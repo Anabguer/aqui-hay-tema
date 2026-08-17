@@ -1,0 +1,15 @@
+{
+  "_comentario": "Mensaje buzón con trazabilidad de origen. Sin catálogo narrativo todavía.",
+  "id": "msg_xxx",
+  "de_persona": null,
+  "tipo": "peticion",
+  "texto": "",
+  "dia": null,
+  "estado": "pendiente",
+  "origen": {
+    "evento_id": null,
+    "tipo_evento": null,
+    "es_narrativo": false,
+    "informacion_revelada": []
+  }
+}
