@@ -1,0 +1,11 @@
+{
+  "_comentario": "Feature flags técnicos. Separado de balance de juego.",
+  "buzon_enabled": false,
+  "diario_enabled": false,
+  "npc_autonomy_enabled": false,
+  "economy_enabled": false,
+  "offline_events_enabled": false,
+  "debug_tools_enabled": true,
+  "mapa_presencia_enabled": true,
+  "encuentros_enabled": true
+}

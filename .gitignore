@@ -1,6 +1,8 @@
 # --- Runtime / local ---
 data/partidas/part_*.json
 data/partidas/*.json
+data/partidas/*.bak
+data/partidas/*.tmp
 !data/partidas/.gitkeep
 
 # Logs y temporales
@@ -16,6 +18,7 @@ cache/
 *.pem
 credentials.json
 dev.local.php
+data/snapshots/
 
 # SO / IDE
 Thumbs.db

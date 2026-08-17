@@ -28,13 +28,59 @@ final class PartidaRepository
             throw new \InvalidArgumentException('partida sin partida_id');
         }
         $partida['meta']['updated_at'] = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format(DATE_ATOM);
-        JsonFile::write($this->pathFor($id), $partida);
+
+        $path = $this->pathFor($id);
+        $tmp = $path . '.tmp';
+        $bak = $path . '.bak';
+
+        JsonFile::write($tmp, $partida);
+
+        try {
+            JsonFile::read($tmp);
+        } catch (\Throwable $e) {
+            @unlink($tmp);
+            throw new \RuntimeException('Validación post-escritura fallida: ' . $e->getMessage(), 0, $e);
+        }
+
+        if (is_file($path)) {
+            try {
+                JsonFile::read($path);
+                @copy($path, $bak);
+            } catch (\Throwable) {
+                // No reemplazar .bak con un save ya corrupto
+            }
+        }
+        if (!@rename($tmp, $path)) {
+            JsonFile::write($path, $partida);
+            @unlink($tmp);
+        }
     }
 
     public function cargar(string $partidaId): array
     {
-        $partida = JsonFile::read($this->pathFor($partidaId));
+        $path = $this->pathFor($partidaId);
+        if (!is_file($path)) {
+            throw new \RuntimeException('partida_no_encontrada');
+        }
+        try {
+            $partida = JsonFile::read($path);
+        } catch (\Throwable $e) {
+            if (is_file($path . '.bak')) {
+                $partida = JsonFile::read($path . '.bak');
+                return SchemaMigrator::migrate($partida);
+            }
+            throw new \RuntimeException('save_corrupto: ' . $e->getMessage(), 0, $e);
+        }
         return SchemaMigrator::migrate($partida);
+    }
+
+    public function eliminar(string $partidaId): bool
+    {
+        $path = $this->pathFor($partidaId);
+        $ok = is_file($path) && @unlink($path);
+        @unlink($path . '.bak');
+        @unlink($path . '.tmp');
+        return $ok;
     }
 
     public function existe(string $partidaId): bool
@@ -47,6 +93,9 @@ final class PartidaRepository
     {
         $out = [];
         foreach (glob("{$this->dir}/*.json") ?: [] as $file) {
+            if (str_ends_with($file, '.bak') || str_ends_with($file, '.tmp')) {
+                continue;
+            }
             try {
                 $data = JsonFile::read($file);
                 $out[] = [

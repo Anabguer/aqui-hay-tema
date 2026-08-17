@@ -32,8 +32,14 @@ final class EncuentroLifecycle
 
             if ($now >= $end && in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
                 $enc['estado'] = 'terminado';
-                $enc['resultado'] = EncuentroResolver::resolver($partida, $enc, $logger);
-                EncuentroResolver::aplicarResultado($partida, $enc, $enc['resultado'], $logger);
+                $resultado = EncuentroResolver::resolver($partida, $enc, $logger);
+                EncuentroResolver::aplicarResultado($partida, $enc, $resultado, $logger);
+                $enc['resultado'] = $resultado;
+                DomainBootstrap::boot();
+                EventBus::dispatch($partida, 'encounter_finished', [
+                    'encuentro' => $enc,
+                    'resultado' => $resultado,
+                ], $logger);
                 $resueltos[] = $enc;
                 $logger?->log($partida, 'encuentro_terminado', [
                     'encuentro_id' => $enc['id'],

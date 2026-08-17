@@ -30,10 +30,10 @@ final class EncuentroEngine
 
         foreach ($participantes as $rid) {
             if (!isset($partida['residentes'][$rid])) {
-                return ['ok' => false, 'error' => 'residente_inexistente', 'residente' => $rid];
+                return array_merge(GameError::respuesta(GameError::PARTICIPANTE_INEXISTENTE, ['residente' => $rid]), ['residente' => $rid]);
             }
             if (($partida['residentes'][$rid]['presencia'] ?? '') !== 'residente') {
-                return ['ok' => false, 'error' => 'no_residente_activo', 'residente' => $rid];
+                return array_merge(GameError::respuesta(GameError::RESIDENTE_NO_ACTIVO, ['residente' => $rid]), ['residente' => $rid]);
             }
         }
 
@@ -50,7 +50,7 @@ final class EncuentroEngine
                     'usadas' => $usadas,
                     'limite' => $limite,
                 ]);
-                return ['ok' => false, 'error' => 'limite_intervenciones_celeste', 'limite' => $limite];
+                return array_merge(GameError::respuesta(GameError::LIMITE_INTERVENCIONES, ['limite' => $limite]), ['limite' => $limite]);
             }
         }
 
@@ -58,7 +58,7 @@ final class EncuentroEngine
         $operativos = $partida['celeste']['lugares_desbloqueados'] ?? [];
         if (!in_array($lugarId, $operativos, true)) {
             $logger?->log($partida, 'encuentro_rechazado', ['regla' => 'lugar_no_operativo', 'lugar' => $lugarId]);
-            return ['ok' => false, 'error' => 'lugar_no_operativo', 'lugar' => $lugarId];
+            return array_merge(GameError::respuesta(GameError::LUGAR_NO_OPERATIVO, ['lugar' => $lugarId]), ['lugar' => $lugarId]);
         }
 
         foreach ($participantes as $rid) {
@@ -70,12 +70,15 @@ final class EncuentroEngine
                     'detalle' => $disp,
                     '_placeholder_rechazo_narrativo' => true,
                 ]);
-                return ['ok' => false, 'error' => 'agenda_ocupada', 'residente' => $rid, 'detalle' => $disp];
+                return array_merge(
+                    GameError::respuesta(GameError::AGENDA_SLOT_OCUPADO, ['residente' => $rid, 'detalle' => $disp]),
+                    ['residente' => $rid, 'detalle' => $disp]
+                );
             }
         }
 
         if (self::hayConflictoHorario($partida, $participantes, $dia, $hora)) {
-            return ['ok' => false, 'error' => 'doble_reserva'];
+            return GameError::respuesta(GameError::DOBLE_RESERVA);
         }
 
         $rng = RngService::fromPartida($partida);
@@ -150,7 +153,10 @@ final class EncuentroEngine
             }
             $prev = $enc['estado'] ?? '';
             if (!self::transicionValida($prev, $nuevoEstado)) {
-                return ['ok' => false, 'error' => 'transicion_invalida', 'desde' => $prev, 'hacia' => $nuevoEstado];
+                return array_merge(
+                    GameError::respuesta(GameError::TRANSICION_INVALIDA, ['desde' => $prev, 'hacia' => $nuevoEstado]),
+                    ['desde' => $prev, 'hacia' => $nuevoEstado]
+                );
             }
             $enc['estado'] = $nuevoEstado;
             return ['ok' => true, 'encuentro' => $enc];

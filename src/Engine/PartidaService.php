@@ -27,6 +27,8 @@ final class PartidaService
             $this->incorporarResidenteCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
         }
 
+        FeatureConfig::mergeIntoPartida($partida, $this->root);
+        DomainBootstrap::boot();
         $this->logger->log($partida, 'partida_nueva', ['config_id' => $configId]);
         $this->repo->guardar($partida);
         return $partida;
