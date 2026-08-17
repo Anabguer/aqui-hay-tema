@@ -18,13 +18,11 @@ El Turno 3 **no añade sistemas jugables nuevos**; fortalece lo existente y prep
 
 ## 2. Commits (Turno 3)
 
-Ver `git log` tras commit. Bloques lógicos:
-
-1. Infra: EventBus, GameError, AuditTrail, FeatureConfig, save atómico
-2. API: router + handlers por dominio
-3. Dev: laboratorio, time travel, snapshots
-4. Tests: cobertura dominio + smoke en run_all
-5. Docs: informe T3
+| Hash | Descripción |
+|------|-------------|
+| `c173b77` | Infra: EventBus, GameError, AuditTrail, FeatureConfig, save atómico |
+| `7b350b5` | API: router + handlers por dominio |
+| `fbf0360` | Dev lab, tests dominio, a11y play, informe |
 
 ---
 
