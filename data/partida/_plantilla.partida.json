@@ -1,12 +1,16 @@
 {
-  "_comentario": "Estado runtime de partida. Placeholders marcados con _placeholder: true.",
+  "_comentario": "Estado runtime schema v2. Encuentro = unidad principal; cita romántica es un tipo.",
   "meta": {
     "partida_id": null,
     "seed": null,
     "config_id": "debug_v0",
-    "schema_version": 1,
+    "schema_version": 2,
     "created_at": null,
     "updated_at": null
+  },
+  "rng": {
+    "seed": null,
+    "state": null
   },
   "reloj": {
     "temporada_id": "temp_01",
@@ -16,7 +20,7 @@
     "ultima_sesion_iso": null,
     "catch_up_pendiente": {
       "_placeholder": true,
-      "descripcion": "Estructura para progreso offline; sin eventos generados todavía.",
+      "descripcion": "Estructura offline; sin eventos generados.",
       "segundos_pendientes": 0,
       "eventos_pendientes": []
     }
@@ -24,8 +28,13 @@
   "celeste": {
     "dinero": null,
     "fama": null,
-    "encuentros_usados_hoy": 0,
-    "encuentros_max_dia": 2,
+    "intervenciones_organizadas_usadas_hoy": 0,
+    "intervenciones_organizadas_max_dia": null,
+    "_config_limite_diario": {
+      "_placeholder": true,
+      "nota": "Cifra pendiente balance. valor_dev solo para pruebas.",
+      "valor_dev": null
+    },
     "lugares_desbloqueados": ["lug_cafeteria"],
     "bloques_abiertos": ["a"]
   },
@@ -34,9 +43,27 @@
     "viviendas": []
   },
   "residentes": {},
-  "citas": [],
+  "encuentros": [],
   "relaciones_sociales": [],
   "relaciones_romanticas": [],
   "buzon": [],
-  "diario": []
+  "diario": [],
+  "buzon_config": {
+    "max_dia": null,
+    "_placeholder": true
+  },
+  "diario_config": {
+    "max_dia": null,
+    "_placeholder": true
+  },
+  "economia": {
+    "dinero": { "balance": null, "historial": [] },
+    "fama": { "balance": null, "historial": [] },
+    "_placeholder": true
+  },
+  "npc_autonomo": {
+    "_placeholder": true,
+    "planes_pendientes": []
+  },
+  "event_log": []
 }

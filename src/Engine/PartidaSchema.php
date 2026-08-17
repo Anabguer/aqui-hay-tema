@@ -33,6 +33,12 @@ final class PartidaSchema
         $partida['meta']['updated_at'] = $now;
         $partida['reloj']['ultima_sesion_iso'] = $now;
 
+        $rng = new RngService($seedFinal);
+        $partida['rng'] = [
+            'seed' => $seedFinal,
+            'state' => $rng->getState(),
+        ];
+
         if (isset($config['lugares_operativos_dia_1'])) {
             $partida['celeste']['lugares_desbloqueados'] = $config['lugares_operativos_dia_1'];
         }

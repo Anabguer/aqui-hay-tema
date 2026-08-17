@@ -33,7 +33,8 @@ final class PartidaRepository
 
     public function cargar(string $partidaId): array
     {
-        return JsonFile::read($this->pathFor($partidaId));
+        $partida = JsonFile::read($this->pathFor($partidaId));
+        return SchemaMigrator::migrate($partida);
     }
 
     public function existe(string $partidaId): bool

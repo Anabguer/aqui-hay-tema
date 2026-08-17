@@ -1,0 +1,3 @@
+<?php
+// Copiar a dev.local.php para habilitar modo dev en local.
+return true;

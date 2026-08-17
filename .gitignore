@@ -15,6 +15,7 @@ cache/
 .env.*
 *.pem
 credentials.json
+dev.local.php
 
 # SO / IDE
 Thumbs.db
