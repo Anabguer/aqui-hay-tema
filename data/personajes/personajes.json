@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "descripcion": "Tanda 1. Día 1 real: Rocío (I08) + B/C pendientes. Micro-sim α: I02+I10. Fase C en curso.",
+    "prueba_objetivo": 16,
+    "esqueleto_aprobado": true,
+    "micro_sim_config": "alpha",
+    "dia_1_confirmados": ["per_i03"],
+    "pilotos_fase_c": ["per_i03", "per_i02", "per_i10", "per_i06"],
+    "interes_romantico_ninguno_slots": ["I10", "L04"],
+    "estado_pool": "borrador",
+    "estado": "fase_c_pilotos"
+  },
+  "items": [
+    { "id": "per_i03", "slot": "I08", "archivo": "per_i03.json", "piloto": true, "dia_1": true },
+    { "id": "per_i02", "slot": "I02", "archivo": "per_i02.json", "piloto": true, "pendiente": false },
+    { "id": "per_i10", "slot": "I10", "archivo": null, "piloto": true, "pendiente": true },
+    { "id": "per_i06", "slot": "I06", "archivo": null, "piloto": true, "pendiente": true }
+  ]
+}

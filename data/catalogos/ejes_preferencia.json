@@ -1,0 +1,40 @@
+{
+  "meta": {
+    "catalogo": "ejes_preferencia",
+    "descripcion": "Ejes de motor para aprendizaje de gustos sobre LA OTRA PERSONA. No son identidad del personaje. Candidatos; no canon. docs/APRENDIZAJE_PREFERENCIAS.md",
+    "estado": "candidatos_v0",
+    "campos_item": ["id", "tipo", "nombre", "notas"],
+    "tipos": [
+      "hobby",
+      "estilo_social",
+      "personalidad",
+      "estetica",
+      "ritmo",
+      "estilo_cita",
+      "estilo_vida",
+      "edad_sesgo"
+    ]
+  },
+  "items": [
+    { "id": "eje_videojuegos", "tipo": "hobby", "nombre": "Videojuegos", "notas": "Que la pareja priorice jugar / pantallas" },
+    { "id": "eje_copas", "tipo": "hobby", "nombre": "Copas", "notas": "" },
+    { "id": "eje_cine", "tipo": "hobby", "nombre": "Cine", "notas": "" },
+    { "id": "eje_deporte", "tipo": "hobby", "nombre": "Deporte", "notas": "" },
+    { "id": "eje_bingo", "tipo": "hobby", "nombre": "Bingo", "notas": "" },
+    { "id": "eje_fiestero", "tipo": "estilo_social", "nombre": "Fiestero", "notas": "Perfil de pareja, no el estilo_social propio" },
+    { "id": "eje_casero", "tipo": "estilo_social", "nombre": "Casero", "notas": "" },
+    { "id": "eje_intenso", "tipo": "estilo_social", "nombre": "Intenso", "notas": "" },
+    { "id": "eje_planificador", "tipo": "estilo_social", "nombre": "Planificador", "notas": "" },
+    { "id": "eje_cabezota", "tipo": "personalidad", "nombre": "Cabezota", "notas": "Rasgo buscado/rechazado en el otro" },
+    { "id": "eje_vanidoso", "tipo": "personalidad", "nombre": "Vanidoso", "notas": "" },
+    { "id": "eje_reservado", "tipo": "personalidad", "nombre": "Reservado", "notas": "" },
+    { "id": "eje_bromista", "tipo": "personalidad", "nombre": "Bromista / humor", "notas": "" },
+    { "id": "eje_look_elegante", "tipo": "estetica", "nombre": "Look elegante", "notas": "Cuando la ropa sea jugable" },
+    { "id": "eje_look_atrevido", "tipo": "estetica", "nombre": "Look atrevido", "notas": "" },
+    { "id": "eje_ritmo_mensajes", "tipo": "ritmo", "nombre": "Mensajes constantes", "notas": "" },
+    { "id": "eje_prisa_convivir", "tipo": "ritmo", "nombre": "Prisa por convivir", "notas": "" },
+    { "id": "eje_planes_grandes", "tipo": "estilo_cita", "nombre": "Planes grandes", "notas": "vs sencillos" },
+    { "id": "eje_noctambulo", "tipo": "estilo_vida", "nombre": "Noctámbulo", "notas": "" },
+    { "id": "eje_edad_distante", "tipo": "edad_sesgo", "nombre": "Edad muy distinta", "notas": "Sesgo suave; nunca de un plantón; no es orientación" }
+  ]
+}

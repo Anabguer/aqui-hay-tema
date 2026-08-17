@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "catalogo": "tipos_entrada_diario",
+    "pantalla": "Diario del pueblo",
+    "cupo_visible_por_dia": "5-10",
+    "estado": "cerrado"
+  },
+  "items": [
+    { "id": "ruido_humor", "nombre": "Ruido / humor", "indicador": "" },
+    { "id": "info_util", "nombre": "Informacion util", "indicador": "" },
+    { "id": "pista", "nombre": "Pista", "indicador": "eyes" },
+    { "id": "problema", "nombre": "Problema", "indicador": "warn" }
+  ]
+}

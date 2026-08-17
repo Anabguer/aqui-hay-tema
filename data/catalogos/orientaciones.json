@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "catalogo": "orientaciones",
+    "descripcion": "genero y atraido_por usan los mismos ids. La etiqueta visible es opcional y no manda.",
+    "estado": "cerrado_v0",
+    "validacion": "Cada uno de los 16 y de los 10 iniciales: ≥1 recíproco potencial. Ver docs/VALIDACION_GRAFO_ROMANTICO.md"
+  },
+  "tipos_de_persona_para_atraccion": [
+    { "id": "mujer", "nombre": "Mujeres" },
+    { "id": "hombre", "nombre": "Hombres" },
+    { "id": "no_binarie", "nombre": "Personas no binarie" }
+  ],
+  "nota": "atraido_por lista uno o más de estos ids. No rellenar las 16 fichas aqui."
+}

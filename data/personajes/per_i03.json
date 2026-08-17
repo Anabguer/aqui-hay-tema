@@ -1,0 +1,120 @@
+{
+  "id": "per_i03",
+  "slot": "I08",
+  "piloto": true,
+  "identidad": {
+    "nombre": "Rocío",
+    "edad": 47,
+    "genero": "mujer",
+    "pronombres": ["ella"],
+    "atraido_por": ["hombre"],
+    "etiqueta_orientacion_visible": "heterosexual",
+    "apertura_descubrimiento": "permeable"
+  },
+  "vida": {
+    "ocupacion": "oficina",
+    "franja_disponibilidad": "tarde",
+    "hobby_principal": "bingo",
+    "hobbies_secundarios": ["pasear"],
+    "lugares_preferentes": ["lug_cafeteria", "lug_parque"],
+    "estilo_social": "sociable_selectiva",
+    "rasgos_publicos": ["observadora", "practica", "socarrona"],
+    "rasgos_ocultos": ["ansioso"],
+    "gustos_declarados": ["Planes sencillos", "Crucigramas", "Pop español 90s/2000s"]
+  },
+  "romance": {
+    "necesidad_contacto_base": "baja",
+    "preferencias_romanticas": [
+      {
+        "texto": "Le atrae la gente que parece segura sin necesidad de presumir.",
+        "visible": false,
+        "tipo": "otro"
+      },
+      {
+        "texto": "Tiene debilidad por una voz bonita y por quien sabe contar una historia.",
+        "visible": false,
+        "tipo": "otro"
+      },
+      {
+        "texto": "Valora que la otra persona tenga vida propia.",
+        "visible": false,
+        "tipo": "ritmo"
+      },
+      {
+        "texto": "Dice públicamente que le gusta la gente con sentido del humor.",
+        "visible": true,
+        "tipo": "otro"
+      }
+    ],
+    "preferencias_esteticas": [],
+    "dealbreakers": [
+      {
+        "texto": "Que la ridiculicen delante de otras personas.",
+        "severidad": "absoluto"
+      },
+      {
+        "texto": "Presumir constantemente de dinero o estatus.",
+        "severidad": "fuerte"
+      },
+      {
+        "texto": "Necesitar mensajes continuos durante todo el día.",
+        "severidad": "leve"
+      }
+    ]
+  },
+  "lazos": [],
+  "presencia_v0": {
+    "empieza_en_pueblo": true,
+    "orden_llegada": null,
+    "funcion_llegada": null
+  },
+  "visual": {
+    "estilo_visual": "Cara redonda, gafas pasta, canas, jersey verde apagado, 47.",
+    "rasgos_fisicos": [
+      "cara redondeada y expresiva",
+      "nariz algo ancha",
+      "ojos marrones pequeños",
+      "cejas marcadas, no perfectas",
+      "pelo castaño ondulado con canas",
+      "gafas de pasta oscuras",
+      "ligera papada natural",
+      "sonrisa pequeña de comisura"
+    ],
+    "etiquetas_look_base": ["cotidiano", "comodo", "discreto"],
+    "looks_posibles": ["comodo", "cotidiano", "discreto"],
+    "retrato": {
+      "estado": "borrador",
+      "version": 1
+    }
+  },
+  "narrativa": {
+    "voz": "seca",
+    "frase_semilla": "Yo no busco nada raro. Con que no me dé pereza verle, vamos bien.",
+    "tono_coletilla": "Bueno, veremos."
+  },
+  "auditoria": {
+    "estado_ficha": "revision",
+    "reciprocos_potenciales": {
+      "estado": "pendiente_pool",
+      "slots": [],
+      "ids": []
+    }
+  },
+  "estado_inicial": {
+    "animo": "neutro",
+    "crush": {
+      "persona": null
+    }
+  },
+  "runtime": {
+    "animo": null,
+    "donde_esta": null,
+    "flag_nuevo": false,
+    "cita_programada": null,
+    "relaciones_romanticas": [],
+    "atracciones_hacia": [],
+    "recuerdos": [],
+    "descubrimientos_jugador": [],
+    "lazos_nuevos": []
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "catalogo": "rasgos",
+    "descripcion": "Candidatos V0 para aprobar con el pool. 3 rasgos publicos por ficha. No duplicar voz ni estilo_social.",
+    "fuente": "docs/FASE_DISENO_POOL_16.md",
+    "mvp_objetivo": 10,
+    "estado": "candidatos_v0"
+  },
+  "items": [
+    { "id": "directo", "nombre": "Directo" },
+    { "id": "timido", "nombre": "Tímido" },
+    { "id": "ironico", "nombre": "Irónico" },
+    { "id": "leal", "nombre": "Leal" },
+    { "id": "cabezota", "nombre": "Cabezota" },
+    { "id": "empatico", "nombre": "Empático" },
+    { "id": "vanidoso", "nombre": "Vanidoso" },
+    { "id": "ansioso", "nombre": "Ansioso" },
+    { "id": "bromista", "nombre": "Bromista" },
+    { "id": "reservado", "nombre": "Reservado" },
+    { "id": "observadora", "nombre": "Observadora" },
+    { "id": "practica", "nombre": "Práctica" },
+    { "id": "socarrona", "nombre": "Socarrona" }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "personaje_id": "per_i02",
+  "slot": "I02",
+  "nombre": "Dani",
+  "archivo": "I02_Dani_revision_01.png",
+  "version": 1,
+  "estado": "revision",
+  "fecha": "2026-08-18",
+  "sha256": "D38CECA708B3F92A67568C1EAB5A2FE517F9D7410EB0B8BE960BF95D68926D6D",
+  "referencia_estilo": "assets/referencias_visuales/estilo_06b/COMPARATIVA_MAESTRA_06b_ABC.png",
+  "referencia_identidad": "data/personajes/per_i02.json",
+  "prompt_generador": "Match GRAPHIC STYLE ONLY from ABC reference sheet. NEW 27yo man: narrow triangular face, fine jaw pronounced chin, long drooping nose, close-set eyes, thick uneven eyebrows, ears out, dark messy short hair. Half-smile bromista. Front master head, neck, no clothing, white bg.",
+  "tool_description": "Cartoon head Dani style 06b from ABC sheet",
+  "reference_images": ["assets/referencias_visuales/estilo_06b/COMPARATIVA_MAESTRA_06b_ABC.png"],
+  "gate_posterior": "pass",
+  "gate_checks": {
+    "1_genero_hombre": "pass",
+    "2_edad_aparente_27": "pass",
+    "3_estilo_06b_abc": "pass",
+    "4_encuadre": "pass",
+    "5_sin_contenido_ajeno": "pass",
+    "6_rasgos_ficha": "pass",
+    "7_no_clon_abc_individual": "pass_nota_similitud_joven_A",
+    "8_expresion_bromista": "pass",
+    "10_misma_familia_grafica_abc": "pass"
+  },
+  "comparativa": "comparativas/COMPARATIVA_ABC_Dani_revision_01.png",
+  "nota": "No canonizado. Revisar similitud estructural con maniquí A en comparativa conjunta."
+}

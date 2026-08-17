@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "catalogo": "preferencias",
+    "descripcion": "Preferencias de pareja y de personalidad. Unas son visibles en ficha; otras solo salen tras citas. Incluye gustos esteticos y atraccion por cosas que el personaje no comparte.",
+    "fuente": "Documento Maestro — 'varias preferencias/dealbreakers'. Lista cerrada PENDIENTE.",
+    "campos_item": ["id", "nombre", "tipo", "visible_por_defecto", "notas"],
+    "tipos_previstos": [
+      "personalidad",
+      "estetica",
+      "estilo_vida",
+      "complementariedad",
+      "ritmo_compromiso"
+    ],
+    "estado": "vacio_a_proposito"
+  },
+  "items": []
+}

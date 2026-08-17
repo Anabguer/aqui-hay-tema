@@ -1,0 +1,25 @@
+{
+  "meta": {
+    "familia": "pareja",
+    "descripcion": "Eventos personales y de pareja. El Maestro nombra mas de 10. El MVP pide 10: el recorte NO se decide aqui. Se listan como candidatos.",
+    "mvp_objetivo": 10,
+    "fuente": "Documento Maestro, bloque EVENTOS PERSONALES Y DE PAREJA",
+    "estado": "candidatos_del_maestro_sin_recortar"
+  },
+  "items": [
+    { "id": "evp_necesitamos_hablar", "nombre": "Necesitamos hablar", "tipo": "crisis", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_aniversario_olvidado", "nombre": "Aniversario olvidado", "tipo": "descuido", "gravedad": "media", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_celos", "nombre": "Celos por otra persona", "tipo": "celos", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_cambio_trabajo", "nombre": "Cambio de trabajo/horario", "tipo": "logistica", "gravedad": "media", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "persona", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_mas_espacio", "nombre": "Una persona quiere mas espacio", "tipo": "momento_vital", "gravedad": "media", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_formalizar", "nombre": "Una quiere formalizar", "tipo": "momento_vital", "gravedad": "media", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_discusion_absurda", "nombre": "Discusion absurda", "tipo": "conflicto", "gravedad": "baja", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_enfermedad_leve", "nombre": "Enfermedad leve / cuidado mutuo", "tipo": "cuidado", "gravedad": "baja", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_encuentro_casual", "nombre": "Encuentro casual con otra persona compatible", "tipo": "tentacion", "gravedad": "media", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "persona", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_convivencia", "nombre": "Propuesta de convivencia", "tipo": "compromiso", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_boda", "nombre": "Boda", "tipo": "compromiso", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_separacion", "nombre": "Separacion", "tipo": "ruptura", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_divorcio", "nombre": "Divorcio", "tipo": "ruptura", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evp_reconciliacion", "nombre": "Reconciliacion", "tipo": "reconciliacion", "gravedad": "media", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "pareja", "consecuencias_posibles": [], "duracion": null }
+  ]
+}

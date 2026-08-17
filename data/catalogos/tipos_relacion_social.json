@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "catalogo": "tipos_relacion_social",
+    "descripcion": "Lazos en personaje.lazos[].tipo. persona = id per_xx o slot I07/L01. publico=true solo si B puede nombrarlo. veta_romance_por_defecto segun grupo_veto.",
+    "estado": "cerrado_v0"
+  },
+  "items": [
+    { "id": "padre", "nombre": "Padre", "veta_romance_por_defecto": true, "grupo_veto": "padre_madre_hijo" },
+    { "id": "madre", "nombre": "Madre", "veta_romance_por_defecto": true, "grupo_veto": "padre_madre_hijo" },
+    { "id": "hijo", "nombre": "Hijo", "veta_romance_por_defecto": true, "grupo_veto": "padre_madre_hijo" },
+    { "id": "hija", "nombre": "Hija", "veta_romance_por_defecto": true, "grupo_veto": "padre_madre_hijo" },
+    { "id": "hermano", "nombre": "Hermano", "veta_romance_por_defecto": true, "grupo_veto": "hermanos" },
+    { "id": "hermana", "nombre": "Hermana", "veta_romance_por_defecto": true, "grupo_veto": "hermanos" },
+    { "id": "medio_hermano", "nombre": "Medio hermano", "veta_romance_por_defecto": true, "grupo_veto": "medio_hermanos" },
+    { "id": "medio_hermana", "nombre": "Media hermana", "veta_romance_por_defecto": true, "grupo_veto": "medio_hermanos" },
+    { "id": "abuelo", "nombre": "Abuelo", "veta_romance_por_defecto": true, "grupo_veto": "abuelo_nieto" },
+    { "id": "abuela", "nombre": "Abuela", "veta_romance_por_defecto": true, "grupo_veto": "abuelo_nieto" },
+    { "id": "nieto", "nombre": "Nieto", "veta_romance_por_defecto": true, "grupo_veto": "abuelo_nieto" },
+    { "id": "nieta", "nombre": "Nieta", "veta_romance_por_defecto": true, "grupo_veto": "abuelo_nieto" },
+    { "id": "tio", "nombre": "Tío", "veta_romance_por_defecto": true, "grupo_veto": "tio_sobrino" },
+    { "id": "tia", "nombre": "Tía", "veta_romance_por_defecto": true, "grupo_veto": "tio_sobrino" },
+    { "id": "sobrino", "nombre": "Sobrino", "veta_romance_por_defecto": true, "grupo_veto": "tio_sobrino" },
+    { "id": "sobrina", "nombre": "Sobrina", "veta_romance_por_defecto": true, "grupo_veto": "tio_sobrino" },
+    { "id": "primo_hermano", "nombre": "Primo hermano", "veta_romance_por_defecto": true, "grupo_veto": "primos_hermanos" },
+    { "id": "prima_hermana", "nombre": "Prima hermana", "veta_romance_por_defecto": true, "grupo_veto": "primos_hermanos" },
+    { "id": "amigo", "nombre": "Amigo", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "amiga", "nombre": "Amiga", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "mejor_amigo", "nombre": "Mejor amigo", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "mejor_amiga", "nombre": "Mejor amiga", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "conocido", "nombre": "Conocido", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "conocida", "nombre": "Conocida", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "companero", "nombre": "Compañero", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "companera", "nombre": "Compañera", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "ex", "nombre": "Ex", "veta_romance_por_defecto": false, "grupo_veto": null },
+    { "id": "roce", "nombre": "Roce", "veta_romance_por_defecto": false, "grupo_veto": null }
+  ]
+}

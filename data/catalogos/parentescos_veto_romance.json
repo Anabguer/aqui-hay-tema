@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "catalogo": "parentescos_veto_romance",
+    "descripcion": "Si el tipo de relacion social esta aqui, no hay romance legal (capa 1). Otras familias se pueden guardar igual.",
+    "estado": "cerrado"
+  },
+  "items": [
+    { "id": "padre_madre_hijo", "nombre": "Padre/madre ↔ hijo/a" },
+    { "id": "hermanos", "nombre": "Hermanos" },
+    { "id": "medio_hermanos", "nombre": "Medio hermanos" },
+    { "id": "abuelo_nieto", "nombre": "Abuelo/a ↔ nieto/a" },
+    { "id": "tio_sobrino", "nombre": "Tio/a ↔ sobrino/a" },
+    { "id": "primos_hermanos", "nombre": "Primos hermanos" }
+  ]
+}

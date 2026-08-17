@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "familia": "micro_cita",
+    "descripcion": "Textos cortos combinables. 2-4 por cita. MVP: 25-40 en el banco.",
+    "mvp_objetivo": 40,
+    "campos_item": [
+      "id",
+      "tipo",
+      "condiciones_activacion",
+      "probabilidad",
+      "personas_afectadas",
+      "consecuencias_posibles",
+      "duracion",
+      "gravedad",
+      "requiere_aviso_previo",
+      "texto"
+    ],
+    "estado": "vacio_a_proposito"
+  },
+  "items": []
+}

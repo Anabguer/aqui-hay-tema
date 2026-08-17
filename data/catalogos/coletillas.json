@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "catalogo": "coletillas",
+    "descripcion": "Frases cortas de identidad. Banco grande: despues. Estos items son tono, no el catalogo final.",
+    "fuente": "encargo_2026-08-17"
+  },
+  "items": [
+    { "id": "col_aqui_hay_tema", "texto": "Uy. Aqui hay tema.", "contextos": ["cita", "rumor", "encuentro"] },
+    { "id": "col_aqui_no_hay_tema", "texto": "Aqui NO hay tema.", "contextos": ["cita_fria", "rechazo"] },
+    { "id": "col_aqui_habia_tema", "texto": "Aqui habia tema.", "contextos": ["ruptura", "recuerdo"] },
+    { "id": "col_aguante_tu_madre", "texto": "Pues que te aguante tu madre.", "contextos": ["crisis", "humor"] },
+    { "id": "col_tu_sabras", "texto": "Tu sabras.", "contextos": ["decision_jugador"] },
+    { "id": "col_fenomenal", "texto": "Fenomenal. Justo lo que faltaba.", "contextos": ["problema", "evento"] },
+    { "id": "col_si_pasa", "texto": "Si pasa.", "contextos": ["diario", "ruido"] }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "_comentario": "Estado del casamentero. Pueblo persistente + temporadas. Cifras de temporada y economia: null.",
+  "dinero": null,
+  "fama": null,
+  "temporada_actual": null,
+  "dia_en_temporada": null,
+  "lugares_desbloqueados": ["lug_cafeteria", "lug_parque", "lug_biblioteca"]
+}

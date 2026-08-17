@@ -1,0 +1,16 @@
+---
+description: Auditoría obligatoria de fichas. Neni solo ve 2–3 pilotos. Nadie es final sin checklist.
+globs: data/personajes/**,docs/FASE_DISENO_POOL_16.md,docs/CHECKLIST_AUDITORIA_PERSONAJES.md,docs/VALIDACION_GRAFO_ROMANTICO.md,docs/SISTEMA_PERSONAJES.md
+alwaysApply: false
+---
+
+# Auditoría de personajes (Aquí Hay Tema)
+
+- **No crear los 16** hasta que Neni apruebe el tono de 2–3 `piloto: true`.
+- Nadie es **final** sin `docs/CHECKLIST_AUDITORIA_PERSONAJES.md`.
+- `estado_ficha`: `borrador` → `revision` → `aprobado`. `aprobado` exige nivel 1 completo (recíproco comprobable).
+- Pool: `estado_pool` `borrador` → `auditoria_global` → `aprobado`.
+- Tres pasos: Cursor (estructura/reglas) → ChatGPT (narrativa) → nivel 2 del pool.
+- Fallo de **identidad**: no corregir en silencio; informar y proponer. Fallo de **formato**: sí corregir y anotar una línea en `docs/REGISTRO_AUDITORIA_PERSONAJES.md`.
+- Las últimas fichas (L03–L06) se auditan **igual** que los pilotos.
+- No volcar el roster no-piloto en docs que Neni lea antes de jugar.

@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "descripcion": "Estados visuales de pareja que el jugador lee de un vistazo. Internamente no son la unica barra.",
+    "fuente": "Documento Maestro, bloque RELACIONES Y BARRA DE CHISPA"
+  },
+  "items": [
+    { "id": "verde", "nombre": "Estable", "color": "verde" },
+    { "id": "amarillo", "nombre": "Necesita atencion", "color": "amarillo" },
+    { "id": "naranja", "nombre": "Crisis", "color": "naranja" },
+    { "id": "rojo", "nombre": "Riesgo real de ruptura", "color": "rojo" }
+  ],
+  "estados_logicos_candidatos": [
+    "solteros_con_interes",
+    "propuesta",
+    "activa",
+    "convivencia",
+    "boda",
+    "separacion",
+    "divorcio",
+    "reconciliando"
+  ],
+  "nota": "El enum logico no esta cerrado en el Maestro. Solo los cuatro colores visuales lo estan."
+}

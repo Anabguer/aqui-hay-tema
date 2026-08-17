@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "familia": "global",
+    "descripcion": "Eventos de villa. El Maestro nombra mas de 5. El MVP pide 5: el recorte NO se decide aqui. Confinamiento es raro de partida, no MVP por defecto.",
+    "mvp_objetivo": 5,
+    "fuente": "Documento Maestro, bloque EVENTOS DE VILLA",
+    "estado": "candidatos_del_maestro_sin_recortar"
+  },
+  "items": [
+    { "id": "evg_ola_calor", "nombre": "Ola de calor", "tipo": "clima", "gravedad": "media", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["menos_ganas_exteriores"], "duracion": null },
+    { "id": "evg_fiesta_mayor", "nombre": "Fiesta mayor", "tipo": "calendario", "gravedad": "baja", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["potencia_discoteca_bar_plaza", "mas_encuentros_casuales"], "duracion": null, "pendiente": "Plaza no esta en el catalogo de 12 lugares." },
+    { "id": "evg_semana_examenes", "nombre": "Semana de examenes", "tipo": "calendario", "gravedad": "baja", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "subset_estudiantes", "consecuencias_posibles": ["biblioteca_llena", "estudiantes_estresados"], "duracion": null },
+    { "id": "evg_lluvia", "nombre": "Lluvia", "tipo": "clima", "gravedad": "baja", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["exteriores_cancelados_o_improvisados"], "duracion": null },
+    { "id": "evg_averia_electrica", "nombre": "Averia electrica", "tipo": "cierre", "gravedad": "media", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["cierra_cine_arcade"], "duracion": null },
+    { "id": "evg_boda_ajena", "nombre": "Boda de una pareja", "tipo": "social", "gravedad": "media", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["afecta_quien_quiere_compromiso_y_quien_huye"], "duracion": null },
+    { "id": "evg_nuevo_habitante", "nombre": "Nuevo habitante", "tipo": "poblacion", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["altera_tablero"], "duracion": null, "pendiente": "Ahora encaja con fama/crecimiento. Sigue sin disenarse el habitante extra." },
+    { "id": "evg_ex_vuelve", "nombre": "Ex que vuelve al pueblo", "tipo": "social", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "subset", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evg_rumor_absurdo", "nombre": "Rumor absurdo", "tipo": "rumor", "gravedad": "baja", "requiere_aviso_previo": false, "incluido_mvp": null, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": [], "duracion": null },
+    { "id": "evg_confinamiento", "nombre": "Pandemia / confinamiento", "tipo": "raro", "gravedad": "alta", "requiere_aviso_previo": true, "incluido_mvp": false, "fuente": "documento_maestro", "condiciones_activacion": [], "probabilidad": null, "personas_afectadas": "villa", "consecuencias_posibles": ["citas_remotas", "tension_convivientes"], "duracion": null, "notas": "El Maestro lo marca como evento raro de partida. No entra en el MVP salvo decision explicita. incluido_mvp=false es lectura del Maestro, no un recorte inventado del resto." }
+  ]
+}

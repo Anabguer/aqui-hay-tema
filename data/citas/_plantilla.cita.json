@@ -1,0 +1,18 @@
+{
+  "_comentario": "CITA propuesta por el jugador. El lugar debe estar desbloqueado. dia ya no se asume 1-30. causas[] = ejes salientes del resultado (APRENDIZAJE_PREFERENCIAS.md); vacío hasta que exista banco de micros.",
+  "id": "cita_xxx",
+  "participantes": [],
+  "lugar": null,
+  "hora": null,
+  "actividad": null,
+  "ropa_elegida": {},
+  "estado_previo_relacion": null,
+  "eventos_ocurridos": [],
+  "causas": [],
+  "resultado": null,
+  "cambios_variables": {},
+  "recuerdos_generados": [],
+  "dia": null,
+  "coletilla_id": null,
+  "semilla_azar": null
+}

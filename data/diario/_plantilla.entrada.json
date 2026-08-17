@@ -1,0 +1,11 @@
+{
+  "_comentario": "Entrada de DIARIO DEL PUEBLO. 5-10 visibles por dia. Indicador vacio salvo pista/problema.",
+  "id": "dia_xxx",
+  "personajes": [],
+  "tipo": null,
+  "texto": "",
+  "indicador": "",
+  "momento": { "temporada": null, "dia": null, "franja": null },
+  "coletilla_id": null,
+  "relacion_ids": []
+}

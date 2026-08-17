@@ -1,0 +1,18 @@
+{
+  "_comentario": "RELACION ROMANTICA. Nucleo: atraccion (2 sentidos), vinculo, conflicto, necesidad de contacto (por persona). chispa/confianza/comodidad/deseo/riesgo son derivados, no se editan como barras.",
+  "id": "rel_xxx",
+  "persona_a": null,
+  "persona_b": null,
+  "atraccion_a_hacia_b": null,
+  "atraccion_b_hacia_a": null,
+  "vinculo": null,
+  "conflicto": null,
+  "necesidad_contacto_a": null,
+  "necesidad_contacto_b": null,
+  "recuerdos_compartidos": [],
+  "historial_citas": [],
+  "historial_encuentros": [],
+  "estado_actual": null,
+  "fecha_inicio": null,
+  "derivados_no_persistir_como_nucleo": ["chispa", "confianza", "comodidad", "deseo", "riesgo_ruptura", "estado_visual"]
+}

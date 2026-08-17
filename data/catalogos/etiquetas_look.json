@@ -1,0 +1,20 @@
+{
+  "meta": {
+    "catalogo": "etiquetas_look",
+    "descripcion": "Etiquetas de ropa/look. No dan atractivo universal. Modifican seguridad propia, adecuacion al lugar y atraccion segun preferencias de la otra persona.",
+    "fuente": "Documento Maestro, bloque ROPA",
+    "estado": "candidatos_del_maestro"
+  },
+  "items": [
+    { "id": "elegante", "nombre": "Elegante", "fuente": "documento_maestro" },
+    { "id": "comodo", "nombre": "Comodo", "fuente": "documento_maestro" },
+    { "id": "atrevido", "nombre": "Atrevido", "fuente": "documento_maestro" },
+    { "id": "alternativo", "nombre": "Alternativo", "fuente": "documento_maestro" },
+    { "id": "formal", "nombre": "Formal", "fuente": "documento_maestro" },
+    { "id": "deportivo", "nombre": "Deportivo", "fuente": "documento_maestro" },
+    { "id": "raro", "nombre": "Raro", "fuente": "documento_maestro" },
+    { "id": "vintage", "nombre": "Vintage", "fuente": "documento_maestro" },
+    { "id": "cotidiano", "nombre": "Cotidiano", "fuente": "piloto_01" },
+    { "id": "discreto", "nombre": "Discreto", "fuente": "piloto_01" }
+  ]
+}

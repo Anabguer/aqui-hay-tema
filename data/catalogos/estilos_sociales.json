@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "catalogo": "estilos_sociales",
+    "descripcion": "Estilo social visible en ficha. El Documento Maestro da ejemplos; no dice que esta lista sea cerrada ni que equivalga a los 8-10 rasgos.",
+    "fuente": "Documento Maestro, bloque PERSONAJES",
+    "estado": "candidatos_del_maestro"
+  },
+  "items": [
+    { "id": "casero", "nombre": "Casero", "fuente": "documento_maestro" },
+    { "id": "fiestero", "nombre": "Fiestero", "fuente": "documento_maestro" },
+    { "id": "tranquilo", "nombre": "Tranquilo", "fuente": "documento_maestro" },
+    { "id": "sociable_selectiva", "nombre": "Sociable selectiva", "fuente": "piloto_01" },
+    { "id": "intenso", "nombre": "Intenso", "fuente": "documento_maestro" },
+    { "id": "espontaneo", "nombre": "Espontaneo", "fuente": "documento_maestro" },
+    { "id": "planificador", "nombre": "Planificador", "fuente": "documento_maestro" }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "personaje_id": "per_i02",
+  "slot": "I02",
+  "nombre": "Dani",
+  "archivo": "I02_Dani_revision_02.png",
+  "version": 2,
+  "estado": "revision",
+  "fecha": "2026-08-18",
+  "sha256": "B6B9FCD095134B925A8C8FCDB8B817B77EF1F482A5D1FD638C13D1274918BD11",
+  "referencia_estilo": "assets/referencias_visuales/estilo_06b/COMPARATIVA_MAESTRA_06b_ABC.png",
+  "referencia_identidad": "data/personajes/per_i02.json",
+  "gate_cabezas_rapadas": {
+    "resultado": "pass",
+    "nota": "Triangular vs oval A; mentón puntiagudo; nariz caída; ojos juntos; cejas asimétricas. Distinto de A sin pelo."
+  },
+  "gate_posterior": "pass_pendiente_neni",
+  "comparativa": "comparativas/COMPARATIVA_ABC_Dani_revision_02.png",
+  "nota": "Última iteración visual I02 por ahora. NO canonizado. revision_01 archivada como clon-A."
+}

@@ -1,0 +1,13 @@
+{
+  "meta": {
+    "catalogo": "franjas_disponibilidad",
+    "descripcion": "Franjas habituales de la vida NPC minima. No es un reloj minuto a minuto.",
+    "estado": "catalogo_de_referencia"
+  },
+  "items": [
+    { "id": "manana", "nombre": "Manana" },
+    { "id": "tarde", "nombre": "Tarde" },
+    { "id": "noche", "nombre": "Noche" },
+    { "id": "flexible", "nombre": "Flexible" }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "catalogo": "profesiones",
+    "descripcion": "Ocupaciones de referencia. No son clases rigidas ni fichas de los 16. Sirven para franjas de disponibilidad.",
+    "estado": "catalogo_inicial_cerrado"
+  },
+  "items": [
+    { "id": "sanitario", "nombre": "Sanitario/a", "franjas_tipicas": ["manana", "tarde", "noche"] },
+    { "id": "oficina", "nombre": "Oficina", "franjas_tipicas": ["manana", "tarde"] },
+    { "id": "camarero", "nombre": "Camarero/a", "franjas_tipicas": ["tarde", "noche"] },
+    { "id": "comercio", "nombre": "Comercio", "franjas_tipicas": ["manana", "tarde"] },
+    { "id": "docente", "nombre": "Docente", "franjas_tipicas": ["manana", "tarde"] },
+    { "id": "estudiante_adulto", "nombre": "Estudiante adulto", "franjas_tipicas": ["tarde", "noche", "flexible"] },
+    { "id": "autonomo", "nombre": "Autonomo / freelance", "franjas_tipicas": ["flexible"] },
+    { "id": "jubilado", "nombre": "Jubilado/a", "franjas_tipicas": ["manana", "tarde", "flexible"] }
+  ]
+}

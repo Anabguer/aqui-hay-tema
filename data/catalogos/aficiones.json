@@ -1,0 +1,24 @@
+{
+  "meta": {
+    "catalogo": "aficiones",
+    "descripcion": "Candidatos V0 para hobby_principal. Ligados a lugares (hobbies_lugares.json). Lista eterna del juego: no.",
+    "fuente": "docs/FASE_DISENO_POOL_16.md",
+    "mvp_objetivo": 12,
+    "estado": "candidatos_v0"
+  },
+  "items": [
+    { "id": "leer", "nombre": "Leer" },
+    { "id": "escribir", "nombre": "Escribir" },
+    { "id": "pasear", "nombre": "Pasear" },
+    { "id": "correr", "nombre": "Correr" },
+    { "id": "cafe_social", "nombre": "Café y gente" },
+    { "id": "manualidades", "nombre": "Manualidades" },
+    { "id": "cocina", "nombre": "Cocina" },
+    { "id": "musica", "nombre": "Música" },
+    { "id": "cine", "nombre": "Cine" },
+    { "id": "videojuegos", "nombre": "Videojuegos" },
+    { "id": "copas", "nombre": "Copas" },
+    { "id": "baile", "nombre": "Baile" },
+    { "id": "bingo", "nombre": "Bingo" }
+  ]
+}

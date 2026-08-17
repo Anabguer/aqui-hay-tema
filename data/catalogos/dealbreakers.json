@@ -1,0 +1,10 @@
+{
+  "meta": {
+    "catalogo": "dealbreakers",
+    "descripcion": "La ficha guarda texto libre + severidad. Este catálogo es opcional (ids reutilizables). severidad absoluto = capa 1. fuerte = estorba mucho. leve = roce. Un absoluto no puede ser lo único que anula la única vía recíproca.",
+    "campos_item": ["id", "nombre", "severidad", "notas"],
+    "severidades": ["leve", "fuerte", "absoluto"],
+    "estado": "vacio_a_proposito"
+  },
+  "items": []
+}

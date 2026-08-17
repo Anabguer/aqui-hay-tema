@@ -1,0 +1,14 @@
+{
+  "meta": {
+    "catalogo": "pistas_jugador",
+    "descripcion": "Frases cualitativas que sustituyen al porcentaje de compatibilidad. El jugador no ve 87%.",
+    "fuente": "Documento Maestro, bloque COMPATIBILIDAD",
+    "estado": "ejemplos_del_maestro_no_banco_cerrado"
+  },
+  "items": [
+    { "id": "hay_chispa", "texto": "Hay chispa", "fuente": "documento_maestro" },
+    { "id": "conversacion_facil", "texto": "Conversacion facil", "fuente": "documento_maestro" },
+    { "id": "algo_no_encaja", "texto": "Algo no encaja", "fuente": "documento_maestro" },
+    { "id": "atraccion_inesperada", "texto": "Atraccion inesperada", "fuente": "documento_maestro" }
+  ]
+}

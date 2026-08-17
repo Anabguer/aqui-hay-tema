@@ -1,0 +1,13 @@
+{
+  "_comentario": "Look o prenda. No hay ropa universalmente mejor. Costes null hasta economia.",
+  "id": "look_xxx",
+  "personaje_id": null,
+  "nombre": "",
+  "etiquetas": [],
+  "coste_dinero": null,
+  "requisito_fama": null,
+  "seguridad": null,
+  "contextos": [],
+  "preferencias_relacionadas": [],
+  "desbloqueado": false
+}

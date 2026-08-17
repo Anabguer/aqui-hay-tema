@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "catalogo": "hobbies_lugares",
+    "descripcion": "Puente hobby -> lugares. Candidatos V0. Si el lugar está bloqueado: sustituto abierto o casa.",
+    "fuente": "docs/FASE_DISENO_POOL_16.md",
+    "estado": "candidatos_v0"
+  },
+  "items": [
+    { "hobby_id": "leer", "lugar_ids": ["lug_biblioteca"] },
+    { "hobby_id": "escribir", "lugar_ids": ["lug_biblioteca"] },
+    { "hobby_id": "pasear", "lugar_ids": ["lug_parque"] },
+    { "hobby_id": "correr", "lugar_ids": ["lug_parque"] },
+    { "hobby_id": "cafe_social", "lugar_ids": ["lug_cafeteria"] },
+    { "hobby_id": "manualidades", "lugar_ids": ["lug_biblioteca", "lug_casa"] },
+    { "hobby_id": "cocina", "lugar_ids": ["lug_casa"] },
+    { "hobby_id": "musica", "lugar_ids": ["lug_casa", "lug_bar"] },
+    { "hobby_id": "cine", "lugar_ids": ["lug_cine"] },
+    { "hobby_id": "videojuegos", "lugar_ids": ["lug_arcade", "lug_casa"] },
+    { "hobby_id": "copas", "lugar_ids": ["lug_bar"] },
+    { "hobby_id": "baile", "lugar_ids": ["lug_discoteca"] },
+    { "hobby_id": "bingo", "lugar_ids": ["lug_bingo"] }
+  ]
+}

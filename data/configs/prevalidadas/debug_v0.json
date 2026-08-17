@@ -1,0 +1,15 @@
+{
+  "_comentario": "Config prevalidada para desarrollo. Sin personajes B/C hasta decisión.",
+  "id": "debug_v0",
+  "descripcion": "Día 1 mínimo: Rocío en Bloque A, solo cafetería operativa.",
+  "seed_sugerida": "debug-v0",
+  "residentes_iniciales": [
+    {
+      "catalog_id": "per_i03",
+      "presencia": "residente",
+      "nota": "Rocío confirmada día 1 (slot catálogo I08 → vivienda auto Bloque A)"
+    }
+  ],
+  "lugares_operativos_dia_1": ["lug_cafeteria"],
+  "bloques_abiertos": ["a"]
+}

@@ -1,0 +1,51 @@
+# --- Runtime / local ---
+data/partidas/part_*.json
+data/partidas/*.json
+!data/partidas/.gitkeep
+
+# Logs y temporales
+logs/
+*.log
+tmp/
+cache/
+.phpunit.cache/
+
+# Secretos
+.env
+.env.*
+*.pem
+credentials.json
+
+# SO / IDE
+Thumbs.db
+Desktop.ini
+.DS_Store
+*.swp
+*.swo
+.idea/
+.vscode/
+*.code-workspace
+
+# Dependencias futuras
+/vendor/
+/node_modules/
+
+# Assets generados / evidencias de iteración visual (mantener README y .meta.json)
+assets/personajes/revision/**/*.png
+assets/personajes/revision/**/*.jpg
+assets/personajes/revision/**/*.webp
+assets/personajes/_revision/**/*.png
+assets/personajes/_revision/**/*.jpg
+assets/personajes/_revision/**/*.webp
+assets/personajes/**/evidencia/**/*.png
+assets/personajes/**/evidencia/**/*.jpg
+assets/referencias_visuales/**/*.png
+assets/referencias_visuales/**/*.jpg
+assets/referencias_visuales/**/*.webp
+!assets/**/README.md
+!assets/**/*.meta.json
+!assets/**/_prompt*.json
+
+# Referencia visual landing (binario grande; README documenta ruta Drive)
+docs/referencias_visuales/**/*.png
+docs/referencias_visuales/**/*.jpg

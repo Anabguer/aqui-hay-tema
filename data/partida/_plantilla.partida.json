@@ -1,0 +1,42 @@
+{
+  "_comentario": "Estado runtime de partida. Placeholders marcados con _placeholder: true.",
+  "meta": {
+    "partida_id": null,
+    "seed": null,
+    "config_id": "debug_v0",
+    "schema_version": 1,
+    "created_at": null,
+    "updated_at": null
+  },
+  "reloj": {
+    "temporada_id": "temp_01",
+    "dia_en_temporada": 1,
+    "dia_pueblo": 1,
+    "hora_actual": 8,
+    "ultima_sesion_iso": null,
+    "catch_up_pendiente": {
+      "_placeholder": true,
+      "descripcion": "Estructura para progreso offline; sin eventos generados todavía.",
+      "segundos_pendientes": 0,
+      "eventos_pendientes": []
+    }
+  },
+  "celeste": {
+    "dinero": null,
+    "fama": null,
+    "encuentros_usados_hoy": 0,
+    "encuentros_max_dia": 2,
+    "lugares_desbloqueados": ["lug_cafeteria"],
+    "bloques_abiertos": ["a"]
+  },
+  "bloque_a": {
+    "capacidad": 16,
+    "viviendas": []
+  },
+  "residentes": {},
+  "citas": [],
+  "relaciones_sociales": [],
+  "relaciones_romanticas": [],
+  "buzon": [],
+  "diario": []
+}

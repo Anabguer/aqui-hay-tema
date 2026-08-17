@@ -1,0 +1,12 @@
+{
+  "_comentario": "RELACION SOCIAL. Si tipo esta en parentescos_veto_romance.json, veta_romance=true y no hay romance legal.",
+  "id": "soc_xxx",
+  "persona_a": null,
+  "persona_b": null,
+  "tipo": null,
+  "es_familiar": false,
+  "veta_romance": false,
+  "intensidad": null,
+  "se_soportan": null,
+  "notas": ""
+}

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="640" viewBox="0 0 640 640" role="img" aria-label="Aquí Hay Tema">
+  <rect width="640" height="640" fill="#fbfaf6"/>
+  <rect x="36" y="36" width="568" height="568" fill="none" stroke="#e8e2d6" stroke-width="3"/>
+  <!-- tablero -->
+  <rect x="88" y="120" width="464" height="300" fill="#fff" stroke="#d9d1c3" stroke-width="3"/>
+  <path d="M88 220h464M88 320h464M242 120v300M398 120v300" fill="none" stroke="#ece6db" stroke-width="8"/>
+  <!-- edificios -->
+  <rect x="118" y="148" width="88" height="56" rx="6" fill="#f3efe6" stroke="#c9bfb0"/>
+  <rect x="276" y="148" width="88" height="56" rx="6" fill="#f7e9ee" stroke="#d9b8c4"/>
+  <rect x="434" y="148" width="88" height="56" rx="6" fill="#e8f0ea" stroke="#b7c9bc"/>
+  <rect x="118" y="248" width="88" height="56" rx="6" fill="#eee8f5" stroke="#c5b7d6"/>
+  <rect x="276" y="248" width="88" height="56" rx="6" fill="#f7f0d8" stroke="#d2c48a"/>
+  <rect x="434" y="248" width="88" height="56" rx="6" fill="#e7eef6" stroke="#b4c4d6"/>
+  <!-- cabezas -->
+  <circle cx="162" cy="196" r="11" fill="#f2c7a6"/>
+  <circle cx="318" cy="196" r="11" fill="#c58b5c"/>
+  <circle cx="478" cy="296" r="11" fill="#e8b898"/>
+  <circle cx="210" cy="348" r="11" fill="#d4a07a"/>
+  <!-- corazon -->
+  <path d="M320 78c8-16 32-16 40 0 8 16-16 32-40 52-24-20-48-36-40-52 8-16 32-16 40 0z" fill="#e56b8a"/>
+  <text x="320" y="500" text-anchor="middle" font-family="Georgia, serif" font-size="36" font-weight="700" fill="#2b2b2b">Aquí Hay Tema</text>
+  <text x="320" y="538" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#8a7f74">Uy. Aquí hay tema.</text>
+</svg>
