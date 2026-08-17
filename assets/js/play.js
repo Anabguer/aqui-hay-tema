@@ -155,7 +155,7 @@
       });
       fb.textContent = r.ok
         ? `OK: ${r.encuentro.id} (${r.encuentro.tipo}) — avanza el reloj para resolver`
-        : `Error: ${r.error}${r.residente ? ' (' + r.residente + ')' : ''}`;
+        : `Error: ${r.mensaje_ui || r.error}${r.residente ? ' (' + r.residente + ')' : ''}`;
       await refreshEstado();
     });
 
