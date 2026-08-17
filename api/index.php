@@ -4,9 +4,17 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/src/autoload.php';
 
 use AquiHayTema\Engine\AgendaEngine;
+use AquiHayTema\Engine\AutonomousPlanner;
+use AquiHayTema\Engine\BuzonEngine;
 use AquiHayTema\Engine\CitaEngine;
+use AquiHayTema\Engine\DiarioEngine;
+use AquiHayTema\Engine\EconomyLedger;
+use AquiHayTema\Engine\EncuentroEngine;
+use AquiHayTema\Engine\EncuentroLifecycle;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\PresenciaEngine;
 use AquiHayTema\Engine\RelacionEngine;
+use AquiHayTema\Engine\RngService;
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -73,8 +81,14 @@ try {
 
         case 'partida.reiniciar':
             $partida = requirePartida($service, $body);
-            $nueva = $service->reiniciar($partida['meta']['partida_id']);
-            jsonOut(['ok' => true, 'partida_id' => $nueva['meta']['partida_id'], 'estado' => $service->estadoResumido($nueva)]);
+            $id = $partida['meta']['partida_id'];
+            $nueva = $service->reiniciarPartida($id, $body['config_id'] ?? 'debug_v0', $body['seed'] ?? null);
+            jsonOut([
+                'ok' => true,
+                'partida_id' => $id,
+                'nota' => 'Reiniciar conserva partida_id; nueva partida usa partida.nueva',
+                'estado' => $service->estadoResumido($nueva),
+            ]);
 
         case 'partida.inspeccionar':
             $partida = requirePartida($service, array_merge($body, $_GET));
@@ -82,8 +96,7 @@ try {
 
         case 'reloj.avanzar':
             $partida = requirePartida($service, $body);
-            $horas = (int) ($body['horas'] ?? 1);
-            $result = $service->avanzarReloj($partida, $horas);
+            $result = $service->avanzarReloj($partida, (int) ($body['horas'] ?? 1));
             $service->guardar($partida);
             jsonOut(['ok' => true, 'reloj' => $result]);
 
@@ -103,21 +116,13 @@ try {
 
         case 'residente.incorporar':
             $partida = requirePartida($service, $body);
-            $catalogId = $body['catalog_id'] ?? null;
-            if (!$catalogId) {
-                jsonOut(['ok' => false, 'error' => 'catalog_id_requerido'], 400);
-            }
-            $r = $service->incorporarResidenteCatalogo($partida, (string) $catalogId);
+            $r = $service->incorporarResidenteCatalogo($partida, (string) ($body['catalog_id'] ?? ''));
             $service->guardar($partida);
             jsonOut(['ok' => $r['ok'], 'resultado' => $r]);
 
         case 'vivienda.liberar':
             $partida = requirePartida($service, $body);
-            $vid = $body['vivienda_id'] ?? null;
-            if (!$vid) {
-                jsonOut(['ok' => false, 'error' => 'vivienda_id_requerido'], 400);
-            }
-            $r = $service->liberarVivienda($partida, (string) $vid);
+            $r = $service->liberarVivienda($partida, (string) ($body['vivienda_id'] ?? ''));
             $service->guardar($partida);
             jsonOut(['ok' => true, 'resultado' => $r]);
 
@@ -133,12 +138,55 @@ try {
         case 'agenda.disponibilidad':
             $partida = requirePartida($service, array_merge($body, $_GET));
             $rid = $body['residente_id'] ?? null;
-            $dia = (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']);
-            $hora = (int) ($body['hora'] ?? 0);
             if (!$rid) {
                 jsonOut(['ok' => false, 'error' => 'residente_id_requerido'], 400);
             }
-            jsonOut(['ok' => true, 'disponibilidad' => AgendaEngine::estaDisponible($partida, (string) $rid, $dia, $hora)]);
+            jsonOut(['ok' => true, 'disponibilidad' => AgendaEngine::estaDisponible(
+                $partida,
+                (string) $rid,
+                (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']),
+                (int) ($body['hora'] ?? 0)
+            )]);
+
+        case 'encuentro.programar':
+            $partida = requirePartida($service, $body);
+            $r = $service->programarEncuentro(
+                $partida,
+                is_array($body['participantes'] ?? null) ? $body['participantes'] : [
+                    (string) ($body['residente_a'] ?? ''),
+                    (string) ($body['residente_b'] ?? ''),
+                ],
+                (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']),
+                (int) ($body['hora'] ?? 17),
+                (string) ($body['tipo'] ?? 'conocerse'),
+                isset($body['lugar']) ? (string) $body['lugar'] : null
+            );
+            if ($r['ok'] ?? false) {
+                $service->guardar($partida);
+            }
+            jsonOut($r);
+
+        case 'encuentro.estado':
+            $partida = requirePartida($service, $body);
+            $r = EncuentroEngine::cambiarEstado($partida, (string) ($body['encuentro_id'] ?? ''), (string) ($body['estado'] ?? ''));
+            if ($r['ok'] ?? false) {
+                $service->guardar($partida);
+            }
+            jsonOut($r);
+
+        case 'encuentro.cancelar':
+            $partida = requirePartida($service, $body);
+            $r = EncuentroEngine::cancelar($partida, (string) ($body['encuentro_id'] ?? ''));
+            if ($r['ok'] ?? false) {
+                $service->guardar($partida);
+            }
+            jsonOut($r);
+
+        case 'encuentro.sincronizar':
+            $partida = requirePartida($service, $body);
+            $r = EncuentroLifecycle::sincronizarConReloj($partida, $service->getLogger());
+            $service->guardar($partida);
+            jsonOut(['ok' => true, 'resultado' => $r]);
 
         case 'cita.programar':
             $partida = requirePartida($service, $body);
@@ -157,16 +205,12 @@ try {
             jsonOut($r);
 
         case 'cita.estado':
-            $partida = requirePartida($service, $body);
-            $r = CitaEngine::cambiarEstado($partida, (string) ($body['cita_id'] ?? ''), (string) ($body['estado'] ?? ''));
-            if ($r['ok'] ?? false) {
-                $service->guardar($partida);
-            }
-            jsonOut($r);
-
         case 'cita.cancelar':
             $partida = requirePartida($service, $body);
-            $r = CitaEngine::cancelar($partida, (string) ($body['cita_id'] ?? ''));
+            $id = (string) ($body['cita_id'] ?? $body['encuentro_id'] ?? '');
+            $r = $action === 'cita.cancelar'
+                ? CitaEngine::cancelar($partida, $id)
+                : CitaEngine::cambiarEstado($partida, $id, (string) ($body['estado'] ?? ''));
             if ($r['ok'] ?? false) {
                 $service->guardar($partida);
             }
@@ -196,19 +240,76 @@ try {
             $service->guardar($partida);
             jsonOut($r);
 
+        case 'mapa.presencia':
+            $partida = requirePartida($service, array_merge($body, $_GET));
+            jsonOut(['ok' => true, 'mapa' => PresenciaEngine::resolver($partida, $root)]);
+
+        case 'buzon.listar':
+            $partida = requirePartida($service, array_merge($body, $_GET));
+            jsonOut(['ok' => true, 'mensajes' => BuzonEngine::listar($partida, $body['estado'] ?? null)]);
+
+        case 'buzon.leer':
+            $partida = requirePartida($service, $body);
+            $r = BuzonEngine::marcarLeido($partida, (string) ($body['mensaje_id'] ?? ''));
+            if ($r['ok'] ?? false) {
+                $service->guardar($partida);
+            }
+            jsonOut($r);
+
+        case 'buzon.crear_dev':
+            require_once $root . '/src/dev_gate.php';
+            if (!aht_dev_enabled()) {
+                jsonOut(['ok' => false, 'error' => 'dev_deshabilitado'], 403);
+            }
+            $partida = requirePartida($service, $body);
+            $r = BuzonEngine::crear($partida, is_array($body['mensaje'] ?? null) ? $body['mensaje'] : [
+                'texto' => '[DEV PLACEHOLDER] Mensaje de prueba',
+                'de_persona' => $body['de_persona'] ?? 'per_i03',
+                'tipo' => $body['tipo'] ?? 'peticion',
+            ]);
+            $service->guardar($partida);
+            jsonOut($r);
+
+        case 'diario.listar':
+            $partida = requirePartida($service, array_merge($body, $_GET));
+            jsonOut(['ok' => true, 'entradas' => DiarioEngine::listarPorDia($partida, isset($body['dia']) ? (int) $body['dia'] : null)]);
+
+        case 'npc.planificar_dev':
+            require_once $root . '/src/dev_gate.php';
+            if (!aht_dev_enabled()) {
+                jsonOut(['ok' => false, 'error' => 'dev_deshabilitado'], 403);
+            }
+            $partida = requirePartida($service, $body);
+            $rng = RngService::fromPartida($partida);
+            $r = AutonomousPlanner::planificarSlot(
+                $partida,
+                (string) ($body['residente_id'] ?? ''),
+                (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']),
+                (int) ($body['hora'] ?? $partida['reloj']['hora_actual']),
+                $rng,
+                $service->getLogger()
+            );
+            $service->guardar($partida);
+            jsonOut($r);
+
+        case 'economia.registrar_dev':
+            require_once $root . '/src/dev_gate.php';
+            if (!aht_dev_enabled()) {
+                jsonOut(['ok' => false, 'error' => 'dev_deshabilitado'], 403);
+            }
+            $partida = requirePartida($service, $body);
+            $r = EconomyLedger::registrar(
+                $partida,
+                (string) ($body['recurso'] ?? 'dinero'),
+                (float) ($body['delta'] ?? 0),
+                (string) ($body['motivo'] ?? 'dev'),
+                is_array($body['meta'] ?? null) ? $body['meta'] : []
+            );
+            $service->guardar($partida);
+            jsonOut($r);
+
         default:
-            jsonOut([
-                'ok' => false,
-                'error' => 'accion_desconocida',
-                'acciones' => [
-                    'partida.nueva', 'partida.listar', 'partida.estado', 'partida.guardar',
-                    'partida.cargar', 'partida.reiniciar', 'partida.inspeccionar',
-                    'reloj.avanzar', 'residente.ficha', 'residente.placeholder',
-                    'residente.incorporar', 'vivienda.liberar', 'agenda.dia',
-                    'agenda.disponibilidad', 'cita.programar', 'cita.estado',
-                    'cita.cancelar', 'relacion.social', 'relacion.romance',
-                ],
-            ], 400);
+            jsonOut(['ok' => false, 'error' => 'accion_desconocida', 'action' => $action], 400);
     }
 } catch (Throwable $e) {
     jsonOut(['ok' => false, 'error' => 'excepcion', 'mensaje' => $e->getMessage()], 500);

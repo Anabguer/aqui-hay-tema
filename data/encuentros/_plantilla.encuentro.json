@@ -1,0 +1,14 @@
+{
+  "_comentario": "ENCUENTRO / PLAN — unidad principal. Cita romántica = tipo romantico.",
+  "id": "enc_xxx",
+  "tipo": "conocerse",
+  "intencion": "celeste_organizado",
+  "participantes": [],
+  "lugar": null,
+  "hora": null,
+  "dia": null,
+  "actividad": null,
+  "estado": "programado",
+  "reserva_agenda": { "tipo": "encuentro", "origen": "celeste" },
+  "resultado": null
+}

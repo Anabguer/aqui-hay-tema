@@ -3,20 +3,17 @@
 
   const API = 'api/index.php';
   let partidaId = localStorage.getItem('aht_partida_id');
+  let selectedResidente = null;
 
   async function api(action, body = {}, method = 'POST') {
-    const opts = {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-    };
+    const opts = { method, headers: { 'Content-Type': 'application/json' } };
     if (method !== 'GET') {
       opts.body = JSON.stringify({ partida_id: partidaId, ...body });
     }
     const url = method === 'GET'
       ? `${API}?action=${encodeURIComponent(action)}&partida_id=${encodeURIComponent(partidaId || '')}`
       : `${API}?action=${encodeURIComponent(action)}`;
-    const res = await fetch(url, opts);
-    return res.json();
+    return (await fetch(url, opts)).json();
   }
 
   function $(sel) { return document.querySelector(sel); }
@@ -40,16 +37,33 @@
     return r;
   }
 
+  async function loadResidentesSelects() {
+    const insp = await api('partida.inspeccionar', {}, 'GET');
+    if (!insp.ok) return;
+    window._residentesMap = {};
+    const selA = $('#enc-a');
+    const selB = $('#enc-b');
+    selA.innerHTML = '';
+    selB.innerHTML = '';
+    Object.entries(insp.partida.residentes || {}).forEach(([id, r]) => {
+      window._residentesMap[id] = r.identidad_publica?.nombre || id;
+      const label = `${r.identidad_publica?.nombre || id} (${id})`;
+      selA.appendChild(new Option(label, id));
+      selB.appendChild(new Option(label, id));
+    });
+  }
+
   async function refreshEstado() {
     const r = await api('partida.estado', {}, 'GET');
-    if (!r.ok) {
-      $('#status-reloj').textContent = 'Error: ' + (r.error || '?');
-      return null;
-    }
+    if (!r.ok) return null;
     const e = r.estado;
     $('#status-reloj').textContent = e.reloj_texto;
-    $('#status-meta').textContent = `Partida ${e.meta.partida_id.slice(0, 12)}… · ${e.residentes_count} residentes · ${e.citas_activas} citas activas`;
+    $('#status-meta').textContent =
+      `${e.residentes_count} residentes · ${e.encuentros_activos ?? 0} encuentros activos · schema v${e.meta.schema_version}`;
     renderBloqueA(e.bloque_a);
+    await renderMapa();
+    await renderBuzon();
+    if (selectedResidente) await abrirFicha(selectedResidente);
     return e;
   }
 
@@ -58,97 +72,105 @@
     grid.innerHTML = '';
     bloque.viviendas.forEach(v => {
       const slot = el('div', 'slot ' + (v.ocupante_id ? 'ocupado' : 'libre'));
-      slot.dataset.vivienda = v.id;
       slot.appendChild(el('div', 'slot-id', v.id));
-      const nombre = v.ocupante_id
-        ? (window._residentesMap?.[v.ocupante_id] || v.ocupante_id)
-        : '— libre —';
-      slot.appendChild(el('div', 'slot-nombre', nombre));
+      slot.appendChild(el('div', 'slot-nombre', v.ocupante_id
+        ? (window._residentesMap?.[v.ocupante_id] || v.ocupante_id) : '— libre —'));
       if (v.ocupante_id) {
-        slot.addEventListener('click', () => abrirFicha(v.ocupante_id, slot));
+        slot.addEventListener('click', () => {
+          selectedResidente = v.ocupante_id;
+          document.querySelectorAll('.slot.selected').forEach(s => s.classList.remove('selected'));
+          slot.classList.add('selected');
+          abrirFicha(v.ocupante_id);
+        });
       }
       grid.appendChild(slot);
     });
   }
 
-  async function abrirFicha(residenteId, slotEl) {
-    document.querySelectorAll('.slot.selected').forEach(s => s.classList.remove('selected'));
-    if (slotEl) slotEl.classList.add('selected');
+  async function renderMapa() {
+    const r = await api('mapa.presencia', {}, 'GET');
+    const panel = $('#mapa-panel');
+    if (!r.ok) {
+      panel.textContent = 'Error mapa';
+      return;
+    }
+    panel.innerHTML = '';
+    r.mapa.lugares.forEach(lug => {
+      const row = el('div', 'campo');
+      const tag = lug.operativo ? 'ABIERTO' : (lug.candado ? 'CANDADO' : 'cerrado');
+      row.appendChild(el('div', 'label', `${lug.nombre} [${tag}]`));
+      const pres = lug.residentes_presentes.map(p => p.iniciales).join(' ') || '—';
+      row.appendChild(document.createTextNode(` ${pres}`));
+      panel.appendChild(row);
+    });
+  }
 
+  async function renderBuzon() {
+    const r = await api('buzon.listar', {}, 'GET');
+    const n = r.ok ? r.mensajes.length : 0;
+    $('#buzon-panel').textContent = n
+      ? `${n} mensaje(s) en buzón`
+      : 'Bandeja vacía (estructura lista, sin catálogo narrativo).';
+  }
+
+  async function abrirFicha(residenteId) {
     const r = await api('residente.ficha', { residente_id: residenteId }, 'GET');
     const panel = $('#ficha-panel');
     if (!r.ok) {
-      panel.innerHTML = '<p class="error">No se pudo cargar ficha</p>';
+      panel.innerHTML = '<p class="error">Error ficha</p>';
       return;
     }
     const f = r.ficha;
     panel.innerHTML = '';
-
-    panel.appendChild(el('h2', null, f.identidad.nombre));
-    if (f.placeholder) {
-      panel.appendChild(el('p', 'badge-provisional', 'PLACEHOLDER DEV'));
-    }
-
-    const campos = [
-      ['Vivienda', f.vivienda_id || '—'],
-      ['Slot catálogo', f.identidad.slot_catalogo || '—'],
-      ['Trabajo', f.trabajo.ocupacion || '—'],
-      ['Presencia', f.presencia],
-    ];
-    campos.forEach(([label, val]) => {
-      const c = el('div', 'campo');
-      c.appendChild(el('div', 'label', label));
-      c.appendChild(document.createTextNode(String(val)));
-      panel.appendChild(c);
-    });
-
-    const hobbies = el('div', 'campo');
-    hobbies.appendChild(el('div', 'label', 'Hobbies conocidos'));
-    hobbies.appendChild(document.createTextNode((f.hobbies.conocidos || []).join(', ') || '—'));
-    panel.appendChild(hobbies);
-
-    const rel = el('div', 'campo');
-    rel.appendChild(el('div', 'label', 'Relaciones'));
+    panel.appendChild(el('h3', null, f.identidad.nombre));
+    panel.appendChild(el('p', null, `Trabajo: ${f.trabajo?.ocupacion || '—'}`));
     const relKeys = Object.keys(f.relaciones || {});
-    rel.appendChild(document.createTextNode(relKeys.length ? relKeys.join(', ') : 'Ninguna registrada'));
-    panel.appendChild(rel);
-
-    const ag = el('div', 'campo agenda-mini');
-    ag.appendChild(el('div', 'label', 'Agenda hoy (24h)'));
-    (f.agenda_hoy?.slots || []).forEach(s => {
-      const line = el('div', s.ocupado ? 'ocupado' : 'libre');
-      line.textContent = `${String(s.hora).padStart(2, '0')}:00 ${s.ocupado ? `[${s.capa}/${s.tipo}]` : 'libre'}`;
-      ag.appendChild(line);
-    });
-    panel.appendChild(ag);
-  }
-
-  async function loadResidentesMap(estado) {
-    window._residentesMap = {};
-    const insp = await api('partida.inspeccionar', {}, 'GET');
-    if (insp.ok) {
-      Object.entries(insp.partida.residentes || {}).forEach(([id, r]) => {
-        window._residentesMap[id] = r.identidad_publica?.nombre || id;
-      });
+    panel.appendChild(el('p', null, `Relaciones: ${relKeys.length || 'ninguna'}`));
+    if (f.ultimo_encuentro?.resultado) {
+      const res = f.ultimo_encuentro.resultado;
+      panel.appendChild(el('p', 'badge-provisional', 'Último encuentro (PLACEHOLDER)'));
+      panel.appendChild(el('p', null, res.texto_resumen || JSON.stringify(res.delta_social || {})));
     }
   }
 
   async function init() {
+    const horaSel = $('#enc-hora');
+    for (let h = 8; h <= 22; h++) {
+      horaSel.appendChild(new Option(`${String(h).padStart(2, '0')}:00`, String(h)));
+    }
+    horaSel.value = '19';
+
     await ensurePartida();
-    const e = await refreshEstado();
-    if (e) await loadResidentesMap(e);
+    await loadResidentesSelects();
     await refreshEstado();
 
-    $('#btn-guardar').addEventListener('click', async () => {
-      await api('partida.guardar', {});
-      $('#status-meta').textContent += ' · guardado';
+    $('#btn-programar').addEventListener('click', async () => {
+      const fb = $('#enc-feedback');
+      fb.textContent = 'Programando…';
+      const r = await api('encuentro.programar', {
+        participantes: [$('#enc-a').value, $('#enc-b').value],
+        tipo: $('#enc-tipo').value,
+        hora: parseInt($('#enc-hora').value, 10),
+        lugar: 'lug_cafeteria',
+      });
+      fb.textContent = r.ok
+        ? `OK: ${r.encuentro.id} (${r.encuentro.tipo}) — avanza el reloj para resolver`
+        : `Error: ${r.error}${r.residente ? ' (' + r.residente + ')' : ''}`;
+      await refreshEstado();
     });
 
+    $('#btn-avanzar-1h').addEventListener('click', async () => {
+      await api('reloj.avanzar', { horas: 1 });
+      await refreshEstado();
+    });
+
+    $('#btn-guardar').addEventListener('click', () => api('partida.guardar', {}));
     $('#btn-nueva').addEventListener('click', async () => {
-      if (!confirm('¿Crear partida nueva? (La actual queda en disco)')) return;
+      if (!confirm('¿Nueva partida (nuevo id)?')) return;
       localStorage.removeItem('aht_partida_id');
       partidaId = null;
       await ensurePartida();
+      await loadResidentesSelects();
       await refreshEstado();
     });
   }

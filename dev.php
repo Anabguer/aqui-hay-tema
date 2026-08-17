@@ -1,5 +1,11 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/src/dev_gate.php';
+if (!aht_dev_enabled()) {
+    http_response_code(403);
+    echo 'Modo dev deshabilitado. Crear dev.local.php o AHT_DEV=1';
+    exit;
+}
 header('Content-Type: text/html; charset=utf-8');
 ?>
 <!DOCTYPE html>

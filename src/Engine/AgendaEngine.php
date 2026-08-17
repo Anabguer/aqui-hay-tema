@@ -36,7 +36,7 @@ final class AgendaEngine
 
         self::aplicarEstructural($slots, $ocupacion, $diaSemana);
         self::aplicarRecurrentes($slots, $residente, $diaSemana);
-        self::aplicarCitas($slots, $partida, $residenteId, $diaPueblo);
+        self::aplicarReservasProgramadas($slots, $partida, $residenteId, $diaPueblo);
 
         return [
             'residente_id' => $residenteId,
@@ -104,27 +104,35 @@ final class AgendaEngine
         }
     }
 
-    private static function aplicarCitas(array &$slots, array $partida, string $residenteId, int $diaPueblo): void
+    /** Reservas programadas: encuentros, planes autónomos futuros, etc. */
+    private static function aplicarReservasProgramadas(array &$slots, array $partida, string $residenteId, int $diaPueblo): void
     {
-        foreach ($partida['citas'] as $cita) {
-            if ((int) ($cita['dia'] ?? -1) !== $diaPueblo) {
+        $items = EncuentroEngine::list($partida);
+        foreach ($partida['npc_autonomo']['planes_pendientes'] ?? [] as $plan) {
+            $items[] = $plan;
+        }
+
+        foreach ($items as $item) {
+            if ((int) ($item['dia'] ?? -1) !== $diaPueblo) {
                 continue;
             }
-            if (!in_array($cita['estado'] ?? '', ['programado', 'en_curso'], true)) {
+            $estado = $item['estado'] ?? 'programado';
+            if (!in_array($estado, ['programado', 'en_curso'], true)) {
                 continue;
             }
-            $participantes = $cita['participantes'] ?? [];
+            $participantes = $item['participantes'] ?? [];
             if (!in_array($residenteId, $participantes, true)) {
                 continue;
             }
-            $hora = (int) ($cita['hora'] ?? 0);
+            $hora = (int) ($item['hora'] ?? 0);
+            $reserva = $item['reserva_agenda'] ?? ['tipo' => 'encuentro'];
             $slots[$hora] = [
                 'hora' => $hora,
                 'ocupado' => true,
                 'capa' => 'programado',
-                'tipo' => 'cita',
-                'detalle' => $cita['id'],
-                'reserva_id' => $cita['id'],
+                'tipo' => $reserva['tipo'] ?? 'encuentro',
+                'detalle' => $item['id'] ?? null,
+                'reserva_id' => $item['id'] ?? null,
             ];
         }
     }
