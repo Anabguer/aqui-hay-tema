@@ -362,11 +362,11 @@ Ver `MVP.md`. Resumen: trío ~3, solo Bloque A, cafetería primero, placeholders
 
 **Falta:** esqueleto aprobado, plantillas agenda, 3–4 pilotos, micro-sim, wireframes, cifras economía/aforo.
 
-### B) Implementación: **~8 %**
+### B) Implementación: **~28 %**
 
-**Incluido:** landing PHP, plantillas JSON, **motor partida** (persistencia JSON, reloj, Bloque A, agenda 24h, citas, relaciones scaffold), **API** (`api/index.php`), **UI provisional** (`play.php`), **harness dev** (`dev.php`), smoke tests.
+**Incluido:** Turno 1 + schema v2, RNG, logging, EncuentroEngine/lifecycle/resolver, mapa técnico presencia, buzón/diario estructura, CompatibilityEvaluator contrato, NPC planner dev, EconomyLedger, bucle play.php, tests modulares ALL PASS.
 
-**Falta para subir:** mapa jugable, buzón/diario UI, economía runtime, vida autónoma NPC, resultados de cita, evaluador compatibilidad, 15 fichas en pool activo.
+**Falta:** catch-up eventos, B/C día 1, contenido narrativo, fórmulas compatibilidad, economía balanceada, retratos.
 
 ---
 
