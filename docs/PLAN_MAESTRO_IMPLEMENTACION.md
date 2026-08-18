@@ -1,8 +1,8 @@
 # Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-08-18 (residente generado + compatibilidad direccional + química)
+**Versión:** 2026-08-18 (vida relacional: pareja, crisis, memoria)
 
-El **~57 %** no infla el playtest: `play.php` sigue con deltas placeholder. Lo nuevo es generador de residente, encaje A→B/B→A y química persistida, más laboratorio de calibración.  
+El **~58 %** no infla el playtest: `play.php` sigue con deltas placeholder. Lo nuevo es social/romance direccional, hitos de pareja y motor diario inactivo en play.  
 **Punto de partida:** ~8 % (Turno 1) → **~28 %** tras Bloques 0–6 ejecutados en Turno 2
 
 ---
@@ -31,7 +31,7 @@ El **~57 %** no infla el playtest: `play.php` sigue con deltas placeholder. Lo n
 - **Química**: facilidad inexplicable para conectar (amistad o romance). Persistida, seed, no rerolea.
 - **Relación**: lo construido en partida (canales social / romance / conflicto).
 - V1 romance: **todos con todos** si edad compatible. **No** hay filtro gay/hetero/bi.
-- Parentesco veto: sigue en catálogo; **no** se aplica todavía como capa dura aquí.
+- **Parentesco cercano = veto romántico duro.** La química no lo atraviesa. Tío/primo: BLOQUEADO_DECISION.
 
 ### Agenda genérica
 - Reservas: trabajo, sueño, recurrente, encuentro, autónomo, temporal.
@@ -185,11 +185,12 @@ Almacenamiento: `logs/partida_*.jsonl` + `event_log[]` en partida (últimas 200)
 | Tras Bloques 0–6 (Turno 2) | ~28 % |
 | Playtest 01 (bucle móvil jugable, placeholder) | **~55 %** |
 | Tras motor de vida/relaciones (infra dominio, sin UI) | ~56 % |
-| Tras generador + compatibilidad/química (calibración, sin UI) | **~57 %** |
+| Tras generador + compatibilidad/química (calibración, sin UI) | ~57 % |
+| Tras vida relacional / pareja / crisis / memoria (infra, sin UI) | **~58 %** |
 | Con contenido mínimo auditado + pueblo vivo en play | ~45–55 % ya cubierto en playtest; el salto jugable real vendrá cuando el flujo proponer→decidir esté en UI |
 | V0 completo REGLAS_NO_NEGOCIABLES | ~70 %+ |
 
-El **~57 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relación siguen en +1 placeholder. Lo nuevo es generador + encaje + química + laboratorio, aún no jugable en la UI.
+El **~58 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relación siguen en +1 placeholder. Pareja/crisis/ruptura existen como **hitos de dominio**, no como pueblo autónomo en UI.
 
 ---
 
@@ -220,15 +221,23 @@ El **~57 %** no infla el playtest: `play.php` sigue programando encuentros en di
 | Ventanas de cooldown por familia de evento | MemoriaEventos |
 | Qué se revela el día 1 (1 hobby / 1 rasgo) | Discovery |
 | Fórmula de voluntad NPC (UI no decide) | Propuesta |
-| Anti-clon agresivo de generación | Primero medir (simulador) |
+| Umbrales estabilidad → tensión → crisis → posible ruptura | RelacionFase de canal (NO es crisis de pareja) |
+| Días/deltas de desgaste social y de pareja | RelacionDesgaste |
+| Presupuesto y pesos del motor diario | AcontecimientoDiario |
+| % flechazo / deltas romance de acciones | AccionRomantica |
+| Cortes UI de bandas sociales (amigo, rival…) | social.bandas |
+| Tío/primo como veto | parentesco.tio_primo_veto |
+| Probabilidad de seguir un consejo | ConsejoEngine |
+| Base de estabilidad al reconciliar | pareja.base_reconciliacion |
+| Pesos de experiencia de cita / carga de azar | EncuentroExperiencia |
 
 ---
 
 ## 10. Siguiente bloque recomendado
 
-**Motor ya preparado:** propuesta → decisión A/B; residente generado por seed; compatibilidad A→B/B→A; química persistida; contrato de resolución ponderada; laboratorio de 1000 pueblos.
+**Esperar revisión Neni + ChatGPT.** No seguir con otro bloque de motorización hasta cerrar pesos/umbrales del laboratorio.
 
-**Siguiente salto jugable (cuando Neni/ChatGPT cierren pesos tras el simulador):** no cablear fórmulas en play; no activar `encuentro.proponer` en UI hasta que se pida. El playtest sigue usando `encuentro.programar`.
+Playtest sigue en `encuentro.programar`. Motor diario `activo_en_play=false`.
 
 ---
 
@@ -369,3 +378,34 @@ El jugador no ve la ficha interna completa. Compatibilidad y química permanecen
 
 ### Propuesta / NPC
 `encuentro.propuesta.decidir` es **DEV**. La UI pública no decide por el NPC.
+
+---
+
+## 17. Vida relacional, pareja y memoria (2026-08-18)
+
+### Canales (separados, direccionales)
+- Social A→B y B→A (pueden ser amigo vs mejor amigo).
+- Romance A→B y B→A (independientes, fluctúan).
+- Conflicto propio.
+- Química y compatibilidad **no** son relación.
+- **Desconocido** = nunca han interactuado (no es un 0). Tras el primer contacto `conocidos=true` aunque el valor sea neutro o negativo.
+
+### Pareja
+Nunca `romance > X → pareja`. Hito explícito (declaración u otro) + respuesta de ambos → `estado_pareja=pareja`.
+Estabilidad de pareja **compartida** y distinta del romance. No hay barra de “amor compartido”.
+
+### Crisis / ruptura
+Nunca por umbral. Acontecimiento explícito. Tras romper: se conservan social, romance, conflicto e historial. Estabilidad operativa se apaga; queda `memoria`. Reconciliación ≠ pareja nueva.
+
+### Motor diario
+Presupuesto limitado. Catálogo de acontecimientos con elegibilidad. `activo_en_play=false` y presupuesto `null` hasta calibrar.
+
+### Emociones V1
+neutro / alegre / triste / enfadado. Afectan conducta (contrato). Un despido puede poner triste; **no** resta romance.
+
+### Parentesco
+Veto romántico duro. Química no lo atraviesa.
+
+### Buzón
+Clasificación importante / oportunidad / petición / cotilleo. Estado **en_espera**. No hay cupo fijo 4–5.
+

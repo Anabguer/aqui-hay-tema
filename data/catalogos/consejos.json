@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "catalogo": "consejos",
+    "estado": "contrato",
+    "_provisional": true,
+    "descripcion": "Respuestas de Celestine. No tocan barras. Inclinan conducta futura. El NPC puede no seguirlas."
+  },
+  "items": [
+    {
+      "id": "lanzate",
+      "nombre": "Lánzate",
+      "inclinacion": "iniciativa_romantica",
+      "efecto_barra": false,
+      "_bloqueado_decision": ["magnitud", "duracion"]
+    },
+    {
+      "id": "queda_mas",
+      "nombre": "Queda más con esa persona primero",
+      "inclinacion": "buscar_encuentros",
+      "efecto_barra": false,
+      "_bloqueado_decision": ["magnitud", "duracion"]
+    },
+    {
+      "id": "no_es_el_momento",
+      "nombre": "No es el momento",
+      "inclinacion": "retrasar_iniciativa",
+      "efecto_barra": false,
+      "_bloqueado_decision": ["magnitud", "duracion"]
+    },
+    {
+      "id": "intentar_arreglar",
+      "nombre": "Intentar arreglarlo",
+      "inclinacion": "reparar_pareja",
+      "efecto_barra": false,
+      "_bloqueado_decision": ["magnitud"]
+    },
+    {
+      "id": "tomar_distancia",
+      "nombre": "Tomar distancia",
+      "inclinacion": "distancia",
+      "efecto_barra": false,
+      "_bloqueado_decision": ["magnitud"]
+    },
+    {
+      "id": "favorecer_ruptura",
+      "nombre": "Si no estás bien, plantéatelo",
+      "inclinacion": "decidir_ruptura",
+      "efecto_barra": false,
+      "_nota": "Inclina. NO ordena romper.",
+      "_bloqueado_decision": ["magnitud"]
+    }
+  ]
+}

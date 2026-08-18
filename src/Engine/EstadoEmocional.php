@@ -11,6 +11,36 @@ namespace AquiHayTema\Engine;
 final class EstadoEmocional
 {
     public const NEUTRO = 'neutro';
+    public const ALEGRE = 'alegre';
+    public const TRISTE = 'triste';
+    public const ENFADADO = 'enfadado';
+    public const V1 = [self::NEUTRO, self::ALEGRE, self::TRISTE, self::ENFADADO];
+
+    public static function canonId(string $id): string
+    {
+        if ($id === 'neutral') {
+            return self::NEUTRO;
+        }
+        return $id !== '' ? $id : self::NEUTRO;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function modificadores(string $id): array
+    {
+        return [
+            'id' => self::canonId($id),
+            'aceptar_planes' => null,
+            'experiencia_encuentro' => null,
+            'iniciativa_social' => null,
+            'iniciativa_romantica' => null,
+            'riesgo_conflicto' => null,
+            'peticiones' => null,
+            'no_modifica_romance_automatico' => true,
+            '_bloqueado_decision' => ['valores'],
+        ];
+    }
 
     public static function estructura(
         string $id = self::NEUTRO,
@@ -22,7 +52,7 @@ final class EstadoEmocional
         ?int $duracionHoras = null
     ): array {
         return [
-            'id' => $id !== '' ? $id : self::NEUTRO,
+            'id' => $id !== '' ? self::canonId($id) : self::NEUTRO,
             'intensidad' => $intensidad,
             'origen' => $origen !== '' ? $origen : 'inicial',
             'contexto' => $contexto,

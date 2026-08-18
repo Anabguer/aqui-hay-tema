@@ -29,15 +29,19 @@ final class SchemaFields
         CompatibilidadOculta::ensure($partida);
         QuimicaEngine::ensure($partida);
         MemoriaEventos::ensure($partida);
+        RelacionBitacora::ensure($partida);
+        $partida['parentesco'] ??= [];
+        $partida['inclinaciones_consejo'] ??= [];
+        $partida['acontecimientos_log'] ??= [];
 
         foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {
             if (is_array($rel)) {
-                RelacionFase::ensure($partida['relaciones_sociales'][$i]);
+                RelacionEngine::ensureSocialCampos($partida['relaciones_sociales'][$i]);
             }
         }
         foreach ($partida['relaciones_romanticas'] ?? [] as $i => $rel) {
             if (is_array($rel)) {
-                RelacionFase::ensure($partida['relaciones_romanticas'][$i]);
+                RelacionEngine::ensureRomanceCampos($partida['relaciones_romanticas'][$i]);
             }
         }
         foreach ($partida['relaciones_conflicto'] ?? [] as $i => $rel) {

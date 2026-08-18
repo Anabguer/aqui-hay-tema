@@ -22,10 +22,17 @@ final class EncuentroPonderacion
         $emoA = $partida['residentes'][$a]['runtime']['estado_emocional']['id'] ?? null;
         $emoB = $partida['residentes'][$b]['runtime']['estado_emocional']['id'] ?? null;
 
+        $socAb = ($a !== '' && $b !== '') ? RelacionEngine::socialHacia($partida, $a, $b) : null;
+        $socBa = ($a !== '' && $b !== '') ? RelacionEngine::socialHacia($partida, $b, $a) : null;
         $factores = [
             'compat_ab' => $a !== '' && $b !== '' ? CompatibilidadOculta::hacia($partida, $a, $b) : null,
             'compat_ba' => $a !== '' && $b !== '' ? CompatibilidadOculta::hacia($partida, $b, $a) : null,
             'quimica' => $a !== '' && $b !== '' ? QuimicaEngine::obtener($partida, $a, $b) : null,
+            'social_ab' => $socAb,
+            'social_ba' => $socBa,
+            'romance_ab' => $a !== '' && $b !== '' ? RelacionEngine::romanceHacia($partida, $a, $b) : null,
+            'romance_ba' => $a !== '' && $b !== '' ? RelacionEngine::romanceHacia($partida, $b, $a) : null,
+            'conflicto' => $rel['conflicto']['intensidad'] ?? null,
             'vinculo' => $rel['romance']['vinculo'] ?? ($rel['social']['intensidad'] ?? null),
             'lugar' => $lugar,
             'plan_a' => $a !== '' ? PlanAfinidad::paraParticipante($partida, $a, $lugar, $catalog) : null,

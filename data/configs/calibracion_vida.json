@@ -1,0 +1,115 @@
+{
+  "_provisional": true,
+  "_nota": "CALIBRACIÓN vida relacional. NO es canon. Cifras null = no se aplican. ChatGPT + Neni cierran tras laboratorio.",
+  "social": {
+    "bandas_positivas": ["conocido", "amigo", "amigo_cercano", "mejor_amigo"],
+    "bandas_negativas": ["cae_mal", "rival", "enemigo"],
+    "bandas_intermedias": [],
+    "_bloqueado_decision": ["nombres_ui", "cortes_valor", "intermedios"]
+  },
+  "desgaste_social": {
+    "dias_sin_contacto_recien": null,
+    "dias_sin_contacto_consolidada": null,
+    "delta_recien": null,
+    "delta_consolidada": null,
+    "_bloqueado_decision": ["dias", "deltas", "que_es_contacto_significativo"]
+  },
+  "desgaste_pareja": {
+    "dias_sin_interaccion_nada": null,
+    "dias_sin_interaccion_lento": null,
+    "delta_estabilidad_recien": null,
+    "delta_estabilidad_consolidada": null,
+    "no_restar_romance_diario": true,
+    "_bloqueado_decision": ["dias", "deltas"]
+  },
+  "emociones_v1": {
+    "ids": ["neutro", "alegre", "triste", "enfadado"],
+    "alias": { "neutral": "neutro" },
+    "modificadores": {
+      "_bloqueado_decision": ["valores"],
+      "aceptar_planes": null,
+      "experiencia_encuentro": null,
+      "iniciativa_social": null,
+      "iniciativa_romantica": null,
+      "riesgo_conflicto": null,
+      "peticiones": null
+    },
+    "_nota": "Un evento personal NO baja romance automáticamente."
+  },
+  "azar_ponderado": {
+    "_bloqueado_decision": ["mapeo_circunstancias_a_carga", "tabla_resultados"],
+    "carga_min": -1,
+    "carga_max": 1,
+    "racha_penaliza_tras": null,
+    "compensacion_obligatoria": false
+  },
+  "resolucion_encuentro": {
+    "_bloqueado_decision": ["pesos_definitivos"],
+    "pesos": {
+      "compat_ab": null,
+      "compat_ba": null,
+      "quimica": null,
+      "vinculo_social": null,
+      "vinculo_romance": null,
+      "conflicto": null,
+      "emocional": null,
+      "lugar": null,
+      "hobbies_plan": null,
+      "historial": null,
+      "azar": null
+    }
+  },
+  "acontecimientos_dia": {
+    "activo_en_play": false,
+    "presupuesto_min": null,
+    "presupuesto_max": null,
+    "_bloqueado_decision": ["presupuesto", "pesos_familias", "frecuencia"]
+  },
+  "buzon": {
+    "max_dia": null,
+    "escala_con_poblacion": true,
+    "clasificaciones": ["importante", "oportunidad", "peticion", "cotilleo"],
+    "_bloqueado_decision": ["cupos_por_clasificacion"]
+  },
+  "flechazo": {
+    "probabilidad": null,
+    "delta_romance": null,
+    "_bloqueado_decision": ["porcentaje", "delta"]
+  },
+  "pareja": {
+    "nunca_auto_por_umbral": true,
+    "estabilidad_inicial": null,
+    "base_reconciliacion": null,
+    "_bloqueado_decision": ["estabilidad_inicial", "base_reconciliacion"]
+  },
+  "crisis": {
+    "nunca_auto_por_umbral": true,
+    "probabilidad": null,
+    "_bloqueado_decision": ["factores_a_probabilidad"]
+  },
+  "ruptura": {
+    "nunca_auto_por_umbral": true,
+    "probabilidad": null,
+    "_bloqueado_decision": ["factores_a_probabilidad"]
+  },
+  "parentesco": {
+    "veto_romance_tipos": [
+      "padre", "madre", "hijo", "hija",
+      "hermano", "hermana", "medio_hermano", "medio_hermana",
+      "abuelo", "abuela", "nieto", "nieta"
+    ],
+    "tio_primo_veto": null,
+    "_bloqueado_decision": ["tio_primo_veto"]
+  },
+  "consejo": {
+    "modifica_barras_directo": false,
+    "probabilidad_seguir": null,
+    "_bloqueado_decision": ["pesos_inclinacion", "probabilidad_seguir"]
+  },
+  "laboratorio_relacional": {
+    "_provisional": true,
+    "_nota": "Cortes de INFORME, no reglas de juego.",
+    "pareja_rapida_dias": 2,
+    "ruptura_rapida_dias": 3
+  }
+}

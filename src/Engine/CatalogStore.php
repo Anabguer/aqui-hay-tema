@@ -68,6 +68,12 @@ final class CatalogStore
             case 'voces':
                 $file = 'voces.json';
                 break;
+            case 'acontecimientos':
+                $file = 'acontecimientos.json';
+                break;
+            case 'consejos':
+                $file = 'consejos.json';
+                break;
             default:
                 $file = null;
         }

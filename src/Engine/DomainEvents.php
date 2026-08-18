@@ -28,6 +28,8 @@ final class DomainEvents
     public const CATCH_UP_PLANIFICADO = 'catch_up_planificado';
     public const PERFIL_PARTIDA_GENERADO = 'perfil_partida_generado';
     public const QUIMICA_GENERADA = 'quimica_generada';
+    public const PAREJA_HITO = 'pareja_hito';
+    public const ACONTECIMIENTO_DIARIO = 'acontecimiento_diario';
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';

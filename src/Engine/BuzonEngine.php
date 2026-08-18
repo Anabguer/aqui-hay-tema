@@ -5,11 +5,20 @@ namespace AquiHayTema\Engine;
 
 final class BuzonEngine
 {
-    public const ESTADOS = ['pendiente', 'leido', 'resuelto'];
+    public const ESTADOS = ['pendiente', 'leido', 'resuelto', 'en_espera'];
+    public const IMPORTANTE = 'importante';
+    public const OPORTUNIDAD = 'oportunidad';
+    public const PETICION = 'peticion';
+    public const COTILLEO = 'cotilleo';
+    public const CLASIFICACIONES = [self::IMPORTANTE, self::OPORTUNIDAD, self::PETICION, self::COTILLEO];
 
     public static function crear(array &$partida, array $mensaje): array
     {
         $id = $mensaje['id'] ?? 'msg_' . bin2hex(random_bytes(4));
+        $clas = $mensaje['clasificacion'] ?? self::PETICION;
+        if (!in_array($clas, self::CLASIFICACIONES, true)) {
+            $clas = self::PETICION;
+        }
         $entry = array_merge([
             'id' => $id,
             'de_persona' => null,
@@ -17,6 +26,7 @@ final class BuzonEngine
             'texto' => '',
             'dia' => $partida['reloj']['dia_pueblo'] ?? 1,
             'estado' => 'pendiente',
+            'clasificacion' => $clas,
             'origen' => [
                 'evento_id' => null,
                 'tipo_evento' => null,
@@ -26,6 +36,10 @@ final class BuzonEngine
             ],
             '_placeholder_contenido' => true,
         ], $mensaje);
+        $entry['clasificacion'] = $clas;
+        if (!in_array($entry['estado'] ?? '', self::ESTADOS, true)) {
+            $entry['estado'] = 'pendiente';
+        }
 
         $partida['buzon'] ??= [];
         $partida['buzon'][] = $entry;
@@ -34,20 +48,35 @@ final class BuzonEngine
 
     public static function marcarLeido(array &$partida, string $mensajeId): array
     {
+        return self::marcarEstado($partida, $mensajeId, 'leido');
+    }
+
+    public static function marcarEstado(array &$partida, string $mensajeId, string $estado): array
+    {
+        if (!in_array($estado, self::ESTADOS, true)) {
+            return ['ok' => false, 'error' => 'estado_invalido'];
+        }
         foreach ($partida['buzon'] as &$m) {
             if ($m['id'] === $mensajeId) {
-                $m['estado'] = 'leido';
+                $m['estado'] = $estado;
                 return ['ok' => true, 'mensaje' => $m];
             }
         }
         return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
     }
 
-    public static function listar(array $partida, ?string $estado = null): array
+    public static function listar(array $partida, ?string $estado = null, ?string $clasificacion = null): array
     {
         $items = $partida['buzon'] ?? [];
         if ($estado !== null) {
-            $items = array_values(array_filter($items, static fn($m) => ($m['estado'] ?? '') === $estado));
+            $items = array_values(array_filter($items, static function ($m) use ($estado) {
+                return ($m['estado'] ?? '') === $estado;
+            }));
+        }
+        if ($clasificacion !== null) {
+            $items = array_values(array_filter($items, static function ($m) use ($clasificacion) {
+                return ($m['clasificacion'] ?? '') === $clasificacion;
+            }));
         }
         return $items;
     }

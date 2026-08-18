@@ -22,7 +22,8 @@ final class MemoriaEventos
         string $familia,
         array $participantes,
         ?int $intensidad = null,
-        ?string $tipo = null
+        ?string $tipo = null,
+        ?string $resultadoExperiencia = null
     ): array {
         self::ensure($partida);
         $reloj = $partida['reloj'] ?? [];
@@ -33,6 +34,7 @@ final class MemoriaEventos
             'dia' => (int) ($reloj['dia_pueblo'] ?? 1),
             'hora' => (int) ($reloj['hora_actual'] ?? 0),
             'intensidad' => $intensidad,
+            'resultado_experiencia' => $resultadoExperiencia,
         ];
         $partida['memoria_eventos'][] = $entry;
         return $entry;

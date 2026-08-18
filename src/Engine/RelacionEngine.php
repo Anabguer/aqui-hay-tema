@@ -17,6 +17,7 @@ final class RelacionEngine
     ): array {
         [$a, $b] = self::ordenarPar($personaA, $personaB);
         $id = "soc_{$a}_{$b}";
+        $partida['relaciones_sociales'] ??= [];
         $antes = self::obtenerEntre($partida, $a, $b)['social'];
 
         foreach ($partida['relaciones_sociales'] as &$rel) {
@@ -29,6 +30,8 @@ final class RelacionEngine
                     $rel['se_soportan'] = $seSoportan;
                 }
                 RelacionFase::ensure($rel);
+                self::ensureSocialCampos($rel);
+                self::aplicarDireccionSocial($rel, $personaA, $personaB, $tipo, $intensidad, $partida);
                 CompatibilidadOculta::ensurePar($partida, $a, $b);
                 self::postCambio($partida, $a, $b, 'social', $eventoOrigen, $antes, $rel, $correlacionId);
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
@@ -48,8 +51,11 @@ final class RelacionEngine
             '_placeholder_balance' => true,
         ];
         RelacionFase::ensure($rel);
+        self::ensureSocialCampos($rel);
+        self::aplicarDireccionSocial($rel, $personaA, $personaB, $tipo, $intensidad, $partida);
         CompatibilidadOculta::ensurePar($partida, $a, $b);
         $partida['relaciones_sociales'][] = $rel;
+        RelacionBitacora::registrar($partida, RelacionBitacora::SE_CONOCIERON, [$personaA, $personaB]);
         self::postCambio($partida, $a, $b, 'social', $eventoOrigen, $antes, $rel, $correlacionId);
         return ['ok' => true, 'relacion' => $rel, 'creada' => true];
     }
@@ -64,6 +70,7 @@ final class RelacionEngine
     ): array {
         [$a, $b] = self::ordenarPar($personaA, $personaB);
         $id = "rel_{$a}_{$b}";
+        $partida['relaciones_romanticas'] ??= [];
         $antes = self::obtenerEntre($partida, $a, $b)['romance'];
 
         $defaults = [
@@ -79,11 +86,13 @@ final class RelacionEngine
         foreach ($partida['relaciones_romanticas'] as &$rel) {
             if ($rel['id'] === $id) {
                 foreach ($valores as $k => $v) {
-                    if (array_key_exists($k, $defaults) || str_starts_with($k, 'atraccion_') || str_starts_with($k, 'necesidad_')) {
+                    if (array_key_exists($k, $defaults) || str_starts_with($k, 'atraccion_') || str_starts_with($k, 'necesidad_') || str_starts_with($k, 'romance_')) {
                         $rel[$k] = $v;
                     }
                 }
                 RelacionFase::ensure($rel);
+                self::ensureRomanceCampos($rel);
+                self::sincronizarRomanceDireccional($rel);
                 CompatibilidadOculta::ensurePar($partida, $a, $b);
                 self::postCambio($partida, $a, $b, 'romance', $eventoOrigen, $antes, $rel, $correlacionId, $valores);
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
@@ -101,6 +110,8 @@ final class RelacionEngine
             '_placeholder_formulas' => true,
         ], $defaults, $valores);
         RelacionFase::ensure($rel);
+        self::ensureRomanceCampos($rel);
+        self::sincronizarRomanceDireccional($rel);
         CompatibilidadOculta::ensurePar($partida, $a, $b);
 
         $partida['relaciones_romanticas'][] = $rel;
@@ -256,6 +267,142 @@ final class RelacionEngine
             'despues' => $despues,
             'actores' => [$a, $b],
         ], null, 'RelacionEngine::upsert', [$a, $b]);
+    }
+
+    public static function ensureSocialCampos(array &$rel): void
+    {
+        RelacionFase::ensure($rel);
+        if (!array_key_exists('conocidos', $rel)) {
+            $rel['conocidos'] = true;
+        }
+        $rel['conocido_desde'] ??= null;
+        $rel['ultimo_contacto_significativo'] ??= null;
+        $rel['consolidacion'] ??= null;
+        $rel['a_hacia_b'] ??= [
+            'valor' => $rel['intensidad'] ?? null,
+            'banda' => $rel['tipo'] ?? null,
+        ];
+        $rel['b_hacia_a'] ??= [
+            'valor' => $rel['intensidad'] ?? null,
+            'banda' => $rel['tipo'] ?? null,
+        ];
+        $rel['a_hacia_b']['valor'] = $rel['a_hacia_b']['valor'] ?? null;
+        $rel['a_hacia_b']['banda'] = $rel['a_hacia_b']['banda'] ?? null;
+        $rel['b_hacia_a']['valor'] = $rel['b_hacia_a']['valor'] ?? null;
+        $rel['b_hacia_a']['banda'] = $rel['b_hacia_a']['banda'] ?? null;
+    }
+
+    public static function ensureRomanceCampos(array &$rel): void
+    {
+        RelacionFase::ensure($rel);
+        if (!array_key_exists('romance_a_hacia_b', $rel)) {
+            $rel['romance_a_hacia_b'] = $rel['atraccion_a_hacia_b'] ?? null;
+        }
+        if (!array_key_exists('romance_b_hacia_a', $rel)) {
+            $rel['romance_b_hacia_a'] = $rel['atraccion_b_hacia_a'] ?? null;
+        }
+        $rel['estado_pareja'] ??= ParejaEngine::NINGUNA;
+        $rel['estabilidad_pareja'] ??= [
+            'activa' => false,
+            'valor' => null,
+            'memoria' => null,
+            'base_reconciliacion' => null,
+            '_bloqueado_decision' => ['valor_inicial', 'desgaste'],
+        ];
+        $rel['historial_parejas'] ??= [];
+        $rel['flechazos'] ??= [];
+    }
+
+    public static function sincronizarRomanceDireccional(array &$rel): void
+    {
+        if (array_key_exists('atraccion_a_hacia_b', $rel) && $rel['atraccion_a_hacia_b'] !== null) {
+            $rel['romance_a_hacia_b'] = $rel['atraccion_a_hacia_b'];
+        }
+        if (array_key_exists('atraccion_b_hacia_a', $rel) && $rel['atraccion_b_hacia_a'] !== null) {
+            $rel['romance_b_hacia_a'] = $rel['atraccion_b_hacia_a'];
+        }
+        $rel['atraccion_a_hacia_b'] = $rel['romance_a_hacia_b'] ?? $rel['atraccion_a_hacia_b'] ?? null;
+        $rel['atraccion_b_hacia_a'] = $rel['romance_b_hacia_a'] ?? $rel['atraccion_b_hacia_a'] ?? null;
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     */
+    private static function aplicarDireccionSocial(
+        array &$rel,
+        string $desde,
+        string $hacia,
+        string $tipo,
+        ?int $intensidad,
+        array $partida
+    ): void {
+        $lo = (string) ($rel['persona_a'] ?? '');
+        $key = $desde === $lo ? 'a_hacia_b' : 'b_hacia_a';
+        $rel[$key]['banda'] = $tipo;
+        if ($intensidad !== null) {
+            $rel[$key]['valor'] = $intensidad;
+        }
+        $rel['conocidos'] = true;
+        $marca = [
+            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
+        ];
+        $rel['conocido_desde'] ??= $marca;
+        $rel['ultimo_contacto_significativo'] = $marca;
+    }
+
+    public static function seConocen(array $partida, string $a, string $b): bool
+    {
+        $rel = self::obtenerEntre($partida, $a, $b)['social'] ?? null;
+        if (!is_array($rel)) {
+            return false;
+        }
+        return !empty($rel['conocidos']);
+    }
+
+    public static function socialHacia(array $partida, string $desde, string $hacia): ?array
+    {
+        $rel = self::obtenerEntre($partida, $desde, $hacia)['social'] ?? null;
+        if (!is_array($rel)) {
+            return null;
+        }
+        self::ensureSocialCampos($rel);
+        $lo = (string) ($rel['persona_a'] ?? '');
+        return $desde === $lo ? $rel['a_hacia_b'] : $rel['b_hacia_a'];
+    }
+
+    public static function romanceHacia(array $partida, string $desde, string $hacia): ?int
+    {
+        $rel = self::obtenerEntre($partida, $desde, $hacia)['romance'] ?? null;
+        if (!is_array($rel)) {
+            return null;
+        }
+        self::ensureRomanceCampos($rel);
+        $lo = (string) ($rel['persona_a'] ?? '');
+        $v = $desde === $lo ? ($rel['romance_a_hacia_b'] ?? null) : ($rel['romance_b_hacia_a'] ?? null);
+        return $v === null ? null : (int) $v;
+    }
+
+    public static function setRomanceHacia(array &$partida, string $desde, string $hacia, ?int $valor): array
+    {
+        self::upsertRomance($partida, $desde, $hacia, []);
+        $rel = self::obtenerEntre($partida, $desde, $hacia)['romance'];
+        self::ensureRomanceCampos($rel);
+        $lo = (string) ($rel['persona_a'] ?? '');
+        if ($desde === $lo) {
+            $rel['romance_a_hacia_b'] = $valor;
+            $rel['atraccion_a_hacia_b'] = $valor;
+        } else {
+            $rel['romance_b_hacia_a'] = $valor;
+            $rel['atraccion_b_hacia_a'] = $valor;
+        }
+        self::persistirRomance($partida, $rel);
+        return ['ok' => true, 'relacion' => $rel];
+    }
+
+    public static function persistirRomance(array &$partida, array $rel): void
+    {
+        self::persistirCanal($partida, 'romance', $rel);
     }
 
     /** @return array{0: string, 1: string} */

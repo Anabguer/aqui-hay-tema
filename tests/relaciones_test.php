@@ -33,6 +33,10 @@ ok($r2['ok'] ?? false && !($r2['creada'] ?? true), 'actualizar social (orden sim
 $rel = RelacionEngine::obtenerEntre($partida, $b, $a);
 ok($rel['social']['tipo'] === 'amigos', 'simetría par social');
 ok($rel['social']['persona_a'] < $rel['social']['persona_b'], 'par ordenado lexicográficamente');
+$haciaA = RelacionEngine::socialHacia($partida, $a, $b);
+$haciaB = RelacionEngine::socialHacia($partida, $b, $a);
+ok(($haciaA['banda'] ?? '') === 'conocidos', 'A→B conserva primera dirección');
+ok(($haciaB['banda'] ?? '') === 'amigos', 'B→A se actualiza aparte');
 
 RelacionEngine::upsertRomance($partida, $a, $b, ['vinculo' => 4, 'conflicto' => 1]);
 $rel2 = RelacionEngine::obtenerEntre($partida, $a, $b);
@@ -44,5 +48,6 @@ $rel3 = RelacionEngine::obtenerEntre($partida, $a, $b);
 ok($rel3['conflicto'] !== null, 'canal roce/conflicto propio');
 ok(array_key_exists('fase', $rel3['social']), 'fase aditiva en social');
 ok($rel3['social']['fase'] === null, 'fase no auto-calculada');
+ok(RelacionEngine::seConocen($partida, $a, $b), 'contacto implica conocidos');
 
 exit($failures > 0 ? 1 : 0);

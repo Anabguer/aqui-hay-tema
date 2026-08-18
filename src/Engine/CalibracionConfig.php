@@ -9,11 +9,20 @@ final class CalibracionConfig
     /** @return array<string, mixed> */
     public static function load(string $projectRoot): array
     {
-        $path = rtrim($projectRoot, DIRECTORY_SEPARATOR) . '/data/configs/calibracion_compatibilidad.json';
-        if (!is_file($path)) {
-            return ['_provisional' => true, 'compatibilidad' => ['base' => 50, 'min' => 0, 'max' => 100]];
+        $root = rtrim($projectRoot, DIRECTORY_SEPARATOR) . '/data/configs';
+        $out = ['_provisional' => true];
+        foreach (['calibracion_compatibilidad.json', 'calibracion_vida.json'] as $file) {
+            $path = $root . '/' . $file;
+            if (!is_file($path)) {
+                continue;
+            }
+            $chunk = JsonFile::read($path);
+            if (is_array($chunk)) {
+                $out = array_merge($out, $chunk);
+                $out['_provisional'] = true;
+            }
         }
-        return JsonFile::read($path);
+        return $out;
     }
 
     /**

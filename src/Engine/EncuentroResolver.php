@@ -8,7 +8,7 @@ use AquiHayTema\Engine\Compatibility\PlaceholderEvaluator;
 /** Resuelve encuentros. Social y romance evolucionan de forma independiente. */
 final class EncuentroResolver
 {
-    public static function resolver(array $partida, array $encuentro, ?GameLogger $logger = null, ?Catalog $catalog = null): array
+    public static function resolver(array &$partida, array $encuentro, ?GameLogger $logger = null, ?Catalog $catalog = null): array
     {
         $evaluator = new PlaceholderEvaluator();
         $participantes = $encuentro['participantes'] ?? [];
@@ -36,6 +36,7 @@ final class EncuentroResolver
             $por[(string) $pid] = [
                 'satisfaccion' => null,
                 'texto' => null,
+                'resultado' => null,
                 '_bloqueado_decision' => ['satisfaccion_direccional', 'copy'],
             ];
         }
@@ -51,11 +52,20 @@ final class EncuentroResolver
             'texto_resumen' => '[PLACEHOLDER] Encuentro ' . $tipo . ' terminado.',
         ];
 
-        if ($catalog !== null && count($participantes) >= 2) {
-            $snap = EncuentroPonderacion::snapshot($partida, $encuentro, $catalog);
+        if ($catalog !== null) {
+            $cal = CalibracionConfig::load($catalog->getRoot());
+            $rng = RngService::fromPartida($partida);
+            $exp = EncuentroExperiencia::resolver($partida, $encuentro, $catalog, $rng, $cal);
+            $rng->persistToPartida($partida);
+            foreach ($exp['por_participante'] ?? [] as $pid => $row) {
+                $resultado['por_participante'][(string) $pid] = array_merge(
+                    $resultado['por_participante'][(string) $pid] ?? [],
+                    $row
+                );
+            }
             \aht_log_optional($logger, $partida, 'encuentro_ponderacion', [
                 'encuentro_id' => $encuentro['id'] ?? null,
-                'factores_keys' => array_keys($snap['factores'] ?? []),
+                'factores_keys' => array_keys($exp['factores'] ?? []),
                 '_interno' => true,
             ]);
         }
@@ -73,6 +83,19 @@ final class EncuentroResolver
     public static function aplicarResultado(array &$partida, array $encuentro, array $resultado, ?GameLogger $logger = null): void
     {
         $participantes = $encuentro['participantes'] ?? [];
+        if (count($participantes) === 1) {
+            $pid = (string) $participantes[0];
+            $exp = $resultado['por_participante'][$pid]['resultado'] ?? null;
+            MemoriaEventos::registrar(
+                $partida,
+                'actividad_individual',
+                $participantes,
+                null,
+                (string) ($encuentro['tipo'] ?? 'individual'),
+                is_string($exp) ? $exp : null
+            );
+            return;
+        }
         if (count($participantes) < 2) {
             return;
         }
@@ -112,6 +135,13 @@ final class EncuentroResolver
             RelacionEngine::upsertConflicto($partida, $a, $b, $intensidad, $tipoConf, 'encuentro');
         }
 
-        MemoriaEventos::registrar($partida, 'encuentro', $participantes, null, (string) ($encuentro['tipo'] ?? 'encuentro'));
+        MemoriaEventos::registrar(
+            $partida,
+            'encuentro',
+            $participantes,
+            null,
+            (string) ($encuentro['tipo'] ?? 'encuentro'),
+            $resultado['por_participante'][$a]['resultado'] ?? null
+        );
     }
 }

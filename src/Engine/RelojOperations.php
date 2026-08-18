@@ -27,6 +27,14 @@ final class RelojOperations
 
         $antes = $partida['reloj'];
         Reloj::avanzarHoras($partida, $horas);
+        $diaAntes = (int) ($antes['dia_pueblo'] ?? 1);
+        $diaDespues = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ($diaDespues > $diaAntes) {
+            $cal = CalibracionConfig::load($this->projectRoot);
+            $catalog = new Catalog($this->projectRoot);
+            RelacionDesgaste::alCerrarDia($partida, $cal);
+            AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
+        }
         // Coincidencias ANTES de sincronizar: los encuentros siguen programado/en_curso
         // y aún ocupan lugar. Coincidir ≠ interactuar.
         $coins = CoincidenciasEngine::detectarEnIntervalo(

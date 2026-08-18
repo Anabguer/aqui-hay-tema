@@ -6,7 +6,7 @@ namespace AquiHayTema\Engine;
 final class EncuentroEngine
 {
     public const ESTADOS = ['programado', 'en_curso', 'terminado', 'cancelado'];
-    public const TIPOS = ['conocerse', 'amistad', 'romantico', 'conflicto', 'otro'];
+    public const TIPOS = ['conocerse', 'amistad', 'romantico', 'conflicto', 'otro', 'individual'];
 
     public static function list(array $partida): array
     {
@@ -28,8 +28,12 @@ final class EncuentroEngine
         ?GameLogger $logger = null
     ): array {
         $participantes = array_values(array_unique(array_filter($participantes)));
-        if (count($participantes) < 2) {
+        $min = $tipo === 'individual' ? 1 : 2;
+        if (count($participantes) < $min) {
             return ['ok' => false, 'error' => 'participantes_insuficientes'];
+        }
+        if ($tipo === 'individual' && count($participantes) !== 1) {
+            return ['ok' => false, 'error' => 'individual_un_participante'];
         }
 
         foreach ($participantes as $rid) {

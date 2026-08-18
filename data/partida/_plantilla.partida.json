@@ -87,5 +87,9 @@
     "pares": {},
     "simetrica_v1": true
   },
-  "memoria_eventos": []
+  "memoria_eventos": [],
+  "bitacora_relaciones": [],
+  "parentesco": [],
+  "inclinaciones_consejo": [],
+  "acontecimientos_log": []
 }
