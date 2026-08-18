@@ -144,6 +144,83 @@ button.primary { background: #3d3520; border-color: var(--accent); }
   .summary-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+@media (max-width: 420px) {
+  .summary-grid { grid-template-columns: 1fr 1fr; }
+}
+
+.summary-card {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.02);
+}
+
+.summary-card strong {
+  display: block;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+
+.proximo-card {
+  margin-top: 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem;
+  background: rgba(255,255,255,0.03);
+}
+
+.proximo-cuerpo {
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.proximo-cuerpo .mini-meta { font-weight: 400; margin-top: 0.2rem; }
+.proximo-item + .proximo-item { margin-top: 0.65rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+
+.reloj-toolbar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.reloj-toolbar button {
+  min-height: 2.75rem;
+  font-size: 0.95rem;
+}
+
+.reloj-toolbar #btn-proximo-encuentro {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 720px) {
+  .reloj-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .reloj-toolbar #btn-proximo-encuentro {
+    grid-column: auto;
+    flex: 1 1 auto;
+  }
+}
+
+.avance-resumen {
+  margin-top: 0.75rem;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  background: rgba(201, 162, 39, 0.06);
+}
+
+.avance-list {
+  margin: 0.35rem 0 0;
+  padding-left: 1.2rem;
+  font-size: 0.88rem;
+}
+
+.partida-actions { margin-top: 0; }
+
 .summary-card {
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -293,8 +370,9 @@ button.primary { background: #3d3520; border-color: var(--accent); }
 
 @media (max-width: 600px) {
   .top-bar { flex-direction: column; align-items: flex-start; }
-  .btn-row { width: 100%; }
-  .btn-row button, .btn-row .btn { flex: 1 1 auto; }
+  .partida-actions { width: 100%; }
+  .partida-actions .btn,
+  .partida-actions button { flex: 1 1 calc(50% - 0.5rem); min-height: 2.5rem; }
   .ficha-hero { grid-template-columns: 72px 1fr; }
   .portrait-frame { width: 72px; height: 72px; }
 }

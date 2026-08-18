@@ -17,12 +17,9 @@ header('Content-Type: text/html; charset=utf-8');
       <p class="status" id="status-reloj" aria-live="polite">Cargando…</p>
       <p class="status" id="status-meta"></p>
     </div>
-    <nav class="btn-row" aria-label="Acciones de partida">
+    <nav class="btn-row partida-actions" aria-label="Acciones de partida">
       <a class="btn" href="index.php">Landing</a>
       <a class="btn" href="dev.php">Modo dev</a>
-      <button type="button" id="btn-avanzar-1h">+1h</button>
-      <button type="button" id="btn-avanzar-8h">+8h</button>
-      <button type="button" id="btn-proximo-encuentro">Ir al próximo encuentro</button>
       <button type="button" id="btn-guardar">Guardar</button>
       <button type="button" id="btn-nueva">Nueva partida</button>
     </nav>
@@ -34,9 +31,22 @@ header('Content-Type: text/html; charset=utf-8');
       <div class="summary-grid" id="summary-grid">
         <div class="summary-card"><span class="label">Día / hora</span><strong id="sum-reloj">—</strong></div>
         <div class="summary-card"><span class="label">Residentes</span><strong id="sum-residentes">—</strong></div>
-        <div class="summary-card"><span class="label">Encuentros activos</span><strong id="sum-encuentros">—</strong></div>
-        <div class="summary-card"><span class="label">Mensajes</span><strong id="sum-buzon">—</strong></div>
+        <div class="summary-card"><span class="label">Encuentros hoy</span><strong id="sum-encuentros-hoy">—</strong><span class="mini-meta" id="sum-encuentros-activos"></span></div>
+        <div class="summary-card"><span class="label">Buzón pendiente</span><strong id="sum-buzon">—</strong></div>
       </div>
+
+      <div class="proximo-card" id="proximo-card">
+        <div class="label">Próximo encuentro</div>
+        <div id="proximo-cuerpo" class="proximo-cuerpo">No hay encuentros programados.</div>
+      </div>
+
+      <div class="reloj-toolbar" role="group" aria-label="Controles de reloj">
+        <button type="button" id="btn-avanzar-1h">+1h</button>
+        <button type="button" id="btn-avanzar-8h">+8h</button>
+        <button type="button" class="primary" id="btn-proximo-encuentro">Ir al próximo encuentro</button>
+      </div>
+
+      <div class="avance-resumen" id="avance-resumen" hidden></div>
     </section>
 
     <div class="play-grid">

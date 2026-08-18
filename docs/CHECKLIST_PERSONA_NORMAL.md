@@ -15,6 +15,14 @@ Partida de prueba sin abrir `dev.php`.
 9. [ ] Usar “Ir al próximo encuentro” (o +8h / +1h) hasta la hora del encuentro.
 10. [ ] Comprobar que el encuentro pasa a “En curso” y luego “Terminado”, y que la ficha/relaciones se actualizan.
 11. [ ] Opcional: programar otro y cancelarlo desde la lista (confirmación simple).
+12. [ ] Ver el próximo encuentro en el resumen del día (nombres, hora, lugar).
+13. [ ] Tras +8h o “Ir al próximo”, leer “Durante este avance” (sin listar cada hora).
+
+## Responsive (checklist manual)
+
+- [ ] Móvil: el header no empuja el resumen; Landing/Dev/Guardar/Nueva caben en dos columnas.
+- [ ] Móvil: +1h, +8h e “Ir al próximo encuentro” están agrupados bajo el resumen, botones grandes, sin scroll horizontal.
+- [ ] Tablet/escritorio: mismos controles, toolbar en fila.
 
 ## Criterios de fallo
 

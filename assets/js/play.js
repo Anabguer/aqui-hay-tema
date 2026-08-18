@@ -307,11 +307,68 @@
   function renderSummary(e, buzonCount) {
     $('#status-reloj').textContent = e.reloj_texto;
     $('#status-meta').textContent =
-      `${e.residentes_count} residentes · ${e.encuentros_activos ?? 0} encuentros activos · schema v${e.meta.schema_version}`;
+      `${e.residentes_count} residentes · ${e.encuentros_activos ?? 0} activos · schema v${e.meta.schema_version}`;
     $('#sum-reloj').textContent = e.reloj_texto;
     $('#sum-residentes').textContent = String(e.residentes_count || 0);
-    $('#sum-encuentros').textContent = String(e.encuentros_activos || 0);
-    $('#sum-buzon').textContent = String(buzonCount || 0);
+    $('#sum-encuentros-hoy').textContent = String(e.encuentros_hoy ?? 0);
+    const activosEl = $('#sum-encuentros-activos');
+    if (activosEl) {
+      const n = e.encuentros_activos || 0;
+      activosEl.textContent = n ? `${n} activo${n === 1 ? '' : 's'}` : '';
+    }
+    $('#sum-buzon').textContent = String(e.buzon_pendientes ?? buzonCount ?? 0);
+    renderProximoEncuentro(e);
+  }
+
+  function renderProximoEncuentro(e) {
+    const cuerpo = $('#proximo-cuerpo');
+    const btn = $('#btn-proximo-encuentro');
+    const actual = e.encuentro_en_curso;
+    const prox = e.proximo_encuentro;
+    if (cuerpo) {
+      cuerpo.innerHTML = '';
+      if (actual) {
+        cuerpo.appendChild(bloqueEncuentroResumen(actual, 'En curso ahora'));
+      }
+      if (prox) {
+        cuerpo.appendChild(bloqueEncuentroResumen(prox, actual ? 'Siguiente programado' : null));
+      }
+      if (!actual && !prox) {
+        cuerpo.appendChild(el('div', 'empty', 'No hay encuentros programados.'));
+      }
+    }
+    if (btn) btn.disabled = !prox;
+  }
+
+  function bloqueEncuentroResumen(enc, etiqueta) {
+    const wrap = el('div', 'proximo-item');
+    if (etiqueta) wrap.appendChild(el('div', 'mini-meta', etiqueta));
+    const nombres = (enc.participantes_nombres || []).join(' + ') || '—';
+    wrap.appendChild(el('div', null, nombres));
+    const hora = formatHora(enc.dia, enc.hora);
+    const lugar = enc.lugar_nombre || enc.lugar || '—';
+    wrap.appendChild(el('div', 'mini-meta', `${hora} · ${lugar}`));
+    wrap.appendChild(el('div', 'mini-meta', `${enc.tipo || 'encuentro'} · ${estadoLabel(enc.estado)}`));
+    return wrap;
+  }
+
+  function mostrarAvanceResumen(resumen) {
+    const panel = $('#avance-resumen');
+    if (!panel) return;
+    const lineas = resumen?.lineas || [];
+    if (!lineas.length) {
+      panel.hidden = true;
+      panel.innerHTML = '';
+      return;
+    }
+    panel.hidden = false;
+    panel.innerHTML = '';
+    panel.appendChild(el('div', 'label', 'Durante este avance'));
+    const ul = el('ul', 'avance-list');
+    lineas.forEach(l => {
+      ul.appendChild(el('li', null, l.texto || l.tipo));
+    });
+    panel.appendChild(ul);
   }
 
   async function renderMapa() {
@@ -630,26 +687,18 @@
   }
 
   async function avanzarRelojUi(horas, etiqueta) {
-    const antes = await api('encuentro.listar', {}, 'GET');
-    const estadosAntes = new Map((antes.encuentros || []).map(e => [e.id, e.estado]));
     const r = await api('reloj.avanzar', { horas, paso_a_paso: true });
     if (!r.ok) {
       setFeedback(r.mensaje_ui || 'No se pudo avanzar el reloj.', 'error');
       return;
     }
-    const despues = await api('encuentro.listar', {}, 'GET');
-    const cambios = [];
-    (despues.encuentros || []).forEach(e => {
-      const prev = estadosAntes.get(e.id);
-      if (prev && prev !== e.estado) {
-        cambios.push(`${e.tipo} → ${estadoLabel(e.estado)}`);
-      }
-    });
-    const resueltos = r.reloj?.encuentros_resueltos ?? r.encuentros_resueltos;
+    const lineas = r.resumen_avance?.lineas || r.reloj?.resumen_avance?.lineas || [];
     let msg = etiqueta || `Tiempo avanzado ${horas}h.`;
-    if (cambios.length) msg += ' ' + cambios.join(' · ');
-    else if (resueltos) msg += ` ${resueltos} encuentro(s) actualizado(s).`;
+    if (lineas.length) {
+      msg += ' ' + lineas.map(l => l.texto).join(' ');
+    }
     setFeedback(msg, 'ok');
+    mostrarAvanceResumen(r.resumen_avance || r.reloj?.resumen_avance);
     await refreshEstado();
   }
 
@@ -711,6 +760,7 @@
       const r = await api('reloj.proximo_encuentro', {});
       if (!r.ok) {
         setFeedback(r.mensaje_ui || 'No hay ningún encuentro programado más adelante.', 'error');
+        mostrarAvanceResumen(null);
         return;
       }
       const enc = r.encuentro || {};
@@ -718,6 +768,7 @@
         `Reloj en el próximo encuentro: ${formatHora(enc.dia, enc.hora)} · ${estadoLabel(enc.estado)} (+${r.horas_avanzadas}h).`,
         'ok'
       );
+      mostrarAvanceResumen(r.resumen_avance || r.reloj?.resumen_avance);
       await refreshEstado();
     });
 
@@ -734,6 +785,7 @@
       cacheInspeccion = null;
       await ensurePartida();
       await refreshEstado();
+      mostrarAvanceResumen(null);
       setFeedback('Nueva partida creada.', 'ok');
     });
   }
