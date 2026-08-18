@@ -9,7 +9,7 @@ use AquiHayTema\Engine\RelacionEngine;
 
 $root = dirname(__DIR__);
 $service = new PartidaService($root);
-$partida = $service->nuevaPartida('debug_v0', 'inv-test');
+$partida = $service->nuevaPartida('test_fixtures_v0', 'inv-test');
 $failures = 0;
 
 function ok(bool $c, string $m): void
@@ -22,7 +22,7 @@ function ok(bool $c, string $m): void
 }
 
 $ph = $service->crearResidentePlaceholderDev($partida);
-$ida = 'per_i03';
+$ida = 'per_qa_valid';
 $idb = $ph['residente']['catalog_id'];
 
 $r1 = EncuentroEngine::programar($partida, [$ida, $idb], 1, 19, 'conocerse');

@@ -171,6 +171,19 @@ header('Content-Type: text/html; charset=utf-8');
         </fieldset>
 
         <fieldset>
+          <legend>Calendario / eventos QA</legend>
+          <label for="inp-cal-dia">Día calendario</label>
+          <input type="number" id="inp-cal-dia" min="1" value="1" />
+          <div class="btn-row">
+            <button type="button" id="btn-calendario">Vista calendario día</button>
+            <button type="button" id="btn-eventos">Inspector eventos</button>
+            <button type="button" id="btn-diagnostico">Export diagnóstico</button>
+            <button type="button" id="btn-simular-30">Simular 30 días</button>
+          </div>
+          <pre class="inspect" id="cal-panel" aria-label="Vista calendario"></pre>
+        </fieldset>
+
+        <fieldset>
           <legend>Log de acciones</legend>
           <pre class="inspect" id="log" tabindex="0" aria-label="Log de acciones dev"></pre>
         </fieldset>

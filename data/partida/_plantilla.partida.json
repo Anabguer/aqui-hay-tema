@@ -65,5 +65,9 @@
     "_placeholder": true,
     "planes_pendientes": []
   },
-  "event_log": []
+  "event_log": [],
+  "audit_trail": [],
+  "descubrimientos": [],
+  "historial_relaciones": [],
+  "domain_events": []
 }

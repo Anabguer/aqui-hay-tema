@@ -8,7 +8,7 @@ use AquiHayTema\Engine\PartidaService;
 
 $root = dirname(__DIR__);
 $service = new PartidaService($root);
-$partida = $service->nuevaPartida('debug_v0', 'viv-test');
+$partida = $service->nuevaPartida('test_fixtures_v0', 'viv-test');
 $failures = 0;
 
 function ok(bool $c, string $m): void
@@ -20,12 +20,12 @@ function ok(bool $c, string $m): void
     }
 }
 
-ok(BloqueA::resumen($partida)['ocupadas'] === 1, 'Rocío ocupa A01');
+ok(BloqueA::resumen($partida)['ocupadas'] === 1, 'per_qa_valid ocupa A01');
 
 $ph = $service->crearResidentePlaceholderDev($partida);
 ok($ph['vivienda_id'] === 'A02', 'placeholder en A02');
 
-$r = $service->incorporarResidenteCatalogo($partida, 'per_i03');
+$r = $service->incorporarResidenteCatalogo($partida, 'per_qa_valid');
 ok(!($r['ok'] ?? true), 'residente duplicado rechazado');
 
 for ($i = 0; $i < 20; $i++) {

@@ -41,7 +41,7 @@ final class EncuentrosHandler
 
     public static function cancelar(ApiContext $ctx, array $body, array &$partida): array
     {
-        $r = EncuentroEngine::cancelar($partida, (string) ($body['encuentro_id'] ?? ''));
+        $r = EncuentroEngine::cancelar($partida, (string) ($body['encuentro_id'] ?? ''), $ctx->logger);
         if ($r['ok'] ?? false) {
             savePartida($ctx, $partida);
         }

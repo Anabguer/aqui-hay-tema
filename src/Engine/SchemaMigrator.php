@@ -17,6 +17,7 @@ final class SchemaMigrator
             };
             $version = (int) $partida['meta']['schema_version'];
         }
+        SchemaFields::ensure($partida);
         return $partida;
     }
 

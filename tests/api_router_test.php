@@ -20,7 +20,7 @@ function ok(bool $c, string $m): void
     }
 }
 
-$r = PartidaHandler::nueva($ctx, ['config_id' => 'debug_v0', 'seed' => 'handler-test']);
+$r = PartidaHandler::nueva($ctx, ['config_id' => 'test_fixtures_v0', 'seed' => 'handler-test']);
 ok($r['ok'] ?? false, 'PartidaHandler::nueva');
 $id = $r['partida_id'] ?? '';
 $p = $ctx->service->cargar($id);

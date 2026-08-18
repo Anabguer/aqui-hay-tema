@@ -28,7 +28,22 @@ final class EventBus
         foreach (self::$listeners[$evento] ?? [] as $handler) {
             $results[] = $handler($partida, $envelope, $logger);
         }
-        return ['evento' => $evento, 'results' => $results];
+
+        $partida['domain_events'] ??= [];
+        $partida['domain_events'][] = [
+            'evento' => $evento,
+            'correlacion_id' => $envelope['correlacion_id'],
+            'ts_juego' => [
+                'dia' => $partida['reloj']['dia_pueblo'] ?? null,
+                'hora' => $partida['reloj']['hora_actual'] ?? null,
+            ],
+            'payload_keys' => array_keys($payload),
+        ];
+        if (count($partida['domain_events']) > 500) {
+            $partida['domain_events'] = array_slice($partida['domain_events'], -500);
+        }
+
+        return ['evento' => $evento, 'correlacion_id' => $envelope['correlacion_id'], 'results' => $results];
     }
 
     public static function reset(): void

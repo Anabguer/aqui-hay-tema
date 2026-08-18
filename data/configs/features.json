@@ -7,5 +7,7 @@
   "offline_events_enabled": false,
   "debug_tools_enabled": true,
   "mapa_presencia_enabled": true,
-  "encuentros_enabled": true
+  "encuentros_enabled": true,
+  "narrative_reactions_enabled": false,
+  "discovery_enabled": false
 }

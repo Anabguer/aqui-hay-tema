@@ -8,7 +8,7 @@ use AquiHayTema\Engine\RelacionEngine;
 
 $root = dirname(__DIR__);
 $service = new PartidaService($root);
-$partida = $service->nuevaPartida('debug_v0', 'rel-test');
+$partida = $service->nuevaPartida('test_fixtures_v0', 'rel-test');
 $failures = 0;
 
 function ok(bool $c, string $m): void
@@ -21,7 +21,7 @@ function ok(bool $c, string $m): void
 }
 
 $ph = $service->crearResidentePlaceholderDev($partida);
-$a = 'per_i03';
+$a = 'per_qa_valid';
 $b = $ph['residente']['catalog_id'];
 
 $r = RelacionEngine::upsertSocial($partida, $a, $b, 'conocidos', 2, true);

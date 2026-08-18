@@ -29,18 +29,18 @@ function assertTrue(bool $cond, string $msg): void
 }
 
 $service = new PartidaService($root);
-$partida = $service->nuevaPartida('debug_v0', 'smoke-test');
+$partida = $service->nuevaPartida('test_fixtures_v0', 'smoke-test');
 
 assertTrue((int) ($partida['meta']['schema_version'] ?? 0) === 2, 'schema v2');
 assertTrue(isset($partida['rng']['state']), 'rng en partida nueva');
 assertTrue(count($partida['bloque_a']['viviendas']) === 16, 'bloque A 16');
-assertTrue(isset($partida['residentes']['per_i03']), 'Rocío presente');
+assertTrue(isset($partida['residentes']['per_qa_valid']), 'per_qa_valid presente');
 
 $ph = $service->crearResidentePlaceholderDev($partida);
-$agenda = AgendaEngine::resolverDia($partida, 'per_i03', 1);
+$agenda = AgendaEngine::resolverDia($partida, 'per_qa_valid', 1);
 assertTrue(count($agenda['slots']) === 24, 'agenda 24 slots');
 
-$enc = EncuentroEngine::programar($partida, ['per_i03', $ph['residente']['catalog_id']], 1, 19, 'conocerse');
+$enc = EncuentroEngine::programar($partida, ['per_qa_valid', $ph['residente']['catalog_id']], 1, 19, 'conocerse');
 assertTrue($enc['ok'] ?? false, 'encuentro programado 19h');
 
 Reloj::avanzarHoras($partida, 12);

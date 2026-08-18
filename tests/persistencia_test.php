@@ -23,7 +23,7 @@ function ok(bool $c, string $m): void
 $service = new PartidaService($root);
 $repo = new PartidaRepository($root);
 
-$p1 = $service->nuevaPartida('debug_v0', 'persist-a');
+$p1 = $service->nuevaPartida('test_fixtures_v0', 'persist-a');
 $id = $p1['meta']['partida_id'];
 $rng1 = $p1['rng']['state'];
 ok($repo->existe($id), 'partida creada en disco');
@@ -43,7 +43,7 @@ try {
 }
 
 // Save corrupto sin .bak debe fallar
-$p4 = $service->nuevaPartida('debug_v0', 'persist-bak');
+$p4 = $service->nuevaPartida('test_fixtures_v0', 'persist-bak');
 $id4 = $p4['meta']['partida_id'];
 $service->guardar($p4);
 $path4 = $repo->pathFor($id4);

@@ -7,8 +7,12 @@ use AquiHayTema\Api\ApiContext;
 use AquiHayTema\Api\requireDev;
 use AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\AutonomousPlanner;
+use AquiHayTema\Engine\DevCalendarService;
+use AquiHayTema\Engine\DiagnosticExport;
 use AquiHayTema\Engine\EconomyLedger;
+use AquiHayTema\Engine\EventInspector;
 use AquiHayTema\Engine\RngService;
+use AquiHayTema\Engine\SimulationRunner;
 use AquiHayTema\Engine\StressTestRunner;
 
 final class DevHandler
@@ -135,5 +139,35 @@ final class DevHandler
     {
         requireDev();
         return StressTestRunner::run($ctx->root, (int) ($body['count'] ?? 100));
+    }
+
+    public static function calendario(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        $dia = isset($body['dia']) ? (int) $body['dia'] : (int) $partida['reloj']['dia_pueblo'];
+        return DevCalendarService::vistaDia($partida, $dia, $ctx->service->getCatalog());
+    }
+
+    public static function eventos(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        return EventInspector::timeline($partida, is_array($body['filtros'] ?? null) ? $body['filtros'] : $body);
+    }
+
+    public static function diagnosticoExport(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        return DiagnosticExport::export($partida, $ctx->root);
+    }
+
+    public static function simular(ApiContext $ctx, array $body): array
+    {
+        requireDev();
+        return SimulationRunner::run(
+            $ctx->root,
+            (int) ($body['days'] ?? 30),
+            isset($body['seed']) ? (string) $body['seed'] : null,
+            (string) ($body['config_id'] ?? 'test_fixtures_v0')
+        );
     }
 }

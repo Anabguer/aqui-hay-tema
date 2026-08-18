@@ -282,11 +282,35 @@
     $('#btn-recargar').addEventListener('click', loadSelectedPartida);
 
     $('#btn-copiar-json').addEventListener('click', async () => {
-      const r = await api('partida.inspeccionar', {});
+      const r = await api('dev.diagnostico.export', {});
       if (r.ok) {
-        await navigator.clipboard.writeText(JSON.stringify(r.partida, null, 2));
-        log('JSON copiado al portapapeles');
+        await navigator.clipboard.writeText(JSON.stringify(r, null, 2));
+        log('Diagnóstico copiado al portapapeles');
       }
+    });
+
+    $('#btn-calendario').addEventListener('click', async () => {
+      const dia = parseInt($('#inp-cal-dia').value, 10);
+      const r = await api('dev.calendario', { dia });
+      $('#cal-panel').textContent = JSON.stringify(r, null, 2);
+      log('Calendario día ' + dia, { conflictos: r.conflictos?.length ?? 0 });
+    });
+
+    $('#btn-eventos').addEventListener('click', async () => {
+      const r = await api('dev.eventos', { filtros: { limit: 50 } });
+      $('#cal-panel').textContent = JSON.stringify(r, null, 2);
+      log('Inspector eventos', { total: r.total });
+    });
+
+    $('#btn-diagnostico').addEventListener('click', async () => {
+      const r = await api('dev.diagnostico.export', {});
+      log('Diagnóstico', r);
+      $('#cal-panel').textContent = JSON.stringify(r, null, 2);
+    });
+
+    $('#btn-simular-30').addEventListener('click', async () => {
+      const r = await api('dev.simular', { days: 30, seed: 'dev-ui' });
+      log('Simulación 30d', r);
     });
 
     $('#btn-ins-residente').addEventListener('click', async () => {

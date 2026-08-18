@@ -176,9 +176,16 @@ final class EncuentroEngine
         };
     }
 
-    public static function cancelar(array &$partida, string $encuentroId): array
+    public static function cancelar(array &$partida, string $encuentroId, ?GameLogger $logger = null): array
     {
-        return self::cambiarEstado($partida, $encuentroId, 'cancelado');
+        $r = self::cambiarEstado($partida, $encuentroId, 'cancelado');
+        if ($r['ok'] ?? false) {
+            DomainEventDispatcher::emit($partida, DomainEvents::ENCUENTRO_CANCELADO, [
+                'encuentro' => $r['encuentro'],
+                'actores' => $r['encuentro']['participantes'] ?? [],
+            ], $logger, 'EncuentroEngine::cancelar', $r['encuentro']['participantes'] ?? []);
+        }
+        return $r;
     }
 
     public static function listarActivos(array $partida): array

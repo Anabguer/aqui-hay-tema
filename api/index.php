@@ -87,6 +87,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return AgendaHandler::disponibilidad($ctx, $body, $p);
     },
+    'agenda.slots_compatibles' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return AgendaHandler::slotsCompatibles($ctx, $body, $p);
+    },
     'encuentro.programar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::programar($ctx, $body, $p);
@@ -199,6 +203,19 @@ $routes = [
         return DevHandler::economiaRegistrar($ctx, $body, $p);
     },
     'dev.stress100' => static fn() => DevHandler::stress100($ctx, $body),
+    'dev.calendario' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::calendario($ctx, $body, $p);
+    },
+    'dev.eventos' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::eventos($ctx, $body, $p);
+    },
+    'dev.diagnostico.export' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::diagnosticoExport($ctx, $body, $p);
+    },
+    'dev.simular' => static fn() => DevHandler::simular($ctx, $body),
 ];
 
 try {

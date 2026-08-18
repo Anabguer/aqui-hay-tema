@@ -14,19 +14,15 @@ final class DomainBootstrap
         }
         self::$booted = true;
 
-        EventBus::on('encounter_finished', static function (array &$partida, array $envelope, ?GameLogger $logger): array {
-            AuditTrail::record(
-                $partida,
-                'encounter_finished',
-                $envelope['payload']['encuentro']['participantes'] ?? [],
-                'EventBus',
-                'encounter_finished',
-                null,
-                $envelope['payload']['resultado'] ?? null,
-                null,
-                $envelope['correlacion_id'] ?? null
-            );
-            return ['ok' => true];
-        });
+        NarrativeTriggerRegistry::register(DomainEvents::ENCUENTRO_TERMINADO, 'dev_encuentro_diario', false);
+        NarrativeTriggerRegistry::register(DomainEvents::RELACION_MODIFICADA, 'dev_relacion_buzon', false);
+        ContentReactionSubscriber::register();
+    }
+
+    public static function resetForTests(): void
+    {
+        self::$booted = false;
+        EventBus::reset();
+        NarrativeTriggerRegistry::reset();
     }
 }

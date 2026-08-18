@@ -11,10 +11,13 @@ final class RelacionEngine
         string $personaB,
         string $tipo,
         ?int $intensidad = null,
-        ?bool $seSoportan = null
+        ?bool $seSoportan = null,
+        ?string $eventoOrigen = 'manual',
+        ?string $correlacionId = null
     ): array {
         [$a, $b] = self::ordenarPar($personaA, $personaB);
         $id = "soc_{$a}_{$b}";
+        $antes = self::obtenerEntre($partida, $a, $b)['social'];
 
         foreach ($partida['relaciones_sociales'] as &$rel) {
             if ($rel['id'] === $id) {
@@ -25,6 +28,7 @@ final class RelacionEngine
                 if ($seSoportan !== null) {
                     $rel['se_soportan'] = $seSoportan;
                 }
+                self::postCambio($partida, $a, $b, 'social', $eventoOrigen, $antes, $rel, $correlacionId);
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
             }
         }
@@ -42,6 +46,7 @@ final class RelacionEngine
             '_placeholder_balance' => true,
         ];
         $partida['relaciones_sociales'][] = $rel;
+        self::postCambio($partida, $a, $b, 'social', $eventoOrigen, $antes, $rel, $correlacionId);
         return ['ok' => true, 'relacion' => $rel, 'creada' => true];
     }
 
@@ -49,10 +54,13 @@ final class RelacionEngine
         array &$partida,
         string $personaA,
         string $personaB,
-        array $valores = []
+        array $valores = [],
+        ?string $eventoOrigen = 'manual',
+        ?string $correlacionId = null
     ): array {
         [$a, $b] = self::ordenarPar($personaA, $personaB);
         $id = "rel_{$a}_{$b}";
+        $antes = self::obtenerEntre($partida, $a, $b)['romance'];
 
         $defaults = [
             'atraccion_a_hacia_b' => null,
@@ -71,6 +79,7 @@ final class RelacionEngine
                         $rel[$k] = $v;
                     }
                 }
+                self::postCambio($partida, $a, $b, 'romance', $eventoOrigen, $antes, $rel, $correlacionId, $valores);
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
             }
         }
@@ -87,6 +96,7 @@ final class RelacionEngine
         ], $defaults, $valores);
 
         $partida['relaciones_romanticas'][] = $rel;
+        self::postCambio($partida, $a, $b, 'romance', $eventoOrigen, $antes, $rel, $correlacionId, $valores);
         return ['ok' => true, 'relacion' => $rel, 'creada' => true];
     }
 
@@ -108,6 +118,38 @@ final class RelacionEngine
             }
         }
         return ['social' => $social, 'romance' => $romance];
+    }
+
+    private static function postCambio(
+        array &$partida,
+        string $a,
+        string $b,
+        string $canal,
+        ?string $eventoOrigen,
+        ?array $antes,
+        array $despues,
+        ?string $correlacionId,
+        array $deltas = []
+    ): void {
+        RelacionHistorial::registrar(
+            $partida,
+            $a,
+            $b,
+            $canal,
+            $eventoOrigen ?? 'manual',
+            $deltas,
+            $antes,
+            $despues,
+            $correlacionId
+        );
+        DomainEventDispatcher::emit($partida, DomainEvents::RELACION_MODIFICADA, [
+            'canal' => $canal,
+            'persona_a' => $a,
+            'persona_b' => $b,
+            'antes' => $antes,
+            'despues' => $despues,
+            'actores' => [$a, $b],
+        ], null, 'RelacionEngine::upsert', [$a, $b]);
     }
 
     /** @return array{0: string, 1: string} */
