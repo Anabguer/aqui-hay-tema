@@ -71,6 +71,107 @@ final class DisponibilidadEngine
             }
         }
 
-        return ['ok' => true, 'slots' => $slots, 'total' => count($slots)];
+        $out = ['ok' => true, 'slots' => $slots, 'total' => count($slots)];
+        if ($slots === []) {
+            $out['diagnostico'] = self::diagnosticarBloqueos($partida, $participantes, $desdeDia, $desdeHora, $maxDias);
+        }
+        return $out;
+    }
+
+    /**
+     * Resume por qué no hay slots compatibles (mensajes técnicos, no narrativa).
+     *
+     * @return array{resumen: string, por_residente: array<string, array<string, int>>, muestras: list<array>}
+     */
+    public static function diagnosticarBloqueos(
+        array $partida,
+        array $participantes,
+        int $desdeDia,
+        int $desdeHora,
+        int $maxDias = 7
+    ): array {
+        $porResidente = [];
+        $muestras = [];
+        $now = $desdeDia * 24 + $desdeHora;
+
+        for ($d = 0; $d < $maxDias; $d++) {
+            $dia = $desdeDia + $d;
+            $horaMin = ($d === 0) ? $desdeHora : 0;
+            for ($h = $horaMin; $h < 24; $h++) {
+                if ($dia * 24 + $h < $now) {
+                    continue;
+                }
+                $bloqueos = [];
+                foreach ($participantes as $rid) {
+                    $disp = AgendaEngine::estaDisponible($partida, $rid, $dia, $h);
+                    if (!$disp['disponible']) {
+                        $clave = self::claveBloqueo($disp);
+                        $porResidente[$rid][$clave] = ($porResidente[$rid][$clave] ?? 0) + 1;
+                        $bloqueos[$rid] = $clave;
+                    }
+                }
+                if ($bloqueos !== [] && count($muestras) < 6) {
+                    $muestras[] = ['dia' => $dia, 'hora' => $h, 'bloqueos' => $bloqueos];
+                }
+                if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $h)) {
+                    foreach ($participantes as $rid) {
+                        $porResidente[$rid]['encuentro_programado'] =
+                            ($porResidente[$rid]['encuentro_programado'] ?? 0) + 1;
+                    }
+                }
+            }
+        }
+
+        $partes = [];
+        $partesUi = [];
+        $nombres = [];
+        foreach ($porResidente as $rid => $motivos) {
+            arsort($motivos);
+            $top = array_key_first($motivos);
+            if ($top !== null) {
+                $etiqueta = self::etiquetaBloqueo($top);
+                $partes[] = "{$rid}: " . $etiqueta;
+                $nombre = IdentidadPublica::nombre($partida, (string) $rid);
+                $nombres[$rid] = $nombre;
+                $partesUi[] = "{$nombre}: " . $etiqueta;
+            }
+        }
+
+        return [
+            'resumen' => $partes !== []
+                ? 'Sin horas compatibles en los próximos ' . $maxDias . ' días. Motivos principales: ' . implode('; ', $partes)
+                : 'Sin horas compatibles en el rango buscado.',
+            'resumen_ui' => $partesUi !== []
+                ? 'Sin horas compatibles en los próximos ' . $maxDias . ' días. Motivos principales: ' . implode('; ', $partesUi)
+                : 'Sin horas compatibles en el rango buscado.',
+            'nombres' => $nombres,
+            'por_residente' => $porResidente,
+            'muestras' => $muestras,
+        ];
+    }
+
+  /** @param array{motivo?: string, tipo?: string|null} $disp */
+    private static function claveBloqueo(array $disp): string
+    {
+        $tipo = (string) ($disp['tipo'] ?? '');
+        return match ($tipo) {
+            'sueno' => 'durmiendo',
+            'trabajo', 'trabajo_blando', 'trabajo_generico', 'estudio' => 'trabajo',
+            'compromiso' => 'otro_compromiso',
+            'encuentro' => 'encuentro_programado',
+            default => (string) ($disp['motivo'] ?? 'ocupado'),
+        };
+    }
+
+    private static function etiquetaBloqueo(string $clave): string
+    {
+        return match ($clave) {
+            'durmiendo' => 'durmiendo',
+            'trabajo' => 'trabajo',
+            'otro_compromiso' => 'otro compromiso',
+            'encuentro_programado' => 'encuentro ya programado',
+            'doble_reserva' => 'doble reserva',
+            default => $clave,
+        };
     }
 }

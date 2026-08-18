@@ -194,7 +194,109 @@ button.primary { background: #3d3520; border-color: var(--accent); }
 
 .compact-form {
   display: grid;
+  gap: 0.5rem;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+@media (max-width: 600px) {
+  .form-row-2 { grid-template-columns: 1fr; }
+}
+
+.form-hint { margin: 0; font-size: 0.82rem; }
+.form-hint--error { color: var(--danger); }
+.form-hint--warn { color: #c9a227; }
+.form-hint--ok { color: var(--ok); }
+
+.feedback {
+  margin-top: 0.5rem;
+  font-size: 0.88rem;
+  min-height: 1.2em;
+}
+.feedback--ok { color: var(--ok); }
+.feedback--error { color: var(--danger); }
+
+.enc-form select,
+.enc-form button {
+  min-height: 2.25rem;
+  font-size: 0.9rem;
+}
+
+.selected-resident {
+  outline: 2px solid var(--accent);
+  border-color: var(--accent);
+}
+
+.estado-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  margin-right: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  border: 1px solid var(--border);
+}
+.estado-programado { background: #2a3540; }
+.estado-en-curso { background: #3a4020; color: #e8e8a0; }
+.estado-terminado { background: var(--libre); }
+.estado-cancelado { background: #402020; color: #f0a0a0; }
+.estado-pendiente { background: #3a3020; }
+.estado-leido { background: #2a2a35; }
+.estado-resuelto { background: var(--libre); }
+
+.enc-row-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: 0.35rem;
+}
+
+.discovery-block { margin-top: 0.75rem; }
+.discovery-list {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+.discovery-item {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr auto;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+@media (max-width: 500px) {
+  .discovery-item { grid-template-columns: 1fr; }
+}
+.discovery-campo { color: var(--muted); }
+.discovery-valor { font-weight: 500; }
+.discovery-oculto { color: var(--muted); font-style: italic; }
+.discovery-parcial { color: #c9a227; font-style: italic; }
+.discovery-politica {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.btn-inline {
+  margin-top: 0.35rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.78rem;
+}
+
+.msg-texto { margin-top: 0.25rem; font-size: 0.85rem; }
+
+@media (max-width: 600px) {
+  .top-bar { flex-direction: column; align-items: flex-start; }
+  .btn-row { width: 100%; }
+  .btn-row button, .btn-row .btn { flex: 1 1 auto; }
+  .ficha-hero { grid-template-columns: 72px 1fr; }
+  .portrait-frame { width: 72px; height: 72px; }
 }
 
 .encuentros-grid {
