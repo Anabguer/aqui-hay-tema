@@ -8,8 +8,9 @@ final class CatalogStore
 {
     /** @var array<string, array> */
     private array $fileCache = [];
+    private string $root;
 
-    public function __construct(private string $root)
+    public function __construct(string $root)
     {
         $this->root = rtrim($root, DIRECTORY_SEPARATOR);
     }
@@ -40,16 +41,33 @@ final class CatalogStore
     /** @return list<array<string, mixed>> */
     public function items(string $catalogo): array
     {
-        $file = match ($catalogo) {
-            'hobbies', 'aficiones' => 'aficiones.json',
-            'rasgos' => 'rasgos.json',
-            'estilos_sociales' => 'estilos_sociales.json',
-            'profesiones', 'ocupaciones' => 'profesiones.json',
-            'etiquetas_look' => 'etiquetas_look.json',
-            'franjas' => 'franjas_disponibilidad.json',
-            'voces' => 'voces.json',
-            default => null,
-        };
+        switch ($catalogo) {
+            case 'hobbies':
+            case 'aficiones':
+                $file = 'aficiones.json';
+                break;
+            case 'rasgos':
+                $file = 'rasgos.json';
+                break;
+            case 'estilos_sociales':
+                $file = 'estilos_sociales.json';
+                break;
+            case 'profesiones':
+            case 'ocupaciones':
+                $file = 'profesiones.json';
+                break;
+            case 'etiquetas_look':
+                $file = 'etiquetas_look.json';
+                break;
+            case 'franjas':
+                $file = 'franjas_disponibilidad.json';
+                break;
+            case 'voces':
+                $file = 'voces.json';
+                break;
+            default:
+                $file = null;
+        }
         if ($file === null) {
             return [];
         }

@@ -5,11 +5,18 @@ namespace AquiHayTema\Engine;
 
 final class RelojOperations
 {
+    private string $projectRoot;
+    private ?GameLogger $logger;
+    private ?EmotionalStateService $emociones;
+
     public function __construct(
-        private string $projectRoot,
-        private ?GameLogger $logger = null,
-        private ?EmotionalStateService $emociones = null
+        string $projectRoot,
+        ?GameLogger $logger = null,
+        ?EmotionalStateService $emociones = null
     ) {
+        $this->projectRoot = $projectRoot;
+        $this->logger = $logger;
+        $this->emociones = $emociones;
     }
 
     public function avanzar(array &$partida, int $horas): array
@@ -30,7 +37,7 @@ final class RelojOperations
             $this->logger
         );
         $sync = EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
-        $expirados = $this->emociones?->expirarVencidos($partida) ?? 0;
+        $expirados = $this->emociones !== null ? $this->emociones->expirarVencidos($partida) : 0;
 
         DomainEventDispatcher::emit($partida, DomainEvents::TIEMPO_AVANZADO, [
             'horas' => $horas,

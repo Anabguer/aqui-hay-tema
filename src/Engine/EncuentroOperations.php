@@ -5,8 +5,11 @@ namespace AquiHayTema\Engine;
 
 final class EncuentroOperations
 {
-    public function __construct(private ?GameLogger $logger = null)
+    private ?GameLogger $logger;
+
+    public function __construct(?GameLogger $logger = null)
     {
+        $this->logger = $logger;
     }
 
     public function programar(

@@ -5,10 +5,13 @@ namespace AquiHayTema\Engine;
 
 final class PartidaDevService
 {
-    public function __construct(
-        private PartidaRepository $repo,
-        private GameLogger $logger
-    ) {
+    private PartidaRepository $repo;
+    private GameLogger $logger;
+
+    public function __construct(PartidaRepository $repo, GameLogger $logger)
+    {
+        $this->repo = $repo;
+        $this->logger = $logger;
     }
 
     public function resetEncuentros(array &$partida): array

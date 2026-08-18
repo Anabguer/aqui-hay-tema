@@ -5,8 +5,13 @@ namespace AquiHayTema\Engine;
 
 final class ResidenteOperations
 {
-    public function __construct(private Catalog $catalog, private ?GameLogger $logger = null)
+    private Catalog $catalog;
+    private ?GameLogger $logger;
+
+    public function __construct(Catalog $catalog, ?GameLogger $logger = null)
     {
+        $this->catalog = $catalog;
+        $this->logger = $logger;
     }
 
     public function incorporarCatalogo(array &$partida, string $catalogId, string $presencia = 'residente'): array

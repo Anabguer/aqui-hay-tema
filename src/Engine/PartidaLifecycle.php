@@ -5,13 +5,24 @@ namespace AquiHayTema\Engine;
 
 final class PartidaLifecycle
 {
+    private string $root;
+    private Catalog $catalog;
+    private PartidaRepository $repo;
+    private GameLogger $logger;
+    private ResidenteOperations $residentes;
+
     public function __construct(
-        private string $root,
-        private Catalog $catalog,
-        private PartidaRepository $repo,
-        private GameLogger $logger,
-        private ResidenteOperations $residentes,
+        string $root,
+        Catalog $catalog,
+        PartidaRepository $repo,
+        GameLogger $logger,
+        ResidenteOperations $residentes
     ) {
+        $this->root = $root;
+        $this->catalog = $catalog;
+        $this->repo = $repo;
+        $this->logger = $logger;
+        $this->residentes = $residentes;
     }
 
     public function nueva(string $configId = 'debug_v0', ?string $seed = null): array

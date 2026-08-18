@@ -11,8 +11,9 @@ final class VisualPackStore
 {
     /** @var array<string, mixed>|null */
     private ?array $registro = null;
+    private string $root;
 
-    public function __construct(private string $root)
+    public function __construct(string $root)
     {
         $this->root = rtrim($root, DIRECTORY_SEPARATOR);
     }

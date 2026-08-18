@@ -14,14 +14,16 @@ use AquiHayTema\Engine\SnapshotService;
 
 final class ApiContext
 {
-    public readonly PartidaService $service;
-    public readonly PartidaRepository $repo;
-    public readonly PartidaDevService $dev;
-    public readonly SnapshotService $snapshots;
-    public readonly GameLogger $logger;
+    public PartidaService $service;
+    public PartidaRepository $repo;
+    public PartidaDevService $dev;
+    public SnapshotService $snapshots;
+    public GameLogger $logger;
+    public string $root;
 
-    public function __construct(public readonly string $root)
+    public function __construct(string $root)
     {
+        $this->root = $root;
         DomainBootstrap::boot();
         $this->service = new PartidaService($root);
         $this->repo = new PartidaRepository($root);
@@ -31,7 +33,7 @@ final class ApiContext
     }
 }
 
-function jsonOut(array $data, int $code = 200): never
+function jsonOut(array $data, int $code = 200): void
 {
     if (isset($data['_http'])) {
         $code = (int) $data['_http'];

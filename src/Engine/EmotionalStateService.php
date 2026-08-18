@@ -6,11 +6,18 @@ namespace AquiHayTema\Engine;
 /** Aplica estado interno y resuelve expresión. Sin fórmulas de juego. */
 final class EmotionalStateService
 {
+    private VisualPackStore $packs;
+    private CatalogStore $catalog;
+    private ?GameLogger $logger;
+
     public function __construct(
-        private VisualPackStore $packs,
-        private CatalogStore $catalog,
-        private ?GameLogger $logger = null
+        VisualPackStore $packs,
+        CatalogStore $catalog,
+        ?GameLogger $logger = null
     ) {
+        $this->packs = $packs;
+        $this->catalog = $catalog;
+        $this->logger = $logger;
     }
 
     public static function packIdDe(array $residente, VisualPackStore $packs): ?string
@@ -53,7 +60,7 @@ final class EmotionalStateService
         string $residenteId,
         string $estadoId,
         string $origen = 'dev_manual',
-        int|float|null $intensidad = null,
+        $intensidad = null,
         ?array $hasta = null,
         array $contexto = [],
         ?int $duracionHoras = null

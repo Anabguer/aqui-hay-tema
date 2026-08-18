@@ -11,8 +11,15 @@ final class DiscoveryVisibilityResolver
 {
     public const PARCIAL_PLACEHOLDER = '__PARCIAL__';
 
-    public function __construct(private array $config, private array $partida)
+    /** @var array<string, mixed> */
+    private array $config;
+    /** @var array<string, mixed> */
+    private array $partida;
+
+    public function __construct(array $config, array $partida)
     {
+        $this->config = $config;
+        $this->partida = $partida;
     }
 
     /**
