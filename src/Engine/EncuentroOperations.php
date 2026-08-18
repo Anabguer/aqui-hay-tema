@@ -35,4 +35,9 @@ final class EncuentroOperations
         }
         return $r;
     }
+
+    public function cancelar(array &$partida, string $encuentroId): array
+    {
+        return EncuentroEngine::cancelar($partida, $encuentroId, $this->logger);
+    }
 }

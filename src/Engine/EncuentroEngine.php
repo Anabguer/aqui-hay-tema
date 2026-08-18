@@ -70,9 +70,14 @@ final class EncuentroEngine
                     'detalle' => $disp,
                     '_placeholder_rechazo_narrativo' => true,
                 ]);
+                $nombre = IdentidadPublica::nombre($partida, $rid);
                 return array_merge(
-                    GameError::respuesta(GameError::AGENDA_SLOT_OCUPADO, ['residente' => $rid, 'detalle' => $disp]),
-                    ['residente' => $rid, 'detalle' => $disp]
+                    GameError::respuesta(GameError::AGENDA_SLOT_OCUPADO, [
+                        'residente' => $rid,
+                        'residente_nombre' => $nombre,
+                        'detalle' => $disp,
+                    ]),
+                    ['residente' => $rid, 'residente_nombre' => $nombre, 'detalle' => $disp]
                 );
             }
         }
@@ -184,6 +189,9 @@ final class EncuentroEngine
                 'encuentro' => $r['encuentro'],
                 'actores' => $r['encuentro']['participantes'] ?? [],
             ], $logger, 'EncuentroEngine::cancelar', $r['encuentro']['participantes'] ?? []);
+            $logger?->log($partida, 'encuentro_cancelado', [
+                'encuentro_id' => $r['encuentro']['id'] ?? $encuentroId,
+            ]);
         }
         return $r;
     }
