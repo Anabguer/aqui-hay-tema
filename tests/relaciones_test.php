@@ -39,4 +39,10 @@ $rel2 = RelacionEngine::obtenerEntre($partida, $a, $b);
 ok($rel2['social'] !== null && $rel2['romance'] !== null, 'social independiente de romance');
 ok(($rel2['romance']['conflicto'] ?? null) === 1, 'conflicto en romance independiente');
 
+RelacionEngine::upsertConflicto($partida, $a, $b, null, 'roce');
+$rel3 = RelacionEngine::obtenerEntre($partida, $a, $b);
+ok($rel3['conflicto'] !== null, 'canal roce/conflicto propio');
+ok(array_key_exists('fase', $rel3['social']), 'fase aditiva en social');
+ok($rel3['social']['fase'] === null, 'fase no auto-calculada');
+
 exit($failures > 0 ? 1 : 0);

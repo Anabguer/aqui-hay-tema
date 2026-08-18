@@ -76,7 +76,7 @@ final class EncuentroResolver
             ]);
         }
 
-        $dr = $resultado['delta_romance'] ?? [];
+            $dr = $resultado['delta_romance'] ?? [];
         if (!empty($dr)) {
             RelacionEngine::upsertRomance($partida, $a, $b, $dr);
             \aht_log_optional($logger, $partida, 'relacion_delta_romance', [
@@ -84,6 +84,13 @@ final class EncuentroResolver
                 'persona_b' => $b,
                 'delta' => $dr,
             ]);
+        }
+
+        $conf = $resultado['conflicto'] ?? null;
+        if ($conf !== null && $conf !== false && $conf !== '') {
+            $intensidad = is_numeric($conf) ? (int) $conf : null;
+            $tipoConf = is_string($conf) ? $conf : 'roce';
+            RelacionEngine::upsertConflicto($partida, $a, $b, $intensidad, $tipoConf, 'encuentro');
         }
     }
 }

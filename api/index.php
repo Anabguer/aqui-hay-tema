@@ -12,6 +12,7 @@ use AquiHayTema\Api\Handlers\DiarioHandler;
 use AquiHayTema\Api\Handlers\EncuentrosHandler;
 use AquiHayTema\Api\Handlers\MapaHandler;
 use AquiHayTema\Api\Handlers\PartidaHandler;
+use AquiHayTema\Api\Handlers\PeticionesHandler;
 use AquiHayTema\Api\Handlers\RelacionesHandler;
 use AquiHayTema\Api\Handlers\RelojHandler;
 use AquiHayTema\Api\Handlers\ResidentesHandler;
@@ -99,6 +100,18 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::programar($ctx, $body, $p);
     },
+    'encuentro.proponer' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::proponer($ctx, $body, $p);
+    },
+    'encuentro.propuesta.decidir' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::decidirPropuesta($ctx, $body, $p);
+    },
+    'encuentro.propuestas.listar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::listarPropuestas($ctx, $body, $p);
+    },
     'encuentro.estado' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::estado($ctx, $body, $p);
@@ -138,6 +151,26 @@ $routes = [
     'relacion.listar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return RelacionesHandler::listar($ctx, $body, $p);
+    },
+    'relacion.fase' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return RelacionesHandler::fase($ctx, $body, $p);
+    },
+    'peticion.listar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PeticionesHandler::listar($ctx, $body, $p);
+    },
+    'peticion.crear' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PeticionesHandler::crear($ctx, $body, $p);
+    },
+    'peticion.atender' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PeticionesHandler::atender($ctx, $body, $p);
+    },
+    'peticion.ignorar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PeticionesHandler::ignorar($ctx, $body, $p);
     },
     'mapa.presencia' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

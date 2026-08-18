@@ -39,6 +39,35 @@ final class EncuentroOperations
         return $r;
     }
 
+    public function proponer(
+        array &$partida,
+        array $participantes,
+        int $dia,
+        int $hora,
+        string $tipo = 'conocerse',
+        ?string $lugar = null
+    ): array {
+        $r = PropuestaEncuentroEngine::proponer(
+            $partida,
+            $participantes,
+            $dia,
+            $hora,
+            $tipo,
+            $lugar,
+            null,
+            null,
+            $this->logger
+        );
+        if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
+            DomainEventDispatcher::emit($partida, DomainEvents::ENCUENTRO_PROGRAMADO, [
+                'encuentro' => $r['encuentro'],
+                'actores' => $participantes,
+                'via' => 'propuesta',
+            ], $this->logger, 'EncuentroOperations::proponer', $participantes);
+        }
+        return $r;
+    }
+
     public function cancelar(array &$partida, string $encuentroId): array
     {
         return EncuentroEngine::cancelar($partida, $encuentroId, $this->logger);

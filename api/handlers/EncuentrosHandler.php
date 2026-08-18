@@ -32,6 +32,47 @@ final class EncuentrosHandler
         return $r;
     }
 
+    public static function proponer(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $r = $ctx->service->proponerEncuentro(
+            $partida,
+            is_array($body['participantes'] ?? null) ? $body['participantes'] : [
+                (string) ($body['residente_a'] ?? ''),
+                (string) ($body['residente_b'] ?? ''),
+            ],
+            (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']),
+            (int) ($body['hora'] ?? 17),
+            (string) ($body['tipo'] ?? 'conocerse'),
+            isset($body['lugar']) ? (string) $body['lugar'] : null
+        );
+        savePartida($ctx, $partida);
+        return $r;
+    }
+
+    public static function decidirPropuesta(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $r = $ctx->service->decidirPropuestaEncuentro(
+            $partida,
+            (string) ($body['propuesta_id'] ?? ''),
+            (string) ($body['residente_id'] ?? ''),
+            (bool) ($body['acepta'] ?? false)
+        );
+        savePartida($ctx, $partida);
+        return $r;
+    }
+
+    public static function listarPropuestas(ApiContext $ctx, array $body, array $partida): array
+    {
+        $estado = isset($body['estado']) ? (string) $body['estado'] : null;
+        $items = \AquiHayTema\Engine\PropuestaEncuentroEngine::listar($partida);
+        if ($estado !== null) {
+            $items = array_values(array_filter($items, static function ($p) use ($estado) {
+                return ($p['estado'] ?? '') === $estado;
+            }));
+        }
+        return ['ok' => true, 'propuestas' => $items];
+    }
+
     public static function estado(ApiContext $ctx, array $body, array &$partida): array
     {
         $r = EncuentroEngine::cambiarEstado($partida, (string) ($body['encuentro_id'] ?? ''), (string) ($body['estado'] ?? ''));

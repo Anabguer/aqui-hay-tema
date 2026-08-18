@@ -41,6 +41,22 @@ final class RelacionesHandler
             'ok' => true,
             'sociales' => $partida['relaciones_sociales'] ?? [],
             'romanticas' => $partida['relaciones_romanticas'] ?? [],
+            'conflicto' => $partida['relaciones_conflicto'] ?? [],
         ];
+    }
+
+    public static function fase(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $r = RelacionEngine::aplicarFase(
+            $partida,
+            (string) ($body['persona_a'] ?? ''),
+            (string) ($body['persona_b'] ?? ''),
+            (string) ($body['canal'] ?? 'social'),
+            (string) ($body['fase'] ?? '')
+        );
+        if ($r['ok'] ?? false) {
+            savePartida($ctx, $partida);
+        }
+        return $r;
     }
 }

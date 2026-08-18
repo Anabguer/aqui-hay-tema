@@ -20,6 +20,12 @@ final class GameError
     public const SIN_PROXIMO_ENCUENTRO = 'SIN_PROXIMO_ENCUENTRO';
     public const VALIDACION_FALLIDA = 'VALIDACION_FALLIDA';
     public const SAVE_CORRUPTO = 'SAVE_CORRUPTO';
+    public const ENCUENTRO_RECHAZADO_INDISPONIBILIDAD = 'ENCUENTRO_RECHAZADO_INDISPONIBILIDAD';
+    public const ENCUENTRO_RECHAZADO_VOLUNTAD = 'ENCUENTRO_RECHAZADO_VOLUNTAD';
+    public const PROPUESTA_PENDIENTE = 'PROPUESTA_PENDIENTE';
+    public const PROPUESTA_NO_ENCONTRADA = 'PROPUESTA_NO_ENCONTRADA';
+    public const PETICION_NO_ENCONTRADA = 'PETICION_NO_ENCONTRADA';
+    public const FASE_TRANSICION_INVALIDA = 'FASE_TRANSICION_INVALIDA';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -53,6 +59,18 @@ final class GameError
                 return 'Datos no válidos.';
             case self::SAVE_CORRUPTO:
                 return 'El archivo de partida está dañado.';
+            case self::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD:
+                return 'No puede ir a esa hora.';
+            case self::ENCUENTRO_RECHAZADO_VOLUNTAD:
+                return 'No quiere ir.';
+            case self::PROPUESTA_PENDIENTE:
+                return 'Todavía no han decidido.';
+            case self::PROPUESTA_NO_ENCONTRADA:
+                return 'No hay ninguna propuesta con ese id.';
+            case self::PETICION_NO_ENCONTRADA:
+                return 'No hay ninguna petición con ese id.';
+            case self::FASE_TRANSICION_INVALIDA:
+                return 'Esa fase de relación no es un paso válido.';
             default:
                 return 'Ha ocurrido un error.';
         }

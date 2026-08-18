@@ -32,5 +32,6 @@ ok(is_file($root . '/api/handlers/PartidaHandler.php'), 'PartidaHandler en api/h
 ok(class_exists(\AquiHayTema\Api\Handlers\EncuentrosHandler::class, true), 'autoload EncuentrosHandler');
 ok(class_exists(\AquiHayTema\Api\Handlers\RelojHandler::class, true), 'autoload RelojHandler');
 ok(class_exists(\AquiHayTema\Api\Handlers\ResidentesHandler::class, true), 'autoload ResidentesHandler');
+ok(class_exists(\AquiHayTema\Api\Handlers\PeticionesHandler::class, true), 'autoload PeticionesHandler');
 
 exit($failures > 0 ? 1 : 0);

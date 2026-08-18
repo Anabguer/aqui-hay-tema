@@ -25,6 +25,9 @@ final class DomainBootstrap
         ConsecuenciaTriggerRegistry::register(DomainEvents::RESIDENTE_INCORPORADO, 'consecuencia_llegada_residente', false);
         ConsecuenciaTriggerRegistry::register(DomainEvents::NPC_AUTONOMO_PLAN, 'consecuencia_evento_autonomo', false);
         ConsecuenciaTriggerRegistry::register(DomainEvents::COINCIDENCIA_RESIDENTES, 'consecuencia_coincidencia', false);
+        ConsecuenciaTriggerRegistry::register(DomainEvents::PROPUESTA_ENCUENTRO, 'consecuencia_propuesta', false);
+        ConsecuenciaTriggerRegistry::register(DomainEvents::PETICION_CREADA, 'consecuencia_peticion', false);
+        ConsecuenciaTriggerRegistry::register(DomainEvents::PETICION_CADUCADA, 'consecuencia_peticion_caducada', false);
 
         ContentReactionSubscriber::register();
         EmotionalEventBridge::register();

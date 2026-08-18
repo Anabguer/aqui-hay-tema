@@ -20,9 +20,10 @@
     "ultima_sesion_iso": null,
     "catch_up_pendiente": {
       "_placeholder": true,
-      "descripcion": "Estructura offline; sin eventos generados.",
+      "descripcion": "Plan de prioridades offline; sin eventos ni cantidades.",
       "segundos_pendientes": 0,
-      "eventos_pendientes": []
+      "eventos_pendientes": [],
+      "plan": null
     }
   },
   "celeste": {
@@ -46,6 +47,18 @@
   "encuentros": [],
   "relaciones_sociales": [],
   "relaciones_romanticas": [],
+  "relaciones_conflicto": [],
+  "propuestas_encuentro": [],
+  "peticiones": [],
+  "compatibilidad_oculta": {
+    "pares": {},
+    "escaner": {
+      "desbloqueado": false,
+      "nombre": null,
+      "coste": null,
+      "_bloqueado_decision": ["nombre_ui", "coste"]
+    }
+  },
   "buzon": [],
   "diario": [],
   "buzon_config": {

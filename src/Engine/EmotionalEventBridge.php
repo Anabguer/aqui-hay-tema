@@ -33,6 +33,9 @@ final class EmotionalEventBridge
             DomainEvents::EVENTO_EDIFICIO,
             DomainEvents::NPC_AUTONOMO_PLAN,
             DomainEvents::DISCUSION,
+            DomainEvents::PROPUESTA_ENCUENTRO,
+            DomainEvents::PETICION_CREADA,
+            DomainEvents::PETICION_CADUCADA,
         ];
     }
 
@@ -58,6 +61,11 @@ final class EmotionalEventBridge
                 return 'npc_autonomo';
             case DomainEvents::DISCUSION:
                 return 'discusion';
+            case DomainEvents::PROPUESTA_ENCUENTRO:
+                return 'encuentro';
+            case DomainEvents::PETICION_CREADA:
+            case DomainEvents::PETICION_CADUCADA:
+                return 'mensaje';
             case DomainEvents::TIEMPO_AVANZADO:
                 return 'expiracion';
             default:

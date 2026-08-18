@@ -23,5 +23,25 @@ final class SchemaFields
         $partida['npc_autonomo'] ??= ['planes_pendientes' => []];
         $partida['npc_autonomo']['planes_pendientes'] ??= [];
         $partida['npc_autonomo']['historial_eventos'] ??= [];
+        $partida['propuestas_encuentro'] ??= [];
+        $partida['peticiones'] ??= [];
+        $partida['relaciones_conflicto'] ??= [];
+        CompatibilidadOculta::ensure($partida);
+
+        foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {
+            if (is_array($rel)) {
+                RelacionFase::ensure($partida['relaciones_sociales'][$i]);
+            }
+        }
+        foreach ($partida['relaciones_romanticas'] ?? [] as $i => $rel) {
+            if (is_array($rel)) {
+                RelacionFase::ensure($partida['relaciones_romanticas'][$i]);
+            }
+        }
+        foreach ($partida['relaciones_conflicto'] ?? [] as $i => $rel) {
+            if (is_array($rel)) {
+                RelacionFase::ensure($partida['relaciones_conflicto'][$i]);
+            }
+        }
     }
 }

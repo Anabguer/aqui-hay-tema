@@ -29,6 +29,9 @@ final class ConsecuenciaReactionSubscriber
             DomainEvents::RESIDENTE_INCORPORADO,
             DomainEvents::NPC_AUTONOMO_PLAN,
             DomainEvents::COINCIDENCIA_RESIDENTES,
+            DomainEvents::PROPUESTA_ENCUENTRO,
+            DomainEvents::PETICION_CREADA,
+            DomainEvents::PETICION_CADUCADA,
         ];
     }
 

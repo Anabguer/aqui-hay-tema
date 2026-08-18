@@ -13,14 +13,18 @@ final class EncuentroEngine
         return $partida['encuentros'] ?? $partida['citas'] ?? [];
     }
 
-    public static function programar(
-        array &$partida,
+    /**
+     * Validación compartida (participantes, tipo, límite, lugar).
+     * No evalúa agenda ni voluntad: eso lo hace programar (legacy) o PropuestaEncuentroEngine.
+     *
+     * @param string[] $participantes
+     * @return array<string, mixed>
+     */
+    public static function validarContexto(
+        array $partida,
         array $participantes,
-        int $dia,
-        int $hora,
         string $tipo = 'conocerse',
         ?string $lugarId = null,
-        ?string $actividad = null,
         ?GameLogger $logger = null
     ): array {
         $participantes = array_values(array_unique(array_filter($participantes)));
@@ -60,6 +64,26 @@ final class EncuentroEngine
             \aht_log_optional($logger, $partida, 'encuentro_rechazado', ['regla' => 'lugar_no_operativo', 'lugar' => $lugarId]);
             return array_merge(GameError::respuesta(GameError::LUGAR_NO_OPERATIVO, ['lugar' => $lugarId]), ['lugar' => $lugarId]);
         }
+
+        return ['ok' => true, 'participantes' => $participantes, 'lugar' => $lugarId, 'tipo' => $tipo];
+    }
+
+    public static function programar(
+        array &$partida,
+        array $participantes,
+        int $dia,
+        int $hora,
+        string $tipo = 'conocerse',
+        ?string $lugarId = null,
+        ?string $actividad = null,
+        ?GameLogger $logger = null
+    ): array {
+        $ctx = self::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
+        if (!($ctx['ok'] ?? false)) {
+            return $ctx;
+        }
+        $participantes = $ctx['participantes'];
+        $lugarId = $ctx['lugar'];
 
         foreach ($participantes as $rid) {
             $disp = AgendaEngine::estaDisponible($partida, $rid, $dia, $hora);

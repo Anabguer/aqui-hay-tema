@@ -22,6 +22,10 @@ final class DomainEvents
     public const EVENTO_EDIFICIO = 'evento_edificio';
     public const NPC_AUTONOMO_PLAN = 'npc_autonomo_plan';
     public const DISCUSION = 'discusion';
+    public const PROPUESTA_ENCUENTRO = 'propuesta_encuentro';
+    public const PETICION_CREADA = 'peticion_creada';
+    public const PETICION_CADUCADA = 'peticion_caducada';
+    public const CATCH_UP_PLANIFICADO = 'catch_up_planificado';
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';

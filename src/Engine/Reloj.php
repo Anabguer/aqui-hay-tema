@@ -57,14 +57,23 @@ final class Reloj
             return ['segundos' => 0, 'aplicado' => false];
         }
 
+        $plan = CatchUpPlanner::planificar($segundos);
         $partida['reloj']['catch_up_pendiente']['segundos_pendientes'] = $segundos;
         $partida['reloj']['catch_up_pendiente']['eventos_pendientes'] = [];
+        $partida['reloj']['catch_up_pendiente']['plan'] = $plan;
         $partida['reloj']['ultima_sesion_iso'] = $now->format(DATE_ATOM);
+
+        if ($segundos > 0) {
+            DomainEventDispatcher::emit($partida, DomainEvents::CATCH_UP_PLANIFICADO, [
+                'plan' => $plan,
+            ], null, 'Reloj::calcularCatchUpPendiente');
+        }
 
         return [
             'segundos' => $segundos,
             'aplicado' => true,
-            'nota' => '_placeholder: tiempo registrado; eventos offline no implementados.',
+            'plan' => $plan,
+            'nota' => 'tiempo registrado; eventos offline no ejecutados (BLOQUEADO_DECISION cantidades).',
         ];
     }
 }

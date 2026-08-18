@@ -101,6 +101,30 @@ final class PartidaService
         return $r;
     }
 
+    public function proponerEncuentro(
+        array &$partida,
+        array $participantes,
+        int $dia,
+        int $hora,
+        string $tipo = 'conocerse',
+        ?string $lugar = null
+    ): array {
+        $r = $this->encuentros->proponer($partida, $participantes, $dia, $hora, $tipo, $lugar);
+        if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
+            $r['vista'] = ResumenDia::vistaEncuentro($partida, $r['encuentro'], $this->catalog);
+        }
+        return $r;
+    }
+
+    public function decidirPropuestaEncuentro(array &$partida, string $propuestaId, string $residenteId, bool $acepta): array
+    {
+        $r = PropuestaEncuentroEngine::registrarDecision($partida, $propuestaId, $residenteId, $acepta, $this->logger);
+        if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
+            $r['vista'] = ResumenDia::vistaEncuentro($partida, $r['encuentro'], $this->catalog);
+        }
+        return $r;
+    }
+
     public function fichaResidente(array $partida, string $residenteId): array
     {
         $runtime = $partida['residentes'][$residenteId] ?? null;
@@ -124,7 +148,7 @@ final class PartidaService
                 continue;
             }
             $rel = RelacionEngine::obtenerEntre($partida, $residenteId, $otroId);
-            if ($rel['social'] !== null || $rel['romance'] !== null) {
+            if ($rel['social'] !== null || $rel['romance'] !== null || $rel['conflicto'] !== null) {
                 $relaciones[$otroId] = $rel;
             }
         }
@@ -226,6 +250,13 @@ final class PartidaService
             'relaciones_sociales' => count($partida['relaciones_sociales']),
             'relaciones_romanticas' => count($partida['relaciones_romanticas']),
             'buzon_pendientes' => count(BuzonEngine::listar($partida, 'pendiente')),
+            'peticiones_abiertas' => count(PeticionEngine::listar($partida, 'abierta')),
+            'propuestas_pendientes' => count(array_filter(
+                $partida['propuestas_encuentro'] ?? [],
+                static function ($p) {
+                    return ($p['estado'] ?? '') === 'propuesta';
+                }
+            )),
         ];
     }
 

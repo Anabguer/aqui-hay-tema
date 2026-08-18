@@ -38,6 +38,8 @@ final class RelojOperations
         );
         $sync = EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
         $expirados = $this->emociones !== null ? $this->emociones->expirarVencidos($partida) : 0;
+        $peticionesCaducadas = PeticionEngine::caducarVencidas($partida, $this->logger);
+        $propuestasCaducadas = PropuestaEncuentroEngine::caducarVencidas($partida);
 
         DomainEventDispatcher::emit($partida, DomainEvents::TIEMPO_AVANZADO, [
             'horas' => $horas,
@@ -55,6 +57,8 @@ final class RelojOperations
             'encuentros_resueltos' => $sync['resueltos'],
             'estados_expirados' => $expirados,
             'coincidencias_detectadas' => count($coins),
+            'peticiones_caducadas' => $peticionesCaducadas,
+            'propuestas_caducadas' => $propuestasCaducadas,
             'horas' => $horas,
         ];
     }
