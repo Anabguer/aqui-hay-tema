@@ -20,7 +20,11 @@ final class RelojHandler
             return $result;
         }
         savePartida($ctx, $partida);
-        return ['ok' => true, 'reloj' => $result];
+        return [
+            'ok' => true,
+            'reloj' => $result,
+            'resumen_avance' => $result['resumen_avance'] ?? ['lineas' => [], 'total' => 0],
+        ];
     }
 
     public static function proximoEncuentro(ApiContext $ctx, array $body, array &$partida): array

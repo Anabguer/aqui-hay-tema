@@ -71,6 +71,7 @@ final class RelojOperations
             'horas' => $horas,
         ];
 
+        $snap = AvanceResumen::snapshot($partida);
         $iter = $horas === 0 ? 1 : $horas;
         $pasoHoras = $horas === 0 ? 0 : 1;
         for ($i = 0; $i < $iter; $i++) {
@@ -89,6 +90,7 @@ final class RelojOperations
 
         $acum['reloj'] = $partida['reloj'];
         $acum['texto'] = Reloj::formatear($partida['reloj']);
+        $acum['resumen_avance'] = AvanceResumen::desdeSnapshot($partida, $snap);
         return $acum;
     }
 
@@ -133,6 +135,7 @@ final class RelojOperations
             'horas_avanzadas' => $horas,
             'encuentro' => $actualizado ?? $next,
             'reloj' => $adv,
+            'resumen_avance' => $adv['resumen_avance'] ?? ['lineas' => [], 'total' => 0],
         ];
     }
 
