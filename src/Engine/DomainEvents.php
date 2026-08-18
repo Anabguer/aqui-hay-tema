@@ -26,6 +26,8 @@ final class DomainEvents
     public const PETICION_CREADA = 'peticion_creada';
     public const PETICION_CADUCADA = 'peticion_caducada';
     public const CATCH_UP_PLANIFICADO = 'catch_up_planificado';
+    public const PERFIL_PARTIDA_GENERADO = 'perfil_partida_generado';
+    public const QUIMICA_GENERADA = 'quimica_generada';
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';

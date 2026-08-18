@@ -27,6 +27,8 @@ final class SchemaFields
         $partida['peticiones'] ??= [];
         $partida['relaciones_conflicto'] ??= [];
         CompatibilidadOculta::ensure($partida);
+        QuimicaEngine::ensure($partida);
+        MemoriaEventos::ensure($partida);
 
         foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {
             if (is_array($rel)) {

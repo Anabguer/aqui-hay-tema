@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
+use function AquiHayTema\Api\requireDev;
 use function AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\CitaEngine;
 use AquiHayTema\Engine\EncuentroEngine;
@@ -51,6 +52,7 @@ final class EncuentrosHandler
 
     public static function decidirPropuesta(ApiContext $ctx, array $body, array &$partida): array
     {
+        requireDev();
         $r = $ctx->service->decidirPropuestaEncuentro(
             $partida,
             (string) ($body['propuesta_id'] ?? ''),
@@ -93,7 +95,7 @@ final class EncuentrosHandler
 
     public static function sincronizar(ApiContext $ctx, array $body, array &$partida): array
     {
-        $r = EncuentroLifecycle::sincronizarConReloj($partida, $ctx->logger);
+        $r = EncuentroLifecycle::sincronizarConReloj($partida, $ctx->logger, $ctx->service->getCatalog());
         savePartida($ctx, $partida);
         return ['ok' => true, 'resultado' => $r];
     }

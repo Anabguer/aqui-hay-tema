@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "catalogo": "indicadores_visuales",
+    "descripcion": "Indicadores reutilizables extraídos de lo visible. NO son hobbies. 'gamer' no es un indicador: si hay auriculares, el id es auriculares.",
+    "estado": "catalogo_extensible",
+    "fuente": "etiquetas_look + rasgos físicos de fichas existentes. No contradice imagen."
+  },
+  "items": [
+    { "id": "gafas", "nombre": "Gafas", "grupo": "accesorio" },
+    { "id": "bigote", "nombre": "Bigote", "grupo": "vello_facial" },
+    { "id": "perilla", "nombre": "Perilla", "grupo": "vello_facial" },
+    { "id": "barba", "nombre": "Barba", "grupo": "vello_facial" },
+    { "id": "pelo_largo", "nombre": "Pelo largo", "grupo": "pelo" },
+    { "id": "pelo_corto", "nombre": "Pelo corto", "grupo": "pelo" },
+    { "id": "pelo_color", "nombre": "Pelo de color", "grupo": "pelo" },
+    { "id": "fade", "nombre": "Rapado / fade", "grupo": "pelo" },
+    { "id": "canas", "nombre": "Canas", "grupo": "pelo" },
+    { "id": "tatuajes", "nombre": "Tatuajes", "grupo": "cuerpo" },
+    { "id": "auriculares", "nombre": "Auriculares", "grupo": "accesorio" },
+    { "id": "elegante", "nombre": "Estilo elegante", "grupo": "look" },
+    { "id": "alternativo", "nombre": "Estilo alternativo", "grupo": "look" },
+    { "id": "cotidiano", "nombre": "Look cotidiano", "grupo": "look" },
+    { "id": "comodo", "nombre": "Look cómodo", "grupo": "look" },
+    { "id": "discreto", "nombre": "Look discreto", "grupo": "look" },
+    { "id": "formal", "nombre": "Look formal", "grupo": "look" },
+    { "id": "deportivo", "nombre": "Look deportivo", "grupo": "look" },
+    { "id": "atrevido", "nombre": "Look atrevido", "grupo": "look" },
+    { "id": "vintage", "nombre": "Look vintage", "grupo": "look" }
+  ]
+}

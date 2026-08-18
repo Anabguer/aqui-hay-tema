@@ -8,7 +8,7 @@ use AquiHayTema\Engine\Compatibility\PlaceholderEvaluator;
 /** Resuelve encuentros. Social y romance evolucionan de forma independiente. */
 final class EncuentroResolver
 {
-    public static function resolver(array $partida, array $encuentro, ?GameLogger $logger = null): array
+    public static function resolver(array $partida, array $encuentro, ?GameLogger $logger = null, ?Catalog $catalog = null): array
     {
         $evaluator = new PlaceholderEvaluator();
         $participantes = $encuentro['participantes'] ?? [];
@@ -31,6 +31,15 @@ final class EncuentroResolver
             }
         }
 
+        $por = [];
+        foreach ($participantes as $pid) {
+            $por[(string) $pid] = [
+                'satisfaccion' => null,
+                'texto' => null,
+                '_bloqueado_decision' => ['satisfaccion_direccional', 'copy'],
+            ];
+        }
+
         $resultado = [
             '_placeholder' => true,
             'delta_social' => $deltaSocial,
@@ -38,8 +47,18 @@ final class EncuentroResolver
             'conflicto' => null,
             'descubrimientos' => [],
             'eventos_derivados' => [],
+            'por_participante' => $por,
             'texto_resumen' => '[PLACEHOLDER] Encuentro ' . $tipo . ' terminado.',
         ];
+
+        if ($catalog !== null && count($participantes) >= 2) {
+            $snap = EncuentroPonderacion::snapshot($partida, $encuentro, $catalog);
+            \aht_log_optional($logger, $partida, 'encuentro_ponderacion', [
+                'encuentro_id' => $encuentro['id'] ?? null,
+                'factores_keys' => array_keys($snap['factores'] ?? []),
+                '_interno' => true,
+            ]);
+        }
 
         \aht_log_optional($logger, $partida, 'encuentro_resuelto', [
             'encuentro_id' => $encuentro['id'] ?? null,
@@ -76,7 +95,7 @@ final class EncuentroResolver
             ]);
         }
 
-            $dr = $resultado['delta_romance'] ?? [];
+        $dr = $resultado['delta_romance'] ?? [];
         if (!empty($dr)) {
             RelacionEngine::upsertRomance($partida, $a, $b, $dr);
             \aht_log_optional($logger, $partida, 'relacion_delta_romance', [
@@ -92,5 +111,7 @@ final class EncuentroResolver
             $tipoConf = is_string($conf) ? $conf : 'roce';
             RelacionEngine::upsertConflicto($partida, $a, $b, $intensidad, $tipoConf, 'encuentro');
         }
+
+        MemoriaEventos::registrar($partida, 'encuentro', $participantes, null, (string) ($encuentro['tipo'] ?? 'encuentro'));
     }
 }

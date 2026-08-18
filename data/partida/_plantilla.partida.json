@@ -82,5 +82,10 @@
   "audit_trail": [],
   "descubrimientos": [],
   "historial_relaciones": [],
-  "domain_events": []
+  "domain_events": [],
+  "quimica": {
+    "pares": {},
+    "simetrica_v1": true
+  },
+  "memoria_eventos": []
 }

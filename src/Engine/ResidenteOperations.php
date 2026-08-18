@@ -38,6 +38,9 @@ final class ResidenteOperations
             return ['ok' => false, 'error' => $asig['error'], 'residente' => $runtime];
         }
 
+        GeneradorResidente::aplicar($partida, $catalogId, $this->catalog, $this->logger);
+        QuimicaEngine::alIncorporar($partida, $catalogId, $this->catalog, $this->logger);
+
         DomainEventDispatcher::emit($partida, DomainEvents::RESIDENTE_INCORPORADO, [
             'residente_id' => $catalogId,
             'vivienda_id' => $asig['vivienda_id'],
@@ -58,6 +61,9 @@ final class ResidenteOperations
         $id = $runtime['catalog_id'];
         $partida['residentes'][$id] = $runtime;
         $asig = BloqueA::asignarAutomatico($partida, $id);
+
+        GeneradorResidente::aplicar($partida, $id, $this->catalog, $this->logger);
+        QuimicaEngine::alIncorporar($partida, $id, $this->catalog, $this->logger);
 
         DomainEventDispatcher::emit($partida, DomainEvents::RESIDENTE_INCORPORADO, [
             'residente_id' => $id,

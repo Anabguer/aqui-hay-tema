@@ -10,7 +10,8 @@ interface CompatibilityEvaluator
     public function evaluateSocial(array $partida, string $personaA, string $personaB, array $contexto = []): array;
 
     /**
-     * Capa dura romántica (orientación, parentesco) solo aquí.
+     * Capa romántica. V1: no hay filtro de orientación (todos con todos si edad compatible).
+     * Parentesco veto: sigue en catálogo, no se aplica aquí todavía.
      * @return array<string, mixed>
      */
     public function evaluateRomantic(array $partida, string $personaA, string $personaB, array $contexto = []): array;

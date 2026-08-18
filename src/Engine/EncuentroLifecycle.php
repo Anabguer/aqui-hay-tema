@@ -6,7 +6,7 @@ namespace AquiHayTema\Engine;
 /** Sincroniza estados de encuentro con el reloj actual de partida. */
 final class EncuentroLifecycle
 {
-    public static function sincronizarConReloj(array &$partida, ?GameLogger $logger = null): array
+    public static function sincronizarConReloj(array &$partida, ?GameLogger $logger = null, ?Catalog $catalog = null): array
     {
         $partida['encuentros'] ??= [];
         $dia = (int) $partida['reloj']['dia_pueblo'];
@@ -36,7 +36,7 @@ final class EncuentroLifecycle
 
             if ($now >= $end && in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
                 $enc['estado'] = 'terminado';
-                $resultado = EncuentroResolver::resolver($partida, $enc, $logger);
+                $resultado = EncuentroResolver::resolver($partida, $enc, $logger, $catalog);
                 EncuentroResolver::aplicarResultado($partida, $enc, $resultado, $logger);
                 $enc['resultado'] = $resultado;
                 DomainBootstrap::boot();
@@ -57,4 +57,4 @@ final class EncuentroLifecycle
         return ['resueltos' => count($resueltos), 'encuentros' => $resueltos];
     }
 }
-
+

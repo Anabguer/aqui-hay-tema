@@ -32,6 +32,10 @@
       "social": true,
       "especificidad": "media",
       "hooks_eventos": ["compromiso_recurrente", "encuentro", "lugar"]
-    }
+    },
+    { "id": "deporte", "nombre": "Deporte", "categoria": "deporte", "tags": ["social"], "lugar_ids": ["lug_parque"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "senderismo", "nombre": "Senderismo", "categoria": "aire_libre", "tags": ["individual", "social"], "lugar_ids": ["lug_parque"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "plantas", "nombre": "Plantas", "categoria": "hacer", "tags": ["individual"], "lugar_ids": ["lug_casa", "lug_parque"], "individual": true, "social": false, "especificidad": "baja" },
+    { "id": "costura", "nombre": "Costura", "categoria": "hacer", "tags": ["individual"], "lugar_ids": ["lug_casa"], "individual": true, "social": false, "especificidad": "media" }
   ]
 }

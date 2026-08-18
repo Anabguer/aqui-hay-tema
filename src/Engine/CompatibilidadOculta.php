@@ -69,4 +69,52 @@ final class CompatibilidadOculta
         }
         return !empty($partida['compatibilidad_oculta']['escaner']['desbloqueado']);
     }
+
+    /**
+     * Persiste A→B y B→A si faltan. No recalcula si ya hay totales.
+     *
+     * @return array<string, mixed>
+     */
+    public static function asegurarDireccional(array &$partida, string $a, string $b, Catalog $catalog): array
+    {
+        $row = self::ensurePar($partida, $a, $b);
+        if (isset($row['direccional']['a_hacia_b']['total'], $row['direccional']['b_hacia_a']['total'])) {
+            return $row;
+        }
+        $cal = CalibracionConfig::load($catalog->getRoot());
+        $pa = PerfilPartida::deOLegacy($partida, $a, $catalog);
+        $pb = PerfilPartida::deOLegacy($partida, $b, $catalog);
+        $ab = CompatibilidadCalculator::aHaciaB($pa, $pb, $cal);
+        $ba = CompatibilidadCalculator::aHaciaB($pb, $pa, $cal);
+        $id = self::parId($a, $b);
+        $lo = $a < $b ? $a : $b;
+        $hi = $a < $b ? $b : $a;
+        $dirAb = $a === $lo ? $ab : $ba;
+        $dirBa = $a === $lo ? $ba : $ab;
+        $partida['compatibilidad_oculta']['pares'][$id]['direccional'] = [
+            'a_hacia_b' => $dirAb,
+            'b_hacia_a' => $dirBa,
+        ];
+        $partida['compatibilidad_oculta']['pares'][$id]['_placeholder_valores'] = false;
+        $partida['compatibilidad_oculta']['pares'][$id]['visible_jugador'] = false;
+        return $partida['compatibilidad_oculta']['pares'][$id];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public static function hacia(array $partida, string $desde, string $hacia): ?array
+    {
+        self::ensure($partida);
+        $id = self::parId($desde, $hacia);
+        $row = $partida['compatibilidad_oculta']['pares'][$id] ?? null;
+        if (!is_array($row) || !isset($row['direccional'])) {
+            return null;
+        }
+        $lo = $row['persona_a'] ?? '';
+        if ($desde === $lo) {
+            return $row['direccional']['a_hacia_b'] ?? null;
+        }
+        return $row['direccional']['b_hacia_a'] ?? null;
+    }
 }

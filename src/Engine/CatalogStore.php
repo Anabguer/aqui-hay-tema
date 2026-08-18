@@ -59,6 +59,9 @@ final class CatalogStore
             case 'etiquetas_look':
                 $file = 'etiquetas_look.json';
                 break;
+            case 'indicadores_visuales':
+                $file = 'indicadores_visuales.json';
+                break;
             case 'franjas':
                 $file = 'franjas_disponibilidad.json';
                 break;

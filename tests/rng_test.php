@@ -40,4 +40,12 @@ $f = new RngService('p1', 12345);
 $f->next();
 ok($n2 === $f->next(), 'save/load preserva secuencia RNG');
 
+$g = new RngService('pick-unique');
+$h = new RngService('pick-unique');
+$pool = ['a', 'b', 'c', 'd', 'e'];
+ok($g->pickUnique($pool, 3) === $h->pickUnique($pool, 3), 'pickUnique reproducible');
+$g2 = new RngService('pick-unique');
+$picked = $g2->pickUnique($pool, 3);
+ok(count($picked) === 3 && count(array_unique($picked)) === 3, 'pickUnique sin duplicados');
+
 exit($failures > 0 ? 1 : 0);

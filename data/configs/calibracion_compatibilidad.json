@@ -1,0 +1,57 @@
+{
+  "_provisional": true,
+  "_nota": "CALIBRACIÓN para simulador. NO es canon. ChatGPT + Neni cierran pesos tras ver distribuciones.",
+  "edad": {
+    "preferencia_anos": 10,
+    "limite_duro_anos": 25,
+    "_bloqueado_decision": ["cifras_tras_simulacion"]
+  },
+  "generacion": {
+    "hobbies_por_residente": 3,
+    "rasgos_por_residente": 3,
+    "prefs_personalidad_pos": 2,
+    "prefs_personalidad_neg": 2,
+    "prefs_visual_pos": 2,
+    "prefs_visual_neg": 2
+  },
+  "compatibilidad": {
+    "base": 50,
+    "min": 0,
+    "max": 100,
+    "peso_personalidad_positivo": 8,
+    "peso_personalidad_negativo": 12,
+    "peso_hobby_compartido": 6,
+    "peso_visual_positivo": 4,
+    "peso_visual_negativo": 7
+  },
+  "quimica": {
+    "simetrica_v1": true,
+    "min": 0,
+    "max": 100,
+    "_nota": "V1 simétrica (azar inexplicable). El almacén guarda A->B y B->A por si más adelante es direccional."
+  },
+  "resolucion_encuentro": {
+    "_bloqueado_decision": ["formula_definitiva"],
+    "pesos": {
+      "compat_ab": null,
+      "compat_ba": null,
+      "quimica": null,
+      "vinculo": null,
+      "lugar": null,
+      "hobbies_plan": null,
+      "emocional": null,
+      "historial": null,
+      "azar": null
+    }
+  },
+  "plan_actividad": {
+    "_nota": "Contrato: hobby relacionado con el lugar. Penalizar a quien no comparte el plan está BLOQUEADO_DECISION.",
+    "aporte_si_relacionado": null,
+    "aporte_si_no_relacionado": 0,
+    "penalizacion_si_ajeno": null
+  },
+  "cooldowns": {
+    "_bloqueado_decision": ["ventanas_por_familia"],
+    "por_familia": {}
+  }
+}

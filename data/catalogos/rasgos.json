@@ -20,6 +20,10 @@
     { "id": "practico", "nombre": "Práctico/a", "eje": "cognicion", "alias": ["practica"] },
     { "id": "practica", "nombre": "Práctica", "eje": "cognicion", "alias_de": "practico", "nota": "ID usado por Rocío; no borrar" },
     { "id": "socarron", "nombre": "Socarrón/a", "eje": "humor", "alias": ["socarrona"] },
-    { "id": "socarrona", "nombre": "Socarrona", "eje": "humor", "alias_de": "socarron", "nota": "ID usado por Rocío; no borrar" }
+    { "id": "socarrona", "nombre": "Socarrona", "eje": "humor", "alias_de": "socarron", "nota": "ID usado por Rocío; no borrar" },
+    { "id": "sociable", "nombre": "Sociable", "eje": "social" },
+    { "id": "tranquilo", "nombre": "Tranquilo/a", "eje": "ritmo", "alias": ["tranquila"] },
+    { "id": "perezoso", "nombre": "Perezoso/a", "eje": "ritmo", "alias": ["perezosa"] },
+    { "id": "nervioso", "nombre": "Nervioso/a", "eje": "afecto", "alias": ["nerviosa"] }
   ]
 }

@@ -18,6 +18,10 @@
     { "hobby_id": "videojuegos", "lugar_ids": ["lug_arcade", "lug_casa"] },
     { "hobby_id": "copas", "lugar_ids": ["lug_bar"] },
     { "hobby_id": "baile", "lugar_ids": ["lug_discoteca"] },
-    { "hobby_id": "bingo", "lugar_ids": ["lug_bingo"] }
+    { "hobby_id": "bingo", "lugar_ids": ["lug_bingo"] },
+    { "hobby_id": "deporte", "lugar_ids": ["lug_parque"] },
+    { "hobby_id": "senderismo", "lugar_ids": ["lug_parque"] },
+    { "hobby_id": "plantas", "lugar_ids": ["lug_casa", "lug_parque"] },
+    { "hobby_id": "costura", "lugar_ids": ["lug_casa"] }
   ]
 }

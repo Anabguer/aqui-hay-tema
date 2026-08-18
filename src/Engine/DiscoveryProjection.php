@@ -34,6 +34,31 @@ final class DiscoveryProjection
     }
 
     /**
+     * Overlay interno del perfil generado. No se aplica a la ficha pública todavía:
+     * qué se revela el día 1 (1 hobby / 1 rasgo) está BLOQUEADO_DECISION.
+     * No expone preferencias ni compatibilidad.
+     *
+     * @param array<string, mixed> $campos
+     * @return array<string, mixed>
+     */
+    public static function conPerfilPartida(array $campos, array $runtime): array
+    {
+        $perfil = $runtime['runtime']['perfil_partida'] ?? null;
+        if (!is_array($perfil)) {
+            return $campos;
+        }
+        $h = is_array($perfil['hobbies'] ?? null) ? array_values($perfil['hobbies']) : [];
+        if ($h !== []) {
+            $campos['vida.hobby_principal'] = $h[0];
+            $campos['vida.hobbies_secundarios'] = array_slice($h, 1);
+        }
+        if (is_array($perfil['rasgos'] ?? null) && $perfil['rasgos'] !== []) {
+            $campos['vida.rasgos_publicos'] = array_values($perfil['rasgos']);
+        }
+        return $campos;
+    }
+
+    /**
      * @param array<string, mixed> $campos campo => valor_real
      * @return array<string, array>
      */

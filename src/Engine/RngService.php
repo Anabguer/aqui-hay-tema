@@ -66,6 +66,25 @@ final class RngService
         return $this->state;
     }
 
+    /**
+     * Extrae N elementos distintos. Reproducible.
+     *
+     * @param list<mixed> $items
+     * @return list<mixed>
+     */
+    public function pickUnique(array $items, int $n): array
+    {
+        $pool = array_values($items);
+        $out = [];
+        $want = min($n, count($pool));
+        while (count($out) < $want && $pool !== []) {
+            $idx = $this->nextInt(0, count($pool) - 1);
+            $out[] = $pool[$idx];
+            array_splice($pool, $idx, 1);
+        }
+        return $out;
+    }
+
     private function step(): void
     {
         $this->state = (int) (($this->state * self::MULT) % self::MOD);

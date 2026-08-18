@@ -38,6 +38,11 @@ final class Catalog
         return new CatalogStore($this->root);
     }
 
+    public function getRoot(): string
+    {
+        return $this->root;
+    }
+
     /** Carga sin validación estricta — solo para auditoría de fichas reales. */
     public function loadPersonajeRaw(string $id): array
     {

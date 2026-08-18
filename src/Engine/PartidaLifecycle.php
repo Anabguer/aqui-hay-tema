@@ -56,7 +56,7 @@ final class PartidaLifecycle
         SchemaFields::ensure($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         Reloj::calcularCatchUpPendiente($partida);
-        EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
+        EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->repo->guardar($partida);
         return $partida;
     }

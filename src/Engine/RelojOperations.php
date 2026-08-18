@@ -36,7 +36,7 @@ final class RelojOperations
             $horas,
             $this->logger
         );
-        $sync = EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
+        $sync = EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, new Catalog($this->projectRoot));
         $expirados = $this->emociones !== null ? $this->emociones->expirarVencidos($partida) : 0;
         $peticionesCaducadas = PeticionEngine::caducarVencidas($partida, $this->logger);
         $propuestasCaducadas = PropuestaEncuentroEngine::caducarVencidas($partida);

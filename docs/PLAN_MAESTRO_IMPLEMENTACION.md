@@ -1,6 +1,8 @@
 # Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-08-18 (motor de vida y relaciones — post playtest)  
+**Versión:** 2026-08-18 (residente generado + compatibilidad direccional + química)
+
+El **~57 %** no infla el playtest: `play.php` sigue con deltas placeholder. Lo nuevo es generador de residente, encaje A→B/B→A y química persistida, más laboratorio de calibración.  
 **Punto de partida:** ~8 % (Turno 1) → **~28 %** tras Bloques 0–6 ejecutados en Turno 2
 
 ---
@@ -23,9 +25,13 @@
 ### RNG centralizado
 - **`RngService`**: seed + state en partida; reproducible QA.
 
-### Compatibilidad
-- **`CompatibilityEvaluator`**: canales `social`, `romantic`, `contextual` separados.
-- Veto romántico (orientación/parentesco) **no** bloquea amistad/conocerse.
+### Compatibilidad, química y relación (tres cosas distintas)
+- **Identidad visual (P001…P100)** ≠ **residente de una partida**. Ver §16.
+- **Compatibilidad** direccional A→B / B→A: encaje de características/preferencias. Estable. No sube con citas.
+- **Química**: facilidad inexplicable para conectar (amistad o romance). Persistida, seed, no rerolea.
+- **Relación**: lo construido en partida (canales social / romance / conflicto).
+- V1 romance: **todos con todos** si edad compatible. **No** hay filtro gay/hetero/bi.
+- Parentesco veto: sigue en catálogo; **no** se aplica todavía como capa dura aquí.
 
 ### Agenda genérica
 - Reservas: trabajo, sueño, recurrente, encuentro, autónomo, temporal.
@@ -46,7 +52,10 @@
 | RNG | `RngService.php` | Funciona + tests |
 | Logging | `GameLogger.php` | Funciona |
 | Encuentros | `EncuentroEngine.php`, `EncuentroLifecycle.php`, `EncuentroResolver.php` | Funciona |
-| Compatibilidad | `Compatibility/CompatibilityEvaluator.php`, `PlaceholderEvaluator.php` | Contrato + placeholder |
+| Compatibilidad | `CompatibilityEvaluator` + `CompatibilidadCalculator` + `CompatibilidadOculta` | Encaje A→B/B→A auditable; pesos **provisionales** |
+| Química | `QuimicaEngine.php` | Persistida; V1 simétrica; almacén dual |
+| Generador residente | `GeneradorResidente.php`, `PerfilPartida.php` | Seed; no reescribe ficha Pxxx |
+| Simulador / laboratorio | `SimuladorPueblos.php` | Distribuciones; no escribe partidas |
 | Agenda genérica | `AgendaEngine.php` | Funciona |
 | Mapa/presencia | `PresenciaEngine.php` | Técnico placeholder |
 | Buzón/Diario | `BuzonEngine.php`, `DiarioEngine.php` | Estructura vacía |
@@ -175,11 +184,12 @@ Almacenamiento: `logs/partida_*.jsonl` + `event_log[]` en partida (últimas 200)
 | Turno 1 | ~8 % |
 | Tras Bloques 0–6 (Turno 2) | ~28 % |
 | Playtest 01 (bucle móvil jugable, placeholder) | **~55 %** |
-| Tras motor de vida/relaciones (infra dominio, sin UI) | **~56 %** |
+| Tras motor de vida/relaciones (infra dominio, sin UI) | ~56 % |
+| Tras generador + compatibilidad/química (calibración, sin UI) | **~57 %** |
 | Con contenido mínimo auditado + pueblo vivo en play | ~45–55 % ya cubierto en playtest; el salto jugable real vendrá cuando el flujo proponer→decidir esté en UI |
 | V0 completo REGLAS_NO_NEGOCIABLES | ~70 %+ |
 
-El **~56 %** no infla el playtest: `play.php` sigue programando encuentros en directo. Lo nuevo es infraestructura de pueblo vivo, aún no jugable en la UI.
+El **~57 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relación siguen en +1 placeholder. Lo nuevo es generador + encaje + química + laboratorio, aún no jugable en la UI.
 
 ---
 
@@ -203,14 +213,22 @@ El **~56 %** no infla el playtest: `play.php` sigue programando encuentros en di
 | Catálogo narrativo de peticiones y consecuencia si se ignoran | Peticiones |
 | Evaluación real de consecuencias (`consequences_enabled`) | Consecuencias |
 | Fórmulas de cambio emocional desde eventos | Emociones |
+| Pesos definitivos de compatibilidad / química / cita | Calibración JSON |
+| Cifras de edad (preferencia ±10, límite duro 25) | Solo hipótesis de simulador |
+| Química simétrica vs direccional (V1 simétrica, almacén dual) | Modelo futuro |
+| Penalizar plan/lugar que no gusta | PlanAfinidad |
+| Ventanas de cooldown por familia de evento | MemoriaEventos |
+| Qué se revela el día 1 (1 hobby / 1 rasgo) | Discovery |
+| Fórmula de voluntad NPC (UI no decide) | Propuesta |
+| Anti-clon agresivo de generación | Primero medir (simulador) |
 
 ---
 
 ## 10. Siguiente bloque recomendado
 
-**Motor ya preparado (este turno):** propuesta → decisión A/B → programar; canales de relación + fase; peticiones; plan de catch-up.
+**Motor ya preparado:** propuesta → decisión A/B; residente generado por seed; compatibilidad A→B/B→A; química persistida; contrato de resolución ponderada; laboratorio de 1000 pueblos.
 
-**Siguiente salto jugable (cuando Neni/ChatGPT cierren fórmulas o un recorte V0):** cablear `encuentro.proponer` en play **solo cuando** se pida; no antes. El playtest sigue usando `encuentro.programar`.
+**Siguiente salto jugable (cuando Neni/ChatGPT cierren pesos tras el simulador):** no cablear fórmulas en play; no activar `encuentro.proponer` en UI hasta que se pida. El playtest sigue usando `encuentro.programar`.
 
 ---
 
@@ -266,7 +284,12 @@ PROPONER → reacción A/B → aceptación/rechazo → encuentro → resultado �
 | Propuesta de encuentro | Validación de contexto, lugares, agenda | `PropuestaEncuentroEngine` + API `encuentro.proponer` | Cablear UI play (no este turno) | — |
 | Aceptación/rechazo | Rechazo agenda `AGENDA_SLOT_OCUPADO` en `programar` | Clases `indisponibilidad` / `voluntad`; `VoluntadPendienteEvaluator`; `copy_id` | Fórmula; copy de personaje | Pesos voluntad; copy |
 | Relaciones | Canales social + romance; deltas placeholder +1/0 | Canal `relaciones_conflicto`; `fase` / `estabilidad_acumulada` aditivos | Deltas reales según compatibilidad | Fórmula; umbrales |
-| Compatibilidad | Contrato `CompatibilityEvaluator` + placeholder | `compatibilidad_oculta` en partida; `visible_jugador=false`; escáner `desbloqueado=false` | Mostrar tras escáner | Fórmula; nombre/coste escáner |
+| Compatibilidad | Contrato `CompatibilityEvaluator` + `CompatibilidadCalculator` A→B/B→A | Pesos en `calibracion_compatibilidad.json` (`_provisional`); desglose auditable persistido | Fórmula/pesos canónicos; escáner | Pesos; nombre/coste/precisión escáner |
+| Identidad vs residente | Pxxx = visual; `perfil_partida` generado | Preferencias +/−; 3 hobbies; 3 rasgos | Anti-clon agresivo; reveal día 1 | Qué se ve el día 1; anti-clon |
+| Química | `QuimicaEngine` al coexistir; seed; no rerolea | Almacén A→B y B→A; V1 simétrica | Decisión irreversible simétrica vs direccional | Modelo a largo plazo |
+| Resolución encuentro | Snapshot de factores + `por_participante` | Pesos `null`; satisfacción `null` | Fórmula; copy por participante | Fórmula; copy |
+| Plan/lugar ↔ hobbies | `PlanAfinidad` detecta hobby relacionado | `aporte=null` | Penalizar plan ajeno | Aporte / penalización |
+| Memoria/cooldowns | `MemoriaEventos` registra familia/día/participantes | `cooldowns.por_familia={}` | Ventanas por familia | Cifras de ventana |
 | Estabilidad/crisis | — | `RelacionFase` transiciones válidas, **sin auto-paso** | Umbrales y proceso de ruptura | Umbrales; nombres UI |
 | Autonomía | `AutonomousPlanner` visita lugares al azar | Coincidencias técnicas ≠ interacción | Interacción autónoma, amistad/romance NPC | Ritmo, cantidades |
 | Peticiones | Buzón tipo `peticion` vacío | `PeticionEngine` + API + plazo/caducar | Generación autónoma; catálogo | Catálogo; consecuencia ignorar; ritmo |
@@ -299,4 +322,50 @@ Jugador ──proponer──► PropuestaEncuentroEngine
 
 Offline: Reloj::calcularCatchUpPendiente → CatchUpPlanner.plan (no eventos)
 Peticiones: PeticionEngine → BuzonEngine → caducar en RelojOperations
+
+Residente: Pxxx (visual) → GeneradorResidente (seed) → perfil_partida
+           QuimicaEngine al coexistir; CompatibilidadOculta direccional A→B/B→A
+           EncuentroPonderacion (snapshot, sin fórmula) + MemoriaEventos
 ```
+
+---
+
+## 16. Identidad visual ≠ residente de partida (2026-08-18)
+
+Sustituye la suposición de que P001…P100 arrastran personalidad/hobbies fijos a todas las partidas.
+
+### Qué es fijo (identidad visual)
+Sexo/apariencia, rango de edad, pelo, barba/perilla/bigote, gafas, tatuajes, estilo/ropa, retratos y expresiones. **No cambia** entre partidas. No se reescriben fichas aprobadas.
+
+### Qué se genera al entrar en UNA partida
+Sobre esa cara se crea el **residente de esa partida** (reproducible por seed, estable mientras dure):
+
+- 3 hobbies
+- 3 rasgos de personalidad
+- 2 preferencias + y 2 rechazos de personalidad
+- 2 preferencias + y 2 rechazos visuales
+- indicadores visuales **extraídos** de la ficha (no inventados)
+- edad tomada de la identidad visual (política de romance)
+
+En otra partida, la misma cara puede salir con otro interior.
+
+### Romance V1
+Cualquier adulto puede tener interés romántico por cualquier otro **compatible por edad**. No hay orientación como filtro. Edad: rango preferente y límite duro **configurables**; hipótesis de simulador ±10 / duro 25; **no canon**.
+
+### Reglas de encaje (cerradas de producto, pesos no)
+- Compartir hobby **suma**; no compartir **no resta**.
+- Preferencia positiva que B no tiene = 0 (no penaliza).
+- Rechazo explícito que B sí tiene = penaliza.
+- Compatibilidad **direccional** A→B y B→A. Es potencial, no relación.
+- Química ≠ atracción. Puede acabar en amistad. Persistida al coexistir; no se recalcula al cargar.
+- V1 química **simétrica en valor**; el almacén guarda ambos sentidos por si más adelante es direccional.
+- El pico y pala del jugador actúa sobre **relación/vínculo**, no reescribe compatibilidad.
+
+### Discovery
+El jugador no ve la ficha interna completa. Compatibilidad y química permanecen ocultas. Qué se revela el día 1 (1 hobby / 1 rasgo) = **BLOQUEADO_DECISION**. Mientras tanto, la ficha pública sigue proyectando el catálogo (playtest intacto); el perfil generado vive en `runtime.perfil_partida`.
+
+### Laboratorio
+`SimuladorPueblos` (p. ej. 1000 pueblos × 16). Pesos en un solo JSON marcado `_provisional`. No anti-clon agresivo: primero medir.
+
+### Propuesta / NPC
+`encuentro.propuesta.decidir` es **DEV**. La UI pública no decide por el NPC.

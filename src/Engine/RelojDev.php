@@ -49,7 +49,11 @@ final class RelojDev
                 $logger
             );
         }
-        $sync = EncuentroLifecycle::sincronizarConReloj($partida, $logger);
+        $sync = EncuentroLifecycle::sincronizarConReloj(
+            $partida,
+            $logger,
+            is_string($projectRoot) ? new Catalog($projectRoot) : null
+        );
         $expirados = $emociones !== null ? $emociones->expirarVencidos($partida) : 0;
 
         return [
