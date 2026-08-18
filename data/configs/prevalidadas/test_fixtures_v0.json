@@ -1,0 +1,11 @@
+{
+  "_comentario": "Config para tests automatizados con personaje QA válido.",
+  "id": "test_fixtures_v0",
+  "descripcion": "Partida test con per_qa_valid — no depende de fichas piloto con enums pendientes.",
+  "seed_sugerida": "test-fixtures",
+  "residentes_iniciales": [
+    { "catalog_id": "per_qa_valid", "presencia": "residente" }
+  ],
+  "lugares_operativos_dia_1": ["lug_cafeteria"],
+  "bloques_abiertos": ["a"]
+}
