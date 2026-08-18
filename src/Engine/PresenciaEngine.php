@@ -40,6 +40,15 @@ final class PresenciaEngine
             }
         }
 
+        $catalog = new Catalog($projectRoot);
+        $marcas = ResumenDia::marcasPorLugar($partida, $catalog);
+        foreach ($mapa as $id => &$lugRow) {
+            $m = $marcas[$id] ?? null;
+            $lugRow['encuentro_marca'] = is_array($m) ? ($m['marca'] ?? null) : null;
+            $lugRow['encuentro'] = is_array($m) ? ($m['encuentro'] ?? null) : null;
+        }
+        unset($lugRow);
+
         return [
             'dia' => $dia,
             'hora' => $hora,

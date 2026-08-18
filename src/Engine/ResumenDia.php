@@ -40,6 +40,33 @@ final class ResumenDia
     }
 
     /**
+     * Marcas de mapa: un lugar, una marca. EN CURSO pisa PRÓXIMO en el mismo sitio.
+     *
+     * @return array<string, array{marca: string, encuentro: array}>
+     */
+    public static function marcasPorLugar(array $partida, ?Catalog $catalog = null): array
+    {
+        $out = [];
+        $prox = self::proximoEncuentro($partida, $catalog);
+        if (is_array($prox) && !empty($prox['lugar'])) {
+            $out[(string) $prox['lugar']] = ['marca' => 'proximo', 'encuentro' => $prox];
+        }
+        $curso = self::encuentroEnCurso($partida, $catalog);
+        if (is_array($curso) && !empty($curso['lugar'])) {
+            $out[(string) $curso['lugar']] = ['marca' => 'en_curso', 'encuentro' => $curso];
+        }
+        return $out;
+    }
+
+    public static function residenteEnVista(?array $vista, string $residenteId): bool
+    {
+        if ($vista === null || $residenteId === '') {
+            return false;
+        }
+        return in_array($residenteId, $vista['participantes'] ?? [], true);
+    }
+
+    /**
      * @param array<string, mixed> $enc
      * @return array<string, mixed>
      */
