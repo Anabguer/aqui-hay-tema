@@ -78,6 +78,8 @@ final class ResumenDia
             $nombres[] = IdentidadPublica::nombre($partida, (string) $id);
         }
         $lugarId = isset($enc['lugar']) ? (string) $enc['lugar'] : '';
+        $diaEnc = isset($enc['dia']) ? (int) $enc['dia'] : null;
+        $diaAhora = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         return [
             'id' => $enc['id'] ?? null,
             'tipo' => $enc['tipo'] ?? null,
@@ -85,6 +87,7 @@ final class ResumenDia
             'estado' => $enc['estado'] ?? null,
             'dia' => $enc['dia'] ?? null,
             'hora' => $enc['hora'] ?? null,
+            'es_hoy' => $diaEnc !== null && $diaEnc === $diaAhora,
             'lugar' => $lugarId !== '' ? $lugarId : null,
             'lugar_nombre' => self::nombreLugar($catalog, $lugarId),
             'participantes' => array_values($ids),

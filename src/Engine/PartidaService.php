@@ -94,7 +94,11 @@ final class PartidaService
         string $tipo = 'conocerse',
         ?string $lugar = null
     ): array {
-        return $this->encuentros->programar($partida, $participantes, $dia, $hora, $tipo, $lugar);
+        $r = $this->encuentros->programar($partida, $participantes, $dia, $hora, $tipo, $lugar);
+        if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
+            $r['vista'] = ResumenDia::vistaEncuentro($partida, $r['encuentro'], $this->catalog);
+        }
+        return $r;
     }
 
     public function fichaResidente(array $partida, string $residenteId): array

@@ -8,7 +8,9 @@
   let cacheLugares = [];
   let cacheBloqueA = null;
   let cacheEstado = null;
+  let cacheEncuentros = [];
   let slotsCache = [];
+  let confirmarTimer = null;
 
   const DISCOVERY_LABELS = {
     'identidad.nombre': 'Nombre',
@@ -333,30 +335,139 @@
     return (enc.participantes || []).includes(id);
   }
 
+  function nombreLugar(id) {
+    if (!id) return '—';
+    const lug = cacheLugares.find(l => l.id === id);
+    return lug?.nombre || id;
+  }
+
+  function lugarCard(lugarId) {
+    if (!lugarId) return null;
+    const sel = (window.CSS && CSS.escape) ? CSS.escape(lugarId) : String(lugarId).replace(/"/g, '');
+    return document.querySelector(`.lugar-card[data-lugar="${sel}"]`);
+  }
+
+  function encuentroEsHoy(enc) {
+    if (!enc) return false;
+    if (enc.es_hoy === true) return true;
+    if (enc.es_hoy === false) return false;
+    return Number(enc.dia) === Number(cacheEstado?.reloj?.dia_pueblo);
+  }
+
+  function nombresEncuentro(enc) {
+    if (!enc) return '—';
+    if ((enc.participantes_nombres || []).length) return enc.participantes_nombres.join(' + ');
+    return (enc.participantes || []).map(nombreResidente).join(' + ') || '—';
+  }
+
+  function textoCuandoEncuentro(enc, marca) {
+    const tipo = enc?.tipo || 'encuentro';
+    if (marca === 'en_curso') {
+      return `Ahora · ${tipo} · ${estadoLabel(enc.estado)}`;
+    }
+    if (!encuentroEsHoy(enc)) {
+      return `Programado ${formatHora(enc.dia, enc.hora)} · ${tipo}`;
+    }
+    return `${formatHora(enc.dia, enc.hora)} · ${tipo}`;
+  }
+
+  function rellenarDetalleEncuentro(box, enc, marca) {
+    if (!box || !enc) return;
+    box.innerHTML = '';
+    box.appendChild(el('div', null, nombresEncuentro(enc)));
+    box.appendChild(el('div', 'mini-meta', textoCuandoEncuentro(enc, marca)));
+  }
+
+  function scrollLugarVisible(card) {
+    if (!card) return;
+    const header = document.querySelector('.top-bar');
+    const offset = (header ? header.getBoundingClientRect().height : 0) + 8;
+    const top = card.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, top), left: 0, behavior: 'smooth' });
+  }
+
   function enfocarLugarMapa(lugarId) {
-    if (!lugarId) return;
-    const sel = CSS && CSS.escape ? CSS.escape(lugarId) : lugarId.replace(/"/g, '');
-    const card = document.querySelector(`.lugar-card[data-lugar="${sel}"]`);
+    const card = lugarCard(lugarId);
     if (!card) return;
     document.querySelectorAll('.lugar-card.abierto').forEach(c => {
-      c.classList.remove('abierto');
-      c.setAttribute('aria-expanded', 'false');
+      if (c !== card) {
+        c.classList.remove('abierto');
+        c.setAttribute('aria-expanded', 'false');
+      }
     });
     card.classList.add('abierto');
     card.setAttribute('aria-expanded', 'true');
-    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    scrollLugarVisible(card);
+  }
+
+  function elegirLugarFormulario(lugarId) {
+    const sel = $('#enc-lugar');
+    if (!sel || !lugarId) return;
+    if ([...sel.options].some(o => o.value === lugarId && !o.disabled)) {
+      sel.value = lugarId;
+    }
+  }
+
+  function irAEncuentroEnMapa(enc) {
+    if (!enc?.lugar) return;
+    elegirLugarFormulario(enc.lugar);
+    const card = lugarCard(enc.lugar);
+    if (card) pintarConfirmacionLugar(card, enc);
+    enfocarLugarMapa(enc.lugar);
+    const sitio = enc.lugar_nombre || nombreLugar(enc.lugar);
+    setFeedback(`${sitio}: ${formatHora(enc.dia, enc.hora)}.`, '');
+  }
+
+  function pintarConfirmacionLugar(card, vista) {
+    if (!card || !vista) return;
+    const lug = cacheLugares.find(l => l.id === vista.lugar);
+    const encMapa = lug?.encuentro || null;
+    if (encMapa && encMapa.id === vista.id) {
+      const box = card.querySelector('.lugar-detalle:not(.lugar-confirmacion)');
+      if (box) rellenarDetalleEncuentro(box, encMapa, lug.encuentro_marca);
+      return;
+    }
+    let box = card.querySelector('.lugar-confirmacion');
+    if (!box) {
+      box = el('div', 'lugar-detalle lugar-confirmacion');
+      card.appendChild(box);
+    }
+    rellenarDetalleEncuentro(box, vista, null);
+  }
+
+  function confirmarEncuentroEnMapa(vista) {
+    const lugarId = vista?.lugar;
+    if (!lugarId) return;
+    elegirLugarFormulario(lugarId);
+    const card = lugarCard(lugarId);
+    if (!card) return;
+    pintarConfirmacionLugar(card, vista);
+    enfocarLugarMapa(lugarId);
+    card.classList.add('lugar-confirmado');
+    if (confirmarTimer) clearTimeout(confirmarTimer);
+    confirmarTimer = setTimeout(() => {
+      card.classList.remove('lugar-confirmado');
+      confirmarTimer = null;
+    }, 4500);
   }
 
   function detalleEncuentroLugar(enc, marca) {
     const box = el('div', 'lugar-detalle');
-    const nombres = (enc.participantes_nombres || (enc.participantes || []).map(nombreResidente)).join(' + ') || '—';
-    box.appendChild(el('div', null, nombres));
-    if (marca === 'en_curso') {
-      box.appendChild(el('div', 'mini-meta', `Ahora · ${enc.tipo || 'encuentro'} · ${estadoLabel(enc.estado)}`));
-    } else {
-      box.appendChild(el('div', 'mini-meta', `${formatHora(enc.dia, enc.hora)} · ${enc.tipo || 'encuentro'}`));
-    }
+    rellenarDetalleEncuentro(box, enc, marca);
     return box;
+  }
+
+  function encuentroVisibleDeResidente(id) {
+    if (!id) return null;
+    const curso = cacheEstado?.encuentro_en_curso;
+    if (curso && encParticipa(curso, id)) return curso;
+    const propios = (cacheEncuentros || []).filter(e =>
+      encParticipa(e, id) && (e.estado === 'programado' || e.estado === 'en_curso')
+    ).sort((a, b) => (Number(a.dia) - Number(b.dia)) || (Number(a.hora) - Number(b.hora)));
+    if (propios[0]) return propios[0];
+    const prox = cacheEstado?.proximo_encuentro;
+    if (prox && encParticipa(prox, id)) return prox;
+    return null;
   }
 
   function renderProximoEncuentro(e) {
@@ -391,11 +502,7 @@
     wrap.appendChild(el('div', 'mini-meta', `${hora} · ${lugar}`));
     wrap.appendChild(el('div', 'mini-meta', `${enc.tipo || 'encuentro'} · ${estadoLabel(enc.estado)}`));
     const ir = () => {
-      enfocarLugarMapa(enc.lugar);
-      const sel = $('#enc-lugar');
-      if (sel && enc.lugar && [...sel.options].some(o => o.value === enc.lugar && !o.disabled)) {
-        sel.value = enc.lugar;
-      }
+      irAEncuentroEnMapa(enc);
       setFeedback(`${lugar}: ${etiqueta || estadoLabel(enc.estado)}.`, '');
     };
     wrap.addEventListener('click', ir);
@@ -511,6 +618,7 @@
       return;
     }
     const list = r.encuentros || [];
+    cacheEncuentros = list;
     const abiertos = list.filter(e => e.estado === 'programado' || e.estado === 'en_curso');
     const cerrados = list.filter(e => e.estado === 'terminado' || e.estado === 'cancelado').slice(-8).reverse();
 
@@ -524,10 +632,20 @@
         header.appendChild(el('span', `estado-badge ${estadoClass(enc.estado)}`, estadoLabel(enc.estado)));
         header.appendChild(el('span', null, `${enc.tipo} · ${formatHora(enc.dia, enc.hora)}`));
         row.appendChild(header);
-        const lugarNombre = cacheLugares.find(l => l.id === enc.lugar)?.nombre || enc.lugar || '—';
+        const lugarNombre = nombreLugar(enc.lugar);
         row.appendChild(el('div', 'mini-meta', `${(enc.participantes || []).map(nombreResidente).join(' · ')} · ${lugarNombre}`));
         if (enc.resultado?.texto_resumen) {
           row.appendChild(el('div', 'mini-meta', enc.resultado.texto_resumen));
+        }
+        const acciones = el('div', 'enc-acciones');
+        if (enc.lugar && (enc.estado === 'programado' || enc.estado === 'en_curso')) {
+          const ver = el('button', 'btn-inline', 'Ver en mapa');
+          ver.type = 'button';
+          ver.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            irAEncuentroEnMapa(enc);
+          });
+          acciones.appendChild(ver);
         }
         if (enc.estado === 'programado') {
           const btn = el('button', 'btn-inline', 'Cancelar');
@@ -536,8 +654,9 @@
             ev.stopPropagation();
             cancelarEncuentro(enc.id);
           });
-          row.appendChild(btn);
+          acciones.appendChild(btn);
         }
+        if (acciones.childNodes.length) row.appendChild(acciones);
         target.appendChild(row);
       });
     };
@@ -707,6 +826,23 @@
 
     panel.appendChild(renderDiscovery(f.discovery?.campos || {}));
 
+    const encPropio = encuentroVisibleDeResidente(residenteId);
+    if (encPropio && encPropio.lugar) {
+      const row = el('div', 'enc-row enc-marca');
+      row.appendChild(el('div', 'label', encPropio.estado === 'en_curso' ? 'Encuentro ahora' : 'Próximo encuentro'));
+      row.appendChild(el('div', null, nombresEncuentro(encPropio)));
+      const sitio = encPropio.lugar_nombre || nombreLugar(encPropio.lugar);
+      row.appendChild(el('div', 'mini-meta', `${formatHora(encPropio.dia, encPropio.hora)} · ${sitio}`));
+      const ver = el('button', 'btn-inline', 'Ver en mapa');
+      ver.type = 'button';
+      ver.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        irAEncuentroEnMapa(encPropio);
+      });
+      row.appendChild(ver);
+      panel.appendChild(row);
+    }
+
     const hobbies = (f.hobbies?.conocidos || []).length ? f.hobbies.conocidos.join(', ') : null;
     if (hobbies) {
       panel.appendChild(el('p', 'mini-meta', `Hobbies visibles: ${hobbies}`));
@@ -736,11 +872,11 @@
     renderBloqueA(cacheBloqueA || {});
     if ($('#enc-a')) $('#enc-a').value = id;
     validarParticipantes();
+    await renderEncuentros();
     await Promise.all([
       abrirFicha(id),
       renderRelaciones(id),
       renderMapa(),
-      renderEncuentros(),
       cargarSlotsCompatibles(),
     ]);
   }
@@ -841,11 +977,19 @@
         lugar,
       });
       if (r.ok) {
-        setFeedback(`Encuentro programado: ${formatHora(r.encuentro.dia, r.encuentro.hora)} · ${cacheLugares.find(l => l.id === lugar)?.nombre || lugar}`, 'ok');
+        const vista = r.vista || r.encuentro;
+        const sitio = vista?.lugar_nombre || nombreLugar(vista?.lugar) || lugar;
+        const nombres = nombresEncuentro(vista);
+        const cuando = vista && !encuentroEsHoy(vista)
+          ? `Programado ${formatHora(vista.dia, vista.hora)}`
+          : formatHora(vista?.dia, vista?.hora);
+        setFeedback(`${nombres} han quedado en ${sitio}. ${cuando}.`, 'ok');
+        await refreshEstado();
+        confirmarEncuentroEnMapa(vista);
       } else {
         setFeedback(formatRechazo(r), 'error');
+        await refreshEstado();
       }
-      await refreshEstado();
     });
   }
 

@@ -11,7 +11,7 @@ Partida de prueba sin abrir `dev.php`.
 5. [ ] Ir a “Proponer encuentro” y elegir Residente A y B distintos.
 6. [ ] Comprobar que aparecen horas compatibles (sin probar al azar).
 7. [ ] Elegir lugar operativo y pulsar “Programar encuentro”.
-8. [ ] Ver feedback de éxito y el encuentro en “Programados / en curso”.
+8. [ ] Ver feedback de éxito, el mapa centrado en el lugar con el detalle abierto, y el encuentro en “Programados / en curso”.
 9. [ ] Usar “Ir al próximo encuentro” (o +8h / +1h) hasta la hora del encuentro.
 10. [ ] Comprobar que el encuentro pasa a “En curso” y luego “Terminado”, y que la ficha/relaciones se actualizan.
 11. [ ] Opcional: programar otro y cancelarlo desde la lista (confirmación simple).
@@ -23,6 +23,7 @@ Partida de prueba sin abrir `dev.php`.
 - [ ] Móvil: el header no empuja el resumen; Landing/Dev/Guardar/Nueva caben en dos columnas.
 - [ ] Móvil: +1h, +8h e “Ir al próximo encuentro” están agrupados bajo el resumen, botones grandes, sin scroll horizontal.
 - [ ] Móvil: el mapa muestra badge Ahora/Próximo sin hover; al tocar el lugar se ve quién y cuándo.
+- [ ] Móvil: al programar, el lugar no queda oculto bajo el header; sin scroll horizontal; “Ver en mapa” usable al toque.
 - [ ] Tablet/escritorio: mismos controles, toolbar en fila.
 
 ## Criterios de fallo

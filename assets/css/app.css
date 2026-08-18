@@ -292,6 +292,32 @@ button.primary { background: #3d3520; border-color: var(--accent); }
 .proximo-item { cursor: pointer; }
 .proximo-item:focus { outline: 2px solid var(--accent); }
 
+html, body, .play-shell, .lugares-list {
+  overflow-x: hidden;
+}
+
+.lugar-card {
+  scroll-margin-top: 5rem;
+}
+
+.lugar-card.lugar-confirmado {
+  outline: 2px solid var(--ok);
+}
+
+.enc-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 600px) {
+  .btn-inline {
+    min-height: 2.5rem;
+    padding: 0.4rem 0.7rem;
+  }
+}
+
 .resident-card.active {
   outline: 2px solid var(--accent);
 }
@@ -484,40 +510,3 @@ pre.inspect {
   white-space: pre-wrap;
   word-break: break-all;
 }
-
-.lugar-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.5rem;
-}
-
-.lugar-badge {
-  font-size: 0.72rem;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 0.2rem 0.45rem;
-  flex-shrink: 0;
-}
-.badge-ahora { background: var(--libre); }
-.badge-proximo { background: #3a3420; }
-
-.lugar-card { min-height: 2.75rem; cursor: pointer; }
-.lugar-card.marca-proximo { border-color: var(--accent); }
-.lugar-card.marca-en-curso { border-color: var(--ok); border-width: 2px; }
-.lugar-card.marca-seleccion { box-shadow: inset 0 0 0 1px var(--accent); }
-.lugar-detalle {
-  display: none;
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
-}
-.lugar-card.abierto .lugar-detalle { display: block; }
-
-.resident-card.en-encuentro { border-color: var(--accent); }
-.enc-row.enc-marca { border-color: var(--accent); }
-.pill-ahora { border-color: var(--ok); }
-.pill-proximo { border-color: var(--accent); }
-.proximo-item { cursor: pointer; }
-.proximo-item:focus { outline: 2px solid var(--accent); }
