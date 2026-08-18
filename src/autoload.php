@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+require_once __DIR__ . '/php74_compat.php';
+
 spl_autoload_register(static function (string $class): void {
     $prefix = 'AquiHayTema\\';
     if (!str_starts_with($class, $prefix)) {
