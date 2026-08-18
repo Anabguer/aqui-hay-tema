@@ -13,10 +13,12 @@ Partida de prueba sin abrir `dev.php`.
 7. [ ] Elegir lugar operativo y pulsar “Programar encuentro”.
 8. [ ] Ver feedback de éxito, el mapa centrado en el lugar con el detalle abierto, y el encuentro en “Programados / en curso”.
 9. [ ] Usar “Ir al próximo encuentro” (o +8h / +1h) hasta la hora del encuentro.
-10. [ ] Comprobar que el encuentro pasa a “En curso” y luego “Terminado”, y que la ficha/relaciones se actualizan.
-11. [ ] Opcional: programar otro y cancelarlo desde la lista (confirmación simple).
-12. [ ] Ver el próximo encuentro en el resumen del día (nombres, hora, lugar).
-13. [ ] Tras +8h o “Ir al próximo”, leer “Durante este avance” (sin listar cada hora).
+10. [ ] Comprobar que el encuentro pasa a “En curso” y luego “Terminado”.
+11. [ ] Al terminar, leer el resultado (social / romance / conflicto) en el resumen o en “Ver resultado”, sin abrir `dev.php`.
+12. [ ] Comprobar que la ficha muestra el último encuentro y permite abrir el detalle.
+13. [ ] Opcional: programar otro y cancelarlo desde la lista (confirmación simple).
+14. [ ] Ver el próximo encuentro en el resumen del día (nombres, hora, lugar).
+15. [ ] Tras +8h o “Ir al próximo”, leer “Durante este avance” (sin listar cada hora).
 
 ## Responsive (checklist manual)
 
@@ -24,6 +26,7 @@ Partida de prueba sin abrir `dev.php`.
 - [ ] Móvil: +1h, +8h e “Ir al próximo encuentro” están agrupados bajo el resumen, botones grandes, sin scroll horizontal.
 - [ ] Móvil: el mapa muestra badge Ahora/Próximo sin hover; al tocar el lugar se ve quién y cuándo.
 - [ ] Móvil: al programar, el lugar no queda oculto bajo el header; sin scroll horizontal; “Ver en mapa” usable al toque.
+- [ ] Móvil: “Ver resultado” abre el detalle sin hover; botones no diminutos.
 - [ ] Tablet/escritorio: mismos controles, toolbar en fila.
 
 ## Criterios de fallo

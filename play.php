@@ -47,6 +47,7 @@ header('Content-Type: text/html; charset=utf-8');
       </div>
 
       <div class="avance-resumen" id="avance-resumen" hidden></div>
+      <div class="resultado-panel" id="resultado-encuentro" hidden></div>
     </section>
 
     <div class="play-grid">

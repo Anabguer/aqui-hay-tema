@@ -311,10 +311,36 @@ html, body, .play-shell, .lugares-list {
   margin-top: 0.35rem;
 }
 
+.resultado-panel {
+  margin-top: 0.75rem;
+  border: 1px solid var(--ok);
+  border-radius: 8px;
+  padding: 0.7rem 0.85rem;
+  background: rgba(68, 136, 136, 0.08);
+}
+
+.resultado-linea {
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.avance-enc {
+  margin-top: 0.5rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--border);
+}
+
+.rel-reciente {
+  border-color: var(--ok);
+}
+
 @media (max-width: 600px) {
   .btn-inline {
     min-height: 2.5rem;
     padding: 0.4rem 0.7rem;
+  }
+  .resultado-panel {
+    font-size: 0.95rem;
   }
 }
 

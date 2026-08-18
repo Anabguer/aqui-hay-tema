@@ -518,8 +518,9 @@
   function mostrarAvanceResumen(resumen) {
     const panel = $('#avance-resumen');
     if (!panel) return;
-    const lineas = resumen?.lineas || [];
-    if (!lineas.length) {
+    const terminados = resumen?.encuentros_terminados || [];
+    const lineas = (resumen?.lineas || []).filter(l => l.tipo !== 'encuentro_terminado');
+    if (!terminados.length && !lineas.length) {
       panel.hidden = true;
       panel.innerHTML = '';
       return;
@@ -527,11 +528,68 @@
     panel.hidden = false;
     panel.innerHTML = '';
     panel.appendChild(el('div', 'label', 'Durante este avance'));
-    const ul = el('ul', 'avance-list');
-    lineas.forEach(l => {
-      ul.appendChild(el('li', null, l.texto || l.tipo));
+    if (terminados.length) {
+      const n = terminados.length;
+      panel.appendChild(el(
+        'div',
+        null,
+        n === 1 ? 'Terminó 1 encuentro.' : `Terminaron ${n} encuentros.`
+      ));
+      terminados.forEach(v => {
+        const row = el('div', 'avance-enc');
+        row.appendChild(el('div', null, nombresEncuentro(v)));
+        row.appendChild(el('div', 'mini-meta', `${v.tipo || 'encuentro'} · ${formatHora(v.dia, v.hora)}`));
+        const btn = el('button', 'btn-inline', 'Ver resultado');
+        btn.type = 'button';
+        btn.addEventListener('click', () => mostrarResultadoEncuentro(v));
+        row.appendChild(btn);
+        panel.appendChild(row);
+      });
+    }
+    if (lineas.length) {
+      const ul = el('ul', 'avance-list');
+      lineas.forEach(l => {
+        ul.appendChild(el('li', null, l.texto || l.tipo));
+      });
+      panel.appendChild(ul);
+    }
+  }
+
+  function mostrarResultadoEncuentro(vista) {
+    const panel = $('#resultado-encuentro');
+    if (!panel || !vista) return;
+    panel.hidden = false;
+    panel.innerHTML = '';
+    panel.appendChild(el('div', 'label', 'Resultado del encuentro'));
+    panel.appendChild(el('div', null, nombresEncuentro(vista)));
+    const sitio = vista.lugar_nombre || nombreLugar(vista.lugar);
+    panel.appendChild(el('div', 'mini-meta', `${vista.tipo || 'encuentro'} · ${formatHora(vista.dia, vista.hora)} · ${sitio}`));
+    const res = vista.resultado || {};
+    const lineas = res.lineas || [];
+    if (!lineas.length) {
+      panel.appendChild(el('div', 'mini-meta', 'Sin cambios técnicos registrados.'));
+    } else {
+      lineas.forEach(t => panel.appendChild(el('div', 'resultado-linea', t)));
+    }
+    const acciones = el('div', 'enc-acciones');
+    if (vista.lugar) {
+      const mapa = el('button', 'btn-inline', 'Ver en mapa');
+      mapa.type = 'button';
+      mapa.addEventListener('click', () => irAEncuentroEnMapa(vista));
+      acciones.appendChild(mapa);
+    }
+    const cerrar = el('button', 'btn-inline', 'Cerrar');
+    cerrar.type = 'button';
+    cerrar.addEventListener('click', () => {
+      panel.hidden = true;
+      panel.innerHTML = '';
     });
-    panel.appendChild(ul);
+    acciones.appendChild(cerrar);
+    panel.appendChild(acciones);
+    const header = document.querySelector('.top-bar');
+    const offset = (header ? header.getBoundingClientRect().height : 0) + 8;
+    const top = panel.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({ top: Math.max(0, top), left: 0, behavior: 'smooth' });
   }
 
   async function renderMapa() {
@@ -632,10 +690,13 @@
         header.appendChild(el('span', `estado-badge ${estadoClass(enc.estado)}`, estadoLabel(enc.estado)));
         header.appendChild(el('span', null, `${enc.tipo} · ${formatHora(enc.dia, enc.hora)}`));
         row.appendChild(header);
-        const lugarNombre = nombreLugar(enc.lugar);
+        const lugarNombre = (enc.vista && enc.vista.lugar_nombre) || nombreLugar(enc.lugar);
         row.appendChild(el('div', 'mini-meta', `${(enc.participantes || []).map(nombreResidente).join(' · ')} · ${lugarNombre}`));
-        if (enc.resultado?.texto_resumen) {
-          row.appendChild(el('div', 'mini-meta', enc.resultado.texto_resumen));
+        if (enc.estado === 'terminado' && enc.vista?.resultado) {
+          const social = enc.vista.resultado.social?.texto;
+          const romance = enc.vista.resultado.romance?.texto;
+          const compact = [social, romance].filter(Boolean).join(' · ');
+          if (compact) row.appendChild(el('div', 'mini-meta', compact));
         }
         const acciones = el('div', 'enc-acciones');
         if (enc.lugar && (enc.estado === 'programado' || enc.estado === 'en_curso')) {
@@ -643,9 +704,18 @@
           ver.type = 'button';
           ver.addEventListener('click', (ev) => {
             ev.stopPropagation();
-            irAEncuentroEnMapa(enc);
+            irAEncuentroEnMapa(enc.vista || enc);
           });
           acciones.appendChild(ver);
+        }
+        if (enc.estado === 'terminado' && enc.vista) {
+          const resBtn = el('button', 'btn-inline', 'Ver resultado');
+          resBtn.type = 'button';
+          resBtn.addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            mostrarResultadoEncuentro(enc.vista);
+          });
+          acciones.appendChild(resBtn);
         }
         if (enc.estado === 'programado') {
           const btn = el('button', 'btn-inline', 'Cancelar');
@@ -671,12 +741,15 @@
     const r = await api('residente.ficha', { residente_id: residenteId }, 'GET');
     if (!r.ok) return emptyState(panel, 'Error relaciones.');
     const rels = Object.entries(r.ficha?.relaciones || {});
+    const idsRecientes = r.ficha?.ultimo_encuentro_vista?.participantes || [];
     panel.innerHTML = '';
     if (!rels.length) return emptyState(panel, 'Sin relaciones visibles todavía.');
     rels.forEach(([id, rel]) => {
-      const row = el('div', 'rel-row' + (selectedResidente === id ? ' selected-resident' : ''));
+      const reciente = idsRecientes.includes(id);
+      const row = el('div', 'rel-row' + (selectedResidente === id ? ' selected-resident' : '') + (reciente ? ' rel-reciente' : ''));
       row.appendChild(el('div', null, nombreResidente(id)));
       row.appendChild(el('div', 'mini-meta', `Social: ${rel.social?.tipo || '—'} · Romance: ${rel.romance ? 'sí' : '—'}`));
+      if (reciente) row.appendChild(el('div', 'mini-meta', 'Cambio reciente'));
       row.addEventListener('click', () => seleccionarResidente(id));
       panel.appendChild(row);
     });
@@ -849,10 +922,22 @@
     }
     panel.appendChild(el('p', 'mini-meta', `Descubrimientos: ${(f.descubrimientos || []).length} · Relaciones: ${Object.keys(f.relaciones || {}).length}`));
 
-    if (f.ultimo_encuentro?.resultado) {
-      const row = el('div', 'enc-row');
+    const uv = f.ultimo_encuentro_vista;
+    if (uv) {
+      const row = el('div', 'enc-row enc-marca');
       row.appendChild(el('div', 'label', 'Último encuentro'));
-      row.appendChild(el('div', null, f.ultimo_encuentro.resultado.texto_resumen || JSON.stringify(f.ultimo_encuentro.resultado.delta_social || {})));
+      row.appendChild(el('div', null, nombresEncuentro(uv)));
+      row.appendChild(el('div', 'mini-meta', `${formatHora(uv.dia, uv.hora)} · ${uv.lugar_nombre || nombreLugar(uv.lugar)}`));
+      (uv.resultado?.lineas || []).slice(0, 3).forEach(t => {
+        row.appendChild(el('div', 'mini-meta', t));
+      });
+      const ver = el('button', 'btn-inline', 'Ver resultado');
+      ver.type = 'button';
+      ver.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        mostrarResultadoEncuentro(uv);
+      });
+      row.appendChild(ver);
       panel.appendChild(row);
     }
 
@@ -928,13 +1013,13 @@
       setFeedback(r.mensaje_ui || 'No se pudo avanzar el reloj.', 'error');
       return;
     }
-    const lineas = r.resumen_avance?.lineas || r.reloj?.resumen_avance?.lineas || [];
+    const resumen = r.resumen_avance || r.reloj?.resumen_avance;
+    const n = resumen?.encuentros_terminados_count || 0;
     let msg = etiqueta || `Tiempo avanzado ${horas}h.`;
-    if (lineas.length) {
-      msg += ' ' + lineas.map(l => l.texto).join(' ');
-    }
+    if (n === 1) msg += ' Terminó 1 encuentro.';
+    else if (n > 1) msg += ` Terminaron ${n} encuentros.`;
     setFeedback(msg, 'ok');
-    mostrarAvanceResumen(r.resumen_avance || r.reloj?.resumen_avance);
+    mostrarAvanceResumen(resumen);
     await refreshEstado();
   }
 
@@ -1008,11 +1093,13 @@
         return;
       }
       const enc = r.encuentro || {};
-      setFeedback(
-        `Reloj en el próximo encuentro: ${formatHora(enc.dia, enc.hora)} · ${estadoLabel(enc.estado)} (+${r.horas_avanzadas}h).`,
-        'ok'
-      );
-      mostrarAvanceResumen(r.resumen_avance || r.reloj?.resumen_avance);
+      const resumen = r.resumen_avance || r.reloj?.resumen_avance;
+      const n = resumen?.encuentros_terminados_count || 0;
+      let msg = `Reloj en el próximo encuentro: ${formatHora(enc.dia, enc.hora)} · ${estadoLabel(enc.estado)} (+${r.horas_avanzadas}h).`;
+      if (n === 1) msg += ' Terminó 1 encuentro por el camino.';
+      else if (n > 1) msg += ` Terminaron ${n} encuentros por el camino.`;
+      setFeedback(msg, 'ok');
+      mostrarAvanceResumen(resumen);
       await refreshEstado();
     });
 
@@ -1030,6 +1117,8 @@
       await ensurePartida();
       await refreshEstado();
       mostrarAvanceResumen(null);
+      const rp = $('#resultado-encuentro');
+      if (rp) { rp.hidden = true; rp.innerHTML = ''; }
       setFeedback('Nueva partida creada.', 'ok');
     });
   }
