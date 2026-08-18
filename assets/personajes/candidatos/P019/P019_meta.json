@@ -1,0 +1,18 @@
+{
+  "id": "P019",
+  "visual_gender": "mujer",
+  "apparent_age": "64-70",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P019_neutral.png",
+  "candidate_asset": "P019_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadada", "triste"],
+  "visual_indicators": [
+    "gafas_enormes",
+    "pendientes_geometricos",
+    "pixie_plata",
+    "lazo_mostaza"
+  ],
+  "alpha_verified": true
+}

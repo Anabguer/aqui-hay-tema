@@ -21,6 +21,15 @@ final class ResidenteRuntime
             'runtime' => [
                 'ocupacion' => $catalogo['vida']['ocupacion'] ?? null,
                 'compromisos_recurrentes' => $catalogo['vida']['compromisos_recurrentes'] ?? [],
+                'estado_emocional' => EstadoEmocional::estructura(
+                    (string) ($catalogo['estado_inicial']['animo'] ?? EstadoEmocional::NEUTRO),
+                    null,
+                    'inicial',
+                    ['dia' => 1, 'hora' => 8],
+                    null
+                ),
+                'expresion_visual' => EstadoEmocional::expresionEstructura(),
+                'animo' => (string) ($catalogo['estado_inicial']['animo'] ?? EstadoEmocional::NEUTRO), // alias de estado_emocional.id
             ],
             '_placeholder' => false,
         ];
@@ -43,6 +52,9 @@ final class ResidenteRuntime
             'runtime' => [
                 'ocupacion' => 'autonomo',
                 'compromisos_recurrentes' => [],
+                'estado_emocional' => EstadoEmocional::estructura(),
+                'expresion_visual' => EstadoEmocional::expresionEstructura(),
+                'animo' => EstadoEmocional::NEUTRO, // alias de estado_emocional.id
             ],
             '_placeholder' => true,
             '_placeholder_nota' => 'Residente sintético solo para pruebas de motor. No modifica fichas canon.',

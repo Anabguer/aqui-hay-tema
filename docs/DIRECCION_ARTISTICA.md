@@ -1,18 +1,18 @@
 # Dirección artística
 
-Ancla: `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` (ver `REFERENCIA_VISUAL.md`).
+Ancla de mapa/UI: `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` (ver `REFERENCIA_VISUAL.md`).
 
 ## Personajes
 
-No realistas. Caricatura 2D de juego de mesa / sitcom. **Referencia: las cabezas del mapa y de las tarjetas PAREJAS**, no un retrato semirrealista posterior.
+No realistas. Caricatura amable de juego social/casual (**v1 provisional**). **Ancla de retrato:** `assets/referencias_visuales/personajes/REFERENCIA_MAESTRA_PERSONAJES_v1.png`. El mapa/UI sigue anclado en las cabezas de chincheta de `REFERENCIA_VISUAL_01`, no un retrato semirrealista.
 
-Contrato y prompt maestro: `CONTRATO_VISUAL_PERSONAJES.md`.
+Contrato: `CONTRATO_VISUAL_PERSONAJES.md`. Reglas v1: `REGLAS_VISUALES_PERSONAJES_v1.md`. Pipeline: `PIPELINE_CABEZA_MAESTRA_EXPRESIONES.md`. 06b en pausa.
 
-Rasgos diferenciados, edades adultas variadas, peinados distintos, gafas, pecas, narices diferentes, diversidad, siluetas reconocibles a tamaño de chincheta. Simpáticos e imperfectos. **No embellecer.**
+Rasgos diferenciados, edades adultas variadas, peinados distintos, gafas, pecas, narices diferentes, diversidad, siluetas reconocibles a tamaño de chincheta. Simpáticos e imperfectos. **No embellecer.** Variedad real de atractivo (atractivos, normales, peculiares, mayores).
 
-Encuadre vigente: **cabeza maestra de frente**, cuello, casi sin ropa. `CONTRATO_VISUAL_PERSONAJES.md`. El estilo gráfico del pueblo **aún se elige**. El 06 gusta; no es canon. Regla **candidata**: distinguirse también por estructura facial, no principalmente por pelo/accesorios.
+Encuadre vigente v1: **cabeza maestra de frente**, cuello, nacimiento de hombros, ropa simple del look base. Identidad = ficha + cabeza maestra; la lámina es solo estilo.
 
-Cursor genera el PNG. ChatGPT no manda imágenes sueltas. Neni aprueba o pide regenerar.
+Cursor genera el PNG. ChatGPT no manda imágenes sueltas. Neni aprueba o pide regenerar. Laboratorio actual: `assets/personajes/_laboratorio/` (no canon).
 
 ## UI y mapa
 
@@ -31,9 +31,11 @@ Mobile-first en acciones. Escritorio: mapa más grande, panel. Sin depender de d
 ## Assets
 
 ```text
-assets/personajes/<id>/retrato.png          ← solo aprobados
-assets/personajes/_revision/<id>/borrador.png
-assets/personajes/_revision/<id>/pruebas_estilo/   ← comparación; ninguna ganadora
+assets/referencias_visuales/personajes/REFERENCIA_MAESTRA_PERSONAJES_v1.png  ← estilo v1
+assets/personajes/aprobados/<SLOT>_<Nombre>/   ← solo Neni APROBADO (vacío)
+assets/personajes/revision/                    ← Dani 06b histórico; no mezclar
+assets/personajes/_laboratorio/LAB_##_Nombre/  ← pruebas NO CANON
 ```
 
 Placeholders valen para programar el bucle si aún no hay cara aprobada. Ropa: look base en ficha; tienda fuera de V0.
+Looks de cuerpo entero: más adelante. Ahora solo cabeza maestra + expresiones.

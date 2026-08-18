@@ -9,7 +9,7 @@ Simulación **sencilla**. Existe para disponibilidad, contexto, encuentros, humo
 - ocupación
 - franja habitual de disponibilidad
 - hobby principal
-- estado de ánimo simple
+- estado emocional (`estado_emocional`; `animo` es alias legacy, no una barra ni el PNG)
 - lugar o lugares preferentes
 
 Sin esto no hay encuentros ni citas útiles. Auditoría bloques Vida y Juego: `CHECKLIST_AUDITORIA_PERSONAJES.md`.
@@ -47,7 +47,7 @@ Los NPC no esperan a Celestine para ir a un sitio. **Coincidir no es interactuar
 
 Familia y amigos (otro sistema), ropa, historial reciente de 1–3 días, una rutina que explique por qué pisa la cafetería. Si no cambia disponibilidad, encuentro, diario o cita, se deja inerte.
 
-El **cansancio** del texto anterior no es una barra Sims: como mucho, un flag o el propio ánimo («ha dormido fatal»).
+El **cansancio** del texto anterior no es una barra Sims: como mucho, un flag o el propio `estado_emocional` («ha dormido fatal»). No usar `animo` como medidor.
 
 ## Ocupaciones de referencia (cerradas como catálogo, no como fichas)
 

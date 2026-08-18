@@ -59,7 +59,7 @@ Auditoría: `CHECKLIST_AUDITORIA_PERSONAJES.md`. Esqueleto de slots: `FASE_DISEN
 | `reciprocos_potenciales.estado` | `pendiente_pool` · `resuelto` · `fallido` |
 | `visual.retrato.estado` | `ninguno` · `borrador` · `aprobado` |
 | `estado_ficha` | `borrador` · `revision` · `aprobado` |
-| `estado_animo_inicial` | `neutro` (otros ánimos = runtime) |
+| `estado_animo_inicial` | Semilla `neutro` → `estado_inicial.animo` (**alias**). Concepto canónico en partida: `estado_emocional`. No es el PNG. |
 
 `pronombres`: texto libre corto (`ella`, `él`, `elle`, `él/elle`…), no enum.
 
@@ -188,11 +188,13 @@ Aprendizaje de gustos en partida (`runtime.aprendizaje_preferencias`): **no** se
 
 ### Semillas (`estado_inicial`)
 
-`animo: neutro`. `crush.persona` = id o slot, o `null`. El juego puede mover el crush; la ficha no guarda «hoy está de mal humor».
+`estado_inicial.animo: neutro` (alias legacy de la semilla). `crush.persona` = id o slot, o `null`. El juego puede mover el crush; la ficha no guarda «hoy está de mal humor».
+
+Runtime de partida (no diseño): el concepto canónico es **`estado_emocional`** (qué siente). Es **distinto** de **`expresion_visual`** (qué PNG se pinta). `animo` en runtime es alias técnico de `estado_emocional.id`: no es una barra y no es la cara. Contrato: `CONTRATO_ESTADO_EMOCIONAL_Y_EXPRESION.md`.
 
 ### Evolutivos (`runtime`)
 
-**Vacío en diseño.** Ánimo del día, dónde está, flag `nuevo`, citas, las 4 variables, `atracciones_hacia`, recuerdos, lazos nuevos, huellas de aprendizaje, `descubrimientos_jugador`.
+**Vacío en diseño.** Estado emocional del día (`estado_emocional`; `animo` = alias, no barra ni PNG), dónde está, flag `nuevo`, citas, las 4 variables, `atracciones_hacia`, recuerdos, lazos nuevos, huellas de aprendizaje, `descubrimientos_jugador`.
 
 La ficha **en partida** crece (público / descubierto / `…`). No se vuelca A. `PROPUESTA_BLOQUE_3_A_24.md`.
 

@@ -1,0 +1,22 @@
+{
+  "id": "P041",
+  "visual_gender": "hombre",
+  "apparent_age": "33-38",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P041_neutral.png",
+  "candidate_asset": "P041_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pelo_cobrizo",
+    "pecas",
+    "camisa_cuadros"
+  ],
+  "alpha_verified": true
+}

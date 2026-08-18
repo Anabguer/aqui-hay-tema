@@ -43,6 +43,12 @@ assets/personajes/_revision/**/*.jpg
 assets/personajes/_revision/**/*.webp
 assets/personajes/**/evidencia/**/*.png
 assets/personajes/**/evidencia/**/*.jpg
+assets/personajes/**/*comparativa*.png
+assets/personajes/**/*comparativa*.jpg
+assets/personajes/**/*comparativa*.webp
+assets/personajes/candidatos/**/*.png
+assets/personajes/candidatos/**/*.jpg
+assets/personajes/candidatos/**/*.webp
 assets/referencias_visuales/**/*.png
 assets/referencias_visuales/**/*.jpg
 assets/referencias_visuales/**/*.webp

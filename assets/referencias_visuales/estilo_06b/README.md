@@ -39,3 +39,6 @@ Personas ficticias de prueba. **EXCLUIDOS del pool.** No pueden convertirse en h
 Origen histórico: `assets/personajes/_revision/_estilo_06/`.
 
 Pipeline: `docs/PIPELINE_RETRATO_06b.md`.
+
+**2026-08-18:** esta carpeta queda **histórica / en pausa**. El trabajo nuevo usa `assets/referencias_visuales/personajes/REFERENCIA_MAESTRA_PERSONAJES_v1.png`. No borrar estas pruebas.
+

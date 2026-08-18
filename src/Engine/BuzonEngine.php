@@ -29,6 +29,11 @@ final class BuzonEngine
 
         $partida['buzon'] ??= [];
         $partida['buzon'][] = $entry;
+        DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
+            'mensaje_id' => $entry['id'],
+            'de_persona' => $entry['de_persona'] ?? null,
+            'actores' => array_values(array_filter([$entry['de_persona'] ?? null])),
+        ]);
         return ['ok' => true, 'mensaje' => $entry];
     }
 

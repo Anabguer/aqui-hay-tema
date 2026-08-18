@@ -25,7 +25,7 @@ La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MA
 | Catálogo de lugares | Ver lista abajo. **Casa no es parcela comercial.** |
 | Parentesco que veta romance | Padre/madre↔hijo/a, hermanos, medio hermanos, abuelo/a↔nieto/a, tío/a↔sobrino/a, primos hermanos |
 | 4 variables románticas | **atracción, vínculo, conflicto, necesidad de contacto.** El resto es derivado. |
-| Vida NPC mínima | ocupación, franja de disponibilidad, hobby principal, ánimo simple, lugar(es) preferente(s). No Los Sims. |
+| Vida NPC mínima | ocupación, franja de disponibilidad, hobby principal, **estado emocional** (no barra Sims; no es el retrato), lugar(es) preferente(s). |
 | Diario | Nombre técnico **Diario del pueblo**. 5–10 entradas/día. Tipos: ruido/humor, info útil, pista, problema. **Complemento:** **Buzón de Celestine** (mensajes directos, subjetivos). Resumen objetivo mínimo opcional si la simulación lo pide. |
 | Indicadores diario | Pista `👀` · aviso importante `⚠️` · el resto, sin alarma |
 | Estructura de partida | **Pueblo persistente + temporadas.** No termina el día 30. Duración de temporada sin cifrar. |
@@ -54,7 +54,8 @@ La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MA
 | Relaciones sociales | **No lineales.** Ejes por par (afecto, confianza, tensión) + rutas múltiples. Enemigo→romance **raro y causal**. |
 | Protección residencia (hipótesis) | Marcha «normal» no antes de **~30 días** en la comunidad. Número **no** canonizado. |
 | Arte / cuadrícula | Caricatura 2D de la PNG; mapas importantes con limpia + grid |
-| Retratos | **Estilo visual canónico: 06b.** Diferenciación estructural facial **obligatoria**. Cabeza maestra de frente. Variedad real de atractivo. Genera **Cursor**; Neni APROBADO / REGENERAR. Aprobar 06b **no** aprueba el borrador antiguo de Rocío (regenerar después). **No** crear estilos 07, 08… |
+| Retratos | Ancla **provisional v1** `REFERENCIA_MAESTRA_PERSONAJES_v1.png`. 06b **en pausa**. Diferenciación estructural, variedad de atractivo, Cursor genera, Neni APROBADO. Packs de expresiones **progresivos**. Identidad visual **versionada**. No reciclar caras de la lámina. |
+| Estado emocional ≠ expresión | **Cerrado 2026-08-18.** Interno = `estado_emocional`. Asset = `expresion_visual` vía `ExpressionResolver`, fallback `neutral`. `animo` = alias legacy (no barra, no PNG). Hooks emocionales **apagados**. Sin fórmulas ni mappings de producción. `CONTRATO_ESTADO_EMOCIONAL_Y_EXPRESION.md`. |
 | Esqueleto pool §7 | **Aprobado** — `FASE_B_ESQUELETO_REVISADO.md` · Rocío **I08** |
 | Micro-sim cast | Config **α:** Rocío + I02 + I10 (+ I06 piloto 4) |
 | Día 1 real | Rocío sí · B/C pendientes · I10 no cerrado en tutorial |
@@ -111,7 +112,7 @@ Parcelas / sitios de diseño:
 | Diario único canal | Diario + **Buzón** |
 | 3 sitios jugables día 1 | **Solo cafetería operativa**; resto cerrado en mapa hasta desbloqueo |
 | Edificios aparecen al desbloquear | Mapa base con edificios **cerrados desde el inicio** |
-| Estilo visual candidato | **06b canónico** |
+| Estilo visual candidato | **v1 provisional**; 06b en pausa |
 | Agenda «reducida» solo franja | Slots 1 h + plantillas motor |
 | Buzón candidato | **Buzón en V0** |
 | Amistad candidato | **Amistad jugable** cerrada |

@@ -36,7 +36,7 @@ Oculto o descubrible: dealbreakers, `atraido_por` fino, apertura, preferencias e
 - ocupación (catálogo de 8)
 - franja habitual de disponibilidad
 - hobby principal
-- estado de ánimo simple
+- estado emocional (`estado_emocional`; no barra; no es el retrato)
 - lugar o lugares preferentes
 
 Prohibido: hambre, higiene, vejiga, casa-Sims, trabajo simulado.

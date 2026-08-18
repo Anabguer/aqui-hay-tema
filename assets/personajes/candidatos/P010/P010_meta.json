@@ -1,0 +1,13 @@
+{
+  "id": "P010",
+  "visual_gender": "mujer",
+  "apparent_age": "21-24",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P010_neutral.png",
+  "candidate_asset": "P010_neutral.png",
+  "expressions": ["neutral", "alegre", "triste", "enfadada"],
+  "visual_indicators": ["dos_moños", "lazos_rosas", "lunar_labio"],
+  "alpha_verified": true
+}

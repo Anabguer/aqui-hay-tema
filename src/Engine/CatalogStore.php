@@ -48,6 +48,9 @@ final class CatalogStore
             'etiquetas_look' => 'etiquetas_look.json',
             'franjas' => 'franjas_disponibilidad.json',
             'voces' => 'voces.json',
+            'expresiones_visuales' => 'expresiones_visuales.json',
+            'estados_emocionales' => 'estados_emocionales.json',
+            'origenes_estado_emocional' => 'origenes_estado_emocional.json',
             default => null,
         };
         if ($file === null) {

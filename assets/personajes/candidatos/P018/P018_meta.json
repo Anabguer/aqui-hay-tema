@@ -1,0 +1,13 @@
+{
+  "id": "P018",
+  "visual_gender": "mujer",
+  "apparent_age": "38-44",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P018_neutral.png",
+  "candidate_asset": "P018_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadada", "triste"],
+  "visual_indicators": ["coleta", "aros_grandes"],
+  "alpha_verified": true
+}

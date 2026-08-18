@@ -1,0 +1,22 @@
+{
+  "id": "P032",
+  "visual_gender": "mujer",
+  "apparent_age": "26-31",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P032_neutral.png",
+  "candidate_asset": "P032_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "bob_rubio_desordenado_raices_oscuras",
+    "aro_nariz_dorado",
+    "top_negro_cuello_alto_sin_mangas"
+  ],
+  "alpha_verified": true
+}

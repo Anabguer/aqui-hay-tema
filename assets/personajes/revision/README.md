@@ -1,5 +1,10 @@
 # Revisión humana de retratos
 
+**2026-08-18:** el trabajo nuevo de estilo va a `docs/PIPELINE_CABEZA_MAESTRA_EXPRESIONES.md` (v1). Esta carpeta conserva Dani 06b. No mezclar. Laboratorio: `assets/personajes/_laboratorio/`.
+
+---
+
+
 Nombres **legibles sin abrir el archivo**. IDs técnicos (`per_i02`) van en `.meta.json`.
 
 ## Convención

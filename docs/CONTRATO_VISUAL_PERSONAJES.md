@@ -2,7 +2,14 @@
 
 Cursor genera las **cabezas maestras**. ChatGPT **no** entrega imágenes sueltas. Neni **no** da por buena ninguna imagen hasta decir APROBADO.
 
-Ancla de estilo (a elegir aún entre pruebas): las **cabezas pequeñas** de `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` (mapa + tarjetas PAREJAS). No retrato semirrealista / «guapo».
+> **2026-08-18 — ancla provisional v1.** El lenguaje gráfico de habitantes pasa a  
+> `assets/referencias_visuales/personajes/REFERENCIA_MAESTRA_PERSONAJES_v1.png`.  
+> Reglas: `docs/REGLAS_VISUALES_PERSONAJES_v1.md`. Pipeline: `docs/PIPELINE_CABEZA_MAESTRA_EXPRESIONES.md`.  
+> **06b queda en pausa** para generación nueva. Este documento conserva las leyes que siguen vigentes (diferenciación estructural, variedad de atractivo, ficha = identidad, Neni aprueba). El encuadre «cuello sin ropa» y el trazo naïf 06b **no** se usan en v1.  
+> **No tocar todavía** Rocío, Dani, I10, I06 ni el pool.  
+> Las caras de la lámina v1 son **maniquíes de estilo**, no identidades.
+
+Ancla de mapa/UI (no de retrato): las **cabezas pequeñas** de `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png`. No retrato semirrealista / «guapo».
 
 El bloque de personaje del prompt sale **solo** de la ficha B (físico). Cero secretos de A.
 

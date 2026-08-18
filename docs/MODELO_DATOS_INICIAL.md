@@ -18,11 +18,11 @@ Canónico: `data/personajes/_plantilla.personaje.json`. Entrega humana: `docs/CO
 | `romance` | Preferencias `{texto, visible, tipo, eje?}`, dealbreakers `{texto, severidad, eje?}`, necesidad de contacto, `plasticidad_preferencias` |
 | `lazos[]` | `{persona, tipo, publico}` — familia, amigos, ex, roce |
 | `presencia_v0` | Empieza aquí / orden y función de llegada |
-| `visual` | Físico + look + `retrato.estado` |
+| `visual` | Físico + look + `retrato.estado` + `identidad_visual_version` + `pack_id` (opcional) |
 | `narrativa` | `voz`, frase semilla |
 | `auditoria` | `estado_ficha`, `reciprocos_potenciales` |
-| `estado_inicial` | Ánimo `neutro`, crush semilla |
-| `runtime` | **Vacío en diseño.** Ánimo de hoy, citas, las 4, `atracciones_hacia`, `aprendizaje_preferencias` |
+| `estado_inicial` | Semilla `animo: neutro` (**alias**). Concepto canónico en partida: `estado_emocional` ≠ PNG, ≠ barra |
+| `runtime` | **Vacío en diseño.** `estado_emocional`, `expresion_visual`, citas, las 4, `atracciones_hacia`, `aprendizaje_preferencias`. `animo` = alias. |
 
 Hambre/higiene/vejiga: **no existen**.
 

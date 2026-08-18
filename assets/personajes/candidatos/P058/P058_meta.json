@@ -1,0 +1,22 @@
+{
+  "id": "P058",
+  "visual_gender": "mujer",
+  "apparent_age": "68-74",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P058_neutral.png",
+  "candidate_asset": "P058_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "moño_bajo_sal_pimienta",
+    "tachuelas_jade",
+    "cuello_mandarin_vino"
+  ],
+  "alpha_verified": true
+}

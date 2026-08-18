@@ -25,6 +25,10 @@ final class DiarioEngine
 
         $partida['diario'] ??= [];
         $partida['diario'][] = $entry;
+        DomainEventDispatcher::emit($partida, DomainEvents::DIARIO_ENTRADA, [
+            'entrada_id' => $entry['id'],
+            'tipo' => $entry['tipo'] ?? null,
+        ]);
         return ['ok' => true, 'entrada' => $entry];
     }
 

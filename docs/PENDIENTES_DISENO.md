@@ -43,13 +43,15 @@ La V0 está **aprobada** en bucle y tono. **Fase C:** pilotos I02, I10, I06 (+ R
 - Celestine narrativo, sin avatar · NPC tutorial con llaves (no diseñar aún)
 - Buzón en V0 · Cafetería sola operativa día 1 · Mapa con edificios cerrados visibles
 - 2× sin romance en tanda 16 · Seed + configs prevalidadas
-- Agenda 1 h / 24 h con plantillas motor · 06b canónico · Rocío día 1
+- Agenda 1 h / 24 h con plantillas motor · retratos **v1 provisional** (06b en pausa) · Rocío día 1 (ficha sí, retrato no regenerar aún)
 
 
 
 ## Abierto (puede esperar al simulador / wireframes / código)
 
 
+
+- Retratos v1: identidades y packs de expresiones por personaje (progresivos). Arquitectura estado/expresión **cerrada**; **sin** fórmulas ni mappings de producción.
 
 - Precios y umbrales de fama
 
@@ -75,7 +77,7 @@ La V0 está **aprobada** en bucle y tono. **Fase C:** pilotos I02, I10, I06 (+ R
 
 - Aprendizaje / preferencias (`APRENDIZAJE_PREFERENCIAS.md`) — candidato
 
-- Estilo 06 / diferenciación estructural
+- Estilo de retrato: **v1 en prueba** (lámina maestra + LAB_01_Teo). 06b histórico. Diferenciación estructural sigue siendo ley.
 
 - Cabeza maestra + cuerpo/look (futuro)
 

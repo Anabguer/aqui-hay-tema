@@ -1,0 +1,18 @@
+{
+  "id": "P009",
+  "visual_gender": "hombre",
+  "apparent_age": "25-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P009_neutral.png",
+  "candidate_asset": null,
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": [
+    "medio_rapado",
+    "pelo_fucsia",
+    "auriculares_al_cuello",
+    "pixel_heart_pecho"
+  ],
+  "alpha_verified": true
+}

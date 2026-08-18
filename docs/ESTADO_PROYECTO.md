@@ -65,7 +65,7 @@ Detalle de pantallas y flujos: **PENDIENTE** (sin wireframes).
 - Esqueleto I01–L06: `FASE_DISENO_POOL_16.md` — **NO APROBADO** (revisión en curso)
 - Fichas JSON: **1** (`per_i03` Rocío), estado `revision`, **confirmada día 1**
 - Pilotos objetivo Fase C: **3–4** (Rocío + otros por definir)
-- Retratos: estilo **06b canónico**; **0** aprobados; Rocío regenerar después
+- Retratos / packs: **v1 provisional**; expresiones progresivas; identidad versionada. **Cerrado:** `estado_emocional` ≠ `expresion_visual`; `animo` = alias legacy (no barra, no PNG). Hooks emocionales apagados. Sin fórmulas. `CONTRATO_ESTADO_EMOCIONAL_Y_EXPRESION.md`.
 
 ### RELACIONES — CERRADO (marco) / CANDIDATO (amistad jugable)
 
@@ -192,7 +192,8 @@ Ver `MVP.md`. Resumen: trío ~3, solo Bloque A, cafetería primero, placeholders
 | Agenda slots 1h + plantillas | CERRADO | 24 h |
 | Amistad jugable | CERRADO | |
 | Seed + configs prevalidadas | CERRADO | |
-| Estilo visual 06b | CERRADO | Canónico |
+| Estilo visual 06b | EN PAUSA | Histórico; ancla nueva = v1 provisional |
+| Estado emocional / expresión visual | CERRADO | Interno ≠ PNG; fallback neutral; hooks apagados |
 | Esqueleto pool §7 | PENDIENTE | No aprobado |
 | 2× interes_romantico ninguno | CERRADO | En tanda 16 |
 | Aforo numérico por lugar | PENDIENTE | Principio cerrado |
@@ -342,7 +343,7 @@ Ver `MVP.md`. Resumen: trío ~3, solo Bloque A, cafetería primero, placeholders
 | --- | --- | --- |
 | Referencia visual mapa+UI | REFERENCIA | `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` |
 | Comparativa estilos 01–05 (A/B/C) | REFERENCIA | `assets/personajes/_revision/_comparativa_estilos_abc/` |
-| Estilo 06 / 06b | **APROBADO** (06b canónico) | `assets/personajes/_revision/_estilo_06/` |
+| Estilo personajes | **v1 PROVISIONAL** (06b en pausa) | `assets/referencias_visuales/personajes/` |
 | Rocío borrador principal | BORRADOR | `assets/personajes/_revision/per_i03/borrador.png` |
 | Rocío pruebas estilo 01–05 | BORRADOR / REFERENCIA | `per_i03/pruebas_estilo/` |
 | Retrato aprobado Rocío | — | **No existe** |
@@ -358,7 +359,7 @@ Ver `MVP.md`. Resumen: trío ~3, solo Bloque A, cafetería primero, placeholders
 
 ### A) Diseño del juego: **~52 %**
 
-**Sube** tras Fase 1: Celestine, buzón, mapa cerrado, agenda, seed, 06b, trío Rocío, 2 sin romance.
+**Sube** tras Fase 1: Celestine, buzón, mapa cerrado, agenda, seed, trío Rocío, 2 sin romance. Retratos: v1 provisional (06b en pausa).
 
 **Falta:** esqueleto aprobado, plantillas agenda, 3–4 pilotos, micro-sim, wireframes, cifras economía/aforo.
 

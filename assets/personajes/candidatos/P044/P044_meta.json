@@ -1,0 +1,22 @@
+{
+  "id": "P044",
+  "visual_gender": "mujer",
+  "apparent_age": "22-26",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P044_neutral.png",
+  "candidate_asset": "P044_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "wolf_cut_oscuro",
+    "mecha_teja",
+    "bomber_oliva"
+  ],
+  "alpha_verified": true
+}

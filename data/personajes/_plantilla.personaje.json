@@ -77,7 +77,9 @@
     "retrato": {
       "estado": "ninguno",
       "version": 0
-    }
+    },
+    "identidad_visual_version": 0,
+    "pack_id": null
   },
 
   "narrativa": {
@@ -96,6 +98,7 @@
   },
 
   "estado_inicial": {
+    "_comentario": "animo = semilla alias de estado_emocional.id (neutro). No es barra ni retrato.",
     "animo": "neutro",
     "crush": {
       "persona": null
@@ -103,8 +106,23 @@
   },
 
   "runtime": {
-    "_comentario": "NO rellenar al diseñar. El juego escribe aquí. No mezclar con vida.hobby ni romance de ficha.",
+    "_comentario": "NO rellenar al diseñar. estado_emocional es canónico. animo = alias legacy (no barra, no PNG).",
     "animo": null,
+    "estado_emocional": {
+      "_comentario": "CANÓNICO. Qué siente. No es el PNG. No es una barra. Alias legacy: runtime.animo. docs/CONTRATO_ESTADO_EMOCIONAL_Y_EXPRESION.md",
+      "id": null,
+      "intensidad": null,
+      "origen": null,
+      "desde": null,
+      "hasta": null
+    },
+    "expresion_visual": {
+      "_comentario": "NO rellenar al diseñar. La resuelve ExpressionResolver. override_dev solo laboratorio.",
+      "id": null,
+      "override_dev": null,
+      "fallback": false,
+      "motivo": null
+    },
     "donde_esta": null,
     "flag_nuevo": false,
     "cita_programada": null,

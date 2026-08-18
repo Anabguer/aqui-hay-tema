@@ -1,0 +1,18 @@
+{
+  "id": "P024",
+  "visual_gender": "hombre",
+  "apparent_age": "66-74",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P024_neutral.png",
+  "candidate_asset": "P024_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": [
+    "coleta_cana",
+    "barba_blanca",
+    "aro_oreja",
+    "camisa_denim"
+  ],
+  "alpha_verified": true
+}

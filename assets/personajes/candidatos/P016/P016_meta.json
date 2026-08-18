@@ -1,0 +1,13 @@
+{
+  "id": "P016",
+  "visual_gender": "hombre",
+  "apparent_age": "38-44",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P016_neutral.png",
+  "candidate_asset": "P016_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": ["polo_cremallera_deportivo", "corte_corto_atletico"],
+  "alpha_verified": true
+}
