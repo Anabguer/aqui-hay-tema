@@ -34,6 +34,10 @@ final class EventInspector
         if ($filtroEnc = $filtros['encuentro_id'] ?? null) {
             $entries = array_values(array_filter($entries, static fn($e) => str_contains(json_encode($e['detalle'] ?? ''), $filtroEnc)));
         }
+        if ($filtroCorr = $filtros['correlacion_id'] ?? null) {
+            $cid = (string) $filtroCorr;
+            $entries = array_values(array_filter($entries, static fn($e) => (string) ($e['correlacion_id'] ?? '') === $cid));
+        }
 
         $limit = (int) ($filtros['limit'] ?? 100);
         if (count($entries) > $limit) {
@@ -41,6 +45,17 @@ final class EventInspector
         }
 
         return ['ok' => true, 'total' => count($entries), 'eventos' => $entries];
+    }
+
+    public static function correlacionados(array $partida, string $correlacionId, int $limit = 100): array
+    {
+        $tl = self::timeline($partida, ['correlacion_id' => $correlacionId, 'limit' => $limit]);
+        return [
+            'ok' => true,
+            'correlacion_id' => $correlacionId,
+            'total' => $tl['total'] ?? 0,
+            'eventos' => $tl['eventos'] ?? [],
+        ];
     }
 
     private static function normalize(array $e, string $fuente): array
@@ -63,7 +78,7 @@ final class EventInspector
             'fuente' => 'domain_events',
             'tipo' => $e['evento'] ?? '',
             'ts_juego' => $e['ts_juego'] ?? null,
-            'actores' => [],
+            'actores' => $e['payload']['actores'] ?? [],
             'correlacion_id' => $e['correlacion_id'] ?? null,
             'detalle' => $e,
         ];

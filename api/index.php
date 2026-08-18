@@ -198,6 +198,14 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return DevHandler::npcPlanificar($ctx, $body, $p);
     },
+    'npc.coincidencias.ahora' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::npcCoincidenciasAhora($ctx, $body, $p);
+    },
+    'npc.coincidencias.historico' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::npcCoincidenciasHistorico($ctx, $body, $p);
+    },
     'economia.registrar_dev' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return DevHandler::economiaRegistrar($ctx, $body, $p);
@@ -218,6 +226,36 @@ $routes = [
     'dev.simular' => static fn() => DevHandler::simular($ctx, $body),
     'dev.catalogos' => static fn() => DevHandler::catalogos($ctx, $body),
     'dev.diversidad' => static fn() => DevHandler::diversidad($ctx, $body),
+    'dev.visual.paquetes' => static fn() => DevHandler::visualPaquetes($ctx, $body),
+    'dev.visual.preview' => static fn() => DevHandler::visualPreview($ctx, $body),
+    'dev.visual.inventario' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::visualInventario($ctx, $body, $p);
+    },
+    'dev.estado_emocional.forzar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::estadoEmocionalForzar($ctx, $body, $p);
+    },
+    'dev.expresion.forzar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::expresionForzar($ctx, $body, $p);
+    },
+    'dev.visual.vincular' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::visualVincular($ctx, $body, $p);
+    },
+    'dev.visual.inventario_lab' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::visualInventario($ctx, $body, $p);
+    },
+    'dev.discovery.campo' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::discoveryCampo($ctx, $body, $p);
+    },
+    'dev.eventos.correlacionados' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::eventosCorrelacionados($ctx, $body, $p);
+    },
 ];
 
 try {

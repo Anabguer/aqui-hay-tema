@@ -15,6 +15,11 @@ use AquiHayTema\Engine\EventInspector;
 use AquiHayTema\Engine\RngService;
 use AquiHayTema\Engine\SimulationRunner;
 use AquiHayTema\Engine\StressTestRunner;
+use AquiHayTema\Engine\CoincidenciasEngine;
+use AquiHayTema\Engine\DiscoveryProjection;
+use AquiHayTema\Engine\DiscoveryVisibilityPolicy;
+use AquiHayTema\Engine\ResidenteRuntime;
+use AquiHayTema\Engine\ContentValidationException;
 
 final class DevHandler
 {
@@ -122,6 +127,25 @@ final class DevHandler
         return $r;
     }
 
+    public static function npcCoincidenciasAhora(ApiContext $ctx, array $body, array &$partida): array
+    {
+        requireDev();
+        $dia = (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($body['hora'] ?? $partida['reloj']['hora_actual'] ?? 0);
+        $new = CoincidenciasEngine::detectarYRegistrar($partida, $ctx->root, $dia, $hora, $ctx->logger);
+        savePartida($ctx, $partida);
+        return ['ok' => true, 'dia' => $dia, 'hora' => $hora, 'nuevas' => $new];
+    }
+
+    public static function npcCoincidenciasHistorico(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        $limit = isset($body['limit']) ? (int) $body['limit'] : 50;
+        $list = $partida['historial_coincidencias'] ?? [];
+        $list = is_array($list) ? $list : [];
+        return ['ok' => true, 'limit' => $limit, 'items' => array_values(array_slice($list, -max(1, $limit)))];
+    }
+
     public static function economiaRegistrar(ApiContext $ctx, array $body, array &$partida): array
     {
         requireDev();
@@ -191,5 +215,179 @@ final class DevHandler
         $store = new CatalogStore($ctx->root);
         $umbral = isset($body['umbral']) ? (float) $body['umbral'] : 0.55;
         return DiversityAnalyzer::desdeDirectorio($ctx->root . '/data/personajes', $store, $umbral);
+    }
+
+    public static function visualPaquetes(ApiContext $ctx, array $body): array
+    {
+        requireDev();
+        $catalog = new CatalogStore($ctx->root);
+        return [
+            'ok' => true,
+            'expression_ids' => \AquiHayTema\Engine\ExpresionVisual::ids($catalog),
+            'estados_emocionales' => $catalog->ids('estados_emocionales'),
+            'packs' => $ctx->service->visualPacks()->listarResumenes($catalog),
+            'nota' => 'El motor consume assets. No los genera. N variable por pack. Fallback = neutral.',
+        ];
+    }
+
+    public static function visualPreview(ApiContext $ctx, array $body): array
+    {
+        requireDev();
+        $packId = (string) ($body['pack_id'] ?? '');
+        $expressionId = (string) ($body['expression_id'] ?? \AquiHayTema\Engine\ExpresionVisual::NEUTRAL);
+        $store = $ctx->service->visualPacks();
+        $catalog = new CatalogStore($ctx->root);
+        $pack = $store->pack($packId);
+        if ($pack === null) {
+            return ['ok' => false, 'error' => 'pack_no_encontrado'];
+        }
+        $resolved = \AquiHayTema\Engine\ExpressionResolver::resolver([
+            'expresion_solicitada' => $expressionId,
+            'pack' => $pack,
+            'pack_id' => $packId,
+        ], $store, $catalog);
+        return [
+            'ok' => true,
+            'pack' => $store->resumenPack($packId, $catalog),
+            'solicitada' => $expressionId,
+            'expression_id' => $resolved['expression_id'],
+            'fallback' => $resolved['fallback'],
+            'motivo' => $resolved['motivo'],
+            'asset' => $resolved['asset'],
+            'existe' => !empty($resolved['asset']['existe']),
+        ];
+    }
+
+    public static function visualInventario(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        return $ctx->service->emociones()->inventarioResidente(
+            $partida,
+            (string) ($body['residente_id'] ?? '')
+        );
+    }
+
+    public static function estadoEmocionalForzar(ApiContext $ctx, array $body, array &$partida): array
+    {
+        requireDev();
+        $hasta = null;
+        if (isset($body['hasta_dia'], $body['hasta_hora'])) {
+            $hasta = ['dia' => (int) $body['hasta_dia'], 'hora' => (int) $body['hasta_hora']];
+        }
+        $duracion = isset($body['duracion_horas']) ? (int) $body['duracion_horas'] : null;
+        $r = $ctx->service->emociones()->aplicar(
+            $partida,
+            (string) ($body['residente_id'] ?? ''),
+            (string) ($body['estado_id'] ?? 'neutro'),
+            'dev_manual',
+            isset($body['intensidad']) ? (float) $body['intensidad'] : null,
+            $hasta,
+            is_array($body['contexto'] ?? null) ? $body['contexto'] : [],
+            $duracion
+        );
+        if ($r['ok'] ?? false) {
+            savePartida($ctx, $partida);
+        }
+        return $r;
+    }
+
+    public static function expresionForzar(ApiContext $ctx, array $body, array &$partida): array
+    {
+        requireDev();
+        $expr = $body['expression_id'] ?? null;
+        $expr = ($expr === '' || $expr === null) ? null : (string) $expr;
+        $r = $ctx->service->emociones()->overrideExpresionDev(
+            $partida,
+            (string) ($body['residente_id'] ?? ''),
+            $expr
+        );
+        if ($r['ok'] ?? false) {
+            savePartida($ctx, $partida);
+        }
+        return $r;
+    }
+
+    public static function visualVincular(ApiContext $ctx, array $body, array &$partida): array
+    {
+        requireDev();
+        $rid = (string) ($body['residente_id'] ?? '');
+        $packId = (string) ($body['pack_id'] ?? '');
+        if (!isset($partida['residentes'][$rid])) {
+            return ['ok' => false, 'error' => 'residente_no_encontrado'];
+        }
+        if ($packId !== '' && $ctx->service->visualPacks()->pack($packId) === null) {
+            return ['ok' => false, 'error' => 'pack_no_encontrado'];
+        }
+        $partida['residentes'][$rid]['runtime']['visual_pack_id'] = $packId !== '' ? $packId : null;
+        $resolved = $ctx->service->emociones()->resolverResidente($partida, $partida['residentes'][$rid]);
+        $partida['residentes'][$rid]['runtime']['expresion_visual']['id'] = $resolved['expression_id'];
+        $partida['residentes'][$rid]['runtime']['expresion_visual']['motivo'] = $resolved['motivo'];
+        savePartida($ctx, $partida);
+        return [
+            'ok' => true,
+            'visual_pack_id' => $partida['residentes'][$rid]['runtime']['visual_pack_id'],
+            'expresion' => $resolved,
+            'sin_evento_de_juego' => true,
+        ];
+    }
+
+    /**
+     * DEV LAB: inspeccionar visibilidad de un campo de una ficha.
+     * No asigna secretos; no toca Rocío ni fichas piloto.
+     */
+    public static function discoveryCampo(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        $rid = (string) ($body['residente_id'] ?? '');
+        $campo = (string) ($body['campo'] ?? '');
+        if ($rid === '' || $campo === '') {
+            return ['ok' => false, 'error' => 'residente_id y campo requeridos'];
+        }
+        if (!isset($partida['residentes'][$rid])) {
+            return ['ok' => false, 'error' => 'residente_no_encontrado'];
+        }
+
+        $runtime = $partida['residentes'][$rid];
+        $catalogo = null;
+        try {
+            $catalogo = ResidenteRuntime::catalogoParaRuntime($runtime, $ctx->service->getCatalog());
+        } catch (ContentValidationException) {
+        }
+
+        $campos = [];
+        if ($catalogo !== null) {
+            $campos = DiscoveryProjection::deCatalogo($catalogo, $runtime);
+        }
+        $valorReal = $campos[$campo] ?? ($body['valor_real'] ?? null);
+
+        $config = DiscoveryVisibilityPolicy::load($ctx->root);
+        $proyeccion = DiscoveryProjection::proyectar(
+            $partida,
+            $rid,
+            [$campo => $valorReal],
+            $config,
+            is_array($body['eventos_alcanzados'] ?? null) ? array_values($body['eventos_alcanzados']) : []
+        );
+
+        return [
+            'ok' => true,
+            'residente_id' => $rid,
+            'campo' => $campo,
+            'politicas_disponibles' => DiscoveryVisibilityPolicy::politicasDisponibles(),
+            'default_config' => $config['default'] ?? 'sin_politica',
+            'por_categoria_config' => $config['por_categoria'] ?? [],
+            'proyeccion' => $proyeccion[$campo] ?? null,
+            '_nota' => 'Sin politicas asignadas a personajes. Cambiar por_categoria en data/configs/discovery_visibility.json.',
+        ];
+    }
+
+    public static function eventosCorrelacionados(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        $cid = (string) ($body['correlacion_id'] ?? '');
+        if ($cid === '') {
+            return ['ok' => false, 'error' => 'correlacion_id requerida'];
+        }
+        return EventInspector::correlacionados($partida, $cid, (int) ($body['limit'] ?? 100));
     }
 }

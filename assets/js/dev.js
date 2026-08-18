@@ -372,10 +372,146 @@
       log('Mapa', await api('mapa.presencia', {}));
     });
 
+    $('#btn-ins-coincidencias').addEventListener('click', async () => {
+      log('Coincidencias NPC (historial)', await api('npc.coincidencias.historico', { limit: 50 }));
+    });
+
+    $('#btn-disc-campo').addEventListener('click', async () => {
+      const rid = $('#sel-residente').value;
+      const campo = $('#inp-disc-campo').value.trim();
+      if (!rid || !campo) { log('Selecciona residente y escribe un campo', {}); return; }
+      const r = await api('dev.discovery.campo', { residente_id: rid, campo });
+      const panel = $('#disc-panel');
+      panel.textContent = JSON.stringify(r, null, 2);
+      log('Discovery campo', r);
+    });
+
     $('#btn-buzon-dev').addEventListener('click', async () => {
       const r = await api('buzon.crear_dev', {});
       log('Mensaje buzón dev', r);
       await inspectFull();
     });
+
+    let visualPacks = [];
+    let currentExprId = 'neutral';
+
+    function currentPack() {
+      const id = $('#sel-pack-visual').value;
+      return visualPacks.find(p => p.pack_id === id) || null;
+    }
+
+    function renderExprStrip(pack) {
+      const strip = $('#expr-strip');
+      strip.innerHTML = '';
+      (pack?.tira || []).forEach(row => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.dataset.expr = row.expression_id;
+        b.textContent = row.expression_id;
+        if (!row.existe) b.classList.add('missing');
+        if (row.expression_id === currentExprId) b.classList.add('active');
+        b.title = row.existe
+          ? row.expression_id
+          : (row.obligatoria ? 'neutral obligatorio — falta el PNG' : 'aún no generado; el motor usará neutral');
+        b.addEventListener('click', () => previewExpression(row.expression_id, row.existe));
+        strip.appendChild(b);
+      });
+      const meta = $('#pack-meta');
+      if (!pack) {
+        meta.textContent = 'Sin packs registrados.';
+        return;
+      }
+      meta.textContent = pack.nombre_visible
+        + ' · identidad v' + pack.visual_identity_version
+        + ' · ' + (pack.laboratorio ? 'LAB (no canon)' : (pack.canon ? 'canon' : 'no canon'))
+        + ' · disponibles: ' + (pack.expresiones_disponibles || []).join(', ');
+    }
+
+    async function previewExpression(exprId, existe) {
+      currentExprId = exprId;
+      document.querySelectorAll('#expr-strip button').forEach(b => {
+        b.classList.toggle('active', b.dataset.expr === exprId);
+      });
+      const packId = $('#sel-pack-visual').value;
+      const r = await api('dev.visual.preview', { pack_id: packId, expression_id: exprId });
+      const img = $('#expr-preview');
+      if (r.asset && r.asset.url_relativa) {
+        img.src = r.asset.url_relativa;
+        img.alt = exprId;
+      } else {
+        img.removeAttribute('src');
+        img.alt = exprId + ' sin asset (en juego: fallback neutral)';
+      }
+      log('Preview expresión', {
+        pack_id: packId,
+        expression_id: exprId,
+        existe: !!r.asset,
+        sin_evento_de_juego: true,
+      });
+      const rid = $('#sel-residente').value;
+      if (rid) {
+        // Forzamos aunque el PNG falte: el motor debe hacer fallback a neutral sin romper UI.
+        await api('dev.expresion.forzar', { residente_id: rid, expression_id: exprId });
+      }
+    }
+
+    async function refreshVisualLab() {
+      const r = await api('dev.visual.paquetes', {});
+      if (!r.ok) return;
+      visualPacks = r.packs || [];
+      const sel = $('#sel-pack-visual');
+      const prev = sel.value;
+      sel.innerHTML = '';
+      visualPacks.forEach(p => {
+        sel.appendChild(new Option(p.nombre_visible + (p.laboratorio ? ' (lab)' : ''), p.pack_id));
+      });
+      if (prev && visualPacks.some(p => p.pack_id === prev)) sel.value = prev;
+      const emo = $('#sel-estado-emo');
+      emo.innerHTML = '';
+      (r.estados_emocionales || ['neutro']).forEach(id => emo.appendChild(new Option(id, id)));
+      renderExprStrip(currentPack());
+      if (currentPack()) await previewExpression('neutral', currentPack().neutral_ok);
+    }
+
+    $('#sel-pack-visual').addEventListener('change', async () => {
+      currentExprId = 'neutral';
+      renderExprStrip(currentPack());
+      if (currentPack()) await previewExpression('neutral', currentPack().neutral_ok);
+    });
+
+    $('#btn-vincular-pack').addEventListener('click', async () => {
+      const r = await api('dev.visual.vincular', {
+        residente_id: $('#sel-residente').value,
+        pack_id: $('#sel-pack-visual').value,
+      });
+      log('Vincular pack (DEV, sin evento de juego)', r);
+      await inspectFull();
+    });
+
+    $('#btn-forzar-estado').addEventListener('click', async () => {
+      const r = await api('dev.estado_emocional.forzar', {
+        residente_id: $('#sel-residente').value,
+        estado_id: $('#sel-estado-emo').value,
+      });
+      log('Forzar estado emocional (placeholder)', r);
+      const expr = r.expresion?.expression_id;
+      if (expr) {
+        currentExprId = expr;
+        renderExprStrip(currentPack());
+        await previewExpression(expr, !!r.expresion?.asset);
+      }
+      await inspectFull();
+    });
+
+    $('#btn-limpiar-override').addEventListener('click', async () => {
+      const r = await api('dev.expresion.forzar', {
+        residente_id: $('#sel-residente').value,
+        expression_id: '',
+      });
+      log('Quitar override expresión', r);
+      await inspectFull();
+    });
+
+    await refreshVisualLab();
   });
 })();

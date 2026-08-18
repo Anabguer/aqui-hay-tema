@@ -23,7 +23,12 @@ header('Content-Type: text/html; charset=utf-8');
     .dev-lab label { display: block; margin: .35rem 0; }
     .dev-lab input[type="number"], .dev-lab select, .dev-lab input[type="text"] { max-width: 100%; }
     .inspect { max-height: 320px; overflow: auto; font-size: 12px; }
-    #inspect-panel { max-height: 480px; }
+    .expr-strip { display: flex; flex-wrap: wrap; gap: .35rem; margin: .5rem 0; }
+    .expr-strip button { font-size: 12px; }
+    .expr-strip button.missing { opacity: .45; }
+    .expr-strip button.active { outline: 2px solid var(--accent, #c9a227); }
+    .expr-preview { width: 220px; height: 220px; object-fit: cover; background: #111; border: 1px solid #444; border-radius: 8px; }
+    .expr-meta { font-size: 12px; color: #9a9aad; }
   </style>
 </head>
 <body>
@@ -90,6 +95,23 @@ header('Content-Type: text/html; charset=utf-8');
           <div class="btn-row">
             <button type="button" id="btn-vivienda-inspect">Inspeccionar vivienda</button>
             <button type="button" id="btn-liberar">Liberar hueco</button>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>QA visual / expresiones</legend>
+          <p class="status">Estado interno ≠ cara. Esta tira mira assets <strong>sin</strong> disparar eventos de juego. El motor no genera PNG.</p>
+          <label for="sel-pack-visual">Paquete gráfico</label>
+          <select id="sel-pack-visual"></select>
+          <p class="expr-meta" id="pack-meta">—</p>
+          <div class="expr-strip" id="expr-strip" role="group" aria-label="Expresiones visuales"></div>
+          <img id="expr-preview" class="expr-preview" alt="Vista previa de expresión" />
+          <label for="sel-estado-emo">Estado emocional (placeholder, no fórmula)</label>
+          <select id="sel-estado-emo"></select>
+          <div class="btn-row">
+            <button type="button" id="btn-vincular-pack">Vincular pack al residente</button>
+            <button type="button" id="btn-forzar-estado">Forzar estado al residente</button>
+            <button type="button" id="btn-limpiar-override">Quitar override de expresión</button>
           </div>
         </fieldset>
 
@@ -166,8 +188,19 @@ header('Content-Type: text/html; charset=utf-8');
             <button type="button" id="btn-ins-buzon">Buzón</button>
             <button type="button" id="btn-ins-diario">Diario</button>
             <button type="button" id="btn-ins-mapa">Mapa presencia</button>
+            <button type="button" id="btn-ins-coincidencias">Coincidencias NPC</button>
             <button type="button" id="btn-buzon-dev">Crear msg buzón dev</button>
           </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>DEV LAB — Discovery (sin asignar secretos)</legend>
+          <label for="inp-disc-campo">Campo (ej. vida.hobby_principal)</label>
+          <input type="text" id="inp-disc-campo" placeholder="vida.hobby_principal" value="vida.hobby_principal" />
+          <div class="btn-row">
+            <button type="button" id="btn-disc-campo">Inspeccionar visibilidad</button>
+          </div>
+          <pre class="inspect" id="disc-panel" aria-label="Proyección discovery"></pre>
         </fieldset>
 
         <fieldset>
