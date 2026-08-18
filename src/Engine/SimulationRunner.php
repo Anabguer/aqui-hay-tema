@@ -253,4 +253,139 @@ final class SimulationRunner
         }
         $informe['save_bytes_json_ultimo'] = $last;
     }
+
+    /**
+     * QA de flujo jugable: partida nueva, 2+ residentes, programar, cancelar, resolver, 30 días.
+     */
+    public static function runFlujoLargoPlay(
+        string $projectRoot,
+        int $days = 30,
+        string $seed = 'flujo-play-30'
+    ): array {
+        $t0 = microtime(true);
+        $days = max(1, min(365, $days));
+        $informe = [
+            'ok' => true,
+            '_nota' => 'QA flujo play largo — no canónico',
+            'days' => $days,
+            'seed' => $seed,
+            'errores' => [],
+            'invariantes_rotas' => [],
+            'encuentros_programados' => 0,
+            'encuentros_resueltos' => 0,
+            'encuentros_cancelados' => 0,
+            'agenda_liberada_tras_cancel' => false,
+            'relacion_placeholder_ok' => false,
+        ];
+
+        $service = new PartidaService($projectRoot);
+        try {
+            $partida = $service->nuevaPartida('test_fixtures_v0', $seed);
+        } catch (\Throwable $e) {
+            return ['ok' => false, 'error' => $e->getMessage()];
+        }
+
+        $emociones = $service->emociones();
+        $catalog = new CatalogStore($projectRoot);
+        $estadosValidos = $catalog->ids('estados_emocionales');
+        $qa = 'per_qa_valid';
+        $phA = $service->crearResidentePlaceholderDev($partida);
+        $phB = $service->crearResidentePlaceholderDev($partida);
+        $idA = (string) ($phA['residente']['catalog_id'] ?? '');
+        $idB = (string) ($phB['residente']['catalog_id'] ?? '');
+        if ($idA === '' || $idB === '') {
+            return ['ok' => false, 'error' => 'placeholders_no_creados'];
+        }
+
+        $slots1 = DisponibilidadEngine::slotsCompatibles($partida, [$qa, $idA], 'conocerse', 1, 8, 2, 8);
+        if (!($slots1['ok'] ?? false) || empty($slots1['slots'])) {
+            $informe['errores'][] = 'sin_slots_qa_a';
+        } else {
+            $s = $slots1['slots'][0];
+            $enc1 = $service->programarEncuentro($partida, [$qa, $idA], (int) $s['dia'], (int) $s['hora'], 'conocerse');
+            if ($enc1['ok'] ?? false) {
+                $informe['encuentros_programados']++;
+                $informe['enc_resolver_id'] = $enc1['encuentro']['id'];
+            } else {
+                $informe['errores'][] = $enc1['error'] ?? 'programar_1';
+            }
+        }
+
+        $slots2 = DisponibilidadEngine::slotsCompatibles($partida, [$qa, $idB], 'conocerse', 1, 8, 2, 8);
+        $enc2Id = null;
+        $enc2Dia = null;
+        $enc2Hora = null;
+        if (($slots2['ok'] ?? false) && !empty($slots2['slots'])) {
+            $s2 = $slots2['slots'][0];
+            $enc2 = $service->programarEncuentro($partida, [$qa, $idB], (int) $s2['dia'], (int) $s2['hora'], 'amistad');
+            if ($enc2['ok'] ?? false) {
+                $informe['encuentros_programados']++;
+                $enc2Id = $enc2['encuentro']['id'];
+                $enc2Dia = (int) $enc2['encuentro']['dia'];
+                $enc2Hora = (int) $enc2['encuentro']['hora'];
+            } else {
+                $informe['errores'][] = $enc2['error'] ?? 'programar_2';
+            }
+        }
+
+        if ($enc2Id !== null) {
+            $cancel = $service->cancelarEncuentro($partida, $enc2Id);
+            if ($cancel['ok'] ?? false) {
+                $informe['encuentros_cancelados']++;
+                $disp = AgendaEngine::estaDisponible($partida, $idB, $enc2Dia, $enc2Hora);
+                $informe['agenda_liberada_tras_cancel'] = (bool) ($disp['disponible'] ?? false);
+            } else {
+                $informe['errores'][] = $cancel['error'] ?? 'cancelar';
+            }
+        }
+
+        $goto = $service->irAlProximoEncuentro($partida);
+        if ($goto['ok'] ?? false) {
+            $adv = $service->avanzarReloj($partida, 1);
+            $informe['encuentros_resueltos'] += (int) ($adv['encuentros_resueltos'] ?? 0);
+        }
+
+        $rel = RelacionEngine::obtenerEntre($partida, $qa, $idA);
+        $informe['relacion_placeholder_ok'] = ($rel['social'] !== null);
+
+        for ($d = 0; $d < $days; $d++) {
+            $dia = (int) $partida['reloj']['dia_pueblo'];
+            $hora = (int) $partida['reloj']['hora_actual'];
+            $slots = DisponibilidadEngine::slotsCompatibles($partida, [$qa, $idA], 'conocerse', $dia, $hora, 2, 3);
+            if (($slots['ok'] ?? false) && !empty($slots['slots'])) {
+                $slot = $slots['slots'][0];
+                $r = $service->programarEncuentro($partida, [$qa, $idA], (int) $slot['dia'], (int) $slot['hora'], 'conocerse');
+                if ($r['ok'] ?? false) {
+                    $informe['encuentros_programados']++;
+                }
+            }
+            $adv = $service->avanzarReloj($partida, 24);
+            $informe['encuentros_resueltos'] += (int) ($adv['encuentros_resueltos'] ?? 0);
+            self::checkInvariants($partida, $informe, $projectRoot, $emociones, $estadosValidos);
+        }
+
+        $val = PartidaValidator::validar($partida);
+        if ($val !== []) {
+            $informe['invariantes_rotas'][] = 'partida_invalida';
+            $informe['validacion'] = $val;
+        }
+
+        $service->guardar($partida);
+        $path = (new PartidaRepository($projectRoot))->pathFor($partida['meta']['partida_id']);
+        $informe['partida_id'] = $partida['meta']['partida_id'];
+        $informe['save_bytes'] = is_file($path) ? filesize($path) : 0;
+        $informe['rng_state'] = (int) ($partida['rng']['state'] ?? 0);
+        $informe['reloj'] = $partida['reloj'];
+        $informe['encuentros_por_estado'] = [];
+        foreach ($partida['encuentros'] ?? [] as $enc) {
+            $st = (string) ($enc['estado'] ?? '');
+            $informe['encuentros_por_estado'][$st] = ($informe['encuentros_por_estado'][$st] ?? 0) + 1;
+        }
+        $informe['eventos_dominio'] = count($partida['domain_events'] ?? []);
+        $informe['audit_trail_size'] = count($partida['audit_trail'] ?? []);
+        $informe['ms_total'] = round((microtime(true) - $t0) * 1000, 2);
+        $informe['ok'] = $informe['errores'] === [] && ($informe['invariantes_rotas'] ?? []) === [];
+
+        return $informe;
+    }
 }
