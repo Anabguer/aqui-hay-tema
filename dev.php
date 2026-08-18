@@ -179,6 +179,8 @@ header('Content-Type: text/html; charset=utf-8');
             <button type="button" id="btn-eventos">Inspector eventos</button>
             <button type="button" id="btn-diagnostico">Export diagnóstico</button>
             <button type="button" id="btn-simular-30">Simular 30 días</button>
+            <button type="button" id="btn-catalogos">Inspeccionar catálogos</button>
+            <button type="button" id="btn-diversidad">Analizador anti-clones</button>
           </div>
           <pre class="inspect" id="cal-panel" aria-label="Vista calendario"></pre>
         </fieldset>

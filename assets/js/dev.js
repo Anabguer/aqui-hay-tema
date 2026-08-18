@@ -313,6 +313,27 @@
       log('Simulación 30d', r);
     });
 
+    $('#btn-catalogos').addEventListener('click', async () => {
+      const hobbies = await api('dev.catalogos', { tipo: 'hobbies' });
+      const rasgos = await api('dev.catalogos', { tipo: 'rasgos' });
+      const voces = await api('dev.catalogos', { tipo: 'voces' });
+      const estilos = await api('dev.catalogos', { tipo: 'estilos_sociales' });
+      const pack = { hobbies, rasgos, voces, estilos };
+      $('#cal-panel').textContent = JSON.stringify(pack, null, 2);
+      log('Catálogos', {
+        hobbies: hobbies.ids?.length,
+        rasgos: rasgos.ids?.length,
+        voces: voces.ids?.length,
+        estilos: estilos.ids?.length,
+      });
+    });
+
+    $('#btn-diversidad').addEventListener('click', async () => {
+      const r = await api('dev.diversidad', { umbral: 0.55 });
+      $('#cal-panel').textContent = JSON.stringify(r, null, 2);
+      log('Anti-clones', { personajes: r.personajes, avisos: r.avisos?.length });
+    });
+
     $('#btn-ins-residente').addEventListener('click', async () => {
       const r = await api('residente.ficha', { residente_id: $('#sel-residente').value });
       log('Ficha residente', r);

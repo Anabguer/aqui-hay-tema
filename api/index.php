@@ -216,6 +216,8 @@ $routes = [
         return DevHandler::diagnosticoExport($ctx, $body, $p);
     },
     'dev.simular' => static fn() => DevHandler::simular($ctx, $body),
+    'dev.catalogos' => static fn() => DevHandler::catalogos($ctx, $body),
+    'dev.diversidad' => static fn() => DevHandler::diversidad($ctx, $body),
 ];
 
 try {

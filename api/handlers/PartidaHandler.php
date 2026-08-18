@@ -5,6 +5,7 @@ namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
 use AquiHayTema\Api\savePartida;
+use AquiHayTema\Engine\ContentValidationException;
 use AquiHayTema\Engine\FeatureConfig;
 use AquiHayTema\Engine\PartidaValidator;
 
@@ -12,10 +13,19 @@ final class PartidaHandler
 {
     public static function nueva(ApiContext $ctx, array $body): array
     {
-        $partida = $ctx->service->nuevaPartida(
-            $body['config_id'] ?? 'debug_v0',
-            isset($body['seed']) ? (string) $body['seed'] : null
-        );
+        try {
+            $partida = $ctx->service->nuevaPartida(
+                $body['config_id'] ?? 'debug_v0',
+                isset($body['seed']) ? (string) $body['seed'] : null
+            );
+        } catch (ContentValidationException $e) {
+            return [
+                'ok' => false,
+                'error' => 'content_validation_failed',
+                'errores' => $e->errores,
+                'mensaje_ui' => 'El catálogo o una ficha no es válida.',
+            ];
+        }
         FeatureConfig::mergeIntoPartida($partida, $ctx->root);
         return ['ok' => true, 'partida' => $ctx->service->estadoResumido($partida), 'partida_id' => $partida['meta']['partida_id']];
     }

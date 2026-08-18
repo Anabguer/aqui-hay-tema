@@ -8,7 +8,8 @@ use AquiHayTema\Api\requireDev;
 use AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\AutonomousPlanner;
 use AquiHayTema\Engine\DevCalendarService;
-use AquiHayTema\Engine\DiagnosticExport;
+use AquiHayTema\Engine\CatalogStore;
+use AquiHayTema\Engine\DiversityAnalyzer;
 use AquiHayTema\Engine\EconomyLedger;
 use AquiHayTema\Engine\EventInspector;
 use AquiHayTema\Engine\RngService;
@@ -169,5 +170,26 @@ final class DevHandler
             isset($body['seed']) ? (string) $body['seed'] : null,
             (string) ($body['config_id'] ?? 'test_fixtures_v0')
         );
+    }
+
+    public static function catalogos(ApiContext $ctx, array $body): array
+    {
+        requireDev();
+        $store = new CatalogStore($ctx->root);
+        $tipo = (string) ($body['tipo'] ?? 'hobbies');
+        return [
+            'ok' => true,
+            'tipo' => $tipo,
+            'ids' => $store->ids($tipo),
+            'items' => $store->items($tipo === 'hobbies' ? 'hobbies' : $tipo),
+        ];
+    }
+
+    public static function diversidad(ApiContext $ctx, array $body): array
+    {
+        requireDev();
+        $store = new CatalogStore($ctx->root);
+        $umbral = isset($body['umbral']) ? (float) $body['umbral'] : 0.55;
+        return DiversityAnalyzer::desdeDirectorio($ctx->root . '/data/personajes', $store, $umbral);
     }
 }
