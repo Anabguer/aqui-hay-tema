@@ -71,6 +71,21 @@ final class PartidaService
         return $this->reloj->avanzar($partida, $horas);
     }
 
+    public function avanzarRelojPasoAPaso(array &$partida, int $horas): array
+    {
+        return $this->reloj->avanzarPasoAPaso($partida, $horas);
+    }
+
+    public function irAlProximoEncuentro(array &$partida): array
+    {
+        return $this->reloj->irAlProximoEncuentro($partida);
+    }
+
+    public function cancelarEncuentro(array &$partida, string $encuentroId): array
+    {
+        return $this->encuentros->cancelar($partida, $encuentroId);
+    }
+
     public function programarEncuentro(
         array &$partida,
         array $participantes,

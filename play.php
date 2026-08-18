@@ -21,6 +21,8 @@ header('Content-Type: text/html; charset=utf-8');
       <a class="btn" href="index.php">Landing</a>
       <a class="btn" href="dev.php">Modo dev</a>
       <button type="button" id="btn-avanzar-1h">+1h</button>
+      <button type="button" id="btn-avanzar-8h">+8h</button>
+      <button type="button" id="btn-proximo-encuentro">Ir al próximo encuentro</button>
       <button type="button" id="btn-guardar">Guardar</button>
       <button type="button" id="btn-nueva">Nueva partida</button>
     </nav>
@@ -57,23 +59,37 @@ header('Content-Type: text/html; charset=utf-8');
 
         <div class="stack-section">
           <h3 id="encuentro-title">Proponer encuentro</h3>
-          <p class="status">Prototipo jugable: lógica real, copy provisional.</p>
-          <form id="form-encuentro" class="compact-form" onsubmit="return false;">
-            <label for="enc-a">Residente A</label>
-            <select id="enc-a" name="residente_a" required></select>
-            <label for="enc-b">Residente B</label>
-            <select id="enc-b" name="residente_b" required></select>
+          <p class="status">Elige participantes, hora compatible y lugar operativo.</p>
+          <form id="form-encuentro" class="compact-form enc-form" onsubmit="return false;">
+            <div class="form-row-2">
+              <div>
+                <label for="enc-a">Residente A</label>
+                <select id="enc-a" name="residente_a" required></select>
+              </div>
+              <div>
+                <label for="enc-b">Residente B</label>
+                <select id="enc-b" name="residente_b" required></select>
+              </div>
+            </div>
+            <p class="status form-hint" id="enc-participantes-hint" hidden></p>
             <label for="enc-tipo">Tipo</label>
             <select id="enc-tipo" name="tipo">
               <option value="conocerse">Conocerse</option>
               <option value="amistad">Amistad</option>
               <option value="romantico">Romántico</option>
             </select>
-            <label for="enc-hora">Hora</label>
-            <select id="enc-hora" name="hora" required></select>
-            <button type="button" class="primary" id="btn-programar">Programar (cafetería)</button>
+            <label for="enc-slot">Hora compatible</label>
+            <select id="enc-slot" name="slot" required disabled>
+              <option value="">Elige dos residentes distintos…</option>
+            </select>
+            <p class="status form-hint" id="enc-slots-hint">Calculando horas compatibles…</p>
+            <label for="enc-lugar">Lugar</label>
+            <select id="enc-lugar" name="lugar" required>
+              <option value="">Cargando lugares…</option>
+            </select>
+            <button type="button" class="primary" id="btn-programar" disabled>Programar encuentro</button>
           </form>
-          <p class="status" id="enc-feedback" role="status" aria-live="polite"></p>
+          <p class="feedback" id="enc-feedback" role="status" aria-live="polite"></p>
         </div>
 
         <div class="stack-section">

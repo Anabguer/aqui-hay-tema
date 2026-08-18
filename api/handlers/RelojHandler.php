@@ -11,9 +11,25 @@ final class RelojHandler
 {
     public static function avanzar(ApiContext $ctx, array $body, array &$partida): array
     {
-        $result = $ctx->service->avanzarReloj($partida, (int) ($body['horas'] ?? 1));
+        $horas = (int) ($body['horas'] ?? 1);
+        $paso = (bool) ($body['paso_a_paso'] ?? false);
+        $result = $paso
+            ? $ctx->service->avanzarRelojPasoAPaso($partida, $horas)
+            : $ctx->service->avanzarReloj($partida, $horas);
+        if (($result['ok'] ?? true) === false) {
+            return $result;
+        }
         savePartida($ctx, $partida);
         return ['ok' => true, 'reloj' => $result];
+    }
+
+    public static function proximoEncuentro(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $r = $ctx->service->irAlProximoEncuentro($partida);
+        if ($r['ok'] ?? false) {
+            savePartida($ctx, $partida);
+        }
+        return $r;
     }
 
     public static function irA(ApiContext $ctx, array $body, array &$partida): array

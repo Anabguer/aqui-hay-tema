@@ -17,6 +17,7 @@ final class GameError
     public const BLOQUE_LLENO = 'BLOQUE_LLENO';
     public const DEV_DESHABILITADO = 'DEV_DESHABILITADO';
     public const RELOJ_NO_REWIND = 'RELOJ_NO_REWIND';
+    public const SIN_PROXIMO_ENCUENTRO = 'SIN_PROXIMO_ENCUENTRO';
     public const VALIDACION_FALLIDA = 'VALIDACION_FALLIDA';
     public const SAVE_CORRUPTO = 'SAVE_CORRUPTO';
 
@@ -35,6 +36,7 @@ final class GameError
             self::BLOQUE_LLENO => 'No hay viviendas libres en el Bloque A.',
             self::DEV_DESHABILITADO => 'Herramientas de desarrollo deshabilitadas.',
             self::RELOJ_NO_REWIND => 'No se puede retroceder el reloj en partida normal.',
+            self::SIN_PROXIMO_ENCUENTRO => 'No hay ningún encuentro programado más adelante.',
             self::VALIDACION_FALLIDA => 'Datos no válidos.',
             self::SAVE_CORRUPTO => 'El archivo de partida está dañado.',
             default => 'Ha ocurrido un error.',

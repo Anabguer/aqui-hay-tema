@@ -55,6 +55,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return RelojHandler::avanzar($ctx, $body, $p);
     },
+    'reloj.proximo_encuentro' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return RelojHandler::proximoEncuentro($ctx, $body, $p);
+    },
     'reloj.ir_a' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return RelojHandler::irA($ctx, $body, $p);
