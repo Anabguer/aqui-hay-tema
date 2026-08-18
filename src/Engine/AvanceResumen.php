@@ -33,6 +33,20 @@ final class AvanceResumen
     {
         $offset = max(0, (int) ($snapshot['audit'] ?? 0));
         $nuevos = array_slice($partida['audit_trail'] ?? [], $offset);
+        $terminadosIds = [];
+        foreach ($nuevos as $e) {
+            if (!is_array($e)) {
+                continue;
+            }
+            if ((string) ($e['tipo'] ?? '') !== DomainEvents::ENCUENTRO_TERMINADO) {
+                continue;
+            }
+            $encId = self::encuentroIdDeEvento($e);
+            if ($encId !== null && !in_array($encId, $terminadosIds, true)) {
+                $terminadosIds[] = $encId;
+            }
+        }
+
         $lineas = [];
         $coincidencias = 0;
         $vistos = [];
@@ -69,6 +83,8 @@ final class AvanceResumen
         return [
             'lineas' => $lineas,
             'total' => count($lineas),
+            'encuentros_terminados_ids' => $terminadosIds,
+            'encuentros_terminados_count' => count($terminadosIds),
         ];
     }
 
@@ -99,7 +115,17 @@ final class AvanceResumen
             'tipo' => $tipo,
             'texto' => $texto,
             'ts_juego' => $e['ts_juego'] ?? null,
+            'encuentro_id' => self::encuentroIdDeEvento($e),
         ];
+    }
+
+    /** @param array<string, mixed> $e */
+    private static function encuentroIdDeEvento(array $e): ?string
+    {
+        $despues = is_array($e['despues'] ?? null) ? $e['despues'] : [];
+        $enc = is_array($despues['encuentro'] ?? null) ? $despues['encuentro'] : [];
+        $id = $enc['id'] ?? $despues['encuentro_id'] ?? null;
+        return is_string($id) && $id !== '' ? $id : null;
     }
 
     /** @param list<mixed> $ids */

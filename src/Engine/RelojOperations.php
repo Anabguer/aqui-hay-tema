@@ -90,7 +90,7 @@ final class RelojOperations
 
         $acum['reloj'] = $partida['reloj'];
         $acum['texto'] = Reloj::formatear($partida['reloj']);
-        $acum['resumen_avance'] = AvanceResumen::desdeSnapshot($partida, $snap);
+        $acum['resumen_avance'] = self::enriquecerResumen($partida, AvanceResumen::desdeSnapshot($partida, $snap));
         return $acum;
     }
 
@@ -165,5 +165,29 @@ final class RelojOperations
     {
         return ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24
             + (int) ($partida['reloj']['hora_actual'] ?? 0);
+    }
+
+    /**
+     * @param array<string, mixed> $resumen
+     * @return array<string, mixed>
+     */
+    private function enriquecerResumen(array $partida, array $resumen): array
+    {
+        $catalog = new Catalog($this->projectRoot);
+        $vistas = [];
+        foreach ($resumen['encuentros_terminados_ids'] ?? [] as $id) {
+            if (!is_string($id) || $id === '') {
+                continue;
+            }
+            foreach (EncuentroEngine::list($partida) as $enc) {
+                if (($enc['id'] ?? '') === $id) {
+                    $vistas[] = EncuentroResultadoVista::de($partida, $enc, $catalog, $this->projectRoot);
+                    break;
+                }
+            }
+        }
+        $resumen['encuentros_terminados'] = $vistas;
+        $resumen['encuentros_terminados_count'] = count($vistas);
+        return $resumen;
     }
 }

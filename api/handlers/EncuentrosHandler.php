@@ -8,6 +8,8 @@ use AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\CitaEngine;
 use AquiHayTema\Engine\EncuentroEngine;
 use AquiHayTema\Engine\EncuentroLifecycle;
+use AquiHayTema\Engine\EncuentroResultadoVista;
+use AquiHayTema\Engine\ResumenDia;
 
 final class EncuentrosHandler
 {
@@ -57,7 +59,19 @@ final class EncuentrosHandler
 
     public static function listar(ApiContext $ctx, array $body, array $partida): array
     {
-        return ['ok' => true, 'encuentros' => $partida['encuentros'] ?? []];
+        $catalog = $ctx->service->getCatalog();
+        $out = [];
+        foreach ($partida['encuentros'] ?? [] as $enc) {
+            if (!is_array($enc)) {
+                continue;
+            }
+            $row = $enc;
+            $row['vista'] = ($enc['estado'] ?? '') === 'terminado'
+                ? EncuentroResultadoVista::de($partida, $enc, $catalog, $ctx->root)
+                : ResumenDia::vistaEncuentro($partida, $enc, $catalog);
+            $out[] = $row;
+        }
+        return ['ok' => true, 'encuentros' => $out];
     }
 
     /** Retrocompat cita.* */

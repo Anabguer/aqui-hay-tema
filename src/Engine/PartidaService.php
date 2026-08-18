@@ -160,6 +160,7 @@ final class PartidaService
         ));
         usort($ultimosEncuentros, static fn($a, $b) => ((int) ($b['dia'] ?? 0) * 24 + (int) ($b['hora'] ?? 0))
             <=> ((int) ($a['dia'] ?? 0) * 24 + (int) ($a['hora'] ?? 0)));
+        $ultimo = $ultimosEncuentros[0] ?? null;
 
         return [
             '_ui' => 'provisional_v0',
@@ -180,7 +181,10 @@ final class PartidaService
             ],
             'relaciones' => $relaciones,
             'agenda_hoy' => $agenda,
-            'ultimo_encuentro' => $ultimosEncuentros[0] ?? null,
+            'ultimo_encuentro' => $ultimo,
+            'ultimo_encuentro_vista' => is_array($ultimo)
+                ? EncuentroResultadoVista::de($partida, $ultimo, $this->catalog, $this->root)
+                : null,
             'placeholder' => $runtime['_placeholder'] ?? false,
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
             'presentacion_visual' => $this->presentacionVisual($partida, $runtime),
