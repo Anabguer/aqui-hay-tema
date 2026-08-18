@@ -8,11 +8,18 @@ spl_autoload_register(static function (string $class): void {
     if (!str_starts_with($class, $prefix)) {
         return;
     }
-    $relative = str_replace('\\', DIRECTORY_SEPARATOR, substr($class, strlen($prefix)));
-    $candidates = [__DIR__ . DIRECTORY_SEPARATOR . $relative . '.php'];
-    if (str_starts_with($relative, 'Api' . DIRECTORY_SEPARATOR)) {
-        $candidates[] = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'api'
-            . DIRECTORY_SEPARATOR . substr($relative, strlen('Api' . DIRECTORY_SEPARATOR)) . '.php';
+    // Rutas POSIX: Hostalia es Linux y distingue mayúsculas. api/handlers/ en disco.
+    $relative = str_replace('\\', '/', substr($class, strlen($prefix)));
+    $candidates = [__DIR__ . '/' . $relative . '.php'];
+    if (str_starts_with($relative, 'Api/')) {
+        $rest = substr($relative, strlen('Api/'));
+        $slash = strrpos($rest, '/');
+        if ($slash === false) {
+            $apiRel = $rest . '.php';
+        } else {
+            $apiRel = strtolower(substr($rest, 0, $slash)) . '/' . substr($rest, $slash + 1) . '.php';
+        }
+        $candidates[] = dirname(__DIR__) . '/api/' . $apiRel;
     }
     foreach ($candidates as $path) {
         if (is_file($path)) {

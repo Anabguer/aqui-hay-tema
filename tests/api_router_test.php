@@ -28,5 +28,9 @@ $est = PartidaHandler::estado($ctx, [], $p);
 ok($est['ok'] ?? false, 'PartidaHandler::estado');
 $g = PartidaHandler::guardar($ctx, [], $p);
 ok($g['ok'] ?? false, 'PartidaHandler::guardar (use function savePartida)');
+ok(is_file($root . '/api/handlers/PartidaHandler.php'), 'PartidaHandler en api/handlers (minúsculas, Hostalia)');
+ok(class_exists(\AquiHayTema\Api\Handlers\EncuentrosHandler::class, true), 'autoload EncuentrosHandler');
+ok(class_exists(\AquiHayTema\Api\Handlers\RelojHandler::class, true), 'autoload RelojHandler');
+ok(class_exists(\AquiHayTema\Api\Handlers\ResidentesHandler::class, true), 'autoload ResidentesHandler');
 
 exit($failures > 0 ? 1 : 0);
