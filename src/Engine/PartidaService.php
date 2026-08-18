@@ -111,7 +111,7 @@ final class PartidaService
         $catalogo = null;
         try {
             $catalogo = ResidenteRuntime::catalogoParaRuntime($runtime, $this->catalog);
-        } catch (ContentValidationException) {
+        } catch (ContentValidationException $e) {
             $catalogo = null;
         }
 

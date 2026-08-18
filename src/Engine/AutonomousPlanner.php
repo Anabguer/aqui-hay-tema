@@ -53,7 +53,7 @@ final class AutonomousPlanner
         $partida['npc_autonomo']['historial_eventos'] ??= [];
         $partida['npc_autonomo']['planes_pendientes'][] = $plan;
 
-        $logger?->log($partida, 'npc_autonomo_plan', [
+        \aht_log_optional($logger, $partida, 'npc_autonomo_plan', [
             'residente' => $residenteId,
             'candidatos' => $candidatos,
             'elegido' => $elegido,

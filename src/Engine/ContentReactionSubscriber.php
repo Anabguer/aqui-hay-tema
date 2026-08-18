@@ -33,7 +33,7 @@ final class ContentReactionSubscriber
         }
 
         // BLOQUEADO_DECISION: evaluación real de triggers y generación de texto
-        $logger?->log($partida, 'narrative_trigger_eval', [
+        \aht_log_optional($logger, $partida, 'narrative_trigger_eval', [
             'evento' => $evento,
             'triggers' => count($activos),
             '_placeholder' => true,

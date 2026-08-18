@@ -41,7 +41,7 @@ final class EncuentroResolver
             'texto_resumen' => '[PLACEHOLDER] Encuentro ' . $tipo . ' terminado.',
         ];
 
-        $logger?->log($partida, 'encuentro_resuelto', [
+        \aht_log_optional($logger, $partida, 'encuentro_resuelto', [
             'encuentro_id' => $encuentro['id'] ?? null,
             'tipo' => $tipo,
             'delta_social' => $deltaSocial,
@@ -69,7 +69,7 @@ final class EncuentroResolver
                 isset($ds['intensidad']) ? (int) $ds['intensidad'] : null,
                 isset($ds['se_soportan']) ? (bool) $ds['se_soportan'] : null
             );
-            $logger?->log($partida, 'relacion_delta_social', [
+            \aht_log_optional($logger, $partida, 'relacion_delta_social', [
                 'persona_a' => $a,
                 'persona_b' => $b,
                 'delta' => $ds,
@@ -79,7 +79,7 @@ final class EncuentroResolver
         $dr = $resultado['delta_romance'] ?? [];
         if (!empty($dr)) {
             RelacionEngine::upsertRomance($partida, $a, $b, $dr);
-            $logger?->log($partida, 'relacion_delta_romance', [
+            \aht_log_optional($logger, $partida, 'relacion_delta_romance', [
                 'persona_a' => $a,
                 'persona_b' => $b,
                 'delta' => $dr,

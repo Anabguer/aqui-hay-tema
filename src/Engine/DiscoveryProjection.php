@@ -58,7 +58,7 @@ final class DiscoveryProjection
     }
 
     /** @param array<string, array> $proyeccion */
-    public static function valorSiVisible(array $proyeccion, string $campo, mixed $fallback = null): mixed
+    public static function valorSiVisible(array $proyeccion, string $campo, $fallback = null)
     {
         $row = $proyeccion[$campo] ?? null;
         if (!is_array($row)) {

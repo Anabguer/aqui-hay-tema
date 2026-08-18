@@ -22,7 +22,7 @@ final class EventBus
             'correlacion_id' => 'evt_' . bin2hex(random_bytes(4)),
         ];
 
-        $logger?->log($partida, 'domain_event', $envelope);
+        \aht_log_optional($logger, $partida, 'domain_event', $envelope);
 
         $results = [];
         foreach (self::$listeners[$evento] ?? [] as $handler) {

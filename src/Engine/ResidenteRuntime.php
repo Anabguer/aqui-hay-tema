@@ -57,7 +57,7 @@ final class ResidenteRuntime
         }
         try {
             return $catalog->loadPersonaje($catalogId);
-        } catch (\RuntimeException) {
+        } catch (\RuntimeException $ignored) {
             return null;
         }
     }

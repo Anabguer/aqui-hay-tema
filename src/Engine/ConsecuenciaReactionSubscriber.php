@@ -45,7 +45,7 @@ final class ConsecuenciaReactionSubscriber
         }
 
         // BLOQUEADO_DECISION: evaluación real de consecuencias (sin contenido).
-        $logger?->log($partida, 'consequence_trigger_eval', [
+        \aht_log_optional($logger, $partida, 'consequence_trigger_eval', [
             'evento' => $evento,
             'triggers' => count($triggers),
             '_placeholder' => true,

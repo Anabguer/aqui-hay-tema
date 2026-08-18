@@ -99,7 +99,7 @@ final class PersonajeValidator
         $vida = $data['vida'] ?? [];
         $romance = $data['romance'] ?? [];
 
-        $check = static function (string $campo, mixed $valor, string $catalogo) use ($store, $archivo, &$errores): void {
+        $check = static function (string $campo, $valor, string $catalogo) use ($store, $archivo, &$errores): void {
             if ($valor === null || $valor === '') {
                 return;
             }
@@ -108,7 +108,7 @@ final class PersonajeValidator
             }
         };
 
-        $checkT = static function (string $campo, mixed $valor, string $claveTecnica) use ($store, $archivo, &$errores): void {
+        $checkT = static function (string $campo, $valor, string $claveTecnica) use ($store, $archivo, &$errores): void {
             if ($valor === null || $valor === '') {
                 return;
             }
@@ -216,7 +216,7 @@ final class PersonajeValidator
         return basename($archivo, '.json') === $id;
     }
 
-    private static function err(string $archivo, string $campo, mixed $valor, string $regla): array
+    private static function err(string $archivo, string $campo, $valor, string $regla): array
     {
         return compact('archivo', 'campo', 'valor', 'regla');
     }

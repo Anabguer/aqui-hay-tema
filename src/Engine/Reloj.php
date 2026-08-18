@@ -53,7 +53,7 @@ final class Reloj
             $then = new \DateTimeImmutable($ultima);
             $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
             $segundos = max(0, $now->getTimestamp() - $then->getTimestamp());
-        } catch (\Exception) {
+        } catch (\Exception $ignored) {
             return ['segundos' => 0, 'aplicado' => false];
         }
 

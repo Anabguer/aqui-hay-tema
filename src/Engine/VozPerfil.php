@@ -9,7 +9,7 @@ namespace AquiHayTema\Engine;
  */
 final class VozPerfil
 {
-    public static function normalizar(mixed $voz): array
+    public static function normalizar($voz): array
     {
         if (is_string($voz) && $voz !== '') {
             return [

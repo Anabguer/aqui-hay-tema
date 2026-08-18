@@ -50,7 +50,7 @@ final class RelojDev
             );
         }
         $sync = EncuentroLifecycle::sincronizarConReloj($partida, $logger);
-        $expirados = $emociones?->expirarVencidos($partida) ?? 0;
+        $expirados = $emociones !== null ? $emociones->expirarVencidos($partida) : 0;
 
         return [
             'ok' => true,

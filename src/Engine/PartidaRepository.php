@@ -46,7 +46,7 @@ final class PartidaRepository
             try {
                 JsonFile::read($path);
                 @copy($path, $bak);
-            } catch (\Throwable) {
+            } catch (\Throwable $ignored) {
                 // No reemplazar .bak con un save ya corrupto
             }
         }
@@ -103,7 +103,7 @@ final class PartidaRepository
                     'updated_at' => $data['meta']['updated_at'] ?? null,
                     'reloj' => $data['reloj'] ?? null,
                 ];
-            } catch (\Throwable) {
+            } catch (\Throwable $ignored) {
                 continue;
             }
         }

@@ -17,7 +17,7 @@ final class DiscoveryEngine
         array &$partida,
         string $residenteId,
         string $campo,
-        mixed $valor,
+        $valor,
         string $origen,
         ?string $correlacionId = null,
         ?string $eventoRelacionado = null

@@ -12,8 +12,8 @@ final class AuditTrail
         array $actores = [],
         ?string $origen = null,
         ?string $regla = null,
-        mixed $antes = null,
-        mixed $despues = null,
+        $antes = null,
+        $despues = null,
         ?int $rngRoll = null,
         ?string $correlacionId = null
     ): void {

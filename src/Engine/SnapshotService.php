@@ -61,7 +61,7 @@ final class SnapshotService
             try {
                 $d = JsonFile::read($f);
                 $out[] = $d['_snapshot_meta'] ?? ['nombre' => basename($f, '.json')];
-            } catch (\Throwable) {
+            } catch (\Throwable $ignored) {
                 continue;
             }
         }

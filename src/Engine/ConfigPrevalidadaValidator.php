@@ -40,7 +40,7 @@ final class ConfigPrevalidadaValidator
         return $errores;
     }
 
-    private static function err(string $archivo, string $campo, mixed $valor, string $regla): array
+    private static function err(string $archivo, string $campo, $valor, string $regla): array
     {
         return compact('archivo', 'campo', 'valor', 'regla');
     }

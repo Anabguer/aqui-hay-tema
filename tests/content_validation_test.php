@@ -74,7 +74,7 @@ $catalog = new Catalog($root);
 try {
     $catalog->loadPersonaje('per_qa_valid');
     ok(true, 'catalog carga válido');
-} catch (ContentValidationException) {
+} catch (ContentValidationException $e) {
     ok(false, 'catalog debe cargar per_qa_valid');
 }
 

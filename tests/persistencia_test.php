@@ -38,7 +38,7 @@ ok($p3['meta']['partida_id'] === $id, 'guardar/cargar id');
 try {
     $service->cargar('part_no_existe_xyz');
     ok(false, 'debe fallar partida inexistente');
-} catch (Throwable) {
+} catch (Throwable $e) {
     ok(true, 'partida inexistente lanza error');
 }
 

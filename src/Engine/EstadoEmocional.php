@@ -14,7 +14,7 @@ final class EstadoEmocional
 
     public static function estructura(
         string $id = self::NEUTRO,
-        int|float|null $intensidad = null,
+        $intensidad = null,
         string $origen = 'inicial',
         ?array $desde = null,
         ?array $hasta = null,

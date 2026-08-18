@@ -265,7 +265,7 @@ final class EncuentroResultadoVista
         return $out;
     }
 
-    private static function valorCatalogo(array $partida, string $rid, string $campo, ?Catalog $catalog): mixed
+    private static function valorCatalogo(array $partida, string $rid, string $campo, ?Catalog $catalog)
     {
         if ($catalog === null) {
             return null;
@@ -276,7 +276,7 @@ final class EncuentroResultadoVista
         }
         try {
             $catalogo = ResidenteRuntime::catalogoParaRuntime($runtime, $catalog);
-        } catch (\Throwable) {
+        } catch (\Throwable $ignored) {
             return null;
         }
         if (!is_array($catalogo)) {
@@ -286,7 +286,7 @@ final class EncuentroResultadoVista
         return $campos[$campo] ?? null;
     }
 
-    private static function valorTexto(mixed $valor): string
+    private static function valorTexto($valor): string
     {
         if ($valor === null || $valor === '') {
             return '';

@@ -109,7 +109,7 @@ final class ResumenDia
                     return (string) ($lug['nombre'] ?? $lugarId);
                 }
             }
-        } catch (\Throwable) {
+        } catch (\Throwable $ignored) {
             return $lugarId;
         }
         return $lugarId;
