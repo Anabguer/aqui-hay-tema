@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
-use AquiHayTema\Api\requireDev;
-use AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\requireDev;
+use function AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\AutonomousPlanner;
 use AquiHayTema\Engine\DevCalendarService;
 use AquiHayTema\Engine\CatalogStore;
@@ -351,7 +351,7 @@ final class DevHandler
         $catalogo = null;
         try {
             $catalogo = ResidenteRuntime::catalogoParaRuntime($runtime, $ctx->service->getCatalog());
-        } catch (ContentValidationException) {
+        } catch (ContentValidationException $e) {
         }
 
         $campos = [];

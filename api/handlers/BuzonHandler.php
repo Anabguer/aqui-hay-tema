@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
-use AquiHayTema\Api\requireDev;
-use AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\requireDev;
+use function AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\BuzonEngine;
 
 final class BuzonHandler

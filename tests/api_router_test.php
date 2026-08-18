@@ -26,5 +26,7 @@ $id = $r['partida_id'] ?? '';
 $p = $ctx->service->cargar($id);
 $est = PartidaHandler::estado($ctx, [], $p);
 ok($est['ok'] ?? false, 'PartidaHandler::estado');
+$g = PartidaHandler::guardar($ctx, [], $p);
+ok($g['ok'] ?? false, 'PartidaHandler::guardar (use function savePartida)');
 
 exit($failures > 0 ? 1 : 0);

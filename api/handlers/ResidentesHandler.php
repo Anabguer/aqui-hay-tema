@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
-use AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\savePartida;
 
 final class ResidentesHandler
 {

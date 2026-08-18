@@ -15,9 +15,9 @@ use AquiHayTema\Api\Handlers\PartidaHandler;
 use AquiHayTema\Api\Handlers\RelacionesHandler;
 use AquiHayTema\Api\Handlers\RelojHandler;
 use AquiHayTema\Api\Handlers\ResidentesHandler;
-use AquiHayTema\Api\jsonOut;
-use AquiHayTema\Api\readBody;
-use AquiHayTema\Api\requirePartida;
+use function AquiHayTema\Api\jsonOut;
+use function AquiHayTema\Api\readBody;
+use function AquiHayTema\Api\requirePartida;
 
 header('Content-Type: application/json; charset=utf-8');
 
