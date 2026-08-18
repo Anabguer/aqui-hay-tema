@@ -14,6 +14,17 @@ final class DomainEvents
     public const ENCUENTRO_CANCELADO = 'encuentro_cancelado';
     public const RELACION_MODIFICADA = 'relacion_modificada';
     public const TIEMPO_AVANZADO = 'tiempo_avanzado';
+    public const ESTADO_EMOCIONAL_CAMBIADO = 'estado_emocional_cambiado';
+    public const EXPRESION_VISUAL_RESUELTA = 'expresion_visual_resuelta';
+    public const DESCUBRIMIENTO_REGISTRADO = 'descubrimiento_registrado';
+    public const BUZON_MENSAJE = 'buzon_mensaje';
+    public const DIARIO_ENTRADA = 'diario_entrada';
+    public const EVENTO_EDIFICIO = 'evento_edificio';
+    public const NPC_AUTONOMO_PLAN = 'npc_autonomo_plan';
+    public const DISCUSION = 'discusion';
+
+    /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
+    public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';
 
     /** @deprecated usar ENCUENTRO_TERMINADO */
     public const ENCOUNTER_FINISHED_LEGACY = 'encounter_finished';

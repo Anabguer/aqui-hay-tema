@@ -9,5 +9,8 @@
   "mapa_presencia_enabled": true,
   "encuentros_enabled": true,
   "narrative_reactions_enabled": false,
-  "discovery_enabled": false
+  "discovery_enabled": false,
+  "expression_resolver_enabled": true,
+  "emotional_state_from_events_enabled": false,
+  "consequences_enabled": false
 }
