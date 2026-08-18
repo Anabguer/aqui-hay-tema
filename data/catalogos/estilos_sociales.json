@@ -1,17 +1,21 @@
 {
   "meta": {
     "catalogo": "estilos_sociales",
-    "descripcion": "Estilo social visible en ficha. El Documento Maestro da ejemplos; no dice que esta lista sea cerrada ni que equivalga a los 8-10 rasgos.",
-    "fuente": "Documento Maestro, bloque PERSONAJES",
-    "estado": "candidatos_del_maestro"
+    "descripcion": "Etiquetas UI + ejes. La etiqueta no sustituye a los ejes; se puede derivar. Catálogo de labels extensible.",
+    "ejes": {
+      "energia_social": ["baja", "media", "alta"],
+      "selectividad": ["abierta", "selectiva", "cerrada"],
+      "ritmo": ["planificador", "equilibrado", "espontaneo"]
+    },
+    "estado": "catalogo_extensible"
   },
   "items": [
-    { "id": "casero", "nombre": "Casero", "fuente": "documento_maestro" },
-    { "id": "fiestero", "nombre": "Fiestero", "fuente": "documento_maestro" },
-    { "id": "tranquilo", "nombre": "Tranquilo", "fuente": "documento_maestro" },
-    { "id": "sociable_selectiva", "nombre": "Sociable selectiva", "fuente": "piloto_01" },
-    { "id": "intenso", "nombre": "Intenso", "fuente": "documento_maestro" },
-    { "id": "espontaneo", "nombre": "Espontaneo", "fuente": "documento_maestro" },
-    { "id": "planificador", "nombre": "Planificador", "fuente": "documento_maestro" }
+    { "id": "casero", "nombre": "Casero", "ejes": { "energia_social": "baja", "selectividad": "selectiva", "ritmo": "planificador" } },
+    { "id": "fiestero", "nombre": "Fiestero", "ejes": { "energia_social": "alta", "selectividad": "abierta", "ritmo": "espontaneo" } },
+    { "id": "tranquilo", "nombre": "Tranquilo", "ejes": { "energia_social": "baja", "selectividad": "selectiva", "ritmo": "equilibrado" } },
+    { "id": "sociable_selectiva", "nombre": "Sociable selectiva", "ejes": { "energia_social": "alta", "selectividad": "selectiva", "ritmo": "equilibrado" }, "fuente": "piloto_01" },
+    { "id": "intenso", "nombre": "Intenso", "ejes": { "energia_social": "alta", "selectividad": "abierta", "ritmo": "planificador" } },
+    { "id": "espontaneo", "nombre": "Espontaneo", "ejes": { "energia_social": "media", "selectividad": "abierta", "ritmo": "espontaneo" } },
+    { "id": "planificador", "nombre": "Planificador", "ejes": { "energia_social": "media", "selectividad": "selectiva", "ritmo": "planificador" } }
   ]
 }

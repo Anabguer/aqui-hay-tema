@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/src/autoload.php';
 
 use AquiHayTema\Engine\Catalog;
+use AquiHayTema\Engine\CatalogStore;
 use AquiHayTema\Engine\ContentValidationException;
 use AquiHayTema\Engine\JsonFile;
 use AquiHayTema\Engine\LugarValidator;
@@ -23,9 +24,10 @@ function ok(bool $c, string $m): void
 
 $fixtureDir = __DIR__ . '/fixtures/content';
 $lugares = LugarValidator::extraerIds(JsonFile::read("{$root}/data/lugares/lugares.json"));
+$store = new CatalogStore($root);
 
 // Válido QA
-$errores = PersonajeValidator::validarArchivo("{$root}/data/personajes/per_qa_valid.json", $lugares);
+$errores = PersonajeValidator::validarArchivo("{$root}/data/personajes/per_qa_valid.json", $lugares, $store);
 ok($errores === [], 'per_qa_valid pasa validación');
 
 // Campo obligatorio ausente
@@ -44,7 +46,7 @@ $enumBad = [
         'rasgos_publicos' => ['directo', 'leal', 'empatico'],
     ],
 ];
-ok(count(PersonajeValidator::validar($enumBad, 'test.json', $lugares)) > 0, 'enum genero inválido');
+ok(count(PersonajeValidator::validar($enumBad, 'test.json', $lugares, $store)) > 0, 'enum genero inválido');
 
 // Referencia lugar inexistente
 $refBad = [
@@ -59,7 +61,7 @@ $refBad = [
         'lugares_preferentes' => ['lug_inexistente'],
     ],
 ];
-$errs = PersonajeValidator::validar($refBad, 'test.json', $lugares);
+$errs = PersonajeValidator::validar($refBad, 'test.json', $lugares, $store);
 $reglas = array_column($errs, 'regla');
 ok(in_array('referencia_inexistente', $reglas, true), 'referencia lugar inexistente');
 
@@ -84,17 +86,14 @@ $lugDup = ['items' => [
 ok(count(LugarValidator::validar($lugDup, 'lug.json')) > 0, 'lugar id duplicado');
 
 // Informe fichas reales (no falla suite — documenta incumplimientos)
-$informe = PersonajeValidator::auditarDirectorio("{$root}/data/personajes", $lugares);
+$informe = PersonajeValidator::auditarDirectorio("{$root}/data/personajes", $lugares, $store);
 foreach ($informe as $archivo => $errs) {
-    if (str_contains($archivo, 'per_qa_valid')) {
-        continue;
-    }
-    echo "REPORTE FICHA REAL {$archivo}: " . count($errs) . " error(es)\n";
+    echo "REPORTE FICHA {$archivo}: " . count($errs) . " error(es)\n";
     foreach (array_slice($errs, 0, 5) as $e) {
         echo "  - {$e['campo']}: {$e['regla']} = " . json_encode($e['valor']) . "\n";
     }
 }
-ok(isset($informe['per_i03.json']), 'REPORTE: per_i03 (Rocío) tiene incumplimientos de contrato');
+ok(!isset($informe['per_i03.json']), 'Rocío ya no incumple catálogo');
 ok(!isset($informe['per_qa_valid.json']), 'per_qa_valid sin incumplimientos');
 
 exit($failures > 0 ? 1 : 0);

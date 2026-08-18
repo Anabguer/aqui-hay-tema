@@ -1,24 +1,37 @@
 {
   "meta": {
     "catalogo": "aficiones",
-    "descripcion": "Candidatos V0 para hobby_principal. Ligados a lugares (hobbies_lugares.json). Lista eterna del juego: no.",
-    "fuente": "docs/FASE_DISENO_POOL_16.md",
-    "mvp_objetivo": 12,
-    "estado": "candidatos_v0"
+    "descripcion": "Hobbies extensibles. Añadir un item aquí no requiere cambiar PHP. No es techo. Campos extra opcionales.",
+    "fuente": "docs/FASE_DISENO_POOL_16.md + turno 5/6",
+    "estado": "catalogo_extensible",
+    "campos_opcionales": [
+      "categoria", "tags", "lugar_ids", "individual", "social",
+      "especificidad", "horarios", "hooks_eventos", "afinidades", "incompatibilidades"
+    ]
   },
   "items": [
-    { "id": "leer", "nombre": "Leer" },
-    { "id": "escribir", "nombre": "Escribir" },
-    { "id": "pasear", "nombre": "Pasear" },
-    { "id": "correr", "nombre": "Correr" },
-    { "id": "cafe_social", "nombre": "Café y gente" },
-    { "id": "manualidades", "nombre": "Manualidades" },
-    { "id": "cocina", "nombre": "Cocina" },
-    { "id": "musica", "nombre": "Música" },
-    { "id": "cine", "nombre": "Cine" },
-    { "id": "videojuegos", "nombre": "Videojuegos" },
-    { "id": "copas", "nombre": "Copas" },
-    { "id": "baile", "nombre": "Baile" },
-    { "id": "bingo", "nombre": "Bingo" }
+    { "id": "leer", "nombre": "Leer", "categoria": "cultura", "tags": ["individual"], "lugar_ids": ["lug_biblioteca"], "individual": true, "social": false, "especificidad": "baja" },
+    { "id": "escribir", "nombre": "Escribir", "categoria": "cultura", "tags": ["individual"], "lugar_ids": ["lug_biblioteca"], "individual": true, "social": false, "especificidad": "baja" },
+    { "id": "pasear", "nombre": "Pasear", "categoria": "aire_libre", "tags": ["individual", "social"], "lugar_ids": ["lug_parque"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "correr", "nombre": "Correr", "categoria": "deporte", "tags": ["individual"], "lugar_ids": ["lug_parque"], "individual": true, "social": false, "especificidad": "baja" },
+    { "id": "cafe_social", "nombre": "Café y gente", "categoria": "social", "tags": ["social"], "lugar_ids": ["lug_cafeteria"], "individual": false, "social": true, "especificidad": "baja" },
+    { "id": "manualidades", "nombre": "Manualidades", "categoria": "hacer", "tags": ["individual"], "lugar_ids": ["lug_biblioteca", "lug_casa"], "individual": true, "social": false, "especificidad": "media" },
+    { "id": "cocina", "nombre": "Cocina", "categoria": "hacer", "tags": ["individual", "social"], "lugar_ids": ["lug_casa"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "musica", "nombre": "Música", "categoria": "cultura", "tags": ["individual", "social"], "lugar_ids": ["lug_casa", "lug_bar"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "cine", "nombre": "Cine", "categoria": "cultura", "tags": ["social"], "lugar_ids": ["lug_cine"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "videojuegos", "nombre": "Videojuegos", "categoria": "ocio", "tags": ["individual", "social"], "lugar_ids": ["lug_arcade", "lug_casa"], "individual": true, "social": true, "especificidad": "baja" },
+    { "id": "copas", "nombre": "Copas", "categoria": "social", "tags": ["social"], "lugar_ids": ["lug_bar"], "individual": false, "social": true, "especificidad": "baja" },
+    { "id": "baile", "nombre": "Baile", "categoria": "social", "tags": ["social"], "lugar_ids": ["lug_discoteca"], "individual": false, "social": true, "especificidad": "baja" },
+    {
+      "id": "bingo",
+      "nombre": "Bingo",
+      "categoria": "ocio_local",
+      "tags": ["social", "pueblo"],
+      "lugar_ids": ["lug_bingo"],
+      "individual": false,
+      "social": true,
+      "especificidad": "media",
+      "hooks_eventos": ["compromiso_recurrente", "encuentro", "lugar"]
+    }
   ]
 }

@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "catalogo": "voces",
+    "descripcion": "Registros de fraseo. Catálogo extensible, NO techo. El perfil completo de voz puede tener más dimensiones en la ficha.",
+    "estado": "base_extensible"
+  },
+  "items": [
+    { "id": "seca", "nombre": "Seca" },
+    { "id": "dramatica", "nombre": "Dramática" },
+    { "id": "tranquila", "nombre": "Tranquila" },
+    { "id": "borde", "nombre": "Borde" },
+    { "id": "candida", "nombre": "Cándida" },
+    { "id": "calida", "nombre": "Cálida" },
+    { "id": "formal", "nombre": "Formal" },
+    { "id": "rapida", "nombre": "Rápida" }
+  ]
+}

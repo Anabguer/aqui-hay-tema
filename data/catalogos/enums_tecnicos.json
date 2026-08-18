@@ -1,0 +1,16 @@
+{
+  "_comentario": "Enums técnicos CERRADOS (agenda, identidad biológica/opción de motor). No hobbies/rasgos/voces.",
+  "genero": ["mujer", "hombre", "no_binarie"],
+  "atraido_por": ["mujer", "hombre", "no_binarie"],
+  "apertura_descubrimiento": ["cerrada", "permeable", "abierta"],
+  "necesidad_contacto": ["baja", "media", "alta"],
+  "dealbreaker_severidad": ["leve", "fuerte", "absoluto"],
+  "pref_rom_tipo": ["ritmo", "estilo_cita", "intensidad", "otro"],
+  "presencia": ["residente", "nuevo", "ausente"],
+  "energia_social": ["baja", "media", "alta"],
+  "selectividad": ["abierta", "selectiva", "cerrada"],
+  "ritmo_social": ["planificador", "equilibrado", "espontaneo"],
+  "voz_verbosidad": ["baja", "media", "alta"],
+  "voz_frontalidad": ["suave", "media", "directa"],
+  "voz_calidez": ["baja", "media", "alta"]
+}

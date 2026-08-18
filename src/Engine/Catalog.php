@@ -26,11 +26,16 @@ final class Catalog
             ]]);
         }
         $data = JsonFile::read($path);
-        $errores = PersonajeValidator::validar($data, $path, $this->lugarIds());
+        $errores = PersonajeValidator::validar($data, $path, $this->lugarIds(), $this->store());
         if ($errores !== []) {
             throw new ContentValidationException($errores);
         }
         return $data;
+    }
+
+    public function store(): CatalogStore
+    {
+        return new CatalogStore($this->root);
     }
 
     /** Carga sin validación estricta — solo para auditoría de fichas reales. */

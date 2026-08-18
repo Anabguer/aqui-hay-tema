@@ -1,24 +1,25 @@
 {
   "meta": {
     "catalogo": "rasgos",
-    "descripcion": "Candidatos V0 para aprobar con el pool. 3 rasgos publicos por ficha. No duplicar voz ni estilo_social.",
-    "fuente": "docs/FASE_DISENO_POOL_16.md",
-    "mvp_objetivo": 10,
-    "estado": "candidatos_v0"
+    "descripcion": "Catálogo extensible. IDs estables. Alias conservan observadora/practica/socarrona sin reescribir fichas. NO es techo.",
+    "estado": "catalogo_extensible"
   },
   "items": [
-    { "id": "directo", "nombre": "Directo" },
-    { "id": "timido", "nombre": "Tímido" },
-    { "id": "ironico", "nombre": "Irónico" },
-    { "id": "leal", "nombre": "Leal" },
-    { "id": "cabezota", "nombre": "Cabezota" },
-    { "id": "empatico", "nombre": "Empático" },
-    { "id": "vanidoso", "nombre": "Vanidoso" },
-    { "id": "ansioso", "nombre": "Ansioso" },
-    { "id": "bromista", "nombre": "Bromista" },
-    { "id": "reservado", "nombre": "Reservado" },
-    { "id": "observadora", "nombre": "Observadora" },
-    { "id": "practica", "nombre": "Práctica" },
-    { "id": "socarrona", "nombre": "Socarrona" }
+    { "id": "directo", "nombre": "Directo", "eje": "social" },
+    { "id": "timido", "nombre": "Tímido", "eje": "social" },
+    { "id": "ironico", "nombre": "Irónico", "eje": "humor" },
+    { "id": "leal", "nombre": "Leal", "eje": "vinculo" },
+    { "id": "cabezota", "nombre": "Cabezota", "eje": "vinculo" },
+    { "id": "empatico", "nombre": "Empático", "eje": "vinculo" },
+    { "id": "vanidoso", "nombre": "Vanidoso", "eje": "ego" },
+    { "id": "ansioso", "nombre": "Ansioso", "eje": "afecto" },
+    { "id": "bromista", "nombre": "Bromista", "eje": "humor" },
+    { "id": "reservado", "nombre": "Reservado", "eje": "social" },
+    { "id": "observador", "nombre": "Observador/a", "eje": "social", "alias": ["observadora"] },
+    { "id": "observadora", "nombre": "Observadora", "eje": "social", "alias_de": "observador", "nota": "ID usado por Rocío; no borrar" },
+    { "id": "practico", "nombre": "Práctico/a", "eje": "cognicion", "alias": ["practica"] },
+    { "id": "practica", "nombre": "Práctica", "eje": "cognicion", "alias_de": "practico", "nota": "ID usado por Rocío; no borrar" },
+    { "id": "socarron", "nombre": "Socarrón/a", "eje": "humor", "alias": ["socarrona"] },
+    { "id": "socarrona", "nombre": "Socarrona", "eje": "humor", "alias_de": "socarron", "nota": "ID usado por Rocío; no borrar" }
   ]
 }
