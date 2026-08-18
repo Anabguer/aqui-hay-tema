@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "catalogo": "estilo_social_v2_propuesta",
+    "estado": "PROPUESTA_NO_ACTIVA",
+    "problema": "Un enum único no representa sociable+selectiva, tímido+intenso, casero+espontáneo."
+  },
+  "ejes": {
+    "energia_social": ["baja", "media", "alta"],
+    "selectividad": ["abierta", "selectiva", "cerrada"],
+    "ritmo": ["planificador", "equilibrado", "espontaneo"]
+  },
+  "etiqueta_opcional": {
+    "nota": "Se puede conservar un label de ficha (sociable_selectiva) derivado de ejes, no como único eje.",
+    "ejemplos": [
+      { "label": "sociable_selectiva", "energia_social": "alta", "selectividad": "selectiva", "ritmo": "equilibrado" },
+      { "label": "casero", "energia_social": "baja", "selectividad": "selectiva", "ritmo": "planificador" },
+      { "label": "fiestero", "energia_social": "alta", "selectividad": "abierta", "ritmo": "espontaneo" }
+    ]
+  },
+  "compatibilidad": "Los 6 valores V0 pueden mapearse a ejes sin borrar fichas."
+}

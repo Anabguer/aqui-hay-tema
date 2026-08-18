@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "catalogo": "voces_v2_propuesta",
+    "estado": "PROPUESTA_NO_ACTIVA",
+    "nota": "Voz = registro de frases, no rasgo de personalidad. No duplicar socarron aquí."
+  },
+  "items": [
+    { "id": "seca", "origen": "v0" },
+    { "id": "dramatica", "origen": "v0" },
+    { "id": "tranquila", "origen": "v0" },
+    { "id": "borde", "origen": "v0" },
+    { "id": "candida", "origen": "v0" },
+    { "id": "calida", "origen": "v2" },
+    { "id": "formal", "origen": "v2" },
+    { "id": "rapida", "origen": "v2" }
+  ]
+}

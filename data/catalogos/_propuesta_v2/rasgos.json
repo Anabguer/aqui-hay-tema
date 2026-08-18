@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "catalogo": "rasgos_v2_propuesta",
+    "estado": "PROPUESTA_NO_ACTIVA",
+    "ids": "neutros en masculino gramatical de catálogo; el nombre visible puede flexionarse",
+    "alias_pendientes": {
+      "observadora": "observador",
+      "practica": "practico",
+      "socarrona": "socarron"
+    },
+    "_bloqueado": "Si se adoptan ids neutros, Rocío NO se reescribe: se añade alias técnico."
+  },
+  "items": [
+    { "id": "directo", "eje": "social", "origen": "v0" },
+    { "id": "timido", "eje": "social", "origen": "v0" },
+    { "id": "reservado", "eje": "social", "origen": "v0" },
+    { "id": "observador", "eje": "social", "origen": "v2", "alias": ["observadora"] },
+    { "id": "ironico", "eje": "humor", "origen": "v0" },
+    { "id": "bromista", "eje": "humor", "origen": "v0" },
+    { "id": "socarron", "eje": "humor", "origen": "v2", "alias": ["socarrona"] },
+    { "id": "leal", "eje": "vinculo", "origen": "v0" },
+    { "id": "empatico", "eje": "vinculo", "origen": "v0" },
+    { "id": "cabezota", "eje": "vinculo", "origen": "v0" },
+    { "id": "protector", "eje": "vinculo", "origen": "v2" },
+    { "id": "generoso", "eje": "vinculo", "origen": "v2" },
+    { "id": "vanidoso", "eje": "ego", "origen": "v0" },
+    { "id": "orgulloso", "eje": "ego", "origen": "v2" },
+    { "id": "independiente", "eje": "ego", "origen": "v2" },
+    { "id": "ansioso", "eje": "afecto", "origen": "v0" },
+    { "id": "calido", "eje": "afecto", "origen": "v2" },
+    { "id": "desconfiado", "eje": "afecto", "origen": "v2" },
+    { "id": "sensible", "eje": "afecto", "origen": "v2" },
+    { "id": "practico", "eje": "cognicion", "origen": "v2", "alias": ["practica"] },
+    { "id": "curioso", "eje": "cognicion", "origen": "v2" },
+    { "id": "soñador", "eje": "cognicion", "origen": "v2" },
+    { "id": "constante", "eje": "ritmo", "origen": "v2" },
+    { "id": "impaciente", "eje": "ritmo", "origen": "v2" },
+    { "id": "competitivo", "eje": "ritmo", "origen": "v2" },
+    { "id": "discreto", "eje": "social", "origen": "v2" },
+    { "id": "cotilla", "eje": "social", "origen": "v2" },
+    { "id": "obstinado", "eje": "vinculo", "origen": "v2", "nota": "solapa parcialmente con cabezota; decidir si se fusionan" }
+  ]
+}

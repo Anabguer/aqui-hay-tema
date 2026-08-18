@@ -1,0 +1,31 @@
+{
+  "meta": {
+    "catalogo": "aficiones_v2_propuesta",
+    "estado": "PROPUESTA_NO_ACTIVA",
+    "nota": "No sustituye el contrato V0 hasta decisión Neni+ChatGPT. Incluye bingo como hobby."
+  },
+  "items": [
+    { "id": "leer", "nombre": "Leer", "origen": "v0" },
+    { "id": "escribir", "nombre": "Escribir", "origen": "v0" },
+    { "id": "pasear", "nombre": "Pasear", "origen": "v0" },
+    { "id": "correr", "nombre": "Correr", "origen": "v0" },
+    { "id": "cafe_social", "nombre": "Café y gente", "origen": "v0" },
+    { "id": "manualidades", "nombre": "Manualidades", "origen": "v0" },
+    { "id": "cocina", "nombre": "Cocina", "origen": "v0" },
+    { "id": "musica", "nombre": "Música", "origen": "v0" },
+    { "id": "cine", "nombre": "Cine", "origen": "v0" },
+    { "id": "videojuegos", "nombre": "Videojuegos", "origen": "v0" },
+    { "id": "copas", "nombre": "Copas", "origen": "v0" },
+    { "id": "baile", "nombre": "Baile", "origen": "v0" },
+    { "id": "bingo", "nombre": "Bingo", "origen": "piloto_01_json", "lugar": "lug_bingo" },
+    { "id": "jardineria", "nombre": "Jardinería", "origen": "v2_propuesta" },
+    { "id": "perros", "nombre": "Perros / mascotas", "origen": "v2_propuesta" },
+    { "id": "crucigramas", "nombre": "Crucigramas / pasatiempos", "origen": "v2_propuesta" },
+    { "id": "deporte", "nombre": "Deporte (ver o practicar)", "origen": "v2_propuesta" },
+    { "id": "fotografia", "nombre": "Fotografía", "origen": "v2_propuesta" },
+    { "id": "coleccionismo", "nombre": "Coleccionismo", "origen": "v2_propuesta" },
+    { "id": "bricolaje", "nombre": "Bricolaje", "origen": "v2_propuesta" },
+    { "id": "asociacion", "nombre": "Asociación / pueblo", "origen": "v2_propuesta" },
+    { "id": "radio", "nombre": "Radio / podcasts", "origen": "v2_propuesta" }
+  ]
+}
