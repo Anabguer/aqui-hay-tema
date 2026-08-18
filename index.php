@@ -27,8 +27,8 @@ $refOk = is_file(__DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPA
         <img src="<?= htmlspecialchars($ref, ENT_QUOTES, 'UTF-8') ?>" alt="Referencia visual del pueblo: mapa, parejas, dinero y fama." width="1600" height="1200" />
       </figure>
     <?php endif; ?>
-    <p class="nota">Esqueleto jugable disponible (UI provisional, sin estética final).</p>
-    <p class="nota"><a href="play.php">Abrir partida</a> · <a href="dev.php">Modo dev</a></p>
+    <p class="nota">Esqueleto jugable PLAYTEST_01 (UI provisional, sin estética final).</p>
+    <p class="nota"><a href="play.php">Abrir partida</a></p>
   </main>
 </body>
 </html>

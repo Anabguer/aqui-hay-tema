@@ -2,6 +2,7 @@
   'use strict';
 
   const API = 'api/index.php';
+  const PLAYTEST = { config_id: 'playtest_01', seed: 'playtest-01' };
   let partidaId = localStorage.getItem('aht_partida_id');
   let selectedResidente = null;
   let cacheInspeccion = null;
@@ -129,7 +130,7 @@
       const r = await api('partida.cargar', { partida_id: partidaId });
       if (r.ok) return r;
     }
-    const r = await api('partida.nueva', {});
+    const r = await api('partida.nueva', PLAYTEST);
     if (r.ok) {
       partidaId = r.partida_id;
       localStorage.setItem('aht_partida_id', partidaId);
@@ -312,7 +313,7 @@
   function renderSummary(e, buzonCount) {
     $('#status-reloj').textContent = e.reloj_texto;
     $('#status-meta').textContent =
-      `${e.residentes_count} residentes · ${e.encuentros_activos ?? 0} activos · schema v${e.meta.schema_version}`;
+      `${e.residentes_count} residentes · ${e.encuentros_activos ?? 0} activos · schema v${e.meta.schema_version} · ${partidaId || e.meta?.partida_id || ''}`;
     $('#sum-reloj').textContent = e.reloj_texto;
     $('#sum-residentes').textContent = String(e.residentes_count || 0);
     $('#sum-encuentros-hoy').textContent = String(e.encuentros_hoy ?? 0);

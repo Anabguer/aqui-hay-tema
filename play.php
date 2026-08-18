@@ -13,13 +13,12 @@ header('Content-Type: text/html; charset=utf-8');
 <body>
   <header class="top-bar">
     <div>
-      <h1>Aquí Hay Tema <span class="badge-provisional">UI provisional v0</span></h1>
+      <h1>Aquí Hay Tema <span class="badge-provisional">UI provisional · PLAYTEST_01</span></h1>
       <p class="status" id="status-reloj" aria-live="polite">Cargando…</p>
       <p class="status" id="status-meta"></p>
     </div>
     <nav class="btn-row partida-actions" aria-label="Acciones de partida">
       <a class="btn" href="index.php">Landing</a>
-      <a class="btn" href="dev.php">Modo dev</a>
       <button type="button" id="btn-guardar">Guardar</button>
       <button type="button" id="btn-nueva">Nueva partida</button>
     </nav>
