@@ -56,11 +56,13 @@ final class DiscoveryVisibilityPolicy
         $politica = self::politicaParaCampo($config, $campo);
         $descubrimiento = DiscoveryEngine::estado($partida, $residenteId, $campo);
 
-        $visible = match ($politica) {
-            self::PUBLICO => true,
-            self::OCULTO, self::PARCIAL, self::POR_EVENTO => $descubrimiento === DiscoveryEngine::DESCUBIERTO,
-            default => null,
-        };
+        if ($politica === self::PUBLICO) {
+            $visible = true;
+        } elseif ($politica === self::OCULTO || $politica === self::PARCIAL || $politica === self::POR_EVENTO) {
+            $visible = $descubrimiento === DiscoveryEngine::DESCUBIERTO;
+        } else {
+            $visible = null;
+        }
 
         return [
             'campo' => $campo,

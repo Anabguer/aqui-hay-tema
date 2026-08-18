@@ -38,20 +38,31 @@ final class EmotionalEventBridge
 
     public static function origenSugerido(string $evento): string
     {
-        return match ($evento) {
-            DomainEvents::ENCUENTRO_TERMINADO => 'encuentro',
-            DomainEvents::ENCUENTRO_CANCELADO => 'rechazo',
-            DomainEvents::RELACION_MODIFICADA => 'romance',
-            DomainEvents::RESIDENTE_INCORPORADO => 'inicial',
-            DomainEvents::DESCUBRIMIENTO_REGISTRADO => 'descubrimiento',
-            DomainEvents::BUZON_MENSAJE => 'mensaje',
-            DomainEvents::DIARIO_ENTRADA => 'mensaje',
-            DomainEvents::EVENTO_EDIFICIO => 'evento_edificio',
-            DomainEvents::NPC_AUTONOMO_PLAN => 'npc_autonomo',
-            DomainEvents::DISCUSION => 'discusion',
-            DomainEvents::TIEMPO_AVANZADO => 'expiracion',
-            default => 'npc_autonomo',
-        };
+        switch ($evento) {
+            case DomainEvents::ENCUENTRO_TERMINADO:
+                return 'encuentro';
+            case DomainEvents::ENCUENTRO_CANCELADO:
+                return 'rechazo';
+            case DomainEvents::RELACION_MODIFICADA:
+                return 'romance';
+            case DomainEvents::RESIDENTE_INCORPORADO:
+                return 'inicial';
+            case DomainEvents::DESCUBRIMIENTO_REGISTRADO:
+                return 'descubrimiento';
+            case DomainEvents::BUZON_MENSAJE:
+            case DomainEvents::DIARIO_ENTRADA:
+                return 'mensaje';
+            case DomainEvents::EVENTO_EDIFICIO:
+                return 'evento_edificio';
+            case DomainEvents::NPC_AUTONOMO_PLAN:
+                return 'npc_autonomo';
+            case DomainEvents::DISCUSION:
+                return 'discusion';
+            case DomainEvents::TIEMPO_AVANZADO:
+                return 'expiracion';
+            default:
+                return 'npc_autonomo';
+        }
     }
 
     private static function handle(array &$partida, array $envelope, ?GameLogger $logger): array
@@ -67,7 +78,7 @@ final class EmotionalEventBridge
             return ['ok' => true, 'skipped' => 'feature_disabled', 'origen_sugerido' => $origen];
         }
 
-        $logger?->log($partida, 'emotional_bridge_placeholder', [
+        \aht_log_optional($logger, $partida, 'emotional_bridge_placeholder', [
             'evento' => $evento,
             'origen_sugerido' => $origen,
             '_placeholder' => true,

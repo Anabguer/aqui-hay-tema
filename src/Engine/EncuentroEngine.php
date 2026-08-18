@@ -45,7 +45,7 @@ final class EncuentroEngine
         if ($limite !== null) {
             $usadas = (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0);
             if ($usadas >= $limite) {
-                $logger?->log($partida, 'encuentro_rechazado', [
+                \aht_log_optional($logger, $partida, 'encuentro_rechazado', [
                     'regla' => 'limite_intervenciones_celeste',
                     'usadas' => $usadas,
                     'limite' => $limite,
@@ -57,14 +57,14 @@ final class EncuentroEngine
         $lugarId ??= 'lug_cafeteria';
         $operativos = $partida['celeste']['lugares_desbloqueados'] ?? [];
         if (!in_array($lugarId, $operativos, true)) {
-            $logger?->log($partida, 'encuentro_rechazado', ['regla' => 'lugar_no_operativo', 'lugar' => $lugarId]);
+            \aht_log_optional($logger, $partida, 'encuentro_rechazado', ['regla' => 'lugar_no_operativo', 'lugar' => $lugarId]);
             return array_merge(GameError::respuesta(GameError::LUGAR_NO_OPERATIVO, ['lugar' => $lugarId]), ['lugar' => $lugarId]);
         }
 
         foreach ($participantes as $rid) {
             $disp = AgendaEngine::estaDisponible($partida, $rid, $dia, $hora);
             if (!$disp['disponible']) {
-                $logger?->log($partida, 'agenda_rechazo', [
+                \aht_log_optional($logger, $partida, 'agenda_rechazo', [
                     'residente' => $rid,
                     'regla' => $disp['motivo'] ?? 'ocupado',
                     'detalle' => $disp,
@@ -110,7 +110,7 @@ final class EncuentroEngine
         $partida['celeste']['intervenciones_organizadas_usadas_hoy'] =
             (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0) + 1;
 
-        $logger?->log($partida, 'encuentro_programado', [
+        \aht_log_optional($logger, $partida, 'encuentro_programado', [
             'encuentro_id' => $encId,
             'tipo' => $tipo,
             'participantes' => $participantes,
@@ -174,11 +174,13 @@ final class EncuentroEngine
         if ($desde === $hacia) {
             return true;
         }
-        return match ($desde) {
-            'programado' => in_array($hacia, ['en_curso', 'cancelado'], true),
-            'en_curso' => in_array($hacia, ['terminado', 'cancelado'], true),
-            default => false,
-        };
+        if ($desde === 'programado') {
+            return in_array($hacia, ['en_curso', 'cancelado'], true);
+        }
+        if ($desde === 'en_curso') {
+            return in_array($hacia, ['terminado', 'cancelado'], true);
+        }
+        return false;
     }
 
     public static function cancelar(array &$partida, string $encuentroId, ?GameLogger $logger = null): array
@@ -189,7 +191,7 @@ final class EncuentroEngine
                 'encuentro' => $r['encuentro'],
                 'actores' => $r['encuentro']['participantes'] ?? [],
             ], $logger, 'EncuentroEngine::cancelar', $r['encuentro']['participantes'] ?? []);
-            $logger?->log($partida, 'encuentro_cancelado', [
+            \aht_log_optional($logger, $partida, 'encuentro_cancelado', [
                 'encuentro_id' => $r['encuentro']['id'] ?? $encuentroId,
             ]);
         }

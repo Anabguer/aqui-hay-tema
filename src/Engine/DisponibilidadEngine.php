@@ -154,24 +154,38 @@ final class DisponibilidadEngine
     private static function claveBloqueo(array $disp): string
     {
         $tipo = (string) ($disp['tipo'] ?? '');
-        return match ($tipo) {
-            'sueno' => 'durmiendo',
-            'trabajo', 'trabajo_blando', 'trabajo_generico', 'estudio' => 'trabajo',
-            'compromiso' => 'otro_compromiso',
-            'encuentro' => 'encuentro_programado',
-            default => (string) ($disp['motivo'] ?? 'ocupado'),
-        };
+        switch ($tipo) {
+            case 'sueno':
+                return 'durmiendo';
+            case 'trabajo':
+            case 'trabajo_blando':
+            case 'trabajo_generico':
+            case 'estudio':
+                return 'trabajo';
+            case 'compromiso':
+                return 'otro_compromiso';
+            case 'encuentro':
+                return 'encuentro_programado';
+            default:
+                return (string) ($disp['motivo'] ?? 'ocupado');
+        }
     }
 
     private static function etiquetaBloqueo(string $clave): string
     {
-        return match ($clave) {
-            'durmiendo' => 'durmiendo',
-            'trabajo' => 'trabajo',
-            'otro_compromiso' => 'otro compromiso',
-            'encuentro_programado' => 'encuentro ya programado',
-            'doble_reserva' => 'doble reserva',
-            default => $clave,
-        };
+        switch ($clave) {
+            case 'durmiendo':
+                return 'durmiendo';
+            case 'trabajo':
+                return 'trabajo';
+            case 'otro_compromiso':
+                return 'otro compromiso';
+            case 'encuentro_programado':
+                return 'encuentro ya programado';
+            case 'doble_reserva':
+                return 'doble reserva';
+            default:
+                return $clave;
+        }
     }
 }

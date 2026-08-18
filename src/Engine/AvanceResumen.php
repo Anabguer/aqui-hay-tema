@@ -101,15 +101,28 @@ final class AvanceResumen
         $quien = $nombres !== [] ? implode(' + ', $nombres) : 'Encuentro';
         $hora = self::horaTexto($e['ts_juego'] ?? null);
 
-        $texto = match ($tipo) {
-            DomainEvents::ENCUENTRO_INICIADO => "Encuentro {$quien} comenzó ({$hora}).",
-            DomainEvents::ENCUENTRO_TERMINADO => "Encuentro {$quien} terminó ({$hora}).",
-            DomainEvents::ENCUENTRO_CANCELADO => "Encuentro {$quien} se canceló.",
-            DomainEvents::COINCIDENCIA_RESIDENTES => $quien . ' coincidieron en el mismo lugar (' . $hora . ').',
-            DomainEvents::ESTADO_EMOCIONAL_CAMBIADO => ($nombres[0] ?? 'Alguien') . ' cambió de estado emocional.',
-            DomainEvents::RELACION_MODIFICADA => 'Relación actualizada: ' . $quien . '.',
-            default => $tipo,
-        };
+        switch ($tipo) {
+            case DomainEvents::ENCUENTRO_INICIADO:
+                $texto = "Encuentro {$quien} comenzó ({$hora}).";
+                break;
+            case DomainEvents::ENCUENTRO_TERMINADO:
+                $texto = "Encuentro {$quien} terminó ({$hora}).";
+                break;
+            case DomainEvents::ENCUENTRO_CANCELADO:
+                $texto = "Encuentro {$quien} se canceló.";
+                break;
+            case DomainEvents::COINCIDENCIA_RESIDENTES:
+                $texto = $quien . ' coincidieron en el mismo lugar (' . $hora . ').';
+                break;
+            case DomainEvents::ESTADO_EMOCIONAL_CAMBIADO:
+                $texto = ($nombres[0] ?? 'Alguien') . ' cambió de estado emocional.';
+                break;
+            case DomainEvents::RELACION_MODIFICADA:
+                $texto = 'Relación actualizada: ' . $quien . '.';
+                break;
+            default:
+                $texto = $tipo;
+        }
 
         return [
             'tipo' => $tipo,
@@ -141,7 +154,7 @@ final class AvanceResumen
         return $out;
     }
 
-    private static function horaTexto(mixed $ts): string
+    private static function horaTexto($ts): string
     {
         if (!is_array($ts)) {
             return '—';

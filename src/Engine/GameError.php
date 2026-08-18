@@ -24,23 +24,38 @@ final class GameError
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
     {
-        return match ($codigo) {
-            self::AGENDA_SLOT_OCUPADO => 'No pueden quedar a esa hora.',
-            self::LUGAR_NO_OPERATIVO => 'Ese lugar no está operativo.',
-            self::PARTICIPANTE_INEXISTENTE => 'Uno de los participantes no existe.',
-            self::RESIDENTE_NO_ACTIVO => 'Ese residente no está activo.',
-            self::DOBLE_RESERVA => 'Ya hay algo programado a esa hora.',
-            self::LIMITE_INTERVENCIONES => 'Has alcanzado el límite de intervenciones de hoy.',
-            self::TRANSICION_INVALIDA => 'Esa transición de estado no es válida.',
-            self::PARTIDA_NO_ENCONTRADA => 'Partida no encontrada.',
-            self::BLOQUE_LLENO => 'No hay viviendas libres en el Bloque A.',
-            self::DEV_DESHABILITADO => 'Herramientas de desarrollo deshabilitadas.',
-            self::RELOJ_NO_REWIND => 'No se puede retroceder el reloj en partida normal.',
-            self::SIN_PROXIMO_ENCUENTRO => 'No hay ningún encuentro programado más adelante.',
-            self::VALIDACION_FALLIDA => 'Datos no válidos.',
-            self::SAVE_CORRUPTO => 'El archivo de partida está dañado.',
-            default => 'Ha ocurrido un error.',
-        };
+        switch ($codigo) {
+            case self::AGENDA_SLOT_OCUPADO:
+                return 'No pueden quedar a esa hora.';
+            case self::LUGAR_NO_OPERATIVO:
+                return 'Ese lugar no está operativo.';
+            case self::PARTICIPANTE_INEXISTENTE:
+                return 'Uno de los participantes no existe.';
+            case self::RESIDENTE_NO_ACTIVO:
+                return 'Ese residente no está activo.';
+            case self::DOBLE_RESERVA:
+                return 'Ya hay algo programado a esa hora.';
+            case self::LIMITE_INTERVENCIONES:
+                return 'Has alcanzado el límite de intervenciones de hoy.';
+            case self::TRANSICION_INVALIDA:
+                return 'Esa transición de estado no es válida.';
+            case self::PARTIDA_NO_ENCONTRADA:
+                return 'Partida no encontrada.';
+            case self::BLOQUE_LLENO:
+                return 'No hay viviendas libres en el Bloque A.';
+            case self::DEV_DESHABILITADO:
+                return 'Herramientas de desarrollo deshabilitadas.';
+            case self::RELOJ_NO_REWIND:
+                return 'No se puede retroceder el reloj en partida normal.';
+            case self::SIN_PROXIMO_ENCUENTRO:
+                return 'No hay ningún encuentro programado más adelante.';
+            case self::VALIDACION_FALLIDA:
+                return 'Datos no válidos.';
+            case self::SAVE_CORRUPTO:
+                return 'El archivo de partida está dañado.';
+            default:
+                return 'Ha ocurrido un error.';
+        }
     }
 
     public static function respuesta(string $codigo, array $contexto = [], int $http = 400): array

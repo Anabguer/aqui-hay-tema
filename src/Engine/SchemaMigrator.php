@@ -11,10 +11,11 @@ final class SchemaMigrator
     {
         $version = (int) ($partida['meta']['schema_version'] ?? 1);
         while ($version < self::CURRENT_VERSION) {
-            $partida = match ($version) {
-                1 => self::v1ToV2($partida),
-                default => throw new \RuntimeException("Migración desconocida desde v{$version}"),
-            };
+            if ($version === 1) {
+                $partida = self::v1ToV2($partida);
+            } else {
+                throw new \RuntimeException("Migración desconocida desde v{$version}");
+            }
             $version = (int) $partida['meta']['schema_version'];
         }
         SchemaFields::ensure($partida);

@@ -11,11 +11,7 @@ final class PlaceholderEvaluator implements CompatibilityEvaluator
         $tipoEnc = $contexto['tipo_encuentro'] ?? 'conocerse';
         return [
             '_placeholder' => true,
-            'tipo' => match ($tipoEnc) {
-                'amistad' => 'amistad',
-                'conflicto' => 'roce',
-                default => 'conocidos',
-            },
+            'tipo' => $tipoEnc === 'amistad' ? 'amistad' : ($tipoEnc === 'conflicto' ? 'roce' : 'conocidos'),
             'intensidad' => 1,
             'se_soportan' => $tipoEnc !== 'conflicto',
         ];
