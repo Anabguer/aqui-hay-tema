@@ -14,5 +14,13 @@ final class SchemaFields
         $partida['domain_events'] ??= [];
         $partida['audit_trail_archivo'] ??= [];
         $partida['domain_events_archivo'] ??= [];
+
+        foreach ($partida['residentes'] ?? [] as $id => $_) {
+            EstadoEmocional::ensureResidente($partida['residentes'][$id], $partida['reloj'] ?? null);
+        }
+
+        $partida['historial_coincidencias'] ??= [];
+        $partida['npc_autonomo'] ??= ['planes_pendientes' => []];
+        $partida['npc_autonomo']['planes_pendientes'] ??= [];
     }
 }

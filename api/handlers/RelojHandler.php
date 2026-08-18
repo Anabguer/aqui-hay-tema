@@ -24,7 +24,9 @@ final class RelojHandler
             (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']),
             (int) ($body['hora'] ?? $partida['reloj']['hora_actual']),
             (bool) ($body['permitir_rewind'] ?? false),
-            $ctx->logger
+            $ctx->logger,
+            $ctx->service->emociones(),
+            $ctx->root
         );
         if ($r['ok'] ?? false) {
             savePartida($ctx, $partida);

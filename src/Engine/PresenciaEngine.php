@@ -61,6 +61,24 @@ final class PresenciaEngine
                 return $enc['lugar'] ?? null;
             }
         }
+
+        // Presencia técnica por planes de NPC autónomo (sin encuentros/interacciones).
+        foreach ($partida['npc_autonomo']['planes_pendientes'] ?? [] as $plan) {
+            if ((int) ($plan['dia'] ?? -1) !== $dia || (int) ($plan['hora'] ?? -1) !== $hora) {
+                continue;
+            }
+            $estado = (string) ($plan['estado'] ?? 'programado');
+            if (!in_array($estado, ['programado', 'en_curso'], true)) {
+                continue;
+            }
+            if (!in_array($rid, $plan['participantes'] ?? [], true)) {
+                continue;
+            }
+            $lugar = $plan['lugar'] ?? null;
+            if (is_string($lugar) && $lugar !== '') {
+                return $lugar;
+            }
+        }
         return null;
     }
 
@@ -70,7 +88,8 @@ final class PresenciaEngine
         $parts = preg_split('/\s+/', trim($nombre)) ?: ['?'];
         $ini = '';
         foreach (array_slice($parts, 0, 2) as $p) {
-            $ini .= mb_strtoupper(mb_substr($p, 0, 1));
+            $char = substr($p, 0, 1);
+            $ini .= strtoupper($char);
         }
         return $ini ?: '?';
     }

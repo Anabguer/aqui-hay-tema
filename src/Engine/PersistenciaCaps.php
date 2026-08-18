@@ -15,6 +15,7 @@ final class PersistenciaCaps
                 'descubrimientos_cap' => 400,
                 'historial_relaciones_cap' => 2000,
                 'event_log_cap' => 100,
+                'historial_coincidencias_cap' => 500,
                 'archivar_al_recortar' => true,
             ];
         }
@@ -111,5 +112,6 @@ final class PersistenciaCaps
         self::recortarLista($partida, 'descubrimientos', self::cap($partida, 'descubrimientos_cap', 400), 'descubrimientos_archivo');
         self::recortarLista($partida, 'event_log', self::cap($partida, 'event_log_cap', 100), 'event_log_archivo');
         self::recortarHistorialRelaciones($partida, self::cap($partida, 'historial_relaciones_cap', 2000));
+        self::recortarLista($partida, 'historial_coincidencias', self::cap($partida, 'historial_coincidencias_cap', 500), 'historial_coincidencias_archivo');
     }
 }

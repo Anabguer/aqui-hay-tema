@@ -36,14 +36,38 @@ final class AutonomousPlanner
         $rng->persistToPartida($partida);
         $elegido = $candidatos[$idx];
 
+        $planId = 'npc_plan_' . bin2hex(random_bytes(4));
+        $plan = [
+            'id' => $planId,
+            'tipo' => 'autonomo',
+            'accion' => $elegido['accion'] ?? 'visitar_lugar',
+            'lugar' => $elegido['lugar'] ?? null,
+            'dia' => $dia,
+            'hora' => $hora,
+            'estado' => 'programado',
+            'participantes' => [$residenteId],
+            'reserva_agenda' => ['tipo' => 'autonomo', 'origen' => 'npc_autonomo'],
+            '_placeholder_dev' => true,
+        ];
+        $partida['npc_autonomo']['planes_pendientes'] ??= [];
+        $partida['npc_autonomo']['planes_pendientes'][] = $plan;
+
         $logger?->log($partida, 'npc_autonomo_plan', [
             'residente' => $residenteId,
             'candidatos' => $candidatos,
             'elegido' => $elegido,
             'rng_state' => $rng->getState(),
             '_placeholder' => true,
+            'plan' => $plan,
         ]);
 
-        return ['ok' => true, 'plan' => $elegido, 'candidatos' => $candidatos];
+        DomainEventDispatcher::emit($partida, DomainEvents::NPC_AUTONOMO_PLAN, [
+            'residente_id' => $residenteId,
+            'elegido' => $elegido,
+            'plan_id' => $planId,
+            'actores' => [$residenteId],
+        ], $logger, 'AutonomousPlanner::planificarSlot');
+
+        return ['ok' => true, 'plan' => $plan, 'candidatos' => $candidatos];
     }
 }

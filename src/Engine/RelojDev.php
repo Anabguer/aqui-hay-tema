@@ -6,7 +6,15 @@ namespace AquiHayTema\Engine;
 final class RelojDev
 {
     /** Salto a fecha/hora. Sin rewind salvo snapshot restore. */
-    public static function irA(array &$partida, int $dia, int $hora, bool $permitirRewind = false, ?GameLogger $logger = null): array
+    public static function irA(
+        array &$partida,
+        int $dia,
+        int $hora,
+        bool $permitirRewind = false,
+        ?GameLogger $logger = null,
+        ?EmotionalStateService $emociones = null,
+        ?string $projectRoot = null
+    ): array
     {
         $hora = max(0, min(23, $hora));
         $dia = max(1, $dia);
@@ -30,13 +38,27 @@ final class RelojDev
         }
 
         AuditTrail::record($partida, 'reloj_dev_ir_a', [], 'RelojDev', 'irA', $antes, $partida['reloj']);
+        $horas = max(0, $objetivo - $actual);
+        $coins = [];
+        if ($projectRoot !== null && $projectRoot !== '') {
+            $coins = CoincidenciasEngine::detectarEnIntervalo(
+                $partida,
+                $projectRoot,
+                $antes,
+                $horas,
+                $logger
+            );
+        }
         $sync = EncuentroLifecycle::sincronizarConReloj($partida, $logger);
+        $expirados = $emociones?->expirarVencidos($partida) ?? 0;
 
         return [
             'ok' => true,
             'reloj' => $partida['reloj'],
             'texto' => Reloj::formatear($partida['reloj']),
             'encuentros_resueltos' => $sync['resueltos'],
+            'estados_expirados' => $expirados,
+            'coincidencias_detectadas' => count($coins),
         ];
     }
 }
