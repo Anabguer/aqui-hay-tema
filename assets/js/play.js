@@ -7,6 +7,7 @@
   let cacheInspeccion = null;
   let cacheLugares = [];
   let cacheBloqueA = null;
+  let cacheEstado = null;
   let slotsCache = [];
 
   const DISCOVERY_LABELS = {
@@ -149,10 +150,12 @@
       return emptyState(panel, 'No hay residentes.');
     }
     entries.forEach(([id, r]) => {
-      const card = el('button', 'resident-card' + (selectedResidente === id ? ' active' : ''), undefined);
+      const enEnc = residenteEnEncuentroVisible(id);
+      const card = el('button', 'resident-card' + (selectedResidente === id ? ' active' : '') + (enEnc ? ' en-encuentro' : ''), undefined);
       card.type = 'button';
       card.appendChild(el('div', null, r.identidad_publica?.nombre || id));
-      card.appendChild(el('div', 'resident-meta', `${id} · ${r.vivienda_id || 'sin vivienda'} · ${r.runtime?.ocupacion || '—'}`));
+      const meta = `${id} · ${r.vivienda_id || 'sin vivienda'} · ${r.runtime?.ocupacion || '—'}`;
+      card.appendChild(el('div', 'resident-meta', enEnc ? `${meta} · encuentro` : meta));
       card.addEventListener('click', () => seleccionarResidente(id));
       panel.appendChild(card);
     });
@@ -320,6 +323,42 @@
     renderProximoEncuentro(e);
   }
 
+  function residenteEnEncuentroVisible(id) {
+    const a = cacheEstado?.encuentro_en_curso;
+    const b = cacheEstado?.proximo_encuentro;
+    return !!(id && ((a && (a.participantes || []).includes(id)) || (b && (b.participantes || []).includes(id))));
+  }
+
+  function encParticipa(enc, id) {
+    return (enc.participantes || []).includes(id);
+  }
+
+  function enfocarLugarMapa(lugarId) {
+    if (!lugarId) return;
+    const sel = CSS && CSS.escape ? CSS.escape(lugarId) : lugarId.replace(/"/g, '');
+    const card = document.querySelector(`.lugar-card[data-lugar="${sel}"]`);
+    if (!card) return;
+    document.querySelectorAll('.lugar-card.abierto').forEach(c => {
+      c.classList.remove('abierto');
+      c.setAttribute('aria-expanded', 'false');
+    });
+    card.classList.add('abierto');
+    card.setAttribute('aria-expanded', 'true');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function detalleEncuentroLugar(enc, marca) {
+    const box = el('div', 'lugar-detalle');
+    const nombres = (enc.participantes_nombres || (enc.participantes || []).map(nombreResidente)).join(' + ') || '—';
+    box.appendChild(el('div', null, nombres));
+    if (marca === 'en_curso') {
+      box.appendChild(el('div', 'mini-meta', `Ahora · ${enc.tipo || 'encuentro'} · ${estadoLabel(enc.estado)}`));
+    } else {
+      box.appendChild(el('div', 'mini-meta', `${formatHora(enc.dia, enc.hora)} · ${enc.tipo || 'encuentro'}`));
+    }
+    return box;
+  }
+
   function renderProximoEncuentro(e) {
     const cuerpo = $('#proximo-cuerpo');
     const btn = $('#btn-proximo-encuentro');
@@ -342,6 +381,8 @@
 
   function bloqueEncuentroResumen(enc, etiqueta) {
     const wrap = el('div', 'proximo-item');
+    wrap.tabIndex = 0;
+    wrap.setAttribute('role', 'button');
     if (etiqueta) wrap.appendChild(el('div', 'mini-meta', etiqueta));
     const nombres = (enc.participantes_nombres || []).join(' + ') || '—';
     wrap.appendChild(el('div', null, nombres));
@@ -349,6 +390,21 @@
     const lugar = enc.lugar_nombre || enc.lugar || '—';
     wrap.appendChild(el('div', 'mini-meta', `${hora} · ${lugar}`));
     wrap.appendChild(el('div', 'mini-meta', `${enc.tipo || 'encuentro'} · ${estadoLabel(enc.estado)}`));
+    const ir = () => {
+      enfocarLugarMapa(enc.lugar);
+      const sel = $('#enc-lugar');
+      if (sel && enc.lugar && [...sel.options].some(o => o.value === enc.lugar && !o.disabled)) {
+        sel.value = enc.lugar;
+      }
+      setFeedback(`${lugar}: ${etiqueta || estadoLabel(enc.estado)}.`, '');
+    };
+    wrap.addEventListener('click', ir);
+    wrap.addEventListener('keydown', (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        ir();
+      }
+    });
     return wrap;
   }
 
@@ -384,27 +440,64 @@
 
     lugares.forEach(lug => {
       const presentes = lug.residentes_presentes || [];
+      const marca = lug.encuentro_marca || null;
+      const enc = lug.encuentro || null;
       const selectedHere = selectedResidente && presentes.some(p => p.id === selectedResidente);
-      const row = el('div', 'lugar-card' + (selectedHere ? ' selected-resident' : ''));
+      const selectedEnc = !!(selectedResidente && enc && (enc.participantes || []).includes(selectedResidente));
+      const cls = [
+        'lugar-card',
+        selectedHere ? 'selected-resident' : '',
+        marca === 'en_curso' ? 'marca-en-curso' : '',
+        marca === 'proximo' ? 'marca-proximo' : '',
+        selectedEnc ? 'marca-seleccion' : '',
+      ].filter(Boolean).join(' ');
+      const row = el('div', cls);
+      row.dataset.lugar = lug.id;
+      row.tabIndex = 0;
+      row.setAttribute('role', 'button');
+      row.setAttribute('aria-expanded', 'false');
+      const head = el('div', 'lugar-head');
       const tag = lug.operativo ? 'abierto' : (lug.candado ? 'candado' : 'cerrado');
-      row.appendChild(el('div', null, `${lug.nombre} · ${tag}`));
+      head.appendChild(el('div', null, `${lug.nombre} · ${tag}`));
+      if (marca === 'en_curso') {
+        head.appendChild(el('span', 'lugar-badge badge-ahora', 'Ahora'));
+      } else if (marca === 'proximo') {
+        head.appendChild(el('span', 'lugar-badge badge-proximo', 'Próximo'));
+      }
+      row.appendChild(head);
       const pres = presentes.map(p => {
         const name = nombreResidente(p.id);
         return p.id === selectedResidente ? `▸ ${name}` : name;
       }).join(', ') || 'Sin residentes';
       row.appendChild(el('div', 'mini-meta', pres));
-      if (lug.operativo) {
-        row.addEventListener('click', () => {
+      if (enc && marca) {
+        row.appendChild(detalleEncuentroLugar(enc, marca));
+      }
+      const activar = () => {
+        const wasOpen = row.classList.contains('abierto');
+        document.querySelectorAll('.lugar-card.abierto').forEach(c => {
+          if (c !== row) {
+            c.classList.remove('abierto');
+            c.setAttribute('aria-expanded', 'false');
+          }
+        });
+        row.classList.toggle('abierto', !wasOpen);
+        row.setAttribute('aria-expanded', String(!wasOpen));
+        if (lug.operativo) {
           const sel = $('#enc-lugar');
           if (sel) sel.value = lug.id;
-        });
-      }
+          setFeedback(`${lug.nombre} seleccionado.`, '');
+        }
+      };
+      row.addEventListener('click', activar);
+      row.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          activar();
+        }
+      });
       panel.appendChild(row);
     });
-  }
-
-  function encParticipa(enc, id) {
-    return (enc.participantes || []).includes(id);
   }
 
   async function renderEncuentros() {
@@ -425,7 +518,8 @@
       if (!items.length) return emptyState(target, empty);
       items.forEach(enc => {
         const selected = selectedResidente && encParticipa(enc, selectedResidente);
-        const row = el('div', 'enc-row' + (selected ? ' selected-resident' : ''));
+        const esMarca = (cacheEstado?.encuentro_en_curso?.id === enc.id) || (cacheEstado?.proximo_encuentro?.id === enc.id);
+        const row = el('div', 'enc-row' + (selected ? ' selected-resident' : '') + (esMarca ? ' enc-marca' : ''));
         const header = el('div', 'enc-row-header');
         header.appendChild(el('span', `estado-badge ${estadoClass(enc.estado)}`, estadoLabel(enc.estado)));
         header.appendChild(el('span', null, `${enc.tipo} · ${formatHora(enc.dia, enc.hora)}`));
@@ -604,6 +698,11 @@
     pills.appendChild(el('span', 'pill', `Estado: ${f.estado_emocional?.id || 'neutro'}`));
     pills.appendChild(el('span', 'pill', `Expresión: ${f.presentacion_visual?.expression_id || 'neutral'}`));
     pills.appendChild(el('span', 'pill', `Fallback: ${f.presentacion_visual?.fallback ? 'sí' : 'no'}`));
+    if (cacheEstado?.encuentro_en_curso && (cacheEstado.encuentro_en_curso.participantes || []).includes(residenteId)) {
+      pills.appendChild(el('span', 'pill pill-ahora', 'En encuentro ahora'));
+    } else if (cacheEstado?.proximo_encuentro && (cacheEstado.proximo_encuentro.participantes || []).includes(residenteId)) {
+      pills.appendChild(el('span', 'pill pill-proximo', 'Próximo encuentro'));
+    }
     panel.appendChild(pills);
 
     panel.appendChild(renderDiscovery(f.discovery?.campos || {}));
@@ -653,6 +752,7 @@
     ]);
     if (!estadoResp.ok || !insp) return null;
     const e = estadoResp.estado;
+    cacheEstado = e;
     if (e.bloque_a) cacheBloqueA = e.bloque_a;
     const buzonCount = await renderBuzon();
     renderSummary(e, buzonCount);

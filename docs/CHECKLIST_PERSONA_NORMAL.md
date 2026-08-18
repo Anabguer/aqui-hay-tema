@@ -22,6 +22,7 @@ Partida de prueba sin abrir `dev.php`.
 
 - [ ] Móvil: el header no empuja el resumen; Landing/Dev/Guardar/Nueva caben en dos columnas.
 - [ ] Móvil: +1h, +8h e “Ir al próximo encuentro” están agrupados bajo el resumen, botones grandes, sin scroll horizontal.
+- [ ] Móvil: el mapa muestra badge Ahora/Próximo sin hover; al tocar el lugar se ve quién y cuándo.
 - [ ] Tablet/escritorio: mismos controles, toolbar en fila.
 
 ## Criterios de fallo
