@@ -1,0 +1,17 @@
+﻿{
+  "personaje_id": "lab_01_teo",
+  "lab_folder": "LAB_01_Teo",
+  "expresion": "neutral",
+  "prompt": "Match GRAPHIC STYLE ONLY from the attached master style sheet: friendly social-game caricature, slightly oversized head, large expressive eyes with small catchlights, simplified but DISTINCT features, warm palette, dark clean outlines, soft shading. NOT cute generic chibi. NOT photoreal. NOT anime. NOT board-game naive 06b.\n\nDO NOT copy any face identity from the style sheet. Those people are mannequins, not this character. Create a NEW person from the written traits.\n\nFRAMING: fully front-facing bust. Head centered. Entire head visible (hair crown + chin). Neck and tiny shoulder tops. Simple clothes: camiseta gris simple, nacimiento de hombros, sin logo. White/light flat background. Square. One character. NO hands. NO scenery. NO text.\n\nNEW person, 36 year old hombre. Face shape: alargada.\nPhysical traits that MUST show: cara alargada, frente alta, ment├│n estrecho pero no puntiagudo; piel clara c├ílida con pecas peque├▒as en nariz y p├│mulos; ojos grandes expresivos gris-verdosos, ligeramente juntos, p├írpado un poco pesado; cejas casta├▒as irregulares, la izquierda un poco m├ís baja; nariz larga y estrecha con un peque├▒o caballete; orejas visiblemente prominentes, identidad fuerte; labios finos; pelo casta├▒o rojizo corto, raya al lado izquierdo, entradas suaves, mechones desordenados; barba de tres d├¡as fina, no cerrada; edad aparente treinta y tantos, no adolescente.\nCaricatura amable v1, juego social/casual. Cabeza algo grande, ojos expresivos, l├¡nea marcada, sombreado suave, paleta c├ílida. No chibi infantil, no anime, no realismo, no 06b na├»f.\n\nNEUTRAL rest face. Mouth closed/relaxed, not smiling, not frowning. Eyes open, looking at camera. This is the master head.\n\nIdentity from bone structure (skull, jaw, nose, ears), not only hair. Do not beautify or rejuvenate.",
+  "negativos": "photorealistic, semirealistic, 3D render, anime, manga, Pixar, Disney, chibi toddler, same-face, beauty filter, text, watermark, UI, ID card, full body, hands in frame, copying Roc├¡o, copying Marta, copying Lucas, copying Daniela, copying ├ülvaro, copying In├®s, copying Dani, military, weapons",
+  "reference_style": "W:\\juegos\\Aqui hay tema\\assets\\referencias_visuales\\personajes\\REFERENCIA_MAESTRA_PERSONAJES_v1.png",
+  "reference_identity": null,
+  "reference_expresiones_lamina": null,
+  "meta": {
+    "edad": 36,
+    "genero": "hombre",
+    "forma_cara": "alargada",
+    "nombre": "Teo",
+    "canon": false
+  }
+}

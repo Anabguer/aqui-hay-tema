@@ -1,0 +1,34 @@
+{
+  "_comentario": "Personaje de LABORATORIO visual. NO CANON. No es A/B/C, ni Dani, ni Rocío, ni ninguna cara de la lámina maestra. No entra al pool.",
+  "id": "lab_01_teo",
+  "slot": "LAB_01",
+  "canon": false,
+  "laboratorio": true,
+  "identidad": {
+    "nombre": "Teo",
+    "edad": 36,
+    "genero": "hombre",
+    "pronombres": ["él"]
+  },
+  "visual": {
+    "forma_cara": "alargada",
+    "estilo_visual": "Caricatura amable v1, juego social/casual. Cabeza algo grande, ojos expresivos, línea marcada, sombreado suave, paleta cálida. No chibi infantil, no anime, no realismo, no 06b naïf.",
+    "rasgos_fisicos": [
+      "cara alargada, frente alta, mentón estrecho pero no puntiagudo",
+      "piel clara cálida con pecas pequeñas en nariz y pómulos",
+      "ojos grandes expresivos gris-verdosos, ligeramente juntos, párpado un poco pesado",
+      "cejas castañas irregulares, la izquierda un poco más baja",
+      "nariz larga y estrecha con un pequeño caballete",
+      "orejas visiblemente prominentes, identidad fuerte",
+      "labios finos",
+      "pelo castaño rojizo corto, raya al lado izquierdo, entradas suaves, mechones desordenados",
+      "barba de tres días fina, no cerrada",
+      "edad aparente treinta y tantos, no adolescente"
+    ],
+    "look_base_laboratorio": "camiseta gris simple, nacimiento de hombros, sin logo",
+    "identidad_visual_version": 1,
+    "pack_id": "lab_01_teo",
+    "notas_identidad": "Las orejas, la nariz con caballete, las pecas y las entradas son anclas. Si desaparecen en una expresión, hay deriva."
+  },
+  "expresiones_objetivo_v0": ["neutral", "alegre", "enfadado", "triste"]
+}

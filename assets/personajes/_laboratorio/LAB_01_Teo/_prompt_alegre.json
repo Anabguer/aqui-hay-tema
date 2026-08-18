@@ -1,0 +1,17 @@
+﻿{
+  "personaje_id": "lab_01_teo",
+  "lab_folder": "LAB_01_Teo",
+  "expresion": "alegre",
+  "prompt": "This is the SAME person as the attached MASTER HEAD. Keep identical: face shape, nose, ears, eye shape, hair silhouette and color, skin, freckles, stubble, age, clothes.\n\nOnly change facial expression muscles (brows, eyelids, mouth).\nHAPPY expression on the SAME face: warm smile, maybe teeth, eyes slightly squinted. Do NOT change hair, nose, ears, face shape, age, or clothes.\n\nFRAMING: fully front-facing bust. Head centered. Entire head visible (hair crown + chin). Neck and tiny shoulder tops. Simple clothes: camiseta gris simple, nacimiento de hombros, sin logo. White/light flat background. Square. One character. NO hands. NO scenery. NO text.\n\nStill 36, hombre, alargada face. Traits: cara alargada, frente alta, ment├│n estrecho pero no puntiagudo; piel clara c├ílida con pecas peque├▒as en nariz y p├│mulos; ojos grandes expresivos gris-verdosos, ligeramente juntos, p├írpado un poco pesado; cejas casta├▒as irregulares, la izquierda un poco m├ís baja; nariz larga y estrecha con un peque├▒o caballete; orejas visiblemente prominentes, identidad fuerte; labios finos; pelo casta├▒o rojizo corto, raya al lado izquierdo, entradas suaves, mechones desordenados; barba de tres d├¡as fina, no cerrada; edad aparente treinta y tantos, no adolescente.\n\nMatch the graphic finish of the master head (line, color, shading). Do NOT redesign the character. Do NOT copy anyone from a style sheet.",
+  "negativos": "photorealistic, semirealistic, 3D render, anime, manga, Pixar, Disney, chibi toddler, same-face, beauty filter, text, watermark, UI, ID card, full body, hands in frame, copying Roc├¡o, copying Marta, copying Lucas, copying Daniela, copying ├ülvaro, copying In├®s, copying Dani, military, weapons",
+  "reference_style": null,
+  "reference_identity": "W:\\juegos\\Aqui hay tema\\assets\\personajes\\_laboratorio\\LAB_01_Teo\\LAB_01_Teo_cabeza_maestra_neutral.png",
+  "reference_expresiones_lamina": "W:\\juegos\\Aqui hay tema\\assets\\referencias_visuales\\personajes\\REFERENCIA_MAESTRA_EXPRESIONES_v1.png",
+  "meta": {
+    "edad": 36,
+    "genero": "hombre",
+    "forma_cara": "alargada",
+    "nombre": "Teo",
+    "canon": false
+  }
+}

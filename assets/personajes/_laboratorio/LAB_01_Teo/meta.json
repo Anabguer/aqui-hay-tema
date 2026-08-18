@@ -1,0 +1,67 @@
+{
+  "personaje_id": "lab_01_teo",
+  "nombre_carpeta": "LAB_01_Teo",
+  "canon": false,
+  "laboratorio": true,
+  "estilo_referencia": "assets/referencias_visuales/personajes/REFERENCIA_MAESTRA_PERSONAJES_v1.png",
+  "visual_identity_version": 1,
+  "pack_id": "lab_01_teo",
+  "pipeline": "docs/PIPELINE_CABEZA_MAESTRA_EXPRESIONES.md",
+  "estado": "borrador_laboratorio",
+  "fecha": "2026-08-18",
+  "regla_anti_deriva": "REFERENCIA MAESTRA = ESTILO; CABEZA MAESTRA = IDENTIDAD",
+  "mapeo_estado_a_expresion": {
+    "_placeholder": true,
+    "_comentario": "Solo laboratorio. No es fórmula del pueblo. frustrado→enfadado es un ejemplo para probar el resolver.",
+    "frustrado": "enfadado",
+    "ilusionado": "alegre",
+    "neutro": "neutral"
+  },
+  "cabeza_maestra": {
+    "archivo": "LAB_01_Teo_cabeza_maestra_neutral.png",
+    "reference_usada": "REFERENCIA_MAESTRA_PERSONAJES_v1.png (estilo, lámina completa)",
+    "gate_a": "pass_con_notas",
+    "nota": "Hombre adulto, frente, busto, camiseta gris, sin texto. Anclas claras: orejas prominentes, entradas, pecas, stubble, cara alargada. No es un recorte de la lámina ni Dani/Rocío/A/B/C. Notas: edad lee un poco más de 36; mandíbula más cuadrada que el 'mentón estrecho' de ficha; nariz con caballete poco marcado; sombreado algo más pictórico que la lámina (más volumen, menos cel). Válida como cabeza maestra de laboratorio, no como habitante."
+  },
+  "expresiones": {
+      "neutral": {
+        "archivo": "LAB_01_Teo_cabeza_maestra_neutral.png",
+        "referencia_identidad": null,
+        "identidad_version": 1,
+        "gate_b": "pass"
+      },
+      "alegre": {
+        "archivo": "LAB_01_Teo_alegre.png",
+        "referencia_identidad": "LAB_01_Teo_cabeza_maestra_neutral.png",
+        "identidad_version": 1,
+        "gate_b": "pass",
+      "nota": "Sonrisa con dientes, ojos más estrechos. Misma silueta de pelo/orejas/nariz. La más legible de las tres derivadas."
+    },
+    "enfadado": {
+      "archivo": "LAB_01_Teo_enfadado.png",
+      "referencia_identidad": "LAB_01_Teo_cabeza_maestra_neutral.png",
+      "identidad_version": 1,
+      "gate_b": "pass_con_notas",
+      "nota": "Cejas en V y boca tensa. Identidad estable. La rabia es contenida, no un grito; a 32 px puede acercarse a 'serio'."
+    },
+    "triste": {
+      "archivo": "LAB_01_Teo_triste.png",
+      "referencia_identidad": "LAB_01_Teo_cabeza_maestra_neutral.png",
+      "identidad_version": 1,
+      "gate_b": "pass_con_notas",
+      "nota": "Cejas internas arriba, párpado caído, boca abajo. Identidad estable. Más sutil que alegre; no hay llanto (correcto)."
+    }
+  },
+  "comparativa": {
+    "archivo": "LAB_01_Teo_comparativa_4_expresiones.png",
+    "metodo": "composicion_python_png_reales",
+    "no_regenerada_como_ilustracion": true
+  },
+  "consistencia_identidad": {
+    "misma_persona": true,
+    "anclas_que_aguantan": ["orejas prominentes", "entradas", "pecas", "stubble", "camiseta gris", "cara alargada"],
+    "derivas_menores": ["tono de pelo castaño vs castaño-rojizo", "ojos gris-verde vs verde", "intensidad de rabia/tristeza"],
+    "fail_grave": false
+  },
+  "proxima_accion": "Neni mira la comparativa. Si el método vale, se puede usar en habitantes. Este Teo no se canoniza."
+}
