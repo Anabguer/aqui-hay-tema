@@ -9,6 +9,10 @@ final class PartidaService
     private Catalog $catalog;
     private PartidaRepository $repo;
     private GameLogger $logger;
+    private PartidaLifecycle $lifecycle;
+    private ResidenteOperations $residentes;
+    private EncuentroOperations $encuentros;
+    private RelojOperations $reloj;
 
     public function __construct(string $projectRoot)
     {
@@ -16,104 +20,55 @@ final class PartidaService
         $this->catalog = new Catalog($this->root);
         $this->repo = new PartidaRepository($this->root);
         $this->logger = new GameLogger($this->root);
+        $this->residentes = new ResidenteOperations($this->catalog, $this->logger);
+        $this->lifecycle = new PartidaLifecycle($this->root, $this->catalog, $this->repo, $this->logger, $this->residentes);
+        $this->encuentros = new EncuentroOperations($this->logger);
+        $this->reloj = new RelojOperations($this->logger);
     }
 
     public function nuevaPartida(string $configId = 'debug_v0', ?string $seed = null): array
     {
-        $partida = PartidaSchema::nueva($this->root, $configId, $seed);
-        $config = $this->catalog->loadConfigPrevalidada($configId);
-
-        foreach ($config['residentes_iniciales'] ?? [] as $entry) {
-            $this->incorporarResidenteCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
-        }
-
-        FeatureConfig::mergeIntoPartida($partida, $this->root);
-        DomainBootstrap::boot();
-        $this->logger->log($partida, 'partida_nueva', ['config_id' => $configId]);
-        $this->repo->guardar($partida);
-        return $partida;
+        return $this->lifecycle->nueva($configId, $seed);
     }
 
     public function cargar(string $partidaId): array
     {
-        $partida = $this->repo->cargar($partidaId);
-        Reloj::calcularCatchUpPendiente($partida);
-        EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
-        $this->repo->guardar($partida);
-        return $partida;
+        return $this->lifecycle->cargar($partidaId);
     }
 
     public function guardar(array $partida): void
     {
-        RngService::fromPartida($partida)->persistToPartida($partida);
-        $this->repo->guardar($partida);
+        $this->lifecycle->guardar($partida);
     }
 
-    /**
-     * NUEVA PARTIDA: nuevo partida_id y archivo.
-     * REINICIAR PARTIDA: conserva partida_id, resetea estado (ver docs PLAN_MAESTRO).
-     */
     public function reiniciarPartida(string $partidaId, string $configId = 'debug_v0', ?string $seed = null): array
     {
-        $partida = PartidaSchema::nueva($this->root, $configId, $seed);
-        $partida['meta']['partida_id'] = $partidaId;
-        $config = $this->catalog->loadConfigPrevalidada($configId);
-        foreach ($config['residentes_iniciales'] ?? [] as $entry) {
-            $this->incorporarResidenteCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
-        }
-        $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
-        $this->repo->guardar($partida);
-        return $partida;
+        return $this->lifecycle->reiniciar($partidaId, $configId, $seed);
     }
 
     public function listarPartidas(): array
     {
-        return $this->repo->listar();
+        return $this->lifecycle->listar();
     }
 
     public function incorporarResidenteCatalogo(array &$partida, string $catalogId, string $presencia = 'residente'): array
     {
-        if (isset($partida['residentes'][$catalogId])) {
-            return ['ok' => false, 'error' => 'ya_presente'];
-        }
-        $catalogo = $this->catalog->loadPersonaje($catalogId);
-        $runtime = ResidenteRuntime::crearDesdeCatalogo($catalogo, $presencia);
-        $partida['residentes'][$catalogId] = $runtime;
-
-        $asig = BloqueA::asignarAutomatico($partida, $catalogId);
-        if ($asig['error'] !== null) {
-            return ['ok' => false, 'error' => $asig['error'], 'residente' => $runtime];
-        }
-        return ['ok' => true, 'residente' => $runtime, 'vivienda_id' => $asig['vivienda_id']];
+        return $this->residentes->incorporarCatalogo($partida, $catalogId, $presencia);
     }
 
     public function crearResidentePlaceholderDev(array &$partida): array
     {
-        $num = 1;
-        while (isset($partida['residentes']['per_placeholder_dev_' . str_pad((string) $num, 2, '0', STR_PAD_LEFT)])) {
-            $num++;
-        }
-        $runtime = ResidenteRuntime::crearPlaceholderDev($num);
-        $id = $runtime['catalog_id'];
-        $partida['residentes'][$id] = $runtime;
-        $asig = BloqueA::asignarAutomatico($partida, $id);
-        return ['ok' => true, 'residente' => $runtime, 'vivienda_id' => $asig['vivienda_id']];
+        return $this->residentes->crearPlaceholderDev($partida);
     }
 
     public function liberarVivienda(array &$partida, string $viviendaId): array
     {
-        return ['ok' => BloqueA::liberar($partida, $viviendaId)];
+        return $this->residentes->liberarVivienda($partida, $viviendaId);
     }
 
     public function avanzarReloj(array &$partida, int $horas): array
     {
-        Reloj::avanzarHoras($partida, $horas);
-        $sync = EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
-        return [
-            'reloj' => $partida['reloj'],
-            'texto' => Reloj::formatear($partida['reloj']),
-            'encuentros_resueltos' => $sync['resueltos'],
-        ];
+        return $this->reloj->avanzar($partida, $horas);
     }
 
     public function programarEncuentro(
@@ -124,16 +79,7 @@ final class PartidaService
         string $tipo = 'conocerse',
         ?string $lugar = null
     ): array {
-        return EncuentroEngine::programar(
-            $partida,
-            $participantes,
-            $dia,
-            $hora,
-            $tipo,
-            $lugar,
-            null,
-            $this->logger
-        );
+        return $this->encuentros->programar($partida, $participantes, $dia, $hora, $tipo, $lugar);
     }
 
     public function fichaResidente(array $partida, string $residenteId): array
@@ -143,7 +89,13 @@ final class PartidaService
             throw new \InvalidArgumentException('residente no encontrado');
         }
 
-        $catalogo = ResidenteRuntime::catalogoParaRuntime($runtime, $this->catalog);
+        $catalogo = null;
+        try {
+            $catalogo = ResidenteRuntime::catalogoParaRuntime($runtime, $this->catalog);
+        } catch (ContentValidationException) {
+            $catalogo = null;
+        }
+
         $dia = (int) $partida['reloj']['dia_pueblo'];
         $agenda = AgendaEngine::resolverDia($partida, $residenteId, $dia, $this->catalog);
 
@@ -160,6 +112,11 @@ final class PartidaService
 
         $hobbiesConocidos = [];
         if ($catalogo !== null) {
+            foreach (['vida.hobby_principal', 'vida.hobbies_secundarios'] as $campo) {
+                if (DiscoveryEngine::estado($partida, $residenteId, $campo) === DiscoveryEngine::DESCONOCIDO) {
+                    continue;
+                }
+            }
             if ($catalogo['vida']['hobby_principal'] ?? null) {
                 $hobbiesConocidos[] = $catalogo['vida']['hobby_principal'];
             }
@@ -188,6 +145,7 @@ final class PartidaService
             'presencia' => $runtime['presencia'],
             'trabajo' => ['ocupacion' => $runtime['runtime']['ocupacion'] ?? null],
             'hobbies' => ['conocidos' => $hobbiesConocidos],
+            'descubrimientos' => DiscoveryEngine::listarPorResidente($partida, $residenteId),
             'relaciones' => $relaciones,
             'agenda_hoy' => $agenda,
             'ultimo_encuentro' => $ultimosEncuentros[0] ?? null,
