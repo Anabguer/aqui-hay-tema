@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "catalogo": "origenes_estado_emocional",
+    "descripcion": "Quién o qué dejó el estado actual. Hooks de integración; sin reglas de producción.",
+    "estado": "placeholder_extensible",
+    "_placeholder": true
+  },
+  "items": [
+    { "id": "inicial", "nombre": "Estado inicial de ficha" },
+    { "id": "encuentro", "nombre": "Encuentro" },
+    { "id": "rechazo", "nombre": "Rechazo" },
+    { "id": "discusion", "nombre": "Discusión" },
+    { "id": "descubrimiento", "nombre": "Descubrimiento" },
+    { "id": "romance", "nombre": "Romance" },
+    { "id": "problema_personal", "nombre": "Problema personal" },
+    { "id": "evento_edificio", "nombre": "Evento de edificio" },
+    { "id": "mensaje", "nombre": "Mensaje / buzón" },
+    { "id": "npc_autonomo", "nombre": "Acontecimiento autónomo NPC" },
+    { "id": "expiracion", "nombre": "Hasta cumplido" },
+    { "id": "dev_manual", "nombre": "Laboratorio DEV" }
+  ]
+}

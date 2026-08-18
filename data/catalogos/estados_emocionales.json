@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "catalogo": "estados_emocionales",
+    "descripcion": "IDs de estado INTERNO. No son PNG. Lista de ejemplo para la arquitectura (los del brief: celoso, frustrado, incómodo, ilusionado). NINGÚN personaje tiene estos estados asignados. Ampliar = añadir item. No es diseño emocional de producción.",
+    "estado": "placeholder_extensible",
+    "_placeholder": true,
+    "no_asignar_a_fichas": true
+  },
+  "items": [
+    { "id": "neutro", "nombre": "Neutro", "alias": ["neutral"] },
+    { "id": "frustrado", "nombre": "Frustrado" },
+    { "id": "celoso", "nombre": "Celoso" },
+    { "id": "ilusionado", "nombre": "Ilusionado" },
+    { "id": "incomodo", "nombre": "Incómodo" }
+  ]
+}

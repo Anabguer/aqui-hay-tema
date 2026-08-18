@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "catalogo": "expresiones_visuales",
+    "descripcion": "IDs de assets de cara. Pertenecen al paquete gráfico, no al estado emocional. Set PROVISIONAL (no techo). Ampliar = añadir item. Neutral es el único fallback obligatorio.",
+    "estado": "provisional_extensible",
+    "obligatorio": ["neutral"]
+  },
+  "items": [
+    { "id": "neutral", "nombre": "Neutral", "obligatoria": true },
+    { "id": "alegre", "nombre": "Alegre", "obligatoria": false },
+    { "id": "entusiasmado", "nombre": "Entusiasmado", "obligatoria": false },
+    { "id": "pensativo", "nombre": "Pensativo", "obligatoria": false },
+    { "id": "enfadado", "nombre": "Enfadado", "obligatoria": false },
+    { "id": "triste", "nombre": "Triste", "obligatoria": false },
+    { "id": "sorprendido", "nombre": "Sorprendido", "obligatoria": false },
+    { "id": "esceptico", "nombre": "Escéptico", "obligatoria": false },
+    { "id": "complice", "nombre": "Cómplice", "obligatoria": false }
+  ]
+}

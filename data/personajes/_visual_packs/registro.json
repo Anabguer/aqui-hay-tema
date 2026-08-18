@@ -1,0 +1,38 @@
+{
+      "_comentario": "El motor SOLO consume packs registrados o descubiertos. No genera PNG. NO RECICLAR caras de la lámina maestra. LAB_01_Teo no es canon. El mapeo emoción→cara del pack lab es PLACEHOLDER de prueba, no diseño de juego. El mapeo global está vacío.",
+  "packs": {
+    "lab_01_teo": {
+      "canon": false,
+      "laboratorio": true,
+      "catalog_id": null,
+      "nombre_visible": "LAB_01_Teo",
+      "visual_identity_version": 1,
+      "carpeta": "assets/personajes/_laboratorio/LAB_01_Teo",
+      "mapeo_estado_a_expresion": {
+        "_placeholder": true,
+        "_comentario": "Solo laboratorio. No es fórmula del pueblo.",
+        "frustrado": "enfadado",
+        "ilusionado": "alegre",
+        "neutro": "neutral"
+      },
+      "expresiones": {
+        "neutral": {
+          "archivo": "LAB_01_Teo_cabeza_maestra_neutral.png",
+          "identidad_version": 1
+        },
+        "alegre": {
+          "archivo": "LAB_01_Teo_alegre.png",
+          "identidad_version": 1
+        },
+        "enfadado": {
+          "archivo": "LAB_01_Teo_enfadado.png",
+          "identidad_version": 1
+        },
+        "triste": {
+          "archivo": "LAB_01_Teo_triste.png",
+          "identidad_version": 1
+        }
+      }
+    }
+  }
+}

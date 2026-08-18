@@ -1,0 +1,24 @@
+{
+  "_comentario": "Meta de cabeza maestra + expresiones. Sin secretos de ficha A. Laboratorio o producción.",
+  "personaje_id": "lab_01_teo",
+  "nombre_carpeta": "LAB_01_Teo",
+  "canon": false,
+  "laboratorio": true,
+  "estilo_referencia": "assets/referencias_visuales/personajes/REFERENCIA_MAESTRA_PERSONAJES_v1.png",
+  "pipeline": "docs/PIPELINE_CABEZA_MAESTRA_EXPRESIONES.md",
+  "estado": "borrador",
+  "fecha": null,
+  "cabeza_maestra": {
+    "archivo": "LAB_01_Teo_cabeza_maestra_neutral.png",
+    "gate_a": null,
+    "nota": ""
+  },
+  "expresiones": {
+    "neutral": { "archivo": "LAB_01_Teo_cabeza_maestra_neutral.png", "gate_b": null },
+    "alegre": { "archivo": "LAB_01_Teo_alegre.png", "gate_b": null },
+    "enfadado": { "archivo": "LAB_01_Teo_enfadado.png", "gate_b": null },
+    "triste": { "archivo": "LAB_01_Teo_triste.png", "gate_b": null }
+  },
+  "comparativa": "LAB_01_Teo_comparativa_4_expresiones.png",
+  "regla_anti_deriva": "REFERENCIA MAESTRA = ESTILO; CABEZA MAESTRA = IDENTIDAD"
+}
