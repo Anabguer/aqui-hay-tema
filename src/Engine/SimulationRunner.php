@@ -10,7 +10,8 @@ final class SimulationRunner
         string $projectRoot,
         int $days,
         ?string $seed = null,
-        string $configId = 'test_fixtures_v0'
+        string $configId = 'test_fixtures_v0',
+        int $residentesActivosExtra = 1
     ): array {
         $t0 = microtime(true);
         $days = max(1, min(365, $days));
@@ -40,20 +41,26 @@ final class SimulationRunner
         $emociones = $service->emociones();
         $catalog = new CatalogStore($projectRoot);
         $estadosValidos = $catalog->ids('estados_emocionales');
-        $ph = $service->crearResidentePlaceholderDev($partida);
         $qa = 'per_qa_valid';
-        $phId = $ph['residente']['catalog_id'];
+        $extraIds = [];
+        for ($i = 0; $i < max(1, $residentesActivosExtra); $i++) {
+            $ph = $service->crearResidentePlaceholderDev($partida);
+            $extraIds[] = (string) ($ph['residente']['catalog_id'] ?? '');
+        }
+        $extraIds = array_values(array_filter($extraIds, static fn($id) => $id !== ''));
 
         for ($d = 0; $d < $days; $d++) {
             $dia = (int) $partida['reloj']['dia_pueblo'];
-            $slots = DisponibilidadEngine::slotsCompatibles($partida, [$qa, $phId], 'conocerse', $dia, 12, 1, 3);
-            if (($slots['ok'] ?? false) && !empty($slots['slots'])) {
-                $slot = $slots['slots'][0];
-                $r = $service->programarEncuentro($partida, [$qa, $phId], $slot['dia'], $slot['hora'], 'conocerse');
-                if ($r['ok'] ?? false) {
-                    $informe['encuentros_programados']++;
-                } else {
-                    $informe['errores'][] = ['dia' => $dia, 'programar' => $r['error'] ?? 'fail'];
+            foreach ($extraIds as $extraId) {
+                $slots = DisponibilidadEngine::slotsCompatibles($partida, [$qa, $extraId], 'conocerse', $dia, 12, 1, 3);
+                if (($slots['ok'] ?? false) && !empty($slots['slots'])) {
+                    $slot = $slots['slots'][0];
+                    $r = $service->programarEncuentro($partida, [$qa, $extraId], $slot['dia'], $slot['hora'], 'conocerse');
+                    if ($r['ok'] ?? false) {
+                        $informe['encuentros_programados']++;
+                    } else {
+                        $informe['errores'][] = ['dia' => $dia, 'programar' => $r['error'] ?? 'fail', 'extra_id' => $extraId];
+                    }
                 }
             }
 
@@ -79,6 +86,8 @@ final class SimulationRunner
         $informe['relaciones_cambios'] = count($partida['historial_relaciones'] ?? []);
         $informe['audit_trail_size'] = count($partida['audit_trail'] ?? []);
         $informe['residentes'] = count($partida['residentes']);
+        $informe['residentes_activos_extra'] = count($extraIds);
+        $informe['historial_coincidencias_size'] = count($partida['historial_coincidencias'] ?? []);
         self::checkSaveGrowth($informe);
 
         return $informe;

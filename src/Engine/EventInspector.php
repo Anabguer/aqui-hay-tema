@@ -15,6 +15,11 @@ final class EventInspector
         foreach ($partida['domain_events'] ?? [] as $e) {
             $entries[] = self::normalizeDomain($e);
         }
+        foreach ($partida['npc_autonomo']['historial_eventos'] ?? [] as $e) {
+            if (is_array($e)) {
+                $entries[] = self::normalizeNpc($e);
+            }
+        }
         foreach (array_slice($partida['event_log'] ?? [], -200) as $e) {
             $entries[] = self::normalizeLog($e);
         }
@@ -91,6 +96,23 @@ final class EventInspector
             'tipo' => $e['tipo'] ?? $e['evento'] ?? 'log',
             'ts_juego' => $e['ts_juego'] ?? null,
             'actores' => $e['actores'] ?? [],
+            'correlacion_id' => $e['correlacion_id'] ?? null,
+            'detalle' => $e,
+        ];
+    }
+
+    private static function normalizeNpc(array $e): array
+    {
+        $rid = isset($e['residente_id']) && is_string($e['residente_id']) ? $e['residente_id'] : null;
+        return [
+            'fuente' => 'npc_autonomo.historial_eventos',
+            'tipo' => $e['tipo'] ?? 'npc_autonomo',
+            'ts_juego' => $e['ts_juego'] ?? [
+                'dia' => $e['dia'] ?? null,
+                'hora' => $e['hora'] ?? null,
+            ],
+            'actores' => $rid !== null ? [$rid] : [],
+            'correlacion_id' => $e['correlacion_id'] ?? null,
             'detalle' => $e,
         ];
     }

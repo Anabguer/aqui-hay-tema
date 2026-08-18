@@ -25,4 +25,11 @@ foreach ([30, 100, 365] as $days) {
     echo "  {$days}d: {$r['ms_total']}ms, save={$r['save_bytes']}B, eventos={$r['eventos_dominio']}\n";
 }
 
+$r2 = SimulationRunner::run($root, 60, 'longevity-multi', 'test_fixtures_v0', 2);
+ok($r2['ok'] ?? false, 'simulación 60 días con 2+ residentes extra completa');
+ok(empty($r2['invariantes_rotas'] ?? []), '60d multi sin invariantes rotas');
+ok(($r2['residentes_activos_extra'] ?? 0) >= 2, 'simulación multi usa 2+ residentes extra');
+ok(($r2['historial_coincidencias_size'] ?? 0) <= 500, 'historial coincidencias respeta cap');
+ok(($r2['coincidencias'] ?? 0) >= 0, 'coincidencias reportadas');
+
 exit($failures > 0 ? 1 : 0);

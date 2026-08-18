@@ -297,7 +297,10 @@
     });
 
     $('#btn-eventos').addEventListener('click', async () => {
-      const r = await api('dev.eventos', { filtros: { limit: 50 } });
+      const tipo = ($('#inp-filtro-tipo-evento')?.value || '').trim();
+      const filtros = { limit: 50 };
+      if (tipo) filtros.tipo = tipo;
+      const r = await api('dev.eventos', { filtros });
       $('#cal-panel').textContent = JSON.stringify(r, null, 2);
       log('Inspector eventos', { total: r.total });
     });

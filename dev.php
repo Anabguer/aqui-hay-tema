@@ -207,6 +207,8 @@ header('Content-Type: text/html; charset=utf-8');
           <legend>Calendario / eventos QA</legend>
           <label for="inp-cal-dia">Día calendario</label>
           <input type="number" id="inp-cal-dia" min="1" value="1" />
+          <label for="inp-filtro-tipo-evento">Filtro tipo evento (exacto)</label>
+          <input type="text" id="inp-filtro-tipo-evento" placeholder="ej. encuentro_programado" />
           <div class="btn-row">
             <button type="button" id="btn-calendario">Vista calendario día</button>
             <button type="button" id="btn-eventos">Inspector eventos</button>

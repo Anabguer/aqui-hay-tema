@@ -22,5 +22,6 @@ final class SchemaFields
         $partida['historial_coincidencias'] ??= [];
         $partida['npc_autonomo'] ??= ['planes_pendientes' => []];
         $partida['npc_autonomo']['planes_pendientes'] ??= [];
+        $partida['npc_autonomo']['historial_eventos'] ??= [];
     }
 }

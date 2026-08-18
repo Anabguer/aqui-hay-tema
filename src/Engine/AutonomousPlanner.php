@@ -50,6 +50,7 @@ final class AutonomousPlanner
             '_placeholder_dev' => true,
         ];
         $partida['npc_autonomo']['planes_pendientes'] ??= [];
+        $partida['npc_autonomo']['historial_eventos'] ??= [];
         $partida['npc_autonomo']['planes_pendientes'][] = $plan;
 
         $logger?->log($partida, 'npc_autonomo_plan', [
@@ -61,12 +62,30 @@ final class AutonomousPlanner
             'plan' => $plan,
         ]);
 
-        DomainEventDispatcher::emit($partida, DomainEvents::NPC_AUTONOMO_PLAN, [
+        $correlacionId = DomainEventDispatcher::emit($partida, DomainEvents::NPC_AUTONOMO_PLAN, [
             'residente_id' => $residenteId,
             'elegido' => $elegido,
             'plan_id' => $planId,
             'actores' => [$residenteId],
         ], $logger, 'AutonomousPlanner::planificarSlot');
+
+        $partida['npc_autonomo']['historial_eventos'][] = [
+            'id' => 'npc_evt_' . bin2hex(random_bytes(4)),
+            'tipo' => DomainEvents::NPC_AUTONOMO_PLAN,
+            'plan_id' => $planId,
+            'residente_id' => $residenteId,
+            'accion' => $plan['accion'],
+            'lugar' => $plan['lugar'],
+            'dia' => $dia,
+            'hora' => $hora,
+            'estado' => $plan['estado'],
+            'correlacion_id' => $correlacionId,
+            'ts_juego' => [
+                'dia' => $partida['reloj']['dia_pueblo'] ?? null,
+                'hora' => $partida['reloj']['hora_actual'] ?? null,
+            ],
+            '_placeholder' => true,
+        ];
 
         return ['ok' => true, 'plan' => $plan, 'candidatos' => $candidatos];
     }
