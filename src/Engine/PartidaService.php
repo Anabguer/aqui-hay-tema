@@ -23,7 +23,7 @@ final class PartidaService
         $this->residentes = new ResidenteOperations($this->catalog, $this->logger);
         $this->lifecycle = new PartidaLifecycle($this->root, $this->catalog, $this->repo, $this->logger, $this->residentes);
         $this->encuentros = new EncuentroOperations($this->logger);
-        $this->reloj = new RelojOperations($this->logger);
+        $this->reloj = new RelojOperations($this->root, $this->logger, $this->emociones());
     }
 
     public function nuevaPartida(string $configId = 'debug_v0', ?string $seed = null): array
@@ -110,18 +110,27 @@ final class PartidaService
             }
         }
 
+        $proyeccion = [];
         $hobbiesConocidos = [];
         if ($catalogo !== null) {
-            foreach (['vida.hobby_principal', 'vida.hobbies_secundarios'] as $campo) {
-                if (DiscoveryEngine::estado($partida, $residenteId, $campo) === DiscoveryEngine::DESCONOCIDO) {
-                    continue;
+            $visConfig = DiscoveryVisibilityPolicy::load($this->root);
+            $proyeccion = DiscoveryProjection::proyectar(
+                $partida,
+                $residenteId,
+                DiscoveryProjection::deCatalogo($catalogo, $runtime),
+                $visConfig
+            );
+            $hp = DiscoveryProjection::valorSiVisible($proyeccion, 'vida.hobby_principal');
+            if (is_string($hp) && $hp !== '' && $hp !== DiscoveryVisibilityResolver::PARCIAL_PLACEHOLDER) {
+                $hobbiesConocidos[] = $hp;
+            }
+            $hs = DiscoveryProjection::valorSiVisible($proyeccion, 'vida.hobbies_secundarios', []);
+            if (is_array($hs)) {
+                foreach ($hs as $h) {
+                    if (is_string($h) && $h !== '') {
+                        $hobbiesConocidos[] = $h;
+                    }
                 }
-            }
-            if ($catalogo['vida']['hobby_principal'] ?? null) {
-                $hobbiesConocidos[] = $catalogo['vida']['hobby_principal'];
-            }
-            foreach ($catalogo['vida']['hobbies_secundarios'] ?? [] as $h) {
-                $hobbiesConocidos[] = $h;
             }
         }
 
@@ -146,11 +155,36 @@ final class PartidaService
             'trabajo' => ['ocupacion' => $runtime['runtime']['ocupacion'] ?? null],
             'hobbies' => ['conocidos' => $hobbiesConocidos],
             'descubrimientos' => DiscoveryEngine::listarPorResidente($partida, $residenteId),
+            'discovery' => [
+                'campos' => $proyeccion,
+                '_nota' => 'Políticas configurables. Default sin_politica: no oculta. Ningún secreto asignado a fichas.',
+            ],
             'relaciones' => $relaciones,
             'agenda_hoy' => $agenda,
             'ultimo_encuentro' => $ultimosEncuentros[0] ?? null,
             'placeholder' => $runtime['_placeholder'] ?? false,
+            'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
+            'presentacion_visual' => $this->presentacionVisual($partida, $runtime),
         ];
+    }
+
+    public function presentacionVisual(array $partida, array $runtime): array
+    {
+        return $this->emociones()->resolverResidente($partida, $runtime);
+    }
+
+    public function emociones(): EmotionalStateService
+    {
+        return new EmotionalStateService(
+            new VisualPackStore($this->root),
+            $this->catalog->store(),
+            $this->logger
+        );
+    }
+
+    public function visualPacks(): VisualPackStore
+    {
+        return new VisualPackStore($this->root);
     }
 
     public function estadoResumido(array $partida): array

@@ -1,6 +1,6 @@
 {
-  "_comentario": "Políticas de visibilidad configurables. NO asignadas a Rocío ni a fichas piloto.",
-  "_bloqueado_decision": "Qué campos/categorías aplican a cada personaje.",
+  "_comentario": "Politicas de visibilidad configurables. NO asignadas a Rocio ni a fichas piloto.",
+  "_bloqueado_decision": "Que campos/categorias aplican a cada personaje.",
   "politicas_disponibles": [
     "publico",
     "oculto",

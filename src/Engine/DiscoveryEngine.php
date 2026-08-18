@@ -38,6 +38,12 @@ final class DiscoveryEngine
             ],
         ];
         $partida['descubrimientos'][] = $entry;
+        DomainEventDispatcher::emit($partida, DomainEvents::DESCUBRIMIENTO_REGISTRADO, [
+            'residente_id' => $residenteId,
+            'campo' => $campo,
+            'origen' => $origen,
+            'actores' => [$residenteId],
+        ]);
         PersistenciaCaps::recortarLista(
             $partida,
             'descubrimientos',
