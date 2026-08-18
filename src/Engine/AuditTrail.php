@@ -38,8 +38,11 @@ final class AuditTrail
         ];
 
         $partida['audit_trail'][] = $entry;
-        if (count($partida['audit_trail']) > 500) {
-            $partida['audit_trail'] = array_slice($partida['audit_trail'], -500);
-        }
+        PersistenciaCaps::recortarLista(
+            $partida,
+            'audit_trail',
+            PersistenciaCaps::cap($partida, 'audit_trail_cap', 200),
+            'audit_trail_archivo'
+        );
     }
 }

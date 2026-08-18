@@ -1,0 +1,9 @@
+{
+  "_comentario": "Caps técnicos de save. No es balance de juego. historial_relaciones se recorta con más cuidado (se conserva última entrada por par).",
+  "audit_trail_cap": 200,
+  "domain_events_cap": 200,
+  "descubrimientos_cap": 400,
+  "historial_relaciones_cap": 2000,
+  "event_log_cap": 100,
+  "archivar_al_recortar": true
+}

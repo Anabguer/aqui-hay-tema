@@ -12,5 +12,7 @@ final class SchemaFields
         $partida['descubrimientos'] ??= [];
         $partida['historial_relaciones'] ??= [];
         $partida['domain_events'] ??= [];
+        $partida['audit_trail_archivo'] ??= [];
+        $partida['domain_events_archivo'] ??= [];
     }
 }

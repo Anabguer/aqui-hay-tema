@@ -39,9 +39,12 @@ final class EventBus
             ],
             'payload_keys' => array_keys($payload),
         ];
-        if (count($partida['domain_events']) > 500) {
-            $partida['domain_events'] = array_slice($partida['domain_events'], -500);
-        }
+        PersistenciaCaps::recortarLista(
+            $partida,
+            'domain_events',
+            PersistenciaCaps::cap($partida, 'domain_events_cap', 200),
+            'domain_events_archivo'
+        );
 
         return ['evento' => $evento, 'correlacion_id' => $envelope['correlacion_id'], 'results' => $results];
     }

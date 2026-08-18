@@ -38,6 +38,12 @@ final class DiscoveryEngine
             ],
         ];
         $partida['descubrimientos'][] = $entry;
+        PersistenciaCaps::recortarLista(
+            $partida,
+            'descubrimientos',
+            PersistenciaCaps::cap($partida, 'descubrimientos_cap', 400),
+            'descubrimientos_archivo'
+        );
         return $entry;
     }
 

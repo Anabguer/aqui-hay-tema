@@ -19,6 +19,9 @@ final class DiagnosticExport
             'partida_id' => $partida['meta']['partida_id'] ?? null,
             'reloj' => $partida['reloj'] ?? null,
             'features' => $partida['features'] ?? [],
+            'persistencia' => $partida['persistencia'] ?? [],
+            'audit_trail_count' => count($partida['audit_trail'] ?? []),
+            'audit_archivo_count' => count($partida['audit_trail_archivo'] ?? []),
             'residentes' => array_map(static fn($r) => [
                 'id' => $r['catalog_id'] ?? null,
                 'nombre' => $r['identidad_publica']['nombre'] ?? null,

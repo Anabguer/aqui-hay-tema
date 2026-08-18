@@ -24,6 +24,7 @@ final class PartidaLifecycle
         }
 
         FeatureConfig::mergeIntoPartida($partida, $this->root);
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         SchemaFields::ensure($partida);
         DomainBootstrap::boot();
 
@@ -42,6 +43,7 @@ final class PartidaLifecycle
     {
         $partida = $this->repo->cargar($partidaId);
         SchemaFields::ensure($partida);
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         Reloj::calcularCatchUpPendiente($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger);
         $this->repo->guardar($partida);
@@ -50,6 +52,8 @@ final class PartidaLifecycle
 
     public function guardar(array $partida): void
     {
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
+        PersistenciaCaps::aplicar($partida);
         RngService::fromPartida($partida)->persistToPartida($partida);
         $this->repo->guardar($partida);
     }

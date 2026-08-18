@@ -40,9 +40,10 @@ final class RelacionHistorial
             ],
         ];
         $partida['historial_relaciones'][] = $entry;
-        if (count($partida['historial_relaciones']) > 1000) {
-            $partida['historial_relaciones'] = array_slice($partida['historial_relaciones'], -1000);
-        }
+        PersistenciaCaps::recortarHistorialRelaciones(
+            $partida,
+            PersistenciaCaps::cap($partida, 'historial_relaciones_cap', 2000)
+        );
         return $entry;
     }
 

@@ -1,0 +1,23 @@
+{
+  "_comentario": "Políticas de visibilidad configurables. NO asignadas a Rocío ni a fichas piloto.",
+  "_bloqueado_decision": "Qué campos/categorías aplican a cada personaje.",
+  "politicas_disponibles": [
+    "publico",
+    "oculto",
+    "parcial",
+    "por_evento"
+  ],
+  "default": "sin_politica",
+  "por_categoria": {},
+  "ejemplos_categorias_no_aplicadas": [
+    "identidad.nombre",
+    "identidad.edad",
+    "vida.ocupacion",
+    "vida.hobby_principal",
+    "vida.hobbies_secundarios",
+    "vida.rasgos_publicos",
+    "vida.rasgos_ocultos",
+    "romance",
+    "lazos"
+  ]
+}
