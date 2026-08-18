@@ -1,0 +1,23 @@
+---
+description: Entrega a GitHub por bloque funcional. Sin push no hay entrega.
+alwaysApply: true
+---
+
+# Entrega a GitHub (Aquí Hay Tema)
+
+Un bloque funcional no está entregado hasta que su commit está en GitHub (`origin`).
+
+Al terminar cada bloque:
+
+1. Suite en verde (`php tests/run_all.php`, o el recorte del bloque si la suite completa no aplica).
+2. Un commit propio y descriptivo. No mezclar hilos ni proyectos.
+3. `git push` de esa rama (y tag de staging si el bloque lo crea/actualiza).
+4. Devolver a Neni:
+   - hash del commit
+   - mensaje del commit
+   - tests ejecutados
+   - archivos principales tocados
+   - cualquier `BLOQUEADO_DECISION` (o ninguno)
+5. Si ChatGPT debe aprobar, el diff a revisar es el de ese commit en GitHub.
+
+No hacer push de `master` sucio ni de cambios de otro hilo. No force-push a `main`/`master`.
