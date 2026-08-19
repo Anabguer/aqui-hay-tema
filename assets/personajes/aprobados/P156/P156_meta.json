@@ -1,0 +1,22 @@
+{
+  "id": "P156",
+  "visual_gender": "hombre",
+  "apparent_age": "25-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P156_neutral.png",
+  "candidate_asset": "P156_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "textured_faux_hawk_with_dark_auburn_tips_n",
+    "small_neck_tattoo_peek"
+  ],
+  "alpha_verified": true
+}

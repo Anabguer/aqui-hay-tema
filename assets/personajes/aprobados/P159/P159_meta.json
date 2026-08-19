@@ -1,0 +1,22 @@
+{
+  "id": "P159",
+  "visual_gender": "mujer",
+  "apparent_age": "23-26",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P159_neutral.png",
+  "candidate_asset": "P159_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_woman",
+    "long_chestnut_ponytail_shaved_side_with_si",
+    "labret_piercing"
+  ],
+  "alpha_verified": true
+}

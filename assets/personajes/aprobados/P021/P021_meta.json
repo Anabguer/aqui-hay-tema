@@ -1,0 +1,18 @@
+{
+  "id": "P021",
+  "visual_gender": "mujer",
+  "apparent_age": "25-30",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P021_neutral.png",
+  "candidate_asset": "P021_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadada", "triste"],
+  "visual_indicators": [
+    "undercut",
+    "pelo_fucsia_violeta",
+    "piercings_multiples",
+    "cazadora_denim"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,12 @@
+{
+  "id": "P002",
+  "visual_gender": "hombre",
+  "apparent_age": "25-30",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P002_neutral.png",
+  "candidate_asset": null,
+  "expressions": ["neutral", "alegre", "triste", "enfadado"],
+  "alpha_verified": true
+}

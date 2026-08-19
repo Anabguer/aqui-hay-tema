@@ -1,0 +1,22 @@
+{
+  "id": "P045",
+  "visual_gender": "hombre",
+  "apparent_age": "70-76",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P045_neutral.png",
+  "candidate_asset": "P045_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pelo_blanco_corto_ordenado",
+    "gafas_rectangulares",
+    "chaleco_marino"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P168",
+  "visual_gender": "hombre",
+  "apparent_age": "24-27",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P168_neutral.png",
+  "candidate_asset": "P168_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "curly_hair_half_bleached_half_dark",
+    "industrial_bar_ear_piercing"
+  ],
+  "alpha_verified": true
+}

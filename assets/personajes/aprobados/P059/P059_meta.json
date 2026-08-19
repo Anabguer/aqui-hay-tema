@@ -1,0 +1,22 @@
+{
+  "id": "P059",
+  "visual_gender": "hombre",
+  "apparent_age": "24-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P059_neutral.png",
+  "candidate_asset": "P059_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "mullet_rubio_sucio",
+    "aro_plata",
+    "camisa_bowling"
+  ],
+  "alpha_verified": true
+}

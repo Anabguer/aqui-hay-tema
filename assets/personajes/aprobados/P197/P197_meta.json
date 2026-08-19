@@ -1,0 +1,22 @@
+{
+  "id": "P197",
+  "visual_gender": "mujer",
+  "apparent_age": "27-30",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P197_neutral.png",
+  "candidate_asset": "P197_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "latina_woman",
+    "messy_ash_blonde_with_dark_roots",
+    "septum"
+  ],
+  "alpha_verified": true
+}

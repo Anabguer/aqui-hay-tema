@@ -1,0 +1,22 @@
+{
+  "id": "P165",
+  "visual_gender": "mujer",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P165_neutral.png",
+  "candidate_asset": "P165_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_woman",
+    "box_braids_with_a_few_gold_beads_not_neon",
+    "nose_stud"
+  ],
+  "alpha_verified": true
+}

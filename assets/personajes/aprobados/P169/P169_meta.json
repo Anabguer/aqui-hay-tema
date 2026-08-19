@@ -1,0 +1,22 @@
+{
+  "id": "P169",
+  "visual_gender": "mujer",
+  "apparent_age": "25-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P169_neutral.png",
+  "candidate_asset": "P169_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_woman",
+    "neutral_cherry_brown_short_pixie",
+    "small_tattoo_behind_ear"
+  ],
+  "alpha_verified": true
+}

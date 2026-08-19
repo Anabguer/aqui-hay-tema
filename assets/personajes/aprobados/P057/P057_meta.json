@@ -1,0 +1,22 @@
+{
+  "id": "P057",
+  "visual_gender": "hombre",
+  "apparent_age": "35-40",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P057_neutral.png",
+  "candidate_asset": "P057_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "calvo",
+    "tachuela_oro",
+    "camisa_teal_geometrica"
+  ],
+  "alpha_verified": true
+}

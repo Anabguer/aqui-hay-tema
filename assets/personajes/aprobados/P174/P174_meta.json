@@ -1,0 +1,22 @@
+{
+  "id": "P174",
+  "visual_gender": "hombre",
+  "apparent_age": "25-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P174_neutral.png",
+  "candidate_asset": "P174_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "purple_shaggy_medium_hair",
+    "one_ear_tunnel_plug"
+  ],
+  "alpha_verified": true
+}

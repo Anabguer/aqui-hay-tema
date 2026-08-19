@@ -1,0 +1,12 @@
+{
+  "id": "P008",
+  "visual_gender": "mujer",
+  "apparent_age": "28-34",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P008_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": ["estetica_gamer", "auriculares_al_cuello"],
+  "alpha_verified": true
+}

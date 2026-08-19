@@ -1,0 +1,13 @@
+{
+  "id": "P013",
+  "visual_gender": "hombre",
+  "apparent_age": "58-64",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P013_neutral.png",
+  "candidate_asset": "P013_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": ["gafas_gordas", "bigote", "chaleco_punto"],
+  "alpha_verified": true
+}

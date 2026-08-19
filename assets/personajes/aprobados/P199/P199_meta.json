@@ -1,0 +1,22 @@
+{
+  "id": "P199",
+  "visual_gender": "mujer",
+  "apparent_age": "20-23",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P199_neutral.png",
+  "candidate_asset": "P199_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_woman",
+    "black_hair_with_subtle_silver_tips",
+    "small_ear_cuffs_1_2"
+  ],
+  "alpha_verified": true
+}

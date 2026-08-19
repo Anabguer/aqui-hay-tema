@@ -1,0 +1,22 @@
+{
+  "id": "P166",
+  "visual_gender": "hombre",
+  "apparent_age": "20-23",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P166_neutral.png",
+  "candidate_asset": "P166_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "latino_man",
+    "short_undercut_with_darker_highlights_no_n",
+    "geometric_neck_tattoo"
+  ],
+  "alpha_verified": true
+}

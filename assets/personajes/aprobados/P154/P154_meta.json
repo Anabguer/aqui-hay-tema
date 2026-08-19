@@ -1,0 +1,22 @@
+{
+  "id": "P154",
+  "visual_gender": "hombre",
+  "apparent_age": "23-26",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P154_neutral.png",
+  "candidate_asset": "P154_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "short_locs_with_mild_warm_brown_highlights",
+    "eyebrow_piercing"
+  ],
+  "alpha_verified": true
+}

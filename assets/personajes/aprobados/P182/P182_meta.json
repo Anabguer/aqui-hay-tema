@@ -1,0 +1,22 @@
+{
+  "id": "P182",
+  "visual_gender": "hombre",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P182_neutral.png",
+  "candidate_asset": "P182_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_man",
+    "messy_silver_grey_medium_hair_dyed",
+    "lip_ring"
+  ],
+  "alpha_verified": true
+}

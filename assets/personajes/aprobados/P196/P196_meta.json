@@ -1,0 +1,22 @@
+{
+  "id": "P196",
+  "visual_gender": "hombre",
+  "apparent_age": "21-24",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P196_neutral.png",
+  "candidate_asset": "P196_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "black_steel_grey_split_dye_medium_hair",
+    "barbed_wire_neck_tattoo"
+  ],
+  "alpha_verified": true
+}

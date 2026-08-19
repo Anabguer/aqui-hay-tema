@@ -1,0 +1,22 @@
+{
+  "id": "P188",
+  "visual_gender": "hombre",
+  "apparent_age": "25-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P188_neutral.png",
+  "candidate_asset": "P188_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_man",
+    "long_brown_hair_with_silver_dyed_tips_subt",
+    "small_skull_neck_tattoo"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P200",
+  "visual_gender": "hombre",
+  "apparent_age": "24-27",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P200_neutral.png",
+  "candidate_asset": "P200_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "medium_brown_wavy_hair_with_slight_bleach_",
+    "nose_ring"
+  ],
+  "alpha_verified": true
+}

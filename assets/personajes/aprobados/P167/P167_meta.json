@@ -1,0 +1,22 @@
+{
+  "id": "P167",
+  "visual_gender": "mujer",
+  "apparent_age": "22-25",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P167_neutral.png",
+  "candidate_asset": "P167_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_woman",
+    "shoulder_length_braided_hair_mostly_black_",
+    "cheek_dimple_piercings"
+  ],
+  "alpha_verified": true
+}

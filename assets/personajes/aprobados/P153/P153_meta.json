@@ -1,0 +1,22 @@
+{
+  "id": "P153",
+  "visual_gender": "mujer",
+  "apparent_age": "22-25",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P153_neutral.png",
+  "candidate_asset": "P153_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "latina_woman",
+    "side_undercut_with_violet_purple_long_top",
+    "lip_ring"
+  ],
+  "alpha_verified": true
+}

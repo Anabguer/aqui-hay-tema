@@ -1,0 +1,22 @@
+{
+  "id": "P172",
+  "visual_gender": "hombre",
+  "apparent_age": "22-25",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P172_neutral.png",
+  "candidate_asset": "P172_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "buzzed_sides_with_small_flame_tattoo_on_te",
+    "short_goatee"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P152",
+  "visual_gender": "hombre",
+  "apparent_age": "21-24",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P152_neutral.png",
+  "candidate_asset": "P152_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_man",
+    "bleached_short_crop_with_dark_roots",
+    "small_neck_script_tattoo"
+  ],
+  "alpha_verified": true
+}

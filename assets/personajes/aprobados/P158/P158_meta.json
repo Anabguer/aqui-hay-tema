@@ -1,0 +1,22 @@
+{
+  "id": "P158",
+  "visual_gender": "hombre",
+  "apparent_age": "22-25",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P158_neutral.png",
+  "candidate_asset": "P158_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "latino_man",
+    "afro_with_copper_orange_warmth_controlled_",
+    "two_helix_piercings"
+  ],
+  "alpha_verified": true
+}

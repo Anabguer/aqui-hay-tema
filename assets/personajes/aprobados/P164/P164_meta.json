@@ -1,0 +1,22 @@
+{
+  "id": "P164",
+  "visual_gender": "hombre",
+  "apparent_age": "25-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P164_neutral.png",
+  "candidate_asset": "P164_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "middle_eastern_man",
+    "white_blond_curtain_hair",
+    "small_snake_tattoo_on_collarbone"
+  ],
+  "alpha_verified": true
+}

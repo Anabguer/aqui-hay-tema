@@ -1,0 +1,22 @@
+{
+  "id": "P157",
+  "visual_gender": "mujer",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P157_neutral.png",
+  "candidate_asset": "P157_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_woman",
+    "silver_grey_wolf_cut",
+    "thin_nose_chain"
+  ],
+  "alpha_verified": true
+}

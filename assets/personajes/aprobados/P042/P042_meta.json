@@ -1,0 +1,22 @@
+{
+  "id": "P042",
+  "visual_gender": "mujer",
+  "apparent_age": "60-66",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P042_neutral.png",
+  "candidate_asset": "P042_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pelo_corto_gris_rizado",
+    "pendientes_cuentas",
+    "top_azul"
+  ],
+  "alpha_verified": true
+}

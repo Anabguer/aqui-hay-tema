@@ -1,0 +1,18 @@
+{
+  "id": "P020",
+  "visual_gender": "hombre",
+  "apparent_age": "52-58",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P020_neutral.png",
+  "candidate_asset": "P020_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": [
+    "coronilla_marcada",
+    "bigote_handlebar",
+    "cara_estrecha",
+    "camisa_estampada"
+  ],
+  "alpha_verified": true
+}

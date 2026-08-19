@@ -1,0 +1,12 @@
+{
+  "id": "P003",
+  "visual_gender": "mujer",
+  "apparent_age": "32-37",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P003_neutral.png",
+  "candidate_asset": null,
+  "expressions": ["neutral", "alegre", "triste", "enfadada"],
+  "alpha_verified": true
+}

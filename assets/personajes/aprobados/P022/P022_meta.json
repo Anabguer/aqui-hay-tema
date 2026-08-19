@@ -1,0 +1,17 @@
+{
+  "id": "P022",
+  "visual_gender": "hombre",
+  "apparent_age": "28-34",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P022_neutral.png",
+  "candidate_asset": "P022_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": [
+    "rastas_trenzas",
+    "barba_cuidada",
+    "henley_terracota"
+  ],
+  "alpha_verified": true
+}

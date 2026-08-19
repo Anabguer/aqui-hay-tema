@@ -1,0 +1,22 @@
+{
+  "id": "P175",
+  "visual_gender": "mujer",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P175_neutral.png",
+  "candidate_asset": "P175_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_woman",
+    "white_hair_with_dark_roots_side_undercut",
+    "eyebrow_slit_cut"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,23 @@
+{
+  "id": "P034",
+  "visual_gender": "mujer",
+  "apparent_age": "28-34",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P034_neutral.png",
+  "candidate_asset": "P034_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "bandana_blanco_negro",
+    "pelo_rizado_oscuro",
+    "aros_plateados",
+    "camisa_vaquera_botones"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P185",
+  "visual_gender": "mujer",
+  "apparent_age": "27-30",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P185_neutral.png",
+  "candidate_asset": "P185_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "latina_woman",
+    "neutral_brown_blunt_bob",
+    "small_butterfly_neck_tattoo"
+  ],
+  "alpha_verified": true
+}

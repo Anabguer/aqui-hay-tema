@@ -1,0 +1,22 @@
+{
+  "id": "P171",
+  "visual_gender": "mujer",
+  "apparent_age": "20-23",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P171_neutral.png",
+  "candidate_asset": "P171_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "latina_woman",
+    "ombré_orange_to_black_medium_hair_only_thi",
+    "septum_ring"
+  ],
+  "alpha_verified": true
+}

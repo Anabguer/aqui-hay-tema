@@ -1,0 +1,22 @@
+{
+  "id": "P189",
+  "visual_gender": "mujer",
+  "apparent_age": "23-26",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P189_neutral.png",
+  "candidate_asset": "P189_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_woman",
+    "black_hime_cut_with_dark_reddish_tips",
+    "spider_tattoo_on_shoulder"
+  ],
+  "alpha_verified": true
+}

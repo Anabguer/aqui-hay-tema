@@ -1,0 +1,11 @@
+{
+  "id": "P004",
+  "visual_gender": "hombre",
+  "apparent_age": "60-67",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P004_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P160",
+  "visual_gender": "hombre",
+  "apparent_age": "24-27",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P160_neutral.png",
+  "candidate_asset": "P160_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_man",
+    "deep_brown_mullet_neutral",
+    "small_hand_tattoo_visible_on_neck"
+  ],
+  "alpha_verified": true
+}

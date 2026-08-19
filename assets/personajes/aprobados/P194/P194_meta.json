@@ -1,0 +1,22 @@
+{
+  "id": "P194",
+  "visual_gender": "hombre",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P194_neutral.png",
+  "candidate_asset": "P194_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_man",
+    "locs_with_gold_cuffs",
+    "eyebrow_piercing"
+  ],
+  "alpha_verified": true
+}
