@@ -377,5 +377,67 @@
         "ruptura_rapida_dias": 3,
         "dias_sin_actividad_preocupante": 7,
         "evaporacion_social_dias": 8
+    },
+    "vida_pueblo": {
+        "_provisional": true,
+        "_nota": "B1\/B2. Cifras de lab, no canon. No son misiones\/peticiones jugables.",
+        "inicial": 65,
+        "post_latido": 75,
+        "umbral_positivos_latido": 25,
+        "offline_dano_max": 15,
+        "offline_suelo": 5,
+        "game_over_en_play": false,
+        "ledger_cap": 400,
+        "bandas": [
+            {
+                "id": "critico",
+                "min": 0,
+                "max": 19,
+                "etiqueta": "Se nos va de las manos"
+            },
+            {
+                "id": "alerta",
+                "min": 20,
+                "max": 39,
+                "etiqueta": "Aquí pasa algo"
+            },
+            {
+                "id": "tirando",
+                "min": 40,
+                "max": 59,
+                "etiqueta": "Tirando, que no es poco"
+            },
+            {
+                "id": "temita",
+                "min": 60,
+                "max": 79,
+                "etiqueta": "Hay temita"
+            },
+            {
+                "id": "controlado",
+                "min": 80,
+                "max": 99,
+                "etiqueta": "Todo controlado"
+            },
+            {
+                "id": "latido",
+                "min": 100,
+                "max": 100,
+                "etiqueta": "Latido"
+            }
+        ],
+        "lab": {
+            "_etiqueta": "INPUT_DE_LAB",
+            "misiones_dia": 3,
+            "peticiones_dia": 2,
+            "mision_ok": 2,
+            "mision_fail": -2,
+            "peticion_ok": 2,
+            "peticion_fail": -2,
+            "hito": 4,
+            "farming_tick": 1,
+            "farming_por_dia": 12,
+            "offline_teorico_por_dia": 4
+        }
     }
 }

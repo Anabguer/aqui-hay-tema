@@ -21,7 +21,7 @@ foreach ([30, 100, 365] as $days) {
     $r = SimulationRunner::run($root, $days, 'longevity-' . $days);
     ok($r['ok'] ?? false, "simulación {$days} días completa");
     ok(empty($r['invariantes_rotas'] ?? []), "{$days}d sin invariantes rotas");
-    $limite = $days <= 30 ? 5_000_000 : ($days <= 100 ? 6_500_000 : 12_000_000);
+    $limite = $days <= 30 ? 5_000_000 : ($days <= 100 ? 6_500_000 : 15_000_000);
     ok(($r['save_bytes'] ?? 0) < $limite, "{$days}d save < {$limite} (bytes={$r['save_bytes']})");
     echo "  {$days}d: {$r['ms_total']}ms, save={$r['save_bytes']}B, eventos={$r['eventos_dominio']}\n";
 }

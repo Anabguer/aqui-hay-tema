@@ -9,6 +9,7 @@ final class SchemaFields
     public static function ensure(array &$partida): void
     {
         Reloj::ensure($partida);
+        VidaPuebloEngine::ensure($partida);
         $partida['audit_trail'] ??= [];
         $partida['descubrimientos'] ??= [];
         $partida['historial_relaciones'] ??= [];

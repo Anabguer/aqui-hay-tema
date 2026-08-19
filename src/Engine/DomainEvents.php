@@ -31,6 +31,8 @@ final class DomainEvents
     public const PAREJA_HITO = 'pareja_hito';
     public const ACONTECIMIENTO_DIARIO = 'acontecimiento_diario';
     public const SENAL_ROMANTICA = 'senal_romantica';
+    public const VIDA_PUEBLO_CAMBIADA = 'vida_pueblo_cambiada';
+    public const VIDA_PUEBLO_LATIDO = 'vida_pueblo_latido';
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';
