@@ -45,9 +45,13 @@ final class EncuentroResultadoVista
 
         $lineas = [];
         if ($terminado) {
-            $lineas[] = $social['texto'];
-            $lineas[] = $romance['texto'];
-            if ($conflicto['hay']) {
+            if (!empty($social['hay']) && (string) ($social['texto'] ?? '') !== '') {
+                $lineas[] = $social['texto'];
+            }
+            if (!empty($romance['hay']) && (string) ($romance['texto'] ?? '') !== '') {
+                $lineas[] = $romance['texto'];
+            }
+            if ($conflicto['hay'] && (string) ($conflicto['texto'] ?? '') !== '') {
                 $lineas[] = $conflicto['texto'];
             }
             foreach ($descubrimientos as $d) {
@@ -61,6 +65,23 @@ final class EncuentroResultadoVista
             }
         }
 
+        $resultado = [
+            'social' => $social,
+            'romance' => $romance,
+            'conflicto' => $conflicto,
+            'descubrimientos' => $descubrimientos,
+            'emociones' => $emociones,
+            'consecuencias' => $consecuencias,
+            'lineas' => $lineas,
+        ];
+        if (FeatureConfig::isEnabled($partida, 'debug_tools_enabled')) {
+            $resultado['debug'] = [
+                'social_delta' => $social['delta'] ?? 0,
+                'romance_delta' => $romance['delta'] ?? 0,
+                'conflicto' => $conflicto['valor'] ?? null,
+            ];
+        }
+
         return [
             'id' => $base['id'],
             'tipo' => $base['tipo'],
@@ -68,19 +89,13 @@ final class EncuentroResultadoVista
             'dia' => $base['dia'],
             'hora' => $base['hora'],
             'es_hoy' => $base['es_hoy'] ?? false,
+            'fecha_corta' => $base['fecha_corta'] ?? null,
+            'dia_semana_ui' => $base['dia_semana_ui'] ?? null,
             'lugar' => $base['lugar'],
             'lugar_nombre' => $base['lugar_nombre'],
             'participantes' => $base['participantes'],
             'participantes_nombres' => $base['participantes_nombres'],
-            'resultado' => [
-                'social' => $social,
-                'romance' => $romance,
-                'conflicto' => $conflicto,
-                'descubrimientos' => $descubrimientos,
-                'emociones' => $emociones,
-                'consecuencias' => $consecuencias,
-                'lineas' => $lineas,
-            ],
+            'resultado' => $resultado,
         ];
     }
 
@@ -89,18 +104,24 @@ final class EncuentroResultadoVista
     {
         $ds = is_array($res['delta_social'] ?? null) ? $res['delta_social'] : [];
         if ($ds === [] || (($ds['aplicado'] ?? true) === false && !array_key_exists('intensidad', $ds) && !isset($ds['tipo']) && !isset($ds['a_hacia_b']))) {
-            return ['hay' => false, 'delta' => 0, 'tipo' => null, 'texto' => 'Relación social: 0'];
+            return ['hay' => false, 'delta' => 0, 'tipo' => null, 'texto' => ''];
         }
         $n = array_key_exists('intensidad', $ds) ? (int) $ds['intensidad'] : 0;
         if ($n === 0 && (isset($ds['a_hacia_b']) || isset($ds['b_hacia_a']))) {
             $n = (int) round(((int) ($ds['a_hacia_b'] ?? 0) + (int) ($ds['b_hacia_a'] ?? 0)) / 2);
         }
         $tipo = isset($ds['tipo']) ? (string) $ds['tipo'] : null;
-        $texto = 'Relación social: ' . self::signo($n);
-        if ($tipo !== null && $tipo !== '' && $tipo !== 'roce') {
-            $texto .= ' (' . $tipo . ')';
+        if ($tipo === 'reales') {
+            $tipo = 'conocidos';
         }
-        return ['hay' => $n !== 0 || ($tipo !== null && $tipo !== ''), 'delta' => $n, 'tipo' => $tipo, 'texto' => $texto];
+        $texto = '';
+        if ($n > 0) {
+            $texto = 'Se han llevado mejor.';
+        } elseif ($n < 0) {
+            $texto = 'Se han llevado peor.';
+        }
+        $hay = $n !== 0;
+        return ['hay' => $hay, 'delta' => $n, 'tipo' => $tipo, 'texto' => $texto];
     }
 
     /** @param array<string, mixed> $res */
@@ -108,7 +129,7 @@ final class EncuentroResultadoVista
     {
         $dr = is_array($res['delta_romance'] ?? null) ? $res['delta_romance'] : [];
         if ($dr === [] || (($dr['aplicado'] ?? true) === false)) {
-            return ['hay' => false, 'delta' => 0, 'texto' => 'Romance: 0'];
+            return ['hay' => false, 'delta' => 0, 'texto' => ''];
         }
         $n = 0;
         if (array_key_exists('vinculo', $dr) && $dr['vinculo'] !== null) {
@@ -119,7 +140,13 @@ final class EncuentroResultadoVista
             $b = (int) ($dr['atraccion_b_hacia_a'] ?? 0);
             $n = $a !== 0 ? $a : $b;
         }
-        return ['hay' => $n !== 0, 'delta' => $n, 'texto' => 'Romance: ' . self::signo($n)];
+        $texto = '';
+        if ($n > 0) {
+            $texto = 'Ha habido un destello romántico.';
+        } elseif ($n < 0) {
+            $texto = 'El ambiente romántico se ha enfriado.';
+        }
+        return ['hay' => $n !== 0, 'delta' => $n, 'texto' => $texto];
     }
 
     /** @param array<string, mixed> $res */
@@ -138,9 +165,7 @@ final class EncuentroResultadoVista
             return ['hay' => false, 'valor' => null, 'texto' => null];
         }
         $valor = $conf ?? $romConf ?? true;
-        $texto = is_numeric($valor)
-            ? 'Conflicto/roce: ' . (string) $valor
-            : 'Conflicto/roce: sí';
+        $texto = 'Ha habido un roce.';
         return ['hay' => true, 'valor' => $valor, 'texto' => $texto];
     }
 
@@ -251,7 +276,7 @@ final class EncuentroResultadoVista
             $out[] = [
                 'residente' => $rid !== '' ? $rid : null,
                 'estado' => $estado,
-                'texto' => "Estado emocional: {$estado} ({$nombre}).",
+                'texto' => $nombre . ' ha cambiado de humor.',
             ];
         }
         return $out;
@@ -323,10 +348,5 @@ final class EncuentroResultadoVista
             return (string) $valor;
         }
         return '';
-    }
-
-    private static function signo(int $n): string
-    {
-        return $n > 0 ? '+' . $n : (string) $n;
     }
 }

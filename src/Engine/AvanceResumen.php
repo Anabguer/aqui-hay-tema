@@ -99,7 +99,7 @@ final class AvanceResumen
         $enc = is_array($despues['encuentro'] ?? null) ? $despues['encuentro'] : [];
         $nombres = self::nombresActores($partida, $e['actores'] ?? ($enc['participantes'] ?? []));
         $quien = $nombres !== [] ? implode(' + ', $nombres) : 'Encuentro';
-        $hora = self::horaTexto($e['ts_juego'] ?? null);
+        $hora = self::horaTexto($partida, $e['ts_juego'] ?? null);
 
         switch ($tipo) {
             case DomainEvents::ENCUENTRO_INICIADO:
@@ -124,11 +124,16 @@ final class AvanceResumen
                 $texto = $tipo;
         }
 
+        $ts = is_array($e['ts_juego'] ?? null) ? $e['ts_juego'] : [];
         return [
             'tipo' => $tipo,
             'texto' => $texto,
             'ts_juego' => $e['ts_juego'] ?? null,
             'encuentro_id' => self::encuentroIdDeEvento($e),
+            'debug' => [
+                'dia_pueblo' => (int) ($ts['dia'] ?? 0),
+                'hora' => (int) ($ts['hora'] ?? 0),
+            ],
         ];
     }
 
@@ -154,13 +159,16 @@ final class AvanceResumen
         return $out;
     }
 
-    private static function horaTexto($ts): string
+    private static function horaTexto(array $partida, $ts): string
     {
         if (!is_array($ts)) {
             return '—';
         }
         $dia = (int) ($ts['dia'] ?? 0);
         $hora = (int) ($ts['hora'] ?? 0);
-        return 'D' . $dia . ' · ' . str_pad((string) $hora, 2, '0', STR_PAD_LEFT) . ':00';
+        if ($dia < 1) {
+            return '—';
+        }
+        return Reloj::formatearDiaHora($partida['reloj'] ?? [], $dia, $hora);
     }
 }

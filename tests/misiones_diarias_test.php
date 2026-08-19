@@ -46,6 +46,9 @@ ok(FeatureConfig::isEnabled($p, MisionDiariaEngine::FLAG), 'playtest misiones on
 $hoy = MisionDiariaEngine::delDia($p);
 ok(count($hoy) <= 3, 'máximo 3 misiones día 1');
 ok(count($hoy) >= 1, 'día 1 tiene al menos 1 misión realizable');
+$estB3 = $service->estadoResumido($p);
+ok(isset($estB3['misiones_hoy']['misiones']) && count($estB3['misiones_hoy']['misiones']) >= 1, 'API estadoResumido trae Hoy en el pueblo');
+ok(($estB3['features'][MisionDiariaEngine::FLAG] ?? false) === true, 'flag misiones visible en estado');
 $fams = [];
 $imposibles = 0;
 foreach ($hoy as $m) {

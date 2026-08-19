@@ -99,8 +99,11 @@ final class EncuentroEngine
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
 
+        $attr = LugarAtributos::de($lugarId);
+        $durH = max(1, (int) ($attr['horas'] ?? 1));
+
         foreach ($participantes as $rid) {
-            $disp = AgendaEngine::estaDisponible($partida, $rid, $dia, $hora);
+            $disp = AgendaEngine::estaDisponibleIntervalo($partida, $rid, $dia, $hora, $durH);
             if (!$disp['disponible']) {
                 \aht_log_optional($logger, $partida, 'agenda_rechazo', [
                     'residente' => $rid,
@@ -120,7 +123,7 @@ final class EncuentroEngine
             }
         }
 
-        if (self::hayConflictoHorario($partida, $participantes, $dia, $hora)) {
+        if (self::hayConflictoHorario($partida, $participantes, $dia, $hora, $durH)) {
             return GameError::respuesta(GameError::DOBLE_RESERVA);
         }
 
@@ -137,6 +140,8 @@ final class EncuentroEngine
             'hora' => $hora,
             'dia' => $dia,
             'actividad' => $actividad,
+            'duracion_minutos' => (int) ($attr['duracion_minutos'] ?? 60),
+            'duracion_horas' => $durH,
             'estado' => 'programado',
             'reserva_agenda' => ['tipo' => 'encuentro', 'origen' => 'celeste'],
             'resultado' => null,
@@ -145,8 +150,10 @@ final class EncuentroEngine
 
         $partida['encuentros'] ??= [];
         $partida['encuentros'][] = $encuentro;
-        $partida['celeste']['intervenciones_organizadas_usadas_hoy'] =
-            (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0) + 1;
+        if ($tipo !== 'individual') {
+            $partida['celeste']['intervenciones_organizadas_usadas_hoy'] =
+                (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0) + 1;
+        }
 
         \aht_log_optional($logger, $partida, 'encuentro_programado', [
             'encuentro_id' => $encId,
@@ -167,18 +174,26 @@ final class EncuentroEngine
         return $dev !== null ? (int) $dev : null;
     }
 
-    public static function hayConflictoHorario(array $partida, array $participantes, int $dia, int $hora): bool
-    {
-        foreach (self::list($partida) as $enc) {
-            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
-                continue;
-            }
-            if (!in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
-                continue;
-            }
-            foreach ($enc['participantes'] ?? [] as $p) {
-                if (in_array($p, $participantes, true)) {
-                    return true;
+    public static function hayConflictoHorario(
+        array $partida,
+        array $participantes,
+        int $dia,
+        int $hora,
+        int $duracionHoras = 1
+    ): bool {
+        $duracionHoras = max(1, $duracionHoras);
+        for ($h = $hora; $h < $hora + $duracionHoras; $h++) {
+            foreach (self::list($partida) as $enc) {
+                if (!LugarAtributos::ocupaHora($enc, $dia, $h)) {
+                    continue;
+                }
+                if (!in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
+                    continue;
+                }
+                foreach ($enc['participantes'] ?? [] as $p) {
+                    if (in_array($p, $participantes, true)) {
+                        return true;
+                    }
                 }
             }
         }

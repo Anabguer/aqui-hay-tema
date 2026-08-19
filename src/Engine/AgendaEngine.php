@@ -159,6 +159,28 @@ final class AgendaEngine
         return ['disponible' => true, 'motivo' => null];
     }
 
+    /**
+     * Disponible durante todo el intervalo [hora, hora+duracion).
+     *
+     * @return array<string, mixed>
+     */
+    public static function estaDisponibleIntervalo(
+        array $partida,
+        string $residenteId,
+        int $dia,
+        int $hora,
+        int $duracionHoras
+    ): array {
+        $duracionHoras = max(1, $duracionHoras);
+        for ($h = $hora; $h < $hora + $duracionHoras; $h++) {
+            $disp = self::estaDisponible($partida, $residenteId, $dia, $h);
+            if (!($disp['disponible'] ?? false)) {
+                return $disp;
+            }
+        }
+        return ['disponible' => true, 'motivo' => null];
+    }
+
     public static function primerSlotLibre(array $partida, string $residenteId, int $dia, int $horaMin = 8): ?int
     {
         $agenda = self::resolverDia($partida, $residenteId, $dia);

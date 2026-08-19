@@ -73,7 +73,8 @@ ok(($resIr['total'] ?? 0) >= 1, 'ir al próximo: hay líneas de resumen');
 
 // +8h desde 19: el de 19 termina; el de 21 comienza y termina (19+8=3 del día 2? 19+8=27 → día 2 hora 3)
 [$service, $partida, $ida, $idb] = setup();
-$service->programarEncuentro($partida, [$ida, $idb], 1, 9, 'conocerse');
+$partida['celeste']['lugares_desbloqueados'][] = 'lug_parque';
+$service->programarEncuentro($partida, [$ida, $idb], 1, 9, 'conocerse', 'lug_parque');
 $paso = $service->avanzarRelojPasoAPaso($partida, 8);
 ok($paso['ok'] ?? false, '+8h ok');
 $res8 = $paso['resumen_avance'] ?? [];
@@ -83,6 +84,8 @@ ok(in_array(DomainEvents::ENCUENTRO_INICIADO, $tipos8, true), '+8h: encuentro co
 ok(in_array(DomainEvents::ENCUENTRO_TERMINADO, $tipos8, true), '+8h: encuentro terminó');
 foreach ($res8['lineas'] ?? [] as $l) {
     ok(is_string($l['texto'] ?? null) && $l['texto'] !== '', 'línea de avance tiene texto');
+    ok(strpos((string) ($l['texto'] ?? ''), 'D1 ·') === false, 'copy de avance sin D1 técnico');
+    ok(strpos((string) ($l['texto'] ?? ''), 'D2 ·') === false, 'copy de avance sin D2 técnico');
 }
 
 $snap = AvanceResumen::snapshot($partida);

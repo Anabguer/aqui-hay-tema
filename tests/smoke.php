@@ -43,7 +43,7 @@ assertTrue(count($agenda['slots']) === 24, 'agenda 24 slots');
 $enc = EncuentroEngine::programar($partida, ['per_qa_valid', $ph['residente']['catalog_id']], 1, 19, 'conocerse');
 assertTrue($enc['ok'] ?? false, 'encuentro programado 19h');
 
-Reloj::avanzarHoras($partida, 12);
+Reloj::avanzarHoras($partida, 16);
 EncuentroLifecycle::sincronizarConReloj($partida, $service->getLogger());
 $terminado = false;
 foreach ($partida['encuentros'] as $e) {

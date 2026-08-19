@@ -16,7 +16,7 @@ final class CopyDescubrimiento
             return 'Has descubierto que a ' . $nombre . ' le va ' . EtiquetaFicha::hobby($id, $store) . '.';
         }
         if (str_starts_with($campo, 'rasgo:')) {
-            return $nombre . ' da el pego de ' . self::min(EtiquetaFicha::rasgo($id, $store)) . '. Anotado.';
+            return $nombre . ' parece ' . self::min(EtiquetaFicha::rasgo($id, $store)) . '.';
         }
         if (str_starts_with($campo, 'rechazo_personalidad:')) {
             return 'Has descubierto que ' . $nombre . ' no soporta a la gente '

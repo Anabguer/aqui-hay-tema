@@ -12,7 +12,15 @@ final class BuzonHandler
 {
     public static function listar(ApiContext $ctx, array $body, array $partida): array
     {
-        return ['ok' => true, 'mensajes' => BuzonEngine::listar($partida, $body['estado'] ?? null)];
+        return [
+            'ok' => true,
+            'mensajes' => BuzonEngine::listar(
+                $partida,
+                $body['estado'] ?? null,
+                $body['clasificacion'] ?? null,
+                $body['canal'] ?? null
+            ),
+        ];
     }
 
     public static function leer(ApiContext $ctx, array $body, array &$partida): array

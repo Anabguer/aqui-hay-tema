@@ -287,6 +287,7 @@ final class PartidaService
                 PeticionPuebloEngine::FLAG => FeatureConfig::isEnabled($partida, PeticionPuebloEngine::FLAG),
                 'debug_tools_enabled' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
             ],
+            'planes_organizar' => PropuestaNivel::contratoOrganizar(),
         ];
         if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
             $vista = VidaPuebloEngine::vista($partida, $cal);

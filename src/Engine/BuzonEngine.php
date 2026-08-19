@@ -11,6 +11,16 @@ final class BuzonEngine
     public const PETICION = 'peticion';
     public const COTILLEO = 'cotilleo';
     public const CLASIFICACIONES = [self::IMPORTANTE, self::OPORTUNIDAD, self::PETICION, self::COTILLEO];
+    public const CANAL_BUZON = 'buzon';
+    public const CANAL_COTILLEO = 'cotilleo';
+
+    public static function canalDe(string $clasificacion): string
+    {
+        if ($clasificacion === self::COTILLEO) {
+            return self::CANAL_COTILLEO;
+        }
+        return self::CANAL_BUZON;
+    }
 
     public static function crear(array &$partida, array $mensaje): array
     {
@@ -37,6 +47,13 @@ final class BuzonEngine
             '_placeholder_contenido' => true,
         ], $mensaje);
         $entry['clasificacion'] = $clas;
+        $entry['canal'] = self::canalDe($clas);
+        $reloj = $partida['reloj'] ?? [];
+        $diaMsg = (int) ($entry['dia'] ?? ($reloj['dia_pueblo'] ?? 1));
+        $entry['dia'] = $diaMsg;
+        $entry['fecha_corta'] = Reloj::fechaCorta($reloj, $diaMsg);
+        $entry['fecha_iso'] = Reloj::fechaIso($reloj, $diaMsg);
+        $entry['dia_semana_ui'] = Reloj::diaSemanaUi($diaMsg, $reloj);
         if (!in_array($entry['estado'] ?? '', self::ESTADOS, true)) {
             $entry['estado'] = 'pendiente';
         }
@@ -65,8 +82,12 @@ final class BuzonEngine
         return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
     }
 
-    public static function listar(array $partida, ?string $estado = null, ?string $clasificacion = null): array
-    {
+    public static function listar(
+        array $partida,
+        ?string $estado = null,
+        ?string $clasificacion = null,
+        ?string $canal = null
+    ): array {
         $items = $partida['buzon'] ?? [];
         if ($estado !== null) {
             $items = array_values(array_filter($items, static function ($m) use ($estado) {
@@ -76,6 +97,12 @@ final class BuzonEngine
         if ($clasificacion !== null) {
             $items = array_values(array_filter($items, static function ($m) use ($clasificacion) {
                 return ($m['clasificacion'] ?? '') === $clasificacion;
+            }));
+        }
+        if ($canal !== null) {
+            $items = array_values(array_filter($items, static function ($m) use ($canal) {
+                $c = (string) ($m['canal'] ?? self::canalDe((string) ($m['clasificacion'] ?? self::PETICION)));
+                return $c === $canal;
             }));
         }
         return $items;

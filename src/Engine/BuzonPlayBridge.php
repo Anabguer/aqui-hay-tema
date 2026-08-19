@@ -74,13 +74,7 @@ final class BuzonPlayBridge
             ];
         }
         if ($evento === DomainEvents::ENCUENTRO_TERMINADO) {
-            return [
-                'clasificacion' => BuzonEngine::IMPORTANTE,
-                'tipo' => 'encuentro',
-                'texto' => $quien !== '' ? 'Ha ocurrido algo entre ' . $quien . '.' : 'Ha terminado un encuentro.',
-                'origen' => ['evento_id' => $envelope['encuentro']['id'] ?? null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
-                '_placeholder_contenido' => false,
-            ];
+            return self::mensajeEncuentroTerminado($partida, $envelope, $quien);
         }
         if ($evento === DomainEvents::PROPUESTA_ENCUENTRO) {
             $prop = is_array($envelope['propuesta'] ?? null) ? $envelope['propuesta'] : [];
@@ -96,15 +90,7 @@ final class BuzonPlayBridge
             ];
         }
         if ($evento === DomainEvents::NPC_AUTONOMO_PLAN) {
-            $rid = (string) ($envelope['residente_id'] ?? ($actores[0] ?? ''));
-            $nom = $rid !== '' ? IdentidadPublica::nombre($partida, $rid) : 'Alguien';
-            return [
-                'clasificacion' => BuzonEngine::COTILLEO,
-                'tipo' => 'autonomo',
-                'texto' => $nom . ' ha salido por su cuenta.',
-                'origen' => ['evento_id' => null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
-                '_placeholder_contenido' => false,
-            ];
+            return null;
         }
         if ($evento === DomainEvents::PETICION_CREADA) {
             $pet = is_array($envelope['peticion'] ?? null) ? $envelope['peticion'] : [];
@@ -135,7 +121,7 @@ final class BuzonPlayBridge
         }
         if ($evento === DomainEvents::DISCUSION) {
             return [
-                'clasificacion' => BuzonEngine::IMPORTANTE,
+                'clasificacion' => BuzonEngine::COTILLEO,
                 'tipo' => 'discusion',
                 'texto' => $quien !== '' ? $quien . ' se han enfadado.' : 'Ha habido una discusión.',
                 'origen' => ['evento_id' => null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
@@ -164,6 +150,102 @@ final class BuzonPlayBridge
                 ],
                 '_placeholder_contenido' => false,
             ];
+        }
+        return null;
+    }
+
+    /**
+     * Cotilleo solo si hay algo que contar. Vacío → ningún aviso.
+     *
+     * @param array<string, mixed> $envelope
+     * @return array<string, mixed>|null
+     */
+    private static function mensajeEncuentroTerminado(array $partida, array $envelope, string $quien): ?array
+    {
+        $enc = is_array($envelope['encuentro'] ?? null) ? $envelope['encuentro'] : [];
+        $res = is_array($envelope['resultado'] ?? null) ? $envelope['resultado'] : [];
+        if ($res === [] && is_array($enc['resultado'] ?? null)) {
+            $res = $enc['resultado'];
+        }
+        $texto = self::copyEncuentroDigno($partida, $enc, $res, $quien);
+        if ($texto === null) {
+            return null;
+        }
+        return [
+            'clasificacion' => BuzonEngine::COTILLEO,
+            'tipo' => 'cotilleo',
+            'texto' => $texto,
+            'origen' => [
+                'evento_id' => $enc['id'] ?? null,
+                'tipo_evento' => DomainEvents::ENCUENTRO_TERMINADO,
+                'es_narrativo' => false,
+                '_placeholder' => false,
+            ],
+            '_placeholder_contenido' => false,
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $enc
+     * @param array<string, mixed> $res
+     */
+    private static function copyEncuentroDigno(array $partida, array $enc, array $res, string $quien): ?string
+    {
+        $ds = is_array($res['delta_social'] ?? null) ? $res['delta_social'] : [];
+        $n = 0;
+        if (array_key_exists('intensidad', $ds)) {
+            $n = (int) $ds['intensidad'];
+        } elseif (isset($ds['a_hacia_b']) || isset($ds['b_hacia_a'])) {
+            $n = (int) round(((int) ($ds['a_hacia_b'] ?? 0) + (int) ($ds['b_hacia_a'] ?? 0)) / 2);
+        }
+        $dr = is_array($res['delta_romance'] ?? null) ? $res['delta_romance'] : [];
+        $rom = (int) ($dr['vinculo'] ?? 0);
+        if ($rom === 0) {
+            $ra = (int) ($dr['atraccion_a_hacia_b'] ?? ($dr['a_hacia_b'] ?? 0));
+            $rb = (int) ($dr['atraccion_b_hacia_a'] ?? ($dr['b_hacia_a'] ?? 0));
+            $rom = $ra !== 0 ? $ra : $rb;
+        }
+        $conf = $res['conflicto'] ?? null;
+        $hayConf = ($enc['tipo'] ?? '') === 'conflicto'
+            || ($ds['tipo'] ?? '') === 'roce'
+            || (($ds['se_soportan'] ?? true) === false)
+            || ($conf !== null && $conf !== false && $conf !== '' && $conf !== 0 && $conf !== '0');
+        $disc = is_array($res['descubrimientos'] ?? null) ? $res['descubrimientos'] : [];
+        $hayDisc = false;
+        foreach ($disc as $item) {
+            if (is_array($item) && ((string) ($item['campo'] ?? '') !== '' || (string) ($item['texto'] ?? '') !== '')) {
+                $hayDisc = true;
+                break;
+            }
+        }
+        if ($n === 0 && $rom === 0 && !$hayConf && !$hayDisc) {
+            return null;
+        }
+
+        $sujeto = $quien !== '' ? $quien : 'Han coincidido';
+        if ($hayConf) {
+            return $sujeto . ' han tenido un roce.';
+        }
+        if ($rom > 0) {
+            return 'Ha habido chispa entre ' . $sujeto . '.';
+        }
+        if ($rom < 0) {
+            return 'El ambiente se ha enfriado entre ' . $sujeto . '.';
+        }
+        if ($n > 0) {
+            return $sujeto . ' se han llevado mejor.';
+        }
+        if ($n < 0) {
+            return $sujeto . ' se han llevado peor.';
+        }
+        if ($hayDisc) {
+            $nombre = $sujeto;
+            $first = is_array($disc[0] ?? null) ? $disc[0] : [];
+            $rid = (string) ($first['residente'] ?? $first['residente_id'] ?? '');
+            if ($rid !== '') {
+                $nombre = IdentidadPublica::nombre($partida, $rid);
+            }
+            return 'Has descubierto algo de ' . $nombre . '.';
         }
         return null;
     }

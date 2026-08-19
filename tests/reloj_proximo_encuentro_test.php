@@ -87,7 +87,8 @@ ok(($rMan['encuentro']['estado'] ?? '') === 'en_curso', 'encuentro de mañana en
 
 // Eventos intermedios con +8h paso a paso: 9h se inicia y termina.
 [$service, $partida, $ida, $idb] = setup();
-$enc9 = $service->programarEncuentro($partida, [$ida, $idb], 1, 9, 'conocerse');
+$partida['celeste']['lugares_desbloqueados'][] = 'lug_parque';
+$enc9 = $service->programarEncuentro($partida, [$ida, $idb], 1, 9, 'conocerse', 'lug_parque');
 ok($enc9['ok'] ?? false, 'programa encuentro 9h para +8h');
 $paso = $service->avanzarRelojPasoAPaso($partida, 8);
 ok($paso['ok'] ?? false, '+8h paso a paso ok');

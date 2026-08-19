@@ -68,7 +68,7 @@ ok($reprog['ok'] ?? false, 'se puede volver a programar la misma hora');
 
 $enc2 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'conocerse');
 ok($enc2['ok'] ?? false, 'segundo encuentro 21h');
-$service->avanzarReloj($partida, 14);
+$service->avanzarReloj($partida, 16);
 $estTerm = null;
 foreach ($partida['encuentros'] as $e) {
     if ($e['id'] === ($enc2['encuentro']['id'] ?? '')) {

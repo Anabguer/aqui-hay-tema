@@ -178,6 +178,16 @@ final class Reloj
             . ' · ' . $dt->format('H:i');
     }
 
+    /** Fecha/hora humanas de un día de pueblo. Sin IDs técnicos tipo D2. */
+    public static function formatearDiaHora(array $reloj, int $diaPueblo, int $hora, int $minuto = 0): string
+    {
+        $fake = $reloj;
+        $fake['dia_pueblo'] = max(1, $diaPueblo);
+        $fake['hora_actual'] = max(0, min(23, $hora));
+        $fake['minuto_actual'] = max(0, min(59, $minuto));
+        return self::formatear($fake);
+    }
+
     public static function fechaIso(array $reloj, int $diaPueblo): string
     {
         return self::fechaDeDia($reloj, $diaPueblo)->format('Y-m-d');

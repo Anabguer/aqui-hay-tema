@@ -143,7 +143,7 @@ ok(array_key_exists('copy_id', $rVol['propuesta']['reacciones'][1]) && $rVol['pr
 $slice = PropuestaEncuentroEngine::proponer($partida, [$ida, $idb], 1, 19, 'conocerse', null, null, $aceptaSiempre);
 ok(($slice['programado'] ?? false) === true, 'evaluator test acepta ambos → programa');
 $encId = $slice['encuentro']['id'] ?? '';
-$adv = $service->avanzarReloj($partida, 12);
+$adv = $service->avanzarReloj($partida, 16);
 ok(($adv['ok'] ?? false) === true, 'avanzar reloj resuelve encuentro');
 $rel = RelacionEngine::obtenerEntre($partida, $ida, $idb);
 ok(RelacionEngine::seConocen($partida, $ida, $idb), 'tras encuentro son conocidos');

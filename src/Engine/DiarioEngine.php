@@ -22,6 +22,12 @@ final class DiarioEngine
             ],
             '_placeholder_contenido' => true,
         ], $entrada);
+        $reloj = $partida['reloj'] ?? [];
+        $diaMsg = (int) ($entry['dia'] ?? ($reloj['dia_pueblo'] ?? 1));
+        $entry['dia'] = $diaMsg;
+        $entry['fecha_corta'] = Reloj::fechaCorta($reloj, $diaMsg);
+        $entry['fecha_iso'] = Reloj::fechaIso($reloj, $diaMsg);
+        $entry['dia_semana_ui'] = Reloj::diaSemanaUi($diaMsg, $reloj);
 
         $partida['diario'] ??= [];
         $partida['diario'][] = $entry;

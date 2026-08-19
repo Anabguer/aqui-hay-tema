@@ -34,7 +34,8 @@ function terminarTrasProgramar(PartidaService $service, array &$partida, array $
     $dia = (int) $enc['encuentro']['dia'];
     $hora = (int) $enc['encuentro']['hora'];
     $now = ((int) $partida['reloj']['dia_pueblo']) * 24 + (int) $partida['reloj']['hora_actual'];
-    $end = $dia * 24 + $hora + 1;
+    $dur = max(1, (int) ($enc['encuentro']['duracion_horas'] ?? 1));
+    $end = $dia * 24 + $hora + $dur;
     $horas = max(1, $end - $now);
     return $service->avanzarRelojPasoAPaso($partida, $horas);
 }
@@ -99,8 +100,11 @@ $rawR = encTerminado($partida, (string) $encR['encuentro']['id']);
 $vistaR = EncuentroResultadoVista::de($partida, $rawR, $service->getCatalog(), $root);
 ok(($vistaR['resultado']['social']['delta'] ?? 0) === -1, 'social -1 independiente');
 ok(($vistaR['resultado']['romance']['delta'] ?? 0) === 1, 'romance +1 independiente');
-ok(str_contains($vistaR['resultado']['social']['texto'] ?? '', 'Relación social: -1'), 'copy social funcional');
-ok(str_contains($vistaR['resultado']['romance']['texto'] ?? '', 'Romance: +1'), 'copy romance funcional');
+ok(str_contains($vistaR['resultado']['social']['texto'] ?? '', 'llevado peor'), 'copy social en lenguaje natural');
+ok(str_contains($vistaR['resultado']['romance']['texto'] ?? '', 'romántico'), 'copy romance en lenguaje natural');
+ok(($vistaR['resultado']['social']['delta'] ?? 0) === -1, 'delta social sigue en datos');
+ok(!str_contains($vistaR['resultado']['social']['texto'] ?? '', 'reales'), 'copy sin “reales”');
+ok(!str_contains(implode(' ', $vistaR['resultado']['lineas'] ?? []), 'Romance: 0'), 'lineas no incluyen romance 0');
 
 // Ambos 0
 [$service, $partida, $ida, $idb] = setup();

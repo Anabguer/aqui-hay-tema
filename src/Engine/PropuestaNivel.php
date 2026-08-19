@@ -138,4 +138,56 @@ final class PropuestaNivel
         $tipo = self::aliasTipo($tipo);
         return $tipo === self::QUEDAR || $tipo === self::PRESENTAR;
     }
+
+    /**
+     * Cupo de caras que la UI pide DESPUÉS de elegir tipo (contrato Carlos II).
+     * Conocerse = 1. Quedar/cita = 2. Grupales apagados.
+     * El motor de propuestas sigue exigiendo 2 IDs para conocerse
+     * hasta que el flujo “1 cara + contexto” se cablee.
+     */
+    public static function cupoUi(string $tipo): int
+    {
+        $tipo = self::aliasTipo($tipo);
+        if ($tipo === self::PRESENTAR || $tipo === 'individual') {
+            return 1;
+        }
+        return 2;
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public static function contratoOrganizar(): array
+    {
+        return [
+            [
+                'tipo' => self::PRESENTAR,
+                'etiqueta' => self::etiquetaPlay(self::PRESENTAR),
+                'cupo' => 1,
+                'grupal' => false,
+                'participantes_motor_min' => 2,
+            ],
+            [
+                'tipo' => self::QUEDAR,
+                'etiqueta' => self::etiquetaPlay(self::QUEDAR),
+                'cupo' => 2,
+                'grupal' => false,
+                'participantes_motor_min' => 2,
+            ],
+            [
+                'tipo' => self::PRIMERA_CITA,
+                'etiqueta' => self::etiquetaPlay(self::PRIMERA_CITA),
+                'cupo' => 2,
+                'grupal' => false,
+                'participantes_motor_min' => 2,
+            ],
+            [
+                'tipo' => self::CITA,
+                'etiqueta' => self::etiquetaPlay(self::CITA),
+                'cupo' => 2,
+                'grupal' => false,
+                'participantes_motor_min' => 2,
+            ],
+        ];
+    }
 }

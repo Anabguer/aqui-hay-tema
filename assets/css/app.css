@@ -571,6 +571,9 @@ pre.inspect {
   display: grid;
   gap: 0.85rem;
 }
+.pueblo-vida-wrap[hidden] {
+  display: none !important;
+}
 .vida-corazon-card {
   display: flex;
   align-items: center;

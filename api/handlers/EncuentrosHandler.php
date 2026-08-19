@@ -90,6 +90,7 @@ final class EncuentrosHandler
             $opciones[] = [
                 'id' => $t,
                 'label' => \AquiHayTema\Engine\PropuestaNivel::etiquetaPlay($t),
+                'cupo' => \AquiHayTema\Engine\PropuestaNivel::cupoUi($t),
             ];
         }
         return [
@@ -97,6 +98,7 @@ final class EncuentrosHandler
             'conocidos' => $a !== '' && $b !== '' && \AquiHayTema\Engine\RelacionEngine::seConocen($partida, $a, $b),
             'tipos' => $tipos,
             'opciones' => $opciones,
+            'planes_organizar' => \AquiHayTema\Engine\PropuestaNivel::contratoOrganizar(),
             'hint' => \AquiHayTema\Engine\PropuestaNivel::hintPlay($partida, $a, $b, $cal),
         ];
     }

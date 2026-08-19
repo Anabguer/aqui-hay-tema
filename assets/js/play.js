@@ -52,12 +52,30 @@
     return cacheInspeccion?.residentes?.[id]?.identidad_publica?.nombre || id;
   }
 
+  function fechaDeDiaPueblo(dia) {
+    const vista = cacheEstado && cacheEstado.reloj_vista;
+    const hit = ((vista && vista.proximos_dias) || []).find(d => Number(d.dia_pueblo) === Number(dia));
+    if (hit && hit.fecha_corta) {
+      return { corta: hit.fecha_corta, sem: hit.dia_semana_ui || '' };
+    }
+    const ancla = vista && vista.fecha_ancla;
+    if (!ancla || !dia) return null;
+    const dt = new Date(ancla + 'T00:00:00');
+    dt.setDate(dt.getDate() + (Number(dia) - 1));
+    const dd = String(dt.getDate()).padStart(2, '0');
+    const mm = String(dt.getMonth() + 1).padStart(2, '0');
+    const dias = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+    return { corta: dd + '/' + mm, sem: dias[dt.getDay()] || '' };
+  }
+
   function formatHora(dia, hora, slot) {
     const hh = String(hora).padStart(2, '0') + ':00';
-    const corta = (slot && slot.fecha_corta) || (cacheEstado && cacheEstado.reloj_vista && cacheEstado.reloj_vista.fecha_corta) || '';
-    const sem = (slot && slot.dia_semana_ui) || '';
-    if (corta) return (sem ? sem + ' ' : '') + corta + ' · ' + hh;
-    return 'D' + dia + ' · ' + hh;
+    const fromSlot = slot && slot.fecha_corta
+      ? { corta: slot.fecha_corta, sem: slot.dia_semana_ui || '' }
+      : null;
+    const info = fromSlot || fechaDeDiaPueblo(dia);
+    if (info && info.corta) return (info.sem ? info.sem + ' ' : '') + info.corta + ' - ' + hh;
+    return hh;
   }
 
   function estadoLabel(estado) {
@@ -826,7 +844,7 @@
       const estado = m.estado || 'pendiente';
       row.appendChild(el('span', `estado-badge estado-${estado}`, estado));
       row.appendChild(el('div', null, `${nombreResidente(m.de_persona || 'sistema')} · ${m.tipo || 'mensaje'}`));
-      row.appendChild(el('div', 'mini-meta', `D${m.dia || '—'}`));
+      row.appendChild(el('div', 'mini-meta', (m.clasificacion === 'peticion' ? 'Peticion' : (m.canal === 'cotilleo' || m.clasificacion === 'cotilleo' ? 'Cotilleo' : 'Aviso')) + ' - ' + (m.fecha_corta || '')));
       row.appendChild(el('div', 'msg-texto', m.texto || '(sin texto)'));
       if (estado === 'pendiente') {
         const btn = el('button', 'btn-inline', 'Marcar leído');
@@ -855,7 +873,7 @@
     entradas.slice(-8).reverse().forEach(d => {
       const row = el('div', 'dia-row');
       row.appendChild(el('div', null, d.tipo || 'entrada'));
-      row.appendChild(el('div', 'mini-meta', `D${d.dia || '—'}`));
+      row.appendChild(el('div', 'mini-meta', d.fecha_corta || ''));
       row.appendChild(el('div', null, d.texto || '(sin texto)'));
       panel.appendChild(row);
     });
