@@ -50,7 +50,7 @@ final class DevCalendarService
         return [
             'ok' => true,
             'dia' => $dia,
-            'dia_semana' => Reloj::diaSemana($dia),
+            'dia_semana' => Reloj::diaSemana($dia, $partida['reloj'] ?? []),
             'residentes' => $filas,
             'encuentros_dia' => array_values(array_filter(
                 $partida['encuentros'] ?? [],

@@ -49,6 +49,20 @@ final class PropuestaEncuentroEngine
         }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
+        $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
+        if (count($participantes) >= 2
+            && !PropuestaNivel::permite($partida, (string) $participantes[0], (string) $participantes[1], $tipo, $calDef)
+        ) {
+            return GameError::respuesta(GameError::TIPO_ENCUENTRO_NO_DISPONIBLE, [
+                'tipo' => $tipo,
+                'tipos_permitidos' => PropuestaNivel::tiposPermitidos(
+                    $partida,
+                    (string) $participantes[0],
+                    (string) $participantes[1],
+                    $calDef
+                ),
+            ]);
+        }
         $franja = self::resolverFranja($partida, $participantes, $dia, $hora);
         if ($franja === null) {
             return GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD, [
@@ -58,7 +72,6 @@ final class PropuestaEncuentroEngine
         $dia = (int) $franja['dia'];
         $hora = (int) $franja['hora'];
         if ($voluntad === null) {
-            $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
             $voluntad = new VoluntadPonderadaEvaluator($calDef);
         }
 
@@ -270,11 +283,12 @@ final class PropuestaEncuentroEngine
             $nombres[] = IdentidadPublica::nombre($partida, (string) $pid);
         }
         $quien = implode(' y ', $nombres);
-        $diaSem = Reloj::diaSemana((int) $prop['dia']);
+        $fechaTxt = Reloj::fechaCorta($partida['reloj'] ?? [], (int) $prop['dia']);
+        $diaSem = Reloj::diaSemanaUi((int) $prop['dia'], $partida['reloj'] ?? []);
         $hh = str_pad((string) (int) $prop['hora'], 2, '0', STR_PAD_LEFT);
         $lugar = (string) ($prop['lugar'] ?? '');
         $sitio = $lugar !== '' ? str_replace('lug_', '', $lugar) : 'el pueblo';
-        $r['mensaje_ui'] = $quien . ' han quedado el ' . $diaSem . ' a las ' . $hh . ':00 en ' . $sitio . '.';
+        $r['mensaje_ui'] = $quien . ' han quedado el ' . $diaSem . ' ' . $fechaTxt . ' a las ' . $hh . ':00 en ' . $sitio . '.';
         return $r;
     }
 
@@ -316,6 +330,7 @@ final class PropuestaEncuentroEngine
         if (!($disp['disponible'] ?? false)) {
             return [
                 'residente_id' => $residenteId,
+                'nombre' => IdentidadPublica::nombre($partida, $residenteId),
                 'decision' => PropuestaEncuentro::DECISION_RECHAZA,
                 'clase' => PropuestaEncuentro::CLASE_INDISPONIBILIDAD,
                 'motivo_tecnico' => (string) ($disp['motivo'] ?? 'ocupado'),
@@ -327,6 +342,7 @@ final class PropuestaEncuentroEngine
         if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $hora)) {
             return [
                 'residente_id' => $residenteId,
+                'nombre' => IdentidadPublica::nombre($partida, $residenteId),
                 'decision' => PropuestaEncuentro::DECISION_RECHAZA,
                 'clase' => PropuestaEncuentro::CLASE_INDISPONIBILIDAD,
                 'motivo_tecnico' => 'doble_reserva',
@@ -358,6 +374,7 @@ final class PropuestaEncuentroEngine
         }
         return [
             'residente_id' => $residenteId,
+            'nombre' => IdentidadPublica::nombre($partida, $residenteId),
             'decision' => (string) ($ev['decision'] ?? PropuestaEncuentro::DECISION_PENDIENTE),
             'clase' => $ev['clase'] ?? null,
             'motivo_tecnico' => (string) ($ev['motivo_tecnico'] ?? 'voluntad'),
@@ -434,17 +451,52 @@ final class PropuestaEncuentroEngine
             $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
         } elseif ($rechazada && $clase === PropuestaEncuentro::CLASE_VOLUNTAD) {
             $out['error'] = GameError::ENCUENTRO_RECHAZADO_VOLUNTAD;
-            $copyId = null;
-            foreach ($propuesta['reacciones'] ?? [] as $reac) {
-                if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA && !empty($reac['copy_id'])) {
-                    $copyId = (string) $reac['copy_id'];
-                    break;
-                }
-            }
-            $out['mensaje_ui'] = CopyVoluntad::texto($copyId);
+            $hablante = self::rechazoHablante($propuesta);
+            $copyId = $hablante['copy_id'];
+            $nombre = $hablante['nombre'] !== '' ? $hablante['nombre'] : 'Alguien';
+            $out['mensaje_ui'] = CopyVoluntad::rechazoConHablante($nombre, $copyId);
             $out['copy_id'] = $copyId;
+            $out['rechazado_por'] = $hablante;
         }
         return $out;
+    }
+
+    /**
+     * Prefiere al segundo participante (a quien se propone) si rechazó.
+     *
+     * @return array{residente_id: ?string, nombre: string, copy_id: ?string}
+     */
+    private static function rechazoHablante(array $propuesta): array
+    {
+        $ids = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+        $preferido = isset($ids[1]) ? (string) $ids[1] : '';
+        $fallback = [
+            'residente_id' => null,
+            'nombre' => '',
+            'copy_id' => null,
+        ];
+        $elegido = null;
+        foreach ($propuesta['reacciones'] ?? [] as $reac) {
+            if (($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            $row = [
+                'residente_id' => (string) ($reac['residente_id'] ?? ''),
+                'nombre' => (string) ($reac['nombre'] ?? ''),
+                'copy_id' => !empty($reac['copy_id']) ? (string) $reac['copy_id'] : null,
+            ];
+            if ($elegido === null) {
+                $elegido = $row;
+            }
+            if ($preferido !== '' && $row['residente_id'] === $preferido) {
+                $elegido = $row;
+                break;
+            }
+        }
+        if ($elegido === null) {
+            return $fallback;
+        }
+        return $elegido;
     }
 
     /**

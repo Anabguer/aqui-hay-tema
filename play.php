@@ -28,9 +28,9 @@ header('Content-Type: text/html; charset=utf-8');
     <section class="panel play-summary" aria-labelledby="resumen-title">
       <h2 id="resumen-title">Resumen del día</h2>
       <div class="summary-grid" id="summary-grid">
-        <div class="summary-card"><span class="label">Día / hora</span><strong id="sum-reloj">—</strong></div>
-        <div class="summary-card"><span class="label">Residentes</span><strong id="sum-residentes">—</strong></div>
-        <div class="summary-card"><span class="label">Encuentros hoy</span><strong id="sum-encuentros-hoy">—</strong><span class="mini-meta" id="sum-encuentros-activos"></span></div>
+        <div class="summary-card"><span class="label">Fecha y hora</span><strong id="sum-reloj">—</strong></div>
+        <div class="summary-card"><span class="label">Residentes en el pueblo</span><strong id="sum-residentes">—</strong></div>
+        <div class="summary-card"><span class="label">Encuentros de hoy</span><strong id="sum-encuentros-hoy">—</strong><span class="mini-meta" id="sum-encuentros-activos"></span></div>
         <div class="summary-card"><span class="label">Buzón pendiente</span><strong id="sum-buzon">—</strong></div>
       </div>
 
@@ -71,7 +71,7 @@ header('Content-Type: text/html; charset=utf-8');
 
         <div class="stack-section">
           <h3 id="encuentro-title">Proponer encuentro</h3>
-          <p class="status">Elige participantes, hora compatible y lugar operativo.</p>
+          <p class="status">Elige participantes, fecha, hora libre y lugar.</p>
           <form id="form-encuentro" class="compact-form enc-form" onsubmit="return false;">
             <div class="form-row-2">
               <div>
@@ -87,14 +87,15 @@ header('Content-Type: text/html; charset=utf-8');
             <label for="enc-tipo">Tipo</label>
             <select id="enc-tipo" name="tipo">
               <option value="conocerse">Conocerse</option>
-              <option value="amistad">Amistad</option>
-              <option value="romantico">Romántico</option>
             </select>
-            <label for="enc-slot">Hora compatible</label>
+            <p class="status form-hint" id="enc-tipo-hint"></p>
+            <label>Fecha</label>
+            <div id="enc-fechas" class="fecha-chips" role="group" aria-label="Fecha del encuentro"></div>
+            <label for="enc-slot">Hora</label>
             <select id="enc-slot" name="slot" required disabled>
-              <option value="">Elige dos residentes distintos…</option>
+              <option value="">Elige fecha…</option>
             </select>
-            <p class="status form-hint" id="enc-slots-hint">Calculando horas compatibles…</p>
+            <p class="status form-hint" id="enc-slots-hint">Elige dos personas para ver huecos.</p>
             <label for="enc-lugar">Lugar</label>
             <select id="enc-lugar" name="lugar" required>
               <option value="">Cargando lugares…</option>
@@ -119,7 +120,8 @@ header('Content-Type: text/html; charset=utf-8');
         </div>
       </section>
 
-      <aside class="panel" aria-labelledby="ficha-title">
+      <aside class="panel ficha-aside" aria-labelledby="ficha-title" id="ficha-aside">
+        <button type="button" class="ficha-close" id="btn-cerrar-ficha" hidden>Cerrar ficha</button>
         <h2 id="ficha-title">Ficha visible</h2>
         <div class="ficha" id="ficha-panel" aria-labelledby="ficha-title">
           <p class="empty">Selecciona un residente.</p>

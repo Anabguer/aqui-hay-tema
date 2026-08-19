@@ -5,12 +5,235 @@ namespace AquiHayTema\Engine;
 
 final class Reloj
 {
-    private const DIAS_SEMANA = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+    public const ZONA = 'Europe/Madrid';
 
-    public static function diaSemana(int $diaPueblo): string
+    /** Lunes 17 ago 2026 08:00. Tests CLI congelan aquí para no romper agendas laborales. */
+    public const TEST_AHORA = '2026-08-17 08:00:00';
+
+    private const DIAS_SEMANA = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
+    private const DIAS_UI = [
+        1 => 'Lunes',
+        2 => 'Martes',
+        3 => 'Miércoles',
+        4 => 'Jueves',
+        5 => 'Viernes',
+        6 => 'Sábado',
+        7 => 'Domingo',
+    ];
+    private const MESES = [
+        1 => 'enero',
+        2 => 'febrero',
+        3 => 'marzo',
+        4 => 'abril',
+        5 => 'mayo',
+        6 => 'junio',
+        7 => 'julio',
+        8 => 'agosto',
+        9 => 'septiembre',
+        10 => 'octubre',
+        11 => 'noviembre',
+        12 => 'diciembre',
+    ];
+
+    /** @var \DateTimeImmutable|null */
+    private static $ahoraFijo = null;
+
+    public static function zona(): \DateTimeZone
     {
+        return new \DateTimeZone(self::ZONA);
+    }
+
+    public static function fijarAhora(?\DateTimeImmutable $dt): void
+    {
+        self::$ahoraFijo = $dt;
+    }
+
+    public static function ahoraLocal(): \DateTimeImmutable
+    {
+        if (self::$ahoraFijo instanceof \DateTimeImmutable) {
+            return self::$ahoraFijo;
+        }
+        if (self::esContextoTest()) {
+            return new \DateTimeImmutable(self::TEST_AHORA, self::zona());
+        }
+        return new \DateTimeImmutable('now', self::zona());
+    }
+
+    public static function esContextoTest(): bool
+    {
+        if (getenv('AHT_RELOJ_REAL') === '1') {
+            return false;
+        }
+        $script = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_FILENAME'] ?? ''));
+        return $script !== '' && preg_match('#(?:^|/)tests/#', $script) === 1;
+    }
+
+    /**
+     * Nueva partida: ancla = hoy local, reloj = ahora (hora+minuto reales).
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function aplicarAlCrear(array &$partida): void
+    {
+        $now = self::ahoraLocal();
+        $partida['reloj']['zona'] = self::ZONA;
+        $partida['reloj']['fecha_ancla'] = $now->format('Y-m-d');
+        $partida['reloj']['dia_pueblo'] = 1;
+        $partida['reloj']['dia_en_temporada'] = 1;
+        $partida['reloj']['hora_actual'] = (int) $now->format('G');
+        $partida['reloj']['minuto_actual'] = (int) $now->format('i');
+        $partida['reloj']['ultima_sesion_iso'] = $now->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM);
+    }
+
+    /**
+     * Saves antiguos: ancla de calendario para que el día actual caiga en la fecha de hoy.
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function ensure(array &$partida): void
+    {
+        if (!isset($partida['reloj']) || !is_array($partida['reloj'])) {
+            $partida['reloj'] = [];
+        }
+        $reloj = &$partida['reloj'];
+        $reloj['zona'] = is_string($reloj['zona'] ?? null) && $reloj['zona'] !== '' ? $reloj['zona'] : self::ZONA;
+        if (!isset($reloj['minuto_actual']) || !is_int($reloj['minuto_actual'])) {
+            $reloj['minuto_actual'] = (int) ($reloj['minuto_actual'] ?? 0);
+        }
+        if ($reloj['minuto_actual'] < 0) {
+            $reloj['minuto_actual'] = 0;
+        }
+        if ($reloj['minuto_actual'] > 59) {
+            $reloj['minuto_actual'] = 59;
+        }
+        if (empty($reloj['fecha_ancla']) || !is_string($reloj['fecha_ancla'])) {
+            $dia = max(1, (int) ($reloj['dia_pueblo'] ?? 1));
+            $hoy = self::ahoraLocal()->setTime(0, 0, 0);
+            $ancla = $hoy->modify('-' . ($dia - 1) . ' days');
+            $reloj['fecha_ancla'] = $ancla->format('Y-m-d');
+        }
+    }
+
+    public static function fechaDeDia(array $reloj, int $diaPueblo): \DateTimeImmutable
+    {
+        $ancla = is_string($reloj['fecha_ancla'] ?? null) ? $reloj['fecha_ancla'] : '';
+        $zonaNombre = is_string($reloj['zona'] ?? null) && $reloj['zona'] !== '' ? $reloj['zona'] : self::ZONA;
+        try {
+            $tz = new \DateTimeZone($zonaNombre);
+        } catch (\Exception $ignored) {
+            $tz = self::zona();
+        }
+        if ($ancla !== '') {
+            $base = \DateTimeImmutable::createFromFormat('Y-m-d', $ancla, $tz);
+            if ($base instanceof \DateTimeImmutable) {
+                $base = $base->setTime(0, 0, 0);
+                $delta = $diaPueblo - 1;
+                if ($delta !== 0) {
+                    $base = $base->modify(($delta > 0 ? '+' : '') . $delta . ' days');
+                }
+                return $base;
+            }
+        }
+        return (new \DateTimeImmutable('2026-08-17', $tz))->modify('+' . ($diaPueblo - 1) . ' days')->setTime(0, 0, 0);
+    }
+
+    public static function instante(array $reloj): \DateTimeImmutable
+    {
+        $dia = (int) ($reloj['dia_pueblo'] ?? 1);
+        $hora = (int) ($reloj['hora_actual'] ?? 0);
+        $min = (int) ($reloj['minuto_actual'] ?? 0);
+        return self::fechaDeDia($reloj, $dia)->setTime($hora, $min, 0);
+    }
+
+    /**
+     * Id técnico de agenda (sin tilde: miercoles) para plantillas laborales.
+     */
+    public static function diaSemana(int $diaPueblo, ?array $reloj = null): string
+    {
+        if ($reloj !== null && !empty($reloj['fecha_ancla'])) {
+            $n = (int) self::fechaDeDia($reloj, $diaPueblo)->format('N');
+            return self::DIAS_SEMANA[$n - 1] ?? self::DIAS_SEMANA[0];
+        }
         $idx = ($diaPueblo - 1) % 7;
+        if ($idx < 0) {
+            $idx += 7;
+        }
         return self::DIAS_SEMANA[$idx];
+    }
+
+    public static function diaSemanaUi(int $diaPueblo, array $reloj): string
+    {
+        $n = (int) self::fechaDeDia($reloj, $diaPueblo)->format('N');
+        return self::DIAS_UI[$n] ?? 'Lunes';
+    }
+
+    public static function formatear(array $reloj): string
+    {
+        $dt = self::instante($reloj);
+        $n = (int) $dt->format('N');
+        $mes = (int) $dt->format('n');
+        $diaUi = self::DIAS_UI[$n] ?? 'Lunes';
+        $mesUi = self::MESES[$mes] ?? 'enero';
+        return $diaUi . ', ' . ((int) $dt->format('j')) . ' de ' . $mesUi . ' de ' . $dt->format('Y')
+            . ' · ' . $dt->format('H:i');
+    }
+
+    public static function fechaIso(array $reloj, int $diaPueblo): string
+    {
+        return self::fechaDeDia($reloj, $diaPueblo)->format('Y-m-d');
+    }
+
+    public static function fechaCorta(array $reloj, int $diaPueblo): string
+    {
+        return self::fechaDeDia($reloj, $diaPueblo)->format('d/m');
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    public static function selectorDias(array $reloj, int $maxDias = 7): array
+    {
+        $hoy = (int) ($reloj['dia_pueblo'] ?? 1);
+        $out = [];
+        for ($i = 0; $i < $maxDias; $i++) {
+            $dia = $hoy + $i;
+            $dt = self::fechaDeDia($reloj, $dia);
+            $n = (int) $dt->format('N');
+            $etiqueta = $i === 0
+                ? ('Hoy ' . $dt->format('d/m'))
+                : ((self::DIAS_UI[$n] ?? '') . ' ' . $dt->format('d/m'));
+            $out[] = [
+                'dia_pueblo' => $dia,
+                'fecha_iso' => $dt->format('Y-m-d'),
+                'fecha_corta' => $dt->format('d/m'),
+                'dia_semana' => self::DIAS_SEMANA[$n - 1] ?? 'lunes',
+                'dia_semana_ui' => self::DIAS_UI[$n] ?? 'Lunes',
+                'es_hoy' => $i === 0,
+                'etiqueta' => $etiqueta,
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public static function vista(array $reloj): array
+    {
+        $dt = self::instante($reloj);
+        return [
+            'texto' => self::formatear($reloj),
+            'fecha_iso' => $dt->format('Y-m-d'),
+            'fecha_corta' => $dt->format('d/m'),
+            'dia_semana' => self::diaSemana((int) ($reloj['dia_pueblo'] ?? 1), $reloj),
+            'dia_semana_ui' => self::diaSemanaUi((int) ($reloj['dia_pueblo'] ?? 1), $reloj),
+            'dia_pueblo' => (int) ($reloj['dia_pueblo'] ?? 1),
+            'hora' => (int) ($reloj['hora_actual'] ?? 0),
+            'minuto' => (int) ($reloj['minuto_actual'] ?? 0),
+            'zona' => (string) ($reloj['zona'] ?? self::ZONA),
+            'fecha_ancla' => (string) ($reloj['fecha_ancla'] ?? ''),
+            'proximos_dias' => self::selectorDias($reloj, 7),
+        ];
     }
 
     public static function avanzarHoras(array &$partida, int $horas): void
@@ -18,6 +241,7 @@ final class Reloj
         if ($horas < 0) {
             throw new \InvalidArgumentException('horas debe ser >= 0');
         }
+        self::ensure($partida);
         $reloj = &$partida['reloj'];
         $total = (int) $reloj['hora_actual'] + $horas;
         while ($total >= 24) {
@@ -33,13 +257,6 @@ final class Reloj
     public static function avanzarDias(array &$partida, int $dias): void
     {
         self::avanzarHoras($partida, $dias * 24);
-    }
-
-    public static function formatear(array $reloj): string
-    {
-        $dia = (int) $reloj['dia_pueblo'];
-        $hora = str_pad((string) (int) $reloj['hora_actual'], 2, '0', STR_PAD_LEFT);
-        return "Día {$dia} (" . self::diaSemana($dia) . ") · {$hora}:00";
     }
 
     /** Estructura catch-up sin generar eventos narrativos. */

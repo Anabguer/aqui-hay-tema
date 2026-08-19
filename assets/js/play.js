@@ -11,6 +11,7 @@
   let cacheEstado = null;
   let cacheEncuentros = [];
   let slotsCache = [];
+  let fechaSelDia = null;
   let confirmarTimer = null;
 
   const DISCOVERY_LABELS = {
@@ -51,8 +52,12 @@
     return cacheInspeccion?.residentes?.[id]?.identidad_publica?.nombre || id;
   }
 
-  function formatHora(dia, hora) {
-    return `D${dia} · ${String(hora).padStart(2, '0')}:00`;
+  function formatHora(dia, hora, slot) {
+    const hh = String(hora).padStart(2, '0') + ':00';
+    const corta = (slot && slot.fecha_corta) || (cacheEstado && cacheEstado.reloj_vista && cacheEstado.reloj_vista.fecha_corta) || '';
+    const sem = (slot && slot.dia_semana_ui) || '';
+    if (corta) return (sem ? sem + ' ' : '') + corta + ' · ' + hh;
+    return 'D' + dia + ' · ' + hh;
   }
 
   function estadoLabel(estado) {
@@ -248,7 +253,7 @@
     else sel.appendChild(new Option('Sin lugares operativos', ''));
   }
 
-  async function cargarSlotsCompatibles() {
+  async async function cargarSlotsCompatibles() {
     const slotSel = $('#enc-slot');
     const hint = $('#enc-slots-hint');
     const btn = $('#btn-programar');
@@ -258,49 +263,49 @@
       slotSel.innerHTML = '<option value="">Elige dos residentes distintos…</option>';
       slotSel.disabled = true;
       if (btn) btn.disabled = true;
+      renderFechaChips([]);
       return;
     }
 
     const { a, b } = participantesEncuentro();
-    hint.textContent = 'Calculando horas compatibles…';
+    hint.textContent = 'Buscando huecos…';
     hint.className = 'status form-hint';
+    await actualizarTiposPermitidos(a, b);
 
     const r = await api('agenda.slots_compatibles', {
       participantes: [a, b],
       tipo: $('#enc-tipo').value,
       max_dias: 7,
-      max_slots: 32,
+      max_slots: 80,
     });
 
-    slotSel.innerHTML = '';
     slotsCache = r.slots || [];
-
     if (!r.ok) {
-      slotSel.appendChild(new Option('Error al calcular horas', ''));
+      slotSel.innerHTML = '<option value="">Error al calcular huecos</option>';
       slotSel.disabled = true;
-      hint.textContent = r.error || 'No se pudieron calcular horas compatibles.';
+      hint.textContent = r.error || 'No se pudieron calcular huecos.';
       hint.className = 'status form-hint form-hint--error';
       if (btn) btn.disabled = true;
+      renderFechaChips([]);
       return;
     }
 
+    const dias = r.por_dia || [];
     if (!slotsCache.length) {
-      slotSel.appendChild(new Option('Sin horas compatibles', ''));
+      slotSel.innerHTML = '<option value="">Sin huecos</option>';
       slotSel.disabled = true;
-      hint.textContent = r.diagnostico?.resumen_ui || r.diagnostico?.resumen || 'No hay horas compatibles en los próximos 7 días.';
+      hint.textContent = r.diagnostico?.resumen_ui || r.diagnostico?.resumen || 'No hay horarios libres en los próximos 7 días.';
       hint.className = 'status form-hint form-hint--warn';
       if (btn) btn.disabled = true;
+      renderFechaChips([]);
       return;
     }
 
-    slotsCache.forEach((s, i) => {
-      const val = `${s.dia}:${s.hora}`;
-      slotSel.appendChild(new Option(formatHora(s.dia, s.hora), val, i === 0, i === 0));
-    });
-    slotSel.disabled = false;
-    hint.textContent = `${slotsCache.length} hora(s) compatible(s) encontrada(s).`;
-    hint.className = 'status form-hint form-hint--ok';
-    if (btn) btn.disabled = !$('#enc-lugar')?.value;
+    if (fechaSelDia == null || !dias.some(d => d.dia === fechaSelDia)) {
+      fechaSelDia = dias[0] ? dias[0].dia : slotsCache[0].dia;
+    }
+    renderFechaChips(dias);
+    pintarHorasDelDia(btn);
   }
 
   function slotSeleccionado() {
@@ -313,14 +318,13 @@
   function renderSummary(e, buzonCount) {
     $('#status-reloj').textContent = e.reloj_texto;
     $('#status-meta').textContent =
-      `${e.residentes_count} residentes · ${e.encuentros_activos ?? 0} activos · schema v${e.meta.schema_version} · ${partidaId || e.meta?.partida_id || ''}`;
+      (e.residentes_count || 0) + ' residentes en el pueblo · ' + (e.encuentros_activos_label || 'Ningún encuentro citado') + ' · ' + (partidaId || (e.meta && e.meta.partida_id) || '');
     $('#sum-reloj').textContent = e.reloj_texto;
     $('#sum-residentes').textContent = String(e.residentes_count || 0);
     $('#sum-encuentros-hoy').textContent = String(e.encuentros_hoy ?? 0);
     const activosEl = $('#sum-encuentros-activos');
     if (activosEl) {
-      const n = e.encuentros_activos || 0;
-      activosEl.textContent = n ? `${n} activo${n === 1 ? '' : 's'}` : '';
+      activosEl.textContent = e.encuentros_activos_label || '';
     }
     $('#sum-buzon').textContent = String(e.buzon_pendientes ?? buzonCount ?? 0);
     renderProximoEncuentro(e);
@@ -870,7 +874,7 @@
     target.appendChild(frame);
   }
 
-  async function abrirFicha(residenteId) {
+  async async function abrirFicha(residenteId) {
     const r = await api('residente.ficha', { residente_id: residenteId }, 'GET');
     const panel = $('#ficha-panel');
     if (!r.ok) {
@@ -879,19 +883,21 @@
     }
     const f = r.ficha;
     panel.innerHTML = '';
+    const vp = f.vista_play || {};
 
     const hero = el('div', 'ficha-hero');
     renderPortrait(hero, f.presentacion_visual, f.identidad.nombre);
     const meta = el('div');
     meta.appendChild(el('h3', null, f.identidad.nombre));
-    meta.appendChild(el('div', 'mini-meta', `${f.id} · ${f.vivienda_id || 'sin vivienda'} · ${f.placeholder ? 'placeholder' : 'catálogo'}`));
+    const edadOc = [];
+    if (vp.edad) edadOc.push(vp.edad + ' años');
+    if (vp.ocupacion) edadOc.push(vp.ocupacion);
+    meta.appendChild(el('div', 'mini-meta', edadOc.join(' · ') || 'Residente'));
     hero.appendChild(meta);
     panel.appendChild(hero);
 
     const pills = el('div', 'pill-row');
-    pills.appendChild(el('span', 'pill', `Estado: ${f.estado_emocional?.id || 'neutro'}`));
-    pills.appendChild(el('span', 'pill', `Expresión: ${f.presentacion_visual?.expression_id || 'neutral'}`));
-    pills.appendChild(el('span', 'pill', `Fallback: ${f.presentacion_visual?.fallback ? 'sí' : 'no'}`));
+    pills.appendChild(el('span', 'pill', 'Ánimo: ' + (vp.estado_animo || 'neutro')));
     if (cacheEstado?.encuentro_en_curso && (cacheEstado.encuentro_en_curso.participantes || []).includes(residenteId)) {
       pills.appendChild(el('span', 'pill pill-ahora', 'En encuentro ahora'));
     } else if (cacheEstado?.proximo_encuentro && (cacheEstado.proximo_encuentro.participantes || []).includes(residenteId)) {
@@ -899,7 +905,12 @@
     }
     panel.appendChild(pills);
 
-    panel.appendChild(renderDiscovery(f.discovery?.campos || {}));
+    if ((vp.gusta || []).length) {
+      panel.appendChild(el('p', null, 'Le gusta: ' + vp.gusta.join(', ')));
+    }
+    if ((vp.manera_de_ser || []).length) {
+      panel.appendChild(el('p', null, 'Manera de ser: ' + vp.manera_de_ser.join(', ')));
+    }
 
     const encPropio = encuentroVisibleDeResidente(residenteId);
     if (encPropio && encPropio.lugar) {
@@ -907,7 +918,7 @@
       row.appendChild(el('div', 'label', encPropio.estado === 'en_curso' ? 'Encuentro ahora' : 'Próximo encuentro'));
       row.appendChild(el('div', null, nombresEncuentro(encPropio)));
       const sitio = encPropio.lugar_nombre || nombreLugar(encPropio.lugar);
-      row.appendChild(el('div', 'mini-meta', `${formatHora(encPropio.dia, encPropio.hora)} · ${sitio}`));
+      row.appendChild(el('div', 'mini-meta', formatHora(encPropio.dia, encPropio.hora, encPropio) + ' · ' + sitio));
       const ver = el('button', 'btn-inline', 'Ver en mapa');
       ver.type = 'button';
       ver.addEventListener('click', (ev) => {
@@ -918,18 +929,12 @@
       panel.appendChild(row);
     }
 
-    const hobbies = (f.hobbies?.conocidos || []).length ? f.hobbies.conocidos.join(', ') : null;
-    if (hobbies) {
-      panel.appendChild(el('p', 'mini-meta', `Hobbies visibles: ${hobbies}`));
-    }
-    panel.appendChild(el('p', 'mini-meta', `Descubrimientos: ${(f.descubrimientos || []).length} · Relaciones: ${Object.keys(f.relaciones || {}).length}`));
-
     const uv = f.ultimo_encuentro_vista;
     if (uv) {
       const row = el('div', 'enc-row enc-marca');
       row.appendChild(el('div', 'label', 'Último encuentro'));
       row.appendChild(el('div', null, nombresEncuentro(uv)));
-      row.appendChild(el('div', 'mini-meta', `${formatHora(uv.dia, uv.hora)} · ${uv.lugar_nombre || nombreLugar(uv.lugar)}`));
+      row.appendChild(el('div', 'mini-meta', formatHora(uv.dia, uv.hora, uv) + ' · ' + (uv.lugar_nombre || nombreLugar(uv.lugar))));
       (uv.resultado?.lineas || []).slice(0, 3).forEach(t => {
         row.appendChild(el('div', 'mini-meta', t));
       });
@@ -943,14 +948,7 @@
       panel.appendChild(row);
     }
 
-    const agenda = el('div', 'agenda-mini');
-    const slots = (f.agenda_hoy?.slots || []).filter(s => s.hora >= 8 && s.hora <= 22);
-    slots.forEach(s => {
-      const tipo = s.ocupado ? (s.tipo || s.detalle || 'ocupado') : 'libre';
-      agenda.appendChild(el('div', s.ocupado ? 'ocupado' : 'libre', `${String(s.hora).padStart(2, '0')}:00 · ${tipo}`));
-    });
-    panel.appendChild(el('div', 'label', 'Agenda hoy'));
-    panel.appendChild(agenda);
+    mostrarFichaMovil();
   }
 
   async function seleccionarResidente(id) {
@@ -1025,18 +1023,119 @@
     await refreshEstado();
   }
 
+
+  async function actualizarTiposPermitidos(a, b) {
+    const sel = $('#enc-tipo');
+    const hint = $('#enc-tipo-hint');
+    if (!sel) return;
+    const r = await api('encuentro.tipos_permitidos', { participantes: [a, b] });
+    const ops = r.opciones || [{ id: 'conocerse', label: 'Conocerse' }];
+    const prev = sel.value;
+    sel.innerHTML = '';
+    ops.forEach(o => sel.appendChild(new Option(o.label, o.id, o.id === prev, o.id === prev)));
+    if (![...sel.options].some(o => o.value === prev) && sel.options.length) {
+      sel.selectedIndex = 0;
+    }
+    if (hint) {
+      hint.textContent = r.conocidos
+        ? 'Ya se conocen: puedes proponer quedada o cita.'
+        : 'Aún no se conocen: solo puedes presentarles.';
+    }
+  }
+
+  function renderFechaChips(dias) {
+    const wrap = $('#enc-fechas');
+    if (!wrap) return;
+    wrap.innerHTML = '';
+    const vista = (cacheEstado && cacheEstado.reloj_vista && cacheEstado.reloj_vista.proximos_dias) || [];
+    const fuente = dias.length ? dias : vista.map(d => ({ dia: d.dia_pueblo, fecha_corta: d.fecha_corta, dia_semana_ui: d.dia_semana_ui, total: 0, etiqueta: d.etiqueta }));
+    fuente.forEach(d => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'fecha-chip' + (d.dia === fechaSelDia ? ' is-on' : '');
+      const nHuecos = d.total != null ? d.total : (slotsCache.filter(s => s.dia === d.dia).length);
+      const et = d.etiqueta || ((d.dia_semana_ui || '') + ' ' + (d.fecha_corta || '')).trim();
+      btn.textContent = et + (nHuecos ? ' (' + nHuecos + ')' : '');
+      btn.addEventListener('click', () => {
+        fechaSelDia = d.dia;
+        renderFechaChips(dias);
+        pintarHorasDelDia($('#btn-programar'));
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function pintarHorasDelDia(btn) {
+    const slotSel = $('#enc-slot');
+    const hint = $('#enc-slots-hint');
+    if (!slotSel || !hint) return;
+    const horas = slotsCache.filter(s => s.dia === fechaSelDia);
+    slotSel.innerHTML = '';
+    if (!horas.length) {
+      slotSel.appendChild(new Option('Sin hora libre ese día', ''));
+      slotSel.disabled = true;
+      hint.textContent = 'No hay horarios disponibles ese día.';
+      hint.className = 'status form-hint form-hint--warn';
+      if (btn) btn.disabled = true;
+      return;
+    }
+    horas.forEach((s, i) => {
+      const val = s.dia + ':' + s.hora;
+      slotSel.appendChild(new Option(s.etiqueta_hora || (String(s.hora).padStart(2, '0') + ':00'), val, i === 0, i === 0));
+    });
+    slotSel.disabled = false;
+    hint.textContent = horas.length === 1
+      ? 'Hay 1 horario disponible.'
+      : ('Hay ' + horas.length + ' horarios disponibles.');
+    hint.className = 'status form-hint form-hint--ok';
+    if (btn) btn.disabled = !$('#enc-lugar')?.value;
+  }
+
+  function mostrarRechazo(r) {
+    const quien = r.rechazado_por || {};
+    const fb = $('#enc-feedback');
+    if (!fb) return;
+    fb.className = 'feedback feedback--error rechazo-box';
+    fb.innerHTML = '';
+    if (quien.retrato_url) {
+      const img = document.createElement('img');
+      img.src = quien.retrato_url;
+      img.alt = quien.nombre || '';
+      img.className = 'rechazo-retrato';
+      fb.appendChild(img);
+    }
+    fb.appendChild(document.createTextNode(r.mensaje_ui || 'No han querido quedar.'));
+  }
+
+  function mostrarFichaMovil() {
+    const aside = $('#ficha-aside');
+    const closer = $('#btn-cerrar-ficha');
+    if (!aside) return;
+    aside.classList.add('ficha-open');
+    if (closer) closer.hidden = false;
+    aside.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  function ocultarFichaMovil() {
+    const aside = $('#ficha-aside');
+    const closer = $('#btn-cerrar-ficha');
+    if (aside) aside.classList.remove('ficha-open');
+    if (closer) closer.hidden = true;
+  }
   function bindEncuentroForm() {
     const onChange = () => {
+      fechaSelDia = null;
       validarParticipantes();
       cargarSlotsCompatibles();
     };
     $('#enc-a')?.addEventListener('change', onChange);
     $('#enc-b')?.addEventListener('change', onChange);
-    $('#enc-tipo')?.addEventListener('change', onChange);
+    $('#enc-tipo')?.addEventListener('change', () => cargarSlotsCompatibles());
     $('#enc-lugar')?.addEventListener('change', () => {
       const btn = $('#btn-programar');
       if (btn) btn.disabled = !slotSeleccionado() || !$('#enc-lugar')?.value;
     });
+    $('#btn-cerrar-ficha')?.addEventListener('click', ocultarFichaMovil);
 
     $('#btn-programar')?.addEventListener('click', async () => {
       if (!validarParticipantes()) {
@@ -1046,7 +1145,7 @@
       const slot = slotSeleccionado();
       const lugar = $('#enc-lugar')?.value;
       if (!slot) {
-        setFeedback('Elige una hora compatible de la lista.', 'error');
+        setFeedback('Elige una fecha y una hora libre.', 'error');
         return;
       }
       if (!lugar) {
@@ -1064,24 +1163,16 @@
         lugar,
       });
       if (r.ok && r.rechazada) {
-        setFeedback(r.mensaje_ui || 'No han querido quedar.', 'error');
+        mostrarRechazo(r);
         await refreshEstado();
         return;
       }
-      if (r.ok) {
-        const vista = r.vista || r.encuentro;
-        const sitio = vista?.lugar_nombre || nombreLugar(vista?.lugar) || lugar;
-        const nombres = nombresEncuentro(vista);
-        const cuando = vista && !encuentroEsHoy(vista)
-          ? `Programado ${formatHora(vista.dia, vista.hora)}`
-          : formatHora(vista?.dia, vista?.hora);
-        setFeedback(`${nombres} han quedado en ${sitio}. ${cuando}.`, 'ok');
+      if (r.ok && (r.programado || r.encuentro)) {
+        setFeedback(r.mensaje_ui || 'Quedada programada.', 'ok');
         await refreshEstado();
-        confirmarEncuentroEnMapa(vista);
-      } else {
-        setFeedback(formatRechazo(r), 'error');
-        await refreshEstado();
+        return;
       }
+      setFeedback(formatRechazo(r) || r.mensaje_ui || 'No se pudo proponer.', 'error');
     });
   }
 

@@ -75,6 +75,33 @@ final class EncuentrosHandler
         return ['ok' => true, 'propuestas' => $items];
     }
 
+    public static function tiposPermitidos(ApiContext $ctx, array $body, array $partida): array
+    {
+        $parts = is_array($body['participantes'] ?? null) ? $body['participantes'] : [
+            (string) ($body['residente_a'] ?? ''),
+            (string) ($body['residente_b'] ?? ''),
+        ];
+        $a = (string) ($parts[0] ?? '');
+        $b = (string) ($parts[1] ?? '');
+        $cal = \AquiHayTema\Engine\CalibracionConfig::load($ctx->root);
+        $tipos = \AquiHayTema\Engine\PropuestaNivel::tiposPermitidos($partida, $a, $b, $cal);
+        $labels = [
+            'conocerse' => 'Conocerse',
+            'amistad' => 'Quedada / amistad',
+            'romantico' => 'Cita romántica',
+        ];
+        $opciones = [];
+        foreach ($tipos as $t) {
+            $opciones[] = ['id' => $t, 'label' => $labels[$t] ?? $t];
+        }
+        return [
+            'ok' => true,
+            'conocidos' => $a !== '' && $b !== '' && \AquiHayTema\Engine\RelacionEngine::seConocen($partida, $a, $b),
+            'tipos' => $tipos,
+            'opciones' => $opciones,
+        ];
+    }
+
     public static function estado(ApiContext $ctx, array $body, array &$partida): array
     {
         $r = EncuentroEngine::cambiarEstado($partida, (string) ($body['encuentro_id'] ?? ''), (string) ($body['estado'] ?? ''));

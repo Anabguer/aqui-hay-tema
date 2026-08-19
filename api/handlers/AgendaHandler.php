@@ -46,7 +46,7 @@ final class AgendaHandler
             isset($body['desde_dia']) ? (int) $body['desde_dia'] : null,
             isset($body['desde_hora']) ? (int) $body['desde_hora'] : null,
             (int) ($body['max_dias'] ?? 7),
-            (int) ($body['max_slots'] ?? 24),
+            (int) ($body['max_slots'] ?? 80),
             $ctx->service->getCatalog()
         );
     }

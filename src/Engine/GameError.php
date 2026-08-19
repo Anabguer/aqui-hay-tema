@@ -26,6 +26,7 @@ final class GameError
     public const PROPUESTA_NO_ENCONTRADA = 'PROPUESTA_NO_ENCONTRADA';
     public const PETICION_NO_ENCONTRADA = 'PETICION_NO_ENCONTRADA';
     public const FASE_TRANSICION_INVALIDA = 'FASE_TRANSICION_INVALIDA';
+    public const TIPO_ENCUENTRO_NO_DISPONIBLE = 'TIPO_ENCUENTRO_NO_DISPONIBLE';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -71,6 +72,8 @@ final class GameError
                 return 'No hay ninguna petición con ese id.';
             case self::FASE_TRANSICION_INVALIDA:
                 return 'Esa fase de relación no es un paso válido.';
+            case self::TIPO_ENCUENTRO_NO_DISPONIBLE:
+                return 'Ese tipo de encuentro no está disponible para esta relación todavía.';
             default:
                 return 'Ha ocurrido un error.';
         }

@@ -15,7 +15,7 @@ final class AgendaEngine
         ?Catalog $catalog = null
     ): array {
         $diaPueblo ??= (int) $partida['reloj']['dia_pueblo'];
-        $diaSemana = Reloj::diaSemana($diaPueblo);
+        $diaSemana = Reloj::diaSemana($diaPueblo, $partida['reloj'] ?? []);
         $residente = $partida['residentes'][$residenteId] ?? null;
         if ($residente === null) {
             throw new \InvalidArgumentException("residente desconocido: {$residenteId}");

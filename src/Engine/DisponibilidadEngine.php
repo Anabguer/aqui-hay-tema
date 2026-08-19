@@ -33,17 +33,22 @@ final class DisponibilidadEngine
 
         $desdeDia ??= (int) $partida['reloj']['dia_pueblo'];
         $desdeHora ??= (int) $partida['reloj']['hora_actual'];
+        $minuto = (int) ($partida['reloj']['minuto_actual'] ?? 0);
         $slots = [];
         $now = $desdeDia * 24 + $desdeHora;
+        $reloj = $partida['reloj'] ?? [];
 
         for ($d = 0; $d < $maxDias && count($slots) < $maxSlots; $d++) {
             $dia = $desdeDia + $d;
-            $horaMin = ($d === 0) ? $desdeHora : 0;
+            $horaMin = 0;
+            if ($d === 0) {
+                $horaMin = $desdeHora;
+                if ($minuto > 0) {
+                    $horaMin = $desdeHora + 1;
+                }
+            }
             for ($h = $horaMin; $h < 24 && count($slots) < $maxSlots; $h++) {
                 if ($dia * 24 + $h < $now) {
-                    continue;
-                }
-                if ($h === 23 && $dia === $desdeDia && $desdeHora > 23) {
                     continue;
                 }
                 $motivos = [];
@@ -61,17 +66,23 @@ final class DisponibilidadEngine
                 if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $h)) {
                     continue;
                 }
+                $n = (int) Reloj::fechaDeDia($reloj, $dia)->format('N');
                 $slots[] = [
                     'dia' => $dia,
                     'hora' => $h,
-                    'dia_semana' => Reloj::diaSemana($dia),
+                    'dia_semana' => Reloj::diaSemana($dia, $reloj),
+                    'dia_semana_ui' => Reloj::diaSemanaUi($dia, $reloj),
+                    'fecha_iso' => Reloj::fechaIso($reloj, $dia),
+                    'fecha_corta' => Reloj::fechaCorta($reloj, $dia),
+                    'etiqueta_hora' => str_pad((string) $h, 2, '0', STR_PAD_LEFT) . ':00',
                     'participantes' => $participantes,
                     'tipo' => $tipoEncuentro,
                 ];
+                unset($n);
             }
         }
 
-        $out = ['ok' => true, 'slots' => $slots, 'total' => count($slots)];
+        $out = ['ok' => true, 'slots' => $slots, 'total' => count($slots), 'por_dia' => self::agruparPorDia($slots)];
         if ($slots === []) {
             $out['diagnostico'] = self::diagnosticarBloqueos($partida, $participantes, $desdeDia, $desdeHora, $maxDias);
         }
@@ -187,5 +198,30 @@ final class DisponibilidadEngine
             default:
                 return $clave;
         }
+    }
+
+    /**
+     * @param list<array<string, mixed>> $slots
+     * @return list<array<string, mixed>>
+     */
+    private static function agruparPorDia(array $slots): array
+    {
+        $grupos = [];
+        foreach ($slots as $s) {
+            $dia = (int) ($s['dia'] ?? 0);
+            if (!isset($grupos[$dia])) {
+                $grupos[$dia] = [
+                    'dia' => $dia,
+                    'fecha_iso' => $s['fecha_iso'] ?? null,
+                    'fecha_corta' => $s['fecha_corta'] ?? null,
+                    'dia_semana_ui' => $s['dia_semana_ui'] ?? null,
+                    'horas' => [],
+                    'total' => 0,
+                ];
+            }
+            $grupos[$dia]['horas'][] = (int) ($s['hora'] ?? 0);
+            $grupos[$dia]['total']++;
+        }
+        return array_values($grupos);
     }
 }

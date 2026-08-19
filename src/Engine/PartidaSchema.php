@@ -31,6 +31,7 @@ final class PartidaSchema
         $partida['meta']['config_id'] = $configId;
         $partida['meta']['created_at'] = $now;
         $partida['meta']['updated_at'] = $now;
+        Reloj::aplicarAlCrear($partida);
         $partida['reloj']['ultima_sesion_iso'] = $now;
 
         $rng = new RngService($seedFinal);

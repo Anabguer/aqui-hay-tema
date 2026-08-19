@@ -113,6 +113,16 @@ final class PartidaService
         if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
             $r['vista'] = ResumenDia::vistaEncuentro($partida, $r['encuentro'], $this->catalog);
         }
+        if (!empty($r['rechazada']) && is_array($r['rechazado_por'] ?? null)) {
+            $rid = (string) ($r['rechazado_por']['residente_id'] ?? '');
+            if ($rid !== '' && isset($partida['residentes'][$rid])) {
+                $vis = $this->presentacionVisual($partida, $partida['residentes'][$rid]);
+                $asset = $vis['asset'] ?? [];
+                $r['rechazado_por']['retrato_url'] = (!empty($asset['existe']) && is_string($asset['url_relativa'] ?? null))
+                    ? $asset['url_relativa']
+                    : null;
+            }
+        }
         return $r;
     }
 
@@ -195,7 +205,7 @@ final class PartidaService
             <=> ((int) ($a['dia'] ?? 0) * 24 + (int) ($a['hora'] ?? 0)));
         $ultimo = $ultimosEncuentros[0] ?? null;
 
-        return [
+        $out = [
             '_ui' => 'provisional_v0',
             'id' => $residenteId,
             'identidad' => [
@@ -222,6 +232,8 @@ final class PartidaService
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
             'presentacion_visual' => $this->presentacionVisual($partida, $runtime),
         ];
+        $out['vista_play'] = FichaPlayVista::de($out, $this->catalog->store());
+        return $out;
     }
 
     public function presentacionVisual(array $partida, array $runtime): array
@@ -249,10 +261,12 @@ final class PartidaService
             'meta' => $partida['meta'],
             'reloj' => $partida['reloj'],
             'reloj_texto' => Reloj::formatear($partida['reloj']),
+            'reloj_vista' => Reloj::vista($partida['reloj']),
             'celeste' => $partida['celeste'],
             'bloque_a' => BloqueA::resumen($partida),
             'residentes_count' => count($partida['residentes']),
             'encuentros_activos' => count(EncuentroEngine::listarActivos($partida)),
+            'encuentros_activos_label' => self::labelEncuentrosActivos(count(EncuentroEngine::listarActivos($partida))),
             'encuentros_hoy' => ResumenDia::encuentrosHoy($partida),
             'proximo_encuentro' => ResumenDia::proximoEncuentro($partida, $this->catalog),
             'encuentro_en_curso' => ResumenDia::encuentroEnCurso($partida, $this->catalog),
@@ -267,6 +281,17 @@ final class PartidaService
                 }
             )),
         ];
+    }
+
+    private static function labelEncuentrosActivos(int $n): string
+    {
+        if ($n <= 0) {
+            return 'Ningún encuentro en curso o citado';
+        }
+        if ($n === 1) {
+            return '1 encuentro citado o en curso';
+        }
+        return $n . ' encuentros citados o en curso';
     }
 
     public function getLogger(): GameLogger

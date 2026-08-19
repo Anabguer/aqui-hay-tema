@@ -536,3 +536,32 @@ pre.inspect {
   white-space: pre-wrap;
   word-break: break-all;
 }
+
+/* Playtest UX: fecha, rechazo, ficha móvil. No es diseño final. */
+.fecha-chips { display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0.35rem 0 0.6rem; }
+.fecha-chip {
+  border: 1px solid var(--muted, #888);
+  background: transparent;
+  color: inherit;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+.fecha-chip.is-on { font-weight: 700; border-width: 2px; }
+.rechazo-box { display: flex; gap: 0.6rem; align-items: center; }
+.rechazo-retrato { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; flex: 0 0 48px; }
+.ficha-close { margin-bottom: 0.5rem; }
+@media (max-width: 800px) {
+  .ficha-aside.ficha-open {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    max-height: 88vh;
+    overflow: auto;
+    z-index: 40;
+    margin: 0;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.25);
+  }
+}

@@ -33,4 +33,35 @@ final class PropuestaNivel
         }
         return self::QUEDADA;
     }
+
+    /**
+     * Opciones que el jugador puede pedir. No es orientación: es progresión de conocimiento.
+     * Desconocidos → solo conocerse. Tras conocerse → amistad y, si no hay veto edad/parentesco, romántico.
+     *
+     * @param array<string, mixed> $cal
+     * @return list<string>
+     */
+    public static function tiposPermitidos(array $partida, string $a, string $b, array $cal = []): array
+    {
+        if ($a === '' || $b === '' || $a === $b) {
+            return [];
+        }
+        if (!RelacionEngine::seConocen($partida, $a, $b)) {
+            return [self::PRESENTAR];
+        }
+        $out = [self::QUEDADA];
+        $el = RomanceElegibilidad::par($partida, $a, $b, $cal);
+        if (!empty($el['ok'])) {
+            $out[] = self::CITA;
+        }
+        return $out;
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    public static function permite(array $partida, string $a, string $b, string $tipo, array $cal = []): bool
+    {
+        return in_array($tipo, self::tiposPermitidos($partida, $a, $b, $cal), true);
+    }
 }

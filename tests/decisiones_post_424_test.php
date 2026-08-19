@@ -90,7 +90,7 @@ $ev = $vol->evaluar($partida, $pFake, $a);
 d424_ok(in_array($ev['decision'], ['acepta', 'rechaza'], true), 'voluntad ponderada decide');
 d424_ok(($ev['p'] ?? 1) < 1.0, 'voluntad nunca 100%');
 
-$rProp = PropuestaEncuentroEngine::proponer($partida, [$a, $b], (int) ($franja['dia'] ?? 1), (int) ($franja['hora'] ?? 19), 'conocerse', 'lug_cafeteria', null, $vol);
+$rProp = PropuestaEncuentroEngine::proponer($partida, [$a, $b], (int) ($franja['dia'] ?? 1), (int) ($franja['hora'] ?? 19), RelacionEngine::seConocen($partida, $a, $b) ? 'amistad' : 'conocerse', 'lug_cafeteria', null, $vol);
 d424_ok(isset($rProp['propuesta']), 'proponer registra');
 
 $ficha = $service->fichaResidente($partida, $a);

@@ -21,4 +21,10 @@ final class CopyVoluntad
         }
         return self::TEXTOS[$copyId] ?? self::TEXTOS['hoy_no_me_da_la_vida'];
     }
+
+    public static function rechazoConHablante(string $nombre, ?string $copyId): string
+    {
+        $frase = rtrim(self::texto($copyId), '.');
+        return $nombre . ' ha rechazado la propuesta: "' . $frase . '."';
+    }
 }
