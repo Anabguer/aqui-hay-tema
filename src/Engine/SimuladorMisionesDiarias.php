@@ -161,6 +161,9 @@ final class SimuladorMisionesDiarias
                 }
                 if ($nDone >= 1) {
                     $acc['cumplidas']++;
+                    if (!empty($m['cuenta_latido'])) {
+                        $acc['validos']++;
+                    }
                     self::sideEffects($partida, $m, $enc, $cal);
                 }
             }
@@ -207,6 +210,7 @@ final class SimuladorMisionesDiarias
             'dias_0' => 0,
             'cumplidas' => 0,
             'fallidas' => 0,
+            'validos' => 0,
             'imposibles' => 0,
             'familias_duplicadas_dia' => 0,
             'mas_de_tres' => 0,
@@ -244,6 +248,8 @@ final class SimuladorMisionesDiarias
             'pct_fallidas' => $resueltas > 0 ? round(100 * $acc['fallidas'] / $resueltas, 2) : 0.0,
             'cumplidas' => (int) $acc['cumplidas'],
             'fallidas' => (int) $acc['fallidas'],
+            'validos' => (int) $acc['validos'],
+            'validos_por_dia' => round(((int) $acc['validos']) / $dias, 3),
             'vida_media' => round($acc['suma_vida'] / $dias, 2),
             'min' => $acc['min_vida'],
             'max' => $acc['max_vida'],
@@ -297,7 +303,7 @@ final class SimuladorMisionesDiarias
             'misiones_generadas', 'misiones_por_dia', 'pct_dias_3', 'pct_dias_2', 'pct_dias_1', 'pct_dias_0',
             'pct_cumplidas', 'pct_fallidas', 'cumplidas', 'fallidas', 'vida_media', 'latidos', 'dias_critico',
             'imposibles', 'familias_duplicadas_dia', 'mas_de_tres', 'encuentro_multi_mision', 'extra_vida_no_mision',
-            'valor_final',
+            'valor_final', 'validos', 'validos_por_dia',
         ];
         $agg = [];
         foreach ($numKeys as $k) {
@@ -500,6 +506,9 @@ final class SimuladorMisionesDiarias
                     if ((float) ($h['encuentro_multi_mision'] ?? 0) > 0.01) {
                         return true;
                     }
+                    if ((float) ($h['validos_por_dia'] ?? 0) > 1.01) {
+                        return true;
+                    }
                 }
             }
         }
@@ -519,11 +528,11 @@ final class SimuladorMisionesDiarias
         $latA = (float) ($a8_30['latidos'] ?? 0);
         $primer = $a8_30['primer_latido_media'] ?? null;
         $combustible = 'ok';
-        if ($primer !== null && (float) $primer < 7) {
+        if ($primer !== null && (float) $primer < 8) {
             $combustible = 'demasiado';
-        } elseif ($latA >= 4) {
+        } elseif ($latA >= 3) {
             $combustible = 'demasiado';
-        } elseif ($latA <= 0.2 && (float) ($a8_30['vida_media'] ?? 65) < 70) {
+        } elseif ($primer !== null && (float) $primer > 28 && $latA < 0.5) {
             $combustible = 'poco';
         }
         return [
@@ -533,7 +542,7 @@ final class SimuladorMisionesDiarias
             'vida_media_B_8_30d' => $b8_30['vida_media'] ?? null,
             'vida_media_C_8_30d' => $c8_30['vida_media'] ?? null,
             'vida_media_D_8_30d' => $d8_30['vida_media'] ?? null,
-            'b4' => 'No sumar otro +6/día de peticiones fáciles si A ya latea con solo misiones. Peticiones deben ser más raras o no todas +2 válido. No tocar B1 todavía.',
+            'b4' => 'B3 ahora da +1/misión y 1 positivo válido/día. Peticiones no deben ser otro +3 válido diario. No tocar B1.',
         ];
     }
 }

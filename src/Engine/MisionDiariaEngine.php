@@ -67,7 +67,11 @@ final class MisionDiariaEngine
             }
             $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CADUCADA;
             $n++;
-            VidaPuebloEngine::aplicar($partida, -2, [
+            $dano = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_caducada', -2);
+            if ($dano > -1) {
+                $dano = -2;
+            }
+            VidaPuebloEngine::aplicar($partida, $dano, [
                 'causa' => VidaPuebloEngine::CAUSA_MISION_FALLIDA,
                 'origen' => VidaPuebloEngine::ORIGEN_SISTEMA,
                 'atribuible_celestine' => true,
@@ -139,6 +143,7 @@ final class MisionDiariaEngine
             $famUsadas[$fam] = true;
             $elegidas[] = $m;
         }
+        self::marcarSlotLatido($elegidas);
 
         $partida['misiones_diarias']['dia'] = $dia;
         foreach ($elegidas as $m) {
@@ -429,11 +434,16 @@ final class MisionDiariaEngine
         }
         $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CUMPLIDA;
         $m = $partida['misiones_diarias']['items'][$i];
-        VidaPuebloEngine::aplicar($partida, 2, [
+        $delta = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_cumplida', 1);
+        if ($delta < 1) {
+            $delta = 1;
+        }
+        $valido = !empty($m['cuenta_latido']) && !self::yaHuboValidoHoy($partida, (int) ($m['dia'] ?? 0), (string) ($m['id'] ?? ''));
+        VidaPuebloEngine::aplicar($partida, $delta, [
             'causa' => VidaPuebloEngine::CAUSA_MISION_CUMPLIDA,
             'origen' => VidaPuebloEngine::ORIGEN_JUGADOR,
             'atribuible_celestine' => true,
-            'positivo_valido_latido' => true,
+            'positivo_valido_latido' => $valido,
             'fuente_id' => $m['id'] ?? null,
         ], $cal, $logger);
         self::emit($partida, DomainEvents::MISION_CUMPLIDA, [
@@ -488,8 +498,51 @@ final class MisionDiariaEngine
             'texto' => $texto,
             'hecho' => (string) ($pl['hecho'] ?? ''),
             'params' => $params,
+            'exigencia' => (int) ($pl['exigencia'] ?? ($pl['prioridad'] ?? 0)),
+            'cuenta_latido' => false,
             'ayer_repetida' => in_array((string) $pl['id'], $ayerIds, true),
         ];
+    }
+
+    /**
+     * Solo una misión del paquete diario alimenta positivos válidos de Latido:
+     * la de mayor exigencia (más específica / más gated).
+     *
+     * @param list<array<string, mixed>> $elegidas
+     */
+    private static function marcarSlotLatido(array &$elegidas): void
+    {
+        if ($elegidas === []) {
+            return;
+        }
+        $best = 0;
+        $bestEx = -1;
+        foreach ($elegidas as $i => $m) {
+            $ex = (int) ($m['exigencia'] ?? 0);
+            if ($ex > $bestEx) {
+                $bestEx = $ex;
+                $best = $i;
+            }
+        }
+        foreach ($elegidas as $i => $_) {
+            $elegidas[$i]['cuenta_latido'] = ($i === $best);
+        }
+    }
+
+    private static function yaHuboValidoHoy(array $partida, int $dia, string $exceptoId): bool
+    {
+        foreach (self::delDia($partida, $dia) as $m) {
+            if ((string) ($m['id'] ?? '') === $exceptoId) {
+                continue;
+            }
+            if (($m['estado'] ?? '') !== self::EST_CUMPLIDA) {
+                continue;
+            }
+            if (!empty($m['cuenta_latido'])) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

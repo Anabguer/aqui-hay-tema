@@ -59,6 +59,13 @@ foreach ($hoy as $m) {
     ok(strpos((string) ($m['texto'] ?? ''), 'positivo_valido') === false, 'copy sin jerga técnica');
 }
 ok($imposibles === 0, 'día 1 sin misiones imposibles');
+$nSlot = 0;
+foreach ($hoy as $m) {
+    if (!empty($m['cuenta_latido'])) {
+        $nSlot++;
+    }
+}
+ok($nSlot === 1, 'solo una misión del día cuenta para Latido');
 
 $vida0 = VidaPuebloEngine::valor($p);
 $ids = array_keys($p['residentes']);
@@ -81,8 +88,33 @@ if ($primera !== null) {
     $n2 = MisionDiariaEngine::onEncuentroCelestine($p, $enc, $cal, null);
     ok($n1 === 1, 'un encuentro completa 1 misión');
     ok($n2 === 0, 'el mismo encuentro no completa otra');
-    ok(VidaPuebloEngine::valor($p) === $vida0 + 2, 'cumplida +2');
+    ok(VidaPuebloEngine::valor($p) === $vida0 + 1, 'cumplida +1');
     ok(count(MisionDiariaEngine::delDia($p)) === $antes, 'no nace una cuarta al completar');
+}
+
+$pSlot = $service->nuevaPartida('playtest_01', 'b3-misiones-slot');
+$vidaS = VidaPuebloEngine::valor($pSlot);
+$posS = (int) ($pSlot['vida_pueblo']['positivos_desde_latido'] ?? 0);
+$noSlot = null;
+$siSlot = null;
+foreach (MisionDiariaEngine::delDia($pSlot) as $m) {
+    if (!empty($m['cuenta_latido'])) {
+        $siSlot = $m;
+    } else {
+        $noSlot = $m;
+    }
+}
+ok($siSlot !== null, 'hay slot de Latido');
+if ($noSlot !== null) {
+    $enc = MisionDiariaEngine::encuentroSinteticoPara($noSlot, $pSlot);
+    MisionDiariaEngine::onEncuentroCelestine($pSlot, $enc, $cal, null);
+    ok(VidaPuebloEngine::valor($pSlot) === $vidaS + 1, 'misión no slot +1 Vida');
+    ok((int) ($pSlot['vida_pueblo']['positivos_desde_latido'] ?? 0) === $posS, 'no slot no suma positivo válido');
+}
+if ($siSlot !== null) {
+    $enc = MisionDiariaEngine::encuentroSinteticoPara($siSlot, $pSlot);
+    MisionDiariaEngine::onEncuentroCelestine($pSlot, $enc, $cal, null);
+    ok((int) ($pSlot['vida_pueblo']['positivos_desde_latido'] ?? 0) === $posS + 1, 'solo el slot suma positivo válido');
 }
 
 $pCad = $service->nuevaPartida('playtest_01', 'b3-misiones-cad');
