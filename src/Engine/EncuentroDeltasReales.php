@@ -31,7 +31,16 @@ final class EncuentroDeltasReales
         if (!is_array($mapa)) {
             $mapa = [];
         }
-        $row = is_array($mapa[$resultado] ?? null) ? $mapa[$resultado] : self::defaults()[$resultado] ?? self::defaults()['normal'];
+        $row = is_array($mapa[$resultado] ?? null) ? $mapa[$resultado] : null;
+        if (!is_array($row)) {
+            return [
+                'social' => 0,
+                'romance' => 0,
+                'conflicto' => null,
+                'calidad' => ContactoCalidad::NORMAL,
+                'signo' => 1,
+            ];
+        }
         $social = (int) ($row['social'] ?? 0);
         $romance = (int) ($row['romance'] ?? 0);
         $conflicto = array_key_exists('conflicto', $row) && $row['conflicto'] !== null
@@ -53,20 +62,6 @@ final class EncuentroDeltasReales
             'conflicto' => $conflicto,
             'calidad' => $calidad,
             'signo' => $social >= 0 ? 1 : -1,
-        ];
-    }
-
-    /**
-     * @return array<string, array<string, mixed>>
-     */
-    private static function defaults(): array
-    {
-        return [
-            'muy_mal' => ['social' => -8, 'romance' => -4, 'conflicto' => 2, 'calidad' => 'significativo'],
-            'mal' => ['social' => -4, 'romance' => -2, 'conflicto' => 1, 'calidad' => 'normal'],
-            'normal' => ['social' => 2, 'romance' => 1, 'conflicto' => null, 'calidad' => 'normal'],
-            'bien' => ['social' => 5, 'romance' => 3, 'conflicto' => null, 'calidad' => 'normal'],
-            'muy_bien' => ['social' => 8, 'romance' => 5, 'conflicto' => null, 'calidad' => 'significativo'],
         ];
     }
 }

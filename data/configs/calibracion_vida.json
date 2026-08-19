@@ -118,6 +118,13 @@
   "resolucion_encuentro": {
     "aplicar_deltas_reales": false,
     "resultados": ["muy_mal", "mal", "normal", "bien", "muy_bien"],
+    "deltas_por_resultado": {
+      "muy_mal": { "social": -8, "romance": -4, "conflicto": 2, "calidad": "significativo" },
+      "mal": { "social": -4, "romance": -2, "conflicto": 1, "calidad": "normal" },
+      "normal": { "social": 2, "romance": 1, "conflicto": null, "calidad": "normal" },
+      "bien": { "social": 5, "romance": 3, "conflicto": null, "calidad": "normal" },
+      "muy_bien": { "social": 8, "romance": 5, "conflicto": null, "calidad": "significativo" }
+    },
     "pesos": {
       "compat_ab": 0.18,
       "compat_ba": 0.08,
