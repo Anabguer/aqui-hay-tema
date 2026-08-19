@@ -47,7 +47,7 @@
             "pillado": 45,
             "enamorado": 72
         },
-        "_nota": "Pareja NO es banda. Es hito/estado aparte."
+        "_nota": "Pareja NO es banda. Es hito\/estado aparte."
     },
     "desgaste_social": {
         "activo": true,
@@ -60,7 +60,7 @@
         "delta_consolidada": 0.25,
         "dias_sin_contacto_recien": 1,
         "dias_sin_contacto_consolidada": 1,
-        "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
+        "_nota": "delta = -base * (1-|v|\/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
     },
     "desgaste_pareja": {
         "activo": true,
@@ -134,7 +134,8 @@
                 "peticiones": 0
             }
         },
-        "_nota": "Un solo estado activo. Caduca a neutro. No apila. No baja romance por existir."
+        "_nota": "Un solo estado activo. Caduca a neutro. No apila. No baja romance por existir.",
+        "duracion_horas": 6
     },
     "azar_ponderado": {
         "carga_min": -1,
@@ -143,7 +144,7 @@
         "compensacion_obligatoria": false
     },
     "resolucion_encuentro": {
-        "aplicar_deltas_reales": false,
+        "aplicar_deltas_reales": true,
         "resultados": [
             "muy_mal",
             "mal",
@@ -261,7 +262,13 @@
             "romance_hito": 0.04,
             "pareja": 0.08,
             "consejo": 0.15
-        }
+        },
+        "familias_en_play": [
+            "trabajo",
+            "ocio",
+            "romance",
+            "consejo"
+        ]
     },
     "autonomia": {
         "salidas_individuales_sqrt": 1.2,
@@ -272,8 +279,8 @@
         "atraccion_ocupacion_bonus": 0.6,
         "atraccion_ocupacion_cap": 3,
         "anti_aislamiento_umbral_dias": 0,
-        "anti_aislamiento_bonus_salida": 0.0,
-        "anti_aislamiento_bonus_lugar": 0.0
+        "anti_aislamiento_bonus_salida": 0,
+        "anti_aislamiento_bonus_lugar": 0
     },
     "buzon": {
         "max_dia": null,
@@ -355,7 +362,7 @@
     "escaner_compatibilidad": {
         "deprecated": true,
         "desbloqueable": false,
-        "_nota": "Eliminado del dise├▒o jugable. Compat/qu├¡mica siguen internas."
+        "_nota": "Eliminado del dise├▒o jugable. Compat\/qu├¡mica siguen internas."
     },
     "laboratorio_relacional": {
         "_provisional": true,

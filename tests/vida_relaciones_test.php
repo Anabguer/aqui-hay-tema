@@ -94,23 +94,11 @@ ok($old['relaciones_sociales'][0]['fase'] === null, 'fase inicial null (sin umbr
 
 // --- Propuesta: indisponibilidad (trabajo lunes 11h, autónomo 10-18) ---
 [$service, $partida, $ida, $idb] = vidaSetup();
-$rInd = PropuestaEncuentroEngine::proponer($partida, [$ida, $idb], 1, 11, 'conocerse');
-ok($rInd['ok'] ?? false, 'propuesta registrada aunque rechazada por agenda');
-ok(($rInd['rechazada'] ?? false) === true, 'propuesta rechazada');
-ok(($rInd['rechazo_clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD, 'clase indisponibilidad');
-ok(($rInd['programado'] ?? true) === false, 'indisponibilidad no programa');
-ok(count($partida['encuentros'] ?? []) === 0, 'sin encuentro creado');
-$claseA = $rInd['propuesta']['reacciones'][0]['clase'] ?? null;
-ok($claseA === PropuestaEncuentro::CLASE_INDISPONIBILIDAD, 'reacción A = indisponibilidad');
-
-$decInd = PropuestaEncuentroEngine::registrarDecision(
-    $partida,
-    (string) $rInd['propuesta']['id'],
-    $ida,
-    true
-);
-ok(!($decInd['ok'] ?? true), 'no se puede aceptar por encima de indisponibilidad');
-ok(($decInd['error'] ?? '') === GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD, 'error indisponibilidad al forzar');
+$rInd = PropuestaEncuentroEngine::proponer($partida, [$ida, $idb], 1, 11, 'conocerse', null, null, new VoluntadPendienteEvaluator());
+ok($rInd['ok'] ?? false, 'propuesta registrada a las 11h (trabajo)');
+ok(($rInd['rechazada'] ?? false) === false, '11h ocupada no aborta: busca siguiente franja');
+ok((int) ($rInd['propuesta']['hora'] ?? 11) !== 11, 'hora resultante distinta de 11');
+ok(($rInd['programado'] ?? true) === false, 'pendiente no programa todavía');
 
 // --- Propuesta: voluntad pendiente (hora libre 19) no programa ---
 [$service, $partida, $ida, $idb] = vidaSetup();
@@ -158,7 +146,8 @@ $encId = $slice['encuentro']['id'] ?? '';
 $adv = $service->avanzarReloj($partida, 12);
 ok(($adv['ok'] ?? false) === true, 'avanzar reloj resuelve encuentro');
 $rel = RelacionEngine::obtenerEntre($partida, $ida, $idb);
-ok(($rel['social']['intensidad'] ?? null) === 1, 'cambio real de canal social (placeholder +1)');
+ok(RelacionEngine::seConocen($partida, $ida, $idb), 'tras encuentro son conocidos');
+ok(is_int(RelacionEngine::valorSocialHacia($partida, $ida, $idb)), 'canal social numérico real');
 ok(($rel['romance'] ?? null) === null || ($rel['romance']['vinculo'] ?? null) === null, 'romance independiente no forzado');
 ok(array_key_exists('fase', $rel['social']), 'fase presente en relación');
 ok($rel['social']['fase'] === null, 'fase no auto-asignada');
@@ -174,7 +163,7 @@ ok(is_array($raw) && ($raw['estado'] ?? '') === 'terminado', 'encuentro terminad
 $vista = EncuentroResultadoVista::de($partida, $raw, $service->getCatalog(), $root);
 $jsVista = json_encode($vista);
 ok($jsVista !== false && strpos($jsVista, 'compatibilidad') === false, 'DTO play sin compatibilidad');
-ok(($vista['resultado']['social']['delta'] ?? null) === 1, 'consecuencia visible social en DTO');
+ok(is_int($vista['resultado']['social']['delta'] ?? null), 'consecuencia visible social en DTO');
 $ficha = $service->fichaResidente($partida, $ida);
 $jsFicha = json_encode($ficha);
 ok($jsFicha !== false && strpos($jsFicha, 'compatibilidad_oculta') === false, 'ficha sin compatibilidad_oculta');
@@ -196,6 +185,7 @@ ok(!($faseBad['ok'] ?? true), 'no salta a crisis sin tensión');
 ok(($faseBad['error'] ?? '') === GameError::FASE_TRANSICION_INVALIDA, 'FASE_TRANSICION_INVALIDA');
 
 // --- Conflicto canal independiente ---
+[$service, $partida, $ida, $idb] = vidaSetup();
 $c1 = RelacionEngine::upsertConflicto($partida, $ida, $idb, null, 'roce');
 ok($c1['ok'] ?? false, 'canal conflicto independiente');
 $relC = RelacionEngine::obtenerEntre($partida, $ida, $idb);

@@ -1,0 +1,76 @@
+{
+    "id": "per_p006",
+    "slot": "I06",
+    "piloto": false,
+    "_playtest": true,
+    "identidad": {
+        "nombre": "Dani",
+        "edad": 38,
+        "genero": "hombre",
+        "pronombres": [
+            "el"
+        ],
+        "atraido_por": [
+            "mujer"
+        ],
+        "etiqueta_orientacion_visible": "heterosexual",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {
+        "ocupacion": "sanitario",
+        "franja_disponibilidad": "tarde",
+        "hobby_principal": "deporte",
+        "hobbies_secundarios": [
+            "correr"
+        ],
+        "lugares_preferentes": [
+            "lug_cafeteria",
+            "lug_parque"
+        ],
+        "estilo_social": "intenso",
+        "rasgos_publicos": [
+            "directo",
+            "leal",
+            "cabezota"
+        ],
+        "rasgos_ocultos": [
+            "ansioso"
+        ],
+        "gustos_declarados": [
+            "Planes del pueblo"
+        ]
+    },
+    "romance": {
+        "necesidad_contacto_base": "media",
+        "preferencias_romanticas": [
+            {
+                "texto": "Valora que la otra persona tenga vida propia.",
+                "visible": true,
+                "tipo": "ritmo"
+            }
+        ],
+        "preferencias_esteticas": [],
+        "dealbreakers": [
+            {
+                "texto": "Que la ridiculicen delante de otras personas.",
+                "severidad": "absoluto"
+            }
+        ]
+    },
+    "lazos": [],
+    "presencia_v0": {
+        "empieza_en_pueblo": true,
+        "orden_llegada": null,
+        "funcion_llegada": null
+    },
+    "visual": {
+        "pack_id": "P006",
+        "estilo_visual": "AHT_PERSONAJES_V1",
+        "etiquetas_look_base": [
+            "deportivo"
+        ]
+    },
+    "narrativa": {
+        "voz": null
+    }
+}

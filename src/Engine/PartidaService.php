@@ -149,13 +149,14 @@ final class PartidaService
             if ($otroId === $residenteId) {
                 continue;
             }
-            $rel = RelacionEngine::obtenerEntre($partida, $residenteId, $otroId);
-            $socH = RelacionEngine::socialHacia($partida, $residenteId, (string) $otroId);
-            $rel['etiqueta_social'] = is_array($socH) ? ($socH['banda'] ?? 'desconocido') : 'desconocido';
-            $rel['conocidos'] = RelacionEngine::seConocen($partida, $residenteId, (string) $otroId);
-            $rom = RelacionEngine::romanceHacia($partida, $residenteId, (string) $otroId);
-            $rel['etiqueta_romance'] = RelacionBandas::romance($rom, $calFicha);
-            $relaciones[$otroId] = $rel;
+            $vista = RelacionVistaJugador::de($partida, $residenteId, (string) $otroId, $calFicha);
+            $relaciones[$otroId] = [
+                'id' => $otroId,
+                'nombre' => IdentidadPublica::nombre($partida, (string) $otroId),
+                'conocidos' => $vista['conocidos'],
+                'etiqueta_social' => $vista['etiqueta_social'],
+                'etiqueta_vinculo' => $vista['etiqueta_vinculo'],
+            ];
         }
 
         $proyeccion = [];

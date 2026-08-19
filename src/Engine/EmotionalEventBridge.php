@@ -86,13 +86,45 @@ final class EmotionalEventBridge
             return ['ok' => true, 'skipped' => 'feature_disabled', 'origen_sugerido' => $origen];
         }
 
-        \aht_log_optional($logger, $partida, 'emotional_bridge_placeholder', [
-            'evento' => $evento,
-            'origen_sugerido' => $origen,
-            '_placeholder' => true,
-            'nota' => 'No se aplica estado. Falta diseño de reglas.',
-        ]);
+        if ($evento !== DomainEvents::ENCUENTRO_TERMINADO) {
+            return ['ok' => true, 'skipped' => 'evento_sin_regla', 'origen_sugerido' => $origen];
+        }
 
-        return ['ok' => true, 'evaluados' => 0, '_placeholder' => true, 'origen_sugerido' => $origen];
+        $resultado = is_array($envelope['resultado'] ?? null) ? $envelope['resultado'] : [];
+        $encuentro = is_array($envelope['encuentro'] ?? null) ? $envelope['encuentro'] : [];
+        $actores = is_array($encuentro['participantes'] ?? null) ? $encuentro['participantes'] : ($envelope['actores'] ?? []);
+        $cal = CalibracionConfig::load(dirname(__DIR__, 2));
+        $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas', 6);
+        $svc = new EmotionalStateService(new VisualPackStore(dirname(__DIR__, 2)), (new Catalog(dirname(__DIR__, 2)))->store(), $logger);
+        $n = 0;
+        foreach ($actores as $rid) {
+            $rid = (string) $rid;
+            if ($rid === '' || !isset($partida['residentes'][$rid])) {
+                continue;
+            }
+            $resExp = (string) ($resultado['por_participante'][$rid]['resultado'] ?? 'normal');
+            $estado = self::estadoDesdeResultado($resExp);
+            if ($estado === null) {
+                continue;
+            }
+            $svc->aplicar($partida, $rid, $estado, 'encuentro', null, null, ['encuentro_id' => $encuentro['id'] ?? null], $dur);
+            $n++;
+        }
+
+        return ['ok' => true, 'evaluados' => $n, '_placeholder' => false, 'origen_sugerido' => $origen];
+    }
+
+    private static function estadoDesdeResultado(string $resultado): ?string
+    {
+        if ($resultado === 'muy_bien' || $resultado === 'bien') {
+            return EstadoEmocional::ALEGRE;
+        }
+        if ($resultado === 'muy_mal') {
+            return EstadoEmocional::TRISTE;
+        }
+        if ($resultado === 'mal') {
+            return EstadoEmocional::ENFADADO;
+        }
+        return null;
     }
 }

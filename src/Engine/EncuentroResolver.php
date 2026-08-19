@@ -132,6 +132,15 @@ final class EncuentroResolver
             'deltas_reales' => $reales,
         ]);
 
+        if (FeatureConfig::isEnabled($partida, 'discovery_enabled') && count($participantes) >= 2) {
+            $calDisc = $cal !== [] ? $cal : ($catalog !== null ? CalibracionConfig::load($catalog->getRoot()) : []);
+            $cands = self::candidatosDiscovery($partida, (string) $participantes[0], (string) $participantes[1]);
+            if ($cands !== [] && $calDisc !== []) {
+                $rev = DiscoveryReveal::aplicarEvento($partida, $cands, $calDisc, 'encuentro', (string) ($encuentro['id'] ?? ''));
+                $resultado['descubrimientos'] = $rev['descubiertos'] ?? [];
+            }
+        }
+
         return $resultado;
     }
 
@@ -248,5 +257,49 @@ final class EncuentroResolver
             (string) ($encuentro['tipo'] ?? 'encuentro'),
             $resultado['por_participante'][$a]['resultado'] ?? null
         );
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private static function candidatosDiscovery(array $partida, string $a, string $b): array
+    {
+        $out = [];
+        foreach ([$a, $b] as $rid) {
+            $perfil = PerfilPartida::deOLegacy($partida, $rid);
+            $hobbies = is_array($perfil['hobbies'] ?? null) ? $perfil['hobbies'] : [];
+            $rasgos = is_array($perfil['rasgos'] ?? null) ? $perfil['rasgos'] : [];
+            foreach ($hobbies as $h) {
+                if (!is_string($h) || $h === '') {
+                    continue;
+                }
+                if (DiscoveryEngine::estado($partida, $rid, ConocimientoNpc::campoHobby($h)) === DiscoveryEngine::DESCUBIERTO) {
+                    continue;
+                }
+                $out[] = [
+                    'residente_id' => $rid,
+                    'campo' => ConocimientoNpc::campoHobby($h),
+                    'valor' => $h,
+                    'observadores' => ['jugador'],
+                ];
+                break;
+            }
+            foreach ($rasgos as $r) {
+                if (!is_string($r) || $r === '') {
+                    continue;
+                }
+                if (DiscoveryEngine::estado($partida, $rid, ConocimientoNpc::campoRasgo($r)) === DiscoveryEngine::DESCUBIERTO) {
+                    continue;
+                }
+                $out[] = [
+                    'residente_id' => $rid,
+                    'campo' => ConocimientoNpc::campoRasgo($r),
+                    'valor' => $r,
+                    'observadores' => ['jugador'],
+                ];
+                break;
+            }
+        }
+        return $out;
     }
 }

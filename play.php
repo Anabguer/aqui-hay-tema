@@ -42,6 +42,8 @@ header('Content-Type: text/html; charset=utf-8');
       <div class="reloj-toolbar" role="group" aria-label="Controles de reloj">
         <button type="button" id="btn-avanzar-1h">+1h</button>
         <button type="button" id="btn-avanzar-8h">+8h</button>
+        <button type="button" id="btn-avanzar-1d">+1 día</button>
+        <button type="button" id="btn-simular-3d">Simular 3 días</button>
         <button type="button" class="primary" id="btn-proximo-encuentro">Ir al próximo encuentro</button>
       </div>
 
@@ -97,7 +99,7 @@ header('Content-Type: text/html; charset=utf-8');
             <select id="enc-lugar" name="lugar" required>
               <option value="">Cargando lugares…</option>
             </select>
-            <button type="button" class="primary" id="btn-programar" disabled>Programar encuentro</button>
+            <button type="button" class="primary" id="btn-programar" disabled>Proponer encuentro</button>
           </form>
           <p class="feedback" id="enc-feedback" role="status" aria-live="polite"></p>
         </div>

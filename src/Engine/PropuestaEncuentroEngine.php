@@ -49,6 +49,14 @@ final class PropuestaEncuentroEngine
         }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
+        $franja = self::resolverFranja($partida, $participantes, $dia, $hora);
+        if ($franja === null) {
+            return GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD, [
+                'motivo' => 'sin_franja_libre',
+            ]);
+        }
+        $dia = (int) $franja['dia'];
+        $hora = (int) $franja['hora'];
         if ($voluntad === null) {
             $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
             $voluntad = new VoluntadPonderadaEvaluator($calDef);
@@ -225,6 +233,30 @@ final class PropuestaEncuentroEngine
             $logger
         );
         if (!($r['ok'] ?? false)) {
+            $alt = self::resolverFranja(
+                $partida,
+                $prop['participantes'],
+                (int) $prop['dia'],
+                (int) $prop['hora'] + 1
+            );
+            if ($alt !== null) {
+                $r = EncuentroEngine::programar(
+                    $partida,
+                    $prop['participantes'],
+                    (int) $alt['dia'],
+                    (int) $alt['hora'],
+                    (string) $prop['tipo'],
+                    isset($prop['lugar']) ? (string) $prop['lugar'] : null,
+                    isset($prop['actividad']) ? (string) $prop['actividad'] : null,
+                    $logger
+                );
+                if ($r['ok'] ?? false) {
+                    $prop['dia'] = (int) $alt['dia'];
+                    $prop['hora'] = (int) $alt['hora'];
+                }
+            }
+        }
+        if (!($r['ok'] ?? false)) {
             return $r;
         }
 
@@ -233,6 +265,16 @@ final class PropuestaEncuentroEngine
         $partida['propuestas_encuentro'][$idx] = $prop;
         $r['propuesta'] = $prop;
         $r['programado'] = true;
+        $nombres = [];
+        foreach ($prop['participantes'] ?? [] as $pid) {
+            $nombres[] = IdentidadPublica::nombre($partida, (string) $pid);
+        }
+        $quien = implode(' y ', $nombres);
+        $diaSem = Reloj::diaSemana((int) $prop['dia']);
+        $hh = str_pad((string) (int) $prop['hora'], 2, '0', STR_PAD_LEFT);
+        $lugar = (string) ($prop['lugar'] ?? '');
+        $sitio = $lugar !== '' ? str_replace('lug_', '', $lugar) : 'el pueblo';
+        $r['mensaje_ui'] = $quien . ' han quedado el ' . $diaSem . ' a las ' . $hh . ':00 en ' . $sitio . '.';
         return $r;
     }
 
@@ -392,9 +434,44 @@ final class PropuestaEncuentroEngine
             $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
         } elseif ($rechazada && $clase === PropuestaEncuentro::CLASE_VOLUNTAD) {
             $out['error'] = GameError::ENCUENTRO_RECHAZADO_VOLUNTAD;
-            $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_VOLUNTAD);
+            $copyId = null;
+            foreach ($propuesta['reacciones'] ?? [] as $reac) {
+                if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA && !empty($reac['copy_id'])) {
+                    $copyId = (string) $reac['copy_id'];
+                    break;
+                }
+            }
+            $out['mensaje_ui'] = CopyVoluntad::texto($copyId);
+            $out['copy_id'] = $copyId;
         }
         return $out;
+    }
+
+    /**
+     * Si la hora pedida está ocupada, busca la siguiente franja libre conjunta.
+     *
+     * @param list<string> $participantes
+     * @return array{dia:int,hora:int}|null
+     */
+    private static function resolverFranja(array $partida, array $participantes, int $dia, int $hora): ?array
+    {
+        $libre = true;
+        foreach ($participantes as $rid) {
+            $disp = AgendaEngine::estaDisponible($partida, (string) $rid, $dia, $hora);
+            if (!($disp['disponible'] ?? false)) {
+                $libre = false;
+                break;
+            }
+        }
+        if ($libre && !EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $hora)) {
+            return ['dia' => $dia, 'hora' => $hora];
+        }
+        $slots = DisponibilidadEngine::slotsCompatibles($partida, $participantes, 'conocerse', $dia, $hora, 7, 24);
+        $first = $slots['slots'][0] ?? null;
+        if (!is_array($first)) {
+            return null;
+        }
+        return ['dia' => (int) $first['dia'], 'hora' => (int) $first['hora']];
     }
 
     private static function indice(array $partida, string $propuestaId): ?int

@@ -1,0 +1,76 @@
+{
+    "id": "per_p003",
+    "slot": "I03",
+    "piloto": false,
+    "_playtest": true,
+    "identidad": {
+        "nombre": "Marta",
+        "edad": 34,
+        "genero": "mujer",
+        "pronombres": [
+            "ella"
+        ],
+        "atraido_por": [
+            "mujer"
+        ],
+        "etiqueta_orientacion_visible": "lesbiana",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {
+        "ocupacion": "docente",
+        "franja_disponibilidad": "tarde",
+        "hobby_principal": "plantas",
+        "hobbies_secundarios": [
+            "costura"
+        ],
+        "lugares_preferentes": [
+            "lug_cafeteria",
+            "lug_parque"
+        ],
+        "estilo_social": "casero",
+        "rasgos_publicos": [
+            "reservado",
+            "empatico",
+            "tranquila"
+        ],
+        "rasgos_ocultos": [
+            "cabezota"
+        ],
+        "gustos_declarados": [
+            "Planes del pueblo"
+        ]
+    },
+    "romance": {
+        "necesidad_contacto_base": "media",
+        "preferencias_romanticas": [
+            {
+                "texto": "Valora que la otra persona tenga vida propia.",
+                "visible": true,
+                "tipo": "ritmo"
+            }
+        ],
+        "preferencias_esteticas": [],
+        "dealbreakers": [
+            {
+                "texto": "Que la ridiculicen delante de otras personas.",
+                "severidad": "absoluto"
+            }
+        ]
+    },
+    "lazos": [],
+    "presencia_v0": {
+        "empieza_en_pueblo": true,
+        "orden_llegada": null,
+        "funcion_llegada": null
+    },
+    "visual": {
+        "pack_id": "P003",
+        "estilo_visual": "AHT_PERSONAJES_V1",
+        "etiquetas_look_base": [
+            "comodo"
+        ]
+    },
+    "narrativa": {
+        "voz": null
+    }
+}

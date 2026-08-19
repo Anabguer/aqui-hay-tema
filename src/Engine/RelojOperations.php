@@ -37,6 +37,7 @@ final class RelojOperations
         }
         if (!empty($partida['lab_vida_activa'])
             || (bool) CalibracionConfig::get(CalibracionConfig::load($this->projectRoot), 'acontecimientos_dia.activo_en_play', false)
+            || FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled')
         ) {
             $calTick = CalibracionConfig::load($this->projectRoot);
             $rngTick = RngService::fromPartida($partida);

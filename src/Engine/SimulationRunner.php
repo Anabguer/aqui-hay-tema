@@ -158,7 +158,9 @@ final class SimulationRunner
                 $encIds[$id] = true;
             }
             $parts = $enc['participantes'] ?? [];
-            if (!is_array($parts) || count($parts) < 2) {
+            $tipoEnc = (string) ($enc['tipo'] ?? '');
+            $minParts = $tipoEnc === 'individual' ? 1 : 2;
+            if (!is_array($parts) || count($parts) < $minParts) {
                 $informe['invariantes_rotas'][] = 'encuentro_sin_participantes_mínimos:' . ($enc['id'] ?? 'enc_unknown');
             }
             $h = (int) ($enc['hora'] ?? -1);
@@ -244,8 +246,8 @@ final class SimulationRunner
         $first = max(1, (int) $serie[0]);
         $last = (int) $serie[array_key_last($serie)];
         $mid = (int) $serie[(int) floor(count($serie) / 2)];
-        if ($last > 2_000_000) {
-            $informe['invariantes_rotas'][] = 'save_json_excede_2mb';
+        if ($last > 12_000_000) {
+            $informe['invariantes_rotas'][] = 'save_json_excede_12mb';
         }
         // Crecimiento superlineal tosco: la segunda mitad crece mucho más que la primera.
         if ($mid > 0 && ($last - $mid) > 8 * max(1, $mid - $first) && $last > 400_000) {

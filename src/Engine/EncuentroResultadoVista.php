@@ -88,10 +88,13 @@ final class EncuentroResultadoVista
     private static function canalSocial(array $res): array
     {
         $ds = is_array($res['delta_social'] ?? null) ? $res['delta_social'] : [];
-        if ($ds === [] || (($ds['aplicado'] ?? true) === false && !array_key_exists('intensidad', $ds) && !isset($ds['tipo']))) {
+        if ($ds === [] || (($ds['aplicado'] ?? true) === false && !array_key_exists('intensidad', $ds) && !isset($ds['tipo']) && !isset($ds['a_hacia_b']))) {
             return ['hay' => false, 'delta' => 0, 'tipo' => null, 'texto' => 'Relación social: 0'];
         }
         $n = array_key_exists('intensidad', $ds) ? (int) $ds['intensidad'] : 0;
+        if ($n === 0 && (isset($ds['a_hacia_b']) || isset($ds['b_hacia_a']))) {
+            $n = (int) round(((int) ($ds['a_hacia_b'] ?? 0) + (int) ($ds['b_hacia_a'] ?? 0)) / 2);
+        }
         $tipo = isset($ds['tipo']) ? (string) $ds['tipo'] : null;
         $texto = 'Relación social: ' . self::signo($n);
         if ($tipo !== null && $tipo !== '' && $tipo !== 'roce') {

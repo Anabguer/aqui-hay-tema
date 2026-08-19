@@ -1,20 +1,70 @@
 {
-  "_comentario": "PLAYTEST_01. Separado de debug_v0 y de tests. No es producción/canon. No incluye B/C.",
-  "id": "playtest_01",
-  "descripcion": "Playtest Neni: Rocío (canon día 1) + QA Valid (NO CANON) para poder programar encuentros. Solo cafetería operativa.",
-  "seed_sugerida": "playtest-01",
-  "residentes_iniciales": [
-    {
-      "catalog_id": "per_i03",
-      "presencia": "residente",
-      "nota": "Rocío, piloto día 1"
-    },
-    {
-      "catalog_id": "per_qa_valid",
-      "presencia": "residente",
-      "nota": "Personaje QA. NO CANON. No es B ni C. Solo para que haya un segundo residente jugable."
+    "_comentario": "PLAYTEST_01. Ocho residentes del pack visual aprobado P001-P008. No es produccion\/canon.",
+    "id": "playtest_01",
+    "descripcion": "Playtest Neni: Carmen, Jose, Marta, Raul, Lucia, Dani, Alex, Sara. Cafeteria, parque y biblioteca.",
+    "seed_sugerida": "playtest-01",
+    "residentes_iniciales": [
+        {
+            "catalog_id": "per_p001",
+            "presencia": "residente",
+            "nota": "Carmen \/ P001"
+        },
+        {
+            "catalog_id": "per_p002",
+            "presencia": "residente",
+            "nota": "José \/ P002"
+        },
+        {
+            "catalog_id": "per_p003",
+            "presencia": "residente",
+            "nota": "Marta \/ P003"
+        },
+        {
+            "catalog_id": "per_p004",
+            "presencia": "residente",
+            "nota": "Raúl \/ P004"
+        },
+        {
+            "catalog_id": "per_p005",
+            "presencia": "residente",
+            "nota": "Lucía \/ P005"
+        },
+        {
+            "catalog_id": "per_p006",
+            "presencia": "residente",
+            "nota": "Dani \/ P006"
+        },
+        {
+            "catalog_id": "per_p007",
+            "presencia": "residente",
+            "nota": "Álex \/ P007"
+        },
+        {
+            "catalog_id": "per_p008",
+            "presencia": "residente",
+            "nota": "Sara \/ P008"
+        }
+    ],
+    "lugares_operativos_dia_1": [
+        "lug_cafeteria",
+        "lug_parque",
+        "lug_biblioteca"
+    ],
+    "bloques_abiertos": [
+        "a"
+    ],
+    "parentesco": [
+        {
+            "persona_a": "per_p004",
+            "persona_b": "per_p007",
+            "tipo": "padre"
+        }
+    ],
+    "features": {
+        "buzon_enabled": true,
+        "npc_autonomy_enabled": true,
+        "discovery_enabled": true,
+        "emotional_state_from_events_enabled": true,
+        "debug_tools_enabled": true
     }
-  ],
-  "lugares_operativos_dia_1": ["lug_cafeteria"],
-  "bloques_abiertos": ["a"]
 }

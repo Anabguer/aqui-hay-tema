@@ -76,7 +76,7 @@ ok(($raw['estado'] ?? '') === 'terminado', 'estado terminado');
 $vista = EncuentroResultadoVista::de($partida, $raw, $service->getCatalog(), $root);
 ok(($vista['participantes_nombres'][0] ?? '') === 'QA Valid' || in_array('QA Valid', $vista['participantes_nombres'] ?? [], true), 'nombres públicos');
 ok(!in_array($ida, $vista['participantes_nombres'] ?? [], true), 'no muestra id técnico como nombre');
-ok(($vista['resultado']['social']['delta'] ?? null) === 1, 'delta social placeholder +1');
+ok(is_int($vista['resultado']['social']['delta'] ?? null), 'delta social real (entero)');
 ok(($vista['resultado']['romance']['delta'] ?? null) === 0, 'romance independiente en 0 (no romántico)');
 ok(($vista['resultado']['conflicto']['hay'] ?? true) === false, 'conocerse sin conflicto');
 ok(!isset($vista['resultado']['delta_social']), 'DTO no expone delta_social crudo');
@@ -167,7 +167,7 @@ $rawP = encTerminado($cargada, $idP);
 ok(($rawP['estado'] ?? '') === 'terminado', 'save/load: sigue terminado');
 ok(isset($rawP['resultado']['delta_social']), 'save/load: resultado persistido');
 $vistaP = EncuentroResultadoVista::de($cargada, $rawP, $service->getCatalog(), $root);
-ok(($vistaP['resultado']['social']['delta'] ?? 0) === 1, 'save/load: vista coherente');
+ok(is_int($vistaP['resultado']['social']['delta'] ?? null), 'save/load: vista coherente');
 
 // Varios en un salto
 [$service, $partida, $ida, $idb] = setup();

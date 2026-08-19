@@ -1,0 +1,77 @@
+{
+    "id": "per_p005",
+    "slot": "I05",
+    "piloto": false,
+    "_playtest": true,
+    "identidad": {
+        "nombre": "Lucía",
+        "edad": 26,
+        "genero": "mujer",
+        "pronombres": [
+            "ella"
+        ],
+        "atraido_por": [
+            "hombre",
+            "mujer"
+        ],
+        "etiqueta_orientacion_visible": "bisexual",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {
+        "ocupacion": "camarero",
+        "franja_disponibilidad": "noche",
+        "hobby_principal": "baile",
+        "hobbies_secundarios": [
+            "copas"
+        ],
+        "lugares_preferentes": [
+            "lug_cafeteria",
+            "lug_parque"
+        ],
+        "estilo_social": "fiestero",
+        "rasgos_publicos": [
+            "sociable",
+            "bromista",
+            "nerviosa"
+        ],
+        "rasgos_ocultos": [
+            "vanidoso"
+        ],
+        "gustos_declarados": [
+            "Planes del pueblo"
+        ]
+    },
+    "romance": {
+        "necesidad_contacto_base": "media",
+        "preferencias_romanticas": [
+            {
+                "texto": "Valora que la otra persona tenga vida propia.",
+                "visible": true,
+                "tipo": "ritmo"
+            }
+        ],
+        "preferencias_esteticas": [],
+        "dealbreakers": [
+            {
+                "texto": "Que la ridiculicen delante de otras personas.",
+                "severidad": "absoluto"
+            }
+        ]
+    },
+    "lazos": [],
+    "presencia_v0": {
+        "empieza_en_pueblo": true,
+        "orden_llegada": null,
+        "funcion_llegada": null
+    },
+    "visual": {
+        "pack_id": "P005",
+        "estilo_visual": "AHT_PERSONAJES_V1",
+        "etiquetas_look_base": [
+            "atrevido"
+        ]
+    },
+    "narrativa": {
+        "voz": null
+    }
+}

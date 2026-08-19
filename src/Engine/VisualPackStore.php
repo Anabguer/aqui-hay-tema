@@ -237,12 +237,12 @@ final class VisualPackStore
                 if (!is_dir($folder)) {
                     continue;
                 }
-                $metaPath = $folder . DIRECTORY_SEPARATOR . 'meta.json';
-                if (!is_file($metaPath)) {
+                $metaPath = self::rutaMetaPack($folder, $name);
+                if ($metaPath === null) {
                     continue;
                 }
-                $meta = JsonFile::read($metaPath);
-                $id = (string) ($meta['personaje_id'] ?? strtolower($name));
+                $meta = self::normalizarMetaPack(JsonFile::read($metaPath), $name);
+                $id = (string) ($meta['personaje_id'] ?? $name);
                 $found[$id] = $this->packDesdeMeta($spec['rel'] . '/' . $name, $meta, $spec['laboratorio'], !$spec['canon']);
             }
         }
@@ -266,7 +266,7 @@ final class VisualPackStore
             ];
         }
         return [
-            'canon' => $noCanon ? false : (bool) ($meta['canon'] ?? false),
+            'canon' => $noCanon ? false : (bool) ($meta['canon'] ?? !$laboratorio),
             'laboratorio' => $laboratorio || (bool) ($meta['laboratorio'] ?? false),
             'catalog_id' => $meta['catalog_id'] ?? null,
             'nombre_visible' => $meta['nombre_carpeta'] ?? $meta['personaje_id'] ?? $carpetaRel,
@@ -284,5 +284,56 @@ final class VisualPackStore
     {
         $carpeta = str_replace(['/', '\\'], DIRECTORY_SEPARATOR, (string) ($pack['carpeta'] ?? ''));
         return $this->root . DIRECTORY_SEPARATOR . $carpeta . DIRECTORY_SEPARATOR . $archivo;
+    }
+
+    /** meta.json canónico o Pxxx_meta.json del pack visual aprobado. */
+    private static function rutaMetaPack(string $folder, string $name): ?string
+    {
+        $candidatos = [
+            $folder . DIRECTORY_SEPARATOR . 'meta.json',
+            $folder . DIRECTORY_SEPARATOR . $name . '_meta.json',
+        ];
+        foreach ($candidatos as $path) {
+            if (is_file($path)) {
+                return $path;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Adapta el schema Pxxx (expressions[]) al schema del motor (expresiones.{id}.archivo).
+     * enfadada.png se declara como expresión enfadado para el resolver.
+     *
+     * @param array<string, mixed> $meta
+     * @return array<string, mixed>
+     */
+    public static function normalizarMetaPack(array $meta, string $folderName): array
+    {
+        $packId = (string) ($meta['personaje_id'] ?? $meta['id'] ?? $folderName);
+        $meta['personaje_id'] = $packId;
+        if (empty($meta['catalog_id']) && preg_match('/^P(\d{3})$/', $packId, $m)) {
+            $meta['catalog_id'] = 'per_p' . $m[1];
+        }
+        if (empty($meta['expresiones']) && isset($meta['expressions']) && is_array($meta['expressions'])) {
+            $exps = [];
+            $ver = (int) ($meta['visual_identity_version'] ?? 1);
+            foreach ($meta['expressions'] as $expId) {
+                if (!is_string($expId) || $expId === '') {
+                    continue;
+                }
+                $canon = $expId === 'enfadada' ? 'enfadado' : $expId;
+                $archivo = $folderName . '_' . $expId . '.png';
+                $exps[$canon] = [
+                    'archivo' => $archivo,
+                    'identidad_version' => $ver,
+                ];
+            }
+            $meta['expresiones'] = $exps;
+        }
+        if (!isset($meta['canon'])) {
+            $meta['canon'] = true;
+        }
+        return $meta;
     }
 }

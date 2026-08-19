@@ -33,8 +33,15 @@ final class PartidaLifecycle
         foreach ($config['residentes_iniciales'] ?? [] as $entry) {
             $this->residentes->incorporarCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
         }
+        self::aplicarParentescoConfig($partida, $config);
 
         FeatureConfig::mergeIntoPartida($partida, $this->root);
+        if (!empty($config['features']) && is_array($config['features'])) {
+            $partida['features'] = array_merge(
+                is_array($partida['features'] ?? null) ? $partida['features'] : [],
+                $config['features']
+            );
+        }
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         SchemaFields::ensure($partida);
         DomainBootstrap::boot();
@@ -77,6 +84,14 @@ final class PartidaLifecycle
         foreach ($config['residentes_iniciales'] ?? [] as $entry) {
             $this->residentes->incorporarCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
         }
+        self::aplicarParentescoConfig($partida, $config);
+        FeatureConfig::mergeIntoPartida($partida, $this->root);
+        if (!empty($config['features']) && is_array($config['features'])) {
+            $partida['features'] = array_merge(
+                is_array($partida['features'] ?? null) ? $partida['features'] : [],
+                $config['features']
+            );
+        }
         SchemaFields::ensure($partida);
         $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
         $this->repo->guardar($partida);
@@ -86,5 +101,17 @@ final class PartidaLifecycle
     public function listar(): array
     {
         return $this->repo->listar();
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $config
+     */
+    private static function aplicarParentescoConfig(array &$partida, array $config): void
+    {
+        if (empty($config['parentesco']) || !is_array($config['parentesco'])) {
+            return;
+        }
+        $partida['parentesco'] = array_values($config['parentesco']);
     }
 }

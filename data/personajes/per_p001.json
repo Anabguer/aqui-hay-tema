@@ -1,0 +1,76 @@
+{
+    "id": "per_p001",
+    "slot": "I01",
+    "piloto": false,
+    "_playtest": true,
+    "identidad": {
+        "nombre": "Carmen",
+        "edad": 45,
+        "genero": "mujer",
+        "pronombres": [
+            "ella"
+        ],
+        "atraido_por": [
+            "hombre"
+        ],
+        "etiqueta_orientacion_visible": "heterosexual",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {
+        "ocupacion": "oficina",
+        "franja_disponibilidad": "tarde",
+        "hobby_principal": "bingo",
+        "hobbies_secundarios": [
+            "pasear"
+        ],
+        "lugares_preferentes": [
+            "lug_cafeteria",
+            "lug_parque"
+        ],
+        "estilo_social": "sociable_selectiva",
+        "rasgos_publicos": [
+            "observadora",
+            "practica",
+            "socarrona"
+        ],
+        "rasgos_ocultos": [
+            "ansioso"
+        ],
+        "gustos_declarados": [
+            "Planes del pueblo"
+        ]
+    },
+    "romance": {
+        "necesidad_contacto_base": "media",
+        "preferencias_romanticas": [
+            {
+                "texto": "Valora que la otra persona tenga vida propia.",
+                "visible": true,
+                "tipo": "ritmo"
+            }
+        ],
+        "preferencias_esteticas": [],
+        "dealbreakers": [
+            {
+                "texto": "Que la ridiculicen delante de otras personas.",
+                "severidad": "absoluto"
+            }
+        ]
+    },
+    "lazos": [],
+    "presencia_v0": {
+        "empieza_en_pueblo": true,
+        "orden_llegada": null,
+        "funcion_llegada": null
+    },
+    "visual": {
+        "pack_id": "P001",
+        "estilo_visual": "AHT_PERSONAJES_V1",
+        "etiquetas_look_base": [
+            "cotidiano"
+        ]
+    },
+    "narrativa": {
+        "voz": null
+    }
+}

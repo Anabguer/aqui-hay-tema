@@ -145,6 +145,13 @@ final class MotorVidaDiaria
         if ($protagonista === null) {
             return null;
         }
+        $familiasPlay = CalibracionConfig::get($cal, 'acontecimientos_dia.familias_en_play', null);
+        $enPlay = empty($partida['lab_vida_activa']) && FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled');
+        if ($enPlay && is_array($familiasPlay) && $familiasPlay !== []) {
+            $items = array_values(array_filter($items, static function ($item) use ($familiasPlay) {
+                return in_array((string) ($item['familia'] ?? ''), $familiasPlay, true);
+            }));
+        }
         $elegido = self::elegirEvento($partida, $items, $protagonista, $cal, $rng);
         if ($elegido === null) {
             return ['omitido' => 'sin_evento_valido', 'protagonista' => $protagonista];

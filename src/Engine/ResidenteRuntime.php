@@ -21,6 +21,7 @@ final class ResidenteRuntime
             'runtime' => [
                 'ocupacion' => $catalogo['vida']['ocupacion'] ?? null,
                 'compromisos_recurrentes' => $catalogo['vida']['compromisos_recurrentes'] ?? [],
+                'visual_pack_id' => $catalogo['visual']['pack_id'] ?? ($catalogo['visual_pack_id'] ?? null),
             ],
             '_placeholder' => false,
         ];

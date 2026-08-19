@@ -749,7 +749,8 @@
       const reciente = idsRecientes.includes(id);
       const row = el('div', 'rel-row' + (selectedResidente === id ? ' selected-resident' : '') + (reciente ? ' rel-reciente' : ''));
       row.appendChild(el('div', null, nombreResidente(id)));
-      row.appendChild(el('div', 'mini-meta', `Social: ${rel.social?.tipo || '—'} · Romance: ${rel.romance ? 'sí' : '—'}`));
+      const vinculo = rel.etiqueta_vinculo ? ` · ${rel.etiqueta_vinculo}` : '';
+      row.appendChild(el('div', 'mini-meta', `${rel.conocidos ? (rel.etiqueta_social || 'conocido') : 'desconocido'}${vinculo}`));
       if (reciente) row.appendChild(el('div', 'mini-meta', 'Cambio reciente'));
       row.addEventListener('click', () => seleccionarResidente(id));
       panel.appendChild(row);
@@ -1053,15 +1054,20 @@
         return;
       }
 
-      setFeedback('Programando…', '');
+      setFeedback('Proponiendo…', '');
       const { a, b } = participantesEncuentro();
-      const r = await api('encuentro.programar', {
+      const r = await api('encuentro.proponer', {
         participantes: [a, b],
         tipo: $('#enc-tipo').value,
         dia: slot.dia,
         hora: slot.hora,
         lugar,
       });
+      if (r.ok && r.rechazada) {
+        setFeedback(r.mensaje_ui || 'No han querido quedar.', 'error');
+        await refreshEstado();
+        return;
+      }
       if (r.ok) {
         const vista = r.vista || r.encuentro;
         const sitio = vista?.lugar_nombre || nombreLugar(vista?.lugar) || lugar;
@@ -1086,6 +1092,8 @@
 
     $('#btn-avanzar-1h')?.addEventListener('click', () => avanzarRelojUi(1, 'Tiempo avanzado 1h.'));
     $('#btn-avanzar-8h')?.addEventListener('click', () => avanzarRelojUi(8, 'Tiempo avanzado 8h.'));
+    $('#btn-avanzar-1d')?.addEventListener('click', () => avanzarRelojUi(24, 'Tiempo avanzado 1 día.'));
+    $('#btn-simular-3d')?.addEventListener('click', () => avanzarRelojUi(72, 'Simulados 3 días con el motor real.'));
     $('#btn-proximo-encuentro')?.addEventListener('click', async () => {
       const r = await api('reloj.proximo_encuentro', {});
       if (!r.ok) {
