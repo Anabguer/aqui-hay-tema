@@ -61,7 +61,9 @@ ok(is_array($nuevasIntervalo), 'detectarEnIntervalo devuelve array');
 
 // Coincidir != interactuar: historial_coincidencias existe pero no implica relación.
 $relSocial = $partida['relaciones_sociales'] ?? [];
-ok(empty($relSocial), 'coincidir no crea relación social automáticamente');
+ok(empty(array_filter($relSocial, static function ($r) {
+    return is_array($r) && !empty($r['conocidos']);
+})), 'coincidir no crea conocidos automáticamente');
 
 // horasRelevantes: devuelve lista de pares.
 $pares = CoincidenciasEngine::horasRelevantes($partida, ['dia_pueblo' => 1, 'hora_actual' => 0], 3);

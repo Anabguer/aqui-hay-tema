@@ -10,7 +10,7 @@ use AquiHayTema\Engine\PropuestaEncuentro;
  */
 final class VoluntadPendienteEvaluator implements VoluntadEvaluator
 {
-    public function evaluar(array $partida, array $propuesta, string $residenteId): array
+    public function evaluar(array &$partida, array $propuesta, string $residenteId): array
     {
         return [
             'decision' => PropuestaEncuentro::DECISION_PENDIENTE,

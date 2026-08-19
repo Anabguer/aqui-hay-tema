@@ -25,6 +25,11 @@ ok(DiscoveryEngine::estado($partida, 'per_qa_valid', 'vida.hobby_principal') ===
 $entry = DiscoveryEngine::registrar($partida, 'per_qa_valid', 'vida.hobby_principal', 'pasear', 'test_fixture', 'corr_test');
 ok($entry['estado'] === DiscoveryEngine::DESCUBIERTO, 'registro descubierto');
 ok(DiscoveryEngine::estado($partida, 'per_qa_valid', 'vida.hobby_principal') === DiscoveryEngine::DESCUBIERTO, 'estado tras registrar');
-ok(count(DiscoveryEngine::listarPorResidente($partida, 'per_qa_valid')) === 1, 'listar por residente');
+ok(count(array_filter(
+    DiscoveryEngine::listarPorResidente($partida, 'per_qa_valid'),
+    static function ($d) {
+        return ($d['campo'] ?? '') === 'vida.hobby_principal';
+    }
+)) === 1, 'listar por residente incluye el campo de test');
 
 exit($failures > 0 ? 1 : 0);

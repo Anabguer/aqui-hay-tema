@@ -77,7 +77,12 @@ final class AccionRomantica
             ];
             RelacionEngine::persistirRomance($partida, $rel);
             $delta = CalibracionConfig::get($cal, 'flechazo.delta_romance', null);
-            return ['ok' => true, 'accion' => $accionId, 'delta_romance' => $delta, 'unilateral' => true];
+            if (is_numeric($delta)) {
+                $actual = RelacionEngine::romanceHacia($partida, $desde, $hacia);
+                $nuevo = RelacionBandas::clampRomance(($actual ?? 0) + (int) $delta);
+                RelacionEngine::setRomanceHacia($partida, $desde, $hacia, $nuevo);
+            }
+            return ['ok' => true, 'accion' => $accionId, 'delta_romance' => is_numeric($delta) ? (int) $delta : null, 'unilateral' => true, 'no_crea_pareja' => true];
         }
         if ($accionId === 'mandar_flores' || $accionId === 'mandar_mensaje') {
             RelacionBitacora::registrar(

@@ -125,15 +125,18 @@ final class AgendaEngine
                 continue;
             }
             $hora = (int) ($item['hora'] ?? 0);
+            $dur = LugarAtributos::horasDeEncuentro($item);
             $reserva = $item['reserva_agenda'] ?? ['tipo' => 'encuentro'];
-            $slots[$hora] = [
-                'hora' => $hora,
-                'ocupado' => true,
-                'capa' => 'programado',
-                'tipo' => $reserva['tipo'] ?? 'encuentro',
-                'detalle' => $item['id'] ?? null,
-                'reserva_id' => $item['id'] ?? null,
-            ];
+            for ($h = $hora; $h < min(24, $hora + $dur); $h++) {
+                $slots[$h] = [
+                    'hora' => $h,
+                    'ocupado' => true,
+                    'capa' => 'programado',
+                    'tipo' => $reserva['tipo'] ?? 'encuentro',
+                    'detalle' => $item['id'] ?? null,
+                    'reserva_id' => $item['id'] ?? null,
+                ];
+            }
         }
     }
 

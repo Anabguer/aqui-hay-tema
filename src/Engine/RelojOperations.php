@@ -35,6 +35,14 @@ final class RelojOperations
             RelacionDesgaste::alCerrarDia($partida, $cal);
             AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
         }
+        if (!empty($partida['lab_vida_activa'])
+            || (bool) CalibracionConfig::get(CalibracionConfig::load($this->projectRoot), 'acontecimientos_dia.activo_en_play', false)
+        ) {
+            $calTick = CalibracionConfig::load($this->projectRoot);
+            $rngTick = RngService::fromPartida($partida);
+            MotorVidaDiaria::tickHora($partida, new Catalog($this->projectRoot), $calTick, $rngTick, $this->logger);
+            $rngTick->persistToPartida($partida);
+        }
         // Coincidencias ANTES de sincronizar: los encuentros siguen programado/en_curso
         // y aún ocupan lugar. Coincidir ≠ interactuar.
         $coins = CoincidenciasEngine::detectarEnIntervalo(

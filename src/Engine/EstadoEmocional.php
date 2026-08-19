@@ -25,20 +25,32 @@ final class EstadoEmocional
     }
 
     /**
+     * @param array<string, mixed> $cal
      * @return array<string, mixed>
      */
-    public static function modificadores(string $id): array
+    public static function modificadores(string $id, array $cal = []): array
     {
+        $id = self::canonId($id);
+        $mods = CalibracionConfig::get($cal, 'emociones_v1.modificadores.' . $id, null);
+        if (!is_array($mods)) {
+            $mods = [
+                'aceptar_planes' => 0,
+                'experiencia_encuentro' => 0,
+                'iniciativa_social' => 0,
+                'iniciativa_romantica' => 0,
+                'riesgo_conflicto' => 0,
+                'peticiones' => 0,
+            ];
+        }
         return [
-            'id' => self::canonId($id),
-            'aceptar_planes' => null,
-            'experiencia_encuentro' => null,
-            'iniciativa_social' => null,
-            'iniciativa_romantica' => null,
-            'riesgo_conflicto' => null,
-            'peticiones' => null,
+            'id' => $id,
+            'aceptar_planes' => $mods['aceptar_planes'] ?? 0,
+            'experiencia_encuentro' => $mods['experiencia_encuentro'] ?? 0,
+            'iniciativa_social' => $mods['iniciativa_social'] ?? 0,
+            'iniciativa_romantica' => $mods['iniciativa_romantica'] ?? 0,
+            'riesgo_conflicto' => $mods['riesgo_conflicto'] ?? 0,
+            'peticiones' => $mods['peticiones'] ?? 0,
             'no_modifica_romance_automatico' => true,
-            '_bloqueado_decision' => ['valores'],
         ];
     }
 

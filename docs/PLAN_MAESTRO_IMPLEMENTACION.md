@@ -1,8 +1,8 @@
 # Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-08-18 (vida relacional: pareja, crisis, memoria)
+**Versión:** 2026-08-19 (decisiones post-424fe940: desconocidos, discovery, vida diaria)
 
-El **~58 %** no infla el playtest: `play.php` sigue con deltas placeholder. Lo nuevo es social/romance direccional, hitos de pareja y motor diario inactivo en play.  
+El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida está apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y laboratorio 3/6/16/32.  
 **Punto de partida:** ~8 % (Turno 1) → **~28 %** tras Bloques 0–6 ejecutados en Turno 2
 
 ---
@@ -371,7 +371,7 @@ Cualquier adulto puede tener interés romántico por cualquier otro **compatible
 - El pico y pala del jugador actúa sobre **relación/vínculo**, no reescribe compatibilidad.
 
 ### Discovery
-El jugador no ve la ficha interna completa. Compatibilidad y química permanecen ocultas. Qué se revela el día 1 (1 hobby / 1 rasgo) = **BLOQUEADO_DECISION**. Mientras tanto, la ficha pública sigue proyectando el catálogo (playtest intacto); el perfil generado vive en `runtime.perfil_partida`.
+El jugador no ve la ficha interna completa. Compatibilidad y química permanecen ocultas. **Reveal inicial cerrado:** 1 hobby + 1 rasgo (`hobby:{id}`, `rasgo:{id}`); el resto `???`. Descubrimiento contextual por evento. Conocimiento NPC→NPC en `conocimiento_npc`.
 
 ### Laboratorio
 `SimuladorPueblos` (p. ej. 1000 pueblos × 16). Pesos en un solo JSON marcado `_provisional`. No anti-clon agresivo: primero medir.
@@ -388,7 +388,7 @@ El jugador no ve la ficha interna completa. Compatibilidad y química permanecen
 - Romance A→B y B→A (independientes, fluctúan).
 - Conflicto propio.
 - Química y compatibilidad **no** son relación.
-- **Desconocido** = nunca han interactuado (no es un 0). Tras el primer contacto `conocidos=true` aunque el valor sea neutro o negativo.
+- **Desconocido** = fila visible con social 0 y `conocidos=false`. Tras el primer contacto `conocidos=true` aunque el valor siga en 0. No es lo mismo que 0 después de conocerse.
 
 ### Pareja
 Nunca `romance > X → pareja`. Hito explícito (declaración u otro) + respuesta de ambos → `estado_pareja=pareja`.
@@ -398,14 +398,45 @@ Estabilidad de pareja **compartida** y distinta del romance. No hay barra de “
 Nunca por umbral. Acontecimiento explícito. Tras romper: se conservan social, romance, conflicto e historial. Estabilidad operativa se apaga; queda `memoria`. Reconciliación ≠ pareja nueva.
 
 ### Motor diario
-Presupuesto limitado. Catálogo de acontecimientos con elegibilidad. `activo_en_play=false` y presupuesto `null` hasta calibrar.
+Presupuesto escala con habitantes (`sqrt`). Huecos 09:00–22:00: se decide CUÁNTOS al empezar el día, no quién ni qué. `activo_en_play=false`. Lab: `lab_vida_activa` + `SimuladorPuebloVivo`.
 
 ### Emociones V1
-neutro / alegre / triste / enfadado. Afectan conducta (contrato). Un despido puede poner triste; **no** resta romance.
+neutro / alegre / triste / enfadado. Un solo estado + caducidad. Modificadores temporales en calibración. Un despido puede poner triste; **no** resta romance.
 
 ### Parentesco
 Veto romántico duro. Química no lo atraviesa.
 
 ### Buzón
-Clasificación importante / oportunidad / petición / cotilleo. Estado **en_espera**. No hay cupo fijo 4–5.
+Clasificación importante / oportunidad / petición / cotilleo. Estado **en_espera**. No congela el mundo. Escala con población.
+
+---
+
+## 18. Decisiones cerradas post-424fe940 (2026-08-19)
+
+**+% estimado dominio:** ~58 % → **~70 %** (sin inflar play: `play.php` intacto, diario inactivo en play, deltas de encuentro placeholder).
+
+### Implementado
+- Desconocidos visibles 0 + flag; bandas conceptuales configurables (pareja ≠ banda).
+- Reveal inicial 1 hobby + 1 rasgo; discovery contextual; conocimiento NPC→NPC (sin rumores).
+- Compatibilidad no cambia por experiencias (sin tocar `CompatibilidadCalculator` en encuentros).
+- Desgaste social hacia 0, nunca cruza 0; fórmula central; calidad de contacto leve/normal/significativo.
+- Emociones V1 con caducidad y modificadores; voluntad ponderada (nunca 100 %); rechazos + cooldown horas.
+- Huecos de vida 09–22; presupuesto no lineal; agenda conjunta; duración; aforo; coincidencia ≠ interacción; casual leve.
+- Lugar autónomo según conocimiento; presentar/proponer/organizar (`PropuestaNivel`); flechazo raro; terceros con freno.
+- Escáner de compatibilidad **deprecated** (no desbloqueable).
+- Laboratorio `SimuladorPuebloVivo` 3/6/16/32 × 30/100. Cifras `_provisional`.
+
+### Solo preparado / no UI
+- Copy final de rechazos (ids banales).
+- UI de bandas/relaciones.
+- `play.php` / hilo visual.
+- Conversaciones grupales.
+- Sistema grande de infidelidad.
+
+### BLOQUEADO_DECISION que sigue
+- Veto tío/primo.
+- Política de IDs multi-dispositivo.
+- Química simétrica vs direccional a largo plazo.
+- Cifras canónicas (todo el JSON vida es laboratorio).
+
 

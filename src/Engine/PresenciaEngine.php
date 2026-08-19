@@ -60,7 +60,7 @@ final class PresenciaEngine
     private static function lugarDeResidente(array $partida, string $rid, int $dia, int $hora): ?string
     {
         foreach (EncuentroEngine::list($partida) as $enc) {
-            if ((int) ($enc['dia'] ?? -1) !== $dia || (int) ($enc['hora'] ?? -1) !== $hora) {
+            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
                 continue;
             }
             if (!in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
@@ -73,7 +73,7 @@ final class PresenciaEngine
 
         // Presencia técnica por planes de NPC autónomo (sin encuentros/interacciones).
         foreach ($partida['npc_autonomo']['planes_pendientes'] ?? [] as $plan) {
-            if ((int) ($plan['dia'] ?? -1) !== $dia || (int) ($plan['hora'] ?? -1) !== $hora) {
+            if (!LugarAtributos::ocupaHora($plan, $dia, $hora)) {
                 continue;
             }
             $estado = (string) ($plan['estado'] ?? 'programado');

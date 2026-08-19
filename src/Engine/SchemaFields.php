@@ -32,7 +32,11 @@ final class SchemaFields
         RelacionBitacora::ensure($partida);
         $partida['parentesco'] ??= [];
         $partida['inclinaciones_consejo'] ??= [];
-        $partida['acontecimientos_log'] ??= [];
+        $partida['conocimiento_npc'] ??= [];
+        $partida['propuestas_cooldown'] ??= [];
+        $partida['rechazos_propuesta'] ??= [];
+        $partida['huecos_vida'] ??= [];
+        RelacionGrafo::asegurarTodos($partida);
 
         foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {
             if (is_array($rel)) {

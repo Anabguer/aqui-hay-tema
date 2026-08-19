@@ -39,8 +39,8 @@ $cal = CalibracionConfig::load($root);
 ok($cal['_provisional'] === true, 'calibración vida mezclada y provisional');
 ok(CalibracionConfig::get($cal, 'pareja.nunca_auto_por_umbral', false) === true, 'pareja nunca auto por umbral');
 ok(CalibracionConfig::get($cal, 'crisis.nunca_auto_por_umbral', false) === true, 'crisis nunca auto');
-ok(CalibracionConfig::get($cal, 'desgaste_social.delta_recien', 'x') === null, 'desgaste social sin delta');
-ok(CalibracionConfig::get($cal, 'flechazo.probabilidad', 'x') === null, 'flechazo sin %');
+ok(is_numeric(CalibracionConfig::get($cal, 'desgaste_social.base_diaria', null)), 'desgaste social tiene fórmula');
+ok(is_numeric(CalibracionConfig::get($cal, 'flechazo.probabilidad', null)), 'flechazo tiene % provisional');
 
 $service = new PartidaService($root);
 $partida = $service->nuevaPartida('test_fixtures_v0', 'vida-rel-1');
@@ -67,11 +67,11 @@ ok(ParejaEngine::estado($partida, $a, $b) === ParejaEngine::NINGUNA, 'romance al
 $no = ParejaEngine::formar($partida, $a, $b, true, false);
 ok(!($no['ok'] ?? true), 'un solo sí no forma pareja');
 
-$si = ParejaEngine::formar($partida, $a, $b, true, true);
+$si = ParejaEngine::formar($partida, $a, $b, true, true, RelacionBitacora::DECLARACION, $cal);
 ok($si['ok'] ?? false, 'hito + ambos sí → pareja');
 ok(ParejaEngine::estado($partida, $a, $b) === ParejaEngine::PAREJA, 'estado pareja');
 ok(!empty($partida['relaciones_romanticas'][0]['estabilidad_pareja']['activa']), 'estabilidad activa');
-ok($partida['relaciones_romanticas'][0]['estabilidad_pareja']['valor'] === null, 'estabilidad inicial no inventada');
+ok(is_numeric($partida['relaciones_romanticas'][0]['estabilidad_pareja']['valor']), 'estabilidad inicial calibrada (provisional)');
 
 $romAntes = RelacionEngine::romanceHacia($partida, $a, $b);
 ParejaEngine::crisis($partida, $a, $b);
@@ -112,11 +112,11 @@ ok(!($pj2['ok'] ?? true), 'no pierde trabajo otra vez si ya está desempleado');
 ok(AcontecimientoElegibilidad::cumple($partida, $store->item('acontecimientos', 'buscar_trabajo'), [$a], $cal)['ok'], 'desbloquea buscar trabajo');
 
 $plan = AcontecimientoDiario::planificar($partida, $store, $cal, new RngService('dia'));
-ok($plan['presupuesto'] === null, 'presupuesto diario no calibrado');
+ok($plan['presupuesto'] !== null && $plan['presupuesto'] > 0, 'presupuesto diario escala con población');
 ok((bool) CalibracionConfig::get($cal, 'acontecimientos_dia.activo_en_play', true) === false, 'diario inactivo en play');
 
 $des = RelacionDesgaste::alCerrarDia($partida, $cal);
-ok($des['aplicado'] === false, 'desgaste no aplica sin cifras');
+ok($des['ok'] === true, 'desgaste cierra día');
 
 $rng = new RngService('azar-1');
 $t1 = AzarPonderado::tirar($rng, ['malo', 'regular', 'bueno', 'excelente'], 0.8, $cal);
@@ -148,7 +148,8 @@ ok(RelacionEngine::romanceHacia($partida, $a, $b) === 80, 'lánzate no sube roma
 
 $fl2 = AccionRomantica::ejecutar($partida, 'flechazo', $a, $b, $store, $cal, true);
 ok($fl2['ok'] ?? false, 'flechazo forzado (lab) unilateral');
-ok($fl2['delta_romance'] === null, 'delta flechazo no inventado');
+ok(is_int($fl2['delta_romance']) && $fl2['delta_romance'] > 0, 'delta flechazo provisional aplicado');
+ok(!empty($fl2['no_crea_pareja']), 'flechazo no crea pareja');
 ok(RelacionBitacora::tienenHito($partida, $a, $b, RelacionBitacora::FLECHAZO), 'hito flechazo');
 
 $flores = AccionRomantica::evaluar($partida, 'mandar_flores', $a, $b, $store, $cal);

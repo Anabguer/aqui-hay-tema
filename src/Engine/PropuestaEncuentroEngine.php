@@ -5,6 +5,7 @@ namespace AquiHayTema\Engine;
 
 use AquiHayTema\Engine\Voluntad\VoluntadEvaluator;
 use AquiHayTema\Engine\Voluntad\VoluntadPendienteEvaluator;
+use AquiHayTema\Engine\Voluntad\VoluntadPonderadaEvaluator;
 
 /**
  * El jugador propone; el residente decide. No programa hasta aceptación de ambos.
@@ -48,7 +49,10 @@ final class PropuestaEncuentroEngine
         }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
-        $voluntad = $voluntad ?? new VoluntadPendienteEvaluator();
+        if ($voluntad === null) {
+            $calDef = [];
+            $voluntad = new VoluntadPonderadaEvaluator($calDef);
+        }
 
         $rng = RngService::fromPartida($partida);
         $id = 'prop_' . bin2hex(substr(pack('N', $rng->next()), 0, 4));
@@ -258,7 +262,7 @@ final class PropuestaEncuentroEngine
      * @return array<string, mixed>
      */
     private static function evaluarParticipante(
-        array $partida,
+        array &$partida,
         array $propuesta,
         string $residenteId,
         int $dia,
@@ -290,12 +294,35 @@ final class PropuestaEncuentroEngine
         }
 
         $ev = $voluntad->evaluar($partida, $propuesta, $residenteId);
+        if (($ev['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
+            && ($ev['clase'] ?? '') !== PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+        ) {
+            $ids = $propuesta['participantes'] ?? [];
+            $otro = '';
+            foreach ($ids as $oid) {
+                if ((string) $oid !== $residenteId) {
+                    $otro = (string) $oid;
+                    break;
+                }
+            }
+            RechazoMemoria::registrar(
+                $partida,
+                $residenteId,
+                $otro,
+                (string) ($ev['motivo_tipo'] ?? 'banal'),
+                [],
+                (string) ($propuesta['tipo'] ?? 'conocerse')
+            );
+        }
         return [
             'residente_id' => $residenteId,
             'decision' => (string) ($ev['decision'] ?? PropuestaEncuentro::DECISION_PENDIENTE),
             'clase' => $ev['clase'] ?? null,
             'motivo_tecnico' => (string) ($ev['motivo_tecnico'] ?? 'voluntad'),
+            'motivo_tipo' => $ev['motivo_tipo'] ?? null,
             'copy_id' => $ev['copy_id'] ?? null,
+            'score' => $ev['score'] ?? null,
+            'p' => $ev['p'] ?? null,
             '_bloqueado_decision' => (bool) ($ev['_bloqueado_decision'] ?? true),
         ];
     }

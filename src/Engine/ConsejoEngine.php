@@ -25,10 +25,9 @@ final class ConsejoEngine
             'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
             'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
             'efecto_barra' => false,
-            'magnitud' => null,
-            'duracion' => null,
+            'magnitud' => CalibracionConfig::get([], 'consejo.inclinacion', 10),
+            'duracion' => CalibracionConfig::get([], 'consejo.duracion_dias', 5),
             'sigue_consejo' => null,
-            '_bloqueado_decision' => ['magnitud', 'duracion', 'probabilidad_seguir'],
         ];
         $partida['inclinaciones_consejo'][] = $entry;
         return ['ok' => true, 'inclinacion' => $entry];

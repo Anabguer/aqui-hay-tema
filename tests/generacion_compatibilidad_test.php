@@ -165,8 +165,10 @@ ok($js !== false && strpos($js, 'compatibilidad_oculta') === false, 'ficha sin c
 ok($js !== false && strpos($js, '"quimica"') === false, 'ficha sin química');
 ok($js !== false && strpos($js, 'preferencias') === false, 'ficha sin preferencias internas');
 if ($rid === 'per_qa_valid') {
-    $hpFicha = $ficha['discovery']['campos']['vida.hobby_principal']['valor'] ?? null;
-    ok($hpFicha === 'pasear', 'ficha pública sigue el catálogo hasta decidir reveal día 1');
+    $hpFicha = $ficha['hobbies']['conocidos'][0] ?? ($ficha['discovery']['campos']['vida.hobby_principal']['valor'] ?? null);
+    $perfilHob = $partida['residentes'][$rid]['runtime']['perfil_partida']['hobbies'][0] ?? null;
+    ok($hpFicha === $perfilHob, 'ficha pública revela 1 hobby generado');
+    ok(count($ficha['hobbies']['conocidos'] ?? []) <= 1, 'solo 1 hobby inicial');
 }
 $est = $service->estadoResumido($partida);
 ok(!isset($est['compatibilidad_oculta'], $est['quimica']), 'estado resumido no expone encaje');
@@ -180,7 +182,7 @@ ok(isset($ponder['factores']['compat_ab'], $ponder['factores']['quimica']), 'pon
 ok(array_key_exists('satisfaccion', $ponder['por_participante'][$rid] ?? [])
     && $ponder['por_participante'][$rid]['satisfaccion'] === null, 'satisfacción direccional no inventada');
 $plan = PlanAfinidad::paraParticipante($partida, $rid, 'lug_cafeteria', $service->getCatalog());
-ok($plan['aporte'] === null, 'aporte plan BLOQUEADO');
+ok($plan['aporte'] !== null, 'aporte hobby/lugar calibrado (provisional)');
 
 MemoriaEventos::registrar($partida, 'bronca', [$rid, $idb], 3, 'bronca_fuerte');
 ok(MemoriaEventos::enCooldown($partida, 'bronca', [$rid, $idb], $cal) === false, 'sin ventana configurada no suprime');

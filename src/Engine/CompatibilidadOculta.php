@@ -20,18 +20,23 @@ final class CompatibilidadOculta
             'pares' => [],
             'escaner' => [
                 'desbloqueado' => false,
+                'desbloqueable' => false,
+                'deprecated' => true,
                 'nombre' => null,
                 'coste' => null,
-                '_bloqueado_decision' => ['nombre_ui', 'coste'],
             ],
         ];
         $partida['compatibilidad_oculta']['pares'] ??= [];
         $partida['compatibilidad_oculta']['escaner'] ??= [
             'desbloqueado' => false,
+            'desbloqueable' => false,
+            'deprecated' => true,
             'nombre' => null,
             'coste' => null,
-            '_bloqueado_decision' => ['nombre_ui', 'coste'],
         ];
+        $partida['compatibilidad_oculta']['escaner']['desbloqueado'] = false;
+        $partida['compatibilidad_oculta']['escaner']['desbloqueable'] = false;
+        $partida['compatibilidad_oculta']['escaner']['deprecated'] = true;
     }
 
     public static function ensurePar(array &$partida, string $a, string $b): array
@@ -64,10 +69,7 @@ final class CompatibilidadOculta
         if (!is_array($par)) {
             return false;
         }
-        if (!empty($par['visible_jugador'])) {
-            return true;
-        }
-        return !empty($partida['compatibilidad_oculta']['escaner']['desbloqueado']);
+        return false;
     }
 
     /**

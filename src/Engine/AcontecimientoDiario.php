@@ -17,8 +17,6 @@ final class AcontecimientoDiario
     public static function planificar(array $partida, CatalogStore $store, array $cal, RngService $rng): array
     {
         $activo = (bool) CalibracionConfig::get($cal, 'acontecimientos_dia.activo_en_play', false);
-        $min = CalibracionConfig::get($cal, 'acontecimientos_dia.presupuesto_min', null);
-        $max = CalibracionConfig::get($cal, 'acontecimientos_dia.presupuesto_max', null);
         $plan = [
             '_provisional' => true,
             'activo' => $activo,
@@ -33,15 +31,11 @@ final class AcontecimientoDiario
             }
             $plan['candidatos_por_id'][$id] = count(AcontecimientoElegibilidad::candidatos($partida, $item, $cal));
         }
-        if ($min === null || $max === null) {
-            return $plan;
+        $n = count($partida['residentes'] ?? []);
+        if ($n > 0) {
+            $plan['presupuesto'] = MotorVidaDiaria::presupuesto($n, $cal, $rng);
+            $plan['huecos'] = MotorVidaDiaria::repartirHuecos((int) $plan['presupuesto'], $cal, $rng);
         }
-        $lo = (int) $min;
-        $hi = (int) $max;
-        if ($hi < $lo) {
-            $hi = $lo;
-        }
-        $plan['presupuesto'] = $rng->nextInt($lo, $hi);
         return $plan;
     }
 

@@ -143,31 +143,39 @@ final class PartidaService
         $agenda = AgendaEngine::resolverDia($partida, $residenteId, $dia, $this->catalog);
 
         $relaciones = [];
+        RelacionGrafo::asegurarTodos($partida);
+        $calFicha = CalibracionConfig::load($this->root);
         foreach ($partida['residentes'] as $otroId => $_) {
             if ($otroId === $residenteId) {
                 continue;
             }
             $rel = RelacionEngine::obtenerEntre($partida, $residenteId, $otroId);
-            if ($rel['social'] !== null || $rel['romance'] !== null || $rel['conflicto'] !== null) {
-                $relaciones[$otroId] = $rel;
-            }
+            $socH = RelacionEngine::socialHacia($partida, $residenteId, (string) $otroId);
+            $rel['etiqueta_social'] = is_array($socH) ? ($socH['banda'] ?? 'desconocido') : 'desconocido';
+            $rel['conocidos'] = RelacionEngine::seConocen($partida, $residenteId, (string) $otroId);
+            $rom = RelacionEngine::romanceHacia($partida, $residenteId, (string) $otroId);
+            $rel['etiqueta_romance'] = RelacionBandas::romance($rom, $calFicha);
+            $relaciones[$otroId] = $rel;
         }
 
         $proyeccion = [];
         $hobbiesConocidos = [];
         if ($catalogo !== null) {
             $visConfig = DiscoveryVisibilityPolicy::load($this->root);
+            $campos = DiscoveryProjection::deCatalogo($catalogo, $runtime);
+            $campos = DiscoveryProjection::conPerfilPartida($campos, $runtime);
+            $campos = DiscoveryReveal::ocultarNoDescubierto($partida, $residenteId, $campos);
             $proyeccion = DiscoveryProjection::proyectar(
                 $partida,
                 $residenteId,
-                DiscoveryProjection::deCatalogo($catalogo, $runtime),
+                $campos,
                 $visConfig
             );
-            $hp = DiscoveryProjection::valorSiVisible($proyeccion, 'vida.hobby_principal');
-            if (is_string($hp) && $hp !== '' && $hp !== DiscoveryVisibilityResolver::PARCIAL_PLACEHOLDER) {
+            $hp = $campos['vida.hobby_principal'] ?? null;
+            if (is_string($hp) && $hp !== '') {
                 $hobbiesConocidos[] = $hp;
             }
-            $hs = DiscoveryProjection::valorSiVisible($proyeccion, 'vida.hobbies_secundarios', []);
+            $hs = $campos['vida.hobbies_secundarios'] ?? [];
             if (is_array($hs)) {
                 foreach ($hs as $h) {
                     if (is_string($h) && $h !== '') {
@@ -201,7 +209,7 @@ final class PartidaService
             'descubrimientos' => DiscoveryEngine::listarPorResidente($partida, $residenteId),
             'discovery' => [
                 'campos' => $proyeccion,
-                '_nota' => 'Políticas configurables. Default sin_politica: no oculta. Ningún secreto asignado a fichas.',
+                '_nota' => 'Reveal inicial: 1 hobby + 1 rasgo. Resto ???. Compatibilidad nunca en ficha.',
             ],
             'relaciones' => $relaciones,
             'agenda_hoy' => $agenda,

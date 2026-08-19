@@ -40,6 +40,9 @@ final class ResidenteOperations
 
         GeneradorResidente::aplicar($partida, $catalogId, $this->catalog, $this->logger);
         QuimicaEngine::alIncorporar($partida, $catalogId, $this->catalog, $this->logger);
+        $cal = CalibracionConfig::load($this->catalog->getRoot());
+        RelacionGrafo::asegurarTodos($partida, $cal);
+        DiscoveryReveal::alIncorporar($partida, $catalogId, $cal);
 
         DomainEventDispatcher::emit($partida, DomainEvents::RESIDENTE_INCORPORADO, [
             'residente_id' => $catalogId,
@@ -64,6 +67,9 @@ final class ResidenteOperations
 
         GeneradorResidente::aplicar($partida, $id, $this->catalog, $this->logger);
         QuimicaEngine::alIncorporar($partida, $id, $this->catalog, $this->logger);
+        $calPh = CalibracionConfig::load($this->catalog->getRoot());
+        RelacionGrafo::asegurarTodos($partida, $calPh);
+        DiscoveryReveal::alIncorporar($partida, $id, $calPh);
 
         DomainEventDispatcher::emit($partida, DomainEvents::RESIDENTE_INCORPORADO, [
             'residente_id' => $id,

@@ -1,0 +1,406 @@
+<?php
+declare(strict_types=1);
+
+namespace AquiHayTema\Engine;
+
+/**
+ * Motor diario 09:00–22:00. Al empezar el día solo se deciden HUECOS, no quién ni qué.
+ * Al llegar el hueco se evalúa el estado real.
+ */
+final class MotorVidaDiaria
+{
+    /**
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function presupuesto(int $nResidentes, array $cal, RngService $rng): int
+    {
+        $k = (float) CalibracionConfig::get($cal, 'acontecimientos_dia.escala_sqrt', 1.15);
+        $off = (float) CalibracionConfig::get($cal, 'acontecimientos_dia.escala_offset', 1.0);
+        $n = (int) round($k * sqrt(max(1, $nResidentes)) + $off);
+        $min = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.presupuesto_min', 2);
+        $max = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.presupuesto_max', 10);
+        if ($n < $min) {
+            $n = $min;
+        }
+        if ($n > $max + (int) round(sqrt($nResidentes))) {
+            $n = $max + (int) round(sqrt($nResidentes) * 0.4);
+        }
+        return max(1, $n);
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return list<int>
+     */
+    public static function repartirHuecos(int $presupuesto, array $cal, RngService $rng): array
+    {
+        $ini = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_inicio', 9);
+        $fin = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_fin', 22);
+        $pool = [];
+        for ($h = $ini; $h <= $fin; $h++) {
+            $pool[] = $h;
+        }
+        $want = min($presupuesto, count($pool));
+        $huecos = [];
+        while (count($huecos) < $want && $pool !== []) {
+            $idx = $rng->nextInt(0, count($pool) - 1);
+            $huecos[] = $pool[$idx];
+            array_splice($pool, $idx, 1);
+        }
+        sort($huecos);
+        return $huecos;
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function alComenzarDia(array &$partida, array $cal, RngService $rng): array
+    {
+        $n = count($partida['residentes'] ?? []);
+        $p = self::presupuesto($n, $cal, $rng);
+        $huecos = self::repartirHuecos($p, $cal, $rng);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $partida['huecos_vida'] = [
+            'dia' => $dia,
+            'presupuesto' => $p,
+            'horas' => $huecos,
+            'ejecutados' => [],
+        ];
+        $rng->persistToPartida($partida);
+        return $partida['huecos_vida'];
+    }
+
+    /**
+     * Tick de UNA hora. No predecide la historia.
+     *
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function tickHora(
+        array &$partida,
+        Catalog $catalog,
+        array $cal,
+        RngService $rng,
+        ?GameLogger $logger = null
+    ): array {
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $ini = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_inicio', 9);
+        $fin = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_fin', 22);
+        $out = [
+            'dia' => $dia,
+            'hora' => $hora,
+            'vida' => null,
+            'autonomo' => null,
+            'casuales' => [],
+        ];
+        if ($hora < $ini || $hora > $fin) {
+            return $out;
+        }
+        if (!isset($partida['huecos_vida']['dia']) || (int) $partida['huecos_vida']['dia'] !== $dia) {
+            self::alComenzarDia($partida, $cal, $rng);
+        }
+        $horasHueco = is_array($partida['huecos_vida']['horas'] ?? null) ? $partida['huecos_vida']['horas'] : [];
+        if (in_array($hora, $horasHueco, true) && !in_array($hora, $partida['huecos_vida']['ejecutados'] ?? [], true)) {
+            $out['vida'] = self::ejecutarHuecoVida($partida, $catalog, $cal, $rng, $logger);
+            $partida['huecos_vida']['ejecutados'][] = $hora;
+        }
+        $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
+        $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
+        $rng->persistToPartida($partida);
+        return $out;
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>|null
+     */
+    private static function ejecutarHuecoVida(
+        array &$partida,
+        Catalog $catalog,
+        array $cal,
+        RngService $rng,
+        ?GameLogger $logger
+    ): ?array {
+        $store = $catalog->store();
+        $capa = $rng->nextFloat() < 0.55 ? 'vida' : 'relacion';
+        $items = [];
+        foreach ($store->items('acontecimientos') as $item) {
+            $fam = (string) ($item['familia'] ?? '');
+            if ($capa === 'vida' && in_array($fam, ['trabajo', 'ocio', 'vida'], true)) {
+                $items[] = $item;
+            }
+            if ($capa === 'relacion' && in_array($fam, ['romance', 'romance_accion', 'romance_hito', 'pareja', 'consejo'], true)) {
+                $items[] = $item;
+            }
+        }
+        if ($items === []) {
+            foreach ($store->items('acontecimientos') as $item) {
+                $items[] = $item;
+            }
+        }
+        $protagonista = self::elegirProtagonista($partida, $cal, $rng);
+        if ($protagonista === null) {
+            return null;
+        }
+        $elegido = self::elegirEvento($partida, $items, $protagonista, $cal, $rng);
+        if ($elegido === null) {
+            return ['omitido' => 'sin_evento_valido', 'protagonista' => $protagonista];
+        }
+        $r = AcontecimientoDiario::ejecutar($partida, $elegido['id'], $elegido['participantes'], $store, $cal, $logger);
+        self::marcarActividad($partida, $elegido['participantes']);
+        return ['capa' => $capa, 'evento' => $elegido['id'], 'resultado' => $r];
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    private static function elegirProtagonista(array $partida, array $cal, RngService $rng): ?string
+    {
+        $ids = array_keys($partida['residentes'] ?? []);
+        if ($ids === []) {
+            return null;
+        }
+        $bonusDias = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.olvidados_bonus_dias', 3);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $pesos = [];
+        foreach ($ids as $id) {
+            $id = (string) $id;
+            $w = 1.0;
+            $ult = (int) ($partida['residentes'][$id]['runtime']['ultimo_protagonismo_dia'] ?? 0);
+            if ($ult === 0 || ($dia - $ult) >= $bonusDias) {
+                $w += 2.2;
+            }
+            $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
+            if ($emo === EstadoEmocional::TRISTE) {
+                $w += 0.8;
+            }
+            $pesos[] = ['id' => $id, 'w' => $w];
+        }
+        return self::pickPeso($pesos, $rng);
+    }
+
+    /**
+     * @param list<array<string, mixed>> $items
+     * @param array<string, mixed> $cal
+     * @return array{id:string,participantes:list<string>}|null
+     */
+    private static function elegirEvento(array $partida, array $items, string $protagonista, array $cal, RngService $rng): ?array
+    {
+        $pesosFam = CalibracionConfig::get($cal, 'acontecimientos_dia.pesos_familias', []);
+        $cands = [];
+        $ids = array_keys($partida['residentes'] ?? []);
+        foreach ($items as $item) {
+            $need = (int) ($item['participantes'] ?? 1);
+            $fam = (string) ($item['familia'] ?? '');
+            $wFam = is_array($pesosFam) && isset($pesosFam[$fam]) ? (float) $pesosFam[$fam] : 0.4;
+            if ($need <= 1) {
+                $el = AcontecimientoElegibilidad::cumple($partida, $item, [$protagonista], $cal);
+                if ($el['ok']) {
+                    $cands[] = ['id' => (string) $item['id'], 'participantes' => [$protagonista], 'w' => max(0.05, $wFam)];
+                }
+                continue;
+            }
+            foreach ($ids as $otro) {
+                $otro = (string) $otro;
+                if ($otro === $protagonista) {
+                    continue;
+                }
+                $el = AcontecimientoElegibilidad::cumple($partida, $item, [$protagonista, $otro], $cal);
+                if ($el['ok']) {
+                    $cands[] = [
+                        'id' => (string) $item['id'],
+                        'participantes' => [$protagonista, $otro],
+                        'w' => max(0.05, $wFam),
+                    ];
+                }
+            }
+        }
+        if ($cands === []) {
+            return null;
+        }
+        $pick = self::pickPeso($cands, $rng);
+        foreach ($cands as $c) {
+            if (($c['id'] . ':' . implode(',', $c['participantes'])) === $pick) {
+                return ['id' => $c['id'], 'participantes' => $c['participantes']];
+            }
+        }
+        $c = $cands[0];
+        return ['id' => $c['id'], 'participantes' => $c['participantes']];
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>|null
+     */
+    private static function quizasSalidaIndividual(
+        array &$partida,
+        Catalog $catalog,
+        array $cal,
+        RngService $rng,
+        ?GameLogger $logger
+    ): ?array {
+        $n = count($partida['residentes'] ?? []);
+        $k = (float) CalibracionConfig::get($cal, 'autonomia.salidas_individuales_sqrt', 0.7);
+        $off = (float) CalibracionConfig::get($cal, 'autonomia.salidas_individuales_offset', 0.4);
+        $cupoDia = (int) max(1, round($k * sqrt(max(1, $n)) + $off));
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hechas = 0;
+        foreach ($partida['npc_autonomo']['historial_eventos'] ?? [] as $ev) {
+            if ((int) ($ev['dia'] ?? 0) === $dia && ($ev['accion'] ?? '') === 'visitar_lugar') {
+                $hechas++;
+            }
+        }
+        if ($hechas >= $cupoDia) {
+            return null;
+        }
+        if ($rng->nextFloat() > 0.35) {
+            return null;
+        }
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $ids = array_keys($partida['residentes'] ?? []);
+        $pesos = [];
+        foreach ($ids as $id) {
+            $id = (string) $id;
+            $disp = AgendaEngine::estaDisponible($partida, $id, $dia, $hora);
+            if (!($disp['disponible'] ?? false)) {
+                continue;
+            }
+            $w = 1.0;
+            $ult = (int) ($partida['residentes'][$id]['runtime']['ultimo_protagonismo_dia'] ?? 0);
+            if ($ult === 0 || ($dia - $ult) >= 3) {
+                $w *= (float) CalibracionConfig::get($cal, 'autonomia.poco_activo_bonus', 1.6);
+            }
+            $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
+            $w += ((int) EstadoEmocional::modificadores($emo, $cal)['iniciativa_social']) / 40.0;
+            $pesos[] = ['id' => $id, 'w' => max(0.05, $w)];
+        }
+        $quien = self::pickPeso($pesos, $rng);
+        if ($quien === null) {
+            return null;
+        }
+        $ops = $partida['celeste']['lugares_desbloqueados'] ?? [];
+        if ($ops === []) {
+            $ops = ['lug_cafeteria', 'lug_parque', 'lug_biblioteca'];
+        }
+        $lugar = LugarAutonomo::elegir($partida, $quien, null, $ops, $rng, $catalog, $cal);
+        if ($lugar === null || !AforoEngine::cabe($partida, $lugar, $dia, $hora, 1)) {
+            return null;
+        }
+        $attr = LugarAtributos::de($lugar);
+        $r = EncuentroEngine::programar($partida, [$quien], $dia, $hora, 'individual', $lugar, null, $logger);
+        if (!($r['ok'] ?? false)) {
+            return ['error' => $r['error'] ?? 'no_programado', 'quien' => $quien];
+        }
+        if (isset($r['encuentro']['id'])) {
+            foreach ($partida['encuentros'] as $i => $enc) {
+                if (($enc['id'] ?? '') === $r['encuentro']['id']) {
+                    $partida['encuentros'][$i]['duracion_minutos'] = $attr['duracion_minutos'];
+                    $partida['encuentros'][$i]['duracion_horas'] = $attr['horas'];
+                    $partida['encuentros'][$i]['intencion'] = 'autonomo';
+                }
+            }
+        }
+        self::marcarActividad($partida, [$quien]);
+        $partida['npc_autonomo']['historial_eventos'][] = [
+            'dia' => $dia,
+            'hora' => $hora,
+            'accion' => 'visitar_lugar',
+            'residente_id' => $quien,
+            'lugar' => $lugar,
+        ];
+        return ['quien' => $quien, 'lugar' => $lugar, 'encuentro' => $r['encuentro'] ?? null];
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return list<array<string, mixed>>
+     */
+    private static function casualesDeHora(array &$partida, Catalog $catalog, array $cal, RngService $rng): array
+    {
+        $out = [];
+        $porLugar = [];
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        foreach (EncuentroEngine::list($partida) as $enc) {
+            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
+                continue;
+            }
+            $lug = (string) ($enc['lugar'] ?? '');
+            if ($lug === '') {
+                continue;
+            }
+            foreach ($enc['participantes'] ?? [] as $pid) {
+                $porLugar[$lug][(string) $pid] = true;
+            }
+        }
+        foreach ($porLugar as $lug => $set) {
+            $ids = array_keys($set);
+            if (count($ids) < 2) {
+                continue;
+            }
+            $hecho = InteraccionCasual::resolverGrupo(
+                $partida,
+                $ids,
+                (string) $lug,
+                $dia,
+                $hora,
+                $rng,
+                $cal,
+                $catalog
+            );
+            foreach ($hecho as $h) {
+                $out[] = $h;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @param list<string> $ids
+     */
+    private static function marcarActividad(array &$partida, array $ids): void
+    {
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        foreach ($ids as $id) {
+            if (isset($partida['residentes'][$id])) {
+                $partida['residentes'][$id]['runtime']['ultimo_protagonismo_dia'] = $dia;
+            }
+        }
+    }
+
+    /**
+     * @param list<array<string, mixed>> $pesos
+     */
+    private static function pickPeso(array $pesos, RngService $rng): ?string
+    {
+        if ($pesos === []) {
+            return null;
+        }
+        $sum = 0.0;
+        foreach ($pesos as $p) {
+            $sum += (float) ($p['w'] ?? 0);
+        }
+        if ($sum <= 0) {
+            return (string) ($pesos[0]['id'] ?? null);
+        }
+        $pick = $rng->nextFloat() * $sum;
+        $acc = 0.0;
+        foreach ($pesos as $p) {
+            $acc += (float) $p['w'];
+            if ($pick <= $acc) {
+                if (isset($p['participantes'])) {
+                    return $p['id'] . ':' . implode(',', $p['participantes']);
+                }
+                return isset($p['id']) ? (string) $p['id'] : null;
+            }
+        }
+        $last = $pesos[count($pesos) - 1];
+        if (isset($last['participantes'])) {
+            return $last['id'] . ':' . implode(',', $last['participantes']);
+        }
+        return isset($last['id']) ? (string) $last['id'] : null;
+    }
+}

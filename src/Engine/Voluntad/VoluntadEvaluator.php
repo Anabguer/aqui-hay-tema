@@ -18,5 +18,5 @@ interface VoluntadEvaluator
      *   _bloqueado_decision: bool
      * }
      */
-    public function evaluar(array $partida, array $propuesta, string $residenteId): array;
+    public function evaluar(array &$partida, array $propuesta, string $residenteId): array;
 }

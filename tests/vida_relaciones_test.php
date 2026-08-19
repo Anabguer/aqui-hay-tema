@@ -18,6 +18,7 @@ use AquiHayTema\Engine\Reloj;
 use AquiHayTema\Engine\SchemaFields;
 use AquiHayTema\Engine\SchemaMigrator;
 use AquiHayTema\Engine\Voluntad\VoluntadEvaluator;
+use AquiHayTema\Engine\Voluntad\VoluntadPendienteEvaluator;
 
 $root = dirname(__DIR__);
 $failures = 0;
@@ -41,7 +42,7 @@ function vidaSetup(): array
 }
 
 $aceptaSiempre = new class implements VoluntadEvaluator {
-    public function evaluar(array $partida, array $propuesta, string $residenteId): array
+    public function evaluar(array &$partida, array $propuesta, string $residenteId): array
     {
         return [
             'decision' => PropuestaEncuentro::DECISION_ACEPTA,
@@ -54,7 +55,7 @@ $aceptaSiempre = new class implements VoluntadEvaluator {
 };
 
 $rechazaB = new class implements VoluntadEvaluator {
-    public function evaluar(array $partida, array $propuesta, string $residenteId): array
+    public function evaluar(array &$partida, array $propuesta, string $residenteId): array
     {
         $ids = $propuesta['participantes'] ?? [];
         $b = $ids[1] ?? '';
@@ -113,7 +114,7 @@ ok(($decInd['error'] ?? '') === GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD,
 
 // --- Propuesta: voluntad pendiente (hora libre 19) no programa ---
 [$service, $partida, $ida, $idb] = vidaSetup();
-$rPend = PropuestaEncuentroEngine::proponer($partida, [$ida, $idb], 1, 19, 'conocerse');
+$rPend = PropuestaEncuentroEngine::proponer($partida, [$ida, $idb], 1, 19, 'conocerse', null, null, new VoluntadPendienteEvaluator());
 ok($rPend['ok'] ?? false, 'propuesta ok con voluntad pendiente');
 ok(($rPend['programado'] ?? true) === false, 'pendiente no programa');
 ok(($rPend['propuesta']['estado'] ?? '') === 'propuesta', 'estado propuesta');

@@ -160,7 +160,7 @@ final class EncuentroEngine
     public static function hayConflictoHorario(array $partida, array $participantes, int $dia, int $hora): bool
     {
         foreach (self::list($partida) as $enc) {
-            if ((int) ($enc['dia'] ?? -1) !== $dia || (int) ($enc['hora'] ?? -1) !== $hora) {
+            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
                 continue;
             }
             if (!in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
