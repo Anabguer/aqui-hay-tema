@@ -82,7 +82,7 @@
       "id": "declaracion",
       "familia": "romance_hito",
       "participantes": 2,
-      "condiciones": ["se_conocen", "interes_o_historia", "no_parentesco_veto"],
+      "condiciones": ["se_conocen", "interes_o_historia", "no_parentesco_veto", "no_son_pareja"],
       "prerequisito_nivel": "importante",
       "requiere_respuesta_ambos": true,
       "peso": null,

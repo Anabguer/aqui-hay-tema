@@ -261,7 +261,7 @@ final class MotorVidaDiaria
         if ($hechas >= $cupoDia) {
             return null;
         }
-        if ($rng->nextFloat() > 0.55) {
+        if ($rng->nextFloat() > 0.60) {
             return null;
         }
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);

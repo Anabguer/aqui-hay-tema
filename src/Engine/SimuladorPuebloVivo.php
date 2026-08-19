@@ -135,6 +135,10 @@ final class SimuladorPuebloVivo
     {
         $m = self::metricasVacias();
         $parejaInicio = [];
+        // Tracking por residente para métricas de aislamiento
+        $idsRes = array_keys($partida['residentes']);
+        $ultimaActividad = array_fill_keys($idsRes, 0);   // 0 = nunca
+        $ultimoContacto  = array_fill_keys($idsRes, 0);   // 0 = nunca
         for ($d = 1; $d <= $dias; $d++) {
             $partida['reloj']['dia_pueblo'] = $d;
             $partida['reloj']['hora_actual'] = 8;
@@ -151,12 +155,23 @@ final class SimuladorPuebloVivo
                     $m['eventos_vida']++;
                     $fam = (string) ($tick['vida']['evento'] ?? '');
                     $m['familias'][$fam] = (int) ($m['familias'][$fam] ?? 0) + 1;
+                    // Actualizar actividad del protagonista (via resultado si disponible)
+                    $resVida = $tick['vida']['resultado'] ?? [];
+                    $prot = (string) ($resVida['protagonista'] ?? $tick['vida']['protagonista'] ?? '');
+                    if ($prot !== '' && isset($ultimaActividad[$prot])) {
+                        $ultimaActividad[$prot] = $d;
+                    }
                 }
                 if (is_array($tick['autonomo'] ?? null) && isset($tick['autonomo']['quien'])) {
                     $autoHoy++;
                     $m['salidas_individuales']++;
                     $lug = (string) ($tick['autonomo']['lugar'] ?? '');
                     $m['visitas_edificio'][$lug] = (int) ($m['visitas_edificio'][$lug] ?? 0) + 1;
+                    // Salida autónoma = actividad del residente
+                    $quien = (string) ($tick['autonomo']['quien'] ?? '');
+                    if ($quien !== '' && isset($ultimaActividad[$quien])) {
+                        $ultimaActividad[$quien] = $d;
+                    }
                 }
                 $cas = is_array($tick['casuales'] ?? null) ? $tick['casuales'] : [];
                 $m['interacciones_casuales'] += count($cas);
@@ -166,6 +181,13 @@ final class SimuladorPuebloVivo
                 foreach ($cas as $c) {
                     if (!empty($c['flechazo']['ok'])) {
                         $m['flechazos']++;
+                    }
+                    // Actualizar último contacto de los participantes (interaccion casual usa 'a' y 'b')
+                    foreach (['a', 'b'] as $side) {
+                        $pid = (string) ($c[$side] ?? '');
+                        if ($pid !== '' && isset($ultimoContacto[$pid])) {
+                            $ultimoContacto[$pid] = $d;
+                        }
                     }
                 }
                 EncuentroLifecycle::sincronizarConReloj($partida, null, $catalog);
@@ -277,6 +299,55 @@ final class SimuladorPuebloVivo
         $proy60 = RelacionDesgaste::proyectarValor(60, 30, $cal);
         $proy90 = RelacionDesgaste::proyectarValor(90, 30, $cal);
         $m['desgaste_lab'] = ['v10_12d' => $proy10, 'v60_30d' => $proy60, 'v90_30d' => $proy90];
+
+        // Métricas de aislamiento
+        $sinActividad7 = 0;
+        $sinInteraccion14 = 0;
+        $diasDesdeContacto = [];
+        $nuncaContacto = 0;
+        foreach ($idsRes as $rid) {
+            $ultAct = $ultimaActividad[$rid] ?? 0;
+            if ($ultAct === 0 || ($dias - $ultAct) >= 7) {
+                $sinActividad7++;
+            }
+            $ultCon = $ultimoContacto[$rid] ?? 0;
+            if ($ultCon === 0) {
+                $nuncaContacto++;
+                // No convertir en 0: representamos con null en distribución
+            } else {
+                $diasDesdeContacto[] = $dias - $ultCon;
+            }
+        }
+        $m['sin_actividad_7dias'] = $sinActividad7;
+        $m['sin_interaccion_14dias'] = count(array_filter($idsRes, static function ($rid) use ($ultimoContacto, $dias) {
+            $u = $ultimoContacto[$rid] ?? 0;
+            return $u === 0 || ($dias - $u) >= 14;
+        }));
+        sort($diasDesdeContacto);
+        $cnt = count($diasDesdeContacto);
+        $m['dias_desde_ultimo_contacto'] = [
+            'nunca_tuvieron_contacto' => $nuncaContacto,
+            'n_con_contacto' => $cnt,
+            'media'  => $cnt > 0 ? round(array_sum($diasDesdeContacto) / $cnt, 1) : null,
+            'mediana'=> $cnt > 0 ? (float) $diasDesdeContacto[(int) floor(($cnt - 1) / 2)] : null,
+            'p90'    => $cnt > 0 ? (float) $diasDesdeContacto[(int) floor(0.9 * ($cnt - 1))] : null,
+            'maximo' => $cnt > 0 ? (float) end($diasDesdeContacto) : null,
+        ];
+        // max_declaraciones_mismo_par: contar desde memoria_eventos (más fiable que el tick)
+        $declPorPar = [];
+        foreach ($partida['memoria_eventos'] ?? [] as $ev) {
+            $evFam = (string) ($ev['familia'] ?? '');
+            if ($evFam === 'romance_hito') {
+                $partic = (array) ($ev['participantes'] ?? []);
+                sort($partic);
+                if (count($partic) >= 2) {
+                    $pk = implode('|', $partic);
+                    $declPorPar[$pk] = ($declPorPar[$pk] ?? 0) + 1;
+                }
+            }
+        }
+        $m['max_declaraciones_mismo_par'] = $declPorPar !== [] ? max($declPorPar) : 0;
+
         return $m;
     }
 
@@ -301,6 +372,10 @@ final class SimuladorPuebloVivo
             'emo_total' => 0,
             'parejas_nuevas' => 0,
             'crisis_obs' => 0,
+            'sin_actividad_7dias' => 0,
+            'sin_interaccion_14dias' => 0,
+            'dias_desde_ultimo_contacto' => [],
+            'max_declaraciones_mismo_par' => 0,
         ];
     }
 
@@ -362,6 +437,19 @@ final class SimuladorPuebloVivo
             'mejores_amigos_media' => $avg(array_map(static function ($m) {
                 return (float) ($m['mejores_amigos'] ?? 0);
             }, $acc)),
+            'sin_actividad_7dias_media' => $avg(array_map(static function ($m) {
+                return (float) ($m['sin_actividad_7dias'] ?? 0);
+            }, $acc)),
+            'sin_interaccion_14dias_media' => $avg(array_map(static function ($m) {
+                return (float) ($m['sin_interaccion_14dias'] ?? 0);
+            }, $acc)),
+            'max_declaraciones_mismo_par_media' => $avg(array_map(static function ($m) {
+                return (float) ($m['max_declaraciones_mismo_par'] ?? 0);
+            }, $acc)),
+            'dias_desde_contacto_ejemplo' => $last['dias_desde_ultimo_contacto'] ?? [],
+            'declaraciones_totales_ejemplo' => array_sum(array_values($last['familias'] ?? [])) > 0
+                ? ($last['familias']['declaracion'] ?? 0)
+                : 0,
             'buzon_cat_ejemplo' => $last['buzon_cat'] ?? [],
             'visitas_edificio_ejemplo' => $last['visitas_edificio'] ?? [],
             'familias_ejemplo' => $last['familias'] ?? [],

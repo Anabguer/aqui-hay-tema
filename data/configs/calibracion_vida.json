@@ -236,6 +236,7 @@
         "por_familia": {
             "romance_accion": 20,
             "romance": 48,
+            "romance_hito": 336,
             "pareja": 36,
             "crisis": 48,
             "trabajo": 72
@@ -263,8 +264,8 @@
         }
     },
     "autonomia": {
-        "salidas_individuales_sqrt": 0.7,
-        "salidas_individuales_offset": 0.4,
+        "salidas_individuales_sqrt": 1.2,
+        "salidas_individuales_offset": 0.5,
         "poco_activo_bonus": 1.6,
         "max_historias_grandes_por_residente_dia": 1,
         "prioridad_agenda_jugador": true
