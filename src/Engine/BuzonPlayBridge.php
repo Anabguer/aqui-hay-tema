@@ -107,13 +107,29 @@ final class BuzonPlayBridge
             ];
         }
         if ($evento === DomainEvents::PETICION_CREADA) {
-            $de = (string) ($envelope['de_persona'] ?? ($actores[0] ?? ''));
+            $pet = is_array($envelope['peticion'] ?? null) ? $envelope['peticion'] : [];
+            if (!empty($pet['buzon_id'])) {
+                return null;
+            }
+            $de = (string) ($pet['residente_id'] ?? $envelope['de_persona'] ?? ($actores[0] ?? ''));
             $nom = $de !== '' ? IdentidadPublica::nombre($partida, $de) : 'Alguien';
+            $texto = (string) ($pet['texto'] ?? '');
+            if ($texto !== '') {
+                $copy = $nom . ': ' . $texto;
+                $plazo = PeticionPuebloEngine::plazoHumano($pet);
+                if ($plazo !== '') {
+                    $copy .= ' ' . $plazo;
+                }
+            } else {
+                $copy = $nom . ' quiere hablar contigo.';
+            }
             return [
                 'clasificacion' => BuzonEngine::PETICION,
                 'tipo' => 'peticion',
-                'texto' => $nom . ' quiere hablar contigo.',
-                'origen' => ['evento_id' => $envelope['peticion_id'] ?? null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
+                'de_persona' => $de !== '' ? $de : null,
+                'texto' => $copy,
+                'peticion_id' => $pet['id'] ?? ($envelope['peticion_id'] ?? null),
+                'origen' => ['evento_id' => $pet['id'] ?? null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
                 '_placeholder_contenido' => false,
             ];
         }

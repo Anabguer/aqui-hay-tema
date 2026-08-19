@@ -51,6 +51,10 @@ final class PeticionEngine
 
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $ahora = Reloj::ahoraLocal();
+        $texto = (string) ($datos['texto'] ?? $datos['texto_placeholder'] ?? '');
+        $esB4 = !empty($datos['schema_b4']);
+        $plazoHoras = isset($datos['plazo_horas']) ? (int) $datos['plazo_horas'] : null;
         $peticion = [
             'id' => $id,
             'residente_id' => $residenteId,
@@ -58,41 +62,63 @@ final class PeticionEngine
             'estado' => 'abierta',
             'dia_creada' => $dia,
             'hora_creada' => $hora,
-            'plazo_dia' => $datos['plazo_dia'] ?? null,
-            'plazo_hora' => $datos['plazo_hora'] ?? null,
+            'plazo_dia' => $plazoHoras !== null ? null : ($datos['plazo_dia'] ?? null),
+            'plazo_hora' => $plazoHoras !== null ? null : ($datos['plazo_hora'] ?? null),
             'objetivo' => $datos['objetivo'] ?? null,
-            'texto_placeholder' => $datos['texto_placeholder'] ?? null,
+            'texto' => $texto !== '' ? $texto : null,
+            'texto_placeholder' => $datos['texto_placeholder'] ?? ($texto !== '' ? $texto : null),
             'buzon_id' => null,
             'evolucion_si_ignora' => null,
             'resultado' => null,
-            '_bloqueado_decision' => ['catalogo_narrativo', 'consecuencia_si_ignora', 'cantidad_generada'],
-            '_placeholder_copy' => true,
+            'creada_iso' => $ahora->format(DATE_ATOM),
+            'vence_iso' => null,
+            'plazo_horas' => $plazoHoras,
+            '_bloqueado_decision' => $esB4 ? [] : ['catalogo_narrativo', 'consecuencia_si_ignora', 'cantidad_generada'],
+            '_placeholder_copy' => array_key_exists('_placeholder_copy', $datos) ? (bool) $datos['_placeholder_copy'] : !$esB4,
         ];
+        if ($plazoHoras !== null && $plazoHoras > 0) {
+            $peticion['vence_iso'] = $ahora->modify('+' . $plazoHoras . ' hours')->format(DATE_ATOM);
+        }
+        foreach (['schema_b4', 'plantilla_id', 'familia', 'params', 'hecho', 'peso', 'exigencia', 'cuenta_latido'] as $k) {
+            if (array_key_exists($k, $datos)) {
+                $peticion[$k] = $datos[$k];
+            }
+        }
 
         $partida['peticiones'][] = $peticion;
 
-        $buzon = BuzonEngine::crear($partida, [
-            'de_persona' => $residenteId,
-            'tipo' => 'peticion',
-            'texto' => $peticion['texto_placeholder'] ?? '[PLACEHOLDER] Petición de residente',
-            'peticion_id' => $id,
-            'origen' => [
-                'evento_id' => $id,
-                'tipo_evento' => 'peticion',
-                'es_narrativo' => false,
-                'informacion_revelada' => [],
-                '_placeholder' => true,
-            ],
-        ]);
-        $buzonId = $buzon['mensaje']['id'] ?? null;
-        $last = count($partida['peticiones']) - 1;
-        $partida['peticiones'][$last]['buzon_id'] = $buzonId;
-        $peticion['buzon_id'] = $buzonId;
+        $silencio = !empty($partida['_lab_peticiones_b4']) || !empty($partida['_lab_misiones_b3']);
+        $buzonId = null;
+        if (!$silencio) {
+            $copyBuzon = $texto !== '' ? $texto : '[PLACEHOLDER] Petición de residente';
+            if ($esB4 && $texto !== '') {
+                $copyBuzon = IdentidadPublica::nombre($partida, $residenteId) . ': ' . $texto . ' ' . PeticionPuebloEngine::plazoHumano($peticion);
+            }
+            $buzon = BuzonEngine::crear($partida, [
+                'de_persona' => $residenteId,
+                'tipo' => 'peticion',
+                'clasificacion' => BuzonEngine::PETICION,
+                'texto' => $copyBuzon,
+                'peticion_id' => $id,
+                '_placeholder_contenido' => !$esB4,
+                'origen' => [
+                    'evento_id' => $id,
+                    'tipo_evento' => 'peticion',
+                    'es_narrativo' => false,
+                    'informacion_revelada' => [],
+                    '_placeholder' => !$esB4,
+                ],
+            ]);
+            $buzonId = $buzon['mensaje']['id'] ?? null;
+            $last = count($partida['peticiones']) - 1;
+            $partida['peticiones'][$last]['buzon_id'] = $buzonId;
+            $peticion['buzon_id'] = $buzonId;
 
-        DomainEventDispatcher::emit($partida, DomainEvents::PETICION_CREADA, [
-            'peticion' => $peticion,
-            'actores' => [$residenteId],
-        ], $logger, 'PeticionEngine::crear', [$residenteId]);
+            DomainEventDispatcher::emit($partida, DomainEvents::PETICION_CREADA, [
+                'peticion' => $peticion,
+                'actores' => [$residenteId],
+            ], $logger, 'PeticionEngine::crear', [$residenteId]);
+        }
 
         return ['ok' => true, 'peticion' => $peticion];
     }
@@ -109,7 +135,12 @@ final class PeticionEngine
         $r = self::cambiarEstado($partida, $peticionId, 'ignorada', $logger);
         if ($r['ok'] ?? false) {
             $r['peticion']['evolucion_si_ignora'] = null;
-            $r['_bloqueado_decision'] = ['consecuencia_si_ignora'];
+            if (empty($r['peticion']['schema_b4'])) {
+                $r['_bloqueado_decision'] = ['consecuencia_si_ignora'];
+            } else {
+                $cal = CalibracionConfig::load(dirname(__DIR__, 2));
+                PeticionPuebloEngine::onIgnorada($partida, $r['peticion'], $cal, $logger);
+            }
         }
         return $r;
     }
@@ -126,23 +157,36 @@ final class PeticionEngine
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $now = $dia * 24 + $hora;
+        $ahoraReal = Reloj::ahoraLocal();
         $n = 0;
+        $lab = !empty($partida['_lab_peticiones_b4']) || !empty($partida['_lab_misiones_b3']);
         foreach ($partida['peticiones'] as &$p) {
             if (($p['estado'] ?? '') !== 'abierta') {
                 continue;
             }
-            if ($p['plazo_dia'] === null) {
-                continue;
+            $vence = false;
+            $iso = (string) ($p['vence_iso'] ?? '');
+            if ($iso !== '') {
+                try {
+                    $dt = new \DateTimeImmutable($iso);
+                    $vence = $ahoraReal->getTimestamp() >= $dt->getTimestamp();
+                } catch (\Exception $e) {
+                    $vence = false;
+                }
+            } elseif ($p['plazo_dia'] !== null) {
+                $plazoHora = $p['plazo_hora'] !== null ? (int) $p['plazo_hora'] : 0;
+                $t = ((int) $p['plazo_dia']) * 24 + $plazoHora;
+                $vence = $now >= $t;
             }
-            $plazoHora = $p['plazo_hora'] !== null ? (int) $p['plazo_hora'] : 0;
-            $t = ((int) $p['plazo_dia']) * 24 + $plazoHora;
-            if ($now >= $t) {
+            if ($vence) {
                 $p['estado'] = 'caducada';
                 $n++;
-                DomainEventDispatcher::emit($partida, DomainEvents::PETICION_CADUCADA, [
-                    'peticion' => $p,
-                    'actores' => [$p['residente_id'] ?? null],
-                ], $logger, 'PeticionEngine::caducar', [$p['residente_id'] ?? '']);
+                if (!$lab) {
+                    DomainEventDispatcher::emit($partida, DomainEvents::PETICION_CADUCADA, [
+                        'peticion' => $p,
+                        'actores' => [$p['residente_id'] ?? null],
+                    ], $logger, 'PeticionEngine::caducar', [$p['residente_id'] ?? '']);
+                }
             }
         }
         unset($p);

@@ -284,6 +284,7 @@ final class PartidaService
             'features' => [
                 VidaPuebloEngine::FLAG => FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG),
                 MisionDiariaEngine::FLAG => FeatureConfig::isEnabled($partida, MisionDiariaEngine::FLAG),
+                PeticionPuebloEngine::FLAG => FeatureConfig::isEnabled($partida, PeticionPuebloEngine::FLAG),
                 'debug_tools_enabled' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
             ],
         ];
@@ -306,6 +307,11 @@ final class PartidaService
         }
         if (MisionDiariaEngine::activa($partida)) {
             $out['misiones_hoy'] = MisionDiariaEngine::vistaHoy($partida, $cal);
+        }
+        if (PeticionPuebloEngine::activa($partida)) {
+            $out['peticiones_pueblo'] = [
+                'abiertas' => PeticionPuebloEngine::vistaAbiertas($partida),
+            ];
         }
         return $out;
     }

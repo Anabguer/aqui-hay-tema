@@ -57,6 +57,16 @@ final class RelojOperations
         $expirados = $this->emociones !== null ? $this->emociones->expirarVencidos($partida) : 0;
         $peticionesCaducadas = PeticionEngine::caducarVencidas($partida, $this->logger);
         $propuestasCaducadas = PropuestaEncuentroEngine::caducarVencidas($partida);
+        if (PeticionPuebloEngine::activa($partida)) {
+            $calPet = CalibracionConfig::load($this->projectRoot);
+            PeticionPuebloEngine::tick(
+                $partida,
+                $calPet,
+                RngService::fromPartida($partida),
+                $this->logger,
+                $horas
+            );
+        }
 
         if ($diaDespues > $diaAntes && MisionDiariaEngine::activa($partida)) {
             $calMis = CalibracionConfig::load($this->projectRoot);

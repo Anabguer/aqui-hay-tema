@@ -25,6 +25,7 @@ final class DomainEvents
     public const PROPUESTA_ENCUENTRO = 'propuesta_encuentro';
     public const PETICION_CREADA = 'peticion_creada';
     public const PETICION_CADUCADA = 'peticion_caducada';
+    public const PETICION_CUMPLIDA = 'peticion_cumplida';
     public const CATCH_UP_PLANIFICADO = 'catch_up_planificado';
     public const PERFIL_PARTIDA_GENERADO = 'perfil_partida_generado';
     public const QUIMICA_GENERADA = 'quimica_generada';

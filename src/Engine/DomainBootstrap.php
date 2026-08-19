@@ -33,6 +33,7 @@ final class DomainBootstrap
         EmotionalEventBridge::register();
         BuzonPlayBridge::register();
         MisionPlayBridge::register();
+        PeticionPlayBridge::register();
         ConsecuenciaReactionSubscriber::register();
     }
 

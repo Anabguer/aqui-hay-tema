@@ -55,6 +55,7 @@ final class PartidaLifecycle
         if (MisionDiariaEngine::activa($partida)) {
             $this->generarMisionesSiToca($partida);
         }
+        $this->tickPeticiones($partida);
 
         $this->logger->log($partida, 'partida_nueva', ['config_id' => $configId]);
         $this->repo->guardar($partida);
@@ -69,6 +70,7 @@ final class PartidaLifecycle
         Reloj::calcularCatchUpPendiente($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->generarMisionesSiToca($partida);
+        $this->tickPeticiones($partida);
         $this->repo->guardar($partida);
         return $partida;
     }
@@ -99,6 +101,7 @@ final class PartidaLifecycle
         }
         SchemaFields::ensure($partida);
         $this->generarMisionesSiToca($partida);
+        $this->tickPeticiones($partida);
         $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
         $this->repo->guardar($partida);
         return $partida;
@@ -119,6 +122,22 @@ final class PartidaLifecycle
             return;
         }
         $partida['parentesco'] = array_values($config['parentesco']);
+    }
+
+    private function tickPeticiones(array &$partida): void
+    {
+        if (!PeticionPuebloEngine::activa($partida)) {
+            PeticionEngine::caducarVencidas($partida, $this->logger);
+            return;
+        }
+        $cal = CalibracionConfig::load($this->root);
+        PeticionPuebloEngine::tick(
+            $partida,
+            $cal,
+            RngService::fromPartida($partida),
+            $this->logger,
+            1
+        );
     }
 
     private function generarMisionesSiToca(array &$partida): void

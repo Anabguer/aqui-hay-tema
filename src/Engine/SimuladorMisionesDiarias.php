@@ -412,7 +412,7 @@ final class SimuladorMisionesDiarias
      * @param array<string, mixed> $enc
      * @param array<string, mixed> $cal
      */
-    private static function sideEffects(array &$partida, array $m, array $enc, array $cal): void
+    public static function sideEffects(array &$partida, array $m, array $enc, array $cal): void
     {
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $pid = (string) ($m['plantilla_id'] ?? '');
