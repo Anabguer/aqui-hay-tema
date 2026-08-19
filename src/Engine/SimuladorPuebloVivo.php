@@ -300,38 +300,88 @@ final class SimuladorPuebloVivo
         $proy90 = RelacionDesgaste::proyectarValor(90, 30, $cal);
         $m['desgaste_lab'] = ['v10_12d' => $proy10, 'v60_30d' => $proy60, 'v90_30d' => $proy90];
 
-        // Métricas de aislamiento
+        // Métricas de aislamiento — CASUAL (solo interacciones casuales, tick a tick)
         $sinActividad7 = 0;
-        $sinInteraccion14 = 0;
-        $diasDesdeContacto = [];
-        $nuncaContacto = 0;
         foreach ($idsRes as $rid) {
             $ultAct = $ultimaActividad[$rid] ?? 0;
             if ($ultAct === 0 || ($dias - $ultAct) >= 7) {
                 $sinActividad7++;
             }
-            $ultCon = $ultimoContacto[$rid] ?? 0;
-            if ($ultCon === 0) {
-                $nuncaContacto++;
-                // No convertir en 0: representamos con null en distribución
-            } else {
-                $diasDesdeContacto[] = $dias - $ultCon;
-            }
         }
         $m['sin_actividad_7dias'] = $sinActividad7;
-        $m['sin_interaccion_14dias'] = count(array_filter($idsRes, static function ($rid) use ($ultimoContacto, $dias) {
+
+        // Casual: últimas interacciones casuales rastreadas tick a tick
+        $nuncaCasual = 0;
+        $diasDesdeCasual = [];
+        foreach ($idsRes as $rid) {
+            $u = $ultimoContacto[$rid] ?? 0;
+            if ($u === 0) {
+                $nuncaCasual++;
+            } else {
+                $diasDesdeCasual[] = $dias - $u;
+            }
+        }
+        $m['sin_interaccion_casual_14dias'] = count(array_filter($idsRes, static function ($rid) use ($ultimoContacto, $dias) {
             $u = $ultimoContacto[$rid] ?? 0;
             return $u === 0 || ($dias - $u) >= 14;
         }));
-        sort($diasDesdeContacto);
-        $cnt = count($diasDesdeContacto);
+        sort($diasDesdeCasual);
+        $cntCas = count($diasDesdeCasual);
+        // LEGACY: mantener nombre anterior para compatibilidad histórica
+        $m['sin_interaccion_14dias'] = $m['sin_interaccion_casual_14dias'];
         $m['dias_desde_ultimo_contacto'] = [
-            'nunca_tuvieron_contacto' => $nuncaContacto,
-            'n_con_contacto' => $cnt,
-            'media'  => $cnt > 0 ? round(array_sum($diasDesdeContacto) / $cnt, 1) : null,
-            'mediana'=> $cnt > 0 ? (float) $diasDesdeContacto[(int) floor(($cnt - 1) / 2)] : null,
-            'p90'    => $cnt > 0 ? (float) $diasDesdeContacto[(int) floor(0.9 * ($cnt - 1))] : null,
-            'maximo' => $cnt > 0 ? (float) end($diasDesdeContacto) : null,
+            'nunca_tuvieron_contacto' => $nuncaCasual,
+            'n_con_contacto' => $cntCas,
+            'media'  => $cntCas > 0 ? round(array_sum($diasDesdeCasual) / $cntCas, 1) : null,
+            'mediana'=> $cntCas > 0 ? (float) $diasDesdeCasual[(int) floor(($cntCas - 1) / 2)] : null,
+            'p90'    => $cntCas > 0 ? (float) $diasDesdeCasual[(int) floor(0.9 * ($cntCas - 1))] : null,
+            'maximo' => $cntCas > 0 ? (float) end($diasDesdeCasual) : null,
+        ];
+
+        // CONTACTO SOCIAL REAL: desde memoria_eventos (casual + encuentro + acontecimiento relacional >=2 participantes)
+        // Excluye: actividad_individual (1 residente solo), coexistencia sin interacción
+        $ultimoContactoSocial = array_fill_keys($idsRes, 0); // 0 = nunca
+        foreach ($partida['memoria_eventos'] ?? [] as $ev) {
+            $evFam = (string) ($ev['familia'] ?? '');
+            // Excluir actividad individual y eventos de 1 sola persona
+            if ($evFam === 'actividad_individual') {
+                continue;
+            }
+            $evPartic = (array) ($ev['participantes'] ?? []);
+            if (count($evPartic) < 2) {
+                continue;
+            }
+            $evDia = (int) ($ev['dia'] ?? 0);
+            foreach ($evPartic as $pid) {
+                $pid = (string) $pid;
+                if (isset($ultimoContactoSocial[$pid]) && $evDia > $ultimoContactoSocial[$pid]) {
+                    $ultimoContactoSocial[$pid] = $evDia;
+                }
+            }
+        }
+        $nuncaSocialReal = 0;
+        $diasDesdeSocial = [];
+        foreach ($idsRes as $rid) {
+            $u = $ultimoContactoSocial[$rid] ?? 0;
+            if ($u === 0) {
+                $nuncaSocialReal++;
+            } else {
+                $diasDesdeSocial[] = $dias - $u;
+            }
+        }
+        sort($diasDesdeSocial);
+        $cntSoc = count($diasDesdeSocial);
+        $m['sin_contacto_social_real_14dias'] = count(array_filter($idsRes, static function ($rid) use ($ultimoContactoSocial, $dias) {
+            $u = $ultimoContactoSocial[$rid] ?? 0;
+            return $u === 0 || ($dias - $u) >= 14;
+        }));
+        $m['dias_desde_contacto_social_real'] = [
+            'nunca_contacto_social_real' => $nuncaSocialReal,
+            'n_con_contacto' => $cntSoc,
+            'media'  => $cntSoc > 0 ? round(array_sum($diasDesdeSocial) / $cntSoc, 1) : null,
+            'mediana'=> $cntSoc > 0 ? (float) $diasDesdeSocial[(int) floor(($cntSoc - 1) / 2)] : null,
+            'p90'    => $cntSoc > 0 ? (float) $diasDesdeSocial[(int) floor(0.9 * ($cntSoc - 1))] : null,
+            'maximo' => $cntSoc > 0 ? (float) end($diasDesdeSocial) : null,
         ];
         // max_declaraciones_mismo_par: contar desde memoria_eventos (más fiable que el tick)
         $declPorPar = [];
@@ -373,8 +423,11 @@ final class SimuladorPuebloVivo
             'parejas_nuevas' => 0,
             'crisis_obs' => 0,
             'sin_actividad_7dias' => 0,
+            'sin_interaccion_casual_14dias' => 0,
             'sin_interaccion_14dias' => 0,
+            'sin_contacto_social_real_14dias' => 0,
             'dias_desde_ultimo_contacto' => [],
+            'dias_desde_contacto_social_real' => [],
             'max_declaraciones_mismo_par' => 0,
         ];
     }
@@ -440,13 +493,17 @@ final class SimuladorPuebloVivo
             'sin_actividad_7dias_media' => $avg(array_map(static function ($m) {
                 return (float) ($m['sin_actividad_7dias'] ?? 0);
             }, $acc)),
-            'sin_interaccion_14dias_media' => $avg(array_map(static function ($m) {
-                return (float) ($m['sin_interaccion_14dias'] ?? 0);
+            'sin_interaccion_casual_14dias_media' => $avg(array_map(static function ($m) {
+                return (float) ($m['sin_interaccion_casual_14dias'] ?? 0);
+            }, $acc)),
+            'sin_contacto_social_real_14dias_media' => $avg(array_map(static function ($m) {
+                return (float) ($m['sin_contacto_social_real_14dias'] ?? 0);
             }, $acc)),
             'max_declaraciones_mismo_par_media' => $avg(array_map(static function ($m) {
                 return (float) ($m['max_declaraciones_mismo_par'] ?? 0);
             }, $acc)),
-            'dias_desde_contacto_ejemplo' => $last['dias_desde_ultimo_contacto'] ?? [],
+            'dias_desde_casual_ejemplo' => $last['dias_desde_ultimo_contacto'] ?? [],
+            'dias_desde_social_real_ejemplo' => $last['dias_desde_contacto_social_real'] ?? [],
             'declaraciones_totales_ejemplo' => array_sum(array_values($last['familias'] ?? [])) > 0
                 ? ($last['familias']['declaracion'] ?? 0)
                 : 0,
