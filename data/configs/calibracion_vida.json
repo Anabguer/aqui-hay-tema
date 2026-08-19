@@ -218,7 +218,13 @@
             "hoy_no_me_da_la_vida",
             "el_gato_tiene_que_comer",
             "se_me_hace_tarde"
-        ]
+        ],
+        "mod_tipo": {
+            "conocerse": 34,
+            "quedar": 0,
+            "primera_cita": 0,
+            "cita": 0
+        }
     },
     "rechazos": {
         "banal_sin_consecuencia": true,

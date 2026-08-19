@@ -139,10 +139,11 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $s += (int) ($afin['aporte'] ?? 0);
         $s -= (int) ($afin['penalizacion'] ?? 0);
 
-        $tipo = (string) ($propuesta['tipo'] ?? '');
+        $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
         if (PropuestaNivel::esTipoCita($tipo) || $tipo === 'pareja') {
             $s += (int) ($mods['iniciativa_romantica'] ?? 0) / 2;
         }
+        $s += self::modTipo($tipo, $cal);
 
         if ($s < 0) {
             return 0;
@@ -151,6 +152,21 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             return 100;
         }
         return (int) $s;
+    }
+
+    /**
+     * Bonus/malus explícito por tipo de propuesta. No cambia la base global.
+     *
+     * @param array<string, mixed> $cal
+     */
+    public static function modTipo(string $tipo, array $cal): int
+    {
+        $tipo = PropuestaNivel::aliasTipo($tipo);
+        if ($tipo === '') {
+            return 0;
+        }
+        $v = CalibracionConfig::get($cal, 'voluntad.mod_tipo.' . $tipo, 0);
+        return is_numeric($v) ? (int) $v : 0;
     }
 
     /**
