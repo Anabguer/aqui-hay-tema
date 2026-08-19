@@ -57,6 +57,7 @@ final class PersonajeValidator
             $errores[] = self::err($archivo, 'identidad.edad', $ident['edad'], 'rango_invalido_22_72');
         }
 
+        // atraido_por es metadata opcional. V1 no filtra romance por orientación ni género.
         if (isset($ident['atraido_por']) && !is_array($ident['atraido_por'])) {
             $errores[] = self::err($archivo, 'identidad.atraido_por', $ident['atraido_por'], 'tipo_invalido_array');
         }
