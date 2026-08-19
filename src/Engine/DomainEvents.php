@@ -33,6 +33,9 @@ final class DomainEvents
     public const SENAL_ROMANTICA = 'senal_romantica';
     public const VIDA_PUEBLO_CAMBIADA = 'vida_pueblo_cambiada';
     public const VIDA_PUEBLO_LATIDO = 'vida_pueblo_latido';
+    public const MISION_GENERADA = 'mision_generada';
+    public const MISION_CUMPLIDA = 'mision_cumplida';
+    public const MISION_CADUCADA = 'mision_caducada';
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';

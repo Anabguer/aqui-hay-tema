@@ -13,5 +13,6 @@
     "expression_resolver_enabled": true,
     "emotional_state_from_events_enabled": false,
     "consequences_enabled": false,
-    "vida_pueblo_enabled": false
+    "vida_pueblo_enabled": false,
+    "misiones_diarias_enabled": false
 }

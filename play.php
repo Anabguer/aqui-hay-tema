@@ -27,11 +27,29 @@ header('Content-Type: text/html; charset=utf-8');
   <main class="play-shell">
     <section class="panel play-summary" aria-labelledby="resumen-title">
       <h2 id="resumen-title">Resumen del día</h2>
-      <div class="summary-grid" id="summary-grid">
+        <div class="summary-grid" id="summary-grid">
         <div class="summary-card"><span class="label">Fecha y hora</span><strong id="sum-reloj">—</strong></div>
         <div class="summary-card"><span class="label">Residentes en el pueblo</span><strong id="sum-residentes">—</strong></div>
         <div class="summary-card"><span class="label">Encuentros de hoy</span><strong id="sum-encuentros-hoy">—</strong><span class="mini-meta" id="sum-encuentros-activos"></span></div>
         <div class="summary-card"><span class="label">Buzón pendiente</span><strong id="sum-buzon">—</strong></div>
+      </div>
+
+      <div id="pueblo-vida-wrap" class="pueblo-vida-wrap" hidden>
+        <div class="vida-corazon-card">
+          <div class="corazon-visual" id="corazon-visual" aria-hidden="true">
+            <span class="corazon-glyph" id="corazon-glyph">❤</span>
+          </div>
+          <div>
+            <div class="label">El pueblo</div>
+            <strong id="vida-etiqueta">—</strong>
+          </div>
+        </div>
+        <div id="misiones-hoy-card">
+          <h3 id="misiones-hoy-title">Hoy en el pueblo</h3>
+          <p class="mini-meta" id="misiones-plazo"></p>
+          <ul id="misiones-hoy-list" class="misiones-hoy-list"></ul>
+        </div>
+        <pre id="vida-debug" class="vida-debug" hidden></pre>
       </div>
 
       <div class="proximo-card" id="proximo-card">

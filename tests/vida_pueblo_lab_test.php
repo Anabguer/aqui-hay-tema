@@ -42,9 +42,10 @@ $d = $lab['por_perfil']['D']['por_horizonte']['7'];
 ok((float) ($d['game_over_max'] ?? 0) >= 0, 'D reporta GO teórico');
 
 ok(strpos(json_encode($lab), 'INPUT_DE_LAB') !== false, 'informe lab declara input sintético');
-ok(!class_exists('AquiHayTema\\Engine\\MisionEngine', false), 'B3 misiones no existe');
+ok(class_exists('AquiHayTema\\Engine\\MisionDiariaEngine'), 'B3 MisionDiariaEngine existe');
+ok(($lab['deltas_lab']['misiones_dia'] ?? 0) === 3, 'lab sintético B1 sigue aislado');
 
 $playSrc = file_get_contents($root . '/assets/js/play.js');
-ok(strpos($playSrc, 'vida_pueblo') === false && strpos($playSrc, 'VidaPueblo') === false, 'PLAY JS no muestra Vida');
+ok(strpos($playSrc, 'renderVidaPueblo') !== false, 'PLAY JS pinta Vida/misiones');
 
 exit($failures > 0 ? 1 : 0);

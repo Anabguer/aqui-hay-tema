@@ -328,6 +328,7 @@
     }
     $('#sum-buzon').textContent = String(e.buzon_pendientes ?? buzonCount ?? 0);
     renderProximoEncuentro(e);
+    renderVidaPueblo(e);
   }
 
   function residenteEnEncuentroVisible(id) {
@@ -1228,3 +1229,69 @@
 
   document.addEventListener('DOMContentLoaded', init);
 })();
+
+  function etiquetaMisionEstado(est) {
+    if (est === 'cumplida') return 'Cumplida';
+    if (est === 'caducada') return 'Se ha quedado en el tintero';
+    return 'Pendiente';
+  }
+
+  function renderVidaPueblo(e) {
+    const wrap = document.getElementById('pueblo-vida-wrap');
+    if (!wrap) return;
+    const vida = e.vida_pueblo;
+    const mis = e.misiones_hoy;
+    if (!vida && !mis) {
+      wrap.hidden = true;
+      return;
+    }
+    wrap.hidden = false;
+    const glyph = document.getElementById('corazon-glyph');
+    const et = document.getElementById('vida-etiqueta');
+    if (vida && glyph) {
+      const pct = Math.max(0, Math.min(100, Number(vida.corazon_pct || 0)));
+      glyph.style.setProperty('--fill', pct + '%');
+    }
+    if (et) {
+      et.textContent = (vida && vida.etiqueta) ? vida.etiqueta : '—';
+    }
+    const plazo = document.getElementById('misiones-plazo');
+    const list = document.getElementById('misiones-hoy-list');
+    if (plazo) {
+      plazo.textContent = (mis && mis.plazo_humano) ? mis.plazo_humano : '';
+    }
+    if (list) {
+      list.innerHTML = '';
+      const items = (mis && mis.misiones) ? mis.misiones : [];
+      if (!items.length) {
+        const li = document.createElement('li');
+        li.className = 'status';
+        li.textContent = 'Hoy el pueblo no pide nada concreto.';
+        list.appendChild(li);
+      }
+      items.forEach((m) => {
+        const li = document.createElement('li');
+        const est = m.estado || 'pendiente';
+        li.className = 'mision-item is-' + est;
+        const st = document.createElement('span');
+        st.className = 'mision-estado';
+        st.textContent = etiquetaMisionEstado(est);
+        const tx = document.createElement('span');
+        tx.className = 'mision-texto';
+        tx.textContent = m.texto || '';
+        li.appendChild(st);
+        li.appendChild(tx);
+        list.appendChild(li);
+      });
+    }
+    const dbg = document.getElementById('vida-debug');
+    if (dbg) {
+      if (e.vida_debug) {
+        dbg.hidden = false;
+        dbg.textContent = JSON.stringify(e.vida_debug, null, 2);
+      } else {
+        dbg.hidden = true;
+        dbg.textContent = '';
+      }
+    }
+  }

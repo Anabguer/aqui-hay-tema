@@ -58,6 +58,19 @@ final class RelojOperations
         $peticionesCaducadas = PeticionEngine::caducarVencidas($partida, $this->logger);
         $propuestasCaducadas = PropuestaEncuentroEngine::caducarVencidas($partida);
 
+        if ($diaDespues > $diaAntes && MisionDiariaEngine::activa($partida)) {
+            $calMis = CalibracionConfig::load($this->projectRoot);
+            for ($d = $diaAntes; $d < $diaDespues; $d++) {
+                MisionDiariaEngine::alCerrarDia($partida, $d, $calMis, $this->logger);
+            }
+            MisionDiariaEngine::alComenzarDia(
+                $partida,
+                $calMis,
+                RngService::fromPartida($partida),
+                $this->logger
+            );
+        }
+
         DomainEventDispatcher::emit($partida, DomainEvents::TIEMPO_AVANZADO, [
             'horas' => $horas,
             'antes' => $antes,

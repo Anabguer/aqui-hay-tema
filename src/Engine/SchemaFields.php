@@ -10,6 +10,7 @@ final class SchemaFields
     {
         Reloj::ensure($partida);
         VidaPuebloEngine::ensure($partida);
+        MisionDiariaEngine::ensure($partida);
         $partida['audit_trail'] ??= [];
         $partida['descubrimientos'] ??= [];
         $partida['historial_relaciones'] ??= [];

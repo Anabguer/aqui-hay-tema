@@ -5,6 +5,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 
 use AquiHayTema\Engine\CalibracionConfig;
 use AquiHayTema\Engine\FeatureConfig;
+use AquiHayTema\Engine\MisionDiariaEngine;
 use AquiHayTema\Engine\PartidaService;
 use AquiHayTema\Engine\SchemaFields;
 use AquiHayTema\Engine\VidaPuebloEngine;
@@ -183,7 +184,8 @@ ok((int) $vieja['vida_pueblo']['valor'] === 65, 'save viejo recibe 65');
 
 $service = new PartidaService($root);
 $play = $service->nuevaPartida('playtest_01', 'vida-b1-flag');
-ok(empty($play['features'][VidaPuebloEngine::FLAG]), 'playtest no enciende vida_pueblo');
+ok(!empty($play['features'][VidaPuebloEngine::FLAG]), 'playtest enciende vida_pueblo');
+ok(!empty($play['features'][MisionDiariaEngine::FLAG]), 'playtest enciende misiones diarias');
 ok(isset($play['vida_pueblo']['valor']), 'partida nueva tiene bloque vida_pueblo');
 ok(FeatureConfig::isEnabled($play, 'economy_enabled') === false, 'economía sigue off');
 

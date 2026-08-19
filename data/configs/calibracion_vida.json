@@ -439,5 +439,11 @@
             "farming_por_dia": 12,
             "offline_teorico_por_dia": 4
         }
+    },
+    "misiones_diarias": {
+        "_provisional": true,
+        "_nota": "B3. No toca cifras de vida_pueblo.",
+        "dias_sin_salir": 2,
+        "social_floja_max": 12
     }
 }

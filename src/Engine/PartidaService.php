@@ -257,7 +257,8 @@ final class PartidaService
 
     public function estadoResumido(array $partida): array
     {
-        return [
+        $cal = CalibracionConfig::load($this->root);
+        $out = [
             'meta' => $partida['meta'],
             'reloj' => $partida['reloj'],
             'reloj_texto' => Reloj::formatear($partida['reloj']),
@@ -280,7 +281,33 @@ final class PartidaService
                     return ($p['estado'] ?? '') === 'propuesta';
                 }
             )),
+            'features' => [
+                VidaPuebloEngine::FLAG => FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG),
+                MisionDiariaEngine::FLAG => FeatureConfig::isEnabled($partida, MisionDiariaEngine::FLAG),
+                'debug_tools_enabled' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
+            ],
         ];
+        if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
+            $vista = VidaPuebloEngine::vista($partida, $cal);
+            unset($vista['latidos']);
+            $out['vida_pueblo'] = $vista;
+            if (FeatureConfig::isEnabled($partida, 'debug_tools_enabled')) {
+                $vp = $partida['vida_pueblo'] ?? [];
+                $out['vida_debug'] = [
+                    'valor' => VidaPuebloEngine::valor($partida),
+                    'positivos_desde_latido' => (int) ($vp['positivos_desde_latido'] ?? 0),
+                    'umbral_positivos_latido' => (int) ($vp['umbral_positivos_latido'] ?? 25),
+                    'latidos' => (int) ($vp['latidos'] ?? 0),
+                    'primer_latido_dia' => $vp['primer_latido_dia'] ?? null,
+                    'positivo_valido_latido' => 'ver ledger',
+                    'ledger_tail' => array_slice(is_array($vp['ledger'] ?? null) ? $vp['ledger'] : [], -8),
+                ];
+            }
+        }
+        if (MisionDiariaEngine::activa($partida)) {
+            $out['misiones_hoy'] = MisionDiariaEngine::vistaHoy($partida, $cal);
+        }
+        return $out;
     }
 
     private static function labelEncuentrosActivos(int $n): string

@@ -52,6 +52,10 @@ final class PartidaLifecycle
             'actores' => array_keys($partida['residentes']),
         ], $this->logger, 'PartidaLifecycle::nueva');
 
+        if (MisionDiariaEngine::activa($partida)) {
+            $this->generarMisionesSiToca($partida);
+        }
+
         $this->logger->log($partida, 'partida_nueva', ['config_id' => $configId]);
         $this->repo->guardar($partida);
         return $partida;
@@ -64,6 +68,7 @@ final class PartidaLifecycle
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         Reloj::calcularCatchUpPendiente($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
+        $this->generarMisionesSiToca($partida);
         $this->repo->guardar($partida);
         return $partida;
     }
@@ -93,6 +98,7 @@ final class PartidaLifecycle
             );
         }
         SchemaFields::ensure($partida);
+        $this->generarMisionesSiToca($partida);
         $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
         $this->repo->guardar($partida);
         return $partida;
@@ -113,5 +119,19 @@ final class PartidaLifecycle
             return;
         }
         $partida['parentesco'] = array_values($config['parentesco']);
+    }
+
+    private function generarMisionesSiToca(array &$partida): void
+    {
+        if (!MisionDiariaEngine::activa($partida)) {
+            return;
+        }
+        $cal = CalibracionConfig::load($this->root);
+        MisionDiariaEngine::alComenzarDia(
+            $partida,
+            $cal,
+            RngService::fromPartida($partida),
+            $this->logger
+        );
     }
 }

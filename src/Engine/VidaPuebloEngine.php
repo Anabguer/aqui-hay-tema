@@ -205,9 +205,17 @@ final class VidaPuebloEngine
         self::ensure($partida, $cal);
         $valor = self::valor($partida);
         $b = self::banda($valor, $cal);
+        $pct = $valor;
+        if ($pct < 0) {
+            $pct = 0;
+        }
+        if ($pct > 100) {
+            $pct = 100;
+        }
         return [
             'banda' => $b['id'],
             'etiqueta' => $b['etiqueta'],
+            'corazon_pct' => $pct,
             'latidos' => (int) ($partida['vida_pueblo']['latidos'] ?? 0),
             'critico' => $valor <= 19,
             'game_over_pendiente' => (bool) ($partida['vida_pueblo']['game_over_pendiente'] ?? false),
@@ -358,24 +366,26 @@ final class VidaPuebloEngine
 
         self::recortarLedger($partida, $cfg);
 
-        DomainEventDispatcher::emit($partida, DomainEvents::VIDA_PUEBLO_CAMBIADA, [
-            'delta' => $delta,
-            'antes' => $antes,
-            'despues' => $despues,
-            'causa' => $causa,
-            'origen' => $origen,
-            'latido' => $latido,
-            'lab' => $esLab,
-            'actores' => [],
-        ], $logger, 'VidaPuebloEngine::aplicar');
-        if ($latido) {
-            DomainEventDispatcher::emit($partida, DomainEvents::VIDA_PUEBLO_LATIDO, [
-                'latidos' => (int) $v['latidos'],
-                'resaca_a' => $despues,
-                'desde' => $resacaDe,
+        if (empty($partida['_lab_misiones_b3'])) {
+            DomainEventDispatcher::emit($partida, DomainEvents::VIDA_PUEBLO_CAMBIADA, [
+                'delta' => $delta,
+                'antes' => $antes,
+                'despues' => $despues,
+                'causa' => $causa,
+                'origen' => $origen,
+                'latido' => $latido,
                 'lab' => $esLab,
                 'actores' => [],
-            ], $logger, 'VidaPuebloEngine::latido');
+            ], $logger, 'VidaPuebloEngine::aplicar');
+            if ($latido) {
+                DomainEventDispatcher::emit($partida, DomainEvents::VIDA_PUEBLO_LATIDO, [
+                    'latidos' => (int) $v['latidos'],
+                    'resaca_a' => $despues,
+                    'desde' => $resacaDe,
+                    'lab' => $esLab,
+                    'actores' => [],
+                ], $logger, 'VidaPuebloEngine::latido');
+            }
         }
 
         \aht_log_optional($logger, $partida, 'vida_pueblo', [
