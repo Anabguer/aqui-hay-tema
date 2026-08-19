@@ -5,7 +5,7 @@ Juego de gestión social y emparejamiento. **Esta fase es solo documentación y 
 | Dato | Valor |
 | --- | --- |
 | Nombre definitivo | **Aquí Hay Tema** |
-| Carpeta local | `W:\juegos\Aqui hay tema` |
+| Carpeta local | `W:\juegos\aqui-hay-tema` |
 | Carpeta Drive (única referencia ChatGPT) | `G:\Mi unidad\Aqui Hay Tema` |
 | Documento Maestro (Drive) | `DOCUMENTO MAESTRO — AQUÍ HAY TEMA` |
 | Instantánea local del Maestro | `docs/FUENTE_DOCUMENTO_MAESTRO.md` |
@@ -13,7 +13,7 @@ Juego de gestión social y emparejamiento. **Esta fase es solo documentación y 
 | Estado | Documentación + puerta en la biblioteca. El bucle aún no se juega. |
 | URL pública | https://intocables13.com/juegos/aqui-hay-tema/ |
 
-La carpeta de diseño sigue siendo esta. La puerta pública del catálogo vive en `W:\juegos\aqui-hay-tema` (W: no admite uniones NTFS).
+La carpeta canónica de desarrollo es `W:\juegos\aqui-hay-tema`. La puerta pública del catálogo vive en `W:\juegos\aqui-hay-tema\public-door\`.
 | Actualización | 2026-08-17 (decisiones posteriores al Maestro original) |
 
 El título de trabajo *Proyecto Cupido Cutre* está **retirado**. El Google Doc y la carpeta de Drive se renombraron en el sitio; no hay una segunda carpeta activa.

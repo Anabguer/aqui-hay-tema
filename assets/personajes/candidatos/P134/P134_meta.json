@@ -1,0 +1,22 @@
+{
+  "id": "P134",
+  "visual_gender": "mujer",
+  "apparent_age": "21-24",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P134_neutral.png",
+  "candidate_asset": "P134_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "south_asian_woman",
+    "black_hair_with_neon_green_streaks",
+    "bridge_piercing"
+  ],
+  "alpha_verified": true
+}

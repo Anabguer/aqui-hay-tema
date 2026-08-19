@@ -1,0 +1,15 @@
+{
+  "slug": "aqui-hay-tema",
+  "name": "Aquí Hay Tema",
+  "description": "Tú no ligas: gestionas el cotilleo romántico de un pueblo entero. Uy. Aquí hay tema.",
+  "cover": "cover.svg",
+  "category": "social",
+  "status": "en-diseno",
+  "url": "/juegos/aqui-hay-tema/",
+  "requires_login": false,
+  "saves_progress": false,
+  "ranking": false,
+  "guest_ok": true,
+  "stack": "html-css",
+  "tag": "Pueblo"
+}

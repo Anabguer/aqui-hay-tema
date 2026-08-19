@@ -1,0 +1,21 @@
+{
+  "id": "P086",
+  "visual_gender": "mujer",
+  "apparent_age": "28-32",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P086_neutral.png",
+  "candidate_asset": "P086_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "flequillo_recto",
+    "cuello_marinero"
+  ],
+  "alpha_verified": true
+}

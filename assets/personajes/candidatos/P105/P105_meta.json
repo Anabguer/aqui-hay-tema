@@ -1,0 +1,22 @@
+{
+  "id": "P105",
+  "visual_gender": "hombre",
+  "apparent_age": "24-27",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P105_neutral.png",
+  "candidate_asset": "P105_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_man",
+    "short_locs_with_green_dyed_tips",
+    "eyebrow_piercing"
+  ],
+  "alpha_verified": true
+}

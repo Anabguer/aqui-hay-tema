@@ -1,0 +1,22 @@
+{
+  "id": "P130",
+  "visual_gender": "mujer",
+  "apparent_age": "22-25",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P130_neutral.png",
+  "candidate_asset": "P130_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_woman",
+    "split_pink_black_long_hair",
+    "helix__tragus_piercings"
+  ],
+  "alpha_verified": true
+}

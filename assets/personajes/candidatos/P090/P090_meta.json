@@ -1,0 +1,22 @@
+{
+  "id": "P090",
+  "visual_gender": "mujer",
+  "apparent_age": "32-36",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P090_neutral.png",
+  "candidate_asset": "P090_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "baby_hairs",
+    "aros_dorados_grandes",
+    "cuello_alto_negro"
+  ],
+  "alpha_verified": true
+}

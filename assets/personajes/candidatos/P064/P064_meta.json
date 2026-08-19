@@ -1,0 +1,22 @@
+{
+  "id": "P064",
+  "visual_gender": "mujer",
+  "apparent_age": "27-31",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P064_neutral.png",
+  "candidate_asset": "P064_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "gafas_ojo_de_gato",
+    "cardigan_mostaza",
+    "pelo_ondulado_oscuro"
+  ],
+  "alpha_verified": true
+}

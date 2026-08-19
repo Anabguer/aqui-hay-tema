@@ -1,0 +1,21 @@
+{
+  "id": "P088",
+  "visual_gender": "mujer",
+  "apparent_age": "30-34",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P088_neutral.png",
+  "candidate_asset": "P088_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "moño_alto_desordenado",
+    "camisa_vaquera_oversize"
+  ],
+  "alpha_verified": true
+}

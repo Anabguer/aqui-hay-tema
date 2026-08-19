@@ -1,0 +1,22 @@
+{
+  "id": "P150",
+  "visual_gender": "mujer",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P150_neutral.png",
+  "candidate_asset": "P150_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_woman",
+    "black_hair_with_hot_pink_streak_not_full_u",
+    "many_ear_piercings"
+  ],
+  "alpha_verified": true
+}

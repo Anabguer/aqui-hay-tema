@@ -1,0 +1,21 @@
+{
+  "id": "P093",
+  "visual_gender": "hombre",
+  "apparent_age": "35-39",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P093_neutral.png",
+  "candidate_asset": "P093_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "tupé_pompadour",
+    "camiseta_gris"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P149",
+  "visual_gender": "hombre",
+  "apparent_age": "23-26",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P149_neutral.png",
+  "candidate_asset": "P149_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_man",
+    "cyan_buzz_cut",
+    "small_geometric_tattoo_near_cheek_subtle"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,21 @@
+{
+  "id": "P100",
+  "visual_gender": "mujer",
+  "apparent_age": "42-46",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P100_neutral.png",
+  "candidate_asset": "P100_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pixie_oscuro_canas",
+    "blusa_coral"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P124",
+  "visual_gender": "mujer",
+  "apparent_age": "23-26",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P124_neutral.png",
+  "candidate_asset": "P124_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_woman",
+    "turquoise_buzz_with_long_front_fringe",
+    "snake_bite_lip_piercings"
+  ],
+  "alpha_verified": true
+}

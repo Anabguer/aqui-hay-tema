@@ -1,0 +1,21 @@
+{
+  "id": "P066",
+  "visual_gender": "mujer",
+  "apparent_age": "29-33",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P066_neutral.png",
+  "candidate_asset": "P066_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "rizos_cortos_negros",
+    "jersey_rosa_empolvado"
+  ],
+  "alpha_verified": true
+}

@@ -1,0 +1,22 @@
+{
+  "id": "P102",
+  "visual_gender": "mujer",
+  "apparent_age": "21-24",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P102_neutral.png",
+  "candidate_asset": "P102_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_woman",
+    "split_dye_hair_black_teal",
+    "small_septum_ring"
+  ],
+  "alpha_verified": true
+}

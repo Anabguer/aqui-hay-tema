@@ -1,0 +1,22 @@
+{
+  "id": "P069",
+  "visual_gender": "hombre",
+  "apparent_age": "32-36",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P069_neutral.png",
+  "candidate_asset": "P069_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pelo_hacia_atras",
+    "cadena_gruesa_oro",
+    "polo_negro"
+  ],
+  "alpha_verified": true
+}

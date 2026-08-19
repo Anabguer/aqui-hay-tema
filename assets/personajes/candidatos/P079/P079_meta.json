@@ -1,0 +1,22 @@
+{
+  "id": "P079",
+  "visual_gender": "hombre",
+  "apparent_age": "42-46",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P079_neutral.png",
+  "candidate_asset": "P079_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pelo_cobrizo_entradas",
+    "gafas_rectangulares",
+    "jersey_avena"
+  ],
+  "alpha_verified": true
+}

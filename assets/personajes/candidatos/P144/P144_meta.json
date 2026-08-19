@@ -1,0 +1,22 @@
+{
+  "id": "P144",
+  "visual_gender": "mujer",
+  "apparent_age": "24-27",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P144_neutral.png",
+  "candidate_asset": "P144_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_woman",
+    "long_purple_hair",
+    "constellation_tattoo_on_collarbone"
+  ],
+  "alpha_verified": true
+}

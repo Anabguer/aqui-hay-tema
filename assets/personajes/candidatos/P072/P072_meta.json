@@ -1,0 +1,21 @@
+{
+  "id": "P072",
+  "visual_gender": "mujer",
+  "apparent_age": "35-39",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P072_neutral.png",
+  "candidate_asset": "P072_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "locs_hombro",
+    "top_terracota"
+  ],
+  "alpha_verified": true
+}

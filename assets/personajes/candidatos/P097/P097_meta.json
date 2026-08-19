@@ -1,0 +1,21 @@
+{
+  "id": "P097",
+  "visual_gender": "hombre",
+  "apparent_age": "39-43",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P097_neutral.png",
+  "candidate_asset": "P097_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "barba_sal_pimienta_corta",
+    "sobrecamisa_oliva"
+  ],
+  "alpha_verified": true
+}

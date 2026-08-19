@@ -1,0 +1,21 @@
+{
+  "id": "P078",
+  "visual_gender": "mujer",
+  "apparent_age": "41-45",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P078_neutral.png",
+  "candidate_asset": "P078_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "pelo_largo_raya_lado",
+    "abrigo_camel"
+  ],
+  "alpha_verified": true
+}

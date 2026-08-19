@@ -1,0 +1,13 @@
+{
+  "id": "P011",
+  "visual_gender": "mujer",
+  "apparent_age": "58-64",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P011_neutral.png",
+  "candidate_asset": null,
+  "expressions": ["neutral", "alegre", "triste", "enfadada"],
+  "visual_indicators": ["pelo_plata_corto", "pendientes_aro_oro"],
+  "alpha_verified": true
+}

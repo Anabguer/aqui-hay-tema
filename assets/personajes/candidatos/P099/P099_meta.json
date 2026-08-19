@@ -1,0 +1,22 @@
+{
+  "id": "P099",
+  "visual_gender": "hombre",
+  "apparent_age": "41-45",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P099_neutral.png",
+  "candidate_asset": "P099_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "raya_al_lado",
+    "barba_castana",
+    "chaleco_argyle"
+  ],
+  "alpha_verified": true
+}

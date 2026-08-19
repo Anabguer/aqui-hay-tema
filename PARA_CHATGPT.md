@@ -4,7 +4,7 @@ Carpeta única de referencia en Drive: `G:\Mi unidad\Aqui Hay Tema`.
 
 **No borres ni edites** el Google Doc `DOCUMENTO MAESTRO — AQUÍ HAY TEMA` salvo que se pida explícitamente. Sigue siendo la semilla conceptual. Las decisiones posteriores **amplían o sustituyen** partes de esa semilla: `docs/DECISIONES_CERRADAS.md`.
 
-Proyecto local: `W:\juegos\Aqui hay tema`. Fase: **diseño**. **No programar el bucle.** Neni aprueba tono de **2–3 pilotos viendo solo la ficha B** (`CONTRATO_PERSONAJE.md`). El resto del pool lo escribe ChatGPT; no hace falta que lo lea uno a uno.
+Proyecto local: `W:\juegos\aqui-hay-tema`. Fase: **diseño**. **No programar el bucle.** Neni aprueba tono de **2–3 pilotos viendo solo la ficha B** (`CONTRATO_PERSONAJE.md`). El resto del pool lo escribe ChatGPT; no hace falta que lo lea uno a uno.
 
 ## Cómo leer (orden ahora)
 

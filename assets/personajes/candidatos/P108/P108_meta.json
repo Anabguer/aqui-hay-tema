@@ -1,0 +1,22 @@
+{
+  "id": "P108",
+  "visual_gender": "mujer",
+  "apparent_age": "26-29",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P108_neutral.png",
+  "candidate_asset": "P108_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "white_woman",
+    "silver_lilac_wolf_cut",
+    "thin_nose_chain"
+  ],
+  "alpha_verified": true
+}

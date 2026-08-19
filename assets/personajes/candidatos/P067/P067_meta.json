@@ -1,0 +1,22 @@
+{
+  "id": "P067",
+  "visual_gender": "hombre",
+  "apparent_age": "30-34",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P067_neutral.png",
+  "candidate_asset": "P067_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "fade_alto",
+    "perilla",
+    "camisa_vaquera"
+  ],
+  "alpha_verified": true
+}

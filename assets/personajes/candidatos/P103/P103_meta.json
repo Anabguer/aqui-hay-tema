@@ -1,0 +1,22 @@
+{
+  "id": "P103",
+  "visual_gender": "hombre",
+  "apparent_age": "22-25",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P103_neutral.png",
+  "candidate_asset": "P103_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_man",
+    "bleached_short_crop",
+    "small_neck_script_tattoo"
+  ],
+  "alpha_verified": true
+}

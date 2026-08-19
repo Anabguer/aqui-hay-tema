@@ -1,0 +1,22 @@
+{
+  "id": "P135",
+  "visual_gender": "hombre",
+  "apparent_age": "24-27",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P135_neutral.png",
+  "candidate_asset": "P135_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "black_man",
+    "black_waves_with_one_red_streak",
+    "line_of_ear_piercings"
+  ],
+  "alpha_verified": true
+}

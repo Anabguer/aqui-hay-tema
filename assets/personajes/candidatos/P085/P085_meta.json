@@ -1,0 +1,21 @@
+{
+  "id": "P085",
+  "visual_gender": "hombre",
+  "apparent_age": "27-31",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P085_neutral.png",
+  "candidate_asset": "P085_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "melena_rubia_ondulada",
+    "camisa_lino"
+  ],
+  "alpha_verified": true
+}

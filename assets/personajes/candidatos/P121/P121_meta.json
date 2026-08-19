@@ -1,0 +1,22 @@
+{
+  "id": "P121",
+  "visual_gender": "hombre",
+  "apparent_age": "27-30",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P121_neutral.png",
+  "candidate_asset": "P121_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_man",
+    "long_straight_black_with_blunt_bangs",
+    "cross_tattoo_on_side_of_neck"
+  ],
+  "alpha_verified": true
+}

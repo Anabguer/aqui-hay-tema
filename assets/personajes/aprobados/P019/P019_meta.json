@@ -1,0 +1,18 @@
+{
+  "id": "P019",
+  "visual_gender": "hombre",
+  "apparent_age": "28-32",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "aprobado",
+  "master_asset": "P019_neutral.png",
+  "candidate_asset": "P019_neutral.png",
+  "expressions": ["neutral", "alegre", "enfadado", "triste"],
+  "visual_indicators": [
+    "flequillo_cortina",
+    "lunar_bajo_ojo",
+    "pendiente_tuerca",
+    "camisa_carbon"
+  ],
+  "alpha_verified": true
+}

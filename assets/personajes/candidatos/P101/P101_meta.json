@@ -1,0 +1,24 @@
+{
+  "id": "P101",
+  "visual_gender": "mujer",
+  "apparent_age": "64-70",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P101_neutral.png",
+  "candidate_asset": "P101_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadada",
+    "triste"
+  ],
+  "visual_indicators": [
+    "gafas_enormes",
+    "pendientes_geometricos",
+    "pixie_plata",
+    "lazo_mostaza"
+  ],
+  "alpha_verified": true,
+  "notes": "Identidad recuperada; el ID P019 se reserva al hombre esteasiatico de 28-32."
+}

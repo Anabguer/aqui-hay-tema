@@ -1,0 +1,22 @@
+{
+  "id": "P139",
+  "visual_gender": "hombre",
+  "apparent_age": "25-28",
+  "visual_style_id": "AHT_PERSONAJES_V1",
+  "visual_identity_version": 1,
+  "status": "candidato",
+  "master_asset": "P139_neutral.png",
+  "candidate_asset": "P139_neutral.png",
+  "expressions": [
+    "neutral",
+    "alegre",
+    "enfadado",
+    "triste"
+  ],
+  "visual_indicators": [
+    "east_asian_man",
+    "long_brown_hair_blue_dyed_tips",
+    "small_skull_neck_tattoo"
+  ],
+  "alpha_verified": true
+}
