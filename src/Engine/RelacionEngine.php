@@ -503,6 +503,7 @@ final class RelacionEngine
             $rel['atraccion_b_hacia_a'] = $clamped;
         }
         self::persistirRomance($partida, $rel);
+        SenalRomantica::avisarSiAplica($partida, $desde, $hacia, CalibracionConfig::load(dirname(__DIR__, 2)));
         return ['ok' => true, 'relacion' => $rel];
     }
 

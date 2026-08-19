@@ -42,6 +42,16 @@ final class GeneradorResidente
         $posV = $rng->pickUnique($poolVis, $nVp);
         $negV = $rng->pickUnique(array_values(array_diff($poolVis, $posV)), $nVn);
 
+        $nHp = (int) CalibracionConfig::get($cal, 'generacion.prefs_hobbies_pos', 2);
+        $nHn = (int) CalibracionConfig::get($cal, 'generacion.prefs_hobbies_neg', 2);
+        $poolHob = self::idsGenerables($store, 'hobbies');
+        $posH = $rng->pickUnique($poolHob, $nHp);
+        $negPool = array_values(array_diff($poolHob, $posH, $hobbies));
+        $negH = $rng->pickUnique($negPool, $nHn);
+
+        $estilos = self::idsGenerables($store, 'estilos_sociales');
+        $estilo = $estilos !== [] ? $rng->pickUnique($estilos, 1) : [];
+
         $visual = $indicadoresForzados;
         if ($visual === null) {
             $visual = is_array($catalogo) ? IndicadoresVisuales::desdeCatalogo($catalogo, $store) : [];
@@ -57,13 +67,14 @@ final class GeneradorResidente
             'rasgos' => array_values($rasgos),
             'indicadores_visuales' => array_values($visual),
             'edad' => $edad,
+            'estilo_social' => $estilo !== [] ? (string) $estilo[0] : null,
             'preferencias' => [
                 'personalidad_pos' => array_values($posP),
                 'personalidad_neg' => array_values($negP),
                 'visual_pos' => array_values($posV),
                 'visual_neg' => array_values($negV),
-                'hobbies_pos' => [],
-                'hobbies_neg' => [],
+                'hobbies_pos' => array_values($posH),
+                'hobbies_neg' => array_values($negH),
             ],
         ];
     }

@@ -46,12 +46,29 @@ final class FichaPlayVista
         $ocId = $ficha['trabajo']['ocupacion'] ?? null;
         $ocupacion = is_string($ocId) && $ocId !== '' ? EtiquetaFicha::ocupacion($ocId, $store) : null;
 
+        $pistas = [];
+        $nombre = (string) ($ficha['identidad']['nombre'] ?? '');
+        foreach ($ficha['descubrimientos'] ?? [] as $d) {
+            if (!is_array($d)) {
+                continue;
+            }
+            $campo = (string) ($d['campo'] ?? '');
+            if ($campo === '' || (strpos($campo, 'gusto_') !== 0 && strpos($campo, 'rechazo_') !== 0)) {
+                continue;
+            }
+            $txt = CopyDescubrimiento::texto($nombre, $campo, $d['valor'] ?? null, $store);
+            if (is_string($txt) && $txt !== '') {
+                $pistas[] = $txt;
+            }
+        }
+
         return [
             'nombre' => $ficha['identidad']['nombre'] ?? '',
             'edad' => $ficha['identidad']['edad'] ?? null,
             'ocupacion' => $ocupacion,
             'gusta' => $hobbies,
             'manera_de_ser' => $rasgos,
+            'pistas' => $pistas,
             'estado_animo' => $ficha['estado_emocional']['id'] ?? 'neutro',
         ];
     }

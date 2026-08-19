@@ -40,17 +40,19 @@ ok(strpos((string) ($vista['proximos_dias'][0]['etiqueta'] ?? ''), 'Hoy') === 0,
 
 $cal = CalibracionConfig::load($root);
 ok(PropuestaNivel::tiposPermitidos($partida, 'per_p001', 'per_p002', $cal) === ['conocerse'], 'desconocidos solo conocerse');
-$rom = PropuestaEncuentroEngine::proponer($partida, ['per_p001', 'per_p002'], 1, 20, 'romantico', 'lug_cafeteria');
-ok(($rom['ok'] ?? true) === false, 'proponer romántico entre desconocidos rechazado');
+$rom = PropuestaEncuentroEngine::proponer($partida, ['per_p001', 'per_p002'], 1, 20, 'primera_cita', 'lug_cafeteria');
+ok(($rom['ok'] ?? true) === false, 'proponer primera cita entre desconocidos rechazado');
 ok(($rom['error'] ?? '') === 'TIPO_ENCUENTRO_NO_DISPONIBLE', 'código tipo no disponible');
 
 $ami = PropuestaEncuentroEngine::proponer($partida, ['per_p001', 'per_p002'], 1, 20, 'amistad', 'lug_cafeteria');
-ok(($ami['ok'] ?? true) === false, 'proponer amistad entre desconocidos rechazado');
+ok(($ami['ok'] ?? true) === false, 'proponer amistad/quedar entre desconocidos rechazado');
 
 RelacionEngine::registrarContacto($partida, 'per_p001', 'per_p002', 'normal');
 $tras = PropuestaNivel::tiposPermitidos($partida, 'per_p001', 'per_p002', $cal);
-ok(in_array('amistad', $tras, true), 'tras conocerse hay amistad');
-ok(in_array('romantico', $tras, true), 'tras conocerse hay romántico (todos-con-todos)');
+ok(in_array('quedar', $tras, true), 'tras conocerse hay Quedar');
+ok(!in_array('amistad', $tras, true), 'PLAY no ofrece Amistad');
+ok(!in_array('romantico', $tras, true), 'sin señal no hay romántico');
+ok(!in_array('primera_cita', $tras, true), 'sin señal no hay primera cita');
 ok(!in_array('conocerse', $tras, true), 'tras conocerse ya no es presentar');
 
 $p2 = $service->nuevaPartida('playtest_01', 'playtest-rechazo-ui');

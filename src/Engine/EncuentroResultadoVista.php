@@ -171,12 +171,16 @@ final class EncuentroResultadoVista
             if (!is_array($item)) {
                 continue;
             }
-            $rid = (string) ($item['residente'] ?? $item['residente_id'] ?? '');
+            $rid = (string) ($item['residente'] ?? $item['residente_id'] ?? $item['de'] ?? '');
             $campo = (string) ($item['campo'] ?? '');
             if ($rid === '' || $campo === '') {
                 continue;
             }
+            $nombre = IdentidadPublica::nombre($partida, $rid);
             $valorReal = $item['valor'] ?? self::valorCatalogo($partida, $rid, $campo, $catalog);
+            if (($valorReal === null || $valorReal === true || $valorReal === '') && strpos($campo, ':') !== false) {
+                $valorReal = CopyDescubrimiento::idDeCampo($campo);
+            }
             $proy = DiscoveryProjection::proyectar(
                 $partida,
                 $rid,
@@ -197,14 +201,23 @@ final class EncuentroResultadoVista
             } else {
                 $valorTxt = self::valorTexto($valor);
             }
-            if ($valorTxt === '') {
+            if ($valorTxt === '' && strpos($campo, ':') === false) {
                 continue;
             }
-            $etiqueta = self::CAMPOS_LABEL[$campo] ?? $campo;
-            $nombre = IdentidadPublica::nombre($partida, $rid);
-            $texto = $valor === DiscoveryVisibilityResolver::PARCIAL_PLACEHOLDER
-                ? "Has descubierto: {$etiqueta} (parcial)."
-                : "Has descubierto: {$etiqueta} — {$valorTxt}.";
+            $etiqueta = CopyDescubrimiento::texto($nombre, $campo, $valor, $catalog !== null ? $catalog->store() : new CatalogStore(dirname(__DIR__, 2)));
+            if ($etiqueta === null) {
+                $etiquetaCampo = self::CAMPOS_LABEL[$campo] ?? null;
+                if ($etiquetaCampo === null && (strpos($campo, ':') !== false || strpos($campo, '_') !== false)) {
+                    continue;
+                }
+                $etiqueta = $etiquetaCampo ?? $campo;
+                $texto = $valor === DiscoveryVisibilityResolver::PARCIAL_PLACEHOLDER
+                    ? "Has descubierto: {$etiqueta} (parcial)."
+                    : "Has descubierto: {$etiqueta} — {$valorTxt}.";
+            } else {
+                $texto = $etiqueta;
+                $etiqueta = 'Pista';
+            }
             $out[] = [
                 'residente' => $rid,
                 'residente_nombre' => $nombre,

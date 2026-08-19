@@ -26,7 +26,8 @@ final class EventBus
 
         $results = [];
         foreach (self::$listeners[$evento] ?? [] as $handler) {
-            $results[] = $handler($partida, $envelope, $logger);
+            $args = [&$partida, $envelope, $logger];
+            $results[] = call_user_func_array($handler, $args);
         }
 
         $partida['domain_events'] ??= [];

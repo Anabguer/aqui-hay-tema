@@ -82,6 +82,7 @@ final class AccionRomantica
                 $nuevo = RelacionBandas::clampRomance(($actual ?? 0) + (int) $delta);
                 RelacionEngine::setRomanceHacia($partida, $desde, $hacia, $nuevo);
             }
+            SenalRomantica::avisarSiAplica($partida, $desde, $hacia, $cal);
             return ['ok' => true, 'accion' => $accionId, 'delta_romance' => is_numeric($delta) ? (int) $delta : null, 'unilateral' => true, 'no_crea_pareja' => true];
         }
         if ($accionId === 'mandar_flores' || $accionId === 'mandar_mensaje') {

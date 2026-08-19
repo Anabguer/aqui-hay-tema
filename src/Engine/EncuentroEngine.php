@@ -6,7 +6,17 @@ namespace AquiHayTema\Engine;
 final class EncuentroEngine
 {
     public const ESTADOS = ['programado', 'en_curso', 'terminado', 'cancelado'];
-    public const TIPOS = ['conocerse', 'amistad', 'romantico', 'conflicto', 'otro', 'individual'];
+    public const TIPOS = [
+        'conocerse',
+        'quedar',
+        'amistad',
+        'primera_cita',
+        'cita',
+        'romantico',
+        'conflicto',
+        'otro',
+        'individual',
+    ];
 
     public static function list(array $partida): array
     {

@@ -49,6 +49,7 @@ final class PropuestaEncuentroEngine
         }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
+        $tipo = PropuestaNivel::aliasTipo($tipo);
         $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
         if (count($participantes) >= 2
             && !PropuestaNivel::permite($partida, (string) $participantes[0], (string) $participantes[1], $tipo, $calDef)

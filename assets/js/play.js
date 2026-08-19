@@ -911,6 +911,9 @@
     if ((vp.manera_de_ser || []).length) {
       panel.appendChild(el('p', null, 'Manera de ser: ' + vp.manera_de_ser.join(', ')));
     }
+    (vp.pistas || []).forEach(function (t) {
+      panel.appendChild(el('p', 'status', t));
+    });
 
     const encPropio = encuentroVisibleDeResidente(residenteId);
     if (encPropio && encPropio.lugar) {
@@ -1037,9 +1040,9 @@
       sel.selectedIndex = 0;
     }
     if (hint) {
-      hint.textContent = r.conocidos
-        ? 'Ya se conocen: puedes proponer quedada o cita.'
-        : 'Aún no se conocen: solo puedes presentarles.';
+      hint.textContent = r.hint || (r.conocidos
+        ? 'Ya se conocen: puedes proponer quedar. La amistad, si nace, la decide el pueblo.'
+        : 'Aún no se conocen: solo puedes presentarles.');
     }
   }
 

@@ -63,7 +63,7 @@ final class EncuentroResolver
             ];
             $romA = $dA['romance'];
             $romB = $dB['romance'];
-            if ((string) $tipo !== 'romantico' && (string) $tipo !== 'cita') {
+            if ((string) $tipo !== 'romantico' && (string) $tipo !== 'cita' && (string) $tipo !== 'primera_cita') {
                 $yaA = RelacionEngine::romanceHacia($partida, $a, $b);
                 $yaB = RelacionEngine::romanceHacia($partida, $b, $a);
                 if (($yaA === null || $yaA === 0) && $romA > 0) {
@@ -72,8 +72,19 @@ final class EncuentroResolver
                 if (($yaB === null || $yaB === 0) && $romB > 0) {
                     $romB = 0;
                 }
+            } else {
+                $yaA = RelacionEngine::romanceHacia($partida, $a, $b);
+                $yaB = RelacionEngine::romanceHacia($partida, $b, $a);
+                $senalA = SenalRomantica::desdeHacia($partida, $a, $b, $cal);
+                $senalB = SenalRomantica::desdeHacia($partida, $b, $a, $cal);
+                if (empty($senalA['ok']) && ($yaA === null || $yaA === 0) && $romA > 0) {
+                    $romA = 0;
+                }
+                if (empty($senalB['ok']) && ($yaB === null || $yaB === 0) && $romB > 0) {
+                    $romB = 0;
+                }
             }
-            if ($romA !== 0 || $romB !== 0 || (string) $tipo === 'romantico') {
+            if ($romA !== 0 || $romB !== 0 || PropuestaNivel::esTipoCita((string) $tipo)) {
                 $deltaRomance = [
                     'a_hacia_b' => $romA,
                     'b_hacia_a' => $romB,
@@ -108,7 +119,7 @@ final class EncuentroResolver
                     'hora' => $encuentro['hora'] ?? null,
                 ];
                 $deltaSocial = $evaluator->evaluateSocial($partida, $a, $b, $ctx);
-                if ($tipo === 'romantico') {
+                if ($tipo === 'romantico' || $tipo === 'primera_cita' || $tipo === 'cita') {
                     $deltaRomance = $evaluator->evaluateRomantic($partida, $a, $b, $ctx);
                 }
             }
@@ -134,7 +145,7 @@ final class EncuentroResolver
 
         if (FeatureConfig::isEnabled($partida, 'discovery_enabled') && count($participantes) >= 2) {
             $calDisc = $cal !== [] ? $cal : ($catalog !== null ? CalibracionConfig::load($catalog->getRoot()) : []);
-            $cands = self::candidatosDiscovery($partida, (string) $participantes[0], (string) $participantes[1]);
+            $cands = self::candidatosDiscovery($partida, (string) $participantes[0], (string) $participantes[1], $encuentro, $catalog);
             if ($cands !== [] && $calDisc !== []) {
                 $rev = DiscoveryReveal::aplicarEvento($partida, $cands, $calDisc, 'encuentro', (string) ($encuentro['id'] ?? ''));
                 $resultado['descubrimientos'] = $rev['descubiertos'] ?? [];
@@ -249,6 +260,15 @@ final class EncuentroResolver
             }
         }
 
+        $tipoEnc = PropuestaNivel::aliasTipo((string) ($encuentro['tipo'] ?? ''));
+        if ($tipoEnc === PropuestaNivel::PRIMERA_CITA
+            && !SenalRomantica::yaHuboPrimeraCita($partida, $a, $b)
+        ) {
+            RelacionBitacora::registrar($partida, RelacionBitacora::PRIMERA_CITA, [$a, $b]);
+        }
+        SenalRomantica::avisarSiAplica($partida, $a, $b, $cal);
+        SenalRomantica::avisarSiAplica($partida, $b, $a, $cal);
+
         MemoriaEventos::registrar(
             $partida,
             'encuentro',
@@ -262,11 +282,12 @@ final class EncuentroResolver
     /**
      * @return list<array<string, mixed>>
      */
-    private static function candidatosDiscovery(array $partida, string $a, string $b): array
+    private static function candidatosDiscovery(array $partida, string $a, string $b, array $encuentro = [], ?Catalog $catalog = null): array
     {
         $out = [];
+        $lugar = isset($encuentro['lugar']) ? (string) $encuentro['lugar'] : null;
         foreach ([$a, $b] as $rid) {
-            $perfil = PerfilPartida::deOLegacy($partida, $rid);
+            $perfil = PerfilPartida::deOLegacy($partida, $rid, $catalog);
             $hobbies = is_array($perfil['hobbies'] ?? null) ? $perfil['hobbies'] : [];
             $rasgos = is_array($perfil['rasgos'] ?? null) ? $perfil['rasgos'] : [];
             foreach ($hobbies as $h) {
@@ -298,6 +319,9 @@ final class EncuentroResolver
                     'observadores' => ['jugador'],
                 ];
                 break;
+            }
+            foreach (DiscoveryReveal::candidatosPreferencias($partida, $rid, $lugar, $catalog) as $pref) {
+                $out[] = $pref;
             }
         }
         return $out;

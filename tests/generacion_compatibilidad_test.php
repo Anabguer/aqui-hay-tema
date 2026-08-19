@@ -66,6 +66,10 @@ ok(count($p1['rasgos']) === 3, '3 rasgos');
 ok(count($p1['preferencias']['personalidad_pos']) === 2, '2 prefs personalidad +');
 ok(count($p1['preferencias']['personalidad_neg']) === 2, '2 prefs personalidad -');
 ok(count(array_intersect($p1['preferencias']['personalidad_pos'], $p1['preferencias']['personalidad_neg'])) === 0, 'pos/neg personalidad no solapan');
+ok(count($p1['preferencias']['hobbies_pos']) === 2, '2 prefs hobbies +');
+ok(count($p1['preferencias']['hobbies_neg']) === 2, '2 prefs hobbies -');
+ok(count(array_intersect($p1['preferencias']['hobbies_pos'], $p1['preferencias']['hobbies_neg'])) === 0, 'pos/neg hobbies no solapan');
+ok(count(array_intersect($p1['preferencias']['hobbies_neg'], $p1['hobbies'])) === 0, 'no rechaza un hobby propio');
 
 $rngC = new RngService('gen-other');
 $p3 = GeneradorResidente::generar($rngC, $store, $cal, $catRocio);
@@ -123,6 +127,15 @@ $joseSinCine['hobbies'] = ['deporte', 'musica', 'correr'];
 $ab0 = CompatibilidadCalculator::aHaciaB($baseA, $joseSinCine, $cal);
 ok($ab0['hobbies']['aporte'] === 0, 'no compartir hobbies no resta');
 ok($ab0['hobbies']['compartidos'] === [], 'cero compartidos');
+
+$baseHobPos = $baseA;
+$baseHobPos['preferencias']['hobbies_pos'] = ['deporte'];
+$abHobPos = CompatibilidadCalculator::aHaciaB($baseHobPos, $joseSinCine, $cal);
+ok($abHobPos['hobbies']['aporte'] > 0, 'hobbies_pos coincidente suma');
+$baseHobNeg = $baseA;
+$baseHobNeg['preferencias']['hobbies_neg'] = ['deporte'];
+$abHobNeg = CompatibilidadCalculator::aHaciaB($baseHobNeg, $joseSinCine, $cal);
+ok($abHobNeg['hobbies']['aporte'] < 0, 'hobbies_neg coincidente resta');
 
 $joseSinBromista = $jose;
 $joseSinBromista['rasgos'] = ['directo', 'leal', 'timido'];

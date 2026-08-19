@@ -15,6 +15,7 @@ final class BuzonPlayBridge
             DomainEvents::NPC_AUTONOMO_PLAN,
             DomainEvents::PETICION_CREADA,
             DomainEvents::DISCUSION,
+            DomainEvents::SENAL_ROMANTICA,
         ];
         foreach ($eventos as $evento) {
             EventBus::on($evento, static function (array &$partida, array $envelope, ?GameLogger $logger): array {
@@ -51,6 +52,8 @@ final class BuzonPlayBridge
      */
     private static function mensajeDe(array $partida, string $evento, array $envelope): ?array
     {
+        $payload = is_array($envelope['payload'] ?? null) ? $envelope['payload'] : [];
+        $envelope = array_merge($envelope, $payload);
         $actores = is_array($envelope['actores'] ?? null) ? $envelope['actores'] : [];
         $nombres = [];
         foreach ($actores as $id) {
@@ -120,6 +123,29 @@ final class BuzonPlayBridge
                 'tipo' => 'discusion',
                 'texto' => $quien !== '' ? $quien . ' se han enfadado.' : 'Ha habido una discusión.',
                 'origen' => ['evento_id' => null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
+                '_placeholder_contenido' => false,
+            ];
+        }
+        if ($evento === DomainEvents::SENAL_ROMANTICA) {
+            $texto = (string) ($envelope['texto'] ?? '');
+            if ($texto === '') {
+                return null;
+            }
+            return [
+                'clasificacion' => BuzonEngine::COTILLEO,
+                'tipo' => 'senal_romantica',
+                'texto' => $texto,
+                'de_persona' => $envelope['desde'] ?? null,
+                'origen' => [
+                    'evento_id' => null,
+                    'tipo_evento' => $evento,
+                    'es_narrativo' => false,
+                    'informacion_revelada' => [
+                        'desde' => $envelope['desde'] ?? null,
+                        'hacia' => $envelope['hacia'] ?? null,
+                    ],
+                    '_placeholder' => false,
+                ],
                 '_placeholder_contenido' => false,
             ];
         }

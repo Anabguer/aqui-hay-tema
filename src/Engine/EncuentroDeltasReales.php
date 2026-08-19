@@ -47,11 +47,7 @@ final class EncuentroDeltasReales
             ? (int) $row['conflicto']
             : null;
         $calidad = ContactoCalidad::canon((string) ($row['calidad'] ?? ContactoCalidad::NORMAL));
-        if ($tipoEncuentro === 'romantico' && $romance === 0 && $social > 0) {
-            $romance = (int) max(1, round($social * 0.5));
-        }
-        if ($tipoEncuentro !== 'romantico' && $tipoEncuentro !== 'cita') {
-            // Social hangouts can nudge romance slightly only if already some interest (applied later).
+        if (!PropuestaNivel::esTipoCita($tipoEncuentro)) {
             $romance = (int) round($romance * 0.35);
         }
         $social = ContactoCalidad::techo($social, $cal);

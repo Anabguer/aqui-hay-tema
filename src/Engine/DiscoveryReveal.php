@@ -113,6 +113,69 @@ final class DiscoveryReveal
     }
 
     /**
+     * Preferencias descubribles. Contextual si el lugar encaja con un hobby preferido/rechazado.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function candidatosPreferencias(
+        array $partida,
+        string $residenteId,
+        ?string $lugarId = null,
+        ?Catalog $catalog = null
+    ): array {
+        $perfil = PerfilPartida::de($partida, $residenteId);
+        if (!is_array($perfil)) {
+            return [];
+        }
+        $prefs = is_array($perfil['preferencias'] ?? null) ? $perfil['preferencias'] : [];
+        $lugarH = [];
+        if (is_string($lugarId) && $lugarId !== '' && $catalog !== null) {
+            $lugarH = LugarAutonomo::hobbiesDeLugar($catalog, $lugarId);
+        }
+        $grupos = [
+            ['hobbies_pos', 'hobby', true],
+            ['hobbies_neg', 'hobby', false],
+            ['personalidad_pos', 'personalidad', true],
+            ['personalidad_neg', 'personalidad', false],
+            ['visual_pos', 'visual', true],
+            ['visual_neg', 'visual', false],
+        ];
+        $out = [];
+        foreach ($grupos as $g) {
+            $key = $g[0];
+            $tipo = $g[1];
+            $pos = $g[2];
+            $ids = is_array($prefs[$key] ?? null) ? $prefs[$key] : [];
+            foreach ($ids as $id) {
+                if (!is_string($id) || $id === '') {
+                    continue;
+                }
+                $campo = $pos
+                    ? ConocimientoNpc::campoGusto($tipo, $id)
+                    : ConocimientoNpc::campoRechazo($tipo, $id);
+                if (DiscoveryEngine::estado($partida, $residenteId, $campo) === DiscoveryEngine::DESCUBIERTO) {
+                    continue;
+                }
+                $contextual = $tipo === 'hobby' && $lugarH !== [] && in_array($id, $lugarH, true);
+                $row = [
+                    'residente_id' => $residenteId,
+                    'campo' => $campo,
+                    'valor' => $id,
+                    'observadores' => ['jugador'],
+                    'contextual' => $contextual,
+                ];
+                if ($contextual) {
+                    array_unshift($out, $row);
+                } else {
+                    $out[] = $row;
+                    break;
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
      * Filtra hobbies/rasgos/gustos no descubiertos por el jugador.
      *
      * @param array<string, mixed> $campos

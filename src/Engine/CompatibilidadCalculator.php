@@ -38,8 +38,13 @@ final class CompatibilidadCalculator
         $min = (int) CalibracionConfig::get($cal, 'compatibilidad.min', 0);
         $max = (int) CalibracionConfig::get($cal, 'compatibilidad.max', 100);
 
+        $posHob = array_values(array_intersect(self::canonList($prefs['hobbies_pos'] ?? []), $hobB));
+        $negHob = array_values(array_intersect(self::canonList($prefs['hobbies_neg'] ?? []), $hobB));
+        $pHobPref = (int) CalibracionConfig::get($cal, 'compatibilidad.peso_hobby_preferido', 6);
+        $pHobRech = (int) CalibracionConfig::get($cal, 'compatibilidad.peso_hobby_rechazado', 10);
+
         $aporteP = (count($posP) * $pPos) - (count($negP) * $pNeg);
-        $aporteH = count($sharedH) * $pHob;
+        $aporteH = (count($sharedH) * $pHob) + (count($posHob) * $pHobPref) - (count($negHob) * $pHobRech);
         $aporteV = (count($posV) * $pVPos) - (count($negV) * $pVNeg);
         $total = $base + $aporteP + $aporteH + $aporteV;
         if ($total < $min) {
@@ -65,6 +70,8 @@ final class CompatibilidadCalculator
             ],
             'hobbies' => [
                 'compartidos' => $sharedH,
+                'preferidos_coincidentes' => $posHob,
+                'rechazados_coincidentes' => $negHob,
                 'aporte' => $aporteH,
             ],
             'visual' => [

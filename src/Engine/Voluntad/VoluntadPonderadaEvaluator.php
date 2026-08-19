@@ -9,6 +9,7 @@ use AquiHayTema\Engine\EstadoEmocional;
 use AquiHayTema\Engine\PlanAfinidad;
 use AquiHayTema\Engine\PropuestaCooldown;
 use AquiHayTema\Engine\PropuestaEncuentro;
+use AquiHayTema\Engine\PropuestaNivel;
 use AquiHayTema\Engine\RechazoMemoria;
 use AquiHayTema\Engine\RelacionEngine;
 use AquiHayTema\Engine\RngService;
@@ -139,7 +140,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $s -= (int) ($afin['penalizacion'] ?? 0);
 
         $tipo = (string) ($propuesta['tipo'] ?? '');
-        if ($tipo === 'romantico' || $tipo === 'pareja') {
+        if (PropuestaNivel::esTipoCita($tipo) || $tipo === 'pareja') {
             $s += (int) ($mods['iniciativa_romantica'] ?? 0) / 2;
         }
 

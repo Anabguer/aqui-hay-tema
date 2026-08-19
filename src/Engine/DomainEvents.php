@@ -30,6 +30,7 @@ final class DomainEvents
     public const QUIMICA_GENERADA = 'quimica_generada';
     public const PAREJA_HITO = 'pareja_hito';
     public const ACONTECIMIENTO_DIARIO = 'acontecimiento_diario';
+    public const SENAL_ROMANTICA = 'senal_romantica';
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';

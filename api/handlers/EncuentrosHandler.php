@@ -85,20 +85,19 @@ final class EncuentrosHandler
         $b = (string) ($parts[1] ?? '');
         $cal = \AquiHayTema\Engine\CalibracionConfig::load($ctx->root);
         $tipos = \AquiHayTema\Engine\PropuestaNivel::tiposPermitidos($partida, $a, $b, $cal);
-        $labels = [
-            'conocerse' => 'Conocerse',
-            'amistad' => 'Quedada / amistad',
-            'romantico' => 'Cita romántica',
-        ];
         $opciones = [];
         foreach ($tipos as $t) {
-            $opciones[] = ['id' => $t, 'label' => $labels[$t] ?? $t];
+            $opciones[] = [
+                'id' => $t,
+                'label' => \AquiHayTema\Engine\PropuestaNivel::etiquetaPlay($t),
+            ];
         }
         return [
             'ok' => true,
             'conocidos' => $a !== '' && $b !== '' && \AquiHayTema\Engine\RelacionEngine::seConocen($partida, $a, $b),
             'tipos' => $tipos,
             'opciones' => $opciones,
+            'hint' => \AquiHayTema\Engine\PropuestaNivel::hintPlay($partida, $a, $b, $cal),
         ];
     }
 
