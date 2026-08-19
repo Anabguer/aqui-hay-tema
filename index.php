@@ -1,6 +1,9 @@
 <?php
 declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
+// Entrada canónica: abrir directamente el juego jugable, sin landing ni imagen de referencia.
+header('Location: play.php', true, 302);
+exit;
 $ref = 'docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png';
 $refOk = is_file(__DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $ref));
 ?>
