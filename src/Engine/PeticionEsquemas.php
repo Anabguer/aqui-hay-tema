@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Candidatos de recompensa/penalización B4. NO son canon.
- * El lab compara; Neni/ChatGPT eligen antes de calibrar.
+ * Esquemas de recompensa B4. E3 es el canon de producto.
+ * fácil/relevante/difícil son categorías internas: no se muestran en PLAY.
  */
 final class PeticionEsquemas
 {
+    public const CANON = 'E3';
     public const PESO_FACIL = 'facil';
     public const PESO_RELEVANTE = 'relevante';
     public const PESO_DIFICIL = 'dificil';
@@ -131,7 +132,7 @@ final class PeticionEsquemas
         if (isset($all[$id])) {
             return $all[$id];
         }
-        return $all['E2'];
+        return $all[self::CANON];
     }
 
     /**
@@ -141,7 +142,7 @@ final class PeticionEsquemas
     {
         $id = (string) ($partida['_b4_esquema'] ?? '');
         if ($id === '') {
-            $id = (string) CalibracionConfig::get($cal, 'peticiones_pueblo.esquema_activo', 'E2');
+            $id = (string) CalibracionConfig::get($cal, 'peticiones_pueblo.esquema_activo', self::CANON);
         }
         return self::de($id);
     }

@@ -67,6 +67,7 @@
         "emotional_state_from_events_enabled": true,
         "debug_tools_enabled": true,
         "vida_pueblo_enabled": true,
-        "misiones_diarias_enabled": true
+        "misiones_diarias_enabled": true,
+        "peticiones_pueblo_enabled": true
     }
 }

@@ -147,14 +147,29 @@ PeticionEngine::crear($pCad, 'lab_r02', 'tiempo', [
 ], null);
 Reloj::fijarAhora($t0->modify('+13 hours'));
 PeticionPuebloEngine::tick($pCad, $cal, $rng, null, 1);
-ok(VidaPuebloEngine::valor($pCad) === $vidaC - 1, 'caducada fácil −1 (E2)');
+ok(VidaPuebloEngine::valor($pCad) === $vidaC - 1, 'caducada fácil −1 (E3)');
 
 $service = new PartidaService($root);
 $off = $service->nuevaPartida('debug_v0', 'b4-flag-off');
 ok(!FeatureConfig::isEnabled($off, PeticionPuebloEngine::FLAG), 'flag global off');
 
-$play = $service->nuevaPartida('playtest_01', 'b4-playtest-off');
-ok(!FeatureConfig::isEnabled($play, PeticionPuebloEngine::FLAG), 'playtest no enciende B4 hasta elegir esquema');
+$play = $service->nuevaPartida('playtest_01', 'b4-playtest-on');
+ok(FeatureConfig::isEnabled($play, PeticionPuebloEngine::FLAG), 'playtest enciende B4');
+ok((string) CalibracionConfig::get($cal, 'peticiones_pueblo.esquema_activo', '') === PeticionEsquemas::CANON, 'E3 canon en calibración');
+$estPlay = $service->estadoResumido($play);
+ok(isset($estPlay['peticiones_pueblo']['abiertas']), 'API vista peticiones');
+$idsPlay = array_keys($play['residentes']);
+$vistaDemo = PeticionPuebloEngine::vistaItem($play, [
+    'id' => 'pet_demo',
+    'residente_id' => (string) ($idsPlay[0] ?? ''),
+    'texto' => 'Me apetece ir al bingo.',
+    'estado' => 'abierta',
+    'peso' => PeticionEsquemas::PESO_FACIL,
+    'cuenta_latido' => true,
+    'exigencia' => 40,
+]);
+ok(!isset($vistaDemo['peso']) && !isset($vistaDemo['cuenta_latido']) && !isset($vistaDemo['exigencia']), 'vista PLAY sin categorías internas');
+ok(strpos(json_encode($vistaDemo), '+1') === false && strpos(json_encode($vistaDemo), 'Latido') === false, 'vista sin recompensa visible');
 
 DomainBootstrap::resetForTests();
 DomainBootstrap::boot();
@@ -177,7 +192,15 @@ if ($petB !== null) {
             $copyOk = $tx !== ''
                 && strpos($tx, 'pet_') === false
                 && strpos($tx, 'PeticionEngine') === false
-                && strpos($tx, 'lab_r') === false;
+                && strpos($tx, 'lab_r') === false
+                && stripos($tx, 'fácil') === false
+                && stripos($tx, 'facil') === false
+                && stripos($tx, 'relevante') === false
+                && stripos($tx, 'difícil') === false
+                && stripos($tx, 'dificil') === false
+                && strpos($tx, '+1') === false
+                && strpos($tx, '+2') === false
+                && stripos($tx, 'latido') === false;
         }
     }
 }
@@ -214,15 +237,15 @@ if (count($idsSave) >= 1) {
 
 $labMini = SimuladorPeticionesPueblo::ejecutarComparacion(
     $root,
-    ['E2'],
+    ['E3'],
     [8],
     [7],
     1,
     'lab-b4-test'
 );
-$a7 = $labMini['esquemas']['E2']['por_tamano']['8']['por_perfil']['A']['por_horizonte']['7'] ?? [];
+$a7 = $labMini['esquemas']['E3']['por_tamano']['8']['por_perfil']['A']['por_horizonte']['7'] ?? [];
 ok((int) round((float) ($a7['imposibles'] ?? 1)) === 0, 'lab mini imposibles = 0');
-ok(empty($labMini['esquemas']['E2']['farming_detectado']), 'lab mini sin farming');
+ok(empty($labMini['esquemas']['E3']['farming_detectado']), 'lab mini sin farming');
 ok((float) ($a7['sobre_cap'] ?? 1) === 0.0, 'lab mini nunca supera cap');
 ok((float) ($a7['doble_npc'] ?? 1) === 0.0, 'lab mini una por NPC');
 ok((float) ($a7['validos_facil'] ?? 1) === 0.0, 'fáciles no generan válido');

@@ -450,12 +450,12 @@
         "latido_slots_por_dia": 1
     },
     "peticiones_pueblo": {
-        "_provisional": true,
-        "_nota": "B4 lab de candidatos. NO canon. No toca vida_pueblo ni misiones_diarias. esquema_activo pendiente de decisión.",
+        "_canon_b4": true,
+        "_nota": "B4 cerrado en E3. fácil\/relevante\/difícil son categorías internas: no se muestran en buzón ni PLAY. No toca vida_pueblo ni misiones_diarias.",
+        "esquema_activo": "E3",
         "cap_pct": 0.33,
         "cap_max": 10,
         "dias_sin_salir": 2,
-        "esquema_activo": "E2",
         "p_nacer_hora_base": 0.045,
         "p_nacer_hora_hueco": 0.07
     }

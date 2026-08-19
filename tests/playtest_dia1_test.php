@@ -53,6 +53,7 @@ ok(empty($partida['features']['economy_enabled']), 'economia apagada');
 ok(empty($partida['features']['offline_events_enabled']), 'offline apagado');
 ok(FeatureConfig::isEnabled($partida, 'vida_pueblo_enabled'), 'vida pueblo activa en playtest');
 ok(FeatureConfig::isEnabled($partida, 'misiones_diarias_enabled'), 'misiones diarias activas en playtest');
+ok(FeatureConfig::isEnabled($partida, 'peticiones_pueblo_enabled'), 'peticiones de habitantes activas en playtest');
 
 $cal = CalibracionConfig::load($root);
 ok((bool) CalibracionConfig::get($cal, 'resolucion_encuentro.aplicar_deltas_reales', false), 'deltas reales');

@@ -23,7 +23,7 @@ final class PeticionPuebloEngine
             'validos_dia_n' => 0,
             'encuentros_usados' => [],
             'historial_plantillas' => [],
-            '_provisional' => true,
+            '_canon_b4' => 'E3',
         ];
         $partida['peticiones_pueblo']['encuentros_usados'] ??= [];
         $partida['peticiones_pueblo']['historial_plantillas'] ??= [];
@@ -289,16 +289,37 @@ final class PeticionPuebloEngine
     {
         $out = [];
         foreach (self::abiertas($partida) as $p) {
-            $rid = (string) ($p['residente_id'] ?? '');
-            $out[] = [
-                'id' => $p['id'] ?? '',
-                'quien' => IdentidadPublica::nombre($partida, $rid),
-                'texto' => (string) ($p['texto'] ?? ''),
-                'plazo_humano' => self::plazoHumano($p),
-                'estado' => 'pendiente',
-            ];
+            $out[] = self::vistaItem($partida, $p);
         }
         return $out;
+    }
+
+    /**
+     * Copy de pueblo: quién, qué, plazo, estado. Sin peso, recompensa ni jerga.
+     *
+     * @param array<string, mixed> $peticion
+     * @return array<string, mixed>
+     */
+    public static function vistaItem(array $partida, array $peticion): array
+    {
+        $rid = (string) ($peticion['residente_id'] ?? '');
+        $est = (string) ($peticion['estado'] ?? self::EST_ABIERTA);
+        if ($est === self::EST_ABIERTA) {
+            $estadoUi = 'pendiente';
+        } elseif ($est === self::EST_RESUELTA) {
+            $estadoUi = 'cumplida';
+        } elseif ($est === self::EST_CADUCADA || $est === self::EST_IGNORADA) {
+            $estadoUi = 'caducada';
+        } else {
+            $estadoUi = 'pendiente';
+        }
+        return [
+            'id' => $peticion['id'] ?? '',
+            'quien' => IdentidadPublica::nombre($partida, $rid),
+            'texto' => (string) ($peticion['texto'] ?? ''),
+            'plazo_humano' => self::plazoHumano($peticion),
+            'estado' => $estadoUi,
+        ];
     }
 
     /**

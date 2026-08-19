@@ -599,7 +599,8 @@ final class SimuladorPeticionesPueblo
             'ranking' => $ranking,
             'notas' => $best['score']['notas'] ?? [],
             'por_que' => 'Mejor encaje A (Latido ~10–15d, no barato) + B sostenible a 100d + C/D en peligro, sin farm de fáciles. Cifras NO canon. No tocar B1 ni B3.',
-            'BLOQUEADO_DECISION' => 'esquema_recompensa_peticiones_pueblo',
+            'BLOQUEADO_DECISION' => null,
+            'cerrado' => 'E3',
         ];
     }
 }
