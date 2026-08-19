@@ -37,6 +37,19 @@ final class MemoriaEventos
             'resultado_experiencia' => $resultadoExperiencia,
         ];
         $partida['memoria_eventos'][] = $entry;
+        // Mantener ultimo_contacto_social_dia en runtime para acceso rápido (excluye actividad_individual)
+        if ($familia !== 'actividad_individual' && count($participantes) >= 2) {
+            $diaCont = (int) ($reloj['dia_pueblo'] ?? 1);
+            foreach ($participantes as $pid) {
+                $pid = (string) $pid;
+                if (isset($partida['residentes'][$pid]['runtime'])) {
+                    $actual = (int) ($partida['residentes'][$pid]['runtime']['ultimo_contacto_social_dia'] ?? 0);
+                    if ($diaCont > $actual) {
+                        $partida['residentes'][$pid]['runtime']['ultimo_contacto_social_dia'] = $diaCont;
+                    }
+                }
+            }
+        }
         return $entry;
     }
 

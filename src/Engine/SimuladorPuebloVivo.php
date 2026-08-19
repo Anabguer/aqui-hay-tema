@@ -9,6 +9,30 @@ namespace AquiHayTema\Engine;
 final class SimuladorPuebloVivo
 {
     /**
+     * @param array<string, int> $visitas
+     * @return array<string, mixed>
+     */
+    private static function concentracionEdificios(array $visitas): array
+    {
+        $total = array_sum($visitas);
+        if ($total === 0) {
+            return ['total' => 0, 'por_lugar' => [], 'lugar_top' => null, 'pct_top' => 0];
+        }
+        arsort($visitas);
+        $porLugar = [];
+        foreach ($visitas as $lug => $v) {
+            $porLugar[(string) $lug] = round(100.0 * $v / $total, 1);
+        }
+        $top = array_key_first($porLugar);
+        return [
+            'total' => $total,
+            'por_lugar_pct' => $porLugar,
+            'lugar_top' => $top,
+            'pct_top' => $porLugar[$top] ?? 0,
+        ];
+    }
+
+    /**
      * @param list<int> $tamanos
      * @param list<int> $horizontes
      * @return array<string, mixed>
@@ -504,6 +528,7 @@ final class SimuladorPuebloVivo
             }, $acc)),
             'dias_desde_casual_ejemplo' => $last['dias_desde_ultimo_contacto'] ?? [],
             'dias_desde_social_real_ejemplo' => $last['dias_desde_contacto_social_real'] ?? [],
+            'concentracion_edificios_ejemplo' => self::concentracionEdificios($last['visitas_edificio'] ?? []),
             'declaraciones_totales_ejemplo' => array_sum(array_values($last['familias'] ?? [])) > 0
                 ? ($last['familias']['declaracion'] ?? 0)
                 : 0,

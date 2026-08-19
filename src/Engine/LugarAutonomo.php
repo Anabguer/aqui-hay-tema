@@ -22,6 +22,11 @@ final class LugarAutonomo
         ?Catalog $catalog = null,
         array $cal = []
     ): ?string {
+        $atraccionBonus = (float) CalibracionConfig::get($cal, 'autonomia.atraccion_ocupacion_bonus', 0);
+        $atraccionCap   = (int)   CalibracionConfig::get($cal, 'autonomia.atraccion_ocupacion_cap', 3);
+        $dia  = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+
         $cands = [];
         foreach ($operativos as $lug) {
             $lug = (string) $lug;
@@ -35,6 +40,12 @@ final class LugarAutonomo
             }
             if ((int) ($afinYo['penalizacion'] ?? 0) > 0) {
                 $w *= 0.35;
+            }
+            // Candidato B: atracción suave por ocupación actual del lugar
+            if ($atraccionBonus > 0.0) {
+                $ocupActual = AforoEngine::ocupacion($partida, $lug, $dia, $hora);
+                $ocupEfectiva = min($ocupActual, $atraccionCap);
+                $w += $atraccionBonus * $ocupEfectiva;
             }
             if ($otro !== null && $otro !== '') {
                 $hobbiesSabidos = ConocimientoNpc::hobbiesConocidos($partida, $quien, $otro);

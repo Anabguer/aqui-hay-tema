@@ -265,6 +265,8 @@ final class MotorVidaDiaria
             return null;
         }
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $aislamientoUmbral = (int)   CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_umbral_dias', 0);
+        $aislamientoBonusSal = (float) CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_bonus_salida', 0.0);
         $ids = array_keys($partida['residentes'] ?? []);
         $pesos = [];
         foreach ($ids as $id) {
@@ -280,6 +282,16 @@ final class MotorVidaDiaria
             }
             $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
             $w += ((int) EstadoEmocional::modificadores($emo, $cal)['iniciativa_social']) / 40.0;
+            // Candidato C: bonus anti-aislamiento — empujón gradual si lleva muchos días sin contacto social real
+            if ($aislamientoUmbral > 0 && $aislamientoBonusSal > 0.0) {
+                $ultCon = (int) ($partida['residentes'][$id]['runtime']['ultimo_contacto_social_dia'] ?? 0);
+                $diasSin = ($ultCon === 0) ? $dia : max(0, $dia - $ultCon);
+                if ($diasSin >= $aislamientoUmbral) {
+                    // Escalado: leve hasta 2× umbral, mayor a partir de 2× umbral
+                    $factor = $diasSin >= ($aislamientoUmbral * 2) ? $aislamientoBonusSal * 1.5 : $aislamientoBonusSal;
+                    $w += $factor;
+                }
+            }
             $pesos[] = ['id' => $id, 'w' => max(0.05, $w)];
         }
         $quien = self::pickPeso($pesos, $rng);
@@ -290,7 +302,18 @@ final class MotorVidaDiaria
         if ($ops === []) {
             $ops = ['lug_cafeteria', 'lug_parque', 'lug_biblioteca'];
         }
-        $lugar = LugarAutonomo::elegir($partida, $quien, null, $ops, $rng, $catalog, $cal);
+        // Candidato C: si el residente está aislado, subir bonus de atracción por lugar ocupado
+        $calLugar = $cal;
+        $aislamientoBonusLugar = (float) CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_bonus_lugar', 0.0);
+        if ($aislamientoUmbral > 0 && $aislamientoBonusLugar > 0.0 && $quien !== null) {
+            $ultConQ = (int) ($partida['residentes'][$quien]['runtime']['ultimo_contacto_social_dia'] ?? 0);
+            $diasSinQ = ($ultConQ === 0) ? $dia : max(0, $dia - $ultConQ);
+            if ($diasSinQ >= $aislamientoUmbral) {
+                $bonusActual = (float) CalibracionConfig::get($cal, 'autonomia.atraccion_ocupacion_bonus', 0);
+                $calLugar['autonomia']['atraccion_ocupacion_bonus'] = $bonusActual + $aislamientoBonusLugar;
+            }
+        }
+        $lugar = LugarAutonomo::elegir($partida, $quien, null, $ops, $rng, $catalog, $calLugar);
         if ($lugar === null) {
             $lugar = is_array($ops) && $ops !== [] ? (string) $ops[0] : 'lug_cafeteria';
         }
