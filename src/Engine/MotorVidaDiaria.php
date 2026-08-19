@@ -212,8 +212,8 @@ final class MotorVidaDiaria
                 if ($el['ok']) {
                     $w = max(0.05, $wFam);
                     if (RelacionEngine::seConocen($partida, $protagonista, $otro)) {
-                        $w *= 1.35;
-                        $w += abs(RelacionEngine::valorSocialHacia($partida, $protagonista, $otro)) / 35.0;
+                        $w *= 1.6;
+                        $w += abs(RelacionEngine::valorSocialHacia($partida, $protagonista, $otro)) / 25.0;
                     }
                     $cands[] = [
                         'id' => (string) $item['id'],

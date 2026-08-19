@@ -1,283 +1,362 @@
 {
-  "_provisional": true,
-  "_nota": "CALIBRACIÓN vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan métricas.",
-  "social": {
-    "min": -100,
-    "max": 100,
-    "bandas_positivas": ["conocido", "cae_bien", "amigo", "buen_amigo", "mejor_amigo"],
-    "bandas_negativas": ["cae_mal", "muy_mala", "enemigo"],
-    "cortes_positivo": {
-      "conocido": 0,
-      "cae_bien": 18,
-      "amigo": 40,
-      "buen_amigo": 62,
-      "mejor_amigo": 82
-    },
-    "cortes_negativo": {
-      "cae_mal": -1,
-      "muy_mala": -35,
-      "enemigo": -70
-    },
-    "etiqueta_sin_contacto": "desconocido"
-  },
-  "romance": {
-    "min": 0,
-    "max": 100,
-    "bandas": ["sin_interes", "tilin", "interes", "pillado", "enamorado"],
-    "cortes": {
-      "sin_interes": 0,
-      "tilin": 8,
-      "interes": 22,
-      "pillado": 45,
-      "enamorado": 72
-    },
-    "_nota": "Pareja NO es banda. Es hito/estado aparte."
-  },
-  "desgaste_social": {
-    "activo": true,
-    "base_diaria": 2.0,
-    "exponente": 2.0,
-    "horas_sin_contacto": 24,
-    "nunca_cruza_cero": true,
-    "solo_positivo_hacia_cero": true,
-    "delta_recien": 2.0,
-    "delta_consolidada": 0.25,
-    "dias_sin_contacto_recien": 1,
-    "dias_sin_contacto_consolidada": 1,
-    "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
-  },
-  "desgaste_pareja": {
-    "activo": true,
-    "dias_sin_interaccion_nada": 2,
-    "dias_sin_interaccion_lento": 1,
-    "delta_estabilidad_recien": 2.0,
-    "delta_estabilidad_consolidada": 0.4,
-    "no_restar_romance_diario": true
-  },
-  "contacto": {
-    "calidades": ["leve", "normal", "significativo"],
-    "delta_social": {
-      "leve": 1,
-      "normal": 3,
-      "significativo": 6
-    },
-    "techo_por_encuentro_canal": 10,
-    "_nota": "Casual = leve. Quedada = normal. Cita importante buena = significativo. Malo puede restar."
-  },
-  "emociones_v1": {
-    "ids": ["neutro", "alegre", "triste", "enfadado"],
-    "alias": { "neutral": "neutro" },
-    "duracion_horas_default": {
-      "alegre": 6,
-      "triste": 10,
-      "enfadado": 4,
-      "neutro": null
-    },
-    "modificadores": {
-      "neutro": {
-        "aceptar_planes": 0,
-        "experiencia_encuentro": 0,
-        "iniciativa_social": 0,
-        "iniciativa_romantica": 0,
-        "riesgo_conflicto": 0,
-        "peticiones": 0
-      },
-      "alegre": {
-        "aceptar_planes": 12,
-        "experiencia_encuentro": 8,
-        "iniciativa_social": 15,
-        "iniciativa_romantica": 10,
-        "riesgo_conflicto": -5,
-        "peticiones": 0
-      },
-      "triste": {
-        "aceptar_planes": -4,
-        "experiencia_encuentro": 0,
-        "iniciativa_social": -12,
-        "iniciativa_romantica": -8,
-        "riesgo_conflicto": 0,
-        "peticiones": 16
-      },
-      "enfadado": {
-        "aceptar_planes": -16,
-        "experiencia_encuentro": -10,
-        "iniciativa_social": -10,
-        "iniciativa_romantica": -8,
-        "riesgo_conflicto": 18,
-        "peticiones": 0
-      }
-    },
-    "_nota": "Un solo estado activo. Caduca a neutro. No apila. No baja romance por existir."
-  },
-  "azar_ponderado": {
-    "carga_min": -1,
-    "carga_max": 1,
-    "racha_penaliza_tras": null,
-    "compensacion_obligatoria": false
-  },
-  "resolucion_encuentro": {
-    "aplicar_deltas_reales": false,
-    "resultados": ["muy_mal", "mal", "normal", "bien", "muy_bien"],
-    "deltas_por_resultado": {
-      "muy_mal": { "social": -8, "romance": -4, "conflicto": 2, "calidad": "significativo" },
-      "mal": { "social": -4, "romance": -2, "conflicto": 1, "calidad": "normal" },
-      "normal": { "social": 2, "romance": 1, "conflicto": null, "calidad": "normal" },
-      "bien": { "social": 5, "romance": 3, "conflicto": null, "calidad": "normal" },
-      "muy_bien": { "social": 8, "romance": 5, "conflicto": null, "calidad": "significativo" }
-    },
-    "pesos": {
-      "compat_ab": 0.18,
-      "compat_ba": 0.08,
-      "quimica": 0.12,
-      "vinculo_social": 0.16,
-      "vinculo_romance": 0.10,
-      "conflicto": 0.12,
-      "emocional": 0.10,
-      "lugar": 0.14,
-      "hobbies_plan": 0.14,
-      "historial": 0.06,
-      "azar": 0.10
-    }
-  },
-  "plan_afinidad": {
-    "bonus_hobby": 8,
-    "penalizacion_rechazo": 12,
-    "neutral_si_no_esta": 0,
-    "no_compartir_no_resta": true,
-    "rechazo_no_es_veto": true
-  },
-  "voluntad": {
-    "usar_ponderada": true,
-    "p_min": 0.08,
-    "p_max": 0.94,
-    "p_excelente": 0.92,
-    "score_excelente": 88,
-    "base": 48,
-    "copy_banal": [
-      "lavadora",
-      "pintar_unias",
-      "hoy_no_me_da_la_vida",
-      "el_gato_tiene_que_comer",
-      "se_me_hace_tarde"
-    ]
-  },
-  "rechazos": {
-    "banal_sin_consecuencia": true,
-    "repetidos_umbral": 3,
-    "delta_romance_hacia_quien_rechaza": -3,
-    "cooldown_horas": 6,
-    "motivos": ["banal", "agenda", "emocional", "relacional"]
-  },
-  "cooldowns": {
-    "propuesta_horas": 6,
-    "por_familia": {
-      "romance_accion": 20,
-      "romance": 48,
-      "pareja": 36,
-      "crisis": 48,
-      "trabajo": 72
-    }
-  },
-  "acontecimientos_dia": {
-    "activo_en_play": false,
-    "activo_en_lab": true,
-    "hora_inicio": 9,
-    "hora_fin": 22,
-    "presupuesto_min": 3,
-    "presupuesto_max": 8,
-    "escala_sqrt": 1.15,
-    "escala_offset": 1.0,
-    "olvidados_bonus_dias": 3,
-    "pesos_familias": {
-      "trabajo": 0.35,
-      "ocio": 1.1,
-      "vida": 1.0,
-      "romance": 0.12,
-      "romance_accion": 0.18,
-      "romance_hito": 0.04,
-      "pareja": 0.08,
-      "consejo": 0.15
-    }
-  },
-  "autonomia": {
-    "salidas_individuales_sqrt": 0.7,
-    "salidas_individuales_offset": 0.4,
-    "poco_activo_bonus": 1.6,
-    "max_historias_grandes_por_residente_dia": 1,
-    "prioridad_agenda_jugador": true
-  },
-  "buzon": {
-    "max_dia": null,
-    "escala_con_poblacion": true,
-    "escala_log2_offset": 2.0,
-    "clasificaciones": ["importante", "oportunidad", "peticion", "cotilleo"],
-    "en_espera_no_congela": true
-  },
-  "flechazo": {
-    "probabilidad": 0.006,
-    "delta_romance": 28,
-    "solo_tras_contacto": true,
-    "no_crea_pareja": true,
-    "casual_mult": 0.35
-  },
-  "terceros": {
-    "freno_pareja_feliz": 0.08,
-    "freno_pareja_crisis": 0.35,
-    "nunca_imposible": true
-  },
-  "pareja": {
-    "nunca_auto_por_umbral": true,
-    "estabilidad_inicial": 55,
-    "base_reconciliacion": 32,
-    "estabilidad_min": 0,
-    "estabilidad_max": 100
-  },
-  "crisis": {
-    "nunca_auto_por_umbral": true,
-    "probabilidad": 0.015,
-    "bonus_si_estabilidad_baja": 0.04
-  },
-  "ruptura": {
-    "nunca_auto_por_umbral": true,
-    "probabilidad": 0.01
-  },
-  "parentesco": {
-    "veto_romance_tipos": [
-      "padre", "madre", "hijo", "hija",
-      "hermano", "hermana", "medio_hermano", "medio_hermana",
-      "abuelo", "abuela", "nieto", "nieta"
-    ],
-    "tio_primo_veto": null,
-    "_bloqueado_decision": ["tio_primo_veto"]
-  },
-  "consejo": {
-    "modifica_barras_directo": false,
-    "probabilidad_seguir": 0.55,
-    "inclinacion": 10,
-    "duracion_dias": 5
-  },
-  "discovery": {
-    "hobbies_iniciales": 1,
-    "rasgos_iniciales": 1,
-    "max_por_experiencia": 2,
-    "no_por_paso_del_tiempo": true
-  },
-  "coincidencias": {
-    "prob_interactuar_base": 0.22,
-    "max_significativas_por_salida": 1,
-    "calidad_casual": "leve"
-  },
-  "escaner_compatibilidad": {
-    "deprecated": true,
-    "desbloqueable": false,
-    "_nota": "Eliminado del diseño jugable. Compat/química siguen internas."
-  },
-  "laboratorio_relacional": {
     "_provisional": true,
-    "_nota": "Cortes de INFORME, no reglas de juego.",
-    "pareja_rapida_dias": 2,
-    "ruptura_rapida_dias": 3,
-    "dias_sin_actividad_preocupante": 7,
-    "evaporacion_social_dias": 8
-  }
+    "_nota": "CALIBRACI├ôN vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan m├®tricas.",
+    "social": {
+        "min": -100,
+        "max": 100,
+        "bandas_positivas": [
+            "conocido",
+            "cae_bien",
+            "amigo",
+            "buen_amigo",
+            "mejor_amigo"
+        ],
+        "bandas_negativas": [
+            "cae_mal",
+            "muy_mala",
+            "enemigo"
+        ],
+        "cortes_positivo": {
+            "conocido": 0,
+            "cae_bien": 18,
+            "amigo": 40,
+            "buen_amigo": 62,
+            "mejor_amigo": 82
+        },
+        "cortes_negativo": {
+            "cae_mal": -1,
+            "muy_mala": -35,
+            "enemigo": -70
+        },
+        "etiqueta_sin_contacto": "desconocido"
+    },
+    "romance": {
+        "min": 0,
+        "max": 100,
+        "bandas": [
+            "sin_interes",
+            "tilin",
+            "interes",
+            "pillado",
+            "enamorado"
+        ],
+        "cortes": {
+            "sin_interes": 0,
+            "tilin": 8,
+            "interes": 22,
+            "pillado": 45,
+            "enamorado": 72
+        },
+        "_nota": "Pareja NO es banda. Es hito/estado aparte."
+    },
+    "desgaste_social": {
+        "activo": true,
+        "base_diaria": 0.8,
+        "exponente": 1.4,
+        "horas_sin_contacto": 24,
+        "nunca_cruza_cero": true,
+        "solo_positivo_hacia_cero": true,
+        "delta_recien": 2,
+        "delta_consolidada": 0.25,
+        "dias_sin_contacto_recien": 1,
+        "dias_sin_contacto_consolidada": 1,
+        "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
+    },
+    "desgaste_pareja": {
+        "activo": true,
+        "dias_sin_interaccion_nada": 2,
+        "dias_sin_interaccion_lento": 1,
+        "delta_estabilidad_recien": 2,
+        "delta_estabilidad_consolidada": 0.4,
+        "no_restar_romance_diario": true
+    },
+    "contacto": {
+        "calidades": [
+            "leve",
+            "normal",
+            "significativo"
+        ],
+        "delta_social": {
+            "leve": 2,
+            "normal": 4,
+            "significativo": 7
+        },
+        "techo_por_encuentro_canal": 10,
+        "_nota": "Casual = leve. Quedada = normal. Cita importante buena = significativo. Malo puede restar."
+    },
+    "emociones_v1": {
+        "ids": [
+            "neutro",
+            "alegre",
+            "triste",
+            "enfadado"
+        ],
+        "alias": {
+            "neutral": "neutro"
+        },
+        "duracion_horas_default": {
+            "alegre": 6,
+            "triste": 10,
+            "enfadado": 4,
+            "neutro": null
+        },
+        "modificadores": {
+            "neutro": {
+                "aceptar_planes": 0,
+                "experiencia_encuentro": 0,
+                "iniciativa_social": 0,
+                "iniciativa_romantica": 0,
+                "riesgo_conflicto": 0,
+                "peticiones": 0
+            },
+            "alegre": {
+                "aceptar_planes": 12,
+                "experiencia_encuentro": 8,
+                "iniciativa_social": 15,
+                "iniciativa_romantica": 10,
+                "riesgo_conflicto": -5,
+                "peticiones": 0
+            },
+            "triste": {
+                "aceptar_planes": -4,
+                "experiencia_encuentro": 0,
+                "iniciativa_social": -12,
+                "iniciativa_romantica": -8,
+                "riesgo_conflicto": 0,
+                "peticiones": 16
+            },
+            "enfadado": {
+                "aceptar_planes": -16,
+                "experiencia_encuentro": -10,
+                "iniciativa_social": -10,
+                "iniciativa_romantica": -8,
+                "riesgo_conflicto": 18,
+                "peticiones": 0
+            }
+        },
+        "_nota": "Un solo estado activo. Caduca a neutro. No apila. No baja romance por existir."
+    },
+    "azar_ponderado": {
+        "carga_min": -1,
+        "carga_max": 1,
+        "racha_penaliza_tras": null,
+        "compensacion_obligatoria": false
+    },
+    "resolucion_encuentro": {
+        "aplicar_deltas_reales": false,
+        "resultados": [
+            "muy_mal",
+            "mal",
+            "normal",
+            "bien",
+            "muy_bien"
+        ],
+        "deltas_por_resultado": {
+            "muy_mal": {
+                "social": -8,
+                "romance": -4,
+                "conflicto": 2,
+                "calidad": "significativo"
+            },
+            "mal": {
+                "social": -4,
+                "romance": -2,
+                "conflicto": 1,
+                "calidad": "normal"
+            },
+            "normal": {
+                "social": 2,
+                "romance": 1,
+                "conflicto": null,
+                "calidad": "normal"
+            },
+            "bien": {
+                "social": 5,
+                "romance": 3,
+                "conflicto": null,
+                "calidad": "normal"
+            },
+            "muy_bien": {
+                "social": 8,
+                "romance": 5,
+                "conflicto": null,
+                "calidad": "significativo"
+            }
+        },
+        "pesos": {
+            "compat_ab": 0.18,
+            "compat_ba": 0.08,
+            "quimica": 0.12,
+            "vinculo_social": 0.16,
+            "vinculo_romance": 0.1,
+            "conflicto": 0.12,
+            "emocional": 0.1,
+            "lugar": 0.14,
+            "hobbies_plan": 0.14,
+            "historial": 0.06,
+            "azar": 0.1
+        }
+    },
+    "plan_afinidad": {
+        "bonus_hobby": 8,
+        "penalizacion_rechazo": 12,
+        "neutral_si_no_esta": 0,
+        "no_compartir_no_resta": true,
+        "rechazo_no_es_veto": true
+    },
+    "voluntad": {
+        "usar_ponderada": true,
+        "p_min": 0.08,
+        "p_max": 0.94,
+        "p_excelente": 0.92,
+        "score_excelente": 88,
+        "base": 48,
+        "copy_banal": [
+            "lavadora",
+            "pintar_unias",
+            "hoy_no_me_da_la_vida",
+            "el_gato_tiene_que_comer",
+            "se_me_hace_tarde"
+        ]
+    },
+    "rechazos": {
+        "banal_sin_consecuencia": true,
+        "repetidos_umbral": 3,
+        "delta_romance_hacia_quien_rechaza": -3,
+        "cooldown_horas": 6,
+        "motivos": [
+            "banal",
+            "agenda",
+            "emocional",
+            "relacional"
+        ]
+    },
+    "cooldowns": {
+        "propuesta_horas": 6,
+        "por_familia": {
+            "romance_accion": 20,
+            "romance": 48,
+            "pareja": 36,
+            "crisis": 48,
+            "trabajo": 72
+        }
+    },
+    "acontecimientos_dia": {
+        "activo_en_play": false,
+        "activo_en_lab": true,
+        "hora_inicio": 9,
+        "hora_fin": 22,
+        "presupuesto_min": 3,
+        "presupuesto_max": 8,
+        "escala_sqrt": 1.15,
+        "escala_offset": 1,
+        "olvidados_bonus_dias": 2,
+        "pesos_familias": {
+            "trabajo": 0.35,
+            "ocio": 1.1,
+            "vida": 1,
+            "romance": 0.12,
+            "romance_accion": 0.18,
+            "romance_hito": 0.04,
+            "pareja": 0.08,
+            "consejo": 0.15
+        }
+    },
+    "autonomia": {
+        "salidas_individuales_sqrt": 0.7,
+        "salidas_individuales_offset": 0.4,
+        "poco_activo_bonus": 1.6,
+        "max_historias_grandes_por_residente_dia": 1,
+        "prioridad_agenda_jugador": true
+    },
+    "buzon": {
+        "max_dia": null,
+        "escala_con_poblacion": true,
+        "escala_log2_offset": 2,
+        "clasificaciones": [
+            "importante",
+            "oportunidad",
+            "peticion",
+            "cotilleo"
+        ],
+        "en_espera_no_congela": true
+    },
+    "flechazo": {
+        "probabilidad": 0.006,
+        "delta_romance": 28,
+        "solo_tras_contacto": true,
+        "no_crea_pareja": true,
+        "casual_mult": 0.35
+    },
+    "terceros": {
+        "freno_pareja_feliz": 0.08,
+        "freno_pareja_crisis": 0.35,
+        "nunca_imposible": true
+    },
+    "pareja": {
+        "nunca_auto_por_umbral": true,
+        "estabilidad_inicial": 55,
+        "base_reconciliacion": 32,
+        "estabilidad_min": 0,
+        "estabilidad_max": 100
+    },
+    "crisis": {
+        "nunca_auto_por_umbral": true,
+        "probabilidad": 0.015,
+        "bonus_si_estabilidad_baja": 0.04
+    },
+    "ruptura": {
+        "nunca_auto_por_umbral": true,
+        "probabilidad": 0.01
+    },
+    "parentesco": {
+        "veto_romance_tipos": [
+            "padre",
+            "madre",
+            "hijo",
+            "hija",
+            "hermano",
+            "hermana",
+            "medio_hermano",
+            "medio_hermana",
+            "abuelo",
+            "abuela",
+            "nieto",
+            "nieta"
+        ],
+        "tio_primo_veto": null,
+        "_bloqueado_decision": [
+            "tio_primo_veto"
+        ]
+    },
+    "consejo": {
+        "modifica_barras_directo": false,
+        "probabilidad_seguir": 0.55,
+        "inclinacion": 10,
+        "duracion_dias": 5
+    },
+    "discovery": {
+        "hobbies_iniciales": 1,
+        "rasgos_iniciales": 1,
+        "max_por_experiencia": 2,
+        "no_por_paso_del_tiempo": true
+    },
+    "coincidencias": {
+        "prob_interactuar_base": 0.32,
+        "max_significativas_por_salida": 2,
+        "calidad_casual": "leve"
+    },
+    "escaner_compatibilidad": {
+        "deprecated": true,
+        "desbloqueable": false,
+        "_nota": "Eliminado del dise├▒o jugable. Compat/qu├¡mica siguen internas."
+    },
+    "laboratorio_relacional": {
+        "_provisional": true,
+        "_nota": "Cortes de INFORME, no reglas de juego.",
+        "pareja_rapida_dias": 2,
+        "ruptura_rapida_dias": 3,
+        "dias_sin_actividad_preocupante": 7,
+        "evaporacion_social_dias": 8
+    }
 }
