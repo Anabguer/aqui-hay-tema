@@ -77,10 +77,10 @@ final class InteraccionCasual
                 $a = (string) $ids[$i];
                 $b = (string) $ids[$j];
                 if (RelacionEngine::seConocen($partida, $a, $b)) {
-                    $w += 1.5;
+                    $w += 2.2;
                 }
                 $soc = abs(RelacionEngine::valorSocialHacia($partida, $a, $b));
-                $w += $soc / 50.0;
+                $w += $soc / 30.0;
                 $pares[] = ['a' => $a, 'b' => $b, 'w' => $w];
             }
         }

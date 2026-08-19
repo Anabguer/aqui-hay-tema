@@ -226,6 +226,7 @@ final class SimuladorPuebloVivo
         $m['mejores_amigos'] = 0;
         $m['social_evapora'] = 0;
         $m['social_clava'] = 0;
+        $bandaCount = ['conocido' => 0, 'cae_bien' => 0, 'amigo' => 0, 'buen_amigo' => 0, 'mejor_amigo' => 0, 'cae_mal' => 0];
         foreach ($partida['relaciones_sociales'] ?? [] as $rel) {
             if (empty($rel['conocidos'])) {
                 continue;
@@ -240,7 +241,13 @@ final class SimuladorPuebloVivo
             if ($ba === 'mejor_amigo' || $bb === 'mejor_amigo') {
                 $m['mejores_amigos']++;
             }
+            foreach ([$ba, $bb] as $banda) {
+                if (isset($bandaCount[$banda])) {
+                    $bandaCount[$banda]++;
+                }
+            }
         }
+        $m['bandas_sociales'] = $bandaCount;
         $m['parejas_activas_final'] = 0;
         $durs = [];
         foreach ($partida['relaciones_romanticas'] ?? [] as $rel) {
@@ -360,6 +367,7 @@ final class SimuladorPuebloVivo
             'familias_ejemplo' => $last['familias'] ?? [],
             'desgaste_proyeccion' => $last['desgaste_lab'] ?? [],
             'hitos_ejemplo' => $last['hitos'] ?? [],
+            'bandas_sociales_ejemplo' => $last['bandas_sociales'] ?? [],
         ];
     }
 }
