@@ -28,7 +28,7 @@ final class ParentescoVeto
     {
         $tipos = self::tiposVeto($cal);
         $tioPrimo = CalibracionConfig::get($cal, 'parentesco.tio_primo_veto', null);
-        if ($tioPrimo === true) {
+        if ($tioPrimo === true || $tioPrimo === null) {
             $tipos = array_merge($tipos, ['tio', 'tia', 'sobrino', 'sobrina', 'primo_hermano', 'prima_hermana']);
         }
         foreach ($partida['parentesco'] ?? [] as $lazo) {

@@ -81,6 +81,7 @@ final class SimuladorPuebloVivo
                 'lugares_desbloqueados' => ['lug_cafeteria', 'lug_parque', 'lug_biblioteca', 'lug_bingo'],
             ],
             'lab_vida_activa' => true,
+            'lab_deltas_reales' => true,
             'npc_autonomo' => ['planes_pendientes' => [], 'historial_eventos' => []],
         ];
         for ($i = 0; $i < $n; $i++) {
@@ -167,7 +168,14 @@ final class SimuladorPuebloVivo
                         $m['flechazos']++;
                     }
                 }
+                EncuentroLifecycle::sincronizarConReloj($partida, null, $catalog);
             }
+            $emoSvc = new EmotionalStateService(
+                new VisualPackStore($catalog->getRoot()),
+                $catalog->store(),
+                null
+            );
+            $emoSvc->expirarVencidos($partida);
             RelacionDesgaste::alCerrarDia($partida, $cal);
             $m['eventos_vida_por_dia'][] = $vidaHoy;
             $m['autonomos_por_dia'][] = $autoHoy;

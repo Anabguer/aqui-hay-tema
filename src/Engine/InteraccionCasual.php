@@ -113,6 +113,11 @@ final class InteraccionCasual
         $calidad = (string) CalibracionConfig::get($cal, 'coincidencias.calidad_casual', ContactoCalidad::LEVE);
         RelacionEngine::registrarContacto($partida, $a, $b, $calidad, $cal, 1);
         RelacionEngine::registrarContacto($partida, $b, $a, $calidad, $cal, 1);
+        $socAb = RelacionEngine::valorSocialHacia($partida, $a, $b);
+        $socBa = RelacionEngine::valorSocialHacia($partida, $b, $a);
+        if ($socAb >= 12 && $socBa >= 12 && $rng->nextFloat() < 0.18) {
+            self::intentarQuedadaCasual($partida, $a, $b, $cal, $rng);
+        }
         $disc = self::descubrimientoCasual($partida, $a, $b, $lugarId, $cal, $catalog);
         $flechazo = null;
         $prob = (float) CalibracionConfig::get($cal, 'flechazo.probabilidad', 0.006);
@@ -161,5 +166,60 @@ final class InteraccionCasual
             }
         }
         return DiscoveryReveal::aplicarEvento($partida, $cands, $cal, 'casual');
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    private static function intentarQuedadaCasual(
+        array &$partida,
+        string $a,
+        string $b,
+        array $cal,
+        RngService $rng
+    ): void {
+        $ops = $partida['celeste']['lugares_desbloqueados'] ?? ['lug_cafeteria', 'lug_parque'];
+        $lugar = (string) $ops[$rng->nextInt(0, max(0, count($ops) - 1))];
+        $attr = LugarAtributos::de($lugar);
+        $franja = AgendaConjunta::primeraFranja(
+            $partida,
+            [$a, $b],
+            max(1, (int) ($attr['horas'] ?? 1)),
+            9,
+            22,
+            (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            2,
+            $lugar
+        );
+        if (!($franja['ok'] ?? false)) {
+            return;
+        }
+        $tipo = 'conocerse';
+        $rom = max(
+            (int) (RelacionEngine::romanceHacia($partida, $a, $b) ?? 0),
+            (int) (RelacionEngine::romanceHacia($partida, $b, $a) ?? 0)
+        );
+        if ($rom >= 22) {
+            $tipo = 'romantico';
+        }
+        $r = EncuentroEngine::programar(
+            $partida,
+            [$a, $b],
+            (int) $franja['dia'],
+            (int) $franja['hora'],
+            $tipo,
+            $lugar,
+            null,
+            null
+        );
+        if (($r['ok'] ?? false) && isset($r['encuentro']['id'])) {
+            foreach ($partida['encuentros'] as $i => $enc) {
+                if (($enc['id'] ?? '') === $r['encuentro']['id']) {
+                    $partida['encuentros'][$i]['duracion_minutos'] = $attr['duracion_minutos'];
+                    $partida['encuentros'][$i]['duracion_horas'] = $attr['horas'];
+                    $partida['encuentros'][$i]['intencion'] = 'casual_quedada';
+                }
+            }
+        }
     }
 }

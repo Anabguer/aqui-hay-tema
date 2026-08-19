@@ -50,7 +50,7 @@ final class PropuestaEncuentroEngine
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
         if ($voluntad === null) {
-            $calDef = [];
+            $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
             $voluntad = new VoluntadPonderadaEvaluator($calDef);
         }
 

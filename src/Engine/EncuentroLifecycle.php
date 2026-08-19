@@ -21,7 +21,11 @@ final class EncuentroLifecycle
             }
 
             $start = (int) ($enc['dia'] ?? 0) * 24 + (int) ($enc['hora'] ?? 0);
-            $end = $start + 1;
+            $durH = isset($enc['duracion_horas']) ? (int) $enc['duracion_horas'] : 1;
+            if ($durH < 1) {
+                $durH = 1;
+            }
+            $end = $start + $durH;
 
             if ($estado === 'programado' && $now >= $start && $now < $end) {
                 if (EncuentroEngine::transicionValida('programado', 'en_curso')) {

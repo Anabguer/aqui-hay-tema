@@ -125,7 +125,7 @@ final class MotorVidaDiaria
         ?GameLogger $logger
     ): ?array {
         $store = $catalog->store();
-        $capa = $rng->nextFloat() < 0.55 ? 'vida' : 'relacion';
+        $capa = $rng->nextFloat() < 0.42 ? 'vida' : 'relacion';
         $items = [];
         foreach ($store->items('acontecimientos') as $item) {
             $fam = (string) ($item['familia'] ?? '');
@@ -171,7 +171,7 @@ final class MotorVidaDiaria
             $w = 1.0;
             $ult = (int) ($partida['residentes'][$id]['runtime']['ultimo_protagonismo_dia'] ?? 0);
             if ($ult === 0 || ($dia - $ult) >= $bonusDias) {
-                $w += 2.2;
+                $w += 3.8;
             }
             $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
             if ($emo === EstadoEmocional::TRISTE) {
@@ -210,10 +210,15 @@ final class MotorVidaDiaria
                 }
                 $el = AcontecimientoElegibilidad::cumple($partida, $item, [$protagonista, $otro], $cal);
                 if ($el['ok']) {
+                    $w = max(0.05, $wFam);
+                    if (RelacionEngine::seConocen($partida, $protagonista, $otro)) {
+                        $w *= 1.35;
+                        $w += abs(RelacionEngine::valorSocialHacia($partida, $protagonista, $otro)) / 35.0;
+                    }
                     $cands[] = [
                         'id' => (string) $item['id'],
                         'participantes' => [$protagonista, $otro],
-                        'w' => max(0.05, $wFam),
+                        'w' => $w,
                     ];
                 }
             }
@@ -256,7 +261,7 @@ final class MotorVidaDiaria
         if ($hechas >= $cupoDia) {
             return null;
         }
-        if ($rng->nextFloat() > 0.35) {
+        if ($rng->nextFloat() > 0.55) {
             return null;
         }
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
@@ -286,6 +291,9 @@ final class MotorVidaDiaria
             $ops = ['lug_cafeteria', 'lug_parque', 'lug_biblioteca'];
         }
         $lugar = LugarAutonomo::elegir($partida, $quien, null, $ops, $rng, $catalog, $cal);
+        if ($lugar === null) {
+            $lugar = is_array($ops) && $ops !== [] ? (string) $ops[0] : 'lug_cafeteria';
+        }
         if ($lugar === null || !AforoEngine::cabe($partida, $lugar, $dia, $hora, 1)) {
             return null;
         }
