@@ -5,14 +5,22 @@
   const qs = new URLSearchParams(location.search);
   const CONFIG_JUEGO = { config_id: 'juego_v1' };
   const CONFIG_LAB = { config_id: 'playtest_01', seed: 'playtest-01' };
-  function configNueva() {
+  const IS_LAB = qs.get('lab') === '1';
+  function configNueva(forceFreshSeed) {
     const c = qs.get('config');
     if (c) {
       const o = { config_id: c };
-      if (qs.get('seed')) o.seed = qs.get('seed');
+      if (forceFreshSeed || IS_LAB) {
+        o.seed = 'playtest-' + Date.now().toString(36);
+      } else if (qs.get('seed')) {
+        o.seed = qs.get('seed');
+      }
       return o;
     }
-    return qs.get('lab') === '1' ? CONFIG_LAB : CONFIG_JUEGO;
+    if (IS_LAB) {
+      return { config_id: 'playtest_01', seed: 'playtest-' + Date.now().toString(36) };
+    }
+    return CONFIG_JUEGO;
   }
   const SLOTS = {
     cafe_libros: { lug_cafeteria: [[22, 52], [34, 66], [16, 70]], lug_biblioteca: [[60, 38], [70, 52]], lug_tienda_ropa: [[86, 46], [80, 62]] },
@@ -23,12 +31,18 @@
     gimnasio_spa: { lug_gimnasio: [[28, 48], [40, 62]], lug_spa: [[76, 42], [70, 58]] }
   };
 
-  let partidaId = localStorage.getItem(qs.get('lab') === '1' ? 'aht_partida_id' : 'aht_partida_id_juego');
+  let partidaId = localStorage.getItem(IS_LAB ? 'aht_partida_id' : 'aht_partida_id_juego');
   let cacheEstado = null;
   let cacheInsp = null;
   let cachePueblo = null;
   let cacheBuzon = [];
   let org = { tipo: '', a: '', b: '', lugar: '', dia: null, hora: 17 };
+  const playtestLogClient = { entries: [] };
+  playtestLogClient.push = function (e) {
+    this.entries.push(e);
+    if (this.entries.length > 300) this.entries = this.entries.slice(-300);
+  };
+  function storageKey() { return IS_LAB ? 'aht_partida_id' : 'aht_partida_id_juego'; }
 
   function esc(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
@@ -37,17 +51,89 @@
   }
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  function pintarPlaytestDiag(fromServer) {
+    const pre = $('[data-playtest-diag-log]');
+    if (!pre) return;
+    const serverText = fromServer && fromServer.texto ? String(fromServer.texto) : '';
+    const clientBits = playtestLogClient.entries.map(function (e) {
+      if (e.tipo === 'API_ERROR') {
+        return e.ts + ' | API_ERROR\n' + e.method + ' ' + e.action + ' → HTTP ' + e.status
+          + '\nreq: ' + JSON.stringify(e.payload)
+          + '\nresp: ' + JSON.stringify(e.respuesta).slice(0, 500)
+          + '\ncausa: ' + e.causa;
+      }
+      return e.ts + ' | ' + (e.tipo || 'CLIENT') + '\n' + JSON.stringify(e);
+    });
+    const all = [];
+    if (serverText) all.push(serverText);
+    if (clientBits.length) all.push('--- CLIENT / API ---\n' + clientBits.join('\n\n'));
+    pre.textContent = all.length ? all.join('\n\n') : '(aún no hay eventos)';
+    try { if (fromServer && fromServer.texto) console.log('[AHT playtest_diag]\n' + fromServer.texto); } catch (e) {}
+  }
+
 
   async function api(action, body, method) {
     body = body || {};
     method = method || 'POST';
-    const opts = { method: method, headers: { 'Content-Type': 'application/json' } };
-    if (method !== 'GET') {
+    const opts = { method: method };
+    let url;
+    if (method === 'GET') {
+      const q = new URLSearchParams();
+      q.set('action', action);
+      if (partidaId) q.set('partida_id', partidaId);
+      Object.keys(body).forEach(function (k) {
+        const v = body[k];
+        if (v === undefined || v === null) return;
+        if (Array.isArray(v)) {
+          v.forEach(function (item) { q.append(k + '[]', String(item)); });
+        } else if (typeof v !== 'object') {
+          q.set(k, String(v));
+        }
+      });
+      url = API + '?' + q.toString();
+    } else {
+      opts.headers = { 'Content-Type': 'application/json' };
       opts.body = JSON.stringify(Object.assign({ partida_id: partidaId }, body));
+      url = API + '?action=' + encodeURIComponent(action);
     }
-    const qs = new URLSearchParams(Object.assign({ action: action, partida_id: partidaId || '' }, body));
-    const url = method === 'GET' ? (API + '?' + qs.toString()) : (API + '?action=' + encodeURIComponent(action));
-    return (await fetch(url, opts)).json();
+    let resp;
+    let raw = '';
+    try {
+      resp = await fetch(url, opts);
+      raw = await resp.text();
+    } catch (err) {
+      const fail = { ok: false, error: 'network_error', mensaje_ui: 'No se pudo contactar con la API.', detalle: String(err && err.message || err) };
+      logApiError(action, method, body, 0, fail, 'network');
+      return fail;
+    }
+    let data;
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch (err) {
+      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvió JSON.', raw: raw.slice(0, 400) };
+      logApiError(action, method, body, resp.status, fail, 'json_parse');
+      return fail;
+    }
+    if (!resp.ok || data.ok === false) {
+      logApiError(action, method, body, resp.status, data, data.error || ('http_' + resp.status));
+    }
+    return data;
+  }
+
+  function logApiError(action, method, payload, status, data, causa) {
+    const entry = {
+      ts: new Date().toISOString().slice(11, 19),
+      tipo: 'API_ERROR',
+      method: method,
+      action: action,
+      status: status,
+      payload: payload,
+      respuesta: data,
+      causa: causa
+    };
+    playtestLogClient.push(entry);
+    try { console.warn('[AHT playtest API]', method, action, status, causa, data); } catch (e) {}
+    pintarPlaytestDiag();
   }
 
   function layout() {
@@ -516,130 +602,75 @@
       toast(org.a && org.a === org.b ? 'Elige a dos personas distintas.' : 'Falta quién, dónde o cuándo.');
       return;
     }
-    const r = await api('encuentro.proponer', {
+    const payload = {
       participantes: [org.a, org.b],
       dia: org.dia,
       hora: org.hora,
       tipo: org.tipo || '',
       lugar: org.lugar
-    });
+    };
+    const r = await api('encuentro.proponer', payload);
+    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+    try {
+      console.log('[AHT plan]', payload, {
+        ok: r.ok,
+        rechazada: r.rechazada,
+        rechazo_clase: r.rechazo_clase,
+        error: r.error,
+        mensaje_ui: r.mensaje_ui,
+        reacciones: r.propuesta && r.propuesta.reacciones
+      });
+    } catch (e) {}
     if (r.ok) {
-      toast('Propuesto. Ellas siguen a lo suyo.');
+      toast(r.rechazada
+        ? (r.mensaje_ui || 'No han quedado. Mira el registro tecnico.')
+        : (r.mensaje_ui || 'Propuesto. Ellas siguen a lo suyo.'));
       setCapa('');
       await refresh();
     } else {
-      toast(r.mensaje_ui || 'Así no se ha podido organizar.');
+      toast(r.mensaje_ui || 'Asi no se ha podido organizar.');
+      await refresh();
     }
   }
-
   async function ensurePartida() {
     if (partidaId) {
       const r = await api('partida.cargar', { partida_id: partidaId });
       if (r.ok) return;
     }
-    const r = await api('partida.nueva', configNueva());
+    const r = await api('partida.nueva', configNueva(true));
     if (r.ok) {
       partidaId = r.partida_id;
-      localStorage.setItem(qs.get('lab') === '1' ? 'aht_partida_id' : 'aht_partida_id_juego', partidaId);
+      localStorage.setItem(storageKey(), partidaId);
     }
   }
-
-  async function refresh() {
-    const estadoResp = await api('partida.estado', {}, 'GET');
-    if (!estadoResp.ok) return;
-    cacheEstado = estadoResp.estado;
-    const insp = await api('partida.inspeccionar', {}, 'GET');
-    cacheInsp = insp.ok ? insp.partida : null;
-    const mapa = await api('mapa.presencia', {}, 'GET');
-    const buzon = await api('buzon.listar', {}, 'GET');
-    const diario = await api('diario.listar', {}, 'GET');
-    renderHud(cacheEstado, buzon.mensajes || []);
-    renderPueblo(mapa.pueblo || { complejos: [] });
-    renderBuzon(buzon.mensajes || []);
-    renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
-    renderVecinos();
-    $('[data-taller-msg]').textContent = cacheEstado.reloj_texto || '';
-    pintarTutorial(cacheEstado && cacheEstado.tutorial);
-    pintarPlaytestGuia(cacheEstado && cacheEstado.playtest_guia, null);
-  }
-
-  function pintarTutorial(tut) {
-    tut = tut || {};
-    const el = $('[data-tutorial-pista]');
-    const zona = tut.activo ? (tut.zona || '') : '';
-    document.body.setAttribute('data-tutorial-zona', zona);
-    document.body.setAttribute('data-tutorial-paso', tut.activo ? (tut.paso || '') : '');
-    if (!el) return;
-    if (tut.activo && tut.pista) {
-      el.hidden = false;
-      el.textContent = tut.pista;
-    } else {
-      el.hidden = true;
-      el.textContent = '';
-    }
-    if (tut.activo && tut.sugerencia && tut.paso === 'organizar_plan') {
-      const s = tut.sugerencia;
-      org.a = s.residente_a || org.a;
-      org.b = s.residente_b || org.b;
-      org.tipo = s.tipo || org.tipo;
-      org.lugar = s.lugar || org.lugar;
-      org.dia = s.dia || org.dia;
-      org.hora = s.hora || org.hora;
-    }
-  }
-
-  document.body.addEventListener('click', function (ev) {
-    const t = ev.target.closest('[data-close], .velo');
-    if (t && t.closest('.play-root')) {
-      setCapa('');
-      $('.play-root').removeAttribute('data-consulta');
-      return;
-    }
-    const open = ev.target.closest('[data-open]');
-    if (open && open.closest('.play-root')) {
-      const name = open.getAttribute('data-open');
-      setCapa(name);
-      $('.play-root').removeAttribute('data-consulta');
-      if (name === 'organizar') fillOrganizar();
-      if (name === 'diario') $('[data-diario-tab="hoy"]').click();
-      return;
-    }
-    const tab = ev.target.closest('[data-diario-tab]');
-    if (tab) {
-      $('.play-root').setAttribute('data-diario', tab.getAttribute('data-diario-tab'));
-      $$('[data-diario-tab]').forEach(function (b) {
-        b.classList.toggle('is-on', b === tab);
-      });
-      return;
-    }
-    const cx = ev.target.closest('.complejo[data-complejo]');
-    if (cx) {
-      abrirConsulta(cx.getAttribute('data-complejo'));
-    }
-  });
-
-  $('[data-org-a]').addEventListener('change', function () {
-    org.a = $('[data-org-a]').value;
-    if (org.b === org.a) org.b = '';
-    fillSelect($('[data-org-b]'), org.b, org.a);
-    refreshTipos();
-  });
-  $('[data-org-b]').addEventListener('change', function () {
-    org.b = $('[data-org-b]').value;
-    if (org.a === org.b) org.a = '';
-    fillSelect($('[data-org-a]'), org.a, org.b);
-    refreshTipos();
-  });
-  $('[data-org-go]').addEventListener('click', proponer);
-
   $('#btn-guardar').addEventListener('click', async function () {
     await api('partida.guardar', {});
     toast('Guardado.');
   });
   $('#btn-nueva').addEventListener('click', async function () {
-    localStorage.removeItem(qs.get('lab') === '1' ? 'aht_partida_id' : 'aht_partida_id_juego');
+    localStorage.removeItem(storageKey());
     partidaId = null;
-    await ensurePartida();
+    cacheEstado = null;
+    cacheInsp = null;
+    cachePueblo = null;
+    cacheBuzon = [];
+    org = { tipo: '', a: '', b: '', lugar: '', dia: null, hora: 17 };
+    playtestLogClient.entries = [];
+    setCapa('');
+    const r = await api('partida.nueva', configNueva(true));
+    if (r.ok) {
+      partidaId = r.partida_id;
+      localStorage.setItem(storageKey(), partidaId);
+      playtestLogClient.push({
+        ts: new Date().toISOString().slice(11, 19),
+        tipo: 'NUEVA_PARTIDA',
+        partida_id: partidaId,
+        seed: (r.partida && r.partida.meta && r.partida.meta.seed) || null
+      });
+      toast('Partida nueva (seed limpia).');
+    } else {
+      toast(r.mensaje_ui || 'No se pudo crear la partida.');
+    }
     await refresh();
   });
     function pintarPlaytestGuia(guia, evento) {
@@ -721,21 +752,51 @@
     el.textContent = lineas.map(function (l) { return '· ' + (l.texto || l.tipo || ''); }).join('\n');
   }
 
-  $$('[data-horas]').forEach(function (b) {
-    b.addEventListener('click', async function () {
-      const r = await api('reloj.avanzar', { horas: parseInt(b.getAttribute('data-horas'), 10), paso_a_paso: true });
-      await refresh();
-      if (r.playtest_guia) pintarPlaytestGuia(r.playtest_guia, r.playtest_guia_evento);
-      pintarResumenAvance(r.resumen_avance);
-    });
-  });
-  $('#btn-proximo').addEventListener('click', async function () {
-    const r = await api('reloj.proximo_encuentro', {});
-    if (!r.ok) toast(r.mensaje_ui || 'No hay próximo encuentro.');
+  async function avanzarHoras(horas) {
+    const r = await api('reloj.avanzar', { horas: horas, paso_a_paso: true });
     await refresh();
     if (r.playtest_guia) pintarPlaytestGuia(r.playtest_guia, r.playtest_guia_evento);
+    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
     pintarResumenAvance(r.resumen_avance);
+  }
+  async function irProximo() {
+    const r = await api('reloj.proximo_encuentro', {});
+    if (!r.ok) toast(r.mensaje_ui || 'No hay proximo encuentro.');
+    await refresh();
+    if (r.playtest_guia) pintarPlaytestGuia(r.playtest_guia, r.playtest_guia_evento);
+    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+    pintarResumenAvance(r.resumen_avance);
+  }
+  $$('[data-horas]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      avanzarHoras(parseInt(b.getAttribute('data-horas'), 10));
+    });
   });
+  const btnProx = $('#btn-proximo');
+  if (btnProx) btnProx.addEventListener('click', irProximo);
+  const btnProxLab = $('#btn-proximo-lab');
+  if (btnProxLab) btnProxLab.addEventListener('click', irProximo);
+  const btnCopy = $('[data-diag-copy]');
+  if (btnCopy) {
+    btnCopy.addEventListener('click', async function () {
+      const pre = $('[data-playtest-diag-log]');
+      const txt = pre ? pre.textContent : '';
+      try {
+        await navigator.clipboard.writeText(txt);
+        toast('Registro copiado.');
+      } catch (e) {
+        toast('No se pudo copiar. Selecciona el texto a mano.');
+      }
+    });
+  }
+  const btnClear = $('[data-diag-clear-ui]');
+  if (btnClear) {
+    btnClear.addEventListener('click', function () {
+      playtestLogClient.entries = [];
+      pintarPlaytestDiag(cacheEstado && cacheEstado.playtest_diag);
+      toast('Vista de cliente limpiada (el log del servidor sigue en la partida).');
+    });
+  }
 
   window.addEventListener('resize', layout);
   layout();

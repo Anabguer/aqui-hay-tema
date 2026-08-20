@@ -56,7 +56,8 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             ];
         }
 
-        $score = self::score($partida, $propuesta, $residenteId, $otro, $cal);
+        $desglose = self::desglose($partida, $propuesta, $residenteId, $otro, $cal);
+        $score = (int) ($desglose['score'] ?? 0);
         $pMin = (float) CalibracionConfig::get($cal, 'voluntad.p_min', 0.08);
         $pMax = (float) CalibracionConfig::get($cal, 'voluntad.p_max', 0.94);
         $excelente = (int) CalibracionConfig::get($cal, 'voluntad.score_excelente', 88);
@@ -82,6 +83,11 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             $motivo = self::motivoRechazo($partida, $residenteId, $otro, $cal);
             $copy = self::copyBanal($rng, $cal);
         }
+        $factores = $desglose;
+        $factores['p'] = $p;
+        $factores['tirada_rng'] = $tirada;
+        $factores['umbral_p'] = $p;
+        $factores['acepta_si_tirada_menor_que_p'] = $acepta;
         return [
             'decision' => $acepta ? PropuestaEncuentro::DECISION_ACEPTA : PropuestaEncuentro::DECISION_RECHAZA,
             'clase' => $acepta ? null : PropuestaEncuentro::CLASE_VOLUNTAD,
@@ -90,7 +96,110 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             'copy_id' => $copy,
             'score' => $score,
             'p' => $p,
+            'factores' => $factores,
             '_bloqueado_decision' => false,
+        ];
+    }
+
+    /**
+     * Desglose real del score (para playtest / diagnóstico).
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $propuesta
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function desglose(array $partida, array $propuesta, string $quien, string $otro, array $cal): array
+    {
+        $base = (int) CalibracionConfig::get($cal, 'voluntad.base', 48);
+        $emo = (string) ($partida['residentes'][$quien]['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);
+        $mods = EstadoEmocional::modificadores($emo, $cal);
+        $modEmo = (int) ($mods['aceptar_planes'] ?? 0);
+        $s = $base + $modEmo;
+        $conocen = false;
+        $soc = 0;
+        $rom = null;
+        $conf = null;
+        $nRech = 0;
+        $modConocer = 0;
+        $modSoc = 0;
+        $modRom = 0;
+        $modConf = 0;
+        $modRech = 0;
+        $modConsejo = 0;
+        if ($otro !== '') {
+            $conocen = RelacionEngine::seConocen($partida, $quien, $otro);
+            if (!$conocen) {
+                $modConocer = -12;
+                $s += $modConocer;
+            }
+            $soc = RelacionEngine::valorSocialHacia($partida, $quien, $otro);
+            $modSoc = (int) round($soc * 0.28);
+            $s += $modSoc;
+            $rom = RelacionEngine::romanceHacia($partida, $quien, $otro);
+            if ($rom !== null) {
+                $modRom = (int) round($rom * 0.18);
+                $s += $modRom;
+            }
+            $conf = RelacionEngine::obtenerEntre($partida, $quien, $otro)['conflicto']['intensidad'] ?? null;
+            if (is_numeric($conf)) {
+                $modConf = -(int) $conf;
+                $s += $modConf;
+            }
+            $nRech = RechazoMemoria::countHacia($partida, $quien, $otro);
+            if ($nRech >= 2) {
+                $modRech = -min(20, ($nRech - 1) * 6);
+                $s += $modRech;
+            }
+            foreach (ConsejoEngine::activas($partida, $quien, $otro) as $c) {
+                $idc = (string) ($c['consejo_id'] ?? '');
+                $inc = (int) CalibracionConfig::get($cal, 'consejo.inclinacion', 10);
+                if ($idc === 'lanzate' || $idc === 'queda_mas') {
+                    $modConsejo += $inc;
+                    $s += $inc;
+                }
+                if ($idc === 'no_es_el_momento' || $idc === 'tomar_distancia') {
+                    $modConsejo -= $inc;
+                    $s -= $inc;
+                }
+            }
+        }
+        $lugar = isset($propuesta['lugar']) ? (string) $propuesta['lugar'] : null;
+        $afin = PlanAfinidad::paraParticipante($partida, $quien, $lugar, null);
+        $aporteAfin = (int) ($afin['aporte'] ?? 0);
+        $penAfin = (int) ($afin['penalizacion'] ?? 0);
+        $s += $aporteAfin - $penAfin;
+        $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
+        $modRomTipo = 0;
+        if (PropuestaNivel::esTipoCita($tipo) || $tipo === 'pareja') {
+            $modRomTipo = (int) (($mods['iniciativa_romantica'] ?? 0) / 2);
+            $s += $modRomTipo;
+        }
+        $modTipo = self::modTipo($tipo, $cal);
+        $s += $modTipo;
+        $score = max(0, min(100, $s));
+        return [
+            'score' => $score,
+            'base' => $base,
+            'estado_emocional' => $emo,
+            'mod_estado_emocional_aceptar_planes' => $modEmo,
+            'relacion_previa_se_conocen' => $conocen,
+            'mod_aun_no_se_conocen' => $modConocer,
+            'social' => $soc,
+            'mod_social' => $modSoc,
+            'romance' => $rom,
+            'mod_romance' => $modRom,
+            'conflicto' => $conf,
+            'mod_conflicto' => $modConf,
+            'rechazos_previos' => $nRech,
+            'mod_rechazos' => $modRech,
+            'mod_consejo' => $modConsejo,
+            'lugar' => $lugar,
+            'afinidad_aporte' => $aporteAfin,
+            'afinidad_penalizacion' => $penAfin,
+            'tipo' => $tipo,
+            'mod_tipo' => $modTipo,
+            'mod_iniciativa_romantica' => $modRomTipo,
         ];
     }
 
@@ -99,59 +208,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
      */
     public static function score(array $partida, array $propuesta, string $quien, string $otro, array $cal): int
     {
-        $s = (int) CalibracionConfig::get($cal, 'voluntad.base', 48);
-        $emo = (string) ($partida['residentes'][$quien]['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);
-        $mods = EstadoEmocional::modificadores($emo, $cal);
-        $s += (int) ($mods['aceptar_planes'] ?? 0);
-
-        if ($otro !== '') {
-            $conocen = RelacionEngine::seConocen($partida, $quien, $otro);
-            if (!$conocen) {
-                $s -= 12;
-            }
-            $soc = RelacionEngine::valorSocialHacia($partida, $quien, $otro);
-            $s += (int) round($soc * 0.28);
-            $rom = RelacionEngine::romanceHacia($partida, $quien, $otro);
-            if ($rom !== null) {
-                $s += (int) round($rom * 0.18);
-            }
-            $conf = RelacionEngine::obtenerEntre($partida, $quien, $otro)['conflicto']['intensidad'] ?? null;
-            if (is_numeric($conf)) {
-                $s -= (int) $conf;
-            }
-            $nRech = RechazoMemoria::countHacia($partida, $quien, $otro);
-            if ($nRech >= 2) {
-                $s -= min(20, ($nRech - 1) * 6);
-            }
-            foreach (ConsejoEngine::activas($partida, $quien, $otro) as $c) {
-                $idc = (string) ($c['consejo_id'] ?? '');
-                if ($idc === 'lanzate' || $idc === 'queda_mas') {
-                    $s += (int) CalibracionConfig::get($cal, 'consejo.inclinacion', 10);
-                }
-                if ($idc === 'no_es_el_momento' || $idc === 'tomar_distancia') {
-                    $s -= (int) CalibracionConfig::get($cal, 'consejo.inclinacion', 10);
-                }
-            }
-        }
-
-        $lugar = isset($propuesta['lugar']) ? (string) $propuesta['lugar'] : null;
-        $afin = PlanAfinidad::paraParticipante($partida, $quien, $lugar, null);
-        $s += (int) ($afin['aporte'] ?? 0);
-        $s -= (int) ($afin['penalizacion'] ?? 0);
-
-        $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
-        if (PropuestaNivel::esTipoCita($tipo) || $tipo === 'pareja') {
-            $s += (int) ($mods['iniciativa_romantica'] ?? 0) / 2;
-        }
-        $s += self::modTipo($tipo, $cal);
-
-        if ($s < 0) {
-            return 0;
-        }
-        if ($s > 100) {
-            return 100;
-        }
-        return (int) $s;
+        return (int) (self::desglose($partida, $propuesta, $quien, $otro, $cal)['score'] ?? 0);
     }
 
     /**

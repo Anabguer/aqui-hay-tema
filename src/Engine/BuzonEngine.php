@@ -47,7 +47,9 @@ final class BuzonEngine
             '_placeholder_contenido' => true,
         ], $mensaje);
         $entry['clasificacion'] = $clas;
-        $entry['canal'] = self::canalDe($clas);
+        $entry['canal'] = isset($mensaje['canal']) && is_string($mensaje['canal']) && $mensaje['canal'] !== ''
+            ? $mensaje['canal']
+            : self::canalDe($clas);
         $reloj = $partida['reloj'] ?? [];
         $diaMsg = (int) ($entry['dia'] ?? ($reloj['dia_pueblo'] ?? 1));
         $entry['dia'] = $diaMsg;

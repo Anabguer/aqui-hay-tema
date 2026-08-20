@@ -3,9 +3,12 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260820f';
+$ahtUi = 'v3-20260820g';
 $ahtTaller = isset($_GET['taller']) && (string) $_GET['taller'] !== '0';
 $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
+if ($ahtLab) {
+    $ahtTaller = true; // playtest siempre muestra cheats de tiempo
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -20,17 +23,38 @@ $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
   <style>
     .tutorial-pista { margin: 0; padding: .4rem .8rem; font-size: .9rem; }
     body.play-v3:not([data-taller="1"]) .taller-cheat { display: none; }
-    body.play-v3:not([data-lab="1"]) .playtest-guia { display: none !important; }
+    body.play-v3:not([data-lab="1"]) .playtest-guia,
+    body.play-v3:not([data-lab="1"]) .playtest-cheats { display: none !important; }
     body.play-v3[data-tutorial-zona="buzon"] [data-open="buzon"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="vecinos"] [data-open="vecinos"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="organizar"] [data-open="organizar"] { outline: 2px solid #c45; }
     .taller-debug { display: none; max-width: 42rem; margin: .25rem .5rem; padding: .4rem .6rem; font: 12px/1.35 monospace; background: #1a1a1a; color: #cfc; white-space: pre-wrap; }
     body.play-v3[data-taller="1"] .taller-debug.is-on { display: block; }
     .taller strong.lab { color: #c45; }
+    .playtest-cheats {
+      display: flex; flex-wrap: wrap; gap: .55rem; align-items: center;
+      margin: 0 .5rem .5rem; padding: .65rem .8rem;
+      background: #2a2218; color: #f7f1e8;
+      border: 3px solid #c45; border-radius: 6px;
+      position: relative; z-index: 40;
+    }
+    .playtest-cheats .pc-label {
+      font: 800 .85rem Nunito, "Segoe UI", sans-serif;
+      letter-spacing: .04em; text-transform: uppercase; color: #f3b1c3;
+      margin-right: .25rem;
+    }
+    .playtest-cheats button {
+      border: 2px solid #f7f1e8; background: #c45; color: #fff;
+      font: 800 1rem Nunito, "Segoe UI", sans-serif;
+      padding: .55rem 1rem; cursor: pointer; border-radius: 4px;
+      min-width: 5.5rem;
+    }
+    .playtest-cheats button:hover { background: #a8324a; }
+    .playtest-cheats .pc-msg { font-size: .85rem; color: #eadfd4; margin-left: .35rem; }
     .playtest-guia {
       margin: .35rem .5rem .6rem;
       padding: .75rem 1rem;
-      max-width: 44rem;
+      max-width: 52rem;
       background: #f7f1e8;
       border: 1px solid #c9b8a0;
       color: #2a2218;
@@ -52,6 +76,23 @@ $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
     .playtest-guia .objs li.hecho { color: #4a7a3a; }
     .playtest-guia details.debug-tec { margin-top: .6rem; font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #555; }
     .playtest-guia .meta-reloj { font-size: .85rem; color: #6a5848; margin: 0 0 .4rem; }
+    .playtest-diag {
+      margin-top: .75rem; border: 1px solid #8a7a66; background: #1b1814; color: #d8d0c4;
+      border-radius: 4px; padding: .35rem .55rem;
+    }
+    .playtest-diag summary {
+      cursor: pointer; font: 800 .8rem Nunito, "Segoe UI", sans-serif;
+      color: #f3b1c3; letter-spacing: .03em;
+    }
+    .playtest-diag .diag-actions { display: flex; gap: .4rem; margin: .45rem 0; flex-wrap: wrap; }
+    .playtest-diag .diag-actions button {
+      border: 1px solid #c9b8a0; background: #2a2218; color: #f7f1e8;
+      font: 700 .75rem Nunito, "Segoe UI", sans-serif; padding: .3rem .55rem; cursor: pointer;
+    }
+    .playtest-diag pre {
+      margin: 0; max-height: 22rem; overflow: auto; white-space: pre-wrap;
+      font: 11px/1.4 ui-monospace, Consolas, monospace; color: #cfc6b8;
+    }
   </style>
 </head>
 <body class="play-v3" data-ui="v3" data-taller="<?= $ahtTaller ? '1' : '0' ?>" data-lab="<?= $ahtLab ? '1' : '0' ?>">
@@ -67,6 +108,14 @@ $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
     <a class="taller-cheat" href="play-provisional.php">UI anterior</a>
     <span class="msg taller-cheat" data-taller-msg></span>
   </div>
+  <div class="playtest-cheats" data-playtest-cheats <?= $ahtLab ? '' : 'hidden' ?>>
+    <span class="pc-label">Acelerar tiempo</span>
+    <button type="button" data-horas="1">+1h</button>
+    <button type="button" data-horas="8">+8h</button>
+    <button type="button" data-horas="24">+1 día</button>
+    <button type="button" id="btn-proximo-lab">Ir al próximo</button>
+    <span class="pc-msg" data-taller-msg-lab></span>
+  </div>
   <aside class="playtest-guia" data-playtest-guia hidden>
     <h2 data-pg-titulo>PRUEBA DEL PUEBLO</h2>
     <p class="meta-reloj" data-pg-reloj></p>
@@ -78,8 +127,16 @@ $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
     <div data-pg-pistas></div>
     <h3>Objetivos de esta partida</h3>
     <ul class="objs" data-pg-objs></ul>
+    <details class="playtest-diag" data-playtest-diag open>
+      <summary>Registro técnico del playtest (copiar para ChatGPT / Carlos I)</summary>
+      <div class="diag-actions">
+        <button type="button" data-diag-copy>Copiar todo</button>
+        <button type="button" data-diag-clear-ui>Limpiar vista</button>
+      </div>
+      <pre data-playtest-diag-log>(aún no hay eventos)</pre>
+    </details>
     <details class="debug-tec">
-      <summary>Datos técnicos (debug)</summary>
+      <summary>Datos técnicos (resumen avance)</summary>
       <pre data-taller-debug hidden></pre>
     </details>
   </aside>

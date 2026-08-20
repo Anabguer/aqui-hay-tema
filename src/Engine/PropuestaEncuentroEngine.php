@@ -139,7 +139,69 @@ final class PropuestaEncuentroEngine
         }
         TutorialBucle::registrar($partida, TutorialBucle::HECHO_PLAN);
         $out['tutorial'] = TutorialBucle::vista($partida);
+        self::registrarDiag($partida, $participantes, $tipo, (string) $lugarId, $dia, $hora, $out, $propuesta);
+        $out['playtest_diag'] = PlaytestDiag::vista($partida);
         return $out;
+    }
+
+    /**
+     * @param list<string> $participantes
+     * @param array<string, mixed> $out
+     * @param array<string, mixed> $propuesta
+     */
+    private static function registrarDiag(
+        array &$partida,
+        array $participantes,
+        string $tipo,
+        string $lugarId,
+        int $dia,
+        int $hora,
+        array $out,
+        array $propuesta
+    ): void {
+        $rechazada = !empty($out['rechazada']) || ($propuesta['estado'] ?? '') === 'rechazada';
+        $programado = !empty($out['programado']) || ($propuesta['estado'] ?? '') === 'programada';
+        $resultado = $programado ? 'ACEPTADO_Y_PROGRAMADO' : ($rechazada ? 'RECHAZADO' : strtoupper((string) ($propuesta['estado'] ?? 'PENDIENTE')));
+        $motivos = [];
+        foreach ($propuesta['reacciones'] ?? [] as $reac) {
+            if (!is_array($reac)) {
+                continue;
+            }
+            if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA) {
+                $motivos[] = ($reac['nombre'] ?? '?') . ': ' . ($reac['motivo_tecnico'] ?? '') . ' (clase=' . ($reac['clase'] ?? '') . ')';
+            }
+        }
+        if ($motivos === [] && !empty($out['error'])) {
+            $motivos[] = (string) $out['error'] . (!empty($out['causa']) ? ' causa=' . $out['causa'] : '');
+        }
+        $factoresUi = [];
+        foreach ($propuesta['reacciones'] ?? [] as $reac) {
+            if (!is_array($reac) || empty($reac['factores']) || !is_array($reac['factores'])) {
+                continue;
+            }
+            $f = $reac['factores'];
+            $factoresUi[] = ($reac['nombre'] ?? '?') . ' score=' . json_encode($f['score'] ?? null)
+                . ' p=' . json_encode($f['p'] ?? $reac['p'] ?? null)
+                . ' tirada=' . json_encode($f['tirada_rng'] ?? null)
+                . ' conocidos=' . json_encode($f['relacion_previa_se_conocen'] ?? null)
+                . ' emo=' . ($f['estado_emocional'] ?? '')
+                . ' social=' . json_encode($f['social'] ?? null);
+        }
+        PlaytestDiag::push($partida, 'PLAN_PROPUESTO', [
+            'residente_a' => (string) ($participantes[0] ?? ''),
+            'residente_b' => (string) ($participantes[1] ?? ''),
+            'tipo_encuentro' => $tipo,
+            'lugar' => $lugarId,
+            'dia_plan' => $dia,
+            'hora_plan' => $hora,
+            'resultado' => $resultado,
+            'motivo_motor' => $motivos !== [] ? implode("\n", $motivos) : (string) ($out['mensaje_ui'] ?? ''),
+            'factores' => $factoresUi,
+            'reacciones' => $propuesta['reacciones'] ?? [],
+            'mensaje_ui' => $out['mensaje_ui'] ?? null,
+            'error' => $out['error'] ?? null,
+            'rechazo_clase' => $out['rechazo_clase'] ?? null,
+        ]);
     }
 
     /**
@@ -263,7 +325,8 @@ final class PropuestaEncuentroEngine
                 $partida,
                 $prop['participantes'],
                 (int) $prop['dia'],
-                (int) $prop['hora'] + 1
+                (int) $prop['hora'] + 1,
+                isset($prop['lugar']) ? (string) $prop['lugar'] : ''
             );
             if ($alt !== null) {
                 $r = EncuentroEngine::programar(
@@ -349,6 +412,11 @@ final class PropuestaEncuentroEngine
                 'motivo_tecnico' => (string) ($disp['motivo'] ?? 'ocupado'),
                 'copy_id' => null,
                 'detalle' => $disp,
+                'factores' => [
+                    'agenda_disponible' => false,
+                    'motivo_agenda' => (string) ($disp['motivo'] ?? 'ocupado'),
+                    'detalle_agenda' => $disp,
+                ],
                 '_bloqueado_decision' => false,
             ];
         }
@@ -360,6 +428,11 @@ final class PropuestaEncuentroEngine
                 'clase' => PropuestaEncuentro::CLASE_INDISPONIBILIDAD,
                 'motivo_tecnico' => 'doble_reserva',
                 'copy_id' => null,
+                'factores' => [
+                    'agenda_disponible' => true,
+                    'conflicto_horario' => true,
+                    'motivo_agenda' => 'doble_reserva',
+                ],
                 '_bloqueado_decision' => false,
             ];
         }
@@ -385,7 +458,7 @@ final class PropuestaEncuentroEngine
                 (string) ($propuesta['tipo'] ?? 'conocerse')
             );
         }
-        return [
+        $row = [
             'residente_id' => $residenteId,
             'nombre' => IdentidadPublica::nombre($partida, $residenteId),
             'decision' => (string) ($ev['decision'] ?? PropuestaEncuentro::DECISION_PENDIENTE),
@@ -397,6 +470,10 @@ final class PropuestaEncuentroEngine
             'p' => $ev['p'] ?? null,
             '_bloqueado_decision' => (bool) ($ev['_bloqueado_decision'] ?? true),
         ];
+        if (isset($ev['factores']) && is_array($ev['factores'])) {
+            $row['factores'] = $ev['factores'];
+        }
+        return $row;
     }
 
     /** @return array<string, mixed> */

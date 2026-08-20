@@ -74,8 +74,9 @@ final class BuzonPlayBridge
                 return null;
             }
             return [
-                'clasificacion' => BuzonEngine::OPORTUNIDAD,
-                'tipo' => 'propuesta',
+                'clasificacion' => BuzonEngine::IMPORTANTE,
+                'tipo' => 'respuesta_plan',
+                'canal' => BuzonEngine::CANAL_BUZON,
                 'texto' => $quien !== '' ? $quien . ' no han quedado.' : 'Una propuesta de encuentro se ha rechazado.',
                 'origen' => ['evento_id' => $prop['id'] ?? null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
                 '_placeholder_contenido' => false,

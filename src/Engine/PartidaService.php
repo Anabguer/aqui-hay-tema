@@ -297,6 +297,7 @@ final class PartidaService
         if (PlaytestGuia::activa($partida)) {
             PlaytestGuia::ensure($partida);
             $out['playtest_guia'] = PlaytestGuia::vista($partida, $this->root);
+            $out['playtest_diag'] = PlaytestDiag::vista($partida);
         }
         if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
             $vista = VidaPuebloEngine::vista($partida, $cal);

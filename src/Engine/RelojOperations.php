@@ -153,6 +153,22 @@ final class RelojOperations
                 $horas
             );
             $acum['playtest_guia'] = PlaytestGuia::vista($partida, $this->projectRoot);
+            $resumen = $acum['resumen_avance'] ?? ['lineas' => []];
+            $lineas = [];
+            foreach (($resumen['lineas'] ?? []) as $l) {
+                if (is_array($l)) {
+                    $lineas[] = (string) ($l['texto'] ?? $l['tipo'] ?? '');
+                }
+            }
+            PlaytestDiag::push($partida, 'AVANCE_TIEMPO', [
+                'horas' => $horas,
+                'paso_a_paso' => true,
+                'resumen_lineas' => $lineas,
+                'encuentros_resueltos' => (int) ($acum['encuentros_resueltos'] ?? 0),
+                'coincidencias_detectadas' => (int) ($acum['coincidencias_detectadas'] ?? 0),
+                'guia_evento' => $acum['playtest_guia_evento'] ?? null,
+            ]);
+            $acum['playtest_diag'] = PlaytestDiag::vista($partida);
         }
         return $acum;
     }
