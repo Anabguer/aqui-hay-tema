@@ -1,0 +1,110 @@
+{
+    "simulaciones": [
+        {
+            "config": "playtest_01",
+            "seed": "y1-activa-d365",
+            "perfil": "activa",
+            "dias": 365,
+            "poblacion_final": 8,
+            "dia_final": 343,
+            "planes": 547,
+            "aceptados": 28,
+            "rechazados": 32,
+            "tasa_acept": 0.051,
+            "buzon_msgs": 51,
+            "cotilleo_msgs": 28,
+            "invariantes_fallos": [],
+            "invariantes_counts": [],
+            "vida": 0
+        },
+        {
+            "config": "playtest_01",
+            "seed": "y1-normal-d365",
+            "perfil": "normal",
+            "dias": 365,
+            "poblacion_final": 8,
+            "dia_final": 350,
+            "planes": 325,
+            "aceptados": 28,
+            "rechazados": 40,
+            "tasa_acept": 0.086,
+            "buzon_msgs": 61,
+            "cotilleo_msgs": 28,
+            "invariantes_fallos": [],
+            "invariantes_counts": [],
+            "vida": 0
+        },
+        {
+            "config": "playtest_01",
+            "seed": "y1-torpe-d365",
+            "perfil": "torpe",
+            "dias": 365,
+            "poblacion_final": 8,
+            "dia_final": 343,
+            "planes": 363,
+            "aceptados": 28,
+            "rechazados": 39,
+            "tasa_acept": 0.077,
+            "buzon_msgs": 60,
+            "cotilleo_msgs": 28,
+            "invariantes_fallos": [],
+            "invariantes_counts": [],
+            "vida": 0
+        },
+        {
+            "config": "playtest_01",
+            "seed": "y1-inactiva-d365",
+            "perfil": "inactiva",
+            "dias": 365,
+            "poblacion_final": 8,
+            "dia_final": 363,
+            "planes": 38,
+            "aceptados": 11,
+            "rechazados": 18,
+            "tasa_acept": 0.289,
+            "buzon_msgs": 30,
+            "cotilleo_msgs": 11,
+            "invariantes_fallos": [],
+            "invariantes_counts": [],
+            "vida": 0
+        }
+    ],
+    "agregado": {
+        "activa:d365": {
+            "n": 1,
+            "planes": 547,
+            "aceptados": 28,
+            "rechazados": 32,
+            "cotilleo": 28,
+            "fallos_inv": 0,
+            "tasa_acept": 0.051
+        },
+        "normal:d365": {
+            "n": 1,
+            "planes": 325,
+            "aceptados": 28,
+            "rechazados": 40,
+            "cotilleo": 28,
+            "fallos_inv": 0,
+            "tasa_acept": 0.086
+        },
+        "torpe:d365": {
+            "n": 1,
+            "planes": 363,
+            "aceptados": 28,
+            "rechazados": 39,
+            "cotilleo": 28,
+            "fallos_inv": 0,
+            "tasa_acept": 0.077
+        },
+        "inactiva:d365": {
+            "n": 1,
+            "planes": 38,
+            "aceptados": 11,
+            "rechazados": 18,
+            "cotilleo": 11,
+            "fallos_inv": 0,
+            "tasa_acept": 0.289
+        }
+    }
+}
