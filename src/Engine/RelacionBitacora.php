@@ -24,6 +24,14 @@ final class RelacionBitacora
     public const APOYO_IMPORTANTE = 'apoyo_importante';
     public const HITO_ROMANTICO = 'hito_romantico';
     public const FLECHAZO = 'flechazo';
+    /** Carril romántico fino (config hitos_relacionales). */
+    public const TENSION_ROMANTICA = 'tension_romantica';
+    public const COQUETEO = 'coqueteo';
+    public const CONFESION = 'confesion';
+    public const BESO = 'beso';
+    public const RECHAZO_ROMANTICO = 'rechazo_romantico';
+    public const INFIDELIDAD = 'infidelidad';
+    public const CELOS = 'celos';
 
     public static function ensure(array &$partida): void
     {

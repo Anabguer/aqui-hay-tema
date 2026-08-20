@@ -34,6 +34,9 @@ final class LugarAutonomo
                 continue;
             }
             $w = 1.0;
+            if (!ComplejoCatalog::estaAbierto($lug, $hora)) {
+                continue;
+            }
             $afinYo = PlanAfinidad::paraParticipante($partida, $quien, $lug, $catalog);
             if (!empty($afinYo['relacionado'])) {
                 $w += 3.0;
@@ -41,12 +44,20 @@ final class LugarAutonomo
             if ((int) ($afinYo['penalizacion'] ?? 0) > 0) {
                 $w *= 0.35;
             }
-            // Candidato B: atracción suave por ocupación actual del lugar
-            if ($atraccionBonus > 0.0) {
-                $ocupActual = AforoEngine::ocupacion($partida, $lug, $dia, $hora);
+            $ocupActual = AforoEngine::ocupacion($partida, $lug, $dia, $hora);
+            $emo = (string) ($partida['residentes'][$quien]['runtime']['estado_emocional']['id'] ?? 'neutro');
+            if ($emo === EstadoEmocional::TRISTE) {
+                $w += $ocupActual >= 3 ? -0.4 : 0.35;
+            } elseif ($emo === EstadoEmocional::ENFADADO) {
+                $w += $ocupActual >= 2 ? -0.6 : 0.4;
+            } elseif ($emo === EstadoEmocional::ALEGRE) {
+                $w += min(2, $ocupActual) * 0.35;
+            }
+            if ($atraccionBonus > 0.0 && $emo !== EstadoEmocional::ENFADADO) {
                 $ocupEfectiva = min($ocupActual, $atraccionCap);
                 $w += $atraccionBonus * $ocupEfectiva;
             }
+            $w *= self::factorAntiRepeticion($partida, $quien, $lug, $dia);
             if ($otro !== null && $otro !== '') {
                 $hobbiesSabidos = ConocimientoNpc::hobbiesConocidos($partida, $quien, $otro);
                 $rechazosSabidos = ConocimientoNpc::hobbiesRechazadosConocidos($partida, $quien, $otro);
@@ -73,7 +84,7 @@ final class LugarAutonomo
             $cands[] = ['lugar' => $lug, 'w' => max(0.05, $w)];
         }
         if ($cands === []) {
-            return $operativos[0] ?? null;
+            return null;
         }
         $sum = 0.0;
         foreach ($cands as $c) {
@@ -88,6 +99,39 @@ final class LugarAutonomo
             }
         }
         return $cands[count($cands) - 1]['lugar'];
+    }
+
+    /**
+     * Penaliza repetir el mismo destino el mismo día o el anterior. No es un veto.
+     */
+    public static function factorAntiRepeticion(array $partida, string $quien, string $lugarId, int $dia): float
+    {
+        $hoy = 0;
+        $ayer = 0;
+        foreach ($partida['npc_autonomo']['historial_eventos'] ?? [] as $ev) {
+            if (($ev['accion'] ?? '') !== 'visitar_lugar') {
+                continue;
+            }
+            if ((string) ($ev['residente_id'] ?? '') !== $quien) {
+                continue;
+            }
+            if ((string) ($ev['lugar'] ?? '') !== $lugarId) {
+                continue;
+            }
+            $d = (int) ($ev['dia'] ?? 0);
+            if ($d === $dia) {
+                $hoy++;
+            } elseif ($d === $dia - 1) {
+                $ayer++;
+            }
+        }
+        if ($hoy > 0) {
+            return 0.08;
+        }
+        if ($ayer > 0) {
+            return 0.28;
+        }
+        return 1.0;
     }
 
     /**

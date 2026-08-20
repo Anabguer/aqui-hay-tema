@@ -19,6 +19,11 @@
   let cacheBuzon = [];
   let org = { tipo: 'quedar', a: '', b: '', lugar: '', dia: null, hora: 17 };
 
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
 
@@ -70,13 +75,17 @@
   function renderHud(estado, buzon) {
     const rv = estado.reloj_vista || {};
     const reloj = estado.reloj || {};
-    $('[data-dow]').textContent = ((rv.dia_semana_ui || '') + ' ' + (rv.fecha_corta || '')).trim() || ('Día ' + (reloj.dia_pueblo || '—'));
+    $('[data-dow]').textContent = rv.dia_semana_ui || ('Día ' + (reloj.dia_pueblo || '—'));
+    $('[data-fecha]').textContent = rv.fecha_corta || '';
     const h = rv.hora !== undefined ? rv.hora : reloj.hora_actual;
     $('[data-hora]').textContent = h === undefined ? '—' : (String(h).padStart(2, '0') + ':00');
     $('[data-dinero]').textContent = dineroTxt(cacheInsp, estado);
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
-    $('.corazon-dibujo').style.setProperty('--fill', pct + '%');
+    const fill = $('.corazon-fill') || $('.corazon-dibujo');
+    if (fill) fill.style.setProperty('--fill', pct + '%');
+    const pctN = $('[data-vida-pct]');
+    if (pctN) pctN.textContent = Math.round(pct) + '%';
     const cartas = (buzon || []).filter(function (m) {
       return (m.canal || 'buzon') === 'buzon' && (m.estado || '') === 'pendiente';
     });
@@ -119,6 +128,9 @@
       const btn = $('[data-complejo="' + cx.id + '"]');
       if (!btn) return;
       btn.setAttribute('data-fase', cx.fase);
+      btn.setAttribute('aria-label', cx.nombre || cx.id);
+      const eti = btn.querySelector('.eti-mapa');
+      if (eti) eti.textContent = cx.nombre || '';
       const etiP = btn.querySelector('.eti-pleno');
       const etiT = btn.querySelector('.eti-temp');
       if (etiP && etiT) {
@@ -198,8 +210,8 @@
       return !destId || p.destino_id === destId;
     });
     $('[data-q-sum]').textContent = gente.length
-      ? (gente.length + ' aquí · en el mapa se ven ' + Math.min(cx.total, 5) + (cx.extra ? ' y +' + cx.extra : ''))
-      : 'Nadie ahora mismo.';
+      ? (gente.length === 1 ? 'Hay alguien.' : ('Hay ' + gente.length + '.'))
+      : copyVacio(id);
     const list = $('[data-q-list]');
     list.innerHTML = '';
     const groups = {};
@@ -215,7 +227,7 @@
       const ul = document.createElement('ul');
       groups[dest].forEach(function (p) {
         const li = document.createElement('li');
-        li.textContent = p.nombre + (p.hay_tema ? ' · hay tema' : '') + (p.emocion && p.emocion !== 'neutro' ? ' · ' + p.emocion : '');
+        li.textContent = p.nombre;
         ul.appendChild(li);
       });
       list.appendChild(ul);
@@ -234,6 +246,18 @@
       });
       box.appendChild(b);
     });
+  }
+
+  function copyVacio(cid) {
+    const t = {
+      cafe_libros: 'Ni el café humea. No hay ni un alma.',
+      rincon_lola: 'Hoy Lola no tendría a quién servir.',
+      cine_game: 'Pantalla en negro. No hay ni un alma.',
+      mala_idea: 'Hasta el bar está en silencio.',
+      parque: 'Solo el banco, esperando.',
+      gimnasio_spa: 'Máquinas quietas. No hay ni un alma.'
+    };
+    return t[cid] || 'No hay ni un alma.';
   }
 
   function tokenDe(rid) {
@@ -304,22 +328,46 @@
     };
   }
 
+  function estadoCarta(m) {
+    const pueblo = m.estado_pueblo || '';
+    if (pueblo === 'cumplida') return { cls: 'estado-cumplida', txt: 'Hecho' };
+    if (pueblo === 'caducada') return { cls: 'estado-caducada', txt: 'Se le pasó' };
+    if ((m.estado || '') === 'pendiente') return { cls: 'estado-pendiente', txt: '' };
+    if ((m.estado || '') === 'resuelto') return { cls: 'estado-cumplida', txt: 'Ya está' };
+    return { cls: '', txt: '' };
+  }
+
+  function cuerpoCarta(m, de) {
+    let t = String(m.texto || '').trim();
+    if (de && t.indexOf(de + ':') === 0) t = t.slice(de.length + 1).trim();
+    if (de && t.indexOf(de + ' ') === 0) {
+      /* deja el resto */
+    }
+    return t;
+  }
+
   function renderBuzon(msgs) {
     cacheBuzon = msgs || [];
     const box = $('[data-buzon-list]');
     box.innerHTML = '';
     const cartas = cacheBuzon.filter(function (m) { return (m.canal || 'buzon') !== 'cotilleo'; });
     if (!cartas.length) {
-      box.innerHTML = '<p class="lista-vacia">Bandeja vacía. Te escribirán a ti.</p>';
+      box.innerHTML = '<p class="lista-vacia">Bandeja vacía. Todavía no te ha escrito nadie.</p>';
       return;
     }
     cartas.forEach(function (m) {
       const art = document.createElement('article');
-      art.className = 'carta-msg' + (m.clasificacion === 'importante' ? ' importante' : '') + ((m.estado || '') === 'pendiente' ? ' no-leida' : '');
+      const st = estadoCarta(m);
+      art.className = 'carta-msg' + (m.clasificacion === 'importante' ? ' importante' : '') +
+        ((m.estado || '') === 'pendiente' ? ' no-leida' : '') + (st.cls ? ' ' + st.cls : '');
       const de = nombreDe(m.de_persona);
-      art.innerHTML = (m.clasificacion === 'importante' ? '<span class="lacre">OJO</span>' : '') +
-        '<div><div class="sello">' + (m.estado || '') + '</div><div class="de">' + de + '</div>' +
-        '<p class="cuerpo">' + (m.texto || '') + '</p></div>';
+      const cuerpo = cuerpoCarta(m, de);
+      const plazo = m.plazo_humano || '';
+      art.innerHTML = (m.clasificacion === 'importante' ? '<span class="lacre" aria-hidden="true"></span>' : '') +
+        (st.txt ? '<div class="sello-estado">' + esc(st.txt) + '</div>' : '') +
+        '<div class="de">De ' + esc(de) + '</div>' +
+        '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
+        (plazo ? '<p class="plazo">' + esc(plazo) + '</p>' : '');
       art.addEventListener('click', async function () {
         if (m.id) await api('buzon.leer', { mensaje_id: m.id });
         await refresh();
@@ -358,15 +406,17 @@
     return Object.keys((cacheInsp && cacheInsp.residentes) || {});
   }
 
-  function fillSelect(sel, value) {
+  function fillSelect(sel, value, excludeId) {
     sel.innerHTML = '<option value="">—</option>';
     idsResidentes().forEach(function (id) {
+      if (excludeId && id === excludeId) return;
       const o = document.createElement('option');
       o.value = id;
       o.textContent = nombreDe(id);
       sel.appendChild(o);
     });
-    if (value) sel.value = value;
+    if (value && value !== excludeId) sel.value = value;
+    else if (value && value === excludeId) sel.value = '';
   }
 
   function destinosOperativos() {
@@ -378,8 +428,8 @@
   }
 
   function fillOrganizar() {
-    fillSelect($('[data-org-a]'), org.a);
-    fillSelect($('[data-org-b]'), org.b);
+    fillSelect($('[data-org-a]'), org.a, org.b);
+    fillSelect($('[data-org-b]'), org.b, org.a);
     const lug = $('[data-org-lugar]');
     lug.innerHTML = '<option value="">—</option>';
     destinosOperativos().forEach(function (d) {
@@ -418,7 +468,7 @@
     org.b = $('[data-org-b]').value;
     const box = $('[data-org-tipos]');
     if (!org.a || !org.b || org.a === org.b) {
-      box.innerHTML = '<p class="mini">Elige dos vecinos. El motor dice qué planes existen entre ellos.</p>';
+      box.innerHTML = '<p class="mini">Elige a dos personas distintas. Luego vemos qué plan encaja.</p>';
       return;
     }
     const r = await api('encuentro.tipos_permitidos', { participantes: [org.a, org.b] }, 'GET');
@@ -436,7 +486,7 @@
       box.appendChild(b);
     });
     if (!(r.opciones || []).length) {
-      box.innerHTML = '<p class="mini">El motor no ofrece un plan entre estas dos personas ahora.</p>';
+      box.innerHTML = '<p class="mini">Entre estas dos, ahora no sale un plan.</p>';
     }
   }
 
@@ -446,8 +496,8 @@
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     org.hora = parseInt($('[data-org-hora]').value, 10);
-    if (!org.a || !org.b || !org.lugar || !org.dia) {
-      toast('Falta quién, dónde o cuándo.');
+    if (!org.a || !org.b || org.a === org.b || !org.lugar || !org.dia) {
+      toast(org.a && org.a === org.b ? 'Elige a dos personas distintas.' : 'Falta quién, dónde o cuándo.');
       return;
     }
     const r = await api('encuentro.proponer', {
@@ -458,11 +508,11 @@
       lugar: org.lugar
     });
     if (r.ok) {
-      toast('Propuesto. Ellas viven.');
+      toast('Propuesto. Ellas siguen a lo suyo.');
       setCapa('');
       await refresh();
     } else {
-      toast(r.mensaje_ui || r.error || 'El motor no ha aceptado el plan.');
+      toast(r.mensaje_ui || 'Así no se ha podido organizar.');
     }
   }
 
@@ -525,8 +575,18 @@
     }
   });
 
-  $('[data-org-a]').addEventListener('change', refreshTipos);
-  $('[data-org-b]').addEventListener('change', refreshTipos);
+  $('[data-org-a]').addEventListener('change', function () {
+    org.a = $('[data-org-a]').value;
+    if (org.b === org.a) org.b = '';
+    fillSelect($('[data-org-b]'), org.b, org.a);
+    refreshTipos();
+  });
+  $('[data-org-b]').addEventListener('change', function () {
+    org.b = $('[data-org-b]').value;
+    if (org.a === org.b) org.a = '';
+    fillSelect($('[data-org-a]'), org.a, org.b);
+    refreshTipos();
+  });
   $('[data-org-go]').addEventListener('click', proponer);
 
   $('#btn-guardar').addEventListener('click', async function () {

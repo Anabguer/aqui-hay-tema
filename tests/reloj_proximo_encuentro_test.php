@@ -62,7 +62,8 @@ ok(countEvento($partida, DomainEvents::ENCUENTRO_INICIADO) >= 1, 'ENCUENTRO_INIC
 // Varios encuentros: aterriza en el más cercano, no en el último.
 [$service, $partida, $ida, $idb] = setup();
 $enc19 = $service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'conocerse');
-$enc21 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad');
+$partida['celeste']['lugares_desbloqueados'][] = 'lug_parque';
+$enc21 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_parque');
 ok(($enc19['ok'] ?? false) && ($enc21['ok'] ?? false), 'dos encuentros programados');
 $rVar = $service->irAlProximoEncuentro($partida);
 ok((int) $partida['reloj']['hora_actual'] === 19, 'varios: aterriza en el primero (19h)');

@@ -1,0 +1,314 @@
+﻿=== voluntad ===
+{
+  "usar_ponderada": true,
+  "p_min": 0.08,
+  "p_max": 0.94,
+  "p_excelente": 0.92,
+  "score_excelente": 88,
+  "base": 48,
+  "copy_banal": [
+    "lavadora",
+    "pintar_unias",
+    "hoy_no_me_da_la_vida",
+    "el_gato_tiene_que_comer",
+    "se_me_hace_tarde"
+  ],
+  "mod_tipo": {
+    "conocerse": 34,
+    "quedar": 0,
+    "primera_cita": 0,
+    "cita": 0
+  }
+}
+
+=== desgaste_social ===
+{
+  "activo": true,
+  "base_diaria": 0.8,
+  "exponente": 1.4,
+  "horas_sin_contacto": 24,
+  "nunca_cruza_cero": true,
+  "solo_positivo_hacia_cero": true,
+  "delta_recien": 2,
+  "delta_consolidada": 0.25,
+  "dias_sin_contacto_recien": 1,
+  "dias_sin_contacto_consolidada": 1,
+  "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
+}
+
+=== desgaste_pareja ===
+{
+  "activo": true,
+  "dias_sin_interaccion_nada": 2,
+  "dias_sin_interaccion_lento": 1,
+  "delta_estabilidad_recien": 2,
+  "delta_estabilidad_consolidada": 0.4,
+  "no_restar_romance_diario": true
+}
+
+=== pareja ===
+{
+  "nunca_auto_por_umbral": true,
+  "estabilidad_inicial": 55,
+  "base_reconciliacion": 32,
+  "estabilidad_min": 0,
+  "estabilidad_max": 100
+}
+
+=== crisis ===
+{
+  "nunca_auto_por_umbral": true,
+  "probabilidad": 0.015,
+  "bonus_si_estabilidad_baja": 0.04
+}
+
+=== ruptura ===
+{
+  "nunca_auto_por_umbral": true,
+  "probabilidad": 0.01
+}
+
+=== discovery ===
+{
+  "hobbies_iniciales": 1,
+  "rasgos_iniciales": 1,
+  "max_por_experiencia": 2,
+  "no_por_paso_del_tiempo": true
+}
+
+=== misiones_diarias ===
+{
+  "_provisional": true,
+  "_nota": "B3 rebalance. No toca cifras de vida_pueblo.",
+  "dias_sin_salir": 2,
+  "social_floja_max": 12,
+  "vida_cumplida": 1,
+  "vida_caducada": -2,
+  "latido_slots_por_dia": 1
+}
+
+=== autonomia ===
+{
+  "_nota": "Lab autonomia 2026-08-20. Cupo lineal con n (movimiento del pueblo). Cotilleo sigue selectivo. No canon.",
+  "salidas_individuales_sqrt": 0,
+  "salidas_individuales_offset": 0.5,
+  "p_intentar_hora": 0.28,
+  "max_salidas_por_residente_dia": 1,
+  "hora_inicio": 7,
+  "hora_fin": 3,
+  "poco_activo_bonus": 1.8,
+  "max_historias_grandes_por_residente_dia": 1,
+  "prioridad_agenda_jugador": true,
+  "atraccion_ocupacion_bonus": 0.85,
+  "atraccion_ocupacion_cap": 3,
+  "anti_aislamiento_umbral_dias": 2,
+  "anti_aislamiento_bonus_salida": 2.2,
+  "anti_aislamiento_bonus_lugar": 0,
+  "p_franjas": [
+    {
+      "ini": 7,
+      "fin": 12,
+      "p": 0.16
+    },
+    {
+      "ini": 12,
+      "fin": 17,
+      "p": 0.28
+    },
+    {
+      "ini": 17,
+      "fin": 22,
+      "p": 0.42
+    },
+    {
+      "ini": 22,
+      "fin": 3,
+      "p": 0.26
+    }
+  ],
+  "max_salidas_misma_hora": 4,
+  "salidas_individuales_lineal": 0.48,
+  "reserva_cupo_tarde": 0.4
+}
+
+=== social ===
+{
+  "min": -100,
+  "max": 100,
+  "bandas_positivas": [
+    "conocido",
+    "cae_bien",
+    "amigo",
+    "buen_amigo",
+    "mejor_amigo"
+  ],
+  "bandas_negativas": [
+    "cae_mal",
+    "muy_mala",
+    "enemigo"
+  ],
+  "cortes_positivo": {
+    "conocido": 0,
+    "cae_bien": 18,
+    "amigo": 40,
+    "buen_amigo": 62,
+    "mejor_amigo": 82
+  },
+  "cortes_negativo": {
+    "cae_mal": -1,
+    "muy_mala": -35,
+    "enemigo": -70
+  },
+  "etiqueta_sin_contacto": "desconocido"
+}
+
+=== romance ===
+{
+  "min": 0,
+  "max": 100,
+  "bandas": [
+    "sin_interes",
+    "tilin",
+    "interes",
+    "pillado",
+    "enamorado"
+  ],
+  "cortes": {
+    "sin_interes": 0,
+    "tilin": 8,
+    "interes": 22,
+    "pillado": 45,
+    "enamorado": 72
+  },
+  "_nota": "Pareja NO es banda. Es hito/estado aparte."
+}
+
+=== contacto ===
+{
+  "calidades": [
+    "leve",
+    "normal",
+    "significativo"
+  ],
+  "delta_social": {
+    "leve": 2,
+    "normal": 4,
+    "significativo": 7
+  },
+  "techo_por_encuentro_canal": 10,
+  "_nota": "Casual = leve. Quedada = normal. Cita importante buena = significativo. Malo puede restar."
+}
+
+=== vida_pueblo ===
+{
+  "_provisional": true,
+  "_nota": "B1/B2. Cifras de lab, no canon. No son misiones/peticiones jugables.",
+  "inicial": 65,
+  "post_latido": 75,
+  "umbral_positivos_latido": 25,
+  "offline_dano_max": 15,
+  "offline_suelo": 5,
+  "game_over_en_play": false,
+  "ledger_cap": 400,
+  "bandas": [
+    {
+      "id": "critico",
+      "min": 0,
+      "max": 19,
+      "etiqueta": "Se nos va de las manos"
+    },
+    {
+      "id": "alerta",
+      "min": 20,
+      "max": 39,
+      "etiqueta": "Aqu├¡ pasa algo"
+    },
+    {
+      "id": "tirando",
+      "min": 40,
+      "max": 59,
+      "etiqueta": "Tirando, que no es poco"
+    },
+    {
+      "id": "temita",
+      "min": 60,
+      "max": 79,
+      "etiqueta": "Hay temita"
+    },
+    {
+      "id": "controlado",
+      "min": 80,
+      "max": 99,
+      "etiqueta": "Todo controlado"
+    },
+    {
+      "id": "latido",
+      "min": 100,
+      "max": 100,
+      "etiqueta": "Latido"
+    }
+  ],
+  "lab": {
+    "_etiqueta": "INPUT_DE_LAB",
+    "misiones_dia": 3,
+    "peticiones_dia": 2,
+    "mision_ok": 2,
+    "mision_fail": -2,
+    "peticion_ok": 2,
+    "peticion_fail": -2,
+    "hito": 4,
+    "farming_tick": 1,
+    "farming_por_dia": 12,
+    "offline_teorico_por_dia": 4
+  }
+}
+
+=== peticiones_pueblo ===
+{
+  "_canon_b4": true,
+  "_nota": "B4 cerrado en E3. f├ícil/relevante/dif├¡cil son categor├¡as internas: no se muestran en buz├│n ni PLAY. No toca vida_pueblo ni misiones_diarias.",
+  "esquema_activo": "E3",
+  "cap_pct": 0.33,
+  "cap_max": 10,
+  "dias_sin_salir": 2,
+  "p_nacer_hora_base": 0.045,
+  "p_nacer_hora_hueco": 0.07
+}
+
+=== laboratorio_relacional ===
+{
+  "_provisional": true,
+  "_nota": "Cortes de INFORME, no reglas de juego.",
+  "pareja_rapida_dias": 2,
+  "ruptura_rapida_dias": 3,
+  "dias_sin_actividad_preocupante": 7,
+  "evaporacion_social_dias": 8
+}
+
+=== cooldowns ===
+{
+  "propuesta_horas": 6,
+  "por_familia": {
+    "romance_accion": 20,
+    "romance": 48,
+    "romance_hito": 336,
+    "pareja": 36,
+    "crisis": 48,
+    "trabajo": 72
+  }
+}
+
+=== rechazos ===
+{
+  "banal_sin_consecuencia": true,
+  "repetidos_umbral": 3,
+  "delta_romance_hacia_quien_rechaza": -3,
+  "cooldown_horas": 6,
+  "motivos": [
+    "banal",
+    "agenda",
+    "emocional",
+    "relacional"
+  ]
+}
+

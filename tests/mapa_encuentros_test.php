@@ -82,7 +82,7 @@ ok(($marcas['lug_parque']['marca'] ?? '') === 'proximo', 'otro lugar conserva pr
 // Mismo lugar: en curso pisa un próximo posterior en la misma cafetería.
 [$service, $partida, $ida, $idb] = setup();
 $service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'conocerse', 'lug_cafeteria');
-$service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_cafeteria');
+$service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'amistad', 'lug_cafeteria');
 $service->irAlProximoEncuentro($partida);
 $mismo = ResumenDia::marcasPorLugar($partida, $service->getCatalog());
 ok(($mismo['lug_cafeteria']['marca'] ?? '') === 'en_curso', 'mismo lugar: en curso pisa próximo');

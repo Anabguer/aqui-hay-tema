@@ -1,0 +1,877 @@
+{
+    "meta": {
+        "catalogo": "rechazos_candidatos",
+        "estado": "PROPUESTA_NO_ACTIVA",
+        "canon": false,
+        "nota": "Candidato. CatalogStore de PLAY no carga esta carpeta."
+    },
+    "items": [
+        {
+            "id": "act_bailar",
+            "tipo": "actividad",
+            "etiqueta": "Bailar",
+            "contra": [
+                "baile"
+            ],
+            "lugar_ids": [
+                "lug_discoteca"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "celestine",
+                "descubrimientos"
+            ],
+            "descubrimientos": [
+                "La música le puede. Bailar, no. Distinción importante, Celestine.",
+                "En la pista se queda de estatua con copa. No es timidez: es veto.",
+                "Sacar a bailar es mala idea. La barra, en cambio, funciona.",
+                "El cuerpo no se apunta. El oído, sí. No lo mezcles.",
+                "Una discoteca con pista obligatoria le cierra la noche. Un bar con música, no."
+            ],
+            "hooks": [
+                "sacar_a_bailar_mal_idea"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "act_cantar_en_publico",
+            "tipo": "actividad",
+            "etiqueta": "Cantar en público",
+            "contra": [
+                "karaoke"
+            ],
+            "lugar_ids": [
+                "lug_karaoke"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "descubrimientos"
+            ],
+            "descubrimientos": [
+                "Cantar en público no entra. Mirar, a lo mejor. Subirse, no.",
+                "Un micro ajeno ya le parece demasiado. El propio, ni se discute.",
+                "El karaoke como público le vale. El karaoke como turno, no.",
+                "Pedir un dueto es un empujón. Un empujón que no ayuda.",
+                "Hay otras formas de noche. Esta, concretamente, está vetada."
+            ],
+            "hooks": [
+                "micro_abierto"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "act_sudar_en_publico",
+            "tipo": "actividad",
+            "etiqueta": "Sudar con público",
+            "contra": [
+                "gimnasio",
+                "baile",
+                "correr"
+            ],
+            "lugar_ids": [
+                "lug_gimnasio",
+                "lug_discoteca"
+            ],
+            "usos": [
+                "lugares",
+                "rutinas",
+                "descubrimientos"
+            ],
+            "descubrimientos": [
+                "El esfuerzo le parece bien. El espejo del gimnasio, no tanto.",
+                "Sudar sí. Hacerlo con un patio de butacas, ya es otro deporte.",
+                "Prefiere el esfuerzo sin testigos. El sudor, que se quede entre cuatro paredes conocidas.",
+                "Una clase llena le pone el cuello tieso. No es metáfora.",
+                "Correr al alba, vale. Una sala con veinte pares de ojos, ya es otra conversación."
+            ],
+            "hooks": [
+                "clase_colectiva"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "act_ir_de_tiendas",
+            "tipo": "actividad",
+            "etiqueta": "Ir de tiendas",
+            "contra": [
+                "moda"
+            ],
+            "lugar_ids": [
+                "lug_tienda"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "regalos"
+            ],
+            "descubrimientos": [
+                "Los escaparates le cansan. Entrar a \"mirar\" le parece una trampa, sea ropa, libros o cajas raras.",
+                "Regalar un plan de tiendas es un acto de fe. O de maldad. Da igual el mostrador.",
+                "Un recado concreto, vale. \"Vamos a ver qué hay\", le cierra el carácter.",
+                "Pasillos, colas, probarse por probarse: le sienta como una espera del médico.",
+                "La tienda le parece un laberinto con precio. Prefiere que le digan qué hace falta y ya."
+            ],
+            "hooks": [
+                "rebajas"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "act_competir",
+            "tipo": "actividad",
+            "etiqueta": "Competir",
+            "contra": [
+                "competir",
+                "videojuegos_competitivo",
+                "deporte_equipo"
+            ],
+            "lugar_ids": [
+                "lug_arcade",
+                "lug_bingo"
+            ],
+            "usos": [
+                "planes",
+                "compatibilidad",
+                "descubrimientos"
+            ],
+            "descubrimientos": [
+                "Jugar le gusta. Que haya un ganador, le amarga la boca.",
+                "Si el plan es \"a ver quién gana\", cuenta con una baja.",
+                "Un torneo le quita el gusto al juego. Una partida sin palmarés, se queda.",
+                "El marcador le pone tenso el café de después. Mejor no hay marcador.",
+                "Arcade, bingo, un partido: si huele a ranking, se echa atrás."
+            ],
+            "hooks": [
+                "torneo"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_perder_en_publico",
+            "tipo": "contexto",
+            "etiqueta": "Perder delante de gente",
+            "contra": [
+                "competir"
+            ],
+            "lugar_ids": [
+                "lug_arcade",
+                "lug_bingo",
+                "lug_karaoke"
+            ],
+            "usos": [
+                "eventos",
+                "cotilleo",
+                "compatibilidad",
+                "descubrimientos"
+            ],
+            "descubrimientos": [
+                "Lleva fatal perder. Sobre todo si hay testigos. Anota, anota.",
+                "La derrota le deja de un humor que no merece un café después.",
+                "Un cartón fallido con corro alrededor le sienta como un empujón.",
+                "Jugar en casa, vale. Jugar con público y perder, ya es otro deporte.",
+                "La partida pública tiene un coste. El pueblo no siempre lo ve."
+            ],
+            "hooks": [
+                "carton_fallido",
+                "partida_publica"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_biblioteca_habitat",
+            "tipo": "contexto",
+            "etiqueta": "Vivir en la biblioteca",
+            "contra": [
+                "leer"
+            ],
+            "lugar_ids": [
+                "lug_biblioteca"
+            ],
+            "usos": [
+                "lugares",
+                "rutinas",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Lee, sí. Convertir la biblioteca en salón, no. Hay una línea.",
+                "Un rato entre estantes le vale. Una tarde entera le parece encierro.",
+                "El libro en casa o en el café. El edificio como hábitat, no.",
+                "Un plan que sea \"nos vemos en la biblioteca y nos quedamos\" le cierra.",
+                "Leer no obliga a vivir entre lomos. Celestine, no lo mezcles."
+            ],
+            "hooks": [
+                "plan_solo_biblioteca"
+            ],
+            "nota": "Sirve para lectora que no quiere el destino como hábitat.",
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_multitud",
+            "tipo": "contexto",
+            "etiqueta": "Muchísima gente",
+            "contra": [
+                "grupos_grandes",
+                "fiesta"
+            ],
+            "lugar_ids": [
+                "lug_discoteca",
+                "lug_bingo"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "preferencias_sociales"
+            ],
+            "descubrimientos": [
+                "La gente, bien. El rebaño, mal. No es lo mismo y se enfada si lo mezclas.",
+                "A partir de cierto número de cuerpos, se apaga. No es un fallo: es un límite.",
+                "Una fiesta mayor le sienta como un empujón. Un corro pequeño, bien.",
+                "La discoteca llena, el bingo a tope: el aforo le gana al plan.",
+                "Más gente no es más alegría. A partir de un punto, es menos persona."
+            ],
+            "hooks": [
+                "fiesta_mayor"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_silencio_sepulcral",
+            "tipo": "contexto",
+            "etiqueta": "Silencio de museo",
+            "contra": [
+                "sitios_en_silencio"
+            ],
+            "lugar_ids": [
+                "lug_biblioteca",
+                "lug_spa"
+            ],
+            "usos": [
+                "lugares",
+                "planes"
+            ],
+            "descubrimientos": [
+                "El silencio total le pone de los nervios. Un murmullo, bien. Una tumba, no.",
+                "En la biblioteca se le escapa la tos. Siempre. Es una maldición menor.",
+                "El spa callado le incomoda si nadie respira. Un hilo de voz, salva.",
+                "Un \"shhh\" ajeno le sube el pulso. El rumor de cafetería, le calma.",
+                "No pide jaleo. Pide que el silencio no parezca un examen."
+            ],
+            "hooks": [
+                "shhh"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_que_te_toquen",
+            "tipo": "contexto",
+            "etiqueta": "Que le toquen (masajes, aglomeración)",
+            "contra": [
+                "spa"
+            ],
+            "lugar_ids": [
+                "lug_spa",
+                "lug_discoteca"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "afecto_estilo"
+            ],
+            "descubrimientos": [
+                "El spa le va… hasta que alguien le pone las manos. Entonces, no.",
+                "El contacto no solicitado le cierra el día. Incluido el bienintencionado.",
+                "Un masaje ofertado es un no educado. Insistir, un no menos educado.",
+                "La aglomeración que pega codo con codo le sienta mal. El espacio, bien.",
+                "Preguntar antes vale. Dar por hecho el abrazo o el apretón, no."
+            ],
+            "hooks": [
+                "masaje_ofertado"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_postal_romantica",
+            "tipo": "contexto",
+            "etiqueta": "Romanticismo de postal",
+            "contra": [
+                "cine_romantico",
+                "atardeceres"
+            ],
+            "lugar_ids": [
+                "lug_mirador",
+                "lug_picnic"
+            ],
+            "usos": [
+                "planes",
+                "celestine",
+                "cotilleo"
+            ],
+            "descubrimientos": [
+                "El mirador le gusta. El paquete \"atardecer + violín + ahora os besáis\", no.",
+                "Si el plan parece un anuncio, se ríe. O se va. Según el día.",
+                "La postal le saca de quicio. La vista, no. Distinción importante.",
+                "Un picnic sencillo vale. Un picnic con playlist de boda, ya es teatro.",
+                "Celestine: no conviertas un sitio bonito en declaración obligatoria."
+            ],
+            "hooks": [
+                "plan_de_pelicula"
+            ],
+            "nota": "Evita romántico = mirador.",
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_alcohol",
+            "tipo": "contexto",
+            "etiqueta": "Alcohol",
+            "contra": [
+                "copas"
+            ],
+            "lugar_ids": [
+                "lug_bar",
+                "lug_discoteca"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "regalos"
+            ],
+            "descubrimientos": [
+                "El bar le puede. La copa, no. Hay zumo y hay conversación. No es un drama.",
+                "No bebe. No hace falta un discurso. Un tono de lástima, sí sería un drama.",
+                "Una ronda obligatoria le pone contra la pared. Una alternativa, le deja en paz.",
+                "La discoteca con copa por medio, peor. El bar con un refresco, encaja.",
+                "Insistir \"una no hace daño\" hace daño. El veto es el veto."
+            ],
+            "hooks": [
+                "ronda_obligatoria"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_improvisar_plan",
+            "tipo": "contexto",
+            "etiqueta": "Planes de última hora",
+            "contra": [],
+            "lugar_ids": [],
+            "usos": [
+                "celestine",
+                "planes",
+                "rutinas"
+            ],
+            "descubrimientos": [
+                "Lo de \"vente ahora\" le sienta como un empujón. Avisa con tiempo.",
+                "Improvisar pone de mal humor. No es sequedad: es que se organiza.",
+                "Una quedada sorpresa le descoloca el día. Una quedada avisada, le abre.",
+                "El calendario no es pose. Es cómo llega a los sitios de buen humor.",
+                "Celestine: si el plan sale hoy, dilo esta mañana. Mejor, ayer."
+            ],
+            "hooks": [
+                "quedada_sorpresa"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_mostrador_eterno",
+            "tipo": "contexto",
+            "etiqueta": "La cafetería como despacho",
+            "contra": [
+                "cafe_con_gente"
+            ],
+            "lugar_ids": [
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Un café, sí. Convertir la cafetería en oficina vitalicia, no. Hay sillas en casa.",
+                "Le gusta el café. No le gusta que el plan sea \"la de siempre, dos horas\".",
+                "La mesa de siempre le cansa si es la única opción. Variar, ayuda.",
+                "Un rato, vale. Un turno completo de mostrador, le parece encierro con taza.",
+                "Quedar a café funciona. Quedar a habitar la cafetería, no."
+            ],
+            "hooks": [
+                "mesa_de_siempre"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_comer_fuera",
+            "tipo": "contexto",
+            "etiqueta": "Comer fuera",
+            "contra": [
+                "restaurantes"
+            ],
+            "lugar_ids": [
+                "lug_restaurante"
+            ],
+            "usos": [
+                "lugares",
+                "planes",
+                "regalos"
+            ],
+            "descubrimientos": [
+                "Cocina. Que le pongan la mesa en un restaurante le parece un robo con mantel.",
+                "Salir a comer le cansa. El de casa le sabe a domingo; el de fuera, a trámite.",
+                "Una reserva \"no, gracias\" no es sequedad: es que el puchero gana.",
+                "El restaurante le sienta a trámite y a precio. La cocina propia, a plan.",
+                "Invitar a casa acierta. Invitar a un local por sistema, menos."
+            ],
+            "hooks": [
+                "reserva_no_gracias"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_sala_a_oscuras",
+            "tipo": "contexto",
+            "etiqueta": "La sala de cine",
+            "contra": [
+                "cine_sala"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "lugares",
+                "planes"
+            ],
+            "descubrimientos": [
+                "Las películas le gustan. La sala, con extraños tosiendo, no. El sofá gana.",
+                "Ir al cine le parece un palomitas a precio de alquiler. Ver, vería.",
+                "Unas entradas de regalo son un riesgo. Un maratón en casa, un acierto.",
+                "La oscuridad ajena le distrae. La de casa, no.",
+                "Cine sí. Destino sala, no. Celestine, no lo mezcles."
+            ],
+            "hooks": [
+                "entradas_regalo"
+            ],
+            "nota": "Pareja de ver_en_casa: cine sí, destino no.",
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        },
+        {
+            "id": "ctx_parque_lleno",
+            "tipo": "contexto",
+            "etiqueta": "El parque cuando hay feria",
+            "contra": [
+                "pasear",
+                "picnic"
+            ],
+            "lugar_ids": [
+                "lug_parque",
+                "lug_picnic"
+            ],
+            "usos": [
+                "lugares",
+                "rutinas"
+            ],
+            "descubrimientos": [
+                "El parque le va. El parque en masa, con bluetooth y tupperware de treinta, no.",
+                "Pasear sí. Hacer cola para un banco, ya es otra afición que no tiene.",
+                "Un domingo de multitud le quita el sitio. Un lunes temprano, se lo devuelve.",
+                "El picnic íntimo vale. El picnic de feria, le cierra el carácter.",
+                "Naturaleza sí. Procesión en el césped, no. Hay diferencia y se enfada si no se ve."
+            ],
+            "hooks": [
+                "domingo_multitud"
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            }
+        }
+    ],
+    "destinos_rechazables": [
+        "lug_cafeteria",
+        "lug_biblioteca",
+        "lug_tienda",
+        "lug_restaurante",
+        "lug_bingo",
+        "lug_cine",
+        "lug_arcade",
+        "lug_bar",
+        "lug_discoteca",
+        "lug_karaoke",
+        "lug_parque",
+        "lug_picnic",
+        "lug_mirador",
+        "lug_gimnasio",
+        "lug_spa"
+    ],
+    "nota_destinos": "Un rechazo tipo destino usa el id del lugar. No se duplica el edificio aquí."
+}

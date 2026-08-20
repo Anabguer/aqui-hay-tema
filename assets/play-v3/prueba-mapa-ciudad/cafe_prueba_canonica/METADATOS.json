@@ -1,0 +1,85 @@
+{
+  "caja": {
+    "x": 152,
+    "y": 796,
+    "w": 561,
+    "h": 185
+  },
+  "fases": {
+    "F1": {
+      "canvas": [
+        235,
+        150
+      ],
+      "bbox": {
+        "x0": 12,
+        "y0": 0,
+        "x1": 223,
+        "y1": 150,
+        "content_w": 211,
+        "content_h": 150,
+        "canvas_w": 235,
+        "canvas_h": 150,
+        "fill_w_pct": 89.8,
+        "fill_h_pct": 100.0
+      },
+      "holes": 0,
+      "black_px": 86,
+      "pos": {
+        "x": 160,
+        "y": 829
+      },
+      "status": "OK"
+    },
+    "F2": {
+      "canvas": [
+        403,
+        161
+      ],
+      "bbox": {
+        "x0": 40,
+        "y0": 2,
+        "x1": 378,
+        "y1": 161,
+        "content_w": 338,
+        "content_h": 159,
+        "canvas_w": 403,
+        "canvas_h": 161,
+        "fill_w_pct": 83.9,
+        "fill_h_pct": 98.8
+      },
+      "holes": 0,
+      "black_px": 112,
+      "pos": {
+        "x": 160,
+        "y": 818
+      },
+      "status": "OK"
+    },
+    "F3": {
+      "canvas": [
+        496,
+        180
+      ],
+      "bbox": {
+        "x0": 31,
+        "y0": 2,
+        "x1": 496,
+        "y1": 180,
+        "content_w": 465,
+        "content_h": 178,
+        "canvas_w": 496,
+        "canvas_h": 180,
+        "fill_w_pct": 93.8,
+        "fill_h_pct": 98.9
+      },
+      "holes": 0,
+      "black_px": 217,
+      "pos": {
+        "x": 160,
+        "y": 799
+      },
+      "status": "OK"
+    }
+  }
+}

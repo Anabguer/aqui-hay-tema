@@ -66,8 +66,9 @@ $partida = $recargada;
 $reprog = $service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'amistad');
 ok($reprog['ok'] ?? false, 'se puede volver a programar la misma hora');
 
-$enc2 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'conocerse');
-ok($enc2['ok'] ?? false, 'segundo encuentro 21h');
+$partida['celeste']['lugares_desbloqueados'][] = 'lug_parque';
+$enc2 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'conocerse', 'lug_parque');
+ok($enc2['ok'] ?? false, 'segundo encuentro 21h parque');
 $service->avanzarReloj($partida, 16);
 $estTerm = null;
 foreach ($partida['encuentros'] as $e) {
@@ -76,7 +77,8 @@ foreach ($partida['encuentros'] as $e) {
     }
 }
 ok($estTerm === 'terminado', 'encuentro 21h terminado');
-$noCancelTerm = $service->cancelarEncuentro($partida, $enc2['encuentro']['id']);
+$enc2Id = (string) ($enc2['encuentro']['id'] ?? '');
+$noCancelTerm = $service->cancelarEncuentro($partida, $enc2Id !== '' ? $enc2Id : 'enc_faltante');
 ok(!($noCancelTerm['ok'] ?? true), 'no cancelar terminado');
 ok(($noCancelTerm['error'] ?? '') === 'TRANSICION_INVALIDA', 'error TRANSICION_INVALIDA al cancelar terminado');
 

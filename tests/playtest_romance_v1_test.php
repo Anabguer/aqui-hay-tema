@@ -74,7 +74,7 @@ foreach ($paresOk as $par) {
     $cmp = CompatibilidadCalculator::aHaciaB($pa, $pb, $cal);
     ok(($cmp['romance_elegible'] ?? false) === true, "$label compatibilidad edad ok");
     $pTmp = $partida;
-    $enc = EncuentroEngine::programar($pTmp, [$a, $b], 1, 20, 'romantico', 'lug_cafeteria');
+    $enc = EncuentroEngine::programar($pTmp, [$a, $b], 1, 18, 'romantico', 'lug_cafeteria');
     ok(($enc['ok'] ?? false) === true, "$label programar romantico no rechaza por género");
 }
 

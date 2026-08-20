@@ -33,6 +33,9 @@ final class RelojOperations
             $cal = CalibracionConfig::load($this->projectRoot);
             $catalog = new Catalog($this->projectRoot);
             RelacionDesgaste::alCerrarDia($partida, $cal);
+            $rngHitos = RngService::fromPartida($partida);
+            HitoRelacionalEngine::alCerrarDia($partida, $cal, $rngHitos);
+            $rngHitos->persistToPartida($partida);
             AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
         }
         if (!empty($partida['lab_vida_activa'])

@@ -1,0 +1,1528 @@
+{
+    "meta": {
+        "catalogo": "gustos_candidatos",
+        "estado": "PROPUESTA_NO_ACTIVA",
+        "canon": false,
+        "nota": "Candidato. CatalogStore de PLAY no carga esta carpeta."
+    },
+    "items": [
+        {
+            "id": "cine_terror",
+            "familia": "cine",
+            "etiqueta": "Terror",
+            "afinidad_aficiones": [
+                "cine_sala",
+                "ver_en_casa"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El terror le pone de un humor extrañamente bueno. No preguntes.",
+                "Si hay sangre de atrezzo, se queda. Si hay comedia romántica, negocia.",
+                "Sale de la sala comentando el susto. El susto era el plan.",
+                "Una noche de miedo en casa también vale. Las luces, bajas.",
+                "Regalar un póster raro acierta. Elegir \"algo suave\" por si acaso, menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "noche_de_susto",
+                "regalo_poster"
+            ]
+        },
+        {
+            "id": "cine_comedia",
+            "familia": "cine",
+            "etiqueta": "Comedia",
+            "afinidad_aficiones": [
+                "cine_sala",
+                "ver_en_casa"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Quiere reírse en la butaca. El resto es opcional.",
+                "Una comedia floja le ofende más que un drama serio. Tiene un punto.",
+                "Si nadie se ríe en la sala, se le atraganta la palomita.",
+                "Repite las buenas. Cita las frases. El pueblo ya las ha oído.",
+                "Propón risa y tienes plan. Propón \"cine importante\", ya es otra negociación."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "session_risa"
+            ]
+        },
+        {
+            "id": "cine_romantico",
+            "familia": "cine",
+            "etiqueta": "Cine romántico",
+            "afinidad_aficiones": [
+                "cine_sala",
+                "ver_en_casa"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Las de amor le llegan. No lo anuncia con un megáfono, pero se le nota.",
+                "No va de postal: es que esas películas le funcionan. Distinto.",
+                "Un final previsible le vale si el camino está bien. Si no, se queja con cariño.",
+                "En el sofá o en sala: el pañuelo, por si acaso, no es broma.",
+                "Burlarse del género le cierra un poco. Verla juntos, abre."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "final_previsible"
+            ]
+        },
+        {
+            "id": "cine_accion",
+            "familia": "cine",
+            "etiqueta": "Acción",
+            "afinidad_aficiones": [
+                "cine_sala",
+                "ver_en_casa"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Quiere que pasen cosas. Diálogo de dos horas le parece un atraco.",
+                "Explosiones, persecuciones, palomitas. El arte, otro día.",
+                "Un estreno de verano le organiza el calendario. El resto, relleno.",
+                "Si la persecución está bien, perdona el guion. Si no, no perdona nada.",
+                "Propón acción y hay plan. Propón subtítulos densos, prepara debate."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "estreno_verano"
+            ]
+        },
+        {
+            "id": "cine_thriller",
+            "familia": "cine",
+            "etiqueta": "Thriller",
+            "afinidad_aficiones": [
+                "cine_sala",
+                "ver_en_casa"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le gusta que la trama apriete. Si lo ve venir, se enfada con el guion.",
+                "Sale del cine comentando agujeros. Es su forma de querer la película.",
+                "Un spoiler de crimen le sienta como un empujón. Anota, anota.",
+                "El silencio de la sala, aquí, es parte del juego. El móvil, no.",
+                "Recomendar un thriller bueno es un favor. Contar el giro, un delito."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "spoiler_crimen"
+            ]
+        },
+        {
+            "id": "cine_autor",
+            "familia": "cine",
+            "etiqueta": "Cine raro / de autor",
+            "afinidad_aficiones": [
+                "cine_sala",
+                "ver_en_casa"
+            ],
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le tiran las raras. Subtítulos, silencios, finales que no cierran. Su rollo.",
+                "Si dices \"no la he entendido\", se le ilumina el día. Por fin alguien honesto. O un aliado.",
+                "Un pase alternativo le parece plan de verdad. Un blockbuster, según el humor.",
+                "Habla de planos como otros de goles. Tú decides si te quedas.",
+                "No es pose: es que esas películas le dejan pensando. El palomitas, opcional."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "pase_alternativo"
+            ]
+        },
+        {
+            "id": "lectura_novela",
+            "familia": "lectura",
+            "etiqueta": "Novela",
+            "afinidad_aficiones": [
+                "leer"
+            ],
+            "lugar_ids": [
+                "lug_biblioteca"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Historias largas. Personajes. Que le dejen vivir en otra parte un rato.",
+                "Acaba un libro y necesita un día de duelo. Es oficial.",
+                "Un personaje bien hecho le dura más que un cotilleo de pasillo.",
+                "Regalar novela es acertar si preguntas antes. Una al azar, riesgo.",
+                "Habla de tramas con una seriedad de recado importante."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "regalo_novela"
+            ]
+        },
+        {
+            "id": "lectura_ensayo",
+            "familia": "lectura",
+            "etiqueta": "Ensayo / no ficción",
+            "afinidad_aficiones": [
+                "leer"
+            ],
+            "lugar_ids": [
+                "lug_biblioteca"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Prefiere que el libro le explique el mundo, no que le invente uno.",
+                "Subraya. Discute con el autor. El autor no se entera; quien lee, sí.",
+                "Un dato bien contado le alegra el café. Una teoría floja, le pica.",
+                "La ficción, según el día. La no ficción, casi siempre.",
+                "Regalar un ensayo bueno es fino. Regalar autoayuda vaga, un tropiezo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "regalo_ensayo"
+            ]
+        },
+        {
+            "id": "pasteleria",
+            "familia": "mesa",
+            "etiqueta": "Dulce",
+            "afinidad_aficiones": [
+                "merendar",
+                "cafe_con_gente"
+            ],
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_picnic"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El dulce no es un postre: es una política.",
+                "Si hay tarta, hay trato. Si no hay tarta, hay negociación.",
+                "Sabe qué día está el hojaldre. Eso, aquí, es poder.",
+                "Un cumple sin dulce le parece un trámite. Con dulce, una fiesta.",
+                "Regalar algo rico acierta. Decir \"mejor no, por la línea\", un riesgo innecesario."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "cumple_tarta",
+                "regalo_dulce"
+            ]
+        },
+        {
+            "id": "cocina_de_casa",
+            "familia": "mesa",
+            "etiqueta": "Comida de casa",
+            "afinidad_aficiones": [
+                "cocina",
+                "restaurantes"
+            ],
+            "lugar_ids": [
+                "lug_restaurante",
+                "lug_picnic"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le puede una buena receta de toda la vida más que un menú con espuma.",
+                "Si el plato sabe a domingo de pueblo, se rinde.",
+                "El guiso bien hecho le cierra el carácter. La novedad por la novedad, no.",
+                "Habla de cucharas de palo con respeto. El gadget, según.",
+                "Invitar a casa a comer es el plan. El restaurante de moda, otro capítulo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "guiso",
+                "abuela"
+            ]
+        },
+        {
+            "id": "mesa_formal",
+            "familia": "mesa",
+            "etiqueta": "Mesa puesta / formal",
+            "afinidad_aficiones": [
+                "restaurantes"
+            ],
+            "lugar_ids": [
+                "lug_restaurante"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le gusta que la cosa tenga mantel y copas. De vez en cuando, no siempre.",
+                "Un restaurante \"en condiciones\" le sienta como un traje bien cortado.",
+                "La reserva, el vaso, el ritmo: forma parte del gusto. No es pose pura.",
+                "Un sitio cualquiera le vale un martes. Un sábado, pide un poco más.",
+                "Propón mesa puesta y hay ilusión. Propón de pie con servilleta de papel, según el día."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "reserva_buena"
+            ]
+        },
+        {
+            "id": "cafe_en_serio",
+            "familia": "mesa",
+            "etiqueta": "Café de verdad",
+            "afinidad_aficiones": [
+                "cafe_con_gente"
+            ],
+            "lugar_ids": [
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El café le importa. El de máquina de gasolinera es una ofensa personal.",
+                "Puede hablar cinco minutos de un grano. Tú decides si te quedas.",
+                "Un barista que se esmera le mejora el pueblo. Uno que no, lo empeora.",
+                "El café malo se nota en el humor. No es capricho: es el primer trago del día.",
+                "Invitar a \"un café de verdad\" es un plan. Invitar a uno cualquiera, un apaño."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "barista"
+            ]
+        },
+        {
+            "id": "terrazas",
+            "familia": "ambiente",
+            "etiqueta": "Terrazas",
+            "afinidad_aficiones": [
+                "cafe_con_gente",
+                "copas",
+                "merendar"
+            ],
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_bar",
+                "lug_picnic"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Fuera, siempre que se pueda. El interior le sabe a espera del dentista.",
+                "Una terraza le arregla el carácter. El aire, no el menú.",
+                "Si hay sol de invierno, aparece. Si hay cristal cerrado, negocia.",
+                "El café, la copa, la merienda: mejor con calle. El techo, para el mal tiempo.",
+                "Pedir mesa fuera no es manía. Es que dentro se le encoge el día."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "mesa_fuera"
+            ]
+        },
+        {
+            "id": "sitios_con_ruido",
+            "familia": "ambiente",
+            "etiqueta": "Ambiente con marcha",
+            "afinidad_aficiones": [
+                "fiesta",
+                "copas",
+                "conciertos"
+            ],
+            "lugar_ids": [
+                "lug_bar",
+                "lug_discoteca",
+                "lug_karaoke"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le sienta bien el jaleo. Pensar, ya pensará mañana.",
+                "Si el sitio está muerto, se apaga un poco también.",
+                "El volumen alto le pone en su sitio. El murmullo de biblioteca, otro día.",
+                "Bar, karaoke, un bolo: el ruido es parte del plan, no un accidente.",
+                "Un local callado le parece sala de espera. Uno vivo, domingo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "volumen_alto"
+            ]
+        },
+        {
+            "id": "sitios_en_silencio",
+            "familia": "ambiente",
+            "etiqueta": "Sitios en silencio",
+            "afinidad_aficiones": [
+                "leer",
+                "escribir",
+                "spa",
+                "crucigramas"
+            ],
+            "lugar_ids": [
+                "lug_biblioteca",
+                "lug_spa",
+                "lug_mirador"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Necesita sitios donde no le griten el café. No es pedantería: es supervivencia.",
+                "El silencio le trabaja a favor. El resto del pueblo, a veces no.",
+                "Una mesa de rincón le vale más que una barra llena.",
+                "Biblioteca, spa, mirador: el volumen bajo es el lujo.",
+                "Propón un sitio quieto y hay alivio. Propón un local a gritos, hay veto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "mesa_rincón"
+            ]
+        },
+        {
+            "id": "luces_bajas",
+            "familia": "ambiente",
+            "etiqueta": "Luz baja, barra, de noche",
+            "afinidad_aficiones": [
+                "copas",
+                "conciertos"
+            ],
+            "lugar_ids": [
+                "lug_bar",
+                "lug_discoteca"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le van los sitios oscuritos. No es misterio: es que se relaja.",
+                "Con luz de oficina se encoge. Con luz de bar, aparece.",
+                "La barra del fondo es territorio. El fluorescente, un enemigo menor.",
+                "De noche, con poca luz, habla mejor. De día, en un recinto blanco, menos.",
+                "Un plan de luces bajas le sienta. Uno de centro comercial a las doce, otro humor."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "barra_fondo"
+            ]
+        },
+        {
+            "id": "competir",
+            "familia": "juegos",
+            "etiqueta": "Competir",
+            "afinidad_aficiones": [
+                "videojuegos_competitivo",
+                "deporte_equipo",
+                "bingo",
+                "arcade",
+                "juegos_mesa"
+            ],
+            "lugar_ids": [
+                "lug_arcade",
+                "lug_bingo",
+                "lug_parque"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le gusta ganar. Y que se note, un poco.",
+                "Un marcador le pone en modo serio. Luego dice que era broma.",
+                "Arcade, bingo, un partido, una caja de mesa: hay palmarés.",
+                "La revancha es el postre. Quien se niega, corta el hilo.",
+                "Un plan \"a ver quién\" le enciende. Un plan sin puntuación, le sabe a poco."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "revancha"
+            ]
+        },
+        {
+            "id": "coleccionar_piezas",
+            "familia": "manos",
+            "etiqueta": "Objetos de colección",
+            "afinidad_aficiones": [
+                "coleccionismo",
+                "moda"
+            ],
+            "lugar_ids": [
+                "lug_tienda"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "No compra por comprar: busca \"la\" cosa. La reconoce al vuelo.",
+                "Un hallazgo le da para una semana de conversación. Prepárate.",
+                "La vitrina tiene ley. Tocar, con permiso. Mover, ni se discute.",
+                "Ropa, libros, una figura rara: el objeto importa más que la marca.",
+                "Regalar una pieza cierta es un acierto grande. Una parecida, un riesgo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "vitrina"
+            ]
+        },
+        {
+            "id": "ropa_atrevida",
+            "familia": "manos",
+            "etiqueta": "Ropa que se nota",
+            "afinidad_aficiones": [
+                "moda"
+            ],
+            "lugar_ids": [
+                "lug_tienda",
+                "lug_discoteca"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le gusta que la ropa diga algo. Aunque sea \"mira\".",
+                "Lo discreto le parece un desperdicio. No siempre, pero a menudo.",
+                "Probarse algo loco es plan. Salir con ello, según el valor del día.",
+                "Un cumplido sobre el conjunto le dura. Ignorarlo, también se nota.",
+                "La tienda, aquí, es escenario. El aparador, el primer acto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "probarse_loco"
+            ]
+        },
+        {
+            "id": "ropa_comoda",
+            "familia": "manos",
+            "etiqueta": "Ropa cómoda",
+            "afinidad_aficiones": [
+                "moda"
+            ],
+            "lugar_ids": [
+                "lug_tienda",
+                "lug_parque"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Si no se puede sentar, no se lo pone. Fin del comunicado.",
+                "La elegancia empieza por no estar sufriendo. El resto es adorno.",
+                "Un zapato que vive le parece lujo. Uno que aprieta, teatro inútil.",
+                "El parque, el sofá, un recado: pide tela que perdone el día.",
+                "Regalar algo suave acierta. Regalar un martirio bonito, menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "zapatos_vivos"
+            ]
+        },
+        {
+            "id": "agua_caliente",
+            "familia": "cuidado",
+            "etiqueta": "Agua caliente / baños",
+            "afinidad_aficiones": [
+                "spa",
+                "yoga"
+            ],
+            "lugar_ids": [
+                "lug_spa"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El agua caliente le arregla más que un consejo bienintencionado.",
+                "Si el cuerpo pide tregua, no pide fiesta: pide vapor y que cierren la puerta.",
+                "Un circuito, un baño, una ducha larga: es plan, no relleno.",
+                "El spa le entiende. El ruido de la calle, a la salida.",
+                "Regalar un rato de agua caliente es fino. Llenar la agenda ese mismo día, no."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "circuito"
+            ]
+        },
+        {
+            "id": "sudar",
+            "familia": "movimiento",
+            "etiqueta": "Sudar de verdad",
+            "afinidad_aficiones": [
+                "correr",
+                "gimnasio",
+                "deporte_equipo",
+                "baile",
+                "bici"
+            ],
+            "lugar_ids": [
+                "lug_gimnasio",
+                "lug_parque",
+                "lug_discoteca"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Si no suda, considera que no ha hecho nada. Es una teoría discutible y suya.",
+                "El esfuerzo le pone de buen humor. El sofá, a veces al revés.",
+                "Correr, pesas, baile, bici: el cuerpo pide trabajo de verdad.",
+                "Después, la ducha es sagrada. El plan siguiente, según las piernas.",
+                "Un plan suave le sabe a poco. Uno que deje la camiseta lista, encaja."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "despues_ducha"
+            ]
+        },
+        {
+            "id": "atardeceres",
+            "familia": "aire_libre",
+            "etiqueta": "Atardeceres",
+            "afinidad_aficiones": [
+                "mirador",
+                "pasear",
+                "fotografia"
+            ],
+            "lugar_ids": [
+                "lug_mirador",
+                "lug_parque"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El atardecer le funciona. No hace falta violín. Con el cielo basta.",
+                "Se queda mirando la luz como quien mira un recado importante.",
+                "El mirador, el parque, una ventana: el sitio es la hora, no el anuncio.",
+                "Fotografiar sí. Convertirlo en escena de película, no hace falta.",
+                "Quedar a esa hora es un plan sencillo y bueno. Vestirlo de declaración, otro recado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "luz_última"
+            ]
+        },
+        {
+            "id": "documentales",
+            "familia": "cine",
+            "etiqueta": "Documentales",
+            "afinidad_aficiones": [
+                "ver_en_casa",
+                "leer"
+            ],
+            "lugar_ids": [],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Prefiere que le cuenten algo que existe. La ficción, según el día.",
+                "Un buen documental le da tema para tres cafés. Aviso a la mesa.",
+                "Sale recomendando rarezas. Tú decides si apuntas o sonríes.",
+                "El sofá, aquí, es aula. El palomitas, opcional.",
+                "Regalar un documental que encaje es fino. Uno genérico de \"cultura\", un apaño."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "recomendacion_rara"
+            ]
+        },
+        {
+            "id": "chisme_sano",
+            "familia": "pueblo",
+            "etiqueta": "Enterarse (con tacto)",
+            "afinidad_aficiones": [
+                "tertulia",
+                "asociacion",
+                "cafe_con_gente"
+            ],
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_bar",
+                "lug_bingo"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le gusta estar al tanto. No es oficio sucio: es que el pueblo es su serie.",
+                "Pregunta. Se entera. No siempre reparte lo que sabe. Eso ya es carácter.",
+                "Un café, el bingo, la barra: el serial se actualiza solo.",
+                "El chisme con tacto le parece convivencia. El que hace daño, le cierra.",
+                "Contar algo de pasada abre puerta. Pedir sangre, la cierra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "se_entero_antes"
+            ]
+        },
+        {
+            "id": "escenario",
+            "familia": "musica",
+            "etiqueta": "Subirse a un escenario",
+            "afinidad_aficiones": [
+                "karaoke",
+                "tocar_instrumento",
+                "conciertos"
+            ],
+            "lugar_ids": [
+                "lug_karaoke",
+                "lug_bar"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le tira subirse un rato. El pánico y el gusto van de la mano.",
+                "Un micro le cambia la postura. Luego vuelve a ser quien era. O no.",
+                "Karaoke, un bolo, una broma al aire: el palco le pica de forma buena.",
+                "No siempre sale bien. Sale. Eso, para esta persona, cuenta.",
+                "Sacar al escenario funciona si hay ganas. Obligar, apaga la gana."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "solo_improvisado"
+            ]
+        },
+        {
+            "id": "naturaleza_sin_gente",
+            "familia": "aire_libre",
+            "etiqueta": "Campo casi vacío",
+            "afinidad_aficiones": [
+                "pasear",
+                "senderismo",
+                "plantas",
+                "mirador"
+            ],
+            "lugar_ids": [
+                "lug_parque",
+                "lug_mirador"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "La naturaleza le gusta más si no hay picnic de treinta. El pájaro, sí; el bluetooth, no.",
+                "Se aleja un poco y se le ve más fácil. O eso parece.",
+                "Un sendero casi vacío le arregla el día. Uno de procesión, lo empeora.",
+                "El parque a primera hora es oro. El parque en feria, otra conversación.",
+                "Propón campo y silencio y hay sí. Propón merienda masiva, hay pero."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "sendero_solo"
+            ]
+        },
+        {
+            "id": "grupos_grandes",
+            "familia": "pueblo",
+            "etiqueta": "Grupos grandes",
+            "afinidad_aficiones": [
+                "fiesta",
+                "deporte_equipo",
+                "asociacion",
+                "bingo"
+            ],
+            "lugar_ids": [
+                "lug_discoteca",
+                "lug_bingo",
+                "lug_parque"
+            ],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "compatibilidad",
+                "descubrimientos",
+                "eventos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Cuanta más gente, mejor. Se enciende. Es agotador y contagioso.",
+                "Un plan de dos le sabe a poco. Un plan de doce, a domingo.",
+                "Bingo, fiesta, un partido, una asociación: el rebaño, aquí, es combustible.",
+                "Se le ve la sonrisa cuando la mesa no cabe. Se le ve también el cansancio después.",
+                "Apuntar a más gente suele alegrar. Dejar el plan en dos, según el día, sabe a poco."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2
+                ],
+                "cotilleo": [
+                    2,
+                    4
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "queda_masiva"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,208 @@
+﻿######## docs/DECISIONES_CERRADAS.md ########
+6|
+7|La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima palabra del jugador**. **Primera prueba jugable: solo Bloque A.** Rol: **Celestine** (`PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`).
+8|
+9|**Respuestas Fase 1 (parada de control):** 2026-08-18. Detalle operativo en `ESTADO_PROYECTO.md`.
+10|
+17|| Fantas├¡a / agencia | **Celestine** = **jugador**. Gestiona v├¡nculos y convivencia (amor, amistad, conflictos, soledadÔÇª). No es alcalde ni casamentero exclusivo. **El jugador propone. Los personajes viven.** Visible **narrativamente** (NPC se dirigen a Celestine, escriben, piden ayuda). **Sin avatar/retrato permanente** de Celestine. |
+18|| Tutorial | Un **NPC distinto** (persona mayor, bajita/regordeta, llaves) presenta el tutorial y cede temporalmente la responsabilidad del bloque antes de marcharse de vacaciones. **No dise├▒ar a├║n** ese personaje definitivo. |
+19|| Sin pareja Ôëá fallo | Un habitante puede **no querer** romance. Eso **no** es un problema que Celestine deba solucionar. |
+20|| Primera prueba jugable | **Solo Bloque A.** ~3 al inicio (**Roc├¡o** + B + C por decidir). **Solo la cafeter├¡a** operativa el d├¡a 1. Parque/biblioteca y resto: en mapa base **cerrados** hasta desbloqueo. Bloque B: arquitectura s├¡, UI/mapa **no** ahora. |
+21|| Compatibilidad | Por capas; nunca un ├║nico % visible |
+22|| Atracci├│n | Asim├®trica y din├ímica |
+23|| Lugares iniciales (cat├ílogo) | **Cafeter├¡a, parque, biblioteca.** D├¡a 1: **solo cafeter├¡a operativa.** |
+24|| Mapa V0 | Mapa **base** con edificios/lugares **visibles pero cerrados** (persiana, obras, abandonado, sin actividadÔÇª). **No** aparecen m├ígicamente al desbloquear. Al abrir: cambio visual + lugar operativo. Notificaci├│n contextual a Celestine (ej. ┬½Hay movimiento en el antiguo bingoÔÇª┬╗). Precio, d├¡a exacto y cat├ílogo visible completo: **no fijados**. Candados visibles **cine, bar, arcade**. |
+25|| Cat├ílogo de lugares | Ver lista abajo. **Casa no es parcela comercial.** |
+26|| Parentesco que veta romance | Padre/madreÔåöhijo/a, hermanos, medio hermanos, abuelo/aÔåönieto/a, t├¡o/aÔåösobrino/a, primos hermanos |
+27|| 4 variables rom├ínticas | **atracci├│n, v├¡nculo, conflicto, necesidad de contacto.** El resto es derivado. |
+28|| Vida NPC m├¡nima | ocupaci├│n, franja de disponibilidad, hobby principal, ├ínimo simple, lugar(es) preferente(s). No Los Sims. |
+29|| Diario | Nombre t├®cnico **Diario del pueblo**. 5ÔÇô10 entradas/d├¡a. Tipos: ruido/humor, info ├║til, pista, problema. **Complemento:** **Buz├│n de Celestine** (mensajes directos, subjetivos). Resumen objetivo m├¡nimo opcional si la simulaci├│n lo pide. |
+30|| Indicadores diario | Pista `­ƒæÇ` ┬À aviso importante `ÔÜá´©Å` ┬À el resto, sin alarma |
+31|| Estructura de partida | **Pueblo persistente + temporadas.** No termina el d├¡a 30. Duraci├│n de temporada sin cifrar. |
+32|| Orientaci├│n | `atraido_por` (lista de `mujer` / `hombre` / `no_binarie`). G├®nero de ficha: los mismos tres valores. |
+34|| Tr├¡o d├¡a 1 | **Roc├¡o** (`per_i03`, slot **I08**) confirmada. B y C **por decidir** tras pilotos. Micro-sim ╬▒: I02+I10; I10 **no cerrado** en d├¡a 1 real. |
+35|| Escala | D├¡a 1 ~**3** ┬À **Bloque A Ôëê 16** ┬À ampliar = **Bloque B Ôëê 16** (futuro; no en 1.┬¬ prueba) ┬À **pool cat├ílogo** 80ÔÇô100+ en tandas (ahora tanda 16) ┬À **32** = capacidad simult├ínea futura A+B, no total de fichas. |
+36|| Marchas | Intenci├│n de irse **s├¡**. Marcha definitiva **solo si Celestine deja ir**. ┬½Qu├®date┬╗ = se queda siempre; la causa vira a arco. Sin tirada. **Nunca offline.** Antiguo **archivado**; no reaparece en **esta** partida. |
+37|| Partidas | Partida persistente ┬À nueva partida ┬À reiniciar ┬À estado del pool **por partida**. **Seed por partida** (reproducible debug). Inicio entre **configuraciones prevalidadas** (no random puro). Llegadas: azar controlado entre candidatos v├ílidos. |
+38|| NPC aut├│nomos | Los residentes viven sin el jugador. **Puede nacer una pareja sin ├®l.** El jugador interviene; no es el pulm├│n del bloque. |
+39|| Objetivo / derrota | Sandbox. **Sin** ┬½X parejas = ganas┬╗. **Sin** game over por rupturas. Lectura: **r├│tulo por bloque** + posible **estado de la comunidad**. Textos no can├│nicos. |
+40|| Ocupaciones de referencia | sanitario/a, oficina, camarero/a, comercio, docente, estudiante adulto, aut├│nomo/freelance, jubilado/a |
+41|| Recursos | Dinero y fama (valores no fijados) |
+42|| Coletillas / encuentros | Sistemas a preparar |
+43|| Ropa | **Fuera de la V0 jugable** (ni tienda de ropa ni look). La ficha **s├¡** guarda estilo visual. Tienda de **herramientas sociales** (test, etc.): candidato aparte. |
+44|| Consulta de habitantes | Pantalla de UI **El pueblo** (nombre provisional). Tarjetas, no tabla. A ~16 (y al abrir B) har├ín falta filtros, incluido por bloque. Grafo social **egoc├®ntrico** y solo de lo descubierto. |
+45|| Vivienda | **Asignaci├│n autom├ítica.** Celestine **no** elige piso ni bloque. Primer hueco libre (A01ÔÇªA16, luego B01ÔÇªB16 si B est├í abierto). Hueco que se libera (marcha o convivencia) vuelve al pool. **No** es gesti├│n inmobiliaria. No modifica personalidad, compatibilidad, atracci├│n, relaciones ni romance. |
+46|| Aforo de lugares | Cada lugar social tiene **aforo** (jugable + visual). Cifras **no** fijadas: se deciden con prueba real de mapa (PC y m├│vil). Legibilidad de cabezas manda. |
+47|| Coincidencia Ôëá interacci├│n | Estar en el mismo sitio genera **oportunidad**, no un encuentro autom├ítico. El motor decide si hablan, se ignoran, etc. |
+48|| Test de compatibilidad | Juguete cutre, **sin %**, info incompleta. **No d├¡a 1:** desbloqueo/compra. Candidato. |
+49|| Encuentros / d├¡a | Un presupuesto (rom├íntico o amistoso). Las citas **NPC** no lo gastan. Cifra fina abierta. |
+50|| Buz├│n V0 | **S├¡** en 1.┬¬ prueba (peque├▒o). Tipos m├¡nimos: bienvenida, petici├│n, problema, respuesta/reacci├│n, informaci├│n/descubrimiento, avisos/desbloqueos. Voz subjetiva del personaje; **no** acceso al estado interno. Ver `BUZON_DE_CELESTINE.md`. |
+51|| Amistad | **Jugable**, valor propio. |
+52|| Tiempo | **1 d├¡a real = 1 d├¡a de juego.** Catch-up al volver; no simular minuto a minuto. Detalle: `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`. |
+53|| Agenda V0 | Slots internos de **1 hora**, **24 h** (sin l├¡mite artificial diurno). Trabajo, sue├▒o, rutinas, compromisos y citas bloquean horas. **No** dise├▒ar 24├ù16 manualmente: **plantillas**, horarios estructurales, excepciones, `compromisos_recurrentes`, eventos din├ímicos. UI: horas incompatibles, anti-doble-reserva, sugerencia de horas compatibles. Ver `PROPUESTA_AGENDA_DISPONIBILIDAD_RUTINAS.md`. |
+54|| Relaciones sociales | **No lineales.** Ejes por par (afecto, confianza, tensi├│n) + rutas m├║ltiples. EnemigoÔåÆromance **raro y causal**. |
+55|| Protecci├│n residencia (hip├│tesis) | Marcha ┬½normal┬╗ no antes de **~30 d├¡as** en la comunidad. N├║mero **no** canonizado. |
+56|| Arte / cuadr├¡cula | Caricatura 2D de la PNG; mapas importantes con limpia + grid |
+57|| Retratos | **Estilo visual can├│nico: 06b.** Diferenciaci├│n estructural facial **obligatoria**. Cabeza maestra de frente. Variedad real de atractivo. Genera **Cursor**; Neni APROBADO / REGENERAR. Aprobar 06b **no** aprueba el borrador antiguo de Roc├¡o (regenerar despu├®s). **No** crear estilos 07, 08ÔÇª |
+60|| D├¡a 1 real | Roc├¡o s├¡ ┬À B/C pendientes ┬À I10 no cerrado en tutorial |
+61|| Agenda base | 24├ù1h ┬À plantillas ┬À 0ÔÇô3 compromisos con variedad real ┬À `PLANTILLAS_AGENDA_BORRADOR.md` |
+62|| Fase actual | **C** ÔÇö pilotos ┬À `FASE_C_ENTREGA_CHATGPT.md` |
+68|
+69|Parcelas / sitios de dise├▒o:
+70|
+71|1. biblioteca *(inicial, mapa V0 abierto)*
+72|2. cafeter├¡a *(inicial, mapa V0 abierto)*
+73|3. parque *(inicial, mapa V0 abierto)*
+74|4. cine *(candado visible V0)*
+75|5. plaza *(cat├ílogo; fuera del mapa V0)*
+76|6. restaurante *(uno, no dos; fuera del mapa V0)*
+77|7. bar *(candado visible V0)*
+78|8. discoteca *(fuera del mapa V0)*
+79|9. bingo *(fuera del mapa V0)*
+80|10. arcade *(candado visible V0)*
+81|11. tienda de ropa *(fuera del mapa V0; ropa no jugable en V0)*
+82|12. gimnasio *(fuera del mapa V0)*
+83|13. mirador *(fuera del mapa V0)*
+84|14. casa *(no se compra como el cine; intimidad / convivencia / fases de relaci├│n)*
+90|| Cupido Cutre / nombre pendiente | Aqu├¡ Hay Tema |
+91|| 30 d├¡as = fin de partida | Pueblo persistente + temporadas |
+92|| 8 lugares fijos / inicio sin recortar | 3 iniciales concretos |
+94|| Plaza / tienda / gimnasio ┬½candidatos┬╗ | En el cat├ílogo |
+95|| 4 barras = chispa, confianza, conflicto, contacto | 4 = **atracci├│n, v├¡nculo, conflicto, necesidad de contacto** |
+96|| ┬½6 variables internas de personaje┬╗ como sistema aparte | Vida NPC m├¡nima; no seis barras de Sims |
+97|| Calendario de partida pendiente | Estructura elegida; solo faltan cifras de temporada |
+98|| Parentesco ┬½┬┐primos?┬╗ | Primos hermanos **s├¡** vetan |
+99|| Grafo = basta un crush de ida | Grafo = ÔëÑ1 rec├¡proco **potencial** por personaje |
+100|| Ropa mec├ínica en el primer prototipo | Ropa en el modelo; no en la V0 jugable |
+101|| Ayuntamiento / padr├│n como 4.┬║ sitio | UI **El pueblo** |
+102|| Derrota dura / game over V0 | Sandbox + r├│tulo por bloque / comunidad; sin ┬½X parejas = ganas┬╗ |
+103|| 10 al d├¡a 1 ┬À 16 = poblaci├│n ┬À techo ~14 | D├¡a 1 ~3 ┬À Bloque A ~16 ┬À pool = tandas |
+104|| Solo llegadas / techo ~24 de golpe | Marchas **consentidas**; ampliar = Bloque B, no un 24 ├║nico |
+105|| Test el d├¡a 1 | Test comprable, m├ís tarde |
+106|| Los 10 iniciales se bastan en el grafo | El tr├¡o tutorial puede no tener v├¡a rom├íntica |
+107|| Amistad solo como lazo de ficha | Plan de amistad jugable (candidato) |
+108|| Casamentero exclusivo | **Celestine** (v├¡nculos + convivencia) |
+109|| Pool = 32 personajes | 32 = capacidad A+B; cat├ílogo **80ÔÇô100+** |
+110|| Antiguo reaparece al azar | Archivado = fuera de llegadas en **esa** partida |
+111|| Diario ├║nico canal | Diario + **Buz├│n** |
+112|| 3 sitios jugables d├¡a 1 | **Solo cafeter├¡a operativa**; resto cerrado en mapa hasta desbloqueo |
+113|| Edificios aparecen al desbloquear | Mapa base con edificios **cerrados desde el inicio** |
+114|| Estilo visual candidato | **06b can├│nico** |
+115|| Agenda ┬½reducida┬╗ solo franja | Slots 1 h + plantillas motor |
+116|| Buz├│n candidato | **Buz├│n en V0** |
+128|- Informe de cita narrativo, no un ┬½+8 amor┬╗.
+129|- Estado de pareja legible por color; el jugador no ve el desglose interno.
+130|- Cutrez intencionada. El jugador no obliga.
+134|
+135|Sigue sin canonizar precios, 12 edificios abiertos, barra 72/100, nombres de maqueta ni el tama├▒o del mapa. Ahora **contradice** el inicio de 3 lugares: es tono, no layout de partida.
+
+######## docs/RELACIONES_Y_CITAS.md ########
+1|# Relaciones rom├ínticas y citas
+2|
+3|Relaciones **sociales**: `RELACIONES_SOCIALES.md`.
+4|
+5|## Las 4 variables principales (cerradas)
+6|
+7|N├║cleo interno de una relaci├│n rom├íntica. El jugador no las ve como cuatro barras de Excel; ve color, pistas y diario.
+8|
+9|| Variable | C├│mo se guarda | Notas |
+10|| --- | --- | --- |
+11|| **Atracci├│n** | dos sentidos: AÔåÆB y BÔåÆA | Din├ímica. Concepto ├║nico, dos n├║meros. |
+12|| **V├¡nculo** | uno por pareja | Cercan├¡a, apego, ┬½estamos juntos┬╗. |
+13|| **Conflicto** | uno por pareja | Tensi├│n acumulada. |
+14|| **Necesidad de contacto** | una por persona dentro de la pareja | A puede necesitar m├ís roce que B. |
+15|
+16|No hay barra independiente para chispa, confianza, comodidad, deseo ni riesgo de ruptura.
+17|
+18|## Mapping conceptual (sin f├│rmulas ni pesos)
+19|
+20|Propuesta de **lectura**, no de c├│digo:
+21|
+22|| Lectura | Sale principalmente de |
+23|| --- | --- |
+24|| Chispa | Atracci├│n (sobre todo la m├ís baja de las dos, o un aviso si est├ín muy desiguales) + contexto reciente (├║ltima cita, encuentro, ├ínimo) |
+25|| Deseo | Atracci├│n + contexto reciente (puede solaparse con chispa; no merece barra propia) |
+26|| Confianza | V├¡nculo, recortado si el conflicto es alto o hay historial feo |
+27|| Comodidad | V├¡nculo alto + conflicto bajo |
+28|| Riesgo de ruptura | Conflicto alto + v├¡nculo bajo + necesidades de contacto desatendidas (poco roce respecto a lo que pide cada cual) |
+29|| Estado visual (verdeÔÇªrojo / BienÔÇªMal) | Derivado de riesgo + conflicto + v├¡nculo. Mapping fino pendiente |
+30|
+31|┬½Contexto reciente┬╗ e ┬½historial┬╗ modifican lecturas y pueden **escribir** las 4; no son una quinta barra.
+32|
+33|## Cita
+34|
+35|Dos personas + lugar **desbloqueado** + franja + **aforo disponible** en esa franja. Opcional: actividad. Ropa: no en V0. Si el sitio est├í lleno, **no se confirma** la cita; Celestine elige otra hora u otro lugar. Sin reservas de mesas.
+36|
+37|Tope de prueba: **encuentros organizados por Celestine** (rom├íntico o amistoso). Las citas **aut├│nomas NPC** no lo gastan. Con 3 habitantes, 2/d├¡a es demasiado. `PROPUESTA_BLOQUE_3_A_24.md`. Coincidir en un sitio **no** es una cita ni una interacci├│n autom├ítica. `ENCUENTROS_ESPONTANEOS.md`.
+38|
+39|Una cita **no** acaba solo en pareja/fracaso. Puede dejar m├ís/menos atracci├│n, amistad, roce, indiferencia, crush unilateral, ganas de repetir, etc. Una pareja **puede nacer sin el jugador**.
+40|
+41|Preparar citas (lugar, hora, look futuro, etc.) como **modificadores de probabilidad**, no como puntuaci├│n que garantiza el resultado: `PREPARACION_DE_CITAS.md`. Candidato; no implementar ahora.
+42|
+43|Gustos de pareja que pueden moverse si hay **causa** (no por una cita mediocre ni por un restaurante cerrado): `APRENDIZAJE_PREFERENCIAS.md`. Candidato; no implementar ahora.
+44|
+45|Las fichas tienen que dar material a citas (franja, lugar, voz, trato). Eso se valida en auditor├¡a nivel 1 (juego) y nivel 2 (horarios del pool): `CHECKLIST_AUDITORIA_PERSONAJES.md`.
+46|
+47|2ÔÇô4 microeventos, informe corto, coletilla, deltas a las 4 variables. No ┬½+8 amor┬╗.
+48|
+49|Nacimiento de relaci├│n con atracci├│n muy asim├®trica: umbral **pendiente**.
+50|
+51|## Casa
+52|
+53|No es parcela ­ƒöÆ de dinero/fama. Opci├│n de intimidad / convivencia / fase de relaci├│n. Umbral concreto **pendiente**.
+54|
+55|## Caos
+56|
+57|Tentaciones y encuentros espont├íneos: el jugador no lo controla del todo. Azar + causas en rupturas graves.
+
+######## docs/RELACIONES_SOCIALES.md ########
+1|# Relaciones no rom├ínticas
+2|
+3|Familia, amigos, compa├▒eros, conocidos, ex. Modelo listo; no es un simulador social gigante.
+4|
+5|## Parentescos que **vetan** romance (cerrado)
+6|
+7|Capa 1. No hay compatibilidad rom├íntica legal entre:
+8|
+9|- padre/madre Ôåö hijo/a
+10|- hermanos
+11|- medio hermanos
+12|- abuelo/a Ôåö nieto/a
+13|- t├¡o/a Ôåö sobrino/a
+14|- primos hermanos
+15|
+16|El modelo **s├¡** guarda estas relaciones (eventos, diario, ┬½Paqui ha discutido con su hermana┬╗). Solo se proh├¡be el romance.
+17|
+18|Otros tipos (no vetan): amigo/amiga, mejor_amigo, compa├▒ero, conocido, ex, **roce**.
+19|
+20|**Plan de amistad** (candidato): Celestine puede proponer un encuentro con intenci├│n amistosa. Valor propio, no preludio obligatorio de romance.
+21|
+22|## Relaciones no lineales (propuesta)
+23|
+24|**No** hay una sola escalera `desconocido ÔåÆ amigo ÔåÆ pareja`.
+25|
+26|Rutas distintas: amistadÔåÆromance, atracci├│n directa, roceÔåÆenemistad, y ÔÇö **raro y causal** ÔÇö enemistadÔåÆtensi├│nÔåÆatracci├│nÔåÆromance.
+27|
+28|V├¡nculo **no binario** entre dos personas: afecto, confianza, tensi├│n, atracci├│n (asim├®trica) pueden combinar estados como ┬½me cae bien pero no conf├¡o┬╗, ┬½me irrita pero me tira┬╗, ┬½amigos con tensi├│n┬╗.
+29|
+30|Detalle: `PROPUESTA_AGENDA_DISPONIBILIDAD_RUTINAS.md` ┬º Relaciones.
+31|
+32|`enemistad` = **estado derivado** (tensi├│n alta + afecto bajo), no parentesco. Cat├ílogo `tipos_relacion_social.json` no necesita fila `enemigo` obligatoria.
+33|
+34|Vista social por habitante: lazos **descubiertos** (pareja, amigo, familia p├║blica, ex conocido, roce vistoÔÇª). No secretos. En m├│vil, lista; no un ovillo de 16. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+35|
+36|Semilla de dise├▒o: `personaje.lazos[]` = `{ persona, tipo, publico }`. Cat├ílogo: `tipos_relacion_social.json`.
+37|
+38|Siguen pudiendo inflar eventos: Luc├¡a no soporta a Eva; Marta sale con Eva ÔåÆ diario / crisis.
+39|
+40|## Dos registros
+41|
+42|- `relacion_social` (incluye parentesco)
+43|- `relacion_romantica` (las 4 variables)
+44|
+45|El parentesco vetado no genera registro rom├íntico legal.
+46|
+47|├ürbol familiar: m├¡nimo, **con** las fichas. Sugerencia de esqueleto en `FASE_DISENO_POOL_16.md`. No un clan de 16.
+48|
+49|Ning├║n parentesco de esta lista puede aparecer como opci├│n rom├íntica. Se comprueba en auditor├¡a nivel 1 (ficha) y nivel 2 (pool): `CHECKLIST_AUDITORIA_PERSONAJES.md`.
+

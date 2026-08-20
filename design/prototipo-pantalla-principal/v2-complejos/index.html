@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Aquí Hay Tema — 6 complejos (no es PLAY)</title>
+  <link rel="stylesheet" href="prototipo.css"/>
+  <link rel="stylesheet" href="complejos.css"/>
+</head>
+<body class="ver-pc">
+  <div class="studio">
+    <header class="studio-bar">
+      <h1>Mapa V2 — 6 complejos <span class="badge-v">reparto cerrado</span></h1>
+      <p>Maqueta de masas. 6 complejos cerrados. Móvil sin scroll en el pueblo. No es PLAY.</p>
+      <div class="studio-controls">
+        <button type="button" data-view="pc" class="is-on">PC</button>
+        <button type="button" data-view="movil">Móvil</button>
+        <button type="button" data-pueblo="temprano" class="is-on">Pueblo temprano</button>
+        <button type="button" data-pueblo="pleno">Después de invertir</button>
+        <button type="button" data-aforo="3">3 personas</button>
+        <button type="button" data-aforo="8">8 personas</button>
+        <button type="button" data-aforo="12">12 en varios destinos</button>
+      </div>
+      <p class="studio-note">Aforo visual: máx. 5 caras por complejo +N. Al tocar, lista completa. Escala M cerrada. Dock: Pueblo · Diario · Organizar · Vecinos. Diario abre El Cotilleo.</p>
+      <p class="ficha-link"><a href="../v2/index.html">V2 anterior</a> · <a href="../v2-capas/index.html">Capas (cerradas)</a></p>
+    </header>
+    <div class="stage">
+      <figure class="device pc"><figcaption class="device-label">PC</figcaption><div id="stage-pc"></div></figure>
+      <figure class="device phone"><figcaption class="device-label">Móvil</figcaption><div id="stage-phone"></div></figure>
+    </div>
+    <section class="ficha-c3">
+      <h2>Los 6, para no perderlos</h2>
+      <ul>
+        <li><strong>Café &amp; Libros</strong> — Cafetería → Biblioteca → Tienda</li>
+        <li><strong>El Rincón de Lola</strong> — Restaurante → Bingo</li>
+        <li><strong>Cine Game</strong> — Cine → Arcade</li>
+        <li><strong>La Mala Idea</strong> — Bar → Discoteca → Karaoke</li>
+        <li><strong>Parque</strong> — Parque → Picnic → Mirador</li>
+        <li><strong>Gimnasio &amp; Spa</strong> — Gimnasio → Spa</li>
+      </ul>
+      <p>Máximo orientativo: 3 destinos por parcela. Escala M cerrada (52 móvil / 62 PC). Recorte individual. Carlos III puede recibir el patrón (lote técnico antes de 200).</p>
+    </section>
+  </div>
+
+  <template id="tpl-play">
+    <div class="play-root" data-pueblo="temprano" data-consulta="" data-destino="">
+      <div class="board-scroll">
+        <div class="board-fit">
+          <div class="calles" aria-hidden="true">
+            <div class="calle h" style="left:0; right:0; top:40%"></div>
+            <div class="calle h" style="left:8%; right:10%; top:66%; height:5%"></div>
+            <div class="calle v" style="top:6%; bottom:10%; left:33%"></div>
+            <div class="calle v" style="top:6%; bottom:8%; left:60%"></div>
+          </div>
+
+          <div class="mapa-complejos">
+          <button type="button" class="complejo cx-cafe" data-complejo="cafe" aria-label="Café y libros">
+            <span class="masa">
+              <span class="toldo"></span>
+              <span class="zona zona-biblio"></span>
+              <span class="zona zona-tienda"></span>
+              <span class="marca marca-temp">Cafetería</span>
+              <span class="marca marca-pleno">Café &amp; Libros</span>
+              <span class="habs" data-habs="cafe"></span>
+            </span>
+          </button>
+
+          <button type="button" class="complejo cx-lola" data-complejo="lola" aria-label="El Rincón de Lola">
+            <span class="masa">
+              <span class="toldo"></span>
+              <span class="zona zona-bingo"></span>
+              <span class="marca">El Rincón de Lola</span>
+              <span class="habs" data-habs="lola"></span>
+            </span>
+          </button>
+
+          <button type="button" class="complejo cx-cine" data-complejo="cine" aria-label="Cine Game">
+            <span class="masa">
+              <span class="marquesina">CINE</span>
+              <span class="zona zona-arcade"></span>
+              <span class="marca marca-temp">Cine</span>
+              <span class="marca marca-pleno">Cine Game</span>
+              <span class="habs" data-habs="cine"></span>
+            </span>
+          </button>
+
+          <button type="button" class="complejo cx-mala" data-complejo="mala" aria-label="La Mala Idea">
+            <span class="masa">
+              <span class="neones"></span>
+              <span class="zona zona-disco"></span>
+              <span class="zona zona-karaoke"></span>
+              <span class="marca">La Mala Idea</span>
+              <span class="habs" data-habs="mala"></span>
+            </span>
+          </button>
+
+          <button type="button" class="complejo cx-parque" data-complejo="parque" aria-label="Parque">
+            <span class="masa">
+              <span class="fuente"></span>
+              <span class="picnic"></span>
+              <span class="mirador"></span>
+              <span class="marca">Parque</span>
+              <span class="habs" data-habs="parque"></span>
+            </span>
+          </button>
+
+          <button type="button" class="complejo cx-gym" data-complejo="gym" aria-label="Gimnasio">
+            <span class="masa">
+              <span class="zona zona-spa"></span>
+              <span class="marca marca-temp">Gimnasio</span>
+              <span class="marca marca-pleno">Gimnasio &amp; Spa</span>
+              <span class="habs" data-habs="gym"></span>
+            </span>
+          </button>
+          </div>
+
+          <div class="bloque-a"><span>Bloque A</span></div>
+          <div class="solar solar-b"><span>Bloque B</span></div>
+          <div class="solar solar-c"><span>Bloque C</span></div>
+
+          <div class="chinchetas">
+            <span class="susurro" style="left:18%; top:28%">¿el espresso o el cotilleo?</span>
+            <button class="chincheta canon" data-open="ficha" style="left:16%; top:40%" aria-label="P138 frente al café">
+              <span class="pin"></span>
+              <span class="cara"><img src="img/p138-neutral.png" alt="P138"/></span>
+              <span class="nombre">P138</span>
+            </button>
+            <button class="chincheta cara-pleno" data-open="ficha" style="left:32%; top:58%" aria-label="Nora en el arcade">
+              <span class="pin"></span>
+              <span class="cara"><img src="img/cabeza-nora.png" alt=""/></span>
+              <span class="nombre">Nora</span>
+            </button>
+            <button class="chincheta" data-open="ficha" style="left:48%; top:52%" aria-label="Luis en el parque">
+              <span class="pin"></span>
+              <span class="cara"><img src="img/cabeza-luis.png" alt=""/></span>
+              <span class="nombre">Luis</span>
+            </button>
+          </div>
+          <aside class="postit" style="left:42%; top:8%"><span class="pin"></span>El pueblo engorda si tú lo alimentas.</aside>
+          <p class="leyenda-escala">P138 (afro) en el círculo y tamaño M aprobados con P001. Misma máscara. Una prueba, no lote.</p>
+
+          <button type="button" class="btn-guia" data-consulta="guia">¿Dónde está…?</button>
+
+          <aside class="consulta">
+            <button type="button" class="cerrar" data-close>cerrar</button>
+            <p class="kicker">En este rincón</p>
+            <h3 data-c-tit></h3>
+            <p class="cotilleo" data-c-coti></p>
+            <p class="contiene" data-c-dest></p>
+            <p class="mini">Para quedar en un destino concreto (cine o arcade, café o biblioteca), eso va en Organizar. El mapa no es el formulario.</p>
+          </aside>
+
+          <aside class="guia">
+            <button type="button" class="cerrar" data-close>cerrar</button>
+            <p class="kicker">Guía del pueblo · directorio, no sede</p>
+            <h3>¿Dónde está…?</h3>
+            <ul>
+              <li><button type="button" data-complejo="cafe">Café &amp; Libros</button> — cafetería, biblioteca, tienda</li>
+              <li><button type="button" data-complejo="lola">El Rincón de Lola</button> — restaurante, bingo</li>
+              <li><button type="button" data-complejo="cine">Cine Game</button> — cine, arcade</li>
+              <li><button type="button" data-complejo="mala">La Mala Idea</button> — bar, disco, karaoke</li>
+              <li><button type="button" data-complejo="parque">Parque</button> — parque, picnic, mirador</li>
+              <li><button type="button" data-complejo="gym">Gimnasio &amp; Spa</button> — gimnasio, spa</li>
+            </ul>
+            <p class="mini">Pulsa un nombre para ir a su parcela. Los destinos que aún no se han pagado, en el pueblo temprano, simplemente no están.</p>
+          </aside>
+          <aside class="selector">
+            <button type="button" class="cerrar" data-close>cerrar</button>
+            <h3 data-s-tit></h3>
+            <p class="cotilleo" data-s-coti></p>
+            <div class="destinos" data-s-btns></div>
+            <p class="mini">Organizar también ofrece estos destinos por separado. El mapa no es el formulario.</p>
+          </aside>
+          <aside class="quien">
+            <button type="button" class="cerrar" data-close>cerrar</button>
+            <p class="kicker">Quién está</p>
+            <h3 data-q-tit></h3>
+            <p class="quien-sum" data-q-sum></p>
+            <div class="quien-list" data-q-list></div>
+            <div class="destinos" data-q-btns></div>
+            <p class="mini">El mapa resume. Aquí está la lista. El aforo real no se dibuja cabeza a cabeza.</p>
+          </aside>
+          <aside class="aviso-ir">Entras a <span data-destino-txt></span>.</aside>
+          <button class="chincheta escala-muestra esc-s canon" style="left:14%; top:38%" aria-label="P138 pequeño">
+            <span class="pin"></span><span class="cara"><img src="img/p138-neutral.png" alt=""/></span><span class="tag-esc">S</span>
+          </button>
+          <button class="chincheta escala-muestra esc-m canon" style="left:24%; top:38%" aria-label="P138 medio">
+            <span class="pin"></span><span class="cara"><img src="img/p138-neutral.png" alt=""/></span><span class="tag-esc">M</span>
+          </button>
+          <button class="chincheta escala-muestra esc-l canon" style="left:36%; top:40%" aria-label="P138 grande">
+            <span class="pin"></span><span class="cara"><img src="img/p138-neutral.png" alt=""/></span><span class="tag-esc">L</span>
+          </button>
+        </div>
+      </div>
+      <div class="mesa">
+        <div class="mesa-papel">
+          <span class="corazon" aria-label="Vida del pueblo"><span class="corazon-dibujo" style="--fill:62%"></span></span>
+          <div class="dia"><div class="dow">MIÉ 19</div><div class="hora">11:30</div></div>
+          <div class="hud-right">
+            <div class="dinero">80 €</div>
+            <button type="button" class="buzon" data-open="buzon" aria-label="Buzón">
+              <svg viewBox="0 0 54 46"><rect x="6" y="14" width="42" height="26" fill="#fffdf6" stroke="#2c261f" stroke-width="2.2"/><path d="M6 14 L27 28 L48 14" fill="none" stroke="#e56b8a" stroke-width="2.6"/></svg>
+              <span class="badge">3</span>
+            </button>
+            <button type="button" class="btn-vecinos" data-open="organizar">Organizar</button>
+          </div>
+        </div>
+      </div>
+      <nav class="dock">
+        <button type="button" data-close>Pueblo</button>
+        <button type="button" data-open="cotilleo">Diario</button>
+        <button type="button" data-open="organizar">Organizar</button>
+        <button type="button" data-open="vecinos">Vecinos</button>
+      </nav>
+      <aside class="capa-stub capa-cotilleo">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>El Cotilleo</h2>
+        <p>Capa con scroll, si hace falta. El pueblo, debajo, no se mueve.</p>
+        <p>Rocío y Nora en la cafetería. Discreción ante todo. Nosotros, ninguna.</p>
+      </aside>
+      <aside class="capa-stub capa-organizar">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Organizar</h2>
+        <p>Tipo → personas → destino (Cine o Arcade por separado) → cuándo. El mapa no sustituye esto.</p>
+      </aside>
+      <aside class="capa-stub capa-vecinos">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Vecinos</h2>
+        <p>Lista con scroll. Acceso secundario. El pueblo sigue siendo la sede.</p>
+      </aside>
+      <aside class="capa-stub capa-buzon">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Buzón</h2>
+        <p>Se abre desde el sobre del HUD. No ocupa el dock.</p>
+      </aside>
+      <div class="velo" data-close></div>
+    </div>
+  </template>
+  <script src="complejos.js"></script>
+</body>
+</html>

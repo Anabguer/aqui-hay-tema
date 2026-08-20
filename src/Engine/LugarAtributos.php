@@ -30,9 +30,10 @@ final class LugarAtributos
     public static function de(?string $lugarId, ?array $item = null): array
     {
         $id = (string) $lugarId;
+        $canon = ComplejoCatalog::destino($id);
         $fb = self::FALLBACK[$id] ?? ['aforo' => 12, 'duracion_minutos' => 60];
-        $aforo = $fb['aforo'];
-        $dur = $fb['duracion_minutos'];
+        $aforo = $canon !== null ? (int) $canon['aforo'] : $fb['aforo'];
+        $dur = $canon !== null ? (int) $canon['duracion_minutos'] : $fb['duracion_minutos'];
         if (is_array($item)) {
             if (isset($item['aforo']) && is_numeric($item['aforo'])) {
                 $aforo = (int) $item['aforo'];

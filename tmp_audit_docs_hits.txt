@@ -1,0 +1,1714 @@
+﻿FILE PARA_CHATGPT.md
+  [A_voluntad] x13
+   | # Aqu├¡ Hay Tema ÔÇö pack para ChatGPT
+   | **No borres ni edites** el Google Doc `DOCUMENTO MAESTRO ÔÇö AQU├ì HAY TEMA` salvo que se pida expl├¡citamente. Sigue siendo la semilla conceptual. Las decisiones posteriores **ampl├¡an o sustituyen** partes de esa semilla: `
+   | 13. **`docs/PROPUESTA_VIDA_POOL_Y_MARCHAS.md`** ÔÇö capacidad Ôëá pool, **marchas consentidas**, vivienda autom├ítica, bloques A/B.
+   | 14. **`docs/PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`** ÔÇö rol Celestine, buz├│n, tiempo 1:1, partidas.
+   | - V0 bucle aprobada en direcci├│n. **Escala:** ~**3** al inicio. **Capacidad simult├ínea Ôëá pool.** Tanda de **16** fichas ahora; cat├ílogo objetivo **80ÔÇô100+**. **Bloque A Ôëê 16**; Bloque B futuro. **Marchas consentidas** (n
+  [C_marcha] x16
+   | Proyecto local: `W:\juegos\aqui-hay-tema`. Fase: **dise├▒o**. **No programar el bucle.** Neni aprueba tono de **2ÔÇô3 pilotos viendo solo la ficha B** (`CONTRATO_PERSONAJE.md`). El resto del pool lo escribe ChatGPT; no hace
+   | 5. `docs/FASE_DISENO_POOL_16.md` ÔÇö plantilla, grafo, esqueleto I01ÔÇôL06.
+   | 13. **`docs/PROPUESTA_VIDA_POOL_Y_MARCHAS.md`** ÔÇö capacidad Ôëá pool, **marchas consentidas**, vivienda autom├ítica, bloques A/B.
+   | - V0 bucle aprobada en direcci├│n. **Escala:** ~**3** al inicio. **Capacidad simult├ínea Ôëá pool.** Tanda de **16** fichas ahora; cat├ílogo objetivo **80ÔÇô100+**. **Bloque A Ôëê 16**; Bloque B futuro. **Marchas consentidas** (n
+  [D_eco] x1
+   | - Fichas: 2ÔÇô3 pilotos para Neni (B + retrato borrador); el resto lo dise├▒a ChatGPT; auditor├¡a obligatoria. Retratos: Cursor, **cabeza maestra**; estilo **06/06b candidato** (no canon).
+
+FILE design\direccion-hud-chatgpt\DIRECCION_APROBADA.md
+  [A_voluntad] x34
+   | **Referencia principal:** `ref/maqueta_chatgpt_hud.png` (= recorte UI de REFERENCIA_VISUAL_01).
+   | - Papelitos / tarjetas / pegatinas
+   | - Panel administrativo
+   | - 14 paneles permanentes sobre el mapa
+   | PUEBLO LIMPIO ÔåÆ veo se├▒al ÔåÆ pulso ÔåÆ tarjeta/papel ÔåÆ consulto/act├║o ÔåÆ cierro ÔåÆ pueblo
+  [B_rel] x12
+   | - Parejas
+   | Primero reutilizar informaci├│n real (parejas activas, encuentros del d├¡a, etc.).
+   | ### 3. Panel Parejas (ejemplo de capa)
+   | Al pulsar Parejas: tira horizontal de tarjetas
+   | Estados visuales de la maqueta (Bien / Genial / Regular / En crisis / Mal) son **referencia de tono**.
+  [D_eco] x8
+   | - Dinero (tarjeta)
+   | - Fama (tarjeta) ÔÇö **solo si el motor la expone en la vista PLAY**; no inventar cifra
+   | mapa nuevo + edificios + personajes + coraz├│n/vida + d├¡a/hora + dinero/(fama si toca)
+   | | Dinero | S├¡ (`economia.dinero` / celeste) | Tarjeta |
+   | | Fama | Ledger existe; UI V1 a confirmar | No inventar; mostrar solo si vista la trae |
+
+FILE design\especificacion-integracion-v3.md
+  [A_voluntad] x26
+   | Pack C3 Fase 1: `docs/carlos-iii/fase1-play/` ÔåÆ servido en `assets/play-v3/`.
+   | - 6 complejos; mapa = observar/consultar; Organizar = crear planes.
+   | - HUD de objetos. Dock: Pueblo ┬À Diario ┬À Organizar ┬À Vecinos.
+   | | Qui├®n est├í d├│nde | `mapa.presencia` ÔåÆ `PresenciaEngine` |
+   | | Marca ÔÇ£hay temaÔÇØ | `hay_tema` (bool) del motor: `HayTema` v├¡a `VistaPuebloV3`. Independiente de emoci├│n, romance y de encuentro pr├│ximo/en curso. Opcional: `tema_id` para abrir el hecho. |
+  [C_marcha] x1
+   | Se activa por un acontecimiento cotilleable real asociado a esa persona en ese contexto: cotilleo/discusi├│n/acercamiento de hoy en El Cotilleo, o patr├│n de coincidencia significativa (varios d├¡as, y ahora mismo hay compa
+  [D_eco] x6
+   | No se tocan econom├¡a, autonom├¡a, relaciones ni peticiones salvo leer sus datos.
+   | | Dinero | `economia.dinero.balance` (si null: ┬½ÔÇö┬╗) |
+   | 5. Dinero null ÔåÆ ┬½ÔÇö┬╗.
+   | - Misiones/peticiones: en `partida.estado`, a├║n no hay panel dedicado en PLAY V3 (contrato C2).
+
+FILE design\integracion-v3\LISTA_C3_FASE1.md
+  [A_voluntad] x19
+   | V3 aprobada como direcci├│n. Encargo original de C2: `design/prototipo-pantalla-principal/v3/LISTA_C3.md`.
+   | Esto no lo sustituye: lo parte para no fabricar el cat├ílogo a ciegas.
+   | PNG RGBA, recorte sucio, paleta V3 (arena, rosa #e56b8a / #c42b4a, tinta #2c261f, ticket amarillo). PC y m├│vil comparten asset.
+   | Suficiente para montar y jugar. No es acabado final.
+   | | Parque | temprano = parque + fuente | `01_complejos/parque_temprano.png` |
+  [C_marcha] x1
+   | | Bloque A | 1 edificio 3 plantas | `01_complejos/bloque_a.png` |
+  [D_eco] x1
+   | Coraz├│n, ticket d├¡a, ticket dinero, sobre, lacre OJO.
+
+FILE design\integracion-v3\NOTAS_ANILLO_C2.md
+  [A_voluntad] x4
+   | # Para Carlos II ÔÇö anillo vs ┬½hay tema┬╗
+   | - positivo: verde papel `#7a9e6a`
+   | - inc├│modo/triste: naranja papel `#d4894a`
+   | Arquitectura de movimiento: los tokens son sprites sueltos (256 master, 52/62 en mapa). C2 puede colocarlos; animar salida/camino es despu├®s.
+  [C_marcha] x1
+   | Arquitectura de movimiento: los tokens son sprites sueltos (256 master, 52/62 en mapa). C2 puede colocarlos; animar salida/camino es despu├®s.
+
+FILE design\prototipo-pantalla-principal\LEEME.md
+  [A_voluntad] x9
+   | # Prototipo pantalla principal (local)
+   | - **V2-complejos (mapa, reparto cerrado):** `v2-complejos/index.html`
+   | - **V2-capas (UX de capas CERRADA):** `v2-capas/index.html`
+   | Drive: `G:\Mi unidad\Juegos\Aqui hay tema\Carlos II - Prototipo pantalla principal\`
+
+FILE design\prototipo-pantalla-principal\v2-capas\README.md
+  [A_voluntad] x8
+   | # V2-capas ÔÇö CERRADA / referencia aprobada
+   | Base de pueblo: V2. Estas capas son la referencia de UX para cuando Carlos I conecte.
+   | - Buz├│n ├║nico, contador, lacre/OJO para lo importante.
+   | - Marcha: ┬½Intentar echarle una mano┬╗ ÔåÆ Organizar, ella decide.
+   | - Organizar: tipo primero; el tipo fija el cupo. Grupales visible/apagado.
+  [C_marcha] x1
+   | - Marcha: ┬½Intentar echarle una mano┬╗ ÔåÆ Organizar, ella decide.
+
+FILE design\prototipo-pantalla-principal\v2-complejos\PATRON_TOKEN.md
+  [A_voluntad] x5
+   | # Patron de token (aprobado) ÔÇö para Carlos III
+   | - NO un crop ciego identico para todos.
+   | - Peso visual de cabeza + volumen principal de pelo, aproximadamente homogeneo.
+   | - Preservar mo├▒os, afro, gorra, coleta, flequillo, rapado asimetrico.
+
+FILE design\prototipo-pantalla-principal\v2-complejos\README.md
+  [A_voluntad] x2
+   | # Mapa V2 - 6 complejos
+   | Carlos III parado.
+
+FILE design\prototipo-pantalla-principal\v3\LISTA_C3.md
+  [A_voluntad] x7
+   | # Lista concreta para Carlos III
+   | Pack: `docs/carlos-iii/fase1-play/` ÔåÆ `assets/play-v3/` + lote `assets/personajes/tokens-m/` (14).
+   | 1. Fachadas 6 ├ù 2 estados (temprano / evolucionado), 3/4 papel.
+   | 4. Marcos de capas (libreta, bandeja, masthead Cotilleo, hoja Organizar).
+   | 6. Ampliar el lote a 10ÔÇô15 extremos (mo├▒o, coleta, gorra, rapado, ancho/alto) **antes** de los 200.
+  [C_marcha] x1
+   | 2. Bloque A + solares B/C + suelo/calles.
+
+FILE design\prototipo-pantalla-principal\v3\NOTAS_VISUALES.md
+  [A_voluntad] x13
+   | - Tablero de cart├│n arena, grano, calles de papel. No grid de producto.
+   | - La evoluci├│n se lee en el volumen: alas nuevas con nombre de destino (biblioteca, bingo, arcadeÔÇª). El letrero pasa de ┬½Cafeter├¡a┬╗ a ┬½Caf├® & Libros┬╗, nunca a ┬½nivel 2┬╗.
+   | - Parque org├ínico. Picnic y mirador aparecen como recortes, no como ampliaciones de caja.
+   | - En PC el mapa baja del HUD para que el caf├® no quede debajo del coraz├│n. En m├│vil, rejilla 2├ù3 entre HUD y dock, sin scroll.
+   | - Dock con sellos de papel (casa, diario, recorte, cabeza), no iconos de app store.
+  [D_eco] x1
+   | - Piezas sueltas: coraz├│n de recorte, ticket de d├¡a, ticket de dinero con celo, sobre ligeramente torcido.
+
+FILE design\prototipo-pantalla-principal\v3\README.md
+  [A_voluntad] x4
+   | PC y m├│vil son el mismo juego: papel, maqueta, cotilleo. El HUD son objetos sobre la mesa, no una barra de aplicaci├│n.
+   | 9. Organizar
+   | - Dock: Pueblo ┬À Diario ┬À Organizar ┬À Vecinos
+   | - Carlos II prepara especificaci├│n de integraci├│n
+
+FILE dev/LAB_AUTONOMIA.md
+  [A_voluntad] x18
+   | - **V1 no organiza quedadas de dos.** Pueden salir, coincidir, hablar, casual, mover relaci├│n si corresponde. No existe ÔÇ£Carmen ha quedado con Jos├® a las 18:00ÔÇØ como plan aut├│nomo. Eso es papel de Celestine.
+   | Las `p_franjas` ya **no** son un dado que puede dejar el cupo a medias. Ponderan **cu├índo** se reparte el cupo (m├ís tarde que ma├▒ana). El motor persigue el objetivo acumulado de esa hora, con tope de arranques simult├íneo
+   | | Cotilleo | mismo par + mismo lugar ÔëÑ 3 d├¡as en 7 |
+   | El lab desbloquea m├ís destinos al crecer n (n=8: 6 sitios; n=48: mapa completo) para no saturar 6 locales. PLAY d├¡a 1 sigue con los operativos de la partida; el aforo recorta solo.
+   | - n=16 deja un 2.1 % sin salir en la semana (ruido de 1 persona ├ù alguna seed). No hay residentes que pasen la semana enteros en casa a n=8/32/48.
+  [B_rel] x4
+   | | Anti-aislamiento | umbral 2 d├¡as, bonus 2.2 (sale quien lleva d├¡as en casa) |
+   | - Cotilleo = 0 en 7 d├¡as: correcto. El umbral pide patr├│n de 3 d├¡as. Hay movimiento; no hay serial.
+   | Banda del lab vs direcci├│n de estudio: los cuatro puntos caen **dentro**. n=48 pisa el suelo (18). Subir m├ís el cupo llenar├¡a locales de noche; el lab no lo recomienda hasta ver PLAY con mapa real d├¡a 1 (menos destinos ÔåÆ
+   | | Semanas en casa sin motivo | anti-aislamiento umbral 2 d |
+  [C_marcha] x12
+   | **Motor:** `src/Engine/AutonomiaSalidas.php`, `ComplejoCatalog.php`, `AforoEngine.php`, `LugarAutonomo.php`, `CotilleoNarrativo.php`
+   | - M├íximo **1 salida aut├│noma por residente/d├¡a**.
+   | - No publicar cada salida. El Cotilleo es filtro narrativo.
+   | La calibraci├│n anterior `round(0.8ÔêÜn + 0.6)` daba ~2.3 / 2.7 / 2.8 / 3.0 salidas/d├¡a. A n=48 casi nadie sal├¡a.
+   | Casa 24 h incluye sue├▒o. La columna ├║til de ÔÇ£pueblo vac├¡oÔÇØ es **casa 10ÔÇô22** y, sobre todo, **salidas/d├¡a** + **% que sale en 7 d├¡as**.
+  [D_eco] x5
+   | **Estado:** ARQUITECTURA APROBADA + CALIBRACI├ôN REHECHA (lab 20/08). Cifras **no canon**. Movimiento del pueblo Ôëá Cotilleo. No toca Relacional V1, B4/E3, B5 ni econom├¡a.
+   | Direcci├│n de estudio (no canon num├®rico): n=8 ÔåÆ 3ÔÇô5; n=16 ÔåÆ 5ÔÇô8; n=32 ÔåÆ 10ÔÇô18; n=48 ÔåÆ 18ÔÇô30.
+   | Econom├¡a sigue con sus 5 preguntas (ver `LAB_ECONOMIA.md`); no bloquean este motor.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE dev/LAB_ECONOMIA.md
+  [A_voluntad] x80
+   | **Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lectura completa pedida
+   | `PARA` econom├¡a: s├¡, con este informe. Cifras **no** a `data/` ni a EconomyLedger. `economy_enabled` OFF.
+   | - La jugadora **no paga** facturas, luz, agua, n├│minas, alquiler, mantenimiento ni gastos peri├│dicos obligatorios.
+   | - **B/C** se compran enteros (+16 plazas). Exigen **tiempo + ocupaci├│n + dinero**. El dinero solo no basta.
+   | - Capacidad: A 16 + B 16 + C 16 = **48**. Tutorial ÔåÆ 8/16 en A.
+  [B_rel] x4
+   | 1. renta/ingreso peri├│dico ligado al **estado general del pueblo** (bandas de Vida);
+   | | Bandas de Vida | sint├®ticas por perfil, **no** el ledger B1 real | no se retoca B1 |
+   | - **Renta por banda de Vida:** fuente **cerrada como tipo**. En lab: alta/media/baja seg├║n perfil sint├®tico. Es el suelo: una racha mala **ralentiza** posibilidades, no apaga el pueblo.
+   | 2. **renta_offline** ÔÇö ┬┐La renta por banda de Vida llega cada d├¡a de calendario (buz├│n de ingresos) aunque Celestine no abra el juego, o solo en d├¡as con sesi├│n?
+  [C_marcha] x4
+   | **Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lectura completa pedida
+   | | Bloque B | ┬º5 d├¡a 30/100 + ┬º6 + ┬º7 |
+   | | Bloque B | 480 | ~20 d de ahorro **o** el gate de d├¡a 50 | +16 huecos ÔåÆ reabre llegadas |
+   | ### Bloque B (d├¡a medio si lo alcanzan)
+  [D_eco] x62
+   | # Lab de econom├¡a ÔÇö Aqu├¡ Hay Tema
+   | **Estado:** AN├üLISIS + PROPUESTA + LAB. **No canon.** No implementado en PLAY. `economy_enabled` sigue OFF. EconomyLedger sigue siendo placeholder.
+   | **Motor:** `src/Engine/SimuladorEconomia.php`
+   | **CLI:** `php dev/simulador_economia.php 8 lab-economia`
+   | **Semillas de este informe:** 8 ├ù seed `lab-economia` ├ù horizontes 30 / 100 / 365.
+  [BLOQ] x2
+   | Cuando Neni + ChatGPT elijan modelo y respondan los `BLOQUEADO_DECISION`, *entonces* se puede cablear el ledger. No antes. No B5.
+   | ## 9. BLOQUEADO_DECISION
+
+FILE dev/README_ECONOMIA_DRIVE.md
+  [A_voluntad] x2
+   | 3. **Parque fase 1** ÔÇö ┬┐p├║blico el d├¡a 1 o se compra como el resto?
+   | 4. **Fama en desbloqueos** ÔÇö ┬┐AND con el dinero, o dinero + hitos y la fama en otra capa?
+  [D_eco] x12
+   | # Carlos I ÔÇö Econom├¡a (lectura, no canon)
+   | Este folder es **copia de revisi├│n**. Los originales siguen en el repo (`dev/LAB_ECONOMIA.md`).
+   | - `LAB_ECONOMIA.md` ÔÇö informe completo del lab.
+   | - Cifras y gates: **propuesta**. No est├ín en `data/` ni en EconomyLedger.
+   | - `economy_enabled` sigue OFF.
+
+FILE dev\LAB_AUTONOMIA.md
+  [A_voluntad] x18
+   | - **V1 no organiza quedadas de dos.** Pueden salir, coincidir, hablar, casual, mover relaci├│n si corresponde. No existe ÔÇ£Carmen ha quedado con Jos├® a las 18:00ÔÇØ como plan aut├│nomo. Eso es papel de Celestine.
+   | Las `p_franjas` ya **no** son un dado que puede dejar el cupo a medias. Ponderan **cu├índo** se reparte el cupo (m├ís tarde que ma├▒ana). El motor persigue el objetivo acumulado de esa hora, con tope de arranques simult├íneo
+   | | Cotilleo | mismo par + mismo lugar ÔëÑ 3 d├¡as en 7 |
+   | El lab desbloquea m├ís destinos al crecer n (n=8: 6 sitios; n=48: mapa completo) para no saturar 6 locales. PLAY d├¡a 1 sigue con los operativos de la partida; el aforo recorta solo.
+   | - n=16 deja un 2.1 % sin salir en la semana (ruido de 1 persona ├ù alguna seed). No hay residentes que pasen la semana enteros en casa a n=8/32/48.
+  [B_rel] x4
+   | | Anti-aislamiento | umbral 2 d├¡as, bonus 2.2 (sale quien lleva d├¡as en casa) |
+   | - Cotilleo = 0 en 7 d├¡as: correcto. El umbral pide patr├│n de 3 d├¡as. Hay movimiento; no hay serial.
+   | Banda del lab vs direcci├│n de estudio: los cuatro puntos caen **dentro**. n=48 pisa el suelo (18). Subir m├ís el cupo llenar├¡a locales de noche; el lab no lo recomienda hasta ver PLAY con mapa real d├¡a 1 (menos destinos ÔåÆ
+   | | Semanas en casa sin motivo | anti-aislamiento umbral 2 d |
+  [C_marcha] x12
+   | **Motor:** `src/Engine/AutonomiaSalidas.php`, `ComplejoCatalog.php`, `AforoEngine.php`, `LugarAutonomo.php`, `CotilleoNarrativo.php`
+   | - M├íximo **1 salida aut├│noma por residente/d├¡a**.
+   | - No publicar cada salida. El Cotilleo es filtro narrativo.
+   | La calibraci├│n anterior `round(0.8ÔêÜn + 0.6)` daba ~2.3 / 2.7 / 2.8 / 3.0 salidas/d├¡a. A n=48 casi nadie sal├¡a.
+   | Casa 24 h incluye sue├▒o. La columna ├║til de ÔÇ£pueblo vac├¡oÔÇØ es **casa 10ÔÇô22** y, sobre todo, **salidas/d├¡a** + **% que sale en 7 d├¡as**.
+  [D_eco] x5
+   | **Estado:** ARQUITECTURA APROBADA + CALIBRACI├ôN REHECHA (lab 20/08). Cifras **no canon**. Movimiento del pueblo Ôëá Cotilleo. No toca Relacional V1, B4/E3, B5 ni econom├¡a.
+   | Direcci├│n de estudio (no canon num├®rico): n=8 ÔåÆ 3ÔÇô5; n=16 ÔåÆ 5ÔÇô8; n=32 ÔåÆ 10ÔÇô18; n=48 ÔåÆ 18ÔÇô30.
+   | Econom├¡a sigue con sus 5 preguntas (ver `LAB_ECONOMIA.md`); no bloquean este motor.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE dev\LAB_CATALOGOS_PERSONALIDAD.md
+  [A_voluntad] x15
+   | **No hace falta un cat├ílogo nuevo por cada columna de Excel.** Hace falta separar *qu├® hace*, *qu├® le tira*, *qu├® no traga*, *c├│mo es*, *c├│mo est├í con la gente* y *c├│mo se vincula*.
+   | | Capa | Qu├® es | Qu├® no es |
+   | | **Afecto estilo** | Espacio, ritmo de v├¡nculo, c├│mo se nota. | Relacional V1, orientaci├│n, dealbreakers, `ejes_preferencia` (lo que busco en *otra* persona). |
+   | - ┬½Preferencias sociales┬╗ paralelas a `estilos_sociales.json`: se **ampl├¡an** los ejes, no se duplican.
+   | Combos de 3 aficiones: **11.480**. Combos de 3 rasgos: **4.960**. 200 residentes no agotan el espacio. El riesgo de clones es un generador estereotipado, no el tama├▒o.
+  [B_rel] x1
+   | - Sociable + umbral de ruido bajo + rechazo Discoteca.
+  [C_marcha] x2
+   | - Man├¡as: 0 o 1; no se reutiliza el id mientras quede pool.
+   | 4. **Man├¡as ~70.** 0 o 1 por persona; unicidad en poblaci├│n activa mientras haya pool. `mecanico: false`.
+  [D_eco] x5
+   | **Estado:** PROPUESTA **V2**. **No canon.** No se han tocado P001ÔÇôP200 ni los JSON de producci├│n. `CatalogStore` de PLAY **no** carga esta carpeta.
+   | - Autonom├¡a futura: aficiones + rechazos de destino ya encajan en `LugarAutonomo` / `PlanAfinidad` cuando se migre. **Bonus num├®ricos no se canonizan ahora.**
+   | Las **entradas concretas** (42 aficiones, 28 gustos, 17 rechazos, 32 rasgos, ejes, ~70 man├¡as, muestra 30) **siguen sin canon**. No sustituyen producci├│n. No se tocan P001ÔÇôP200.
+   | Pendiente de Neni + ChatGPT (revisi├│n Drive V2): **aprobar las entradas concretas** antes de migrar a cat├ílogos de PLAY. Econom├¡a: las 5 decisiones siguen abiertas en `Carlos I - Economia` (no son de este bloque).
+  [E_disc] x5
+   | ## 5. Descubrimiento progresivo
+   | Cada ├¡tem lleva frases de Celestine (humanas, no ┬½Hobby: Leer┬╗) y hooks de evento/regalo. Nada obliga a volcar la ficha el d├¡a 1. Una persona puede llevar diez d├¡as en el pueblo sin que sepamos que juega.
+   | - Copy visible = `descubrimientos[]`, nunca el id.
+   | 6. **Etiquetas claras** (lista arriba). El chiste vive en `descubrimientos[]`.
+   | Los n├║meros son ├¡ndices de `descubrimientos[]`. PLAY no los usa todav├¡a.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE dev\LAB_ECONOMIA.md
+  [A_voluntad] x80
+   | **Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lectura completa pedida
+   | `PARA` econom├¡a: s├¡, con este informe. Cifras **no** a `data/` ni a EconomyLedger. `economy_enabled` OFF.
+   | - La jugadora **no paga** facturas, luz, agua, n├│minas, alquiler, mantenimiento ni gastos peri├│dicos obligatorios.
+   | - **B/C** se compran enteros (+16 plazas). Exigen **tiempo + ocupaci├│n + dinero**. El dinero solo no basta.
+   | - Capacidad: A 16 + B 16 + C 16 = **48**. Tutorial ÔåÆ 8/16 en A.
+  [B_rel] x4
+   | 1. renta/ingreso peri├│dico ligado al **estado general del pueblo** (bandas de Vida);
+   | | Bandas de Vida | sint├®ticas por perfil, **no** el ledger B1 real | no se retoca B1 |
+   | - **Renta por banda de Vida:** fuente **cerrada como tipo**. En lab: alta/media/baja seg├║n perfil sint├®tico. Es el suelo: una racha mala **ralentiza** posibilidades, no apaga el pueblo.
+   | 2. **renta_offline** ÔÇö ┬┐La renta por banda de Vida llega cada d├¡a de calendario (buz├│n de ingresos) aunque Celestine no abra el juego, o solo en d├¡as con sesi├│n?
+  [C_marcha] x4
+   | **Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lectura completa pedida
+   | | Bloque B | ┬º5 d├¡a 30/100 + ┬º6 + ┬º7 |
+   | | Bloque B | 480 | ~20 d de ahorro **o** el gate de d├¡a 50 | +16 huecos ÔåÆ reabre llegadas |
+   | ### Bloque B (d├¡a medio si lo alcanzan)
+  [D_eco] x62
+   | # Lab de econom├¡a ÔÇö Aqu├¡ Hay Tema
+   | **Estado:** AN├üLISIS + PROPUESTA + LAB. **No canon.** No implementado en PLAY. `economy_enabled` sigue OFF. EconomyLedger sigue siendo placeholder.
+   | **Motor:** `src/Engine/SimuladorEconomia.php`
+   | **CLI:** `php dev/simulador_economia.php 8 lab-economia`
+   | **Semillas de este informe:** 8 ├ù seed `lab-economia` ├ù horizontes 30 / 100 / 365.
+  [BLOQ] x2
+   | Cuando Neni + ChatGPT elijan modelo y respondan los `BLOQUEADO_DECISION`, *entonces* se puede cablear el ledger. No antes. No B5.
+   | ## 9. BLOQUEADO_DECISION
+
+FILE dev\README_ECONOMIA_DRIVE.md
+  [A_voluntad] x2
+   | 3. **Parque fase 1** ÔÇö ┬┐p├║blico el d├¡a 1 o se compra como el resto?
+   | 4. **Fama en desbloqueos** ÔÇö ┬┐AND con el dinero, o dinero + hitos y la fama en otra capa?
+  [D_eco] x12
+   | # Carlos I ÔÇö Econom├¡a (lectura, no canon)
+   | Este folder es **copia de revisi├│n**. Los originales siguen en el repo (`dev/LAB_ECONOMIA.md`).
+   | - `LAB_ECONOMIA.md` ÔÇö informe completo del lab.
+   | - Cifras y gates: **propuesta**. No est├ín en `data/` ni en EconomyLedger.
+   | - `economy_enabled` sigue OFF.
+
+FILE docs\APRENDIZAJE_PREFERENCIAS.md
+  [A_voluntad] x68
+   | Los gustos de pareja **no son siempre est├íticos**. Una experiencia relevante puede dejar huella. Solo si hay **causalidad**: el rasgo tiene que haber sido *causa* del bien o del mal, no decorado de la escena.
+   | ÔåÆ impacto
+   | 4. **Una tirada, un eje.** Un divorcio no dispara un escopetazo a diez gustos. Se elige el eje con m├ís evidencia causal.
+   | 7. **No modelamos (a├║n) el error de atribuci├│n** (┬½culpar a los gamers porque el restaurante cerr├│┬╗). Ser├¡a gracioso y ca├│tico. Fuera de esta propuesta.
+   | ### Dos capas
+  [B_rel] x10
+   | Los gustos de pareja **no son siempre est├íticos**. Una experiencia relevante puede dejar huella. Solo si hay **causalidad**: el rasgo tiene que haber sido *causa* del bien o del mal, no decorado de la escena.
+   | 4. Si el resultado malo/bueno se explica por **contexto** (sitio cerrado, lluvia, horario, un tercero, un micro de lugar), las causas son de contexto. **No se copian** a hobbies de la pareja.
+   | | El restaurante cerrado | `contexto_lugar` (no es eje de pareja) | `eje_videojuegos` |
+   | | Ruptura | s├¡, si el motivo de ruptura apunta a un eje | 3 | |
+   | | Evento traum├ítico/memorable (tono del juego) | s├¡ | 3ÔÇô4 | Rid├¡culo p├║blico, abandono en crisisÔÇª no gore |
+  [C_marcha] x3
+   | Los gustos de pareja **no son siempre est├íticos**. Una experiencia relevante puede dejar huella. Solo si hay **causalidad**: el rasgo tiene que haber sido *causa* del bien o del mal, no decorado de la escena.
+   | 1. **La causalidad es un dato, no un comentario.** El evento declara `causas[]`. Si no hay causa que apunte a un eje, no hay tirada.
+   | ## Causalidad (el filtro que manda)
+  [D_eco] x3
+   | **Candidato. No es implementaci├│n. No es canon de cifras. No entra en la V0 programable todav├¡a.**
+   | ### Escala recomendada para simular (no canon)
+   | **No canonizar** estos % hasta ver el simulador. Si en 60 d├¡as todo el pueblo ha girado, bajar. Si nadie cambia nunca, subir un pelda├▒o o la repetici├│n, no el incidente peque├▒o.
+  [E_disc] x10
+   | Orientaci├│n / `atraido_por` / `apertura_descubrimiento`: **otro mecanismo** (`PROPUESTA_JUGABLE_V0_CURSOR.md` ┬º13). Este sistema **no** los usa como premio ni como castigo.
+   | 2. **Qui├®n soy Ôëá qu├® busco.** Este sistema mueve *preferencias sobre la otra persona*. No reescribe hobby, rasgos p├║blicos, voz ni estilo social del personaje. Roc├¡o no deja de ser observadora porque una cita salga mal.
+   | | hobby / planes | videojuegos, copas, cine, deporte, bingoÔÇª |
+   | | `apertura_descubrimiento` | no se gasta aqu├¡ |
+   | | `hobby_principal`, rasgos p├║blicos/ocultos, `voz`, `estilo_social` *propio* | qui├®n es, no a qui├®n busca |
+
+FILE docs\ARQUITECTURA_CATALOGOS.md
+  [A_voluntad] x2
+   | | Ocupaci├│n / franja | `profesiones.json`, `franjas_disponibilidad.json` | Cerrado t├®cnico (agenda). |
+   | Evita 8 plantillas para 100 personas: el registro es cat├ílogo; verbosidad/calidez/muletilla diferencian. **BLOQUEADO_DECISION:** cu├íntos registros y si muletilla es texto libre o id de coletilla.
+  [BLOQ] x1
+   | Evita 8 plantillas para 100 personas: el registro es cat├ílogo; verbosidad/calidez/muletilla diferencian. **BLOQUEADO_DECISION:** cu├íntos registros y si muletilla es texto libre o id de coletilla.
+
+FILE docs\BUZON_DE_CELESTINE.md
+  [A_voluntad] x6
+   | **Cerrado para V0** (2026-08-18). Peque├▒o pero obligatorio en la 1.┬¬ prueba. An├ílisis ampliado: `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`.
+   | 6. Mantener posibilidad de un **resumen objetivo m├¡nimo** de hechos del pueblo si la simulaci├│n demuestra que hace falta (canal aparte o entrada especial; no sustituye la voz subjetiva).
+   | | Uso | ┬½┬┐Qu├® ha pasado?┬╗ | ┬½┬┐Qui├®n me necesita?┬╗ |
+   | | `soledad` | ┬½Necesito compa├▒├¡a, no s├® con qui├®n.┬╗ |
+   | | `cuento` | ┬½Anoche pas├│ una cosaÔÇª┬╗ |
+  [B_rel] x1
+   | - Los urgentes (`marcha`, crisis) quedan **pendientes de pulsar**.
+  [C_marcha] x5
+   | 5. Una **marcha** puede empezar aqu├¡; **nunca** se cierra offline sin Celestine.
+   | Ids internos candidatos ampliados (post-V0): `conflicto`, `soledad`, `amistad`, `marcha`, `cuento`, `venteo` ÔÇö ver tabla hist├│rica abajo.
+   | - Los urgentes (`marcha`, crisis) quedan **pendientes de pulsar**.
+   | | `marcha` | ┬½Estoy pensando en irme.┬╗ ÔåÆ flujo consentido |
+  [E_disc] x1
+   | | `descubrimiento` | Informaci├│n o pista relevante (subjetiva) |
+
+FILE docs\CHECKLIST_AUDITORIA_PERSONAJES.md
+  [A_voluntad] x45
+   | ## Para qu├® existe
+   | El ┬½s├¡, este tono┬╗ de Neni **no** convierte una ficha en `aprobado`. Esa palabra es de la auditor├¡a.
+   | | Neni | 2ÔÇô3 pilotos (tono). El resto, en partida. |
+   | | `revision` | Nivel 1 pasado *o* tono de piloto OK. Puede faltar el rec├¡proco real del pool. |
+   | Un piloto al que Neni ha dicho ┬½s├¡┬╗ queda en `revision` hasta que existan destinos rec├¡procos. Entonces Cursor cierra esa l├¡nea y puede pasar a `aprobado`.
+  [B_rel] x5
+   | - `I10` (otra banda de edad)
+   | - [ ] No es clon evidente de otra ficha ya escrita (misma voz + mismo estilo social + ÔëÑ2 rasgos iguales + banda de edad cercana ÔåÆ FAIL salvo justificaci├│n)
+   | - [ ] Estado inicial compatible (`estado_animo_inicial` simple; nadie empieza ya emparejado en V0)
+   | - [ ] No tiene ┬½pareja perfecta obvia┬╗: horario, trato y preferencias no apuntan a una sola persona del pool como puzzle resuelto
+   | - [ ] Varias combinaciones posibles; no un matching ├║nico obvio de 8 parejas
+  [C_marcha] x25
+   | **Ninguna ficha es FINAL** hasta superar esta auditor├¡a. No es c├│digo. No sustituye a `FASE_DISENO_POOL_16.md` ni a `VALIDACION_GRAFO_ROMANTICO.md`: los usa.
+   | 1. Conservar que **Neni se encuentre gente inesperada al jugar**. Ve y aprueba el tono de **2ÔÇô3 pilotos**. El resto del pool de 16 lo dise├▒a ChatGPT; no hace falta que lo lea uno a uno.
+   | | ChatGPT | Dise├▒a el pool con el mismo est├índar que los pilotos. Revisi├│n narrativa. |
+   | | `revision` | Nivel 1 pasado *o* tono de piloto OK. Puede faltar el rec├¡proco real del pool. |
+   | | `aprobado` | Nivel 1 **completo**, incluido rec├¡proco comprobable en el pool. |
+  [E_disc] x7
+   | | Estructura / formato (campo vac├¡o, enum ilegal, id mal escrito, hobby fuera de cat├ílogo) | Cursor **corrige** y lo anota en una l├¡nea. |
+   | - [ ] `apertura_descubrimiento` Ôêê `cerrada` / `permeable` / `abierta`
+   | - [ ] Etiqueta visible, si hay, **no manda**; si discrepa de `atraido_por`, es descubrible, no un error
+   | - [ ] `hobby_principal` del cat├ílogo candidato; secundarios v├ílidos si hay
+   | - [ ] `lugares_preferentes` ligados al hobby o a su vida; ids reales (`MAPA_Y_LUGARES.md`)
+
+FILE docs\CHECKLIST_PERSONA_NORMAL.md
+  [A_voluntad] x13
+   | Partida de prueba sin abrir `dev.php`.
+   | ## Pasos
+   | 6. [ ] Comprobar que aparecen horas compatibles (sin probar al azar).
+   | 8. [ ] Ver feedback de ├®xito, el mapa centrado en el lugar con el detalle abierto, y el encuentro en ÔÇ£Programados / en cursoÔÇØ.
+   | 10. [ ] Comprobar que el encuentro pasa a ÔÇ£En cursoÔÇØ y luego ÔÇ£TerminadoÔÇØ.
+  [C_marcha] x1
+   | 2. [ ] Entender qui├®n vive all├¡: lista de residentes + Bloque A con viviendas.
+  [E_disc] x1
+   | 4. [ ] Ver qu├® se sabe de esa persona: bloque Discovery + hobbies visibles + agenda.
+
+FILE docs\CHECKLIST_PRE_IMPLEMENTACION.md
+  [A_voluntad] x16
+   | - compatibilidad, relaciones, marchas, llegadas
+   | - mapa/lugares operativos, desbloqueos
+   | - persistencia partida / seed
+   | - cualquier pantalla de partida (El pueblo, mapa, etc.)
+   | **Opcional** para cambios triviales (texto landing, typos en docs).
+  [C_marcha] x3
+   | - compatibilidad, relaciones, marchas, llegadas
+   | | B1 | ┬┐Reglas de entrada/salida escritas? | ÔÿÉ |
+   | ### Personajes (pool)
+  [D_eco] x2
+   | - econom├¡a/fama jugables
+  [E_disc] x1
+   | | Tipos V0 | bienvenida, petici├│n, problema, respuesta, descubrimiento, aviso_comunidad |
+
+FILE docs\CHECKLIST_PRE_PLAYTEST_01.md
+  [A_voluntad] x14
+   | - [x] Partidas en `data/partidas/` (escritura PHP; listado HTTP denegado)
+   | - [x] `data/partidas/.htaccess` ÔåÆ `Require all denied`
+   | - [x] Carpeta versionada con `.gitkeep`; JSON de partidas no van a git
+   | - [x] APIs `dev.*` y `reloj.ir_a` pasan por `requireDev()` ÔåÆ 403 si el gate est├í off
+   | - [x] `dev.php` sigue existiendo para diagn├│stico **si** el gate est├í activo
+  [D_eco] x2
+   | - [x] Config `playtest_01`: Roc├¡o real + **QA Valid** (NO CANON)
+   | - [x] No hay econom├¡a / compatibilidad real / narrativa nueva
+
+FILE docs\COLETILLAS.md
+  [A_voluntad] x2
+   | - S├¡ pasa.
+   | La maqueta visual usa otra del mismo palo (┬½Las que te aguante tu madre.┬╗). Mismo registro: seco, popular, un poco de comedia de pueblo.
+  [B_rel] x2
+   | - crisis / ruptura / boda
+  [D_eco] x1
+   | ## Ejemplos de tono (canon de voz, no banco cerrado)
+
+FILE docs\CONSOLIDACION_DRIVE.md
+  [A_voluntad] x4
+   | No hab├¡a una segunda carpeta con material distinto: era **rename**, no un fork. En DriveFS no quedaban ├¡tems ┬½Cupido Cutre┬╗ ni papelera con ese t├¡tulo.
+   | - Esta fase **escribe primero en local** y luego copia `docs/`, `data/`, `README.md` y `PARA_CHATGPT.md` a Drive, **sin** `/MIR` y **sin** tocar el `.gdoc` ni el PNG de la ra├¡z.
+   | ## Referencia ├║nica para ChatGPT
+   | Punto de entrada: `PARA_CHATGPT.md`.
+
+FILE docs\CONTRATO_ESTADO_EMOCIONAL_Y_EXPRESION.md
+  [A_voluntad] x25
+   | - hooks emocionales **apagados** hasta definir reglas
+   | - packs de expresiones **progresivos** (no hace falta el set completo)
+   | Identidades visuales y packs por personaje: trabajo de dise├▒o en curso. El motor no los genera.
+   | EXPRESI├ôN VISUAL   = qu├® asset de cara se pinta ahora (paquete gr├ífico)
+   | ## 1. Dos capas
+  [D_eco] x2
+   | **CANON 2026-08-18.** Arquitectura aprobada. Extensible. **No** es un sistema emocional de producci├│n. **No** hay f├│rmulas ni mappings de pueblo.
+   | Canon cerrado:
+  [E_disc] x2
+   | | `descubrimiento` | descubrimiento |
+
+FILE docs\CONTRATO_PERSONAJE.md
+  [A_voluntad] x43
+   | Neni aprueba **pilotos solo con B**. Si un secreto aparece en B, la entrega es FAIL.
+   | ## 1. Enums y cat├ílogos (cerrados para V0)
+   | | `ocupacion` | `sanitario` ┬À `oficina` ┬À `camarero` ┬À `comercio` ┬À `docente` ┬À `estudiante_adulto` ┬À `autonomo` ┬À `jubilado` |
+   | | `hobby_principal` / secundarios | `leer` ┬À `escribir` ┬À `pasear` ┬À `correr` ┬À `cafe_social` ┬À `manualidades` ┬À `cocina` ┬À `musica` ┬À `cine` ┬À `videojuegos` ┬À `copas` ┬À `baile` |
+   | | `rasgos_*` | `directo` ┬À `timido` ┬À `ironico` ┬À `leal` ┬À `cabezota` ┬À `empatico` ┬À `vanidoso` ┬À `ansioso` ┬À `bromista` ┬À `reservado` |
+  [B_rel] x5
+   | | `funcion_llegada` | `neutra` ┬À `amistad` ┬À `interes_soltero` ┬À `quimica_emparejado` ┬À `triangulo_potencial` ┬À `vida_del_pueblo` |
+   | | `interes_romantico` | `activo` ┬À `pasivo` ┬À `ninguno` ÔÇö **candidato.** `ninguno` = no quiere pareja; no es fallo de dise├▒o. Ver `VALIDACION_GRAFO_ROMANTICO.md`. |
+   | `interes_romantico` (default `activo` o `pasivo`; `ninguno` = no quiere pareja ÔÇö ver grafo).
+   | | Las 4 variables de pareja, recuerdos, citas | No existen en cat├ílogo |
+   | `plasticidad_preferencias`: `baja` / `media` / `alta`. C├│mo de f├ícil reinterpreta gustos de pareja. Distinto de `apertura_descubrimiento`.
+  [C_marcha] x17
+   | Auditor├¡a: `CHECKLIST_AUDITORIA_PERSONAJES.md`. Esqueleto de slots: `FASE_DISENO_POOL_16.md`.
+   | 1. Un personaje = un bloque A + un bloque B, en este orden, con las cabeceras literales de ┬º8.
+   | 4. En B **no se nombran** personajes que Neni a├║n no puede conocer (resto del pool no piloto).
+   | | `reciprocos_potenciales.estado` | `pendiente_pool` ┬À `resuelto` ┬À `fallido` |
+   | Si `empieza_en_pueblo` es `false`: tambi├®n `orden_llegada` (1ÔÇô6, ├║nico en el pool) y `funcion_llegada`.
+  [E_disc] x17
+   | | `apertura_descubrimiento` | `cerrada` ┬À `permeable` ┬À `abierta` |
+   | | `hobby_principal` / secundarios | `leer` ┬À `escribir` ┬À `pasear` ┬À `correr` ┬À `cafe_social` ┬À `manualidades` ┬À `cocina` ┬À `musica` ┬À `cine` ┬À `videojuegos` ┬À `copas` ┬À `baile` |
+   | `slot`, `id`, `nombre`, `edad`, `genero`, `pronombres`, `atraido_por` (ÔëÑ1), `apertura_descubrimiento`, `ocupacion`, `franja_disponibilidad`, `hobby_principal`, `lugares_preferentes` (ÔëÑ1), `estilo_social`, `voz`, `rasgos_
+   | `slot`, `id`, `nombre`, `edad`, `genero`, `pronombres`, `atraido_por` (ÔëÑ1), `apertura_descubrimiento`, `ocupacion`, `franja_disponibilidad`, `hobby_principal`, `lugares_preferentes` (ÔëÑ1), `estilo_social`, `voz`, `rasgos_
+   | `compromisos_recurrentes[]` (0ÔÇô3): `{ id, dia_semana, hora_inicio, hora_fin, lugar?, etiqueta, descubrible }`. Solo en A; descubrimiento en runtime.
+
+FILE docs\CONTRATO_VISUAL_PERSONAJES.md
+  [A_voluntad] x51
+   | Ancla de estilo (a elegir a├║n entre pruebas): las **cabezas peque├▒as** de `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` (mapa + tarjetas PAREJAS). No retrato semirrealista / ┬½guapo┬╗.
+   | El **look/cuerpo** (ropa cotidiana, de cita, elegante, fiesta, c├│moda, de evento) se estudia **despu├®s**. No se programa ni se genera ahora.
+   | Hay que resolver m├ís adelante c├│mo pegar cabeza + cuerpo sin que parezcan otro personaje (misma paleta, mismo trazo, mismo grado de caricatura). Hasta entonces: solo cabezas.
+   | Guapa no es el default **ni** feo a prop├│sito. El cat├ílogo debe tener **variedad real de atractivo**: personas muy atractivas, normales, peculiares, mayores, j├│venes adultas, distintos cuerpos y estructuras faciales ÔÇö si
+   | Si la ficha pide nariz ancha, papada, canas, gafas gordas: **se dibuja**. Si pide belleza llamativa dentro del estilo cutre: **tambi├®n**.
+  [B_rel] x2
+   | Ancla de estilo (a elegir a├║n entre pruebas): las **cabezas peque├▒as** de `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` (mapa + tarjetas PAREJAS). No retrato semirrealista / ┬½guapo┬╗.
+   | **Prohibido:** medio cuerpo, cuerpo entero, 3/4 de moda, hombros vestidos a lo retrato de LinkedIn, caf├®/parque, pareja, texto.
+  [C_marcha] x4
+   | ## Maniqu├¡es de prueba ÔÇö EXCLUIDOS del pool (cerrado 2026-08-18)
+   | Los personajes **A**, **B** y **C** son **maniqu├¡es de prueba**. **EXCLUIDOS del pool.**
+   | Referencia: PNG 01, **cabecitas** del mapa/tarjetas. Salida **1:1**.
+   | **FAIL anti-reciclaje:** borrador = maniqu├¡ A/B/C de `_estilo_06/` (misma estructura de cr├íneo/mand├¡bula/ojos/nariz aunque cambie pelo) **o** clon de otro habitante del pool.
+  [D_eco] x2
+   | **Canon desde 2026-08-18.** Obligatoria para todos los habitantes con el lenguaje visual **06b**.
+   | El primer borrador de Roc├¡o (jersey verde, 3/4) **no** es el encuadre vigente. No est├í aprobado. Sirve de contraste, no de canon.
+
+FILE docs\CUADRICULA_REFERENCIAS.md
+  [A_voluntad] x14
+   | # Cuadr├¡cula obligatoria en referencias de mapa
+   | Cualquier mockup o referencia visual **importante del mapa** debe existir en dos versiones de la **misma** imagen:
+   | 2. La misma, con cuadr├¡cula y coordenadas superpuestas, sin tapar el dise├▒o.
+   | ## Para qu├®
+   | Para que se pueda dirigir el mapa con frases inequ├¡vocas:
+
+FILE docs\DECISIONES_CERRADAS.md
+  [A_voluntad] x76
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | **Respuestas Fase 1 (parada de control):** 2026-08-18. Detalle operativo en `ESTADO_PROYECTO.md`.
+   | | Sin pareja Ôëá fallo | Un habitante puede **no querer** romance. Eso **no** es un problema que Celestine deba solucionar. |
+  [B_rel] x6
+   | | Sin pareja Ôëá fallo | Un habitante puede **no querer** romance. Eso **no** es un problema que Celestine deba solucionar. |
+   | | NPC aut├│nomos | Los residentes viven sin el jugador. **Puede nacer una pareja sin ├®l.** El jugador interviene; no es el pulm├│n del bloque. |
+   | | Objetivo / derrota | Sandbox. **Sin** ┬½X parejas = ganas┬╗. **Sin** game over por rupturas. Lectura: **r├│tulo por bloque** + posible **estado de la comunidad**. Textos no can├│nicos. |
+   | | Derrota dura / game over V0 | Sandbox + r├│tulo por bloque / comunidad; sin ┬½X parejas = ganas┬╗ |
+   | - Estado de pareja legible por color; el jugador no ve el desglose interno.
+  [C_marcha] x29
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+   | La **escala** la mandan `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`: ~3 al inicio, **capacidad Ôëá pool**, tanda 16 de fichas, **Bloque A Ôëê 16** (ampliar = Bloque B, no un 24 ├║nico). Marchas: **├║ltima
+  [D_eco] x4
+   | | Recursos | Dinero y fama (valores no fijados) |
+   | | Protecci├│n residencia (hip├│tesis) | Marcha ┬½normal┬╗ no antes de **~30 d├¡as** en la comunidad. N├║mero **no** canonizado. |
+   | Sigue sin canonizar precios, 12 edificios abiertos, barra 72/100, nombres de maqueta ni el tama├▒o del mapa. Ahora **contradice** el inicio de 3 lugares: es tono, no layout de partida.
+  [E_disc] x2
+   | | Vida NPC m├¡nima | ocupaci├│n, franja de disponibilidad, hobby principal, ├ínimo simple, lugar(es) preferente(s). No Los Sims. |
+   | | Buz├│n V0 | **S├¡** en 1.┬¬ prueba (peque├▒o). Tipos m├¡nimos: bienvenida, petici├│n, problema, respuesta/reacci├│n, informaci├│n/descubrimiento, avisos/desbloqueos. Voz subjetiva del personaje; **no** acceso al estado interno
+
+FILE docs\DIARIO_DEL_PUEBLO.md
+  [A_voluntad] x5
+   | **Complemento candidato:** **Buz├│n de Celestine** ÔÇö mensajes directos, subjetivos, en 1.┬¬ persona. Ver `BUZON_DE_CELESTINE.md` y `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`.
+   | | Pregunta | ┬½┬┐Qu├® ha pasado en el pueblo?┬╗ | ┬½┬┐Qui├®n me necesita?┬╗ |
+   | **Recomendaci├│n:** mantener **ambos**. El diario no desaparece.
+   | No todos los mensajes parecen importantes. La mayor├¡a van sin icono.
+   | - Joel ha pasado la tarde jugando.
+  [C_marcha] x1
+   | Las voces de las fichas alimentan el diario; no 16 veces la misma. Auditor├¡a narrativa de pool: `CHECKLIST_AUDITORIA_PERSONAJES.md`.
+
+FILE docs\DINERO_Y_FAMA.md
+  [A_voluntad] x12
+   | Recurso principal. Usos previstos (lista abierta, no econom├¡a cerrada):
+   | - comprar / desbloquear ropa
+   | - organizar planes especiales (modifican probabilidades, no compran el amor)
+   | El oficio manda **horario** m├ís que sueldo. A+B (~32) no deben dejar el dinero irrelevante: hacen falta sumideros (lugares, herramientas, planes especiales, **abrir B**). El goteo c├│ncavo se calcula sobre **residentes to
+   | El jugador se est├í convirtiendo en la **Celestine** de la comunidad ÔÇö quien conoce el pulso del barrio y ayuda con v├¡nculos (no solo parejas).
+  [B_rel] x5
+   | Valores, precios y umbrales: **no fijados.** Los 1.250 Ôé¼ y la fama 38 de la maqueta son decorado.
+   | El jugador se est├í convirtiendo en la **Celestine** de la comunidad ÔÇö quien conoce el pulso del barrio y ayuda con v├¡nculos (no solo parejas).
+   | - parejas creadas
+   | - resolver crisis
+   | ┬┐La fama puede bajar (esc├índalos, rupturas en cadena, rumores)? **Pendiente.** No decidir aqu├¡ un sistema de reputaci├│n punitiva.
+  [C_marcha] x3
+   | - **abrir / rehabilitar un bloque** (candidato: Bloque B; precio no fijado)
+   | C├│mo se obtiene: **goteo por la actividad laboral de los residentes presentes** (curva c├│ncava; no `Ôé¼ ├ù n`). Puede sumar, m├ís adelante, citas/encargos. Cifras: no. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+  [D_eco] x23
+   | # Dinero y fama
+   | Valores, precios y umbrales: **no fijados.** Los 1.250 Ôé¼ y la fama 38 de la maqueta son decorado.
+   | ## Dinero
+   | Recurso principal. Usos previstos (lista abierta, no econom├¡a cerrada):
+   | El oficio manda **horario** m├ís que sueldo. A+B (~32) no deben dejar el dinero irrelevante: hacen falta sumideros (lugares, herramientas, planes especiales, **abrir B**). El goteo c├│ncavo se calcula sobre **residentes to
+
+FILE docs\DIRECCION_ARTISTICA.md
+  [A_voluntad] x13
+   | No realistas. Caricatura 2D de juego de mesa / sitcom. **Referencia: las cabezas del mapa y de las tarjetas PAREJAS**, no un retrato semirrealista posterior.
+   | Encuadre vigente: **cabeza maestra de frente**, cuello, casi sin ropa. `CONTRATO_VISUAL_PERSONAJES.md`. El estilo gr├ífico del pueblo **a├║n se elige**. El 06 gusta; no es canon. Regla **candidata**: distinguirse tambi├®n p
+   | Encuadre vigente: **cabeza maestra de frente**, cuello, casi sin ropa. `CONTRATO_VISUAL_PERSONAJES.md`. El estilo gr├ífico del pueblo **a├║n se elige**. El 06 gusta; no es canon. Regla **candidata**: distinguirse tambi├®n p
+   | ## UI y mapa
+   | Blanco, limpio, sencillo. Tablero, calles simples, edificios reconocibles, cabezas en el mapa, tarjetas de pareja, estados claros, coletillas, dinero y fama.
+  [B_rel] x2
+   | No realistas. Caricatura 2D de juego de mesa / sitcom. **Referencia: las cabezas del mapa y de las tarjetas PAREJAS**, no un retrato semirrealista posterior.
+   | Blanco, limpio, sencillo. Tablero, calles simples, edificios reconocibles, cabezas en el mapa, tarjetas de pareja, estados claros, coletillas, dinero y fama.
+  [D_eco] x3
+   | Encuadre vigente: **cabeza maestra de frente**, cuello, casi sin ropa. `CONTRATO_VISUAL_PERSONAJES.md`. El estilo gr├ífico del pueblo **a├║n se elige**. El 06 gusta; no es canon. Regla **candidata**: distinguirse tambi├®n p
+   | Blanco, limpio, sencillo. Tablero, calles simples, edificios reconocibles, cabezas en el mapa, tarjetas de pareja, estados claros, coletillas, dinero y fama.
+
+FILE docs\ENCUENTROS_ESPONTANEOS.md
+  [A_voluntad] x9
+   | Esto puede pasar **aunque una ya tenga pareja**. Si el motor tira hacia interacci├│n, puede generar amistad, inter├®s, crush, tensi├│n, celos, problemas nuevos ÔÇö o **nada**.
+   | **Una pareja puede formarse sin Celestine.** Eso es deseable y **raro**. El diario / buz├│n lo cuenta; Celestine interviene despu├®s si quiere. Las citas aut├│nomas **no** gastan el tope de encuentros del jugador.
+   | Frecuencia: rutina a menudo (estar en sitios); lo importante, raro. Aforo limita cu├íntas cabezas hay a la vez (`MAPA_Y_LUGARES.md`). Catch-up: `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+   | Vida de habitantes: hobbies ÔåÆ lugares, trabajo ÔåÆ horarios, rutinas. Dos rutinas que se solapan = **est├ín en el mismo sitio** (si el aforo les deja entrar).
+   | ## Qu├® puede pasar (candidatos)
+  [B_rel] x4
+   | Esto puede pasar **aunque una ya tenga pareja**. Si el motor tira hacia interacci├│n, puede generar amistad, inter├®s, crush, tensi├│n, celos, problemas nuevos ÔÇö o **nada**.
+   | **Una pareja puede formarse sin Celestine.** Eso es deseable y **raro**. El diario / buz├│n lo cuenta; Celestine interviene despu├®s si quiere. Las citas aut├│nomas **no** gastan el tope de encuentros del jugador.
+   | 5. Si hay pareja, semilla de celos o tentaci├│n (azar + causas, no loter├¡a de divorcio).
+   | Umbrales (┬½tres veces esta semana┬╗) **no fijados**.
+  [C_marcha] x2
+   | Frecuencia: rutina a menudo (estar en sitios); lo importante, raro. Aforo limita cu├íntas cabezas hay a la vez (`MAPA_Y_LUGARES.md`). Catch-up: `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+  [E_disc] x1
+   | Si una ficha no tiene hobby, lugar o franja usables, casi no genera oportunidades. Auditor├¡a: `CHECKLIST_AUDITORIA_PERSONAJES.md` (bloques Vida y Juego).
+
+FILE docs\ESTADO_PROYECTO.md
+  [A_voluntad] x80
+   | Este documento manda como **mapa de situaci├│n**. Las decisiones cerradas siguen en `DECISIONES_CERRADAS.md`. Si algo aqu├¡ contradice a `DECISIONES_CERRADAS.md`, gana `DECISIONES_CERRADAS.md` salvo que este archivo marque
+   | | **OBSOLETO** | Documento o regla sustituida; no usar para dise├▒ar |
+   | **Aqu├¡ Hay Tema** es un juego de gesti├│n social en una villa peque├▒a, cutre y simp├ítica. El jugador es **Celestine**: gestiona v├¡nculos y convivencia (amor, amistad, conflictos, soledad), no un sudoku de parejas ni Los S
+   | ### BUCLE PRINCIPAL ÔÇö CERRADO (direcci├│n) / PENDIENTE (wireframes)
+   | Detalle de pantallas y flujos: **PENDIENTE** (sin wireframes).
+  [B_rel] x8
+   | **Aqu├¡ Hay Tema** es un juego de gesti├│n social en una villa peque├▒a, cutre y simp├ítica. El jugador es **Celestine**: gestiona v├¡nculos y convivencia (amor, amistad, conflictos, soledad), no un sudoku de parejas ni Los S
+   | **Aqu├¡ Hay Tema** es un juego de gesti├│n social en una villa peque├▒a, cutre y simp├ítica. El jugador es **Celestine**: gestiona v├¡nculos y convivencia (amor, amistad, conflictos, soledad), no un sudoku de parejas ni Los S
+   | - Pesos, umbrales, capas concretas ÔÇö **PENDIENTE**
+   | - Pueden formar pareja **sin** Celestine ÔÇö **CERRADO**
+   | - Precios, umbrales, or├¡genes de ingresos ÔÇö **PENDIENTE**
+  [C_marcha] x39
+   | 6. Gestionar llegadas, marchas consentidas, desbloqueos progresivos.
+   | | Capacidad Bloque A | Ôëê **16** (A01ÔÇªA16) |
+   | | Bloque B | Ôëê16 futuro; **no** en 1.┬¬ prueba |
+   | | Pool cat├ílogo | Tanda **16** ahora; objetivo **80ÔÇô100+** |
+   | | 32 | Capacidad simult├ínea A+B, **no** total de fichas |
+  [D_eco] x18
+   | ### ECONOM├ìA Y FAMA ÔÇö CERRADO (existen) / PENDIENTE (cifras)
+   | - Dinero y fama existen; visibles en prototipo ÔÇö **CERRADO**
+   | - Fama = reconocimiento de Celestine en la comunidad ÔÇö **CERRADO** (post-Celestine)
+   | | Econom├¡a (dinero/fama) | **CERRADO** mostrar; sin UI |
+  [E_disc] x2
+   | - Vida m├¡nima: ocupaci├│n, franja, hobby, ├ínimo, lugares ÔÇö **CERRADO**
+   | - Trabajo din├ímico, rutinas descubribles ÔÇö **CANDIDATO** (propuesta agenda)
+
+FILE docs\ESTADO_VISUAL_ACTUAL.md
+  [A_voluntad] x18
+   | Expresiones que el hilo visual est├í **probando** (no obliga a las nueve en cada pack):
+   | | Lista de expression_id | PROVISIONAL (ampliable; N variable por pack) |
+   | | Cabeza maestra por personaje | APROBADO solo cuando el hilo visual lo marque y se registre el pack |
+   | - `data/personajes/_visual_packs/registro.json`
+   | Cada pack declara:
+  [D_eco] x3
+   | - Laboratorio (no canon): `assets/personajes/_laboratorio/LAB_##_Nombre/`
+   | El motor **no** los trata como canon ni como pack jugable hasta que el hilo visual los apruebe y se registren.
+   | ### LAB_01_Teo ÔÇö laboratorio, NO canon
+  [E_disc] x1
+   | - Que un encuentro, un descubrimiento o un NPC aut├│nomo cambien la cara (hooks apagados).
+
+FILE docs\EVENTOS.md
+  [A_voluntad] x8
+   | 2ÔÇô4 por cita, cortos, combinables. El Maestro hablaba de 25ÔÇô40 en el banco del prototipo: sigue siendo **orden de magnitud**, no cupo cerrado, ahora que la partida puede no durar 30 d├¡as.
+   | ## 2. Eventos de pareja / personales
+   | La lista del Maestro sigue como candidatos (necesitamos hablar, aniversario, celos, espacio, formalizar, boda, separaci├│n, etc.). Recorte a 10: **ya no se trata como cifra cerrada**. Se recortar├í cuando haya n├║cleo.
+   | Nuevo: eventos disparados por **relaci├│n social** (la mejor amiga no soporta a la pareja).
+   | Candidatos del Maestro (calor, fiesta mayor, lluvia, apag├│n, boda ajena, ex que vuelve, rumor, nuevo habitante, confinamiento raroÔÇª).
+  [B_rel] x3
+   | ## 2. Eventos de pareja / personales
+   | Nuevo: eventos disparados por **relaci├│n social** (la mejor amiga no soporta a la pareja).
+   | No todo cruce es evento de pareja. Ver `ENCUENTROS_ESPONTANEOS.md`.
+  [D_eco] x1
+   | ┬½Nuevo habitante┬╗ ahora **encaja** con fama/crecimiento; ya no choca con una poblaci├│n sellada. Sigue sin dise├▒arse el habitante 17.
+
+FILE docs\FASE_B_ESQUELETO_REVISADO.md
+  [A_voluntad] x9
+   | | Agenda | 24├ù1h, plantillas ocupaci├│n, 0ÔÇô3 compromisos **con variedad real** (0 v├ílido), prioridad capas, anti-doble-reserva, sugerencia horas |
+   | ## Resumen compacto (16 slots)
+   | | Slot | Edad | G├® | Orientaci├│n | Franja | Ocupaci├│n | Romance | Nota |
+   | | Slot | Edad | G├® | Orientaci├│n | Franja | Ocupaci├│n | Romance | Funci├│n |
+   | | **╬▒** | I02 | I10 | **Elegida** para Fase D |
+  [C_marcha] x1
+   | - Romance activo/pasivo ÔåÆ ÔëÑ1 rec├¡proco potencial en pool 16.
+
+FILE docs\FASE_C_ENTREGA_CHATGPT.md
+  [A_voluntad] x12
+   | # Fase C ÔÇö Entrega para ChatGPT (pilotos micro-sim)
+   | **Formato:** `CONTRATO_PERSONAJE.md` ÔÇö bloques **A + B** por personaje, en archivos markdown separados o un solo archivo con cabeceras claras.
+   | | `ocupacion` | `camarero` |
+   | | `hobby_principal` | `copas` (bar ­ƒöÆ ÔÇö deseo futuro) |
+   | **Visual:** estilo **06b**, diferenciaci├│n estructural obligatoria. `rasgos_fisicos` 3ÔÇô8 para cabeza maestra.
+  [B_rel] x3
+   | | Banda edad | 22ÔÇô29 |
+   | | Banda edad | 60ÔÇô72 |
+   | | Banda edad | 30ÔÇô44 |
+  [C_marcha] x1
+   | **Grafo (A):** rec├¡proco potencial con al menos una mujer del pool futuro (slots, no nombres). Roc├¡o (I08) puede ser crush/rec├¡proco **potencial** documentado por slot.
+  [E_disc] x3
+   | | `hobby_principal` | `copas` (bar ­ƒöÆ ÔÇö deseo futuro) |
+   | | `hobby_principal` | `cocina` o `manualidades` o `pasear` |
+   | | `hobby_principal` | `cine` (­ƒöÆ) |
+
+FILE docs\FASE_C_PACK_CHATGPT_I02.md
+  [A_voluntad] x50
+   | # PACK FASE C ÔÇö Piloto I02 (ChatGPT)
+   | **Versi├│n pack:** 2026-08-18
+   | **Uso:** documento **autocontenido**. ChatGPT crea **solo I02** (bloques A + B). Cursor valida; **no** rellenar este pack.
+   | | Respetar **datos cerrados del slot** (┬º2) | Cambiar slot, g├®nero, orientaci├│n base, ocupaci├│nÔÇª |
+   | | Usar **slots** para lazos no escritos (`I08`, `I06`ÔÇª) | Nombrar personajes no p├║blicos en B |
+  [B_rel] x4
+   | | Banda `edad` | **22ÔÇô29** (entero) |
+   | Creatividad libre **solo** donde el contrato lo permite: nombre, edad exacta en banda, rasgos, voz, secretos, dealbreakers, crush, lazos, compromisos, f├¡sico, frase_semilla, etc.
+   | `slot`, `id`, `piloto`, `estado_ficha`, `atraido_por`, `apertura_descubrimiento`, `interes_romantico`, `voz`, `rasgos_ocultos`, preferencias con `visible: false`, `preferencias_esteticas`, `plasticidad_preferencias`, `de
+   | - **Sin pareja Ôëá fallo** (no aplica a I02 activo).
+  [C_marcha] x13
+   | | Dejar `reciprocos_potenciales: pendiente_pool` | Poner `estado_ficha: aprobado` |
+   | | `reciprocos_potenciales` | `pendiente_pool` ┬À `resuelto` ┬À `fallido` ÔÇö usar **`pendiente_pool`** |
+   | ### Regla (pool 16)
+   | Para I02 (`interes_romantico: activo`), en **A** debe quedar documentado que existe **ÔëÑ1 rec├¡proco potencial** entre mujeres del pool futuro:
+   | reciprocos_potenciales: pendiente_pool
+  [E_disc] x15
+   | | `hobby_principal` | **`copas`** (bar ­ƒöÆ ÔÇö deseo / lugar futuro) |
+   | | `apertura_descubrimiento` | `cerrada` ┬À `permeable` ┬À `abierta` |
+   | | `hobby_principal` / secundarios | `leer` ┬À `escribir` ┬À `pasear` ┬À `correr` ┬À `cafe_social` ┬À `manualidades` ┬À `cocina` ┬À `musica` ┬À `cine` ┬À `videojuegos` ┬À `copas` ┬À `baile` |
+   | | `lug_bar` | Bar | Candado visible ÔÇö coherente con hobby `copas` |
+   | `slot`, `id`, `nombre`, `edad`, `genero`, `pronombres`, `atraido_por`, `apertura_descubrimiento`, `ocupacion`, `franja_disponibilidad`, `hobby_principal`, `lugares_preferentes` (ÔëÑ1), `estilo_social`, `voz`, `rasgos_publi
+
+FILE docs\FASE_DISENO_POOL_16.md
+  [A_voluntad] x91
+   | Este es el documento para **empezar a crear fichas** con Neni y ChatGPT. El esqueleto de 16 es la **primera tanda** de contenido y encaja con **Bloque A Ôëê 16**. No es el pool eterno ni un edificio de 24. Capacidad Ôëá pool
+   | Este es el documento para **empezar a crear fichas** con Neni y ChatGPT. El esqueleto de 16 es la **primera tanda** de contenido y encaja con **Bloque A Ôëê 16**. No es el pool eterno ni un edificio de 24. Capacidad Ôëá pool
+   | 1. Aprobar o retocar la **secci├│n 7** (reparto sin nombres).
+   | Un personaje es un **id estable** + ficha de cat├ílogo + estado de partida.
+   | La ficha de cat├ílogo es lo que rellen├íis ahora. El estado de partida (├ínimo de hoy, citas, crush concreto) **no se inventa en la biograf├¡a**: nace al jugar, salvo semillas opcionales.
+  [B_rel] x22
+   | | `edad` | entero | Adulto. Bandas recomendadas en ┬º7. |
+   | | `necesidad_contacto_base` | enum | `baja` / `media` / `alta`. Semilla de la variable de pareja. |
+   | | `funcion_llegada` | enum o `""` | `neutra` / `amistad` / `interes_soltero` / `quimica_emparejado` / `triangulo_potencial` / `vida_del_pueblo`. Qu├® **puede** romper, no un guion obligatorio. |
+   | | `crush_inicial` | id o null | Semilla oculta. Unilateral bienvenida. No emparejar de salida. |
+   | El jugador **nunca** ve n├║meros internos de pareja.
+  [C_marcha] x19
+   | # Fase de dise├▒o: pool de 16 personajes
+   | Este es el documento para **empezar a crear fichas** con Neni y ChatGPT. El esqueleto de 16 es la **primera tanda** de contenido y encaja con **Bloque A Ôëê 16**. No es el pool eterno ni un edificio de 24. Capacidad Ôëá pool
+   | Este es el documento para **empezar a crear fichas** con Neni y ChatGPT. El esqueleto de 16 es la **primera tanda** de contenido y encaja con **Bloque A Ôëê 16**. No es el pool eterno ni un edificio de 24. Capacidad Ôëá pool
+   | Este es el documento para **empezar a crear fichas** con Neni y ChatGPT. El esqueleto de 16 es la **primera tanda** de contenido y encaja con **Bloque A Ôëê 16**. No es el pool eterno ni un edificio de 24. Capacidad Ôëá pool
+   | Este es el documento para **empezar a crear fichas** con Neni y ChatGPT. El esqueleto de 16 es la **primera tanda** de contenido y encaja con **Bloque A Ôëê 16**. No es el pool eterno ni un edificio de 24. Capacidad Ôëá pool
+  [D_eco] x2
+   | Fama del NPC: no. La fama es del casamentero.
+  [E_disc] x18
+   | | `etiqueta_orientacion_visible` | texto corto o `""` | Cosm├®tica. **No manda.** Si miente un poco respecto a `atraido_por`, es descubrible. |
+   | | `apertura_descubrimiento` | enum | `cerrada` / `permeable` / `abierta`. Ver ┬º6. No es una ruleta de orientaci├│n. |
+   | | `hobby_principal` | id | Uno. Candidatos en ┬º7. |
+   | | `rasgos_ocultos` | 0ÔÇô2 ids | Mismo set u otro corto. Se descubren. |
+   | - `apertura_descubrimiento`
+
+FILE docs\FUENTE_DOCUMENTO_MAESTRO.md
+  [A_voluntad] x120
+   | - Instant├ínea del texto: 2026-08-17 (el cuerpo sigue diciendo ┬½PROYECTO CUPIDO CUTRE┬╗ porque esa era la semilla; no se reescribe aqu├¡ para no fingir historia).
+   | - El Google Doc es la semilla conceptual. Las decisiones de `DECISIONES_CERRADAS.md` ganan donde hay conflicto (nombre, 30 d├¡as, mapa de 8 sitios fijos, poblaci├│n sellada, NPC inerte, etc.).
+   | Juego de gesti├│n social y emparejamiento ambientado en una villa peque├▒a, deliberadamente sencilla, simp├ítica y un poco cutre. El jugador no controla a un personaje: hace de casamentero/gestor de la vida sentimental de t
+   | Juego de gesti├│n social y emparejamiento ambientado en una villa peque├▒a, deliberadamente sencilla, simp├ítica y un poco cutre. El jugador no controla a un personaje: hace de casamentero/gestor de la vida sentimental de t
+   | La orientaci├│n y las combinaciones son libres: chico-chica, chica-chica, chico-chico y otras identidades/orientaciones que definamos. Cada personaje tiene a qui├®n puede sentirse atra├¡do; nunca se fuerza una combinaci├│n i
+  [B_rel] x43
+   | Juego de gesti├│n social y emparejamiento ambientado en una villa peque├▒a, deliberadamente sencilla, simp├ítica y un poco cutre. El jugador no controla a un personaje: hace de casamentero/gestor de la vida sentimental de t
+   | Juego de gesti├│n social y emparejamiento ambientado en una villa peque├▒a, deliberadamente sencilla, simp├ítica y un poco cutre. El jugador no controla a un personaje: hace de casamentero/gestor de la vida sentimental de t
+   | ÔÇ£Yo manejo el desastre rom├íntico de este pueblo.ÔÇØ El jugador observa fichas, prueba emparejamientos, organiza citas, interviene cuando una relaci├│n entra en crisis y acepta que algunas parejas, aun pareciendo perfectas, 
+   | ÔÇ£Yo manejo el desastre rom├íntico de este pueblo.ÔÇØ El jugador observa fichas, prueba emparejamientos, organiza citas, interviene cuando una relaci├│n entra en crisis y acepta que algunas parejas, aun pareciendo perfectas, 
+   | ÔÇ£Yo manejo el desastre rom├íntico de este pueblo.ÔÇØ El jugador observa fichas, prueba emparejamientos, organiza citas, interviene cuando una relaci├│n entra en crisis y acepta que algunas parejas, aun pareciendo perfectas, 
+  [E_disc] x5
+   | Juego de gesti├│n social y emparejamiento ambientado en una villa peque├▒a, deliberadamente sencilla, simp├ítica y un poco cutre. El jugador no controla a un personaje: hace de casamentero/gestor de la vida sentimental de t
+   | Datos parcialmente ocultos o descubribles:
+   | Cada lugar favorece o perjudica perfiles diferentes. La biblioteca puede ser maravillosa para dos personas tranquilas y un desastre para alguien que necesita est├¡mulo. Pero debe haber sorpresas: una persona fiestera pued
+   | 2. Match perfecto determinista: una vez descubres la f├│rmula, se acaba el juego.
+   | - Crush secreto: tras una cita descubres que alguien ya ten├¡a inter├®s en otra persona.
+
+FILE docs\INFORME_IMPLEMENTACION_TURNO_1.md
+  [A_voluntad] x43
+   | Solo landing PHP (`index.php`), plantillas JSON y estructura de assets. Sin motor, persistencia ni UI de partida.
+   | | Persistencia partida (crear/guardar/cargar/reiniciar) | 2 | **Funciona** |
+   | | Agenda 24├ù1h + capas + plantillas ocupaci├│n | 2 | **Funciona** |
+   | | UI partida Bloque A + ficha provisional | 2 | **Funciona** |
+   | | Mapa jugable | 3 | No empezado |
+  [C_marcha] x5
+   | # Informe implementaci├│n ÔÇö Turno 1 (bloque A)
+   | | Bloque A (16 viviendas, auto-asignaci├│n) | 2 | **Funciona** |
+   | | UI partida Bloque A + ficha provisional | 2 | **Funciona** |
+   | | Llegadas / marchas | 2 | No empezado |
+   | 8. **UI `play.php`** ÔÇö grid Bloque A, ficha residente al clic.
+  [D_eco] x6
+   | | Econom├¡a / fama runtime | 2 | No empezado |
+   | - Cifras econom├¡a/fama, aforos, desbloqueos adicionales.
+   | - **NO** se canoniz├│ estilo visual.
+   | - **NO** se inventaron f├│rmulas de compatibilidad ni econom├¡a.
+
+FILE docs\INFORME_IMPLEMENTACION_TURNO_2.md
+  [A_voluntad] x10
+   | **Criterio:** mismos ~100 puntos ponderados del informe Turno 1; +20 puntos por Bloques 0ÔÇô6 ejecutados con tests PASS.
+   | php tests/run_all.php ÔåÆ ALL PASS
+   | 6. **AVANZAR TIEMPO** ÔåÆ bot├│n +1h (12 veces hasta pasar 20:00) o dev +12h
+   | - `_placeholder` en CompatibilityEvaluator / EncuentroResolver
+   | - Mapa: `_placeholder_visual` iniciales
+  [C_marcha] x1
+   | 3. **VER PERSONA** ÔåÆ clic hueco Bloque A
+  [D_eco] x2
+   | - Econom├¡a: `_placeholder` en ledger
+   | - Econom├¡a balanceada
+  [BLOQ] x1
+   | ## 6. BLOQUEADO_DECISION
+
+FILE docs\INFORME_IMPLEMENTACION_TURNO_3.md
+  [A_voluntad] x13
+   | **Alcance:** Robustez, QA, preparaci├│n arquitect├│nica (sin decisiones creativas/producto)
+   | | **Calidad t├®cnica / preparaci├│n** | baseline T2 | +infra QA, API modular, dev lab |
+   | El Turno 3 **no a├▒ade sistemas jugables nuevos**; fortalece lo existente y prepara escala.
+   | ## 3. Tests PASS / FAIL
+   | - **PartidaRepository:** `tmp ÔåÆ validar ÔåÆ bak (solo JSON v├ílido) ÔåÆ replace`.
+  [C_marcha] x1
+   | | Bloque A ocupadas | 16 |
+  [D_eco] x3
+   | | `c173b77` | Infra: EventBus, GameError, AuditTrail, FeatureConfig, save at├│mico |
+   | F├│rmulas, cupos, econom├¡a, narrativa, B/C d├¡a 1, I10/I06 ÔÇö pendiente Neni+ChatGPT.
+   | Confirmado: no retratos, estilo, identidades, narrativa, econom├¡a balanceada, cupos definitivos.
+  [BLOQ] x1
+   | ## 9. BLOQUEADO_DECISION
+
+FILE docs\INFORME_IMPLEMENTACION_TURNO_4.md
+  [A_voluntad] x9
+   | 2. **Casos de uso** ÔÇö `PartidaLifecycle`, `ResidenteOperations`, `EncuentroOperations`, `RelojOperations`; `PartidaService` como fachada.
+   | 3. **EventBus real** ÔÇö eventos en espa├▒ol (`partida_creada`, `encuentro_*`, `relacion_modificada`, `tiempo_avanzado`) + `DomainEventDispatcher` + audit correlacionado.
+   | 4. **Buz├│n/diario preparados** ÔÇö `NarrativeTriggerRegistry`, `ContentReactionSubscriber` (desactivado por feature flag).
+   | 7. **Disponibilidad** ÔÇö `DisponibilidadEngine` + API `agenda.slots_compatibles`.
+   | - `vida.hobby_principal`: `bingo` ÔåÆ enum_invalido
+  [E_disc] x5
+   | 5. **Descubrimiento** ÔÇö `DiscoveryEngine` + tests.
+   | - `vida.hobby_principal`: `bingo` ÔåÆ enum_invalido
+   | - Qu├® campos empiezan ocultos por personaje (descubrimiento)
+   | Corregir enums fichas piloto con Neni+ChatGPT; activar descubrimiento por reglas; conectar triggers narrativos; reducir tama├▒o save (audit cap tuning).
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE docs\INFORME_IMPLEMENTACION_TURNO_5.md
+  [A_voluntad] x2
+   | - Discovery: pol├¡ticas configurables (`publico|oculto|parcial|por_evento|sin_politica`), sin asignar campos a Roc├¡o.
+   | - Save: caps configurables + archivo resumen; historial de relaci├│n conserva ├║ltima entrada por par.
+  [E_disc] x1
+   | - Discovery: pol├¡ticas configurables (`publico|oculto|parcial|por_evento|sin_politica`), sin asignar campos a Roc├¡o.
+
+FILE docs\LAB_AUTONOMIA.md
+  [A_voluntad] x18
+   | - **V1 no organiza quedadas de dos.** Pueden salir, coincidir, hablar, casual, mover relaci├│n si corresponde. No existe ÔÇ£Carmen ha quedado con Jos├® a las 18:00ÔÇØ como plan aut├│nomo. Eso es papel de Celestine.
+   | Las `p_franjas` ya **no** son un dado que puede dejar el cupo a medias. Ponderan **cu├índo** se reparte el cupo (m├ís tarde que ma├▒ana). El motor persigue el objetivo acumulado de esa hora, con tope de arranques simult├íneo
+   | | Cotilleo | mismo par + mismo lugar ÔëÑ 3 d├¡as en 7 |
+   | El lab desbloquea m├ís destinos al crecer n (n=8: 6 sitios; n=48: mapa completo) para no saturar 6 locales. PLAY d├¡a 1 sigue con los operativos de la partida; el aforo recorta solo.
+   | - n=16 deja un 2.1 % sin salir en la semana (ruido de 1 persona ├ù alguna seed). No hay residentes que pasen la semana enteros en casa a n=8/32/48.
+  [B_rel] x4
+   | | Anti-aislamiento | umbral 2 d├¡as, bonus 2.2 (sale quien lleva d├¡as en casa) |
+   | - Cotilleo = 0 en 7 d├¡as: correcto. El umbral pide patr├│n de 3 d├¡as. Hay movimiento; no hay serial.
+   | Banda del lab vs direcci├│n de estudio: los cuatro puntos caen **dentro**. n=48 pisa el suelo (18). Subir m├ís el cupo llenar├¡a locales de noche; el lab no lo recomienda hasta ver PLAY con mapa real d├¡a 1 (menos destinos ÔåÆ
+   | | Semanas en casa sin motivo | anti-aislamiento umbral 2 d |
+  [C_marcha] x12
+   | **Motor:** `src/Engine/AutonomiaSalidas.php`, `ComplejoCatalog.php`, `AforoEngine.php`, `LugarAutonomo.php`, `CotilleoNarrativo.php`
+   | - M├íximo **1 salida aut├│noma por residente/d├¡a**.
+   | - No publicar cada salida. El Cotilleo es filtro narrativo.
+   | La calibraci├│n anterior `round(0.8ÔêÜn + 0.6)` daba ~2.3 / 2.7 / 2.8 / 3.0 salidas/d├¡a. A n=48 casi nadie sal├¡a.
+   | Casa 24 h incluye sue├▒o. La columna ├║til de ÔÇ£pueblo vac├¡oÔÇØ es **casa 10ÔÇô22** y, sobre todo, **salidas/d├¡a** + **% que sale en 7 d├¡as**.
+  [D_eco] x5
+   | **Estado:** ARQUITECTURA APROBADA + CALIBRACI├ôN REHECHA (lab 20/08). Cifras **no canon**. Movimiento del pueblo Ôëá Cotilleo. No toca Relacional V1, B4/E3, B5 ni econom├¡a.
+   | Direcci├│n de estudio (no canon num├®rico): n=8 ÔåÆ 3ÔÇô5; n=16 ÔåÆ 5ÔÇô8; n=32 ÔåÆ 10ÔÇô18; n=48 ÔåÆ 18ÔÇô30.
+   | Econom├¡a sigue con sus 5 preguntas (ver `LAB_ECONOMIA.md`); no bloquean este motor.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE docs\LAB_CATALOGOS_PERSONALIDAD.md
+  [A_voluntad] x13
+   | **No hace falta un cat├ílogo nuevo por cada columna de Excel.** Hace falta separar *qu├® hace*, *qu├® le tira*, *qu├® no traga*, *c├│mo es*, *c├│mo est├í con la gente* y *c├│mo se vincula*.
+   | | Capa | Qu├® es | Qu├® no es |
+   | | **Afecto estilo** | Espacio, ritmo de v├¡nculo, c├│mo se nota. | Relacional V1, orientaci├│n, dealbreakers, `ejes_preferencia` (lo que busco en *otra* persona). |
+   | - ┬½Preferencias sociales┬╗ paralelas a `estilos_sociales.json`: se **ampl├¡an** los ejes, no se duplican.
+   | Combos de 3 aficiones: **11.480**. Combos de 3 rasgos: **4.960**. 200 residentes no agotan el espacio. El riesgo de clones es un generador estereotipado, no el tama├▒o.
+  [B_rel] x1
+   | - Sociable + umbral de ruido bajo + rechazo Discoteca.
+  [D_eco] x3
+   | **Estado:** PROPUESTA. **No canon.** No se han tocado P001ÔÇôP200 ni los JSON de producci├│n. `CatalogStore` de PLAY **no** carga esta carpeta.
+   | - Autonom├¡a futura: aficiones + rechazos de destino ya encajan en `LugarAutonomo` / `PlanAfinidad` cuando se migre. **Bonus num├®ricos no se canonizan ahora.**
+   | Las **entradas concretas** (42 aficiones, 28 gustos, 17 rechazos, 32 rasgos, ejes, 22 man├¡as, muestra 20) **siguen sin canon**. No sustituyen producci├│n. No se tocan P001ÔÇôP200.
+  [E_disc] x3
+   | ## 5. Descubrimiento progresivo
+   | Cada ├¡tem lleva frases de Celestine (humanas, no ┬½Hobby: Leer┬╗) y hooks de evento/regalo. Nada obliga a volcar la ficha el d├¡a 1. Una persona puede llevar diez d├¡as en el pueblo sin que sepamos que juega.
+   | - Copy visible = `descubrimientos[]`, nunca el id.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE docs\LAB_ECONOMIA.md
+  [A_voluntad] x80
+   | **Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lectura completa pedida
+   | `PARA` econom├¡a: s├¡, con este informe. Cifras **no** a `data/` ni a EconomyLedger. `economy_enabled` OFF.
+   | - La jugadora **no paga** facturas, luz, agua, n├│minas, alquiler, mantenimiento ni gastos peri├│dicos obligatorios.
+   | - **B/C** se compran enteros (+16 plazas). Exigen **tiempo + ocupaci├│n + dinero**. El dinero solo no basta.
+   | - Capacidad: A 16 + B 16 + C 16 = **48**. Tutorial ÔåÆ 8/16 en A.
+  [B_rel] x4
+   | 1. renta/ingreso peri├│dico ligado al **estado general del pueblo** (bandas de Vida);
+   | | Bandas de Vida | sint├®ticas por perfil, **no** el ledger B1 real | no se retoca B1 |
+   | - **Renta por banda de Vida:** fuente **cerrada como tipo**. En lab: alta/media/baja seg├║n perfil sint├®tico. Es el suelo: una racha mala **ralentiza** posibilidades, no apaga el pueblo.
+   | 2. **renta_offline** ÔÇö ┬┐La renta por banda de Vida llega cada d├¡a de calendario (buz├│n de ingresos) aunque Celestine no abra el juego, o solo en d├¡as con sesi├│n?
+  [C_marcha] x4
+   | **Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lectura completa pedida
+   | | Bloque B | ┬º5 d├¡a 30/100 + ┬º6 + ┬º7 |
+   | | Bloque B | 480 | ~20 d de ahorro **o** el gate de d├¡a 50 | +16 huecos ÔåÆ reabre llegadas |
+   | ### Bloque B (d├¡a medio si lo alcanzan)
+  [D_eco] x62
+   | # Lab de econom├¡a ÔÇö Aqu├¡ Hay Tema
+   | **Estado:** AN├üLISIS + PROPUESTA + LAB. **No canon.** No implementado en PLAY. `economy_enabled` sigue OFF. EconomyLedger sigue siendo placeholder.
+   | **Motor:** `src/Engine/SimuladorEconomia.php`
+   | **CLI:** `php dev/simulador_economia.php 8 lab-economia`
+   | **Semillas de este informe:** 8 ├ù seed `lab-economia` ├ù horizontes 30 / 100 / 365.
+  [BLOQ] x2
+   | Cuando Neni + ChatGPT elijan modelo y respondan los `BLOQUEADO_DECISION`, *entonces* se puede cablear el ledger. No antes. No B5.
+   | ## 9. BLOQUEADO_DECISION
+
+FILE docs\MAPA_Y_LUGARES.md
+  [A_voluntad] x23
+   | # Mapa y lugares
+   | **Mapa base:** edificios y lugares del cat├ílogo pueden **existir desde el principio** pero **cerrados** (persiana bajada, en obras, abandonado, sin actividadÔÇª). **No** aparecen m├ígicamente al desbloquear.
+   | 3. El edificio **cambia visualmente** y pasa a **operativo**.
+   | **No fijado todav├¡a:** precio, d├¡a exacto, cat├ílogo completo visible en mapa, n├║mero exacto de edificios dibujados.
+   | En **datos**, los tres lugares iniciales del cat├ílogo siguen siendo cafeter├¡a, parque, biblioteca. Parque y biblioteca: visibles cerrados hasta su desbloqueo.
+  [B_rel] x1
+   | No se compra con dinero/fama como el cine. Es opci├│n de fases de relaci├│n, intimidad, convivencia o eventos. Umbral **pendiente**.
+  [C_marcha] x6
+   | | `lug_casa` | Casa | no aplica | fuera | **No es parcela comercial.** Sitio de quedar / intimidad. Distinto de los **apartamentos** de cada bloque (`PROPUESTA_VIDA_POOL_Y_MARCHAS.md`). |
+   | Sitios sociales (cafeter├¡a, biblioteca, cine, bingoÔÇª) son **compartidos** por residentes de todos los bloques abiertos. Candidato: Bloque A y, m├ís adelante, Bloque B como **dos edificios-icono** en el mismo mapa de villa
+   | Sitios sociales (cafeter├¡a, biblioteca, cine, bingoÔÇª) son **compartidos** por residentes de todos los bloques abiertos. Candidato: Bloque A y, m├ís adelante, Bloque B como **dos edificios-icono** en el mismo mapa de villa
+   | Sitios sociales (cafeter├¡a, biblioteca, cine, bingoÔÇª) son **compartidos** por residentes de todos los bloques abiertos. Candidato: Bloque A y, m├ís adelante, Bloque B como **dos edificios-icono** en el mismo mapa de villa
+   | Sitios sociales (cafeter├¡a, biblioteca, cine, bingoÔÇª) son **compartidos** por residentes de todos los bloques abiertos. Candidato: Bloque A y, m├ís adelante, Bloque B como **dos edificios-icono** en el mismo mapa de villa
+  [D_eco] x5
+   | Precios y fama: **null**.
+   | 500 Ôé¼ / Fama 10     ÔåÉ ejemplo, no canon
+   | No se compra con dinero/fama como el cine. Es opci├│n de fases de relaci├│n, intimidad, convivencia o eventos. Umbral **pendiente**.
+
+FILE docs\MODELO_DATOS_INICIAL.md
+  [A_voluntad] x43
+   | No existe `compatibilidad = X%`. Las 4 variables de pareja **s├¡** se guardan (la atracci├│n, en dos sentidos).
+   | | veto | `grupo_veto` del tipo; lista cerrada en `parentescos_veto_romance.json` |
+   | | `atraccion_a_hacia_b` / `atraccion_b_hacia_a` | principal (asim├®trica) |
+   | | `vinculo` | principal (compartido) |
+   | | `conflicto` | principal (compartido) |
+  [B_rel] x2
+   | No existe `compatibilidad = X%`. Las 4 variables de pareja **s├¡** se guardan (la atracci├│n, en dos sentidos).
+   | | `chispa`, `confianza`, `comodidad`, `deseo`, `riesgo_ruptura`, `estado_visual` | **derivados**, no n├║cleo |
+  [C_marcha] x8
+   | | `id` `slot` `piloto` | Claves de pool / piloto / auditor├¡a |
+   | `estado_ficha`: `borrador` \| `revision` \| `aprobado`. Pool: `estado_pool` en `personajes.json`.
+   | Cupo visible: 5ÔÇô10/d├¡a **cuando el pueblo es mediano**. Con ~3 vecinos el cupo alto es relleno. Con ~16 el cupo es un filtro (la rutina NPC no entra). `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+   | Marchas: `pensando_en_irse` espera a Celestine. Offline **no** lo resuelve. ┬½Qu├®date┬╗ no tira dado.
+   | **Partidas (concepto):** persistente ┬À nueva ┬À reiniciar ┬À pool independiente por partida. `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`.
+  [D_eco] x6
+   | Propuesta. **No es c├│digo.** `0ÔÇô100` = hip├│tesis, no canon.
+   | `coste_dinero` / `requisito_fama`: null.
+   | | `dinero`, `fama` | null hasta econom├¡a |
+
+FILE docs\MUESTRA_20_CATALOGOS.md
+  [A_voluntad] x55
+   | **Al llegar, Celestine solo tiene:** En el karaoke se le olvida el resto. Incluido el pudor, a veces. / Le cuesta el primer paso. El segundo, a veces, lo da de una vez.
+   | - **En lo afectivo:** espacio_personal: cercano; ritmo_vinculo: lento; demostracion: regalos
+   | **Al llegar, Celestine solo tiene:** El spa no es capricho: es mantenimiento. Como el coche, pero con albornoz. / La gente le sienta bien. No todas las pistas ni todos los vol├║menes.
+   | - **Hace:** Spa / mimo, Escaparates / ropa, Pasatiempos
+   | - **En lo afectivo:** espacio_personal: normal; ritmo_vinculo: lento; demostracion: presencia
+  [B_rel] x22
+   | - **Con la gente:** energia_social: alta; selectividad: selectiva; ritmo: planificador; umbral_ruido: medio; tamano_grupo: pocos
+   | - **Con la gente:** energia_social: alta; selectividad: cerrada; ritmo: planificador; umbral_ruido: bajo; tamano_grupo: muchos
+   | - **Con la gente:** energia_social: baja; selectividad: selectiva; ritmo: planificador; umbral_ruido: alto; tamano_grupo: uno
+   | - **Con la gente:** energia_social: alta; selectividad: cerrada; ritmo: planificador; umbral_ruido: medio; tamano_grupo: muchos
+   | - **Con la gente:** energia_social: media; selectividad: selectiva; ritmo: planificador; umbral_ruido: alto; tamano_grupo: pocos
+  [C_marcha] x3
+   | - **Le tira:** Agua caliente / ba├▒os, Ambiente con marcha
+   | - **Le tira:** Ambiente con marcha, Subirse a un escenario
+   | - **Le tira:** Ambiente con marcha, Caf├® de verdad
+  [D_eco] x1
+   | # 20 residentes de muestra (auditor├¡a, no canon)
+
+FILE docs\MVP.md
+  [A_voluntad] x12
+   | | Capacidad simult├ínea | Bloque A Ôëê 16 | Ôëá pool; ampliar = Bloque B |
+   | | Partidas | Seed + configs prevalidadas | Llegadas: azar controlado |
+   | | Rol jugador | Celestine | V├¡nculos + convivencia, no solo parejas |
+   | | 30 d├¡as de partida | Pueblo persistente + temporadas (d├¡as por temporada: no cifrados) |
+   | | 10 eventos de pareja / 5 globales | Candidatos; recorte despu├®s |
+  [B_rel] x4
+   | | Rol jugador | Celestine | V├¡nculos + convivencia, no solo parejas |
+   | | 10 eventos de pareja / 5 globales | Candidatos; recorte despu├®s |
+   | | Derrota / ┬½X parejas = ganas┬╗ | Sandbox + r├│tulo por bloque / comunidad |
+   | - Parejas y amistades con estado legible, no un %
+  [C_marcha] x10
+   | El bloque ┬½MVP PROPUESTO┬╗ del Maestro era una **primera** cesta. La **V0 jugable** est├í aprobada; a├║n no se programa. Fichas: `FASE_DISENO_POOL_16.md`. Primero **2ÔÇô3 pilotos**. Nadie final sin `CHECKLIST_AUDITORIA_PERSON
+   | | Capacidad simult├ínea | Bloque A Ôëê 16 | Ôëá pool; ampliar = Bloque B |
+   | | Pool dise├▒ado ahora | 16 | Tanda 1; futuro **80ÔÇô100+** |
+   | | Primera prueba | Solo Bloque A | **Solo cafeter├¡a operativa** d├¡a 1 |
+   | | Rasgos reutilizables | 10 candidatos | En el marco del pool |
+  [D_eco] x6
+   | | Sin econom├¡a | Dinero + fama (sin cifras) |
+   | - Dinero y fama visibles (aunque la econom├¡a sea dummy)
+
+FILE docs\PENDIENTES_DISENO.md
+  [A_voluntad] x19
+   | 2. **Pilotos** (sugeridos I03, I05, I10): Neni ve **B + retrato borrador**. Ficha y cara se aprueban por separado.
+   | - **Plantillas de agenda** m├¡nimas (ocupaci├│n ÔåÆ bloques 1 h).
+   | - Buz├│n en V0 ┬À Cafeter├¡a sola operativa d├¡a 1 ┬À Mapa con edificios cerrados visibles
+   | - Nombre definitivo de la pantalla **El pueblo**
+   | - F├│rmulas y pesos de capas / de los derivados
+  [B_rel] x4
+   | - Precios y umbrales de fama
+   | - Umbral para que nazca una relaci├│n si la atracci├│n es muy asim├®trica
+   | - Umbral concreto de **casa**
+   | - Sin pareja voluntaria Ôëá fallo
+  [C_marcha] x11
+   | 1. **Aprobar o retocar el esqueleto** de `FASE_DISENO_POOL_16.md` ┬º7.
+   | 6. Nivel 2 + `VALIDACION_GRAFO_ROMANTICO.md` ÔåÆ `estado_pool: aprobado`.
+   | - **Aprobar esqueleto revisado** (`FASE_DISENO_POOL_16.md` ┬º7) ÔÇö Fase B.
+   | - Bloque B: precio, hito, UI (arquitectura s├¡; **no** 1.┬¬ prueba)
+   | - Marchas: ┬┐en la 1.┬¬ prueba o solo modelo?
+  [D_eco] x4
+   | - Precios y umbrales de fama
+   | - Fama baja o no
+   | - Or├¡genes de dinero (cifras)
+   | - **Tiempo 1:1** ÔÇö confirmar en simulador antes de canonizar
+  [E_disc] x1
+   | - Hobby ÔåÆ lugar ­ƒöÆ
+
+FILE docs\PILOTO_02_I02.md
+  [A_voluntad] x11
+   | ocupacion: camarero
+   | hobby_principal: copas
+   | - Cocinar para m├ís gente de la necesaria
+   | tono_coletilla: Bromea para quitar hierro, pero se vuelve muy directo cuando algo le importa.
+   | frase_semilla: ┬½Yo digo una y nos vamos. Luego ya veremos qui├®n tuvo la culpa de la segunda.┬╗
+  [C_marcha] x3
+   | - Orejas ligeramente salidas
+   | reciprocos_potenciales: pendiente_pool
+  [E_disc] x3
+   | apertura_descubrimiento: permeable
+   | hobby_principal: copas
+
+FILE docs\PIPELINE_CABEZA_MAESTRA_EXPRESIONES.md
+  [A_voluntad] x18
+   | Esto es **preparaci├│n del sistema**. No se genera:
+   | comparativa/
+   | LAB_01_Teo_comparativa_4_expresiones.png
+   | | `triste` | Cejas internas arriba, p├írpados ca├¡dos, boca hacia abajo. |
+   | La identidad facial permanece: misma forma de cara, misma nariz, mismos ojos (forma base), mismas orejas, mismo pelo, misma edad aparente. Solo cambia expresi├│n.
+  [C_marcha] x2
+   | Solo Cursor genera. ChatGPT no entrega PNGs sueltos al pool. Neni no da por bueno nada hasta **APROBADO**.
+   | - pool de 16
+  [D_eco] x2
+   | - ning├║n personaje canon
+   | Laboratorio (no canon):
+
+FILE docs\PIPELINE_RETRATO_06b.md
+  [A_voluntad] x10
+   | COMPARATIVA CON UNIVERSO VISUAL (ABC + personaje)
+   | REFERENCIA DE ESTILO: S├ì ÔÇö COMPARATIVA_MAESTRA_06b_ABC.png
+   | Ruta can├│nica: `assets/referencias_visuales/estilo_06b/COMPARATIVA_MAESTRA_06b_ABC.png`
+   | **Prohibido en prompt:** slot `I02`, c├│digos militares, ocupaci├│n, romance, texto del juego.
+   | | Par├ímetro | Regla |
+  [C_marcha] x1
+   | | Salida temporal | `revision/<Slot>_<Nombre>_revision_NN.png` |
+  [D_eco] x1
+   | FAIL ÔåÆ `evidencia/` con nombre humano descriptivo. No canonizar.
+
+FILE docs\PLANTILLAS_AGENDA_BORRADOR.md
+  [A_voluntad] x16
+   | El motor resuelve agenda; la ficha aporta **ocupaci├│n**, **sesgo de franja**, **0ÔÇô3 `compromisos_recurrentes`** y excepciones. **No** dise├▒ar 24├ù16 manualmente.
+   | Capas: estructural > programado > temporal > aut├│nomo
+   | Visible al jugador: hora concreta (`17:00`); UI sugiere primer slot libre compatible.
+   | ## Plantillas por `ocupacion` (estructural A)
+   | | Ocupaci├│n | Bloque trabajo (d├¡as) | Horas t├¡picas | Sue├▒o orientativo | Notas |
+  [C_marcha] x1
+   | | `autonomo` | lunÔÇôvie | 10ÔÇô18 (bloque blando) | 00ÔÇô08 | M├ís huecos aut├│nomos |
+  [D_eco] x1
+   | Ejemplo Roc├¡o (propuesta, no canon hasta ficha): `bingo_viernes` ÔÇö coherente con hobby.
+  [E_disc] x3
+   | descubrible: true
+   | Ejemplo Roc├¡o (propuesta, no canon hasta ficha): `bingo_viernes` ÔÇö coherente con hobby.
+
+FILE docs\PLAN_IMPLEMENTACION_TURNO_1.md
+  [A_voluntad] x10
+   | ### A ÔÇö Seguro para implementar ahora
+   | 1. **Estado y persistencia de partida** ÔÇö seed, crear/guardar/cargar/reiniciar, reloj 1:1, catch-up offline (estructura sin eventos).
+   | 3. **Agenda base** ÔÇö 24├ù1h, capas estructural/programado, plantillas por `ocupacion`, anti-doble-reserva.
+   | - Balance compatibilidad, resultados de citas, progresi├│n romance derivada.
+   | - Retratos, UI final, mapa ilustrado, caras.
+  [C_marcha] x5
+   | # Plan de implementaci├│n ÔÇö Turno 1 (bloque A)
+   | 2. **Modelo residentes + Bloque A** ÔÇö 16 viviendas A01ÔÇôA16, asignaci├│n autom├ítica primer hueco, Roc├¡o d├¡a 1, placeholders expl├¡citos.
+   | 5. **UI t├®cnica Bloque A + ficha provisional** ÔÇö grid 16, abrir residente, datos reales de cat├ílogo.
+   | ## BLOQUEADO_DECISION (no bloquea bloque A)
+   | | B/C d├¡a 1 | No cerrado | Esperar elecci├│n pool | Poblaci├│n inicial >1 |
+  [D_eco] x3
+   | - Econom├¡a (dinero/fama cifras), aforos, desbloqueos adicionales.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION (no bloquea bloque A)
+
+FILE docs\PLAN_MAESTRO_IMPLEMENTACION.md
+  [A_voluntad] x120
+   | El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida est├í apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y laboratorio 3/6/16/32.
+   | **Punto de partida:** ~8 % (Turno 1) ÔåÆ **~28 %** tras Bloques 0ÔÇô6 ejecutados en Turno 2
+   | ### Encuentro / Plan = unidad principal
+   | - **`EncuentroEngine`** es la abstracci├│n central; `CitaEngine` es wrapper retrocompatible (`tipo: romantico`).
+   | - **`RngService`**: seed + state en partida; reproducible QA.
+  [B_rel] x58
+   | El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida est├í apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y laboratorio 3/6/16/32.
+   | | Tras vida relacional / pareja / crisis / memoria (infra, sin UI) | **~58 %** |
+   | El **~58 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relaci├│n siguen en +1 placeholder. Pareja/crisis/ruptura existen como **hitos de dominio**, no como pueblo aut├│nomo en
+   | El **~58 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relaci├│n siguen en +1 placeholder. Pareja/crisis/ruptura existen como **hitos de dominio**, no como pueblo aut├│nomo en
+   | El **~58 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relaci├│n siguen en +1 placeholder. Pareja/crisis/ruptura existen como **hitos de dominio**, no como pueblo aut├│nomo en
+  [D_eco] x12
+   | - **NO canonizar ┬½2/d├¡a┬╗**. NPC aut├│nomo no consume ese presupuesto.
+   | | Econom├¡a | `EconomyLedger.php` | Ledger sin cifras |
+   | ### Bloque 6 ÔÇö Econom├¡a arquitectura Ô£à EJECUTADO
+   | - EconomyLedger dinero/fama separados
+   | - Cat├ílogos narrativos, econom├¡a balanceada
+  [E_disc] x13
+   | **Versi├│n:** 2026-08-19 (decisiones post-424fe940: desconocidos, discovery, vida diaria)
+   | El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida est├í apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y laboratorio 3/6/16/32.
+   | - Un encuentro puede producir: delta social, delta romance, conflicto, descubrimiento, ninguno, o varios a la vez.
+   | | Qu├® se revela el d├¡a 1 (1 hobby / 1 rasgo) | Discovery |
+   | | Plan/lugar Ôåö hobbies | `PlanAfinidad` detecta hobby relacionado | `aporte=null` | Penalizar plan ajeno | Aporte / penalizaci├│n |
+  [BLOQ] x6
+   | - **Parentesco cercano = veto rom├íntico duro.** La qu├¡mica no lo atraviesa. T├¡o/primo: BLOQUEADO_DECISION.
+   | - **BLOQUEADO_DECISION producto:** pol├¡tica de IDs en producci├│n multi-dispositivo.
+   | - BLOQUEADO_DECISION: residentes d├¡a 1
+   | ## 9. BLOQUEADO_DECISION
+   | | Sistema | YA EXISTE | EXISTE COMO SCAFFOLD | FALTA | BLOQUEADO_DECISION |
+
+FILE docs\PLAN_UI_JUGABLE_V0.md
+  [A_voluntad] x34
+   | - Preparar integraci├│n desacoplada para `personaje -> expression_id -> asset/fallback`.
+   | - mapa con presencia NPC por lugar
+   | - paneles separados de buz├│n y diario
+   | - soporte estructural para retrato / expresi├│n usando `presentacion_visual.asset.url_relativa`
+   | - fallback visual a placeholder si no hay pack o asset usable
+  [C_marcha] x2
+   | - bloque A clicable
+   | - grid del Bloque A
+  [E_disc] x2
+   | - filtros b├ísicos (`todos`, `con relaci├│n`, `sin descubrir apenas`)
+   | - desglose m├ís legible de discovery por campos
+
+FILE docs\PLAYTEST_01.md
+  [A_voluntad] x24
+   | Versi├│n congelada para el primer playtest real de Neni.
+   | El hash exacto queda en el tag `PLAYTEST_01` (`git rev-parse PLAYTEST_01`).
+   | ## Config de partida
+   | `play.php` crea partidas nuevas con esa config.
+   | | mapa_presencia_enabled | true |
+  [C_marcha] x1
+   | - Solo Bloque A
+  [D_eco] x3
+   | - QA Valid (`per_qa_valid`) ÔÇö **NO CANON**, no es B ni C
+   | | economy_enabled | false |
+   | - Sin econom├¡a, sin compatibilidad real, sin narrativa
+  [E_disc] x3
+   | | discovery_enabled | false |
+   | Discovery **de proyecci├│n** en ficha s├¡ se usa (pol├¡ticas). El flag `discovery_enabled` no abre un sistema nuevo de secretos.
+
+FILE docs\PLAYTEST_INTEGRAL_REPORT.json
+  [A_voluntad] x96
+   | "status": "PASS",
+   | "D_planes_voluntad": {
+   | "n_participantes": 0,
+   | "n_participantes": 607,
+  [B_rel] x30
+   | "tasas_por_banda_score": {
+   | "umbral_p": 0.6819999999999999,
+  [C_marcha] x5
+   | "J_marchas": {
+   | "titulo": "Marchas",
+   | "detalle": "No existe MarchaEngine \/ salida de roster \/ se├▒ales de marcha."
+  [D_eco] x7
+   | "canon": [
+   | "K_economia": {
+   | "economy_enabled": false,
+   | "dinero_juego_v1": null,
+   | "misiones_playtest_01": true,
+  [E_disc] x7
+   | "G_descubrimientos": {
+   | "campo": "hobby:costura",
+   | "campo": "hobby:musica",
+   | "nota": "Discovery ON; se espera revelaci├│n gradual, no dump total d├¡a 1."
+  [BLOQ] x30
+   | "_bloqueado_decision": false,
+   | "_bloqueado_decision": false
+
+FILE docs\PLAYTEST_INTEGRAL_REPORT.md
+  [A_voluntad] x134
+   | - PASS: 9
+   | - PARCIAL: 1
+   | - Balance de voluntad: BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en 
+   | - Balance de voluntad: BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en 
+   | ### Mapa de secciones
+  [B_rel] x32
+   | ## Voluntad ÔÇö tasas por banda
+   | ### pareja_distinta_hora
+   | "tasas_por_banda_score": {
+   | "umbral_p": 0.6819999999999999,
+  [C_marcha] x6
+   | - **J. Marchas**: NO_IMPLEMENTADO
+   | ## J. Marchas ÔÇö detalle JSON ÔÇö NO_IMPLEMENTADO
+   | "titulo": "Marchas",
+   | "detalle": "No existe MarchaEngine \/ salida de roster \/ se├▒ales de marcha."
+  [D_eco] x8
+   | - **K. Econom├¡a**: NO_IMPLEMENTADO
+   | "canon": [
+   | ## K. Econom├¡a ÔÇö detalle JSON ÔÇö NO_IMPLEMENTADO
+   | "economy_enabled": false,
+   | "dinero_juego_v1": null,
+  [E_disc] x8
+   | - **G. Descubrimientos**: PASS
+   | ## G. Descubrimientos ÔÇö detalle JSON ÔÇö PASS
+   | "campo": "hobby:costura",
+   | "campo": "hobby:musica",
+   | "nota": "Discovery ON; se espera revelaci├│n gradual, no dump total d├¡a 1."
+  [BLOQ] x30
+   | - BLOQUEADO_DECISION: 1
+   | - Balance de voluntad: BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en 
+   | > BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en Organizar.
+   | "_bloqueado_decision": false,
+   | "_bloqueado_decision": false
+
+FILE docs\PREGUNTAS_PARA_NENI_Y_CHATGPT.md
+  [A_voluntad] x7
+   | # Preguntas para Neni y ChatGPT
+   | | 2 | ┬┐Padr├│n edificio o UI? | UI **El pueblo**. |
+   | | 5 | ┬┐Ropa en V0? | **Fuera** de lo jugable. Campos de apariencia **s├¡** en la ficha. |
+   | Siguiente lectura: `CONTRATO_PERSONAJE.md`, `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`, `PROPUESTA_BLOQUE_3_A_24.md` y `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`. Las preguntas **nuevas** est├ín al final de esos docs. Neni ve
+   | El reparto sin nombres (edades, 7/7/2, cupos de `atraido_por`, slots I01ÔÇôL06) es **propuesta** en ese documento, no canon hasta que dig├íis s├¡ o ┬▒1.
+  [C_marcha] x6
+   | | 1 | ┬┐Marchas en V0? | **V0 hist├│rica: no.** Direcci├│n actual: intenci├│n de irse **s├¡**; marcha definitiva **solo con consentimiento**. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`. |
+   | Siguiente lectura: `CONTRATO_PERSONAJE.md`, `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`, `PROPUESTA_BLOQUE_3_A_24.md` y `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`. Las preguntas **nuevas** est├ín al final de esos docs. Neni ve
+   | Siguiente lectura: `CONTRATO_PERSONAJE.md`, `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`, `PROPUESTA_BLOQUE_3_A_24.md` y `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`. Las preguntas **nuevas** est├ín al final de esos docs. Neni ve
+  [D_eco] x1
+   | El reparto sin nombres (edades, 7/7/2, cupos de `atraido_por`, slots I01ÔÇôL06) es **propuesta** en ese documento, no canon hasta que dig├íis s├¡ o ┬▒1.
+
+FILE docs\PREPARACION_DE_CITAS.md
+  [A_voluntad] x14
+   | # Preparaci├│n de citas (sistema candidato)
+   | Idea: en citas importantes el jugador puede **preparar** la experiencia. Cada elecci├│n modifica **probabilidades**, no garantiza el resultado.
+   | Una cita muy bien preparada puede salir regular. Una mediocre puede conectar. Si no, dejan de parecer personas.
+   | ## Qu├® se puede preparar (lista abierta)
+   | | Pareja | Ya es la decisi├│n central |
+  [B_rel] x1
+   | | Pareja | Ya es la decisi├│n central |
+  [C_marcha] x2
+   | Ver tambi├®n: `RELACIONES_Y_CITAS.md`, `ROPA_Y_LOOKS.md`, `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (planes especiales caros = modificador, no compra de amor).
+  [E_disc] x1
+   | - Si ya descubriste que a alguien le va cierto tipo de m├║sica, puedes usarlo.
+
+FILE docs\PROGRESION_Y_DIFICULTAD.md
+  [A_voluntad] x4
+   | El pueblo, los habitantes, las relaciones y los desbloqueos **contin├║an** entre temporadas. La partida no se acaba el d├¡a 30.
+   | Partida: ~3 residentes ┬À **Bloque A Ôëê 16** ┬À ampliar = **Bloque B Ôëê 16** (no un 24 ├║nico) ┬À pool = tandas. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+   | Sandbox. **Sin** ┬½X parejas = ganas┬╗. **Sin** game over por rupturas. Lectura: r├│tulo **por bloque** + posible estado de comunidad (textos no can├│nicos).
+   | Incendios con muchas parejas + pocos sitios al inicio. El ritmo de desbloqueo (dinero/fama) es el acelerador; cifras no fijadas.
+  [B_rel] x3
+   | Sandbox. **Sin** ┬½X parejas = ganas┬╗. **Sin** game over por rupturas. Lectura: r├│tulo **por bloque** + posible estado de comunidad (textos no can├│nicos).
+   | Incendios con muchas parejas + pocos sitios al inicio. El ritmo de desbloqueo (dinero/fama) es el acelerador; cifras no fijadas.
+  [C_marcha] x6
+   | Partida: ~3 residentes ┬À **Bloque A Ôëê 16** ┬À ampliar = **Bloque B Ôëê 16** (no un 24 ├║nico) ┬À pool = tandas. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+   | Beat de progresi├│n residencial (candidato, no implementar): comprar / rehabilitar / abrir Bloque B. Precios y m├íximo de bloques: no.
+  [D_eco] x6
+   | Incendios con muchas parejas + pocos sitios al inicio. El ritmo de desbloqueo (dinero/fama) es el acelerador; cifras no fijadas.
+   | Dinero y fama. Ver `DINERO_Y_FAMA.md`.
+
+FILE docs\PROPUESTA_AGENDA_DISPONIBILIDAD_RUTINAS.md
+  [A_voluntad] x61
+   | **Dise├▒o. No es c├│digo.** Ronda 2026-08-18. Complementa `VIDA_DE_HABITANTES.md`, `RELACIONES_Y_CITAS.md`, `RELACIONES_SOCIALES.md`, `MAPA_Y_LUGARES.md`, `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`.
+   | Cada residente tiene **agenda propia**: suficiente para saber d├│nde deber├¡a estar, bloquear tiempo de citas y diferenciar personajes ÔÇö **sin** simular minuto a minuto ni convertir el juego en Outlook.
+   | | Agenda por persona | Sustituye el modelo plano de ┬½una franja + trabajo off-mapa┬╗. Da personalidad, conflictos y mapa cre├¡ble. |
+   | | Trabajo que **cambia** en partida | Eventos con consecuencias sociales (dejan de coincidir). Encaja con goteo econ├│mico y narrativa. |
+   | | Cuatro capas de bloqueo (estructural / programado / aut├│nomo / temporal) | Orden claro; evita dos actividades imposibles. |
+  [B_rel] x3
+   | 1. **Cita programada confirmada** (B) ÔÇö compromiso con Celestine o pareja ya aceptada.
+   | Adem├ís de `tipo` de lazo y las **4 variables rom├ínticas** (si hay pareja o atracci├│n activa):
+   | | `atraccion_a_hacia_b` | (ya existe) | puede existir **sin** pareja y **con** enemistad |
+  [C_marcha] x5
+   | | Marcha / ┬½qu├®date┬╗ | Pendiente; nunca offline. |
+   | | ┬½Una franja de trabajo + sue├▒o┬╗ (`PROPUESTA_VIDA_POOL`) | Bloques A con slots concretos |
+   | | ┬½Sin calendario de fichar┬╗ (`PROPUESTA_VIDA_POOL`) | No | El **jugador** no ficha horas a mano; la UI **sugiere**. |
+   | - Vivienda autom├ítica: `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (no mezclar)
+  [E_disc] x9
+   | Celestine **propone** planes; los personajes **aceptan o rechazan** con voz propia. El rechazo por agenda puede **descubrir** rutinas.
+   | | Rechazo que **descubre** rutina | Conecta agenda + ficha que crece + bingo desbloqueable despu├®s. |
+   | descubrible: true          # Celestine puede aprenderlo al rechazar
+   | publico_en_ficha: false    # hasta descubrir
+   | - Si `descubrible` y choca ÔåÆ respuesta con motivo ÔåÆ `runtime.descubrimientos_jugador.rutinas += bingo_viernes`
+
+FILE docs\PROPUESTA_BLOQUE_3_A_24.md
+  [A_voluntad] x93
+   | Ronda de jugabilidad (2026-08-17, noche). **Prioridad sobre las cifras de escala de la V0** (10 al inicio, pool 16, techo ~14). Ampliada por `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (capacidad Ôëá pool, marchas **consentidas**, 
+   | capacidad simult├ínea  Ôëá  pool total dise├▒ado
+   | **Bloque A Ôëê 16** (primera prueba **solo A**). Ampliar = **Bloque B Ôëê 16**. 80ÔÇô100+ es cat├ílogo futuro en tandas. **32** = capacidad A+B, no total de fichas.
+   | El resto de la V0 (4 variables, sin %, Celestine propone, sin game over duro, cabeza maestra) **sigue**. **Primera prueba:** cafeter├¡a como primer sitio social; parque/biblioteca en onboarding progresivo (`DECISIONES_CER
+   | | Que los 3 **no** formen dos parejas (incluso 0 qu├¡mica rom├íntica) | Ense├▒a amistad, roce e incompatibilidad. El juego no es ┬½empareja a los que hay┬╗. |
+  [B_rel] x21
+   | | Que los 3 **no** formen dos parejas (incluso 0 qu├¡mica rom├íntica) | Ense├▒a amistad, roce e incompatibilidad. El juego no es ┬½empareja a los que hay┬╗. |
+   | | Resultados **no binarios** (cita Ôëá pareja/fracaso) | Ya iba por aqu├¡ el informe narrativo. Hay que nombrarlo como regla. |
+   | | Sandbox, **sin victoria** ┬½X parejas┬╗ | Ya hab├¡amos tirado el game over. Esto tira tambi├®n el ┬½ganar┬╗ disfrazado. |
+   | 6. **Temporadas** no mueren, pero **no llevan objetivos de ┬½haz 5 parejas┬╗**. Pueden ser clima, eventos de villa, llegadas agrupadas, un resumen. Si una temporada exige cupo de parejas, volvemos a la victoria tradicional
+   | 6. **Temporadas** no mueren, pero **no llevan objetivos de ┬½haz 5 parejas┬╗**. Pueden ser clima, eventos de villa, llegadas agrupadas, un resumen. Si una temporada exige cupo de parejas, volvemos a la victoria tradicional
+  [C_marcha] x38
+   | El nombre del archivo es hist├│rico. **24-en-uno ya no es la ampliaci├│n recomendada** (ver ┬º7 y `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`).
+   | Ronda de jugabilidad (2026-08-17, noche). **Prioridad sobre las cifras de escala de la V0** (10 al inicio, pool 16, techo ~14). Ampliada por `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (capacidad Ôëá pool, marchas **consentidas**, 
+   | Ronda de jugabilidad (2026-08-17, noche). **Prioridad sobre las cifras de escala de la V0** (10 al inicio, pool 16, techo ~14). Ampliada por `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (capacidad Ôëá pool, marchas **consentidas**, 
+   | Ronda de jugabilidad (2026-08-17, noche). **Prioridad sobre las cifras de escala de la V0** (10 al inicio, pool 16, techo ~14). Ampliada por `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (capacidad Ôëá pool, marchas **consentidas**, 
+   | Ronda de jugabilidad (2026-08-17, noche). **Prioridad sobre las cifras de escala de la V0** (10 al inicio, pool 16, techo ~14). Ampliada por `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (capacidad Ôëá pool, marchas **consentidas**, 
+  [D_eco] x5
+   | - Dinero/fama con 3 vecinos: o no se ense├▒a hasta el primer desbloqueo, o la cifra no se mueve y parece rota.
+   | | Dinero/fama | Al primer desbloqueo o mejora | No el minuto 0 |
+   | Prohibido el d├¡a 1: tienda, 10 fichas, econom├¡a visible como tutorial, tri├íngulos, test de compatibilidad, tutorial de 12 ventanas.
+  [E_disc] x3
+   | 3. **Conocimiento del jugador** por persona: cada campo sensible tiene estado `publico` | `descubierto` | `desconocido`. La UI de ficha muestra huecos (`ÔÇª`) sin decir *cu├íntos* secretos hay. `runtime.descubrimientos_juga
+   | ## 5. Qu├® descubre el jugador y c├│mo
+   | | P├║blica (B, llegada) | Nombre, edad, oficio a groso modo, hobby declarado, look, frase | Tarjeta de llegada + ficha |
+
+FILE docs\PROPUESTA_CATALOGOS_V2.md
+  [A_voluntad] x4
+   | Roc├¡o **no est├í mal**. El validador T4 usa `ContractEnums` copiados del contrato V0 (12 hobbies, 10 rasgos, 6 estilos). Los JSON en `data/catalogos/` **ya incluyen** `bingo`, `sociable_selectiva`, `observadora`, `practic
+   | Ver `data/catalogos/_propuesta_v2/`. Ids de rasgos neutros + **alias** para no reescribir Roc├¡o.
+   | ## Compatibilidad hacia atr├ís
+   | - Enums t├®cnicos (g├®nero, franja, ocupaci├│n, severidad) se quedan cerrados.
+  [E_disc] x3
+   | ## bingo ÔåÆ A (hobby v├ílido)
+   | `lug_bingo` existe. `hobbies_lugares.json` ya mapea `bingo ÔåÆ lug_bingo`. No mapear a `cafe_social`. Puede coexistir con un compromiso recurrente, pero el hobby es el lugar correcto.
+   | No asignar pol├¡ticas Discovery a Roc├¡o todav├¡a.
+  [BLOQ] x1
+   | ## BLOQUEADO_DECISION
+
+FILE docs\PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md
+  [A_voluntad] x78
+   | # Propuesta: Celestine, buz├│n, tiempo real y partidas
+   | | Primera prueba jugable | **Solo Bloque A.** B queda como expansi├│n posterior. No dibujar ni construir UI de B ahora; la arquitectura **no** debe impedir a├▒adirlo. |
+   | | Sin pareja Ôëá problema | Un habitante puede **no querer** relaci├│n rom├íntica. Eso **no** es un fallo que Celestine deba ┬½arreglar┬╗. |
+   | | Pool a largo plazo | Cat├ílogo **80ÔÇô100+** fichas en tandas. **32** = posible capacidad simult├ínea futura (A+B), **no** el total de personajes existentes. |
+   | | Antiguos en una partida | Quien se marcha definitivamente queda **archivado / ya presentado**. **No** reaparece como llegada nueva aleatoria en **esa** partida. |
+  [B_rel] x13
+   | | Sin pareja Ôëá problema | Un habitante puede **no querer** relaci├│n rom├íntica. Eso **no** es un fallo que Celestine deba ┬½arreglar┬╗. |
+   | | Grafo = todo el mundo debe poder emparejarse | Rec├¡proco potencial solo donde el dise├▒o **permite** romance; **no buscar pareja Ôëá bug** |
+   | ## 2. No todo el mundo busca pareja
+   | | `activo` | Puede buscar pareja; citas rom├ínticas encajan en su arco |
+   | - **Pareja NPC:** diario puede anunciarlo; buz├│n puede traer reacciones (┬½no me lo esperaba┬╗).
+  [C_marcha] x40
+   | **Dise├▒o. No es c├│digo.** Ronda 2026-08-17 (noche, segunda tanda). Complementa `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`, `PROPUESTA_BLOQUE_3_A_24.md`, `DIARIO_DEL_PUEBLO.md`.
+   | | Primera prueba jugable | **Solo Bloque A.** B queda como expansi├│n posterior. No dibujar ni construir UI de B ahora; la arquitectura **no** debe impedir a├▒adirlo. |
+   | | Pool a largo plazo | Cat├ílogo **80ÔÇô100+** fichas en tandas. **32** = posible capacidad simult├ínea futura (A+B), **no** el total de personajes existentes. |
+   | | Antiguos en una partida | Quien se marcha definitivamente queda **archivado / ya presentado**. **No** reaparece como llegada nueva aleatoria en **esa** partida. |
+   | | Partidas (concepto) | Debe existir: partida persistente ┬À nueva partida ┬À reiniciar ┬À estado del pool **independiente por partida**. |
+  [D_eco] x10
+   | ## Candidato / estudiar (no canon de cifras)
+   | | Protecci├│n de residencia | No plantear marcha ┬½normal┬╗ hasta llevar **~30 d├¡as** en la comunidad (n├║mero **no** canonizado). |
+   | | Fama = gran casamentero | Fama = reconocimiento de **Celestine** en la comunidad (v├¡nculos en general) |
+   | | Goteo econ├│mico | Dinero por d├¡as transcurridos | Cifra actualizada |
+   | - El n├║mero **30 no est├í canonizado.**
+
+FILE docs\PROPUESTA_JUGABLE_V0_CURSOR.md
+  [A_voluntad] x123
+   | Matices respecto a la propuesta original: grafo **rec├¡proco potencial** (no solo ida); ropa inerte en V0 pero campos de look en ficha. Escala de pantalla: ver la ronda del bloque (~3 al inicio), no la ┬º2 de abajo.
+   | > ┬º2ÔÇô3 de este archivo (10 al d├¡a 1, techo 14, no bajar de 8) son **hist├│ricas**. No usarlas para dise├▒ar el tr├¡o tutorial.
+   | 1. **Ma├▒ana breve.** Coletilla del d├¡a (una). Diario con 5ÔÇô10 l├¡neas. Cabezas en el mapa seg├║n rutina (trabajo / hobby / banco / casa-offmap).
+   | 5. **Informes cortos.** Cita = 2 microfrases + 1 coletilla + cambio de color de pareja. No una novela.
+   | 6. **Dinero y fama se mueven un poco.** Cita decente / pareja nueva / crisis salvada. Gastos solo si desbloqueas o tiras de plan especial.
+  [B_rel] x37
+   | 5. **Informes cortos.** Cita = 2 microfrases + 1 coletilla + cambio de color de pareja. No una novela.
+   | 6. **Dinero y fama se mueven un poco.** Cita decente / pareja nueva / crisis salvada. Gastos solo si desbloqueas o tiras de plan especial.
+   | 7. **A veces llega alguien.** Maleta en el diario, halo ┬½nuevo┬╗, el grafo se mueve. Casi nunca una crisis autom├ítica.
+   | - Ritmo propuesto (orden de magnitud, no cifra sagrada): **primera llegada tras un hito** (primera pareja que aguanta unos d├¡as, o primer desbloqueo, o fama m├¡nima). Luego **como mucho una llegada cada varios d├¡as**, y n
+   | La referencia ya tiene cinta de parejas abajo y laterales. El padr├│n es el hermano de esa cinta: bot├│n **┬½El pueblo┬╗** (o ┬½Gente┬╗) siempre visible. Mapa = sitios + cabezas. Padr├│n = tarjetas. En PC, panel o overlay a la 
+  [C_marcha] x34
+   | Estado: **aprobada** (2026-08-17) en bucle y tono. **Cifras de poblaci├│n (10/16/14) desplazadas** por `PROPUESTA_BLOQUE_3_A_24.md`. **Marchas y escala posterior:** `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (consentidas; Bloque 
+   | Estado: **aprobada** (2026-08-17) en bucle y tono. **Cifras de poblaci├│n (10/16/14) desplazadas** por `PROPUESTA_BLOQUE_3_A_24.md`. **Marchas y escala posterior:** `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (consentidas; Bloque 
+   | Estado: **aprobada** (2026-08-17) en bucle y tono. **Cifras de poblaci├│n (10/16/14) desplazadas** por `PROPUESTA_BLOQUE_3_A_24.md`. **Marchas y escala posterior:** `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (consentidas; Bloque 
+   | Estado: **aprobada** (2026-08-17) en bucle y tono. **Cifras de poblaci├│n (10/16/14) desplazadas** por `PROPUESTA_BLOQUE_3_A_24.md`. **Marchas y escala posterior:** `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (consentidas; Bloque 
+   | Estado: **aprobada** (2026-08-17) en bucle y tono. **Cifras de poblaci├│n (10/16/14) desplazadas** por `PROPUESTA_BLOQUE_3_A_24.md`. **Marchas y escala posterior:** `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (consentidas; Bloque 
+  [D_eco] x18
+   | 6. **Dinero y fama se mueven un poco.** Cita decente / pareja nueva / crisis salvada. Gastos solo si desbloqueas o tiras de plan especial.
+   | No fijar esto como canon hasta que ChatGPT dibuje el grafo; si el grafo de 10 a├¡sla a alguien, se sube a 12 **antes** de inventar marchas.
+   | - Ritmo propuesto (orden de magnitud, no cifra sagrada): **primera llegada tras un hito** (primera pareja que aguanta unos d├¡as, o primer desbloqueo, o fama m├¡nima). Luego **como mucho una llegada cada varios d├¡as**, y n
+   | Fama/notoriedad **del NPC**: no en V0. La fama es del jugador-casamentero. Un NPC ┬½conocido en el pueblo┬╗ es texto, no recurso.
+   | ## 8. Econom├¡a (circuito, sin cifras sagradas)
+  [E_disc] x16
+   | 1. **Ma├▒ana breve.** Coletilla del d├¡a (una). Diario con 5ÔÇô10 l├¡neas. Cabezas en el mapa seg├║n rutina (trabajo / hobby / banco / casa-offmap).
+   | 3. `apertura_descubrimiento` no cuenta para este veto.
+   | Todo en el tablero. Coherente con ┬½el pueblo es el UI┬╗. Pero: (1) ya hay 3 sitios de cita; un 4.┬║ abierto el d├¡a 1 diluye ┬½pueblo medio vac├¡o┬╗; (2) el padr├│n no es un lugar de cita ni de hobby; (3) en m├│vil, ir al ayunta
+   | | `apertura_descubrimiento` | `cerrada` / `permeable` / `abierta` ÔÇö ver ┬º12 |
+   | | `hobby_principal` | Rutina + encuentros |
+
+FILE docs\PROPUESTA_VIDA_POOL_Y_MARCHAS.md
+  [A_voluntad] x84
+   | Ronda (2026-08-17, noche-2). Separa **siempre**:
+   | capacidad simult├ínea  Ôëá  pool total dise├▒ado
+   | | Marchas con aviso; **la ├║ltima palabra es del jugador** | Encari├▒arse semanas sin miedo a un dado |
+   | | Capacidad del edificio **aparte** del cat├ílogo | 16 fichas no obligan a 16 en casa el d├¡a 1, ni a 16 para siempre |
+   | | Los NPC viven solos; **puede nacer una pareja sin el jugador** | Si no, 16 personas son un call center |
+  [B_rel] x15
+   | | Los NPC viven solos; **puede nacer una pareja sin el jugador** | Si no, 16 personas son un call center |
+   | 2. **Marchas: el jugador autoriza la marcha definitiva.** ┬½Qu├®date┬╗ no tira un dado. La causa sigue (necesidad / misi├│n / crisis). Arquitectura ya; en la primera prueba, despu├®s de las llegadas.
+   | 7. **Parejas NPC offline: s├¡, con cupo.** 0ÔÇô1 por ausencia larga, no 8.
+   | 1. Causa visible (soledad, ruptura, aburrimiento, trabajo, conflicto, ganas de cambioÔÇª).
+   | 4. Si se queda, la causa **no se borra**: pasa a necesidad / problema / arco / misi├│n / crisis / objetivo opcional. Genera juego. No es un ┬½ok┬╗ vac├¡o.
+  [C_marcha] x52
+   | # Propuesta: vida aut├│noma, pool y marchas
+   | capacidad simult├ínea  Ôëá  pool total dise├▒ado
+   | | Marchas con aviso; **la ├║ltima palabra es del jugador** | Encari├▒arse semanas sin miedo a un dado |
+   | | Pool grande futuro; tanda 16 ahora | Auditor├¡a y arte no explotan |
+   | 1. **Primera capacidad Ôëê un bloque de ~16, no un edificio de 24.** Ampliar = **abrir Bloque B** (~16 m├ís), no hinchar el mismo mapa. Ver ┬º Varios bloques. 24-en-uno queda peor para m├│vil.
+  [D_eco] x19
+   | | El trabajo da un goteo al bloque | 3 vecinos = poco dinero; m├ís gente = m├ís margen. Sin cifras |
+   | | Ôé¼ lineal con poblaci├│n | El dinero sobra; los desbloqueos sobran |
+   | ## Propuesta concreta (a├║n no canon de cifras)
+   | Marcha ┬½normal┬╗ (`pensando_en_irse`) no antes de **~30 d├¡as** en la comunidad. Cifra **no** canonizada. Con tiempo 1:1 = d├¡as de pueblo transcurridos. Excepciones por crisis: estudiar aparte.
+   | ### Econom├¡a
+
+FILE docs\README.md
+  [A_voluntad] x29
+   | | Archivo | Para qu├® |
+   | | [FASE_C_PACK_CHATGPT_I02.md](FASE_C_PACK_CHATGPT_I02.md) | **Pack autocontenido** para ChatGPT ÔÇö piloto I02. |
+   | | [PLANTILLAS_AGENDA_BORRADOR.md](PLANTILLAS_AGENDA_BORRADOR.md) | Plantillas agenda por ocupaci├│n (Fase B). |
+   | | [PREPARACION_DE_CITAS.md](PREPARACION_DE_CITAS.md) | Candidato: preparar citas modifica probabilidades, no garantiza. |
+  [B_rel] x2
+   | | [APRENDIZAJE_PREFERENCIAS.md](APRENDIZAJE_PREFERENCIAS.md) | Candidato: gustos de pareja que pueden cambiar con causa. |
+   | | [EVENTOS.md](EVENTOS.md) | Micro, pareja, villa. |
+  [C_marcha] x9
+   | | [FASE_DISENO_POOL_16.md](FASE_DISENO_POOL_16.md) | Plantilla, grafo, esqueleto sin nombres. |
+   | | [PROPUESTA_VIDA_POOL_Y_MARCHAS.md](PROPUESTA_VIDA_POOL_Y_MARCHAS.md) | Capacidad Ôëá pool, marchas consentidas, vivienda autom├ítica, bloques A/B. |
+  [D_eco] x5
+   | | [REFERENCIA_VISUAL.md](REFERENCIA_VISUAL.md) | Qu├® canoniza la PNG y qu├® no. |
+   | | [DINERO_Y_FAMA.md](DINERO_Y_FAMA.md) | Recursos; sin cifras. |
+
+FILE docs\REFERENCIA_VISUAL.md
+  [A_voluntad] x20
+   | Creada con ChatGPT. **No es un dise├▒o para copiar p├¡xel a p├¡xel.** Es una br├║jula de tono.
+   | La imagen ya trae dos mitades: arriba la UI de juego, abajo **el mismo mapa** con cuadr├¡cula roja. Ese formato (limpia + coordenadas) es el est├índar a partir de ahora. Ver `CUADRICULA_REFERENCIAS.md`.
+   | - Mapa tipo tablero, calles/carreteras simples
+   | - Cabezas peque├▒as visibles sobre el mapa
+   | - Tarjetas de parejas abajo
+  [B_rel] x3
+   | - Tarjetas de parejas abajo
+   | - Estados visuales claros (Bien / Genial / Regular / En crisis / Mal)
+   | **Las cabezas peque├▒as del mapa y de las tarjetas PAREJAS.** Ese trazo, no un retrato m├ís realista o ┬½guapo┬╗ generado despu├®s.
+  [D_eco] x7
+   | ## Qu├® S├ì nos gusta (canon de direcci├│n)
+   | - Dinero y fama visibles
+   | ## Qu├® NO canoniza esta imagen
+   | | 1.250 Ôé¼ y Fama 38 | Ejemplos. Econom├¡a no fijada. |
+   | 3. Mostrar el resto como parcela bloqueada (precio/fama de ejemplo, no valores finales).
+
+FILE docs\REGISTRO_AUDITORIA_PERSONAJES.md
+  [A_voluntad] x1
+   | `Ô£ô` PASS ┬À `Ô£ù` FAIL ┬À `~` pendiente de pool ┬À `ÔÇö` a├║n no auditado.
+  [C_marcha] x4
+   | `Ô£ô` PASS ┬À `Ô£ù` FAIL ┬À `~` pendiente de pool ┬À `ÔÇö` a├║n no auditado.
+   | `estado_pool`: **borrador**
+   | | I02 | per_i02 | s├¡ | revision | Ô£ô Ô£ô Ô£ô ~ Ô£ô Ô£ô Ô£ô | voz enum corregida bromistaÔåÆcandida; rec├¡proco pendiente_pool |
+   | ## Nivel 2 (pool)
+
+FILE docs\REGLAS_NO_NEGOCIABLES.md
+  [A_voluntad] x27
+   | Ning├║n sistema se declara **terminado** sin pasar **ambos** gates.
+   | - No corrompe estado de partida.
+   | **Regla:** un sistema puede estar `t├®cnicamente_funcional` y seguir **INCOMPLETO** por contenido hasta pasar el gate de experiencia.
+   | Si el dise├▒o habla de ┬½muchas variantes┬╗, ┬½varios motivos┬╗, ┬½variedad deÔÇª┬╗, **Cursor no puede** sustituirlo silenciosamente por 2ÔÇô5 ejemplos gen├®ricos para cerrar la implementaci├│n.
+   | | Impacto en experiencia | Bajo / medio / alto |
+  [C_marcha] x2
+   | - hobbies / rasgos en pool
+   | - hobbies/rasgos redundantes en el pool
+
+FILE docs\REGLAS_VISUALES_PERSONAJES_v1.md
+  [A_voluntad] x24
+   | El estilo 06b (`PIPELINE_RETRATO_06b.md`) queda **en pausa** para generaci├│n nueva. No se borra: es hist├│rico. Esta v1 no sustituye fichas ni retratos existentes.
+   | - Peinados llamativos permitidos (undercut magenta, coleta alta, mohawk, flequillo que tapa un ojo, canas, bigote).
+   | - Paleta **c├ílida**: pieles con vida, sombras suaves anaranjadas/marrones, ropa contempor├ínea saturada pero no agresiva.
+   | - **Sombreado suave**: no planos 06b secos; hay volumen (sombra de ment├│n, bajo el pelo, en p├írpados) sin beauty light.
+   | - Anime (ojos ocupando media cara, pesta├▒as de m├íscara, shine excesivo).
+  [C_marcha] x2
+   | NO RECICLAR CARAS DE LA L├üMINA COMO IDENTIDADES DEL POOL
+   | NO TOCAR TODAV├ìA: Roc├¡o, Dani, I10, I06, pool de 16
+  [D_eco] x1
+   | NO PERSONAJE CANON
+
+FILE docs\RELACIONES_SOCIALES.md
+  [A_voluntad] x14
+   | Familia, amigos, compa├▒eros, conocidos, ex. Modelo listo; no es un simulador social gigante.
+   | ## Parentescos que **vetan** romance (cerrado)
+   | Capa 1. No hay compatibilidad rom├íntica legal entre:
+   | - padre/madre Ôåö hijo/a
+   | El modelo **s├¡** guarda estas relaciones (eventos, diario, ┬½Paqui ha discutido con su hermana┬╗). Solo se proh├¡be el romance.
+  [B_rel] x3
+   | **No** hay una sola escalera `desconocido ÔåÆ amigo ÔåÆ pareja`.
+   | Vista social por habitante: lazos **descubiertos** (pareja, amigo, familia p├║blica, ex conocido, roce vistoÔÇª). No secretos. En m├│vil, lista; no un ovillo de 16. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+   | Siguen pudiendo inflar eventos: Luc├¡a no soporta a Eva; Marta sale con Eva ÔåÆ diario / crisis.
+  [C_marcha] x4
+   | Vista social por habitante: lazos **descubiertos** (pareja, amigo, familia p├║blica, ex conocido, roce vistoÔÇª). No secretos. En m├│vil, lista; no un ovillo de 16. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+   | ├ürbol familiar: m├¡nimo, **con** las fichas. Sugerencia de esqueleto en `FASE_DISENO_POOL_16.md`. No un clan de 16.
+   | Ning├║n parentesco de esta lista puede aparecer como opci├│n rom├íntica. Se comprueba en auditor├¡a nivel 1 (ficha) y nivel 2 (pool): `CHECKLIST_AUDITORIA_PERSONAJES.md`.
+
+FILE docs\RELACIONES_Y_CITAS.md
+  [A_voluntad] x17
+   | ## Las 4 variables principales (cerradas)
+   | | **V├¡nculo** | uno por pareja | Cercan├¡a, apego, ┬½estamos juntos┬╗. |
+   | | **Conflicto** | uno por pareja | Tensi├│n acumulada. |
+   | | **Necesidad de contacto** | una por persona dentro de la pareja | A puede necesitar m├ís roce que B. |
+   | No hay barra independiente para chispa, confianza, comodidad, deseo ni riesgo de ruptura.
+  [B_rel] x11
+   | | **V├¡nculo** | uno por pareja | Cercan├¡a, apego, ┬½estamos juntos┬╗. |
+   | | **Conflicto** | uno por pareja | Tensi├│n acumulada. |
+   | | **Necesidad de contacto** | una por persona dentro de la pareja | A puede necesitar m├ís roce que B. |
+   | No hay barra independiente para chispa, confianza, comodidad, deseo ni riesgo de ruptura.
+   | | Riesgo de ruptura | Conflicto alto + v├¡nculo bajo + necesidades de contacto desatendidas (poco roce respecto a lo que pide cada cual) |
+  [C_marcha] x1
+   | Las fichas tienen que dar material a citas (franja, lugar, voz, trato). Eso se valida en auditor├¡a nivel 1 (juego) y nivel 2 (horarios del pool): `CHECKLIST_AUDITORIA_PERSONAJES.md`.
+  [D_eco] x2
+   | No es parcela ­ƒöÆ de dinero/fama. Opci├│n de intimidad / convivencia / fase de relaci├│n. Umbral concreto **pendiente**.
+
+FILE docs\ROPA_Y_LOOKS.md
+  [A_voluntad] x7
+   | # Ropa y looks
+   | La cara/pelo/gafas no se redibujan por cada outfit. El cuerpo/ropa se estudia despu├®s. No se genera ni se programa ahora. Detalle de encuadre: `CONTRATO_VISUAL_PERSONAJES.md`.
+   | ## Modificadores, no la mejor ropa
+   | Una cita ┬½bien vestida┬╗ puede salir regular. Encaje: `PREPARACION_DE_CITAS.md`.
+   | ┬½Lo ideal para impresionar┬╗ puede hacer que quien se viste se sienta fatal ÔÇö se mantiene del Maestro.
+  [D_eco] x2
+   | Looks con dinero, fama u hitos. Costes no fijados. Fuera de la implementaci├│n inmediata.
+  [E_disc] x1
+   | El jugador descubre preferencias est├®ticas; no las tiene en un men├║ el d├¡a 1.
+
+FILE docs\SIMULADOR_DISENO.md
+  [A_voluntad] x12
+   | El Maestro ped├¡a ~1.000 partidas para cazar estados imposibles y combinaciones dominantes. Sigue siendo el plan. Cambia el entorno: ya no se asume un corte a 30 d├¡as ni un mapa de 8 sitios siempre abiertos.
+   | - ┬┐Empezar con 3 deja el mapa muerto o ense├▒a bien?
+   | - ┬┐El catch-up offline dispara demasiados irreversibles o congela el pueblo? (una marcha **nunca** se resuelve AFK)
+   | - ┬┐El goteo econ├│mico se dispara con n residentes?
+   | - ┬┐Los NPC se bastan entre ellos a partir de ~12, o todo espera al jugador?
+  [B_rel] x2
+   | - ┬┐Los encuentros espont├íneos rompen todas las parejas?
+   | Se mantienen las de la fase 1 (`aleatorio_legal`, `max_atraccion`, `estabilizar`, `ignorar_crisis`, `monocultivo`, `grafo_maximo`) y se a├▒adir├ín despu├®s: `solo_desbloquear`, `ignorar_diario`, `aprendizaje_on` / `aprendiz
+  [C_marcha] x1
+   | - ┬┐El catch-up offline dispara demasiados irreversibles o congela el pueblo? (una marcha **nunca** se resuelve AFK)
+  [D_eco] x1
+   | Cat├ílogos, pesos v1, bancos, **pol├¡ticas de jugador**, semilla RNG, y adem├ís: mapa con flags de desbloqueo, rutinas, grafo social, econom├¡a dummy.
+
+FILE docs\SISTEMA_COMPATIBILIDAD.md
+  [A_voluntad] x21
+   | # Sistema de compatibilidad
+   | **No hay un ├║nico `compatibilidad = X%`.** El jugador no lo ve.
+   | ## Capa 1 (dura)
+   | - las reglas `atraido_por` de **ambos** no cubren al otro *para formar pareja*. Un crush **unilateral** s├¡ puede existir si solo un lado encaja. El roster, eso s├¡, exige que cada ficha tenga ÔëÑ1 persona con la que *ambos*
+   | - las reglas `atraido_por` de **ambos** no cubren al otro *para formar pareja*. Un crush **unilateral** s├¡ puede existir si solo un lado encaja. El roster, eso s├¡, exige que cada ficha tenga ÔëÑ1 persona con la que *ambos*
+  [B_rel] x3
+   | - las reglas `atraido_por` de **ambos** no cubren al otro *para formar pareja*. Un crush **unilateral** s├¡ puede existir si solo un lado encaja. El roster, eso s├¡, exige que cada ficha tenga ÔëÑ1 persona con la que *ambos*
+   | Es **una de las 4 variables de relaci├│n**, guardada en dos direcciones. No es un % de pareja.
+   | Ver mapping en `RELACIONES_Y_CITAS.md`: chispa, confianza, comodidad, deseo, riesgo de ruptura.
+  [C_marcha] x2
+   | **No est├í el d├¡a 1.** Se desbloquea / compra (tienda de herramientas). Usos limitados, info imperfecta. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+  [E_disc] x1
+   | - `apertura_descubrimiento` no sustituye esta lista al validar el grafo
+
+FILE docs\SISTEMA_PERSONAJES.md
+  [A_voluntad] x11
+   | - **Partida:** ~3 al d├¡a 1. **Bloque A Ôëê 16** simult├íneos (hip├│tesis). Ampliar = **Bloque B Ôëê 16** (candidato; no un 24 ├║nico). **Pool** = tandas (ahora 16 fichas). No son la misma cifra.
+   | - Marchas: ├║ltima palabra del jugador. ┬½Qu├®date┬╗ = se queda; la causa vira a arco.
+   | Nadie es un mu├▒eco apagado. Ver `VIDA_DE_HABITANTES.md`.
+   | ## Identidad y atracci├│n (capa 1)
+   | - Parentesco incompatible = veto (lista en `RELACIONES_SOCIALES.md`)
+  [C_marcha] x9
+   | Fichas: se dise├▒an ahora con `FASE_DISENO_POOL_16.md`. Aqu├¡ el sistema, no los nombres.
+   | - **Partida:** ~3 al d├¡a 1. **Bloque A Ôëê 16** simult├íneos (hip├│tesis). Ampliar = **Bloque B Ôëê 16** (candidato; no un 24 ├║nico). **Pool** = tandas (ahora 16 fichas). No son la misma cifra.
+   | - Marchas: ├║ltima palabra del jugador. ┬½Qu├®date┬╗ = se queda; la causa vira a arco.
+   | - Detalle: `PROPUESTA_BLOQUE_3_A_24.md` + `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`
+   | Al escribir fichas: `VALIDACION_GRAFO_ROMANTICO.md` + auditor├¡a nivel 1/2. Rec├¡proco potencial obligatorio. Una ficha piloto puede quedar en `revision` hasta que existan destinos en el pool.
+  [E_disc] x4
+   | - `apertura_descubrimiento`: `cerrada` / `permeable` / `abierta` (narrativa; no salva el grafo)
+   | Visible en **El pueblo**: nombre, edad, pronombres si procede, retrato, 3 rasgos p├║blicos, hobby, lugares preferentes, estilo social, ocupaci├│n a groso modo, estado sentimental, disponibilidad, flag nuevo, ÔÜá´©Å, cita.
+   | Oculto o descubrible: dealbreakers, `atraido_por` fino, apertura, preferencias est├®ticas, necesidad de contacto como cifra, crush, rasgos ocultos.
+   | - hobby principal
+
+FILE docs\VALIDACION_GRAFO_ROMANTICO.md
+  [A_voluntad] x14
+   | **No buscar pareja no es un fallo.** Un habitante con `interes_romantico: ninguno` (campo candidato en `CONTRATO_PERSONAJE.md`) **no** entra en esta regla como ┬½personaje roto┬╗.
+   | Para quien **s├¡** puede tener romance (`activo` o `pasivo`):
+   | 1. No hay parentesco vetado entre A y B.
+   | 2. No hay dealbreaker **absoluto** de A hacia B ni de B hacia A que anule el romance para siempre. Un `absoluto` **no** puede ser lo ├║nico que deja a A (o a B) en 0 rec├¡procos: si pasa, se retoca el dealbreaker o el graf
+   | 2. No hay dealbreaker **absoluto** de A hacia B ni de B hacia A que anule el romance para siempre. Un `absoluto` **no** puede ser lo ├║nico que deja a A (o a B) en 0 rec├¡procos: si pasa, se retoca el dealbreaker o el graf
+  [B_rel] x2
+   | **No buscar pareja no es un fallo.** Un habitante con `interes_romantico: ninguno` (campo candidato en `CONTRATO_PERSONAJE.md`) **no** entra en esta regla como ┬½personaje roto┬╗.
+   | Eso **no** implica pareja, qu├¡mica alta, que empiecen juntos ni un final ├║nico.
+  [C_marcha] x4
+   | Esto es el **n├║cleo del grafo** del nivel 2 de `CHECKLIST_AUDITORIA_PERSONAJES.md` (y del bloque Romance del nivel 1). Una ficha no es `aprobado` si falla esta regla (en pilotos, el rec├¡proco puede quedar `pendiente_pool
+   | Nadie del pool que **puede tener romance** est├í **condenado por dise├▒o** a no poder tener nunca una relaci├│n rec├¡proca.
+   | El **tr├¡o del d├¡a 1 no tiene por qu├® cumplir** esta regla *entre los tres*. La regla es de la **tanda** y de quien **puede coexistir** y **puede querer romance**, no de un cat├ílogo futuro de 100. `PROPUESTA_VIDA_POOL_Y_M
+   | El **tr├¡o del d├¡a 1 no tiene por qu├® cumplir** esta regla *entre los tres*. La regla es de la **tanda** y de quien **puede coexistir** y **puede querer romance**, no de un cat├ílogo futuro de 100. `PROPUESTA_VIDA_POOL_Y_M
+  [E_disc] x1
+   | - `apertura_descubrimiento` (`permeable` / `abierta`). Es narrativa. **No** cuenta para aprobar el roster.
+
+FILE docs\VIDA_DE_HABITANTES.md
+  [A_voluntad] x15
+   | Simulaci├│n **sencilla**. Existe para disponibilidad, contexto, encuentros, humor, peque├▒as historias y sesgos ligeros en las citas.
+   | - ocupaci├│n
+   | - hobby principal
+   | - **Capas:** estructural (trabajo, sue├▒o, rutinas) ┬À programado (citas) ┬À aut├│nomo ┬À temporal.
+   | - Citas **ocupan** slots. UI sugiere ┬½primera hora compatible┬╗ ÔÇö el jugador no revisa 16 calendarios.
+  [C_marcha] x1
+   | No son clases r├¡gidas. Sirven para ma├▒ana / tarde / noche / flexible y para mucha o poca disponibilidad. Al escribir los 16, usar este cat├ílogo (repartir, no inventar un noveno oficio). Ver `FASE_DISENO_POOL_16.md`.
+  [D_eco] x1
+   | S├¡: una **franja de trabajo** que ocupa a la persona, y un **goteo tonto** de dinero a la comunidad. Eso no es un simulador de empleo.
+  [E_disc] x2
+   | - hobby principal
+   | - Celestine **propone**; aceptaci├│n/rechazo con **voz**. Rechazo puede **descubrir** rutinas.
+
+FILE docs\VISION_JUEGO.md
+  [A_voluntad] x18
+   | La orientaci├│n y las combinaciones son libres. Cada personaje declara `atraido_por`. **Nunca se fuerza una combinaci├│n incompatible.** El parentesco incompatible tampoco entra en lo rom├íntico. Quien **no quiere** pareja 
+   | La orientaci├│n y las combinaciones son libres. Cada personaje declara `atraido_por`. **Nunca se fuerza una combinaci├│n incompatible.** El parentesco incompatible tampoco entra en lo rom├íntico. Quien **no quiere** pareja 
+   | La orientaci├│n y las combinaciones son libres. Cada personaje declara `atraido_por`. **Nunca se fuerza una combinaci├│n incompatible.** El parentesco incompatible tampoco entra en lo rom├íntico. Quien **no quiere** pareja 
+   | La orientaci├│n y las combinaciones son libres. Cada personaje declara `atraido_por`. **Nunca se fuerza una combinaci├│n incompatible.** El parentesco incompatible tampoco entra en lo rom├íntico. Quien **no quiere** pareja 
+   | > ┬½Soy Celestine: el pueblo me escribe, yo propongo, ellos viven. A veces se enamoran; a veces solo necesitan compa├▒├¡a o que alguien medie un l├¡o.┬╗
+  [B_rel] x8
+   | La orientaci├│n y las combinaciones son libres. Cada personaje declara `atraido_por`. **Nunca se fuerza una combinaci├│n incompatible.** El parentesco incompatible tampoco entra en lo rom├íntico. Quien **no quiere** pareja 
+   | Observa fichas, lee el **diario** y el **buz├│n** (candidato), propone encuentros, interviene en crisis, desbloquea el pueblo con dinero y fama, y acepta que parejas ┬½perfectas┬╗ fracasen, que las absurdas funcionen, y que
+   | Observa fichas, lee el **diario** y el **buz├│n** (candidato), propone encuentros, interviene en crisis, desbloquea el pueblo con dinero y fama, y acepta que parejas ┬½perfectas┬╗ fracasen, que las absurdas funcionen, y que
+   | - un sudoku de parejas
+   | - un juego donde **todos** deben emparejarse
+  [C_marcha] x5
+   | La orientaci├│n y las combinaciones son libres. Cada personaje declara `atraido_por`. **Nunca se fuerza una combinaci├│n incompatible.** El parentesco incompatible tampoco entra en lo rom├íntico. Quien **no quiere** pareja 
+   | 1. El pueblo empieza peque├▒o (**~3** en Bloque A). La **cafeter├¡a** es el primer sitio social; el resto se abre con progresi├│n.
+   | 9. El pueblo crece. **Pueblo persistente + temporadas.** Capacidad del bloque Ôëá pool de fichas. **Tiempo 1:1** candidato (`PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`).
+   | Solo **Bloque A**. Bloque B queda para despu├®s (arquitectura preparada, sin UI ahora). Ver `PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`.
+  [D_eco] x4
+   | Observa fichas, lee el **diario** y el **buz├│n** (candidato), propone encuentros, interviene en crisis, desbloquea el pueblo con dinero y fama, y acepta que parejas ┬½perfectas┬╗ fracasen, que las absurdas funcionen, y que
+   | Observa fichas, lee el **diario** y el **buz├│n** (candidato), propone encuentros, interviene en crisis, desbloquea el pueblo con dinero y fama, y acepta que parejas ┬½perfectas┬╗ fracasen, que las absurdas funcionen, y que
+   | 7. Dinero y fama suben o se gastan; se desbloquean sitios y opciones.
+
+FILE docs\carlos-iii\AUDITORIA_ASSETS.md
+  [A_voluntad] x78
+   | - **Qu├® tenemos:** 200 packs de retrato (800 PNG con transparencia) + identidad de landing + una br├║jula de tono. Cero edificios de producci├│n.
+   | - **Qu├® se reutiliza:** los retratos can├│nicos en ficha; paleta papel/rosa de la landing; referencia 01 como tono, no como layout.
+   | - **Qu├® falta:** tablero, edificios, decoraci├│n, objetos de HUD, thumbs de cabeza para el mapa.
+   | | ├ürea | En disco | Para el pueblo |
+   | | A. Personajes | P001-P200, 4 expresiones RGBA | Ficha: s├¡. Mapa: derivados, sin tocar originales |
+  [C_marcha] x8
+   | | Viviendas / casas | lug_casa + Bloque A | NO EXISTE | Casa distinto de apartamentos. Bloque A hoy es grid CSS, no edificio |
+   | | lug_casa | No | | | S├¡ | Distinto de Bloque A |
+   | | Bloque A | No (grid CSS) | No | | S├¡ como un edificio del mapa | C├│mo se lee vs el pueblo |
+   | **No usar en producci├│n del pueblo:** dashboard de PLAY; emoji de coraz├│n de lab; grid Bloque A; cajas de cover.svg; LAB/revision/06b; comparativas internas. `docs/ESTADO_VISUAL_ACTUAL.md` (2026-08-18) dice que no hay na
+   | **Falta:** tablero; edificios; Bloque A como pieza de mapa; decoraci├│n; coraz├│n/buz├│n/nota/avisos; dinero/fama si II los pone; marcas de estado; thumbs de cabeza.
+  [D_eco] x15
+   | **Canon de personajes:** la carpeta `assets/personajes/aprobados/` manda. El campo `status` de los `*_meta.json` **no** decide si est├ín aprobados.
+   | ### 1.7 Fuera de canon
+   | | Dinero | NO | Referencia 01; PLAY no | Si II lo pone en el pulso |
+   | | Fama | NO | Igual | II no ha cerrado sitio |
+   | | Dinero | No | | | Si va al pulso | ┬┐icono o cifra? |
+
+FILE docs\carlos-iii\PAUSA_TOKENS.md
+  [A_voluntad] x1
+   | # Tokens ÔÇö PAUSA (2026-08-20)
+
+FILE docs\carlos-iii\README.md
+  [A_voluntad] x3
+   | - No toca el prototipo de pantalla (`design/prototipo-pantalla-principal/`, Carlos II).
+
+FILE docs\carlos-iii\fase1-play\06_tokens\params.json
+  [A_voluntad] x2
+   | "why": "rapado + melena"
+   | "why": "rapado con flequillo"
+
+FILE docs\carlos-iii\fase1-play\LISTA_C3.md
+  [A_voluntad] x19
+   | V3 aprobada como direcci├│n. Encargo original de C2: `design/prototipo-pantalla-principal/v3/LISTA_C3.md`.
+   | Esto no lo sustituye: lo parte para no fabricar el cat├ílogo a ciegas.
+   | PNG RGBA, recorte sucio, paleta V3 (arena, rosa #e56b8a / #c42b4a, tinta #2c261f, ticket amarillo). PC y m├│vil comparten asset.
+   | Suficiente para montar y jugar. No es acabado final.
+   | | Parque | temprano = parque + fuente | `01_complejos/parque_temprano.png` |
+  [C_marcha] x1
+   | | Bloque A | 1 edificio 3 plantas | `01_complejos/bloque_a.png` |
+  [D_eco] x1
+   | Coraz├│n, ticket d├¡a, ticket dinero, sobre, lacre OJO.
+
+FILE docs\carlos-iii\fase1-play\NOTAS_ANILLO_C2.md
+  [A_voluntad] x4
+   | # Para Carlos II ÔÇö anillo vs ┬½hay tema┬╗
+   | - positivo: verde papel `#7a9e6a`
+   | - inc├│modo/triste: naranja papel `#d4894a`
+   | Arquitectura de movimiento: los tokens son sprites sueltos (256 master, 52/62 en mapa). C2 puede colocarlos; animar salida/camino es despu├®s.
+  [C_marcha] x1
+   | Arquitectura de movimiento: los tokens son sprites sueltos (256 master, 52/62 en mapa). C2 puede colocarlos; animar salida/camino es despu├®s.
+
+FILE docs\carlos-iii\prueba-cafeteria-ref01\README.md
+  [A_voluntad] x12
+   | Carlos III no hab├¡a recibido esta referencia. La prueba anterior parti├│ de texto.
+   | Esta prueba parte de `REFERENCIA_VISUAL_01`.
+   | Fachada paralela al borde horizontal de pantalla.
+   | Sin giro para seguir la calle.
+   | - `cafe_sobre_mapa.png` ÔÇö la misma pieza sobre `suelo_calles.png` (mapa actual, sin retocar), en la caja PLAY del caf├® (~4% / 4% / 32% / 36%).
+
+FILE docs\carlos-iii\prueba-estilo-mapa\PATRON_EDIFICIO_MAPA.md
+  [A_voluntad] x18
+   | # Patr├│n de edificio para el mapa PLAY ÔÇö prueba de 3
+   | Pregunta de aprobaci├│n: **┬┐parece que este edificio siempre ha pertenecido a este mapa?**
+   | Referencia est├®tica: `assets/play-v3/complejos/suelo_calles.png` (mapa actual de PLAY).
+   | Apoyo de c├│mo se dibuja un pueblo sobre papel: `pueblo-tablero.png`.
+   | Los sprites actuales se leen como piezas de otro juego (maqueta 3D / papercraft) colocadas encima.
+
+FILE docs\carlos-iii\prueba-estilo-mapa\README.md
+  [A_voluntad] x16
+   | # Prueba de estilo ÔÇö 3 familias sobre el mapa PLAY
+   | Esto **no** es producci├│n del cat├ílogo. Solo caf├®, cine y gym, para cerrar el lenguaje visual **en el mapa real**.
+   | ┬┐Parece que este edificio siempre ha pertenecido a este mapa?
+   | Si los tres pasan: se autoriza el resto.
+   | Si no: se corrige c├ímara/trazo, no se fabrica Lola/Mala/Parque/200 tokens.
+  [D_eco] x1
+   | No duplicar l├│gica. No tocar econom├¡a.
+
+FILE docs\carlos-iii\pruebas-estilo-edificios\README.md
+  [A_voluntad] x10
+   | **No son assets definitivos.** Casting para que Neni + ChatGPT elijan familia visual del pueblo.
+   | - maqueta / papel / pastel / trazo visible / cutrez intencionada
+   | Empezar por las l├íminas comparativas, no por los archivos sueltos.
+   | - **B** pueblo: toldo de rayas, terraza, escaparate con luz. La m├ís cercana al tablero de Carlos II.
+   | - **C** papel recortado, bordes imperfectos, m├ís cutrez.
+  [C_marcha] x1
+   | ## Bloque A
+
+FILE docs\carlos-iii\tokens-muestra\README.md
+  [A_voluntad] x7
+   | **No son los 200.** No se tocan los originales P001ÔÇôP200. 56/44 px es el tama├▒o en el mapa, no un recorte id├®ntico.
+   | 1. M├íscara de silueta (alfa; se ignora el negro opaco de fondo).
+   | 2. Cortar hombros/pecho; conservar cabeza + pelo (mo├▒os, afro, coleta, gorra, flequillo, rapado asim├®trico).
+   | Eso iguala el **peso de cabeza+pelo**, no el tama├▒o de la cara. Un rapado se ver├í con la cara m├ís grande; un afro, m├ís peque├▒a. Si se igualara la cara, se cortar├¡an peinados.
+   | | P009 | Rapado + melena (el que dispar├│ el matiz) |
+
+FILE docs\carlos-iii\tokens-muestra\params.json
+  [A_voluntad] x2
+   | "why": "Asimetrico: rapado + melena (el que disparo el matiz)",
+
+FILE docs\carlos-iii\v0-corte\CHOQUES.md
+  [A_voluntad] x9
+   | ## Resuelto en esta pasada
+   | - Pin = chincheta redonda de papel.
+   | ## Matices menores (para el cat├ílogo, no para reabrir V0)
+   | - La biblioteca comparte toldo de rayas con el caf├®. En serie: toldo distinto o sin toldo, para no parecer la cafeter├¡a con otro cartel.
+   | - El parque sigue teniendo banco y ├írboles propios; los props sueltos son para la calle.
+
+FILE docs\carlos-iii\v0-corte\README.md
+  [A_voluntad] x5
+   | **No es cat├ílogo can├│nico.** Direcci├│n de V0 aprobada, con esta pasada de correcci├│n. No es PLAY.
+   | ## Correcciones de esta pasada
+   | - Pin = chincheta de papel (cabeza redonda), no gota de mapa.
+   | - Cine dormido: persiana + tablones. Muros de la misma familia papel, no ladrillo rojo como idioma.
+  [C_marcha] x2
+   | Familia: cafeter├¡a B + cutrez de C. Bloque A con tendedero/antena, sin recargar.
+   | Tablero 1280├ù720. Caf├® ~210 px. Token 56 (master 256). Coraz├│n 78. Bloque A ~305 px de alto.
+
+FILE docs\referencias_visuales\README.md
+  [A_voluntad] x1
+   | La misma imagen est├í en la ra├¡z de Drive para que ChatGPT la vea al abrir la carpeta.
+

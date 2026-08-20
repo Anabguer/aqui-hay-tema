@@ -1,0 +1,247 @@
+{
+    "meta": {
+        "catalogo": "preferencias_sociales_candidatas",
+        "estado": "PROPUESTA_NO_ACTIVA",
+        "canon": false
+    },
+    "items": [],
+    "ejes": [
+        {
+            "id": "energia_social",
+            "etiqueta": "Energía con gente",
+            "valores": [
+                {
+                    "id": "baja",
+                    "etiqueta": "Poca",
+                    "descubrimientos": [
+                        "Un rato con gente le basta. Luego necesita volver a ser persona.",
+                        "La sobremesa larga le deja fuera de sitio. No es sequedad: se le acaba el depósito.",
+                        "Después de un corro, pide silencio como quien pide agua.",
+                        "Un plan de dos le sienta. Un plan de pueblo entero, le pide cama temprano."
+                    ]
+                },
+                {
+                    "id": "media",
+                    "etiqueta": "Normal",
+                    "descubrimientos": [
+                        "Aguanta el tira y afloja social sin drama. Tampoco monta la fiesta.",
+                        "Ni se esconde ni abre el bar. El punto medio, aquí, es un carácter.",
+                        "Un café le vale. Una noche entera, según el día y el volumen.",
+                        "No hay que empujar ni frenar. Aparece, está, se va a una hora decente."
+                    ]
+                },
+                {
+                    "id": "alta",
+                    "etiqueta": "Mucha",
+                    "descubrimientos": [
+                        "La gente le carga las pilas. Ojo: no dice de qué sitio.",
+                        "Un día sin caras le deja raro. No es tristeza: faltaba roce.",
+                        "Se apunta. La mesa extra rara vez es un problema de energía.",
+                        "El sofá a solas le vale un rato. Luego ya está buscando quién hay en el bar."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "selectividad",
+            "etiqueta": "Con quién",
+            "valores": [
+                {
+                    "id": "abierta",
+                    "etiqueta": "Con casi cualquiera",
+                    "descubrimientos": [
+                        "La mesa extra nunca es un problema. Quien llega, se sienta.",
+                        "Conoce a media calle por el nombre. Al resto, le dura una semana en enterarse.",
+                        "Un desconocido en la mesa le parece material, no un riesgo.",
+                        "Filtrar poco. Elegir, después. El orden es ese."
+                    ]
+                },
+                {
+                    "id": "selectiva",
+                    "etiqueta": "Con cierta gente",
+                    "descubrimientos": [
+                        "Sociable, sí. Con todo el mundo, no. Ahí está el truco.",
+                        "Hay un círculo. Fuera del círculo hay educación. Dentro, ya es otra cosa.",
+                        "No es sequedad: es que no reparte sitio en la agenda a cualquiera.",
+                        "Una presentación ayuda. Un “vente, hay gente”, no siempre."
+                    ]
+                },
+                {
+                    "id": "cerrada",
+                    "etiqueta": "Con muy poca",
+                    "descubrimientos": [
+                        "El círculo es pequeño. Entrar cuesta. Salir, también.",
+                        "Con dos o tres está en casa. Con una mesa nueva, en guardia.",
+                        "No colecciona amistades. Mantiene las que hay, y ya es trabajo.",
+                        "Un plan de desconocidos le pide un motivo. Un plan de siempre, no."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "ritmo",
+            "etiqueta": "Cómo queda",
+            "valores": [
+                {
+                    "id": "planificador",
+                    "etiqueta": "Con aviso",
+                    "descubrimientos": [
+                        "Le va el plan escrito. Lo de “vente ahora” le sienta regular.",
+                        "El calendario no es pose. Es cómo llega de buen humor.",
+                        "Avisar el día antes abre puertas. El recado a última hora, las cierra un poco.",
+                        "Improvisar se puede. Improvisar siempre, le deja fuera de sitio."
+                    ]
+                },
+                {
+                    "id": "equilibrado",
+                    "etiqueta": "Según",
+                    "descubrimientos": [
+                        "Planea cuando toca e improvisa cuando apetece. Raro, útil.",
+                        "Un plan con hora le vale. Uno que sale ahora, también, si el día ayuda.",
+                        "No hace drama del calendario. Tampoco lo ignora del todo.",
+                        "Pregunta “¿cuándo?” y se adapta. El extremo, en cualquiera de los dos lados, le cansa."
+                    ]
+                },
+                {
+                    "id": "espontaneo",
+                    "etiqueta": "Sobre la marcha",
+                    "descubrimientos": [
+                        "Si el plan sale ahora, mejor. Mañana ya es otro tiempo.",
+                        "Las reservas con una semana le saben a trámite. El “¿vienes?” de ahora, a vida.",
+                        "Cambiar de sitio a mitad de calle le sienta bien. A quien planea, le puede sentar mal.",
+                        "Avisar con mucho tiempo no ofende. Esperar que lo cumpla al minuto, ya es otra guerra."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "umbral_ruido",
+            "etiqueta": "Ruido",
+            "valores": [
+                {
+                    "id": "bajo",
+                    "etiqueta": "Poco ruido",
+                    "lugar_penaliza": [
+                        "lug_discoteca",
+                        "lug_arcade",
+                        "lug_karaoke"
+                    ],
+                    "descubrimientos": [
+                        "El volumen alto le cierra el carácter. La discoteca, ya es otra conversación.",
+                        "Un bar a media voz le vale. Uno que vibre el vaso, le pide la calle.",
+                        "Se le ve el alivio cuando baja la música. No es pose: es el cuerpo.",
+                        "Karaoke, arcade, pista: el oído protesta antes que la boca."
+                    ]
+                },
+                {
+                    "id": "medio",
+                    "etiqueta": "Según el día",
+                    "descubrimientos": [
+                        "Aguanta el jaleo un rato. Toda la noche, ya veremos.",
+                        "Un concierto le vale. Tres seguidos, le dejan zumbando.",
+                        "El volumen no veta el sitio. El rato, sí: hay un tope.",
+                        "Pide a veces la terraza, a veces el rincón. El día manda."
+                    ]
+                },
+                {
+                    "id": "alto",
+                    "etiqueta": "Cuanto más mejor",
+                    "lugar_bonus": [
+                        "lug_discoteca",
+                        "lug_bar",
+                        "lug_karaoke"
+                    ],
+                    "descubrimientos": [
+                        "El jaleo le sienta bien. El silencio largo le pone raro.",
+                        "Si el local está muerto, se apaga un poco también.",
+                        "Una pista, un bolo, un corro alto: eso carga. Una biblioteca a deshora, según.",
+                        "No pide silencio para pensar. Pide ruido para estar, algunos días."
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "tamano_grupo",
+            "etiqueta": "Tamaño de grupo",
+            "valores": [
+                {
+                    "id": "uno",
+                    "etiqueta": "De uno en uno",
+                    "descubrimientos": [
+                        "Mejor dos. Tres ya es mitin.",
+                        "La conversación de verdad le sale en pareja. El corro, le deja a medias.",
+                        "Un café de dos le abre. Una mesa de ocho, le pone de oyente.",
+                        "No es que no aguante gente: es que el hilo se le pierde cuando hay turnos."
+                    ]
+                },
+                {
+                    "id": "pocos",
+                    "etiqueta": "Cuatro y ya",
+                    "descubrimientos": [
+                        "Un grupo pequeño le enciende. Un rebaño, le apaga.",
+                        "Cuatro en una mesa es el número. Seis, ya negocia. Doce, otra película.",
+                        "Le gusta el corro donde se oye a todo el mundo. El mitin, no.",
+                        "Un plan íntimo de tres o cuatro acierta. Uno de pueblo entero, cansa."
+                    ]
+                },
+                {
+                    "id": "muchos",
+                    "etiqueta": "Cuantos más",
+                    "descubrimientos": [
+                        "Cuanta más gente, más se le ve. Es agotador y se le nota la sonrisa.",
+                        "Un plan de dos le sabe a poco. Un plan de doce, a domingo.",
+                        "Bingo, fiesta, un partido: el aforo le sirve de combustible.",
+                        "La mesa que no cabe le alegra. Luego hay cansancio. Las dos cosas."
+                    ]
+                }
+            ]
+        }
+    ],
+    "labels_derivados_opcionales": [
+        {
+            "id": "casero",
+            "energia_social": "baja",
+            "selectividad": "selectiva",
+            "ritmo": "planificador"
+        },
+        {
+            "id": "fiestero",
+            "energia_social": "alta",
+            "selectividad": "abierta",
+            "ritmo": "espontaneo",
+            "umbral_ruido": "alto"
+        },
+        {
+            "id": "tranquilo",
+            "energia_social": "baja",
+            "selectividad": "selectiva",
+            "ritmo": "equilibrado"
+        },
+        {
+            "id": "sociable_selectiva",
+            "energia_social": "alta",
+            "selectividad": "selectiva",
+            "ritmo": "equilibrado"
+        },
+        {
+            "id": "intenso",
+            "energia_social": "alta",
+            "selectividad": "abierta",
+            "ritmo": "planificador"
+        },
+        {
+            "id": "espontaneo",
+            "energia_social": "media",
+            "selectividad": "abierta",
+            "ritmo": "espontaneo"
+        },
+        {
+            "id": "planificador",
+            "energia_social": "media",
+            "selectividad": "selectiva",
+            "ritmo": "planificador"
+        }
+    ],
+    "nota": "Amplía estilos_sociales.json: mismos 3 ejes V0 + 2 ejes nuevos. El label es opcional y derivado. NO es un catálogo paralelo de introvertido/extrovertido. Celestine los descubre con frases, no como columnas Excel.",
+    "regla": "Los rasgos NO rellenan estos ejes. Timidez + energía alta es legal. Sociabilidad + umbral_ruido bajo explica odiar discotecas."
+}

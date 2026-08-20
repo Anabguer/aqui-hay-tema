@@ -18,8 +18,21 @@ final class VistaPuebloV3
         'P117.png', 'P121.png', 'P138.png', 'P173.png',
     ];
 
-    /** Complejos con PNG evolucionado en Fase 1. El resto se queda en temprano visual. */
-    private const CRECE_VISUAL = ['cafe_libros', 'cine_game'];
+    /**
+     * PNG evolucionado de C3. Café incluye biblio Y tienda en el mismo recorte.
+     * No se muestra si el motor no tiene todas esas alas.
+     */
+    private const PNG_PLENO_REQUIERE = [
+        'cafe_libros' => ['lug_biblioteca', 'lug_tienda_ropa'],
+        'cine_game' => ['lug_arcade'],
+    ];
+
+    /** Nombre de mapa mientras el PNG aún es el del núcleo. */
+    private const NOMBRE_TEMPRANO = [
+        'cafe_libros' => 'Cafetería',
+        'cine_game' => 'Cine',
+        'gimnasio_spa' => 'Gimnasio',
+    ];
 
     /**
      * @param array<string, mixed> $partida
@@ -113,13 +126,25 @@ final class VistaPuebloV3
             $gente = HayTema::aplicar($partida, $gente);
             $vis = self::pickVisible($gente);
             $faseMotor = $tieneExpansion ? 'pleno' : 'temprano';
-            $faseVisual = (in_array($cid, self::CRECE_VISUAL, true) && $tieneExpansion)
-                ? 'pleno'
-                : 'temprano';
+            $reqPng = self::PNG_PLENO_REQUIERE[$cid] ?? null;
+            $pngPleno = is_array($reqPng);
+            if ($pngPleno) {
+                foreach ($reqPng as $need) {
+                    if (!isset($abiertos[$need])) {
+                        $pngPleno = false;
+                        break;
+                    }
+                }
+            }
+            $nombreCatalog = (string) ($meta['nombre'] ?? $cid);
+            $nombreVisible = $pngPleno
+                ? $nombreCatalog
+                : (self::NOMBRE_TEMPRANO[$cid] ?? $nombreCatalog);
             $complejos[] = [
                 'id' => $cid,
-                'nombre' => (string) ($meta['nombre'] ?? $cid),
-                'fase' => $faseVisual,
+                'nombre' => $nombreVisible,
+                'nombre_catalogo' => $nombreCatalog,
+                'fase' => $pngPleno ? 'pleno' : 'temprano',
                 'fase_motor' => $faseMotor,
                 'destinos' => $destinos,
                 'destinos_operativos' => array_values(array_filter($destinos, static function ($d) {

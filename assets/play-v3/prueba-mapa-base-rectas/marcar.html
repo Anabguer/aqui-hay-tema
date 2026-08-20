@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Marcar cajas + preview café / P001</title>
+<style>
+  :root { font-family: "Segoe UI", Georgia, serif; color: #222; }
+  body { margin: 0; background: #efe7da; }
+  header { padding: .7rem 1rem; background: #fff8ee; border-bottom: 2px solid #2c261f; display:flex; flex-wrap:wrap; gap:.55rem; align-items:center; }
+  h1 { font-size: 1rem; margin: 0 .6rem 0 0; }
+  button, select, label { font: inherit; }
+  button, select { padding: .35rem .55rem; border: 2px solid #2c261f; background: #fff; cursor: pointer; }
+  button.primary { background: #f2d25a; font-weight: 700; }
+  button.on { background: #cfe9b8; }
+  .hint { font-size: .86rem; opacity: .88; }
+  .sep { width:1px; height: 1.4rem; background:#2c261f55; margin: 0 .2rem; }
+  #stage { position: relative; display: inline-block; margin: .8rem; max-width: calc(100vw - 1.6rem); box-shadow: 0 8px 24px #0002; }
+  #map { display:block; max-width: 100%; height: auto; user-select: none; }
+  #canvas { position: absolute; left: 0; top: 0; width: 100%; height: 100%; cursor: crosshair; }
+  aside { margin: 0 1rem 1.5rem; background: #fffdf6; border: 2px solid #2c261f; padding: .8rem 1rem; max-width: 980px; }
+  pre { white-space: pre-wrap; background: #f7f1e4; padding: .6rem; border: 1px dashed #2c261f; font-size: .85rem; }
+  .row { display:flex; flex-wrap:wrap; gap:.8rem; align-items:center; margin: .4rem 0; }
+  .swatch { display:inline-block; width:12px; height:12px; border:1px solid #222; margin-right:4px; vertical-align:middle; }
+  input[type=range] { width: 160px; vertical-align: middle; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Mapa + cajas + preview</h1>
+
+  <label>Modo
+    <select id="mode">
+      <option value="caja">Marcar caja</option>
+      <option value="mover_cafe">Mover café</option>
+      <option value="mover_token">Mover token</option>
+    </select>
+  </label>
+
+  <label>Complejo
+    <select id="kind">
+      <option value="cafe_libros">Café &amp; Libros</option>
+      <option value="rincon_lola">El Rincón de Lola</option>
+      <option value="cine_game">Cine Game</option>
+      <option value="mala_idea">La Mala Idea</option>
+      <option value="gimnasio_spa">Gimnasio &amp; Spa</option>
+      <option value="parque">Parque</option>
+    </select>
+  </label>
+
+  <span class="sep"></span>
+
+  <button type="button" id="toggleCafe" class="on">Café ON</button>
+  <label>Escala café <input id="cafeScale" type="range" min="18" max="55" value="36"/> <span id="cafeScaleTxt">36%</span></label>
+
+  <span class="sep"></span>
+
+  <button type="button" id="faceOld" class="on">P001 antiguo</button>
+  <button type="button" id="faceNew">P001 nuevo</button>
+  <label>Token
+    <select id="tokenSize">
+      <option value="52">52 px (móvil)</option>
+      <option value="62" selected>62 px (PC)</option>
+    </select>
+  </label>
+  <button type="button" id="toggleToken" class="on">Token ON</button>
+
+  <span class="sep"></span>
+  <button type="button" id="undo">Deshacer caja</button>
+  <button type="button" id="clear">Limpiar cajas</button>
+  <button type="button" id="export" class="primary">Copiar JSON</button>
+  <button type="button" id="download">Descargar preview</button>
+</header>
+
+<div id="stage">
+  <img id="map" src="mapa_base_rectas.png" alt="Mapa base"/>
+  <canvas id="canvas"></canvas>
+</div>
+
+<aside>
+  <p class="hint">
+    <strong>Cómo probar:</strong> dibuja la caja de Café (modo “Marcar caja”) o mueve el café/token directamente.
+    Cambia P001 antiguo ↔ nuevo a 52/62 px. La caja = tamaño máximo del complejo; el café inicial puede ocupar solo una parte.
+  </p>
+  <div class="row" id="list"></div>
+  <pre id="out">{}</pre>
+</aside>
+
+<script>
+const COLORS = {
+  cafe_libros: "#e08a3c",
+  rincon_lola: "#d45a5a",
+  cine_game: "#b44fa0",
+  mala_idea: "#6b4cb0",
+  gimnasio_spa: "#3f84b8",
+  parque: "#4fa85a"
+};
+const LABELS = {
+  cafe_libros: "Café & Libros",
+  rincon_lola: "El Rincón de Lola",
+  cine_game: "Cine Game",
+  mala_idea: "La Mala Idea",
+  gimnasio_spa: "Gimnasio & Spa",
+  parque: "Parque"
+};
+
+const img = document.getElementById("map");
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+const cafeImg = new Image();
+cafeImg.src = "preview/cafe_temprano.png";
+const tokenOld = new Image();
+tokenOld.src = "preview/P001_antiguo_token.png";
+const tokenNew = new Image();
+tokenNew.src = "preview/P001_nuevo_token.png";
+
+const state = {
+  boxes: [],
+  showCafe: true,
+  showToken: true,
+  face: "old", // old | new
+  cafeScale: 0.36, // relative to natural cafe width vs canvas natural width feeling
+  cafe: { x: 70, y: 70 }, // natural px top-left
+  token: { x: 160, y: 250 },
+  drag: null
+};
+
+function naturalScale() {
+  const r = img.getBoundingClientRect();
+  return { sx: img.naturalWidth / r.width, sy: img.naturalHeight / r.height, r };
+}
+function syncCanvas() {
+  const r = img.getBoundingClientRect();
+  canvas.width = Math.round(r.width);
+  canvas.height = Math.round(r.height);
+  redraw();
+}
+function cafeDrawSize() {
+  // scale % of cafe master width relative to map width roughly
+  const targetW = Math.round(img.naturalWidth * state.cafeScale);
+  const aspect = cafeImg.naturalHeight / cafeImg.naturalWidth || (814/1301);
+  return { w: targetW, h: Math.round(targetW * aspect) };
+}
+function tokenPx() {
+  return parseInt(document.getElementById("tokenSize").value, 10) || 62;
+}
+function redraw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const { sx, sy } = naturalScale();
+
+  // boxes
+  for (const b of state.boxes) {
+    const x = b.x / sx, y = b.y / sy, w = b.ancho / sx, h = b.alto / sy;
+    ctx.fillStyle = COLORS[b.id] + "44";
+    ctx.strokeStyle = COLORS[b.id];
+    ctx.lineWidth = 2;
+    ctx.fillRect(x, y, w, h);
+    ctx.strokeRect(x, y, w, h);
+    ctx.fillStyle = "#111";
+    ctx.font = "600 13px Segoe UI, sans-serif";
+    ctx.fillText(`${LABELS[b.id]} ${b.ancho}×${b.alto}`, x + 6, y + 16);
+  }
+
+  // cafe
+  if (state.showCafe && cafeImg.complete && cafeImg.naturalWidth) {
+    const { w, h } = cafeDrawSize();
+    const x = state.cafe.x / sx, y = state.cafe.y / sy;
+    ctx.drawImage(cafeImg, x, y, w / sx, h / sy);
+    // thin guide
+    ctx.strokeStyle = "#e08a3c";
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]);
+    ctx.strokeRect(x, y, w / sx, h / sy);
+    ctx.setLineDash([]);
+  }
+
+  // token
+  if (state.showToken) {
+    const timg = state.face === "old" ? tokenOld : tokenNew;
+    if (timg.complete && timg.naturalWidth) {
+      const s = tokenPx();
+      const x = state.token.x / sx, y = state.token.y / sy;
+      const dw = s / sx, dh = s / sy;
+      // ring
+      ctx.beginPath();
+      ctx.arc(x + dw/2, y + dh/2, dw/2 + 2/sx, 0, Math.PI*2);
+      ctx.fillStyle = "#fff";
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#2c261f";
+      ctx.stroke();
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(x + dw/2, y + dh/2, dw/2, 0, Math.PI*2);
+      ctx.clip();
+      ctx.drawImage(timg, x, y, dw, dh);
+      ctx.restore();
+      ctx.fillStyle = "#111";
+      ctx.font = "600 12px Segoe UI, sans-serif";
+      ctx.fillText(state.face === "old" ? "P001 antiguo" : "P001 nuevo", x, y - 6);
+    }
+  }
+
+  // drag rect for caja mode
+  if (state.drag && state.drag.type === "caja") {
+    const x = Math.min(state.drag.x0, state.drag.x1);
+    const y = Math.min(state.drag.y0, state.drag.y1);
+    const w = Math.abs(state.drag.x1 - state.drag.x0);
+    const h = Math.abs(state.drag.y1 - state.drag.y0);
+    ctx.strokeStyle = COLORS[state.drag.id];
+    ctx.setLineDash([6, 4]);
+    ctx.strokeRect(x, y, w, h);
+    ctx.setLineDash([]);
+  }
+}
+
+function toNatural(evt) {
+  const { sx, sy, r } = naturalScale();
+  return {
+    x: Math.round((evt.clientX - r.left) * sx),
+    y: Math.round((evt.clientY - r.top) * sy),
+    px: evt.clientX - r.left,
+    py: evt.clientY - r.top,
+    sx, sy
+  };
+}
+
+function hitCafe(nx, ny) {
+  if (!state.showCafe) return false;
+  const { w, h } = cafeDrawSize();
+  return nx >= state.cafe.x && ny >= state.cafe.y && nx <= state.cafe.x + w && ny <= state.cafe.y + h;
+}
+function hitToken(nx, ny) {
+  if (!state.showToken) return false;
+  const s = tokenPx();
+  return nx >= state.token.x && ny >= state.token.y && nx <= state.token.x + s && ny <= state.token.y + s;
+}
+
+function refreshOut() {
+  const { w, h } = cafeDrawSize();
+  const payload = {
+    canvas_px: [img.naturalWidth, img.naturalHeight],
+    origen: "top-left",
+    archivo: "mapa_base_rectas.png",
+    preview: {
+      cafe: { x: state.cafe.x, y: state.cafe.y, ancho: w, alto: h, scale_pct: Math.round(state.cafeScale * 100) },
+      token: { x: state.token.x, y: state.token.y, size: tokenPx(), face: state.face }
+    },
+    cajas: Object.fromEntries(state.boxes.map(b => [b.id, {
+      nombre: LABELS[b.id],
+      x: b.x, y: b.y, ancho_max: b.ancho, alto_max: b.alto
+    }]))
+  };
+  document.getElementById("out").textContent = JSON.stringify(payload, null, 2);
+  document.getElementById("list").innerHTML = state.boxes.map(b =>
+    `<div><span class="swatch" style="background:${COLORS[b.id]}"></span><strong>${LABELS[b.id]}</strong> x=${b.x} y=${b.y} ${b.ancho}×${b.alto}</div>`
+  ).join("") || "<em>Sin cajas aún.</em>";
+  try {
+    localStorage.setItem("aht_mapa_rectas_state", JSON.stringify({
+      boxes: state.boxes, cafe: state.cafe, token: state.token,
+      cafeScale: state.cafeScale, face: state.face,
+      showCafe: state.showCafe, showToken: state.showToken
+    }));
+  } catch (e) {}
+}
+
+canvas.addEventListener("mousedown", (e) => {
+  const p = toNatural(e);
+  const mode = document.getElementById("mode").value;
+
+  if (mode === "mover_cafe" || (mode === "caja" && hitCafe(p.x, p.y) && e.altKey)) {
+    state.drag = { type: "cafe", ox: p.x - state.cafe.x, oy: p.y - state.cafe.y };
+    return;
+  }
+  if (mode === "mover_token" || (mode === "caja" && hitToken(p.x, p.y) && e.altKey)) {
+    state.drag = { type: "token", ox: p.x - state.token.x, oy: p.y - state.token.y };
+    return;
+  }
+  if (mode === "caja") {
+    state.drag = {
+      type: "caja",
+      id: document.getElementById("kind").value,
+      x0: p.px, y0: p.py, x1: p.px, y1: p.py,
+      nx0: p.x, ny0: p.y
+    };
+  }
+});
+
+window.addEventListener("mousemove", (e) => {
+  if (!state.drag) return;
+  const p = toNatural(e);
+  if (state.drag.type === "caja") {
+    state.drag.x1 = p.px; state.drag.y1 = p.py;
+  } else if (state.drag.type === "cafe") {
+    state.cafe.x = p.x - state.drag.ox;
+    state.cafe.y = p.y - state.drag.oy;
+  } else if (state.drag.type === "token") {
+    state.token.x = p.x - state.drag.ox;
+    state.token.y = p.y - state.drag.oy;
+  }
+  redraw();
+});
+
+window.addEventListener("mouseup", (e) => {
+  if (!state.drag) return;
+  if (state.drag.type === "caja") {
+    const p = toNatural(e);
+    const x = Math.min(state.drag.nx0, p.x);
+    const y = Math.min(state.drag.ny0, p.y);
+    const ancho = Math.abs(p.x - state.drag.nx0);
+    const alto = Math.abs(p.y - state.drag.ny0);
+    const id = state.drag.id;
+    state.drag = null;
+    if (ancho >= 20 && alto >= 20) {
+      const i = state.boxes.findIndex(b => b.id === id);
+      const box = { id, x, y, ancho, alto };
+      if (i >= 0) state.boxes[i] = box; else state.boxes.push(box);
+      // if cafe box, snap cafe into left part of box
+      if (id === "cafe_libros") {
+        state.cafe.x = x + 8;
+        state.cafe.y = y + 8;
+        state.token.x = x + Math.round(ancho * 0.22);
+        state.token.y = y + alto - tokenPx() - 10;
+      }
+    }
+  } else {
+    state.drag = null;
+  }
+  redraw();
+  refreshOut();
+});
+
+document.getElementById("undo").onclick = () => { state.boxes.pop(); redraw(); refreshOut(); };
+document.getElementById("clear").onclick = () => { state.boxes = []; redraw(); refreshOut(); };
+document.getElementById("export").onclick = async () => {
+  refreshOut();
+  const t = document.getElementById("out").textContent;
+  try { await navigator.clipboard.writeText(t); alert("JSON copiado"); }
+  catch (e) { prompt("Copia el JSON:", t); }
+};
+document.getElementById("download").onclick = () => {
+  const off = document.createElement("canvas");
+  off.width = img.naturalWidth; off.height = img.naturalHeight;
+  const o = off.getContext("2d");
+  o.drawImage(img, 0, 0);
+  for (const b of state.boxes) {
+    o.fillStyle = COLORS[b.id] + "55";
+    o.strokeStyle = COLORS[b.id];
+    o.lineWidth = 4;
+    o.fillRect(b.x, b.y, b.ancho, b.alto);
+    o.strokeRect(b.x, b.y, b.ancho, b.alto);
+    o.fillStyle = "#111";
+    o.font = "bold 26px Segoe UI, sans-serif";
+    o.fillText(LABELS[b.id], b.x + 10, b.y + 32);
+  }
+  if (state.showCafe && cafeImg.naturalWidth) {
+    const { w, h } = cafeDrawSize();
+    o.drawImage(cafeImg, state.cafe.x, state.cafe.y, w, h);
+  }
+  if (state.showToken) {
+    const timg = state.face === "old" ? tokenOld : tokenNew;
+    const s = tokenPx();
+    o.beginPath();
+    o.arc(state.token.x + s/2, state.token.y + s/2, s/2 + 3, 0, Math.PI*2);
+    o.fillStyle = "#fff"; o.fill();
+    o.lineWidth = 3; o.strokeStyle = "#2c261f"; o.stroke();
+    o.save();
+    o.beginPath();
+    o.arc(state.token.x + s/2, state.token.y + s/2, s/2, 0, Math.PI*2);
+    o.clip();
+    o.drawImage(timg, state.token.x, state.token.y, s, s);
+    o.restore();
+  }
+  const a = document.createElement("a");
+  a.href = off.toDataURL("image/png");
+  a.download = "mapa_base_rectas_PREVIEW.png";
+  a.click();
+};
+
+document.getElementById("toggleCafe").onclick = (e) => {
+  state.showCafe = !state.showCafe;
+  e.target.classList.toggle("on", state.showCafe);
+  e.target.textContent = state.showCafe ? "Café ON" : "Café OFF";
+  redraw(); refreshOut();
+};
+document.getElementById("toggleToken").onclick = (e) => {
+  state.showToken = !state.showToken;
+  e.target.classList.toggle("on", state.showToken);
+  e.target.textContent = state.showToken ? "Token ON" : "Token OFF";
+  redraw(); refreshOut();
+};
+document.getElementById("faceOld").onclick = (e) => {
+  state.face = "old";
+  e.target.classList.add("on");
+  document.getElementById("faceNew").classList.remove("on");
+  redraw(); refreshOut();
+};
+document.getElementById("faceNew").onclick = (e) => {
+  state.face = "new";
+  e.target.classList.add("on");
+  document.getElementById("faceOld").classList.remove("on");
+  redraw(); refreshOut();
+};
+document.getElementById("cafeScale").oninput = (e) => {
+  state.cafeScale = parseInt(e.target.value, 10) / 100;
+  document.getElementById("cafeScaleTxt").textContent = e.target.value + "%";
+  redraw(); refreshOut();
+};
+document.getElementById("tokenSize").onchange = () => { redraw(); refreshOut(); };
+document.getElementById("mode").onchange = (e) => {
+  canvas.style.cursor = e.target.value === "caja" ? "crosshair" : "move";
+};
+
+function boot() {
+  syncCanvas();
+  try {
+    const saved = JSON.parse(localStorage.getItem("aht_mapa_rectas_state") || "null");
+    if (saved) {
+      state.boxes = saved.boxes || [];
+      state.cafe = saved.cafe || state.cafe;
+      state.token = saved.token || state.token;
+      state.cafeScale = saved.cafeScale || state.cafeScale;
+      state.face = saved.face || "old";
+      state.showCafe = saved.showCafe !== false;
+      state.showToken = saved.showToken !== false;
+      document.getElementById("cafeScale").value = Math.round(state.cafeScale * 100);
+      document.getElementById("cafeScaleTxt").textContent = document.getElementById("cafeScale").value + "%";
+      document.getElementById("faceOld").classList.toggle("on", state.face === "old");
+      document.getElementById("faceNew").classList.toggle("on", state.face === "new");
+      document.getElementById("toggleCafe").classList.toggle("on", state.showCafe);
+      document.getElementById("toggleToken").classList.toggle("on", state.showToken);
+    }
+  } catch (e) {}
+  redraw();
+  refreshOut();
+}
+img.onload = boot;
+cafeImg.onload = () => redraw();
+tokenOld.onload = () => redraw();
+tokenNew.onload = () => redraw();
+window.addEventListener("resize", syncCanvas);
+if (img.complete) boot();
+</script>
+</body>
+</html>

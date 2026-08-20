@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aquí Hay Tema — prototipo pantalla principal (no es PLAY)</title>
+  <link rel="stylesheet" href="prototipo.css" />
+</head>
+<body class="ver-pc">
+  <div class="studio">
+    <header class="studio-bar">
+      <h1>Prototipo aislado — pantalla principal</h1>
+      <p>Arquitectura B aprobada. Tablero ilustrado + capas. No está conectado a PLAY. Caras y nombres de maqueta, no roster.</p>
+      <div class="studio-controls">
+        <button type="button" data-view="pc" class="is-on">PC</button>
+        <button type="button" data-view="movil">Móvil</button>
+        <button type="button" data-view="ambas">Las dos</button>
+        <button type="button" data-grid>Cuadrícula</button>
+        <button type="button" data-capa-btn="ninguna" class="is-on">Pueblo solo</button>
+        <button type="button" data-capa-btn="ficha">Capa ficha</button>
+        <button type="button" data-capa-btn="buzon">Capa buzón</button>
+        <button type="button" data-capa-btn="hoy">Capa hoy</button>
+        <button type="button" data-capa-btn="vecinos">Capa vecinos</button>
+        <button type="button" data-capa-btn="organizar">Capa organizar</button>
+        <button type="button" data-capa-btn="evento">Acontecimiento</button>
+      </div>
+      <p class="studio-note">Pulsa una cabeza, el corazón, el buzón, Vecinos o el post-it. El acontecimiento [cara] corazón [cara] es un evento, no una tira permanente.</p>
+      <p class="ficha-link"><a href="ficha-carlos-iii.html">Ficha de dirección visual para Carlos III</a></p>
+    </header>
+
+    <div class="stage">
+      <figure class="device pc">
+        <figcaption class="device-label">PC — el pueblo es la pantalla</figcaption>
+        <div id="stage-pc"></div>
+      </figure>
+      <figure class="device phone">
+        <figcaption class="device-label">Móvil — el mismo pueblo, capas</figcaption>
+        <div id="stage-phone"></div>
+      </figure>
+    </div>
+
+    <section class="ficha-c3" id="ficha-carlos-iii">
+      <h2>Ficha para Carlos III</h2>
+      <p class="mini">Cerrada para que, si Neni dice sí, C3 produzca sin reinventar perspectiva ni escala. Versión larga: <a href="ficha-carlos-iii.html">ficha-carlos-iii.html</a></p>
+
+      <div class="regla-escala" aria-label="Regla de escala">
+        <div class="reg-item">
+          <div class="reg-edificio"></div>
+          <span>edificio medio<br>~200 px PC</span>
+        </div>
+        <div class="reg-item">
+          <img src="img/cabeza-rocio.png" alt="" class="reg-token">
+          <span>token mapa<br>56 px PC / 44 móvil</span>
+        </div>
+        <div class="reg-item">
+          <span class="corazon-dibujo reg-heart" style="--fill:58%"></span>
+          <span>corazón HUD<br>78 px PC / 56 móvil</span>
+        </div>
+      </div>
+
+      <ul>
+        <li><strong>Perspectiva:</strong> pseudo-isométrica suave (3/4 de maqueta). No frontal, no cenital de tejados.</li>
+        <li><strong>Personajes en mapa:</strong> cabeza circular, solo neutral. Emoción en la ficha. Derivados 256×256 RGBA en <code>assets/personajes/tokens/</code>, sin tocar P001–P200.</li>
+        <li><strong>Edificios:</strong> maqueta con volumen ligero, papel. 2 PNG por lugar (abierto / dormido). Horario, selección, gente y encuentro = overlay.</li>
+        <li><strong>V0 primero:</strong> suelo+calles, cafetería, parque, biblioteca, Bloque A, cine dormido, árbol+banco+farola, corazón, buzón, post-it, candado, pin, 1 token de ejemplo.</li>
+        <li><strong>HUD V0:</strong> corazón, día, dinero, buzón, post-it, candado, pin. Nada más.</li>
+        <li><strong>Este prototipo:</strong> base visual a traducir (A). El HTML no se pega en PLAY (B).</li>
+      </ul>
+    </section>
+  </div>
+
+  <template id="tpl-play">
+    <div class="play-root" data-capa="">
+      <div class="board-scroll">
+        <div class="board-fit">
+          <img class="mapa" src="img/pueblo-tablero.png" alt="Pueblo ilustrado: edificios abiertos y dormidos alrededor de la plaza." />
+          <svg class="grid-overlay" viewBox="0 0 1600 900" aria-hidden="true">
+            <g stroke="#c42b4a" stroke-width="1.1" opacity=".5">
+              <path d="M0 90 H1600 M0 180 H1600 M0 270 H1600 M0 360 H1600 M0 450 H1600 M0 540 H1600 M0 630 H1600 M0 720 H1600 M0 810 H1600"/>
+              <path d="M100 0 V900 M200 0 V900 M300 0 V900 M400 0 V900 M500 0 V900 M600 0 V900 M700 0 V900 M800 0 V900 M900 0 V900 M1000 0 V900 M1100 0 V900 M1200 0 V900 M1300 0 V900 M1400 0 V900 M1500 0 V900"/>
+            </g>
+            <g fill="#c42b4a" font-family="Georgia, serif" font-size="16" font-weight="700">
+              <text x="6" y="22">A</text><text x="6" y="112">B</text><text x="6" y="202">C</text><text x="6" y="292">D</text><text x="6" y="382">E</text>
+              <text x="6" y="472">F</text><text x="6" y="562">G</text><text x="6" y="652">H</text><text x="6" y="742">I</text><text x="6" y="832">J</text>
+              <text x="108" y="18">1</text><text x="208" y="18">2</text><text x="308" y="18">3</text><text x="408" y="18">4</text>
+              <text x="508" y="18">5</text><text x="608" y="18">6</text><text x="708" y="18">7</text><text x="808" y="18">8</text>
+              <text x="908" y="18">9</text><text x="1008" y="18">10</text><text x="1108" y="18">11</text><text x="1208" y="18">12</text>
+              <text x="1308" y="18">13</text><text x="1408" y="18">14</text><text x="1508" y="18">15</text>
+            </g>
+          </svg>
+
+          <div class="lugar-tags">
+            <span class="lugar-tag" style="left:18%; top:18%">BIBLIOTECA</span>
+            <span class="lugar-tag" style="left:38%; top:16%">CAFETERÍA</span>
+            <span class="lugar-tag" style="left:66%; top:15%">PARQUE</span>
+            <span class="lugar-tag dormido" style="left:18%; top:48%">CINE</span>
+            <span class="lugar-tag" style="left:48%; top:46%">PLAZA</span>
+            <span class="lugar-tag" style="left:78%; top:45%">BLOQUE A</span>
+            <span class="lugar-tag dormido" style="left:12%; top:78%">BAR</span>
+            <span class="lugar-tag dormido" style="left:28%; top:78%">BINGO</span>
+            <span class="lugar-tag dormido" style="left:44%; top:78%">DISCO</span>
+            <span class="lugar-tag dormido" style="left:58%; top:78%">ROPA</span>
+            <span class="lugar-tag dormido" style="left:72%; top:78%">GIMNASIO</span>
+            <span class="lugar-tag dormido" style="left:86%; top:78%">ARCADE</span>
+          </div>
+
+          <div class="chinchetas">
+            <button class="chincheta" data-open="ficha" style="left:18%; top:34%" title="Eva"><span class="cara"><img src="img/cabeza-eva.png" alt=""></span><span class="nombre">Eva</span></button>
+            <button class="chincheta" data-open="ficha" style="left:34%; top:38%" title="Rocío"><span class="cara"><img src="img/cabeza-rocio.png" alt=""></span><span class="nombre">Rocío</span></button>
+            <button class="chincheta" data-open="ficha" style="left:40%; top:40%" title="Nora"><span class="cara"><img src="img/cabeza-nora.png" alt=""></span><span class="nombre">Nora</span></button>
+            <button class="chincheta" data-open="ficha" style="left:46%; top:38%" title="Luis"><span class="cara"><img src="img/cabeza-luis.png" alt=""></span><span class="nombre">Luis</span></button>
+            <button class="chincheta" data-open="ficha" style="left:67%; top:36%" title="Hugo"><span class="cara"><img src="img/cabeza-hugo.png" alt=""></span><span class="nombre">Hugo</span></button>
+            <button class="chincheta" data-open="ficha" style="left:78%; top:58%" title="Aina"><span class="cara"><img src="img/cabeza-aina.png" alt=""></span><span class="nombre">Aina</span></button>
+          </div>
+
+          <aside class="postit" data-open="hoy"><span class="pin"></span>Uy. Aquí hay tema.</aside>
+        </div>
+      </div>
+
+      <header class="hud">
+        <button type="button" class="corazon" data-open="hoy" aria-label="Vida del pueblo" title="El pueblo, sin números">
+          <span class="corazon-dibujo" style="--fill:58%"></span>
+        </button>
+        <div class="dia"><div class="dow">MIÉ 19</div><div class="hora">11:30</div></div>
+        <div class="hud-right">
+          <div class="dinero" title="Dinero de Celestine">240 €</div>
+          <button type="button" class="buzon" data-open="buzon" aria-label="Buzón, 2 mensajes">
+            <svg viewBox="0 0 54 46" aria-hidden="true"><rect x="6" y="14" width="42" height="26" fill="#fffdf6" stroke="#2c261f" stroke-width="2.4"/><path d="M6 14 L27 28 L48 14" fill="none" stroke="#e56b8a" stroke-width="2.8"/></svg>
+            <span class="badge">2</span>
+          </button>
+          <button type="button" class="btn-vecinos" data-open="vecinos">Vecinos</button>
+        </div>
+      </header>
+
+      <nav class="dock" aria-label="Navegación">
+        <button type="button" data-close>Pueblo</button>
+        <button type="button" data-open="buzon">Buzón</button>
+        <button type="button" data-open="organizar">Organizar</button>
+        <button type="button" data-open="vecinos">Vecinos</button>
+      </nav>
+
+      <div class="velo" data-close></div>
+
+      <aside class="capa capa-ficha">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <div class="ficha-hero">
+          <div class="cara"><img src="img/cabeza-rocio.png" alt=""></div>
+          <div>
+            <h2>Rocío</h2>
+            <p class="mini">Barista · Bloque A · ahora en la cafetería</p>
+          </div>
+        </div>
+        <p>Hoy está de un humor peligroso. El café le sale rico igual.</p>
+        <div class="papelito">Le gusta: enterarse, el primer espresso y que la saquen del turno.</div>
+        <p class="mini">No hay barras. Si hay tilín, se cuenta. Si hay bronca, también.</p>
+        <button type="button" class="cta" data-open="organizar">Organizar un plan con ella</button>
+        <button type="button" class="cta ghost" data-close>Verla en el pueblo</button>
+      </aside>
+
+      <aside class="capa capa-buzon">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Buzón</h2>
+        <p class="mini">Te escriben a ti. El diario del pueblo es otra voz.</p>
+        <article class="carta">
+          <p><strong>Rocío</strong> · petición</p>
+          <p>¿Me organizas algo con alguien que no sea yo misma hablándole al vapor?</p>
+        </article>
+        <article class="carta">
+          <p><strong>Luis</strong> · soledad</p>
+          <p>El parque está bien, pero si no hablo con un humano esta semana me convierto en paloma.</p>
+        </article>
+        <button type="button" class="cta" data-open="organizar">Organizar desde el recado</button>
+      </aside>
+
+      <aside class="capa capa-hoy">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Hoy en el pueblo</h2>
+        <p class="mini">El corazón no lleva cifra. Si se vacía, hay lío. Si se llena, hay Latido.</p>
+        <div class="notas-hoy">
+          <div class="nota-mision">Que Luis no se quede hablando con los palomos.</div>
+          <div class="nota-mision">Si Rocío y Nora pegan, primera cita en el café. Si no, también hay tema.</div>
+        </div>
+      </aside>
+
+      <aside class="capa capa-vecinos">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Vecinos</h2>
+        <p class="mini">Directorio rápido. El pueblo sigue siendo el sitio donde viven.</p>
+        <div class="grid-vecinos">
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-rocio.png" alt=""><div><strong>Rocío</strong><span>Cafetería</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-nora.png" alt=""><div><strong>Nora</strong><span>Cafetería</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-luis.png" alt=""><div><strong>Luis</strong><span>Cafetería</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-eva.png" alt=""><div><strong>Eva</strong><span>Biblioteca</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-hugo.png" alt=""><div><strong>Hugo</strong><span>Parque</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-aina.png" alt=""><div><strong>Aina</strong><span>Bloque A</span></div></button>
+        </div>
+      </aside>
+
+      <aside class="capa capa-organizar">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Organizar un plan</h2>
+        <p class="mini">Un papelito. No un formulario de jefatura.</p>
+        <div class="papelito"><strong>Quién</strong><br>Rocío + Nora</div>
+        <div class="papelito"><strong>Cuándo</strong><br>Hoy · 17:00</div>
+        <div class="papelito"><strong>Dónde</strong><br>Cafetería</div>
+        <button type="button" class="cta" data-open="evento">Proponer</button>
+      </aside>
+
+      <aside class="capa capa-evento">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <div class="evento-card">
+          <div class="evento-caras">
+            <div class="cara"><img src="img/cabeza-rocio.png" alt=""></div>
+            <div class="evento-heart">♥</div>
+            <div class="cara"><img src="img/cabeza-nora.png" alt=""></div>
+          </div>
+          <h2>Primera cita</h2>
+          <p>Rocío y Nora · cafetería · hoy 17:00</p>
+          <p class="mini">Uy. Aquí hay tema.</p>
+        </div>
+        <p class="mini">Esto aparece cuando pasa algo. Luego se va. No vive abajo para siempre.</p>
+      </aside>
+    </div>
+  </template>
+  <script src="prototipo.js"></script>
+</body>
+</html>

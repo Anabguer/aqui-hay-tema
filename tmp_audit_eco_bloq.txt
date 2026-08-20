@@ -1,0 +1,34 @@
+﻿## 9. BLOQUEADO_DECISION
+
+Hace falta respuesta de **Neni + ChatGPT**. El lab no inventa la cifra can├│nica.
+
+1. **gates_B_C** ÔÇö ┬┐Confirm├íis B: d├¡a ÔëÑ 50 y ÔëÑ 12/16 en A; C: d├¡a ÔëÑ 160 y ÔëÑ 26 residentes? El Maestro deja los exactos pendientes. Si quer├®is B m├ís ÔÇ£a mitad de temporadaÔÇØ o C m├ís tard├¡o, se re-simula sin tocar B1/B3.
+2. **renta_offline** ÔÇö ┬┐La renta por banda de Vida llega cada d├¡a de calendario (buz├│n de ingresos) aunque Celestine no abra el juego, o solo en d├¡as con sesi├│n?
+3. **parque_inicial** ÔÇö ┬┐El Parque fase 1 se compra, o es espacio p├║blico abierto el d├¡a 1 junto a la cafeter├¡a?
+4. **fama_en_desbloqueos** ÔÇö ┬┐La fama entra como AND junto al dinero, o los lugares van a dinero + hitos (Mirador) y la fama queda en otra capa?
+5. **latido_paga** ÔÇö ┬┐Un Latido da bono de dinero o solo Vida/narrativa/buz├│n? El Maestro **no** lo lista como fuente.
+
+Ninguno de estos bloquea a Carlos II ni a Carlos III salvo (3) Parque, que afecta a la ficha/mapa.
+
+---
+
+## 10. Qu├® no se ha hecho (a prop├│sito)
+
+- No se han escrito precios en `data/` ni en EconomyLedger.
+- No se ha encendido `economy_enabled`.
+- No se ha modificado B1 / B3 / E3 / relacional V1 / B5.
+- No se ha tocado dise├▒o de Carlos II ni assets de Carlos III.
+- No se ha canonizado U ÔåÆ Ôé¼.
+
+Reproducir: `php tests/economia_lab_test.php` y `php dev/simulador_economia.php 8 lab-economia`.
+====
+PREVAL debug_v0.json keys ['_comentario', 'id', 'descripcion', 'seed_sugerida', 'residentes_iniciales', 'lugares_operativos_dia_1', 'bloques_abiertos']
+PREVAL juego_v1.json keys ['_comentario', 'id', 'descripcion', 'seed_sugerida', 'tutorial_bucle_1', 'residentes_iniciales', 'lugares_operativos_dia_1', 'bloques_abiertos', 'features']
+  features {'buzon_enabled': True, 'npc_autonomy_enabled': True, 'discovery_enabled': True, 'emotional_state_from_events_enabled': True, 'debug_tools_enabled': False, 'vida_pueblo_enabled': True, 'misiones_diarias_enabled': False, 'peticiones_pueblo_enabled': False}
+PREVAL playtest_01.json keys ['_comentario', 'id', 'descripcion', 'seed_sugerida', 'residentes_iniciales', 'lugares_operativos_dia_1', 'bloques_abiertos', 'parentesco', 'features']
+  features {'buzon_enabled': True, 'npc_autonomy_enabled': True, 'discovery_enabled': True, 'emotional_state_from_events_enabled': True, 'debug_tools_enabled': True, 'vida_pueblo_enabled': True, 'misiones_diarias_enabled': True, 'peticiones_pueblo_enabled': True}
+PREVAL test_fixtures_v0.json keys ['_comentario', 'id', 'descripcion', 'seed_sugerida', 'residentes_iniciales', 'lugares_operativos_dia_1', 'bloques_abiertos']
+====
+45|     * Ejecuta un acontecimiento concreto (tests / hito). No usa probabilidad inventada.
+180|        if ($eventoId === 'crisis_pareja' && count($participantes) >= 2) {
+187|        if ($eventoId === 'ruptura' && count($participantes) >= 2) {

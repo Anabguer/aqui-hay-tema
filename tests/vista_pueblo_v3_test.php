@@ -86,10 +86,17 @@ ok($emoFake === 'neutro', 'id emocional desconocido no se inventa: cae a neutro'
 $pt = $service->nuevaPartida('playtest_01', 'vista-v3-pt');
 $mapaPt = PresenciaEngine::resolver($pt, $root);
 $puebloPt = VistaPuebloV3::de($pt, $mapaPt, $root);
-ok(cx($puebloPt, 'cafe_libros')['fase'] === 'pleno', 'biblioteca desbloqueada → café evolucionado');
+ok(cx($puebloPt, 'cafe_libros')['fase'] === 'temprano', 'solo biblioteca: PNG evolucionado tiene también tienda → no se muestra');
+ok(cx($puebloPt, 'cafe_libros')['nombre'] === 'Cafetería', 'nombre de mapa = núcleo mientras falte el PNG completo');
+ok(cx($puebloPt, 'cafe_libros')['fase_motor'] === 'pleno', 'el motor sí tiene biblioteca');
 ok(cx($puebloPt, 'parque')['fase'] === 'temprano', 'parque sin anexos → inicial');
 ok(count($puebloPt['complejos']) === 6, '6 complejos');
 ok(isset($puebloPt['tokens']) && count($puebloPt['tokens']) >= 1, 'tokens de todos los residentes, no solo los del mapa');
+
+$pt['celeste']['lugares_desbloqueados'][] = 'lug_tienda_ropa';
+$puebloCafeFull = VistaPuebloV3::de($pt, PresenciaEngine::resolver($pt, $root), $root);
+ok(cx($puebloCafeFull, 'cafe_libros')['fase'] === 'pleno', 'biblio + tienda → PNG Café & Libros');
+ok(cx($puebloCafeFull, 'cafe_libros')['nombre'] === 'Café & Libros', 'nombre pleno solo con el asset completo');
 
 $pt['celeste']['lugares_desbloqueados'][] = 'lug_arcade';
 $puebloCine = VistaPuebloV3::de($pt, PresenciaEngine::resolver($pt, $root), $root);
@@ -108,6 +115,19 @@ $pt['diario'] = [
 $coti = VistaCotilleoV3::de($pt);
 ok(count($coti['hoy']) === 1, 'cotilleo hoy = diario del día');
 ok($coti['ayer'] === [] && $coti['viejos'] === [], 'sin inventar ayer/viejos');
+
+$ptCoti = $service->nuevaPartida('playtest_01', 'vista-v3-coti');
+$ptCoti['buzon'][] = [
+    'id' => 'msg_coti_play',
+    'dia' => (int) $ptCoti['reloj']['dia_pueblo'],
+    'clasificacion' => 'cotilleo',
+    'canal' => 'cotilleo',
+    'tipo' => 'cotilleo',
+    'texto' => 'Carmen y José se han llevado mejor.',
+];
+$cotiBuz = VistaCotilleoV3::de($ptCoti);
+ok(count($cotiBuz['hoy']) >= 1, 'El Cotilleo lee el canal cotilleo del buzón');
+ok(strpos(json_encode($cotiBuz['hoy'], JSON_UNESCAPED_UNICODE), 'Carmen') !== false, 'texto real del cotilleo visible');
 
 ok(is_file($root . '/assets/personajes/tokens-m/P138.png'), 'lote técnico P138 en PLAY');
 ok(is_file($root . '/assets/personajes/tokens-m/P173.png'), 'lote técnico Fase 1: 14 cabezas (P173)');

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Aquí Hay Tema — capas V2 (no es PLAY)</title>
+  <link rel="stylesheet" href="prototipo.css"/>
+  <link rel="stylesheet" href="capas.css"/>
+</head>
+<body class="ver-pc">
+  <div class="studio">
+    <header class="studio-bar">
+      <h1>Capas principales sobre V2 <span class="badge-v">cerrada</span></h1>
+      <p>Libreta, buzón a dos niveles, diario Superpop y organizar por cupo. Prototipo aislado. No es PLAY.</p>
+      <div class="studio-controls">
+        <button type="button" data-view="pc" class="is-on">PC</button>
+        <button type="button" data-view="movil">Móvil</button>
+        <button type="button" data-capa-btn="ficha-nueva">1. Ficha recién llegado</button>
+        <button type="button" data-capa-btn="ficha-conocida">2. Ficha conocida</button>
+        <button type="button" data-capa-btn="buzon">3. Buzón</button>
+        <button type="button" data-capa-btn="diario">4. Diario hoy</button>
+        <button type="button" data-diario-btn="ayer">Diario ayer</button>
+        <button type="button" data-diario-btn="viejos">Trapos viejos</button>
+        <button type="button" data-capa-btn="organizar">5. Organizar</button>
+        <button type="button" data-capa-btn="ninguna">Pueblo</button>
+      </div>
+      <p class="studio-note">Referencia cerrada. Diario en el dock; dentro, El Cotilleo (Hoy / Ayer / Trapos viejos). Organizar: tipo primero, luego el cupo.</p>
+      <p class="ficha-link"><a href="../v2/index.html">Pantalla principal V2</a></p>
+    </header>
+    <div class="stage">
+      <figure class="device pc"><figcaption class="device-label">PC</figcaption><div id="stage-pc"></div></figure>
+      <figure class="device phone"><figcaption class="device-label">Móvil</figcaption><div id="stage-phone"></div></figure>
+    </div>
+  </div>
+
+  <template id="tpl-play">
+    <div class="play-root" data-capa="" data-paso="tipo" data-cupo="2" data-diario="hoy">
+      <div class="board-scroll">
+        <div class="board-fit">
+          <img class="mapa" src="img/pueblo-tablero.png" alt="Pueblo V2"/>
+          <div class="chinchetas">
+            <span class="susurro" style="left:33%; top:29%">¿esos dos?</span>
+            <button class="chincheta" data-open="ficha-conocida" style="left:31%; top:36%" aria-label="Rocío">
+              <span class="pin"></span><span class="cara"><img src="img/cabeza-rocio.png" alt=""/></span><span class="nombre">Rocío</span>
+            </button>
+            <button class="chincheta" data-open="ficha-conocida" style="left:36%; top:38%" aria-label="Nora">
+              <span class="pin"></span><span class="cara"><img src="img/cabeza-nora.png" alt=""/></span><span class="nombre">Nora</span>
+            </button>
+            <button class="chincheta" data-open="ficha-nueva" style="left:51%; top:54%" aria-label="Luis">
+              <span class="pin"></span><span class="cara"><img src="img/cabeza-luis.png" alt=""/></span><span class="nombre">Luis</span>
+            </button>
+          </div>
+          <aside class="postit" data-open="diario"><span class="pin"></span>Tú sabrás.</aside>
+        </div>
+      </div>
+      <div class="mesa">
+        <div class="mesa-papel">
+          <button type="button" class="corazon" data-open="diario" aria-label="Hoy en el pueblo"><span class="corazon-dibujo" style="--fill:62%"></span></button>
+          <div class="dia"><div class="dow">MIÉ 19</div><div class="hora">11:30</div></div>
+          <div class="hud-right">
+            <div class="dinero">80 €</div>
+            <button type="button" class="buzon" data-open="buzon" aria-label="Buzón, 3 sin leer">
+              <svg viewBox="0 0 54 46"><rect x="6" y="14" width="42" height="26" fill="#fffdf6" stroke="#2c261f" stroke-width="2.2"/><path d="M6 14 L27 28 L48 14" fill="none" stroke="#e56b8a" stroke-width="2.6"/></svg>
+              <span class="badge">3</span>
+              <span class="lacre-hud" title="Hay correspondencia importante"></span>
+            </button>
+            <button type="button" class="btn-vecinos" data-open="organizar">Organizar</button>
+          </div>
+        </div>
+      </div>
+      <nav class="dock">
+        <button type="button" data-close>Pueblo</button>
+        <button type="button" data-open="buzon">Buzón</button>
+        <button type="button" data-open="diario">Diario</button>
+        <button type="button" data-open="organizar">Plan</button>
+      </nav>
+      <div class="velo" data-close></div>
+
+      <aside class="capa capa-ficha-nueva">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine · página casi en blanco</p>
+        <div class="ficha-hero">
+          <div class="cara"><img src="img/cabeza-luis.png" alt=""/></div>
+          <div>
+            <h2>Luis</h2>
+            <p class="mini">Llegó ayer · ahora en la plaza</p>
+          </div>
+        </div>
+        <p class="animo">Mira el pueblo como quien entra en una fiesta ajena.</p>
+        <div class="seccion-lib">
+          <h3>De momento</h3>
+          <p class="nota-libre">Le he visto sentado. Punto.</p>
+        </div>
+        <div class="paginas-vacias"></div>
+        <aside class="anota-cele"><strong>Nota mía</strong>Presentarle a alguien. Cuando deje de hacer de estatua.</aside>
+        <p class="queda">Todavía no sé casi nada de él. Eso se escribe con el tiempo, no con huecos.</p>
+        <button type="button" class="cta" data-open="organizar" data-quien="luis" data-tipo="conocerse" data-cupo="1">Proponer conocerse</button>
+      </aside>
+
+      <aside class="capa capa-ficha-conocida">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine · lleva un tiempo en el pueblo</p>
+        <div class="ficha-hero">
+          <div class="cara"><img src="img/cabeza-rocio.png" alt=""/></div>
+          <div>
+            <h2>Rocío</h2>
+            <p class="mini">En el pueblo desde el día 1 · ahora en la cafetería · Bloque A</p>
+          </div>
+        </div>
+        <p class="animo">Hoy está de un humor peligroso. El café, rico igual.</p>
+        <div class="seccion-lib">
+          <h3>Lo que ya sé</h3>
+          <ul>
+            <li>Le encanta el primer espresso. El segundo ya es negociable.</li>
+            <li>Parece tener debilidad por la gente directa.</li>
+            <li>La gente mandona le pone de los nervios.</li>
+          </ul>
+        </div>
+        <div class="seccion-lib">
+          <h3>Me he ido enterando de que…</h3>
+          <ul>
+            <li>El rosa le va. El uniforme del café, menos.</li>
+          </ul>
+        </div>
+        <div class="seccion-lib">
+          <h3>Con quién se junta</h3>
+          <div class="vinculo">
+            <img src="img/cabeza-nora.png" alt=""/>
+            <span>Con Nora. Hoy se reían en la terraza. No hay pareja. No hay crisis. Hay tilín, o eso parece.</span>
+          </div>
+          <div class="vinculo" style="margin-top:.45rem">
+            <img src="img/cabeza-luis.png" alt=""/>
+            <span>A Luis lo acaba de ver. Todavía no hay historia.</span>
+          </div>
+        </div>
+        <aside class="anota-cele"><strong>Nota mía</strong>Juntarla con alguien que no sea el vapor de la cafetera.</aside>
+        <div class="paginas-vacias"></div>
+        <p class="queda">Aún me queda mucho por saber de ella. No todo cabe el primer mes.</p>
+        <button type="button" class="cta" data-open="organizar" data-quien="rocio">Organizar un plan con ella</button>
+        <button type="button" class="cta ghost" data-close>Mirarla en el pueblo</button>
+      </aside>
+
+      <aside class="capa capa-buzon">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Buzón</h2>
+        <p class="mini">Te escriben a ti. El diario es otra voz. Lo importante lleva lacre.</p>
+
+        <article class="carta-msg importante no-leida">
+          <span class="chincheta-carta"></span>
+          <img src="img/cabeza-nora.png" alt=""/>
+          <span class="lacre">OJO</span>
+          <div>
+            <p class="marca-mano">Léeme ya</p>
+            <div class="sello">Sin abrir · se está pensando ir</div>
+            <p class="voz">No es una postal. Es un aviso.</p>
+            <div class="de">Nora</div>
+            <p class="cuerpo">Si el pueblo sigue tan callado, no sé si me quedo el mes que viene. No amenazo. Aviso.</p>
+            <div class="acciones-msg">
+              <button type="button" data-open="organizar" data-quien="nora" data-desde="marcha">Intentar echarle una mano</button>
+              <button type="button" data-close>Dejarla reposar</button>
+            </div>
+            <p class="aviso-suave">Puedes intentarlo. Ella decide si se queda.</p>
+          </div>
+        </article>
+
+        <article class="carta-msg importante no-leida">
+          <span class="chincheta-carta"></span>
+          <img src="img/cabeza-luis.png" alt=""/>
+          <span class="lacre">OJO</span>
+          <div>
+            <p class="marca-mano">Cara nueva</p>
+            <div class="sello">Sin abrir · acaba de llegar</div>
+            <p class="voz">Un vecino nuevo te escribe. Eso importa.</p>
+            <div class="de">Luis</div>
+            <p class="cuerpo">Llegué ayer. El banco es bonito. Si no hablo con un humano esta semana me convierto en paloma.</p>
+            <div class="acciones-msg">
+              <button type="button" data-open="organizar" data-quien="luis" data-tipo="conocerse" data-cupo="1">Ver qué puedo hacer</button>
+              <button type="button" data-close>Más tarde</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="carta-msg no-leida">
+          <img src="img/cabeza-rocio.png" alt=""/>
+          <div>
+            <div class="sello">Sin abrir</div>
+            <p class="voz">Quiere un plan, y no dentro de una semana.</p>
+            <div class="de">Rocío</div>
+            <p class="cuerpo">Celestine, tengo que contárselo a alguien… ¿me organizas algo con alguien que no sea yo misma hablándole al vapor?</p>
+            <p class="plazo">Si no hay plan hoy, se le pasa el valor.</p>
+            <div class="acciones-msg">
+              <button type="button" data-open="organizar" data-quien="rocio">Organizarle algo</button>
+              <button type="button">Más tarde</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="carta-msg">
+          <img src="img/cabeza-nora.png" alt=""/>
+          <div>
+            <div class="sello">Ya leída</div>
+            <p class="voz">Te cuenta un cotilleo. No pide nada.</p>
+            <div class="de">Nora</div>
+            <p class="cuerpo">Me he enterado de que a Rocío le ponen de los nervios los mandones. No lo entiendo: yo soy un encanto.</p>
+          </div>
+        </article>
+
+        <article class="carta-msg antigua">
+          <img src="img/cabeza-rocio.png" alt=""/>
+          <div>
+            <div class="sello">De hace unos días</div>
+            <p class="voz">Un gracias. Ya está.</p>
+            <div class="de">Rocío</div>
+            <p class="cuerpo">Gracias por el café con Nora. No prometo nada. Prometo espresso.</p>
+          </div>
+        </article>
+      </aside>
+
+      <aside class="capa capa-diario">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <header class="masthead">
+          <h2>El Cotilleo</h2>
+          <p class="edicion">Diario del pueblo · mié 19 · edición de media mañana · más o menos veraz</p>
+        </header>
+        <p class="mini">Nadie te lo ha pedido. Por eso está tan bueno.</p>
+        <div class="tabs-papel">
+          <button type="button" class="is-on" data-diario-tab="hoy">Hoy</button>
+          <button type="button" data-diario-tab="ayer">Ayer</button>
+          <button type="button" class="trapos" data-diario-tab="viejos">Trapos viejos</button>
+        </div>
+
+        <div class="dia-block dia-hoy collage">
+          <article class="recorte portada">
+            <h3>Portada · terraza</h3>
+            <p>Se ha visto a Rocío y Nora en la cafetería. Discreción ante todo. Nosotros, ninguna.</p>
+            <p class="firma">11:20 · fuentes: nuestros ojos, que no tienen oficio</p>
+          </article>
+          <article class="recorte polaroid">
+            <div class="caras-clip">
+              <img src="img/cabeza-rocio.png" alt=""/>
+              <img src="img/cabeza-nora.png" alt=""/>
+            </div>
+            <p>Esas dos. Otra vez. El café, testigo. El espresso, cómplice.</p>
+            <p class="firma">foto robada con el corazón, no con el teléfono</p>
+          </article>
+          <article class="recorte escandalo">
+            <h3>Ojo a esto</h3>
+            <p>Nora ha mirado a Luis. Sí, Luis. El del banco. El que llegó ayer. Nosotros solo informamos.</p>
+            <p class="firma">duración de la mirada: tres segundos y un silencio</p>
+          </article>
+          <article class="recorte gacetilla">
+            <h3>Sucesos menores</h3>
+            <p>El gato de la vecina ha vuelto a saltar al primero. Ramón dice que lo va a devolver. Ramón lleva diciendo eso cuatro días.</p>
+          </article>
+          <article class="recorte tira">
+            <h3>Urbanismo, o eso dicen</h3>
+            <p>La carretilla del solar se ha movido diez centímetros. El pueblo finge que no ha visto nada. Ha visto todo.</p>
+            <p class="firma">futuro Bloque B, o un muy caro palomar</p>
+          </article>
+          <article class="recorte corto">
+            <p>Luis lleva tres minutos mirando la fuente. Esto acaba en vecino o en estatua. No vemos término medio.</p>
+            <p class="firma">plaza · día 2 de Luis</p>
+          </article>
+          <article class="recorte gacetilla">
+            <p>El cine sigue con la persiana. El cine, discreto. Como si no hubiera tema.</p>
+          </article>
+          <article class="recorte enterado">
+            <p>11:28. No ha pasado nada. Mentira: ha pasado el tiempo, que en este pueblo también cotillea.</p>
+          </article>
+        </div>
+
+        <div class="dia-block dia-ayer collage">
+          <article class="recorte portada">
+            <h3>Ayer por la tarde</h3>
+            <p>Luis ha vuelto al bingo. Tercer día seguido. Empieza a ser una relación seria.</p>
+            <p class="firma">martes · 19:40 · el bingo no confirma ni desmiente</p>
+          </article>
+          <article class="recorte escandalo">
+            <h3>Noche</h3>
+            <p>Se oyeron risas a las 23:10 cerca de la plaza. Fuentes: todas. Fiables: ninguna.</p>
+          </article>
+          <article class="recorte chisme">
+            <h3>Cafetería</h3>
+            <p>Rocío cerró con un portazo educado. Existe. Lo hemos comprobado.</p>
+            <p class="firma">18:02 · el espresso, ya frío, no opina</p>
+          </article>
+          <article class="recorte polaroid">
+            <div class="caras-clip">
+              <img src="img/cabeza-nora.png" alt=""/>
+            </div>
+            <p>Nora compró pan y dijo buenos días a nadie en concreto. O a todo el mundo. Las versiones no coinciden. Las versiones nunca coinciden.</p>
+          </article>
+          <article class="recorte tira">
+            <p>El post-it del banco seguía ahí al cerrar. Nadie lo ha robado. El pueblo, íntegro. O aburrido. Las dos cosas, a veces.</p>
+          </article>
+          <article class="recorte gacetilla">
+            <p>A las 16:00 no pasó nada fotogénico. Lo anotamos igual. La ausencia también es noticia, si uno insiste.</p>
+          </article>
+        </div>
+
+        <div class="dia-block dia-viejos collage">
+          <article class="recorte rumor">
+            <h3>Hace una semana</h3>
+            <p>Luis no existía. El banco, sí. El banco nos extraña menos ahora.</p>
+          </article>
+          <article class="recorte poesia">
+            <h3>El lunes</h3>
+            <p>Se dijo que el rosa le iba a Rocío. Se sigue diciendo. El uniforme del café, en cambio, sigue perdiendo el pleito.</p>
+          </article>
+          <article class="recorte gacetilla">
+            <h3>El mes pasado, o eso parece</h3>
+            <p>Alguien dejó una carretilla. Alguien sigue sin llevársela. La carretilla ya es vecina.</p>
+          </article>
+          <article class="recorte corto">
+            <p>Se habló de un Latido y luego se habló de otra cosa. El pueblo tiene memoria selectiva. Nosotros, de pago.</p>
+            <p class="firma">trapos, no archivo</p>
+          </article>
+        </div>
+      </aside>
+
+      <aside class="capa capa-organizar">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Un papelito, no un parte</p>
+        <h2>Organizar un plan</h2>
+
+        <div class="paso paso-tipo">
+          <p><strong>Qué tipo de plan</strong></p>
+          <p class="mini">El tipo decide cuánta gente. Luego el motor solo enseña caras que encajan.</p>
+          <div class="chips">
+            <button type="button" class="chip" data-tipo="conocerse" data-cupo="1">Conocerse</button>
+            <button type="button" class="chip is-on" data-tipo="quedar" data-cupo="2">Quedar</button>
+            <button type="button" class="chip" data-tipo="primera" data-cupo="2">Primera cita</button>
+            <button type="button" class="chip" data-tipo="cita" data-cupo="2">Cita</button>
+            <button type="button" class="chip" disabled title="Más adelante">Algo con más gente</button>
+          </div>
+          <p class="cupo-nota solo-cupo-1">Conocerse va de uno.</p>
+          <p class="cupo-nota solo-cupo-2">Quedar y las citas van de dos. No se arma un trío por error.</p>
+          <div class="nav-pasos"><span></span><button type="button" class="cta" data-paso="quien">Siguiente</button></div>
+        </div>
+
+        <div class="paso paso-quien">
+          <p><strong>Quién</strong></p>
+          <p class="mini solo-cupo-1">Una persona. Las que ves son las que el motor deja para este plan.</p>
+          <p class="mini solo-cupo-2">Dos personas. Marca dos. El motor no ofrece combinaciones imposibles.</p>
+          <p class="desde">Si venías de una carta o una ficha, esa persona ya está en el papel.</p>
+          <div class="chips">
+            <button type="button" class="chip is-on" data-chip="rocio"><img src="img/cabeza-rocio.png" alt=""/> Rocío</button>
+            <button type="button" class="chip is-on" data-chip="nora"><img src="img/cabeza-nora.png" alt=""/> Nora</button>
+            <button type="button" class="chip" data-chip="luis"><img src="img/cabeza-luis.png" alt=""/> Luis</button>
+          </div>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="tipo">Atrás</button>
+            <button type="button" class="cta" data-paso="lugar">Siguiente</button>
+          </div>
+        </div>
+
+        <div class="paso paso-lugar">
+          <p><strong>Dónde</strong></p>
+          <p class="mini">Hoy el pueblo solo tiene unos sitios despiertos. El motor recorta el resto.</p>
+          <div class="chips">
+            <button type="button" class="chip is-on">Cafetería</button>
+            <button type="button" class="chip">Parque</button>
+            <button type="button" class="chip">Biblioteca</button>
+            <button type="button" class="chip" disabled>Cine — persiana</button>
+          </div>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="quien">Atrás</button>
+            <button type="button" class="cta" data-paso="cuando">Siguiente</button>
+          </div>
+        </div>
+
+        <div class="paso paso-cuando">
+          <p><strong>Cuándo</strong></p>
+          <div class="chips">
+            <button type="button" class="chip is-on">Hoy</button>
+            <button type="button" class="chip">Mañana</button>
+            <button type="button" class="chip">Pasado</button>
+          </div>
+          <div class="chips">
+            <button type="button" class="chip">12:00</button>
+            <button type="button" class="chip is-on">17:00</button>
+            <button type="button" class="chip">20:00</button>
+          </div>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="lugar">Atrás</button>
+            <button type="button" class="cta" data-paso="hecho">Proponer</button>
+          </div>
+        </div>
+
+        <div class="paso paso-hecho">
+          <p class="resumen-plan solo-cupo-2">Rocío y Nora · quedar · cafetería · hoy 17:00.</p>
+          <p class="resumen-plan solo-cupo-1">Luis · conocerse · cafetería · hoy 17:00.</p>
+          <p class="queda">Tú propones. Ellas viven.</p>
+          <p class="aviso-suave nota-marcha">Si venías de un «me estoy pensando ir»: puedes echar una mano. No hay promesa de que se quede.</p>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="cuando">Atrás</button>
+            <button type="button" class="cta" data-close>Al pueblo</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </template>
+  <script src="capas.js"></script>
+</body>
+</html>

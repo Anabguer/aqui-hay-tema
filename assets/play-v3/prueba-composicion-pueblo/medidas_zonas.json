@@ -1,0 +1,60 @@
+﻿{
+  "tablero_px": [2880, 1620],
+  "mc_px": 600,
+  "mc_h_px": 375,
+  "ancla_escala": "cafe_temprano.png 1301x814",
+  "complejos": {
+    "cafe_libros": {
+      "fases": ["cafeteria", "biblioteca", "tienda"],
+      "crecimiento": "derecha",
+      "edificio_f1_mc": [1.0, 1.0],
+      "edificio_f3_mc": [2.1, 1.0],
+      "parcela_px": [1260, 470],
+      "apron_frontal_px": 70,
+      "bbox_pct": {"left": 3, "top": 4, "width": 44, "height": 29}
+    },
+    "rincon_lola": {
+      "fases": ["restaurante", "bingo"],
+      "crecimiento": "abajo-derecha",
+      "edificio_f1_mc": [0.85, 0.95],
+      "edificio_f2_mc": [1.15, 1.35],
+      "parcela_px": [690, 510],
+      "apron_frontal_px": 70,
+      "bbox_pct": {"left": 68, "top": 5, "width": 28, "height": 32}
+    },
+    "cine_game": {
+      "fases": ["cine", "arcade"],
+      "crecimiento": "derecha",
+      "edificio_f1_mc": [0.95, 1.05],
+      "edificio_f2_mc": [1.6, 1.05],
+      "parcela_px": [960, 430],
+      "apron_frontal_px": 70,
+      "bbox_pct": {"left": 3, "top": 48, "width": 36, "height": 28}
+    },
+    "mala_idea": {
+      "fases": ["bar", "discoteca", "karaoke"],
+      "crecimiento": "derecha y abajo-derecha",
+      "edificio_f1_mc": [0.8, 1.0],
+      "edificio_f3_mc": [1.85, 1.35],
+      "parcela_px": [1110, 540],
+      "apron_frontal_px": 70,
+      "bbox_pct": {"left": 58, "top": 42, "width": 39, "height": 34}
+    },
+    "parque": {
+      "fases": ["parque", "picnic", "mirador"],
+      "crecimiento": "fuera desde fuente (picnic SO, mirador NE)",
+      "parcela_px": [900, 720],
+      "forma": "irregular",
+      "bbox_pct": {"left": 36, "top": 18, "width": 32, "height": 42}
+    },
+    "gimnasio_spa": {
+      "fases": ["gimnasio", "spa"],
+      "crecimiento": "derecha",
+      "edificio_f1_mc": [0.9, 0.9],
+      "edificio_f2_mc": [1.45, 0.9],
+      "parcela_px": [870, 400],
+      "apron_frontal_px": 70,
+      "bbox_pct": {"left": 28, "top": 72, "width": 32, "height": 24}
+    }
+  }
+}

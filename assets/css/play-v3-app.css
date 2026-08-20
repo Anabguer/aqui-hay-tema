@@ -53,30 +53,70 @@ body.play-v3 {
 }
 
 .mesa { position: absolute; z-index: 5; top: 8px; left: 10px; right: 10px; pointer-events: none; }
-.mesa-papel { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
-.hud-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.mesa-papel { display: flex; align-items: flex-start; gap: 12px; pointer-events: auto; }
+.hud-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
 .corazon { position: relative; border: 0; background: transparent; padding: 0; cursor: default; pointer-events: none; }
 .play-v3 .corazon::after { display: none; }
-.corazon-dibujo {
-  width: 62px; height: 56px; display: block;
-  background: linear-gradient(to top, var(--pink-deep) 0, var(--pink) var(--fill, 0%), var(--heart-empty) var(--fill, 0%));
+.corazon-papel {
+  position: relative;
+  width: 92px; height: 88px;
+  transform: rotate(-8deg);
+  filter: drop-shadow(3px 4px 0 rgba(44,38,31,.18));
+}
+.corazon-papel::before {
+  content: "";
+  position: absolute; left: 22px; top: -7px; width: 38px; height: 14px;
+  background: url("../play-v3/capas/celo.png") center / contain no-repeat;
+  transform: rotate(12deg);
+  z-index: 3;
+  pointer-events: none;
+}
+.corazon-fill {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, var(--pink-deep) 0, var(--pink) var(--fill, 0%), #f7e4ea var(--fill, 0%));
+  -webkit-mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
+  mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
+  border: 0;
+}
+.corazon-papel::after {
+  content: "";
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse at 30% 28%, rgba(255,253,246,.35), transparent 42%);
   -webkit-mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
   mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
 }
-.play-root.phone .corazon-dibujo { width: 48px; height: 44px; }
-.dia {
-  background: var(--day) url("../play-v3/hud/ticket_dia.png") center / cover no-repeat;
-  border: 0; padding: .35rem .7rem .4rem; transform: rotate(-1.5deg);
-  text-align: center; min-width: 88px; position: relative;
-  box-shadow: 3px 3px 0 rgba(44,38,31,.12);
+.corazon-pct {
+  position: absolute; left: 0; right: 0; bottom: 14px;
+  text-align: center;
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 700; font-size: .78rem;
+  color: #fffdf6;
+  text-shadow: 0 1px 0 #2c261f;
+  z-index: 2;
 }
-.dia .dow { font-family: Fraunces, Georgia, serif; font-size: 1.05rem; font-weight: 700; }
-.dia .hora { font-weight: 800; font-size: .92rem; }
+.play-root.phone .corazon-papel { width: 72px; height: 68px; }
+.play-root.phone .corazon-pct { font-size: .68rem; bottom: 10px; }
+.play-v3 .dia {
+  background: repeating-linear-gradient(-90deg, var(--ticket) 0 10px, #efe08a 10px 12px) !important;
+  background-image: repeating-linear-gradient(-90deg, var(--ticket) 0 10px, #efe08a 10px 12px) !important;
+  border: 2.5px solid var(--ink);
+  padding: .4rem .85rem .45rem;
+  transform: rotate(-2deg);
+  text-align: center; min-width: 108px; position: relative;
+  box-shadow: 3px 3px 0 rgba(44,38,31,.12);
+  clip-path: polygon(6px 0, calc(100% - 6px) 0, 100% 6px, 100% calc(100% - 6px), calc(100% - 6px) 100%, 6px 100%, 0 calc(100% - 6px), 0 6px);
+}
+.dia .dow { font-family: Fraunces, Georgia, serif; font-size: 1.12rem; font-weight: 700; line-height: 1.1; }
+.dia .fecha { font-size: .78rem; font-weight: 800; color: var(--muted); }
+.dia .hora { font-weight: 800; font-size: 1.05rem; }
 .dinero {
-  background: #e7f0c8 url("../play-v3/hud/ticket_dinero.png") center / cover no-repeat;
-  border: 0; padding: .4rem .7rem; font-weight: 800;
+  background: #dce8b8;
+  border: 2.5px dashed #5f8a4a;
+  padding: .4rem .7rem; font-weight: 800;
   min-width: 72px; text-align: center;
   box-shadow: 2px 3px 0 rgba(44,38,31,.1);
+  transform: rotate(1.5deg);
 }
 .buzon {
   width: 52px; height: 44px; padding: 0; border: 0; background: transparent;
@@ -111,15 +151,20 @@ body.play-v3 {
 
 .capa {
   position: absolute; z-index: 8;
-  display: flex; flex-direction: column; gap: .65rem;
-  padding: 1rem; overflow: auto; pointer-events: none;
+  display: flex; flex-direction: column; gap: .7rem;
+  padding: 1.15rem 1.3rem 1.3rem; overflow: auto; pointer-events: none;
   transform: translateX(110%); transition: transform .28s ease;
   border: 3px solid var(--ink);
-  box-shadow: 8px 10px 0 rgba(44,38,31,.12);
+  box-shadow: 10px 12px 0 rgba(44,38,31,.14);
+  word-break: normal;
+  overflow-wrap: break-word;
 }
-.play-root.pc .capa { top: 14px; right: 14px; bottom: 14px; width: min(400px, 38%); }
+.play-root.pc .capa {
+  top: 62px; left: 7%; right: 7%; bottom: 16px;
+  width: auto; max-width: 920px; margin: 0 auto;
+}
 .play-root.phone .capa {
-  left: 8px; right: 8px; bottom: 74px; max-height: 76%;
+  left: 6px; right: 6px; top: 56px; bottom: 62px; max-height: none;
   transform: translateY(120%);
 }
 .play-root[data-capa="vecinos"] .capa-vecinos,
@@ -140,18 +185,23 @@ body.play-v3 {
 .ficha-hero .cara img { width: 100%; height: 100%; object-fit: cover; }
 
 .capa-vecinos, .capa-ficha {
-  background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat;
+  background:
+    radial-gradient(circle at 88% 8%, rgba(229,107,138,.22), transparent 28%),
+    #fff6ea url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat !important;
 }
 .capa-vecinos::before, .capa-ficha::before {
   content: ""; position: absolute; left: 10px; top: 8px; width: 46px; height: 18px;
   background: url("../play-v3/capas/celo.png") center / contain no-repeat;
   pointer-events: none;
 }
-.capa-buzon {
-  background: #f3e6cc url("../play-v3/capas/bandeja_buzon.png") center / cover no-repeat;
+.play-v3 .capa.capa-buzon {
+  background:
+    radial-gradient(circle at 12% 0%, rgba(196,43,74,.18), transparent 34%),
+    #fde8ee url("../play-v3/capas/bandeja_buzon.png") center / cover no-repeat !important;
 }
-.capa-diario {
-  background: #f7f1e2;
+.play-v3 .capa.capa-diario {
+  background: #fff8e8 !important;
+  background-image: linear-gradient(180deg, #2c261f 0 8px, transparent 8px) !important;
 }
 .capa-diario .masthead {
   position: relative; min-height: 72px;
@@ -161,13 +211,69 @@ body.play-v3 {
 .capa-diario .masthead img { display: none; }
 .capa-diario .masthead h2 { color: #fffdf6; }
 .capa-diario .masthead .edicion { color: #f3b1c3; margin: 0; font-size: .78rem; }
-.capa-organizar {
-  background: #f7f0de url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat;
+.play-v3 .capa.capa-organizar {
+  background:
+    repeating-linear-gradient(transparent, transparent 27px, rgba(234,217,196,.55) 28px),
+    #fff3c9 url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat !important;
 }
 .carta-msg.importante .lacre {
+  position: absolute; right: 8px; top: -10px; left: auto;
   width: 32px; height: 32px; border-radius: 0; background:
     url("../play-v3/hud/lacre.png") center / contain no-repeat;
   color: transparent; border: 0;
+}
+.play-v3 .carta-msg {
+  display: block !important;
+  grid-template-columns: none !important;
+  position: relative;
+  background: #fffdf6;
+  border: 2.5px solid var(--ink);
+  padding: .85rem 1rem .95rem;
+  margin: .65rem 0;
+  box-shadow: 4px 5px 0 rgba(44,38,31,.1);
+  transform: rotate(-.4deg);
+  word-break: normal !important;
+  overflow-wrap: break-word;
+  hyphens: manual;
+}
+.carta-msg:nth-child(even) { transform: rotate(.5deg); background: #fff8e4; }
+.carta-msg .de {
+  font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: 1.15rem;
+  margin: 0 0 .35rem;
+}
+.carta-msg .cuerpo {
+  font-family: Fraunces, Georgia, serif; font-size: 1.12rem; font-style: italic;
+  line-height: 1.45; margin: 0;
+  white-space: pre-wrap;
+  word-break: normal !important;
+  overflow-wrap: break-word;
+}
+.carta-msg .plazo {
+  margin-top: .55rem; font-weight: 800; font-size: .86rem; color: #8a4a18;
+}
+.carta-msg .sello-estado {
+  display: inline-block;
+  font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 700;
+  font-size: .78rem;
+  transform: rotate(-6deg);
+  margin-bottom: .25rem;
+}
+.carta-msg.estado-pendiente .sello-estado { color: var(--pink-deep); }
+.carta-msg.estado-cumplida .sello-estado { color: var(--emo-alegre); }
+.carta-msg.estado-caducada .sello-estado { color: var(--muted); text-decoration: line-through; }
+.carta-msg.no-leida { background: #fde3c4; }
+.carta-msg.importante {
+  background: #fff4e6;
+  box-shadow: 4px 4px 0 rgba(196,43,74,.2);
+}
+[data-buzon-list] {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .2rem;
+}
+.play-root.pc [data-buzon-list] {
+  grid-template-columns: 1fr 1fr;
+  gap: .8rem 1rem;
 }
 
 .play-root .habs { display: block; pointer-events: none; }
@@ -209,10 +315,15 @@ select.chip-select, .org-row select {
 .org-row { display: flex; flex-direction: column; gap: .25rem; margin: .35rem 0; }
 .capa-ficha .animo { font-family: Fraunces, Georgia, serif; font-style: italic; }
 
-/* Fachadas C3: apaga geometría CSS del prototipo. */
-.play-v3 .complejo .sombra,
-.play-v3 .complejo .cuerpo,
-.play-v3 .complejo .etiqueta { display: none !important; }
+.play-v3 .complejo .eti-mapa {
+  position: absolute; left: 8%; right: 18%; bottom: 4%;
+  font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: .78rem;
+  background: #fffdf6; border: 1.5px solid #c9b59a;
+  padding: .12rem .4rem; transform: rotate(-1.4deg);
+  z-index: 4; box-shadow: 2px 2px 0 rgba(44,38,31,.08);
+  text-align: center; pointer-events: none;
+}
+.play-root.phone .complejo .eti-mapa { font-size: .58rem; left: 6px; right: 6px; }
 .play-v3 .complejo .fachada {
   position: absolute; inset: 0; width: 100%; height: 100%;
   object-fit: contain; object-position: center bottom;
@@ -234,7 +345,16 @@ select.chip-select, .org-row select {
 .play-root.pc .cx-cafe.is-pleno { width: 38%; }
 .play-root.pc .cx-cine.is-pleno { width: 36%; }
 .play-root.phone .complejo.is-pleno { width: auto !important; height: auto !important; }
-.play-root.phone .bloque-a, .play-root.phone .solar { display: none; }
+.play-v3 .selector, .play-v3 .quien {
+  width: min(560px, 62%);
+  background: #fff6ea;
+  border: 3px solid var(--ink);
+  word-break: normal;
+  box-shadow: 8px 10px 0 rgba(44,38,31,.12);
+}
+.play-root.phone .selector, .play-root.phone .quien { width: auto; }
+.chip { background: var(--ticket); }
+.chip.is-on { background: var(--postit); border-color: var(--ink); }
 
 .collage .recorte {
   position: relative;
@@ -249,3 +369,4 @@ select.chip-select, .org-row select {
   width: 14px; height: 14px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
 }
+.quien-sum { font-family: Fraunces, Georgia, serif; font-style: italic; font-size: .95rem; }

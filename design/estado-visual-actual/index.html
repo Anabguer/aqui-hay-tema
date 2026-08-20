@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AHT — Estado visual actual</title>
+<style>
+  :root {
+    --ink: #2a2118;
+    --muted: #6a5a4a;
+    --paper: #f3ebe0;
+    --card: #fffdf8;
+    --line: #d9cbb8;
+    --ok: #2f6b3a;
+    --rev: #9a5b12;
+    --prop: #3a5a8c;
+    --obs: #7a7a7a;
+    --accent: #c45a6a;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", system-ui, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(ellipse at top, #fff8ee, var(--paper));
+    line-height: 1.45;
+  }
+  header {
+    padding: 1.5rem 1.25rem 1rem;
+    border-bottom: 1px solid var(--line);
+    background: #fffaf3;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  header h1 {
+    margin: 0 0 .35rem;
+    font-size: 1.45rem;
+    letter-spacing: .01em;
+  }
+  header p { margin: 0; color: var(--muted); max-width: 70ch; font-size: .95rem; }
+  .meta {
+    margin-top: .75rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem .75rem;
+    font-size: .82rem;
+    color: var(--muted);
+  }
+  nav.toc {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin-top: .9rem;
+  }
+  nav.toc a {
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: .25rem .7rem;
+    font-size: .8rem;
+  }
+  nav.toc a:hover { border-color: var(--accent); }
+  main { padding: 1rem 1.25rem 3rem; max-width: 1200px; margin: 0 auto; }
+  section { margin: 2rem 0; }
+  section > h2 {
+    margin: 0 0 .75rem;
+    font-size: 1.15rem;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: .35rem;
+  }
+  .note {
+    background: #fff6e8;
+    border: 1px solid #efd7b0;
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    font-size: .9rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: .9rem;
+  }
+  article.card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  article.card.latest {
+    border-color: #c45a6a;
+    box-shadow: 0 0 0 1px rgba(196,90,106,.25);
+  }
+  .thumb {
+    aspect-ratio: 16/10;
+    background: #e8dfd2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .thumb .empty {
+    color: var(--muted);
+    font-size: .85rem;
+    padding: 1rem;
+    text-align: center;
+  }
+  .body { padding: .75rem .85rem 1rem; display: flex; flex-direction: column; gap: .35rem; flex: 1; }
+  .body h3 { margin: 0; font-size: 1rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: .3rem; }
+  .badge {
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    padding: .15rem .5rem;
+  }
+  .badge.pc, .badge.mov, .badge.ambos { background: #eee6da; color: #4a3d30; }
+  .badge.aprobado { background: #d7edd9; color: var(--ok); }
+  .badge.revisar { background: #ffe4c2; color: var(--rev); }
+  .badge.propuesta { background: #dce7f7; color: var(--prop); }
+  .badge.obsoleto { background: #e8e8e8; color: var(--obs); }
+  .badge.reciente { background: #f8d5db; color: #8a3040; }
+  .body p { margin: 0; font-size: .84rem; color: var(--muted); }
+  .body .dec { color: var(--ink); }
+  .links { margin-top: auto; padding-top: .5rem; display: flex; flex-wrap: wrap; gap: .4rem; }
+  .links a {
+    font-size: .8rem;
+    color: #7a3040;
+    text-decoration: none;
+    border-bottom: 1px solid #e2b4bc;
+  }
+  .links a:hover { color: var(--accent); }
+  table.versions {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .86rem;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  table.versions th, table.versions td {
+    text-align: left;
+    padding: .55rem .7rem;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+  }
+  table.versions th { background: #f7f0e6; }
+  table.versions tr:last-child td { border-bottom: 0; }
+  footer {
+    padding: 1rem 1.25rem 2rem;
+    color: var(--muted);
+    font-size: .8rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  code { font-size: .85em; background: #efe6d8; padding: .05rem .3rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Estado visual actual — Aquí Hay Tema</h1>
+  <p>
+    Inventario de prototipos y piezas UX/diseño ya existentes (Carlos II).
+    No es PLAY. No toca motor. Los edificios en capturas son placeholders.
+    Assets definitivos de edificios: pendientes de entrega externa.
+  </p>
+  <div class="meta">
+    <span>Fecha índice: 2026-08-20</span>
+    <span>Fuente principal: <code>design/prototipo-pantalla-principal/</code></span>
+    <span>Edificios: flujo técnico (sin generar)</span>
+  </div>
+  <nav class="toc" aria-label="Secciones">
+    <a href="#lineas">Líneas de prototipo</a>
+    <a href="#pantalla">Pantalla principal</a>
+    <a href="#hud">HUD / dock</a>
+    <a href="#capas">Capas / paneles</a>
+    <a href="#mapa">Mapa / tokens</a>
+    <a href="#faltan">Sin prototipo visual</a>
+    <a href="#legacy">Versiones anteriores</a>
+  </nav>
+</header>
+
+<main>
+
+<section id="lineas">
+  <h2>1. Líneas de prototipo (cuál es cuál)</h2>
+  <div class="note">
+    Si hay varias versiones de la misma pantalla, <strong>no se elige en silencio</strong>: abajo están todas.
+    La marcada <span class="badge reciente">más reciente</span> es la candidata a revisar mañana.
+  </div>
+  <table class="versions">
+    <thead>
+      <tr>
+        <th>Línea</th>
+        <th>Qué es</th>
+        <th>Estado</th>
+        <th>Abrir</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>V3</strong> <span class="badge reciente">más reciente</span></td>
+        <td>Dirección visual completa (pueblo + HUD objetos + 12 estados PC/móvil). Spec dice dirección V3 aprobada; capturas siguen siendo la base de revisión diaria.</td>
+        <td><span class="badge aprobado">APROBADO</span> (dirección) · implementación PLAY pendiente de assets</td>
+        <td><a href="../prototipo-pantalla-principal/v3/index.html">v3/index.html</a></td>
+      </tr>
+      <tr>
+        <td><strong>V2-capas</strong></td>
+        <td>UX de capas cerrada (buzón, cotilleo, organizar, ficha…). Base de pueblo = V2.</td>
+        <td><span class="badge aprobado">APROBADO</span> / CERRADA (Neni+ChatGPT 19 ago)</td>
+        <td><a href="../prototipo-pantalla-principal/v2-capas/index.html">v2-capas/index.html</a></td>
+      </tr>
+      <tr>
+        <td><strong>V2-complejos</strong></td>
+        <td>Mapa 6 complejos, selector, tokens, aforo +N, escala M.</td>
+        <td><span class="badge aprobado">APROBADO</span> (reparto/escala provisional)</td>
+        <td><a href="../prototipo-pantalla-principal/v2-complejos/index.html">v2-complejos/index.html</a></td>
+      </tr>
+      <tr>
+        <td><strong>Dirección HUD ChatGPT</strong></td>
+        <td>Maqueta pegatinas/resumen/parejas. Aprobada como lenguaje; <em>no</em> es la maqueta V3 completa.</td>
+        <td><span class="badge aprobado">APROBADO</span> (dirección) · no implementada</td>
+        <td><a href="../direccion-hud-chatgpt/DIRECCION_APROBADA.md">DIRECCION_APROBADA.md</a></td>
+      </tr>
+      <tr>
+        <td>V2 pueblo pintado</td>
+        <td>Pueblo anterior a V3.</td>
+        <td><span class="badge obsoleto">OBSOLETO</span> (sustituido por V3 en dirección)</td>
+        <td><a href="../prototipo-pantalla-principal/v2/index.html">v2/index.html</a></td>
+      </tr>
+      <tr>
+        <td>V1 / raíz</td>
+        <td>Primer prototipo + ficha Carlos III.</td>
+        <td><span class="badge obsoleto">OBSOLETO</span></td>
+        <td><a href="../prototipo-pantalla-principal/index.html">index.html</a> · <a href="../prototipo-pantalla-principal/v1/index.html">v1/</a></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="pantalla">
+  <h2>2. Pantalla principal / pueblo</h2>
+  <div class="grid">
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/01-pc-temprano.png" alt="Pueblo PC temprano V3" /></div>
+      <div class="body">
+        <h3>Pueblo PC — temprano</h3>
+        <div class="badges">
+          <span class="badge pc">PC</span>
+          <span class="badge revisar">PARA REVISAR</span>
+          <span class="badge reciente">más reciente = V3</span>
+        </div>
+        <p class="dec"><strong>Falta:</strong> sustituir edificios placeholder por assets definitivos; mapa base canónico cuando se entregue.</p>
+        <p>Versiones previas: V2, V1 (obsoletas como dirección).</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/index.html">Prototipo V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/01-pc-temprano.png">Captura</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/02-pc-pleno.png">PC evolucionado</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/03-movil-temprano.png" alt="Pueblo móvil temprano V3" /></div>
+      <div class="body">
+        <h3>Pueblo móvil — temprano</h3>
+        <div class="badges">
+          <span class="badge mov">Móvil</span>
+          <span class="badge revisar">PARA REVISAR</span>
+          <span class="badge reciente">más reciente = V3</span>
+        </div>
+        <p class="dec"><strong>Falta:</strong> mismos assets definitivos; rejilla 2×3 ya cerrada en UX.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/index.html">Prototipo V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/03-movil-temprano.png">Captura</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/04-movil-pleno.png">Móvil evolucionado</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/12-pc-crece.png" alt="Cómo crece el pueblo" /></div>
+      <div class="body">
+        <h3>Crecimiento del pueblo (alas / destinos)</h3>
+        <div class="badges">
+          <span class="badge ambos">Ambos</span>
+          <span class="badge aprobado">APROBADO</span> (regla UX)
+        </div>
+        <p class="dec"><strong>Falta:</strong> PNG de evolución reales (Café/Biblioteca/Tienda vendrán por flujo nuevo).</p>
+        <p>Regla: crecimiento físico con nombre de destino, nunca «nivel 2».</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/12-pc-crece.png">Captura V3</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="hud">
+  <h2>3. HUD superior + dock inferior</h2>
+  <div class="grid">
+
+    <article class="card latest">
+      <div class="thumb"><img src="../direccion-hud-chatgpt/ref/maqueta_chatgpt_hud.png" alt="Maqueta HUD ChatGPT" /></div>
+      <div class="body">
+        <h3>Dirección HUD — maqueta ChatGPT</h3>
+        <div class="badges">
+          <span class="badge ambos">Ambos</span>
+          <span class="badge aprobado">APROBADO</span>
+        </div>
+        <p class="dec"><strong>Falta:</strong> maqueta PLAY completa con mapa nuevo + esta UX (bloqueada a assets/mapa).</p>
+        <p>Pegatinas, resumen plegable, parejas bajo demanda. No barra de app.</p>
+        <div class="links">
+          <a href="../direccion-hud-chatgpt/DIRECCION_APROBADA.md">Doc aprobada</a>
+          <a href="../direccion-hud-chatgpt/ref/maqueta_chatgpt_hud.png">Maqueta</a>
+          <a href="../direccion-hud-chatgpt/ref/REFERENCIA_VISUAL_01.png">Lámina completa</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/02-pc-pleno.png" alt="HUD objetos V3" /></div>
+      <div class="body">
+        <h3>HUD objetos (corazón, día, dinero, sobre)</h3>
+        <div class="badges">
+          <span class="badge ambos">Ambos</span>
+          <span class="badge aprobado">APROBADO</span> (patrón V3)
+        </div>
+        <p class="dec"><strong>Falta:</strong> pulir assets C3 definitivos si se regeneran; fama solo si motor la expone.</p>
+        <p>PNG actuales: <code>assets/play-v3/hud/</code> (corazon, tickets, sobre, lacre).</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/index.html">Ver en V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/11-pc-importante.png">Correo importante / lacre</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/04-movil-pleno.png" alt="Dock móvil" /></div>
+      <div class="body">
+        <h3>Dock inferior</h3>
+        <div class="badges">
+          <span class="badge ambos">Ambos</span>
+          <span class="badge aprobado">APROBADO</span>
+        </div>
+        <p class="dec"><strong>Falta:</strong> nada de estructura; assets sello opcionales.</p>
+        <p>Pueblo · Diario · Organizar · Vecinos. Sellos en <code>assets/play-v3/dock/</code>.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v2-capas/README.md">Cierre V2-capas</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/04-movil-pleno.png">Captura móvil</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="capas">
+  <h2>4. Capas, paneles y pantallas secundarias</h2>
+  <div class="note">
+    V2-capas = referencia UX <strong>cerrada</strong>. V3 = misma lógica con dirección visual más completa (capturas más recientes).
+  </div>
+  <div class="grid">
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/07-pc-buzon.png" alt="Buzón PC V3" /></div>
+      <div class="body">
+        <h3>Buzón</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span><span class="badge reciente">V3 preview</span></div>
+        <p class="dec"><strong>Falta:</strong> decidir si se revisa copy/visual fina mañana; motor ya tiene listar + importante.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/07-pc-buzon.png">PC V3</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/03-pc-buzon.png">PC V2-capas</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/12-movil-buzon.png">Móvil V2-capas</a>
+          <a href="../prototipo-pantalla-principal/v3/index.html">Prototipo</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/08-pc-cotilleo.png" alt="El Cotilleo PC" /></div>
+      <div class="body">
+        <h3>El Cotilleo / Diario</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span><span class="badge reciente">V3 preview</span></div>
+        <p class="dec"><strong>Falta:</strong> nada estructural. Hoy / Ayer / Trapos viejos cerrados.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/08-pc-cotilleo.png">PC V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/15-movil-cotilleo.png">Móvil V3</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/04-pc-diario-hoy.png">Hoy V2</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/05-pc-diario-ayer.png">Ayer V2</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/06-pc-diario-viejos.png">Viejos V2</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/09-pc-organizar.png" alt="Organizar PC" /></div>
+      <div class="body">
+        <h3>Organizar</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span><span class="badge reciente">V3 preview</span></div>
+        <p class="dec"><strong>Falta:</strong> validar con datos reales de motor en playtest (no rediseño).</p>
+        <p>Flujo: tipo → quién → conocerse → hecho (V2-capas).</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/09-pc-organizar.png">PC V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/17-movil-organizar.png">Móvil V3</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/07-pc-organizar-tipo.png">Tipo</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/08-pc-organizar-quien.png">Quién</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/09-pc-organizar-conocerse.png">Conocerse</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/10-pc-organizar-hecho.png">Hecho</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/06-pc-vecinos.png" alt="Vecinos PC" /></div>
+      <div class="body">
+        <h3>Vecinos (libreta)</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span><span class="badge reciente">V3 preview</span></div>
+        <p class="dec"><strong>Falta:</strong> «Nota mía» es hueco visual; no tareas.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/06-pc-vecinos.png">PC V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/14-movil-vecinos.png">Móvil V3</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v2-capas/previews/02-pc-ficha-conocido.png" alt="Ficha vecino" /></div>
+      <div class="body">
+        <h3>Ficha de vecino</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span></div>
+        <p class="dec"><strong>Falta:</strong> alinear campos exactos a <code>inspeccionar</code> / ficha motor sin inventar.</p>
+        <p>Variantes: nuevo vs conocido (V2-capas). V1 tenía ficha Carlos III aparte.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/01-pc-ficha-nuevo.png">Nuevo PC</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/02-pc-ficha-conocido.png">Conocido PC</a>
+          <a href="../prototipo-pantalla-principal/v2-capas/previews/11-movil-ficha-conocido.png">Móvil</a>
+          <a href="../prototipo-pantalla-principal/v1/ficha-carlos-iii.html">Ficha V1 (obsoleta)</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card latest">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/10-pc-selector.png" alt="Selector complejo" /></div>
+      <div class="body">
+        <h3>Selector de destino (complejo)</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span><span class="badge reciente">V3 preview</span></div>
+        <p class="dec"><strong>Falta:</strong> nada de regla; si 1 destino → ir a «quién hay».</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/10-pc-selector.png">PC V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/16-movil-selector.png">Móvil V3</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/03-pc-selector.png">PC V2-complejos</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/08-movil-selector.png">Móvil V2-complejos</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v2-complejos/previews/04-pc-entrar.png" alt="Entrar destino" /></div>
+      <div class="body">
+        <h3>Entrada / consulta de destino («quién hay»)</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span></div>
+        <p class="dec"><strong>Falta:</strong> interior narrativo profundo no prototipado; hoy es consulta de presencia.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/04-pc-entrar.png">Entrar PC</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/14-pc-quien.png">Quién PC</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/17-movil-quien.png">Quién móvil</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/05-pc-habitantes.png" alt="Habitantes anillo" /></div>
+      <div class="body">
+        <h3>Habitantes en complejo / +N / anillo cotilleo</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span></div>
+        <p class="dec"><strong>Falta:</strong> assets token definitivos por lote; anillo lo pinta C2.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/05-pc-habitantes.png">PC V3</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/13-movil-habitantes.png">Móvil V3</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/11-pc-aforo3.png">Aforo 3</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/13-pc-aforo12.png">Aforo 12 / +N</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v3/previews/11-pc-importante.png" alt="Aviso importante" /></div>
+      <div class="body">
+        <h3>Avisos / correo importante</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span> (patrón)</div>
+        <p class="dec"><strong>Falta:</strong> no hay sistema genérico de toasts; importante = lacre en sobre/buzón.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v3/previews/11-pc-importante.png">PC</a>
+          <a href="../prototipo-pantalla-principal/v3/previews/18-movil-importante.png">Móvil</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="mapa">
+  <h2>5. Mapa, tokens, escala, pipeline edificios</h2>
+  <div class="grid">
+
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v2-complejos/previews/06-pc-escala.png" alt="Escala tokens" /></div>
+      <div class="body">
+        <h3>P001 / tokens / escala M</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge aprobado">APROBADO</span> (provisional)</div>
+        <p class="dec"><strong>Falta:</strong> lote identidad vs técnico; PNG sin anillo horneado.</p>
+        <p>52 px móvil / 62 px PC. Prueba P001 + P138. Carpeta <code>assets/play-v3/tokens-m/</code> (14).</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v2-complejos/index.html">Prototipo</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/05-pc-token.png">Token PC</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/previews/06-pc-escala.png">Escala PC</a>
+          <a href="../prototipo-pantalla-principal/v2-complejos/PATRON_TOKEN.md">Patrón token</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><img src="../../assets/play-v3/prueba-mapa-ciudad/mapa_base_ciudad.png" alt="Mapa base ciudad" onerror="this.parentElement.innerHTML='<div class=empty>Mapa ciudad (ver assets/play-v3/prueba-mapa-ciudad)</div>'" /></div>
+      <div class="body">
+        <h3>Mapa base / cajas / pipeline técnico</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge revisar">PARA REVISAR</span></div>
+        <p class="dec"><strong>Falta:</strong> assets edificio definitivos (externos). Carlos II solo monta/valida.</p>
+        <p>Rectas aprobadas como sistema. Ciudad = prueba suelo urbano. Cajas Neni conservadas.</p>
+        <div class="links">
+          <a href="../../assets/play-v3/prueba-mapa-base-rectas/mapa_base_rectas.png">mapa_base_rectas</a>
+          <a href="../../assets/play-v3/prueba-cajas-neni/MEDIDAS.md">MEDIDAS cajas</a>
+          <a href="../../assets/play-v3/prueba-mapa-ciudad/">prueba-mapa-ciudad</a>
+          <a href="../../assets/play-v3/prueba-mapa-base-rectas/marcar.html">Herramienta marcar</a>
+        </div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Generaciones Café &amp; Libros anteriores = NO candidatas visuales</div></div>
+      <div class="body">
+        <h3>Café &amp; Libros (assets visuales)</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge obsoleto">OBSOLETO</span> (como candidato visual)</div>
+        <p class="dec"><strong>Falta:</strong> recibir PNG aprobados Café + Biblioteca + Tienda → composición técnica F1/F2/F3.</p>
+        <p>Carpetas de prueba conservadas solo como archivo/pipeline, no como dirección artística.</p>
+        <div class="links">
+          <a href="../../assets/play-v3/prueba-cajas-neni/">prueba-cajas-neni</a>
+          <a href="../../assets/play-v3/prueba-mapa-ciudad/">prueba-mapa-ciudad</a>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="faltan">
+  <h2>6. Piezas pedidas que aún NO tienen prototipo visual dedicado</h2>
+  <div class="grid">
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Sin capturas de UI</div></div>
+      <div class="body">
+        <h3>Tutorial / onboarding</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge propuesta">PROPUESTA</span></div>
+        <p class="dec"><strong>Falta:</strong> diseño visual de pistas/zonas. Motor expone <code>estado.tutorial</code> (buzón|vecinos|organizar).</p>
+        <p>Solo contrato en spec integración V3.</p>
+        <div class="links"><a href="../especificacion-integracion-v3.md">Spec § tutorial</a></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Sin panel dedicado</div></div>
+      <div class="body">
+        <h3>Misiones / peticiones</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge propuesta">PROPUESTA</span></div>
+        <p class="dec"><strong>Falta:</strong> panel UX completo. Spec: datos en partida, sin panel PLAY V3 aún.</p>
+        <div class="links"><a href="../especificacion-integracion-v3.md">Spec § huecos</a></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Parcial vía ficha / Organizar / Resumen HUD</div></div>
+      <div class="body">
+        <h3>Relaciones (pantalla dedicada)</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge propuesta">PROPUESTA</span></div>
+        <p class="dec"><strong>Falta:</strong> decidir si basta ficha+organizar+resumen parejas (maqueta ChatGPT) o hace falta vista propia.</p>
+        <div class="links"><a href="../direccion-hud-chatgpt/DIRECCION_APROBADA.md">Resumen parejas (maqueta)</a></div>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Sin UI específica</div></div>
+      <div class="body">
+        <h3>Candidatos a nuevos residentes</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge propuesta">PROPUESTA</span></div>
+        <p class="dec"><strong>Falta:</strong> pantalla/modal de elección. Hay datos/catálogos de personalidad en repo, no prototipo de UI.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Vacío Cotilleo / dinero «—» documentados</div></div>
+      <div class="body">
+        <h3>Estados vacíos / bloqueados</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge propuesta">PROPUESTA</span></div>
+        <p class="dec"><strong>Falta:</strong> set visual sistemático (empty states, destinos bloqueados, sin correo…). Solo notas en spec.</p>
+      </div>
+    </article>
+
+    <article class="card">
+      <div class="thumb"><div class="empty">Movimiento casa→destino no expuesto</div></div>
+      <div class="body">
+        <h3>Aparición / trayecto de personajes</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge propuesta">PROPUESTA</span></div>
+        <p class="dec"><strong>Falta:</strong> motor no da casa/trayecto. Hoy: tokens en destino si hay presencia.</p>
+        <div class="links"><a href="../especificacion-integracion-v3.md">Spec § movimiento</a></div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<section id="legacy">
+  <h2>7. Versiones anteriores (referencia, no dirección)</h2>
+  <div class="grid">
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/v2/previews/v2-pc.png" alt="V2 PC" /></div>
+      <div class="body">
+        <h3>V2 — pueblo pintado</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge obsoleto">OBSOLETO</span></div>
+        <p>Base que alimentó V2-capas. Dirección pueblo → V3.</p>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/v2/index.html">Prototipo</a>
+          <a href="../prototipo-pantalla-principal/v2/previews/v2-pc.png">PC</a>
+          <a href="../prototipo-pantalla-principal/v2/previews/v2-movil.png">Móvil</a>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="thumb"><img src="../prototipo-pantalla-principal/previews/pc.png" alt="V1 PC" /></div>
+      <div class="body">
+        <h3>V1 — primer prototipo</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge obsoleto">OBSOLETO</span></div>
+        <div class="links">
+          <a href="../prototipo-pantalla-principal/index.html">Raíz</a>
+          <a href="../prototipo-pantalla-principal/previews/pc.png">PC</a>
+          <a href="../prototipo-pantalla-principal/previews/movil.png">Móvil</a>
+          <a href="../prototipo-pantalla-principal/previews/pc-ficha.png">Ficha PC</a>
+        </div>
+      </div>
+    </article>
+    <article class="card">
+      <div class="thumb"><div class="empty">Pack C3 preview (chincheta, lacre, sello…)</div></div>
+      <div class="body">
+        <h3>Integración V3 / assets C3 fase 1</h3>
+        <div class="badges"><span class="badge ambos">Ambos</span><span class="badge revisar">PARA REVISAR</span></div>
+        <p class="dec"><strong>Falta:</strong> C3 parado para edificios; pack parcial en assets/play-v3.</p>
+        <div class="links">
+          <a href="../integracion-v3/README.md">README integración</a>
+          <a href="../especificacion-integracion-v3.md">Spec integración</a>
+          <a href="../integracion-v3/c3-preview/">c3-preview/</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  Ruta de este índice: <code>design/estado-visual-actual/index.html</code><br />
+  Abrir en local: file:///W:/juegos/aqui-hay-tema/design/estado-visual-actual/index.html<br />
+  LEEME prototipos: <code>design/prototipo-pantalla-principal/LEEME.md</code>
+</footer>
+</body>
+</html>

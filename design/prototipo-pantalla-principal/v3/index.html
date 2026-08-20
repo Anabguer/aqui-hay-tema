@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Aquí Hay Tema — V3 visual (no es PLAY)</title>
+  <link rel="stylesheet" href="prototipo.css"/>
+  <link rel="stylesheet" href="capas.css"/>
+  <link rel="stylesheet" href="pueblo.css"/>
+</head>
+<body class="ver-pc">
+  <div class="studio">
+    <header class="studio-bar">
+      <h1>V3 — el pueblo de verdad <span class="badge-v">dirección visual</span></h1>
+      <p>Primera versión para sentir el juego. Arquitectura cerrada. No es PLAY.</p>
+      <div class="studio-controls">
+        <button type="button" data-view="pc" class="is-on">PC</button>
+        <button type="button" data-view="movil">Móvil</button>
+        <button type="button" data-pueblo="temprano" class="is-on">Temprano</button>
+        <button type="button" data-pueblo="pleno">Evolucionado</button>
+        <button type="button" data-demo="crece">Cómo crece</button>
+        <button type="button" data-aforo="12">Habitantes</button>
+        <button type="button" data-capa-btn="vecinos">Vecinos</button>
+        <button type="button" data-capa-btn="buzon">Buzón</button>
+        <button type="button" data-demo="importante">Correo importante</button>
+        <button type="button" data-capa-btn="diario">El Cotilleo</button>
+        <button type="button" data-capa-btn="organizar">Organizar</button>
+        <button type="button" data-demo="sel">Selector Cine Game</button>
+        <button type="button" data-capa-btn="ninguna">Pueblo</button>
+      </div>
+      <p class="studio-note">Mismo juego en PC y móvil. Papel, maqueta, cotilleo. Dock: Pueblo · Diario · Organizar · Vecinos.</p>
+      <p class="ficha-link"><a href="../v2-complejos/index.html">V2 complejos</a> · <a href="../v2-capas/index.html">Capas (cerradas)</a></p>
+    </header>
+    <div class="stage">
+      <figure class="device pc"><figcaption class="device-label">PC</figcaption><div id="stage-pc"></div></figure>
+      <figure class="device phone"><figcaption class="device-label">Móvil</figcaption><div id="stage-phone"></div></figure>
+    </div>
+  </div>
+
+  <template id="tpl-play">
+    <div class="play-root" data-pueblo="temprano" data-diario="hoy" data-paso="tipo" data-cupo="2">
+      <div class="board-scroll">
+        <div class="board-fit">
+          <div class="calles" aria-hidden="true">
+            <div class="calle h" style="left:0;right:0;top:40%"></div>
+            <div class="calle h" style="left:8%;right:10%;top:66%;height:5%"></div>
+            <div class="calle v" style="top:6%;bottom:10%;left:33%"></div>
+            <div class="calle v" style="top:6%;bottom:8%;left:60%"></div>
+          </div>
+          <div class="mapa-complejos">
+            <button type="button" class="complejo cx-cafe" data-complejo="cafe" aria-label="Café y libros">
+              <span class="sombra"></span>
+              <span class="cuerpo">
+                <span class="lado"></span>
+                <span class="frente"><span class="toldo"></span><span class="ventanas"></span></span>
+                <span class="ala ala-biblio"><span class="ala-nom">biblio</span></span>
+                <span class="ala ala-tienda"><span class="ala-nom">tienda</span></span>
+              </span>
+              <span class="etiqueta eti-temp">Cafetería</span>
+              <span class="etiqueta eti-pleno">Café &amp; Libros</span>
+              <span class="habs" data-habs="cafe"></span>
+            </button>
+            <button type="button" class="complejo cx-lola" data-complejo="lola" aria-label="El Rincón de Lola">
+              <span class="sombra"></span>
+              <span class="cuerpo">
+                <span class="lado"></span>
+                <span class="frente"><span class="toldo"></span><span class="ventanas"></span></span>
+                <span class="ala ala-bingo"><span class="ala-nom">bingo</span></span>
+              </span>
+              <span class="etiqueta">El Rincón de Lola</span>
+              <span class="habs" data-habs="lola"></span>
+            </button>
+            <button type="button" class="complejo cx-cine" data-complejo="cine" aria-label="Cine Game">
+              <span class="sombra"></span>
+              <span class="cuerpo">
+                <span class="lado"></span>
+                <span class="frente"><span class="marquesina">CINE</span><span class="ventanas"></span></span>
+                <span class="ala ala-arcade"><span class="ala-nom">arcade</span></span>
+              </span>
+              <span class="etiqueta eti-temp">Cine</span>
+              <span class="etiqueta eti-pleno">Cine Game</span>
+              <span class="habs" data-habs="cine"></span>
+            </button>
+            <button type="button" class="complejo cx-mala" data-complejo="mala" aria-label="La Mala Idea">
+              <span class="sombra"></span>
+              <span class="cuerpo">
+                <span class="lado"></span>
+                <span class="frente"><span class="neones"></span><span class="ventanas"></span></span>
+                <span class="ala ala-disco"><span class="ala-nom">disco</span></span>
+                <span class="ala ala-karaoke"><span class="ala-nom">karaoke</span></span>
+              </span>
+              <span class="etiqueta">La Mala Idea</span>
+              <span class="habs" data-habs="mala"></span>
+            </button>
+            <button type="button" class="complejo cx-parque" data-complejo="parque" aria-label="Parque">
+              <span class="sombra"></span>
+              <span class="cuerpo">
+                <span class="frente"></span>
+                <span class="fuente"></span>
+                <span class="arbol" style="left:12%;top:18%"></span>
+                <span class="arbol" style="right:14%;top:28%;width:12%"></span>
+                <span class="picnic"></span>
+                <span class="mirador"></span>
+              </span>
+              <span class="etiqueta">Parque</span>
+              <span class="habs" data-habs="parque"></span>
+            </button>
+            <button type="button" class="complejo cx-gym" data-complejo="gym" aria-label="Gimnasio">
+              <span class="sombra"></span>
+              <span class="cuerpo">
+                <span class="lado"></span>
+                <span class="frente"><span class="ventanas"></span></span>
+                <span class="ala ala-spa"><span class="ala-nom">spa</span></span>
+              </span>
+              <span class="etiqueta eti-temp">Gimnasio</span>
+              <span class="etiqueta eti-pleno">Gimnasio &amp; Spa</span>
+              <span class="habs" data-habs="gym"></span>
+            </button>
+          </div>
+          <div class="bloque-a"><span>Bloque A</span></div>
+          <div class="solar solar-b"><span>Bloque B</span></div>
+          <div class="solar solar-c"><span>Bloque C</span></div>
+          <aside class="postit" data-open="diario"><span class="pin"></span>El pueblo engorda si tú lo alimentas.</aside>
+          <p class="crece-nota">Así crece: alas nuevas, mismo nombre. No hay «nivel 2».</p>
+          <button type="button" class="btn-guia">¿Dónde está…?</button>
+          <aside class="selector">
+            <button type="button" class="cerrar" data-close>cerrar</button>
+            <h3 data-s-tit></h3>
+            <p class="cotilleo" data-s-coti></p>
+            <div class="destinos" data-s-btns></div>
+            <p class="mini">Organizar también ofrece estos destinos por separado.</p>
+          </aside>
+          <aside class="quien">
+            <button type="button" class="cerrar" data-close>cerrar</button>
+            <p class="kicker">Quién está</p>
+            <h3 data-q-tit></h3>
+            <p class="quien-sum" data-q-sum></p>
+            <div class="quien-list" data-q-list></div>
+            <div class="destinos" data-q-btns></div>
+          </aside>
+          <aside class="aviso-ir">Entras a <span data-destino-txt></span>.</aside>
+        </div>
+      </div>
+      <div class="mesa">
+        <div class="mesa-papel">
+          <span class="mancha" aria-hidden="true"></span>
+          <span class="corazon" aria-label="Vida del pueblo" title="El pueblo respira. No se toca para ir a ningún sitio."><span class="corazon-dibujo" style="--fill:62%"></span></span>
+          <div class="dia"><span class="cinta"></span><div class="dow">MIÉ 19</div><div class="hora">11:30</div></div>
+          <div class="hud-right">
+            <div class="dinero"><span class="cinta cinta-verde"></span>80 €</div>
+            <button type="button" class="buzon" data-open="buzon" aria-label="Buzón">
+              <svg viewBox="0 0 54 46"><rect x="6" y="14" width="42" height="26" fill="#fffdf6" stroke="#2c261f" stroke-width="2.2"/><path d="M6 14 L27 28 L48 14" fill="none" stroke="#e56b8a" stroke-width="2.6"/></svg>
+              <span class="badge">3</span>
+              <span class="lacre-hud">OJO</span>
+            </button>
+            <button type="button" class="btn-organizar-pc" data-open="organizar">Organizar</button>
+          </div>
+        </div>
+      </div>
+      <nav class="dock">
+        <button type="button" data-close><i></i>Pueblo</button>
+        <button type="button" data-open="diario"><i></i>Diario</button>
+        <button type="button" data-open="organizar"><i></i>Organizar</button>
+        <button type="button" data-open="vecinos"><i></i>Vecinos</button>
+      </nav>
+      <div class="velo" data-close></div>
+
+      <aside class="capa capa-vecinos">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine</p>
+        <h2>Vecinos</h2>
+        <p class="mini">Lo que sé, escrito a mano. El resto llegará.</p>
+        <button type="button" class="vecino" data-open="ficha-conocida">
+          <img src="img/cabeza-rocio.png" alt=""/>
+          <span>Rocío · la del espresso · hay tilín con Nora, o eso parece</span>
+        </button>
+        <button type="button" class="vecino" data-open="ficha-conocida">
+          <img src="img/cabeza-nora.png" alt=""/>
+          <span>Nora · avisa que se piensa ir · léeme ya</span>
+        </button>
+        <button type="button" class="vecino" data-open="ficha-nueva">
+          <img src="img/cabeza-luis.png" alt=""/>
+          <span>Luis · llegó ayer · página casi en blanco</span>
+        </button>
+      </aside>
+
+      <aside class="capa capa-ficha-nueva">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine · página casi en blanco</p>
+        <div class="ficha-hero">
+          <div class="cara"><img src="img/cabeza-luis.png" alt=""/></div>
+          <div>
+            <h2>Luis</h2>
+            <p class="mini">Llegó ayer · ahora en el parque</p>
+          </div>
+        </div>
+        <p class="animo">Mira el pueblo como quien entra en una fiesta ajena.</p>
+        <div class="seccion-lib">
+          <h3>De momento</h3>
+          <p class="nota-libre">Le he visto sentado. Punto.</p>
+        </div>
+        <aside class="anota-cele"><strong>Nota mía</strong>Presentarle a alguien. Cuando deje de hacer de estatua.</aside>
+        <button type="button" class="cta" data-open="organizar" data-quien="luis" data-tipo="conocerse" data-cupo="1">Proponer conocerse</button>
+      </aside>
+
+      <aside class="capa capa-ficha-conocida">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine · lleva un tiempo</p>
+        <div class="ficha-hero">
+          <div class="cara"><img src="img/cabeza-rocio.png" alt=""/></div>
+          <div>
+            <h2>Rocío</h2>
+            <p class="mini">Día 1 · ahora en la cafetería · Bloque A</p>
+          </div>
+        </div>
+        <p class="animo">Hoy está de un humor peligroso. El café, rico igual.</p>
+        <div class="seccion-lib">
+          <h3>Lo que ya sé</h3>
+          <ul>
+            <li>Le encanta el primer espresso.</li>
+            <li>La gente mandona le pone de los nervios.</li>
+          </ul>
+        </div>
+        <aside class="anota-cele"><strong>Nota mía</strong>Juntarla con alguien que no sea el vapor de la cafetera.</aside>
+        <button type="button" class="cta" data-open="organizar" data-quien="rocio">Organizar un plan con ella</button>
+      </aside>
+
+      <aside class="capa capa-buzon">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Buzón</h2>
+        <p class="mini">Te escriben a ti. Lo importante lleva lacre.</p>
+        <article class="carta-msg importante no-leida">
+          <span class="chincheta-carta"></span>
+          <img src="img/cabeza-nora.png" alt=""/>
+          <span class="lacre">OJO</span>
+          <div>
+            <p class="marca-mano">Léeme ya</p>
+            <div class="sello">Sin abrir · se está pensando ir</div>
+            <div class="de">Nora</div>
+            <p class="cuerpo">Si el pueblo sigue tan callado, no sé si me quedo el mes que viene. No amenazo. Aviso.</p>
+            <div class="acciones-msg">
+              <button type="button" data-open="organizar" data-quien="nora" data-desde="marcha">Intentar echarle una mano</button>
+              <button type="button" data-close>Dejarla reposar</button>
+            </div>
+          </div>
+        </article>
+        <article class="carta-msg no-leida">
+          <img src="img/cabeza-rocio.png" alt=""/>
+          <div>
+            <div class="sello">Sin abrir</div>
+            <div class="de">Rocío</div>
+            <p class="cuerpo">¿Me organizas algo con alguien que no sea yo misma hablándole al vapor?</p>
+            <div class="acciones-msg">
+              <button type="button" data-open="organizar" data-quien="rocio">Organizarle algo</button>
+            </div>
+          </div>
+        </article>
+      </aside>
+
+      <aside class="capa capa-diario">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <header class="masthead">
+          <h2>El Cotilleo</h2>
+          <p class="edicion">Diario del pueblo · mié 19 · más o menos veraz</p>
+        </header>
+        <div class="tabs-papel">
+          <button type="button" class="is-on" data-diario-tab="hoy">Hoy</button>
+          <button type="button" data-diario-tab="ayer">Ayer</button>
+          <button type="button" class="trapos" data-diario-tab="viejos">Trapos viejos</button>
+        </div>
+        <div class="dia-block dia-hoy collage">
+          <article class="recorte portada">
+            <h3>Portada · terraza</h3>
+            <p>Se ha visto a Rocío y Nora en la cafetería. Discreción ante todo. Nosotros, ninguna.</p>
+            <p class="firma">11:20 · fuentes: nuestros ojos</p>
+          </article>
+          <article class="recorte polaroid">
+            <div class="caras-clip">
+              <img src="img/cabeza-rocio.png" alt=""/>
+              <img src="img/cabeza-nora.png" alt=""/>
+            </div>
+            <p>Esas dos. Otra vez. El café, testigo.</p>
+          </article>
+          <article class="recorte escandalo">
+            <h3>Ojo a esto</h3>
+            <p>Nora ha mirado a Luis. Sí, Luis. El del banco. El que llegó ayer.</p>
+          </article>
+        </div>
+        <div class="dia-block dia-ayer collage">
+          <article class="recorte portada">
+            <h3>Ayer</h3>
+            <p>Luis ha vuelto al bingo. Tercer día. Empieza a ser una relación seria.</p>
+          </article>
+          <article class="recorte chisme">
+            <p>Rocío cerró con un portazo educado. Existe. Lo hemos comprobado.</p>
+          </article>
+        </div>
+        <div class="dia-block dia-viejos collage">
+          <article class="recorte rumor">
+            <h3>Hace una semana</h3>
+            <p>Luis no existía. El banco, sí.</p>
+          </article>
+          <article class="recorte poesia">
+            <p>Se dijo que el rosa le iba a Rocío. Se sigue diciendo.</p>
+          </article>
+        </div>
+      </aside>
+
+      <aside class="capa capa-organizar">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Un papelito, no un parte</p>
+        <h2>Organizar un plan</h2>
+        <div class="paso paso-tipo">
+          <p><strong>Qué tipo de plan</strong></p>
+          <div class="chips">
+            <button type="button" class="chip" data-tipo="conocerse" data-cupo="1">Conocerse</button>
+            <button type="button" class="chip is-on" data-tipo="quedar" data-cupo="2">Quedar</button>
+            <button type="button" class="chip" data-tipo="primera" data-cupo="2">Primera cita</button>
+          </div>
+          <div class="nav-pasos"><span></span><button type="button" class="cta" data-paso="quien">Siguiente</button></div>
+        </div>
+        <div class="paso paso-quien">
+          <p><strong>Quién</strong></p>
+          <div class="chips">
+            <button type="button" class="chip is-on" data-chip="rocio"><img src="img/cabeza-rocio.png" alt=""/> Rocío</button>
+            <button type="button" class="chip is-on" data-chip="nora"><img src="img/cabeza-nora.png" alt=""/> Nora</button>
+            <button type="button" class="chip" data-chip="luis"><img src="img/cabeza-luis.png" alt=""/> Luis</button>
+          </div>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="tipo">Atrás</button>
+            <button type="button" class="cta" data-paso="lugar">Siguiente</button>
+          </div>
+        </div>
+        <div class="paso paso-lugar">
+          <p><strong>Dónde</strong></p>
+          <div class="chips">
+            <button type="button" class="chip is-on">Cafetería</button>
+            <button type="button" class="chip">Parque</button>
+            <button type="button" class="chip">Cine</button>
+            <button type="button" class="chip">Arcade</button>
+          </div>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="quien">Atrás</button>
+            <button type="button" class="cta" data-paso="cuando">Siguiente</button>
+          </div>
+        </div>
+        <div class="paso paso-cuando">
+          <p><strong>Cuándo</strong></p>
+          <div class="chips">
+            <button type="button" class="chip is-on">Hoy</button>
+            <button type="button" class="chip">Mañana</button>
+          </div>
+          <div class="chips">
+            <button type="button" class="chip is-on">17:00</button>
+            <button type="button" class="chip">20:00</button>
+          </div>
+          <div class="nav-pasos">
+            <button type="button" class="cta ghost" data-paso="lugar">Atrás</button>
+            <button type="button" class="cta" data-paso="hecho">Proponer</button>
+          </div>
+        </div>
+        <div class="paso paso-hecho">
+          <p class="resumen-plan">Rocío y Nora · quedar · cafetería · hoy 17:00.</p>
+          <p class="queda">Tú propones. Ellas viven.</p>
+          <button type="button" class="cta" data-close>Al pueblo</button>
+        </div>
+      </aside>
+    </div>
+  </template>
+  <script src="v3.js"></script>
+</body>
+</html>

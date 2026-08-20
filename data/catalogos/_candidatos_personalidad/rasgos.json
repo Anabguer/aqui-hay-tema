@@ -1,0 +1,1659 @@
+{
+    "meta": {
+        "catalogo": "rasgos_candidatos",
+        "estado": "PROPUESTA_NO_ACTIVA",
+        "canon": false,
+        "nota": "Candidato. CatalogStore de PLAY no carga esta carpeta."
+    },
+    "items": [
+        {
+            "id": "directo",
+            "eje": "social",
+            "etiqueta": "Franqueza",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Va al grano. El rodeito le parece una pérdida de tarde.",
+                "Si hay que decirlo, lo dice. El resto es decorado.",
+                "Una pregunta clara le sienta bien. Una insinuación, le cansa.",
+                "No adorna el no. Tampoco el sí. Conveniente y, a veces, seco.",
+                "Si te riza el rizo, se le ve la impaciencia en la ceja.",
+                "Celestine: no hace falta preparar el discurso. Hace falta la frase.",
+                "Quien espera diplomacia de manual, se sorprende. Quien quiere la verdad, agradece."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "corte_seco"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "timido",
+            "eje": "social",
+            "etiqueta": "Timidez",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Le cuesta el primer paso. El segundo, a veces, lo da de una vez.",
+                "No es que no quiera: es que la entrada le sale cara. Luego puede cantar karaoke, ojo.",
+                "En una mesa nueva se queda a media frase. No es desinterés: está tomando tierra.",
+                "Si le dejas el hueco, aparece. Si le empujas, se retrasa una semana.",
+                "Habla más cuando no hay un corro mirando. El corro, luego, a lo mejor se apunta.",
+                "El silencio inicial no es un no. Es un calentamiento. Celestine, cuenta hasta tres.",
+                "Quien espera un poco, se lleva conversación. Quien apremia, se lleva un \"otro día\"."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "calentamiento"
+            ],
+            "modula": true,
+            "asigna_destino": false,
+            "nota": "No veta karaoke ni fiesta."
+        },
+        {
+            "id": "reservado",
+            "eje": "social",
+            "etiqueta": "Reserva",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Cuenta poco. No es vacío: es selección.",
+                "Si te suelta algo personal, anótalo. No lo repite cada martes.",
+                "Las preguntas de relleno le cansan. Las justas, las aguanta.",
+                "Hay un cajón cerrado. No es un reto. Es un cajón.",
+                "En el cotilleo escucha más de lo que aporta. El pueblo lo nota tarde.",
+                "Un plan íntimo le va. Un plan de confesiones en grupo, menos.",
+                "No es hielo: ahorra. El calor, cuando sale, calienta de verdad."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "confidencia_rara"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "observador",
+            "eje": "social",
+            "etiqueta": "Observación",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se entera de más de lo que habla. Incómodo para quien cotillea alto.",
+                "Mira. Luego opina, si acaso. El orden importa.",
+                "Un detalle de pasada le dura. El peinado nuevo, el tono raro, la silla cambiada.",
+                "Quien miente en la mesa tiene un problema. No siempre lo dice. Lo guarda.",
+                "En el bar parece ausente. Está tomando nota. Distinto.",
+                "Un \"¿te has dado cuenta?\" le sienta como un café. Suele haber visto eso, sí.",
+                "No es magia: es que mira cuando el resto habla."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "se_dio_cuenta"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "sociable",
+            "eje": "social",
+            "etiqueta": "Sociabilidad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "La gente le sienta bien. No todas las pistas ni todos los volúmenes.",
+                "Necesita caras. Luego puede odiar la discoteca igual. Las dos cosas caben.",
+                "Se apunta. La mesa extra rara vez es un problema.",
+                "Un día sin nadie le deja fuera de sitio. No es tristeza: es que faltan caras.",
+                "Saluda en la calle de verdad. No es educación: es que le gusta el roce.",
+                "Un plan de dos le vale. Un plan de ocho, también. El sofá a solas, a ratos.",
+                "No implica fiesta. Implica gente. El sitio, ya se habla."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "se_apunta"
+            ],
+            "modula": true,
+            "asigna_destino": false,
+            "nota": "No implica discoteca."
+        },
+        {
+            "id": "cotilla",
+            "eje": "social",
+            "etiqueta": "Al tanto",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se entera. A veces incluso de lo que aún no ha pasado.",
+                "El pueblo es su serial. No siempre lo cuenta. Eso ya es ética, o estrategia.",
+                "Una noticia pequeña le abre el día. Una grande, la semana.",
+                "Pregunta con tiento. O sin tiento. Según cómo venga el café.",
+                "Sabe el nombre del primo y el motivo del silencio. Útil y delicado.",
+                "Si dices \"no se lo digas a nadie\", hay un debate interno. Suele ganar el secreto. Suele.",
+                "No es oficio sucio: es que le gusta estar al tanto. El reparo, si hay, se nota en lo que no suelta."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "se_entero_antes"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "discreto",
+            "eje": "social",
+            "etiqueta": "Discreción",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "No reparte lo que sabe. En este pueblo eso casi es un superpoder.",
+                "Si le cuentas algo, se queda ahí. Raro. Valioso.",
+                "El cotilleo le llega y no sigue viaje. Quien habla alto se confunde.",
+                "Una confianza le pesa bien. Una filtración le pesa mal. Muy mal.",
+                "En la tertulia escucha. Aporta poco de lo ajeno. Aporta lo suyo, si toca.",
+                "Pedir un secreto es razonable. Pedir que lo confirme en voz alta, no.",
+                "Celestine: lo que se diga aquí no sale por el bingo. Casi nunca sale."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "secreto_a_salvo"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "ironico",
+            "eje": "humor",
+            "etiqueta": "Ironía",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "El tono va por otro lado. Si lo tomas al pie de la letra, os peleáis sin motivo.",
+                "Bromea en serio. O habla en broma. Adivina.",
+                "Una frase seca puede ser cariño. Una dulce, aviso. El manual no existe.",
+                "Se le ve la ceja. Eso es el subtítulo. Apréndetelo.",
+                "Quien necesita todo explícito, sufre. Quien pilló el tono, se queda.",
+                "En un malentendido de ironía, cede tarde. Cree que se entendía.",
+                "No es crueldad: es distancia. A veces ayuda. A veces deja a alguien en el aire."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "malentendido_tono"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "bromista",
+            "eje": "humor",
+            "etiqueta": "Bromas",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Suelta chistes como quien suelta aire. Algunos salen bien.",
+                "Si el ambiente se pone denso, tira de broma. A veces ayuda. A veces no.",
+                "Una pulla a tiempo le parece un favor. A destiempo, un problema.",
+                "Se ríe de lo propio antes. Eso desarma. O cansa. Según la racha.",
+                "En un plan serio se le ve el esfuerzo por no soltarla. A veces gana el chiste.",
+                "No hace falta palco: hace falta un oído. El resto es ganas.",
+                "Si la broma duele, se le puede decir. Suele recoger. Suele."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "broma_a_destiempo"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "socarron",
+            "eje": "humor",
+            "etiqueta": "Socarronería",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Picarda de pueblo. No es crueldad: es deporte local.",
+                "Te pincha para ver si aguantas. Si aguantas, sois de los suyos. Si no, también, pero más lejos.",
+                "Una pulla bien puesta le parece educación. El piropo fácil, no.",
+                "En el bar se le entiende mejor. En una mesa formal, hay que traducir.",
+                "No adula. Comenta. El comentario suele tener filo y fondo.",
+                "Quien se ofende a la primera, lo tiene crudo. Quien devuelve la pulla, entra.",
+                "Celestine: si te pica, a veces es que le caes bien. A veces, no. Mira el resto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "pulla"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "leal",
+            "eje": "vinculo",
+            "etiqueta": "Lealtad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Cuando está, está. No es ruido: es sitio.",
+                "No cambia de gente como de chaqueta. Quien está dentro, lo nota.",
+                "Un apuro ajeno le mueve. Un cotilleo contra los suyos, le cierra.",
+                "Acude. Aunque el plan sea malo. Aunque la hora sea peor.",
+                "La constancia no la anuncia. Se ve en las semanas, no en un brindis.",
+                "Pedir ayuda es razonable. Dudar de si va a venir, menos.",
+                "Si hay que elegir bando, elige tarde y se queda. El resto es conversación."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "acude"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "empatico",
+            "eje": "vinculo",
+            "etiqueta": "Empatía",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se le pegan los estados ajenos. Conveniente y cansino.",
+                "Se da cuenta de cómo estás antes de que lo cuentes. Inquietante, útil.",
+                "Un mal gesto en la mesa le deja raro el resto del café.",
+                "Consuela de verdad. No de manual. A veces se queda sin pila.",
+                "Las películas tristes le llegan. Las noticias del pueblo, también.",
+                "Si alguien está mal, el plan se reorganiza. Sin anuncio. Se nota.",
+                "Celestine: no hace falta fingir alegría. Se pilla. Mejor el tono cierto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "consuelo"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "cabezota",
+            "eje": "vinculo",
+            "etiqueta": "Cabezota",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Cuando se planta, se planta. El resto es negociación de fachada.",
+                "No es que no oiga: es que ya decidió. Matiz importante.",
+                "Una discusión larga le cansa menos que ceder por ceder.",
+                "Si el plan era A, B tiene que merecer la pena. De verdad.",
+                "Pedir un cambio a última hora pone de mal humor. Avisa antes.",
+                "Tiene razón a menudo. Cuando no, cuesta. El pueblo lo sabe.",
+                "No hace falta gritar. Hace falta un argumento que no haya oído diez veces."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "disputa_larga"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "protector",
+            "eje": "vinculo",
+            "etiqueta": "Protección",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se pone delante. A veces hace falta. A veces ahoga. El arte está en el cuándo.",
+                "Cuida. Pregunta si la otra persona quería ser cuidada.",
+                "Un apuro ajeno le saca de la silla. Un consejo no pedido, también.",
+                "Vigila el camino a casa, la copa de más, el rumor feo. Se le ve el radar.",
+                "Quien pide espacio a veces se encuentra un escudo. Hay que decirlo claro.",
+                "No es mando: es miedo a que pase algo. Traduce eso, no el tono.",
+                "Celestine: si te cubre de más, se puede hablar. Suele recoger si no es ataque."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "intervencion"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "independiente",
+            "eje": "vinculo",
+            "etiqueta": "Independencia",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se basta. No es un rechazo: es un sistema operativo.",
+                "Pide poco. Cuando pide, es que importa.",
+                "Un plan en solitario le parece normal. A otras personas les parece aviso.",
+                "No necesita compañía para el cine, el paseo, la cena. La admite. Distinto.",
+                "Quien se pega, cansa. Quien aparece y se va, encaja.",
+                "Compatible con cariño. El hueco, también. Las dos cosas caben.",
+                "Ofrecer ayuda vale. Insistir cuando ha dicho que no, menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "no_necesita"
+            ],
+            "modula": true,
+            "asigna_destino": false,
+            "nota": "Compatible con vínculo cálido."
+        },
+        {
+            "id": "generoso",
+            "eje": "vinculo",
+            "etiqueta": "Generosidad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Da. Tiempo, favores, postre. Luego hay que vigilar que no se quede a cero.",
+                "Invita. A veces antes de saber si te apetecía. El gesto es bueno; el radar, mejorable.",
+                "Un detalle pequeño le sale solo. Uno grande, también, si el día tira.",
+                "Le cuesta recibir. Le resulta más fácil el otro sentido.",
+                "Si hay que pagar, ya está buscando el bolsillo. Frenar eso es un arte.",
+                "La generosidad no es teatrillo. Se nota cuando nadie mira.",
+                "Pedir es difícil. Aceptar, también. El \"gracias\" hay que decirlo igual."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "invita"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "vanidoso",
+            "eje": "ego",
+            "etiqueta": "Vanidad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Le importa cómo queda. No lo niegues: se le ve el esfuerzo.",
+                "Un cumplido le dura. Una pega, también. Maneja ambos con tiento.",
+                "El espejo no es vicio: es control de daños. El pueblo tiene ojos.",
+                "Una foto borrosa le pica más que un rumor pequeño.",
+                "Se arregla para el bar igual que para una boda. El listón es suyo.",
+                "No hace falta adular. Hace falta no ignorar que se ha esforzado.",
+                "Un \"vas bien\" a tiempo abre puertas. Un \"da igual cómo vas\", las cierra un poco."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "espejo"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "orgulloso",
+            "eje": "ego",
+            "etiqueta": "Orgullo",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Pedir perdón le sale caro. No imposible: caro.",
+                "Prefiere tener razón a tener paz. Trabajo para Celestine, si te pica.",
+                "Una humillación chica le dura. Una grande, se queda en el cuerpo.",
+                "Ceder en público cuesta más que ceder en la cocina. Elige el sitio.",
+                "No pide ayuda hasta tarde. Cuando pide, el asunto ya pesa.",
+                "Un \"tenías razón\" le desarma más que un discurso.",
+                "No es teatro: es que bajar la guardia le parece un riesgo. Dale tiempo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "no_cede"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "ansioso",
+            "eje": "afecto",
+            "etiqueta": "Ansiedad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Adelanta problemas que aún no han aparcado. El cuerpo va por delante.",
+                "Si no llega un mensaje, se inventa tres películas. Ninguna es buena.",
+                "Esperar le sienta mal. Avisar, bien. El silencio, mal del todo.",
+                "Un plan vago le deja en vilo. Un plan escrito, le baja el pulso.",
+                "Se le ve en el vaso, en la silla, en la pregunta de más.",
+                "No hace falta decir \"tranquilo\". Hace falta un dato. La hora, el sitio, el sí.",
+                "Celestine: un \"estoy en camino\" vale más que un discurso de calma."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "espera"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "calido",
+            "eje": "afecto",
+            "etiqueta": "Calidez",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Calienta el cuarto. No es azúcar: es presencia.",
+                "Se está bien al lado. Luego puede pedir espacio igual. Cabe.",
+                "Un abrazo a tiempo le sale. Uno a destiempo, también, y hay que frenarlo con tiento.",
+                "Recuerda el café, el nombre del perro, el mal día de la semana pasada.",
+                "En una mesa fría hace de estufa. Se le agradece. A veces se le carga el muerto.",
+                "No es calor de cartel. Es que no deja a la gente a la intemperie.",
+                "Quien necesita calor, lo encuentra. Quien necesita aire, tiene que pedirlo. Suele entenderlo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "abrazo_a_tiempo"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "desconfiado",
+            "eje": "afecto",
+            "etiqueta": "Desconfianza",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "No compra la primera versión. Ni la segunda, según el día.",
+                "La gente nueva le parece un tráiler. El filme, más adelante.",
+                "Un favor de entrada le pone en guardia. Uno después de tiempo, le entra.",
+                "Las promesas grandes le cansan. Las pequeñas cumplidas, le abren.",
+                "En el pueblo ha visto demasiado. El escepticismo no es pose.",
+                "Ganarse un sí lleva semanas. Perderlo, una tarde. El recuento es justo, a su modo.",
+                "No hace falta jurar. Hace falta aparecer cuando se dijo. Punto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "prueba_de_fuego"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "sensible",
+            "eje": "afecto",
+            "etiqueta": "Sensible",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Le llega todo un poco más alto. No es fragilidad: es volumen.",
+                "Una frase de pasada le dura la tarde. Elige las tuyas.",
+                "El cine, la música, un mal gesto: entra. No siempre avisa.",
+                "Una pulla de broma puede dejar marca. El bromista no siempre lo sabe.",
+                "Se le humedece el ojo y sigue. No hace falta un pañuelo de teatro.",
+                "Cuidar el tono no es tratar con cristal. Es que el cristal oye.",
+                "Si algo duele, a veces lo dice tarde. El retraso no es teatro: es digestión."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "comentario_cruzado"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "practico",
+            "eje": "cognicion",
+            "etiqueta": "Pragmatismo",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Va a lo que funciona. La teoría, si acaso, de postre.",
+                "Si el plan no se puede hacer, lo dice. Sin poesía. Gracias.",
+                "Un atajo le parece inteligencia. Un rodeíto estético, pérdida.",
+                "Pregunta hora, sitio, quién paga. No es sequedad: es que quiere ir.",
+                "Las crisis de mantel le cansan. Un problema con solución, le enciende.",
+                "Regalar algo útil acierta. Regalar un símbolo vago, según el día.",
+                "Celestine: no hace falta el discurso. Hace falta que el plan cierre."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "atajo"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "curioso",
+            "eje": "cognicion",
+            "etiqueta": "Curiosidad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Pregunta. Se mete. Quiere saber cómo va la cosa por dentro.",
+                "Un dato nuevo le alegra el día más que un pastel. Casi.",
+                "La pregunta incómoda sale. No siempre en el momento fino.",
+                "Un taller, un detrás de cámaras, una receta: se apunta.",
+                "El \"no se pregunta eso\" le parece un cartel. A veces lo respeta. A veces no.",
+                "En la biblioteca no solo lee: husmea lomos. En el pueblo, igual.",
+                "Contar algo raro es un buen regalo. Contar un secreto ajeno, ya es otra guerra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "pregunta_incómoda"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "soñador",
+            "eje": "cognicion",
+            "etiqueta": "Ensoñación",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se va. Vuelve. A veces trae un plan imposible y un brillo raro.",
+                "La realidad le parece un primer borrador. Hay que quererle así.",
+                "Una idea grande le ocupa la sobremesa. El ticket del pan, a veces no.",
+                "Mira el mirador y ya está en otra ciudad. El cuerpo, aquí.",
+                "No es que no pise suelo: es que el suelo le sabe a poco algunos días.",
+                "Un plan poético le enciende. Uno solo práctico, le deja a medias.",
+                "Aterrizar la idea es un favor. Reírse de la idea, un corte."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "idea_grande"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "constante",
+            "eje": "ritmo",
+            "etiqueta": "Constancia",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Mantiene. Lo de cada martes, lo de cada planta, lo de cada persona.",
+                "No presume de disciplina. Simplemente no deja que se caiga.",
+                "Una racha le sienta bien. Un salto de humor ajeno, le descoloca.",
+                "Si dice que va, va. El pueblo usa eso como reloj.",
+                "Los planes nuevos entran despacio. Los viejos, tienen silla.",
+                "Cancelar a última hora le pica. Avisa con tiempo y hay margen.",
+                "No es aburrimiento: es que le gusta que las cosas sigan estando."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "racha"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "impaciente",
+            "eje": "ritmo",
+            "etiqueta": "Impaciencia",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Lo quiere ya. Esperar le parece un deporte ajeno.",
+                "Si el plan tarda, se le pone cara de bus perdido.",
+                "Las colas le sientan mal. Las explicaciones largas, también.",
+                "Un \"en cinco minutos\" de verdad le vale. Uno eterno, le cierra el carácter.",
+                "Anda rápido. Habla rápido. El resto del pueblo, a veces, no.",
+                "Decidir ya le alivia. Dejarlo para el jueves, le deja en vilo.",
+                "Celestine: si vas a llegar tarde, dilo. El silencio hincha la espera."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "darse_prisa"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "competitivo",
+            "eje": "ritmo",
+            "etiqueta": "Competitividad",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Todo le sabe un poco a partido. Hasta un café, si se descuida.",
+                "Ganar le sienta bien. Perder, ya es otro rasgo o una manía. No lo mezcles todavía.",
+                "Un marcador le pone en modo serio. Luego dice que era broma.",
+                "Un reto le enciende. Un \"da igual quién gane\", le apaga un poco.",
+                "En el bingo, en el arcade, en la cocina: hay un palmarés invisible.",
+                "La revancha es un lenguaje. Quien no lo habla, se extraña.",
+                "No hace falta competir siempre. Hace falta no fingir que no le importa cuando sí."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "reto"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "perezoso",
+            "eje": "ritmo",
+            "etiqueta": "Pereza",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Economiza movimiento. No es que no quiera: es que el sofá hace campaña.",
+                "Se apunta… y luego negocia la hora. Suele ganar el sofá. Salvo karaoke. Pasa.",
+                "Un plan cerca le vale. Uno que pida dos autobuses, ya es épica.",
+                "La mañana le cuesta. La tarde, según. La noche del sofá, fácil.",
+                "Quedar para luego es su idioma. Quedar ahora, una negociación.",
+                "No es desinterés: es que el esfuerzo quiere motivo. El motivo, a veces, es un dulce.",
+                "Empujar con cariño funciona. Empujar con culpa, cierra la persiana."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "queda_para_luego"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "tranquilo",
+            "eje": "ritmo",
+            "etiqueta": "Calma",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "No se altera a la primera. Ni a la segunda. A la tercera, ya veremos.",
+                "Baja el volumen de la mesa sin decir nada. Útil. A veces desesperante.",
+                "Un \"no pasa nada\" le sale de verdad. A quien está en llamas, le puede irritar.",
+                "El caos ajeno le rodea y sigue. Hasta que no puede. Entonces, poco teatro.",
+                "Los planes pausados le van. Los de sprint, le dejan a medias.",
+                "En una crisis es agua. En una fiesta, a veces también, y hay que sacudir un poco.",
+                "No hace falta gritar para que oiga. Hace falta no confundir calma con que da igual."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "no_pasa_nada"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "nervioso",
+            "eje": "ritmo",
+            "etiqueta": "Nervios",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "Se le ve el motor. La pierna, el vaso, la frase a medias.",
+                "El cuerpo avisa antes que la boca. Si aprendes el código, llegas a tiempo.",
+                "No para. Aunque esté en una silla. El descanso es otra cosa, y cuesta.",
+                "Un sitio nuevo le sube el volumen interno. Un sitio conocido, lo baja.",
+                "Hablar le ayuda. Callar del todo, a veces lo pone peor.",
+                "No hace falta decir que se note. Se nota. Mejor un plan claro que un \"relájate\".",
+                "Celestine: un rato al aire o un café sencillo suelen bajar más que un discurso."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "no_para"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        },
+        {
+            "id": "caotico",
+            "eje": "ritmo",
+            "etiqueta": "Caos cotidiano",
+            "usos": [
+                "compatibilidad",
+                "conversaciones",
+                "descubrimientos",
+                "celestine",
+                "eventos"
+            ],
+            "descubrimientos": [
+                "El orden le parece una sugerencia. Llega, pero no por el camino del mapa.",
+                "Improvisa. A veces sale bien. El resto es anécdota, o incendio.",
+                "Las llaves, el recado, la hora: viven en un cajón mental con goteras.",
+                "Un cambio de plan le sienta bien. A quien planea, le puede sentar mal.",
+                "La mesa acaba llena. La conversación, también. El hilo, a ratos, se pierde.",
+                "Pedir puntualidad estricta es pedir un milagro menor. Un margen, civilización.",
+                "No es desprecio: es que el día se le desordena solo. Quien se apunta, se apunta a eso."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "cambio_de_plan"
+            ],
+            "modula": true,
+            "asigna_destino": false
+        }
+    ],
+    "ejes": [
+        "social",
+        "humor",
+        "vinculo",
+        "ego",
+        "afecto",
+        "cognicion",
+        "ritmo"
+    ],
+    "alias_produccion_a_conservar": {
+        "observadora": "observador",
+        "practica": "practico",
+        "socarrona": "socarron"
+    }
+}

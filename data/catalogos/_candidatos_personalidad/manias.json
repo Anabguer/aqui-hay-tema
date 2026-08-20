@@ -1,0 +1,2793 @@
+{
+    "meta": {
+        "catalogo": "manias_candidatas",
+        "estado": "PROPUESTA_NO_ACTIVA",
+        "canon": false,
+        "nota": "Candidato. CatalogStore de PLAY no carga esta carpeta."
+    },
+    "items": [
+        {
+            "id": "nombra_plantas",
+            "etiqueta": "Nombra las plantas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Les pone nombre a las plantas. Pregunta por Gerardo, que es un ficus.",
+                "Si una maceta cambia de sitio, se entera. El resto del mobiliario, según."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "gerardo_enfermo"
+            ],
+            "regalo": "maceta"
+        },
+        {
+            "id": "llega_tarde_teatro",
+            "etiqueta": "Llega tarde con historia",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Llega tarde. Siempre hay una historia. Algunas son incluso verdad.",
+                "La entrada es un acto. El reloj, un extra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "espera_en_la_puerta"
+            ]
+        },
+        {
+            "id": "puntual_militar",
+            "etiqueta": "Puntual de reloj",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si dices las siete, está a las seis cincuenta y ocho.",
+                "Esperar le parece un deporte ajeno. Llegar tarde, una ofensa menor."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "le_hicieron_esperar"
+            ]
+        },
+        {
+            "id": "cafe_en_jarra",
+            "etiqueta": "El café, en jarra",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Una taza le parece un aperitivo. El café va en jarra o no es café.",
+                "Pide la jarra sin pestañear. El resto de la mesa toma nota."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "regalo_jarra"
+            ],
+            "regalo": "jarra"
+        },
+        {
+            "id": "relee_el_mismo",
+            "etiqueta": "Relee el mismo libro",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Tiene un libro que relee como quien visita a un primo.",
+                "Ya se lo sabe. Da igual. Lo abre por la página de siempre."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "regalo_edicion_nueva"
+            ],
+            "regalo": "esa_novela"
+        },
+        {
+            "id": "no_cumple_sorpresa",
+            "etiqueta": "Odia los cumpleaños sorpresa",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Una tarta-sorpresa es una emboscada. Pastel anunciado, gracias.",
+                "Felicitar en voz baja funciona. Saltar de detrás de un sofá, no."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "emboscada_velas"
+            ]
+        },
+        {
+            "id": "apuesta_chicles_bingo",
+            "etiqueta": "En el bingo apuesta chicles",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "No se la juega con dinero. Se la juega con chicles. El honor es el mismo.",
+                "El bote de chicle es sagrado. El de euros, ya se verá."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "bote_de_chicle"
+            ]
+        },
+        {
+            "id": "captura_arcade",
+            "etiqueta": "Foto al récord del arcade",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si hay récord, hay foto. Si no hay récord, hay foto del marcador, por si acaso.",
+                "El teléfono sale antes que la palomita. Prioridades."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "marca_batida"
+            ]
+        },
+        {
+            "id": "colecciona_servilletas",
+            "etiqueta": "Colecciona servilletas de bar",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Se lleva la servilleta si tiene dibujo. El camarero ya ni pregunta.",
+                "Hay un cajón. No lo abras sin avisar."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "servilleta_rara"
+            ],
+            "regalo": "papel_bonito"
+        },
+        {
+            "id": "canta_en_la_ducha_alto",
+            "etiqueta": "Canta en la ducha, fuerte",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El vecindario confirma que hay repertorio.",
+                "La ducha es escenario. El karaoke, según el día, es otra guerra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "vecino_queja"
+            ]
+        },
+        {
+            "id": "lista_de_la_compra_obsesiva",
+            "etiqueta": "Lista de la compra sagrada",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si no está en la lista, no se compra. Salvo que sí. Entonces hay crisis menor.",
+                "La lista viaja. El bolsillo, el móvil, la cabeza. En ese orden."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "item_no_listado"
+            ]
+        },
+        {
+            "id": "sillas_espalda_pared",
+            "etiqueta": "Silla de espaldas a la pared",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En la cafetería pide el asiento de espaldas a la pared. Es manual.",
+                "Mesa en medio del local: se le ve el disgusto antes que el café."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "mesa_ocupada"
+            ]
+        },
+        {
+            "id": "cuenta_escalones",
+            "etiqueta": "Cuenta escalones",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Cuenta los escalones. Si el número no cuadra, lo vuelve a contar.",
+                "El mirador tiene un número. Pregunta y te arrepentirás."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "escalera_del_mirador"
+            ]
+        },
+        {
+            "id": "fotos_sin_gente",
+            "etiqueta": "Fotos sin gente",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hace fotos del pueblo vacío. La gente estropea el encuadre. Lo dice.",
+                "Espera a que pase el grupo. A veces espera de más."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "alguien_se_coló"
+            ]
+        },
+        {
+            "id": "guarda_entradas",
+            "etiqueta": "Guarda las entradas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Guarda las entradas de cine como si fueran estampas.",
+                "Un día será un altar. O un cajón. Hoy es archivo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "entrada_perdida"
+            ],
+            "regalo": "marco"
+        },
+        {
+            "id": "pide_lo_mismo",
+            "etiqueta": "Pide siempre lo mismo",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En la carta ya ni mira. Lo de siempre.",
+                "El día que cambia, el pueblo se entera. Es noticia local."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "plato_agotado"
+            ]
+        },
+        {
+            "id": "no_pisa_juntas",
+            "etiqueta": "No pisa las juntas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En la acera no pisa las juntas. Es un deporte silencioso.",
+                "Si le sacas de quicio, pisará una a propósito. No lo hagas."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "suelo_del_parque"
+            ]
+        },
+        {
+            "id": "saluda_a_los_perros",
+            "etiqueta": "Saluda primero a los perros",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Saluda al perro. A la persona, si queda tiempo.",
+                "El hocico es prioridad. El resto es protocolo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "perro_nuevo"
+            ]
+        },
+        {
+            "id": "anota_en_servilleta",
+            "etiqueta": "Anota en servilletas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Las ideas van a la servilleta. Luego se pierden. Luego hay enfado con el papel.",
+                "Un bolígrafo prestado es un favor serio."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "servilleta_olvidada"
+            ]
+        },
+        {
+            "id": "clima_como_personaje",
+            "etiqueta": "El tiempo es un personaje",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Habla del tiempo como de un vecino difícil.",
+                "Tiene razón más a menudo de lo que duele."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "borrasca"
+            ]
+        },
+        {
+            "id": "playlist_de_la_vida",
+            "etiqueta": "Una canción para cada cosa",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hay canción para fregar, para enfadarse y para el bus. No es metáfora.",
+                "Si suena el tema equivocado, el día se tuerce un milímetro."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "tema_equivocado"
+            ],
+            "regalo": "vinilo_o_enlace"
+        },
+        {
+            "id": "nunca_ve_el_final",
+            "etiqueta": "Se tapa el final",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En el cine se tapa los ojos al final. Luego pregunta. Luego se enfada si se lo cuentas.",
+                "Los créditos son zona de peligro. Silencio en la fila."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "spoiler_accidental"
+            ]
+        },
+        {
+            "id": "ordena_cubiertos",
+            "etiqueta": "Alinea los cubiertos",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Antes de comer, alinea tenedor y cuchillo. Es un ritual breve y no negociable.",
+                "Si el mantel está torcido, el plato espera."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "mantel_cruzado"
+            ]
+        },
+        {
+            "id": "prueba_el_borde",
+            "etiqueta": "Prueba por el borde del plato",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Empieza por el borde. El centro es para cuando se fíe.",
+                "Un bocado de reconocimiento. Luego, si acaso, el resto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "plato_nuevo"
+            ]
+        },
+        {
+            "id": "guarda_piedras",
+            "etiqueta": "Guarda piedras bonitas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Vuelve del paseo con una piedra en el bolsillo. Siempre una.",
+                "Hay un cuenco. No es basura. Es archivo geológico casero."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "piedra_del_rio"
+            ],
+            "regalo": "cuenco"
+        },
+        {
+            "id": "cuenta_las_uvas_mal",
+            "etiqueta": "Cuenta las uvas mal",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En Nochevieja se pierde. El resto del año también, si hay uvas.",
+                "El doce es una teoría. La práctica, otra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "fin_de_ano"
+            ]
+        },
+        {
+            "id": "toca_madera",
+            "etiqueta": "Toca madera",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si dice algo que puede tentarle a la suerte, toca madera. La mesa, la silla, el marco.",
+                "No es broma. O sí, pero toca igual."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "mala_pata"
+            ]
+        },
+        {
+            "id": "no_pasa_bajo_escalera",
+            "etiqueta": "No pasa bajo escaleras",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si hay una escalera abierta, da el rodeo. El pueblo ya lo sabe.",
+                "La superstición es pequeña. El rodeo, también."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "obras_en_la_plaza"
+            ]
+        },
+        {
+            "id": "sienta_en_la_punta",
+            "etiqueta": "Se sienta en la punta del banco",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En el parque ocupa la punta. El centro del banco es para otras geografías.",
+                "Si el banco está lleno, se queda de pie. Tiene su lógica."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "banco_lleno"
+            ]
+        },
+        {
+            "id": "camina_por_la_sombra",
+            "etiqueta": "Camina por la sombra",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Cruza la calle si hace falta, con tal de no pisar el sol de las tres.",
+                "La sombra es un plan. El sol, un trámite."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "siesta_de_luz"
+            ]
+        },
+        {
+            "id": "saluda_con_dos_besos_mal",
+            "etiqueta": "Duda con los besos de saludo",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Nunca tiene claro si es uno, dos, o la mano. Improvisa con dignidad irregular.",
+                "El momento del saludo le dura más que a la otra persona."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "presentacion"
+            ]
+        },
+        {
+            "id": "pide_hielo_aparte",
+            "etiqueta": "Pide el hielo aparte",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "La bebida, sin hielo. El hielo, si acaso, al lado. Hay un sistema.",
+                "Diluirle el vaso es un acto hostil. Sin querer, pero hostil."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "cubito"
+            ]
+        },
+        {
+            "id": "remueve_el_azucar_mucho",
+            "etiqueta": "Remueve más de la cuenta",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Remueve el café como si hubiera un secreto al fondo.",
+                "La cucharilla trabaja. El café espera. La mesa observa."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "cucharilla"
+            ]
+        },
+        {
+            "id": "guarda_bolsas_de_tela",
+            "etiqueta": "Acumula bolsas de tela",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Nunca llega a la tienda sin bolsa. A veces llega con cuatro.",
+                "Hay un cajón de bolsas. Es un ecosistema."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "olvido_bolsa"
+            ]
+        },
+        {
+            "id": "lee_los_prospectos",
+            "etiqueta": "Lee los prospectos",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Antes de un medicamento, lee el papel entero. Luego pregunta. Luego lo lee otra vez.",
+                "Los efectos secundarios le parecen literatura. Oscura, pero literatura."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "resfriado"
+            ]
+        },
+        {
+            "id": "nombra_los_dias_por_la_comida",
+            "etiqueta": "Nombra los días por lo que se come",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El jueves es el de lentejas. El domingo, el del horno. El calendario, secundario.",
+                "Si cambias el menú, cambias el día. Cuidado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "jueves_sin_lentejas"
+            ]
+        },
+        {
+            "id": "cuenta_las_aceitunas",
+            "etiqueta": "Cuenta las aceitunas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En la tapa, cuenta. Si el número es impar, hay comentario. Si es par, también.",
+                "No es hambre: es inventario."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "racion"
+            ]
+        },
+        {
+            "id": "deja_el_ultimo_bocado",
+            "etiqueta": "Deja el último bocado",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Nunca termina el plato del todo. El último bocado es de respeto. O de costumbre.",
+                "Limpiar el plato le parece una falta de educación con la comida."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "segundo_plato"
+            ]
+        },
+        {
+            "id": "repite_la_pregunta",
+            "etiqueta": "Repite la pregunta para estar seguro",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "“¿A las siete?”. Ya te lo han dicho. Lo vuelve a preguntar. Es el método.",
+                "No es que no escuche. Es que el dato tiene que entrar dos veces."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "quedada"
+            ]
+        },
+        {
+            "id": "mira_atras_al_salir",
+            "etiqueta": "Mira atrás al salir de casa",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Cierra, da dos pasos, vuelve a mirar la puerta. Luego se va de verdad.",
+                "La llave está. Lo sabe. Mira igual."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "llaves"
+            ]
+        },
+        {
+            "id": "colecciona_imanes",
+            "etiqueta": "Colecciona imanes de nevera",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Cada sitio deja un imán. La nevera es un mapa. El mapa, un poco caótico.",
+                "Regalarle un imán feo es un riesgo. Uno bonito, un acierto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "viaje_corto"
+            ],
+            "regalo": "iman"
+        },
+        {
+            "id": "habla_con_los_objetos",
+            "etiqueta": "Habla con los objetos",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Le dice “no te caigas” a la taza. La taza, de momento, obedece.",
+                "No espera respuesta. Eso lo hace más serio, no menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "taza_en_el_borde"
+            ]
+        },
+        {
+            "id": "guarda_piedras_de_hueso",
+            "etiqueta": "Guarda huesos de aceituna",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hay un platito. Los huesos no van al plato principal. Hay normas.",
+                "Mezclar huesos y comida le parece un desorden moral menor."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "racion_aceitunas"
+            ]
+        },
+        {
+            "id": "usa_siempre_la_misma_taza",
+            "etiqueta": "Usa siempre la misma taza",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hay una taza. Las demás son extras. La de siempre, no se presta.",
+                "Si se rompe, hay duelo breve y una sucesión complicada."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "taza_rota"
+            ],
+            "regalo": "taza_parecida"
+        },
+        {
+            "id": "dobla_las_servilletas",
+            "etiqueta": "Dobla las servilletas en cuatro",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Antes de usarlas, las dobla. Es inútil y necesario.",
+                "Una servilleta abierta de golpe le parece improvisación."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "mesa_puesta"
+            ]
+        },
+        {
+            "id": "no_pisa_la_sombra_de_otro",
+            "etiqueta": "Evita la sombra ajena",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si puede, no pisa la sombra de nadie. Es un tic. No lo discute.",
+                "En el paseo estrecho, se complica. El pueblo cabe igual."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "paseo_estrecho"
+            ]
+        },
+        {
+            "id": "cuenta_las_campanadas",
+            "etiqueta": "Cuenta las campanadas",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si suena el reloj, cuenta. Si falla una, lo dice. El pueblo no siempre agradece.",
+                "El tiempo, para esta persona, hace ruido. Hay que llevar la cuenta."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "iglesia"
+            ]
+        },
+        {
+            "id": "se_cambia_de_lado_de_la_cama",
+            "etiqueta": "Cambia de lado de la cama según el día",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hay un sistema. No está escrito. Fallar el lado tuerce la mañana.",
+                "No preguntes el sistema. Tampoco lo entiende del todo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "insomnio"
+            ]
+        },
+        {
+            "id": "limpia_las_gafas_demasiado",
+            "etiqueta": "Limpia las gafas de más",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Las limpia. Las mira. Las limpia otra vez. El mundo, entonces, sí.",
+                "Un vaho es un incidente. Un paño, una herramienta de precisión."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "vaho"
+            ]
+        },
+        {
+            "id": "guarda_ticket_del_super",
+            "etiqueta": "Guarda el ticket del súper",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El ticket viaja a un cajón. Por si acaso. El por si acaso dura meses.",
+                "Tirarlo el mismo día le parece temerario."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "devolucion"
+            ]
+        },
+        {
+            "id": "prueba_el_agua_del_grifo",
+            "etiqueta": "Prueba el agua del grifo como catador",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Un sorbo. Un gesto. Un veredicto. El agua del pueblo tiene opinión.",
+                "Si el agua “está rara”, hay comunicado. Si está bien, silencio de experto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "obras_del_agua"
+            ]
+        },
+        {
+            "id": "se_sienta_cerca_de_la_salida",
+            "etiqueta": "Se sienta cerca de la salida",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En el cine, en el bingo, en la reunión: pasillo. Por si acaso.",
+                "No es huida. Es geografía personal."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "sala_llena"
+            ]
+        },
+        {
+            "id": "repite_el_pedido_en_voz_baja",
+            "etiqueta": "Repite el pedido en voz baja",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Lo dice al camarero. Luego lo repite, más bajo, para que conste.",
+                "No es desconfianza: es archivo oral."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "barra"
+            ]
+        },
+        {
+            "id": "alineas_los_zapatos",
+            "etiqueta": "Alinea los zapatos en la entrada",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Los zapatos no se tiran. Se colocan. Punta a la pared, o al revés, según dogma.",
+                "Un zapato torcido es un recado para el resto de la casa."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "visita"
+            ]
+        },
+        {
+            "id": "no_abre_paraguas_dentro",
+            "etiqueta": "No abre el paraguas en casa",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Aunque esté seco. Aunque sea para comprobarlo. Fuera, y punto.",
+                "La superstición cabe en el recibidor."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "lluvia"
+            ]
+        },
+        {
+            "id": "colecciona_piedras_de_jabon",
+            "etiqueta": "Acaba los jabones hasta el final",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El pastilla se usa hasta que es una lámina. Tirarla antes es desperdicio moral.",
+                "Hay un sistema de empalme de jabones. Funciona. Más o menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "baño"
+            ]
+        },
+        {
+            "id": "cuenta_los_pajaros",
+            "etiqueta": "Cuenta los pájaros del tendido",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En el parque, mira el cable. Cuenta. Si hay uno raro, hay comentario.",
+                "No es ornitología: es costumbre."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "tendido"
+            ]
+        },
+        {
+            "id": "deja_recado_en_la_nevera",
+            "etiqueta": "Deja recados en la nevera",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El imán sujeta avisos. “Leche”. “No tocar el flan”. Literatura doméstica.",
+                "Si no hay recado, la nevera parece muda. Eso también se nota."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "flan"
+            ]
+        },
+        {
+            "id": "camina_sin_pisar_charcos_a_proposito",
+            "etiqueta": "Rodea los charcos con ceremonia",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Un charco no se pisa. Se honra con un rodeo. Aunque sea ridículo.",
+                "Los días de lluvia el trayecto se alarga. El calzado, se agradece."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "lluvia_calle"
+            ]
+        },
+        {
+            "id": "guarda_mecheros_vacios",
+            "etiqueta": "Guarda mecheros vacíos",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Por si recobran vida. No recobran. El cajón, igual, los acoge.",
+                "Tirar un mechero “por si acaso” le parece precipitado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "mechero"
+            ]
+        },
+        {
+            "id": "saluda_al_conductor_del_bus",
+            "etiqueta": "Saluda a quien conduce el bus",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Al subir, un gesto. Al bajar, otro. El pueblo es pequeño. El gesto, también.",
+                "Si un día no saluda, es que va a otra parte con la cabeza."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "parada"
+            ]
+        },
+        {
+            "id": "ordena_los_libros_por_color",
+            "etiqueta": "Ordena los libros por color",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El lomo manda. El abecedario, que se apañe.",
+                "Encontrar un título es una cacería. La estantería, una bandera."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "estanteria"
+            ]
+        },
+        {
+            "id": "no_empieza_capitulos_de_noche",
+            "etiqueta": "No empieza capítulos de noche",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Un capítulo a las once es una trampa. Lo sabe. Aun así, a veces cae.",
+                "La regla existe. El sueño, también. Gana quien gana."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "insomnio_libro"
+            ]
+        },
+        {
+            "id": "toca_el_marco_al_entrar",
+            "etiqueta": "Toca el marco al entrar",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Un toque al marco de la puerta. Luego ya está dentro de verdad.",
+                "Si se olvida, vuelve dos pasos y lo hace. El recibidor lo ha visto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "visita_ajena"
+            ]
+        },
+        {
+            "id": "pide_la_cuenta_en_cuanto_termina",
+            "etiqueta": "Pide la cuenta en cuanto termina",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "El último bocado y la mirada al camarero. Quedarse de más le pica.",
+                "No es prisa: es cierre. La sobremesa, en otro sitio."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "restaurante"
+            ]
+        },
+        {
+            "id": "guarda_piedras_de_la_suerte",
+            "etiqueta": "Lleva una piedra de la suerte",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En el bolsillo hay una piedra. No se enseña. No se presta.",
+                "Si se queda en el otro pantalón, el día empieza con un hueco."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "bolsillo_vacio"
+            ]
+        },
+        {
+            "id": "repite_el_camino_de_siempre",
+            "etiqueta": "Vuelve por el mismo camino",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Ida, un trazado. Vuelta, el mismo. Atajar le parece hacer trampas con el pueblo.",
+                "Si cortan la calle, hay crisis de itinerario. Se resuelve. Con comentario."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "obras"
+            ]
+        },
+        {
+            "id": "se_limpia_las_manos_antes_de_pagar",
+            "etiqueta": "Se limpia las manos antes de pagar",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Un gesto rápido. Luego el dinero o la tarjeta. El orden importa.",
+                "No es manía de sucio: es de cierre de acto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "caja"
+            ]
+        },
+        {
+            "id": "nombra_las_calles_mal_a_proposito",
+            "etiqueta": "Nombra las calles a su manera",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Esa no es “la calle Nueva”. Es “la de la panadería vieja”. El mapa oficial, secundario.",
+                "Quien llega de fuera se pierde. Quien es del pueblo, entiende."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "indicaciones"
+            ]
+        },
+        {
+            "id": "espera_el_numero_par_del_ascensor",
+            "etiqueta": "Espera un número par en el ascensor",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Si puede, deja pasar el impar. Es absurdo. Lo sabe. Espera igual.",
+                "En un pueblo con pocas plantas, se nota más."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "portal"
+            ]
+        },
+        {
+            "id": "guarda_las_tapas_de_los_botes",
+            "etiqueta": "Guarda tapas de más",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hay un cajón de tapas. Algún día encajarán. El día, de momento, no llega.",
+                "Tirar una tapa buena es un desperdicio. Aunque el bote ya no exista."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "cajon"
+            ]
+        },
+        {
+            "id": "silba_una_sola_cancion",
+            "etiqueta": "Silba siempre la misma canción",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "Hay un tema. Sale al fregar, al andar, al esperar. El pueblo ya lo tiene memorizado.",
+                "Si un día silba otra, alguien pregunta si pasa algo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "fregadero"
+            ]
+        },
+        {
+            "id": "cuenta_los_azulejos",
+            "etiqueta": "Cuenta azulejos en el baño ajeno",
+            "mecanico": false,
+            "usos": [
+                "descubrimientos",
+                "cotilleo",
+                "conversaciones",
+                "regalos",
+                "cumpleaños"
+            ],
+            "descubrimientos": [
+                "En casas de otras personas, la mirada se va a la pared. Hay un número. Hay paz.",
+                "No es juicio. Es costumbre. El anfitrión no tiene por qué saberlo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1
+                ],
+                "cotilleo": [
+                    1
+                ],
+                "conversacion": [
+                    0,
+                    1
+                ],
+                "mensaje": [
+                    1
+                ],
+                "plan": [
+                    1
+                ]
+            },
+            "hooks": [
+                "visita_aseo"
+            ]
+        }
+    ]
+}

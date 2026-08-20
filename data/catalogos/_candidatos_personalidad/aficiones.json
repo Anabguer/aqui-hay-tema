@@ -1,0 +1,2452 @@
+{
+    "meta": {
+        "catalogo": "aficiones_candidatas",
+        "estado": "PROPUESTA_NO_ACTIVA",
+        "canon": false,
+        "nota": "Candidato. CatalogStore de PLAY no carga esta carpeta."
+    },
+    "items": [
+        {
+            "id": "leer",
+            "familia": "lectura",
+            "etiqueta": "Leer",
+            "lugar_ids": [
+                "lug_biblioteca",
+                "lug_cafeteria",
+                "lug_parque"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Un libro y un rincón tranquilo y ya tiene la tarde hecha.",
+                "Es bastante rata de biblioteca. Lo dice como un cumplido, creo.",
+                "Como entre en una librería, se esfuma. El recado espera.",
+                "Lee en los huecos: el café, el banco, el minuto antes de que llegue nadie.",
+                "Si le preguntas qué anda leyendo, te cuenta el argumento y se le olvida la hora.",
+                "Un libro bien elegido le llega más que un ramo. Anótalo.",
+                "No presume de lecturas. Luego te enteras por un marcador olvidado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "regalo_libro",
+                "se_pierde_en_la_biblioteca"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "escribir",
+            "familia": "lectura",
+            "etiqueta": "Escribir",
+            "lugar_ids": [
+                "lug_biblioteca",
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Si se queda mirando un cuaderno, no le hables. Está en otra parte.",
+                "Escribe. No presume. Luego te enteras por una esquina de papel.",
+                "Tiene frases a medias en servilletas. No las tires.",
+                "Un rato a solas con un boli le arregla el carácter. O se lo complica. Según la página.",
+                "No hace falta publicar: hace falta que salga. El cajón ya verá.",
+                "Si pide silencio, a veces es para eso. No para rumiar. Bueno, las dos cosas.",
+                "Regalarle un cuaderno bonito es acertar. Preguntar qué escribe, ya es otra guerra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "cuaderno_olvidado",
+                "lectura_publica"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "comics",
+            "familia": "lectura",
+            "etiqueta": "Cómics",
+            "lugar_ids": [
+                "lug_biblioteca",
+                "lug_tienda",
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "No es que no lea: lee con dibujitos y se ofende si lo dices así.",
+                "Tiene una pila de cómics que defiende como quien defiende a un primo.",
+                "Un tomo nuevo le ilumina la semana. El precio, mejor no.",
+                "Discute canon con una seriedad de junta de vecinos.",
+                "En la tienda va directo a la estantería de viñetas. El resto es decorado.",
+                "Prestarle un cómic es un voto de confianza. Devolverlo doblado, un delito menor.",
+                "No es nostalgia: es que esas historias le funcionan. Punto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "regalo_tomo",
+                "discutir_canon"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "cine_sala",
+            "familia": "cine",
+            "etiqueta": "Ir al cine",
+            "lugar_ids": [
+                "lug_cine"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El cine de verdad, con butaca y palomitas. La pantalla del salón no le sirve.",
+                "Si hay sesión, se organiza la semana alrededor. Sin drama. Bueno, un poco.",
+                "La cola, la butaca, el anuncio de apagar el móvil. Eso es ir al cine.",
+                "Un estreno le pone de un humor que conviene aprovechar.",
+                "Comenta la película en la acera. El criterio, discutible; las ganas, no.",
+                "Regalar entradas es acertar. Elegir el género sin preguntar, un riesgo.",
+                "El sofá está bien para repetir. Para verla de verdad, pide sala."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "estreno",
+                "palomitas_sagradas"
+            ],
+            "social": "mixto",
+            "nota": "La sala. El género va en gustos."
+        },
+        {
+            "id": "ver_en_casa",
+            "familia": "cine",
+            "etiqueta": "Ver series en casa",
+            "lugar_ids": [],
+            "usos": [
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "descubrimientos",
+                "compatibilidad"
+            ],
+            "descubrimientos": [
+                "El sofá es su sala vip. No espera que nadie lo entienda.",
+                "Mantiene maratones con una seriedad que otros reservan para el trabajo.",
+                "Una manta, un mando y que no llamen. El plan del siglo, según quien manda.",
+                "Los spoilers le sientan como un empujón en la cola del pan.",
+                "Propón una serie y te ganas una tarde. Propón salir a las ocho, ya veremos.",
+                "No es que no salga: es que algunas historias piden pijama.",
+                "Si se queda hasta las tantas, al día siguiente el café es sagrado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "maraton",
+                "spoiler_guerra"
+            ],
+            "social": "solo",
+            "nota": "Sin destino del pueblo; alimenta regalos y planes en casa."
+        },
+        {
+            "id": "videojuegos_cozy",
+            "familia": "juegos",
+            "etiqueta": "Juegos tranquilitos",
+            "lugar_ids": [
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Juega a cosas bonitas donde nadie te grita. Lo cuenta como quien habla de punto de cruz.",
+                "No es \"gamer\". Es que le calma plantar tomates digitales. Déjalo.",
+                "Se queda hasta tarde construyendo islas. El pueblo no se entera. Mejor.",
+                "Un juego suave le baja los hombros. Uno de ranking, al revés.",
+                "Si ves la lucecita de la consola, no es momento de recados urgentes.",
+                "Regalarle un juego tranquilo es un detalle fino. Uno competitivo, una apuesta.",
+                "Habla de cosechas y aldeanos con una ternura rara. Tú verás."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "regalo_juego_suave",
+                "se_queda_hasta_tarde"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "videojuegos_competitivo",
+            "familia": "juegos",
+            "etiqueta": "Juegos de competir",
+            "lugar_ids": [
+                "lug_arcade"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Si pierde, la casa se entera. Si gana, también.",
+                "Le brilla el ojo cuando hay ranking. Luego dice que es solo un juego.",
+                "Una revancha más. Siempre una revancha más. La cena espera.",
+                "El auricular es frontera. Cruzarla sin aviso tiene consecuencias.",
+                "Ganar le sienta bien. Perder le deja de un humor que pide aire.",
+                "Un uno contra uno le enciende. Un paseo, según el día.",
+                "No hace falta entender el juego. Hace falta no comentar la jugada a destiempo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "rabieta_sana",
+                "reto_1v1"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "arcade",
+            "familia": "juegos",
+            "etiqueta": "Máquinas recreativas",
+            "lugar_ids": [
+                "lug_arcade"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Las máquinas del arcade le devuelven a los quince años y no pide perdón.",
+                "Cambia monedas con una solemnidad de misa.",
+                "Un récord local le da para una semana de conversación. Prepárate.",
+                "El parpadeo de las pantallas le sienta mejor que un atardecer, algunos días.",
+                "Si hay una máquina libre, se le ve el plan en la cara.",
+                "No va a \"pasar el rato\": va a intentar esa pantalla otra vez.",
+                "Invitar a una ronda de fichas es un buen plan. Hablar por encima de la partida, no."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "record_local",
+                "monedas"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "juegos_mesa",
+            "familia": "juegos",
+            "etiqueta": "Juegos de mesa",
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_picnic"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Si saca una caja, la sobremesa se alarga. Avisa a quien tenga que madrugar.",
+                "Explica reglas con paciencia. La primera vez. La segunda, ya veremos.",
+                "Una partida le arregla un domingo. Una pelea por las reglas, también, a su manera.",
+                "Colecciona cajas como quien colecciona primos: con nombres y manías.",
+                "Si el plan es \"un juego corto\", cuenta dos horas. Mínimo.",
+                "Le gusta la mesa, no el móvil. El tablero pide manos y cara.",
+                "Regalar una caja nueva es acertar. Abrirla sin leer el reglamento, un riesgo calculado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "partida_tensa",
+                "regalo_caja"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "bingo",
+            "familia": "juegos",
+            "etiqueta": "Bingo",
+            "lugar_ids": [
+                "lug_bingo"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El bingo no es un chiste. Es una cita con el destino y un rotulador.",
+                "Los martes tiene un compromiso. No preguntes si es con una persona.",
+                "Un cartón casi lleno le pone el pulso en la garganta. El pueblo lo ha visto.",
+                "Llega pronto. Elige sitio. Nadie toca el boli ajeno.",
+                "Gane o no, sale hablando del último número como de un primo lejano.",
+                "Si cancelan el bingo, el humor se resiente. Es información útil.",
+                "Acompañar vale. Hablar durante el canto, ya es otra afición que no tiene."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "carton_casi",
+                "ritual_martes"
+            ],
+            "social": "grupo",
+            "pueblo": true
+        },
+        {
+            "id": "escuchar_musica",
+            "familia": "musica",
+            "etiqueta": "Escuchar música",
+            "lugar_ids": [
+                "lug_bar",
+                "lug_parque"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Anda con banda sonora. Si se la quitas, se queda a medias.",
+                "No hace falta que cante: con que suene, ya está en su sitio.",
+                "Los auriculares no son un capricho. Son una pared educada.",
+                "Te recomienda una canción y luego pregunta qué te ha parecido. Contesta en serio.",
+                "Un disco nuevo le cambia el paso. Se le nota en cómo cierra la puerta.",
+                "No implica bailar ni karaoke. A veces solo implica mirar por la ventana.",
+                "Si suena algo bueno, se calla. Eso, aquí, es un cumplido."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "auriculares",
+                "recomendacion_canción"
+            ],
+            "social": "solo",
+            "nota": "No implica bailar ni karaoke."
+        },
+        {
+            "id": "tocar_instrumento",
+            "familia": "musica",
+            "etiqueta": "Tocar un instrumento",
+            "lugar_ids": [
+                "lug_bar"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Tiene un instrumento y una relación seria. El vecindario lo confirma.",
+                "Si pide un rato a solas, suele ser para eso. No para rumiar. Bueno, las dos cosas.",
+                "Ensaya. Se le oye. El pueblo ha hecho las paces con eso, más o menos.",
+                "Un jam improvisado le saca de quicio o le ilumina. Según si estaba listo.",
+                "Habla de cuerdas y de afinación como otros hablan del tiempo.",
+                "Regalar cuerdas, partituras, un rato de silencio: aciertas. Un micro por sorpresa, no.",
+                "No siempre quiere público. A veces quiere que la pieza salga, y ya."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "ensayo_oido",
+                "jam_improvisada"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "conciertos",
+            "familia": "musica",
+            "etiqueta": "Música en directo",
+            "lugar_ids": [
+                "lug_bar"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Prefiere la música con gente cerca y un escenario pequeño.",
+                "Un bolo en el bar le arregla una semana entera. O se la fastidia, según el sonido.",
+                "Llega tarde por la cola y no se queja. Forma parte del rito.",
+                "Si hay música en directo, el resto de planes se reorganiza solo.",
+                "Sale del concierto hablando del bajo, no de quién estaba. Prioridades.",
+                "Un escenario pequeño le vale más que un recinto enorme. El oído, no el aforo.",
+                "Invitar a un bolo local es un buen plan. Hablar encima de la canción, un error."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "bolo_local",
+                "llegar_tarde_por_la_cola"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "karaoke",
+            "familia": "musica",
+            "etiqueta": "Karaoke",
+            "lugar_ids": [
+                "lug_karaoke"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "En el karaoke se le olvida el resto. Incluido el pudor, a veces.",
+                "No canta bien. Canta como si le fuera el alquiler. Es peor y mejor.",
+                "Tiene un tema fetiche. El pueblo lo sabe. Fingir sorpresa ya no cuela.",
+                "Un dueto inesperado le puede el carácter. O lo rompe. Según la noche.",
+                "No hace falta cantar afinado. Hace falta cantar como si importara.",
+                "Si hay micro abierto, se le ve el debate interno. Suele ganar el micro.",
+                "Sacar a cantar funciona. Obligar, no. El matiz es todo."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "tema_fetiche",
+                "dueto_inesperado"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "correr",
+            "familia": "movimiento",
+            "etiqueta": "Correr",
+            "lugar_ids": [
+                "lug_parque",
+                "lug_gimnasio"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Sale a correr como quien paga una deuda con su cabeza.",
+                "Si amanece y no ha salido, el día le sale torcido. Aviso a navegantes.",
+                "Habla de kilómetros con una modestia falsa. Se le ve el orgullo en el paso.",
+                "Quedar a correr es un plan. Quedar a charlar mientras corre, otro, más difícil.",
+                "Una lesión leve le pone de un humor bajo. El cuerpo manda, y se le resiste.",
+                "El parque a primera hora es territorio. El banco, para después.",
+                "No es exhibición: es que si no sale, la cabeza no cierra."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "quedar_a_correr",
+                "lesion_leve"
+            ],
+            "social": "mixto",
+            "tags": [
+                "deporte"
+            ]
+        },
+        {
+            "id": "bici",
+            "familia": "movimiento",
+            "etiqueta": "Bici",
+            "lugar_ids": [
+                "lug_parque"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "La bici no es un medio: es una personalidad con ruedas.",
+                "Habla de puertos y de viento como otros hablan de series.",
+                "Un pinchazo le parece un drama menor y un relato mayor.",
+                "Si hay quedada, aparece con casco y opinión. Las dos cosas pesan.",
+                "El pueblo llano le sabe a poco. Una cuesta le mejora el día.",
+                "Regalar un trapo de cadena o un mapa es más fino de lo que parece.",
+                "No va a \"dar una vuelta\": va a hacer la ruta. Distinto."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "quedada_bici",
+                "pinchazo_dramatico"
+            ],
+            "social": "mixto",
+            "tags": [
+                "deporte"
+            ]
+        },
+        {
+            "id": "deporte_equipo",
+            "familia": "movimiento",
+            "etiqueta": "Deporte de equipo",
+            "lugar_ids": [
+                "lug_parque"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Necesita un balón y otras cuatro personas. El sofá no le sustituye.",
+                "Gana, pierde, pero sobre todo discute el fuera de juego hasta la cena.",
+                "Un partido del pueblo le organiza el domingo. El resto es relleno.",
+                "La afición no es verlo: es estar en el campo, aunque duela la rodilla.",
+                "Si falta gente, llama. Si sobra, discute el once. Siempre hay once.",
+                "Una derrota le deja sin hablar un rato. Luego vuelve con la revancha en la boca.",
+                "Apuntarse al equipo es un sí. Ir de público a abuchear, ya es otra persona."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "partido_pueblo",
+                "lesion_orgullo"
+            ],
+            "social": "grupo",
+            "tags": [
+                "deporte"
+            ]
+        },
+        {
+            "id": "gimnasio",
+            "familia": "movimiento",
+            "etiqueta": "Gimnasio",
+            "lugar_ids": [
+                "lug_gimnasio"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El gimnasio le cuadra. Las pesas no le deben nada y se lo agradece.",
+                "Tiene una hora sagrada entre máquinas. Celestine, no la pises sin motivo.",
+                "Sale de allí de mejor humor. O de ninguno, que a veces es lo mismo.",
+                "Habla de series y descansos con una seriedad de receta médica.",
+                "Se puede ser de deporte y odiar este sitio. Esta persona, al revés: el sitio le va.",
+                "Un plan de pesas le vale. Un plan de copas justo después, según las piernas.",
+                "No va a verse. Va a que el cuerpo haga lo que tiene que hacer."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "rutina_hierro",
+                "espejo"
+            ],
+            "social": "solo",
+            "tags": [
+                "deporte"
+            ],
+            "nota": "Se puede ser de deporte y odiar ESTE sitio."
+        },
+        {
+            "id": "baile",
+            "familia": "movimiento",
+            "etiqueta": "Bailar",
+            "lugar_ids": [
+                "lug_discoteca",
+                "lug_gimnasio"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Baila. No \"le gusta la música\": se le va el cuerpo solo.",
+                "En la pista se le entiende mejor que en una sobremesa.",
+                "Una clase de baile le sienta como un café bien puesto.",
+                "Si suena algo bueno, ya está en pie. El corro, que se aparte.",
+                "No espera a que le saquen. Sale. Luego, si acaso, invita.",
+                "La discoteca le sirve si hay pista. Si solo hay gritos, se queda en la barra.",
+                "Sacar a bailar suele funcionar. Obligar a una coreografía, ya es otro recado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "clase_baile",
+                "sacar_a_bailar"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "yoga",
+            "familia": "movimiento",
+            "etiqueta": "Yoga / movilidad",
+            "lugar_ids": [
+                "lug_spa",
+                "lug_parque",
+                "lug_gimnasio"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Estira, respira y pide que no le conviertan eso en chiste de incienso.",
+                "No es que sea zen. Es que si no se mueve despacio, explota.",
+                "La esterilla es territorio. El móvil, fuera. El cotilleo, después.",
+                "Una clase suave le baja el volumen al día. Se le nota a la salida.",
+                "Habla de caderas y de respiración sin pedir permiso. Tú decides si te quedas.",
+                "El spa, el parque, un rincón en casa: el sitio importa menos que el rato.",
+                "No va a \"relajarse\" de postal. Va a que el cuerpo deje de estar en guardia."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "clase_suave",
+                "esterilla"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "pasear",
+            "familia": "aire_libre",
+            "etiqueta": "Pasear",
+            "lugar_ids": [
+                "lug_parque",
+                "lug_mirador"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Un paseo le arregla más que un consejo. Y sale más barato.",
+                "Camina para pensar. Si le acompañas, no hace falta rellenar el silencio.",
+                "Conoce atajos que el pueblo usa sin saber que son atajos.",
+                "Una vuelta al parque le pone en su sitio. Dos, si el día viene torcido.",
+                "Quedar a pasear es un plan de verdad. No es \"no se nos ocurre otra cosa\".",
+                "Habla mejor andando que a la mesa. El banco, para el descanso.",
+                "Si el plan es largo, lleva calzado decente. El resto se improvisa."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "paseo_largo",
+                "atajo_secreto"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "senderismo",
+            "familia": "aire_libre",
+            "etiqueta": "Senderismo",
+            "lugar_ids": [
+                "lug_parque",
+                "lug_mirador"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Si hay cuesta, se anima. El pueblo llano le sabe a poco.",
+                "Habla de botas con el respeto que otros reservan a los zapatos de boda.",
+                "Un domingo de ruta le limpia la cabeza. El lunes se le nota.",
+                "El blister es anécdota. La vista, el premio. El bocadillo, sagrado.",
+                "Propón una senda y tienes plan. Propón el sofá el mismo día, negociad.",
+                "No es una carrera. Es ir, llegar, mirar, volver. En ese orden.",
+                "Avisa si hay desnivel. Esta persona cuenta con la cuesta. El resto, a veces no."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "ruta_domingo",
+                "blister"
+            ],
+            "social": "mixto",
+            "tags": [
+                "deporte"
+            ]
+        },
+        {
+            "id": "plantas",
+            "familia": "aire_libre",
+            "etiqueta": "Plantas",
+            "lugar_ids": [
+                "lug_parque",
+                "lug_picnic"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Habla con las plantas. No es metáfora. O sí, pero da igual: tiran.",
+                "Si se le muere un geranio, hay duelo. Bajo, pero hay duelo.",
+                "Un esqueje le parece un buen regalo. Un ramo cortado, según el día.",
+                "Sabe de riegos y de sombras. Pregunta y te quedas un rato.",
+                "El parque le vale para mirar hojas. La tienda, si hay macetas, también.",
+                "Tiene nombres para las plantas. No siempre para las personas nuevas.",
+                "Regalar una planta es acertar. Olvidar el riego, un delito menor."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "esqueje",
+                "planta_regalo"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "perros",
+            "familia": "aire_libre",
+            "etiqueta": "Perros",
+            "lugar_ids": [
+                "lug_parque"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Los perros ajenos ya son un poco suyos. Quien pasea tarda en enterarse.",
+                "Si hay un hocico en el parque, la conversación se resuelve sola.",
+                "Se agacha sin pedir permiso. El perro, de acuerdo. Quien lleva la correa, a veces no.",
+                "Un paseo canino le organiza la tarde mejor que una agenda.",
+                "Habla de caracteres de perro con más tino que de los de la gente. Casi.",
+                "Si hay un animal cerca, se le ve el humor antes. Es un dato útil.",
+                "No hace falta tener perro. Hace falta que haya uno, y ya está el plan."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "paseo_canino",
+                "perro_ajeno"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "picnic",
+            "familia": "aire_libre",
+            "etiqueta": "Picnic",
+            "lugar_ids": [
+                "lug_picnic",
+                "lug_parque"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El mantel en el césped es su idea de lujo. Hormigas incluidas.",
+                "Organiza comidas al aire con una logística de boda pequeña.",
+                "El tupper es política. El plástico de un solo uso, una opinión.",
+                "Las avispas forman parte del folclore. Se queja y sigue.",
+                "Un picnic le sabe a domingo aunque sea jueves.",
+                "Si el plan es césped y comida, aparece. Si es cola para un banco, ya veremos.",
+                "Aporta siempre algo. Quien no aporta, se nota. No es rencor: es inventario."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "tupper",
+                "avispas"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "mirador",
+            "familia": "aire_libre",
+            "etiqueta": "Mirador / vistas",
+            "lugar_ids": [
+                "lug_mirador"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Se sube al mirador a mirar. Punto. No todo atardecer es una declaración.",
+                "Le sienta bien el pueblo visto de lejos. A veces también la gente.",
+                "Un rato arriba le calla la cabeza. El silencio, si se comparte, vale igual.",
+                "No pide violín. Pide cielo y que no hablen encima de la luz.",
+                "Fotografiar, sí. Convertir el sitio en postal de anuncio, no hace falta.",
+                "Quedar en el mirador es un plan sencillo. Vestirlo de cine, ya es otro recado.",
+                "Baja distinto. Se le nota en cómo saluda en la cuesta."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "atardecer",
+                "silencio_compartido"
+            ],
+            "social": "mixto",
+            "nota": "No es código de romance."
+        },
+        {
+            "id": "cocina",
+            "familia": "mesa",
+            "etiqueta": "Cocinar",
+            "lugar_ids": [
+                "lug_restaurante"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Cocina de verdad. Si te invita, ve. Si dices que da igual, se ofende.",
+                "Prueba recetas con una fe que otros reservan para las quinielas.",
+                "La cocina es territorio. Entrar a \"ayudar\" sin que te lo pidan tiene riesgo.",
+                "Un cacharro nuevo le ilumina más que un ramo. Prioridades.",
+                "Si hay olla, hay plan. El restaurante, otro día, o nunca.",
+                "Cuenta la receta como quien cuenta un viaje. Tú decides si tomas notas.",
+                "Regalar un ingrediente difícil es fino. Decir \"mejor pedimos\", menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "cena_en_casa",
+                "regalo_cacharro"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "restaurantes",
+            "familia": "mesa",
+            "etiqueta": "Salir a comer",
+            "lugar_ids": [
+                "lug_restaurante"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le encanta que le pongan la mesa. Cocinar está bien; que le cocinen, también.",
+                "Elige restaurante como quien elige película: con veto incluido.",
+                "Una reserva le sienta como un traje bien cortado. De vez en cuando.",
+                "Tiene un plato fetiche. Si no está, el local baja enteros.",
+                "Salir a comer le parece un plan, no un trámite. El matiz importa.",
+                "Comenta la carta con una seriedad que otros reservan al tiempo.",
+                "Invitar a un sitio \"en condiciones\" acierta. Improvisar una hamburguesa de gasolinera, no."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "mesa_reservada",
+                "plato_fetiche"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "cafe_con_gente",
+            "familia": "mesa",
+            "etiqueta": "Café y conversación",
+            "lugar_ids": [
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "La cafetería es su despacho. El café, una excusa bastante convincente.",
+                "Si dice \"un café\", cuenta una hora. Mínimo.",
+                "Tiene mesa de siempre. Quien la ocupa, peca sin saberlo.",
+                "El café se enfría de tanto hablar. Es un oficio, no un descuido.",
+                "Quedar a tomar algo es el plan por defecto. Y funciona.",
+                "No hace falta un motivo. El motivo es la mesa y quien se siente.",
+                "Si cancelas el café, se nota. No es drama: es que era el hueco de la semana."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "mesa_de_siempre",
+                "cafe_frio_de_tanto_hablar"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "merendar",
+            "familia": "mesa",
+            "etiqueta": "Merendar",
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_picnic"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Defiende la merienda como institución. Con razón.",
+                "Un dulce a media tarde le pone de un humor que conviene aprovechar.",
+                "La pastelería no es un recado: es una cita.",
+                "Si hay tarta, hay trato. Si no hay tarta, hay negociación.",
+                "Merendar en el picnic le parece civilización. Merendar de pie, un apaño.",
+                "Sabe qué día sale el hojaldre bueno. Eso es información sensible.",
+                "Invitar a merendar acierta casi siempre. Saltarla \"porque luego cenamos\", casi nunca."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "pastel",
+                "merienda_brigada"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "manualidades",
+            "familia": "manos",
+            "etiqueta": "Manualidades",
+            "lugar_ids": [
+                "lug_biblioteca",
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Hace cosas con las manos y luego finge que no es para regalarlas. Lo es.",
+                "Si hay taller, aparece. Si no hay taller, se lo inventa en la mesa de la cocina.",
+                "Un rato de tijeras y pegamento le baja el volumen al día.",
+                "Regala lo que hace. Recibir un \"qué bonito\" le dura. Un \"para qué sirve\", también.",
+                "La mesa acaba llena de recortes. Forma parte del proceso. El orden, después.",
+                "Habla de materiales con entusiasmo de feria. Tú verás si te apuntas.",
+                "Un kit sencillo es un buen regalo. Decir que es cosa de críos, un error."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "taller",
+                "regalo_hecho"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "costura",
+            "familia": "manos",
+            "etiqueta": "Costura",
+            "lugar_ids": [
+                "lug_tienda"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Cose. Arregla. Opina de dobladillos con autoridad moral.",
+                "Un botón suelto le pica más que un rumor.",
+                "Una tela bonita le ilumina el paso por la tienda. El resto puede esperar.",
+                "Hace favores de aguja. Luego hay que devolverlos, aunque sea en café.",
+                "El arreglo bien hecho le parece respeto. Tirar la prenda, un desperdicio.",
+                "Habla de puntadas como otros de series. El hilo tiene temporada.",
+                "Llevar algo roto es un plan. Llevarlo a última hora, un abuso leve."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "arreglo_favor",
+                "tela_bonita"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "bricolaje",
+            "familia": "manos",
+            "etiqueta": "Bricolaje",
+            "lugar_ids": [],
+            "usos": [
+                "regalos",
+                "rutinas",
+                "conversaciones",
+                "descubrimientos"
+            ],
+            "descubrimientos": [
+                "Si algo se mueve y no debería, ya está buscando el destornillador.",
+                "Ayuda. A veces sin que se lo pidan. A veces sin que haga falta. El resultado varía.",
+                "Una estantería bien puesta le da una paz que otros logran con spa.",
+                "El dedo golpeado es anécdota. El tornillo torcido, una ofensa.",
+                "Tiene un cajón de herramientas y una opinión sobre cada una.",
+                "Pedir un apaño funciona. Vigilar el apaño, según el día.",
+                "Regalar una herramienta decente acierta. Un mueble \"fácil de montar\", una broma."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "estanteria",
+                "dedo_golpeado"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "fotografia",
+            "familia": "manos",
+            "etiqueta": "Fotografía",
+            "lugar_ids": [
+                "lug_mirador",
+                "lug_parque",
+                "lug_picnic"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Para el paso para una foto y el pueblo entero espera, resignado.",
+                "No hace selfies. Hace \"espera, la luz\". Es peor.",
+                "Un atardecer le pone el pulso en el disparador. El resto, que espere.",
+                "Guarda álbumes. No presume. Luego te los enseña y se te va la tarde.",
+                "Una foto robada (de las buenas) le parece un tesoro. Una posada a la fuerza, no.",
+                "El mirador, el parque, una esquina rara: el sitio es la luz, no el monumento.",
+                "Regalar un carrete o una copia en papel es fino. Pedir que borre una, delicado."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "foto_robada",
+                "album"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "coleccionismo",
+            "familia": "manos",
+            "etiqueta": "Coleccionar",
+            "lugar_ids": [
+                "lug_tienda",
+                "lug_bingo"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Colecciona algo concreto y puede explicarlo veinte minutos. Tú verás.",
+                "Un hallazgo en la tienda le ilumina la semana. No preguntes el precio.",
+                "La vitrina no es vanidad: es archivo. Tocar sin permiso, delito.",
+                "Trueque, feria, cajón de alguien: huele la pieza rara a distancia.",
+                "Habla de ediciones y de faltas como quien habla de familia.",
+                "Regalar \"la\" pieza es acertar en grande. Regalar \"una parecida\", un riesgo.",
+                "No compra por comprar. Busca. Cuando aparece, se le ve en el paso."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "pieza_rara",
+                "trueque"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "moda",
+            "familia": "manos",
+            "etiqueta": "Moda y escaparates",
+            "lugar_ids": [
+                "lug_tienda"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "La tienda no es solo ropa: es teatro. Mira, toca, opina, a veces compra.",
+                "Se le ve el humor en el peinado. Y en si ha pasado o no por los aparadores.",
+                "Un escaparate bueno le detiene. Un pasillo de ofertas, según el día.",
+                "Prueba, aconseja, descarta. Quien va de recadero se aburre. Quien opina, no.",
+                "No es consumo a lo loco: es que le gusta ver cómo queda el mundo puesto.",
+                "Libros, objetos, una bufanda rara: el hallazgo importa más que la etiqueta.",
+                "Ir de tiendas juntos funciona si hay café después. Sin café, es expedición."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "probarse",
+                "consejo_look"
+            ],
+            "social": "mixto"
+        },
+        {
+            "id": "copas",
+            "familia": "noche",
+            "etiqueta": "Copas",
+            "lugar_ids": [
+                "lug_bar"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Una copa le suelta la lengua. Dos, la agenda. Tres, ya es El Cotilleo quien informa.",
+                "El bar le sienta bien. No lo confundas con ganas de discoteca.",
+                "Una ronda a tiempo abre conversaciones que el café deja a medias.",
+                "La barra es confesionario. Lo que se dice, a veces, se queda ahí. A veces no.",
+                "Si hay sitio en la barra, aparece. Si hay cola de discoteca, ya es otro humor.",
+                "No bebe para olvidar. Bebe para que el día termine en voz baja, o en voz alta.",
+                "Invitar a una copa es un plan. Convertirlo en noche eterna, según."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "ronda",
+                "confesion_barra"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "fiesta",
+            "familia": "noche",
+            "etiqueta": "Fiesta",
+            "lugar_ids": [
+                "lug_discoteca",
+                "lug_bar"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Cuando hay fiesta, aparece. Cuando no hay, a veces la monta.",
+                "La noche le mejora el carácter. A algunos les pasa lo contrario, aviso.",
+                "Sabe dónde está el corro bueno. El resto del local es decorado.",
+                "Un amanecer contado al día siguiente forma parte del relato. El dolor de cabeza, también.",
+                "No necesita un motivo grande. Con que haya gente y un poco de ruido, tira.",
+                "Si cancelan la noche, se reorganiza. Suele reorganizar hacia otro sitio con gente.",
+                "Apuntarse a salir funciona. Prometer irse \"solo un rato\", una negociación."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "salir_de_marcha",
+                "amanecer"
+            ],
+            "social": "grupo"
+        },
+        {
+            "id": "spa",
+            "familia": "cuidado",
+            "etiqueta": "Spa",
+            "lugar_ids": [
+                "lug_spa"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "El spa no es capricho: es mantenimiento. Como el coche, pero con albornoz.",
+                "Si el día ha sido largo, no pide un plan: pide agua caliente y que no le molesten.",
+                "El albornoz le sienta mejor que un traje. No lo discute.",
+                "Un circuito de agua le baja los hombros. Se le ve. Literal.",
+                "Regalar un bono es acertar. Un plan ruidoso el mismo día, no.",
+                "Pide silencio y toalla. El cotilleo, a la salida. Si acaso.",
+                "No va a posar. Va a que el cuerpo deje de protestar un rato."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "bono_spa",
+                "silencio_toalla"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "asociacion",
+            "familia": "pueblo",
+            "etiqueta": "Asociaciones del pueblo",
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_bingo"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Se apunta a lo del pueblo. Fiestas, listas, lo que se tercie. Alguien tiene que hacerlo.",
+                "Sabe quién organiza qué. Es información sensible. Trátala como tal.",
+                "Una comisión le parece normal. A otras personas les parece un castigo.",
+                "El cartel de las fiestas le importa. El color, el verbo, quién queda fuera.",
+                "Si hay que montar sillas, está. Si hay que opinar, también. Sobre todo lo segundo.",
+                "El bingo, la cafetería, el local social: son despachos, no ocio puro.",
+                "Pedir un favor de pueblo funciona. Pedirlo a última hora, menos."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "comision",
+                "cartel"
+            ],
+            "social": "grupo",
+            "pueblo": true
+        },
+        {
+            "id": "crucigramas",
+            "familia": "lectura",
+            "etiqueta": "Pasatiempos",
+            "lugar_ids": [
+                "lug_cafeteria",
+                "lug_biblioteca"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Hace crucigramas como quien entrena para no morder a nadie.",
+                "Si se atasca en una definición, el café se enfría. Prioridades.",
+                "El periódico no es noticia: es el 7 horizontal.",
+                "Pedir ayuda es un honor. Decir la palabra sin que la pidan, una descortesía.",
+                "Un rato de pasatiempos le deja de mejor humor que un consejo.",
+                "La biblioteca y la cafetería le valen igual: mesa, boli, silencio a ratos.",
+                "Regalar un libro de crucigramas es fino. Hacerlos por encima, un delito menor."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "ayuda_7_horizontal",
+                "periodico"
+            ],
+            "social": "solo"
+        },
+        {
+            "id": "tertulia",
+            "familia": "pueblo",
+            "etiqueta": "Tertulia",
+            "lugar_ids": [
+                "lug_bar",
+                "lug_cafeteria"
+            ],
+            "usos": [
+                "lugares",
+                "eventos",
+                "conversaciones",
+                "regalos",
+                "rutinas",
+                "compatibilidad",
+                "descubrimientos",
+                "celestine"
+            ],
+            "descubrimientos": [
+                "Le gusta hablar. De verdad. No el ruido: el hilo.",
+                "Si la conversación está buena, se le olvida la hora. Y a veces la mesa de al lado.",
+                "Una mesa sin reserva y un tema vivo: eso es plan.",
+                "Debate con ganas y sin prisa. Quien quiera zanjas rápidas, que se siente aparte.",
+                "El bar y la cafetería le sirven de foro. El sofá, solo si hay gente.",
+                "No cotillea por cotillear: sigue el hilo. El chisme, si aparece, es combustible.",
+                "Quedar a hablar funciona. Quedar a \"estar\" sin tema, se le hace cuesta."
+            ],
+            "canales": {
+                "libreta": [
+                    0,
+                    1,
+                    2,
+                    5
+                ],
+                "cotilleo": [
+                    2,
+                    6
+                ],
+                "conversacion": [
+                    0,
+                    1,
+                    6
+                ],
+                "mensaje": [
+                    2,
+                    3
+                ],
+                "plan": [
+                    3,
+                    4
+                ]
+            },
+            "hooks": [
+                "mesa_reservada_sin_reserva",
+                "debate_sano"
+            ],
+            "social": "grupo"
+        }
+    ],
+    "familias": [
+        "lectura",
+        "cine",
+        "juegos",
+        "musica",
+        "movimiento",
+        "aire_libre",
+        "mesa",
+        "manos",
+        "noche",
+        "cuidado",
+        "pueblo"
+    ]
+}

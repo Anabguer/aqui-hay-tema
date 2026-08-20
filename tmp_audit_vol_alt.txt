@@ -1,0 +1,212 @@
+﻿#### docs/PLAYTEST_INTEGRAL_REPORT.md
+7|- PASS: 9
+10|- PARCIAL: 1
+19|- Balance de voluntad: BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como dema
+21|### Mapa de secciones
+25|- **C. Vida aut├│noma**: PASS
+26|- **D. Planes/voluntad**: PASS
+27|- **E. Compatibilidad/resultados**: PASS
+28|- **F. Emociones**: PASS
+29|- **G. Descubrimientos**: PASS
+30|- **H. Buz├│n/Cotilleo**: PASS
+31|- **I. Relaciones**: PARCIAL
+34|- **L. Aforos**: PASS
+35|- **M. Save/load/API/integraci├│n**: PASS
+36|- **N. Invariantes**: PASS
+38|## Voluntad ÔÇö tasas por banda
+43|        "n_participantes": 0,
+48|        "n_participantes": 607,
+53|        "n_participantes": 0,
+60|> BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en O
+62|### Ejemplos humanos (voluntad)
+64|- **Carmen ÔåÆ Jos├®** @10: RECHAZA (voluntad) ÔÇö Jos├® ha rechazado la propuesta: "Hoy no me da la vida."
+74|- DECISI├ôN: rechaza | voluntad | Jos├® ha rechazado la propuesta: "Me tengo que pintar las u├▒as."
+79|- DECISI├ôN: rechaza | voluntad | Marta ha rechazado la propuesta: "Hoy no me da la vida."
+87|### parque_si_operativo
+88|- INPUT: Carmen + Luc├¡a | conocerse @ lug_parque h12
+89|- DECISI├ôN: rechaza | voluntad | Luc├¡a ha rechazado la propuesta: "Hoy no me da la vida."
+97|### pareja_distinta_hora
+102|### otro_par_tarde
+107|### ocupado_solape
+147|## C. Vida aut├│noma ÔÇö detalle JSON ÔÇö PASS
+151|    "status": "PASS",
+170|## D. Planes/voluntad ÔÇö detalle JSON ÔÇö PASS
+174|    "status": "PASS",
+181|            "n_participantes": 0,
+186|            "n_participantes": 607,
+191|            "n_participantes": 0,
+205|            "clase": "voluntad",
+212|                    "clase": "voluntad",
+213|                    "motivo_tecnico": "voluntad_rechaza_banal",
+275|                    "motivo_tecnico": "voluntad_acepta",
+314|                    "motivo_tecnico": "voluntad_acepta",
+364|                    "motivo_tecnico": "voluntad_acepta",
+403|                    "motivo_tecnico": "voluntad_acepta",
+453|                    "motivo_tecnico": "voluntad_acepta",
+492|                    "motivo_tecnico": "voluntad_acepta",
+542|                    "motivo_tecnico": "voluntad_acepta",
+581|                    "motivo_tecnico": "voluntad_acepta",
+623|            "clase": "voluntad",
+630|                    "clase": "voluntad",
+631|                    "motivo_tecnico": "voluntad_rechaza_banal",
+693|                    "motivo_tecnico": "voluntad_acepta",
+732|                    "motivo_tecnico": "voluntad_acepta",
+774|            "clase": "voluntad",
+781|                    "clase": "voluntad",
+782|                    "motivo_tecnico": "voluntad_rechaza_banal",
+831|    "balance": "BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados 
+832|    "nota": "Medir persona (Ôëêp) vs plan (ambos). Neni percibe plantones a nivel plan."
+836|## E. Compatibilidad/resultados ÔÇö detalle JSON ÔÇö PASS
+840|    "status": "PASS",
+864|                "error": "ENCUENTRO_RECHAZADO_VOLUNTAD",
+865|                "clase": "voluntad",
+873|                        "motivo_tecnico": "voluntad_acepta",
+911|                        "clase": "voluntad",
+912|                        "motivo_tecnico": "voluntad_rechaza_banal",
+977|                "error": "ENCUENTRO_RECHAZADO_VOLUNTAD",
+978|                "clase": "voluntad",
+985|                        "clase": "voluntad",
+986|                        "motivo_tecnico": "voluntad_rechaza_banal",
+1077|            "label": "parque_si_operativo",
+1084|                "lugar": "lug_parque",
+1097|                "error": "ENCUENTRO_RECHAZADO_VOLUNTAD",
+1098|                "clase": "voluntad",
+1105|                        "clase": "voluntad",
+1106|                        "motivo_tecnico": "voluntad_rechaza_banal",
+1128|                            "lugar": "lug_parque",
+1197|            "label": "pareja_distinta_hora",
+1226|                        "motivo_tecnico": "voluntad_acepta",
+1265|                        "motivo_tecnico": "voluntad_acepta",
+1310|            "label": "otro_par_tarde",
+1339|                        "motivo_tecnico": "voluntad_acepta",
+1378|                        "motivo_tecnico": "voluntad_acepta",
+1423|            "label": "ocupado_solape",
+1460|## F. Emociones ÔÇö detalle JSON ÔÇö PASS
+1464|    "status": "PASS",
+1473|    "nota": "Emoci├│n es individual; bridge emocional solo en ENCUENTRO_TERMINADO (cobertura parcial de eventos).",
+1474|    "parcial": true
+1478|## G. Descubrimientos ÔÇö detalle JSON ÔÇö PASS
+1482|    "status": "PASS",
+1657|## H. Buz├│n/Cotilleo ÔÇö detalle JSON ÔÇö PASS
+1661|    "status": "PASS",
+1669|## I. Relaciones ÔÇö detalle JSON ÔÇö PARCIAL
+1673|    "status": "PARCIAL",
+1675|    "pareja_crisis_ruptura_hitos": "IMPLEMENTADO (manual\/hitos, no umbral autom├ítico)",
+1700|    "nota": "Econom├¡a OFF en play can├│nico; hay lab SimuladorEconomia separado."
+1704|## L. Aforos ÔÇö detalle JSON ÔÇö PASS
+1708|    "status": "PASS",
+1714|        "parque": 16,
+1715|        "gimnasio_spa": 10
+1725|## M. Save/load/API/integraci├│n ÔÇö detalle JSON ÔÇö PASS
+1729|    "status": "PASS",
+1734|        "organizar_misma_persona_causa": true
+1740|## N. Invariantes ÔÇö detalle JSON ÔÇö PASS
+1744|    "status": "PASS",
+
+#### PARA_CHATGPT.md
+1|# Aqu├¡ Hay Tema ÔÇö pack para ChatGPT
+5|**No borres ni edites** el Google Doc `DOCUMENTO MAESTRO ÔÇö AQU├ì HAY TEMA` salvo que se pida expl├¡citamente. Sigue siendo la semilla conceptual. Las decisiones posteriores **ampl├¡an o sustituyen** part
+24|13. **`docs/PROPUESTA_VIDA_POOL_Y_MARCHAS.md`** ÔÇö capacidad Ôëá pool, **marchas consentidas**, vivienda autom├ítica, bloques A/B.
+25|14. **`docs/PROPUESTA_CELESTINE_BUZON_TIEMPO_PARTIDAS.md`** ÔÇö rol Celestine, buz├│n, tiempo 1:1, partidas.
+33|- V0 bucle aprobada en direcci├│n. **Escala:** ~**3** al inicio. **Capacidad simult├ínea Ôëá pool.** Tanda de **16** fichas ahora; cat├ílogo objetivo **80ÔÇô100+**. **Bloque A Ôëê 16**; Bloque B futuro. **Marc
+35|- Mapa V0: cafeter├¡a (+ parque/biblioteca progresivos) + candados cine, bar, arcade.
+39|- Fichas: 2ÔÇô3 pilotos para Neni (B + retrato borrador); el resto lo dise├▒a ChatGPT; auditor├¡a obligatoria. Retratos: Cursor, **cabeza maestra**; estilo **06/06b candidato** (no canon).
+46|**Primera entrega ChatGPT:** `docs/FASE_C_PACK_CHATGPT_I02.md` ( tambi├®n en Drive: `FASE_C_PACK_CHATGPT_I02.md` ).
+50|- Mapa funcional, simulador implementado
+
+#### docs/PLAN_MAESTRO_IMPLEMENTACION.md
+5|El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida est├í apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y labo
+6|**Punto de partida:** ~8 % (Turno 1) ÔåÆ **~28 %** tras Bloques 0ÔÇô6 ejecutados en Turno 2
+12|### Encuentro / Plan = unidad principal
+13|- **`EncuentroEngine`** es la abstracci├│n central; `CitaEngine` es wrapper retrocompatible (`tipo: romantico`).
+26|- **`RngService`**: seed + state en partida; reproducible QA.
+28|### Compatibilidad, qu├¡mica y relaci├│n (tres cosas distintas)
+29|- **Identidad visual (P001ÔÇªP100)** Ôëá **residente de una partida**. Ver ┬º16.
+30|- **Compatibilidad** direccional AÔåÆB / BÔåÆA: encaje de caracter├¡sticas/preferencias. Estable. No sube con citas.
+31|- **Qu├¡mica**: facilidad inexplicable para conectar (amistad o romance). Persistida, seed, no rerolea.
+32|- **Relaci├│n**: lo construido en partida (canales social / romance / conflicto).
+33|- V1 romance: **todos con todos** si edad compatible. **No** hay filtro gay/hetero/bi.
+34|- **Parentesco cercano = veto rom├íntico duro.** La qu├¡mica no lo atraviesa. T├¡o/primo: BLOQUEADO_DECISION.
+38|- La agenda solo sabe ocupaci├│n + origen; sem├íntica la define el motor creador.
+40|### Partidas
+41|- **`partida.nueva`**: nuevo `partida_id`.
+42|- **`partida.reiniciar`**: conserva `partida_id`, resetea estado.
+55|| Compatibilidad | `CompatibilityEvaluator` + `CompatibilidadCalculator` + `CompatibilidadOculta` | Encaje AÔåÆB/BÔåÆA auditable; pesos **provisionales** |
+57|| Generador residente | `GeneradorResidente.php`, `PerfilPartida.php` | Seed; no reescribe ficha Pxxx |
+58|| Simulador / laboratorio | `SimuladorPueblos.php` | Distribuciones; no escribe partidas |
+60|| Mapa/presencia | `PresenciaEngine.php` | T├®cnico placeholder |
+69|| Tests | `tests/*.php`, `run_all.php` | ALL PASS |
+83|### Bloque 2 ÔÇö Mapa t├®cnico Ô£à EJECUTADO
+85|- PresenciaEngine, panel mapa en play.php, iniciales/candados
+91|### Bloque 4 ÔÇö Compatibilidad contrato Ô£à EJECUTADO
+101|- EconomyLedger dinero/fama separados
+122|- F├│rmulas compatibilidad, micro-sim
+124|- Aforos mapa
+167|| Reset parcial | Pendiente |
+168|| Reproducir seed | Ô£à via partida seed + rng state |
+176|Almacenamiento: `logs/partida_*.jsonl` + `event_log[]` en partida (├║ltimas 200).
+188|| Tras generador + compatibilidad/qu├¡mica (calibraci├│n, sin UI) | ~57 % |
+189|| Tras vida relacional / pareja / crisis / memoria (infra, sin UI) | **~58 %** |
+193|El **~58 %** no infla el playtest: `play.php` sigue programando encuentros en directo y los deltas de relaci├│n siguen en +1 placeholder. Pareja/crisis/ruptura existen como **hitos de dominio**, no com
+206|| F├│rmula / pesos de **aceptaci├│n por voluntad** | Propuesta de encuentro |
+210|| F├│rmula de compatibilidad y deltas reales (sustituir +1 placeholder) | Relaciones |
+212|| Nombre UI y coste del esc├íner / herramienta de compatibilidad | Progresi├│n futura |
+213|| Copy narrativo de rechazos (indisponibilidad vs voluntad) | Personaje / buz├│n |
+217|| Pesos definitivos de compatibilidad / qu├¡mica / cita | Calibraci├│n JSON |
+223|| F├│rmula de voluntad NPC (UI no decide) | Propuesta |
+224|| Umbrales estabilidad ÔåÆ tensi├│n ÔåÆ crisis ÔåÆ posible ruptura | RelacionFase de canal (NO es crisis de pareja) |
+225|| D├¡as/deltas de desgaste social y de pareja | RelacionDesgaste |
+229|| T├¡o/primo como veto | parentesco.tio_primo_veto |
+231|| Base de estabilidad al reconciliar | pareja.base_reconciliacion |
+267|Distinci├│n t├®cnica: **indisponibilidad** vs **voluntad**. `copy_id` preparado, vac├¡o. Pesos no fijados.
+270|Canales independientes: social, romance/inter├®s, conflicto/roce. La velocidad **no** es igual para todas las parejas (compatibilidad oculta). Placeholder +1/0 no es la f├│rmula final.
+272|### Compatibilidad oculta
+276|Una pareja consolidada no rompe por una mala interacci├│n aislada. Arquitectura interna: `estable` ÔåÆ `tension` ÔåÆ `crisis` ÔåÆ `posible_ruptura` (nombres **no** son UI final). Umbrales no fijados.
+285|PROPONER ÔåÆ reacci├│n A/B ÔåÆ aceptaci├│n/rechazo ÔåÆ encuentro ÔåÆ resultado ÔåÆ cambio real de relaci├│n (hoy: placeholder de canales) ÔåÆ emocional si procede (flag apagado) ÔåÆ consecuencia visible (DTO existente
+294|| Aceptaci├│n/rechazo | Rechazo agenda `AGENDA_SLOT_OCUPADO` en `programar` | Clases `indisponibilidad` / `voluntad`; `VoluntadPendienteEvaluator`; `copy_id` | F├│rmula; copy de personaje | Pesos volunt
+295|| Relaciones | Canales social + romance; deltas placeholder +1/0 | Canal `relaciones_conflicto`; `fase` / `estabilidad_acumulada` aditivos | Deltas reales seg├║n compatibilidad | F├│rmula; umbrales |
+296|| Compatibilidad | Contrato `CompatibilityEvaluator` + `CompatibilidadCalculator` AÔåÆB/BÔåÆA | Pesos en `calibracion_compatibilidad.json` (`_provisional`); desglose auditable persistido | F├│rmula/pesos c
+297|| Identidad vs residente | Pxxx = visual; `perfil_partida` generado | Preferencias +/ÔêÆ; 3 hobbies; 3 rasgos | Anti-clon agresivo; reveal d├¡a 1 | Qu├® se ve el d├¡a 1; anti-clon |
+299|| Resoluci├│n encuentro | Snapshot de factores + `por_participante` | Pesos `null`; satisfacci├│n `null` | F├│rmula; copy por participante | F├│rmula; copy |
+301|| Memoria/cooldowns | `MemoriaEventos` registra familia/d├¡a/participantes | `cooldowns.por_familia={}` | Ventanas por familia | Cifras de ventana |
+302|| Estabilidad/crisis | ÔÇö | `RelacionFase` transiciones v├ílidas, **sin auto-paso** | Umbrales y proceso de ruptura | Umbrales; nombres UI |
+306|| Consecuencias | DTO play (social/romance/conflicto/lineas); triggers `enabled=false` | Contratos para propuesta/petici├│n | Evaluaci├│n real | Flag + reglas |
+307|| Emociones | `EmotionalStateService` runtime; bridge con flag apagado | Enchufe a propuesta/petici├│n | Cambio emocional de encuentro | F├│rmulas |
+320|                         Ôöé  VoluntadEvaluator ÔåÆ pendiente | acepta | rechaza
+322|              ambos aceptan ÔöÇÔöÇconfirmarSiProcedeÔöÇÔöÇÔû║ EncuentroEngine::programar
+329|              CompatibilidadOculta (nunca en DTO play)
+335|Residente: Pxxx (visual) ÔåÆ GeneradorResidente (seed) ÔåÆ perfil_partida
+336|           QuimicaEngine al coexistir; CompatibilidadOculta direccional AÔåÆB/BÔåÆA
+342|## 16. Identidad visual Ôëá residente de partida (2026-08-18)
+344|Sustituye la suposici├│n de que P001ÔÇªP100 arrastran personalidad/hobbies fijos a todas las partidas.
+347|Sexo/apariencia, rango de edad, pelo, barba/perilla/bigote, gafas, tatuajes, estilo/ropa, retratos y expresiones. **No cambia** entre partidas. No se reescriben fichas aprobadas.
+349|### Qu├® se genera al entrar en UNA partida
+350|Sobre esa cara se crea el **residente de esa partida** (reproducible por seed, estable mientras dure):
+359|En otra partida, la misma cara puede salir con otro interior.
+362|Cualquier adulto puede tener inter├®s rom├íntico por cualquier otro **compatible por edad**. No hay orientaci├│n como filtro. Edad: rango preferente y l├¡mite duro **configurables**; hip├│tesis de simulado
+365|- Compartir hobby **suma**; no compartir **no resta**.
+368|- Compatibilidad **direccional** AÔåÆB y BÔåÆA. Es potencial, no relaci├│n.
+371|- El pico y pala del jugador act├║a sobre **relaci├│n/v├¡nculo**, no reescribe compatibilidad.
+374|El jugador no ve la ficha interna completa. Compatibilidad y qu├¡mica permanecen ocultas. **Reveal inicial cerrado:** 1 hobby + 1 rasgo (`hobby:{id}`, `rasgo:{id}`); el resto `???`. Descubrimiento cont
+384|## 17. Vida relacional, pareja y memoria (2026-08-18)
+386|### Canales (separados, direccionales)
+390|- Qu├¡mica y compatibilidad **no** son relaci├│n.
+393|### Pareja
+394|Nunca `romance > X ÔåÆ pareja`. Hito expl├¡cito (declaraci├│n u otro) + respuesta de ambos ÔåÆ `estado_pareja=pareja`.
+395|Estabilidad de pareja **compartida** y distinta del romance. No hay barra de ÔÇ£amor compartidoÔÇØ.
+398|Nunca por umbral. Acontecimiento expl├¡cito. Tras romper: se conservan social, romance, conflicto e historial. Estabilidad operativa se apaga; queda `memoria`. Reconciliaci├│n Ôëá pareja nueva.
+406|### Parentesco
+419|- Desconocidos visibles 0 + flag; bandas conceptuales configurables (pareja Ôëá banda).
+421|- Compatibilidad no cambia por experiencias (sin tocar `CompatibilidadCalculator` en encuentros).
+423|- Emociones V1 con caducidad y modificadores; voluntad ponderada (nunca 100 %); rechazos + cooldown horas.
+425|- Lugar aut├│nomo seg├║n conocimiento; presentar/proponer/organizar (`PropuestaNivel`); flechazo raro; terceros con freno.
+426|- Esc├íner de compatibilidad **deprecated** (no desbloqueable).
+429|### Solo preparado / no UI
+433|- Conversaciones grupales.
+
+#### docs/PROGRESION_Y_DIFICULTAD.md
+7|El pueblo, los habitantes, las relaciones y los desbloqueos **contin├║an** entre temporadas. La partida no se acaba el d├¡a 30.
+23|Partida: ~3 residentes ┬À **Bloque A Ôëê 16** ┬À ampliar = **Bloque B Ôëê 16** (no un 24 ├║nico) ┬À pool = tandas. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+27|Sandbox. **Sin** ┬½X parejas = ganas┬╗. **Sin** game over por rupturas. Lectura: r├│tulo **por bloque** + posible estado de comunidad (textos no can├│nicos).
+35|Incendios con muchas parejas + pocos sitios al inicio. El ritmo de desbloqueo (dinero/fama) es el acelerador; cifras no fijadas.
+

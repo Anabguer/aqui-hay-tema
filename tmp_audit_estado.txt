@@ -1,0 +1,433 @@
+﻿######## docs/ESTADO_PROYECTO.md ########
+6|Este documento manda como **mapa de situaci├│n**. Las decisiones cerradas siguen en `DECISIONES_CERRADAS.md`. Si algo aqu├¡ contradice a `DECISIONES_CERRADAS.md`, gana `DECISIONES_CERRADAS.md` salvo que este archivo marque
+17|| **OBSOLETO** | Documento o regla sustituida; no usar para dise├▒ar |
+26|**Aqu├¡ Hay Tema** es un juego de gesti├│n social en una villa peque├▒a, cutre y simp├ítica. El jugador es **Celestine**: gestiona v├¡nculos y convivencia (amor, amistad, conflictos, soledad), no un sudoku de parejas ni Los S
+34|### BUCLE PRINCIPAL ÔÇö CERRADO (direcci├│n) / PENDIENTE (wireframes)
+43|6. Gestionar llegadas, marchas consentidas, desbloqueos progresivos.
+45|Detalle de pantallas y flujos: **PENDIENTE** (sin wireframes).
+52|| Capacidad Bloque A | Ôëê **16** (A01ÔÇªA16) |
+55|| 32 | Capacidad simult├ínea A+B, **no** total de fichas |
+57|| Marchas | Intenci├│n s├¡; salida **solo con OK de Celestine**; ┬½qu├®date┬╗ siempre; nunca offline; archivado no reaparece en esa partida |
+59|| Partidas | Persistente / nueva / reiniciar; pool **por partida** |
+80|### COMPATIBILIDAD ÔÇö CERRADO (principio) / PENDIENTE (capas)
+82|- Por capas; **nunca** un ├║nico % visible ÔÇö **CERRADO**
+85|- Pesos, umbrales, capas concretas ÔÇö **PENDIENTE**
+86|- `SISTEMA_COMPATIBILIDAD.md`, `APRENDIZAJE_PREFERENCIAS.md` ÔÇö **CANDIDATO**
+90|- Vida m├¡nima: ocupaci├│n, franja, hobby, ├ínimo, lugares ÔÇö **CERRADO**
+91|- Pueden formar pareja **sin** Celestine ÔÇö **CERRADO**
+101|- Trabajo din├ímico, rutinas descubribles ÔÇö **CANDIDATO** (propuesta agenda)
+109|- `PREPARACION_DE_CITAS.md` ÔÇö **CANDIDATO**
+111|### ECONOM├ìA Y FAMA ÔÇö CERRADO (existen) / PENDIENTE (cifras)
+118|### MAPA Y LUGARES ÔÇö CERRADO (cat├ílogo) / PENDIENTE (mapa)
+122|- Parque/biblioteca progresivos ÔÇö **CERRADO**
+124|- Casa: intimidad/convivencia, no parcela comercial ÔÇö **CERRADO**
+125|- Mapa celda a celda, aforos num├®ricos ÔÇö **PENDIENTE**
+126|- Asset mapa jugable ÔÇö **no existe**
+130|| Pantalla | Estado |
+132|| Landing biblioteca (`index.php`) | Existe (no es partida) |
+136|| Mapa con lugares | **PENDIENTE** |
+137|| Econom├¡a (dinero/fama) | **CERRADO** mostrar; sin UI |
+151|- Test compatibilidad desbloqueable ÔÇö **CANDIDATO**
+155|- Ancla tono: `REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` ÔÇö **REFERENCIA** (layout partida **no** canon)
+156|- Estilos 01ÔÇô05: comparativa ÔÇö **REFERENCIA** hist├│rica
+161|### PARTIDAS ÔÇö CERRADO
+164|- Pool y archivados por partida ÔÇö **CERRADO**
+169|Ver `MVP.md`. Resumen: tr├¡o ~3, solo Bloque A, cafeter├¡a primero, placeholders visuales, diario, posible buz├│n, una cita/plan, una llegada, NPC que se mueve, econom├¡a dummy, **sin** tienda ropa, **sin** test d├¡a 1.
+184|| Marchas consentidas | CERRADO | Sustituye retenci├│n con dado |
+202|| F├│rmulas compatibilidad | PENDIENTE | |
+203|| Econom├¡a (cifras) | PENDIENTE | |
+204|| Mapa funcional | PENDIENTE | |
+208|| Marchas con retenci├│n/dado | OBSOLETO | ÔåÆ consentidas |
+210|| Estilo ┬½retrato PNG 01┬╗ en PARA_CHATGPT | OBSOLETO | ÔåÆ cabeza maestra + pruebas 06 |
+217|| # | Documento A | Documento B | Parece m├ís reciente | Resoluci├│n |
+219|| 1 | `PARA_CHATGPT.md` ÔÇö ┬½Marchas con retenci├│n┬╗ | `DECISIONES_CERRADAS.md` ÔÇö marchas consentidas | DECISIONES | **Resolver:** actualizar PARA_CHATGPT (hecho en esta parada) |
+224|| 6 | `FASE_DISENO_POOL_16.md` ÔÇö I01ÔÇôI10 ┬½iniciales┬╗ del pool 16 | D├¡a 1 solo ~3 | Ambos v├ílidos en capas distintas | **No es contradicci├│n real** si se entiende: 16 = cat├ílogo tanda; 3 = activos d├¡a 1. **Riesgo:** confu
+227|| 9 | `FUENTE_DOCUMENTO_MAESTRO.md` ÔÇö casamentero, 8 lugares, 30 d├¡as | DECISIONES actuales | DECISIONES | **OBSOLETO** parcial; Maestro = semilla tono |
+228|| 10 | `PROPUESTA_JUGABLE_V0_CURSOR.md` ÔÇö ┬½fama del casamentero┬╗ | Fama de Celestine | Celestine | **Pendiente:** pasada de limpieza terminol├│gica en propuesta V0 |
+233|## 4. Preguntas para Neni + ChatGPT
+235|### NECESITO RESPUESTA AHORA (bloquean siguiente paso)
+237|1. ┬┐**Celestine** aparece con nombre/avatar en UI o es rol interno del jugador?
+239|3. ┬┐Confirm├íis **cafeter├¡a sola** al arrancar (parque/biblioteca despu├®s)? ÔÇö cerrado en DECISIONES; validaci├│n final.
+241|5. **Nueva partida rejugable:** ┬┐semilla fija, pools de tr├¡o/llegadas, u otro mecanismo?
+242|6. **Agenda en 1.┬¬ prueba:** ┬┐m├¡nima (franja + ocupaci├│n) o slots 1h completos?
+249|- Cifras de **aforo** por lugar (tras prueba mapa PC/m├│vil)
+253|- **Marchas** en 1.┬¬ prueba o solo modeladas en texto
+254|- Nombre visible diario / buz├│n / villa / pantalla El pueblo
+264|- Tienda herramientas sociales, tienda ropa
+265|- F├│rmulas finas de capas compatibilidad
+289|## 5b. Esqueleto I01ÔÇôL06 ÔÇö resumen compacto (Fase B)
+295|**Patrones orientaci├│n (cupos):** ~5 solo mujeres ┬À ~5 solo hombres ┬À ~3 bi ┬À ~3 incluyen NB.
+312|**Llegadas L01ÔÇôL06:** camarero noche (amistad/tri├íngulo gay) ┬À estudiante l├®sbica ┬À oficinista qu├¡mica emparejado ┬À docente vida pueblo ┬À NB soltero ┬À jubilado vida pueblo.
+316|**Revisi├│n necesaria por decisiones posteriores:** ver respuesta aparte en este turno.
+327|| Mapa funcional | **No** | |
+328|| Pantalla partida | **No** | |
+331|| Modelo datos | **Parcial** | Plantillas JSON en `data/`; `per_i03.json`; `lugares.json`; eventos placeholder |
+343|| Referencia visual mapa+UI | REFERENCIA | `docs/referencias_visuales/REFERENCIA_VISUAL_01_AQUI_HAY_TEMA.png` |
+344|| Comparativa estilos 01ÔÇô05 (A/B/C) | REFERENCIA | `assets/personajes/_revision/_comparativa_estilos_abc/` |
+346|| Roc├¡o borrador principal | BORRADOR | `assets/personajes/_revision/per_i03/borrador.png` |
+350|| Mapa jugable | ÔÇö | **No existe** |
+351|| UI partida | ÔÇö | **No existe** |
+361|**Sube** tras Fase 1: Celestine, buz├│n, mapa cerrado, agenda, seed, 06b, tr├¡o Roc├¡o, 2 sin romance.
+363|**Falta:** esqueleto aprobado, plantillas agenda, 3ÔÇô4 pilotos, micro-sim, wireframes, cifras econom├¡a/aforo.
+367|**Incluido:** Turno 1 + schema v2, RNG, logging, EncuentroEngine/lifecycle/resolver, mapa t├®cnico presencia, buz├│n/diario estructura, CompatibilityEvaluator contrato, NPC planner dev, EconomyLedger, bucle play.php, tests
+369|**Falta:** catch-up eventos, B/C d├¡a 1, contenido narrativo, f├│rmulas compatibilidad, econom├¡a balanceada, retratos.
+379|| DECISIONES n├║cleo escala/marchas/vivienda | Propuestas agenda/buz├│n/tiempo | Mapa/UI partida |
+381|| Cat├ílogo lugares (dise├▒o) | Compatibilidad (marco sin f├│rmulas) | Simulador mesa |
+382|| Modelo datos plantilla | README/PARA_CHATGPT (limpieza pendiente) | |
+388|**Fase B:** devolver esqueleto revisado para aprobaci├│n Neni + ChatGPT.  
+389|**Paralelo Fase C prep:** no regenerar Roc├¡o; completar 2ÔÇô3 pilotos adicionales tras B.
+
+######## docs/PENDIENTES_DISENO.md ########
+19|2. **Pilotos** (sugeridos I03, I05, I10): Neni ve **B + retrato borrador**. Ficha y cara se aprueban por separado.
+35|- **Plantillas de agenda** m├¡nimas (ocupaci├│n ÔåÆ bloques 1 h).
+44|- Buz├│n en V0 ┬À Cafeter├¡a sola operativa d├¡a 1 ┬À Mapa con edificios cerrados visibles
+62|- Nombre definitivo de la pantalla **El pueblo**
+64|- F├│rmulas y pesos de capas / de los derivados
+66|- Mapa celda a celda
+68|- Umbral para que nazca una relaci├│n si la atracci├│n es muy asim├®trica
+74|- Preparaci├│n de citas (`PREPARACION_DE_CITAS.md`) ÔÇö candidato
+95|- **Cifras de aforo** por lugar (tras prueba de mapa PC/m├│vil)
+102|- Marchas: ┬┐en la 1.┬¬ prueba o solo modelo?
+116|- Aptos: **asignaci├│n autom├ítica** (cerrado). Convivir libera un hueco. Cifras de aforo: **despu├®s**, con prueba de mapa PC/m├│vil.
+144|4. Grid AÔÇôJ ├ù 1ÔÇô16 es de la maqueta, no del mapa final.
+154|## Cerrado en pasadas recientes
+162|- Sin pareja voluntaria Ôëá fallo
+166|- Pool **80ÔÇô100+**; 32 = capacidad A+B
+168|- Archivados no reaparecen en la misma partida
+170|- Partidas: persistente / nueva / reiniciar / pool por partida
+172|- Marchas consentidas; nunca offline
+
+######## docs/PROPUESTA_JUGABLE_V0_CURSOR.md ########
+3|Estado: **aprobada** (2026-08-17) en bucle y tono. **Cifras de poblaci├│n (10/16/14) desplazadas** por `PROPUESTA_BLOQUE_3_A_24.md`. **Marchas y escala posterior:** `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (consentidas; Bloque 
+5|Matices respecto a la propuesta original: grafo **rec├¡proco potencial** (no solo ida); ropa inerte en V0 pero campos de look en ficha. Escala de pantalla: ver la ronda del bloque (~3 al inicio), no la ┬º2 de abajo.
+9|> ┬º2ÔÇô3 de este archivo (10 al d├¡a 1, techo 14, no bajar de 8) son **hist├│ricas**. No usarlas para dise├▒ar el tr├¡o tutorial.
+17|1. **Ma├▒ana breve.** Coletilla del d├¡a (una). Diario con 5ÔÇô10 l├¡neas. Cabezas en el mapa seg├║n rutina (trabajo / hobby / banco / casa-offmap).
+21|5. **Informes cortos.** Cita = 2 microfrases + 1 coletilla + cambio de color de pareja. No una novela.
+22|6. **Dinero y fama se mueven un poco.** Cita decente / pareja nueva / crisis salvada. Gastos solo si desbloqueas o tiras de plan especial.
+23|7. **A veces llega alguien.** Maleta en el diario, halo ┬½nuevo┬╗, el grafo se mueve. Casi nunca una crisis autom├ítica.
+25|La fantas├¡a que hay que sentir en 20 minutos: *yo no ligue; yo cotilleo y apago fuegos, y el pueblo no se queda quieto si yo no pincho*.
+27|Dificultad = **elegir a qui├®n ignorar**, no clicar a todos. Por eso el tope de citas/d├¡a es el motor, no las matem├íticas de capas.
+33|La cifra cerrada anterior (~16 para probar) era un techo de *contenido dise├▒ado*, no de *gente en pantalla el d├¡a 1*. Con 3 sitios, 16 residentes simult├íneos es un hormiguero ilegible y un infierno de agenda.
+35|| Capa | Recomendaci├│n V0 | Por qu├® |
+37|| Residentes el d├¡a 1 | **10** | Par, se lee de un vistazo, hay solteros de verdad, 3 sitios se llenan (encuentros) sin ser caos |
+39|| Simult├íneos m├íximo | **14** | Margen para 4 llegadas netas. M├ís de 14 + 2 citas/d├¡a = trabajo de secretar├¡a |
+40|| En pantalla (mapa) | los 10ÔÇô14 | Cabezas; el padr├│n es otra vista |
+44|No fijar esto como canon hasta que ChatGPT dibuje el grafo; si el grafo de 10 a├¡sla a alguien, se sube a 12 **antes** de inventar marchas.
+59|| `ausente` | Se fue. Sigue en datos. Puede volver. No ocupa m├íximo. |
+60|| `visitante` | Pasa unos d├¡as. No cuenta igual para ┬½m├íximo vital┬╗. V0: **fuera**. |
+63|Flag, no estado: **`nuevo`** (se apaga a los 3ÔÇô4 d├¡as). ┬½Se muda┬╗ es una **transici├│n** (residente ÔåÆ ausente), no un sitio en el que vivir. ┬½Antiguo residente┬╗ = `ausente` con historial.
+70|- Ritmo propuesto (orden de magnitud, no cifra sagrada): **primera llegada tras un hito** (primera pareja que aguanta unos d├¡as, o primer desbloqueo, o fama m├¡nima). Luego **como mucho una llegada cada varios d├¡as**, y n
+71|- Condici├│n: hay hueco bajo el m├íximo; el candidato no deja a nadie del pueblo **sin un destino legal de `atraido_por`** (se simula el grafo *despu├®s* de entrar); no es pariente vetado de media aldea si eso vac├¡a opcione
+74|### Marchas (V0 hist├│rica: no; direcci├│n actual: consentidas)
+78|Direcci├│n actual (`PROPUESTA_VIDA_POOL_Y_MARCHAS.md`): un residente puede **querer** irse; **no se va** sin el jugador. Botones: dejar ir / pedir que se quede. ┬½Qu├®date┬╗ = se queda siempre (sin tirada). La causa vira a a
+80|`nuevo` no se puede marchar. Antiguo se archiva. Offline no resuelve una marcha.
+85|- `nuevo` no se puede marchar.
+93|1. Nadie residente con 0 rec├¡procos potenciales legales (`genero` Ôèå `atraido_por` del otro, en los dos sentidos, + no parentesco + no dealbreaker absoluto).
+95|3. `apertura_descubrimiento` no cuenta para este veto.
+97|El pool de 16 existe para elegir qui├®n entra sin romper el pueblo **y** para que las llegadas muevan el grafo, no para rescatar aislados.
+105|El pool 16 Ôëá 16 en pantalla. Mezclar esas dos cifras fue el error de la fase anterior; no lo repetir├¡a.
+109|## 5. Pantalla de habitantes
+111|### Cr├¡tica de ┬½un edificio en el mapa┬╗
+113|**A ÔÇö Ayuntamiento / padr├│n / centro vecinal**  
+114|Todo en el tablero. Coherente con ┬½el pueblo es el UI┬╗. Pero: (1) ya hay 3 sitios de cita; un 4.┬║ abierto el d├¡a 1 diluye ┬½pueblo medio vac├¡o┬╗; (2) el padr├│n no es un lugar de cita ni de hobby; (3) en m├│vil, ir al ayunta
+117|La referencia ya tiene cinta de parejas abajo y laterales. El padr├│n es el hermano de esa cinta: bot├│n **┬½El pueblo┬╗** (o ┬½Gente┬╗) siempre visible. Mapa = sitios + cabezas. Padr├│n = tarjetas. En PC, panel o overlay a la 
+119|Un ayuntamiento **decorativo bloqueado** o desbloqueable m├ís tarde (┬½archivo del padr├│n┬╗) puede existir sin ser la ├║nica puerta.
+134|Filtros (pueden llegar en la misma V0, son baratos): todos, solteros, parejas, nuevos, en crisis, disponibles. Uno activo a la vez.
+146|| Campo | Para qu├® |
+153|| `atraido_por[]` | Capa 1. Lista de g├®neros (puede ser varios) |
+155|| `apertura_descubrimiento` | `cerrada` / `permeable` / `abierta` ÔÇö ver ┬º12 |
+157|| `ocupacion` | Franja de trabajo |
+159|| `hobby_principal` | Rutina + encuentros |
+163|| `rasgos_ocultos[]` | 1ÔÇô2, se descubren |
+165|| `preferencias_romanticas[]` | Parte visible, parte oculta (estilo, ritmoÔÇª) |
+166|| `dealbreakers[]` | Ocultos; absolutos = capa 1 |
+168|| `amigos_iniciales[]` | ids; el resto nace en partida |
+169|| `necesidad_contacto_base` | baja / media / alta ÔÇö semilla de la variable de pareja |
+170|| `voz` / `registro` | `seca` / `dramatica` / `tranquila` / `borde` / `c├índida` ÔÇö para el motor de frases |
+175|├ínimo (enum corto), cansancio como **flag** no barra, d├│nde est├í ahora, `nuevo` hasta fecha, estado de residencia, relaciones sociales que nazcan, relaciones rom├ínticas (las 4), atracciones dirigidas hacia gente concreta
+186|| `apertura_descubrimiento` | No se nombra; se infiere |
+190|**Campo que nos faltaba y s├¡ meter├¡a:** `voz` (para el cat├ílogo de frases) y `apertura_descubrimiento`. Sin voz, ChatGPT no puede etiquetar variantes. Sin apertura, el ┬½descubrimiento┬╗ es una ruleta disfrazada.
+203|2. Si el bloque coincide con `franja_laboral` ÔåÆ **trabaja** (off-mapa o en su sitio si m├ís adelante hay local; en V0, off-mapa basta).
+206|Azar: poco. Pesos fijos por ficha + 1 tirada. Nada de pathfinding.
+210|Si el hobby es cine y el cine est├í ­ƒöÆ: va a cafeter├¡a/parque/biblioteca o se queda en casa. Diario ocasional, no cada d├¡a (`Joel extra├▒a las m├íquinas.` como mucho una vez por semana).
+214|## 8. Econom├¡a (circuito, sin cifras sagradas)
+216|### Separaci├│n (esto s├¡ es dise├▒o, no n├║meros)
+220|| Fantas├¡a | Te pagan por el cotilleo / el pueblo te suelta efectivo | Eres *el* casamentero |
+221|| Entra | Paga diaria peque├▒a + extra por cita que no es un desastre + extra por crisis resuelta | Pareja que nace, pareja que aguanta, ÔÜá´©Å atendido a tiempo, historia memorable (boda m├ís adelante) |
+223|| Desbloquea | Sitios, planes de pago | Llegadas, alg├║n evento, m├ís tarde ropa/gente |
+230|- La paga diaria evita sequ├¡a si fallas dos citas.
+231|- Las citas especiales son un sumidero opcional, no un peaje para jugar.
+235|Recomendaci├│n: **s├¡, poco, y solo si ignoras ÔÜá´©Å de verdad** (cadena de rupturas por abandono). Una ruptura *natural* o una pareja que se deja en paz **no** te castiga. Castigar el arco bueno ser├¡a moralina, y el Maestro 
+246|| Parque | **Inicio** | Exterior, ├ínimo, coincidencias de paseo |
+248|| Cine | 1.er desbloqueo (dinero y/o fama) | Plan ┬½de verdad┬╗, cita de tarde/noche, cierra si hay apag├│n m├ís adelante |
+253|| Plaza | **Fuera del mapa V0** o parcela muda | Redundante con parque al inicio. ├Ütil en fiesta mayor *m├ís tarde* |
+255|| Gimnasio | Despu├®s | Cuerpos, encuentros; no aporta cita distinta a parque/cafeter├¡a a├║n |
+256|| Tienda de ropa | Con ropa | Si la ropa sale de la V0, la tienda tambi├®n |
+257|| Mirador | Despu├®s | Cita rom├íntica; el parque cubre ┬½afuera┬╗ al inicio |
+258|| Casa | No parcela | Intimidad cuando el v├¡nculo lo pida; **fuera de la prueba** o al final |
+260|**Cr├¡tica:** el cat├ílogo de 14 es bueno como *pueblo a largo plazo*. En la V0, **ense├▒ar 11 candados** es ruido y contradice la maqueta *y* el pueblo vac├¡o. Recomiendo mapa V0 = 3 abiertos + **3 candados visibles** (cine
+266|Las 4 variables se quedan. El jugador ve **color** (Bien / Regular / Crisis / Mal), no el desglose.
+270|| `necesidad_contacto` | Quiere verse | Amarillo si pasas | Rojo / ÔÜá´©Å |
+276|No es un daily de 10 parejas. Con 2 citas/d├¡a y 4 parejas, *ya* eliges. Eso es el juego.
+282|Repetir el mismo plan o citar cada d├¡a a la misma pareja: la atracci├│n no sube (o baja un poco: agobio). El diario se r├¡e. No hay que inventar un sistema de ┬½stamina de cita┬╗ m├ís all├í de: **rendimientos decrecientes** + 
+287|- Las parejas verdes **no piden** clic. Solo las amarillas/naranjas y los ÔÜá´©Å.
+288|- Cinta de parejas de la maqueta = el gestor. No un segundo Excel.
+291|Nacimiento de pareja: tras una cita que no sea desastre **y** atracci├│n m├¡nima en *alg├║n* sentido. Si B est├í en ┬½bueno, sin m├ís┬╗, puede nacer igual como ┬½est├ín quedando┬╗ (estado blando) sin boda. Umbral fino = prueba, no
+299|Motor **local**, cat├ílogos. Cero IA en partida.
+319|Cupo 5ÔÇô10/d├¡a: **prioridad** problema > pista > info > ruido. Se rellenan con ruido hasta un m├¡nimo de 5 para que el pueblo respire, sin pasar de 10. Los ÔÜá´©Å no se tiran por el cupo: si hay 3 crisis, hay 3 ÔÜá´©Å y menos chis
+335|| `aqui_habia_tema` | Ruptura, marcha, ┬½se enfri├│┬╗ |
+339|| `si_pasa` | Ruido, resignaci├│n, humor seco |
+341|Sitios: coletilla del d├¡a (una, al despertar); cierre de cita; desbloqueo; llegada. El diario **no** lleva coletilla en cada l├¡nea (ser├¡a ruido). M├íximo una coletilla a la vez en pantalla.
+347|## 13. Descubrimiento de atracci├│n (con respeto)
+353|- `atraido_por` es el mapa **estable** de la persona. La mayor├¡a no se reescribe.
+354|- Puede existir un **inter├®s concreto** `hacia_persona_id` que *no* estaba en el mapa, si `apertura_descubrimiento` no es `cerrada`, hay v├¡nculo o historia (varias coincidencias, una cita impuesta por el jugador que sale
+356|- Solo tras **varios** hitos con sentido se puede **ampliar** `atraido_por` (reconocimiento). Es raro, reversible en UI solo como texto de ficha descubierto, y no se usa para gag.
+358|Personajes `cerrada`: no hay excepci├│n. `permeable`: un caso en toda la partida como mucho. `abierta`: puede pasar antes, igual con causa.
+366|- **No 16 en el mapa el d├¡a 1.** Pool 16, pueblo 10.
+368|- **No ropa ni tienda en V0.**
+370|- **No visitantes** hasta que las llegadas sepan bien. Marchas: modelo consentido en `PROPUESTA_VIDA_POOL_Y_MARCHAS.md` (puede retrasarse *usarlas* en la primera prueba).
+372|- **No 9 capas visibles ni 4 barras.** 4 n├║meros internos, 1 color.
+383|3. **`voz` en la ficha** para que el banco de frases sea industrializable.
+384|4. **Candados visibles limitados** (3) para que el vac├¡o se lea y el deseo de desbloquear tambi├®n.
+387|7. **Las parejas verdes no llaman.** El juego tiene que ense├▒ar a ignorar lo sano.
+397|| 10 personas ├ù diario 5ÔÇô10 = o silencio o spam | Prioridad ÔÜá´©Å/­ƒæÇ; ruido con cupo |
+398|| Llegadas rompen parejas a lo loco | La mayor├¡a de llegadas son neutras; ver ┬º llegada |
+401|| Pueblo persistente sin objetivo = se apaga | Un objetivo blando de prueba (abajo), no una derrota |
+403|| Grafo cojo al marcharse | No marchar en V0 |
+411|- Mapa: 3 abiertos + 3 ­ƒöÆ (cine, bar, arcade)
+413|- Padr├│n en UI (tarjetas + filtros)
+415|- 2 citas/d├¡a, 4 variables internas, colores de pareja
+421|- Cero ropa, cero casa, cero temporadas-timer, cero visitantes, cero marchas, cero IA
+425|Ropa y tienda; casa; plaza/bingo/gym/mirador/discoteca/restaurante (datos s├¡, mapa no); visitantes; mudanzas; bodas/divorcios como sistema (una ruptura simple s├¡); reputaci├│n punitiva; 9 capas con pesos finales; prompt d
+429|## Llegadas que no son crisis (reglas)
+431|Al entrar alguien, se tira **una** categor├¡a, sesgada por qu├¡mica real (atracci├│n previa calculada en silencio) y por si hay parejas fr├ígiles (conflicto alto o contacto desatendido):
+438|| Raro | Qu├¡mica con alguien **emparejado** ÔåÆ ­ƒæÇ, no ruptura |
+439|| Muy raro | Tri├íngulo de verdad (solo si la pareja ya estaba amarilla/naranja) |
+447|Todo es id + cat├ílogo: personajes, sitios, frases, coletillas, ocupaciones, vetos. El m├íximo simult├íneo y los huecos/d├¡a son **n├║meros de partida**, no c├│digo de ficha. Las temporadas envuelven el mismo pueblo. Los 6 del
+
+######## docs/PLAYTEST_INTEGRAL_REPORT.md ########
+7|- PASS: 9
+10|- PARCIAL: 1
+11|- BLOQUEADO_DECISION: 1
+19|- Balance de voluntad: BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en 
+21|### Mapa de secciones
+25|- **C. Vida aut├│noma**: PASS
+26|- **D. Planes/voluntad**: PASS
+27|- **E. Compatibilidad/resultados**: PASS
+28|- **F. Emociones**: PASS
+29|- **G. Descubrimientos**: PASS
+30|- **H. Buz├│n/Cotilleo**: PASS
+31|- **I. Relaciones**: PARCIAL
+32|- **J. Marchas**: NO_IMPLEMENTADO
+33|- **K. Econom├¡a**: NO_IMPLEMENTADO
+34|- **L. Aforos**: PASS
+35|- **M. Save/load/API/integraci├│n**: PASS
+36|- **N. Invariantes**: PASS
+38|## Voluntad ÔÇö tasas por banda
+43|        "n_participantes": 0,
+48|        "n_participantes": 607,
+53|        "n_participantes": 0,
+60|> BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en Organizar.
+62|### Ejemplos humanos (voluntad)
+64|- **Carmen ÔåÆ Jos├®** @10: RECHAZA (voluntad) ÔÇö Jos├® ha rechazado la propuesta: "Hoy no me da la vida."
+74|- DECISI├ôN: rechaza | voluntad | Jos├® ha rechazado la propuesta: "Me tengo que pintar las u├▒as."
+79|- DECISI├ôN: rechaza | voluntad | Marta ha rechazado la propuesta: "Hoy no me da la vida."
+87|### parque_si_operativo
+88|- INPUT: Carmen + Luc├¡a | conocerse @ lug_parque h12
+89|- DECISI├ôN: rechaza | voluntad | Luc├¡a ha rechazado la propuesta: "Hoy no me da la vida."
+97|### pareja_distinta_hora
+102|### otro_par_tarde
+107|### ocupado_solape
+147|## C. Vida aut├│noma ÔÇö detalle JSON ÔÇö PASS
+151|    "status": "PASS",
+170|## D. Planes/voluntad ÔÇö detalle JSON ÔÇö PASS
+174|    "status": "PASS",
+181|            "n_participantes": 0,
+186|            "n_participantes": 607,
+191|            "n_participantes": 0,
+205|            "clase": "voluntad",
+212|                    "clase": "voluntad",
+213|                    "motivo_tecnico": "voluntad_rechaza_banal",
+218|                    "_bloqueado_decision": false,
+239|                        "mod_tipo": 34,
+257|                    "_bloqueado_decision": false
+275|                    "motivo_tecnico": "voluntad_acepta",
+280|                    "_bloqueado_decision": false,
+301|                        "mod_tipo": 34,
+314|                    "motivo_tecnico": "voluntad_acepta",
+319|                    "_bloqueado_decision": false,
+340|                        "mod_tipo": 34,
+364|                    "motivo_tecnico": "voluntad_acepta",
+369|                    "_bloqueado_decision": false,
+390|                        "mod_tipo": 34,
+403|                    "motivo_tecnico": "voluntad_acepta",
+408|                    "_bloqueado_decision": false,
+429|                        "mod_tipo": 34,
+453|                    "motivo_tecnico": "voluntad_acepta",
+458|                    "_bloqueado_decision": false,
+479|                        "mod_tipo": 34,
+492|                    "motivo_tecnico": "voluntad_acepta",
+497|                    "_bloqueado_decision": false,
+518|                        "mod_tipo": 34,
+542|                    "motivo_tecnico": "voluntad_acepta",
+547|                    "_bloqueado_decision": false,
+568|                        "mod_tipo": 34,
+581|                    "motivo_tecnico": "voluntad_acepta",
+586|                    "_bloqueado_decision": false,
+607|                        "mod_tipo": 34,
+623|            "clase": "voluntad",
+630|                    "clase": "voluntad",
+631|                    "motivo_tecnico": "voluntad_rechaza_banal",
+636|                    "_bloqueado_decision": false,
+657|                        "mod_tipo": 34,
+675|                    "_bloqueado_decision": false
+693|                    "motivo_tecnico": "voluntad_acepta",
+698|                    "_bloqueado_decision": false,
+719|                        "mod_tipo": 34,
+732|                    "motivo_tecnico": "voluntad_acepta",
+737|                    "_bloqueado_decision": false,
+758|                        "mod_tipo": 34,
+774|            "clase": "voluntad",
+781|                    "clase": "voluntad",
+782|                    "motivo_tecnico": "voluntad_rechaza_banal",
+787|                    "_bloqueado_decision": false,
+808|                        "mod_tipo": 34,
+826|                    "_bloqueado_decision": false
+831|    "balance": "BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en Organiz
+836|## E. Compatibilidad/resultados ÔÇö detalle JSON ÔÇö PASS
+840|    "status": "PASS",
+864|                "error": "ENCUENTRO_RECHAZADO_VOLUNTAD",
+865|                "clase": "voluntad",
+873|                        "motivo_tecnico": "voluntad_acepta",
+878|                        "_bloqueado_decision": false,
+899|                            "mod_tipo": 34,
+911|                        "clase": "voluntad",
+912|                        "motivo_tecnico": "voluntad_rechaza_banal",
+917|                        "_bloqueado_decision": false,
+938|                            "mod_tipo": 34,
+977|                "error": "ENCUENTRO_RECHAZADO_VOLUNTAD",
+978|                "clase": "voluntad",
+985|                        "clase": "voluntad",
+986|                        "motivo_tecnico": "voluntad_rechaza_banal",
+991|                        "_bloqueado_decision": false,
+1012|                            "mod_tipo": 34,
+1030|                        "_bloqueado_decision": false
+1077|            "label": "parque_si_operativo",
+1084|                "lugar": "lug_parque",
+1097|                "error": "ENCUENTRO_RECHAZADO_VOLUNTAD",
+1098|                "clase": "voluntad",
+1105|                        "clase": "voluntad",
+1106|                        "motivo_tecnico": "voluntad_rechaza_banal",
+1111|                        "_bloqueado_decision": false,
+1128|                            "lugar": "lug_parque",
+1132|                            "mod_tipo": 34,
+1150|                        "_bloqueado_decision": false
+1197|            "label": "pareja_distinta_hora",
+1226|                        "motivo_tecnico": "voluntad_acepta",
+1231|                        "_bloqueado_decision": false,
+1252|                            "mod_tipo": 34,
+1265|                        "motivo_tecnico": "voluntad_acepta",
+1270|                        "_bloqueado_decision": false,
+1291|                            "mod_tipo": 34,
+1310|            "label": "otro_par_tarde",
+1339|                        "motivo_tecnico": "voluntad_acepta",
+1344|                        "_bloqueado_decision": false,
+1365|                            "mod_tipo": 34,
+1378|                        "motivo_tecnico": "voluntad_acepta",
+1383|                        "_bloqueado_decision": false,
+1404|                            "mod_tipo": 34,
+1423|            "label": "ocupado_solape",
+1460|## F. Emociones ÔÇö detalle JSON ÔÇö PASS
+1464|    "status": "PASS",
+1473|    "nota": "Emoci├│n es individual; bridge emocional solo en ENCUENTRO_TERMINADO (cobertura parcial de eventos).",
+1474|    "parcial": true
+1478|## G. Descubrimientos ÔÇö detalle JSON ÔÇö PASS
+1482|    "status": "PASS",
+1653|    "nota": "Discovery ON; se espera revelaci├│n gradual, no dump total d├¡a 1."
+1657|## H. Buz├│n/Cotilleo ÔÇö detalle JSON ÔÇö PASS
+1661|    "status": "PASS",
+1669|## I. Relaciones ÔÇö detalle JSON ÔÇö PARCIAL
+1673|    "status": "PARCIAL",
+1675|    "pareja_crisis_ruptura_hitos": "IMPLEMENTADO (manual\/hitos, no umbral autom├ítico)",
+1677|    "nota": "No se simula falsamente crisis autom├ítica por umbral si no est├í cableada."
+1681|## J. Marchas ÔÇö detalle JSON ÔÇö NO_IMPLEMENTADO
+1686|    "titulo": "Marchas",
+1687|    "detalle": "No existe MarchaEngine \/ salida de roster \/ se├▒ales de marcha."
+1691|## K. Econom├¡a ÔÇö detalle JSON ÔÇö NO_IMPLEMENTADO
+1696|    "economy_enabled": false,
+1700|    "nota": "Econom├¡a OFF en play can├│nico; hay lab SimuladorEconomia separado."
+1704|## L. Aforos ÔÇö detalle JSON ÔÇö PASS
+1708|    "status": "PASS",
+1714|        "parque": 16,
+1715|        "gimnasio_spa": 10
+1725|## M. Save/load/API/integraci├│n ÔÇö detalle JSON ÔÇö PASS
+1729|    "status": "PASS",
+1734|        "organizar_misma_persona_causa": true
+1740|## N. Invariantes ÔÇö detalle JSON ÔÇö PASS
+1744|    "status": "PASS",
+
+######## docs/APRENDIZAJE_PREFERENCIAS.md ########
+5|Los gustos de pareja **no son siempre est├íticos**. Una experiencia relevante puede dejar huella. Solo si hay **causalidad**: el rasgo tiene que haber sido *causa* del bien o del mal, no decorado de la escena.
+17|ÔåÆ impacto
+27|Orientaci├│n / `atraido_por` / `apertura_descubrimiento`: **otro mecanismo** (`PROPUESTA_JUGABLE_V0_CURSOR.md` ┬º13). Este sistema **no** los usa como premio ni como castigo.
+36|4. **Una tirada, un eje.** Un divorcio no dispara un escopetazo a diez gustos. Se elige el eje con m├ís evidencia causal.
+39|7. **No modelamos (a├║n) el error de atribuci├│n** (┬½culpar a los gamers porque el restaurante cerr├│┬╗). Ser├¡a gracioso y ca├│tico. Fuera de esta propuesta.
+45|### Dos capas
+47|| Capa | D├│nde | Qu├® es |
+52|Un texto de ficha **puede** apuntar a un eje (`eje: "eje_videojuegos"`). Si no apunta, el motor no lo usa para aprender; sigue valiendo como voz.
+61|aprendizaje         delta consolidado (partida)
+78|### Escala recomendada para simular (no canon)
+102|| hobby / planes | videojuegos, copas, cine, deporte, bingoÔÇª |
+105|| est├®tica / look | elegante, atrevido, c├│modoÔÇª (`ROPA_Y_LOOKS.md`, cuando exista) |
+117|| `apertura_descubrimiento` | no se gasta aqu├¡ |
+118|| `hobby_principal`, rasgos p├║blicos/ocultos, `voz`, `estilo_social` *propio* | qui├®n es, no a qui├®n busca |
+120|| parentesco / vetos | capa 1 legal |
+142|4. Si el resultado malo/bueno se explica por **contexto** (sitio cerrado, lluvia, horario, un tercero, un micro de lugar), las causas son de contexto. **No se copian** a hobbies de la pareja.
+147|| Qu├® pas├│ | Causas legales | Causas ilegales |
+149|| Le ignora toda la noche por el m├│vil / partida | `eje_videojuegos` ÔêÆ, evidencia 3 | ÔÇö |
+150|| El restaurante cerrado | `contexto_lugar` (no es eje de pareja) | `eje_videojuegos` |
+158|## Eventos disparadores
+160|No todos pesan igual. ┬½Cita mediocre┬╗ **no** dispara.
+162|| Evento | ┬┐Puede disparar? | Impacto base (hip├│tesis) | Notas |
+170|| Ruptura | s├¡, si el motivo de ruptura apunta a un eje | 3 | |
+175|| Evento traum├ítico/memorable (tono del juego) | s├¡ | 3ÔÇô4 | Rid├¡culo p├║blico, abandono en crisisÔÇª no gore |
+177|El **divorcio** no es un bot├│n m├ígico: si se van por un parentesco imposible o porque uno se muda, no hay eje de hobby que aprender.
+184|1. ┬┐El evento est├í en la tabla de disparadores? si no ÔåÆ stop
+186|3. Quedarse con 1 eje: mayor (evidencia ├ù |polaridad|), desempate al azar
+192|9. ┬┐Puede consolidar? (repetici├│n o impacto ÔëÑ 4 o temporal ya activo en el mismo signo)
+194|10. Escribir memoria. Diario solo si el cambio se nota (paso 8 fuerte o paso 9)
+209|Una cita mediocre **no** destruye un +2. Un +2 contrario solo se mueve ÔêÆ1 temporal, y consolidar el enfriamiento pide repetici├│n o ruptura/divorcio con esa causa.
+223|| Ruptura cuyo motivo es ese rasgo | 30 % | Cierra un cap├¡tulo |
+226|| Relaci├│n larga muy positiva, misma causa (hito, no cada d├¡a) | 20 % | El cari├▒o ense├▒a despacio |
+237|| Ya hay temporal activo en el mismo eje y signo | consolidar: p aparte = la mitad de la p que acert├│ |
+240|Ejemplo: ruptura 30 % ├ù baja 0,4 ├ù predilecci├│n en contra 0,5 Ôëê **6 %**. Casi nunca. Eso es lo que queremos para gente cabezota.
+252|| **Temporal** | Moret├│n. ┬½Ahora mismo no quiero fiesteros.┬╗ | Casi todo acierto de tirada | Baja 1 tick cada **7 d├¡as** de pueblo sin reforzar. A 0, desaparece |
+253|| **Consolidada** | Cicatriz / aprendizaje. Cambia el sesgo de verdad | 2.┬¬ tirada, o 2.┬¬ experiencia igual mientras el temporal sigue vivo, o impacto 4 con acierto | No caduca sola. Solo otra experiencia **contraria** (
+255|Duraci├│n t├¡pica del moret├│n: **7ÔÇô21 d├¡as** seg├║n impacto (2 ÔåÆ ~7; 4 ÔåÆ ~21). Hip├│tesis.
+271|| `baja` | Cambia poco. Cabezota afectiva. Default bueno para gente mayor de car├ícter cerrado, no por edad autom├ítica |
+275|V0: **una** plasticidad global. Plasticidad por categor├¡a (hobbies vs est├®tica) se deja para si el simulador demuestra que hace falta. Si falta el campo en una ficha ya escrita: tratar como `media` en simulaci├│n; ChatGPT
+277|No atar plasticidad a `apertura_descubrimiento`. Una persona `cerrada` en orientaci├│n puede ser `alta` en hobbies, y al rev├®s.
+289|No es capa 1. Sesga citas y preparaci├│n (`PREPARACION_DE_CITAS.md`). El jugador puede enterarse por diario ­ƒæÇ, no por un icono de veto.
+291|Subir un dealbreaker `leve` ÔåÆ `fuerte` del **mismo tema**: solo con consolidaci├│n + impacto ÔëÑ 3. `fuerte` ÔåÆ `absoluto`: **no** por este sistema.
+312|Sirve para auditor├¡a y para prosa posterior: *┬½┬┐por qu├® ahora le molesta ese perfil?┬╗*
+328|Solo si el cambio es temporal con impacto ÔëÑ 3 **o** consolidado.
+330|Tipo `pista`, indicador ­ƒæÇ. Una l├¡nea. Sin n├║meros. Cupo 5ÔÇô10/d├¡a sigue mandando: si el d├¡a est├í lleno, se guarda para ma├▒ana o se descarta el m├ís flojo.
+334|- ­ƒæÇ Despu├®s de aquello, parece que mira a los fiesteros de otra manera.
+338|Coletilla: no enganchar una coletilla a cada aprendizaje (ruido). El informe de cita sigue siendo el sitio del palo o del piropo.
+342|## Impacto sobre compatibilidad
+344|Sigue **sin** existir `compatibilidad = X%`.
+346|| Capa | Efecto del aprendizaje |
+348|| 1 dura | **Ninguno** sobre orientaci├│n, parentesco, absolutos de dise├▒o |
+352|| Preparaci├│n de citas | Un eje descubierto por el jugador es informaci├│n ├║til; uno no descubierto se elige a ciegas |
+363|2. Un evento de contexto (sitio cerrado, clima) mueve un eje de pareja.
+370|9. Tras muchas partidas, la **media del pueblo** de un eje se desplaza igual en todas las semillas ÔåÆ hay un im├ín global; hay que romperlo.
+373|ChatGPT **no** escribe deltas. Escribe plasticidad + textos + (opcional) enlace a eje. El motor aprende en partida.
+392|| distancia de vectores de ejes entre semillas distintas | si todas las partidas acaban en el mismo perfil medio: convergencia |
+414|| `dealbreakers[].eje` | no | para saber si un aprendizaje refuerza *ese* tema |
+418|Fichas ya escritas (Roc├¡o): **no se rellenan ahora**. En simulaci├│n, `media` si falta. ChatGPT lo a├▒ade en la siguiente pasada de esa ficha, sin tocar identidad.
+431|`intensidad_base` se deriva al empezar partida: del enlace `eje` si existe, si no **0** (neutro) salvo que m├ís adelante definamos un mapa textoÔåÆeje. No inventar bases en silencio para que ┬½quede interesante┬╗.
+452|- Preparar citas (info incompleta): `PREPARACION_DE_CITAS.md`
+453|- Ropa como modificador, no como ┬½mejor look┬╗: `ROPA_Y_LOOKS.md`
+454|- Compatibilidad: `SISTEMA_COMPATIBILIDAD.md`
+456|- Descubrimiento identitario: `PROPUESTA_JUGABLE_V0_CURSOR.md` ┬º13
+

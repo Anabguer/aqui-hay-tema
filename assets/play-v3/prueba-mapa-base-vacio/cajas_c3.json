@@ -1,0 +1,160 @@
+{
+  "arquitectura": {
+    "capa_1": "mapa_base_vacio.png",
+    "capa_2": "sprites de complejos (sustituir al evolucionar; el mapa no cambia)"
+  },
+  "canvas_px": [
+    1536,
+    1024
+  ],
+  "origen": "top-left",
+  "unidad": "pixeles del mapa_base_vacio.png",
+  "ancla_escala": "cafe_temprano C3 1301x814",
+  "ref_composicion_solo_layout": "prueba-composicion-pueblo (NO asset final)",
+  "complejos": {
+    "cafe_libros": {
+      "nombre": "Café & Libros",
+      "id_corto": "CAFE",
+      "fases": [
+        "cafeteria",
+        "biblioteca",
+        "tienda"
+      ],
+      "crecimiento": "derecha",
+      "x": 48,
+      "y": 44,
+      "ancho_max": 470,
+      "alto_max": 240,
+      "apron_frontal_px": 48,
+      "parcela": {
+        "x": 32,
+        "y": 28,
+        "w": 510,
+        "h": 300
+      },
+      "notas": "Nucleo F1 a la izquierda; biblio+tienda a la derecha dentro de ancho_max. Escala ref C3 cafe_temprano."
+    },
+    "rincon_lola": {
+      "nombre": "El Rincón de Lola",
+      "id_corto": "LOLA",
+      "fases": [
+        "restaurante",
+        "bingo"
+      ],
+      "crecimiento": "abajo-derecha",
+      "x": 1000,
+      "y": 48,
+      "ancho_max": 460,
+      "alto_max": 270,
+      "apron_frontal_px": 48,
+      "parcela": {
+        "x": 980,
+        "y": 32,
+        "w": 500,
+        "h": 330
+      },
+      "notas": "Bingo volumen secundario abajo-derecha."
+    },
+    "parque": {
+      "nombre": "Parque",
+      "id_corto": "PARQUE",
+      "fases": [
+        "base_en_mapa",
+        "picnic_overlay",
+        "mirador_overlay"
+      ],
+      "crecimiento": "picnic SO + mirador NE (overlays)",
+      "capa": 1,
+      "x": 540,
+      "y": 200,
+      "ancho_max": 400,
+      "alto_max": 420,
+      "apron_frontal_px": 0,
+      "parcela": {
+        "x": 520,
+        "y": 180,
+        "w": 440,
+        "h": 460
+      },
+      "overlays": {
+        "picnic": {
+          "x": 555,
+          "y": 485,
+          "ancho_max": 150,
+          "alto_max": 100
+        },
+        "mirador": {
+          "x": 790,
+          "y": 230,
+          "ancho_max": 120,
+          "alto_max": 130
+        }
+      },
+      "notas": "CAPA 1 permanente. Picnic/mirador = sprites opcionales encima."
+    },
+    "cine_game": {
+      "nombre": "Cine Game",
+      "id_corto": "CINE",
+      "fases": [
+        "cine",
+        "arcade"
+      ],
+      "crecimiento": "derecha",
+      "x": 40,
+      "y": 580,
+      "ancho_max": 400,
+      "alto_max": 250,
+      "apron_frontal_px": 48,
+      "parcela": {
+        "x": 24,
+        "y": 560,
+        "w": 440,
+        "h": 310
+      },
+      "notas": "Arcade a la derecha; cabe en ancho_max."
+    },
+    "mala_idea": {
+      "nombre": "La Mala Idea",
+      "id_corto": "MALA",
+      "fases": [
+        "bar",
+        "discoteca",
+        "karaoke"
+      ],
+      "crecimiento": "derecha y abajo-derecha",
+      "x": 1090,
+      "y": 380,
+      "ancho_max": 390,
+      "alto_max": 350,
+      "apron_frontal_px": 48,
+      "parcela": {
+        "x": 1070,
+        "y": 360,
+        "w": 430,
+        "h": 410
+      },
+      "notas": "Bar arriba-izq; disco derecha; karaoke abajo-derecha."
+    },
+    "gimnasio_spa": {
+      "nombre": "Gimnasio & Spa",
+      "id_corto": "GYM",
+      "fases": [
+        "gimnasio",
+        "spa"
+      ],
+      "crecimiento": "derecha",
+      "x": 540,
+      "y": 740,
+      "ancho_max": 460,
+      "alto_max": 210,
+      "apron_frontal_px": 40,
+      "parcela": {
+        "x": 520,
+        "y": 720,
+        "w": 500,
+        "h": 270
+      },
+      "notas": "Spa ala derecha más baja/clara."
+    }
+  }
+}

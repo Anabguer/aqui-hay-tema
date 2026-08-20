@@ -1,0 +1,212 @@
+[
+  {
+    "bbox": [
+      236,
+      16,
+      1146,
+      869
+    ],
+    "cx": 691.0,
+    "cy": 442.5,
+    "r_content": 621.5,
+    "r": 652.5,
+    "bbox_w": 911,
+    "bbox_h": 854,
+    "id": "P001",
+    "why": "Canvas irregular + pelo de volumen",
+    "canvas": [
+      1408,
+      1117
+    ],
+    "neck_y": 742
+  },
+  {
+    "bbox": [
+      273,
+      12,
+      823,
+      737
+    ],
+    "cx": 548.0,
+    "cy": 374.5,
+    "r_content": 455.0,
+    "r": 477.8,
+    "bbox_w": 551,
+    "bbox_h": 726,
+    "id": "P009",
+    "why": "Asimetrico: rapado + melena (el que disparo el matiz)",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 619
+  },
+  {
+    "bbox": [
+      180,
+      20,
+      846,
+      773
+    ],
+    "cx": 513.0,
+    "cy": 396.5,
+    "r_content": 442.2,
+    "r": 464.4,
+    "bbox_w": 667,
+    "bbox_h": 754,
+    "id": "P010",
+    "why": "Moños altos y lazos",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 655
+  },
+  {
+    "bbox": [
+      317,
+      18,
+      690,
+      651
+    ],
+    "cx": 503.5,
+    "cy": 334.5,
+    "r_content": 367.4,
+    "r": 385.7,
+    "bbox_w": 374,
+    "bbox_h": 634,
+    "id": "P016",
+    "why": "Pelo corto / poco volumen",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 534
+  },
+  {
+    "bbox": [
+      326,
+      44,
+      817,
+      702
+    ],
+    "cx": 571.5,
+    "cy": 373.0,
+    "r_content": 410.5,
+    "r": 431.0,
+    "bbox_w": 492,
+    "bbox_h": 659,
+    "id": "P018",
+    "why": "Coleta alta",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 589
+  },
+  {
+    "bbox": [
+      276,
+      71,
+      772,
+      642
+    ],
+    "cx": 524.0,
+    "cy": 356.5,
+    "r_content": 378.2,
+    "r": 397.1,
+    "bbox_w": 497,
+    "bbox_h": 572,
+    "id": "P031",
+    "why": "Gorra + pelo largo y trenzas",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 537
+  },
+  {
+    "bbox": [
+      254,
+      19,
+      763,
+      692
+    ],
+    "cx": 508.5,
+    "cy": 355.5,
+    "r_content": 421.9,
+    "r": 443.0,
+    "bbox_w": 510,
+    "bbox_h": 674,
+    "id": "P109",
+    "why": "Rizo alto / mucho pelo arriba",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 577
+  },
+  {
+    "bbox": [
+      320,
+      39,
+      710,
+      737
+    ],
+    "cx": 515.0,
+    "cy": 388.0,
+    "r_content": 399.8,
+    "r": 419.8,
+    "bbox_w": 391,
+    "bbox_h": 699,
+    "id": "P117",
+    "why": "Faux hawk corto",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 628
+  },
+  {
+    "bbox": [
+      237,
+      22,
+      800,
+      696
+    ],
+    "cx": 518.5,
+    "cy": 359.0,
+    "r_content": 439.1,
+    "r": 461.1,
+    "bbox_w": 564,
+    "bbox_h": 675,
+    "id": "P121",
+    "why": "Melena larga y flequillo; mas aire en el lienzo",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 581
+  },
+  {
+    "bbox": [
+      132,
+      5,
+      870,
+      735
+    ],
+    "cx": 501.0,
+    "cy": 370.0,
+    "r_content": 519.0,
+    "r": 545.0,
+    "bbox_w": 739,
+    "bbox_h": 731,
+    "id": "P138",
+    "why": "Afro ancho (maximo volumen)",
+    "canvas": [
+      1024,
+      1024
+    ],
+    "neck_y": 617
+  }
+]

@@ -97,17 +97,28 @@ final class MotorVidaDiaria
             'casuales' => [],
         ];
         if ($hora < $ini || $hora > $fin) {
+            if (AutonomiaSalidas::horaActiva($hora, $cal)) {
+                $out['autonomo'] = AutonomiaSalidas::intentar($partida, $catalog, $cal, $rng, $logger);
+                $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
+                $rng->persistToPartida($partida);
+            }
             return $out;
         }
-        if (!isset($partida['huecos_vida']['dia']) || (int) $partida['huecos_vida']['dia'] !== $dia) {
-            self::alComenzarDia($partida, $cal, $rng);
+        $labOn = !empty($partida['lab_vida_activa']);
+        $playAcontece = (bool) CalibracionConfig::get($cal, 'acontecimientos_dia.activo_en_play', false);
+        if ($labOn || $playAcontece) {
+            if (!isset($partida['huecos_vida']['dia']) || (int) $partida['huecos_vida']['dia'] !== $dia) {
+                self::alComenzarDia($partida, $cal, $rng);
+            }
+            $horasHueco = is_array($partida['huecos_vida']['horas'] ?? null) ? $partida['huecos_vida']['horas'] : [];
+            if (in_array($hora, $horasHueco, true) && !in_array($hora, $partida['huecos_vida']['ejecutados'] ?? [], true)) {
+                $out['vida'] = self::ejecutarHuecoVida($partida, $catalog, $cal, $rng, $logger);
+                $partida['huecos_vida']['ejecutados'][] = $hora;
+            }
         }
-        $horasHueco = is_array($partida['huecos_vida']['horas'] ?? null) ? $partida['huecos_vida']['horas'] : [];
-        if (in_array($hora, $horasHueco, true) && !in_array($hora, $partida['huecos_vida']['ejecutados'] ?? [], true)) {
-            $out['vida'] = self::ejecutarHuecoVida($partida, $catalog, $cal, $rng, $logger);
-            $partida['huecos_vida']['ejecutados'][] = $hora;
+        if (AutonomiaSalidas::horaActiva($hora, $cal)) {
+            $out['autonomo'] = AutonomiaSalidas::intentar($partida, $catalog, $cal, $rng, $logger);
         }
-        $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
         $rng->persistToPartida($partida);
         return $out;
@@ -244,112 +255,19 @@ final class MotorVidaDiaria
     }
 
     /**
-     * @param array<string, mixed> $cal
-     * @return array<string, mixed>|null
+     * @param list<string> $ids
      */
-    private static function quizasSalidaIndividual(
-        array &$partida,
-        Catalog $catalog,
-        array $cal,
-        RngService $rng,
-        ?GameLogger $logger
-    ): ?array {
-        $n = count($partida['residentes'] ?? []);
-        $k = (float) CalibracionConfig::get($cal, 'autonomia.salidas_individuales_sqrt', 0.7);
-        $off = (float) CalibracionConfig::get($cal, 'autonomia.salidas_individuales_offset', 0.4);
-        $cupoDia = (int) max(1, round($k * sqrt(max(1, $n)) + $off));
-        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
-        $hechas = 0;
-        foreach ($partida['npc_autonomo']['historial_eventos'] ?? [] as $ev) {
-            if ((int) ($ev['dia'] ?? 0) === $dia && ($ev['accion'] ?? '') === 'visitar_lugar') {
-                $hechas++;
-            }
-        }
-        if ($hechas >= $cupoDia) {
-            return null;
-        }
-        if ($rng->nextFloat() > 0.60) {
-            return null;
-        }
-        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
-        $aislamientoUmbral = (int)   CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_umbral_dias', 0);
-        $aislamientoBonusSal = (float) CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_bonus_salida', 0.0);
-        $ids = array_keys($partida['residentes'] ?? []);
-        $pesos = [];
-        foreach ($ids as $id) {
-            $id = (string) $id;
-            $disp = AgendaEngine::estaDisponible($partida, $id, $dia, $hora);
-            if (!($disp['disponible'] ?? false)) {
-                continue;
-            }
-            $w = 1.0;
-            $ult = (int) ($partida['residentes'][$id]['runtime']['ultimo_protagonismo_dia'] ?? 0);
-            if ($ult === 0 || ($dia - $ult) >= 3) {
-                $w *= (float) CalibracionConfig::get($cal, 'autonomia.poco_activo_bonus', 1.6);
-            }
-            $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
-            $w += ((int) EstadoEmocional::modificadores($emo, $cal)['iniciativa_social']) / 40.0;
-            // Candidato C: bonus anti-aislamiento — empujón gradual si lleva muchos días sin contacto social real
-            if ($aislamientoUmbral > 0 && $aislamientoBonusSal > 0.0) {
-                $ultCon = (int) ($partida['residentes'][$id]['runtime']['ultimo_contacto_social_dia'] ?? 0);
-                $diasSin = ($ultCon === 0) ? $dia : max(0, $dia - $ultCon);
-                if ($diasSin >= $aislamientoUmbral) {
-                    // Escalado: leve hasta 2× umbral, mayor a partir de 2× umbral
-                    $factor = $diasSin >= ($aislamientoUmbral * 2) ? $aislamientoBonusSal * 1.5 : $aislamientoBonusSal;
-                    $w += $factor;
-                }
-            }
-            $pesos[] = ['id' => $id, 'w' => max(0.05, $w)];
-        }
-        $quien = self::pickPeso($pesos, $rng);
-        if ($quien === null) {
-            return null;
-        }
-        $ops = $partida['celeste']['lugares_desbloqueados'] ?? [];
-        if ($ops === []) {
-            $ops = ['lug_cafeteria', 'lug_parque', 'lug_biblioteca'];
-        }
-        // Candidato C: si el residente está aislado, subir bonus de atracción por lugar ocupado
-        $calLugar = $cal;
-        $aislamientoBonusLugar = (float) CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_bonus_lugar', 0.0);
-        if ($aislamientoUmbral > 0 && $aislamientoBonusLugar > 0.0 && $quien !== null) {
-            $ultConQ = (int) ($partida['residentes'][$quien]['runtime']['ultimo_contacto_social_dia'] ?? 0);
-            $diasSinQ = ($ultConQ === 0) ? $dia : max(0, $dia - $ultConQ);
-            if ($diasSinQ >= $aislamientoUmbral) {
-                $bonusActual = (float) CalibracionConfig::get($cal, 'autonomia.atraccion_ocupacion_bonus', 0);
-                $calLugar['autonomia']['atraccion_ocupacion_bonus'] = $bonusActual + $aislamientoBonusLugar;
-            }
-        }
-        $lugar = LugarAutonomo::elegir($partida, $quien, null, $ops, $rng, $catalog, $calLugar);
-        if ($lugar === null) {
-            $lugar = is_array($ops) && $ops !== [] ? (string) $ops[0] : 'lug_cafeteria';
-        }
-        if ($lugar === null || !AforoEngine::cabe($partida, $lugar, $dia, $hora, 1)) {
-            return null;
-        }
-        $attr = LugarAtributos::de($lugar);
-        $r = EncuentroEngine::programar($partida, [$quien], $dia, $hora, 'individual', $lugar, null, $logger);
-        if (!($r['ok'] ?? false)) {
-            return ['error' => $r['error'] ?? 'no_programado', 'quien' => $quien];
-        }
-        if (isset($r['encuentro']['id'])) {
-            foreach ($partida['encuentros'] as $i => $enc) {
-                if (($enc['id'] ?? '') === $r['encuentro']['id']) {
-                    $partida['encuentros'][$i]['duracion_minutos'] = $attr['duracion_minutos'];
-                    $partida['encuentros'][$i]['duracion_horas'] = $attr['horas'];
-                    $partida['encuentros'][$i]['intencion'] = 'autonomo';
-                }
-            }
-        }
-        self::marcarActividad($partida, [$quien]);
-        $partida['npc_autonomo']['historial_eventos'][] = [
-            'dia' => $dia,
-            'hora' => $hora,
-            'accion' => 'visitar_lugar',
-            'residente_id' => $quien,
-            'lugar' => $lugar,
-        ];
-        return ['quien' => $quien, 'lugar' => $lugar, 'encuentro' => $r['encuentro'] ?? null];
+    public static function marcarActividadPublico(array &$partida, array $ids): void
+    {
+        self::marcarActividad($partida, $ids);
+    }
+
+    /**
+     * @param list<array<string, mixed>> $pesos
+     */
+    public static function pickPesoPublico(array $pesos, RngService $rng): ?string
+    {
+        return self::pickPeso($pesos, $rng);
     }
 
     /**

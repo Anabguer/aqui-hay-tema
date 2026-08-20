@@ -1,0 +1,42 @@
+﻿SEC E_compatibilidad
+{"status": "PASS", "n_casos": 8, "casos": [{"label": "conocerse_cafe_valido", "input": {"a_id": "per_p001", "b_id": "per_p002", "a": "Carmen", "b": "Jos├®", "tipo": "conocerse", "lugar": "lug_cafeteria", "hora": 15, "before": {"conocen": false, "social_ab": 0, "social_ba": 0, "emo_a": "neutro", "emo_b": "neutro"}}, "decision": {"ok": true, "rechazada": true, "error": "ENCUENTRO_RECHAZADO_VOLUNTAD", "clase": "voluntad", "mensaje_ui": "Jos├® ha rechazado la propuesta: \"Me tengo que pintar las u├▒as.\"", "reacciones": [{"residente_id": "per_p001", "nombre": "Carmen", "decision": "acepta", "clase": null, "motivo_tecnico": "voluntad_acepta", "motivo_tipo": null, "copy_id": null, "score": 70, "p": 0.6819999999999999, "_bloqueado_decision": false, "factores": {"score": 70, "base": 48, "estado_emocional": "neutro", "mod_estado_emocional_aceptar_planes": 0, "relacion_previa_se_conocen": false, "mod_aun_no_se_conocen": -12, "social": 0, "mod_social": 0, "romance": null, "mod_romance": 0, "conflict
+
+SEC F_emociones
+{"status": "PASS", "canon": ["alegre", "neutro", "triste", "enfadado"], "emo_post_a": "neutro", "emo_post_b": "neutro", "nota": "Emoci├│n es individual; bridge emocional solo en ENCUENTRO_TERMINADO (cobertura parcial de eventos).", "parcial": true}
+
+SEC G_descubrimientos
+{"status": "PASS", "residente": "Carmen", "snapshots": {"dia_1": {"n": 2, "items": [{"id": "disc_d43e3090", "residente_id": "per_p001", "campo": "hobby:costura", "valor": "costura", "estado": "descubierto", "origen": "reveal_inicial", "evento_relacionado": null, "correlacion_id": null, "ts_juego": {"dia": 1, "hora": 15}}, {"id": "disc_342e36f4", "residente_id": "per_p001", "campo": "rasgo:nervioso", "valor": "nervioso", "estado": "descubierto", "origen": "reveal_inicial", "evento_relacionado": null, "correlacion_id": null, "ts_juego": {"dia": 1, "hora": 15}}]}, "dia_10": {"n": 2, "items": [{"id": "disc_d43e3090", "residente_id": "per_p001", "campo": "hobby:costura", "valor": "costura", "estado": "descubierto", "origen": "reveal_inicial", "evento_relacionado": null, "correlacion_id": null, "ts_juego": {"dia": 1, "hora": 15}}, {"id": "disc_342e36f4", "residente_id": "per_p001", "campo": "rasgo:nervioso", "valor": "nervioso", "estado": "descubierto", "origen": "reveal_inicial", "evento_re
+
+SEC H_buzon_cotilleo
+{"status": "PASS", "rechazo_en_buzon_no_cotilleo": true, "respuesta_plan_count": 1, "cotilleo_max_por_dia_en_14d": 0, "notas": []}
+
+FINDINGS:
+- BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en Organizar.
+NENI: {"veredicto": "NO", "motivos": ["Tutorial can├│nico 3ÔåÆÔëê8 no est├í cableado: Neni seguir├¡a chocando con arranque incoherente seg├║n docs.", "Sin sistema de llegadas post-tutorial; el playtest longitudinal de poblaci├│n no es el juego real.", "Balance de voluntad: BLOQUEADO_DECISION: scoreÔëê70 ÔçÆ p_personaÔëê0.682 y tasa observada persona=0.652, pero tasa de PLAN (ambos aceptan)Ôëê0.404. Matem├íticamente coherente (Ôëêp┬▓); puede sentirse como demasiados plantones en Organizar."]}
+acontecimientos_dia {
+  "activo_en_play": false,
+  "activo_en_lab": true,
+  "hora_inicio": 9,
+  "hora_fin": 22,
+  "presupuesto_min": 3,
+  "presupuesto_max": 8,
+  "escala_sqrt": 1.15,
+  "escala_offset": 1,
+  "olvidados_bonus_dias": 2,
+  "pesos_familias": {
+    "trabajo": 0.35,
+    "ocio": 1.1,
+    "vida": 1,
+    "romance": 0.12,
+    "romance_accion": 0.18,
+    "romance_hito": 0.04,
+    "pareja": 0.08,
+    "consejo": 0.15
+  },
+  "familias_en_play": [
+    "trabajo",
+    "ocio",
+    "romance",
+    "consejo"
+  ]
+}

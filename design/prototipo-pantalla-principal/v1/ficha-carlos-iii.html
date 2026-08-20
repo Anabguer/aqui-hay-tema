@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Ficha para Carlos III</title>
+  <link rel="stylesheet" href="prototipo.css"/>
+  <style>
+    .sheet { max-width: 900px; margin: 1.2rem auto 3rem; background:#fffdf6; border:3px solid #2c261f; padding:1.4rem 1.5rem 2rem; }
+    .sheet h1 { font-family: Fraunces, Georgia, serif; margin:0 0 .25rem; font-size:1.8rem; }
+    .sheet h2 { font-family: Fraunces, Georgia, serif; font-size:1.15rem; margin:1.35rem 0 .4rem; border-top:2px dashed #2c261f; padding-top:.85rem; }
+    .sheet p, .sheet li { line-height:1.45; }
+    .cerrado { display:inline-block; background:#f2d25a; border:2px solid #2c261f; padding:.05rem .4rem; font-weight:800; font-size:.78rem; }
+    .no { color:#7a3b3b; }
+    table { width:100%; border-collapse:collapse; font-size:.9rem; margin:.5rem 0 0; }
+    th, td { border:2px solid #2c261f; padding:.4rem .5rem; text-align:left; vertical-align:top; }
+    th { background:#f6efe0; font-family: Fraunces, Georgia, serif; }
+    .swatches { display:flex; flex-wrap:wrap; gap:.5rem; margin:.6rem 0; }
+    .sw { width:76px; height:52px; border:2px solid #2c261f; display:flex; align-items:flex-end; padding:4px; font-size:.62rem; font-weight:800; }
+    .k { background:#f4ead6; } .k2 { background:#e56b8a; color:#fff; } .k3 { background:#c42b4a; color:#fff; }
+    .k4 { background:#f2d25a; } .k5 { background:#f3e19a; } .k6 { background:#cfe0a8; } .k7 { background:#e8c8b0; }
+    .ref img { width:100%; border:2px solid #2c261f; }
+    a { color:#2c261f; font-weight:800; }
+    code { font-size:.84em; background:#f6efe0; padding:.05rem .25rem; }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <p><a href="index.html">← volver al mockup</a></p>
+    <h1>Ficha para Carlos III</h1>
+    <p>Pantalla principal · Aquí Hay Tema · cuando Neni diga sí a este diseño, se produce esto. No PLAY. No motor.</p>
+    <p>Referencia viva de tono y perspectiva: <code>img/pueblo-tablero.png</code></p>
+
+    <h2>1. Perspectiva <span class="cerrado">cerrada</span></h2>
+    <p><strong>Pseudo-isométrica suave</strong> (3/4 de maqueta). Se ve fachada + tejado + un costado. Las piezas se plantan sobre un plano de calles casi cenital.</p>
+    <ul>
+      <li>SÍ: pueblo de juguete / tablero de mesa.</li>
+      <li class="no">NO: alzado frontal puro, vista superior de tejados, isométrico técnico 30º, 3D de motor.</li>
+    </ul>
+
+    <h2>2. Escala aproximada <span class="cerrado">cerrada</span></h2>
+    <p>Referencias relativas. No son mm de producción; sí la proporción que hay que respetar.</p>
+    <table>
+      <tr><th>Pieza</th><th>PC (~tablero 1280 px de ancho)</th><th>Móvil</th></tr>
+      <tr><td>Edificio medio (cafetería)</td><td>frente ~180–220 px (2–3 unidades de 16)</td><td>el mismo dibujo, el mapa se recorre</td></tr>
+      <tr><td>Token de cabeza</td><td><strong>56 px</strong> ø</td><td><strong>44 px</strong> ø</td></tr>
+      <tr><td>Cabeza vs edificio</td><td colspan="2">~mitad de una puerta de planta baja. No tapa la fachada. Se clava en acera/terraza, no en el tejado.</td></tr>
+      <tr><td>Corazón HUD</td><td><strong>78 px</strong> de alto</td><td><strong>56 px</strong></td></tr>
+      <tr><td>Ticket dinero / buzón</td><td>más pequeños que el corazón</td><td>compactos, una sola fila</td></tr>
+    </table>
+    <p>Tablero de trabajo: <strong>16:9</strong>, cuadrícula <strong>16×10</strong> (A–J / 1–16). Bloque A = un edificio de 3 plantas, no rejilla de pisos.</p>
+
+    <h2>3. Personajes en el mapa <span class="cerrado">cerrada</span></h2>
+    <p><strong>Cabeza circular</strong> (token / chincheta). No busto, no mini-ficha flotante, no retrato rectangular.</p>
+    <ul>
+      <li>En el mapa: <strong>solo cabeza maestra / neutral</strong>. La emoción se ve en la ficha, no cambiando 200 caras sobre el pueblo.</li>
+      <li>Máximo ~3 tokens en la cafetería (aforo visual).</li>
+      <li>Los originales P001–P200 se quedan para ficha. El mapa usa un derivado.</li>
+    </ul>
+
+    <h2>4. Recorte / derivados P001–P200 <span class="cerrado">cerrada</span></h2>
+    <p>C3 prepara tokens. <strong>No se tocan los PNG originales.</strong></p>
+    <ul>
+      <li>Carpeta propuesta: <code>assets/personajes/tokens/</code> (un PNG por id, p. ej. <code>P042.png</code>).</li>
+      <li>Formato: PNG RGBA, <strong>fondo transparente</strong>.</li>
+      <li>Relación: <strong>1:1</strong>. Master <strong>256×256</strong>. En juego se escala a 56/44 px.</li>
+      <li>Forma: círculo (el píxel fuera del círculo es alfa 0). El borde de tinta lo pone la UI.</li>
+      <li>Recorte: cara centrada; caben coronilla y mentón; cuello mínimo; <strong>sin hombros ni ropa de busto</strong>.</li>
+      <li>P001–P008 (tamaños irregulares): misma regla, revisión a mano si el recorte automático deja aire o corta pelo.</li>
+      <li>Ficha: usa el original 1024 recortado en CSS a círculo. No hace falta un segundo derivado de ficha en V0.</li>
+    </ul>
+
+    <h2>5. Edificios <span class="cerrado">cerrada</span></h2>
+    <p>Ilustración de <strong>maqueta con volumen ligero</strong> (la misma 3/4), textura papel, trazo visible, pasteles. Conviven con tokens circulares de tinta. No son iconos planos de app ni renders 3D.</p>
+    <div class="swatches">
+      <div class="sw k">papel</div><div class="sw k2">rosa</div><div class="sw k3">corazón</div>
+      <div class="sw k4">día</div><div class="sw k5">dinero</div><div class="sw k6">parque</div><div class="sw k7">bloque</div>
+    </div>
+
+    <h2>6. Estados de edificio <span class="cerrado">cerrada</span></h2>
+    <p>Preferimos <strong>no multiplicar PNG</strong>.</p>
+    <table>
+      <tr><th>Estado</th><th>Cómo</th></tr>
+      <tr><td>Abierto</td><td>PNG del edificio vivo (ventanas con luz si toca).</td></tr>
+      <tr><td>Bloqueado / aún no desbloqueado</td><td><strong>Segundo PNG</strong> del mismo edificio dormido (persiana, valla, tablones…). Es arquitectura, no un icono suelto.</td></tr>
+      <tr><td>Cerrado por horario</td><td>El PNG abierto + overlay CSS (más oscuro) + candado/luna reutilizable. Sin tercer edificio.</td></tr>
+      <tr><td>Seleccionado</td><td>CSS (anillo / cinta). Cero PNG extra.</td></tr>
+      <tr><td>Con habitantes</td><td>Los tokens encima. El edificio no cambia.</td></tr>
+      <tr><td>Con encuentro / actividad</td><td>Un <strong>pin</strong> PNG reutilizable sobre el lugar. Un solo asset para todo el pueblo.</td></tr>
+    </table>
+    <p>Tope: <strong>2 sprites por lugar</strong> (abierto + dormido) + 1 pin + 1 candado, compartidos.</p>
+
+    <h2>7. Corte V0 — fabricar primero</h2>
+    <ol>
+      <li>Suelo + calles (tablero base 16:9, o tiras mínimas de camino/césped).</li>
+      <li>Cafetería abierta.</li>
+      <li>Parque.</li>
+      <li>Biblioteca abierta.</li>
+      <li>Bloque A.</li>
+      <li>Cine dormido (un solo ejemplo del lenguaje “bloqueado”).</li>
+      <li>Decoración mínima: 1 árbol, 1 banco, 1 farola.</li>
+      <li>HUD: corazón (contorno; el relleno puede ser CSS), buzón/sobre, post-it, candado, pin de encuentro.</li>
+      <li>1 token circular de ejemplo recortado de un P### real, para calibrar el recorte de los 200. No recortar los 200 en V0.</li>
+    </ol>
+    <p>Plaza, fuente y el resto de locales dormidos: después. En V0 la plaza puede ir dibujada en el suelo base.</p>
+
+    <h2>8. Objetos HUD de la pantalla principal</h2>
+    <p>Lista cerrada. Nada más en V0:</p>
+    <ul>
+      <li>Corazón rellenable (sin número).</li>
+      <li>Cartelito de fecha/hora (HTML/CSS vale; PNG opcional).</li>
+      <li>Ticket de dinero (HTML/CSS vale).</li>
+      <li>Buzón / sobre + badge numérico (badge = CSS).</li>
+      <li>Post-it de coletilla.</li>
+      <li>Candado (horario / bloqueo ligero).</li>
+      <li>Pin de encuentro.</li>
+    </ul>
+    <p class="no">No en V0: bocadillos, chincheta física aparte (el token ya es la chincheta), fama, iconos de resumen, tira de parejas.</p>
+
+    <h2>9. Qué es este prototipo</h2>
+    <p><strong>A en dirección, B en código.</strong> El look, la perspectiva, la escala y esta ficha se traducen a PLAY. El HTML de <code>design/prototipo-pantalla-principal/</code> no se pega encima de <code>play.php</code>: se rehace sobre el PLAY de Carlos I cuando Neni + ChatGPT lo pidan.</p>
+
+    <p class="ref"><img src="img/pueblo-tablero.png" alt="Tablero de referencia"/></p>
+  </div>
+</body>
+</html>

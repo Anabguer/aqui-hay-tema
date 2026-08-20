@@ -1,0 +1,97 @@
+﻿# Dinero y fama
+
+Dos recursos de **Celestine**. **No es un juego econ├│mico complejo.** Tienen que entenderse de un vistazo, como en la referencia visual.
+
+Valores, precios y umbrales: **no fijados.** Los 1.250 Ôé¼ y la fama 38 de la maqueta son decorado.
+
+## Dinero
+
+Recurso principal. Usos previstos (lista abierta, no econom├¡a cerrada):
+
+- desbloquear lugares
+- mejorar lugares
+- desbloquear determinadas opciones
+- comprar / desbloquear ropa
+- desbloquear / comprar **herramientas sociales** (test, etc.)
+- **abrir / rehabilitar un bloque** (candidato: Bloque B; precio no fijado)
+- organizar planes especiales (modifican probabilidades, no compran el amor)
+- posibles eventos futuros
+
+C├│mo se obtiene: **goteo por la actividad laboral de los residentes presentes** (curva c├│ncava; no `Ôé¼ ├ù n`). Puede sumar, m├ís adelante, citas/encargos. Cifras: no. `PROPUESTA_VIDA_POOL_Y_MARCHAS.md`.
+
+El oficio manda **horario** m├ís que sueldo. A+B (~32) no deben dejar el dinero irrelevante: hacen falta sumideros (lugares, herramientas, planes especiales, **abrir B**). El goteo c├│ncavo se calcula sobre **residentes totales presentes**, no por bloque por separado.
+
+No queremos gesti├│n de impuestos, stocks ni minijuegos de tienda. Una cifra, gastos evidentes, feedback inmediato.
+
+## Fama
+
+El jugador se est├í convirtiendo en la **Celestine** de la comunidad ÔÇö quien conoce el pulso del barrio y ayuda con v├¡nculos (no solo parejas).
+
+Puede subir con (candidatos, no pesos):
+
+- citas exitosas
+- parejas creadas
+- relaciones duraderas
+- resolver crisis
+- bodas
+- objetivos especiales
+- historias memorables
+
+Puede desbloquear:
+
+- edificios
+- habitantes
+- actividades
+- ropa
+- eventos
+- posibilidades nuevas
+
+┬┐La fama puede bajar (esc├índalos, rupturas en cadena, rumores)? **Pendiente.** No decidir aqu├¡ un sistema de reputaci├│n punitiva.
+
+## C├│mo se combinan en el mapa
+
+Sensaci├│n buscada:
+
+> Empiezo con un pueblo medio vac├¡o ÔåÆ consigo dinero y fama ÔåÆ desbloqueo lugares ÔåÆ el pueblo crece ÔåÆ tengo m├ís opciones para citas y vida social.
+
+Una parcela bloqueada puede pedir las dos cosas, solo dinero, o solo fama. Los n├║meros de ejemplo del encargo (`500 Ôé¼ / Fama 10`) son **ilustraci├│n**, no tabla de precios.
+
+```text
+­ƒöÆ Cine
+500 Ôé¼ / Fama 10     ÔåÉ ejemplo, no canon
+```
+
+## Relaci├│n con otros sistemas
+
+- **Agenda:** m├ís lugares = m├ís sitios donde los NPCs viven y se encuentran, no solo m├ís botones de cita.
+- **Ropa:** otro sumidero de dinero/fama.
+- **Habitantes:** las llegadas tienen ritmo propio. La fama no ┬½compra un vecino┬╗ el d├¡a 1. El goteo de dinero escala (c├│ncavo) con residentes *presentes*.
+- **Derrota/victoria:** con recursos persistentes, un corte a 30 d├¡as ya no se da por bueno. Ver `PROGRESION_Y_DIFICULTAD.md`.
+
+## Modelo (campos)
+
+Ver `MODELO_DATOS_INICIAL.md`: estado de partida del jugador con `dinero` y `fama`; cada lugar con `desbloqueado`, `coste_dinero`, `requisito_fama`.
+
+====LAB ECO BLOQ====
+3|**Estado:** AN├üLISIS + PROPUESTA + LAB. **No canon.** No implementado en PLAY. `economy_enabled` sigue OFF. EconomyLedger sigue siendo placeholder.
+13|**Cierre de entrega (20/08):** la referencia adelantada (jugadora normal ÔåÆ Bloque B ~d├¡a 50ÔÇô52; farmer no salta el gate temporal) **cuadra con el lab**. Sigue **sin canonizar**. Este archivo es la lec
+29|`PARA` econom├¡a: s├¡, con este informe. Cifras **no** a `data/` ni a EconomyLedger. `economy_enabled` OFF.
+33|## 1. Qu├® est├í cerrado y qu├® es hip├│tesis
+42|  1. renta/ingreso peri├│dico ligado al **estado general del pueblo** (bandas de Vida);
+44|  3. **encargos extra** opcionales, que **no** alimentan Vida ni Latidos.
+56|| Gates B | d├¡a ÔëÑ **50** AND residentes ÔëÑ **12/16** AND dinero ÔëÑ precio_B | cifra can├│nica |
+57|| Gates C | d├¡a ÔëÑ **160** AND residentes ÔëÑ **26** (Ôëê10 plazas de B) AND dinero ÔëÑ precio_C | cifra can├│nica |
+60|| Latido | **no paga dinero** en la simulaci├│n principal | el Maestro no lo lista como fuente |
+63|| Mirador | dinero + hito ÔÇ£primera cita positivaÔÇØ (d├¡a ~10ÔÇô40 seg├║n perfil; no se simula el relacional V1) | |
+72|## 2. Fuentes analizadas
+76|B3 sigue igual: m├íx. 3/d├¡a, Vida ┬▒, 1 de 3 cuenta para Latido. Este lab **a├▒ade dinero encima** sin recalibrar Vida.
+95|Funci├│n: jugar m├ís rato a cambio de dinero **sin** imprimir Latidos.
+105|### 2.3 Vida del Pueblo / Latidos
+108|- **Latido:** ~cada 22ÔÇô28 d├¡as en perfiles que cumplen 1 positivo v├ílido/d├¡a (B1 no se toca). **No entra como ingreso** en este lab. Propuesta aparte, m├ís abajo.
+116|1. **Bono de Latido** (hito raro, ~2ÔÇô3 d├¡as de ingreso normal). Narrativo, no granja: B1 ya impide farmear Latidos.
+126|## 3. Gastos (rangos, no precios por edificio)
+135|| Bloque B | 480 | ~20 d de ahorro **o** el gate de d├¡a 50 | +16 huecos ÔåÆ reabre llegadas |
+258|## 7. Respuestas a las preguntas del encargo
+312|Cuando Neni + ChatGPT elijan modelo y respondan los `BLOQUEADO_DECISION`, *entonces* se puede cablear el ledger. No antes. No B5.
+316|## 9. BLOQUEADO_DECISION
+320|1. **gates_B_C** ÔÇö ┬┐Confirm├íis B: d├¡a ÔëÑ 50 y ÔëÑ 12/16 en A; C: d├¡a ÔëÑ 160 y ÔëÑ 26 residentes? El Maestro deja los exactos pendientes. Si quer├®is B m├ís ÔÇ£a mitad de temporadaÔÇØ o C m├ís tard├¡o, se re-simula 

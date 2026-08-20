@@ -126,7 +126,7 @@ ok($t1['resultado'] === $t2['resultado'], 'azar ponderado reproducible');
 ok($t1['compensacion_obligatoria'] === false, 'sin compensación obligatoria');
 ok(AzarPonderado::rachaArtificial(['malo', 'malo'], 'malo', null) === false, 'sin umbral no hay racha forzada');
 
-$ind = EncuentroEngine::programar($partida, [$a], 1, 21, 'individual', 'lug_cafeteria');
+$ind = EncuentroEngine::programar($partida, [$a], 1, 18, 'individual', 'lug_cafeteria');
 ok($ind['ok'] ?? false, 'actividad individual 1 participante');
 $dos = EncuentroEngine::validarContexto($partida, [$a], 'conocerse');
 ok(!($dos['ok'] ?? true), 'conocerse sigue exigiendo 2');

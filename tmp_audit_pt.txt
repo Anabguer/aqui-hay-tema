@@ -1,0 +1,14 @@
+﻿top ['meta', 'secciones', 'bugs', 'fixes', 'neni', 'resumen', 'findings', 'horizontes']
+secciones {"A_tutorial": {"status": "FAIL", "inicial_n": 3, "ids_iniciales": ["per_i03", "per_p001", "per_p002"], "tutorial_activo_inicio": true, "tutorial_activo_fin": false, "n_tras_tutorial": 3, "n_fin_dia_1": 3, "crecimiento_a_8": false, "playtest_01_sin_tutorial": true, "playtest_01_n": 8, "notas": ["NO_IMPLEMENTADO: tras tutorial + d├¡a 1 siguen 3 residentes (can├│nico Ôëê8)."], "gap": "Falta motor de incorporaciones tutorializadas 3ÔåÆÔëê8 en el primer d├¡a."}, "B_llegadas": {"status": "NO_IMPLEMENTADO", "titulo": "Llegadas post-tutorial / candidatos por buz├│n", "detalle": "No hay motor de candidatoÔåÆbuz├│nÔåÆaceptar/rechazar/expirar/vivienda en play."}, "C_autonomia": {"status": "PASS", "seeds": ["aut-a", "aut-b", "aut-c"], "dias_por_seed": 7, "poblacion_auditada": 8, "poblaciones_pedidas_no_disponibles"
+SEC D_planes_voluntad
+{"status": "PASS", "seeds": 12, "planes_por_seed": 40, "tasa_aceptacion_plan": 0.404, "planes_total": 480, "tasas_por_banda_score": {"bajo": {"n_participantes": 0, "tasa_aceptacion_persona": null, "p_media_formula": null}, "medio": {"n_participantes": 607, "tasa_aceptacion_persona": 0.652, "p_media_formula": 0.682}, "alto": {"n_participantes": 0, "tasa_aceptacion_persona": null, "p_media_formula": null}}, "racha_rechazos_plan_max_media": 5.92, "racha_rechazos_plan_max_abs": 9, "ejemplos": [{"seed": "vol-0", "a": "Carmen", "b": "Jos├®", "hora": 10, "rechazada": true, "clase": "voluntad", "mensaje_ui": "Jos├® ha rechazado la propuesta: \"Hoy no me da la vida.\"", "reacciones": [{"residente_id": "per_p001", "nombre": "Carmen", "decision": "rechaza", "clase": "voluntad", "motivo_tecnico": "voluntad_rechaza_banal", "motivo_tipo": "banal", "copy_id": "el_gato_tiene_que_comer", "score": 70, "p": 
+
+SEC I_relaciones
+{"status": "PARCIAL", "social_romance_contacto": "IMPLEMENTADO", "pareja_crisis_ruptura_hitos": "IMPLEMENTADO (manual/hitos, no umbral autom├ítico)", "deterioro_diario": "IMPLEMENTADO", "nota": "No se simula falsamente crisis autom├ítica por umbral si no est├í cableada."}
+
+SEC J_marchas
+{"status": "NO_IMPLEMENTADO", "titulo": "Marchas", "detalle": "No existe MarchaEngine / salida de roster / se├▒ales de marcha."}
+
+SEC K_economia
+{"status": "NO_IMPLEMENTADO", "economy_enabled": false, "dinero_juego_v1": null, "misiones_playtest_01": true, "peticiones_playtest_01": true, "nota": "Econom├¡a OFF en play can├│nico; hay lab SimuladorEconomia separado."}
+

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Aquí Hay Tema — prototipo V2 (no es PLAY)</title>
+  <link rel="stylesheet" href="prototipo.css"/>
+</head>
+<body class="ver-pc">
+  <div class="studio">
+    <header class="studio-bar">
+      <h1>Prototipo V2 — pantalla principal <span class="badge-v">V2</span></h1>
+      <p>Mismo concepto que V1. Núcleo vivo + pueblo que puede crecer. No está conectado a PLAY. Tres habitantes de maqueta (tutorial).</p>
+      <div class="studio-controls">
+        <button type="button" data-view="pc" class="is-on">PC</button>
+        <button type="button" data-view="movil">Móvil</button>
+        <button type="button" data-view="ambas">Las dos</button>
+        <button type="button" data-grid>Cuadrícula</button>
+        <button type="button" data-capa-btn="ninguna" class="is-on">Pueblo solo</button>
+        <button type="button" data-capa-btn="ficha">Ficha abierta</button>
+        <button type="button" data-capa-btn="buzon">Buzón</button>
+        <button type="button" data-capa-btn="vecinos">Vecinos</button>
+        <button type="button" data-capa-btn="evento">Acontecimiento</button>
+      </div>
+      <p class="studio-note">Hover (PC) o foco muestra el nombre. Clic abre la libreta. El post-it rosa se queda. Capturas V2 en <code>previews/</code>.</p>
+      <p class="ficha-link"><a href="../v1/index.html">Ver V1</a> · <a href="../v2-capas/index.html">Capas (cerradas)</a> · <a href="../v2-complejos/index.html">6 complejos</a> · <a href="notas-c3.html">Qué cambia para Carlos III</a></p>
+    </header>
+    <div class="stage">
+      <figure class="device pc"><figcaption class="device-label">PC V2</figcaption><div id="stage-pc"></div></figure>
+      <figure class="device phone"><figcaption class="device-label">Móvil V2</figcaption><div id="stage-phone"></div></figure>
+    </div>
+    <section class="ficha-c3">
+      <h2>V2 — para revisar (Neni)</h2>
+      <ul>
+        <li>Núcleo: cafetería, casita/biblioteca, Bloque A, plaza a medio hacer. Alrededor: persianas, solares, obras, estacas de Bloque B/C.</li>
+        <li>Solo 3 habitantes. Rocío y Nora juntas en el café (curiosidad). Luis solo en la plaza. Nombres al pasar, no etiqueta permanente.</li>
+        <li>HUD sobre una tira de papel rasgada: misma familia. Post-it aparte, pegado al mapa.</li>
+        <li>Ficha = libreta de Celestine. Lo desconocido no aparece como ???.</li>
+      </ul>
+    </section>
+  </div>
+
+  <template id="tpl-play">
+    <div class="play-root" data-capa="">
+      <div class="board-scroll">
+        <div class="board-fit">
+          <img class="mapa" src="img/pueblo-tablero.png" alt="Pueblo en crecimiento: núcleo vivo y solares alrededor."/>
+          <svg class="grid-overlay" viewBox="0 0 1600 900" aria-hidden="true">
+            <g stroke="#c42b4a" stroke-width="1" opacity=".45">
+              <path d="M0 90 H1600 M0 180 H1600 M0 270 H1600 M0 360 H1600 M0 450 H1600 M0 540 H1600 M0 630 H1600 M0 720 H1600 M0 810 H1600"/>
+              <path d="M100 0 V900 M200 0 V900 M300 0 V900 M400 0 V900 M500 0 V900 M600 0 V900 M700 0 V900 M800 0 V900 M900 0 V900 M1000 0 V900 M1100 0 V900 M1200 0 V900 M1300 0 V900 M1400 0 V900 M1500 0 V900"/>
+            </g>
+          </svg>
+          <div class="lugar-tags">
+            <span class="lugar-tag" style="left:22%; top:16%">BIBLIOTECA</span>
+            <span class="lugar-tag" style="left:34%; top:18%">CAFETERÍA</span>
+            <span class="lugar-tag" style="left:24%; top:48%">BLOQUE A</span>
+            <span class="lugar-tag" style="left:50%; top:42%">PLAZA</span>
+            <span class="lugar-tag futuro" style="left:72%; top:28%">Bloque B, algún día</span>
+            <span class="lugar-tag futuro" style="left:84%; top:58%">por aquí, Bloque C</span>
+            <span class="lugar-tag futuro" style="left:38%; top:78%">cerrado</span>
+            <span class="lugar-tag futuro" style="left:55%; top:80%">obras</span>
+          </div>
+          <div class="chinchetas">
+            <span class="susurro" style="left:33%; top:29%">¿esos dos?</span>
+            <button class="chincheta" data-open="ficha" style="left:31%; top:36%" aria-label="Rocío">
+              <span class="pin"></span>
+              <span class="cara"><img src="img/cabeza-rocio.png" alt=""/></span>
+              <span class="nombre">Rocío</span>
+            </button>
+            <button class="chincheta" data-open="ficha" style="left:36%; top:38%" aria-label="Nora">
+              <span class="pin"></span>
+              <span class="cara"><img src="img/cabeza-nora.png" alt=""/></span>
+              <span class="nombre">Nora</span>
+            </button>
+            <button class="chincheta" data-open="ficha" style="left:51%; top:54%" aria-label="Luis">
+              <span class="pin"></span>
+              <span class="cara"><img src="img/cabeza-luis.png" alt=""/></span>
+              <span class="nombre">Luis</span>
+            </button>
+          </div>
+          <aside class="postit" data-open="hoy"><span class="pin"></span>Tú sabrás.</aside>
+        </div>
+      </div>
+
+      <div class="mesa">
+        <div class="mesa-papel">
+          <button type="button" class="corazon" data-open="hoy" aria-label="Vida del pueblo">
+            <span class="corazon-dibujo" style="--fill:62%"></span>
+          </button>
+          <div class="dia"><div class="dow">MIÉ 19</div><div class="hora">11:30</div></div>
+          <div class="hud-right">
+            <div class="dinero">80 €</div>
+            <button type="button" class="buzon" data-open="buzon" aria-label="Buzón, 2">
+              <svg viewBox="0 0 54 46" aria-hidden="true"><rect x="6" y="14" width="42" height="26" fill="#fffdf6" stroke="#2c261f" stroke-width="2.2"/><path d="M6 14 L27 28 L48 14" fill="none" stroke="#e56b8a" stroke-width="2.6"/></svg>
+              <span class="badge">2</span>
+            </button>
+            <button type="button" class="btn-vecinos" data-open="vecinos">Vecinos</button>
+          </div>
+        </div>
+      </div>
+
+      <nav class="dock">
+        <button type="button" data-close>Pueblo</button>
+        <button type="button" data-open="buzon">Buzón</button>
+        <button type="button" data-open="organizar">Organizar</button>
+        <button type="button" data-open="vecinos">Vecinos</button>
+      </nav>
+      <div class="velo" data-close></div>
+
+      <aside class="capa capa-ficha">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine</p>
+        <div class="ficha-hero">
+          <div class="cara"><img src="img/cabeza-rocio.png" alt=""/></div>
+          <div>
+            <h2>Rocío</h2>
+            <p class="mini">Ahora en la cafetería · vive en el Bloque A</p>
+          </div>
+        </div>
+        <p class="nota-libre">Hoy está de un humor peligroso. El café, rico igual.</p>
+        <div class="seccion-lib">
+          <h3>Lo que ya sé</h3>
+          <ul>
+            <li>Barista. El primer espresso es sagrado.</li>
+            <li>No le va que le hablen por encima.</li>
+          </ul>
+        </div>
+        <div class="seccion-lib">
+          <h3>Por aquí</h3>
+          <div class="vinculo">
+            <img src="img/cabeza-nora.png" alt=""/>
+            <span>Hoy con Nora en el café. Se reían. No sé si hay tema.</span>
+          </div>
+        </div>
+        <div class="paginas-vacias" aria-hidden="true"></div>
+        <p class="queda">Aún me queda mucho por saber de ella.</p>
+        <button type="button" class="cta" data-open="organizar">Organizar un plan con ella</button>
+        <button type="button" class="cta ghost" data-close>Mirarla en el pueblo</button>
+      </aside>
+
+      <aside class="capa capa-buzon">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Buzón</h2>
+        <p class="mini">Te escriben a ti.</p>
+        <article class="carta"><p><strong>Rocío</strong></p><p>¿Me organizas algo con alguien que no sea yo misma hablándole al vapor?</p></article>
+        <article class="carta"><p><strong>Luis</strong></p><p>Si no hablo con un humano esta semana me convierto en paloma.</p></article>
+      </aside>
+
+      <aside class="capa capa-hoy">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Hoy</h2>
+        <div class="notas-hoy">
+          <div class="nota-mision">Luis no debería quedarse solo con los palomos.</div>
+          <div class="nota-mision">Rocío y Nora ya se han encontrado. Tú sabrás.</div>
+        </div>
+      </aside>
+
+      <aside class="capa capa-vecinos">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Vecinos</h2>
+        <p class="mini">Ahora mismo son tres. El pueblo dará para más.</p>
+        <div class="grid-vecinos">
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-rocio.png" alt=""/><div><strong>Rocío</strong><span>Cafetería</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-nora.png" alt=""/><div><strong>Nora</strong><span>Cafetería</span></div></button>
+          <button class="vecino" data-open="ficha"><img src="img/cabeza-luis.png" alt=""/><div><strong>Luis</strong><span>Plaza</span></div></button>
+        </div>
+      </aside>
+
+      <aside class="capa capa-organizar">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <h2>Organizar un plan</h2>
+        <div class="papelito"><strong>Quién</strong><br>Rocío + Nora</div>
+        <div class="papelito"><strong>Cuándo</strong><br>Hoy · 17:00</div>
+        <div class="papelito"><strong>Dónde</strong><br>Cafetería</div>
+        <button type="button" class="cta" data-open="evento">Proponer</button>
+      </aside>
+
+      <aside class="capa capa-evento">
+        <button type="button" class="cerrar" data-close>cerrar</button>
+        <div class="evento-card">
+          <div class="evento-caras">
+            <div class="cara"><img src="img/cabeza-rocio.png" alt=""/></div>
+            <div class="evento-heart">♥</div>
+            <div class="cara"><img src="img/cabeza-nora.png" alt=""/></div>
+          </div>
+          <h2>Primera cita</h2>
+          <p>Rocío y Nora · cafetería · 17:00</p>
+          <p class="mini">Uy. Aquí hay tema.</p>
+        </div>
+      </aside>
+    </div>
+  </template>
+  <script src="prototipo.js"></script>
+</body>
+</html>
