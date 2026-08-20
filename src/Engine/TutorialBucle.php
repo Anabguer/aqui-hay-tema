@@ -91,13 +91,46 @@ final class TutorialBucle
         }
         $tut['hechos'] = $hechos;
         $faltan = array_values(array_diff($validos, $hechos));
+        $acabado = false;
         if ($faltan === []) {
+            $acabado = empty($tut['completado']);
             $tut['activo'] = false;
             $tut['completado'] = true;
             $tut['sugerencia'] = null;
         }
         $partida['tutorial'] = $tut;
+        if ($acabado) {
+            $partida['tutorial']['_pendiente_incorporaciones'] = true;
+        }
         return self::vista($partida);
+    }
+
+    /**
+     * Completa hechos + dispara incorporaciones tutorializadas si hay root.
+     *
+     * @return array<string, mixed>
+     */
+    public static function registrarConRoot(
+        array &$partida,
+        string $hecho,
+        string $root,
+        ?GameLogger $logger = null
+    ): array {
+        $vista = self::registrar($partida, $hecho);
+        self::flushIncorporacionesPendientes($partida, $root, $logger);
+        return self::vista($partida) + ['incorporaciones_tutorial' => $vista['incorporaciones_tutorial'] ?? null];
+    }
+
+    public static function flushIncorporacionesPendientes(
+        array &$partida,
+        string $root,
+        ?GameLogger $logger = null
+    ): array {
+        if (empty($partida['tutorial']['_pendiente_incorporaciones'])) {
+            return [];
+        }
+        unset($partida['tutorial']['_pendiente_incorporaciones']);
+        return TutorialIncorporaciones::alCompletarTutorial($partida, $root, $logger);
     }
 
     /**

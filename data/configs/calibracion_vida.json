@@ -47,7 +47,7 @@
             "pillado": 45,
             "enamorado": 72
         },
-        "_nota": "Pareja NO es banda. Es hito\/estado aparte."
+        "_nota": "Pareja NO es banda. Es hito/estado aparte."
     },
     "desgaste_social": {
         "activo": true,
@@ -60,7 +60,7 @@
         "delta_consolidada": 0.25,
         "dias_sin_contacto_recien": 1,
         "dias_sin_contacto_consolidada": 1,
-        "_nota": "delta = -base * (1-|v|\/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
+        "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
     },
     "desgaste_pareja": {
         "activo": true,
@@ -368,7 +368,7 @@
     "escaner_compatibilidad": {
         "deprecated": true,
         "desbloqueable": false,
-        "_nota": "Eliminado del dise├▒o jugable. Compat\/qu├¡mica siguen internas."
+        "_nota": "Eliminado del dise├▒o jugable. Compat/qu├¡mica siguen internas."
     },
     "laboratorio_relacional": {
         "_provisional": true,
@@ -380,7 +380,7 @@
     },
     "vida_pueblo": {
         "_provisional": true,
-        "_nota": "B1\/B2. Cifras de lab, no canon. No son misiones\/peticiones jugables.",
+        "_nota": "B1/B2. Cifras de lab, no canon. No son misiones/peticiones jugables.",
         "inicial": 65,
         "post_latido": 75,
         "umbral_positivos_latido": 25,
@@ -451,12 +451,25 @@
     },
     "peticiones_pueblo": {
         "_canon_b4": true,
-        "_nota": "B4 cerrado en E3. fácil\/relevante\/difícil son categorías internas: no se muestran en buzón ni PLAY. No toca vida_pueblo ni misiones_diarias.",
+        "_nota": "B4 cerrado en E3. fácil/relevante/difícil son categorías internas: no se muestran en buzón ni PLAY. No toca vida_pueblo ni misiones_diarias.",
         "esquema_activo": "E3",
         "cap_pct": 0.33,
         "cap_max": 10,
         "dias_sin_salir": 2,
         "p_nacer_hora_base": 0.045,
         "p_nacer_hora_hueco": 0.07
+    },
+    "llegadas": {
+        "_nota": "Lab SimuladorEconomia + brief post-gate. Plazo 2d sin cifra canonica previa.",
+        "p_base": 0.08,
+        "p_por_hueco": 0.04,
+        "p_max_dia": 0.45,
+        "p_cooldown_1d": 0.4,
+        "plazo_oferta_dias": 2,
+        "espera_minutos_min": 1,
+        "espera_minutos_max": 10,
+        "un_candidato_activo": true,
+        "cooldown_cara_dias": 14,
+        "placeholders_si_catalogo_vacio": true
     }
 }

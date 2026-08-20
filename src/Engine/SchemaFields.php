@@ -12,6 +12,8 @@ final class SchemaFields
         VidaPuebloEngine::ensure($partida);
         MisionDiariaEngine::ensure($partida);
         PeticionPuebloEngine::ensure($partida);
+        CapacidadViviendas::ensure($partida);
+        CandidatoLlegadaEngine::ensure($partida);
         $partida['audit_trail'] ??= [];
         $partida['descubrimientos'] ??= [];
         $partida['historial_relaciones'] ??= [];

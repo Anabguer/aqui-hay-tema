@@ -16,7 +16,12 @@ final class ResidentesHandler
         }
         $ficha = $ctx->service->fichaResidente($partida, (string) $rid);
         $antes = json_encode($partida['tutorial'] ?? null);
-        $tut = \AquiHayTema\Engine\TutorialBucle::registrar($partida, \AquiHayTema\Engine\TutorialBucle::HECHO_VECINO);
+        $tut = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
+            $partida,
+            \AquiHayTema\Engine\TutorialBucle::HECHO_VECINO,
+            $ctx->root,
+            $ctx->logger
+        );
         if ($antes !== json_encode($partida['tutorial'] ?? null)) {
             savePartida($ctx, $partida);
         }

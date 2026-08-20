@@ -53,6 +53,7 @@ final class PartidaLifecycle
         ], $this->logger, 'PartidaLifecycle::nueva');
 
         TutorialBucle::arrancar($partida, $config);
+        TutorialIncorporaciones::ensureDesdeConfig($partida, $config);
         if (PlaytestGuia::activa($partida)) {
             PlaytestGuia::ensure($partida);
         }

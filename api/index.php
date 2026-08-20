@@ -10,6 +10,7 @@ use AquiHayTema\Api\Handlers\BuzonHandler;
 use AquiHayTema\Api\Handlers\DevHandler;
 use AquiHayTema\Api\Handlers\DiarioHandler;
 use AquiHayTema\Api\Handlers\EncuentrosHandler;
+use AquiHayTema\Api\Handlers\LlegadaHandler;
 use AquiHayTema\Api\Handlers\MapaHandler;
 use AquiHayTema\Api\Handlers\PartidaHandler;
 use AquiHayTema\Api\Handlers\PeticionesHandler;
@@ -191,6 +192,18 @@ $routes = [
     'buzon.crear_dev' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return BuzonHandler::crearDev($ctx, $body, $p);
+    },
+    'llegada.estado' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return LlegadaHandler::estado($ctx, $body, $p);
+    },
+    'llegada.aceptar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return LlegadaHandler::aceptar($ctx, $body, $p);
+    },
+    'llegada.rechazar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return LlegadaHandler::rechazar($ctx, $body, $p);
     },
     'diario.listar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

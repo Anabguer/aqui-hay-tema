@@ -57,6 +57,16 @@ final class RelojOperations
         $expirados = $this->emociones !== null ? $this->emociones->expirarVencidos($partida) : 0;
         $peticionesCaducadas = PeticionEngine::caducarVencidas($partida, $this->logger);
         $propuestasCaducadas = PropuestaEncuentroEngine::caducarVencidas($partida);
+
+        // Llegadas: tutorial día 1 + candidatos post-tutorial
+        $partida['llegadas']['_tick_por_hora'] = true;
+        TutorialBucle::flushIncorporacionesPendientes($partida, $this->projectRoot, $this->logger);
+        TutorialIncorporaciones::tickDia1($partida, $this->projectRoot, $this->logger);
+        if ($diaDespues > $diaAntes) {
+            TutorialIncorporaciones::alCerrarDia1SiToca($partida, $this->projectRoot, $this->logger);
+        }
+        $llegadasTick = CandidatoLlegadaEngine::tick($partida, $this->projectRoot, $this->logger);
+
         if (PeticionPuebloEngine::activa($partida)) {
             $calPet = CalibracionConfig::load($this->projectRoot);
             PeticionPuebloEngine::tick(
@@ -99,6 +109,7 @@ final class RelojOperations
             'coincidencias_detectadas' => count($coins),
             'peticiones_caducadas' => $peticionesCaducadas,
             'propuestas_caducadas' => $propuestasCaducadas,
+            'llegadas' => $llegadasTick,
             'horas' => $horas,
         ];
     }

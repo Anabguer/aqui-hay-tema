@@ -1,5 +1,5 @@
 {
-    "_comentario": "Arranque jugable V1. NO es el roster canonico: B y C del trio dia 1 siguen BLOQUEADO_DECISION. Rocio si esta cerrada. Carmen y Jose son stand-in provisional del pack visual P001\/P002 para poder probar el bucle. playtest_01 sigue siendo laboratorio.",
+    "_comentario": "Arranque jugable V1. NO es el roster canonico: B y C del trio dia 1 siguen BLOQUEADO_DECISION. Rocio si esta cerrada. Carmen y Jose son stand-in provisional del pack visual P001/P002 para poder probar el bucle. playtest_01 sigue siendo laboratorio.",
     "id": "juego_v1",
     "descripcion": "Nueva partida del jugador: trio pequeno, solo cafeteria, tutorial en la misma partida.",
     "seed_sugerida": "juego-v1",
@@ -13,12 +13,12 @@
         {
             "catalog_id": "per_p001",
             "presencia": "residente",
-            "nota": "PROVISIONAL B hasta decision de producto (Carmen \/ P001)"
+            "nota": "PROVISIONAL B hasta decision de producto (Carmen / P001)"
         },
         {
             "catalog_id": "per_p002",
             "presencia": "residente",
-            "nota": "PROVISIONAL C hasta decision de producto (Jose \/ P002)"
+            "nota": "PROVISIONAL C hasta decision de producto (Jose / P002)"
         }
     ],
     "lugares_operativos_dia_1": [
@@ -36,5 +36,13 @@
         "vida_pueblo_enabled": true,
         "misiones_diarias_enabled": false,
         "peticiones_pueblo_enabled": false
-    }
+    },
+    "tutorial_incorporaciones_dia_1": [
+        "per_p003",
+        "per_p004",
+        "per_p005",
+        "per_p006",
+        "per_p007"
+    ],
+    "tutorial_objetivo_residentes": 8
 }

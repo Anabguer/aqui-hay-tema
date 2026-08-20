@@ -110,6 +110,7 @@ final class PartidaService
         ?string $lugar = null
     ): array {
         $r = $this->encuentros->proponer($partida, $participantes, $dia, $hora, $tipo, $lugar);
+        TutorialBucle::flushIncorporacionesPendientes($partida, $this->root, $this->logger);
         if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
             $r['vista'] = ResumenDia::vistaEncuentro($partida, $r['encuentro'], $this->catalog);
         }

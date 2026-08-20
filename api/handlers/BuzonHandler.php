@@ -51,9 +51,11 @@ final class BuzonHandler
     {
         $r = BuzonEngine::marcarLeido($partida, (string) ($body['mensaje_id'] ?? ''));
         if ($r['ok'] ?? false) {
-            $r['tutorial'] = \AquiHayTema\Engine\TutorialBucle::registrar(
+            $r['tutorial'] = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
                 $partida,
-                \AquiHayTema\Engine\TutorialBucle::HECHO_BUZON
+                \AquiHayTema\Engine\TutorialBucle::HECHO_BUZON,
+                $ctx->root,
+                $ctx->logger
             );
             savePartida($ctx, $partida);
         }

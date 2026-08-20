@@ -21,17 +21,12 @@ final class BloqueA
     /** @return array{vivienda_id: string|null, error: string|null} */
     public static function asignarAutomatico(array &$partida, string $residenteId): array
     {
-        foreach ($partida['bloque_a']['viviendas'] as &$vivienda) {
-            if ($vivienda['ocupante_id'] === null && $vivienda['estado'] === 'libre') {
-                $vivienda['ocupante_id'] = $residenteId;
-                $vivienda['estado'] = 'ocupado';
-                if (isset($partida['residentes'][$residenteId])) {
-                    $partida['residentes'][$residenteId]['vivienda_id'] = $vivienda['id'];
-                }
-                return ['vivienda_id' => $vivienda['id'], 'error' => null];
-            }
+        // Delega a CapacidadViviendas (A, y B/C si están abiertos en lab/gate).
+        $r = CapacidadViviendas::asignarAutomatico($partida, $residenteId);
+        if (($r['error'] ?? null) === 'viviendas_llenas') {
+            return ['vivienda_id' => null, 'error' => 'bloque_a_lleno'];
         }
-        return ['vivienda_id' => null, 'error' => 'bloque_a_lleno'];
+        return $r;
     }
 
     public static function liberar(array &$partida, string $viviendaId): bool

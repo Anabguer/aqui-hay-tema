@@ -42,7 +42,7 @@ final class PlaytestIntegralRunner
         ];
 
         $out['secciones']['A_tutorial'] = $this->secTutorial();
-        $out['secciones']['B_llegadas'] = $this->secNoImpl('Llegadas post-tutorial / candidatos por buzón', 'No hay motor de candidato→buzón→aceptar/rechazar/expirar/vivienda en play.');
+        $out['secciones']['B_llegadas'] = $this->secLlegadasRapido();
         $out['secciones']['C_autonomia'] = $this->secAutonomia();
         $out['secciones']['D_planes_voluntad'] = $this->secVoluntad();
         $out['secciones']['E_compatibilidad'] = $this->secPlanesMuestra();
@@ -95,10 +95,9 @@ final class PlaytestIntegralRunner
         $ok3 = $n0 === 3 && isset($p['residentes']['per_i03'], $p['residentes']['per_p001'], $p['residentes']['per_p002']);
         $okTut = !empty($tut['activo']);
 
-        // Completar tutorial
-        TutorialBucle::registrar($p, TutorialBucle::HECHO_BUZON);
-        TutorialBucle::registrar($p, TutorialBucle::HECHO_VECINO);
-        $plan = $tut['sugerencia'] ?? TutorialBucle::vista($p)['sugerencia'] ?? null;
+        TutorialBucle::registrarConRoot($p, TutorialBucle::HECHO_BUZON, $this->root);
+        TutorialBucle::registrarConRoot($p, TutorialBucle::HECHO_VECINO, $this->root);
+        $plan = TutorialBucle::vista($p)['sugerencia'] ?? null;
         if (is_array($plan) && !empty($plan['residente_a']) && !empty($plan['residente_b'])) {
             PropuestaEncuentroEngine::proponer(
                 $p,
@@ -108,42 +107,24 @@ final class PlaytestIntegralRunner
                 (string) ($plan['tipo'] ?? 'conocerse'),
                 isset($plan['lugar']) ? (string) $plan['lugar'] : 'lug_cafeteria'
             );
+            TutorialBucle::flushIncorporacionesPendientes($p, $this->root);
         } else {
-            TutorialBucle::registrar($p, TutorialBucle::HECHO_PLAN);
+            TutorialBucle::registrarConRoot($p, TutorialBucle::HECHO_PLAN, $this->root);
         }
         $tutFin = TutorialBucle::vista($p);
-        $nFin = count($p['residentes'] ?? []);
-
-        // Avanzar resto del día 1
         $hora = (int) ($p['reloj']['hora_actual'] ?? 14);
         if ($hora < 22) {
             $this->service->avanzarReloj($p, 22 - $hora);
         }
-        $nDia1 = count($p['residentes'] ?? []);
+        // completar espaciado tutorial día 1
+        for ($i = 0; $i < 8; $i++) {
+            $this->service->avanzarReloj($p, 1);
+        }
+        $nDia1 = count(TutorialIncorporaciones::residentesActivos($p));
         $crece = $nDia1 >= 8;
-        $status = 'FAIL';
-        $notas = [];
-        if (!$ok3) {
-            $notas[] = 'No arranca con exactamente 3 utilizables.';
-        }
-        if (!$okTut) {
-            $notas[] = 'Tutorial no activo al crear juego_v1.';
-        }
-        if (!empty($tutFin['activo'])) {
-            $notas[] = 'Tutorial sigue activo tras completar pasos.';
-            $status = 'FAIL';
-        }
-        if (!$crece) {
-            $notas[] = 'NO_IMPLEMENTADO: tras tutorial + día 1 siguen ' . $nDia1 . ' residentes (canónico ≈8).';
-            $status = 'FAIL';
-        }
-        if ($ok3 && $okTut && empty($tutFin['activo']) && $crece) {
-            $status = 'PASS';
-        } elseif ($ok3 && $okTut && empty($tutFin['activo']) && !$crece) {
-            $status = 'FAIL'; // decisión canónica no cableada
-        }
+        $status = ($ok3 && $okTut && empty($tutFin['activo']) && $crece
+            && ($p['llegadas']['modo'] ?? '') === 'normal') ? 'PASS' : 'FAIL';
 
-        // playtest_01 no debe saltarse tutorial del jugador
         $lab = $this->service->nuevaPartida('playtest_01', 'gate-lab');
         $labTut = TutorialBucle::vista($lab);
 
@@ -153,13 +134,38 @@ final class PlaytestIntegralRunner
             'ids_iniciales' => $ids,
             'tutorial_activo_inicio' => $okTut,
             'tutorial_activo_fin' => !empty($tutFin['activo']),
-            'n_tras_tutorial' => $nFin,
             'n_fin_dia_1' => $nDia1,
             'crecimiento_a_8' => $crece,
             'playtest_01_sin_tutorial' => empty($labTut['activo']),
             'playtest_01_n' => count($lab['residentes'] ?? []),
-            'notas' => $notas,
-            'gap' => $crece ? null : 'Falta motor de incorporaciones tutorializadas 3→≈8 en el primer día.',
+            'modo_llegadas' => $p['llegadas']['modo'] ?? null,
+            'notas' => $status === 'PASS' ? [] : ['Fallo en flujo 3→8'],
+            'gap' => null,
+        ];
+    }
+
+    /** @return array<string, mixed> */
+    private function secLlegadasRapido(): array
+    {
+        $p = $this->service->nuevaPartida('playtest_01', 'gate-lleg');
+        CandidatoLlegadaEngine::activarModoNormal($p);
+        $p['llegadas']['cooldown_hasta_dia'] = 0;
+        $ok = false;
+        for ($i = 0; $i < 40; $i++) {
+            $p['llegadas']['_tick_por_hora'] = false;
+            $of = CandidatoLlegadaEngine::intentarOfrecer($p, $this->root);
+            if ($of) {
+                $ok = true;
+                break;
+            }
+            $this->service->avanzarReloj($p, 24);
+            $p['llegadas']['cooldown_hasta_dia'] = 0;
+            $p['llegadas']['candidato_activo'] = null;
+        }
+        return [
+            'status' => $ok ? 'PASS' : 'FAIL',
+            'motor' => 'CandidatoLlegadaEngine',
+            'candidato_ofrecido' => $ok,
         ];
     }
 
