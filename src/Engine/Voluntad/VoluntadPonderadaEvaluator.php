@@ -76,6 +76,27 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $rng = RngService::fromPartida($partida);
         $tirada = $rng->nextFloat();
         $rng->persistToPartida($partida);
+        $resolucion = (string) CalibracionConfig::get($cal, 'voluntad.resolucion_plan', 'media_geometrica');
+        // media_geometrica: no tirar aquí; PropuestaEncuentroEngine resuelve el plan con √(pA·pB).
+        // Evitar doble registro en RechazoMemoria dentro de evaluarParticipante.
+        if ($resolucion === 'media_geometrica') {
+            $factores = $desglose;
+            $factores['p'] = $p;
+            $factores['resolucion_plan'] = 'media_geometrica';
+            $factores['tirada_diferida'] = true;
+            return [
+                'decision' => PropuestaEncuentro::DECISION_ACEPTA,
+                'clase' => null,
+                'motivo_tecnico' => 'voluntad_p_calculada',
+                'motivo_tipo' => null,
+                'copy_id' => null,
+                'score' => $score,
+                'p' => $p,
+                'factores' => $factores,
+                '_bloqueado_decision' => false,
+                '_joint_plan' => true,
+            ];
+        }
         $acepta = $tirada < $p;
         $copy = null;
         $motivo = 'ponderada';
@@ -88,6 +109,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $factores['tirada_rng'] = $tirada;
         $factores['umbral_p'] = $p;
         $factores['acepta_si_tirada_menor_que_p'] = $acepta;
+        $factores['resolucion_plan'] = 'producto';
         return [
             'decision' => $acepta ? PropuestaEncuentro::DECISION_ACEPTA : PropuestaEncuentro::DECISION_RECHAZA,
             'clase' => $acepta ? null : PropuestaEncuentro::CLASE_VOLUNTAD,
@@ -224,6 +246,22 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $v = CalibracionConfig::get($cal, 'voluntad.mod_tipo.' . $tipo, 0);
         return is_numeric($v) ? (int) $v : 0;
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    public static function motivoRechazoPublic(array $partida, string $quien, string $otro, array $cal): string
+    {
+        return self::motivoRechazo($partida, $quien, $otro, $cal);
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    public static function copyBanalPublic(RngService $rng, array $cal): string
+    {
+        return self::copyBanal($rng, $cal);
     }
 
     /**

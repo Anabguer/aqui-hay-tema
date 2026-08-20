@@ -65,7 +65,7 @@ final class RelojOperations
         if ($diaDespues > $diaAntes) {
             TutorialIncorporaciones::alCerrarDia1SiToca($partida, $this->projectRoot, $this->logger);
         }
-        $llegadasTick = CandidatoLlegadaEngine::tick($partida, $this->projectRoot, $this->logger);
+        $llegadasTick = CandidatoLlegadaEngine::tick($partida, $this->projectRoot, $this->logger, $horas);
 
         if (PeticionPuebloEngine::activa($partida)) {
             $calPet = CalibracionConfig::load($this->projectRoot);

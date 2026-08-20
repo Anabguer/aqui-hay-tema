@@ -68,7 +68,8 @@ final class CandidatoLlegadaEngine
     public static function tick(
         array &$partida,
         string $root,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        int $horasAvanzadas = 1
     ): array {
         self::ensure($partida);
         $out = ['llegadas_completadas' => [], 'expirados' => [], 'ofrecidos' => null];
@@ -87,7 +88,7 @@ final class CandidatoLlegadaEngine
             && ($partida['llegadas']['candidato_activo'] ?? null) === null
             && ($partida['llegadas']['en_camino'] ?? null) === null
         ) {
-            $of = self::intentarOfrecer($partida, $root, $logger);
+            $of = self::intentarOfrecer($partida, $root, $logger, max(1, $horasAvanzadas));
             if ($of !== null) {
                 $out['ofrecidos'] = $of;
             }
@@ -99,8 +100,12 @@ final class CandidatoLlegadaEngine
     /**
      * @return array<string, mixed>|null
      */
-    public static function intentarOfrecer(array &$partida, string $root, ?GameLogger $logger = null): ?array
-    {
+    public static function intentarOfrecer(
+        array &$partida,
+        string $root,
+        ?GameLogger $logger = null,
+        int $horasAvanzadas = 24
+    ): ?array {
         self::ensure($partida);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         if ($dia < (int) ($partida['llegadas']['cooldown_hasta_dia'] ?? 0)) {
@@ -121,11 +126,11 @@ final class CandidatoLlegadaEngine
         $pBase = (float) CalibracionConfig::get($cal, 'llegadas.p_base', 0.08);
         $pPorHueco = (float) CalibracionConfig::get($cal, 'llegadas.p_por_hueco', 0.04);
         $pMax = (float) CalibracionConfig::get($cal, 'llegadas.p_max_dia', 0.45);
-        // Tirada por día: solo en el primer tick del día (hora 0) o flag.
-        // Para sims que avanzan por horas: probabilidad repartida ≈ p/24 por hora.
         $pDia = $huecos <= 0 ? 0.0 : min($pMax, $pBase + $pPorHueco * $huecos);
-        $porHora = !empty($partida['llegadas']['_tick_por_hora']);
-        $p = $porHora ? (1.0 - pow(1.0 - $pDia, 1.0 / 24.0)) : $pDia;
+        // p diaria canónica. Si el reloj salta N horas, componer: 1-(1-p)^(N/24).
+        // Evita el bug de avanzar(+24h) con una sola tirada a p/24.
+        $fracDias = max(1, $horasAvanzadas) / 24.0;
+        $p = 1.0 - pow(1.0 - $pDia, $fracDias);
 
         $rng = RngService::fromPartida($partida);
         $tirada = $rng->nextFloat();

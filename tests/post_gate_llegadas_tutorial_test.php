@@ -118,7 +118,11 @@ ok(CapacidadViviendas::capacidadTotal($p4) === 48, 'A+B+C = 48');
 $lab = VoluntadPlanLab::simular([[70, 70], [95, 20], [20, 20], [95, 95]], 500);
 ok(isset($lab['formulas']['media_geometrica']), 'lab voluntad tiene media_geometrica');
 ok(($lab['recomendacion']['formula'] ?? '') === 'media_geometrica', 'recomienda geométrica');
-ok(!empty($lab['bloqueado']), 'marca BLOQUEADO_DECISION_VOLUNTAD');
+ok((string) \AquiHayTema\Engine\CalibracionConfig::get(
+    \AquiHayTema\Engine\CalibracionConfig::load($root),
+    'voluntad.resolucion_plan',
+    ''
+) === 'media_geometrica', 'canon resolucion_plan media_geometrica');
 
 echo $fail === 0 ? "OK post_gate_llegadas_tutorial\n" : "FAIL post_gate ($fail)\n";
 exit($fail === 0 ? 0 : 1);

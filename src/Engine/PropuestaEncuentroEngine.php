@@ -9,7 +9,8 @@ use AquiHayTema\Engine\Voluntad\VoluntadPonderadaEvaluator;
 
 /**
  * El jugador propone; el residente decide. No programa hasta aceptación de ambos.
- * La fórmula de voluntad está BLOQUEADO_DECISION (evaluator por defecto deja pendiente).
+ * Resolución de plan (cal `voluntad.resolucion_plan`): media_geometrica (canon 20/08)
+ * o producto (legado pA×pB).
  */
 final class PropuestaEncuentroEngine
 {
@@ -117,6 +118,7 @@ final class PropuestaEncuentroEngine
             );
         }
 
+        self::aplicarResolucionPlan($partida, $propuesta, $calDef);
         $propuesta = self::cerrarEstado($propuesta);
         $partida['propuestas_encuentro'] ??= [];
         $partida['propuestas_encuentro'][] = $propuesta;
@@ -390,6 +392,110 @@ final class PropuestaEncuentroEngine
     }
 
     /**
+     * Canon 20/08: p_plan = √(pA·pB). Atribuye el rechazo UI al participante con menor p.
+     *
+     * @param array<string, mixed> $propuesta
+     * @param array<string, mixed> $cal
+     */
+    private static function aplicarResolucionPlan(array &$partida, array &$propuesta, array $cal): void
+    {
+        $modo = (string) CalibracionConfig::get($cal, 'voluntad.resolucion_plan', 'media_geometrica');
+        if ($modo !== 'media_geometrica') {
+            return;
+        }
+        $idxs = [];
+        foreach ($propuesta['reacciones'] ?? [] as $i => $r) {
+            if (!is_array($r)) {
+                continue;
+            }
+            if (empty($r['_joint_plan'])) {
+                continue;
+            }
+            if (($r['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
+                && ($r['clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+            ) {
+                return; // agenda ya tumba el plan
+            }
+            if (($r['clase'] ?? '') === 'cooldown') {
+                return;
+            }
+            $idxs[] = (int) $i;
+        }
+        if (count($idxs) < 2) {
+            return;
+        }
+        $pA = (float) ($propuesta['reacciones'][$idxs[0]]['p'] ?? 0);
+        $pB = (float) ($propuesta['reacciones'][$idxs[1]]['p'] ?? 0);
+        $pPlan = sqrt(max(0.0, $pA) * max(0.0, $pB));
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+        $acepta = $tirada < $pPlan;
+
+        $weak = $idxs[0];
+        $strong = $idxs[1];
+        if ($pB < $pA) {
+            $weak = $idxs[1];
+            $strong = $idxs[0];
+        }
+
+        $propuesta['resolucion_plan'] = [
+            'modo' => 'media_geometrica',
+            'pA' => $pA,
+            'pB' => $pB,
+            'p_plan' => $pPlan,
+            'tirada' => $tirada,
+            'acepta' => $acepta,
+        ];
+
+        if ($acepta) {
+            foreach ($idxs as $i) {
+                $propuesta['reacciones'][$i]['decision'] = PropuestaEncuentro::DECISION_ACEPTA;
+                $propuesta['reacciones'][$i]['clase'] = null;
+                $propuesta['reacciones'][$i]['motivo_tecnico'] = 'voluntad_acepta_plan_geom';
+                $propuesta['reacciones'][$i]['motivo_tipo'] = null;
+                $propuesta['reacciones'][$i]['copy_id'] = null;
+                $propuesta['reacciones'][$i]['factores']['p_plan'] = $pPlan;
+                $propuesta['reacciones'][$i]['factores']['tirada_plan'] = $tirada;
+                unset($propuesta['reacciones'][$i]['_joint_plan']);
+            }
+            return;
+        }
+
+        // Rechazo: el de menor p “planta”; el otro habría aceptado a nivel individual.
+        $copy = VoluntadPonderadaEvaluator::copyBanalPublic($rng, $cal);
+        $motivo = VoluntadPonderadaEvaluator::motivoRechazoPublic(
+            $partida,
+            (string) $propuesta['reacciones'][$weak]['residente_id'],
+            (string) $propuesta['reacciones'][$strong]['residente_id'],
+            $cal
+        );
+        $propuesta['reacciones'][$weak]['decision'] = PropuestaEncuentro::DECISION_RECHAZA;
+        $propuesta['reacciones'][$weak]['clase'] = PropuestaEncuentro::CLASE_VOLUNTAD;
+        $propuesta['reacciones'][$weak]['motivo_tecnico'] = 'voluntad_rechaza_plan_geom_' . $motivo;
+        $propuesta['reacciones'][$weak]['motivo_tipo'] = $motivo;
+        $propuesta['reacciones'][$weak]['copy_id'] = $copy;
+        $propuesta['reacciones'][$weak]['factores']['p_plan'] = $pPlan;
+        $propuesta['reacciones'][$weak]['factores']['tirada_plan'] = $tirada;
+        unset($propuesta['reacciones'][$weak]['_joint_plan']);
+
+        $propuesta['reacciones'][$strong]['decision'] = PropuestaEncuentro::DECISION_ACEPTA;
+        $propuesta['reacciones'][$strong]['clase'] = null;
+        $propuesta['reacciones'][$strong]['motivo_tecnico'] = 'voluntad_ok_pero_plan_rechazado';
+        $propuesta['reacciones'][$strong]['factores']['p_plan'] = $pPlan;
+        unset($propuesta['reacciones'][$strong]['_joint_plan']);
+
+        RechazoMemoria::registrar(
+            $partida,
+            (string) $propuesta['reacciones'][$weak]['residente_id'],
+            (string) $propuesta['reacciones'][$strong]['residente_id'],
+            $motivo,
+            [],
+            (string) ($propuesta['tipo'] ?? 'conocerse')
+        );
+    }
+
+    /**
      * @param string[] $participantes
      * @return array<string, mixed>
      */
@@ -440,6 +546,7 @@ final class PropuestaEncuentroEngine
         $ev = $voluntad->evaluar($partida, $propuesta, $residenteId);
         if (($ev['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
             && ($ev['clase'] ?? '') !== PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+            && empty($ev['_joint_plan'])
         ) {
             $ids = $propuesta['participantes'] ?? [];
             $otro = '';
@@ -470,6 +577,9 @@ final class PropuestaEncuentroEngine
             'p' => $ev['p'] ?? null,
             '_bloqueado_decision' => (bool) ($ev['_bloqueado_decision'] ?? true),
         ];
+        if (!empty($ev['_joint_plan'])) {
+            $row['_joint_plan'] = true;
+        }
         if (isset($ev['factores']) && is_array($ev['factores'])) {
             $row['factores'] = $ev['factores'];
         }

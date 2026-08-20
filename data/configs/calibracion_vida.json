@@ -224,7 +224,9 @@
             "quedar": 0,
             "primera_cita": 0,
             "cita": 0
-        }
+        },
+        "resolucion_plan": "media_geometrica",
+        "_nota_resolucion_plan": "Canon 20/08 Neni+ChatGPT: p_plan=sqrt(pA*pB). Sustituye producto."
     },
     "rechazos": {
         "banal_sin_consecuencia": true,
@@ -358,7 +360,9 @@
         "hobbies_iniciales": 1,
         "rasgos_iniciales": 1,
         "max_por_experiencia": 2,
-        "no_por_paso_del_tiempo": true
+        "no_por_paso_del_tiempo": true,
+        "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
+        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de catálogo amplio. No recalibrar ritmos ahora."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,

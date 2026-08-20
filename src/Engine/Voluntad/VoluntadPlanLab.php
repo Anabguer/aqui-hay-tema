@@ -116,8 +116,10 @@ final class VoluntadPlanLab
                 '95/95 alto sin llegar a 1.0.',
                 'Mantiene voluntad individual en el cálculo (vía pA y pB), sin promediar scores.',
             ],
-            'no_canonizado' => true,
+            'canonizado' => true,
+            'canon_fecha' => '2026-08-20',
         ];
+        $out['bloqueado'] = null;
         return $out;
     }
 }
