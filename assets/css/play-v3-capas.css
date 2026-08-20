@@ -1,0 +1,207 @@
+/* Capas principales sobre V2 — tanda 2 */
+.carta-msg {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: .55rem;
+  padding: .7rem .15rem .75rem;
+  border-bottom: 2px dashed #d5c9b4;
+  position: relative;
+}
+.carta-msg:last-child { border: 0; }
+.carta-msg img {
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 2.5px solid var(--ring); object-fit: cover;
+}
+.carta-msg .de { font-family: Fraunces, Georgia, serif; font-weight: 700; }
+.carta-msg .cuerpo {
+  font-family: Fraunces, Georgia, serif; font-size: .98rem; font-style: italic;
+  margin-top: .2rem; line-height: 1.35;
+}
+.carta-msg.no-leida { background: rgba(243,177,195,.18); margin: 0 -.5rem; padding-left: .5rem; padding-right: .5rem; }
+.carta-msg.antigua { opacity: .72; }
+.sello {
+  font-size: .68rem; font-weight: 800; letter-spacing: .04em; text-transform: uppercase;
+  color: var(--pink-deep);
+}
+.plazo { font-size: .78rem; font-weight: 800; color: #8a4a18; margin-top: .25rem; }
+.acciones-msg { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .4rem; }
+.acciones-msg button {
+  border: 2px solid #c9b59a; background: #fffdf6; font: inherit; font-weight: 800;
+  font-size: .75rem; padding: .25rem .45rem; cursor: pointer;
+}
+.voz {
+  margin: .15rem 0 .1rem;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+/* Correspondencia importante: mismo buzón, otro sobre */
+.carta-msg.importante {
+  background: #fff4e6;
+  border: 3px solid var(--ink);
+  margin: .45rem -.2rem .7rem;
+  padding: .85rem .7rem .9rem;
+  box-shadow: 4px 4px 0 rgba(196,43,74,.18);
+  transform: rotate(-.45deg);
+}
+.carta-msg.importante.no-leida { background: #fde3c4; }
+.carta-msg.importante .chincheta-carta {
+  position: absolute; top: -7px; right: 14px;
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--pink-deep); border: 2px solid var(--ink);
+}
+.carta-msg.importante .lacre {
+  position: absolute; left: 38px; top: 48px;
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--pink-deep); color: #fffdf6;
+  border: 2px solid var(--ink);
+  font-size: .52rem; font-weight: 800; letter-spacing: .04em;
+  display: grid; place-items: center;
+  transform: rotate(12deg);
+  font-family: Fraunces, Georgia, serif;
+}
+.marca-mano {
+  display: inline-block;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-weight: 700;
+  color: var(--pink-deep);
+  transform: rotate(-6deg);
+  border-bottom: 2px solid var(--pink-deep);
+  margin-bottom: .15rem;
+}
+.aviso-suave {
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .82rem;
+  color: var(--muted);
+  margin-top: .35rem;
+}
+
+.buzon .lacre-hud {
+  position: absolute; left: -7px; bottom: -6px;
+  width: 13px; height: 13px; border-radius: 50%;
+  background: var(--pink-deep); border: 2px solid var(--ink);
+}
+
+/* Diario Superpop */
+.masthead {
+  text-align: center;
+  border-top: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  padding: .25rem 0 .35rem;
+  margin: .1rem 0 .35rem;
+}
+.masthead h2 { font-family: Fraunces, Georgia, serif; margin: 0; letter-spacing: .06em; font-size: 1.55rem; }
+.masthead .edicion {
+  font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin: .15rem 0 0;
+}
+.tabs-papel { display: flex; flex-wrap: wrap; gap: .3rem; margin: .2rem 0 .55rem; }
+.tabs-papel button {
+  border: 2.5px solid #c9b59a; background: #efe4cc; font: inherit; font-weight: 800;
+  font-size: .78rem; padding: .28rem .5rem; cursor: pointer;
+}
+.tabs-papel button.is-on { background: #fffaf0; border-color: var(--ink); }
+.tabs-papel .trapos { font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 700; }
+.dia-block { display: none; flex-direction: column; gap: .55rem; }
+.play-root[data-diario="hoy"] .dia-hoy,
+.play-root[data-diario="ayer"] .dia-ayer,
+.play-root[data-diario="viejos"] .dia-viejos { display: flex; }
+
+.collage { /* gap via .dia-block when visible */ }
+.recorte {
+  border: 2.5px solid #c9b59a;
+  padding: .65rem .7rem;
+  font-family: Fraunces, Georgia, serif;
+  line-height: 1.35;
+}
+.recorte h3 { margin: 0 0 .3rem; font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.recorte p { margin: 0; font-size: 1.02rem; }
+.recorte .firma { margin-top: .35rem; font-size: .78rem; color: var(--muted); font-style: italic; }
+.recorte.portada { background: #fde8ee; transform: rotate(-.5deg); padding: .85rem .75rem; }
+.recorte.portada p { font-size: 1.12rem; font-weight: 700; }
+.recorte.chisme { background: #fde8ee; transform: rotate(.8deg); }
+.recorte.rumor { background: #f7f0de; transform: rotate(-.6deg); }
+.recorte.aviso { background: #f3e19a; transform: rotate(-1deg); }
+.recorte.poesia { background: #eef3e4; transform: rotate(.4deg); }
+.recorte.escandalo { background: #f7d0d8; transform: rotate(1.1deg); width: 96%; }
+.recorte.gacetilla {
+  background: #fffdf6; border-style: dashed; font-size: .9rem;
+  width: 88%; margin-left: auto; transform: rotate(-.8deg);
+}
+.recorte.gacetilla p { font-size: .9rem; }
+.recorte.tira { background: #f3e19a; transform: rotate(-1.4deg); width: 94%; }
+.recorte.polaroid {
+  background: #fffdf6; text-align: center; transform: rotate(1.2deg);
+  width: 70%; margin: .1rem auto;
+  box-shadow: 3px 4px 0 rgba(44,38,31,.08);
+}
+.caras-clip { display: flex; justify-content: center; gap: .35rem; margin-bottom: .35rem; }
+.caras-clip img {
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 2px solid var(--ring); object-fit: cover;
+}
+.recorte.corto { width: 90%; margin-left: 8%; transform: rotate(.6deg); background: #f7f0de; }
+.recorte.enterado { background: #e8f0e4; transform: rotate(-.3deg); }
+
+.paso { display: none; }
+.play-root[data-paso="tipo"] .paso-tipo,
+.play-root[data-paso="quien"] .paso-quien,
+.play-root[data-paso="lugar"] .paso-lugar,
+.play-root[data-paso="cuando"] .paso-cuando,
+.play-root[data-paso="hecho"] .paso-hecho { display: block; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; margin: .5rem 0; }
+.chip {
+  border: 2.5px solid #c9b59a; background: #fffdf6;
+  font: inherit; font-weight: 800; padding: .35rem .55rem; cursor: pointer;
+  display: inline-flex; align-items: center; gap: .35rem;
+}
+.chip img { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.chip.is-on {
+  background: #fde8ee;
+  border-color: var(--ink);
+  box-shadow: 2px 2px 0 rgba(44,38,31,.12);
+}
+.chip:disabled { opacity: .4; cursor: not-allowed; }
+.resumen-plan { font-family: Fraunces, Georgia, serif; font-size: 1.05rem; }
+.nav-pasos { display: flex; justify-content: space-between; gap: .5rem; margin-top: .8rem; }
+.cupo-nota {
+  font-family: Fraunces, Georgia, serif; font-style: italic;
+  background: rgba(242,210,90,.35); padding: .3rem .45rem; display: inline-block;
+}
+.play-root[data-cupo="1"] .solo-cupo-2,
+.play-root[data-cupo="2"] .solo-cupo-1 { display: none; }
+.desde {
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .82rem;
+  color: var(--muted);
+}
+
+.animo {
+  font-family: Fraunces, Georgia, serif; font-style: italic;
+  background: rgba(243,177,195,.25); padding: .35rem .5rem; display: inline-block;
+  transform: rotate(-1deg);
+}
+.anota-cele {
+  background: var(--day);
+  border: 2px solid #c9b59a;
+  padding: .45rem .55rem;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  transform: rotate(-1.8deg);
+  box-shadow: 2px 3px 0 rgba(44,38,31,.08);
+}
+.anota-cele strong { font-style: normal; font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; display: block; margin-bottom: .15rem; font-family: Nunito, sans-serif; }
+
+.play-root[data-capa="ficha-nueva"] .capa-ficha-nueva,
+.play-root[data-capa="ficha-conocida"] .capa-ficha-conocida,
+.play-root[data-capa="diario"] .capa-diario,
+.play-root[data-capa="organizar"] .capa-organizar {
+  transform: none;
+  pointer-events: auto;
+}
+.nota-marcha { display: none; }
+.play-root[data-desde="marcha"] .nota-marcha { display: block; }
