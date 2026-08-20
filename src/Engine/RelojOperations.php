@@ -123,6 +123,9 @@ final class RelojOperations
         ];
 
         $snap = AvanceResumen::snapshot($partida);
+        $snapGuia = PlaytestGuia::activa($partida)
+            ? PlaytestGuia::snapshot($partida, $this->projectRoot)
+            : null;
         $iter = $horas === 0 ? 1 : $horas;
         $pasoHoras = $horas === 0 ? 0 : 1;
         for ($i = 0; $i < $iter; $i++) {
@@ -142,6 +145,15 @@ final class RelojOperations
         $acum['reloj'] = $partida['reloj'];
         $acum['texto'] = Reloj::formatear($partida['reloj']);
         $acum['resumen_avance'] = self::enriquecerResumen($partida, AvanceResumen::desdeSnapshot($partida, $snap));
+        if ($snapGuia !== null) {
+            $acum['playtest_guia_evento'] = PlaytestGuia::trasAvance(
+                $partida,
+                $this->projectRoot,
+                $snapGuia,
+                $horas
+            );
+            $acum['playtest_guia'] = PlaytestGuia::vista($partida, $this->projectRoot);
+        }
         return $acum;
     }
 
@@ -187,6 +199,10 @@ final class RelojOperations
             'encuentro' => $actualizado ?? $next,
             'reloj' => $adv,
             'resumen_avance' => $adv['resumen_avance'] ?? ['lineas' => [], 'total' => 0],
+            'playtest_guia_evento' => $adv['playtest_guia_evento'] ?? null,
+            'playtest_guia' => $adv['playtest_guia'] ?? (PlaytestGuia::activa($partida)
+                ? PlaytestGuia::vista($partida, $this->projectRoot)
+                : null),
         ];
     }
 

@@ -8,6 +8,7 @@ final class GameError
 {
     public const AGENDA_SLOT_OCUPADO = 'AGENDA_SLOT_OCUPADO';
     public const LUGAR_NO_OPERATIVO = 'LUGAR_NO_OPERATIVO';
+    public const LUGAR_CERRADO = 'LUGAR_CERRADO';
     public const PARTICIPANTE_INEXISTENTE = 'PARTICIPANTE_INEXISTENTE';
     public const RESIDENTE_NO_ACTIVO = 'RESIDENTE_NO_ACTIVO';
     public const DOBLE_RESERVA = 'DOBLE_RESERVA';
@@ -27,6 +28,7 @@ final class GameError
     public const PETICION_NO_ENCONTRADA = 'PETICION_NO_ENCONTRADA';
     public const FASE_TRANSICION_INVALIDA = 'FASE_TRANSICION_INVALIDA';
     public const TIPO_ENCUENTRO_NO_DISPONIBLE = 'TIPO_ENCUENTRO_NO_DISPONIBLE';
+    public const MISMA_PERSONA = 'MISMA_PERSONA';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -36,6 +38,8 @@ final class GameError
                 return 'No pueden quedar a esa hora.';
             case self::LUGAR_NO_OPERATIVO:
                 return 'Ese lugar no está operativo.';
+            case self::LUGAR_CERRADO:
+                return 'Ese lugar está cerrado a esa hora.';
             case self::PARTICIPANTE_INEXISTENTE:
                 return 'Uno de los participantes no existe.';
             case self::RESIDENTE_NO_ACTIVO:
@@ -74,6 +78,8 @@ final class GameError
                 return 'Esa fase de relación no es un paso válido.';
             case self::TIPO_ENCUENTRO_NO_DISPONIBLE:
                 return 'Ese tipo de encuentro no está disponible para esta relación todavía.';
+            case self::MISMA_PERSONA:
+                return 'Elige a dos personas distintas.';
             default:
                 return 'Ha ocurrido un error.';
         }

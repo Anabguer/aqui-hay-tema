@@ -54,17 +54,26 @@ final class PropuestaEncuentroEngine
         if (count($participantes) >= 2
             && !PropuestaNivel::permite($partida, (string) $participantes[0], (string) $participantes[1], $tipo, $calDef)
         ) {
-            return GameError::respuesta(GameError::TIPO_ENCUENTRO_NO_DISPONIBLE, [
+            $motivo = OrganizarMotivo::de(
+                $partida,
+                (string) $participantes[0],
+                (string) $participantes[1],
+                $tipo,
+                $calDef
+            );
+            $msg = OrganizarMotivo::mensajeUi($motivo['codigo']);
+            $r = GameError::respuesta(GameError::TIPO_ENCUENTRO_NO_DISPONIBLE, [
                 'tipo' => $tipo,
-                'tipos_permitidos' => PropuestaNivel::tiposPermitidos(
-                    $partida,
-                    (string) $participantes[0],
-                    (string) $participantes[1],
-                    $calDef
-                ),
+                'tipos_permitidos' => $motivo['tipos'],
+                'causa' => $motivo['codigo'],
+                'tipo_sugerido' => $motivo['tipo_sugerido'],
             ]);
+            if ($msg !== '') {
+                $r['mensaje_ui'] = $msg;
+            }
+            return $r;
         }
-        $franja = self::resolverFranja($partida, $participantes, $dia, $hora);
+        $franja = self::resolverFranja($partida, $participantes, $dia, $hora, (string) $lugarId);
         if ($franja === null) {
             return GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD, [
                 'motivo' => 'sin_franja_libre',
@@ -124,10 +133,13 @@ final class PropuestaEncuentroEngine
         ]);
 
         if (($propuesta['estado'] ?? '') === 'aceptada') {
-            return self::confirmarSiProcede($partida, $id, $logger);
+            $out = self::confirmarSiProcede($partida, $id, $logger);
+        } else {
+            $out = self::respuestaPropuesta($propuesta);
         }
-
-        return self::respuestaPropuesta($propuesta);
+        TutorialBucle::registrar($partida, TutorialBucle::HECHO_PLAN);
+        $out['tutorial'] = TutorialBucle::vista($partida);
+        return $out;
     }
 
     /**
@@ -506,7 +518,7 @@ final class PropuestaEncuentroEngine
      * @param list<string> $participantes
      * @return array{dia:int,hora:int}|null
      */
-    private static function resolverFranja(array $partida, array $participantes, int $dia, int $hora): ?array
+    private static function resolverFranja(array $partida, array $participantes, int $dia, int $hora, string $lugarId): ?array
     {
         $libre = true;
         foreach ($participantes as $rid) {
@@ -516,15 +528,24 @@ final class PropuestaEncuentroEngine
                 break;
             }
         }
-        if ($libre && !EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $hora)) {
+        if ($libre
+            && ComplejoCatalog::estaAbierto($lugarId, $hora)
+            && !EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $hora)
+        ) {
             return ['dia' => $dia, 'hora' => $hora];
         }
         $slots = DisponibilidadEngine::slotsCompatibles($partida, $participantes, 'conocerse', $dia, $hora, 7, 24);
-        $first = $slots['slots'][0] ?? null;
-        if (!is_array($first)) {
-            return null;
+        foreach ($slots['slots'] ?? [] as $slot) {
+            if (!is_array($slot)) {
+                continue;
+            }
+            $h = (int) ($slot['hora'] ?? -1);
+            if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                continue;
+            }
+            return ['dia' => (int) $slot['dia'], 'hora' => $h];
         }
-        return ['dia' => (int) $first['dia'], 'hora' => (int) $first['hora']];
+        return null;
     }
 
     private static function indice(array $partida, string $propuestaId): ?int

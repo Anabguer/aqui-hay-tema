@@ -288,7 +288,16 @@ final class PartidaService
                 'debug_tools_enabled' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
             ],
             'planes_organizar' => PropuestaNivel::contratoOrganizar(),
+            'tutorial' => TutorialBucle::vista($partida),
+            'taller' => [
+                'disponible' => true,
+                'activo_en_partida' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
+            ],
         ];
+        if (PlaytestGuia::activa($partida)) {
+            PlaytestGuia::ensure($partida);
+            $out['playtest_guia'] = PlaytestGuia::vista($partida, $this->root);
+        }
         if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
             $vista = VidaPuebloEngine::vista($partida, $cal);
             unset($vista['latidos']);

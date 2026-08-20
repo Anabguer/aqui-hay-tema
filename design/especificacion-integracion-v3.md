@@ -37,7 +37,8 @@ No se tocan economía, autonomía, relaciones ni peticiones salvo leer sus datos
 | Buzón | `buzon.listar`. Importante = `clasificacion=importante` → lacre OJO |
 | El Cotilleo | diario real (hoy / ayer / viejos) |
 | Vecinos / ficha | `partida.inspeccionar` + `residente.ficha` |
-| Organizar | `encuentro.tipos_permitidos` + `encuentro.proponer` |
+| Organizar | `encuentro.tipos_permitidos` + `encuentro.proponer`. `tipo_sugerido`, `causa`, `mensaje_ui`, `candidatos_a` / `candidatos_b` (nunca la misma persona). |
+| Tutorial | `estado.tutorial` (`activo`, `paso`, `zona`, `pista`, `sugerencia`). Se completa en la misma partida. |
 
 Presentación: `VistaPuebloV3`. No decide quién se mueve.
 
@@ -58,7 +59,9 @@ Otro id → neutro.
 
 **Hay tema:** `assets/play-v3/marcas/sello_hay_tema.png` en la esquina del token. No es el anillo. No es enamoramiento.
 
-Fase 1: hay tema = participante de encuentro `proximo` o `en_curso` en ese lugar. No se lee romance.
+El motor expone `hay_tema: bool` por persona en el complejo (y `tema_id` si hay un hecho concreto). PLAY no lo calcula. No se infiere de `estado_emocional` ni de scores de romance ni de cita/encuentro próximo o en curso.
+
+Se activa por un acontecimiento cotilleable real asociado a esa persona en ese contexto: cotilleo/discusión/acercamiento de hoy en El Cotilleo, o patrón de coincidencia significativa (varios días, y ahora mismo hay compañía de ese patrón en el sitio). Una salida cotidiana sola no basta.
 
 Lote: 14 cabezas en `assets/personajes/tokens-m/`. Si el pack visual tiene PNG neutral, se usa ese.
 
@@ -90,3 +93,25 @@ playtest_01: cafetería + biblioteca + parque → Café evolucionado; Cine tempr
 5. Dinero null → «—».
 6. “Hay tema” no es un flag de cotilleo genérico: se usa el encuentro marcado del lugar. Si hace falta otra señal, contrato concreto a C1.
 7. Alas evolucionadas de Lola, Mala Idea, Parque, Gym: no hay PNG. No se fingen.
+
+---
+
+## Playtest Neni (sistemas)
+
+Entrada: `playtest.php` → `play.php?taller=1&lab=1&config=playtest_01&seed=playtest-01`.
+
+- Config: `playtest_01` (8 vecinos P001–P008, café+parque+biblio). Sin tutorial `juego_v1`.
+- Controles taller: Nueva partida, Guardar, +1h, +8h, +1 día, Ir al próximo. Panel `data-taller-debug` muestra `resumen_avance` tras avanzar.
+- El Cotilleo: `VistaCotilleoV3` lee canal `cotilleo` del buzón (no solo `diario`).
+- Misiones/peticiones: en `partida.estado`, aún no hay panel dedicado en PLAY V3 (contrato C2).
+
+
+---
+
+## Nueva partida (jugador) vs taller
+
+- Experiencia jugador: `play.php`. Config `juego_v1`. No usa `playtest_01`.
+- Taller: `play.php?taller=1` enseña +1h / +8h / +1 día / Ir al próximo / UI anterior. Laboratorio 8 vecinos: `play.php?taller=1&lab=1`.
+- `estado.tutorial`: si `activo`, C2 señala `zona` (`buzon` | `vecinos` | `organizar`) con `pista` (copy placeholder). `sugerencia` es un plan que el motor real admite. Al completar, `activo=false` en la misma partida.
+- Organizar: no enviar la misma persona dos veces. `causa` `misma_persona` | `aun_no_se_conocen` | `ya_se_conocen` | `todavia_no`. El motor trae `mensaje_ui` placeholder; C2 puede reescribir voz.
+

@@ -106,6 +106,12 @@ final class PropuestaNivel
     public static function hintPlay(array $partida, string $a, string $b, array $cal = []): string
     {
         $tipos = self::tiposPermitidos($partida, $a, $b, $cal);
+        if ($a === '' || $b === '') {
+            return 'Elige a quién.';
+        }
+        if ($a === $b) {
+            return 'Elige a dos personas distintas.';
+        }
         if ($tipos === [self::PRESENTAR]) {
             return 'Aún no se conocen: solo puedes presentarles.';
         }

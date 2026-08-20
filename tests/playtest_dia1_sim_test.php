@@ -120,7 +120,7 @@ $reloj = new RelojOperations($root, $service->getLogger(), $service->emociones()
 
 $prop = $service->proponerEncuentro($partida, ['per_p001', 'per_p002'], 1, 18, 'conocerse', 'lug_cafeteria');
 ok(isset($prop['ok']), 'propuesta inicial Carmen-José ejecutada');
-$forced = $service->programarEncuentro($partida, ['per_p001', 'per_p002'], 1, 20, 'conocerse', 'lug_cafeteria');
+$forced = $service->programarEncuentro($partida, ['per_p001', 'per_p002'], 1, 19, 'conocerse', 'lug_cafeteria');
 ok(($forced['ok'] ?? false) || !empty($prop['programado']), 'Carmen-José quedan (propuesta o forzado QA)');
 
 $cortes = [1, 3, 7, 14, 30];

@@ -37,7 +37,19 @@ final class EncuentroEngine
         ?string $lugarId = null,
         ?GameLogger $logger = null
     ): array {
-        $participantes = array_values(array_unique(array_filter($participantes)));
+        $crudos = [];
+        foreach ($participantes as $rid) {
+            if (is_string($rid) && $rid !== '') {
+                $crudos[] = $rid;
+            }
+        }
+        $unicos = array_values(array_unique($crudos));
+        if (count($crudos) >= 2 && count($unicos) === 1) {
+            return GameError::respuesta(GameError::MISMA_PERSONA, [
+                'causa' => OrganizarMotivo::MISMA_PERSONA,
+            ]);
+        }
+        $participantes = $unicos;
         $min = $tipo === 'individual' ? 1 : 2;
         if (count($participantes) < $min) {
             return ['ok' => false, 'error' => 'participantes_insuficientes'];
@@ -99,8 +111,27 @@ final class EncuentroEngine
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
 
+        if (!ComplejoCatalog::estaAbierto((string) $lugarId, $hora)) {
+            \aht_log_optional($logger, $partida, 'encuentro_rechazado', [
+                'regla' => 'lugar_cerrado',
+                'lugar' => $lugarId,
+                'hora' => $hora,
+            ]);
+            return array_merge(
+                GameError::respuesta(GameError::LUGAR_CERRADO, ['lugar' => $lugarId, 'hora' => $hora]),
+                ['lugar' => $lugarId, 'hora' => $hora]
+            );
+        }
+
         $attr = LugarAtributos::de($lugarId);
-        $durH = max(1, (int) ($attr['horas'] ?? 1));
+        $rest = ComplejoCatalog::horasRestantesAbiertas((string) $lugarId, $hora);
+        if ($rest < 1) {
+            return array_merge(
+                GameError::respuesta(GameError::LUGAR_CERRADO, ['lugar' => $lugarId, 'hora' => $hora]),
+                ['lugar' => $lugarId, 'hora' => $hora]
+            );
+        }
+        $durH = min(max(1, (int) ($attr['horas'] ?? 1)), $rest);
 
         foreach ($participantes as $rid) {
             $disp = AgendaEngine::estaDisponibleIntervalo($partida, $rid, $dia, $hora, $durH);
@@ -140,7 +171,7 @@ final class EncuentroEngine
             'hora' => $hora,
             'dia' => $dia,
             'actividad' => $actividad,
-            'duracion_minutos' => (int) ($attr['duracion_minutos'] ?? 60),
+            'duracion_minutos' => min((int) ($attr['duracion_minutos'] ?? 60), $durH * 60),
             'duracion_horas' => $durH,
             'estado' => 'programado',
             'reserva_agenda' => ['tipo' => 'encuentro', 'origen' => 'celeste'],

@@ -24,6 +24,8 @@ final class RelojHandler
             'ok' => true,
             'reloj' => $result,
             'resumen_avance' => $result['resumen_avance'] ?? ['lineas' => [], 'total' => 0],
+            'playtest_guia_evento' => $result['playtest_guia_evento'] ?? null,
+            'playtest_guia' => $result['playtest_guia'] ?? null,
         ];
     }
 

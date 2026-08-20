@@ -63,15 +63,7 @@ final class BuzonPlayBridge
         }
         $quien = self::yNombres($nombres);
         if ($evento === DomainEvents::COINCIDENCIA_RESIDENTES) {
-            $lugar = (string) ($envelope['lugar'] ?? $envelope['coincidencia']['lugar'] ?? '');
-            $sitio = $lugar !== '' ? ' en ' . str_replace('lug_', '', $lugar) : '';
-            return [
-                'clasificacion' => BuzonEngine::COTILLEO,
-                'tipo' => 'cotilleo',
-                'texto' => $quien !== '' ? $quien . ' han coincidido' . $sitio . '.' : 'Han coincidido dos residentes.',
-                'origen' => ['evento_id' => null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
-                '_placeholder_contenido' => false,
-            ];
+            return CotilleoNarrativo::mensajeCoincidencia($partida, $envelope, []);
         }
         if ($evento === DomainEvents::ENCUENTRO_TERMINADO) {
             return self::mensajeEncuentroTerminado($partida, $envelope, $quien);
@@ -120,10 +112,13 @@ final class BuzonPlayBridge
             ];
         }
         if ($evento === DomainEvents::DISCUSION) {
+            $lugar = $envelope['lugar_id'] ?? $envelope['lugar'] ?? null;
             return [
                 'clasificacion' => BuzonEngine::COTILLEO,
                 'tipo' => 'discusion',
                 'texto' => $quien !== '' ? $quien . ' se han enfadado.' : 'Ha habido una discusión.',
+                'actores' => self::idsDe($actores),
+                'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
                 'origen' => ['evento_id' => null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
                 '_placeholder_contenido' => false,
             ];
@@ -133,18 +128,21 @@ final class BuzonPlayBridge
             if ($texto === '') {
                 return null;
             }
+            $desde = $envelope['desde'] ?? null;
+            $hacia = $envelope['hacia'] ?? null;
             return [
                 'clasificacion' => BuzonEngine::COTILLEO,
                 'tipo' => 'senal_romantica',
                 'texto' => $texto,
-                'de_persona' => $envelope['desde'] ?? null,
+                'de_persona' => $desde,
+                'actores' => self::idsDe([$desde, $hacia]),
                 'origen' => [
                     'evento_id' => null,
                     'tipo_evento' => $evento,
                     'es_narrativo' => false,
                     'informacion_revelada' => [
-                        'desde' => $envelope['desde'] ?? null,
-                        'hacia' => $envelope['hacia'] ?? null,
+                        'desde' => $desde,
+                        'hacia' => $hacia,
                     ],
                     '_placeholder' => false,
                 ],
@@ -167,14 +165,24 @@ final class BuzonPlayBridge
         if ($res === [] && is_array($enc['resultado'] ?? null)) {
             $res = $enc['resultado'];
         }
+        if (($enc['tipo'] ?? '') === 'individual' && ($enc['intencion'] ?? '') === 'autonomo') {
+            return null;
+        }
         $texto = self::copyEncuentroDigno($partida, $enc, $res, $quien);
         if ($texto === null) {
             return null;
         }
+        $partes = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+        if ($partes === [] && is_array($envelope['actores'] ?? null)) {
+            $partes = $envelope['actores'];
+        }
+        $lugar = $enc['lugar'] ?? $enc['lugar_id'] ?? $envelope['lugar'] ?? $envelope['lugar_id'] ?? null;
         return [
             'clasificacion' => BuzonEngine::COTILLEO,
             'tipo' => 'cotilleo',
             'texto' => $texto,
+            'actores' => self::idsDe($partes),
+            'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
             'origen' => [
                 'evento_id' => $enc['id'] ?? null,
                 'tipo_evento' => DomainEvents::ENCUENTRO_TERMINADO,
@@ -183,6 +191,21 @@ final class BuzonPlayBridge
             ],
             '_placeholder_contenido' => false,
         ];
+    }
+
+    /**
+     * @param array $raw
+     * @return list<string>
+     */
+    private static function idsDe(array $raw): array
+    {
+        $ids = [];
+        foreach ($raw as $id) {
+            if (is_string($id) && $id !== '') {
+                $ids[] = $id;
+            }
+        }
+        return array_values(array_unique($ids));
     }
 
     /**

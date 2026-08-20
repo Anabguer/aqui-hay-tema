@@ -85,6 +85,7 @@ final class EncuentrosHandler
         $b = (string) ($parts[1] ?? '');
         $cal = \AquiHayTema\Engine\CalibracionConfig::load($ctx->root);
         $tipos = \AquiHayTema\Engine\PropuestaNivel::tiposPermitidos($partida, $a, $b, $cal);
+        $motivo = \AquiHayTema\Engine\OrganizarMotivo::de($partida, $a, $b, '', $cal);
         $opciones = [];
         foreach ($tipos as $t) {
             $opciones[] = [
@@ -95,9 +96,14 @@ final class EncuentrosHandler
         }
         return [
             'ok' => true,
-            'conocidos' => $a !== '' && $b !== '' && \AquiHayTema\Engine\RelacionEngine::seConocen($partida, $a, $b),
+            'conocidos' => $a !== '' && $b !== '' && $a !== $b && \AquiHayTema\Engine\RelacionEngine::seConocen($partida, $a, $b),
             'tipos' => $tipos,
             'opciones' => $opciones,
+            'tipo_sugerido' => $motivo['tipo_sugerido'],
+            'causa' => $motivo['codigo'],
+            'mensaje_ui' => \AquiHayTema\Engine\OrganizarMotivo::mensajeUi($motivo['codigo']),
+            'candidatos_a' => \AquiHayTema\Engine\OrganizarMotivo::candidatos($partida, $b),
+            'candidatos_b' => \AquiHayTema\Engine\OrganizarMotivo::candidatos($partida, $a),
             'planes_organizar' => \AquiHayTema\Engine\PropuestaNivel::contratoOrganizar(),
             'hint' => \AquiHayTema\Engine\PropuestaNivel::hintPlay($partida, $a, $b, $cal),
         ];

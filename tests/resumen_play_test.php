@@ -42,7 +42,8 @@ ok(($est['encuentros_hoy'] ?? -1) === 0, 'sin encuentros: encuentros_hoy 0');
 ok(ResumenDia::proximoEncuentro($partida, $service->getCatalog()) === null, 'ResumenDia sin encuentros');
 
 $enc19 = $service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'conocerse');
-$enc21 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad');
+$partida['celeste']['lugares_desbloqueados'][] = 'lug_parque';
+$enc21 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_parque');
 ok(($enc19['ok'] ?? false) && ($enc21['ok'] ?? false), 'dos encuentros programados');
 
 $est = $service->estadoResumido($partida);

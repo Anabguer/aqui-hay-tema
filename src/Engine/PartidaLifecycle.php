@@ -52,6 +52,11 @@ final class PartidaLifecycle
             'actores' => array_keys($partida['residentes']),
         ], $this->logger, 'PartidaLifecycle::nueva');
 
+        TutorialBucle::arrancar($partida, $config);
+        if (PlaytestGuia::activa($partida)) {
+            PlaytestGuia::ensure($partida);
+        }
+
         if (MisionDiariaEngine::activa($partida)) {
             $this->generarMisionesSiToca($partida);
         }
@@ -102,6 +107,7 @@ final class PartidaLifecycle
         SchemaFields::ensure($partida);
         $this->generarMisionesSiToca($partida);
         $this->tickPeticiones($partida);
+        TutorialBucle::arrancar($partida, $config);
         $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
         $this->repo->guardar($partida);
         return $partida;

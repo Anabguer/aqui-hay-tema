@@ -8,13 +8,19 @@ use function AquiHayTema\Api\savePartida;
 
 final class ResidentesHandler
 {
-    public static function ficha(ApiContext $ctx, array $body, array $partida): array
+    public static function ficha(ApiContext $ctx, array $body, array &$partida): array
     {
         $rid = $body['residente_id'] ?? ($_GET['residente_id'] ?? null);
         if (!$rid) {
             return ['ok' => false, 'error' => 'residente_id_requerido'];
         }
-        return ['ok' => true, 'ficha' => $ctx->service->fichaResidente($partida, (string) $rid)];
+        $ficha = $ctx->service->fichaResidente($partida, (string) $rid);
+        $antes = json_encode($partida['tutorial'] ?? null);
+        $tut = \AquiHayTema\Engine\TutorialBucle::registrar($partida, \AquiHayTema\Engine\TutorialBucle::HECHO_VECINO);
+        if ($antes !== json_encode($partida['tutorial'] ?? null)) {
+            savePartida($ctx, $partida);
+        }
+        return ['ok' => true, 'ficha' => $ficha, 'tutorial' => $tut];
     }
 
     public static function placeholder(ApiContext $ctx, array $body, array &$partida): array

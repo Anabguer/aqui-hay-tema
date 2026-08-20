@@ -62,8 +62,21 @@ final class AvanceResumen
             if (!in_array($tipo, self::TIPOS_JUGABLES, true)) {
                 continue;
             }
+            if ($tipo === DomainEvents::ENCUENTRO_INICIADO || $tipo === DomainEvents::ENCUENTRO_TERMINADO) {
+                $despues = is_array($e['despues'] ?? null) ? $e['despues'] : [];
+                $payload = is_array($e['payload'] ?? null) ? $e['payload'] : [];
+                $enc = is_array($despues['encuentro'] ?? null)
+                    ? $despues['encuentro']
+                    : (is_array($payload['encuentro'] ?? null) ? $payload['encuentro'] : []);
+                if (($enc['tipo'] ?? '') === 'individual' && ($enc['intencion'] ?? '') === 'autonomo') {
+                    continue;
+                }
+            }
             if ($tipo === DomainEvents::COINCIDENCIA_RESIDENTES) {
                 $coincidencias++;
+                if (!CotilleoNarrativo::coincidenciaDigna($partida, $e, [])) {
+                    continue;
+                }
                 if ($coincidencias > 2) {
                     continue;
                 }
