@@ -1,0 +1,282 @@
+﻿<timestamp>Friday, Aug 21, 2026, 7:39 PM (UTC+2)</timestamp>
+<user_query>
+g:\Mi unidad\Juegos\Aqui Hay Tema\DOCUMENTO MAESTRO — AQUÍ HAY TEMA.gdoc CAMBIO DE ESTRATEGIA DE TRABAJO.
+
+Te adjunto AHORA el verdadero:
+
+DOCUMENTO_MAESTRO_V3_AQUI_HAY_TEMA.md
+
+La auditoría anterior la hiciste sin poder leerlo completo.
+
+LEE EL ARCHIVO ADJUNTO ENTERO ANTES DE CONTINUAR.
+
+El Documento Maestro adjunto es la FUENTE DE VERDAD DEL PRODUCTO.
+
+No uses como canon ninguna documentación antigua que lo contradiga.
+
+CHECKPOINT ACTUAL:
+cbcb6e6036e00ed5e214ab8d43f8de1988afdb38
+
+RAMA:
+playtest-01-php74
+
+==================================================
+DOS CORRECCIONES OBLIGATORIAS A TU AUDITORÍA
+==================================================
+
+1. PERSONAJES
+
+Interpretaste al revés la parte de personalidad.
+
+NO queremos personalidad social fija por Pxxx.
+
+El Pxxx conserva únicamente la identidad base que corresponda:
+- retrato/token;
+- género;
+- edad;
+- características visuales/base asociadas al asset cuando proceda.
+
+Pero AL ENTRAR EN UNA PARTIDA se genera y persiste para ESA partida, usando los catálogos y reglas canónicas:
+
+- hobby principal;
+- hobbies secundarios;
+- rasgos públicos;
+- posibles rasgos ocultos;
+- estilo social;
+- gustos;
+- preferencias románticas;
+- dealbreakers;
+- coletilla/voz si procede;
+- lugares preferentes;
+- demás atributos sociales definidos en el Maestro.
+
+Debe existir separación conceptual entre:
+
+IDENTIDAD BASE Pxxx
++
+PERSONALIDAD GENERADA DE ESA PARTIDA
++
+RUNTIME EVOLUTIVO
+
+Por tanto NO propongas volver a cargar hobbies/carácter/preferencias fijos desde cada Pxxx.
+
+Audita GeneradorResidente y estructuras relacionadas para comprobar si actualmente hacen esto correctamente, qué catálogos utilizan, cardinalidades, compatibilidades y persistencia.
+
+2. VIVIENDAS / BLOQUES
+
+Tampoco queremos una nueva pantalla “Residencias sin A/B/C”.
+
+CANON:
+
+- máximo 24 vecinos;
+- desaparecen A/B/C del producto;
+- desaparece la imagen de bloques;
+- desaparece la pantalla Residencias;
+- no hay compra ni desbloqueo residencial;
+- no interesa saber quién vive en A/B/C.
+
+El acceso de población es:
+
+CELESTINE APUNTA → VECINOS
+
+Ahí se mostrará la población, por ejemplo:
+
+8 de 24 vecinos
+
+y desde allí se accede al listado y ficha de cada vecino.
+
+CapacidadViviendas, bloque_a/b/c, vivienda_id, etc. pueden mantenerse TEMPORALMENTE por compatibilidad si eliminarlos directamente rompe partidas existentes.
+
+Pero son LEGACY TÉCNICO A MIGRAR, no una funcionalidad que haya que rediseñar.
+
+==================================================
+NUEVA FORMA DE TRABAJO
+==================================================
+
+NO quiero trabajar mediante decenas de micro-pedidos.
+
+Quiero que entiendas TODO el estado actual + TODO el Documento Maestro y prepares UN PLAN COMPLETO DE ALINEACIÓN V3.
+
+Después de que Neni/ChatGPT aprueben ese plan, tú mismo ejecutarás el plan completo manteniendo este mismo agente y contexto.
+
+La ejecución futura será progresiva internamente, pero NO requerirá volver a pedir autorización después de cada pequeña tarea salvo que:
+
+- aparezca una contradicción de producto no resuelta;
+- exista riesgo real de pérdida de datos;
+- una decisión necesaria no esté definida en el Maestro;
+- necesites hacer algo destructivo no previsto.
+
+==================================================
+ÚNICO ARCHIVO QUE PUEDES CREAR AHORA
+==================================================
+
+Puedes crear SOLAMENTE:
+
+docs/PLAN_ALINEACION_V3.md
+
+No modifiques ningún otro archivo todavía.
+
+Ese MD será la hoja de ruta viva del trabajo.
+
+Debe contener:
+
+# 1. ESTADO DE PARTIDA
+- SHA base
+- rama
+- estado Git
+- Documento Maestro utilizado
+- fecha
+
+# 2. CONTRADICCIONES DETECTADAS
+Resumen completo de discrepancias entre el Maestro y el checkpoint actual.
+
+# 3. PLAN COMPLETO DE ALINEACIÓN
+Organizado en fases lógicas y en el orden correcto.
+
+Para CADA tarea del plan incluye:
+
+- [ ] pendiente
+- objetivo
+- archivos o sistemas afectados
+- qué existe actualmente
+- qué debe quedar finalmente
+- dependencias
+- riesgo
+- compatibilidad/persistencia si afecta saves
+- comprobación técnica prevista
+- si necesita revisión visual manual de Neni
+
+No hace falta convertir cada selector CSS en una tarea.
+Agrupa trabajo relacionado de forma inteligente.
+
+# 4. DECISIONES DE PRODUCTO QUE NO SE PUEDEN CAMBIAR
+
+Incluye expresamente, como mínimo:
+
+- sin economía/dinero;
+- Vida del Pueblo sí;
+- 9 lugares definitivos y activos;
+- sin tienda;
+- sin lugares antiguos;
+- mapa canónico actual;
+- máximo 24 vecinos;
+- sin A/B/C en producto;
+- 3 personajes aleatorios iniciales;
+- 5 incorporaciones aleatorias iniciales posteriores;
+- personalidad social generada desde catálogos;
+- identidad Pxxx separada de personalidad;
+- llegadas posteriores cada vez más espaciadas;
+- MENSAJITOS;
+- Celestine apunta → Vecinos;
+- play.php como producto canónico;
+- herramientas dev fuera de la interfaz del jugador.
+
+# 5. LEGACY Y MIGRACIONES
+Lista específica de código/estructuras antiguas que NO deben borrarse a ciegas.
+
+Ejemplos:
+- viviendas/bloques persistidos;
+- saves antiguos;
+- complejos/lugares viejos;
+- economía persistida;
+- configs antiguas;
+- documentación obsoleta.
+
+Para cada uno indica:
+MANTENER TEMPORALMENTE / MIGRAR / RETIRAR CUANDO SEA SEGURO.
+
+# 6. SANEAMIENTO TÉCNICO
+Debe incluir:
+
+- CSS actualmente cargados y estrategia para consolidarlos;
+- NO rediseñar durante la consolidación;
+- UTF-8/mojibake;
+- HTML inválido;
+- SVG corazón;
+- barra/taller mezclada con producto;
+- código muerto;
+- JS del mapa antiguo;
+- documentación antigua que contradice Maestro.
+
+# 7. VALIDACIÓN FINAL PREVISTA
+Qué comprobaciones técnicas deben realizarse al terminar.
+
+IMPORTANTE:
+Neni realiza la validación VISUAL.
+
+No planifiques capturas automáticas ni Browser/Playwright para comprobar estética.
+
+# 8. REGISTRO DE EJECUCIÓN
+Deja preparada una sección que durante la ejecución iremos rellenando así:
+
+- [x] tarea realizada
+- archivos realmente modificados
+- resultado
+- comprobación ejecutada
+- incidencias/desviaciones
+- resolución
+- SHA del checkpoint correspondiente cuando exista
+
+Queremos que este MD termine siendo también la bitácora de lo que realmente se hizo.
+
+==================================================
+AHORRO DE TOKENS / CONTEXTO
+==================================================
+
+NO utilices:
+
+- Browser
+- Playwright
+- screenshots
+- capturas
+- subagentes visuales
+- análisis estético automatizado
+- generación de imágenes
+
+Neni valida visualmente.
+
+No vuelvas a inspeccionar desde cero todo lo que ya auditaste.
+
+Usa tu auditoría anterior y revisa solamente lo necesario después de leer el Documento Maestro real para corregirla y completar el plan.
+
+==================================================
+MUY IMPORTANTE SOBRE LA EJECUCIÓN FUTURA
+==================================================
+
+Todavía NO ejecutes el plan.
+
+Primero quiero aprobar PLAN_ALINEACION_V3.md.
+
+Cuando se autorice posteriormente la ejecución:
+
+- utilizarás este mismo MD como checklist;
+- actualizarás el MD conforme avances;
+- no dejarás tareas hechas sin marcarlas;
+- anotarás desviaciones;
+- harás comprobaciones técnicas razonables;
+- NO harás validación visual automatizada;
+- NO harás deploy salvo autorización;
+- NO cambiarás el diseño aprobado aprovechando un refactor;
+- no borrarás legacy peligroso sin migración;
+- trabajarás sobre play.php real y sus dependencias;
+- no crearás productos paralelos.
+
+==================================================
+ENTREGA DE ESTA PASADA
+==================================================
+
+Al terminar dime:
+
+1. Ruta del plan creado.
+2. Número de fases.
+3. Resumen de las decisiones más importantes del plan.
+4. Riesgos críticos.
+5. Confirma que has leído completo el Documento Maestro adjunto.
+6. Confirma:
+
+“NO HE MODIFICADO CÓDIGO. SOLO HE CREADO EL PLAN MD.”
+
+Y PARA.
+
+No ejecutes el plan hasta autorización de Neni.
+</user_query>
