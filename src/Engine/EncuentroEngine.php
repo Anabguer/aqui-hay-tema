@@ -108,6 +108,9 @@ final class EncuentroEngine
         if (!($ctx['ok'] ?? false)) {
             return $ctx;
         }
+        if (!Reloj::esFuturo($partida['reloj'] ?? [], $dia, $hora)) {
+            return GameError::respuesta(GameError::HORA_PASADA, ['dia' => $dia, 'hora' => $hora]);
+        }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
 

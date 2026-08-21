@@ -1,0 +1,99 @@
+{
+  "canvas_px": [
+    1536,
+    1024
+  ],
+  "origen": "top-left",
+  "fuente": "export manual calibrador — fase3 (2026-08-21)",
+  "meta": {
+    "herramienta": "dev/mapa-calibrador.html",
+    "mapa": "assets/play-v3/mapa_base_rectas.png",
+    "nota": "Valores literales exportados. Geometria maestra FASE 3; fases 1/2 solo cambian estado operativo."
+  },
+  "edificios": {
+    "bar": {
+      "x": 791,
+      "y": 753,
+      "ancho": 215,
+      "alto": 232
+    },
+    "discoteca": {
+      "x": 326,
+      "y": 2,
+      "ancho": 235,
+      "alto": 251
+    },
+    "karaoke": {
+      "x": 547,
+      "y": 3,
+      "ancho": 235,
+      "alto": 256
+    },
+    "cine": {
+      "x": 996,
+      "y": 0,
+      "ancho": 265,
+      "alto": 265
+    },
+    "recreativo": {
+      "x": 1217,
+      "y": 11,
+      "ancho": 235,
+      "alto": 235
+    },
+    "restaurante": {
+      "x": 79,
+      "y": 351,
+      "ancho": 358,
+      "alto": 358
+    },
+    "bingo": {
+      "x": 111,
+      "y": 8,
+      "ancho": 225,
+      "alto": 240
+    },
+    "cafeteria": {
+      "x": 108,
+      "y": 749,
+      "ancho": 255,
+      "alto": 255
+    },
+    "biblioteca": {
+      "x": 320,
+      "y": 742,
+      "ancho": 275,
+      "alto": 275
+    },
+    "tienda": {
+      "x": 553,
+      "y": 743,
+      "ancho": 255,
+      "alto": 255
+    },
+    "gimnasio": {
+      "x": 1013,
+      "y": 767,
+      "ancho": 215,
+      "alto": 222
+    },
+    "spa": {
+      "x": 1223,
+      "y": 766,
+      "ancho": 195,
+      "alto": 219
+    },
+    "picnic": {
+      "x": 1052,
+      "y": 455,
+      "ancho": 245,
+      "alto": 245
+    },
+    "mirador": {
+      "x": 1246,
+      "y": 296,
+      "ancho": 270,
+      "alto": 270
+    }
+  }
+}

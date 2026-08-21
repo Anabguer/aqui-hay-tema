@@ -1,0 +1,51 @@
+﻿{
+  "projectRoot": "W:\\juegos\\aqui-hay-tema",
+  "gitRemote": "origin",
+  "gitRepo": "git@github.com:Anabguer/aqui-hay-tema.git",
+  "defaultBranch": "playtest-01-php74",
+  "credentialsConfig": "W:\\anabel\\deploy\\hostalia.publish.local.json",
+  "winscpLogHint": "W:\\juegos\\deploy\\logs\\deploy-aht-canonical-*.log",
+  "deployDefault": "incremental",
+  "deployTargets": {
+    "playtest": {
+      "branchPattern": "playtest",
+      "script": "W:\\juegos\\deploy\\winscp_put_aqui_hay_tema_playtest.ps1",
+      "remotePath": "/juegos/aqui-hay-tema-playtest",
+      "publicUrl": "https://intocables13.com/juegos/aqui-hay-tema-playtest/play.php",
+      "checkUrl": "https://intocables13.com/juegos/aqui-hay-tema-playtest/play.php"
+    },
+    "canonical": {
+      "script": "W:\\juegos\\deploy\\winscp_put_aqui_hay_tema_canonical.ps1",
+      "remotePath": "/juegos/aqui-hay-tema",
+      "publicUrl": "https://intocables13.com/juegos/aqui-hay-tema/play.php",
+      "checkUrl": "https://intocables13.com/juegos/aqui-hay-tema/play.php",
+      "deployExclusions": [
+        "dev/",
+        "tests/dev/"
+      ],
+      "postDeployWinScpCommands": [
+        "chmod 775 \"/juegos/aqui-hay-tema/data/partidas\""
+      ]
+    },
+    "publicDoor": {
+      "script": "W:\\juegos\\deploy\\winscp_put_aqui_hay_tema_public.ps1",
+      "remotePath": "/juegos/aqui-hay-tema",
+      "publicUrl": "https://intocables13.com/juegos/aqui-hay-tema/",
+      "checkUrl": "https://intocables13.com/juegos/aqui-hay-tema/"
+    }
+  },
+  "deployExclusions": [
+    ".git/",
+    ".cursor/",
+    "public-door/",
+    "logs/",
+    "dev.local.php",
+    "part_*.json",
+    "*.bak",
+    "*.tmp",
+    "*.log",
+    "*.jsonl",
+    "tests/dev/"
+  ],
+  "notes": "DEPLOY_CANONICAL.bat = incremental canonical. DEPLOY_FULL.bat = completo canonical. DEPLOY.bat = playtest (sin cambiar)."
+}

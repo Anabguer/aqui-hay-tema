@@ -11,6 +11,7 @@ final class PropuestaEncuentro
 {
     public const ESTADOS = ['propuesta', 'aceptada', 'rechazada', 'programada', 'caducada'];
     public const CLASE_INDISPONIBILIDAD = 'indisponibilidad';
+    public const CLASE_COOLDOWN = 'cooldown';
     public const CLASE_VOLUNTAD = 'voluntad';
     public const DECISION_PENDIENTE = 'pendiente';
     public const DECISION_ACEPTA = 'acepta';

@@ -1,0 +1,199 @@
+/**
+ * Capa MENSAJITOS (ex buzon) — solo esta capa.
+ */
+
+.play-v3 .capa-buzon .mensajitos-tit {
+  font-family: Caveat, cursive;
+  font-size: 1.55rem;
+  font-weight: 700;
+  margin: .35rem 0 1.1rem;
+  padding-right: 2.5rem;
+  letter-spacing: .02em;
+  color: #2c261f;
+}
+
+.play-v3 .capa-buzon > .mini {
+  display: none !important;
+}
+
+.play-v3 .capa-buzon [data-buzon-list] {
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  overflow-x: clip;
+  overflow-y: auto;
+  max-height: calc(88vh - 120px);
+  padding-top: .15rem;
+}
+
+.play-v3 .capa-buzon .mensajitos-seccion {
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.play-v3 .capa-buzon .mensajitos-seccion + .mensajitos-seccion {
+  margin-top: .85rem;
+  padding-top: .65rem;
+  border-top: 1px dashed rgba(120, 96, 72, .22);
+}
+
+.play-v3 .capa-buzon .mensajitos-seccion-tit {
+  margin: 0 0 .15rem;
+  font-size: .58rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a7a66;
+}
+
+.play-v3 .capa-buzon .carta-msg {
+  display: block !important;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: .62rem .55rem .58rem !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  transform: none !important;
+  background: #fffdf8;
+  box-shadow: 0 1px 0 rgba(44, 38, 31, .08);
+  position: relative;
+  cursor: default;
+}
+
+.play-v3 .capa-buzon .carta-msg.no-leida {
+  margin: 0 !important;
+  padding-left: .55rem !important;
+  padding-right: .55rem !important;
+  background: rgba(255, 246, 220, .45);
+}
+
+.play-v3 .capa-buzon .carta-msg.importante,
+.play-v3 .capa-buzon .carta-msg.carta-accion {
+  background: #fffef8;
+  box-shadow: inset 3px 0 0 #c9a87a, 0 1px 0 rgba(44, 38, 31, .06) !important;
+}
+
+.play-v3 .capa-buzon .carta-msg.carta-info {
+  background: #fffdf9;
+  box-shadow: inset 3px 0 0 rgba(180, 150, 110, .35), 0 1px 0 rgba(44, 38, 31, .05);
+}
+
+.play-v3 .capa-buzon .lacre,
+.play-v3 .capa-buzon .chincheta-carta {
+  display: none !important;
+}
+
+.play-v3 .capa-buzon .carta-inner {
+  display: flex !important;
+  align-items: flex-start;
+  gap: .65rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.play-v3 .capa-buzon .carta-avatar,
+.play-v3 .capa-buzon .carta-avatar.cara-ini {
+  flex: 0 0 44px;
+  width: 44px;
+  height: 44px;
+  max-width: 44px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(40, 28, 16, .12);
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: .85rem;
+  background: #f3e6cc;
+}
+
+.play-v3 .capa-buzon .carta-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.play-v3 .capa-buzon .carta-msg .de {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 700;
+  font-size: .92rem;
+  line-height: 1.25;
+  margin-bottom: .12rem;
+}
+
+.play-v3 .capa-buzon .carta-msg .cuerpo {
+  font-family: Fraunces, Georgia, serif;
+  font-size: .9rem;
+  font-style: italic;
+  line-height: 1.38;
+  margin: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.play-v3 .capa-buzon .carta-msg.carta-info .cuerpo {
+  font-size: .88rem;
+  color: #4a4038;
+}
+
+.play-v3 .capa-buzon .carta-msg .plazo,
+.play-v3 .capa-buzon .carta-msg .sello-estado {
+  font-size: .76rem;
+  font-weight: 800;
+  margin-top: .28rem;
+  color: #8a4a18;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.play-v3 .capa-buzon .acciones-msg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  margin-top: .45rem;
+  max-width: 100%;
+}
+
+.play-v3 .capa-buzon .acciones-msg button {
+  border: 2px solid #2c261f;
+  background: #fff6c8;
+  font: inherit;
+  font-weight: 800;
+  font-size: .72rem;
+  padding: .28rem .5rem;
+  cursor: pointer;
+  transform: rotate(-.4deg);
+  max-width: 100%;
+  white-space: normal;
+  text-align: left;
+}
+
+.play-v3 .capa-buzon .acciones-msg button.btn-suave {
+  background: #fffdf6;
+  border-color: #a89888;
+  font-weight: 700;
+}
+
+.play-v3 .capa-buzon .lista-vacia {
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .9rem;
+  color: #6a5848;
+  margin: .25rem 0 0;
+}

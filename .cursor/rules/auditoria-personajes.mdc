@@ -1,16 +1,34 @@
 ---
-description: Auditoría obligatoria de fichas. Neni solo ve 2–3 pilotos. Nadie es final sin checklist.
+description: Reglas obligatorias para crear, modificar, revisar o auditar personajes de Aquí Hay Tema. Aplicar solo al sistema, fichas y documentación de personajes.
 globs: data/personajes/**,docs/FASE_DISENO_POOL_16.md,docs/CHECKLIST_AUDITORIA_PERSONAJES.md,docs/VALIDACION_GRAFO_ROMANTICO.md,docs/SISTEMA_PERSONAJES.md
 alwaysApply: false
 ---
 
 # Auditoría de personajes (Aquí Hay Tema)
 
-- **No crear los 16** hasta que Neni apruebe el tono de 2–3 `piloto: true`.
-- Nadie es **final** sin `docs/CHECKLIST_AUDITORIA_PERSONAJES.md`.
-- `estado_ficha`: `borrador` → `revision` → `aprobado`. `aprobado` exige nivel 1 completo (recíproco comprobable).
-- Pool: `estado_pool` `borrador` → `auditoria_global` → `aprobado`.
-- Tres pasos: Cursor (estructura/reglas) → ChatGPT (narrativa) → nivel 2 del pool.
-- Fallo de **identidad**: no corregir en silencio; informar y proponer. Fallo de **formato**: sí corregir y anotar una línea en `docs/REGISTRO_AUDITORIA_PERSONAJES.md`.
-- Las últimas fichas (L03–L06) se auditan **igual** que los pilotos.
-- No volcar el roster no-piloto en docs que Neni lea antes de jugar.
+Aplica esta regla únicamente cuando la tarea afecte a personajes, fichas, pool de personajes, relaciones románticas o a los documentos incluidos en los globs.
+
+- **No crear los 16 personajes** hasta que Neni apruebe el tono de 2–3 `piloto: true`.
+
+- Ningún personaje es **final** sin cumplir `docs/CHECKLIST_AUDITORIA_PERSONAJES.md`.
+
+- Flujo de `estado_ficha`:
+  `borrador` → `revision` → `aprobado`.
+
+- `aprobado` exige nivel 1 completo y recíproco comprobable.
+
+- Flujo de `estado_pool`:
+  `borrador` → `auditoria_global` → `aprobado`.
+
+- Auditoría en tres pasos:
+  1. Cursor: estructura y reglas.
+  2. ChatGPT: narrativa.
+  3. Nivel 2 del pool.
+
+- Si existe un fallo de **identidad**, no corregirlo silenciosamente: informar y proponer la corrección.
+
+- Si existe un fallo de **formato**, corregirlo y anotar una línea en `docs/REGISTRO_AUDITORIA_PERSONAJES.md`.
+
+- Las últimas fichas (`L03`–`L06`) se auditan con los mismos criterios que los pilotos.
+
+- No mostrar ni volcar el roster no-piloto en documentación que Neni pueda leer antes de jugar.

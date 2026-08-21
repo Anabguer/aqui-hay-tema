@@ -1,23 +1,44 @@
 ---
-description: Entrega a GitHub por bloque funcional. Sin push no hay entrega.
-alwaysApply: true
+description: Reglas de entrega a GitHub cuando se completa o entrega un bloque funcional, se hace commit/push o se prepara trabajo para revisión.
+alwaysApply: false
 ---
 
 # Entrega a GitHub (Aquí Hay Tema)
 
+Aplica esta regla cuando:
+- se complete un bloque funcional;
+- se vaya a hacer commit o push;
+- se prepare una entrega;
+- se solicite dejar el trabajo terminado en GitHub;
+- o se prepare un commit para revisión de ChatGPT.
+
 Un bloque funcional no está entregado hasta que su commit está en GitHub (`origin`).
 
-Al terminar cada bloque:
+Al terminar cada bloque funcional:
 
-1. Suite en verde (`php tests/run_all.php`, o el recorte del bloque si la suite completa no aplica).
-2. Un commit propio y descriptivo. No mezclar hilos ni proyectos.
-3. `git push` de esa rama (y tag de staging si el bloque lo crea/actualiza).
+1. Ejecutar los tests correspondientes.
+   - `php tests/run_all.php` cuando aplique.
+   - Si la suite completa no corresponde al bloque, ejecutar únicamente las pruebas necesarias.
+
+2. Crear un commit propio y descriptivo.
+   - No mezclar hilos.
+   - No mezclar proyectos.
+   - No incluir cambios ajenos al bloque.
+
+3. Hacer `git push` de la rama correspondiente.
+   - Incluir el tag de staging únicamente si ese bloque lo crea o actualiza.
+
 4. Devolver a Neni:
-   - hash del commit
-   - mensaje del commit
-   - tests ejecutados
-   - archivos principales tocados
-   - cualquier `BLOQUEADO_DECISION` (o ninguno)
-5. Si ChatGPT debe aprobar, el diff a revisar es el de ese commit en GitHub.
+   - hash del commit;
+   - mensaje del commit;
+   - tests ejecutados;
+   - archivos principales modificados;
+   - cualquier `BLOQUEADO_DECISION`, o indicar que no existe ninguno.
 
-No hacer push de `master` sucio ni de cambios de otro hilo. No force-push a `main`/`master`.
+5. Si ChatGPT debe aprobar el trabajo, el diff que debe revisarse es el correspondiente a ese commit en GitHub.
+
+## Seguridad Git
+
+- No hacer push de `master` sucio.
+- No incluir cambios pertenecientes a otro hilo.
+- No hacer force-push a `main` ni `master`.

@@ -50,6 +50,9 @@ final class PropuestaEncuentroEngine
         }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
+        if (!Reloj::esFuturo($partida['reloj'] ?? [], $dia, $hora)) {
+            return GameError::respuesta(GameError::HORA_PASADA, ['dia' => $dia, 'hora' => $hora]);
+        }
         $tipo = PropuestaNivel::aliasTipo($tipo);
         $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
         if (count($participantes) >= 2
@@ -297,13 +300,10 @@ final class PropuestaEncuentroEngine
         $partida['propuestas_encuentro'][$idx] = $prop;
 
         if (($prop['estado'] ?? '') === 'rechazada') {
-            $clase = self::claseRechazo($prop);
-            $codigo = $clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
-                ? GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD
-                : GameError::ENCUENTRO_RECHAZADO_VOLUNTAD;
-            return array_merge(self::respuestaPropuesta($prop), GameError::respuesta($codigo, [
+            $out = self::respuestaPropuesta($prop);
+            return array_merge($out, GameError::respuesta(self::codigoRechazo($out['rechazo_clase'] ?? null), [
                 'propuesta_id' => $propuestaId,
-                'rechazo_clase' => $clase,
+                'rechazo_clase' => $out['rechazo_clase'] ?? null,
             ]));
         }
         if (($prop['estado'] ?? '') !== 'aceptada') {
@@ -619,10 +619,15 @@ final class PropuestaEncuentroEngine
     private static function claseRechazo(array $propuesta): ?string
     {
         foreach ($propuesta['reacciones'] ?? [] as $r) {
-            if (($r['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA) {
-                if (($r['clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
-                    return PropuestaEncuentro::CLASE_INDISPONIBILIDAD;
-                }
+            if (($r['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            $clase = (string) ($r['clase'] ?? '');
+            if ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
+                return PropuestaEncuentro::CLASE_INDISPONIBILIDAD;
+            }
+            if ($clase === PropuestaEncuentro::CLASE_COOLDOWN) {
+                return PropuestaEncuentro::CLASE_COOLDOWN;
             }
         }
         foreach ($propuesta['reacciones'] ?? [] as $r) {
@@ -631,6 +636,17 @@ final class PropuestaEncuentroEngine
             }
         }
         return null;
+    }
+
+    private static function codigoRechazo(?string $clase): string
+    {
+        if ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
+            return GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD;
+        }
+        if ($clase === PropuestaEncuentro::CLASE_COOLDOWN) {
+            return GameError::ENCUENTRO_RECHAZADO_COOLDOWN;
+        }
+        return GameError::ENCUENTRO_RECHAZADO_VOLUNTAD;
     }
 
     /** @return array<string, mixed> */
@@ -649,8 +665,8 @@ final class PropuestaEncuentroEngine
         if ($rechazada && $clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
             $out['error'] = GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD;
             $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
-        } elseif ($rechazada && $clase === PropuestaEncuentro::CLASE_VOLUNTAD) {
-            $out['error'] = GameError::ENCUENTRO_RECHAZADO_VOLUNTAD;
+        } elseif ($rechazada && in_array($clase, [PropuestaEncuentro::CLASE_VOLUNTAD, PropuestaEncuentro::CLASE_COOLDOWN], true)) {
+            $out['error'] = self::codigoRechazo($clase);
             $hablante = self::rechazoHablante($propuesta);
             $copyId = $hablante['copy_id'];
             $nombre = $hablante['nombre'] !== '' ? $hablante['nombre'] : 'Alguien';

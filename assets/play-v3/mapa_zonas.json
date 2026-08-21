@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "herramienta": "dev/mapa-zonas-calibrador.html",
+    "mapa": "assets/play-v3/mapa_canonico.jpg",
+    "overlay_obras": "assets/play-v3/overlay_en_obras.png",
+    "unidad": "porcentaje",
+    "mapa_px": [
+      1024,
+      682
+    ]
+  },
+  "zonas": {
+    "cafeteria": {
+      "x": 14.7,
+      "y": 7.54,
+      "w": 19.25,
+      "h": 23.46,
+      "label": "Cafetería"
+    },
+    "biblioteca": {
+      "x": 39.96,
+      "y": 9.43,
+      "w": 19.67,
+      "h": 21.16,
+      "label": "Biblioteca"
+    },
+    "gimnasio": {
+      "x": 68.14,
+      "y": 8.38,
+      "w": 18.69,
+      "h": 21.58,
+      "label": "Gimnasio"
+    },
+    "restaurante": {
+      "x": 12.33,
+      "y": 37.91,
+      "w": 20.37,
+      "h": 22.2,
+      "label": "Restaurante"
+    },
+    "parque": {
+      "x": 38.7,
+      "y": 37.29,
+      "w": 22.74,
+      "h": 21.99,
+      "label": "Parque"
+    },
+    "bar": {
+      "x": 67.72,
+      "y": 38.75,
+      "w": 20.51,
+      "h": 21.16,
+      "label": "Bar"
+    },
+    "cine": {
+      "x": 13.45,
+      "y": 68.08,
+      "w": 18.69,
+      "h": 22.62,
+      "label": "Cine"
+    },
+    "discoteca": {
+      "x": 39.4,
+      "y": 67.24,
+      "w": 22.18,
+      "h": 23.04,
+      "label": "Discoteca"
+    },
+    "bingo": {
+      "x": 68.69,
+      "y": 67.03,
+      "w": 19.95,
+      "h": 23.67,
+      "label": "Bingo"
+    }
+  }
+}

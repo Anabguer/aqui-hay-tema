@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Calibrador zonas mapa — Aquí Hay Tema (dev)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font: 13px/1.35 Consolas, "Segoe UI", sans-serif;
+      background: #2a2620; color: #f5f0e6;
+      display: grid; grid-template-rows: auto 1fr; height: 100vh;
+    }
+    header {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 8px 10px; background: #1e1b17; border-bottom: 1px solid #4a4338;
+    }
+    header h1 { margin: 0; font-size: 14px; font-weight: 700; margin-right: 8px; }
+    header button, header label {
+      background: #3d362c; color: inherit; border: 1px solid #6b6154;
+      padding: 5px 10px; cursor: pointer; border-radius: 3px;
+    }
+    header button:hover { background: #524a3e; }
+    header button.is-on { background: #7a4a2a; border-color: #c98a4a; }
+    header .sep { width: 1px; height: 22px; background: #4a4338; margin: 0 4px; }
+    main { display: grid; grid-template-columns: 220px 1fr 340px; min-height: 0; }
+    .zonas-list {
+      overflow: auto; padding: 10px; background: #1e1b17;
+      border-right: 1px solid #4a4338;
+    }
+    .zonas-list h2 { margin: 0 0 8px; font-size: 13px; }
+    .zona-btn {
+      display: block; width: 100%; text-align: left;
+      margin-bottom: 6px; padding: 8px 10px;
+      border: 1px solid #3d362c; border-radius: 4px;
+      background: #242018; color: inherit; cursor: pointer;
+      border-left: 4px solid var(--c, #888);
+    }
+    .zona-btn.is-active { border-color: #c98a4a; background: #2a2418; }
+    .zona-btn small { display: block; color: #9a8f7e; font-size: 10px; margin-top: 2px; }
+    .viewport {
+      overflow: auto; padding: 12px; background: #111;
+      display: flex; justify-content: center; align-items: flex-start;
+    }
+    .stage-wrap { transform-origin: top center; }
+    .stage {
+      position: relative; width: 1024px; height: 682px;
+      background: #444 center / contain no-repeat;
+      box-shadow: 0 0 0 2px #555;
+      user-select: none; touch-action: none;
+    }
+    .stage img.mapa-bg {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      pointer-events: none; display: block;
+    }
+    .zones-layer { position: absolute; inset: 0; }
+    .zona-rect {
+      position: absolute; border: 2px solid var(--c, #ffdc50);
+      background: color-mix(in srgb, var(--c, #ffdc50) 18%, transparent);
+      cursor: move; min-width: 8px; min-height: 8px;
+    }
+    .zona-rect:not(.is-active) { opacity: .45; }
+    .zona-rect.is-active { opacity: 1; z-index: 5; box-shadow: 0 0 0 1px rgba(0,0,0,.35); }
+    .zona-rect .lbl {
+      position: absolute; top: 2px; left: 4px;
+      font-size: 10px; font-weight: 700; color: #fff;
+      text-shadow: 0 1px 2px rgba(0,0,0,.85); pointer-events: none;
+    }
+    .zona-rect .handle {
+      position: absolute; width: 10px; height: 10px;
+      background: #fff; border: 2px solid #222; border-radius: 2px;
+      z-index: 2;
+    }
+    .zona-rect .handle.nw { top: -6px; left: -6px; cursor: nwse-resize; }
+    .zona-rect .handle.ne { top: -6px; right: -6px; cursor: nesw-resize; }
+    .zona-rect .handle.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+    .zona-rect .handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+    .zona-rect .handle.n { top: -6px; left: 50%; margin-left: -5px; cursor: ns-resize; }
+    .zona-rect .handle.s { bottom: -6px; left: 50%; margin-left: -5px; cursor: ns-resize; }
+    .zona-rect .handle.w { left: -6px; top: 50%; margin-top: -5px; cursor: ew-resize; }
+    .zona-rect .handle.e { right: -6px; top: 50%; margin-top: -5px; cursor: ew-resize; }
+    .zona-rect .obras-preview {
+      position: absolute; inset: 0; display: flex;
+      align-items: center; justify-content: center;
+      pointer-events: none; padding: 6%;
+    }
+    .zona-rect .obras-preview img {
+      max-width: 88%; max-height: 88%; width: auto; height: auto;
+      object-fit: contain; opacity: .95;
+    }
+    .draw-preview {
+      position: absolute; border: 2px dashed #fff;
+      background: rgba(255,255,255,.12); pointer-events: none; z-index: 20;
+    }
+    aside {
+      overflow: auto; padding: 10px; background: #242018;
+      border-left: 1px solid #4a4338;
+    }
+    aside h2 { margin: 0 0 8px; font-size: 13px; }
+    .info { color: #b8aa96; font-size: 12px; margin-bottom: 10px; }
+    .ctrl { display: grid; grid-template-columns: 72px 1fr 36px; gap: 4px; align-items: center; margin: 5px 0; }
+    .ctrl label { grid-column: 1 / -1; color: #9a8f7e; font-size: 11px; }
+    .ctrl input[type=number] {
+      width: 100%; padding: 4px; background: #111; color: #cfc;
+      border: 1px solid #4a4338; font: inherit;
+    }
+    .ctrl button {
+      padding: 4px; background: #3d362c; border: 1px solid #6b6154; color: inherit; cursor: pointer;
+    }
+    .row-btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
+    .row-btns button { flex: 1 1 auto; min-width: 90px; }
+    .export-box { margin-top: 12px; padding-top: 10px; border-top: 1px solid #4a4338; }
+    .export-box textarea {
+      width: 100%; height: 200px; font: 11px/1.3 Consolas, monospace;
+      background: #111; color: #cfc; border: 1px solid #4a4338; padding: 6px;
+    }
+    .export-box button { margin-top: 6px; width: 100%; padding: 8px; }
+    .hint { font-size: 11px; color: #8a8070; margin-top: 8px; line-height: 1.45; }
+    #toast {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      background: #2d5a2d; padding: 8px 16px; border-radius: 4px; display: none; z-index: 99;
+    }
+    #toast.is-on { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Calibrador zonas (mapa único)</h1>
+    <button type="button" id="btn-zoom-out">− zoom</button>
+    <button type="button" id="btn-zoom-in">+ zoom</button>
+    <span id="zoom-label">70%</span>
+    <span class="sep"></span>
+    <button type="button" id="btn-all-zones" class="is-on">Ver todas</button>
+    <button type="button" id="btn-obras">Preview EN OBRAS</button>
+    <span class="sep"></span>
+    <button type="button" id="btn-export">EXPORTAR JSON</button>
+    <button type="button" id="btn-copy">COPIAR JSON</button>
+    <button type="button" id="btn-clear-zone">Borrar zona</button>
+  </header>
+  <main>
+    <div class="zonas-list" id="zonas-list">
+      <h2>Zonas (9)</h2>
+    </div>
+    <div class="viewport" id="viewport">
+      <div class="stage-wrap" id="stage-wrap">
+        <div class="stage" id="stage">
+          <img class="mapa-bg" id="mapa-bg" src="../assets/play-v3/mapa_canonico.jpg" alt="Mapa canónico" width="1024" height="682"/>
+          <div class="zones-layer" id="zones-layer"></div>
+        </div>
+      </div>
+    </div>
+    <aside>
+      <h2 id="sel-title">Zona seleccionada</h2>
+      <p class="info" id="sel-info">Elige una zona a la izquierda. Arrastra en el mapa para dibujar su área.</p>
+      <div id="controls"></div>
+      <div class="row-btns">
+        <button type="button" id="btn-nudge-up">↑ 0.5%</button>
+        <button type="button" id="btn-nudge-down">↓ 0.5%</button>
+        <button type="button" id="btn-nudge-left">← 0.5%</button>
+        <button type="button" id="btn-nudge-right">→ 0.5%</button>
+      </div>
+      <div class="export-box">
+        <label for="export-out">Salida JSON (porcentajes)</label>
+        <textarea id="export-out" readonly spellcheck="false"></textarea>
+        <button type="button" id="btn-download">Descargar mapa_zonas.json</button>
+        <p class="hint">
+          Coordenadas en % relativas al tamaño de la imagen (origen arriba-izquierda).<br/>
+          Arrastra vacío = dibujar · arrastra rectángulo = mover · asas = redimensionar.<br/>
+          Calibrador anterior (14 PNG): <code>dev/mapa-calibrador.html</code>
+        </p>
+      </div>
+    </aside>
+  </main>
+  <div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var MAP_W = 1024;
+  var MAP_H = 682;
+  var MAP_URL = '../assets/play-v3/mapa_canonico.jpg';
+  var OBRAS_URL = '../assets/play-v3/overlay_en_obras.png';
+  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v1';
+  var MIN_PCT = 0.5;
+
+  var ZONAS = [
+    { id: 'cafeteria', label: 'Cafetería', color: '#e8a030' },
+    { id: 'biblioteca', label: 'Biblioteca', color: '#5080c0' },
+    { id: 'gimnasio', label: 'Gimnasio', color: '#40a0a0' },
+    { id: 'restaurante', label: 'Restaurante', color: '#d08040' },
+    { id: 'parque', label: 'Parque', color: '#60a840' },
+    { id: 'bar', label: 'Bar', color: '#8a5030' },
+    { id: 'cine', label: 'Cine', color: '#9060a0' },
+    { id: 'discoteca', label: 'Discoteca', color: '#c040a0' },
+    { id: 'bingo', label: 'Bingo', color: '#b09030' }
+  ];
+
+  var state = {
+    selected: 'cafeteria',
+    zoom: 0.7,
+    showAll: true,
+    showObras: false,
+    zonas: {}
+  };
+
+  var stage = document.getElementById('stage');
+  var zonesLayer = document.getElementById('zones-layer');
+  var stageWrap = document.getElementById('stage-wrap');
+  var zonasList = document.getElementById('zonas-list');
+  var controlsEl = document.getElementById('controls');
+  var exportOut = document.getElementById('export-out');
+
+  var interaction = { mode: null, id: null, handle: null, sx: 0, sy: 0, start: null, orig: null };
+  var drawPreview = null;
+
+  ZONAS.forEach(function (z) {
+    state.zonas[z.id] = { x: 0, y: 0, w: 0, h: 0 };
+  });
+
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove('is-on'); }, 1800);
+  }
+
+  function roundPct(n) {
+    return Math.round(n * 100) / 100;
+  }
+
+  function pctToPx(z) {
+    return {
+      left: (z.x / 100) * MAP_W,
+      top: (z.y / 100) * MAP_H,
+      width: (z.w / 100) * MAP_W,
+      height: (z.h / 100) * MAP_H
+    };
+  }
+
+  function pxToPct(left, top, width, height) {
+    return {
+      x: roundPct((left / MAP_W) * 100),
+      y: roundPct((top / MAP_H) * 100),
+      w: roundPct((width / MAP_W) * 100),
+      h: roundPct((height / MAP_H) * 100)
+    };
+  }
+
+  function clampRect(p) {
+    var x = Math.max(0, Math.min(100 - MIN_PCT, p.x));
+    var y = Math.max(0, Math.min(100 - MIN_PCT, p.y));
+    var w = Math.max(MIN_PCT, Math.min(100 - x, p.w));
+    var h = Math.max(MIN_PCT, Math.min(100 - y, p.h));
+    return { x: x, y: y, w: w, h: h };
+  }
+
+  function zonaMeta(id) {
+    for (var i = 0; i < ZONAS.length; i++) {
+      if (ZONAS[i].id === id) return ZONAS[i];
+    }
+    return { id: id, label: id, color: '#888' };
+  }
+
+  function getZ(id) {
+    return state.zonas[id];
+  }
+
+  function setZ(id, patch) {
+    var z = state.zonas[id];
+    var next = clampRect({
+      x: patch.x !== undefined ? patch.x : z.x,
+      y: patch.y !== undefined ? patch.y : z.y,
+      w: patch.w !== undefined ? patch.w : z.w,
+      h: patch.h !== undefined ? patch.h : z.h
+    });
+    z.x = next.x; z.y = next.y; z.w = next.w; z.h = next.h;
+    saveLocal();
+    renderZones();
+    renderControls();
+    updateExportPreview();
+    renderZonaButtons();
+  }
+
+  function saveLocal() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ zonas: state.zonas })); } catch (e) { /* ignore */ }
+  }
+
+  function loadLocal() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var parsed = JSON.parse(raw);
+      if (parsed.zonas) {
+        Object.keys(parsed.zonas).forEach(function (id) {
+          if (state.zonas[id]) state.zonas[id] = clampRect(parsed.zonas[id]);
+        });
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function stageScale() { return state.zoom; }
+
+  function stagePoint(ev) {
+    var rect = stage.getBoundingClientRect();
+    var s = stageScale();
+    return {
+      x: (ev.clientX - rect.left) / s,
+      y: (ev.clientY - rect.top) / s
+    };
+  }
+
+  function renderZonaButtons() {
+    var html = '<h2>Zonas (9)</h2>';
+    ZONAS.forEach(function (z) {
+      var cfg = getZ(z.id);
+      var ok = cfg.w > 0 && cfg.h > 0;
+      html += '<button type="button" class="zona-btn' + (state.selected === z.id ? ' is-active' : '') +
+        '" data-z="' + z.id + '" style="--c:' + z.color + '">' +
+        z.label + '<small>' + (ok ? (cfg.x + ', ' + cfg.y + ' · ' + cfg.w + '×' + cfg.h + '%') : 'sin marcar') +
+        '</small></button>';
+    });
+    zonasList.innerHTML = html;
+    zonasList.querySelectorAll('[data-z]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        state.selected = btn.getAttribute('data-z');
+        renderZones();
+        renderControls();
+        renderZonaButtons();
+      });
+    });
+  }
+
+  function renderZones() {
+    zonesLayer.innerHTML = '';
+    ZONAS.forEach(function (meta) {
+      var z = getZ(meta.id);
+      if (z.w <= 0 || z.h <= 0) return;
+      if (!state.showAll && meta.id !== state.selected) return;
+      var px = pctToPx(z);
+      var el = document.createElement('div');
+      el.className = 'zona-rect' + (meta.id === state.selected ? ' is-active' : '');
+      el.style.setProperty('--c', meta.color);
+      el.style.left = px.left + 'px';
+      el.style.top = px.top + 'px';
+      el.style.width = px.width + 'px';
+      el.style.height = px.height + 'px';
+      el.setAttribute('data-z', meta.id);
+      el.innerHTML = '<span class="lbl">' + meta.label + '</span>';
+      if (state.showObras && meta.id === state.selected) {
+        el.innerHTML += '<div class="obras-preview"><img src="' + OBRAS_URL + '" alt="EN OBRAS"/></div>';
+      }
+      if (meta.id === state.selected) {
+        ['nw','n','ne','e','se','s','sw','w'].forEach(function (h) {
+          var hd = document.createElement('span');
+          hd.className = 'handle ' + h;
+          hd.setAttribute('data-handle', h);
+          el.appendChild(hd);
+        });
+      }
+      zonesLayer.appendChild(el);
+    });
+  }
+
+  function renderControls() {
+    var meta = zonaMeta(state.selected);
+    var z = getZ(state.selected);
+    document.getElementById('sel-title').textContent = meta.label + ' (' + meta.id + ')';
+    document.getElementById('sel-info').textContent =
+      (z.w > 0 ? 'Área marcada. Arrastra para mover o usa las asas.' : 'Sin área: clic y arrastra en el mapa para dibujar.');
+    controlsEl.innerHTML =
+      numRow('X (%)', 'x', z.x) +
+      numRow('Y (%)', 'y', z.y) +
+      numRow('Ancho (%)', 'w', z.w) +
+      numRow('Alto (%)', 'h', z.h);
+    controlsEl.querySelectorAll('input[data-k]').forEach(function (inp) {
+      inp.addEventListener('change', function () {
+        var patch = {};
+        patch[inp.getAttribute('data-k')] = Number(inp.value);
+        setZ(state.selected, patch);
+      });
+    });
+  }
+
+  function numRow(label, key, val) {
+    return '<div class="ctrl"><label>' + label + '</label>' +
+      '<span></span><input type="number" step="0.01" min="0" max="100" data-k="' + key + '" value="' + val + '"/><span></span></div>';
+  }
+
+  function buildExport() {
+    var out = {
+      meta: {
+        herramienta: 'dev/mapa-zonas-calibrador.html',
+        mapa: 'assets/play-v3/mapa_canonico.jpg',
+        overlay_obras: 'assets/play-v3/overlay_en_obras.png',
+        unidad: 'porcentaje',
+        mapa_px: [MAP_W, MAP_H]
+      },
+      zonas: {}
+    };
+    ZONAS.forEach(function (meta) {
+      var z = getZ(meta.id);
+      out.zonas[meta.id] = {
+        x: z.x, y: z.y, w: z.w, h: z.h,
+        label: meta.label
+      };
+    });
+    return out;
+  }
+
+  function updateExportPreview() {
+    exportOut.value = JSON.stringify(buildExport(), null, 2);
+  }
+
+  function copyExport() {
+    exportOut.select();
+    exportOut.setSelectionRange(0, exportOut.value.length);
+    navigator.clipboard.writeText(exportOut.value).then(function () {
+      toast('JSON copiado al portapapeles');
+    }).catch(function () {
+      document.execCommand('copy');
+      toast('JSON copiado');
+    });
+  }
+
+  function downloadExport() {
+    var blob = new Blob([exportOut.value], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'mapa_zonas.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    toast('Descarga iniciada');
+  }
+
+  function applyZoom() {
+    stageWrap.style.transform = 'scale(' + state.zoom + ')';
+    document.getElementById('zoom-label').textContent = Math.round(state.zoom * 100) + '%';
+  }
+
+  function clearDrawPreview() {
+    if (drawPreview && drawPreview.parentNode) drawPreview.parentNode.removeChild(drawPreview);
+    drawPreview = null;
+  }
+
+  function onPointerDown(ev) {
+    if (ev.button !== 0) return;
+    var t = ev.target;
+    var handle = t.closest('[data-handle]');
+    var rect = t.closest('.zona-rect');
+    var pt = stagePoint(ev);
+
+    if (handle && rect) {
+      interaction.mode = 'resize';
+      interaction.id = rect.getAttribute('data-z');
+      interaction.handle = handle.getAttribute('data-handle');
+      interaction.sx = pt.x;
+      interaction.sy = pt.y;
+      interaction.orig = Object.assign({}, getZ(interaction.id));
+      ev.preventDefault();
+      return;
+    }
+    if (rect) {
+      interaction.mode = 'move';
+      interaction.id = rect.getAttribute('data-z');
+      state.selected = interaction.id;
+      interaction.sx = pt.x;
+      interaction.sy = pt.y;
+      interaction.orig = Object.assign({}, getZ(interaction.id));
+      renderZones();
+      renderControls();
+      renderZonaButtons();
+      ev.preventDefault();
+      return;
+    }
+    if (t.closest('.stage') || t === stage || t.id === 'mapa-bg') {
+      interaction.mode = 'draw';
+      interaction.id = state.selected;
+      interaction.sx = pt.x;
+      interaction.sy = pt.y;
+      interaction.start = { x: pt.x, y: pt.y };
+      clearDrawPreview();
+      drawPreview = document.createElement('div');
+      drawPreview.className = 'draw-preview';
+      zonesLayer.appendChild(drawPreview);
+      ev.preventDefault();
+    }
+  }
+
+  function onPointerMove(ev) {
+    var pt = stagePoint(ev);
+    if (interaction.mode === 'draw' && drawPreview) {
+      var x1 = Math.min(interaction.start.x, pt.x);
+      var y1 = Math.min(interaction.start.y, pt.y);
+      var x2 = Math.max(interaction.start.x, pt.x);
+      var y2 = Math.max(interaction.start.y, pt.y);
+      drawPreview.style.left = x1 + 'px';
+      drawPreview.style.top = y1 + 'px';
+      drawPreview.style.width = (x2 - x1) + 'px';
+      drawPreview.style.height = (y2 - y1) + 'px';
+      return;
+    }
+    if (!interaction.mode || !interaction.orig) return;
+    var o = interaction.orig;
+    var opx = pctToPx(o);
+    if (interaction.mode === 'move') {
+      var dx = pt.x - interaction.sx;
+      var dy = pt.y - interaction.sy;
+      var p = pxToPct(opx.left + dx, opx.top + dy, opx.width, opx.height);
+      setZ(interaction.id, p);
+      interaction.orig = Object.assign({}, getZ(interaction.id));
+      interaction.sx = pt.x;
+      interaction.sy = pt.y;
+      return;
+    }
+    if (interaction.mode === 'resize') {
+      var left = opx.left, top = opx.top, right = opx.left + opx.width, bottom = opx.top + opx.height;
+      var h = interaction.handle;
+      if (h.indexOf('w') >= 0) left = pt.x;
+      if (h.indexOf('e') >= 0) right = pt.x;
+      if (h.indexOf('n') >= 0) top = pt.y;
+      if (h.indexOf('s') >= 0) bottom = pt.y;
+      if (right - left < 4) return;
+      if (bottom - top < 4) return;
+      setZ(interaction.id, pxToPct(left, top, right - left, bottom - top));
+    }
+  }
+
+  function onPointerUp(ev) {
+    if (interaction.mode === 'draw' && drawPreview) {
+      var pt = stagePoint(ev);
+      var x1 = Math.min(interaction.start.x, pt.x);
+      var y1 = Math.min(interaction.start.y, pt.y);
+      var w = Math.abs(pt.x - interaction.start.x);
+      var h = Math.abs(pt.y - interaction.start.y);
+      if (w >= 4 && h >= 4) {
+        setZ(interaction.id, pxToPct(x1, y1, w, h));
+        toast('Zona ' + interaction.id + ' marcada');
+      }
+      clearDrawPreview();
+    }
+    interaction.mode = null;
+    interaction.id = null;
+    interaction.handle = null;
+    interaction.orig = null;
+  }
+
+  function nudge(dx, dy) {
+    var z = getZ(state.selected);
+    if (z.w <= 0) return;
+    setZ(state.selected, { x: z.x + dx, y: z.y + dy });
+  }
+
+  document.getElementById('mapa-bg').addEventListener('load', function () {
+    MAP_W = this.naturalWidth || MAP_W;
+    MAP_H = this.naturalHeight || MAP_H;
+    stage.style.width = MAP_W + 'px';
+    stage.style.height = MAP_H + 'px';
+    updateExportPreview();
+  });
+
+  document.getElementById('btn-zoom-in').addEventListener('click', function () {
+    state.zoom = Math.min(2, Math.round((state.zoom + 0.1) * 10) / 10);
+    applyZoom();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', function () {
+    state.zoom = Math.max(0.35, Math.round((state.zoom - 0.1) * 10) / 10);
+    applyZoom();
+  });
+  document.getElementById('btn-all-zones').addEventListener('click', function () {
+    state.showAll = !state.showAll;
+    this.classList.toggle('is-on', state.showAll);
+    renderZones();
+  });
+  document.getElementById('btn-obras').addEventListener('click', function () {
+    state.showObras = !state.showObras;
+    this.classList.toggle('is-on', state.showObras);
+    renderZones();
+  });
+  document.getElementById('btn-export').addEventListener('click', updateExportPreview);
+  document.getElementById('btn-copy').addEventListener('click', copyExport);
+  document.getElementById('btn-download').addEventListener('click', downloadExport);
+  document.getElementById('btn-clear-zone').addEventListener('click', function () {
+    setZ(state.selected, { x: 0, y: 0, w: 0, h: 0 });
+    toast('Zona borrada');
+  });
+  document.getElementById('btn-nudge-up').addEventListener('click', function () { nudge(0, -0.5); });
+  document.getElementById('btn-nudge-down').addEventListener('click', function () { nudge(0, 0.5); });
+  document.getElementById('btn-nudge-left').addEventListener('click', function () { nudge(-0.5, 0); });
+  document.getElementById('btn-nudge-right').addEventListener('click', function () { nudge(0.5, 0); });
+
+  stage.addEventListener('mousedown', onPointerDown);
+  window.addEventListener('mousemove', onPointerMove);
+  window.addEventListener('mouseup', onPointerUp);
+
+  loadLocal();
+  renderZonaButtons();
+  renderZones();
+  renderControls();
+  updateExportPreview();
+  applyZoom();
+})();
+</script>
+</body>
+</html>

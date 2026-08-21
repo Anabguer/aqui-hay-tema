@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Calibrador mapa — Aquí Hay Tema (solo dev)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font: 13px/1.35 Consolas, "Segoe UI", sans-serif;
+      background: #2a2620; color: #f5f0e6;
+      display: grid; grid-template-rows: auto 1fr; height: 100vh;
+    }
+    header {
+      display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+      padding: 8px 10px; background: #1e1b17; border-bottom: 1px solid #4a4338;
+    }
+    header h1 { margin: 0; font-size: 14px; font-weight: 700; margin-right: 8px; }
+    header button, header label {
+      background: #3d362c; color: inherit; border: 1px solid #6b6154;
+      padding: 5px 10px; cursor: pointer; border-radius: 3px;
+    }
+    header button:hover { background: #524a3e; }
+    header button.is-on { background: #7a4a2a; border-color: #c98a4a; }
+    header .sep { width: 1px; height: 22px; background: #4a4338; margin: 0 4px; }
+    main { display: grid; grid-template-columns: 1fr 320px; min-height: 0; }
+    .viewport {
+      overflow: auto; padding: 12px; background: #111;
+      display: flex; justify-content: center; align-items: flex-start;
+    }
+    .stage-wrap { transform-origin: top center; }
+    .stage {
+      position: relative; width: 1536px; height: 1024px;
+      background: #888 url("../assets/play-v3/mapa_base_rectas.png") 0 0 / 1536px 1024px no-repeat;
+      box-shadow: 0 0 0 2px #555;
+      user-select: none;
+    }
+    .caja {
+      position: absolute; border: 2px dashed rgba(255, 220, 80, .55);
+      background: rgba(255, 220, 80, .06); pointer-events: none;
+      font-size: 11px; color: rgba(255, 220, 80, .85); padding: 2px 4px;
+    }
+    .caja.parque-reserva { border-color: rgba(180, 220, 255, .6); background: rgba(180, 220, 255, .08); color: rgba(200, 230, 255, .9); }
+    .edif {
+      position: absolute; cursor: grab; transform-origin: left bottom;
+      filter: drop-shadow(0 3px 2px rgba(0,0,0,.35));
+      outline: 2px solid transparent;
+    }
+    .edif.is-selected { outline-color: #ff6; z-index: 20; }
+    .edif.is-out-fase { opacity: .28; outline: 1px dashed rgba(255,255,255,.25); }
+    .edif.is-load-err { outline: 2px solid #f44; background: rgba(255,0,0,.2); min-width: 80px; min-height: 60px; }
+    .edif:active { cursor: grabbing; }
+    aside {
+      overflow: auto; padding: 10px; background: #242018;
+      border-left: 1px solid #4a4338;
+    }
+    aside h2 { margin: 0 0 8px; font-size: 13px; }
+    .fase-info { color: #b8aa96; margin-bottom: 10px; font-size: 12px; }
+    .edif-row {
+      border: 1px solid #3d362c; padding: 8px; margin-bottom: 8px;
+      background: #1a1712; border-radius: 4px;
+    }
+    .edif-row.is-active { border-color: #c98a4a; }
+    .edif-row h3 {
+      margin: 0 0 6px; font-size: 12px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .edif-row h3 button {
+      font-size: 11px; padding: 2px 6px; background: #3d362c; border: 1px solid #6b6154;
+      color: inherit; cursor: pointer; border-radius: 2px;
+    }
+    .ctrl { display: grid; grid-template-columns: 52px 1fr 52px; gap: 4px; align-items: center; margin: 4px 0; }
+    .ctrl label { grid-column: 1 / -1; color: #9a8f7e; font-size: 11px; }
+    .ctrl button {
+      padding: 4px; background: #3d362c; border: 1px solid #6b6154; color: inherit; cursor: pointer;
+    }
+    .ctrl .val { text-align: center; font-weight: 700; }
+    .ctrl input[type=range] { grid-column: 1 / -1; width: 100%; }
+    .export-box {
+      margin-top: 12px; padding-top: 10px; border-top: 1px solid #4a4338;
+    }
+    .export-box textarea {
+      width: 100%; height: 140px; font: 11px/1.3 Consolas, monospace;
+      background: #111; color: #cfc; border: 1px solid #4a4338; padding: 6px;
+    }
+    .export-box button { margin-top: 6px; width: 100%; padding: 8px; }
+    .hint { font-size: 11px; color: #8a8070; margin-top: 8px; }
+    #toast {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      background: #2d5a2d; padding: 8px 16px; border-radius: 4px; display: none; z-index: 99;
+    }
+    #toast.is-on { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Calibrador mapa (dev)</h1>
+    <button type="button" data-fase="1" class="is-on">FASE 1</button>
+    <button type="button" data-fase="2">FASE 2</button>
+    <button type="button" data-fase="3">FASE 3</button>
+    <span class="sep"></span>
+    <button type="button" id="btn-cajas" class="is-on">Cajas Neni</button>
+    <button type="button" id="btn-zoom-out">− zoom</button>
+    <button type="button" id="btn-zoom-in">+ zoom</button>
+    <span id="zoom-label">70%</span>
+    <span id="load-status" style="font-size:12px;color:#9a8f7e;margin-left:6px"></span>
+    <span class="sep"></span>
+    <button type="button" id="btn-export">EXPORTAR CONFIGURACIÓN</button>
+    <button type="button" id="btn-copy">COPIAR CONFIGURACIÓN</button>
+  </header>
+  <main>
+    <div class="viewport" id="viewport">
+      <div class="stage-wrap" id="stage-wrap">
+        <div class="stage" id="stage">
+          <div id="cajas-layer"></div>
+          <div id="edifs-layer"></div>
+        </div>
+      </div>
+    </div>
+    <aside id="panel">
+      <h2>Edificio seleccionado</h2>
+      <p class="fase-info" id="fase-info"></p>
+      <div id="controls"></div>
+      <div class="export-box">
+        <label for="export-out">Salida JSON</label>
+        <textarea id="export-out" readonly spellcheck="false"></textarea>
+        <p class="hint">Arrastra un edificio en el mapa para moverlo. Clic en el mapa o en «Sel» para elegir edificio.</p>
+      </div>
+    </aside>
+  </main>
+  <div id="toast"></div>
+
+<script>
+(function () {
+  'use strict';
+
+  var CANVAS_W = 1536;
+  var CANVAS_H = 1024;
+  /* Fuente: G:\Mi unidad\Juegos\Aqui Hay Tema\mapa chat (copiadas a dev/calibrador-assets/) */
+  var ASSETS = 'calibrador-assets/';
+  var MAP_CAJAS_URL = '../assets/play-v3/cajas_definitivas.json';
+  var STORAGE_KEY = 'aht_mapa_calibrador_v2';
+
+  var EDIFICIOS = [
+    { id: 'bar',         file: 'bar.png',         grupo: 'mala_idea' },
+    { id: 'discoteca',   file: 'discoteca.png',   grupo: 'mala_idea' },
+    { id: 'karaoke',     file: 'karaoke.png',     grupo: 'mala_idea' },
+    { id: 'cine',        file: 'cine.png',        grupo: 'cine_game' },
+    { id: 'recreativo',  file: 'recreativo.png',  grupo: 'cine_game' },
+    { id: 'restaurante', file: 'restaurante.png', grupo: 'rincon_lola' },
+    { id: 'bingo',       file: 'bingo.png',       grupo: 'rincon_lola' },
+    { id: 'cafeteria',   file: 'cafeteria.png',   grupo: 'cafe_libros' },
+    { id: 'biblioteca',  file: 'biblioteca.png',  grupo: 'cafe_libros' },
+    { id: 'tienda',      file: 'tienda.png',      grupo: 'cafe_libros' },
+    { id: 'gimnasio',    file: 'gimnasio.png',    grupo: 'gimnasio_spa' },
+    { id: 'spa',         file: 'spa.png',         grupo: 'gimnasio_spa' },
+    { id: 'picnic',      file: 'picnic.png',      grupo: 'parque' },
+    { id: 'mirador',     file: 'mirador.png',     grupo: 'parque' }
+  ];
+
+  var FASES = {
+    1: ['bar', 'cine', 'restaurante', 'cafeteria', 'gimnasio', 'picnic'],
+    2: ['bar', 'discoteca', 'cine', 'recreativo', 'restaurante', 'bingo', 'cafeteria', 'biblioteca', 'gimnasio', 'spa', 'picnic', 'mirador'],
+    3: ['bar', 'discoteca', 'karaoke', 'cine', 'recreativo', 'restaurante', 'bingo', 'cafeteria', 'biblioteca', 'tienda', 'gimnasio', 'spa', 'picnic', 'mirador']
+  };
+
+  var FASE_DESC = {
+    1: 'Bar · Cine · Restaurante · Cafetería · Gimnasio · Picnic',
+    2: 'Conjuntos ampliados + Picnic + Mirador',
+    3: 'Composición completa (Karaoke, Tienda, resto completo)'
+  };
+
+  /* Punto de partida: edificios grandes, aproximados a cajas_definitivas.json */
+  var DEFAULTS = {
+    1: {
+      bar:         { x: 158, y: 56,  ancho: 420, visible: true },
+      cine:        { x: 1042, y: 48, ancho: 360, visible: true },
+      restaurante: { x: 98,  y: 418, ancho: 290, visible: true },
+      cafeteria:   { x: 168, y: 802, ancho: 420, visible: true },
+      gimnasio:    { x: 762, y: 800, ancho: 480, visible: true },
+      picnic:      { x: 792, y: 548, ancho: 300, visible: true },
+      discoteca:   { x: 380, y: 56,  ancho: 280, visible: false },
+      karaoke:     { x: 520, y: 56,  ancho: 170, visible: false },
+      recreativo:  { x: 1260, y: 48, ancho: 160, visible: false },
+      bingo:       { x: 268, y: 418, ancho: 130, visible: false },
+      biblioteca:  { x: 410, y: 802, ancho: 280, visible: false },
+      tienda:      { x: 530, y: 802, ancho: 170, visible: false },
+      spa:         { x: 1080, y: 800, ancho: 280, visible: false },
+      mirador:     { x: 868, y: 368, ancho: 220, visible: false }
+    },
+    2: {
+      bar:         { x: 158, y: 56,  ancho: 240, visible: true },
+      discoteca:   { x: 395, y: 56,  ancho: 280, visible: true },
+      karaoke:     { x: 520, y: 56,  ancho: 170, visible: false },
+      cine:        { x: 1042, y: 48, ancho: 220, visible: true },
+      recreativo:  { x: 1260, y: 48, ancho: 165, visible: true },
+      restaurante: { x: 98,  y: 418, ancho: 165, visible: true },
+      bingo:       { x: 262, y: 418, ancho: 135, visible: true },
+      cafeteria:   { x: 168, y: 802, ancho: 255, visible: true },
+      biblioteca:  { x: 418, y: 802, ancho: 270, visible: true },
+      tienda:      { x: 530, y: 802, ancho: 170, visible: false },
+      gimnasio:    { x: 762, y: 800, ancho: 320, visible: true },
+      spa:         { x: 1080, y: 800, ancho: 285, visible: true },
+      picnic:      { x: 792, y: 560, ancho: 210, visible: true },
+      mirador:     { x: 868, y: 368, ancho: 230, visible: true }
+    },
+    3: {
+      bar:         { x: 158, y: 56,  ancho: 175, visible: true },
+      discoteca:   { x: 328, y: 56,  ancho: 195, visible: true },
+      karaoke:     { x: 518, y: 56,  ancho: 175, visible: true },
+      cine:        { x: 1042, y: 48, ancho: 215, visible: true },
+      recreativo:  { x: 1258, y: 48, ancho: 165, visible: true },
+      restaurante: { x: 98,  y: 418, ancho: 158, visible: true },
+      bingo:       { x: 255, y: 418, ancho: 145, visible: true },
+      cafeteria:   { x: 168, y: 802, ancho: 175, visible: true },
+      biblioteca:  { x: 340, y: 802, ancho: 195, visible: true },
+      tienda:      { x: 530, y: 802, ancho: 175, visible: true },
+      gimnasio:    { x: 762, y: 800, ancho: 310, visible: true },
+      spa:         { x: 1075, y: 800, ancho: 295, visible: true },
+      picnic:      { x: 792, y: 560, ancho: 205, visible: true },
+      mirador:     { x: 868, y: 368, ancho: 230, visible: true }
+    }
+  };
+
+  var state = {
+    fase: 1,
+    zoom: 0.7,
+    showCajas: true,
+    selected: 'bar',
+    configs: { 1: cloneDefaults(1), 2: cloneDefaults(2), 3: cloneDefaults(3) },
+    ratios: {},
+    loadOk: {},
+    loadErr: {},
+    mapCajas: null
+  };
+
+  var stage = document.getElementById('stage');
+  var edifsLayer = document.getElementById('edifs-layer');
+  var cajasLayer = document.getElementById('cajas-layer');
+  var stageWrap = document.getElementById('stage-wrap');
+  var controlsEl = document.getElementById('controls');
+  var faseInfo = document.getElementById('fase-info');
+  var exportOut = document.getElementById('export-out');
+
+  var drag = { active: false, id: null, ox: 0, oy: 0 };
+
+  function cloneDefaults(f) {
+    var o = {};
+    EDIFICIOS.forEach(function (e) {
+      var d = DEFAULTS[f][e.id] || { x: 100, y: 100, ancho: 200, visible: false };
+      o[e.id] = { x: d.x, y: d.y, ancho: d.ancho, visible: !!d.visible };
+    });
+    return o;
+  }
+
+  function toast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.classList.remove('is-on'); }, 1800);
+  }
+
+  function loadLocal() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      var parsed = JSON.parse(raw);
+      [1, 2, 3].forEach(function (f) {
+        if (parsed[f]) state.configs[f] = parsed[f];
+      });
+    } catch (e) { /* ignore */ }
+  }
+
+  function saveLocal() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.configs));
+    } catch (e) { /* ignore */ }
+  }
+
+  function getCfg(id) {
+    return state.configs[state.fase][id];
+  }
+
+  function setCfg(id, patch) {
+    var c = state.configs[state.fase][id];
+    Object.keys(patch).forEach(function (k) { c[k] = patch[k]; });
+    saveLocal();
+    renderEdifs();
+    renderControls();
+    updateExportPreview();
+  }
+
+  function altura(id, ancho) {
+    var r = state.ratios[id];
+    if (!r) return ancho * 0.75;
+    return ancho * r;
+  }
+
+  function renderCajas() {
+    cajasLayer.innerHTML = '';
+    if (!state.showCajas || !state.mapCajas) return;
+    var cajas = state.mapCajas.cajas || {};
+    Object.keys(cajas).forEach(function (key) {
+      var c = cajas[key];
+      addCaja(c.x, c.y, c.ancho_max, c.alto_max, c.nombre || key, false);
+    });
+    var p = state.mapCajas.parque || {};
+    if (p.reserva_derecha_propuesta) {
+      var r = p.reserva_derecha_propuesta;
+      addCaja(r.x, r.y, r.ancho_max, r.alto_max, 'Picnic + Mirador', true);
+    }
+  }
+
+  function addCaja(x, y, w, h, label, parque) {
+    var d = document.createElement('div');
+    d.className = 'caja' + (parque ? ' parque-reserva' : '');
+    d.style.left = x + 'px';
+    d.style.top = y + 'px';
+    d.style.width = w + 'px';
+    d.style.height = h + 'px';
+    d.textContent = label;
+    cajasLayer.appendChild(d);
+  }
+
+  function enFase(id) {
+    return FASES[state.fase].indexOf(id) >= 0;
+  }
+
+  function updateLoadStatus() {
+    var ok = Object.keys(state.loadOk).length;
+    var err = Object.keys(state.loadErr).length;
+    var el = document.getElementById('load-status');
+    if (!el) return;
+    if (ok + err < EDIFICIOS.length) {
+      el.textContent = 'Cargando imágenes… ' + ok + '/' + EDIFICIOS.length;
+      el.style.color = '#9a8f7e';
+    } else if (err > 0) {
+      el.textContent = 'Imágenes: ' + ok + ' OK, ' + err + ' ERROR';
+      el.style.color = '#f88';
+    } else {
+      el.textContent = '14/14 imágenes OK';
+      el.style.color = '#7ec87e';
+    }
+  }
+
+  function renderEdifs() {
+    var cfgFase = state.configs[state.fase];
+    EDIFICIOS.forEach(function (e) {
+      var img = document.getElementById('edif-' + e.id);
+      if (!img) return;
+      var c = cfgFase[e.id];
+      var inFase = enFase(e.id);
+      var err = state.loadErr[e.id];
+      img.classList.toggle('is-out-fase', !inFase);
+      img.classList.toggle('is-load-err', !!err);
+      img.classList.toggle('is-selected', state.selected === e.id);
+      var h = altura(e.id, c.ancho);
+      img.style.left = c.x + 'px';
+      img.style.top = c.y + 'px';
+      img.style.width = c.ancho + 'px';
+      img.style.height = h + 'px';
+      img.style.display = 'block';
+      if (err) img.title = 'ERROR: ' + err;
+    });
+  }
+
+  function renderControls() {
+    faseInfo.textContent = 'Fase ' + state.fase + ': ' + FASE_DESC[state.fase] +
+      ' — todos los edificios visibles; atenuados = no en esta fase';
+    controlsEl.innerHTML = '';
+
+    EDIFICIOS.forEach(function (e) {
+      var c = getCfg(e.id);
+      var inFase = enFase(e.id);
+      var err = state.loadErr[e.id];
+      var row = document.createElement('div');
+      row.className = 'edif-row' + (state.selected === e.id ? ' is-active' : '');
+      row.innerHTML =
+        '<h3><span>' + e.id + (inFase ? ' [F' + state.fase + ']' : ' [otra fase]') +
+        (err ? ' ⚠' : '') + '</span>' +
+        '<button type="button" data-sel="' + e.id + '">Sel</button></h3>' +
+        ctrlRow('En fase ' + state.fase, 'vis', e.id, inFase ? 1 : 0, 'toggle') +
+        ctrlRow('Ancho (px)', 'ancho', e.id, c.ancho, 'ancho') +
+        ctrlRow('Escala', 'escala', e.id, escalaPct(e.id), 'escala') +
+        ctrlRow('X', 'x', e.id, c.x, 'xy', -10, 10) +
+        ctrlRow('Y', 'y', e.id, c.y, 'xy', -10, 10);
+      controlsEl.appendChild(row);
+    });
+
+    controlsEl.querySelectorAll('[data-sel]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        state.selected = btn.getAttribute('data-sel');
+        renderEdifs();
+        renderControls();
+      });
+    });
+    bindControlEvents();
+  }
+
+  function escalaPct(id) {
+    var c = getCfg(id);
+    var nat = state.ratios[id] ? (1536 / state.ratios[id]) * 0.01 : 400;
+    return Math.round((c.ancho / Math.max(nat, 80)) * 100);
+  }
+
+  function ctrlRow(label, kind, id, val, mode, dec, inc) {
+    if (mode === 'toggle') {
+      return '<div class="ctrl"><label>' + label + '</label>' +
+        '<button type="button" data-act="vis-off" data-id="' + id + '">Quitar fase</button>' +
+        '<span class="val">' + (val ? 'SÍ' : 'NO') + '</span>' +
+        '<button type="button" data-act="vis-on" data-id="' + id + '">Añadir fase</button></div>';
+    }
+    if (mode === 'ancho') {
+      return '<div class="ctrl"><label>' + label + ': <strong data-val="' + id + '-ancho">' + val + '</strong></label>' +
+        '<button type="button" data-act="ancho-dec" data-id="' + id + '">−20</button>' +
+        '<input type="range" min="40" max="900" step="5" value="' + val + '" data-range="ancho" data-id="' + id + '"/>' +
+        '<button type="button" data-act="ancho-inc" data-id="' + id + '">+20</button></div>';
+    }
+    if (mode === 'escala') {
+      return '<div class="ctrl"><label>' + label + ' (% ref): <strong data-val="' + id + '-escala">' + val + '</strong></label>' +
+        '<button type="button" data-act="esc-dec" data-id="' + id + '">−5%</button>' +
+        '<span class="val">' + val + '%</span>' +
+        '<button type="button" data-act="esc-inc" data-id="' + id + '">+5%</button></div>';
+    }
+    return '<div class="ctrl"><label>' + label + ': <strong data-val="' + id + '-' + kind + '">' + val + '</strong></label>' +
+      '<button type="button" data-act="' + kind + '-dec" data-id="' + id + '">' + (dec || '−10') + '</button>' +
+      '<span class="val">' + val + '</span>' +
+      '<button type="button" data-act="' + kind + '-inc" data-id="' + id + '">' + (inc || '+10') + '</button></div>';
+  }
+
+  function bindControlEvents() {
+    controlsEl.querySelectorAll('[data-act]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = btn.getAttribute('data-id');
+        var act = btn.getAttribute('data-act');
+        var c = getCfg(id);
+        if (act === 'vis-on') {
+          if (FASES[state.fase].indexOf(id) < 0) FASES[state.fase].push(id);
+          c.visible = true;
+          saveLocal();
+          renderEdifs();
+          renderControls();
+          updateExportPreview();
+        } else if (act === 'vis-off') {
+          var idx = FASES[state.fase].indexOf(id);
+          if (idx >= 0) FASES[state.fase].splice(idx, 1);
+          c.visible = false;
+          saveLocal();
+          renderEdifs();
+          renderControls();
+          updateExportPreview();
+        }
+        else if (act === 'ancho-dec') setCfg(id, { ancho: Math.max(40, c.ancho - 20) });
+        else if (act === 'ancho-inc') setCfg(id, { ancho: Math.min(900, c.ancho + 20) });
+        else if (act === 'x-dec') setCfg(id, { x: c.x - 10 });
+        else if (act === 'x-inc') setCfg(id, { x: c.x + 10 });
+        else if (act === 'y-dec') setCfg(id, { y: c.y - 10 });
+        else if (act === 'y-inc') setCfg(id, { y: c.y + 10 });
+        else if (act === 'esc-dec') resizeByScale(id, -0.05);
+        else if (act === 'esc-inc') resizeByScale(id, 0.05);
+      });
+    });
+    controlsEl.querySelectorAll('[data-range="ancho"]').forEach(function (sl) {
+      sl.addEventListener('input', function () {
+        setCfg(sl.getAttribute('data-id'), { ancho: Number(sl.value) });
+      });
+    });
+  }
+
+  function resizeByScale(id, delta) {
+    var c = getCfg(id);
+    setCfg(id, { ancho: Math.round(Math.max(40, Math.min(900, c.ancho * (1 + delta)))) });
+  }
+
+  function applyFasePreset(f) {
+    state.fase = f;
+    if (!enFase(state.selected)) {
+      state.selected = FASES[f][0];
+    }
+    document.querySelectorAll('header [data-fase]').forEach(function (b) {
+      b.classList.toggle('is-on', Number(b.getAttribute('data-fase')) === f);
+    });
+    renderEdifs();
+    renderControls();
+    updateExportPreview();
+  }
+
+  function buildExport() {
+    var out = {
+      meta: {
+        herramienta: 'dev/mapa-calibrador.html',
+        canvas_px: [CANVAS_W, CANVAS_H],
+        mapa: 'assets/play-v3/mapa_base_rectas.png',
+        contrato: 'assets/play-v3/cajas_definitivas.json',
+        nota: 'Valores en píxeles absolutos (origen top-left). ancho = render width; alto derivado del PNG.'
+      },
+      fases: {}
+    };
+    [1, 2, 3].forEach(function (f) {
+      out.fases['fase' + f] = {
+        descripcion: FASE_DESC[f],
+        edificios_visibles: FASES[f].slice(),
+        edificios: {}
+      };
+      EDIFICIOS.forEach(function (e) {
+        var c = state.configs[f][e.id];
+        var vis = FASES[f].indexOf(e.id) >= 0;
+        out.fases['fase' + f].edificios[e.id] = {
+          x: c.x,
+          y: c.y,
+          ancho: c.ancho,
+          alto: Math.round(altura(e.id, c.ancho)),
+          visible: vis,
+          en_fase: vis,
+          png: 'dev/calibrador-assets/' + e.file,
+          fuente: 'G:\\Mi unidad\\Juegos\\Aqui Hay Tema\\mapa chat\\' + e.file
+        };
+      });
+    });
+    return out;
+  }
+
+  function updateExportPreview() {
+    exportOut.value = JSON.stringify(buildExport(), null, 2);
+  }
+
+  function copyExport() {
+    exportOut.select();
+    exportOut.setSelectionRange(0, exportOut.value.length);
+    navigator.clipboard.writeText(exportOut.value).then(function () {
+      toast('Configuración copiada al portapapeles');
+    }).catch(function () {
+      document.execCommand('copy');
+      toast('Configuración copiada');
+    });
+  }
+
+  function applyZoom() {
+    stageWrap.style.transform = 'scale(' + state.zoom + ')';
+    document.getElementById('zoom-label').textContent = Math.round(state.zoom * 100) + '%';
+  }
+
+  function stageScale() {
+    return state.zoom;
+  }
+
+  function onPointerDown(ev) {
+    var t = ev.target;
+    if (!t.classList.contains('edif')) return;
+    var id = t.getAttribute('data-id');
+    state.selected = id;
+    drag.active = true;
+    drag.id = id;
+    var c = getCfg(id);
+    var rect = stage.getBoundingClientRect();
+    var sx = stageScale();
+    drag.ox = (ev.clientX - rect.left) / sx - c.x;
+    drag.oy = (ev.clientY - rect.top) / sx - c.y;
+    renderEdifs();
+    renderControls();
+    ev.preventDefault();
+  }
+
+  function onPointerMove(ev) {
+    if (!drag.active || !drag.id) return;
+    var rect = stage.getBoundingClientRect();
+    var sx = stageScale();
+    var x = Math.round((ev.clientX - rect.left) / sx - drag.ox);
+    var y = Math.round((ev.clientY - rect.top) / sx - drag.oy);
+    setCfg(drag.id, {
+      x: Math.max(0, Math.min(CANVAS_W - 20, x)),
+      y: Math.max(0, Math.min(CANVAS_H - 20, y))
+    });
+  }
+
+  function onPointerUp() {
+    drag.active = false;
+    drag.id = null;
+  }
+
+  function initEdifs() {
+    var pending = EDIFICIOS.length;
+    updateLoadStatus();
+    EDIFICIOS.forEach(function (e) {
+      var img = document.createElement('img');
+      img.className = 'edif';
+      img.id = 'edif-' + e.id;
+      img.setAttribute('data-id', e.id);
+      img.draggable = false;
+      var src = ASSETS + e.file;
+      img.src = src;
+      img.alt = e.id;
+      img.addEventListener('load', function () {
+        state.ratios[e.id] = img.naturalHeight / img.naturalWidth;
+        state.loadOk[e.id] = src;
+        delete state.loadErr[e.id];
+        pending--;
+        updateLoadStatus();
+        if (pending === 0) {
+          renderEdifs();
+          renderControls();
+          updateExportPreview();
+        }
+      });
+      img.addEventListener('error', function () {
+        state.loadErr[e.id] = 'No carga: ' + src;
+        delete state.loadOk[e.id];
+        pending--;
+        updateLoadStatus();
+        if (pending === 0) {
+          renderEdifs();
+          renderControls();
+          updateExportPreview();
+        }
+      });
+      edifsLayer.appendChild(img);
+    });
+  }
+
+  fetch(MAP_CAJAS_URL).then(function (r) { return r.json(); }).then(function (j) {
+    state.mapCajas = j;
+    renderCajas();
+  }).catch(function () { /* sin cajas overlay */ });
+
+  loadLocal();
+  initEdifs();
+
+  document.querySelectorAll('header [data-fase]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      applyFasePreset(Number(btn.getAttribute('data-fase')));
+    });
+  });
+
+  document.getElementById('btn-cajas').addEventListener('click', function () {
+    state.showCajas = !state.showCajas;
+    this.classList.toggle('is-on', state.showCajas);
+    renderCajas();
+  });
+
+  document.getElementById('btn-zoom-in').addEventListener('click', function () {
+    state.zoom = Math.min(1.5, Math.round((state.zoom + 0.1) * 10) / 10);
+    applyZoom();
+  });
+  document.getElementById('btn-zoom-out').addEventListener('click', function () {
+    state.zoom = Math.max(0.35, Math.round((state.zoom - 0.1) * 10) / 10);
+    applyZoom();
+  });
+
+  document.getElementById('btn-export').addEventListener('click', updateExportPreview);
+  document.getElementById('btn-copy').addEventListener('click', copyExport);
+
+  stage.addEventListener('mousedown', onPointerDown);
+  window.addEventListener('mousemove', onPointerMove);
+  window.addEventListener('mouseup', onPointerUp);
+
+  applyZoom();
+  applyFasePreset(1);
+})();
+</script>
+</body>
+</html>

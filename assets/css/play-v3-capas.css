@@ -199,6 +199,7 @@
 .play-root[data-capa="ficha-nueva"] .capa-ficha-nueva,
 .play-root[data-capa="ficha-conocida"] .capa-ficha-conocida,
 .play-root[data-capa="diario"] .capa-diario,
+.play-root[data-capa="agenda"] .capa-agenda,
 .play-root[data-capa="organizar"] .capa-organizar {
   transform: none;
   pointer-events: auto;

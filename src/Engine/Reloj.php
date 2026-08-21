@@ -246,6 +246,14 @@ final class Reloj
         ];
     }
 
+    /** Slot estrictamente posterior al reloj actual (misma hora = pasado). */
+    public static function esFuturo(array $reloj, int $dia, int $hora): bool
+    {
+        $nowD = (int) ($reloj['dia_pueblo'] ?? 1);
+        $nowH = (int) ($reloj['hora_actual'] ?? 0);
+        return ($dia * 24 + $hora) > ($nowD * 24 + $nowH);
+    }
+
     public static function avanzarHoras(array &$partida, int $horas): void
     {
         if ($horas < 0) {

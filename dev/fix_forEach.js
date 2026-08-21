@@ -1,0 +1,12 @@
+const fs = require('fs');
+const p = require('path').join(__dirname, '..', 'assets', 'js', 'play-v3.js');
+let s = fs.readFileSync(p, 'utf8');
+const a = "$('[data-dinero]').forEach";
+const b = "$$('[data-dinero]').forEach";
+const c = "$('.dock button').forEach";
+const d = "$$('.dock button').forEach";
+console.log('before dinero', s.includes(a), 'before dock', s.includes(c));
+s = s.split(a).join(b);
+s = s.split(c).join(d);
+fs.writeFileSync(p, s);
+console.log('after dinero', s.includes(b), 'after dock', s.includes(d));

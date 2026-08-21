@@ -1,0 +1,132 @@
+{
+  "estado": "CONTRATO espacial Neni — APROBADO el sistema de mapa",
+  "canvas_px": [
+    1536,
+    1024
+  ],
+  "origen": "top-left",
+  "archivo_mapa": "mapa_base_rectas.png",
+  "reglas": [
+    "Cajas Neni = espacio MÁXIMO del complejo terminado",
+    "Fase inicial NO debe llenar la caja",
+    "Edificios frontales, paralelos al borde, apoyados en acera inferior",
+    "Sin rotación ni perspectiva diagonal",
+    "Parque dibujado = capa 1; Picnic/Mirador = overlays"
+  ],
+  "intercambio": {
+    "mala_idea": "caja grande 566x195 @ (143,31)",
+    "cine_game": "superior derecha 411x198 @ (1029,31)"
+  },
+  "cajas": {
+    "cafe_libros": {
+      "nombre": "Café & Libros",
+      "x": 152,
+      "y": 796,
+      "ancho_max": 561,
+      "alto_max": 185,
+      "fases": [
+        "cafeteria",
+        "biblioteca",
+        "tienda"
+      ],
+      "crecimiento": "derecha",
+      "ancla": "fachada frontal; apoyado en acera inferior de la parcela",
+      "notas": "F1 no llena la caja. Espacio libre deliberado para biblio+tienda."
+    },
+    "rincon_lola": {
+      "nombre": "El Rincón de Lola",
+      "x": 92,
+      "y": 410,
+      "ancho_max": 316,
+      "alto_max": 271,
+      "fases": [
+        "restaurante",
+        "bingo"
+      ],
+      "crecimiento": "derecha / volumen secundario",
+      "ancla": "fachada frontal; acera inferior",
+      "notas": "Caja Neni sin cambios."
+    },
+    "mala_idea": {
+      "nombre": "La Mala Idea",
+      "x": 143,
+      "y": 31,
+      "ancho_max": 566,
+      "alto_max": 195,
+      "fases": [
+        "bar",
+        "discoteca",
+        "karaoke"
+      ],
+      "crecimiento": "derecha",
+      "ancla": "fachada frontal; acera inferior",
+      "notas": "Tras intercambio: ocupa la caja GRANDE (Bar→Disco→Karaoke)."
+    },
+    "cine_game": {
+      "nombre": "Cine Game",
+      "x": 1029,
+      "y": 31,
+      "ancho_max": 411,
+      "alto_max": 198,
+      "fases": [
+        "cine",
+        "arcade"
+      ],
+      "crecimiento": "derecha",
+      "ancla": "fachada frontal; acera inferior",
+      "notas": "Tras intercambio: ocupa la superior derecha (Cine→Arcade)."
+    },
+    "gimnasio_spa": {
+      "nombre": "Gimnasio & Spa",
+      "x": 747,
+      "y": 794,
+      "ancho_max": 640,
+      "alto_max": 184,
+      "fases": [
+        "gimnasio",
+        "spa"
+      ],
+      "crecimiento": "derecha",
+      "ancla": "fachada frontal; acera inferior",
+      "notas": "Caja Neni sin cambios."
+    }
+  },
+  "parque": {
+    "estado": "PROPUESTA — confirmar o volver a pintar por Neni",
+    "parque_dibujado": "fijo en mapa_base_rectas.png (capa 1)",
+    "caja_neni_original": {
+      "x": 607,
+      "y": 347,
+      "ancho_max": 328,
+      "alto_max": 330
+    },
+    "reserva_derecha_propuesta": {
+      "x": 787,
+      "y": 347,
+      "ancho_max": 328,
+      "alto_max": 330,
+      "uso": "Picnic + Mirador (overlays, no edificio)",
+      "nota": "Si no encaja, usar mapa_base_rectas.png limpio y volver a marcar el rectángulo."
+    },
+    "picnic_provisional": {
+      "x": 800,
+      "y": 520,
+      "ancho_max": 160,
+      "alto_max": 120
+    },
+    "mirador_provisional": {
+      "x": 860,
+      "y": 360,
+      "ancho_max": 140,
+      "alto_max": 140
+    }
+  },
+  "preview_cafe_ref_neni": {
+    "x": 247,
+    "y": 765,
+    "ancho": 353,
+    "alto": 221,
+    "scale_pct": 23,
+    "nota": "Preview previo de Neni; alto 221 > caja cafe 185. En prueba F1 se ajusta a la caja sin estirar para llenarla."
+  }
+}

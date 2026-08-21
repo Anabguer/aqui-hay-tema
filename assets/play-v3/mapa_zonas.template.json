@@ -1,0 +1,21 @@
+﻿{
+  "meta": {
+    "herramienta": "dev/mapa-zonas-calibrador.html",
+    "mapa": "assets/play-v3/mapa_canonico.jpg",
+    "overlay_obras": "assets/play-v3/overlay_en_obras.png",
+    "unidad": "porcentaje",
+    "mapa_px": [1024, 682],
+    "nota": "Plantilla sin calibrar. Exporta desde el calibrador y sustituye por mapa_zonas.json cuando estes satisfecho."
+  },
+  "zonas": {
+    "cafeteria": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Cafeteria" },
+    "biblioteca": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Biblioteca" },
+    "gimnasio": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Gimnasio" },
+    "restaurante": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Restaurante" },
+    "parque": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Parque" },
+    "bar": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Bar" },
+    "cine": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Cine" },
+    "discoteca": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Discoteca" },
+    "bingo": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Bingo" }
+  }
+}

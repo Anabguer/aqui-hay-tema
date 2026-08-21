@@ -5,6 +5,7 @@ namespace AquiHayTema\Engine\Voluntad;
 
 use AquiHayTema\Engine\CalibracionConfig;
 use AquiHayTema\Engine\ConsejoEngine;
+use AquiHayTema\Engine\CopyVoluntad;
 use AquiHayTema\Engine\EstadoEmocional;
 use AquiHayTema\Engine\PlanAfinidad;
 use AquiHayTema\Engine\PropuestaCooldown;
@@ -44,12 +45,15 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
 
         $cd = PropuestaCooldown::activo($partida, $residenteId, $otro, (string) ($propuesta['tipo'] ?? 'conocerse'), $cal);
         if ($cd) {
+            $rngCd = RngService::fromPartida($partida);
+            $copyCd = self::copyCooldown($rngCd, $cal);
+            $rngCd->persistToPartida($partida);
             return [
                 'decision' => PropuestaEncuentro::DECISION_RECHAZA,
-                'clase' => 'cooldown',
+                'clase' => PropuestaEncuentro::CLASE_COOLDOWN,
                 'motivo_tecnico' => 'cooldown_propuesta',
                 'motivo_tipo' => 'banal',
-                'copy_id' => 'hoy_no_me_da_la_vida',
+                'copy_id' => $copyCd,
                 'score' => null,
                 'p' => 0.0,
                 '_bloqueado_decision' => false,
@@ -267,6 +271,14 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
     /**
      * @param array<string, mixed> $cal
      */
+    public static function copyCooldownPublic(RngService $rng, array $cal): string
+    {
+        return self::copyCooldown($rng, $cal);
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
     private static function motivoRechazo(array $partida, string $quien, string $otro, array $cal): string
     {
         $emo = EstadoEmocional::canonId((string) ($partida['residentes'][$quien]['runtime']['estado_emocional']['id'] ?? 'neutro'));
@@ -288,6 +300,19 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
     private static function copyBanal(RngService $rng, array $cal): string
     {
         $pool = CalibracionConfig::get($cal, 'voluntad.copy_banal', ['hoy_no_me_da_la_vida']);
+        if (!is_array($pool) || $pool === []) {
+            return 'hoy_no_me_da_la_vida';
+        }
+        $idx = $rng->nextInt(0, count($pool) - 1);
+        return (string) $pool[$idx];
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    private static function copyCooldown(RngService $rng, array $cal): string
+    {
+        $pool = CalibracionConfig::get($cal, 'voluntad.copy_cooldown', CopyVoluntad::COOLDOWN_IDS);
         if (!is_array($pool) || $pool === []) {
             return 'hoy_no_me_da_la_vida';
         }

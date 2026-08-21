@@ -1,0 +1,21 @@
+---
+description: Regla de entorno sobre cuál es la referencia de validación (producción) y cuándo está permitido desplegar. Aplica siempre en este proyecto.
+alwaysApply: true
+---
+
+# Entorno de referencia (Aquí Hay Tema)
+
+- La referencia visual y funcional para Neni es **PRODUCCIÓN** (`intocables13.com`), no localhost.
+
+- `?lab=1`, `playtest_01` y cualquier entorno de laboratorio son **herramientas internas auxiliares** para el propio trabajo de desarrollo/validación técnica. Nunca son el "producto" que se le pide revisar a Neni.
+
+- No pedir a Neni que revise localhost, `?lab=1` o `playtest_01` como versión final. Si se necesita su validación visual/funcional, debe ser sobre la versión canónica ya desplegada en `intocables13.com`.
+
+- Los cambios deben implementarse en la **versión canónica** que se despliega a `intocables13.com` (no quedarse solo en lab/playtest).
+
+- Flujo de entrega:
+  1. Implementar el cambio en la versión canónica del repo.
+  2. Validar técnicamente lo necesario (tests, lab/playtest como herramienta interna si hace falta).
+  3. Dejar el proyecto listo para deploy canónico (`DEPLOY_CANONICAL.bat` / `scripts/deploy_canonical.ps1`).
+  4. **No desplegar a producción si no ha sido autorizado expresamente.**
+  5. Cuando Neni autorice, desplegar. La revisión final la hace Neni en `intocables13.com`, no en el agente.

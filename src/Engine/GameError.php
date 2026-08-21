@@ -23,12 +23,14 @@ final class GameError
     public const SAVE_CORRUPTO = 'SAVE_CORRUPTO';
     public const ENCUENTRO_RECHAZADO_INDISPONIBILIDAD = 'ENCUENTRO_RECHAZADO_INDISPONIBILIDAD';
     public const ENCUENTRO_RECHAZADO_VOLUNTAD = 'ENCUENTRO_RECHAZADO_VOLUNTAD';
+    public const ENCUENTRO_RECHAZADO_COOLDOWN = 'ENCUENTRO_RECHAZADO_COOLDOWN';
     public const PROPUESTA_PENDIENTE = 'PROPUESTA_PENDIENTE';
     public const PROPUESTA_NO_ENCONTRADA = 'PROPUESTA_NO_ENCONTRADA';
     public const PETICION_NO_ENCONTRADA = 'PETICION_NO_ENCONTRADA';
     public const FASE_TRANSICION_INVALIDA = 'FASE_TRANSICION_INVALIDA';
     public const TIPO_ENCUENTRO_NO_DISPONIBLE = 'TIPO_ENCUENTRO_NO_DISPONIBLE';
     public const MISMA_PERSONA = 'MISMA_PERSONA';
+    public const HORA_PASADA = 'HORA_PASADA';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -68,6 +70,8 @@ final class GameError
                 return 'No puede ir a esa hora.';
             case self::ENCUENTRO_RECHAZADO_VOLUNTAD:
                 return 'No quiere ir.';
+            case self::ENCUENTRO_RECHAZADO_COOLDOWN:
+                return 'Todavía no quiere hablar de eso.';
             case self::PROPUESTA_PENDIENTE:
                 return 'Todavía no han decidido.';
             case self::PROPUESTA_NO_ENCONTRADA:
@@ -78,6 +82,8 @@ final class GameError
                 return 'Esa fase de relación no es un paso válido.';
             case self::TIPO_ENCUENTRO_NO_DISPONIBLE:
                 return 'Ese tipo de encuentro no está disponible para esta relación todavía.';
+            case self::HORA_PASADA:
+                return 'Esa hora ya ha pasado.';
             case self::MISMA_PERSONA:
                 return 'Elige a dos personas distintas.';
             default:

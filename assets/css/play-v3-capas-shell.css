@@ -1,0 +1,234 @@
+﻿/* Capas libreta — apertura lateral, sin modal web */
+
+.play-v3 .play-root.pc .capa {
+  top: 0;
+  bottom: 0;
+  width: min(420px, 46%);
+  padding: 1.15rem 1rem 1.25rem 1.1rem;
+  border: 0 !important;
+  border-radius: 0 8px 10px 0;
+  box-shadow: 8px 6px 28px rgba(40, 28, 16, .14), inset 0 0 0 1px rgba(180, 150, 110, .22) !important;
+  transform: translateX(-108%);
+  transition: transform .32s ease, opacity .25s ease;
+  opacity: .98;
+}
+
+/* Cerrado: ninguna capa visible ni interactiva */
+.play-v3 .play-root:not([data-capa]) .capa {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.play-v3 .play-root.pc[data-capa-origin="right"] .capa {
+  left: auto;
+  right: 0;
+  border-radius: 8px 0 0 10px;
+  box-shadow: -8px 6px 28px rgba(40, 28, 16, .14), inset 0 0 0 1px rgba(180, 150, 110, .22) !important;
+  transform: translateX(108%);
+}
+
+
+.play-v3 .play-root.pc[data-capa] .capa {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
+.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon,
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
+.play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda,
+.play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
+.play-v3 .play-root.pc[data-capa="residencias"] .capa-residencias,
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario {
+  visibility: visible;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.play-v3 .play-root.pc[data-capa-origin="left"] .capa { left: 0; right: auto; }
+.play-v3 .play-root.pc[data-capa-origin="right"] .capa { right: 0; left: auto; }
+
+/* Cabecera libreta secundaria */
+.play-v3 .capa .libreta-kicker {
+  display: block;
+  position: relative;
+  margin: .15rem 0 .5rem;
+  padding: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.48rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: #5a4838;
+  background: transparent;
+  transform: none;
+}
+.play-v3 .capa .libreta-kicker::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  top: -4px;
+  width: 34px;
+  height: 14px;
+  background: url("../play-v3/capas/celo.png") center / contain no-repeat;
+  opacity: .85;
+  transform: rotate(-4deg);
+}
+
+/* Cerrar = esquina doblada (libretas; buzon usa estilo propio) */
+.play-v3 .capa:not(.capa-buzon) .capa-cerrar-pestaña {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  z-index: 8;
+  width: 4.75rem;
+  height: 4.75rem;
+  min-width: 4.75rem;
+  min-height: 4.75rem;
+  padding: .55rem .5rem .65rem !important;
+  border: 0 !important;
+  background: transparent !important;
+  overflow: visible;
+  font-size: .92rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .05em;
+  text-transform: lowercase;
+  color: #2c261f !important;
+  text-shadow: 0 1px 0 rgba(255,255,255,.9);
+  cursor: pointer;
+  display: grid;
+  place-items: end;
+  box-sizing: border-box;
+}
+.play-v3 .capa:not(.capa-buzon) .capa-cerrar-pestaña::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(225deg, #fff6c8 0 54%, #f5e6a8 54% 58%, transparent 58%);
+  border-left: 1.5px solid rgba(140, 110, 80, .45);
+  border-bottom: 1.5px solid rgba(140, 110, 80, .45);
+  z-index: -1;
+}
+.play-v3 .capa:not(.capa-buzon) h2 {
+  padding-right: 4.75rem;
+}
+
+/* Buzon — marco suave */
+.play-v3 .capa-buzon {
+  background: #fff9ee !important;
+  border: 0 !important;
+  box-shadow: 8px 6px 28px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(180, 150, 110, .2) !important;
+}
+.play-v3 .capa-buzon > .capa-cerrar-pestaña { background: transparent !important; }
+.play-v3 .capa-buzon > .cerrar[data-close] { display: grid; }
+.play-v3 .capa-buzon h2 { margin-top: .35rem; padding-right: 2.5rem; }
+.play-v3 .capa-buzon .carta-msg.importante {
+  border: 0 !important;
+  box-shadow: inset 4px 0 0 #c42b4a, 0 1px 0 rgba(44,38,31,.06) !important;
+  transform: rotate(-0.3deg);
+}
+
+/* Agenda / Planes */
+.play-v3 .capa-agenda {
+  background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat !important;
+  border: 0 !important;
+}
+.play-v3 .capa-agenda .agenda-fila {
+  padding: .55rem .25rem;
+  border-bottom: 1px dashed rgba(140, 110, 80, .16);
+  gap: .65rem;
+}
+.play-v3 .capa-agenda .agenda-fila:last-child { border-bottom: 0; }
+.play-v3 .capa-agenda .agenda-faces img,
+.play-v3 .capa-agenda .agenda-faces .cara-ini { width: 32px; height: 32px; }
+
+/* Organizar */
+.play-v3 .capa-organizar {
+  background: #f7f0de url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat !important;
+  border: 0 !important;
+}
+.play-v3 .capa-organizar .org-row {
+  margin: .55rem 0;
+  gap: .35rem;
+}
+.play-v3 .capa-organizar .org-row select {
+  border: 1.5px solid rgba(140, 110, 80, .45);
+  border-radius: 3px 5px 4px 3px;
+  background: rgba(255, 253, 246, .85);
+  padding: .4rem .45rem;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+}
+.play-v3 .capa-organizar [data-org-go] {
+  margin-top: .85rem;
+  border: 2px solid #2c261f;
+  background: linear-gradient(145deg, #fde8ef, #f5a8bc);
+  color: #2c261f;
+  padding: .55rem .85rem;
+  transform: rotate(-0.5deg);
+  clip-path: polygon(0 4%, 98% 0, 100% 92%, 4% 100%);
+  box-shadow: 2px 3px 0 rgba(196, 43, 74, .15);
+}
+
+/* Vecinos capa */
+.play-v3 .capa-vecinos {
+  background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat !important;
+}
+
+/* Velo mas suave */
+.play-v3 .velo {
+  background: rgba(44, 38, 31, .12) !important;
+}
+
+/* Anular overrides pesados shell-ui */
+.play-v3 .capa-buzon > .cerrar:not([data-close]) { display: none; }
+
+.play-v3 .play-root.pc .capa { overflow: visible; }
+.play-v3 .capa > [data-buzon-list],
+.play-v3 .capa > .agenda-list,
+.play-v3 .capa > .org-row,
+.play-v3 .capa > [data-vecinos-list] {
+  overflow-x: clip;
+  overflow-y: auto;
+  max-height: calc(100vh - 160px);
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+
+/* Scroll acorde en capas y listas del juego */
+.play-v3 .capa-scroll,
+.play-v3 .capa > [data-vecinos-list],
+.play-v3 .capa > [data-buzon-list],
+.play-v3 .capa > .agenda-list,
+.play-v3 .capa > [data-res-grid],
+.play-v3 .capa > .org-row,
+.play-v3 .capa > [data-vecinos-list].vecinos-grid {
+  scrollbar-width: thin;
+  scrollbar-color: #c9b59a rgba(243, 230, 204, .35);
+}
+.play-v3 .capa-scroll::-webkit-scrollbar,
+.play-v3 .capa > [data-vecinos-list]::-webkit-scrollbar,
+.play-v3 .capa > [data-buzon-list]::-webkit-scrollbar,
+.play-v3 .capa > .agenda-list::-webkit-scrollbar,
+.play-v3 .capa > [data-res-grid]::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+.play-v3 .capa-scroll::-webkit-scrollbar-track,
+.play-v3 .capa > [data-vecinos-list]::-webkit-scrollbar-track,
+.play-v3 .capa > [data-buzon-list]::-webkit-scrollbar-track,
+.play-v3 .capa > .agenda-list::-webkit-scrollbar-track,
+.play-v3 .capa > [data-res-grid]::-webkit-scrollbar-track {
+  background: rgba(243, 230, 204, .35);
+  border-radius: 6px;
+}
+.play-v3 .capa-scroll::-webkit-scrollbar-thumb,
+.play-v3 .capa > [data-vecinos-list]::-webkit-scrollbar-thumb,
+.play-v3 .capa > [data-buzon-list]::-webkit-scrollbar-thumb,
+.play-v3 .capa > .agenda-list::-webkit-scrollbar-thumb,
+.play-v3 .capa > [data-res-grid]::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4c4a8, #b89a78);
+  border-radius: 6px;
+  border: 2px solid rgba(243, 230, 204, .45);
+}

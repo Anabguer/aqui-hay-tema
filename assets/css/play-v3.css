@@ -12,14 +12,11 @@
 }
 
 .board-fit {
-  background:
-    radial-gradient(ellipse at 48% 52%, #c5dc9a 0 18%, transparent 46%),
-    linear-gradient(#d9c49a 0, #d9c49a 100%);
+  background: transparent;
 }
 .phone .board-fit {
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse at 50% 50%, #cfe3b0 0 40%, #d9c49a 100%);
+  position: relative;
+  background: transparent;
 }
 
 .calles { position: absolute; inset: 0; pointer-events: none; }
@@ -80,11 +77,9 @@
 }
 .phone .complejo .etiqueta { font-size: .58rem; left: 6px; right: 6px; }
 
-.cx-cafe { left: 4%; top: 4%; width: 32%; height: 36%; }
 .cx-cafe .frente { background: #f3d4b8; }
 .cx-cafe .ala { display: none; background: #d5e0c8; top: 16%; bottom: 16%; border-style: dashed; }
-.play-root[data-pueblo="pleno"] .cx-cafe { width: 38%; }
-.play-root[data-pueblo="pleno"] .cx-cafe .ala-biblio {
+.play-root[data-pueblo="pleno"] .play-root[data-pueblo="pleno"] .cx-cafe .ala-biblio {
   display: block; left: 70%; width: 16%; top: 14%; bottom: 22%;
   background: #d5e0c8; border-style: solid; transform: none;
 }
@@ -95,19 +90,16 @@
 .play-root[data-pueblo="temprano"] .cx-cafe .eti-pleno,
 .play-root[data-pueblo="pleno"] .cx-cafe .eti-temp { display: none; }
 
-.cx-lola { left: 62%; top: 5%; width: 26%; height: 32%; }
 .cx-lola .frente { background: #f3cfc0; }
 .cx-lola .toldo {
   background: repeating-linear-gradient(90deg, #2c261f 0 8px, #e56b8a 8px 16px);
 }
 .cx-lola .ala-bingo { display: none; }
-.play-root[data-pueblo="pleno"] .cx-lola { height: 38%; }
-.play-root[data-pueblo="pleno"] .cx-lola .ala-bingo {
+.play-root[data-pueblo="pleno"] .play-root[data-pueblo="pleno"] .cx-lola .ala-bingo {
   display: block; left: 8%; right: 28%; bottom: 6%; height: 28%; top: auto;
   background: #cfe8c4; transform: none;
 }
 
-.cx-cine { left: 5%; top: 44%; width: 28%; height: 30%; }
 .cx-cine .frente { background: #e8d5b3; }
 .cx-cine .marquesina {
   position: absolute; left: 8%; right: 30%; top: 10%; height: 22%;
@@ -116,15 +108,13 @@
   display: grid; place-items: center; z-index: 2;
 }
 .cx-cine .ala-arcade { display: none; }
-.play-root[data-pueblo="pleno"] .cx-cine { width: 36%; }
-.play-root[data-pueblo="pleno"] .cx-cine .ala-arcade {
+.play-root[data-pueblo="pleno"] .play-root[data-pueblo="pleno"] .cx-cine .ala-arcade {
   display: block; left: 64%; width: 32%; top: 12%; bottom: 14%;
   background: #d4c0ea; transform: none;
 }
 .play-root[data-pueblo="temprano"] .cx-cine .eti-pleno,
 .play-root[data-pueblo="pleno"] .cx-cine .eti-temp { display: none; }
 
-.cx-mala { left: 64%; top: 42%; width: 24%; height: 28%; }
 .cx-mala .frente { background: #3d3340; }
 .cx-mala .lado { background: #2a242e; }
 .cx-mala .etiqueta { background: #2c261f; color: #fffdf6; }
@@ -133,8 +123,7 @@
   background: #e56b8a; border: 2px solid #fffdf6; z-index: 2;
 }
 .cx-mala .ala { display: none; }
-.play-root[data-pueblo="pleno"] .cx-mala { width: 30%; height: 34%; }
-.play-root[data-pueblo="pleno"] .cx-mala .ala-disco {
+.play-root[data-pueblo="pleno"] .play-root[data-pueblo="pleno"] .cx-mala .ala-disco {
   display: block; left: 58%; width: 38%; top: 6%; height: 46%;
   background: #5a2a4a; transform: none;
 }
@@ -143,9 +132,6 @@
   background: #6b4a2a; transform: none;
 }
 
-.cx-parque {
-  left: 34%; top: 30%; width: 28%; height: 36%;
-}
 .cx-parque .sombra { border-radius: 40% 50% 45% 40%; }
 .cx-parque .frente {
   width: 100%; left: 0; border-radius: 40% 48% 42% 38%;
@@ -169,11 +155,9 @@
   background: #8aa56a; clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
-.cx-gym { left: 36%; top: 70%; width: 24%; height: 22%; }
 .cx-gym .frente { background: #d9dde8; }
 .cx-gym .ala-spa { display: none; }
-.play-root[data-pueblo="pleno"] .cx-gym { width: 32%; }
-.play-root[data-pueblo="pleno"] .cx-gym .ala-spa {
+.play-root[data-pueblo="pleno"] .play-root[data-pueblo="pleno"] .cx-gym .ala-spa {
   display: block; left: 62%; width: 34%; top: 14%; bottom: 16%;
   background: #e8d5e4; transform: none;
 }
@@ -248,22 +232,8 @@
 .dock button { font-family: Fraunces, Georgia, serif; }
 .dock button.is-on { background: var(--postit); }
 
-.phone .mapa-complejos {
-  position: absolute !important;
-  inset: 8px !important;
-  display: grid !important;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: repeat(3, minmax(0, 1fr));
-  gap: 8px;
-}
-.phone .complejo {
-  position: relative !important;
-  left: auto !important; top: auto !important;
-  width: auto !important; height: auto !important;
-  min-width: 0; min-height: 0;
-}
-.phone .complejo .sombra { display: none; }
-.phone .complejo .lado { width: 22%; }
+.phone .mapa-complejos { position: absolute; inset: 0; display: block !important; }
+.phone .complejo { position: absolute; }
 .phone .btn-guia, .phone .postit, .phone .bloque-a, .phone .solar { display: none; }
 
 .habs { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
@@ -321,8 +291,12 @@
 }
 .play-root[data-consulta="sel"] .selector,
 .play-root[data-consulta="quien"] .quien { display: block; }
-.selector { right: 3%; top: 12%; }
-.quien { right: 3%; top: 10%; max-height: 68%; overflow: auto; }
+
+.quien {
+  position: absolute; left: 0; top: 0; right: auto;
+  max-width: min(240px, 46%); max-height: 55%; overflow: auto;
+  z-index: 45; box-shadow: 4px 6px 0 rgba(44,38,31,.12);
+}
 .selector h3, .quien h3 { font-family: Fraunces, Georgia, serif; margin: .2rem 0; }
 .destinos { display: flex; flex-direction: column; gap: .3rem; margin-top: .5rem; }
 .destinos button, .quien .destinos button {
@@ -400,7 +374,6 @@
 .play-root[data-capa="buzon"] .capa-buzon,
 .play-root[data-capa="organizar"] .capa-organizar { transform: none; pointer-events: auto; }
 
-.pc .mapa-complejos, .pc .calles { top: 68px; }
 .pc .postit { top: auto; right: 6%; bottom: 18%; width: 154px; font-size: .92rem; }
 
 .complejo .frente, .complejo .lado, .complejo .ala {
@@ -470,10 +443,7 @@
 .phone.play-root[data-pueblo="pleno"] .cx-lola,
 .phone.play-root[data-pueblo="pleno"] .cx-mala,
 .phone.play-root[data-pueblo="pleno"] .cx-gym,
-.phone.play-root[data-pueblo="pleno"] .cx-parque {
-  width: auto !important; height: auto !important;
-}
-
+.phone.play-root[data-pueblo="pleno"] 
 .dock button { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
 .dock button i {
   width: 18px; height: 14px; display: block; border: 2px solid var(--ink);
