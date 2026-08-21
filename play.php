@@ -3,7 +3,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260820g';
+$ahtUi = 'v3-20260821a';
 $ahtTaller = isset($_GET['taller']) && (string) $_GET['taller'] !== '0';
 $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
 if ($ahtLab) {
@@ -21,7 +21,11 @@ if ($ahtLab) {
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
-    .tutorial-pista { margin: 0; padding: .4rem .8rem; font-size: .9rem; }
+    .tutorial-pista {
+      margin: 0; padding: .45rem .85rem; font-size: .88rem;
+      font-family: Fraunces, Georgia, serif; font-style: italic;
+      background: #f3e6cc; border-bottom: 2px solid #c9b8a0; color: #2a2218;
+    }
     body.play-v3:not([data-taller="1"]) .taller-cheat { display: none; }
     body.play-v3:not([data-lab="1"]) .playtest-guia,
     body.play-v3:not([data-lab="1"]) .playtest-cheats { display: none !important; }
@@ -148,32 +152,58 @@ if ($ahtLab) {
             <button type="button" class="complejo cx-cafe" data-complejo="cafe_libros" aria-label="Cafetería">
               <img class="fachada fachada-temp" src="assets/play-v3/complejos/cafe_temprano.png" alt=""/>
               <img class="fachada fachada-pleno" src="assets/play-v3/complejos/cafe_evolucionado.png" alt=""/>
+              <span class="edificios">
+                <img class="edif b-cafeteria" data-destino="lug_cafeteria" src="assets/play-v3/edificios/cafeteria.png" alt="Cafetería"/>
+                <img class="edif b-biblioteca" data-destino="lug_biblioteca" src="assets/play-v3/edificios/biblioteca.png" alt="Biblioteca"/>
+                <img class="edif b-tienda" data-destino="lug_tienda_ropa" src="assets/play-v3/edificios/tienda.png" alt="Tienda"/>
+              </span>
               <span class="eti-mapa">Cafetería</span>
               <span class="habs"></span>
             </button>
             <button type="button" class="complejo cx-lola" data-complejo="rincon_lola" aria-label="El Rincón de Lola">
               <img class="fachada fachada-temp" src="assets/play-v3/complejos/lola_temprano.png" alt=""/>
+              <span class="edificios">
+                <img class="edif b-restaurante" data-destino="lug_restaurante" src="assets/play-v3/edificios/restaurante.png" alt="Restaurante"/>
+                <img class="edif b-bingo" data-destino="lug_bingo" src="assets/play-v3/edificios/bingo.png" alt="Bingo"/>
+              </span>
               <span class="eti-mapa">El Rincón de Lola</span>
               <span class="habs"></span>
             </button>
             <button type="button" class="complejo cx-cine" data-complejo="cine_game" aria-label="Cine">
               <img class="fachada fachada-temp" src="assets/play-v3/complejos/cine_temprano.png" alt=""/>
               <img class="fachada fachada-pleno" src="assets/play-v3/complejos/cine_evolucionado.png" alt=""/>
+              <span class="edificios">
+                <img class="edif b-cine" data-destino="lug_cine" src="assets/play-v3/edificios/cine.png" alt="Cine"/>
+                <img class="edif b-recreativo" data-destino="lug_arcade" src="assets/play-v3/edificios/recreativo.png" alt="Recreativo"/>
+              </span>
               <span class="eti-mapa">Cine</span>
               <span class="habs"></span>
             </button>
             <button type="button" class="complejo cx-mala" data-complejo="mala_idea" aria-label="La Mala Idea">
               <img class="fachada fachada-temp" src="assets/play-v3/complejos/mala_temprano.png" alt=""/>
+              <span class="edificios">
+                <img class="edif b-bar" data-destino="lug_bar" src="assets/play-v3/edificios/bar.png" alt="Bar"/>
+                <img class="edif b-discoteca" data-destino="lug_discoteca" src="assets/play-v3/edificios/discoteca.png" alt="Discoteca"/>
+                <img class="edif b-karaoke" data-destino="lug_karaoke" src="assets/play-v3/edificios/karaoke.png" alt="Karaoke"/>
+              </span>
               <span class="eti-mapa">La Mala Idea</span>
               <span class="habs"></span>
             </button>
             <button type="button" class="complejo cx-parque" data-complejo="parque" aria-label="Parque">
               <img class="fachada fachada-temp" src="assets/play-v3/complejos/parque_temprano.png" alt=""/>
+              <span class="edificios">
+                <img class="edif b-picnic" data-destino="lug_picnic" src="assets/play-v3/edificios/picnic.png" alt="Picnic"/>
+                <img class="edif b-mirador" data-destino="lug_mirador" src="assets/play-v3/edificios/mirador.png" alt="Mirador"/>
+              </span>
               <span class="eti-mapa">Parque</span>
               <span class="habs"></span>
             </button>
             <button type="button" class="complejo cx-gym" data-complejo="gimnasio_spa" aria-label="Gimnasio">
               <img class="fachada fachada-temp" src="assets/play-v3/complejos/gym_temprano.png" alt=""/>
+              <span class="edificios">
+                <img class="edif b-gimnasio" data-destino="lug_gimnasio" src="assets/play-v3/edificios/gimnasio.png" alt="Gimnasio"/>
+                <img class="edif b-spa" data-destino="lug_spa" src="assets/play-v3/edificios/spa.png" alt="Spa"/>
+              </span>
               <span class="eti-mapa">Gimnasio</span>
               <span class="habs"></span>
             </button>
@@ -181,15 +211,16 @@ if ($ahtLab) {
           <div class="bloque-a"><img src="assets/play-v3/complejos/bloque_a.png" alt="Bloque A"/></div>
           <div class="solar solar-b"><img src="assets/play-v3/complejos/solar_b.png" alt="Solar B"/></div>
           <div class="solar solar-c"><img src="assets/play-v3/complejos/solar_c.png" alt="Solar C"/></div>
-          <aside class="selector">
-            <button type="button" class="cerrar" data-close>cerrar</button>
+          <aside class="selector nota-mapa">
+            <button type="button" class="cerrar" data-close aria-label="Cerrar">×</button>
+            <p class="libreta-kicker">Un vistazo al lugar</p>
             <h3 data-s-tit></h3>
             <p class="cotilleo" data-s-coti></p>
             <div class="destinos" data-s-btns></div>
           </aside>
-          <aside class="quien">
-            <button type="button" class="cerrar" data-close>cerrar</button>
-            <p class="kicker">Quién está</p>
+          <aside class="quien nota-mapa">
+            <button type="button" class="cerrar" data-close aria-label="Cerrar">×</button>
+            <p class="libreta-kicker">Quién está</p>
             <h3 data-q-tit></h3>
             <p class="quien-sum" data-q-sum></p>
             <div class="quien-list" data-q-list></div>
@@ -210,6 +241,10 @@ if ($ahtLab) {
             <div class="fecha" data-fecha></div>
             <div class="hora" data-hora>—</div>
           </div>
+          <div class="tiempo-juego" aria-label="Avanzar el tiempo">
+            <button type="button" class="tique-hora" data-horas="1" title="Avanzar una hora">+1 h</button>
+            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un día">+1 día</button>
+          </div>
           <div class="hud-right">
             <div class="dinero" data-dinero>—</div>
             <button type="button" class="buzon" data-open="buzon" aria-label="Buzón">
@@ -218,6 +253,7 @@ if ($ahtLab) {
               <img class="lacre-hud" src="assets/play-v3/hud/lacre.png" alt="OJO"/>
             </button>
             <button type="button" class="btn-organizar-pc" data-open="organizar">Organizar</button>
+            <button type="button" class="btn-nueva-mesa" id="btn-nueva-mesa" title="Empezar de cero">Nueva partida</button>
           </div>
         </div>
       </div>
@@ -229,6 +265,20 @@ if ($ahtLab) {
       </nav>
       <div class="velo" data-close></div>
       <p class="feedback-toast" data-toast></p>
+      <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
+      <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
+        <div class="tut-papel">
+          <button type="button" class="cerrar tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
+          <p class="libreta-kicker">Primeros pasos</p>
+          <h2 data-tut-tit></h2>
+          <p class="tut-texto" data-tut-texto></p>
+          <div class="tut-pasos" data-tut-pasos></div>
+          <div class="tut-acciones">
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
+            <button type="button" class="cta" data-tut-siguiente>Siguiente</button>
+          </div>
+        </div>
+      </aside>
 
       <aside class="capa capa-vecinos">
         <button type="button" class="cerrar" data-close>cerrar</button>

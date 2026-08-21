@@ -136,6 +136,103 @@
     pintarPlaytestDiag();
   }
 
+
+  const TUT_INTRO_KEY = 'aht_intro_tutorial_v1';
+  const TUT_PASOS = [
+    {
+      tit: 'Bienvenida al pueblo',
+      txt: 'Esto es tu mapa: un pueblo de papel donde ves quién está y dónde. No mueves piezas; observas, lees y propones.'
+    },
+    {
+      tit: 'El tiempo pasa',
+      txt: 'Arriba tienes el día y la hora. El pueblo sigue aunque tú no hagas nada. Con +1 h y +1 día avanzas el reloj para ver qué pasa después.'
+    },
+    {
+      tit: 'Los lugares',
+      txt: 'Toca un complejo del mapa: cafetería, cine, parque… Verás quién hay y podrás organizar algo allí si encaja.'
+    },
+    {
+      tit: 'Organizar',
+      txt: 'No mandas a nadie. Propones un plan entre dos vecinas: quién, dónde y cuándo. Ellas deciden si les cuadra.'
+    },
+    {
+      tit: 'El buzón',
+      txt: 'En el sobre llegan recados, peticiones y cotilleos. Los urgentes llevan lacre. Léelos cuando quieras; algunos piden prisa.'
+    },
+    {
+      tit: 'Vecinos y diario',
+      txt: 'En Vecinos llevas la libreta de Celestine. En Diario, El Cotilleo cuenta lo que el pueblo comenta. Todo encaja con el mismo reloj.'
+    },
+    {
+      tit: 'A jugar',
+      txt: 'Empieza por el buzón si hay un recado, o echa un ojo al mapa. Si te pierdes, el botón «¿Cómo va esto?» vuelve a abrir esta guía.'
+    }
+  ];
+  let tutIntroIdx = 0;
+
+  function tutIntroHecho() {
+    try { return localStorage.getItem(TUT_INTRO_KEY) === '1'; } catch (e) { return false; }
+  }
+  function marcarTutIntroHecho() {
+    try { localStorage.setItem(TUT_INTRO_KEY, '1'); } catch (e) {}
+  }
+  function pintarTutIntro() {
+    const box = $('[data-tut-intro]');
+    if (!box) return;
+    const paso = TUT_PASOS[tutIntroIdx];
+    $('[data-tut-tit]').textContent = paso.tit;
+    $('[data-tut-texto]').textContent = paso.txt;
+    const dots = $('[data-tut-pasos]');
+    dots.innerHTML = '';
+    TUT_PASOS.forEach(function (_, i) {
+      const s = document.createElement('span');
+      if (i <= tutIntroIdx) s.className = 'is-on';
+      dots.appendChild(s);
+    });
+    const btnAtras = $('[data-tut-atras]');
+    const btnSig = $('[data-tut-siguiente]');
+    if (btnAtras) btnAtras.hidden = tutIntroIdx === 0;
+    if (btnSig) btnSig.textContent = tutIntroIdx >= TUT_PASOS.length - 1 ? 'Empezar' : 'Siguiente';
+  }
+  function abrirTutIntro(desdeCero) {
+    if (desdeCero) tutIntroIdx = 0;
+    const box = $('[data-tut-intro]');
+    if (!box) return;
+    box.hidden = false;
+    document.body.setAttribute('data-tut-activo', '1');
+    pintarTutIntro();
+  }
+  function cerrarTutIntro(marcar) {
+    const box = $('[data-tut-intro]');
+    if (box) box.hidden = true;
+    document.body.removeAttribute('data-tut-activo');
+    if (marcar) marcarTutIntroHecho();
+    const reopen = $('[data-tut-reopen]');
+    if (reopen) reopen.hidden = false;
+  }
+  function quizaMostrarTutIntro() {
+    if (IS_LAB || tutIntroHecho()) {
+      const reopen = $('[data-tut-reopen]');
+      if (reopen && tutIntroHecho()) reopen.hidden = false;
+      return;
+    }
+    abrirTutIntro(true);
+  }
+  function pintarTutorialMotor(tut) {
+    const pista = $('[data-tutorial-pista]');
+    if (!pista) return;
+    if (!tut || !tut.activo || !tut.pista) {
+      pista.hidden = true;
+      pista.textContent = '';
+      document.body.removeAttribute('data-tutorial-zona');
+      return;
+    }
+    pista.hidden = false;
+    pista.textContent = tut.pista;
+    if (tut.zona) document.body.setAttribute('data-tutorial-zona', tut.zona);
+    else document.body.removeAttribute('data-tutorial-zona');
+  }
+
   function layout() {
     const root = $('.play-root');
     const phone = window.innerWidth < 720;
@@ -236,6 +333,7 @@
       }
       if (cx.fase === 'pleno') root.setAttribute('data-pueblo-' + cx.id, 'pleno');
       else root.removeAttribute('data-pueblo-' + cx.id);
+      pintarEdificios(btn, cx);
       const box = btn.querySelector('.habs');
       box.innerHTML = '';
       const used = {};
@@ -266,6 +364,22 @@
       const cx = (pueblo.complejos || []).filter(function (c) { return c.id === id; })[0];
       el.classList.toggle('is-pleno', !!(cx && cx.fase === 'pleno'));
     });
+  }
+
+  function pintarEdificios(btn, cx) {
+    const ops = {};
+    (cx.destinos || []).forEach(function (d, i) {
+      if (i === 0 || d.operativo) ops[d.id] = true;
+    });
+    const edifs = btn.querySelectorAll('.edif');
+    let alguna = false;
+    for (let j = 0; j < edifs.length; j++) {
+      const img = edifs[j];
+      const show = !!ops[img.getAttribute('data-destino')];
+      img.classList.toggle('is-on', show);
+      if (show) alguna = true;
+    }
+    btn.classList.toggle('tiene-edifs', alguna);
   }
 
   function cxById(id) {
@@ -392,6 +506,7 @@
   async function abrirFicha(id) {
     const r = await api('residente.ficha', { residente_id: id }, 'GET');
     if (!r.ok) return;
+    if (r.tutorial) pintarTutorialMotor(r.tutorial);
     const f = r.ficha || {};
     const vista = f.vista_play || f;
     setCapa('ficha');
@@ -466,8 +581,13 @@
         '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
         (plazo ? '<p class="plazo">' + esc(plazo) + '</p>' : '');
       art.addEventListener('click', async function () {
-        if (m.id) await api('buzon.leer', { mensaje_id: m.id });
+        let tr = null;
+        if (m.id) {
+          const lr = await api('buzon.leer', { mensaje_id: m.id });
+          tr = lr.tutorial || null;
+        }
         await refresh();
+        if (tr) pintarTutorialMotor(tr);
       });
       box.appendChild(art);
     });
@@ -627,6 +747,7 @@
         : (r.mensaje_ui || 'Propuesto. Ellas siguen a lo suyo.'));
       setCapa('');
       await refresh();
+      if (r.tutorial) pintarTutorialMotor(r.tutorial);
     } else {
       toast(r.mensaje_ui || 'Asi no se ha podido organizar.');
       await refresh();
@@ -643,11 +764,29 @@
       localStorage.setItem(storageKey(), partidaId);
     }
   }
+  async function refresh() {
+    const estadoResp = await api('partida.estado', {}, 'GET');
+    if (!estadoResp.ok) return;
+    cacheEstado = estadoResp.estado;
+    const insp = await api('partida.inspeccionar', {}, 'GET');
+    cacheInsp = insp.ok ? insp.partida : null;
+    const mapa = await api('mapa.presencia', {}, 'GET');
+    const buzon = await api('buzon.listar', {}, 'GET');
+    const diario = await api('diario.listar', {}, 'GET');
+    renderHud(cacheEstado, buzon.mensajes || []);
+    renderPueblo(mapa.pueblo || { complejos: [] });
+    renderBuzon(buzon.mensajes || []);
+    renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
+    renderVecinos();
+    $('[data-taller-msg]').textContent = cacheEstado.reloj_texto || '';
+    pintarTutorialMotor(cacheEstado.tutorial);
+  }
   $('#btn-guardar').addEventListener('click', async function () {
     await api('partida.guardar', {});
     toast('Guardado.');
   });
-  $('#btn-nueva').addEventListener('click', async function () {
+
+  async function nuevaPartidaLimpia() {
     localStorage.removeItem(storageKey());
     partidaId = null;
     cacheEstado = null;
@@ -672,6 +811,11 @@
       toast(r.mensaje_ui || 'No se pudo crear la partida.');
     }
     await refresh();
+    quizaMostrarTutIntro();
+  }
+
+  $('#btn-nueva').addEventListener('click', async function () {
+    await nuevaPartidaLimpia();
   });
     function pintarPlaytestGuia(guia, evento) {
     const box = $('[data-playtest-guia]');
@@ -798,7 +942,59 @@
     });
   }
 
+  document.body.addEventListener('click', function (ev) {
+    const t = ev.target.closest('[data-close], .velo');
+    if (t && t.closest('.play-root')) {
+      setCapa('');
+      $('.play-root').removeAttribute('data-consulta');
+      return;
+    }
+    const open = ev.target.closest('[data-open]');
+    if (open && open.closest('.play-root')) {
+      const name = open.getAttribute('data-open');
+      setCapa(name);
+      $('.play-root').removeAttribute('data-consulta');
+      if (name === 'organizar') fillOrganizar();
+      if (name === 'diario') $('[data-diario-tab="hoy"]').click();
+      return;
+    }
+    const tab = ev.target.closest('[data-diario-tab]');
+    if (tab) {
+      $('.play-root').setAttribute('data-diario', tab.getAttribute('data-diario-tab'));
+      $$('[data-diario-tab]').forEach(function (b) {
+        b.classList.toggle('is-on', b === tab);
+      });
+      return;
+    }
+    const cx = ev.target.closest('.complejo[data-complejo]');
+    if (cx) {
+      abrirConsulta(cx.getAttribute('data-complejo'));
+    }
+  });
+
+  $('[data-org-a]').addEventListener('change', refreshTipos);
+  $('[data-org-b]').addEventListener('change', refreshTipos);
+  $('[data-org-go]').addEventListener('click', proponer);
+
   window.addEventListener('resize', layout);
   layout();
-  ensurePartida().then(refresh);
+  const btnNuevaMesa = $('#btn-nueva-mesa');
+  if (btnNuevaMesa) btnNuevaMesa.addEventListener('click', nuevaPartidaLimpia);
+  const tutSkip = $('[data-tut-skip]');
+  if (tutSkip) tutSkip.addEventListener('click', function () { cerrarTutIntro(true); });
+  const tutSig = $('[data-tut-siguiente]');
+  if (tutSig) tutSig.addEventListener('click', function () {
+    if (tutIntroIdx >= TUT_PASOS.length - 1) cerrarTutIntro(true);
+    else { tutIntroIdx++; pintarTutIntro(); }
+  });
+  const tutAtras = $('[data-tut-atras]');
+  if (tutAtras) tutAtras.addEventListener('click', function () {
+    if (tutIntroIdx > 0) { tutIntroIdx--; pintarTutIntro(); }
+  });
+  const tutReopen = $('[data-tut-reopen]');
+  if (tutReopen) tutReopen.addEventListener('click', function () { abrirTutIntro(true); });
+
+  ensurePartida().then(function () {
+    return refresh().then(function () { quizaMostrarTutIntro(); });
+  });
 })();

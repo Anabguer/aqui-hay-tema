@@ -249,3 +249,143 @@ select.chip-select, .org-row select {
   width: 14px; height: 14px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
 }
+
+/* Edificios definitivos: elementos independientes por destino (primer boceto). */
+.play-v3 .complejo { overflow: visible; }
+.play-v3 .complejo .edificios {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+}
+.play-v3 .complejo .edif {
+  position: absolute; display: none;
+  width: auto; height: auto; max-height: 88%;
+  filter: drop-shadow(0 3px 2px rgba(44,38,31,.22));
+  transform: rotate(-.6deg);
+}
+.play-v3 .complejo .edif.is-on { display: block; }
+
+/* CX CAFE */
+.play-root.pc .cx-cafe .b-cafeteria { left: 2%;  bottom: 4%; width: 36%; }
+.play-root.pc .cx-cafe .b-biblioteca { left: 38%; bottom: 2%; width: 30%; }
+.play-root.pc .cx-cafe .b-tienda     { left: 70%; bottom: 4%; width: 26%; }
+
+/* CX LOLA */
+.play-root.pc .cx-lola .b-restaurante { left: 4%;  bottom: 3%; width: 48%; }
+.play-root.pc .cx-lola .b-bingo       { left: 54%; bottom: 3%; width: 42%; }
+
+/* CX CINE */
+.play-root.pc .cx-cine .b-cine        { left: 3%;  bottom: 4%; width: 50%; }
+.play-root.pc .cx-cine .b-recreativo  { left: 56%; bottom: 4%; width: 40%; }
+
+/* CX MALA IDEA */
+.play-root.pc .cx-mala .b-bar         { left: 3%;  bottom: 4%; width: 36%; }
+.play-root.pc .cx-mala .b-discoteca   { left: 41%; bottom: 2%; width: 30%; }
+.play-root.pc .cx-mala .b-karaoke     { left: 73%; bottom: 5%; width: 22%; }
+
+/* CX PARQUE (suelo base + picnic/mirador) */
+.play-v3 .cx-parque .parque-suelo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; object-position: center bottom; display: block; pointer-events: none;
+}
+.play-root.pc .cx-parque .b-picnic    { left: 14%; bottom: 6%; width: 44%; }
+.play-root.pc .cx-parque .b-mirador   { left: 60%; top: 2%;  width: 30%; }
+
+/* CX GYM */
+.play-root.pc .cx-gym .b-gimnasio { left: 4%;  bottom: 4%; width: 50%; }
+.play-root.pc .cx-gym .b-spa       { left: 56%; bottom: 4%; width: 40%; }
+
+/* Teléfono: escala M 52 (edificios más pequeños, anclados abajo). */
+.play-root.phone .complejo .edificios { inset: auto 0 0 0; }
+.play-root.phone .complejo .edif { max-height: 52px; bottom: 2px; left: 50%; transform: translateX(-50%); }
+.play-root.phone .cx-cafe .b-cafeteria { left: 22%; }
+.play-root.phone .cx-cafe .b-biblioteca { left: 40%; }
+.play-root.phone .cx-cafe .b-tienda { left: 60%; }
+.play-root.phone .cx-lola .b-restaurante { left: 30%; }
+.play-root.phone .cx-lola .b-bingo { left: 52%; }
+.play-root.phone .cx-cine .b-cine { left: 30%; }
+.play-root.phone .cx-cine .b-recreativo { left: 54%; }
+.play-root.phone .cx-mala .b-bar { left: 28%; }
+.play-root.phone .cx-mala .b-discoteca { left: 46%; }
+.play-root.phone .cx-mala .b-karaoke { left: 64%; }
+.play-root.phone .cx-parque .b-picnic { left: 34%; }
+.play-root.phone .cx-parque .b-mirador { left: 56%; top: auto; }
+.play-root.phone .cx-gym .b-gimnasio { left: 32%; }
+.play-root.phone .cx-gym .b-spa { left: 54%; }
+
+
+/* Controles de tiempo integrados en la mesa */
+.tiempo-juego {
+  display: flex; gap: 4px; align-items: center; pointer-events: auto;
+}
+.tique-hora, .tique-dia {
+  border: 2px solid #8a7a66; background: #fffdf6;
+  font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 700;
+  font-size: .72rem; padding: .32rem .45rem; cursor: pointer;
+  box-shadow: 2px 2px 0 rgba(44,38,31,.1); transform: rotate(-1deg);
+  color: var(--ink);
+}
+.tique-dia { background: #f3e6cc; transform: rotate(1deg); }
+.tique-hora:hover, .tique-dia:hover { background: var(--postit); border-color: #d48aa0; }
+.btn-nueva-mesa {
+  border: 2px solid #c9b59a; background: transparent;
+  font-family: Nunito, "Segoe UI", sans-serif; font-weight: 800;
+  font-size: .65rem; padding: .28rem .4rem; cursor: pointer;
+  color: var(--muted); text-decoration: underline; text-underline-offset: 2px;
+}
+.btn-nueva-mesa:hover { color: var(--ink); background: rgba(255,253,246,.6); }
+.play-root.phone .tiempo-juego { gap: 2px; }
+.play-root.phone .tique-hora, .play-root.phone .tique-dia {
+  font-size: .62rem; padding: .25rem .35rem;
+}
+.play-root.phone .btn-nueva-mesa { display: none; }
+
+/* Tutorial de inicio */
+.tut-intro {
+  position: absolute; z-index: 14; inset: 0;
+  display: grid; place-items: center;
+  background: rgba(44,38,31,.35);
+  pointer-events: auto;
+}
+.tut-intro[hidden] { display: none !important; }
+.tut-papel {
+  position: relative; width: min(420px, 92%);
+  background: #f7f0de url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat;
+  border: 2.5px solid #8a7a66;
+  padding: 1.1rem 1.15rem 1rem;
+  box-shadow: 6px 8px 0 rgba(44,38,31,.18);
+  transform: rotate(-.5deg);
+}
+.tut-papel::before {
+  content: ""; position: absolute; left: 14px; top: -10px; width: 20px; height: 20px;
+  background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
+}
+.tut-papel .libreta-kicker {
+  margin: 0 0 .2rem; font-size: .68rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .08em; color: #7a7164;
+}
+.tut-papel h2 {
+  font-family: Fraunces, Georgia, serif; margin: 0 0 .5rem; font-size: 1.35rem;
+}
+.tut-texto {
+  font-family: Fraunces, Georgia, serif; font-size: .95rem; line-height: 1.45;
+  margin: 0 0 .65rem; color: var(--ink);
+}
+.tut-pasos {
+  display: flex; gap: 5px; margin-bottom: .75rem;
+}
+.tut-pasos span {
+  flex: 1; height: 4px; background: #e8d7c0; border-radius: 2px;
+}
+.tut-pasos span.is-on { background: var(--pink-deep); }
+.tut-acciones { display: flex; gap: .5rem; justify-content: flex-end; align-items: center; }
+.tut-skip {
+  position: absolute; top: .5rem; right: .5rem;
+  border: 0; background: transparent; font-size: .72rem; font-weight: 800;
+  color: var(--muted); cursor: pointer; text-decoration: underline;
+}
+.tut-skip:hover { color: var(--ink); }
+body.play-v3[data-tut-activo="1"] .play-stage { pointer-events: none; }
+body.play-v3[data-tut-activo="1"] .tut-intro { pointer-events: auto; }
+
+/* Pista del bucle tutorial (motor) */
+body.play-v3[data-tutorial-zona] .tutorial-pista { display: block; }
+body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; }
