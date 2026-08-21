@@ -30,11 +30,13 @@ Desktop.ini
 .vscode/
 *.code-workspace
 
-# Dependencias futuras
+# Dependencias
 /vendor/
 /node_modules/
+/dev/node_modules/
 
-# Assets generados / evidencias de iteración visual (mantener README y .meta.json)
+# Assets generados / evidencias de iteración visual
+# (mantener README y .meta.json)
 assets/personajes/revision/**/*.png
 assets/personajes/revision/**/*.jpg
 assets/personajes/revision/**/*.webp
@@ -50,6 +52,13 @@ assets/referencias_visuales/**/*.webp
 !assets/**/*.meta.json
 !assets/**/_prompt*.json
 
-# Referencia visual landing (binario grande; README documenta ruta Drive)
+# Referencia visual landing
+# (binario grande; README documenta ruta Drive)
 docs/referencias_visuales/**/*.png
 docs/referencias_visuales/**/*.jpg
+
+# Evidencias de validación visual local
+/dev/screenshots-art/
+/dev/screenshots-bloques/
+/dev/screenshots-ui/
+/dev/_regression_*.png

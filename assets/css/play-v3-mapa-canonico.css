@@ -1,0 +1,92 @@
+﻿/* Mapa canonico unico — 9 zonas calibradas (mapa_zonas.json) */
+
+.play-v3 .board-fit {
+  background: transparent !important;
+  aspect-ratio: 1024 / 682;
+}
+
+.play-v3 .mapa-complejos,
+.play-v3 .edificios-layer {
+  display: none !important;
+}
+
+.play-v3 .mapa-canonico {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: #fff;
+}
+
+.play-v3 .mapa-canonico-bg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+}
+
+.play-v3 .mapa-zonas-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.play-v3 .mapa-zona-hit {
+  position: absolute;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  overflow: visible;
+}
+
+.play-v3 .mapa-zona-hit .habs {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.play-v3 .mapa-zona-hit .hab {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.play-v3 .mapa-zona-hit .hab .cara,
+.play-v3 .mapa-zona-hit .hab .cara img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+}
+
+.play-v3 .mapa-zona-hit .hab .cara-ini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #fff6c8;
+  border: 2px solid #2c261f;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.play-v3 .mapa-zona-hit .aforo-mas {
+  position: absolute;
+  right: 4%;
+  bottom: 6%;
+  z-index: 3;
+  border: 2px solid #2c261f;
+  background: #fff6c8;
+  font-weight: 800;
+  font-size: .72rem;
+  padding: .12rem .35rem;
+  cursor: pointer;
+  pointer-events: auto;
+}

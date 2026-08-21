@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Calibrador zonas mapa — Aquí Hay Tema (dev)</title>
+  <title>Calibrador mapa canónico — 9 zonas</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -16,25 +16,20 @@
       padding: 8px 10px; background: #1e1b17; border-bottom: 1px solid #4a4338;
     }
     header h1 { margin: 0; font-size: 14px; font-weight: 700; margin-right: 8px; }
-    header button, header label {
+    header button {
       background: #3d362c; color: inherit; border: 1px solid #6b6154;
       padding: 5px 10px; cursor: pointer; border-radius: 3px;
     }
     header button:hover { background: #524a3e; }
     header button.is-on { background: #7a4a2a; border-color: #c98a4a; }
     header .sep { width: 1px; height: 22px; background: #4a4338; margin: 0 4px; }
-    main { display: grid; grid-template-columns: 220px 1fr 340px; min-height: 0; }
-    .zonas-list {
-      overflow: auto; padding: 10px; background: #1e1b17;
-      border-right: 1px solid #4a4338;
-    }
+    main { display: grid; grid-template-columns: 220px 1fr 360px; min-height: 0; }
+    .zonas-list { overflow: auto; padding: 10px; background: #1e1b17; border-right: 1px solid #4a4338; }
     .zonas-list h2 { margin: 0 0 8px; font-size: 13px; }
     .zona-btn {
-      display: block; width: 100%; text-align: left;
-      margin-bottom: 6px; padding: 8px 10px;
-      border: 1px solid #3d362c; border-radius: 4px;
-      background: #242018; color: inherit; cursor: pointer;
-      border-left: 4px solid var(--c, #888);
+      display: block; width: 100%; text-align: left; margin-bottom: 6px; padding: 8px 10px;
+      border: 1px solid #3d362c; border-radius: 4px; background: #242018; color: inherit;
+      cursor: pointer; border-left: 4px solid var(--c, #888);
     }
     .zona-btn.is-active { border-color: #c98a4a; background: #2a2418; }
     .zona-btn small { display: block; color: #9a8f7e; font-size: 10px; margin-top: 2px; }
@@ -45,46 +40,50 @@
     .stage-wrap { transform-origin: top center; }
     .stage {
       position: relative; width: 1024px; height: 682px;
-      background: #444 center / contain no-repeat;
-      box-shadow: 0 0 0 2px #555;
-      user-select: none; touch-action: none;
+      box-shadow: 0 0 0 2px #555; user-select: none; touch-action: none;
     }
     .stage img.mapa-bg {
       position: absolute; inset: 0; width: 100%; height: 100%;
       pointer-events: none; display: block;
     }
     .zones-layer { position: absolute; inset: 0; }
-    .zona-rect {
-      position: absolute; border: 2px solid var(--c, #ffdc50);
-      background: color-mix(in srgb, var(--c, #ffdc50) 18%, transparent);
-      cursor: move; min-width: 8px; min-height: 8px;
+    .zona-rect, .tokens-rect {
+      position: absolute; min-width: 8px; min-height: 8px; cursor: move;
     }
-    .zona-rect:not(.is-active) { opacity: .45; }
-    .zona-rect.is-active { opacity: 1; z-index: 5; box-shadow: 0 0 0 1px rgba(0,0,0,.35); }
-    .zona-rect .lbl {
-      position: absolute; top: 2px; left: 4px;
-      font-size: 10px; font-weight: 700; color: #fff;
+    .zona-rect {
+      border: 2px solid var(--c, #ffdc50);
+      background: color-mix(in srgb, var(--c, #ffdc50) 16%, transparent);
+    }
+    .zona-rect:not(.is-active) { opacity: .42; }
+    .zona-rect.is-active { opacity: 1; z-index: 4; box-shadow: 0 0 0 1px rgba(0,0,0,.35); }
+    .tokens-rect {
+      border: 2px dashed #6ec8ff;
+      background: rgba(110, 200, 255, .12); z-index: 6;
+    }
+    .tokens-rect:not(.is-active) { opacity: .55; }
+    .tokens-rect.is-active { opacity: 1; box-shadow: 0 0 0 1px rgba(110,200,255,.5); }
+    .zona-rect .lbl, .tokens-rect .lbl {
+      position: absolute; top: 2px; left: 4px; font-size: 10px; font-weight: 700; color: #fff;
       text-shadow: 0 1px 2px rgba(0,0,0,.85); pointer-events: none;
     }
-    .zona-rect .handle {
+    .tokens-rect .lbl { color: #dff4ff; }
+    .handle {
       position: absolute; width: 10px; height: 10px;
-      background: #fff; border: 2px solid #222; border-radius: 2px;
-      z-index: 2;
+      background: #fff; border: 2px solid #222; border-radius: 2px; z-index: 8;
     }
-    .zona-rect .handle.nw { top: -6px; left: -6px; cursor: nwse-resize; }
-    .zona-rect .handle.ne { top: -6px; right: -6px; cursor: nesw-resize; }
-    .zona-rect .handle.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
-    .zona-rect .handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
-    .zona-rect .handle.n { top: -6px; left: 50%; margin-left: -5px; cursor: ns-resize; }
-    .zona-rect .handle.s { bottom: -6px; left: 50%; margin-left: -5px; cursor: ns-resize; }
-    .zona-rect .handle.w { left: -6px; top: 50%; margin-top: -5px; cursor: ew-resize; }
-    .zona-rect .handle.e { right: -6px; top: 50%; margin-top: -5px; cursor: ew-resize; }
-    .zona-rect .obras-preview {
-      position: absolute; inset: 0; display: flex;
-      align-items: center; justify-content: center;
-      pointer-events: none; padding: 6%;
+    .handle.nw { top: -6px; left: -6px; cursor: nwse-resize; }
+    .handle.ne { top: -6px; right: -6px; cursor: nesw-resize; }
+    .handle.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+    .handle.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+    .handle.n { top: -6px; left: 50%; margin-left: -5px; cursor: ns-resize; }
+    .handle.s { bottom: -6px; left: 50%; margin-left: -5px; cursor: ns-resize; }
+    .handle.w { left: -6px; top: 50%; margin-top: -5px; cursor: ew-resize; }
+    .handle.e { right: -6px; top: 50%; margin-top: -5px; cursor: ew-resize; }
+    .obras-preview {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      pointer-events: none; padding: 6%; z-index: 3;
     }
-    .zona-rect .obras-preview img {
+    .obras-preview img {
       max-width: 88%; max-height: 88%; width: auto; height: auto;
       object-fit: contain; opacity: .95;
     }
@@ -92,29 +91,26 @@
       position: absolute; border: 2px dashed #fff;
       background: rgba(255,255,255,.12); pointer-events: none; z-index: 20;
     }
-    aside {
-      overflow: auto; padding: 10px; background: #242018;
-      border-left: 1px solid #4a4338;
-    }
+    aside { overflow: auto; padding: 10px; background: #242018; border-left: 1px solid #4a4338; }
     aside h2 { margin: 0 0 8px; font-size: 13px; }
     .info { color: #b8aa96; font-size: 12px; margin-bottom: 10px; }
-    .ctrl { display: grid; grid-template-columns: 72px 1fr 36px; gap: 4px; align-items: center; margin: 5px 0; }
-    .ctrl label { grid-column: 1 / -1; color: #9a8f7e; font-size: 11px; }
+    .layer-toggle { display: flex; gap: 6px; margin-bottom: 10px; }
+    .layer-toggle button { flex: 1; padding: 6px 8px; }
+    .ctrl { display: grid; grid-template-columns: 1fr; gap: 4px; margin: 5px 0; }
+    .ctrl label { color: #9a8f7e; font-size: 11px; }
     .ctrl input[type=number] {
       width: 100%; padding: 4px; background: #111; color: #cfc;
       border: 1px solid #4a4338; font: inherit;
     }
-    .ctrl button {
-      padding: 4px; background: #3d362c; border: 1px solid #6b6154; color: inherit; cursor: pointer;
-    }
+    .section-title { margin: 12px 0 6px; font-size: 11px; color: #c98a4a; text-transform: uppercase; letter-spacing: .06em; }
     .row-btns { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
-    .row-btns button { flex: 1 1 auto; min-width: 90px; }
+    .row-btns button { flex: 1 1 45%; min-width: 80px; padding: 6px; }
     .export-box { margin-top: 12px; padding-top: 10px; border-top: 1px solid #4a4338; }
     .export-box textarea {
-      width: 100%; height: 200px; font: 11px/1.3 Consolas, monospace;
+      width: 100%; height: 220px; font: 11px/1.3 Consolas, monospace;
       background: #111; color: #cfc; border: 1px solid #4a4338; padding: 6px;
     }
-    .export-box button { margin-top: 6px; width: 100%; padding: 8px; }
+    .export-box button { margin-top: 6px; width: 100%; padding: 8px; background: #3d362c; color: inherit; border: 1px solid #6b6154; cursor: pointer; }
     .hint { font-size: 11px; color: #8a8070; margin-top: 8px; line-height: 1.45; }
     #toast {
       position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
@@ -125,7 +121,7 @@
 </head>
 <body>
   <header>
-    <h1>Calibrador zonas (mapa único)</h1>
+    <h1>Calibrador mapa canónico</h1>
     <button type="button" id="btn-zoom-out">− zoom</button>
     <button type="button" id="btn-zoom-in">+ zoom</button>
     <span id="zoom-label">70%</span>
@@ -135,12 +131,9 @@
     <span class="sep"></span>
     <button type="button" id="btn-export">EXPORTAR JSON</button>
     <button type="button" id="btn-copy">COPIAR JSON</button>
-    <button type="button" id="btn-clear-zone">Borrar zona</button>
   </header>
   <main>
-    <div class="zonas-list" id="zonas-list">
-      <h2>Zonas (9)</h2>
-    </div>
+    <div class="zonas-list" id="zonas-list"></div>
     <div class="viewport" id="viewport">
       <div class="stage-wrap" id="stage-wrap">
         <div class="stage" id="stage">
@@ -151,22 +144,28 @@
     </div>
     <aside>
       <h2 id="sel-title">Zona seleccionada</h2>
-      <p class="info" id="sel-info">Elige una zona a la izquierda. Arrastra en el mapa para dibujar su área.</p>
+      <p class="info" id="sel-info"></p>
+      <div class="layer-toggle">
+        <button type="button" id="btn-layer-zona" class="is-on">Área clicable</button>
+        <button type="button" id="btn-layer-tokens">Área tokens</button>
+      </div>
       <div id="controls"></div>
       <div class="row-btns">
         <button type="button" id="btn-nudge-up">↑ 0.5%</button>
         <button type="button" id="btn-nudge-down">↓ 0.5%</button>
         <button type="button" id="btn-nudge-left">← 0.5%</button>
         <button type="button" id="btn-nudge-right">→ 0.5%</button>
+        <button type="button" id="btn-clear-layer">Borrar capa activa</button>
       </div>
       <div class="export-box">
-        <label for="export-out">Salida JSON (porcentajes)</label>
+        <label for="export-out">Salida JSON (porcentajes del mapa)</label>
         <textarea id="export-out" readonly spellcheck="false"></textarea>
         <button type="button" id="btn-download">Descargar mapa_zonas.json</button>
         <p class="hint">
-          Coordenadas en % relativas al tamaño de la imagen (origen arriba-izquierda).<br/>
-          Arrastra vacío = dibujar · arrastra rectángulo = mover · asas = redimensionar.<br/>
-          Calibrador anterior (14 PNG): <code>dev/mapa-calibrador.html</code>
+          Rutas canónicas: <code>assets/play-v3/mapa_canonico.jpg</code> ·
+          <code>assets/play-v3/overlay_en_obras.png</code><br/>
+          Rectángulo sólido = zona clicable · rectángulo punteado azul = tokens/personajes.<br/>
+          Clic vacío = dibujar · arrastrar = mover · asas = redimensionar.
         </p>
       </div>
     </aside>
@@ -179,9 +178,8 @@
 
   var MAP_W = 1024;
   var MAP_H = 682;
-  var MAP_URL = '../assets/play-v3/mapa_canonico.jpg';
   var OBRAS_URL = '../assets/play-v3/overlay_en_obras.png';
-  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v1';
+  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v2';
   var MIN_PCT = 0.5;
 
   var ZONAS = [
@@ -198,6 +196,7 @@
 
   var state = {
     selected: 'cafeteria',
+    editLayer: 'zona',
     zoom: 0.7,
     showAll: true,
     showObras: false,
@@ -210,12 +209,13 @@
   var zonasList = document.getElementById('zonas-list');
   var controlsEl = document.getElementById('controls');
   var exportOut = document.getElementById('export-out');
-
-  var interaction = { mode: null, id: null, handle: null, sx: 0, sy: 0, start: null, orig: null };
+  var interaction = { mode: null, layer: null, id: null, handle: null, sx: 0, sy: 0, start: null, orig: null };
   var drawPreview = null;
 
+  function emptyRect() { return { x: 0, y: 0, w: 0, h: 0 }; }
+
   ZONAS.forEach(function (z) {
-    state.zonas[z.id] = { x: 0, y: 0, w: 0, h: 0 };
+    state.zonas[z.id] = { x: 0, y: 0, w: 0, h: 0, tokens: emptyRect() };
   });
 
   function toast(msg) {
@@ -226,16 +226,14 @@
     toast._t = setTimeout(function () { t.classList.remove('is-on'); }, 1800);
   }
 
-  function roundPct(n) {
-    return Math.round(n * 100) / 100;
-  }
+  function roundPct(n) { return Math.round(n * 100) / 100; }
 
-  function pctToPx(z) {
+  function pctToPx(r) {
     return {
-      left: (z.x / 100) * MAP_W,
-      top: (z.y / 100) * MAP_H,
-      width: (z.w / 100) * MAP_W,
-      height: (z.h / 100) * MAP_H
+      left: (r.x / 100) * MAP_W,
+      top: (r.y / 100) * MAP_H,
+      width: (r.w / 100) * MAP_W,
+      height: (r.h / 100) * MAP_H
     };
   }
 
@@ -249,33 +247,40 @@
   }
 
   function clampRect(p) {
-    var x = Math.max(0, Math.min(100 - MIN_PCT, p.x));
-    var y = Math.max(0, Math.min(100 - MIN_PCT, p.y));
-    var w = Math.max(MIN_PCT, Math.min(100 - x, p.w));
-    var h = Math.max(MIN_PCT, Math.min(100 - y, p.h));
-    return { x: x, y: y, w: w, h: h };
+    return {
+      x: Math.max(0, Math.min(100 - MIN_PCT, p.x)),
+      y: Math.max(0, Math.min(100 - MIN_PCT, p.y)),
+      w: Math.max(0, Math.min(100 - p.x, p.w)),
+      h: Math.max(0, Math.min(100 - p.y, p.h))
+    };
   }
 
+  function hasRect(r) { return r && r.w >= MIN_PCT && r.h >= MIN_PCT; }
+
   function zonaMeta(id) {
-    for (var i = 0; i < ZONAS.length; i++) {
-      if (ZONAS[i].id === id) return ZONAS[i];
-    }
+    for (var i = 0; i < ZONAS.length; i++) if (ZONAS[i].id === id) return ZONAS[i];
     return { id: id, label: id, color: '#888' };
   }
 
-  function getZ(id) {
-    return state.zonas[id];
+  function getLayerRect(id, layer) {
+    var z = state.zonas[id];
+    return layer === 'tokens' ? z.tokens : z;
   }
 
-  function setZ(id, patch) {
+  function setLayerRect(id, layer, patch) {
     var z = state.zonas[id];
+    var cur = layer === 'tokens' ? z.tokens : z;
     var next = clampRect({
-      x: patch.x !== undefined ? patch.x : z.x,
-      y: patch.y !== undefined ? patch.y : z.y,
-      w: patch.w !== undefined ? patch.w : z.w,
-      h: patch.h !== undefined ? patch.h : z.h
+      x: patch.x !== undefined ? patch.x : cur.x,
+      y: patch.y !== undefined ? patch.y : cur.y,
+      w: patch.w !== undefined ? patch.w : cur.w,
+      h: patch.h !== undefined ? patch.h : cur.h
     });
-    z.x = next.x; z.y = next.y; z.w = next.w; z.h = next.h;
+    if (layer === 'tokens') {
+      z.tokens.x = next.x; z.tokens.y = next.y; z.tokens.w = next.w; z.tokens.h = next.h;
+    } else {
+      z.x = next.x; z.y = next.y; z.w = next.w; z.h = next.h;
+    }
     saveLocal();
     renderZones();
     renderControls();
@@ -283,8 +288,12 @@
     renderZonaButtons();
   }
 
+  function clearLayerRect(id, layer) {
+    setLayerRect(id, layer, emptyRect());
+  }
+
   function saveLocal() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ zonas: state.zonas })); } catch (e) { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ zonas: state.zonas })); } catch (e) {}
   }
 
   function loadLocal() {
@@ -292,12 +301,22 @@
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
       var parsed = JSON.parse(raw);
-      if (parsed.zonas) {
-        Object.keys(parsed.zonas).forEach(function (id) {
-          if (state.zonas[id]) state.zonas[id] = clampRect(parsed.zonas[id]);
-        });
-      }
-    } catch (e) { /* ignore */ }
+      if (!parsed.zonas) return;
+      Object.keys(parsed.zonas).forEach(function (id) {
+        if (!state.zonas[id]) return;
+        var s = parsed.zonas[id];
+        state.zonas[id].x = s.x || 0;
+        state.zonas[id].y = s.y || 0;
+        state.zonas[id].w = s.w || 0;
+        state.zonas[id].h = s.h || 0;
+        if (s.tokens) {
+          state.zonas[id].tokens = {
+            x: s.tokens.x || 0, y: s.tokens.y || 0,
+            w: s.tokens.w || 0, h: s.tokens.h || 0
+          };
+        }
+      });
+    } catch (e) {}
   }
 
   function stageScale() { return state.zoom; }
@@ -305,87 +324,117 @@
   function stagePoint(ev) {
     var rect = stage.getBoundingClientRect();
     var s = stageScale();
-    return {
-      x: (ev.clientX - rect.left) / s,
-      y: (ev.clientY - rect.top) / s
-    };
+    return { x: (ev.clientX - rect.left) / s, y: (ev.clientY - rect.top) / s };
+  }
+
+  function appendHandles(el) {
+    ['nw','n','ne','e','se','s','sw','w'].forEach(function (h) {
+      var hd = document.createElement('span');
+      hd.className = 'handle ' + h;
+      hd.setAttribute('data-handle', h);
+      el.appendChild(hd);
+    });
   }
 
   function renderZonaButtons() {
-    var html = '<h2>Zonas (9)</h2>';
+    var html = '<h2>9 lugares</h2>';
     ZONAS.forEach(function (z) {
-      var cfg = getZ(z.id);
-      var ok = cfg.w > 0 && cfg.h > 0;
+      var cfg = state.zonas[z.id];
+      var ok = hasRect(cfg);
+      var tok = hasRect(cfg.tokens);
       html += '<button type="button" class="zona-btn' + (state.selected === z.id ? ' is-active' : '') +
-        '" data-z="' + z.id + '" style="--c:' + z.color + '">' +
-        z.label + '<small>' + (ok ? (cfg.x + ', ' + cfg.y + ' · ' + cfg.w + '×' + cfg.h + '%') : 'sin marcar') +
-        '</small></button>';
+        '" data-z="' + z.id + '" style="--c:' + z.color + '">' + z.label +
+        '<small>' + (ok ? ('zona ' + cfg.w + '×' + cfg.h + '%') : 'zona sin marcar') +
+        (tok ? ' · tokens OK' : '') + '</small></button>';
     });
     zonasList.innerHTML = html;
     zonasList.querySelectorAll('[data-z]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         state.selected = btn.getAttribute('data-z');
-        renderZones();
-        renderControls();
-        renderZonaButtons();
+        renderAll();
       });
     });
+  }
+
+  function renderRectEl(meta, layer, r, active) {
+    if (!hasRect(r)) return null;
+    var px = pctToPx(r);
+    var el = document.createElement('div');
+    el.className = (layer === 'tokens' ? 'tokens-rect' : 'zona-rect') + (active ? ' is-active' : '');
+    el.style.setProperty('--c', meta.color);
+    el.style.left = px.left + 'px';
+    el.style.top = px.top + 'px';
+    el.style.width = px.width + 'px';
+    el.style.height = px.height + 'px';
+    el.setAttribute('data-z', meta.id);
+    el.setAttribute('data-layer', layer);
+    el.innerHTML = '<span class="lbl">' + (layer === 'tokens' ? 'tokens' : meta.label) + '</span>';
+    if (layer === 'zona' && state.showObras && meta.id === state.selected) {
+      el.innerHTML += '<div class="obras-preview"><img src="' + OBRAS_URL + '" alt="EN OBRAS"/></div>';
+    }
+    if (active) appendHandles(el);
+    return el;
   }
 
   function renderZones() {
     zonesLayer.innerHTML = '';
     ZONAS.forEach(function (meta) {
-      var z = getZ(meta.id);
-      if (z.w <= 0 || z.h <= 0) return;
+      var z = state.zonas[meta.id];
+      if (!hasRect(z)) return;
       if (!state.showAll && meta.id !== state.selected) return;
-      var px = pctToPx(z);
-      var el = document.createElement('div');
-      el.className = 'zona-rect' + (meta.id === state.selected ? ' is-active' : '');
-      el.style.setProperty('--c', meta.color);
-      el.style.left = px.left + 'px';
-      el.style.top = px.top + 'px';
-      el.style.width = px.width + 'px';
-      el.style.height = px.height + 'px';
-      el.setAttribute('data-z', meta.id);
-      el.innerHTML = '<span class="lbl">' + meta.label + '</span>';
-      if (state.showObras && meta.id === state.selected) {
-        el.innerHTML += '<div class="obras-preview"><img src="' + OBRAS_URL + '" alt="EN OBRAS"/></div>';
+      var activeZona = meta.id === state.selected && state.editLayer === 'zona';
+      var activeTok = meta.id === state.selected && state.editLayer === 'tokens';
+      var zonaEl = renderRectEl(meta, 'zona', z, activeZona);
+      if (zonaEl) zonesLayer.appendChild(zonaEl);
+      if (hasRect(z.tokens)) {
+        var tokEl = renderRectEl(meta, 'tokens', z.tokens, activeTok);
+        if (tokEl) zonesLayer.appendChild(tokEl);
       }
-      if (meta.id === state.selected) {
-        ['nw','n','ne','e','se','s','sw','w'].forEach(function (h) {
-          var hd = document.createElement('span');
-          hd.className = 'handle ' + h;
-          hd.setAttribute('data-handle', h);
-          el.appendChild(hd);
-        });
-      }
-      zonesLayer.appendChild(el);
     });
+  }
+
+  function numRow(label, layer, key, val) {
+    return '<div class="ctrl"><label>' + label + '</label>' +
+      '<input type="number" step="0.01" min="0" max="100" data-layer="' + layer + '" data-k="' + key + '" value="' + val + '"/></div>';
   }
 
   function renderControls() {
     var meta = zonaMeta(state.selected);
-    var z = getZ(state.selected);
-    document.getElementById('sel-title').textContent = meta.label + ' (' + meta.id + ')';
-    document.getElementById('sel-info').textContent =
-      (z.w > 0 ? 'Área marcada. Arrastra para mover o usa las asas.' : 'Sin área: clic y arrastra en el mapa para dibujar.');
+    var z = state.zonas[state.selected];
+    var layerLabel = state.editLayer === 'tokens' ? 'tokens / personajes' : 'zona clicable';
+    document.getElementById('sel-title').textContent = meta.label + ' · ' + layerLabel;
+    document.getElementById('sel-info').textContent = state.editLayer === 'tokens'
+      ? 'Marca el rectángulo donde cabrán personajes sin salirse del lugar.'
+      : (hasRect(z) ? 'Zona clicable marcada.' : 'Sin zona: arrastra en el mapa para dibujar.');
+    document.getElementById('btn-layer-zona').classList.toggle('is-on', state.editLayer === 'zona');
+    document.getElementById('btn-layer-tokens').classList.toggle('is-on', state.editLayer === 'tokens');
+
+    var cur = state.editLayer === 'tokens' ? z.tokens : z;
     controlsEl.innerHTML =
-      numRow('X (%)', 'x', z.x) +
-      numRow('Y (%)', 'y', z.y) +
-      numRow('Ancho (%)', 'w', z.w) +
-      numRow('Alto (%)', 'h', z.h);
+      '<div class="section-title">Capa activa: ' + layerLabel + '</div>' +
+      numRow('X (%)', state.editLayer, 'x', cur.x) +
+      numRow('Y (%)', state.editLayer, 'y', cur.y) +
+      numRow('Ancho (%)', state.editLayer, 'w', cur.w) +
+      numRow('Alto (%)', state.editLayer, 'h', cur.h);
+
+    if (hasRect(z)) {
+      controlsEl.innerHTML += '<div class="section-title">Zona clicable</div>' +
+        numRow('X', 'zona', 'x', z.x) + numRow('Y', 'zona', 'y', z.y) +
+        numRow('Ancho', 'zona', 'w', z.w) + numRow('Alto', 'zona', 'h', z.h);
+    }
+    if (hasRect(z.tokens)) {
+      controlsEl.innerHTML += '<div class="section-title">Tokens</div>' +
+        numRow('X', 'tokens', 'x', z.tokens.x) + numRow('Y', 'tokens', 'y', z.tokens.y) +
+        numRow('Ancho', 'tokens', 'w', z.tokens.w) + numRow('Alto', 'tokens', 'h', z.tokens.h);
+    }
+
     controlsEl.querySelectorAll('input[data-k]').forEach(function (inp) {
       inp.addEventListener('change', function () {
         var patch = {};
         patch[inp.getAttribute('data-k')] = Number(inp.value);
-        setZ(state.selected, patch);
+        setLayerRect(state.selected, inp.getAttribute('data-layer'), patch);
       });
     });
-  }
-
-  function numRow(label, key, val) {
-    return '<div class="ctrl"><label>' + label + '</label>' +
-      '<span></span><input type="number" step="0.01" min="0" max="100" data-k="' + key + '" value="' + val + '"/><span></span></div>';
   }
 
   function buildExport() {
@@ -400,37 +449,30 @@
       zonas: {}
     };
     ZONAS.forEach(function (meta) {
-      var z = getZ(meta.id);
-      out.zonas[meta.id] = {
-        x: z.x, y: z.y, w: z.w, h: z.h,
-        label: meta.label
-      };
+      var z = state.zonas[meta.id];
+      var item = { x: z.x, y: z.y, w: z.w, h: z.h, label: meta.label };
+      if (hasRect(z.tokens)) {
+        item.tokens = { x: z.tokens.x, y: z.tokens.y, w: z.tokens.w, h: z.tokens.h };
+      }
+      out.zonas[meta.id] = item;
     });
     return out;
   }
 
-  function updateExportPreview() {
-    exportOut.value = JSON.stringify(buildExport(), null, 2);
-  }
+  function updateExportPreview() { exportOut.value = JSON.stringify(buildExport(), null, 2); }
 
   function copyExport() {
     exportOut.select();
-    exportOut.setSelectionRange(0, exportOut.value.length);
     navigator.clipboard.writeText(exportOut.value).then(function () {
-      toast('JSON copiado al portapapeles');
-    }).catch(function () {
-      document.execCommand('copy');
       toast('JSON copiado');
-    });
+    }).catch(function () { document.execCommand('copy'); toast('JSON copiado'); });
   }
 
   function downloadExport() {
-    var blob = new Blob([exportOut.value], { type: 'application/json' });
     var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
+    a.href = URL.createObjectURL(new Blob([exportOut.value], { type: 'application/json' }));
     a.download = 'mapa_zonas.json';
     a.click();
-    URL.revokeObjectURL(a.href);
     toast('Descarga iniciada');
   }
 
@@ -448,41 +490,40 @@
     if (ev.button !== 0) return;
     var t = ev.target;
     var handle = t.closest('[data-handle]');
-    var rect = t.closest('.zona-rect');
+    var rectEl = t.closest('[data-z]');
     var pt = stagePoint(ev);
 
-    if (handle && rect) {
+    if (handle && rectEl) {
       interaction.mode = 'resize';
-      interaction.id = rect.getAttribute('data-z');
+      interaction.layer = rectEl.getAttribute('data-layer');
+      interaction.id = rectEl.getAttribute('data-z');
       interaction.handle = handle.getAttribute('data-handle');
-      interaction.sx = pt.x;
-      interaction.sy = pt.y;
-      interaction.orig = Object.assign({}, getZ(interaction.id));
+      interaction.orig = Object.assign({}, getLayerRect(interaction.id, interaction.layer));
       ev.preventDefault();
       return;
     }
-    if (rect) {
+    if (rectEl) {
       interaction.mode = 'move';
-      interaction.id = rect.getAttribute('data-z');
+      interaction.layer = rectEl.getAttribute('data-layer');
+      interaction.id = rectEl.getAttribute('data-z');
       state.selected = interaction.id;
+      state.editLayer = interaction.layer;
       interaction.sx = pt.x;
       interaction.sy = pt.y;
-      interaction.orig = Object.assign({}, getZ(interaction.id));
-      renderZones();
-      renderControls();
-      renderZonaButtons();
+      interaction.orig = Object.assign({}, getLayerRect(interaction.id, interaction.layer));
+      renderAll();
       ev.preventDefault();
       return;
     }
     if (t.closest('.stage') || t === stage || t.id === 'mapa-bg') {
       interaction.mode = 'draw';
+      interaction.layer = state.editLayer;
       interaction.id = state.selected;
-      interaction.sx = pt.x;
-      interaction.sy = pt.y;
       interaction.start = { x: pt.x, y: pt.y };
       clearDrawPreview();
       drawPreview = document.createElement('div');
       drawPreview.className = 'draw-preview';
+      if (state.editLayer === 'tokens') drawPreview.style.borderColor = '#6ec8ff';
       zonesLayer.appendChild(drawPreview);
       ev.preventDefault();
     }
@@ -493,23 +534,19 @@
     if (interaction.mode === 'draw' && drawPreview) {
       var x1 = Math.min(interaction.start.x, pt.x);
       var y1 = Math.min(interaction.start.y, pt.y);
-      var x2 = Math.max(interaction.start.x, pt.x);
-      var y2 = Math.max(interaction.start.y, pt.y);
       drawPreview.style.left = x1 + 'px';
       drawPreview.style.top = y1 + 'px';
-      drawPreview.style.width = (x2 - x1) + 'px';
-      drawPreview.style.height = (y2 - y1) + 'px';
+      drawPreview.style.width = Math.abs(pt.x - interaction.start.x) + 'px';
+      drawPreview.style.height = Math.abs(pt.y - interaction.start.y) + 'px';
       return;
     }
     if (!interaction.mode || !interaction.orig) return;
-    var o = interaction.orig;
-    var opx = pctToPx(o);
+    var opx = pctToPx(interaction.orig);
     if (interaction.mode === 'move') {
       var dx = pt.x - interaction.sx;
       var dy = pt.y - interaction.sy;
-      var p = pxToPct(opx.left + dx, opx.top + dy, opx.width, opx.height);
-      setZ(interaction.id, p);
-      interaction.orig = Object.assign({}, getZ(interaction.id));
+      setLayerRect(interaction.id, interaction.layer, pxToPct(opx.left + dx, opx.top + dy, opx.width, opx.height));
+      interaction.orig = Object.assign({}, getLayerRect(interaction.id, interaction.layer));
       interaction.sx = pt.x;
       interaction.sy = pt.y;
       return;
@@ -521,9 +558,8 @@
       if (h.indexOf('e') >= 0) right = pt.x;
       if (h.indexOf('n') >= 0) top = pt.y;
       if (h.indexOf('s') >= 0) bottom = pt.y;
-      if (right - left < 4) return;
-      if (bottom - top < 4) return;
-      setZ(interaction.id, pxToPct(left, top, right - left, bottom - top));
+      if (right - left < 4 || bottom - top < 4) return;
+      setLayerRect(interaction.id, interaction.layer, pxToPct(left, top, right - left, bottom - top));
     }
   }
 
@@ -535,21 +571,29 @@
       var w = Math.abs(pt.x - interaction.start.x);
       var h = Math.abs(pt.y - interaction.start.y);
       if (w >= 4 && h >= 4) {
-        setZ(interaction.id, pxToPct(x1, y1, w, h));
-        toast('Zona ' + interaction.id + ' marcada');
+        setLayerRect(interaction.id, interaction.layer, pxToPct(x1, y1, w, h));
+        toast((interaction.layer === 'tokens' ? 'Tokens' : 'Zona') + ' marcados');
       }
       clearDrawPreview();
     }
     interaction.mode = null;
+    interaction.layer = null;
     interaction.id = null;
     interaction.handle = null;
     interaction.orig = null;
   }
 
   function nudge(dx, dy) {
-    var z = getZ(state.selected);
-    if (z.w <= 0) return;
-    setZ(state.selected, { x: z.x + dx, y: z.y + dy });
+    var r = getLayerRect(state.selected, state.editLayer);
+    if (!hasRect(r)) return;
+    setLayerRect(state.selected, state.editLayer, { x: r.x + dx, y: r.y + dy });
+  }
+
+  function renderAll() {
+    renderZonaButtons();
+    renderZones();
+    renderControls();
+    updateExportPreview();
   }
 
   document.getElementById('mapa-bg').addEventListener('load', function () {
@@ -578,12 +622,20 @@
     this.classList.toggle('is-on', state.showObras);
     renderZones();
   });
+  document.getElementById('btn-layer-zona').addEventListener('click', function () {
+    state.editLayer = 'zona';
+    renderAll();
+  });
+  document.getElementById('btn-layer-tokens').addEventListener('click', function () {
+    state.editLayer = 'tokens';
+    renderAll();
+  });
   document.getElementById('btn-export').addEventListener('click', updateExportPreview);
   document.getElementById('btn-copy').addEventListener('click', copyExport);
   document.getElementById('btn-download').addEventListener('click', downloadExport);
-  document.getElementById('btn-clear-zone').addEventListener('click', function () {
-    setZ(state.selected, { x: 0, y: 0, w: 0, h: 0 });
-    toast('Zona borrada');
+  document.getElementById('btn-clear-layer').addEventListener('click', function () {
+    clearLayerRect(state.selected, state.editLayer);
+    toast('Capa borrada');
   });
   document.getElementById('btn-nudge-up').addEventListener('click', function () { nudge(0, -0.5); });
   document.getElementById('btn-nudge-down').addEventListener('click', function () { nudge(0, 0.5); });
@@ -595,10 +647,7 @@
   window.addEventListener('mouseup', onPointerUp);
 
   loadLocal();
-  renderZonaButtons();
-  renderZones();
-  renderControls();
-  updateExportPreview();
+  renderAll();
   applyZoom();
 })();
 </script>

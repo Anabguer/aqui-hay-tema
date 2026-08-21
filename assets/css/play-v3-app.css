@@ -136,8 +136,30 @@ body.play-v3 {
 .capa h2 { font-family: Fraunces, Georgia, serif; margin: 0; font-size: 1.45rem; }
 .capa p { margin: 0; line-height: 1.4; }
 .mini { color: var(--muted); font-size: .86rem; }
-.cta { border: 3px solid var(--ink); background: var(--pink); color: #fffdf6; font: inherit; font-weight: 800; padding: .5rem .75rem; cursor: pointer; }
-.cta.ghost { background: transparent; color: var(--ink); border-color: #c9b59a; }
+.cta {
+  border: 2px solid #2c261f;
+  background: linear-gradient(145deg, #fde8ef, #f5a8bc);
+  color: #2c261f;
+  font: inherit;
+  font-weight: 800;
+  padding: .55rem .9rem;
+  cursor: pointer;
+  transform: rotate(-.5deg);
+  clip-path: polygon(0 4%, 98% 0, 100% 92%, 4% 100%);
+  box-shadow: 2px 3px 0 rgba(44,38,31,.18);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.cta:hover { transform: rotate(0deg) translateY(-1px); }
+.cta.ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 2px solid #c9b59a;
+  box-shadow: none;
+  clip-path: none;
+  transform: none;
+  font-weight: 700;
+}
+.cta.ghost:hover { color: var(--ink); transform: none; }
 .vecino { border: 2px solid #c9b59a; background: rgba(246,239,224,.9); display: flex; align-items: center; gap: .45rem; padding: .35rem; cursor: pointer; font: inherit; text-align: left; width: 100%; }
 .vecino img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
 .ficha-hero { display: flex; gap: .8rem; align-items: center; }

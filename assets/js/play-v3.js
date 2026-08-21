@@ -298,31 +298,7 @@
     const ult = (hoy[0] && (hoy[0].texto || hoy[0].cuerpo || hoy[0].titulo)) || '';
     if (teaser) teaser.textContent = ult || 'Todavía no hay cotilleo hoy.';
 
-    const bloques = $('[data-bloques-row]');
-    if (bloques) {
-      bloques.innerHTML = '';
-      const defs = [
-        { id: 'a', key: 'bloque_a', label: 'BLOQUE A' },
-        { id: 'b', key: 'bloque_b', label: 'BLOQUE B' },
-        { id: 'c', key: 'bloque_c', label: 'BLOQUE C' },
-      ];
-      defs.forEach(function (d) {
-        const blk = partida[d.key];
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'bloque-chip';
-        if (!blk || !blk.viviendas) {
-          btn.disabled = true;
-          btn.textContent = d.label + ' · cerrado';
-        } else {
-          let occ = 0;
-          (blk.viviendas || []).forEach(function (v) { if (v.ocupante_id) occ++; });
-          const cap = blk.capacidad || blk.viviendas.length || 16;
-          btn.textContent = d.label + ' · ' + occ + '/' + cap;
-        }
-        bloques.appendChild(btn);
-      });
-    }
+    renderResidencias();
 
     const prev = $('[data-buzon-preview]');
     const pend = (buzon || []).filter(function (m) {
@@ -380,6 +356,195 @@
         strip.innerHTML = '<p class="muted">Aún no hay parejas registradas.</p>';
       }
     }
+  }
+
+
+  var cacheMapaZonas = null;
+  var LUG_TO_ZONA = {
+    lug_cafeteria: 'cafeteria', lug_biblioteca: 'biblioteca', lug_gimnasio: 'gimnasio',
+    lug_restaurante: 'restaurante', lug_parque: 'parque', lug_picnic: 'parque', lug_mirador: 'parque',
+    lug_bar: 'bar', lug_cine: 'cine', lug_discoteca: 'discoteca', lug_bingo: 'bingo'
+  };
+  var ZONA_TO_LUGS = {
+    cafeteria: ['lug_cafeteria'], biblioteca: ['lug_biblioteca'], gimnasio: ['lug_gimnasio'],
+    restaurante: ['lug_restaurante'], parque: ['lug_parque', 'lug_picnic', 'lug_mirador'],
+    bar: ['lug_bar'], cine: ['lug_cine'], discoteca: ['lug_discoteca'], bingo: ['lug_bingo']
+  };
+
+  function initMapaCanonico() {
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return Promise.resolve(null);
+    var v = (document.querySelector('meta[name="aht-ui"]') && document.querySelector('script[src*="play-v3.js"]')) ?
+      (document.querySelector('script[src*="play-v3.js"]').src.split('v=')[1] || '') : '';
+    return fetch('assets/play-v3/mapa_zonas.json?v=' + encodeURIComponent(v)).then(function (r) { return r.json(); }).then(function (cfg) {
+      cacheMapaZonas = cfg;
+      layer.innerHTML = '';
+      var zonas = cfg.zonas || {};
+      Object.keys(zonas).forEach(function (id) {
+        var z = zonas[id];
+        if (!z || !z.w || !z.h) return;
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'mapa-zona-hit';
+        btn.setAttribute('data-zona', id);
+        btn.setAttribute('aria-label', z.label || id);
+        btn.style.left = z.x + '%';
+        btn.style.top = z.y + '%';
+        btn.style.width = z.w + '%';
+        btn.style.height = z.h + '%';
+        btn.innerHTML = '<span class="habs"></span>';
+        layer.appendChild(btn);
+      });
+      return cfg;
+    }).catch(function () { return null; });
+  }
+
+  function personasEnZona(zonaId) {
+    var lugs = ZONA_TO_LUGS[zonaId] || [];
+    var out = [];
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (cx) {
+      (cx.personas || []).forEach(function (p) {
+        if (lugs.indexOf(p.destino_id) >= 0) out.push(p);
+      });
+    });
+    return out;
+  }
+
+  function destinosOperativosZona(zonaId) {
+    var lugs = ZONA_TO_LUGS[zonaId] || [];
+    var out = [];
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (cx) {
+      (cx.destinos_operativos || []).forEach(function (d) {
+        if (lugs.indexOf(d.id) >= 0) out.push(d);
+      });
+    });
+    return out;
+  }
+
+  function placeHabEnZona(box, p, i) {
+    var el = document.createElement('span');
+    el.className = 'hab';
+    el.setAttribute('data-residente', p.id);
+    el.setAttribute('data-destino', p.destino_id);
+    el.setAttribute('data-fase', p.fase || 'en_destino');
+    el.setAttribute('data-emocion', p.emocion || 'neutro');
+    if (p.hay_tema) el.setAttribute('data-hay-tema', '1');
+    var cols = 3;
+    var col = i % cols;
+    var row = Math.floor(i / cols);
+    el.style.left = (14 + col * 26) + '%';
+    el.style.top = (18 + row * 24) + '%';
+    if (p.token_url) {
+      el.innerHTML = '<span class="cara"><img src="' + p.token_url + '" alt=""/></span>';
+    } else {
+      el.innerHTML = '<span class="cara cara-ini">' + (p.iniciales || '?') + '</span>';
+    }
+    if (p.hay_tema) {
+      el.insertAdjacentHTML('beforeend', '<img class="sello-tema" src="assets/play-v3/marcas/sello_hay_tema.png" alt=""/>');
+    }
+    box.appendChild(el);
+  }
+
+  function posicionarNotaMapa(el, zonaBtn) {
+    if (!el || !zonaBtn) return;
+    var board = $('.board-fit');
+    if (!board) return;
+    var boardRect = board.getBoundingClientRect();
+    var zonaRect = zonaBtn.getBoundingClientRect();
+    var margen = 10;
+    var pw = el.offsetWidth || 240;
+    var ph = el.offsetHeight || 160;
+    var relX = zonaRect.left - boardRect.left;
+    var relY = zonaRect.top - boardRect.top;
+    var bw = boardRect.width;
+    var bh = boardRect.height;
+    var left = relX + zonaRect.width + margen;
+    if (left + pw > bw - margen) {
+      left = relX - pw - margen;
+    }
+    if (left < margen) left = margen;
+    if (left + pw > bw - margen) left = Math.max(margen, bw - pw - margen);
+    var top = relY;
+    if (top + ph > bh - margen) top = Math.max(margen, bh - ph - margen);
+    if (top < margen) top = margen;
+    el.style.right = 'auto';
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+  }
+
+  function abrirConsultaZona(zonaId, zonaBtn) {
+    var meta = cacheMapaZonas && cacheMapaZonas.zonas && cacheMapaZonas.zonas[zonaId];
+    var ops = destinosOperativosZona(zonaId);
+    if (ops.length > 1) {
+      $('.play-root').setAttribute('data-consulta', 'sel');
+      $('[data-s-tit]').textContent = meta ? meta.label : zonaId;
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
+      var box = $('[data-s-btns]');
+      box.innerHTML = '';
+      ops.forEach(function (d) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = 'Ver ' + d.nombre.toLowerCase();
+        b.addEventListener('click', function () { abrirQuienZona(zonaId, d.id, zonaBtn); });
+        box.appendChild(b);
+      });
+      var all = document.createElement('button');
+      all.type = 'button';
+      all.textContent = 'Quién hay aquí';
+      all.addEventListener('click', function () { abrirQuienZona(zonaId, null, zonaBtn); });
+      box.appendChild(all);
+      posicionarNotaMapa($('.selector'), zonaBtn);
+      return;
+    }
+    abrirQuienZona(zonaId, ops[0] ? ops[0].id : null, zonaBtn);
+  }
+
+  function abrirQuienZona(zonaId, destId, zonaBtn) {
+    var meta = cacheMapaZonas && cacheMapaZonas.zonas && cacheMapaZonas.zonas[zonaId];
+    var lugs = ZONA_TO_LUGS[zonaId] || [];
+    var gente = personasEnZona(zonaId).filter(function (p) {
+      return !destId || p.destino_id === destId;
+    });
+    $('.play-root').setAttribute('data-consulta', 'quien');
+    $('[data-q-tit]').textContent = meta ? meta.label : zonaId;
+    $('[data-q-sum]').textContent = gente.length
+      ? (gente.length === 1 ? 'Hay alguien.' : ('Hay ' + gente.length + '.'))
+      : 'No hay ni un alma.';
+    var list = $('[data-q-list]');
+    list.innerHTML = '';
+    var groups = {};
+    gente.forEach(function (p) {
+      if (!groups[p.destino_nombre]) groups[p.destino_nombre] = [];
+      groups[p.destino_nombre].push(p);
+    });
+    Object.keys(groups).forEach(function (dest) {
+      var h = document.createElement('p');
+      h.className = 'quien-dest';
+      h.textContent = dest;
+      list.appendChild(h);
+      var ul = document.createElement('ul');
+      groups[dest].forEach(function (p) {
+        var li = document.createElement('li');
+        li.textContent = p.nombre;
+        ul.appendChild(li);
+      });
+      list.appendChild(ul);
+    });
+    var box = $('[data-q-btns]');
+    box.innerHTML = '';
+    destinosOperativosZona(zonaId).forEach(function (d) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = 'Organizar en ' + d.nombre.toLowerCase();
+      b.addEventListener('click', function () {
+        org.lugar = d.id;
+        setCapa('organizar');
+        $('.play-root').removeAttribute('data-consulta');
+        fillOrganizar();
+      });
+      box.appendChild(b);
+    });
+    posicionarNotaMapa($('.quien'), zonaBtn);
   }
 
   function renderHud(estado, buzon) {
@@ -600,6 +765,8 @@
   }
 
   let vecBuscaTxt = '';
+  let resBloqueActivo = 'a';
+  let resBuscaTxt = '';
 
   function renderVecinos() {
     const box = $('[data-vecinos-list]');
@@ -634,6 +801,74 @@
         '</div><p class="vecino-nom">' + esc(nom) + '</p>';
       b.addEventListener('click', function () { abrirFicha(id); });
       box.appendChild(b);
+    });
+  }
+
+  var RES_BLOQUES = [
+    { letra: 'a', key: 'bloque_a' },
+    { letra: 'b', key: 'bloque_b' },
+    { letra: 'c', key: 'bloque_c' }
+  ];
+
+  function bloqueInfo(letra) {
+    var partida = cacheInsp || {};
+    var def = RES_BLOQUES.filter(function (b) { return b.letra === letra; })[0];
+    var blk = def ? partida[def.key] : null;
+    var viviendas = (blk && Array.isArray(blk.viviendas)) ? blk.viviendas : [];
+    return { viviendas: viviendas, abierto: viviendas.length > 0 };
+  }
+
+  function renderResidencias() {
+    var tabs = $('[data-res-bloque-tabs]');
+    var grid = $('[data-res-grid]');
+    if (!tabs || !grid) return;
+    if (!RES_BLOQUES.some(function (b) { return b.letra === resBloqueActivo; })) {
+      resBloqueActivo = 'a';
+    }
+    tabs.innerHTML = '';
+    RES_BLOQUES.forEach(function (def) {
+      var info = bloqueInfo(def.letra);
+      var ocupadas = info.viviendas.filter(function (v) { return v && v.ocupante_id; }).length;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'res-placa' + (def.letra === resBloqueActivo ? ' is-on' : '') + (!info.abierto ? ' is-cerrado' : '');
+      b.innerHTML = '<span class="res-placa-medalla">' + def.letra.toUpperCase() + '</span>' +
+        '<span class="res-placa-pronto">' + (info.abierto ? (ocupadas + '/' + info.viviendas.length) : 'en obras') + '</span>';
+      b.addEventListener('click', function () {
+        resBloqueActivo = def.letra;
+        renderResidencias();
+      });
+      tabs.appendChild(b);
+    });
+
+    var infoActivo = bloqueInfo(resBloqueActivo);
+    grid.innerHTML = '';
+    if (!infoActivo.abierto) {
+      grid.innerHTML = '<p class="res-vacio">Este bloque todavía está en obras.</p>';
+      return;
+    }
+    var filtro = (resBuscaTxt || '').trim().toLowerCase();
+    var ocupadas = infoActivo.viviendas.filter(function (v) { return v && v.ocupante_id; });
+    var filtradas = ocupadas.filter(function (v) {
+      var nom = nombreDe(v.ocupante_id).toLowerCase();
+      return !filtro || nom.indexOf(filtro) >= 0;
+    });
+    if (!filtradas.length) {
+      grid.innerHTML = '<p class="res-vacio">' +
+        (filtro ? 'Nadie con ese nombre en este bloque.' : 'Todavía no vive nadie en este bloque.') +
+        '</p>';
+      return;
+    }
+    filtradas.forEach(function (v) {
+      var img = tokenDe(v.ocupante_id);
+      var nom = nombreDe(v.ocupante_id);
+      var celda = document.createElement('div');
+      celda.className = 'res-celda';
+      celda.innerHTML = '<div class="res-cara">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="res-cara-ini">' + esc(nom.charAt(0) || '?') + '</span>') +
+        '</div><p class="res-nombre">' + esc(nom) + '</p><p class="res-piso">' + esc(v.id || '') + '</p>';
+      celda.addEventListener('click', function () { abrirFicha(v.ocupante_id); });
+      grid.appendChild(celda);
     });
   }
 
@@ -1101,6 +1336,11 @@
       });
       return;
     }
+    const zona = ev.target.closest('.mapa-zona-hit[data-zona]');
+    if (zona) {
+      abrirConsultaZona(zona.getAttribute('data-zona'), zona);
+      return;
+    }
     const cx = ev.target.closest('.complejo[data-complejo]');
     if (cx) {
       abrirConsulta(cx.getAttribute('data-complejo'));
@@ -1112,6 +1352,14 @@
     vecBuscaInp.addEventListener('input', function () {
       vecBuscaTxt = vecBuscaInp.value;
       renderVecinos();
+    });
+  }
+
+  const resBuscaInp = $('[data-res-busca]');
+  if (resBuscaInp) {
+    resBuscaInp.addEventListener('input', function () {
+      resBuscaTxt = resBuscaInp.value;
+      renderResidencias();
     });
   }
 
@@ -1137,7 +1385,9 @@
   const tutReopen = $('[data-tut-reopen]');
   if (tutReopen) tutReopen.addEventListener('click', function () { abrirTutIntro(true); });
 
-  ensurePartida().then(function () {
-    return refresh().then(function () { quizaMostrarTutIntro(); });
+  initMapaCanonico().then(function () {
+    return ensurePartida().then(function () {
+      return refresh().then(function () { quizaMostrarTutIntro(); });
+    });
   });
 })();
