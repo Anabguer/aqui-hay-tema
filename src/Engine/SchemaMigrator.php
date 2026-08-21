@@ -5,7 +5,7 @@ namespace AquiHayTema\Engine;
 
 final class SchemaMigrator
 {
-    public const CURRENT_VERSION = 2;
+    public const CURRENT_VERSION = 3;
 
     public static function migrate(array $partida): array
     {
@@ -13,12 +13,15 @@ final class SchemaMigrator
         while ($version < self::CURRENT_VERSION) {
             if ($version === 1) {
                 $partida = self::v1ToV2($partida);
+            } elseif ($version === 2) {
+                $partida = self::v2ToV3($partida);
             } else {
                 throw new \RuntimeException("Migración desconocida desde v{$version}");
             }
             $version = (int) $partida['meta']['schema_version'];
         }
         SchemaFields::ensure($partida);
+        CapacidadViviendas::ensure($partida);
         return $partida;
     }
 
@@ -84,6 +87,17 @@ final class SchemaMigrator
         $partida['diario_config'] = ['max_dia' => null, '_placeholder' => true];
 
         $partida['meta']['schema_version'] = 2;
+        return $partida;
+    }
+
+    private static function v2ToV3(array $partida): array
+    {
+        CapacidadViviendas::buildPoolFromLegacy($partida);
+        CapacidadViviendas::normalizarViviendaIds($partida);
+        $partida['celeste']['vivienda_capacidad_max'] = CapacidadViviendas::CAP_PRODUCTO;
+        $partida['celeste']['bloques_abiertos'] = ['a', 'b'];
+        CapacidadViviendas::syncLegacyMirror($partida);
+        $partida['meta']['schema_version'] = 3;
         return $partida;
     }
 }

@@ -33,6 +33,7 @@ final class PartidaLifecycle
         foreach ($config['residentes_iniciales'] ?? [] as $entry) {
             $this->residentes->incorporarCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
         }
+        PoblacionV3::incorporarIniciales($partida, $config, $this->root, $this->residentes);
         self::aplicarParentescoConfig($partida, $config);
 
         FeatureConfig::mergeIntoPartida($partida, $this->root);
@@ -57,6 +58,8 @@ final class PartidaLifecycle
         if (PlaytestGuia::activa($partida)) {
             PlaytestGuia::ensure($partida);
         }
+
+        $partida = SchemaMigrator::migrate($partida);
 
         if (MisionDiariaEngine::activa($partida)) {
             $this->generarMisionesSiToca($partida);

@@ -52,7 +52,7 @@ final class TutorialBucle
             'tipo' => 'bienvenida',
             'de_persona' => $de !== '' ? $de : null,
             'actores' => $de !== '' ? [$de] : [],
-            'texto' => $nombre . ' te ha dejado un recado: echa un ojo a quién hay en el bloque. Si te apetece, organiza algo en la cafetería.',
+            'texto' => $nombre . ' te ha dejado un recado: mira quién hay en el pueblo y abre Vecinos si quieres anotar algo. Si te apetece, organiza un plan en la cafetería.',
             'origen' => [
                 'evento_id' => null,
                 'tipo_evento' => DomainEvents::PARTIDA_CREADA,
@@ -260,10 +260,10 @@ final class TutorialBucle
             return 'Tienes un recado. Ábrelo.';
         }
         if ($paso === self::HECHO_VECINO) {
-            return 'Mira quién vive en el bloque.';
+            return 'Abre Vecinos y echa un ojo a quién hay en el pueblo.';
         }
         if ($paso === self::HECHO_PLAN) {
-            return 'Organiza que se conozcan en la cafetería.';
+            return 'Propón un plan entre dos vecinas: quién, dónde y cuándo.';
         }
         return null;
     }

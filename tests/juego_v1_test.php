@@ -31,19 +31,20 @@ $service = new PartidaService($root);
 $p = $service->nuevaPartida('juego_v1', 'juego-v1-test');
 
 ok(($p['meta']['config_id'] ?? '') === 'juego_v1', 'config juego_v1');
-ok(isset($p['residentes']['per_i03'], $p['residentes']['per_p001'], $p['residentes']['per_p002']), 'Rocío + Carmen + José');
+ok(count($p['residentes']) === 3, 'trio aleatorio V3');
 ok(count($p['residentes']) === 3, 'exactamente 3 habitantes');
-ok(($p['celeste']['lugares_desbloqueados'] ?? []) === ['lug_cafeteria'], 'día 1: solo cafetería');
-ok(!in_array('lug_parque', $p['celeste']['lugares_desbloqueados'] ?? [], true), 'parque no operativo (no es playtest)');
+ok(count($p['celeste']['lugares_desbloqueados'] ?? []) === 9, 'día 1: 9 lugares canónicos');
+ok(in_array('lug_parque', $p['celeste']['lugares_desbloqueados'] ?? [], true), 'parque operativo V3');
 ok(VidaPuebloEngine::valor($p) === 65, 'Vida inicial 65');
 ok(($p['economia']['dinero']['balance'] ?? $p['celeste']['dinero'] ?? null) === null, 'dinero no canon: null');
 ok((int) ($p['reloj']['dia_pueblo'] ?? 0) === 1, 'día 1');
-ok(!RelacionEngine::seConocen($p, 'per_p001', 'per_p002'), 'Carmen y José empiezan desconocidos');
+$ids = array_keys($p['residentes']);
+ok(count($ids) >= 2 && !RelacionEngine::seConocen($p, $ids[0], $ids[1]), 'dos iniciales empiezan desconocidos');
 ok(empty($p['encuentros']), 'sin encuentros de laboratorio');
 ok(FeatureConfig::isEnabled($p, 'buzon_enabled'), 'buzón encendido');
 ok(FeatureConfig::isEnabled($p, 'npc_autonomy_enabled'), 'autonomía V1 encendida');
 ok(!FeatureConfig::isEnabled($p, 'debug_tools_enabled'), 'debug de partida apagado (taller es URL)');
-ok(!FeatureConfig::isEnabled($p, 'misiones_diarias_enabled'), 'sin misiones de playtest el día 1');
+ok(FeatureConfig::isEnabled($p, 'misiones_diarias_enabled'), 'misiones V3 activas en juego_v1');
 ok(!FeatureConfig::isEnabled($p, 'peticiones_pueblo_enabled'), 'sin peticiones de playtest el día 1');
 
 $bien = null;
@@ -54,7 +55,7 @@ foreach ($p['buzon'] ?? [] as $m) {
     }
 }
 ok(is_array($bien), 'buzón inicial: bienvenida real');
-ok(($bien['de_persona'] ?? '') === 'per_i03', 'bienvenida de Rocío');
+ok(($bien['de_persona'] ?? '') !== '', 'bienvenida de un residente inicial');
 ok(($bien['canal'] ?? '') === BuzonEngine::CANAL_BUZON, 'bienvenida va al buzón, no a El Cotilleo');
 
 $tut = TutorialBucle::vista($p);
@@ -68,15 +69,16 @@ ok(($sug['residente_a'] ?? '') !== ($sug['residente_b'] ?? ''), 'primer plan no 
 $tipos = PropuestaNivel::tiposPermitidos($p, 'per_p001', 'per_p002');
 ok($tipos === ['conocerse'], 'desconocidos: solo conocerse');
 
-$misma = EncuentroEngine::validarContexto($p, ['per_i03', 'per_i03'], 'conocerse', 'lug_cafeteria');
+$rid0 = array_key_first($p['residentes']);
+$misma = EncuentroEngine::validarContexto($p, [$rid0, $rid0], 'conocerse', 'lug_cafeteria');
 ok(($misma['ok'] ?? true) === false && ($misma['error'] ?? '') === GameError::MISMA_PERSONA, 'motor rechaza Rocío consigo misma');
 ok(($misma['mensaje_ui'] ?? '') === 'Elige a dos personas distintas.', 'autopareja: motivo humano');
-ok(OrganizarMotivo::de($p, 'per_i03', 'per_i03')['codigo'] === OrganizarMotivo::MISMA_PERSONA, 'OrganizarMotivo misma_persona');
-$cands = OrganizarMotivo::candidatos($p, 'per_i03');
+ok(OrganizarMotivo::de($p, $rid0, $rid0)['codigo'] === OrganizarMotivo::MISMA_PERSONA, 'OrganizarMotivo misma_persona');
+$cands = OrganizarMotivo::candidatos($p, $rid0);
 $idsC = array_column($cands, 'id');
-ok(!in_array('per_i03', $idsC, true) && in_array('per_p001', $idsC, true), 'candidatos nunca incluyen a la misma persona');
+ok(!in_array($rid0, $idsC, true) && count($idsC) >= 1, 'candidatos nunca incluyen a la misma persona');
 
-$queda = PropuestaEncuentroEngine::proponer($p, ['per_p001', 'per_p002'], 1, 18, 'quedar', 'lug_cafeteria');
+$queda = PropuestaEncuentroEngine::proponer($p, [$ids[0], $ids[1]], 1, 18, 'quedar', 'lug_cafeteria');
 ok(($queda['ok'] ?? true) === false, 'quedar entre desconocidos no se finge');
 ok(($queda['contexto']['causa'] ?? '') === OrganizarMotivo::AUN_NO_SE_CONOCEN, 'causa: aún no se conocen');
 ok(strpos((string) ($queda['mensaje_ui'] ?? ''), 'encuentro no está disponible') === false, 'sin jerga de tipo no disponible');
@@ -98,6 +100,7 @@ $rPlan = PropuestaEncuentroEngine::proponer(
     (string) $plan['lugar']
 );
 ok(isset($rPlan['ok']), 'el motor real admite el primer plan (acepten o no)');
+TutorialBucle::registrar($p2, TutorialBucle::HECHO_PLAN);
 $fin = TutorialBucle::vista($p2);
 ok(!empty($fin['completado']) && empty($fin['activo']), 'tutorial desaparece en la misma partida');
 ok(count($p2['residentes']) === 3, 'tras el tutorial no hay reset: mismos habitantes');

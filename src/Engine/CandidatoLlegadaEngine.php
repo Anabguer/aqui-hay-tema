@@ -115,6 +115,10 @@ final class CandidatoLlegadaEngine
         if ($huecos <= 0) {
             return null;
         }
+        $n = count(TutorialIncorporaciones::residentesActivos($partida));
+        if ($n >= CapacidadViviendas::CAP_PRODUCTO) {
+            return null;
+        }
         if (($partida['llegadas']['candidato_activo'] ?? null) !== null) {
             return null;
         }
@@ -123,10 +127,14 @@ final class CandidatoLlegadaEngine
         }
 
         $cal = CalibracionConfig::load($root);
-        $pBase = (float) CalibracionConfig::get($cal, 'llegadas.p_base', 0.08);
-        $pPorHueco = (float) CalibracionConfig::get($cal, 'llegadas.p_por_hueco', 0.04);
-        $pMax = (float) CalibracionConfig::get($cal, 'llegadas.p_max_dia', 0.45);
-        $pDia = $huecos <= 0 ? 0.0 : min($pMax, $pBase + $pPorHueco * $huecos);
+        if (self::modoNormalActivo($partida)) {
+            $pDia = self::pDiaV3($n);
+        } else {
+            $pBase = (float) CalibracionConfig::get($cal, 'llegadas.p_base', 0.08);
+            $pPorHueco = (float) CalibracionConfig::get($cal, 'llegadas.p_por_hueco', 0.04);
+            $pMax = (float) CalibracionConfig::get($cal, 'llegadas.p_max_dia', 0.45);
+            $pDia = $huecos <= 0 ? 0.0 : min($pMax, $pBase + $pPorHueco * $huecos);
+        }
         // p diaria canónica. Si el reloj salta N horas, componer: 1-(1-p)^(N/24).
         // Evita el bug de avanzar(+24h) con una sola tirada a p/24.
         $fracDias = max(1, $horasAvanzadas) / 24.0;
@@ -177,7 +185,7 @@ final class CandidatoLlegadaEngine
             'estado' => 'pendiente',
             'de_persona' => null,
             'actores' => [],
-            'texto' => $nombre . ' quiere mudarse al bloque. ¿Le dejamos hueco? '
+            'texto' => $nombre . ' quiere mudarse al pueblo. ¿Le dejamos hueco? '
                 . 'Tiene hasta el día ' . $cand['vence_dia'] . ' para una respuesta.',
             'candidato_catalog_id' => $catalogId,
             'acciones' => ['aceptar_candidato', 'rechazar_candidato'],
@@ -298,8 +306,7 @@ final class CandidatoLlegadaEngine
             BuzonEngine::marcarEstado($partida, (string) $cand['mensaje_id'], 'resuelto');
         }
         $partida['llegadas']['candidato_activo'] = null;
-        // Cooldown tras expirar: mismo contrato lab (a menudo 1 día)
-        $partida['llegadas']['cooldown_hasta_dia'] = $dia + 1;
+        self::aplicarCooldown($partida, $root, 'expirado');
         $row = [
             'catalog_id' => $id,
             'resultado' => self::ESTADO_EXPIRADO,
@@ -361,17 +368,43 @@ final class CandidatoLlegadaEngine
 
     private static function aplicarCooldown(array &$partida, string $root, string $motivo): void
     {
+        if (self::modoNormalActivo($partida)) {
+            self::aplicarCooldownV3($partida);
+            return;
+        }
         $cal = CalibracionConfig::load($root);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $pCd = (float) CalibracionConfig::get($cal, 'llegadas.p_cooldown_1d', 0.40);
         $rng = RngService::fromPartida($partida);
         $cd = $rng->nextFloat() < $pCd ? 1 : 0;
-        // Tras llegada siempre al menos un pequeño respiro el mismo día: no otro candidato hoy
         if ($motivo === 'llegada') {
             $cd = max($cd, 1);
         }
         $rng->persistToPartida($partida);
         $partida['llegadas']['cooldown_hasta_dia'] = $dia + $cd;
+    }
+
+    public static function gapMin(int $n): int
+    {
+        $n = max(8, min(23, $n));
+        return 2 + (int) floor(($n - 8) * 1.25);
+    }
+
+    public static function pDiaV3(int $n): float
+    {
+        $h = max(0, CapacidadViviendas::CAP_PRODUCTO - $n);
+        return min(0.30, 0.04 + 0.015 * $h);
+    }
+
+    private static function aplicarCooldownV3(array &$partida): void
+    {
+        $n = count(TutorialIncorporaciones::residentesActivos($partida));
+        $gap = self::gapMin($n);
+        $rng = RngService::fromPartida($partida);
+        $jitter = $rng->nextInt(0, 2);
+        $rng->persistToPartida($partida);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $partida['llegadas']['cooldown_hasta_dia'] = $dia + $gap + $jitter;
     }
 
     private static function marcarCooldownCara(array &$partida, string $catalogId, string $root): void

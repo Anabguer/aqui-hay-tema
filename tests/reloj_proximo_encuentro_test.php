@@ -32,6 +32,8 @@ function setup(): array
     global $root;
     $service = new PartidaService($root);
     $partida = $service->nuevaPartida('test_fixtures_v0', 'reloj-proximo');
+    $partida['reloj']['hora_actual'] = 8;
+    $partida['reloj']['minuto_actual'] = 0;
     $ph = $service->crearResidentePlaceholderDev($partida);
     return [$service, $partida, 'per_qa_valid', $ph['residente']['catalog_id']];
 }
@@ -62,7 +64,7 @@ ok(countEvento($partida, DomainEvents::ENCUENTRO_INICIADO) >= 1, 'ENCUENTRO_INIC
 // Varios encuentros: aterriza en el más cercano, no en el último.
 [$service, $partida, $ida, $idb] = setup();
 $enc19 = $service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'conocerse');
-$enc21 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad');
+$enc21 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_parque');
 ok(($enc19['ok'] ?? false) && ($enc21['ok'] ?? false), 'dos encuentros programados');
 $rVar = $service->irAlProximoEncuentro($partida);
 ok((int) $partida['reloj']['hora_actual'] === 19, 'varios: aterriza en el primero (19h)');

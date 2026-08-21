@@ -286,6 +286,8 @@ final class SimulationRunner
         } catch (\Throwable $e) {
             return ['ok' => false, 'error' => $e->getMessage()];
         }
+        $partida['reloj']['hora_actual'] = 7;
+        $partida['reloj']['minuto_actual'] = 0;
 
         $emociones = $service->emociones();
         $catalog = new CatalogStore($projectRoot);

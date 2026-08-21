@@ -31,7 +31,7 @@ function assertTrue(bool $cond, string $msg): void
 $service = new PartidaService($root);
 $partida = $service->nuevaPartida('test_fixtures_v0', 'smoke-test');
 
-assertTrue((int) ($partida['meta']['schema_version'] ?? 0) === 2, 'schema v2');
+        assertTrue((int) ($partida['meta']['schema_version'] ?? 0) === 3, 'schema v3');
 assertTrue(isset($partida['rng']['state']), 'rng en partida nueva');
 assertTrue(count($partida['bloque_a']['viviendas']) === 16, 'bloque A 16');
 assertTrue(isset($partida['residentes']['per_qa_valid']), 'per_qa_valid presente');

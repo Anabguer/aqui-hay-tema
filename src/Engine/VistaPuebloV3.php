@@ -36,7 +36,7 @@ final class VistaPuebloV3
             $porLugar[(string) $lug['id']] = $lug;
         }
 
-        $abiertos = [];
+        $abiertos = array_fill_keys(LugaresCanonicos::todos(), true);
         foreach ($partida['celeste']['lugares_desbloqueados'] ?? [] as $id) {
             if (is_string($id) && $id !== '') {
                 $abiertos[$id] = true;
@@ -64,7 +64,7 @@ final class VistaPuebloV3
             $tieneExpansion = false;
             foreach ($destinosMeta as $did) {
                 $row = $porLugar[$did] ?? null;
-                $operativo = isset($abiertos[$did]);
+                $operativo = LugaresCanonicos::operativoEnProducto($did) || isset($abiertos[$did]);
                 if ($core !== null && $did !== $core && $operativo) {
                     $tieneExpansion = true;
                 }

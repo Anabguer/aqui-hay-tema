@@ -1,7 +1,7 @@
 # Plan de alineación V3 — Aquí Hay Tema
 
 Hoja de ruta viva para alinear el checkpoint visual `cbcb6e6` con el **Documento Maestro V3**.
-**Estado:** **listo para ejecución completa** — pendiente autorización explícita de Neni/ChatGPT. **Decisiones técnicas cerradas 21/08; Misiones V3 cerradas 21/08 (curva llegadas + migración viviendas). **Corrección canon lugares aplicada 21/08 (9 lugares disponibles; sin desbloqueo/compra/EN OBRAS funcional).** **Ejecutar solo tras autorización explícita.**
+**Estado:** **ejecución completada 2026-08-21** — pendiente autorización explícita de Neni/ChatGPT. **Decisiones técnicas cerradas 21/08; Misiones V3 cerradas 21/08 (curva llegadas + migración viviendas). **Corrección canon lugares aplicada 21/08 (9 lugares disponibles; sin desbloqueo/compra/EN OBRAS funcional).** **Ejecutar solo tras autorización explícita.**
 
 ---
 
@@ -80,7 +80,7 @@ UTF-8 roto, SVG inválido, JS mapa legacy convive con mapa canónico, docs pre-V
 ### Fase 0 — Fuente de verdad y congelación
 
 #### Tarea 0.1 — Ingesta Documento Maestro V3
-- [ ] **pendiente**
+- [x] **realizada**
 - **Objetivo:** Canon versionado en repo; validar plan vs maestro.
 - **Archivos:** `docs/DOCUMENTO_MAESTRO_V3_AQUI_HAY_TEMA.md` (nuevo).
 - **Existe → Final:** Solo adjunto/Drive → copia UTF-8 en repo.
@@ -88,7 +88,7 @@ UTF-8 roto, SVG inválido, JS mapa legacy convive con mapa canónico, docs pre-V
 - **Riesgo:** Bajo | **Persistencia:** N/A | **Neni visual:** No
 
 #### Tarea 0.2 — Baseline técnico
-- [ ] **pendiente**
+- [x] **realizada**
 - **Objetivo:** SHA base + tests verdes antes de codificar.
 - **Archivos:** `tests/smoke.php`, suite acordada.
 - **Comprobación:** Smoke + vista_pueblo + vida_pueblo tests.
@@ -98,29 +98,29 @@ UTF-8 roto, SVG inválido, JS mapa legacy convive con mapa canónico, docs pre-V
 ### Fase 1 — Saneamiento técnico bloqueante (sin rediseño)
 
 #### Tarea 1.1 — UTF-8 y literales
-- [ ] **pendiente** | **Archivos:** `play.php`, `play-v3.js` | **Riesgo:** Bajo | **Neni:** Sí
+- [x] **realizada** | **Archivos:** `play.php`, `play-v3.js` | **Riesgo:** Bajo | **Neni:** Sí
 
 #### Tarea 1.2 — SVG corazón + cableado Vida del Pueblo
-- [ ] **pendiente** | **Archivos:** `play.php`, `play-v3.js` | **Riesgo:** Medio | **Neni:** Sí
+- [x] **realizada** | **Archivos:** `play.php`, `play-v3.js` | **Riesgo:** Medio | **Neni:** Sí
 
 #### Tarea 1.3 — Dev fuera de producto
-- [ ] **pendiente** | **Archivos:** `play.php`, CSS taller | Ocultar `.taller` sin lab; quitar link provisional | **Neni:** Sí
+- [x] **realizada** | **Archivos:** `play.php`, CSS taller | Ocultar `.taller` sin lab; quitar link provisional | **Neni:** Sí
 
 ---
 
 ### Fase 2 — Mapa canónico funcional
 
 #### Tarea 2.1 — Tokens en 9 zonas
-- [ ] **pendiente** | **Archivos:** `play-v3.js`, `play-v3-mapa-canonico.css`
+- [x] **realizada** | **Archivos:** `play-v3.js`, `play-v3-mapa-canonico.css`
 - **Existe:** Zonas OK; `placeHabEnZona()` sin invocar → mapa vacío.
 - **Final:** Habitantes visibles con emoción/hay_tema.
 - **Riesgo:** **Crítico** | **Neni:** Sí
 
 #### Tarea 2.2 — Retirar JS mapa 6 complejos
-- [ ] **pendiente** | `SLOTS`, `[data-complejo]`, handlers legacy | **Dep:** 2.1 | **Neni:** Sí
+- [x] **realizada** | `SLOTS`, `[data-complejo]`, handlers legacy | **Dep:** 2.1 | **Neni:** Sí
 
 #### Tarea 2.3 - Motor alineado a 9 lugares (sin desbloqueo)
-- [ ] **pendiente** | `ComplejoCatalog`, `VistaPuebloV3`, `PresenciaEngine`, `lugares.json`
+- [x] **realizada** | `ComplejoCatalog`, `VistaPuebloV3`, `PresenciaEngine`, `lugares.json`
 - **Final:** Catálogo jugable = **solo** los 9 destinos canónicos; presencia y planes usan esas zonas. Retirar destinos legacy (Tienda, Arcade, Karaoke, Spa, Picnic, Mirador) del flujo producto. **No** `lugares_desbloqueados`, compra ni EN OBRAS como mecánica.
 - **Riesgo:** Alto | **Persistencia:** migrar saves con flags legacy (ignorar en producto) | **Neni:** Sí
 
@@ -129,12 +129,12 @@ UTF-8 roto, SVG inválido, JS mapa legacy convive con mapa canónico, docs pre-V
 ### Fase 3 — Vecinos (eliminar Residencias, no sustituir)
 
 #### Tarea 3.1 — Quitar UI Residencias/bloques
-- [ ] **pendiente** | `play.php`, `play-v3-bloques-residencias.css`, `renderResidencias`, refs `bloques_*.png`
+- [x] **realizada** | `play.php`, `play-v3-bloques-residencias.css`, `renderResidencias`, refs `bloques_*.png`
 - **Final:** Solo Celestine apunta → Vecinos. **No** nueva pantalla residencial.
 - **Persistencia:** No tocar `bloque_*` en JSON aún | **Neni:** Sí
 
 #### Tarea 3.2 — Contador 'N de 24 vecinos'
-- [ ] **pendiente** | shell Vecinos, `renderShellPanels` | **Dep:** 3.1, 4.1 | **Neni:** Sí
+- [x] **realizada** | shell Vecinos, `renderShellPanels` | **Dep:** 3.1, 4.1 | **Neni:** Sí
 
 ---
 
@@ -143,7 +143,7 @@ UTF-8 roto, SVG inválido, JS mapa legacy convive con mapa canónico, docs pre-V
 > **Decisión técnica cerrada (21/08):** estrategia «pool lógico 24 + espejo legacy». Ver tareas ampliadas.
 
 #### Tarea 4.1 — Techo 24 residentes
-- [ ] **pendiente** | `CapacidadViviendas`, CandidatoLlegadaEngine, ResidenteOperations
+- [x] **realizada** | `CapacidadViviendas`, CandidatoLlegadaEngine, ResidenteOperations
 - **Objetivo:** Capacidad de producto = **24** fija; llegadas bloqueadas si N >= 24.
 - **Existe → Final:** capacidadTotal()` depende de `bloques_abiertos` (legacy; hasta 48) -> **24** via pool(hasta 48) → **24** vía pool lógico; huecos = max(0, 24 - N).
 - **Riesgo:** **Crítico** persistencia | **Persistencia:** ver 4.2 | **Neni:** No
@@ -162,7 +162,7 @@ esidentes[id].vivienda_id.
 **Motivo:** separa el canon de producto (24 opacos) del almacenamiento legacy (`bloque_a`/b/c) sin reescribir saves a ciegas. Auditable: un array de 24 entradas.
 
 #### Tarea 4.2 — Migración aditiva vivienda (sin pérdida de partidas)
-- [ ] **pendiente** | `SchemaMigrator`, `CapacidadViviendas`, `PartidaRepository`
+- [x] **realizada** | `SchemaMigrator`, `CapacidadViviendas`, `PartidaRepository`
 - **Dep:** 4.1
 - **Final:** Carga y guardado compatibles con saves antiguos; lógica nueva **no** usa A/B/C como concepto de producto.
 
@@ -217,10 +217,10 @@ esidentes[*].vivienda_id | **Conservar** | Enlace canónico residente ↔ slot; 
 ### Fase 5 — Economía fuera del producto
 
 #### Tarea 5.1 — Quitar dinero de UI
-- [ ] **pendiente** | `play.php`, `play-v3.js` | Mantener `economia` en save | **Neni:** Sí
+- [x] **realizada** | `play.php`, `play-v3.js` | Mantener `economia` en save | **Neni:** Sí
 
 #### Tarea 5.2 - Lugares siempre disponibles (sin economía ni desbloqueo)
-- [ ] **pendiente** | `features.json`, `lugares.json`, motores que lean `coste_dinero` / desbloqueo
+- [x] **realizada** | `features.json`, `lugares.json`, motores que lean `coste_dinero` / desbloqueo
 - **Final:** Los 9 lugares canónicos accesibles desde el inicio; sin compra, sin flags de desbloqueo en producto; sin EN OBRAS funcional
 - **Dep:** 5.1
 
@@ -231,29 +231,29 @@ esidentes[*].vivienda_id | **Conservar** | Enlace canónico residente ↔ slot; 
 > Identidad Pxxx = retrato/token/género/edad/base visual. Personalidad = generada al entrar en partida desde catálogos.
 
 #### Tarea 6.1 — Completar `GeneradorResidente`
-- [ ] **pendiente** | `GeneradorResidente.php`, `PerfilPartida.php`, calibración
+- [x] **realizada** | `GeneradorResidente.php`, `PerfilPartida.php`, calibración
 - **Existe:** hobbies, rasgos, prefs parciales, estilo; falta ocultos, románticas, dealbreakers, coletilla, lugares preferentes, hobby principal.
 - **Final:** Tres capas: identidad / personalidad partida / runtime. No regenerar al cargar save.
 - **Riesgo:** Alto | **Dep:** 0.1 (cardinalidades Maestro)
 
 #### Tarea 6.2 — Catálogos producción
-- [ ] **pendiente** | `data/catalogos/`, quitar `_provisional_catalogos`
+- [x] **realizada** | `data/catalogos/`, quitar `_provisional_catalogos`
 
 #### Tarea 6.3 — Ficha vecino
-- [ ] **pendiente** | `FichaPlayVista.php`, capa ficha | **Neni:** Sí
+- [x] **realizada** | `FichaPlayVista.php`, capa ficha | **Neni:** Sí
 
 ---
 
 ### Fase 7 — Nueva partida y llegadas
 
 #### Tarea 7.1 — Config producto V3 (3 aleatorios)
-- [ ] **pendiente** | prevalidadas, `configNueva()` | Sustituir roster fijo `juego_v1`
+- [x] **realizada** | prevalidadas, `configNueva()` | Sustituir roster fijo `juego_v1`
 
 #### Tarea 7.2 — 5 incorporaciones aleatorias (→ 8)
-- [ ] **pendiente** | `TutorialIncorporaciones`, configs | RNG acotado, no cola fija
+- [x] **realizada** | `TutorialIncorporaciones`, configs | RNG acotado, no cola fija
 
 #### Tarea 7.3 — Llegadas posteriores espaciadas (curva cerrada)
-- [ ] **pendiente** | CandidatoLlegadaEngine, CalibracionConfig, MENSAJITOS | **Dep:** 7.2, 8.2, 4.1
+- [x] **realizada** | CandidatoLlegadaEngine, CalibracionConfig, MENSAJITOS | **Dep:** 7.2, 8.2, 4.1
 
 > **Decisión técnica cerrada (21/08):** curva «gap mínimo por población + lotería diaria suave por huecos».
 
@@ -334,7 +334,7 @@ E[T] = gap_min(N) + E[jitter] + E[días hasta acierto de lotería]
 
 
 #### Tarea 8.5 — Misiones diarias V3 (canon social, sin economía)
-- [ ] **pendiente** | motor misiones + UI play | **Dep:** 8.1, 6.3, 2.3
+- [x] **realizada** | motor misiones + UI play | **Dep:** 8.1, 6.3, 2.3
 - **Neni:** Sí (ubicación panel en shell)
 
 > **Decisión V3 cerrada (21/08):** las misiones **permanecen**; ya no dan dinero. Son objetivos sociales opcionales + pequeño empujón de Vida + información ocasional.
@@ -538,6 +538,13 @@ Mapa con tokens; shell sin dev/dinero; corazón OK; Vecinos `N de 24` sin Reside
 
 ### Log
 
+### Ejecución 2026-08-21 (agente Cursor)
+- [x] Fases 0-9 implementadas en rama playtest-01-php74
+- **Archivos:** CapacidadViviendas, SchemaMigrator v3, LugaresCanonicos, play.php, play-v3.js, juego_v1.json, motores misiones/llegadas/generador, tests v3
+- **Tests:** smoke, viviendas_pool_v3, llegadas_curva_v3, juego_v1, vista_pueblo_v3, viviendas OK
+- **Pendiente Neni:** placement misiones, validación visual
+
+
 _(vacío — pendiente autorización de ejecución)_
 
 
@@ -680,3 +687,61 @@ Copiar Maestro a `docs/DOCUMENTO_MAESTRO_V3_AQUI_HAY_TEMA.md` y anexar **addendu
 | UI | Acceso visual propio en `play.php` (capas shell); etiqueta provisional «Hoy en el pueblo»/«Misiones»; placement fino → Neni |
 | Pendiente producto | Placement visual exacto en shell (Neni) |
 
+
+---
+
+## Bitácora cierre técnico — 2026-08-21 (noche)
+
+### Validación manual Neni (play.php canónico, sin ?lab=1)
+
+**Regresiones UI reales corregidas:**
+
+1. **ssets/js/play-v3.js ~L577** — SyntaxError: Identifier 'h' has already been declared en enderHud: colisión entre const h (hora del HUD) y ar h (altura del relleno del corazón). Fix: renombrar altura a illH.
+2. **ssets/js/play-v3.js ~L1103** — TypeError: Cannot read properties of null (reading 'addEventListener') en #btn-guardar: botones #btn-guardar / #btn-nueva y [data-taller-msg] solo existen en markup cuando ?lab=1 (play.php). En producto V3 no deben cablearse. Fix: listeners y actualización de data-taller-msg movidos bajo if (IS_LAB). Producto usa #btn-nueva-mesa (ya cableado con guard).
+
+### Validación PHP (	ests/run_all.php)
+
+**Tests obsoletos actualizados (canon V3):**
+- iviendas_pool_v3_test.php: expectativas numéricas erróneas (34→24; gap_min alineado a fórmula V3).
+- encuentro_solape_test.php: cafetería cierra 20h → gimnasio para solapes 2h.
+- encuentro_cancelar_test.php, eloj_proximo_encuentro_test.php: encuentro 21h en lug_parque.
+- playtest_romance_v1_test.php, playtest_relacional_v1_test.php: hora 19h (cafetería cierra a las 20).
+- ida_relacional_test.php: romance B→A independiente (expect 20); individual en parque 21h; migración schema v2→v3 valor=2.
+- Varios tests: reloj fijado a hora temprana / slots esFuturo para evitar HORA_PASADA con reloj anclado a hora real.
+
+**Regresiones motor corregidas:**
+- MisionDiariaEngine::cumplirIndice: cap +4 Vida calculado antes de marcar cumplida (evitaba latido).
+- VidaPuebloEngine: positivo válido Latido suma +1 (no +delta).
+- TutorialIncorporaciones::ensureDesdeConfig: modo 	utorial cuando PoblacionV3 ya creó 	utorial_cola.
+- DisponibilidadEngine: slots filtrados con Reloj::esFuturo y opcionalmente por lugar abierto.
+
+**Migración round-trip:** 3 saves reales en data/partidas/ validados sin modificar originales (dev/migracion_roundtrip_reales.php → OK).
+
+**Estado run_all:** ver ejecución final en sesión (pendiente al cerrar bitácora si aún corre).
+
+
+**Estado final 	ests/run_all.php:** ALL PASS (exit 0, 2026-08-21 noche).
+
+**Regresión UI adicional (validación manual Neni):**
+- play-v3.js L1103: listeners #btn-guardar / #btn-nueva y [data-taller-msg] solo existen con ?lab=1. Cableado movido bajo if (IS_LAB); producto usa #btn-nueva-mesa.
+
+**Regresión motor adicional:**
+- LugarAtributos::de() ahora toma aforo/duración de ComplejoCatalog en destinos V3 (antes fallback legacy hacía fallar aforos y secAforos).
+- AforoEngine::ocupacionComplejo() restaurado para invariantes playtest.
+
+### Validación manual funcional pre-checkpoint (2026-08-21 noche)
+
+**Alcance:** copy tutorial/ayuda V3, lab discreto, misiones, retratos en Organizar, copy mapa, salto de hora, sin rediseño visual.
+
+| Punto | Resultado |
+|-------|-----------|
+| Tutorial «¿Cómo va esto?» + pistas motor | Copy V3 (sin bloques A/B/C, sin «pueblo de papel»). Intro por partida (`localStorage` keyed por `partida_id`). |
+| Lab `?lab=1` | Float 🧪 esquina inferior derecha: Nueva, Guardar, +1h, +8h, +1d, +3d, Ir al próximo. Producto sin `.tiempo-juego`. |
+| Misiones | Bug UI: leía `misiones_diarias` en vez de `estado.misiones_hoy`. Corregido en `play-v3.js`. Motor ya generaba en `PartidaLifecycle`. |
+| Retratos Organizar | `data-org-caras` + `pintarOrgCaras()` con `cachePueblo.tokens` / `tokenDe()`. |
+| «look cafetería» | Botones mapa `Ver cafeteria` / `Organizar en cafeteria` (`.toLowerCase()` sobre nombre catálogo). → `nombreLugarUi()`. |
+| Hora 23h cafetería | Cafetería cierra 20h (`ComplejoCatalog`). `resolverFranja` busca siguiente slot; intencional. UI: `hora_ajustada` + mensaje en motor/toast. |
+
+**Tests:** `node --check assets/js/play-v3.js` OK; `misiones_diarias_test.php` + `juego_v1_test.php` OK; `tests/run_all.php` ALL PASS (exit 0).
+
+**Git:** sin commit / push / deploy (checkpoint pendiente autorización Neni).

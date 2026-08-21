@@ -128,7 +128,7 @@ ok((int) $pLat['vida_pueblo']['latidos'] === 1, 'segundo Latido no dispara con 3
 
 $pLat2 = $pLat;
 $got2 = false;
-for ($i = 0; $i < 20; $i++) {
+for ($i = 0; $i < 30; $i++) {
     $rr = VidaPuebloEngine::aplicar($pLat2, 3, [
         'causa' => VidaPuebloEngine::CAUSA_MISION_CUMPLIDA,
         'origen' => VidaPuebloEngine::ORIGEN_LAB,

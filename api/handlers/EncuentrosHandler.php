@@ -4,12 +4,16 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
+use function AquiHayTema\Api\labActiva;
 use function AquiHayTema\Api\requireDev;
 use function AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\withLabAudit;
+use AquiHayTema\Engine\Catalog;
 use AquiHayTema\Engine\CitaEngine;
 use AquiHayTema\Engine\EncuentroEngine;
 use AquiHayTema\Engine\EncuentroLifecycle;
 use AquiHayTema\Engine\EncuentroResultadoVista;
+use AquiHayTema\Engine\LabAudit;
 use AquiHayTema\Engine\ResumenDia;
 
 final class EncuentrosHandler
@@ -35,6 +39,8 @@ final class EncuentrosHandler
 
     public static function proponer(ApiContext $ctx, array $body, array &$partida): array
     {
+        $lab = labActiva($body);
+        $antesRes = $lab ? LabAudit::residentesActivos($partida) : [];
         $r = $ctx->service->proponerEncuentro(
             $partida,
             is_array($body['participantes'] ?? null) ? $body['participantes'] : [
@@ -47,7 +53,12 @@ final class EncuentrosHandler
             isset($body['lugar']) ? (string) $body['lugar'] : null
         );
         savePartida($ctx, $partida);
-        return $r;
+        if ($lab) {
+            $catalog = new Catalog($ctx->root);
+            LabAudit::eventosNuevosResidentes($antesRes, $partida, $catalog);
+            LabAudit::eventoPlan($partida, $r, $catalog);
+        }
+        return withLabAudit($r);
     }
 
     public static function decidirPropuesta(ApiContext $ctx, array $body, array &$partida): array

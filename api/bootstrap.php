@@ -79,3 +79,13 @@ function savePartida(ApiContext $ctx, array &$partida): void
 {
     $ctx->service->guardar($partida);
 }
+
+function labActiva(array $body): bool
+{
+    return \AquiHayTema\Engine\LabAudit::activa($body);
+}
+
+function withLabAudit(array $response): array
+{
+    return \AquiHayTema\Engine\LabAudit::attach($response);
+}

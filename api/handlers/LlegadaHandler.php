@@ -4,8 +4,11 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
+use function AquiHayTema\Api\labActiva;
 use function AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\withLabAudit;
 use AquiHayTema\Engine\CandidatoLlegadaEngine;
+use AquiHayTema\Engine\LabAudit;
 
 final class LlegadaHandler
 {
@@ -31,8 +34,11 @@ final class LlegadaHandler
         );
         if ($r['ok'] ?? false) {
             savePartida($ctx, $partida);
+            if (labActiva($body) && is_array($r['en_camino'] ?? null)) {
+                LabAudit::eventoLlegadaEnCamino($partida, $r['en_camino']);
+            }
         }
-        return $r;
+        return withLabAudit($r);
     }
 
     public static function rechazar(ApiContext $ctx, array $body, array &$partida): array

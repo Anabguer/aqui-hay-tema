@@ -14,7 +14,8 @@ final class DisponibilidadEngine
         ?int $desdeHora = null,
         int $maxDias = 7,
         int $maxSlots = 24,
-        ?Catalog $catalog = null
+        ?Catalog $catalog = null,
+        ?string $lugarId = null
     ): array {
         $participantes = array_values(array_unique(array_filter($participantes)));
         if (count($participantes) < 2) {
@@ -35,7 +36,6 @@ final class DisponibilidadEngine
         $desdeHora ??= (int) $partida['reloj']['hora_actual'];
         $minuto = (int) ($partida['reloj']['minuto_actual'] ?? 0);
         $slots = [];
-        $now = $desdeDia * 24 + $desdeHora;
         $reloj = $partida['reloj'] ?? [];
 
         for ($d = 0; $d < $maxDias && count($slots) < $maxSlots; $d++) {
@@ -48,7 +48,7 @@ final class DisponibilidadEngine
                 }
             }
             for ($h = $horaMin; $h < 24 && count($slots) < $maxSlots; $h++) {
-                if ($dia * 24 + $h < $now) {
+                if (!Reloj::esFuturo($reloj, $dia, $h)) {
                     continue;
                 }
                 $motivos = [];
@@ -65,6 +65,14 @@ final class DisponibilidadEngine
                 }
                 if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $h)) {
                     continue;
+                }
+                if ($lugarId !== null && $lugarId !== '') {
+                    if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                        continue;
+                    }
+                    if (ComplejoCatalog::horasRestantesAbiertas($lugarId, $h) < 1) {
+                        continue;
+                    }
                 }
                 $n = (int) Reloj::fechaDeDia($reloj, $dia)->format('N');
                 $slots[] = [

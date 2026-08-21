@@ -26,6 +26,8 @@ final class TutorialIncorporaciones
                 }
             }
             $partida['llegadas']['tutorial_cola'] = $cola;
+        }
+        if (!array_key_exists('tutorial_hechas', $partida['llegadas'])) {
             $partida['llegadas']['tutorial_hechas'] = [];
             $partida['llegadas']['tutorial_objetivo'] = (int) ($config['tutorial_objetivo_residentes'] ?? self::META_OBJETIVO);
             $partida['llegadas']['modo'] = !empty($config['tutorial_bucle_1']) ? 'tutorial' : 'normal';
@@ -160,7 +162,7 @@ final class TutorialIncorporaciones
                 'id' => 'msg_tut_inc_' . $id . '_' . bin2hex(random_bytes(2)),
                 'clasificacion' => BuzonEngine::IMPORTANTE,
                 'tipo' => 'llegada_tutorial',
-                'texto' => $nombre . ' se ha mudado al bloque. Forma parte de las llegadas del primer día.',
+                'texto' => $nombre . ' se ha mudado al pueblo. Forma parte de las llegadas del primer día.',
                 'de_persona' => $id,
                 'actores' => [$id],
                 'origen' => ['tipo_evento' => 'tutorial_incorporacion', 'es_narrativo' => false],

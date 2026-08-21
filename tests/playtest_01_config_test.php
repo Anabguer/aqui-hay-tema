@@ -22,7 +22,7 @@ $partida = $service->nuevaPartida('playtest_01', 'playtest-01');
 
 ok(($partida['meta']['config_id'] ?? '') === 'playtest_01', 'config_id playtest_01');
 ok(($partida['meta']['seed'] ?? '') === 'playtest-01', 'seed playtest-01');
-ok(($partida['meta']['schema_version'] ?? 0) === 2, 'schema v2');
+ok(($partida['meta']['schema_version'] ?? 0) === 3, 'schema v3');
 ok(isset($partida['residentes']['per_p001']), 'incluye a Carmen');
 ok(isset($partida['residentes']['per_p002']), 'incluye a José');
 ok(count($partida['residentes']) === 8, 'exactamente ocho residentes');

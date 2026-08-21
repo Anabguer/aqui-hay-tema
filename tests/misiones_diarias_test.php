@@ -91,7 +91,8 @@ if ($primera !== null) {
     $n2 = MisionDiariaEngine::onEncuentroCelestine($p, $enc, $cal, null);
     ok($n1 === 1, 'un encuentro completa 1 misión');
     ok($n2 === 0, 'el mismo encuentro no completa otra');
-    ok(VidaPuebloEngine::valor($p) === $vida0 + 1, 'cumplida +1');
+    $delta = min(3, 1 + (int) floor((int) ($primera['exigencia'] ?? 50) / 50));
+    ok(VidaPuebloEngine::valor($p) === $vida0 + $delta, 'cumplida delta V3');
     ok(count(MisionDiariaEngine::delDia($p)) === $antes, 'no nace una cuarta al completar');
 }
 
@@ -111,7 +112,8 @@ ok($siSlot !== null, 'hay slot de Latido');
 if ($noSlot !== null) {
     $enc = MisionDiariaEngine::encuentroSinteticoPara($noSlot, $pSlot);
     MisionDiariaEngine::onEncuentroCelestine($pSlot, $enc, $cal, null);
-    ok(VidaPuebloEngine::valor($pSlot) === $vidaS + 1, 'misión no slot +1 Vida');
+    $deltaN = min(3, 1 + (int) floor((int) ($noSlot['exigencia'] ?? 50) / 50));
+    ok(VidaPuebloEngine::valor($pSlot) === $vidaS + $deltaN, 'misión no slot delta V3');
     ok((int) ($pSlot['vida_pueblo']['positivos_desde_latido'] ?? 0) === $posS, 'no slot no suma positivo válido');
 }
 if ($siSlot !== null) {
@@ -137,7 +139,7 @@ foreach ($pCad['misiones_diarias']['items'] ?? [] as $m) {
     }
 }
 ok($nCad === $nPend, 'pendientes del día cerrado caducan');
-ok(VidaPuebloEngine::valor($pCad) === $vidaCad - (2 * $nPend), 'caducada −2 por misión');
+ok(VidaPuebloEngine::valor($pCad) === $vidaCad, 'caducada V3 = 0 Vida');
 $dia2 = MisionDiariaEngine::delDia($pCad);
 ok(count($dia2) <= 3, 'día 2 máximo 3');
 $f2 = [];

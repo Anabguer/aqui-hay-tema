@@ -202,7 +202,7 @@ ok(MemoriaEventos::enCooldown($partida, 'bronca', [$rid, $idb], $cal) === false,
 ok(count(MemoriaEventos::recientes($partida, [$rid], 3)) >= 1, 'memoria registra');
 
 $v2 = SchemaMigrator::migrate(['meta' => ['schema_version' => 2, 'seed' => 'x'], 'residentes' => []]);
-ok((int) $v2['meta']['schema_version'] === 2, 'schema sigue v2');
+ok((int) $v2['meta']['schema_version'] === 3, 'schema sigue v3');
 ok(isset($v2['quimica'], $v2['memoria_eventos']), 'campos aditivos química/memoria');
 
 $lab = SimuladorPueblos::ejecutar($root, 1000, 16, 'lab-1000');

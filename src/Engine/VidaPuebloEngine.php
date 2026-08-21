@@ -284,8 +284,8 @@ final class VidaPuebloEngine
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
 
         if ($positivoValido && $delta > 0) {
-            $v['positivos_desde_latido'] = (int) $v['positivos_desde_latido'] + $delta;
-            $v['positivos_validos_total'] = (int) $v['positivos_validos_total'] + $delta;
+            $v['positivos_desde_latido'] = (int) $v['positivos_desde_latido'] + 1;
+            $v['positivos_validos_total'] = (int) $v['positivos_validos_total'] + 1;
         }
         if ($delta < 0 && $causa !== self::CAUSA_LATIDO_RESACA) {
             $v['negativos_total'] = (int) $v['negativos_total'] + (-$delta);

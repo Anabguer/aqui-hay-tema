@@ -33,6 +33,11 @@ final class LugarAtributos
         $fb = self::FALLBACK[$id] ?? ['aforo' => 12, 'duracion_minutos' => 60];
         $aforo = $fb['aforo'];
         $dur = $fb['duracion_minutos'];
+        $canon = ComplejoCatalog::destino($id);
+        if ($canon !== null) {
+            $aforo = (int) ($canon['aforo'] ?? $aforo);
+            $dur = (int) ($canon['duracion_minutos'] ?? $dur);
+        }
         if (is_array($item)) {
             if (isset($item['aforo']) && is_numeric($item['aforo'])) {
                 $aforo = (int) $item['aforo'];

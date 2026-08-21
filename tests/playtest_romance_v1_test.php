@@ -30,6 +30,8 @@ $service = new PartidaService($root);
 $catalog = new Catalog($root);
 $cal = CalibracionConfig::load($root);
 $partida = $service->nuevaPartida('playtest_01', 'playtest-01');
+$partida['reloj']['hora_actual'] = 8;
+$partida['reloj']['minuto_actual'] = 0;
 
 $ids = ['per_p001', 'per_p002', 'per_p003', 'per_p004', 'per_p005', 'per_p006', 'per_p007', 'per_p008'];
 foreach ($ids as $id) {
@@ -74,7 +76,7 @@ foreach ($paresOk as $par) {
     $cmp = CompatibilidadCalculator::aHaciaB($pa, $pb, $cal);
     ok(($cmp['romance_elegible'] ?? false) === true, "$label compatibilidad edad ok");
     $pTmp = $partida;
-    $enc = EncuentroEngine::programar($pTmp, [$a, $b], 1, 20, 'romantico', 'lug_cafeteria');
+    $enc = EncuentroEngine::programar($pTmp, [$a, $b], 1, 19, 'romantico', 'lug_cafeteria');
     ok(($enc['ok'] ?? false) === true, "$label programar romantico no rechaza por género");
 }
 

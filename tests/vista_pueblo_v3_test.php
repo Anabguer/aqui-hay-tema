@@ -86,15 +86,13 @@ ok($emoFake === 'neutro', 'id emocional desconocido no se inventa: cae a neutro'
 $pt = $service->nuevaPartida('playtest_01', 'vista-v3-pt');
 $mapaPt = PresenciaEngine::resolver($pt, $root);
 $puebloPt = VistaPuebloV3::de($pt, $mapaPt, $root);
-ok(cx($puebloPt, 'cafe_libros')['fase'] === 'pleno', 'biblioteca desbloqueada → café evolucionado');
+ok(cx($puebloPt, 'cafe_libros')['fase_motor'] === 'pleno', 'café+biblioteca operativos V3');
 ok(cx($puebloPt, 'parque')['fase'] === 'temprano', 'parque sin anexos → inicial');
 ok(count($puebloPt['complejos']) === 6, '6 complejos');
 ok(isset($puebloPt['tokens']) && count($puebloPt['tokens']) >= 1, 'tokens de todos los residentes, no solo los del mapa');
 
-$pt['celeste']['lugares_desbloqueados'][] = 'lug_arcade';
 $puebloCine = VistaPuebloV3::de($pt, PresenciaEngine::resolver($pt, $root), $root);
-ok(cx($puebloCine, 'cine_game')['fase'] === 'pleno', 'arcade desbloqueado → cine evolucionado (PNG Fase 1)');
-ok(cx($puebloCine, 'cine_game')['fase_motor'] === 'pleno', 'fase_motor sigue al desbloqueo');
+ok(count(array_filter(cx($puebloCine, 'cine_game')['destinos_operativos'] ?? [], static fn($d) => ($d['id'] ?? '') === 'lug_cine')) === 1, 'cine operativo V3 sin arcade legacy');
 
 $ptBingo = $service->nuevaPartida('playtest_01', 'vista-v3-bingo');
 $ptBingo['celeste']['lugares_desbloqueados'][] = 'lug_bingo';

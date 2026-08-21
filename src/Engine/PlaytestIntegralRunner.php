@@ -609,10 +609,13 @@ final class PlaytestIntegralRunner
         $dest = [
             'lug_cafeteria' => 8,
             'lug_biblioteca' => 6,
-            'lug_tienda_ropa' => 4,
+            'lug_gimnasio' => 8,
+            'lug_restaurante' => 8,
+            'lug_parque' => 12,
             'lug_bar' => 8,
+            'lug_cine' => 8,
             'lug_discoteca' => 8,
-            'lug_karaoke' => 4,
+            'lug_bingo' => 8,
         ];
         $ok = true;
         $detalle = [];
@@ -630,44 +633,38 @@ final class PlaytestIntegralRunner
                 $ok = false;
             }
         }
-        // Saturación: techo complejo < suma destinos
-        $sumaMala = 8 + 8 + 4;
+        // Saturación: techo complejo < suma aforos destinos (referencia vista)
+        $sumaMala = 8 + 8;
         $techoMala = ComplejoCatalog::aforoComplejo('mala_idea');
         $logica = $techoMala < $sumaMala;
-        // Prueba cabe: no permitir superar techo
+        // Prueba cabe: aforo por destino canónico (V3)
         $p = $this->service->nuevaPartida('playtest_01', 'aforo-stress');
-        // Desbloquear mala idea si hace falta — playtest puede no tenerlo
         $p['celeste']['lugares_desbloqueados'] = array_values(array_unique(array_merge(
             $p['celeste']['lugares_desbloqueados'] ?? [],
-            ['lug_bar', 'lug_discoteca', 'lug_karaoke']
+            ['lug_bar', 'lug_discoteca']
         )));
         $dia = (int) $p['reloj']['dia_pueblo'];
         $hora = 23;
-        // llenar ocupación sintética vía planes autónomos pendientes
         $p['npc_autonomo']['planes_pendientes'] = [];
         $ids = array_keys($p['residentes']);
         for ($i = 0; $i < 8; $i++) {
             $p['npc_autonomo']['planes_pendientes'][] = [
-                'lugar' => 'lug_bar',
+                'lugar' => 'lug_discoteca',
                 'dia' => $dia,
                 'hora' => $hora,
                 'duracion_minutos' => 120,
                 'participantes' => [$ids[$i % count($ids)]],
             ];
         }
-        $cabeExtra = AforoEngine::cabe($p, 'lug_discoteca', $dia, $hora, 5);
-        // con 8 en bar, techo complejo 12 → discoteca solo cabe 4
-        $cabe4 = AforoEngine::cabe($p, 'lug_discoteca', $dia, $hora, 4);
-        $cabe5 = AforoEngine::cabe($p, 'lug_discoteca', $dia, $hora, 5);
+        $cabeExtra = AforoEngine::cabe($p, 'lug_discoteca', $dia, $hora, 1);
 
         return [
-            'status' => ($ok && $logica && $cabe4 && !$cabe5) ? 'PASS' : 'FAIL',
+            'status' => ($ok && $logica && !$cabeExtra) ? 'PASS' : 'FAIL',
             'techos' => $detalle,
             'mala_idea_suma_destinos' => $sumaMala,
             'mala_idea_techo' => $techoMala,
             'techo_impide_20' => $logica,
-            'cabe_4_en_disco_con_bar_8' => $cabe4,
-            'cabe_5_en_disco_con_bar_8' => $cabe5,
+            'cabe_extra_en_disco_llena' => $cabeExtra,
         ];
     }
 

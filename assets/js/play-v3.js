@@ -22,15 +22,6 @@
     }
     return CONFIG_JUEGO;
   }
-  const SLOTS = {
-    cafe_libros: { lug_cafeteria: [[22, 52], [34, 66], [16, 70]], lug_biblioteca: [[60, 38], [70, 52]], lug_tienda_ropa: [[86, 46], [80, 62]] },
-    rincon_lola: { lug_restaurante: [[30, 40], [50, 48]], lug_bingo: [[40, 78], [58, 82]] },
-    cine_game: { lug_cine: [[22, 58], [34, 72], [18, 78]], lug_arcade: [[76, 42], [68, 58], [82, 68]] },
-    mala_idea: { lug_bar: [[22, 40], [34, 54], [18, 62]], lug_discoteca: [[76, 26], [68, 40], [82, 48]], lug_karaoke: [[30, 80], [46, 84]] },
-    parque: { lug_parque: [[48, 48], [36, 58]], lug_picnic: [[22, 78], [34, 84]], lug_mirador: [[78, 22], [70, 32]] },
-    gimnasio_spa: { lug_gimnasio: [[28, 48], [40, 62]], lug_spa: [[76, 42], [70, 58]] }
-  };
-
   let partidaId = localStorage.getItem(IS_LAB ? 'aht_partida_id' : 'aht_partida_id_juego');
   let cacheEstado = null;
   let cacheInsp = null;
@@ -51,6 +42,17 @@
   }
   const $ = (sel, root) => (root || document).querySelector(sel);
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const ptToggle = $('[data-playtest-toggle]');
+  const ptPanel = document.querySelector('[data-playtest-float] .playtest-float-panel');
+  if (ptToggle && ptPanel) {
+    ptToggle.addEventListener('click', function () {
+      var open = ptPanel.hasAttribute('hidden');
+      if (open) ptPanel.removeAttribute('hidden');
+      else ptPanel.setAttribute('hidden', 'hidden');
+      ptToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  }
+
   function pintarPlaytestDiag(fromServer) {
     const pre = $('[data-playtest-diag-log]');
     if (!pre) return;
@@ -77,9 +79,11 @@
     method = method || 'POST';
     const opts = { method: method };
     let url;
+    if (IS_LAB) body.lab = 1;
     if (method === 'GET') {
       const q = new URLSearchParams();
       q.set('action', action);
+      if (IS_LAB) q.set('lab', '1');
       if (partidaId) q.set('partida_id', partidaId);
       Object.keys(body).forEach(function (k) {
         const v = body[k];
@@ -117,6 +121,9 @@
     if (!resp.ok || data.ok === false) {
       logApiError(action, method, body, resp.status, data, data.error || ('http_' + resp.status));
     }
+    if (IS_LAB && typeof AhtLabAudit !== 'undefined' && AhtLabAudit.log) {
+      try { AhtLabAudit.log(data); } catch (e) {}
+    }
     return data;
   }
 
@@ -137,44 +144,47 @@
   }
 
 
-  const TUT_INTRO_KEY = 'aht_intro_tutorial_v1';
+    const TUT_INTRO_KEY_PREFIX = 'aht_intro_v1_';
   const TUT_PASOS = [
     {
       tit: 'Bienvenida al pueblo',
-      txt: 'Esto es tu mapa: un pueblo de papel donde ves quién está y dónde. No mueves piezas; observas, lees y propones.'
+      txt: 'Este es tu mapa: un pueblo con hasta 24 vecinos, nueve lugares y un reloj que sigue aunque tú no hagas nada. Observas, lees y propones; no mueves piezas.'
     },
     {
       tit: 'El tiempo pasa',
-      txt: 'Arriba tienes el día y la hora. El pueblo sigue aunque tú no hagas nada. Con +1 h y +1 día avanzas el reloj para ver qué pasa después.'
+      txt: 'Arriba ves el día y la hora. El pueblo vive solo: la gente va y viene, llegan recados y cambian los planes. Tú decides cuándo mirar más de cerca.'
     },
     {
       tit: 'Los lugares',
-      txt: 'Toca un complejo del mapa: cafetería, cine, parque… Verás quién hay y podrás organizar algo allí si encaja.'
+      txt: 'Toca una zona del mapa — cafetería, parque, cine… — para ver quién está y, si encaja, proponer un plan allí.'
     },
     {
       tit: 'Organizar',
       txt: 'No mandas a nadie. Propones un plan entre dos vecinas: quién, dónde y cuándo. Ellas deciden si les cuadra.'
     },
     {
-      tit: 'El buzón',
+      tit: 'Mensajitos',
       txt: 'En el sobre llegan recados, peticiones y cotilleos. Los urgentes llevan lacre. Léelos cuando quieras; algunos piden prisa.'
     },
     {
       tit: 'Vecinos y diario',
-      txt: 'En Vecinos llevas la libreta de Celestine. En Diario, El Cotilleo cuenta lo que el pueblo comenta. Todo encaja con el mismo reloj.'
+      txt: 'Desde Celestine abres Vecinos: la libreta con quien vive en el pueblo. En Diario, El Cotilleo cuenta lo que se comenta. Todo encaja con el mismo reloj.'
     },
     {
       tit: 'A jugar',
-      txt: 'Empieza por el buzón si hay un recado, o echa un ojo al mapa. Si te pierdes, el botón «¿Cómo va esto?» vuelve a abrir esta guía.'
+      txt: 'Empieza por Mensajitos si hay un recado, o echa un ojo al mapa. Si te pierdes, el botón «¿Cómo va esto?» vuelve a abrir esta guía.'
     }
   ];
   let tutIntroIdx = 0;
 
+  function tutIntroKey() {
+    return TUT_INTRO_KEY_PREFIX + (partidaId || 'sin_partida');
+  }
   function tutIntroHecho() {
-    try { return localStorage.getItem(TUT_INTRO_KEY) === '1'; } catch (e) { return false; }
+    try { return localStorage.getItem(tutIntroKey()) === '1'; } catch (e) { return false; }
   }
   function marcarTutIntroHecho() {
-    try { localStorage.setItem(TUT_INTRO_KEY, '1'); } catch (e) {}
+    try { localStorage.setItem(tutIntroKey(), '1'); } catch (e) {}
   }
   function pintarTutIntro() {
     const box = $('[data-tut-intro]');
@@ -276,6 +286,37 @@
     return (r.identidad_publica && r.identidad_publica.nombre) || id;
   }
 
+  function renderMisiones(misiones) {
+    var teaser = $('[data-misiones-teaser]');
+    var list = $('[data-misiones-list]');
+    var items = [];
+    if (misiones && Array.isArray(misiones.misiones)) items = misiones.misiones;
+    else if (misiones && Array.isArray(misiones.items)) items = misiones.items;
+    else if (Array.isArray(misiones)) items = misiones;
+    var dia = (misiones && misiones.dia) ? misiones.dia : (cacheEstado && cacheEstado.reloj ? cacheEstado.reloj.dia_pueblo : 0);
+    if (!dia && cacheEstado && cacheEstado.reloj) dia = cacheEstado.reloj.dia_pueblo;
+    var hoy = items.filter(function (m) { return !m.dia || (m.dia || 0) === dia; });
+    if (teaser) {
+      var pend = hoy.filter(function (m) { return (m.estado || '') === 'pendiente'; });
+      teaser.textContent = pend.length
+        ? (pend.length + ' objetivo' + (pend.length === 1 ? '' : 's') + ' pendiente' + (pend.length === 1 ? '' : 's'))
+        : (hoy.length ? 'Nada pendiente hoy.' : 'Sin misiones hoy.');
+    }
+    if (!list) return;
+    list.innerHTML = '';
+    if (!hoy.length) {
+      list.innerHTML = '<p class="muted">No hay misiones para hoy.</p>';
+      return;
+    }
+    hoy.forEach(function (m) {
+      var row = document.createElement('div');
+      row.className = 'mision-row mision-' + (m.estado || 'pendiente');
+      row.innerHTML = '<p>' + esc(m.texto || m.hecho || 'Objetivo') + '</p>' +
+        '<span class="mision-estado">' + esc(m.estado || '') + '</span>';
+      list.appendChild(row);
+    });
+  }
+
   function renderShellPanels(estado, buzon, diario) {
     const partida = cacheInsp || {};
     const res = partida.residentes || {};
@@ -286,8 +327,8 @@
     const stats = $('[data-resumen-stats]');
     if (stats) {
       stats.innerHTML =
+        '<div class="stat-row"><span>Vecinos</span><strong>' + nRes + ' de 24</strong></div>' +
         '<div class="stat-row"><span>Parejas</span><strong>' + parejas.length + '</strong></div>' +
-        '<div class="stat-row"><span>Residentes</span><strong>' + nRes + '</strong></div>' +
         '<div class="stat-row"><span>Buzón pendiente</span><strong>' +
         (buzon || []).filter(function (m) { return (m.estado || '') === 'pendiente'; }).length +
         '</strong></div>';
@@ -297,8 +338,6 @@
     const hoy = (diario && diario.cotilleo && diario.cotilleo.hoy) || diario.entradas || [];
     const ult = (hoy[0] && (hoy[0].texto || hoy[0].cuerpo || hoy[0].titulo)) || '';
     if (teaser) teaser.textContent = ult || 'Todavía no hay cotilleo hoy.';
-
-    renderResidencias();
 
     const prev = $('[data-buzon-preview]');
     const pend = (buzon || []).filter(function (m) {
@@ -360,15 +399,27 @@
 
 
   var cacheMapaZonas = null;
+  const LUGAR_NOMBRE_UI = {
+    lug_cafeteria: 'la cafetería', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
+    lug_restaurante: 'el restaurante', lug_parque: 'el parque', lug_bar: 'el bar',
+    lug_cine: 'el cine', lug_discoteca: 'la discoteca', lug_bingo: 'el bingo'
+  };
+  function nombreLugarUi(id, fallback) {
+    if (!id) return fallback || 'ese sitio';
+    if (LUGAR_NOMBRE_UI[id]) return LUGAR_NOMBRE_UI[id];
+    var fb = fallback || id;
+    if (typeof fb === 'string' && fb.indexOf('lug_') === 0) return fb.replace('lug_', '').replace(/_/g, ' ');
+    return fb;
+  }
   var LUG_TO_ZONA = {
     lug_cafeteria: 'cafeteria', lug_biblioteca: 'biblioteca', lug_gimnasio: 'gimnasio',
-    lug_restaurante: 'restaurante', lug_parque: 'parque', lug_picnic: 'parque', lug_mirador: 'parque',
-    lug_bar: 'bar', lug_cine: 'cine', lug_discoteca: 'discoteca', lug_bingo: 'bingo'
+    lug_restaurante: 'restaurante', lug_parque: 'parque', lug_bar: 'bar',
+    lug_cine: 'cine', lug_discoteca: 'discoteca', lug_bingo: 'bingo'
   };
   var ZONA_TO_LUGS = {
     cafeteria: ['lug_cafeteria'], biblioteca: ['lug_biblioteca'], gimnasio: ['lug_gimnasio'],
-    restaurante: ['lug_restaurante'], parque: ['lug_parque', 'lug_picnic', 'lug_mirador'],
-    bar: ['lug_bar'], cine: ['lug_cine'], discoteca: ['lug_discoteca'], bingo: ['lug_bingo']
+    restaurante: ['lug_restaurante'], parque: ['lug_parque'], bar: ['lug_bar'],
+    cine: ['lug_cine'], discoteca: ['lug_discoteca'], bingo: ['lug_bingo']
   };
 
   function initMapaCanonico() {
@@ -484,7 +535,7 @@
       ops.forEach(function (d) {
         var b = document.createElement('button');
         b.type = 'button';
-        b.textContent = 'Ver ' + d.nombre.toLowerCase();
+        b.textContent = 'Ver ' + nombreLugarUi(d.id, d.nombre);
         b.addEventListener('click', function () { abrirQuienZona(zonaId, d.id, zonaBtn); });
         box.appendChild(b);
       });
@@ -535,7 +586,7 @@
     destinosOperativosZona(zonaId).forEach(function (d) {
       var b = document.createElement('button');
       b.type = 'button';
-      b.textContent = 'Organizar en ' + d.nombre.toLowerCase();
+      b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
       b.addEventListener('click', function () {
         org.lugar = d.id;
         setCapa('organizar');
@@ -554,9 +605,14 @@
     $('[data-fecha]').textContent = rv.fecha_corta || '';
     const h = rv.hora !== undefined ? rv.hora : reloj.hora_actual;
     $('[data-hora]').textContent = h === undefined ? '—' : (String(h).padStart(2, '0') + ':00');
-    $('[data-dinero]').textContent = dineroTxt(cacheInsp, estado);
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
+    const fillRect = $('[data-corazon-fill]');
+    if (fillRect) {
+      var fillH = 52 * (pct / 100);
+      fillRect.setAttribute('y', String(52 - fillH));
+      fillRect.setAttribute('height', String(fillH));
+    }
     const fill = $('.corazon-fill') || $('.corazon-dibujo');
     if (fill) fill.style.setProperty('--fill', pct + '%');
     const pctN = $('[data-vida-pct]');
@@ -598,45 +654,26 @@
 
   function renderPueblo(pueblo) {
     cachePueblo = pueblo;
-    const root = $('.play-root');
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return;
+    $$('.mapa-zona-hit .habs').forEach(function (b) { b.innerHTML = ''; });
+    var porZona = {};
     (pueblo.complejos || []).forEach(function (cx) {
-      const btn = $('[data-complejo="' + cx.id + '"]');
-      if (!btn) return;
-      btn.setAttribute('data-fase', cx.fase);
-      btn.setAttribute('aria-label', cx.nombre || cx.id);
-      const eti = btn.querySelector('.eti-mapa');
-      if (eti) eti.textContent = cx.nombre || '';
-      const etiP = btn.querySelector('.eti-pleno');
-      const etiT = btn.querySelector('.eti-temp');
-      if (etiP && etiT) {
-        etiP.style.display = cx.fase === 'pleno' ? '' : 'none';
-        etiT.style.display = cx.fase === 'pleno' ? 'none' : '';
-      }
-      if (cx.fase === 'pleno') root.setAttribute('data-pueblo-' + cx.id, 'pleno');
-      else root.removeAttribute('data-pueblo-' + cx.id);
-      pintarEdificios(btn, cx);
-      const box = btn.querySelector('.habs');
-      box.innerHTML = '';
-      const used = {};
-      (cx.visibles || []).forEach(function (p) {
-        const i = used[p.destino_id] || 0;
-        used[p.destino_id] = i + 1;
-        placeHab(box, p, i, cx.id);
+      (cx.visibles || cx.personas || []).forEach(function (p) {
+        var zid = LUG_TO_ZONA[p.destino_id];
+        if (!zid) return;
+        if (!porZona[zid]) porZona[zid] = [];
+        if (porZona[zid].length >= 5) return;
+        porZona[zid].push(p);
       });
-      if (cx.extra > 0) {
-        const mas = document.createElement('button');
-        mas.type = 'button';
-        mas.className = 'aforo-mas';
-        mas.textContent = '+' + cx.extra;
-        mas.setAttribute('aria-label', 'Ver las ' + cx.total + ' personas de ' + cx.nombre);
-        mas.addEventListener('click', function (ev) {
-          ev.stopPropagation();
-          abrirQuien(cx.id, null);
-        });
-        box.appendChild(mas);
-      }
     });
-    applyFases(pueblo);
+    Object.keys(porZona).forEach(function (zid) {
+      var btn = layer.querySelector('[data-zona="' + zid + '"]');
+      if (!btn) return;
+      var box = btn.querySelector('.habs');
+      if (!box) return;
+      porZona[zid].forEach(function (p, i) { placeHabEnZona(box, p, i); });
+    });
   }
 
   function applyFases(pueblo) {
@@ -680,7 +717,7 @@
       ops.forEach(function (d) {
         const b = document.createElement('button');
         b.type = 'button';
-        b.textContent = 'Ver ' + d.nombre.toLowerCase();
+        b.textContent = 'Ver ' + nombreLugarUi(d.id, d.nombre);
         b.addEventListener('click', function () { abrirQuien(id, d.id); });
         box.appendChild(b);
       });
@@ -729,7 +766,7 @@
     (cx.destinos_operativos || []).forEach(function (d) {
       const b = document.createElement('button');
       b.type = 'button';
-      b.textContent = 'Organizar en ' + d.nombre.toLowerCase();
+      b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
       b.addEventListener('click', function () {
         org.lugar = d.id;
         setCapa('organizar');
@@ -816,60 +853,6 @@
     var blk = def ? partida[def.key] : null;
     var viviendas = (blk && Array.isArray(blk.viviendas)) ? blk.viviendas : [];
     return { viviendas: viviendas, abierto: viviendas.length > 0 };
-  }
-
-  function renderResidencias() {
-    var tabs = $('[data-res-bloque-tabs]');
-    var grid = $('[data-res-grid]');
-    if (!tabs || !grid) return;
-    if (!RES_BLOQUES.some(function (b) { return b.letra === resBloqueActivo; })) {
-      resBloqueActivo = 'a';
-    }
-    tabs.innerHTML = '';
-    RES_BLOQUES.forEach(function (def) {
-      var info = bloqueInfo(def.letra);
-      var ocupadas = info.viviendas.filter(function (v) { return v && v.ocupante_id; }).length;
-      var b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'res-placa' + (def.letra === resBloqueActivo ? ' is-on' : '') + (!info.abierto ? ' is-cerrado' : '');
-      b.innerHTML = '<span class="res-placa-medalla">' + def.letra.toUpperCase() + '</span>' +
-        '<span class="res-placa-pronto">' + (info.abierto ? (ocupadas + '/' + info.viviendas.length) : 'en obras') + '</span>';
-      b.addEventListener('click', function () {
-        resBloqueActivo = def.letra;
-        renderResidencias();
-      });
-      tabs.appendChild(b);
-    });
-
-    var infoActivo = bloqueInfo(resBloqueActivo);
-    grid.innerHTML = '';
-    if (!infoActivo.abierto) {
-      grid.innerHTML = '<p class="res-vacio">Este bloque todavía está en obras.</p>';
-      return;
-    }
-    var filtro = (resBuscaTxt || '').trim().toLowerCase();
-    var ocupadas = infoActivo.viviendas.filter(function (v) { return v && v.ocupante_id; });
-    var filtradas = ocupadas.filter(function (v) {
-      var nom = nombreDe(v.ocupante_id).toLowerCase();
-      return !filtro || nom.indexOf(filtro) >= 0;
-    });
-    if (!filtradas.length) {
-      grid.innerHTML = '<p class="res-vacio">' +
-        (filtro ? 'Nadie con ese nombre en este bloque.' : 'Todavía no vive nadie en este bloque.') +
-        '</p>';
-      return;
-    }
-    filtradas.forEach(function (v) {
-      var img = tokenDe(v.ocupante_id);
-      var nom = nombreDe(v.ocupante_id);
-      var celda = document.createElement('div');
-      celda.className = 'res-celda';
-      celda.innerHTML = '<div class="res-cara">' +
-        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="res-cara-ini">' + esc(nom.charAt(0) || '?') + '</span>') +
-        '</div><p class="res-nombre">' + esc(nom) + '</p><p class="res-piso">' + esc(v.id || '') + '</p>';
-      celda.addEventListener('click', function () { abrirFicha(v.ocupante_id); });
-      grid.appendChild(celda);
-    });
   }
 
   async function abrirFicha(id) {
@@ -1013,6 +996,33 @@
     return out;
   }
 
+  function pintarOrgCaras() {
+    var box = $('[data-org-caras]');
+    if (!box) return;
+    var selA = $('[data-org-a]');
+    var selB = $('[data-org-b]');
+    var a = (selA && selA.value) || org.a;
+    var b = (selB && selB.value) || org.b;
+    if (!a || !b || a === b) {
+      box.hidden = true;
+      box.innerHTML = '';
+      return;
+    }
+    box.hidden = false;
+    box.innerHTML = '';
+    [a, b].forEach(function (id) {
+      var img = tokenDe(id);
+      var nom = nombreDe(id);
+      var ini = (nom.charAt(0) || '?');
+      var span = document.createElement('span');
+      span.className = 'cara';
+      span.innerHTML = img
+        ? '<img src="' + esc(img) + '" alt=""/>'
+        : '<span class="cara-ini">' + esc(ini) + '</span>';
+      box.appendChild(span);
+    });
+  }
+
   function fillOrganizar() {
     fillSelect($('[data-org-a]'), org.a, org.b);
     fillSelect($('[data-org-b]'), org.b, org.a);
@@ -1144,17 +1154,17 @@
     const diario = await api('diario.listar', {}, 'GET');
     renderHud(cacheEstado, buzon.mensajes || []);
     renderShellPanels(cacheEstado, buzon.mensajes || [], diario);
+      renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
     renderPueblo(mapa.pueblo || { complejos: [] });
     renderBuzon(buzon.mensajes || []);
     renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
     renderVecinos();
-    $('[data-taller-msg]').textContent = cacheEstado.reloj_texto || '';
+    if (IS_LAB) {
+      const tm = $('[data-taller-msg]');
+      if (tm) tm.textContent = cacheEstado.reloj_texto || '';
+    }
     pintarTutorialMotor(cacheEstado.tutorial);
   }
-  $('#btn-guardar').addEventListener('click', async function () {
-    await api('partida.guardar', {});
-    toast('Guardado.');
-  });
 
   async function nuevaPartidaLimpia() {
     localStorage.removeItem(storageKey());
@@ -1184,10 +1194,23 @@
     quizaMostrarTutIntro();
   }
 
-  $('#btn-nueva').addEventListener('click', async function () {
-    await nuevaPartidaLimpia();
-  });
-    function pintarPlaytestGuia(guia, evento) {
+  if (IS_LAB) {
+    const btnGuardar = $('#btn-guardar');
+    if (btnGuardar) {
+      btnGuardar.addEventListener('click', async function () {
+        await api('partida.guardar', {});
+        toast('Guardado.');
+      });
+    }
+    const btnNueva = $('#btn-nueva');
+    if (btnNueva) {
+      btnNueva.addEventListener('click', async function () {
+        await nuevaPartidaLimpia();
+      });
+    }
+  }
+
+  function pintarPlaytestGuia(guia, evento) {
     const box = $('[data-playtest-guia]');
     if (!box) return;
     if (!guia || !guia.activo) {
@@ -1281,11 +1304,18 @@
     if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
     pintarResumenAvance(r.resumen_avance);
   }
-  $$('[data-horas]').forEach(function (b) {
-    b.addEventListener('click', function () {
-      avanzarHoras(parseInt(b.getAttribute('data-horas'), 10));
+  function bindLabHoras() {
+    var scope = IS_LAB ? document.querySelector('[data-playtest-float]') : null;
+    if (!scope) return;
+    $$('[data-horas]', scope).forEach(function (btn) {
+      if (btn._ahtHorasBound) return;
+      btn._ahtHorasBound = true;
+      btn.addEventListener('click', function () {
+        avanzarHoras(parseInt(btn.getAttribute('data-horas'), 10));
+      });
     });
-  });
+  }
+  bindLabHoras();
   const btnProx = $('#btn-proximo');
   if (btnProx) btnProx.addEventListener('click', irProximo);
   const btnProxLab = $('#btn-proximo-lab');
@@ -1359,7 +1389,6 @@
   if (resBuscaInp) {
     resBuscaInp.addEventListener('input', function () {
       resBuscaTxt = resBuscaInp.value;
-      renderResidencias();
     });
   }
 

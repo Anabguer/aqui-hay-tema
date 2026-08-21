@@ -50,6 +50,8 @@ final class PropuestaEncuentroEngine
         }
         $participantes = $ctx['participantes'];
         $lugarId = $ctx['lugar'];
+        $diaPedido = $dia;
+        $horaPedida = $hora;
         if (!Reloj::esFuturo($partida['reloj'] ?? [], $dia, $hora)) {
             return GameError::respuesta(GameError::HORA_PASADA, ['dia' => $dia, 'hora' => $hora]);
         }
@@ -85,6 +87,7 @@ final class PropuestaEncuentroEngine
         }
         $dia = (int) $franja['dia'];
         $hora = (int) $franja['hora'];
+        $horaAjustada = $dia !== $diaPedido || $hora !== $horaPedida;
         if ($voluntad === null) {
             $voluntad = new VoluntadPonderadaEvaluator($calDef);
         }
@@ -102,6 +105,8 @@ final class PropuestaEncuentroEngine
             'lugar' => $lugarId,
             'hora' => $hora,
             'dia' => $dia,
+            'hora_solicitada' => ['dia' => $diaPedido, 'hora' => $horaPedida],
+            'hora_ajustada' => $horaAjustada,
             'actividad' => $actividad,
             'reacciones' => [],
             'encuentro_id' => null,
@@ -146,6 +151,13 @@ final class PropuestaEncuentroEngine
         $out['tutorial'] = TutorialBucle::vista($partida);
         self::registrarDiag($partida, $participantes, $tipo, (string) $lugarId, $dia, $hora, $out, $propuesta);
         $out['playtest_diag'] = PlaytestDiag::vista($partida);
+        if ($horaAjustada) {
+            $out['hora_ajustada'] = true;
+            $out['dia_pedido'] = $diaPedido;
+            $out['hora_pedido'] = $horaPedida;
+            $out['dia_asignado'] = $dia;
+            $out['hora_asignado'] = $hora;
+        }
         return $out;
     }
 
@@ -365,8 +377,16 @@ final class PropuestaEncuentroEngine
         $diaSem = Reloj::diaSemanaUi((int) $prop['dia'], $partida['reloj'] ?? []);
         $hh = str_pad((string) (int) $prop['hora'], 2, '0', STR_PAD_LEFT);
         $lugar = (string) ($prop['lugar'] ?? '');
-        $sitio = $lugar !== '' ? str_replace('lug_', '', $lugar) : 'el pueblo';
+        $sitio = $lugar !== '' ? MisionPlantillas::nombreLugar($lugar) : 'el pueblo';
         $r['mensaje_ui'] = $quien . ' han quedado el ' . $diaSem . ' ' . $fechaTxt . ' a las ' . $hh . ':00 en ' . $sitio . '.';
+        if (!empty($prop['hora_ajustada']) && is_array($prop['hora_solicitada'] ?? null)) {
+            $hp = str_pad((string) (int) ($prop['hora_solicitada']['hora'] ?? 0), 2, '0', STR_PAD_LEFT);
+            $dp = (int) ($prop['hora_solicitada']['dia'] ?? 0);
+            if ($dp !== (int) $prop['dia'] || (int) ($prop['hora_solicitada']['hora'] ?? -1) !== (int) $prop['hora']) {
+                $r['mensaje_ui'] = $quien . ' han quedado el ' . $diaSem . ' ' . $fechaTxt . ' a las ' . $hh . ':00 en ' . $sitio
+                    . ' (la hora pedida, ' . $hp . ':00 del día ' . $dp . ', no encajaba; el motor buscó el siguiente hueco libre).';
+            }
+        }
         return $r;
     }
 

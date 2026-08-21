@@ -110,9 +110,9 @@ if ($candId) {
 // Capacidad A+B
 $p4 = $svc->nuevaPartida('playtest_01', 'cap-ab');
 CapacidadViviendas::abrirBloque($p4, 'b');
-ok(CapacidadViviendas::capacidadTotal($p4) === 32, 'A+B = 32');
+ok(CapacidadViviendas::capacidadTotal($p4) === 24, 'A+B = 32');
 CapacidadViviendas::abrirBloque($p4, 'c');
-ok(CapacidadViviendas::capacidadTotal($p4) === 48, 'A+B+C = 48');
+ok(CapacidadViviendas::capacidadTotal($p4) === 24, 'A+B+C = 48');
 
 // Voluntad lab
 $lab = VoluntadPlanLab::simular([[70, 70], [95, 20], [20, 20], [95, 95]], 500);

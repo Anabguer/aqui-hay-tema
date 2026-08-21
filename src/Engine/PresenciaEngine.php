@@ -15,7 +15,8 @@ final class PresenciaEngine
 
         foreach ($lugares['items'] as $lug) {
             $id = $lug['id'];
-            $operativo = in_array($id, $partida['celeste']['lugares_desbloqueados'] ?? [], true);
+            $operativo = LugaresCanonicos::operativoEnProducto($id)
+                || in_array($id, $partida['celeste']['lugares_desbloqueados'] ?? [], true);
             $mapa[$id] = [
                 'id' => $id,
                 'nombre' => $lug['nombre'],

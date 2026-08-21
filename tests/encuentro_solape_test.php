@@ -25,29 +25,29 @@ $ph = $service->crearResidentePlaceholderDev($partida);
 $ida = 'per_qa_valid';
 $idb = $ph['residente']['catalog_id'];
 
-$attrCafe = LugarAtributos::de('lug_cafeteria');
-ok((int) $attrCafe['horas'] >= 2, 'cafetería ocupa al menos 2 h');
+$attrCafe = LugarAtributos::de('lug_gimnasio');
+ok((int) $attrCafe['horas'] >= 2, 'gimnasio ocupa al menos 2 h');
 
-$r1 = EncuentroEngine::programar($partida, [$ida], 1, 19, 'individual', 'lug_cafeteria');
-ok($r1['ok'] ?? false, 'individual 19h en cafetería');
+$r1 = EncuentroEngine::programar($partida, [$ida], 1, 19, 'individual', 'lug_gimnasio');
+ok($r1['ok'] ?? false, 'individual 19h en gimnasio');
 ok((int) ($r1['encuentro']['duracion_horas'] ?? 0) >= 2, 'duración aplicada al programar');
 
-$r2 = EncuentroEngine::programar($partida, [$ida], 1, 20, 'individual', 'lug_cafeteria');
+$r2 = EncuentroEngine::programar($partida, [$ida], 1, 20, 'individual', 'lug_gimnasio');
 ok(!($r2['ok'] ?? true), 'mismo residente a las 20h rechazado (solape)');
 
-$rMix = EncuentroEngine::programar($partida, [$ida, $idb], 1, 20, 'conocerse', 'lug_cafeteria');
+$rMix = EncuentroEngine::programar($partida, [$ida, $idb], 1, 20, 'conocerse', 'lug_gimnasio');
 ok(!($rMix['ok'] ?? true), 'conocerse que solapa con individual rechazado');
 
-$r3 = EncuentroEngine::programar($partida, [$ida], 1, 21, 'individual', 'lug_cafeteria');
-ok($r3['ok'] ?? false, '21h libre tras cafetería 19–21');
+$r3 = EncuentroEngine::programar($partida, [$ida], 1, 21, 'individual', 'lug_gimnasio');
+ok($r3['ok'] ?? false, '21h libre tras gimnasio 19–21');
 
 $p2 = $service->nuevaPartida('test_fixtures_v0', 'solape-inverso');
 $ph2 = $service->crearResidentePlaceholderDev($p2);
 $a = 'per_qa_valid';
 $b = $ph2['residente']['catalog_id'];
-$corto = EncuentroEngine::programar($p2, [$a, $b], 1, 21, 'conocerse', 'lug_cafeteria');
-ok($corto['ok'] ?? false, 'cafetería 21h');
-$largo = EncuentroEngine::programar($p2, [$a], 1, 20, 'individual', 'lug_cafeteria');
+$corto = EncuentroEngine::programar($p2, [$a, $b], 1, 21, 'conocerse', 'lug_gimnasio');
+ok($corto['ok'] ?? false, 'gimnasio 21h');
+$largo = EncuentroEngine::programar($p2, [$a], 1, 20, 'individual', 'lug_gimnasio');
 ok(!($largo['ok'] ?? true), 'individual 20h 2h que pisa las 21h rechazado');
 
 exit($failures > 0 ? 1 : 0);

@@ -11,6 +11,8 @@ use AquiHayTema\Engine\RelojOperations;
 $root = dirname(__DIR__);
 $service = new PartidaService($root);
 $partida = $service->nuevaPartida('test_fixtures_v0', 'play-flujo');
+$partida['reloj']['hora_actual'] = 7;
+$partida['reloj']['minuto_actual'] = 0;
 $failures = 0;
 
 function ok(bool $c, string $m): void
@@ -26,7 +28,7 @@ $ph = $service->crearResidentePlaceholderDev($partida);
 $ida = 'per_qa_valid';
 $idb = $ph['residente']['catalog_id'];
 
-$slots = DisponibilidadEngine::slotsCompatibles($partida, [$ida, $idb], 'conocerse');
+$slots = DisponibilidadEngine::slotsCompatibles($partida, [$ida, $idb], 'conocerse', null, null, 7, 24, null, 'lug_cafeteria');
 ok($slots['ok'] ?? false, 'slots_compatibles devuelve ok');
 ok(count($slots['slots'] ?? []) > 0, 'hay al menos un slot compatible');
 

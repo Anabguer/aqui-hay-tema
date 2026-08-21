@@ -22,6 +22,8 @@ function ok(bool $c, string $m): void
 
 $service = new PartidaService($root);
 $partida = $service->nuevaPartida('test_fixtures_v0', 'cancel-enc');
+$partida['reloj']['hora_actual'] = 8;
+$partida['reloj']['minuto_actual'] = 0;
 $ph = $service->crearResidentePlaceholderDev($partida);
 $ida = 'per_qa_valid';
 $idb = $ph['residente']['catalog_id'];
@@ -66,7 +68,7 @@ $partida = $recargada;
 $reprog = $service->programarEncuentro($partida, [$ida, $idb], 1, 19, 'amistad');
 ok($reprog['ok'] ?? false, 'se puede volver a programar la misma hora');
 
-$enc2 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'conocerse');
+$enc2 = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'conocerse', 'lug_parque');
 ok($enc2['ok'] ?? false, 'segundo encuentro 21h');
 $service->avanzarReloj($partida, 16);
 $estTerm = null;

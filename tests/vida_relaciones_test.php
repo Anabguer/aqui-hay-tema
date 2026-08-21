@@ -81,7 +81,7 @@ $rechazaB = new class implements VoluntadEvaluator {
 // --- Schema aditivo sin bump ---
 $v2 = ['meta' => ['schema_version' => 2, 'seed' => 's'], 'residentes' => [], 'relaciones_sociales' => []];
 $ensured = SchemaMigrator::migrate($v2);
-ok((int) $ensured['meta']['schema_version'] === 2, 'schema sigue v2 (sin bump)');
+ok((int) $ensured['meta']['schema_version'] === 3, 'schema sigue v3 (sin bump)');
 ok(isset($ensured['propuestas_encuentro']), 'ensure propuestas_encuentro');
 ok(isset($ensured['peticiones']), 'ensure peticiones');
 ok(isset($ensured['relaciones_conflicto']), 'ensure relaciones_conflicto');

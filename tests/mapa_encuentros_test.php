@@ -59,13 +59,12 @@ ok(($cafe['encuentro']['id'] ?? '') === ($encCafe['encuentro']['id'] ?? ''), 'da
 ok(ResumenDia::residenteEnVista($cafe['encuentro'] ?? null, $ida), 'residente seleccionado participa');
 ok(!ResumenDia::residenteEnVista($cafe['encuentro'] ?? null, 'per_inexistente'), 'no participante no refuerza');
 
-$bloq = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_parque');
-ok(!($bloq['ok'] ?? true), 'lugar bloqueado no acepta encuentro');
-ok(marcaDe(PresenciaEngine::resolver($partida, $root), 'lug_parque') === null, 'bloqueado sin encuentro válido → sin marca');
+$bloq = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_karaoke');
+ok(!($bloq['ok'] ?? true), 'destino legacy no acepta encuentro');
+ok(marcaDe(PresenciaEngine::resolver($partida, $root), 'lug_karaoke') === 'missing', 'legacy sin marca');
 
-$partida['celeste']['lugares_desbloqueados'][] = 'lug_parque';
 $encPar = $service->programarEncuentro($partida, [$ida, $idb], 1, 21, 'amistad', 'lug_parque');
-ok($encPar['ok'] ?? false, 'parque desbloqueado acepta encuentro');
+ok($encPar['ok'] ?? false, 'parque operativo V3 acepta encuentro');
 $mapa2 = PresenciaEngine::resolver($partida, $root);
 ok(marcaDe($mapa2, 'lug_cafeteria') === 'proximo', 'varios: el próximo (19h) marca cafetería');
 ok(marcaDe($mapa2, 'lug_parque') === null, 'varios: el de 21h no es el próximo, parque sin marca de próximo');

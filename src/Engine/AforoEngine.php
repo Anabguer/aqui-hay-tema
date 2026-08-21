@@ -30,6 +30,15 @@ final class AforoEngine
         return $n;
     }
 
+    public static function ocupacionComplejo(array $partida, string $complejoId, int $dia, int $hora): int
+    {
+        $n = 0;
+        foreach (ComplejoCatalog::destinosDeComplejo($complejoId) as $lugarId) {
+            $n += self::ocupacion($partida, $lugarId, $dia, $hora);
+        }
+        return $n;
+    }
+
     public static function cabe(array $partida, string $lugarId, int $dia, int $hora, int $quien, ?array $lugarItem = null): bool
     {
         $attr = LugarAtributos::de($lugarId, $lugarItem);

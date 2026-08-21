@@ -40,8 +40,13 @@ final class PartidaSchema
             'state' => $rng->getState(),
         ];
 
-        if (isset($config['lugares_operativos_dia_1'])) {
-            $partida['celeste']['lugares_desbloqueados'] = $config['lugares_operativos_dia_1'];
+        $partida['celeste']['lugares_desbloqueados'] = LugaresCanonicos::todos();
+        if (isset($config['lugares_operativos_dia_1']) && is_array($config['lugares_operativos_dia_1'])) {
+            foreach ($config['lugares_operativos_dia_1'] as $lid) {
+                if (is_string($lid) && $lid !== '' && !in_array($lid, $partida['celeste']['lugares_desbloqueados'], true)) {
+                    $partida['celeste']['lugares_desbloqueados'][] = $lid;
+                }
+            }
         }
         if (isset($config['bloques_abiertos'])) {
             $partida['celeste']['bloques_abiertos'] = $config['bloques_abiertos'];

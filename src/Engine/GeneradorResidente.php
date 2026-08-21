@@ -28,8 +28,17 @@ final class GeneradorResidente
         $nVp = (int) CalibracionConfig::get($cal, 'generacion.prefs_visual_pos', 2);
         $nVn = (int) CalibracionConfig::get($cal, 'generacion.prefs_visual_neg', 2);
 
+        $nRo = (int) CalibracionConfig::get($cal, 'generacion.rasgos_ocultos_por_residente', 2);
+        $nRom = (int) CalibracionConfig::get($cal, 'generacion.prefs_romanticas', 2);
+        $nDeal = (int) CalibracionConfig::get($cal, 'generacion.dealbreakers', 1);
+        $nLugPref = (int) CalibracionConfig::get($cal, 'generacion.lugares_preferentes', 2);
+
         $hobbies = $rng->pickUnique(self::idsGenerables($store, 'hobbies'), $nHob);
         $rasgos = $rng->pickUnique(self::idsGenerables($store, 'rasgos'), $nRas);
+        $rasgosOcultos = $rng->pickUnique(
+            array_values(array_diff(self::idsGenerables($store, 'rasgos'), $rasgos)),
+            min($nRo, max(0, count(self::idsGenerables($store, 'rasgos')) - count($rasgos)))
+        );
 
         $poolPers = self::idsGenerables($store, 'rasgos');
         $posP = $rng->pickUnique($poolPers, $nPp);
@@ -52,6 +61,22 @@ final class GeneradorResidente
         $estilos = self::idsGenerables($store, 'estilos_sociales');
         $estilo = $estilos !== [] ? $rng->pickUnique($estilos, 1) : [];
 
+        $poolRom = self::idsGenerables($store, 'prefs_romanticas');
+        if ($poolRom === []) {
+            $poolRom = self::idsGenerables($store, 'rasgos');
+        }
+        $prefsRom = $rng->pickUnique($poolRom, min($nRom, count($poolRom)));
+        $dealPool = self::idsGenerables($store, 'dealbreakers');
+        if ($dealPool === []) {
+            $dealPool = array_values(array_diff($poolRom, $prefsRom));
+        }
+        $dealbreakers = $rng->pickUnique($dealPool, min($nDeal, count($dealPool)));
+
+        $lugaresPref = $rng->pickUnique(LugaresCanonicos::IDS, min($nLugPref, count(LugaresCanonicos::IDS)));
+
+        $coletillas = self::idsGenerables($store, 'coletillas');
+        $coletilla = $coletillas !== [] ? (string) $rng->pickUnique($coletillas, 1)[0] : null;
+
         $visual = $indicadoresForzados;
         if ($visual === null) {
             $visual = is_array($catalogo) ? IndicadoresVisuales::desdeCatalogo($catalogo, $store) : [];
@@ -62,12 +87,16 @@ final class GeneradorResidente
 
         return [
             'fuente' => 'generado',
-            '_provisional_catalogos' => true,
+            'hobby_principal' => $hobbies !== [] ? (string) $hobbies[0] : null,
+            'hobbies_secundarios' => array_values(array_slice($hobbies, 1)),
             'hobbies' => array_values($hobbies),
             'rasgos' => array_values($rasgos),
+            'rasgos_ocultos' => array_values($rasgosOcultos),
             'indicadores_visuales' => array_values($visual),
             'edad' => $edad,
             'estilo_social' => $estilo !== [] ? (string) $estilo[0] : null,
+            'coletilla' => $coletilla,
+            'lugares_preferentes' => array_values($lugaresPref),
             'preferencias' => [
                 'personalidad_pos' => array_values($posP),
                 'personalidad_neg' => array_values($negP),
@@ -75,6 +104,8 @@ final class GeneradorResidente
                 'visual_neg' => array_values($negV),
                 'hobbies_pos' => array_values($posH),
                 'hobbies_neg' => array_values($negH),
+                'romanticas' => array_values($prefsRom),
+                'dealbreakers' => array_values($dealbreakers),
             ],
         ];
     }

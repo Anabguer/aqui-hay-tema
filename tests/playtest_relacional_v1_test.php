@@ -79,10 +79,12 @@ ok((RelacionEngine::romanceHacia($p, $b, $a) ?? 0) < 8, 'E valor B→A bajo');
 
 // F) primera cita aceptada → encuentro real → deltas
 $pF = $service->nuevaPartida('playtest_01', 'rel-v1-f');
+$pF['reloj']['hora_actual'] = 8;
+$pF['reloj']['minuto_actual'] = 0;
 RelacionEngine::registrarContacto($pF, $a, $b, 'normal', $cal);
 RelacionEngine::registrarContacto($pF, $b, $a, 'normal', $cal);
 RelacionEngine::setRomanceHacia($pF, $a, $b, 12);
-$horaF = 20;
+$horaF = 19;
 $encF = EncuentroEngine::programar($pF, [$a, $b], 1, $horaF, 'primera_cita', 'lug_cafeteria');
 ok(($encF['ok'] ?? false) === true, 'F programa primera cita ' . (string) ($encF['error'] ?? ''));
 $horaNow = (int) ($pF['reloj']['hora_actual'] ?? 8);

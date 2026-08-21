@@ -4,12 +4,10 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * 6 complejos, horarios y aforos cerrados (Maestro 20/08 + Producto 20/08).
- * Cine 16:00–00:00 aforo 8; Arcade 12:00–00:00 aforo 8; Cine Game techo 12.
+ * Catálogo V3: 9 destinos canónicos. Agrupación legacy en complejos solo para vista/API.
  */
 final class ComplejoCatalog
 {
-
     /**
      * @return array<string, array<string, mixed>>
      */
@@ -19,7 +17,7 @@ final class ComplejoCatalog
             'cafe_libros' => [
                 'nombre' => 'Café & Libros',
                 'aforo' => 10,
-                'destinos' => ['lug_cafeteria', 'lug_biblioteca', 'lug_tienda_ropa'],
+                'destinos' => ['lug_cafeteria', 'lug_biblioteca'],
             ],
             'rincon_lola' => [
                 'nombre' => 'El Rincón de Lola',
@@ -27,32 +25,29 @@ final class ComplejoCatalog
                 'destinos' => ['lug_restaurante', 'lug_bingo'],
             ],
             'cine_game' => [
-                'nombre' => 'Cine Game',
+                'nombre' => 'Cine',
                 'aforo' => 12,
-                'destinos' => ['lug_cine', 'lug_arcade'],
+                'destinos' => ['lug_cine'],
             ],
             'mala_idea' => [
                 'nombre' => 'La Mala Idea',
                 'aforo' => 12,
-                'destinos' => ['lug_bar', 'lug_discoteca', 'lug_karaoke'],
+                'destinos' => ['lug_bar', 'lug_discoteca'],
             ],
             'parque' => [
                 'nombre' => 'Parque',
                 'aforo' => 16,
-                'destinos' => ['lug_parque', 'lug_picnic', 'lug_mirador'],
+                'destinos' => ['lug_parque'],
             ],
             'gimnasio_spa' => [
-                'nombre' => 'Gimnasio & Spa',
+                'nombre' => 'Gimnasio',
                 'aforo' => 10,
-                'destinos' => ['lug_gimnasio', 'lug_spa'],
+                'destinos' => ['lug_gimnasio'],
             ],
         ];
     }
 
     /**
-     * ini inclusive, fin exclusive. fin=0 = medianoche.
-     * Si ini > fin (o fin=0 con ini>0) la franja cruza medianoche.
-     *
      * @return array<string, array<string, mixed>>
      */
     public static function destinos(): array
@@ -60,19 +55,13 @@ final class ComplejoCatalog
         return [
             'lug_cafeteria' => ['complejo' => 'cafe_libros', 'aforo' => 8, 'ini' => 8, 'fin' => 20, 'duracion_minutos' => 90],
             'lug_biblioteca' => ['complejo' => 'cafe_libros', 'aforo' => 6, 'ini' => 10, 'fin' => 20, 'duracion_minutos' => 120],
-            'lug_tienda_ropa' => ['complejo' => 'cafe_libros', 'aforo' => 4, 'ini' => 10, 'fin' => 20, 'duracion_minutos' => 60],
-            'lug_restaurante' => ['complejo' => 'rincon_lola', 'aforo' => 8, 'ini' => 13, 'fin' => 16, 'ini2' => 20, 'fin2' => 0, 'duracion_minutos' => 90],
-            'lug_bingo' => ['complejo' => 'rincon_lola', 'aforo' => 8, 'ini' => 17, 'fin' => 23, 'duracion_minutos' => 120],
-            'lug_cine' => ['complejo' => 'cine_game', 'aforo' => 8, 'ini' => 16, 'fin' => 0, 'duracion_minutos' => 150],
-            'lug_arcade' => ['complejo' => 'cine_game', 'aforo' => 8, 'ini' => 12, 'fin' => 0, 'duracion_minutos' => 90],
-            'lug_bar' => ['complejo' => 'mala_idea', 'aforo' => 8, 'ini' => 17, 'fin' => 0, 'duracion_minutos' => 120],
-            'lug_discoteca' => ['complejo' => 'mala_idea', 'aforo' => 8, 'ini' => 22, 'fin' => 4, 'duracion_minutos' => 120],
-            'lug_karaoke' => ['complejo' => 'mala_idea', 'aforo' => 4, 'ini' => 20, 'fin' => 3, 'duracion_minutos' => 90],
-            'lug_parque' => ['complejo' => 'parque', 'aforo' => 12, 'ini' => 7, 'fin' => 22, 'duracion_minutos' => 60],
-            'lug_picnic' => ['complejo' => 'parque', 'aforo' => 8, 'ini' => 10, 'fin' => 20, 'duracion_minutos' => 90],
-            'lug_mirador' => ['complejo' => 'parque', 'aforo' => 4, 'ini' => 8, 'fin' => 0, 'duracion_minutos' => 60],
             'lug_gimnasio' => ['complejo' => 'gimnasio_spa', 'aforo' => 8, 'ini' => 7, 'fin' => 22, 'duracion_minutos' => 90],
-            'lug_spa' => ['complejo' => 'gimnasio_spa', 'aforo' => 4, 'ini' => 10, 'fin' => 22, 'duracion_minutos' => 90],
+            'lug_restaurante' => ['complejo' => 'rincon_lola', 'aforo' => 8, 'ini' => 13, 'fin' => 16, 'ini2' => 20, 'fin2' => 0, 'duracion_minutos' => 90],
+            'lug_parque' => ['complejo' => 'parque', 'aforo' => 12, 'ini' => 7, 'fin' => 22, 'duracion_minutos' => 60],
+            'lug_bar' => ['complejo' => 'mala_idea', 'aforo' => 8, 'ini' => 17, 'fin' => 0, 'duracion_minutos' => 120],
+            'lug_cine' => ['complejo' => 'cine_game', 'aforo' => 8, 'ini' => 16, 'fin' => 0, 'duracion_minutos' => 150],
+            'lug_discoteca' => ['complejo' => 'mala_idea', 'aforo' => 8, 'ini' => 22, 'fin' => 4, 'duracion_minutos' => 120],
+            'lug_bingo' => ['complejo' => 'rincon_lola', 'aforo' => 8, 'ini' => 17, 'fin' => 23, 'duracion_minutos' => 120],
         ];
     }
 
@@ -93,6 +82,9 @@ final class ComplejoCatalog
 
     public static function estaAbierto(string $lugarId, int $hora): bool
     {
+        if (!LugaresCanonicos::esCanonico($lugarId)) {
+            return false;
+        }
         $d = self::destino($lugarId);
         if ($d === null) {
             return true;

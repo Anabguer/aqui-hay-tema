@@ -3,12 +3,9 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260821ab';
-$ahtTaller = isset($_GET['taller']) && (string) $_GET['taller'] !== '0';
+$ahtUi = 'v3-20260821ac';
 $ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
-if ($ahtLab) {
-    $ahtTaller = true; // playtest siempre muestra cheats de tiempo
-}
+$ahtTaller = $ahtLab; // dev solo con ?lab=1
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -25,7 +22,6 @@ if ($ahtLab) {
   <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
@@ -33,9 +29,11 @@ if ($ahtLab) {
       font-family: Fraunces, Georgia, serif; font-style: italic;
       background: #f3e6cc; border-bottom: 2px solid #c9b8a0; color: #2a2218;
     }
-    body.play-v3:not([data-taller="1"]) .taller-cheat { display: none; }
+    body.play-v3:not([data-lab="1"]) .taller,
+    body.play-v3:not([data-lab="1"]) .taller-cheat { display: none !important; }
     body.play-v3:not([data-lab="1"]) .playtest-guia,
-    body.play-v3:not([data-lab="1"]) .playtest-cheats { display: none !important; }
+    body.play-v3:not([data-lab="1"]) .playtest-cheats,
+    body.play-v3:not([data-lab="1"]) .tiempo-juego { display: none !important; }
     body.play-v3[data-tutorial-zona="buzon"] [data-open="buzon"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="vecinos"] [data-open="vecinos"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="organizar"] [data-open="organizar"] { outline: 2px solid #c45; }
@@ -117,6 +115,7 @@ if ($ahtLab) {
       <button type="button" class="taller-cheat" data-horas="1">+1h</button>
       <button type="button" class="taller-cheat" data-horas="8">+8h</button>
       <button type="button" class="taller-cheat" data-horas="24">+1 día</button>
+      <button type="button" class="taller-cheat" data-horas="72">+3 días</button>
       <button type="button" class="taller-cheat" id="btn-proximo">Ir al próximo</button>
       <a class="taller-cheat" href="play-provisional.php">UI anterior</a>
       <span class="msg taller-cheat" data-taller-msg></span>
@@ -124,19 +123,6 @@ if ($ahtLab) {
   </div>
   <?php endif; ?>
   <p class="tutorial-pista" data-tutorial-pista hidden></p>
-  <?php if (!$ahtLab): ?>
-  <div class="taller">
-    <strong class="<?= $ahtLab ? 'lab' : '' ?>"><?= $ahtLab ? 'Playtest Neni' : 'Aquí Hay Tema' ?></strong>
-    <button type="button" id="btn-nueva">Nueva partida</button>
-    <button type="button" class="taller-cheat" id="btn-guardar">Guardar</button>
-    <button type="button" class="taller-cheat" data-horas="1">+1h</button>
-    <button type="button" class="taller-cheat" data-horas="8">+8h</button>
-    <button type="button" class="taller-cheat" data-horas="24">+1 día</button>
-    <button type="button" class="taller-cheat" id="btn-proximo">Ir al próximo</button>
-    <a class="taller-cheat" href="play-provisional.php">UI anterior</a>
-    <span class="msg taller-cheat" data-taller-msg></span>
-  </div>
-  <?php endif; ?>
   <div class="playtest-cheats" data-playtest-cheats hidden>
     <span class="pc-label">Acelerar tiempo</span>
     <button type="button" data-horas="1">+1h</button>
@@ -178,25 +164,22 @@ if ($ahtLab) {
       <div class="top-center">
         <div class="obj-dia" style="--rot:-2deg">
           <div class="obj-dia-placa">
-            <span class="obj-dia-num" data-dia-num>Dï¿½A ï¿½</span>
+            <span class="obj-dia-num" data-dia-num>DÍA ·</span>
           </div>
           <div class="obj-dia-cuerpo">
             <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
-            <span class="obj-dia-meta" data-dia-meta>ï¿½</span>
+            <span class="obj-dia-meta" data-dia-meta>·</span>
           </div>
           <span class="sr-only" data-fecha></span>
-        </div>
-        <div class="obj-dinero" style="--rot:0.6deg">
-          <span class="obj-dinero-txt" data-dinero>Dinero: …</span>
         </div>
       </div>
       <div class="top-vida" aria-label="Vida del pueblo">
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" width="68" height="62" aria-hidden="true">
-          <defs><filter id="corazon-hand" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0.8"/></filter></defs><filter id="corazon-hand" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0.8"/></filter></defs> width="68" height="62" aria-hidden="true">
+          <defs><filter id="corazon-hand" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0.8"/></filter></defs>
           <path class="corazon-bg" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
           <clipPath id="corazon-clip"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
-          <rect class="corazon-fill-rect" clip-path="url(#corazon-clip)" x="0" y="52" width="58" height="0"/>
+          <rect class="corazon-fill-rect" clip-path="url(#corazon-clip)" x="0" y="0" width="58" height="52" data-corazon-fill/>
           <path class="corazon-stroke" fill="none" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
@@ -229,6 +212,12 @@ if ($ahtLab) {
           <button type="button" class="obj-nuevo-plan obj-nota-rosa" data-open="organizar" aria-label="Nuevo plan">
             <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
             <span class="obj-nuevo-plan-txt">NUEVO PLAN</span>
+          </button>
+        </section>
+        <section class="shell-grupo shell-grupo-misiones">
+          <button type="button" class="obj-misiones obj-nota-rosa" data-open="misiones" aria-label="Misiones de hoy">
+            <span class="obj-misiones-tit">Hoy en el pueblo</span>
+            <p class="obj-misiones-teaser" data-misiones-teaser>—</p>
           </button>
         </section>
         <section class="shell-grupo shell-grupo-cotilleo">
@@ -331,18 +320,6 @@ if ($ahtLab) {
         <p class="mini">Lo que sé, escrito a mano. El resto llegará.</p>
         <div data-vecinos-list></div>
       </aside>
-      <aside class="capa capa-residencias">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <p class="libreta-kicker">Libreta de Celestine</p>
-        <h2>Quién vive aquí</h2>
-        <p class="mini">Por bloque, como apunto en la libreta.</p>
-        <div class="res-placas-row" data-res-bloque-tabs></div>
-        <div class="res-busca-tira">
-          <label class="res-busca-etiq" for="res-busca-input">¿Buscas a alguien?</label>
-          <input type="text" id="res-busca-input" class="res-busca-campo" data-res-busca autocomplete="off" spellcheck="false" placeholder="nombre…"/>
-        </div>
-        <div class="res-grid" data-res-grid></div>
-      </aside>
       <aside class="capa capa-ficha">
         <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
         <p class="libreta-kicker">Libreta de Celestine</p>
@@ -381,11 +358,19 @@ if ($ahtLab) {
         <div class="dia-block dia-ayer collage" data-coti-ayer></div>
         <div class="dia-block dia-viejos collage" data-coti-viejos></div>
       </aside>
+      <aside class="capa capa-misiones">
+        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
+        <p class="libreta-kicker">Libreta de Celestine</p>
+        <h2>Hoy en el pueblo</h2>
+        <p class="mini">Pequeños objetivos sociales. Opcionales.</p>
+        <div data-misiones-list></div>
+      </aside>
       <aside class="capa capa-organizar">
         <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
         <p class="libreta-kicker">Libreta de Celestine</p>
         <h2>Organizar un plan</h2>
         <p class="mini">Tú propones. Ellas viven.</p>
+        <div class="caras-clip" data-org-caras hidden></div>
         <div class="org-row"><label>¿Con quién?</label><select data-org-a></select></div>
         <div class="org-row"><label>¿Y con quién más?</label><select data-org-b></select></div>
         <p><strong>¿Qué plan?</strong></p>
@@ -406,14 +391,6 @@ if ($ahtLab) {
   </div>
       </div>
       <aside class="game-right zona-personas">
-        <section class="shell-grupo shell-grupo-residencias">
-          <span class="zona-tit">Bloques</span>
-          <div class="obj-bloques-res">
-            <button type="button" class="obj-bloques-img-btn" data-open="residencias" aria-label="Ver los bloques del pueblo">
-              <img class="obj-bloques-img" src="assets/play-v3/shell/bloques_edificios.png" alt="Bloques A, B y C"/>
-            </button>
-          </div>
-        </section>
         <section class="shell-grupo shell-grupo-parejas">
           <span class="zona-tit zona-tit-parejas">Parejas</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
@@ -421,6 +398,9 @@ if ($ahtLab) {
       </aside>
     </div>
   </div>
+  <?php if ($ahtLab): ?>
+  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <?php endif; ?>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

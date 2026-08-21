@@ -1,31 +1,23 @@
 {
-    "_comentario": "Arranque jugable V1. NO es el roster canonico: B y C del trio dia 1 siguen BLOQUEADO_DECISION. Rocio si esta cerrada. Carmen y Jose son stand-in provisional del pack visual P001/P002 para poder probar el bucle. playtest_01 sigue siendo laboratorio.",
+    "_comentario": "Arranque V3: 3 aleatorios + 5 incorporaciones tutorial aleatorias. 9 lugares desde inicio.",
     "id": "juego_v1",
-    "descripcion": "Nueva partida del jugador: trio pequeno, solo cafeteria, tutorial en la misma partida.",
+    "descripcion": "Nueva partida V3: trio aleatorio, tutorial, 8 vecinos dia 1.",
     "seed_sugerida": "juego-v1",
     "tutorial_bucle_1": true,
-    "residentes_iniciales": [
-        {
-            "catalog_id": "per_i03",
-            "presencia": "residente",
-            "nota": "Rocio confirmada dia 1 (cerrado)"
-        },
-        {
-            "catalog_id": "per_p001",
-            "presencia": "residente",
-            "nota": "PROVISIONAL B hasta decision de producto (Carmen / P001)"
-        },
-        {
-            "catalog_id": "per_p002",
-            "presencia": "residente",
-            "nota": "PROVISIONAL C hasta decision de producto (Jose / P002)"
-        }
-    ],
     "lugares_operativos_dia_1": [
-        "lug_cafeteria"
+        "lug_cafeteria",
+        "lug_biblioteca",
+        "lug_gimnasio",
+        "lug_restaurante",
+        "lug_parque",
+        "lug_bar",
+        "lug_cine",
+        "lug_discoteca",
+        "lug_bingo"
     ],
     "bloques_abiertos": [
-        "a"
+        "a",
+        "b"
     ],
     "features": {
         "buzon_enabled": true,
@@ -34,15 +26,12 @@
         "emotional_state_from_events_enabled": true,
         "debug_tools_enabled": false,
         "vida_pueblo_enabled": true,
-        "misiones_diarias_enabled": false,
+        "misiones_diarias_enabled": true,
         "peticiones_pueblo_enabled": false
     },
-    "tutorial_incorporaciones_dia_1": [
-        "per_p003",
-        "per_p004",
-        "per_p005",
-        "per_p006",
-        "per_p007"
-    ],
-    "tutorial_objetivo_residentes": 8
+    "tutorial_objetivo_residentes": 8,
+    "poblacion_v3": {
+        "iniciales_aleatorios": 3,
+        "incorporaciones_aleatorias": 5
+    }
 }

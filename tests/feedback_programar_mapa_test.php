@@ -75,10 +75,12 @@ if ($horaAhora !== 19) {
     ok(!in_array($ida, idsPresentes($cafeHoy), true), 'hoy antes de la hora: no simula presencia en el lugar');
 }
 
-$parqueBloq = $service->programarEncuentro($partida, [$ida, $idb], $diaAhora, 21, 'amistad', 'lug_parque');
-ok(!($parqueBloq['ok'] ?? true), 'lugar bloqueado rechazado');
-ok(!in_array('lug_parque', $partida['celeste']['lugares_desbloqueados'] ?? [], true), 'parque no entra en operativos');
-ok(marcaDe(PresenciaEngine::resolver($partida, $root), 'lug_parque') === null, 'bloqueado nunca marcado');
+$parqueBloq = $service->programarEncuentro($partida, [$ida, $idb], $diaAhora, 21, 'amistad', 'lug_karaoke');
+ok(!($parqueBloq['ok'] ?? true), 'destino legacy rechazado');
+ok(in_array('lug_parque', $partida['celeste']['lugares_desbloqueados'] ?? [], true), 'parque operativo V3');
+$parqueOk = $service->programarEncuentro($partida, [$ida, $idb], $diaAhora, 21, 'amistad', 'lug_parque');
+ok($parqueOk['ok'] ?? false, 'parque acepta encuentro V3');
+ok(marcaDe(PresenciaEngine::resolver($partida, $root), 'lug_parque') === null, 'parque 21h no es próximo si hay café 19h');
 
 $est1 = $service->estadoResumido($partida);
 $mapa1 = PresenciaEngine::resolver($partida, $root);

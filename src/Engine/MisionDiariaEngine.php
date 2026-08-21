@@ -67,17 +67,7 @@ final class MisionDiariaEngine
             }
             $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CADUCADA;
             $n++;
-            $dano = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_caducada', -2);
-            if ($dano > -1) {
-                $dano = -2;
-            }
-            VidaPuebloEngine::aplicar($partida, $dano, [
-                'causa' => VidaPuebloEngine::CAUSA_MISION_FALLIDA,
-                'origen' => VidaPuebloEngine::ORIGEN_SISTEMA,
-                'atribuible_celestine' => true,
-                'positivo_valido_latido' => false,
-                'fuente_id' => $m['id'] ?? null,
-            ], $cal, $logger);
+            // V3: caducada = 0 Vida, sin castigo
             self::emit($partida, DomainEvents::MISION_CADUCADA, [
                 'mision' => $partida['misiones_diarias']['items'][$i],
                 'actores' => [],
@@ -432,11 +422,20 @@ final class MisionDiariaEngine
         if (($m['estado'] ?? '') !== self::EST_PENDIENTE) {
             return ['ok' => false, 'error' => 'no_pendiente', 'mision' => $m];
         }
+        $exigencia = (int) ($m['exigencia'] ?? 50);
+        $delta = min(3, 1 + (int) floor($exigencia / 50));
+        $yaVidaHoy = self::vidaMisionesHoy($partida, (int) ($m['dia'] ?? 0));
+        if ($yaVidaHoy + $delta > 4) {
+            $delta = max(0, 4 - $yaVidaHoy);
+        }
         $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CUMPLIDA;
         $m = $partida['misiones_diarias']['items'][$i];
-        $delta = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_cumplida', 1);
-        if ($delta < 1) {
-            $delta = 1;
+        if ($delta <= 0) {
+            self::emit($partida, DomainEvents::MISION_CUMPLIDA, [
+                'mision' => $m,
+                'actores' => [],
+            ], $logger, 'MisionDiariaEngine::cumplir');
+            return ['ok' => true, 'mision' => $m, 'vida_delta' => 0];
         }
         $valido = !empty($m['cuenta_latido']) && !self::yaHuboValidoHoy($partida, (int) ($m['dia'] ?? 0), (string) ($m['id'] ?? ''));
         VidaPuebloEngine::aplicar($partida, $delta, [
@@ -527,6 +526,19 @@ final class MisionDiariaEngine
         foreach ($elegidas as $i => $_) {
             $elegidas[$i]['cuenta_latido'] = ($i === $best);
         }
+    }
+
+    private static function vidaMisionesHoy(array $partida, int $dia): int
+    {
+        $sum = 0;
+        foreach (self::delDia($partida, $dia) as $m) {
+            if (($m['estado'] ?? '') !== self::EST_CUMPLIDA) {
+                continue;
+            }
+            $ex = (int) ($m['exigencia'] ?? 50);
+            $sum += min(3, 1 + (int) floor($ex / 50));
+        }
+        return min(4, $sum);
     }
 
     private static function yaHuboValidoHoy(array $partida, int $dia, string $exceptoId): bool
