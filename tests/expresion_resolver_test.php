@@ -66,6 +66,19 @@ $teoCeloso = ExpressionResolver::resolver([
 ok($teoCeloso['expression_id'] === 'neutral', 'celoso sin clave de mapeo → neutral (no se inventa cara)');
 ok($teoCeloso['fallback'] === false || $teoCeloso['motivo'] === 'sin_mapeo', 'sin mapeo no es fallback de asset faltante');
 
+$v1Alegre = ExpressionResolver::resolver([
+    'estado_emocional_id' => 'alegre',
+    'pack' => $pack,
+], $store, $catalog);
+ok($v1Alegre['expression_id'] === 'alegre', 'V1 alegre → expresión alegre sin mapeo explícito en pack');
+ok($v1Alegre['asset']['existe'] ?? false, 'asset alegre existe en pack Teo');
+
+$v1Neutro = ExpressionResolver::resolver([
+    'estado_emocional_id' => 'neutro',
+    'pack' => $pack,
+], $store, $catalog);
+ok($v1Neutro['expression_id'] === 'neutral', 'V1 neutro → expresión neutral');
+
 $packEsceptico = $pack;
 $packEsceptico['mapeo_estado_a_expresion'] = ['celoso' => 'esceptico'];
 $teoCelosoAsset = ExpressionResolver::resolver([

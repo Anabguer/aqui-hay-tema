@@ -37,15 +37,17 @@ final class VistaPuebloV3
         }
 
         $packs = new VisualPackStore($root);
+        $catalog = new CatalogStore($root);
         $tokens = [];
         foreach ($partida['residentes'] ?? [] as $rid => $res) {
             if (!is_string($rid) || $rid === '') {
                 continue;
             }
-            $tok = RetratoResolver::resolver(is_array($res) ? $res : [], $rid, $packs);
+            $tok = RetratoResolver::resolver(is_array($res) ? $res : [], $rid, $packs, $root, $catalog);
             $tokens[$rid] = [
                 'url' => $tok['url'],
                 'lote' => $tok['lote'],
+                'expression_id' => $tok['expression_id'],
             ];
         }
 
@@ -86,7 +88,7 @@ final class VistaPuebloV3
                     if (!in_array($emo, EstadoEmocional::V1, true)) {
                         $emo = EstadoEmocional::NEUTRO;
                     }
-                    $token = RetratoResolver::resolver($res, $rid, $packs);
+                    $token = RetratoResolver::resolver($res, $rid, $packs, $root, $catalog);
                     $gente[] = [
                         'id' => $rid,
                         'nombre' => IdentidadPublica::nombre($partida, $rid),
@@ -98,6 +100,7 @@ final class VistaPuebloV3
                         'tema_id' => null,
                         'token_url' => $token['url'],
                         'token_lote' => $token['lote'],
+                        'expression_id' => $token['expression_id'],
                         'fase' => 'en_destino',
                     ];
                 }

@@ -202,6 +202,7 @@ final class EncuentroResultadoVista
                 continue;
             }
             $nombre = IdentidadPublica::nombre($partida, $rid);
+            $genero = self::generoResidente($partida, $rid, $catalog);
             $valorReal = $item['valor'] ?? self::valorCatalogo($partida, $rid, $campo, $catalog);
             if (($valorReal === null || $valorReal === true || $valorReal === '') && strpos($campo, ':') !== false) {
                 $valorReal = CopyDescubrimiento::idDeCampo($campo);
@@ -229,7 +230,13 @@ final class EncuentroResultadoVista
             if ($valorTxt === '' && strpos($campo, ':') === false) {
                 continue;
             }
-            $etiqueta = CopyDescubrimiento::texto($nombre, $campo, $valor, $catalog !== null ? $catalog->store() : new CatalogStore(dirname(__DIR__, 2)));
+            $etiqueta = CopyDescubrimiento::texto(
+                $nombre,
+                $campo,
+                $valor,
+                $catalog !== null ? $catalog->store() : new CatalogStore(dirname(__DIR__, 2)),
+                $genero
+            );
             if ($etiqueta === null) {
                 $etiquetaCampo = self::CAMPOS_LABEL[$campo] ?? null;
                 if ($etiquetaCampo === null && (strpos($campo, ':') !== false || strpos($campo, '_') !== false)) {
@@ -348,5 +355,23 @@ final class EncuentroResultadoVista
             return (string) $valor;
         }
         return '';
+    }
+
+    private static function generoResidente(array $partida, string $rid, ?Catalog $catalog): ?string
+    {
+        $runtime = $partida['residentes'][$rid] ?? null;
+        if (!is_array($runtime) || $catalog === null) {
+            return null;
+        }
+        try {
+            $cat = ResidenteRuntime::catalogoParaRuntime($runtime, $catalog);
+        } catch (\Throwable $ignored) {
+            return null;
+        }
+        if (!is_array($cat)) {
+            return null;
+        }
+        $g = (string) ($cat['identidad']['genero'] ?? '');
+        return $g !== '' ? $g : null;
     }
 }

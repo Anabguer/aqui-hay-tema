@@ -3,7 +3,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260822mapa3-ficha-v9';
+$ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,6 +22,7 @@ $ahtUi = 'v3-20260822mapa3-ficha-v9';
   <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -252,22 +253,46 @@ $ahtUi = 'v3-20260822mapa3-ficha-v9';
       <div class="top-vida" aria-label="Vida del pueblo">
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
+          <defs>
+            <clipPath id="corazon-clip"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
+            <linearGradient id="corazon-agua-grad" x1="29" y1="52" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#d46278"/>
+              <stop offset="55%" stop-color="#e57d90"/>
+              <stop offset="100%" stop-color="#f0a8b6"/>
+            </linearGradient>
+          </defs>
           <path class="corazon-bg" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
-          <clipPath id="corazon-clip"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
-          <rect class="corazon-fill-rect" clip-path="url(#corazon-clip)" x="0" y="0" width="58" height="52" data-corazon-fill/>
+          <path class="corazon-fill-path" clip-path="url(#corazon-clip)" fill="url(#corazon-agua-grad)" d="" data-corazon-fill/>
+          <path class="corazon-fill-surface" clip-path="url(#corazon-clip)" fill="none" stroke="rgba(255,255,255,.62)" stroke-width="1.15" stroke-linecap="round" d="" data-corazon-surface/>
           <path class="corazon-stroke" fill="none" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
       </div>
+      <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar música" title="Desactivar música">
+        <span class="control-musica-ico" aria-hidden="true">♪</span>
+      </button>
     </header>
     <div class="game-main">
       <aside class="game-left zona-actividad">
         <section class="shell-grupo shell-grupo-buzon">
-          <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
-            <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
-            <img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/>
-            <span class="obj-buzon-txt">MENSAJITOS</span>
-          </button>
+          <div class="mensajitos-wrap">
+            <button type="button" class="obj-buzon" data-mensajitos-trigger aria-label="Abrir mensajitos" aria-expanded="false" aria-haspopup="true">
+              <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
+              <img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/>
+              <span class="obj-buzon-txt">MENSAJITOS</span>
+            </button>
+            <div class="mensajitos-pop" data-mensajitos-pop hidden>
+              <div class="mensajitos-pop-punta" aria-hidden="true"></div>
+              <div class="mensajitos-pop-inner">
+                <header class="mensajitos-pop-cab">
+                  <h3 class="mensajitos-pop-tit">Mensajitos</h3>
+                  <button type="button" class="mensajitos-pop-cerrar" data-mensajitos-cerrar aria-label="Cerrar">×</button>
+                </header>
+                <div class="mensajitos-pop-lista" data-mensajitos-preview></div>
+                <button type="button" class="mensajitos-ver-mas" data-mensajitos-ver-mas hidden>ver más</button>
+              </div>
+            </div>
+          </div>
         </section>
         <section class="shell-grupo shell-grupo-resumen">
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
@@ -363,16 +388,21 @@ $ahtUi = 'v3-20260822mapa3-ficha-v9';
       <div class="velo" data-close></div>
       <p class="feedback-toast" data-toast></p>
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
-        <div class="tut-papel">
+        <div class="tut-papel" data-tut-papel>
           <button type="button" class="cerrar tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
           <p class="libreta-kicker">Primeros pasos</p>
-          <h2 data-tut-tit></h2>
-          <p class="tut-texto" data-tut-texto></p>
+          <h2 class="tut-titulo" data-tut-tit></h2>
+          <p class="tut-intro-line" data-tut-intro-line hidden></p>
+          <p class="tut-intro-extra" data-tut-intro-extra hidden></p>
           <div class="tut-caras" data-tut-caras hidden></div>
+          <p class="tut-bloques-pref" data-tut-bloques-pref hidden></p>
+          <div class="tut-bloques" data-tut-bloques hidden></div>
+          <div class="tut-tareas" data-tut-tareas hidden></div>
+          <p class="tut-cierre" data-tut-cierre hidden></p>
           <div class="tut-pasos" data-tut-pasos></div>
           <div class="tut-acciones">
             <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
-            <button type="button" class="cta" data-tut-siguiente>Siguiente</button>
+            <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
         </div>
       </aside>
@@ -386,8 +416,7 @@ $ahtUi = 'v3-20260822mapa3-ficha-v9';
 
       <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
         <span class="vecinos-pin vecinos-pin-l" aria-hidden="true"></span>
-        <span class="vecinos-pin vecinos-pin-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar vecinos-cerrar" data-close aria-label="Cerrar">cerrar</button>
+        <button type="button" class="cerrar vecinos-cerrar" data-close aria-label="Cerrar">×</button>
         <header class="vecinos-cab">
           <h2>Vecinos del pueblo</h2>
           <span class="vecinos-cuenta" data-vecinos-count></span>
@@ -404,7 +433,7 @@ $ahtUi = 'v3-20260822mapa3-ficha-v9';
       <aside class="capa capa-ficha" aria-label="Ficha de vecino">
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar ficha-cerrar" data-close aria-label="Cerrar">cerrar</button>
+        <button type="button" class="cerrar ficha-cerrar" data-close aria-label="Cerrar">×</button>
         <header class="ficha-top">
           <button type="button" class="ficha-volver" data-ficha-volver>← Volver a vecinos</button>
           <h2 class="ficha-tit">Ficha de vecino</h2>
@@ -464,63 +493,109 @@ $ahtUi = 'v3-20260822mapa3-ficha-v9';
           <div class="ficha-rel-modal" role="dialog" aria-label="Relaciones del vecino">
             <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
             <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-            <button type="button" class="cerrar ficha-cerrar" data-ficha-rel-close aria-label="Cerrar">cerrar</button>
+            <button type="button" class="cerrar ficha-cerrar" data-ficha-rel-close aria-label="Cerrar">×</button>
             <h3 class="ficha-rel-modal-tit" data-ficha-rel-modal-tit>Relaciones</h3>
             <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
         </div>
       </aside>
-      <aside class="capa capa-buzon">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <p class="libreta-kicker">Correo del pueblo</p>
-        <h2 class="mensajitos-tit">Mensajitos</h2>
+      <aside class="capa capa-buzon" aria-label="Mensajitos">
+        <button type="button" class="cerrar mensajitos-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="mensajitos-cab">
+          <h2 class="mensajitos-tit">Mensajitos</h2>
+        </header>
         <div data-buzon-list></div>
       </aside>
-      <aside class="capa capa-diario">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <header class="masthead">
-          <img src="assets/play-v3/capas/masthead_cotilleo.png" alt=""/>
-          <h2>El Cotilleo</h2>
-          <p class="edicion">Diario del pueblo</p>
+      <aside class="capa capa-diario coti-modal-papel" aria-label="Cotilleos">
+        <span class="coti-speech-tail" aria-hidden="true"></span>
+        <button type="button" class="cerrar coti-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="coti-top">
+          <h2 class="coti-tit">Cotilleos</h2>
         </header>
-        <div class="tabs-papel">
-          <button type="button" class="is-on" data-diario-tab="hoy">Hoy</button>
-          <button type="button" data-diario-tab="ayer">Ayer</button>
-          <button type="button" class="trapos" data-diario-tab="viejos">Trapos viejos</button>
+        <div class="coti-tabs" role="tablist" aria-label="Cuándo">
+          <button type="button" class="coti-tab is-on" data-diario-tab="hoy" role="tab">Hoy</button>
+          <button type="button" class="coti-tab" data-diario-tab="ayer" role="tab">Ayer</button>
+          <button type="button" class="coti-tab coti-tab-trapos" data-diario-tab="viejos" role="tab">Trapos viejos</button>
         </div>
-        <div class="dia-block dia-hoy collage" data-coti-hoy></div>
-        <div class="dia-block dia-ayer collage" data-coti-ayer></div>
-        <div class="dia-block dia-viejos collage" data-coti-viejos></div>
-      </aside>
-      <aside class="capa capa-misiones">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <p class="libreta-kicker">Libreta de Celestine</p>
-        <h2>Hoy en el pueblo</h2>
-        <p class="mini">Pequeños objetivos sociales. Opcionales.</p>
-        <div data-misiones-list></div>
-      </aside>
-      <aside class="capa capa-organizar">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <p class="libreta-kicker">Libreta de Celestine</p>
-        <h2>Organizar un plan</h2>
-        <p class="mini">Tú propones. Ellas viven.</p>
-        <div class="org-row" data-org-modo-row>
-          <label>Tipo de plan</label>
-          <button type="button" class="chip is-on" data-org-modo="pareja">Con alguien</button>
-          <button type="button" class="chip" data-org-modo="solo">Por su cuenta</button>
+        <div class="coti-body capa-scroll">
+          <div class="dia-block dia-hoy" data-coti-hoy></div>
+          <div class="dia-block dia-ayer" data-coti-ayer></div>
+          <div class="dia-block dia-viejos" data-coti-viejos></div>
         </div>
-        <div class="caras-clip" data-org-caras hidden></div>
-        <div class="org-row"><label>¿Con quién?</label><select data-org-a></select></div>
-        <div class="org-row" data-org-row-b><label>¿Y con quién más?</label><select data-org-b></select></div>
-        <p><strong>¿Qué plan?</strong></p>
-        <div class="chips" data-org-tipos></div>
-        <div class="org-row"><label>¿Dónde?</label><select data-org-lugar></select></div>
-        <div class="org-row"><label>¿Qué día?</label><select data-org-dia></select></div>
-        <div class="org-row"><label>¿A qué hora?</label><select data-org-hora></select></div>
-        <button type="button" class="cta" data-org-go>Proponer</button>
+        <footer class="coti-footer">
+          <button type="button" class="coti-ver-todos" data-coti-ver-todos>Ver todos</button>
+        </footer>
+      </aside>
+      <aside class="capa capa-misiones mis-modal-papel" aria-label="Misiones">
+        <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
+        <span class="mis-pin" aria-hidden="true"></span>
+        <span class="mis-speech-tail" aria-hidden="true"></span>
+        <button type="button" class="cerrar mis-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="mis-top">
+          <h2 class="mis-tit">Misiones</h2>
+          <p class="mis-sub">Pequeños objetivos sociales. Opcionales.</p>
+        </header>
+        <div class="mis-body capa-scroll" data-misiones-list></div>
+      </aside>
+      <aside class="capa capa-organizar org-plan-papel" aria-label="Nuevo plan">
+        <span class="ficha-tape ficha-tape-l org-tape-tl" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r org-tape-tr" aria-hidden="true"></span>
+        <span class="org-pin org-pin-l" aria-hidden="true"></span>
+        <button type="button" class="cerrar org-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="org-top">
+          <h2 class="org-tit">Nuevo plan</h2>
+        </header>
+        <div class="org-body capa-scroll">
+          <section class="ficha-seccion org-seccion">
+            <h4 class="ficha-seccion-tit">¿Solo o acompañado?</h4>
+            <div class="ficha-seccion-body">
+              <div class="org-modo-chips" data-org-modo-row>
+                <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
+                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompañado</button>
+              </div>
+            </div>
+          </section>
+          <section class="ficha-seccion org-seccion">
+            <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
+            <div class="ficha-seccion-body">
+              <p class="org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
+              <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
+              <div class="org-picker-strip capa-scroll" data-org-picker></div>
+            </div>
+          </section>
+          <section class="ficha-seccion org-seccion">
+            <h4 class="ficha-seccion-tit">¿Qué buscamos?</h4>
+            <div class="ficha-seccion-body">
+              <div class="org-tipos" data-org-tipos></div>
+            </div>
+          </section>
+          <section class="ficha-seccion org-seccion">
+            <h4 class="ficha-seccion-tit">¿Dónde?</h4>
+            <div class="ficha-seccion-body">
+              <select class="org-select" data-org-lugar></select>
+            </div>
+          </section>
+          <section class="ficha-seccion org-seccion">
+            <h4 class="ficha-seccion-tit">¿Cuándo?</h4>
+            <div class="ficha-seccion-body">
+              <div class="org-cuando">
+                <select class="org-select" data-org-dia></select>
+                <select class="org-select" data-org-hora></select>
+              </div>
+            </div>
+          </section>
+        </div>
+        <footer class="org-footer">
+          <button type="button" class="org-crear" data-org-go>
+            <span class="org-crear-tape org-crear-tape-l" aria-hidden="true"></span>
+            <span class="org-crear-tape org-crear-tape-r" aria-hidden="true"></span>
+            <span class="org-crear-txt">Crear plan</span>
+          </button>
+        </footer>
       </aside>
       <aside class="capa capa-agenda">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
+        <button type="button" class="cerrar agenda-cerrar" data-close aria-label="Cerrar">×</button>
         <p class="libreta-kicker">Libreta de Celestine</p>
         <h2>Planes</h2>
         <p class="mini">Lo que está por venir. Solo consulta.</p>

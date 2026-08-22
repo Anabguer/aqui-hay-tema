@@ -1,0 +1,67 @@
+/* Control m?nimo de m?sica ambiental del shell */
+.play-v3 .game-top { position: relative; }
+
+.play-v3 .control-musica {
+  position: fixed;
+  right: .75rem;
+  bottom: .8rem;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.65rem;
+  height: 1.65rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(120, 96, 72, .55);
+  border-radius: 50%;
+  background: #fff6c8;
+  color: #8a4a58;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .12);
+  cursor: pointer;
+  transform: rotate(-5deg);
+}
+
+.play-v3 .control-musica:hover,
+.play-v3 .control-musica:focus-visible {
+  background: #fde8ef;
+}
+
+.play-v3 .control-musica:focus-visible {
+  outline: 2px solid #c42b4a;
+  outline-offset: 2px;
+}
+
+.play-v3 .control-musica[data-musica="off"] {
+  background: #f0ebe2;
+  color: #786d60;
+  opacity: .9;
+}
+
+.play-v3 .control-musica-ico {
+  position: relative;
+  display: block;
+  font: 1.05rem/1 Georgia, serif;
+}
+
+.play-v3 .control-musica[data-musica="off"] .control-musica-ico::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -0.12rem;
+  width: 1.28rem;
+  height: 1.5px;
+  background: currentColor;
+  transform: rotate(-45deg);
+  transform-origin: center;
+}
+
+@media (max-width: 720px) {
+  .play-v3 .control-musica {
+    right: .45rem;
+    bottom: .5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .play-v3 .control-musica-ico { font-size: .95rem; }
+}

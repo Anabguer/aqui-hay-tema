@@ -41,7 +41,9 @@ final class MisionDiariaEngine
         $dia = $dia ?? (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $out = [];
         foreach ($partida['misiones_diarias']['items'] ?? [] as $m) {
-            if ((int) ($m['dia'] ?? 0) === $dia) {
+            if ((int) ($m['dia'] ?? 0) === $dia
+                || TutorialPrimerosPasos::conservaMision($partida, is_array($m) ? $m : [])
+            ) {
                 $out[] = $m;
             }
         }
@@ -65,6 +67,9 @@ final class MisionDiariaEngine
             if (($m['estado'] ?? '') !== self::EST_PENDIENTE) {
                 continue;
             }
+            if (TutorialPrimerosPasos::conservaMision($partida, is_array($m) ? $m : [])) {
+                continue;
+            }
             $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CADUCADA;
             $n++;
             // V3: caducada = 0 Vida, sin castigo
@@ -74,6 +79,26 @@ final class MisionDiariaEngine
             ], $logger, 'MisionDiariaEngine::caducar');
         }
         return $n;
+    }
+
+    /**
+     * Paquete normal ya generado para un día de reloj (excluye misiones del tutorial).
+     */
+    public static function tienePaqueteNormalDelDia(array $partida, int $dia): bool
+    {
+        foreach ($partida['misiones_diarias']['items'] ?? [] as $m) {
+            if (!is_array($m)) {
+                continue;
+            }
+            if ((int) ($m['dia'] ?? 0) !== $dia) {
+                continue;
+            }
+            if (TutorialPrimerosPasos::esMisionTutorial($m)) {
+                continue;
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -88,9 +113,10 @@ final class MisionDiariaEngine
         self::ensure($partida);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         if (TutorialPrimerosPasos::bloqueaMisionesNormales($partida)) {
+            TutorialPrimerosPasos::asegurarMisiones($partida);
             return self::delDia($partida, $dia);
         }
-        if ((int) ($partida['misiones_diarias']['dia'] ?? 0) === $dia) {
+        if (self::tienePaqueteNormalDelDia($partida, $dia)) {
             return self::delDia($partida, $dia);
         }
         $partida['misiones_diarias']['encuentros_usados'] = [];
@@ -231,14 +257,15 @@ final class MisionDiariaEngine
         } else {
             $plazo = 'Te quedan ' . $quedan . ' h de hoy';
         }
-        $items = [];
+        $items = self::delDia($partida, $dia);
         $ocultarPrimerosPasos = ($partida['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID
-            && !empty($partida['tutorial']['finale_visto']);
-        foreach (self::delDia($partida, $dia) as $m) {
+            && !empty($partida['tutorial']['jugable_completado']);
+        $vistaItems = [];
+        foreach ($items as $m) {
             if ($ocultarPrimerosPasos && ($m['familia'] ?? '') === 'primeros_pasos') {
                 continue;
             }
-            $items[] = [
+            $vistaItems[] = [
                 'id' => $m['id'] ?? '',
                 'titulo' => $m['titulo'] ?? '',
                 'texto' => $m['texto'] ?? '',
@@ -253,7 +280,7 @@ final class MisionDiariaEngine
         return [
             'dia' => $dia,
             'plazo_humano' => $plazo,
-            'misiones' => $items,
+            'misiones' => $vistaItems,
         ];
     }
 

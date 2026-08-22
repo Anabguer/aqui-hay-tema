@@ -78,7 +78,8 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
   filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1));
 }
 .corazon-bg { fill: #fceef0; }
-.corazon-fill-rect { fill: #e57d90; transition: y .55s ease, height .55s ease; }
+.corazon-fill-path { transition: d .45s ease; }
+.corazon-fill-surface { pointer-events: none; }
 .corazon-stroke { stroke: #2c261f; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
 
 /* Vida del pueblo - latido del corazon (solo feedback visual) */
@@ -210,7 +211,7 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
     animation: none !important;
     filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) !important;
   }
-  .corazon-fill-rect { transition: none; }
+  .corazon-fill-path { transition: none; }
 }
 
 /* Día — ticket vertical irregular */

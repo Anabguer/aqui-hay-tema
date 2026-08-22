@@ -42,6 +42,7 @@ final class SchemaFields
         $partida['propuestas_cooldown'] ??= [];
         $partida['rechazos_propuesta'] ??= [];
         $partida['huecos_vida'] ??= [];
+        CotilleoAutonomoCadencia::ensure($partida);
         RelacionGrafo::asegurarTodos($partida);
 
         foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {

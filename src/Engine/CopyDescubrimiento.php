@@ -6,7 +6,7 @@ namespace AquiHayTema\Engine;
 /** Pistas humanas de discovery. Sin IDs de motor ni scores. */
 final class CopyDescubrimiento
 {
-    public static function texto(string $nombre, string $campo, $valor, CatalogStore $store): ?string
+    public static function texto(string $nombre, string $campo, $valor, CatalogStore $store, ?string $genero = null): ?string
     {
         $id = is_string($valor) && $valor !== '' ? $valor : self::idDeCampo($campo);
         if ($id === '') {
@@ -16,15 +16,15 @@ final class CopyDescubrimiento
             return 'Has descubierto que a ' . $nombre . ' le va ' . EtiquetaFicha::hobby($id, $store) . '.';
         }
         if (str_starts_with($campo, 'rasgo:')) {
-            return $nombre . ' parece ' . self::min(EtiquetaFicha::rasgo($id, $store)) . '.';
+            return $nombre . ' parece ' . self::min(EtiquetaFicha::rasgoParaGenero($id, $genero, $store)) . '.';
         }
         if (str_starts_with($campo, 'rechazo_personalidad:')) {
             return 'Has descubierto que ' . $nombre . ' no soporta a la gente '
-                . self::min(EtiquetaFicha::rasgo($id, $store)) . '.';
+                . self::min(EtiquetaFicha::rasgoParaGenero($id, $genero, $store)) . '.';
         }
         if (str_starts_with($campo, 'gusto_personalidad:')) {
             return $nombre . ' parece tener debilidad por la gente '
-                . self::min(EtiquetaFicha::rasgo($id, $store)) . '.';
+                . self::min(EtiquetaFicha::rasgoParaGenero($id, $genero, $store)) . '.';
         }
         if (str_starts_with($campo, 'rechazo_visual:')) {
             return 'A ' . $nombre . ' el look “' . EtiquetaFicha::visual($id, $store) . '” le echa para atrás. Sin más.';

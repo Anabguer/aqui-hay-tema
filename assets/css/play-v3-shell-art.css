@@ -640,7 +640,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 .corazon-org .corazon-bg { fill: #fceef0; }
 
-.corazon-org .corazon-fill-rect { fill: #e57d90; }
+.corazon-org .corazon-fill-path { fill: url(#corazon-agua-grad); }
 
 .corazon-org .corazon-stroke {
 
@@ -1930,10 +1930,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 }
 .obj-proximo-polaroid.is-en-curso .obj-proximo-tit { color: #4a6e3a; }
 .obj-proximo-polaroid .prox-meta--en-curso { color: #4a6e3a; font-weight: 600; }
-.obj-proximo-polaroid .prox-faces--en-curso img,
-.obj-proximo-polaroid .prox-faces--en-curso .cara-ini {
-  box-shadow: 0 0 0 2px #7a9e6a;
-}
+/* Las caras del plan en curso usan solo el aro emocional del token */
 .play-v3 .capa-agenda .agenda-fila--en-curso {
   background: rgba(122, 158, 106, 0.12);
   border-left: 3px solid #7a9e6a;

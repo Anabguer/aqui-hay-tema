@@ -20,6 +20,7 @@ final class ApiContext
     public SnapshotService $snapshots;
     public GameLogger $logger;
     public string $root;
+    public bool $partidaCargadaSincronizada = false;
 
     public function __construct(string $root)
     {
@@ -62,6 +63,7 @@ function requirePartida(ApiContext $ctx, array $body): array
     try {
         $partida = $ctx->service->cargar((string) $id);
         FeatureConfig::mergeIntoPartida($partida, $ctx->root);
+        $ctx->partidaCargadaSincronizada = true;
         return $partida;
     } catch (\Throwable $e) {
         $code = str_contains($e->getMessage(), 'corrupto') ? GameError::SAVE_CORRUPTO : GameError::PARTIDA_NO_ENCONTRADA;

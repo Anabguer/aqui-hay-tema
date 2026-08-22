@@ -33,6 +33,76 @@
     }
     return o;
   }
+  const MUSICA_STORAGE_KEY = 'aht_musica_fondo';
+  let musicaActiva = true;
+  try { musicaActiva = localStorage.getItem(MUSICA_STORAGE_KEY) !== '0'; } catch (e) {}
+  const musicaFondo = new Audio('assets/audio/musica-fondo.mp3');
+  musicaFondo.loop = true;
+  musicaFondo.volume = 0.22;
+  musicaFondo.preload = 'auto';
+  let musicaPlayEnCurso = null;
+  let musicaPrimerGestoPendiente = false;
+
+  function actualizarControlMusica() {
+    const control = $('[data-musica-toggle]');
+    if (!control) return;
+    control.dataset.musica = musicaActiva ? 'on' : 'off';
+    control.setAttribute('aria-pressed', musicaActiva ? 'true' : 'false');
+    const etiqueta = musicaActiva ? 'Desactivar m?sica' : 'Activar m?sica';
+    control.setAttribute('aria-label', etiqueta);
+    control.setAttribute('title', etiqueta);
+  }
+
+  function retirarEsperaPrimerGesto() {
+    if (!musicaPrimerGestoPendiente) return;
+    musicaPrimerGestoPendiente = false;
+    document.removeEventListener('pointerdown', musicaPrimerGesto, true);
+    document.removeEventListener('click', musicaPrimerGesto, true);
+    document.removeEventListener('keydown', musicaPrimerGesto, true);
+    document.removeEventListener('touchstart', musicaPrimerGesto, true);
+  }
+
+  function registrarEsperaPrimerGesto() {
+    if (!musicaActiva || musicaPrimerGestoPendiente) return;
+    musicaPrimerGestoPendiente = true;
+    document.addEventListener('pointerdown', musicaPrimerGesto, true);
+    document.addEventListener('click', musicaPrimerGesto, true);
+    document.addEventListener('keydown', musicaPrimerGesto, true);
+    document.addEventListener('touchstart', musicaPrimerGesto, true);
+  }
+
+  function iniciarMusicaFondo(esperarInteraccion) {
+    if (!musicaActiva || !musicaFondo.paused || musicaPlayEnCurso) return;
+    try {
+      musicaPlayEnCurso = Promise.resolve(musicaFondo.play()).then(function () {
+        musicaPlayEnCurso = null;
+      }, function () {
+        musicaPlayEnCurso = null;
+        if (esperarInteraccion) registrarEsperaPrimerGesto();
+      });
+    } catch (e) {
+      musicaPlayEnCurso = null;
+      if (esperarInteraccion) registrarEsperaPrimerGesto();
+    }
+  }
+
+  function musicaPrimerGesto(ev) {
+    if (ev && ev.target && ev.target.closest && ev.target.closest('[data-musica-toggle]')) return;
+    retirarEsperaPrimerGesto();
+    iniciarMusicaFondo(false);
+  }
+
+  function cambiarMusica(activa) {
+    musicaActiva = !!activa;
+    try { localStorage.setItem(MUSICA_STORAGE_KEY, musicaActiva ? '1' : '0'); } catch (e) {}
+    if (musicaActiva) iniciarMusicaFondo(false);
+    else {
+      retirarEsperaPrimerGesto();
+      musicaFondo.pause();
+    }
+    actualizarControlMusica();
+  }
+
   let partidaId = localStorage.getItem('aht_partida_id_juego');
   let cacheEstado = null;
   let cacheInsp = null;
@@ -231,8 +301,119 @@
     if (!box) return;
     const pasos = tutPasosActuales();
     const paso = pasos[tutIntroIdx];
-    $('[data-tut-tit]').textContent = paso.tit;
-    $('[data-tut-texto]').textContent = paso.txt;
+    if (!paso) return;
+
+    var papel = $('[data-tut-papel]') || box.querySelector('.tut-papel');
+    if (papel) papel.classList.remove('tut-anim');
+
+    $('[data-tut-tit]').textContent = paso.tit || '';
+
+    var introEl = $('[data-tut-intro-line]');
+    if (introEl) {
+      introEl.textContent = paso.intro || '';
+      introEl.hidden = !paso.intro;
+    }
+    var introExtra = $('[data-tut-intro-extra]');
+    if (introExtra) {
+      introExtra.textContent = paso.intro_extra || '';
+      introExtra.hidden = !paso.intro_extra;
+    }
+
+    var carasBox = $('[data-tut-caras]');
+    if (carasBox) {
+      carasBox.innerHTML = '';
+      if (paso.caras && paso.caras.length) {
+        carasBox.hidden = false;
+        paso.caras.forEach(function (c, i) {
+          var wrap = document.createElement('div');
+          wrap.className = 'tut-cara-wrap tut-anim-item tut-anim-pop';
+          wrap.style.setProperty('--tut-delay', String(100 + i * 90) + 'ms');
+          var sp = document.createElement('span');
+          sp.className = 'tut-cara';
+          sp.innerHTML = c.token_url
+            ? '<img src="' + esc(c.token_url) + '" alt=""/>'
+            : '<span class="cara-ini">' + esc((c.nombre || '?')[0]) + '</span>';
+          wrap.appendChild(sp);
+          if (c.nombre) {
+            var nm = document.createElement('span');
+            nm.className = 'tut-cara-nombre';
+            nm.textContent = c.nombre;
+            wrap.appendChild(nm);
+          }
+          carasBox.appendChild(wrap);
+        });
+      } else {
+        carasBox.hidden = true;
+      }
+    }
+
+    var prefijoEl = $('[data-tut-bloques-pref]');
+    if (prefijoEl) {
+      prefijoEl.textContent = paso.bloques_prefijo || '';
+      prefijoEl.hidden = !paso.bloques_prefijo;
+    }
+
+    var bloquesBox = $('[data-tut-bloques]');
+    if (bloquesBox) {
+      bloquesBox.innerHTML = '';
+      bloquesBox.className = 'tut-bloques';
+      if (paso.bloques_estilo === 'inline') bloquesBox.classList.add('is-inline');
+      if (paso.bloques && paso.bloques.length) {
+        bloquesBox.hidden = false;
+        paso.bloques.forEach(function (b, i) {
+          var div = document.createElement('div');
+          div.className = 'tut-bloque tut-anim-item';
+          div.style.setProperty('--tut-delay', String(60 + i * 80) + 'ms');
+          var sym = document.createElement('span');
+          sym.className = 'tut-bloque-sym';
+          sym.textContent = b.simbolo || '';
+          div.appendChild(sym);
+          var body = document.createElement('span');
+          body.className = 'tut-bloque-body';
+          if (b.tit) {
+            var tit = document.createElement('strong');
+            tit.className = 'tut-bloque-tit';
+            tit.textContent = b.tit;
+            body.appendChild(tit);
+          }
+          if (b.txt) {
+            var txt = document.createElement('span');
+            txt.className = 'tut-bloque-txt';
+            txt.textContent = b.txt;
+            body.appendChild(txt);
+          }
+          div.appendChild(body);
+          bloquesBox.appendChild(div);
+        });
+      } else {
+        bloquesBox.hidden = true;
+      }
+    }
+
+    var tareasBox = $('[data-tut-tareas]');
+    if (tareasBox) {
+      tareasBox.innerHTML = '';
+      if (paso.tareas) {
+        tareasBox.hidden = false;
+        var nums = ['①', '②', '③'];
+        for (var t = 0; t < 3; t++) {
+          var mark = document.createElement('span');
+          mark.className = 'tut-tarea-mark tut-anim-item tut-anim-pop';
+          mark.style.setProperty('--tut-delay', String(t * 80) + 'ms');
+          mark.textContent = nums[t];
+          tareasBox.appendChild(mark);
+        }
+      } else {
+        tareasBox.hidden = true;
+      }
+    }
+
+    var cierreEl = $('[data-tut-cierre]');
+    if (cierreEl) {
+      cierreEl.textContent = paso.cierre || '';
+      cierreEl.hidden = !paso.cierre;
+    }
+
     const dots = $('[data-tut-pasos]');
     dots.innerHTML = '';
     tutPasosActuales().forEach(function (_, i) {
@@ -240,32 +421,24 @@
       if (i <= tutIntroIdx) s.className = 'is-on';
       dots.appendChild(s);
     });
+
     const btnAtras = $('[data-tut-atras]');
     const btnSig = $('[data-tut-siguiente]');
     if (btnAtras) btnAtras.hidden = tutIntroIdx === 0;
     const pasosN = tutPasosActuales();
     const ult = pasosN[tutIntroIdx];
+    var esFinal = tutIntroIdx >= pasosN.length - 1;
     if (btnSig) {
-      btnSig.textContent = tutIntroIdx >= pasosN.length - 1
+      btnSig.textContent = esFinal
         ? (ult && ult.boton_final ? ult.boton_final : 'A ver qué se cuece')
         : 'Siguiente';
+      btnSig.classList.toggle('tut-cta-final', esFinal);
     }
-    var carasBox = $('[data-tut-caras]');
-    if (carasBox) {
-      carasBox.innerHTML = '';
-      if (ult && ult.caras && ult.caras.length) {
-        carasBox.hidden = false;
-        ult.caras.forEach(function (c) {
-          var sp = document.createElement('span');
-          sp.className = 'cara';
-          sp.innerHTML = c.token_url
-            ? '<img src="' + esc(c.token_url) + '" alt=""/>'
-            : '<span class="cara-ini">' + esc((c.nombre || '?')[0]) + '</span>';
-          carasBox.appendChild(sp);
-        });
-      } else {
-        carasBox.hidden = true;
-      }
+
+    if (papel) {
+      requestAnimationFrame(function () {
+        papel.classList.add('tut-anim');
+      });
     }
   }
   function abrirTutIntro(desdeCero) {
@@ -383,6 +556,212 @@
     return (r.identidad_publica && r.identidad_publica.nombre) || id;
   }
 
+﻿  function esIdInterno(s) {
+    if (typeof s !== 'string' || !s) return false;
+    return /^per_[a-z0-9_]+$/i.test(s) || /^lug_[a-z0-9_]+$/i.test(s) || /^msg_/.test(s);
+  }
+
+  function nombrePublicoDe(m) {
+    if (!m || typeof m !== 'object') return '';
+    if (m.tipo === 'candidato_llegada' && m.texto) {
+      const mt = String(m.texto).match(/^([^\n.:]{2,32}?)\s+quiere\s+/i);
+      if (mt) return mt[1].trim();
+    }
+    const remitente = String(m.remitente_nombre || '').trim();
+    if (remitente && !esIdInterno(remitente)) return remitente;
+    const id = remitenteIdDe(m);
+    if (id) {
+      const n = nombreDe(id);
+      if (n && !esIdInterno(n)) return n;
+    }
+    // Compatibilidad de lectura: mensajes response_plan antiguos no guardaban remitente.
+    if (m.tipo === 'respuesta_plan') {
+      const legacy = String(m.texto || '').match(/^(.+?)\s+(?:no han quedado\.?|ha rechazado la propuesta\s*:)/i);
+      if (legacy && legacy[1].trim()) return legacy[1].trim();
+    }
+    const t = String(m.texto || '');
+    const ci = t.indexOf(':');
+    if (ci > 0 && ci < 28) {
+      const pref = t.slice(0, ci).trim();
+      if (pref && !esIdInterno(pref)) return pref;
+    }
+    return 'Alguien';
+  }
+
+  function cuerpoMensajito(m, nombre) {
+    let t = String(m.texto || '').trim();
+    if (m.tipo === 'respuesta_plan' && nombre && t.indexOf(nombre + ' ') === 0) {
+      t = t.slice(nombre.length).trim();
+    }
+    if (nombre && t.indexOf(nombre + ':') === 0) {
+      t = t.slice(nombre.length + 1).trim();
+    } else if (nombre && t.indexOf(nombre + ' ') === 0) {
+      const rest = t.slice(nombre.length).trim();
+      if (/^quiere\s+/i.test(rest)) t = rest;
+    }
+    if (m.plazo_humano) {
+      const ph = String(m.plazo_humano).trim();
+      if (ph && t.endsWith(ph)) t = t.slice(0, t.length - ph.length).trim();
+      t = t.replace(/\s*Te quedan\s+\d+\s*h\s*$/i, '').trim();
+    }
+    return t;
+  }
+
+
+  function mensajitoRequiereAccion(m) {
+    if (!m || typeof m !== 'object') return false;
+    if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') return true;
+    if ((m.clasificacion || '') === 'peticion' && m.peticion_id && (m.estado || '') === 'pendiente') return true;
+    return false;
+  }
+
+  async function marcarMensajitoLeido(m) {
+    if (!m || !m.id || (m.estado || '') !== 'pendiente') return null;
+    const lr = await api('buzon.leer', { mensaje_id: m.id });
+    return lr.tutorial || null;
+  }
+
+
+  function remitenteIdDe(m) {
+    if (!m || typeof m !== 'object') return null;
+    const direct = m.de_persona || m.de;
+    if (direct) return direct;
+    if (m.candidato_catalog_id) return m.candidato_catalog_id;
+    const act = m.actores;
+    if (Array.isArray(act)) {
+      for (let i = 0; i < act.length; i++) {
+        if (act[i]) return act[i];
+      }
+    }
+    return null;
+  }
+
+  function inicialDe(nombre) {
+    if (typeof nombre !== 'string' || !nombre.length) return '?';
+    return nombre.charAt(0);
+  }
+
+  function htmlAvatarMensajito(m, nombre, cls) {
+    const rid = remitenteIdDe(m);
+    const tok = rid && !m.candidato_catalog_id ? tokenDe(rid) : null;
+    const base = cls || 'msg-item-avatar';
+    if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""/>';
+    return '<span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span>';
+  }
+
+  function mensajitosCartas(msgs) {
+    return (msgs || []).filter(function (m) {
+      return m && (m.canal || 'buzon') !== 'cotilleo' && String(m.texto || '').trim() !== '';
+    });
+  }
+
+  function mensajitosOrdenados(msgs) {
+    return mensajitosCartas(msgs).slice().sort(function (a, b) {
+      const pa = (a.estado || '') === 'pendiente' ? 0 : 1;
+      const pb = (b.estado || '') === 'pendiente' ? 0 : 1;
+      if (pa !== pb) return pa - pb;
+      return (b.dia || 0) - (a.dia || 0);
+    });
+  }
+
+  function mensajitoEstaLeido(m) {
+    return (m.estado || '') !== 'pendiente';
+  }
+
+  async function toggleMensajitoLeido(m, leido) {
+    if (!m || !m.id) { toast('No se puede marcar este mensaje.'); return false; }
+    if (leido) {
+      if (mensajitoEstaLeido(m)) return true;
+      const lr = await api('buzon.leer', { mensaje_id: m.id });
+      if (!lr.ok) { toast(lr.mensaje_ui || 'No se pudo marcar como leido.'); return false; } return lr.tutorial || true;
+    }
+    if (!mensajitoEstaLeido(m)) return true;
+    const nr = await api('buzon.no_leer', { mensaje_id: m.id });
+    if (!nr.ok) { toast(nr.mensaje_ui || 'No se pudo desmarcar.'); return false; } return true;
+  }
+
+  function crearMsgLeidoToggle(m) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    wireMsgLeidoToggle(btn, m);
+    return btn;
+  }
+
+  function wireMsgLeidoToggle(btn, m) {
+    const leido = mensajitoEstaLeido(m);
+    btn.className = 'msg-leido-toggle' + (leido ? ' is-leido' : ' is-pendiente');
+    btn.textContent = leido ? 'le\u00eddo' : 'marcar';
+    btn.setAttribute('aria-pressed', leido ? 'true' : 'false');
+    btn.setAttribute('aria-label', leido ? 'Marcar como no le\u00eddo' : 'Marcar como le\u00eddo');
+    btn.onclick = null;
+    btn.addEventListener('click', async function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const quiereLeido = btn.getAttribute('aria-pressed') !== 'true';
+      const popAbierto = mensajitosPopAbierto;
+      const tr = await toggleMensajitoLeido(m, quiereLeido);
+      if (tr === false) return;
+      
+      await refresh();
+      if (popAbierto) abrirMensajitosPop();
+      if (tr && tr !== true) pintarTutorialMotor(tr);
+    });
+  }
+
+  function crearMsgItem(m, compact) {
+    const row = document.createElement('div');
+    const leido = (m.estado || '') !== 'pendiente';
+    row.className = 'msg-item' + (leido ? ' leida' : ' no-leida');
+    const nombre = nombrePublicoDe(m);
+    const cuerpo = cuerpoMensajito(m, nombre);
+    row.innerHTML = htmlAvatarMensajito(m, nombre) +
+      '<div class="msg-item-copy"><span class="msg-item-nom">' + esc(nombre) + '</span>' +
+      (compact ? ' — ' : '<br/>') +
+      '<span class="msg-item-txt">' + esc(cuerpo) + '</span></div>';
+    row.appendChild(crearMsgLeidoToggle(m));
+    return row;
+  }
+
+  let mensajitosPopAbierto = false;
+
+  function cerrarMensajitosPop() {
+    mensajitosPopAbierto = false;
+    const pop = $('[data-mensajitos-pop]');
+    const trig = $('[data-mensajitos-trigger]');
+    if (pop) pop.hidden = true;
+    if (trig) trig.setAttribute('aria-expanded', 'false');
+  }
+
+  function abrirMensajitosPop() {
+    mensajitosPopAbierto = true;
+    const pop = $('[data-mensajitos-pop]');
+    const trig = $('[data-mensajitos-trigger]');
+    if (pop) pop.hidden = false;
+    if (trig) trig.setAttribute('aria-expanded', 'true');
+  }
+
+  function toggleMensajitosPop() {
+    if (mensajitosPopAbierto) cerrarMensajitosPop();
+    else abrirMensajitosPop();
+  }
+
+  function renderMensajitosPop(msgs) {
+    const box = $('[data-mensajitos-preview]');
+    const verMas = $('[data-mensajitos-ver-mas]');
+    if (!box) return;
+    const cartas = mensajitosOrdenados(msgs);
+    box.innerHTML = '';
+    if (!cartas.length) {
+      box.innerHTML = '<p class="lista-vacia">Sin mensajitos. De momento, silencio.</p>';
+      if (verMas) verMas.hidden = true;
+      return;
+    }
+    cartas.slice(0, 3).forEach(function (m) {
+      box.appendChild(crearMsgItem(m, true));
+    });
+    if (verMas) verMas.hidden = cartas.length <= 3;
+  }
+
   function estadoMisionLabel(estado) {
     if (estado === 'cumplida') return 'Completada';
     if (estado === 'bloqueada') return 'Bloqueada';
@@ -422,27 +801,9 @@
     if (teaser) teaser.textContent = 'Primeros pasos';
     list.innerHTML = '';
     sorted.forEach(function (m) {
-      var row = document.createElement('div');
-      var est = m.estado || 'pendiente';
-      row.className = 'mision-row mision-' + est + ' mision-pp';
-      var accBtn = '';
-      if (m.accion && est !== 'bloqueada' && est !== 'cumplida') {
-        accBtn = '<button type="button" class="mision-accion" data-mision-accion="' + esc(m.id || '') + '">' +
-          esc(m.accion_label || 'Ir') + '</button>';
-      }
-      row.innerHTML =
-        '<div class="mision-pp-head">' + bolitaMision(est) +
-        '<strong class="mision-pp-tit">' + esc(m.titulo || '') + '</strong></div>' +
-        '<p class="mision-pp-texto">' + esc(m.texto || '') + '</p>' + accBtn;
-      var btnAcc = row.querySelector('[data-mision-accion]');
-      if (btnAcc) {
-        btnAcc.addEventListener('click', function (ev) {
-          ev.stopPropagation();
-          ejecutarAccionMision(m);
-        });
-      }
-      list.appendChild(row);
+      list.insertAdjacentHTML('beforeend', htmlMisionItem(m, { primerosPasos: true }));
     });
+    enlazarAccionesMision(list, sorted);
     renderMisionesStrip(sorted);
   }
 
@@ -473,29 +834,13 @@
     if (!list) return;
     list.innerHTML = '';
     if (!hoy.length) {
-      list.innerHTML = '<p class="muted">No hay misiones para hoy.</p>';
+      list.innerHTML = '<p class="mis-vacio">No hay misiones para hoy.</p>';
       return;
     }
     hoy.forEach(function (m) {
-      var row = document.createElement('div');
-      row.className = 'mision-row mision-' + (m.estado || 'pendiente');
-      var tit = m.titulo ? '<strong>' + esc(m.titulo) + '</strong><br/>' : '';
-      var accBtn = '';
-      if (m.accion && m.estado !== 'bloqueada' && m.estado !== 'cumplida') {
-        accBtn = '<button type="button" class="mision-accion" data-mision-accion="' + esc(m.id || '') + '">' +
-          esc(m.accion_label || 'Ir') + '</button>';
-      }
-      row.innerHTML = tit + '<p>' + esc(m.texto || m.hecho || 'Objetivo') + '</p>' +
-        '<span class="mision-estado">' + esc(estadoMisionLabel(m.estado || '')) + '</span>' + accBtn;
-      var btnAcc = row.querySelector('[data-mision-accion]');
-      if (btnAcc) {
-        btnAcc.addEventListener('click', function (ev) {
-          ev.stopPropagation();
-          ejecutarAccionMision(m);
-        });
-      }
-      list.appendChild(row);
+      list.insertAdjacentHTML('beforeend', htmlMisionItem(m));
     });
+    enlazarAccionesMision(list, hoy);
   }
 
 
@@ -624,8 +969,8 @@
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     const reloj = (estado && estado.reloj) || {};
-    const enCurso = String(enc.estado || '') === 'en_curso' ||
-      !!(estado && estado.encuentro_en_curso && estado.encuentro_en_curso.id === enc.id);
+    const enCurso = planEsEnCurso(enc, estado);
+
     if (enCurso) return lugar + ' · En curso · ' + hora;
     if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' · Hoy ' + hora;
     return lugar + ' · Día ' + (enc.dia || '?') + ' · ' + hora;
@@ -654,9 +999,19 @@
   function carasPlanHtml(ids) {
     return ids.slice(0, 2).map(function (id) { return htmlCaraToken(id); }).join('');
   }
-  function planEsEnCurso(enc, estado) {
+  function encuentroOcupaAhora(enc, estado) {
+    if (!enc) return false;
+    var st = String(enc.estado || '');
+    if (st !== 'programado' && st !== 'en_curso') return false;
+    var reloj = (estado && estado.reloj) || {};
+    var now = relojAbs(reloj.dia_pueblo, reloj.hora_actual);
+    var start = relojAbs(enc.dia, horaEnc(enc));
+    var end = start + duracionEncHoras(enc);
+    return now >= start && now < end;
+  }  function planEsEnCurso(enc, estado) {
     if (!enc) return false;
     if (String(enc.estado || '') === 'en_curso') return true;
+    if (encuentroOcupaAhora(enc, estado)) return true;
     return !!(estado && estado.encuentro_en_curso && estado.encuentro_en_curso.id === enc.id);
   }
   function htmlProximoPlan(enc, estado) {
@@ -716,7 +1071,8 @@
     const proxTit = $('.obj-proximo-tit');
     const enCurso = estado.encuentro_en_curso || null;
     const futuros = encuentrosFuturos(partida, estado);
-    const next = enCurso || futuros[0] || null;
+    const ocupandoAhora = futuros.filter(function (e) { return encuentroOcupaAhora(e, estado); })[0] || null;
+    const next = enCurso || ocupandoAhora || futuros[0] || null;
     const hayEnCurso = !!(enCurso || (next && planEsEnCurso(next, estado)));
     if (polaroid) {
       polaroid.classList.toggle('is-en-curso', hayEnCurso);
@@ -864,7 +1220,7 @@
     ];
   }
 
-  function placeHabEnZona(box, p, i, total, enCurso) {
+  function placeHabEnZona(box, p, i, total) {
     var el = document.createElement('span');
     el.className = 'hab cara-token';
     el.setAttribute('role', 'button');
@@ -872,7 +1228,6 @@
     el.setAttribute('data-residente', p.id);
     el.setAttribute('data-destino', p.destino_id);
     el.setAttribute('data-fase', p.fase || 'en_destino');
-    if (enCurso) el.classList.add('hab--plan-en-curso');
     el.setAttribute('data-emocion', p.emocion || 'neutro');
     if (p.hay_tema) el.setAttribute('data-hay-tema', '1');
     var slots = slotsTokensZona(total);
@@ -899,6 +1254,10 @@
     box.appendChild(el);
   }
 
+  function marcarConsultaLugar(el, lugarId) {
+    if (!el) return;
+    el.setAttribute('data-consulta-lugar', String(lugarId || '').replace(/^lug_/, ''));
+  }
   function posicionarNotaMapa(el, zonaBtn) {
     if (!el || !zonaBtn) return;
     var board = $('.board-fit');
@@ -931,6 +1290,7 @@
     var ops = destinosOperativosZona(zonaId);
     if (ops.length > 1) {
       $('.play-root').setAttribute('data-consulta', 'sel');
+    marcarConsultaLugar($('.selector'), zonaId);
       $('[data-s-tit]').textContent = meta ? meta.label : zonaId;
       $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
       var box = $('[data-s-btns]');
@@ -960,6 +1320,7 @@
       return !destId || p.destino_id === destId;
     });
     $('.play-root').setAttribute('data-consulta', 'quien');
+    marcarConsultaLugar($('.quien'), destId || zonaId);
     $('[data-q-tit]').textContent = meta ? meta.label : zonaId;
     $('[data-q-sum]').textContent = gente.length
       ? (gente.length === 1 ? 'Hay alguien.' : ('Hay ' + gente.length + '.'))
@@ -1071,6 +1432,43 @@
     });
   }
 
+  function htmlMisionItem(m, opts) {
+    opts = opts || {};
+    var est = m.estado || 'pendiente';
+    var accBtn = '';
+    if (m.accion && est !== 'bloqueada' && est !== 'cumplida') {
+      accBtn = '<button type="button" class="mis-accion mision-accion" data-mision-accion="' + esc(m.id || '') + '">' +
+        esc(m.accion_label || 'Ir') + '</button>';
+    }
+    var titulo = m.titulo
+      ? '<strong class="mis-item-tit">' + esc(m.titulo) + '</strong>'
+      : '';
+    var estado = opts.primerosPasos
+      ? ''
+      : '<span class="mis-item-estado">' + esc(estadoMisionLabel(est)) + '</span>';
+    return '<article class="mis-item mis-item-' + est + (opts.primerosPasos ? ' mis-item-pp' : '') + '">' +
+      '<span class="mis-item-tape mis-item-tape-l" aria-hidden="true"></span>' +
+      '<span class="mis-item-tape mis-item-tape-r" aria-hidden="true"></span>' +
+      '<div class="mis-item-head">' + bolitaMision(est) + titulo + '</div>' +
+      '<p class="mis-item-txt">' + esc(m.texto || m.hecho || 'Objetivo') + '</p>' +
+      estado + accBtn + '</article>';
+  }
+
+  function enlazarAccionesMision(container, items) {
+    if (!container) return;
+    var byId = {};
+    (items || []).forEach(function (m) {
+      if (m && m.id) byId[m.id] = m;
+    });
+    $$('[data-mision-accion]', container).forEach(function (btn) {
+      btn.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        var id = btn.getAttribute('data-mision-accion');
+        ejecutarAccionMision(byId[id] || null);
+      });
+    });
+  }
+
   function bolitaMision(estado) {
     if (estado === 'cumplida') {
       return '<span class="mision-bolita cumplida" aria-label="Hecha"><span class="mision-check">✓</span></span>';
@@ -1079,6 +1477,61 @@
       return '<span class="mision-bolita bloqueada" aria-hidden="true"></span>';
     }
     return '<span class="mision-bolita pendiente" aria-hidden="true"></span>';
+  }
+
+  let corazonOlaPhase = 0;
+  let corazonOlaFillY = 52;
+  let corazonOlaFillH = 0;
+  let corazonOlaTimer = null;
+
+  function corazonOlaY(x, fillY, phase) {
+    return fillY + Math.sin((x * 0.54) + phase) * 3.6;
+  }
+
+  function corazonFillPathD(fillY, phase) {
+    var bottom = 52;
+    var parts = [];
+    for (var x = 0; x <= 58; x += 1.1) {
+      var y = corazonOlaY(x, fillY, phase);
+      parts.push((parts.length ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1));
+    }
+    return parts.join(' ') + ' L58 ' + bottom + ' L0 ' + bottom + ' Z';
+  }
+
+  function corazonSurfacePathD(fillY, phase) {
+    var parts = [];
+    for (var x = 0; x <= 58; x += 1.1) {
+      var y = corazonOlaY(x, fillY, phase);
+      parts.push((parts.length ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1));
+    }
+    return parts.join(' ');
+  }
+
+  function aplicarCorazonAgua(fillEl, surfaceEl, fillY, fillH, phase) {
+    if (!fillEl) return;
+    if (fillH <= 0.5) {
+      fillEl.setAttribute('d', '');
+      if (surfaceEl) surfaceEl.setAttribute('d', '');
+      return;
+    }
+    fillEl.setAttribute('d', corazonFillPathD(fillY, phase));
+    if (surfaceEl) surfaceEl.setAttribute('d', corazonSurfacePathD(fillY, phase));
+  }
+
+  function animarCorazonAgua() {
+    if (corazonOlaTimer) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    corazonOlaTimer = setInterval(function () {
+      if (corazonOlaFillH <= 0.5) return;
+      corazonOlaPhase += 0.24;
+      aplicarCorazonAgua(
+        document.querySelector('[data-corazon-fill]'),
+        document.querySelector('[data-corazon-surface]'),
+        corazonOlaFillY,
+        corazonOlaFillH,
+        corazonOlaPhase
+      );
+    }, 130);
   }
 
   function corazonVidaSvg() {
@@ -1147,11 +1600,15 @@
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
     const critico = !!(vida && vida.critico);
-    const fillRect = $('[data-corazon-fill]');
-    if (fillRect) {
+    const fillEl = $('[data-corazon-fill]');
+    const surfaceEl = $('[data-corazon-surface]');
+    if (fillEl) {
       var fillH = 52 * (pct / 100);
-      fillRect.setAttribute('y', String(52 - fillH));
-      fillRect.setAttribute('height', String(fillH));
+      var fillY = 52 - fillH;
+      corazonOlaFillY = fillY;
+      corazonOlaFillH = fillH;
+      aplicarCorazonAgua(fillEl, surfaceEl, fillY, fillH, corazonOlaPhase);
+      animarCorazonAgua();
     }
     const fill = $('.corazon-fill') || $('.corazon-dibujo');
     if (fill) fill.style.setProperty('--fill', pct + '%');
@@ -1257,7 +1714,7 @@
       });
       var marcaZona = btn.getAttribute('data-encuentro-marca') || '';
       enZona.forEach(function (p, i) {
-        placeHabEnZona(box, p, i, enZona.length, marcaZona === 'en_curso');
+        placeHabEnZona(box, p, i, enZona.length);
       });
     });
   }
@@ -1296,6 +1753,7 @@
     const ops = cx.destinos_operativos || [];
     if (ops.length > 1) {
       $('.play-root').setAttribute('data-consulta', 'sel');
+    marcarConsultaLugar($('.selector'), id);
       $('[data-s-tit]').textContent = cx.nombre;
       $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
       const box = $('[data-s-btns]');
@@ -1320,6 +1778,7 @@
   function abrirQuien(id, destId) {
     const cx = cxById(id);
     $('.play-root').setAttribute('data-consulta', 'quien');
+    marcarConsultaLugar($('.quien'), id);
     $('[data-q-tit]').textContent = cx.nombre;
     const gente = (cx.personas || []).filter(function (p) {
       return !destId || p.destino_id === destId;
@@ -1395,7 +1854,23 @@
     return hitUrl || null;
   }
 
+  function retratoDe(rid, ficha) {
+    var pres = ficha && ficha.presentacion_visual;
+    var asset = pres && pres.asset;
+    if (asset && asset.url_relativa) return asset.url_relativa;
+    return tokenDe(rid);
+  }
+
   let vecBuscaTxt = '';
+
+  function txtBuscaNorm(s) {
+    return String(s || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+  let orgBuscaTxt = '';
   let resBloqueActivo = 'a';
   let resBuscaTxt = '';
 
@@ -1405,11 +1880,11 @@
     box.classList.add('vecinos-grid');
     box.innerHTML = '';
     const res = (cacheInsp && cacheInsp.residentes) || {};
-    const filtroTxt = (vecBuscaTxt || '').trim().toLowerCase();
+    const filtroTxt = txtBuscaNorm(vecBuscaTxt);
     const ids = Object.keys(res).filter(function (id) {
       const r = res[id];
       if ((r.presencia || 'residente') !== 'residente') return false;
-      const nom = ((r.identidad_publica && r.identidad_publica.nombre) || id).toLowerCase();
+      const nom = txtBuscaNorm((r.identidad_publica && r.identidad_publica.nombre) || id);
       if (filtroTxt && nom.indexOf(filtroTxt) < 0) return false;
       return true;
     });
@@ -1778,7 +2253,7 @@ function hobbyIconKey(id, texto) {
   function pintarFicha(id, f, vista) {
     fichaActualId = id;
     const nom = vista.nombre || (f.identidad && f.identidad.nombre) || id;
-    const img = tokenDe(id);
+    const img = retratoDe(id, f);
     const caraBox = $('[data-ficha-img]');
     if (caraBox) {
       caraBox.innerHTML = img
@@ -1871,67 +2346,230 @@ function hobbyIconKey(id, texto) {
   function renderBuzon(msgs) {
     cacheBuzon = msgs || [];
     const box = $('[data-buzon-list]');
+    if (!box) return;
     box.innerHTML = '';
-    const cartas = cacheBuzon.filter(function (m) { return (m.canal || 'buzon') !== 'cotilleo'; });
+    renderMensajitosPop(msgs);
+    const cartas = mensajitosOrdenados(msgs);
     if (!cartas.length) {
-      box.innerHTML = '<p class="lista-vacia">Bandeja vacía. Todavía no te ha escrito nadie.</p>';
+      box.innerHTML = '<p class="lista-vacia">Nada por aquí. Celestine respira.</p>';
       return;
     }
-    cartas.forEach(function (m) {
+    const accion = cartas.filter(mensajitoRequiereAccion);
+    const info = cartas.filter(function (m) { return !mensajitoRequiereAccion(m); });
+
+    function pintarCarta(m, esAccion) {
       const art = document.createElement('article');
       const st = estadoCarta(m);
-      art.className = 'carta-msg' + (m.clasificacion === 'importante' ? ' importante' : '') +
-        ((m.estado || '') === 'pendiente' ? ' no-leida' : '') +
-        ((m.estado || '') === 'leido' ? ' leida' : '') + (st.cls ? ' ' + st.cls : '');
-      const de = nombreDe(m.de_persona);
-      const cuerpo = cuerpoCarta(m, de);
+      const leido = (m.estado || '') !== 'pendiente';
+      art.className = 'carta-msg' +
+        (esAccion ? ' carta-accion' : ' carta-info') +
+        (leido ? ' leida' : ' no-leida') +
+        (st.cls ? ' ' + st.cls : '');
+      const nombre = nombrePublicoDe(m);
+      const cuerpo = cuerpoMensajito(m, nombre);
       const plazo = m.plazo_humano || '';
-      art.innerHTML = (m.clasificacion === 'importante' ? '<span class="lacre" aria-hidden="true"></span>' : '') +
+      let accionesHtml = '';
+      if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') {
+        accionesHtml = '<div class="acciones-msg">' +
+          '<button type="button" data-accion="aceptar">Dejarle hueco</button>' +
+          '<button type="button" class="btn-suave" data-accion="rechazar">Ahora no</button>' +
+          '</div>';
+      }
+      art.innerHTML = '<div class="carta-inner">' + htmlAvatarMensajito(m, nombre, 'carta-avatar') +
+        '<div class="carta-copy">' +
         (st.txt ? '<div class="sello-estado">' + esc(st.txt) + '</div>' : '') +
-        '<div class="de">De ' + esc(de) + '</div>' +
+        (nombre ? '<div class="de">' + esc(nombre) + '</div>' : '') +
         '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
-        (plazo ? '<p class="plazo">' + esc(plazo) + '</p>' : '');
-      art.addEventListener('click', async function () {
-        let tr = null;
-        if (m.id) {
-          const lr = await api('buzon.leer', { mensaje_id: m.id });
-          tr = lr.tutorial || null;
-        }
-        await refresh();
-        if (tr) pintarTutorialMotor(tr);
+        (plazo ? '<p class="plazo">' + esc(plazo) + '</p>' : '') +
+        accionesHtml +
+        '</div></div>';
+      art.appendChild(crearMsgLeidoToggle(m));
+
+      art.querySelectorAll('[data-accion]').forEach(function (btn) {
+        btn.addEventListener('click', async function (ev) {
+          ev.stopPropagation();
+          const acc = btn.getAttribute('data-accion');
+          if (acc === 'aceptar') await api('llegada.aceptar', { mensaje_id: m.id });
+          else if (acc === 'rechazar') await api('llegada.rechazar', { mensaje_id: m.id });
+          await refresh();
+        });
       });
-      box.appendChild(art);
-    });
+      return art;
+    }
+
+    function pintarSeccion(titulo, items, esAccion) {
+      if (!items.length) return;
+      const sec = document.createElement('section');
+      sec.className = 'mensajitos-seccion';
+      sec.innerHTML = '<h3 class="mensajitos-seccion-tit">' + titulo + '</h3>';
+      items.forEach(function (m) { sec.appendChild(pintarCarta(m, esAccion)); });
+      box.appendChild(sec);
+    }
+
+    pintarSeccion('Piden algo', accion, true);
+    pintarSeccion('Lo que circula', info, false);
   }
 
-  function nombreDe(id) {
-    if (!id) return 'Alguien';
-    const r = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id];
-    return (r && r.identidad_publica && r.identidad_publica.nombre) || id;
+  function cotiEtiquetaTiempo(e, bucket) {
+    if (bucket === 'ayer') return 'Ayer';
+    if (e.fecha_corta) return e.fecha_corta;
+    if (bucket === 'hoy') return 'Hoy';
+    return e.dia ? ('día ' + e.dia) : '';
+  }
+
+  function htmlCotiAvatares(actores) {
+    const ids = (actores && actores.length) ? actores.slice(0, 2) : [];
+    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">…</span>';
+    return ids.map(function (id) {
+      const img = tokenDe(id);
+      const nom = nombreDe(id);
+      const ini = (String(nom).charAt(0) || '?');
+      return '<span class="coti-item-cara">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="coti-item-ini">' + esc(ini) + '</span>') +
+        '</span>';
+    }).join('');
+  }
+
+  function htmlCotiItem(e, bucket) {
+    const nuevo = e.nuevo === true;
+    return '<article class="coti-item">' +
+      '<span class="coti-item-tape coti-item-tape-l" aria-hidden="true"></span>' +
+      '<span class="coti-item-tape coti-item-tape-r" aria-hidden="true"></span>' +
+      (nuevo ? '<span class="coti-item-nuevo">Nuevo</span>' : '') +
+      '<div class="coti-item-avatares">' + htmlCotiAvatares(e.actores) + '</div>' +
+      '<div class="coti-item-cuerpo">' +
+      '<p class="coti-item-txt">' + esc(e.texto || '') + '</p>' +
+      '<p class="coti-item-cuando">' + esc(cotiEtiquetaTiempo(e, bucket)) + '</p>' +
+      '</div></article>';
   }
 
   function renderCotilleo(coti) {
-    function fill(sel, items) {
+    function fill(sel, items, bucket) {
       const box = $(sel);
+      if (!box) return;
       box.innerHTML = '';
       if (!items || !items.length) {
-        box.innerHTML = '<p class="lista-vacia">Hoy el pueblo no ha dado titular.</p>';
+        box.innerHTML = '<p class="coti-vacio">Hoy el pueblo no ha dado titular.</p>';
         return;
       }
       items.forEach(function (e) {
-        const art = document.createElement('article');
-        art.className = 'recorte chisme';
-        art.innerHTML = '<p>' + (e.texto || '') + '</p><p class="firma">' + (e.fecha_corta || ('día ' + e.dia)) + '</p>';
-        box.appendChild(art);
+        box.insertAdjacentHTML('beforeend', htmlCotiItem(e, bucket));
       });
     }
-    fill('[data-coti-hoy]', coti && coti.hoy);
-    fill('[data-coti-ayer]', coti && coti.ayer);
-    fill('[data-coti-viejos]', coti && coti.viejos);
+    fill('[data-coti-hoy]', coti && coti.hoy, 'hoy');
+    fill('[data-coti-ayer]', coti && coti.ayer, 'ayer');
+    fill('[data-coti-viejos]', coti && coti.viejos, 'viejos');
   }
 
   function idsResidentes() {
     return Object.keys((cacheInsp && cacheInsp.residentes) || {});
+  }
+
+  function orgTipoIco(id) {
+    const k = String(id || '').toLowerCase();
+    if (k === 'romance') return '❤️';
+    if (k === 'amistad') return '🤝';
+    if (k === 'conocerse') return '👋';
+    if (k === 'individual') return '🚶';
+    return '';
+  }
+
+  function orgTipoHtml(id, label, on) {
+    const ico = orgTipoIco(id);
+    const cls = 'org-tipo-chip' + (on ? ' is-on' : '');
+    return '<button type="button" class="' + cls + '" data-org-tipo="' + esc(id) + '">' +
+      (ico ? '<span class="org-tipo-ico" aria-hidden="true">' + ico + '</span>' : '') +
+      esc(String(label || '').toUpperCase()) + '</button>';
+  }
+
+  function orgIdsFiltrados() {
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const filtroTxt = txtBuscaNorm(orgBuscaTxt);
+    return Object.keys(res).filter(function (id) {
+      const r = res[id];
+      if ((r.presencia || 'residente') !== 'residente') return false;
+      const nom = txtBuscaNorm((r.identidad_publica && r.identidad_publica.nombre) || id);
+      if (filtroTxt && nom.indexOf(filtroTxt) < 0) return false;
+      return true;
+    }).sort(function (a, b) {
+      const na = (res[a].identidad_publica && res[a].identidad_publica.nombre) || a;
+      const nb = (res[b].identidad_publica && res[b].identidad_publica.nombre) || b;
+      return String(na).localeCompare(String(nb), 'es');
+    });
+  }
+
+  function orgSeleccionados() {
+    if (org.modo === 'solo') return org.a ? [org.a] : [];
+    const out = [];
+    if (org.a) out.push(org.a);
+    if (org.b && org.b !== org.a) out.push(org.b);
+    return out;
+  }
+
+  function actualizarOrgPickerHint() {
+    const hint = $('[data-org-picker-hint]');
+    if (!hint) return;
+    const n = orgSeleccionados().length;
+    if (org.modo === 'solo') {
+      hint.textContent = n ? '1 vecino elegido.' : 'Elige 1 vecino.';
+      return;
+    }
+    if (!n) hint.textContent = 'Elige hasta 2 vecinos.';
+    else if (n === 1) hint.textContent = 'Elige un vecino más.';
+    else hint.textContent = '2 vecinos elegidos.';
+  }
+
+  function toggleOrgPicker(id) {
+    if (!id) return;
+    if (org.modo === 'solo') {
+      org.a = org.a === id ? '' : id;
+      org.b = '';
+    } else if (org.a === id) {
+      org.a = org.b || '';
+      org.b = '';
+    } else if (org.b === id) {
+      org.b = '';
+    } else if (!org.a) {
+      org.a = id;
+    } else if (!org.b) {
+      org.b = id;
+    } else {
+      toast('Ya elegiste a dos vecinos.');
+      return;
+    }
+    pintarOrgPicker();
+    actualizarOrgPickerHint();
+    refreshTipos();
+    refreshOrgHoras();
+  }
+
+  function pintarOrgPicker() {
+    const box = $('[data-org-picker]');
+    if (!box) return;
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const ids = orgIdsFiltrados();
+    const sel = orgSeleccionados();
+    box.innerHTML = '';
+    if (!ids.length) {
+      box.innerHTML = '<p class="mini">Nadie con ese nombre.</p>';
+      return;
+    }
+    ids.forEach(function (id) {
+      const r = res[id] || {};
+      const nom = (r.identidad_publica && r.identidad_publica.nombre) || nombreDe(id) || id;
+      const ini = String(nom).charAt(0) || '?';
+      const img = tokenDe(id);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '');
+      btn.title = nom;
+      btn.setAttribute('aria-label', nom);
+      btn.innerHTML = '<span class="org-picker-cara">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="org-picker-ini">' + esc(ini) + '</span>') +
+        '</span>' + (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">✓</span>' : '');
+      btn.addEventListener('click', function () { toggleOrgPicker(id); });
+      box.appendChild(btn);
+    });
   }
 
   function fillSelect(sel, value, excludeId) {
@@ -1956,38 +2594,8 @@ function hobbyIconKey(id, texto) {
   }
 
   function pintarOrgCaras() {
-    var box = $('[data-org-caras]');
-    if (!box) return;
-    var selA = $('[data-org-a]');
-    var selB = $('[data-org-b]');
-    var a = (selA && selA.value) || org.a;
-    var b = (selB && selB.value) || org.b;
-    var ids = [];
-    if (org.modo === 'solo') {
-      if (!a) { box.hidden = true; box.innerHTML = ''; return; }
-      ids = [a];
-    } else {
-      if (!a || !b || a === b) { box.hidden = true; box.innerHTML = ''; return; }
-      ids = [a, b];
-    }
-    box.hidden = false;
-    box.innerHTML = '';
-    ids.forEach(function (id) {
-      var wrap = document.createElement('span');
-      wrap.className = 'cara-token';
-      wrap.setAttribute('role', 'button');
-      wrap.setAttribute('tabindex', '0');
-      wrap.setAttribute('data-residente', id);
-      var emo = emocionDe(id);
-      wrap.setAttribute('data-emocion', emo);
-      var img = tokenDe(id);
-      var nom = nombreDe(id);
-      var ini = (nom.charAt(0) || '?');
-      wrap.innerHTML = '<span class="cara" data-emocion="' + esc(emo) + '">' +
-        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="cara-ini">' + esc(ini) + '</span>') +
-        '</span>';
-      box.appendChild(wrap);
-    });
+    pintarOrgPicker();
+    actualizarOrgPickerHint();
   }
 
   function resetOrgForm(preset) {
@@ -2021,8 +2629,6 @@ function hobbyIconKey(id, texto) {
     var hora = $('[data-org-hora]');
     if (!hora) return;
     hora.innerHTML = '';
-    org.a = $('[data-org-a]').value;
-    org.b = $('[data-org-b]').value;
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
@@ -2072,10 +2678,6 @@ function hobbyIconKey(id, texto) {
   }
 
   async function fillOrganizar() {
-    fillSelect($('[data-org-a]'), org.a, org.b);
-    var rowB = $('[data-org-row-b]');
-    if (rowB) rowB.hidden = org.modo === 'solo';
-    if (org.modo !== 'solo') fillSelect($('[data-org-b]'), org.b, org.a);
     const lug = $('[data-org-lugar]');
     lug.innerHTML = '<option value="">—</option>';
     destinosOperativos().forEach(function (d) {
@@ -2103,26 +2705,19 @@ function hobbyIconKey(id, texto) {
   }
 
   async function refreshTipos() {
-    org.a = $('[data-org-a]').value;
-    org.b = $('[data-org-b]').value;
     const box = $('[data-org-tipos]');
     if (org.modo === 'solo') {
       if (!org.a) {
-        box.innerHTML = '<p class="mini">Elige a quién organizar el plan.</p>';
+        box.innerHTML = '<p class="mini org-tipos-vacio">Elige a quién organizar el plan.</p>';
         return;
       }
       const rSolo = await api('encuentro.tipos_permitidos', { participantes: [org.a], modo: 'solo' }, 'GET');
-      box.innerHTML = '';
       org.tipo = 'individual';
-      var chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'chip is-on';
-      chip.textContent = 'Por su cuenta';
-      box.appendChild(chip);
+      box.innerHTML = orgTipoHtml('individual', 'Por su cuenta', true);
       return;
     }
     if (!org.a || !org.b || org.a === org.b) {
-      box.innerHTML = '<p class="mini">Elige a dos personas distintas. Luego vemos qué plan encaja.</p>';
+      box.innerHTML = '<p class="mini org-tipos-vacio">Elige a dos personas distintas.</p>';
       return;
     }
     const r = await api('encuentro.tipos_permitidos', { residente_a: org.a, residente_b: org.b }, 'GET');
@@ -2132,17 +2727,17 @@ function hobbyIconKey(id, texto) {
     if (!org.tipo || ids.indexOf(org.tipo) < 0) {
       org.tipo = r.tipo_sugerido || (ops[0] && ops[0].id) || '';
     }
-    ops.forEach(function (op) {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'chip' + (org.tipo === op.id ? ' is-on' : '');
-      b.textContent = op.label;
-      b.addEventListener('click', function () {
-        org.tipo = op.id;
-        $$('.chip', box).forEach(function (c) { c.classList.remove('is-on'); });
-        b.classList.add('is-on');
+    box.innerHTML = ops.map(function (op) {
+      return orgTipoHtml(op.id, op.label, org.tipo === op.id);
+    }).join('');
+    $$('[data-org-tipo]', box).forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        org.tipo = btn.getAttribute('data-org-tipo') || '';
+        $$('[data-org-tipo]', box).forEach(function (c) {
+          c.classList.toggle('is-on', c === btn);
+        });
+        refreshOrgHoras();
       });
-      box.appendChild(b);
     });
     if (!ops.length) {
       box.innerHTML = '<p class="mini">' + (r.mensaje_ui || 'Entre estas dos, ahora no sale un plan.') + '</p>';
@@ -2150,8 +2745,6 @@ function hobbyIconKey(id, texto) {
   }
 
   async function proponer() {
-    org.a = $('[data-org-a]').value;
-    org.b = $('[data-org-b]').value;
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     org.hora = parseInt($('[data-org-hora]').value, 10);
@@ -2212,25 +2805,30 @@ function hobbyIconKey(id, texto) {
     }
   }
   async function ensurePartida() {
-    if (partidaId) {
-      const r = await api('partida.cargar', { partida_id: partidaId });
-      if (r.ok) return;
-    }
+    if (partidaId) return true;
     const r = await api('partida.nueva', configNueva(true));
     if (r.ok) {
       partidaId = r.partida_id;
       localStorage.setItem(storageKey(), partidaId);
     }
+    return !!r.ok;
   }
   async function refresh() {
-    const estadoResp = await api('partida.estado', {}, 'GET');
-    if (!estadoResp.ok) return;
-    cacheEstado = estadoResp.estado;
-    const insp = await api('partida.inspeccionar', {}, 'GET');
-    cacheInsp = insp.ok ? insp.partida : null;
-    const mapa = await api('mapa.presencia', {}, 'GET');
-    const buzon = await api('buzon.listar', {}, 'GET');
-    const diario = await api('diario.listar', {}, 'GET');
+    const popMensajitosAbierto = mensajitosPopAbierto;
+    let paquete = await api('partida.refresh', {}, 'GET');
+    if (!paquete.ok && partidaId) {
+      try { localStorage.removeItem(storageKey()); } catch (e) {}
+      partidaId = null;
+      if (await ensurePartida()) {
+        paquete = await api('partida.refresh', {}, 'GET');
+      }
+    }
+    if (!paquete.ok) return;
+    cacheEstado = paquete.estado || null;
+    cacheInsp = paquete.partida || null;
+    const mapa = { mapa: paquete.mapa || {}, pueblo: paquete.pueblo || {} };
+    const buzon = paquete.buzon || {};
+    const diario = paquete.diario || {};
     renderHud(cacheEstado, buzon.mensajes || []);
     renderMapaMarcas(mapa.mapa || null);
     renderPueblo(mapa.pueblo || { complejos: [] });
@@ -2245,6 +2843,8 @@ function hobbyIconKey(id, texto) {
     }
     pintarTutorialMotor(cacheEstado.tutorial);
     quizaMostrarTutFinale();
+    if ($('.play-root') && $('.play-root').getAttribute('data-capa') === 'agenda') renderAgendaPlanes();
+    if (popMensajitosAbierto) abrirMensajitosPop();
   }
 
   async function nuevaPartidaLimpia() {
@@ -2489,6 +3089,7 @@ function hobbyIconKey(id, texto) {
     const open = ev.target.closest('[data-open]');
     if (open && uiRootFrom(open)) {
       const name = open.getAttribute('data-open');
+      cerrarMensajitosPop();
       setCapa(name);
       $('.play-root').removeAttribute('data-consulta');
       if (name === 'organizar') {
@@ -2541,6 +3142,38 @@ function hobbyIconKey(id, texto) {
     fichaVolver.addEventListener('click', function () { setCapa('vecinos'); renderVecinos(); });
   }
 
+
+  const mensajitosTrig = $('[data-mensajitos-trigger]');
+  if (mensajitosTrig) {
+    mensajitosTrig.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      toggleMensajitosPop();
+    });
+  }
+  const mensajitosPopCerrar = $('[data-mensajitos-cerrar]');
+  if (mensajitosPopCerrar) {
+    mensajitosPopCerrar.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarMensajitosPop();
+    });
+  }
+  const mensajitosVerMas = $('[data-mensajitos-ver-mas]');
+  if (mensajitosVerMas) {
+    mensajitosVerMas.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarMensajitosPop();
+      setCapa('buzon');
+    });
+  }
+  document.addEventListener('click', function (ev) {
+    if (!mensajitosPopAbierto) return;
+    if (ev.target.closest('[data-mensajitos-pop]') || ev.target.closest('[data-mensajitos-trigger]')) return;
+    cerrarMensajitosPop();
+  });
+
   const vecBuscaInp = $('[data-vec-busca]');
   if (vecBuscaInp) {
     vecBuscaInp.addEventListener('input', function () {
@@ -2556,11 +3189,14 @@ function hobbyIconKey(id, texto) {
     });
   }
 
-  var orgA = $('[data-org-a]');
-  var orgB = $('[data-org-b]');
   var orgGo = $('[data-org-go]');
-  if (orgA) orgA.addEventListener('change', async function () { await refreshTipos(); pintarOrgCaras(); await refreshOrgHoras(); });
-  if (orgB) orgB.addEventListener('change', async function () { await refreshTipos(); pintarOrgCaras(); await refreshOrgHoras(); });
+  var orgBusca = $('[data-org-busca]');
+  if (orgBusca) {
+    orgBusca.addEventListener('input', function () {
+      orgBuscaTxt = orgBusca.value || '';
+      pintarOrgPicker();
+    });
+  }
   var orgLug = $('[data-org-lugar]');
   var orgDia = $('[data-org-dia]');
   if (orgLug) orgLug.addEventListener('change', function () { refreshOrgHoras(); });
@@ -2571,6 +3207,15 @@ function hobbyIconKey(id, texto) {
   var finOk = $('[data-tut-fin-ok]');
   if (finOk) finOk.addEventListener('click', cerrarTutFinale);
   if (orgGo) orgGo.addEventListener('click', proponer);
+
+  const musicaToggle = $('[data-musica-toggle]');
+  actualizarControlMusica();
+  if (musicaToggle) {
+    musicaToggle.addEventListener('click', function () {
+      cambiarMusica(!musicaActiva);
+    });
+  }
+  iniciarMusicaFondo(true);
 
   window.addEventListener('resize', layout);
   layout();

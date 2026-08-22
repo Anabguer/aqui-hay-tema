@@ -85,6 +85,7 @@ final class LabAudit
         foreach (self::residentesActivos($partida) as $id) {
             $npcs[] = self::perfilNpc($partida, $id, $catalog);
         }
+        $matriz = self::matrizRelacional($partida, $catalog);
         self::push('PARTIDA', '[AHT DEBUG PARTIDA]', [
             'evento' => 'NUEVA_PARTIDA',
             'partida_id' => $partida['meta']['partida_id'] ?? null,
@@ -94,13 +95,13 @@ final class LabAudit
             'rng' => $partida['rng'] ?? null,
             'reloj' => $partida['reloj'] ?? null,
             'vecinos' => $npcs,
-            'matriz_relacional' => self::matrizRelacional($partida, $catalog),
+            'matriz_relacional' => $matriz,
             'nota_relaciones' => self::notaRelacionesMotor(),
         ]);
         foreach ($npcs as $npc) {
             self::push('NPC', '[AHT DEBUG NPC]', $npc);
         }
-        foreach (self::matrizRelacional($partida, $catalog) as $par) {
+        foreach ($matriz as $par) {
             $dirs = $par['direcciones'] ?? [];
             if (is_array($dirs['a_hacia_b'] ?? null)) {
                 self::push('REL', '[AHT DEBUG REL]', $dirs['a_hacia_b']);

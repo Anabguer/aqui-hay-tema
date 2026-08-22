@@ -37,6 +37,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return PartidaHandler::estado($ctx, $body, $p);
     },
+    'partida.refresh' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PartidaHandler::refrescar($ctx, $body, $p);
+    },
     'partida.guardar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return PartidaHandler::guardar($ctx, $body, $p);
@@ -204,6 +208,10 @@ $routes = [
     'buzon.leer' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return BuzonHandler::leer($ctx, $body, $p);
+    },
+    'buzon.no_leer' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return BuzonHandler::noLeer($ctx, $body, $p);
     },
     'buzon.crear_dev' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

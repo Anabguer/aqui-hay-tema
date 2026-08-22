@@ -16,6 +16,54 @@ final class EtiquetaFicha
         return is_string($nombre) && $nombre !== '' ? $nombre : $id;
     }
 
+    /** Etiqueta de rasgo adaptada al género del residente (p. ej. Tímido/a → Tímida). */
+    public static function rasgoParaGenero(string $id, ?string $genero, CatalogStore $store): string
+    {
+        $raw = self::rasgo($id, $store);
+        if (!preg_match('/^(.+)\/a$/u', $raw, $m)) {
+            return $raw;
+        }
+        $masc = $m[1];
+        $fem = preg_replace('/o$/u', 'a', $masc);
+        if ($fem === $masc) {
+            $fem = $masc . 'a';
+        }
+        return match ($genero) {
+            'mujer' => $fem,
+            'hombre' => $masc,
+            default => $masc,
+        };
+    }
+
+    public static function lugar(string $id, CatalogStore $store): string
+    {
+        $item = $store->item('lugares', $id);
+        if (!is_array($item)) {
+            foreach ($store->items('lugares') as $lug) {
+                if (is_array($lug) && ($lug['id'] ?? '') === $id) {
+                    $item = $lug;
+                    break;
+                }
+            }
+        }
+        $nombre = is_array($item) ? (string) ($item['nombre'] ?? '') : '';
+        if ($nombre === '') {
+            $nombre = ucfirst(str_replace(['lug_', '_'], ['', ' '], $id));
+        }
+        return self::lugarDisplay($id, $nombre);
+    }
+
+    private static function lugarDisplay(string $id, string $nombre): string
+    {
+        static $map = [
+            'lug_cafeteria' => 'Cafetería',
+            'Cafeteria' => 'Cafetería',
+            'lug_cine' => 'Cine',
+            'cine' => 'Cine',
+        ];
+        return $map[$id] ?? $map[$nombre] ?? $nombre;
+    }
+
     public static function hobby(string $id, CatalogStore $store): string
     {
         $item = $store->hobby($id) ?? $store->item('hobbies', $id);

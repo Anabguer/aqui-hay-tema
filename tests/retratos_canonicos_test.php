@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/src/autoload.php';
 
 use AquiHayTema\Engine\Catalog;
+use AquiHayTema\Engine\EstadoEmocional;
 use AquiHayTema\Engine\PartidaService;
 use AquiHayTema\Engine\PresenciaEngine;
 use AquiHayTema\Engine\ResidenteRuntime;
@@ -36,7 +37,7 @@ $lotePorCatalog = [];
 foreach ($pool as $catalogId) {
     $personaje = $cat->loadPersonaje($catalogId);
     $runtime = ResidenteRuntime::crearDesdeCatalogo($personaje);
-    $tok = RetratoResolver::resolver($runtime, $catalogId, $packs);
+    $tok = RetratoResolver::resolver($runtime, $catalogId, $packs, $root);
 
   if ($tok['lote']) {
         $lotePorCatalog[] = $catalogId;
@@ -67,17 +68,20 @@ ok(count($pool) === 200, 'pool jugable canónico tiene 200 per_p* con pack');
 $raul = RetratoResolver::resolver(
     ResidenteRuntime::crearDesdeCatalogo($cat->loadPersonaje('per_p004')),
     'per_p004',
-    $packs
+    $packs,
+    $root
 );
 $alex = RetratoResolver::resolver(
     ResidenteRuntime::crearDesdeCatalogo($cat->loadPersonaje('per_p007')),
     'per_p007',
-    $packs
+    $packs,
+    $root
 );
 $dani = RetratoResolver::resolver(
     ResidenteRuntime::crearDesdeCatalogo($cat->loadPersonaje('per_p006')),
     'per_p006',
-    $packs
+    $packs,
+    $root
 );
 ok($raul['url'] !== null && $alex['url'] !== null && $dani['url'] !== null, 'Raúl, Álex y Dani tienen retrato canónico');
 ok($raul['url'] !== $alex['url'], 'Raúl y Álex no comparten retrato');
@@ -86,8 +90,24 @@ ok(str_contains((string) $raul['url'], 'P004_'), 'Raúl usa pack P004');
 ok(str_contains((string) $alex['url'], 'P007_'), 'Álex usa pack P007');
 ok(str_contains((string) $dani['url'], 'P006_'), 'Dani usa pack P006');
 
-// Misma resolución en VistaPuebloV3 (mapa) y RetratoResolver
+// Expresión según estado emocional V1 (misma fuente que ficha y mapa)
 $service = new PartidaService($root);
+$partidaEmo = $service->nuevaPartida('playtest_01', 'retratos-emo');
+$ridDani = 'per_p006';
+if (isset($partidaEmo['residentes'][$ridDani])) {
+    $partidaEmo['residentes'][$ridDani]['runtime']['estado_emocional'] = EstadoEmocional::estructura('alegre');
+    $alegre = RetratoResolver::resolver($partidaEmo['residentes'][$ridDani], $ridDani, $packs, $root);
+    ok(str_contains((string) $alegre['url'], 'P006_alegre'), 'estado alegre → P006_alegre.png');
+    ok($alegre['expression_id'] === 'alegre', 'expression_id alegre');
+    $partidaEmo['residentes'][$ridDani]['runtime']['estado_emocional'] = EstadoEmocional::estructura('triste');
+    $triste = RetratoResolver::resolver($partidaEmo['residentes'][$ridDani], $ridDani, $packs, $root);
+    ok(str_contains((string) $triste['url'], 'P006_triste'), 'estado triste → P006_triste.png');
+    $partidaEmo['residentes'][$ridDani]['runtime']['estado_emocional'] = EstadoEmocional::estructura('enfadado');
+    $enfad = RetratoResolver::resolver($partidaEmo['residentes'][$ridDani], $ridDani, $packs, $root);
+    ok(str_contains((string) $enfad['url'], 'P006_enfadado'), 'estado enfadado → P006_enfadado.png');
+}
+
+// Misma resolución en VistaPuebloV3 (mapa) y RetratoResolver
 $partida = $service->nuevaPartida('playtest_01', 'retratos-canonicos');
 $mapa = PresenciaEngine::resolver($partida, $root);
 $pueblo = VistaPuebloV3::de($partida, $mapa, $root);
@@ -95,7 +115,7 @@ foreach (['per_p004', 'per_p006', 'per_p007'] as $rid) {
     if (!isset($partida['residentes'][$rid])) {
         continue;
     }
-    $canon = RetratoResolver::resolver($partida['residentes'][$rid], $rid, $packs);
+    $canon = RetratoResolver::resolver($partida['residentes'][$rid], $rid, $packs, $root);
     $vista = $pueblo['tokens'][$rid] ?? null;
     ok(
         is_array($vista) && ($vista['url'] ?? null) === $canon['url'],
@@ -105,8 +125,8 @@ foreach (['per_p004', 'per_p006', 'per_p007'] as $rid) {
 }
 
 // Estabilidad: misma URL en dos llamadas
-$t1 = RetratoResolver::resolver($partida['residentes']['per_p007'], 'per_p007', $packs);
-$t2 = RetratoResolver::resolver($partida['residentes']['per_p007'], 'per_p007', $packs);
+$t1 = RetratoResolver::resolver($partida['residentes']['per_p007'], 'per_p007', $packs, $root);
+$t2 = RetratoResolver::resolver($partida['residentes']['per_p007'], 'per_p007', $packs, $root);
 ok($t1['url'] === $t2['url'], 'asociación estable personaje → retrato');
 
 // Demostrar colisión del antiguo fallback CRC32 (regresión documentada)

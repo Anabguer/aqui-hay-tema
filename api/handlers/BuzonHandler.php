@@ -13,12 +13,19 @@ final class BuzonHandler
 {
     public static function listar(ApiContext $ctx, array $body, array $partida): array
     {
+        $canal = array_key_exists('canal', $body)
+            ? $body['canal']
+            : BuzonEngine::CANAL_BUZON;
         $mensajes = BuzonEngine::listar(
             $partida,
             $body['estado'] ?? null,
             $body['clasificacion'] ?? null,
-            $body['canal'] ?? null
+            $canal
         );
+        $mensajes = array_values(array_filter(
+            $mensajes,
+            static fn($m) => is_array($m) && BuzonEngine::tieneContenido($m)
+        ));
         $pets = [];
         foreach ($partida['peticiones'] ?? [] as $p) {
             if (is_array($p) && !empty($p['id'])) {
@@ -68,6 +75,15 @@ final class BuzonHandler
             } else {
                 $r['tutorial'] = \AquiHayTema\Engine\TutorialPrimerosPasos::vistaPublica($partida);
             }
+            savePartida($ctx, $partida);
+        }
+        return $r;
+    }
+
+    public static function noLeer(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $r = BuzonEngine::marcarEstado($partida, (string) ($body['mensaje_id'] ?? ''), 'pendiente');
+        if ($r['ok'] ?? false) {
             savePartida($ctx, $partida);
         }
         return $r;

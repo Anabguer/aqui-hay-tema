@@ -50,7 +50,9 @@ $tercero = (string) ($p['tutorial']['tercero'] ?? '');
 ok(!empty($p['tutorial']['jugable_completado']), 'jugable completado');
 $v4 = MisionDiariaEngine::vistaHoy($p);
 $pp4 = array_values(array_filter($v4['misiones'] ?? [], static fn($m) => ($m['familia'] ?? '') === 'primeros_pasos'));
-ok(count($pp4) === 3, 'tras M3 siguen 3 visibles antes del finale');
+$norm4 = array_values(array_filter($v4['misiones'] ?? [], static fn($m) => ($m['familia'] ?? '') !== 'primeros_pasos'));
+ok(count($pp4) === 0, 'tras M3 ocultas primeros pasos en vista activa');
+ok(count($norm4) >= 1, 'tras M3 aparecen misiones normales del mismo día');
 
 $tut = TutorialPrimerosPasos::vistaPublica($p);
 ok(!empty($tut['finale_pendiente']), 'finale pendiente tras tercera');
@@ -58,6 +60,6 @@ ok(!empty($tut['finale_pendiente']), 'finale pendiente tras tercera');
 TutorialPrimerosPasos::marcarFinaleVisto($p);
 $v5 = MisionDiariaEngine::vistaHoy($p);
 $pp5 = array_values(array_filter($v5['misiones'] ?? [], static fn($m) => ($m['familia'] ?? '') === 'primeros_pasos'));
-ok(count($pp5) === 0, 'tras finale_visto ocultas primeros pasos');
+ok(count($pp5) === 0, 'tras finale_visto siguen ocultas primeros pasos');
 
 exit($failures > 0 ? 1 : 0);

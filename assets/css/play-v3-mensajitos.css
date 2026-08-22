@@ -197,3 +197,407 @@
   color: #6a5848;
   margin: .25rem 0 0;
 }
+/* === Popover lateral (preview 3 mensajes) === */
+.play-v3 .mensajitos-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.play-v3 .mensajitos-pop {
+  position: absolute;
+  left: calc(100% + .55rem);
+  top: -.35rem;
+  z-index: 55;
+  width: min(290px, 78vw);
+  filter: drop-shadow(4px 6px 0 rgba(44, 38, 31, .1));
+}
+
+.play-v3 .mensajitos-pop[hidden] { display: none !important; }
+
+.play-v3 .mensajitos-pop-punta {
+  position: absolute;
+  left: -7px;
+  top: 1.65rem;
+  width: 14px;
+  height: 14px;
+  background: #fffaf0;
+  border-left: 2px solid rgba(44, 38, 31, .55);
+  border-bottom: 2px solid rgba(44, 38, 31, .55);
+  transform: rotate(45deg);
+  z-index: 1;
+}
+
+.play-v3 .mensajitos-pop-inner {
+  position: relative;
+  z-index: 2;
+  background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat;
+  border: 2px solid rgba(44, 38, 31, .62);
+  border-radius: 10px 12px 11px 9px;
+  padding: .55rem .6rem .5rem;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .45);
+}
+
+.play-v3 .mensajitos-pop-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  margin-bottom: .45rem;
+  padding-bottom: .25rem;
+  border-bottom: 1px dashed rgba(120, 96, 72, .28);
+}
+
+.play-v3 .mensajitos-pop-tit {
+  margin: 0;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: #2c261f;
+}
+
+.play-v3 .mensajitos-pop-cerrar {
+  border: 0;
+  background: transparent;
+  padding: 0 .1rem;
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #6a5848;
+  cursor: pointer;
+}
+
+.play-v3 .mensajitos-pop-cerrar:hover { color: #2c261f; }
+
+.play-v3 .mensajitos-pop-lista {
+  display: flex;
+  flex-direction: column;
+  gap: .42rem;
+  min-width: 0;
+}
+
+.play-v3 .mensajitos-ver-mas {
+  display: block;
+  width: 100%;
+  margin: .5rem 0 0;
+  padding: .2rem 0 0;
+  border: 0;
+  background: transparent;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #6a5848;
+  text-align: center;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(106, 88, 72, .45);
+}
+
+.play-v3 .mensajitos-ver-mas:hover { color: #2c261f; }
+.play-v3 .mensajitos-ver-mas[hidden] { display: none !important; }
+
+/* === Items compartidos popover + modal === */
+.play-v3 .msg-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .42rem .45rem;
+  border-radius: 8px 9px 7px 8px;
+  background: rgba(255, 253, 248, .92);
+  box-shadow: inset 0 0 0 1px rgba(120, 96, 72, .14);
+  min-width: 0;
+}
+
+.play-v3 .msg-item.no-leida {
+  background: rgba(255, 246, 220, .72);
+  box-shadow: inset 0 0 0 1px rgba(180, 140, 80, .22);
+}
+
+.play-v3 .msg-item.leida { opacity: .88; }
+
+.play-v3 .msg-item-avatar,
+.play-v3 .msg-item-avatar.cara-ini {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px rgba(40, 28, 16, .12);
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: .78rem;
+  background: #f3e6cc;
+}
+
+.play-v3 .msg-item-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.02rem;
+  line-height: 1.28;
+  color: #2c261f;
+}
+
+.play-v3 .msg-item-nom {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 700;
+  font-size: .82rem;
+  font-style: normal;
+}
+
+.play-v3 .msg-item-txt {
+  font-family: Caveat, cursive;
+  font-size: 1.02rem;
+  font-style: normal;
+}
+
+.play-v3 .msg-check {
+  flex: 0 0 auto;
+  align-self: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(44, 38, 31, .55);
+  border-radius: 50%;
+  background: rgba(255, 253, 246, .9);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transform: rotate(-2deg);
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .08);
+}
+
+.play-v3 .msg-check:hover {
+  border-color: #2c261f;
+  background: #fffef8;
+}
+
+.play-v3 .msg-check[aria-pressed="true"] {
+  background: #e8f4df;
+  border-color: #4a7a3a;
+}
+
+.play-v3 .msg-check-ico {
+  display: block;
+  width: .72rem;
+  height: .42rem;
+  border-left: 2.5px solid transparent;
+  border-bottom: 2.5px solid transparent;
+  transform: rotate(-45deg) translateY(-1px);
+  opacity: 0;
+}
+
+.play-v3 .msg-check[aria-pressed="true"] .msg-check-ico {
+  border-left-color: #3d6b30;
+  border-bottom-color: #3d6b30;
+  opacity: 1;
+}
+
+/* === Modal completo (capa) === */
+.play-v3 .capa-buzon .mensajitos-cerrar {
+  position: absolute;
+  top: 1.65rem;
+  right: .85rem;
+  z-index: 6;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: lowercase;
+  color: #6a5848;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.play-v3 .capa-buzon .mensajitos-cerrar:hover { color: #2c261f; }
+.play-v3 .capa-buzon .capa-cerrar-pestaña { display: none !important; }
+
+.play-v3 .capa-buzon .mensajitos-cab {
+  margin: 0 0 .65rem;
+  padding-right: 3.5rem;
+}
+
+.play-v3 .capa-buzon .mensajitos-tit {
+  margin: 0;
+  padding-right: 0;
+}
+
+.play-v3 .capa-buzon .carta-msg {
+  border-radius: 8px 9px 7px 8px !important;
+  padding: .5rem .45rem !important;
+}
+
+.play-v3 .capa-buzon .carta-inner {
+  align-items: center;
+}
+
+.play-v3 .capa-buzon .carta-msg .de {
+  display: inline;
+  font-family: Fraunces, Georgia, serif;
+  font-size: .88rem;
+}
+
+.play-v3 .capa-buzon .carta-msg .cuerpo {
+  display: inline;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-style: normal;
+}
+
+.play-v3 .capa-buzon .carta-msg .de::after {
+  content: " — ";
+  font-weight: 400;
+  color: #6a5848;
+}
+
+@media (max-width: 900px) {
+  .play-v3 .mensajitos-pop {
+    left: 50%;
+    top: calc(100% + .35rem);
+    transform: translateX(-50%);
+    width: min(300px, 92vw);
+  }
+  .play-v3 .mensajitos-pop-punta {
+    left: 50%;
+    top: -7px;
+    transform: translateX(-50%) rotate(135deg);
+  }
+}
+
+.play-v3 .capa-buzon .carta-msg {
+  display: flex !important;
+  align-items: center;
+  gap: .45rem;
+}
+
+.play-v3 .capa-buzon .carta-inner {
+  flex: 1 1 auto;
+}
+
+/* Toggle leído / marcar */
+.play-v3 .msg-leido-toggle {
+  flex: 0 0 auto;
+  align-self: center;
+  margin: 0;
+  padding: .12rem .35rem;
+  border: 0;
+  background: transparent;
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.1;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(106, 88, 72, .45);
+  color: #8a4a18;
+  white-space: nowrap;
+}
+
+.play-v3 .msg-leido-toggle.is-leido {
+  color: #4a7a3a;
+  text-decoration: none;
+  font-size: .74rem;
+  letter-spacing: .02em;
+}
+
+.play-v3 .msg-leido-toggle.is-pendiente:hover {
+  color: #2c261f;
+}
+
+.play-v3 .msg-leido-toggle.is-leido:hover {
+  color: #2c261f;
+  text-decoration: underline;
+}
+
+.play-v3 .mensajitos-wrap {
+  overflow: visible;
+  z-index: 60;
+}
+
+.play-v3 .mensajitos-pop {
+  z-index: 80;
+}
+
+.play-v3 .capa-buzon .carta-msg .msg-leido-toggle {
+  margin-left: .15rem;
+}
+
+
+/* === Cerrar × unificado en modales === */
+.play-v3 .capa-ficha .ficha-cerrar,
+.play-v3 .capa-buzon .mensajitos-cerrar,
+.play-v3 .capa-agenda .agenda-cerrar {
+  position: absolute !important;
+  top: .5rem !important;
+  right: .6rem !important;
+  z-index: 8 !important;
+  width: 1.6rem !important;
+  height: 1.6rem !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  display: block !important;
+  overflow: visible !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.55rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #5a4838 !important;
+  text-shadow: none !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar::before,
+.play-v3 .capa-agenda .agenda-cerrar::before {
+  display: none !important;
+  content: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar:hover,
+.play-v3 .capa-buzon .mensajitos-cerrar:hover,
+.play-v3 .capa-agenda .agenda-cerrar:hover {
+  color: #2c261f !important;
+}
+
+.play-v3 .capa-ficha .ficha-top {
+  padding-right: 2rem !important;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal .ficha-cerrar {
+  top: .45rem !important;
+  right: .55rem !important;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal-tit {
+  padding-right: 2rem !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-cab,
+.play-v3 .capa-buzon h2,
+.play-v3 .capa-buzon .mensajitos-tit {
+  padding-right: 2rem !important;
+}
+
+.play-v3 .capa-agenda h2,
+.play-v3 .capa-agenda .libreta-kicker {
+  padding-right: 2rem !important;
+}

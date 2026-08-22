@@ -52,7 +52,7 @@ foreach ($pool as $catalogId) {
     ok(preg_match('/^per_p\d{3}$/', $catalogId) === 1, "id canónico per_pXXX: $catalogId");
     $personaje = $cat->loadPersonaje($catalogId);
     $runtime = ResidenteRuntime::crearDesdeCatalogo($personaje);
-    $tok = RetratoResolver::resolver($runtime, $catalogId, $packs);
+    $tok = RetratoResolver::resolver($runtime, $catalogId, $packs, $root);
     ok($tok['url'] !== null, "retrato resoluble: $catalogId");
     ok(empty($tok['lote']), "sin fallback lote: $catalogId");
     ok(isset($urlPorId[$tok['url']]) === false, "retrato único: $catalogId");

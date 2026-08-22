@@ -24,6 +24,13 @@ final class BuzonEngine
 
     public static function crear(array &$partida, array $mensaje): array
     {
+        if (!self::tieneContenido($mensaje)) {
+            return [
+                'ok' => false,
+                'error' => 'contenido_invalido',
+                'mensaje_ui' => 'No se ha creado el Mensajito porque no tiene contenido.',
+            ];
+        }
         $id = $mensaje['id'] ?? 'msg_' . bin2hex(random_bytes(4));
         $clas = $mensaje['clasificacion'] ?? self::PETICION;
         if (!in_array($clas, self::CLASIFICACIONES, true)) {
@@ -81,6 +88,9 @@ final class BuzonEngine
                 if ($estado === 'leido') {
                     $m['leido'] = true;
                     $m['leido_en'] = date('c');
+                } elseif ($estado === 'pendiente') {
+                    $m['leido'] = false;
+                    unset($m['leido_en']);
                 }
                 return ['ok' => true, 'mensaje' => $m];
             }
@@ -115,6 +125,15 @@ final class BuzonEngine
     }
 
     /**
+     * Un Mensajito jugable necesita texto propio. Los registros legacy sin
+     * texto se conservan en el save para auditoría, pero no se proyectan.
+     */
+    public static function tieneContenido(array $mensaje): bool
+    {
+        return trim((string) ($mensaje['texto'] ?? '')) !== '';
+    }
+
+    /**
      * Mensajes no leídos del canal Mensajitos (solo estado pendiente).
      */
     public static function contarNoLeidos(array $partida, ?string $canal = self::CANAL_BUZON): int
@@ -122,6 +141,9 @@ final class BuzonEngine
         $n = 0;
         foreach ($partida['buzon'] ?? [] as $m) {
             if (!is_array($m)) {
+                continue;
+            }
+            if (!self::tieneContenido($m)) {
                 continue;
             }
             if (($m['estado'] ?? '') !== 'pendiente') {

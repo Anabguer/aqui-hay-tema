@@ -265,6 +265,7 @@ final class PartidaService
         $cal = CalibracionConfig::load($this->root);
         CapacidadViviendas::ensure($partida);
         $activos = CapacidadViviendas::residentesActivos($partida);
+        $encuentrosActivos = EncuentroEngine::listarActivos($partida);
         $out = [
             'meta' => $partida['meta'],
             'reloj' => $partida['reloj'],
@@ -275,14 +276,14 @@ final class PartidaService
             'residentes_count' => count($partida['residentes']),
             'pueblo_residentes_activos' => count($activos),
             'pueblo_capacidad_max' => CapacidadViviendas::CAP_PRODUCTO,
-            'encuentros_activos' => count(EncuentroEngine::listarActivos($partida)),
-            'encuentros_activos_label' => self::labelEncuentrosActivos(count(EncuentroEngine::listarActivos($partida))),
+            'encuentros_activos' => count($encuentrosActivos),
+            'encuentros_activos_label' => self::labelEncuentrosActivos(count($encuentrosActivos)),
             'encuentros_hoy' => ResumenDia::encuentrosHoy($partida),
             'proximo_encuentro' => ResumenDia::proximoEncuentro($partida, $this->catalog),
             'encuentro_en_curso' => ResumenDia::encuentroEnCurso($partida, $this->catalog),
             'relaciones_sociales' => count($partida['relaciones_sociales']),
             'relaciones_romanticas' => count($partida['relaciones_romanticas']),
-            'buzon_pendientes' => count(BuzonEngine::listar($partida, 'pendiente')),
+            'buzon_pendientes' => BuzonEngine::contarNoLeidos($partida, null),
             'peticiones_abiertas' => count(PeticionEngine::listar($partida, 'abierta')),
             'propuestas_pendientes' => count(array_filter(
                 $partida['propuestas_encuentro'] ?? [],

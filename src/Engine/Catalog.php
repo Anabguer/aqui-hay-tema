@@ -113,7 +113,7 @@ final class Catalog
                 continue;
             }
             $runtime = ResidenteRuntime::crearDesdeCatalogo($personaje);
-            $tok = RetratoResolver::resolver($runtime, $id, $packs);
+            $tok = RetratoResolver::resolver($runtime, $id, $packs, $this->root);
             if ($tok['url'] === null) {
                 continue;
             }
@@ -135,7 +135,7 @@ final class Catalog
             $personaje = $this->loadPersonaje($id);
             $runtime = ResidenteRuntime::crearDesdeCatalogo($personaje);
             $packs = new VisualPackStore($this->root);
-            return RetratoResolver::resolver($runtime, $id, $packs)['url'] !== null;
+            return RetratoResolver::resolver($runtime, $id, $packs, $this->root)['url'] !== null;
         } catch (\Throwable $e) {
             return false;
         }

@@ -10,6 +10,7 @@ use function AquiHayTema\Api\withLabAudit;
 use AquiHayTema\Engine\CalibracionConfig;
 use AquiHayTema\Engine\Catalog;
 use AquiHayTema\Engine\ContentValidationException;
+use AquiHayTema\Engine\EncuentroLifecycle;
 use AquiHayTema\Engine\DebugParejasEngine;
 use AquiHayTema\Engine\FeatureConfig;
 use AquiHayTema\Engine\LabAudit;
@@ -47,8 +48,11 @@ final class PartidaHandler
         return ['ok' => true, 'partidas' => $ctx->service->listarPartidas()];
     }
 
-    public static function estado(ApiContext $ctx, array $body, array $partida): array
+    public static function estado(ApiContext $ctx, array $body, array &$partida): array
     {
+        if (!$ctx->partidaCargadaSincronizada) {
+            self::sincronizarEncuentrosSiToca($ctx, $partida);
+        }
         LabAudit::reset();
         if (labActiva($body)) {
             LabAudit::eventoSnapshotCargada($partida, new Catalog($ctx->root));
@@ -100,8 +104,11 @@ final class PartidaHandler
         ]);
     }
 
-    public static function inspeccionar(ApiContext $ctx, array $body, array $partida): array
+    public static function inspeccionar(ApiContext $ctx, array $body, array &$partida): array
     {
+        if (!$ctx->partidaCargadaSincronizada) {
+            self::sincronizarEncuentrosSiToca($ctx, $partida);
+        }
         LabAudit::reset();
         if (labActiva($body)) {
             $catalog = new Catalog($ctx->root);
@@ -111,6 +118,41 @@ final class PartidaHandler
             ]);
         }
         return withLabAudit(['ok' => true, 'partida' => self::enriquecerRetratos($partida, $ctx->root)]);
+    }
+
+    /**
+     * Carga una vez la partida y compone todos los datos del refresh.
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function refrescar(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $estado = self::estado($ctx, $body, $partida);
+        $inspeccion = self::inspeccionar($ctx, $body, $partida);
+        $mapa = MapaHandler::presencia($ctx, $body, $partida);
+        $buzon = BuzonHandler::listar($ctx, $body, $partida);
+        $diario = DiarioHandler::listar($ctx, $body, $partida);
+
+        $eventosLab = [];
+        foreach ([$estado, $inspeccion] as $respuesta) {
+            if (is_array($respuesta['lab_audit']['eventos'] ?? null)) {
+                $eventosLab = array_merge($eventosLab, $respuesta['lab_audit']['eventos']);
+            }
+        }
+
+        $out = [
+            'ok' => true,
+            'estado' => $estado['estado'] ?? [],
+            'partida' => $inspeccion['partida'] ?? [],
+            'mapa' => $mapa['mapa'] ?? [],
+            'pueblo' => $mapa['pueblo'] ?? [],
+            'buzon' => $buzon,
+            'diario' => $diario,
+        ];
+        if ($eventosLab !== []) {
+            $out['lab_audit'] = ['eventos' => $eventosLab];
+        }
+        return $out;
     }
 
   /**
@@ -196,5 +238,17 @@ final class PartidaHandler
             }
         }
         return withLabAudit($r);
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     */
+    private static function sincronizarEncuentrosSiToca(ApiContext $ctx, array &$partida): void
+    {
+        $antes = LabAudit::snapshotEstadosEncuentros($partida);
+        EncuentroLifecycle::sincronizarConReloj($partida, $ctx->logger, new Catalog($ctx->root));
+        if ($antes !== LabAudit::snapshotEstadosEncuentros($partida)) {
+            savePartida($ctx, $partida);
+        }
     }
 }

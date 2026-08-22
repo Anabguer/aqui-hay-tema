@@ -80,6 +80,8 @@ final class VistaCotilleoV3
                 'tipo' => (string) ($m['tipo'] ?? 'cotilleo'),
                 'fecha_corta' => (string) ($m['fecha_corta'] ?? ''),
                 'origen' => 'buzon_cotilleo',
+                'actores' => self::actoresDe($m),
+                'nuevo' => !((bool) ($m['leido'] ?? false)) && (($m['estado'] ?? 'pendiente') !== 'leido'),
             ];
         }
         return $out;
@@ -98,6 +100,27 @@ final class VistaCotilleoV3
             'tipo' => (string) ($e['tipo'] ?? 'diario'),
             'fecha_corta' => (string) ($e['fecha_corta'] ?? ''),
             'origen' => 'diario',
+            'actores' => self::actoresDe($e),
+            'nuevo' => false,
         ];
+    }
+
+    /**
+     * @param array<string, mixed> $m
+     * @return list<string>
+     */
+    private static function actoresDe(array $m): array
+    {
+        $raw = $m['actores'] ?? [];
+        if (!is_array($raw)) {
+            return [];
+        }
+        $out = [];
+        foreach ($raw as $id) {
+            if (is_string($id) && $id !== '') {
+                $out[] = $id;
+            }
+        }
+        return array_values(array_unique($out));
     }
 }

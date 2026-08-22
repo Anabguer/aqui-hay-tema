@@ -11,6 +11,8 @@ final class VisualPackStore
 {
     /** @var array<string, mixed>|null */
     private ?array $registro = null;
+    /** @var array<string, array<string, mixed>> */
+    private static array $registroPorRoot = [];
     private string $root;
 
     public function __construct(string $root)
@@ -21,6 +23,10 @@ final class VisualPackStore
     public function registro(): array
     {
         if ($this->registro !== null) {
+            return $this->registro;
+        }
+        if (isset(self::$registroPorRoot[$this->root])) {
+            $this->registro = self::$registroPorRoot[$this->root];
             return $this->registro;
         }
         $packs = [];
@@ -44,6 +50,7 @@ final class VisualPackStore
         }
         unset($pack);
         $this->registro = ['packs' => $packs];
+        self::$registroPorRoot[$this->root] = $this->registro;
         return $this->registro;
     }
 

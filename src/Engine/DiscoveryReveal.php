@@ -176,6 +176,74 @@ final class DiscoveryReveal
     }
 
     /**
+     * Candidatos de discovery en encuentro: máx. 1 hobby o rasgo por residente, luego preferencias.
+     * Permite que gusto/rechazo compita desde citas tempranas (cupo sigue en aplicarEvento).
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function candidatosEncuentro(
+        array $partida,
+        string $a,
+        string $b,
+        array $encuentro = [],
+        ?Catalog $catalog = null
+    ): array {
+        $out = [];
+        $lugar = isset($encuentro['lugar']) ? (string) $encuentro['lugar'] : null;
+        foreach ([$a, $b] as $rid) {
+            $perfil = PerfilPartida::deOLegacy($partida, $rid, $catalog);
+            $hobbies = is_array($perfil['hobbies'] ?? null) ? $perfil['hobbies'] : [];
+            $rasgos = is_array($perfil['rasgos'] ?? null) ? $perfil['rasgos'] : [];
+            $uno = self::candidatoHobbyORasgo($partida, $rid, $hobbies, $rasgos);
+            if ($uno !== null) {
+                $out[] = $uno;
+            }
+            foreach (self::candidatosPreferencias($partida, $rid, $lugar, $catalog) as $pref) {
+                $out[] = $pref;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @param list<mixed> $hobbies
+     * @param list<mixed> $rasgos
+     * @return array<string, mixed>|null
+     */
+    private static function candidatoHobbyORasgo(array $partida, string $rid, array $hobbies, array $rasgos): ?array
+    {
+        foreach ($hobbies as $h) {
+            if (!is_string($h) || $h === '') {
+                continue;
+            }
+            if (DiscoveryEngine::estado($partida, $rid, ConocimientoNpc::campoHobby($h)) === DiscoveryEngine::DESCUBIERTO) {
+                continue;
+            }
+            return [
+                'residente_id' => $rid,
+                'campo' => ConocimientoNpc::campoHobby($h),
+                'valor' => $h,
+                'observadores' => ['jugador'],
+            ];
+        }
+        foreach ($rasgos as $r) {
+            if (!is_string($r) || $r === '') {
+                continue;
+            }
+            if (DiscoveryEngine::estado($partida, $rid, ConocimientoNpc::campoRasgo($r)) === DiscoveryEngine::DESCUBIERTO) {
+                continue;
+            }
+            return [
+                'residente_id' => $rid,
+                'campo' => ConocimientoNpc::campoRasgo($r),
+                'valor' => $r,
+                'observadores' => ['jugador'],
+            ];
+        }
+        return null;
+    }
+
+    /**
      * Filtra hobbies/rasgos/gustos no descubiertos por el jugador.
      *
      * @param array<string, mixed> $campos

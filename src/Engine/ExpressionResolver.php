@@ -64,7 +64,25 @@ final class ExpressionResolver
             return $mapeo[$estado];
         }
 
+        $v1 = self::mapearV1($estado);
+        if ($v1 !== null) {
+            return $v1;
+        }
+
         return ExpresionVisual::NEUTRAL;
+    }
+
+    /** V1 canónico: neutro→neutral; alegre/triste/enfadado→misma expresión en pack. */
+    private static function mapearV1(string $estado): ?string
+    {
+        $estado = EstadoEmocional::canonId($estado);
+        if ($estado === EstadoEmocional::NEUTRO) {
+            return ExpresionVisual::NEUTRAL;
+        }
+        if (in_array($estado, [EstadoEmocional::ALEGRE, EstadoEmocional::TRISTE, EstadoEmocional::ENFADADO], true)) {
+            return $estado;
+        }
+        return null;
     }
 
     private static function conFallback(

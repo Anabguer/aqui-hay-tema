@@ -5,7 +5,7 @@ namespace AquiHayTema\Engine;
 
 /**
  * Resolución canónica de retrato/token de personaje.
- * Un personaje → un pack visual → un asset neutral. Sin fallback por posición ni lote CRC32.
+ * estado_emocional + pack → expresión visual (ExpressionResolver). Sin fallback por posición ni lote CRC32.
  */
 final class RetratoResolver
 {
@@ -15,17 +15,25 @@ final class RetratoResolver
      *   url: ?string,
      *   lote: bool,
      *   pack_id: ?string,
+     *   expression_id: ?string,
      *   sin_pack: bool,
      *   asset_faltante: bool,
      *   residente_id: string
      * }
      */
-    public static function resolver(array $residente, string $residenteId, VisualPackStore $packs): array
+    public static function resolver(
+        array $residente,
+        string $residenteId,
+        VisualPackStore $packs,
+        ?string $root = null,
+        ?CatalogStore $catalogStore = null
+    ): array
     {
         $base = [
             'url' => null,
             'lote' => false,
             'pack_id' => null,
+            'expression_id' => null,
             'sin_pack' => true,
             'asset_faltante' => false,
             'residente_id' => $residenteId,
@@ -46,6 +54,37 @@ final class RetratoResolver
             return $base;
         }
 
+        if ($root !== null && $root !== '') {
+            $work = $residente;
+            EstadoEmocional::ensureResidente($work);
+            $est = $work['runtime']['estado_emocional'];
+            $expRt = is_array($work['runtime']['expresion_visual'] ?? null)
+                ? $work['runtime']['expresion_visual']
+                : [];
+            $catalog = $catalogStore ?? new CatalogStore($root);
+            $resolved = ExpressionResolver::resolver([
+                'estado_emocional_id' => (string) ($est['id'] ?? EstadoEmocional::NEUTRO),
+                'intensidad' => $est['intensidad'] ?? null,
+                'override_dev' => $expRt['override_dev'] ?? null,
+                'pack' => $pack,
+                'pack_id' => $packId,
+            ], $packs, $catalog);
+            $base['expression_id'] = is_string($resolved['expression_id'] ?? null)
+                ? $resolved['expression_id']
+                : null;
+            $asset = is_array($resolved['asset'] ?? null) ? $resolved['asset'] : null;
+            if (
+                is_array($asset)
+                && !empty($asset['existe'])
+                && is_string($asset['url_relativa'] ?? null)
+                && $asset['url_relativa'] !== ''
+            ) {
+                $base['url'] = (string) $asset['url_relativa'];
+                $base['asset_faltante'] = (bool) ($resolved['fallback'] ?? false);
+                return $base;
+            }
+        }
+
         $asset = $packs->asset($pack, ExpresionVisual::NEUTRAL);
         if (
             is_array($asset)
@@ -54,6 +93,7 @@ final class RetratoResolver
             && $asset['url_relativa'] !== ''
         ) {
             $base['url'] = (string) $asset['url_relativa'];
+            $base['expression_id'] = ExpresionVisual::NEUTRAL;
             return $base;
         }
 
@@ -68,15 +108,17 @@ final class RetratoResolver
     public static function mapaTokensPartida(array $partida, string $root): array
     {
         $packs = new VisualPackStore($root);
+        $catalog = new CatalogStore($root);
         $out = [];
         foreach ($partida['residentes'] ?? [] as $rid => $res) {
             if (!is_string($rid) || $rid === '') {
                 continue;
             }
-            $tok = self::resolver(is_array($res) ? $res : [], $rid, $packs);
+            $tok = self::resolver(is_array($res) ? $res : [], $rid, $packs, $root, $catalog);
             $out[$rid] = [
                 'url' => $tok['url'],
                 'lote' => $tok['lote'],
+                'expression_id' => $tok['expression_id'],
             ];
         }
         return $out;
@@ -89,12 +131,13 @@ final class RetratoResolver
     public static function mapaCompletoPartida(array $partida, string $root): array
     {
         $packs = new VisualPackStore($root);
+        $catalog = new CatalogStore($root);
         $out = [];
         foreach ($partida['residentes'] ?? [] as $rid => $res) {
             if (!is_string($rid) || $rid === '') {
                 continue;
             }
-            $out[$rid] = self::resolver(is_array($res) ? $res : [], $rid, $packs);
+            $out[$rid] = self::resolver(is_array($res) ? $res : [], $rid, $packs, $root, $catalog);
         }
         return $out;
     }

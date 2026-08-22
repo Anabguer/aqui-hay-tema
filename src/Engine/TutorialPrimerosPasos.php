@@ -63,17 +63,86 @@ final class TutorialPrimerosPasos
         if (!self::activo($partida)) {
             return false;
         }
-        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
-        if ($dia !== 1 || !empty($partida['tutorial']['jugable_completado'])) {
+        if (!empty($partida['tutorial']['jugable_completado'])) {
+            self::reconciliarMisionesNormales($partida, new Catalog($root));
             return false;
         }
-        if ((int) ($partida['misiones_diarias']['dia'] ?? 0) === $dia
-            && self::tieneMisionesPrimerosPasos($partida)
-        ) {
-            return true;
-        }
-        self::sembrarMisiones($partida, new Catalog($root));
+        self::asegurarMisiones($partida, new Catalog($root));
         return true;
+    }
+
+    /**
+     * Las misiones de Primeros pasos sobreviven al cambio de día mientras el
+     * tutorial jugable siga abierto. También repara saves donde una misión
+     * quedó caducada o desapareció sin resetear el progreso ya conseguido.
+     */
+    public static function asegurarMisiones(array &$partida, ?Catalog $catalog = null): void
+    {
+        if (!self::debeConservarMisiones($partida)) {
+            return;
+        }
+        MisionDiariaEngine::ensure($partida);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $partida['misiones_diarias']['dia'] = $dia;
+        $base = self::filasMision($partida, $dia);
+        $indices = [];
+        $estados = [];
+        foreach ($partida['misiones_diarias']['items'] as $i => $m) {
+            if (!is_array($m) || !self::esMisionTutorial($m)) {
+                continue;
+            }
+            $id = (string) ($m['id'] ?? $m['plantilla_id'] ?? '');
+            if (isset($indices[$id])) {
+                continue;
+            }
+            $indices[$id] = $i;
+            $estados[$id] = (string) ($m['estado'] ?? '');
+        }
+
+        foreach ($base as $fila) {
+            $id = (string) $fila['id'];
+            $necesario = self::estadoNecesario($id, $estados);
+            if (isset($indices[$id])) {
+                $i = $indices[$id];
+                $actual = $estados[$id];
+                $partida['misiones_diarias']['items'][$i] = array_merge(
+                    $fila,
+                    $partida['misiones_diarias']['items'][$i]
+                );
+                if ($actual === MisionDiariaEngine::EST_CADUCADA
+                    || ($actual === 'bloqueada' && $necesario === MisionDiariaEngine::EST_PENDIENTE)
+                ) {
+                    $partida['misiones_diarias']['items'][$i]['estado'] = $necesario;
+                    $estados[$id] = $necesario;
+                }
+                continue;
+            }
+            $fila['estado'] = $necesario;
+            $partida['misiones_diarias']['items'][] = $fila;
+            $estados[$id] = $necesario;
+        }
+
+        if (self::estadoMision($partida, self::M2) === MisionDiariaEngine::EST_PENDIENTE) {
+            self::asegurarMensajito($partida, $catalog);
+        }
+    }
+
+    public static function esMisionTutorial(array $mision): bool
+    {
+        $id = (string) ($mision['id'] ?? '');
+        $plantilla = (string) ($mision['plantilla_id'] ?? '');
+        return in_array($id, [self::M1, self::M2, self::M3], true)
+            || in_array($plantilla, [self::M1, self::M2, self::M3], true);
+    }
+
+    public static function debeConservarMisiones(array $partida): bool
+    {
+        return self::activo($partida) && empty($partida['tutorial']['jugable_completado']);
+    }
+
+    public static function conservaMision(array $partida, array $mision): bool
+    {
+        return self::debeConservarMisiones($partida) && self::esMisionTutorial($mision);
     }
 
     public static function bloqueaMisionesNormales(array $partida): bool
@@ -81,10 +150,27 @@ final class TutorialPrimerosPasos
         if (!self::activo($partida)) {
             return false;
         }
-        if (empty($partida['tutorial']['jugable_completado'])) {
-            return true;
+        return empty($partida['tutorial']['jugable_completado']);
+    }
+
+    /**
+     * Tras completar el tutorial jugable, genera el paquete normal del día actual si falta.
+     * Idempotente: no duplica si ya existe paquete normal para ese día.
+     */
+    public static function reconciliarMisionesNormales(array &$partida, Catalog $catalog): void
+    {
+        if (!self::activo($partida) || empty($partida['tutorial']['jugable_completado'])) {
+            return;
         }
-        return empty($partida['tutorial']['finale_visto']);
+        if (!MisionDiariaEngine::activa($partida)) {
+            return;
+        }
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if (MisionDiariaEngine::tienePaqueteNormalDelDia($partida, $dia)) {
+            return;
+        }
+        $cal = CalibracionConfig::load($catalog->getRoot());
+        MisionDiariaEngine::alComenzarDia($partida, $cal, RngService::fromPartida($partida));
     }
 
     public static function bloqueaIncorporaciones(array $partida): bool
@@ -208,29 +294,45 @@ final class TutorialPrimerosPasos
                 'pasos' => [
                     [
                         'tit' => 'Bienvenida al pueblo',
-                        'txt' => 'Este sitio parece tranquilo. No te fíes.'
-                            . "\nAquí viven personas con gustos, manías, crushes, dramas y una capacidad sorprendente para complicarse la vida sin ayuda."
-                            . "\nTú no controlas a nadie. Solo observas, propones planes y, de vez en cuando, intentas evitar un desastre sentimental.",
+                        'intro' => 'Parece tranquilo. No te fíes.',
+                        'intro_extra' => 'Aquí viven personas con gustos, manías, crushes, dramas y una capacidad sorprendente para complicarse la vida sin ayuda.',
+                        'bloques' => [
+                            ['simbolo' => '◉', 'tit' => 'OBSERVA', 'txt' => 'Descubre qué está pasando.'],
+                            ['simbolo' => '✉', 'tit' => 'PROPÓN', 'txt' => 'Organiza planes cuando quieras meter un poco la mano.'],
+                            ['simbolo' => '◎', 'tit' => 'MIRA QUÉ PASA', 'txt' => 'Porque tú propones. Ellos deciden.'],
+                        ],
+                        'cierre' => 'No controlas a nadie. Y ahí está la gracia.',
                     ],
                     [
                         'tit' => 'Tus primeros vecinos',
-                        'txt' => 'De momento tienes a ' . $n1 . ', ' . $n2 . ' y ' . $n3 . '.'
-                            . "\nCada uno ha llegado con su propia personalidad, sus gustos y sus cosas raras. Tú irás descubriendo quién encaja con quién… y quién parecía buena idea hasta que abrió la boca.",
+                        'intro' => 'De momento tienes a ' . $n1 . ', ' . $n2 . ' y ' . $n3 . '.',
                         'caras' => $caras,
+                        'bloques_prefijo' => 'Cada uno ha llegado con:',
+                        'bloques_estilo' => 'inline',
+                        'bloques' => [
+                            ['simbolo' => '♥', 'txt' => 'su personalidad'],
+                            ['simbolo' => '★', 'txt' => 'sus gustos'],
+                            ['simbolo' => '?', 'txt' => 'sus cosas raras'],
+                        ],
+                        'cierre' => 'Tú irás descubriendo quién encaja con quién… y quién parecía una idea estupenda hasta que abrió la boca.',
                     ],
                     [
                         'tit' => 'Lo básico',
-                        'txt' => "En el mapa puedes ver por dónde anda la gente.\n"
-                            . "En Vecinos puedes cotillear sus fichas.\n"
-                            . "En Mensajitos te llegarán recados, peticiones y alguna cosa que requerirá atención.\n"
-                            . "Y con Nuevo plan puedes proponer que dos personas queden o montar un plan para una sola persona, elegir dónde y cuándo.\n"
-                            . 'Ellos luego harán lo que les dé la gana. Como debe ser.',
+                        'intro' => 'Con tres sitios te apañas para empezar.',
+                        'bloques' => [
+                            ['simbolo' => '⌖', 'tit' => 'MAPA', 'txt' => 'Mira por dónde anda la gente.'],
+                            ['simbolo' => '◉', 'tit' => 'VECINOS', 'txt' => 'Cotillea sus fichas y descubre cómo son.'],
+                            ['simbolo' => '✉', 'tit' => 'MENSAJITOS', 'txt' => 'Aquí llegan recados, peticiones y cosas que requieren tu atención.'],
+                            ['simbolo' => '+', 'tit' => 'NUEVO PLAN', 'txt' => 'Junta a dos personas… o manda a alguien por su cuenta.'],
+                        ],
+                        'cierre' => 'Después ellos harán lo que les dé la gana. Como debe ser.',
                     ],
                     [
                         'tit' => 'Empieza por aquí',
-                        'txt' => "Ya está. No necesitas un máster.\n"
-                            . "Te he dejado tres misiones de Primeros pasos en ‘Hoy en el pueblo’.\n"
-                            . 'Hazlas y aprenderás el resto jugando.',
+                        'intro' => 'Ya está. No necesitas un máster.',
+                        'intro_extra' => 'Te he dejado tres misiones de Primeros pasos en «Hoy en el pueblo».',
+                        'tareas' => 3,
+                        'cierre' => 'Hazlas. El resto lo aprenderás jugando.',
                         'boton_final' => 'A ver qué se cuece',
                     ],
                 ],
@@ -274,20 +376,19 @@ final class TutorialPrimerosPasos
             && ($partida['tutorial']['id'] ?? '') === self::ID;
     }
 
-    private static function tieneMisionesPrimerosPasos(array $partida): bool
-    {
-        foreach ($partida['misiones_diarias']['items'] ?? [] as $m) {
-            if (($m['familia'] ?? '') === 'primeros_pasos') {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private static function sembrarMisiones(array &$partida, Catalog $catalog): void
     {
         MisionDiariaEngine::ensure($partida);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $partida['misiones_diarias']['dia'] = $dia;
+        $partida['misiones_diarias']['items'] = self::filasMision($partida, $dia);
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private static function filasMision(array $partida, int $dia): array
+    {
         $pareja = $partida['tutorial']['pareja_mision1'] ?? [];
         $a = (string) ($pareja['a'] ?? '');
         $b = (string) ($pareja['b'] ?? '');
@@ -296,8 +397,7 @@ final class TutorialPrimerosPasos
         $nb = IdentidadPublica::nombre($partida, $b);
         $nc = IdentidadPublica::nombre($partida, $tercero);
 
-        $partida['misiones_diarias']['dia'] = $dia;
-        $partida['misiones_diarias']['items'] = [
+        return [
             self::filaMision($dia, self::M1, 'Romper el hielo',
                 "Empecemos con algo fácil.\nCreo que {$na} y {$nb} podrían aguantar una cita sin provocar una evacuación.\nPropón un plan entre ellos.",
                 MisionDiariaEngine::EST_PENDIENTE, 1, [
@@ -337,6 +437,46 @@ final class TutorialPrimerosPasos
             'familia' => 'primeros_pasos',
             'orden' => $orden,
         ], $extra);
+    }
+
+    private static function estadoNecesario(string $id, array $estados): string
+    {
+        if ($id === self::M1) {
+            return MisionDiariaEngine::EST_PENDIENTE;
+        }
+        if ($id === self::M2) {
+            return ($estados[self::M1] ?? '') === MisionDiariaEngine::EST_CUMPLIDA
+                ? MisionDiariaEngine::EST_PENDIENTE
+                : 'bloqueada';
+        }
+        return ($estados[self::M2] ?? '') === MisionDiariaEngine::EST_CUMPLIDA
+            ? MisionDiariaEngine::EST_PENDIENTE
+            : 'bloqueada';
+    }
+
+    private static function asegurarMensajito(array &$partida, ?Catalog $catalog): void
+    {
+        $tercero = (string) ($partida['tutorial']['tercero'] ?? '');
+        if ($tercero === '') {
+            return;
+        }
+        $msgId = (string) ($partida['tutorial']['mensajito_id'] ?? '');
+        if ($msgId === '') {
+            $msgId = 'msg_pp_' . substr(md5($partida['meta']['partida_id'] . '|' . $tercero), 0, 10);
+            $partida['tutorial']['mensajito_id'] = $msgId;
+        }
+        foreach ($partida['buzon'] ?? [] as &$mensaje) {
+            if (($mensaje['id'] ?? '') !== $msgId) {
+                continue;
+            }
+            $mensaje['estado'] = 'pendiente';
+            $mensaje['leido'] = false;
+            unset($mensaje['leido_en']);
+            unset($mensaje);
+            return;
+        }
+        unset($mensaje);
+        self::activarMision2($partida, $catalog ?? new Catalog(dirname(__DIR__, 2)));
     }
 
     private static function completarMision(array &$partida, string $misionId, Catalog $catalog): string
@@ -413,6 +553,7 @@ final class TutorialPrimerosPasos
         if (!empty($partida['llegadas']['tutorial_cola'])) {
             TutorialIncorporaciones::alCompletarTutorial($partida, $catalog->getRoot());
         }
+        self::reconciliarMisionesNormales($partida, $catalog);
         if (LabAudit::activaEnRequest()) {
             LabAudit::eventoTutorial($partida, 'JUGABLE_COMPLETADO', $catalog);
         }
@@ -602,7 +743,7 @@ final class TutorialPrimerosPasos
             return null;
         }
         $packs = new VisualPackStore($catalog->getRoot());
-        $tok = RetratoResolver::resolver($res, $id, $packs);
+        $tok = RetratoResolver::resolver($res, $id, $packs, $catalog->getRoot());
         return $tok['url'];
     }
 }

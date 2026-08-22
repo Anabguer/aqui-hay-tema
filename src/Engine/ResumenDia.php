@@ -114,14 +114,9 @@ final class ResumenDia
             return $lugarId;
         }
         try {
-            foreach ($catalog->loadLugares()['items'] ?? [] as $lug) {
-                if (($lug['id'] ?? '') === $lugarId) {
-                    return Utf8Text::paraJson((string) ($lug['nombre'] ?? $lugarId));
-                }
-            }
+            return EtiquetaFicha::lugar($lugarId, $catalog->store());
         } catch (\Throwable $ignored) {
             return $lugarId;
         }
-        return $lugarId;
     }
 }

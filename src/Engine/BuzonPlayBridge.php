@@ -50,7 +50,7 @@ final class BuzonPlayBridge
      * @param array<string, mixed> $envelope
      * @return array<string, mixed>|null
      */
-    private static function mensajeDe(array $partida, string $evento, array $envelope): ?array
+    private static function mensajeDe(array &$partida, string $evento, array $envelope): ?array
     {
         $payload = is_array($envelope['payload'] ?? null) ? $envelope['payload'] : [];
         $envelope = array_merge($envelope, $payload);
@@ -73,12 +73,38 @@ final class BuzonPlayBridge
             if (($prop['estado'] ?? '') !== 'rechazada') {
                 return null;
             }
+            $rechazo = self::rechazoDePropuesta($prop);
+            if ($rechazo === null) {
+                return null;
+            }
+            $de = (string) ($rechazo['residente_id'] ?? '');
+            $nom = $de !== '' ? IdentidadPublica::nombre($partida, $de) : '';
+            if ($nom === '') {
+                return null;
+            }
+            $copyId = !empty($rechazo['copy_id']) ? (string) $rechazo['copy_id'] : '';
+            $copy = $copyId !== ''
+                ? CopyVoluntad::rechazoConHablante($nom, $copyId)
+                : $nom . ' ha rechazado la propuesta.';
+            $partes = is_array($prop['participantes'] ?? null) ? $prop['participantes'] : [];
             return [
                 'clasificacion' => BuzonEngine::IMPORTANTE,
                 'tipo' => 'respuesta_plan',
                 'canal' => BuzonEngine::CANAL_BUZON,
-                'texto' => $quien !== '' ? $quien . ' no han quedado.' : 'Una propuesta de encuentro se ha rechazado.',
-                'origen' => ['evento_id' => $prop['id'] ?? null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
+                'de_persona' => $de,
+                'actores' => self::idsDe($partes),
+                'texto' => $copy,
+                'copy_id' => $copyId !== '' ? $copyId : null,
+                'origen' => [
+                    'evento_id' => $prop['id'] ?? null,
+                    'tipo_evento' => $evento,
+                    'es_narrativo' => false,
+                    'informacion_revelada' => [
+                        'rechazado_por' => $de,
+                        'copy_id' => $copyId !== '' ? $copyId : null,
+                    ],
+                    '_placeholder' => false,
+                ],
                 '_placeholder_contenido' => false,
             ];
         }
@@ -159,18 +185,45 @@ final class BuzonPlayBridge
      * @param array<string, mixed> $envelope
      * @return array<string, mixed>|null
      */
-    private static function mensajeEncuentroTerminado(array $partida, array $envelope, string $quien): ?array
+    private static function mensajeEncuentroTerminado(array &$partida, array $envelope, string $quien): ?array
     {
         $enc = is_array($envelope['encuentro'] ?? null) ? $envelope['encuentro'] : [];
         $res = is_array($envelope['resultado'] ?? null) ? $envelope['resultado'] : [];
         if ($res === [] && is_array($enc['resultado'] ?? null)) {
             $res = $enc['resultado'];
         }
-        if (($enc['tipo'] ?? '') === 'individual' && ($enc['intencion'] ?? '') === 'autonomo') {
+        if (($enc['tipo'] ?? '') === 'individual') {
+            $intencion = (string) ($enc['intencion'] ?? '');
+            if (in_array($intencion, ['autonomo', 'autonomo_relacion'], true)) {
+                $catalog = new Catalog(dirname(__DIR__, 2));
+                $texto = EncuentroCotilleoCopy::mensajeAutonomo($partida, $enc, $catalog);
+                if ($texto === null || $texto === '') {
+                    return null;
+                }
+                $partes = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+                $lugar = $enc['lugar'] ?? $enc['lugar_id'] ?? $envelope['lugar'] ?? $envelope['lugar_id'] ?? null;
+                $msg = [
+                    'clasificacion' => BuzonEngine::COTILLEO,
+                    'tipo' => CotilleoAutonomoCadencia::TIPO_BUZON,
+                    'texto' => $texto,
+                    'actores' => self::idsDe($partes),
+                    'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
+                    'origen' => [
+                        'evento_id' => $enc['id'] ?? null,
+                        'tipo_evento' => DomainEvents::ENCUENTRO_TERMINADO,
+                        'es_narrativo' => false,
+                        '_placeholder' => false,
+                    ],
+                    '_placeholder_contenido' => false,
+                ];
+                CotilleoAutonomoCadencia::registrar($partida, $enc, $msg, $catalog);
+                return null;
+            }
             return null;
         }
-        $texto = self::copyEncuentroDigno($partida, $enc, $res, $quien);
-        if ($texto === null) {
+        $catalog = new Catalog(dirname(__DIR__, 2));
+        $texto = EncuentroCotilleoCopy::mensaje($partida, $enc, $res, $catalog);
+        if ($texto === null || $texto === '') {
             return null;
         }
         $partes = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
@@ -210,68 +263,31 @@ final class BuzonPlayBridge
     }
 
     /**
-     * @param array<string, mixed> $enc
-     * @param array<string, mixed> $res
+     * @param array<string, mixed> $propuesta
+     * @return array{residente_id: string, copy_id: ?string}|null
      */
-    private static function copyEncuentroDigno(array $partida, array $enc, array $res, string $quien): ?string
+    private static function rechazoDePropuesta(array $propuesta): ?array
     {
-        $ds = is_array($res['delta_social'] ?? null) ? $res['delta_social'] : [];
-        $n = 0;
-        if (array_key_exists('intensidad', $ds)) {
-            $n = (int) $ds['intensidad'];
-        } elseif (isset($ds['a_hacia_b']) || isset($ds['b_hacia_a'])) {
-            $n = (int) round(((int) ($ds['a_hacia_b'] ?? 0) + (int) ($ds['b_hacia_a'] ?? 0)) / 2);
-        }
-        $dr = is_array($res['delta_romance'] ?? null) ? $res['delta_romance'] : [];
-        $rom = (int) ($dr['vinculo'] ?? 0);
-        if ($rom === 0) {
-            $ra = (int) ($dr['atraccion_a_hacia_b'] ?? ($dr['a_hacia_b'] ?? 0));
-            $rb = (int) ($dr['atraccion_b_hacia_a'] ?? ($dr['b_hacia_a'] ?? 0));
-            $rom = $ra !== 0 ? $ra : $rb;
-        }
-        $conf = $res['conflicto'] ?? null;
-        $hayConf = ($enc['tipo'] ?? '') === 'conflicto'
-            || ($ds['tipo'] ?? '') === 'roce'
-            || (($ds['se_soportan'] ?? true) === false)
-            || ($conf !== null && $conf !== false && $conf !== '' && $conf !== 0 && $conf !== '0');
-        $disc = is_array($res['descubrimientos'] ?? null) ? $res['descubrimientos'] : [];
-        $hayDisc = false;
-        foreach ($disc as $item) {
-            if (is_array($item) && ((string) ($item['campo'] ?? '') !== '' || (string) ($item['texto'] ?? '') !== '')) {
-                $hayDisc = true;
-                break;
+        $ids = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+        $preferido = (string) ($ids[1] ?? '');
+        $elegido = null;
+        foreach ($propuesta['reacciones'] ?? [] as $reac) {
+            if (!is_array($reac) || ($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            $row = [
+                'residente_id' => (string) ($reac['residente_id'] ?? ''),
+                'copy_id' => !empty($reac['copy_id']) ? (string) $reac['copy_id'] : null,
+            ];
+            if (($row['residente_id'] ?? '') === '') {
+                continue;
+            }
+            $elegido = $elegido ?? $row;
+            if ($preferido !== '' && $row['residente_id'] === $preferido) {
+                return $row;
             }
         }
-        if ($n === 0 && $rom === 0 && !$hayConf && !$hayDisc) {
-            return null;
-        }
-
-        $sujeto = $quien !== '' ? $quien : 'Han coincidido';
-        if ($hayConf) {
-            return $sujeto . ' han tenido un roce.';
-        }
-        if ($rom > 0) {
-            return 'Ha habido chispa entre ' . $sujeto . '.';
-        }
-        if ($rom < 0) {
-            return 'El ambiente se ha enfriado entre ' . $sujeto . '.';
-        }
-        if ($n > 0) {
-            return $sujeto . ' se han llevado mejor.';
-        }
-        if ($n < 0) {
-            return $sujeto . ' se han llevado peor.';
-        }
-        if ($hayDisc) {
-            $nombre = $sujeto;
-            $first = is_array($disc[0] ?? null) ? $disc[0] : [];
-            $rid = (string) ($first['residente'] ?? $first['residente_id'] ?? '');
-            if ($rid !== '') {
-                $nombre = IdentidadPublica::nombre($partida, $rid);
-            }
-            return 'Has descubierto algo de ' . $nombre . '.';
-        }
-        return null;
+        return $elegido;
     }
 
     /**

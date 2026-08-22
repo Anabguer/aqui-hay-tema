@@ -2042,3 +2042,1329 @@
   font-size: .78rem !important;
   line-height: 1.1 !important;
 }
+
+/* === Nuevo plan v1: modal scrapbook como ficha === */
+
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar {
+  position: absolute;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(700px, 94vw) !important;
+  max-width: min(700px, 94vw) !important;
+  max-height: min(84vh, 760px) !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 13;
+  padding: 1.65rem 1rem .85rem !important;
+  border-radius: 2px 8px 5px 4px !important;
+  border: 1.5px solid rgba(44, 38, 31, .14) !important;
+  box-shadow:
+    2px 4px 14px rgba(40, 28, 16, .14),
+    inset 0 0 0 1px rgba(180, 150, 110, .28) !important;
+  background-color: #fdf9f4 !important;
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 249, .88) 0%, rgba(255, 253, 249, .58) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center !important;
+  background-size: cover, cover !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+}
+
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar::before,
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar::after {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .org-top {
+  text-align: center;
+  padding: 0 .5rem;
+}
+
+.play-v3 .capa-organizar .org-tit {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.55rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .org-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 .2rem .15rem;
+}
+
+.play-v3 .capa-organizar .ficha-seccion {
+  margin-bottom: .55rem;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  margin: 0 0 .22rem;
+  font-family: Caveat, cursive;
+  font-size: .98rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #d96d8a;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 2px;
+  min-width: 1.5rem;
+  background: linear-gradient(
+    90deg,
+    rgba(201, 90, 118, .82) 0%,
+    rgba(217, 107, 138, .45) 35%,
+    rgba(232, 160, 176, .22) 70%,
+    rgba(253, 235, 240, 0) 100%
+  );
+  border-radius: 2px;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-body {
+  padding-left: .9rem;
+  margin-top: .1rem;
+}
+
+.play-v3 .capa-organizar .org-modo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.play-v3 .capa-organizar .org-modo-chip {
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  padding: .32rem .7rem;
+  border-radius: 6px;
+}
+
+.play-v3 .capa-organizar .org-picker-hint {
+  margin: 0 0 .35rem;
+  font-size: .82rem;
+  color: #7a6450;
+}
+
+.play-v3 .capa-organizar .org-busca {
+  width: 100%;
+  margin: 0 0 .4rem;
+  border: 1.5px solid rgba(44, 38, 31, .18);
+  border-radius: 6px;
+  background: rgba(255, 252, 245, .92);
+  padding: .38rem .55rem;
+  font: inherit;
+  font-size: .86rem;
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .org-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(3.15rem, 1fr));
+  gap: .35rem;
+  max-height: 10.5rem;
+  overflow-y: auto;
+  padding: .1rem .05rem .2rem;
+}
+
+.play-v3 .capa-organizar .org-picker-celda {
+  position: relative;
+  border: 0;
+  background: transparent;
+  padding: .12rem;
+  cursor: pointer;
+}
+
+.play-v3 .capa-organizar .org-picker-cara {
+  width: 2.55rem;
+  height: 2.55rem;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 2px solid rgba(44, 38, 31, .16);
+  overflow: hidden;
+  background: #fffdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-v3 .capa-organizar .org-picker-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.play-v3 .capa-organizar .org-picker-ini {
+  font-family: Caveat, cursive;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #8a7460;
+}
+
+.play-v3 .capa-organizar .org-picker-celda.is-on .org-picker-cara {
+  border-color: #d96d8a;
+  box-shadow: 0 0 0 2px rgba(217, 107, 138, .22);
+}
+
+.play-v3 .capa-organizar .org-picker-check {
+  position: absolute;
+  top: 0;
+  right: .05rem;
+  width: 1rem;
+  height: 1rem;
+  border-radius: 50%;
+  background: #d96d8a;
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 800;
+  line-height: 1rem;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(44, 38, 31, .18);
+}
+
+.play-v3 .capa-organizar .org-tipos {
+  margin: 0;
+}
+
+.play-v3 .capa-organizar .org-tipos .chip {
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  border-radius: 6px;
+}
+
+.play-v3 .capa-organizar .org-select {
+  width: 100%;
+  border: 1.5px solid rgba(44, 38, 31, .18);
+  border-radius: 6px;
+  background: rgba(255, 252, 245, .92);
+  padding: .42rem .55rem;
+  font: inherit;
+  font-size: .88rem;
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .org-cuando {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .45rem;
+}
+
+.play-v3 .capa-organizar .org-crear {
+  align-self: center;
+  margin: .2rem auto 0;
+  min-width: 9.5rem;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .5rem 1.1rem;
+}
+
+.play-v3 .capa-organizar .org-tipos .mini {
+  margin: 0;
+  font-size: .84rem;
+  color: #7a6450;
+}
+
+@media (max-width: 560px) {
+  .play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
+    width: min(96vw, 96vw) !important;
+    max-width: 96vw !important;
+    max-height: min(86vh, 760px) !important;
+    padding-top: 1.45rem !important;
+  }
+
+  .play-v3 .capa-organizar .org-picker-grid {
+    max-height: 9rem;
+    grid-template-columns: repeat(auto-fill, minmax(2.85rem, 1fr));
+  }
+}
+
+/* === Nuevo plan v2: polish tipo mockup Sai === */
+
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
+.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(520px, 92vw) !important;
+  max-width: min(520px, 92vw) !important;
+  max-height: min(88vh, 820px) !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 13;
+  padding: 2rem 1.15rem 1rem !important;
+  border-radius: 3px 10px 6px 5px !important;
+  border: 1.5px solid rgba(44, 38, 31, .12) !important;
+  box-shadow:
+    3px 6px 22px rgba(40, 28, 16, .16),
+    inset 0 0 0 1px rgba(255, 255, 255, .45) !important;
+  background-color: #fdf8f2 !important;
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 1.35rem,
+      rgba(217, 107, 138, .07) 1.35rem,
+      rgba(217, 107, 138, .07) calc(1.35rem + 1px)
+    ),
+    linear-gradient(180deg, rgba(255, 253, 249, .94) 0%, rgba(255, 249, 242, .78) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: 0 3.2rem, center, center !important;
+  background-size: auto, cover, cover !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+}
+
+.play-v3 .capa-organizar .org-pin {
+  position: absolute;
+  top: -4px;
+  left: 18px;
+  width: 20px;
+  height: 20px;
+  background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
+  z-index: 5;
+  transform: rotate(-10deg);
+  pointer-events: none;
+}
+
+.play-v3 .capa-organizar .org-tape-tl {
+  top: -2px !important;
+  left: 8px !important;
+  transform: rotate(-7deg);
+}
+
+.play-v3 .capa-organizar .org-tape-tr {
+  top: -2px !important;
+  right: 8px !important;
+  transform: rotate(6deg);
+}
+
+.play-v3 .capa-organizar .org-cerrar {
+  position: absolute;
+  top: .55rem;
+  right: .65rem;
+  z-index: 8;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-family: Caveat, cursive;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #5a4838;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.play-v3 .capa-organizar .org-cerrar:hover {
+  color: #2c261f;
+  transform: scale(1.06);
+}
+
+.play-v3 .capa-organizar .org-top {
+  text-align: center;
+  padding: .15rem 1.5rem .35rem;
+}
+
+.play-v3 .capa-organizar .org-tit {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #2c261f;
+  transform: rotate(-.3deg);
+}
+
+.play-v3 .capa-organizar .org-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 .15rem .2rem;
+}
+
+.play-v3 .capa-organizar .ficha-seccion {
+  margin-bottom: .62rem;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 .28rem;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit::after {
+  content: '';
+  flex: 1 1 auto;
+  height: 1.5px;
+  min-width: 1rem;
+  background: linear-gradient(90deg, rgba(44, 38, 31, .22) 0%, rgba(44, 38, 31, 0) 100%);
+  border-radius: 2px;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-body {
+  padding-left: .75rem;
+}
+
+.play-v3 .capa-organizar .org-modo-chips {
+  display: inline-flex;
+  gap: 0;
+  border: 1.5px solid rgba(44, 38, 31, .16);
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(255, 252, 245, .75);
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .05);
+}
+
+.play-v3 .capa-organizar .org-modo-chip {
+  border: 0;
+  background: transparent;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .38rem .85rem;
+  color: #5a4838;
+  cursor: pointer;
+}
+
+.play-v3 .capa-organizar .org-modo-chip + .org-modo-chip {
+  border-left: 1.5px solid rgba(44, 38, 31, .12);
+}
+
+.play-v3 .capa-organizar .org-modo-chip.is-on {
+  background: #f8d4df;
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .org-picker-hint {
+  margin: 0 0 .3rem;
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  color: #8a7460;
+}
+
+.play-v3 .capa-organizar .org-busca {
+  width: 100%;
+  margin: 0 0 .45rem;
+  border: 1.5px solid rgba(44, 38, 31, .14);
+  border-radius: 7px;
+  background: rgba(255, 252, 245, .88);
+  padding: .34rem .5rem;
+  font-family: inherit;
+  font-size: .84rem;
+  color: #2c261f;
+  box-shadow: inset 0 1px 2px rgba(44, 38, 31, .04);
+}
+
+.play-v3 .capa-organizar .org-picker-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: .55rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: .25rem .1rem .45rem;
+  min-height: 4.2rem;
+  align-items: flex-start;
+  scroll-snap-type: x proximity;
+}
+
+.play-v3 .capa-organizar .org-picker-celda {
+  position: relative;
+  flex: 0 0 auto;
+  border: 0;
+  background: transparent;
+  padding: .1rem;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+.play-v3 .capa-organizar .org-picker-cara {
+  width: 3.15rem;
+  height: 3.15rem;
+  border-radius: 50%;
+  border: 2px solid rgba(44, 38, 31, .14);
+  overflow: hidden;
+  background: #fffdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+
+.play-v3 .capa-organizar .org-picker-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-v3 .capa-organizar .org-picker-ini {
+  font-family: Caveat, cursive;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #8a7460;
+}
+
+.play-v3 .capa-organizar .org-picker-celda.is-on .org-picker-cara {
+  border-color: #e07a98;
+  border-width: 2.5px;
+  box-shadow: 0 0 0 3px rgba(224, 122, 152, .18);
+}
+
+.play-v3 .capa-organizar .org-picker-check {
+  position: absolute;
+  right: -.02rem;
+  bottom: .12rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: #e07a98;
+  color: #fff;
+  font-size: .68rem;
+  font-weight: 800;
+  line-height: 1.15rem;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(44, 38, 31, .2);
+  border: 1.5px solid #fffdf8;
+}
+
+.play-v3 .capa-organizar .org-tipos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+}
+
+.play-v3 .capa-organizar .org-tipo-chip {
+  border: 1.5px solid rgba(44, 38, 31, .16);
+  border-radius: 7px;
+  background: rgba(255, 252, 245, .92);
+  font-family: Caveat, cursive;
+  font-size: .98rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding: .36rem .72rem;
+  color: #3a3028;
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .05);
+}
+
+.play-v3 .capa-organizar .org-tipo-chip.is-on {
+  background: #f8d4df;
+  border-color: rgba(201, 90, 118, .35);
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .org-tipo-ico {
+  margin-right: .2rem;
+}
+
+.play-v3 .capa-organizar .org-select {
+  width: 100%;
+  appearance: none;
+  border: 1.5px solid rgba(44, 38, 31, .16);
+  border-radius: 7px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235a4838' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat right .55rem center,
+    rgba(255, 252, 245, .92);
+  padding: .48rem 1.6rem .48rem .55rem;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c261f;
+  box-shadow: inset 0 1px 2px rgba(44, 38, 31, .04);
+}
+
+.play-v3 .capa-organizar .org-cuando {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+}
+
+.play-v3 .capa-organizar .org-footer {
+  display: flex;
+  justify-content: center;
+  padding: .35rem 0 .15rem;
+}
+
+.play-v3 .capa-organizar .org-crear {
+  position: relative;
+  border: 1.5px solid rgba(201, 90, 118, .35);
+  background: #f3b1c3;
+  color: #2c261f;
+  font-family: Caveat, cursive;
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .55rem 1.65rem;
+  min-width: 11rem;
+  cursor: pointer;
+  box-shadow: 2px 4px 0 rgba(44, 38, 31, .12);
+  transform: rotate(-.5deg);
+}
+
+.play-v3 .capa-organizar .org-crear:hover {
+  filter: brightness(1.03);
+  transform: rotate(-.5deg) translateY(-1px);
+}
+
+.play-v3 .capa-organizar .org-crear-tape {
+  position: absolute;
+  width: 22px;
+  height: 10px;
+  background: rgba(228, 198, 118, .88);
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 1px 1px rgba(60, 44, 28, .12);
+}
+
+.play-v3 .capa-organizar .org-crear-tape-l {
+  top: -4px;
+  left: 10px;
+  transform: rotate(-14deg);
+}
+
+.play-v3 .capa-organizar .org-crear-tape-r {
+  top: -4px;
+  right: 10px;
+  transform: rotate(12deg);
+}
+
+.play-v3 .capa-organizar .org-tipos .mini {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  color: #8a7460;
+}
+
+@media (max-width: 560px) {
+  .play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
+    width: min(96vw, 96vw) !important;
+    max-width: 96vw !important;
+    padding-top: 1.75rem !important;
+  }
+
+  .play-v3 .capa-organizar .org-picker-cara {
+    width: 2.85rem;
+    height: 2.85rem;
+  }
+}
+
+/* org v4: chincheta un poco más abajo */
+.play-v3 .capa-organizar .org-pin {
+  top: 8px !important;
+}
+
+/* === Cotilleos v1: modal scrapbook tipo mockup === */
+
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario,
+.play-v3 .play-root.phone[data-capa="diario"] .capa-diario {
+  position: absolute !important;
+  left: auto !important;
+  right: 11% !important;
+  top: 46% !important;
+  bottom: auto !important;
+  width: min(420px, 90vw) !important;
+  max-width: min(420px, 90vw) !important;
+  max-height: min(78vh, 640px) !important;
+  transform: translate(0, -50%) !important;
+  z-index: 13;
+  padding: 1.35rem 1rem .85rem !important;
+  border-radius: 10px !important;
+  border: 1.5px solid rgba(44, 38, 31, .14) !important;
+  box-shadow:
+    3px 6px 20px rgba(40, 28, 16, .15),
+    inset 0 0 0 1px rgba(255, 255, 255, .35) !important;
+  background: #f8d4df !important;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario::before,
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario::after {
+  display: none !important;
+}
+
+.play-v3 .capa-diario .coti-speech-tail {
+  position: absolute;
+  top: -9px;
+  right: 22%;
+  width: 16px;
+  height: 16px;
+  background: #f8d4df;
+  border-left: 1.5px solid rgba(44, 38, 31, .12);
+  border-top: 1.5px solid rgba(44, 38, 31, .12);
+  transform: rotate(45deg);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.play-v3 .capa-diario .coti-cerrar {
+  position: absolute;
+  top: .5rem;
+  right: .6rem;
+  z-index: 8;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-family: Caveat, cursive;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #5a4838;
+  cursor: pointer;
+}
+
+.play-v3 .capa-diario .coti-top {
+  text-align: left;
+  padding: 0 .25rem .1rem;
+}
+
+.play-v3 .capa-diario .coti-tit {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.65rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #2c261f;
+}
+
+.play-v3 .capa-diario .coti-tabs {
+  display: flex;
+  gap: .35rem;
+  padding: 0 .15rem;
+}
+
+.play-v3 .capa-diario .coti-tab {
+  border: 1.5px solid rgba(44, 38, 31, .14);
+  border-radius: 6px;
+  background: rgba(255, 252, 245, .55);
+  font-family: Caveat, cursive;
+  font-size: .88rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .22rem .55rem;
+  color: #5a4838;
+  cursor: pointer;
+}
+
+.play-v3 .capa-diario .coti-tab.is-on {
+  background: #fffdf8;
+  color: #2c261f;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .08);
+}
+
+.play-v3 .capa-diario .coti-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: .15rem .05rem;
+}
+
+.play-v3 .capa-diario .dia-block {
+  display: none;
+  flex-direction: column;
+  gap: .55rem;
+}
+
+.play-v3 .play-root[data-diario="hoy"] .capa-diario .dia-hoy,
+.play-v3 .play-root[data-diario="ayer"] .capa-diario .dia-ayer,
+.play-v3 .play-root[data-diario="viejos"] .capa-diario .dia-viejos {
+  display: flex;
+}
+
+.play-v3 .capa-diario .coti-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .55rem;
+  align-items: start;
+  padding: .55rem .55rem .5rem;
+  border: 1.5px solid rgba(44, 38, 31, .12);
+  border-radius: 8px;
+  background: #fffdf8;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .06);
+}
+
+.play-v3 .capa-diario .coti-item-tape {
+  position: absolute;
+  width: 20px;
+  height: 9px;
+  background: rgba(228, 198, 118, .85);
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 1px 1px rgba(60, 44, 28, .1);
+}
+
+.play-v3 .capa-diario .coti-item-tape-l {
+  top: -3px;
+  left: 8px;
+  transform: rotate(-10deg);
+}
+
+.play-v3 .capa-diario .coti-item-tape-r {
+  top: -3px;
+  right: 8px;
+  transform: rotate(9deg);
+}
+
+.play-v3 .capa-diario .coti-item-nuevo {
+  position: absolute;
+  top: .45rem;
+  right: .5rem;
+  border: 1.5px solid #c45;
+  border-radius: 4px;
+  padding: .05rem .32rem;
+  font-family: Caveat, cursive;
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #c45;
+  background: rgba(255, 252, 245, .9);
+}
+
+.play-v3 .capa-diario .coti-item-avatares {
+  display: flex;
+  align-items: center;
+  padding-top: .1rem;
+}
+
+.play-v3 .capa-diario .coti-item-cara {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  border: 2px solid rgba(44, 38, 31, .14);
+  overflow: hidden;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -.35rem;
+}
+
+.play-v3 .capa-diario .coti-item-cara:first-child {
+  margin-left: 0;
+  z-index: 2;
+}
+
+.play-v3 .capa-diario .coti-item-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-v3 .capa-diario .coti-item-ini {
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #8a7460;
+}
+
+.play-v3 .capa-diario .coti-item-sin-cara {
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 50%;
+  border: 2px dashed rgba(44, 38, 31, .16);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b8a898;
+  font-size: 1rem;
+}
+
+.play-v3 .capa-diario .coti-item-cuerpo {
+  min-width: 0;
+  padding-right: 2.5rem;
+}
+
+.play-v3 .capa-diario .coti-item-txt {
+  margin: 0;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .92rem;
+  line-height: 1.38;
+  color: #2c261f;
+}
+
+.play-v3 .capa-diario .coti-item-cuando {
+  margin: .28rem 0 0;
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  color: #8a7460;
+}
+
+.play-v3 .capa-diario .coti-vacio {
+  margin: .25rem .15rem;
+  font-family: Caveat, cursive;
+  font-size: .98rem;
+  color: #7a6450;
+  text-align: center;
+}
+
+.play-v3 .capa-diario .coti-footer {
+  display: flex;
+  justify-content: center;
+  padding-top: .15rem;
+}
+
+.play-v3 .capa-diario .coti-ver-todos {
+  border: 0;
+  background: transparent;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #2c261f;
+  cursor: pointer;
+  padding: .2rem .5rem;
+}
+
+.play-v3 .capa-diario .coti-ver-todos:hover {
+  color: #c45;
+}
+
+@media (max-width: 560px) {
+  .play-v3 .play-root.phone[data-capa="diario"] .capa-diario {
+    right: auto !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: min(96vw, 96vw) !important;
+    max-width: 96vw !important;
+  }
+
+  .play-v3 .capa-diario .coti-speech-tail {
+    right: 18%;
+  }
+}
+
+/* === Misiones v1: modal scrapbook (ficha / vecinos) === */
+
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones,
+.play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones {
+  position: absolute !important;
+  left: auto !important;
+  right: 11% !important;
+  top: 24% !important;
+  bottom: auto !important;
+  width: min(400px, 90vw) !important;
+  max-width: min(400px, 90vw) !important;
+  max-height: min(76vh, 620px) !important;
+  transform: translate(0, 0) !important;
+  z-index: 13;
+  padding: 1.45rem 1rem .9rem !important;
+  border-radius: 3px 10px 6px 5px !important;
+  border: 1.5px solid rgba(44, 38, 31, .14) !important;
+  box-shadow:
+    3px 6px 20px rgba(40, 28, 16, .15),
+    inset 0 0 0 1px rgba(255, 255, 255, .4) !important;
+  background-color: #fdf9f4 !important;
+  background-image:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0,
+      transparent 1.35rem,
+      rgba(217, 107, 138, .06) 1.35rem,
+      rgba(217, 107, 138, .06) calc(1.35rem + 1px)
+    ),
+    linear-gradient(180deg, rgba(255, 253, 249, .94) 0%, rgba(255, 249, 242, .78) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: 0 3rem, center, center !important;
+  background-size: auto, cover, cover !important;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones::before,
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones::after {
+  display: none !important;
+}
+
+.play-v3 .capa-misiones .mis-speech-tail {
+  position: absolute;
+  top: -9px;
+  left: 28%;
+  width: 16px;
+  height: 16px;
+  background: #fdf9f4;
+  border-left: 1.5px solid rgba(44, 38, 31, .12);
+  border-top: 1.5px solid rgba(44, 38, 31, .12);
+  transform: rotate(45deg);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.play-v3 .capa-misiones .mis-pin {
+  position: absolute;
+  top: 6px;
+  left: 16px;
+  width: 20px;
+  height: 20px;
+  background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
+  z-index: 5;
+  transform: rotate(-9deg);
+  pointer-events: none;
+}
+
+.play-v3 .capa-misiones .mis-tape-tl {
+  top: -2px !important;
+  left: 8px !important;
+  transform: rotate(-7deg);
+}
+
+.play-v3 .capa-misiones .mis-tape-tr {
+  top: -2px !important;
+  right: 8px !important;
+  transform: rotate(6deg);
+}
+
+.play-v3 .capa-misiones .mis-cerrar {
+  position: absolute;
+  top: .5rem;
+  right: .6rem;
+  z-index: 8;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  font-family: Caveat, cursive;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #5a4838;
+  cursor: pointer;
+}
+
+.play-v3 .capa-misiones .mis-top {
+  text-align: center;
+  padding: .1rem .5rem .2rem;
+}
+
+.play-v3 .capa-misiones .mis-tit {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #2c261f;
+  transform: rotate(-.25deg);
+}
+
+.play-v3 .capa-misiones .mis-sub {
+  margin: .15rem 0 0;
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  color: #8a7460;
+}
+
+.play-v3 .capa-misiones .mis-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  padding: .1rem .05rem .15rem;
+}
+
+.play-v3 .capa-misiones .mis-vacio,
+.play-v3 .capa-misiones .mis-body .muted {
+  margin: .35rem .15rem;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  color: #8a7460;
+  text-align: center;
+}
+
+.play-v3 .capa-misiones .mis-item {
+  position: relative;
+  padding: .55rem .6rem .5rem;
+  border: 1.5px solid rgba(44, 38, 31, .14);
+  border-radius: 8px;
+  background: #fffdf8;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .06);
+}
+
+.play-v3 .capa-misiones .mis-item.mis-item-cumplida {
+  opacity: .88;
+  background: rgba(255, 252, 245, .92);
+}
+
+.play-v3 .capa-misiones .mis-item.mis-item-bloqueada {
+  opacity: .72;
+}
+
+.play-v3 .capa-misiones .mis-item-tape {
+  position: absolute;
+  width: 20px;
+  height: 9px;
+  background: rgba(228, 198, 118, .85);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.play-v3 .capa-misiones .mis-item-tape-l {
+  top: -3px;
+  left: 8px;
+  transform: rotate(-10deg);
+}
+
+.play-v3 .capa-misiones .mis-item-tape-r {
+  top: -3px;
+  right: 8px;
+  transform: rotate(9deg);
+}
+
+.play-v3 .capa-misiones .mis-item-head {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  margin-bottom: .25rem;
+}
+
+.play-v3 .capa-misiones .mision-bolita {
+  flex-shrink: 0;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  border: 2px solid rgba(44, 38, 31, .22);
+  background: #fffdf8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-v3 .capa-misiones .mision-bolita.pendiente {
+  border-color: rgba(201, 90, 118, .45);
+}
+
+.play-v3 .capa-misiones .mision-bolita.cumplida {
+  border-color: #7a9e6a;
+  background: #eef6e8;
+  color: #4a6a3a;
+}
+
+.play-v3 .capa-misiones .mision-bolita.bloqueada {
+  border-style: dashed;
+  border-color: rgba(120, 96, 72, .35);
+  background: rgba(255, 252, 245, .6);
+}
+
+.play-v3 .capa-misiones .mision-check {
+  font-size: .72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.play-v3 .capa-misiones .mis-item-tit {
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: #2c261f;
+}
+
+.play-v3 .capa-misiones .mis-item-txt {
+  margin: 0;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .9rem;
+  line-height: 1.38;
+  color: #3a3028;
+}
+
+.play-v3 .capa-misiones .mis-item-estado {
+  display: inline-block;
+  margin-top: .35rem;
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #8a7460;
+}
+
+.play-v3 .capa-misiones .mis-item-cumplida .mis-item-estado {
+  color: #5a7a48;
+}
+
+.play-v3 .capa-misiones .mis-accion,
+.play-v3 .capa-misiones .mision-accion {
+  display: inline-block;
+  margin-top: .45rem;
+  border: 1.5px solid rgba(201, 90, 118, .35);
+  border-radius: 6px;
+  background: #f3b1c3;
+  color: #2c261f;
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .32rem .7rem;
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .1);
+}
+
+.play-v3 .capa-misiones .mis-accion:hover,
+.play-v3 .capa-misiones .mision-accion:hover {
+  filter: brightness(1.03);
+}
+
+@media (max-width: 560px) {
+  .play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones {
+    right: auto !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: min(96vw, 96vw) !important;
+    max-width: 96vw !important;
+  }
+}
+
+/* === Vecinos v6: sin chincheta derecha; cerrar como otros modales === */
+.play-v3 .capa-vecinos .vecinos-pin-r {
+  display: none !important;
+}
+
+.play-v3 .capa-vecinos .vecinos-cerrar {
+  top: .5rem !important;
+  right: .6rem !important;
+  z-index: 8 !important;
+  width: 1.6rem !important;
+  height: 1.6rem !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  font-size: 1.55rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #5a4838 !important;
+}
+
+.play-v3 .capa-vecinos .vecinos-cerrar:hover {
+  color: #2c261f !important;
+}
+
+.play-v3 .capa-vecinos .vecinos-cab {
+  padding-right: 1.65rem !important;
+}
+
+
+/* === Cerrar × unificado en modales === */
+.play-v3 .capa-ficha .ficha-cerrar,
+.play-v3 .capa-buzon .mensajitos-cerrar,
+.play-v3 .capa-agenda .agenda-cerrar {
+  position: absolute !important;
+  top: .5rem !important;
+  right: .6rem !important;
+  z-index: 8 !important;
+  width: 1.6rem !important;
+  height: 1.6rem !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 0 !important;
+  background: transparent !important;
+  display: block !important;
+  overflow: visible !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.55rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
+  color: #5a4838 !important;
+  text-shadow: none !important;
+  cursor: pointer;
+  box-shadow: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar::before,
+.play-v3 .capa-agenda .agenda-cerrar::before {
+  display: none !important;
+  content: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar:hover,
+.play-v3 .capa-buzon .mensajitos-cerrar:hover,
+.play-v3 .capa-agenda .agenda-cerrar:hover {
+  color: #2c261f !important;
+}
+
+.play-v3 .capa-ficha .ficha-top {
+  padding-right: 2rem !important;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal .ficha-cerrar {
+  top: .45rem !important;
+  right: .55rem !important;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal-tit {
+  padding-right: 2rem !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-cab,
+.play-v3 .capa-buzon h2,
+.play-v3 .capa-buzon .mensajitos-tit {
+  padding-right: 2rem !important;
+}
+
+.play-v3 .capa-agenda h2,
+.play-v3 .capa-agenda .libreta-kicker {
+  padding-right: 2rem !important;
+}
