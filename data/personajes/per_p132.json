@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Mónica",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 27
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P132",
         "estilo_visual": "AHT_PERSONAJES_V1"

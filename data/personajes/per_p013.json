@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Javier",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 61
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P013",
         "estilo_visual": "AHT_PERSONAJES_V1"

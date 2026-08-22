@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "José",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 35
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P091",
         "estilo_visual": "AHT_PERSONAJES_V1"

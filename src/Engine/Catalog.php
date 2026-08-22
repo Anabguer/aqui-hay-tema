@@ -104,7 +104,7 @@ final class Catalog
         $packs = new VisualPackStore($this->root);
         $out = [];
         foreach (PoolJugableCanon::ids($this->root) as $id) {
-            if (!$this->esIdCanonicoPool($id)) {
+            if (!$this->esIdCanonicoPool($id) || !PoolJugableCanon::esSeleccionable($id, $this->root)) {
                 continue;
             }
             try {

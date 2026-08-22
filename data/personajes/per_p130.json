@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Karla",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 24
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P130",
         "estilo_visual": "AHT_PERSONAJES_V1"

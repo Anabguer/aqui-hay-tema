@@ -18,6 +18,9 @@ final class PoolJugableCanon
     /** @var list<string>|null */
     private static ?array $idsCache = null;
 
+    /** @var list<string>|null */
+    private static ?array $excluidosSeleccionCache = null;
+
     /** @var array<string, mixed>|null */
     private static ?array $manifestCache = null;
 
@@ -78,6 +81,42 @@ final class PoolJugableCanon
         return $n >= 1 && $n <= self::TOTAL;
     }
 
+    /**
+     * IDs del catálogo per_p* retirados de selección para nuevas partidas/llegadas.
+     * Siguen siendo canónicos (esIdCanonico) y cargables en saves existentes.
+     *
+     * @return list<string>
+     */
+    public static function excluidosSeleccion(?string $root = null): array
+    {
+        if (self::$excluidosSeleccionCache !== null) {
+            return self::$excluidosSeleccionCache;
+        }
+        $out = [];
+        $manifest = self::manifest($root);
+        $raw = $manifest['excluidos_seleccion'] ?? null;
+        if (is_array($raw)) {
+            foreach ($raw as $id) {
+                if (!is_string($id) || $id === '' || !self::esIdCanonico($id)) {
+                    continue;
+                }
+                $out[] = $id;
+            }
+        }
+        self::$excluidosSeleccionCache = array_values(array_unique($out));
+        return self::$excluidosSeleccionCache;
+    }
+
+    public static function esSeleccionable(string $id, ?string $root = null): bool
+    {
+        return self::esIdCanonico($id) && !in_array($id, self::excluidosSeleccion($root), true);
+    }
+
+    public static function totalSeleccionables(?string $root = null): int
+    {
+        return self::TOTAL - count(self::excluidosSeleccion($root));
+    }
+
     /** @return array<string, mixed> */
     public static function manifest(?string $root = null): array
     {
@@ -105,6 +144,7 @@ final class PoolJugableCanon
     public static function resetCache(): void
     {
         self::$idsCache = null;
+        self::$excluidosSeleccionCache = null;
         self::$manifestCache = null;
     }
 }

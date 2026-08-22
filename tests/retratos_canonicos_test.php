@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 use AquiHayTema\Engine\Catalog;
 use AquiHayTema\Engine\EstadoEmocional;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\PoolJugableCanon;
 use AquiHayTema\Engine\PresenciaEngine;
 use AquiHayTema\Engine\ResidenteRuntime;
 use AquiHayTema\Engine\RetratoResolver;
@@ -62,7 +63,7 @@ foreach ($pool as $catalogId) {
 
 ok($lotePorCatalog === [], 'ningún personaje jugable usa fallback lote');
 ok($sinRetrato === [], 'todos en pool jugable tienen retrato válido');
-ok(count($pool) === 200, 'pool jugable canónico tiene 200 per_p* con pack');
+ok(count($pool) === PoolJugableCanon::totalSeleccionables($root), 'pool seleccionable tiene total esperado');
 
 // Caso reportado: per_p004 y per_p007 no deben compartir retrato
 $raul = RetratoResolver::resolver(

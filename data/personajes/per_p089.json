@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Ulises",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 33
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P089",
         "estilo_visual": "AHT_PERSONAJES_V1"

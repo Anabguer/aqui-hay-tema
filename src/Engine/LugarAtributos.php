@@ -65,9 +65,7 @@ final class LugarAtributos
 
     public static function ocupaHora(array $item, int $dia, int $hora): bool
     {
-        if ((int) ($item['dia'] ?? -1) !== $dia) {
-            return false;
-        }
+        $itemDia = (int) ($item['dia'] ?? -1);
         $estado = (string) ($item['estado'] ?? 'programado');
         if (!in_array($estado, ['programado', 'en_curso'], true)) {
             return false;
@@ -76,7 +74,19 @@ final class LugarAtributos
         if ($ini < 0) {
             return false;
         }
-        $fin = $ini + self::horasDeEncuentro($item);
-        return $hora >= $ini && $hora < $fin;
+        $dur = self::horasDeEncuentro($item);
+        $fin = $ini + $dur;
+
+        if ($itemDia === $dia) {
+            if ($fin <= 24) {
+                return $hora >= $ini && $hora < $fin;
+            }
+            return $hora >= $ini && $hora < 24;
+        }
+        if ($itemDia === $dia - 1 && $fin > 24) {
+            $spill = $fin - 24;
+            return $hora >= 0 && $hora < $spill;
+        }
+        return false;
     }
 }

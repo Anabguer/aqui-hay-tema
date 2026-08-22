@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Rebeca",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 29
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P136",
         "estilo_visual": "AHT_PERSONAJES_V1"

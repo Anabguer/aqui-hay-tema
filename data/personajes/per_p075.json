@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Germán",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 40
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P075",
         "estilo_visual": "AHT_PERSONAJES_V1"

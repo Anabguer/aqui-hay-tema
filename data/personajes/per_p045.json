@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Ángel",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 72
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P045",
         "estilo_visual": "AHT_PERSONAJES_V1"

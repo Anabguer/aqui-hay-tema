@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Andrea",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 25
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P110",
         "estilo_visual": "AHT_PERSONAJES_V1"

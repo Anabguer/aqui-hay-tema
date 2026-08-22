@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/src/autoload.php';
 
+use AquiHayTema\Engine\EdadCanonica;
 use AquiHayTema\Engine\JsonFile;
 use AquiHayTema\Engine\PoolJugableCanon;
 use AquiHayTema\Engine\VisualPackStore;
@@ -108,14 +109,20 @@ for ($i = 1; $i <= PoolJugableCanon::TOTAL; $i++) {
         continue;
     }
 
+    $edad = EdadCanonica::desdePackMeta($root, $packId);
+    $identidad = [
+        'nombre' => $nombre,
+        'genero' => $genero,
+        'apertura_descubrimiento' => 'permeable',
+    ];
+    if ($edad !== null) {
+        $identidad['edad'] = $edad;
+    }
+
     $ficha = [
         'id' => $id,
         'piloto' => false,
-        'identidad' => [
-            'nombre' => $nombre,
-            'genero' => $genero,
-            'apertura_descubrimiento' => 'permeable',
-        ],
+        'identidad' => $identidad,
         'vida' => new stdClass(),
         'visual' => [
             'pack_id' => $packId,
@@ -134,6 +141,13 @@ $manifest = [
     'ids' => $ids,
     'personajes' => $manifestPersonajes,
 ];
-JsonFile::write($personajesDir . '/_pool_canonico.json', $manifest);
+$manifestPath = $personajesDir . '/_pool_canonico.json';
+if (is_file($manifestPath)) {
+    $prev = JsonFile::read($manifestPath);
+    if (is_array($prev['excluidos_seleccion'] ?? null)) {
+        $manifest['excluidos_seleccion'] = $prev['excluidos_seleccion'];
+    }
+}
+JsonFile::write($manifestPath, $manifest);
 
 echo "pool_canonico_200: creadas=$creadas omitidas=$omitidas manifest=" . count($ids) . " ids\n";

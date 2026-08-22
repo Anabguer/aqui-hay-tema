@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "David",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 31
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P012",
         "estilo_visual": "AHT_PERSONAJES_V1"

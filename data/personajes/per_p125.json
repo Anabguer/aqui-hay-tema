@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Mateo",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 27
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P125",
         "estilo_visual": "AHT_PERSONAJES_V1"

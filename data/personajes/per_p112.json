@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Noelia",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 23
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P112",
         "estilo_visual": "AHT_PERSONAJES_V1"

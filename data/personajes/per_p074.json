@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Valeria",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 39
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P074",
         "estilo_visual": "AHT_PERSONAJES_V1"

@@ -80,7 +80,8 @@ final class CompatibilidadOculta
     public static function asegurarDireccional(array &$partida, string $a, string $b, Catalog $catalog): array
     {
         $row = self::ensurePar($partida, $a, $b);
-        if (isset($row['direccional']['a_hacia_b']['total'], $row['direccional']['b_hacia_a']['total'])) {
+        if (isset($row['direccional']['a_hacia_b']['total'], $row['direccional']['b_hacia_a']['total'])
+            && !self::direccionalEdadObsoleta($partida, $a, $b, $row, $catalog)) {
             return $row;
         }
         $cal = CalibracionConfig::load($catalog->getRoot());
@@ -118,5 +119,47 @@ final class CompatibilidadOculta
             return $row['direccional']['a_hacia_b'] ?? null;
         }
         return $row['direccional']['b_hacia_a'] ?? null;
+    }
+
+    /**
+     * Detecta bloques edad cacheados antes del backfill de edades canónicas.
+     *
+     * @param array<string, mixed> $row
+     */
+    private static function direccionalEdadObsoleta(
+        array $partida,
+        string $a,
+        string $b,
+        array $row,
+        Catalog $catalog
+    ): bool {
+        if (!isset($row['direccional']) || !is_array($row['direccional'])) {
+            return false;
+        }
+        $pa = PerfilPartida::deOLegacy($partida, $a, $catalog);
+        $pb = PerfilPartida::deOLegacy($partida, $b, $catalog);
+        $edadA = $pa['edad'] ?? null;
+        $edadB = $pb['edad'] ?? null;
+        if ($edadA === null || $edadB === null) {
+            return false;
+        }
+        foreach (['a_hacia_b', 'b_hacia_a'] as $dir) {
+            $bloque = $row['direccional'][$dir]['edad'] ?? null;
+            if (!is_array($bloque)) {
+                continue;
+            }
+            if (($bloque['delta'] ?? null) === null) {
+                return true;
+            }
+            $cachedA = $bloque['edad_a'] ?? null;
+            $cachedB = $bloque['edad_b'] ?? null;
+            if ($cachedA !== null && (int) $cachedA !== (int) $edadA) {
+                return true;
+            }
+            if ($cachedB !== null && (int) $cachedB !== (int) $edadB) {
+                return true;
+            }
+        }
+        return false;
     }
 }

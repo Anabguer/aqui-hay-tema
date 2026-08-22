@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Paz",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 33
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P068",
         "estilo_visual": "AHT_PERSONAJES_V1"

@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Bruno",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 70
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P024",
         "estilo_visual": "AHT_PERSONAJES_V1"

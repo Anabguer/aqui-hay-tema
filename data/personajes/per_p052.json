@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Zoe",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 41
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P052",
         "estilo_visual": "AHT_PERSONAJES_V1"

@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Álvaro",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 55
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P020",
         "estilo_visual": "AHT_PERSONAJES_V1"

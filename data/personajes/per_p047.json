@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Cristian",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 43
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P047",
         "estilo_visual": "AHT_PERSONAJES_V1"

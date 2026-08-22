@@ -18,6 +18,56 @@ final class PerfilPartida
         return is_array($rt) ? $rt : null;
     }
 
+    public static function edadDesdeCatalogo(array $partida, string $residenteId, Catalog $catalog): ?int
+    {
+        $res = $partida['residentes'][$residenteId] ?? null;
+        if (!is_array($res) || !empty($res['_placeholder'])) {
+            return null;
+        }
+        try {
+            $cat = ResidenteRuntime::catalogoParaRuntime($res, $catalog);
+        } catch (\Throwable $ignored) {
+            return null;
+        }
+        return isset($cat['identidad']['edad']) ? (int) $cat['identidad']['edad'] : null;
+    }
+
+    public static function edadResuelta(array $partida, string $residenteId, ?Catalog $catalog = null): ?int
+    {
+        $perfil = self::de($partida, $residenteId);
+        if ($perfil !== null && isset($perfil['edad']) && $perfil['edad'] !== null) {
+            return (int) $perfil['edad'];
+        }
+        if ($catalog === null) {
+            return null;
+        }
+        return self::edadDesdeCatalogo($partida, $residenteId, $catalog);
+    }
+
+    /**
+     * Backfill determinista: si el catálogo tiene edad y el perfil de partida no, copia sin regenerar.
+     */
+    public static function reconciliarEdades(array &$partida, Catalog $catalog): void
+    {
+        foreach ($partida['residentes'] ?? [] as $residenteId => $res) {
+            if (!is_string($residenteId) || $residenteId === '' || !is_array($res)) {
+                continue;
+            }
+            if (!isset($res['runtime']['perfil_partida']) || !is_array($res['runtime']['perfil_partida'])) {
+                continue;
+            }
+            $perfil = &$partida['residentes'][$residenteId]['runtime']['perfil_partida'];
+            if (isset($perfil['edad']) && $perfil['edad'] !== null) {
+                continue;
+            }
+            $catEdad = self::edadDesdeCatalogo($partida, $residenteId, $catalog);
+            if ($catEdad !== null) {
+                $perfil['edad'] = $catEdad;
+            }
+            unset($perfil);
+        }
+    }
+
     /**
      * Legacy: si no hay generación, usa hobbies/rasgos del catálogo (saves antiguos).
      *
@@ -27,6 +77,12 @@ final class PerfilPartida
     {
         $gen = self::de($partida, $residenteId);
         if ($gen !== null) {
+            if (($gen['edad'] ?? null) === null && $catalog !== null) {
+                $catEdad = self::edadDesdeCatalogo($partida, $residenteId, $catalog);
+                if ($catEdad !== null) {
+                    $gen['edad'] = $catEdad;
+                }
+            }
             return $gen;
         }
         $res = $partida['residentes'][$residenteId] ?? [];

@@ -128,9 +128,9 @@ final class RetratoResolver
      * @param array<string, mixed> $partida
      * @return array<string, array<string, mixed>>
      */
-    public static function mapaCompletoPartida(array $partida, string $root): array
+    public static function mapaCompletoPartida(array $partida, string $root, ?VisualPackStore $packs = null): array
     {
-        $packs = new VisualPackStore($root);
+        $packs ??= new VisualPackStore($root);
         $catalog = new CatalogStore($root);
         $out = [];
         foreach ($partida['residentes'] ?? [] as $rid => $res) {

@@ -32,10 +32,12 @@ $cat = new Catalog($root);
 $packs = new VisualPackStore($root);
 $pool = $cat->listPersonajeIdsJugables();
 $canonIds = PoolJugableCanon::ids($root);
+$exclSel = PoolJugableCanon::excluidosSeleccion($root);
+$totalSel = PoolJugableCanon::totalSeleccionables($root);
 
 ok(count($canonIds) === 200, 'PoolJugableCanon::ids = 200');
-ok(count($pool) === 200, 'listPersonajeIdsJugables = 200');
-ok(count(array_unique($pool)) === 200, '200 IDs únicos en pool');
+ok(count($pool) === $totalSel, 'listPersonajeIdsJugables = total seleccionables');
+ok(count(array_unique($pool)) === $totalSel, 'IDs únicos en pool seleccionable');
 ok(PoolJugableCanon::TOTAL === 200, 'PoolJugableCanon::TOTAL = 200');
 ok(CapacidadViviendas::CAP_PRODUCTO === 46, 'capacidad simultánea = 46');
 ok(PoolJugableCanon::TOTAL !== CapacidadViviendas::CAP_PRODUCTO, 'catálogo 200 ≠ capacidad 46');
@@ -44,6 +46,11 @@ $prohibidos = ['per_qa_valid', 'per_i02', 'per_i03'];
 foreach ($prohibidos as $bad) {
     ok(!in_array($bad, $pool, true), "$bad excluido del pool");
     ok(!PoolJugableCanon::esIdCanonico($bad), "$bad no es id canónico");
+}
+foreach ($exclSel as $ret) {
+    ok(!in_array($ret, $pool, true), "$ret retirado de selección");
+    ok(PoolJugableCanon::esIdCanonico($ret), "$ret sigue siendo id canónico");
+    ok(!PoolJugableCanon::esSeleccionable($ret, $root), "$ret no es seleccionable");
 }
 
 $urlPorId = [];
@@ -76,7 +83,7 @@ $aparecidos = HistorialPersonajesPartida::idsAparecidos($p);
 ok(count($aparecidos) >= $iniciales, 'ya_aparecieron incluye iniciales');
 
 $disponible = CandidatoLlegadaEngine::poolDisponible($p, $root);
-ok(count($disponible) === 200 - count($aparecidos), 'poolDisponible = 200 − ya_aparecieron');
+ok(count($disponible) === $totalSel - count($aparecidos), 'poolDisponible = seleccionables − ya_aparecieron');
 foreach ($aparecidos as $aid) {
     ok(!in_array($aid, $disponible, true), "aparecido $aid no en candidatos");
 }

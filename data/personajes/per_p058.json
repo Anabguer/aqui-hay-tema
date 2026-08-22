@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Francesca",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 71
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P058",
         "estilo_visual": "AHT_PERSONAJES_V1"

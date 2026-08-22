@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Arturo",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 34
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P069",
         "estilo_visual": "AHT_PERSONAJES_V1"

@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Rosa",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 35
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P070",
         "estilo_visual": "AHT_PERSONAJES_V1"

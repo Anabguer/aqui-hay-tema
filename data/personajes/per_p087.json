@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Saúl",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 31
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P087",
         "estilo_visual": "AHT_PERSONAJES_V1"

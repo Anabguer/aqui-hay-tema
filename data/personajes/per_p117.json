@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Eduardo",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 22
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P117",
         "estilo_visual": "AHT_PERSONAJES_V1"

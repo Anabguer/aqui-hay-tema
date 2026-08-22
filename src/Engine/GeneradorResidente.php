@@ -33,7 +33,16 @@ final class GeneradorResidente
         $nDeal = (int) CalibracionConfig::get($cal, 'generacion.dealbreakers', 1);
         $nLugPref = (int) CalibracionConfig::get($cal, 'generacion.lugares_preferentes', 2);
 
-        $hobbies = $rng->pickUnique(self::idsGenerables($store, 'hobbies'), $nHob);
+        $poolHobbies = self::idsGenerables($store, 'hobbies');
+        $poolAccionables = HobbyAccionable::idsGenerables($store);
+        if ($nHob > 0 && $poolAccionables !== []) {
+            $principal = (string) $rng->pickUnique($poolAccionables, 1)[0];
+            $resto = array_values(array_diff($poolHobbies, [$principal]));
+            $secundarios = $rng->pickUnique($resto, min($nHob - 1, count($resto)));
+            $hobbies = array_values(array_merge([$principal], $secundarios));
+        } else {
+            $hobbies = $rng->pickUnique($poolHobbies, $nHob);
+        }
         $rasgos = $rng->pickUnique(self::idsGenerables($store, 'rasgos'), $nRas);
         $rasgosOcultos = $rng->pickUnique(
             array_values(array_diff(self::idsGenerables($store, 'rasgos'), $rasgos)),

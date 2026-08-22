@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Vera",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 55
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P050",
         "estilo_visual": "AHT_PERSONAJES_V1"

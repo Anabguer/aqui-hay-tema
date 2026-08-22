@@ -59,6 +59,10 @@ final class CompatibilidadCalculator
             isset($perfilB['edad']) ? (int) $perfilB['edad'] : null,
             $cal
         );
+        if (isset($edad['delta']) || isset($edad['_nota'])) {
+            $edad['edad_a'] = isset($perfilA['edad']) ? (int) $perfilA['edad'] : null;
+            $edad['edad_b'] = isset($perfilB['edad']) ? (int) $perfilB['edad'] : null;
+        }
 
         return [
             '_provisional' => true,

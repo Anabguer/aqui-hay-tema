@@ -13,7 +13,7 @@ final class EdadPolitica
     public static function clasificar(?int $edadA, ?int $edadB, array $cal): array
     {
         $pref = (int) CalibracionConfig::get($cal, 'edad.preferencia_anos', 10);
-        $duro = (int) CalibracionConfig::get($cal, 'edad.limite_duro_anos', 25);
+        $duro = (int) CalibracionConfig::get($cal, 'edad.limite_duro_anos', 10);
         if ($edadA === null || $edadB === null) {
             return [
                 'delta' => null,

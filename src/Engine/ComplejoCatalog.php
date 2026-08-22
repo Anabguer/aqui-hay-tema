@@ -129,6 +129,33 @@ final class ComplejoCatalog
         return $n;
     }
 
+    /** Horario legible para UI (p. ej. «10:00–20:00» o «22:00–04:00»). */
+    public static function horarioUi(string $lugarId): string
+    {
+        $d = self::destino($lugarId);
+        if ($d === null) {
+            return '';
+        }
+        $partes = [self::franjaHorarioUi((int) $d['ini'], (int) $d['fin'])];
+        if (isset($d['ini2'], $d['fin2'])) {
+            $partes[] = self::franjaHorarioUi((int) $d['ini2'], (int) $d['fin2']);
+        }
+
+        return implode(' · ', $partes);
+    }
+
+    private static function franjaHorarioUi(int $ini, int $finExcl): string
+    {
+        return self::horaEtiqueta($ini) . '–' . self::horaEtiqueta($finExcl);
+    }
+
+    private static function horaEtiqueta(int $h): string
+    {
+        $h = (($h % 24) + 24) % 24;
+
+        return str_pad((string) $h, 2, '0', STR_PAD_LEFT) . ':00';
+    }
+
     /**
      * @return list<string>
      */

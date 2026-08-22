@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Berta",
         "genero": "mujer",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 47
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P054",
         "estilo_visual": "AHT_PERSONAJES_V1"

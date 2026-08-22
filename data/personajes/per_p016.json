@@ -4,9 +4,10 @@
     "identidad": {
         "nombre": "Francisco",
         "genero": "hombre",
-        "apertura_descubrimiento": "permeable"
+        "apertura_descubrimiento": "permeable",
+        "edad": 41
     },
-    "vida": {},
+    "vida": [],
     "visual": {
         "pack_id": "P016",
         "estilo_visual": "AHT_PERSONAJES_V1"
