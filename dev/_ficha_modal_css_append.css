@@ -1,0 +1,393 @@
+
+/* === Ficha vecino: modal centrado (scrapbook) === */
+.play-v3 .play-root[data-capa="ficha"] .velo {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha {
+  position: absolute;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(660px, 92vw) !important;
+  max-width: min(660px, 92vw) !important;
+  max-height: min(78vh, 680px) !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 13;
+  padding: 1.65rem 1rem .85rem !important;
+  border-radius: 2px 8px 5px 4px !important;
+  border: 1.5px solid rgba(44, 38, 31, .14) !important;
+  box-shadow:
+    2px 4px 14px rgba(40, 28, 16, .14),
+    inset 0 0 0 1px rgba(180, 150, 110, .28) !important;
+  background-color: #fdf9f4 !important;
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 249, .88) 0%, rgba(255, 253, 249, .58) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center !important;
+  background-size: cover, cover !important;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha::before,
+.play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha::after {
+  display: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-tape {
+  position: absolute;
+  width: 34px;
+  height: 13px;
+  background: rgba(228, 198, 118, .82);
+  z-index: 4;
+  box-shadow: 0 1px 1px rgba(60, 44, 28, .12);
+  pointer-events: none;
+}
+
+.play-v3 .capa-ficha .ficha-tape-l {
+  top: 6px;
+  left: 18px;
+  transform: rotate(-32deg);
+}
+
+.play-v3 .capa-ficha .ficha-tape-r {
+  top: 6px;
+  right: 18px;
+  transform: rotate(32deg);
+}
+
+.play-v3 .capa-ficha .capa-cerrar-pestaña {
+  top: .55rem !important;
+  right: .35rem !important;
+  z-index: 8;
+}
+
+.play-v3 .capa-ficha .ficha-top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: .35rem .5rem;
+  padding: 0 4.5rem .15rem .15rem;
+  margin-bottom: .15rem;
+}
+
+.play-v3 .capa-ficha .ficha-volver {
+  grid-column: 1 / -1;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 .2rem;
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 700;
+  color: #6a5848;
+  cursor: pointer;
+  text-align: left;
+}
+
+.play-v3 .capa-ficha .ficha-volver:hover {
+  color: #2c261f;
+}
+
+.play-v3 .capa-ficha .ficha-tit {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.28rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #2a2218;
+  text-align: center;
+}
+
+.play-v3 .capa-ficha .ficha-body {
+  display: grid;
+  grid-template-columns: minmax(0, 38%) minmax(0, 1fr);
+  gap: .75rem .85rem;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.play-v3 .capa-ficha .ficha-col-perfil {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: .35rem;
+  min-width: 0;
+}
+
+.play-v3 .capa-ficha .ficha-cara {
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2.5px solid #e8a0b8;
+  background: #fffdf6;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.play-v3 .capa-ficha .ficha-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 12%;
+  display: block;
+}
+
+.play-v3 .capa-ficha .ficha-ini {
+  font-family: Caveat, cursive;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #6a5848;
+}
+
+.play-v3 .capa-ficha .ficha-nombre {
+  margin: .1rem 0 0;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #2a2218;
+  line-height: 1.15;
+}
+
+.play-v3 .capa-ficha .ficha-desde,
+.play-v3 .capa-ficha .ficha-animo-line {
+  margin: 0;
+  font-size: .78rem;
+  line-height: 1.35;
+  color: #6a5848;
+}
+
+.play-v3 .capa-ficha .ficha-animo-line {
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  color: #5a4838;
+}
+
+.play-v3 .capa-ficha .ficha-rasgos {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .28rem .35rem;
+  margin: .25rem 0 .45rem;
+  width: 100%;
+}
+
+.play-v3 .capa-ficha .ficha-rasgo-tag {
+  display: inline-block;
+  padding: .18rem .55rem .2rem .62rem;
+  border: 1.5px solid rgba(44, 38, 31, .22);
+  border-radius: 999px;
+  background: #fff9ee;
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  color: #3a3028;
+  box-shadow: 1px 1px 0 rgba(44, 38, 31, .06);
+}
+
+.play-v3 .capa-ficha .ficha-btn-msg {
+  margin-top: .15rem;
+  width: 100%;
+  max-width: 11rem;
+  padding: .38rem .55rem;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.play-v3 .capa-ficha .ficha-col-detalles {
+  min-width: 0;
+  overflow-y: auto;
+  padding-right: .15rem;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+
+.play-v3 .capa-ficha .ficha-seccion-tit {
+  margin: 0 0 .28rem;
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #5a4838;
+}
+
+.play-v3 .capa-ficha .ficha-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+}
+
+.play-v3 .capa-ficha .ficha-chip {
+  display: inline-block;
+  padding: .28rem .55rem;
+  border: 1.5px solid rgba(44, 38, 31, .18);
+  border-radius: 6px;
+  background: rgba(255, 252, 245, .9);
+  font-size: .74rem;
+  font-weight: 700;
+  color: #3a3028;
+  line-height: 1.2;
+}
+
+.play-v3 .capa-ficha .ficha-nogusta-item {
+  margin: 0;
+  font-size: .78rem;
+  line-height: 1.4;
+  color: #4a3c30;
+}
+
+.play-v3 .capa-ficha .ficha-vacio {
+  margin: 0;
+  font-size: .76rem;
+  font-style: italic;
+  color: #8a7868;
+  line-height: 1.35;
+}
+
+.play-v3 .capa-ficha .ficha-relaciones {
+  display: flex;
+  flex-direction: column;
+  gap: .42rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: .4rem .45rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-cara {
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1.5px solid rgba(120, 96, 72, .35);
+  background: #fffdf6;
+  display: grid;
+  place-items: center;
+  font-size: .7rem;
+  font-weight: 800;
+  color: #6a5848;
+}
+
+.play-v3 .capa-ficha .ficha-rel-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.play-v3 .capa-ficha .ficha-rel-nom {
+  font-size: .76rem;
+  font-weight: 800;
+  color: #2a2218;
+  line-height: 1.2;
+  margin-bottom: .12rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-bar {
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(44, 38, 31, .08);
+  overflow: hidden;
+}
+
+.play-v3 .capa-ficha .ficha-rel-bar span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #7eb8b0;
+  min-width: 8%;
+}
+
+.play-v3 .capa-ficha .ficha-rel-row.is-crisis .ficha-rel-bar span {
+  background: #e8a0b0;
+}
+
+.play-v3 .capa-ficha .ficha-rel-etiq {
+  font-size: .62rem;
+  font-weight: 800;
+  letter-spacing: .03em;
+  color: #5a4838;
+  white-space: nowrap;
+  padding: .12rem .35rem;
+  border-radius: 3px;
+}
+
+.play-v3 .capa-ficha .ficha-rel-row.is-crisis .ficha-rel-etiq {
+  border: 1.5px solid #c45;
+  color: #a33;
+  text-transform: uppercase;
+  font-size: .58rem;
+  letter-spacing: .05em;
+}
+
+.play-v3 .capa-ficha .ficha-planes {
+  display: flex;
+  flex-direction: column;
+  gap: .28rem;
+}
+
+.play-v3 .capa-ficha .ficha-plan-item {
+  margin: 0;
+  font-size: .76rem;
+  line-height: 1.35;
+  color: #3a3028;
+}
+
+.play-v3 .capa-ficha .ficha-btn-org {
+  align-self: flex-start;
+  margin-top: .15rem;
+  border: 0;
+  background: #f3b1c3;
+  color: #2c261f;
+  font: inherit;
+  font-weight: 800;
+  font-size: .78rem;
+  letter-spacing: .03em;
+  padding: .45rem .75rem;
+  cursor: pointer;
+  box-shadow: 2px 3px 0 rgba(44, 38, 31, .14);
+  transform: rotate(-.4deg);
+  clip-path: polygon(0 3%, 98% 0, 100% 94%, 3% 100%);
+}
+
+.play-v3 .capa-ficha .ficha-btn-org:hover {
+  transform: rotate(0deg) translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha {
+    width: min(96vw, 96vw) !important;
+    max-width: 96vw !important;
+    max-height: min(82vh, 720px) !important;
+    padding-top: 1.45rem !important;
+  }
+
+  .play-v3 .capa-ficha .ficha-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .play-v3 .capa-ficha .ficha-col-detalles {
+    overflow-y: visible;
+  }
+}

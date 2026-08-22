@@ -1,76 +1,76 @@
 {
   "meta": {
     "herramienta": "dev/mapa-zonas-calibrador.html",
-    "mapa": "assets/play-v3/mapa_canonico.jpg",
+    "mapa": "assets/play-v3/mapa_canonico.png",
     "overlay_obras": "assets/play-v3/overlay_en_obras.png",
     "unidad": "porcentaje",
     "mapa_px": [
-      1024,
-      682
+      618,
+      404
     ]
   },
   "zonas": {
     "cafeteria": {
-      "x": 14.7,
-      "y": 7.54,
-      "w": 19.25,
-      "h": 23.46,
+      "x": 16.25,
+      "y": 8.49,
+      "w": 18.49,
+      "h": 26.17,
       "label": "Cafetería"
     },
     "biblioteca": {
-      "x": 39.96,
-      "y": 9.43,
-      "w": 19.67,
-      "h": 21.16,
+      "x": 41.22,
+      "y": 6.72,
+      "w": 19.65,
+      "h": 25.46,
       "label": "Biblioteca"
     },
     "gimnasio": {
-      "x": 68.14,
-      "y": 8.38,
-      "w": 18.69,
-      "h": 21.58,
+      "x": 68.26,
+      "y": 10.25,
+      "w": 18.03,
+      "h": 22.63,
       "label": "Gimnasio"
     },
     "restaurante": {
-      "x": 12.33,
-      "y": 37.91,
-      "w": 20.37,
-      "h": 22.2,
+      "x": 9.08,
+      "y": 37.84,
+      "w": 20.8,
+      "h": 24.4,
       "label": "Restaurante"
     },
     "parque": {
-      "x": 38.7,
-      "y": 37.29,
-      "w": 22.74,
-      "h": 21.99,
+      "x": 35.9,
+      "y": 37.13,
+      "w": 27.97,
+      "h": 28.29,
       "label": "Parque"
     },
     "bar": {
-      "x": 67.72,
-      "y": 38.75,
-      "w": 20.51,
-      "h": 21.16,
+      "x": 70.57,
+      "y": 36.42,
+      "w": 20.34,
+      "h": 25.46,
       "label": "Bar"
     },
     "cine": {
-      "x": 13.45,
-      "y": 68.08,
-      "w": 18.69,
-      "h": 22.62,
+      "x": 11.63,
+      "y": 64,
+      "w": 20.57,
+      "h": 26.87,
       "label": "Cine"
     },
     "discoteca": {
-      "x": 39.4,
-      "y": 67.24,
-      "w": 22.18,
-      "h": 23.04,
+      "x": 40.29,
+      "y": 67.89,
+      "w": 20.11,
+      "h": 24.05,
       "label": "Discoteca"
     },
     "bingo": {
-      "x": 68.69,
-      "y": 67.03,
-      "w": 19.95,
-      "h": 23.67,
+      "x": 69.42,
+      "y": 64.36,
+      "w": 20.57,
+      "h": 25.11,
       "label": "Bingo"
     }
   }

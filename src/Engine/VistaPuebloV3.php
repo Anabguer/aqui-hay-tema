@@ -11,13 +11,6 @@ final class VistaPuebloV3
 {
     public const MAX_VIS = 5;
 
-    /** @var list<string> Lote técnico C3 Fase 1 (14 extremos). No son los 200. */
-    private const LOTE = [
-        'P001.png', 'P008.png', 'P009.png', 'P010.png', 'P016.png',
-        'P018.png', 'P028.png', 'P031.png', 'P082.png', 'P109.png',
-        'P117.png', 'P121.png', 'P138.png', 'P173.png',
-    ];
-
     /** Complejos con PNG evolucionado en Fase 1. El resto se queda en temprano visual. */
     private const CRECE_VISUAL = ['cafe_libros', 'cine_game'];
 
@@ -49,7 +42,7 @@ final class VistaPuebloV3
             if (!is_string($rid) || $rid === '') {
                 continue;
             }
-            $tok = self::tokenDe(is_array($res) ? $res : [], $rid, $packs);
+            $tok = RetratoResolver::resolver(is_array($res) ? $res : [], $rid, $packs);
             $tokens[$rid] = [
                 'url' => $tok['url'],
                 'lote' => $tok['lote'],
@@ -70,7 +63,7 @@ final class VistaPuebloV3
                 }
                 $destinos[] = [
                     'id' => $did,
-                    'nombre' => is_array($row) ? (string) ($row['nombre'] ?? $did) : $did,
+                    'nombre' => is_array($row) ? Utf8Text::paraJson((string) ($row['nombre'] ?? $did)) : $did,
                     'operativo' => $operativo,
                 ];
             }
@@ -93,13 +86,13 @@ final class VistaPuebloV3
                     if (!in_array($emo, EstadoEmocional::V1, true)) {
                         $emo = EstadoEmocional::NEUTRO;
                     }
-                    $token = self::tokenDe($res, $rid, $packs);
+                    $token = RetratoResolver::resolver($res, $rid, $packs);
                     $gente[] = [
                         'id' => $rid,
                         'nombre' => IdentidadPublica::nombre($partida, $rid),
                         'iniciales' => (string) ($p['iniciales'] ?? ''),
                         'destino_id' => $did,
-                        'destino_nombre' => (string) ($row['nombre'] ?? $did),
+                        'destino_nombre' => Utf8Text::paraJson((string) ($row['nombre'] ?? $did)),
                         'emocion' => $emo,
                         'hay_tema' => false,
                         'tema_id' => null,
@@ -118,7 +111,7 @@ final class VistaPuebloV3
                 : 'temprano';
             $complejos[] = [
                 'id' => $cid,
-                'nombre' => (string) ($meta['nombre'] ?? $cid),
+                'nombre' => Utf8Text::paraJson((string) ($meta['nombre'] ?? $cid)),
                 'fase' => $faseVisual,
                 'fase_motor' => $faseMotor,
                 'destinos' => $destinos,
@@ -188,25 +181,4 @@ final class VistaPuebloV3
         return $vis;
     }
 
-    /**
-     * @param array<string, mixed> $residente
-     * @return array{url: ?string, lote: bool}
-     */
-    private static function tokenDe(array $residente, string $rid, VisualPackStore $packs): array
-    {
-        $packId = EmotionalStateService::packIdDe($residente, $packs);
-        if (is_string($packId) && $packId !== '') {
-            $pack = $packs->pack($packId);
-            if (is_array($pack)) {
-                $asset = $packs->asset($pack, ExpresionVisual::NEUTRAL);
-                if (is_array($asset) && !empty($asset['existe']) && !empty($asset['url_relativa'])) {
-                    return ['url' => (string) $asset['url_relativa'], 'lote' => false];
-                }
-            }
-        }
-        $n = count(self::LOTE);
-        $idx = $n > 0 ? (int) (sprintf('%u', crc32($rid)) % $n) : 0;
-        $file = self::LOTE[$idx] ?? self::LOTE[0];
-        return ['url' => 'assets/personajes/tokens-m/' . $file, 'lote' => true];
-    }
 }

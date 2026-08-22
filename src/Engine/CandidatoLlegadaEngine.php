@@ -386,7 +386,7 @@ final class CandidatoLlegadaEngine
 
     public static function gapMin(int $n): int
     {
-        $n = max(8, min(23, $n));
+        $n = max(8, min(CapacidadViviendas::CAP_PRODUCTO - 1, $n));
         return 2 + (int) floor(($n - 8) * 1.25);
     }
 

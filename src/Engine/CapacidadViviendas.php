@@ -4,23 +4,28 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Capacidad V3: pool lógico de 24 slots (A01–A16, B01–B08).
- * Espejo legacy bloque_a/b al guardar; bloque_c ignorado en producto.
+ * Capacidad V3: pool lógico de 46 slots (catálogo jugable completo).
+ * A01–A16, B01–B08 (legacy), C01–C16, D01–D06.
+ * Espejo legacy bloque_a/b al guardar; C/D solo en viviendas.slots.
  */
 final class CapacidadViviendas
 {
-    public const CAP_PRODUCTO = 24;
-    public const CAP_POR_BLOQUE = 16;
+    public const CAP_PRODUCTO = 46;
+    public const CAP_BLOQUE_A = 16;
+    public const CAP_BLOQUE_B = 8;
+    public const CAP_BLOQUE_C = 16;
+    public const CAP_BLOQUE_D = 6;
+    /** @deprecated Usar CAP_BLOQUE_A — alias legacy bloque_a */
+    public const CAP_POR_BLOQUE = self::CAP_BLOQUE_A;
 
     /** @return list<string> */
     public static function slotIdsCanon(): array
     {
         $out = [];
-        for ($i = 1; $i <= 16; $i++) {
-            $out[] = 'A' . str_pad((string) $i, 2, '0', STR_PAD_LEFT);
-        }
-        for ($i = 1; $i <= 8; $i++) {
-            $out[] = 'B' . str_pad((string) $i, 2, '0', STR_PAD_LEFT);
+        foreach (['A' => self::CAP_BLOQUE_A, 'B' => self::CAP_BLOQUE_B, 'C' => self::CAP_BLOQUE_C, 'D' => self::CAP_BLOQUE_D] as $bloque => $max) {
+            for ($i = 1; $i <= $max; $i++) {
+                $out[] = $bloque . str_pad((string) $i, 2, '0', STR_PAD_LEFT);
+            }
         }
         return $out;
     }
@@ -43,11 +48,14 @@ final class CapacidadViviendas
     public static function ensure(array &$partida): void
     {
         $partida['viviendas'] ??= [];
-        if (!is_array($partida['viviendas']['slots'] ?? null)
-            || count($partida['viviendas']['slots']) !== self::CAP_PRODUCTO
-        ) {
+        $slots = $partida['viviendas']['slots'] ?? null;
+        if (!is_array($slots) || $slots === []) {
             self::ensureLegacyBlocks($partida);
             self::buildPoolFromLegacy($partida);
+        } elseif (count($slots) < self::CAP_PRODUCTO) {
+            self::expandirPoolAdditivo($partida);
+        } elseif (count($slots) > self::CAP_PRODUCTO) {
+            self::expandirPoolAdditivo($partida);
         }
         $partida['viviendas']['cap'] = self::CAP_PRODUCTO;
         $partida['celeste']['vivienda_capacidad_max'] = self::CAP_PRODUCTO;
@@ -109,9 +117,8 @@ final class CapacidadViviendas
     public static function asignarAutomatico(array &$partida, string $residenteId): array
     {
         self::ensure($partida);
-        if (count(self::residentesActivos($partida)) >= self::CAP_PRODUCTO
-            && !isset($partida['residentes'][$residenteId])
-        ) {
+        $activos = self::residentesActivos($partida);
+        if (count($activos) > self::CAP_PRODUCTO) {
             return ['vivienda_id' => null, 'error' => 'viviendas_llenas'];
         }
         self::liberarSlotsDe($partida, $residenteId);
@@ -130,14 +137,53 @@ final class CapacidadViviendas
         return ['vivienda_id' => null, 'error' => 'viviendas_llenas'];
     }
 
-    /** Abre bloque para lab/gate — no expande producto más allá de 24. */
+    /** Abre bloque para lab/gate — capacidad fija en producto (46). */
     public static function abrirBloque(array &$partida, string $bloque): void
     {
         self::ensure($partida);
     }
 
     /**
-     * Construye pool v3 desde bloque_a + bloque_b (máx. 24).
+     * Migra partidas con pool menor que CAP_PRODUCTO preservando ocupantes en A/B.
+     * Añade slots C/D vacíos sin tocar vivienda_id existentes.
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function expandirPoolAdditivo(array &$partida): void
+    {
+        $byId = [];
+        foreach ($partida['viviendas']['slots'] ?? [] as $slot) {
+            if (!is_array($slot) || empty($slot['id'])) {
+                continue;
+            }
+            $byId[(string) $slot['id']] = [
+                'id' => (string) $slot['id'],
+                'ocupante_id' => $slot['ocupante_id'] ?? null,
+                'estado' => ($slot['ocupante_id'] ?? null) !== null ? 'ocupado' : ($slot['estado'] ?? 'libre'),
+            ];
+        }
+        $antes = count($byId);
+        $slots = [];
+        foreach (self::slotIdsCanon() as $sid) {
+            $slots[] = $byId[$sid] ?? [
+                'id' => $sid,
+                'ocupante_id' => null,
+                'estado' => 'libre',
+            ];
+        }
+        $partida['viviendas']['slots'] = $slots;
+        $partida['viviendas']['cap'] = self::CAP_PRODUCTO;
+        if ($antes > 0 && $antes < self::CAP_PRODUCTO) {
+            $partida['viviendas']['migracion']['pool_expandido'] = [
+                'desde_slots' => $antes,
+                'hacia_slots' => self::CAP_PRODUCTO,
+            ];
+        }
+        self::normalizarViviendaIds($partida);
+    }
+
+    /**
+     * Construye pool v3 desde bloque_a + bloque_b (primeros 24 slots).
      *
      * @param array<string, mixed> $partida
      */
@@ -168,7 +214,7 @@ final class CapacidadViviendas
         $partida['viviendas']['slots'] = $slots;
         $partida['viviendas']['cap'] = self::CAP_PRODUCTO;
         self::reasignarFueraDePool($partida);
-        self::normalizarViviendaIds($partida);
+        self::expandirPoolAdditivo($partida);
     }
 
     public static function normalizarViviendaIds(array &$partida): void
@@ -253,7 +299,7 @@ final class CapacidadViviendas
                 $mapB[$id] = $slot;
             }
         }
-        for ($i = 1; $i <= self::CAP_POR_BLOQUE; $i++) {
+        for ($i = 1; $i <= self::CAP_BLOQUE_A; $i++) {
             $aid = 'A' . str_pad((string) $i, 2, '0', STR_PAD_LEFT);
             $partida['bloque_a']['viviendas'][$i - 1] = $mapA[$aid] ?? [
                 'id' => $aid,
@@ -261,7 +307,7 @@ final class CapacidadViviendas
                 'estado' => 'libre',
             ];
         }
-        for ($i = 1; $i <= 8; $i++) {
+        for ($i = 1; $i <= self::CAP_BLOQUE_B; $i++) {
             $bid = 'B' . str_pad((string) $i, 2, '0', STR_PAD_LEFT);
             $partida['bloque_b']['viviendas'][$i - 1] = $mapB[$bid] ?? [
                 'id' => $bid,
@@ -269,8 +315,8 @@ final class CapacidadViviendas
                 'estado' => 'libre',
             ];
         }
-        $partida['bloque_a']['capacidad'] = self::CAP_POR_BLOQUE;
-        $partida['bloque_b']['capacidad'] = 8;
+        $partida['bloque_a']['capacidad'] = self::CAP_BLOQUE_A;
+        $partida['bloque_b']['capacidad'] = self::CAP_BLOQUE_B;
     }
 
     /**
@@ -278,12 +324,12 @@ final class CapacidadViviendas
      */
     private static function ensureLegacyBlocks(array &$partida): void
     {
-        $partida['bloque_a'] ??= ['capacidad' => self::CAP_POR_BLOQUE, 'viviendas' => []];
+        $partida['bloque_a'] ??= ['capacidad' => self::CAP_BLOQUE_A, 'viviendas' => []];
         if (!is_array($partida['bloque_a']['viviendas'] ?? null) || $partida['bloque_a']['viviendas'] === []) {
             $partida['bloque_a']['viviendas'] = BloqueA::viviendasVacias();
         }
-        $partida['bloque_b'] ??= ['capacidad' => 8, 'viviendas' => self::viviendasVacias('b')];
-        if (count($partida['bloque_b']['viviendas'] ?? []) < 8) {
+        $partida['bloque_b'] ??= ['capacidad' => self::CAP_BLOQUE_B, 'viviendas' => self::viviendasVacias('b')];
+        if (count($partida['bloque_b']['viviendas'] ?? []) < self::CAP_BLOQUE_B) {
             $partida['bloque_b']['viviendas'] = self::viviendasVacias('b');
         }
     }
@@ -292,7 +338,12 @@ final class CapacidadViviendas
     public static function viviendasVacias(string $bloque): array
     {
         $bloque = strtoupper($bloque);
-        $max = $bloque === 'B' ? 8 : self::CAP_POR_BLOQUE;
+        $max = match ($bloque) {
+            'B' => self::CAP_BLOQUE_B,
+            'C' => self::CAP_BLOQUE_C,
+            'D' => self::CAP_BLOQUE_D,
+            default => self::CAP_BLOQUE_A,
+        };
         $out = [];
         for ($i = 1; $i <= $max; $i++) {
             $out[] = [

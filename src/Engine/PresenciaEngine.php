@@ -19,7 +19,7 @@ final class PresenciaEngine
                 || in_array($id, $partida['celeste']['lugares_desbloqueados'] ?? [], true);
             $mapa[$id] = [
                 'id' => $id,
-                'nombre' => $lug['nombre'],
+                'nombre' => Utf8Text::paraJson((string) ($lug['nombre'] ?? $id)),
                 'operativo' => $operativo,
                 'candado' => !$operativo && ($lug['desbloqueado_inicial'] ?? false) === false,
                 'capacidad' => $lug['capacidad'] ?? null,
@@ -28,7 +28,7 @@ final class PresenciaEngine
         }
 
         foreach ($partida['residentes'] as $rid => $res) {
-            if (($res['presencia'] ?? '') !== 'residente') {
+            if (($res['presencia'] ?? 'residente') !== 'residente') {
                 continue;
             }
             $lugar = self::lugarDeResidente($partida, $rid, $dia, $hora);
@@ -74,6 +74,11 @@ final class PresenciaEngine
 
         // Presencia técnica por planes de NPC autónomo (sin encuentros/interacciones).
         foreach ($partida['npc_autonomo']['planes_pendientes'] ?? [] as $plan) {
+            if (!isset($plan['duracion_horas']) && !isset($plan['duracion_minutos']) && is_string($plan['lugar'] ?? null)) {
+                $attrPlan = LugarAtributos::de((string) $plan['lugar'], $plan);
+                $plan['duracion_horas'] = $attrPlan['horas'];
+                $plan['duracion_minutos'] = $attrPlan['duracion_minutos'];
+            }
             if (!LugarAtributos::ocupaHora($plan, $dia, $hora)) {
                 continue;
             }
@@ -120,13 +125,13 @@ final class PresenciaEngine
 
     private static function iniciales(array $res): string
     {
-        $nombre = $res['identidad_publica']['nombre'] ?? '?';
+        $nombre = Utf8Text::paraJson((string) ($res['identidad_publica']['nombre'] ?? '?'));
         $parts = preg_split('/\s+/', trim($nombre)) ?: ['?'];
         $ini = '';
         foreach (array_slice($parts, 0, 2) as $p) {
-            $char = substr($p, 0, 1);
-            $ini .= strtoupper($char);
+            $ini .= Utf8Text::mayusculas(Utf8Text::primeraLetra($p));
         }
-        return $ini ?: '?';
+
+        return Utf8Text::paraJson($ini !== '' ? $ini : '?');
     }
 }

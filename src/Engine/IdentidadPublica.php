@@ -10,7 +10,7 @@ final class IdentidadPublica
     {
         $n = $partida['residentes'][$residenteId]['identidad_publica']['nombre'] ?? null;
         if (is_string($n) && trim($n) !== '') {
-            return $n;
+            return Utf8Text::paraJson($n);
         }
         return $residenteId;
     }

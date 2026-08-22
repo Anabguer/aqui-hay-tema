@@ -232,13 +232,19 @@ final class MisionDiariaEngine
             $plazo = 'Te quedan ' . $quedan . ' h de hoy';
         }
         $items = [];
+        $ocultarPrimerosPasos = ($partida['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID
+            && !empty($partida['tutorial']['finale_visto']);
         foreach (self::delDia($partida, $dia) as $m) {
+            if ($ocultarPrimerosPasos && ($m['familia'] ?? '') === 'primeros_pasos') {
+                continue;
+            }
             $items[] = [
                 'id' => $m['id'] ?? '',
                 'titulo' => $m['titulo'] ?? '',
                 'texto' => $m['texto'] ?? '',
                 'estado' => $m['estado'] ?? self::EST_PENDIENTE,
                 'familia' => $m['familia'] ?? '',
+                'orden' => (int) ($m['orden'] ?? 0),
                 'accion' => $m['accion'] ?? null,
                 'accion_params' => $m['accion_params'] ?? null,
                 'accion_label' => $m['accion_label'] ?? null,

@@ -46,6 +46,18 @@ if (strpos($js, 'setOrgModo(btn.getAttribute') === false) {
 if (strpos($js, 'nuevo_mensajito') === false) {
     $fail[] = 'falta feedback nuevo_mensajito tras plan tutorial';
 }
+if (strpos($js, 'agenda.slots_compatibles') === false) {
+    $fail[] = 'falta agenda.slots_compatibles en Nuevo plan';
+}
+if (strpos($js, 'function buzonNoLeidos') === false) {
+    $fail[] = 'falta buzonNoLeidos para badge canónico';
+}
+if (strpos($js, 'function enTutorialPrimerosPasos') === false) {
+    $fail[] = 'falta enTutorialPrimerosPasos para misiones tutorial';
+}
+if (strpos($js, 'quizaMostrarTutFinale') === false) {
+    $fail[] = 'falta quizaMostrarTutFinale';
+}
 
 if ($fail) {
     fwrite(STDERR, "play_v3_tutorial_source_test FAIL:\n- " . implode("\n- ", $fail) . "\n");

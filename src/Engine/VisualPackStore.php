@@ -112,7 +112,7 @@ final class VisualPackStore
         return [
             'expression_id' => $expressionId,
             'archivo' => $meta['archivo'],
-            'url_relativa' => $rel,
+            'url_relativa' => Utf8Text::paraJson($rel),
             'identidad_version' => (int) ($meta['identidad_version'] ?? $pack['visual_identity_version'] ?? 0),
             'existe' => $existe,
             'placeholder' => !$existe,
@@ -241,8 +241,8 @@ final class VisualPackStore
                 if ($metaPath === null) {
                     continue;
                 }
-                $meta = self::normalizarMetaPack(JsonFile::read($metaPath), $name);
-                $id = (string) ($meta['personaje_id'] ?? $name);
+                $meta = self::normalizarMetaPack(JsonFile::read($metaPath), Utf8Text::paraJson($name));
+                $id = Utf8Text::paraJson((string) ($meta['personaje_id'] ?? $name));
                 $found[$id] = $this->packDesdeMeta($spec['rel'] . '/' . $name, $meta, $spec['laboratorio'], !$spec['canon']);
             }
         }

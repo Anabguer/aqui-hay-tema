@@ -15,6 +15,12 @@ if (in_array('per_qa_valid', $cat->listPersonajeIdsJugables(), true)) {
     fwrite(STDERR, 'FAIL: per_qa_valid en pool jugable\n');
     exit(1);
 }
+foreach (['per_i02', 'per_i03'] as $piloto) {
+    if (in_array($piloto, $cat->listPersonajeIdsJugables(), true)) {
+        fwrite(STDERR, "FAIL: $piloto en pool jugable\n");
+        exit(1);
+    }
+}
 if ($cat->loadPersonaje('per_qa_valid') === []) {
     fwrite(STDERR, 'FAIL: fichero per_qa_valid vacío\n');
     exit(1);
@@ -38,8 +44,8 @@ for ($i = 0; $i < 30; $i++) {
         exit(1);
     }
     foreach (array_keys($p['residentes']) as $rid) {
-        if ($rid === 'per_qa_valid') {
-            fwrite(STDERR, "FAIL: per_qa_valid residente en seed qa-excl-$i\n");
+        if ($rid === 'per_qa_valid' || $rid === 'per_i02' || $rid === 'per_i03') {
+            fwrite(STDERR, "FAIL: $rid residente en seed qa-excl-$i\n");
             exit(1);
         }
     }

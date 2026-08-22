@@ -213,6 +213,7 @@ final class PartidaService
                 'nombre' => $runtime['identidad_publica']['nombre'],
                 'slot_catalogo' => $runtime['identidad_publica']['slot_catalogo'],
                 'edad' => $catalogo['identidad']['edad'] ?? null,
+                'genero' => $catalogo['identidad']['genero'] ?? null,
             ],
             'vivienda_id' => $runtime['vivienda_id'],
             'presencia' => $runtime['presencia'],
@@ -259,6 +260,8 @@ final class PartidaService
     public function estadoResumido(array $partida): array
     {
         $cal = CalibracionConfig::load($this->root);
+        CapacidadViviendas::ensure($partida);
+        $activos = CapacidadViviendas::residentesActivos($partida);
         $out = [
             'meta' => $partida['meta'],
             'reloj' => $partida['reloj'],
@@ -267,6 +270,8 @@ final class PartidaService
             'celeste' => $partida['celeste'],
             'bloque_a' => BloqueA::resumen($partida),
             'residentes_count' => count($partida['residentes']),
+            'pueblo_residentes_activos' => count($activos),
+            'pueblo_capacidad_max' => CapacidadViviendas::CAP_PRODUCTO,
             'encuentros_activos' => count(EncuentroEngine::listarActivos($partida)),
             'encuentros_activos_label' => self::labelEncuentrosActivos(count(EncuentroEngine::listarActivos($partida))),
             'encuentros_hoy' => ResumenDia::encuentrosHoy($partida),
@@ -320,6 +325,7 @@ final class PartidaService
         if (MisionDiariaEngine::activa($partida)) {
             $out['misiones_hoy'] = MisionDiariaEngine::vistaHoy($partida, $cal);
         }
+        $out['buzon_no_leidos'] = BuzonEngine::contarNoLeidos($partida);
         if (PeticionPuebloEngine::activa($partida)) {
             $out['peticiones_pueblo'] = [
                 'abiertas' => PeticionPuebloEngine::vistaAbiertas($partida),

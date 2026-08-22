@@ -1,8 +1,18 @@
-﻿/* Mapa canonico unico — 9 zonas calibradas (mapa_zonas.json) */
+﻿/* Mapa canonico unico - 9 zonas calibradas (mapa_zonas.json) */
 
 .play-v3 .board-fit {
   background: transparent !important;
-  aspect-ratio: 1024 / 682;
+  position: relative;
+  aspect-ratio: 618 / 404;
+  width: 89%;
+  height: auto !important;
+  max-height: min(78vh, 640px);
+  box-shadow: none !important;
+}
+
+.play-v3 .play-root.phone .board-fit {
+  width: 89%;
+  max-height: min(71vh, 605px);
 }
 
 .play-v3 .mapa-complejos,
@@ -14,14 +24,14 @@
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: #fff;
+  background: transparent;
 }
 
 .play-v3 .mapa-canonico-bg {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: fill;
   object-position: center;
   pointer-events: none;
   user-select: none;

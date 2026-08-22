@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Calibrador mapa canónico — 9 zonas</title>
+  <title>Calibrador mapa canónico v2 — 9 zonas</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -39,7 +39,7 @@
     }
     .stage-wrap { transform-origin: top center; }
     .stage {
-      position: relative; width: 1024px; height: 682px;
+      position: relative; width: 618px; height: 404px;
       box-shadow: 0 0 0 2px #555; user-select: none; touch-action: none;
     }
     .stage img.mapa-bg {
@@ -121,7 +121,7 @@
 </head>
 <body>
   <header>
-    <h1>Calibrador mapa canónico</h1>
+    <h1>Calibrador mapa canónico v2 (Mapa_2)</h1>
     <button type="button" id="btn-zoom-out">− zoom</button>
     <button type="button" id="btn-zoom-in">+ zoom</button>
     <span id="zoom-label">70%</span>
@@ -129,6 +129,7 @@
     <button type="button" id="btn-all-zones" class="is-on">Ver todas</button>
     <button type="button" id="btn-obras">Preview EN OBRAS</button>
     <span class="sep"></span>
+    <button type="button" id="btn-load-server">CARGAR JSON JUEGO</button>
     <button type="button" id="btn-export">EXPORTAR JSON</button>
     <button type="button" id="btn-copy">COPIAR JSON</button>
   </header>
@@ -137,7 +138,7 @@
     <div class="viewport" id="viewport">
       <div class="stage-wrap" id="stage-wrap">
         <div class="stage" id="stage">
-          <img class="mapa-bg" id="mapa-bg" src="../assets/play-v3/mapa_canonico.jpg" alt="Mapa canónico" width="1024" height="682"/>
+          <img class="mapa-bg" id="mapa-bg" src="../assets/play-v3/mapa_canonico_v2.png" alt="Mapa canónico v2" width="618" height="404"/>
           <div class="zones-layer" id="zones-layer"></div>
         </div>
       </div>
@@ -162,7 +163,7 @@
         <textarea id="export-out" readonly spellcheck="false"></textarea>
         <button type="button" id="btn-download">Descargar mapa_zonas.json</button>
         <p class="hint">
-          Rutas canónicas: <code>assets/play-v3/mapa_canonico.jpg</code> ·
+          Rutas canónicas: <code>assets/play-v3/mapa_canonico_v2.png</code> ·
           <code>assets/play-v3/overlay_en_obras.png</code><br/>
           Rectángulo sólido = zona clicable · rectángulo punteado azul = tokens/personajes.<br/>
           Clic vacío = dibujar · arrastrar = mover · asas = redimensionar.
@@ -176,10 +177,10 @@
 (function () {
   'use strict';
 
-  var MAP_W = 1024;
-  var MAP_H = 682;
+  var MAP_W = 618;
+  var MAP_H = 404;
   var OBRAS_URL = '../assets/play-v3/overlay_en_obras.png';
-  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v2';
+  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v3_mapa2';
   var MIN_PCT = 0.5;
 
   var ZONAS = [
@@ -300,23 +301,36 @@
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return;
-      var parsed = JSON.parse(raw);
-      if (!parsed.zonas) return;
-      Object.keys(parsed.zonas).forEach(function (id) {
-        if (!state.zonas[id]) return;
-        var s = parsed.zonas[id];
-        state.zonas[id].x = s.x || 0;
-        state.zonas[id].y = s.y || 0;
-        state.zonas[id].w = s.w || 0;
-        state.zonas[id].h = s.h || 0;
-        if (s.tokens) {
-          state.zonas[id].tokens = {
-            x: s.tokens.x || 0, y: s.tokens.y || 0,
-            w: s.tokens.w || 0, h: s.tokens.h || 0
-          };
-        }
-      });
+      applyZonasData(JSON.parse(raw));
     } catch (e) {}
+  }
+
+  function applyZonasData(data) {
+    if (!data || !data.zonas) return;
+    Object.keys(data.zonas).forEach(function (id) {
+      if (!state.zonas[id]) return;
+      var s = data.zonas[id];
+      state.zonas[id].x = s.x || 0;
+      state.zonas[id].y = s.y || 0;
+      state.zonas[id].w = s.w || 0;
+      state.zonas[id].h = s.h || 0;
+      if (s.tokens) {
+        state.zonas[id].tokens = {
+          x: s.tokens.x || 0, y: s.tokens.y || 0,
+          w: s.tokens.w || 0, h: s.tokens.h || 0
+        };
+      }
+    });
+  }
+
+  function loadServer() {
+    return fetch('../assets/play-v3/mapa_zonas.json?v=' + Date.now())
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        applyZonasData(data);
+        toast('JSON del juego cargado');
+      })
+      .catch(function () { toast('No se pudo cargar mapa_zonas.json'); });
   }
 
   function stageScale() { return state.zoom; }
@@ -441,7 +455,7 @@
     var out = {
       meta: {
         herramienta: 'dev/mapa-zonas-calibrador.html',
-        mapa: 'assets/play-v3/mapa_canonico.jpg',
+        mapa: 'assets/play-v3/mapa_canonico_v2.png',
         overlay_obras: 'assets/play-v3/overlay_en_obras.png',
         unidad: 'porcentaje',
         mapa_px: [MAP_W, MAP_H]
@@ -629,6 +643,9 @@
   document.getElementById('btn-layer-tokens').addEventListener('click', function () {
     state.editLayer = 'tokens';
     renderAll();
+  });
+  document.getElementById('btn-load-server').addEventListener('click', function () {
+    loadServer().then(function () { renderAll(); });
   });
   document.getElementById('btn-export').addEventListener('click', updateExportPreview);
   document.getElementById('btn-copy').addEventListener('click', copyExport);

@@ -37,6 +37,7 @@ final class RelacionEngine
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
             }
         }
+        unset($rel);
 
         $rel = [
             'id' => $id,
@@ -97,6 +98,7 @@ final class RelacionEngine
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
             }
         }
+        unset($rel);
 
         $rel = array_merge([
             'id' => $id,
@@ -151,6 +153,7 @@ final class RelacionEngine
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
             }
         }
+        unset($rel);
 
         $rel = [
             'id' => $id,

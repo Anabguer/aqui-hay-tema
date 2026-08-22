@@ -78,6 +78,10 @@ final class BuzonEngine
         foreach ($partida['buzon'] as &$m) {
             if ($m['id'] === $mensajeId) {
                 $m['estado'] = $estado;
+                if ($estado === 'leido') {
+                    $m['leido'] = true;
+                    $m['leido_en'] = date('c');
+                }
                 return ['ok' => true, 'mensaje' => $m];
             }
         }
@@ -108,5 +112,27 @@ final class BuzonEngine
             }));
         }
         return $items;
+    }
+
+    /**
+     * Mensajes no leídos del canal Mensajitos (solo estado pendiente).
+     */
+    public static function contarNoLeidos(array $partida, ?string $canal = self::CANAL_BUZON): int
+    {
+        $n = 0;
+        foreach ($partida['buzon'] ?? [] as $m) {
+            if (!is_array($m)) {
+                continue;
+            }
+            if (($m['estado'] ?? '') !== 'pendiente') {
+                continue;
+            }
+            $c = (string) ($m['canal'] ?? self::canalDe((string) ($m['clasificacion'] ?? self::PETICION)));
+            if ($canal !== null && $c !== $canal) {
+                continue;
+            }
+            $n++;
+        }
+        return $n;
     }
 }

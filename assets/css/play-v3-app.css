@@ -16,12 +16,21 @@
   --emo-enfadado: #c42b4a;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; height: 100%; }
+html {
+  margin: 0;
+  min-height: 100%;
+  background: #fff;
+}
+body {
+  margin: 0;
+  height: 100%;
+}
 body.play-v3 {
   background: #fafaf8;
+  margin: 1cm 2.5cm 0;
+  min-height: calc(100% - 1cm);
   color: var(--ink);
   font-family: Nunito, "Segoe UI", sans-serif;
-  min-height: 100%;
 }
 .taller {
   position: relative; z-index: 20;
@@ -63,7 +72,6 @@ body.play-v3 {
 .play-v3 .corazon::after { display: none; }
 .corazon-dibujo {
   width: 62px; height: 56px; display: block;
-  background: linear-gradient(to top, var(--pink-deep) 0, var(--pink) var(--fill, 0%), var(--heart-empty) var(--fill, 0%));
   -webkit-mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
   mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
 }
@@ -139,7 +147,6 @@ body.play-v3 {
 .mini { color: var(--muted); font-size: .86rem; }
 .cta {
   border: 2px solid #2c261f;
-  background: linear-gradient(145deg, #fde8ef, #f5a8bc);
   color: #2c261f;
   font: inherit;
   font-weight: 800;
@@ -288,7 +295,6 @@ select.chip-select, .org-row select {
 .play-v3 .edificios-layer .edif.is-off::after {
   content: "";
   position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.08));
   border: 1.5px dashed rgba(122,113,100,.45);
   border-radius: 2px;
 }

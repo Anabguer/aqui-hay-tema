@@ -13,6 +13,7 @@ $root = dirname(__DIR__);
 $svc = new PartidaService($root);
 $p = $svc->nuevaPartida('juego_v1', 'dia2-misiones-test');
 $p['tutorial']['jugable_completado'] = true;
+$p['tutorial']['finale_visto'] = true;
 $p['tutorial']['activo'] = false;
 $p['reloj']['dia_pueblo'] = 2;
 $p['reloj']['hora_actual'] = 9;

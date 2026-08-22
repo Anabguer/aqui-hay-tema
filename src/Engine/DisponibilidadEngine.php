@@ -18,7 +18,7 @@ final class DisponibilidadEngine
         ?string $lugarId = null
     ): array {
         $participantes = array_values(array_unique(array_filter($participantes)));
-        if (count($participantes) < 2) {
+        if (count($participantes) < 1) {
             return ['ok' => false, 'error' => 'participantes_insuficientes', 'slots' => []];
         }
 
@@ -35,6 +35,10 @@ final class DisponibilidadEngine
         $desdeDia ??= (int) $partida['reloj']['dia_pueblo'];
         $desdeHora ??= (int) $partida['reloj']['hora_actual'];
         $minuto = (int) ($partida['reloj']['minuto_actual'] ?? 0);
+        $durHoras = 1;
+        if ($lugarId !== null && $lugarId !== '') {
+            $durHoras = LugarAtributos::de($lugarId)['horas'];
+        }
         $slots = [];
         $reloj = $partida['reloj'] ?? [];
 
@@ -51,30 +55,9 @@ final class DisponibilidadEngine
                 if (!Reloj::esFuturo($reloj, $dia, $h)) {
                     continue;
                 }
-                $motivos = [];
-                $libre = true;
-                foreach ($participantes as $rid) {
-                    $disp = AgendaEngine::estaDisponible($partida, $rid, $dia, $h);
-                    if (!$disp['disponible']) {
-                        $libre = false;
-                        $motivos[$rid] = $disp['motivo'] ?? 'ocupado';
-                    }
-                }
-                if (!$libre) {
+                if (!self::franjaValida($partida, $participantes, $dia, $h, $lugarId, $durHoras)) {
                     continue;
                 }
-                if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $h)) {
-                    continue;
-                }
-                if ($lugarId !== null && $lugarId !== '') {
-                    if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
-                        continue;
-                    }
-                    if (ComplejoCatalog::horasRestantesAbiertas($lugarId, $h) < 1) {
-                        continue;
-                    }
-                }
-                $n = (int) Reloj::fechaDeDia($reloj, $dia)->format('N');
                 $slots[] = [
                     'dia' => $dia,
                     'hora' => $h,
@@ -85,8 +68,9 @@ final class DisponibilidadEngine
                     'etiqueta_hora' => str_pad((string) $h, 2, '0', STR_PAD_LEFT) . ':00',
                     'participantes' => $participantes,
                     'tipo' => $tipoEncuentro,
+                    'lugar' => $lugarId,
+                    'duracion_horas' => $durHoras,
                 ];
-                unset($n);
             }
         }
 
@@ -169,7 +153,46 @@ final class DisponibilidadEngine
         ];
     }
 
-  /** @param array{motivo?: string, tipo?: string|null} $disp */
+    /**
+     * Valida una franja completa (duración, agenda, lugar y conflictos).
+     *
+     * @param list<string> $participantes
+     */
+    public static function franjaValida(
+        array $partida,
+        array $participantes,
+        int $dia,
+        int $hora,
+        ?string $lugarId = null,
+        int $duracionHoras = 1
+    ): bool {
+        $duracionHoras = max(1, $duracionHoras);
+        for ($offset = 0; $offset < $duracionHoras; $offset++) {
+            $h = $hora + $offset;
+            if ($h >= 24) {
+                return false;
+            }
+            foreach ($participantes as $rid) {
+                $disp = AgendaEngine::estaDisponible($partida, (string) $rid, $dia, $h);
+                if (!$disp['disponible']) {
+                    return false;
+                }
+            }
+            if ($lugarId !== null && $lugarId !== '') {
+                if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                    return false;
+                }
+            }
+        }
+        if ($lugarId !== null && $lugarId !== '') {
+            if (ComplejoCatalog::horasRestantesAbiertas($lugarId, $hora) < $duracionHoras) {
+                return false;
+            }
+        }
+        return !EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $hora, $duracionHoras);
+    }
+
+    /** @param array{motivo?: string, tipo?: string|null} $disp */
     private static function claveBloqueo(array $disp): string
     {
         $tipo = (string) ($disp['tipo'] ?? '');

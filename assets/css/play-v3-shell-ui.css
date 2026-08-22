@@ -24,7 +24,7 @@ body.play-v3[data-lab="1"] .taller, body.play-v3[data-lab="1"] .playtest-cheats 
 body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .game-main {
   flex: 1; min-height: 0; display: grid;
-  grid-template-columns: minmax(220px, 290px) minmax(0, 1fr) minmax(220px, 290px);
+  grid-template-columns: minmax(250px, 320px) minmax(0, 1fr) minmax(250px, 320px);
   gap: 14px; padding: 10px 14px; background: #fafaf8;
 }
 .game-map-wrap { min-width: 0; min-height: 0; display: flex; background: #fff; border: none; border-radius: 0; }
@@ -44,6 +44,15 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
   -webkit-mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
   mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
   transform: rotate(8deg) translateY(-1px);
+}
+.brand-col {
+  display: flex; flex-direction: column; align-items: flex-start;
+  align-self: start;
+}
+.game-top .btn-guia {
+  position: static; left: auto; bottom: auto;
+  margin: .55rem 0 0; align-self: flex-end;
+  font-size: .68rem; padding: .22rem .45rem;
 }
 .top-center { display: flex; align-items: flex-end; justify-content: center; gap: 1.35rem; flex-wrap: nowrap; }
 .top-vida {
@@ -69,8 +78,140 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
   filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1));
 }
 .corazon-bg { fill: #fceef0; }
-.corazon-fill-rect { fill: #e57d90; transition: y .35s ease, height .35s ease; }
+.corazon-fill-rect { fill: #e57d90; transition: y .55s ease, height .55s ease; }
 .corazon-stroke { stroke: #2c261f; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
+
+/* Vida del pueblo - latido del corazon (solo feedback visual) */
+.top-vida .corazon-svg {
+  transform-origin: 50% 58%;
+  transform-box: fill-box;
+  filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+}
+@keyframes corazon-vida-reposo {
+  0%, 72%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+  74% {
+    transform: scale(1.014);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 7px rgba(229,125,144,.38));
+  }
+  76% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 2px rgba(229,125,144,.12));
+  }
+  78% {
+    transform: scale(1.02);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 9px rgba(229,125,144,.44));
+  }
+  80% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+}
+@keyframes corazon-vida-reposo-critico {
+  0%, 72%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+  74% {
+    transform: scale(1.014);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 6px rgba(196,43,74,.34));
+  }
+  76% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 2px rgba(196,43,74,.14));
+  }
+  78% {
+    transform: scale(1.02);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 8px rgba(196,43,74,.4));
+  }
+  80% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+}
+@keyframes corazon-vida-sube {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 4px rgba(229,125,144,.2));
+  }
+  12% {
+    transform: scale(1.055);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 14px rgba(229,125,144,.62)) drop-shadow(0 0 22px rgba(252,238,240,.35));
+  }
+  24% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 5px rgba(229,125,144,.25));
+  }
+  36% {
+    transform: scale(1.065);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 16px rgba(229,125,144,.68)) drop-shadow(0 0 24px rgba(252,238,240,.4));
+  }
+  48% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 5px rgba(229,125,144,.25));
+  }
+  60% {
+    transform: scale(1.045);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 12px rgba(229,125,144,.52));
+  }
+  72% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 6px rgba(229,125,144,.28));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+}
+@keyframes corazon-vida-baja {
+  0% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+  14% {
+    transform: scale(0.94) rotate(-0.6deg);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.14)) drop-shadow(0 0 3px rgba(196,43,74,.22));
+  }
+  28% {
+    transform: scale(0.97) rotate(0.5deg);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.12)) drop-shadow(0 0 2px rgba(196,43,74,.16));
+  }
+  42% {
+    transform: scale(0.935) rotate(-0.4deg);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.14)) drop-shadow(0 0 4px rgba(196,43,74,.24));
+  }
+  56% {
+    transform: scale(0.96);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.12)) drop-shadow(0 0 2px rgba(196,43,74,.14));
+  }
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0));
+  }
+}
+.top-vida .corazon-svg.corazon-vida--reposo {
+  animation: corazon-vida-reposo 3.6s ease-in-out infinite;
+}
+.top-vida .corazon-svg.corazon-vida--critico.corazon-vida--reposo {
+  animation: corazon-vida-reposo-critico 4.8s ease-in-out infinite;
+}
+.top-vida .corazon-svg.corazon-vida--sube {
+  animation: corazon-vida-sube 1.35s ease-in-out;
+}
+.top-vida .corazon-svg.corazon-vida--baja {
+  animation: corazon-vida-baja 0.95s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .top-vida .corazon-svg.corazon-vida--reposo,
+  .top-vida .corazon-svg.corazon-vida--sube,
+  .top-vida .corazon-svg.corazon-vida--baja {
+    animation: none !important;
+    filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) !important;
+  }
+  .corazon-fill-rect { transition: none; }
+}
 
 /* Día — ticket vertical irregular */
 .obj-dia {
@@ -254,7 +395,7 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
   display: block; width: 100%; border: 0; cursor: pointer; text-align: left; font: inherit; color: inherit;
 }
 .obj-vecinos-stats { max-width: 100%; overflow: hidden; }
-.obj-vecinos-tit { display: block; font-size: .58rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #7a7164; margin-bottom: .35rem; }
+.obj-vecinos-tit { display: block; font-size: .82rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #7a7164; margin-bottom: .35rem; }
 .celestine-nota .obj-vecinos-tit { color: #6a5848; }
 .vecinos-stat { display: flex; align-items: center; gap: .35rem; padding: .12rem 0; font-size: .68rem; line-height: 1.25; min-width: 0; max-width: 100%; }
 .vecinos-stat-ico { width: 1rem; text-align: center; opacity: .85; font-size: .72rem; }

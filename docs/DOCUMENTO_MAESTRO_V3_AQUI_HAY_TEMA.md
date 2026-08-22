@@ -11,11 +11,11 @@ Celestine (la jugadora) observa, organiza encuentros y descubre a los vecinos pr
 
 ## Población
 
-- Máximo **24 vecinos** en producto.
+- Máximo **46 vecinos** simultáneos en producto (catálogo jugable completo).
 - Arranque: **3 personajes aleatorios** al iniciar partida.
 - Tras tutorial día 1: **5 incorporaciones aleatorias** → total **8**.
 - Llegadas posteriores: un candidato activo, buzón, aceptar/rechazar; espaciado creciente (curva V3).
-- **Sin pantalla Residencias** ni bloques A/B/C visibles. Celestine apunta → **Vecinos** (`N de 24 vecinos`).
+- **Sin pantalla Residencias** ni bloques A/B/C visibles. Celestine apunta → **Vecinos** (`En el pueblo N / 46`).
 
 ## Identidad vs personalidad
 
@@ -91,12 +91,24 @@ Asset EN OBRAS puede existir en repo; **no** es mecánica de producto.
 |---|---|
 | 6 complejos / 14 destinos | Solo **9 lugares** planos en mapa único |
 | Compra/desbloqueo lugares, EN OBRAS progresión | **Eliminado** — 9 siempre abiertos |
-| Economía, dinero HUD, compra bloques A/B/C | **Eliminado** — cap 24 fija, pool opaco |
+| Economía, dinero HUD, compra bloques A/B/C | **Eliminado** — cap 46 fija, pool opaco |
 | Residencias UI, tabs A/B/C | **Eliminado** — solo Vecinos |
-| Capacidad 48 (16×3) | **24** vecinos máximo |
+| Capacidad 48 (16×3) | **46** vecinos máximo simultáneo |
 | Roster fijo juego_v1 | 3+5 aleatorios → 8, luego curva llegadas |
 | Hobbies fijos en Pxxx | Personalidad generada por partida |
 | Encargos extra económicos | **No implementar** |
 | Penalización misión caducada | **0** — sin castigo |
 
 **Jerarquía:** este addendum + `docs/PLAN_ALINEACION_V3.md` > textos Maestro anteriores > semilla Cupido Cutre (tono válido; cifras sustituidas).
+
+
+
+### Addendum población (22/08/2026)
+
+| Antes (erróneo V3) | Canon actual |
+|---|---|
+| Capacidad máxima 24 | **46 vecinos simultáneos** (catálogo jugable completo) |
+| Pool 24 slots A+B | Pool **46** slots: A16+B8+C16+D6 |
+| Celestine N de 24 | Celestine En el pueblo N / 46 |
+
+Los 46 personajes del catálogo pueden convivir en una misma partida si ninguno se marcha. **No** reintroducir 24 como límite de población.

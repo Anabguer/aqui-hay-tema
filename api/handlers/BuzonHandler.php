@@ -44,6 +44,7 @@ final class BuzonHandler
         return [
             'ok' => true,
             'mensajes' => $mensajes,
+            'no_leidos' => BuzonEngine::contarNoLeidos($partida),
         ];
     }
 

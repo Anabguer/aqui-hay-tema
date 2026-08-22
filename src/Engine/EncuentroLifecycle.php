@@ -20,7 +20,7 @@ final class EncuentroLifecycle
                 continue;
             }
 
-            $start = (int) ($enc['dia'] ?? 0) * 24 + (int) ($enc['hora'] ?? 0);
+            $start = (int) ($enc['dia'] ?? 0) * 24 + (int) ($enc['hora'] ?? ($enc['hora_inicio'] ?? 0));
             $durH = LugarAtributos::horasDeEncuentro($enc);
             $end = $start + $durH;
 

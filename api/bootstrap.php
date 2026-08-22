@@ -40,6 +40,8 @@ function jsonOut(array $data, int $code = 200): void
         unset($data['_http']);
     }
     http_response_code($code);
+    header('Cache-Control: no-store, no-cache, must-revalidate');
+    header('Pragma: no-cache');
     echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
     exit;
 }

@@ -1,0 +1,244 @@
+
+/* === Ficha v2: aire, cerrar vecinos, scroll, rosas, rel overlay === */
+.play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha {
+  max-height: min(86vh, 780px) !important;
+  padding: 1.85rem 1.15rem 1rem !important;
+  gap: .65rem !important;
+}
+
+.play-v3 .capa-ficha .capa-cerrar-pestaña {
+  display: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar {
+  position: absolute;
+  top: 1.65rem;
+  right: .85rem;
+  z-index: 8;
+  border: 0 !important;
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
+  width: auto;
+  height: auto;
+  min-width: 0;
+  min-height: 0;
+  display: block;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: .02em;
+  text-transform: lowercase;
+  color: #6a5848;
+  cursor: pointer;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar::before {
+  display: none !important;
+  content: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-cerrar:hover {
+  color: #2c261f;
+}
+
+.play-v3 .capa-ficha .ficha-top {
+  padding: 0 4.75rem .35rem .15rem;
+  margin-bottom: .25rem;
+}
+
+.play-v3 .capa-ficha .ficha-body {
+  gap: .95rem 1rem;
+  padding-top: .15rem;
+}
+
+.play-v3 .capa-ficha .ficha-col-perfil {
+  gap: .5rem;
+  padding: .15rem .25rem;
+}
+
+.play-v3 .capa-ficha .ficha-col-detalles {
+  gap: .85rem;
+  padding: .15rem .2rem .25rem .1rem;
+  max-height: calc(86vh - 11rem);
+  overflow-y: auto;
+  overflow-x: clip;
+  scrollbar-width: thin;
+  scrollbar-color: #c9b59a rgba(243, 230, 204, .35);
+}
+
+.play-v3 .capa-ficha .ficha-col-detalles::-webkit-scrollbar,
+.play-v3 .capa-ficha .ficha-rel-scroll::-webkit-scrollbar {
+  width: 9px;
+}
+
+.play-v3 .capa-ficha .ficha-col-detalles::-webkit-scrollbar-track,
+.play-v3 .capa-ficha .ficha-rel-scroll::-webkit-scrollbar-track {
+  background: rgba(243, 230, 204, .35);
+  border-radius: 6px;
+}
+
+.play-v3 .capa-ficha .ficha-col-detalles::-webkit-scrollbar-thumb,
+.play-v3 .capa-ficha .ficha-rel-scroll::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4c4a8, #b89a78);
+  border-radius: 6px;
+  border: 2px solid rgba(243, 230, 204, .45);
+}
+
+.play-v3 .capa-ficha .ficha-seccion {
+  margin-bottom: .15rem;
+}
+
+.play-v3 .capa-ficha .ficha-seccion-tit {
+  margin: 0 0 .45rem;
+  padding-bottom: .22rem;
+  border-bottom: 1.5px solid rgba(217, 107, 138, .35);
+  font-size: .88rem;
+  letter-spacing: .12em;
+  color: #d96d8a;
+}
+
+.play-v3 .capa-ficha .ficha-chips {
+  gap: .45rem;
+}
+
+.play-v3 .capa-ficha .ficha-chip {
+  padding: .35rem .62rem;
+}
+
+.play-v3 .capa-ficha .ficha-relaciones {
+  gap: .55rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-bar {
+  height: 6px;
+}
+
+.play-v3 .capa-ficha .ficha-rel-row.is-crisis .ficha-rel-bar span {
+  background: #e8a0b0;
+}
+
+.play-v3 .capa-ficha .ficha-rel-row:not(.is-crisis) .ficha-rel-bar span {
+  background: #5a9e96;
+}
+
+.play-v3 .capa-ficha .ficha-ver-mas {
+  margin-top: .45rem;
+  border: 0;
+  background: transparent;
+  padding: .15rem 0;
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 700;
+  color: #6a5848;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.play-v3 .capa-ficha .ficha-ver-mas:hover {
+  color: #d96d8a;
+}
+
+.play-v3 .capa-ficha .ficha-planes {
+  gap: .38rem;
+}
+
+.play-v3 .capa-ficha .ficha-ironico {
+  font-style: italic;
+  color: #8a7868;
+}
+
+.play-v3 .capa-ficha .ficha-btn-org {
+  margin-top: .35rem;
+  padding: .52rem .85rem;
+}
+
+/* Overlay relaciones */
+.play-v3 .capa-ficha .ficha-rel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(44, 38, 31, .22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .75rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-overlay[hidden] {
+  display: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal {
+  position: relative;
+  width: min(420px, 92%);
+  max-height: min(70vh, 520px);
+  padding: 1.65rem .95rem .85rem;
+  border-radius: 2px 8px 5px 4px;
+  border: 1.5px solid rgba(44, 38, 31, .14);
+  box-shadow:
+    2px 4px 14px rgba(40, 28, 16, .18),
+    inset 0 0 0 1px rgba(180, 150, 110, .28);
+  background-color: #fdf9f4;
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 249, .88) 0%, rgba(255, 253, 249, .58) 100%),
+    url("../play-v3/capas/libreta_hoja.png");
+  background-position: center, center;
+  background-size: cover, cover;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal .ficha-tape-l {
+  top: 8px;
+  left: 14px;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal .ficha-tape-r {
+  top: 8px;
+  right: 14px;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal .ficha-cerrar {
+  top: 1.35rem;
+  right: .75rem;
+}
+
+.play-v3 .capa-ficha .ficha-rel-modal-tit {
+  margin: .35rem 0 .25rem;
+  padding: 0 4rem .35rem .15rem;
+  font-family: Caveat, cursive;
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #2a2218;
+  text-align: center;
+}
+
+.play-v3 .capa-ficha .ficha-rel-scroll {
+  overflow-y: auto;
+  overflow-x: clip;
+  max-height: calc(70vh - 8rem);
+  padding: .25rem .15rem .15rem;
+  display: flex;
+  flex-direction: column;
+  gap: .55rem;
+  scrollbar-width: thin;
+  scrollbar-color: #c9b59a rgba(243, 230, 204, .35);
+}
+
+@media (max-width: 520px) {
+  .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha {
+    max-height: 78% !important;
+    padding-top: 1.55rem !important;
+  }
+
+  .play-v3 .capa-ficha .ficha-col-detalles {
+    max-height: calc(78vh - 12rem);
+  }
+}

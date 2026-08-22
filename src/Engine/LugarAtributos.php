@@ -72,7 +72,10 @@ final class LugarAtributos
         if (!in_array($estado, ['programado', 'en_curso'], true)) {
             return false;
         }
-        $ini = (int) ($item['hora'] ?? -1);
+        $ini = (int) ($item['hora'] ?? ($item['hora_inicio'] ?? -1));
+        if ($ini < 0) {
+            return false;
+        }
         $fin = $ini + self::horasDeEncuentro($item);
         return $hora >= $ini && $hora < $fin;
     }

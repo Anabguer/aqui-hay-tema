@@ -64,6 +64,10 @@ final class ResidenteOperations
         $id = $runtime['catalog_id'];
         $partida['residentes'][$id] = $runtime;
         $asig = BloqueA::asignarAutomatico($partida, $id);
+        if (($asig['error'] ?? null) !== null) {
+            unset($partida['residentes'][$id]);
+            return ['ok' => false, 'error' => $asig['error'], 'residente' => $runtime];
+        }
 
         GeneradorResidente::aplicar($partida, $id, $this->catalog, $this->logger);
         QuimicaEngine::alIncorporar($partida, $id, $this->catalog, $this->logger);

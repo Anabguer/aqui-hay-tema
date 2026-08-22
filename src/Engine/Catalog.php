@@ -5,8 +5,11 @@ namespace AquiHayTema\Engine;
 
 final class Catalog
 {
-    /** Fichas técnicas/QA: cargables para tests, nunca en pools jugables. */
-    private const EXCLUIDOS_POOL_JUGABLE = ['per_qa_valid'];
+    /**
+     * Fichas técnicas/piloto: cargables para tests explícitos, nunca en pool aleatorio.
+     * El pool canónico es solo per_p* con ficha y pack visual válidos.
+     */
+    private const EXCLUIDOS_POOL_JUGABLE = ['per_qa_valid', 'per_i02', 'per_i03'];
 
     private string $root;
     private ?array $lugaresCache = null;
@@ -85,7 +88,7 @@ final class Catalog
         return $data;
     }
 
-  public function listPersonajeIds(): array
+    public function listPersonajeIds(): array
     {
         $ids = [];
         foreach (glob("{$this->root}/data/personajes/per_*.json") ?: [] as $file) {
@@ -95,19 +98,51 @@ final class Catalog
         return $ids;
     }
 
-    /** @return list<string> */
+    /**
+     * Pool canónico juego_v1: per_p* con ficha válida y pack visual P00x resoluble.
+     *
+     * @return list<string>
+     */
     public function listPersonajeIdsJugables(): array
     {
-        $excl = self::EXCLUIDOS_POOL_JUGABLE;
-        return array_values(array_filter(
-            $this->listPersonajeIds(),
-            static fn(string $id): bool => !in_array($id, $excl, true)
-        ));
+        $packs = new VisualPackStore($this->root);
+        $out = [];
+        foreach ($this->listPersonajeIds() as $id) {
+            if (!$this->esIdCanonicoPool($id)) {
+                continue;
+            }
+            try {
+                $personaje = $this->loadPersonaje($id);
+            } catch (\Throwable $e) {
+                continue;
+            }
+            $runtime = ResidenteRuntime::crearDesdeCatalogo($personaje);
+            $tok = RetratoResolver::resolver($runtime, $id, $packs);
+            if ($tok['url'] === null) {
+                continue;
+            }
+            $out[] = $id;
+        }
+        return $out;
     }
 
     public function esPersonajeJugable(string $id): bool
     {
-        return $id !== '' && !in_array($id, self::EXCLUIDOS_POOL_JUGABLE, true);
+        if (!$this->esIdCanonicoPool($id)) {
+            return false;
+        }
+        $path = "{$this->root}/data/personajes/{$id}.json";
+        if (!is_file($path)) {
+            return false;
+        }
+        try {
+            $personaje = $this->loadPersonaje($id);
+            $runtime = ResidenteRuntime::crearDesdeCatalogo($personaje);
+            $packs = new VisualPackStore($this->root);
+            return RetratoResolver::resolver($runtime, $id, $packs)['url'] !== null;
+        } catch (\Throwable $e) {
+            return false;
+        }
     }
 
     /** @return list<string> */
@@ -117,5 +152,13 @@ final class Catalog
             $this->loadLugares();
         }
         return $this->lugarIdsCache ?? [];
+    }
+
+    private function esIdCanonicoPool(string $id): bool
+    {
+        if ($id === '' || in_array($id, self::EXCLUIDOS_POOL_JUGABLE, true)) {
+            return false;
+        }
+        return preg_match('/^per_p\d+$/', $id) === 1;
     }
 }

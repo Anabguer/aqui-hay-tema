@@ -78,7 +78,13 @@ final class TutorialPrimerosPasos
 
     public static function bloqueaMisionesNormales(array $partida): bool
     {
-        return self::bloqueaIncorporaciones($partida);
+        if (!self::activo($partida)) {
+            return false;
+        }
+        if (empty($partida['tutorial']['jugable_completado'])) {
+            return true;
+        }
+        return empty($partida['tutorial']['finale_visto']);
     }
 
     public static function bloqueaIncorporaciones(array $partida): bool
@@ -164,6 +170,9 @@ final class TutorialPrimerosPasos
         }
         $partida['tutorial']['finale_visto'] = true;
         $partida['tutorial']['activo'] = false;
+        if (LabAudit::activaEnRequest()) {
+            LabAudit::eventoTutorial($partida, 'FINALE_VISTO', new Catalog(dirname(__DIR__, 2)));
+        }
     }
 
     /**
@@ -227,10 +236,11 @@ final class TutorialPrimerosPasos
                 ],
             ],
             'finale' => [
-                'tit' => 'Bueno. Sigues viva.',
-                'txt' => "Ya sabes mirar, cotillear y meter a la gente en planes.\n"
-                    . "A partir de aquí el pueblo se encargará de complicarlo todo él solito.\n"
-                    . 'Cada día tendrás nuevas misiones en ‘Hoy en el pueblo’, pero no hace falta hacerlas todas. Tú sabrás.',
+                'tit' => 'Bueno. Ya sabes lo básico.',
+                'txt' => "Ya sabes mirar, cotillear y organizar planes.\n\n"
+                    . "Ahora pásate por Vecinos y échales un ojo a sus fichas. Al principio no vas a saberlo todo: cuanto más los conozcas, más irás descubriendo sobre sus hobbies, gustos, manías y demás miserias humanas.\n\n"
+                    . "Y por cierto… he oído que pronto llegan nuevos vecinos al pueblo.\n\n"
+                    . 'Suerte. La vas a necesitar.',
                 'boton' => 'Que empiece el tema',
             ],
         ];
@@ -592,15 +602,7 @@ final class TutorialPrimerosPasos
             return null;
         }
         $packs = new VisualPackStore($catalog->getRoot());
-        $packId = EmotionalStateService::packIdDe($res, $packs);
-        if (!is_string($packId) || $packId === '') {
-            return null;
-        }
-        $pack = $packs->pack($packId);
-        if (!is_array($pack)) {
-            return null;
-        }
-        $asset = $packs->asset($pack, ExpresionVisual::NEUTRAL);
-        return (is_array($asset) && !empty($asset['url_relativa'])) ? (string) $asset['url_relativa'] : null;
+        $tok = RetratoResolver::resolver($res, $id, $packs);
+        return $tok['url'];
     }
 }

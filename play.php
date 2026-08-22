@@ -3,7 +3,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260822bloq';
+$ahtUi = 'v3-20260822mapa2-ficha-v3';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -128,6 +128,26 @@ $ahtUi = 'v3-20260822bloq';
       margin-top: .35rem; border: 1px solid #8a7a66; background: #fff6c8;
       font: inherit; font-size: .75rem; font-weight: 800; padding: .25rem .5rem; cursor: pointer;
     }
+    .mision-pp { margin-bottom: .55rem; }
+    .mision-pp.mision-bloqueada { opacity: .55; }
+    .mision-pp-head { display: flex; align-items: center; gap: .45rem; margin-bottom: .2rem; }
+    .mision-pp-tit { font-size: .92rem; }
+    .mision-pp-texto { margin: 0; font-size: .82rem; line-height: 1.35; }
+    .mision-bolita {
+      width: 1.15rem; height: 1.15rem; flex: 0 0 1.15rem;
+      border: 2px solid #5c4f42; border-radius: 50%; background: #fffef8;
+      display: inline-flex; align-items: center; justify-content: center;
+      box-shadow: 1px 1px 0 rgba(60,48,36,.15);
+    }
+    .mision-bolita.bloqueada { background: #ece6da; border-color: #a89a88; opacity: .7; }
+    .mision-bolita.cumplida { background: #fff6c8; border-color: #5c4f42; }
+    .mision-check {
+      font-family: "Comic Sans MS", "Segoe Print", cursive;
+      font-size: .95rem; font-weight: 900; color: #3d3228;
+      transform: rotate(-8deg); line-height: 1;
+    }
+    .carta-msg.leida { opacity: .88; }
+    .carta-msg.leida .cuerpo { color: #5a5248; }
     /* Retratos: rostro visible sin rediseñar capas */
     .capa-vecinos .vecino img,
     .vecino-celda img,
@@ -147,6 +167,7 @@ $ahtUi = 'v3-20260822bloq';
       display: inline-flex; align-items: center; justify-content: center; background: #fff;
       font-weight: 800; font-size: .9rem;
     }
+    .celestine-nota .obj-vecinos-tit { color: #d0697a; }
       </style>
 </head>
 <body class="play-v3" data-ui="v3" data-debug="0">
@@ -163,6 +184,8 @@ $ahtUi = 'v3-20260822bloq';
       <button type="button" id="btn-debug-proximo">Ir al próximo</button>
       <button type="button" id="btn-debug-copy">Copiar debug</button>
       <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
+      <button type="button" id="btn-debug-parejas-crear">Crear parejas de prueba</button>
+      <button type="button" id="btn-debug-parejas-quitar">Quitar parejas de prueba</button>
       <span class="msg" data-debug-msg></span>
     </div>
   </div>
@@ -201,20 +224,29 @@ $ahtUi = 'v3-20260822bloq';
   </aside>
   <div class="game-shell">
     <header class="game-top">
-      <h1 class="brand" aria-label="Aquí Hay Tema">
-        <span class="brand-text">AQUÍ HAY TEMA</span>
-        <span class="brand-heart" aria-hidden="true"></span>
-      </h1>
+      <div class="brand-col">
+        <h1 class="brand" aria-label="Aquí Hay Tema">
+          <span class="brand-text">AQUÍ HAY TEMA</span>
+          <span class="brand-heart" aria-hidden="true"></span>
+        </h1>
+        <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
+      </div>
       <div class="top-center">
-        <div class="obj-dia" style="--rot:-2deg">
-          <div class="obj-dia-placa">
-            <span class="obj-dia-num" data-dia-num>DÍA ·</span>
+        <div class="top-reloj">
+          <div class="obj-dia" style="--rot:-2deg">
+            <div class="obj-dia-placa">
+              <span class="obj-dia-num" data-dia-num>DÍA ·</span>
+            </div>
+            <div class="obj-dia-cuerpo">
+              <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
+              <span class="obj-dia-meta" data-dia-meta>·</span>
+            </div>
+            <span class="sr-only" data-fecha></span>
           </div>
-          <div class="obj-dia-cuerpo">
-            <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
-            <span class="obj-dia-meta" data-dia-meta>·</span>
+          <div class="obj-hora" style="--rot:3deg" aria-label="Hora del pueblo">
+            <span class="obj-hora-ico" aria-hidden="true"></span>
+            <span class="obj-hora-val" data-hora>—</span>
           </div>
-          <span class="sr-only" data-fecha></span>
         </div>
       </div>
       <div class="top-vida" aria-label="Vida del pueblo">
@@ -230,6 +262,13 @@ $ahtUi = 'v3-20260822bloq';
     </header>
     <div class="game-main">
       <aside class="game-left zona-actividad">
+        <section class="shell-grupo shell-grupo-buzon">
+          <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
+            <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
+            <img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/>
+            <span class="obj-buzon-txt">MENSAJITOS</span>
+          </button>
+        </section>
         <section class="shell-grupo shell-grupo-resumen">
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
@@ -237,38 +276,20 @@ $ahtUi = 'v3-20260822bloq';
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
-        <section class="shell-grupo shell-grupo-buzon">
-          <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
-            <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
-            <img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="52" height="42"/>
-            <span class="obj-buzon-txt">MENSAJITOS</span>
-          </button>
-        </section>
         <section class="shell-grupo shell-grupo-planes">
-          <div class="obj-proximo">
+          <div class="obj-proximo obj-proximo-polaroid">
             <span class="obj-proximo-tit">Próximo plan</span>
             <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en agenda. Sospechoso.</p></div>
-            <button type="button" class="obj-planes-pend" data-planes-pend hidden>
-              <span data-planes-pend-txt></span>
+            <button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Nuevo plan">
+              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
+              <span class="obj-nuevo-plan-txt">NUEVO PLAN</span>
+            </button>
+            <button type="button" class="obj-ver-planes" data-open="agenda" aria-label="Ver todos los planes">
+              <span class="obj-ver-planes-txt">ver todos los planes</span>
             </button>
           </div>
-          <button type="button" class="obj-nuevo-plan obj-nota-rosa" data-open="organizar" aria-label="Nuevo plan">
-            <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-            <span class="obj-nuevo-plan-txt">NUEVO PLAN</span>
-          </button>
         </section>
-        <section class="shell-grupo shell-grupo-misiones">
-          <button type="button" class="obj-misiones obj-nota-rosa" data-open="misiones" aria-label="Misiones de hoy">
-            <span class="obj-misiones-tit">Hoy en el pueblo</span>
-            <p class="obj-misiones-teaser" data-misiones-teaser>—</p>
-          </button>
-        </section>
-        <section class="shell-grupo shell-grupo-cotilleo">
-          <button type="button" class="obj-cotilleo" data-open="diario" aria-label="Abrir diario">
-            <span class="obj-cotilleo-tit">Cotilleo</span>
-            <p class="obj-cotilleo-txt" data-cotilleo-teaser>—</p>
-          </button>
-        </section>
+
       </aside>
       <div class="game-map-wrap">
         <div class="plan-notif" data-plan-notif hidden role="status" aria-live="polite">
@@ -283,7 +304,7 @@ $ahtUi = 'v3-20260822bloq';
       <div class="board-scroll">
         <div class="board-fit">
           <div class="mapa-canonico" data-mapa-canonico>
-            <img class="mapa-canonico-bg" src="assets/play-v3/mapa_canonico.png" alt="Mapa del pueblo" width="1024" height="682"/>
+            <img class="mapa-canonico-bg" src="assets/play-v3/mapa_canonico.png" alt="Mapa del pueblo" width="618" height="404"/>
             <div class="mapa-zonas-layer" data-mapa-zonas></div>
           </div>
           <div class="edificios-layer" data-edificios-layer aria-hidden="true"></div>
@@ -341,7 +362,6 @@ $ahtUi = 'v3-20260822bloq';
       </nav>
       <div class="velo" data-close></div>
       <p class="feedback-toast" data-toast></p>
-      <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
         <div class="tut-papel">
           <button type="button" class="cerrar tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
@@ -364,28 +384,78 @@ $ahtUi = 'v3-20260822bloq';
         </div>
       </aside>
 
-      <aside class="capa capa-vecinos">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <p class="libreta-kicker">Libreta de Celestine</p>
-        <h2>Vecinos</h2>
-        <p class="mini">Lo que sé, escrito a mano. El resto llegará.</p>
-        <div data-vecinos-list></div>
+      <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
+        <span class="vecinos-pin vecinos-pin-l" aria-hidden="true"></span>
+        <span class="vecinos-pin vecinos-pin-r" aria-hidden="true"></span>
+        <button type="button" class="cerrar vecinos-cerrar" data-close aria-label="Cerrar">cerrar</button>
+        <header class="vecinos-cab">
+          <h2>Vecinos del pueblo</h2>
+          <span class="vecinos-cuenta" data-vecinos-count></span>
+        </header>
+        <div class="vec-busca-tira">
+          <label class="vec-busca-wrap">
+            <span class="vec-busca-ico" aria-hidden="true">⌕</span>
+            <input type="search" class="vec-busca-inp" data-vec-busca placeholder="¿Dónde está?" autocomplete="off" spellcheck="false"/>
+          </label>
+        </div>
+        <div class="vecinos-grid" data-vecinos-list></div>
+        <p class="vecinos-pie">Haz clic en un vecino para ver su ficha.</p>
       </aside>
-      <aside class="capa capa-ficha">
-        <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
-        <p class="libreta-kicker">Libreta de Celestine</p>
-        <div class="ficha-hero">
-          <div class="cara" data-ficha-img></div>
-          <div>
-            <h2 data-ficha-nombre></h2>
-            <p class="animo" data-ficha-animo></p>
+      <aside class="capa capa-ficha" aria-label="Ficha de vecino">
+        <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
+        <button type="button" class="cerrar ficha-cerrar" data-close aria-label="Cerrar">cerrar</button>
+        <header class="ficha-top">
+          <button type="button" class="ficha-volver" data-ficha-volver>← Volver a vecinos</button>
+          <h2 class="ficha-tit">Ficha de vecino</h2>
+        </header>
+        <div class="ficha-body">
+          <div class="ficha-col ficha-col-perfil">
+            <div class="ficha-cara-ring">
+              <div class="ficha-cara" data-ficha-img></div>
+            </div>
+            <h3 class="ficha-nombre" data-ficha-nombre></h3>
+            <p class="ficha-desde" data-ficha-desde></p>
+            <div class="ficha-animo-row">
+              <p class="ficha-animo-line">
+                <span class="ficha-animo-label">Ánimo:</span>
+                <span class="ficha-animo-val" data-ficha-animo-text></span>
+              </p>
+              <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+            </div>
+            <div class="ficha-rasgos" data-ficha-rasgos></div>
+            <button type="button" class="ficha-btn-msg" data-ficha-msg disabled>Enviar mensaje</button>
+          </div>
+          <div class="ficha-col ficha-col-detalles capa-scroll">
+            <section class="ficha-seccion">
+              <h4 class="ficha-seccion-tit">Le gusta</h4>
+              <div class="ficha-chips ficha-gusta" data-ficha-gusta></div>
+            </section>
+            <section class="ficha-seccion">
+              <h4 class="ficha-seccion-tit">No le gusta</h4>
+              <div class="ficha-nogusta" data-ficha-nogusta></div>
+            </section>
+            <section class="ficha-seccion">
+              <h4 class="ficha-seccion-tit">Relaciones</h4>
+              <div class="ficha-relaciones" data-ficha-relaciones></div>
+              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver más relaciones</button>
+            </section>
+            <section class="ficha-seccion">
+              <h4 class="ficha-seccion-tit">Próximos planes</h4>
+              <div class="ficha-planes" data-ficha-planes></div>
+            </section>
+            <button type="button" class="ficha-btn-org" data-ficha-org>+ Organizar plan</button>
           </div>
         </div>
-        <div class="seccion-lib">
-          <h3>Lo que ya sé</h3>
-          <ul data-ficha-pistas></ul>
+        <div class="ficha-rel-overlay" data-ficha-rel-overlay hidden>
+          <div class="ficha-rel-modal" role="dialog" aria-label="Relaciones del vecino">
+            <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
+            <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
+            <button type="button" class="cerrar ficha-cerrar" data-ficha-rel-close aria-label="Cerrar">cerrar</button>
+            <h3 class="ficha-rel-modal-tit" data-ficha-rel-modal-tit>Relaciones</h3>
+            <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
+          </div>
         </div>
-        <button type="button" class="cta" data-ficha-org>Organizar un plan</button>
       </aside>
       <aside class="capa capa-buzon">
         <button type="button" class="cerrar capa-cerrar-pestaña" data-close>cerrar</button>
@@ -447,8 +517,24 @@ $ahtUi = 'v3-20260822bloq';
   </div>
       </div>
       <aside class="game-right zona-personas">
+        <section class="shell-grupo shell-grupo-misiones-par">
+          <button type="button" class="obj-misiones-papel" data-open="misiones" aria-label="Ver misiones de hoy">
+            <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
+            <span class="obj-misiones-papel-tit">MISIONES</span>
+            <div class="obj-misiones-strip" data-misiones-strip></div>
+          </button>
+        </section>
+        <section class="shell-grupo shell-grupo-cotilleo-par">
+          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir diario">
+            <span class="obj-cotilleo-tit">Cotilleo</span>
+            <p class="obj-cotilleo-txt" data-cotilleo-teaser>—</p>
+          </button>
+        </section>
         <section class="shell-grupo shell-grupo-parejas">
-          <span class="zona-tit zona-tit-parejas">Parejas</span>
+          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
       </aside>

@@ -39,6 +39,8 @@ final class AgendaHandler
         if (!is_array($parts) || count($parts) < 2) {
             return ['ok' => false, 'error' => 'participantes_requeridos'];
         }
+        $lugar = $body['lugar_id'] ?? $body['lugar'] ?? null;
+        $lugarId = is_string($lugar) && $lugar !== '' ? $lugar : null;
         return DisponibilidadEngine::slotsCompatibles(
             $partida,
             $parts,
@@ -47,7 +49,8 @@ final class AgendaHandler
             isset($body['desde_hora']) ? (int) $body['desde_hora'] : null,
             (int) ($body['max_dias'] ?? 7),
             (int) ($body['max_slots'] ?? 80),
-            $ctx->service->getCatalog()
+            $ctx->service->getCatalog(),
+            $lugarId
         );
     }
 }

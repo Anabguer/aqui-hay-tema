@@ -14,17 +14,24 @@ final class ResumenDia
 
     public static function encuentroEnCurso(array $partida, ?Catalog $catalog = null): ?array
     {
-        $now = RelojOperations::ahoraAbsoluto($partida);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $best = null;
+        $bestIni = null;
         foreach (EncuentroEngine::list($partida) as $enc) {
             if (($enc['estado'] ?? '') !== 'en_curso') {
                 continue;
             }
-            $t = ((int) ($enc['dia'] ?? 0)) * 24 + (int) ($enc['hora'] ?? 0);
-            if ($t === $now) {
-                return self::vistaEncuentro($partida, $enc, $catalog);
+            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
+                continue;
+            }
+            $ini = ((int) ($enc['dia'] ?? 0)) * 24 + (int) ($enc['hora'] ?? ($enc['hora_inicio'] ?? 0));
+            if ($bestIni === null || $ini < $bestIni) {
+                $best = $enc;
+                $bestIni = $ini;
             }
         }
-        return null;
+        return is_array($best) ? self::vistaEncuentro($partida, $best, $catalog) : null;
     }
 
     public static function encuentrosHoy(array $partida): int
@@ -109,7 +116,7 @@ final class ResumenDia
         try {
             foreach ($catalog->loadLugares()['items'] ?? [] as $lug) {
                 if (($lug['id'] ?? '') === $lugarId) {
-                    return (string) ($lug['nombre'] ?? $lugarId);
+                    return Utf8Text::paraJson((string) ($lug['nombre'] ?? $lugarId));
                 }
             }
         } catch (\Throwable $ignored) {

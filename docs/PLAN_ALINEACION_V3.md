@@ -65,3 +65,27 @@
 ### Misiones Primeros pasos
 - capa-misiones visible en CSS (faltaba en selectores).
 - Misiones con ccion navegable: Nuevo Plan / Mensajitos / plan solo.
+
+## 2026-08-22 - Canon población: 46 vecinos simultáneos
+
+- **Decisión:** capacidad máxima de producto = **46** (no 24). Los 46 personajes del catálogo pueden convivir en una misma partida si ninguno se marcha.
+- **Motor:** CapacidadViviendas::CAP_PRODUCTO = 46. Pool lógico: A01–A16 + B01–B08 (legacy) + C01–C16 + D01–D06.
+- **Migración aditiva:** partidas con iviendas.slots de 24 se expanden en ensure() vía expandirPoolAdditivo() sin tocar ocupantes A/B.
+- **Llegadas:** CandidatoLlegadaEngine usa CAP_PRODUCTO (sin tope artificial en 24). gapMin escala hasta N=45.
+- **UI:** Celestine → En el pueblo N / 46 leyendo celeste.vivienda_capacidad_max.
+- **No reintroducir 24** como límite de población en código, tests ni documentación de producto.
+
+## 2026-08-22 - Curva llegadas post-8 (cap 46)
+
+Fórmulas en CandidatoLlegadaEngine (modo normal V3):
+
+- gapMin(n) = 2 + floor((n-8)*1.25) con n en [8, 45]
+- pDiaV3(n) = min(0.30, 0.04 + 0.015 * (46 - n)) — horizonte H = 46-N (antes H = 24-N con N máx 23)
+
+Espíritu conservado:
+
+- Bloque N=8..23: ~245 días esperados acumulados (igual que la curva original calibrada).
+- N=24..45: gap y E[T] crecen; p cae hasta 0.055 en N=45.
+- Horizonte 8→46 completo: ~1172 días esperados (relleno progresivamente lento).
+
+No reintroducir tope 24 en clamps ni UI.

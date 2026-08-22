@@ -61,6 +61,14 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return PartidaHandler::debugExport($ctx, $body, $p);
     },
+    'partida.debug_parejas_crear' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PartidaHandler::debugParejasCrear($ctx, $body, $p);
+    },
+    'partida.debug_parejas_quitar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PartidaHandler::debugParejasQuitar($ctx, $body, $p);
+    },
     'reloj.avanzar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return RelojHandler::avanzar($ctx, $body, $p);

@@ -67,11 +67,32 @@ final class PartidaRepository
         } catch (\Throwable $e) {
             if (is_file($path . '.bak')) {
                 $partida = JsonFile::read($path . '.bak');
-                return SchemaMigrator::migrate($partida);
+                $partida = SchemaMigrator::migrate($partida);
+                self::sanitizarTextosPartida($partida);
+                return $partida;
             }
             throw new \RuntimeException('save_corrupto: ' . $e->getMessage(), 0, $e);
         }
-        return SchemaMigrator::migrate($partida);
+        $partida = SchemaMigrator::migrate($partida);
+        self::sanitizarTextosPartida($partida);
+        return $partida;
+    }
+
+    private static function sanitizarTextosPartida(array &$partida): void
+    {
+        foreach ($partida['residentes'] ?? [] as &$res) {
+            if (!is_array($res)) {
+                continue;
+            }
+            if (!isset($res['identidad_publica']) || !is_array($res['identidad_publica'])) {
+                $res['identidad_publica'] = [];
+            }
+            $n = $res['identidad_publica']['nombre'] ?? null;
+            if (is_string($n)) {
+                $res['identidad_publica']['nombre'] = Utf8Text::repair($n);
+            }
+        }
+        unset($res);
     }
 
     public function eliminar(string $partidaId): bool

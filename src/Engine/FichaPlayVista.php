@@ -65,6 +65,7 @@ final class FichaPlayVista
         return [
             'nombre' => $ficha['identidad']['nombre'] ?? '',
             'edad' => $ficha['identidad']['edad'] ?? null,
+            'genero' => $ficha['identidad']['genero'] ?? null,
             'ocupacion' => $ocupacion,
             'gusta' => $hobbies,
             'manera_de_ser' => $rasgos,

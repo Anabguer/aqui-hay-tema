@@ -697,6 +697,14 @@ final class LabAudit
     }
 
     /**
+     * @param array<string, mixed> $debugPayload
+     */
+    public static function eventoDebugParejas(string $accion, array $debugPayload): void
+    {
+        self::push('PAREJAS', '[AHT DEBUG PAREJAS]', array_merge(['accion' => $accion], $debugPayload));
+    }
+
+    /**
      * @param array<string, mixed> $partida
      * @param array<string, mixed> $respuestaApi
      */
