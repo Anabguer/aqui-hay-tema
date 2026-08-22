@@ -15,16 +15,16 @@ final class RomanceElegibilidad
      * @param array<string, mixed> $cal
      * @return array{ok: bool, motivo: ?string, edad: array<string, mixed>}
      */
-    public static function par(array $partida, string $a, string $b, array $cal): array
+    public static function par(array $partida, string $a, string $b, array $cal, ?Catalog $catalog = null): array
     {
         if (ParentescoVeto::bloqueaRomance($partida, $a, $b, $cal)) {
             return [
                 'ok' => false,
                 'motivo' => 'parentesco_veto',
-                'edad' => self::edad($partida, $a, $b, $cal),
+                'edad' => self::edad($partida, $a, $b, $cal, $catalog),
             ];
         }
-        $edad = self::edad($partida, $a, $b, $cal);
+        $edad = self::edad($partida, $a, $b, $cal, $catalog);
         if (!($edad['romance_elegible'] ?? true)) {
             return [
                 'ok' => false,
@@ -43,10 +43,15 @@ final class RomanceElegibilidad
      * @param array<string, mixed> $cal
      * @return array<string, mixed>
      */
-    private static function edad(array $partida, string $a, string $b, array $cal): array
+    private static function edad(array $partida, string $a, string $b, array $cal, ?Catalog $catalog = null): array
     {
-        $pa = PerfilPartida::de($partida, $a);
-        $pb = PerfilPartida::de($partida, $b);
+        if ($catalog !== null) {
+            $pa = PerfilPartida::deOLegacy($partida, $a, $catalog);
+            $pb = PerfilPartida::deOLegacy($partida, $b, $catalog);
+        } else {
+            $pa = PerfilPartida::de($partida, $a) ?? [];
+            $pb = PerfilPartida::de($partida, $b) ?? [];
+        }
         return EdadPolitica::clasificar(
             isset($pa['edad']) ? (int) $pa['edad'] : null,
             isset($pb['edad']) ? (int) $pb['edad'] : null,

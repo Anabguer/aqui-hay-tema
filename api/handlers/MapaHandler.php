@@ -21,11 +21,13 @@ final class MapaHandler
                 savePartida($ctx, $partida);
             }
         }
+        $packs = $ctx->visualPacks();
+        $packs->precargarResidentes($partida);
         $mapa = PresenciaEngine::resolver($partida, $ctx->root);
         return [
             'ok' => true,
             'mapa' => $mapa,
-            'pueblo' => VistaPuebloV3::de($partida, $mapa, $ctx->root),
+            'pueblo' => VistaPuebloV3::de($partida, $mapa, $ctx->root, $packs),
         ];
     }
 }

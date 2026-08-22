@@ -81,6 +81,15 @@ final class DisponibilidadEngine
         $out = ['ok' => true, 'slots' => $slots, 'total' => count($slots), 'por_dia' => self::agruparPorDia($slots)];
         if ($slots === []) {
             $out['diagnostico'] = self::diagnosticarBloqueos($partida, $participantes, $desdeDia, $desdeHora, $maxDias);
+        } else {
+            $out = array_merge($out, self::hintsPrimeraCompatible(
+                $partida,
+                $participantes,
+                $slots,
+                $desdeDia,
+                $desdeHora,
+                $lugarId
+            ));
         }
         return $out;
     }
@@ -184,8 +193,10 @@ final class DisponibilidadEngine
         }
         for ($offset = 0; $offset < $duracionHoras; $offset++) {
             $h = $hora + $offset;
-            if ($h >= 24) {
-                return false;
+            $d = $dia;
+            while ($h >= 24) {
+                $h -= 24;
+                $d++;
             }
             if ($lugarId !== null && $lugarId !== '' && !ComplejoCatalog::estaAbierto($lugarId, $h)) {
                 return false;
@@ -237,6 +248,98 @@ final class DisponibilidadEngine
             default:
                 return $clave;
         }
+    }
+
+    /**
+     * Hint discreto cuando la primera hora compatible no coincide con la solicitada.
+     *
+     * @param list<string> $participantes
+     * @param list<array<string, mixed>> $slots
+     * @return array<string, mixed>
+     */
+    private static function hintsPrimeraCompatible(
+        array $partida,
+        array $participantes,
+        array $slots,
+        int $desdeDia,
+        int $desdeHora,
+        ?string $lugarId
+    ): array {
+        if ($slots === []) {
+            return [];
+        }
+        $first = $slots[0];
+        $extra = [
+            'primera_compatible' => [
+                'dia' => (int) ($first['dia'] ?? 0),
+                'hora' => (int) ($first['hora'] ?? 0),
+                'dia_semana_ui' => $first['dia_semana_ui'] ?? null,
+                'fecha_corta' => $first['fecha_corta'] ?? null,
+                'etiqueta_hora' => $first['etiqueta_hora'] ?? null,
+                'etiqueta_ui' => CopyRechazoPropuesta::etiquetaSlotUi($partida, $first),
+            ],
+        ];
+        $desdeKey = $desdeDia * 24 + $desdeHora;
+        $firstKey = (int) ($first['dia'] ?? 0) * 24 + (int) ($first['hora'] ?? 0);
+        $bloqueo = self::motivoBloqueoFranjaUi($partida, $participantes, $desdeDia, $desdeHora, $lugarId);
+        if ($bloqueo !== '') {
+            $extra['bloqueo_solicitado'] = $bloqueo;
+        }
+        if ($firstKey > $desdeKey) {
+            $etiqueta = CopyRechazoPropuesta::etiquetaSlotUi($partida, $first);
+            $hint = 'Primera hora compatible: ' . $etiqueta;
+            if ($bloqueo !== '') {
+                $hint .= ' (' . $bloqueo . ')';
+            }
+            $extra['hint_ui'] = $hint;
+        } elseif ($bloqueo !== '' && $firstKey === $desdeKey) {
+            $extra['hint_ui'] = $bloqueo;
+        }
+        return $extra;
+    }
+
+    /**
+     * @param list<string> $participantes
+     */
+    public static function motivoBloqueoFranjaUi(
+        array $partida,
+        array $participantes,
+        int $dia,
+        int $hora,
+        ?string $lugarId = null
+    ): string {
+        return CopyRechazoPropuesta::motivoBloqueoFranjaUi($partida, $participantes, $dia, $hora, $lugarId);
+    }
+
+    /**
+     * @param list<string> $participantes
+     * @return array{dia: int, hora: int}|null
+     */
+    public static function siguienteSlotTras(
+        array $partida,
+        array $participantes,
+        string $tipoEncuentro,
+        int $desdeDia,
+        int $desdeHora,
+        ?string $lugarId = null,
+        int $maxDias = 7
+    ): ?array {
+        $slots = self::slotsCompatibles(
+            $partida,
+            $participantes,
+            $tipoEncuentro,
+            $desdeDia,
+            $desdeHora + 1,
+            $maxDias,
+            1,
+            null,
+            $lugarId
+        );
+        $slot = $slots['slots'][0] ?? null;
+        if (!is_array($slot)) {
+            return null;
+        }
+        return ['dia' => (int) ($slot['dia'] ?? 0), 'hora' => (int) ($slot['hora'] ?? 0)];
     }
 
     /**

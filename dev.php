@@ -38,6 +38,7 @@ header('Content-Type: text/html; charset=utf-8');
       <p class="status" aria-live="polite">Partida activa: <code id="partida-id">—</code></p>
     </div>
     <nav class="btn-row" aria-label="Navegación">
+      <a class="btn" href="dev/mapa-zonas-calibrador.html" target="_blank" rel="noopener">Calibrador mapa</a>
       <a class="btn" href="play.php">Jugar</a>
       <a class="btn" href="index.php">Landing</a>
     </nav>

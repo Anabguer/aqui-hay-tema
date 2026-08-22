@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/src/autoload.php';
 
+use AquiHayTema\Engine\BuzonEngine;
 use AquiHayTema\Engine\EstadoEmocional;
 use AquiHayTema\Engine\PartidaService;
 use AquiHayTema\Engine\PresenciaEngine;
@@ -58,6 +59,17 @@ $partida['residentes'][$idb]['runtime']['estado_emocional'] = EstadoEmocional::e
 $partida['residentes'][$ida]['runtime']['estado_emocional']['id'] = 'alegre';
 $mapa = PresenciaEngine::resolver($partida, $root);
 $pueblo = VistaPuebloV3::de($partida, $mapa, $root);
+$biblio = null;
+foreach ($pueblo['complejos'] ?? [] as $cx) {
+    foreach ($cx['destinos_operativos'] ?? [] as $d) {
+        if (($d['id'] ?? '') === 'lug_biblioteca') {
+            $biblio = $d;
+            break 2;
+        }
+    }
+}
+ok(is_array($biblio) && ($biblio['horario'] ?? '') === '10:00–20:00', 'destino expone horario UI');
+ok(is_array($biblio) && array_key_exists('abierto_ahora', $biblio), 'destino expone abierto_ahora');
 $cafe = cx($pueblo, 'cafe_libros');
 ok(is_array($cafe), 'complejo café existe');
 ok(($cafe['total'] ?? 0) >= 2, 'presencia real en café');
@@ -106,6 +118,18 @@ $pt['diario'] = [
 $coti = VistaCotilleoV3::de($pt);
 ok(count($coti['hoy']) === 1, 'cotilleo hoy = diario del día');
 ok($coti['ayer'] === [] && $coti['viejos'] === [], 'sin inventar ayer/viejos');
+
+$ptOrden = $service->nuevaPartida('playtest_01', 'cotilleo-orden');
+$ptOrden['reloj']['dia_pueblo'] = 3;
+$ptOrden['buzon'] = [
+    ['id' => 'c1', 'clasificacion' => BuzonEngine::COTILLEO, 'texto' => 'primero del día', 'dia' => 3, 'estado' => 'leido'],
+    ['id' => 'c2', 'clasificacion' => BuzonEngine::COTILLEO, 'texto' => 'último del día', 'dia' => 3, 'estado' => 'pendiente'],
+    ['id' => 'c0', 'clasificacion' => BuzonEngine::COTILLEO, 'texto' => 'de ayer', 'dia' => 2, 'estado' => 'leido'],
+];
+$cotiOrden = VistaCotilleoV3::de($ptOrden);
+ok(($cotiOrden['hoy'][0]['texto'] ?? '') === 'último del día', 'cotilleo hoy: más reciente arriba');
+ok(($cotiOrden['hoy'][1]['texto'] ?? '') === 'primero del día', 'cotilleo hoy: más antiguo abajo');
+ok(($cotiOrden['ayer'][0]['texto'] ?? '') === 'de ayer', 'cotilleo ayer ordenado');
 
 ok(is_file($root . '/assets/personajes/tokens-m/P138.png'), 'lote técnico P138 en PLAY');
 ok(is_file($root . '/assets/personajes/tokens-m/P173.png'), 'lote técnico Fase 1: 14 cabezas (P173)');

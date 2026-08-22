@@ -33,25 +33,21 @@ final class CotilleoNarrativo
             return false;
         }
         $dia = (int) ($env['dia'] ?? $partida['reloj']['dia_pueblo'] ?? 1);
-        if (!self::patronParLugar($partida, $ids, $lugar, $dia, $cal)) {
-            return false;
-        }
-        return !self::yaPublicadoHoy($partida, $ids, $lugar, $dia);
+        return CotilleoPatronCadencia::debePublicar($partida, $ids, $lugar, $dia, $cal);
     }
 
     /**
-     * Mismo par + mismo lugar en ≥ N días de la ventana. No exige inédito en El Cotilleo.
+     * Días distintos con coincidencia técnica del par en el lugar (ventana móvil).
      *
      * @param list<string> $ids
      */
-    public static function patronParLugar(array $partida, array $ids, string $lugar, int $dia, array $cal = []): bool
+    public static function diasPatronParLugar(array $partida, array $ids, string $lugar, int $dia, array $cal = []): int
     {
         $ids = array_values(array_unique($ids));
         sort($ids);
         if (count($ids) < 2 || $lugar === '') {
-            return false;
+            return 0;
         }
-        $minDias = (int) CalibracionConfig::get($cal, 'coincidencias.cotilleo_min_dias_par_lugar', 3);
         $ventana = (int) CalibracionConfig::get($cal, 'coincidencias.cotilleo_ventana_dias', 7);
         $desde = $dia - $ventana;
         $dias = [];
@@ -80,10 +76,22 @@ final class CotilleoNarrativo
             }
             $dias[$d] = true;
         }
-        return count($dias) >= $minDias;
+        return count($dias);
     }
 
     /**
+     * Mismo par + mismo lugar en ≥ N días de la ventana.
+     *
+     * @param list<string> $ids
+     */
+    public static function patronParLugar(array $partida, array $ids, string $lugar, int $dia, array $cal = []): bool
+    {
+        $minDias = (int) CalibracionConfig::get($cal, 'coincidencias.cotilleo_min_dias_par_lugar', 3);
+        return self::diasPatronParLugar($partida, $ids, $lugar, $dia, $cal) >= $minDias;
+    }
+
+    /**
+     * @deprecated Usar CotilleoPatronCadencia::debePublicar
      * @param list<string> $ids
      */
     public static function yaPublicadoHoy(array $partida, array $ids, string $lugar, int $dia): bool
@@ -131,14 +139,24 @@ final class CotilleoNarrativo
         $ids = array_values(array_unique($ids));
         sort($ids);
         $quien = self::yNombres($nombres);
-        $sitio = $lugar !== '' ? ' en ' . str_replace('lug_', '', $lugar) : '';
+        $vista = self::vistaPatron($partida, $ids, $lugar, null);
+        $metaPub = CotilleoPatronCadencia::metaPublicacion(
+            $partida,
+            $ids,
+            $lugar,
+            (int) ($env['dia'] ?? $partida['reloj']['dia_pueblo'] ?? 1),
+            $cal
+        );
         return [
             'clasificacion' => BuzonEngine::COTILLEO,
             'tipo' => 'cotilleo_patron',
-            'texto' => $quien !== ''
-                ? $quien . ' llevan varios días coincidiendo' . $sitio . '.'
-                : 'Hay caras que se repiten demasiado en el mismo sitio.',
+            'texto' => (string) ($vista['texto'] ?? ''),
+            'cotilleo_meta' => is_array($vista['cotilleo_meta'] ?? null)
+                ? $vista['cotilleo_meta']
+                : CotilleoCategoria::meta(CotilleoCategoria::RELACION, false),
             'patron_clave' => self::clavePar($ids, $lugar),
+            'patron_nivel' => $metaPub['patron_nivel'],
+            'patron_estado' => $metaPub['patron_estado'],
             'actores' => $ids,
             'lugar_id' => $lugar !== '' ? $lugar : null,
             'origen' => [
@@ -149,6 +167,50 @@ final class CotilleoNarrativo
             ],
             '_placeholder_contenido' => false,
         ];
+    }
+
+    /**
+     * Copy y pista de un patrón par+lugar según hecho real (co-presencia vs relación).
+     *
+     * @param list<string> $ids
+     * @return array{
+     *   texto: string,
+     *   pista: string,
+     *   categoria: string,
+     *   categoria_etiqueta: string,
+     *   categoria_icono: string,
+     *   destacado: bool,
+     *   cotilleo_meta: array{categoria: string, destacado: bool},
+     *   actores: list<string>,
+     *   actores_nombres: list<string>,
+     *   lugar_id: string,
+     *   lugar_nombre: string,
+     *   se_conocen: bool,
+     *   nivel: string
+     * }
+     */
+    public static function vistaPatron(array $partida, array $ids, string $lugarId, ?Catalog $catalog = null): array
+    {
+        $ids = array_values(array_unique($ids));
+        sort($ids);
+        $root = $catalog !== null ? $catalog->getRoot() : dirname(__DIR__, 2);
+        if ($catalog === null) {
+            $catalog = new Catalog($root);
+        }
+        $nombres = [];
+        foreach ($ids as $id) {
+            $nombres[] = IdentidadPublica::nombre($partida, $id);
+        }
+        $lugarNombre = $lugarId !== '' ? EtiquetaFicha::lugar($lugarId, $catalog->store()) : '';
+
+        $copy = CopyCoincidenciaPatron::vista($partida, $ids, $lugarId, $catalog);
+
+        return array_merge($copy, [
+            'actores' => $ids,
+            'actores_nombres' => $nombres,
+            'lugar_id' => $lugarId,
+            'lugar_nombre' => $lugarNombre,
+        ]);
     }
 
     /**

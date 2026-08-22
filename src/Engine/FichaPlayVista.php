@@ -70,7 +70,7 @@ final class FichaPlayVista
         }
 
         $rasgosSlots = self::tresSlotsConId($rasgoIds, $rasgos);
-        $hobbiesSlots = self::tresSlotsConId($hobbyIds, $hobbies);
+        $hobbiesSlots = self::tresSlotsHobby($hobbyIds, $hobbies, $store);
         $gustaGente = self::dosSlotsGente($ficha, $store, 'gusto');
         $noGustaGente = self::dosSlotsGente($ficha, $store, 'rechazo');
 
@@ -105,6 +105,28 @@ final class FichaPlayVista
                 'descubierto' => is_string($id) && $id !== '',
                 'id' => is_string($id) && $id !== '' ? $id : null,
                 'texto' => is_string($txt) && $txt !== '' ? $txt : null,
+            ];
+        }
+        return $slots;
+    }
+
+    /**
+     * @param list<string> $ids
+     * @param list<string> $textos
+     * @return list<array{descubierto: bool, id: string|null, texto: string|null, pista: string|null}>
+     */
+    private static function tresSlotsHobby(array $ids, array $textos, CatalogStore $store): array
+    {
+        $slots = [];
+        for ($i = 0; $i < 3; $i++) {
+            $id = $ids[$i] ?? null;
+            $txt = $textos[$i] ?? null;
+            $descubierto = is_string($id) && $id !== '';
+            $slots[] = [
+                'descubierto' => $descubierto,
+                'id' => $descubierto ? $id : null,
+                'texto' => is_string($txt) && $txt !== '' ? $txt : null,
+                'pista' => $descubierto ? HobbyAccionable::pista($id, $store) : null,
             ];
         }
         return $slots;

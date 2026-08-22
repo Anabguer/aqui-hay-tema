@@ -172,9 +172,14 @@ final class MotorVidaDiaria
         }
         $bonusDias = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.olvidados_bonus_dias', 3);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $pesos = [];
         foreach ($ids as $id) {
             $id = (string) $id;
+            $disp = AgendaEngine::estaDisponible($partida, $id, $dia, $hora);
+            if (!($disp['disponible'] ?? false)) {
+                continue;
+            }
             $w = 1.0;
             $ult = (int) ($partida['residentes'][$id]['runtime']['ultimo_protagonismo_dia'] ?? 0);
             if ($ult === 0 || ($dia - $ult) >= $bonusDias) {

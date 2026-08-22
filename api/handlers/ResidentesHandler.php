@@ -5,6 +5,7 @@ namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
 use function AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\savePartidaRapida;
 
 final class ResidentesHandler
 {
@@ -14,7 +15,7 @@ final class ResidentesHandler
         if (!$rid) {
             return ['ok' => false, 'error' => 'residente_id_requerido'];
         }
-        $ficha = $ctx->service->fichaResidente($partida, (string) $rid);
+        $ficha = $ctx->service->fichaResidente($partida, (string) $rid, true);
         $antes = json_encode($partida['tutorial'] ?? null);
         $tut = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
             $partida,
@@ -23,7 +24,7 @@ final class ResidentesHandler
             $ctx->logger
         );
         if ($antes !== json_encode($partida['tutorial'] ?? null)) {
-            savePartida($ctx, $partida);
+            savePartidaRapida($ctx, $partida);
         }
         return ['ok' => true, 'ficha' => $ficha, 'tutorial' => $tut];
     }

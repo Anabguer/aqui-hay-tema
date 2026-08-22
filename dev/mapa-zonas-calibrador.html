@@ -121,7 +121,7 @@
 </head>
 <body>
   <header>
-    <h1>Calibrador mapa canónico v2 (Mapa_2)</h1>
+    <h1>Calibrador zonas mapa (producción)</h1>
     <button type="button" id="btn-zoom-out">− zoom</button>
     <button type="button" id="btn-zoom-in">+ zoom</button>
     <span id="zoom-label">70%</span>
@@ -138,7 +138,7 @@
     <div class="viewport" id="viewport">
       <div class="stage-wrap" id="stage-wrap">
         <div class="stage" id="stage">
-          <img class="mapa-bg" id="mapa-bg" src="../assets/play-v3/mapa_canonico_v2.png" alt="Mapa canónico v2" width="618" height="404"/>
+          <img class="mapa-bg" id="mapa-bg" src="../assets/play-v3/mapa_canonico.png" alt="Mapa canónico" width="618" height="404"/>
           <div class="zones-layer" id="zones-layer"></div>
         </div>
       </div>
@@ -163,10 +163,10 @@
         <textarea id="export-out" readonly spellcheck="false"></textarea>
         <button type="button" id="btn-download">Descargar mapa_zonas.json</button>
         <p class="hint">
-          Rutas canónicas: <code>assets/play-v3/mapa_canonico_v2.png</code> ·
-          <code>assets/play-v3/overlay_en_obras.png</code><br/>
-          Rectángulo sólido = zona clicable · rectángulo punteado azul = tokens/personajes.<br/>
-          Clic vacío = dibujar · arrastrar = mover · asas = redimensionar.
+          Mapa: <code>assets/play-v3/mapa_canonico.png</code> (618×404) · mismo que <code>play.php</code><br/>
+          <strong>Rectángulo sólido</strong> = zona clicable · <strong>punteado azul</strong> = tokens/personajes.<br/>
+          Clic vacío = dibujar · arrastrar = mover · asas = redimensionar · flechas = ajuste fino 0,5%.<br/>
+          Al terminar: <strong>COPIAR JSON</strong> o <strong>Descargar</strong> y pásamelo.
         </p>
       </div>
     </aside>
@@ -180,7 +180,8 @@
   var MAP_W = 618;
   var MAP_H = 404;
   var OBRAS_URL = '../assets/play-v3/overlay_en_obras.png';
-  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v3_mapa2';
+  var STORAGE_KEY = 'aht_mapa_zonas_calibrador_v1';
+  var MAPA_URL = '../assets/play-v3/mapa_canonico.png';
   var MIN_PCT = 0.5;
 
   var ZONAS = [
@@ -194,6 +195,19 @@
     { id: 'discoteca', label: 'Discoteca', color: '#c040a0' },
     { id: 'bingo', label: 'Bingo', color: '#b09030' }
   ];
+
+  /** Calibración canónica (sincronizada con assets/play-v3/mapa_zonas.json). */
+  var DEFAULT_ZONAS = {
+    cafeteria: { x: 8.96, y: 3.15, w: 21.48, h: 31.05 },
+    biblioteca: { x: 38.38, y: 4.05, w: 21.92, h: 27.45 },
+    gimnasio: { x: 68.09, y: 6.08, w: 22.95, h: 27.23 },
+    restaurante: { x: 3.37, y: 36.45, w: 22.95, h: 27.9 },
+    parque: { x: 32.64, y: 38.48, w: 31.04, h: 30.6 },
+    bar: { x: 71.48, y: 36.45, w: 21.62, h: 25.88 },
+    cine: { x: 5.58, y: 67.06, w: 24.12, h: 29.03 },
+    discoteca: { x: 38.23, y: 70.66, w: 21.62, h: 26.55 },
+    bingo: { x: 69.27, y: 66.83, w: 23.98, h: 28.58 }
+  };
 
   var state = {
     selected: 'cafeteria',
@@ -215,8 +229,13 @@
 
   function emptyRect() { return { x: 0, y: 0, w: 0, h: 0 }; }
 
+  function zonaStateFromDefaults(id) {
+    var d = DEFAULT_ZONAS[id] || emptyRect();
+    return { x: d.x, y: d.y, w: d.w, h: d.h, tokens: emptyRect() };
+  }
+
   ZONAS.forEach(function (z) {
-    state.zonas[z.id] = { x: 0, y: 0, w: 0, h: 0, tokens: emptyRect() };
+    state.zonas[z.id] = zonaStateFromDefaults(z.id);
   });
 
   function toast(msg) {
@@ -455,7 +474,7 @@
     var out = {
       meta: {
         herramienta: 'dev/mapa-zonas-calibrador.html',
-        mapa: 'assets/play-v3/mapa_canonico_v2.png',
+        mapa: 'assets/play-v3/mapa_canonico.png',
         overlay_obras: 'assets/play-v3/overlay_en_obras.png',
         unidad: 'porcentaje',
         mapa_px: [MAP_W, MAP_H]
@@ -663,8 +682,11 @@
   window.addEventListener('mousemove', onPointerMove);
   window.addEventListener('mouseup', onPointerUp);
 
-  loadLocal();
-  renderAll();
+  loadServer().then(function () { renderAll(); }).catch(function () {
+    loadLocal();
+    renderAll();
+    toast('Sin JSON del juego — calibración canónica por defecto');
+  });
   applyZoom();
 })();
 </script>

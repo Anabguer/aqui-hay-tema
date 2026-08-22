@@ -5,8 +5,10 @@ namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
 use function AquiHayTema\Api\requireDev;
-use function AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\requirePartidaLigera;
+use function AquiHayTema\Api\savePartidaRapida;
 use AquiHayTema\Engine\BuzonEngine;
+use AquiHayTema\Engine\MensajitoAcciones;
 use AquiHayTema\Engine\PeticionPuebloEngine;
 
 final class BuzonHandler
@@ -63,7 +65,7 @@ final class BuzonHandler
             \AquiHayTema\Engine\TutorialPrimerosPasos::alLeerMensaje(
                 $partida,
                 $mid,
-                new \AquiHayTema\Engine\Catalog($ctx->root)
+                $ctx->service->getCatalog()
             );
             if (($partida['tutorial']['id'] ?? '') !== \AquiHayTema\Engine\TutorialPrimerosPasos::ID) {
                 $r['tutorial'] = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
@@ -75,7 +77,37 @@ final class BuzonHandler
             } else {
                 $r['tutorial'] = \AquiHayTema\Engine\TutorialPrimerosPasos::vistaPublica($partida);
             }
-            savePartida($ctx, $partida);
+            savePartidaRapida($ctx, $partida);
+            $r['no_leidos'] = BuzonEngine::contarNoLeidos($partida);
+        }
+        return $r;
+    }
+
+    public static function leerTodos(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $canal = array_key_exists('canal', $body)
+            ? $body['canal']
+            : BuzonEngine::CANAL_BUZON;
+        $r = BuzonEngine::marcarTodosLeidos($partida, $canal);
+        if (($r['ok'] ?? false) && ($r['marcados'] ?? 0) > 0) {
+            foreach ($r['ids'] ?? [] as $mid) {
+                \AquiHayTema\Engine\TutorialPrimerosPasos::alLeerMensaje(
+                    $partida,
+                    (string) $mid,
+                    $ctx->service->getCatalog()
+                );
+            }
+            if (($partida['tutorial']['id'] ?? '') !== \AquiHayTema\Engine\TutorialPrimerosPasos::ID) {
+                $r['tutorial'] = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
+                    $partida,
+                    \AquiHayTema\Engine\TutorialBucle::HECHO_BUZON,
+                    $ctx->root,
+                    $ctx->logger
+                );
+            } else {
+                $r['tutorial'] = \AquiHayTema\Engine\TutorialPrimerosPasos::vistaPublica($partida);
+            }
+            savePartidaRapida($ctx, $partida);
         }
         return $r;
     }
@@ -84,9 +116,33 @@ final class BuzonHandler
     {
         $r = BuzonEngine::marcarEstado($partida, (string) ($body['mensaje_id'] ?? ''), 'pendiente');
         if ($r['ok'] ?? false) {
-            savePartida($ctx, $partida);
+            savePartidaRapida($ctx, $partida);
+            $r['no_leidos'] = BuzonEngine::contarNoLeidos($partida);
         }
         return $r;
+    }
+
+    public static function resolver(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $r = MensajitoAcciones::resolver(
+            $partida,
+            (string) ($body['mensaje_id'] ?? ''),
+            (string) ($body['accion'] ?? ''),
+            $ctx->root,
+            $ctx->logger
+        );
+        if ($r['ok'] ?? false) {
+            savePartidaRapida($ctx, $partida);
+        }
+        return $r;
+    }
+
+    public static function catalogoAcciones(ApiContext $ctx): array
+    {
+        return [
+            'ok' => true,
+            'acciones' => MensajitoAcciones::catalogo(),
+        ];
     }
 
     public static function crearDev(ApiContext $ctx, array $body, array &$partida): array

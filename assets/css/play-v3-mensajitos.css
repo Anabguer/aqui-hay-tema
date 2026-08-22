@@ -1,5 +1,5 @@
-/**
- * Capa MENSAJITOS (ex buzon) � solo esta capa.
+﻿/**
+ * Capa MENSAJITOS (ex buzon) â€” solo esta capa.
  */
 
 .play-v3 .capa-buzon .mensajitos-tit {
@@ -137,7 +137,7 @@
 
 .play-v3 .capa-buzon .carta-msg .cuerpo {
   font-family: Fraunces, Georgia, serif;
-  font-size: .9rem;
+  font-size: 1.12rem;
   font-style: italic;
   line-height: 1.38;
   margin: 0;
@@ -148,7 +148,7 @@
 }
 
 .play-v3 .capa-buzon .carta-msg.carta-info .cuerpo {
-  font-size: .88rem;
+  font-size: 1.08rem;
   color: #4a4038;
 }
 
@@ -422,7 +422,7 @@
 }
 
 .play-v3 .capa-buzon .mensajitos-cerrar:hover { color: #2c261f; }
-.play-v3 .capa-buzon .capa-cerrar-pestaña { display: none !important; }
+.play-v3 .capa-buzon .capa-cerrar-pestaÃƒÂ±a { display: none !important; }
 
 .play-v3 .capa-buzon .mensajitos-cab {
   margin: 0 0 .65rem;
@@ -446,18 +446,18 @@
 .play-v3 .capa-buzon .carta-msg .de {
   display: inline;
   font-family: Fraunces, Georgia, serif;
-  font-size: .88rem;
+  font-size: .98rem;
 }
 
 .play-v3 .capa-buzon .carta-msg .cuerpo {
   display: inline;
   font-family: Caveat, cursive;
-  font-size: 1.05rem;
+  font-size: 1.28rem;
   font-style: normal;
 }
 
 .play-v3 .capa-buzon .carta-msg .de::after {
-  content: " — ";
+  content: " \2013 ";
   font-weight: 400;
   color: #6a5848;
 }
@@ -478,53 +478,63 @@
 
 .play-v3 .capa-buzon .carta-msg {
   display: flex !important;
-  align-items: center;
-  gap: .45rem;
+  align-items: flex-start;
+  gap: .55rem;
 }
 
 .play-v3 .capa-buzon .carta-inner {
   flex: 1 1 auto;
 }
 
-/* Toggle leído / marcar */
+/* Toggle leÃƒÂ­do / marcar */
 .play-v3 .msg-leido-toggle {
   flex: 0 0 auto;
-  align-self: center;
-  margin: 0;
-  padding: .12rem .35rem;
-  border: 0;
-  background: transparent;
-  font-family: Caveat, cursive;
-  font-size: .82rem;
-  font-weight: 700;
+  align-self: flex-start;
+  margin: .15rem 0 0;
+  padding: .3rem .55rem;
+  border: 1.5px solid #8a4a18;
+  border-radius: 5px;
+  background: #fff6c8;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   line-height: 1.1;
   cursor: pointer;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  text-decoration-color: rgba(106, 88, 72, .45);
-  color: #8a4a18;
+  text-decoration: none;
+  color: #4a3010;
   white-space: nowrap;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .1);
+}
+
+.play-v3 .msg-leido-toggle.is-pendiente {
+  background: #fff6c8;
+  border-color: #8a4a18;
+  color: #4a3010;
 }
 
 .play-v3 .msg-leido-toggle.is-leido {
-  color: #4a7a3a;
-  text-decoration: none;
-  font-size: .74rem;
-  letter-spacing: .02em;
+  background: rgba(230, 244, 226, .9);
+  border-color: #6a9a5a;
+  color: #3a6a32;
+  font-size: .64rem;
+  letter-spacing: .06em;
 }
 
 .play-v3 .msg-leido-toggle.is-pendiente:hover {
+  background: #ffe98a;
   color: #2c261f;
 }
 
 .play-v3 .msg-leido-toggle.is-leido:hover {
+  background: #dcefd6;
   color: #2c261f;
-  text-decoration: underline;
 }
 
 .play-v3 .mensajitos-wrap {
   overflow: visible;
-  z-index: 60;
+  z-index: 4;
 }
 
 .play-v3 .mensajitos-pop {
@@ -532,14 +542,16 @@
 }
 
 .play-v3 .capa-buzon .carta-msg .msg-leido-toggle {
-  margin-left: .15rem;
+  margin: .2rem .1rem 0 0;
+  flex-shrink: 0;
 }
 
 
-/* === Cerrar × unificado en modales === */
+/* === Cerrar Ãƒâ€” unificado en modales === */
 .play-v3 .capa-ficha .ficha-cerrar,
 .play-v3 .capa-buzon .mensajitos-cerrar,
-.play-v3 .capa-agenda .agenda-cerrar {
+.play-v3 .capa-agenda .agenda-cerrar,
+.play-v3 .capa-misiones .mis-cerrar {
   position: absolute !important;
   top: .5rem !important;
   right: .6rem !important;
@@ -567,14 +579,16 @@
 }
 
 .play-v3 .capa-ficha .ficha-cerrar::before,
-.play-v3 .capa-agenda .agenda-cerrar::before {
+.play-v3 .capa-agenda .agenda-cerrar::before,
+.play-v3 .capa-misiones .mis-cerrar::before {
   display: none !important;
   content: none !important;
 }
 
 .play-v3 .capa-ficha .ficha-cerrar:hover,
 .play-v3 .capa-buzon .mensajitos-cerrar:hover,
-.play-v3 .capa-agenda .agenda-cerrar:hover {
+.play-v3 .capa-agenda .agenda-cerrar:hover,
+.play-v3 .capa-misiones .mis-cerrar:hover {
   color: #2c261f !important;
 }
 
@@ -598,6 +612,113 @@
 }
 
 .play-v3 .capa-agenda h2,
-.play-v3 .capa-agenda .libreta-kicker {
+.play-v3 .capa-agenda .libreta-kicker,
+.play-v3 .capa-misiones .mis-top {
   padding-right: 2rem !important;
 }
+
+/* Panel mensajitos: anclado a la izquierda del mapa (junto a columna izq.) */
+.play-v3 .play-root.pc .capa-buzon {
+  left: 0 !important;
+  right: auto !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  border-radius: 0 8px 10px 0 !important;
+  box-shadow: 8px 6px 28px rgba(40, 28, 16, .14), inset 0 0 0 1px rgba(180, 150, 110, .22) !important;
+  transform: translateX(-108%);
+}
+.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon {
+  transform: translateX(0);
+}
+/* BotÃƒÂ³n marcar todos como leÃƒÂ­dos */
+.play-v3 .capa-buzon .mensajitos-cab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .45rem;
+  margin: 0 0 .65rem;
+  padding-right: 3.5rem;
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos {
+  display: inline-flex;
+  align-items: center;
+  gap: .38rem;
+  margin: 0;
+  padding: .32rem .62rem .34rem;
+  border: 1.5px solid rgba(138, 74, 24, .55);
+  border-radius: 6px;
+  background: linear-gradient(180deg, #fff8dc 0%, #fff0b8 100%);
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #5a4028;
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .12);
+  transition: background .15s ease, border-color .15s ease, transform .12s ease, box-shadow .15s ease;
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos:hover:not(:disabled) {
+  background: linear-gradient(180deg, #fffef0 0%, #ffe8a0 100%);
+  border-color: #8a4a18;
+  color: #3a2818;
+  box-shadow: 1px 3px 0 rgba(44, 38, 31, .16);
+  transform: translateY(-1px);
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos:active:not(:disabled) {
+  transform: translateY(0);
+  box-shadow: 1px 1px 0 rgba(44, 38, 31, .1);
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos:disabled,
+.play-v3 .capa-buzon .mensajitos-leer-todos[hidden] {
+  display: none !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos-ico {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.05rem;
+  height: 1.05rem;
+  border-radius: 50%;
+  background: rgba(106, 154, 90, .22);
+  color: #4a7a3a;
+  font-size: .62rem;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-weight: 900;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos-txt {
+  letter-spacing: .01em;
+}
+
+
+
+/* × más grande en todos los modales */
+.play-v3 .capa .cerrar[data-close],
+.play-v3 .capa .vecinos-cerrar,
+.play-v3 .capa .mensajitos-cerrar,
+.play-v3 .capa .ficha-cerrar,
+.play-v3 .capa .agenda-cerrar,
+.play-v3 .capa .coti-cerrar,
+.play-v3 .capa .org-cerrar,
+.play-v3 .capa .mis-cerrar,
+.play-v3 .nota-mapa .cerrar,
+.play-v3 .mensajitos-pop-cerrar {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  min-width: 2.25rem !important;
+  min-height: 2.25rem !important;
+  padding: 0 !important;
+  font-size: 2rem !important;
+  line-height: 1 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+

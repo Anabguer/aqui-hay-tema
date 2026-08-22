@@ -28,11 +28,14 @@ final class EtiquetaFicha
         if ($fem === $masc) {
             $fem = $masc . 'a';
         }
-        return match ($genero) {
-            'mujer' => $fem,
-            'hombre' => $masc,
-            default => $masc,
-        };
+        switch ($genero) {
+            case 'mujer':
+                return $fem;
+            case 'hombre':
+                return $masc;
+            default:
+                return $masc;
+        }
     }
 
     public static function lugar(string $id, CatalogStore $store): string

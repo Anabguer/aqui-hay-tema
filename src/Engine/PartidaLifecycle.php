@@ -25,9 +25,9 @@ final class PartidaLifecycle
         $this->residentes = $residentes;
     }
 
-    public function nueva(string $configId = 'debug_v0', ?string $seed = null): array
+    public function nueva(string $configId = 'debug_v0', ?string $seed = null, ?array $horaLocalCliente = null): array
     {
-        $partida = PartidaSchema::nueva($this->root, $configId, $seed);
+        $partida = PartidaSchema::nueva($this->root, $configId, $seed, $horaLocalCliente);
         $config = $this->catalog->loadConfigPrevalidada($configId);
 
         foreach ($config['residentes_iniciales'] ?? [] as $entry) {
@@ -78,14 +78,95 @@ final class PartidaLifecycle
     public function cargar(string $partidaId): array
     {
         $partida = $this->repo->cargar($partidaId);
+        $fingerprintAntes = self::fingerprintEstadoPersistible($partida);
+
         SchemaFields::ensure($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         Reloj::calcularCatchUpPendiente($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->generarMisionesSiToca($partida);
         $this->tickPeticiones($partida);
-        $this->repo->guardar($partida);
+
+        if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
+            $this->guardar($partida);
+        }
         return $partida;
+    }
+
+    /**
+     * Bootstrap UI (partida.refresh): sync de gameplay visible, sin catch-up de sesión ni logs instrumentales.
+     */
+    public function cargarParaRefresh(string $partidaId): array
+    {
+        $partida = $this->repo->cargar($partidaId);
+        $fingerprintAntes = self::fingerprintEstadoPersistible($partida);
+
+        SchemaFields::ensure($partida);
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
+        EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
+        $this->generarMisionesSiToca($partida);
+        $this->tickPeticiones($partida);
+
+        if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
+            $this->guardar($partida);
+        }
+        return $partida;
+    }
+
+    /**
+     * Carga sin reconciliar reloj/encuentros/misiones/peticiones ni escribir el save.
+     * Para mutaciones acotadas (marcar mensajito leído, etc.).
+     */
+    public function cargarLigero(string $partidaId): array
+    {
+        $partida = $this->repo->cargar($partidaId);
+        SchemaFields::ensure($partida);
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
+        return $partida;
+    }
+
+    /**
+     * Persistencia sin recorte de caps (evita barrer listas enormes en cada micro-cambio).
+     */
+    public function guardarRapido(array $partida): void
+    {
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
+        RngService::fromPartida($partida)->persistToPartida($partida);
+        $this->repo->guardarRapido($partida);
+    }
+
+    /**
+     * Huella del estado persistible: ignora marca de sesión, updated_at y buffers de auditoría
+     * (no son mutación de gameplay inmediata).
+     *
+     * @param array<string, mixed> $partida
+     */
+    private static function fingerprintEstadoPersistible(array $partida): string
+    {
+        $reloj = is_array($partida['reloj'] ?? null) ? $partida['reloj'] : [];
+        unset($reloj['ultima_sesion_iso'], $reloj['catch_up_pendiente']);
+        $slice = [
+            'encuentros' => $partida['encuentros'] ?? [],
+            'buzon' => $partida['buzon'] ?? [],
+            'misiones_diarias' => $partida['misiones_diarias'] ?? null,
+            'peticiones' => $partida['peticiones'] ?? [],
+            'residentes' => $partida['residentes'] ?? [],
+            'relaciones_sociales' => $partida['relaciones_sociales'] ?? [],
+            'relaciones_romanticas' => $partida['relaciones_romanticas'] ?? [],
+            'relaciones_conflicto' => $partida['relaciones_conflicto'] ?? [],
+            'propuestas_encuentro' => $partida['propuestas_encuentro'] ?? [],
+            'tutorial' => $partida['tutorial'] ?? null,
+            'reloj' => $reloj,
+            'rng' => $partida['rng'] ?? null,
+            'vida_pueblo' => $partida['vida_pueblo'] ?? null,
+            'npc_autonomo' => $partida['npc_autonomo'] ?? null,
+            'propuestas_cooldown' => $partida['propuestas_cooldown'] ?? null,
+            'rechazos_propuesta' => $partida['rechazos_propuesta'] ?? [],
+            'historial_coincidencias' => $partida['historial_coincidencias'] ?? [],
+            'descubrimientos' => $partida['descubrimientos'] ?? [],
+        ];
+        $json = json_encode($slice, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+        return hash('sha256', $json);
     }
 
     public function guardar(array $partida): void

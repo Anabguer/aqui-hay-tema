@@ -132,10 +132,11 @@ $dos = EncuentroEngine::validarContexto($partida, [$a], 'conocerse');
 ok(!($dos['ok'] ?? true), 'conocerse sigue exigiendo 2');
 
 $msg = BuzonEngine::crear($partida, [
-    'texto' => '',
+    'texto' => 'Aviso importante de prueba relacional.',
     'clasificacion' => BuzonEngine::IMPORTANTE,
     'de_persona' => $a,
 ]);
+ok($msg['ok'] ?? false, 'mensaje importante creado');
 ok(($msg['mensaje']['clasificacion'] ?? '') === 'importante', 'clasificación importante');
 $mid = $msg['mensaje']['id'];
 $esp = BuzonEngine::marcarEstado($partida, $mid, 'en_espera');

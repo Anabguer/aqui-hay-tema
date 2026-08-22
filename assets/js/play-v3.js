@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   'use strict';
 
   const API = 'api/index.php';
@@ -16,10 +16,18 @@
     }
   }
   function isDebugOn() { return DEBUG_ON; }
+  function horaLocalCreacion() {
+    const d = new Date();
+    const pad = function (n) { return String(n).padStart(2, '0'); };
+    return {
+      fecha: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()),
+      hora: d.getHours()
+    };
+  }
   function configNueva(forceFreshSeed) {
     const c = qs.get('config');
     if (c) {
-      const o = { config_id: c };
+      const o = { config_id: c, hora_local: horaLocalCreacion() };
       if (qs.get('seed')) {
         o.seed = qs.get('seed');
       } else if (forceFreshSeed) {
@@ -27,7 +35,7 @@
       }
       return o;
     }
-    const o = Object.assign({}, CONFIG_JUEGO);
+    const o = Object.assign({}, CONFIG_JUEGO, { hora_local: horaLocalCreacion() });
     if (forceFreshSeed) {
       o.seed = 'ui-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
     }
@@ -91,6 +99,20 @@
     retirarEsperaPrimerGesto();
     iniciarMusicaFondo(false);
   }
+
+  function pausarAudioPorOculto() {
+    if (!document.hidden && document.visibilityState !== 'hidden') {
+      if (musicaActiva) iniciarMusicaFondo(false);
+      return;
+    }
+    retirarEsperaPrimerGesto();
+    try { musicaFondo.pause(); } catch (e) {}
+    if (window.AhtAudioFeedback && typeof window.AhtAudioFeedback.pauseAll === 'function') {
+      window.AhtAudioFeedback.pauseAll();
+    }
+  }
+  document.addEventListener('visibilitychange', pausarAudioPorOculto);
+  window.addEventListener('pagehide', pausarAudioPorOculto);
 
   function cambiarMusica(activa) {
     musicaActiva = !!activa;
@@ -532,10 +554,67 @@
     return el && (el.closest('.play-root') || el.closest('.game-shell'));
   }
 
+  let consultaNav = null;
+  let uiHistDepth = 0;
+  let uiHistSilent = false;
+
+  function uiHistPush() {
+    if (uiHistSilent) return;
+    uiHistDepth++;
+    try { history.pushState({ ahtUi: uiHistDepth }, ''); } catch (e) {}
+  }
+
+  function uiHistReset() {
+    uiHistDepth = 0;
+    consultaNav = null;
+  }
+
+  function uiHistBack() {
+    const root = $('.play-root');
+    if (!root) return false;
+    const consulta = root.getAttribute('data-consulta') || '';
+    const capa = root.getAttribute('data-capa') || '';
+    if (consulta === 'quien' && consultaNav && consultaNav.fromSel) {
+      uiHistSilent = true;
+      if (consultaNav.tipo === 'zona') abrirConsultaZona(consultaNav.zonaId, consultaNav.zonaBtn, true);
+      else abrirConsulta(consultaNav.complejoId, true);
+      uiHistSilent = false;
+      return true;
+    }
+    if (consulta) {
+      root.removeAttribute('data-consulta');
+      consultaNav = null;
+      actualizarNotaAtras();
+      return true;
+    }
+    if (capa) {
+      setCapa('');
+      return true;
+    }
+    return false;
+  }
+
+  function cerrarUiCompleto() {
+    uiHistSilent = true;
+    cerrarFichaRelOverlay();
+    setCapa('');
+    if ($('.play-root')) $('.play-root').removeAttribute('data-consulta');
+    uiHistReset();
+    actualizarNotaAtras();
+    if (uiHistDepth > 0) {
+      const n = uiHistDepth;
+      uiHistDepth = 0;
+      try { history.go(-n); } catch (e) {}
+    }
+    uiHistSilent = false;
+  }
+
   function setCapa(name) {
     const root = $('.play-root');
+    const prev = (root && root.getAttribute('data-capa')) || '';
     if (!name) root.removeAttribute('data-capa');
     else root.setAttribute('data-capa', name);
+    if (name && name !== prev && !uiHistSilent) uiHistPush();
     $$('.dock button').forEach(function (b) {
       const open = b.getAttribute('data-open');
       b.classList.toggle('is-on', name ? open === name : !open);
@@ -556,7 +635,7 @@
     return (r.identidad_publica && r.identidad_publica.nombre) || id;
   }
 
-﻿  function esIdInterno(s) {
+  function esIdInterno(s) {
     if (typeof s !== 'string' || !s) return false;
     return /^per_[a-z0-9_]+$/i.test(s) || /^lug_[a-z0-9_]+$/i.test(s) || /^msg_/.test(s);
   }
@@ -778,17 +857,11 @@
       return;
     }
     if (acc === 'organizar_pareja') {
-      resetOrgForm({ modo: 'pareja', a: params.a, b: params.b });
-      orgPresetNuevo = true;
-      setCapa('organizar');
-      fillOrganizar();
+      abrirOrganizarConPreset({ modo: 'pareja', a: params.a, b: params.b });
       return;
     }
     if (acc === 'organizar_solo') {
-      resetOrgForm({ modo: 'solo', a: params.a, lugar: params.lugar });
-      orgPresetNuevo = true;
-      setCapa('organizar');
-      fillOrganizar();
+      abrirOrganizarConPreset({ modo: 'solo', a: params.a, lugar: params.lugar });
       return;
     }
     setCapa('misiones');
@@ -1020,7 +1093,72 @@
     return '<div class="prox-faces' + (enCurso ? ' prox-faces--en-curso' : '') + '">' + carasPlanHtml(ids) + '</div>' +
       '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
       '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
-      esc(formatPlanMeta(enc, estado)) + '</p>';
+      esc(formatPlanMeta(enc, estado)) + '</p>' +
+      htmlIntervencionEncuentro(enc, estado);
+  }
+  function intervencionVistaDe(enc, estado) {
+    if (!enc) return null;
+    if (enc.intervencion) return enc.intervencion;
+    var cur = estado && estado.encuentro_en_curso;
+    if (cur && cur.id === enc.id && cur.intervencion) return cur.intervencion;
+    return null;
+  }
+  function htmlIntervencionEncuentro(enc, estado) {
+    if (!planEsEnCurso(enc, estado)) return '';
+    var iv = intervencionVistaDe(enc, estado);
+    if (!iv) return '';
+    if (iv.usada && iv.ultimo && iv.ultimo.texto) {
+      var tono = iv.ultimo.tono || 'neutral';
+      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(iv.ultimo.texto) + '</p></div>';
+    }
+    if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
+    var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
+      '<p class="enc-int-kicker">Intervenir una vez</p><div class="enc-int-btns">';
+    iv.acciones.forEach(function (a) {
+      if (!a.disponible) return;
+      if (a.id === 'hobby' && a.hobbies && a.hobbies.length) {
+        a.hobbies.forEach(function (h) {
+          html += '<button type="button" class="enc-int-btn enc-int-btn--hobby" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '">' +
+            esc(h.etiqueta) + '</button>';
+        });
+        return;
+      }
+      html += '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(a.id) + '">' + esc(a.etiqueta) + '</button>';
+    });
+    html += '</div><p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
+    return html;
+  }
+  async function ejecutarIntervencionEncuentro(encId, accion, extra) {
+    var payload = { encuentro_id: encId, accion: accion };
+    if (extra && extra.hobby_id) payload.hobby_id = extra.hobby_id;
+    if (extra && extra.residente_id) payload.residente_id = extra.residente_id;
+    var r = await api('encuentro.intervencion.ejecutar', payload);
+    if (!r.ok) {
+      toast(r.mensaje_ui || 'No se pudo intervenir.');
+      return r;
+    }
+    if (r.estado_delta && cacheEstado) {
+      Object.keys(r.estado_delta).forEach(function (k) {
+        cacheEstado[k] = r.estado_delta[k];
+      });
+    }
+    if (r.intervencion && cacheEstado && cacheEstado.encuentro_en_curso) {
+      cacheEstado.encuentro_en_curso.intervencion = r.vista || {
+        disponible: false,
+        usada: true,
+        ultimo: { accion: r.intervencion.accion, tono: r.intervencion.tono, texto: r.intervencion.texto }
+      };
+    }
+    if (cacheInsp && cacheInsp.encuentros) {
+      cacheInsp.encuentros.forEach(function (e) {
+        if (e.id === encId) {
+          e.intervencion_celeste = r.intervencion;
+          if (r.vista) e.intervencion = r.vista;
+        }
+      });
+    }
+    renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
+    return r;
   }
   function renderAgendaPlanes() {
     const box = document.querySelector('[data-agenda-list]');
@@ -1285,11 +1423,22 @@
     el.style.top = top + 'px';
   }
 
-  function abrirConsultaZona(zonaId, zonaBtn) {
+  function actualizarNotaAtras() {
+    var root = $('.play-root');
+    var consulta = root && root.getAttribute('data-consulta');
+    $$('[data-consulta-atras]').forEach(function (btn) {
+      var show = consulta === 'quien' && consultaNav && consultaNav.fromSel;
+      btn.hidden = !show;
+    });
+  }
+
+  function abrirConsultaZona(zonaId, zonaBtn, silentHist) {
     var meta = cacheMapaZonas && cacheMapaZonas.zonas && cacheMapaZonas.zonas[zonaId];
     var ops = destinosOperativosZona(zonaId);
-    if (ops.length > 1) {
+    if (ops.length > 1 || silentHist) {
       $('.play-root').setAttribute('data-consulta', 'sel');
+      consultaNav = { tipo: 'zona', zonaId: zonaId, zonaBtn: zonaBtn, vista: 'sel', fromSel: false };
+      if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.selector'), zonaId);
       $('[data-s-tit]').textContent = meta ? meta.label : zonaId;
       $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
@@ -1299,27 +1448,31 @@
         var b = document.createElement('button');
         b.type = 'button';
         b.textContent = 'Ver ' + nombreLugarUi(d.id, d.nombre);
-        b.addEventListener('click', function () { abrirQuienZona(zonaId, d.id, zonaBtn); });
+        b.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, d.id, zonaBtn); });
         box.appendChild(b);
       });
       var all = document.createElement('button');
       all.type = 'button';
       all.textContent = 'Quién hay aquí';
-      all.addEventListener('click', function () { abrirQuienZona(zonaId, null, zonaBtn); });
+      all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, null, zonaBtn); });
       box.appendChild(all);
       posicionarNotaMapa($('.selector'), zonaBtn);
+      actualizarNotaAtras();
       return;
     }
-    abrirQuienZona(zonaId, ops[0] ? ops[0].id : null, zonaBtn);
+    abrirQuienZona(zonaId, ops[0] ? ops[0].id : null, zonaBtn, silentHist);
   }
 
-  function abrirQuienZona(zonaId, destId, zonaBtn) {
+  function abrirQuienZona(zonaId, destId, zonaBtn, silentHist) {
     var meta = cacheMapaZonas && cacheMapaZonas.zonas && cacheMapaZonas.zonas[zonaId];
     var lugs = ZONA_TO_LUGS[zonaId] || [];
     var gente = personasEnZona(zonaId).filter(function (p) {
       return !destId || p.destino_id === destId;
     });
+    var fromSel = $('.play-root').getAttribute('data-consulta') === 'sel';
     $('.play-root').setAttribute('data-consulta', 'quien');
+    consultaNav = { tipo: 'zona', zonaId: zonaId, zonaBtn: zonaBtn, destId: destId, vista: 'quien', fromSel: fromSel };
+    if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.quien'), destId || zonaId);
     $('[data-q-tit]').textContent = meta ? meta.label : zonaId;
     $('[data-q-sum]').textContent = gente.length
@@ -1351,15 +1504,15 @@
       var b = document.createElement('button');
       b.type = 'button';
       b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
-      b.addEventListener('click', function () {
-        org.lugar = d.id;
-        setCapa('organizar');
-        $('.play-root').removeAttribute('data-consulta');
-        fillOrganizar();
+      b.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        abrirOrganizarConPreset({ lugar: d.id });
       });
       box.appendChild(b);
     });
     posicionarNotaMapa($('.quien'), zonaBtn);
+    actualizarNotaAtras();
   }
 
   function renderProximoCaras(enc) {
@@ -1594,7 +1747,7 @@
       const diaTemp = reloj.dia_en_temporada;
       const diasTemp = 24;
       metaEl.textContent = (diaTemp !== undefined && diaTemp !== null)
-        ? (diaTemp + '/' + diasTemp)
+        ? ('día ' + diaTemp + ' de ' + diasTemp)
         : '—';
     }
     const vida = estado.vida_pueblo || null;
@@ -1747,12 +1900,14 @@
     return (cachePueblo && cachePueblo.complejos || []).filter(function (c) { return c.id === id; })[0];
   }
 
-  function abrirConsulta(id) {
+  function abrirConsulta(id, silentHist) {
     const cx = cxById(id);
     if (!cx) return;
     const ops = cx.destinos_operativos || [];
-    if (ops.length > 1) {
+    if (ops.length > 1 || silentHist) {
       $('.play-root').setAttribute('data-consulta', 'sel');
+      consultaNav = { tipo: 'complejo', complejoId: id, vista: 'sel', fromSel: false };
+      if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.selector'), id);
       $('[data-s-tit]').textContent = cx.nombre;
       $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
@@ -1762,22 +1917,26 @@
         const b = document.createElement('button');
         b.type = 'button';
         b.textContent = 'Ver ' + nombreLugarUi(d.id, d.nombre);
-        b.addEventListener('click', function () { abrirQuien(id, d.id); });
+        b.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, d.id); });
         box.appendChild(b);
       });
       const all = document.createElement('button');
       all.type = 'button';
       all.textContent = 'Quién hay en el complejo';
-      all.addEventListener('click', function () { abrirQuien(id, null); });
+      all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, null); });
       box.appendChild(all);
+      actualizarNotaAtras();
       return;
     }
-    abrirQuien(id, ops[0] ? ops[0].id : null);
+    abrirQuien(id, ops[0] ? ops[0].id : null, silentHist);
   }
 
-  function abrirQuien(id, destId) {
+  function abrirQuien(id, destId, silentHist) {
     const cx = cxById(id);
+    const fromSel = $('.play-root').getAttribute('data-consulta') === 'sel';
     $('.play-root').setAttribute('data-consulta', 'quien');
+    consultaNav = { tipo: 'complejo', complejoId: id, destId: destId, vista: 'quien', fromSel: fromSel };
+    if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.quien'), id);
     $('[data-q-tit]').textContent = cx.nombre;
     const gente = (cx.personas || []).filter(function (p) {
@@ -1812,14 +1971,14 @@
       const b = document.createElement('button');
       b.type = 'button';
       b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
-      b.addEventListener('click', function () {
-        org.lugar = d.id;
-        setCapa('organizar');
-        $('.play-root').removeAttribute('data-consulta');
-        fillOrganizar();
+      b.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        abrirOrganizarConPreset({ lugar: d.id });
       });
       box.appendChild(b);
     });
+    actualizarNotaAtras();
   }
 
   function copyVacio(cid) {
@@ -1909,9 +2068,13 @@
       const img = tokenDe(id);
       const nom = (r.identidad_publica && r.identidad_publica.nombre) || id;
       const ini = nom.charAt(0) || '?';
-      b.innerHTML = '<div class="vecino-cara">' +
+      const emo = emocionDe(id);
+      const genero = (r.identidad_publica && r.identidad_publica.genero) || '';
+      const emoTxt = textoEmoVecinoSutil(emo, genero);
+      b.innerHTML = '<div class="vecino-cara" data-emocion="' + esc(emo) + '">' +
         (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="vecino-ini">' + esc(ini) + '</span>') +
-        '</div><p class="vecino-nom">' + esc(nom) + '</p>';
+        '</div><p class="vecino-nom">' + esc(nom) + '</p>' +
+        (emoTxt ? '<p class="vecino-emo" data-emocion="' + esc(emo) + '">' + esc(emoTxt) + '</p>' : '');
       b.addEventListener('click', function () { abrirFicha(id); });
       box.appendChild(b);
     });
@@ -2034,6 +2197,15 @@ function canonEmoId(id) {
       enfadado: 'enfadada'
     };
     return map[emo] || emo.replace(/_/g, ' ');
+  }
+
+  function textoEmoVecinoSutil(emo, genero) {
+    const e = canonEmoId(emo);
+    if (e === 'neutro') return '';
+    if (e === 'alegre') return 'está feliz';
+    if (e === 'triste') return 'está triste';
+    if (e === 'enfadado') return genero === 'mujer' ? 'está enfadada' : 'está enfadado';
+    return '';
   }
 
   function svgAnimoBadge(emo) {
@@ -2306,9 +2478,7 @@ function hobbyIconKey(id, texto) {
     const orgBtn = $('[data-ficha-org]');
     if (orgBtn) {
       orgBtn.onclick = function () {
-        org.a = id;
-        setCapa('organizar');
-        fillOrganizar();
+        abrirOrganizarConPreset({ a: id });
       };
     }
   }
@@ -2343,12 +2513,44 @@ function hobbyIconKey(id, texto) {
     return t;
   }
 
+  function mensajitosPendientesCount(msgs) {
+    return mensajitosCartas(msgs).filter(function (m) {
+      return (m.estado || '') === 'pendiente';
+    }).length;
+  }
+
+  function actualizarBuzonLeerTodosBtn(msgs) {
+    const btn = $('[data-buzon-leer-todos]');
+    if (!btn) return;
+    const n = mensajitosPendientesCount(msgs);
+    btn.hidden = n === 0;
+    btn.disabled = n === 0;
+  }
+
+  async function marcarTodosMensajitosLeidos() {
+    const btn = $('[data-buzon-leer-todos]');
+    if (btn && btn.disabled) return;
+    if (btn) btn.disabled = true;
+    const popAbierto = mensajitosPopAbierto;
+    const r = await api('buzon.leer_todos', {});
+    if (!r.ok) {
+      toast(r.mensaje_ui || 'No se pudieron marcar los mensajes.');
+      actualizarBuzonLeerTodosBtn(cacheBuzon);
+      return;
+    }
+    await refresh();
+    if (popAbierto) abrirMensajitosPop();
+    if (r.tutorial) pintarTutorialMotor(r.tutorial);
+  }
+
+
   function renderBuzon(msgs) {
     cacheBuzon = msgs || [];
     const box = $('[data-buzon-list]');
     if (!box) return;
     box.innerHTML = '';
     renderMensajitosPop(msgs);
+    actualizarBuzonLeerTodosBtn(msgs);
     const cartas = mensajitosOrdenados(msgs);
     if (!cartas.length) {
       box.innerHTML = '<p class="lista-vacia">Nada por aquí. Celestine respira.</p>';
@@ -2543,6 +2745,161 @@ function hobbyIconKey(id, texto) {
     refreshOrgHoras();
   }
 
+
+  function cerrarOrgDds() {
+    $$('.org-dd.is-open').forEach(function (dd) {
+      dd.classList.remove('is-open');
+      var trig = dd.querySelector('.org-dd-trigger');
+      if (trig) trig.setAttribute('aria-expanded', 'false');
+      var menu = dd.querySelector('.org-dd-menu');
+      if (menu) menu.hidden = true;
+    });
+  }
+
+  function pintarOrgDropdown(kind, options, value, onChange) {
+    var map = {
+      lugar: { box: '[data-org-dd-lugar]', native: '[data-org-lugar]' },
+      dia: { box: '[data-org-dd-dia]', native: '[data-org-dia]' }
+    };
+    var cfg = map[kind];
+    if (!cfg) return;
+    var box = $(cfg.box);
+    var native = $(cfg.native);
+    if (!box) return;
+    var opts = Array.isArray(options) ? options : [];
+    var valStr = value === null || value === undefined ? '' : String(value);
+    var label = 'Elegir…';
+    opts.forEach(function (opt) {
+      var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+      if (valStr !== '' && optVal === valStr) label = opt.label || optVal;
+    });
+    box.innerHTML = '';
+    box.className = 'org-dd' + (kind === 'dia' ? ' org-dd--dia' : '');
+    if (native) {
+      native.innerHTML = '';
+      opts.forEach(function (opt) {
+        var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+        var o = document.createElement('option');
+        o.value = optVal;
+        o.textContent = opt.label || optVal;
+        if (opt.disabled) o.disabled = true;
+        if (valStr !== '' && optVal === valStr) o.selected = true;
+        native.appendChild(o);
+      });
+      if (valStr !== '') native.value = valStr;
+    }
+    var trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'org-dd-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML = '<span class="org-dd-label">' + esc(label) + '</span>';
+    var menu = document.createElement('ul');
+    menu.className = 'org-dd-menu capa-scroll';
+    menu.setAttribute('role', 'listbox');
+    menu.hidden = true;
+    if (!opts.length) {
+      trigger.disabled = true;
+      trigger.querySelector('.org-dd-label').textContent = 'Sin opciones';
+    } else {
+      opts.forEach(function (opt) {
+        var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+        var li = document.createElement('li');
+        li.className = 'org-dd-opt';
+        if (opt.disabled) li.className += ' is-disabled';
+        else if (valStr !== '' && optVal === valStr) li.className += ' is-on';
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', li.classList.contains('is-on') ? 'true' : 'false');
+        li.textContent = opt.label || optVal;
+        if (!opt.disabled && onChange) {
+          li.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            onChange(opt.value);
+            if (native) {
+              native.value = optVal;
+              native.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            cerrarOrgDds();
+            pintarOrgDropdown(kind, opts, opt.value, onChange);
+          });
+        }
+        menu.appendChild(li);
+      });
+      trigger.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        var open = box.classList.contains('is-open');
+        cerrarOrgDds();
+        if (!open) {
+          box.classList.add('is-open');
+          menu.hidden = false;
+          trigger.setAttribute('aria-expanded', 'true');
+        }
+      });
+    }
+    box.appendChild(trigger);
+    box.appendChild(menu);
+  }
+
+  function pintarOrgPick(kind, options, value, onChange) {
+    var map = {
+      hora: { box: '[data-org-pick-hora]', native: '[data-org-hora]' }
+    };
+    var cfg = map[kind];
+    if (!cfg) return;
+    var box = $(cfg.box);
+    var native = $(cfg.native);
+    if (!box && !native) return;
+    if (box) box.innerHTML = '';
+    if (native) native.innerHTML = '';
+    var opts = Array.isArray(options) ? options : [];
+    if (!opts.length) {
+      if (box) {
+        var vacio = document.createElement('p');
+        vacio.className = 'mini org-pick-vacio';
+        vacio.textContent = 'Sin opciones';
+        box.appendChild(vacio);
+      }
+      return;
+    }
+    var valStr = value === null || value === undefined ? '' : String(value);
+    opts.forEach(function (opt) {
+      var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'org-pick-opt';
+      btn.setAttribute('role', 'option');
+      if (opt.disabled) {
+        btn.className += ' is-disabled';
+        btn.disabled = true;
+      } else if (valStr !== '' && optVal === valStr) {
+        btn.classList.add('is-on');
+      }
+      btn.setAttribute('aria-selected', btn.classList.contains('is-on') ? 'true' : 'false');
+      btn.textContent = opt.label || optVal;
+      if (!opt.disabled && onChange) {
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          var picked = opt.value;
+          onChange(picked);
+          if (native) native.value = optVal;
+          pintarOrgPick(kind, opts, picked, onChange);
+        });
+      }
+      if (box) box.appendChild(btn);
+      if (native) {
+        var o = document.createElement('option');
+        o.value = optVal;
+        o.textContent = opt.label || optVal;
+        if (opt.disabled) o.disabled = true;
+        if (valStr !== '' && optVal === valStr) o.selected = true;
+        native.appendChild(o);
+      }
+    });
+    if (native && valStr !== '') native.value = valStr;
+  }
   function pintarOrgPicker() {
     const box = $('[data-org-picker]');
     if (!box) return;
@@ -2564,10 +2921,13 @@ function hobbyIconKey(id, texto) {
       btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '');
       btn.title = nom;
       btn.setAttribute('aria-label', nom);
-      btn.innerHTML = '<span class="org-picker-cara">' +
+      btn.innerHTML = '<span class="org-picker-stack">' +
+        '<span class="org-picker-cara">' +
         (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="org-picker-ini">' + esc(ini) + '</span>') +
-        '</span>' + (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">✓</span>' : '');
-      btn.addEventListener('click', function () { toggleOrgPicker(id); });
+        '</span>' +
+        (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">✓</span>' : '') +
+        '</span><span class="org-picker-nom">' + esc(nom) + '</span>';
+      btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); toggleOrgPicker(id); });
       box.appendChild(btn);
     });
   }
@@ -2609,6 +2969,14 @@ function hobbyIconKey(id, texto) {
     org.hora = 17;
   }
 
+  function abrirOrganizarConPreset(preset) {
+    resetOrgForm(preset);
+    orgPresetNuevo = true;
+    setCapa('organizar');
+    if ($('.play-root')) $('.play-root').removeAttribute('data-consulta');
+    fillOrganizar();
+  }
+
   function setOrgModo(modo) {
     org.modo = modo === 'solo' ? 'solo' : 'pareja';
     if (org.modo === 'solo') {
@@ -2628,16 +2996,12 @@ function hobbyIconKey(id, texto) {
   async function refreshOrgHoras() {
     var hora = $('[data-org-hora]');
     if (!hora) return;
-    hora.innerHTML = '';
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
     var parts = (org.modo === 'solo' ? [org.a] : [org.a, org.b]).filter(Boolean);
     if (!org.lugar || !org.dia || parts.length < 1 || (org.modo !== 'solo' && parts.length < 2)) {
-      var o0 = document.createElement('option');
-      o0.value = '';
-      o0.textContent = '—';
-      hora.appendChild(o0);
+      pintarOrgPick('hora', [{ value: '', label: '—', disabled: true }], '', null);
       return;
     }
     var tipo = org.modo === 'solo' ? 'individual' : (org.tipo || 'conocerse');
@@ -2654,51 +3018,65 @@ function hobbyIconKey(id, texto) {
         return (s.dia || 0) === org.dia;
       });
       slots.sort(function (a, b) { return (a.hora || 0) - (b.hora || 0); });
-      slots.forEach(function (s) {
-        var h = s.hora;
-        var o = document.createElement('option');
-        o.value = String(h);
-        o.textContent = s.etiqueta_hora || String(h).padStart(2, '0') + ':00';
-        hora.appendChild(o);
+      var horaOpts = slots.map(function (s) {
+        return {
+          value: s.hora,
+          label: s.etiqueta_hora || String(s.hora).padStart(2, '0') + ':00'
+        };
       });
-      if (!hora.options.length) {
-        var oEmpty = document.createElement('option');
-        oEmpty.value = '';
-        oEmpty.textContent = 'Sin huecos hoy';
-        hora.appendChild(oEmpty);
+      if (!horaOpts.length) {
+        pintarOrgPick('hora', [{ value: '', label: 'Sin huecos hoy', disabled: true }], '', null);
+        org.hora = 0;
+      } else {
+        var curHora = org.hora && horaOpts.some(function (o) { return String(o.value) === String(org.hora); })
+          ? org.hora : horaOpts[0].value;
+        pintarOrgPick('hora', horaOpts, curHora, function (v) { org.hora = v; });
+        org.hora = parseInt(curHora, 10) || 0;
       }
-      hora.value = hora.options.length ? hora.options[0].value : '';
-      org.hora = parseInt(hora.value, 10) || 0;
+      var hintEl = document.querySelector('[data-org-horas-hint]');
+      if (hintEl) {
+        if (r.hint_ui) {
+          hintEl.textContent = r.hint_ui;
+          hintEl.hidden = false;
+        } else if (!slots.length && r.primera_compatible && (r.primera_compatible.dia || 0) !== org.dia) {
+          hintEl.textContent = 'Primera hora compatible: ' + (r.primera_compatible.etiqueta_ui || r.primera_compatible.etiqueta_hora || '');
+          if (r.bloqueo_solicitado) hintEl.textContent += ' (' + r.bloqueo_solicitado + ')';
+          hintEl.hidden = false;
+        } else if (!slots.length && r.diagnostico && r.diagnostico.resumen_ui) {
+          hintEl.textContent = r.diagnostico.resumen_ui;
+          hintEl.hidden = false;
+        } else {
+          hintEl.textContent = '';
+          hintEl.hidden = true;
+        }
+      }
     } catch (e) {
-      var oErr = document.createElement('option');
-      oErr.value = '';
-      oErr.textContent = 'Sin huecos';
-      hora.appendChild(oErr);
+      pintarOrgPick('hora', [{ value: '', label: 'Sin huecos', disabled: true }], '', null);
     }
   }
 
   async function fillOrganizar() {
-    const lug = $('[data-org-lugar]');
-    lug.innerHTML = '<option value="">—</option>';
-    destinosOperativos().forEach(function (d) {
-      const o = document.createElement('option');
-      o.value = d.id;
-      o.textContent = d.nombre;
-      lug.appendChild(o);
+    const lugares = destinosOperativos();
+    const lugOpts = lugares.map(function (d) { return { value: d.id, label: d.nombre }; });
+    if (org.lugar && !lugOpts.some(function (o) { return o.value === org.lugar; })) org.lugar = '';
+    if (!org.lugar && lugOpts.length) org.lugar = lugOpts[0].value;
+    pintarOrgDropdown('lugar', lugOpts, org.lugar, function (v) {
+      org.lugar = v;
+      refreshOrgHoras();
     });
-    if (org.lugar) lug.value = org.lugar;
     const rv = (cacheEstado && cacheEstado.reloj_vista) || {};
     const dias = rv.proximos_dias || [];
-    const fd = $('[data-org-dia]');
-    fd.innerHTML = '';
-    dias.forEach(function (d) {
-      const o = document.createElement('option');
-      o.value = String(d.dia_pueblo);
-      o.textContent = d.etiqueta || ('día ' + d.dia_pueblo);
-      fd.appendChild(o);
+    const diaOpts = dias.map(function (d) {
+      return { value: d.dia_pueblo, label: d.etiqueta || ('dia ' + d.dia_pueblo) };
     });
     org.dia = org.dia || (cacheEstado && cacheEstado.reloj && cacheEstado.reloj.dia_pueblo);
-    if (org.dia) fd.value = String(org.dia);
+    if (org.dia && !diaOpts.some(function (o) { return String(o.value) === String(org.dia); })) {
+      org.dia = diaOpts.length ? diaOpts[0].value : null;
+    }
+    pintarOrgDropdown('dia', diaOpts, org.dia, function (v) {
+      org.dia = v;
+      refreshOrgHoras();
+    });
     pintarOrgCaras();
     await refreshTipos();
     await refreshOrgHoras();
@@ -2731,7 +3109,9 @@ function hobbyIconKey(id, texto) {
       return orgTipoHtml(op.id, op.label, org.tipo === op.id);
     }).join('');
     $$('[data-org-tipo]', box).forEach(function (btn) {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
         org.tipo = btn.getAttribute('data-org-tipo') || '';
         $$('[data-org-tipo]', box).forEach(function (c) {
           c.classList.toggle('is-on', c === btn);
@@ -2783,6 +3163,10 @@ function hobbyIconKey(id, texto) {
       var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
       if (r.rechazada) {
         toast(r.mensaje_ui || ('Plan rechazado: ' + na + ' y ' + nb + ' en ' + lugUi + '.'));
+        if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
+          org.dia = r.contrapropuesta.dia;
+          org.hora = r.contrapropuesta.hora;
+        }
       } else {
         var horaUi = String(org.hora).padStart(2, '0') + ':00';
         var msg = r.mensaje_ui || ('Plan aceptado: ' + na + ' y ' + nb + ' en ' + lugUi + ', día ' + org.dia + ' a las ' + horaUi + '.');
@@ -2804,23 +3188,41 @@ function hobbyIconKey(id, texto) {
       await refresh();
     }
   }
+  function persistPartidaId(id) {
+    if (!id) return;
+    partidaId = id;
+    try { localStorage.setItem(storageKey(), id); } catch (e) {}
+    try { localStorage.removeItem('aht_partida_id'); } catch (e) {}
+  }
+  async function adoptSqlPartidaIfAny() {
+    const list = await api('partida.listar', {}, 'GET');
+    if (!list.ok || !Array.isArray(list.partidas) || list.partidas.length === 0) return false;
+    const serverId = list.partidas[0] && list.partidas[0].partida_id;
+    if (!serverId) return false;
+    if (partidaId !== serverId) persistPartidaId(serverId);
+    return true;
+  }
   async function ensurePartida() {
+    if (await adoptSqlPartidaIfAny()) return true;
     if (partidaId) return true;
     const r = await api('partida.nueva', configNueva(true));
-    if (r.ok) {
-      partidaId = r.partida_id;
-      localStorage.setItem(storageKey(), partidaId);
-    }
+    if (r.ok && r.partida_id) persistPartidaId(r.partida_id);
     return !!r.ok;
   }
   async function refresh() {
     const popMensajitosAbierto = mensajitosPopAbierto;
     let paquete = await api('partida.refresh', {}, 'GET');
     if (!paquete.ok && partidaId) {
-      try { localStorage.removeItem(storageKey()); } catch (e) {}
-      partidaId = null;
-      if (await ensurePartida()) {
-        paquete = await api('partida.refresh', {}, 'GET');
+      const errRefresh = String(paquete.error || '').toUpperCase();
+      const partidaPerdida = errRefresh === 'PARTIDA_NO_ENCONTRADA' || errRefresh === 'SAVE_CORRUPTO';
+      if (partidaPerdida) {
+        try { localStorage.removeItem(storageKey()); } catch (e) {}
+        partidaId = null;
+        if (await adoptSqlPartidaIfAny()) {
+          paquete = await api('partida.refresh', {}, 'GET');
+        } else if (await ensurePartida()) {
+          paquete = await api('partida.refresh', {}, 'GET');
+        }
       }
     }
     if (!paquete.ok) return;
@@ -2847,6 +3249,13 @@ function hobbyIconKey(id, texto) {
     if (popMensajitosAbierto) abrirMensajitosPop();
   }
 
+  window.AHT_PLAY = {
+    api: api,
+    isDebugOn: isDebugOn,
+    refresh: refresh,
+    get partidaId() { return partidaId; }
+  };
+
   async function nuevaPartidaLimpia() {
     try { localStorage.removeItem(tutIntroKey()); } catch (e) {}
     localStorage.removeItem(storageKey());
@@ -2861,9 +3270,8 @@ function hobbyIconKey(id, texto) {
     playtestLogClient.entries = [];
     setCapa('');
     const r = await api('partida.nueva', configNueva(true));
-    if (r.ok) {
-      partidaId = r.partida_id;
-      localStorage.setItem(storageKey(), partidaId);
+    if (r.ok && r.partida_id) {
+      persistPartidaId(r.partida_id);
       playtestLogClient.push({
         ts: new Date().toISOString().slice(11, 19),
         tipo: 'NUEVA_PARTIDA',
@@ -3079,11 +3487,19 @@ function hobbyIconKey(id, texto) {
         return;
       }
     }
+    const atras = ev.target.closest('[data-consulta-atras]');
+    if (atras && uiRootFrom(atras)) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (uiHistDepth > 0) {
+        uiHistDepth--;
+        try { history.back(); } catch (e) { uiHistBack(); }
+      } else uiHistBack();
+      return;
+    }
     const t = ev.target.closest('[data-close], .velo');
     if (t && uiRootFrom(t)) {
-      cerrarFichaRelOverlay();
-      setCapa('');
-      $('.play-root').removeAttribute('data-consulta');
+      cerrarUiCompleto();
       return;
     }
     const open = ev.target.closest('[data-open]');
@@ -3098,7 +3514,10 @@ function hobbyIconKey(id, texto) {
         fillOrganizar();
       }
       if (name === 'agenda') renderAgendaPlanes();
-      if (name === 'diario') $('[data-diario-tab="hoy"]').click();
+      if (name === 'diario') {
+        const diarioTabHoy = $('[data-diario-tab="hoy"]');
+        if (diarioTabHoy) diarioTabHoy.click();
+      }
       if (name === 'vecinos') renderVecinos();
       return;
     }
@@ -3107,6 +3526,25 @@ function hobbyIconKey(id, texto) {
       $('.play-root').setAttribute('data-diario', tab.getAttribute('data-diario-tab'));
       $$('[data-diario-tab]').forEach(function (b) {
         b.classList.toggle('is-on', b === tab);
+      });
+      return;
+    }
+    const encIntBtn = ev.target.closest('[data-enc-int-accion]');
+    if (encIntBtn) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrap = encIntBtn.closest('[data-enc-int]');
+      if (!wrap || wrap.classList.contains('is-busy')) return;
+      wrap.classList.add('is-busy');
+      var encId = wrap.getAttribute('data-enc-id');
+      var acc = encIntBtn.getAttribute('data-enc-int-accion');
+      var extra = {};
+      if (acc === 'hobby') {
+        extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
+        extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+      }
+      ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
+        wrap.classList.remove('is-busy');
       });
       return;
     }
@@ -3142,6 +3580,15 @@ function hobbyIconKey(id, texto) {
     fichaVolver.addEventListener('click', function () { setCapa('vecinos'); renderVecinos(); });
   }
 
+
+  const buzonLeerTodos = $('[data-buzon-leer-todos]');
+  if (buzonLeerTodos) {
+    buzonLeerTodos.addEventListener('click', async function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      await marcarTodosMensajitosLeidos();
+    });
+  }
 
   const mensajitosTrig = $('[data-mensajitos-trigger]');
   if (mensajitosTrig) {
@@ -3200,6 +3647,10 @@ function hobbyIconKey(id, texto) {
   var orgLug = $('[data-org-lugar]');
   var orgDia = $('[data-org-dia]');
   if (orgLug) orgLug.addEventListener('change', function () { refreshOrgHoras(); });
+  document.addEventListener('click', function (ev) {
+    if (ev.target.closest('.org-dd')) return;
+    cerrarOrgDds();
+  });
   if (orgDia) orgDia.addEventListener('change', function () { refreshOrgHoras(); });
   $$('[data-org-modo]').forEach(function (btn) {
     btn.addEventListener('click', function () { setOrgModo(btn.getAttribute('data-org-modo')); });
@@ -3216,6 +3667,11 @@ function hobbyIconKey(id, texto) {
     });
   }
   iniciarMusicaFondo(true);
+
+  window.addEventListener('popstate', function () {
+    if (uiHistDepth > 0) uiHistDepth--;
+    uiHistBack();
+  });
 
   window.addEventListener('resize', layout);
   layout();

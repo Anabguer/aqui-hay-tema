@@ -1,6 +1,6 @@
-/**
+﻿/**
 
- * Direccion artistica shell Ã¢â‚¬â€ objetos visuales, no dashboard.
+ * Direccion artistica shell ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â objetos visuales, no dashboard.
 
  */
 
@@ -538,6 +538,69 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   z-index: 3;
 
   pointer-events: none;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+}
+
+.obj-hora-ico::after {
+
+  content: "";
+
+  position: absolute;
+
+  top: -18%;
+
+  left: -90%;
+
+  width: 48%;
+
+  height: 136%;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.5) 46%,
+    rgba(255,255,255,.18) 54%,
+    rgba(255,255,255,0) 100%
+  );
+
+  transform: rotate(18deg);
+
+  opacity: 0;
+
+  animation: reloj-ico-reflejo 13s ease-in-out infinite;
+
+  pointer-events: none;
+
+}
+
+@keyframes reloj-ico-reflejo {
+
+  0%, 74%, 100% {
+    left: -90%;
+    opacity: 0;
+  }
+
+  76% { opacity: .95; }
+
+  84% {
+    left: 92%;
+    opacity: .95;
+  }
+
+  86% {
+    left: 92%;
+    opacity: 0;
+  }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .obj-hora-ico::after { animation: none !important; opacity: 0 !important; }
 
 }
 
@@ -1142,7 +1205,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 
-.play-v3 .capa-cerrar-pestaÃƒÂ±a {
+.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a {
 
   font-size: .72rem !important;
 
@@ -1156,7 +1219,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 }
 
-.play-v3 .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
+.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a::before { z-index: -1; }
 
 
 
@@ -1429,7 +1492,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   border-radius: 50%;
   border: 2px solid rgba(120, 96, 72, 0.35);
   object-fit: cover;
-  object-position: 50% 12%;
+  object-position: 50% 20%;
   background: #fff8e8;
   display: flex;
   align-items: center;
@@ -1439,6 +1502,20 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   margin-right: 0 !important;
   vertical-align: unset !important;
   flex-shrink: 0;
+}
+
+/* plan-cara-token: clic â†’ ficha */
+.obj-proximo-polaroid .prox-faces .cara-token .cara {
+  width: 46px;
+  height: 46px;
+}
+.obj-proximo-polaroid .prox-faces .cara-token .cara img,
+.obj-proximo-polaroid .prox-faces .cara-token .cara .cara-ini,
+.obj-proximo-polaroid .prox-faces .cara-token .cara .plan-cara {
+  width: 100%;
+  height: 100%;
+  border: none;
+  margin: 0;
 }
 .obj-proximo-polaroid .prox-nombres {
   margin: 0 0 .22rem;
@@ -1687,6 +1764,20 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   margin: 0;
 }
 
+.obj-cotilleo-par .obj-cotilleo-ver-mas {
+  display: block;
+  margin-top: .42rem;
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: lowercase;
+  color: #8a4a58;
+}
+.obj-cotilleo-par .obj-cotilleo-ver-mas[hidden] {
+  display: none !important;
+}
+
 /* Parejas: raya difuminada bajo titulo */
 .zona-tit-parejas::after {
   content: "";
@@ -1817,7 +1908,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
     1px 2px 0 rgba(188, 158, 118, .12),
     2px 4px 12px rgba(40, 28, 16, .08);
   transform: rotate(-0.25deg);
-  cursor: pointer;
+  cursor: default;
   font: inherit;
   color: inherit;
   text-align: left;
@@ -1871,6 +1962,12 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 }
 .mision-strip-row:last-child { border-bottom: 0; padding-bottom: .1rem; }
 .mision-strip-row.mision-bloqueada { opacity: .55; }
+.mision-strip-row--accion {
+  cursor: pointer;
+}
+.mision-strip-row--accion:hover .mision-strip-txt {
+  color: #a84a62;
+}
 .mision-strip-ico {
   display: flex;
   align-items: center;
@@ -1923,15 +2020,264 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   display: block;
 }
 
-/* Plan en curso — polaroid y agenda */
-.obj-proximo-polaroid.is-en-curso {
-  border-left-color: #7a9e6a !important;
-  box-shadow: 0 1px 0 rgba(120,96,72,.15), 2px 4px 10px rgba(74,110,58,.12);
+/* Plan en curso â€” polaroid y agenda */
+@keyframes plan-curso-respiro {
+  0%, 100% {
+    box-shadow:
+      1px 2px 0 rgba(122, 158, 106, 0.16),
+      3px 5px 16px rgba(74, 110, 58, 0.12),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  }
+  50% {
+    box-shadow:
+      1px 2px 0 rgba(122, 158, 106, 0.24),
+      3px 7px 20px rgba(74, 110, 58, 0.18),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+  }
 }
-.obj-proximo-polaroid.is-en-curso .obj-proximo-tit { color: #4a6e3a; }
-.obj-proximo-polaroid .prox-meta--en-curso { color: #4a6e3a; font-weight: 600; }
+@keyframes plan-curso-punto {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .55; transform: scale(.82); }
+}
+.obj-proximo-polaroid.is-en-curso,
+.shell-grupo-planes .obj-proximo.obj-proximo-polaroid.is-en-curso {
+  border: 2px solid #b8c9a8;
+  background-image:
+    linear-gradient(145deg, rgba(212, 232, 196, 0.38) 0%, rgba(253, 249, 244, 0.92) 44%, rgba(255, 253, 249, 0.22) 100%),
+    url("../play-v3/capas/libreta_hoja.png");
+  animation: plan-curso-respiro 2.8s ease-in-out infinite;
+}
+.obj-proximo-polaroid.is-en-curso::before {
+  width: 42px;
+  background: rgba(196, 220, 178, 0.9);
+  box-shadow: 0 1px 2px rgba(74, 110, 58, 0.14);
+}
+.obj-proximo-polaroid.is-en-curso::after {
+  content: "ahora";
+  position: absolute;
+  top: .42rem;
+  right: .55rem;
+  padding: .1rem .42rem .14rem;
+  font-family: Caveat, cursive;
+  font-size: 1.02rem;
+  font-weight: 700;
+  color: #4a6e3a;
+  background: rgba(230, 244, 218, 0.94);
+  border: 1.5px dashed rgba(122, 158, 106, 0.55);
+  border-radius: 3px 8px 4px 7px;
+  transform: rotate(6deg);
+  z-index: 2;
+  box-shadow: 1px 2px 0 rgba(74, 110, 58, 0.1);
+  pointer-events: none;
+}
+.obj-proximo-polaroid.is-en-curso .obj-proximo-tit {
+  color: #3d5c32;
+  display: inline-block;
+  padding-right: .15rem;
+  background: linear-gradient(transparent 66%, rgba(196, 220, 178, 0.58) 66%, rgba(196, 220, 178, 0.58) 92%, transparent 92%);
+}
+.obj-proximo-polaroid .prox-meta--en-curso {
+  color: #4a6e3a;
+  font-weight: 600;
+}
+.obj-proximo-polaroid .prox-meta--en-curso::after {
+  content: "";
+  display: inline-block;
+  width: .42rem;
+  height: .42rem;
+  margin-left: .22rem;
+  border-radius: 50%;
+  background: #8fbc78;
+  box-shadow: 0 0 0 2px rgba(143, 188, 120, 0.35);
+  animation: plan-curso-punto 1.6s ease-in-out infinite;
+  vertical-align: middle;
+}
 /* Las caras del plan en curso usan solo el aro emocional del token */
 .play-v3 .capa-agenda .agenda-fila--en-curso {
-  background: rgba(122, 158, 106, 0.12);
-  border-left: 3px solid #7a9e6a;
+  position: relative;
+  padding-left: .85rem;
+  background: linear-gradient(90deg, rgba(212, 232, 196, 0.42) 0%, rgba(255, 254, 248, 0.96) 22%);
+  border-left: 0;
 }
+.play-v3 .capa-agenda .agenda-fila--en-curso::before {
+  content: "";
+  position: absolute;
+  left: .25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: .38rem;
+  height: .38rem;
+  border-radius: 50%;
+  background: #8fbc78;
+  box-shadow: 0 0 0 2px rgba(143, 188, 120, 0.3);
+  animation: plan-curso-punto 1.6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .obj-proximo-polaroid.is-en-curso { animation: none !important; }
+  .obj-proximo-polaroid .prox-meta--en-curso::after,
+  .play-v3 .capa-agenda .agenda-fila--en-curso::before { animation: none !important; }
+}
+
+
+/* AquÃ­ hay tema â€” bloque en nota del edificio */
+.play-v3 .quien-tema { margin: .45rem 0 .55rem; }
+.play-v3 .quien-tema-card {
+  padding: .5rem .55rem .55rem;
+  border: 1px dashed rgba(138, 74, 88, .28);
+  border-radius: .15rem;
+  background: rgba(255, 248, 242, .72);
+}
+.play-v3 .quien-tema--destacado {
+  border-color: rgba(138, 74, 88, .42);
+  background: rgba(255, 240, 244, .82);
+}
+.play-v3 .quien-tema-kicker {
+  margin: 0 0 .2rem;
+  font-size: .58rem;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a4a58;
+}
+.play-v3 .quien-tema-cat {
+  margin: 0 0 .28rem;
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: .92rem;
+  color: #6d3f4d;
+}
+.play-v3 .quien-tema-ico { margin-right: .15rem; }
+.play-v3 .quien-tema-txt {
+  margin: 0 0 .25rem;
+  font-family: Fraunces, Georgia, serif;
+  font-size: .82rem;
+  line-height: 1.36;
+  color: #2c261f;
+}
+.play-v3 .quien-tema-quien {
+  margin: 0 0 .2rem;
+  font-size: .72rem;
+  color: #5a4a42;
+}
+.play-v3 .quien-tema-pista {
+  margin: 0;
+  font-size: .72rem;
+  font-style: italic;
+  line-height: 1.34;
+  color: #6a5348;
+}
+
+/* Popover Â«QuiÃ©n estÃ¡Â» â€” listado compacto + temas */
+.quien-kicker { text-align: center; }
+aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; font-style: italic; }
+.quien-residentes { display: flex; margin: 0; }
+.quien-residente { display: flex; align-items: center; justify-content: center; gap: 0.35rem; flex-wrap: wrap; }
+.quien-residente--activo .quien-residente-nombre { font-weight: 600; }
+.quien-residente-nombre {
+  background: none; border: none; padding: 0; font: inherit; color: inherit;
+  cursor: pointer; text-decoration: underline dotted transparent;
+}
+.quien-residente-nombre:hover, .quien-residente-nombre:focus-visible { text-decoration-color: currentColor; }
+.quien-tema-mark {
+  border: none; border-radius: 999px; width: 1.35rem; height: 1.35rem;
+  font-size: 0.72rem; line-height: 1; cursor: pointer; padding: 0;
+  background: rgba(255, 120, 160, 0.18); color: #b8326a;
+}
+.quien-tema-mark--coincidencias { background: rgba(120, 140, 200, 0.15); color: #4a5a8a; }
+.quien-tema-mark--relacion { background: rgba(100, 160, 120, 0.15); color: #2d6a4f; }
+.quien-tema-mark--romance { background: rgba(255, 120, 160, 0.28); color: #b8326a; }
+.quien-tema-mark--drama { background: rgba(220, 140, 60, 0.2); color: #9a5a10; }
+.quien-tema-mas { text-align: center; font-size: 0.8rem; opacity: 0.75; margin: 0.2rem 0 0; }
+.quien-tema-card .quien-tema-quien { font-size: 0.85rem; opacity: 0.85; margin: 0 0 0.25rem; }
+/* Popover Quién está — bloques jerárquicos */
+.play-v3 aside.quien .quien-bloque {
+  margin: 0 0 0.55rem;
+  padding: 0.5rem 0.55rem 0.55rem;
+  border-radius: 0.2rem;
+  text-align: center;
+}
+.play-v3 aside.quien .quien-bloque--lugar {
+  margin-top: 0.15rem;
+  padding: 0.55rem 0.6rem 0.5rem;
+  border: 1.5px solid rgba(90, 72, 56, 0.22);
+  background: rgba(255, 252, 246, 0.88);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+}
+.play-v3 aside.quien .quien-lugar-tit {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.75rem;
+  line-height: 1.05;
+  letter-spacing: 0.03em;
+  color: #2c261f;
+}
+.play-v3 aside.quien .quien-bloque--lugar .quien-horario {
+  margin: 0.28rem 0 0;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  color: #5a4a3a;
+}
+.play-v3 aside.quien .quien-estado { font-weight: 800; }
+.play-v3 aside.quien .quien-estado--abierto { color: #2d6a4f; }
+.play-v3 aside.quien .quien-estado--cerrado { color: #9a4a2a; }
+.play-v3 aside.quien .quien-horas { font-weight: 600; opacity: 0.92; }
+.play-v3 aside.quien .quien-horario-sep { opacity: 0.45; font-weight: 400; }
+.play-v3 aside.quien .quien-bloque--presencia {
+  padding: 0.55rem 0.55rem 0.85rem;
+  border: 1px dashed rgba(138, 116, 96, 0.35);
+  background: rgba(255, 255, 255, 0.35);
+}
+.play-v3 aside.quien .quien-bloque--presencia .quien-kicker {
+  margin: 0 0 0.25rem;
+  padding-bottom: 0.15rem;
+}
+.play-v3 aside.quien .quien-bloque--presencia .quien-residentes,
+.play-v3 aside.quien .quien-bloque--presencia .quien-vacio {
+  margin: 0.55rem 0 0.18rem;
+  padding-bottom: 0.12rem;
+}
+.play-v3 aside.quien .quien-vacio {
+  margin: 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 0.92rem;
+  font-style: italic;
+  color: #6a5848;
+}
+.play-v3 aside.quien .quien-bloque--tema {
+  margin-bottom: 0.45rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+}
+.play-v3 aside.quien .quien-bloque--tema .quien-tema-card {
+  margin: 0;
+}
+.play-v3 .quien-residentes--inline {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem 0.15rem;
+  margin: 0;
+}
+.play-v3 .quien-residente-sep {
+  opacity: 0.55;
+  font-size: 0.95rem;
+  line-height: 1;
+  padding: 0 0.05rem;
+}
+.play-v3 aside.quien .destinos { margin-top: 0.35rem; }
+
+
+/* Intervención durante encuentro (polaroid) */
+.shell-grupo-planes .enc-int { margin-top: .55rem; padding-top: .45rem; border-top: 1px dashed rgba(120,96,72,.35); }
+.shell-grupo-planes .enc-int-kicker { font-family: Caveat, cursive; font-size: .82rem; color: #7a6450; margin: 0 0 .35rem; }
+.shell-grupo-planes .enc-int-btns { display: flex; flex-wrap: wrap; gap: .28rem; }
+.shell-grupo-planes .enc-int-btn { font-size: .68rem; padding: .22rem .42rem; border: 1px solid #c9b89a; background: #fffdf6; border-radius: 3px; cursor: pointer; }
+.shell-grupo-planes .enc-int-btn:hover { background: #f5ecd8; }
+.shell-grupo-planes .enc-int.is-busy { opacity: .65; pointer-events: none; }
+.shell-grupo-planes .enc-int-result { margin-top: .5rem; }
+.shell-grupo-planes .enc-int-result-txt { font-size: .78rem; line-height: 1.35; margin: 0; }
+.shell-grupo-planes .enc-int-result-txt--bien { color: #3d6b3a; }
+.shell-grupo-planes .enc-int-result-txt--mal { color: #8b3a32; }
+.shell-grupo-planes .enc-int-result-txt--neutral { color: #5c5044; }

@@ -77,6 +77,8 @@ final class EmotionalEventBridge
     {
         $evento = (string) ($envelope['evento'] ?? '');
         $origen = self::origenSugerido($evento);
+        $payload = is_array($envelope['payload'] ?? null) ? $envelope['payload'] : [];
+        $envelope = array_merge($envelope, $payload);
 
         if ($evento === DomainEvents::TIEMPO_AVANZADO) {
             return ['ok' => true, 'skipped' => 'expiracion_la_hace_RelojOperations', 'origen_sugerido' => $origen];
@@ -93,38 +95,78 @@ final class EmotionalEventBridge
         $resultado = is_array($envelope['resultado'] ?? null) ? $envelope['resultado'] : [];
         $encuentro = is_array($envelope['encuentro'] ?? null) ? $envelope['encuentro'] : [];
         $actores = is_array($encuentro['participantes'] ?? null) ? $encuentro['participantes'] : ($envelope['actores'] ?? []);
+        $lugarId = isset($encuentro['lugar']) ? (string) $encuentro['lugar'] : null;
         $cal = CalibracionConfig::load(dirname(__DIR__, 2));
         $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas', 6);
-        $svc = new EmotionalStateService(new VisualPackStore(dirname(__DIR__, 2)), (new Catalog(dirname(__DIR__, 2)))->store(), $logger);
+        $catalog = new Catalog(dirname(__DIR__, 2));
+        $svc = new EmotionalStateService(new VisualPackStore(dirname(__DIR__, 2)), $catalog->store(), $logger);
         $n = 0;
+        $emocionesRes = [];
         foreach ($actores as $rid) {
             $rid = (string) $rid;
             if ($rid === '' || !isset($partida['residentes'][$rid])) {
                 continue;
             }
+            EstadoEmocional::ensureResidente($partida['residentes'][$rid], $partida['reloj'] ?? null);
+            $antes = $partida['residentes'][$rid]['runtime']['estado_emocional'];
+            $estadoAntes = (string) ($antes['id'] ?? EstadoEmocional::NEUTRO);
             $resExp = (string) ($resultado['por_participante'][$rid]['resultado'] ?? 'normal');
-            $estado = self::estadoDesdeResultado($resExp);
-            if ($estado === null) {
+            $afin = PlanAfinidad::paraParticipante($partida, $rid, $lugarId, $catalog);
+            $hobbyMatch = !empty($afin['relacionado']);
+            $eval = EmotionalRecovery::evaluar($estadoAntes, $resExp, $hobbyMatch);
+            if ($eval === null) {
                 continue;
             }
-            $svc->aplicar($partida, $rid, $estado, 'encuentro', null, null, ['encuentro_id' => $encuentro['id'] ?? null], $dur);
+            $origenAplicar = (string) ($eval['motivo'] === 'hobby_recuperacion' ? 'hobby_recuperacion' : 'encuentro');
+            $ctx = [
+                'encuentro_id' => $encuentro['id'] ?? null,
+                'hobby_match' => $hobbyMatch,
+                'resultado_experiencia' => $resExp,
+                'estado_antes' => $estadoAntes,
+                'motivo' => $eval['motivo'],
+            ];
+            $svc->aplicar(
+                $partida,
+                $rid,
+                (string) $eval['estado'],
+                $origenAplicar,
+                null,
+                null,
+                $ctx,
+                $dur
+            );
+            $despues = $partida['residentes'][$rid]['runtime']['estado_emocional'];
+            $emocionesRes[] = [
+                'residente_id' => $rid,
+                'estado' => (string) ($despues['id'] ?? ''),
+                'antes' => $estadoAntes,
+                'hobby_match' => $hobbyMatch,
+                'resultado_experiencia' => $resExp,
+                'motivo' => $eval['motivo'],
+            ];
             $n++;
         }
 
-        return ['ok' => true, 'evaluados' => $n, '_placeholder' => false, 'origen_sugerido' => $origen];
+        if ($emocionesRes !== [] && isset($encuentro['id'])) {
+            self::anotarResultadoEncuentro($partida, (string) $encuentro['id'], $emocionesRes);
+        }
+
+        return ['ok' => true, 'evaluados' => $n, '_placeholder' => false, 'origen_sugerido' => $origen, 'emociones' => $emocionesRes];
     }
 
-    private static function estadoDesdeResultado(string $resultado): ?string
+    /**
+     * @param list<array<string, mixed>> $emociones
+     */
+    private static function anotarResultadoEncuentro(array &$partida, string $encuentroId, array $emociones): void
     {
-        if ($resultado === 'muy_bien' || $resultado === 'bien') {
-            return EstadoEmocional::ALEGRE;
+        foreach ($partida['encuentros'] ?? [] as $i => $enc) {
+            if (!is_array($enc) || (string) ($enc['id'] ?? '') !== $encuentroId) {
+                continue;
+            }
+            $res = is_array($enc['resultado'] ?? null) ? $enc['resultado'] : [];
+            $res['emociones'] = $emociones;
+            $partida['encuentros'][$i]['resultado'] = $res;
+            return;
         }
-        if ($resultado === 'muy_mal') {
-            return EstadoEmocional::TRISTE;
-        }
-        if ($resultado === 'mal') {
-            return EstadoEmocional::ENFADADO;
-        }
-        return null;
     }
 }

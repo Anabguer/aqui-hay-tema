@@ -70,7 +70,7 @@ final class Utf8Text
     /**
      * @return list<array{path: string, hex: string}>
      */
-    public static function rutasInvalidas(mixed $value, string $path = ''): array
+    public static function rutasInvalidas($value, string $path = ''): array
     {
         $bad = [];
         if (is_string($value)) {

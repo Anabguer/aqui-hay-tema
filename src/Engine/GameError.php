@@ -21,6 +21,7 @@ final class GameError
     public const SIN_PROXIMO_ENCUENTRO = 'SIN_PROXIMO_ENCUENTRO';
     public const VALIDACION_FALLIDA = 'VALIDACION_FALLIDA';
     public const SAVE_CORRUPTO = 'SAVE_CORRUPTO';
+    public const SAVE_DEMASIADO_GRANDE = 'SAVE_DEMASIADO_GRANDE';
     public const ENCUENTRO_RECHAZADO_INDISPONIBILIDAD = 'ENCUENTRO_RECHAZADO_INDISPONIBILIDAD';
     public const ENCUENTRO_RECHAZADO_VOLUNTAD = 'ENCUENTRO_RECHAZADO_VOLUNTAD';
     public const ENCUENTRO_RECHAZADO_COOLDOWN = 'ENCUENTRO_RECHAZADO_COOLDOWN';
@@ -31,6 +32,9 @@ final class GameError
     public const TIPO_ENCUENTRO_NO_DISPONIBLE = 'TIPO_ENCUENTRO_NO_DISPONIBLE';
     public const MISMA_PERSONA = 'MISMA_PERSONA';
     public const HORA_PASADA = 'HORA_PASADA';
+    public const INTERVENCION_NO_DISPONIBLE = 'INTERVENCION_NO_DISPONIBLE';
+    public const INTERVENCION_YA_USADA = 'INTERVENCION_YA_USADA';
+    public const INTERVENCION_ACCION_INVALIDA = 'INTERVENCION_ACCION_INVALIDA';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -66,6 +70,8 @@ final class GameError
                 return 'Datos no válidos.';
             case self::SAVE_CORRUPTO:
                 return 'El archivo de partida está dañado.';
+            case self::SAVE_DEMASIADO_GRANDE:
+                return 'La partida ocupa demasiado espacio para guardarse.';
             case self::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD:
                 return 'No puede ir a esa hora.';
             case self::ENCUENTRO_RECHAZADO_VOLUNTAD:
@@ -86,6 +92,12 @@ final class GameError
                 return 'Esa hora ya ha pasado.';
             case self::MISMA_PERSONA:
                 return 'Elige a dos personas distintas.';
+            case self::INTERVENCION_NO_DISPONIBLE:
+                return 'Ahora no puedes intervenir en este encuentro.';
+            case self::INTERVENCION_YA_USADA:
+                return 'Ya has intervenido en este encuentro.';
+            case self::INTERVENCION_ACCION_INVALIDA:
+                return 'Esa acción no está disponible ahora.';
             default:
                 return 'Ha ocurrido un error.';
         }

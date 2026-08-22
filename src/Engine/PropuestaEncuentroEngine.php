@@ -82,9 +82,47 @@ final class PropuestaEncuentroEngine
         }
         $franja = self::resolverFranja($partida, $participantes, $dia, $hora, (string) $lugarId);
         if ($franja === null) {
-            return GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD, [
+            $propCtx = [
+                'participantes' => $participantes,
+                'tipo' => $tipo,
+                'lugar' => $lugarId,
+                'dia' => $diaPedido,
+                'hora' => $horaPedida,
+            ];
+            $contrap = null;
+            if (self::aceptariaSocialmente($partida, $propCtx, $calDef)) {
+                $contrap = self::construirContrapropuesta(
+                    $partida,
+                    $participantes,
+                    $tipo,
+                    (string) $lugarId,
+                    $diaPedido,
+                    $horaPedida
+                );
+            }
+            $motivoUi = CopyRechazoPropuesta::motivoBloqueoFranjaUi(
+                $partida,
+                $participantes,
+                $diaPedido,
+                $horaPedida,
+                (string) $lugarId
+            );
+            $msg = $motivoUi !== ''
+                ? 'No puede quedar a esa hora (' . $motivoUi . ').'
+                : GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
+            if ($contrap !== null && !empty($contrap['texto'])) {
+                $msg .= ' ' . (string) $contrap['texto'];
+            }
+            $err = GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD, [
                 'motivo' => 'sin_franja_libre',
             ]);
+            $err['mensaje_ui'] = $msg;
+            $err['rechazo_clase'] = PropuestaEncuentro::CLASE_INDISPONIBILIDAD;
+            $err['rechazo_tipo'] = CopyRechazoPropuesta::TIPO_NO_PUEDO;
+            if ($contrap !== null) {
+                $err['contrapropuesta'] = $contrap;
+            }
+            return $err;
         }
         $dia = (int) $franja['dia'];
         $hora = (int) $franja['hora'];
@@ -129,6 +167,16 @@ final class PropuestaEncuentroEngine
 
         self::aplicarResolucionPlan($partida, $propuesta, $calDef);
         $propuesta = self::cerrarEstado($propuesta);
+        if (($propuesta['estado'] ?? '') === 'rechazada') {
+            self::anotarRechazoNarrativo(
+                $partida,
+                $propuesta,
+                (string) $lugarId,
+                $diaPedido,
+                $horaPedida,
+                $calDef
+            );
+        }
         $partida['propuestas_encuentro'] ??= [];
         $partida['propuestas_encuentro'][] = $propuesta;
 
@@ -227,6 +275,8 @@ final class PropuestaEncuentroEngine
             'mensaje_ui' => $out['mensaje_ui'] ?? null,
             'error' => $out['error'] ?? null,
             'rechazo_clase' => $out['rechazo_clase'] ?? null,
+            'rechazo_tipo' => $out['rechazo_tipo'] ?? null,
+            'contrapropuesta' => $out['contrapropuesta'] ?? null,
         ]);
     }
 
@@ -291,6 +341,18 @@ final class PropuestaEncuentroEngine
 
         $prop = self::cerrarEstado($prop);
         $partida['propuestas_encuentro'][$idx] = $prop;
+        if (($prop['estado'] ?? '') === 'rechazada') {
+            $hp = is_array($prop['hora_solicitada'] ?? null) ? $prop['hora_solicitada'] : [];
+            self::anotarRechazoNarrativo(
+                $partida,
+                $prop,
+                (string) ($prop['lugar'] ?? ''),
+                (int) ($hp['dia'] ?? $prop['dia'] ?? 0),
+                (int) ($hp['hora'] ?? $prop['hora'] ?? 0),
+                CalibracionConfig::load(dirname(__DIR__, 2))
+            );
+            $partida['propuestas_encuentro'][$idx] = $prop;
+        }
 
         \aht_log_optional($logger, $partida, 'propuesta_decision', [
             'propuesta_id' => $propuestaId,
@@ -523,7 +585,7 @@ final class PropuestaEncuentroEngine
         $propuesta['reacciones'][$weak]['clase'] = PropuestaEncuentro::CLASE_VOLUNTAD;
         $propuesta['reacciones'][$weak]['motivo_tecnico'] = 'voluntad_rechaza_plan_geom_' . $motivo;
         $propuesta['reacciones'][$weak]['motivo_tipo'] = $motivo;
-        $propuesta['reacciones'][$weak]['copy_id'] = $copy;
+        $propuesta['reacciones'][$weak]['copy_id'] = $motivo;
         $propuesta['reacciones'][$weak]['factores']['p_plan'] = $pPlan;
         $propuesta['reacciones'][$weak]['factores']['tirada_plan'] = $tirada;
         unset($propuesta['reacciones'][$weak]['_joint_plan']);
@@ -711,17 +773,25 @@ final class PropuestaEncuentroEngine
             'rechazada' => $rechazada,
             'rechazo_clase' => $clase,
         ];
-        if ($rechazada && $clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
-            $out['error'] = GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD;
-            $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
-        } elseif ($rechazada && in_array($clase, [PropuestaEncuentro::CLASE_VOLUNTAD, PropuestaEncuentro::CLASE_COOLDOWN], true)) {
+        if ($rechazada) {
             $out['error'] = self::codigoRechazo($clase);
-            $hablante = self::rechazoHablante($propuesta);
-            $copyId = $hablante['copy_id'];
-            $nombre = $hablante['nombre'] !== '' ? $hablante['nombre'] : 'Alguien';
-            $out['mensaje_ui'] = CopyVoluntad::rechazoConHablante($nombre, $copyId);
-            $out['copy_id'] = $copyId;
-            $out['rechazado_por'] = $hablante;
+            $out['rechazo_tipo'] = $propuesta['rechazo_tipo'] ?? CopyRechazoPropuesta::tipoDeClase($clase);
+            if (!empty($propuesta['contrapropuesta']) && is_array($propuesta['contrapropuesta'])) {
+                $out['contrapropuesta'] = $propuesta['contrapropuesta'];
+            }
+            if (!empty($propuesta['mensaje_rechazo_ui'])) {
+                $out['mensaje_ui'] = (string) $propuesta['mensaje_rechazo_ui'];
+            } elseif ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
+                $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
+            } else {
+                $hablante = self::rechazoHablante($propuesta);
+                $out['mensaje_ui'] = CopyVoluntad::rechazoConHablante(
+                    $hablante['nombre'] !== '' ? $hablante['nombre'] : 'Alguien',
+                    $hablante['copy_id']
+                );
+                $out['copy_id'] = $hablante['copy_id'];
+                $out['rechazado_por'] = $hablante;
+            }
         }
         return $out;
     }
@@ -808,5 +878,164 @@ final class PropuestaEncuentroEngine
             }
         }
         return null;
+    }
+
+    /**
+     * Anota causa real, copy coherente y contrapropuesta (solo disponibilidad) en la propuesta.
+     *
+     * @param array<string, mixed> $propuesta
+     * @param array<string, mixed> $cal
+     */
+    private static function anotarRechazoNarrativo(
+        array $partida,
+        array &$propuesta,
+        string $lugarId,
+        int $diaPedido,
+        int $horaPedida,
+        array $cal
+    ): void {
+        $clase = self::claseRechazo($propuesta);
+        $propuesta['rechazo_tipo'] = CopyRechazoPropuesta::tipoDeClase($clase);
+        foreach ($propuesta['reacciones'] ?? [] as $i => $reac) {
+            if (!is_array($reac) || ($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            $familia = CopyRechazoPropuesta::familiaDeReaccion(
+                $reac,
+                $lugarId !== '' ? $lugarId : null,
+                (int) ($propuesta['hora'] ?? $horaPedida)
+            );
+            $propuesta['reacciones'][$i]['rechazo_tipo'] = CopyRechazoPropuesta::tipoDeClase((string) ($reac['clase'] ?? ''));
+            $propuesta['reacciones'][$i]['rechazo_familia'] = $familia;
+            $propuesta['reacciones'][$i]['copy_id'] = $familia;
+        }
+        $contrap = null;
+        if ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+            && self::soloRechazoIndisponibilidad($propuesta)
+            && self::aceptariaSocialmente($partida, $propuesta, $cal)
+        ) {
+            $parts = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+            $contrap = self::construirContrapropuesta(
+                $partida,
+                $parts,
+                (string) ($propuesta['tipo'] ?? 'conocerse'),
+                $lugarId,
+                $diaPedido,
+                $horaPedida
+            );
+        }
+        if ($contrap !== null) {
+            $propuesta['contrapropuesta'] = $contrap;
+        }
+        $propuesta['mensaje_rechazo_ui'] = CopyRechazoPropuesta::mensajeRechazo($partida, $propuesta, $contrap);
+    }
+
+    /**
+     * @param array<string, mixed> $propuesta
+     */
+    private static function soloRechazoIndisponibilidad(array $propuesta): bool
+    {
+        foreach ($propuesta['reacciones'] ?? [] as $reac) {
+            if (!is_array($reac) || ($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            if (($reac['clase'] ?? '') !== PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param array<string, mixed> $propuesta
+     * @param array<string, mixed> $cal
+     */
+    private static function aceptariaSocialmente(array $partida, array $propuesta, array $cal): bool
+    {
+        $parts = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+        $tipo = (string) ($propuesta['tipo'] ?? 'conocerse');
+        foreach ($parts as $rid) {
+            if (!is_string($rid) || $rid === '') {
+                continue;
+            }
+            $otro = self::otroParticipante($parts, $rid);
+            if (PropuestaCooldown::activo($partida, $rid, $otro, $tipo, $cal)) {
+                return false;
+            }
+            $emo = EstadoEmocional::canonId(
+                (string) ($partida['residentes'][$rid]['runtime']['estado_emocional']['id'] ?? 'neutro')
+            );
+            if ($emo === EstadoEmocional::ENFADADO) {
+                return false;
+            }
+            if ($otro !== '') {
+                $conf = RelacionEngine::obtenerEntre($partida, $rid, $otro)['conflicto']['intensidad'] ?? null;
+                if (is_numeric($conf) && (int) $conf >= 8) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param list<string> $participantes
+     * @return array<string, mixed>|null
+     */
+    private static function construirContrapropuesta(
+        array $partida,
+        array $participantes,
+        string $tipo,
+        string $lugarId,
+        int $diaPedido,
+        int $horaPedida
+    ): ?array {
+        if (count($participantes) < 1) {
+            return null;
+        }
+        $slot = DisponibilidadEngine::siguienteSlotTras(
+            $partida,
+            $participantes,
+            $tipo,
+            $diaPedido,
+            $horaPedida,
+            $lugarId !== '' ? $lugarId : null
+        );
+        if ($slot === null) {
+            return null;
+        }
+        $dia = (int) $slot['dia'];
+        $hora = (int) $slot['hora'];
+        if ($dia === $diaPedido && $hora <= $horaPedida) {
+            return null;
+        }
+        $reloj = $partida['reloj'] ?? [];
+        $slotUi = [
+            'dia' => $dia,
+            'hora' => $hora,
+            'dia_semana_ui' => Reloj::diaSemanaUi($dia, $reloj),
+            'etiqueta_hora' => str_pad((string) $hora, 2, '0', STR_PAD_LEFT) . ':00',
+        ];
+        return [
+            'dia' => $dia,
+            'hora' => $hora,
+            'lugar' => $lugarId !== '' ? $lugarId : null,
+            'tipo' => $tipo,
+            'etiqueta_ui' => CopyRechazoPropuesta::etiquetaSlotUi($partida, $slotUi),
+            'texto' => CopyRechazoPropuesta::lineaContrapropuesta($partida, $slotUi, $diaPedido, $horaPedida),
+        ];
+    }
+
+    /**
+     * @param list<string> $participantes
+     */
+    private static function otroParticipante(array $participantes, string $rid): string
+    {
+        foreach ($participantes as $id) {
+            if ((string) $id !== $rid) {
+                return (string) $id;
+            }
+        }
+        return '';
     }
 }

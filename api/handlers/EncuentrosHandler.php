@@ -11,8 +11,10 @@ use function AquiHayTema\Api\withLabAudit;
 use AquiHayTema\Engine\Catalog;
 use AquiHayTema\Engine\CitaEngine;
 use AquiHayTema\Engine\EncuentroEngine;
+use AquiHayTema\Engine\EncuentroIntervencion;
 use AquiHayTema\Engine\EncuentroLifecycle;
 use AquiHayTema\Engine\EncuentroResultadoVista;
+use AquiHayTema\Engine\GameError;
 use AquiHayTema\Engine\LabAudit;
 use AquiHayTema\Engine\ResumenDia;
 
@@ -62,7 +64,30 @@ final class EncuentrosHandler
                 LabAudit::eventoPlanSolo($partida, $r, $catalog);
             }
         }
+        if ($r['ok'] ?? false) {
+            $r['estado_delta'] = self::estadoDeltaOrganizar($ctx, $partida);
+        }
         return withLabAudit($r);
+    }
+
+    /**
+     * Campos de estado que la UI necesita tras organizar un plan (sin partida.refresh).
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>
+     */
+    private static function estadoDeltaOrganizar(ApiContext $ctx, array $partida): array
+    {
+        $estado = $ctx->service->estadoResumido($partida);
+        return [
+            'proximo_encuentro' => $estado['proximo_encuentro'] ?? null,
+            'encuentro_en_curso' => $estado['encuentro_en_curso'] ?? null,
+            'encuentros_hoy' => $estado['encuentros_hoy'] ?? [],
+            'encuentros_activos' => $estado['encuentros_activos'] ?? 0,
+            'encuentros_activos_label' => $estado['encuentros_activos_label'] ?? '',
+            'buzon_pendientes' => $estado['buzon_pendientes'] ?? 0,
+            'propuestas_pendientes' => $estado['propuestas_pendientes'] ?? 0,
+        ];
     }
 
     public static function decidirPropuesta(ApiContext $ctx, array $body, array &$partida): array
@@ -184,6 +209,47 @@ final class EncuentrosHandler
             $out[] = $row;
         }
         return ['ok' => true, 'encuentros' => $out];
+    }
+
+    public static function intervencionAcciones(ApiContext $ctx, array $body, array $partida): array
+    {
+        $encId = (string) ($body['encuentro_id'] ?? '');
+        $enc = EncuentroIntervencion::buscar($partida, $encId);
+        if ($enc === null) {
+            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'encuentro_no_encontrado']);
+        }
+        return [
+            'ok' => true,
+            'vista' => EncuentroIntervencion::vistaParaPlay($partida, $enc, $ctx->service->getCatalog()),
+        ];
+    }
+
+    public static function intervencionEjecutar(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $params = [];
+        if (isset($body['hobby_id'])) {
+            $params['hobby_id'] = (string) $body['hobby_id'];
+        }
+        if (isset($body['residente_id'])) {
+            $params['residente_id'] = (string) $body['residente_id'];
+        }
+        $r = EncuentroIntervencion::ejecutar(
+            $partida,
+            (string) ($body['encuentro_id'] ?? ''),
+            (string) ($body['accion'] ?? ''),
+            $params,
+            $ctx->service->getCatalog(),
+            $ctx->logger
+        );
+        if ($r['ok'] ?? false) {
+            savePartida($ctx, $partida);
+            $estado = $ctx->service->estadoResumido($partida);
+            $r['estado_delta'] = [
+                'encuentro_en_curso' => $estado['encuentro_en_curso'] ?? null,
+                'buzon_pendientes' => $estado['buzon_pendientes'] ?? 0,
+            ];
+        }
+        return $r;
     }
 
     /** Retrocompat cita.* */

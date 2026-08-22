@@ -40,6 +40,10 @@ final class DomainEvents
 
     /** Coincidencia técnica de residentes en el mismo lugar/hora (sin interacción garantizada). */
     public const COINCIDENCIA_RESIDENTES = 'coincidencia_residentes';
+    /** Interacción casual disparada tras patrón de coincidencias (contacto real, no automático). */
+    public const COINCIDENCIA_INTERACCION = 'coincidencia_interaccion';
+    public const MARCHA_INTENCION = 'marcha_intencion';
+    public const MARCHA_EFECTIVA = 'marcha_efectiva';
 
     /** @deprecated usar ENCUENTRO_TERMINADO */
     public const ENCOUNTER_FINISHED_LEGACY = 'encounter_finished';

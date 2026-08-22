@@ -1,4 +1,4 @@
-/* Capas principales sobre V2 — tanda 2 */
+﻿/* Capas principales sobre V2 — tanda 2 */
 .carta-msg {
   display: grid;
   grid-template-columns: 52px 1fr;
@@ -105,12 +105,9 @@
 }
 .tabs-papel button.is-on { background: #fffaf0; border-color: var(--ink); }
 .tabs-papel .trapos { font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 700; }
-.dia-block { display: none; flex-direction: column; gap: .55rem; }
-.play-root[data-diario="hoy"] .dia-hoy,
-.play-root[data-diario="ayer"] .dia-ayer,
-.play-root[data-diario="viejos"] .dia-viejos { display: flex; }
+.coti-list { display: flex; flex-direction: column; gap: .55rem; }
 
-.collage { /* gap via .dia-block when visible */ }
+.collage { /* gap via .coti-list when visible */ }
 .recorte {
   border: 2.5px solid #c9b59a;
   padding: .65rem .7rem;

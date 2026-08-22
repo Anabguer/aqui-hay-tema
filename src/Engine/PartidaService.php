@@ -13,12 +13,14 @@ final class PartidaService
     private ResidenteOperations $residentes;
     private EncuentroOperations $encuentros;
     private RelojOperations $reloj;
+    private ?VisualPackStore $visualPackStore = null;
 
     public function __construct(string $projectRoot)
     {
         $this->root = rtrim($projectRoot, DIRECTORY_SEPARATOR);
         $this->catalog = new Catalog($this->root);
         $this->repo = new PartidaRepository($this->root);
+        $this->repo->setUserContext(IntocablesSession::currentUserId($this->root));
         $this->logger = new GameLogger($this->root);
         $this->residentes = new ResidenteOperations($this->catalog, $this->logger);
         $this->lifecycle = new PartidaLifecycle($this->root, $this->catalog, $this->repo, $this->logger, $this->residentes);
@@ -26,9 +28,9 @@ final class PartidaService
         $this->reloj = new RelojOperations($this->root, $this->logger, $this->emociones());
     }
 
-    public function nuevaPartida(string $configId = 'debug_v0', ?string $seed = null): array
+    public function nuevaPartida(string $configId = 'debug_v0', ?string $seed = null, ?array $horaLocalCliente = null): array
     {
-        return $this->lifecycle->nueva($configId, $seed);
+        return $this->lifecycle->nueva($configId, $seed, $horaLocalCliente);
     }
 
     public function cargar(string $partidaId): array
@@ -36,9 +38,27 @@ final class PartidaService
         return $this->lifecycle->cargar($partidaId);
     }
 
+    /**
+     * Carga para partida.refresh: reconcilia gameplay para la UI sin marcar sesión/catch-up.
+     */
+    public function cargarParaRefresh(string $partidaId): array
+    {
+        return $this->lifecycle->cargarParaRefresh($partidaId);
+    }
+
+    public function cargarLigero(string $partidaId): array
+    {
+        return $this->lifecycle->cargarLigero($partidaId);
+    }
+
     public function guardar(array $partida): void
     {
         $this->lifecycle->guardar($partida);
+    }
+
+    public function guardarRapido(array $partida): void
+    {
+        $this->lifecycle->guardarRapido($partida);
     }
 
     public function reiniciarPartida(string $partidaId, string $configId = 'debug_v0', ?string $seed = null): array
@@ -136,7 +156,7 @@ final class PartidaService
         return $r;
     }
 
-    public function fichaResidente(array $partida, string $residenteId): array
+    public function fichaResidente(array $partida, string $residenteId, bool $respuestaLigera = false): array
     {
         $runtime = $partida['residentes'][$residenteId] ?? null;
         if ($runtime === null) {
@@ -150,11 +170,13 @@ final class PartidaService
             $catalogo = null;
         }
 
-        $dia = (int) $partida['reloj']['dia_pueblo'];
-        $agenda = AgendaEngine::resolverDia($partida, $residenteId, $dia, $this->catalog);
+        $agenda = [];
+        if (!$respuestaLigera) {
+            $dia = (int) $partida['reloj']['dia_pueblo'];
+            $agenda = AgendaEngine::resolverDia($partida, $residenteId, $dia, $this->catalog);
+        }
 
         $relaciones = [];
-        RelacionGrafo::asegurarTodos($partida);
         $calFicha = CalibracionConfig::load($this->root);
         foreach ($partida['residentes'] as $otroId => $_) {
             if ($otroId === $residenteId) {
@@ -166,7 +188,16 @@ final class PartidaService
                 'nombre' => IdentidadPublica::nombre($partida, (string) $otroId),
                 'conocidos' => $vista['conocidos'],
                 'etiqueta_social' => $vista['etiqueta_social'],
+                'etiqueta_social_ui' => $vista['etiqueta_social_ui'],
+                'emoji_social' => $vista['emoji_social'],
+                'social_valor' => $vista['social_valor'],
+                'social_bar_pct' => $vista['social_bar_pct'],
+                'social_negativo' => $vista['social_negativo'],
                 'etiqueta_vinculo' => $vista['etiqueta_vinculo'],
+                'romance_visible' => $vista['romance_visible'],
+                'etiqueta_romance' => $vista['etiqueta_romance'],
+                'emoji_romance' => $vista['emoji_romance'],
+                'romance_banda' => $vista['romance_banda'],
             ];
         }
 
@@ -197,22 +228,27 @@ final class PartidaService
             }
         }
 
-        $ultimosEncuentros = array_values(array_filter(
-            $partida['encuentros'] ?? [],
-            static fn($e) => in_array($residenteId, $e['participantes'] ?? [], true)
-                && ($e['estado'] ?? '') === 'terminado'
-        ));
-        usort($ultimosEncuentros, static fn($a, $b) => ((int) ($b['dia'] ?? 0) * 24 + (int) ($b['hora'] ?? 0))
-            <=> ((int) ($a['dia'] ?? 0) * 24 + (int) ($a['hora'] ?? 0)));
-        $ultimo = $ultimosEncuentros[0] ?? null;
+        $ultimo = null;
+        if (!$respuestaLigera) {
+            $ultimosEncuentros = array_values(array_filter(
+                $partida['encuentros'] ?? [],
+                static fn($e) => is_array($e) && in_array($residenteId, $e['participantes'] ?? [], true)
+                    && ($e['estado'] ?? '') === 'terminado'
+            ));
+            usort($ultimosEncuentros, static fn($a, $b) => ((int) ($b['dia'] ?? 0) * 24 + (int) ($b['hora'] ?? 0))
+                <=> ((int) ($a['dia'] ?? 0) * 24 + (int) ($a['hora'] ?? 0)));
+            $ultimo = $ultimosEncuentros[0] ?? null;
+        }
 
+        $presentacion = $this->presentacionVisual($partida, $runtime);
         $out = [
             '_ui' => 'provisional_v0',
             'id' => $residenteId,
             'identidad' => [
                 'nombre' => $runtime['identidad_publica']['nombre'],
                 'slot_catalogo' => $runtime['identidad_publica']['slot_catalogo'],
-                'edad' => $catalogo['identidad']['edad'] ?? null,
+                'edad' => PerfilPartida::edadResuelta($partida, $residenteId, $this->catalog)
+                    ?? ($catalogo['identidad']['edad'] ?? null),
                 'genero' => $catalogo['identidad']['genero'] ?? null,
             ],
             'vivienda_id' => $runtime['vivienda_id'],
@@ -227,17 +263,28 @@ final class PartidaService
             'relaciones' => $relaciones,
             'agenda_hoy' => $agenda,
             'ultimo_encuentro' => $ultimo,
-            'ultimo_encuentro_vista' => is_array($ultimo)
+            'ultimo_encuentro_vista' => (!$respuestaLigera && is_array($ultimo))
                 ? EncuentroResultadoVista::de($partida, $ultimo, $this->catalog, $this->root)
                 : null,
             'placeholder' => $runtime['_placeholder'] ?? false,
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
-            'presentacion_visual' => $this->presentacionVisual($partida, $runtime),
+            'presentacion_visual' => $presentacion,
         ];
         $out['perfil_partida'] = PerfilPartida::de($partida, $residenteId)
             ?? PerfilPartida::deOLegacy($partida, $residenteId, $this->catalog);
         $out['vista_play'] = FichaPlayVista::de($out, $this->catalog->store());
         unset($out['perfil_partida']);
+
+        if ($respuestaLigera) {
+            $asset = is_array($presentacion['asset'] ?? null) ? $presentacion['asset'] : null;
+            return [
+                'vista_play' => $out['vista_play'],
+                'relaciones' => $relaciones,
+                'presentacion_visual' => ['asset' => $asset],
+                'identidad' => ['nombre' => $out['identidad']['nombre']],
+            ];
+        }
+
         return $out;
     }
 
@@ -248,8 +295,11 @@ final class PartidaService
 
     public function emociones(): EmotionalStateService
     {
+        if ($this->visualPackStore === null) {
+            $this->visualPackStore = new VisualPackStore($this->root);
+        }
         return new EmotionalStateService(
-            new VisualPackStore($this->root),
+            $this->visualPackStore,
             $this->catalog->store(),
             $this->logger
         );
@@ -257,7 +307,10 @@ final class PartidaService
 
     public function visualPacks(): VisualPackStore
     {
-        return new VisualPackStore($this->root);
+        if ($this->visualPackStore === null) {
+            $this->visualPackStore = new VisualPackStore($this->root);
+        }
+        return $this->visualPackStore;
     }
 
     public function estadoResumido(array $partida): array
@@ -365,6 +418,16 @@ final class PartidaService
     public function getLogger(): GameLogger
     {
         return $this->logger;
+    }
+
+    public function getRepository(): PartidaRepository
+    {
+        return $this->repo;
+    }
+
+    public function setUserContext(?int $userId): void
+    {
+        $this->repo->setUserContext($userId);
     }
 
     public function getCatalog(): Catalog

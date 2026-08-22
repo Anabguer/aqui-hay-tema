@@ -102,6 +102,7 @@ final class ResumenDia
             'lugar_nombre' => self::nombreLugar($catalog, $lugarId),
             'participantes' => array_values($ids),
             'participantes_nombres' => $nombres,
+            'intervencion' => EncuentroIntervencion::vistaParaPlay($partida, $enc, $catalog),
         ];
     }
 

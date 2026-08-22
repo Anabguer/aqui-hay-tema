@@ -13,6 +13,7 @@ final class VisualPackStore
     private ?array $registro = null;
     /** @var array<string, array<string, mixed>> */
     private static array $registroPorRoot = [];
+    private bool $discoDescubierto = false;
     private string $root;
 
     public function __construct(string $root)
@@ -35,14 +36,6 @@ final class VisualPackStore
             $data = JsonFile::read($path);
             $packs = is_array($data['packs'] ?? null) ? $data['packs'] : [];
         }
-        foreach ($this->descubrirEnDisco() as $id => $pack) {
-            if (!isset($packs[$id])) {
-                $packs[$id] = $pack;
-            } else {
-                $packs[$id] = array_merge($pack, $packs[$id]);
-                $packs[$id]['pack_id'] = $id;
-            }
-        }
         foreach ($packs as $id => &$pack) {
             if (is_array($pack)) {
                 $pack['pack_id'] = $id;
@@ -57,24 +50,137 @@ final class VisualPackStore
     /** @return array<string, array> */
     public function packs(): array
     {
+        $this->asegurarDescubiertoEnDisco();
         $packs = $this->registro()['packs'] ?? [];
         return is_array($packs) ? $packs : [];
     }
 
     public function pack(string $packId): ?array
     {
-        $pack = $this->packs()[$packId] ?? null;
+        $pack = $this->registro()['packs'][$packId] ?? null;
+        if (is_array($pack)) {
+            return $pack;
+        }
+        $cargado = $this->cargarPackCarpeta($packId, 'assets/personajes/aprobados', false, true)
+            ?? $this->cargarPackCarpeta($packId, 'assets/personajes/_laboratorio', true, false);
+        if ($cargado !== null) {
+            $this->registrarPackEnCache($packId, $cargado);
+            return $cargado;
+        }
+        $this->asegurarDescubiertoEnDisco();
+        $pack = $this->registro()['packs'][$packId] ?? null;
         return is_array($pack) ? $pack : null;
     }
 
     public function packIdParaCatalogo(string $catalogId): ?string
     {
-        foreach ($this->packs() as $id => $pack) {
-            if (($pack['catalog_id'] ?? null) === $catalogId) {
+        foreach ($this->registro()['packs'] as $id => $pack) {
+            if (is_array($pack) && ($pack['catalog_id'] ?? null) === $catalogId) {
+                return (string) $id;
+            }
+        }
+        $carpeta = self::carpetaCanonDeCatalogId($catalogId);
+        if ($carpeta !== null) {
+            $cargado = $this->cargarPackCarpeta($carpeta, 'assets/personajes/aprobados', false, true)
+                ?? $this->cargarPackCarpeta($carpeta, 'assets/personajes/_laboratorio', true, false);
+            if ($cargado !== null) {
+                $packId = (string) ($cargado['pack_id'] ?? $carpeta);
+                $this->registrarPackEnCache($packId, $cargado);
+                return $packId;
+            }
+        }
+        $this->asegurarDescubiertoEnDisco();
+        foreach ($this->registro()['packs'] as $id => $pack) {
+            if (is_array($pack) && ($pack['catalog_id'] ?? null) === $catalogId) {
                 return (string) $id;
             }
         }
         return null;
+    }
+
+    public static function carpetaCanonDeCatalogId(string $catalogId): ?string
+    {
+        if (preg_match('/^per_p(\d{3})$/', $catalogId, $m)) {
+            return 'P' . $m[1];
+        }
+        return null;
+    }
+
+    /**
+     * Precarga packs de residentes sin escanear el árbol completo de packs.
+     *
+     * @param array<string, mixed> $partida
+     */
+    public function precargarResidentes(array $partida): void
+    {
+        foreach ($partida['residentes'] ?? [] as $rid => $res) {
+            if (!is_string($rid) || $rid === '' || !is_array($res)) {
+                continue;
+            }
+            $packId = EmotionalStateService::packIdDe($res, $this);
+            if (is_string($packId) && $packId !== '') {
+                $this->pack($packId);
+            }
+        }
+    }
+
+    private function asegurarDescubiertoEnDisco(): void
+    {
+        if ($this->discoDescubierto) {
+            return;
+        }
+        $this->discoDescubierto = true;
+        foreach ($this->descubrirEnDisco() as $id => $pack) {
+            $packs = $this->registro()['packs'];
+            if (!isset($packs[$id])) {
+                $packs[$id] = $pack;
+            } else {
+                $packs[$id] = array_merge($pack, $packs[$id]);
+                $packs[$id]['pack_id'] = $id;
+            }
+        }
+        $this->registro['packs'] = $packs;
+        self::$registroPorRoot[$this->root] = $this->registro;
+    }
+
+    /**
+     * @param array<string, mixed> $pack
+     */
+    private function registrarPackEnCache(string $packId, array $pack): void
+    {
+        $reg = $this->registro();
+        $pack['pack_id'] = $packId;
+        if (!isset($reg['packs'][$packId])) {
+            $reg['packs'][$packId] = $pack;
+        } else {
+            $reg['packs'][$packId] = array_merge($pack, $reg['packs'][$packId]);
+            $reg['packs'][$packId]['pack_id'] = $packId;
+        }
+        $this->registro = $reg;
+        self::$registroPorRoot[$this->root] = $this->registro;
+    }
+
+  /**
+     * Carga meta de una sola carpeta de pack (sin escanear el árbol completo).
+     *
+     * @return array<string, mixed>|null
+     */
+    private function cargarPackCarpeta(string $folderName, string $relBase, bool $laboratorio, bool $canon): ?array
+    {
+        $rel = rtrim($relBase, '/') . '/' . $folderName;
+        $abs = $this->root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $rel);
+        if (!is_dir($abs)) {
+            return null;
+        }
+        $metaPath = self::rutaMetaPack($abs, $folderName);
+        if ($metaPath === null) {
+            return null;
+        }
+        $meta = self::normalizarMetaPack(JsonFile::read($metaPath), Utf8Text::paraJson($folderName));
+        $packId = Utf8Text::paraJson((string) ($meta['personaje_id'] ?? $folderName));
+        $pack = $this->packDesdeMeta($rel, $meta, $laboratorio, !$canon);
+        $pack['pack_id'] = $packId;
+        return $pack;
     }
 
     /** IDs declarados en ESTE pack (cantidad variable). */

@@ -17,7 +17,7 @@ final class PartidaSchema
         return $partida;
     }
 
-    public static function nueva(string $projectRoot, string $configId, ?string $seed = null): array
+    public static function nueva(string $projectRoot, string $configId, ?string $seed = null, ?array $horaLocalCliente = null): array
     {
         $partida = self::fromTemplate($projectRoot);
         $config = (new Catalog($projectRoot))->loadConfigPrevalidada($configId);
@@ -31,7 +31,7 @@ final class PartidaSchema
         $partida['meta']['config_id'] = $configId;
         $partida['meta']['created_at'] = $now;
         $partida['meta']['updated_at'] = $now;
-        Reloj::aplicarAlCrear($partida);
+        Reloj::aplicarAlCrear($partida, $horaLocalCliente);
         $partida['reloj']['ultima_sesion_iso'] = $now;
 
         $rng = new RngService($seedFinal);

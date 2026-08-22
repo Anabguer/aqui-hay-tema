@@ -41,6 +41,7 @@ final class HayTema
             $s = self::de($partida, $rid, $did, $ids);
             $gente[$i]['hay_tema'] = $s['hay_tema'];
             $gente[$i]['tema_id'] = $s['tema_id'];
+            $gente[$i]['tema_vista'] = $s['tema_vista'];
         }
         return $gente;
     }
@@ -48,12 +49,12 @@ final class HayTema
     /**
      * @param array<string, mixed> $partida
      * @param list<string> $idsEnEsteDestino
-     * @return array{hay_tema: bool, tema_id: ?string}
+     * @return array{hay_tema: bool, tema_id: ?string, tema_vista: ?array}
      */
     public static function de(array $partida, string $rid, string $did, array $idsEnEsteDestino = []): array
     {
         if ($rid === '') {
-            return ['hay_tema' => false, 'tema_id' => null];
+            return ['hay_tema' => false, 'tema_id' => null, 'tema_vista' => null];
         }
         $buzon = self::desdeBuzonHoy($partida, $rid, $did);
         if ($buzon['hay_tema']) {
@@ -64,7 +65,7 @@ final class HayTema
 
     /**
      * @param array<string, mixed> $partida
-     * @return array{hay_tema: bool, tema_id: ?string}
+     * @return array{hay_tema: bool, tema_id: ?string, tema_vista: ?array}
      */
     private static function desdeBuzonHoy(array $partida, string $rid, string $did): array
     {
@@ -84,27 +85,29 @@ final class HayTema
                 continue;
             }
             $lugar = self::lugarDeMensaje($msg);
+            // Señal romántica sin lugar: estado relacional, no hecho en este sitio ahora.
+            if ($tipo === 'senal_romantica' && $lugar === null) {
+                continue;
+            }
             if ($lugar !== null && $lugar !== $did) {
                 continue;
             }
             $tid = (string) ($msg['id'] ?? '');
-            return ['hay_tema' => true, 'tema_id' => $tid !== '' ? $tid : null];
+            $temaId = $tid !== '' ? $tid : null;
+            return self::conVista($partida, true, $temaId);
         }
-        return ['hay_tema' => false, 'tema_id' => null];
+        return self::conVista($partida, false, null);
     }
 
     /**
-     * Patrón de coincidencia significativa (mismo par/grupo + mismo lugar, varios días).
-     * Solo si ahora mismo hay compañía del patrón en ese sitio. Un café solo no basta.
-     *
      * @param array<string, mixed> $partida
      * @param list<string> $idsEnEsteDestino
-     * @return array{hay_tema: bool, tema_id: ?string}
+     * @return array{hay_tema: bool, tema_id: ?string, tema_vista: ?array}
      */
     private static function desdePatron(array $partida, string $rid, string $did, array $idsEnEsteDestino): array
     {
         if ($did === '') {
-            return ['hay_tema' => false, 'tema_id' => null];
+            return self::conVista($partida, false, null);
         }
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $presentes = [];
@@ -118,29 +121,62 @@ final class HayTema
             $presentes[] = $rid;
         }
         if (count($presentes) < 2) {
-            return ['hay_tema' => false, 'tema_id' => null];
+            return self::conVista($partida, false, null);
         }
 
-        if (CotilleoNarrativo::patronParLugar($partida, $presentes, $did, $dia, [])) {
-            return [
-                'hay_tema' => true,
-                'tema_id' => 'coin_patron:' . CotilleoNarrativo::clavePar($presentes, $did),
-            ];
-        }
-
+        $mejor = null;
+        $mejorPri = 99;
+        $catalog = new Catalog(dirname(__DIR__, 2));
         foreach ($presentes as $oid) {
             if ($oid === $rid) {
                 continue;
             }
             $par = [$rid, $oid];
-            if (CotilleoNarrativo::patronParLugar($partida, $par, $did, $dia, [])) {
-                return [
-                    'hay_tema' => true,
-                    'tema_id' => 'coin_patron:' . CotilleoNarrativo::clavePar($par, $did),
-                ];
+            if (!CotilleoNarrativo::patronParLugar($partida, $par, $did, $dia, [])) {
+                continue;
+            }
+            $vista = CopyCoincidenciaPatron::vista($partida, $par, $did, $catalog);
+            $pri = self::prioridadCategoria((string) ($vista['categoria'] ?? ''));
+            if ($pri < $mejorPri) {
+                $mejorPri = $pri;
+                $mejor = 'coin_patron:' . CotilleoNarrativo::clavePar($par, $did);
             }
         }
-        return ['hay_tema' => false, 'tema_id' => null];
+        if ($mejor !== null) {
+            return self::conVista($partida, true, $mejor);
+        }
+        return self::conVista($partida, false, null);
+    }
+
+    private static function prioridadCategoria(string $cat): int
+    {
+        switch ($cat) {
+            case CotilleoCategoria::ROMANCE:
+                return 0;
+            case CotilleoCategoria::DRAMA:
+                return 1;
+            case CotilleoCategoria::RELACION:
+                return 2;
+            case CotilleoCategoria::COINCIDENCIAS:
+                return 3;
+            default:
+                return 4;
+        }
+    }
+
+    /**
+     * @return array{hay_tema: bool, tema_id: ?string, tema_vista: ?array}
+     */
+    private static function conVista(array $partida, bool $hay, ?string $temaId): array
+    {
+        if (!$hay || $temaId === null || $temaId === '') {
+            return ['hay_tema' => false, 'tema_id' => null, 'tema_vista' => null];
+        }
+        return [
+            'hay_tema' => true,
+            'tema_id' => $temaId,
+            'tema_vista' => HayTemaVista::resolver($partida, $temaId),
+        ];
     }
 
     /**

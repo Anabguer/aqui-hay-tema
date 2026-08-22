@@ -271,7 +271,7 @@
   transform: rotate(-.8deg);
 }
 .nota-mapa::before {
-  content: ""; position: absolute; left: 12px; top: -9px; width: 18px; height: 18px;
+  content: ""; position: absolute; left: 12px; top: 8px; width: 18px; height: 18px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
   pointer-events: none;
 }

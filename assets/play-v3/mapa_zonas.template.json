@@ -1,21 +1,78 @@
-﻿{
-  "meta": {
-    "herramienta": "dev/mapa-zonas-calibrador.html",
-    "mapa": "assets/play-v3/mapa_canonico.jpg",
-    "overlay_obras": "assets/play-v3/overlay_en_obras.png",
-    "unidad": "porcentaje",
-    "mapa_px": [1024, 682],
-    "nota": "Plantilla sin calibrar. Exporta desde el calibrador y sustituye por mapa_zonas.json cuando estes satisfecho."
-  },
-  "zonas": {
-    "cafeteria": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Cafeteria" },
-    "biblioteca": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Biblioteca" },
-    "gimnasio": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Gimnasio" },
-    "restaurante": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Restaurante" },
-    "parque": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Parque" },
-    "bar": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Bar" },
-    "cine": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Cine" },
-    "discoteca": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Discoteca" },
-    "bingo": { "x": 0, "y": 0, "w": 0, "h": 0, "label": "Bingo" }
-  }
+{
+    "meta": {
+        "herramienta": "dev\/mapa-zonas-calibrador.html",
+        "mapa": "assets\/play-v3\/mapa_canonico.png",
+        "overlay_obras": "assets\/play-v3\/overlay_en_obras.png",
+        "unidad": "porcentaje",
+        "mapa_px": [
+            618,
+            404
+        ],
+        "nota": "Calibración canónica sincronizada con mapa_zonas.json del juego."
+    },
+    "zonas": {
+        "cafeteria": {
+            "x": 8.96,
+            "y": 3.15,
+            "w": 21.48,
+            "h": 31.05,
+            "label": "Cafetería"
+        },
+        "biblioteca": {
+            "x": 38.38,
+            "y": 4.05,
+            "w": 21.92,
+            "h": 27.45,
+            "label": "Biblioteca"
+        },
+        "gimnasio": {
+            "x": 68.09,
+            "y": 6.08,
+            "w": 22.95,
+            "h": 27.23,
+            "label": "Gimnasio"
+        },
+        "restaurante": {
+            "x": 3.37,
+            "y": 36.45,
+            "w": 22.95,
+            "h": 27.9,
+            "label": "Restaurante"
+        },
+        "parque": {
+            "x": 32.64,
+            "y": 38.48,
+            "w": 31.04,
+            "h": 30.6,
+            "label": "Parque"
+        },
+        "bar": {
+            "x": 71.48,
+            "y": 36.45,
+            "w": 21.62,
+            "h": 25.88,
+            "label": "Bar"
+        },
+        "cine": {
+            "x": 5.58,
+            "y": 67.06,
+            "w": 24.12,
+            "h": 29.03,
+            "label": "Cine"
+        },
+        "discoteca": {
+            "x": 38.23,
+            "y": 70.66,
+            "w": 21.62,
+            "h": 26.55,
+            "label": "Discoteca"
+        },
+        "bingo": {
+            "x": 69.27,
+            "y": 66.83,
+            "w": 23.98,
+            "h": 28.58,
+            "label": "Bingo"
+        }
+    }
 }

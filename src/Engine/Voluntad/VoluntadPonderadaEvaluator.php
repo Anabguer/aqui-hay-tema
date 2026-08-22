@@ -106,7 +106,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $motivo = 'ponderada';
         if (!$acepta) {
             $motivo = self::motivoRechazo($partida, $residenteId, $otro, $cal);
-            $copy = self::copyBanal($rng, $cal);
+            $copy = $motivo;
         }
         $factores = $desglose;
         $factores['p'] = $p;

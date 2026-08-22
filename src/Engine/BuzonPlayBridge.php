@@ -83,9 +83,15 @@ final class BuzonPlayBridge
                 return null;
             }
             $copyId = !empty($rechazo['copy_id']) ? (string) $rechazo['copy_id'] : '';
-            $copy = $copyId !== ''
-                ? CopyVoluntad::rechazoConHablante($nom, $copyId)
-                : $nom . ' ha rechazado la propuesta.';
+            $copy = !empty($prop['mensaje_rechazo_ui'])
+                ? (string) $prop['mensaje_rechazo_ui']
+                : ($copyId !== ''
+                    ? CopyVoluntad::rechazoConHablante($nom, $copyId)
+                    : CopyRechazoPropuesta::mensajeRechazo(
+                        $partida,
+                        $prop,
+                        is_array($prop['contrapropuesta'] ?? null) ? $prop['contrapropuesta'] : null
+                    ));
             $partes = is_array($prop['participantes'] ?? null) ? $prop['participantes'] : [];
             return [
                 'clasificacion' => BuzonEngine::IMPORTANTE,
@@ -102,6 +108,8 @@ final class BuzonPlayBridge
                     'informacion_revelada' => [
                         'rechazado_por' => $de,
                         'copy_id' => $copyId !== '' ? $copyId : null,
+                        'rechazo_tipo' => $prop['rechazo_tipo'] ?? null,
+                        'contrapropuesta' => $prop['contrapropuesta'] ?? null,
                     ],
                     '_placeholder' => false,
                 ],
@@ -144,6 +152,7 @@ final class BuzonPlayBridge
                 'clasificacion' => BuzonEngine::COTILLEO,
                 'tipo' => 'discusion',
                 'texto' => $quien !== '' ? $quien . ' se han enfadado.' : 'Ha habido una discusión.',
+                'cotilleo_meta' => CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true),
                 'actores' => self::idsDe($actores),
                 'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
                 'origen' => ['evento_id' => null, 'tipo_evento' => $evento, 'es_narrativo' => false, '_placeholder' => false],
@@ -157,19 +166,32 @@ final class BuzonPlayBridge
             }
             $desde = $envelope['desde'] ?? null;
             $hacia = $envelope['hacia'] ?? null;
+            $ts = is_array($envelope['ts_juego'] ?? null) ? $envelope['ts_juego'] : [];
+            if ($ts === []) {
+                $reloj = $partida['reloj'] ?? [];
+                $ts = [
+                    'dia' => (int) ($reloj['dia_pueblo'] ?? 1),
+                    'hora' => (int) ($reloj['hora_actual'] ?? 0),
+                ];
+            }
             return [
                 'clasificacion' => BuzonEngine::COTILLEO,
                 'tipo' => 'senal_romantica',
                 'texto' => $texto,
+                'ts_juego' => $ts,
+                'cotilleo_meta' => CotilleoCategoria::meta(CotilleoCategoria::ROMANCE, true),
                 'de_persona' => $desde,
                 'actores' => self::idsDe([$desde, $hacia]),
                 'origen' => [
                     'evento_id' => null,
                     'tipo_evento' => $evento,
+                    'regla' => 'SenalRomantica::avisarSiAplica',
                     'es_narrativo' => false,
                     'informacion_revelada' => [
                         'desde' => $desde,
                         'hacia' => $hacia,
+                        'motivo' => $envelope['motivo'] ?? null,
+                        'ts_juego' => $ts,
                     ],
                     '_placeholder' => false,
                 ],
@@ -192,10 +214,23 @@ final class BuzonPlayBridge
         if ($res === [] && is_array($enc['resultado'] ?? null)) {
             $res = $enc['resultado'];
         }
+        $encId = (string) ($enc['id'] ?? '');
+        if ($encId !== '') {
+            foreach ($partida['encuentros'] ?? [] as $e) {
+                if (!is_array($e) || (string) ($e['id'] ?? '') !== $encId) {
+                    continue;
+                }
+                $em = $e['resultado']['emociones'] ?? null;
+                if (is_array($em) && $em !== []) {
+                    $res['emociones'] = $em;
+                }
+                break;
+            }
+        }
         if (($enc['tipo'] ?? '') === 'individual') {
             $intencion = (string) ($enc['intencion'] ?? '');
+            $catalog = new Catalog(dirname(__DIR__, 2));
             if (in_array($intencion, ['autonomo', 'autonomo_relacion'], true)) {
-                $catalog = new Catalog(dirname(__DIR__, 2));
                 $texto = EncuentroCotilleoCopy::mensajeAutonomo($partida, $enc, $catalog);
                 if ($texto === null || $texto === '') {
                     return null;
@@ -206,6 +241,7 @@ final class BuzonPlayBridge
                     'clasificacion' => BuzonEngine::COTILLEO,
                     'tipo' => CotilleoAutonomoCadencia::TIPO_BUZON,
                     'texto' => $texto,
+                    'cotilleo_meta' => CotilleoCategoria::meta(CotilleoCategoria::PUEBLO, false),
                     'actores' => self::idsDe($partes),
                     'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
                     'origen' => [
@@ -219,11 +255,36 @@ final class BuzonPlayBridge
                 CotilleoAutonomoCadencia::registrar($partida, $enc, $msg, $catalog);
                 return null;
             }
+            $hobbyLinea = self::lineaHobbyAnimoIndividual($partida, $enc, $res, $catalog);
+            if ($hobbyLinea !== null && $hobbyLinea !== '') {
+                $partes = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+                $lugar = $enc['lugar'] ?? $enc['lugar_id'] ?? null;
+                return [
+                    'clasificacion' => BuzonEngine::COTILLEO,
+                    'tipo' => 'cotilleo',
+                    'texto' => $hobbyLinea,
+                    'actores' => self::idsDe($partes),
+                    'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
+                    'origen' => [
+                        'evento_id' => $enc['id'] ?? null,
+                        'tipo_evento' => DomainEvents::ENCUENTRO_TERMINADO,
+                        'es_narrativo' => false,
+                        '_placeholder' => false,
+                    ],
+                    '_placeholder_contenido' => false,
+                ];
+            }
             return null;
         }
         $catalog = new Catalog(dirname(__DIR__, 2));
-        $texto = EncuentroCotilleoCopy::mensaje($partida, $enc, $res, $catalog);
-        if ($texto === null || $texto === '') {
+        $comp = EncuentroCotilleoCopy::compilar($partida, $enc, $res, $catalog);
+        $texto = is_array($comp) ? (string) ($comp['texto'] ?? '') : '';
+        $cotilleoMeta = is_array($comp) ? ($comp['cotilleo_meta'] ?? null) : null;
+        $hobbyLinea = self::lineaHobbyAnimoDeResultado($partida, $enc, $res, $catalog);
+        if ($hobbyLinea !== null && $hobbyLinea !== '' && substr_count($texto, '.') < 2) {
+            $texto = $texto !== '' ? $texto . ' ' . $hobbyLinea : $hobbyLinea;
+        }
+        if ($texto === '') {
             return null;
         }
         $partes = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
@@ -235,6 +296,7 @@ final class BuzonPlayBridge
             'clasificacion' => BuzonEngine::COTILLEO,
             'tipo' => 'cotilleo',
             'texto' => $texto,
+            'cotilleo_meta' => is_array($cotilleoMeta) ? $cotilleoMeta : CotilleoCategoria::meta(CotilleoCategoria::ENCUENTRO, false),
             'actores' => self::idsDe($partes),
             'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
             'origen' => [
@@ -310,5 +372,56 @@ final class BuzonPlayBridge
         }
         $last = array_pop($nombres);
         return implode(', ', $nombres) . ' y ' . $last;
+    }
+
+    /**
+     * @param array<string, mixed> $enc
+     * @param array<string, mixed> $res
+     */
+    private static function lineaHobbyAnimoIndividual(array $partida, array $enc, array $res, Catalog $catalog): ?string
+    {
+        $ctx = self::ctxHobbyAnimo($res);
+        if ($ctx === null) {
+            return null;
+        }
+        return HobbyAnimoCopy::linea($partida, $enc, $ctx, $catalog);
+    }
+
+    /**
+     * @param array<string, mixed> $enc
+     * @param array<string, mixed> $res
+     */
+    private static function lineaHobbyAnimoDeResultado(array $partida, array $enc, array $res, Catalog $catalog): ?string
+    {
+        $ctx = self::ctxHobbyAnimo($res);
+        if ($ctx === null) {
+            return null;
+        }
+        return HobbyAnimoCopy::linea($partida, $enc, $ctx, $catalog);
+    }
+
+    /**
+     * @param array<string, mixed> $res
+     * @return array{estado_antes: string, estado_despues: string, hobby_match: bool}|null
+     */
+    private static function ctxHobbyAnimo(array $res): ?array
+    {
+        $list = is_array($res['emociones'] ?? null) ? $res['emociones'] : [];
+        foreach ($list as $em) {
+            if (!is_array($em) || empty($em['hobby_match'])) {
+                continue;
+            }
+            $antes = (string) ($em['antes'] ?? '');
+            $despues = (string) ($em['estado'] ?? '');
+            if ($antes === '' || $despues === '') {
+                continue;
+            }
+            return [
+                'estado_antes' => $antes,
+                'estado_despues' => $despues,
+                'hobby_match' => true,
+            ];
+        }
+        return null;
     }
 }

@@ -1,0 +1,37 @@
+{
+    "coincidencia_sospechosa": [
+        "Otra vez {quien}{donde}. Casualidad, claro.",
+        "Estos dos tienen un talento especial para acabar siempre en el mismo sitio{donde}.",
+        "El destino lleva días empeñado en cruzar a {quien}{donde}.",
+        "{quien} vuelven a coincidir{donde}. Tanta casualidad empieza a ser sospechosa…"
+    ],
+    "se_conocieron": [
+        "Después de tanto coincidir, {quien} por fin se han hablado.",
+        "Tanta casualidad tenía que acabar así: {quien} ya no son desconocidos."
+    ],
+    "amistad_social": [
+        "Ya no coinciden por casualidad. {quien} empiezan a buscarse.",
+        "Lo de {quien} ya tiene pinta de costumbre voluntaria."
+    ],
+    "romance": [
+        "Entre {quien} hay algo que no es solo amistad. El pueblo lo huele."
+    ],
+    "drama": [
+        "La tensión entre {quien} se ha notado hasta en la plaza."
+    ],
+    "pareja": [
+        "{quien} ya son pareja. El secreto mejor guardado del pueblo dura poco."
+    ],
+    "ruptura": [
+        "{quien} han roto. El pueblo suspira y se prepara para el drama."
+    ],
+    "marcha_intencion": [
+        "{nombre} está pensando en marcharse del pueblo."
+    ],
+    "marcha_efectiva": [
+        "{nombre} se ha ido del pueblo. La vivienda queda libre."
+    ],
+    "marcha_se_queda": [
+        "{nombre} ha decidido darle otra oportunidad al pueblo."
+    ]
+}

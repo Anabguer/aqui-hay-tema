@@ -22,9 +22,11 @@ final class PartidaHandler
     public static function nueva(ApiContext $ctx, array $body): array
     {
         try {
+            $horaLocal = isset($body['hora_local']) && is_array($body['hora_local']) ? $body['hora_local'] : null;
             $partida = $ctx->service->nuevaPartida(
                 $body['config_id'] ?? 'debug_v0',
-                isset($body['seed']) ? (string) $body['seed'] : null
+                isset($body['seed']) ? (string) $body['seed'] : null,
+                $horaLocal
             );
         } catch (ContentValidationException $e) {
             return [
@@ -127,42 +129,63 @@ final class PartidaHandler
      */
     public static function refrescar(ApiContext $ctx, array $body, array &$partida): array
     {
-        $estado = self::estado($ctx, $body, $partida);
-        $inspeccion = self::inspeccionar($ctx, $body, $partida);
+        if (!$ctx->partidaCargadaSincronizada) {
+            self::sincronizarEncuentrosSiToca($ctx, $partida);
+        }
+
+        $labOn = labActiva($body);
+        LabAudit::reset();
+        if ($labOn) {
+            LabAudit::eventoSnapshotRefreshBootstrap($partida);
+        }
+
         $mapa = MapaHandler::presencia($ctx, $body, $partida);
         $buzon = BuzonHandler::listar($ctx, $body, $partida);
         $diario = DiarioHandler::listar($ctx, $body, $partida);
 
-        $eventosLab = [];
-        foreach ([$estado, $inspeccion] as $respuesta) {
-            if (is_array($respuesta['lab_audit']['eventos'] ?? null)) {
-                $eventosLab = array_merge($eventosLab, $respuesta['lab_audit']['eventos']);
-            }
-        }
-
         $out = [
             'ok' => true,
-            'estado' => $estado['estado'] ?? [],
-            'partida' => $inspeccion['partida'] ?? [],
+            'estado' => $ctx->service->estadoResumido($partida),
+            'partida' => self::partidaParaRefreshUi(self::enriquecerRetratos($partida, $ctx->root, $ctx->visualPacks())),
             'mapa' => $mapa['mapa'] ?? [],
             'pueblo' => $mapa['pueblo'] ?? [],
             'buzon' => $buzon,
             'diario' => $diario,
         ];
-        if ($eventosLab !== []) {
-            $out['lab_audit'] = ['eventos' => $eventosLab];
+        if ($labOn) {
+            $eventosLab = LabAudit::flush();
+            if ($eventosLab !== []) {
+                $out['lab_audit'] = ['eventos' => $eventosLab];
+            }
         }
         return $out;
     }
 
-  /**
+    /**
+     * Subconjunto de partida que el cliente usa en cacheInsp tras refresh.
+     *
      * @param array<string, mixed> $partida
      * @return array<string, mixed>
      */
-    private static function enriquecerRetratos(array $partida, string $root): array
+    private static function partidaParaRefreshUi(array $partida): array
+    {
+        $out = [];
+        foreach (['residentes', 'encuentros', 'propuestas_encuentro', 'misiones_diarias', 'relaciones_romanticas', 'celeste'] as $k) {
+            if (array_key_exists($k, $partida)) {
+                $out[$k] = $partida[$k];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>
+     */
+    private static function enriquecerRetratos(array $partida, string $root, ?\AquiHayTema\Engine\VisualPackStore $packs = null): array
     {
         $vista = $partida;
-        $mapa = RetratoResolver::mapaCompletoPartida($partida, $root);
+        $mapa = RetratoResolver::mapaCompletoPartida($partida, $root, $packs);
         foreach ($vista['residentes'] ?? [] as $rid => &$res) {
             if (!is_string($rid) || $rid === '' || !is_array($res)) {
                 continue;

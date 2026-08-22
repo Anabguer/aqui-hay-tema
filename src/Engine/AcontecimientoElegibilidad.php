@@ -33,11 +33,9 @@ final class AcontecimientoElegibilidad
                 $fallos[] = $c;
             }
             if ($c === 'romance_elegible_edad' && $b !== '') {
-                $pa = PerfilPartida::de($partida, $a);
-                $pb = PerfilPartida::de($partida, $b);
                 $edad = EdadPolitica::clasificar(
-                    isset($pa['edad']) ? (int) $pa['edad'] : null,
-                    isset($pb['edad']) ? (int) $pb['edad'] : null,
+                    PerfilPartida::edadResuelta($partida, $a),
+                    PerfilPartida::edadResuelta($partida, $b),
                     $cal
                 );
                 if (!($edad['romance_elegible'] ?? true)) {

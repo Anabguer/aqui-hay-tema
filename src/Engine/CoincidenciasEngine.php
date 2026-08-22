@@ -69,6 +69,13 @@ final class CoincidenciasEngine
                 'residentes' => $residents,
                 'actores' => $residents,
             ], $logger, 'CoincidenciasEngine::detectarYRegistrar', $residents);
+
+            CoincidenciasInteraccionBridge::intentarTrasCoincidencia(
+                $partida,
+                $entry,
+                $projectRoot,
+                $logger
+            );
         }
         PersistenciaCaps::recortarLista(
             $partida,

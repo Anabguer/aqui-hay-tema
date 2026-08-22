@@ -58,4 +58,42 @@ final class CopyDescubrimiento
         }
         return substr($campo, $p + 1);
     }
+
+    /** Versión breve para El Cotilleo (una sola pista, sin tono de informe). */
+    public static function textoCotilleo(string $nombre, string $campo, $valor, CatalogStore $store, ?string $genero = null): ?string
+    {
+        $id = is_string($valor) && $valor !== '' ? $valor : self::idDeCampo($campo);
+        if ($id === '') {
+            return null;
+        }
+        if (str_starts_with($campo, 'hobby:')) {
+            return 'Apunta: a ' . $nombre . ' le pierde ' . self::min(EtiquetaFicha::hobby($id, $store)) . '.';
+        }
+        if (str_starts_with($campo, 'rasgo:')) {
+            return $nombre . ' parece ' . self::min(EtiquetaFicha::rasgoParaGenero($id, $genero, $store)) . '. Ojo con eso.';
+        }
+        if (str_starts_with($campo, 'rechazo_personalidad:')) {
+            return $nombre . ' no soporta a la gente '
+                . self::min(EtiquetaFicha::rasgoParaGenero($id, $genero, $store)) . '.';
+        }
+        if (str_starts_with($campo, 'gusto_personalidad:')) {
+            return $nombre . ' flipa con la gente '
+                . self::min(EtiquetaFicha::rasgoParaGenero($id, $genero, $store)) . '.';
+        }
+        if (str_starts_with($campo, 'rechazo_visual:')) {
+            return 'A ' . $nombre . ' el look “' . EtiquetaFicha::visual($id, $store) . '” no le va.';
+        }
+        if (str_starts_with($campo, 'gusto_visual:')) {
+            return 'A ' . $nombre . ' le hace gracia el look “' . EtiquetaFicha::visual($id, $store) . '”.';
+        }
+        if (str_starts_with($campo, 'rechazo_hobby:')) {
+            return $nombre . ' pone mala cara si sale el tema de '
+                . self::min(EtiquetaFicha::hobby($id, $store)) . '.';
+        }
+        if (str_starts_with($campo, 'gusto_hobby:')) {
+            return 'Si mencionas ' . self::min(EtiquetaFicha::hobby($id, $store))
+                . ', ' . $nombre . ' se anima.';
+        }
+        return null;
+    }
 }

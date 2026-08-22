@@ -143,21 +143,26 @@ final class SenalRomantica
             RelacionEngine::persistirRomance($partida, $rel);
             return;
         }
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $rel['avisos_senal'][$key] = [
-            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'dia' => $dia,
+            'hora' => $hora,
             'motivo' => $senal['motivo'],
         ];
         RelacionEngine::persistirRomance($partida, $rel);
 
         $nomDe = IdentidadPublica::nombre($partida, $desde);
         $nomA = IdentidadPublica::nombre($partida, $hacia);
-        $texto = CopySenalRomantica::texto($nomDe, $nomA, (string) $senal['motivo']);
+        $motivo = (string) $senal['motivo'];
+        $texto = CopySenalRomantica::texto($nomDe, $nomA, $motivo);
         DomainBootstrap::boot();
         DomainEventDispatcher::emit($partida, DomainEvents::SENAL_ROMANTICA, [
             'desde' => $desde,
             'hacia' => $hacia,
-            'motivo' => $senal['motivo'],
+            'motivo' => $motivo,
             'texto' => $texto,
+            'ts_juego' => ['dia' => $dia, 'hora' => $hora],
             'actores' => [$desde, $hacia],
         ], null, 'SenalRomantica::avisarSiAplica', [$desde, $hacia]);
     }

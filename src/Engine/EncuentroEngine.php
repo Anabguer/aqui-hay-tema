@@ -215,19 +215,44 @@ final class EncuentroEngine
         int $hora,
         int $duracionHoras = 1
     ): bool {
+        foreach ($participantes as $rid) {
+            if (self::residenteOcupadoEnHorario($partida, (string) $rid, $dia, $hora, $duracionHoras)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * ¿El residente está en un encuentro programado o en curso que ocupa esta franja?
+     */
+    public static function residenteOcupadoEnHorario(
+        array $partida,
+        string $residenteId,
+        int $dia,
+        int $hora,
+        int $duracionHoras = 1
+    ): bool {
+        if ($residenteId === '') {
+            return false;
+        }
         $duracionHoras = max(1, $duracionHoras);
-        for ($h = $hora; $h < $hora + $duracionHoras; $h++) {
+        for ($offset = 0; $offset < $duracionHoras; $offset++) {
+            $h = $hora + $offset;
+            $d = $dia;
+            while ($h >= 24) {
+                $h -= 24;
+                $d++;
+            }
             foreach (self::list($partida) as $enc) {
-                if (!LugarAtributos::ocupaHora($enc, $dia, $h)) {
+                if (!LugarAtributos::ocupaHora($enc, $d, $h)) {
                     continue;
                 }
                 if (!in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
                     continue;
                 }
-                foreach ($enc['participantes'] ?? [] as $p) {
-                    if (in_array($p, $participantes, true)) {
-                        return true;
-                    }
+                if (in_array($residenteId, $enc['participantes'] ?? [], true)) {
+                    return true;
                 }
             }
         }

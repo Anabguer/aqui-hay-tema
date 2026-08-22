@@ -1,0 +1,122 @@
+﻿/* Control sutil de mÃºsica y efectos. La mÃºsica conserva sus estilos base. */
+.play-v3 .control-audio {
+  position: fixed;
+  right: max(.75rem, env(safe-area-inset-right, 0));
+  bottom: max(.8rem, env(safe-area-inset-bottom, 0));
+  z-index: 25;
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+.play-v3 .control-audio .control-musica,
+.play-v3 .control-audio .control-efectos {
+  position: relative;
+  right: auto;
+  bottom: auto;
+  width: 1.65rem;
+  height: 1.65rem;
+  flex: 0 0 1.65rem;
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(120, 96, 72, .55);
+  border-radius: 50%;
+  background: #fff6c8;
+  color: #8a4a58;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .12);
+  cursor: pointer;
+}
+
+.play-v3 .control-audio .control-musica:hover,
+.play-v3 .control-audio .control-musica:focus-visible,
+.play-v3 .control-audio .control-efectos:hover,
+.play-v3 .control-audio .control-efectos:focus-visible {
+  background: #fde8ef;
+}
+
+.play-v3 .control-audio .control-musica:focus-visible,
+.play-v3 .control-audio .control-efectos:focus-visible {
+  outline: 2px solid #c42b4a;
+  outline-offset: 2px;
+}
+
+.play-v3 .control-audio .control-musica[data-musica="off"],
+.play-v3 .control-audio .control-efectos[data-efectos="off"] {
+  background: #f0ebe2;
+  color: #786d60;
+  opacity: .9;
+}
+
+.play-v3 .control-audio .control-musica-ico,
+.play-v3 .control-audio .control-efectos-ico {
+  position: relative;
+  display: block;
+  font: 1.05rem/1 Georgia, serif;
+}
+
+.play-v3 .control-audio .control-efectos-ico {
+  font-size: .92rem;
+}
+
+.play-v3 .control-audio .control-efectos[data-efectos="off"] .control-efectos-ico::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -.12rem;
+  width: 1.28rem;
+  height: 1.5px;
+  background: currentColor;
+  transform: rotate(-45deg);
+  transform-origin: center;
+}
+
+.play-v3 .aht-sfx-debug {
+  display: none;
+  width: 100%;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-top: .45rem;
+  padding-top: .45rem;
+  border-top: 1px solid rgba(201, 184, 160, .35);
+}
+
+.play-v3[data-debug="1"] .aht-sfx-debug {
+  display: flex;
+}
+
+.play-v3 .aht-sfx-debug-title {
+  width: 100%;
+  margin: 0;
+  color: #7a7164;
+  font-size: .65rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.play-v3 .aht-sfx-debug button {
+  border: 1px solid #8a7a66;
+  background: #fff;
+  color: #2a2218;
+  font: inherit;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .2rem .4rem;
+  cursor: pointer;
+}
+
+@media (max-width: 720px) {
+  .play-v3 .control-audio {
+    right: max(.45rem, env(safe-area-inset-right, 0));
+    bottom: max(.5rem, env(safe-area-inset-bottom, 0));
+  }
+
+  .play-v3 .control-audio .control-musica,
+  .play-v3 .control-audio .control-efectos {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-basis: 1.5rem;
+  }
+}
+

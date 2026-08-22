@@ -34,8 +34,8 @@ if (strpos($php, 'data-debug-toggle') === false) {
 if (strpos($php, 'lab-audit.js') === false) {
     $fail[] = 'play.php no carga lab-audit.js';
 }
-if (strpos($js, 'setCapa(\'misiones\')') === false) {
-    $fail[] = 'cerrar tutorial debe abrir misiones, no cotilleos';
+if (strpos($js, 'renderMisionesStrip') === false) {
+    $fail[] = 'falta renderMisionesStrip para panel lateral de misiones';
 }
 if (strpos($js, 'resetOrgForm') === false) {
     $fail[] = 'falta resetOrgForm para Nuevo plan limpio';

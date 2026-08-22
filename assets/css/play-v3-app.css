@@ -214,25 +214,34 @@ body.play-v3 {
   box-shadow: 0 0 0 1.5px #b08968, 2px 2px 0 rgba(44,38,31,.12);
 }
 .play-root.pc .hab .cara { width: 62px; height: 62px; }
-.hab .cara img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; display: block; }
+.hab .cara img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .hab[data-emocion="alegre"] .cara { border-color: var(--emo-alegre); box-shadow: 0 0 0 2px var(--emo-alegre); }
 .hab[data-emocion="triste"] .cara { border-color: var(--emo-triste); box-shadow: 0 0 0 2px var(--emo-triste); }
 .hab[data-emocion="enfadado"] .cara { border-color: var(--emo-enfadado); box-shadow: 0 0 0 2px var(--emo-enfadado); }
 .hab.is-rel .cara { border-color: var(--ring); box-shadow: 0 0 0 1.5px #b08968; }
 .hab.is-rel::after { display: none; }
-.hab .sello-tema {
-  position: absolute; right: -5px; top: -7px;
-  width: 18px; height: 18px; object-fit: contain;
-  pointer-events: none; z-index: 3;
+.hab .hab-tema-mark {
+  position: absolute; right: -4px; top: -5px;
+  width: 20px; height: 20px;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  background: rgba(255, 248, 240, 0.95);
+  border: 1.5px solid rgba(80, 70, 60, 0.35);
+  box-shadow: 0 1px 3px rgba(44, 38, 31, 0.25);
+  font-family: system-ui, sans-serif;
+  font-weight: 600; font-size: 11px; line-height: 1;
+  color: #5a5048;
+  pointer-events: none; z-index: 4;
 }
-.play-root.pc .hab .sello-tema { width: 20px; height: 20px; }
+.play-root.pc .hab .hab-tema-mark { width: 22px; height: 22px; font-size: 12px; right: -5px; top: -6px; }
+.hab .sello-tema { display: none !important; }
 .hab { transition: left .6s ease, top .6s ease; }
 .aforo-mas {
   pointer-events: auto; cursor: pointer;
 }
 
 .feedback-toast {
-  position: absolute; z-index: 12; left: 50%; bottom: 72px; transform: translateX(-50%);
+  position: absolute; z-index: 30; left: 50%; bottom: 72px; transform: translateX(-50%);
   background: var(--postit); border: 2px solid #d48aa0;
   padding: .4rem .7rem; font-family: Fraunces, Georgia, serif; display: none;
 }
@@ -260,7 +269,7 @@ select.chip-select, .org-row select {
   box-shadow: 3px 3px 0 rgba(44,38,31,.08);
 }
 .collage .recorte::before {
-  content: ""; position: absolute; left: 10px; top: -7px;
+  content: ""; position: absolute; left: 10px; top: 8px;
   width: 14px; height: 14px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
 }
@@ -351,7 +360,7 @@ select.chip-select, .org-row select {
   transform: rotate(-.5deg);
 }
 .tut-papel::before {
-  content: ""; position: absolute; left: 14px; top: -10px; width: 20px; height: 20px;
+  content: ""; position: absolute; left: 14px; top: 8px; width: 20px; height: 20px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
 }
 .tut-papel .libreta-kicker {
@@ -445,7 +454,7 @@ select.chip-select, .org-row select {
 .tut-caras {
   display: flex;
   justify-content: center;
-  align-items: flex-end;
+  align-items: center;
   gap: .85rem;
   margin: .85rem 0 .9rem;
 }
@@ -461,11 +470,18 @@ select.chip-select, .org-row select {
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--ring, #c9a06a);
-  background: #fff;
+  background: #fffdf6;
   box-shadow: 2px 3px 0 rgba(44,38,31,.14);
+  display: grid;
+  place-items: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+.tut-cara img {
+  width: 100%;
+  height: 100%;
   display: block;
 }
-.tut-cara img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; display: block; }
 .tut-cara .cara-ini {
   display: grid; place-items: center;
   width: 100%; height: 100%;
@@ -660,8 +676,6 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
 .capa-organizar .org-row { gap: .85rem; }
 
 .play-root[data-capa="agenda"] .capa-agenda { transform: none; pointer-events: auto; }
-.feedback-toast.is-on { display: none !important; }
-
 /* --- Tokens cara interactivos (mapa, próximo plan, parejas, organizar) --- */
 .play-v3 .cara-token {
   display: inline-block;
@@ -850,4 +864,13 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
   transform: rotate(5deg);
   z-index: 2;
   margin-left: -10px;
+}
+
+/* Hobby descubierto: pista al hover / foco (datos desde API, no hardcode JS) */
+.play-v3 .capa-ficha .ficha-hobby-card.has-pista {
+  cursor: help;
+}
+.play-v3 .capa-ficha .ficha-hobby-card.has-pista:focus-visible {
+  outline: 2px solid rgba(120, 90, 50, 0.55);
+  outline-offset: 2px;
 }

@@ -1,77 +1,77 @@
 {
-  "meta": {
-    "herramienta": "dev/mapa-zonas-calibrador.html",
-    "mapa": "assets/play-v3/mapa_canonico.png",
-    "overlay_obras": "assets/play-v3/overlay_en_obras.png",
-    "unidad": "porcentaje",
-    "mapa_px": [
-      618,
-      404
-    ]
-  },
-  "zonas": {
-    "cafeteria": {
-      "x": 16.25,
-      "y": 8.49,
-      "w": 18.49,
-      "h": 26.17,
-      "label": "Cafetería"
+    "meta": {
+        "herramienta": "dev\/mapa-zonas-calibrador.html",
+        "mapa": "assets\/play-v3\/mapa_canonico.png",
+        "overlay_obras": "assets\/play-v3\/overlay_en_obras.png",
+        "unidad": "porcentaje",
+        "mapa_px": [
+            618,
+            404
+        ]
     },
-    "biblioteca": {
-      "x": 41.22,
-      "y": 6.72,
-      "w": 19.65,
-      "h": 25.46,
-      "label": "Biblioteca"
-    },
-    "gimnasio": {
-      "x": 68.26,
-      "y": 10.25,
-      "w": 18.03,
-      "h": 22.63,
-      "label": "Gimnasio"
-    },
-    "restaurante": {
-      "x": 9.08,
-      "y": 37.84,
-      "w": 20.8,
-      "h": 24.4,
-      "label": "Restaurante"
-    },
-    "parque": {
-      "x": 35.9,
-      "y": 37.13,
-      "w": 27.97,
-      "h": 28.29,
-      "label": "Parque"
-    },
-    "bar": {
-      "x": 70.57,
-      "y": 36.42,
-      "w": 20.34,
-      "h": 25.46,
-      "label": "Bar"
-    },
-    "cine": {
-      "x": 11.63,
-      "y": 64,
-      "w": 20.57,
-      "h": 26.87,
-      "label": "Cine"
-    },
-    "discoteca": {
-      "x": 40.29,
-      "y": 67.89,
-      "w": 20.11,
-      "h": 24.05,
-      "label": "Discoteca"
-    },
-    "bingo": {
-      "x": 69.42,
-      "y": 64.36,
-      "w": 20.57,
-      "h": 25.11,
-      "label": "Bingo"
+    "zonas": {
+        "cafeteria": {
+            "x": 8.96,
+            "y": 3.15,
+            "w": 21.48,
+            "h": 31.05,
+            "label": "Cafetería"
+        },
+        "biblioteca": {
+            "x": 38.38,
+            "y": 4.05,
+            "w": 21.92,
+            "h": 27.45,
+            "label": "Biblioteca"
+        },
+        "gimnasio": {
+            "x": 68.09,
+            "y": 6.08,
+            "w": 22.95,
+            "h": 27.23,
+            "label": "Gimnasio"
+        },
+        "restaurante": {
+            "x": 3.37,
+            "y": 36.45,
+            "w": 22.95,
+            "h": 27.9,
+            "label": "Restaurante"
+        },
+        "parque": {
+            "x": 32.64,
+            "y": 38.48,
+            "w": 31.04,
+            "h": 30.6,
+            "label": "Parque"
+        },
+        "bar": {
+            "x": 71.48,
+            "y": 36.45,
+            "w": 21.62,
+            "h": 25.88,
+            "label": "Bar"
+        },
+        "cine": {
+            "x": 5.58,
+            "y": 67.06,
+            "w": 24.12,
+            "h": 29.03,
+            "label": "Cine"
+        },
+        "discoteca": {
+            "x": 38.23,
+            "y": 70.66,
+            "w": 21.62,
+            "h": 26.55,
+            "label": "Discoteca"
+        },
+        "bingo": {
+            "x": 69.27,
+            "y": 66.83,
+            "w": 23.98,
+            "h": 28.58,
+            "label": "Bingo"
+        }
     }
-  }
 }

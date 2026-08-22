@@ -47,5 +47,5 @@
     "*.jsonl",
     "tests/dev/"
   ],
-  "notes": "DEPLOY_CANONICAL.bat = incremental canonical. DEPLOY_FULL.bat = completo canonical. DEPLOY.bat = playtest (sin cambiar)."
+  "notes": "DEPLOY.bat = menu manual (NORMAL / ARCHIVOS / FULL). DEPLOY_CANONICAL.bat y DEPLOY_FULL.bat siguen disponibles."
 }

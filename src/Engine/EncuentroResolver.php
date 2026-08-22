@@ -44,6 +44,10 @@ final class EncuentroResolver
                 'factores_keys' => array_keys($exp['factores'] ?? []),
                 '_interno' => true,
             ]);
+            $narr = EncuentroExperienciaNarrativa::de($partida, $encuentro, $exp, $cal);
+            if ($narr !== null) {
+                $exp['experiencia_narrativa'] = $narr;
+            }
         }
 
         if ($reales && $catalog !== null && count($participantes) >= 2) {
@@ -105,6 +109,8 @@ final class EncuentroResolver
                 'descubrimientos' => [],
                 'eventos_derivados' => [],
                 'por_participante' => $por,
+                'experiencia' => $exp,
+                'experiencia_narrativa' => is_array($exp['experiencia_narrativa'] ?? null) ? $exp['experiencia_narrativa'] : null,
                 'texto_resumen' => 'Encuentro ' . $tipo . ' (' . $resA . '/' . $resB . ').',
             ];
         } else {

@@ -37,6 +37,7 @@ final class AgendaEngine
         self::aplicarEstructural($slots, $ocupacion, $diaSemana);
         self::aplicarRecurrentes($slots, $residente, $diaSemana);
         self::aplicarReservasProgramadas($slots, $partida, $residenteId, $diaPueblo);
+        self::aplicarReservasDesdeDiaAnterior($slots, $partida, $residenteId, $diaPueblo);
 
         return [
             'residente_id' => $residenteId,
@@ -127,7 +128,59 @@ final class AgendaEngine
             $hora = (int) ($item['hora'] ?? 0);
             $dur = LugarAtributos::horasDeEncuentro($item);
             $reserva = $item['reserva_agenda'] ?? ['tipo' => 'encuentro'];
-            for ($h = $hora; $h < min(24, $hora + $dur); $h++) {
+            for ($off = 0; $off < $dur; $off++) {
+                $h = $hora + $off;
+                if ($h >= 24) {
+                    break;
+                }
+                $slots[$h] = [
+                    'hora' => $h,
+                    'ocupado' => true,
+                    'capa' => 'programado',
+                    'tipo' => $reserva['tipo'] ?? 'encuentro',
+                    'detalle' => $item['id'] ?? null,
+                    'reserva_id' => $item['id'] ?? null,
+                ];
+            }
+        }
+    }
+
+    /** Encuentros del día anterior que continúan tras medianoche. */
+    private static function aplicarReservasDesdeDiaAnterior(
+        array &$slots,
+        array $partida,
+        string $residenteId,
+        int $diaPueblo
+    ): void {
+        if ($diaPueblo < 1) {
+            return;
+        }
+        $diaAnterior = $diaPueblo - 1;
+        $items = EncuentroEngine::list($partida);
+        foreach ($partida['npc_autonomo']['planes_pendientes'] ?? [] as $plan) {
+            $items[] = $plan;
+        }
+
+        foreach ($items as $item) {
+            if ((int) ($item['dia'] ?? -1) !== $diaAnterior) {
+                continue;
+            }
+            $estado = $item['estado'] ?? 'programado';
+            if (!in_array($estado, ['programado', 'en_curso'], true)) {
+                continue;
+            }
+            $participantes = $item['participantes'] ?? [];
+            if (!in_array($residenteId, $participantes, true)) {
+                continue;
+            }
+            $hora = (int) ($item['hora'] ?? 0);
+            $dur = LugarAtributos::horasDeEncuentro($item);
+            $fin = $hora + $dur;
+            if ($fin <= 24) {
+                continue;
+            }
+            $reserva = $item['reserva_agenda'] ?? ['tipo' => 'encuentro'];
+            for ($h = 0; $h < $fin - 24; $h++) {
                 $slots[$h] = [
                     'hora' => $h,
                     'ocupado' => true,
@@ -162,6 +215,10 @@ final class AgendaEngine
     /**
      * Disponible durante todo el intervalo [hora, hora+duracion).
      *
+     * El sueño estructural es rutina habitual: bloquea empezar un plan dentro de esa
+     * ventana, pero no invalida horas posteriores si el plan ya empezó antes de dormir.
+     * Trabajo, compromisos y encuentros programados siguen siendo bloqueos duros.
+     *
      * @return array<string, mixed>
      */
     public static function estaDisponibleIntervalo(
@@ -172,13 +229,43 @@ final class AgendaEngine
         int $duracionHoras
     ): array {
         $duracionHoras = max(1, $duracionHoras);
-        for ($h = $hora; $h < $hora + $duracionHoras; $h++) {
-            $disp = self::estaDisponible($partida, $residenteId, $dia, $h);
-            if (!($disp['disponible'] ?? false)) {
-                return $disp;
+        $dispInicio = self::estaDisponible($partida, $residenteId, $dia, $hora);
+        if (!($dispInicio['disponible'] ?? false)) {
+            return $dispInicio;
+        }
+
+        for ($offset = 1; $offset < $duracionHoras; $offset++) {
+            [$d, $h] = self::desplazarDiaHora($dia, $hora + $offset);
+            $disp = self::estaDisponible($partida, $residenteId, $d, $h);
+            if ($disp['disponible'] ?? false) {
+                continue;
             }
+            if (self::esBloqueoSuenoHabitual($disp)) {
+                continue;
+            }
+            return $disp;
         }
         return ['disponible' => true, 'motivo' => null];
+    }
+
+    /** @param array<string, mixed> $disp */
+    private static function esBloqueoSuenoHabitual(array $disp): bool
+    {
+        return ($disp['tipo'] ?? '') === 'sueno' && ($disp['capa'] ?? '') === 'estructural';
+    }
+
+    /** @return array{0: int, 1: int} */
+    private static function desplazarDiaHora(int $dia, int $hora): array
+    {
+        while ($hora >= 24) {
+            $hora -= 24;
+            $dia++;
+        }
+        while ($hora < 0) {
+            $hora += 24;
+            $dia--;
+        }
+        return [$dia, $hora];
     }
 
     public static function primerSlotLibre(array $partida, string $residenteId, int $dia, int $horaMin = 8): ?int

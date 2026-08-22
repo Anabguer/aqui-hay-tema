@@ -8,10 +8,12 @@ use AquiHayTema\Api\ApiContext;
 use AquiHayTema\Api\Handlers\AgendaHandler;
 use AquiHayTema\Api\Handlers\BuzonHandler;
 use AquiHayTema\Api\Handlers\DevHandler;
+use AquiHayTema\Api\Handlers\DebugLabHandler;
 use AquiHayTema\Api\Handlers\DiarioHandler;
 use AquiHayTema\Api\Handlers\EncuentrosHandler;
 use AquiHayTema\Api\Handlers\LlegadaHandler;
 use AquiHayTema\Api\Handlers\MapaHandler;
+use AquiHayTema\Api\Handlers\MarchaHandler;
 use AquiHayTema\Api\Handlers\PartidaHandler;
 use AquiHayTema\Api\Handlers\PeticionesHandler;
 use AquiHayTema\Api\Handlers\RelacionesHandler;
@@ -20,6 +22,8 @@ use AquiHayTema\Api\Handlers\ResidentesHandler;
 use function AquiHayTema\Api\jsonOut;
 use function AquiHayTema\Api\readBody;
 use function AquiHayTema\Api\requirePartida;
+use function AquiHayTema\Api\requirePartidaRefresh;
+use function AquiHayTema\Api\requirePartidaLigera;
 
 header('Content-Type: application/json; charset=utf-8');
 
@@ -38,7 +42,7 @@ $routes = [
         return PartidaHandler::estado($ctx, $body, $p);
     },
     'partida.refresh' => static function () use ($ctx, $body) {
-        $p = requirePartida($ctx, $body);
+        $p = requirePartidaRefresh($ctx, $body);
         return PartidaHandler::refrescar($ctx, $body, $p);
     },
     'partida.guardar' => static function () use ($ctx, $body) {
@@ -73,6 +77,22 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return PartidaHandler::debugParejasQuitar($ctx, $body, $p);
     },
+    'debug.lab.resumen' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DebugLabHandler::resumen($ctx, $body, $p);
+    },
+    'debug.lab.vecino' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DebugLabHandler::vecino($ctx, $body, $p);
+    },
+    'debug.lab.par' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DebugLabHandler::par($ctx, $body, $p);
+    },
+    'debug.lab.simular' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DebugLabHandler::simular($ctx, $body, $p);
+    },
     'reloj.avanzar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return RelojHandler::avanzar($ctx, $body, $p);
@@ -86,7 +106,7 @@ $routes = [
         return RelojHandler::irA($ctx, $body, $p);
     },
     'residente.ficha' => static function () use ($ctx, $body) {
-        $p = requirePartida($ctx, $body);
+        $p = requirePartidaLigera($ctx, $body);
         return ResidentesHandler::ficha($ctx, $body, $p);
     },
     'residente.placeholder' => static function () use ($ctx, $body) {
@@ -153,6 +173,14 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::listar($ctx, $body, $p);
     },
+    'encuentro.intervencion.acciones' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::intervencionAcciones($ctx, $body, $p);
+    },
+    'encuentro.intervencion.ejecutar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::intervencionEjecutar($ctx, $body, $p);
+    },
     'cita.programar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::citaProgramar($ctx, $body, $p);
@@ -206,13 +234,22 @@ $routes = [
         return BuzonHandler::listar($ctx, $body, $p);
     },
     'buzon.leer' => static function () use ($ctx, $body) {
-        $p = requirePartida($ctx, $body);
+        $p = requirePartidaLigera($ctx, $body);
         return BuzonHandler::leer($ctx, $body, $p);
     },
+    'buzon.leer_todos' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return BuzonHandler::leerTodos($ctx, $body, $p);
+    },
     'buzon.no_leer' => static function () use ($ctx, $body) {
-        $p = requirePartida($ctx, $body);
+        $p = requirePartidaLigera($ctx, $body);
         return BuzonHandler::noLeer($ctx, $body, $p);
     },
+    'buzon.resolver' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return BuzonHandler::resolver($ctx, $body, $p);
+    },
+    'buzon.acciones' => static fn() => BuzonHandler::catalogoAcciones($ctx),
     'buzon.crear_dev' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return BuzonHandler::crearDev($ctx, $body, $p);
@@ -228,6 +265,18 @@ $routes = [
     'llegada.rechazar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return LlegadaHandler::rechazar($ctx, $body, $p);
+    },
+    'marcha.dejar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return MarchaHandler::dejar($ctx, $body, $p);
+    },
+    'marcha.quedarse' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return MarchaHandler::quedarse($ctx, $body, $p);
+    },
+    'marcha.forzar_dev' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return MarchaHandler::forzarDev($ctx, $body, $p);
     },
     'diario.listar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
@@ -334,6 +383,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return DevHandler::eventosCorrelacionados($ctx, $body, $p);
     },
+    'dev.hobby.emocion' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return DevHandler::hobbyEmocionDiagnostico($ctx, $body, $p);
+    },
 ];
 
 try {
@@ -343,6 +396,13 @@ try {
     jsonOut($routes[$action]());
 } catch (Throwable $e) {
     $msg = $e->getMessage();
+    if (str_starts_with($msg, 'save_demasiado_grande')) {
+        jsonOut(\AquiHayTema\Engine\GameError::respuesta(
+            \AquiHayTema\Engine\GameError::SAVE_DEMASIADO_GRANDE,
+            ['detalle' => $msg],
+            413
+        ));
+    }
     $code = str_contains($msg, 'partida_no_encontrada') ? \AquiHayTema\Engine\GameError::PARTIDA_NO_ENCONTRADA
         : (str_contains($msg, 'corrupto') ? \AquiHayTema\Engine\GameError::SAVE_CORRUPTO : 'excepcion');
     if ($code === 'excepcion') {

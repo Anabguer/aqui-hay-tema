@@ -57,6 +57,28 @@ ok(BuzonEngine::contarNoLeidos($p) === 1, 'badge 2→1');
 BuzonEngine::marcarLeido($p, 'msg_test_b');
 ok(BuzonEngine::contarNoLeidos($p) === 0, 'badge 1→0');
 
+$rTodos = BuzonEngine::marcarTodosLeidos($p);
+ok(($rTodos['marcados'] ?? 0) === 0, 'marcar todos con 0 pendientes no marca nada');
+
+BuzonEngine::crear($p, [
+    'id' => 'msg_bulk_a',
+    'texto' => 'Bulk A',
+    'estado' => 'pendiente',
+    'clasificacion' => BuzonEngine::OPORTUNIDAD,
+]);
+BuzonEngine::crear($p, [
+    'id' => 'msg_bulk_b',
+    'texto' => 'Bulk B',
+    'estado' => 'pendiente',
+    'clasificacion' => BuzonEngine::OPORTUNIDAD,
+]);
+ok(BuzonEngine::contarNoLeidos($p) === 2, 'badge 2 pendientes antes de bulk');
+
+$rTodos = BuzonEngine::marcarTodosLeidos($p);
+ok(($rTodos['ok'] ?? false) === true, 'marcar todos ok');
+ok(($rTodos['marcados'] ?? 0) === 2, 'marcar todos cuenta 2');
+ok(BuzonEngine::contarNoLeidos($p) === 0, 'badge 0 tras marcar todos');
+
 // Tutorial mensajito: completar M1 crea uno pendiente
 $pareja = $p['tutorial']['pareja_mision1'] ?? [];
 $a = (string) ($pareja['a'] ?? '');

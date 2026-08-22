@@ -34,12 +34,16 @@ final class RelojOperations
             $catalog = new Catalog($this->projectRoot);
             RelacionDesgaste::alCerrarDia($partida, $cal);
             AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
+            MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
         }
-        if (!empty($partida['lab_vida_activa'])
-            || (bool) CalibracionConfig::get(CalibracionConfig::load($this->projectRoot), 'acontecimientos_dia.activo_en_play', false)
+        $calTick = CalibracionConfig::load($this->projectRoot);
+        // Vida horaria autónoma (huecos, casuales, declaración/ruptura): independiente del
+        // planificador diario batch (acontecimientos_dia.activo_en_play).
+        $runVidaHoraria = !empty($partida['lab_vida_activa'])
+            || (bool) CalibracionConfig::get($calTick, 'acontecimientos_dia.activo_en_play', false)
             || FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled')
-        ) {
-            $calTick = CalibracionConfig::load($this->projectRoot);
+            || FeatureConfig::isEnabled($partida, 'encuentros_enabled');
+        if ($runVidaHoraria) {
             $rngTick = RngService::fromPartida($partida);
             MotorVidaDiaria::tickHora($partida, new Catalog($this->projectRoot), $calTick, $rngTick, $this->logger);
             $rngTick->persistToPartida($partida);

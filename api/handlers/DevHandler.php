@@ -18,6 +18,7 @@ use AquiHayTema\Engine\StressTestRunner;
 use AquiHayTema\Engine\CoincidenciasEngine;
 use AquiHayTema\Engine\DiscoveryProjection;
 use AquiHayTema\Engine\DiscoveryVisibilityPolicy;
+use AquiHayTema\Engine\HobbyEmocionDev;
 use AquiHayTema\Engine\ResidenteRuntime;
 use AquiHayTema\Engine\ContentValidationException;
 
@@ -389,5 +390,16 @@ final class DevHandler
             return ['ok' => false, 'error' => 'correlacion_id requerida'];
         }
         return EventInspector::correlacionados($partida, $cid, (int) ($body['limit'] ?? 100));
+    }
+
+    public static function hobbyEmocionDiagnostico(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        $rid = (string) ($body['residente_id'] ?? '');
+        if ($rid === '') {
+            return ['ok' => false, 'error' => 'residente_id requerido'];
+        }
+        $lugar = isset($body['lugar_id']) ? (string) $body['lugar_id'] : null;
+        return HobbyEmocionDev::diagnostico($partida, $rid, $lugar, $ctx->service->getCatalog());
     }
 }

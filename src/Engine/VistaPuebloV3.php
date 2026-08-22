@@ -19,7 +19,7 @@ final class VistaPuebloV3
      * @param array<string, mixed> $mapa salida de PresenciaEngine::resolver
      * @return array<string, mixed>
      */
-    public static function de(array $partida, array $mapa, string $root): array
+    public static function de(array $partida, array $mapa, string $root, ?VisualPackStore $packs = null): array
     {
         $porLugar = [];
         foreach ($mapa['lugares'] ?? [] as $lug) {
@@ -36,7 +36,7 @@ final class VistaPuebloV3
             }
         }
 
-        $packs = new VisualPackStore($root);
+        $packs ??= new VisualPackStore($root);
         $catalog = new CatalogStore($root);
         $tokens = [];
         foreach ($partida['residentes'] ?? [] as $rid => $res) {
@@ -51,6 +51,7 @@ final class VistaPuebloV3
             ];
         }
 
+        $horaPueblo = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $complejos = [];
         foreach (ComplejoCatalog::complejos() as $cid => $meta) {
             $destinosMeta = ComplejoCatalog::destinosDeComplejo($cid);
@@ -67,6 +68,8 @@ final class VistaPuebloV3
                     'id' => $did,
                     'nombre' => is_array($row) ? Utf8Text::paraJson((string) ($row['nombre'] ?? $did)) : $did,
                     'operativo' => $operativo,
+                    'horario' => ComplejoCatalog::horarioUi($did),
+                    'abierto_ahora' => ComplejoCatalog::estaAbierto($did, $horaPueblo),
                 ];
             }
 
@@ -88,7 +91,7 @@ final class VistaPuebloV3
                     if (!in_array($emo, EstadoEmocional::V1, true)) {
                         $emo = EstadoEmocional::NEUTRO;
                     }
-                    $token = RetratoResolver::resolver($res, $rid, $packs, $root, $catalog);
+                    $tokenTok = $tokens[$rid] ?? null;
                     $gente[] = [
                         'id' => $rid,
                         'nombre' => IdentidadPublica::nombre($partida, $rid),
@@ -98,9 +101,10 @@ final class VistaPuebloV3
                         'emocion' => $emo,
                         'hay_tema' => false,
                         'tema_id' => null,
-                        'token_url' => $token['url'],
-                        'token_lote' => $token['lote'],
-                        'expression_id' => $token['expression_id'],
+                        'tema_vista' => null,
+                        'token_url' => is_array($tokenTok) ? ($tokenTok['url'] ?? null) : null,
+                        'token_lote' => is_array($tokenTok) ? ($tokenTok['lote'] ?? false) : false,
+                        'expression_id' => is_array($tokenTok) ? ($tokenTok['expression_id'] ?? null) : null,
                         'fase' => 'en_destino',
                     ];
                 }

@@ -69,20 +69,75 @@ final class Reloj
     }
 
     /**
-     * Nueva partida: ancla = hoy local, reloj = ahora (hora+minuto reales).
+     * Nueva partida: ancla y hora inicial desde el dispositivo (una sola vez).
+     * Granularidad horaria: truncado a la hora en curso (minuto 0).
      *
      * @param array<string, mixed> $partida
+     * @param array<string, mixed>|null $horaLocalCliente {fecha: Y-m-d, hora: 0-23}
      */
-    public static function aplicarAlCrear(array &$partida): void
+    public static function aplicarAlCrear(array &$partida, ?array $horaLocalCliente = null): void
     {
-        $now = self::ahoraLocal();
+        $inicio = self::resolverHoraInicialCreacion($horaLocalCliente);
         $partida['reloj']['zona'] = self::ZONA;
-        $partida['reloj']['fecha_ancla'] = $now->format('Y-m-d');
+        $partida['reloj']['fecha_ancla'] = $inicio['fecha'];
         $partida['reloj']['dia_pueblo'] = 1;
         $partida['reloj']['dia_en_temporada'] = 1;
-        $partida['reloj']['hora_actual'] = (int) $now->format('G');
-        $partida['reloj']['minuto_actual'] = (int) $now->format('i');
-        $partida['reloj']['ultima_sesion_iso'] = $now->setTimezone(new \DateTimeZone('UTC'))->format(DATE_ATOM);
+        $partida['reloj']['hora_actual'] = $inicio['hora'];
+        $partida['reloj']['minuto_actual'] = 0;
+        $partida['reloj']['ultima_sesion_iso'] = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format(DATE_ATOM);
+    }
+
+    /**
+     * Valida hora local del cliente para creación. Null = inválido/ausente.
+     *
+     * @param mixed $dato
+     * @return array{fecha: string, hora: int}|null
+     */
+    public static function normalizarHoraLocalCliente($dato): ?array
+    {
+        if (!is_array($dato)) {
+            return null;
+        }
+        $fecha = $dato['fecha'] ?? null;
+        if (!is_string($fecha) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha)) {
+            return null;
+        }
+        $dt = \DateTimeImmutable::createFromFormat('!Y-m-d', $fecha);
+        if (!$dt instanceof \DateTimeImmutable || $dt->format('Y-m-d') !== $fecha) {
+            return null;
+        }
+        if (!array_key_exists('hora', $dato)) {
+            return null;
+        }
+        $horaRaw = $dato['hora'];
+        if (is_string($horaRaw) && $horaRaw !== '' && ctype_digit($horaRaw)) {
+            $horaRaw = (int) $horaRaw;
+        }
+        if (!is_int($horaRaw)) {
+            return null;
+        }
+        if ($horaRaw < 0 || $horaRaw > 23) {
+            return null;
+        }
+        return ['fecha' => $fecha, 'hora' => $horaRaw];
+    }
+
+    /**
+     * @param array<string, mixed>|null $horaLocalCliente
+     * @return array{fecha: string, hora: int, origen: string}
+     */
+    public static function resolverHoraInicialCreacion(?array $horaLocalCliente = null): array
+    {
+        $cliente = self::normalizarHoraLocalCliente($horaLocalCliente);
+        if ($cliente !== null) {
+            return ['fecha' => $cliente['fecha'], 'hora' => $cliente['hora'], 'origen' => 'cliente'];
+        }
+        $now = self::ahoraLocal();
+        return [
+            'fecha' => $now->format('Y-m-d'),
+            'hora' => (int) $now->format('G'),
+            'origen' => 'fallback',
+        ];
     }
 
     /**

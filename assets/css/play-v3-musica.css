@@ -1,11 +1,11 @@
-/* Control m?nimo de m?sica ambiental del shell */
+﻿/* Control m?nimo de m?sica ambiental del shell */
 .play-v3 .game-top { position: relative; }
 
+.play-v3 .control-audio .control-musica {
+  transform: rotate(-5deg);
+}
+
 .play-v3 .control-musica {
-  position: fixed;
-  right: .75rem;
-  bottom: .8rem;
-  z-index: 3;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -57,11 +57,6 @@
 }
 
 @media (max-width: 720px) {
-  .play-v3 .control-musica {
-    right: .45rem;
-    bottom: .5rem;
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-  .play-v3 .control-musica-ico { font-size: .95rem; }
+  .play-v3 .control-audio .control-musica-ico { font-size: .95rem; }
 }
+

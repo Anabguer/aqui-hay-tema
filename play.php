@@ -3,13 +3,20 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
+$ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
+$ahtUi = 'v3-static';
+if (is_file($ahtBusterFile)) {
+    $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
+    if ($ahtBusterRaw !== '') {
+        $ahtUi = $ahtBusterRaw;
+    }
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
   <link rel="icon" href="cover.svg" type="image/svg+xml"/>
@@ -23,6 +30,9 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
   <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -117,14 +127,14 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
     }
     .tut-caras img, .tut-caras .cara img {
       width: 52px; height: 52px; max-width: 52px; max-height: 52px;
-      object-fit: cover; object-position: 50% 12%; display: block; border-radius: 50%;
+      object-fit: cover; object-position: 50% 20%; transform: scale(1.1); transform-origin: 50% 14%; display: block; border-radius: 50%;
     }
     .caras-clip { display: flex; justify-content: center; gap: .35rem; margin-bottom: .35rem; flex-wrap: wrap; overflow: hidden; }
     .caras-clip .cara {
       width: 52px; height: 52px; flex: 0 0 52px; overflow: hidden;
       border-radius: 50%; border: 2px solid rgba(120,96,72,.35);
     }
-    .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; max-width: 52px; max-height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; display: block; }
+    .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; max-width: 52px; max-height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; transform: scale(1.1); transform-origin: 50% 14%; display: block; }
     .mision-accion {
       margin-top: .35rem; border: 1px solid #8a7a66; background: #fff6c8;
       font: inherit; font-size: .75rem; font-weight: 800; padding: .25rem .5rem; cursor: pointer;
@@ -159,7 +169,9 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
     .tut-caras .cara img,
     .prox-caras img {
       object-fit: cover;
-      object-position: 50% 12%;
+      object-position: 50% 20%;
+      transform: scale(1.1);
+      transform-origin: 50% 14%;
     }
     .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; border-radius: 50%; }
     .prox-caras { display: flex; gap: .35rem; margin-bottom: .35rem; }
@@ -176,18 +188,78 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
     <button type="button" class="aht-debug-toggle" data-debug-toggle aria-expanded="false" title="Herramientas DEBUG">🧪 DEBUG</button>
     <div class="aht-debug-panel" data-debug-panel hidden>
       <p class="aht-debug-title">DEBUG</p>
+      <button type="button" id="btn-debug-lab-open" class="btn-open-lab">Abrir laboratorio</button>
       <button type="button" id="btn-debug-nueva">Nueva partida</button>
       <button type="button" id="btn-debug-guardar">Guardar</button>
       <button type="button" data-horas="1">+1h</button>
       <button type="button" data-horas="8">+8h</button>
       <button type="button" data-horas="24">+1 día</button>
       <button type="button" data-horas="72">+3 días</button>
+      <button type="button" data-horas="168">+7 días</button>
+      <button type="button" data-horas="720">+30 días</button>
       <button type="button" id="btn-debug-proximo">Ir al próximo</button>
       <button type="button" id="btn-debug-copy">Copiar debug</button>
       <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
       <button type="button" id="btn-debug-parejas-crear">Crear parejas de prueba</button>
       <button type="button" id="btn-debug-parejas-quitar">Quitar parejas de prueba</button>
+      <div class="aht-sfx-debug" aria-label="Prueba de efectos de sonido">
+        <p class="aht-sfx-debug-title">Prueba de sonidos</p>
+        <button type="button" data-aht-sfx="mensajito">Mensajito</button>
+        <button type="button" data-aht-sfx="cotilleo">Cotilleo</button>
+        <button type="button" data-aht-sfx="mision">Misión</button>
+        <button type="button" data-aht-sfx="descubrimiento">Descubrimiento</button>
+        <button type="button" data-aht-sfx="romance">Romance</button>
+        <button type="button" data-aht-sfx="conflicto">Conflicto</button>
+        <button type="button" data-aht-sfx="llegada">Llegada</button>
+        <button type="button" data-aht-sfx="nuevo_dia">Nuevo día</button>
+      </div>
       <span class="msg" data-debug-msg></span>
+    </div>
+  </div>
+  <div class="play-lab-overlay" data-play-lab hidden>
+    <div class="play-lab-shell" role="dialog" aria-label="Laboratorio DEBUG">
+      <header class="play-lab-head">
+        <h2>Laboratorio de playtest</h2>
+        <span class="lab-reloj" data-lab-reloj></span>
+        <button type="button" data-lab-close>Cerrar</button>
+      </header>
+      <nav class="play-lab-tabs" aria-label="Secciones">
+        <button type="button" data-lab-tab="resumen" aria-selected="true">Resumen</button>
+        <button type="button" data-lab-tab="vecinos">Vecinos</button>
+        <button type="button" data-lab-tab="relaciones">Relaciones</button>
+        <button type="button" data-lab-tab="historial">Historial</button>
+        <button type="button" data-lab-tab="tecnico">Datos técnicos</button>
+      </nav>
+      <div class="play-lab-body">
+        <section class="play-lab-panel" data-lab-panel="resumen" data-lab-resumen></section>
+        <section class="play-lab-panel" data-lab-panel="vecinos" hidden>
+          <div class="lab-select-row">
+            <select data-lab-vecino-select aria-label="Vecino"></select>
+          </div>
+          <div data-lab-vecinos-chips style="margin-bottom:.6rem"></div>
+          <div data-lab-vecino-detalle></div>
+        </section>
+        <section class="play-lab-panel" data-lab-panel="relaciones" hidden>
+          <div class="lab-select-row">
+            <select data-lab-par-a aria-label="Persona A"></select>
+            <span>+</span>
+            <select data-lab-par-b aria-label="Persona B"></select>
+            <button type="button" data-lab-inspeccionar-par>Inspeccionar par</button>
+          </div>
+          <div data-lab-par-detalle></div>
+        </section>
+        <section class="play-lab-panel" data-lab-panel="historial" hidden>
+          <div data-lab-cronologia></div>
+        </section>
+        <section class="play-lab-panel" data-lab-panel="tecnico" hidden>
+          <p style="font-size:.78rem;color:#6a5d4f">Exportación técnica completa (estado + historial de sesión DEBUG).</p>
+          <div class="lab-export-bar">
+            <button type="button" id="btn-lab-debug-export">Copiar debug completo</button>
+            <button type="button" id="btn-lab-debug-estado">Copiar solo estado</button>
+          </div>
+          <pre class="lab-json-pre" data-lab-tecnico-pre>(usa los botones de arriba)</pre>
+        </section>
+      </div>
     </div>
   </div>
   <p class="tutorial-pista" data-tutorial-pista hidden></p>
@@ -236,7 +308,7 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
         <div class="top-reloj">
           <div class="obj-dia" style="--rot:-2deg">
             <div class="obj-dia-placa">
-              <span class="obj-dia-num" data-dia-num>DÍA ·</span>
+              <span class="obj-dia-num" data-dia-num>—</span>
             </div>
             <div class="obj-dia-cuerpo">
               <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
@@ -268,30 +340,24 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
       </div>
-      <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar música" title="Desactivar música">
-        <span class="control-musica-ico" aria-hidden="true">♪</span>
-      </button>
+      <div class="control-audio" aria-label="Controles de audio">
+        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar música" title="Desactivar música">
+          <span class="control-musica-ico" aria-hidden="true">♪</span>
+        </button>
+        <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
+          <span class="control-efectos-ico" aria-hidden="true">✦</span>
+        </button>
+      </div>
     </header>
     <div class="game-main">
       <aside class="game-left zona-actividad">
         <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
-            <button type="button" class="obj-buzon" data-mensajitos-trigger aria-label="Abrir mensajitos" aria-expanded="false" aria-haspopup="true">
+            <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
               <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
               <img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/>
               <span class="obj-buzon-txt">MENSAJITOS</span>
             </button>
-            <div class="mensajitos-pop" data-mensajitos-pop hidden>
-              <div class="mensajitos-pop-punta" aria-hidden="true"></div>
-              <div class="mensajitos-pop-inner">
-                <header class="mensajitos-pop-cab">
-                  <h3 class="mensajitos-pop-tit">Mensajitos</h3>
-                  <button type="button" class="mensajitos-pop-cerrar" data-mensajitos-cerrar aria-label="Cerrar">×</button>
-                </header>
-                <div class="mensajitos-pop-lista" data-mensajitos-preview></div>
-                <button type="button" class="mensajitos-ver-mas" data-mensajitos-ver-mas hidden>ver más</button>
-              </div>
-            </div>
           </div>
         </section>
         <section class="shell-grupo shell-grupo-resumen">
@@ -325,7 +391,7 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
           </button>
         </div>
   <div class="play-stage">
-    <div class="play-root pc" data-pueblo="temprano" data-diario="hoy" data-aforo="1">
+    <div class="play-root pc" data-pueblo="temprano" data-aforo="1">
       <div class="board-scroll">
         <div class="board-fit">
           <div class="mapa-canonico" data-mapa-canonico>
@@ -335,6 +401,7 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
           <div class="edificios-layer" data-edificios-layer aria-hidden="true"></div>
           <aside class="selector nota-mapa">
             <button type="button" class="cerrar" data-close aria-label="Cerrar">×</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrás">← Atrás</button>
             <p class="libreta-kicker">Un vistazo al lugar</p>
             <h3 data-s-tit></h3>
             <p class="cotilleo" data-s-coti></p>
@@ -342,10 +409,17 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
           </aside>
           <aside class="quien nota-mapa">
             <button type="button" class="cerrar" data-close aria-label="Cerrar">×</button>
-            <p class="libreta-kicker">Quién está</p>
-            <h3 data-q-tit></h3>
-            <p class="quien-sum" data-q-sum></p>
-            <div class="quien-list" data-q-list></div>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrás">← Atrás</button>
+            <header class="quien-bloque quien-bloque--lugar">
+              <h3 class="quien-lugar-tit" data-q-tit></h3>
+              <p class="quien-horario" data-q-horario hidden></p>
+            </header>
+            <section class="quien-bloque quien-bloque--presencia">
+              <p class="libreta-kicker quien-kicker">¿Quién está?</p>
+              <p class="quien-vacio" data-q-sum hidden></p>
+              <div class="quien-list quien-residentes" data-q-list></div>
+            </section>
+            <div class="quien-bloque quien-bloque--tema quien-tema" data-q-tema hidden></div>
             <div class="destinos" data-q-btns></div>
           </aside>
         </div>
@@ -430,6 +504,16 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
         <div class="vecinos-grid" data-vecinos-list></div>
         <p class="vecinos-pie">Haz clic en un vecino para ver su ficha.</p>
       </aside>
+      <aside class="capa capa-agenda agenda-modal" aria-label="Planes de Celestine">
+        <span class="agenda-pin agenda-pin-l" aria-hidden="true"></span>
+        <button type="button" class="cerrar agenda-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="agenda-cab">
+          <p class="libreta-kicker agenda-kicker">Libreta de Celestine</p>
+          <h2 class="agenda-tit">Planes</h2>
+          <p class="agenda-sub mini">Lo que está por venir.</p>
+        </header>
+        <div class="agenda-list capa-scroll" data-agenda-list></div>
+      </aside>
       <aside class="capa capa-ficha" aria-label="Ficha de vecino">
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
@@ -444,6 +528,7 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
               <div class="ficha-cara" data-ficha-img></div>
             </div>
             <h3 class="ficha-nombre" data-ficha-nombre></h3>
+            <p class="ficha-edad" data-ficha-edad hidden></p>
             <p class="ficha-desde" data-ficha-desde></p>
             <div class="ficha-animo-row">
               <p class="ficha-animo-line">
@@ -503,6 +588,10 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
         <button type="button" class="cerrar mensajitos-cerrar" data-close aria-label="Cerrar">×</button>
         <header class="mensajitos-cab">
           <h2 class="mensajitos-tit">Mensajitos</h2>
+          <button type="button" class="mensajitos-leer-todos" data-buzon-leer-todos hidden>
+            <span class="mensajitos-leer-todos-ico" aria-hidden="true">✓</span>
+            <span class="mensajitos-leer-todos-txt">Marcar todos como leídos</span>
+          </button>
         </header>
         <div data-buzon-list></div>
       </aside>
@@ -511,32 +600,11 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
         <button type="button" class="cerrar coti-cerrar" data-close aria-label="Cerrar">×</button>
         <header class="coti-top">
           <h2 class="coti-tit">Cotilleos</h2>
+          <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
         </header>
-        <div class="coti-tabs" role="tablist" aria-label="Cuándo">
-          <button type="button" class="coti-tab is-on" data-diario-tab="hoy" role="tab">Hoy</button>
-          <button type="button" class="coti-tab" data-diario-tab="ayer" role="tab">Ayer</button>
-          <button type="button" class="coti-tab coti-tab-trapos" data-diario-tab="viejos" role="tab">Trapos viejos</button>
-        </div>
         <div class="coti-body capa-scroll">
-          <div class="dia-block dia-hoy" data-coti-hoy></div>
-          <div class="dia-block dia-ayer" data-coti-ayer></div>
-          <div class="dia-block dia-viejos" data-coti-viejos></div>
+          <div class="coti-list" data-coti-list></div>
         </div>
-        <footer class="coti-footer">
-          <button type="button" class="coti-ver-todos" data-coti-ver-todos>Ver todos</button>
-        </footer>
-      </aside>
-      <aside class="capa capa-misiones mis-modal-papel" aria-label="Misiones">
-        <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
-        <span class="mis-pin" aria-hidden="true"></span>
-        <span class="mis-speech-tail" aria-hidden="true"></span>
-        <button type="button" class="cerrar mis-cerrar" data-close aria-label="Cerrar">×</button>
-        <header class="mis-top">
-          <h2 class="mis-tit">Misiones</h2>
-          <p class="mis-sub">Pequeños objetivos sociales. Opcionales.</p>
-        </header>
-        <div class="mis-body capa-scroll" data-misiones-list></div>
       </aside>
       <aside class="capa capa-organizar org-plan-papel" aria-label="Nuevo plan">
         <span class="ficha-tape ficha-tape-l org-tape-tl" aria-hidden="true"></span>
@@ -545,6 +613,7 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
         <button type="button" class="cerrar org-cerrar" data-close aria-label="Cerrar">×</button>
         <header class="org-top">
           <h2 class="org-tit">Nuevo plan</h2>
+          <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
           <section class="ficha-seccion org-seccion">
@@ -560,7 +629,10 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
             <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
             <div class="ficha-seccion-body">
               <p class="org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
-              <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
+              <div class="org-busca-wrap">
+                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
+                <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
+              </div>
               <div class="org-picker-strip capa-scroll" data-org-picker></div>
             </div>
           </section>
@@ -573,16 +645,21 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
           <section class="ficha-seccion org-seccion">
             <h4 class="ficha-seccion-tit">¿Dónde?</h4>
             <div class="ficha-seccion-body">
-              <select class="org-select" data-org-lugar></select>
+              <div class="org-dd" data-org-dd-lugar></div>
+              <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
+              <p class="org-lugar-horario mini" data-org-lugar-horario hidden></p>
             </div>
           </section>
           <section class="ficha-seccion org-seccion">
             <h4 class="ficha-seccion-tit">¿Cuándo?</h4>
             <div class="ficha-seccion-body">
               <div class="org-cuando">
-                <select class="org-select" data-org-dia></select>
-                <select class="org-select" data-org-hora></select>
+                <div class="org-dd org-dd--dia" data-org-dd-dia></div>
+                <div class="org-pick org-pick--hora" data-org-pick-hora role="listbox" aria-label="Hora"></div>
+                <select class="org-select org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
+                <select class="org-select org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
               </div>
+              <p class="org-horas-hint mini" data-org-horas-hint hidden></p>
             </div>
           </section>
         </div>
@@ -594,34 +671,28 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
           </button>
         </footer>
       </aside>
-      <aside class="capa capa-agenda">
-        <button type="button" class="cerrar agenda-cerrar" data-close aria-label="Cerrar">×</button>
-        <p class="libreta-kicker">Libreta de Celestine</p>
-        <h2>Planes</h2>
-        <p class="mini">Lo que está por venir. Solo consulta.</p>
-        <div class="agenda-list" data-agenda-list></div>
-      </aside>
     </div>
   </div>
       </div>
       <aside class="game-right zona-personas">
-        <section class="shell-grupo shell-grupo-misiones-par">
-          <button type="button" class="obj-misiones-papel" data-open="misiones" aria-label="Ver misiones de hoy">
+        <section class="shell-grupo shell-grupo-misiones-par" id="mob-misiones">
+          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
             <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
             <span class="obj-misiones-papel-tit">MISIONES</span>
             <div class="obj-misiones-strip" data-misiones-strip></div>
-          </button>
+          </div>
         </section>
         <section class="shell-grupo shell-grupo-cotilleo-par">
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir diario">
             <span class="obj-cotilleo-tit">Cotilleo</span>
             <p class="obj-cotilleo-txt" data-cotilleo-teaser>—</p>
+            <span class="obj-cotilleo-ver-mas" data-cotilleo-ver-mas hidden>ver más</span>
           </button>
         </section>
-        <section class="shell-grupo shell-grupo-parejas">
+        <section class="shell-grupo shell-grupo-parejas" id="mob-parejas">
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
@@ -629,6 +700,8 @@ $ahtUi = 'v3-20260822mapa3-tokens-glow-v1';
     </div>
   </div>
   <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

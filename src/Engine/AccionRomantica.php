@@ -61,6 +61,20 @@ final class AccionRomantica
         if (!($ev['elegible'] ?? false) && !$forzar) {
             return array_merge(['ok' => false, 'error' => 'no_elegible'], $ev);
         }
+        if (in_array($accionId, ['flechazo', 'mandar_flores', 'mandar_mensaje'], true)) {
+            $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+            $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+            foreach ([$desde, $hacia] as $rid) {
+                if (EncuentroEngine::residenteOcupadoEnHorario($partida, $rid, $dia, $hora)) {
+                    return [
+                        'ok' => false,
+                        'error' => 'ocupado_encuentro',
+                        'residente_id' => $rid,
+                        'elegible' => $ev['elegible'] ?? false,
+                    ];
+                }
+            }
+        }
         if ($accionId === 'flechazo') {
             $prob = CalibracionConfig::get($cal, 'flechazo.probabilidad', null);
             if ($prob === null && !$forzar) {

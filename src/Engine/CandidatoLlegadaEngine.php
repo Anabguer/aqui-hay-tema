@@ -187,6 +187,8 @@ final class CandidatoLlegadaEngine
                 . 'Tiene hasta el día ' . $cand['vence_dia'] . ' para una respuesta.',
             'candidato_catalog_id' => $catalogId,
             'acciones' => ['aceptar_candidato', 'rechazar_candidato'],
+            'estado_decision' => BuzonEngine::DECISION_PENDIENTE,
+            'leido' => false,
             'origen' => [
                 'evento_id' => null,
                 'tipo_evento' => 'candidato_llegada',
@@ -238,7 +240,7 @@ final class CandidatoLlegadaEngine
         $partida['llegadas']['candidato_activo'] = null;
 
         if (!empty($cand['mensaje_id'])) {
-            BuzonEngine::marcarEstado($partida, (string) $cand['mensaje_id'], 'resuelto');
+            BuzonEngine::resolverDecision($partida, (string) $cand['mensaje_id']);
         }
         BuzonEngine::crear($partida, [
             'id' => 'msg_espera_' . $enCamino['catalog_id'] . '_' . bin2hex(random_bytes(2)),
@@ -273,7 +275,7 @@ final class CandidatoLlegadaEngine
         $id = (string) $cand['catalog_id'];
         HistorialPersonajesPartida::marcar($partida, $id);
         if (!empty($cand['mensaje_id'])) {
-            BuzonEngine::marcarEstado($partida, (string) $cand['mensaje_id'], 'resuelto');
+            BuzonEngine::resolverDecision($partida, (string) $cand['mensaje_id']);
         }
         $partida['llegadas']['candidato_activo'] = null;
         self::aplicarCooldown($partida, $root, 'rechazo');
@@ -301,7 +303,7 @@ final class CandidatoLlegadaEngine
         $id = (string) $cand['catalog_id'];
         HistorialPersonajesPartida::marcar($partida, $id);
         if (!empty($cand['mensaje_id'])) {
-            BuzonEngine::marcarEstado($partida, (string) $cand['mensaje_id'], 'resuelto');
+            BuzonEngine::resolverDecision($partida, (string) $cand['mensaje_id']);
         }
         $partida['llegadas']['candidato_activo'] = null;
         self::aplicarCooldown($partida, $root, 'expirado');

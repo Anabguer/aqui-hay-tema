@@ -129,6 +129,45 @@ final class LabAudit
     }
 
     /**
+     * Snapshot LAB ligero en bootstrap (partida.refresh): sin matriz relacional.
+     * Matriz completa: partida.inspeccionar o partida.debug_export.
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function eventoSnapshotRefreshBootstrap(array $partida): void
+    {
+        self::push('PARTIDA', '[AHT DEBUG PARTIDA]', [
+            'evento' => 'REFRESH_UI',
+            'partida_id' => $partida['meta']['partida_id'] ?? null,
+            'config_id' => $partida['meta']['config_id'] ?? null,
+            'reloj' => $partida['reloj'] ?? null,
+            'vecinos_activos' => count(self::residentesActivos($partida)),
+            'encuentros_activos' => count(EncuentroEngine::listarActivos($partida)),
+            'nota' => 'Bootstrap partida.refresh sin matriz. Matriz: partida.inspeccionar o partida.debug_export.',
+        ]);
+    }
+
+    /**
+     * Snapshot LAB para partida.refresh con matriz (auditoría profunda bajo demanda).
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function eventoSnapshotRefreshUi(array $partida, Catalog $catalog): void
+    {
+        self::push('PARTIDA', '[AHT DEBUG PARTIDA]', [
+            'evento' => 'REFRESH_UI',
+            'partida_id' => $partida['meta']['partida_id'] ?? null,
+            'config_id' => $partida['meta']['config_id'] ?? null,
+            'reloj' => $partida['reloj'] ?? null,
+            'vecinos_activos' => count(self::residentesActivos($partida)),
+            'encuentros_activos' => count(EncuentroEngine::listarActivos($partida)),
+            'matriz_relacional' => self::matrizRelacional($partida, $catalog),
+            'nota_relaciones' => self::notaRelacionesMotor(),
+            'nota' => 'Snapshot compacto en partida.refresh (un evento; sin explosión NPC/REL).',
+        ]);
+    }
+
+    /**
      * @return array<string, string>
      */
     private static function notaRelacionesMotor(): array
@@ -241,6 +280,8 @@ final class LabAudit
             'resultado' => $resultado,
             'error_api' => $respuestaApi['error'] ?? null,
             'rechazo_clase' => $respuestaApi['rechazo_clase'] ?? null,
+            'rechazo_tipo' => $respuestaApi['rechazo_tipo'] ?? null,
+            'contrapropuesta' => $respuestaApi['contrapropuesta'] ?? null,
             'mensaje_ui' => $respuestaApi['mensaje_ui'] ?? null,
             'causas_reales' => self::causasPlan($reacciones, $respuestaApi),
         ]);
@@ -514,8 +555,9 @@ final class LabAudit
      * @param array<string, mixed> $partida
      * @return array<string, mixed>
      */
-    private static function parDireccional(array $partida, string $desde, string $hacia, Catalog $catalog): array
+    private static function parDireccional(array &$partida, string $desde, string $hacia, Catalog $catalog): array
     {
+        CompatibilidadOculta::asegurarDireccional($partida, $desde, $hacia, $catalog);
         $cal = CalibracionConfig::load($catalog->getRoot());
         $entre = RelacionEngine::obtenerEntre($partida, $desde, $hacia);
         $social = RelacionEngine::socialHacia($partida, $desde, $hacia);
@@ -613,6 +655,8 @@ final class LabAudit
                 'residente' => $reac['nombre'] ?? $reac['residente_id'] ?? '?',
                 'clase' => $reac['clase'] ?? null,
                 'motivo_tecnico' => $reac['motivo_tecnico'] ?? null,
+                'rechazo_tipo' => $reac['rechazo_tipo'] ?? null,
+                'rechazo_familia' => $reac['rechazo_familia'] ?? null,
                 'score' => $reac['score'] ?? null,
                 'p' => $reac['p'] ?? null,
                 'factores' => $reac['factores'] ?? null,

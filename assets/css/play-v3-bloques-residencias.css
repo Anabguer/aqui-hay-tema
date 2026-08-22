@@ -1,4 +1,4 @@
-﻿/* Bloques residenciales — imagen lateral + capa libreta */
+﻿/* Bloques residenciales ? imagen lateral + capa libreta */
 
 .obj-bloques-res {
   display: block;
@@ -174,7 +174,7 @@
   display: block;
   margin: 0 0 .25rem;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #6a5848;
 }
@@ -287,7 +287,7 @@
   padding: .75rem .5rem;
   font-family: Fraunces, Georgia, serif;
   font-style: italic;
-  font-size: .92rem;
+  font-size: 1.05rem;
   color: #6a5848;
   text-align: center;
 }
@@ -328,7 +328,7 @@
   padding-right: 4.5rem;
 }
 
-.play-v3 .capa-residencias .capa-cerrar-pestaña {
+.play-v3 .capa-residencias .capa-cerrar-pesta?a {
   width: 4.75rem;
   height: 4.75rem;
   min-width: 4.75rem;
@@ -343,7 +343,7 @@
   z-index: 8;
 }
 
-.play-v3 .capa-residencias .capa-cerrar-pestaña::before {
+.play-v3 .capa-residencias .capa-cerrar-pesta?a::before {
   background: linear-gradient(225deg, #fff6c8 0 54%, #f5e6a8 54% 58%, transparent 58%);
   border-left: 1.5px solid rgba(140, 110, 80, .45);
   border-bottom: 1.5px solid rgba(140, 110, 80, .45);
@@ -625,7 +625,7 @@
   color: #2c261f;
 }
 
-.play-v3 .capa-vecinos .capa-cerrar-pestaña {
+.play-v3 .capa-vecinos .capa-cerrar-pesta?a {
   display: none !important;
 }
 
@@ -654,7 +654,7 @@
 
 .play-v3 .capa-vecinos .vecinos-cuenta {
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: var(--pink-deep);
   white-space: nowrap;
@@ -675,7 +675,7 @@
 }
 
 .play-v3 .capa-vecinos .vec-busca-ico {
-  font-size: .92rem;
+  font-size: 1.05rem;
   line-height: 1;
   color: #8a7a66;
   opacity: .85;
@@ -714,8 +714,9 @@
   border: 0;
   background: transparent;
   transform: none;
-  padding: .2rem .1rem .3rem;
+  padding: .1rem .05rem .2rem;
   box-shadow: none;
+  gap: .18rem;
 }
 
 .play-v3 .capa-vecinos .vecino-celda:hover,
@@ -734,21 +735,29 @@
   width: 3.15rem;
   height: 3.15rem;
   border-width: 2px;
-  margin-bottom: .28rem;
+  margin-bottom: .18rem;
 }
 
 .play-v3 .capa-vecinos .vecino-nom {
-  font-family: Nunito, "Segoe UI", sans-serif;
-  font-size: .68rem;
-  font-weight: 800;
-  line-height: 1.2;
+  margin: 0;
+  padding: 0 .05rem;
+  font-family: Caveat, cursive;
+  font-size: .92rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #8a7460;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .play-v3 .capa-vecinos .vecinos-pie {
   margin: .05rem 0 0;
   text-align: center;
   font-family: Caveat, cursive;
-  font-size: .78rem;
+  font-size: .98rem;
   font-weight: 700;
   font-style: normal;
   color: #6a5848;
@@ -780,7 +789,7 @@
   }
 }
 
-/* === Vecinos modal: refinado v3 (chinchetas, caras, tipografía) === */
+/* === Vecinos modal: refinado v3 (chinchetas, caras, tipograf?a) === */
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
   overflow: visible !important;
 }
@@ -821,26 +830,32 @@
   height: 3.75rem;
   border-width: 2.5px;
   background: #fffdf6;
+  margin-bottom: .18rem;
 }
 
 .play-v3 .capa-vecinos .vecino-cara img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 12%;
   display: block;
 }
 
 .play-v3 .capa-vecinos .vecino-nom {
-  font-family: Nunito, "Segoe UI", sans-serif;
+  margin: 0;
+  padding: 0 .05rem;
+  font-family: Caveat, cursive;
   font-size: .92rem;
-  font-weight: 800;
-  line-height: 1.2;
-  color: #2a2218;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #8a7460;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .play-v3 .capa-vecinos .vecinos-pie {
-  font-size: .86rem;
+  font-size: .98rem;
 }
 
 /* === Vecinos modal: layout bajo chinchetas + cerrar esquina === */
@@ -874,7 +889,7 @@
   margin-top: .1rem;
 }
 
-/* === Vecinos modal: más aire bajo chinchetas (v5) === */
+/* === Vecinos modal: m?s aire bajo chinchetas (v5) === */
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
   padding-top: 1.75rem !important;
 }
@@ -956,7 +971,7 @@
   transform: rotate(32deg);
 }
 
-.play-v3 .capa-ficha .capa-cerrar-pestaña {
+.play-v3 .capa-ficha .capa-cerrar-pesta?a {
   top: .55rem !important;
   right: .35rem !important;
   z-index: 8;
@@ -978,7 +993,7 @@
   padding: 0;
   margin: 0 0 .2rem;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #6a5848;
   cursor: pointer;
@@ -1034,8 +1049,6 @@
 .play-v3 .capa-ficha .ficha-cara img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 50% 12%;
   display: block;
 }
 
@@ -1057,6 +1070,7 @@
   line-height: 1.15;
 }
 
+.play-v3 .capa-ficha .ficha-edad,
 .play-v3 .capa-ficha .ficha-desde,
 .play-v3 .capa-ficha .ficha-animo-line {
   margin: 0;
@@ -1205,6 +1219,14 @@
   overflow: hidden;
 }
 
+.play-v3 .capa-ficha .ficha-rel-romance {
+  font-size: 0.78rem;
+  color: #9a3d6b;
+  margin: 0.1rem 0 0.15rem;
+}
+.play-v3 .capa-ficha .ficha-rel-bar.is-neg span {
+  background: linear-gradient(90deg, #c47a5a 0%, #a85a42 100%);
+}
 .play-v3 .capa-ficha .ficha-rel-bar span {
   display: block;
   height: 100%;
@@ -1294,7 +1316,7 @@
   gap: .65rem !important;
 }
 
-.play-v3 .capa-ficha .capa-cerrar-pestaña {
+.play-v3 .capa-ficha .capa-cerrar-pesta?a {
   display: none !important;
 }
 
@@ -1418,7 +1440,7 @@
   background: transparent;
   padding: .15rem 0;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #6a5848;
   cursor: pointer;
@@ -1570,6 +1592,7 @@
   line-height: 1.1;
 }
 
+.play-v3 .capa-ficha .ficha-edad,
 .play-v3 .capa-ficha .ficha-desde {
   margin: 0;
   font-family: Caveat, cursive;
@@ -1577,6 +1600,10 @@
   font-weight: 600;
   color: #5a4838;
   line-height: 1.3;
+}
+
+.play-v3 .capa-ficha .ficha-edad {
+  margin-bottom: .1rem;
 }
 
 .play-v3 .capa-ficha .ficha-animo-row {
@@ -1641,7 +1668,7 @@
   border-radius: 2px;
   background: linear-gradient(180deg, #ebe0cc 0%, #e0d4bc 100%);
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -1694,7 +1721,7 @@
   background: rgba(255, 252, 245, .85) !important;
 }
 
-/* === Ficha v4: títulos sección con raya lateral (degradado) === */
+/* === Ficha v4: t?tulos secci?n con raya lateral (degradado) === */
 .play-v3 .capa-ficha .ficha-seccion-tit {
   display: flex;
   align-items: center;
@@ -1852,11 +1879,12 @@
   font-style: italic;
 }
 
-/* === Ficha v6: prefs, tipografía, ánimo, sin mensaje === */
+/* === Ficha v6: prefs, tipograf?a, ?nimo, sin mensaje === */
 .play-v3 .capa-ficha .ficha-nombre {
   font-size: 1.42rem;
 }
 
+.play-v3 .capa-ficha .ficha-edad,
 .play-v3 .capa-ficha .ficha-desde {
   font-size: .94rem;
 }
@@ -1909,7 +1937,7 @@
   font-size: .96rem;
 }
 
-/* === Ficha v7: tipografía, sangría, cinta esquinas === */
+/* === Ficha v7: tipograf?a, sangr?a, cinta esquinas === */
 .play-v3 .capa-ficha .ficha-tape-l {
   top: -3px;
   left: 6px;
@@ -1945,14 +1973,15 @@
   font-size: 1.52rem !important;
 }
 
+.play-v3 .capa-ficha .ficha-edad,
 .play-v3 .capa-ficha .ficha-desde {
-  font-size: 1rem !important;
+  font-size: 1.1rem !important;
 }
 
 .play-v3 .capa-ficha .ficha-animo-line,
 .play-v3 .capa-ficha .ficha-animo-label,
 .play-v3 .capa-ficha .ficha-animo-val {
-  font-size: 1rem !important;
+  font-size: 1.1rem !important;
 }
 
 .play-v3 .capa-ficha .ficha-animo-ico {
@@ -1961,7 +1990,7 @@
 }
 
 .play-v3 .capa-ficha .ficha-pref-line {
-  font-size: 1rem !important;
+  font-size: 1.1rem !important;
   line-height: 1.45 !important;
   padding-left: 0 !important;
 }
@@ -1975,7 +2004,7 @@
 }
 
 .play-v3 .capa-ficha .ficha-hobby-lab {
-  font-size: .9rem !important;
+  font-size: 1.05rem !important;
 }
 
 .play-v3 .capa-ficha .ficha-rasgo-tag {
@@ -2004,7 +2033,7 @@
   display: none !important;
 }
 
-/* ficha v8: sangría relaciones/planes + ver-mas dentro del body */
+/* ficha v8: sangr?a relaciones/planes + ver-mas dentro del body */
 .play-v3 .capa-ficha .ficha-seccion-body .ficha-relaciones {
   margin-top: 0;
 }
@@ -2017,16 +2046,29 @@
   margin-top: 0;
 }
 
-/* ficha v9: hobby cards más compactas */
+/* ficha v9: hobby cards m?s compactas */
 .play-v3 .capa-ficha .ficha-hobbies {
-  gap: .28rem !important;
+  gap: .35rem !important;
 }
 
 .play-v3 .capa-ficha .ficha-hobby-card {
-  max-width: 4.1rem !important;
-  padding: .24rem .18rem .2rem !important;
+  max-width: none !important;
+  padding: .24rem .28rem .2rem !important;
   gap: .14rem !important;
   border-radius: 6px;
+}
+
+.play-v3 .capa-ficha .ficha-hobby-card.is-desconocido {
+  justify-content: center !important;
+  padding: .35rem .18rem !important;
+}
+
+.play-v3 .capa-ficha .ficha-hobby-card.is-desconocido .ficha-hobby-ico {
+  width: auto !important;
+  height: auto !important;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
 }
 
 .play-v3 .capa-ficha .ficha-hobby-ico {
@@ -2035,12 +2077,13 @@
 }
 
 .play-v3 .capa-ficha .ficha-hobby-q {
-  font-size: 1rem !important;
+  font-size: 1.75rem !important;
 }
 
 .play-v3 .capa-ficha .ficha-hobby-lab {
-  font-size: .78rem !important;
-  line-height: 1.1 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.15 !important;
+  white-space: nowrap !important;
 }
 
 /* === Nuevo plan v1: modal scrapbook como ficha === */
@@ -2245,7 +2288,7 @@
 
 .play-v3 .capa-organizar .org-tipos .chip {
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: .03em;
   text-transform: uppercase;
@@ -2477,7 +2520,7 @@
 .play-v3 .capa-organizar .org-picker-hint {
   margin: 0 0 .3rem;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   color: #8a7460;
 }
 
@@ -2501,19 +2544,64 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding: .25rem .1rem .45rem;
-  min-height: 4.2rem;
+  min-height: 5.1rem;
   align-items: flex-start;
   scroll-snap-type: x proximity;
 }
 
 .play-v3 .capa-organizar .org-picker-celda {
-  position: relative;
   flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .18rem;
+  max-width: 4.4rem;
   border: 0;
   background: transparent;
   padding: .1rem;
   cursor: pointer;
   scroll-snap-align: start;
+}
+
+.play-v3 .capa-organizar .org-picker-stack {
+  position: relative;
+  display: block;
+}
+
+.play-v3 .capa-organizar .org-picker-nom {
+  margin: 0;
+  padding: 0 .05rem;
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #6a5848;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  opacity: .92;
+}
+
+.play-v3 .capa-organizar .org-picker-stack {
+  position: relative;
+  display: block;
+}
+
+.play-v3 .capa-organizar .org-picker-nom {
+  margin: 0;
+  padding: 0 .05rem;
+  font-family: Caveat, cursive;
+  font-size: .76rem;
+  font-weight: 600;
+  line-height: 1.1;
+  color: #8a7460;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .play-v3 .capa-organizar .org-picker-cara {
@@ -2689,7 +2777,7 @@
   }
 }
 
-/* org v4: chincheta un poco más abajo */
+/* org v4: chincheta un poco m?s abajo */
 .play-v3 .capa-organizar .org-pin {
   top: 8px !important;
 }
@@ -2759,12 +2847,16 @@
 }
 
 .play-v3 .capa-diario .coti-top {
+  display: flex;
+  flex-direction: column;
+  gap: .38rem;
   text-align: left;
-  padding: 0 .25rem .1rem;
+  padding: 0 .25rem .12rem;
 }
 
 .play-v3 .capa-diario .coti-tit {
   margin: 0;
+  padding-right: 2rem;
   font-family: Caveat, cursive;
   font-size: 1.65rem;
   font-weight: 700;
@@ -2773,49 +2865,105 @@
   color: #2c261f;
 }
 
-.play-v3 .capa-diario .coti-tabs {
+.play-v3 .capa-diario .coti-filtros {
   display: flex;
-  gap: .35rem;
-  padding: 0 .15rem;
+  flex-wrap: wrap;
+  gap: .28rem;
+  align-items: center;
+  justify-content: flex-end;
+  align-self: flex-end;
+  max-width: 100%;
+  padding-right: .05rem;
 }
 
-.play-v3 .capa-diario .coti-tab {
+.play-v3 .capa-diario .coti-filtros[hidden] {
+  display: none !important;
+}
+
+.play-v3 .capa-diario .coti-filtro {
   border: 1.5px solid rgba(44, 38, 31, .14);
-  border-radius: 6px;
-  background: rgba(255, 252, 245, .55);
-  font-family: Caveat, cursive;
-  font-size: .88rem;
-  font-weight: 700;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  padding: .22rem .55rem;
-  color: #5a4838;
+  border-radius: 7px;
+  background: #fffdf8;
+  min-width: 2.05rem;
+  height: 2.05rem;
+  padding: .18rem;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .07);
+  transform: rotate(-3deg);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
 }
 
-.play-v3 .capa-diario .coti-tab.is-on {
-  background: #fffdf8;
-  color: #2c261f;
-  box-shadow: 1px 2px 0 rgba(44, 38, 31, .08);
+.play-v3 .capa-diario .coti-filtro:nth-child(even) { transform: rotate(2deg); }
+
+.play-v3 .capa-diario .coti-filtro.is-on {
+  transform: rotate(0deg);
+  border-color: rgba(196, 43, 74, .45);
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .1), inset 0 0 0 1px rgba(196, 43, 74, .12);
 }
+
+.play-v3 .capa-diario .coti-filtro:hover { transform: rotate(0deg) scale(1.04); }
+
+.play-v3 .capa-diario .coti-cat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #5a4838;
+}
+
+.play-v3 .capa-diario .coti-cat .coti-svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+}
+
+.play-v3 .capa-diario .coti-filtro .coti-cat {
+  pointer-events: none;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  transform: none;
+}
+
+.play-v3 .capa-diario .coti-cat-sello {
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1.5px dashed rgba(44, 38, 31, .18);
+  border-radius: 6px;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .05);
+  transform: rotate(-4deg);
+}
+
+.play-v3 .capa-diario .coti-cat--pueblo.coti-cat-sello { color: #7a5c3a; background: rgba(248, 236, 214, .75); border-color: rgba(122, 92, 58, .28); }
+.play-v3 .capa-diario .coti-cat--encuentro.coti-cat-sello { color: #6a5238; background: rgba(255, 244, 228, .9); border-color: rgba(106, 82, 56, .26); }
+.play-v3 .capa-diario .coti-cat--descubrimiento.coti-cat-sello { color: #4a6a52; background: rgba(232, 244, 232, .9); border-color: rgba(74, 106, 82, .28); }
+.play-v3 .capa-diario .coti-cat--romance.coti-cat-sello { color: #b84a62; background: rgba(255, 236, 242, .92); border-color: rgba(184, 74, 98, .32); }
+.play-v3 .capa-diario .coti-cat--drama.coti-cat-sello { color: #c06a28; background: rgba(255, 240, 220, .92); border-color: rgba(192, 106, 40, .3); }
+.play-v3 .capa-diario .coti-cat--relacion.coti-cat-sello { color: #7a4a62; background: rgba(248, 232, 240, .92); border-color: rgba(122, 74, 98, .28); }
+
+.play-v3 .capa-diario .coti-filtro.coti-cat--pueblo { color: #7a5c3a; background: rgba(248, 236, 214, .85); border-color: rgba(122, 92, 58, .28); }
+.play-v3 .capa-diario .coti-filtro.coti-cat--encuentro { color: #6a5238; background: rgba(255, 244, 228, .95); border-color: rgba(106, 82, 56, .26); }
+.play-v3 .capa-diario .coti-filtro.coti-cat--descubrimiento { color: #4a6a52; background: rgba(232, 244, 232, .95); border-color: rgba(74, 106, 82, .28); }
+.play-v3 .capa-diario .coti-filtro.coti-cat--romance { color: #b84a62; background: rgba(255, 236, 242, .95); border-color: rgba(184, 74, 98, .32); }
+.play-v3 .capa-diario .coti-filtro.coti-cat--drama { color: #c06a28; background: rgba(255, 240, 220, .95); border-color: rgba(192, 106, 40, .3); }
+.play-v3 .capa-diario .coti-filtro.coti-cat--relacion { color: #7a4a62; background: rgba(248, 232, 240, .95); border-color: rgba(122, 74, 98, .28); }
+.play-v3 .capa-diario .coti-cat--coincidencias.coti-cat-sello { color: #5a6a7a; background: rgba(232, 240, 248, .92); border-color: rgba(90, 106, 122, .28); }
+.play-v3 .capa-diario .coti-filtro.coti-cat--coincidencias { color: #5a6a7a; background: rgba(232, 240, 248, .95); border-color: rgba(90, 106, 122, .28); }
 
 .play-v3 .capa-diario .coti-body {
   flex: 1 1 auto;
   min-height: 0;
+  overflow-x: clip;
   overflow-y: auto;
   padding: .15rem .05rem;
 }
 
-.play-v3 .capa-diario .dia-block {
-  display: none;
+.play-v3 .capa-diario .coti-list {
+  display: flex;
   flex-direction: column;
   gap: .55rem;
-}
-
-.play-v3 .play-root[data-diario="hoy"] .capa-diario .dia-hoy,
-.play-v3 .play-root[data-diario="ayer"] .capa-diario .dia-ayer,
-.play-v3 .play-root[data-diario="viejos"] .capa-diario .dia-viejos {
-  display: flex;
 }
 
 .play-v3 .capa-diario .coti-item {
@@ -2853,7 +3001,7 @@
   transform: rotate(9deg);
 }
 
-.play-v3 .capa-diario .coti-item-nuevo {
+.play-v3 .capa-diario .coti-item-hoy {
   position: absolute;
   top: .45rem;
   right: .5rem;
@@ -2869,9 +3017,18 @@
   background: rgba(255, 252, 245, .9);
 }
 
+.play-v3 .capa-diario .coti-item-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .32rem;
+  min-width: 2.85rem;
+}
+
 .play-v3 .capa-diario .coti-item-avatares {
   display: flex;
   align-items: center;
+  justify-content: center;
   padding-top: .1rem;
 }
 
@@ -2927,7 +3084,7 @@
   margin: 0;
   font-family: Fraunces, Georgia, serif;
   font-style: italic;
-  font-size: .92rem;
+  font-size: 1.05rem;
   line-height: 1.38;
   color: #2c261f;
 }
@@ -2947,29 +3104,6 @@
   text-align: center;
 }
 
-.play-v3 .capa-diario .coti-footer {
-  display: flex;
-  justify-content: center;
-  padding-top: .15rem;
-}
-
-.play-v3 .capa-diario .coti-ver-todos {
-  border: 0;
-  background: transparent;
-  font-family: Caveat, cursive;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: #2c261f;
-  cursor: pointer;
-  padding: .2rem .5rem;
-}
-
-.play-v3 .capa-diario .coti-ver-todos:hover {
-  color: #c45;
-}
-
 @media (max-width: 560px) {
   .play-v3 .play-root.phone[data-capa="diario"] .capa-diario {
     right: auto !important;
@@ -2984,26 +3118,370 @@
   }
 }
 
-/* === Misiones v1: modal scrapbook (ficha / vecinos) === */
 
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones,
-.play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones {
-  position: absolute !important;
-  left: auto !important;
-  right: 11% !important;
-  top: 24% !important;
+.play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda.agenda-modal {
+  position: absolute;
+  left: 50% !important;
+  top: 46% !important;
+  right: auto !important;
   bottom: auto !important;
-  width: min(400px, 90vw) !important;
-  max-width: min(400px, 90vw) !important;
-  max-height: min(76vh, 620px) !important;
-  transform: translate(0, 0) !important;
-  z-index: 13;
-  padding: 1.45rem 1rem .9rem !important;
+  width: min(560px, 92vw) !important;
+  max-width: min(560px, 92vw) !important;
+  max-height: min(74vh, 600px) !important;
+  min-height: min(340px, 58vh);
+  transform: translate(-50%, -50%) !important;
+  z-index: 12;
+  padding: 1.05rem 1.1rem .9rem !important;
   border-radius: 3px 10px 6px 5px !important;
-  border: 1.5px solid rgba(44, 38, 31, .14) !important;
+  border: 2px solid rgba(44, 38, 31, .16) !important;
   box-shadow:
-    3px 6px 20px rgba(40, 28, 16, .15),
-    inset 0 0 0 1px rgba(255, 255, 255, .4) !important;
+    4px 8px 28px rgba(40, 28, 16, .2),
+    inset 0 0 0 1px rgba(180, 150, 110, .32) !important;
+  background-color: #fdf9f4 !important;
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 249, .9) 0%, rgba(255, 253, 249, .62) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center !important;
+  background-size: cover, cover !important;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column;
+  gap: .55rem;
+  box-sizing: border-box;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-cab {
+  margin: 0 0 .45rem;
+  padding: .15rem 2.5rem .1rem .15rem;
+  border-bottom: 1px dashed rgba(120, 96, 72, .22);
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-kicker {
+  margin: 0 0 .2rem;
+  font-size: 1.12rem;
+  letter-spacing: .02em;
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-tit {
+  font-size: 1.65rem;
+  line-height: 1.15;
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-sub {
+  font-size: .9rem;
+  margin-top: .28rem;
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  padding: .25rem .15rem .35rem;
+  gap: .55rem;
+  background: rgba(255, 253, 248, .45);
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-fila {
+  padding: .58rem .62rem;
+  border-radius: 9px 10px 8px 9px;
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-fila-nombres {
+  font-size: 1rem;
+}
+
+.play-v3 .capa-agenda.agenda-modal .agenda-fila-meta {
+  font-size: 1.02rem;
+}
+
+
+
+
+.play-v3 .capa-agenda .agenda-pin {
+  position: absolute;
+  top: 12px;
+  width: 18px;
+  height: 18px;
+  background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.play-v3 .capa-agenda .agenda-pin-l { left: 12px; transform: rotate(-8deg); z-index: 6; }
+
+.play-v3 .capa-agenda .agenda-cab {
+  margin: 0 0 .35rem;
+  padding-right: 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.play-v3 .capa-agenda .agenda-kicker { margin: 0 0 .15rem; }
+
+.play-v3 .capa-agenda .agenda-tit {
+  margin: 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #2c261f;
+}
+
+.play-v3 .capa-agenda .agenda-sub {
+  margin: .2rem 0 0;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .82rem;
+  color: #6a5848;
+}
+
+.play-v3 .capa-agenda .agenda-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
+  margin: 0;
+  padding: .15rem .1rem .25rem;
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: rgba(255, 253, 248, .55);
+  border-radius: 6px 7px 5px 6px;
+}
+
+.play-v3 .capa-agenda .agenda-fila {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: .48rem .5rem;
+  margin: 0;
+  border: 0;
+  border-radius: 8px 9px 7px 8px;
+  background: rgba(255, 253, 248, .92);
+  box-shadow: inset 0 0 0 1px rgba(120, 96, 72, .14);
+  text-align: left;
+  color: inherit;
+}
+
+.play-v3 .capa-agenda .agenda-fila-fotos {
+  display: flex;
+  gap: .22rem;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.play-v3 .capa-agenda .plan-cara,
+.play-v3 .capa-agenda .agenda-fila-fotos .plan-cara {
+  flex: 0 0 36px;
+  width: 36px !important;
+  height: 36px !important;
+  max-width: 36px;
+  max-height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 2px rgba(40, 28, 16, .12);
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: .78rem;
+  background: #f3e6cc;
+  line-height: 1;
+}
+
+.play-v3 .capa-agenda .agenda-fila-cuerpo {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+}
+
+.play-v3 .capa-agenda .agenda-fila-nombres {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 700;
+  font-size: .9rem;
+  line-height: 1.25;
+  color: #2c261f;
+}
+
+.play-v3 .capa-agenda .agenda-fila-meta {
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  line-height: 1.25;
+  color: #5a5048;
+}
+
+.play-v3 .capa-agenda .lista-vacia {
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .9rem;
+  color: #6a5848;
+  margin: .35rem .25rem;
+}
+
+/* === Encuadre can�nico tokens (todas las caras del juego) === */
+.play-v3 .cara-token .cara {
+  overflow: hidden;
+}
+
+.play-v3 .cara-token .cara img,
+.play-v3 .vecino-cara img,
+.play-v3 .capa-ficha .ficha-cara img,
+.play-v3 .capa-ficha .ficha-rel-cara img,
+.play-v3 .capa-organizar .org-picker-cara img,
+.play-v3 .capa-diario .coti-item-cara img,
+.play-v3 .prox-cara img,
+.play-v3 .prox-faces img,
+.play-v3 .plan-cara,
+.play-v3 .capa-agenda .plan-cara,
+.play-v3 .hab .cara img,
+.play-v3 .mapa-zona-hit .hab .cara img,
+.play-v3 .tut-cara img,
+.play-v3 .ficha-hero .cara img,
+.play-v3 .capa-buzon .carta-avatar,
+.play-v3 .msg-item-avatar,
+.play-v3 .obj-proximo-polaroid .prox-faces img,
+.play-v3 .caras-clip img,
+.play-v3 .caras-clip .cara img,
+.play-v3 .tut-caras img,
+.play-v3 .tut-caras .cara img {
+  object-fit: cover;
+  object-position: 50% 20%;
+  transform: scale(1.1);
+  transform-origin: 50% 14%;
+}
+
+
+/* Chinchetas modales: dentro del borde del papel */
+.play-v3 .capa-vecinos .vecinos-pin,
+.play-v3 .capa-organizar .org-pin,
+.play-v3 .capa-misiones .mis-pin,
+.play-v3 .capa-agenda .agenda-pin,
+.play-v3 .nota-mapa::before {
+  top: 8px !important;
+}
+
+
+.play-v3 .capa-organizar .org-select:disabled {
+  opacity: .52;
+  cursor: not-allowed;
+  color: rgba(44, 38, 31, .45);
+  background: rgba(248, 244, 236, .75);
+}
+
+
+/* Buscar vecino + "mostrar todos" fuera de la barra */
+.play-v3 .capa-organizar .org-busca-wrap {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin: 0 0 .45rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.play-v3 .capa-organizar .org-busca-wrap .org-busca {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: 100%;
+  margin: 0;
+  padding: .34rem .5rem;
+  padding-right: .5rem;
+  box-sizing: border-box;
+}
+
+.play-v3 .capa-organizar .org-busca-todos {
+  position: static;
+  transform: none;
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  font-family: inherit;
+  font-size: .64rem;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.2;
+  color: rgba(90, 72, 56, .62);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.play-v3 .capa-organizar .org-busca-todos[hidden] {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .org-busca-todos:hover {
+  color: #a84a62;
+}
+
+.play-v3 .capa-organizar .org-busca-todos:focus-visible {
+  outline: 2px solid rgba(196, 43, 74, .3);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+
+.play-v3 .capa-organizar .org-top .org-aviso {
+  margin: .4rem auto .2rem;
+  max-width: 92%;
+  padding: .38rem .6rem;
+  border-radius: 6px;
+  background: rgba(255, 236, 242, .72);
+  border: 1px solid rgba(196, 43, 74, .22);
+  font-size: .78rem;
+  font-style: italic;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  color: #a84a62;
+  flex-shrink: 0;
+}
+
+.play-v3 .capa-organizar .org-aviso[hidden] {
+  display: none !important;
+}
+
+
+/* Cotilleos v2: tarjetas destacadas */
+.play-v3 .capa-diario .coti-item--destacado {
+  box-shadow: 0 1px 0 rgba(180, 90, 110, .12), inset 0 0 0 1px rgba(180, 90, 110, .14);
+}
+
+
+/* === Misiones: modal papel (como agenda / ver todos los planes) === */
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.mis-modal-papel,
+.play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones.mis-modal-papel {
+  position: absolute !important;
+  left: 50% !important;
+  top: 46% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(440px, 92vw) !important;
+  max-width: min(440px, 92vw) !important;
+  max-height: min(74vh, 600px) !important;
+  min-height: min(280px, 48vh);
+  transform: translate(-50%, -50%) !important;
+  z-index: 12;
+  padding: 1.05rem 1.1rem .9rem !important;
+  border-radius: 3px 10px 6px 5px !important;
+  border: 2px solid rgba(44, 38, 31, .16) !important;
+  box-shadow:
+    4px 8px 28px rgba(40, 28, 16, .2),
+    inset 0 0 0 1px rgba(180, 150, 110, .32) !important;
   background-color: #fdf9f4 !important;
   background-image:
     repeating-linear-gradient(
@@ -3013,138 +3491,119 @@
       rgba(217, 107, 138, .06) 1.35rem,
       rgba(217, 107, 138, .06) calc(1.35rem + 1px)
     ),
-    linear-gradient(180deg, rgba(255, 253, 249, .94) 0%, rgba(255, 249, 242, .78) 100%),
+    linear-gradient(180deg, rgba(255, 253, 249, .9) 0%, rgba(255, 253, 249, .62) 100%),
     url("../play-v3/capas/libreta_hoja.png") !important;
   background-position: 0 3rem, center, center !important;
   background-size: auto, cover, cover !important;
-  overflow: visible;
-  display: flex;
+  overflow: hidden;
+  display: flex !important;
   flex-direction: column;
-  gap: .4rem;
+  gap: .45rem;
+  box-sizing: border-box;
+  pointer-events: auto !important;
+  visibility: visible !important;
 }
 
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones::before,
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones::after {
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.mis-modal-papel::before,
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.mis-modal-papel::after {
   display: none !important;
 }
 
-.play-v3 .capa-misiones .mis-speech-tail {
-  position: absolute;
-  top: -9px;
-  left: 28%;
-  width: 16px;
-  height: 16px;
-  background: #fdf9f4;
-  border-left: 1.5px solid rgba(44, 38, 31, .12);
-  border-top: 1.5px solid rgba(44, 38, 31, .12);
-  transform: rotate(45deg);
-  z-index: 2;
-  pointer-events: none;
+.play-v3 .capa-misiones.mis-modal-papel .mis-speech-tail {
+  display: none;
 }
 
-.play-v3 .capa-misiones .mis-pin {
+.play-v3 .capa-misiones.mis-modal-papel .mis-pin {
   position: absolute;
-  top: 6px;
-  left: 16px;
-  width: 20px;
-  height: 20px;
+  top: 10px;
+  left: 14px;
+  width: 18px;
+  height: 18px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
   z-index: 5;
-  transform: rotate(-9deg);
+  transform: rotate(-8deg);
   pointer-events: none;
 }
 
-.play-v3 .capa-misiones .mis-tape-tl {
+.play-v3 .capa-misiones.mis-modal-papel .mis-tape-tl {
   top: -2px !important;
   left: 8px !important;
   transform: rotate(-7deg);
 }
 
-.play-v3 .capa-misiones .mis-tape-tr {
+.play-v3 .capa-misiones.mis-modal-papel .mis-tape-tr {
   top: -2px !important;
   right: 8px !important;
   transform: rotate(6deg);
 }
 
-.play-v3 .capa-misiones .mis-cerrar {
-  position: absolute;
-  top: .5rem;
-  right: .6rem;
-  z-index: 8;
-  border: 0 !important;
-  background: transparent !important;
-  padding: 0;
-  width: 1.6rem;
-  height: 1.6rem;
-  font-family: Caveat, cursive;
-  font-size: 1.55rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #5a4838;
-  cursor: pointer;
+.play-v3 .capa-misiones.mis-modal-papel .mis-top {
+  margin: 0 0 .35rem;
+  padding: .15rem 2.5rem .1rem .15rem;
+  border-bottom: 1px dashed rgba(120, 96, 72, .22);
+  text-align: left;
 }
 
-.play-v3 .capa-misiones .mis-top {
-  text-align: center;
-  padding: .1rem .5rem .2rem;
-}
-
-.play-v3 .capa-misiones .mis-tit {
+.play-v3 .capa-misiones.mis-modal-papel .mis-tit {
   margin: 0;
-  font-family: Caveat, cursive;
-  font-size: 1.75rem;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.65rem;
   font-weight: 700;
-  letter-spacing: .07em;
-  text-transform: uppercase;
+  line-height: 1.15;
   color: #2c261f;
-  transform: rotate(-.25deg);
 }
 
-.play-v3 .capa-misiones .mis-sub {
-  margin: .15rem 0 0;
-  font-family: Caveat, cursive;
-  font-size: .95rem;
-  color: #8a7460;
+.play-v3 .capa-misiones.mis-modal-papel .mis-sub {
+  margin: .28rem 0 0;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .9rem;
+  color: #6a5848;
 }
 
-.play-v3 .capa-misiones .mis-body {
+.play-v3 .capa-misiones.mis-modal-papel .mis-body {
   flex: 1 1 auto;
   min-height: 0;
+  max-height: none;
   overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
   gap: .55rem;
-  padding: .1rem .05rem .15rem;
+  margin: 0;
+  padding: .25rem .15rem .35rem;
+  background: rgba(255, 253, 248, .45);
+  border-radius: 6px 7px 5px 6px;
 }
 
-.play-v3 .capa-misiones .mis-vacio,
-.play-v3 .capa-misiones .mis-body .muted {
-  margin: .35rem .15rem;
-  font-family: Caveat, cursive;
-  font-size: 1rem;
-  color: #8a7460;
+.play-v3 .capa-misiones.mis-modal-papel .mis-vacio,
+.play-v3 .capa-misiones.mis-modal-papel .mis-body .muted {
+  margin: .35rem .25rem;
+  font-family: Fraunces, Georgia, serif;
+  font-style: italic;
+  font-size: .9rem;
+  color: #6a5848;
   text-align: center;
 }
 
-.play-v3 .capa-misiones .mis-item {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item {
   position: relative;
-  padding: .55rem .6rem .5rem;
-  border: 1.5px solid rgba(44, 38, 31, .14);
-  border-radius: 8px;
-  background: #fffdf8;
-  box-shadow: 1px 2px 0 rgba(44, 38, 31, .06);
+  padding: .58rem .62rem .52rem;
+  border: 0;
+  border-radius: 9px 10px 8px 9px;
+  background: rgba(255, 253, 248, .92);
+  box-shadow: inset 0 0 0 1px rgba(120, 96, 72, .14);
 }
 
-.play-v3 .capa-misiones .mis-item.mis-item-cumplida {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item.mis-item-cumplida {
   opacity: .88;
-  background: rgba(255, 252, 245, .92);
 }
 
-.play-v3 .capa-misiones .mis-item.mis-item-bloqueada {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item.mis-item-bloqueada {
   opacity: .72;
 }
 
-.play-v3 .capa-misiones .mis-item-tape {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-tape {
   position: absolute;
   width: 20px;
   height: 9px;
@@ -3153,26 +3612,26 @@
   z-index: 2;
 }
 
-.play-v3 .capa-misiones .mis-item-tape-l {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-tape-l {
   top: -3px;
   left: 8px;
   transform: rotate(-10deg);
 }
 
-.play-v3 .capa-misiones .mis-item-tape-r {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-tape-r {
   top: -3px;
   right: 8px;
   transform: rotate(9deg);
 }
 
-.play-v3 .capa-misiones .mis-item-head {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-head {
   display: flex;
   align-items: center;
   gap: .45rem;
-  margin-bottom: .25rem;
+  margin-bottom: .2rem;
 }
 
-.play-v3 .capa-misiones .mision-bolita {
+.play-v3 .capa-misiones.mis-modal-papel .mision-bolita {
   flex-shrink: 0;
   width: 1.15rem;
   height: 1.15rem;
@@ -3184,65 +3643,63 @@
   justify-content: center;
 }
 
-.play-v3 .capa-misiones .mision-bolita.pendiente {
+.play-v3 .capa-misiones.mis-modal-papel .mision-bolita.pendiente {
   border-color: rgba(201, 90, 118, .45);
 }
 
-.play-v3 .capa-misiones .mision-bolita.cumplida {
+.play-v3 .capa-misiones.mis-modal-papel .mision-bolita.cumplida {
   border-color: #7a9e6a;
   background: #eef6e8;
   color: #4a6a3a;
 }
 
-.play-v3 .capa-misiones .mision-bolita.bloqueada {
+.play-v3 .capa-misiones.mis-modal-papel .mision-bolita.bloqueada {
   border-style: dashed;
   border-color: rgba(120, 96, 72, .35);
   background: rgba(255, 252, 245, .6);
 }
 
-.play-v3 .capa-misiones .mision-check {
+.play-v3 .capa-misiones.mis-modal-papel .mision-check {
   font-size: .72rem;
   font-weight: 800;
   line-height: 1;
 }
 
-.play-v3 .capa-misiones .mis-item-tit {
-  font-family: Caveat, cursive;
-  font-size: 1.05rem;
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-tit {
+  font-family: Fraunces, Georgia, serif;
   font-weight: 700;
-  letter-spacing: .03em;
-  text-transform: uppercase;
+  font-size: .95rem;
+  line-height: 1.25;
   color: #2c261f;
 }
 
-.play-v3 .capa-misiones .mis-item-txt {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-txt {
   margin: 0;
-  font-family: Fraunces, Georgia, serif;
-  font-style: italic;
-  font-size: .9rem;
-  line-height: 1.38;
-  color: #3a3028;
+  font-family: Caveat, cursive;
+  font-size: 1.02rem;
+  line-height: 1.3;
+  color: #5a5048;
 }
 
-.play-v3 .capa-misiones .mis-item-estado {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-estado {
   display: inline-block;
-  margin-top: .35rem;
+  margin-top: .3rem;
   font-family: Caveat, cursive;
-  font-size: .82rem;
+  font-size: .88rem;
   font-weight: 700;
   letter-spacing: .04em;
   text-transform: uppercase;
   color: #8a7460;
 }
 
-.play-v3 .capa-misiones .mis-item-cumplida .mis-item-estado {
+.play-v3 .capa-misiones.mis-modal-papel .mis-item-cumplida .mis-item-estado {
   color: #5a7a48;
 }
 
-.play-v3 .capa-misiones .mis-accion,
-.play-v3 .capa-misiones .mision-accion {
+.play-v3 .capa-misiones.mis-modal-papel .mis-accion,
+.play-v3 .capa-misiones.mis-modal-papel .mision-accion {
   display: inline-block;
-  margin-top: .45rem;
+  margin-top: .4rem;
   border: 1.5px solid rgba(201, 90, 118, .35);
   border-radius: 6px;
   background: #f3b1c3;
@@ -3257,14 +3714,13 @@
   box-shadow: 1px 2px 0 rgba(44, 38, 31, .1);
 }
 
-.play-v3 .capa-misiones .mis-accion:hover,
-.play-v3 .capa-misiones .mision-accion:hover {
+.play-v3 .capa-misiones.mis-modal-papel .mis-accion:hover,
+.play-v3 .capa-misiones.mis-modal-papel .mision-accion:hover {
   filter: brightness(1.03);
 }
 
 @media (max-width: 560px) {
-  .play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones {
-    right: auto !important;
+  .play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones.mis-modal-papel {
     left: 50% !important;
     top: 50% !important;
     transform: translate(-50%, -50%) !important;
@@ -3273,98 +3729,225 @@
   }
 }
 
-/* === Vecinos v6: sin chincheta derecha; cerrar como otros modales === */
-.play-v3 .capa-vecinos .vecinos-pin-r {
+/* Aro emocional en modal Vecinos del pueblo (igual que cara-token del mapa) */
+.play-v3 .capa-vecinos .vecino-cara {
+  --cara-emo: var(--emo-neutro, #c9a06a);
+  --cara-crema: #fffdf8;
+  border-color: transparent;
+  box-shadow:
+    0 2px 6px rgba(44, 38, 31, 0.15),
+    0 0 0 1.5px var(--cara-emo),
+    0 0 0 3.5px var(--cara-crema);
+}
+
+.play-v3 .capa-vecinos .vecino-cara[data-emocion="neutro"] { --cara-emo: var(--emo-neutro, #c9a06a); }
+.play-v3 .capa-vecinos .vecino-cara[data-emocion="alegre"] { --cara-emo: var(--emo-alegre, #8faa84); }
+.play-v3 .capa-vecinos .vecino-cara[data-emocion="triste"] { --cara-emo: var(--emo-triste, #8a9aad); }
+.play-v3 .capa-vecinos .vecino-cara[data-emocion="enfadado"] { --cara-emo: var(--emo-enfadado, #c4775a); }
+
+.play-v3 .capa-vecinos .vecino-celda:hover .vecino-cara,
+.play-v3 .capa-vecinos .vecino-celda:focus-visible .vecino-cara {
+  border-color: transparent;
+  box-shadow:
+    0 3px 8px rgba(44, 38, 31, 0.2),
+    0 0 0 1.5px var(--cara-emo),
+    0 0 0 3.5px rgba(243, 177, 195, 0.75),
+    0 0 0 5px var(--cara-crema);
+}
+
+.play-v3 .capa-vecinos .vecino-emo {
+  margin: 0;
+  padding: 0 .05rem;
+  font-family: Caveat, cursive;
+  font-size: .68rem;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.05;
+  text-align: center;
+  opacity: 0.78;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-v3 .capa-vecinos .vecino-emo[data-emocion="alegre"] { color: #6a8a62; }
+.play-v3 .capa-vecinos .vecino-emo[data-emocion="triste"] { color: #6a7a94; }
+.play-v3 .capa-vecinos .vecino-emo[data-emocion="enfadado"] { color: #a85a48; }
+
+
+
+/* Nuevo plan: hora con chips; lugar y dia con desplegable custom */
+.play-v3 .capa-organizar .org-select-native {
   display: none !important;
 }
 
-.play-v3 .capa-vecinos .vecinos-cerrar {
-  top: .5rem !important;
-  right: .6rem !important;
-  z-index: 8 !important;
-  width: 1.6rem !important;
-  height: 1.6rem !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  font-size: 1.55rem !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  color: #5a4838 !important;
+.play-v3 .capa-organizar .org-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .4rem;
+  width: 100%;
 }
 
-.play-v3 .capa-vecinos .vecinos-cerrar:hover {
-  color: #2c261f !important;
+.play-v3 .capa-organizar .org-pick-vacio {
+  margin: 0;
+  width: 100%;
+  text-align: left;
 }
 
-.play-v3 .capa-vecinos .vecinos-cab {
-  padding-right: 1.65rem !important;
-}
-
-
-/* === Cerrar × unificado en modales === */
-.play-v3 .capa-ficha .ficha-cerrar,
-.play-v3 .capa-buzon .mensajitos-cerrar,
-.play-v3 .capa-agenda .agenda-cerrar {
-  position: absolute !important;
-  top: .5rem !important;
-  right: .6rem !important;
-  z-index: 8 !important;
-  width: 1.6rem !important;
-  height: 1.6rem !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  border: 0 !important;
-  background: transparent !important;
-  display: block !important;
-  overflow: visible !important;
-  font-family: Caveat, cursive !important;
-  font-size: 1.55rem !important;
-  font-weight: 700 !important;
-  line-height: 1 !important;
-  letter-spacing: 0 !important;
-  text-transform: none !important;
-  color: #5a4838 !important;
-  text-shadow: none !important;
+.play-v3 .capa-organizar .org-pick-opt {
+  border: 1.5px solid rgba(44, 38, 31, .16);
+  border-radius: 7px;
+  background: rgba(255, 252, 245, .92);
+  font-family: Caveat, cursive;
+  font-size: .98rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  padding: .42rem .65rem;
+  color: #3a3028;
   cursor: pointer;
-  box-shadow: none !important;
+  box-shadow: 1px 2px 0 rgba(44, 38, 31, .05);
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.play-v3 .capa-ficha .ficha-cerrar::before,
-.play-v3 .capa-agenda .agenda-cerrar::before {
-  display: none !important;
-  content: none !important;
+.play-v3 .capa-organizar .org-pick-opt.is-on {
+  background: #f8d4df;
+  border-color: rgba(201, 90, 118, .35);
+  color: #2c261f;
 }
 
-.play-v3 .capa-ficha .ficha-cerrar:hover,
-.play-v3 .capa-buzon .mensajitos-cerrar:hover,
-.play-v3 .capa-agenda .agenda-cerrar:hover {
-  color: #2c261f !important;
+.play-v3 .capa-organizar .org-pick-opt.is-disabled,
+.play-v3 .capa-organizar .org-pick-opt:disabled {
+  opacity: .52;
+  cursor: not-allowed;
 }
 
-.play-v3 .capa-ficha .ficha-top {
-  padding-right: 2rem !important;
+.play-v3 .capa-organizar .org-picker-celda {
+  position: relative;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.play-v3 .capa-ficha .ficha-rel-modal .ficha-cerrar {
-  top: .45rem !important;
-  right: .55rem !important;
+.play-v3 .capa-organizar .org-picker-strip {
+  padding-left: .25rem;
+  padding-right: .15rem;
 }
 
-.play-v3 .capa-ficha .ficha-rel-modal-tit {
-  padding-right: 2rem !important;
+.play-v3 .capa-organizar .org-picker-check {
+  pointer-events: none;
 }
 
-.play-v3 .capa-buzon .mensajitos-cab,
-.play-v3 .capa-buzon h2,
-.play-v3 .capa-buzon .mensajitos-tit {
-  padding-right: 2rem !important;
+.play-v3 .capa-organizar .org-tipo-chip {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.play-v3 .capa-agenda h2,
-.play-v3 .capa-agenda .libreta-kicker {
-  padding-right: 2rem !important;
+.play-v3 .capa-organizar .ficha-tape {
+  pointer-events: none;
+}
+
+/* Consulta mapa: atrás + botones más fiables en táctil */
+.play-v3 .nota-atras {
+  position: absolute;
+  top: .5rem;
+  left: .55rem;
+  z-index: 14;
+  border: 0;
+  background: transparent;
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  font-weight: 700;
+  color: #5a4838;
+  padding: .25rem .35rem;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.play-v3 .nota-atras:hover { color: #2c261f; }
+
+.play-v3 .play-root[data-consulta] .nota-mapa .destinos {
+  position: relative;
+  z-index: 3;
+  padding-top: .2rem;
+}
+
+.play-v3 .play-root[data-consulta] .nota-mapa .destinos button {
+  position: relative;
+  z-index: 3;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Nuevo plan: desplegable custom para lugar y dia */
+.play-v3 .capa-organizar .org-dd {
+  position: relative;
+  width: 100%;
+}
+
+.play-v3 .capa-organizar .org-dd-trigger {
+  width: 100%;
+  text-align: left;
+  border: 1.5px solid rgba(44, 38, 31, .16);
+  border-radius: 7px;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235a4838' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat right .55rem center,
+    rgba(255, 252, 245, .92);
+  padding: .48rem 1.6rem .48rem .55rem;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2c261f;
+  box-shadow: inset 0 1px 2px rgba(44, 38, 31, .04);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-v3 .capa-organizar .org-dd-trigger:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.play-v3 .capa-organizar .org-dd-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + .25rem);
+  z-index: 24;
+  margin: 0;
+  padding: .3rem;
+  list-style: none;
+  border: 1.5px solid rgba(44, 38, 31, .16);
+  border-radius: 7px;
+  background: rgba(255, 252, 245, .98);
+  box-shadow: 2px 4px 12px rgba(44, 38, 31, .12);
+  max-height: min(12rem, 40dvh);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.play-v3 .capa-organizar .org-dd-opt {
+  padding: .42rem .5rem;
+  border-radius: 5px;
+  font-family: Caveat, cursive;
+  font-size: .98rem;
+  font-weight: 700;
+  color: #3a3028;
+  cursor: pointer;
+}
+
+.play-v3 .capa-organizar .org-dd-opt.is-on {
+  background: #f8d4df;
+  color: #2c261f;
+}
+
+.play-v3 .capa-organizar .org-dd-opt.is-disabled {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.play-v3 .capa-organizar .org-cuando .org-dd--dia {
+  min-width: 0;
 }

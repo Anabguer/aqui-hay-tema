@@ -1,4 +1,4 @@
-/* Mapa canonico unico - 9 zonas calibradas (mapa_zonas.json) */
+﻿/* Mapa canonico unico - 9 zonas calibradas (mapa_zonas.json) */
 
 .play-v3 .board-fit {
   background: transparent !important;
@@ -136,12 +136,12 @@
 }
 /* Encuentro en curso / proximo — UI plan + mapa */
 .play-v3 .mapa-zona-hit.mapa-zona--en-curso {
-  box-shadow: 0 0 0 2px rgba(122, 158, 106, 0.95), 0 0 12px rgba(122, 158, 106, 0.35);
+  /* La cita en curso se ve por los tokens en el edificio, sin marco sobre el mapa. */
 }
 .play-v3 .mapa-zona-hit.mapa-zona--proximo {
   /* El proximo encuentro sigue indicado en la agenda, sin marco sobre el mapa. */
 }
-/* El aro del token solo refleja estado emocional; la zona marca el plan en curso */
+/* El aro del token refleja estado emocional; la agenda marca el plan en curso. */
 
 /* Consulta de edificio: modal de papel sobre el mapa, sin oscurecer el pueblo. */
 .play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
@@ -185,7 +185,7 @@
 .play-v3 .play-root[data-consulta="sel"] .selector::before,
 .play-v3 .play-root[data-consulta="quien"] .quien::before {
   left: 18px;
-  top: -8px;
+  top: 8px;
   width: 20px;
   height: 20px;
 }
@@ -223,14 +223,7 @@
 }
 
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .cotilleo,
-.play-v3 .play-root[data-consulta="quien"] .nota-mapa .quien-sum {
-  margin: 0 0 .6rem;
-  font-family: Fraunces, Georgia, serif;
-  font-size: .92rem;
-  font-style: italic;
-  line-height: 1.35;
-  color: #6a5848;
-}
+
 
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .destinos,
 .play-v3 .play-root[data-consulta="quien"] .nota-mapa .destinos {
@@ -298,10 +291,7 @@
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa h3,
 .play-v3 .play-root[data-consulta="quien"] .nota-mapa h3,
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .cotilleo,
-.play-v3 .play-root[data-consulta="quien"] .nota-mapa .quien-sum {
-  margin-left: auto;
-  margin-right: auto;
-}
+
 
 .play-v3 .play-root[data-consulta="quien"] .quien-list {
   text-align: center;
@@ -500,3 +490,62 @@
     inset 0 0 0 1px rgba(255, 255, 255, .6),
     inset 0 0 0 3px rgba(90, 72, 56, .06) !important;
 }
+
+.play-v3 .play-root[data-consulta="quien"] .quien-horario {
+  display: block;
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #5a4a3a;
+}
+
+
+/* Chinchetas mapa: dentro del papel */
+.play-v3 .play-root[data-consulta="sel"] .selector::before,
+.play-v3 .play-root[data-consulta="quien"] .quien::before,
+.play-v3 .nota-mapa::before {
+  top: 8px !important;
+}
+
+
+/* Horario en edificios del mapa */
+.play-v3 .mapa-zona-horario {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  z-index: 5;
+  max-width: 96%;
+  padding: 0.12rem 0.32rem;
+  border-radius: 5px;
+  background: rgba(255, 252, 245, 0.94);
+  border: 1px solid rgba(58, 48, 40, 0.14);
+  box-shadow: 0 1px 3px rgba(44, 38, 31, 0.12);
+  font-size: 0.58rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.15;
+  color: #5a4a3a;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+.play-v3 .mapa-zona-horario[data-abierto="1"] {
+  color: #2d6a3e;
+  border-color: rgba(45, 106, 62, 0.22);
+}
+.play-v3 .mapa-zona-horario[data-abierto="0"] {
+  color: #8a4545;
+  border-color: rgba(138, 69, 69, 0.2);
+}
+.play-v3 .play-root[data-consulta="quien"] .quien-horario {
+  display: block;
+  margin: 0.2rem 0 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #5a4a3a;
+}
+

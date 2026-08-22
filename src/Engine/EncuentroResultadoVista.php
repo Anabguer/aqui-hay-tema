@@ -43,8 +43,13 @@ final class EncuentroResultadoVista
         $emociones = $terminado ? self::emocionesPublicas($partida, $res) : [];
         $consecuencias = $terminado ? self::consecuenciasPublicas($res) : [];
 
+        $experienciaNarrativa = is_array($res['experiencia_narrativa'] ?? null) ? $res['experiencia_narrativa'] : null;
+
         $lineas = [];
         if ($terminado) {
+            if ($experienciaNarrativa !== null && (string) ($experienciaNarrativa['texto'] ?? '') !== '') {
+                $lineas[] = (string) $experienciaNarrativa['texto'];
+            }
             if (!empty($social['hay']) && (string) ($social['texto'] ?? '') !== '') {
                 $lineas[] = $social['texto'];
             }
@@ -79,6 +84,7 @@ final class EncuentroResultadoVista
                 'social_delta' => $social['delta'] ?? 0,
                 'romance_delta' => $romance['delta'] ?? 0,
                 'conflicto' => $conflicto['valor'] ?? null,
+                'experiencia_narrativa' => $experienciaNarrativa,
             ];
         }
 

@@ -338,12 +338,15 @@ final class CapacidadViviendas
     public static function viviendasVacias(string $bloque): array
     {
         $bloque = strtoupper($bloque);
-        $max = match ($bloque) {
-            'B' => self::CAP_BLOQUE_B,
-            'C' => self::CAP_BLOQUE_C,
-            'D' => self::CAP_BLOQUE_D,
-            default => self::CAP_BLOQUE_A,
-        };
+        if ($bloque === 'B') {
+            $max = self::CAP_BLOQUE_B;
+        } elseif ($bloque === 'C') {
+            $max = self::CAP_BLOQUE_C;
+        } elseif ($bloque === 'D') {
+            $max = self::CAP_BLOQUE_D;
+        } else {
+            $max = self::CAP_BLOQUE_A;
+        }
         $out = [];
         for ($i = 1; $i <= $max; $i++) {
             $out[] = [
@@ -379,6 +382,20 @@ final class CapacidadViviendas
             }
         }
         unset($slot);
+    }
+
+    public static function liberarResidente(array &$partida, string $residenteId): void
+    {
+        self::ensure($partida);
+        self::liberarSlotsDe($partida, $residenteId);
+        if (isset($partida['residentes'][$residenteId])) {
+            $vid = (string) ($partida['residentes'][$residenteId]['vivienda_id'] ?? '');
+            if ($vid !== '') {
+                BloqueA::liberar($partida, $vid);
+            }
+            $partida['residentes'][$residenteId]['vivienda_id'] = null;
+        }
+        self::syncLegacyMirror($partida);
     }
 
     private static function liberarSlotsDe(array &$partida, string $residenteId): void
