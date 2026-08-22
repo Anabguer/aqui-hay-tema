@@ -5,11 +5,7 @@ namespace AquiHayTema\Engine;
 
 final class Catalog
 {
-    /**
-     * Fichas técnicas/piloto: cargables para tests explícitos, nunca en pool aleatorio.
-     * El pool canónico es solo per_p* con ficha y pack visual válidos.
-     */
-    private const EXCLUIDOS_POOL_JUGABLE = ['per_qa_valid', 'per_i02', 'per_i03'];
+    /** @see PoolJugableCanon — pool jugable = per_p001…per_p200 con ficha y retrato canónico. */
 
     private string $root;
     private ?array $lugaresCache = null;
@@ -107,7 +103,7 @@ final class Catalog
     {
         $packs = new VisualPackStore($this->root);
         $out = [];
-        foreach ($this->listPersonajeIds() as $id) {
+        foreach (PoolJugableCanon::ids($this->root) as $id) {
             if (!$this->esIdCanonicoPool($id)) {
                 continue;
             }
@@ -156,9 +152,6 @@ final class Catalog
 
     private function esIdCanonicoPool(string $id): bool
     {
-        if ($id === '' || in_array($id, self::EXCLUIDOS_POOL_JUGABLE, true)) {
-            return false;
-        }
-        return preg_match('/^per_p\d+$/', $id) === 1;
+        return PoolJugableCanon::esIdCanonico($id);
     }
 }

@@ -1,0 +1,14 @@
+{
+    "id": "per_p022",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Alberto",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P022",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

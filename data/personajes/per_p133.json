@@ -1,0 +1,14 @@
+{
+    "id": "per_p133",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Yago",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P133",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

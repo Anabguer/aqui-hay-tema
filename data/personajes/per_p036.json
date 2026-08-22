@@ -1,0 +1,14 @@
+{
+    "id": "per_p036",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Fátima",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P036",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

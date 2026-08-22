@@ -234,7 +234,10 @@ final class PartidaService
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
             'presentacion_visual' => $this->presentacionVisual($partida, $runtime),
         ];
+        $out['perfil_partida'] = PerfilPartida::de($partida, $residenteId)
+            ?? PerfilPartida::deOLegacy($partida, $residenteId, $this->catalog);
         $out['vista_play'] = FichaPlayVista::de($out, $this->catalog->store());
+        unset($out['perfil_partida']);
         return $out;
     }
 

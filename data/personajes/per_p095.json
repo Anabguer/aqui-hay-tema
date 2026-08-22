@@ -1,0 +1,14 @@
+{
+    "id": "per_p095",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Marcos",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P095",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

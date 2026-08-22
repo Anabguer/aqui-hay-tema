@@ -1,0 +1,14 @@
+{
+    "id": "per_p171",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Candela",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P171",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "per_p092",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Lucía",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P092",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

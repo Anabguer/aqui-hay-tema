@@ -1,0 +1,14 @@
+{
+    "id": "per_p089",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Ulises",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P089",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

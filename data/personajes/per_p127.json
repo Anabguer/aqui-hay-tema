@@ -1,0 +1,14 @@
+{
+    "id": "per_p127",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Óscar",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P127",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

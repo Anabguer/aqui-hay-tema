@@ -1,0 +1,14 @@
+{
+    "id": "per_p177",
+    "piloto": false,
+    "identidad": {
+        "nombre": "India",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P177",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

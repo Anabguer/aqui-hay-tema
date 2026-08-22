@@ -61,7 +61,7 @@ foreach ($pool as $catalogId) {
 
 ok($lotePorCatalog === [], 'ningún personaje jugable usa fallback lote');
 ok($sinRetrato === [], 'todos en pool jugable tienen retrato válido');
-ok(count($pool) === 8, 'pool jugable canónico tiene 8 per_p* con pack');
+ok(count($pool) === 200, 'pool jugable canónico tiene 200 per_p* con pack');
 
 // Caso reportado: per_p004 y per_p007 no deben compartir retrato
 $raul = RetratoResolver::resolver(

@@ -1,0 +1,14 @@
+{
+    "id": "per_p122",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Aitana",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P122",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

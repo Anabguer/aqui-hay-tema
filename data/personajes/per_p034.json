@@ -1,0 +1,14 @@
+{
+    "id": "per_p034",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Diana",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P034",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

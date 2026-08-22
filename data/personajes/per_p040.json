@@ -1,0 +1,14 @@
+{
+    "id": "per_p040",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Karla",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P040",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "per_p017",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Luis",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P017",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

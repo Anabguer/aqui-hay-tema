@@ -1,0 +1,14 @@
+{
+    "id": "per_p166",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Hipólito",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P166",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

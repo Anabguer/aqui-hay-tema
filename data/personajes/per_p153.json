@@ -1,0 +1,14 @@
+{
+    "id": "per_p153",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Katia",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P153",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

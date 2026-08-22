@@ -1,0 +1,14 @@
+{
+    "id": "per_p090",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Luna",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P090",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

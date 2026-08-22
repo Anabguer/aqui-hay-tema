@@ -594,36 +594,78 @@
     return Number(enc.hora || 0);
   }
   function relojAbs(dia, hora) { return (Number(dia) || 0) * 24 + (Number(hora) || 0); }
+  function duracionEncHoras(enc) {
+    if (!enc) return 1;
+    if (enc.duracion_horas != null) return Math.max(1, Number(enc.duracion_horas));
+    if (enc.duracion_minutos != null) return Math.max(1, Math.ceil(Number(enc.duracion_minutos) / 60));
+    return 1;
+  }
   function esEncuentroFuturo(enc, estado) {
     if (!enc) return false;
     const st = String(enc.estado || '');
-    if (st !== 'programado' && st !== 'en_curso') return false;
+    if (st === 'en_curso') return true;
+    if (st !== 'programado') return false;
     const reloj = (estado && estado.reloj) || {};
-    return relojAbs(enc.dia, horaEnc(enc)) >= relojAbs(reloj.dia_pueblo, reloj.hora_actual);
+    const now = relojAbs(reloj.dia_pueblo, reloj.hora_actual);
+    const start = relojAbs(enc.dia, horaEnc(enc));
+    const end = start + duracionEncHoras(enc);
+    return now < end;
   }
   function encuentrosFuturos(partida, estado) {
     return ((partida && partida.encuentros) || []).filter(function (e) { return esEncuentroFuturo(e, estado); })
-      .sort(function (a, b) { return relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b)); });
+      .sort(function (a, b) {
+        const aCurso = String(a.estado || '') === 'en_curso' ? 0 : 1;
+        const bCurso = String(b.estado || '') === 'en_curso' ? 0 : 1;
+        if (aCurso !== bCurso) return aCurso - bCurso;
+        return relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b));
+      });
   }
   function formatPlanMeta(enc, estado) {
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     const reloj = (estado && estado.reloj) || {};
+    const enCurso = String(enc.estado || '') === 'en_curso' ||
+      !!(estado && estado.encuentro_en_curso && estado.encuentro_en_curso.id === enc.id);
+    if (enCurso) return lugar + ' · En curso · ' + hora;
     if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' · Hoy ' + hora;
     return lugar + ' · Día ' + (enc.dia || '?') + ' · ' + hora;
   }
+  function emocionDe(id) {
+    var r = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id];
+    var emo = (r && r.runtime && r.runtime.estado_emocional && r.runtime.estado_emocional.id) || 'neutro';
+    if (['neutro', 'alegre', 'triste', 'enfadado'].indexOf(emo) < 0) emo = 'neutro';
+    return emo;
+  }
+
+  function htmlCaraToken(id, opts) {
+    opts = opts || {};
+    var emo = opts.emocion || emocionDe(id);
+    var img = tokenDe(id);
+    var extra = opts.wrapClass ? ' ' + opts.wrapClass : '';
+    var imgCls = opts.imgClass ? ' class="' + esc(opts.imgClass) + '"' : '';
+    var inner = img
+      ? '<img' + imgCls + ' src="' + esc(img) + '" alt=""/>'
+      : '<span class="cara-ini' + (opts.imgClass ? ' ' + esc(opts.imgClass) : '') + '">' +
+        esc((nombreDe(id)[0] || '?')) + '</span>';
+    return '<span class="cara-token' + extra + '" role="button" tabindex="0" data-residente="' + esc(id) +
+      '" data-emocion="' + esc(emo) + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
+  }
+
   function carasPlanHtml(ids) {
-    return ids.slice(0, 2).map(function (id) {
-      const img = tokenDe(id);
-      if (img) return '<img src="' + esc(img) + '" alt=""/>';
-      return '<span class="cara-ini">' + esc((nombreDe(id)[0] || '?')) + '</span>';
-    }).join('');
+    return ids.slice(0, 2).map(function (id) { return htmlCaraToken(id); }).join('');
+  }
+  function planEsEnCurso(enc, estado) {
+    if (!enc) return false;
+    if (String(enc.estado || '') === 'en_curso') return true;
+    return !!(estado && estado.encuentro_en_curso && estado.encuentro_en_curso.id === enc.id);
   }
   function htmlProximoPlan(enc, estado) {
     const ids = enc.participantes || [];
-    return '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
+    const enCurso = planEsEnCurso(enc, estado);
+    return '<div class="prox-faces' + (enCurso ? ' prox-faces--en-curso' : '') + '">' + carasPlanHtml(ids) + '</div>' +
       '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
-      '<p class="prox-meta"><span class="prox-meta-ico" aria-hidden="true"></span>' + esc(formatPlanMeta(enc, estado)) + '</p>';
+      '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
+      esc(formatPlanMeta(enc, estado)) + '</p>';
   }
   function renderAgendaPlanes() {
     const box = document.querySelector('[data-agenda-list]');
@@ -634,7 +676,7 @@
     fut.forEach(function (enc) {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'agenda-fila';
+      btn.className = 'agenda-fila' + (planEsEnCurso(enc, cacheEstado) ? ' agenda-fila--en-curso' : '');
       const ids = enc.participantes || [];
       btn.innerHTML = '<span class="agenda-fila-fotos">' + carasPlanHtml(ids) + '</span>' +
         '<span class="agenda-fila-cuerpo"><span class="agenda-fila-nombres">' +
@@ -670,8 +712,17 @@
 
     const proxBox = $('[data-proximo-plan]');
     const verPlanes = $('.obj-ver-planes');
+    const polaroid = $('.obj-proximo-polaroid');
+    const proxTit = $('.obj-proximo-tit');
+    const enCurso = estado.encuentro_en_curso || null;
     const futuros = encuentrosFuturos(partida, estado);
-    const next = futuros[0] || null;
+    const next = enCurso || futuros[0] || null;
+    const hayEnCurso = !!(enCurso || (next && planEsEnCurso(next, estado)));
+    if (polaroid) {
+      polaroid.classList.toggle('is-en-curso', hayEnCurso);
+      polaroid.classList.toggle('is-proximo', !!(next && !hayEnCurso));
+    }
+    if (proxTit) proxTit.textContent = hayEnCurso ? 'Plan en curso' : 'Próximo plan';
     if (proxBox) {
       if (!next) proxBox.innerHTML = '<p class="obj-proximo-vacio">Nada en agenda. Sospechoso.</p>';
       else proxBox.innerHTML = htmlProximoPlan(next, estado);
@@ -688,9 +739,7 @@
         const row = document.createElement('div');
         row.className = 'obj-pareja-piece' + (crisis ? ' is-crisis' : '');
         const tok = function (id) {
-          const img = tokenDe(id);
-          if (img) return '<img class="obj-pareja-cara" src="' + esc(img) + '" alt=""/>';
-          return '<span class="obj-pareja-cara cara-ini">' + esc((nombreDe(id)[0] || '?')) + '</span>';
+          return htmlCaraToken(id, { imgClass: 'obj-pareja-cara' });
         };
         row.innerHTML = '<span class="obj-pareja-fotos">' + tok(ids[0]) +
           '<span class="obj-pareja-enlace" aria-hidden="true"></span>' + tok(ids[1]) + '</span>' +
@@ -706,6 +755,7 @@
 
 
   var cacheMapaZonas = null;
+  var cacheMapaPresencia = null;
   const LUGAR_TITULO_UI = {
     lug_cafeteria: 'Cafetería', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
     lug_restaurante: 'Restaurante', lug_parque: 'Parque', lug_bar: 'Bar',
@@ -788,24 +838,61 @@
     return out;
   }
 
-  function placeHabEnZona(box, p, i) {
+  function habPosSeed(rid) {
+    var s = 0;
+    var str = String(rid || '');
+    for (var k = 0; k < str.length; k++) {
+      s = ((s << 5) - s + str.charCodeAt(k)) | 0;
+    }
+    return Math.abs(s);
+  }
+
+  /** Slots en franja inferior del hotspot (% left/top). Índice estable por cantidad. */
+  function slotsTokensZona(total) {
+    var n = Math.max(1, Math.min(5, total || 1));
+    if (n === 1) return [{ left: 50, top: 82 }];
+    if (n === 2) return [{ left: 34, top: 83 }, { left: 66, top: 83 }];
+    if (n === 3) return [{ left: 26, top: 82 }, { left: 50, top: 84 }, { left: 74, top: 82 }];
+    if (n === 4) {
+      return [
+        { left: 22, top: 80 }, { left: 38, top: 86 }, { left: 62, top: 86 }, { left: 78, top: 80 }
+      ];
+    }
+    return [
+      { left: 16, top: 81 }, { left: 30, top: 86 }, { left: 50, top: 78 },
+      { left: 70, top: 86 }, { left: 84, top: 81 }
+    ];
+  }
+
+  function placeHabEnZona(box, p, i, total, enCurso) {
     var el = document.createElement('span');
-    el.className = 'hab';
+    el.className = 'hab cara-token';
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
     el.setAttribute('data-residente', p.id);
     el.setAttribute('data-destino', p.destino_id);
     el.setAttribute('data-fase', p.fase || 'en_destino');
+    if (enCurso) el.classList.add('hab--plan-en-curso');
     el.setAttribute('data-emocion', p.emocion || 'neutro');
     if (p.hay_tema) el.setAttribute('data-hay-tema', '1');
-    var cols = 3;
-    var col = i % cols;
-    var row = Math.floor(i / cols);
-    el.style.left = (14 + col * 26) + '%';
-    el.style.top = (18 + row * 24) + '%';
+    var slots = slotsTokensZona(total);
+    var slot = slots[i] || slots[slots.length - 1];
+    var seed = habPosSeed(p.id);
+    var jx = ((seed % 5) - 2) * 0.35;
+    var jy = (((seed >> 4) % 5) - 2) * 0.25;
+    el.style.left = (slot.left + jx).toFixed(2) + '%';
+    el.style.top = (slot.top + jy).toFixed(2) + '%';
+    var idleKind = ['a', 'b', 'c'][seed % 3];
+    el.classList.add('hab-idle-' + idleKind);
+    el.style.setProperty('--hab-idle-delay', (-(seed % 800) / 100).toFixed(2) + 's');
+    var emo = p.emocion || 'neutro';
+    if (['neutro', 'alegre', 'triste', 'enfadado'].indexOf(emo) < 0) emo = 'neutro';
     if (p.token_url) {
-      el.innerHTML = '<span class="cara"><img src="' + p.token_url + '" alt=""/></span>';
+      el.innerHTML = '<span class="cara" data-emocion="' + emo + '"><img src="' + p.token_url + '" alt=""/></span>';
     } else {
-      el.innerHTML = '<span class="cara cara-ini">' + (p.iniciales || '?') + '</span>';
+      el.innerHTML = '<span class="cara cara-ini" data-emocion="' + emo + '">' + (p.iniciales || '?') + '</span>';
     }
+    el.setAttribute('data-emocion', emo);
     if (p.hay_tema) {
       el.insertAdjacentHTML('beforeend', '<img class="sello-tema" src="assets/play-v3/marcas/sello_hay_tema.png" alt=""/>');
     }
@@ -1124,6 +1211,27 @@
     box.appendChild(el);
   }
 
+
+  function renderMapaMarcas(mapa) {
+    cacheMapaPresencia = mapa || null;
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return;
+    layer.querySelectorAll('.mapa-zona-hit').forEach(function (btn) {
+      btn.classList.remove('mapa-zona--proximo', 'mapa-zona--en-curso');
+      btn.removeAttribute('data-encuentro-marca');
+    });
+    (mapa && mapa.lugares || []).forEach(function (lug) {
+      var marca = lug.encuentro_marca;
+      if (!marca) return;
+      var zid = LUG_TO_ZONA[lug.id];
+      if (!zid) return;
+      var btn = layer.querySelector('[data-zona="' + zid + '"]');
+      if (!btn) return;
+      btn.setAttribute('data-encuentro-marca', marca);
+      btn.classList.add(marca === 'en_curso' ? 'mapa-zona--en-curso' : 'mapa-zona--proximo');
+    });
+  }
+
   function renderPueblo(pueblo) {
     cachePueblo = pueblo;
     var layer = $('[data-mapa-zonas]');
@@ -1144,7 +1252,13 @@
       if (!btn) return;
       var box = btn.querySelector('.habs');
       if (!box) return;
-      porZona[zid].forEach(function (p, i) { placeHabEnZona(box, p, i); });
+      var enZona = porZona[zid].slice().sort(function (a, b) {
+        return String(a.id).localeCompare(String(b.id));
+      });
+      var marcaZona = btn.getAttribute('data-encuentro-marca') || '';
+      enZona.forEach(function (p, i) {
+        placeHabEnZona(box, p, i, enZona.length, marcaZona === 'en_curso');
+      });
     });
   }
 
@@ -1364,6 +1478,19 @@
     return rels;
   }
 
+  function emojiRel(rel) {
+    if (!rel) return '';
+    if (rel.etiqueta_vinculo === 'crisis') return '💔 ';
+    if (rel.etiqueta_vinculo === 'pareja') return '❤️ ';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return '💔 ';
+    const s = rel.etiqueta_social || '';
+    if (s === 'cae_mal') return '😒 ';
+    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '🤝 ';
+    if (s === 'amigo') return '🙂 ';
+    if (s === 'conocido') return '👋 ';
+    return '';
+  }
+
   function htmlRelRow(rel) {
     const cara = tokenDe(rel.id);
     const ini = (rel.nombre || '?').charAt(0);
@@ -1379,7 +1506,7 @@
       '<div class="ficha-rel-nom">' + esc(rel.nombre || rel.id) + '</div>' +
       '<div class="ficha-rel-bar"><span style="width:' + pct + '%"></span></div>' +
       '</div>' +
-      '<span class="ficha-rel-etiq">' + esc(lbl) + '</span>' +
+      '<span class="ficha-rel-etiq">' + esc(emojiRel(rel) + lbl) + '</span>' +
       '</div>'
     );
   }
@@ -1434,19 +1561,18 @@ function canonEmoId(id) {
     return map[emo] || emo.replace(/_/g, ' ');
   }
 
-  function svgAnimoBubble(emo) {
-    const faces = {
-      neutro: '<circle cx="18" cy="17" r="1.2" fill="#2c261f"/><circle cx="24" cy="17" r="1.2" fill="#2c261f"/><path d="M17 22.5 Q21 24.5 25 22.5" stroke="#2c261f" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
-      alegre: '<circle cx="18" cy="17" r="1.2" fill="#2c261f"/><circle cx="24" cy="17" r="1.2" fill="#2c261f"/><path d="M17 21.5 Q21 25.5 25 21.5" stroke="#2c261f" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
-      triste: '<circle cx="18" cy="17" r="1.2" fill="#2c261f"/><circle cx="24" cy="17" r="1.2" fill="#2c261f"/><path d="M17 24 Q21 21 25 24" stroke="#2c261f" stroke-width="1.2" fill="none" stroke-linecap="round"/>',
-      enfadado: '<path d="M16.5 15.5 L19 17" stroke="#2c261f" stroke-width="1.2" stroke-linecap="round"/><path d="M25.5 15.5 L23 17" stroke="#2c261f" stroke-width="1.2" stroke-linecap="round"/><circle cx="18" cy="18.5" r="1.2" fill="#2c261f"/><circle cx="24" cy="18.5" r="1.2" fill="#2c261f"/><path d="M17.5 23 Q21 21.5 24.5 23" stroke="#2c261f" stroke-width="1.2" fill="none" stroke-linecap="round"/>'
+  function svgAnimoBadge(emo) {
+    const tint = { neutro: '#9a8a78', alegre: '#7a9e6a', triste: '#8a9eb8', enfadado: '#c45' }[emo] || '#9a8a78';
+    const face = '<circle cx="16" cy="16" r="10" fill="#fffdf8" stroke="' + tint + '" stroke-width="1.3"/>';
+    const eyes = '<circle cx="12" cy="14" r="1.1" fill="#3a3028"/><circle cx="20" cy="14" r="1.1" fill="#3a3028"/>';
+    const doodles = {
+      neutro: face + eyes + '<line x1="11" y1="19" x2="21" y2="19" stroke="#3a3028" stroke-width="1.3" stroke-linecap="round"/>',
+      alegre: face + eyes + '<path d="M11 18.5q5 4.5 10 0" stroke="#3a3028" stroke-width="1.3" fill="none" stroke-linecap="round"/>',
+      triste: face + eyes + '<path d="M11 21q5-3.5 10 0" stroke="#3a3028" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M21 12l1.5 2.5" stroke="' + tint + '" stroke-width="1.1" stroke-linecap="round"/>',
+      enfadado: face + '<path d="M10 12.5l3 1.5M22 12.5l-3 1.5" stroke="#3a3028" stroke-width="1.2" stroke-linecap="round"/><circle cx="12" cy="15" r="1.1" fill="#3a3028"/><circle cx="20" cy="15" r="1.1" fill="#3a3028"/><path d="M11 20.5q5-3 10 0" stroke="#3a3028" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
     };
-    const face = faces[emo] || faces.neutro;
-    return '<svg class="ficha-animo-svg" viewBox="0 0 42 36" width="42" height="36" aria-hidden="true">' +
-      '<path d="M8 14 C8 8 14 4 21 4 C28 4 34 8 34 14 C34 20 30 24 26 26 L24 32 L18 32 L16 26 C12 24 8 20 8 14 Z" fill="#fffdf8" stroke="#2c261f" stroke-width="1.4" stroke-linejoin="round"/>' +
-      '<ellipse cx="12" cy="12" rx="5" ry="4" fill="#fffdf8" stroke="#2c261f" stroke-width="1.2"/>' +
-      face +
-      '</svg>';
+    const body = doodles[emo] || doodles.neutro;
+    return '<svg class="ficha-animo-svg" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">' + body + '</svg>';
   }
 
   function pintarAnimoFicha(vista) {
@@ -1456,8 +1582,132 @@ function canonEmoId(id) {
     if (txtEl) txtEl.textContent = textoAnimoDisplay(emo);
     if (icoEl) {
       icoEl.setAttribute('data-emo', emo);
-      icoEl.innerHTML = svgAnimoBubble(emo);
+      icoEl.innerHTML = svgAnimoBadge(emo);
     }
+  }
+
+function slotsDesdeLista(lista) {
+    const l = (lista || []).slice(0, 3);
+    const out = [];
+    for (let i = 0; i < 3; i++) {
+      out.push({ descubierto: !!l[i], texto: l[i] || null });
+    }
+    return out;
+  }
+
+function hobbyIconKey(id, texto) {
+    if (id) return String(id);
+    const t = String(texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const map = [
+      ['cafe', 'cafe_social'],
+      ['leer', 'leer'], ['biblioteca', 'leer'],
+      ['escribir', 'escribir'],
+      ['pasear', 'pasear'], ['parque', 'pasear'],
+      ['correr', 'correr'],
+      ['manualidades', 'manualidades'],
+      ['cocina', 'cocina'],
+      ['musica', 'musica'],
+      ['cine', 'cine'],
+      ['videojuegos', 'videojuegos'],
+      ['copas', 'copas'],
+      ['baile', 'baile'],
+      ['bingo', 'bingo'],
+      ['deporte', 'deporte'],
+      ['senderismo', 'senderismo'],
+      ['plantas', 'plantas'],
+      ['costura', 'costura']
+    ];
+    for (let i = 0; i < map.length; i++) {
+      if (t.indexOf(map[i][0]) >= 0) return map[i][1];
+    }
+    return '';
+  }
+
+  function svgHobbyPaths(key) {
+    const k = hobbyIconKey(key, key);
+    const paths = {
+      leer: '<path d="M9 8h6.5c1 0 1.5.5 1.5 1.5V24H9z"/><path d="M15 8H21.5c1 0 1.5.5 1.5 1.5V24H15z"/><path d="M9 8c0-1.5 2-2.5 4.5-2.5S18 6.5 18 8"/><path d="M15 8c0-1.5 2-2.5 4.5-2.5S24 6.5 24 8"/>',
+      escribir: '<path d="M9 23l9-9 3 3-9 9H9z"/><path d="M20 11l3-3 2 2-3 3"/><path d="M7 25h18"/>',
+      pasear: '<path d="M8 24c2-5 4-7 8-7s6 2 8 7"/><circle cx="11" cy="12" r="2.5"/><path d="M11 14.5V20"/><path d="M21 20c0-3 1-5.5 3-7"/><path d="M24 24h-6"/>',
+      correr: '<path d="M10 24l2.5-6 4 1.5 3.5 4.5"/><path d="M9 15l4.5-1.5 5 3"/><circle cx="13" cy="9" r="2.2"/>',
+      cafe_social: '<path d="M10 12h9v7c0 2-1.2 3.5-4.5 3.5S10 21 10 19z"/><path d="M19 14h2.5c1 0 1.8.8 1.8 1.8s-.8 1.7-1.8 1.7"/><path d="M12 9.5c0-.8.6-1.2 1.2-1.2"/><path d="M16 8.8c0-.8.6-1.2 1.2-1.2"/><path d="M20 9.5c0-.8.6-1.2 1.2-1.2"/>',
+      manualidades: '<circle cx="11" cy="11" r="3.5"/><circle cx="21" cy="21" r="3.5"/><path d="M13.5 13.5l5.5 5.5"/>',
+      cocina: '<path d="M9 14h14v9H9z"/><path d="M11 14V10"/><path d="M16 14V9"/><path d="M21 14V10"/><path d="M9 18h14"/>',
+      musica: '<path d="M13 9v12"/><path d="M13 9l8-2v9"/><ellipse cx="10" cy="21" rx="2.8" ry="2.5"/><ellipse cx="21" cy="19" rx="2.8" ry="2.5"/>',
+      cine: '<rect x="7" y="11" width="18" height="11" rx="1.2"/><path d="M7 15h18"/><path d="M11 11v4"/><path d="M15 11v4"/><path d="M19 11v4"/><path d="M23 11v4"/>',
+      videojuegos: '<rect x="6" y="13" width="20" height="9" rx="2.5"/><path d="M12 16.5v5"/><path d="M9.5 19h5"/><circle cx="22" cy="16.5" r="1"/><circle cx="24.5" cy="19" r="1"/>',
+      copas: '<path d="M11 11h8v5c0 2-1.5 3.2-4 3.2s-4-1.2-4-3.2z"/><path d="M15 19.5v3"/><path d="M11 24.5h8"/>',
+      baile: '<circle cx="16" cy="9" r="2.2"/><path d="M11 24l4-8 5 2.5 4 5.5"/><path d="M8 15l6-2"/>',
+      bingo: '<rect x="8" y="8" width="16" height="16" rx="2"/><path d="M8 14h16"/><path d="M8 20h16"/><path d="M14 8v16"/><path d="M20 8v16"/>',
+      deporte: '<circle cx="16" cy="16" r="7.5"/><path d="M16 8.5v15"/><path d="M8.5 16h15"/><path d="M10 10.5c3 2 9 2 12 0"/><path d="M10 21.5c3-2 9-2 12 0"/>',
+      senderismo: '<path d="M6 24l7-12 3.5 5 5.5-7 4 7"/><path d="M6 24h20"/>',
+      plantas: '<path d="M16 24V13"/><path d="M16 15c-4.5-2-8.5 0-8.5 6"/><path d="M16 17c4.5-2 8.5 0 8.5 6"/><path d="M12 24h8"/>',
+      costura: '<path d="M10 24l6-13 6 13"/><path d="M13 18.5h6"/><circle cx="16" cy="9" r="2"/>'
+    };
+    return paths[k] || paths.leer;
+  }
+
+  function svgHobbyIcon(id, texto) {
+    const key = hobbyIconKey(id, texto);
+    const body = svgHobbyPaths(key);
+    return '<svg class="ficha-hobby-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">' +
+      '<g fill="none" stroke="#2c261f" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">' +
+      body + '</g></svg>';
+  }
+
+  function emojiHobby(txt) {
+    const t = String(txt || '').toLowerCase();
+    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '☕ ';
+    if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '📖 ';
+    if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '🌳 ';
+    return '';
+  }
+
+  function pintarSlotsRasgos(box, slots) {
+    if (!box) return;
+    box.innerHTML = '';
+    const items = (slots && slots.length) ? slots : slotsDesdeLista([]);
+    items.forEach(function (sl) {
+      const sp = document.createElement('span');
+      sp.className = 'ficha-rasgo-tag' + (sl.descubierto ? '' : ' is-desconocido');
+      sp.textContent = sl.descubierto ? String(sl.texto).toUpperCase() : '?';
+      box.appendChild(sp);
+    });
+  }
+
+  function pintarSlotsHobbies(box, slots) {
+    if (!box) return;
+    box.innerHTML = '';
+    const items = (slots && slots.length) ? slots : slotsDesdeLista([]);
+    items.forEach(function (sl) {
+      const card = document.createElement('div');
+      card.className = 'ficha-hobby-card' + (sl.descubierto ? '' : ' is-desconocido');
+      const ico = document.createElement('span');
+      ico.className = 'ficha-hobby-ico';
+      const lab = document.createElement('span');
+      lab.className = 'ficha-hobby-lab';
+      if (sl.descubierto) {
+        ico.innerHTML = svgHobbyIcon(sl.id, sl.texto);
+        lab.textContent = sl.texto || '';
+      } else {
+        ico.innerHTML = '<span class="ficha-hobby-q">?</span>';
+        lab.textContent = '?';
+        lab.className += ' is-desconocido';
+      }
+      card.appendChild(ico);
+      card.appendChild(lab);
+      box.appendChild(card);
+    });
+  }
+
+  function slotGenteTxt(sl) {
+    if (sl && sl.descubierto && sl.texto) return String(sl.texto);
+    return '?';
+  }
+
+  function lineaGente(slots) {
+    const items = (slots && slots.length >= 2) ? slots.slice(0, 2) : [null, null];
+    return 'Gente: ' + slotGenteTxt(items[0]) + ' · ' + slotGenteTxt(items[1]);
   }
 
   function textoPlanesVacios(id) {
@@ -1541,60 +1791,21 @@ function canonEmoId(id) {
     if (desdeEl) desdeEl.textContent = etiquetaVecinoDesde(vista, diaLlegadaVecino(id));
     pintarAnimoFicha(vista);
     const rasgosBox = $('[data-ficha-rasgos]');
-    if (rasgosBox) {
-      rasgosBox.innerHTML = '';
-      const rasgos = (vista.manera_de_ser || []).slice(0, 4);
-      if (!rasgos.length) {
-        rasgosBox.innerHTML = '<span class="ficha-vacio">Aún no sabes cómo es.</span>';
-      } else {
-        rasgos.forEach(function (t) {
-          const sp = document.createElement('span');
-          sp.className = 'ficha-rasgo-tag';
-          sp.textContent = String(t).toUpperCase();
-          rasgosBox.appendChild(sp);
-        });
-      }
-    }
-    const gustaBox = $('[data-ficha-gusta]');
-    if (gustaBox) {
-      gustaBox.innerHTML = '';
-      const gusta = (vista.gusta || []).slice(0, 6);
-      if (!gusta.length) {
-        gustaBox.innerHTML = '<p class="ficha-vacio">Todavía no sabes qué le gusta.</p>';
-      } else {
-        gusta.forEach(function (t) {
-          const sp = document.createElement('span');
-          sp.className = 'ficha-chip';
-          sp.textContent = t;
-          gustaBox.appendChild(sp);
-        });
-      }
-    }
-    const noBox = $('[data-ficha-nogusta]');
-    if (noBox) {
-      noBox.innerHTML = '';
-      const pistas = (vista.pistas || []).filter(function (t) {
-        return /no soporta|echa para atrás|cara rara|Evítalo|no le va/i.test(String(t));
-      });
-      if (!pistas.length) {
-        noBox.innerHTML = '<p class="ficha-vacio">Todavía no sabes qué no le gusta.</p>';
-      } else {
-        pistas.slice(0, 3).forEach(function (t) {
-          const p = document.createElement('p');
-          p.className = 'ficha-nogusta-item';
-          p.textContent = t.replace(/^Has descubierto que /, '').replace(/^A /, '');
-          noBox.appendChild(p);
-        });
-      }
-    }
+    pintarSlotsRasgos(rasgosBox, vista.rasgos_slots || slotsDesdeLista(vista.manera_de_ser));
+    const hobbiesBox = $('[data-ficha-hobbies]');
+    pintarSlotsHobbies(hobbiesBox, vista.hobbies_slots || slotsDesdeLista(vista.gusta));
+    const gustaGenteEl = $('[data-ficha-gusta-gente]');
+    if (gustaGenteEl) gustaGenteEl.textContent = lineaGente(vista.gusta_en_gente);
+    const noGustaGenteEl = $('[data-ficha-nogusta-gente]');
+    if (noGustaGenteEl) noGustaGenteEl.textContent = lineaGente(vista.no_gusta_en_gente);
     const relBox = $('[data-ficha-relaciones]');
     const relMasBtn = $('[data-ficha-rel-mas]');
     fichaRelCache = relacionesConocidas(f);
-    pintarRelacionesEn(relBox, fichaRelCache, 3);
+    pintarRelacionesEn(relBox, fichaRelCache, 2);
     if (relMasBtn) {
-      if (fichaRelCache.length > 3) {
+      if (fichaRelCache.length > 2) {
         relMasBtn.hidden = false;
-        relMasBtn.textContent = 'Ver más relaciones (' + (fichaRelCache.length - 3) + ' más)';
+        relMasBtn.textContent = 'Ver más relaciones';
         relMasBtn.onclick = function () { abrirFichaRelOverlay(nom); };
       } else {
         relMasBtn.hidden = true;
@@ -1607,7 +1818,7 @@ function canonEmoId(id) {
       planBox.innerHTML = '';
       const planes = planesDeVecino(id);
       if (!planes.length) {
-        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">' + esc(textoPlanesVacios(id)) + '</p>';
+        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">«Su agenda está sospechosamente tranquila.»</p>';
       } else {
         planes.forEach(function (enc) {
           const p = document.createElement('p');
@@ -1624,11 +1835,6 @@ function canonEmoId(id) {
         setCapa('organizar');
         fillOrganizar();
       };
-    }
-    const msgBtn = $('[data-ficha-msg]');
-    if (msgBtn) {
-      msgBtn.disabled = true;
-      msgBtn.title = 'Pronto podrás escribirles directamente.';
     }
   }
 
@@ -1767,15 +1973,20 @@ function canonEmoId(id) {
     box.hidden = false;
     box.innerHTML = '';
     ids.forEach(function (id) {
+      var wrap = document.createElement('span');
+      wrap.className = 'cara-token';
+      wrap.setAttribute('role', 'button');
+      wrap.setAttribute('tabindex', '0');
+      wrap.setAttribute('data-residente', id);
+      var emo = emocionDe(id);
+      wrap.setAttribute('data-emocion', emo);
       var img = tokenDe(id);
       var nom = nombreDe(id);
       var ini = (nom.charAt(0) || '?');
-      var span = document.createElement('span');
-      span.className = 'cara';
-      span.innerHTML = img
-        ? '<img src="' + esc(img) + '" alt=""/>'
-        : '<span class="cara-ini">' + esc(ini) + '</span>';
-      box.appendChild(span);
+      wrap.innerHTML = '<span class="cara" data-emocion="' + esc(emo) + '">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="cara-ini">' + esc(ini) + '</span>') +
+        '</span>';
+      box.appendChild(wrap);
     });
   }
 
@@ -1815,7 +2026,7 @@ function canonEmoId(id) {
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
-    var parts = org.modo === 'solo' ? [org.a] : [org.a, org.b].filter(Boolean);
+    var parts = (org.modo === 'solo' ? [org.a] : [org.a, org.b]).filter(Boolean);
     if (!org.lugar || !org.dia || parts.length < 1 || (org.modo !== 'solo' && parts.length < 2)) {
       var o0 = document.createElement('option');
       o0.value = '';
@@ -2021,6 +2232,7 @@ function canonEmoId(id) {
     const buzon = await api('buzon.listar', {}, 'GET');
     const diario = await api('diario.listar', {}, 'GET');
     renderHud(cacheEstado, buzon.mensajes || []);
+    renderMapaMarcas(mapa.mapa || null);
     renderPueblo(mapa.pueblo || { complejos: [] });
     renderShellPanels(cacheEstado, buzon.mensajes || [], diario);
       renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
@@ -2295,6 +2507,13 @@ function canonEmoId(id) {
       $$('[data-diario-tab]').forEach(function (b) {
         b.classList.toggle('is-on', b === tab);
       });
+      return;
+    }
+    const caraTok = ev.target.closest('.cara-token[data-residente]');
+    if (caraTok) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      abrirFicha(caraTok.getAttribute('data-residente'));
       return;
     }
     const zona = ev.target.closest('.mapa-zona-hit[data-zona]');

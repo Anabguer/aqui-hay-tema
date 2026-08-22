@@ -1,0 +1,14 @@
+{
+    "id": "per_p096",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Paula",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P096",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

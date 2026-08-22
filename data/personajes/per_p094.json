@@ -1,0 +1,14 @@
+{
+    "id": "per_p094",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Marta",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P094",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

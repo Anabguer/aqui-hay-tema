@@ -1,0 +1,14 @@
+{
+    "id": "per_p183",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Elena",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P183",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

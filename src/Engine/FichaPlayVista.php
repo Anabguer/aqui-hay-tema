@@ -14,7 +14,9 @@ final class FichaPlayVista
     {
         $campos = is_array($ficha['discovery']['campos'] ?? null) ? $ficha['discovery']['campos'] : [];
         $hobbies = [];
+        $hobbyIds = [];
         $rasgos = [];
+        $rasgoIds = [];
         foreach (['vida.hobby_principal', 'vida.hobbies_secundarios'] as $k) {
             $row = $campos[$k] ?? null;
             if (!is_array($row) || ($row['visible_jugador'] ?? true) === false) {
@@ -26,10 +28,12 @@ final class FichaPlayVista
                 if (!is_string($id) || $id === '') {
                     continue;
                 }
-                $hobbies[] = EtiquetaFicha::hobby($id, $store);
+                if (!in_array($id, $hobbyIds, true)) {
+                    $hobbyIds[] = $id;
+                    $hobbies[] = EtiquetaFicha::hobby($id, $store);
+                }
             }
         }
-        $hobbies = array_values(array_unique($hobbies));
 
         $rowR = $campos['vida.rasgos_publicos'] ?? null;
         if (is_array($rowR) && ($rowR['visible_jugador'] ?? true) !== false) {
@@ -37,7 +41,10 @@ final class FichaPlayVista
             if (is_array($val)) {
                 foreach ($val as $id) {
                     if (is_string($id) && $id !== '') {
-                        $rasgos[] = EtiquetaFicha::rasgo($id, $store);
+                        if (!in_array($id, $rasgoIds, true)) {
+                            $rasgoIds[] = $id;
+                            $rasgos[] = EtiquetaFicha::rasgo($id, $store);
+                        }
                     }
                 }
             }
@@ -62,15 +69,127 @@ final class FichaPlayVista
             }
         }
 
+        $rasgosSlots = self::tresSlotsConId($rasgoIds, $rasgos);
+        $hobbiesSlots = self::tresSlotsConId($hobbyIds, $hobbies);
+        $gustaGente = self::dosSlotsGente($ficha, $store, 'gusto');
+        $noGustaGente = self::dosSlotsGente($ficha, $store, 'rechazo');
+
         return [
             'nombre' => $ficha['identidad']['nombre'] ?? '',
             'edad' => $ficha['identidad']['edad'] ?? null,
             'genero' => $ficha['identidad']['genero'] ?? null,
             'ocupacion' => $ocupacion,
             'gusta' => $hobbies,
+            'hobbies_slots' => $hobbiesSlots,
             'manera_de_ser' => $rasgos,
+            'rasgos_slots' => $rasgosSlots,
+            'gusta_en_gente' => $gustaGente,
+            'no_gusta_en_gente' => $noGustaGente,
             'pistas' => $pistas,
             'estado_animo' => $ficha['estado_emocional']['id'] ?? 'neutro',
         ];
+    }
+
+    /**
+     * @param list<string> $ids
+     * @param list<string> $textos
+     * @return list<array{descubierto: bool, id: string|null, texto: string|null}>
+     */
+    private static function tresSlotsConId(array $ids, array $textos): array
+    {
+        $slots = [];
+        for ($i = 0; $i < 3; $i++) {
+            $id = $ids[$i] ?? null;
+            $txt = $textos[$i] ?? null;
+            $slots[] = [
+                'descubierto' => is_string($id) && $id !== '',
+                'id' => is_string($id) && $id !== '' ? $id : null,
+                'texto' => is_string($txt) && $txt !== '' ? $txt : null,
+            ];
+        }
+        return $slots;
+    }
+
+    /**
+     * @param list<string> $descubiertos
+     * @return list<array{descubierto: bool, texto: string|null}>
+     */
+    private static function tresSlotsTexto(array $descubiertos): array
+    {
+        $slots = [];
+        for ($i = 0; $i < 3; $i++) {
+            $txt = $descubiertos[$i] ?? null;
+            $slots[] = [
+                'descubierto' => is_string($txt) && $txt !== '',
+                'texto' => is_string($txt) && $txt !== '' ? $txt : null,
+            ];
+        }
+        return $slots;
+    }
+
+    /**
+     * Preferencias de personalidad en la gente (solo gusto/rechazo_personalidad descubiertos).
+     *
+     * @return list<array{descubierto: bool, texto: string|null}>
+     */
+    private static function dosSlotsGente(array $ficha, CatalogStore $store, string $tipo): array
+    {
+        $prefix = $tipo === 'gusto' ? 'gusto_personalidad:' : 'rechazo_personalidad:';
+        $prefKey = $tipo === 'gusto' ? 'personalidad_pos' : 'personalidad_neg';
+
+        $discovered = [];
+        foreach ($ficha['descubrimientos'] ?? [] as $d) {
+            if (!is_array($d)) {
+                continue;
+            }
+            if (($d['estado'] ?? DiscoveryEngine::DESCUBIERTO) !== DiscoveryEngine::DESCUBIERTO) {
+                continue;
+            }
+            $campo = (string) ($d['campo'] ?? '');
+            if (!str_starts_with($campo, $prefix)) {
+                continue;
+            }
+            $id = CopyDescubrimiento::idDeCampo($campo);
+            if ($id === '') {
+                continue;
+            }
+            $discovered[$id] = EtiquetaFicha::rasgo($id, $store);
+        }
+
+        $perfil = is_array($ficha['perfil_partida'] ?? null) ? $ficha['perfil_partida'] : [];
+        $prefs = is_array($perfil['preferencias'][$prefKey] ?? null)
+            ? array_values($perfil['preferencias'][$prefKey]) : [];
+        $prefs = array_slice($prefs, 0, 2);
+
+        if ($prefs === []) {
+            $labels = array_values($discovered);
+            $slots = [];
+            for ($i = 0; $i < 2; $i++) {
+                $txt = $labels[$i] ?? null;
+                $slots[] = [
+                    'descubierto' => is_string($txt) && $txt !== '',
+                    'texto' => is_string($txt) && $txt !== '' ? $txt : null,
+                ];
+            }
+            return $slots;
+        }
+
+        $slots = [];
+        for ($i = 0; $i < 2; $i++) {
+            $pid = $prefs[$i] ?? null;
+            if (!is_string($pid) || $pid === '') {
+                $slots[] = ['descubierto' => false, 'texto' => null];
+                continue;
+            }
+            if (isset($discovered[$pid])) {
+                $slots[] = [
+                    'descubierto' => true,
+                    'texto' => $discovered[$pid],
+                ];
+            } else {
+                $slots[] = ['descubierto' => false, 'texto' => null];
+            }
+        }
+        return $slots;
     }
 }

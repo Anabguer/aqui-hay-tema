@@ -58,6 +58,10 @@ final class DisponibilidadEngine
                 if (!self::franjaValida($partida, $participantes, $dia, $h, $lugarId, $durHoras)) {
                     continue;
                 }
+                $durSlot = $durHoras;
+                if ($lugarId !== null && $lugarId !== '') {
+                    $durSlot = min($durHoras, ComplejoCatalog::horasRestantesAbiertas($lugarId, $h));
+                }
                 $slots[] = [
                     'dia' => $dia,
                     'hora' => $h,
@@ -69,7 +73,7 @@ final class DisponibilidadEngine
                     'participantes' => $participantes,
                     'tipo' => $tipoEncuentro,
                     'lugar' => $lugarId,
-                    'duracion_horas' => $durHoras,
+                    'duracion_horas' => $durSlot,
                 ];
             }
         }
@@ -167,25 +171,29 @@ final class DisponibilidadEngine
         int $duracionHoras = 1
     ): bool {
         $duracionHoras = max(1, $duracionHoras);
+        if ($lugarId !== null && $lugarId !== '') {
+            if (!ComplejoCatalog::estaAbierto($lugarId, $hora)) {
+                return false;
+            }
+            $rest = ComplejoCatalog::horasRestantesAbiertas($lugarId, $hora);
+            if ($rest < 1) {
+                return false;
+            }
+            // Misma regla que EncuentroEngine: duración efectiva acotada al cierre del lugar (p. ej. cine fin=0).
+            $duracionHoras = min($duracionHoras, $rest);
+        }
         for ($offset = 0; $offset < $duracionHoras; $offset++) {
             $h = $hora + $offset;
             if ($h >= 24) {
                 return false;
             }
-            foreach ($participantes as $rid) {
-                $disp = AgendaEngine::estaDisponible($partida, (string) $rid, $dia, $h);
-                if (!$disp['disponible']) {
-                    return false;
-                }
-            }
-            if ($lugarId !== null && $lugarId !== '') {
-                if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
-                    return false;
-                }
+            if ($lugarId !== null && $lugarId !== '' && !ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                return false;
             }
         }
-        if ($lugarId !== null && $lugarId !== '') {
-            if (ComplejoCatalog::horasRestantesAbiertas($lugarId, $hora) < $duracionHoras) {
+        foreach ($participantes as $rid) {
+            $disp = AgendaEngine::estaDisponibleIntervalo($partida, (string) $rid, $dia, $hora, $duracionHoras);
+            if (!$disp['disponible']) {
                 return false;
             }
         }

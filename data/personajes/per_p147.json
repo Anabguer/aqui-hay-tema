@@ -1,0 +1,14 @@
+{
+    "id": "per_p147",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Nacho",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P147",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

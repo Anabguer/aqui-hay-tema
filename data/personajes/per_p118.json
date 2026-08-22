@@ -1,0 +1,14 @@
+{
+    "id": "per_p118",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Silvia",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P118",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

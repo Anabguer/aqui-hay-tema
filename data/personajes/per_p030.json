@@ -1,0 +1,14 @@
+{
+    "id": "per_p030",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Inés",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P030",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

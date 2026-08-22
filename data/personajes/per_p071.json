@@ -1,0 +1,14 @@
+{
+    "id": "per_p071",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Camilo",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P071",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

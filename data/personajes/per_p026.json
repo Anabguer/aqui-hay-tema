@@ -1,0 +1,14 @@
+{
+    "id": "per_p026",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Daniel",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P026",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

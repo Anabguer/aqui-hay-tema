@@ -1,0 +1,14 @@
+{
+    "id": "per_p143",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Jaime",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P143",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

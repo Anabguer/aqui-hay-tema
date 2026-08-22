@@ -1,0 +1,14 @@
+{
+    "id": "per_p142",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Zoe",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P142",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

@@ -1465,12 +1465,11 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 }
 .obj-proximo-polaroid .prox-meta-ico {
   display: inline-block;
-  width: 2.35rem;
-  height: 2rem;
-  min-width: 2.35rem;
+  width: 2.75rem;
+  height: 2.35rem;
+  min-width: 2.75rem;
   flex-shrink: 0;
   background: url("../play-v3/hud/icono_libro.png") center / contain no-repeat;
-  image-rendering: pixelated;
   border: 0;
   transform: rotate(-4deg) translateY(1px);
   opacity: 0.95;
@@ -1922,4 +1921,20 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   color: #2c261f;
   line-height: 1;
   display: block;
+}
+
+/* Plan en curso — polaroid y agenda */
+.obj-proximo-polaroid.is-en-curso {
+  border-left-color: #7a9e6a !important;
+  box-shadow: 0 1px 0 rgba(120,96,72,.15), 2px 4px 10px rgba(74,110,58,.12);
+}
+.obj-proximo-polaroid.is-en-curso .obj-proximo-tit { color: #4a6e3a; }
+.obj-proximo-polaroid .prox-meta--en-curso { color: #4a6e3a; font-weight: 600; }
+.obj-proximo-polaroid .prox-faces--en-curso img,
+.obj-proximo-polaroid .prox-faces--en-curso .cara-ini {
+  box-shadow: 0 0 0 2px #7a9e6a;
+}
+.play-v3 .capa-agenda .agenda-fila--en-curso {
+  background: rgba(122, 158, 106, 0.12);
+  border-left: 3px solid #7a9e6a;
 }

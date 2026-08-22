@@ -1,0 +1,14 @@
+{
+    "id": "per_p184",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Dani",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P184",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

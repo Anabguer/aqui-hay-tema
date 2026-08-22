@@ -1,0 +1,14 @@
+{
+    "id": "per_p077",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Iker",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P077",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

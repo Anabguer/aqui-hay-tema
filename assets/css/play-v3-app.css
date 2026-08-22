@@ -441,3 +441,71 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
 
 .play-root[data-capa="agenda"] .capa-agenda { transform: none; pointer-events: auto; }
 .feedback-toast.is-on { display: none !important; }
+
+/* --- Tokens cara interactivos (mapa, próximo plan, parejas, organizar) --- */
+.play-v3 .cara-token {
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  vertical-align: middle;
+  line-height: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.play-v3 .cara-token:focus-visible {
+  outline: 2px solid #c45;
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.play-v3 .cara-token .cara {
+  --cara-emo: #c98a3a;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  line-height: 0;
+  box-shadow:
+    0 3px 9px rgba(44, 38, 31, 0.3),
+    0 1px 3px rgba(44, 38, 31, 0.2),
+    0 0 0 3px var(--cara-emo),
+    0 0 0 5.5px #fffdf6,
+    0 0 12px rgba(255, 248, 230, 0.42);
+}
+
+.play-v3 .cara-token .cara[data-emocion="neutro"] { --cara-emo: #c98a3a; }
+.play-v3 .cara-token .cara[data-emocion="alegre"] { --cara-emo: #3d9a52; }
+.play-v3 .cara-token .cara[data-emocion="triste"] { --cara-emo: #4a78b8; }
+.play-v3 .cara-token .cara[data-emocion="enfadado"] { --cara-emo: #c84a42; }
+
+.play-v3 .cara-token .cara img,
+.play-v3 .cara-token .cara .cara-ini {
+  border-radius: 50%;
+  display: block;
+  object-fit: cover;
+  box-sizing: border-box;
+}
+
+.play-v3 .cara-token .cara .cara-ini {
+  background: #fff6c8;
+  color: #2c261f;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Parejas: rotación en el token, no en la img suelta */
+.play-v3 .obj-pareja-fotos > .cara-token:first-child .cara {
+  transform: rotate(-6deg);
+  z-index: 1;
+  margin-right: -10px;
+}
+.play-v3 .obj-pareja-fotos > .cara-token:last-child .cara {
+  transform: rotate(5deg);
+  z-index: 2;
+  margin-left: -10px;
+}

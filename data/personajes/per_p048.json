@@ -1,0 +1,14 @@
+{
+    "id": "per_p048",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Tamara",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P048",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

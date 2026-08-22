@@ -1,0 +1,14 @@
+{
+    "id": "per_p009",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Sergio",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P009",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

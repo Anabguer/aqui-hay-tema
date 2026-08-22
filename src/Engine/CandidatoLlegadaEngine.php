@@ -149,9 +149,6 @@ final class CandidatoLlegadaEngine
 
         $pool = self::poolDisponible($partida, $root);
         if ($pool === []) {
-            $pool = self::poolPlaceholder($partida);
-        }
-        if ($pool === []) {
             $rng->persistToPartida($partida);
             return null;
         }
@@ -161,6 +158,7 @@ final class CandidatoLlegadaEngine
         if ($catalogId === '') {
             return null;
         }
+        HistorialPersonajesPartida::marcar($partida, $catalogId);
 
         $plazoDias = (int) CalibracionConfig::get($cal, 'llegadas.plazo_oferta_dias', 2);
         $nombre = self::nombreCatalogo($root, $catalogId);
@@ -273,7 +271,7 @@ final class CandidatoLlegadaEngine
             return ['ok' => false, 'error' => 'mensaje_no_coincide'];
         }
         $id = (string) $cand['catalog_id'];
-        self::marcarCooldownCara($partida, $id, $root);
+        HistorialPersonajesPartida::marcar($partida, $id);
         if (!empty($cand['mensaje_id'])) {
             BuzonEngine::marcarEstado($partida, (string) $cand['mensaje_id'], 'resuelto');
         }
@@ -301,7 +299,7 @@ final class CandidatoLlegadaEngine
             return null;
         }
         $id = (string) $cand['catalog_id'];
-        self::marcarCooldownCara($partida, $id, $root);
+        HistorialPersonajesPartida::marcar($partida, $id);
         if (!empty($cand['mensaje_id'])) {
             BuzonEngine::marcarEstado($partida, (string) $cand['mensaje_id'], 'resuelto');
         }
@@ -333,17 +331,13 @@ final class CandidatoLlegadaEngine
         }
         $catalogId = (string) ($ec['catalog_id'] ?? '');
         $ops = new ResidenteOperations(new Catalog($root), $logger);
-        if (strpos($catalogId, 'per_llegada_') === 0 || !is_file($root . '/data/personajes/' . $catalogId . '.json')) {
-            $r = $ops->crearPlaceholderDev($partida);
-            if ($r['ok'] ?? false) {
-                $catalogId = (string) ($r['residente']['catalog_id'] ?? $catalogId);
-            }
-        } else {
-            $r = $ops->incorporarCatalogo($partida, $catalogId, 'residente');
+        if (!PoolJugableCanon::esIdCanonico($catalogId)) {
+            $partida['llegadas']['en_camino'] = null;
+            return ['ok' => false, 'error' => 'candidato_no_canonico', 'catalog_id' => $catalogId];
         }
+        $r = $ops->incorporarCatalogo($partida, $catalogId, 'residente');
         $partida['llegadas']['en_camino'] = null;
         if (!($r['ok'] ?? false)) {
-            self::marcarCooldownCara($partida, $catalogId, $root);
             return ['ok' => false, 'error' => $r['error'] ?? 'incorporar_fallo', 'catalog_id' => $catalogId];
         }
         $partida['llegadas']['historial'][] = [
@@ -407,54 +401,16 @@ final class CandidatoLlegadaEngine
         $partida['llegadas']['cooldown_hasta_dia'] = $dia + $gap + $jitter;
     }
 
-    private static function marcarCooldownCara(array &$partida, string $catalogId, string $root): void
-    {
-        $cal = CalibracionConfig::load($root);
-        $dias = (int) CalibracionConfig::get($cal, 'llegadas.cooldown_cara_dias', 14);
-        $hasta = (int) ($partida['reloj']['dia_pueblo'] ?? 1) + max(1, $dias);
-        $partida['llegadas']['cooldown_caras'] ??= [];
-        $partida['llegadas']['cooldown_caras'][$catalogId] = $hasta;
-    }
-
-    private static function caraEnCooldown(array $partida, string $catalogId): bool
-    {
-        $hasta = (int) (($partida['llegadas']['cooldown_caras'][$catalogId] ?? 0));
-        if ($hasta <= 0) {
-            return false;
-        }
-        return (int) ($partida['reloj']['dia_pueblo'] ?? 1) < $hasta;
-    }
-
-    /** @return list<string> */
-    public static function poolPlaceholder(array $partida): array
-    {
-        // IDs sintéticos cuando el catálogo real está agotado (pueblo puede seguir creciendo hasta capacidad).
-        $n = 1;
-        while (isset($partida['residentes']['per_llegada_' . $n])
-            || self::caraEnCooldown($partida, 'per_llegada_' . $n)) {
-            $n++;
-            if ($n > 200) {
-                return [];
-            }
-        }
-        return ['per_llegada_' . $n];
-    }
-
     /** @return list<string> */
     public static function poolDisponible(array $partida, string $root): array
     {
+        HistorialPersonajesPartida::ensure($partida);
         $catalog = new Catalog($root);
         $ids = $catalog->listPersonajeIdsJugables();
         $out = [];
         foreach ($ids as $id) {
             $id = (string) $id;
-            if (isset($partida['residentes'][$id])) {
-                $pres = (string) ($partida['residentes'][$id]['presencia'] ?? 'residente');
-                if ($pres === 'residente' || $pres === 'antiguo_residente') {
-                    continue;
-                }
-            }
-            if (self::caraEnCooldown($partida, $id)) {
+            if (HistorialPersonajesPartida::yaAparecio($partida, $id)) {
                 continue;
             }
             $out[] = $id;
@@ -464,9 +420,6 @@ final class CandidatoLlegadaEngine
 
     private static function nombreCatalogo(string $root, string $catalogId): string
     {
-        if (strpos($catalogId, 'per_llegada_') === 0) {
-            return 'Vecino nuevo';
-        }
         try {
             $p = (new Catalog($root))->loadPersonaje($catalogId);
             return (string) ($p['identidad']['nombre'] ?? $p['nombre'] ?? $catalogId);

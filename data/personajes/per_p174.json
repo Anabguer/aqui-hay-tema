@@ -1,0 +1,14 @@
+{
+    "id": "per_p174",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Pol",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P174",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

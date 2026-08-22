@@ -1,0 +1,14 @@
+{
+    "id": "per_p196",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Francisco",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P196",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

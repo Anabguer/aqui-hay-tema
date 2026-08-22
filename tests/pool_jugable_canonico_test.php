@@ -98,4 +98,8 @@ foreach (array_keys($partidaVacia['residentes']) as $rid) {
     }
 }
 
-echo "pool_jugable_canonico_test OK (pool=$poolCount)\n";
+echo "pool_jugable_canonico_test OK (pool=$poolCount, canon=" . \AquiHayTema\Engine\PoolJugableCanon::TOTAL . ")\n";
+if ($poolCount !== \AquiHayTema\Engine\PoolJugableCanon::TOTAL) {
+    fwrite(STDERR, "FAIL: pool=$poolCount esperado " . \AquiHayTema\Engine\PoolJugableCanon::TOTAL . "\n");
+    exit(1);
+}

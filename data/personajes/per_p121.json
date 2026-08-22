@@ -1,0 +1,14 @@
+{
+    "id": "per_p121",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Héctor",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P121",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

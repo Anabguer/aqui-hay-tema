@@ -1,0 +1,14 @@
+{
+    "id": "per_p058",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Francesca",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P058",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

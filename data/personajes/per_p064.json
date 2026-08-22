@@ -1,0 +1,14 @@
+{
+    "id": "per_p064",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Leire",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P064",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

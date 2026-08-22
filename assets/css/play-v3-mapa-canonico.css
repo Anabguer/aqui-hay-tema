@@ -63,28 +63,61 @@
   position: absolute;
   transform: translate(-50%, -50%);
   z-index: 2;
+  pointer-events: auto;
+  cursor: pointer;
+  /* Scope canónico: anula legacy global .hab { translate(-50%, -70%) } de play-v3.css */
 }
 
 .play-v3 .mapa-zona-hit .hab .cara,
-.play-v3 .mapa-zona-hit .hab .cara img {
+.play-v3 .mapa-zona-hit .hab .cara img,
+.play-v3 .mapa-zona-hit .hab .cara .cara-ini {
   width: 32px;
   height: 32px;
+}
+
+.play-v3 .mapa-zona-hit .hab .cara img {
   border-radius: 50%;
   display: block;
   object-fit: cover;
 }
 
+/* Idle en mapa: un poco más de vida; la base .hab no se mueve entre refreshes */
+.play-v3 .mapa-zona-hit .hab .cara {
+  will-change: transform;
+}
+
+.play-v3 .mapa-zona-hit .hab.hab-idle-a .cara {
+  animation: hab-idle-can-a 4.8s ease-in-out infinite alternate;
+  animation-delay: var(--hab-idle-delay, 0s);
+}
+
+.play-v3 .mapa-zona-hit .hab.hab-idle-b .cara {
+  animation: hab-idle-can-b 5.4s ease-in-out infinite alternate;
+  animation-delay: var(--hab-idle-delay, 0s);
+}
+
+.play-v3 .mapa-zona-hit .hab.hab-idle-c .cara {
+  animation: hab-idle-can-c 5.1s ease-in-out infinite alternate;
+  animation-delay: var(--hab-idle-delay, 0s);
+}
+
+@keyframes hab-idle-can-a {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3px, -3px); }
+}
+
+@keyframes hab-idle-can-b {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-3px, 3px); }
+}
+
+@keyframes hab-idle-can-c {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3px, 2px); }
+}
+
 .play-v3 .mapa-zona-hit .hab .cara-ini {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #fff6c8;
-  border: 2px solid #2c261f;
   font-size: .72rem;
-  font-weight: 800;
 }
 
 .play-v3 .mapa-zona-hit .aforo-mas {
@@ -99,4 +132,14 @@
   padding: .12rem .35rem;
   cursor: pointer;
   pointer-events: auto;
+}
+/* Encuentro en curso / proximo — UI plan + mapa */
+.play-v3 .mapa-zona-hit.mapa-zona--en-curso {
+  box-shadow: 0 0 0 2px rgba(122, 158, 106, 0.95), 0 0 12px rgba(122, 158, 106, 0.35);
+}
+.play-v3 .mapa-zona-hit.mapa-zona--proximo {
+  box-shadow: 0 0 0 2px rgba(212, 137, 74, 0.85);
+}
+.play-v3 .mapa-zona-hit .hab.hab--plan-en-curso .cara {
+  box-shadow: 0 0 0 2px #7a9e6a, 0 0 8px rgba(122, 158, 106, 0.45);
 }

@@ -1,0 +1,14 @@
+{
+    "id": "per_p101",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Beatriz",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P101",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "per_p169",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Ángela",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P169",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

@@ -1,0 +1,14 @@
+{
+    "id": "per_p176",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Rafa",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P176",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

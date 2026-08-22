@@ -1,0 +1,14 @@
+{
+    "id": "per_p165",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Wendy",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P165",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

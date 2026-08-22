@@ -1,0 +1,14 @@
+{
+    "id": "per_p187",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Laura",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P187",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

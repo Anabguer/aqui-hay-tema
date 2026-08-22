@@ -1,0 +1,14 @@
+{
+    "id": "per_p041",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Víctor",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P041",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

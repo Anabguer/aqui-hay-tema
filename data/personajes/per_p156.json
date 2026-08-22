@@ -1,0 +1,14 @@
+{
+    "id": "per_p156",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Walid",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P156",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

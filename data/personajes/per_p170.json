@@ -1,0 +1,14 @@
+{
+    "id": "per_p170",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Luis",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P170",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

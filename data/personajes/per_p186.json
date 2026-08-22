@@ -1,0 +1,14 @@
+{
+    "id": "per_p186",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Iván",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P186",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

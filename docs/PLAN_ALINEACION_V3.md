@@ -89,3 +89,41 @@ Espíritu conservado:
 - Horizonte 8→46 completo: ~1172 días esperados (relleno progresivamente lento).
 
 No reintroducir tope 24 en clamps ni UI.
+
+## 2026-08-22 - PENDIENTE tests pre-checkpoint (clasificación, sin re-ejecutar run_all)
+
+Estado según últimos resultados ya disponibles en terminal (no revalidado en esta pasada).
+
+### Último `run_all.php` con log completo (~05:30)
+**3 ficheros con exit ≠ 0:**
+
+| Test | Aserciones FAIL | Clasificación | Bloquea checkpoint presencia/UTF-8 |
+|------|-----------------|---------------|-------------------------------------|
+| `tutorial_misiones_visibles_test.php` | `jugable completado`; `finale pendiente tras tercera` | **Otro bloque pendiente** (ronda tutorial/finale, agente funcional) | **NO** |
+| `dia2_misiones_test.php` | `sin misiones normales dia 2` | **Otro bloque pendiente** (transición tutorial → misiones día 2) | **NO** |
+| `slots_ui_compatibles_test.php` | `hay horas para cine` | **Otro bloque pendiente** (slots UI / DisponibilidadEngine; resto del test OK) | **NO** |
+
+Re-ejecución puntual ~07:05 de `tutorial_misiones_visibles_test`: **mismos 2 FAIL** (sin cambio).
+
+### UTF-8 / presencia (este bloque)
+- `utf8_text_test.php`, `utf8_mapa_presencia_test.php`, `presencia_encuentros_test.php`: **OK** (ejecución focalizada post-fix `iniciales`).
+- Scripts `tests/_diag_utf8_*`: **diagnóstico temporal** usado solo durante investigación; **eliminados** del repo. **Nunca entraron en `run_all`** (glob `*_test.php`).
+- **No hay regresión UTF-8 pendiente** en tests canónicos de este bloque.
+
+### Capacidad 46 (bloque aparte)
+- `capacidad_pueblo_46_test.php`: ejecución aislada ~06:32 con exit 1 en bucle `relleno hasta 46` (spam de FAIL; aserciones iniciales migración/n=25 **OK**). **No atribuido al fix UTF-8/presencia**. Pendiente de otro pase si el checkpoint incluye cap 46.
+
+### Último `run_all` ~07:13
+Exit 1 sin listado de ficheros en log (filtro `FAIL ` no captura `FAIL:`). No usar como fuente principal.
+
+### Commit: excluir
+- Cualquier `tests/_diag_utf8_*` o `tests/_quick_check_*` (temporales; ya borrados).
+- `data/partidas/*.json` de prueba local.
+- `dev/_run_all_*.txt` si existen.
+
+### Commit: incluir (tests canónicos de este bloque)
+- `tests/utf8_text_test.php`
+- `tests/utf8_mapa_presencia_test.php`
+- `tests/presencia_encuentros_test.php`
+- Código motor/API presencia + `src/Engine/Utf8Text.php`
+

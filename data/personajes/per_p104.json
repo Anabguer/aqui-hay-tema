@@ -1,0 +1,14 @@
+{
+    "id": "per_p104",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Alba",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P104",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

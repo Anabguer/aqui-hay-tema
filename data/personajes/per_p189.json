@@ -1,0 +1,14 @@
+{
+    "id": "per_p189",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Isabel",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P189",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

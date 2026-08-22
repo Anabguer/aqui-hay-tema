@@ -1,0 +1,14 @@
+{
+    "id": "per_p103",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Javier",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P103",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

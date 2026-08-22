@@ -160,6 +160,7 @@ final class TutorialIncorporaciones
             if (!($r['ok'] ?? false)) {
                 continue;
             }
+            HistorialPersonajesPartida::marcar($partida, $id);
             $max--;
             $nombre = IdentidadPublica::nombre($partida, $id);
             BuzonEngine::crear($partida, [

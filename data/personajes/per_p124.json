@@ -1,0 +1,14 @@
+{
+    "id": "per_p124",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Diana",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P124",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

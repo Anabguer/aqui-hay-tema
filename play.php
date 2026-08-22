@@ -3,7 +3,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260822mapa2-ficha-v3';
+$ahtUi = 'v3-20260822mapa3-ficha-v9';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -424,25 +424,38 @@ $ahtUi = 'v3-20260822mapa2-ficha-v3';
               <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
             </div>
             <div class="ficha-rasgos" data-ficha-rasgos></div>
-            <button type="button" class="ficha-btn-msg" data-ficha-msg disabled>Enviar mensaje</button>
           </div>
           <div class="ficha-col ficha-col-detalles capa-scroll">
             <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">Le gusta</h4>
-              <div class="ficha-chips ficha-gusta" data-ficha-gusta></div>
+              <h4 class="ficha-seccion-tit">Hobbies</h4>
+              <div class="ficha-seccion-body">
+                <div class="ficha-hobbies" data-ficha-hobbies></div>
+              </div>
             </section>
-            <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">No le gusta</h4>
-              <div class="ficha-nogusta" data-ficha-nogusta></div>
+            <section class="ficha-seccion ficha-seccion-prefs">
+              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Le gusta</h4>
+              <div class="ficha-seccion-body ficha-seccion-body-prefs">
+                <p class="ficha-pref-line" data-ficha-gusta-gente>Gente: ? · ?</p>
+              </div>
+            </section>
+            <section class="ficha-seccion ficha-seccion-prefs">
+              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">No le gusta</h4>
+              <div class="ficha-seccion-body ficha-seccion-body-prefs">
+                <p class="ficha-pref-line" data-ficha-nogusta-gente>Gente: ? · ?</p>
+              </div>
             </section>
             <section class="ficha-seccion">
               <h4 class="ficha-seccion-tit">Relaciones</h4>
-              <div class="ficha-relaciones" data-ficha-relaciones></div>
+              <div class="ficha-seccion-body">
+                <div class="ficha-relaciones" data-ficha-relaciones></div>
               <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver más relaciones</button>
+              </div>
             </section>
             <section class="ficha-seccion">
               <h4 class="ficha-seccion-tit">Próximos planes</h4>
-              <div class="ficha-planes" data-ficha-planes></div>
+              <div class="ficha-seccion-body">
+                <div class="ficha-planes" data-ficha-planes></div>
+              </div>
             </section>
             <button type="button" class="ficha-btn-org" data-ficha-org>+ Organizar plan</button>
           </div>

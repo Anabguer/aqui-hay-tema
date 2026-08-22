@@ -1,0 +1,14 @@
+{
+    "id": "per_p023",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Alicia",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P023",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

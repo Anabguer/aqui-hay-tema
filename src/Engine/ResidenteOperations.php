@@ -39,6 +39,7 @@ final class ResidenteOperations
         }
 
         GeneradorResidente::aplicar($partida, $catalogId, $this->catalog, $this->logger);
+        HistorialPersonajesPartida::marcar($partida, $catalogId);
         QuimicaEngine::alIncorporar($partida, $catalogId, $this->catalog, $this->logger);
         $cal = CalibracionConfig::load($this->catalog->getRoot());
         RelacionGrafo::asegurarTodos($partida, $cal);

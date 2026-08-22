@@ -1,0 +1,14 @@
+{
+    "id": "per_p091",
+    "piloto": false,
+    "identidad": {
+        "nombre": "José",
+        "genero": "hombre",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P091",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

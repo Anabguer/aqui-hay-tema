@@ -1,0 +1,14 @@
+{
+    "id": "per_p136",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Rebeca",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P136",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

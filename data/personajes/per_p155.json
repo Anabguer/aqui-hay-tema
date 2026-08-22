@@ -1,0 +1,14 @@
+{
+    "id": "per_p155",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Miriam",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P155",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

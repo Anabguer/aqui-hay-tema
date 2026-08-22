@@ -1,0 +1,14 @@
+{
+    "id": "per_p134",
+    "piloto": false,
+    "identidad": {
+        "nombre": "Olga",
+        "genero": "mujer",
+        "apertura_descubrimiento": "permeable"
+    },
+    "vida": {},
+    "visual": {
+        "pack_id": "P134",
+        "estilo_visual": "AHT_PERSONAJES_V1"
+    }
+}

@@ -36,7 +36,13 @@ final class AgendaHandler
     public static function slotsCompatibles(ApiContext $ctx, array $body, array $partida): array
     {
         $parts = $body['participantes'] ?? [];
-        if (!is_array($parts) || count($parts) < 2) {
+        if (!is_array($parts)) {
+            return ['ok' => false, 'error' => 'participantes_requeridos'];
+        }
+        $parts = array_values(array_filter($parts, static fn($p) => is_string($p) && $p !== ''));
+        $tipo = (string) ($body['tipo'] ?? 'conocerse');
+        $minParts = $tipo === 'individual' ? 1 : 2;
+        if (count($parts) < $minParts) {
             return ['ok' => false, 'error' => 'participantes_requeridos'];
         }
         $lugar = $body['lugar_id'] ?? $body['lugar'] ?? null;
