@@ -6,20 +6,32 @@
     "nombre": "Dani",
     "edad": 27,
     "genero": "hombre",
-    "pronombres": ["él"],
-    "atraido_por": ["mujer"],
-    "etiqueta_orientacion_visible": "heterosexual",
+    "pronombres": [
+      "él"
+    ],
     "apertura_descubrimiento": "permeable"
   },
   "vida": {
     "ocupacion": "camarero",
     "franja_disponibilidad": "noche",
     "hobby_principal": "copas",
-    "hobbies_secundarios": ["musica", "cocina"],
-    "lugares_preferentes": ["lug_bar", "lug_cafeteria"],
+    "hobbies_secundarios": [
+      "musica",
+      "cocina"
+    ],
+    "lugares_preferentes": [
+      "lug_bar",
+      "lug_cafeteria"
+    ],
     "estilo_social": "fiestero",
-    "rasgos_publicos": ["bromista", "directo", "leal"],
-    "rasgos_ocultos": ["ansioso"],
+    "rasgos_publicos": [
+      "bromista",
+      "directo",
+      "leal"
+    ],
+    "rasgos_ocultos": [
+      "ansioso"
+    ],
     "gustos_declarados": [
       "La música que se puede cantar mal",
       "Cocinar para más gente de la necesaria",
@@ -41,7 +53,10 @@
         "tipo": "ritmo"
       }
     ],
-    "preferencias_esteticas": ["atrevido", "comodo"],
+    "preferencias_esteticas": [
+      "atrevido",
+      "comodo"
+    ],
     "dealbreakers": [
       {
         "texto": "Que le controlen constantemente dónde está o con quién",
@@ -72,8 +87,15 @@
       "Orejas ligeramente salidas",
       "Pelo oscuro, corto y revuelto"
     ],
-    "etiquetas_look_base": ["comodo", "atrevido"],
-    "looks_posibles": ["comodo", "atrevido", "raro"],
+    "etiquetas_look_base": [
+      "comodo",
+      "atrevido"
+    ],
+    "looks_posibles": [
+      "comodo",
+      "atrevido",
+      "raro"
+    ],
     "retrato": {
       "estado": "borrador",
       "version": 1
@@ -88,7 +110,11 @@
     "estado_ficha": "revision",
     "reciprocos_potenciales": {
       "estado": "pendiente_pool",
-      "slots": ["I08", "I01", "I07"],
+      "slots": [
+        "I08",
+        "I01",
+        "I07"
+      ],
       "ids": []
     }
   },

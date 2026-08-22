@@ -12,7 +12,7 @@ use AquiHayTema\Engine\PartidaService;
 use AquiHayTema\Engine\PropuestaEncuentroEngine;
 use AquiHayTema\Engine\PropuestaNivel;
 use AquiHayTema\Engine\RelacionEngine;
-use AquiHayTema\Engine\TutorialBucle;
+use AquiHayTema\Engine\TutorialPrimerosPasos;
 use AquiHayTema\Engine\VidaPuebloEngine;
 
 $root = dirname(__DIR__);
@@ -54,17 +54,16 @@ foreach ($p['buzon'] ?? [] as $m) {
         break;
     }
 }
-ok(is_array($bien), 'buzón inicial: bienvenida real');
-ok(($bien['de_persona'] ?? '') !== '', 'bienvenida de un residente inicial');
-ok(($bien['canal'] ?? '') === BuzonEngine::CANAL_BUZON, 'bienvenida va al buzón, no a El Cotilleo');
+ok($bien === null, 'primeros pasos: sin bienvenida legacy al arrancar');
 
-$tut = TutorialBucle::vista($p);
-ok(!empty($tut['activo']) && $tut['paso'] === TutorialBucle::HECHO_BUZON, 'tutorial activo: pista buzón');
-ok(is_array($tut['sugerencia'] ?? null), 'hay un primer plan válido calculado');
-$sug = $tut['sugerencia'];
-ok(($sug['tipo'] ?? '') === 'conocerse', 'primer plan = conocerse');
-ok(($sug['lugar'] ?? '') === 'lug_cafeteria', 'primer plan en cafetería');
-ok(($sug['residente_a'] ?? '') !== ($sug['residente_b'] ?? ''), 'primer plan no es autopareja');
+$tut = TutorialPrimerosPasos::vistaPublica($p);
+ok(($p['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID, 'tutorial primeros pasos activo');
+ok(!empty($tut['intro']['pasos']) && count($tut['intro']['pasos']) === 4, 'intro 4 pantallas');
+ok(!empty($tut['intro']['pasos'][1]['caras']) && count($tut['intro']['pasos'][1]['caras']) === 3, 'pantalla 2 con 3 retratos');
+$pareja = $p['tutorial']['pareja_mision1'] ?? [];
+ok(($pareja['a'] ?? '') !== '' && ($pareja['b'] ?? '') !== '' && ($pareja['a'] ?? '') !== ($pareja['b'] ?? ''), 'pareja mision 1 elegida');
+$pp = array_values(array_filter($p['misiones_diarias']['items'] ?? [], static fn($m) => ($m['familia'] ?? '') === 'primeros_pasos'));
+ok(count($pp) === 3, '3 misiones primeros pasos dia 1');
 
 $tipos = PropuestaNivel::tiposPermitidos($p, 'per_p001', 'per_p002');
 ok($tipos === ['conocerse'], 'desconocidos: solo conocerse');
@@ -84,34 +83,20 @@ ok(($queda['contexto']['causa'] ?? '') === OrganizarMotivo::AUN_NO_SE_CONOCEN, '
 ok(strpos((string) ($queda['mensaje_ui'] ?? ''), 'encuentro no está disponible') === false, 'sin jerga de tipo no disponible');
 ok(strpos((string) ($queda['mensaje_ui'] ?? ''), 'Todavía no se conocen') !== false, 'copy humano de causa');
 
-$p2 = $service->nuevaPartida('juego_v1', 'juego-v1-bucle');
-TutorialBucle::registrar($p2, TutorialBucle::HECHO_BUZON);
-ok(TutorialBucle::vista($p2)['paso'] === TutorialBucle::HECHO_VECINO, 'tras leer el recado: mira un vecino');
-TutorialBucle::registrar($p2, TutorialBucle::HECHO_VECINO);
-ok(TutorialBucle::vista($p2)['paso'] === TutorialBucle::HECHO_PLAN, 'tras ficha: organizar');
-$plan = TutorialBucle::vista($p2)['sugerencia'];
-ok(is_array($plan), 'sugerencia sigue ahí hasta completar');
-$rPlan = PropuestaEncuentroEngine::proponer(
-    $p2,
-    [$plan['residente_a'], $plan['residente_b']],
-    (int) $plan['dia'],
-    (int) $plan['hora'],
-    (string) $plan['tipo'],
-    (string) $plan['lugar']
-);
-ok(isset($rPlan['ok']), 'el motor real admite el primer plan (acepten o no)');
-TutorialBucle::registrar($p2, TutorialBucle::HECHO_PLAN);
-$fin = TutorialBucle::vista($p2);
-ok(!empty($fin['completado']) && empty($fin['activo']), 'tutorial desaparece en la misma partida');
-ok(count($p2['residentes']) === 3, 'tras el tutorial no hay reset: mismos habitantes');
-ok(($p2['meta']['partida_id'] ?? '') !== '', 'misma partida persistente');
+$p2 = $service->nuevaPartida('juego_v1', 'juego-v1-pp');
+$par2 = $p2['tutorial']['pareja_mision1'] ?? [];
+$a2 = (string) ($par2['a'] ?? '');
+$b2 = (string) ($par2['b'] ?? '');
+$rPlan = PropuestaEncuentroEngine::proponer($p2, [$a2, $b2], 1, 18, PropuestaNivel::PRESENTAR, 'lug_cafeteria');
+ok(isset($rPlan['ok']), 'el motor admite plan pareja tutorial');
+ok(count($p2['residentes']) === 3, 'sin reset de habitantes');
 
 $lab = $service->nuevaPartida('playtest_01', 'playtest-01');
 ok(empty($lab['tutorial']['activo'] ?? null), 'playtest_01 no arranca el tutorial del jugador');
 ok(count($lab['residentes']) === 8, 'laboratorio 8 vecinos intacto');
 
 $est = $service->estadoResumido($p);
-ok(isset($est['tutorial']['paso']), 'estado PLAY expone tutorial');
+ok(isset($est['tutorial']['intro']), 'estado PLAY expone tutorial intro');
 ok(isset($est['taller']), 'estado distingue taller');
 
 echo $failures === 0 ? "OK juego_v1\n" : "FAIL juego_v1 ({$failures})\n";

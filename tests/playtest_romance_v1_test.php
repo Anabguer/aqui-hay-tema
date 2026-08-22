@@ -48,7 +48,7 @@ $src = array_unique(array_merge(
 $fugas = [];
 foreach ($src as $file) {
     $base = basename($file);
-    if ($base === 'PersonajeValidator.php' || $base === 'RomanceElegibilidad.php') {
+    if ($base === 'PersonajeValidator.php' || $base === 'RomanceElegibilidad.php' || $base === 'IdentidadCanon.php') {
         continue;
     }
     $code = (string) file_get_contents($file);

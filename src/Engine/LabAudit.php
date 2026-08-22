@@ -22,7 +22,13 @@ final class LabAudit
      */
     public static function activa(array $body): bool
     {
+        if (isset($body['debug']) && (string) $body['debug'] !== '' && (string) $body['debug'] !== '0') {
+            return true;
+        }
         if (isset($body['lab']) && (string) $body['lab'] !== '' && (string) $body['lab'] !== '0') {
+            return true;
+        }
+        if (isset($_GET['debug']) && (string) $_GET['debug'] !== '' && (string) $_GET['debug'] !== '0') {
             return true;
         }
         if (isset($_GET['lab']) && (string) $_GET['lab'] !== '' && (string) $_GET['lab'] !== '0') {
@@ -89,8 +95,49 @@ final class LabAudit
             'reloj' => $partida['reloj'] ?? null,
             'vecinos' => $npcs,
             'matriz_relacional' => self::matrizRelacional($partida, $catalog),
-            'nota' => 'Perfiles sin filtro discovery; mismos datos que usa el motor.',
+            'nota_relaciones' => self::notaRelacionesMotor(),
         ]);
+        foreach ($npcs as $npc) {
+            self::push('NPC', '[AHT DEBUG NPC]', $npc);
+        }
+        foreach (self::matrizRelacional($partida, $catalog) as $par) {
+            $dirs = $par['direcciones'] ?? [];
+            if (is_array($dirs['a_hacia_b'] ?? null)) {
+                self::push('REL', '[AHT DEBUG REL]', $dirs['a_hacia_b']);
+            }
+            if (is_array($dirs['b_hacia_a'] ?? null)) {
+                self::push('REL', '[AHT DEBUG REL]', $dirs['b_hacia_a']);
+            }
+        }
+    }
+
+    /**
+     * Snapshot completo al cargar partida existente en LAB.
+     *
+     * @param array<string, mixed> $partida
+     */
+    public static function eventoSnapshotCargada(array $partida, Catalog $catalog): void
+    {
+        self::eventoNuevaPartida($partida, $catalog);
+        self::push('PARTIDA', '[AHT DEBUG PARTIDA]', [
+            'evento' => 'PARTIDA_CARGADA',
+            'partida_id' => $partida['meta']['partida_id'] ?? null,
+            'encuentros_activos' => count(EncuentroEngine::listarActivos($partida)),
+            'nota' => 'Snapshot al cargar partida existente (?lab=1).',
+        ]);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    private static function notaRelacionesMotor(): array
+    {
+        return [
+            'quimica' => 'QuimicaEngine::asegurarPar al incorporar (RNG, no lazy).',
+            'compatibilidad_oculta' => 'CompatibilidadOculta::asegurarDireccional al incorporar (CompatibilidadCalculator).',
+            'social_romance' => 'RelacionGrafo::asegurarTodos al incorporar; valores iniciales en relaciones_*.',
+            'presencia_mapa' => 'PresenciaEngine: encuentro programado > plan autónomo > rutina lugares_preferentes (solo visual).',
+        ];
     }
 
     /**
@@ -390,7 +437,7 @@ final class LabAudit
             'catalog_id' => $res['catalog_id'] ?? $id,
             'nombre' => IdentidadPublica::nombre($partida, $id),
             'vivienda_id' => $res['vivienda_id'] ?? null,
-            'identidad_catalogo' => is_array($cat) ? ($cat['identidad'] ?? null) : null,
+            'identidad_catalogo' => is_array($cat) ? IdentidadCanon::sanitizarIdentidad($cat['identidad'] ?? null) : null,
             'romance_catalogo' => is_array($cat) ? ($cat['romance'] ?? null) : null,
             'vida_catalogo' => is_array($cat) ? ($cat['vida'] ?? null) : null,
             'perfil_partida_generado' => $perfil,
@@ -605,5 +652,153 @@ final class LabAudit
             return (string) $item['nombre'];
         }
         return $id;
+    }
+
+    public static function activaEnRequest(): bool
+    {
+        if (isset($_GET['debug']) && (string) $_GET['debug'] !== '' && (string) $_GET['debug'] !== '0') {
+            return true;
+        }
+        if (isset($_GET['lab']) && (string) $_GET['lab'] !== '' && (string) $_GET['lab'] !== '0') {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     */
+    public static function eventoTutorial(array $partida, string $evento, Catalog $catalog): void
+    {
+        $tut = is_array($partida['tutorial'] ?? null) ? $partida['tutorial'] : [];
+        if (($tut['id'] ?? '') !== TutorialPrimerosPasos::ID) {
+            return;
+        }
+        $ids = [];
+        foreach ($partida['residentes'] ?? [] as $id => $res) {
+            if (is_string($id) && ($res['presencia'] ?? '') === 'residente') {
+                $ids[] = $id;
+            }
+        }
+        sort($ids);
+        self::push('TUTORIAL', '[AHT DEBUG TUTORIAL]', [
+            'evento' => $evento,
+            'npcs_iniciales' => array_map(static function (string $id) use ($partida): array {
+                return ['id' => $id, 'nombre' => IdentidadPublica::nombre($partida, $id)];
+            }, $ids),
+            'pareja_mision1' => $tut['pareja_mision1'] ?? null,
+            'tercero' => $tut['tercero'] ?? null,
+            'seleccion_pareja' => $tut['seleccion_pareja'] ?? null,
+            'mensajito_id' => $tut['mensajito_id'] ?? null,
+            'lugar_mision3' => $tut['lugar_mision3'] ?? null,
+            'jugable_completado' => $tut['jugable_completado'] ?? false,
+            'misiones' => MisionDiariaEngine::delDia($partida, (int) ($partida['reloj']['dia_pueblo'] ?? 1)),
+        ]);
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $respuestaApi
+     */
+    public static function eventoPlanSolo(array $partida, array $respuestaApi, Catalog $catalog): void
+    {
+        $prop = is_array($respuestaApi['propuesta'] ?? null) ? $respuestaApi['propuesta'] : [];
+        if ((string) ($prop['tipo'] ?? '') !== 'individual') {
+            return;
+        }
+        $parts = is_array($prop['participantes'] ?? null) ? $prop['participantes'] : [];
+        self::push('PLAN_SOLO', '[AHT DEBUG PLAN SOLO]', [
+            'npc' => $parts[0] ?? null,
+            'lugar' => $prop['lugar'] ?? null,
+            'dia_solicitado' => $prop['hora_solicitada']['dia'] ?? ($prop['dia'] ?? null),
+            'hora_solicitada' => $prop['hora_solicitada']['hora'] ?? null,
+            'dia_final' => $prop['dia'] ?? null,
+            'hora_final' => $prop['hora'] ?? null,
+            'hora_ajustada' => $prop['hora_ajustada'] ?? false,
+            'estado' => $prop['estado'] ?? null,
+            'programado' => !empty($respuestaApi['programado']),
+            'rechazada' => !empty($respuestaApi['rechazada']),
+            'resolucion_plan' => $prop['resolucion_plan'] ?? null,
+            'reacciones' => $prop['reacciones'] ?? [],
+            'encuentro_id' => $prop['encuentro_id'] ?? ($respuestaApi['encuentro']['id'] ?? null),
+        ]);
+    }
+
+    /**
+     * Exportación completa para copiar en DEBUG (estado actual + historial opcional).
+     *
+     * @param list<array<string, mixed>> $historialCliente
+     * @return array{texto: string, json: array<string, mixed>}
+     */
+    public static function exportCompleto(array $partida, Catalog $catalog, array $historialCliente = []): array
+    {
+        $npcs = [];
+        foreach (self::residentesActivos($partida) as $id) {
+            $npcs[] = self::perfilNpc($partida, $id, $catalog);
+        }
+        $matriz = self::matrizRelacional($partida, $catalog);
+        $encuentros = EncuentroEngine::listarActivos($partida);
+        $misiones = MisionDiariaEngine::delDia($partida, (int) ($partida['reloj']['dia_pueblo'] ?? 1));
+        $tutorial = $partida['tutorial'] ?? null;
+
+        $json = [
+            'generado' => date('c'),
+            'partida' => [
+                'partida_id' => $partida['meta']['partida_id'] ?? null,
+                'config_id' => $partida['meta']['config_id'] ?? null,
+                'seed' => $partida['meta']['seed'] ?? null,
+                'rng' => $partida['rng'] ?? null,
+                'reloj' => $partida['reloj'] ?? null,
+            ],
+            'npcs' => $npcs,
+            'matriz_relacional' => $matriz,
+            'encuentros_activos' => $encuentros,
+            'misiones_hoy' => $misiones,
+            'tutorial' => $tutorial,
+            'historial_sesion' => $historialCliente,
+            'nota_canon' => 'Romance V1: sin veto por género/orientación. Química, dealbreakers y parentesco sí aplican.',
+        ];
+
+        $bloques = [];
+        $bloques[] = '[AHT DEBUG PARTIDA]';
+        $bloques[] = json_encode($json['partida'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $bloques[] = '';
+        foreach ($npcs as $npc) {
+            $bloques[] = '[AHT DEBUG NPC] ' . ($npc['nombre'] ?? $npc['id'] ?? '?');
+            $bloques[] = json_encode($npc, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $bloques[] = '';
+        }
+        foreach ($matriz as $par) {
+            $bloques[] = '[AHT DEBUG REL] par ' . implode('↔', $par['par'] ?? []);
+            $bloques[] = json_encode($par, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $bloques[] = '';
+        }
+        if ($encuentros !== []) {
+            $bloques[] = '[AHT DEBUG ENCUENTRO]';
+            $bloques[] = json_encode($encuentros, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $bloques[] = '';
+        }
+        if ($misiones !== []) {
+            $bloques[] = '[AHT DEBUG MISION]';
+            $bloques[] = json_encode($misiones, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $bloques[] = '';
+        }
+        if (is_array($tutorial) && $tutorial !== []) {
+            $bloques[] = '[AHT DEBUG TUTORIAL]';
+            $bloques[] = json_encode($tutorial, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            $bloques[] = '';
+        }
+        if ($historialCliente !== []) {
+            $bloques[] = '[AHT DEBUG HISTORIAL SESIÓN]';
+            foreach ($historialCliente as $ev) {
+                $pref = (string) ($ev['prefijo'] ?? '[AHT DEBUG]');
+                $bloques[] = $pref . ' ' . json_encode($ev['datos'] ?? $ev, JSON_UNESCAPED_UNICODE);
+            }
+        }
+
+        return [
+            'texto' => implode("\n", $bloques),
+            'json' => $json,
+        ];
     }
 }

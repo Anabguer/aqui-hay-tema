@@ -41,6 +41,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return PartidaHandler::guardar($ctx, $body, $p);
     },
+    'partida.tutorial_finale' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PartidaHandler::tutorialFinale($ctx, $body, $p);
+    },
     'partida.reiniciar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return PartidaHandler::reiniciar($ctx, $body, $p);
@@ -52,6 +56,10 @@ $routes = [
     'partida.validar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return PartidaHandler::validar($ctx, $body, $p);
+    },
+    'partida.debug_export' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return PartidaHandler::debugExport($ctx, $body, $p);
     },
     'reloj.avanzar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

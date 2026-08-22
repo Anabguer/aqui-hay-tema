@@ -53,7 +53,11 @@ final class PartidaLifecycle
             'actores' => array_keys($partida['residentes']),
         ], $this->logger, 'PartidaLifecycle::nueva');
 
-        TutorialBucle::arrancar($partida, $config);
+        if (TutorialPrimerosPasos::debeArrancar($config)) {
+            TutorialPrimerosPasos::arrancar($partida, $config, $this->catalog);
+        } elseif (TutorialBucle::debeArrancar($config)) {
+            TutorialBucle::arrancar($partida, $config);
+        }
         TutorialIncorporaciones::ensureDesdeConfig($partida, $config);
         if (PlaytestGuia::activa($partida)) {
             PlaytestGuia::ensure($partida);
@@ -153,6 +157,9 @@ final class PartidaLifecycle
     private function generarMisionesSiToca(array &$partida): void
     {
         if (!MisionDiariaEngine::activa($partida)) {
+            return;
+        }
+        if (TutorialPrimerosPasos::sembrarSiToca($partida, $this->root)) {
             return;
         }
         $cal = CalibracionConfig::load($this->root);

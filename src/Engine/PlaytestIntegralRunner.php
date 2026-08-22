@@ -90,39 +90,36 @@ final class PlaytestIntegralRunner
     {
         $p = $this->service->nuevaPartida('juego_v1', 'gate-tut-1');
         $n0 = count($p['residentes'] ?? []);
-        $tut = TutorialBucle::vista($p);
         $ids = array_keys($p['residentes'] ?? []);
-        $ok3 = $n0 === 3 && isset($p['residentes']['per_i03'], $p['residentes']['per_p001'], $p['residentes']['per_p002']);
-        $okTut = !empty($tut['activo']);
+        $ok3 = $n0 === 3;
+        $okTut = ($p['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID;
 
-        TutorialBucle::registrarConRoot($p, TutorialBucle::HECHO_BUZON, $this->root);
-        TutorialBucle::registrarConRoot($p, TutorialBucle::HECHO_VECINO, $this->root);
-        $plan = TutorialBucle::vista($p)['sugerencia'] ?? null;
-        if (is_array($plan) && !empty($plan['residente_a']) && !empty($plan['residente_b'])) {
-            PropuestaEncuentroEngine::proponer(
-                $p,
-                [(string) $plan['residente_a'], (string) $plan['residente_b']],
-                (int) ($plan['dia'] ?? 1),
-                (int) ($plan['hora'] ?? 15),
-                (string) ($plan['tipo'] ?? 'conocerse'),
-                isset($plan['lugar']) ? (string) $plan['lugar'] : 'lug_cafeteria'
-            );
-            TutorialBucle::flushIncorporacionesPendientes($p, $this->root);
-        } else {
-            TutorialBucle::registrarConRoot($p, TutorialBucle::HECHO_PLAN, $this->root);
+        $pareja = $p['tutorial']['pareja_mision1'] ?? [];
+        $a = (string) ($pareja['a'] ?? '');
+        $b = (string) ($pareja['b'] ?? '');
+        if ($a !== '' && $b !== '') {
+            PropuestaEncuentroEngine::proponer($p, [$a, $b], 1, 18, PropuestaNivel::PRESENTAR, 'lug_cafeteria');
         }
-        $tutFin = TutorialBucle::vista($p);
+        $mid = (string) ($p['tutorial']['mensajito_id'] ?? '');
+        if ($mid !== '') {
+            BuzonEngine::marcarLeido($p, $mid);
+            TutorialPrimerosPasos::alLeerMensaje($p, $mid, new Catalog($this->root));
+        }
+        $tercero = (string) ($p['tutorial']['tercero'] ?? '');
+        if ($tercero !== '') {
+            PropuestaEncuentroEngine::proponer($p, [$tercero], 1, 19, 'individual', 'lug_cine');
+        }
+        $tutFin = !empty($p['tutorial']['jugable_completado']);
         $hora = (int) ($p['reloj']['hora_actual'] ?? 14);
         if ($hora < 22) {
             $this->service->avanzarReloj($p, 22 - $hora);
         }
-        // completar espaciado tutorial día 1
         for ($i = 0; $i < 8; $i++) {
             $this->service->avanzarReloj($p, 1);
         }
         $nDia1 = count(TutorialIncorporaciones::residentesActivos($p));
         $crece = $nDia1 >= 8;
-        $status = ($ok3 && $okTut && empty($tutFin['activo']) && $crece
+        $status = ($ok3 && $okTut && $tutFin && $crece
             && ($p['llegadas']['modo'] ?? '') === 'normal') ? 'PASS' : 'FAIL';
 
         $lab = $this->service->nuevaPartida('playtest_01', 'gate-lab');
@@ -133,7 +130,7 @@ final class PlaytestIntegralRunner
             'inicial_n' => $n0,
             'ids_iniciales' => $ids,
             'tutorial_activo_inicio' => $okTut,
-            'tutorial_activo_fin' => !empty($tutFin['activo']),
+            'tutorial_activo_fin' => !$tutFin,
             'n_fin_dia_1' => $nDia1,
             'crecimiento_a_8' => $crece,
             'playtest_01_sin_tutorial' => empty($labTut['activo']),

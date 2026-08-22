@@ -57,9 +57,10 @@ final class PersonajeValidator
             $errores[] = self::err($archivo, 'identidad.edad', $ident['edad'], 'rango_invalido_22_72');
         }
 
-        // atraido_por es metadata opcional. V1 no filtra romance por orientación ni género.
-        if (isset($ident['atraido_por']) && !is_array($ident['atraido_por'])) {
-            $errores[] = self::err($archivo, 'identidad.atraido_por', $ident['atraido_por'], 'tipo_invalido_array');
+        foreach (['atraido_por', 'etiqueta_orientacion_visible'] as $campoLegacy) {
+            if (array_key_exists($campoLegacy, $ident)) {
+                $errores[] = self::err($archivo, 'identidad.' . $campoLegacy, $ident[$campoLegacy], 'campo_deprecated_orientacion_v1');
+            }
         }
 
         $vida = $data['vida'] ?? [];
@@ -120,9 +121,6 @@ final class PersonajeValidator
 
         $checkT('identidad.genero', $ident['genero'] ?? null, 'genero');
         $checkT('identidad.apertura_descubrimiento', $ident['apertura_descubrimiento'] ?? null, 'apertura_descubrimiento');
-        foreach ($ident['atraido_por'] ?? [] as $i => $v) {
-            $checkT("identidad.atraido_por[$i]", $v, 'atraido_por');
-        }
 
         $check('vida.ocupacion', $vida['ocupacion'] ?? null, 'ocupaciones');
         $check('vida.franja_disponibilidad', $vida['franja_disponibilidad'] ?? null, 'franjas');

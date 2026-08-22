@@ -21,26 +21,42 @@
       "persona": null
     }
   },
-  "_enums_tipo_preferencia": ["ritmo", "estilo_cita", "intensidad", "otro"],
-  "_enums_severidad_dealbreaker": ["leve", "fuerte", "absoluto"],
-  "_enums_plasticidad_preferencias": ["baja", "media", "alta"],
-  "_enums_reciprocos": ["pendiente_pool", "resuelto", "fallido"],
-  "_enums_retrato": ["ninguno", "borrador", "aprobado"],
-
+  "_enums_tipo_preferencia": [
+    "ritmo",
+    "estilo_cita",
+    "intensidad",
+    "otro"
+  ],
+  "_enums_severidad_dealbreaker": [
+    "leve",
+    "fuerte",
+    "absoluto"
+  ],
+  "_enums_plasticidad_preferencias": [
+    "baja",
+    "media",
+    "alta"
+  ],
+  "_enums_reciprocos": [
+    "pendiente_pool",
+    "resuelto",
+    "fallido"
+  ],
+  "_enums_retrato": [
+    "ninguno",
+    "borrador",
+    "aprobado"
+  ],
   "id": "per_xxx",
   "slot": null,
   "piloto": false,
-
   "identidad": {
     "nombre": "",
     "edad": null,
     "genero": null,
     "pronombres": [],
-    "atraido_por": [],
-    "etiqueta_orientacion_visible": "",
     "apertura_descubrimiento": null
   },
-
   "vida": {
     "ocupacion": null,
     "franja_disponibilidad": null,
@@ -52,7 +68,6 @@
     "rasgos_ocultos": [],
     "gustos_declarados": []
   },
-
   "romance": {
     "necesidad_contacto_base": null,
     "plasticidad_preferencias": null,
@@ -60,15 +75,12 @@
     "preferencias_esteticas": [],
     "dealbreakers": []
   },
-
   "lazos": [],
-
   "presencia_v0": {
     "empieza_en_pueblo": true,
     "orden_llegada": null,
     "funcion_llegada": null
   },
-
   "visual": {
     "estilo_visual": "",
     "rasgos_fisicos": [],
@@ -79,13 +91,11 @@
       "version": 0
     }
   },
-
   "narrativa": {
     "voz": null,
     "frase_semilla": "",
     "tono_coletilla": null
   },
-
   "auditoria": {
     "estado_ficha": "borrador",
     "reciprocos_potenciales": {
@@ -94,14 +104,12 @@
       "ids": []
     }
   },
-
   "estado_inicial": {
     "animo": "neutro",
     "crush": {
       "persona": null
     }
   },
-
   "runtime": {
     "_comentario": "NO rellenar al diseñar. El juego escribe aquí. No mezclar con vida.hobby ni romance de ficha.",
     "animo": null,

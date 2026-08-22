@@ -3,7 +3,7 @@
     "id": "juego_v1",
     "descripcion": "Nueva partida V3: trio aleatorio, tutorial, 8 vecinos dia 1.",
     "seed_sugerida": "juego-v1",
-    "tutorial_bucle_1": true,
+    "tutorial_bucle_1": false,
     "lugares_operativos_dia_1": [
         "lug_cafeteria",
         "lug_biblioteca",
@@ -33,5 +33,6 @@
     "poblacion_v3": {
         "iniciales_aleatorios": 3,
         "incorporaciones_aleatorias": 5
-    }
+    },
+    "tutorial_primeros_pasos": true
 }

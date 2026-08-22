@@ -6,7 +6,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 use AquiHayTema\Engine\PlaytestIntegralRunner;
 use AquiHayTema\Engine\PlaytestInvariantes;
 use AquiHayTema\Engine\PartidaService;
-use AquiHayTema\Engine\TutorialBucle;
+use AquiHayTema\Engine\TutorialPrimerosPasos;
 
 $root = dirname(__DIR__);
 $failures = 0;
@@ -27,7 +27,7 @@ ok(!in_array('reloj_dia_invalido:0', $fallos, true), 'día válido al crear');
 
 $j = $service->nuevaPartida('juego_v1', 'tut-unit');
 ok(count($j['residentes']) === 3, 'juego_v1 arranca con 3');
-ok(!empty(TutorialBucle::vista($j)['activo']), 'tutorial activo');
+ok(($j['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID, 'tutorial primeros pasos activo');
 
 // Smoke del runner sin sims largas: solo tutorial + no-impl + aforos vía reflexión de secciones ligeras
 $runner = new PlaytestIntegralRunner($root);

@@ -34,6 +34,7 @@ final class PartidaHandler
         LabAudit::reset();
         if (labActiva($body)) {
             LabAudit::eventoNuevaPartida($partida, new Catalog($ctx->root));
+            LabAudit::eventoTutorial($partida, 'NUEVA_PARTIDA', new Catalog($ctx->root));
         }
         return withLabAudit(['ok' => true, 'partida' => $ctx->service->estadoResumido($partida), 'partida_id' => $partida['meta']['partida_id']]);
     }
@@ -45,13 +46,25 @@ final class PartidaHandler
 
     public static function estado(ApiContext $ctx, array $body, array $partida): array
     {
-        return ['ok' => true, 'estado' => $ctx->service->estadoResumido($partida)];
+        LabAudit::reset();
+        if (labActiva($body)) {
+            LabAudit::eventoSnapshotCargada($partida, new Catalog($ctx->root));
+        }
+        return withLabAudit(['ok' => true, 'estado' => $ctx->service->estadoResumido($partida)]);
     }
 
     public static function guardar(ApiContext $ctx, array $body, array $partida): array
     {
         savePartida($ctx, $partida);
-        return ['ok' => true, 'guardado' => true];
+        LabAudit::reset();
+        if (labActiva($body)) {
+            LabAudit::push('PARTIDA', '[AHT DEBUG PARTIDA]', [
+                'evento' => 'GUARDAR',
+                'partida_id' => $partida['meta']['partida_id'] ?? null,
+                'reloj' => $partida['reloj'] ?? null,
+            ]);
+        }
+        return withLabAudit(['ok' => true, 'guardado' => true]);
     }
 
     public static function cargar(ApiContext $ctx, array $body): array
@@ -61,7 +74,11 @@ final class PartidaHandler
             return ['ok' => false, 'error' => 'partida_id_requerido'];
         }
         $partida = $ctx->service->cargar((string) $id);
-        return ['ok' => true, 'partida_id' => $id, 'estado' => $ctx->service->estadoResumido($partida)];
+        LabAudit::reset();
+        if (labActiva($body)) {
+            LabAudit::eventoSnapshotCargada($partida, new Catalog($ctx->root));
+        }
+        return withLabAudit(['ok' => true, 'partida_id' => $id, 'estado' => $ctx->service->estadoResumido($partida)]);
     }
 
     public static function reiniciar(ApiContext $ctx, array $body, array $partida): array
@@ -97,5 +114,28 @@ final class PartidaHandler
     {
         $errores = PartidaValidator::validar($partida);
         return ['ok' => empty($errores), 'errores' => $errores];
+    }
+
+    public static function tutorialFinale(ApiContext $ctx, array $body, array &$partida): array
+    {
+        \AquiHayTema\Engine\TutorialPrimerosPasos::marcarFinaleVisto($partida);
+        savePartida($ctx, $partida);
+        return [
+            'ok' => true,
+            'tutorial' => \AquiHayTema\Engine\TutorialPrimerosPasos::vistaPublica($partida),
+        ];
+    }
+
+    public static function debugExport(ApiContext $ctx, array $body, array $partida): array
+    {
+        if (!labActiva($body)) {
+            return ['ok' => false, 'error' => 'debug_no_activo'];
+        }
+        $historial = is_array($body['historial'] ?? null) ? $body['historial'] : [];
+        $export = LabAudit::exportCompleto($partida, new Catalog($ctx->root), $historial);
+        return withLabAudit([
+            'ok' => true,
+            'debug_export' => $export,
+        ]);
     }
 }

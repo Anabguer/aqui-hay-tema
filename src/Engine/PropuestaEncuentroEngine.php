@@ -58,6 +58,7 @@ final class PropuestaEncuentroEngine
         $tipo = PropuestaNivel::aliasTipo($tipo);
         $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
         if (count($participantes) >= 2
+            && $tipo !== 'individual'
             && !PropuestaNivel::permite($partida, (string) $participantes[0], (string) $participantes[1], $tipo, $calDef)
         ) {
             $motivo = OrganizarMotivo::de(
@@ -147,8 +148,16 @@ final class PropuestaEncuentroEngine
         } else {
             $out = self::respuestaPropuesta($propuesta);
         }
-        TutorialBucle::registrar($partida, TutorialBucle::HECHO_PLAN);
-        $out['tutorial'] = TutorialBucle::vista($partida);
+        TutorialPrimerosPasos::alProponer($partida, $out, new Catalog(dirname(__DIR__, 2)));
+        if (($partida['tutorial']['id'] ?? '') !== TutorialPrimerosPasos::ID) {
+            TutorialBucle::registrar($partida, TutorialBucle::HECHO_PLAN);
+            $out['tutorial'] = TutorialBucle::vista($partida);
+        } else {
+            $v = TutorialPrimerosPasos::vistaPublica($partida);
+            if ($v !== []) {
+                $out['tutorial'] = $v;
+            }
+        }
         self::registrarDiag($partida, $participantes, $tipo, (string) $lugarId, $dia, $hora, $out, $propuesta);
         $out['playtest_diag'] = PlaytestDiag::vista($partida);
         if ($horaAjustada) {
@@ -440,6 +449,26 @@ final class PropuestaEncuentroEngine
                 return;
             }
             $idxs[] = (int) $i;
+        }
+        if (count($idxs) === 1) {
+            $i = $idxs[0];
+            $p = (float) ($propuesta['reacciones'][$i]['p'] ?? 0);
+            $rng = RngService::fromPartida($partida);
+            $tirada = $rng->nextFloat();
+            $rng->persistToPartida($partida);
+            $acepta = $tirada < $p;
+            $propuesta['resolucion_plan'] = [
+                'modo' => 'individual',
+                'p' => $p,
+                'tirada' => $tirada,
+                'acepta' => $acepta,
+            ];
+            $propuesta['reacciones'][$i]['decision'] = $acepta
+                ? PropuestaEncuentro::DECISION_ACEPTA
+                : PropuestaEncuentro::DECISION_RECHAZA;
+            $propuesta['reacciones'][$i]['clase'] = $acepta ? null : PropuestaEncuentro::CLASE_VOLUNTAD;
+            $propuesta['reacciones'][$i]['motivo_tecnico'] = $acepta ? 'voluntad_acepta_solo' : 'voluntad_rechaza_solo';
+            return;
         }
         if (count($idxs) < 2) {
             return;

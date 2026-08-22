@@ -289,7 +289,7 @@ final class PartidaService
                 'debug_tools_enabled' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
             ],
             'planes_organizar' => PropuestaNivel::contratoOrganizar(),
-            'tutorial' => TutorialBucle::vista($partida),
+            'tutorial' => self::vistaTutorial($partida),
             'taller' => [
                 'disponible' => true,
                 'activo_en_partida' => FeatureConfig::isEnabled($partida, 'debug_tools_enabled'),
@@ -326,6 +326,19 @@ final class PartidaService
             ];
         }
         return $out;
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>
+     */
+    private static function vistaTutorial(array $partida): array
+    {
+        if (($partida['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID) {
+            $v = TutorialPrimerosPasos::vistaPublica($partida);
+            return $v !== [] ? $v : TutorialBucle::vista($partida);
+        }
+        return TutorialBucle::vista($partida);
     }
 
     private static function labelEncuentrosActivos(int $n): string

@@ -25,7 +25,7 @@ final class PoblacionV3
             return;
         }
         $cat = new Catalog($root);
-        $pool = $cat->listPersonajeIds();
+        $pool = $cat->listPersonajeIdsJugables();
         $rng = RngService::fromPartida($partida);
         $picked = $rng->pickUnique($pool, min($n, count($pool)));
         $rng->persistToPartida($partida);

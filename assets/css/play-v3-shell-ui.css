@@ -1,4 +1,4 @@
-﻿@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap");
 
 .play-v3 .play-root { background: #fafaf8 !important; }
 .play-v3 .play-root::after { display: none !important; }
@@ -33,8 +33,8 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 
 /* === Cabecera: logo | centro | vida === */
 .game-top {
-  display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: .75rem 1.25rem;
-  background: #fafaf8; border-bottom: none; padding: .35rem .85rem .45rem;
+  display: grid; grid-template-columns: auto 1fr minmax(240px, 300px); align-items: center; gap: .75rem 1.25rem;
+  background: #fafaf8; border-bottom: none; padding: .45rem 1cm .55rem; box-sizing: border-box;
 }
 .brand { margin: 0; display: flex; align-items: center; gap: .4rem; transform: rotate(-1deg); }
 .brand-text { font-family: Caveat, cursive; font-size: clamp(1.55rem, 2.2vw, 1.95rem); font-weight: 700; line-height: 1; color: #2c261f; }
@@ -46,14 +46,33 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
   transform: rotate(8deg) translateY(-1px);
 }
 .top-center { display: flex; align-items: flex-end; justify-content: center; gap: 1.35rem; flex-wrap: nowrap; }
-.top-vida { display: flex; flex-direction: column; align-items: center; gap: .04rem; justify-self: end; padding-right: .2rem; min-width: 72px; }
-.obj-vida-kicker { font-size: .46rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #a89888; opacity: .85; }
-.corazon-svg { display: block; filter: drop-shadow(1px 2px 0 rgba(44,38,31,.08)); }
-.corazon-bg { fill: #f3e8ec; }
-.corazon-fill-rect { fill: #e56b8a; transition: y .35s ease, height .35s ease; }
-.corazon-stroke { stroke: #2c261f; stroke-width: 3; stroke-linejoin: round; }
+.top-vida {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center; gap: 1.5rem;
+  width: 100%; min-width: 0;
+  padding: .1rem 0 0 .2rem; box-sizing: border-box;
+}
+.obj-vida-kicker {
+  font-family: Caveat, cursive;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+  color: #3f3832; opacity: 1; line-height: 1.05;
+  border-bottom: 2px solid #d8d0c6; padding-bottom: .2rem;
+  white-space: nowrap; min-width: 0; justify-self: start;
+}
+.corazon-svg {
+  display: block; grid-column: 2;
+  width: clamp(64px, 9vw, 82px);
+  height: auto;
+  margin-right: 0;
+  justify-self: end;
+  filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1));
+}
+.corazon-bg { fill: #fceef0; }
+.corazon-fill-rect { fill: #e57d90; transition: y .35s ease, height .35s ease; }
+.corazon-stroke { stroke: #2c261f; stroke-width: 2.4; stroke-linejoin: round; stroke-linecap: round; }
 
-/* DÃ­a â€” ticket vertical irregular */
+/* Día — ticket vertical irregular */
 .obj-dia {
   display: flex; flex-direction: column; gap: .04rem; padding: .34rem .58rem .4rem;
   background: linear-gradient(168deg, #fff8c4, #ffef9e);
@@ -65,7 +84,7 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .obj-dia-dow { font-size: .66rem; font-weight: 800; color: #5a5048; }
 .obj-dia-hora { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: .84rem; }
 
-/* Dinero â€” tira horizontal distinta */
+/* Dinero — tira horizontal distinta */
 .obj-dinero {
   display: flex; flex-direction: column; align-items: flex-start; gap: .02rem;
   padding: .18rem .55rem .22rem .45rem; min-width: 78px;
@@ -76,7 +95,7 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .obj-dinero-lbl { font-size: .5rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #7a7164; }
 .obj-dinero-val { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: .88rem; line-height: 1.1; }
 
-/* === Zona ACTIVIDAD (izquierda) â€” proximidad, sin caja === */
+/* === Zona ACTIVIDAD (izquierda) — proximidad, sin caja === */
 .zona-actividad { display: flex; flex-direction: column; gap: .65rem; align-items: stretch; padding-top: .15rem; }
 .obj-buzon {
   position: relative; display: flex; flex-direction: column; align-items: center;
@@ -164,8 +183,8 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .obj-parejas { padding: 0; background: transparent; }
 .obj-parejas-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .3rem; gap: .25rem; }
 .obj-parejas-tab { font-size: .58rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #7a7164; }
-.obj-pestaÃ±a { border: 0; background: none; font: inherit; font-size: .58rem; font-weight: 800; color: #8a7a66; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 0; }
-.obj-pestaÃ±a:disabled { opacity: .35; cursor: not-allowed; text-decoration: none; }
+.obj-pestaña { border: 0; background: none; font: inherit; font-size: .58rem; font-weight: 800; color: #8a7a66; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 0; }
+.obj-pestaña:disabled { opacity: .35; cursor: not-allowed; text-decoration: none; }
 .obj-parejas-list { display: flex; flex-direction: column; gap: .45rem; }
 .obj-pareja-fila { display: flex; flex-direction: column; gap: .1rem; }
 .obj-pareja-fotos { display: flex; align-items: center; }
@@ -182,7 +201,7 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .play-v3 .edificios-layer .edif.is-on {
   filter: none; opacity: 1;
 }
-/* Prototipo biblioteca â†’ mismo sistema .is-off */
+/* Prototipo biblioteca → mismo sistema .is-off */
 .play-v3 .edificios-layer .edif.b-biblioteca.is-off,
 .play-v3 .edificios-layer .edif.is-off {
   opacity: 1 !important;
@@ -206,7 +225,7 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
   border: 1px solid rgba(44,38,31,.35);
 }
 
-/* BuzÃ³n modal */
+/* Buzón modal */
 .play-v3 .play-root.pc .capa-buzon { width: min(520px, 94vw) !important; max-width: 520px !important; }
 .play-v3 .capa-buzon [data-buzon-list] { max-height: calc(88vh - 120px); overflow-x: clip; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #c9b59a rgba(243, 230, 204, .35); }
 .play-v3 .capa-buzon .carta-msg { display: block !important; grid-template-columns: unset !important; }
@@ -214,7 +233,7 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .play-v3 .capa-buzon .carta-copy { flex: 1 1 auto; min-width: 0; }
 
 
-/* === Coherencia: aire, overflow, vecinos, bloques, buzÃ³n === */
+/* === Coherencia: aire, overflow, vecinos, bloques, buzón === */
 body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 .game-left, .game-right { overflow-x: visible; overflow-y: visible; max-width: 100%; }
 .zona-actividad { gap: 1.1rem; padding-bottom: .5rem; }
@@ -227,12 +246,16 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 .zona-personas .obj-bloques-res { margin-bottom: .35rem; }
 .zona-personas .obj-parejas { margin-top: .5rem; }
 
-.obj-vecinos-resumen {
+.obj-vecinos-resumen:not(.celestine-nota) {
   display: block; width: 100%; padding: .35rem 0 .2rem; border: 0; background: transparent;
   cursor: pointer; text-align: left; font: inherit; color: inherit;
 }
+.obj-vecinos-resumen.celestine-nota {
+  display: block; width: 100%; border: 0; cursor: pointer; text-align: left; font: inherit; color: inherit;
+}
 .obj-vecinos-stats { max-width: 100%; overflow: hidden; }
 .obj-vecinos-tit { display: block; font-size: .58rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #7a7164; margin-bottom: .35rem; }
+.celestine-nota .obj-vecinos-tit { color: #6a5848; }
 .vecinos-stat { display: flex; align-items: center; gap: .35rem; padding: .12rem 0; font-size: .68rem; line-height: 1.25; min-width: 0; max-width: 100%; }
 .vecinos-stat-ico { width: 1rem; text-align: center; opacity: .85; font-size: .72rem; }
 .vecinos-stat-k { flex: 1; color: #5a5048; }
@@ -257,14 +280,14 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 
 .obj-lab-note { font-size: .55rem; font-style: italic; color: #8a7a66; margin: 0 0 .25rem; }
 
-/* Tienda = instalaciÃ³n funcional */
+/* Tienda = instalación funcional */
 .play-v3 .edificios-layer .edif.is-funcional.is-on {
   filter: drop-shadow(0 0 4px rgba(120, 90, 200, .35));
   outline: 2px solid rgba(120, 90, 200, .45);
   outline-offset: 1px;
 }
 
-/* BuzÃ³n modal â€” menos ventana, mÃ¡s papel */
+/* Buzón modal — menos ventana, más papel */
 .play-v3 .capa-buzon {
   background: #fff9ee !important;
   border: 2px solid #2c261f !important;
@@ -293,7 +316,7 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 .game-left, .zona-actividad { min-width:0; }
 .obj-vecinos-resumen, .obj-cotilleo, .obj-proximo, .obj-buzon { max-width:100%; box-sizing:border-box; }
 
-/* --- Agenda planes + notificaciÃ³n confirmado --- */
+/* --- Agenda planes + notificación confirmado --- */
 .obj-planes-pend {
   display: flex; align-items: center; justify-content: space-between; gap: .35rem;
   width: 100%; margin-top: .55rem; padding: .28rem .1rem .1rem;

@@ -3,9 +3,7 @@ declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
-$ahtUi = 'v3-20260821ac';
-$ahtLab = isset($_GET['lab']) && (string) $_GET['lab'] !== '0';
-$ahtTaller = $ahtLab; // dev solo con ?lab=1
+$ahtUi = 'v3-20260822bloq';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -13,7 +11,7 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="aht-ui" content="v3"/>
-  <title><?= $ahtLab ? 'Playtest · Aquí Hay Tema' : 'Aquí Hay Tema' ?></title>
+  <title>Aquí Hay Tema</title>
   <link rel="icon" href="cover.svg" type="image/svg+xml"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -23,17 +21,16 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
   <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
       font-family: Fraunces, Georgia, serif; font-style: italic;
       background: #f3e6cc; border-bottom: 2px solid #c9b8a0; color: #2a2218;
     }
-    body.play-v3:not([data-lab="1"]) .taller,
-    body.play-v3:not([data-lab="1"]) .taller-cheat { display: none !important; }
-    body.play-v3:not([data-lab="1"]) .playtest-guia,
-    body.play-v3:not([data-lab="1"]) .playtest-cheats,
-    body.play-v3:not([data-lab="1"]) .tiempo-juego { display: none !important; }
+        body.play-v3 .playtest-guia,
+    body.play-v3 .playtest-cheats,
+    body.play-v3 .tiempo-juego { display: none !important; }
     body.play-v3[data-tutorial-zona="buzon"] [data-open="buzon"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="vecinos"] [data-open="vecinos"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="organizar"] [data-open="organizar"] { outline: 2px solid #c45; }
@@ -102,26 +99,73 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
       margin: 0; max-height: 22rem; overflow: auto; white-space: pre-wrap;
       font: 11px/1.4 ui-monospace, Consolas, monospace; color: #cfc6b8;
     }
-  </style>
+    .aht-debug-float { position: fixed; z-index: 90; left: 10px; bottom: 10px; }
+    .aht-debug-toggle { border: 1px solid #8a7a66; background: #fff6c8; font: 700 .72rem Nunito,sans-serif; padding: .35rem .55rem; border-radius: 999px; cursor: pointer; opacity: .92; }
+    .aht-debug-panel { position: absolute; left: 0; bottom: calc(100% + 6px); width: min(260px, 88vw); padding: .5rem; background: #fffdf6; border: 1px solid #8a7a66; display: flex; flex-wrap: wrap; gap: .3rem; box-shadow: 2px 3px 8px rgba(0,0,0,.12); }
+    .aht-debug-panel[hidden] { display: none !important; }
+    .aht-debug-title { width: 100%; margin: 0; font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #7a7164; }
+    .aht-debug-panel button { border: 1px solid #8a7a66; background: #fff; font: inherit; font-size: .7rem; font-weight: 700; padding: .2rem .4rem; cursor: pointer; }
+    .tut-caras {
+      display: flex; justify-content: center; gap: .35rem; flex-wrap: wrap;
+      margin: .45rem 0 .55rem; max-width: 100%; overflow: hidden;
+    }
+    .tut-caras .cara {
+      width: 52px; height: 52px; flex: 0 0 52px; overflow: hidden;
+      border-radius: 50%; border: 2px solid rgba(120,96,72,.35); background: #fff;
+      display: inline-flex; align-items: center; justify-content: center;
+    }
+    .tut-caras img, .tut-caras .cara img {
+      width: 52px; height: 52px; max-width: 52px; max-height: 52px;
+      object-fit: cover; object-position: 50% 12%; display: block; border-radius: 50%;
+    }
+    .caras-clip { display: flex; justify-content: center; gap: .35rem; margin-bottom: .35rem; flex-wrap: wrap; overflow: hidden; }
+    .caras-clip .cara {
+      width: 52px; height: 52px; flex: 0 0 52px; overflow: hidden;
+      border-radius: 50%; border: 2px solid rgba(120,96,72,.35);
+    }
+    .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; max-width: 52px; max-height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 12%; display: block; }
+    .mision-accion {
+      margin-top: .35rem; border: 1px solid #8a7a66; background: #fff6c8;
+      font: inherit; font-size: .75rem; font-weight: 800; padding: .25rem .5rem; cursor: pointer;
+    }
+    /* Retratos: rostro visible sin rediseñar capas */
+    .capa-vecinos .vecino img,
+    .vecino-celda img,
+    .ficha-hero .cara img,
+    .caras-clip img,
+    .caras-clip .cara img,
+    .tut-caras img,
+    .tut-caras .cara img,
+    .prox-caras img {
+      object-fit: cover;
+      object-position: 50% 12%;
+    }
+    .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; border-radius: 50%; }
+    .prox-caras { display: flex; gap: .35rem; margin-bottom: .35rem; }
+    .prox-caras img, .prox-cara-ini {
+      width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(120,96,72,.35);
+      display: inline-flex; align-items: center; justify-content: center; background: #fff;
+      font-weight: 800; font-size: .9rem;
+    }
+      </style>
 </head>
-<body class="play-v3" data-ui="v3" data-taller="<?= $ahtTaller ? '1' : '0' ?>" data-lab="<?= $ahtLab ? '1' : '0' ?>">
-    <?php if ($ahtLab): ?>
-  <div class="playtest-float" data-playtest-float>
-    <button type="button" class="playtest-float-toggle" data-playtest-toggle aria-expanded="false" title="Controles de playtest">🧪 Playtest</button>
-    <div class="playtest-float-panel" hidden>
-      <p class="playtest-float-title">Laboratorio</p>
-      <button type="button" id="btn-nueva">Nueva partida</button>
-      <button type="button" class="taller-cheat" id="btn-guardar">Guardar</button>
-      <button type="button" class="taller-cheat" data-horas="1">+1h</button>
-      <button type="button" class="taller-cheat" data-horas="8">+8h</button>
-      <button type="button" class="taller-cheat" data-horas="24">+1 día</button>
-      <button type="button" class="taller-cheat" data-horas="72">+3 días</button>
-      <button type="button" class="taller-cheat" id="btn-proximo">Ir al próximo</button>
-      <a class="taller-cheat" href="play-provisional.php">UI anterior</a>
-      <span class="msg taller-cheat" data-taller-msg></span>
+<body class="play-v3" data-ui="v3" data-debug="0">
+  <div class="aht-debug-float" data-debug-float>
+    <button type="button" class="aht-debug-toggle" data-debug-toggle aria-expanded="false" title="Herramientas DEBUG">🧪 DEBUG</button>
+    <div class="aht-debug-panel" data-debug-panel hidden>
+      <p class="aht-debug-title">DEBUG</p>
+      <button type="button" id="btn-debug-nueva">Nueva partida</button>
+      <button type="button" id="btn-debug-guardar">Guardar</button>
+      <button type="button" data-horas="1">+1h</button>
+      <button type="button" data-horas="8">+8h</button>
+      <button type="button" data-horas="24">+1 día</button>
+      <button type="button" data-horas="72">+3 días</button>
+      <button type="button" id="btn-debug-proximo">Ir al próximo</button>
+      <button type="button" id="btn-debug-copy">Copiar debug</button>
+      <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
+      <span class="msg" data-debug-msg></span>
     </div>
   </div>
-  <?php endif; ?>
   <p class="tutorial-pista" data-tutorial-pista hidden></p>
   <div class="playtest-cheats" data-playtest-cheats hidden>
     <span class="pc-label">Acelerar tiempo</span>
@@ -175,8 +219,7 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
       </div>
       <div class="top-vida" aria-label="Vida del pueblo">
         <span class="obj-vida-kicker">Vida del pueblo</span>
-        <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" width="68" height="62" aria-hidden="true">
-          <defs><filter id="corazon-hand" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="0.8"/></filter></defs>
+        <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <path class="corazon-bg" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
           <clipPath id="corazon-clip"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
           <rect class="corazon-fill-rect" clip-path="url(#corazon-clip)" x="0" y="0" width="58" height="52" data-corazon-fill/>
@@ -305,11 +348,19 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
           <p class="libreta-kicker">Primeros pasos</p>
           <h2 data-tut-tit></h2>
           <p class="tut-texto" data-tut-texto></p>
+          <div class="tut-caras" data-tut-caras hidden></div>
           <div class="tut-pasos" data-tut-pasos></div>
           <div class="tut-acciones">
             <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
             <button type="button" class="cta" data-tut-siguiente>Siguiente</button>
           </div>
+        </div>
+      </aside>
+      <aside class="tut-finale" data-tut-finale hidden aria-live="polite">
+        <div class="tut-papel">
+          <h2 data-tut-fin-tit></h2>
+          <p class="tut-texto" data-tut-fin-texto></p>
+          <button type="button" class="cta" data-tut-fin-ok>Que empiece el tema</button>
         </div>
       </aside>
 
@@ -370,9 +421,14 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
         <p class="libreta-kicker">Libreta de Celestine</p>
         <h2>Organizar un plan</h2>
         <p class="mini">Tú propones. Ellas viven.</p>
+        <div class="org-row" data-org-modo-row>
+          <label>Tipo de plan</label>
+          <button type="button" class="chip is-on" data-org-modo="pareja">Con alguien</button>
+          <button type="button" class="chip" data-org-modo="solo">Por su cuenta</button>
+        </div>
         <div class="caras-clip" data-org-caras hidden></div>
         <div class="org-row"><label>¿Con quién?</label><select data-org-a></select></div>
-        <div class="org-row"><label>¿Y con quién más?</label><select data-org-b></select></div>
+        <div class="org-row" data-org-row-b><label>¿Y con quién más?</label><select data-org-b></select></div>
         <p><strong>¿Qué plan?</strong></p>
         <div class="chips" data-org-tipos></div>
         <div class="org-row"><label>¿Dónde?</label><select data-org-lugar></select></div>
@@ -398,9 +454,7 @@ $ahtTaller = $ahtLab; // dev solo con ?lab=1
       </aside>
     </div>
   </div>
-  <?php if ($ahtLab): ?>
   <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <?php endif; ?>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
 </body>
 </html>

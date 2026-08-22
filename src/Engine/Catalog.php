@@ -5,6 +5,9 @@ namespace AquiHayTema\Engine;
 
 final class Catalog
 {
+    /** Fichas técnicas/QA: cargables para tests, nunca en pools jugables. */
+    private const EXCLUIDOS_POOL_JUGABLE = ['per_qa_valid'];
+
     private string $root;
     private ?array $lugaresCache = null;
     private ?array $lugarIdsCache = null;
@@ -26,6 +29,7 @@ final class Catalog
             ]]);
         }
         $data = JsonFile::read($path);
+        $data = IdentidadCanon::sanitizarPersonaje($data);
         $errores = PersonajeValidator::validar($data, $path, $this->lugarIds(), $this->store());
         if ($errores !== []) {
             throw new ContentValidationException($errores);
@@ -81,7 +85,7 @@ final class Catalog
         return $data;
     }
 
-    public function listPersonajeIds(): array
+  public function listPersonajeIds(): array
     {
         $ids = [];
         foreach (glob("{$this->root}/data/personajes/per_*.json") ?: [] as $file) {
@@ -89,6 +93,21 @@ final class Catalog
         }
         sort($ids);
         return $ids;
+    }
+
+    /** @return list<string> */
+    public function listPersonajeIdsJugables(): array
+    {
+        $excl = self::EXCLUIDOS_POOL_JUGABLE;
+        return array_values(array_filter(
+            $this->listPersonajeIds(),
+            static fn(string $id): bool => !in_array($id, $excl, true)
+        ));
+    }
+
+    public function esPersonajeJugable(string $id): bool
+    {
+        return $id !== '' && !in_array($id, self::EXCLUIDOS_POOL_JUGABLE, true);
     }
 
     /** @return list<string> */

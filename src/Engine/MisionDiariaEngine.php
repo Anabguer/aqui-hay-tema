@@ -87,6 +87,9 @@ final class MisionDiariaEngine
         }
         self::ensure($partida);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if (TutorialPrimerosPasos::bloqueaMisionesNormales($partida)) {
+            return self::delDia($partida, $dia);
+        }
         if ((int) ($partida['misiones_diarias']['dia'] ?? 0) === $dia) {
             return self::delDia($partida, $dia);
         }
@@ -232,9 +235,13 @@ final class MisionDiariaEngine
         foreach (self::delDia($partida, $dia) as $m) {
             $items[] = [
                 'id' => $m['id'] ?? '',
+                'titulo' => $m['titulo'] ?? '',
                 'texto' => $m['texto'] ?? '',
                 'estado' => $m['estado'] ?? self::EST_PENDIENTE,
                 'familia' => $m['familia'] ?? '',
+                'accion' => $m['accion'] ?? null,
+                'accion_params' => $m['accion_params'] ?? null,
+                'accion_label' => $m['accion_label'] ?? null,
             ];
         }
         return [

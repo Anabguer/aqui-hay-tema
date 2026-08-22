@@ -444,13 +444,10 @@ final class CandidatoLlegadaEngine
     public static function poolDisponible(array $partida, string $root): array
     {
         $catalog = new Catalog($root);
-        $ids = $catalog->listPersonajeIds();
+        $ids = $catalog->listPersonajeIdsJugables();
         $out = [];
         foreach ($ids as $id) {
             $id = (string) $id;
-            if ($id === 'per_qa_valid') {
-                continue;
-            }
             if (isset($partida['residentes'][$id])) {
                 $pres = (string) ($partida['residentes'][$id]['presencia'] ?? 'residente');
                 if ($pres === 'residente' || $pres === 'antiguo_residente') {

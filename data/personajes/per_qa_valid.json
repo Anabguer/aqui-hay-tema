@@ -7,19 +7,30 @@
     "nombre": "QA Valid",
     "edad": 30,
     "genero": "mujer",
-    "pronombres": ["ella"],
-    "atraido_por": ["hombre"],
+    "pronombres": [
+      "ella"
+    ],
     "apertura_descubrimiento": "permeable"
   },
   "vida": {
     "ocupacion": "autonomo",
     "franja_disponibilidad": "flexible",
     "hobby_principal": "pasear",
-    "hobbies_secundarios": ["leer"],
-    "lugares_preferentes": ["lug_parque"],
+    "hobbies_secundarios": [
+      "leer"
+    ],
+    "lugares_preferentes": [
+      "lug_parque"
+    ],
     "estilo_social": "tranquilo",
-    "rasgos_publicos": ["directo", "leal", "empatico"],
-    "rasgos_ocultos": ["ansioso"]
+    "rasgos_publicos": [
+      "directo",
+      "leal",
+      "empatico"
+    ],
+    "rasgos_ocultos": [
+      "ansioso"
+    ]
   },
   "romance": {
     "necesidad_contacto_base": "media"

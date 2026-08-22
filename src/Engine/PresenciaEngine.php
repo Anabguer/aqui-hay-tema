@@ -89,7 +89,33 @@ final class PresenciaEngine
                 return $lugar;
             }
         }
-        return null;
+
+        return self::lugarRutina($partida, $rid, $dia, $hora);
+    }
+
+    /**
+     * Presencia visual rutinaria: lugares_preferentes del perfil de partida.
+     * Solo afecta mapa/presencia; no altera encuentros ni RNG de gameplay.
+     */
+    private static function lugarRutina(array $partida, string $rid, int $dia, int $hora): ?string
+    {
+        if ($hora < 8 || $hora > 22) {
+            return null;
+        }
+        $perfil = PerfilPartida::de($partida, $rid);
+        if ($perfil === null) {
+            return null;
+        }
+        $prefs = is_array($perfil['lugares_preferentes'] ?? null) ? $perfil['lugares_preferentes'] : [];
+        $prefs = array_values(array_filter($prefs, static function ($lug): bool {
+            return is_string($lug) && $lug !== '' && LugaresCanonicos::operativoEnProducto($lug);
+        }));
+        if ($prefs === []) {
+            return null;
+        }
+        $idx = abs((int) sprintf('%u', crc32($rid . '|' . $dia . '|' . (int) floor($hora / 3)))) % count($prefs);
+
+        return (string) $prefs[$idx];
     }
 
     private static function iniciales(array $res): string

@@ -51,12 +51,22 @@ final class BuzonHandler
     {
         $r = BuzonEngine::marcarLeido($partida, (string) ($body['mensaje_id'] ?? ''));
         if ($r['ok'] ?? false) {
-            $r['tutorial'] = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
+            $mid = (string) ($body['mensaje_id'] ?? '');
+            \AquiHayTema\Engine\TutorialPrimerosPasos::alLeerMensaje(
                 $partida,
-                \AquiHayTema\Engine\TutorialBucle::HECHO_BUZON,
-                $ctx->root,
-                $ctx->logger
+                $mid,
+                new \AquiHayTema\Engine\Catalog($ctx->root)
             );
+            if (($partida['tutorial']['id'] ?? '') !== \AquiHayTema\Engine\TutorialPrimerosPasos::ID) {
+                $r['tutorial'] = \AquiHayTema\Engine\TutorialBucle::registrarConRoot(
+                    $partida,
+                    \AquiHayTema\Engine\TutorialBucle::HECHO_BUZON,
+                    $ctx->root,
+                    $ctx->logger
+                );
+            } else {
+                $r['tutorial'] = \AquiHayTema\Engine\TutorialPrimerosPasos::vistaPublica($partida);
+            }
             savePartida($ctx, $partida);
         }
         return $r;

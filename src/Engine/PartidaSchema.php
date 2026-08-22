@@ -23,7 +23,7 @@ final class PartidaSchema
         $config = (new Catalog($projectRoot))->loadConfigPrevalidada($configId);
 
         $partidaId = self::generarId();
-        $seedFinal = $seed ?? ($config['seed_sugerida'] ?? $partidaId);
+        $seedFinal = $seed ?? $partidaId;
 
         $now = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format(DATE_ATOM);
         $partida['meta']['partida_id'] = $partidaId;

@@ -1,5 +1,5 @@
-ï»¿/**
- * Direccion artistica shell â€” objetos visuales, no dashboard.
+/**
+ * Direccion artistica shell — objetos visuales, no dashboard.
  */
 body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; }
 .zona-actividad, .zona-personas { gap: 0 !important; padding-top: .25rem; }
@@ -7,10 +7,62 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 .shell-grupo + .shell-grupo { margin-top: 1.35rem; }
 .shell-grupo-kicker, .zona-tit { display: block; margin: 0 0 .55rem; font-size: .52rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #a89888; }
 .shell-par-buzon-coti { display: flex; flex-direction: column; align-items: stretch; gap: .15rem; }
-.celestine-nota { position: relative; display: block; width: 100%; padding: .55rem .5rem .5rem .62rem; border: 0; background: linear-gradient(168deg, #fffef9 0%, #fff8ee 100%); cursor: pointer; text-align: left; font: inherit; color: inherit; transform: rotate(-0.6deg); clip-path: polygon(0 2%, 97% 0, 100% 94%, 3% 100%, 0 88%); box-shadow: 1px 2px 0 rgba(120,96,72,.12), 0 0 0 1px rgba(180,150,110,.18); }
-.celestine-nota::after { content: ""; position: absolute; top: -5px; right: 10px; width: 14px; height: 14px; background: radial-gradient(circle at 40% 35%, #d4a574, #b8895a); border-radius: 50%; opacity: .55; }
-.celestine-nota .libreta-kicker { display: block; margin: 0 0 .12rem; font-family: Caveat, cursive; font-size: .84rem; font-weight: 700; color: #8a7060; letter-spacing: .02em; text-transform: none; }
-.celestine-nota .obj-vecinos-tit { margin-bottom: .28rem; font-size: .56rem; letter-spacing: .12em; }
+.celestine-nota {
+  position: relative; display: block; width: 100%; overflow: visible;
+  padding: 1rem 1.4rem .88rem .92rem;
+  background: linear-gradient(168deg, #fffef9 0%, #faf5ea 55%, #f4ead8 100%);
+  cursor: pointer; text-align: left; font: inherit; color: inherit;
+  transform: rotate(-0.45deg);
+  clip-path: polygon(0 3%, 98% 0, 100% 5%, 99% 96%, 94% 100%, 3% 99%, 0 93%, 1% 7%);
+  border: 1.5px solid rgba(108, 88, 66, 0.72);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 250, 242, 0.55),
+    inset -2px -3px 6px rgba(120, 92, 64, 0.09);
+  filter:
+    drop-shadow(1px 2px 0 rgba(172, 142, 108, 0.28))
+    drop-shadow(2px 4px 0 rgba(158, 128, 94, 0.16))
+    drop-shadow(3px 7px 10px rgba(58, 42, 28, 0.09))
+    drop-shadow(5px 11px 22px rgba(44, 38, 31, 0.14));
+}
+.celestine-nota::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  box-shadow: inset 0 0 0 1px rgba(88, 70, 52, 0.14);
+}
+.celestine-nota::after {
+  content: "";
+  position: absolute;
+  top: 7px;
+  right: 12px;
+  width: 26px;
+  height: 30px;
+  background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
+  transform: rotate(9deg);
+  z-index: 2;
+  pointer-events: none;
+  filter: drop-shadow(1px 2px 1px rgba(40, 28, 16, 0.22));
+}
+.celestine-nota .libreta-kicker {
+  display: block; margin: 0 0 1.05rem;
+  font-family: Caveat, cursive; font-size: 1.28rem; font-weight: 700;
+  color: #3f3228; letter-spacing: .01em; text-transform: none; line-height: 1.05;
+}
+.celestine-nota .obj-vecinos-tit {
+  display: block; margin: 0 0 .45rem;
+  font-family: Nunito, "Segoe UI", sans-serif; font-size: .74rem; font-weight: 800;
+  letter-spacing: .13em; text-transform: uppercase; color: #5a4838;
+}
+.celestine-nota .obj-vecinos-stats .stat-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  gap: .75rem; padding: .14rem 0; font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .76rem; line-height: 1.35; color: #4a4038;
+}
+.celestine-nota .obj-vecinos-stats .stat-row strong {
+  font-size: .8rem; font-weight: 800; color: #2c261f; flex: 0 0 auto;
+}
 .celeste-lead { margin: 0 0 .35rem; font-family: Fraunces, Georgia, serif; font-size: .92rem; line-height: 1.2; color: #2c261f; }
 .celeste-lead strong { font-size: 1.15rem; font-weight: 700; }
 .celeste-lead span { font-style: italic; font-size: .82rem; color: #6a5848; }
@@ -64,12 +116,10 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 .shell-grupo-parejas { margin-top: .25rem; }
 
 /* === PASS 2: composicion lateral izquierdo === */
-.shell-grupo-resumen { overflow: visible; padding-top: 1.75rem; margin-bottom: 0; }
+.shell-grupo-resumen { overflow: visible; padding-top: 0; margin-bottom: 0; }
 .zona-actividad .shell-grupo-buzon { margin-top: 2rem !important; }
 .zona-actividad .shell-grupo-planes { margin-top: 1.5rem !important; }
 .zona-actividad .shell-grupo-cotilleo { margin-top: 2.25rem !important; }
-.celestine-nota::after { display: none !important; }
-.celestine-nota::before { display: none !important; }
 
 .shell-grupo-cotilleo .obj-cotilleo {
   margin-left: 0;
@@ -202,16 +252,20 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 .top-center { gap: 1.1rem; align-items: center; }
 
 /* Vida del pueblo - corazon organico */
-.corazon-org .corazon-bg { fill: #f8e8ee; }
-.corazon-org .corazon-fill-rect { fill: #e56b8a; }
+.corazon-org .corazon-bg { fill: #fceef0; }
+.corazon-org .corazon-fill-rect { fill: #e57d90; }
 .corazon-org .corazon-stroke {
   stroke: #2c261f;
   stroke-width: 2.6;
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: url(#corazon-hand) drop-shadow(1px 2px 0 rgba(44,38,31,.06));
+  filter: drop-shadow(1px 2px 0 rgba(44,38,31,.08));
 }
-.obj-vida-kicker { font-size: .44rem; letter-spacing: .1em; opacity: .75; }
+.obj-vida-kicker {
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  letter-spacing: .03em;
+  opacity: 1;
+}
 
 /* Bloques - mini edificios mas grandes */
 .obj-residencias-row, .obj-bloques-res {
@@ -286,14 +340,14 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 /* === PASS 3: laterales mas grandes === */
 .game-left, .game-right { padding: 0 .15rem; }
 
-.shell-grupo-resumen { padding-top: 2rem; }
+.shell-grupo-resumen { padding-top: 0; }
 .zona-actividad .shell-grupo-buzon { margin-top: 2.4rem !important; }
 .zona-actividad .shell-grupo-planes { margin-top: 2rem !important; }
 .zona-actividad .shell-grupo-cotilleo { margin-top: 2.75rem !important; }
 
-.celestine-nota { padding: .75rem .65rem .65rem .78rem; }
-.celestine-nota .libreta-kicker { font-size: .98rem; margin-bottom: .18rem; }
-.celestine-nota .obj-vecinos-tit { font-size: .68rem; margin-bottom: .35rem; }
+.celestine-nota { padding: 1rem 1.4rem .88rem .92rem; }
+.celestine-nota .libreta-kicker { font-size: 1.28rem; margin-bottom: 1.1rem; }
+.celestine-nota .obj-vecinos-tit { font-size: .72rem; margin-bottom: .42rem; }
 .celeste-lead { font-size: 1.02rem; margin-bottom: .42rem; }
 .celeste-lead strong { font-size: 1.38rem; }
 .celeste-lead span { font-size: .92rem; }
@@ -354,41 +408,20 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 .shell-grupo-resumen {
   position: relative;
-  padding-top: 2rem;
-  padding-right: .35rem;
+  padding-top: 0;
+  padding-right: 0;
 }
 
-.shell-grupo-resumen::before {
-  content: "";
-  position: absolute;
-  top: 4px;
-  right: 2px;
-  width: 28px;
-  height: 32px;
-  background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
-  transform: rotate(12deg);
-  z-index: 4;
-  pointer-events: none;
-  filter: drop-shadow(1px 2px 0 rgba(40,28,16,.18));
-}
 
-.celestine-nota {
-  position: relative;
-  overflow: visible;
-  padding: .95rem 2.4rem .78rem .88rem;
-  clip-path: polygon(0 5%, 90% 0, 100% 95%, 5% 100%, 0 92%);
-}
-
-.celestine-nota::before { display: none !important; }
 
 .celestine-nota .libreta-kicker {
-  font-size: 1.32rem;
+  font-size: 1.28rem;
   line-height: 1.05;
-  margin-bottom: .24rem;
-  color: #7a6450;
+  margin-bottom: 1.1rem;
+  color: #6e5848;
 }
 
-.celestine-nota .obj-vecinos-tit { font-size: .78rem; margin-bottom: .38rem; }
+.celestine-nota .obj-vecinos-tit { font-size: .72rem; margin-bottom: .42rem; }
 .celeste-lead { font-size: 1.1rem; margin-bottom: .48rem; }
 .celeste-lead strong { font-size: 1.62rem; }
 .celeste-lead span { font-size: 1.02rem; }
@@ -471,11 +504,31 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   color: #7a6450;
 }
 
-.play-v3 .capa-cerrar-pestaÃ±a {
+.play-v3 .capa-cerrar-pestaña {
   font-size: .72rem !important;
   color: #2c261f !important;
   text-shadow: 0 1px 0 rgba(255,255,255,.95);
   isolation: isolate;
   z-index: 8;
 }
-.play-v3 .capa-cerrar-pestaÃ±a::before { z-index: -1; }
+.play-v3 .capa-cerrar-pestaña::before { z-index: -1; }
+
+/* Vida pueblo: margen derecho cabecera */
+.game-top {
+  padding-right: 1cm !important;
+  box-sizing: border-box;
+}
+.game-top .top-vida {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-right: 0;
+  overflow: hidden;
+}
+.game-top .corazon-svg {
+  margin-right: 0;
+  justify-self: end;
+}
+.shell-grupo-resumen::before { display: none !important; content: none !important; }

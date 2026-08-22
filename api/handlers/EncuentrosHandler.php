@@ -57,6 +57,10 @@ final class EncuentrosHandler
             $catalog = new Catalog($ctx->root);
             LabAudit::eventosNuevosResidentes($antesRes, $partida, $catalog);
             LabAudit::eventoPlan($partida, $r, $catalog);
+            $prop = is_array($r['propuesta'] ?? null) ? $r['propuesta'] : [];
+            if ((string) ($prop['tipo'] ?? '') === 'individual') {
+                LabAudit::eventoPlanSolo($partida, $r, $catalog);
+            }
         }
         return withLabAudit($r);
     }
@@ -94,6 +98,26 @@ final class EncuentrosHandler
         ];
         $a = (string) ($parts[0] ?? '');
         $b = (string) ($parts[1] ?? '');
+        $modo = (string) ($body['modo'] ?? 'pareja');
+        if ($modo === 'solo' || ($b === '' && $a !== '')) {
+            return [
+                'ok' => true,
+                'conocidos' => false,
+                'tipos' => ['individual'],
+                'opciones' => [[
+                    'id' => 'individual',
+                    'label' => 'Por su cuenta',
+                    'cupo' => '1 persona',
+                ]],
+                'tipo_sugerido' => 'individual',
+                'causa' => '',
+                'mensaje_ui' => '',
+                'candidatos_a' => \AquiHayTema\Engine\OrganizarMotivo::candidatos($partida, ''),
+                'candidatos_b' => [],
+                'planes_organizar' => \AquiHayTema\Engine\PropuestaNivel::contratoOrganizar(),
+                'hint' => 'Plan en solitario: un vecino, un lugar, una hora.',
+            ];
+        }
         $cal = \AquiHayTema\Engine\CalibracionConfig::load($ctx->root);
         $tipos = \AquiHayTema\Engine\PropuestaNivel::tiposPermitidos($partida, $a, $b, $cal);
         $motivo = \AquiHayTema\Engine\OrganizarMotivo::de($partida, $a, $b, '', $cal);

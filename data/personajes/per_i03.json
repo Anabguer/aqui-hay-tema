@@ -6,21 +6,36 @@
     "nombre": "Rocío",
     "edad": 47,
     "genero": "mujer",
-    "pronombres": ["ella"],
-    "atraido_por": ["hombre"],
-    "etiqueta_orientacion_visible": "heterosexual",
+    "pronombres": [
+      "ella"
+    ],
     "apertura_descubrimiento": "permeable"
   },
   "vida": {
     "ocupacion": "oficina",
     "franja_disponibilidad": "tarde",
     "hobby_principal": "bingo",
-    "hobbies_secundarios": ["pasear"],
-    "lugares_preferentes": ["lug_cafeteria", "lug_parque"],
+    "hobbies_secundarios": [
+      "pasear"
+    ],
+    "lugares_preferentes": [
+      "lug_cafeteria",
+      "lug_parque"
+    ],
     "estilo_social": "sociable_selectiva",
-    "rasgos_publicos": ["observadora", "practica", "socarrona"],
-    "rasgos_ocultos": ["ansioso"],
-    "gustos_declarados": ["Planes sencillos", "Crucigramas", "Pop español 90s/2000s"]
+    "rasgos_publicos": [
+      "observadora",
+      "practica",
+      "socarrona"
+    ],
+    "rasgos_ocultos": [
+      "ansioso"
+    ],
+    "gustos_declarados": [
+      "Planes sencillos",
+      "Crucigramas",
+      "Pop español 90s/2000s"
+    ]
   },
   "romance": {
     "necesidad_contacto_base": "baja",
@@ -80,8 +95,16 @@
       "ligera papada natural",
       "sonrisa pequeña de comisura"
     ],
-    "etiquetas_look_base": ["cotidiano", "comodo", "discreto"],
-    "looks_posibles": ["comodo", "cotidiano", "discreto"],
+    "etiquetas_look_base": [
+      "cotidiano",
+      "comodo",
+      "discreto"
+    ],
+    "looks_posibles": [
+      "comodo",
+      "cotidiano",
+      "discreto"
+    ],
     "retrato": {
       "estado": "borrador",
       "version": 1

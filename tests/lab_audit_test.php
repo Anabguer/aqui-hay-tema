@@ -17,7 +17,10 @@ LabAudit::reset();
 LabAudit::eventoNuevaPartida($partida, new Catalog($root));
 $eventos = LabAudit::flush();
 
-assert(count($eventos) >= 1, 'debe haber al menos un evento PARTIDA');
+assert(count($eventos) >= 7, 'debe haber PARTIDA + NPC + REL por vecino');
+$tags = array_column($eventos, 'tag');
+assert(in_array('NPC', $tags, true), 'debe haber eventos NPC');
+assert(in_array('REL', $tags, true), 'debe haber eventos REL');
 assert($eventos[0]['tag'] === 'PARTIDA', 'primer evento PARTIDA');
 assert(isset($eventos[0]['datos']['vecinos']), 'debe incluir vecinos');
 assert(isset($eventos[0]['datos']['matriz_relacional']), 'debe incluir matriz');

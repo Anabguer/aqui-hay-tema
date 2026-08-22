@@ -1,5 +1,5 @@
 ﻿/**
- * Instrumentación LAB: imprime en consola los eventos lab_audit de la API.
+ * Instrumentacion LAB: imprime eventos lab_audit de la API.
  * Solo se carga con ?lab=1.
  */
 (function (global) {
@@ -10,26 +10,26 @@
     var pref = ev.prefijo || '[AHT DEBUG]';
     var tag = ev.tag || 'EVENTO';
     var datos = ev.datos || {};
-    var label = pref + ' · ' + tag + (ev.ts ? ' · ' + ev.ts : '');
+    var label = pref + ' | ' + tag;
+    console.log(label, datos);
+    try {
+      console.log(label + ' JSON\n' + JSON.stringify(datos, null, 2));
+    } catch (e) { /* ignore */ }
     if (typeof console.groupCollapsed === 'function') {
       console.groupCollapsed(label);
       console.log(datos);
-      try {
-        console.log(JSON.stringify(datos, null, 2));
-      } catch (e) { /* ignore */ }
       console.groupEnd();
-    } else {
-      console.log(label, datos);
     }
   }
 
   function logPayload(payload) {
     if (!payload || !payload.lab_audit || !Array.isArray(payload.lab_audit.eventos)) return;
+    console.log('[AHT LAB] ' + payload.lab_audit.eventos.length + ' evento(s) de auditoria');
     payload.lab_audit.eventos.forEach(logEvento);
   }
 
   global.AhtLabAudit = {
     log: logPayload,
-    logEvento: logEvento,
+    logEvento: logEvento
   };
 })(typeof window !== 'undefined' ? window : globalThis);

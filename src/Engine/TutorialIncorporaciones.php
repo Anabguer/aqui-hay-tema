@@ -30,7 +30,8 @@ final class TutorialIncorporaciones
         if (!array_key_exists('tutorial_hechas', $partida['llegadas'])) {
             $partida['llegadas']['tutorial_hechas'] = [];
             $partida['llegadas']['tutorial_objetivo'] = (int) ($config['tutorial_objetivo_residentes'] ?? self::META_OBJETIVO);
-            $partida['llegadas']['modo'] = !empty($config['tutorial_bucle_1']) ? 'tutorial' : 'normal';
+            $modoTutorial = !empty($config['tutorial_bucle_1']) || !empty($config['tutorial_primeros_pasos']);
+            $partida['llegadas']['modo'] = $modoTutorial ? 'tutorial' : 'normal';
             if (($partida['llegadas']['modo'] ?? '') === 'normal') {
                 $partida['llegadas']['normal_desde_dia'] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
             }
@@ -61,6 +62,9 @@ final class TutorialIncorporaciones
     public static function tickDia1(array &$partida, string $root, ?GameLogger $logger = null): array
     {
         CandidatoLlegadaEngine::ensure($partida);
+        if (TutorialPrimerosPasos::bloqueaIncorporaciones($partida)) {
+            return [];
+        }
         $tut = TutorialBucle::vista($partida);
         if (!empty($tut['activo'])) {
             return []; // aún en tutorial: no incorporar
@@ -160,9 +164,10 @@ final class TutorialIncorporaciones
             $nombre = IdentidadPublica::nombre($partida, $id);
             BuzonEngine::crear($partida, [
                 'id' => 'msg_tut_inc_' . $id . '_' . bin2hex(random_bytes(2)),
-                'clasificacion' => BuzonEngine::IMPORTANTE,
-                'tipo' => 'llegada_tutorial',
-                'texto' => $nombre . ' se ha mudado al pueblo. Forma parte de las llegadas del primer día.',
+                'clasificacion' => BuzonEngine::COTILLEO,
+                'canal' => BuzonEngine::CANAL_COTILLEO,
+                'tipo' => 'llegada_pueblo',
+                'texto' => $nombre . ' ha llegado al pueblo (incorporación del día 1, población 3+5).',
                 'de_persona' => $id,
                 'actores' => [$id],
                 'origen' => ['tipo_evento' => 'tutorial_incorporacion', 'es_narrativo' => false],
