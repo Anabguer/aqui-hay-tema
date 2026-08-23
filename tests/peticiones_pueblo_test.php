@@ -97,16 +97,40 @@ $petPlazo = PeticionEngine::crear($pPlazo, 'lab_r01', 'tiempo', [
     'plazo_horas' => 12,
     'params' => ['lugar_id' => 'lug_parque'],
 ], null);
-ok(!empty($petPlazo['ok']), 'crear con plazo real');
-ok(!empty($petPlazo['peticion']['vence_iso']), 'guarda vence_iso');
-ok(PeticionEngine::caducarVencidas($pPlazo) === 0, 'no caduca antes de plazo real');
-Reloj::fijarAhora($t0->modify('+11 hours'));
-ok(PeticionEngine::caducarVencidas($pPlazo) === 0, 'a las 11 h sigue abierta');
-Reloj::fijarAhora($t0->modify('+12 hours'));
-ok(PeticionEngine::caducarVencidas($pPlazo) === 1, 'caduca a las 12 h reales');
-ok(count(PeticionEngine::listar($pPlazo, 'caducada')) === 1, 'queda caducada');
-$hum = PeticionPuebloEngine::plazoHumano($petPlazo['peticion']);
+ok(!empty($petPlazo['ok']), 'crear con plazo de juego');
+ok(!empty($petPlazo['peticion']['vence_iso']), 'guarda vence_iso (compat)');
+$vj = ((int) $pPlazo['reloj']['dia_pueblo']) * 24 + (int) $pPlazo['reloj']['hora_actual'] + 12;
+ok((int) $petPlazo['peticion']['vence_dia'] === intdiv($vj, 24)
+    && (int) $petPlazo['peticion']['vence_hora'] === $vj % 24,
+    'vence_dia/vence_hora en reloj de juego (creacion + plazo)');
+ok(PeticionEngine::caducarVencidas($pPlazo) === 0, 'no caduca antes de plazo de juego');
+Reloj::avanzarHoras($pPlazo, 11);
+ok(PeticionEngine::caducarVencidas($pPlazo) === 0, 'a las 11 h de juego sigue abierta');
+$hum = PeticionPuebloEngine::plazoHumano($petPlazo['peticion'], $pPlazo);
 ok(strpos($hum, '20/08') === false && strpos($hum, '17:34') === false, 'plazo humano sin fecha técnica');
+Reloj::avanzarHoras($pPlazo, 1);
+ok(PeticionEngine::caducarVencidas($pPlazo) === 1, 'caduca a las 12 h de juego');
+ok(count(PeticionEngine::listar($pPlazo, 'caducada')) === 1, 'queda caducada');
+
+// Fallback legacy: save antiguo sin vence_dia caduca por vence_iso (reloj real).
+$pLeg = SimuladorPeticionesPueblo::partidaLab(8, new RngService('b4-legacy'), $cal, 'E2');
+$pLeg['_lab_peticiones_b4'] = true;
+Reloj::fijarAhora($t0);
+$petLeg = PeticionEngine::crear($pLeg, 'lab_r01', 'tiempo', [
+    'schema_b4' => true,
+    'peso' => PeticionEsquemas::PESO_FACIL,
+    'texto' => 'Legacy.',
+    'plazo_horas' => 12,
+], null);
+unset($petLeg['peticion']['vence_dia'], $petLeg['peticion']['vence_hora']);
+foreach ($pLeg['peticiones'] as $i => $lp) {
+    if (($lp['id'] ?? '') === ($petLeg['peticion']['id'] ?? '')) {
+        unset($pLeg['peticiones'][$i]['vence_dia'], $pLeg['peticiones'][$i]['vence_hora']);
+    }
+}
+ok(PeticionEngine::caducarVencidas($pLeg) === 0, 'legacy: no caduca antes de plazo real');
+Reloj::fijarAhora($t0->modify('+13 hours'));
+ok(PeticionEngine::caducarVencidas($pLeg) === 1, 'legacy sin vence_dia cae a vence_iso');
 
 Reloj::fijarAhora($t0);
 $pCum = SimuladorPeticionesPueblo::partidaLab(8, new RngService('b4-cumple'), $cal, 'E2');
@@ -145,9 +169,9 @@ PeticionEngine::crear($pCad, 'lab_r02', 'tiempo', [
     'plazo_horas' => 12,
     'texto' => 'Sácame de casa.',
 ], null);
-Reloj::fijarAhora($t0->modify('+13 hours'));
+Reloj::avanzarHoras($pCad, 13);
 PeticionPuebloEngine::tick($pCad, $cal, $rng, null, 1);
-ok(VidaPuebloEngine::valor($pCad) === $vidaC - 1, 'caducada fácil −1 (E3)');
+ok(VidaPuebloEngine::valor($pCad) === $vidaC - 1, 'caducada fácil −1 (E3, por reloj de juego)');
 
 $service = new PartidaService($root);
 $off = $service->nuevaPartida('debug_v0', 'b4-flag-off');
@@ -222,6 +246,11 @@ if (count($idsSave) >= 1) {
         'plantilla_id' => 'ir_al_lugar',
         'params' => ['lugar_id' => 'lug_parque'],
     ], null);
+    foreach ($pSave['peticiones'] as $i => $lp) {
+        if (($lp['id'] ?? '') === ($cr['peticion']['id'] ?? '')) {
+            unset($pSave['peticiones'][$i]['vence_dia'], $pSave['peticiones'][$i]['vence_hora']);
+        }
+    }
     $service->guardar($pSave);
     $pid = (string) ($pSave['meta']['partida_id'] ?? '');
     Reloj::fijarAhora($t0->modify('+25 hours'));
@@ -232,7 +261,7 @@ if (count($idsSave) >= 1) {
             $cadLoad++;
         }
     }
-    ok($cadLoad >= 1, 'save/load conserva timestamps y caduca offline');
+    ok($cadLoad >= 1, 'save legacy (solo vence_iso) conserva timestamps y caduca offline');
 }
 
 $labMini = SimuladorPeticionesPueblo::ejecutarComparacion(

@@ -72,12 +72,17 @@ final class PeticionEngine
             'resultado' => null,
             'creada_iso' => $ahora->format(DATE_ATOM),
             'vence_iso' => null,
+            'vence_dia' => null,
+            'vence_hora' => null,
             'plazo_horas' => $plazoHoras,
             '_bloqueado_decision' => $esB4 ? [] : ['catalogo_narrativo', 'consecuencia_si_ignora', 'cantidad_generada'],
             '_placeholder_copy' => array_key_exists('_placeholder_copy', $datos) ? (bool) $datos['_placeholder_copy'] : !$esB4,
         ];
         if ($plazoHoras !== null && $plazoHoras > 0) {
             $peticion['vence_iso'] = $ahora->modify('+' . $plazoHoras . ' hours')->format(DATE_ATOM);
+            $totalJuego = $dia * 24 + $hora + $plazoHoras;
+            $peticion['vence_dia'] = intdiv($totalJuego, 24);
+            $peticion['vence_hora'] = $totalJuego % 24;
         }
         foreach (['schema_b4', 'plantilla_id', 'familia', 'params', 'hecho', 'peso', 'exigencia', 'cuenta_latido'] as $k) {
             if (array_key_exists($k, $datos)) {
@@ -92,7 +97,7 @@ final class PeticionEngine
         if (!$silencio) {
             $copyBuzon = $texto !== '' ? $texto : '[PLACEHOLDER] Petición de residente';
             if ($esB4 && $texto !== '') {
-                $copyBuzon = IdentidadPublica::nombre($partida, $residenteId) . ': ' . $texto . ' ' . PeticionPuebloEngine::plazoHumano($peticion);
+                $copyBuzon = IdentidadPublica::nombre($partida, $residenteId) . ': ' . $texto . ' ' . PeticionPuebloEngine::plazoHumano($peticion, $partida);
             }
             $buzon = BuzonEngine::crear($partida, [
                 'de_persona' => $residenteId,
@@ -165,18 +170,26 @@ final class PeticionEngine
                 continue;
             }
             $vence = false;
-            $iso = (string) ($p['vence_iso'] ?? '');
-            if ($iso !== '') {
-                try {
-                    $dt = new \DateTimeImmutable($iso);
-                    $vence = $ahoraReal->getTimestamp() >= $dt->getTimestamp();
-                } catch (\Exception $e) {
-                    $vence = false;
+            $venceDia = $p['vence_dia'] ?? null;
+            if ($venceDia !== null) {
+                // Caducidad canónica: reloj de juego (cruza medianoche/día sin problema).
+                $venceJuego = ((int) $venceDia) * 24 + (int) ($p['vence_hora'] ?? 0);
+                $vence = $now >= $venceJuego;
+            } else {
+                // Fallback legacy: saves sin vencimiento de juego.
+                $iso = (string) ($p['vence_iso'] ?? '');
+                if ($iso !== '') {
+                    try {
+                        $dt = new \DateTimeImmutable($iso);
+                        $vence = $ahoraReal->getTimestamp() >= $dt->getTimestamp();
+                    } catch (\Exception $e) {
+                        $vence = false;
+                    }
+                } elseif ($p['plazo_dia'] !== null) {
+                    $plazoHora = $p['plazo_hora'] !== null ? (int) $p['plazo_hora'] : 0;
+                    $t = ((int) $p['plazo_dia']) * 24 + $plazoHora;
+                    $vence = $now >= $t;
                 }
-            } elseif ($p['plazo_dia'] !== null) {
-                $plazoHora = $p['plazo_hora'] !== null ? (int) $p['plazo_hora'] : 0;
-                $t = ((int) $p['plazo_dia']) * 24 + $plazoHora;
-                $vence = $now >= $t;
             }
             if ($vence) {
                 $p['estado'] = 'caducada';

@@ -133,6 +133,7 @@ final class RelojOperations
             'encuentros_resueltos' => 0,
             'estados_expirados' => 0,
             'coincidencias_detectadas' => 0,
+            'peticiones_caducadas' => 0,
             'pasos' => 0,
             'horas' => $horas,
         ];
@@ -151,6 +152,7 @@ final class RelojOperations
             $acum['encuentros_resueltos'] += (int) ($r['encuentros_resueltos'] ?? 0);
             $acum['estados_expirados'] += (int) ($r['estados_expirados'] ?? 0);
             $acum['coincidencias_detectadas'] += (int) ($r['coincidencias_detectadas'] ?? 0);
+            $acum['peticiones_caducadas'] += (int) ($r['peticiones_caducadas'] ?? 0);
             $acum['pasos']++;
             if ($horas === 0) {
                 break;

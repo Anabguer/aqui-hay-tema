@@ -238,9 +238,9 @@ final class PeticionPuebloEngine
     /**
      * Copy de plazo humano. Sin fechas técnicas ni IDs.
      */
-    public static function plazoHumano(array $peticion): string
+    public static function plazoHumano(array $peticion, ?array $partida = null): string
     {
-        $h = self::horasRestantes($peticion);
+        $h = self::horasRestantes($peticion, $partida);
         if ($h === null) {
             return 'Cuando puedas.';
         }
@@ -260,8 +260,16 @@ final class PeticionPuebloEngine
         return 'Te quedan ' . $h . ' h';
     }
 
-    public static function horasRestantes(array $peticion): ?int
+    public static function horasRestantes(array $peticion, ?array $partida = null): ?int
     {
+        $venceDia = $peticion['vence_dia'] ?? null;
+        if ($partida !== null && $venceDia !== null) {
+            // Canónico: horas de juego restantes según el reloj de la partida.
+            $nowJuego = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24
+                + (int) ($partida['reloj']['hora_actual'] ?? 0);
+            $secs = (((int) $venceDia) * 24 + (int) ($peticion['vence_hora'] ?? 0) - $nowJuego) * 3600;
+            return self::horasDeSegundos($secs);
+        }
         $iso = (string) ($peticion['vence_iso'] ?? '');
         if ($iso === '') {
             return null;
@@ -271,6 +279,11 @@ final class PeticionPuebloEngine
             return null;
         }
         $secs = $vence->getTimestamp() - Reloj::ahoraLocal()->getTimestamp();
+        return self::horasDeSegundos($secs);
+    }
+
+    private static function horasDeSegundos(int $secs): int
+    {
         if ($secs <= 0) {
             return 0;
         }
@@ -317,7 +330,7 @@ final class PeticionPuebloEngine
             'id' => $peticion['id'] ?? '',
             'quien' => IdentidadPublica::nombre($partida, $rid),
             'texto' => (string) ($peticion['texto'] ?? ''),
-            'plazo_humano' => self::plazoHumano($peticion),
+            'plazo_humano' => self::plazoHumano($peticion, $partida),
             'estado' => $estadoUi,
         ];
     }

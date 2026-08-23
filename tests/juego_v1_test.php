@@ -45,7 +45,7 @@ ok(FeatureConfig::isEnabled($p, 'buzon_enabled'), 'buzón encendido');
 ok(FeatureConfig::isEnabled($p, 'npc_autonomy_enabled'), 'autonomía V1 encendida');
 ok(!FeatureConfig::isEnabled($p, 'debug_tools_enabled'), 'debug de partida apagado (taller es URL)');
 ok(FeatureConfig::isEnabled($p, 'misiones_diarias_enabled'), 'misiones V3 activas en juego_v1');
-ok(!FeatureConfig::isEnabled($p, 'peticiones_pueblo_enabled'), 'sin peticiones de playtest el día 1');
+ok(FeatureConfig::isEnabled($p, 'peticiones_pueblo_enabled'), 'peticiones de pueblo activas en juego_v1');
 
 $bien = null;
 foreach ($p['buzon'] ?? [] as $m) {
