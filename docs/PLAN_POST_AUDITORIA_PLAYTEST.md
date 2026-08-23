@@ -699,3 +699,40 @@ RECOMENDACION POST-INTEGRACION (tras mergear rec/css y rec/iconos):
 - 2026-08-23 noche (CIERRE E2E): decisiones usuaria aplicadas sobre int/recuperaciones-20260823 -> commit (ver SHA en bitacora git): (1) gate CSS desktop @media min-width:769px .play-v3 .encursos-movil{display:none!important} en responsive; (2) arnes verify_encursos_movil.js VERSIONADO con expectativa E corregida a semantica estable por cursoSelId (2/2 legitimo). E2E real 28/28 TODO OK; planes_simultaneos_ui_test TODO OK. Cero cambios de JS de producto. NO DEPLOY.
 - 2026-08-23 noche (DEPLOY AUTORIZADO de int/recuperaciones-20260823 @ daf1962): backup PRE remoto en _forense-sesiones/predeploy/20260823-225318 (+copia duradera dev/_prod_fetch_predeploy/20260823-225318, hashes-PRE.txt). Subida selectiva explicita de 7 ficheros daf1962 + buster v3-20260823-225321 (sin deploy_lib/auto-play.php; solo helpers de credenciales). Verificacion: 8/8 byte-IDENTICO contra commit; HTTP 200 x4; HTML servido con ficha-nav(1/1/1)+sabes+curso-nav/cont; JS servido tema-hab--=1 mapa-tema--=0 cursoSelId/moverCursoSeleccion presentes; responsive vec-rel-overlay=7 FEEDBACK=1 gate-769 presente; shell-art noche; ResumenDia.encuentrosEnCurso+duracion_minutos; PartidaService inyeccion encuentros_en_curso x1; handler x4. Incidente mecanico previo al deploy real (rutas '/' en WinSCP -> 0 bytes transferidos) resuelto con backslash; produccion nunca afectada por el intento fallido. Siguiente: smoke visual humano + decidir sincronizacion/versionado H5 del nuevo estado.
 - 2026-08-23 noche (CIERRE RECUPERACION - NUEVA BASE CANONICA): SMOKE HUMANO APROBADO en produccion (movil: corazones/relaciones, Pasar el rato, encuentro+intervencion, Mensajitos, Vecinos, relaciones + navegacion < >, Nuevo Plan, lugar/dia, Cotilleos, ficha vecino, navegacion general). Recuperacion historica CERRADA. SHA desplegado y aprobado: daf1962. NUEVA BASE ESTABLE CANONICA: rama stable/recuperacion-20260823 (=daf1962) + tag recuperacion-aprobada-20260823. TODA rama/worktree futuro nace de ahi. playtest-01-php74 queda CONGELADO en 29c4732 con su WIP antiguo intacto y sin incorporar (no se movera su ref mientras este checked-out en el arbol compartido sucio; su WIP se preserva para triaje posterior por sus agentes). Preservados sin borrar: rec/css-responsive-stash-restore, rec/aht-iconos-clase, feat/ficha-nav-markup, feat/planes-simultaneos-1N, int/recuperaciones-20260823, stash@{0} (c3ed3c90), backups PRE (predeploy 225318 + prerestore 201923). Regla vigente: deploy solo desde commit de stable/, nunca dirty, con backup PRE y buster nuevo.
+
+---
+## NUEVA HERRAMIENTA: AHT DEBUG RESUMEN PARTIDA (2026-08-24)
+
+**Objetivo:** Permitir analizar partidas largas sin necesitar el DEBUG completo de cada NPC. Endpoint de diagnóstico/playtest que devuelve un resumen estructurado de 7 secciones.
+
+**Endpoint:** `GET /api/index.php?action=debug.resumen_partida&partida_id=XXX&limite=20`
+
+**Secciones:**
+1. **Header** — día, hora, temporada, vecinos_actuales, llegadas_total, marchas_total
+2. **Parejas** — actuales, creadas_total, rupturas, primera_pareja_dia
+3. **Romance** — flechazos, primeras_citas, citas_realizadas, citas_rechazadas, planes_autonomos, relaciones_mas_avanzadas, relaciones_estancadas
+4. **Vida** — trabajos_actuales, trabajos_perdidos, trabajos_encontrados, acontecimientos_relevantes, estados_emocionales_activos
+5. **Jugador** — misiones_completadas, misiones_falladas, peticiones_recibidas, peticiones_atendidas, peticiones_caducadas, dias_consecutivos_sin_mision
+6. **Equilibrio** — valor_actual, minimo_historico, umbral_derrota, penalizaciones_acumuladas, causa_exacta_final, dia_estado_critico
+7. **Historial** — últimos N eventos (domain_events + acontecimientos_log + event_log, deduplicados y ordenados)
+
+**Archivos:**
+- `src/Engine/DebugResumenPartida.php` (nuevo)
+- `api/handlers/DevHandler.php` (método `resumenPartida`)
+- `tests/DebugResumenPartida_test.php` (58 asserts cubriendo A–F)
+
+**Validación:**
+- php -l: OK en 3 ficheros
+- Tests unitarios: 58/58 pass
+- Test real con partida poblada: OK (devuelve JSON válido con 7 secciones)
+- Compatibilidad saves antiguos: OK (valores default null/0/[] sin inventar histórico)
+
+**Limitaciones históricas detectadas:**
+- `minimo_historico` = valor actual si ledger vacío (el save no guarda histórico previo al cap)
+- `causa_exacta_final` y `dia_estado_critico` solo informados si `llego_a_cero=true` o `dias_en_critico>0`
+- `relaciones_estancadas` usa heurística (última cita >14 días + fase no null)
+- `trabajos_actuales` cuenta huecos_vida tipo 'trabajo' (puede no reflejar estado real si hay desync)
+
+**Estado:** IMPLEMENTADO EN RAMA AISLADA + TESTS OK / PENDIENTE INTEGRACIÓN
+
+**Commit atómico:** DebugResumenPartida.php + DevHandler.php + DebugResumenPartida_test.php + PLAN_POST_AUDITORIA_PLAYTEST.md

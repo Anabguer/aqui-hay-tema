@@ -7,6 +7,7 @@ use AquiHayTema\Api\ApiContext;
 use function AquiHayTema\Api\requireDev;
 use function AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\AutonomousPlanner;
+use AquiHayTema\Engine\DebugResumenPartida;
 use AquiHayTema\Engine\DevCalendarService;
 use AquiHayTema\Engine\CatalogStore;
 use AquiHayTema\Engine\DiversityAnalyzer;
@@ -401,5 +402,12 @@ final class DevHandler
         }
         $lugar = isset($body['lugar_id']) ? (string) $body['lugar_id'] : null;
         return HobbyEmocionDev::diagnostico($partida, $rid, $lugar, $ctx->service->getCatalog());
+    }
+
+    public static function resumenPartida(ApiContext $ctx, array $body, array $partida): array
+    {
+        requireDev();
+        $limite = isset($body['limite']) ? (int) $body['limite'] : 20;
+        return DebugResumenPartida::resumen($partida, $limite);
     }
 }
