@@ -43,12 +43,22 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 - **Comprobar al revalidar:** si es percepción correcta (deltas pequeños + desgaste diario) o artefacto del mapeo visual; correlacionar valores internos vs barra pintada. Puede ser síntoma de P01, no bug independiente.
 
 ### P03 — Hobbies/gustos no dan ventaja coherente en intervenciones
-- **Clase:** BUG CONFIRMADO (por playtest) · **Prioridad:** ALTA · **Estado:** EN INVESTIGACIÓN POR OTRO AGENTE
-- **Subsistema:** intervención/experiencia/discovery · **Archivos:** EncuentroIntervencion.php, EncuentroExperiencia.php (PlanAfinidad), PlanAfinidad.php, DiscoveryReveal.php, calibracion_vida.json (plan_afinidad?)
-- **Casos reales:** Dolores disfruta BINGO → cita en el bingo → Dolores enfadada. Alba disfruta COSTURA → encuentro con costura → Alba triste/"hecha polvo" y Sergio contento.
-- **Objetivo de producto:** usar información descubierta debe ser estratégicamente útil (favorece a quien disfruta, perjudica a quien odia; ambas cosas pueden coexistir). No éxito automático: coherencia.
-- **Comprobar al revalidar:** signo y participante del aporte hobby en `cargaDe` (ver también B15/B03: emoción de A usada para B puede estar distorsionando quién sale perjudicado), mapeo hobby↔lugar, gustos/rechazos de rasgos en voluntad.
-- **Solapa con:** B03 (emoción A→B), B15 (pesos fantasma). **Criterio de aceptación:** elegir el lugar/hobby que la ficha marca como gusto produce experiencia mejor PARA ESA PERSONA de forma consistente; rechazo penaliza solo al que rechaza.
+- **Clase:** BUG CONFIRMADO (por playtest) · **Prioridad:** ALTA · **Estado:** ✅ RESUELTO Y VERIFICADO EN PRODUCCIÓN (2026-08-23)
+- **Subsistema:** intervención/experiencia/discovery · **Archivos:** EncuentroIntervencion.php, EncuentroExperiencia.php, EncuentroPonderacion.php, PlanAfinidad.php, EmotionalEventBridge.php, FichaPlayVista.php, EncuentroResultadoVista.php, EncuentroCotilleoCopy.php, calibracion_vida.json (`intervencion_tema`), play.php, play-v3.js
+- **Casos reales originales:** Dolores disfruta BINGO → cita en el bingo → Dolores enfadada. Alba disfruta COSTURA → encuentro con costura → Alba triste/"hecha polvo" y Sergio contento.
+- **Causa raíz demostrada por auditoría:** la resolución leía `$plan['hobby_match']`, clave que `PlanAfinidad` nunca devolvió (código muerto); el tema elegido no se evaluaba contra gustos de nadie; además doble signo (`factorAccion('mal') = -1.1` × delta ya negativo ⇒ social POSITIVO en tiradas malas) y bug `plan_a/plan_b` (todos los participantes evaluados contra el plan del segundo).
+- **Sub-fixes entregados y verificados en producción (deploy 2026-08-23 18:29/18:33, snapshot remoto byte-idéntico al worktree):**
+  1. Tema elegido evaluado POR PARTICIPANTE (`tema_cargas` individual consumido por `EncuentroExperiencia`). ✔
+  2. Gustos/rechazos favorecen o perjudican a la persona correcta (precedencia rechazo > gusto > propio). ✔
+  3. Doble signo corregido: muy_mal/mal JAMÁS suman social (regresión en tests). ✔
+  4. plan_A usado por A y plan_B por B (orden fijado antes del bucle de cargas). ✔
+  5. `plan_lugar_match` (afinidad lugar↔hobby propio) separado de `tema_match` (afinidad residente↔tema); legacy `hobby_match` mantenido como alias. ✔
+  6. Delta romance visible en vista/debug (ver también B14, cerrado con esto). ✔
+  7. Cotilleo de primera cita coherente con el resultado (mala ⇒ DRAMA «…aunque la cosa ha acabado bastante tensa.»; neutra ⇒ incertidumbre; buena ⇒ ROMANCE). ✔
+  8. Descubrimientos/pistas visibles en ficha («Lo que sabes»: ❤️ Le anima / 💢 No le gusta, solo estado `descubierto`; personalidad sigue en sus slots propios). ✔
+- **CASO REAL CONCEPTUAL CUBIERTO Y EN PRODUCCIÓN:** Dolores + Bingo → favorece a Dolores (+5.4 pts p(bien+)); Sandra + Bingo → perjudica a Sandra (−8.4 pts). Cubierto por `tests/intervencion_tema_test.php` (47 asserts, incl. casos A–G direccionalidad, gating de no-descubiertos e independencia lugar≠tema) y verificado byte-a-byte contra producción post-deploy.
+- **Knobs nuevos (calibracion_vida.json → `intervencion_tema`):** `carga_propio 0.18`, `carga_gusto 0.22`, `carga_rechazo -0.28`, `max_abs 0.35`. Perceptible, nunca determinista.
+- **Solapaba con:** B03 (emoción A→B — SIGUE VIVO, no tocado), B14 (cerrado aquí), B15 (pesos fantasma — sigue vivo). **Criterio de aceptación:** CUMPLIDO para hobbies/gustos de hobby; gustos de rasgos/personalidad quedan para su entrada correspondiente.
 
 ### P04 — Enfado direccional / anti-stale emocional
 - **Clase:** INCOHERENCIA/DEUDA · **Prioridad:** MEDIA · **Estado:** POSIBLEMENTE RESUELTO — REQUIERE REVALIDACIÓN
@@ -68,6 +78,46 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 - **Trabajo en curso:** indicadores por token (romance→corazón, drama→rayo…) sobre participantes reales.
 - **Caso stale detectado:** lugar marcaba "Aquí hay tema" por Francisco/Yeray cuando ambos estaban ya en otro encuentro y Aitana estaba sola allí.
 - **Comprobar al revalidar:** expiración de marcas por cambio de hora/lugar; prioridad encuentro-en-curso > burbuja histórica; deduplicación con `ResumenDia::marcasPorLugar`.
+
+---
+
+## ⚠️ INCIDENTE — DEPLOY CON WIP CONCURRENTE (2026-08-23)
+
+**Qué pasó:** durante el cierre de P03 (hobbies/intervenciones), el mecanismo canónico `deploy_canonical` subió a producción **96 ficheros**, incluidos archivos con WIP sin commitear de otro agente (voluntad/emociones/calibración). Verificado post-deploy comparando por hash un snapshot remoto contra el worktree local.
+
+**Estado comprobado en PRODUCCIÓN (post-deploy 18:29/18:33):**
+
+**P2 — REGRESIÓN CONFIRMADA EN PRODUCCIÓN / PENDIENTE DE RECONCILIACIÓN**
+- `voluntad.mod_tipo.primera_cita`: esperado **4** → producción **0**
+- `bonus_primera_cita_reciproca`: esperado **12** → **ausente** (config) y **eliminado del código** de VoluntadPonderadaEvaluator (0 referencias)
+- `conflicto_mult_cita`: esperado **3** → **ausente** (config) y **eliminado del código**
+
+**Enfado direccional — PARCIALMENTE REGRESIONADO EN PRODUCCIÓN**
+- `resolverEnfado` (dirigida/ajena/indeterminada): sigue presente ✔
+- Anti-stale (`EstadoEmocional::vencido` → mods neutros): sigue presente ✔
+- Knob `emociones_v1.enfadado_ajeno_aceptar_planes = -8`: **ausente** → 'ajena' cae hoy al fallback −16 (mitigación inoperante; el código consulta el knob pero la config no lo define)
+
+**M2+/continuidad — ACTIVO EN PRODUCCIÓN / PENDIENTE DE REVALIDACIÓN CON P2 Y ENFADO DIRECCIONAL**
+- `voluntad.continuidad_reciente {activo:true, bonus_muy_bien:10, bonus_bien:5, bonus_dos_buenos_48h:3, decay_halflife_horas:12, max_bonus:12}` desplegada y cableada en `desglose()` (`mod_continuidad_reciente`), junto a `mod_social_factor=0.28` y `delta_multiplier_positivo=1.15`
+- Fue desplegada como parte del WIP concurrente antes del cierre formal de integración
+
+**Impacto en tests:** `tests/primera_cita_balance_p2_test.php` (9 fails) y `tests/emocion_enfado_direccional_test.php` (12 fails) reproducen idéntico contra producción (worktree ≡ remoto byte-a-byte en los 21 ficheros auditados). Son fallos del subsistema voluntad/emociones, NO del cierre P03.
+
+**Propiedad:** reconciliación exclusivamente del agente propietario del WIP de voluntad/continuidad. El cierre P03 queda aislado y validado.
+
+---
+
+## 🔒 REGLA OPERATIVA — DEPLOYS CON WIP CONCURRENTE
+
+Mientras exista WIP concurrente en el worktree:
+
+1. **PROHIBIDO** usar deploy general/canónico que suba automáticamente todo el árbol modificado (`deploy_canonical` incremental sube TODO lo dirty).
+2. Los agentes deben:
+   - identificar EXACTAMENTE sus runtime files;
+   - hacer deploy **SELECTIVO** solo si esos archivos no contienen WIP ajeno;
+   - si un archivo contiene WIP ajeno no validado → **NO DEPLOY** y escalar a coordinación.
+3. **Un deploy de 96 archivos para una tarea localizada es señal de STOP.**
+4. Antes de cerrar cualquier tarea con deploy: verificación post-deploy obligatoria (snapshot/hash de los ficheros críticos + suites afectadas), documentando qué se subió realmente.
 
 ---
 
@@ -213,10 +263,10 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 - **Fix mínimo:** filtrar por fecha en activas() + tirar probabilidad_seguir al evaluar; o documentar como decisión.
 
 ### B14 — «Destello romántico» jamás visible (formato legacy en vista)
-- **Clase:** BUG CONFIRMADO (presentación) · **Prioridad:** MEDIA-ALTA · **Riesgo fix:** BAJO · **Estado:** CONFIRMADO VIVO
-- **Archivos:** EncuentroResultadoVista.php:134-156 (lee vinculo/atraccion_* = formato PlaceholderEvaluator) vs EncuentroResolver.php:91-96 (formato real a_hacia_b/b_hacia_a); afecta también EncuentroCotilleoCopy::elegirExtra (usa esa vista).
-- **Impacto directo en jugabilidad:** el romance positivo que SÍ ocurre no se cuenta → alimenta M01/R02 (parece que no hay romance).
-- **Fix:** leer formato real (canalSocial ya lo hace bien: :116-118) + test de vista con deltas reales.
+- **Clase:** BUG CONFIRMADO (presentación) · **Prioridad:** MEDIA-ALTA · **Riesgo fix:** BAJO · **Estado:** ✅ RESUELTO Y VERIFICADO EN PRODUCCIÓN (2026-08-23, dentro del cierre P03)
+- **Archivos:** EncuentroResultadoVista.php (`canalRomance` ahora lee también `a_hacia_b`/`b_hacia_a`, formato real del resolver) + EncuentroCotilleoCopy::elegirExtra reordenado.
+- **Fix entregado:** vista proyecta el delta real (26→24 ⇒ −2 visible en UI/debug); tests: `encuentro_resultado_play_test` (contrato actualizado y determinizado) e `intervencion_tema_test`.
+- **Nota:** la parte de "destello positivo jamás contado" queda cubierta por esta lectura; el balance de cadencia romántica sigue en R02/M01.
 
 ### B15 — Pesos fantasma historial(0.06)/azar(0.10) diluyen la experiencia
 - **Clase:** INCOHERENCIA/BALANCE · **Prioridad:** MEDIA · **Estado:** CONFIRMADO VIVO
@@ -443,3 +493,11 @@ Re-evaluar esta lista cuando P01-P06 cierren.
 ## BITÁCORA DE CAMBIOS DEL PLAN
 
 - 2026-08-23: creación del documento a partir de la auditoría general + contextos de playtest (P01-P06), investigaciones (R01-R05) e ideas refinadas (F01-F02). Foto Git: HEAD 50a0a3d + WIP sin commitear.
+- 2026-08-23 (cierre P03): **P03 → RESUELTO Y VERIFICADO EN PRODUCCIÓN** (tema por participante, signo, plan_A/B, plan_lugar_match≠tema_match, vista romance [cierra B14], cotilleo cita mala coherente, pistas en ficha «Lo que sabes»; caso Dolores+Bingo/Sandra+Bingo cubierto por tests/intervencion_tema_test y presente en producción). **B14 → RESUELTO Y VERIFICADO.** Registrado INCIDENTE deploy-con-WIP-concurrente (96 ficheros; regresiones P2 y mitigación enfado 'ajena' en producción; continuidad_reciente activa) + REGLA OPERATIVA de deploy selectivo con WIP concurrente. B03 y B15 siguen vivos (no tocados).
+
+- 2026-08-23 (R3 deploy): implementado y en producción el castigo único por día de misiones ignorado (caducada individual = 0; `vida_dia_ignorado=-3`; ledger `dia_misiones_ignorado`). Commit 7b10642 aislado sin WIP ajeno. Hallazgos laterales derivados:
+  - L-FLAKY-SMB: lectura intermitente de archivos obsoletos sobre UNC/SMB (fatal esporádico `calcularContinuidadReciente` en WIP de VoluntadPonderadaEvaluator; número de línea del trace no coincidía con el archivo actual). No es bug de juego: es caché de red/AV. Afecta a tests CLI largos.
+  - L-CHECKOUT-INDEX: `git checkout-index` no exporta tests sin trackear (pasar_noche_test.php etc. solo existen en worktree); la validación "estado commiteado" no los incluye.
+  - L-INDEX-PREVIO: se encontró `src/Engine/HayTema.php` ya staged en el index antes de esta tarea (WIP ajeno); des-stage hecho para commit limpio. Revisar quién lo dejó.
+  - L-LEDGER-DIA: entradas de cierre del día D quedan etiquetadas con dia=D+1 en el ledger de vida_pueblo (el reloj avanza antes de cerrar misiones). Cosmético, pero rompe trazas/agrupaciones por día.
+  - L-AUSENCIA-HOOK: infra canónica de ausencia ya cableada: PartidaLifecycle::cargar() llama Reloj::calcularCatchUpPendiente() y persiste segundos reales en reloj.catch_up_pendiente sin tocar el reloj del pueblo. Penalización offline suave puede engancharse ahí SIN segundo sistema; cap motor −15/suelo 5/nunca GO ya protegido (estresado). Curva recomendada: gracia 24 h + −1/día lineal (el cap −15 del motor da forma a la cola). PENDIENTE autorización + política anti-doble-cobro con futuro catch-up (un día de pueblo cobra una sola vez y por un solo mecanismo).
