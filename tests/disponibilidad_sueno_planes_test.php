@@ -33,10 +33,10 @@ function partidaBase(): array
         'npc_autonomo' => ['planes_pendientes' => []],
     ];
     $r = ResidenteRuntime::crearPlaceholderDev(1);
-    $r['runtime']['ocupacion'] = 'oficina';
+    $r['runtime']['ocupacion'] = 'jubilado';
     $p['residentes'][$r['catalog_id']] = $r;
     $r2 = ResidenteRuntime::crearPlaceholderDev(2);
-    $r2['runtime']['ocupacion'] = 'oficina';
+    $r2['runtime']['ocupacion'] = 'jubilado';
     $p['residentes'][$r2['catalog_id']] = $r2;
     return $p;
 }
@@ -54,12 +54,18 @@ $slots = DisponibilidadEngine::slotsCompatibles($p, [$a, $b], 'conocerse', 1, 10
 $horas = array_map(static fn($s) => (int) ($s['hora'] ?? -1), $slots['slots'] ?? []);
 ok(in_array(22, $horas, true), 'A: slots_compatibles ofrece 22h discoteca');
 
-// B) sueño 23–07, plan 01–03 → no disponible (inicio en sueño)
+// B) sueño 23–07, plan 01–03 → no disponible si trabaja al día siguiente
+$p = partidaBase();
+$a = (string) array_key_first($p['residentes']);
+$p['residentes'][$a]['runtime']['ocupacion'] = 'oficina';
+$p['residentes'][$a]['runtime']['trabajo_dias'] = ['martes', 'miercoles', 'jueves'];
+$p['residentes'][$a]['runtime']['trabajo_hora_inicio'] = 10;
+$p['residentes'][$a]['runtime']['trabajo_hora_fin'] = 12;
 $disp01 = AgendaEngine::estaDisponible($p, $a, 1, 1);
-ok(!($disp01['disponible'] ?? true), 'B: hora 01h bloqueada por sueño al inicio');
+ok(!($disp01['disponible'] ?? true), 'B: hora 01h bloqueada por sueño al inicio (agenda estricta)');
 ok(
     !DisponibilidadEngine::franjaValida($p, [$a], 1, 1, 'lug_discoteca'),
-    'B: plan 01h inválido'
+    'B: plan 01h inválido con trabajo mañana'
 );
 
 // C) plan 22–00 pero otro encuentro a las 23 → no disponible

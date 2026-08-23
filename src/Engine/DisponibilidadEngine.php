@@ -203,7 +203,7 @@ final class DisponibilidadEngine
             }
         }
         foreach ($participantes as $rid) {
-            $disp = AgendaEngine::estaDisponibleIntervalo($partida, (string) $rid, $dia, $hora, $duracionHoras);
+            $disp = AgendaEngine::estaDisponibleIntervalo($partida, (string) $rid, $dia, $hora, $duracionHoras, true);
             if (!$disp['disponible']) {
                 return false;
             }

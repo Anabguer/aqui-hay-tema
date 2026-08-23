@@ -241,6 +241,10 @@ final class PartidaService
         }
 
         $presentacion = $this->presentacionVisual($partida, $runtime);
+        TrabajoHorario::asegurarHorario($partida, $residenteId);
+        $rt = $partida['residentes'][$residenteId]['runtime'] ?? [];
+        $genero = $catalogo['identidad']['genero'] ?? null;
+        $trabajoVista = TrabajoHorario::paraFicha($rt, is_string($genero) ? $genero : null, $this->catalog->store());
         $out = [
             '_ui' => 'provisional_v0',
             'id' => $residenteId,
@@ -253,7 +257,13 @@ final class PartidaService
             ],
             'vivienda_id' => $runtime['vivienda_id'],
             'presencia' => $runtime['presencia'],
-            'trabajo' => ['ocupacion' => $runtime['runtime']['ocupacion'] ?? null],
+            'trabajo' => [
+                'ocupacion' => $rt['ocupacion'] ?? null,
+                'dias' => $rt['trabajo_dias'] ?? null,
+                'hora_inicio' => $rt['trabajo_hora_inicio'] ?? null,
+                'hora_fin' => $rt['trabajo_hora_fin'] ?? null,
+                'vista' => $trabajoVista,
+            ],
             'hobbies' => ['conocidos' => $hobbiesConocidos],
             'descubrimientos' => DiscoveryEngine::listarPorResidente($partida, $residenteId),
             'discovery' => [

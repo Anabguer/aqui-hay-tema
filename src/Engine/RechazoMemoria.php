@@ -56,14 +56,28 @@ final class RechazoMemoria
             if ($triste) {
                 $reloj = $partida['reloj'] ?? [];
                 $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 10);
-                $partida['residentes'][$hacia]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
+                $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
+                $root = dirname(__DIR__, 2);
+                $emoSvc = new EmotionalStateService(
+                    new VisualPackStore($root),
+                    new CatalogStore($root),
+                    null
+                );
+                $emoSvc->aplicar(
+                    $partida,
+                    $hacia,
                     EstadoEmocional::TRISTE,
-                    null,
                     'rechazo_repetido',
-                    EstadoEmocional::marcaReloj($reloj),
-                    EstadoEmocional::hastaDesdeDuracion($reloj, $dur),
+                    null,
+                    $hasta,
                     ['hacia' => $quienRechaza],
                     $dur
+                );
+                EmocionalNarrativa::publicarCotilleo(
+                    $partida,
+                    $hacia,
+                    'rechazo_repetido',
+                    ['hacia' => $quienRechaza, 'quien' => $quienRechaza]
                 );
             }
             $est = ParejaEngine::estado($partida, $quienRechaza, $hacia);

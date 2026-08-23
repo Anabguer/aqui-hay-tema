@@ -19,7 +19,8 @@ if (is_file($ahtBusterFile)) {
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
-  <link rel="icon" href="cover.svg" type="image/svg+xml"/>
+  <link rel="icon" href="favicon.png" type="image/png" sizes="512x512"/>
+  <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -302,6 +303,7 @@ if (is_file($ahtBusterFile)) {
           <span class="brand-text">AQUÍ HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
+        <p class="top-meta-line" data-top-meta-mobile></p>
         <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
       </div>
       <div class="top-center">
@@ -322,7 +324,7 @@ if (is_file($ahtBusterFile)) {
           </div>
         </div>
       </div>
-      <div class="top-vida" aria-label="Vida del pueblo">
+      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para más información">
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <defs>
@@ -339,7 +341,7 @@ if (is_file($ahtBusterFile)) {
           <path class="corazon-stroke" fill="none" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
-      </div>
+      </button>
       <div class="control-audio" aria-label="Controles de audio">
         <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar música" title="Desactivar música">
           <span class="control-musica-ico" aria-hidden="true">♪</span>
@@ -355,15 +357,17 @@ if (is_file($ahtBusterFile)) {
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
               <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
-              <img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/>
-              <span class="obj-buzon-txt">MENSAJITOS</span>
+              <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
+              <span class="obj-buzon-txt game-left-tile-label">Mensajitos</span>
             </button>
           </div>
         </section>
         <section class="shell-grupo shell-grupo-resumen">
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
-            <span class="obj-vecinos-tit">Vecinos</span>
+            <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
+            <span class="obj-vecinos-tit game-left-tile-label">Vecinos</span>
+            <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
@@ -372,8 +376,8 @@ if (is_file($ahtBusterFile)) {
             <span class="obj-proximo-tit">Próximo plan</span>
             <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en agenda. Sospechoso.</p></div>
             <button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Nuevo plan">
-              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt">NUEVO PLAN</span>
+              <span class="obj-nuevo-plan-ico game-left-tile-ico" aria-hidden="true">+</span>
+              <span class="obj-nuevo-plan-txt game-left-tile-label">Nuevo plan</span>
             </button>
             <button type="button" class="obj-ver-planes" data-open="agenda" aria-label="Ver todos los planes">
               <span class="obj-ver-planes-txt">ver todos los planes</span>
@@ -487,6 +491,13 @@ if (is_file($ahtBusterFile)) {
           <button type="button" class="cta" data-tut-fin-ok>Que empiece el tema</button>
         </div>
       </aside>
+      <aside class="vida-derrota" data-vida-derrota hidden aria-live="assertive">
+        <div class="tut-papel">
+          <h2>Se nos va de las manos</h2>
+          <p class="tut-texto">La vida del pueblo ha llegado a un punto crítico. Celestine no ha podido mantener el equilibrio.</p>
+          <button type="button" class="cta" data-vida-derrota-ok>Entendido</button>
+        </div>
+      </aside>
 
       <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
         <span class="vecinos-pin vecinos-pin-l" aria-hidden="true"></span>
@@ -529,6 +540,7 @@ if (is_file($ahtBusterFile)) {
             </div>
             <h3 class="ficha-nombre" data-ficha-nombre></h3>
             <p class="ficha-edad" data-ficha-edad hidden></p>
+            <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
             <p class="ficha-desde" data-ficha-desde></p>
             <div class="ficha-animo-row">
               <p class="ficha-animo-line">
@@ -584,14 +596,44 @@ if (is_file($ahtBusterFile)) {
           </div>
         </div>
       </aside>
+      <aside class="capa capa-misiones mis-modal-papel" aria-label="Misiones de hoy">
+        <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
+        <span class="mis-pin mis-pin-l" aria-hidden="true"></span>
+        <button type="button" class="cerrar mis-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="mis-top">
+          <p class="libreta-kicker">Libreta de Celestine</p>
+          <h2 class="mis-tit">Hoy en el pueblo</h2>
+          <p class="mis-sub mini" data-misiones-teaser>—</p>
+        </header>
+        <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
+      </aside>
+      <aside class="capa capa-vida-pueblo vida-modal-papel" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
+        <button type="button" class="cerrar vida-cerrar" data-close aria-label="Cerrar">×</button>
+        <header class="vida-top">
+          <p class="vida-modal-ico" aria-hidden="true">❤️</p>
+          <h2 class="vida-tit">Vida del pueblo</h2>
+          <p class="vida-valor" data-vida-modal-valor>— / 100</p>
+          <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
+        </header>
+        <div class="vida-body capa-scroll">
+          <div class="vida-copy">
+            <p>Esto no es decoración, aunque lo parezca.</p>
+            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algún motivo, ahora son responsabilidad tuya.</p>
+            <p>Haz que las cosas salgan bien y el corazón subirá. Déjalos a su suerte demasiado tiempo y… bueno, procura que esto no llegue a 0.</p>
+          </div>
+          <p class="vida-latido mini">¿Llegas a 100? 💓 Hay latido.<br>Sí, conseguir que este pueblo funcione tiene premio. Increíble, pero cierto.</p>
+        </div>
+      </aside>
       <aside class="capa capa-buzon" aria-label="Mensajitos">
         <button type="button" class="cerrar mensajitos-cerrar" data-close aria-label="Cerrar">×</button>
         <header class="mensajitos-cab">
-          <h2 class="mensajitos-tit">Mensajitos</h2>
-          <button type="button" class="mensajitos-leer-todos" data-buzon-leer-todos hidden>
-            <span class="mensajitos-leer-todos-ico" aria-hidden="true">✓</span>
-            <span class="mensajitos-leer-todos-txt">Marcar todos como leídos</span>
-          </button>
+          <div class="mensajitos-cab-row">
+            <h2 class="mensajitos-tit">Mensajitos</h2>
+            <button type="button" class="mensajitos-leer-todos" data-buzon-leer-todos hidden>
+              Marcar todo como leído
+            </button>
+          </div>
         </header>
         <div data-buzon-list></div>
       </aside>
@@ -616,19 +658,20 @@ if (is_file($ahtBusterFile)) {
           <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
-          <section class="ficha-seccion org-seccion">
-            <h4 class="ficha-seccion-tit">¿Solo o acompañado?</h4>
-            <div class="ficha-seccion-body">
+          <section class="ficha-seccion org-seccion org-seccion--modo">
+            <div class="org-seccion-head org-seccion-head--center">
               <div class="org-modo-chips" data-org-modo-row>
                 <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
                 <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompañado</button>
               </div>
             </div>
           </section>
-          <section class="ficha-seccion org-seccion">
-            <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
+          <section class="ficha-seccion org-seccion org-seccion--quienes">
+            <div class="org-seccion-head">
+              <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
+              <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
+            </div>
             <div class="ficha-seccion-body">
-              <p class="org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
               <div class="org-busca-wrap">
                 <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
                 <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
@@ -636,26 +679,26 @@ if (is_file($ahtBusterFile)) {
               <div class="org-picker-strip capa-scroll" data-org-picker></div>
             </div>
           </section>
-          <section class="ficha-seccion org-seccion">
+          <section class="ficha-seccion org-seccion org-seccion--que">
             <h4 class="ficha-seccion-tit">¿Qué buscamos?</h4>
             <div class="ficha-seccion-body">
               <div class="org-tipos" data-org-tipos></div>
             </div>
           </section>
-          <section class="ficha-seccion org-seccion">
+          <section class="ficha-seccion org-seccion org-seccion--donde">
             <h4 class="ficha-seccion-tit">¿Dónde?</h4>
-            <div class="ficha-seccion-body">
+            <div class="ficha-seccion-body org-donde-fila">
               <div class="org-dd" data-org-dd-lugar></div>
               <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
               <p class="org-lugar-horario mini" data-org-lugar-horario hidden></p>
             </div>
           </section>
-          <section class="ficha-seccion org-seccion">
+          <section class="ficha-seccion org-seccion org-seccion--cuando">
             <h4 class="ficha-seccion-tit">¿Cuándo?</h4>
             <div class="ficha-seccion-body">
               <div class="org-cuando">
                 <div class="org-dd org-dd--dia" data-org-dd-dia></div>
-                <div class="org-pick org-pick--hora" data-org-pick-hora role="listbox" aria-label="Hora"></div>
+                <div class="org-dd org-dd--hora" data-org-dd-hora></div>
                 <select class="org-select org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
                 <select class="org-select org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
               </div>
@@ -686,10 +729,13 @@ if (is_file($ahtBusterFile)) {
           </div>
         </section>
         <section class="shell-grupo shell-grupo-cotilleo-par">
-          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir diario">
+          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
-            <p class="obj-cotilleo-txt" data-cotilleo-teaser>—</p>
-            <span class="obj-cotilleo-ver-mas" data-cotilleo-ver-mas hidden>ver más</span>
+            <span class="obj-cotilleo-cuerpo">
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy están sospechosamente tranquilos…</span>
+              <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
+            </span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">›</span>
           </button>
         </section>
         <section class="shell-grupo shell-grupo-parejas" id="mob-parejas">

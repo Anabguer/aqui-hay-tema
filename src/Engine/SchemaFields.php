@@ -24,6 +24,7 @@ final class SchemaFields
         foreach ($partida['residentes'] ?? [] as $id => $_) {
             EstadoEmocional::ensureResidente($partida['residentes'][$id], $partida['reloj'] ?? null);
         }
+        PerfilPartida::reconciliarLugaresPreferentes($partida);
 
         $partida['historial_coincidencias'] ??= [];
         $partida['npc_autonomo'] ??= ['planes_pendientes' => []];

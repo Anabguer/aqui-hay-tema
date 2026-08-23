@@ -54,7 +54,11 @@ function jsonOut(array $data, int $code = 200): void
     http_response_code($code);
     header('Cache-Control: no-store, no-cache, must-revalidate');
     header('Pragma: no-cache');
-    echo json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
+    $flags = JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR;
+    if (defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+        $flags |= JSON_INVALID_UTF8_SUBSTITUTE;
+    }
+    echo json_encode($data, $flags);
     exit;
 }
 

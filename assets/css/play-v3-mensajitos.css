@@ -425,8 +425,9 @@
 .play-v3 .capa-buzon .capa-cerrar-pestaÃƒÂ±a { display: none !important; }
 
 .play-v3 .capa-buzon .mensajitos-cab {
-  margin: 0 0 .65rem;
-  padding-right: 3.5rem;
+  margin: 0 0 .55rem;
+  padding-top: .85rem;
+  padding-right: 2.5rem;
 }
 
 .play-v3 .capa-buzon .mensajitos-tit {
@@ -630,71 +631,60 @@
 .play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon {
   transform: translateX(0);
 }
-/* BotÃƒÂ³n marcar todos como leÃƒÂ­dos */
+/* Marcar todo como leído — enlace sutil en cabecera */
 .play-v3 .capa-buzon .mensajitos-cab {
+  margin: 0 0 .55rem;
+  padding-top: .85rem;
+  padding-right: 2.5rem;
+}
+
+.play-v3 .capa-buzon .mensajitos-cab-row {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: .45rem;
-  margin: 0 0 .65rem;
-  padding-right: 3.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: .65rem;
+  min-width: 0;
+}
+
+.play-v3 .capa-buzon .mensajitos-cab-row .mensajitos-tit {
+  margin: .2rem 0 0;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .play-v3 .capa-buzon .mensajitos-leer-todos {
-  display: inline-flex;
-  align-items: center;
-  gap: .38rem;
-  margin: 0;
-  padding: .32rem .62rem .34rem;
-  border: 1.5px solid rgba(138, 74, 24, .55);
-  border-radius: 6px;
-  background: linear-gradient(180deg, #fff8dc 0%, #fff0b8 100%);
-  font-family: Caveat, cursive;
-  font-size: .92rem;
+  flex: 0 0 auto;
+  margin: .15rem 0 .12rem;
+  padding: .1rem 0;
+  border: 0;
+  background: transparent;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .62rem;
   font-weight: 700;
-  line-height: 1.1;
-  color: #5a4028;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: rgba(90, 72, 56, .72);
   cursor: pointer;
-  box-shadow: 1px 2px 0 rgba(44, 38, 31, .12);
-  transition: background .15s ease, border-color .15s ease, transform .12s ease, box-shadow .15s ease;
+  text-decoration: underline;
+  text-decoration-color: rgba(90, 72, 56, .28);
+  text-underline-offset: 2px;
+  white-space: nowrap;
+  transition: color .15s ease, text-decoration-color .15s ease;
 }
 
 .play-v3 .capa-buzon .mensajitos-leer-todos:hover:not(:disabled) {
-  background: linear-gradient(180deg, #fffef0 0%, #ffe8a0 100%);
-  border-color: #8a4a18;
-  color: #3a2818;
-  box-shadow: 1px 3px 0 rgba(44, 38, 31, .16);
-  transform: translateY(-1px);
+  color: #4a7a3a;
+  text-decoration-color: rgba(74, 122, 58, .45);
 }
 
 .play-v3 .capa-buzon .mensajitos-leer-todos:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 1px 1px 0 rgba(44, 38, 31, .1);
+  color: #3d6630;
 }
 
 .play-v3 .capa-buzon .mensajitos-leer-todos:disabled,
 .play-v3 .capa-buzon .mensajitos-leer-todos[hidden] {
   display: none !important;
-}
-
-.play-v3 .capa-buzon .mensajitos-leer-todos-ico {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.05rem;
-  height: 1.05rem;
-  border-radius: 50%;
-  background: rgba(106, 154, 90, .22);
-  color: #4a7a3a;
-  font-size: .62rem;
-  font-family: Nunito, "Segoe UI", sans-serif;
-  font-weight: 900;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.play-v3 .capa-buzon .mensajitos-leer-todos-txt {
-  letter-spacing: .01em;
 }
 
 

@@ -98,6 +98,23 @@ final class EmotionalStateService
             'actores' => [$residenteId],
         ], $this->logger, 'EmotionalStateService::aplicar');
 
+        $antesId = EstadoEmocional::canonId((string) ($antes['id'] ?? EstadoEmocional::NEUTRO));
+        $despuesId = EstadoEmocional::canonId((string) ($res['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO));
+        if ($antesId !== $despuesId) {
+            LabAudit::eventoEmocion(
+                $partida,
+                $residenteId,
+                $antes,
+                $res['runtime']['estado_emocional'],
+                'EmotionalStateService::aplicar',
+                [
+                    'expresion_id' => $resolved['expression_id'],
+                    'expresion_motivo' => $resolved['motivo'] ?? null,
+                    'expresion_fallback' => $resolved['fallback'] ?? false,
+                ]
+            );
+        }
+
         DomainEventDispatcher::emit($partida, DomainEvents::EXPRESION_VISUAL_RESUELTA, [
             'residente_id' => $residenteId,
             'expression_id' => $resolved['expression_id'],

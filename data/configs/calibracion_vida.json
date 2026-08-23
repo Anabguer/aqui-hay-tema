@@ -390,7 +390,7 @@
         "umbral_positivos_latido": 25,
         "offline_dano_max": 15,
         "offline_suelo": 5,
-        "game_over_en_play": false,
+        "game_over_en_play": true,
         "ledger_cap": 400,
         "bandas": [
             {

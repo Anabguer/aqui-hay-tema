@@ -51,7 +51,25 @@ final class FichaPlayVista
         }
 
         $ocId = $ficha['trabajo']['ocupacion'] ?? null;
-        $ocupacion = is_string($ocId) && $ocId !== '' ? EtiquetaFicha::ocupacion($ocId, $store) : null;
+        $genero = $ficha['identidad']['genero'] ?? null;
+        $trabajoVista = is_array($ficha['trabajo']['vista'] ?? null)
+            ? $ficha['trabajo']['vista']
+            : TrabajoHorario::paraFicha(
+                [
+                    'ocupacion' => $ficha['trabajo']['ocupacion'] ?? null,
+                    'trabajo_dias' => $ficha['trabajo']['dias'] ?? null,
+                    'trabajo_hora_inicio' => $ficha['trabajo']['hora_inicio'] ?? null,
+                    'trabajo_hora_fin' => $ficha['trabajo']['hora_fin'] ?? null,
+                ],
+                is_string($genero) ? $genero : null,
+                $store
+            );
+        $ocupacion = null;
+        if (!($trabajoVista['desempleado'] ?? false)) {
+            $ocupacion = is_string($trabajoVista['linea_principal'] ?? null) && $trabajoVista['linea_principal'] !== ''
+                ? $trabajoVista['linea_principal']
+                : (is_string($ocId) && $ocId !== '' ? EtiquetaFicha::ocupacion($ocId, $store) : null);
+        }
 
         $pistas = [];
         $nombre = (string) ($ficha['identidad']['nombre'] ?? '');
@@ -79,6 +97,7 @@ final class FichaPlayVista
             'edad' => $ficha['identidad']['edad'] ?? null,
             'genero' => $ficha['identidad']['genero'] ?? null,
             'ocupacion' => $ocupacion,
+            'trabajo' => $trabajoVista,
             'gusta' => $hobbies,
             'hobbies_slots' => $hobbiesSlots,
             'manera_de_ser' => $rasgos,
@@ -87,6 +106,9 @@ final class FichaPlayVista
             'no_gusta_en_gente' => $noGustaGente,
             'pistas' => $pistas,
             'estado_animo' => $ficha['estado_emocional']['id'] ?? 'neutro',
+            'pista_estado' => EmocionalNarrativa::pistaFicha(
+                is_array($ficha['estado_emocional'] ?? null) ? $ficha['estado_emocional'] : []
+            ),
         ];
     }
 

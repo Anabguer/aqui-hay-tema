@@ -58,6 +58,9 @@ if (strpos($js, 'function enTutorialPrimerosPasos') === false) {
 if (strpos($js, 'quizaMostrarTutFinale') === false) {
     $fail[] = 'falta quizaMostrarTutFinale';
 }
+if (strpos($php, 'capa-misiones') === false || strpos($php, 'data-misiones-list') === false) {
+    $fail[] = 'play.php sin capa-misiones (setCapa misiones deja solo el velo)';
+}
 
 if ($fail) {
     fwrite(STDERR, "play_v3_tutorial_source_test FAIL:\n- " . implode("\n- ", $fail) . "\n");

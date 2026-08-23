@@ -136,6 +136,9 @@ final class CopyRechazoPropuesta
                 break;
         }
         $motivoAgenda = (string) ($reac['factores']['motivo_agenda'] ?? $tec);
+        if ($motivoAgenda === 'trabaja_manana' || (string) ($detalle['motivo'] ?? '') === 'trabaja_manana') {
+            return 'trabajo';
+        }
         if ($motivoAgenda === 'doble_reserva') {
             return 'encuentro_programado';
         }

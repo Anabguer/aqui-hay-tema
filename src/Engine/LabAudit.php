@@ -54,6 +54,35 @@ final class LabAudit
     }
 
     /**
+     * @param array<string, mixed> $antes
+     * @param array<string, mixed> $despues
+     * @param array<string, mixed> $extra
+     */
+    public static function eventoEmocion(
+        array $partida,
+        string $residenteId,
+        array $antes,
+        array $despues,
+        string $regla,
+        array $extra = []
+    ): void {
+        self::push('EMOCION', '[AHT DEBUG EMOCION]', array_merge([
+            'npc' => IdentidadPublica::nombre($partida, $residenteId),
+            'npc_id' => $residenteId,
+            'antes' => EstadoEmocional::canonId((string) ($antes['id'] ?? EstadoEmocional::NEUTRO)),
+            'despues' => EstadoEmocional::canonId((string) ($despues['id'] ?? EstadoEmocional::NEUTRO)),
+            'origen' => $despues['origen'] ?? null,
+            'regla' => $regla,
+            'dia' => $despues['desde']['dia'] ?? ($partida['reloj']['dia_pueblo'] ?? null),
+            'hora' => $despues['desde']['hora'] ?? ($partida['reloj']['hora_actual'] ?? null),
+            'hasta' => $despues['hasta'] ?? null,
+            'duracion_horas' => $despues['duracion_horas'] ?? null,
+            'contexto' => $despues['contexto'] ?? [],
+            'reloj' => $partida['reloj'] ?? null,
+        ], $extra));
+    }
+
+    /**
      * @return list<array<string, mixed>>
      */
     public static function flush(): array
@@ -351,20 +380,43 @@ final class LabAudit
             if (!is_array($entry)) {
                 continue;
             }
-            self::push('VIDA', '[AHT DEBUG VIDA]', [
-                'vida_antes' => $entry['antes'] ?? $entry['valor_antes'] ?? null,
-                'vida_despues' => $entry['despues'] ?? $entry['valor_despues'] ?? ($entry['valor'] ?? null),
-                'delta' => $entry['delta'] ?? null,
-                'causa' => $entry['causa'] ?? null,
-                'origen' => $entry['origen'] ?? null,
-                'motivo' => $entry['motivo'] ?? $entry['detalle'] ?? null,
-                'positivo_valido_latido' => $entry['positivo_valido_latido'] ?? null,
-                'latido' => $entry['latido'] ?? null,
-                'dia' => $entry['dia'] ?? null,
-                'hora' => $entry['hora'] ?? null,
-                'entrada_completa' => $entry,
-            ]);
+            self::eventoVidaCambio(
+                $partida,
+                (int) ($entry['valor_antes'] ?? 0),
+                (int) ($entry['valor_despues'] ?? 0),
+                (int) ($entry['delta'] ?? 0),
+                (string) ($entry['causa'] ?? ''),
+                (string) ($entry['origen'] ?? ''),
+                $entry
+            );
         }
+    }
+
+    /**
+     * @param array<string, mixed> $meta
+     */
+    public static function eventoVidaCambio(
+        array $partida,
+        int $antes,
+        int $despues,
+        int $delta,
+        string $causa,
+        string $origen,
+        array $meta = []
+    ): void {
+        self::push('VIDA', '[AHT DEBUG VIDA PUEBLO]', [
+            'antes' => $antes,
+            'delta' => $delta,
+            'despues' => $despues,
+            'origen' => $causa,
+            'origen_meta' => $origen,
+            'id' => $meta['fuente_id'] ?? $meta['id'] ?? null,
+            'contexto' => $meta['detalle'] ?? $meta['motivo'] ?? null,
+            'dia' => $meta['dia'] ?? ($partida['reloj']['dia_pueblo'] ?? null),
+            'hora' => $meta['hora'] ?? ($partida['reloj']['hora_actual'] ?? null),
+            'positivo_valido_latido' => $meta['positivo_valido_latido'] ?? null,
+            'latido' => $meta['latido'] ?? null,
+        ]);
     }
 
     /**

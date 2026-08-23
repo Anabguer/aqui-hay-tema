@@ -37,9 +37,15 @@ function partidaOficina(): array
     ];
     $r = ResidenteRuntime::crearPlaceholderDev(1);
     $r['runtime']['ocupacion'] = 'oficina';
+    $r['runtime']['trabajo_dias'] = ['lunes', 'martes', 'miercoles'];
+    $r['runtime']['trabajo_hora_inicio'] = 14;
+    $r['runtime']['trabajo_hora_fin'] = 16;
     $p['residentes'][$r['catalog_id']] = $r;
     $r2 = ResidenteRuntime::crearPlaceholderDev(2);
     $r2['runtime']['ocupacion'] = 'oficina';
+    $r2['runtime']['trabajo_dias'] = ['jueves', 'viernes', 'sabado'];
+    $r2['runtime']['trabajo_hora_inicio'] = 14;
+    $r2['runtime']['trabajo_hora_fin'] = 16;
     $p['residentes'][$r2['catalog_id']] = $r2;
     return $p;
 }
@@ -50,7 +56,7 @@ $ids = array_keys($p['residentes']);
 $a = (string) $ids[0];
 $b = (string) $ids[1];
 $dispTrabajo = AgendaEngine::estaDisponible($p, $a, 1, 14);
-ok(!($dispTrabajo['disponible'] ?? true) && (($dispTrabajo['tipo'] ?? '') === 'trabajo' || ($dispTrabajo['tipo'] ?? '') === 'trabajo_generico'), 'oficina ocupa hora laboral');
+ok((($dispTrabajo['tipo'] ?? '') === 'trabajo'), 'oficina ocupa hora laboral');
 $reacTrabajo = [
     'residente_id' => $a,
     'nombre' => 'Carmen',

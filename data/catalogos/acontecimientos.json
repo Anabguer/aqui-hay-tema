@@ -1,136 +1,220 @@
 {
-  "meta": {
-    "catalogo": "acontecimientos",
-    "estado": "contrato",
-    "_provisional": true,
-    "descripcion": "Familias de acontecimiento diario. Pesos/cooldowns null = no se tiran solos. Continuidad de estado sí."
-  },
-  "items": [
-    {
-      "id": "perder_trabajo",
-      "familia": "trabajo",
-      "participantes": 1,
-      "condiciones": ["empleado"],
-      "peso": null,
-      "cooldown_horas": null,
-      "repetible": false,
-      "importancia": "relevante",
-      "visibilidad_jugador": "aviso",
-      "efectos": ["desempleado", "estado_triste"],
-      "siguientes": ["buscar_trabajo"],
-      "_bloqueado_decision": ["peso", "cooldown"]
+    "meta": {
+        "catalogo": "acontecimientos",
+        "estado": "contrato",
+        "_provisional": true,
+        "descripcion": "Familias de acontecimiento diario. Pesos\/cooldowns null = no se tiran solos. Continuidad de estado sí."
     },
-    {
-      "id": "buscar_trabajo",
-      "familia": "trabajo",
-      "participantes": 1,
-      "condiciones": ["desempleado"],
-      "peso": null,
-      "cooldown_horas": null,
-      "repetible": true,
-      "importancia": "rutina",
-      "visibilidad_jugador": "ninguna",
-      "efectos": [],
-      "siguientes": ["entrevista_trabajo"],
-      "_bloqueado_decision": ["peso"]
-    },
-    {
-      "id": "actividad_individual",
-      "familia": "ocio",
-      "participantes": 1,
-      "condiciones": [],
-      "peso": null,
-      "importancia": "rutina",
-      "visibilidad_jugador": "ninguna",
-      "efectos": ["animo_lugar"],
-      "_bloqueado_decision": ["peso", "efecto_animo"]
-    },
-    {
-      "id": "flechazo",
-      "familia": "romance",
-      "participantes": 2,
-      "condiciones": ["se_conocen", "romance_elegible_edad", "no_parentesco_veto"],
-      "peso": null,
-      "unilateral": true,
-      "importancia": "hito",
-      "visibilidad_jugador": "oportunidad",
-      "_bloqueado_decision": ["probabilidad"]
-    },
-    {
-      "id": "mandar_flores",
-      "familia": "romance_accion",
-      "participantes": 2,
-      "condiciones": ["se_conocen", "interes_o_historia", "no_parentesco_veto"],
-      "prerequisito_nivel": "importante",
-      "peso": null,
-      "importancia": "relevante",
-      "visibilidad_jugador": "cotilleo",
-      "_bloqueado_decision": ["peso"]
-    },
-    {
-      "id": "mandar_mensaje",
-      "familia": "romance_accion",
-      "participantes": 2,
-      "condiciones": ["se_conocen"],
-      "prerequisito_nivel": "pequena",
-      "peso": null,
-      "importancia": "rutina",
-      "visibilidad_jugador": "ninguna",
-      "_bloqueado_decision": ["peso"]
-    },
-    {
-      "id": "declaracion",
-      "familia": "romance_hito",
-      "participantes": 2,
-      "condiciones": ["se_conocen", "interes_o_historia", "no_parentesco_veto", "no_son_pareja"],
-      "prerequisito_nivel": "importante",
-      "requiere_respuesta_ambos": true,
-      "peso": null,
-      "importancia": "hito",
-      "visibilidad_jugador": "importante",
-      "_bloqueado_decision": ["peso"]
-    },
-    {
-      "id": "crisis_pareja",
-      "familia": "pareja",
-      "participantes": 2,
-      "condiciones": ["son_pareja"],
-      "peso": null,
-      "importancia": "hito",
-      "visibilidad_jugador": "importante",
-      "_nota": "Nunca por umbral. Solo acontecimiento explícito.",
-      "_bloqueado_decision": ["probabilidad"]
-    },
-    {
-      "id": "ruptura",
-      "familia": "pareja",
-      "participantes": 2,
-      "condiciones": ["son_pareja_o_crisis"],
-      "peso": null,
-      "importancia": "hito",
-      "visibilidad_jugador": "importante",
-      "_nota": "Nunca estabilidad < X. Hito explícito.",
-      "_bloqueado_decision": ["probabilidad"]
-    },
-    {
-      "id": "reconciliacion",
-      "familia": "pareja",
-      "participantes": 2,
-      "condiciones": ["fueron_pareja", "no_son_pareja"],
-      "peso": null,
-      "importancia": "hito",
-      "visibilidad_jugador": "importante",
-      "_bloqueado_decision": ["peso", "base_estabilidad"]
-    },
-    {
-      "id": "consejo_celestine",
-      "familia": "consejo",
-      "participantes": 1,
-      "condiciones": ["se_conocen_alguien"],
-      "peso": null,
-      "importancia": "peticion",
-      "visibilidad_jugador": "peticion",
-      "_bloqueado_decision": ["peso"]
-    }
-  ]
+    "items": [
+        {
+            "id": "perder_trabajo",
+            "familia": "trabajo",
+            "participantes": 1,
+            "condiciones": [
+                "empleado"
+            ],
+            "peso": null,
+            "cooldown_horas": null,
+            "repetible": false,
+            "importancia": "relevante",
+            "visibilidad_jugador": "aviso",
+            "efectos": [
+                "desempleado",
+                "estado_triste"
+            ],
+            "siguientes": [
+                "buscar_trabajo"
+            ],
+            "_bloqueado_decision": [
+                "peso",
+                "cooldown"
+            ]
+        },
+        {
+            "id": "buscar_trabajo",
+            "familia": "trabajo",
+            "participantes": 1,
+            "condiciones": [
+                "desempleado"
+            ],
+            "peso": null,
+            "cooldown_horas": null,
+            "repetible": true,
+            "importancia": "rutina",
+            "visibilidad_jugador": "ninguna",
+            "efectos": [],
+            "siguientes": [
+                "encontrar_trabajo"
+            ],
+            "_bloqueado_decision": [
+                "peso"
+            ]
+        },
+        {
+            "id": "actividad_individual",
+            "familia": "ocio",
+            "participantes": 1,
+            "condiciones": [],
+            "peso": null,
+            "importancia": "rutina",
+            "visibilidad_jugador": "ninguna",
+            "efectos": [
+                "animo_lugar"
+            ],
+            "_bloqueado_decision": [
+                "peso",
+                "efecto_animo"
+            ]
+        },
+        {
+            "id": "flechazo",
+            "familia": "romance",
+            "participantes": 2,
+            "condiciones": [
+                "se_conocen",
+                "romance_elegible_edad",
+                "no_parentesco_veto"
+            ],
+            "peso": null,
+            "unilateral": true,
+            "importancia": "hito",
+            "visibilidad_jugador": "oportunidad",
+            "_bloqueado_decision": [
+                "probabilidad"
+            ]
+        },
+        {
+            "id": "mandar_flores",
+            "familia": "romance_accion",
+            "participantes": 2,
+            "condiciones": [
+                "se_conocen",
+                "interes_o_historia",
+                "no_parentesco_veto"
+            ],
+            "prerequisito_nivel": "importante",
+            "peso": null,
+            "importancia": "relevante",
+            "visibilidad_jugador": "cotilleo",
+            "_bloqueado_decision": [
+                "peso"
+            ]
+        },
+        {
+            "id": "mandar_mensaje",
+            "familia": "romance_accion",
+            "participantes": 2,
+            "condiciones": [
+                "se_conocen"
+            ],
+            "prerequisito_nivel": "pequena",
+            "peso": null,
+            "importancia": "rutina",
+            "visibilidad_jugador": "ninguna",
+            "_bloqueado_decision": [
+                "peso"
+            ]
+        },
+        {
+            "id": "declaracion",
+            "familia": "romance_hito",
+            "participantes": 2,
+            "condiciones": [
+                "se_conocen",
+                "interes_o_historia",
+                "no_parentesco_veto",
+                "no_son_pareja"
+            ],
+            "prerequisito_nivel": "importante",
+            "requiere_respuesta_ambos": true,
+            "peso": null,
+            "importancia": "hito",
+            "visibilidad_jugador": "importante",
+            "_bloqueado_decision": [
+                "peso"
+            ]
+        },
+        {
+            "id": "crisis_pareja",
+            "familia": "pareja",
+            "participantes": 2,
+            "condiciones": [
+                "son_pareja"
+            ],
+            "peso": null,
+            "importancia": "hito",
+            "visibilidad_jugador": "importante",
+            "_nota": "Nunca por umbral. Solo acontecimiento explícito.",
+            "_bloqueado_decision": [
+                "probabilidad"
+            ]
+        },
+        {
+            "id": "ruptura",
+            "familia": "pareja",
+            "participantes": 2,
+            "condiciones": [
+                "son_pareja_o_crisis"
+            ],
+            "peso": null,
+            "importancia": "hito",
+            "visibilidad_jugador": "importante",
+            "_nota": "Nunca estabilidad < X. Hito explícito.",
+            "_bloqueado_decision": [
+                "probabilidad"
+            ]
+        },
+        {
+            "id": "reconciliacion",
+            "familia": "pareja",
+            "participantes": 2,
+            "condiciones": [
+                "fueron_pareja",
+                "no_son_pareja"
+            ],
+            "peso": null,
+            "importancia": "hito",
+            "visibilidad_jugador": "importante",
+            "_bloqueado_decision": [
+                "peso",
+                "base_estabilidad"
+            ]
+        },
+        {
+            "id": "consejo_celestine",
+            "familia": "consejo",
+            "participantes": 1,
+            "condiciones": [
+                "se_conocen_alguien"
+            ],
+            "peso": null,
+            "importancia": "peticion",
+            "visibilidad_jugador": "peticion",
+            "_bloqueado_decision": [
+                "peso"
+            ]
+        },
+        {
+            "id": "encontrar_trabajo",
+            "familia": "trabajo",
+            "participantes": 1,
+            "condiciones": [
+                "desempleado"
+            ],
+            "peso": 12,
+            "cooldown_horas": null,
+            "repetible": false,
+            "importancia": "relevante",
+            "visibilidad_jugador": "aviso",
+            "efectos": [
+                "empleado",
+                "estado_alegre",
+                "horario_generado"
+            ],
+            "siguientes": [],
+            "_bloqueado_decision": [
+                "peso"
+            ]
+        }
+    ]
 }

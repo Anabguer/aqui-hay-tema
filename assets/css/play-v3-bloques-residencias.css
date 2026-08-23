@@ -1071,7 +1071,7 @@
 }
 
 .play-v3 .capa-ficha .ficha-edad,
-.play-v3 .capa-ficha .ficha-desde,
+.play-v3 .capa-ficha .ficha-trabajo,\n.play-v3 .capa-ficha .ficha-desde,
 .play-v3 .capa-ficha .ficha-animo-line {
   margin: 0;
   font-size: .78rem;
@@ -1593,7 +1593,7 @@
 }
 
 .play-v3 .capa-ficha .ficha-edad,
-.play-v3 .capa-ficha .ficha-desde {
+.play-v3 .capa-ficha .ficha-trabajo,\n.play-v3 .capa-ficha .ficha-desde {
   margin: 0;
   font-family: Caveat, cursive;
   font-size: .88rem;
@@ -1885,7 +1885,7 @@
 }
 
 .play-v3 .capa-ficha .ficha-edad,
-.play-v3 .capa-ficha .ficha-desde {
+.play-v3 .capa-ficha .ficha-trabajo,\n.play-v3 .capa-ficha .ficha-desde {
   font-size: .94rem;
 }
 
@@ -1974,7 +1974,7 @@
 }
 
 .play-v3 .capa-ficha .ficha-edad,
-.play-v3 .capa-ficha .ficha-desde {
+.play-v3 .capa-ficha .ficha-trabajo,\n.play-v3 .capa-ficha .ficha-desde {
   font-size: 1.1rem !important;
 }
 
@@ -3950,4 +3950,172 @@
 
 .play-v3 .capa-organizar .org-cuando .org-dd--dia {
   min-width: 0;
+}
+
+/* org-dd: menú por encima del modal */
+.play-v3 .capa-organizar.org-dd-menu-open,
+.play-v3 .capa-organizar .org-body.org-dd-menu-open {
+  overflow: visible !important;
+}
+
+.play-v3 .capa-organizar .org-dd.is-open {
+  z-index: 60;
+}
+
+.play-v3 .capa-organizar .org-dd.is-open .org-dd-menu {
+  z-index: 61;
+}
+
+.play-v3 .capa-organizar .org-dd.is-open.org-dd--flip .org-dd-menu {
+  top: auto;
+  bottom: calc(100% + .25rem);
+}
+
+/* === Cotilleos modal: cabecera título + filtros (batch cotilleo UX) === */
+.play-v3 .capa-diario .coti-top {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: .35rem .55rem;
+}
+
+.play-v3 .capa-diario .coti-tit {
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
+  padding-right: 0;
+}
+
+.play-v3 .capa-diario .coti-filtros {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  justify-self: end;
+  margin-top: .05rem;
+}
+
+
+/* Horario bajo selector de lugar (Nuevo plan) */
+.play-v3 .capa-organizar .org-lugar-horario {
+  margin: .4rem 0 0;
+  padding: .45rem .55rem;
+  border: 1.5px dashed rgba(44, 38, 31, .16);
+  border-radius: 8px;
+  background: rgba(255, 253, 248, .92);
+  font-size: .74rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #5a4a3a;
+}
+
+.play-v3 .capa-organizar .org-lugar-horario .quien-estado--abierto { color: #2d6a3e; }
+.play-v3 .capa-organizar .org-lugar-horario .quien-estado--cerrado { color: #9a4545; }
+.play-v3 .capa-organizar .org-lugar-horario .quien-horas { font-weight: 500; color: #5a4a3a; }
+
+/* Scroll lock / overscroll modales PC */
+.play-v3 .play-root.pc[data-capa] .capa-organizar .org-body,
+.play-v3 .play-root.pc[data-capa] .capa .capa-scroll,
+.play-v3 .play-root.pc[data-capa] .capa-ficha .ficha-body,
+.play-v3 .play-root.pc[data-capa] .capa-diario .coti-body {
+  overscroll-behavior: contain;
+}
+
+
+/* === Vida del pueblo: modal informativa (corazón) === */
+.play-v3 .top-vida-btn {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.play-v3 .top-vida-btn:focus-visible {
+  outline: 2px solid #c45;
+  outline-offset: 3px;
+}
+.play-v3 .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo.vida-modal-papel,
+.play-v3 .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo.vida-modal-papel {
+  position: absolute !important;
+  left: 50% !important;
+  top: 46% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(420px, 92vw) !important;
+  max-width: min(420px, 92vw) !important;
+  max-height: min(78vh, 620px) !important;
+  min-height: min(240px, 44vh);
+  transform: translate(-50%, -50%) !important;
+  z-index: 12;
+  padding: 1rem 1.05rem .85rem !important;
+  border-radius: 3px 10px 6px 5px !important;
+  border: 2px solid rgba(44, 38, 31, .16) !important;
+  box-shadow:
+    4px 8px 28px rgba(40, 28, 16, .2),
+    inset 0 0 0 1px rgba(180, 150, 110, .32) !important;
+  background-color: #fdf9f4 !important;
+  background-image:
+    linear-gradient(180deg, rgba(255, 253, 249, .94) 0%, rgba(255, 248, 244, .78) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center !important;
+  background-size: cover, cover !important;
+  overflow: hidden;
+  display: flex !important;
+  flex-direction: column;
+  gap: .5rem;
+  box-sizing: border-box;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-top {
+  text-align: center;
+  padding-top: .15rem;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-modal-ico {
+  margin: 0;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-tit {
+  margin: .2rem 0 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 1.35rem;
+  letter-spacing: .01em;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-valor {
+  margin: .35rem 0 0;
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: .02em;
+  color: #8f2f45;
+}
+.play-v3 .capa-vida-pueblo.vida-modal--alta .vida-valor { color: #b33d58; }
+.play-v3 .capa-vida-pueblo.vida-modal--baja .vida-valor,
+.play-v3 .capa-vida-pueblo.vida-modal--critica .vida-valor { color: #8a1f34; }
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-estado-pista {
+  margin: .25rem 0 0;
+  font-style: italic;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-body {
+  overflow: auto;
+  padding-right: .15rem;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-copy p {
+  margin: 0 0 .65rem;
+  line-height: 1.45;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-latido {
+  margin: .35rem 0 0;
+  padding-top: .55rem;
+  border-top: 1px dashed rgba(180, 90, 110, .28);
+  line-height: 1.4;
+}
+.play-v3 .capa-vida-pueblo.vida-modal-papel .vida-cerrar {
+  position: absolute;
+  top: .45rem;
+  right: .45rem;
+  z-index: 2;
 }

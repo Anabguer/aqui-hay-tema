@@ -39,6 +39,11 @@ final class EncuentroLifecycle
                 $enc['estado'] = 'terminado';
                 $resultado = EncuentroResolver::resolver($partida, $enc, $logger, $catalog);
                 EncuentroResolver::aplicarResultado($partida, $enc, $resultado, $logger);
+                $calVp = $catalog !== null ? CalibracionConfig::load($catalog->getRoot()) : [];
+                $vpR = VidaPuebloEngine::aplicarEncuentroOrganizado($partida, $enc, $resultado, $calVp, $logger);
+                if ($vpR !== null) {
+                    $enc['vida_pueblo_aplicada'] = true;
+                }
                 $enc['resultado'] = $resultado;
                 DomainBootstrap::boot();
                 DomainEventDispatcher::emit($partida, DomainEvents::ENCUENTRO_TERMINADO, [

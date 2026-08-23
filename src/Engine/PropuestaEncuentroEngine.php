@@ -449,7 +449,8 @@ final class PropuestaEncuentroEngine
         $hh = str_pad((string) (int) $prop['hora'], 2, '0', STR_PAD_LEFT);
         $lugar = (string) ($prop['lugar'] ?? '');
         $sitio = $lugar !== '' ? MisionPlantillas::nombreLugar($lugar) : 'el pueblo';
-        $r['mensaje_ui'] = $quien . ' han quedado el ' . $diaSem . ' ' . $fechaTxt . ' a las ' . $hh . ':00 en ' . $sitio . '.';
+        $verboQuedado = count($nombres) === 1 ? 'ha quedado' : 'han quedado';
+        $r['mensaje_ui'] = $quien . ' ' . $verboQuedado . ' el ' . $diaSem . ' ' . $fechaTxt . ' a las ' . $hh . ':00 en ' . $sitio . '.';
         if (!empty($prop['hora_ajustada']) && is_array($prop['hora_solicitada'] ?? null)) {
             $hp = str_pad((string) (int) ($prop['hora_solicitada']['hora'] ?? 0), 2, '0', STR_PAD_LEFT);
             $dp = (int) ($prop['hora_solicitada']['dia'] ?? 0);

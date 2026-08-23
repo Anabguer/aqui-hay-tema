@@ -14,7 +14,8 @@ $refOk = is_file(__DIR__ . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPA
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Aquí Hay Tema</title>
   <meta name="description" content="Gestiona vínculos y convivencia en un pueblo entero. Celestine eres tú." />
-  <link rel="icon" href="cover.svg" type="image/svg+xml" />
+  <link rel="icon" href="favicon.png" type="image/png" sizes="512x512" />
+  <link rel="apple-touch-icon" href="assets/brand/logo-aht.png" />
   <link rel="stylesheet" href="css/home.css" />
 </head>
 <body>

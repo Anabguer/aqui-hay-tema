@@ -140,6 +140,7 @@ body.play-v3 {
 .play-root[data-capa="buzon"] .capa-buzon,
 .play-root[data-capa="diario"] .capa-diario,
 .play-root[data-capa="organizar"] .capa-organizar,
+.play-root[data-capa="vida_pueblo"] .capa-vida-pueblo,
 .play-root[data-capa="misiones"] .capa-misiones,
 .play-root[data-capa="residencias"] .capa-residencias { transform: none; pointer-events: auto; }
 .cerrar { align-self: flex-start; border: 2px solid #c9b59a; background: var(--day); font: inherit; font-weight: 800; cursor: pointer; padding: .18rem .5rem; }

@@ -72,18 +72,26 @@ final class AcontecimientoDiario
         $romanceTocado = false;
 
         if ($eventoId === 'perder_trabajo') {
-            $id = $participantes[0];
+            $id = (string) $participantes[0];
             $oc = $partida['residentes'][$id]['runtime']['ocupacion'] ?? null;
             $partida['residentes'][$id]['runtime']['ocupacion_anterior'] = $oc;
             $partida['residentes'][$id]['runtime']['ocupacion'] = 'desempleado';
+            TrabajoHorario::limpiarHorario($partida['residentes'][$id]['runtime']);
             $reloj = $partida['reloj'] ?? [];
             $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 8);
             $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
-            $partida['residentes'][$id]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
-                'triste',
-                null,
+            $root = dirname(__DIR__, 2);
+            $emoSvc = new EmotionalStateService(
+                new VisualPackStore($root),
+                $store,
+                $logger
+            );
+            $emoSvc->aplicar(
+                $partida,
+                $id,
+                EstadoEmocional::TRISTE,
                 'perder_trabajo',
-                EstadoEmocional::marcaReloj($reloj),
+                null,
                 $hasta,
                 [],
                 $dur
@@ -104,6 +112,42 @@ final class AcontecimientoDiario
             $partida['residentes'][$id]['runtime']['busqueda_trabajo_cd_hasta'] = $now + max(24, $cdH);
             $partida['residentes'][$id]['runtime']['busqueda_trabajo_estado'] = 'espera';
             $efectos[] = 'busqueda_registrada';
+        }
+
+        if ($eventoId === 'encontrar_trabajo') {
+            $id = (string) $participantes[0];
+            $rng = RngService::fromPartida($partida);
+            $profesiones = $store->items('ocupaciones');
+            $preferida = $partida['residentes'][$id]['runtime']['ocupacion_anterior'] ?? null;
+            $oc = TrabajoHorario::elegirOcupacion(
+                $profesiones,
+                is_string($preferida) ? $preferida : null,
+                $rng
+            );
+            TrabajoHorario::asignarEmpleo($partida['residentes'][$id]['runtime'], $oc, $rng);
+            $rng->persistToPartida($partida);
+            $reloj = $partida['reloj'] ?? [];
+            $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.alegre', 4);
+            $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
+            $root = dirname(__DIR__, 2);
+            $emoSvc = new EmotionalStateService(
+                new VisualPackStore($root),
+                $store,
+                $logger
+            );
+            $emoSvc->aplicar(
+                $partida,
+                $id,
+                EstadoEmocional::ALEGRE,
+                'encontrar_trabajo',
+                null,
+                $hasta,
+                [],
+                $dur
+            );
+            $efectos[] = 'empleado';
+            $efectos[] = 'estado_alegre';
+            $efectos[] = 'horario_generado';
         }
 
         if ($eventoId === 'flechazo' && count($participantes) >= 2) {
@@ -218,12 +262,20 @@ final class AcontecimientoDiario
             if ($emo === EstadoEmocional::NEUTRO && ((int) ($partida['reloj']['hora_actual'] ?? 0) % 7) === 0) {
                 $reloj = $partida['reloj'] ?? [];
                 $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.alegre', 4);
-                $partida['residentes'][$id]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
-                    'alegre',
-                    null,
+                $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
+                $root = dirname(__DIR__, 2);
+                $emoSvc = new EmotionalStateService(
+                    new VisualPackStore($root),
+                    $store,
+                    $logger
+                );
+                $emoSvc->aplicar(
+                    $partida,
+                    $id,
+                    EstadoEmocional::ALEGRE,
                     'actividad_individual',
-                    EstadoEmocional::marcaReloj($reloj),
-                    EstadoEmocional::hastaDesdeDuracion($reloj, $dur),
+                    null,
+                    $hasta,
                     [],
                     $dur
                 );
@@ -244,18 +296,14 @@ final class AcontecimientoDiario
             $eventoId
         );
         $vis = (string) ($item['visibilidad_jugador'] ?? 'ninguna');
-        $msg = null;
-        if ($vis !== 'ninguna') {
-            $msg = BuzonEngine::crear($partida, [
-                'de_persona' => $participantes[0] ?? null,
-                'tipo' => $vis === 'peticion' ? 'peticion' : 'novedad',
-                'clasificacion' => self::clasificacionDeVisibilidad($vis),
-                'texto' => '',
-                'copy_id' => null,
-                'importancia' => $item['importancia'] ?? 'relevante',
-                '_placeholder_contenido' => true,
-            ]);
-        }
+        $msg = VidaNarrativaBridge::alAcontecimiento(
+            $partida,
+            $eventoId,
+            $participantes,
+            $item,
+            $efectos,
+            $logger
+        );
         $partida['acontecimientos_log'] ??= [];
         $row = [
             'id' => $eventoId,
@@ -267,6 +315,7 @@ final class AcontecimientoDiario
         ];
         $partida['acontecimientos_log'][] = $row;
         \aht_log_optional($logger, $partida, 'acontecimiento_diario', $row);
+        VidaPuebloEngine::aplicarAcontecimientoVida($partida, $eventoId, $item, $cal, $logger);
         return ['ok' => true, 'evento' => $row, 'mensaje' => $msg, 'romance_tocado' => $romanceTocado];
     }
 
@@ -349,7 +398,7 @@ final class AcontecimientoDiario
         return ['ok' => true, 'plan' => $plan, 'ejecutados' => []];
     }
 
-    private static function clasificacionDeVisibilidad(string $vis): string
+    public static function clasificacionVisibilidad(string $vis): string
     {
         if ($vis === 'importante' || $vis === 'aviso') {
             return BuzonEngine::IMPORTANTE;

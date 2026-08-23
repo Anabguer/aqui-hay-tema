@@ -21,7 +21,10 @@ final class AgendaEngine
             throw new \InvalidArgumentException("residente desconocido: {$residenteId}");
         }
 
-        $ocupacion = $residente['runtime']['ocupacion'] ?? 'autonomo';
+        TrabajoHorario::asegurarHorario($partida, $residenteId);
+        $residente = $partida['residentes'][$residenteId];
+        $runtime = $residente['runtime'] ?? [];
+        $ocupacion = is_string($runtime['ocupacion'] ?? null) ? (string) $runtime['ocupacion'] : '';
         $slots = [];
         for ($h = 0; $h < 24; $h++) {
             $slots[$h] = [
@@ -34,7 +37,7 @@ final class AgendaEngine
             ];
         }
 
-        self::aplicarEstructural($slots, $ocupacion, $diaSemana);
+        self::aplicarEstructural($slots, $runtime, $ocupacion, $diaSemana);
         self::aplicarRecurrentes($slots, $residente, $diaSemana);
         self::aplicarReservasProgramadas($slots, $partida, $residenteId, $diaPueblo);
         self::aplicarReservasDesdeDiaAnterior($slots, $partida, $residenteId, $diaPueblo);
@@ -47,32 +50,35 @@ final class AgendaEngine
         ];
     }
 
-    private static function aplicarEstructural(array &$slots, string $ocupacion, string $diaSemana): void
+    /**
+     * @param array<string, mixed> $runtime
+     */
+    private static function aplicarEstructural(array &$slots, array $runtime, string $ocupacion, string $diaSemana): void
     {
-        $sueno = AgendaTemplates::ventanaSueno($ocupacion);
-        for ($h = 0; $h < 24; $h++) {
-            if (self::horaEnRango($h, $sueno['hora_inicio'], $sueno['hora_fin'])) {
-                $slots[$h] = [
-                    'hora' => $h,
-                    'ocupado' => true,
-                    'capa' => 'estructural',
-                    'tipo' => 'sueno',
-                    'detalle' => 'sueño_estructural',
-                    'reserva_id' => null,
-                ];
+        if ($ocupacion !== '') {
+            $sueno = AgendaTemplates::ventanaSueno($ocupacion);
+            for ($h = 0; $h < 24; $h++) {
+                if (self::horaEnRango($h, $sueno['hora_inicio'], $sueno['hora_fin'])) {
+                    $slots[$h] = [
+                        'hora' => $h,
+                        'ocupado' => true,
+                        'capa' => 'estructural',
+                        'tipo' => 'sueno',
+                        'detalle' => 'sueño_estructural',
+                        'reserva_id' => null,
+                    ];
+                }
             }
         }
 
-        foreach (AgendaTemplates::bloquesTrabajo($ocupacion) as $bloque) {
-            if (!in_array($diaSemana, $bloque['dias'], true)) {
-                continue;
-            }
+        $bloque = TrabajoHorario::bloqueDia($runtime, $diaSemana);
+        if ($bloque !== null) {
             for ($h = $bloque['hora_inicio']; $h < min($bloque['hora_fin'], 24); $h++) {
                 $slots[$h] = [
                     'hora' => $h,
                     'ocupado' => true,
                     'capa' => 'estructural',
-                    'tipo' => $bloque['tipo'],
+                    'tipo' => 'trabajo',
                     'detalle' => $ocupacion,
                     'reserva_id' => null,
                 ];
@@ -226,12 +232,27 @@ final class AgendaEngine
         string $residenteId,
         int $dia,
         int $hora,
-        int $duracionHoras
+        int $duracionHoras,
+        bool $propuestaJugador = false
     ): array {
         $duracionHoras = max(1, $duracionHoras);
+        $trabajaManana = $propuestaJugador && TrabajoHorario::trabajaEseDia($partida, $residenteId, $dia + 1);
+        if ($propuestaJugador && $trabajaManana && ($hora + $duracionHoras) > 23) {
+            return [
+                'disponible' => false,
+                'motivo' => 'trabaja_manana',
+                'tipo' => 'trabajo',
+                '_placeholder_rechazo_narrativo' => true,
+            ];
+        }
+
         $dispInicio = self::estaDisponible($partida, $residenteId, $dia, $hora);
         if (!($dispInicio['disponible'] ?? false)) {
-            return $dispInicio;
+            if ($propuestaJugador && !$trabajaManana && self::esBloqueoSuenoHabitual($dispInicio)) {
+                // Sueño habitual no bloquea el inicio si libra al día siguiente.
+            } else {
+                return $dispInicio;
+            }
         }
 
         for ($offset = 1; $offset < $duracionHoras; $offset++) {
@@ -240,7 +261,7 @@ final class AgendaEngine
             if ($disp['disponible'] ?? false) {
                 continue;
             }
-            if (self::esBloqueoSuenoHabitual($disp)) {
+            if ($propuestaJugador && self::esBloqueoSuenoHabitual($disp)) {
                 continue;
             }
             return $disp;

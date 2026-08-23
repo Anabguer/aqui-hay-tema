@@ -23,6 +23,11 @@ final class VidaPuebloEngine
     public const CAUSA_OFFLINE = 'offline_acumulado';
     public const CAUSA_LAB = 'lab_sintetico';
     public const CAUSA_LAB_SETUP = 'lab_setup';
+    public const CAUSA_ENCUENTRO_JUGADOR = 'encuentro_jugador';
+    public const CAUSA_ACONTECIMIENTO = 'acontecimiento_vida';
+
+    public const DELTA_MISION_CUMPLIDA = 2;
+    public const DELTA_MISION_FALLIDA = -3;
 
     public const ORIGEN_JUGADOR = 'jugador';
     public const ORIGEN_SISTEMA = 'sistema';
@@ -51,7 +56,7 @@ final class VidaPuebloEngine
             'umbral_positivos_latido' => 25,
             'offline_dano_max' => 15,
             'offline_suelo' => 5,
-            'game_over_en_play' => false,
+            'game_over_en_play' => true,
             'ledger_cap' => 400,
             'bandas' => [
                 ['id' => self::BANDA_CRITICO, 'min' => 0, 'max' => 19, 'etiqueta' => 'Se nos va de las manos'],
@@ -79,7 +84,7 @@ final class VidaPuebloEngine
         $d['umbral_positivos_latido'] = (int) CalibracionConfig::get($cal, 'vida_pueblo.umbral_positivos_latido', $d['umbral_positivos_latido']);
         $d['offline_dano_max'] = (int) CalibracionConfig::get($cal, 'vida_pueblo.offline_dano_max', $d['offline_dano_max']);
         $d['offline_suelo'] = (int) CalibracionConfig::get($cal, 'vida_pueblo.offline_suelo', $d['offline_suelo']);
-        $d['game_over_en_play'] = (bool) CalibracionConfig::get($cal, 'vida_pueblo.game_over_en_play', false);
+        $d['game_over_en_play'] = (bool) CalibracionConfig::get($cal, 'vida_pueblo.game_over_en_play', $d['game_over_en_play']);
         $d['ledger_cap'] = (int) CalibracionConfig::get($cal, 'vida_pueblo.ledger_cap', $d['ledger_cap']);
         $bandas = CalibracionConfig::get($cal, 'vida_pueblo.bandas', null);
         if (is_array($bandas) && $bandas !== []) {
@@ -212,13 +217,19 @@ final class VidaPuebloEngine
         if ($pct > 100) {
             $pct = 100;
         }
+        $latidoAnim = (bool) ($partida['vida_pueblo']['latido_ui_pendiente'] ?? false);
+        if ($latidoAnim) {
+            $partida['vida_pueblo']['latido_ui_pendiente'] = false;
+        }
         return [
             'banda' => $b['id'],
             'etiqueta' => $b['etiqueta'],
             'corazon_pct' => $pct,
             'latidos' => (int) ($partida['vida_pueblo']['latidos'] ?? 0),
+            'latido_anim' => $latidoAnim,
             'critico' => $valor <= 19,
             'game_over_pendiente' => (bool) ($partida['vida_pueblo']['game_over_pendiente'] ?? false),
+            'game_over_activo' => self::derrotaVisibleEnPlay($partida, $cal),
         ];
     }
 
@@ -317,6 +328,7 @@ final class VidaPuebloEngine
             $despues = self::clamp($post, $cfg);
             $v['valor'] = $despues;
             $v['latidos'] = (int) $v['latidos'] + 1;
+            $v['latido_ui_pendiente'] = true;
             $v['positivos_desde_latido'] = 0;
             $v['ultimo_latido_dia'] = $dia;
             $v['ultimo_latido_hora'] = $hora;
@@ -394,6 +406,8 @@ final class VidaPuebloEngine
             'causa' => $causa,
             'latido' => $latido,
         ]);
+
+        LabAudit::eventoVidaCambio($partida, $antes, $despues, $despues - $antes, $causa, $origen, $meta);
 
         return [
             'ok' => true,
@@ -538,5 +552,151 @@ final class VidaPuebloEngine
             'dia' => $partida['reloj']['dia_pueblo'] ?? null,
         ];
         $partida['vida_pueblo']['ledger'] = array_values(array_slice($lista, -$cap));
+    }
+
+    public static function deltaResultadoEncuentro(string $resultado): int
+    {
+        $map = [
+            'muy_bien' => 2,
+            'bien' => 1,
+            'normal' => 0,
+            'mal' => -1,
+            'muy_mal' => -2,
+        ];
+        return $map[$resultado] ?? 0;
+    }
+
+    /**
+     * @param array<string, mixed> $resultado
+     */
+    public static function resultadoGlobalEncuentro(array $resultado): ?string
+    {
+        $global = $resultado['resultado'] ?? $resultado['experiencia']['resultado'] ?? null;
+        if (is_string($global) && $global !== '') {
+            return $global;
+        }
+        $por = $resultado['por_participante'] ?? [];
+        if (!is_array($por) || $por === []) {
+            return null;
+        }
+        $vals = [];
+        foreach ($por as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $r = (string) ($row['resultado'] ?? '');
+            if ($r !== '') {
+                $vals[] = self::deltaResultadoEncuentro($r);
+            }
+        }
+        if ($vals === []) {
+            return null;
+        }
+        $avg = (int) round(array_sum($vals) / count($vals));
+        foreach (['muy_mal' => -2, 'mal' => -1, 'normal' => 0, 'bien' => 1, 'muy_bien' => 2] as $k => $v) {
+            if ($avg === $v) {
+                return $k;
+            }
+        }
+        if ($avg > 0) {
+            return 'bien';
+        }
+        if ($avg < 0) {
+            return 'mal';
+        }
+        return 'normal';
+    }
+
+    /**
+     * Una sola variación por encuentro organizado por Celestine al resolverse.
+     *
+     * @param array<string, mixed> $encuentro
+     * @param array<string, mixed> $resultado
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>|null
+     */
+    public static function aplicarEncuentroOrganizado(
+        array &$partida,
+        array $encuentro,
+        array $resultado,
+        array $cal = [],
+        ?GameLogger $logger = null
+    ): ?array {
+        if (!FeatureConfig::isEnabled($partida, self::FLAG)) {
+            return null;
+        }
+        if (!MisionDiariaEngine::esEncuentroCelestine($encuentro)) {
+            return null;
+        }
+        if (!empty($encuentro['vida_pueblo_aplicada'])) {
+            return null;
+        }
+        $res = self::resultadoGlobalEncuentro($resultado);
+        if ($res === null) {
+            return null;
+        }
+        $delta = self::deltaResultadoEncuentro($res);
+        if ($delta === 0) {
+            return ['ok' => true, 'delta_aplicado' => 0, 'resultado' => $res];
+        }
+        $r = self::aplicar($partida, $delta, [
+            'causa' => self::CAUSA_ENCUENTRO_JUGADOR,
+            'origen' => self::ORIGEN_JUGADOR,
+            'atribuible_celestine' => true,
+            'positivo_valido_latido' => false,
+            'fuente_id' => $encuentro['id'] ?? null,
+            'detalle' => $res,
+        ], $cal, $logger);
+        return array_merge($r, ['resultado' => $res]);
+    }
+
+    /**
+     * @param array<string, mixed> $item
+     * @param array<string, mixed> $cal
+     */
+    public static function aplicarAcontecimientoVida(
+        array &$partida,
+        string $eventoId,
+        array $item,
+        array $cal = [],
+        ?GameLogger $logger = null
+    ): ?array {
+        if (!FeatureConfig::isEnabled($partida, self::FLAG)) {
+            return null;
+        }
+        $delta = self::deltaAcontecimientoCatalogo($eventoId, $item);
+        if ($delta === null || $delta === 0) {
+            return null;
+        }
+        return self::aplicar($partida, $delta, [
+            'causa' => self::CAUSA_ACONTECIMIENTO,
+            'origen' => self::ORIGEN_SISTEMA,
+            'atribuible_celestine' => true,
+            'positivo_valido_latido' => false,
+            'fuente_id' => $eventoId,
+        ], $cal, $logger);
+    }
+
+    /**
+     * @param array<string, mixed> $item
+     */
+    private static function deltaAcontecimientoCatalogo(string $eventoId, array $item): ?int
+    {
+        $map = [
+            'perder_trabajo' => -1,
+            'encontrar_trabajo' => 1,
+            'crisis_pareja' => -2,
+            'ruptura' => -2,
+            'reconciliacion' => 2,
+        ];
+        if (isset($map[$eventoId])) {
+            return $map[$eventoId];
+        }
+        $imp = (string) ($item['importancia'] ?? '');
+        $vis = (string) ($item['visibilidad_jugador'] ?? 'ninguna');
+        if ($imp === 'hito' && ($vis === 'importante' || $vis === 'aviso')) {
+            return null;
+        }
+        return null;
     }
 }

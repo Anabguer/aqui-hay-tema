@@ -204,6 +204,24 @@ body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
 .top-vida .corazon-svg.corazon-vida--baja {
   animation: corazon-vida-baja 0.95s ease-out;
 }
+@keyframes corazon-vida-latido {
+  0% { transform: scale(1); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0)); }
+  10% { transform: scale(1.12); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 18px rgba(196,43,74,.75)) drop-shadow(0 0 28px rgba(252,238,240,.45)); }
+  22% { transform: scale(1); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 6px rgba(229,125,144,.3)); }
+  34% { transform: scale(1.14); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 20px rgba(196,43,74,.8)) drop-shadow(0 0 30px rgba(252,238,240,.5)); }
+  46% { transform: scale(1); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 8px rgba(229,125,144,.35)); }
+  58% { transform: scale(1.1); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 16px rgba(196,43,74,.65)); }
+  100% { transform: scale(1); filter: drop-shadow(2px 3px 0 rgba(44,38,31,.1)) drop-shadow(0 0 0 rgba(229,125,144,0)); }
+}
+.top-vida .corazon-svg.corazon-vida--latido {
+  animation: corazon-vida-latido 1.8s ease-in-out;
+}
+.vida-derrota {
+  position: fixed; inset: 0; z-index: 12000; display: flex; align-items: center; justify-content: center;
+  background: rgba(20, 12, 10, .72); padding: 1rem;
+}
+.vida-derrota[hidden] { display: none !important; }
+body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.25) brightness(.92); }
 @media (prefers-reduced-motion: reduce) {
   .top-vida .corazon-svg.corazon-vida--reposo,
   .top-vida .corazon-svg.corazon-vida--sube,

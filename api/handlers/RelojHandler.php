@@ -30,10 +30,17 @@ final class RelojHandler
             return $result;
         }
         if ($lab && $catalog !== null) {
-            LabAudit::eventosEncuentrosTerminados($antesEnc, $partida, $catalog);
-            LabAudit::eventosNuevosResidentes($antesRes, $partida, $catalog);
-            LabAudit::eventoVidaDesdeIndice($partida, $antesLedger);
-            LabAudit::eventoMisionesDia($partida, $ctx->root);
+            try {
+                LabAudit::eventosEncuentrosTerminados($antesEnc, $partida, $catalog);
+                LabAudit::eventosNuevosResidentes($antesRes, $partida, $catalog);
+                LabAudit::eventoVidaDesdeIndice($partida, $antesLedger);
+                LabAudit::eventoMisionesDia($partida, $ctx->root);
+            } catch (\Throwable $auditErr) {
+                LabAudit::push('AUDIT', '[AHT DEBUG ERROR]', [
+                    'mensaje' => $auditErr->getMessage(),
+                    'accion' => 'reloj.avanzar',
+                ]);
+            }
         }
         savePartida($ctx, $partida);
         return withLabAudit([

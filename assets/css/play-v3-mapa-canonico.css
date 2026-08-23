@@ -143,12 +143,6 @@
 }
 /* El aro del token refleja estado emocional; la agenda marca el plan en curso. */
 
-/* Consulta de edificio: modal de papel sobre el mapa, sin oscurecer el pueblo. */
-.play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
-  opacity: 0 !important;
-  pointer-events: none !important;
-}
-
 .play-v3 .play-root[data-consulta="sel"] .selector,
 .play-v3 .play-root[data-consulta="quien"] .quien {
   left: 50% !important;
@@ -509,7 +503,7 @@
 }
 
 
-/* Horario en edificios del mapa */
+/* Horario en edificios del mapa (deshabilitado en mapa) */
 .play-v3 .mapa-zona-horario {
   position: absolute;
   left: 50%;
@@ -539,6 +533,11 @@
 .play-v3 .mapa-zona-horario[data-abierto="0"] {
   color: #8a4545;
   border-color: rgba(138, 69, 69, 0.2);
+}
+
+/* Horario: oculto en mapa (solo en ventana al pulsar edificio) */
+.play-v3 .mapa-zona-horario {
+  display: none !important;
 }
 .play-v3 .play-root[data-consulta="quien"] .quien-horario {
   display: block;

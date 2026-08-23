@@ -1,6 +1,6 @@
-﻿/**
+/**
 
- * Direccion artistica shell ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â objetos visuales, no dashboard.
+ * Direccion artistica shell Ã¢â‚¬â€ objetos visuales, no dashboard.
 
  */
 
@@ -440,7 +440,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
   font-weight: 700;
 
-  font-size: .84rem;
+  font-size: 1.05rem;
 
   letter-spacing: .02em;
 
@@ -1205,7 +1205,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 
-.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a {
+.play-v3 .capa-cerrar-pestaÃƒÂ±a {
 
   font-size: .72rem !important;
 
@@ -1219,7 +1219,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 }
 
-.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a::before { z-index: -1; }
+.play-v3 .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
 
 
 
@@ -1504,7 +1504,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   flex-shrink: 0;
 }
 
-/* plan-cara-token: clic â†’ ficha */
+/* plan-cara-token: clic → ficha */
 .obj-proximo-polaroid .prox-faces .cara-token .cara {
   width: 46px;
   height: 46px;
@@ -2020,7 +2020,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   display: block;
 }
 
-/* Plan en curso â€” polaroid y agenda */
+/* Plan en curso — polaroid y agenda */
 @keyframes plan-curso-respiro {
   0%, 100% {
     box-shadow:
@@ -2119,7 +2119,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 }
 
 
-/* AquÃ­ hay tema â€” bloque en nota del edificio */
+/* Aquí hay tema — bloque en nota del edificio */
 .play-v3 .quien-tema { margin: .45rem 0 .55rem; }
 .play-v3 .quien-tema-card {
   padding: .5rem .55rem .55rem;
@@ -2166,7 +2166,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   color: #6a5348;
 }
 
-/* Popover Â«QuiÃ©n estÃ¡Â» â€” listado compacto + temas */
+/* Popover «Quién está» — listado compacto + temas */
 .quien-kicker { text-align: center; }
 aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; font-style: italic; }
 .quien-residentes { display: flex; margin: 0; }
@@ -2188,7 +2188,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .quien-tema-mark--drama { background: rgba(220, 140, 60, 0.2); color: #9a5a10; }
 .quien-tema-mas { text-align: center; font-size: 0.8rem; opacity: 0.75; margin: 0.2rem 0 0; }
 .quien-tema-card .quien-tema-quien { font-size: 0.85rem; opacity: 0.85; margin: 0 0 0.25rem; }
-/* Popover Quién está — bloques jerárquicos */
+/* Popover Qui�n est� � bloques jer�rquicos */
 .play-v3 aside.quien .quien-bloque {
   margin: 0 0 0.55rem;
   padding: 0.5rem 0.55rem 0.55rem;
@@ -2269,7 +2269,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .play-v3 aside.quien .destinos { margin-top: 0.35rem; }
 
 
-/* Intervención durante encuentro (polaroid) */
+/* Intervenci�n durante encuentro (polaroid) */
 .shell-grupo-planes .enc-int { margin-top: .55rem; padding-top: .45rem; border-top: 1px dashed rgba(120,96,72,.35); }
 .shell-grupo-planes .enc-int-kicker { font-family: Caveat, cursive; font-size: .82rem; color: #7a6450; margin: 0 0 .35rem; }
 .shell-grupo-planes .enc-int-btns { display: flex; flex-wrap: wrap; gap: .28rem; }
@@ -2281,3 +2281,24 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .shell-grupo-planes .enc-int-result-txt--bien { color: #3d6b3a; }
 .shell-grupo-planes .enc-int-result-txt--mal { color: #8b3a32; }
 .shell-grupo-planes .enc-int-result-txt--neutral { color: #5c5044; }
+
+/* Consulta edificio + Nuevo plan: alineación estilo mockup */
+.play-v3 .play-root[data-consulta="quien"] .quien.nota-mapa {
+  text-align: center;
+}
+
+.play-v3 aside.quien .quien-bloque,
+.play-v3 aside.quien .quien-bloque--presencia .quien-kicker,
+.play-v3 aside.quien .quien-vacio {
+  text-align: center;
+}
+
+.play-v3 .quien-residentes--inline {
+  justify-content: center;
+}
+
+.play-v3 aside.quien .quien-bloque--tema {
+  padding: 0;
+  border: none;
+  background: transparent;
+}

@@ -47,6 +47,44 @@ final class PerfilPartida
     /**
      * Backfill determinista: si el catálogo tiene edad y el perfil de partida no, copia sin regenerar.
      */
+    /**
+     * Backfill determinista: saves antiguos sin lugares_preferentes no muestran tokens en el mapa.
+     */
+    public static function reconciliarLugaresPreferentes(array &$partida): void
+    {
+        $seed = (string) ($partida['meta']['seed'] ?? $partida['meta']['partida_id'] ?? '');
+        $operativos = array_values(array_filter(
+            LugaresCanonicos::IDS,
+            static fn(string $lug): bool => LugaresCanonicos::operativoEnProducto($lug)
+        ));
+        if ($operativos === []) {
+            return;
+        }
+
+        foreach ($partida['residentes'] ?? [] as $residenteId => $res) {
+            if (!is_string($residenteId) || $residenteId === '' || !is_array($res)) {
+                continue;
+            }
+            if (!isset($res['runtime']['perfil_partida']) || !is_array($res['runtime']['perfil_partida'])) {
+                continue;
+            }
+            $perfil = &$partida['residentes'][$residenteId]['runtime']['perfil_partida'];
+            $prefs = $perfil['lugares_preferentes'] ?? null;
+            if (is_array($prefs) && $prefs !== []) {
+                unset($perfil);
+                continue;
+            }
+            $n = min(2, count($operativos));
+            $base = (int) sprintf('%u', crc32($seed . '|' . $residenteId . '|lugpref'));
+            $chosen = [];
+            for ($i = 0; $i < $n; $i++) {
+                $chosen[] = $operativos[($base + $i * 3) % count($operativos)];
+            }
+            $perfil['lugares_preferentes'] = array_values(array_unique($chosen));
+            unset($perfil);
+        }
+    }
+
     public static function reconciliarEdades(array &$partida, Catalog $catalog): void
     {
         foreach ($partida['residentes'] ?? [] as $residenteId => $res) {
