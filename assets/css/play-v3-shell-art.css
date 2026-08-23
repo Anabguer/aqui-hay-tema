@@ -2270,11 +2270,65 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 
 
 /* Intervenci�n durante encuentro (polaroid) */
-.shell-grupo-planes .enc-int { margin-top: .55rem; padding-top: .45rem; border-top: 1px dashed rgba(120,96,72,.35); }
-.shell-grupo-planes .enc-int-kicker { font-family: Caveat, cursive; font-size: .82rem; color: #7a6450; margin: 0 0 .35rem; }
-.shell-grupo-planes .enc-int-btns { display: flex; flex-wrap: wrap; gap: .28rem; }
-.shell-grupo-planes .enc-int-btn { font-size: .68rem; padding: .22rem .42rem; border: 1px solid #c9b89a; background: #fffdf6; border-radius: 3px; cursor: pointer; }
-.shell-grupo-planes .enc-int-btn:hover { background: #f5ecd8; }
+.shell-grupo-planes .enc-int {
+  margin-top: .55rem;
+  padding-top: .55rem;
+  border-top: 1px dashed rgba(120,96,72,.35);
+  margin-bottom: .9rem;
+  text-align: center;
+}
+.shell-grupo-planes .enc-int::after {
+  content: "\00B7\00A0\00A0\00B7\00A0\00A0\00B7";
+  display: block;
+  margin-top: .9rem;
+  font-family: Caveat, cursive;
+  font-size: .8rem;
+  line-height: 1;
+  letter-spacing: .3em;
+  color: rgba(122,100,80,.45);
+}
+.shell-grupo-planes .enc-int-kicker { font-family: Caveat, cursive; font-size: .85rem; color: #7a6450; margin: 0 0 .6rem; }
+.shell-grupo-planes .enc-int-btns { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .42rem .34rem; }
+.shell-grupo-planes .enc-int-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .69rem;
+  font-weight: 700;
+  line-height: 1.15;
+  padding: .26rem .58rem .28rem;
+  border: 1px solid rgba(120,96,72,.4);
+  border-radius: 999px;
+  background: #fdf6e6;
+  color: #4a4038;
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(120,96,72,.12);
+  transition: background-color .12s ease, transform .12s ease, box-shadow .12s ease;
+}
+.shell-grupo-planes .enc-int-btns .enc-int-btn:nth-child(odd) { transform: rotate(-.5deg); }
+.shell-grupo-planes .enc-int-btns .enc-int-btn:nth-child(even) { transform: rotate(.45deg); }
+.shell-grupo-planes .enc-int-btn::before { font-size: .95em; line-height: 1; }
+.shell-grupo-planes .enc-int-btns .enc-int-btn:hover {
+  transform: translateY(-1px) rotate(0deg);
+  box-shadow: 1.5px 2.5px 0 rgba(120,96,72,.18);
+}
+.shell-grupo-planes .enc-int-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 rgba(120,96,72,.14); }
+/* Pastel suave por acción */
+.shell-grupo-planes .enc-int-btn[data-enc-int-accion="hablar"]::before { content: "\01F4AC"; }
+.shell-grupo-planes .enc-int-btn[data-enc-int-accion="hablar"] { background: #e2edf8; border-color: #b9cde2; }
+.shell-grupo-planes .enc-int-btn[data-enc-int-accion="broma"]::before { content: "\01F602"; }
+.shell-grupo-planes .enc-int-btn[data-enc-int-accion="broma"] { background: #fbf0cd; border-color: #e0cf9d; }
+.shell-grupo-planes .enc-int-btn--hobby { background: #f3ecdd; border-color: #d8c9ac; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="manualidades"]::before { content: "\01F3A8"; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="manualidades"] { background: #fadfe9; border-color: #e5bccd; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="bingo"]::before { content: "\01F3B1"; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="bingo"] { background: #e7dff6; border-color: #c6b8e2; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="videojuegos"]::before { content: "\01F3AE"; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="videojuegos"] { background: #dfeeda; border-color: #bcd4b4; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="cocina"]::before { content: "\01F373"; }
+.shell-grupo-planes .enc-int-btn[data-hobby-id="cocina"] { background: #fce3cf; border-color: #e6c4a4; }
+.shell-grupo-planes .enc-int-btn:hover { background-color: #fffef9; }
 .shell-grupo-planes .enc-int.is-busy { opacity: .65; pointer-events: none; }
 .shell-grupo-planes .enc-int-result { margin-top: .5rem; }
 .shell-grupo-planes .enc-int-result-txt { font-size: .78rem; line-height: 1.35; margin: 0; }
