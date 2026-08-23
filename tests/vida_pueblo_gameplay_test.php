@@ -148,6 +148,8 @@ foreach (MisionDiariaEngine::delDia($pCad) as $m) {
 }
 $reloj = new RelojOperations($root);
 $reloj->avanzar($pCad, 24);
-ok(VidaPuebloEngine::valor($pCad) === $vidaCad - (3 * $nPend), 'caducadas aplican -3 cada una');
+// R3: día con paquete normal y 0 cumplidas -> UN único -3 (no 3 x -3)
+$esperadoR3 = $nPend > 0 ? $vidaCad - 3 : $vidaCad;
+ok(VidaPuebloEngine::valor($pCad) === $esperadoR3, 'caducadas R3: dia ignorado aplica -3 unico');
 
 exit($failures > 0 ? 1 : 0);

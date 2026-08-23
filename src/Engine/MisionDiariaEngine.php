@@ -51,7 +51,10 @@ final class MisionDiariaEngine
     }
 
     /**
-     * @param array<string, mixed> $cal
+     * R3 (23/08/2026): caducada individual NO mueve Vida (canon Maestro V3: 0).
+     * Castigo único diario solo si hubo paquete normal y no se cumplió ninguna:
+     * calibracion misiones_diarias.vida_dia_ignorado (ledger causa dia_misiones_ignorado).
+     * Idempotente: solo cobra si esta llamada caducó algo ($n > 0).
      */
     public static function alCerrarDia(array &$partida, int $diaCerrado, array $cal = [], ?GameLogger $logger = null): int
     {
@@ -60,6 +63,15 @@ final class MisionDiariaEngine
         }
         self::ensure($partida);
         $n = 0;
+        $huboNormal = false;
+        foreach ($partida['misiones_diarias']['items'] as $m) {
+            if (!is_array($m) || (int) ($m['dia'] ?? 0) !== $diaCerrado) {
+                continue;
+            }
+            if (!TutorialPrimerosPasos::esMisionTutorial($m)) {
+                $huboNormal = true;
+            }
+        }
         foreach ($partida['misiones_diarias']['items'] as $i => $m) {
             if ((int) ($m['dia'] ?? 0) !== $diaCerrado) {
                 continue;
@@ -72,20 +84,46 @@ final class MisionDiariaEngine
             }
             $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CADUCADA;
             $n++;
-            if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
-                VidaPuebloEngine::aplicar($partida, VidaPuebloEngine::DELTA_MISION_FALLIDA, [
-                    'causa' => VidaPuebloEngine::CAUSA_MISION_FALLIDA,
-                    'origen' => VidaPuebloEngine::ORIGEN_SISTEMA,
-                    'atribuible_celestine' => true,
-                    'positivo_valido_latido' => false,
-                    'fuente_id' => $partida['misiones_diarias']['items'][$i]['id'] ?? null,
-                ], $cal, $logger);
-            }
-            // V3: caducada penaliza vida del pueblo
             self::emit($partida, DomainEvents::MISION_CADUCADA, [
                 'mision' => $partida['misiones_diarias']['items'][$i],
                 'actores' => [],
             ], $logger, 'MisionDiariaEngine::caducar');
+        }
+        if ($n > 0
+            && $huboNormal
+            && self::cumplidasNormalesDelDia($partida, $diaCerrado) === 0
+            && FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)
+        ) {
+            $delta = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -3);
+            if ($delta < 0) {
+                VidaPuebloEngine::aplicar($partida, $delta, [
+                    'causa' => VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO,
+                    'origen' => VidaPuebloEngine::ORIGEN_SISTEMA,
+                    'atribuible_celestine' => true,
+                    'positivo_valido_latido' => false,
+                    'fuente_id' => 'misiones_dia_' . $diaCerrado,
+                ], $cal, $logger);
+            }
+        }
+        return $n;
+    }
+
+    /**
+     * @return int misiones normales (no tutorial) del día en estado cumplida
+     */
+    private static function cumplidasNormalesDelDia(array $partida, int $dia): int
+    {
+        $n = 0;
+        foreach ($partida['misiones_diarias']['items'] as $m) {
+            if (!is_array($m)
+                || (int) ($m['dia'] ?? 0) !== $dia
+                || TutorialPrimerosPasos::esMisionTutorial($m)
+            ) {
+                continue;
+            }
+            if (($m['estado'] ?? '') === self::EST_CUMPLIDA) {
+                $n++;
+            }
         }
         return $n;
     }

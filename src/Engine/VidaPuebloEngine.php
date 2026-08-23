@@ -12,7 +12,10 @@ final class VidaPuebloEngine
     public const FLAG = 'vida_pueblo_enabled';
 
     public const CAUSA_MISION_CUMPLIDA = 'mision_cumplida';
+    /** Legacy R3 (23/08/2026): la caducada individual ya no mueve Vida en play.
+     * Constante viva solo para escrituras sintéticas de lab/tests. */
     public const CAUSA_MISION_FALLIDA = 'mision_fallida';
+    public const CAUSA_DIA_MISIONES_IGNORADO = 'dia_misiones_ignorado';
     public const CAUSA_PETICION_CUMPLIDA = 'peticion_cumplida';
     public const CAUSA_PETICION_CADUCADA = 'peticion_caducada';
     public const CAUSA_PETICION_IGNORADA = 'peticion_ignorada';
@@ -27,6 +30,8 @@ final class VidaPuebloEngine
     public const CAUSA_ACONTECIMIENTO = 'acontecimiento_vida';
 
     public const DELTA_MISION_CUMPLIDA = 2;
+    /** Legacy R3 (23/08/2026): sin uso en play. El castigo diario vive en
+     * calibracion misiones_diarias.vida_dia_ignorado (MisionDiariaEngine::alCerrarDia). */
     public const DELTA_MISION_FALLIDA = -3;
 
     public const ORIGEN_JUGADOR = 'jugador';

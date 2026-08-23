@@ -445,12 +445,14 @@
         }
     },
     "misiones_diarias": {
-        "_provisional": true,
-        "_nota": "B3 rebalance. No toca cifras de vida_pueblo.",
+        "_provisional": false,
+        "_canon_r3": true,
+        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo único por día con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
         "dias_sin_salir": 2,
         "social_floja_max": 12,
         "vida_cumplida": 1,
-        "vida_caducada": -2,
+        "vida_caducada": 0,
+        "vida_dia_ignorado": -3,
         "latido_slots_por_dia": 1
     },
     "peticiones_pueblo": {

@@ -97,7 +97,7 @@ Asset EN OBRAS puede existir en repo; **no** es mecánica de producto.
 | Roster fijo juego_v1 | 3+5 aleatorios → 8, luego curva llegadas |
 | Hobbies fijos en Pxxx | Personalidad generada por partida |
 | Encargos extra económicos | **No implementar** |
-| Penalización misión caducada | **0** — sin castigo |
+| Penalización misión caducada | **0** — sin castigo individual (R3 23/08/2026: el castigo es por **día completamente ignorado**, único −3 vía `misiones_diarias.vida_dia_ignorado`; ledger causa `dia_misiones_ignorado`) |
 
 **Jerarquía:** este addendum + `docs/PLAN_ALINEACION_V3.md` > textos Maestro anteriores > semilla Cupido Cutre (tono válido; cifras sustituidas).
 
