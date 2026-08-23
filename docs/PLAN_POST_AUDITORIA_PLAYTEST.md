@@ -29,18 +29,19 @@
 Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen, volver aquí, **comprobar el código real** (no confiar en el informe del agente) y revalidar las entradas relacionadas de este backlog.
 
 ### P01 — Continuidad relacional / crecimiento de relaciones
-- **Clase:** JUGABILIDAD/UX · **Prioridad:** ALTA · **Estado:** EN INVESTIGACIÓN POR OTRO AGENTE
-- **Subsistema:** relaciones/voluntad/experiencia · **Archivos implicados conocidos:** VoluntadPonderadaEvaluator.php, RelacionEngine.php, EncuentroDeltasReales.php, ContactoCalidad.php, calibracion_vida.json
+- **Clase:** JUGABILIDAD/UX · **Prioridad:** ALTA · **Estado:** IMPLEMENTADO LOCALMENTE (M2+) / PENDIENTE DE INTEGRACIÓN Y REVALIDACIÓN — bloqueado por decisión de balance en extremos (ver INCIDENTE, hallazgo >0.85) + compatibilidad P2
+- **Subsistema:** relaciones/voluntad/experiencia · **Archivos implicados conocidos:** VoluntadPonderadaEvaluator.php, RelacionEngine.php, RelacionDesgaste.php, EncuentroResolver.php, EncuentroDeltasReales.php, ContactoCalidad.php, calibracion_vida.json
 - **Hallazgo de playtest:** caso Yeray+Sergio: conocerse muy_bien + intervención exitosa → social ≈7; horas después una propuesta seguía ≈51%. La voluntad apenas conserva calidad/recencia del encuentro.
 - **Objetivo de producto:** relaciones construibles progresivamente; trayectoria comprensible; relación fuerte amortigua incidentes pequeños (80→70 sí; 80→"como recién conocidos" no); relación fuerte facilita aceptar planes/citas/recuperación.
-- **Comprobar al revalidar:** pesos de voluntad (social×0.28, romance×0.18), memoria de contactos (`ultimo_contacto_significativo`), techo ±10 por encuentro-canal, si existe algún término de "historia compartida"; medir curva social/día.
+- **Implementado (M2+, modelo aprobado):** `mod_continuidad_reciente` por PAR (memoria_eventos, muy_bien +10/bien +5, dos buenos 48h +3, half-life 12h, cap 12, corte por mal/muy_mal posterior del mismo par; tercero NO corta); consolidación por niveles (40/62/82 → desgaste base 0.8/0.4/0.2/0.1); protección progresiva de daño `max(0.3, 1−0.005×social)`; nivel 3 primer muy_mal max −5; delta positivo ×1.15; `mod_social_factor` configurable. Caso Yeray+Sergio verificado: p_plan 0.51 → **0.596**.
+- **Comprobar al revalidar:** curva social/día con juego real; percepción de consolidación; que continuidad nunca dispare aceptación automática (pendiente: decisión sobre extremos primera_cita).
 - **Solapa con:** B3, B15, R02, S04. **Criterio de aceptación:** tras varios encuentros buenos, la probabilidad de propuestas futuras sube de forma perceptible y estable; una mala experiencia puntual no resetea la relación.
 
 ### P02 — Barras sociales visibles muy cortas incluso tras muchos días
-- **Clase:** JUGABILIDAD/UX · **Prioridad:** MEDIA · **Estado:** EN INVESTIGACIÓN POR OTRO AGENTE
+- **Clase:** JUGABILIDAD/UX · **Prioridad:** MEDIA · **Estado:** IMPLEMENTADO PARCIALMENTE (M2+ acelera crecimiento ×1.15 + consolidación frena desgaste) / PENDIENTE DE VALIDACIÓN JUGANDO
 - **Subsistema:** vistas de relaciones · **Archivos:** EtiquetaRelacionPlay.php (mapeo barra −100..100→8..100), PartidaService::vistaRelacionesPueblo, RelacionDesgaste.php
 - **Hallazgo de playtest:** casi todas las barras de conocidos son cortas tras muchos días.
-- **Comprobar al revalidar:** si es percepción correcta (deltas pequeños + desgaste diario) o artefacto del mapeo visual; correlacionar valores internos vs barra pintada. Puede ser síntoma de P01, no bug independiente.
+- **Comprobar al revalidar:** si M2+ (delta ×1.15 + desgaste por nivel) basta para percibir progreso jugando, o si queda artefacto del mapeo visual (EtiquetaRelacionPlay). NO cerrar sin sesión de juego.
 
 ### P03 — Hobbies/gustos no dan ventaja coherente en intervenciones
 - **Clase:** BUG CONFIRMADO (por playtest) · **Prioridad:** ALTA · **Estado:** ✅ RESUELTO Y VERIFICADO EN PRODUCCIÓN (2026-08-23)
@@ -61,9 +62,9 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 - **Solapaba con:** B03 (emoción A→B — SIGUE VIVO, no tocado), B14 (cerrado aquí), B15 (pesos fantasma — sigue vivo). **Criterio de aceptación:** CUMPLIDO para hobbies/gustos de hobby; gustos de rasgos/personalidad quedan para su entrada correspondiente.
 
 ### P04 — Enfado direccional / anti-stale emocional
-- **Clase:** INCOHERENCIA/DEUDA · **Prioridad:** MEDIA · **Estado:** POSIBLEMENTE RESUELTO — REQUIERE REVALIDACIÓN
+- **Clase:** INCOHERENCIA/DEUDA · **Prioridad:** MEDIA · **Estado:** IMPLEMENTADO LOCALMENTE / PENDIENTE DE INTEGRACIÓN Y REVALIDACIÓN (bloqueado con P01/P2 por el hallazgo de extremos; knob −8 restaurado en config local)
 - **Subsistema:** emociones/voluntad · **Archivos:** EmotionalEventBridge.php (persistencia de `hacia`), VoluntadPonderadaEvaluator.php:150-181 (mitigación enfado por tercero −8, anti-stale), EstadoEmocional.php
-- **Nota:** trabajo reciente ya distinguía enfado con la persona del plan / por tercero / indeterminado y caducidad de emociones viejas.
+- **Nota:** trabajo reciente ya distinguía enfado con la persona del plan / por tercero / indeterminado y caducidad de emociones viejas. `tests/emocion_enfado_direccional_test.php` en 0 fails tras restaurar el knob.
 - **Comprobar al revalidar:** que cubre o no B03 (emoción usada en experiencia) y parte de B09 (conflicto); NO asumir que lo arregla todo. Test existente: tests/emocion_enfado_direccional_test.php.
 
 ### P05 — Balance Vida del Pueblo / misiones (+2/−3, hasta −9/día)
@@ -73,11 +74,74 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 - **Comprobar al revalidar:** deltas reales aplicados vs JSON; cadencia de misiones caducadas; solape con B12. Criterio: partida pasiva no muerta en <2 semanas; jugador activo percibe progreso.
 
 ### P06 — Visibilidad "Aquí hay tema" sobre tokens + indicador stale
-- **Clase:** JUGABILIDAD/UX · **Prioridad:** MEDIA · **Estado:** EN INVESTIGACIÓN POR OTRO AGENTE
-- **Subsistema:** mapa/HayTema/VistaPuebloV3 · **Archivos:** HayTema.php, VistaPuebloV3.php, play-v3.js (render tokens)
-- **Trabajo en curso:** indicadores por token (romance→corazón, drama→rayo…) sobre participantes reales.
-- **Caso stale detectado:** lugar marcaba "Aquí hay tema" por Francisco/Yeray cuando ambos estaban ya en otro encuentro y Aitana estaba sola allí.
-- **Comprobar al revalidar:** expiración de marcas por cambio de hora/lugar; prioridad encuentro-en-curso > burbuja histórica; deduplicación con `ResumenDia::marcasPorLugar`.
+- **Clase:** JUGABILIDAD/UX — **Prioridad:** MEDIA — **Estado:** RESUELTO Y VERIFICADO EN PRODUCCIÓN (2026-08-23 19:58)
+- **Subsistema:** mapa/HayTema/VistaPuebloV3 — **Archivos:** HayTema.php, VistaPuebloV3.php, play-v3.js (render tokens), play-v3-app.css (indicador por-token)
+- **Regla canónica final:** "AQUÍ HAY TEMA" en el mapa/lugar solo se muestra si los PROTAGONISTAS REALES del tema (actores estructurados del mensaje/patrón) están ACTUALMENTE PRESENTES en ese lugar. Solo los protagonistas reciben badge individual.
+- **Caso Aitana (resuelto):** cotilleo en Cine con actores=[Francisco,Yeray] (protagonistas) y Aitana solo como testigo → Aitana NO marcada; Cine sin "Aquí hay tema" por Francisco/Yeray ausentes. El cotilleo sigue en El Cotilleo/Diario.
+- **Caso Francisco+Yeray (Restaurante, ambos presentes):** patrón coin_patron activo (≥3 días en 7 días en Restaurante) + ambos presentes → ambos llevan ❤️; Restaurante muestra "AQUÍ HAY TEMA · Romance".
+- **Francisco se va / Yeray queda solo:** tema desaparece del Restaurante (requiere AMBOS presentes).
+- **Ambos cambian de lugar:** tema desaparece del lugar anterior; si generan patrón allí, aparece en el nuevo.
+- **Indicador visual (deploy 19:52/19:58, cache-buster v3-20260823-195213):**
+  - Desktop 24px / Móvil 19px; esquina sup-dcha del token; único por protagonista.
+  - Romance: corazón rosa lleno (#e0688f fill) + halo rosa (box-shadow 3 capas); Drama: rayo ámbar; Relación/Coincidencias: burbuja azul; sin badge de grupo.
+- **Tests:** hay_tema_test.php (34/34 OK, casos Aitana/Francisco/Yeray); mapa_tema_exterior_ui_test.js (26/26 OK); regresiones pasar_noche_ui, pasar_rato_movil, play_flujo_encuentro, slots_ui, disponibilidad_futuro, vida_relacional OK.
+- **Deploy:** selectivo (play-v3.js, play-v3-app.css, cache-buster, HayTema.php) via deploy_manual -Mode Files; HTTP 200; cache-buster v3-20260823-195213; remoto verificado (JS tema-hab + CSS tema-hab--romance).### P07 — Reorganización UX: selector único de temas en «Plan en curso»
+- **Clase:** JUGABILIDAD/UX · **Prioridad:** MEDIA · **Estado:** IMPLEMENTADO EN WORKTREE (2026-08-23) — NO DESPLEGADO (bloqueo por WIP concurrente, ver abajo)
+- **Subsistema:** UI intervención · **Archivos:** `assets/js/play-v3.js` (htmlIntervencionEncuentro, handler delegado body, helper cerrarSelectorTemas), `assets/css/play-v3-shell-art.css` (bloque nuevo `.enc-int-temas*`)
+- **Origen:** derivado directo del cierre P03: con los descubrimientos vivos, «Plan en curso» puede mostrar 15–20 botones de tema simultáneos (nube de botones que no escala).
+- **Qué cambia (SOLO presentación):**
+  1. Acciones principales visibles = intervenciones generales disponibles según gates (`hablar`, `broma`, `personal`, `coquetear`, `beso`); las no disponibles siguen sin pintarse (mismo gate `a.disponible` de `EncuentroIntervencion::accionesDisponibles`).
+  2. Todos los temas/hobbies se agrupan bajo un único control «💬 Elegir un tema…» que abre un panel pequeño con la MISMA lista que ya devolvía el motor (`vista.acciones[hobby].hobbies`, deduplicada por id).
+  3. El selector NO revela buena/mala elección: sin colores de afinidad, sin recomendados, sin porcentajes. La decisión sigue dependiendo de «Lo que sabes» en fichas.
+  4. Al elegir un tema, el disparo es IDÉNTICO al flujo anterior: mismos atributos `data-enc-int-accion="hobby"` + `data-hobby-id` + `data-residente-id`, mismo handler delegado, mismo payload a `encuentro.intervencion.ejecutar`, ejecución inmediata SIN paso extra de confirmación. El toggle muestra brevemente el tema elegido («Costura ▾») si la ejecución falla; en éxito la vista pasa al resultado como siempre.
+- **Qué NO cambia (verificado):** tema_match/cargas, gustos/rechazos, descubrimientos, deltas, probabilidades, reglas/gates de intervención. Cero líneas PHP tocadas; `tests/intervencion_tema_test.php` sigue en OK tras el cambio.
+- **Móvil/overflow:** panel anclado al ancho de la polaroid con `width:min(300px,100%,calc(100vw - 32px))`, scroll interno (`max-height:min(264px,44vh)` + `overscroll-behavior:contain`) para 15–20 temas; polaroid ya es `overflow:visible` así que el popover no se recorta.
+- **⚠️ Bloqueo de deploy:** `play-v3.js` contiene AHORA MISMO WIP ajeno activo de otro agente (iconos de mapa P06 en ~1524 + marcadores `tema-hab`/`hobbyIconKey` en ~2160/~4180). Subir el fichero arrastraría ese trabajo no validado → aplica REGLA OPERATIVA §DEPLOYS: **NO deploy** hasta coordinación/liberación. `play-v3-shell-art.css` está limpio, pero subirlo solo no tiene efecto útil sin el JS.
+- **Verificación pendiente para cerrar:** smoke manual desktop+móvil del selector (abrir/cerrar, elegir tema, gates ocultos cuando `sin_hobby_conocido`, resultado tras éxito).
+
+---
+
+## 📦 RECUPERACIÓN — Auditoría narrativa + variedad + fix flechazo (2026-08-24)
+
+**Commit funcional:** `f64c925`  
+**Rama aislada:** `task/narrativa-variedad-flechazo` (worktree `C:/Users/agl03/AppData/Local/Temp/opencode/wt/narrativa-variedad`)  
+**Base:** `stable/recuperacion-20260823` @ `daf1962`
+
+### Recuperado dentro de esta tarea
+- **Fix flechazo duplicado** (`AccionRomantica.php`): idempotencia vía `RelacionBitacora::tienenHito()` — TESTS OK
+- **CopyVariante** (nuevo): helper anti-repetición determinista (`crc32` + rotación, estado `partida['copy_ultimo']`)
+- **CopyRechazoPropuesta**: pools ampliados (banal/emocional/relacional/cansancio/otro_dispuesto) + integración CopyVariante + `&$partida` en `linea/fraseCausaHumana/lineaOtroDispuesto/mensajeRechazo`
+- **CopySenalRomantica**: pools flechazo/tilín/histórico ampliados (+3 cada uno); marcadores históricos en minúsculas
+- **DiarioResidenteBridge** (nuevo): cuerpos narrativos variados por acontecimiento (títulos estables, 15 familias: flechazo, inicio_pareja, vuelta, reconciliación, ruptura, crisis, discusión, declaración, llegada, trabajo, rechazo_repetido, encuentro muy_mal/mal/calentado)
+- **DiarioEngine**: idempotencia por `evento_id` + defaults `titulo/consecuencias/actores` + `entradaPorEvento`
+- **PropuestaEncuentroEngine**: `&$partida` en `anotarRechazoNarrativo` (persistir `copy_ultimo`)
+- **RelacionBitacora + DomainBootstrap**: wiring `DiarioResidenteBridge::alHito/register()`
+- **cotilleo_familias.json**: pools ampliados romance/drama/pareja/ruptura/amistad/se_conocieron (7/6/6/6/6/10)
+
+### Tests recuperados
+- `narrativa_variedad_test.php` (9 casos): **TODO OK** (37/37) — case 5 adaptado a marcador literal `'voluntad_ok_pero_plan_rechazado'`
+- `cotilleo_se_conocieron_variedad_test.php`: **TODO OK** (14/14)
+- `diario_residente_test.php`: **FAIL** (línea 88) — requiere `EmocionalNarrativa::explicacionCompleta()` **AUSENTE en daf1962** (trabajo ajeno)
+- Baseline daf1962: `rechazo_copy_coherente`, `senal_romantica_coherencia_temporal`, `vida_relacional` — **TODO OK**
+
+### Expresamente AJENO / preexistente (NO recuperado en esta tarea)
+- ❌ `EmocionalNarrativa::explicacionCompleta()` — falta en daf1962, impide completar `diario_residente_test`
+- ❌ `CopyRechazoPropuesta::mensajeCooldownPar` / `COOLDOWN_GENERICO` — agente cooldown (test `rechazo_cooldown_neutro_test.php`)
+- ❌ `CopyRechazoPropuesta::hablanteRechazo` → `rechazoCanonico` — agente atribución canónica (`rechazo_atribucion_canonica_test.php`)
+- ❌ `PropuestaEncuentroEngine` hunks cooldown/B4/peticiones — solo `&$partida` recuperado
+- ❌ `DiarioEngine::listarPorResidente` — agente ResidentesHandler
+- ❌ `tests/copy_rechazo_causas_test.php` — no existe en donante ni en daf1962
+- ❌ B4 (mensajitos/peticiones) — NO pertenece a este stream
+
+### Producción y deploy histórico
+- Deploy ~22:15 (2026-08-23) **incompleto/no determinista** (timeout 10 min, sin cache-buster). Producción actual contiene streams posteriores a daf1962. Fuente de integración para ESTA tarea: **exclusivamente commit `f64c925`**. No marcado como verificado en producción.
+
+### Estado
+- Auditoría/variedad narrativa: **RECUPERADA EN RAMA AISLADA / TESTS ESPECÍFICOS OK / PENDIENTE INTEGRACIÓN Y PLAYTEST**
+- Fix flechazo duplicado: **RECUPERADO EN RAMA AISLADA / TESTS OK / PENDIENTE INTEGRACIÓN**
+- CopyVariante / anti-repetición narrativa: **recuperado**
+- Ampliación de pools: **rechazos, señales románticas, diario y cotilleos**
+- DiarioResidenteBridge + idempotencia por evento: **recuperados dentro de esta tarea**
 
 ---
 
@@ -105,6 +169,29 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 
 **Propiedad:** reconciliación exclusivamente del agente propietario del WIP de voluntad/continuidad. El cierre P03 queda aislado y validado.
 
+### ✅ RESOLUCIÓN LOCAL DE LA RECONCILIACIÓN (2026-08-23, fase posterior al incidente)
+
+**Estado local (worktree, SIN deploy):** P2 restaurado quirúrgicamente SOBRE el código M2+ actual (sin revertir nada):
+
+1. **Config (`calibracion_vida.json`)** — merge quirúrgico, knobs M2+ intactos:
+   - `voluntad.mod_tipo.primera_cita: 0 → 4`
+   - `voluntad.bonus_primera_cita_reciproca: 12` (+notas) — restaurado
+   - `voluntad.conflicto_mult_cita: 3` (+notas) — restaurado
+   - `emociones_v1.enfadado_ajeno_aceptar_planes: -8` (+nota) — restaurado (se había perdido con el checkout del config en sesión anterior)
+2. **Código (`VoluntadPonderadaEvaluator.php`)** — sobre la versión M2+ vigente:
+   - `conflicto_mult_cita`: solo `primera_cita`/`cita`; quedar/conocerse/pareja/romantico-legacy = ×1
+   - `bonus_primera_cita_reciproca`: solo `primera_cita` + señal canónica MUTUA vía `SenalRomantica::desdeHacia` ambas direcciones; visible en desglose
+   - M2+ intacto: `mod_continuidad_reciente`, decay half-life 12h, cap 12, corte por malo del par
+   - Enfado direccional intacto: dirigida −16 / ajena −8 / indeterminada −16 conservador / vencida 0
+
+**Tests bloqueadores tras reconciliación (LOCAL):** `primera_cita_balance_p2_test.php` ✅ 0 fails · `emocion_enfado_direccional_test.php` ✅ 0 fails.
+**Regresiones:** voluntad_media_geometrica ✅ · encuentros ✅ · encuentro_resultado_play ✅ · relaciones ✅ · vida_relacional ✅ · emocional_trazabilidad ✅ · encuentro_intervencion ✅. Fails PREEXISTENTES de WIP ajeno verificados contra baseline (stash): `rechazo_atribucion_canonica` (2 fails toasts), `rechazo_cooldown_neutro` (fatal `CopyRechazoPropuesta::mensajeCooldownPar` inexistente).
+
+**Tabla A–F motor real (quedar/cita):** A=0.51 · B(soc7+muybien2h)=0.587 · C(1ªcita mutua)=0.673 · D(+muybien)=0.751 · E(enfado dirigido)=0.581 · F(enfado ajeno)=0.62. Orden **E < C/F < D cumple**.
+
+**⚠️ HALLAZGO ABIERTO QUE BLOQUEA EL DEPLOY — extremos >0.85 (PARA Y REPORTADO):**
+Simulación de extremos (72 combinaciones: soc 20–80 × rom medio/alto × conf 0/leve/fuerte × neutro/alegre/enfadado, SIEMPRE primera_cita + señal mutua + muy_bien reciente): **32/72 (44%) superan p_plan 0.85**, máximo **0.920** (= cap `p_excelente`, score≥88). Causas apiladas: P2 (+4 tipo, +12 recíproco) + M2+ continuidad (+9) suben muchos casos neutrales por encima del umbral excelente 88 que antes requería estado alegre. El caso real jugable D queda en 0.751 (<0.85 ✔), pero el frame favorable-sistemático cruza el techo con demasiada frecuencia. **DECISIÓN PENDIENTE DEL USUARIO:** aceptar 0.92 como techo diseñado para el stack perfecto, o recalibrar (p.ej. cap de suma recíproco+continuidad, bajar bonus, o subir `score_excelente`). NO se ha tocado nada silenciosamente. **DEPLOY EN ESPERA hasta decisión.**
+
 ---
 
 ## 🔒 REGLA OPERATIVA — DEPLOYS CON WIP CONCURRENTE
@@ -124,9 +211,10 @@ Mientras exista WIP concurrente en el worktree:
 ## SECCIÓN 0b — INVESTIGACIONES PRIORITARIAS REGISTRADAS (sin implementar)
 
 ### R01 — Mensajitos ≠ Cotilleos: separación de canales [INVESTIGACIÓN PRIORITARIA]
-- **Clase:** JUGABILIDAD/UX · **Prioridad:** ALTA · **Estado:** PENDIENTE (investigar antes de tocar)
+- **Clase:** JUGABILIDAD/UX · **Prioridad:** ALTA · **Estado:** PARCIALMENTE RESUELTO Y VERIFICADO (2026-08-23: pipeline B4 personal vivo en producción; ver R05/R06) · Pendiente: reparto canal-a-canal completo de emisores no-B4
 - **Subsistema:** buzón/cotilleo/diario · **Archivos:** BuzonEngine.php, BuzonPlayBridge.php, CotilleoNarrativo.php, CotilleoAutonomoCadencia.php, VistaCotilleoV3.php, DiarioResidenteBridge.php, PeticionEngine/PeticionPuebloEngine (mensajes asociados)
 - **Realidad actual (playtest):** `buzon_enabled=ON` pero prácticamente no llegan mensajitos personales accionables; llega información tipo "X hoy no tenía ganas de quedar", que se siente cotilleo duplicado.
+  - **ACTUALIZACIÓN 2026-08-23 (fix B4 desplegado):** los mensajitos personales B4 ya nacen con variedad real (5/7 plantillas activas en pasivo; antes 2), el peticionario ya no rechaza su propia petición exacta, y cumplida/caducada/rechazo-de-tercero tienen feedback diferenciado (`peticion_resultado`). La métrica de salud B4 cuenta SOLO clasificación PETICION + resultados asociados, separada de cotilleos y respuestas de plan.
 - **Definición objetivo de producto:**
   - COTILLEO = Celestine se entera de algo OCURRIDO (rechazo, discusión, cita, flechazo, alguien raro).
   - MENSAJITO = UN vecino SE DIRIGE a Celestine con intención personal (petición, duda, decisión) y acción cuando tenga sentido ("quiero ir al cine", "¿me lanzo?", "¿puede venir X?").
@@ -175,6 +263,22 @@ Mientras exista WIP concurrente en el worktree:
   - Historial técnico: audit_trail/domain_events/event_log (ya capados) vs `_casual_intentos`, `acontecimientos_log`, `memoria_eventos`, `npc_autonomo.historial_eventos` (sin cap = B1).
 - **PROTEGIDO (no purgar jamás sin análisis):** relaciones, rechazos, marchas, señales, misiones, peticiones, decisiones, historial de personajes/partida, viviendas.
 - **Entregable de la investigación:** matriz campo→clase(retención)→ventana→riesgo de perder mecánica. Después sí implementar caps.
+
+### R06 — B4 Mensajitos VIVOS: variedad, compromiso del peticionario y feedback
+- **Clase:** JUGABILIDAD/UX + INCOHERENCIA · **Prioridad:** ALTA · **Estado:** RESUELTO Y VERIFICADO EN PRODUCCIÓN (2026-08-23) — EXCEPTO cadencia por población → ver R07 (ABIERTA)
+- **Subsistema:** peticiones B4 / propuestas / buzon · **Archivos:** PeticionPuebloEngine.php, PeticionFeedback.php (nuevo), PropuestaEncuentroEngine.php, VoluntadPonderadaEvaluator.php, calibracion_vida.json (`peticiones_pueblo`), tests/mensajitos_vivos_test.php
+- **Resuelto y verificado en producción (marcadores remotos + URL 200):**
+  - VARIEDAD: anti-repetición por `historial_plantillas` (ventana 3, penalización 25). Antes: salir_de_casa 73%, 5 plantillas al 0%. Después: conocer 29% / quedar 23% / salir 20% / volver 17% / ir_al_lugar 10% / algo_distinto 2%; rachas máximas 1–2; primera_cita respeta su gate romántico.
+  - COMPROMISO: si Celestine organiza EXACTAMENTE lo pedido, el peticionario no re-tira RNG (`compromiso_peticion_propia`). Con compañía añadida NO pedida: bonus configurable `bonus_nucleo_modificado=30`, sin garantía. Terceros con voluntad normal. Agenda/cooldown siguen mandando.
+  - FEEDBACK: cumplida → eco positivo + mensajito `resuelto`; caducada/ignorada → eco negativo + original `leido`; tercero rechaza → petición SIGUE ABIERTA + copy "yo sí quería, pero X no".
+- **FRECUENCIA OBJETIVO POR POBLACIÓN: PENDIENTE** → "variedad corregida; frecuencia objetivo por población pendiente". Hoy ~1,65/día con 8 residentes (objetivo producto 4-5/día). Matriz 3/5/8/10/16/24 × pasivo/activo medida 2026-08-23 (dev/_audit_mensajitos_matrix.php); propuesta de curva entregada, NO implementada aún.
+- **Criterio de cierre total:** 8–10 residentes produciendo 4–5 mensajitos personales/día sin spam ni cap excesivo, validado con la misma matriz.
+
+### R07 — Cadencia B4 por población (curva orgánica)
+- **Clase:** BALANCE/CALIBRACIÓN · **Prioridad:** ALTA · **Estado:** CONFIRMADO VIVO / ABIERTA (propuesta entregada, pendiente autorización)
+- **Dato que la mantiene abierta:** 8–10 residentes siguen produciendo ~1,65/día frente a objetivo 4–5/día.
+- **Cuello de botella medido:** cap simultáneo = ceil(n·0.33) estrangula el recambio (con cap lleno el spawn es nulo; a 8 res el cap está lleno ~43% del tiempo; a 3 res cap=1 → techo teórico ~0,7/día).
+- **NO implementar hasta autorización. Ver R07 en informe de matriz 2026-08-23 para opciones A/B/C/D con números.**
 
 ---
 
@@ -495,9 +599,103 @@ Re-evaluar esta lista cuando P01-P06 cierren.
 - 2026-08-23: creación del documento a partir de la auditoría general + contextos de playtest (P01-P06), investigaciones (R01-R05) e ideas refinadas (F01-F02). Foto Git: HEAD 50a0a3d + WIP sin commitear.
 - 2026-08-23 (cierre P03): **P03 → RESUELTO Y VERIFICADO EN PRODUCCIÓN** (tema por participante, signo, plan_A/B, plan_lugar_match≠tema_match, vista romance [cierra B14], cotilleo cita mala coherente, pistas en ficha «Lo que sabes»; caso Dolores+Bingo/Sandra+Bingo cubierto por tests/intervencion_tema_test y presente en producción). **B14 → RESUELTO Y VERIFICADO.** Registrado INCIDENTE deploy-con-WIP-concurrente (96 ficheros; regresiones P2 y mitigación enfado 'ajena' en producción; continuidad_reciente activa) + REGLA OPERATIVA de deploy selectivo con WIP concurrente. B03 y B15 siguen vivos (no tocados).
 
+- 2026-08-23 (B4 Mensajitos VIVOS + revalidación): **R06 → RESUELTO Y VERIFICADO EN PRODUCCIÓN** (variedad anti-rep; compromiso del peticionario exacto; bonus núcleo modificado; feedback cumplida/caducada/rechazo-tercero con petición abierta; deploy selectivo `deploy_mensajitos_vivos.ps1` con calibración merge-sobre-remota; verificación remota 6/6 marcadores + URL 200). **R01 → PARCIAL** (canal B4 personal vivo; reparto completo de emisores pendiente). **R07 creada ABIERTA** (cadencia por población: "variedad corregida; frecuencia objetivo por población pendiente"). Estado remoto revalidado: R3 ✓ completo y activo; M2+/continuidad_reciente ✓ ACTIVA (`voluntad.continuidad_reciente.activo=true` + código); P2 ❌ SIGUE REGRESADA en remoto (mod_tipo.primera_cita=0 en vez de 4; bonus_primera_cita_reciproca ausente en vez de 12; conflicto_mult_cita ausente en vez de 3) — colisión del incidente ya registrado, NO corregida en esta tarea; enfado direccional código ✓ pero knob `emociones_v1.enfadado_ajeno_aceptar_planes` AUSENTE en remoto ⇒ 'ajena' sin mitigación (-16 en vez de -8). Lateral nuevo: whitelist de `SimuladorPeticionesPueblo::contarExtraVida` no conoce causa `dia_misiones_ignorado` ⇒ test "lab mini sin farming" falso-positivo de farming hasta que R3 y lab se sincronicen. Tests emocion_enfado_direccional (13 FAILs) y primera_cita_balance_p2 (12 FAILs) fallan por el mismo WIP concurrente, no por B4 (verificado aislando deltas).
+
 - 2026-08-23 (R3 deploy): implementado y en producción el castigo único por día de misiones ignorado (caducada individual = 0; `vida_dia_ignorado=-3`; ledger `dia_misiones_ignorado`). Commit 7b10642 aislado sin WIP ajeno. Hallazgos laterales derivados:
   - L-FLAKY-SMB: lectura intermitente de archivos obsoletos sobre UNC/SMB (fatal esporádico `calcularContinuidadReciente` en WIP de VoluntadPonderadaEvaluator; número de línea del trace no coincidía con el archivo actual). No es bug de juego: es caché de red/AV. Afecta a tests CLI largos.
   - L-CHECKOUT-INDEX: `git checkout-index` no exporta tests sin trackear (pasar_noche_test.php etc. solo existen en worktree); la validación "estado commiteado" no los incluye.
   - L-INDEX-PREVIO: se encontró `src/Engine/HayTema.php` ya staged en el index antes de esta tarea (WIP ajeno); des-stage hecho para commit limpio. Revisar quién lo dejó.
   - L-LEDGER-DIA: entradas de cierre del día D quedan etiquetadas con dia=D+1 en el ledger de vida_pueblo (el reloj avanza antes de cerrar misiones). Cosmético, pero rompe trazas/agrupaciones por día.
   - L-AUSENCIA-HOOK: infra canónica de ausencia ya cableada: PartidaLifecycle::cargar() llama Reloj::calcularCatchUpPendiente() y persiste segundos reales en reloj.catch_up_pendiente sin tocar el reloj del pueblo. Penalización offline suave puede engancharse ahí SIN segundo sistema; cap motor −15/suelo 5/nunca GO ya protegido (estresado). Curva recomendada: gracia 24 h + −1/día lineal (el cap −15 del motor da forma a la cola). PENDIENTE autorización + política anti-doble-cobro con futuro catch-up (un día de pueblo cobra una sola vez y por un solo mecanismo).
+
+- 2026-08-23 (P07 UX): registrada e implementada en worktree la **reorganización UX del selector de temas** en «Plan en curso» (P07 arriba): intervenciones generales como acciones principales + todos los hobbies agrupados bajo «💬 Elegir un tema…» con panel/scroll; handlers, payload y gates intactos; cero cambios PHP (`intervencion_tema_test` OK post-cambio). **NO DEPLOY**: `play-v3.js` arrastra WIP concurrente activo de P06 (iconos mapa + marcadores hay_tema) → REGLA OPERATIVA §DEPLOYS aplicada; pendiente coordinación y smoke manual desktop/móvil para marcar RESUELTO.
+
+- 2026-08-23 (limpieza ficha: fuera LE GUSTA / NO LE GUSTA): retiradas de la FICHA DE VECINO las secciones legacy «Le gusta» / «No le gusta» («Gente: ? · ?», slots de personalidad interpersonal) en desktop y móvil (mismo DOM, flujo normal ⇒ «Lo que sabes» y Relaciones suben sin huecos). **Solo presentación**: `FichaPlayVista` sigue exponiendo `gusta_en_gente`/`no_gusta_en_gente` (motor/API intactos, consumibles por otras mecánicas); el fill JS queda como no-op seguro (guard nulo); CSS `.ficha-seccion-prefs`/`.ficha-pref-line` se conserva (lo reutiliza «Lo que sabes»). Origen verificado: markup en `play.php` + único consumidor en `play-v3.js` (líneas ~3397-3400 prod). Deploy SELECTIVO de UN solo archivo (`scripts/deploy_ficha_prefs_off_only.ps1`, con salvaguardas anti-regresión en staging): fuente real remota descargada por WinSCP → parche → subida solo de `play.php`; NO se tocó `play-v3.js` ni cache-buster (innecesario: HTML dinámico). Verificación post-deploy remota OK: hooks retirados ausentes; `data-ficha-sabes(-body)`, hobbies, relaciones, planes, org y `data-animo-overlay` (P03) presentes; URL 200. Tests: nuevo `tests/ficha_prefs_quitadas_ui_test.js` OK (22 asserts); `intervencion_tema_test.php` y `relacion_coherencia_fichas_test.php` OK. ⚠️ NOTA OPERATIVA: `tests/ficha_pistas_ui_test.js` sigue FALLANDO en worktree por desync PREEXISTENTE (el árbol local aún no tiene el trabajo P03 de «Lo que sabes» en su `play.php`/`play-v3.js`; ese trabajo vive solo en producción). Consecuencia directa: **NO lanzar deploy general/incremental desde este worktree** — sobrescribiría el `play.php`/`play-v3.js` remotos con versiones sin P03 (mismo patrón que el INCIDENTE de WIP concurrente). Pendiente: sincronizar a worktree el estado P03+P06/P07 antes de cualquier deploy masivo.
+
+- 2026-08-23 (reconciliación M2+ + P2 + enfado — LOCAL, SIN DEPLOY): restauración quirúrgica de P2 sobre el evaluador M2+ vigente (detalle completo en el INCIDENTE, sección «RESOLUCIÓN LOCAL»). Knobs config restaurados (`mod_tipo.primera_cita=4`, `bonus_primera_cita_reciproca=12`, `conflicto_mult_cita=3`, `enfadado_ajeno_aceptar_planes=-8`); código: conflicto ×3 solo primera_cita/cita, bonus recíproco solo primera_cita con señal mutua canónica; M2+ y enfado direccional intactos. Tests bloqueadores 0 fails; regresiones OK salvo dos fallos PREEXISTENTES de WIP ajeno verificados contra baseline (stash): **L-WIP-COPYTOAST**: `rechazo_atribucion_canonica_test` 2 fails («toast transmite que Dolores sí parecía dispuesta») — copy de toasts en WIP ajeno; **L-WIP-COOLDOWNPAR**: `rechazo_cooldown_neutro_test` FATAL `CopyRechazoPropuesta::mensajeCooldownPar()` inexistente (llamado desde PropuestaEncuentroEngine.php:97) — método prometido por el WIP ajeno no llegó al worktree. Ambos NO son de esta tarea; escalar a su agente. Simulación A–F motor real correcta (orden E<C/F<D). **BLOQUEO ACTIVO:** simulación de extremos arroja 44% de combinaciones favorables-sistemáticas >0.85 (máx 0.920 = cap p_excelente) para primera_cita+señal mutua+muy_bien reciente → decisión de balance pendiente del usuario antes de deploy. Scripts evidencia: `dev/_sim_reconciliacion_af.php`, `dev/_sim_extremos_p2_m2.php`.
+
+## INVENTARIO POST-RESTAURACION (2026-08-23 noche) - regresiones visuales observadas por la jugadora
+
+Contexto: produccion restaurada 20:19 (play.php=C22165B4..., play-v3.js=DB31B877..., buster v3-20260823-201952). Backup PRE del estado regresado: dev/_prod_fetch_prerestore/20260823-201923/. Causa raiz ADICIONAL identificada en esta investigacion: una sesion FTP SIN LOG (~19:42-19:46) subio a produccion responsive.css/shell-art.css (y quizas mas CSS) en version POST-stash vieja (mtimes remotos MLST: responsive=19:08:49, shell-art=19:42:16, app=19:43:49). El stash@{0} "aht-tmp-verify" (creado 19:08:49) contiene las ULTIMAS versiones buenas de esos CSS: responsive=122540 B, shell-art=64312 B, play-v3.js=205489 B, play.php=47918 B.
+
+- INV-AHT-ICONOS - REGRESION RECUPERABLE (parche minimo): el play-v3.js restaurado emite `class="tema-hab mapa-tema--<cat>"` pero el CSS aprobado (ya en prod, play-v3-app.css L887-985) define `.tema-hab--romance` (#e0688f + halo 3 capas), `.tema-hab--drama` (#f0a94f ambar), `.tema-hab--relacion/--coincidencias` (#3f5a86 azul) sobre svg fill/stroke currentColor => los iconos salen NEGROS sin glow por mismatch de clase. La version que se vio bien (19:52-20:19) era la del JS regresionado (E64EA6D3). Accion futura: alinear la emission de clases en el JS bueno (1 linea) o anadir alias CSS; NO tocar app.css.
+- INV-VEC-REL-MODAL - REGRESION RECUPERABLE: el fix del modal de Relaciones (grande/centrada/sin Vecinos detras/scroll/«<- Vecinos del pueblo»/X) vivia en play-v3-responsive.css (deploys 15:48 [114905 B], 16:26 [118781 B], canonical 18:33 [119826 B]); produccion actual tiene 97102 B SIN ninguna regla vec-rel. Copia buena: responsive.css del STASH@{0} (122540 B, vec-rel x20). Restaurar fichero completo tras diff contra remoto.
+- INV-PASAR-RATO-NOCHE - REGRESION RECUPERABLE: mismo vehiculo. Diseno movil aprobado (reloj junto a hora, Pasar el rato secundario, luna nocturna, keyframes) SOLO en responsive.css del stash (pasar-rato x15, noche x11, luna x3, keyframes x2). Remoto: 0. Velo parcialmente presente (remoto velo=12).
+- INV-FEEDBACK-INTERVENCION - REGRESION RECUPERABLE: seccion "FEEDBACK DEL RESULTADO DE INTERVENCION" (.enc-int-result / .enc-int-result-txt estilo polaroid: centrado, .88rem, bordes irregulares, rotate(-.35deg), ::after puntos, margen 1.9rem antes de NUEVO PLAN) SOLO en responsive.css del stash (x13). El JS en prod ya pinta enc-int-result x3; la logica tono bien|neutral|mal (EncuentroIntervencion::tonoDe) no se toca. Test de referencia: tests/enc_result_ui_test.js (define el estado deseado).
+- INV-EN-CURSO-DESKTOP-DUPLICADO - REGRESION RECUPERABLE (mismo vehiculo): el bloque derecho "En curso" en desktop es la seccion movil `<section class="encursos-movil">` (play.php L777-784) filtrandose al desktop porque el responsive regresionado no contiene sus reglas (0 menciones enc-movil). Con el responsive del stash desaparece el duplicado; la caja canonica izquierda `obj-proximo-polaroid` (L383-391, con data-curso-prev/data-curso-next y data-proximo-plan) ya es el componente correcto. NO eliminar markup.
+- INV-ENCUENTROS-SIMULTANEOS - PARCIALMENTE EN PROD / PENDIENTE DE VERIFICACION: integrado en prod: carrusel desktop (data-curso-prev/next) + carrusel movil encima de Cotilleos (renderEncursosMovil x6, encMovPaso x3, htmlEncursoCardMovil, fuente canonica unica L1226/L1359). Indicador 1/N explicito NO localizado. El agente parado dejo verificacion funcional Playwright lista: dev/verify_encursos_movil.js (node+php -S 8765) con screenshots en dev/screenshots-encursos-movil. Estado: PENDIENTE DE INTEGRACION/VERIFICACION hasta ejecutar ese oracle; no dar por terminado.
+- INV-FICHA-NAV - PENDIENTE DE INTEGRACION (nunca desplegado): navegarFicha/syncFichaNav existen en el JS de prod (queries L3443-3444 `[data-ficha-nav-prev|next]`) pero NINGUNA copia de play.php (restaurada C22165B4, stash 47918, ni HTML publicado) contiene esos botones. Falta el hunk de markup (candidato: cabecera de aside.capa-ficha L562). Implementacion funcional completa = JS actual + hunk de botones por crear.
+- INV-VARIEDAD-FRASES - MIXTO, NO ASUMIR RESUELTO: (A) Llego a produccion: P2 atribucion (deploy 15:40), enfado direccional (16:24), canonical 18:33 (CopyVariante NUEVO, DiarioResidenteBridge NUEVO, VistaCotilleoV3, EncuentroCotilleoCopy, EmocionalNarrativa...), mensajitos B4 (18:43). (B) WIP local SIN deploy: diffs M vs HEAD en CopyRechazoPropuesta/CopySenalRomantica/EmocionalNarrativa/etc.; fails documentados L-WIP-COPYTOAST (rechazo_atribucion_canonica_test, 2 fails) y L-WIP-COOLDOWNPAR (PropuestaEncuentroEngine llama CopyRechazoPropuesta::mensajeCooldownPar, metodo que faltaba en worktree - verificar pareja coherente en prod antes de tocar nada). (C) Nunca terminado: todo lo no cubierto por A/B (pools/anti-repeticion adicionales).
+- INV-REVALIDACION-CORE (2026-08-23 20:4x, contra REMOTO): P03 intervencion_tema=true en calibracion remota (CD4DCD3B...); R3 vida_dia_ignorado presente (x2) y misiones_diarias ok; B4 p_nacer_hora_base=0.058 + anti_rep_ventana=3 (merge 18:43 intacto); HayTema radar protagonistas en remoto (E1B654CC..., actoresDeMensaje/Radar espacial presentes); Lo que sabes restaurado. TODO PRESENTE.
+- REGLA PARA LA FASE DE RECUPERACION: cada item en rama/worktree separado, commit OBLIGATORIO antes de integrar, UN unico agente autorizado a integrar/deployar. Items 2/3/4/5 comparten vehiculo: restaurar play-v3-responsive.css desde stash@{0} (tras diff contra el remoto 97102 para confirmar que no se pierde nada posterior) + nuevo cache-buster + verificacion por marcadores (vec-rel/noche/luna/pasar-rato/FEEDBACK DEL RESULTADO) y tests enc_result_ui_test.js, pasar_rato_movil_ui_test.js, pasar_noche_ui_test.js, vec_rel_layout_ui_test.js. Nada se marca RESUELTO hasta deploy + verificacion remota + smoke visual.
+
+## AUDITORIA DE SEGURIDAD POST-RESTAURACION (2026-08-23 noche, fase 2)
+
+Metodo: lectura integra de este plan + descarga REMOTA de los 46 ficheros src/Engine+api desplegados el 18:33/18:43 y comparacion tamano-a-tamano contra los logs WinSCP de aquellos deploys + barrido de marcadores de mecanica + claves profundas de calibracion remota (CD4DCD3B...) + MLST de mtimes + diff semantico selector-a-selector del responsive stash vs remoto.
+
+RESULTADO GLOBAL: 45/46 Engine/API identicos a lo desplegado antes del accidente => toda la mecanica backend (P03, B14, P06-logica, R06/B4, R01-parcial, R3, M2+, enfado direccional, limpieza ficha) SIGUE CABLEADA EN PRODUCCION. La regresion real se limita a la capa visual (responsive.css + shell-art.css sustituidos por versiones viejas via sesion FTP SIN LOG ~19:42-19:46) y al mismatch de clase del indicador AHT tras la restauracion.
+
+HALLAZGOS NUEVOS DE ESTA AUDITORIA:
+- H1: api/handlers/EncuentrosHandler.php en produccion (11908 B) NO es el del canonical 18:33 (11752 B): es la version worktree 18:46 con `VidaPuebloEngine::rechazoSiPerdida` + exposicion `encuentros_en_curso` (WIP del agente de encuentros simultaneos). Subida SIN LOG. Dependencia verificada presente en el VidaPuebloEngine remoto (sin fatal). Clasificar como WIP-ajeno-en-prod; NO revertir hasta integrar item varios-encuentros.
+- H2: calibracion remota HOY contiene los knobs P2 (mod_tipo.primera_cita=4, bonus_primera_cita_reciproca=12, conflicto_mult_cita=3) y enfadado_ajeno_aceptar_planes=-8. Mejor de lo que esta bitacora registro tras el incidente (entonces ausentes). PERO el codigo remoto VoluntadPonderadaEvaluator sigue SIN leer bonus_primera_cita_reciproca/conflicto_mult_cita/delta_multiplier_positivo/mod_social_factor (0 refs) => knobs inertes; M2+ (mod_continuidad_reciente + calcularContinuidadReciente) SI cableada. Estado = exactamente el pre-accidente: reconciliacion P2 sigue LOCAL/SIN DEPLOY y bloqueada por extremos >0.85.
+- H3: diff semantico responsive stash(122540) vs remoto(97102): el stash ANADE ~109 selectores agrupados por feature (REL-MODAL +13, FEEDBACK-INTERV +11 con ::before bien/neutral/mal, RATO-NOCHE +14 con .es-noche/.es-noche-luna, ENCURSO-MOVIL +25, BUZON +9 sello-estado/acciones, COTILLEO +9 badge-pulso/aviso-importante/star, FICHA +6 INCLUYE .ficha-nav/.ficha-nav-next/.ficha-btn-diario, OTROS +20, prefers-reduced-motion +1) y SOLO se perderian 2 selectores de buzon phone (.carta-msg:has(.sello-estado) .cuerpo / .msg-leido-toggle variante phone) cuyas reglas equivalentes existen en el stash con otra forma => riesgo bajo; anadir esos 2 selectores como hunk de merge tras restaurar.
+- H4: shell-art.css tambien requiere restauracion desde stash (64312 vs remoto 62874; noche x10/luna/velo solo en stash).
+- H5: produccion contiene multiples ficheros BUENA-COPIA-UNICA sin versionar en Git (play-v3.js 208017, play.php 48033-ficha-fix, EncuentrosHandler 11908, responsive/shell-art stash-era tras recuperar): sincronizar/commitear OBLIGATORIO antes de cualquier nuevo deploy masivo.
+
+CLASIFICACION POST-ACCIDENTE (entradas que constaban terminadas/activas):
+- INTACTO EN PRODUCCION: P03 (tema_cargas en Intervencion/Experiencia + knobs 0.18/0.22/-0.28/0.35), B14 (canalRomance a_hacia_b/b_hacia_a), P06-logica (radar actoresDeMensaje), R06/B4 (historial_plantillas/anti_rep/compromiso en PropuestaEncuentro/peticion_resultado/knobs 30-25-0.058), R01-parcial, R3 (vida_dia_ignorado/dia_misiones_ignorado), limpieza Le/No-gusta (play.php restaurado), enfado direccional (hacia/vencido/enfadado_ajeno + knob -8).
+- PARCIALMENTE REGRESIONADO: P06-indicador visual (mismatch clase mapa-tema-- vs tema-hab--, parche 1 linea).
+- REGRESIONADO (recuperable 100% via stash@{0}): capa visual responsive+shell-art (modal Relaciones, pasar-rato/noche movil, velo, feedback polaroid intervencion, ocultacion encursos-movil en desktop, badges cotilleo, sellos buzon).
+- YA ERA PENDIENTE ANTES DEL ACCIDENTE: P2 reconciliada-local (bloqueo extremos >0.85), knob-enfado (resuelto en config actual), R07 cadencia B4, B09/R04 conflicto, B31 higiene Git (AGRAVADA: ver H5).
+- REQUIERE PRUEBA FUNCIONAL: M2+ continuidad (revalidacion conjunta con P2 cuando se despliegue), varios encuentros simultaneos (oracle dev/verify_encursos_movil.js pendiente de ejecutar).
+
+INCIDENCIA DE PROCESO (REGLA OPERATIVA ampliada - NO parchear deploy_lib todavia):
+- deploy_lib_aht.ps1 (Enhance-AhtNormalDeployFiles) AUTOANADE play.php a cualquier deploy con assets/api/src: provoco parte del accidente de las 19:52. ARREGLAR ANTES de volver al flujo normal.
+- PROHIBIDO desplegar desde worktree dirty sin listar explicitamente cada fichero y su contenido aprobado.
+- PROHIBIDO usar stash como mecanismo de coordinacion entre agentes (stash@{0} sustrajo el trabajo desplegado y provoco la regresion).
+- PROHIBIDO sesiones FTP manuales sin log en repo (causa de H1/H3/H4).
+- PRODUCCION NO PUEDE SER LA UNICA COPIA BUENA: todo estado desplegado debe existir en un commit (H5).
+
+- 2026-08-23 noche (FASE RECUPERACION 1 y 2 - NUEVO PROTOCOLO GIT, SIN DEPLOY): creadas ramas+worktrees aislados fuera del webroot (C:\Users\agl03\AppData\Local\Temp\opencode\wt\). Stash@{0} NO consumido (solo lectura de blobs via checkout <sha> -- path). Worktree compartido intacto.
+  * rec/css-responsive-stash-restore -> commits cc6ef26 + 0c03827. Ficheros: play-v3-responsive.css (+1109/-) desde blob stash 122540 B; play-v3-shell-art.css (+343) desde blob 64312 B; merge phone-buzon (6 bloques sello-estado/msg-leido-toggle preservados del remoto 97102). Recupera: modal Relaciones, pasar-rato movil, noche/luna/velo (.es-noche/.noche-activa), FEEDBACK polaroid intervencion, ocultacion encursos-movil desktop, badges cotilleo, ficha-nav styles, prefers-reduced-motion. NOTA: el tooltip data-tip de filtros vec-rel ya vive en bloques-residencias.css de produccion (se retiro reconstruccion redundante en 0c03827 para evitar doble ::after).
+    Tests (worktree + fuentes prod restauradas temporales donde el test las exige): enc_result_ui_test 12/12 · pasar_rato_movil_ui_test 31/31 TODO OK · pasar_noche_ui_test 54/54 TODO OK · vec_rel_layout_ui_test 21/21 TODO OK.
+  * rec/aht-iconos-clase -> commit 48a5b47. Ficheros: assets/js/play-v3.js (base = produccion restaurada DB31B877..., no versionada; cambio de 1 linea: class "tema-hab mapa-tema--<cat>" => "tema-hab tema-hab--<cat>") + tests/mapa_tema_exterior_ui_test.js actualizado al contrato correcto (el anterior codificaba el nombre bug). Colores/halo del app.css INTOCADOS.
+    Tests: todos los asserts estaticos JS+CSS OK con app.css de produccion (corazon rosa visible, drama rayo, halo/currentColor/movil19px/anclado). Pendientes de arnes completo (php -S+playwright+motor P06 sin versionar): sin-tema x2, resuelto; es-noche depende del shell-art de la otra rama.
+  * ESTADO: ambas recuperaciones COMMITTEADAS y verificadas estaticamente. NO DEPLOY (deploy_lib_aht.ps1 BLOQUEADO por auto-play.php hasta sus guardas). Siguiente: integrador autorizado decide merge a estable + deploy con backup PRE; luego qa/encursos-simultaneos-oracle.
+
+## AUDITORIA FORENSE DE SESIONES HISTORICAS OPENCODE (2026-08-23 noche, fase 3 - SOLO LECTURA)
+
+Fuente: opencode.db (SQLite, modo read-only; 80 sesiones del proyecto) + almacen snapshot interno de OpenCode
+(C:\Users\agl03\.local\share\opencode\snapshot\0688781b.../fab7a385.../ = repos Git de contenido con 9.116 objetos,
+sin commits; minado por marcadores -> _forense-sesiones/blobs_reporte.txt). Digestos por sesion en
+_forense-sesiones/ses_*_digesto.txt. Exportaciones en _forense-sesiones/candidatos/. NADA aplicado a produccion ni worktree.
+
+HALLAZGOS CLAVE:
+- F1 FICHA-NAV: la sesion ses_fd22d7 ("Ficha vecino anterior y siguiente", 10:52-13:43) implemento COMPLETA la navegacion (< FICHA DE VECINO >, botones data-ficha-nav-prev/next + SVG + boton Diario) tocando play.php/play-v3.js/bloques/responsive; termino FINALIZADO con pulido CSS. El markup existio en play.php (lineage ~18:48-19:04: blob snapshot 6f7739c1/1adb0496/61b05ed1 ~49.6KB con ficha-nav-row + obj-curso-btn x2 + data-es-noche+luna) pero fue perdido del arbol por las reversiones concurrentes; produccion actual (restaurada) NO lo tiene. RECUPERABLE: candidatos exportados.
+- F2 PLANES SIMULTANEOS 1/N: sesion ses_fd08b7 (18:29-21:06) termino "implementacion local + tests" SIN commit/deploy (bloqueo E2E MySQL): fuente canonica 0..N en ResumenDia/PartidaService, carrusel movil sobre Cotilleos, nav desktop "< 1/N >" sobre polaroid unica, identidad por encuentro_id. Su estado JS mas avanzado EXISTE como blob snapshot b0cc319f (210507 B; data-curso-prev + enc-mov-card + renderEncursosMovil + encMovPaso + "/ N") SUPERIOR al restaurado 208017 (que carece de data-curso-prev). El handler EncuentrosHandler 11908 ya en prod pertenece a esta linea (dependencia rechazoSiPerdida verificada presente).
+- F3 BLOQUE MOVIL ENCURSOS: sesion ses_fd0a30 reporta su implementacion REVERTIDA por sesion concurrente 19:41-19:46 (coincide con la ventana FTP-sin-log identificada); patch nunca generado; oracle Playwright dev/verify_encursos_movil.js nunca llego a pasar. Partes vivas hoy via js restaurado (renderEncursosMovil etc.).
+- F4 FEEDBACK INTERVENCION + FIX RELACIONES: sesion ses_fd155c creo el CSS polaroid bien/neutral/mal y el fix vec-rel, DEPLOYADOS a las 15:48/16:26 (logs deploy-rel-fix citados dentro de la propia sesion) -> ya recuperados en rama rec/css-responsive-stash-restore.
+- F5 AHT ICONOS/P06: sesion ses_fd23b8 (modelo nemotron, 10:37-21:05) cerro P06 con despliegues documentados buster 195213/195847 y actualizo el Plan Maestro; el mismatch de clase detectado tras nuestra restauracion se explica porque esa sesion trabajo sobre la linea del JS regresado. Fix ya commiteado en rec/aht-iconos-clase (48a5b47).
+- F6 P2/M2+/ENFADO: sesiones fd15d6 (P2 atribucion+balance), fd0fda (M2+ continuidad), fd189a (rechazo Sandra-Dolores) confirman exactamente el estado ya auditado: deploy 15:40/16:24 para atribucion/enfado; M2+ activa; reconciliacion P2 LOCAL sin deploy bloqueada por extremos>0.85.
+- F7 VARIEDAD NARRATIVA: sesion ses_fd122e (nemotron, "continua" x2) termino EJECUTANDO el script canonical de deploy (~21:05 segun digesto) PERO verificado contra produccion: CERO cambios post-restauracion (buster 201952 intacto, play.php C22165B4, responsive 97102; sin logs nuevos). Posible ejecucion fallida/interrumpida. Marcar como sospechosa de reintentar; vigilar.
+- F8 NOCHE/RATO/CABECERA: sesiones fd1b85/fd112d/fd0ea3/fd23cf/256d generaron el diseno aprobado (luna SVG, papelito, batch30, es-noche) presente en stash responsive (ya en rama rec/css) + play.php restaurado (data-es-noche/luna OK en tests).
+- F9 P07 SELECTOR TEMAS: sesion fd0666 quedo en investigacion/post-incidente sin implementar en prod (coincide con plan).
+
+CONTRADICCIONES SESION vs REALIDAD: ninguna sesion FINALIZADO implica estado actual: fd22d7 (ficha-nav) y fd0a30 (encursos) dicen terminado y NO esta en prod; fd122e apunta deploy canonical no materializado. Regla mantenida: solo cuenta codigo+produccion verificados.
+
+CANDIDATOS EXPORTADOS (forense, NO aplicar sin rama propia):
+- candidatos/play_php_candidato_49668_6f7739c1.php (+variantes 49620/49466): base ~18:48 CON ficha-nav/curso/es-noche PERO aun con secciones legacy Le/No-gusta => usar SOLO como donante de hunks sobre play.src.php restaurado.
+- candidatos/play_v3_js_candidato_210507_b0cc319f.js (+209385/209277): linea planes-simultaneos completa (carrusel+1/N+ficha-nav queries); requiere fix tema-hab-- (mismo parche 1 linea) antes de integrar.
+- candidatos/responsive_candidato_77160_935333dc.css (+75054): variante consolidada con FEEDBACK/noche/ficha-nav; alternativa a estudiar frente al stash 122540.
+
+RECOMENDACION POST-INTEGRACION (tras mergear rec/css y rec/iconos):
+1. feat/ficha-nav-markup: hunks de play_php_candidato_49668 (ficha-nav-row + obj-curso-btn) sobre play.src.php restaurado.
+2. feat/planes-simultaneos-1N: partir de js candidato 210507 + fix tema-hab-- + tests planes_simultaneos_ui_test.js/resumen_dia_encuentros_en_curso_test.php (ya existen en shared tests) + ejecutar dev/verify_encursos_movil.js.
+3. Vigilar posible reintento de deploy canonical por sesion nemotron (F7).
+- 2026-08-23 noche (FASE RECUPERACION 3): rama feat/ficha-nav-markup (worktree aislado, apilada sobre rec/aht-iconos-clase). Injerto quirurgico UNICO bloque ficha-nav-row (prev/Diario/next con SVG) desde snapshot blob 6f7739c1 (lineage ses_fd22d7 FINALIZADO) sobre play.php restaurado C22165B4. Descartados del donante: secciones legacy Le/No-gusta, .ficha-sabes-ico margin, linea vida-derrota-pie. Cero JS (wiring ya presente), cero CSS aqui (vive en rec/css). php -l OK + 12/12 aserciones especificas. NO DEPLOY.
+- 2026-08-23 noche (BASE DE INTEGRACION): rama int/recuperaciones-20260823 (worktree aislado wt/integracion) desde base 29c4732. Merges --no-ff en orden: rec/css-responsive-stash-restore (8e9e9b2), rec/aht-iconos-clase (4392100), feat/ficha-nav-markup (dc0dc7c). CERO conflictos (ficheros disjuntos por diseno). Validacion: php -l OK; coherencia marcadores completa (ficha-nav markup prev/next/diario=1/1/1; js wiring navegarFicha x2 + tema-hab-- emitido x1 / residual mapa-tema--=0; responsive stash vec-rel=20 FEEDBACK=1 es-noche=8 pasar-rato=15 .ficha-nav-row=1). Tests con overlays temporales de app.css/bloques (ya correctos en produccion, nada nuevo a desplegar): enc_result TODO OK, pasar_rato_movil TODO OK, pasar_noche TODO OK, vec_rel TODO OK, mapa_tema 3 fallos residuales documentados (arnes php-S+playwright+motor P06 sin versionar: sin-tema x2, resuelto). Leccion: al copiar tests desde el arbol compartido se sobrescribio la version corregida del test mapa_tema commiteada; detectado y revertido (usar SIEMPRE la version del commit de la rama). Estado final dc0dc7c limpio. NO DEPLOY; pendiente decision de integrador sobre despliegue conjunto (incluye restaurar responsive/shell-art + js + play.php y buster nuevo).
+- 2026-08-23 noche (FASE RECUPERACION 4): rama feat/planes-simultaneos-1N (worktree aislado, base dc0dc7c) -> commit d3ecb37. JS: 4 hunks desde snapshot b0cc319f (cursoSelId estable por id; renderShellPanels consume encuentrosEnCursoAhora 0..N; nav < 1/N > con contador data-curso-cont; moverCursoSeleccion+bindCursoNav sin acciones ni API) + guard typeof para arneses estaticos. PHP recuperado de snapshots (nunca llego a produccion, donantes verificados como prod+adiciones puras sin eliminaciones): ResumenDia blob 7b05b614 (encuentrosEnCurso+duracion_minutos), PartidaService blob e1890e97 (1 linea exposicion canonica, ASSERT resultado==donante), handler versionado byte-exacto al superviviente 11908/36162AEC (regla H5). Rechazado: hunk que revertia fix tema-hab--. tests/planes_simultaneos_ui_test.js commiteado. Resultados: planes_simultaneos 29/29 TODO OK (1 activo=1/1; 2+ navegables sin mezclar datos; movil conserva bloque sobre Cotilleos; escritura dirigida por encuentro_id; organizar/intervencion intactos). Regresiones: enc_result/pasar_rato/pasar_noche/vec_rel TODO OK; mapa_tema 3 fallos documentados de arnes. php -l x3 + node --check OK. Pendiente E2E real verify_encursos_movil.js. NO DEPLOY; no merge a int/ hasta autorizacion.
+- 2026-08-23 noche (INTEGRACION PLANES-1N): d3ecb37 integrado en int/recuperaciones-20260823 -> merge --no-ff 1135046 SIN conflictos. Verificacion previa +164 lineas PartidaService: confirmado baseline valida = linaje de produccion 18:33 ya desplegado y verificado (vistaRelacionesPueblo/dirVistaRelacion/relevanciaDirRelacion = P02 barras sociales; 0 restos dev/debug; php -l OK) + 458 CRLF normalizados a LF (commit==donante-normalizado: True) + la 1 linea de la feature. Resultado commit == donante normalizado ASSERT True. Validacion rama integrada: php -l x4 OK; ficha-nav 1/1/1; responsive vec-rel=20 FEEDBACK=1; fix tema-hab--=1 residual=0; encuentros_en_curso service=1 resumen(func)=1 handler>=2; nav data-curso-nav/cont=1/1 moverCursoSeleccion=3; planes_simultaneos_ui_test TODO OK (29/29). Estado limpio. NO DEPLOY.
+- 2026-08-23 noche (CIERRE E2E): decisiones usuaria aplicadas sobre int/recuperaciones-20260823 -> commit (ver SHA en bitacora git): (1) gate CSS desktop @media min-width:769px .play-v3 .encursos-movil{display:none!important} en responsive; (2) arnes verify_encursos_movil.js VERSIONADO con expectativa E corregida a semantica estable por cursoSelId (2/2 legitimo). E2E real 28/28 TODO OK; planes_simultaneos_ui_test TODO OK. Cero cambios de JS de producto. NO DEPLOY.
+- 2026-08-23 noche (DEPLOY AUTORIZADO de int/recuperaciones-20260823 @ daf1962): backup PRE remoto en _forense-sesiones/predeploy/20260823-225318 (+copia duradera dev/_prod_fetch_predeploy/20260823-225318, hashes-PRE.txt). Subida selectiva explicita de 7 ficheros daf1962 + buster v3-20260823-225321 (sin deploy_lib/auto-play.php; solo helpers de credenciales). Verificacion: 8/8 byte-IDENTICO contra commit; HTTP 200 x4; HTML servido con ficha-nav(1/1/1)+sabes+curso-nav/cont; JS servido tema-hab--=1 mapa-tema--=0 cursoSelId/moverCursoSeleccion presentes; responsive vec-rel-overlay=7 FEEDBACK=1 gate-769 presente; shell-art noche; ResumenDia.encuentrosEnCurso+duracion_minutos; PartidaService inyeccion encuentros_en_curso x1; handler x4. Incidente mecanico previo al deploy real (rutas '/' en WinSCP -> 0 bytes transferidos) resuelto con backslash; produccion nunca afectada por el intento fallido. Siguiente: smoke visual humano + decidir sincronizacion/versionado H5 del nuevo estado.
+- 2026-08-23 noche (CIERRE RECUPERACION - NUEVA BASE CANONICA): SMOKE HUMANO APROBADO en produccion (movil: corazones/relaciones, Pasar el rato, encuentro+intervencion, Mensajitos, Vecinos, relaciones + navegacion < >, Nuevo Plan, lugar/dia, Cotilleos, ficha vecino, navegacion general). Recuperacion historica CERRADA. SHA desplegado y aprobado: daf1962. NUEVA BASE ESTABLE CANONICA: rama stable/recuperacion-20260823 (=daf1962) + tag recuperacion-aprobada-20260823. TODA rama/worktree futuro nace de ahi. playtest-01-php74 queda CONGELADO en 29c4732 con su WIP antiguo intacto y sin incorporar (no se movera su ref mientras este checked-out en el arbol compartido sucio; su WIP se preserva para triaje posterior por sus agentes). Preservados sin borrar: rec/css-responsive-stash-restore, rec/aht-iconos-clase, feat/ficha-nav-markup, feat/planes-simultaneos-1N, int/recuperaciones-20260823, stash@{0} (c3ed3c90), backups PRE (predeploy 225318 + prerestore 201923). Regla vigente: deploy solo desde commit de stable/, nunca dirty, con backup PRE y buster nuevo.
