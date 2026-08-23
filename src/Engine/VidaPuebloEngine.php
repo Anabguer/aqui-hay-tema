@@ -671,7 +671,7 @@ final class VidaPuebloEngine
         return self::aplicar($partida, $delta, [
             'causa' => self::CAUSA_ACONTECIMIENTO,
             'origen' => self::ORIGEN_SISTEMA,
-            'atribuible_celestine' => true,
+            'atribuible_celestine' => false,
             'positivo_valido_latido' => false,
             'fuente_id' => $eventoId,
         ], $cal, $logger);
