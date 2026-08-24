@@ -352,6 +352,18 @@ select.chip-select, .org-row select {
   pointer-events: auto;
 }
 .tut-intro[hidden] { display: none !important; }
+/* Finale del tutorial: mismo patrón modal que .tut-intro, válido también en
+   desktop (antes solo existía la variante móvil de play-v3-responsive.css).
+   z-index 520 = mismo nivel canónico del modal móvil (batch 15). */
+.tut-finale {
+  position: fixed; z-index: 520; inset: 0;
+  display: grid; place-items: center;
+  width: 100vw;
+  height: 100dvh;
+  background: rgba(30,25,25,0.42);
+  pointer-events: auto;
+}
+.tut-finale[hidden] { display: none !important; }
 .tut-papel {
   position: relative; width: min(420px, 92%);
   background: #f7f0de url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat;

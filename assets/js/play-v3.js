@@ -486,7 +486,9 @@
   function quizaMostrarTutFinale() {
     var tut = cacheEstado && cacheEstado.tutorial;
     if (!tut || !tut.finale_pendiente || !tut.finale) return;
-    var box = $('[data-tut-finale]');
+    /* Selector con tag: [data-tut-finale] a secas tambien casa con <body data-tut-finale="1">
+       y hacia que cerrarTutFinale() aplicara hidden al body (pantalla en blanco). */
+    var box = $('aside[data-tut-finale]');
     if (!box) return;
     $('[data-tut-fin-tit]').textContent = tut.finale.tit || '';
     $('[data-tut-fin-texto]').textContent = tut.finale.txt || '';
@@ -497,7 +499,8 @@
     syncScrollLock();
   }
   async function cerrarTutFinale() {
-    var box = $('[data-tut-finale]');
+    /* aside[...]: nunca resuelve a <body>, hidden solo puede aplicar al modal. */
+    var box = $('aside[data-tut-finale]');
     if (box) box.hidden = true;
     document.body.removeAttribute('data-tut-finale');
     syncScrollLock();
