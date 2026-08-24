@@ -1,0 +1,143 @@
+/* ============================================================
+   AQUI HAY TEMA — Design System · TOKENS
+   docs/design-system/02-tokens.md es la fuente canónica.
+   FASE 2: este archivo NO está enlazado desde play.php.
+   Cableado (FASE 3, paso 0): cargar AMBOS archivos del DS al
+   final, DESPUÉS de play-v3-responsive.css (ver 05-responsive.md §6):
+     <link ... href="assets/css/design-system/tokens.css?v=...">
+     <link ... href="assets/css/design-system/components.css?v=...">
+   ============================================================ */
+
+:root {
+  /* --- Papel y superficies --- */
+  --ds-paper-app: #F6EFDC;
+  --ds-paper-card: #FBF5E6;
+  --ds-paper-modal: #F8F1DF;
+  --ds-paper-warm: #F3E7CE;
+  --ds-paper-dim: #EFE5CC;
+
+  /* --- Tinta y texto --- */
+  --ds-ink: #33261E;
+  --ds-ink-soft: #6B5138;
+  --ds-text-muted: #75634F;
+  --ds-text-faint: #A99A87;
+
+  /* --- Marca --- */
+  --ds-coral: #E87A5A;
+  --ds-coral-deep: #C9563E;
+  --ds-coral-soft: #F7C9B9;
+  --ds-pink: #E989A7;
+  --ds-pink-deep: #C42B4A;
+  --ds-pink-soft: #F9DCE4;
+  --ds-lavender: #B9A8DC;
+  --ds-lavender-deep: #7C6BAE;
+  --ds-lavender-soft: #E4DCF4;
+  --ds-mustard: #E3B04B;
+  --ds-mustard-deep: #B98A2F;
+  --ds-mustard-soft: #F6E3AE;
+
+  /* --- Estados y feedback --- */
+  --ds-green: #8FAA84;
+  --ds-green-deep: #5E7A55;
+  --ds-green-soft: #D9E4CF;
+  --ds-red-alert: #C4453B;
+  --ds-red-soft: #F3D3CE;
+  --ds-warning: #E0A93F;
+  --ds-warning-soft: #F7E8C8;
+  --ds-disabled: #C9BFB0;
+  --ds-overlay: rgba(40, 32, 26, .55);
+
+  /* --- Emocionales (canónicos del motor) --- */
+  --ds-emo-neutro: #C9A06A;
+  --ds-emo-alegre: #8FAA84;
+  --ds-emo-triste: #8A9AAD;
+  --ds-emo-enfadado: #C4775A;
+
+  /* --- Tipografía (roles) --- */
+  --ds-font-hand: "Caveat", "Segoe Print", cursive;
+  --ds-font-ui: "Nunito", "Segoe UI", sans-serif;
+
+  /* --- Espaciado --- */
+  --ds-space-1: 4px;
+  --ds-space-2: 8px;
+  --ds-space-3: 12px;
+  --ds-space-4: 16px;
+  --ds-space-5: 20px;
+  --ds-space-6: 24px;
+  --ds-space-7: 32px;
+  --ds-space-8: 40px;
+
+  /* --- Radios --- */
+  --ds-radius-card: 20px;
+  --ds-radius-modal: 28px;
+  --ds-radius-btn: 16px;
+  --ds-radius-chip: 12px;
+  --ds-radius-pill: 999px;
+
+  /* --- Bordes y sombras --- */
+  --ds-border-color: var(--ds-ink-soft);
+  --ds-border-w: 1.5px;
+  --ds-border: var(--ds-border-w) solid var(--ds-border-color);
+  --ds-border-strong: 2px solid var(--ds-ink);
+  --ds-shadow-rest: 0 4px 10px rgba(70, 50, 30, .10);
+  --ds-shadow-raised: 0 8px 20px rgba(70, 50, 30, .16);
+  --ds-shadow-cta: 0 6px 14px rgba(70, 50, 30, .16), inset 0 -3px 0 rgba(0, 0, 0, .14);
+  --ds-shadow-cta-press: inset 0 -1px 0 rgba(0, 0, 0, .14);
+  --ds-stitch-color: rgba(255, 255, 255, .75);
+
+  /* --- Táctil y tamaños --- */
+  --ds-touch-min: 44px;
+  --ds-cta-h: 56px;
+  --ds-tab-h: 48px;
+  --ds-close-size: 44px;
+  --ds-avatar-token: 40px;
+  --ds-avatar-sm: 48px;
+  --ds-avatar-md: 56px;
+  --ds-avatar-lg: 64px;
+  --ds-avatar-xl: 120px;
+
+  /* --- Z-index --- */
+  --ds-z-map: 1;
+  --ds-z-hud: 30;
+  --ds-z-velo: 40;
+  --ds-z-capa: 50;
+  --ds-z-submodal: 60;
+  --ds-z-toast: 70;
+  --ds-z-debug: 200;
+
+  /* --- Motion --- */
+  --ds-ease: cubic-bezier(.22, .9, .3, 1.2);
+  --ds-dur-fast: 120ms;
+  --ds-dur: 200ms;
+  --ds-dur-slow: 320ms;
+
+  /* --- Breakpoints (solo documental; usar en @media) ---
+     phone:  <= 767px   |  tablet: 768–1023px  |  desktop: >= 1024px
+     NOTA: el corte JS .phone/.pc es <720px (play-v3.js layout()).
+     No modificar aqui; ver docs/design-system/05-responsive.md §3. */
+}
+
+/* ============================================================
+   PUENTE LEGACY — SE ACTIVA EN FASE 3 (paso 0 de migración).
+   Remapea las variables actuales al nuevo sistema para que el
+   CSS heredado beba de los tokens DS sin reescribirse.
+   Mientras este bloque esté comentado, tokens.css no altera nada.
+
+:root {
+  --paper: var(--ds-paper-app);
+  --desk: var(--ds-paper-dim);
+  --ink: var(--ds-ink);
+  --muted: var(--ds-text-muted);
+  --pink: var(--ds-pink);
+  --pink-deep: var(--ds-pink-deep);
+  --heart-empty: var(--ds-paper-dim);
+  --ticket: var(--ds-mustard-soft);
+  --day: var(--ds-mustard);
+  --postit: var(--ds-pink-soft);
+  --ring: var(--ds-paper-warm);
+  --emo-neutro: var(--ds-emo-neutro);
+  --emo-alegre: var(--ds-emo-alegre);
+  --emo-triste: var(--ds-emo-triste);
+  --emo-enfadado: var(--ds-emo-enfadado);
+}
+   ============================================================ */

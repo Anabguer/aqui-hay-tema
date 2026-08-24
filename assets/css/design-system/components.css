@@ -1,0 +1,653 @@
+/* ============================================================
+   AQUI HAY TEMA — Design System · COMPONENTES BASE (.ds-*)
+   docs/design-system/03-components.md es la fuente canónica.
+
+   FASE 2: este archivo NO está enlazado desde play.php.
+   Cableado (FASE 3, paso 0): cargar EL ÚLTIMO de todos:
+     <link rel="stylesheet" href="assets/css/design-system/components.css?v=...">
+   Los overrides de selectores heredados van por pantalla en
+   assets/css/design-system/screens/<pantalla>.css (también al final).
+
+   REGLAS:
+   - Clases opt-in .ds-*: cero colisión con el CSS actual.
+   - Prohibido !important (excepciones documentadas por pantalla).
+   - CERO anillas/espirales/agujeros/encuadernaciones.
+   - Mobile-first: base móvil, @media (min-width:1024px) para desktop.
+   - Manuscrita (Caveat) jamás por debajo de 16px; microtexto min 11px.
+   ============================================================ */
+
+/* ---------- 1. Superficies ---------- */
+
+.ds-sheet {
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 60%),
+    var(--ds-paper-modal);
+  border: var(--ds-border-w) solid var(--ds-border-color);
+  border-radius: var(--ds-radius-modal);
+  box-shadow: var(--ds-shadow-raised);
+  color: var(--ds-ink);
+}
+
+.ds-sheet--full {
+  width: calc(100% - 24px);
+  max-height: 92dvh;
+  margin: auto;
+}
+
+.ds-card {
+  position: relative;
+  background: var(--ds-paper-card);
+  border: var(--ds-border-w) solid var(--ds-border-color);
+  border-radius: var(--ds-radius-card);
+  box-shadow: var(--ds-shadow-rest);
+}
+
+.ds-card--tint-green { background: var(--ds-green-soft); }
+.ds-card--tint-lavender { background: var(--ds-lavender-soft); }
+.ds-card--tint-pink { background: var(--ds-pink-soft); }
+.ds-card--tint-mustard { background: var(--ds-mustard-soft); }
+
+.ds-card--dashed { border-style: dashed; }
+
+.ds-card--tilt-l { transform: rotate(-1.5deg); }
+.ds-card--tilt-r { transform: rotate(1.5deg); }
+
+/* ---------- 2. Botones ---------- */
+
+.ds-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-touch-min);
+  padding: 0 var(--ds-space-5);
+  border-radius: var(--ds-radius-btn);
+  border: 2px solid var(--ds-ink);
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .875rem;
+  color: var(--ds-ink);
+  background: var(--ds-paper-card);
+  box-shadow: var(--ds-shadow-rest);
+  cursor: pointer;
+  user-select: none;
+  transition: transform var(--ds-dur-fast) var(--ds-ease), box-shadow var(--ds-dur-fast) var(--ds-ease);
+}
+
+.ds-btn:active { transform: scale(.97); }
+
+.ds-btn--primary {
+  min-height: var(--ds-cta-h);
+  font-family: var(--ds-font-hand);
+  font-size: 1.3rem;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: #fff;
+  background: var(--ds-coral);
+  box-shadow: var(--ds-shadow-cta);
+  position: relative;
+}
+
+.ds-btn--primary::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px dashed var(--ds-stitch-color);
+  border-radius: calc(var(--ds-radius-btn) - 5px);
+  pointer-events: none;
+}
+
+.ds-btn--primary:active { box-shadow: var(--ds-shadow-cta-press); }
+
+.ds-btn--secondary {
+  min-height: 48px;
+  color: #fff;
+  background: var(--ds-lavender);
+  border-color: var(--ds-ink);
+}
+
+.ds-btn--ghost {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  color: var(--ds-lavender-deep);
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+}
+
+.ds-btn:disabled,
+.ds-btn.is-disabled {
+  background: var(--ds-disabled);
+  color: rgba(255, 255, 255, .75);
+  border-color: var(--ds-text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.ds-close {
+  width: var(--ds-close-size);
+  height: var(--ds-close-size);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill);
+  border: 2px solid var(--ds-ink);
+  background: var(--ds-paper-card);
+  box-shadow: var(--ds-shadow-rest);
+  font-weight: 800;
+  font-size: 1.1rem;
+  color: var(--ds-ink);
+  cursor: pointer;
+}
+
+.ds-step {
+  width: 32px;
+  height: 32px;
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-coral);
+  border: 2px solid var(--ds-ink);
+  color: #fff;
+  font-family: var(--ds-font-hand);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+/* ---------- 3. Navegación ---------- */
+
+.ds-tab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-tab-h);
+  padding: 0 var(--ds-space-5);
+  border-radius: var(--ds-radius-pill);
+  border: 2px dashed var(--ds-lavender);
+  background: var(--ds-paper-card);
+  font-family: var(--ds-font-hand);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--ds-lavender-deep);
+  cursor: pointer;
+}
+
+.ds-tab.is-active {
+  border-style: solid;
+  border-color: var(--ds-ink);
+  background: var(--ds-coral);
+  color: #fff;
+  box-shadow: var(--ds-shadow-rest);
+  position: relative;
+}
+
+.ds-tab.is-active::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 2px dashed var(--ds-stitch-color);
+  border-radius: var(--ds-radius-pill);
+  pointer-events: none;
+}
+
+.ds-tab--lavender.is-active { background: var(--ds-lavender); }
+
+.ds-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ds-space-1);
+  min-height: 38px;
+  padding: 0 var(--ds-space-3);
+  border-radius: var(--ds-radius-chip);
+  border: var(--ds-border-w) solid var(--ds-border-color);
+  background: var(--ds-paper-card);
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .8125rem;
+  color: var(--ds-ink);
+  cursor: pointer;
+}
+
+.ds-chip.is-active { background: var(--ds-coral-soft); border-color: var(--ds-coral-deep); }
+.ds-chip--green.is-active { background: var(--ds-green-soft); border-color: var(--ds-green-deep); }
+.ds-chip--lavender.is-active { background: var(--ds-lavender-soft); border-color: var(--ds-lavender-deep); }
+.ds-chip--mustard.is-active { background: var(--ds-mustard-soft); border-color: var(--ds-mustard-deep); }
+.ds-chip:disabled { opacity: .5; cursor: not-allowed; }
+
+.ds-chip-emoji {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 56px;
+  padding: var(--ds-space-1);
+  border-radius: var(--ds-radius-chip);
+  border: var(--ds-border-w) solid transparent;
+  background: transparent;
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .6875rem;
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  color: var(--ds-ink);
+  cursor: pointer;
+}
+
+.ds-chip-emoji > span[aria-hidden] {
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill);
+  border: var(--ds-border-w) solid var(--ds-border-color);
+  background: #fff;
+  font-size: 1.35rem;
+}
+
+.ds-chip-emoji.is-active { border-color: var(--ds-ink); border-radius: var(--ds-radius-chip); }
+
+.ds-select,
+.ds-search {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  min-height: var(--ds-touch-min);
+  padding: 0 var(--ds-space-4);
+  border-radius: var(--ds-radius-btn);
+  border: var(--ds-border-w) solid var(--ds-border-color);
+  background: var(--ds-paper-card);
+  font-family: var(--ds-font-hand);
+  font-size: 1.15rem;
+  color: var(--ds-ink);
+}
+
+.ds-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  color: var(--ds-ink);
+  width: 100%;
+}
+
+.ds-search input::placeholder { color: var(--ds-text-muted); }
+.ds-select:focus-within, .ds-search:focus-within { border-color: var(--ds-lavender-deep); }
+
+/* ---------- 4. Identidad ---------- */
+
+.ds-avatar {
+  position: relative;
+  border-radius: var(--ds-radius-pill);
+  background: #fff;
+  border: 3px solid var(--ds-emo-neutro);
+  box-shadow: 0 0 0 2.5px #fff;
+  overflow: hidden;
+  flex: none;
+}
+
+.ds-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 20%;
+}
+
+.ds-avatar--token { width: var(--ds-avatar-token); height: var(--ds-avatar-token); }
+.ds-avatar--sm { width: var(--ds-avatar-sm); height: var(--ds-avatar-sm); }
+.ds-avatar--md { width: var(--ds-avatar-md); height: var(--ds-avatar-md); }
+.ds-avatar--lg { width: var(--ds-avatar-lg); height: var(--ds-avatar-lg); }
+.ds-avatar--xl { width: var(--ds-avatar-xl); height: var(--ds-avatar-xl); }
+
+.ds-avatar[data-emocion="alegre"] { border-color: var(--ds-emo-alegre); }
+.ds-avatar[data-emocion="triste"] { border-color: var(--ds-emo-triste); }
+.ds-avatar[data-emocion="enfadado"] { border-color: var(--ds-emo-enfadado); }
+.ds-avatar[data-emocion="neutro"] { border-color: var(--ds-emo-neutro); }
+
+.ds-avatar-group { display: inline-flex; }
+.ds-avatar-group .ds-avatar + .ds-avatar { margin-left: -8px; }
+.ds-avatar-group .ds-avatar { box-shadow: 0 0 0 2.5px var(--ds-paper-card); }
+
+.ds-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+  padding: 2px 12px;
+  border-radius: var(--ds-radius-pill);
+  border: var(--ds-border-w) solid var(--ds-ink-soft);
+  background: var(--ds-paper-warm);
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .8125rem;
+  color: var(--ds-ink);
+  white-space: nowrap;
+}
+
+.ds-pill--emo-alegre { background: var(--ds-green-soft); color: var(--ds-green-deep); }
+.ds-pill--emo-triste { background: #DDE5EC; color: #4F6478; }
+.ds-pill--emo-enfadado { background: var(--ds-red-soft); color: var(--ds-red-alert); }
+.ds-pill--emo-neutro { background: var(--ds-mustard-soft); color: var(--ds-mustard-deep); }
+.ds-pill--pink { background: var(--ds-pink-soft); color: var(--ds-pink-deep); }
+.ds-pill--lavender { background: var(--ds-lavender-soft); color: var(--ds-lavender-deep); }
+.ds-pill--green { background: var(--ds-green-soft); color: var(--ds-green-deep); }
+
+.ds-badge {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-red-alert);
+  border: 2px solid var(--ds-paper-card);
+  color: #fff;
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .75rem;
+}
+
+.ds-alert {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-red-alert);
+  border: 2px solid var(--ds-paper-card);
+  color: #fff;
+  font-weight: 800;
+  font-size: .75rem;
+}
+
+.ds-ticket {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 2px 14px;
+  border-radius: var(--ds-radius-chip);
+  border: var(--ds-border-w) solid var(--ds-mustard-deep);
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .6);
+  background: var(--ds-mustard-soft);
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .8125rem;
+  color: var(--ds-mustard-deep);
+}
+
+/* ---------- 5. Decoración ---------- */
+
+.ds-tape {
+  position: absolute;
+  width: 96px;
+  height: 26px;
+  background: rgba(233, 214, 165, .8);
+  border-left: 1px dashed rgba(107, 81, 56, .35);
+  border-right: 1px dashed rgba(107, 81, 56, .35);
+  box-shadow: 0 2px 4px rgba(70, 50, 30, .12);
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.ds-tape--tl { top: -12px; left: 18px; }
+.ds-tape--tr { top: -12px; right: 18px; transform: rotate(3deg); }
+.ds-tape--tc { top: -12px; left: 50%; margin-left: -48px; }
+.ds-tape--pink { background: rgba(244, 183, 195, .8); }
+
+.ds-pin {
+  position: absolute;
+  top: -8px;
+  left: 18px;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--ds-radius-pill);
+  background: radial-gradient(circle at 35% 30%, #f2a7b4, var(--ds-pink-deep));
+  border: 2px solid var(--ds-ink);
+  box-shadow: 0 3px 5px rgba(70, 50, 30, .25);
+  pointer-events: none;
+}
+
+.ds-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 16px;
+  border-radius: 6px;
+  border: var(--ds-border-w) solid var(--ds-ink-soft);
+  box-shadow: var(--ds-shadow-rest);
+  font-family: var(--ds-font-hand);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: #fff;
+  transform: rotate(-1.2deg);
+}
+
+.ds-ribbon--green { background: var(--ds-green); }
+.ds-ribbon--lavender { background: var(--ds-lavender); }
+.ds-ribbon--mustard { background: var(--ds-mustard); }
+.ds-ribbon--pink { background: var(--ds-pink); }
+.ds-ribbon--coral { background: var(--ds-coral); }
+
+.ds-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  color: var(--ds-text-faint);
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .6875rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.ds-divider::before,
+.ds-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 2px dashed rgba(107, 81, 56, .35);
+}
+
+.ds-progress {
+  height: 9px;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-paper-dim);
+  border: 1px solid rgba(107, 81, 56, .3);
+  overflow: hidden;
+}
+
+.ds-progress > i {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ds-emo-neutro);
+}
+
+.ds-progress--alegre > i { background: var(--ds-emo-alegre); }
+.ds-progress--triste > i { background: var(--ds-emo-triste); }
+.ds-progress--enfadado > i { background: var(--ds-emo-enfadado); }
+.ds-progress--mustard > i { background: var(--ds-mustard); }
+.ds-progress--pink > i { background: var(--ds-pink); }
+.ds-progress--lavender > i { background: var(--ds-lavender); }
+
+/* ---------- 6. Estados ---------- */
+
+.ds-locked {
+  border: 2px dashed rgba(107, 81, 56, .45);
+  border-radius: var(--ds-radius-card);
+  background: rgba(239, 229, 204, .5);
+  color: var(--ds-text-faint);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ds-space-1);
+  text-align: center;
+}
+
+.ds-locked::before { content: "🔒"; opacity: .75; font-size: 1.1rem; }
+
+.ds-unknown {
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-ui);
+  font-weight: 700;
+  font-size: .8125rem;
+}
+
+.ds-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-6) var(--ds-space-4);
+  text-align: center;
+  color: var(--ds-text-muted);
+  font-family: var(--ds-font-hand);
+  font-size: 1.25rem;
+}
+
+.ds-empty > [aria-hidden] { font-size: 2rem; opacity: .8; }
+
+.ds-hint {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-2) var(--ds-space-3);
+  border-radius: var(--ds-radius-chip);
+  background: var(--ds-lavender-soft);
+  border: 1px solid rgba(124, 107, 174, .35);
+  color: var(--ds-lavender-deep);
+  font-family: var(--ds-font-hand);
+  font-size: 1.15rem;
+}
+
+.ds-flag-new {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 4px 4px 8px 8px;
+  background: var(--ds-red-alert);
+  border: 2px solid var(--ds-ink);
+  color: #fff;
+  font-family: var(--ds-font-hand);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.25;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  position: relative;
+}
+
+/* ---------- 7. Timeline (Diario) ---------- */
+
+.ds-tl { position: relative; padding-left: 44px; }
+.ds-tl::before {
+  content: "";
+  position: absolute;
+  left: 19px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(107, 81, 56, .3);
+}
+
+.ds-tl-item { position: relative; margin-bottom: var(--ds-space-4); }
+
+.ds-tl-item::before {
+  content: attr(data-node);
+  position: absolute;
+  left: -44px;
+  top: 6px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ds-radius-pill);
+  background: var(--ds-paper-card);
+  border: 2px solid var(--ds-ink-soft);
+  font-size: 1.1rem;
+}
+
+.ds-tl-day {
+  display: inline-flex;
+  margin: var(--ds-space-5) 0 var(--ds-space-3);
+  padding: 2px 14px;
+  border-radius: 6px;
+  background: var(--ds-pink-soft);
+  border: var(--ds-border-w) solid var(--ds-ink-soft);
+  font-family: var(--ds-font-hand);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ds-ink);
+  transform: rotate(-1deg);
+}
+
+.ds-tl-day--lavender { background: var(--ds-lavender-soft); }
+.ds-tl-day--green { background: var(--ds-green-soft); }
+.ds-tl-day--dim { background: var(--ds-paper-dim); }
+
+/* ---------- 8. EventCard / EventBanner (FUTURO — sin uso hasta EV) ---------- */
+/* Componente documentado en docs/design-system/03-components.md §EventCard.
+   NO implementar motor/endpoints/comportamiento. Desaparece si no hay evento. */
+
+.ds-event {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-3);
+  padding: var(--ds-space-2) var(--ds-space-4);
+  border-radius: var(--ds-radius-card);
+  border: 2px dashed var(--ds-mustard-deep);
+  background: var(--ds-mustard-soft);
+  box-shadow: var(--ds-shadow-rest);
+}
+
+.ds-event--en-marcha {
+  border-color: var(--ds-coral-deep);
+  background: var(--ds-coral-soft);
+}
+
+.ds-event-tag {
+  flex: none;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: var(--ds-mustard);
+  border: var(--ds-border-w) solid var(--ds-ink);
+  font-family: var(--ds-font-ui);
+  font-weight: 800;
+  font-size: .6875rem;
+  letter-spacing: .6px;
+  text-transform: uppercase;
+  color: var(--ds-ink);
+}
+
+.ds-event--en-marcha .ds-event-tag { background: var(--ds-coral); color: #fff; }
+
+.ds-event-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  font-family: var(--ds-font-hand);
+}
+
+.ds-event-title { font-size: 1.2rem; font-weight: 700; color: var(--ds-ink); }
+.ds-event-meta { font-size: 1rem; color: var(--ds-text-muted); }
+
+/* ---------- 9. Desktop ---------- */
+
+@media (min-width: 1024px) {
+  .ds-btn--primary { font-size: 1.4rem; }
+  .ds-sheet--full { width: min(460px, 46%); max-height: none; }
+  .ds-tab { font-size: 1.3rem; }
+}
