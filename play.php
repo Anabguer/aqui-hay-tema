@@ -374,6 +374,11 @@ if (is_file($ahtBusterFile)) {
         <section class="shell-grupo shell-grupo-planes">
           <div class="obj-proximo obj-proximo-polaroid">
             <span class="obj-proximo-tit">Próximo plan</span>
+            <div class="obj-curso-nav" data-curso-nav hidden>
+              <button type="button" class="obj-curso-btn" data-curso-prev aria-label="Encuentro en curso anterior">‹</button>
+              <span class="obj-curso-cont" data-curso-cont>1 / 2</span>
+              <button type="button" class="obj-curso-btn" data-curso-next aria-label="Siguiente encuentro en curso">›</button>
+            </div>
             <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en agenda. Sospechoso.</p></div>
             <button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Nuevo plan">
               <span class="obj-nuevo-plan-ico game-left-tile-ico" aria-hidden="true">+</span>
@@ -558,18 +563,6 @@ if (is_file($ahtBusterFile)) {
                 <div class="ficha-hobbies" data-ficha-hobbies></div>
               </div>
             </section>
-            <section class="ficha-seccion ficha-seccion-prefs">
-              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Le gusta</h4>
-              <div class="ficha-seccion-body ficha-seccion-body-prefs">
-                <p class="ficha-pref-line" data-ficha-gusta-gente>Gente: ? · ?</p>
-              </div>
-            </section>
-            <section class="ficha-seccion ficha-seccion-prefs">
-              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">No le gusta</h4>
-              <div class="ficha-seccion-body ficha-seccion-body-prefs">
-                <p class="ficha-pref-line" data-ficha-nogusta-gente>Gente: ? · ?</p>
-              </div>
-            </section>
             <section class="ficha-seccion">
               <h4 class="ficha-seccion-tit">Relaciones</h4>
               <div class="ficha-seccion-body">
@@ -727,6 +720,14 @@ if (is_file($ahtBusterFile)) {
             <span class="obj-misiones-papel-tit">MISIONES</span>
             <div class="obj-misiones-strip" data-misiones-strip></div>
           </div>
+        </section>
+        <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+          <header class="enc-mov-cab">
+            <span class="enc-mov-live" aria-hidden="true"></span>
+            <h3 class="enc-mov-tit">EN CURSO</h3>
+          </header>
+          <div class="enc-mov-track" data-encursos-track></div>
+          <p class="enc-mov-indice" data-encursos-indice hidden aria-hidden="true"></p>
         </section>
         <section class="shell-grupo shell-grupo-cotilleo-par">
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">

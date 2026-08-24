@@ -1143,6 +1143,45 @@
     if (encuentroOcupaAhora(enc, estado)) return true;
     return !!(estado && estado.encuentro_en_curso && estado.encuentro_en_curso.id === enc.id);
   }
+  /* Planes EN CURSO AHORA (fuente canonica unica desktop + movil):
+     - preferencia: estado.encuentros_en_curso (coleccion 0..N del servidor,
+       ResumenDia::encuentrosEnCurso, mismas vistas con intervencion);
+     - fallback: partida.encuentros por ventana de reloj + encuentro_en_curso;
+     - el encuentro_en_curso del motor siempre entra si se colo.
+     Futuros, terminados, cancelados y rechazados quedan fuera por construccion. */
+  function encuentrosEnCursoAhora(partida, estado) {
+    var cur = estado && estado.encuentro_en_curso;
+    var coleccion = estado && Array.isArray(estado.encuentros_en_curso) ? estado.encuentros_en_curso : null;
+    var lista = coleccion
+      ? coleccion.filter(function (e) { return e && e.id; })
+      : ((partida && partida.encuentros) || []).filter(function (e) {
+          if (!e) return false;
+          if (cur && cur.id === e.id) return true;
+          return encuentroOcupaAhora(e, estado);
+        });
+    if (cur && cur.id && !lista.some(function (e) { return e.id === cur.id; })) {
+      lista = lista.concat([cur]);
+    }
+    return lista.slice().sort(function (a, b) {
+      var d = relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b));
+      if (d !== 0) return d;
+      return String(a.id).localeCompare(String(b.id));
+    });
+  }
+  /* Seleccion estable del encuentro en curso mostrado en la polaroid.
+     Navegar NO ejecuta acciones ni llama a la API: solo re-renderiza. */
+  var cursoSelId = null;
+  function moverCursoSeleccion(delta) {
+    var lista = encuentrosEnCursoAhora(cacheInsp, cacheEstado);
+    if (!lista.length) { cursoSelId = null; renderShellPanels(cacheEstado, cacheBuzon, cacheDiario); return; }
+    var pos = -1;
+    for (var i = 0; i < lista.length; i++) {
+      if (String(lista[i].id) === String(cursoSelId)) { pos = i; break; }
+    }
+    pos = ((pos < 0 ? 0 : pos) + delta + lista.length) % lista.length;
+    cursoSelId = String(lista[pos].id);
+    renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
+  }
   function htmlProximoPlan(enc, estado) {
     const ids = enc.participantes || [];
     const enCurso = planEsEnCurso(enc, estado);
@@ -1157,6 +1196,11 @@
     if (enc.intervencion) return enc.intervencion;
     var cur = estado && estado.encuentro_en_curso;
     if (cur && cur.id === enc.id && cur.intervencion) return cur.intervencion;
+    var col = estado && Array.isArray(estado.encuentros_en_curso) ? estado.encuentros_en_curso : [];
+    for (var i = 0; i < col.length; i++) {
+      var e = col[i];
+      if (e && e.id === enc.id && e.intervencion) return e.intervencion;
+    }
     return null;
   }
   function htmlIntervencionEncuentro(enc, estado) {
@@ -1170,19 +1214,34 @@
     if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
     var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-int-kicker">Intervenir una vez</p><div class="enc-int-btns">';
+    var temas = null;
     iv.acciones.forEach(function (a) {
       if (!a.disponible) return;
-      if (a.id === 'hobby' && a.hobbies && a.hobbies.length) {
-        a.hobbies.forEach(function (h) {
-          html += '<button type="button" class="enc-int-btn enc-int-btn--hobby" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '">' +
-            esc(h.etiqueta) + '</button>';
-        });
+      if (a.id === 'hobby') {
+        if (a.hobbies && a.hobbies.length) temas = a.hobbies;
         return;
       }
       html += '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(a.id) + '">' + esc(a.etiqueta) + '</button>';
     });
-    html += '</div><p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
+    html += '</div>';
+    if (temas && temas.length) {
+      html += '<div class="enc-int-temas">' +
+        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">💬 Elegir un tema…</button>' +
+        '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu">';
+      temas.forEach(function (h) {
+        html += '<button type="button" class="enc-int-btn enc-int-btn--hobby enc-int-opt" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '" role="menuitem">' +
+          esc(h.etiqueta) + '</button>';
+      });
+      html += '</div></div>';
+    }
+    html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
     return html;
+  }
+  function cerrarSelectorTemas() {
+    $$('[data-temas-panel]').forEach(function (p) { p.hidden = true; });
+    $$('[data-temas-toggle][aria-expanded="true"]').forEach(function (t) {
+      t.setAttribute('aria-expanded', 'false');
+    });
   }
   async function ejecutarIntervencionEncuentro(encId, accion, extra) {
     var payload = { encuentro_id: encId, accion: accion };
@@ -1198,12 +1257,21 @@
         cacheEstado[k] = r.estado_delta[k];
       });
     }
-    if (r.intervencion && cacheEstado && cacheEstado.encuentro_en_curso) {
-      cacheEstado.encuentro_en_curso.intervencion = r.vista || {
-        disponible: false,
-        usada: true,
-        ultimo: { accion: r.intervencion.accion, tono: r.intervencion.tono, texto: r.intervencion.texto }
-      };
+    /* Identidad: la vista de intervencion SOLO se escribe en el encuentro
+       intervenido (por id). Nunca sobre un "encuentro actual" global. */
+    var vistaIntervencion = r.vista || {
+      disponible: false,
+      usada: true,
+      ultimo: { accion: r.intervencion ? r.intervencion.accion : accion, tono: r.intervencion ? r.intervencion.tono : 'neutral', texto: r.intervencion ? r.intervencion.texto : '' }
+    };
+    if (r.intervencion && cacheEstado && Array.isArray(cacheEstado.encuentros_en_curso)) {
+      cacheEstado.encuentros_en_curso.forEach(function (e) {
+        if (e && String(e.id) === String(encId)) e.intervencion = vistaIntervencion;
+      });
+    }
+    if (r.intervencion && cacheEstado && cacheEstado.encuentro_en_curso &&
+        String(cacheEstado.encuentro_en_curso.id) === String(encId)) {
+      cacheEstado.encuentro_en_curso.intervencion = vistaIntervencion;
     }
     if (cacheInsp && cacheInsp.encuentros) {
       cacheInsp.encuentros.forEach(function (e) {
@@ -1240,6 +1308,88 @@
     if (!s) return '';
     if (s.length <= lim) return s;
     return s.slice(0, lim - 1).trim() + '—';
+  }
+
+  /* === Planes en curso — carrusel movil (misma fuente canonica que desktop) === */
+  var encMovIndice = 0;
+  function htmlEncursoCardMovil(enc, estado) {
+    const ids = enc.participantes || [];
+    const iv = intervencionVistaDe(enc, estado);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<p class="enc-mov-hora"><span class="enc-mov-punto" aria-hidden="true"></span>' +
+      esc('AHORA · ' + (String(horaEnc(enc)).padStart(2, '0') + ':00')) + '</p>' +
+      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
+      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
+      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>';
+    if (hayInt) {
+      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">Ver encuentro</span>' +
+        '<span class="enc-mov-cta-flecha" aria-hidden="true">›</span></button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
+        htmlIntervencionEncuentro(enc, estado) + '</div>';
+    }
+    return html + '</article>';
+  }
+  function encMovPaso(track) {
+    const cards = track.querySelectorAll('[data-enc-mov-card]');
+    if (!cards.length) return 0;
+    const st = getComputedStyle(track);
+    const gap = parseFloat(st.columnGap || st.gap) || 0;
+    return cards[0].offsetWidth + gap;
+  }
+  function renderEncursosMovilIndicador() {
+    const block = document.querySelector('[data-encursos-block]');
+    const track = block && block.querySelector('[data-encursos-track]');
+    const ind = block && block.querySelector('[data-encursos-indice]');
+    if (!block || !track || !ind) return;
+    const n = track.querySelectorAll('[data-enc-mov-card]').length;
+    if (!block.classList.contains('is-on') || n < 2) { ind.hidden = true; ind.textContent = ''; return; }
+    const paso = encMovPaso(track);
+    const idx = paso > 0 ? Math.min(n - 1, Math.max(0, Math.round(track.scrollLeft / paso))) : 0;
+    encMovIndice = idx;
+    ind.hidden = false;
+    ind.textContent = (idx + 1) + ' / ' + n;
+  }
+  function renderEncursosMovil(estado) {
+    const block = document.querySelector('[data-encursos-block]');
+    if (!block) return;
+    const track = block.querySelector('[data-encursos-track]');
+    if (!track) return;
+    const lista = encuentrosEnCursoAhora(cacheInsp, estado);
+    if (!lista.length) {
+      block.classList.remove('is-on');
+      track.innerHTML = '';
+      encMovIndice = 0;
+      renderEncursosMovilIndicador();
+      return;
+    }
+    const abiertos = {};
+    track.querySelectorAll('[data-enc-mov-panel]:not([hidden])').forEach(function (p) {
+      const card = p.closest('[data-enc-mov-card]');
+      if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
+    });
+    encMovIndice = Math.min(encMovIndice, lista.length - 1);
+    block.classList.add('is-on');
+    track.innerHTML = lista.map(function (enc) { return htmlEncursoCardMovil(enc, estado); }).join('');
+    requestAnimationFrame(function () {
+      if (encMovIndice > 0) {
+        const paso = encMovPaso(track);
+        if (paso > 0) track.scrollLeft = encMovIndice * paso;
+      }
+      const cards = track.querySelectorAll('[data-enc-mov-card]');
+      Object.keys(abiertos).forEach(function (id) {
+        Array.prototype.forEach.call(cards, function (card) {
+          if ((card.getAttribute('data-enc-id') || '') !== id) return;
+          const panel = card.querySelector('[data-enc-mov-panel]');
+          const cta = card.querySelector('[data-enc-mov-toggle]');
+          if (panel) panel.hidden = false;
+          if (cta) { cta.setAttribute('aria-expanded', 'true'); cta.classList.add('is-open'); }
+        });
+      });
+      renderEncursosMovilIndicador();
+    });
   }
 
   function renderShellPanels(estado, buzon, diario) {
@@ -1290,11 +1440,19 @@
     const verPlanes = $('.obj-ver-planes');
     const polaroid = $('.obj-proximo-polaroid');
     const proxTit = $('.obj-proximo-tit');
-    const enCurso = estado.encuentro_en_curso || null;
     const futuros = encuentrosFuturos(partida, estado);
-    const ocupandoAhora = futuros.filter(function (e) { return encuentroOcupaAhora(e, estado); })[0] || null;
-    const next = enCurso || ocupandoAhora || futuros[0] || null;
-    const hayEnCurso = !!(enCurso || (next && planEsEnCurso(next, estado)));
+    /* Fuente canonica 0..N (coleccion del servidor con fallback local).
+       Seleccion estable por id; si el elegido termina -> auto-seleccion valida. */
+    const enCursoLista = encuentrosEnCursoAhora(partida, estado);
+    let pos = -1;
+    for (var ci = 0; ci < enCursoLista.length; ci++) {
+      if (String(enCursoLista[ci].id) === String(cursoSelId)) { pos = ci; break; }
+    }
+    if (pos < 0) pos = 0;
+    const n = enCursoLista.length;
+    cursoSelId = n ? String(enCursoLista[pos].id) : null;
+    const hayEnCurso = enCursoLista.length > 0;
+    const next = hayEnCurso ? enCursoLista[pos] : (futuros[0] || null);
     if (polaroid) {
       polaroid.classList.toggle('is-en-curso', hayEnCurso);
       polaroid.classList.toggle('is-proximo', !!(next && !hayEnCurso));
@@ -1305,6 +1463,16 @@
       else proxBox.innerHTML = htmlProximoPlan(next, estado);
     }
     if (verPlanes) verPlanes.hidden = futuros.length <= 1;
+    const cursoNav = $('[data-curso-nav]');
+    if (cursoNav) {
+      cursoNav.hidden = !(hayEnCurso && n > 1);
+      if (!cursoNav.hidden) {
+        var contEl = cursoNav.querySelector('[data-curso-cont]');
+        if (contEl) contEl.textContent = (pos + 1) + ' / ' + n;
+      }
+    }
+
+    renderEncursosMovil(estado);
 
     const strip = $('[data-parejas-strip]');
     if (strip) {
@@ -1508,6 +1676,16 @@
     el.hidden = false;
   }
 
+  var MAPA_TEMA_PRIORIDAD = { romance: 0, drama: 1, relacion: 2, coincidencias: 3 };
+  var MAPA_TEMA_ICONOS = {
+    romance: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 C7 16.5 3.5 13.2 3.5 9.4 C3.5 6.8 5.5 5 7.9 5 C9.6 5 11.1 5.9 12 7.3 C12.9 5.9 14.4 5 16.1 5 C18.5 5 20.5 6.8 20.5 9.4 C20.5 13.2 17 16.5 12 20.5 Z"/></svg>',
+    drama: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 L5.5 13 L10.5 13 L9.5 22 L18.5 10 L12.8 10 Z"/></svg>',
+    relacion: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6 H19.5 V15.5 H12.5 L8 19.5 V15.5 H4.5 Z"/></svg>',
+    coincidencias: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6 H19.5 V15.5 H12.5 L8 19.5 V15.5 H4.5 Z"/><circle cx="9" cy="10.7" r="1"/><circle cx="12" cy="10.7" r="1"/><circle cx="15" cy="10.7" r="1"/></svg>'
+  };
+  function mapaTemaIcono(cat) {
+    return MAPA_TEMA_ICONOS[cat] || MAPA_TEMA_ICONOS.coincidencias;
+  }
   function pintarHorariosMapa() {
     /* Horario solo en la ventana de consulta / Nuevo plan, no en el mapa. */
     var layer = $('[data-mapa-zonas]');
@@ -2131,8 +2309,10 @@
     } else {
       el.innerHTML = '<span class="cara cara-ini">' + (p.iniciales || '?') + '</span>';
     }
-    if (p.hay_tema) {
-      el.insertAdjacentHTML('beforeend', '<img class="sello-tema" src="assets/play-v3/marcas/sello_hay_tema.png" alt=""/>');
+            if (p.hay_tema) {
+      var catTema = String((p.tema_vista && p.tema_vista.categoria) || 'hecho').toLowerCase();
+      el.insertAdjacentHTML('beforeend',
+        '<span class=\"tema-hab mapa-tema--' + esc(catTema) + '\" data-tema-hab=\"' + esc(catTema) + '\" title=\"Aqu\u00ed hay tema\">' + mapaTemaIcono(catTema) + '</span>');
     }
     box.appendChild(el);
   }
@@ -4048,6 +4228,22 @@ function hobbyIconKey(id, texto) {
     });
   }
   bindLabHoras();
+  (function bindCursoNav() {
+    const nav = document.querySelector('[data-curso-nav]');
+    if (!nav || nav._ahtCursoBound) return;
+    nav._ahtCursoBound = true;
+    var prevBtn = nav.querySelector('[data-curso-prev]');
+    var nextBtn = nav.querySelector('[data-curso-next]');
+    if (prevBtn) prevBtn.addEventListener('click', function () { moverCursoSeleccion(-1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { moverCursoSeleccion(1); });
+  })();
+  (function bindEncursosMovil() {
+    const encTrack = document.querySelector('[data-encursos-track]');
+    if (encTrack && !encTrack._ahtEncMovScroll) {
+      encTrack._ahtEncMovScroll = true;
+      encTrack.addEventListener('scroll', renderEncursosMovilIndicador, { passive: true });
+    }
+  })();
   const btnProx = $('#btn-debug-proximo');
   if (btnProx) btnProx.addEventListener('click', irProximo);
   const btnProxLab = $('#btn-proximo-lab');
@@ -4139,6 +4335,39 @@ function hobbyIconKey(id, texto) {
       });
       return;
     }
+    /* Selector de temas: abrir/cerrar el panel del encuentro pintado.
+       Cada .enc-int-temas vive dentro de SU tarjeta (data-enc-id), asi que
+       solo afecta al encuentro seleccionado. */
+    if (!ev.target.closest('.enc-int-temas')) cerrarSelectorTemas();
+    const temasToggle = ev.target.closest('[data-temas-toggle]');
+    if (temasToggle) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrapTemas = temasToggle.closest('.enc-int-temas');
+      var panelTemas = wrapTemas && wrapTemas.querySelector('[data-temas-panel]');
+      if (panelTemas) {
+        const abrirTemas = panelTemas.hidden;
+        cerrarSelectorTemas();
+        panelTemas.hidden = !abrirTemas;
+        temasToggle.setAttribute('aria-expanded', String(abrirTemas));
+        temasToggle.classList.toggle('is-open', abrirTemas);
+      }
+      return;
+    }
+    const encMovCta = ev.target.closest('[data-enc-mov-toggle]');
+    if (encMovCta) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const movCard = encMovCta.closest('[data-enc-mov-card]');
+      const movPanel = movCard && movCard.querySelector('[data-enc-mov-panel]');
+      if (movPanel) {
+        const abrirMov = movPanel.hidden;
+        movPanel.hidden = !abrirMov;
+        encMovCta.setAttribute('aria-expanded', String(abrirMov));
+        encMovCta.classList.toggle('is-open', abrirMov);
+      }
+      return;
+    }
     const encIntBtn = ev.target.closest('[data-enc-int-accion]');
     if (encIntBtn) {
       ev.preventDefault();
@@ -4152,6 +4381,16 @@ function hobbyIconKey(id, texto) {
       if (acc === 'hobby') {
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
         extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+        var optWrap = encIntBtn.closest('.enc-int-temas');
+        if (optWrap) {
+          cerrarSelectorTemas();
+          var togEl = optWrap.querySelector('[data-temas-toggle]');
+          if (togEl) {
+            togEl.classList.add('is-elegido');
+            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' ▾';
+            togEl.setAttribute('aria-expanded', 'false');
+          }
+        }
       }
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');

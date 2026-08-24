@@ -1,6 +1,6 @@
 /**
 
- * Direccion artistica shell Ã¢â‚¬â€ objetos visuales, no dashboard.
+ * Direccion artistica shell ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â objetos visuales, no dashboard.
 
  */
 
@@ -1205,7 +1205,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 
-.play-v3 .capa-cerrar-pestaÃƒÂ±a {
+.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a {
 
   font-size: .72rem !important;
 
@@ -1219,7 +1219,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 }
 
-.play-v3 .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
+.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a::before { z-index: -1; }
 
 
 
@@ -1504,7 +1504,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   flex-shrink: 0;
 }
 
-/* plan-cara-token: clic → ficha */
+/* plan-cara-token: clic â†’ ficha */
 .obj-proximo-polaroid .prox-faces .cara-token .cara {
   width: 46px;
   height: 46px;
@@ -2020,7 +2020,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   display: block;
 }
 
-/* Plan en curso — polaroid y agenda */
+/* Plan en curso â€” polaroid y agenda */
 @keyframes plan-curso-respiro {
   0%, 100% {
     box-shadow:
@@ -2119,7 +2119,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 }
 
 
-/* Aquí hay tema — bloque en nota del edificio */
+/* AquÃ­ hay tema â€” bloque en nota del edificio */
 .play-v3 .quien-tema { margin: .45rem 0 .55rem; }
 .play-v3 .quien-tema-card {
   padding: .5rem .55rem .55rem;
@@ -2166,7 +2166,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   color: #6a5348;
 }
 
-/* Popover «Quién está» — listado compacto + temas */
+/* Popover Â«QuiÃ©n estÃ¡Â» â€” listado compacto + temas */
 .quien-kicker { text-align: center; }
 aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; font-style: italic; }
 .quien-residentes { display: flex; margin: 0; }
@@ -2188,7 +2188,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .quien-tema-mark--drama { background: rgba(220, 140, 60, 0.2); color: #9a5a10; }
 .quien-tema-mas { text-align: center; font-size: 0.8rem; opacity: 0.75; margin: 0.2rem 0 0; }
 .quien-tema-card .quien-tema-quien { font-size: 0.85rem; opacity: 0.85; margin: 0 0 0.25rem; }
-/* Popover Qui�n est� � bloques jer�rquicos */
+/* Popover Quiï¿½n estï¿½ ï¿½ bloques jerï¿½rquicos */
 .play-v3 aside.quien .quien-bloque {
   margin: 0 0 0.55rem;
   padding: 0.5rem 0.55rem 0.55rem;
@@ -2269,15 +2269,15 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .play-v3 aside.quien .destinos { margin-top: 0.35rem; }
 
 
-/* Intervenci�n durante encuentro (polaroid) */
-.shell-grupo-planes .enc-int {
+/* Intervenciï¿½n durante encuentro (polaroid) */
+:is(.shell-grupo-planes, .encursos-movil) .enc-int {
   margin-top: .55rem;
   padding-top: .55rem;
   border-top: 1px dashed rgba(120,96,72,.35);
   margin-bottom: .9rem;
   text-align: center;
 }
-.shell-grupo-planes .enc-int::after {
+:is(.shell-grupo-planes, .encursos-movil) .enc-int::after {
   content: "\00B7\00A0\00A0\00B7\00A0\00A0\00B7";
   display: block;
   margin-top: .9rem;
@@ -2287,9 +2287,9 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   letter-spacing: .3em;
   color: rgba(122,100,80,.45);
 }
-.shell-grupo-planes .enc-int-kicker { font-family: Caveat, cursive; font-size: .85rem; color: #7a6450; margin: 0 0 .6rem; }
-.shell-grupo-planes .enc-int-btns { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .42rem .34rem; }
-.shell-grupo-planes .enc-int-btn {
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-kicker { font-family: Caveat, cursive; font-size: .85rem; color: #7a6450; margin: 0 0 .6rem; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btns { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .42rem .34rem; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn {
   display: inline-flex;
   align-items: center;
   gap: .3em;
@@ -2306,37 +2306,95 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   box-shadow: 1px 2px 0 rgba(120,96,72,.12);
   transition: background-color .12s ease, transform .12s ease, box-shadow .12s ease;
 }
-.shell-grupo-planes .enc-int-btns .enc-int-btn:nth-child(odd) { transform: rotate(-.5deg); }
-.shell-grupo-planes .enc-int-btns .enc-int-btn:nth-child(even) { transform: rotate(.45deg); }
-.shell-grupo-planes .enc-int-btn::before { font-size: .95em; line-height: 1; }
-.shell-grupo-planes .enc-int-btns .enc-int-btn:hover {
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btns .enc-int-btn:nth-child(odd) { transform: rotate(-.5deg); }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btns .enc-int-btn:nth-child(even) { transform: rotate(.45deg); }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn::before { font-size: .95em; line-height: 1; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btns .enc-int-btn:hover {
   transform: translateY(-1px) rotate(0deg);
   box-shadow: 1.5px 2.5px 0 rgba(120,96,72,.18);
 }
-.shell-grupo-planes .enc-int-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 rgba(120,96,72,.14); }
-/* Pastel suave por acción */
-.shell-grupo-planes .enc-int-btn[data-enc-int-accion="hablar"]::before { content: "\01F4AC"; }
-.shell-grupo-planes .enc-int-btn[data-enc-int-accion="hablar"] { background: #e2edf8; border-color: #b9cde2; }
-.shell-grupo-planes .enc-int-btn[data-enc-int-accion="broma"]::before { content: "\01F602"; }
-.shell-grupo-planes .enc-int-btn[data-enc-int-accion="broma"] { background: #fbf0cd; border-color: #e0cf9d; }
-.shell-grupo-planes .enc-int-btn--hobby { background: #f3ecdd; border-color: #d8c9ac; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="manualidades"]::before { content: "\01F3A8"; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="manualidades"] { background: #fadfe9; border-color: #e5bccd; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="bingo"]::before { content: "\01F3B1"; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="bingo"] { background: #e7dff6; border-color: #c6b8e2; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="videojuegos"]::before { content: "\01F3AE"; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="videojuegos"] { background: #dfeeda; border-color: #bcd4b4; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="cocina"]::before { content: "\01F373"; }
-.shell-grupo-planes .enc-int-btn[data-hobby-id="cocina"] { background: #fce3cf; border-color: #e6c4a4; }
-.shell-grupo-planes .enc-int-btn:hover { background-color: #fffef9; }
-.shell-grupo-planes .enc-int.is-busy { opacity: .65; pointer-events: none; }
-.shell-grupo-planes .enc-int-result { margin-top: .5rem; }
-.shell-grupo-planes .enc-int-result-txt { font-size: .78rem; line-height: 1.35; margin: 0; }
-.shell-grupo-planes .enc-int-result-txt--bien { color: #3d6b3a; }
-.shell-grupo-planes .enc-int-result-txt--mal { color: #8b3a32; }
-.shell-grupo-planes .enc-int-result-txt--neutral { color: #5c5044; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 rgba(120,96,72,.14); }
+/* Pastel suave por acciÃ³n */
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="hablar"]::before { content: "\01F4AC"; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="hablar"] { background: #e2edf8; border-color: #b9cde2; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="broma"]::before { content: "\01F602"; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="broma"] { background: #fbf0cd; border-color: #e0cf9d; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--hobby { background: #f3ecdd; border-color: #d8c9ac; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="manualidades"]::before { content: "\01F3A8"; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="manualidades"] { background: #fadfe9; border-color: #e5bccd; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="bingo"]::before { content: "\01F3B1"; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="bingo"] { background: #e7dff6; border-color: #c6b8e2; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="videojuegos"]::before { content: "\01F3AE"; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="videojuegos"] { background: #dfeeda; border-color: #bcd4b4; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="cocina"]::before { content: "\01F373"; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="cocina"] { background: #fce3cf; border-color: #e6c4a4; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn:hover { background-color: #fffef9; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int.is-busy { opacity: .65; pointer-events: none; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-result { margin-top: .5rem; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt { font-size: .78rem; line-height: 1.35; margin: 0; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--bien { color: #3d6b3a; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--mal { color: #8b3a32; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--neutral { color: #5c5044; }
 
-/* Consulta edificio + Nuevo plan: alineación estilo mockup */
+/* Selector agrupado de temas (P07 â€” reorganizaciÃ³n UX, sin semÃ¡ntica nueva) */
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-temas {
+  position: relative;
+  margin-top: .5rem;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas {
+  background: #eef3ee;
+  border-color: #c9d6c6;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas::after {
+  content: "\25BE";
+  font-size: .85em;
+  line-height: 1;
+  opacity: .65;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas.is-elegido {
+  background: #f3ecdd;
+  border-color: #d8c9ac;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas.is-elegido::after {
+  content: "";
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel {
+  position: absolute;
+  top: calc(100% + .4rem);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0 auto;
+  width: min(300px, 100%, calc(100vw - 32px));
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: .22rem;
+  max-height: min(264px, 44vh);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: .45rem;
+  border-radius: .9rem;
+  background: #fffdf4;
+  border: 1px solid rgba(120, 96, 72, .35);
+  box-shadow: 0 6px 18px rgba(80, 60, 40, .18);
+  text-align: left;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel[hidden] { display: none; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel .enc-int-btn {
+  justify-content: flex-start;
+  width: 100%;
+  transform: none;
+  box-shadow: none;
+  background: #fdf6e6;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel .enc-int-btn:hover {
+  background-color: #f3ead4;
+  transform: none;
+}
+
+/* Consulta edificio + Nuevo plan: alineaciÃ³n estilo mockup */
 .play-v3 .play-root[data-consulta="quien"] .quien.nota-mapa {
   text-align: center;
 }
@@ -2355,4 +2413,53 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   padding: 0;
   border: none;
   background: transparent;
+}
+
+/* === Planes en curso: navegacion discreta â€¹ 1/N â€º en la polaroid.
+   Una sola tarjeta activa; cambiar de encuentro solo re-renderiza. === */
+.obj-curso-nav {
+  position: absolute;
+  top: .58rem;
+  right: .6rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: .22rem;
+}
+.obj-curso-nav[hidden] { display: none !important; }
+.obj-curso-btn {
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed rgba(122, 158, 106, .6);
+  border-radius: 50%;
+  background: #eef4e4;
+  color: #3d5c32;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 1px 1px 0 rgba(74, 110, 58, .12);
+}
+.obj-curso-btn:hover { background: #e2efdb; }
+.obj-curso-btn:active { transform: translateY(1px); box-shadow: none; }
+.obj-curso-btn[disabled] { opacity: .45; cursor: default; }
+.obj-curso-cont {
+  min-width: 2.1rem;
+  text-align: center;
+  font-family: Caveat, cursive;
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #7a6450;
+}
+
+/* Guardia desktop: el carrusel EN CURSO es exclusivo de <=768px.
+   Con .is-on a ancho mayor no se muestra (evita duplicar la polaroid). */
+@media (min-width: 769px) {
+  .play-v3 .encursos-movil.is-on { display: none; }
 }

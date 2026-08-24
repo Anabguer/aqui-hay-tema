@@ -1,6 +1,6 @@
-/* play-v3-responsive.css — móvil real (game-shell). Desktop intacto vía media queries. */
+/* play-v3-responsive.css â€” mÃ³vil real (game-shell). Desktop intacto vÃ­a media queries. */
 
-/* ── Tablet: quitar márgenes de impresión ── */
+/* â”€â”€ Tablet: quitar mÃ¡rgenes de impresiÃ³n â”€â”€ */
 @media (max-width: 900px) {
   body.play-v3 {
     margin: 0 !important;
@@ -41,7 +41,7 @@
   }
 }
 
-/* ── Móvil vertical ── */
+/* â”€â”€ MÃ³vil vertical â”€â”€ */
 @media (max-width: 768px) {
   html {
     overflow-x: hidden;
@@ -146,7 +146,7 @@
     box-sizing: border-box;
   }
 
-  /* 1. MAPA — altura por aspect-ratio, sin reservar hueco vacío */
+  /* 1. MAPA â€” altura por aspect-ratio, sin reservar hueco vacÃ­o */
   .game-map-wrap {
     order: 2;
     flex: 0 0 auto;
@@ -196,7 +196,7 @@
   }
 
 
-  /* Mapa móvil: imagen y capa de zonas comparten la misma caja (sin margen 89% del layout antiguo) */
+  /* Mapa mÃ³vil: imagen y capa de zonas comparten la misma caja (sin margen 89% del layout antiguo) */
   .play-v3:has(.game-shell) .board-scroll {
     display: block !important;
     align-items: stretch !important;
@@ -247,7 +247,7 @@
     pointer-events: none !important;
   }
 
-  /* 2. BARRA NAV — 3 accesos izquierda */
+  /* 2. BARRA NAV â€” 3 accesos izquierda */
   .game-left {
     order: 1;
     display: grid;
@@ -447,7 +447,7 @@
     max-width: 100%;
   }
 
-  /* Cotilleo — tile ancho completo */
+  /* Cotilleo â€” tile ancho completo */
   .game-right .shell-grupo-cotilleo-par {
     display: block !important;
   }
@@ -483,7 +483,7 @@
   .obj-cotilleo-txt,
   .obj-cotilleo-ver-mas { display: none !important; }
 
-  /* Misiones — panel completo */
+  /* Misiones â€” panel completo */
   .shell-grupo-misiones-par {
     scroll-margin-top: 0;
   }
@@ -512,7 +512,7 @@
     gap: .4rem;
   }
 
-  /* Parejas — panel completo */
+  /* Parejas â€” panel completo */
   .shell-grupo-parejas {
     display: block;
     padding: .55rem .65rem;
@@ -610,7 +610,7 @@
   .play-v3 .mapa-zona-hit { min-width: 28px; min-height: 28px; }
 }
 
-/* Móvil estrecho */
+/* MÃ³vil estrecho */
 @media (max-width: 420px) {
   .game-top {
     grid-template-columns: minmax(0, 1fr) auto auto;
@@ -748,7 +748,7 @@
 
 
 
-/* ── Ajustes móvil Neni (nube) ── */
+/* â”€â”€ Ajustes mÃ³vil Neni (nube) â”€â”€ */
 @media (max-width: 768px) {
   /* Audio/voz: abajo, fuera de la cabecera */
   .game-top .control-audio {
@@ -760,7 +760,7 @@
     z-index: 28;
   }
 
-  /* Reloj: estación más ancha (2 líneas) + hora un poco más pequeña */
+  /* Reloj: estaciÃ³n mÃ¡s ancha (2 lÃ­neas) + hora un poco mÃ¡s pequeÃ±a */
   .top-reloj {
     gap: .45rem !important;
     align-items: flex-end;
@@ -805,7 +805,7 @@
     transform-origin: center;
   }
 
-  /* Fila accesos: cuadrados iguales, separación uniforme, aire arriba/abajo ~0,5 cm */
+  /* Fila accesos: cuadrados iguales, separaciÃ³n uniforme, aire arriba/abajo ~0,5 cm */
   .game-left {
     gap: 8px !important;
     padding-top: 0.5cm !important;
@@ -911,7 +911,7 @@
 }
 
 
-/* ── UX móvil: taps, buzón, organizar, debug ── */
+/* â”€â”€ UX mÃ³vil: taps, buzÃ³n, organizar, debug â”€â”€ */
 @media (max-width: 768px) {
   .game-left {
     position: relative;
@@ -1061,7 +1061,7 @@
   }
 }
 
-/* === Móvil UX batch 3 (override) === */
+/* === MÃ³vil UX batch 3 (override) === */
 @media (max-width: 768px) {
   .brand-text {
     font-size: clamp(1.08rem, 5vw, 1.32rem) !important;
@@ -1238,13 +1238,13 @@
   }
 }
 
-/* === Móvil UX batch 4 (override) === */
+/* === MÃ³vil UX batch 4 (override) === */
 .play-v3 .obj-vecinos-resumen.celestine-nota::after {
   display: none !important;
 }
 
 
-/* Caritas preview vecinos — tamaño global (sidebar desktop) */
+/* Caritas preview vecinos â€” tamaÃ±o global (sidebar desktop) */
 .play-v3 .obj-vecinos-preview {
   display: flex;
   align-items: center;
@@ -1362,7 +1362,7 @@
   }
 }
 
-/* === Cabecera móvil compacta (batch 5) === */
+/* === Cabecera mÃ³vil compacta (batch 5) === */
 .play-v3 .top-meta-line {
   display: none;
 }
@@ -1432,7 +1432,7 @@
   }
 }
 
-/* === Cotilleo tira móvil (batch 6) === */
+/* === Cotilleo tira mÃ³vil (batch 6) === */
 .play-v3 .obj-cotilleo-flecha,
 .play-v3 .obj-cotilleo-badge {
   display: none;
@@ -1570,7 +1570,7 @@
   }
 }
 
-/* === Móvil ficha vecino (batch 7) === */
+/* === MÃ³vil ficha vecino (batch 7) === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha {
     width: min(94vw, 400px) !important;
@@ -1789,14 +1789,14 @@
     background: rgba(30, 25, 25, 0.37) !important;
   }
 }
-/* === Móvil: legibilidad textos secundarios modales (batch 9) === */
+/* === MÃ³vil: legibilidad textos secundarios modales (batch 9) === */
 @media (max-width: 768px) {
   /* Cuerpo base en capas modales */
   .play-v3:has(.game-shell) .play-root.phone .capa {
     font-size: 0.9375rem;
   }
 
-  /* Secundarios genéricos (.mini, hints, metadatos) */
+  /* Secundarios genÃ©ricos (.mini, hints, metadatos) */
   .play-v3:has(.game-shell) .play-root.phone .capa .mini,
   .play-v3:has(.game-shell) .play-root.phone .capa .org-picker-hint,
   .play-v3:has(.game-shell) .play-root.phone .capa .org-horas-hint,
@@ -1822,7 +1822,7 @@
     line-height: 1.35 !important;
   }
 
-  /* Ficha: ánimo, metadatos, prefs (corrige batch 7 demasiado pequeño) */
+  /* Ficha: Ã¡nimo, metadatos, prefs (corrige batch 7 demasiado pequeÃ±o) */
   .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-animo-line,
   .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-animo-val {
     font-size: 0.9375rem !important;
@@ -1879,7 +1879,7 @@
   .play-v3:has(.game-shell) .play-root.phone .capa-buzon .mensajitos-leer-todos {
     margin-top: .25rem !important;
   }
-  /* Mensajitos: metadatos y controles pequeños */
+  /* Mensajitos: metadatos y controles pequeÃ±os */
   .play-v3:has(.game-shell) .play-root.phone .capa-buzon .mensajitos-seccion-tit {
     font-size: 0.75rem !important;
     letter-spacing: 0.1em !important;
@@ -1895,14 +1895,14 @@
     line-height: 1.4 !important;
   }
 
-  /* Nuevo plan: desplegables legibles (sin tocar títulos de sección) */
+  /* Nuevo plan: desplegables legibles (sin tocar tÃ­tulos de secciÃ³n) */
   .play-v3:has(.game-shell) .play-root.phone .capa-organizar .org-dd-label,
   .play-v3:has(.game-shell) .play-root.phone .capa-organizar .org-dd-opt {
     font-size: 0.9375rem !important;
   }
 }
 
-/* === Móvil: 3 cards superiores alineadas (batch 10) === */
+/* === MÃ³vil: 3 cards superiores alineadas (batch 10) === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
   .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
@@ -1985,9 +1985,9 @@
 /* === HUD fecha: dia arriba, fecha abajo (sin estaciones) === */
 
 
-/* === Móvil UX batch 11 (pruebas funcionales) === */
+/* === MÃ³vil UX batch 11 (pruebas funcionales) === */
 @media (max-width: 768px) {
-  /* A. Cabecera: más aire + meta en una línea */
+  /* A. Cabecera: mÃ¡s aire + meta en una lÃ­nea */
   .play-v3:has(.game-shell) .game-top {
     padding-top: max(.52rem, calc(env(safe-area-inset-top, 0px) + .22rem)) !important;
   }
@@ -2018,7 +2018,7 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* B. Tres cards hermanas: misma caja y tipografía */
+  /* B. Tres cards hermanas: misma caja y tipografÃ­a */
   .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
   .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
   .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
@@ -2073,7 +2073,7 @@
     margin: 0 !important;
   }
 
-  /* C. Ficha vecino móvil: más limpia y legible */
+  /* C. Ficha vecino mÃ³vil: mÃ¡s limpia y legible */
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha {
     background-color: #fdf8f2 !important;
     background-image: linear-gradient(180deg, rgba(255, 253, 249, .98) 0%, rgba(255, 247, 238, .94) 100%) !important;
@@ -2182,7 +2182,7 @@
 
 /* === Fix batch 12: cards grid + meta temporal agrupada === */
 @media (max-width: 768px) {
-  /* Meta temporal: bloque Ãºnico bajo el tÃ­tulo, alineado a la izquierda */
+  /* Meta temporal: bloque ÃƒÂºnico bajo el tÃƒÂ­tulo, alineado a la izquierda */
   .play-v3:has(.game-shell) .top-meta-line {
     display: block !important;
     width: 100% !important;
@@ -2213,7 +2213,7 @@
     font-variant-numeric: tabular-nums;
   }
 
-  /* Tres cards: grid comÃºn, misma caja exterior por stretch de fila */
+  /* Tres cards: grid comÃƒÂºn, misma caja exterior por stretch de fila */
   .play-v3:has(.game-shell) .game-left.zona-actividad {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
@@ -2378,7 +2378,7 @@
     pointer-events: auto;
   }
 
-  /* Parejas: más aire vertical */
+  /* Parejas: mÃ¡s aire vertical */
   .play-v3:has(.game-shell) .shell-grupo-parejas {
     padding: .72rem .7rem .78rem !important;
   }
@@ -2399,7 +2399,7 @@
 }
 
 
-/* === Fix batch 16: cabecera móvil con más aire (título + fecha) === */
+/* === Fix batch 16: cabecera mÃ³vil con mÃ¡s aire (tÃ­tulo + fecha) === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-top {
     padding-top: max(.9rem, calc(env(safe-area-inset-top, 0px) + .62rem)) !important;
@@ -2411,14 +2411,14 @@
   }
 }
 
-/* === Fix batch 17: tres cards móvil iguales (altura + borde unificado) === */
+/* === Fix batch 17: tres cards mÃ³vil iguales (altura + borde unificado) === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
   .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
   .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
-    height: 90px !important;
-    min-height: 90px !important;
-    max-height: 90px !important;
+    height: 86px !important;
+    min-height: 86px !important;
+    max-height: 86px !important;
     display: flex !important;
     align-items: stretch !important;
     align-self: stretch !important;
@@ -2435,8 +2435,8 @@
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: .08rem !important;
-    padding: .3rem .22rem !important;
+    gap: .18rem !important;
+    padding: .28rem .22rem !important;
     margin: 0 !important;
     box-sizing: border-box !important;
     border: 1.5px solid rgba(44, 38, 31, .12) !important;
@@ -2445,7 +2445,7 @@
     background-image: none !important;
     box-shadow: 0 1px 3px rgba(44, 38, 31, .06) !important;
     transform: none !important;
-    overflow: hidden !important;
+    overflow: visible !important;
   }
 
   .play-v3:has(.game-shell) .game-left .obj-proximo-polaroid::before,
@@ -2472,13 +2472,64 @@
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: .08rem !important;
+    gap: .18rem !important;
     -webkit-appearance: none;
     appearance: none;
   }
+
+  /* Icono slot: 32px visible */
+  .play-v3:has(.game-shell) .game-left .game-left-tile-ico,
+  .play-v3:has(.game-shell) .game-left .obj-buzon-ico-wrap,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview,
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
+    flex: 0 0 32px !important;
+    height: 32px !important;
+    min-height: 32px !important;
+    margin: 0 !important;
+  }
+
+  /* Sobre no recortado */
+  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-img {
+    width: 32px !important;
+    height: auto !important;
+    max-height: 32px !important;
+    margin: 0 !important;
+  }
+
+  /* Caritas vecinos 28px */
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview-cara,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview-ini {
+    width: 28px !important;
+    height: 28px !important;
+    font-size: .58rem !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview {
+    gap: 3px !important;
+  }
+
+  /* + de Nuevo Plan 1.5rem */
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
+    font-size: 1.5rem !important;
+    line-height: 1 !important;
+  }
+
+  /* Labels 0.66-0.68rem */
+  .play-v3:has(.game-shell) .game-left .game-left-tile-label,
+  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
+  .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
+    font-size: .66rem !important;
+    line-height: 1.08 !important;
+    letter-spacing: .075em !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
+    display: none !important;
+  }
 }
 
-/* === Fix batch 18: mapa móvil — manita en edificios clicables === */
+/* === Fix batch 18: mapa mÃ³vil â€” manita en edificios clicables === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .mapa-zona-hit {
     pointer-events: auto !important;
@@ -2496,7 +2547,7 @@
   }
 }
 
-/* === Fix batch 19: cotilleos móvil — filtros bajo título + texto más pequeño === */
+/* === Fix batch 19: cotilleos mÃ³vil â€” filtros bajo tÃ­tulo + texto mÃ¡s pequeÃ±o === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .capa-diario .coti-top {
     display: flex !important;
@@ -2570,7 +2621,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   -webkit-overflow-scrolling: touch;
 }
 
-/* === Batch 21: Nuevo plan móvil más compacto === */
+/* === Batch 21: Nuevo plan mÃ³vil mÃ¡s compacto === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar {
     padding: .62rem .55rem .45rem !important;
@@ -2675,9 +2726,9 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   }
 }
 
-/* === Batch 22: Tarjeta edificio estilo mockup + móvil compacto === */
+/* === Batch 22: Tarjeta edificio estilo mockup + mÃ³vil compacto === */
 
-/* Tarjeta quién: centrada, borde verde suave */
+/* Tarjeta quiÃ©n: centrada, borde verde suave */
 .play-v3 .play-root[data-consulta="quien"] .quien.nota-mapa {
   text-align: center !important;
   padding: 1.05rem .82rem .72rem !important;
@@ -2685,7 +2736,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   background-position: 0 2.35rem, center, center !important;
 }
 
-/* Cabecera lugar: título + horario sin caja */
+/* Cabecera lugar: tÃ­tulo + horario sin caja */
 .play-v3 aside.quien .quien-bloque--lugar {
   margin: 0 0 .32rem !important;
   padding: 0 .2rem .32rem !important;
@@ -2709,7 +2760,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   color: #5a4a3a !important;
 }
 
-/* ¿Quién está? */
+/* Â¿QuiÃ©n estÃ¡? */
 .play-v3 aside.quien .quien-bloque--presencia {
   text-align: center !important;
   padding: .4rem .42rem .48rem !important;
@@ -2749,7 +2800,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   font-size: .88rem !important;
 }
 
-/* Aquí hay tema: caja rosa única */
+/* AquÃ­ hay tema: caja rosa Ãºnica */
 .play-v3 aside.quien .quien-bloque--tema {
   padding: 0 !important;
   margin-bottom: .34rem !important;
@@ -2808,7 +2859,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   font-size: .66rem !important;
 }
 
-/* Botón organizar verde (mockup) */
+/* BotÃ³n organizar verde (mockup) */
 .play-v3 .play-root[data-consulta="quien"] .nota-mapa .destinos {
   margin-top: .24rem !important;
   gap: .32rem !important;
@@ -2828,7 +2879,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   border-color: rgba(91, 126, 71, .55) !important;
 }
 
-/* Anula alineación izquierda previa */
+/* Anula alineaciÃ³n izquierda previa */
 .play-v3 aside.quien .quien-bloque,
 .play-v3 aside.quien .quien-bloque--presencia .quien-kicker,
 .play-v3 aside.quien .quien-vacio {
@@ -3063,7 +3114,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   }
 }
 
-/* === Batch 24: chip ¿Qué buscamos? pegado al título === */
+/* === Batch 24: chip Â¿QuÃ© buscamos? pegado al tÃ­tulo === */
 .play-v3 .capa-organizar .org-seccion-head--que {
   justify-content: flex-start !important;
   gap: .32rem !important;
@@ -3083,7 +3134,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   margin-left: 0 !important;
 }
 
-/* === Batch 25: Ficha vecino móvil — cabecera y prefs legibles === */
+/* === Batch 25: Ficha vecino mÃ³vil â€” cabecera y prefs legibles === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha .ficha-col-perfil {
     grid-template-rows: auto auto auto auto auto auto !important;
@@ -3162,7 +3213,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   }
 }
 
-/* === Batch 26: chips ¿Qué buscamos? debajo del título === */
+/* === Batch 26: chips Â¿QuÃ© buscamos? debajo del tÃ­tulo === */
 .play-v3 .capa-organizar .org-seccion--que .ficha-seccion-tit {
   display: flex !important;
   align-items: center;
@@ -3200,7 +3251,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   justify-content: flex-start !important;
 }
 
-/* === Batch 27: Mensajitos móvil — texto debajo de nombre + marcar === */
+/* === Batch 27: Mensajitos mÃ³vil â€” texto debajo de nombre + marcar === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg {
     display: grid !important;
@@ -3275,7 +3326,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     margin-top: .2rem !important;
   }
 
-  /* Popover mini preview: misma lógica */
+  /* Popover mini preview: misma lÃ³gica */
   .play-v3:has(.game-shell) .play-root.phone .msg-item {
     display: grid !important;
     grid-template-columns: 36px minmax(0, 1fr) auto;
@@ -3318,4 +3369,307 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     margin: 0 !important;
     align-self: start;
   }
+}
+
+/* ======================================================================
+   FEEDBACK DEL RESULTADO DE INTERVENCION (polaroid, solo presentacion)
+   El motor (EncuentroIntervencion::tonoDe) devuelve tres tonos reales:
+   'bien' | 'neutral' | 'mal'  ->  clase enc-int-result-txt--{tono}.
+   Se convierte la linea de texto en un bloque papel pegado a la polaroid,
+   con titulo corto + emoji por estado y aire extra antes de NUEVO PLAN.
+   No cambia logica, copys ni probabilidades.
+   ====================================================================== */
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result {
+  margin: .55rem .08rem 1.9rem;
+}
+
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt {
+  display: block;
+  margin: 0;
+  padding: .48rem .55rem .54rem;
+  text-align: center;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .88rem;
+  line-height: 1.38;
+  border-radius: 9px 12px 10px 9px;
+  box-shadow:
+    1px 2px 0 rgba(120, 96, 72, .14),
+    inset 0 0 0 1px rgba(255, 255, 255, .55);
+  transform: rotate(-.35deg);
+}
+
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt::before {
+  display: block;
+  margin: 0 0 .16rem;
+  font-family: Caveat, cursive;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  line-height: 1.15;
+}
+
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--bien {
+  background: #e2efdb;
+  border: 1px solid #b7d1ae;
+  color: #345f31;
+}
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--bien::before {
+  content: "\2728\00A0\00A1HA FUNCIONADO!";
+}
+
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--mal {
+  background: #fae1de;
+  border: 1px solid #e3b9b4;
+  color: #8b3a32;
+}
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--mal::before {
+  content: "\01F62C\00A0\00A0NO HA SALIDO BIEN";
+}
+
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--neutral {
+  background: #fbf1cf;
+  border: 1px solid #dfcd98;
+  color: #6b5a3e;
+}
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--neutral::before {
+  content: "\01F937\00A0\00A0SIN MUCHO EFECTO";
+}
+
+.play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result::after {
+  content: "\00B7\00A0\00A0\00B7\00A0\00A0\00B7";
+  display: block;
+  margin-top: .6rem;
+  font-family: Caveat, cursive;
+  font-size: .8rem;
+  line-height: 1;
+  letter-spacing: .3em;
+  color: rgba(122, 100, 80, .45);
+}
+
+@media (max-width: 768px) {
+  .play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt {
+    padding: .42rem .42rem .46rem;
+    font-size: .84rem;
+  }
+
+  .play-v3 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt::before {
+    font-size: .76rem;
+  }
+}
+
+/* ======================================================================
+   PLANES EN CURSO - carrusel horizontal movil encima de COTILLEOS.
+   Misma fuente canonica que desktop (encuentrosEnCursoAhora).
+   Sin planes en curso: .is-on no existe y el bloque no ocupa espacio.
+   ====================================================================== */
+.play-v3 .encursos-movil:not(.is-on) { display: none; }
+
+@media (max-width: 768px) {
+  .play-v3 .obj-curso-nav { top: .3rem; right: .34rem; gap: .18rem; }
+  .play-v3 .obj-curso-btn { width: 1.55rem; height: 1.55rem; font-size: 1.15rem; }
+
+  .play-v3 .game-right .encursos-movil.is-on {
+    order: 0;
+    display: block;
+    padding: .5rem .55rem .5rem;
+    border: 1.5px solid rgba(184, 201, 168, .85);
+    border-radius: 10px;
+    background: #f4f8ef;
+    box-shadow: 0 1px 3px rgba(44, 38, 31, .06);
+    box-sizing: border-box;
+  }
+
+  .encursos-movil .enc-mov-cab {
+    display: flex;
+    align-items: center;
+    gap: .42rem;
+    margin: 0 0 .45rem;
+  }
+
+  .encursos-movil .enc-mov-live {
+    width: .5rem;
+    height: .5rem;
+    border-radius: 50%;
+    background: #8fbc78;
+    box-shadow: 0 0 0 2px rgba(143, 188, 120, .35);
+    animation: plan-curso-punto 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .encursos-movil .enc-mov-tit {
+    margin: 0;
+    font-family: Caveat, cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: .07em;
+    line-height: 1;
+    color: #4a6e3a;
+  }
+
+  .encursos-movil .enc-mov-track {
+    display: flex;
+    align-items: stretch;
+    gap: .55rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: .1rem;
+    padding: .15rem .1rem .3rem;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .encursos-movil .enc-mov-track::-webkit-scrollbar { display: none; }
+
+  .encursos-movil .enc-mov-card {
+    flex: 0 0 min(84%, 320px);
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: .6rem .55rem .65rem;
+    border: 2px solid #b8c9a8;
+    border-radius: 2px 9px 4px 6px;
+    background-color: #fdf9f4;
+    background-image:
+      linear-gradient(180deg, rgba(255, 253, 249, 0.78) 0%, rgba(255, 253, 249, 0.42) 55%, rgba(255, 253, 249, 0.22) 100%),
+      url("../play-v3/capas/libreta_hoja.png");
+    background-position: center, center;
+    background-size: cover, cover;
+    transform: rotate(-.35deg);
+    box-shadow:
+      1px 2px 0 rgba(188, 158, 118, 0.18),
+      3px 5px 16px rgba(40, 28, 16, 0.14),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.5);
+    box-sizing: border-box;
+  }
+
+  .encursos-movil .enc-mov-card:nth-child(even) { transform: rotate(.4deg); }
+
+  .encursos-movil .enc-mov-hora {
+    display: inline-flex;
+    align-items: center;
+    gap: .34rem;
+    margin: 0 0 .45rem;
+    padding: .1rem .55rem .14rem;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    color: #4a6e3a;
+    background: rgba(230, 244, 218, 0.94);
+    border: 1.5px dashed rgba(122, 158, 106, 0.55);
+    border-radius: 999px;
+    transform: rotate(-1.5deg);
+  }
+
+  .encursos-movil .enc-mov-punto {
+    width: .38rem;
+    height: .38rem;
+    border-radius: 50%;
+    background: #8fbc78;
+    box-shadow: 0 0 0 2px rgba(143, 188, 120, .3);
+    animation: plan-curso-punto 1.6s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .encursos-movil .enc-mov-card .prox-faces {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: .45rem;
+    width: 100%;
+    margin-bottom: .34rem;
+  }
+
+  .encursos-movil .enc-mov-card .prox-faces img,
+  .encursos-movil .enc-mov-card .prox-faces .cara-ini {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    border: 2px solid rgba(120, 96, 72, 0.35);
+    object-fit: cover;
+    object-position: 50% 20%;
+    background: #fff8e8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: .95rem;
+    margin-right: 0 !important;
+    flex-shrink: 0;
+  }
+
+  .encursos-movil .enc-mov-card .cara-token .cara { width: 42px; height: 42px; }
+  .encursos-movil .enc-mov-card .cara-token .cara img,
+  .encursos-movil .enc-mov-card .cara-token .cara .cara-ini { width: 100%; height: 100%; border: none; margin: 0; }
+
+  .encursos-movil .enc-mov-nombres {
+    margin: 0 0 .18rem;
+    width: 100%;
+    font-family: Caveat, cursive;
+    font-size: 1.08rem;
+    font-weight: 700;
+    color: #2c261f;
+    line-height: 1.15;
+    text-align: center;
+  }
+
+  .encursos-movil .enc-mov-lugar {
+    margin: 0;
+    width: 100%;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .72rem;
+    color: #5a5048;
+    text-align: center;
+  }
+
+  .encursos-movil .enc-mov-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: .32rem;
+    margin: .55rem 0 0;
+    padding: .32rem .85rem .38rem;
+    border: 1.5px solid rgba(122, 158, 106, .55);
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .64rem;
+    font-weight: 800;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: #3d5c32;
+    background: #eef4e4;
+    box-shadow: 1px 2px 0 rgba(74, 110, 58, .12);
+    transform: rotate(-.4deg);
+  }
+
+  .encursos-movil .enc-mov-cta-flecha {
+    display: inline-block;
+    font-size: .95em;
+    line-height: 1;
+    transition: transform .15s ease;
+  }
+
+  .encursos-movil .enc-mov-cta.is-open .enc-mov-cta-flecha { transform: rotate(90deg); }
+  .encursos-movil .enc-mov-cta:active { transform: translateY(1px); box-shadow: 1px 1px 0 rgba(74, 110, 58, .12); }
+
+  .encursos-movil .enc-mov-panel[hidden] { display: none; }
+  .encursos-movil .enc-mov-panel { width: 100%; }
+
+  .encursos-movil .enc-mov-indice {
+    margin: .3rem 0 0;
+    text-align: center;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .24em;
+    color: #6a7d58;
+  }
+
+  .encursos-movil .enc-mov-indice[hidden] { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .encursos-movil .enc-mov-live,
+  .encursos-movil .enc-mov-punto { animation: none !important; }
 }
