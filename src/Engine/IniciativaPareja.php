@@ -265,12 +265,170 @@ final class IniciativaPareja
     }
 
     // ==================================================================
-    // R6 / R7 — se implementan en sus bloques (reparación y ruptura).
+    // R6 · REPARACIÓN (salida de crisis SIN ruptura).
+    //
+    // Reutiliza la infraestructura viva: el canal conflicto ya decae y ya se
+    // repara con encuentros bien/muy_bien. La reparación exige un encuentro
+    // REAL bueno DURANTE la crisis + voluntad geométrica de ambos. Puede
+    // fallar (deja memoria) y no convierte cada crisis en ruptura.
     // ==================================================================
 
     /** @param array<string, int> $out */
     private static function gestionarCrisis(array &$partida, string $a, string $b, array $cal, array &$out): void
     {
-        // R6/R7: reparación y riesgo de ruptura (implementado en bloques R6/R7).
+        $rel = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+        if (!is_array($rel)) {
+            return;
+        }
+        // Crisis legacy sin sello: sellarla para habilitar los carriles.
+        if (!is_array($rel['crisis_desde'] ?? null)) {
+            $rel['crisis_desde'] = [
+                'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
+            ];
+            RelacionEngine::persistirRomance($partida, $rel);
+        }
+
+        if (self::intentarReparacion($partida, $a, $b, $cal, $out)) {
+            return; // reparada hoy: nada más que gestionar
+        }
+        self::evaluarRiesgoRuptura($partida, $a, $b, $cal, $out);
+    }
+
+    /**
+     * Intento de reparación si procede. Devuelve true si el par SALIÓ de crisis.
+     *
+     * @param array<string, int> $out
+     */
+    private static function intentarReparacion(array &$partida, string $a, string $b, array $cal, array &$out): bool
+    {
+        $now = self::absNow($partida);
+        $rel = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+        if (!is_array($rel)) {
+            return false;
+        }
+        $crisisDesdeAbs = is_array($rel['crisis_desde'] ?? null)
+            ? ((int) ($rel['crisis_desde']['dia'] ?? 0)) * 24 + (int) ($rel['crisis_desde']['hora'] ?? 0)
+            : $now;
+        $ultimo = is_array($rel['ultimo_intento_reparacion'] ?? null)
+            ? ((int) ($rel['ultimo_intento_reparacion']['dia'] ?? 0)) * 24 + (int) ($rel['ultimo_intento_reparacion']['hora'] ?? 0)
+            : -1;
+        $gapIntentos = max(1, self::knobInt($cal, 'reparacion', 'gap_intentos_horas', 24));
+        if ($ultimo >= 0 && ($now - $ultimo) < $gapIntentos) {
+            return false;
+        }
+        // Conflicto debe estar YA rebajado (el canal vivo repara niveles con citas buenas).
+        $confMin = self::knobInt($cal, 'crisis', 'conflicto_min', 6);
+        $conf = RelacionEngine::obtenerEntre($partida, $a, $b)['conflicto']['intensidad'] ?? null;
+        if (is_numeric($conf) && (int) $conf >= $confMin) {
+            return false;
+        }
+        // Debe existir ≥1 encuentro REAL bueno DESPUÉS de entrar en crisis.
+        $hayBuenaEnCrisis = false;
+        foreach (($partida['memoria_eventos'] ?? []) as $ev) {
+            if (!is_array($ev) || ($ev['familia'] ?? '') !== 'encuentro') {
+                continue;
+            }
+            $pp = is_array($ev['participantes'] ?? null) ? $ev['participantes'] : [];
+            if (!in_array($a, $pp, true) || !in_array($b, $pp, true)) {
+                continue;
+            }
+            if (!in_array((string) ($ev['resultado_experiencia'] ?? ''), ['bien', 'muy_bien'], true)) {
+                continue;
+            }
+            if (((int) ($ev['dia'] ?? 0)) * 24 + (int) ($ev['hora'] ?? 0) >= $crisisDesdeAbs) {
+                $hayBuenaEnCrisis = true;
+                break;
+            }
+        }
+        if (!$hayBuenaEnCrisis) {
+            return false;
+        }
+
+        // Voluntad geométrica de AMBOS (tipo cita; conflicto/emocional ya penalizan).
+        $prop = [
+            'participantes' => [$a, $b],
+            'tipo' => 'cita',
+            'lugar' => null,
+            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'hora' => (int) ($partida['reloj']['hora_actual'] ?? 12),
+        ];
+        $vol = new VoluntadPonderadaEvaluator($cal);
+        $ra = $vol->evaluar($partida, $prop, $a);
+        $rb = $vol->evaluar($partida, $prop, $b);
+        $pPlan = sqrt(max(0.0, (float) ($ra['p'] ?? 0)) * max(0.0, (float) ($rb['p'] ?? 0)));
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+
+        $marcarIntento = static function () use (&$partida, $a, $b): void {
+            $relX = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+            if (!is_array($relX)) {
+                return;
+            }
+            $relX['ultimo_intento_reparacion'] = [
+                'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
+            ];
+            RelacionEngine::persistirRomance($partida, $relX);
+        };
+
+        if (!($tirada < $pPlan)) {
+            $relF = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+            if (is_array($relF)) {
+                $relF['fallos_reparacion'] = (int) ($relF['fallos_reparacion'] ?? 0) + 1;
+                RelacionEngine::persistirRomance($partida, $relF);
+            }
+            $marcarIntento();
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'reparacion_fallida',
+                '_k' => 'reparacion_fail',
+                'par' => [$a, $b],
+                'p_plan' => round($pPlan, 4),
+            ]);
+            $out['reparaciones_fail']++;
+            return false;
+        }
+
+        // ÉXITO: volver a PAREJA con estabilidad restaurada PARCIALMENTE.
+        $deltaRep = self::knobInt($cal, 'reparacion', 'delta_estabilidad', 20);
+        $relOk = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+        if (!is_array($relOk)) {
+            return false;
+        }
+        $valorActual = is_numeric($relOk['estabilidad_pareja']['valor'] ?? null)
+            ? (int) $relOk['estabilidad_pareja']['valor']
+            : 0;
+        $relOk['estado_pareja'] = ParejaEngine::PAREJA;
+        $relOk['estabilidad_pareja']['activa'] = true;
+        $relOk['estabilidad_pareja']['valor'] = min(100, $valorActual + $deltaRep);
+        $relOk['crisis_desde'] = null;
+        $relOk['fallos_reparacion'] = 0;
+        $relOk['ultimo_intento_reparacion'] = null;
+        RelacionEngine::persistirRomance($partida, $relOk);
+        RelacionBitacora::registrar($partida, RelacionBitacora::APOYO_IMPORTANTE, [$a, $b]);
+        MemoriaEventos::registrar($partida, 'pareja', [$a, $b], null, 'reparacion');
+        SimFunnelProbe::on($partida, 'declaracion', [
+            'ev' => 'reparacion_ok',
+            '_k' => 'reparacion_ok',
+            'par' => [$a, $b],
+        ]);
+        $out['reparaciones_ok']++;
+        return true;
+    }
+
+    // ==================================================================
+    // R7 — Riesgo de ruptura desde crisis sin salida (stub hasta R7).
+    // ==================================================================
+
+    /**
+     * @param array<string, int> $out
+     */
+    private static function evaluarRiesgoRuptura(array &$partida, string $a, string $b, array $cal, array &$out): void
+    {
+        if (!self::rupturaActiva($cal)) {
+            return;
+        }
+        // Implementación completa en bloque R7.
     }
 }
