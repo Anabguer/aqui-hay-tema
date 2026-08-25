@@ -7,6 +7,7 @@ use AquiHayTema\Engine\CalibracionConfig;
 use AquiHayTema\Engine\ConsejoEngine;
 use AquiHayTema\Engine\CopyVoluntad;
 use AquiHayTema\Engine\EstadoEmocional;
+use AquiHayTema\Engine\MemoriaEventos;
 use AquiHayTema\Engine\PlanAfinidad;
 use AquiHayTema\Engine\PropuestaCooldown;
 use AquiHayTema\Engine\PropuestaEncuentro;
@@ -14,6 +15,7 @@ use AquiHayTema\Engine\PropuestaNivel;
 use AquiHayTema\Engine\RechazoMemoria;
 use AquiHayTema\Engine\RelacionEngine;
 use AquiHayTema\Engine\RngService;
+use AquiHayTema\Engine\SenalRomantica;
 
 /**
  * Sí/no ponderado. Nunca 100%. Excelente ≈ muy alto, no garantizado.
@@ -52,7 +54,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
                 'decision' => PropuestaEncuentro::DECISION_RECHAZA,
                 'clase' => PropuestaEncuentro::CLASE_COOLDOWN,
                 'motivo_tecnico' => 'cooldown_propuesta',
-                'motivo_tipo' => 'banal',
+                'motivo_tipo' => 'cooldown',
                 'copy_id' => $copyCd,
                 'score' => null,
                 'p' => 0.0,
@@ -138,9 +140,46 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
     public static function desglose(array $partida, array $propuesta, string $quien, string $otro, array $cal): array
     {
         $base = (int) CalibracionConfig::get($cal, 'voluntad.base', 48);
-        $emo = (string) ($partida['residentes'][$quien]['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);
-        $mods = EstadoEmocional::modificadores($emo, $cal);
+        $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
+        // P2: peso del conflicto SOLO en tipos de cita jugables (primera_cita, cita).
+        // No aplica a 'romantico' legacy ni a quedar/conocerse/pareja.
+        $aplicaConfMultCita = $tipo === PropuestaNivel::PRIMERA_CITA || $tipo === PropuestaNivel::CITA;
+        $confMultCita = $aplicaConfMultCita
+            ? max(1.0, (float) CalibracionConfig::get($cal, 'voluntad.conflicto_mult_cita', 1.0))
+            : 1.0;
+        // Estado emocional: vigencia (anti-stale) y dirección del enfado.
+        $emoRow = is_array(($partida['residentes'][$quien]['runtime']['estado_emocional'] ?? null))
+            ? $partida['residentes'][$quien]['runtime']['estado_emocional']
+            : [];
+        $emo = EstadoEmocional::canonId((string) ($emoRow['id'] ?? EstadoEmocional::NEUTRO));
+        $emoVigente = true;
+        if ($emo !== EstadoEmocional::NEUTRO
+            && isset($emoRow['hasta'])
+            && is_array($emoRow['hasta'])
+            && EstadoEmocional::vencido($emoRow['hasta'], $partida['reloj'] ?? [])
+        ) {
+            // Vencido respecto al reloj actual: ni penaliza ni bonifica voluntad.
+            // No muta el save (la expiración canónica sigue en RelojOperations).
+            $emoVigente = false;
+        }
+        // Mods emocionales: si el estado no está vigente, se computan como neutro.
+        $mods = $emoVigente
+            ? EstadoEmocional::modificadores($emo, $cal)
+            : EstadoEmocional::modificadores(EstadoEmocional::NEUTRO, $cal);
         $modEmo = (int) ($mods['aceptar_planes'] ?? 0);
+        // Enfado direccional: solo con datos reales ya persistidos.
+        // 'dirigida' (contra la persona del plan) o 'indeterminada' -> penalización completa.
+        // 'ajena' (demostrablemente causada por otra persona) -> penalización mitigada.
+        $emocionDireccion = null;
+        if ($emoVigente && $emo === EstadoEmocional::ENFADADO) {
+            $emocionDireccion = self::resolverEnfado($partida, $emoRow, $otro);
+            if ($emocionDireccion === 'ajena') {
+                $mitigada = CalibracionConfig::get($cal, 'emociones_v1.enfadado_ajeno_aceptar_planes', null);
+                if (is_numeric($mitigada)) {
+                    $modEmo = (int) $mitigada;
+                }
+            }
+        }
         $s = $base + $modEmo;
         $conocen = false;
         $soc = 0;
@@ -169,7 +208,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             }
             $conf = RelacionEngine::obtenerEntre($partida, $quien, $otro)['conflicto']['intensidad'] ?? null;
             if (is_numeric($conf)) {
-                $modConf = -(int) $conf;
+                $modConf = -(int) round(((int) $conf) * $confMultCita);
                 $s += $modConf;
             }
             $nRech = RechazoMemoria::countHacia($partida, $quien, $otro);
@@ -195,7 +234,6 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $aporteAfin = (int) ($afin['aporte'] ?? 0);
         $penAfin = (int) ($afin['penalizacion'] ?? 0);
         $s += $aporteAfin - $penAfin;
-        $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
         $modRomTipo = 0;
         if (PropuestaNivel::esTipoCita($tipo) || $tipo === 'pareja') {
             $modRomTipo = (int) (($mods['iniciativa_romantica'] ?? 0) / 2);
@@ -203,11 +241,43 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $modTipo = self::modTipo($tipo, $cal);
         $s += $modTipo;
+        // P2: Bonus de primera cita SOLO con señal romántica real en AMBAS direcciones
+        // (canon: SenalRomantica::desdeHacia; flechazo o romance >= tilín).
+        $bonusReciprocaPC = 0;
+        if ($otro !== '' && $tipo === PropuestaNivel::PRIMERA_CITA) {
+            $brCfg = (int) CalibracionConfig::get($cal, 'voluntad.bonus_primera_cita_reciproca', 0);
+            if ($brCfg > 0
+                && !empty(SenalRomantica::desdeHacia($partida, $quien, $otro, $cal)['ok'])
+                && !empty(SenalRomantica::desdeHacia($partida, $otro, $quien, $cal)['ok'])
+            ) {
+                $bonusReciprocaPC = $brCfg;
+                $s += $bonusReciprocaPC;
+            }
+        }
+
+        // Continuidad reciente: bonus por encuentros positivos recientes con esta persona
+        $modContinuidad = 0;
+        if ($otro !== '') {
+            $modContinuidad = self::calcularContinuidadReciente($partida, $quien, $otro, $cal);
+            $s += $modContinuidad;
+        }
+
+        // B4 núcleo modificado: Celestine cumple el núcleo de una petición pero
+        // añadió compañía no pedida. Bonus fuerte, nunca garantía.
+        $modPeticionNucleo = 0;
+        $bonusMap = is_array($propuesta['_bonus_voluntad'] ?? null) ? $propuesta['_bonus_voluntad'] : [];
+        if (isset($bonusMap[$quien]) && is_numeric($bonusMap[$quien])) {
+            $modPeticionNucleo = (int) round((float) $bonusMap[$quien]);
+            $s += $modPeticionNucleo;
+        }
         $score = max(0, min(100, $s));
         return [
             'score' => $score,
+            'bonus_peticion_nucleo' => $modPeticionNucleo,
             'base' => $base,
             'estado_emocional' => $emo,
+            'estado_emocional_vigente' => $emoVigente,
+            'emocion_direccion' => $emocionDireccion,
             'mod_estado_emocional_aceptar_planes' => $modEmo,
             'relacion_previa_se_conocen' => $conocen,
             'mod_aun_no_se_conocen' => $modConocer,
@@ -217,6 +287,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             'mod_romance' => $modRom,
             'conflicto' => $conf,
             'mod_conflicto' => $modConf,
+            'conflicto_mult_cita' => $confMultCita,
             'rechazos_previos' => $nRech,
             'mod_rechazos' => $modRech,
             'mod_consejo' => $modConsejo,
@@ -225,6 +296,8 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             'afinidad_penalizacion' => $penAfin,
             'tipo' => $tipo,
             'mod_tipo' => $modTipo,
+            'bonus_primera_cita_reciproca' => $bonusReciprocaPC,
+            'mod_continuidad_reciente' => $modContinuidad,
             'mod_iniciativa_romantica' => $modRomTipo,
         ];
     }
@@ -235,6 +308,53 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
     public static function score(array $partida, array $propuesta, string $quien, string $otro, array $cal): int
     {
         return (int) (self::desglose($partida, $propuesta, $quien, $otro, $cal)['score'] ?? 0);
+    }
+
+    /**
+     * Dirección del enfado usando SOLO datos reales ya persistidos.
+     *
+     * - contexto.hacia presente -> 'dirigida' si apunta a $otro, 'ajena' si no.
+     * - origen 'encuentro' + contexto.encuentro_id resoluble en partida['encuentros']
+     *   -> 'dirigida' si $otro participó, 'ajena' si no.
+     * - cualquier otra cosa -> 'indeterminada' (conservador: no se inventa culpable).
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $emoRow
+     */
+    private static function resolverEnfado(array $partida, array $emoRow, string $otro): string
+    {
+        if ($otro === '') {
+            return 'indeterminada';
+        }
+        $ctx = is_array($emoRow['contexto'] ?? null) ? $emoRow['contexto'] : [];
+        $hacia = (string) ($ctx['hacia'] ?? '');
+        if ($hacia !== '') {
+            return $hacia === $otro ? 'dirigida' : 'ajena';
+        }
+        if ((string) ($emoRow['origen'] ?? '') !== 'encuentro') {
+            return 'indeterminada';
+        }
+        $encId = (string) ($ctx['encuentro_id'] ?? '');
+        if ($encId === '') {
+            return 'indeterminada';
+        }
+        foreach ($partida['encuentros'] ?? [] as $enc) {
+            if (!is_array($enc) || (string) ($enc['id'] ?? '') !== $encId) {
+                continue;
+            }
+            $parts = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+            if ($parts === []) {
+                return 'indeterminada';
+            }
+            foreach ($parts as $pid) {
+                if ((string) $pid === $otro) {
+                    return 'dirigida';
+                }
+            }
+            return 'ajena';
+        }
+        // Encuentro origen no encontrado: comportamiento conservador.
+        return 'indeterminada';
     }
 
     /**
@@ -318,5 +438,102 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $idx = $rng->nextInt(0, count($pool) - 1);
         return (string) $pool[$idx];
+    }
+
+    /**
+     * Calcula el bonus de continuidad reciente basado en memoria_eventos.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $cal
+     * @return int
+     */
+    private static function calcularContinuidadReciente(array $partida, string $quien, string $otro, array $cal): int
+    {
+        $cfg = CalibracionConfig::get($cal, 'voluntad.continuidad_reciente', []);
+        if (empty($cfg['activo'])) {
+            return 0;
+        }
+
+        $bonusMuyBien = (int) ($cfg['bonus_muy_bien'] ?? 10);
+        $bonusBien = (int) ($cfg['bonus_bien'] ?? 5);
+        $bonusDosBuenos = (int) ($cfg['bonus_dos_buenos_48h'] ?? 3);
+        $halfLife = (float) ($cfg['decay_halflife_horas'] ?? 12);
+        $maxBonus = (int) ($cfg['max_bonus'] ?? 12);
+        $corteSiMalo = (bool) ($cfg['corte_si_ultimo_malo'] ?? true);
+        $mirarUltimos = (int) ($cfg['mirar_ultimos'] ?? 5);
+
+        $recientes = MemoriaEventos::recientes($partida, [$quien, $otro], $mirarUltimos);
+        if ($recientes === []) {
+            return 0;
+        }
+
+        // Filtrar solo encuentros (familia 'encuentro')
+        $encuentros = array_filter($recientes, static function ($ev) {
+            return ($ev['familia'] ?? '') === 'encuentro';
+        });
+
+        if ($encuentros === []) {
+            return 0;
+        }
+
+        // Verificar si hay un mal/muy_mal POSTERIOR al último bueno
+        // (ordenados por recencia, el primero es el más reciente = índice 0)
+        $ultimoBueno = null;
+        $ultimoBuenoIdx = -1;
+        $hayMaloPosterior = false;
+
+        // Primera pasada: encontrar el bueno más reciente (menor índice)
+        foreach ($encuentros as $idx => $ev) {
+            $res = $ev['resultado_experiencia'] ?? '';
+            if ($res === 'muy_bien' || $res === 'bien') {
+                $ultimoBueno = $res;
+                $ultimoBuenoIdx = $idx;
+                break; // El primero que encontremos es el más reciente
+            }
+        }
+
+        // Segunda pasada: verificar si hay mal/muy_mal ANTES (más reciente) que el bueno
+        if ($corteSiMalo && $ultimoBueno !== null) {
+            for ($idx = 0; $idx < $ultimoBuenoIdx; $idx++) {
+                $res = $encuentros[$idx]['resultado_experiencia'] ?? '';
+                if ($res === 'mal' || $res === 'muy_mal') {
+                    $hayMaloPosterior = true;
+                    break;
+                }
+            }
+        }
+
+        if ($hayMaloPosterior || $ultimoBueno === null) {
+            return 0;
+        }
+
+        // Calcular horas desde el último bueno
+        $reloj = $partida['reloj'] ?? [];
+        $ahora = ((int) ($reloj['dia_pueblo'] ?? 1)) * 24 + (int) ($reloj['hora_actual'] ?? 0);
+        $evBueno = $encuentros[$ultimoBuenoIdx];
+        $entonces = ((int) ($evBueno['dia'] ?? 0)) * 24 + (int) ($evBueno['hora'] ?? 0);
+        $horas = max(0, $ahora - $entonces);
+
+        // Bonus base
+        $base = $ultimoBueno === 'muy_bien' ? $bonusMuyBien : $bonusBien;
+
+        // Bonus por dos buenos en 48h (el siguiente más antiguo)
+        if ($ultimoBuenoIdx + 1 < count($encuentros)) {
+            $siguiente = $encuentros[$ultimoBuenoIdx + 1];
+            $resSig = $siguiente['resultado_experiencia'] ?? '';
+            if (($resSig === 'muy_bien' || $resSig === 'bien') && $horas <= 48) {
+                $entoncesSig = ((int) ($siguiente['dia'] ?? 0)) * 24 + (int) ($siguiente['hora'] ?? 0);
+                $horasEntre = $entonces - $entoncesSig;
+                if ($horasEntre <= 48) {
+                    $base += $bonusDosBuenos;
+                }
+            }
+        }
+
+        // Decay exponencial
+        $decay = pow(0.5, $horas / $halfLife);
+        $bonus = (int) round($base * $decay);
+
+        return min($maxBonus, max(0, $bonus));
     }
 }
