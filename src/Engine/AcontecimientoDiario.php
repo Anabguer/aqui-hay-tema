@@ -61,10 +61,23 @@ final class AcontecimientoDiario
             return ['ok' => false, 'error' => 'evento_desconocido'];
         }
         if (MemoriaEventos::enCooldown($partida, (string) ($item['familia'] ?? $eventoId), $participantes, $cal)) {
+            SimFunnelProbe::on($partida, 'cooldown_gate', [
+                'ev' => 'bloqueado',
+                '_k' => 'cooldown_' . (string) ($item['familia'] ?? $eventoId),
+                'evento' => $eventoId,
+                'familia' => (string) ($item['familia'] ?? $eventoId),
+                'par' => $participantes,
+            ]);
             return ['ok' => false, 'error' => 'cooldown'];
         }
         $el = AcontecimientoElegibilidad::cumple($partida, $item, $participantes, $cal);
         if (!$el['ok']) {
+            SimFunnelProbe::on($partida, 'hueco', [
+                'ev' => 'ejecutar_no_elegible',
+                '_k' => 'ejecutar_no_elegible',
+                'evento' => $eventoId,
+                'fallos' => $el['fallos'],
+            ]);
             return ['ok' => false, 'error' => 'no_elegible', 'fallos' => $el['fallos']];
         }
 
@@ -184,6 +197,8 @@ final class AcontecimientoDiario
             }
             $efectos[] = $eventoId;
             self::intentarAgendarQuedada($partida, $desde, $hacia, $cal, $logger);
+            // FASE 1: la accion puede derivar en iniciativa autonoma de primera cita.
+            IniciativaRomantica::intentarPrimeraCita($partida, $desde, $hacia, $cal, $logger);
         }
 
         if ($eventoId === 'declaracion' && count($participantes) >= 2) {
@@ -201,6 +216,16 @@ final class AcontecimientoDiario
             $rb = $vol->evaluar($partida, $prop, $b);
             $aceptaA = ($ra['decision'] ?? '') === PropuestaEncuentro::DECISION_ACEPTA;
             $aceptaB = ($rb['decision'] ?? '') === PropuestaEncuentro::DECISION_ACEPTA;
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'evaluada',
+                '_k' => ($aceptaA && $aceptaB) ? 'declaracion_aceptada' : 'declaracion_rechazada',
+                'a' => $a,
+                'b' => $b,
+                'acepta_a' => $aceptaA,
+                'acepta_b' => $aceptaB,
+                'motivo_a' => $ra['motivo_tecnico'] ?? ($ra['motivo'] ?? null),
+                'motivo_b' => $rb['motivo_tecnico'] ?? ($rb['motivo'] ?? null),
+            ]);
             $r = ParejaEngine::formar($partida, $a, $b, $aceptaA, $aceptaB, RelacionBitacora::DECLARACION, $cal);
             if (!($r['ok'] ?? false)) {
                 if (($ra['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA) {
@@ -346,6 +371,13 @@ final class AcontecimientoDiario
             $lugar
         );
         if (!($franja['ok'] ?? false)) {
+            SimFunnelProbe::on($partida, 'quedada_autonoma', [
+                'ev' => 'sin_hueco_agenda',
+                '_k' => 'sin_hueco_agenda',
+                'via' => 'flores_mensaje',
+                'a' => $a,
+                'b' => $b,
+            ]);
             return;
         }
         $tipo = 'conocerse';
@@ -366,6 +398,14 @@ final class AcontecimientoDiario
             null,
             $logger
         );
+        SimFunnelProbe::on($partida, 'quedada_autonoma', [
+            'ev' => (($r['ok'] ?? false) ? 'programada' : 'error_programar'),
+            '_k' => (((($r['ok'] ?? false) ? 'fm_programada_' : 'fm_error_programar_')) . $tipo),
+            'via' => 'flores_mensaje',
+            'a' => $a,
+            'b' => $b,
+            'tipo' => $tipo,
+        ]);
         if (($r['ok'] ?? false) && isset($r['encuentro']['id'])) {
             foreach ($partida['encuentros'] as $i => $enc) {
                 if (($enc['id'] ?? '') === $r['encuentro']['id']) {

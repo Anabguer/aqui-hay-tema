@@ -1,6 +1,6 @@
 {
     "_provisional": true,
-    "_nota": "CALIBRACI├ôN vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan m├®tricas.",
+    "_nota": "CALIBRACIÔö£├┤N vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan mÔö£┬«tricas.",
     "social": {
         "min": -100,
         "max": 100,
@@ -60,7 +60,28 @@
         "delta_consolidada": 0.25,
         "dias_sin_contacto_recien": 1,
         "dias_sin_contacto_consolidada": 1,
-        "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas."
+        "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas.",
+        "base_por_nivel": [
+            0.8,
+            0.4,
+            0.2,
+            0.1
+        ],
+        "consolidacion_umbrales": [
+            40,
+            62,
+            82
+        ],
+        "consolidacion_ventana_horas": 168,
+        "proteccion_curva": 0.005,
+        "proteccion_min": 0.3,
+        "nivel3_primer_muy_mal_max_da├▒o": 5
+    },
+    "conflicto": {
+        "_decision_producto": "2026-08-24: el canal conflicto ya no es eterno. Decae por tiempo limpio (7+7 dias) y se repara 1 nivel por encuentro bien/muy_bien. Cualquier nuevo conflicto reinicia el reloj. NO toca el social negativo (canal distinto).",
+        "activo": true,
+        "dias_para_bajar_nivel": 7,
+        "dias_nivel1_para_eliminar": 7
     },
     "desgaste_pareja": {
         "activo": true,
@@ -135,7 +156,9 @@
             }
         },
         "_nota": "Un solo estado activo. Caduca a neutro. No apila. No baja romance por existir.",
-        "duracion_horas": 6
+        "duracion_horas": 6,
+        "enfadado_ajeno_aceptar_planes": -8,
+        "_nota_enfadado_ajeno": "Enfado demostrablemente causado por OTRA persona (contexto.hacia o encuentro_id resoluble): aceptar_planes mitigado. Dirigido o indeterminado usa el -16 de modificadores.enfadado."
     },
     "azar_ponderado": {
         "carga_min": -1,
@@ -222,16 +245,34 @@
         "mod_tipo": {
             "conocerse": 34,
             "quedar": 0,
-            "primera_cita": 0,
+            "primera_cita": 4,
             "cita": 0
         },
+        "bonus_primera_cita_reciproca": 12,
+        "_nota_bonus_primera_cita_reciproca": "P2: solo primera_cita y SOLO si SenalRomantica::desdeHacia ok en AMBAS direcciones (flechazo o romance>=tilin).",
+        "conflicto_mult_cita": 3,
+        "_nota_conflicto_mult_cita": "P2: multiplica el peso del conflicto SOLO en tipos cita jugables (primera_cita, cita). No aplica a quedar/conocerse/pareja/romantico-legacy.",
+        "mod_social_factor": 0.28,
         "resolucion_plan": "media_geometrica",
-        "_nota_resolucion_plan": "Canon 20/08 Neni+ChatGPT: p_plan=sqrt(pA*pB). Sustituye producto."
+        "_nota_resolucion_plan": "Canon 20/08 Neni+ChatGPT: p_plan=sqrt(pA*pB). Sustituye producto.",
+        "delta_multiplier_positivo": 1.15,
+        "continuidad_reciente": {
+            "activo": true,
+            "bonus_muy_bien": 10,
+            "bonus_bien": 5,
+            "bonus_dos_buenos_48h": 3,
+            "decay_halflife_horas": 12,
+            "max_bonus": 12,
+            "corte_si_ultimo_malo": true,
+            "mirar_ultimos": 5
+        }
     },
     "rechazos": {
         "banal_sin_consecuencia": true,
         "repetidos_umbral": 3,
         "delta_romance_hacia_quien_rechaza": -3,
+        "ventana_voluntad_dias": 30,
+        "_nota_ventana_voluntad": "Decision producto 2026-08-24: mod_rechazos solo cuenta rechazos de los ultimos 30 dias (frontera inclusiva: dia_actual - dia_rechazo <= 30). Historico se conserva; erosion en el momento del rechazo no cambia.",
         "cooldown_horas": 6,
         "motivos": [
             "banal",
@@ -275,8 +316,10 @@
             "trabajo",
             "ocio",
             "romance",
-            "consejo"
-        ]
+            "consejo",
+            "romance_accion"
+        ],
+        "_nota_familias_fase1": "FASE 1: romance_accion da ruta de acercamiento tras flechazo. EXCLUIDAS romance_hito/pareja."
     },
     "autonomia": {
         "salidas_individuales_sqrt": 1.2,
@@ -362,7 +405,7 @@
         "max_por_experiencia": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de catálogo amplio. No recalibrar ritmos ahora."
+        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de cat├ílogo amplio. No recalibrar ritmos ahora."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,
@@ -372,7 +415,7 @@
     "escaner_compatibilidad": {
         "deprecated": true,
         "desbloqueable": false,
-        "_nota": "Eliminado del dise├▒o jugable. Compat/qu├¡mica siguen internas."
+        "_nota": "Eliminado del diseÔö£ÔûÆo jugable. Compat/quÔö£┬ímica siguen internas."
     },
     "laboratorio_relacional": {
         "_provisional": true,
@@ -403,7 +446,7 @@
                 "id": "alerta",
                 "min": 20,
                 "max": 39,
-                "etiqueta": "Aquí pasa algo"
+                "etiqueta": "Aqu├¡ pasa algo"
             },
             {
                 "id": "tirando",
@@ -447,7 +490,7 @@
     "misiones_diarias": {
         "_provisional": false,
         "_canon_r3": true,
-        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo único por día con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
+        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo ├║nico por d├¡a con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
         "dias_sin_salir": 2,
         "social_floja_max": 12,
         "vida_cumplida": 1,
@@ -457,13 +500,19 @@
     },
     "peticiones_pueblo": {
         "_canon_b4": true,
-        "_nota": "B4 cerrado en E3. fácil/relevante/difícil son categorías internas: no se muestran en buzón ni PLAY. No toca vida_pueblo ni misiones_diarias.",
+        "_nota": "B4 cerrado en E3. f├ícil/relevante/dif├¡cil son categor├¡as internas: no se muestran en buz├│n ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalizaci├│n por plantilla repetida en la ventana de ├║ltimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el n├║cleo pero a├▒ade compa├▒├¡a no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos peque├▒os (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global. R08 (playtest 25/08): gap_min_horas=6 separa nacimientos autónomos (ultima_nace_abs); no limita manuales ni labs forzados.",
         "esquema_activo": "E3",
         "cap_pct": 0.33,
+        "cap_min": 2,
         "cap_max": 10,
         "dias_sin_salir": 2,
-        "p_nacer_hora_base": 0.045,
-        "p_nacer_hora_hueco": 0.07
+        "p_nacer_hora_base": 0.058,
+        "p_nacer_hora_hueco": 0.088,
+        "impulso_cap_pequeno": 1.25,
+        "gap_min_horas": 6,
+        "anti_rep_ventana": 3,
+        "anti_rep_penalizacion": 25,
+        "bonus_nucleo_modificado": 30
     },
     "llegadas": {
         "_nota": "Lab SimuladorEconomia + brief post-gate. Plazo 2d sin cifra canonica previa.",

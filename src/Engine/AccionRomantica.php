@@ -66,6 +66,14 @@ final class AccionRomantica
             $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
             foreach ([$desde, $hacia] as $rid) {
                 if (EncuentroEngine::residenteOcupadoEnHorario($partida, $rid, $dia, $hora)) {
+                    SimFunnelProbe::on($partida, 'flechazo', [
+                        'ev' => 'ocupado_encuentro',
+                        '_k' => 'ocupado_encuentro',
+                        'accion' => $accionId,
+                        'desde' => $desde,
+                        'hacia' => $hacia,
+                        'ocupado' => $rid,
+                    ]);
                     return [
                         'ok' => false,
                         'error' => 'ocupado_encuentro',
@@ -80,7 +88,34 @@ final class AccionRomantica
             if ($prob === null && !$forzar) {
                 return ['ok' => false, 'error' => 'probabilidad_no_calibrada', 'elegible' => $ev['elegible'] ?? false];
             }
+            // El flechazo es un hito único por pareja (importancia "hito"):
+            // si ya ocurrió entre los dos, repetir el azar no repite el hito
+            // ni su entrada de diario ni su delta de romance.
+            if (RelacionBitacora::tienenHito($partida, $desde, $hacia, RelacionBitacora::FLECHAZO)) {
+                SimFunnelProbe::on($partida, 'flechazo', [
+                    'ev' => 'ya_registrado',
+                    '_k' => 'ya_registrado',
+                    'desde' => $desde,
+                    'hacia' => $hacia,
+                ]);
+                // FASE 1: el flechazo ya existe; el paso canonico es intentar la primera cita autonoma.
+                IniciativaRomantica::intentarPrimeraCita($partida, $desde, $hacia, $cal);
+return [
+                    'ok' => true,
+                    'accion' => $accionId,
+                    'flechazo_ya_registrado' => true,
+                    'delta_romance' => null,
+                    'unilateral' => true,
+                    'no_crea_pareja' => true,
+                ];
+            }
             RelacionBitacora::registrar($partida, RelacionBitacora::FLECHAZO, [$desde, $hacia], $desde . '>' . $hacia);
+            SimFunnelProbe::on($partida, 'flechazo', [
+                'ev' => 'flechazo_ok',
+                '_k' => 'flechazo_ok',
+                'desde' => $desde,
+                'hacia' => $hacia,
+            ]);
             RelacionEngine::upsertRomance($partida, $desde, $hacia, []);
             $rel = RelacionEngine::obtenerEntre($partida, $desde, $hacia)['romance'];
             $rel['flechazos'] ??= [];

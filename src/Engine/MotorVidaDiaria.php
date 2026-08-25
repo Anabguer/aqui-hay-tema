@@ -143,6 +143,7 @@ final class MotorVidaDiaria
         }
         $protagonista = self::elegirProtagonista($partida, $cal, $rng);
         if ($protagonista === null) {
+            SimFunnelProbe::on($partida, 'hueco', ['ev' => 'sin_protagonista', '_k' => 'sin_protagonista_agenda', 'capa' => $capa, '_solo_conteo' => true]);
             return null;
         }
         $familiasPlay = CalibracionConfig::get($cal, 'acontecimientos_dia.familias_en_play', null);
@@ -154,9 +155,20 @@ final class MotorVidaDiaria
         }
         $elegido = self::elegirEvento($partida, $items, $protagonista, $cal, $rng);
         if ($elegido === null) {
+            SimFunnelProbe::on($partida, 'hueco', ['ev' => 'sin_evento_valido', '_k' => 'sin_evento_valido', 'capa' => $capa, 'prot' => $protagonista, '_solo_conteo' => true]);
             return ['omitido' => 'sin_evento_valido', 'protagonista' => $protagonista];
         }
         $r = AcontecimientoDiario::ejecutar($partida, $elegido['id'], $elegido['participantes'], $store, $cal, $logger);
+        $itemEl = $store->item('acontecimientos', $elegido['id']);
+        SimFunnelProbe::on($partida, 'hueco', [
+            'ev' => 'ejecutado',
+            '_k' => 'ejecutado_' . (string) ($itemEl['familia'] ?? '?'),
+            'capa' => $capa,
+            'id' => $elegido['id'],
+            'fam' => (string) ($itemEl['familia'] ?? '?'),
+            'ok' => (bool) ($r['ok'] ?? false),
+            'error' => $r['error'] ?? null,
+        ]);
         self::marcarActividad($partida, $elegido['participantes']);
         return ['capa' => $capa, 'evento' => $elegido['id'], 'resultado' => $r];
     }
@@ -203,6 +215,7 @@ final class MotorVidaDiaria
     {
         $pesosFam = CalibracionConfig::get($cal, 'acontecimientos_dia.pesos_familias', []);
         $cands = [];
+        $flechazoCands = 0;
         $ids = array_keys($partida['residentes'] ?? []);
         foreach ($items as $item) {
             $need = (int) ($item['participantes'] ?? 1);
@@ -222,6 +235,9 @@ final class MotorVidaDiaria
                 }
                 $el = AcontecimientoElegibilidad::cumple($partida, $item, [$protagonista, $otro], $cal);
                 if ($el['ok']) {
+                    if ((string) $item['id'] === 'flechazo') {
+                        $flechazoCands++;
+                    }
                     $w = max(0.05, $wFam);
                     if (RelacionEngine::seConocen($partida, $protagonista, $otro)) {
                         $w *= 1.6;
@@ -235,6 +251,13 @@ final class MotorVidaDiaria
                 }
             }
         }
+        SimFunnelProbe::on($partida, 'elegir_evento', [
+            'ev' => 'escaneo',
+            '_k' => 'escaneo',
+            'prot' => $protagonista,
+            'n_cands' => count($cands),
+            'flechazo_n' => $flechazoCands,
+        ]);
         if ($cands === []) {
             return null;
         }
@@ -271,9 +294,11 @@ final class MotorVidaDiaria
             }
         }
         if ($hechas >= $cupoDia) {
+            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'cupo_lleno', '_k' => 'cupo_lleno', '_solo_conteo' => true]);
             return null;
         }
         if ($rng->nextFloat() > 0.60) {
+            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'rng_no_sale', '_k' => 'rng_no_sale', '_solo_conteo' => true]);
             return null;
         }
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
@@ -308,6 +333,7 @@ final class MotorVidaDiaria
         }
         $quien = self::pickPeso($pesos, $rng);
         if ($quien === null) {
+            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'sin_disponibles_agenda', '_k' => 'sin_disponibles_agenda', '_solo_conteo' => true]);
             return null;
         }
         $ops = $partida['celeste']['lugares_desbloqueados'] ?? [];
@@ -329,12 +355,25 @@ final class MotorVidaDiaria
         if ($lugar === null) {
             $lugar = is_array($ops) && $ops !== [] ? (string) $ops[0] : 'lug_cafeteria';
         }
-        if ($lugar === null || !AforoEngine::cabe($partida, $lugar, $dia, $hora, 1)) {
+        // FASE 1 (fix HORA_PASADA): la actividad se agenda SIEMPRE a futuro
+        // (Reloj::esFuturo es estricto: misma hora = pasado). Se busca la próxima
+        // franja válida respetando ventana canónica, apertura del lugar y agenda
+        // (trabajo/sueño/ocupaciones/encuentros ya reservados).
+        $franja = self::siguienteFranjaFutura($partida, $quien, (string) $lugar, $cal);
+        if ($franja === null || !AforoEngine::cabe($partida, $lugar, (int) $franja['dia'], (int) $franja['hora'], 1)) {
+            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'aforo_o_lugar_fail', '_k' => 'aforo_o_lugar_fail', '_solo_conteo' => true]);
             return null;
         }
         $attr = LugarAtributos::de($lugar);
-        $r = EncuentroEngine::programar($partida, [$quien], $dia, $hora, 'individual', $lugar, null, $logger);
+        $r = EncuentroEngine::programar($partida, [$quien], (int) $franja['dia'], (int) $franja['hora'], 'individual', $lugar, null, $logger);
         if (!($r['ok'] ?? false)) {
+            SimFunnelProbe::on($partida, 'salida_individual', [
+                'ev' => 'error_programar',
+                '_k' => 'error_programar_' . (string) ($r['error'] ?? '?'),
+                'quien' => $quien,
+                'lugar' => $lugar,
+                'err' => $r['error'] ?? null,
+            ]);
             return ['error' => $r['error'] ?? 'no_programado', 'quien' => $quien];
         }
         if (isset($r['encuentro']['id'])) {
@@ -346,13 +385,17 @@ final class MotorVidaDiaria
                 }
             }
         }
-        self::marcarActividad($partida, [$quien]);
+self::marcarActividad($partida, [$quien]);
+        $nowDia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $nowHora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $partida['npc_autonomo']['historial_eventos'][] = [
-            'dia' => $dia,
-            'hora' => $hora,
+            'dia' => $nowDia,
+            'hora' => $nowHora,
             'accion' => 'visitar_lugar',
             'residente_id' => $quien,
             'lugar' => $lugar,
+            'programado_dia' => (int) $franja['dia'],
+            'programado_hora' => (int) $franja['hora'],
         ];
         return ['quien' => $quien, 'lugar' => $lugar, 'encuentro' => $r['encuentro'] ?? null];
     }
@@ -445,5 +488,37 @@ final class MotorVidaDiaria
             return $last['id'] . ':' . implode(',', $last['participantes']);
         }
         return isset($last['id']) ? (string) $last['id'] : null;
+    }
+
+    /**
+     * FASE 1: primera hora FUTURA (máx +48 h) que cumple ventana canónica,
+     * apertura del lugar y disponibilidad de agenda del residente.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $cal
+     * @return array{dia:int,hora:int}|null
+     */
+    private static function siguienteFranjaFutura(array $partida, string $quien, string $lugar, array $cal): ?array
+    {
+        $ini = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_inicio', 9);
+        $fin = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_fin', 22);
+        $nowAbs = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24 + (int) ($partida['reloj']['hora_actual'] ?? 0);
+        for ($k = 1; $k <= 48; $k++) {
+            $abs = $nowAbs + $k;
+            $d = intdiv($abs, 24);
+            $h = $abs % 24;
+            if ($h < $ini || $h > $fin) {
+                continue;
+            }
+            if (!ComplejoCatalog::estaAbierto($lugar, $h)) {
+                continue;
+            }
+            $disp = AgendaEngine::estaDisponible($partida, $quien, $d, $h);
+            if (!($disp['disponible'] ?? false)) {
+                continue;
+            }
+            return ['dia' => $d, 'hora' => $h];
+        }
+        return null;
     }
 }
