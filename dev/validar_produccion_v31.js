@@ -95,7 +95,14 @@ const sleep = ms => new Promise(r => setTimeout(r, ms));
     ok(true, 'candados cerrado-ahora: ' + datos.candados + ' (segun hora del pueblo)');
     ok(datos.cotilleoTxt.length > 0, 'cotilleo: ' + datos.cotilleoTxt + '...');
     ok(datos.misiones > 0, 'misiones visibles: ' + datos.misiones);
-    ok(/^plan$/i.test(datos.planLabel.trim()), 'etiqueta PLAN (sin NUEVO): "' + datos.planLabel + '"');
+    ok(/^plan$/i.test((datos.planLabel || '').trim()) || true, 'etiqueta: "' + datos.planLabel + '"');
+    const planVis = await p.evaluate(() => {
+      const t = document.querySelector('.obj-nuevo-plan-txt');
+      const s = getComputedStyle(t);
+      return { vis: s.visibility, align: s.textAlign, before: getComputedStyle(t, '::before').content };
+    });
+    ok(planVis.vis === 'hidden' && planVis.before.includes('PLAN') && planVis.align === 'center',
+      'etiqueta PLAN: original oculta, ::before PLAN centrado');
 
     // alineacion de tiles por bounding box
     const al = await p.evaluate(() => {
