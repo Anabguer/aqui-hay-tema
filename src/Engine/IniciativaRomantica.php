@@ -1195,8 +1195,8 @@ final class IniciativaRomantica
         ]);
     }
 
-    /** Memoria canónica de una declaración rechazada (bitácora+cooldowns). */
-    private static function registrarRechazoDeclaracion(array &$partida, string $declara, string $rechaza, array $cal): void
+    /** Memoria canónica de una declaración rechazada (bitácora+cooldowns). R8 la reutiliza. */
+    public static function registrarRechazoDeclaracion(array &$partida, string $declara, string $rechaza, array $cal): void
     {
         RelacionBitacora::registrar(
             $partida,

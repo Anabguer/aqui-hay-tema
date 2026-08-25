@@ -6,17 +6,17 @@ namespace AquiHayTema\Engine;
 use AquiHayTema\Engine\Voluntad\VoluntadPonderadaEvaluator;
 
 /**
- * ROMANCE_CIERRE · Evaluador autónomo de PAREJAS al cerrar el día.
+ * ROMANCE_CIERRE Â· Evaluador autÃ³nomo de PAREJAS al cerrar el dÃ­a.
  *
  * R5 Crisis: NUNCA por umbral ni RNG desnudo (canon *_nunca_auto_por_umbral).
  *   - CAUSAS observables (conflicto alto, racha mala, estabilidad en suelo por
  *     desgaste/malos registrados, abandono) deciden SI hay riesgo.
- *   - Con causas suficientes, UNA tirada condicionada decide CUÁNDO llega
+ *   - Con causas suficientes, UNA tirada condicionada decide CUÃNDO llega
  *     dentro del periodo de riesgo (revive claves crisis.probabilidad /
  *     bonus_si_estabilidad_baja, muertas hasta hoy).
  *   - Sin causas suficientes: p = 0 EXACTO y cero consumo de RNG.
  *
- * R6 Reparación y R7 Ruptura se enganchan en gestionarCrisis() (mismo pase).
+ * R6 ReparaciÃ³n y R7 Ruptura se enganchan en gestionarCrisis() (mismo pase).
  */
 final class IniciativaPareja
 {
@@ -57,8 +57,10 @@ final class IniciativaPareja
      */
     public static function evaluarAlCerrarDia(array &$partida, array $cal, ?GameLogger $logger = null): array
     {
-        $out = ['crisis' => 0, 'reparaciones_ok' => 0, 'reparaciones_fail' => 0, 'rupturas' => 0];
-        if (!self::crisisActiva($cal)) {
+        $out = ['crisis' => 0, 'reparaciones_ok' => 0, 'reparaciones_fail' => 0, 'rupturas' => 0, 'vueltas' => 0];
+        // R5-R8: el pase diario corre si CUALQUIER carril tiene su flag ON.
+        // Todo OFF (producciÃ³n pre-cierre) â‡’ no-op puro sin consumo RNG.
+        if (!self::crisisActiva($cal) && !self::rupturaActiva($cal) && !self::vueltaActiva($cal)) {
             return $out;
         }
         foreach (($partida['relaciones_romanticas'] ?? []) as $i => $rel) {
@@ -71,7 +73,7 @@ final class IniciativaPareja
             if ($a === '' || $b === '') {
                 continue;
             }
-            // Copia fresca por si otro paso del pase mutó el par.
+            // Copia fresca por si otro paso del pase mutÃ³ el par.
             $rel = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
             if (!is_array($rel)) {
                 continue;
@@ -84,13 +86,17 @@ final class IniciativaPareja
             if ($est === ParejaEngine::PAREJA) {
                 self::evaluarCrisisNueva($partida, $a, $b, $cal, $out);
                 self::evaluarGolpeDuro($partida, $a, $b, $cal, $out);
+                continue;
+            }
+            if ($est === ParejaEngine::EX && self::vueltaActiva($cal)) {
+                self::evaluarVuelta($partida, $a, $b, $cal, $out);
             }
         }
         return $out;
     }
 
     // ==================================================================
-    // R5 · CRISIS CAUSAL
+    // R5 Â· CRISIS CAUSAL
     // ==================================================================
 
     /**
@@ -107,7 +113,7 @@ final class IniciativaPareja
         if (is_numeric($conf) && (int) $conf >= $confMin) {
             $causas[] = 'conflicto';
         }
-        // C2 racha mala (últimos N encuentros del par)
+        // C2 racha mala (Ãºltimos N encuentros del par)
         $ventana = max(1, self::knobInt($cal, 'crisis', 'racha_mala_ventana', 3));
         $umbralRacha = max(1, self::knobInt($cal, 'crisis', 'racha_mala', 2));
         $recientes = MemoriaEventos::recientes($partida, [$a, $b], 12);
@@ -136,7 +142,7 @@ final class IniciativaPareja
         if (is_numeric($val) && (int) $val <= $riesgo) {
             $causas[] = 'estabilidad_suelo';
         }
-        // C4 abandono (días sin NINGÚN contacto social del par)
+        // C4 abandono (dÃ­as sin NINGÃšN contacto social del par)
         $diasAbandono = max(1, self::knobInt($cal, 'crisis', 'dias_abandono', 6));
         $soc = RelacionEngine::obtenerEntre($partida, $a, $b)['social'] ?? null;
         $uc = is_array($soc) ? ($soc['ultimo_contacto']['dia'] ?? null) : null;
@@ -166,11 +172,11 @@ final class IniciativaPareja
     /** @param array<string, int> $out */
     private static function evaluarCrisisNueva(array &$partida, string $a, string $b, array $cal, array &$out): void
     {
-        // Anti-spam canónico: cooldown de familia crisis (48 h) por par.
+        // Anti-spam canÃ³nico: cooldown de familia crisis (48 h) por par.
         if (MemoriaEventos::enCooldown($partida, 'crisis', [$a, $b], $cal)) {
             return;
         }
-        // Máximo de crisis por par y mes (720 h).
+        // MÃ¡ximo de crisis por par y mes (720 h).
         $maxMes = self::knobInt($cal, 'crisis', 'max_por_par_mes', 2);
         $now = self::absNow($partida);
         $nMes = 0;
@@ -194,7 +200,7 @@ final class IniciativaPareja
         $causas = self::causasCrisis($partida, $a, $b, $cal);
         $p = self::probabilidadCrisis($cal, $causas);
         if ($p <= 0.0) {
-            return; // SIN CAUSAS NO HAY CRISIS JAMÁS (y cero draws)
+            return; // SIN CAUSAS NO HAY CRISIS JAMÃS (y cero draws)
         }
         $rng = RngService::fromPartida($partida);
         $tirada = $rng->nextFloat();
@@ -240,7 +246,7 @@ final class IniciativaPareja
         $out['crisis']++;
     }
 
-    /** Tristeza simultánea al entrar en crisis / ruptura. */
+    /** Tristeza simultÃ¡nea al entrar en crisis / ruptura. */
     protected static function tristezaMutua(array &$partida, string $a, string $b, array $cal, ?int $durOverride = null): void
     {
         $dur = $durOverride ?? (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 10);
@@ -266,11 +272,11 @@ final class IniciativaPareja
     }
 
     // ==================================================================
-    // R6 · REPARACIÓN (salida de crisis SIN ruptura).
+    // R6 Â· REPARACIÃ“N (salida de crisis SIN ruptura).
     //
     // Reutiliza la infraestructura viva: el canal conflicto ya decae y ya se
-    // repara con encuentros bien/muy_bien. La reparación exige un encuentro
-    // REAL bueno DURANTE la crisis + voluntad geométrica de ambos. Puede
+    // repara con encuentros bien/muy_bien. La reparaciÃ³n exige un encuentro
+    // REAL bueno DURANTE la crisis + voluntad geomÃ©trica de ambos. Puede
     // fallar (deja memoria) y no convierte cada crisis en ruptura.
     // ==================================================================
 
@@ -291,13 +297,13 @@ final class IniciativaPareja
         }
 
         if (self::intentarReparacion($partida, $a, $b, $cal, $out)) {
-            return; // reparada hoy: nada más que gestionar
+            return; // reparada hoy: nada mÃ¡s que gestionar
         }
         self::evaluarRiesgoRuptura($partida, $a, $b, $cal, $out);
     }
 
     /**
-     * Intento de reparación si procede. Devuelve true si el par SALIÓ de crisis.
+     * Intento de reparaciÃ³n si procede. Devuelve true si el par SALIÃ“ de crisis.
      *
      * @param array<string, int> $out
      */
@@ -324,7 +330,7 @@ final class IniciativaPareja
         if (is_numeric($conf) && (int) $conf >= $confMin) {
             return false;
         }
-        // Debe existir ≥1 encuentro REAL bueno DESPUÉS de entrar en crisis.
+        // Debe existir â‰¥1 encuentro REAL bueno DESPUÃ‰S de entrar en crisis.
         $hayBuenaEnCrisis = false;
         foreach (($partida['memoria_eventos'] ?? []) as $ev) {
             if (!is_array($ev) || ($ev['familia'] ?? '') !== 'encuentro') {
@@ -346,7 +352,7 @@ final class IniciativaPareja
             return false;
         }
 
-        // Voluntad geométrica de AMBOS (tipo cita; conflicto/emocional ya penalizan).
+        // Voluntad geomÃ©trica de AMBOS (tipo cita; conflicto/emocional ya penalizan).
         $prop = [
             'participantes' => [$a, $b],
             'tipo' => 'cita',
@@ -391,7 +397,7 @@ final class IniciativaPareja
             return false;
         }
 
-        // ÉXITO: volver a PAREJA con estabilidad restaurada PARCIALMENTE.
+        // Ã‰XITO: volver a PAREJA con estabilidad restaurada PARCIALMENTE.
         $deltaRep = self::knobInt($cal, 'reparacion', 'delta_estabilidad', 20);
         $relOk = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
         if (!is_array($relOk)) {
@@ -419,12 +425,12 @@ final class IniciativaPareja
     }
 
     // ==================================================================
-    // R7 · RUPTURA — orígenes únicos O1/O2, decisión unilateral, memoria.
+    // R7 Â· RUPTURA â€” orÃ­genes Ãºnicos O1/O2, decisiÃ³n unilateral, memoria.
     //
-    // O1: crisis sin salida (días en crisis ≥ límite OR fallos de reparación).
+    // O1: crisis sin salida (dÃ­as en crisis â‰¥ lÃ­mite OR fallos de reparaciÃ³n).
     // O2: golpe duro en pareja estable (muy_mal reciente + conflicto + suelo).
     // Nunca por umbral silencioso: cada ruptura lleva causa registrada y
-    // autoría (rompe el de MENOR romance, con SU voluntad individual).
+    // autorÃ­a (rompe el de MENOR romance, con SU voluntad individual).
     // ==================================================================
 
     /**
@@ -470,7 +476,7 @@ final class IniciativaPareja
             return;
         }
 
-        // Autoría: rompe el de MENOR romance; decisión UNILATERAL con su voluntad.
+        // AutorÃ­a: rompe el de MENOR romance; decisiÃ³n UNILATERAL con su voluntad.
         $quienRompe = self::elDeMenorRomance($partida, $a, $b);
         $receptor = $quienRompe === $a ? $b : $a;
         if (!self::voluntadDeRomper($partida, $quienRompe, $receptor, $cal)) {
@@ -487,8 +493,8 @@ final class IniciativaPareja
     }
 
     /**
-     * O2 · Golpe duro en pareja ESTABLE: muy_mal reciente + conflicto alto +
-     * estabilidad en suelo. Combo explícito o p=0.
+     * O2 Â· Golpe duro en pareja ESTABLE: muy_mal reciente + conflicto alto +
+     * estabilidad en suelo. Combo explÃ­cito o p=0.
      *
      * @param array<string, int> $out
      */
@@ -543,11 +549,11 @@ final class IniciativaPareja
     {
         $romAB = RelacionEngine::romanceHacia($partida, $a, $b) ?? 0;
         $romBA = RelacionEngine::romanceHacia($partida, $b, $a) ?? 0;
-        // Empate → orden canónico del par (coherente con el resto del motor).
+        // Empate â†’ orden canÃ³nico del par (coherente con el resto del motor).
         return $romAB <= $romBA ? $a : $b;
     }
 
-    /** Decisión individual de romper (tirada propia, NO media geométrica). */
+    /** DecisiÃ³n individual de romper (tirada propia, NO media geomÃ©trica). */
     private static function voluntadDeRomper(array &$partida, string $quien, string $otro, array $cal): bool
     {
         $calInd = $cal;
@@ -589,9 +595,9 @@ final class IniciativaPareja
         }
         // Marcadores de continuidad fuera.
         IniciativaRomantica::purgarMarcadoresPar($partida, $iniciador, $receptor);
-        // Hito canónico de ruptura (estado EX + estabilidad memoria + historial).
+        // Hito canÃ³nico de ruptura (estado EX + estabilidad memoria + historial).
         ParejaEngine::romper($partida, $iniciador, $receptor, $comoAcabo);
-        // Emociones asimétricas: pesa más a quien la recibe.
+        // Emociones asimÃ©tricas: pesa mÃ¡s a quien la recibe.
         $durReceptor = self::knobInt($cal, 'ruptura_politica', 'triste_receptor_horas', 10);
         $durIniciador = self::knobInt($cal, 'ruptura_politica', 'triste_iniciador_horas', 5);
         self::tristezaIndividual($partida, $receptor, $durReceptor, $iniciador, $cal);
@@ -625,5 +631,149 @@ final class IniciativaPareja
             ['hacia' => $hacia],
             $durEf
         );
+    }
+
+    // ==================================================================
+    // R8 Â· VUELTA â€” posible pero CON CONTRATO (no telenovela infinita).
+    //
+    // cooldown post-ruptura = romance_hito (336 h canon) Â· seÃ±al mutua viva
+    // Â· â‰¥1 encuentro real bueno POST-ruptura Â· voluntad geomÃ©trica con
+    // penalti por vuelta Â· cap absoluto max_vueltas â‡’ historia_cerrada.
+    // ==================================================================
+
+    public static function vueltaActiva(array $cal): bool
+    {
+        return (bool) CalibracionConfig::get($cal, 'romance_autonomo.vuelta_activa', false)
+            && (bool) CalibracionConfig::get($cal, 'romance_autonomo.declaracion_activa', false);
+    }
+
+    /**
+     * @param array<string, int> $out
+     */
+    private static function evaluarVuelta(array &$partida, string $a, string $b, array $cal, array &$out): void
+    {
+        // Cooldown post-ruptura: Ãºltima RUPTURA â‰¥ romance_hito (336 h canon).
+        $rupturas = RelacionBitacora::entre($partida, $a, $b, RelacionBitacora::RUPTURA);
+        if ($rupturas === []) {
+            return;
+        }
+        $last = $rupturas[count($rupturas) - 1];
+        $absRup = ((int) ($last['fecha']['dia'] ?? 0)) * 24 + (int) ($last['fecha']['hora'] ?? 0);
+        $cooldownRup = max(1, (int) CalibracionConfig::get($cal, 'cooldowns.por_familia.romance_hito', 336));
+        if ((self::absNow($partida) - $absRup) < $cooldownRup) {
+            return;
+        }
+
+        // Cap absoluto de vueltas: historia cerrada.
+        $vueltasPrevias = count(RelacionBitacora::entre($partida, $a, $b, RelacionBitacora::VUELTA));
+        $maxVueltas = self::knobInt($cal, 'pareja_vuelta', 'max_vueltas', 2);
+        if ($vueltasPrevias >= $maxVueltas) {
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'vuelta_bloqueada',
+                '_k' => 'historia_cerrada',
+                'par' => [$a, $b],
+            ]);
+            return;
+        }
+
+        // SeÃ±al mutua viva.
+        $ab = SenalRomantica::desdeHacia($partida, $a, $b, $cal);
+        $ba = SenalRomantica::desdeHacia($partida, $b, $a, $cal);
+        if (empty($ab['ok']) || empty($ba['ok'])) {
+            return;
+        }
+
+        // Deben haberse tratado DESPUÃ‰S de romper: â‰¥1 encuentro real bueno post-ruptura.
+        $hayBuenaPost = false;
+        foreach (($partida['memoria_eventos'] ?? []) as $ev) {
+            if (!is_array($ev) || ($ev['familia'] ?? '') !== 'encuentro') {
+                continue;
+            }
+            $pp = is_array($ev['participantes'] ?? null) ? $ev['participantes'] : [];
+            if (!in_array($a, $pp, true) || !in_array($b, $pp, true)) {
+                continue;
+            }
+            if (!in_array((string) ($ev['resultado_experiencia'] ?? ''), ['bien', 'muy_bien'], true)) {
+                continue;
+            }
+            if (((int) ($ev['dia'] ?? 0)) * 24 + (int) ($ev['hora'] ?? 0) >= $absRup) {
+                $hayBuenaPost = true;
+                break;
+            }
+        }
+        if (!$hayBuenaPost) {
+            return;
+        }
+        if (MemoriaEventos::enCooldown($partida, 'romance_hito', [$a, $b], $cal)) {
+            return;
+        }
+        if (PropuestaCooldown::activo($partida, $a, $b, 'declaracion', $cal)
+            || PropuestaCooldown::activo($partida, $b, $a, 'declaracion', $cal)) {
+            return;
+        }
+        if (!IniciativaRomantica::capHitosDisponible($partida, $cal)) {
+            return;
+        }
+
+        // Memoria pesa: penalti de voluntad proporcional a vecesPareja.
+        $veces = RelacionBitacora::vecesPareja($partida, $a, $b);
+        $penPorVuelta = self::knobInt($cal, 'pareja_vuelta', 'penalti_voluntad_por_vuelta', 8);
+        $penalti = -$penPorVuelta * max(0, $veces);
+
+        $prop = [
+            'participantes' => [$a, $b],
+            'tipo' => 'declaracion',
+            'lugar' => null,
+            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'hora' => (int) ($partida['reloj']['hora_actual'] ?? 12),
+            '_bonus_voluntad' => [$a => $penalti, $b => $penalti],
+        ];
+        $vol = new VoluntadPonderadaEvaluator($cal);
+        $ra = $vol->evaluar($partida, $prop, $a);
+        $rb = $vol->evaluar($partida, $prop, $b);
+        foreach ([[$ra, $a, $b], [$rb, $b, $a]] as [$r, $quien, $otro]) {
+            if (($r['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            if (($r['clase'] ?? '') === PropuestaEncuentro::CLASE_COOLDOWN) {
+                return;
+            }
+            $motivo = (string) ($r['motivo_tipo'] ?? 'banal');
+            RechazoMemoria::registrar($partida, $quien, $otro, $motivo, $cal, 'declaracion');
+            IniciativaRomantica::registrarRechazoDeclaracion($partida, $otro, $quien, $cal);
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'vuelta_rechazada',
+                '_k' => 'vuelta_no',
+                'par' => [$a, $b],
+                'motivo' => $motivo,
+            ]);
+            return;
+        }
+        $pPlan = sqrt(max(0.0, (float) ($ra['p'] ?? 0)) * max(0.0, (float) ($rb['p'] ?? 0)));
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+        if (!($tirada < $pPlan)) {
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'vuelta_geom_no',
+                '_k' => 'vuelta_no',
+                'par' => [$a, $b],
+                'p_plan' => round($pPlan, 4),
+            ]);
+            return;
+        }
+
+        $rec = ParejaEngine::reconciliar($partida, $a, $b, true, true, $cal);
+        if (!($rec['ok'] ?? false)) {
+            return;
+        }
+        MemoriaEventos::registrar($partida, 'pareja', [$a, $b], null, 'vuelta');
+        IniciativaRomantica::purgarMarcadoresPar($partida, $a, $b);
+        SimFunnelProbe::on($partida, 'declaracion', [
+            'ev' => 'vuelta_ok',
+            '_k' => 'vuelta_ok',
+            'par' => [$a, $b],
+        ]);
+        $out['vueltas']++;
     }
 }
