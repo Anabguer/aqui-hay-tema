@@ -27,6 +27,9 @@ final class RechazoMemoria
         string $tipo = 'conocerse'
     ): array {
         self::ensure($partida);
+        if ($motivo === 'agenda' || $motivo === 'cooldown') {
+            return ['ok' => true, 'delta_romance' => 0, 'entrada' => null];
+        }
         $row = [
             'quien' => $quienRechaza,
             'hacia' => $hacia,
@@ -40,13 +43,17 @@ final class RechazoMemoria
 
         $delta = 0;
         $triste = false;
-        if ($motivo === 'agenda' || $motivo === 'cooldown') {
-            return ['ok' => true, 'delta_romance' => 0, 'entrada' => $row];
-        }
         $n = self::countHacia($partida, $quienRechaza, $hacia);
         $umbral = (int) CalibracionConfig::get($cal, 'rechazos.repetidos_umbral', 3);
         $relevante = $motivo === 'emocional' || $motivo === 'relacional';
         $erode = $relevante || $n >= $umbral;
+        // Auto-rechazo (plan individual): memoria + cooldown SÍ; las
+        // consecuencias dirigidas a OTRA persona (erosión de su romance,
+        // tristeza, cotilleo, estabilidad, bitácora) exigen dos personas
+        // distintas y no aplican estructuralmente.
+        if ($hacia === $quienRechaza) {
+            return ['ok' => true, 'delta_romance' => 0, 'entrada' => $row, 'triste' => false];
+        }
         if ($erode && $hacia !== '') {
             $delta = (int) CalibracionConfig::get($cal, 'rechazos.delta_romance_hacia_quien_rechaza', -3);
             $actual = RelacionEngine::romanceHacia($partida, $hacia, $quienRechaza);

@@ -14,6 +14,12 @@ use AquiHayTema\Engine\Voluntad\VoluntadPonderadaEvaluator;
  */
 final class PropuestaEncuentroEngine
 {
+    /** Marcador que escribe la resolución geom: esa persona habría aceptado a nivel individual. */
+    public const MARCA_HABRIA_ACEPTADO_PLAN = 'voluntad_ok_pero_plan_rechazado';
+
+    /** Marcador B4: acepta porque el ES el plan que pidió por Mensajitos. */
+    public const MARCA_COMPROMISO_PETICION = 'compromiso_peticion_propia';
+
     public static function listar(array $partida): array
     {
         return $partida['propuestas_encuentro'] ?? [];
@@ -80,6 +86,30 @@ final class PropuestaEncuentroEngine
             }
             return $r;
         }
+        if (count($participantes) >= 1 && $tipo !== 'individual') {
+            foreach ($participantes as $rid) {
+                $otro = self::otroParticipante($participantes, (string) $rid);
+                if ($otro === '') {
+                    continue;
+                }
+                if (PropuestaCooldown::activo($partida, (string) $rid, $otro, $tipo, $calDef)) {
+                    $err = GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_COOLDOWN, ['motivo' => 'cooldown_propuesta']);
+                    $err['mensaje_ui'] = CopyRechazoPropuesta::mensajeCooldownPar($partida, $participantes, $tipo);
+                    return $err;
+                }
+            }
+        } elseif ($tipo === 'individual' && count($participantes) === 1) {
+            // Cooldown de plan individual: tras un rechazo real, el propio
+            // residente marca cooldown hacia sí mismo para ese tipo. Reintento
+            // inmediato = bloqueo neutro temporal; NO es rechazo nuevo.
+            $rid = (string) $participantes[0];
+            if ($rid !== '' && PropuestaCooldown::activo($partida, $rid, $rid, 'individual', $calDef)) {
+                $err = GameError::respuesta(GameError::ENCUENTRO_RECHAZADO_COOLDOWN, ['motivo' => 'cooldown_propuesta']);
+                $err['mensaje_ui'] = IdentidadPublica::nombre($partida, $rid)
+                    . ' necesita un poco de espacio ahora mismo. Quizá más tarde.';
+                return $err;
+            }
+        }
         $franja = self::resolverFranja($partida, $participantes, $dia, $hora, (string) $lugarId);
         if ($franja === null) {
             $propCtx = [
@@ -131,6 +161,14 @@ final class PropuestaEncuentroEngine
             $voluntad = new VoluntadPonderadaEvaluator($calDef);
         }
 
+        // B4: ¿esta propuesta cubre una petición abierta? 'exacta' compromete al
+        // peticionario (no repite RNG por lo ya pedido); 'nucleo' (Celestine añadió
+        // compañía no pedida) solo da un bonus fuerte configurable. Agenda y
+        // cooldown siguen mandando para todos.
+        $petCubre = PeticionPuebloEngine::activa($partida)
+            ? PeticionPuebloEngine::peticionQueCubre($partida, $participantes, $tipo, (string) $lugarId)
+            : null;
+
         $rng = RngService::fromPartida($partida);
         $id = 'prop_' . bin2hex(substr(pack('N', $rng->next()), 0, 4));
         $rng->persistToPartida($partida);
@@ -153,6 +191,15 @@ final class PropuestaEncuentroEngine
             '_placeholder_copy' => true,
         ];
 
+        if ($petCubre !== null && $petCubre['nivel'] === 'nucleo') {
+            $bonus = (int) CalibracionConfig::get($calDef, 'peticiones_pueblo.bonus_nucleo_modificado', 30);
+            if ($bonus > 0) {
+                $propuesta['_bonus_voluntad'] = [
+                    (string) ($petCubre['peticion']['residente_id'] ?? '') => $bonus,
+                ];
+            }
+        }
+
         foreach ($participantes as $rid) {
             $propuesta['reacciones'][] = self::evaluarParticipante(
                 $partida,
@@ -163,6 +210,10 @@ final class PropuestaEncuentroEngine
                 $participantes,
                 $voluntad
             );
+        }
+
+        if ($petCubre !== null && $petCubre['nivel'] === 'exacta') {
+            self::aplicarCompromisoPeticionario($partida, $propuesta, (string) ($petCubre['peticion']['residente_id'] ?? ''), (string) ($petCubre['peticion']['id'] ?? ''));
         }
 
         self::aplicarResolucionPlan($partida, $propuesta, $calDef);
@@ -176,6 +227,7 @@ final class PropuestaEncuentroEngine
                 $horaPedida,
                 $calDef
             );
+            self::feedbackRechazoTerceroSiProcede($partida, $propuesta, $logger);
         }
         $partida['propuestas_encuentro'] ??= [];
         $partida['propuestas_encuentro'][] = $propuesta;
@@ -281,6 +333,91 @@ final class PropuestaEncuentroEngine
     }
 
     /**
+     * B4 exacta: el peticionario no vuelve a decidir si quiere SU plan.
+     * Solo la agenda/cooldown pueden tumbarle; el RNG de voluntad, no.
+     *
+     * @param array<string, mixed> $propuesta
+     */
+    private static function aplicarCompromisoPeticionario(
+        array &$partida,
+        array &$propuesta,
+        string $ridPet,
+        string $petId
+    ): void {
+        if ($ridPet === '') {
+            return;
+        }
+        foreach ($propuesta['reacciones'] as $i => $reac) {
+            if (!is_array($reac) || (string) ($reac['residente_id'] ?? '') !== $ridPet) {
+                continue;
+            }
+            $clase = (string) ($reac['clase'] ?? '');
+            if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
+                && ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+                    || $clase === PropuestaEncuentro::CLASE_COOLDOWN)
+            ) {
+                continue;
+            }
+            $pAntes = isset($reac['p']) ? $reac['p'] : null;
+            $propuesta['reacciones'][$i]['decision'] = PropuestaEncuentro::DECISION_ACEPTA;
+            $propuesta['reacciones'][$i]['clase'] = null;
+            $propuesta['reacciones'][$i]['motivo_tecnico'] = self::MARCA_COMPROMISO_PETICION;
+            $propuesta['reacciones'][$i]['motivo_tipo'] = null;
+            $propuesta['reacciones'][$i]['copy_id'] = null;
+            $propuesta['reacciones'][$i]['_bloqueado_decision'] = false;
+            if (!isset($propuesta['reacciones'][$i]['factores']) || !is_array($propuesta['reacciones'][$i]['factores'])) {
+                $propuesta['reacciones'][$i]['factores'] = [];
+            }
+            if ($pAntes !== null) {
+                $propuesta['reacciones'][$i]['factores']['p_sin_compromiso'] = $pAntes;
+            }
+            $propuesta['reacciones'][$i]['factores']['compromiso_peticion'] = $petId;
+            unset($propuesta['reacciones'][$i]['_joint_plan']);
+        }
+    }
+
+    /**
+     * Si el plan cubría una petición abierta y lo tumbó un TERCERO mientras el
+     * peticionario aceptaba, el Mensajito lo cuenta: "yo sí quería, pero X no".
+     * La petición permanece abierta.
+     *
+     * @param array<string, mixed> $propuesta
+     */
+    private static function feedbackRechazoTerceroSiProcede(array &$partida, array $propuesta, ?GameLogger $logger): void
+    {
+        if (!PeticionPuebloEngine::activa($partida)
+            || ($propuesta['estado'] ?? '') !== 'rechazada'
+        ) {
+            return;
+        }
+        $canon = self::rechazoCanonico($propuesta);
+        $hablante = is_array($canon['hablante'] ?? null) ? $canon['hablante'] : null;
+        $comprometido = is_array($canon['habria_aceptado'] ?? null) ? $canon['habria_aceptado'] : null;
+        if ($hablante === null || $comprometido === null) {
+            return;
+        }
+        $ridPet = (string) ($comprometido['residente_id'] ?? '');
+        $tercero = (string) ($hablante['residente_id'] ?? '');
+        if ($ridPet === '' || $tercero === '' || $ridPet === $tercero) {
+            return;
+        }
+        $parts = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+        $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
+        $cubre = PeticionPuebloEngine::peticionQueCubre(
+            $partida,
+            $parts,
+            $tipo,
+            (string) ($propuesta['lugar'] ?? '')
+        );
+        if ($cubre === null
+            || (string) ($cubre['peticion']['residente_id'] ?? '') !== $ridPet
+        ) {
+            return;
+        }
+        PeticionFeedback::alRechazoTercero($partida, $cubre['peticion'], $tercero, $logger);
+    }
+
+    /**
      * Decisión explícita (tests / UI futura). No inventa fórmula.
      * No puede anular un rechazo por indisponibilidad.
      *
@@ -352,6 +489,7 @@ final class PropuestaEncuentroEngine
                 CalibracionConfig::load(dirname(__DIR__, 2))
             );
             $partida['propuestas_encuentro'][$idx] = $prop;
+            self::feedbackRechazoTerceroSiProcede($partida, $prop, $logger);
         }
 
         \aht_log_optional($logger, $partida, 'propuesta_decision', [
@@ -531,6 +669,32 @@ final class PropuestaEncuentroEngine
                 : PropuestaEncuentro::DECISION_RECHAZA;
             $propuesta['reacciones'][$i]['clase'] = $acepta ? null : PropuestaEncuentro::CLASE_VOLUNTAD;
             $propuesta['reacciones'][$i]['motivo_tecnico'] = $acepta ? 'voluntad_acepta_solo' : 'voluntad_rechaza_solo';
+            if (!$acepta) {
+                // Rechazo REAL de voluntad en plan individual: mismo contrato de
+                // memoria/cooldown que la vía geom. Sin otro participante, el
+                // rechazo se registra auto (quien=hacia) y RechazoMemoria aplica
+                // sus consecuencias según contrato (las dirigidas a OTRA persona
+                // no aplican estructuralmente).
+                $ridSolo = (string) ($propuesta['reacciones'][$i]['residente_id'] ?? '');
+                if ($ridSolo !== '') {
+                    $motivoSolo = VoluntadPonderadaEvaluator::motivoRechazoPublic(
+                        $partida,
+                        $ridSolo,
+                        '',
+                        $cal
+                    );
+                    $propuesta['reacciones'][$i]['motivo_tipo'] = $motivoSolo;
+                    $propuesta['reacciones'][$i]['copy_id'] = $motivoSolo;
+                    RechazoMemoria::registrar(
+                        $partida,
+                        $ridSolo,
+                        $ridSolo,
+                        $motivoSolo,
+                        [],
+                        (string) ($propuesta['tipo'] ?? 'individual')
+                    );
+                }
+            }
             return;
         }
         if (count($idxs) < 2) {
@@ -658,6 +822,7 @@ final class PropuestaEncuentroEngine
         $ev = $voluntad->evaluar($partida, $propuesta, $residenteId);
         if (($ev['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
             && ($ev['clase'] ?? '') !== PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+            && ($ev['clase'] ?? '') !== PropuestaEncuentro::CLASE_COOLDOWN
             && empty($ev['_joint_plan'])
         ) {
             $ids = $propuesta['participantes'] ?? [];
@@ -785,54 +950,90 @@ final class PropuestaEncuentroEngine
             } elseif ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD) {
                 $out['mensaje_ui'] = GameError::mensajeUi(GameError::ENCUENTRO_RECHAZADO_INDISPONIBILIDAD);
             } else {
-                $hablante = self::rechazoHablante($propuesta);
+                $hablante = self::rechazoCanonico($propuesta)['hablante'];
+                $nombre = is_array($hablante) ? (string) ($hablante['nombre'] ?? '') : '';
+                $copyId = is_array($hablante) && !empty($hablante['copy_id']) ? (string) $hablante['copy_id'] : null;
                 $out['mensaje_ui'] = CopyVoluntad::rechazoConHablante(
-                    $hablante['nombre'] !== '' ? $hablante['nombre'] : 'Alguien',
-                    $hablante['copy_id']
+                    $nombre !== '' ? $nombre : 'Alguien',
+                    $copyId
                 );
-                $out['copy_id'] = $hablante['copy_id'];
-                $out['rechazado_por'] = $hablante;
+                $out['copy_id'] = $copyId;
+                $out['rechazado_por'] = [
+                    'residente_id' => is_array($hablante) ? ((string) ($hablante['residente_id'] ?? '') ?: null) : null,
+                    'nombre' => $nombre,
+                    'copy_id' => $copyId,
+                ];
             }
         }
         return $out;
     }
 
     /**
-     * Prefiere al segundo participante (a quien se propone) si rechazó.
+     * FUENTE CANÓNICA de atribución de rechazo (única; no duplicar).
      *
-     * @return array{residente_id: ?string, nombre: string, copy_id: ?string}
+     * - hablante: la reacción rechazadora REAL elegida por severidad de clase
+     *   (indisponibilidad > cooldown > voluntad), mismo orden que claseRechazo().
+     *   Empate dentro de una clase → primera aparición en reacciones.
+     *   NUNCA depende de participants[0]/participants[1] ni del orden A/B.
+     * - habria_aceptado: reacción con el marcador MARCA_HABRIA_ACEPTADO_PLAN
+     *   (decisión ACEPTA + 'voluntad_ok_pero_plan_rechazado'), o null.
+     *
+     * @param array<string, mixed> $propuesta
+     * @return array{
+     *   rechazadores: list<array<string, mixed>>,
+     *   hablante: array<string, mixed>|null,
+     *   habria_aceptado: array<string, mixed>|null
+     * }
      */
-    private static function rechazoHablante(array $propuesta): array
+    public static function rechazoCanonico(array $propuesta): array
     {
-        $ids = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
-        $preferido = isset($ids[1]) ? (string) $ids[1] : '';
-        $fallback = [
-            'residente_id' => null,
-            'nombre' => '',
-            'copy_id' => null,
-        ];
-        $elegido = null;
+        $rechazadores = [];
         foreach ($propuesta['reacciones'] ?? [] as $reac) {
-            if (($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+            if (!is_array($reac)) {
                 continue;
             }
-            $row = [
-                'residente_id' => (string) ($reac['residente_id'] ?? ''),
-                'nombre' => (string) ($reac['nombre'] ?? ''),
-                'copy_id' => !empty($reac['copy_id']) ? (string) $reac['copy_id'] : null,
-            ];
-            if ($elegido === null) {
-                $elegido = $row;
-            }
-            if ($preferido !== '' && $row['residente_id'] === $preferido) {
-                $elegido = $row;
-                break;
+            if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA) {
+                $rechazadores[] = $reac;
             }
         }
-        if ($elegido === null) {
-            return $fallback;
+        $hablante = null;
+        $prioridad = [
+            PropuestaEncuentro::CLASE_INDISPONIBILIDAD,
+            PropuestaEncuentro::CLASE_COOLDOWN,
+            PropuestaEncuentro::CLASE_VOLUNTAD,
+        ];
+        foreach ($prioridad as $clase) {
+            foreach ($rechazadores as $r) {
+                $rc = (string) ($r['clase'] ?? '');
+                $coincide = $clase === PropuestaEncuentro::CLASE_VOLUNTAD
+                    ? ($rc === '' || $rc === PropuestaEncuentro::CLASE_VOLUNTAD)
+                    : ($rc === $clase);
+                if ($coincide) {
+                    $hablante = $r;
+                    break 2;
+                }
+            }
         }
-        return $elegido;
+        $habriaAceptado = null;
+        if ($hablante !== null) {
+            foreach ($propuesta['reacciones'] ?? [] as $reac) {
+                if (!is_array($reac)) {
+                    continue;
+                }
+                $mt = (string) ($reac['motivo_tecnico'] ?? '');
+                if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_ACEPTA
+                    && ($mt === self::MARCA_HABRIA_ACEPTADO_PLAN || $mt === self::MARCA_COMPROMISO_PETICION)
+                ) {
+                    $habriaAceptado = $reac;
+                    break;
+                }
+            }
+        }
+        return [
+            'rechazadores' => $rechazadores,
+            'hablante' => $hablante,
+            'habria_aceptado' => $habriaAceptado,
+        ];
     }
 
     /**
@@ -888,7 +1089,7 @@ final class PropuestaEncuentroEngine
      * @param array<string, mixed> $cal
      */
     private static function anotarRechazoNarrativo(
-        array $partida,
+        array &$partida,
         array &$propuesta,
         string $lugarId,
         int $diaPedido,
