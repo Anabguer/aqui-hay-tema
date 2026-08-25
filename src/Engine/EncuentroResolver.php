@@ -34,8 +34,10 @@ final class EncuentroResolver
         $exp = null;
         if ($catalog !== null && count($participantes) >= 1) {
             $rng = RngService::fromPartida($partida);
+            LabAudit::ctxAbrir('encuentro_final:' . (string) ($encuentro['id'] ?? ''));
             $exp = EncuentroExperiencia::resolver($partida, $encuentro, $catalog, $rng, $cal);
             $rng->persistToPartida($partida);
+            LabAudit::ctxAbrir(null);
             foreach ($exp['por_participante'] ?? [] as $pid => $row) {
                 $por[(string) $pid] = array_merge($por[(string) $pid] ?? [], $row);
             }
@@ -113,6 +115,11 @@ final class EncuentroResolver
                 'experiencia_narrativa' => is_array($exp['experiencia_narrativa'] ?? null) ? $exp['experiencia_narrativa'] : null,
                 'texto_resumen' => 'Encuentro ' . $tipo . ' (' . $resA . '/' . $resB . ').',
             ];
+            /* Telemetría DEV observacional: persiste la traza REAL de tiradas si hubo captura. */
+            $trazaDev = LabAudit::trazaCtx('encuentro_final:' . (string) ($encuentro['id'] ?? ''));
+            if ($trazaDev !== []) {
+                $resultado['_dev_traza'] = ['tiradas_finales' => $trazaDev];
+            }
         } else {
             $evaluator = new PlaceholderEvaluator();
             if (count($participantes) >= 2) {

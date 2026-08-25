@@ -159,7 +159,9 @@ final class EncuentroIntervencion
         }
 
         $rng = RngService::fromPartida($partida);
+        LabAudit::ctxAbrir('intervencion:' . $encuentroId);
         $res = self::resolverAccion($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog, $rng);
+        LabAudit::ctxAbrir(null);
         $rng->persistToPartida($partida);
 
         foreach ($partida['encuentros'] as &$row) {
@@ -175,6 +177,8 @@ final class EncuentroIntervencion
                 'hobby_id' => $params['hobby_id'] ?? null,
                 'carga' => $res['carga'] ?? 0.0,
                 'hito' => $res['hito'] ?? null,
+                /* Telemetría DEV observacional (solo con debug activo): traza REAL de la resolución. */
+                'dev_traza' => LabAudit::trazaCtx('intervencion:' . $encuentroId),
                 'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
                 'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
             ];
@@ -565,6 +569,17 @@ final class EncuentroIntervencion
         $p = max(0.05, min(0.92, $p));
 
         $aceptado = $rng->nextFloat() < $p;
+        /* Telemetría DEV observacional: probabilidad y tirada REALES del beso. */
+        LabAudit::obsResolucion('beso_tirada', [
+            'p' => $p,
+            'p_rango_clamp' => ['min' => 0.05, 'max' => 0.92],
+            'pareja_estado' => ParejaEngine::estado($partida, $a, $b),
+            'tipo_es_cita' => PropuestaNivel::esTipoCita((string) ($enc['tipo'] ?? '')),
+            'quimica_desde_hacia' => QuimicaEngine::valorHacia($partida, $desde, $hacia),
+            'emocion_hacia' => $emo,
+            'rng_state_post' => $rng->getState(),
+            'aceptado' => $aceptado,
+        ]);
         $efectos = [];
         $hito = null;
         $cotilleo = null;
@@ -623,27 +638,46 @@ final class EncuentroIntervencion
         Catalog $catalog
     ): float {
         $snap = EncuentroPonderacion::snapshot($partida, $enc, $catalog);
-        $carga = (EncuentroExperiencia::cargaDe($snap, $a, $cal) + EncuentroExperiencia::cargaDe($snap, $b, $cal)) / 2.0;
+        $cargaA = EncuentroExperiencia::cargaDe($snap, $a, $cal);
+        $cargaB = EncuentroExperiencia::cargaDe($snap, $b, $cal);
+        $carga = ($cargaA + $cargaB) / 2.0;
+        $bonoAccion = 0.0;
         if ($accionId === self::BROMA) {
-            $carga += 0.08;
+            $bonoAccion += 0.08;
         }
         if ($accionId === self::PERSONAL) {
-            $carga += 0.05;
+            $bonoAccion += 0.05;
         }
         if ($accionId === self::COQUETEAR) {
-            $carga += 0.1;
+            $bonoAccion += 0.1;
         }
+        $carga += $bonoAccion;
+        $bonoTema = 0.0;
         if ($accionId === self::HOBBY) {
             $rid = (string) ($params['residente_id'] ?? '');
             $lugar = (string) ($enc['lugar'] ?? '');
             if ($rid !== '') {
                 $plan = PlanAfinidad::paraParticipante($partida, $rid, $lugar, $catalog);
                 if (is_array($plan) && !empty($plan['hobby_match'])) {
-                    $carga += 0.2;
+                    $bonoTema = 0.2;
+                    $carga += $bonoTema;
                 }
             }
         }
-        return max(-1.0, min(1.0, $carga));
+        $clampeada = max(-1.0, min(1.0, $carga));
+        /* Telemetría DEV observacional: componentes REALES usados para la carga. */
+        LabAudit::obsResolucion('carga_base_intervencion', [
+            'accion' => $accionId,
+            'carga_a' => $cargaA,
+            'carga_b' => $cargaB,
+            'media_participantes' => ($cargaA + $cargaB) / 2.0,
+            'bono_accion' => $bonoAccion,
+            'bono_hobby_match' => $bonoTema,
+            'antes_clamp' => $carga,
+            'carga_final' => $clampeada,
+            'factores_snapshot' => $snap['factores'] ?? null,
+        ]);
+        return $clampeada;
     }
 
     private static function factorAccion(string $accionId, string $tono): float
