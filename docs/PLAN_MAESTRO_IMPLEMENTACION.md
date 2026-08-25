@@ -440,3 +440,18 @@ Clasificación importante / oportunidad / petición / cotilleo. Estado **en_espe
 - Cifras canónicas (todo el JSON vida es laboratorio).
 
 
+
+---
+
+## ICONOS HOBBIES - LOTE 17 APROBADO E INTEGRACION PREPARADA SIN DEPLOY (2026-08-25)
+
+**SOLO infraestructura de assets + resolver. Sin deploy, sin cache-buster, sin merge a canonica. Pendiente consumo definitivo por la Ficha de Vecino del Design System (layout/tamanos/seccion AFICIONES finales).**
+
+- **Lote 17 aprobado por diseno:** tinta #2c261f dibujada a mano, viewBox 0 0 32 32 (~29,6px reales), maximo UN pastel DS por icono (mostaza/rosa/coral/verde salvia/lila + azul grisaceo #D8E0E8 en videojuegos), tipografia SIEMPRE fuera del SVG: el nombre sigue pintandose como HTML/Caveat en la ficha.
+- **Assets canonicos:** assets/icons/hobbies/hobby-<id>.svg con correspondencia 1:1 a data/catalogos/aficiones.json (leer, escribir, pasear, correr, cafe_social, manualidades, cocina, musica, cine, videojuegos, copas, baile, bingo, deporte, senderismo, plantas, costura). IDs legacy de _propuesta_v2 (jardineria, perros...) excluidos.
+- **Mapping/resolver generado:** assets/js/hobby-icons.js expone window.AHTHobbyIcons (ids/has/get/svg); clave = ID canonico, NUNCA label/texto traducido. Regenerable sin drift con scripts/generar_hobby_icons_js.ps1 (falla si falta/sobra SVG o hay <text>/raster/fuentes).
+- **Consumo minimo actual:** play-v3.js svgHobbyIcon(id) consulta el resolver con guard y cae al mapa legacy inline si no hay SVG para el ID (ID desconocido NO rompe la ficha). play.php carga hobby-icons.js antes de play-v3.js.
+- **Intacto en esta pieza:** descubrimiento, numero de slots, labels del catalogo, Caveat, interrogaciones/candados de slots bloqueados, backend de hobbies y bloque pendiente "Le anima / No le gusta".
+- **Tests:** node tests/hobby_icons_test.js -> cobertura 17/17, nombres = IDs canonicos, validez de cada SVG, sincronia resolver-ficheros, fallback de ID desconocido/vacio, labels HTML fuera del SVG, slots intactos, orden de carga en play.php. Regresion ficha: ficha_prefs_quitadas_ui_test y ficha_pistas_ui_test OK; php -l play.php limpio.
+- **Validacion visual del lote (local):** dev/prueba-iconos-hobby/ (muestrario completo, control de coherencia y captura de integracion usando el resolver real con demo de fallback).
+- **Doc DS:** docs/design-system/iconos-hobbies.md.

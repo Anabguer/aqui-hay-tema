@@ -2812,6 +2812,9 @@ function hobbyIconKey(id, texto) {
   }
 
   function svgHobbyIcon(id, texto) {
+    if (typeof window !== 'undefined' && window.AHTHobbyIcons && window.AHTHobbyIcons.has(id)) {
+      return window.AHTHobbyIcons.svg(id);
+    }
     const key = hobbyIconKey(id, texto);
     const body = svgHobbyPaths(key);
     return '<svg class="ficha-hobby-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">' +

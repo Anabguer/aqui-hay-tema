@@ -50,6 +50,10 @@ assets/css/design-system/
   tokens.css           ← tokens --ds-* (se cargará tras play-v3-app.css en FASE 3)
   components.css       ← componentes base .ds-* opt-in (se cargará el ÚLTIMO)
   screens/             ← un CSS por pantalla migrada (FASE 3+)
+
+assets/icons/hobbies/
+  hobby-<id>.svg       ← SVGs canónicos de hobbies, lote 17 aprobado (ver iconos-hobbies.md)
+assets/js/hobby-icons.js ← resolver generado window.AHTHobbyIcons (clave = ID canónico)
 ```
 
 **En FASE 2 estos CSS existen pero NO están enlazados desde `play.php`.** El cableado (2 `<link>`) se hace en FASE 3 con el primer paso de migración. Cero impacto en producción hasta entonces.
