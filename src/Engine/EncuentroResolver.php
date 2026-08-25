@@ -166,23 +166,6 @@ final class EncuentroResolver
             }
         }
 
-        if ($reales && count($participantes) >= 2) {
-            $aP = (string) $participantes[0];
-            $bP = (string) $participantes[1];
-            SimFunnelProbe::on($partida, 'encuentro_resuelto', [
-                'ev' => 'resuelto',
-                '_k' => 'resuelto_' . (string) $tipo,
-                'tipo' => (string) $tipo,
-                'intencion' => $encuentro['intencion'] ?? null,
-                'a' => $aP,
-                'b' => $bP,
-                'rom_a' => $deltaRomance['a_hacia_b'] ?? null,
-                'rom_b' => $deltaRomance['b_hacia_a'] ?? null,
-                'senal_a_ok' => SenalRomantica::desdeHacia($partida, $aP, $bP, $cal)['ok'] ?? null,
-                'senal_b_ok' => SenalRomantica::desdeHacia($partida, $bP, $aP, $cal)['ok'] ?? null,
-            ]);
-        }
-
         return $resultado;
     }
 
@@ -309,8 +292,8 @@ final class EncuentroResolver
             $resultado['por_participante'][$a]['resultado'] ?? null
         );
 
-        // FASE 2A: tras resolver una cita romántica queda FECHADO el intento de
-        // continuidad (última cita + gap canónico 48 h). Aquí solo se registra
+        // FASE 2A: tras resolver una cita romantica queda FECHADO el intento de
+        // continuidad (ultima cita + gap canonico 48 h). Aqui solo se registra
         // el marcador; la cita futura, si llega, la decide un tick posterior
         // con voluntad real (IniciativaRomantica::procesarContinuidad).
         if ($tipoEnc === PropuestaNivel::PRIMERA_CITA || $tipoEnc === PropuestaNivel::CITA) {

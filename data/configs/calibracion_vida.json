@@ -1,6 +1,6 @@
 {
     "_provisional": true,
-    "_nota": "CALIBRACIÔö£├┤N vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan mÔö£┬«tricas.",
+    "_nota": "CALIBRACI├ôN vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan m├®tricas.",
     "social": {
         "min": -100,
         "max": 100,
@@ -61,27 +61,12 @@
         "dias_sin_contacto_recien": 1,
         "dias_sin_contacto_consolidada": 1,
         "_nota": "delta = -base * (1-|v|/100)^exp. Nunca baja de 0 sin evento malo. Resto fraccional para no clavar barras altas.",
-        "base_por_nivel": [
-            0.8,
-            0.4,
-            0.2,
-            0.1
-        ],
-        "consolidacion_umbrales": [
-            40,
-            62,
-            82
-        ],
+        "base_por_nivel": [0.8, 0.4, 0.2, 0.1],
+        "consolidacion_umbrales": [40, 62, 82],
         "consolidacion_ventana_horas": 168,
         "proteccion_curva": 0.005,
         "proteccion_min": 0.3,
-        "nivel3_primer_muy_mal_max_da├▒o": 5
-    },
-    "conflicto": {
-        "_decision_producto": "2026-08-24: el canal conflicto ya no es eterno. Decae por tiempo limpio (7+7 dias) y se repara 1 nivel por encuentro bien/muy_bien. Cualquier nuevo conflicto reinicia el reloj. NO toca el social negativo (canal distinto).",
-        "activo": true,
-        "dias_para_bajar_nivel": 7,
-        "dias_nivel1_para_eliminar": 7
+        "nivel3_primer_muy_mal_max_daño": 5
     },
     "desgaste_pareja": {
         "activo": true,
@@ -271,8 +256,6 @@
         "banal_sin_consecuencia": true,
         "repetidos_umbral": 3,
         "delta_romance_hacia_quien_rechaza": -3,
-        "ventana_voluntad_dias": 30,
-        "_nota_ventana_voluntad": "Decision producto 2026-08-24: mod_rechazos solo cuenta rechazos de los ultimos 30 dias (frontera inclusiva: dia_actual - dia_rechazo <= 30). Historico se conserva; erosion en el momento del rechazo no cambia.",
         "cooldown_horas": 6,
         "motivos": [
             "banal",
@@ -292,17 +275,6 @@
             "trabajo": 72,
             "iniciativa_social": 72
         }
-    },
-    "iniciativa_social": {
-        "_provisional": true,
-        "_nota": "A1 (H2): quedada deliberada NPC-NPC no romantica. Umbral por BANDA canonica (sin abs()). Ventana por par en cooldowns.por_familia.iniciativa_social. Cifras de laboratorio, calibrar con evidencia del lab.",
-        "activa": true,
-        "umbral_banda": "cae_bien",
-        "prob_intento_hueco": 0.12,
-        "max_por_residente_dia": 1,
-        "bonus_contacto_reciente": 0.6,
-        "penal_repeticion_dias": 7,
-        "penal_repeticion_factor": 0.35
     },
     "acontecimientos_dia": {
         "activo_en_play": false,
@@ -417,7 +389,7 @@
         "max_por_experiencia": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de cat├ílogo amplio. No recalibrar ritmos ahora."
+        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de catálogo amplio. No recalibrar ritmos ahora."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,
@@ -427,7 +399,7 @@
     "escaner_compatibilidad": {
         "deprecated": true,
         "desbloqueable": false,
-        "_nota": "Eliminado del diseÔö£ÔûÆo jugable. Compat/quÔö£┬ímica siguen internas."
+        "_nota": "Eliminado del dise├▒o jugable. Compat/qu├¡mica siguen internas."
     },
     "laboratorio_relacional": {
         "_provisional": true,
@@ -458,7 +430,7 @@
                 "id": "alerta",
                 "min": 20,
                 "max": 39,
-                "etiqueta": "Aqu├¡ pasa algo"
+                "etiqueta": "Aquí pasa algo"
             },
             {
                 "id": "tirando",
@@ -502,7 +474,7 @@
     "misiones_diarias": {
         "_provisional": false,
         "_canon_r3": true,
-        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo ├║nico por d├¡a con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
+        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo único por día con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
         "dias_sin_salir": 2,
         "social_floja_max": 12,
         "vida_cumplida": 1,
@@ -512,7 +484,7 @@
     },
     "peticiones_pueblo": {
         "_canon_b4": true,
-        "_nota": "B4 cerrado en E3. f├ícil/relevante/dif├¡cil son categor├¡as internas: no se muestran en buz├│n ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalizaci├│n por plantilla repetida en la ventana de ├║ltimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el n├║cleo pero a├▒ade compa├▒├¡a no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos peque├▒os (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global. R08 (playtest 25/08): gap_min_horas=6 separa nacimientos autónomos (ultima_nace_abs); no limita manuales ni labs forzados.",
+        "_nota": "B4 cerrado en E3. fácil/relevante/difícil son categorías internas: no se muestran en buzón ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalización por plantilla repetida en la ventana de últimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el núcleo pero añade compañía no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos pequeños (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global.",
         "esquema_activo": "E3",
         "cap_pct": 0.33,
         "cap_min": 2,
@@ -538,5 +510,16 @@
         "un_candidato_activo": true,
         "cooldown_cara_dias": 14,
         "placeholders_si_catalogo_vacio": true
+    },
+    "iniciativa_social": {
+        "_provisional": true,
+        "_nota": "A1 (H2): quedada deliberada NPC-NPC no romantica. Umbral por BANDA canonica (sin abs()). Ventana por par en cooldowns.por_familia.iniciativa_social. Cifras de laboratorio, calibrar con evidencia del lab.",
+        "activa": true,
+        "umbral_banda": "cae_bien",
+        "prob_intento_hueco": 0.12,
+        "max_por_residente_dia": 1,
+        "bonus_contacto_reciente": 0.6,
+        "penal_repeticion_dias": 7,
+        "penal_repeticion_factor": 0.35
     }
 }

@@ -66,22 +66,22 @@ final class IniciativaSocial
         // Precheck PURO (sin RNG): si nadie puede intentar nada esta hora,
         // el tick no consume stream aleatorio ni decide nada.
         if (!self::hayIntentoPosible($partida, $cal)) {
-            SimFunnelProbe::on($partida, self::FAMILIA, ['ev' => 'sin_candidatos', '_k' => 'sin_candidatos', '_solo_conteo' => true]);
+
             return null;
         }
         $prob = (float) CalibracionConfig::get($cal, 'iniciativa_social.prob_intento_hueco', 0.12);
         if ($rng->nextFloat() >= $prob) {
-            SimFunnelProbe::on($partida, self::FAMILIA, ['ev' => 'sin_ganas_tick', '_k' => 'sin_ganas_tick', '_solo_conteo' => true]);
+
             return null;
         }
         $desde = self::elegirIniciador($partida, $cal, $rng);
         if ($desde === null) {
-            SimFunnelProbe::on($partida, self::FAMILIA, ['ev' => 'sin_iniciador', '_k' => 'sin_iniciador', '_solo_conteo' => true]);
+
             return null;
         }
         $hacia = self::elegirObjetivo($partida, $desde, $cal, $rng);
         if ($hacia === null) {
-            SimFunnelProbe::on($partida, self::FAMILIA, ['ev' => 'sin_objetivo', '_k' => 'sin_objetivo', '_solo_conteo' => true, 'desde' => $desde]);
+
             return null;
         }
         return self::intentarQuedada($partida, $desde, $hacia, $cal, $catalog, $logger);
@@ -262,14 +262,7 @@ final class IniciativaSocial
         // Memoria/cooldown por par (ventana en cooldowns.por_familia.iniciativa_social).
         MemoriaEventos::registrar($partida, self::FAMILIA, [$desde, $hacia]);
 
-        SimFunnelProbe::on($partida, self::FAMILIA, [
-            'ev' => 'agendada',
-            '_k' => 'agendada',
-            'desde' => $desde,
-            'hacia' => $hacia,
-            'lugar' => $lugarFinal,
-            'p_invitado' => round($pInvitado, 4),
-        ]);
+
         return self::fin($partida, 'quedada_agendada', $desde, $hacia, [
             'programado_dia' => (int) $franja['dia'],
             'programado_hora' => (int) $franja['hora'],

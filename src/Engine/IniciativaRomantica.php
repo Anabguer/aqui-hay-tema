@@ -565,7 +565,7 @@ final class IniciativaRomantica
             $lugarElegido,
             null,
             $logger,
-            false
+            ['intencion' => 'autonomo_npc']
         );
         if (!($r['ok'] ?? false)) {
             return self::fin($partida, 'error_programar_' . (string) ($r['error'] ?? '?'), $desde, $hacia);

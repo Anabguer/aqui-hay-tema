@@ -1137,3 +1137,59 @@ Ejemplo: Celestine elige quién recibe a Marta → Marta y José pasan cuatro ho
 
 ### BUG BLOQUEANTE DE 2C (registrado, NO arreglar dentro de 2A)
 `ParejaEngine::formar()` (src/Engine/ParejaEngine.php:20-70) solo veta parentesco y exige ambos-sí: NO comprueba si `a` o `b` ya tienen `estado_pareja ∈ {pareja,crisis}` con un TERCERO → el motor permite hoy DOS parejas simultáneas para una misma persona vía dos declaraciones. Además `TerceroRomantico::parejaDe()` devuelve solo la primera relación activa (ambigüedad con poli-parejas). Requiere gate de exclusividad + política de rebote antes de activar 2C.
+
+---
+
+## RECONCILIACIÓN ROMANCE PRODUCCIÓN 2026-08-25 — F1 + A1 + PRE + F2A RESTAURADAS SOBRE PRODUCCIÓN REAL
+
+**Estado: DESPLEGADO EN PRODUCCIÓN Y VERIFICADO (7/7 hashes byte-idénticos). Rama `int/recon-romance-f1-a1-pre-f2a-20260825`.**
+
+**Causa del incidente:** el deploy selectivo de F2A de la sesión anterior (~15:04-15:28) nunca llegó a persistir en
+`/juegos/aqui-hay-tema` (sin POST-fetch que lo acreditara). Las olas concurrentes posteriores (rechazo-individual,
+latidos-l1, f4-paso-2, r08, narrativa-p2, loquesabes, p0-entender) desplegaron cada una desde su propia base y
+dejaron producción en un linaje mixto SIN F2A, SIN IniciativaRomantica.php, SIN IniciativaSocial.php y con los
+ficheros de romance en blobs pre-F1 (`int/canonical-20260824-consolidada`): regresión total del subsistema romance.
+
+**Método (sin sustituciones a ciegas):** snapshot remoto completo PRE (`pre_20260825_184830` + espejo recursivo
+517 ficheros) → hunks semánticos F1/A1/PRE/F2A reconstruidos SOBRE los blobs remotos actuales → staging único
+espejo de producción → gates baseline-vs-candidato → backup PRE remoto → upload atómico único → FETCH POST 7/7.
+
+- **F1 restaurado:** `IniciativaRomantica.php` (recreado, blob validado 45b33227 con glue `opts=['intencion'=>'autonomo_npc']`);
+  hook 1-línea en `AccionRomantica` (bloque flechazo_ya_registrado); hook 1-línea tras `intentarAgendarQuedada` en
+  `AcontecimientoDiario`; fix HORA_PASADA `siguienteFranjaFutura` (+programado_dia/hora) en `MotorVidaDiaria`;
+  calibración: `romance_accion` en familias_en_play + `_nota_familias_fase1`.
+- **A1 restaurada:** `IniciativaSocial.php` (blob validado sin telemetría SimFunnelProbe), hook tick en MVD
+  (`$out['iniciativa_social']`), config `/iniciativa_social` + cooldown por par 72h.
+- **PRE gate:** `filtrarFamiliasEnPlay(items, familiasPlay, esLab)` público en MVD; fuera de LAB solo contrato;
+  romance_hito/pareja siguen excluidos; flags técnicos dejan de condicionar.
+- **F2A:** marcador post-cita en `EncuentroResolver` (tras MemoriaEventos::registrar); consumidor
+  `procesarContinuidad` como ÚLTIMO hook de `tickHora`; gap = cooldowns.por_familia.romance 48h;
+  cupo Celestine cubierto nativamente por intencion≠celeste_organizado (mecanismo F4 ya presente).
+- **Preservado sin tocar:** EncuentroEngine (F4), RelojOperations, CoincidenciasEngine, EncuentroLifecycle,
+  EventosComunitario/*, LatidosProgresionEngine, DomainBootstrap/PartidaService (latidos), RechazoMemoria +
+  PropuestaEncuentroEngine (rechazo-individual), CopyRechazoPropuesta (P2), peticiones R07/R08, features.json,
+  buster p0. Variante `max(0,...)` del peso social del remoto se conserva. Telemetría SimFunnelProbe NO restaurada
+  (su clase ya no existe en remoto; impacto conductual cero). `/conflicto` de calibración no restaurado (sin lector).
+- **Orden final de hooks en MotorVidaDiaria::tickHora:** hueco_vida (con PRE gate) → salida individual (fix F1)
+  → casuales → **iniciativa_social (A1)** → **continuidad romántica (F2A)** → persistencia RNG. Sin dobles ejecuciones.
+
+**Gates (staging espejo de remoto, baseline vs candidato):**
+- VERDE NUEVO: fase1_iniciativa_primera_cita 30/30 · fase1_primera_cita_narrativa 13/13 ·
+  fase1_salida_individual_franja 11/11 · primera_cita_balance_p2 23/23 · senal_romantica_coherencia_temporal 8/8 ·
+  pre_gate_familias_play 10/10 · **fase2_continuidad_citas 51/51 (A–T)** · **iniciativa_social_autonoma 59/59** ·
+  voluntad_media_geometrica 7/7.
+- IDÉNTICO AL BASELINE (preexistentes, no de esta pieza): rechazo_cooldown_neutro 48/5F · peticiones_pueblo 47/1F ·
+  vida_relaciones 75/2F (documentado) · playtest_voluntad_tipo 12/1F (documentado) · eventos_comunitarios_core/ciclo
+  fatal idéntico (evaluador de lab no desplegado, dominio F4).
+- REVERTIDO A ESTADO DOCUMENTADO: encuentro_resultado_play 38/1F «conocerse sin conflicto» — fallo preexistente
+  documentado de la era F1+A1; el baseline regresado lo pasaba solo porque A1 no corría.
+
+**E2E en producción real (API HTTP, juego_v1):** pid `part_adc2ae26d95a832a` (seed TEST_rr2_194306_4, ELIMINADA):
+primera cita autónoma programada y resuelta `bien` → **gap 49h ≥ 48h** → segunda cita tipo=cita autónoma resuelta
+muy_bien → tercera cita programada SIN formación de pareja · anti-dup (nunca >1 cita activa del par) ·
+cupo Celestine intacto · F4 flag OFF sin interferencias · 0 HORA_PASADA · partida.refresh OK (R08).
+Freno natural demostrado aparte: experiencia mal/muy_mal ⇒ continuidad bloqueada. A1 viva aparte:
+pid `part_5e8535a3bdf62498` (ELIMINADA): iniciativa_social_log con intento autónomo y voluntad real (p≈0.49).
+Limpieza: 7 partidas TEST + sus JSONL borradas por ruta literal individual (14/14, sin wildcards).
+Backup PRE remoto: `/juegos/_backup_pre_recon_romance_20260825_192900` (+manifiesto).
+

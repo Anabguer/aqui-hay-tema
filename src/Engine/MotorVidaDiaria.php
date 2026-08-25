@@ -110,10 +110,10 @@ final class MotorVidaDiaria
         $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
         $out['iniciativa_social'] = IniciativaSocial::tick($partida, $catalog, $cal, $rng, $logger);
-        // FASE 2A: continuidad romántica. Solo consume marcadores VENCIDOS
-        // (última cita + gap 48 h canónicas); nunca crea nada en el tick en
-        // que se resolvió la cita anterior. Último hook del tick, tras la
-        // vida autónoma previa (hueco/salidas/casuales/A1), sin reordenar.
+        // FASE 2A: continuidad romantica. Solo consume marcadores VENCIDOS
+        // (ultima cita + gap 48 h canonicas); nunca crea nada en el tick en
+        // que se resolvio la cita anterior. Ultimo hook del tick, tras la
+        // vida autonoma previa (hueco/salidas/casuales/A1), sin reordenar.
         $out['continuidad'] = IniciativaRomantica::procesarContinuidad($partida, $cal, $logger);
         $rng->persistToPartida($partida);
         return $out;
@@ -149,16 +149,15 @@ final class MotorVidaDiaria
         }
         $protagonista = self::elegirProtagonista($partida, $cal, $rng);
         if ($protagonista === null) {
-            SimFunnelProbe::on($partida, 'hueco', ['ev' => 'sin_protagonista', '_k' => 'sin_protagonista_agenda', 'capa' => $capa, '_solo_conteo' => true]);
             return null;
         }
-        // PRE FASE 2A — familias_en_play es el CONTRATO EFECTIVO de familias
-        // permitidas fuera de laboratorio. El gate antiguo exigía además
-        // npc_autonomy_enabled, flag global a false, lo que dejaba el filtro
-        // muerto y permitía romance_hito/pareja (declaracion/crisis/ruptura)
-        // en play contra lo documentado en Fase 1. Ahora el criterio es solo
-        // lab vs no-lab; los flags técnicos NO condicionan el contrato.
         $familiasPlay = CalibracionConfig::get($cal, 'acontecimientos_dia.familias_en_play', null);
+        // PRE FASE 2A - familias_en_play es el CONTRATO EFECTIVO de familias
+        // permitidas fuera de laboratorio. El gate antiguo exigia ademas
+        // npc_autonomy_enabled, flag global a false, lo que dejaba el filtro
+        // muerto y permitia romance_hito/pareja (declaracion/crisis/ruptura)
+        // en play contra lo documentado en Fase 1. Ahora el criterio es solo
+        // lab vs no-lab; los flags tecnicos NO condicionan el contrato.
         $items = self::filtrarFamiliasEnPlay(
             $items,
             is_array($familiasPlay) ? $familiasPlay : [],
@@ -166,20 +165,9 @@ final class MotorVidaDiaria
         );
         $elegido = self::elegirEvento($partida, $items, $protagonista, $cal, $rng);
         if ($elegido === null) {
-            SimFunnelProbe::on($partida, 'hueco', ['ev' => 'sin_evento_valido', '_k' => 'sin_evento_valido', 'capa' => $capa, 'prot' => $protagonista, '_solo_conteo' => true]);
             return ['omitido' => 'sin_evento_valido', 'protagonista' => $protagonista];
         }
         $r = AcontecimientoDiario::ejecutar($partida, $elegido['id'], $elegido['participantes'], $store, $cal, $logger);
-        $itemEl = $store->item('acontecimientos', $elegido['id']);
-        SimFunnelProbe::on($partida, 'hueco', [
-            'ev' => 'ejecutado',
-            '_k' => 'ejecutado_' . (string) ($itemEl['familia'] ?? '?'),
-            'capa' => $capa,
-            'id' => $elegido['id'],
-            'fam' => (string) ($itemEl['familia'] ?? '?'),
-            'ok' => (bool) ($r['ok'] ?? false),
-            'error' => $r['error'] ?? null,
-        ]);
         self::marcarActividad($partida, $elegido['participantes']);
         return ['capa' => $capa, 'evento' => $elegido['id'], 'resultado' => $r];
     }
@@ -226,7 +214,6 @@ final class MotorVidaDiaria
     {
         $pesosFam = CalibracionConfig::get($cal, 'acontecimientos_dia.pesos_familias', []);
         $cands = [];
-        $flechazoCands = 0;
         $ids = array_keys($partida['residentes'] ?? []);
         foreach ($items as $item) {
             $need = (int) ($item['participantes'] ?? 1);
@@ -246,13 +233,10 @@ final class MotorVidaDiaria
                 }
                 $el = AcontecimientoElegibilidad::cumple($partida, $item, [$protagonista, $otro], $cal);
                 if ($el['ok']) {
-                    if ((string) $item['id'] === 'flechazo') {
-                        $flechazoCands++;
-                    }
                     $w = max(0.05, $wFam);
                     if (RelacionEngine::seConocen($partida, $protagonista, $otro)) {
                         $w *= 1.6;
-                        $w += abs(RelacionEngine::valorSocialHacia($partida, $protagonista, $otro)) / 25.0;
+                        $w += max(0, RelacionEngine::valorSocialHacia($partida, $protagonista, $otro)) / 25.0;
                     }
                     $cands[] = [
                         'id' => (string) $item['id'],
@@ -262,13 +246,6 @@ final class MotorVidaDiaria
                 }
             }
         }
-        SimFunnelProbe::on($partida, 'elegir_evento', [
-            'ev' => 'escaneo',
-            '_k' => 'escaneo',
-            'prot' => $protagonista,
-            'n_cands' => count($cands),
-            'flechazo_n' => $flechazoCands,
-        ]);
         if ($cands === []) {
             return null;
         }
@@ -305,11 +282,9 @@ final class MotorVidaDiaria
             }
         }
         if ($hechas >= $cupoDia) {
-            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'cupo_lleno', '_k' => 'cupo_lleno', '_solo_conteo' => true]);
             return null;
         }
         if ($rng->nextFloat() > 0.60) {
-            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'rng_no_sale', '_k' => 'rng_no_sale', '_solo_conteo' => true]);
             return null;
         }
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
@@ -344,7 +319,6 @@ final class MotorVidaDiaria
         }
         $quien = self::pickPeso($pesos, $rng);
         if ($quien === null) {
-            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'sin_disponibles_agenda', '_k' => 'sin_disponibles_agenda', '_solo_conteo' => true]);
             return null;
         }
         $ops = $partida['celeste']['lugares_desbloqueados'] ?? [];
@@ -367,24 +341,16 @@ final class MotorVidaDiaria
             $lugar = is_array($ops) && $ops !== [] ? (string) $ops[0] : 'lug_cafeteria';
         }
         // FASE 1 (fix HORA_PASADA): la actividad se agenda SIEMPRE a futuro
-        // (Reloj::esFuturo es estricto: misma hora = pasado). Se busca la próxima
-        // franja válida respetando ventana canónica, apertura del lugar y agenda
-        // (trabajo/sueño/ocupaciones/encuentros ya reservados).
+        // (Reloj::esFuturo es estricto: misma hora = pasado). Se busca la proxima
+        // franja valida respetando ventana canonica, apertura del lugar y agenda
+        // (trabajo/suenio/ocupaciones/encuentros ya reservados).
         $franja = self::siguienteFranjaFutura($partida, $quien, (string) $lugar, $cal);
         if ($franja === null || !AforoEngine::cabe($partida, $lugar, (int) $franja['dia'], (int) $franja['hora'], 1)) {
-            SimFunnelProbe::on($partida, 'salida_individual', ['ev' => 'aforo_o_lugar_fail', '_k' => 'aforo_o_lugar_fail', '_solo_conteo' => true]);
             return null;
         }
         $attr = LugarAtributos::de($lugar);
         $r = EncuentroEngine::programar($partida, [$quien], (int) $franja['dia'], (int) $franja['hora'], 'individual', $lugar, null, $logger);
         if (!($r['ok'] ?? false)) {
-            SimFunnelProbe::on($partida, 'salida_individual', [
-                'ev' => 'error_programar',
-                '_k' => 'error_programar_' . (string) ($r['error'] ?? '?'),
-                'quien' => $quien,
-                'lugar' => $lugar,
-                'err' => $r['error'] ?? null,
-            ]);
             return ['error' => $r['error'] ?? 'no_programado', 'quien' => $quien];
         }
         if (isset($r['encuentro']['id'])) {
@@ -396,7 +362,7 @@ final class MotorVidaDiaria
                 }
             }
         }
-self::marcarActividad($partida, [$quien]);
+        self::marcarActividad($partida, [$quien]);
         $nowDia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $nowHora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $partida['npc_autonomo']['historial_eventos'][] = [
@@ -500,14 +466,26 @@ self::marcarActividad($partida, [$quien]);
         }
         return isset($last['id']) ? (string) $last['id'] : null;
     }
+    /**
+     * PRE FASE 2A: contrato de familias del hueco de vida.
+     * - Fuera de laboratorio (play): SOLO familias_en_play (romance_hito/pareja
+     *   quedan fuera: sin declaracion/crisis/ruptura/reconciliacion autonomas).
+     * - En laboratorio (lab_vida_activa): catalogo completo, sin filtro.
+     * - Config vacia/ausente: comportamiento legacy sin filtro.
+     */
+    public static function filtrarFamiliasEnPlay(array $items, array $familiasPlay, bool $esLabVidaActiva): array
+    {
+        if ($esLabVidaActiva || $familiasPlay === []) {
+            return $items;
+        }
+        return array_values(array_filter($items, static function ($item) use ($familiasPlay) {
+            return in_array((string) ($item['familia'] ?? ''), $familiasPlay, true);
+        }));
+    }
 
     /**
-     * FASE 1: primera hora FUTURA (máx +48 h) que cumple ventana canónica,
+     * FASE 1: primera hora FUTURA (max +48 h) que cumple ventana canonica,
      * apertura del lugar y disponibilidad de agenda del residente.
-     *
-     * @param array<string, mixed> $partida
-     * @param array<string, mixed> $cal
-     * @return array{dia:int,hora:int}|null
      */
     private static function siguienteFranjaFutura(array $partida, string $quien, string $lugar, array $cal): ?array
     {
@@ -531,27 +509,5 @@ self::marcarActividad($partida, [$quien]);
             return ['dia' => $d, 'hora' => $h];
         }
         return null;
-    }
-
-    /**
-     * PRE FASE 2A: contrato de familias del hueco de vida.
-     * - Fuera de laboratorio (play): SOLO familias_en_play (romance_hito/pareja
-     *   quedan fuera: sin declaracion/crisis/ruptura/reconciliacion autónomas).
-     * - En laboratorio (lab_vida_activa): catálogo completo, sin filtro.
-     * - Config vacía/ausente: comportamiento legacy sin filtro.
-     *
-     * @param list<array<string, mixed>> $items
-     * @param array<int|string, mixed> $familiasPlay
-     * @param bool $esLabVidaActiva
-     * @return list<array<string, mixed>>
-     */
-    public static function filtrarFamiliasEnPlay(array $items, array $familiasPlay, bool $esLabVidaActiva): array
-    {
-        if ($esLabVidaActiva || $familiasPlay === []) {
-            return $items;
-        }
-        return array_values(array_filter($items, static function ($item) use ($familiasPlay) {
-            return in_array((string) ($item['familia'] ?? ''), $familiasPlay, true);
-        }));
     }
 }
