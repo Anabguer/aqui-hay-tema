@@ -96,6 +96,10 @@ final class SenalRomantica
         if ($est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS) {
             return false;
         }
+        // R7: exes no re-entran en citas románticas por la puerta de primera cita.
+        if ($est === ParejaEngine::EX) {
+            return false;
+        }
         // R1: nadie inicia nada romántico nuevo si está emparejado con un tercero.
         if (self::enParejaConTercero($partida, $a, $b)) {
             return false;

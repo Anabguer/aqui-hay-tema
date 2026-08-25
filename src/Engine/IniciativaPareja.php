@@ -83,6 +83,7 @@ final class IniciativaPareja
             }
             if ($est === ParejaEngine::PAREJA) {
                 self::evaluarCrisisNueva($partida, $a, $b, $cal, $out);
+                self::evaluarGolpeDuro($partida, $a, $b, $cal, $out);
             }
         }
         return $out;
@@ -418,7 +419,12 @@ final class IniciativaPareja
     }
 
     // ==================================================================
-    // R7 — Riesgo de ruptura desde crisis sin salida (stub hasta R7).
+    // R7 · RUPTURA — orígenes únicos O1/O2, decisión unilateral, memoria.
+    //
+    // O1: crisis sin salida (días en crisis ≥ límite OR fallos de reparación).
+    // O2: golpe duro en pareja estable (muy_mal reciente + conflicto + suelo).
+    // Nunca por umbral silencioso: cada ruptura lleva causa registrada y
+    // autoría (rompe el de MENOR romance, con SU voluntad individual).
     // ==================================================================
 
     /**
@@ -429,6 +435,195 @@ final class IniciativaPareja
         if (!self::rupturaActiva($cal)) {
             return;
         }
-        // Implementación completa en bloque R7.
+        $rel = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+        if (!is_array($rel) || !is_array($rel['crisis_desde'] ?? null)) {
+            return;
+        }
+        $crisisDesdeAbs = ((int) ($rel['crisis_desde']['dia'] ?? 0)) * 24 + (int) ($rel['crisis_desde']['hora'] ?? 0);
+        $diasEnCrisis = intdiv(max(0, self::absNow($partida) - $crisisDesdeAbs), 24);
+        $fallos = (int) ($rel['fallos_reparacion'] ?? 0);
+        $diasLimite = self::knobInt($cal, 'ruptura_politica', 'dias_crisis_sin_salida', 7);
+        $maxFallos = self::knobInt($cal, 'reparacion', 'max_fallos', 2);
+
+        $origen = null;
+        if ($diasEnCrisis >= $diasLimite || $fallos >= $maxFallos) {
+            $origen = 'crisis_sin_salida';
+            $factorFallo = self::knob($cal, 'ruptura_politica', 'factor_por_fallo', 0.03);
+            $p = self::knob($cal, 'ruptura', 'probabilidad', 0.01) + $factorFallo * max(0, $fallos);
+        } else {
+            return;
+        }
+        if (!IniciativaRomantica::capHitosDisponible($partida, $cal)) {
+            return;
+        }
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+        if (!($tirada < min(1.0, $p))) {
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'ruptura_riesgo_sin_ruptura',
+                '_k' => 'ruptura_no',
+                'par' => [$a, $b],
+                'origen' => $origen,
+                'p' => round($p, 4),
+            ]);
+            return;
+        }
+
+        // Autoría: rompe el de MENOR romance; decisión UNILATERAL con su voluntad.
+        $quienRompe = self::elDeMenorRomance($partida, $a, $b);
+        $receptor = $quienRompe === $a ? $b : $a;
+        if (!self::voluntadDeRomper($partida, $quienRompe, $receptor, $cal)) {
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'ruptura_declinada',
+                '_k' => 'ruptura_declinada',
+                'par' => [$a, $b],
+                'quien' => $quienRompe,
+            ]);
+            return;
+        }
+        self::ejecutarRuptura($partida, $quienRompe, $receptor, $origen, $cal);
+        $out['rupturas']++;
+    }
+
+    /**
+     * O2 · Golpe duro en pareja ESTABLE: muy_mal reciente + conflicto alto +
+     * estabilidad en suelo. Combo explícito o p=0.
+     *
+     * @param array<string, int> $out
+     */
+    private static function evaluarGolpeDuro(array &$partida, string $a, string $b, array $cal, array &$out): void
+    {
+        if (!self::rupturaActiva($cal)) {
+            return;
+        }
+        $confMin = self::knobInt($cal, 'crisis', 'conflicto_min', 6);
+        $riesgo = self::knobInt($cal, 'crisis', 'estabilidad_riesgo', 30);
+        $conf = RelacionEngine::obtenerEntre($partida, $a, $b)['conflicto']['intensidad'] ?? null;
+        $rel = RelacionEngine::obtenerEntre($partida, $a, $b)['romance'];
+        $val = is_array($rel) ? ($rel['estabilidad_pareja']['valor'] ?? null) : null;
+        if (!is_numeric($conf) || (int) $conf < $confMin) {
+            return;
+        }
+        if (!is_numeric($val) || (int) $val > $riesgo) {
+            return;
+        }
+        $recientes = MemoriaEventos::recientes($partida, [$a, $b], 5);
+        $ultimaMuyMal = false;
+        foreach ($recientes as $ev) {
+            if (($ev['familia'] ?? '') !== 'encuentro') {
+                continue;
+            }
+            $ultimaMuyMal = (($ev['resultado_experiencia'] ?? '') === 'muy_mal');
+            break;
+        }
+        if (!$ultimaMuyMal) {
+            return;
+        }
+        if (!IniciativaRomantica::capHitosDisponible($partida, $cal)) {
+            return;
+        }
+        $p = min(1.0, self::knob($cal, 'ruptura', 'probabilidad', 0.01));
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+        if (!($tirada < $p)) {
+            return;
+        }
+        $quienRompe = self::elDeMenorRomance($partida, $a, $b);
+        $receptor = $quienRompe === $a ? $b : $a;
+        if (!self::voluntadDeRomper($partida, $quienRompe, $receptor, $cal)) {
+            return;
+        }
+        self::ejecutarRuptura($partida, $quienRompe, $receptor, 'golpe_duro', $cal);
+        $out['rupturas']++;
+    }
+
+    private static function elDeMenorRomance(array $partida, string $a, string $b): string
+    {
+        $romAB = RelacionEngine::romanceHacia($partida, $a, $b) ?? 0;
+        $romBA = RelacionEngine::romanceHacia($partida, $b, $a) ?? 0;
+        // Empate → orden canónico del par (coherente con el resto del motor).
+        return $romAB <= $romBA ? $a : $b;
+    }
+
+    /** Decisión individual de romper (tirada propia, NO media geométrica). */
+    private static function voluntadDeRomper(array &$partida, string $quien, string $otro, array $cal): bool
+    {
+        $calInd = $cal;
+        $calInd['voluntad']['resolucion_plan'] = 'producto'; // tirada individual real
+        $prop = [
+            'participantes' => [$quien, $otro],
+            'tipo' => 'ruptura',
+            'lugar' => null,
+            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'hora' => (int) ($partida['reloj']['hora_actual'] ?? 12),
+        ];
+        $vol = new VoluntadPonderadaEvaluator($calInd);
+        $r = $vol->evaluar($partida, $prop, $quien);
+        return ($r['decision'] ?? '') === PropuestaEncuentro::DECISION_ACEPTA;
+    }
+
+    /** Ejecuta la ruptura completa: estado, citas futuras, marcadores, emociones. */
+    public static function ejecutarRuptura(
+        array &$partida,
+        string $iniciador,
+        string $receptor,
+        string $comoAcabo,
+        array $cal
+    ): void {
+        // Citas FUTURAS del par (programadas) se cancelan con motivo; quedadas amistosas siguen.
+        foreach (($partida['encuentros'] ?? []) as $i => $enc) {
+            if (!is_array($enc) || ($enc['estado'] ?? '') !== 'programado') {
+                continue;
+            }
+            $tipoEnc = (string) ($enc['tipo'] ?? '');
+            if ($tipoEnc !== 'primera_cita' && $tipoEnc !== 'cita') {
+                continue;
+            }
+            $parts = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+            if (in_array($iniciador, $parts, true) && in_array($receptor, $parts, true)) {
+                $partida['encuentros'][$i]['estado'] = 'cancelado';
+                $partida['encuentros'][$i]['motivo_cancelacion'] = 'ruptura';
+            }
+        }
+        // Marcadores de continuidad fuera.
+        IniciativaRomantica::purgarMarcadoresPar($partida, $iniciador, $receptor);
+        // Hito canónico de ruptura (estado EX + estabilidad memoria + historial).
+        ParejaEngine::romper($partida, $iniciador, $receptor, $comoAcabo);
+        // Emociones asimétricas: pesa más a quien la recibe.
+        $durReceptor = self::knobInt($cal, 'ruptura_politica', 'triste_receptor_horas', 10);
+        $durIniciador = self::knobInt($cal, 'ruptura_politica', 'triste_iniciador_horas', 5);
+        self::tristezaIndividual($partida, $receptor, $durReceptor, $iniciador, $cal);
+        self::tristezaIndividual($partida, $iniciador, $durIniciador, $receptor, $cal);
+        MemoriaEventos::registrar($partida, 'romance_hito', [$iniciador, $receptor], null, 'ruptura');
+        SimFunnelProbe::on($partida, 'declaracion', [
+            'ev' => 'ruptura',
+            '_k' => 'ruptura_ok',
+            'par' => [$iniciador, $receptor],
+            'como_acabo' => $comoAcabo,
+        ]);
+    }
+
+    private static function tristezaIndividual(array &$partida, string $id, int $dur, string $hacia, array $cal): void
+    {
+        $root = dirname(__DIR__, 2);
+        $emoSvc = new EmotionalStateService(
+            new VisualPackStore($root),
+            new CatalogStore($root),
+            null
+        );
+        $durEf = $dur > 0 ? $dur : (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 10);
+        $hasta = EstadoEmocional::hastaDesdeDuracion($partida['reloj'] ?? [], $durEf);
+        $emoSvc->aplicar(
+            $partida,
+            $id,
+            EstadoEmocional::TRISTE,
+            'ruptura_pareja',
+            null,
+            $hasta,
+            ['hacia' => $hacia],
+            $durEf
+        );
     }
 }

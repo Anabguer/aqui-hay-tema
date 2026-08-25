@@ -232,9 +232,11 @@
             "quedar": 0,
             "primera_cita": 4,
             "cita": 0,
-            "declaracion": -10
+            "declaracion": -10,
+            "ruptura": -15
         },
         "_nota_mod_tipo_declaracion": "ROMANCE_CIERRE R2: declararse cuesta (arriesgado); el romance/social/emocional aportan lo suyo. Cifra _provisional, calibrar con sims.",
+        "_nota_mod_tipo_ruptura": "ROMANCE_CIERRE R7: romper no es barato; decisión unilateral del de menor romance con SU voluntad.",
         "bonus_primera_cita_reciproca": 12,
         "_nota_bonus_primera_cita_reciproca": "P2: solo primera_cita y SOLO si SenalRomantica::desdeHacia ok en AMBAS direcciones (flechazo o romance>=tilin).",
         "conflicto_mult_cita": 3,

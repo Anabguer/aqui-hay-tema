@@ -107,6 +107,11 @@ final class IniciativaRomantica
                 $gate = 'ya_pareja_o_crisis';
                 break;
             }
+            // R7 · Post-ruptura: sin citas románticas autónomas entre exes.
+            if ($est === ParejaEngine::EX) {
+                $gate = 'ex_sin_vuelta';
+                break;
+            }
             // R1: exclusividad — nadie inicia nada romántico nuevo emparejado con un tercero.
             if (SenalRomantica::enParejaConTercero($partida, $desde, $hacia)) {
                 $gate = 'en_pareja_con_otro';
@@ -494,6 +499,11 @@ final class IniciativaRomantica
             $est = ParejaEngine::estado($partida, $desde, $hacia);
             if ($est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS) {
                 $gate = 'ya_pareja_o_crisis';
+                break;
+            }
+            // R7 · Post-ruptura: sin citas románticas autónomas entre exes.
+            if ($est === ParejaEngine::EX) {
+                $gate = 'ex_sin_vuelta';
                 break;
             }
             // R1: exclusividad — nadie inicia nada romántico nuevo emparejado con un tercero.

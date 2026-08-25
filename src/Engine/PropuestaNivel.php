@@ -81,6 +81,10 @@ final class PropuestaNivel
         }
         $out = [self::QUEDAR];
         $est = ParejaEngine::estado($partida, $a, $b);
+        // R7: exes — solo quedadas amistosas; citas románticas requieren vuelta.
+        if ($est === ParejaEngine::EX) {
+            return $out;
+        }
         $el = RomanceElegibilidad::par($partida, $a, $b, $cal);
         if (empty($el['ok'])) {
             return $out;
