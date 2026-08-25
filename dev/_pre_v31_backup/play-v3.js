@@ -1,0 +1,5407 @@
+(function () {
+  'use strict';
+
+  const API = 'api/index.php';
+  const qs = new URLSearchParams(location.search);
+  const CONFIG_JUEGO = { config_id: 'juego_v1' };
+  const DEBUG_KEY = 'aht_debug_on';
+  let DEBUG_ON = false;
+  try { DEBUG_ON = localStorage.getItem(DEBUG_KEY) === '1'; } catch (e) {}
+  function setDebugOn(on) {
+    DEBUG_ON = !!on;
+    try { localStorage.setItem(DEBUG_KEY, DEBUG_ON ? '1' : '0'); } catch (e2) {}
+    document.body.setAttribute('data-debug', DEBUG_ON ? '1' : '0');
+    if (DEBUG_ON) {
+      try { console.log('%c[AHT DEBUG] Instrumentación activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
+    }
+  }
+  function isDebugOn() { return DEBUG_ON; }
+  function horaLocalCreacion() {
+    const d = new Date();
+    const pad = function (n) { return String(n).padStart(2, '0'); };
+    return {
+      fecha: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()),
+      hora: d.getHours()
+    };
+  }
+  function configNueva(forceFreshSeed) {
+    const c = qs.get('config');
+    if (c) {
+      const o = { config_id: c, hora_local: horaLocalCreacion() };
+      if (qs.get('seed')) {
+        o.seed = qs.get('seed');
+      } else if (forceFreshSeed) {
+        o.seed = 'ui-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+      }
+      return o;
+    }
+    const o = Object.assign({}, CONFIG_JUEGO, { hora_local: horaLocalCreacion() });
+    if (forceFreshSeed) {
+      o.seed = 'ui-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 8);
+    }
+    return o;
+  }
+  const MUSICA_STORAGE_KEY = 'aht_musica_fondo';
+  let musicaActiva = true;
+  try { musicaActiva = localStorage.getItem(MUSICA_STORAGE_KEY) !== '0'; } catch (e) {}
+  const musicaFondo = new Audio('assets/audio/musica-fondo.mp3');
+  musicaFondo.loop = true;
+  musicaFondo.volume = 0.22;
+  musicaFondo.preload = 'auto';
+  let musicaPlayEnCurso = null;
+  let musicaPrimerGestoPendiente = false;
+
+  function actualizarControlMusica() {
+    const control = $('[data-musica-toggle]');
+    if (!control) return;
+    control.dataset.musica = musicaActiva ? 'on' : 'off';
+    control.setAttribute('aria-pressed', musicaActiva ? 'true' : 'false');
+    const etiqueta = musicaActiva ? 'Desactivar m?sica' : 'Activar m?sica';
+    control.setAttribute('aria-label', etiqueta);
+    control.setAttribute('title', etiqueta);
+  }
+
+  function retirarEsperaPrimerGesto() {
+    if (!musicaPrimerGestoPendiente) return;
+    musicaPrimerGestoPendiente = false;
+    document.removeEventListener('pointerdown', musicaPrimerGesto, true);
+    document.removeEventListener('click', musicaPrimerGesto, true);
+    document.removeEventListener('keydown', musicaPrimerGesto, true);
+    document.removeEventListener('touchstart', musicaPrimerGesto, true);
+  }
+
+  function registrarEsperaPrimerGesto() {
+    if (!musicaActiva || musicaPrimerGestoPendiente) return;
+    musicaPrimerGestoPendiente = true;
+    document.addEventListener('pointerdown', musicaPrimerGesto, true);
+    document.addEventListener('click', musicaPrimerGesto, true);
+    document.addEventListener('keydown', musicaPrimerGesto, true);
+    document.addEventListener('touchstart', musicaPrimerGesto, true);
+  }
+
+  function iniciarMusicaFondo(esperarInteraccion) {
+    if (!musicaActiva || !musicaFondo.paused || musicaPlayEnCurso) return;
+    try {
+      musicaPlayEnCurso = Promise.resolve(musicaFondo.play()).then(function () {
+        musicaPlayEnCurso = null;
+      }, function () {
+        musicaPlayEnCurso = null;
+        if (esperarInteraccion) registrarEsperaPrimerGesto();
+      });
+    } catch (e) {
+      musicaPlayEnCurso = null;
+      if (esperarInteraccion) registrarEsperaPrimerGesto();
+    }
+  }
+
+  function musicaPrimerGesto(ev) {
+    if (ev && ev.target && ev.target.closest && ev.target.closest('[data-musica-toggle]')) return;
+    retirarEsperaPrimerGesto();
+    iniciarMusicaFondo(false);
+  }
+
+  function pausarAudioPorOculto() {
+    if (!document.hidden && document.visibilityState !== 'hidden') {
+      if (musicaActiva) iniciarMusicaFondo(false);
+      return;
+    }
+    retirarEsperaPrimerGesto();
+    try { musicaFondo.pause(); } catch (e) {}
+    if (window.AhtAudioFeedback && typeof window.AhtAudioFeedback.pauseAll === 'function') {
+      window.AhtAudioFeedback.pauseAll();
+    }
+  }
+  document.addEventListener('visibilitychange', pausarAudioPorOculto);
+  window.addEventListener('pagehide', pausarAudioPorOculto);
+
+  function cambiarMusica(activa) {
+    musicaActiva = !!activa;
+    try { localStorage.setItem(MUSICA_STORAGE_KEY, musicaActiva ? '1' : '0'); } catch (e) {}
+    if (musicaActiva) iniciarMusicaFondo(false);
+    else {
+      retirarEsperaPrimerGesto();
+      musicaFondo.pause();
+    }
+    actualizarControlMusica();
+  }
+
+  let partidaId = localStorage.getItem('aht_partida_id_juego');
+  let cacheEstado = null;
+  let cacheInsp = null;
+  let cachePueblo = null;
+  let cacheBuzon = [];
+  let cacheDiario = null;
+  let cotiSinVerPrev = null;
+  let vidaCorazonPctPrev = null;
+  let vidaCorazonReady = false;
+  let vidaDerrotaCerrada = false;
+  let org = { modo: 'pareja', tipo: '', a: '', b: '', lugar: '', dia: null, hora: 17 };
+  let orgPresetNuevo = false;
+  const playtestLogClient = { entries: [] };
+  const ahtDebugSessionLog = [];
+  playtestLogClient.push = function (e) {
+    this.entries.push(e);
+    if (this.entries.length > 300) this.entries = this.entries.slice(-300);
+  };
+  function storageKey() { return 'aht_partida_id_juego'; }
+
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c];
+    });
+  }
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  function initDebugPanel() {
+    setDebugOn(DEBUG_ON);
+    const ptToggle = $('[data-debug-toggle]');
+    const ptPanel = document.querySelector('[data-debug-panel]');
+    if (ptToggle && ptPanel) {
+      ptToggle.addEventListener('click', function () {
+        var opening = ptPanel.hasAttribute('hidden');
+        if (opening) {
+          setDebugOn(true);
+          ptPanel.removeAttribute('hidden');
+        } else {
+          ptPanel.setAttribute('hidden', 'hidden');
+        }
+        ptToggle.setAttribute('aria-expanded', opening ? 'true' : 'false');
+        ptToggle.textContent = opening ? '?? DEBUG ?' : '?? DEBUG';
+      });
+    }
+  }
+  initDebugPanel();
+
+  function pintarPlaytestDiag(fromServer) {
+    const pre = $('[data-playtest-diag-log]');
+    if (!pre) return;
+    const serverText = fromServer && fromServer.texto ? String(fromServer.texto) : '';
+    const clientBits = playtestLogClient.entries.map(function (e) {
+      if (e.tipo === 'API_ERROR') {
+        return e.ts + ' | API_ERROR\n' + e.method + ' ' + e.action + ' ? HTTP ' + e.status
+          + '\nreq: ' + JSON.stringify(e.payload)
+          + '\nresp: ' + JSON.stringify(e.respuesta).slice(0, 500)
+          + '\ncausa: ' + e.causa;
+      }
+      return e.ts + ' | ' + (e.tipo || 'CLIENT') + '\n' + JSON.stringify(e);
+    });
+    const all = [];
+    if (serverText) all.push(serverText);
+    if (clientBits.length) all.push('--- CLIENT / API ---\n' + clientBits.join('\n\n'));
+    pre.textContent = all.length ? all.join('\n\n') : '(aún no hay eventos)';
+    try { if (fromServer && fromServer.texto) console.log('[AHT playtest_diag]\n' + fromServer.texto); } catch (e) {}
+  }
+
+
+  function ahtLabAuditLog(payload) {
+    if (!isDebugOn() || !payload || !payload.lab_audit || !Array.isArray(payload.lab_audit.eventos)) return;
+    payload.lab_audit.eventos.forEach(function (ev) {
+      ahtDebugSessionLog.push(ev);
+      if (ahtDebugSessionLog.length > 500) ahtDebugSessionLog.splice(0, ahtDebugSessionLog.length - 500);
+    });
+    if (typeof AhtLabAudit !== 'undefined' && AhtLabAudit.log) {
+      try { AhtLabAudit.log(payload); return; } catch (e) {}
+    }
+    payload.lab_audit.eventos.forEach(function (ev) {
+      var pref = ev.prefijo || '[AHT DEBUG]';
+      console.log(pref, ev.datos);
+      try { console.log(pref + ' JSON', JSON.stringify(ev.datos, null, 2)); } catch (e2) {}
+    });
+  }
+
+  async function copiarDebugExport(soloEstado) {
+    if (!isDebugOn()) {
+      toast('Activa DEBUG primero.');
+      return;
+    }
+    const body = { historial: soloEstado ? [] : ahtDebugSessionLog.slice() };
+    const r = await api('partida.debug_export', body);
+    if (!r.ok || !r.debug_export) {
+      toast(r.mensaje_ui || 'No se pudo exportar debug.');
+      return;
+    }
+    const txt = r.debug_export.texto || '';
+    try {
+      await navigator.clipboard.writeText(txt);
+      toast('Debug copiado.');
+    } catch (e) {
+      toast('No se pudo copiar al portapapeles.');
+    }
+  }
+
+  async function api(action, body, method) {
+    body = body || {};
+    method = method || 'POST';
+    const opts = { method: method, cache: 'no-store' };
+    let url;
+    if (isDebugOn()) body.debug = 1;
+    if (method === 'GET') {
+      const q = new URLSearchParams();
+      q.set('action', action);
+      if (isDebugOn()) q.set('debug', '1');
+      if (partidaId) q.set('partida_id', partidaId);
+      Object.keys(body).forEach(function (k) {
+        const v = body[k];
+        if (v === undefined || v === null) return;
+        if (Array.isArray(v)) {
+          v.forEach(function (item) { q.append(k + '[]', String(item)); });
+        } else if (typeof v !== 'object') {
+          q.set(k, String(v));
+        }
+      });
+      url = API + '?' + q.toString();
+    } else {
+      opts.headers = { 'Content-Type': 'application/json' };
+      opts.body = JSON.stringify(Object.assign({ partida_id: partidaId }, body));
+      url = API + '?action=' + encodeURIComponent(action);
+      if (isDebugOn()) url += '&debug=1';
+    }
+    let resp;
+    let raw = '';
+    try {
+      resp = await fetch(url, opts);
+      raw = await resp.text();
+    } catch (err) {
+      const fail = { ok: false, error: 'network_error', mensaje_ui: 'No se pudo contactar con la API.', detalle: String(err && err.message || err) };
+      logApiError(action, method, body, 0, fail, 'network');
+      return fail;
+    }
+    let data;
+    try {
+      data = raw ? JSON.parse(raw) : {};
+    } catch (err) {
+      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvió JSON.', raw: raw.slice(0, 400) };
+      logApiError(action, method, body, resp.status, fail, 'json_parse');
+      return fail;
+    }
+    if (!resp.ok || data.ok === false) {
+      logApiError(action, method, body, resp.status, data, data.error || ('http_' + resp.status));
+    }
+    ahtLabAuditLog(data);
+    return data;
+  }
+
+  function logApiError(action, method, payload, status, data, causa) {
+    const entry = {
+      ts: new Date().toISOString().slice(11, 19),
+      tipo: 'API_ERROR',
+      method: method,
+      action: action,
+      status: status,
+      payload: payload,
+      respuesta: data,
+      causa: causa
+    };
+    playtestLogClient.push(entry);
+    try { console.warn('[AHT playtest API]', method, action, status, causa, data); } catch (e) {}
+    pintarPlaytestDiag();
+  }
+
+
+    const TUT_INTRO_KEY_PREFIX = 'aht_intro_v1_';
+  /* Tutorial intro: solo servidor (TutorialPrimerosPasos::vistaPublica). Sin copy legacy en cliente. */
+  let tutIntroIdx = 0;
+
+  function tutIntroKey() {
+    return TUT_INTRO_KEY_PREFIX + (partidaId || 'sin_partida');
+  }
+  function tutIntroHecho() {
+    try { return localStorage.getItem(tutIntroKey()) === '1'; } catch (e) { return false; }
+  }
+  function marcarTutIntroHecho() {
+    try { localStorage.setItem(tutIntroKey(), '1'); } catch (e) {}
+  }
+  function tutPasosActuales() {
+    if (cacheEstado && cacheEstado.tutorial && cacheEstado.tutorial.intro && cacheEstado.tutorial.intro.pasos) {
+      return cacheEstado.tutorial.intro.pasos;
+    }
+    return [];
+  }
+  function tieneTutorialV3() {
+    return !!(cacheEstado && cacheEstado.tutorial && cacheEstado.tutorial.id === 'primeros_pasos'
+      && cacheEstado.tutorial.intro && cacheEstado.tutorial.intro.pasos && cacheEstado.tutorial.intro.pasos.length);
+  }
+  function pintarTutIntro() {
+    const box = $('[data-tut-intro]');
+    if (!box) return;
+    const pasos = tutPasosActuales();
+    const paso = pasos[tutIntroIdx];
+    if (!paso) return;
+
+    var papel = $('[data-tut-papel]') || box.querySelector('.tut-papel');
+    if (papel) papel.classList.remove('tut-anim');
+
+    $('[data-tut-tit]').textContent = paso.tit || '';
+
+    var introEl = $('[data-tut-intro-line]');
+    if (introEl) {
+      introEl.textContent = paso.intro || '';
+      introEl.hidden = !paso.intro;
+    }
+    var introExtra = $('[data-tut-intro-extra]');
+    if (introExtra) {
+      introExtra.textContent = paso.intro_extra || '';
+      introExtra.hidden = !paso.intro_extra;
+    }
+
+    var carasBox = $('[data-tut-caras]');
+    if (carasBox) {
+      carasBox.innerHTML = '';
+      if (paso.caras && paso.caras.length) {
+        carasBox.hidden = false;
+        paso.caras.forEach(function (c, i) {
+          var wrap = document.createElement('div');
+          wrap.className = 'tut-cara-wrap tut-anim-item tut-anim-pop';
+          wrap.style.setProperty('--tut-delay', String(100 + i * 90) + 'ms');
+          var sp = document.createElement('span');
+          sp.className = 'tut-cara';
+          sp.innerHTML = c.token_url
+            ? '<img src="' + esc(c.token_url) + '" alt=""/>'
+            : '<span class="cara-ini">' + esc((c.nombre || '?')[0]) + '</span>';
+          wrap.appendChild(sp);
+          if (c.nombre) {
+            var nm = document.createElement('span');
+            nm.className = 'tut-cara-nombre';
+            nm.textContent = c.nombre;
+            wrap.appendChild(nm);
+          }
+          carasBox.appendChild(wrap);
+        });
+      } else {
+        carasBox.hidden = true;
+      }
+    }
+
+    var prefijoEl = $('[data-tut-bloques-pref]');
+    if (prefijoEl) {
+      prefijoEl.textContent = paso.bloques_prefijo || '';
+      prefijoEl.hidden = !paso.bloques_prefijo;
+    }
+
+    var bloquesBox = $('[data-tut-bloques]');
+    if (bloquesBox) {
+      bloquesBox.innerHTML = '';
+      bloquesBox.className = 'tut-bloques';
+      if (paso.bloques_estilo === 'inline') bloquesBox.classList.add('is-inline');
+      if (paso.bloques && paso.bloques.length) {
+        bloquesBox.hidden = false;
+        paso.bloques.forEach(function (b, i) {
+          var div = document.createElement('div');
+          div.className = 'tut-bloque tut-anim-item';
+          div.style.setProperty('--tut-delay', String(60 + i * 80) + 'ms');
+          var sym = document.createElement('span');
+          sym.className = 'tut-bloque-sym';
+          sym.textContent = b.simbolo || '';
+          div.appendChild(sym);
+          var body = document.createElement('span');
+          body.className = 'tut-bloque-body';
+          if (b.tit) {
+            var tit = document.createElement('strong');
+            tit.className = 'tut-bloque-tit';
+            tit.textContent = b.tit;
+            body.appendChild(tit);
+          }
+          if (b.txt) {
+            var txt = document.createElement('span');
+            txt.className = 'tut-bloque-txt';
+            txt.textContent = b.txt;
+            body.appendChild(txt);
+          }
+          div.appendChild(body);
+          bloquesBox.appendChild(div);
+        });
+      } else {
+        bloquesBox.hidden = true;
+      }
+    }
+
+    var tareasBox = $('[data-tut-tareas]');
+    if (tareasBox) {
+      tareasBox.innerHTML = '';
+      if (paso.tareas) {
+        tareasBox.hidden = false;
+        var nums = ['?', '?', '?'];
+        for (var t = 0; t < 3; t++) {
+          var mark = document.createElement('span');
+          mark.className = 'tut-tarea-mark tut-anim-item tut-anim-pop';
+          mark.style.setProperty('--tut-delay', String(t * 80) + 'ms');
+          mark.textContent = nums[t];
+          tareasBox.appendChild(mark);
+        }
+      } else {
+        tareasBox.hidden = true;
+      }
+    }
+
+    var cierreEl = $('[data-tut-cierre]');
+    if (cierreEl) {
+      cierreEl.textContent = paso.cierre || '';
+      cierreEl.hidden = !paso.cierre;
+    }
+
+    const dots = $('[data-tut-pasos]');
+    dots.innerHTML = '';
+    tutPasosActuales().forEach(function (_, i) {
+      const s = document.createElement('span');
+      if (i <= tutIntroIdx) s.className = 'is-on';
+      dots.appendChild(s);
+    });
+
+    const btnAtras = $('[data-tut-atras]');
+    const btnSig = $('[data-tut-siguiente]');
+    if (btnAtras) btnAtras.hidden = tutIntroIdx === 0;
+    const pasosN = tutPasosActuales();
+    const ult = pasosN[tutIntroIdx];
+    var esFinal = tutIntroIdx >= pasosN.length - 1;
+    if (btnSig) {
+      btnSig.textContent = esFinal
+        ? (ult && ult.boton_final ? ult.boton_final : 'A ver qué se cuece')
+        : 'Siguiente';
+      btnSig.classList.toggle('tut-cta-final', esFinal);
+    }
+
+    if (papel) {
+      requestAnimationFrame(function () {
+        papel.classList.add('tut-anim');
+      });
+    }
+  }
+  function abrirTutIntro(desdeCero) {
+    if (desdeCero) tutIntroIdx = 0;
+    const box = $('[data-tut-intro]');
+    if (!box) return;
+    box.hidden = false;
+    document.body.setAttribute('data-tut-activo', '1');
+    pintarTutIntro();
+  }
+  function cerrarTutIntro(marcar, irMisiones) {
+    const box = $('[data-tut-intro]');
+    if (box) box.hidden = true;
+    document.body.removeAttribute('data-tut-activo');
+    if (marcar) marcarTutIntroHecho();
+    if (irMisiones !== false && marcar) {
+      setCapa('misiones');
+    }
+    const reopen = $('[data-tut-reopen]');
+    if (reopen) reopen.hidden = false;
+  }
+  function quizaMostrarTutFinale() {
+    var tut = cacheEstado && cacheEstado.tutorial;
+    if (!tut || !tut.finale_pendiente || !tut.finale) return;
+    var box = $('aside[data-tut-finale]');
+    if (!box) return;
+    $('[data-tut-fin-tit]').textContent = tut.finale.tit || '';
+    $('[data-tut-fin-texto]').textContent = tut.finale.txt || '';
+    var btn = $('[data-tut-fin-ok]');
+    if (btn) btn.textContent = tut.finale.boton || 'Que empiece el tema';
+    box.hidden = false;
+    document.body.setAttribute('data-tut-finale', '1');
+    syncScrollLock();
+  }
+  async function cerrarTutFinale() {
+    var box = $('aside[data-tut-finale]');
+    if (box) box.hidden = true;
+    document.body.removeAttribute('data-tut-finale');
+    syncScrollLock();
+    await api('partida.tutorial_finale', {});
+    await refresh();
+    setCapa('');
+  }
+  function quizaMostrarTutIntro() {
+    const reopen = $('[data-tut-reopen]');
+    if (!tieneTutorialV3()) {
+      if (reopen) reopen.hidden = true;
+      return;
+    }
+    if (tutIntroHecho()) {
+      if (reopen) reopen.hidden = false;
+      return;
+    }
+    abrirTutIntro(true);
+  }
+  function pintarTutorialMotor(tut) {
+    const pista = $('[data-tutorial-pista]');
+    if (!pista) return;
+    if (tut && tut.id === 'primeros_pasos') {
+      pista.hidden = true;
+      pista.textContent = '';
+      document.body.removeAttribute('data-tutorial-zona');
+      return;
+    }
+    if (!tut || !tut.activo || !tut.pista) {
+      pista.hidden = true;
+      pista.textContent = '';
+      document.body.removeAttribute('data-tutorial-zona');
+      return;
+    }
+    pista.hidden = false;
+    pista.textContent = tut.pista;
+    if (tut.zona) document.body.setAttribute('data-tutorial-zona', tut.zona);
+    else document.body.removeAttribute('data-tutorial-zona');
+  }
+
+  function layout() {
+    const root = $('.play-root');
+    const phone = window.innerWidth < 720;
+    root.classList.toggle('phone', phone);
+    root.classList.toggle('pc', !phone);
+  }
+
+  function toast(txt) {
+    const n = $('[data-toast]');
+    n.textContent = txt;
+    n.classList.add('is-on');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { n.classList.remove('is-on'); }, 2800);
+  }
+
+  function uiRootFrom(el) {
+    return el && (el.closest('.play-root') || el.closest('.game-shell'));
+  }
+
+  let consultaNav = null;
+  let consultaOverlayHome = null;
+
+  function limpiarPosicionNotaMapa(el) {
+    if (!el) return;
+    el.style.left = '';
+    el.style.top = '';
+    el.style.right = '';
+    el.style.bottom = '';
+  }
+
+  function syncConsultaOverlay() {
+    var root = $('.play-root');
+    var consulta = root && root.getAttribute('data-consulta');
+    var activa = consulta === 'sel' || consulta === 'quien';
+    var velo = root && root.querySelector('.velo');
+    var fit = root && root.querySelector('.board-fit');
+    var sel = root && root.querySelector('.selector');
+    var quien = root && root.querySelector('.quien');
+    if (!root || !velo || !fit || !sel || !quien) return;
+
+    if (activa) {
+      if (!consultaOverlayHome) {
+        consultaOverlayHome = { parent: fit, after: fit.querySelector('.edificios-layer') };
+      }
+      limpiarPosicionNotaMapa(sel);
+      limpiarPosicionNotaMapa(quien);
+      if (sel.parentElement !== root) velo.insertAdjacentElement('afterend', sel);
+      if (quien.parentElement !== root) {
+        if (sel.parentElement === root) sel.insertAdjacentElement('afterend', quien);
+        else velo.insertAdjacentElement('afterend', quien);
+      }
+      return;
+    }
+
+    if (!consultaOverlayHome) return;
+    var home = consultaOverlayHome;
+    consultaOverlayHome = null;
+    if (!home.parent || !home.parent.isConnected) return;
+    var anchor = home.after;
+    if (sel.parentElement !== home.parent) {
+      if (quien.parentElement === home.parent) home.parent.insertBefore(sel, quien);
+      else if (anchor && anchor.parentElement === home.parent) anchor.insertAdjacentElement('afterend', sel);
+      else home.parent.appendChild(sel);
+    }
+    if (quien.parentElement !== home.parent) {
+      if (sel.parentElement === home.parent) sel.insertAdjacentElement('afterend', quien);
+      else if (anchor && anchor.parentElement === home.parent) anchor.insertAdjacentElement('afterend', quien);
+      else home.parent.appendChild(quien);
+    }
+    limpiarPosicionNotaMapa(sel);
+    limpiarPosicionNotaMapa(quien);
+  }
+
+  let uiHistDepth = 0;
+  let uiHistSilent = false;
+
+  function uiHistPush() {
+    if (uiHistSilent) return;
+    uiHistDepth++;
+    try { history.pushState({ ahtUi: uiHistDepth }, ''); } catch (e) {}
+  }
+
+  function uiHistReset() {
+    uiHistDepth = 0;
+    consultaNav = null;
+  }
+
+  function uiHistBack() {
+    const root = $('.play-root');
+    if (!root) return false;
+    const consulta = root.getAttribute('data-consulta') || '';
+    const capa = root.getAttribute('data-capa') || '';
+    if (consulta === 'quien' && consultaNav && consultaNav.fromSel) {
+      uiHistSilent = true;
+      if (consultaNav.tipo === 'zona') abrirConsultaZona(consultaNav.zonaId, consultaNav.zonaBtn, true);
+      else abrirConsulta(consultaNav.complejoId, true);
+      uiHistSilent = false;
+      return true;
+    }
+    if (consulta) {
+      root.removeAttribute('data-consulta');
+      consultaNav = null;
+      actualizarNotaAtras();
+      return true;
+    }
+    if (capa) {
+      setCapa('');
+      return true;
+    }
+    return false;
+  }
+
+  function cerrarUiCompleto() {
+    uiHistSilent = true;
+    cerrarFichaRelOverlay();
+    cerrarVecRelOverlay();
+    setCapa('');
+    if ($('.play-root')) $('.play-root').removeAttribute('data-consulta');
+    uiHistReset();
+    actualizarNotaAtras();
+    if (uiHistDepth > 0) {
+      const n = uiHistDepth;
+      uiHistDepth = 0;
+      try { history.go(-n); } catch (e) {}
+    }
+    uiHistSilent = false;
+  }
+
+
+  function syncScrollLock() {
+    var body = document.body;
+    if (!body || !body.classList.contains('play-v3')) return;
+    var root = $('.play-root');
+    var open = !!(root && (root.getAttribute('data-capa') || root.getAttribute('data-consulta')))
+      || body.getAttribute('data-tut-finale') === '1';
+    if (open) {
+      if (!body.classList.contains('play-v3--scroll-lock')) {
+        var y = window.scrollY || window.pageYOffset || 0;
+        var sbw = Math.max(0, window.innerWidth - document.documentElement.clientWidth);
+        body.dataset.scrollLockY = String(y);
+        body.dataset.scrollLockPad = String(sbw);
+        body.style.top = '-' + y + 'px';
+        if (sbw > 0) body.style.paddingRight = sbw + 'px';
+        body.classList.add('play-v3--scroll-lock');
+      }
+    } else if (body.classList.contains('play-v3--scroll-lock')) {
+      var restore = parseInt(body.dataset.scrollLockY || '0', 10) || 0;
+      body.classList.remove('play-v3--scroll-lock');
+      body.style.top = '';
+      body.style.paddingRight = '';
+      delete body.dataset.scrollLockY;
+      delete body.dataset.scrollLockPad;
+      window.scrollTo(0, restore);
+    }
+  }
+
+  /* [LATIDOS-L1] Linea discreta de latidos en el modal Vida.
+     Reutiliza clases existentes (.vida-estado-pista mini): sin CSS nuevo. */
+  function ensureVidaModalLatidosLinea(modal) {
+    if (!modal) return null;
+    let el = modal.querySelector('[data-vida-modal-latidos]');
+    if (!el) {
+      el = document.createElement('p');
+      el.className = 'vida-estado-pista mini';
+      el.setAttribute('data-vida-modal-latidos', '');
+      el.hidden = true;
+      const head = modal.querySelector('.vida-top');
+      if (head) head.appendChild(el);
+      else modal.appendChild(el);
+    }
+    return el;
+  }
+
+  function renderVidaPuebloModal() {
+    const vida = cacheEstado && cacheEstado.vida_pueblo ? cacheEstado.vida_pueblo : null;
+    const valor = vida && typeof vida.corazon_pct === 'number' ? Math.round(vida.corazon_pct) : 0;
+    const valEl = $('[data-vida-modal-valor]');
+    if (valEl) valEl.textContent = valor + ' / 100';
+    const estEl = $('[data-vida-modal-estado]');
+    if (estEl) {
+      let hint = '';
+      if (vida && vida.critico) hint = 'La cosa se está poniendo fea.';
+      else if (valor >= 80) hint = 'Por ahora el pueblo respira.';
+      else if (valor <= 39) hint = 'Aquí pasa algo, y no es bueno.';
+      estEl.textContent = hint;
+      estEl.hidden = !hint;
+      estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
+    }
+    /* [LATIDOS-L1] inicio */
+    const latEl = ensureVidaModalLatidosLinea($('.capa-vida-pueblo'));
+    if (latEl) {
+      let txt = '';
+      if (vida && typeof vida.latidos === 'number') {
+        txt = 'Latidos del pueblo: ' + vida.latidos;
+        const ult = vida.ultimo_latido;
+        if (ult && typeof ult.numero === 'number' && ult.numero > 0 && typeof ult.dia === 'number' && ult.dia > 0) {
+          txt += ' · Último: día ' + ult.dia;
+        }
+      }
+      latEl.textContent = txt;
+      latEl.hidden = !txt;
+    }
+    /* [LATIDOS-L1] fin */
+    const modal = $('.capa-vida-pueblo');
+    if (modal) {
+      modal.classList.toggle('vida-modal--critica', !!(vida && vida.critico));
+      modal.classList.toggle('vida-modal--alta', valor >= 80 && !(vida && vida.critico));
+      modal.classList.toggle('vida-modal--baja', valor <= 39 && !(vida && vida.critico));
+    }
+  }
+
+  function setCapa(name) {
+    const root = $('.play-root');
+    const prev = (root && root.getAttribute('data-capa')) || '';
+    if (!name) root.removeAttribute('data-capa');
+    else root.setAttribute('data-capa', name);
+    if (name === 'vida_pueblo') renderVidaPuebloModal();
+    if (name && name !== prev && !uiHistSilent) uiHistPush();
+    $$('.dock button').forEach(function (b) {
+      const open = b.getAttribute('data-open');
+      b.classList.toggle('is-on', name ? open === name : !open);
+    });
+    syncScrollLock();
+  }
+
+  function dineroTxt(insp, estado) {
+    const eco = (insp && insp.economia && insp.economia.dinero) ? insp.economia.dinero.balance : null;
+    const cel = estado && estado.celeste ? estado.celeste.dinero : null;
+    const v = eco !== null && eco !== undefined ? eco : cel;
+    if (v === null || v === undefined || v === '') return '—';
+    return String(Math.round(Number(v))) + ' €';
+  }
+
+
+  function nombreDe(id) {
+    const r = (cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id]) || {};
+    return (r.identidad_publica && r.identidad_publica.nombre) || id;
+  }
+
+  function esIdInterno(s) {
+    if (typeof s !== 'string' || !s) return false;
+    return /^per_[a-z0-9_]+$/i.test(s) || /^lug_[a-z0-9_]+$/i.test(s) || /^msg_/.test(s);
+  }
+
+  function nombrePublicoDe(m) {
+    if (!m || typeof m !== 'object') return '';
+    if (m.tipo === 'candidato_llegada' && m.texto) {
+      const mt = String(m.texto).match(/^([^\n.:]{2,32}?)\s+quiere\s+/i);
+      if (mt) return mt[1].trim();
+    }
+    const remitente = String(m.remitente_nombre || '').trim();
+    if (remitente && !esIdInterno(remitente)) return remitente;
+    const id = remitenteIdDe(m);
+    if (id) {
+      const n = nombreDe(id);
+      if (n && !esIdInterno(n)) return n;
+    }
+    // Compatibilidad de lectura: mensajes response_plan antiguos no guardaban remitente.
+    if (m.tipo === 'respuesta_plan') {
+      const legacy = String(m.texto || '').match(/^(.+?)\s+(?:no han quedado\.?|ha rechazado la propuesta\s*:)/i);
+      if (legacy && legacy[1].trim()) return legacy[1].trim();
+    }
+    const t = String(m.texto || '');
+    const ci = t.indexOf(':');
+    if (ci > 0 && ci < 28) {
+      const pref = t.slice(0, ci).trim();
+      if (pref && !esIdInterno(pref)) return pref;
+    }
+    return 'Alguien';
+  }
+
+  function cuerpoMensajito(m, nombre) {
+    let t = String(m.texto || '').trim();
+    if (m.tipo === 'respuesta_plan' && nombre && t.indexOf(nombre + ' ') === 0) {
+      t = t.slice(nombre.length).trim();
+    }
+    if (nombre && t.indexOf(nombre + ':') === 0) {
+      t = t.slice(nombre.length + 1).trim();
+    } else if (nombre && t.indexOf(nombre + ' ') === 0) {
+      const rest = t.slice(nombre.length).trim();
+      if (/^quiere\s+/i.test(rest)) t = rest;
+    }
+    if (m.plazo_humano) {
+      const ph = String(m.plazo_humano).trim();
+      if (ph && t.endsWith(ph)) t = t.slice(0, t.length - ph.length).trim();
+      t = t.replace(/\s*Te quedan\s+\d+\s*h\s*$/i, '').trim();
+    }
+    return t;
+  }
+
+
+  function mensajitoRequiereAccion(m) {
+    if (!m || typeof m !== 'object') return false;
+    if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') return true;
+    if ((m.clasificacion || '') === 'peticion' && m.peticion_id && (m.estado || '') === 'pendiente') return true;
+    return false;
+  }
+
+  async function marcarMensajitoLeido(m) {
+    if (!m || !m.id || (m.estado || '') !== 'pendiente') return null;
+    const lr = await api('buzon.leer', { mensaje_id: m.id });
+    return lr.tutorial || null;
+  }
+
+
+  function remitenteIdDe(m) {
+    if (!m || typeof m !== 'object') return null;
+    const direct = m.de_persona || m.de;
+    if (direct) return direct;
+    if (m.candidato_catalog_id) return m.candidato_catalog_id;
+    const act = m.actores;
+    if (Array.isArray(act)) {
+      for (let i = 0; i < act.length; i++) {
+        if (act[i]) return act[i];
+      }
+    }
+    return null;
+  }
+
+  function inicialDe(nombre) {
+    if (typeof nombre !== 'string' || !nombre.length) return '?';
+    return nombre.charAt(0);
+  }
+
+  function htmlAvatarMensajito(m, nombre, cls) {
+    const rid = remitenteIdDe(m);
+    const tok = rid && !m.candidato_catalog_id ? tokenDe(rid) : null;
+    const base = cls || 'msg-item-avatar';
+    if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""/>';
+    return '<span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span>';
+  }
+
+  function mensajitosCartas(msgs) {
+    return (msgs || []).filter(function (m) {
+      return m && (m.canal || 'buzon') !== 'cotilleo' && String(m.texto || '').trim() !== '';
+    });
+  }
+
+  function mensajitoTsKey(m) {
+    if (!m || typeof m !== 'object') return 0;
+    const ts = (m.ts_juego && typeof m.ts_juego === 'object') ? m.ts_juego : {};
+    const dia = Number(ts.dia != null ? ts.dia : m.dia) || 0;
+    const hora = Number(ts.hora) || 0;
+    return dia * 24 + hora;
+  }
+
+  function mensajitoRequiereAccion(m) {
+    if (!m || typeof m !== 'object') return false;
+    if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') return true;
+    if ((m.clasificacion || '') === 'peticion' && m.peticion_id && (m.estado || '') === 'pendiente') return true;
+    return false;
+  }
+
+  // R08: prioridad acordada - pendientes primero; luego ts (dia*24+hora) desc;
+  // desempate estable por llegada (mas nuevo primero). mensajitoTsKey del
+  // trabajo previo en produccion se conserva como clave secundaria.
+  function mensajitosOrdenados(msgs) {
+    return mensajitosCartas(msgs)
+      .map(function (m, i) { return { m: m, i: i }; })
+      .sort(function (a, b) {
+        const pa = (a.m.estado || '') === 'pendiente' ? 0 : 1;
+        const pb = (b.m.estado || '') === 'pendiente' ? 0 : 1;
+        if (pa !== pb) return pa - pb;
+        const ta = mensajitoTsKey(a.m);
+        const tb = mensajitoTsKey(b.m);
+        if (ta !== tb) return tb - ta;
+        return b.i - a.i;
+      })
+      .map(function (x) { return x.m; });
+  }
+
+  // Primera carta visible del panel: primera pendiente de decision si la hay;
+  // si no, primera pendiente. El preview HUD nunca contradice al panel.
+  function mensajitoTopPreview(msgs) {
+    const cartas = mensajitosOrdenados(msgs).filter(function (m) {
+      return (m.estado || '') === 'pendiente';
+    });
+    if (!cartas.length) return null;
+    for (let i = 0; i < cartas.length; i++) {
+      if (mensajitoRequiereAccion(cartas[i])) return cartas[i];
+    }
+    return cartas[0];
+  }
+
+
+function mensajitoCuandoTxt(m) {
+    if (!m || typeof m !== 'object') return '';
+    const fc = String(m.fecha_corta || '').trim();
+    const ts = (m.ts_juego && typeof m.ts_juego === 'object') ? m.ts_juego : null;
+    const hora = ts ? Number(ts.hora) : NaN;
+    if (!fc || !isFinite(hora)) return '';
+    const hh = String(Math.max(0, Math.min(23, Math.trunc(hora)))).padStart(2, '0');
+    return fc + ' \u00b7 ' + hh + ':00';
+  }
+
+  function mensajitoEstaLeido(m) {
+    return (m.estado || '') !== 'pendiente';
+  }
+
+  async function toggleMensajitoLeido(m, leido) {
+    if (!m || !m.id) { toast('No se puede marcar este mensaje.'); return false; }
+    if (leido) {
+      if (mensajitoEstaLeido(m)) return true;
+      const lr = await api('buzon.leer', { mensaje_id: m.id });
+      if (!lr.ok) { toast(lr.mensaje_ui || 'No se pudo marcar como leido.'); return false; } return lr.tutorial || true;
+    }
+    if (!mensajitoEstaLeido(m)) return true;
+    const nr = await api('buzon.no_leer', { mensaje_id: m.id });
+    if (!nr.ok) { toast(nr.mensaje_ui || 'No se pudo desmarcar.'); return false; } return true;
+  }
+
+  function crearMsgLeidoToggle(m) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    wireMsgLeidoToggle(btn, m);
+    return btn;
+  }
+
+  function wireMsgLeidoToggle(btn, m) {
+    const leido = mensajitoEstaLeido(m);
+    btn.className = 'msg-leido-toggle' + (leido ? ' is-leido' : ' is-pendiente');
+    btn.textContent = leido ? 'le\u00eddo' : 'marcar';
+    btn.setAttribute('aria-pressed', leido ? 'true' : 'false');
+    btn.setAttribute('aria-label', leido ? 'Marcar como no le\u00eddo' : 'Marcar como le\u00eddo');
+    btn.onclick = null;
+    btn.addEventListener('click', async function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const quiereLeido = btn.getAttribute('aria-pressed') !== 'true';
+      const popAbierto = mensajitosPopAbierto;
+      const tr = await toggleMensajitoLeido(m, quiereLeido);
+      if (tr === false) return;
+      
+      await refresh();
+      if (popAbierto) abrirMensajitosPop();
+      if (tr && tr !== true) pintarTutorialMotor(tr);
+    });
+  }
+
+  function crearMsgItem(m, compact) {
+    const row = document.createElement('div');
+    const leido = (m.estado || '') !== 'pendiente';
+    row.className = 'msg-item' + (leido ? ' leida' : ' no-leida');
+    const nombre = nombrePublicoDe(m);
+    const cuerpo = cuerpoMensajito(m, nombre);
+    const cuando = mensajitoCuandoTxt(m);
+    row.innerHTML = htmlAvatarMensajito(m, nombre) +
+      '<div class="msg-item-copy"><span class="msg-item-nom">' + esc(nombre) +
+      (cuando ? '<span class="msg-item-cuando">' + esc(cuando) + '</span>' : '') +
+      '</span>' +
+      (compact ? ' — ' : '<br/>') +
+      '<span class="msg-item-txt">' + esc(cuerpo) + '</span></div>';
+    row.appendChild(crearMsgLeidoToggle(m));
+    return row;
+  }
+
+  let mensajitosPopAbierto = false;
+
+  function cerrarMensajitosPop() {
+    mensajitosPopAbierto = false;
+    const pop = $('[data-mensajitos-pop]');
+    const trig = $('[data-mensajitos-trigger]');
+    if (pop) pop.hidden = true;
+    if (trig) trig.setAttribute('aria-expanded', 'false');
+  }
+
+  function abrirMensajitosPop() {
+    mensajitosPopAbierto = true;
+    const pop = $('[data-mensajitos-pop]');
+    const trig = $('[data-mensajitos-trigger]');
+    if (pop) pop.hidden = false;
+    if (trig) trig.setAttribute('aria-expanded', 'true');
+  }
+
+  function toggleMensajitosPop() {
+    if (mensajitosPopAbierto) cerrarMensajitosPop();
+    else abrirMensajitosPop();
+  }
+
+  function renderMensajitosPop(msgs) {
+    const box = $('[data-mensajitos-preview]');
+    const verMas = $('[data-mensajitos-ver-mas]');
+    if (!box) return;
+    const cartas = mensajitosOrdenados(msgs);
+    box.innerHTML = '';
+    if (!cartas.length) {
+      box.innerHTML = '<p class="lista-vacia">Sin mensajitos. De momento, silencio.</p>';
+      if (verMas) verMas.hidden = true;
+      return;
+    }
+    cartas.slice(0, 3).forEach(function (m) {
+      box.appendChild(crearMsgItem(m, true));
+    });
+    if (verMas) verMas.hidden = cartas.length <= 3;
+  }
+
+  function estadoMisionLabel(estado) {
+    if (estado === 'cumplida') return 'Completada';
+    if (estado === 'bloqueada') return 'Bloqueada';
+    if (estado === 'pendiente') return 'Pendiente';
+    return estado || '';
+  }
+
+  function ejecutarAccionMision(m) {
+    if (!m || m.estado === 'bloqueada' || m.estado === 'cumplida') return;
+    const acc = m.accion;
+    const params = m.accion_params || {};
+    if (acc === 'buzon') {
+      setCapa('buzon');
+      return;
+    }
+    if (acc === 'organizar_pareja') {
+      abrirOrganizarConPreset({ modo: 'pareja', a: params.a, b: params.b });
+      return;
+    }
+    if (acc === 'organizar_solo') {
+      abrirOrganizarConPreset({ modo: 'solo', a: params.a, lugar: params.lugar });
+      return;
+    }
+    setCapa('misiones');
+  }
+
+  function renderMisionesTutorial(items, list, teaser) {
+    var sorted = items.slice().sort(function (a, b) {
+      return ((a.orden || 0) - (b.orden || 0)) || String(a.titulo || '').localeCompare(String(b.titulo || ''));
+    });
+    if (teaser) teaser.textContent = 'Primeros pasos';
+    list.innerHTML = '';
+    sorted.forEach(function (m) {
+      list.insertAdjacentHTML('beforeend', htmlMisionItem(m, { primerosPasos: true }));
+    });
+    enlazarAccionesMision(list, sorted);
+    renderMisionesStrip(sorted);
+  }
+
+  function renderMisiones(misiones) {
+    var teaser = $('[data-misiones-teaser]');
+    var list = $('[data-misiones-list]');
+    var items = [];
+    if (misiones && Array.isArray(misiones.misiones)) items = misiones.misiones;
+    else if (misiones && Array.isArray(misiones.items)) items = misiones.items;
+    else if (misiones && misiones.misiones_hoy && Array.isArray(misiones.misiones_hoy.misiones)) items = misiones.misiones_hoy.misiones;
+    else if (Array.isArray(misiones)) items = misiones;
+    var dia = (misiones && misiones.dia) ? misiones.dia : (cacheEstado && cacheEstado.reloj ? cacheEstado.reloj.dia_pueblo : 0);
+    if (!dia && cacheEstado && cacheEstado.reloj) dia = cacheEstado.reloj.dia_pueblo;
+    var hoy = items.filter(function (m) { return !m.dia || (m.dia || 0) === dia; });
+    var pp = hoy.filter(function (m) { return (m.familia || '') === 'primeros_pasos'; });
+    if (enTutorialPrimerosPasos() && pp.length >= 3) {
+      if (list) renderMisionesTutorial(pp, list, teaser);
+      renderMisionesStrip(pp);
+      return;
+    }
+    renderMisionesStrip(hoy);
+    if (teaser) {
+      var pend = hoy.filter(function (m) { return (m.estado || '') === 'pendiente'; });
+      teaser.textContent = pend.length
+        ? (pend.length + ' objetivo' + (pend.length === 1 ? '' : 's') + ' pendiente' + (pend.length === 1 ? '' : 's'))
+        : (hoy.length ? 'Nada pendiente hoy.' : 'Sin misiones hoy.');
+    }
+    if (!list) return;
+    list.innerHTML = '';
+    if (!hoy.length) {
+      list.innerHTML = '<p class="mis-vacio">No hay misiones para hoy.</p>';
+      return;
+    }
+    hoy.forEach(function (m) {
+      list.insertAdjacentHTML('beforeend', htmlMisionItem(m));
+    });
+    enlazarAccionesMision(list, hoy);
+  }
+
+
+  const CELESTINE_CAP_VECINOS = 46;
+  const CELESTINE_EMO_RESUMEN = [
+    { id: 'alegre', icon: '\ud83d\ude0a', label: 'Felices' },
+    { id: 'triste', icon: '\ud83d\ude22', label: 'Tristes' },
+    { id: 'enfadado', icon: '\ud83d\ude21', label: 'Enfadados' },
+  ];
+
+  function metricasSociales(partida) {
+    const res = (partida && partida.residentes) || {};
+    const ids = Object.keys(res).filter(function (k) { return (res[k].presencia || '') === 'residente'; });
+    const emo = { alegre: 0, triste: 0, enfadado: 0 };
+    ids.forEach(function (id) {
+      const rt = res[id].runtime && res[id].runtime.estado_emocional;
+      let eid = rt && rt.id ? String(rt.id) : 'neutro';
+      if (eid === 'neutral') eid = 'neutro';
+      if (eid === 'alegre') emo.alegre++;
+      else if (eid === 'triste') emo.triste++;
+      else if (eid === 'enfadado') emo.enfadado++;
+    });
+    const parejasList = parejasParaUI(partida || {});
+    let crisis = 0;
+    parejasList.forEach(function (r) {
+      if (esCrisisPareja(r)) crisis++;
+    });
+    const capRaw = partida && partida.celeste && partida.celeste.vivienda_capacidad_max;
+    const cap = Number(capRaw) > 0 ? Number(capRaw) : CELESTINE_CAP_VECINOS;
+    return { vecinos: ids.length, cap: cap, parejas: parejasList.length, crisis: crisis, emo: emo };
+  }
+
+  function htmlFilaCelestineFiltro(opts) {
+    return '<div class="vecinos-stat celeste-filtro-pendiente" role="presentation" data-celestine-filtro="' +
+      esc(opts.filtro) + '" data-filtro-panel="' + esc(opts.panel) + '">' +
+      '<span class="vecinos-stat-ico" aria-hidden="true">' + opts.icon + '</span>' +
+      '<span class="vecinos-stat-k">' + esc(opts.label) + '</span>' +
+      '<strong class="vecinos-stat-v">' + esc(String(opts.valor)) + '</strong></div>';
+  }
+
+  function htmlResumenCelestine(met) {
+    const bits = [];
+    bits.push('<div class="stat-row celeste-cuenta-vecinos"><span>En el pueblo</span><strong>' +
+      esc(String(met.vecinos)) + ' / ' + esc(String(met.cap)) + '</strong></div>');
+    CELESTINE_EMO_RESUMEN.forEach(function (def) {
+      const n = met.emo[def.id] || 0;
+      if (!n) return;
+      bits.push(htmlFilaCelestineFiltro({
+        filtro: 'vecinos:emo:' + def.id,
+        panel: 'vecinos',
+        icon: def.icon,
+        label: def.label,
+        valor: n,
+      }));
+    });
+    if (met.parejas > 0) {
+      bits.push('<span class="obj-vecinos-tit celeste-seccion-parejas">Parejas</span>');
+      bits.push('<div class="stat-row celeste-cuenta-parejas"><span>Parejas</span><strong>' +
+        esc(String(met.parejas)) + '</strong></div>');
+      if (met.crisis > 0) {
+        bits.push(htmlFilaCelestineFiltro({
+          filtro: 'parejas:estado:crisis',
+          panel: 'parejas',
+          icon: '\ud83d\udc94',
+          label: 'En crisis',
+          valor: met.crisis,
+        }));
+      }
+    }
+    return bits.join('');
+  }
+
+  function parejasParaUI(partida) {
+    return (partida.relaciones_romanticas || []).filter(function (r) {
+      if (!r) return false;
+      const est = String(r.estado_pareja || r.estado || '');
+      return est === 'pareja' || est === 'crisis';
+    });
+  }
+
+  function esCrisisPareja(rel) {
+    return String(rel && (rel.estado_pareja || rel.estado) || '') === 'crisis';
+  }
+
+  function idsPareja(rel) {
+    if (rel.persona_a && rel.persona_b) return [rel.persona_a, rel.persona_b];
+    if (rel.pareja && rel.pareja.length >= 2) return rel.pareja;
+    if (rel.participantes && rel.participantes.length >= 2) return rel.participantes;
+    return [];
+  }
+
+
+  function horaEnc(enc) {
+    if (!enc) return 0;
+    if (enc.hora_inicio != null) return Number(enc.hora_inicio);
+    return Number(enc.hora || 0);
+  }
+  function relojAbs(dia, hora) { return (Number(dia) || 0) * 24 + (Number(hora) || 0); }
+  function duracionEncHoras(enc) {
+    if (!enc) return 1;
+    if (enc.duracion_horas != null) return Math.max(1, Number(enc.duracion_horas));
+    if (enc.duracion_minutos != null) return Math.max(1, Math.ceil(Number(enc.duracion_minutos) / 60));
+    return 1;
+  }
+  function esEncuentroFuturo(enc, estado) {
+    if (!enc) return false;
+    const st = String(enc.estado || '');
+    if (st === 'en_curso') return true;
+    if (st !== 'programado') return false;
+    const reloj = (estado && estado.reloj) || {};
+    const now = relojAbs(reloj.dia_pueblo, reloj.hora_actual);
+    const start = relojAbs(enc.dia, horaEnc(enc));
+    const end = start + duracionEncHoras(enc);
+    return now < end;
+  }
+  function encuentrosFuturos(partida, estado) {
+    return ((partida && partida.encuentros) || []).filter(function (e) { return esEncuentroFuturo(e, estado); })
+      .sort(function (a, b) {
+        const aCurso = String(a.estado || '') === 'en_curso' ? 0 : 1;
+        const bCurso = String(b.estado || '') === 'en_curso' ? 0 : 1;
+        if (aCurso !== bCurso) return aCurso - bCurso;
+        return relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b));
+      });
+  }
+  function formatPlanMeta(enc, estado) {
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
+    const reloj = (estado && estado.reloj) || {};
+    const enCurso = planEsEnCurso(enc, estado);
+
+    if (enCurso) return lugar + ' · En curso · ' + hora;
+    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' · Hoy ' + hora;
+    return lugar + ' · Día ' + (enc.dia || '?') + ' · ' + hora;
+  }
+  function emocionDe(id) {
+    var r = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id];
+    var emo = (r && r.runtime && r.runtime.estado_emocional && r.runtime.estado_emocional.id) || 'neutro';
+    if (['neutro', 'alegre', 'triste', 'enfadado'].indexOf(emo) < 0) emo = 'neutro';
+    return emo;
+  }
+
+  function htmlCaraToken(id, opts) {
+    opts = opts || {};
+    var emo = opts.emocion || emocionDe(id);
+    var img = tokenDe(id);
+    var extra = opts.wrapClass ? ' ' + opts.wrapClass : '';
+    var imgCls = opts.imgClass ? ' class="' + esc(opts.imgClass) + '"' : '';
+    var inner = img
+      ? '<img' + imgCls + ' src="' + esc(img) + '" alt=""/>'
+      : '<span class="cara-ini' + (opts.imgClass ? ' ' + esc(opts.imgClass) : '') + '">' +
+        esc((nombreDe(id)[0] || '?')) + '</span>';
+    return '<span class="cara-token' + extra + '" role="button" tabindex="0" data-residente="' + esc(id) +
+      '" data-emocion="' + esc(emo) + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
+  }
+
+  function carasPlanHtml(ids) {
+    return ids.slice(0, 2).map(function (id) { return htmlCaraToken(id); }).join('');
+  }
+  function encuentroOcupaAhora(enc, estado) {
+    if (!enc) return false;
+    var st = String(enc.estado || '');
+    if (st !== 'programado' && st !== 'en_curso') return false;
+    var reloj = (estado && estado.reloj) || {};
+    var now = relojAbs(reloj.dia_pueblo, reloj.hora_actual);
+    var start = relojAbs(enc.dia, horaEnc(enc));
+    var end = start + duracionEncHoras(enc);
+    return now >= start && now < end;
+  }  function planEsEnCurso(enc, estado) {
+    if (!enc) return false;
+    if (String(enc.estado || '') === 'en_curso') return true;
+    if (encuentroOcupaAhora(enc, estado)) return true;
+    return !!(estado && estado.encuentro_en_curso && estado.encuentro_en_curso.id === enc.id);
+  }
+  /* Planes EN CURSO AHORA (fuente canonica unica desktop + movil):
+     - preferencia: estado.encuentros_en_curso (coleccion 0..N del servidor,
+       ResumenDia::encuentrosEnCurso, mismas vistas con intervencion);
+     - fallback: partida.encuentros por ventana de reloj + encuentro_en_curso;
+     - el encuentro_en_curso del motor siempre entra si se colo.
+     Futuros, terminados, cancelados y rechazados quedan fuera por construccion. */
+  function encuentrosEnCursoAhora(partida, estado) {
+    var cur = estado && estado.encuentro_en_curso;
+    var coleccion = estado && Array.isArray(estado.encuentros_en_curso) ? estado.encuentros_en_curso : null;
+    var lista = coleccion
+      ? coleccion.filter(function (e) { return e && e.id; })
+      : ((partida && partida.encuentros) || []).filter(function (e) {
+          if (!e) return false;
+          if (cur && cur.id === e.id) return true;
+          return encuentroOcupaAhora(e, estado);
+        });
+    if (cur && cur.id && !lista.some(function (e) { return e.id === cur.id; })) {
+      lista = lista.concat([cur]);
+    }
+    return lista.slice().sort(function (a, b) {
+      var d = relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b));
+      if (d !== 0) return d;
+      return String(a.id).localeCompare(String(b.id));
+    });
+  }
+  function htmlProximoPlan(enc, estado) {
+    const ids = enc.participantes || [];
+    const enCurso = planEsEnCurso(enc, estado);
+    return '<div class="prox-faces' + (enCurso ? ' prox-faces--en-curso' : '') + '">' + carasPlanHtml(ids) + '</div>' +
+      '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
+      '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
+      esc(formatPlanMeta(enc, estado)) + '</p>' +
+      htmlIntervencionEncuentro(enc, estado);
+  }
+  function intervencionVistaDe(enc, estado) {
+    if (!enc) return null;
+    if (enc.intervencion) return enc.intervencion;
+    var cur = estado && estado.encuentro_en_curso;
+    if (cur && cur.id === enc.id && cur.intervencion) return cur.intervencion;
+    return null;
+  }
+  function htmlIntervencionEncuentro(enc, estado) {
+    if (!planEsEnCurso(enc, estado)) return '';
+    var iv = intervencionVistaDe(enc, estado);
+    if (!iv) return '';
+    if (iv.usada && iv.ultimo && iv.ultimo.texto) {
+      var tono = iv.ultimo.tono || 'neutral';
+      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(iv.ultimo.texto) + '</p></div>';
+    }
+    if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
+    var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
+      '<p class="enc-int-kicker">Intervenir una vez</p><div class="enc-int-btns">';
+    var temas = null;
+    iv.acciones.forEach(function (a) {
+      if (!a.disponible) return;
+      if (a.id === 'hobby') {
+        if (a.hobbies && a.hobbies.length) temas = a.hobbies;
+        return;
+      }
+      html += '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(a.id) + '">' + esc(a.etiqueta) + '</button>';
+    });
+    html += '</div>';
+    if (temas && temas.length) {
+      html += '<div class="enc-int-temas">' +
+        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">💬 Elegir un tema…</button>' +
+        '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu">';
+      temas.forEach(function (h) {
+        html += '<button type="button" class="enc-int-btn enc-int-btn--hobby enc-int-opt" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '" role="menuitem">' +
+          esc(h.etiqueta) + '</button>';
+      });
+      html += '</div></div>';
+    }
+    html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
+    return html;
+  }
+  function cerrarSelectorTemas() {
+    $$('[data-temas-panel]').forEach(function (p) { p.hidden = true; });
+    $$('[data-temas-toggle][aria-expanded="true"]').forEach(function (t) {
+      t.setAttribute('aria-expanded', 'false');
+    });
+  }
+  async function ejecutarIntervencionEncuentro(encId, accion, extra) {
+    var payload = { encuentro_id: encId, accion: accion };
+    if (extra && extra.hobby_id) payload.hobby_id = extra.hobby_id;
+    if (extra && extra.residente_id) payload.residente_id = extra.residente_id;
+    var r = await api('encuentro.intervencion.ejecutar', payload);
+    if (!r.ok) {
+      toast(r.mensaje_ui || 'No se pudo intervenir.');
+      return r;
+    }
+    if (r.estado_delta && cacheEstado) {
+      Object.keys(r.estado_delta).forEach(function (k) {
+        cacheEstado[k] = r.estado_delta[k];
+      });
+    }
+    /* Identidad: la vista de intervencion SOLO se escribe en el encuentro
+       intervenido (por id). Nunca sobre un "encuentro actual" global. */
+    var vistaIntervencion = r.vista || {
+      disponible: false,
+      usada: true,
+      ultimo: { accion: r.intervencion ? r.intervencion.accion : accion, tono: r.intervencion ? r.intervencion.tono : 'neutral', texto: r.intervencion ? r.intervencion.texto : '' }
+    };
+    if (r.intervencion && cacheEstado && Array.isArray(cacheEstado.encuentros_en_curso)) {
+      cacheEstado.encuentros_en_curso.forEach(function (e) {
+        if (e && String(e.id) === String(encId)) e.intervencion = vistaIntervencion;
+      });
+    }
+    if (r.intervencion && cacheEstado && cacheEstado.encuentro_en_curso &&
+        String(cacheEstado.encuentro_en_curso.id) === String(encId)) {
+      cacheEstado.encuentro_en_curso.intervencion = vistaIntervencion;
+    }
+    if (cacheInsp && cacheInsp.encuentros) {
+      cacheInsp.encuentros.forEach(function (e) {
+        if (e.id === encId) {
+          e.intervencion_celeste = r.intervencion;
+          if (r.vista) e.intervencion = r.vista;
+        }
+      });
+    }
+    renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
+    return r;
+  }
+  function renderAgendaPlanes() {
+    const box = document.querySelector('[data-agenda-list]');
+    if (!box) return;
+    const fut = encuentrosFuturos(cacheInsp, cacheEstado);
+    box.innerHTML = '';
+    if (!fut.length) { box.innerHTML = '<p class="lista-vacia">Nada en agenda.</p>'; return; }
+    fut.forEach(function (enc) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'agenda-fila' + (planEsEnCurso(enc, cacheEstado) ? ' agenda-fila--en-curso' : '');
+      const ids = enc.participantes || [];
+      btn.innerHTML = '<span class="agenda-fila-fotos">' + carasPlanHtml(ids) + '</span>' +
+        '<span class="agenda-fila-cuerpo"><span class="agenda-fila-nombres">' +
+        esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</span>' +
+        '<span class="agenda-fila-meta">' + esc(formatPlanMeta(enc, cacheEstado)) + '</span></span>';
+      box.appendChild(btn);
+    });
+  }
+  function resumenCotilleoUi(txt, max) {
+    var s = String(txt || '').replace(/\s+/g, ' ').trim();
+    var lim = max || 110;
+    if (!s) return '';
+    if (s.length <= lim) return s;
+    return s.slice(0, lim - 1).trim() + '—';
+  }
+
+  /* === Planes en curso — carrusel movil (misma fuente canonica que desktop) === */
+  var encMovIndice = 0;
+  /* Encuentro en curso seleccionado en la polaroid desktop (estable por id). */
+  var cursoSelId = null;
+  /* Próximos planes FUTUROS (bloque movil): encuentros PROGRAMADOS que
+     todavia NO estan en curso. Misma fuente canonica que desktop
+     (partida.encuentros + estado); quedan fuera por construccion los
+     en_curso/ocupando-ahora, cancelados, rechazados y terminados.
+     Orden estrictamente cronologico. */
+  function proximosPlanesFuturos(partida, estado) {
+    const reloj = (estado && estado.reloj) || {};
+    const now = relojAbs(reloj.dia_pueblo, reloj.hora_actual);
+    return ((partida && partida.encuentros) || []).filter(function (e) {
+      if (!e || !e.id) return false;
+      if (String(e.estado || '') !== 'programado') return false;
+      if (planEsEnCurso(e, estado)) return false;
+      return now < relojAbs(e.dia, horaEnc(e)) + duracionEncHoras(e);
+    }).sort(function (a, b) {
+      return relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b)) ||
+        String(a.id).localeCompare(String(b.id));
+    });
+  }
+  function htmlProximoPlanCardMovil(enc, estado) {
+    const ids = enc.participantes || [];
+    const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
+    const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'DÍA ' + (enc.dia || '?')) +
+      ' · ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
+    return '<article class="pp-mov-card">' +
+      '<p class="pp-mov-hora">' + esc(sello) + '</p>' +
+      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
+      '<p class="pp-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
+      '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
+      '</article>';
+  }
+  function renderProximosPlanesMovil(estado) {
+    const block = document.querySelector('[data-proxplanes-block]');
+    if (!block) return;
+    const track = block.querySelector('[data-proxplanes-track]');
+    if (!track) return;
+    const lista = proximosPlanesFuturos(cacheInsp, estado).slice(0, 6);
+    if (!lista.length) {
+      block.classList.remove('is-on');
+      track.innerHTML = '';
+      return;
+    }
+    block.classList.add('is-on');
+    track.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardMovil(enc, estado); }).join('');
+  }
+
+  function htmlEncursoCardMovil(enc, estado) {
+    const ids = enc.participantes || [];
+    const iv = intervencionVistaDe(enc, estado);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<p class="enc-mov-hora"><span class="enc-mov-punto" aria-hidden="true"></span>' +
+      esc('AHORA · ' + (String(horaEnc(enc)).padStart(2, '0') + ':00')) + '</p>' +
+      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
+      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
+      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>';
+    if (hayInt) {
+      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">Ver encuentro</span>' +
+        '<span class="enc-mov-cta-flecha" aria-hidden="true">›</span></button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
+        htmlIntervencionEncuentro(enc, estado) + '</div>';
+    }
+    return html + '</article>';
+  }
+  function encMovPaso(track) {
+    const cards = track.querySelectorAll('[data-enc-mov-card]');
+    if (!cards.length) return 0;
+    const st = getComputedStyle(track);
+    const gap = parseFloat(st.columnGap || st.gap) || 0;
+    return cards[0].offsetWidth + gap;
+  }
+  function renderEncursosMovilIndicador() {
+    const block = document.querySelector('[data-encursos-block]');
+    const track = block && block.querySelector('[data-encursos-track]');
+    const ind = block && block.querySelector('[data-encursos-indice]');
+    if (!block || !track || !ind) return;
+    const n = track.querySelectorAll('[data-enc-mov-card]').length;
+    if (!block.classList.contains('is-on') || n < 2) { ind.hidden = true; ind.textContent = ''; return; }
+    const paso = encMovPaso(track);
+    const idx = paso > 0 ? Math.min(n - 1, Math.max(0, Math.round(track.scrollLeft / paso))) : 0;
+    encMovIndice = idx;
+    ind.hidden = false;
+    ind.textContent = (idx + 1) + ' / ' + n;
+  }
+  function renderEncursosMovil(estado) {
+    const block = document.querySelector('[data-encursos-block]');
+    if (!block) return;
+    const track = block.querySelector('[data-encursos-track]');
+    if (!track) return;
+    const lista = encuentrosEnCursoAhora(cacheInsp, estado);
+    if (!lista.length) {
+      block.classList.remove('is-on');
+      track.innerHTML = '';
+      encMovIndice = 0;
+      renderEncursosMovilIndicador();
+      return;
+    }
+    const abiertos = {};
+    track.querySelectorAll('[data-enc-mov-panel]:not([hidden])').forEach(function (p) {
+      const card = p.closest('[data-enc-mov-card]');
+      if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
+    });
+    encMovIndice = Math.min(encMovIndice, lista.length - 1);
+    block.classList.add('is-on');
+    track.innerHTML = lista.map(function (enc) { return htmlEncursoCardMovil(enc, estado); }).join('');
+    requestAnimationFrame(function () {
+      if (encMovIndice > 0) {
+        const paso = encMovPaso(track);
+        if (paso > 0) track.scrollLeft = encMovIndice * paso;
+      }
+      const cards = track.querySelectorAll('[data-enc-mov-card]');
+      Object.keys(abiertos).forEach(function (id) {
+        Array.prototype.forEach.call(cards, function (card) {
+          if ((card.getAttribute('data-enc-id') || '') !== id) return;
+          const panel = card.querySelector('[data-enc-mov-panel]');
+          const cta = card.querySelector('[data-enc-mov-toggle]');
+          if (panel) panel.hidden = false;
+          if (cta) { cta.setAttribute('aria-expanded', 'true'); cta.classList.add('is-open'); }
+        });
+      });
+      renderEncursosMovilIndicador();
+    });
+  }
+
+
+  function renderShellPanels(estado, buzon, diario) {
+    const partida = cacheInsp || {};
+    const parejas = parejasParaUI(partida);
+        const met = metricasSociales(partida);
+    const stats = $('[data-resumen-stats]');
+    if (stats) stats.innerHTML = htmlResumenCelestine(met);
+    const pob = $('[data-vecinos-poblacion]');
+    if (pob) pob.textContent = String(met.vecinos) + ' de ' + String(met.cap);
+
+    renderVecinosPreview();
+
+
+    const teaser = $('[data-cotilleo-teaser]');
+    const cotiBadge = $('[data-cotilleo-badge]');
+    const hoy = (diario && diario.cotilleo && diario.cotilleo.hoy) || diario.entradas || [];
+    const hoyLista = Array.isArray(hoy) ? hoy : [];
+    const ultRaw = (hoyLista[0] && (hoyLista[0].texto || hoyLista[0].cuerpo || hoyLista[0].titulo)) || '';
+    if (teaser) {
+      teaser.textContent = ultRaw
+        ? resumenCotilleoUi(ultRaw, 120)
+        : 'Hoy están sospechosamente tranquilos…';
+    }
+    if (cotiBadge) {
+      const sinVer = Math.max(0, Number(diario && diario.cotilleo && diario.cotilleo.importantes_sin_ver) || 0);
+      const subio = cotiSinVerPrev !== null && sinVer > cotiSinVerPrev;
+      cotiSinVerPrev = sinVer;
+      const cotiCard = $('.obj-cotilleo-par');
+      if (cotiCard) cotiCard.classList.toggle('is-aviso-importante', sinVer > 0);
+      if (sinVer > 0) {
+        cotiBadge.textContent = String(sinVer);
+        cotiBadge.hidden = false;
+        if (subio) pulsoCotilleoBadge(cotiBadge);
+      } else {
+        cotiBadge.textContent = '';
+        cotiBadge.hidden = true;
+      }
+    }
+
+    const prev = $('[data-buzon-preview]');
+    // R08: preview HUD con el MISMO criterio que el panel (orden + decision primero).
+    const top = mensajitoTopPreview(buzon);
+    if (prev) {
+      if (!top) prev.textContent = 'Sin mensajes pendientes.';
+      else {
+        prev.textContent = (top.remitente_nombre || top.de || 'Mensaje') + ': ' + (top.preview || top.asunto || top.texto || '').slice(0, 80);
+      }
+    }
+
+    const proxBox = $('[data-proximo-plan]');
+    const verPlanes = $('.obj-ver-planes');
+    const polaroid = $('.obj-proximo-polaroid');
+    const proxTit = $('.obj-proximo-tit');
+    const cursoNav = $('[data-curso-nav]');
+    const futuros = encuentrosFuturos(partida, estado);
+    /* Fuente canonica unica: 0..N encuentros EN CURSO AHORA. */
+    const enCursoLista = (typeof encuentrosEnCursoAhora === 'function') ? encuentrosEnCursoAhora(partida, estado) : [];
+    let next = null;
+    let hayEnCurso = enCursoLista.length > 0;
+    if (hayEnCurso) {
+      /* Seleccion estable por id: la misma tarjeta se reconstruye con el
+         encuentro elegido. Cambiar de encuentro NO ejecuta ninguna accion. */
+      let pos = -1;
+      for (let i = 0; i < enCursoLista.length; i++) {
+        if (String(enCursoLista[i].id) === String(cursoSelId)) { pos = i; break; }
+      }
+      if (pos < 0) pos = 0; /* el seleccionado termino: auto-seleccion valida */
+      cursoSelId = String(enCursoLista[pos].id);
+      next = enCursoLista[pos];
+    } else {
+      cursoSelId = null;
+      next = futuros[0] || null;
+    }
+    const hayProximo = !!(next && !hayEnCurso);
+    if (polaroid) {
+      polaroid.classList.toggle('is-en-curso', hayEnCurso);
+      polaroid.classList.toggle('is-proximo', hayProximo);
+    }
+    if (proxTit) proxTit.textContent = hayEnCurso ? 'Plan en curso' : 'Próximo plan';
+    if (proxBox) {
+      if (!next) proxBox.innerHTML = '<p class="obj-proximo-vacio">Nada en agenda. Sospechoso.</p>';
+      else proxBox.innerHTML = htmlProximoPlan(next, estado);
+    }
+    if (cursoNav) {
+      const n = enCursoLista.length;
+      cursoNav.hidden = !(hayEnCurso && n > 1);
+      if (!cursoNav.hidden) {
+        let pos = 0;
+        for (let i = 0; i < enCursoLista.length; i++) {
+          if (String(enCursoLista[i].id) === String(cursoSelId)) { pos = i; break; }
+        }
+        const cont = cursoNav.querySelector('[data-curso-cont]');
+        if (cont) cont.textContent = (pos + 1) + ' / ' + n;
+        const btnPrev = cursoNav.querySelector('[data-curso-prev]');
+        const btnNext = cursoNav.querySelector('[data-curso-next]');
+        if (btnPrev) btnPrev.disabled = false;
+        if (btnNext) btnNext.disabled = false;
+      }
+    }
+    if (verPlanes) verPlanes.hidden = futuros.length <= 1;
+
+    renderEncursosMovil(estado);
+    renderProximosPlanesMovil(estado);
+
+    const strip = $('[data-parejas-strip]');
+    if (strip) {
+      strip.innerHTML = '';
+      parejas.forEach(function (rel) {
+        const ids = idsPareja(rel);
+        if (!ids || ids.length < 2) return;
+        const crisis = esCrisisPareja(rel);
+        const row = document.createElement('div');
+        row.className = 'obj-pareja-piece' + (crisis ? ' is-crisis' : '');
+        const tok = function (id) {
+          return htmlCaraToken(id, { imgClass: 'obj-pareja-cara' });
+        };
+        row.innerHTML = '<span class="obj-pareja-fotos">' + tok(ids[0]) +
+          '<span class="obj-pareja-enlace" aria-hidden="true"></span>' + tok(ids[1]) + '</span>' +
+          '<span class="obj-pareja-nombres">' + esc(nombreDe(ids[0])) + ' \u00b7 ' + esc(nombreDe(ids[1])) + '</span>' +
+          (crisis ? '<span class="pareja-crisis-sello">EN CRISIS</span>' : '');
+        strip.appendChild(row);
+      });
+      if (!parejas.length) {
+        strip.innerHTML = '<p class="muted">A\u00fan no hay parejas registradas.</p>';
+      }
+    }
+  }
+
+
+  var cacheMapaZonas = null;
+  var cacheMapaPresencia = null;
+  const LUGAR_TITULO_UI = {
+    lug_cafeteria: 'Cafetería', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
+    lug_restaurante: 'Restaurante', lug_parque: 'Parque', lug_bar: 'Bar',
+    lug_cine: 'Cine', lug_discoteca: 'Discoteca', lug_bingo: 'Bingo'
+  };
+  function nombreLugarTitulo(id, fb) {
+    if (id && LUGAR_TITULO_UI[id]) return LUGAR_TITULO_UI[id];
+    return nombreLugarUi(id, fb);
+  }
+  const LUGAR_NOMBRE_UI = {
+    lug_cafeteria: 'la cafetería', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
+    lug_restaurante: 'el restaurante', lug_parque: 'el parque', lug_bar: 'el bar',
+    lug_cine: 'el cine', lug_discoteca: 'la discoteca', lug_bingo: 'el bingo'
+  };
+  function nombreLugarUi(id, fallback) {
+    if (!id) return fallback || 'ese sitio';
+    if (LUGAR_NOMBRE_UI[id]) return LUGAR_NOMBRE_UI[id];
+    var fb = fallback || id;
+    if (typeof fb === 'string' && fb.indexOf('lug_') === 0) return fb.replace('lug_', '').replace(/_/g, ' ');
+    return fb;
+  }
+  var LUG_TO_ZONA = {
+    lug_cafeteria: 'cafeteria', lug_biblioteca: 'biblioteca', lug_gimnasio: 'gimnasio',
+    lug_restaurante: 'restaurante', lug_parque: 'parque', lug_bar: 'bar',
+    lug_cine: 'cine', lug_discoteca: 'discoteca', lug_bingo: 'bingo'
+  };
+  var ZONA_TO_LUGS = {
+    cafeteria: ['lug_cafeteria'], biblioteca: ['lug_biblioteca'], gimnasio: ['lug_gimnasio'],
+    restaurante: ['lug_restaurante'], parque: ['lug_parque'], bar: ['lug_bar'],
+    cine: ['lug_cine'], discoteca: ['lug_discoteca'], bingo: ['lug_bingo']
+  };
+
+  function initMapaCanonico() {
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return Promise.resolve(null);
+    var v = (document.querySelector('meta[name="aht-ui"]') && document.querySelector('script[src*="play-v3.js"]')) ?
+      (document.querySelector('script[src*="play-v3.js"]').src.split('v=')[1] || '') : '';
+    return fetch('assets/play-v3/mapa_zonas.json?v=' + encodeURIComponent(v)).then(function (r) { return r.json(); }).then(function (cfg) {
+      cacheMapaZonas = cfg;
+      layer.innerHTML = '';
+      var zonas = cfg.zonas || {};
+      Object.keys(zonas).forEach(function (id) {
+        var z = zonas[id];
+        if (!z || !z.w || !z.h) return;
+        var btn = document.createElement('div');
+        btn.className = 'mapa-zona-hit';
+        btn.setAttribute('role', 'button');
+        btn.tabIndex = 0;
+        btn.setAttribute('data-zona', id);
+        btn.setAttribute('aria-label', z.label || id);
+        btn.style.left = z.x + '%';
+        btn.style.top = z.y + '%';
+        btn.style.width = z.w + '%';
+        btn.style.height = z.h + '%';
+        btn.innerHTML = '<span class="habs"></span>';
+        layer.appendChild(btn);
+      });
+      return cfg;
+    }).catch(function () { return null; });
+  }
+
+  function zonaBtnPorId(zonaId) {
+    var layer = $('[data-mapa-zonas]');
+    return layer ? layer.querySelector('[data-zona="' + zonaId + '"]') : null;
+  }
+
+  /** Hit-test por coordenadas sobre la imagen del mapa (más fiable que botones % en móvil). */
+  function zonaDesdePuntoMapa(clientX, clientY) {
+    if (!cacheMapaZonas || !cacheMapaZonas.zonas) return null;
+    var img = document.querySelector('[data-mapa-canonico] .mapa-canonico-bg');
+    if (!img) return null;
+    var rect = img.getBoundingClientRect();
+    if (!rect.width || !rect.height) return null;
+    if (clientX < rect.left || clientX > rect.right || clientY < rect.top || clientY > rect.bottom) return null;
+    var px = ((clientX - rect.left) / rect.width) * 100;
+    var py = ((clientY - rect.top) / rect.height) * 100;
+    var zonas = cacheMapaZonas.zonas;
+    var found = null;
+    Object.keys(zonas).forEach(function (id) {
+      var z = zonas[id];
+      if (!z || !z.w || !z.h) return;
+      if (px >= z.x && px <= z.x + z.w && py >= z.y && py <= z.y + z.h) found = id;
+    });
+    if (!found) return null;
+    return { zonaId: found, zonaBtn: zonaBtnPorId(found) };
+  }
+
+  function personasEnZona(zonaId) {
+    var lugs = ZONA_TO_LUGS[zonaId] || [];
+    var out = [];
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (cx) {
+      (cx.personas || []).forEach(function (p) {
+        if (lugs.indexOf(p.destino_id) >= 0) out.push(p);
+      });
+    });
+    return out;
+  }
+
+  function destinosOperativosZona(zonaId) {
+    var lugs = ZONA_TO_LUGS[zonaId] || [];
+    var out = [];
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (cx) {
+      (cx.destinos_operativos || []).forEach(function (d) {
+        if (lugs.indexOf(d.id) >= 0) out.push(d);
+      });
+    });
+    return out;
+  }
+
+  function destinoOperativoPorId(lugId) {
+    var found = null;
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (cx) {
+      (cx.destinos_operativos || []).forEach(function (d) {
+        if (d.id === lugId) found = d;
+      });
+    });
+    return found;
+  }
+
+  function lineaHorarioDestino(d) {
+    if (!d || !d.horario) return '';
+    var est = d.abierto_ahora ? 'Abierto ahora' : 'Cerrado ahora';
+    return est + ' · ' + d.horario;
+  }
+
+  function pintarHorarioQuien(destinos) {
+    var el = $('[data-q-horario]');
+    if (!el) return;
+    var list = (destinos || []).filter(function (d) { return d && d.horario; });
+    if (!list.length) {
+      el.innerHTML = '';
+      el.hidden = true;
+      return;
+    }
+    el.innerHTML = list.map(function (d) {
+      var estado = '';
+      var estadoCls = '';
+      if (d.abierto_ahora === true) {
+        estado = 'Abierto ahora';
+        estadoCls = 'quien-estado--abierto';
+      } else if (d.abierto_ahora === false) {
+        estado = 'Cerrado ahora';
+        estadoCls = 'quien-estado--cerrado';
+      }
+      if (estado) {
+        return '<span class="quien-estado ' + estadoCls + '">' + estado + '</span>' +
+          '<span class="quien-horas"> · ' + esc(d.horario) + '</span>';
+      }
+      return '<span class="quien-horas">Horario: ' + esc(d.horario) + '</span>';
+    }).join('<span class="quien-horario-sep"> | </span>');
+    el.hidden = false;
+  }
+
+  function pintarOrgLugarHorario(lugId) {
+    var el = $('[data-org-lugar-horario]');
+    if (!el) return;
+    var id = lugId || ($('[data-org-lugar]') && $('[data-org-lugar]').value) || org.lugar || '';
+    if (!id) {
+      el.innerHTML = '';
+      el.hidden = true;
+      return;
+    }
+    var d = destinoOperativoPorId(id);
+    if (!d || !d.horario) {
+      el.innerHTML = '';
+      el.hidden = true;
+      return;
+    }
+    var estado = d.abierto_ahora ? 'Abierto ahora' : 'Cerrado ahora';
+    var estadoCls = d.abierto_ahora ? 'quien-estado--abierto' : 'quien-estado--cerrado';
+    el.innerHTML = '<span class="quien-estado ' + estadoCls + '">' + estado + '</span>' +
+      '<span class="quien-horas"> · ' + esc(d.horario) + '</span>';
+    el.hidden = false;
+  }
+
+  var MAPA_TEMA_PRIORIDAD = { romance: 0, drama: 1, relacion: 2, coincidencias: 3 };
+  var MAPA_TEMA_ICONOS = {
+    romance: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5 C7 16.5 3.5 13.2 3.5 9.4 C3.5 6.8 5.5 5 7.9 5 C9.6 5 11.1 5.9 12 7.3 C12.9 5.9 14.4 5 16.1 5 C18.5 5 20.5 6.8 20.5 9.4 C20.5 13.2 17 16.5 12 20.5 Z"/></svg>',
+    drama: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13 2 L5.5 13 L10.5 13 L9.5 22 L18.5 10 L12.8 10 Z"/></svg>',
+    relacion: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6 H19.5 V15.5 H12.5 L8 19.5 V15.5 H4.5 Z"/></svg>',
+    coincidencias: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 6 H19.5 V15.5 H12.5 L8 19.5 V15.5 H4.5 Z"/><circle cx="9" cy="10.7" r="1"/><circle cx="12" cy="10.7" r="1"/><circle cx="15" cy="10.7" r="1"/></svg>'
+  };
+  function mapaTemaIcono(cat) {
+    return MAPA_TEMA_ICONOS[cat] || MAPA_TEMA_ICONOS.coincidencias;
+  }
+
+  function pintarHorariosMapa() {
+    /* Horario solo en la ventana de consulta / Nuevo plan, no en el mapa. */
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return;
+    layer.querySelectorAll('.mapa-zona-horario').forEach(function (badge) {
+      badge.textContent = '';
+      badge.hidden = true;
+      badge.removeAttribute('data-abierto');
+      badge.removeAttribute('title');
+    });
+  }
+
+  function habPosSeed(rid) {
+    var s = 0;
+    var str = String(rid || '');
+    for (var k = 0; k < str.length; k++) {
+      s = ((s << 5) - s + str.charCodeAt(k)) | 0;
+    }
+    return Math.abs(s);
+  }
+
+  /** Slots en franja inferior del hotspot (% left/top). Índice estable por cantidad. */
+  function slotsTokensZona(total) {
+    var n = Math.max(1, Math.min(5, total || 1));
+    if (n === 1) return [{ left: 50, top: 82 }];
+    if (n === 2) return [{ left: 34, top: 83 }, { left: 66, top: 83 }];
+    if (n === 3) return [{ left: 26, top: 82 }, { left: 50, top: 84 }, { left: 74, top: 82 }];
+    if (n === 4) {
+      return [
+        { left: 22, top: 80 }, { left: 38, top: 86 }, { left: 62, top: 86 }, { left: 78, top: 80 }
+      ];
+    }
+    return [
+      { left: 16, top: 81 }, { left: 30, top: 86 }, { left: 50, top: 78 },
+      { left: 70, top: 86 }, { left: 84, top: 81 }
+    ];
+  }
+
+  function placeHabEnZona(box, p, i, total) {
+    var el = document.createElement('span');
+    el.className = 'hab cara-token';
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('data-residente', p.id);
+    el.setAttribute('data-destino', p.destino_id);
+    el.setAttribute('data-fase', p.fase || 'en_destino');
+    el.setAttribute('data-emocion', p.emocion || 'neutro');
+    if (p.hay_tema) el.setAttribute('data-hay-tema', '1');
+    var slots = slotsTokensZona(total);
+    var slot = slots[i] || slots[slots.length - 1];
+    var seed = habPosSeed(p.id);
+    var jx = ((seed % 5) - 2) * 0.35;
+    var jy = (((seed >> 4) % 5) - 2) * 0.25;
+    el.style.left = (slot.left + jx).toFixed(2) + '%';
+    el.style.top = (slot.top + jy).toFixed(2) + '%';
+    var idleKind = ['a', 'b', 'c'][seed % 3];
+    el.classList.add('hab-idle-' + idleKind);
+    el.style.setProperty('--hab-idle-delay', (-(seed % 800) / 100).toFixed(2) + 's');
+    var emo = p.emocion || 'neutro';
+    if (['neutro', 'alegre', 'triste', 'enfadado'].indexOf(emo) < 0) emo = 'neutro';
+    if (p.token_url) {
+      el.innerHTML = '<span class="cara" data-emocion="' + emo + '"><img src="' + p.token_url + '" alt=""/></span>';
+    } else {
+      el.innerHTML = '<span class="cara cara-ini" data-emocion="' + emo + '">' + (p.iniciales || '?') + '</span>';
+    }
+    el.setAttribute('data-emocion', emo);
+    if (p.hay_tema) {
+      var catTema = String((p.tema_vista && p.tema_vista.categoria) || 'hecho').toLowerCase();
+      el.insertAdjacentHTML('beforeend',
+        '<span class="tema-hab tema-hab--' + esc(catTema) + '" data-tema-hab="' + esc(catTema) + '" title="Aqu\u00ed hay tema">' + mapaTemaIcono(catTema) + '</span>');
+    }
+    box.appendChild(el);
+  }
+
+  function marcarConsultaLugar(el, lugarId) {
+    if (!el) return;
+    el.setAttribute('data-consulta-lugar', String(lugarId || '').replace(/^lug_/, ''));
+  }
+  function posicionarNotaMapa(el, zonaBtn) {
+    if (!el || !zonaBtn) return;
+    var board = $('.board-fit');
+    if (!board) return;
+    var boardRect = board.getBoundingClientRect();
+    var zonaRect = zonaBtn.getBoundingClientRect();
+    var margen = 10;
+    var pw = el.offsetWidth || 240;
+    var ph = el.offsetHeight || 160;
+    var relX = zonaRect.left - boardRect.left;
+    var relY = zonaRect.top - boardRect.top;
+    var bw = boardRect.width;
+    var bh = boardRect.height;
+    var left = relX + zonaRect.width + margen;
+    if (left + pw > bw - margen) {
+      left = relX - pw - margen;
+    }
+    if (left < margen) left = margen;
+    if (left + pw > bw - margen) left = Math.max(margen, bw - pw - margen);
+    var top = relY;
+    if (top + ph > bh - margen) top = Math.max(margen, bh - ph - margen);
+    if (top < margen) top = margen;
+    el.style.right = 'auto';
+    el.style.left = left + 'px';
+    el.style.top = top + 'px';
+  }
+
+  function actualizarNotaAtras() {
+    var root = $('.play-root');
+    var consulta = root && root.getAttribute('data-consulta');
+    $$('[data-consulta-atras]').forEach(function (btn) {
+      var show = consulta === 'quien' && consultaNav && consultaNav.fromSel;
+      btn.hidden = !show;
+    });
+    syncScrollLock();
+    syncConsultaOverlay();
+  }
+
+  function abrirConsultaZona(zonaId, zonaBtn, silentHist) {
+    var meta = cacheMapaZonas && cacheMapaZonas.zonas && cacheMapaZonas.zonas[zonaId];
+    var ops = destinosOperativosZona(zonaId);
+    if (ops.length > 1 || silentHist) {
+      $('.play-root').setAttribute('data-consulta', 'sel');
+      consultaNav = { tipo: 'zona', zonaId: zonaId, zonaBtn: zonaBtn, vista: 'sel', fromSel: false };
+      if (!silentHist) uiHistPush();
+    marcarConsultaLugar($('.selector'), zonaId);
+      $('[data-s-tit]').textContent = meta ? meta.label : zonaId;
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
+      var box = $('[data-s-btns]');
+      box.innerHTML = '';
+      ops.forEach(function (d) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = 'Ver ' + nombreLugarUi(d.id, d.nombre);
+        b.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, d.id, zonaBtn); });
+        box.appendChild(b);
+      });
+      var all = document.createElement('button');
+      all.type = 'button';
+      all.textContent = 'Quién hay aquí';
+      all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, null, zonaBtn); });
+      box.appendChild(all);
+      posicionarNotaMapa($('.selector'), zonaBtn);
+      actualizarNotaAtras();
+      return;
+    }
+    abrirQuienZona(zonaId, ops[0] ? ops[0].id : null, zonaBtn, silentHist);
+  }
+
+
+  var quienTemaActivo = null;
+
+  function recolectarTemasQuien(gente) {
+    var vistos = {};
+    var temas = [];
+    (gente || []).forEach(function (p) {
+      if (!p || !p.hay_tema || !p.tema_vista) return;
+      var id = p.tema_id || (p.tema_vista && p.tema_vista.tema_id) || '';
+      if (id && vistos[id]) return;
+      if (id) vistos[id] = true;
+      temas.push(Object.assign({ tema_id: id }, p.tema_vista));
+    });
+    return temas;
+  }
+
+  function mapaTemaResidenteQuien(gente) {
+    var porId = {};
+    (gente || []).forEach(function (p) {
+      if (!p || !p.hay_tema || !p.tema_vista) return;
+      var tid = p.tema_id || (p.tema_vista && p.tema_vista.tema_id) || '';
+      if (tid && p.id) porId[p.id] = tid;
+    });
+    return porId;
+  }
+
+  function pintarQuienResidentes(gente, temaActivo, vacioTxt) {
+    var list = $('[data-q-list]');
+    var vacio = $('[data-q-sum]');
+    if (!list) return;
+    list.innerHTML = '';
+    if (!gente || !gente.length) {
+      list.hidden = true;
+      if (vacio) {
+        vacio.hidden = false;
+        vacio.textContent = vacioTxt || 'No hay ni un alma.';
+      }
+      return;
+    }
+    list.hidden = false;
+    if (vacio) vacio.hidden = true;
+    list.className = 'quien-list quien-residentes quien-residentes--inline';
+    var temaPorRes = mapaTemaResidenteQuien(gente);
+    var temas = recolectarTemasQuien(gente);
+    (gente || []).forEach(function (p, idx) {
+      if (idx > 0) {
+        var sep = document.createElement('span');
+        sep.className = 'quien-residente-sep';
+        sep.setAttribute('aria-hidden', 'true');
+        sep.textContent = '·';
+        list.appendChild(sep);
+      }
+      var row = document.createElement('span');
+      row.className = 'quien-residente';
+      var nameBtn = document.createElement('button');
+      nameBtn.type = 'button';
+      nameBtn.className = 'quien-residente-nombre cara-token';
+      nameBtn.setAttribute('data-residente', p.id);
+      nameBtn.textContent = p.nombre;
+      row.appendChild(nameBtn);
+      var tid = temaPorRes[p.id];
+      if (tid) {
+        var tv = null;
+        for (var i = 0; i < temas.length; i++) {
+          if (temas[i].tema_id === tid) { tv = temas[i]; break; }
+        }
+        var mark = document.createElement('button');
+        mark.type = 'button';
+        mark.className = 'quien-tema-mark quien-tema-mark--' + esc((tv && tv.categoria) || 'hecho');
+        mark.setAttribute('aria-label', 'Aquí hay tema');
+        mark.textContent = (tv && tv.categoria_icono) || '◎';
+        (function (temaId) {
+          mark.addEventListener('click', function (ev) {
+            ev.stopPropagation();
+            quienTemaActivo = quienTemaActivo === temaId ? null : temaId;
+            pintarQuienTema(gente, quienTemaActivo);
+            pintarQuienResidentes(gente, quienTemaActivo, vacioTxt);
+          });
+        })(tid);
+        row.appendChild(mark);
+        if (temaActivo === tid) row.classList.add('quien-residente--activo');
+      }
+      list.appendChild(row);
+    });
+  }
+
+  function pintarQuienTema(gente, temaActivoId) {
+    var box = $('[data-q-tema]');
+    if (!box) return;
+    var temas = recolectarTemasQuien(gente);
+    if (!temas.length) {
+      box.hidden = true;
+      box.innerHTML = '';
+      return;
+    }
+    var activos = temas;
+    if (temaActivoId) {
+      activos = temas.filter(function (t) { return t.tema_id === temaActivoId; });
+    } else if (temas.length > 1) {
+      box.hidden = true;
+      box.innerHTML = '';
+      return;
+    }
+    if (!activos.length) {
+      box.hidden = true;
+      box.innerHTML = '';
+      return;
+    }
+    box.hidden = false;
+    box.innerHTML = activos.slice(0, 2).map(function (tv) {
+      var cat = tv.categoria_etiqueta || 'Aquí hay tema';
+      var ico = tv.categoria_icono || '◎';
+      var dest = tv.destacado ? ' quien-tema--destacado' : '';
+      return '<section class="quien-tema-card' + dest + '">' +
+        '<p class="quien-tema-kicker">Aquí hay tema</p>' +
+        '<p class="quien-tema-cat"><span class="quien-tema-ico" aria-hidden="true">' + esc(ico) + '</span> ' + esc(cat) + '</p>' +
+        '<p class="quien-tema-txt">' + esc(tv.texto || '') + '</p>' +
+        (tv.pista ? '<p class="quien-tema-pista">' + esc(tv.pista) + '</p>' : '') +
+        '</section>';
+    }).join('');
+  }
+
+  function abrirQuienZona(zonaId, destId, zonaBtn, silentHist) {
+    var meta = cacheMapaZonas && cacheMapaZonas.zonas && cacheMapaZonas.zonas[zonaId];
+    var lugs = ZONA_TO_LUGS[zonaId] || [];
+    var gente = personasEnZona(zonaId).filter(function (p) {
+      return !destId || p.destino_id === destId;
+    });
+    var fromSel = $('.play-root').getAttribute('data-consulta') === 'sel';
+    $('.play-root').setAttribute('data-consulta', 'quien');
+    consultaNav = { tipo: 'zona', zonaId: zonaId, zonaBtn: zonaBtn, destId: destId, vista: 'quien', fromSel: fromSel };
+    if (!silentHist) uiHistPush();
+    marcarConsultaLugar($('.quien'), destId || zonaId);
+    $('[data-q-tit]').textContent = meta ? meta.label : zonaId;
+    var destinosHorario = destId
+      ? [destinoOperativoPorId(destId)].filter(Boolean)
+      : destinosOperativosZona(zonaId);
+    if (destId) {
+      var dnom = destinosHorario[0] && destinosHorario[0].nombre;
+      if (dnom) $('[data-q-tit]').textContent = dnom;
+    }
+    pintarHorarioQuien(destinosHorario);
+    quienTemaActivo = null;
+    pintarQuienResidentes(gente, null, gente.length ? '' : 'No hay ni un alma.');
+    pintarQuienTema(gente, null);
+    var box = $('[data-q-btns]');
+    box.innerHTML = '';
+    destinosOperativosZona(zonaId).forEach(function (d) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
+      b.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        abrirOrganizarConPreset({ lugar: d.id });
+      });
+      box.appendChild(b);
+    });
+    posicionarNotaMapa($('.quien'), zonaBtn);
+    actualizarNotaAtras();
+  }
+
+  function renderProximoCaras(enc) {
+    if (!enc || !enc.participantes || !enc.participantes.length) return '';
+    return enc.participantes.map(function (id) {
+      var img = tokenDe(id);
+      var nom = nombreDe(id);
+      if (img) return '<span class="prox-cara"><img src="' + esc(img) + '" alt=""/></span>';
+      return '<span class="prox-cara prox-cara-ini">' + esc((nom.charAt(0) || '?')) + '</span>';
+    }).join('');
+  }
+  function buzonNoLeidos(estado, buzon) {
+    if (estado && typeof estado.buzon_no_leidos === 'number') return estado.buzon_no_leidos;
+    return (buzon || []).filter(function (m) {
+      return (m.estado || '') === 'pendiente' && (m.canal || 'buzon') === 'buzon';
+    }).length;
+  }
+
+  function enTutorialPrimerosPasos() {
+    var tut = cacheEstado && cacheEstado.tutorial;
+    return tut && tut.id === 'primeros_pasos' && !tut.finale_visto;
+  }
+
+
+  function iconoMision(m) {
+    var fam = (m && m.familia) || '';
+    var id = (m && m.id) || '';
+    if (id === 'pp_plan_solo_cine' || fam === 'cita' || fam === 'primera_cita') {
+      return '<svg class="mision-ico-svg" viewBox="0 0 32 28" aria-hidden="true"><path d="M4 6h18l4 4v14H4z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M4 6l9 0 4 4" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M10 14h12M10 18h8" stroke="currentColor" stroke-width="1.4"/></svg>';
+    }
+    if (fam === 'conocerse' || fam === 'quedar' || id === 'pp_romper_hielo') {
+      return '<svg class="mision-ico-svg" viewBox="0 0 32 28" aria-hidden="true"><circle cx="11" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="21" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 24c1-4 4-6 6-6s5 2 6 6M17 24c1-4 4-6 6-6s5 2 6 6" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+    }
+    if (id === 'pp_mensajito' || fam === 'tema') {
+      return '<svg class="mision-ico-svg" viewBox="0 0 32 28" aria-hidden="true"><rect x="5" y="7" width="22" height="15" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 7l11 9 11-9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+    }
+    if (fam === 'lugar') {
+      return '<svg class="mision-ico-svg" viewBox="0 0 32 28" aria-hidden="true"><path d="M16 4C11 4 8 8 8 12c0 6 8 12 8 12s8-6 8-12c0-4-3-8-8-8z" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="16" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+    }
+  return '<svg class="mision-ico-svg" viewBox="0 0 32 28" aria-hidden="true"><rect x="7" y="5" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M11 11h10M11 15h7" stroke="currentColor" stroke-width="1.4"/><path d="M20 19l3 3" stroke="currentColor" stroke-width="1.6"/><circle cx="21" cy="17" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+  }
+
+  function textoMisionStrip(m) {
+    var t = (m && m.texto) || '';
+    if (t.length > 72) t = t.slice(0, 69) + '…';
+    if (!t) t = (m && m.titulo) || 'Objetivo';
+    return t;
+  }
+
+  function renderMisionesStrip(items) {
+    var strip = $('[data-misiones-strip]');
+    if (!strip) return;
+    var sorted = (items || []).slice().sort(function (a, b) {
+      return ((a.orden || 0) - (b.orden || 0)) || String(a.titulo || '').localeCompare(String(b.titulo || ''));
+    });
+    strip.innerHTML = '';
+    if (!sorted.length) {
+      strip.innerHTML = '<p class="obj-misiones-vacio">Sin misiones hoy.</p>';
+      return;
+    }
+    sorted.forEach(function (m) {
+      var est = m.estado || 'pendiente';
+      var row = document.createElement('div');
+      row.className = 'mision-strip-row mision-' + est;
+      row.innerHTML =
+        '<span class="mision-strip-ico">' + iconoMision(m) + '</span>' +
+        '<span class="mision-strip-txt">' + esc(textoMisionStrip(m)) + '</span>' +
+        bolitaMision(est);
+      strip.appendChild(row);
+    });
+  }
+
+  function htmlMisionItem(m, opts) {
+    opts = opts || {};
+    var est = m.estado || 'pendiente';
+    var accBtn = '';
+    if (m.accion && est !== 'bloqueada' && est !== 'cumplida') {
+      accBtn = '<button type="button" class="mis-accion mision-accion" data-mision-accion="' + esc(m.id || '') + '">' +
+        esc(m.accion_label || 'Ir') + '</button>';
+    }
+    var titulo = m.titulo
+      ? '<strong class="mis-item-tit">' + esc(m.titulo) + '</strong>'
+      : '';
+    var estado = opts.primerosPasos
+      ? ''
+      : '<span class="mis-item-estado">' + esc(estadoMisionLabel(est)) + '</span>';
+    return '<article class="mis-item mis-item-' + est + (opts.primerosPasos ? ' mis-item-pp' : '') + '">' +
+      '<span class="mis-item-tape mis-item-tape-l" aria-hidden="true"></span>' +
+      '<span class="mis-item-tape mis-item-tape-r" aria-hidden="true"></span>' +
+      '<div class="mis-item-head">' + bolitaMision(est) + titulo + '</div>' +
+      '<p class="mis-item-txt">' + esc(m.texto || m.hecho || 'Objetivo') + '</p>' +
+      estado + accBtn + '</article>';
+  }
+
+  function enlazarAccionesMision(container, items) {
+    if (!container) return;
+    var byId = {};
+    (items || []).forEach(function (m) {
+      if (m && m.id) byId[m.id] = m;
+    });
+    $$('[data-mision-accion]', container).forEach(function (btn) {
+      btn.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        var id = btn.getAttribute('data-mision-accion');
+        ejecutarAccionMision(byId[id] || null);
+      });
+    });
+  }
+
+  function bolitaMision(estado) {
+    if (estado === 'cumplida') {
+      return '<span class="mision-bolita cumplida" aria-label="Hecha"><span class="mision-check">✓</span></span>';
+    }
+    if (estado === 'bloqueada') {
+      return '<span class="mision-bolita bloqueada" aria-hidden="true"></span>';
+    }
+    return '<span class="mision-bolita pendiente" aria-hidden="true"></span>';
+  }
+
+  let corazonOlaPhase = 0;
+  let corazonOlaFillY = 52;
+  let corazonOlaFillH = 0;
+  let corazonOlaTimer = null;
+
+  function corazonOlaY(x, fillY, phase) {
+    return fillY + Math.sin((x * 0.54) + phase) * 3.6;
+  }
+
+  function corazonFillPathD(fillY, phase) {
+    var bottom = 52;
+    var parts = [];
+    for (var x = 0; x <= 58; x += 1.1) {
+      var y = corazonOlaY(x, fillY, phase);
+      parts.push((parts.length ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1));
+    }
+    return parts.join(' ') + ' L58 ' + bottom + ' L0 ' + bottom + ' Z';
+  }
+
+  function corazonSurfacePathD(fillY, phase) {
+    var parts = [];
+    for (var x = 0; x <= 58; x += 1.1) {
+      var y = corazonOlaY(x, fillY, phase);
+      parts.push((parts.length ? 'L' : 'M') + x.toFixed(1) + ' ' + y.toFixed(1));
+    }
+    return parts.join(' ');
+  }
+
+  function aplicarCorazonAgua(fillEl, surfaceEl, fillY, fillH, phase) {
+    if (!fillEl) return;
+    if (fillH <= 0.5) {
+      fillEl.setAttribute('d', '');
+      if (surfaceEl) surfaceEl.setAttribute('d', '');
+      return;
+    }
+    fillEl.setAttribute('d', corazonFillPathD(fillY, phase));
+    if (surfaceEl) surfaceEl.setAttribute('d', corazonSurfacePathD(fillY, phase));
+  }
+
+  function animarCorazonAgua() {
+    if (corazonOlaTimer) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    corazonOlaTimer = setInterval(function () {
+      if (corazonOlaFillH <= 0.5) return;
+      corazonOlaPhase += 0.24;
+      aplicarCorazonAgua(
+        document.querySelector('[data-corazon-fill]'),
+        document.querySelector('[data-corazon-surface]'),
+        corazonOlaFillY,
+        corazonOlaFillH,
+        corazonOlaPhase
+      );
+    }, 130);
+  }
+
+  function corazonVidaSvg() {
+    var el = $('.top-vida .corazon-svg');
+    if (el) return el;
+    return $('.corazon-svg');
+  }
+
+  function corazonVidaOnReactionEnd(svg, cls) {
+    function onEnd(e) {
+      if (e.target !== svg) return;
+      if (e.animationName !== 'corazon-vida-sube' && e.animationName !== 'corazon-vida-baja' && e.animationName !== 'corazon-vida-latido') return;
+      svg.removeEventListener('animationend', onEnd);
+      svg.classList.remove(cls);
+      svg.classList.add('corazon-vida--reposo');
+    }
+    svg.addEventListener('animationend', onEnd);
+  }
+
+  function triggerCorazonVidaReaction(svg, dir) {
+    const cls = dir === 'sube' ? 'corazon-vida--sube' : 'corazon-vida--baja';
+    svg.classList.remove('corazon-vida--reposo', 'corazon-vida--sube', 'corazon-vida--baja', 'corazon-vida--latido');
+    svg.classList.add(cls);
+    corazonVidaOnReactionEnd(svg, cls);
+  }
+
+  function triggerCorazonLatido(svg) {
+    svg.classList.remove('corazon-vida--reposo', 'corazon-vida--sube', 'corazon-vida--baja');
+    svg.classList.add('corazon-vida--latido');
+    corazonVidaOnReactionEnd(svg, 'corazon-vida--latido');
+  }
+
+  function renderVidaDerrota(estado) {
+    const perdida = !!(estado && estado.partida_perdida) ||
+      !!(estado && estado.vida_pueblo && estado.vida_pueblo.game_over_activo);
+    const root = $('.play-root');
+    if (root) {
+      if (perdida) root.setAttribute('data-partida-perdida', '1');
+      else root.removeAttribute('data-partida-perdida');
+    }
+    const box = $('[data-vida-derrota]');
+    const mostrarAviso = perdida && !vidaDerrotaCerrada;
+    if (box) box.hidden = !mostrarAviso;
+    document.body.classList.toggle('vida-derrota-activa', mostrarAviso);
+    if (mostrarAviso) pintarVidaDerrotaDebug(estado);
+  }
+
+  function pintarVidaDerrotaDebug(estado) {
+    const wrap = $('[data-vida-debug]');
+    const cuerpo = $('[data-vida-debug-body]');
+    if (!wrap || !cuerpo) return;
+    const dbg = estado && estado.vida_debug;
+    if (!dbg || typeof dbg !== 'object') {
+      wrap.hidden = true;
+      cuerpo.textContent = '';
+      return;
+    }
+    const lineas = ['[AHT DEBUG EQUILIBRIO / FINAL]'];
+    const relojTxt = (estado && estado.reloj_texto) || '';
+    if (relojTxt) lineas.push('reloj: ' + relojTxt);
+    const banda = dbg.banda || (estado.vida_pueblo && estado.vida_pueblo.etiqueta) || '?';
+    lineas.push('vida: ' + dbg.valor + ' · banda: ' + banda);
+    if (dbg.llego_a_cero !== undefined) {
+      lineas.push('llegó a cero: ' + (dbg.llego_a_cero ? 'sí' : 'no') +
+        ' · game over activo: ' + (dbg.game_over_activo ? 'sí' : 'no') +
+        (dbg.origen_ultimo_cero ? ' · origen del cero: ' + dbg.origen_ultimo_cero : ''));
+    }
+    const cola = Array.isArray(dbg.ledger_tail) ? dbg.ledger_tail : [];
+    let gota = null;
+    for (let i = cola.length - 1; i >= 0; i--) {
+      if ((cola[i] && cola[i].delta) < 0) { gota = cola[i]; break; }
+    }
+    if (gota) {
+      lineas.push('última gota: ' + (gota.causa || '?') + ' ' + gota.delta +
+        ' (día ' + gota.dia + ' ' + gota.hora + 'h → ' + gota.valor_despues + ')');
+    }
+    if (dbg.positivos_desde_latido !== undefined) {
+      lineas.push('positivos desde latido: ' + dbg.positivos_desde_latido + '/' + dbg.umbral_positivos_latido +
+        ' · latidos: ' + dbg.latidos);
+    }
+    lineas.push('checkpoint: snapshots DEV vía api dev.snapshot.* (data/snapshots)');
+    cuerpo.textContent = lineas.join('\n');
+    wrap.hidden = false;
+  }
+
+  // Frontera canónica del motor: AgendaTemplates::ventanaSueno() por defecto acuesta a los residentes a las 23:00.
+  // A las 22:00 siguen abiertos bar/cine/discoteca/restaurante/bingo y hay planes válidos (ver disponibilidad_sueno_planes_test).
+  const HORA_NOCHE_DESDE = 23;
+  const HORA_DIA_DESDE = 8;
+
+  function horaActualEstado(estado) {
+    const e = estado || cacheEstado;
+    const rv = (e && e.reloj_vista) || {};
+    const reloj = (e && e.reloj) || {};
+    const h = rv.hora !== undefined ? rv.hora : reloj.hora_actual;
+    return typeof h === 'number' ? h : null;
+  }
+
+  function esHoraNoche(h) {
+    return h !== null && (h >= HORA_NOCHE_DESDE || h < HORA_DIA_DESDE);
+  }
+
+  // Sincroniza el aspecto nocturno global con el reloj REAL de la partida.
+  // Se ejecuta en CADA pintarModoReloj (renderHud): botón normal, debug +h,
+  // pasar la noche, refresh y carga inicial de partida ya nocturna.
+  function aplicarNocheVisual(esNoche) {
+    const shell = document.querySelector('.game-shell');
+    if (shell) shell.classList.toggle('noche-activa', !!esNoche);
+  }
+
+  function pintarModoReloj(esNoche) {
+    aplicarNocheVisual(esNoche);
+    $$('[data-es-noche]').forEach(function (el) {
+      el.hidden = !esNoche;
+    });
+    const btn = $('[data-pasar-rato]');
+    if (!btn) return;
+    btn.classList.toggle('pasar-rato--noche', esNoche);
+    btn.title = esNoche ? 'Avanza hasta las 08:00 de la mañana' : 'Avanza el tiempo exactamente 1 hora';
+    if (!btn.classList.contains('is-busy')) {
+      const txt = btn.querySelector('.pasar-rato-txt');
+      if (txt) txt.textContent = esNoche ? 'Pasar la noche' : 'Pasar el rato';
+    }
+  }
+
+  function renderHud(estado, buzon) {
+    const rv = estado.reloj_vista || {};
+    const reloj = estado.reloj || {};
+    const diaNum = reloj.dia_pueblo;
+    const fechaCorta = rv.fecha_corta || '';
+    const diaLblHud = (diaNum !== undefined && diaNum !== null) ? ('Día ' + diaNum) : '';
+    const diaNumEl = $('[data-dia-num]');
+    if (diaNumEl) {
+      diaNumEl.textContent = diaLblHud || '—';
+    }
+    const h = rv.hora !== undefined ? rv.hora : reloj.hora_actual;
+    const ht = h === undefined ? '' : (String(h).padStart(2, '0') + ':00');
+    $$('[data-dow]').forEach(function (el) {
+      el.textContent = rv.dia_semana_ui || (diaNum !== undefined ? ('Día ' + diaNum) : '-');
+    });
+    $$('[data-fecha]').forEach(function (el) {
+      el.textContent = fechaCorta;
+    });
+    $$('[data-hora]').forEach(function (el) {
+      el.textContent = ht || '-';
+    });
+    pintarModoReloj(esHoraNoche(typeof h === 'number' ? h : null));
+    const estEl = $('[data-dia-estacion]');
+    if (estEl) {
+      estEl.textContent = '';
+      estEl.hidden = true;
+    }
+    const metaEl = $('[data-dia-meta]');
+    const metaMobEl = $('[data-top-meta-mobile]');
+    if (metaEl) {
+      metaEl.textContent = fechaCorta || '—';
+    }
+    if (metaMobEl) {
+      const mobDia = diaLblHud || 'Día —';
+      const mobFecha = fechaCorta || '—';
+      const min = rv.minuto !== undefined ? rv.minuto : reloj.minuto_actual;
+      const mobHora = h === undefined ? '—:—' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
+      metaMobEl.innerHTML = '<span class="top-meta-prim">' + mobDia + ' · ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span>';
+    }
+    const vida = estado.vida_pueblo || null;
+    const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
+    const critico = !!(vida && vida.critico);
+    const fillEl = $('[data-corazon-fill]');
+    const surfaceEl = $('[data-corazon-surface]');
+    if (fillEl) {
+      var fillH = 52 * (pct / 100);
+      var fillY = 52 - fillH;
+      corazonOlaFillY = fillY;
+      corazonOlaFillH = fillH;
+      aplicarCorazonAgua(fillEl, surfaceEl, fillY, fillH, corazonOlaPhase);
+      animarCorazonAgua();
+    }
+    const fill = $('.corazon-fill') || $('.corazon-dibujo');
+    if (fill) fill.style.setProperty('--fill', pct + '%');
+    const pctN = $('[data-vida-pct]');
+    if (pctN) pctN.textContent = Math.round(pct) + '%';
+    const corazonSvg = corazonVidaSvg();
+    if (corazonSvg) {
+      corazonSvg.classList.toggle('corazon-vida--critico', critico);
+      if (vida && vida.latido_anim) {
+        triggerCorazonLatido(corazonSvg);
+      } else if (vidaCorazonReady && vidaCorazonPctPrev !== null && pct !== vidaCorazonPctPrev) {
+        triggerCorazonVidaReaction(corazonSvg, pct > vidaCorazonPctPrev ? 'sube' : 'baja');
+      } else if (!vidaCorazonReady) {
+        corazonSvg.classList.add('corazon-vida--reposo');
+      }
+      vidaCorazonPctPrev = pct;
+      vidaCorazonReady = true;
+    }
+    renderVidaDerrota(estado);
+    const nPend = buzonNoLeidos(estado, buzon);
+    const badgeHud = $('.buzon .badge');
+    if (badgeHud) {
+      badgeHud.textContent = String(nPend);
+      badgeHud.classList.toggle('is-on', nPend > 0);
+    }
+    const badgeObj = $('[data-buzon-badge]');
+    if (badgeObj) {
+      badgeObj.textContent = String(nPend);
+      badgeObj.hidden = nPend <= 0;
+    }
+    const cartas = (buzon || []).filter(function (m) {
+      return (m.estado || '') === 'pendiente' || (m.estado || '') === 'en_espera';
+    });
+    const imp = cartas.some(function (m) { return m.clasificacion === 'importante'; });
+    if (imp) $('.play-root').setAttribute('data-importante', '1');
+    else $('.play-root').removeAttribute('data-importante');
+  }
+
+  function placeHab(box, p, i, cid) {
+    const el = document.createElement('span');
+    el.className = 'hab';
+    el.setAttribute('data-residente', p.id);
+    el.setAttribute('data-complejo', cid);
+    el.setAttribute('data-destino', p.destino_id);
+    el.setAttribute('data-fase', p.fase || 'en_destino');
+    el.setAttribute('data-emocion', p.emocion || 'neutro');
+    if (p.hay_tema) el.setAttribute('data-hay-tema', '1');
+    const slots = (SLOTS[cid] && SLOTS[cid][p.destino_id]) || [[22 + i * 12, 50]];
+    const xy = slots[Math.min(i, slots.length - 1)];
+    el.style.left = xy[0] + '%';
+    el.style.top = xy[1] + '%';
+    if (p.token_url) {
+      el.innerHTML = '<span class="cara"><img src="' + p.token_url + '" alt=""/></span>';
+    } else {
+      el.innerHTML = '<span class="cara cara-ini">' + (p.iniciales || '?') + '</span>';
+    }
+    if (p.hay_tema) {
+      el.insertAdjacentHTML('beforeend', '<img class="sello-tema" src="assets/play-v3/marcas/sello_hay_tema.png" alt=""/>');
+    }
+    box.appendChild(el);
+  }
+
+
+  function renderMapaMarcas(mapa) {
+    cacheMapaPresencia = mapa || null;
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return;
+    layer.querySelectorAll('.mapa-zona-hit').forEach(function (btn) {
+      btn.classList.remove('mapa-zona--proximo', 'mapa-zona--en-curso');
+      btn.removeAttribute('data-encuentro-marca');
+    });
+    (mapa && mapa.lugares || []).forEach(function (lug) {
+      var marca = lug.encuentro_marca;
+      if (!marca) return;
+      var zid = LUG_TO_ZONA[lug.id];
+      if (!zid) return;
+      var btn = layer.querySelector('[data-zona="' + zid + '"]');
+      if (!btn) return;
+      btn.setAttribute('data-encuentro-marca', marca);
+      btn.classList.add(marca === 'en_curso' ? 'mapa-zona--en-curso' : 'mapa-zona--proximo');
+    });
+  }
+
+  function renderPueblo(pueblo) {
+    cachePueblo = pueblo;
+    var layer = $('[data-mapa-zonas]');
+    if (!layer) return;
+    $$('.mapa-zona-hit .habs').forEach(function (b) { b.innerHTML = ''; });
+    var porZona = {};
+    (pueblo.complejos || []).forEach(function (cx) {
+      ((cx.visibles && cx.visibles.length) ? cx.visibles : (cx.personas || [])).forEach(function (p) {
+        var zid = LUG_TO_ZONA[p.destino_id];
+        if (!zid) return;
+        if (!porZona[zid]) porZona[zid] = [];
+        if (porZona[zid].length >= 5) return;
+        porZona[zid].push(p);
+      });
+    });
+    Object.keys(porZona).forEach(function (zid) {
+      var btn = layer.querySelector('[data-zona="' + zid + '"]');
+      if (!btn) return;
+      var box = btn.querySelector('.habs');
+      if (!box) return;
+      var enZona = porZona[zid].slice().sort(function (a, b) {
+        return String(a.id).localeCompare(String(b.id));
+      });
+      var marcaZona = btn.getAttribute('data-encuentro-marca') || '';
+      enZona.forEach(function (p, i) {
+        placeHabEnZona(box, p, i, enZona.length);
+      });
+    });
+    pintarHorariosMapa();
+  }
+
+  function applyFases(pueblo) {
+    $$('.complejo').forEach(function (el) {
+      const id = el.getAttribute('data-complejo');
+      const cx = (pueblo.complejos || []).filter(function (c) { return c.id === id; })[0];
+      el.classList.toggle('is-pleno', !!(cx && cx.fase === 'pleno'));
+    });
+  }
+
+  function pintarEdificios(btn, cx) {
+    const ops = {};
+    (cx.destinos || []).forEach(function (d, i) {
+      if (i === 0 || d.operativo) ops[d.id] = true;
+    });
+    const edifs = btn.querySelectorAll('.edif');
+    let alguna = false;
+    for (let j = 0; j < edifs.length; j++) {
+      const img = edifs[j];
+      const show = !!ops[img.getAttribute('data-destino')];
+      img.classList.toggle('is-on', show);
+      if (show) alguna = true;
+    }
+    btn.classList.toggle('tiene-edifs', alguna);
+  }
+
+  function cxById(id) {
+    return (cachePueblo && cachePueblo.complejos || []).filter(function (c) { return c.id === id; })[0];
+  }
+
+  function abrirConsulta(id, silentHist) {
+    const cx = cxById(id);
+    if (!cx) return;
+    const ops = cx.destinos_operativos || [];
+    if (ops.length > 1 || silentHist) {
+      $('.play-root').setAttribute('data-consulta', 'sel');
+      consultaNav = { tipo: 'complejo', complejoId: id, vista: 'sel', fromSel: false };
+      if (!silentHist) uiHistPush();
+    marcarConsultaLugar($('.selector'), id);
+      $('[data-s-tit]').textContent = cx.nombre;
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
+      const box = $('[data-s-btns]');
+      box.innerHTML = '';
+      ops.forEach(function (d) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = 'Ver ' + nombreLugarUi(d.id, d.nombre);
+        b.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, d.id); });
+        box.appendChild(b);
+      });
+      const all = document.createElement('button');
+      all.type = 'button';
+      all.textContent = 'Quién hay en el complejo';
+      all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, null); });
+      box.appendChild(all);
+      actualizarNotaAtras();
+      return;
+    }
+    abrirQuien(id, ops[0] ? ops[0].id : null, silentHist);
+  }
+
+  function abrirQuien(id, destId, silentHist) {
+    const cx = cxById(id);
+    const fromSel = $('.play-root').getAttribute('data-consulta') === 'sel';
+    $('.play-root').setAttribute('data-consulta', 'quien');
+    consultaNav = { tipo: 'complejo', complejoId: id, destId: destId, vista: 'quien', fromSel: fromSel };
+    if (!silentHist) uiHistPush();
+    marcarConsultaLugar($('.quien'), id);
+    $('[data-q-tit]').textContent = cx.nombre;
+    const gente = (cx.personas || []).filter(function (p) {
+      return !destId || p.destino_id === destId;
+    });
+    var destinosHorarioCx = destId
+      ? [destinoOperativoPorId(destId)].filter(Boolean)
+      : ((cx && cx.destinos_operativos) || []);
+    if (destId) {
+      var dnomCx = destinosHorarioCx[0] && destinosHorarioCx[0].nombre;
+      if (dnomCx) $('[data-q-tit]').textContent = dnomCx;
+    }
+    pintarHorarioQuien(destinosHorarioCx);
+    quienTemaActivo = null;
+    pintarQuienResidentes(gente, null, gente.length ? '' : copyVacio(id));
+    pintarQuienTema(gente, null);
+    const box = $('[data-q-btns]');
+    box.innerHTML = '';
+    (cx.destinos_operativos || []).forEach(function (d) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
+      b.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        abrirOrganizarConPreset({ lugar: d.id });
+      });
+      box.appendChild(b);
+    });
+    actualizarNotaAtras();
+  }
+
+  function copyVacio(cid) {
+    const t = {
+      cafe_libros: 'Ni el café humea. No hay ni un alma.',
+      rincon_lola: 'Hoy Lola no tendría a quién servir.',
+      cine_game: 'Pantalla en negro. No hay ni un alma.',
+      mala_idea: 'Hasta el bar está en silencio.',
+      parque: 'Solo el banco, esperando.',
+      gimnasio_spa: 'Máquinas quietas. No hay ni un alma.'
+    };
+    return t[cid] || 'No hay ni un alma.';
+  }
+
+  function tokenDe(rid) {
+    if (!rid) return null;
+    var tokens = cachePueblo && cachePueblo.tokens;
+    if (tokens && tokens[rid] && tokens[rid].url) return tokens[rid].url;
+    var res = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[rid];
+    if (res && res.retrato_url) return res.retrato_url;
+    var hitUrl = null;
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (c) {
+      (c.personas || []).forEach(function (p) {
+        if (p.id === rid) hitUrl = p.token_url || hitUrl;
+      });
+      if (!hitUrl) {
+        (c.visibles || []).forEach(function (p) {
+          if (p.id === rid) hitUrl = p.token_url || hitUrl;
+        });
+      }
+    });
+    return hitUrl || null;
+  }
+
+  function retratoDe(rid, ficha) {
+    var pres = ficha && ficha.presentacion_visual;
+    var asset = pres && pres.asset;
+    if (asset && asset.url_relativa) return asset.url_relativa;
+    return tokenDe(rid);
+  }
+
+  let vecBuscaTxt = '';
+
+  function txtBuscaNorm(s) {
+    return String(s || '')
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+  }
+  let orgBuscaTxt = '';
+  let resBloqueActivo = 'a';
+  let resBuscaTxt = '';
+
+  function vecinosIdsLlegadaReciente() {
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const llegadas = (cacheInsp && cacheInsp.llegadas) || {};
+    const esActivo = function (id) {
+      return !!res[id] && (res[id].presencia || 'residente') === 'residente';
+    };
+    const seq = [];
+    const apuntar = function (id) {
+      if (!id || !esActivo(id)) return;
+      const i = seq.indexOf(id);
+      if (i >= 0) seq.splice(i, 1);
+      seq.push(id);
+    };
+    const enHistoria = {};
+    (llegadas.tutorial_hechas || []).forEach(function (h) {
+      if (h && h.catalog_id) enHistoria[h.catalog_id] = true;
+    });
+    (llegadas.historial || []).forEach(function (h) {
+      if (h && h.catalog_id && h.resultado === 'llegado') enHistoria[h.catalog_id] = true;
+    });
+    Object.keys(res).forEach(function (id) {
+      if (!enHistoria[id]) apuntar(id);
+    });
+    (llegadas.tutorial_hechas || []).forEach(function (h) {
+      if (h && h.catalog_id) apuntar(h.catalog_id);
+    });
+    (llegadas.historial || []).forEach(function (h) {
+      if (h && h.catalog_id && h.resultado === 'llegado') apuntar(h.catalog_id);
+    });
+    return seq.reverse();
+  }
+
+  function renderVecinosPreview() {
+    var box = $('[data-vecinos-preview]');
+    if (!box) return;
+    var res = (cacheInsp && cacheInsp.residentes) || {};
+    var pick = vecinosIdsLlegadaReciente().slice(0, 3);
+    if (!pick.length) {
+      box.innerHTML = '<span class="obj-vecinos-preview-ini">?</span>';
+      return;
+    }
+    box.innerHTML = pick.map(function (id) {
+      var r = res[id];
+      var img = tokenDe(id);
+      var nom = (r.identidad_publica && r.identidad_publica.nombre) || id;
+      var ini = nom.charAt(0) || '?';
+      return img
+        ? '<img class="obj-vecinos-preview-cara" src="' + esc(img) + '" alt=""/>'
+        : '<span class="obj-vecinos-preview-cara obj-vecinos-preview-ini">' + esc(ini) + '</span>';
+    }).join('');
+  }
+
+  function vecinosIdsOrdenados() {
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const ids = Object.keys(res).filter(function (id) {
+      return ((res[id].presencia || 'residente') === 'residente');
+    });
+    ids.sort(function (a, b) {
+      const na = (res[a].identidad_publica && res[a].identidad_publica.nombre) || a;
+      const nb = (res[b].identidad_publica && res[b].identidad_publica.nombre) || b;
+      return String(na).localeCompare(String(nb), 'es');
+    });
+    return ids;
+  }
+
+  function renderVecinos() {
+    const box = $('[data-vecinos-list]');
+    if (!box) return;
+    box.classList.add('vecinos-grid');
+    box.innerHTML = '';
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const filtroTxt = txtBuscaNorm(vecBuscaTxt);
+    const ids = vecinosIdsOrdenados().filter(function (id) {
+      if (!filtroTxt) return true;
+      const r = res[id];
+      const nom = txtBuscaNorm((r.identidad_publica && r.identidad_publica.nombre) || id);
+      return nom.indexOf(filtroTxt) >= 0;
+    });
+    const metVec = metricasSociales(cacheInsp || {});
+    const cuenta = $('[data-vecinos-count]');
+    if (cuenta) cuenta.textContent = String(metVec.vecinos) + ' / ' + String(metVec.cap);
+    if (!ids.length) {
+      box.innerHTML = '<p class="lista-vacia vecinos-vacio">' +
+        (filtroTxt ? 'Nadie con ese nombre.' : 'Todavía no hay vecinos en esta partida.') + '</p>';
+      return;
+    }
+    ids.forEach(function (id) {
+      const r = res[id];
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'vecino-celda';
+      const img = tokenDe(id);
+      const nom = (r.identidad_publica && r.identidad_publica.nombre) || id;
+      const ini = nom.charAt(0) || '?';
+      const emo = emocionDe(id);
+      const genero = (r.identidad_publica && r.identidad_publica.genero) || '';
+      const emoTxt = textoEmoVecinoSutil(emo, genero);
+      b.innerHTML = '<div class="vecino-cara" data-emocion="' + esc(emo) + '">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="vecino-ini">' + esc(ini) + '</span>') +
+        '</div><p class="vecino-nom">' + esc(nom) + '</p>' +
+        (emoTxt ? '<p class="vecino-emo" data-emocion="' + esc(emo) + '">' + esc(emoTxt) + '</p>' : '');
+      b.addEventListener('click', function () { abrirFicha(id); });
+      box.appendChild(b);
+    });
+  }
+
+  var RES_BLOQUES = [
+    { letra: 'a', key: 'bloque_a' },
+    { letra: 'b', key: 'bloque_b' },
+    { letra: 'c', key: 'bloque_c' }
+  ];
+
+  function bloqueInfo(letra) {
+    var partida = cacheInsp || {};
+    var def = RES_BLOQUES.filter(function (b) { return b.letra === letra; })[0];
+    var blk = def ? partida[def.key] : null;
+    var viviendas = (blk && Array.isArray(blk.viviendas)) ? blk.viviendas : [];
+    return { viviendas: viviendas, abierto: viviendas.length > 0 };
+  }
+
+
+  let fichaActualId = '';
+  let fichaRelCache = [];
+  let fichaAnimoExplicacion = null;
+
+  function relacionesConocidas(f) {
+    const rels = [];
+    const raw = (f && f.relaciones) || {};
+    Object.keys(raw).forEach(function (oid) {
+      const r = raw[oid];
+      if (r && r.conocidos) rels.push(r);
+    });
+    rels.sort(function (a, b) {
+      const pa = barRelPct(a);
+      const pb = barRelPct(b);
+      if (pb !== pa) return pb - pa;
+      if (a.etiqueta_vinculo === 'crisis') return -1;
+      if (b.etiqueta_vinculo === 'crisis') return 1;
+      return String(a.nombre).localeCompare(String(b.nombre), 'es');
+    });
+    return rels;
+  }
+
+  function emojiRel(rel) {
+    if (!rel) return '';
+    if (rel.etiqueta_vinculo === 'crisis') return '\uD83D\uDC94 ';
+    if (rel.etiqueta_vinculo === 'pareja') return '\u2764\uFE0F ';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return '\uD83D\uDC94 ';
+    if (rel.romance_visible && rel.etiqueta_romance) return '';
+    const s = rel.etiqueta_social || '';
+    if (s === 'cae_mal') return '\uD83D\uDE12 ';
+    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '\uD83E\uDD1D ';
+    if (s === 'amigo') return '\uD83D\uDE42 ';
+    if (s === 'conocido') return '\uD83D\uDC4B ';
+    return '';
+  }
+  function htmlRelRow(rel) {
+    const cara = tokenDe(rel.id);
+    const ini = (rel.nombre || '?').charAt(0);
+    const pct = barRelPct(rel);
+    const lbl = etiquetaRelText(rel);
+    const crisis = rel.etiqueta_vinculo === 'crisis';
+    return (
+      '<div class="ficha-rel-row' + (crisis ? ' is-crisis' : '') + '">' +
+      '<div class="ficha-rel-cara">' +
+      (cara ? '<img src="' + esc(cara) + '" alt=""/>' : '<span>' + esc(ini) + '</span>') +
+      '</div>' +
+      '<div class="ficha-rel-main">' +
+      '<div class="ficha-rel-nom">' + esc(rel.nombre || rel.id) + '</div>' +
+      '<div class="ficha-rel-bar"><span style="width:' + pct + '%"></span></div>' +
+      '</div>' +
+      '<span class="ficha-rel-etiq">' + esc(emojiRel(rel) + lbl) + '</span>' +
+      '</div>'
+    );
+  }
+
+  function pintarRelacionesEn(box, rels, limit) {
+    if (!box) return;
+    box.innerHTML = '';
+    if (!rels.length) {
+      box.innerHTML = '<p class="ficha-vacio">De momento, solo le conoces a ti. O eso dice el pueblo.</p>';
+      return;
+    }
+    rels.slice(0, limit).forEach(function (rel) {
+      box.insertAdjacentHTML('beforeend', htmlRelRow(rel));
+    });
+  }
+
+  function cerrarFichaRelOverlay() {
+    const overlay = $('[data-ficha-rel-overlay]');
+    if (overlay) overlay.hidden = true;
+  }
+
+  function abrirFichaRelOverlay(nombre) {
+    const overlay = $('[data-ficha-rel-overlay]');
+    const list = $('[data-ficha-rel-list]');
+    const tit = $('[data-ficha-rel-modal-tit]');
+    if (!overlay || !list) return;
+    if (tit) tit.textContent = 'Relaciones de ' + (nombre || 'vecino');
+    pintarRelacionesEn(list, fichaRelCache, fichaRelCache.length);
+    overlay.hidden = false;
+  }
+
+  var VEC_REL_FILTROS = [
+    { id: '', txt: 'Todas', icono: '' },
+    { id: 'romance', txt: 'Romance', icono: '\uD83D\uDC98' },
+    { id: 'bien', txt: 'Se llevan bien', icono: '\uD83E\uDD1D' },
+    { id: 'conocidos', txt: 'Conocidos', icono: '\uD83D\uDC4B' },
+    { id: 'mal', txt: 'Se caen mal', icono: '\uD83D\uDE12' },
+    { id: 'conflicto', txt: 'Conflictos', icono: '\uD83D\uDC94' }
+  ];
+  var vecRelCache = [];
+  var vecRelFiltro = '';
+  var vecRelPersona = '';
+  var VEC_REL_ICONO_PAR = '<svg viewBox="0 0 24 12" aria-hidden="true"><path d="M6 3 L2 6 L6 9 M18 3 L22 6 L18 9 M2 6 H22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function cerrarVecRelOverlay() {
+    const overlay = $('[data-vec-rel-overlay]');
+    if (overlay) overlay.hidden = true;
+  }
+
+  async function abrirVecRelOverlay() {
+    const overlay = $('[data-vec-rel-overlay]');
+    if (!overlay) return;
+    overlay.hidden = false;
+    const list = $('[data-vec-rel-list]');
+    if (list) list.innerHTML = '<p class="lista-vacia vec-rel-vacio">Mirando el cotilleo del pueblo…</p>';
+    const r = await api('relacion.vista_pueblo', {}, 'GET');
+    if (!r.ok) {
+      cerrarVecRelOverlay();
+      toast(r.mensaje_ui || 'No se pudieron cargar las relaciones.');
+      return;
+    }
+    vecRelCache = Array.isArray(r.relaciones) ? r.relaciones : [];
+    vecRelFiltro = '';
+    vecRelPersona = '';
+    pintarVecRelFiltros();
+    pintarVecRelPersonas();
+    renderVecRelLista();
+  }
+
+  function pintarVecRelFiltros() {
+    const box = $('[data-vec-rel-filtros]');
+    if (!box) return;
+    box.innerHTML = VEC_REL_FILTROS.map(function (f) {
+      const activo = vecRelFiltro === f.id;
+      if (!f.icono) {
+        return '<button type="button" class="vec-rel-filtro vec-rel-filtro-txt' + (activo ? ' is-on' : '') +
+          '" data-vec-rel-filtro="' + f.id + '">' + f.txt + '</button>';
+      }
+      return '<button type="button" class="vec-rel-filtro vec-rel-filtro-ico' + (activo ? ' is-on' : '') +
+        '" data-vec-rel-filtro="' + f.id + '" data-tip="' + f.txt + '" aria-label="' + f.txt + '">' +
+        '<span class="vec-rel-filtro-glyph">' + f.icono + '</span>' +
+        (activo ? '<span class="vec-rel-filtro-nom">' + f.txt + '</span>' : '') +
+        '</button>';
+    }).join('');
+  }
+  function pintarVecRelPersonas() {
+    const sel = $('[data-vec-rel-persona]');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Todo el pueblo</option>' + vecinosIdsOrdenados().map(function (id) {
+      const nom = nombreDe(id);
+      return '<option value="' + esc(id) + '"' + (vecRelPersona === id ? ' selected' : '') + '>' + esc(nom) + '</option>';
+    }).join('');
+  }
+
+  function vecRelTextoDir(dir) {
+    dir = dir || {};
+    const parts = [];
+    if (dir.etiqueta_vinculo === 'pareja') parts.push('\u2764\uFE0F Pareja');
+    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\uD83D\uDC94 En crisis');
+    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\uD83D\uDC94 Ex pareja');
+    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\uD83D\uDC98') + ' ' + dir.etiqueta_romance);
+    if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
+      parts.push(((dir.emoji_social || '') + ' ' + dir.etiqueta_social_ui).trim());
+    }
+    return parts.join(' \u00B7 ');
+  }
+
+  function vecRelFlags(row) {
+    const ab = row.a_hacia_b || {};
+    const ba = row.b_hacia_a || {};
+    const f = { romance: false, bien: false, mal: false, conflicto: !!row.conflicto };
+    [ab, ba].forEach(function (d) {
+      if (d.etiqueta_vinculo || d.romance_visible) f.romance = true;
+      const s = d.etiqueta_social || '';
+      if (d.social_negativo || s === 'cae_mal') f.mal = true;
+      else if (s === 'cae_bien' || s === 'amigo' || s === 'buen_amigo' || s === 'mejor_amigo') f.bien = true;
+    });
+    f.conocidos = !(f.romance || f.bien || f.mal || f.conflicto) &&
+      !!(ab.conocidos || ba.conocidos);
+    return f;
+  }
+
+  function vecRelMatchFiltro(row, filtro) {
+    if (!filtro) return true;
+    const f = vecRelFlags(row);
+    if (filtro === 'romance') return f.romance;
+    if (filtro === 'bien') return f.bien;
+    if (filtro === 'mal') return f.mal;
+    if (filtro === 'conflicto') return f.conflicto;
+    if (filtro === 'conocidos') return f.conocidos;
+    return true;
+  }
+
+  function caraVecRel(id, nombre) {
+    const img = tokenDe(id);
+    const ini = (nombre || '?').charAt(0);
+    return img ? '<img src="' + esc(img) + '" alt=""/>' : '<span>' + esc(ini) + '</span>';
+  }
+
+  function vecRelBarra(dir) {
+    dir = dir || {};
+    const pct = typeof dir.social_bar_pct === 'number'
+      ? Math.max(4, Math.min(100, dir.social_bar_pct))
+      : 8;
+    return '<span class="vec-rel-barra' + (dir.social_negativo ? ' is-neg' : '') + '" aria-hidden="true">' +
+      '<span style="width:' + pct + '%"></span></span>';
+  }
+
+  function htmlVecRelCard(row) {
+    const a = row.persona_a || {};
+    const b = row.persona_b || {};
+    const ab = row.a_hacia_b || {};
+    const ba = row.b_hacia_a || {};
+    const tAb = vecRelTextoDir(ab);
+    const tBa = vecRelTextoDir(ba);
+    const barAb = vecRelBarra(ab);
+    const barBa = vecRelBarra(ba);
+    const conBarras = !!(ab.conocidos || ba.conocidos);
+    const f = vecRelFlags(row);
+    const cls = 'vec-rel-card' + (f.romance ? ' is-amor' : '') + (f.mal ? ' is-mal' : '') + (f.conflicto ? ' is-conflicto' : '');
+    let lineas = '';
+    if (tAb && tAb === tBa && barAb === barBa) {
+      lineas = '<p class="vec-rel-linea">' + esc(a.nombre || '') + ' y ' + esc(b.nombre || '') + ': ' + esc(tAb) + '</p>' +
+        (conBarras ? barAb : '');
+    } else {
+      if (tAb) lineas += '<p class="vec-rel-linea"><span class="vec-rel-dir">' + esc(a.nombre || '') + ' \u2192 ' + esc(b.nombre || '') + '</span> ' + esc(tAb) + '</p>' + (conBarras ? barAb : '');
+      if (tBa) lineas += '<p class="vec-rel-linea"><span class="vec-rel-dir">' + esc(b.nombre || '') + ' \u2192 ' + esc(a.nombre || '') + '</span> ' + esc(tBa) + '</p>' + (conBarras ? barBa : '');
+    }
+    if (!lineas) lineas = '<p class="vec-rel-linea">Se conocen de vista.</p>';
+    if (f.conflicto) lineas += '<span class="vec-rel-sello">Conflicto</span>';
+    return (
+      '<article class="' + cls + '">' +
+      '<div class="vec-rel-par">' +
+      '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(a.id || '') + '">' +
+      '<span class="vec-rel-cara">' + caraVecRel(a.id, a.nombre) + '</span>' +
+      '<span class="vec-rel-nom">' + esc(a.nombre || a.id || '?') + '</span></button>' +
+      '<span class="vec-rel-vinculo" aria-hidden="true">' + VEC_REL_ICONO_PAR + '</span>' +
+      '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(b.id || '') + '">' +
+      '<span class="vec-rel-cara">' + caraVecRel(b.id, b.nombre) + '</span>' +
+      '<span class="vec-rel-nom">' + esc(b.nombre || b.id || '?') + '</span></button>' +
+      '</div>' +
+      '<div class="vec-rel-estados">' + lineas + '</div>' +
+      '</article>'
+    );
+  }
+
+  function renderVecRelLista() {
+    const list = $('[data-vec-rel-list]');
+    if (!list) return;
+    const rows = vecRelCache.filter(function (r) {
+      if (vecRelPersona && (r.persona_a || {}).id !== vecRelPersona && (r.persona_b || {}).id !== vecRelPersona) return false;
+      return vecRelMatchFiltro(r, vecRelFiltro);
+    });
+    if (!rows.length) {
+      const quien = vecRelPersona ? nombreDe(vecRelPersona) : '';
+      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">' +
+        (quien ? esc(quien) + ' no tiene nada que contar por ahora.' : 'Aqu\u00ED no hay nada de nada todav\u00EDa.') + '</p>';
+      return;
+    }
+    list.innerHTML = rows.map(htmlVecRelCard).join('');
+  }
+
+function canonEmoId(id) {
+    const e = String(id || 'neutro').toLowerCase();
+    if (e === 'neutral' || e === 'neutro') return 'neutro';
+    if (e === 'alegre' || e === 'triste' || e === 'enfadado') return e;
+    return 'neutro';
+  }
+
+  function etiquetaVecinoDesde(vista, dia) {
+    const g = vista && vista.genero;
+    const rol = g === 'mujer' ? 'Vecina' : (g === 'hombre' ? 'Vecino' : 'Vecino');
+    return rol + ' desde el día ' + dia;
+  }
+
+  function textoAnimoDisplay(emo) {
+    const map = {
+      neutro: 'neutral',
+      alegre: 'alegre',
+      triste: 'triste',
+      enfadado: 'enfadada'
+    };
+    return map[emo] || emo.replace(/_/g, ' ');
+  }
+
+  function textoEmoVecinoSutil(emo, genero) {
+    const e = canonEmoId(emo);
+    if (e === 'neutro') return '';
+    if (e === 'alegre') return 'está feliz';
+    if (e === 'triste') return 'está triste';
+    if (e === 'enfadado') return genero === 'mujer' ? 'está enfadada' : 'está enfadado';
+    return '';
+  }
+
+  function svgAnimoBadge(emo) {
+    const tint = { neutro: '#9a8a78', alegre: '#7a9e6a', triste: '#8a9eb8', enfadado: '#c45' }[emo] || '#9a8a78';
+    const face = '<circle cx="16" cy="16" r="10" fill="#fffdf8" stroke="' + tint + '" stroke-width="1.3"/>';
+    const eyes = '<circle cx="12" cy="14" r="1.1" fill="#3a3028"/><circle cx="20" cy="14" r="1.1" fill="#3a3028"/>';
+    const doodles = {
+      neutro: face + eyes + '<line x1="11" y1="19" x2="21" y2="19" stroke="#3a3028" stroke-width="1.3" stroke-linecap="round"/>',
+      alegre: face + eyes + '<path d="M11 18.5q5 4.5 10 0" stroke="#3a3028" stroke-width="1.3" fill="none" stroke-linecap="round"/>',
+      triste: face + eyes + '<path d="M11 21q5-3.5 10 0" stroke="#3a3028" stroke-width="1.3" fill="none" stroke-linecap="round"/><path d="M21 12l1.5 2.5" stroke="' + tint + '" stroke-width="1.1" stroke-linecap="round"/>',
+      enfadado: face + '<path d="M10 12.5l3 1.5M22 12.5l-3 1.5" stroke="#3a3028" stroke-width="1.2" stroke-linecap="round"/><circle cx="12" cy="15" r="1.1" fill="#3a3028"/><circle cx="20" cy="15" r="1.1" fill="#3a3028"/><path d="M11 20.5q5-3 10 0" stroke="#3a3028" stroke-width="1.3" fill="none" stroke-linecap="round"/>'
+    };
+    const body = doodles[emo] || doodles.neutro;
+    return '<svg class="ficha-animo-svg" viewBox="0 0 32 32" width="32" height="32" aria-hidden="true">' + body + '</svg>';
+  }
+
+  function pintarAnimoFicha(vista) {
+    const emo = canonEmoId(vista.estado_animo);
+    const txtEl = $('[data-ficha-animo-text]');
+    const icoEl = $('[data-ficha-animo-ico]');
+    if (txtEl) txtEl.textContent = textoAnimoDisplay(emo);
+    if (icoEl) {
+      icoEl.setAttribute('data-emo', emo);
+      icoEl.innerHTML = svgAnimoBadge(emo);
+    }
+    fichaAnimoExplicacion = vista.animo_explicacion || null;
+    const qBtn = $('[data-ficha-animo-q]');
+    if (qBtn) {
+      qBtn.hidden = !fichaAnimoExplicacion;
+      qBtn.onclick = abrirAnimoModal;
+    }
+    cerrarAnimoOverlay();
+    cerrarDiarioOverlay();
+  }
+
+  function cerrarAnimoOverlay() {
+    const overlay = $('[data-animo-overlay]');
+    if (overlay) overlay.hidden = true;
+  }
+
+  function cerrarDiarioOverlay() {
+    const overlay = $('[data-diario-overlay]');
+    if (overlay) overlay.hidden = true;
+  }
+
+  function abrirAnimoModal() {
+    const exp = fichaAnimoExplicacion;
+    const overlay = $('[data-animo-overlay]');
+    const body = $('[data-animo-body]');
+    if (!exp || !overlay || !body) return;
+    const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
+    const tit = $('[data-animo-modal-tit]');
+    if (tit) tit.textContent = '¿Qué le pasa a ' + nom + '?';
+    body.innerHTML = '<p class="ficha-animo-modal-estado">' + esc(exp.texto_estado || '') + '</p>' +
+      '<p class="ficha-animo-modal-texto">' + esc(exp.explicacion || '') + '</p>' +
+      '<p class="ficha-animo-modal-desde">' + esc(exp.desde_texto || '') + '</p>';
+    const link = document.createElement('button');
+    link.type = 'button';
+    link.className = 'ficha-diario-link';
+    link.textContent = 'Ver en su diario \u2192';
+    if (exp.diario_evento_id) {
+      link.hidden = false;
+      link.onclick = function () { abrirDiarioVecino(fichaActualId, exp.diario_evento_id); };
+    } else {
+      link.hidden = true;
+      link.onclick = null;
+    }
+    body.appendChild(link);
+    overlay.hidden = false;
+  }
+
+  function entradaDiarioHtml(e) {
+    let html = '<article class="ficha-diario-entrada" data-diario-evento="' +
+      esc((e.origen && e.origen.evento_id) || '') + '">' +
+      '<p class="ficha-diario-fecha">' + esc(e.fecha_corta || ('Día ' + (e.dia || ''))) + '</p>' +
+      '<h4 class="ficha-diario-titulo">' + esc(e.titulo || '') + '</h4>' +
+      '<p class="ficha-diario-texto">' + esc(e.texto || '') + '</p>';
+    const cons = Array.isArray(e.consecuencias) ? e.consecuencias : [];
+    if (cons.length) {
+      html += '<ul class="ficha-diario-consecuencias">';
+      cons.forEach(function (c) { html += '<li>' + esc(String(c)) + '</li>'; });
+      html += '</ul>';
+    }
+    return html + '</article>';
+  }
+
+  async function abrirDiarioVecino(rid, highlightEventoId) {
+    const overlay = $('[data-diario-overlay]');
+    const list = $('[data-diario-list]');
+    if (!overlay || !list || !rid) return;
+    const r = await api('residente.diario', { residente_id: rid }, 'GET');
+    if (!r.ok) return;
+    const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
+    const tit = $('[data-diario-modal-tit]');
+    if (tit) tit.textContent = 'Diario de ' + nom;
+    const entradas = Array.isArray(r.entradas) ? r.entradas : [];
+    if (!entradas.length) {
+      list.innerHTML = '<p class="ficha-vacio ficha-ironico">«Aún no ha pasado nada digno de página.»</p>';
+    } else {
+      list.innerHTML = entradas.map(entradaDiarioHtml).join('');
+    }
+    cerrarAnimoOverlay();
+    overlay.hidden = false;
+    if (highlightEventoId) {
+      const dest = list.querySelector('[data-diario-evento="' + highlightEventoId.replace(/"/g, '\\"') + '"]');
+      if (dest) {
+        dest.classList.add('is-destacada');
+        try { dest.scrollIntoView({ block: 'center' }); } catch (e) {}
+      }
+    }
+  }
+
+function slotsDesdeLista(lista) {
+    const l = (lista || []).slice(0, 3);
+    const out = [];
+    for (let i = 0; i < 3; i++) {
+      out.push({ descubierto: !!l[i], texto: l[i] || null });
+    }
+    return out;
+  }
+
+  /* Navegacion desktop entre encuentros en curso: SOLO cambia la seleccion
+     y re-renderiza. Jamas ejecuta acciones ni llama a la API. */
+  function moverCursoSeleccion(delta) {
+    if (!cacheEstado) return;
+    const lista = encuentrosEnCursoAhora(cacheInsp, cacheEstado);
+    if (lista.length < 2) return;
+    let pos = -1;
+    for (let i = 0; i < lista.length; i++) {
+      if (String(lista[i].id) === String(cursoSelId)) { pos = i; break; }
+    }
+    if (pos < 0) pos = 0;
+    pos = (pos + delta + lista.length) % lista.length;
+    cursoSelId = String(lista[pos].id);
+    renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
+  }
+  (function bindCursoNav() {
+    const nav = document.querySelector('[data-curso-nav]');
+    if (!nav || nav._ahtCursoNav) return;
+    nav._ahtCursoNav = true;
+    const prev = nav.querySelector('[data-curso-prev]');
+    const next = nav.querySelector('[data-curso-next]');
+    if (prev) prev.addEventListener('click', function () { moverCursoSeleccion(-1); });
+    if (next) next.addEventListener('click', function () { moverCursoSeleccion(1); });
+  })();
+function hobbyIconKey(id, texto) {
+    if (id) return String(id);
+    const t = String(texto || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const map = [
+      ['cafe', 'cafe_social'],
+      ['leer', 'leer'], ['biblioteca', 'leer'],
+      ['escribir', 'escribir'],
+      ['pasear', 'pasear'], ['parque', 'pasear'],
+      ['correr', 'correr'],
+      ['manualidades', 'manualidades'],
+      ['cocina', 'cocina'],
+      ['musica', 'musica'],
+      ['cine', 'cine'],
+      ['videojuegos', 'videojuegos'],
+      ['copas', 'copas'],
+      ['baile', 'baile'],
+      ['bingo', 'bingo'],
+      ['deporte', 'deporte'],
+      ['senderismo', 'senderismo'],
+      ['plantas', 'plantas'],
+      ['costura', 'costura']
+    ];
+    for (let i = 0; i < map.length; i++) {
+      if (t.indexOf(map[i][0]) >= 0) return map[i][1];
+    }
+    return '';
+  }
+
+  function svgHobbyPaths(key) {
+    const k = hobbyIconKey(key, key);
+    const paths = {
+      leer: '<path d="M9 8h6.5c1 0 1.5.5 1.5 1.5V24H9z"/><path d="M15 8H21.5c1 0 1.5.5 1.5 1.5V24H15z"/><path d="M9 8c0-1.5 2-2.5 4.5-2.5S18 6.5 18 8"/><path d="M15 8c0-1.5 2-2.5 4.5-2.5S24 6.5 24 8"/>',
+      escribir: '<path d="M9 23l9-9 3 3-9 9H9z"/><path d="M20 11l3-3 2 2-3 3"/><path d="M7 25h18"/>',
+      pasear: '<path d="M8 24c2-5 4-7 8-7s6 2 8 7"/><circle cx="11" cy="12" r="2.5"/><path d="M11 14.5V20"/><path d="M21 20c0-3 1-5.5 3-7"/><path d="M24 24h-6"/>',
+      correr: '<path d="M10 24l2.5-6 4 1.5 3.5 4.5"/><path d="M9 15l4.5-1.5 5 3"/><circle cx="13" cy="9" r="2.2"/>',
+      cafe_social: '<path d="M10 12h9v7c0 2-1.2 3.5-4.5 3.5S10 21 10 19z"/><path d="M19 14h2.5c1 0 1.8.8 1.8 1.8s-.8 1.7-1.8 1.7"/><path d="M12 9.5c0-.8.6-1.2 1.2-1.2"/><path d="M16 8.8c0-.8.6-1.2 1.2-1.2"/><path d="M20 9.5c0-.8.6-1.2 1.2-1.2"/>',
+      manualidades: '<circle cx="11" cy="11" r="3.5"/><circle cx="21" cy="21" r="3.5"/><path d="M13.5 13.5l5.5 5.5"/>',
+      cocina: '<path d="M9 14h14v9H9z"/><path d="M11 14V10"/><path d="M16 14V9"/><path d="M21 14V10"/><path d="M9 18h14"/>',
+      musica: '<path d="M13 9v12"/><path d="M13 9l8-2v9"/><ellipse cx="10" cy="21" rx="2.8" ry="2.5"/><ellipse cx="21" cy="19" rx="2.8" ry="2.5"/>',
+      cine: '<rect x="7" y="11" width="18" height="11" rx="1.2"/><path d="M7 15h18"/><path d="M11 11v4"/><path d="M15 11v4"/><path d="M19 11v4"/><path d="M23 11v4"/>',
+      videojuegos: '<rect x="6" y="13" width="20" height="9" rx="2.5"/><path d="M12 16.5v5"/><path d="M9.5 19h5"/><circle cx="22" cy="16.5" r="1"/><circle cx="24.5" cy="19" r="1"/>',
+      copas: '<path d="M11 11h8v5c0 2-1.5 3.2-4 3.2s-4-1.2-4-3.2z"/><path d="M15 19.5v3"/><path d="M11 24.5h8"/>',
+      baile: '<circle cx="16" cy="9" r="2.2"/><path d="M11 24l4-8 5 2.5 4 5.5"/><path d="M8 15l6-2"/>',
+      bingo: '<rect x="8" y="8" width="16" height="16" rx="2"/><path d="M8 14h16"/><path d="M8 20h16"/><path d="M14 8v16"/><path d="M20 8v16"/>',
+      deporte: '<circle cx="16" cy="16" r="7.5"/><path d="M16 8.5v15"/><path d="M8.5 16h15"/><path d="M10 10.5c3 2 9 2 12 0"/><path d="M10 21.5c3-2 9-2 12 0"/>',
+      senderismo: '<path d="M6 24l7-12 3.5 5 5.5-7 4 7"/><path d="M6 24h20"/>',
+      plantas: '<path d="M16 24V13"/><path d="M16 15c-4.5-2-8.5 0-8.5 6"/><path d="M16 17c4.5-2 8.5 0 8.5 6"/><path d="M12 24h8"/>',
+      costura: '<path d="M10 24l6-13 6 13"/><path d="M13 18.5h6"/><circle cx="16" cy="9" r="2"/>'
+    };
+    return paths[k] || paths.leer;
+  }
+
+  function svgHobbyIcon(id, texto) {
+    const key = hobbyIconKey(id, texto);
+    const body = svgHobbyPaths(key);
+    return '<svg class="ficha-hobby-svg" viewBox="0 0 32 32" aria-hidden="true" focusable="false">' +
+      '<g fill="none" stroke="#2c261f" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">' +
+      body + '</g></svg>';
+  }
+
+  function emojiHobby(txt) {
+    const t = String(txt || '').toLowerCase();
+    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '☕ ';
+    if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '📖 ';
+    if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '🌳 ';
+    return '';
+  }
+
+  function pintarSlotsRasgos(box, slots) {
+    if (!box) return;
+    box.innerHTML = '';
+    const items = (slots && slots.length) ? slots : slotsDesdeLista([]);
+    items.forEach(function (sl) {
+      const sp = document.createElement('span');
+      sp.className = 'ficha-rasgo-tag' + (sl.descubierto ? '' : ' is-desconocido');
+      sp.textContent = sl.descubierto ? String(sl.texto).toUpperCase() : '?';
+      box.appendChild(sp);
+    });
+  }
+
+  function pintarSlotsHobbies(box, slots) {
+    if (!box) return;
+    box.innerHTML = '';
+    const items = (slots && slots.length) ? slots : slotsDesdeLista([]);
+    items.forEach(function (sl) {
+      const card = document.createElement('div');
+      card.className = 'ficha-hobby-card' + (sl.descubierto ? '' : ' is-desconocido');
+      const ico = document.createElement('span');
+      ico.className = 'ficha-hobby-ico';
+      const lab = document.createElement('span');
+      lab.className = 'ficha-hobby-lab';
+      if (sl.descubierto) {
+        ico.innerHTML = svgHobbyIcon(sl.id, sl.texto);
+        lab.textContent = sl.texto || '';
+      } else {
+        ico.innerHTML = '<span class="ficha-hobby-q">?</span>';
+        lab.textContent = '?';
+        lab.className += ' is-desconocido';
+      }
+      card.appendChild(ico);
+      card.appendChild(lab);
+      box.appendChild(card);
+    });
+  }
+
+  function slotGenteTxt(sl) {
+    if (sl && sl.descubierto && sl.texto) return String(sl.texto);
+    return '?';
+  }
+
+  function lineaGente(slots) {
+    const items = (slots && slots.length >= 2) ? slots.slice(0, 2) : [null, null];
+    return 'Gente: ' + slotGenteTxt(items[0]) + ' · ' + slotGenteTxt(items[1]);
+  }
+
+  function pintarLoQueSabes(vista) {
+    const sec = $('[data-ficha-sabes]');
+    const box = $('[data-ficha-sabes-body]');
+    if (!sec || !box) return;
+    const g = (vista && vista.pistas_grupos) || {};
+    const animas = Array.isArray(g.animas) ? g.animas : [];
+    const disgustas = Array.isArray(g.disgustas) ? g.disgustas : [];
+    if (!animas.length && !disgustas.length) {
+      box.innerHTML = '';
+      sec.hidden = true;
+      return;
+    }
+    let html = '';
+    if (animas.length) {
+      html += '<p class="ficha-pref-line"><span class="ficha-sabes-ico">\u2764\uFE0F</span>Le anima: '
+        + esc(animas.map(function (a) { return a.etiqueta || a.id || ''; }).filter(Boolean).join(', '))
+        + '</p>';
+    }
+    if (disgustas.length) {
+      html += '<p class="ficha-pref-line"><span class="ficha-sabes-ico">\uD83D\uDCA2</span>No le gusta: '
+        + esc(disgustas.map(function (d) { return d.etiqueta || d.id || ''; }).filter(Boolean).join(', '))
+        + '</p>';
+    }
+    box.innerHTML = html;
+    sec.hidden = false;
+  }
+
+  function textoPlanesVacios(id) {
+    const frases = [
+      'Ni un café en el horizonte. O eso cree.',
+      'Agenda libre. Demasiado libre.',
+      'Hoy no tiene nada apuntado. Ni mañana, según parece.',
+      'Cero planes. Cero prisas. Cero drama… por ahora.'
+    ];
+    let h = 0;
+    const s = String(id || '');
+    for (let i = 0; i < s.length; i++) h = (h + s.charCodeAt(i)) % frases.length;
+    return frases[h];
+  }
+
+  function diaLlegadaVecino(id) {
+    const insp = cacheInsp || {};
+    const llegadas = insp.llegadas || {};
+    const hist = llegadas.historial || [];
+    for (let i = hist.length - 1; i >= 0; i--) {
+      const h = hist[i];
+      if (h && h.catalog_id === id && h.resultado === 'llegado') return Number(h.dia || 1);
+    }
+    const tut = llegadas.tutorial_hechas || [];
+    for (let j = 0; j < tut.length; j++) {
+      if (tut[j].catalog_id === id) return Number(llegadas.tutorial_completado_dia || 1);
+    }
+    return 1;
+  }
+
+  function etiquetaRelText(rel) {
+    if (!rel) return '\u2014';
+    if (rel.etiqueta_vinculo === 'crisis') return 'En crisis';
+    if (rel.etiqueta_vinculo === 'pareja') return 'Pareja';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return 'Ex pareja';
+    let rom = '';
+    if (rel.romance_visible && rel.etiqueta_romance) {
+      rom = ((rel.emoji_romance || '\uD83D\uDC98') + ' ' + rel.etiqueta_romance);
+    }
+    let soc = '';
+    if (rel.etiqueta_social_ui) soc = String(rel.etiqueta_social_ui);
+    else {
+      const map = {
+        desconocido: 'Desconocido',
+        conocido: 'Conocido',
+        amigo: 'Amigo',
+        buena_amistad: 'Buena amistad',
+        muy_buena_amistad: 'Buena amistad',
+        cae_mal: 'Cae mal',
+        cae_bien: 'Le cae bien',
+        buen_amigo: 'Buen amigo',
+        mejor_amigo: 'Mejor amigo'
+      };
+      soc = map[rel.etiqueta_social] || String(rel.etiqueta_social || '\u2014').replace(/_/g, ' ');
+    }
+    if (rom && soc && soc !== 'Desconocido') return rom + ' \u00B7 ' + soc;
+    return rom || soc;
+  }
+  function barRelPct(rel) {
+    if (!rel) return 8;
+    if (typeof rel.social_bar_pct === 'number') return rel.social_bar_pct;
+    if (rel.etiqueta_vinculo === 'pareja') return 96;
+    if (rel.etiqueta_vinculo === 'crisis') return 52;
+    if (rel.etiqueta_vinculo === 'ex_pareja') return 38;
+    return 48;
+  }
+
+
+  function planesDeVecino(id) {
+    return encuentrosFuturos(cacheInsp, cacheEstado).filter(function (e) {
+      return (e.participantes || []).indexOf(id) >= 0;
+    }).slice(0, 4);
+  }
+
+  function pintarFicha(id, f, vista) {
+    fichaActualId = id;
+    const nom = vista.nombre || (f.identidad && f.identidad.nombre) || id;
+    const img = retratoDe(id, f);
+    const caraBox = $('[data-ficha-img]');
+    if (caraBox) {
+      caraBox.innerHTML = img
+        ? '<img src="' + esc(img) + '" alt=""/>'
+        : '<span class="ficha-ini">' + esc((nom.charAt(0) || '?')) + '</span>';
+    }
+    const nomEl = $('[data-ficha-nombre]');
+    if (nomEl) nomEl.textContent = nom;
+    const edadEl = $('[data-ficha-edad]');
+    if (edadEl) {
+      var edadVal = vista.edad != null ? vista.edad : (f.identidad && f.identidad.edad);
+      if (edadVal != null && edadVal !== '') {
+        edadEl.textContent = String(edadVal) + ' a\u00f1os';
+        edadEl.hidden = false;
+      } else {
+        edadEl.textContent = '';
+        edadEl.hidden = true;
+      }
+    }
+    const trabajoEl = $('[data-ficha-trabajo]');
+    if (trabajoEl) {
+      var t = vista.trabajo || {};
+      var principal = '';
+      var horario = '';
+      if (t.desempleado) {
+        principal = t.linea_principal || 'Desempleado/a';
+      } else if (t.linea_principal) {
+        principal = t.linea_principal;
+        if (t.linea_horario) horario = t.linea_horario;
+      } else if (vista.ocupacion) {
+        principal = vista.ocupacion;
+      }
+      if (principal) {
+        trabajoEl.innerHTML = '<span class="ficha-trabajo-principal">\uD83D\uDCBC ' + esc(principal) + '</span>'
+          + (horario ? '<span class="ficha-trabajo-horario">' + esc(horario) + '</span>' : '');
+        trabajoEl.hidden = false;
+      } else {
+        trabajoEl.textContent = '';
+        trabajoEl.hidden = true;
+      }
+    }
+    const desdeEl = $('[data-ficha-desde]');
+    if (desdeEl) desdeEl.textContent = etiquetaVecinoDesde(vista, diaLlegadaVecino(id));
+    pintarAnimoFicha(vista);
+    const rasgosBox = $('[data-ficha-rasgos]');
+    pintarSlotsRasgos(rasgosBox, vista.rasgos_slots || slotsDesdeLista(vista.manera_de_ser));
+    const hobbiesBox = $('[data-ficha-hobbies]');
+    pintarSlotsHobbies(hobbiesBox, vista.hobbies_slots || slotsDesdeLista(vista.gusta));
+    const gustaGenteEl = $('[data-ficha-gusta-gente]');
+    if (gustaGenteEl) gustaGenteEl.textContent = lineaGente(vista.gusta_en_gente);
+    const noGustaGenteEl = $('[data-ficha-nogusta-gente]');
+    if (noGustaGenteEl) noGustaGenteEl.textContent = lineaGente(vista.no_gusta_en_gente);
+    pintarLoQueSabes(vista);
+    const relBox = $('[data-ficha-relaciones]');
+    const relMasBtn = $('[data-ficha-rel-mas]');
+    fichaRelCache = relacionesConocidas(f);
+    pintarRelacionesEn(relBox, fichaRelCache, 2);
+    if (relMasBtn) {
+      if (fichaRelCache.length > 2) {
+        relMasBtn.hidden = false;
+        relMasBtn.textContent = 'Ver más relaciones';
+        relMasBtn.onclick = function () { abrirFichaRelOverlay(nom); };
+      } else {
+        relMasBtn.hidden = true;
+        relMasBtn.onclick = null;
+      }
+    }
+    cerrarFichaRelOverlay();
+    const planBox = $('[data-ficha-planes]');
+    if (planBox) {
+      planBox.innerHTML = '';
+      const planes = planesDeVecino(id);
+      if (!planes.length) {
+        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">«Su agenda está sospechosamente tranquila.»</p>';
+      } else {
+        planes.forEach(function (enc) {
+          const p = document.createElement('p');
+          p.className = 'ficha-plan-item';
+          p.textContent = formatPlanMeta(enc, cacheEstado);
+          planBox.appendChild(p);
+        });
+      }
+    }
+    const orgBtn = $('[data-ficha-org]');
+    if (orgBtn) {
+      orgBtn.onclick = function () {
+        abrirOrganizarConPreset({ a: id });
+      };
+    }
+    syncFichaNav();
+  }
+
+  function syncFichaNav() {
+    const ok = vecinosIdsOrdenados().length > 1;
+    const prev = $('[data-ficha-nav-prev]');
+    const next = $('[data-ficha-nav-next]');
+    if (prev) prev.disabled = !ok;
+    if (next) next.disabled = !ok;
+  }
+
+  var fichaNavegando = false;
+
+  async function navegarFicha(delta) {
+    if (fichaNavegando) return;
+    const ids = vecinosIdsOrdenados();
+    if (ids.length < 2) return;
+    const idx = ids.indexOf(fichaActualId);
+    const base = idx < 0 ? 0 : idx;
+    const destino = ids[(base + delta + ids.length) % ids.length];
+    fichaNavegando = true;
+    try {
+      await abrirFicha(destino);
+    } finally {
+      fichaNavegando = false;
+    }
+  }
+
+  async function abrirFicha(id) {
+    const r = await api('residente.ficha', { residente_id: id }, 'GET');
+    if (!r.ok) return;
+    if (r.tutorial) pintarTutorialMotor(r.tutorial);
+    const f = r.ficha || {};
+    const vista = f.vista_play || f;
+    pintarFicha(id, f, vista);
+    setCapa('ficha');
+  }
+
+  function estadoCarta(m) {
+    const pueblo = m.estado_pueblo || '';
+    if (pueblo === 'cumplida') return { cls: 'estado-cumplida', txt: 'Hecho' };
+    if (pueblo === 'caducada') return { cls: 'estado-caducada', txt: 'Se le pasó' };
+    if ((m.estado || '') === 'pendiente') return { cls: 'estado-pendiente', txt: '' };
+    if ((m.estado || '') === 'leido') return { cls: 'estado-leida', txt: '' };
+    if ((m.estado || '') === 'en_espera') return { cls: 'estado-espera', txt: 'En espera' };
+    if ((m.estado || '') === 'resuelto') return { cls: 'estado-cumplida', txt: 'Ya está' };
+    return { cls: '', txt: '' };
+  }
+
+  function cuerpoCarta(m, de) {
+    let t = String(m.texto || '').trim();
+    if (de && t.indexOf(de + ':') === 0) t = t.slice(de.length + 1).trim();
+    if (de && t.indexOf(de + ' ') === 0) {
+      /* deja el resto */
+    }
+    return t;
+  }
+
+  function mensajitosPendientesCount(msgs) {
+    return mensajitosCartas(msgs).filter(function (m) {
+      return (m.estado || '') === 'pendiente';
+    }).length;
+  }
+
+  function actualizarBuzonLeerTodosBtn(msgs) {
+    const btn = $('[data-buzon-leer-todos]');
+    if (!btn) return;
+    const n = mensajitosPendientesCount(msgs);
+    btn.hidden = n === 0;
+    btn.disabled = n === 0;
+  }
+
+  async function marcarTodosMensajitosLeidos() {
+    const btn = $('[data-buzon-leer-todos]');
+    if (btn && btn.disabled) return;
+    if (btn) btn.disabled = true;
+    const popAbierto = mensajitosPopAbierto;
+    const r = await api('buzon.leer_todos', {});
+    if (!r.ok) {
+      toast(r.mensaje_ui || 'No se pudieron marcar los mensajes.');
+      actualizarBuzonLeerTodosBtn(cacheBuzon);
+      return;
+    }
+    await refresh();
+    if (popAbierto) abrirMensajitosPop();
+    if (r.tutorial) pintarTutorialMotor(r.tutorial);
+  }
+
+
+  function renderBuzon(msgs) {
+    cacheBuzon = msgs || [];
+    const box = $('[data-buzon-list]');
+    if (!box) return;
+    box.innerHTML = '';
+    renderMensajitosPop(msgs);
+    actualizarBuzonLeerTodosBtn(msgs);
+    const cartas = mensajitosOrdenados(msgs);
+    if (!cartas.length) {
+      box.innerHTML = '<p class="lista-vacia buzon-vacio">No hay mensajes por ahora. Cuando llegue algo, lo verás aquí.</p>';
+      return;
+    }
+    const accion = cartas.filter(mensajitoRequiereAccion);
+    const info = cartas.filter(function (m) { return !mensajitoRequiereAccion(m); });
+
+    function pintarCarta(m, esAccion) {
+      const art = document.createElement('article');
+      const st = estadoCarta(m);
+      const leido = (m.estado || '') !== 'pendiente';
+      art.className = 'carta-msg' +
+        (esAccion ? ' carta-accion' : ' carta-info') +
+        (leido ? ' leida' : ' no-leida') +
+        (st.cls ? ' ' + st.cls : '');
+      const nombre = nombrePublicoDe(m);
+      const cuerpo = cuerpoMensajito(m, nombre);
+      const cuando = mensajitoCuandoTxt(m);
+      const plazo = m.plazo_humano || '';
+      let accionesHtml = '';
+      if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') {
+        accionesHtml = '<div class="acciones-msg">' +
+          '<button type="button" data-accion="aceptar">Dejarle hueco</button>' +
+          '<button type="button" class="btn-suave" data-accion="rechazar">Ahora no</button>' +
+          '</div>';
+      }
+      art.innerHTML = '<div class="carta-inner">' + htmlAvatarMensajito(m, nombre, 'carta-avatar') +
+        '<div class="carta-copy">' +
+        (st.txt ? '<div class="sello-estado">' + esc(st.txt) + '</div>' : '') +
+        (nombre ? '<div class="de">' + esc(nombre) + (cuando ? '<span class="carta-cuando">' + esc(cuando) + '</span>' : '') + '</div>' : '') +
+        '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
+        (plazo ? '<p class="plazo">' + esc(plazo) + '</p>' : '') +
+        accionesHtml +
+        '</div></div>';
+      art.appendChild(crearMsgLeidoToggle(m));
+
+      art.querySelectorAll('[data-accion]').forEach(function (btn) {
+        btn.addEventListener('click', async function (ev) {
+          ev.stopPropagation();
+          const acc = btn.getAttribute('data-accion');
+          if (acc === 'aceptar') await api('llegada.aceptar', { mensaje_id: m.id });
+          else if (acc === 'rechazar') await api('llegada.rechazar', { mensaje_id: m.id });
+          await refresh();
+        });
+      });
+      return art;
+    }
+
+    function pintarSeccion(titulo, items, esAccion) {
+      if (!items.length) return;
+      const sec = document.createElement('section');
+      sec.className = 'mensajitos-seccion';
+      sec.innerHTML = '<h3 class="mensajitos-seccion-tit">' + titulo + '</h3>';
+      items.forEach(function (m) { sec.appendChild(pintarCarta(m, esAccion)); });
+      box.appendChild(sec);
+    }
+
+    pintarSeccion('Piden algo', accion, true);
+    pintarSeccion('Lo que circula', info, false);
+  }
+
+  const COTI_ESTRELLA_SVG = '<svg class="coti-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.75 5.75 6.25.8-4.6 4.35 1.2 6.2L12 16.9l-5.6 3 1.2-6.2-4.6-4.35 6.25-.8z" fill="#f2b52e" stroke="#c8891b" stroke-width="1" stroke-linejoin="round"/></svg>';
+
+  function cotiCatSvg(catId) {
+    const k = String(catId || 'encuentro').toLowerCase();
+    if (k === 'pueblo') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 14l10-7 10 7v12H6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M12 26v-8h8v8" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+    }
+    if (k === 'encuentro') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M9 12h14l-2 10H11z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M8 12h16" stroke="currentColor" stroke-width="1.5"/><path d="M12 8c0-2 1.5-3 4-3s4 1 4 3" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+    }
+    if (k === 'descubrimiento') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><circle cx="14" cy="14" r="6" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M19 19l6 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>';
+    }
+    if (k === 'romance') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 25s-8-5.5-8-11.5C8 9.5 11 7 14 9c1.2.9 2 2.1 2 2.1s.8-1.2 2-2.1c3-2 6 0.5 6 4.5C24 19.5 16 25 16 25z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+    }
+    if (k === 'drama') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M18 5l-2 9h6l-8 13 2-10h-6z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+    }
+    if (k === 'relacion') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M8 16h8M16 16h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M8 16l3-3M8 16l3 3M24 16l-3-3M24 16l-3 3" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+    }
+    if (k === 'coincidencias') {
+      return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><path d="M10 16c0-4 2.5-7 6-7s6 3 6 7-2.5 7-6 7-6-3-6-7z" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M22 16c0-4 2.5-7 6-7s6 3 6 7-2.5 7-6 7-6-3-6-7z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>';
+    }
+    return '<svg class="coti-svg" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+  }
+
+  function htmlCotiCat(catId, etiqueta) {
+    const id = String(catId || 'encuentro').toLowerCase();
+    const lab = etiqueta || 'Cotilleo';
+    return '<span class="coti-cat coti-cat--' + esc(id) + ' coti-cat-sello" title="' + esc(lab) + '" aria-label="' + esc(lab) + '">' +
+      cotiCatSvg(id) + '</span>';
+  }
+
+  function cotiEtiquetaTiempo(e, bucket) {
+    if (e.fecha_corta) return e.fecha_corta;
+    if (bucket === 'ayer') return 'Ayer';
+    if (bucket === 'hoy') return '';
+    return e.dia ? ('día ' + e.dia) : '';
+  }
+
+  function htmlCotiAvatares(actores) {
+    const ids = (actores && actores.length) ? actores.slice(0, 2) : [];
+    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">…</span>';
+    return ids.map(function (id) {
+      const img = tokenDe(id);
+      const nom = nombreDe(id);
+      const ini = (String(nom).charAt(0) || '?');
+      return '<span class="coti-item-cara cara-token" role="button" tabindex="0" data-residente="' + esc(id) +
+        '" aria-label="Ver ficha de ' + esc(nom) + '" title="' + esc(nom) + '">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="coti-item-ini">' + esc(ini) + '</span>') +
+        '</span>';
+    }).join('');
+  }
+
+  function htmlCotiItem(e, bucket) {
+    const cat = String(e.categoria || 'encuentro').toLowerCase();
+    const etiqueta = e.categoria_etiqueta || 'Cotilleo';
+    const dest = e.destacado === true ? ' coti-item--destacado' : '';
+    const cuando = cotiEtiquetaTiempo(e, bucket);
+    return '<article class="coti-item' + dest + '">' +
+      '<span class="coti-item-tape coti-item-tape-l" aria-hidden="true"></span>' +
+      '<span class="coti-item-tape coti-item-tape-r" aria-hidden="true"></span>' +
+      (bucket === 'hoy' ? '<span class="coti-item-hoy">HOY</span>' : '') +
+      '<div class="coti-item-col">' +
+      '<div class="coti-item-avatares">' + htmlCotiAvatares(e.actores) + '</div>' +
+      htmlCotiCat(cat, etiqueta) +
+      (e.destacado === true ? '<span class="coti-item-star" role="img" aria-label="Acontecimiento importante" title="Acontecimiento importante">' + COTI_ESTRELLA_SVG + '</span>' : '') +
+      '</div>' +
+      '<div class="coti-item-cuerpo">' +
+      '<p class="coti-item-txt">' + esc(e.texto || '') + '</p>' +
+      (cuando ? '<p class="coti-item-cuando">' + esc(cuando) + '</p>' : '') +
+      '</div></article>';
+  }
+
+  let cotiCache = { hoy: [], ayer: [], viejos: [] };
+  let cotiFiltroActivo = '';
+
+  function cotiTodosItems(coti) {
+    const items = [];
+    ['hoy', 'ayer', 'viejos'].forEach(function (bucket) {
+      (coti && coti[bucket] ? coti[bucket] : []).forEach(function (e) {
+        items.push(Object.assign({}, e, { _bucket: bucket }));
+      });
+    });
+    return items;
+  }
+
+  function renderCotilleoFiltros(items) {
+    const box = $('[data-coti-filtros]');
+    if (!box) return;
+    const cats = {};
+    (items || []).forEach(function (e) {
+      const id = e.categoria || 'encuentro';
+      if (!cats[id]) {
+        cats[id] = {
+          id: id,
+          etiqueta: e.categoria_etiqueta || 'Cotilleo',
+        };
+      }
+    });
+    const keys = Object.keys(cats);
+    if (keys.length <= 1) {
+      box.hidden = true;
+      box.innerHTML = '';
+      return;
+    }
+    box.hidden = false;
+    box.innerHTML = keys.map(function (id) {
+      const c = cats[id];
+      const on = cotiFiltroActivo === id ? ' is-on' : '';
+      return '<button type="button" class="coti-filtro coti-cat--' + esc(id) + on + '" data-coti-filtro="' + esc(id) + '" aria-label="' + esc(c.etiqueta) + '" title="' + esc(c.etiqueta) + '">' +
+        '<span class="coti-cat" aria-hidden="true">' + cotiCatSvg(id) + '</span></button>';
+    }).join('');
+  }
+
+  function renderCotilleoLista(coti) {
+    const box = $('[data-coti-list]');
+    if (!box) return;
+    const items = cotiTodosItems(coti || cotiCache);
+    const filtered = cotiFiltroActivo
+      ? items.filter(function (e) { return (e.categoria || 'encuentro') === cotiFiltroActivo; })
+      : items;
+    box.innerHTML = '';
+    if (!filtered.length) {
+      box.innerHTML = '<p class="coti-vacio">' + (items.length ? 'Nada de este tipo por ahora.' : 'Hoy el pueblo no ha dado titular.') + '</p>';
+      return;
+    }
+    filtered.forEach(function (e) {
+      box.insertAdjacentHTML('beforeend', htmlCotiItem(e, e._bucket));
+    });
+  }
+
+  function renderCotilleo(coti) {
+    cotiCache = coti || { hoy: [], ayer: [], viejos: [] };
+    const items = cotiTodosItems(cotiCache);
+    renderCotilleoFiltros(items);
+    renderCotilleoLista(cotiCache);
+  }
+
+  function pulsoCotilleoBadge(badge) {
+    badge.classList.remove('is-pulso');
+    void badge.offsetWidth;
+    badge.classList.add('is-pulso');
+    badge.addEventListener('animationend', function () {
+      badge.classList.remove('is-pulso');
+    }, { once: true });
+  }
+
+  async function marcarCotilleoVisto() {
+    const sinVerCache = Math.max(0, Number(cacheDiario && cacheDiario.cotilleo && cacheDiario.cotilleo.importantes_sin_ver) || 0);
+    if (!sinVerCache) return;
+    const ids = [];
+    ['hoy', 'ayer', 'viejos'].forEach(function (bucket) {
+      ((cotiCache && cotiCache[bucket]) || []).forEach(function (e) {
+        if (e && e.destacado === true && e.id) ids.push(String(e.id));
+      });
+    });
+    try {
+      const r = await api('diario.cotilleo_visto', { ids: ids });
+      if (!r || !r.ok) return;
+      const restan = Math.max(0, Number(r.importantes_sin_ver) || 0);
+      if (cacheDiario && cacheDiario.cotilleo) cacheDiario.cotilleo.importantes_sin_ver = restan;
+      cotiSinVerPrev = restan;
+      if (!restan) {
+        const b = $('[data-cotilleo-badge]');
+        if (b) { b.textContent = ''; b.hidden = true; }
+        const card = $('.obj-cotilleo-par');
+        if (card) card.classList.remove('is-aviso-importante');
+      }
+    } catch (e) {}
+  }
+
+  function idsResidentes() {
+    return Object.keys((cacheInsp && cacheInsp.residentes) || {});
+  }
+
+  function orgTipoIco(id) {
+    const k = String(id || '').toLowerCase();
+    if (k === 'romance') return '❤️';
+    if (k === 'amistad') return '🤝';
+    if (k === 'conocerse') return '👋';
+    if (k === 'individual') return '🚶';
+    return '';
+  }
+
+  function orgTipoHtml(id, label, on) {
+    const ico = orgTipoIco(id);
+    const cls = 'org-tipo-chip' + (on ? ' is-on' : '');
+    return '<button type="button" class="' + cls + '" data-org-tipo="' + esc(id) + '">' +
+      (ico ? '<span class="org-tipo-ico" aria-hidden="true">' + ico + '</span>' : '') +
+      esc(String(label || '').toUpperCase()) + '</button>';
+  }
+
+  function orgIdsFiltrados() {
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const filtroTxt = txtBuscaNorm(orgBuscaTxt);
+    const sel = orgSeleccionados();
+    const todos = Object.keys(res).filter(function (id) {
+      const r = res[id];
+      if ((r.presencia || 'residente') !== 'residente') return false;
+      const nom = txtBuscaNorm((r.identidad_publica && r.identidad_publica.nombre) || id);
+      if (filtroTxt && nom.indexOf(filtroTxt) < 0) return false;
+      return true;
+    }).sort(function (a, b) {
+      const na = (res[a].identidad_publica && res[a].identidad_publica.nombre) || a;
+      const nb = (res[b].identidad_publica && res[b].identidad_publica.nombre) || b;
+      return String(na).localeCompare(String(nb), 'es');
+    });
+    const elegidos = sel.filter(function (id) { return todos.indexOf(id) >= 0; });
+    const resto = todos.filter(function (id) { return elegidos.indexOf(id) < 0; });
+    return elegidos.concat(resto);
+  }
+
+  function orgSeleccionados() {
+    if (org.modo === 'solo') return org.a ? [org.a] : [];
+    const out = [];
+    if (org.a) out.push(org.a);
+    if (org.b && org.b !== org.a) out.push(org.b);
+    return out;
+  }
+
+  function actualizarOrgPickerHint() {
+    const hint = $('[data-org-picker-hint]');
+    if (!hint) return;
+    const n = orgSeleccionados().length;
+    if (org.modo === 'solo') {
+      hint.textContent = n ? '1 vecino elegido.' : 'Elige 1 vecino.';
+      return;
+    }
+    if (!n) hint.textContent = 'Elige hasta 2 vecinos.';
+    else if (n === 1) hint.textContent = 'Elige un vecino más.';
+    else hint.textContent = '2 vecinos elegidos.';
+  }
+
+  function orgParticipantesListos() {
+    var parts = orgSeleccionados();
+    if (org.modo === 'solo') return parts.length >= 1;
+    return parts.length >= 2;
+  }
+
+  function mensajeOrgParticipantesPendientes() {
+    if (org.modo === 'solo') {
+      return org.a ? '' : 'Elige a qui\u00e9n va el plan.';
+    }
+    var n = orgSeleccionados().length;
+    if (n === 0) return 'Elige al menos dos vecinos.';
+    if (n === 1) return 'Elige un acompa\u00f1ante para continuar.';
+    return '';
+  }
+
+  function actualizarOrgCrearBtn() {
+    var btn = $('[data-org-go]');
+    if (!btn) return;
+    var val = validarOrgForm();
+    btn.disabled = !val.ok;
+    btn.setAttribute('aria-disabled', val.ok ? 'false' : 'true');
+  }
+
+  function setOrgHorasHint(txt, show) {
+    var hintEl = document.querySelector('[data-org-horas-hint]');
+    if (!hintEl) return;
+    if (show && txt) {
+      hintEl.textContent = txt;
+      hintEl.hidden = false;
+    } else {
+      hintEl.textContent = '';
+      hintEl.hidden = true;
+    }
+  }
+
+  function mensajeErrorOrgApi(r, fallback) {
+    if (!r) return fallback;
+    if (r.mensaje_ui) return r.mensaje_ui;
+    var err = String(r.error || '');
+    if (err === 'participantes_requeridos' || err === 'participantes_insuficientes') {
+      if (org.modo === 'solo') return 'Elige a qui\u00e9n va el plan.';
+      var pend = mensajeOrgParticipantesPendientes();
+      return pend || 'Elige al menos dos vecinos.';
+    }
+    if (err === 'lugar_requerido') return 'Elige un lugar.';
+    if (err === 'dia_requerido' || err === 'hora_requerida') return 'Elige cuándo quedar.';
+    return fallback;
+  }
+
+  function validarOrgForm() {
+    org.lugar = $('[data-org-lugar]').value;
+    org.dia = parseInt($('[data-org-dia]').value, 10);
+    org.hora = parseInt($('[data-org-hora]').value, 10);
+    if (org.modo === 'solo') {
+      if (!org.a) return { ok: false, msg: 'Elige a quién va el plan.' };
+      if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
+      if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cuándo quedar.' };
+      return { ok: true };
+    }
+    if (!org.a || !org.b) return { ok: false, msg: 'Elige al menos dos vecinos.' };
+    if (org.a === org.b) return { ok: false, msg: 'Elige a dos personas distintas.' };
+    if (!org.tipo) return { ok: false, msg: 'Elige qué buscáis.' };
+    if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
+    if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cuándo quedar.' };
+    return { ok: true };
+  }
+
+  function toggleOrgPicker(id) {
+    if (!id) return;
+    limpiarOrgAviso();
+    if (org.modo === 'solo') {
+      org.a = org.a === id ? '' : id;
+      org.b = '';
+    } else if (org.a === id) {
+      org.a = org.b || '';
+      org.b = '';
+    } else if (org.b === id) {
+      org.b = '';
+    } else if (!org.a) {
+      org.a = id;
+    } else if (!org.b) {
+      org.b = id;
+    } else {
+      toast('Ya elegiste a dos vecinos.');
+      return;
+    }
+    limpiarOrgBusca();
+    pintarOrgPicker();
+    actualizarOrgPickerHint();
+    refreshTipos();
+    refreshOrgHoras();
+    actualizarOrgCrearBtn();
+  }
+
+
+  function ajustarOrgDdMenu(box) {
+    var menu = box.querySelector('.org-dd-menu');
+    var trigger = box.querySelector('.org-dd-trigger');
+    var capa = box.closest('.capa-organizar');
+    var body = capa && capa.querySelector('.org-body');
+    if (!menu || !trigger) return;
+    box.classList.remove('org-dd--flip');
+    if (capa) capa.classList.add('org-dd-menu-open');
+    if (body) body.classList.add('org-dd-menu-open');
+    var capaRect = capa ? capa.getBoundingClientRect() : { top: 0, bottom: window.innerHeight };
+    var tr = trigger.getBoundingClientRect();
+    menu.hidden = false;
+    var mh = Math.min(menu.scrollHeight || 0, Math.round(window.innerHeight * 0.4));
+    if (!mh) mh = menu.offsetHeight || 120;
+    var spaceBelow = capaRect.bottom - tr.bottom;
+    var spaceAbove = tr.top - capaRect.top;
+    if (spaceBelow < mh + 10 && spaceAbove > spaceBelow) box.classList.add('org-dd--flip');
+  }
+
+  function cerrarOrgDds() {
+    var capa = $('.capa-organizar');
+    var body = capa && capa.querySelector('.org-body');
+    if (capa) capa.classList.remove('org-dd-menu-open');
+    if (body) body.classList.remove('org-dd-menu-open');
+    $$('.org-dd.is-open').forEach(function (dd) {
+      dd.classList.remove('is-open', 'org-dd--flip');
+      var trig = dd.querySelector('.org-dd-trigger');
+      if (trig) trig.setAttribute('aria-expanded', 'false');
+      var menu = dd.querySelector('.org-dd-menu');
+      if (menu) menu.hidden = true;
+    });
+  }
+
+  function pintarOrgDropdown(kind, options, value, onChange) {
+    var map = {
+      lugar: { box: '[data-org-dd-lugar]', native: '[data-org-lugar]' },
+      dia: { box: '[data-org-dd-dia]', native: '[data-org-dia]' },
+      hora: { box: '[data-org-dd-hora]', native: '[data-org-hora]' }
+    };
+    var cfg = map[kind];
+    if (!cfg) return;
+    var box = $(cfg.box);
+    var native = $(cfg.native);
+    if (!box) return;
+    var opts = Array.isArray(options) ? options : [];
+    var valStr = value === null || value === undefined ? '' : String(value);
+    var label = 'Elegir…';
+    opts.forEach(function (opt) {
+      var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+      if (valStr !== '' && optVal === valStr) label = opt.label || optVal;
+    });
+    box.innerHTML = '';
+    box.className = 'org-dd' + (kind === 'dia' ? ' org-dd--dia' : (kind === 'hora' ? ' org-dd--hora' : ''));
+    if (native) {
+      native.innerHTML = '';
+      opts.forEach(function (opt) {
+        var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+        var o = document.createElement('option');
+        o.value = optVal;
+        o.textContent = opt.label || optVal;
+        if (opt.disabled) o.disabled = true;
+        if (valStr !== '' && optVal === valStr) o.selected = true;
+        native.appendChild(o);
+      });
+      if (valStr !== '') native.value = valStr;
+    }
+    var trigger = document.createElement('button');
+    trigger.type = 'button';
+    trigger.className = 'org-dd-trigger';
+    trigger.setAttribute('aria-haspopup', 'listbox');
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.innerHTML = '<span class="org-dd-label">' + esc(label) + '</span>';
+    var menu = document.createElement('ul');
+    menu.className = 'org-dd-menu capa-scroll';
+    menu.setAttribute('role', 'listbox');
+    menu.hidden = true;
+    var actionable = opts.filter(function (opt) { return !opt.disabled; });
+    var canInteract = Boolean(onChange) && actionable.length > 0;
+    if (!canInteract) {
+      trigger.disabled = true;
+      box.classList.add('is-disabled');
+      if (!actionable.length) trigger.querySelector('.org-dd-label').textContent = 'Sin opciones';
+    } else {
+      box.classList.remove('is-disabled');
+      opts.forEach(function (opt) {
+        var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+        var li = document.createElement('li');
+        li.className = 'org-dd-opt';
+        if (opt.disabled) li.className += ' is-disabled';
+        else if (valStr !== '' && optVal === valStr) li.className += ' is-on';
+        li.setAttribute('role', 'option');
+        li.setAttribute('aria-selected', li.classList.contains('is-on') ? 'true' : 'false');
+        li.textContent = opt.label || optVal;
+        if (!opt.disabled && onChange) {
+          li.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            if (native) {
+              native.value = optVal;
+              native.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+            onChange(opt.value);
+            cerrarOrgDds();
+            pintarOrgDropdown(kind, opts, opt.value, onChange);
+          });
+        }
+        menu.appendChild(li);
+      });
+      trigger.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        var open = box.classList.contains('is-open');
+        cerrarOrgDds();
+        if (!open) {
+          box.classList.add('is-open');
+          menu.hidden = false;
+          trigger.setAttribute('aria-expanded', 'true');
+          ajustarOrgDdMenu(box);
+        }
+      });
+    }
+    box.appendChild(trigger);
+    box.appendChild(menu);
+  }
+
+  function pintarOrgPick(kind, options, value, onChange) {
+    var map = {
+      hora: { box: '[data-org-pick-hora]', native: '[data-org-hora]' }
+    };
+    var cfg = map[kind];
+    if (!cfg) return;
+    var box = $(cfg.box);
+    var native = $(cfg.native);
+    if (!box && !native) return;
+    if (box) box.innerHTML = '';
+    if (native) native.innerHTML = '';
+    var opts = Array.isArray(options) ? options : [];
+    if (!opts.length) {
+      if (box) {
+        var vacio = document.createElement('p');
+        vacio.className = 'mini org-pick-vacio';
+        vacio.textContent = 'Sin opciones';
+        box.appendChild(vacio);
+      }
+      return;
+    }
+    var valStr = value === null || value === undefined ? '' : String(value);
+    opts.forEach(function (opt) {
+      var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'org-pick-opt';
+      btn.setAttribute('role', 'option');
+      if (opt.disabled) {
+        btn.className += ' is-disabled';
+        btn.disabled = true;
+      } else if (valStr !== '' && optVal === valStr) {
+        btn.classList.add('is-on');
+      }
+      btn.setAttribute('aria-selected', btn.classList.contains('is-on') ? 'true' : 'false');
+      btn.textContent = opt.label || optVal;
+      if (!opt.disabled && onChange) {
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          var picked = opt.value;
+          onChange(picked);
+          if (native) native.value = optVal;
+          pintarOrgPick(kind, opts, picked, onChange);
+        });
+      }
+      if (box) box.appendChild(btn);
+      if (native) {
+        var o = document.createElement('option');
+        o.value = optVal;
+        o.textContent = opt.label || optVal;
+        if (opt.disabled) o.disabled = true;
+        if (valStr !== '' && optVal === valStr) o.selected = true;
+        native.appendChild(o);
+      }
+    });
+    if (native && valStr !== '') native.value = valStr;
+  }
+  function limpiarOrgBusca() {
+    orgBuscaTxt = '';
+    const inp = $('[data-org-busca]');
+    if (inp) inp.value = '';
+  }
+
+  function pintarOrgPicker() {
+    const box = $('[data-org-picker]');
+    if (!box) return;
+    const res = (cacheInsp && cacheInsp.residentes) || {};
+    const ids = orgIdsFiltrados();
+    const sel = orgSeleccionados();
+    box.innerHTML = '';
+    if (!ids.length) {
+      box.innerHTML = '<p class="mini">Nadie con ese nombre.</p>';
+      return;
+    }
+    ids.forEach(function (id) {
+      const r = res[id] || {};
+      const nom = (r.identidad_publica && r.identidad_publica.nombre) || nombreDe(id) || id;
+      const ini = String(nom).charAt(0) || '?';
+      const img = tokenDe(id);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '');
+      btn.title = nom;
+      btn.setAttribute('aria-label', nom);
+      btn.innerHTML = '<span class="org-picker-stack">' +
+        '<span class="org-picker-cara">' +
+        (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="org-picker-ini">' + esc(ini) + '</span>') +
+        '</span>' +
+        (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">?</span>' : '') +
+        '</span><span class="org-picker-nom">' + esc(nom) + '</span>';
+      btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); toggleOrgPicker(id); });
+      box.appendChild(btn);
+    });
+  }
+
+  function fillSelect(sel, value, excludeId) {
+    sel.innerHTML = '<option value="">—</option>';
+    idsResidentes().forEach(function (id) {
+      if (excludeId && id === excludeId) return;
+      const o = document.createElement('option');
+      o.value = id;
+      o.textContent = nombreDe(id);
+      sel.appendChild(o);
+    });
+    if (value && value !== excludeId) sel.value = value;
+    else if (value && value === excludeId) sel.value = '';
+  }
+
+  function destinosOperativos() {
+    const out = [];
+    (cachePueblo && cachePueblo.complejos || []).forEach(function (c) {
+      (c.destinos_operativos || []).forEach(function (d) { out.push(d); });
+    });
+    return out;
+  }
+
+  function pintarOrgCaras() {
+    pintarOrgPicker();
+    actualizarOrgPickerHint();
+  }
+
+  function resetOrgForm(preset) {
+    limpiarOrgBusca();
+    var p = preset || {};
+    org.modo = p.modo === 'solo' ? 'solo' : 'pareja';
+    org.tipo = org.modo === 'solo' ? 'individual' : '';
+    org.a = p.a || '';
+    org.b = org.modo === 'solo' ? '' : (p.b || '');
+    org.lugar = p.lugar || '';
+    org.dia = null;
+    org.hora = 17;
+    syncOrgModoUi();
+  }
+
+  function abrirOrganizarConPreset(preset) {
+    resetOrgForm(preset);
+    orgPresetNuevo = true;
+    limpiarOrgAviso();
+    setCapa('organizar');
+    if ($('.play-root')) $('.play-root').removeAttribute('data-consulta');
+    syncConsultaOverlay();
+    fillOrganizar();
+  }
+
+  function syncOrgModoUi() {
+    var rowB = $('[data-org-row-b]');
+    if (rowB) rowB.hidden = org.modo === 'solo';
+    $$('[data-org-modo]').forEach(function (btn) {
+      btn.classList.toggle('is-on', btn.getAttribute('data-org-modo') === org.modo);
+    });
+    actualizarOrgPickerHint();
+  }
+
+  function setOrgModo(modo) {
+    org.modo = modo === 'solo' ? 'solo' : 'pareja';
+    if (org.modo === 'solo') {
+      org.b = '';
+      org.tipo = 'individual';
+    } else {
+      org.tipo = '';
+      if (org.a && org.b && org.a === org.b) org.b = '';
+    }
+    limpiarOrgAviso();
+    syncOrgModoUi();
+    fillOrganizar();
+  }
+  async function refreshOrgHoras() {
+    var hora = $('[data-org-hora]');
+    if (!hora) return;
+    org.lugar = $('[data-org-lugar]').value;
+    org.dia = parseInt($('[data-org-dia]').value, 10);
+    if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
+    var parts = (org.modo === 'solo' ? [org.a] : [org.a, org.b]).filter(Boolean);
+    if (!orgParticipantesListos()) {
+      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+      org.hora = 0;
+      setOrgHorasHint('', false);
+      actualizarOrgCrearBtn();
+      return;
+    }
+    if (!org.lugar) {
+      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+      org.hora = 0;
+      setOrgHorasHint('Elige un lugar para ver horarios.', true);
+      actualizarOrgCrearBtn();
+      return;
+    }
+    if (!org.dia) {
+      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+      org.hora = 0;
+      setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
+      actualizarOrgCrearBtn();
+      return;
+    }
+    var tipo = org.modo === 'solo' ? 'individual' : (org.tipo || 'conocerse');
+    try {
+      var r = await api('agenda.slots_compatibles', {
+        participantes: parts,
+        tipo: tipo,
+        lugar_id: org.lugar,
+        desde_dia: org.dia,
+        max_dias: 1,
+        max_slots: 48
+      }, 'GET');
+      if (!r.ok) {
+        pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+        org.hora = 0;
+        setOrgHorasHint(mensajeErrorOrgApi(r, 'No hay horarios disponibles ahora.'), true);
+        actualizarOrgCrearBtn();
+        return;
+      }
+      var slots = (r.slots || []).filter(function (s) {
+        return (s.dia || 0) === org.dia;
+      });
+      slots.sort(function (a, b) { return (a.hora || 0) - (b.hora || 0); });
+      var horaOpts = slots.map(function (s) {
+        return {
+          value: s.hora,
+          label: s.etiqueta_hora || String(s.hora).padStart(2, '0') + ':00'
+        };
+      });
+      if (!horaOpts.length) {
+        pintarOrgDropdown('hora', [{ value: '', label: 'Sin huecos hoy', disabled: true }], '', null);
+        org.hora = 0;
+      } else {
+        var curHora = org.hora && horaOpts.some(function (o) { return String(o.value) === String(org.hora); })
+          ? org.hora : horaOpts[0].value;
+        pintarOrgDropdown('hora', horaOpts, curHora, function (v) { org.hora = v; });
+        org.hora = parseInt(curHora, 10) || 0;
+      }
+      var hintEl = document.querySelector('[data-org-horas-hint]');
+      if (hintEl) {
+        if (r.hint_ui) {
+          hintEl.textContent = r.hint_ui;
+          hintEl.hidden = false;
+        } else if (!slots.length && r.primera_compatible && (r.primera_compatible.dia || 0) !== org.dia) {
+          hintEl.textContent = 'Primera hora compatible: ' + (r.primera_compatible.etiqueta_ui || r.primera_compatible.etiqueta_hora || '');
+          if (r.bloqueo_solicitado) hintEl.textContent += ' (' + r.bloqueo_solicitado + ')';
+          hintEl.hidden = false;
+        } else if (!slots.length && r.diagnostico && r.diagnostico.resumen_ui) {
+          hintEl.textContent = r.diagnostico.resumen_ui;
+          hintEl.hidden = false;
+        } else {
+          hintEl.textContent = '';
+          hintEl.hidden = true;
+        }
+      }
+    } catch (e) {
+      pintarOrgDropdown('hora', [{ value: '', label: 'Sin huecos', disabled: true }], '', null);
+      org.hora = 0;
+      setOrgHorasHint('No se pudieron cargar los horarios.', true);
+    }
+    actualizarOrgCrearBtn();
+  }
+
+  async function fillOrganizar() {
+    syncOrgModoUi();
+    const lugares = destinosOperativos();
+    const lugOpts = lugares.map(function (d) { return { value: d.id, label: d.nombre }; });
+    if (org.lugar && !lugOpts.some(function (o) { return o.value === org.lugar; })) org.lugar = '';
+    if (!org.lugar && lugOpts.length) org.lugar = lugOpts[0].value;
+    pintarOrgDropdown('lugar', lugOpts, org.lugar, function (v) {
+      org.lugar = v;
+      pintarOrgLugarHorario(v);
+      refreshOrgHoras();
+      actualizarOrgCrearBtn();
+    });
+    pintarOrgLugarHorario(org.lugar);
+    const rv = (cacheEstado && cacheEstado.reloj_vista) || {};
+    const dias = rv.proximos_dias || [];
+    const diaOpts = dias.map(function (d) {
+      return { value: d.dia_pueblo, label: d.etiqueta || ('dia ' + d.dia_pueblo) };
+    });
+    org.dia = org.dia || (cacheEstado && cacheEstado.reloj && cacheEstado.reloj.dia_pueblo);
+    if (org.dia && !diaOpts.some(function (o) { return String(o.value) === String(org.dia); })) {
+      org.dia = diaOpts.length ? diaOpts[0].value : null;
+    }
+    pintarOrgDropdown('dia', diaOpts, org.dia, function (v) {
+      org.dia = v;
+      refreshOrgHoras();
+      actualizarOrgCrearBtn();
+    });
+    pintarOrgCaras();
+    await refreshTipos();
+    await refreshOrgHoras();
+    actualizarOrgCrearBtn();
+  }
+
+  async function refreshTipos() {
+    const box = $('[data-org-tipos]');
+    if (org.modo === 'solo') {
+      if (!org.a) {
+        box.innerHTML = '';
+        return;
+      }
+      const rSolo = await api('encuentro.tipos_permitidos', { participantes: [org.a], modo: 'solo' }, 'GET');
+      org.tipo = 'individual';
+      box.innerHTML = orgTipoHtml('individual', 'Por su cuenta', true);
+      actualizarOrgCrearBtn();
+      return;
+    }
+    if (!org.a || !org.b || org.a === org.b) {
+      box.innerHTML = '';
+        return;
+    }
+    const r = await api('encuentro.tipos_permitidos', { residente_a: org.a, residente_b: org.b }, 'GET');
+    box.innerHTML = '';
+    const ops = r.opciones || [];
+    const ids = ops.map(function (op) { return op.id; });
+    if (!org.tipo || ids.indexOf(org.tipo) < 0) {
+      org.tipo = r.tipo_sugerido || (ops[0] && ops[0].id) || '';
+    }
+    box.innerHTML = ops.map(function (op) {
+      return orgTipoHtml(op.id, op.label, org.tipo === op.id);
+    }).join('');
+    $$('[data-org-tipo]', box).forEach(function (btn) {
+      btn.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        org.tipo = btn.getAttribute('data-org-tipo') || '';
+        $$('[data-org-tipo]', box).forEach(function (c) {
+          c.classList.toggle('is-on', c === btn);
+        });
+        refreshOrgHoras();
+      });
+    });
+    if (!ops.length) {
+      box.innerHTML = '<p class="mini">' + (r.mensaje_ui || 'Entre estas dos, ahora no sale un plan.') + '</p>';
+    }
+    actualizarOrgCrearBtn();
+  }
+
+  function mostrarOrgAviso(txt) {
+    var el = $('[data-org-aviso]');
+    if (el) {
+      el.textContent = txt;
+      el.hidden = false;
+    }
+    toast(txt);
+  }
+
+  function limpiarOrgAviso() {
+    var el = $('[data-org-aviso]');
+    if (el) {
+      el.hidden = true;
+      el.textContent = '';
+    }
+  }
+
+  async function proponer() {
+    limpiarOrgAviso();
+    var val = validarOrgForm();
+    if (!val.ok) {
+      mostrarOrgAviso(val.msg);
+      return;
+    }
+    const payload = {
+      participantes: org.modo === 'solo' ? [org.a] : [org.a, org.b],
+      dia: org.dia,
+      hora: org.hora,
+      tipo: org.modo === 'solo' ? 'individual' : (org.tipo || ''),
+      lugar: org.lugar,
+      modo: org.modo
+    };
+    const r = await api('encuentro.proponer', payload);
+    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+    try {
+      console.log('[AHT plan]', payload, {
+        ok: r.ok,
+        rechazada: r.rechazada,
+        rechazo_clase: r.rechazo_clase,
+        error: r.error,
+        mensaje_ui: r.mensaje_ui,
+        reacciones: r.propuesta && r.propuesta.reacciones
+      });
+    } catch (e) {}
+    if (r.ok) {
+      var na = nombreDe(org.a);
+      var nb = nombreDe(org.b);
+      var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
+      if (r.rechazada) {
+        toast(r.mensaje_ui || ('Plan rechazado: ' + na + ' y ' + nb + ' en ' + lugUi + '.'));
+        if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
+          org.dia = r.contrapropuesta.dia;
+          org.hora = r.contrapropuesta.hora;
+        }
+      } else {
+        var horaUi = String(org.hora).padStart(2, '0') + ':00';
+        var msg = r.mensaje_ui || ('Plan aceptado: ' + na + ' y ' + nb + ' en ' + lugUi + ', día ' + org.dia + ' a las ' + horaUi + '.');
+        if (r.hora_ajustada || (r.propuesta && r.propuesta.hora_ajustada)) {
+          msg += ' (El motor ajustó la hora al hueco disponible.)';
+        }
+        toast(msg);
+      }
+      if (r.nuevo_mensajito) {
+        toast(r.mensajito_aviso_ui || 'Tienes un nuevo Mensajito.');
+        $('.play-root').setAttribute('data-importante', '1');
+      }
+      setCapa('');
+      await refresh();
+      if (r.tutorial) pintarTutorialMotor(r.tutorial);
+      quizaMostrarTutFinale();
+    } else {
+      mostrarOrgAviso(mensajeErrorOrgApi(r, 'No se ha podido organizar el plan.'));
+      await refresh();
+    }
+  }
+  function persistPartidaId(id) {
+    if (!id) return;
+    partidaId = id;
+    try { localStorage.setItem(storageKey(), id); } catch (e) {}
+    try { localStorage.removeItem('aht_partida_id'); } catch (e) {}
+  }
+  async function adoptSqlPartidaIfAny() {
+    const list = await api('partida.listar', {}, 'GET');
+    if (!list.ok || !Array.isArray(list.partidas) || list.partidas.length === 0) return false;
+    const serverId = list.partidas[0] && list.partidas[0].partida_id;
+    if (!serverId) return false;
+    if (partidaId !== serverId) persistPartidaId(serverId);
+    return true;
+  }
+  async function ensurePartida() {
+    if (await adoptSqlPartidaIfAny()) return true;
+    if (partidaId) return true;
+    const r = await api('partida.nueva', configNueva(true));
+    if (r.ok && r.partida_id) persistPartidaId(r.partida_id);
+    return !!r.ok;
+  }
+  async function refresh() {
+    const popMensajitosAbierto = mensajitosPopAbierto;
+    let paquete = await api('partida.refresh', {}, 'GET');
+    if (!paquete.ok && partidaId) {
+      const errRefresh = String(paquete.error || '').toUpperCase();
+      const partidaPerdida = errRefresh === 'PARTIDA_NO_ENCONTRADA' || errRefresh === 'SAVE_CORRUPTO';
+      if (partidaPerdida) {
+        try { localStorage.removeItem(storageKey()); } catch (e) {}
+        partidaId = null;
+        if (await adoptSqlPartidaIfAny()) {
+          paquete = await api('partida.refresh', {}, 'GET');
+        } else if (await ensurePartida()) {
+          paquete = await api('partida.refresh', {}, 'GET');
+        }
+      }
+    }
+    if (!paquete.ok) return;
+    cacheEstado = paquete.estado || null;
+    cacheInsp = paquete.partida || null;
+    const mapa = { mapa: paquete.mapa || {}, pueblo: paquete.pueblo || {} };
+    const buzon = paquete.buzon || {};
+    const diario = paquete.diario || {};
+    cacheDiario = diario;
+    renderHud(cacheEstado, buzon.mensajes || []);
+    renderMapaMarcas(mapa.mapa || null);
+    renderPueblo(mapa.pueblo || { complejos: [] });
+    renderShellPanels(cacheEstado, buzon.mensajes || [], diario);
+      renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
+    renderBuzon(buzon.mensajes || []);
+    renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
+    renderVecinos();
+    if (isDebugOn()) {
+      const tm = $('[data-taller-msg]');
+      if (tm) tm.textContent = cacheEstado.reloj_texto || '';
+    }
+    pintarTutorialMotor(cacheEstado.tutorial);
+    quizaMostrarTutFinale();
+    if ($('.play-root') && $('.play-root').getAttribute('data-capa') === 'agenda') renderAgendaPlanes();
+    /* [LATIDOS-L1] re-render si la capa vida_pueblo esta abierta al refrescar estado */
+    if ($('.play-root') && $('.play-root').getAttribute('data-capa') === 'vida_pueblo') renderVidaPuebloModal();
+    if (popMensajitosAbierto) abrirMensajitosPop();
+  }
+
+  window.AHT_PLAY = {
+    api: api,
+    isDebugOn: isDebugOn,
+    refresh: refresh,
+    get partidaId() { return partidaId; }
+  };
+
+  async function nuevaPartidaLimpia() {
+    try { localStorage.removeItem(tutIntroKey()); } catch (e) {}
+    localStorage.removeItem(storageKey());
+    partidaId = null;
+    cacheEstado = null;
+    cacheInsp = null;
+    cachePueblo = null;
+    cacheBuzon = [];
+    vidaCorazonPctPrev = null;
+    vidaCorazonReady = false;
+    org = { modo: 'pareja', tipo: '', a: '', b: '', lugar: '', dia: null, hora: 17 };
+    playtestLogClient.entries = [];
+    setCapa('');
+    const r = await api('partida.nueva', configNueva(true));
+    if (r.ok && r.partida_id) {
+      persistPartidaId(r.partida_id);
+      playtestLogClient.push({
+        ts: new Date().toISOString().slice(11, 19),
+        tipo: 'NUEVA_PARTIDA',
+        partida_id: partidaId,
+        seed: (r.partida && r.partida.meta && r.partida.meta.seed) || null
+      });
+      toast('Partida nueva (seed limpia).');
+    } else {
+      toast(r.mensaje_ui || 'No se pudo crear la partida.');
+    }
+    await refresh();
+    quizaMostrarTutIntro();
+  }
+
+  (function bindDebugControls() {
+    const btnGuardar = $('#btn-debug-guardar');
+    if (btnGuardar) btnGuardar.addEventListener('click', async function () {
+      await api('partida.guardar', {});
+      toast('Guardado.');
+    });
+    const btnNueva = $('#btn-debug-nueva');
+    if (btnNueva) btnNueva.addEventListener('click', async function () {
+      ahtDebugSessionLog.length = 0;
+      await nuevaPartidaLimpia();
+    });
+    const btnCopy = $('#btn-debug-copy');
+    if (btnCopy) btnCopy.addEventListener('click', function () { copiarDebugExport(false); });
+    const btnCopyEstado = $('#btn-debug-copy-estado');
+    if (btnCopyEstado) btnCopyEstado.addEventListener('click', function () { copiarDebugExport(true); });
+    const btnParejasCrear = $('#btn-debug-parejas-crear');
+    if (btnParejasCrear) btnParejasCrear.addEventListener('click', crearParejasPruebaDebug);
+    const btnParejasQuitar = $('#btn-debug-parejas-quitar');
+    if (btnParejasQuitar) btnParejasQuitar.addEventListener('click', quitarParejasPruebaDebug);
+  })();
+
+  async function crearParejasPruebaDebug() {
+    if (!isDebugOn()) {
+      toast('Activa DEBUG primero.');
+      return;
+    }
+    const r = await api('partida.debug_parejas_crear', {});
+    if (!r.ok) {
+      toast(r.mensaje_ui || 'No se pudieron crear las parejas de prueba.');
+      return;
+    }
+    try {
+      console.log('%c[AHT DEBUG PAREJAS]', 'color:#c45;font-weight:bold', r.debug_parejas || r);
+      console.log('[AHT DEBUG PAREJAS] JSON', JSON.stringify(r.debug_parejas || r, null, 2));
+    } catch (e) {}
+    toast('Parejas de prueba creadas.');
+    await refresh();
+  }
+
+  async function quitarParejasPruebaDebug() {
+    if (!isDebugOn()) {
+      toast('Activa DEBUG primero.');
+      return;
+    }
+    const r = await api('partida.debug_parejas_quitar', {});
+    if (!r.ok) {
+      toast(r.mensaje_ui || 'No se pudieron quitar las parejas de prueba.');
+      return;
+    }
+    try {
+      console.log('%c[AHT DEBUG PAREJAS]', 'color:#c45;font-weight:bold', r.debug_parejas || r);
+      console.log('[AHT DEBUG PAREJAS] JSON', JSON.stringify(r.debug_parejas || r, null, 2));
+    } catch (e) {}
+    toast((r.n || 0) > 0 ? 'Parejas de prueba eliminadas.' : 'No hab\u00eda parejas de prueba.');
+    await refresh();
+  }
+
+  function pintarPlaytestGuia(guia, evento) {
+    const box = $('[data-playtest-guia]');
+    if (!box) return;
+    if (!guia || !guia.activo) {
+      box.hidden = true;
+      return;
+    }
+    box.hidden = false;
+    const tit = $('[data-pg-titulo]');
+    if (tit) tit.textContent = guia.titulo || 'PRUEBA DEL PUEBLO';
+    const rel = $('[data-pg-reloj]');
+    if (rel) rel.textContent = guia.reloj_humano || '';
+    const ahora = $('[data-pg-ahora]');
+    if (ahora) {
+      ahora.innerHTML = '';
+      (guia.ahora_mismo || []).forEach(function (l) {
+        const li = document.createElement('li');
+        li.textContent = l;
+        ahora.appendChild(li);
+      });
+    }
+    const hacer = $('[data-pg-hacer]');
+    if (hacer) {
+      hacer.innerHTML = '';
+      (guia.que_hacer_ahora || []).forEach(function (l) {
+        const li = document.createElement('li');
+        li.textContent = l;
+        hacer.appendChild(li);
+      });
+    }
+    const ev = $('[data-pg-evento]');
+    const ultimo = evento || guia.ultimo;
+    if (ev) {
+      if (ultimo && (ultimo.titulo || (ultimo.lineas && ultimo.lineas.length))) {
+        ev.hidden = false;
+        const lines = (ultimo.lineas || []).map(function (l) { return '<li>' + esc(l) + '</li>'; }).join('');
+        ev.innerHTML = '<strong>' + esc(ultimo.titulo || 'HA PASADO ALGO') + '</strong><ul>' + lines + '</ul>';
+      } else {
+        ev.hidden = true;
+        ev.innerHTML = '';
+      }
+    }
+    const pist = $('[data-pg-pistas]');
+    if (pist) {
+      pist.innerHTML = '';
+      (guia.pistas || []).forEach(function (p) {
+        const d = document.createElement('div');
+        d.className = 'pista ' + (p.tipo === 'ojo' ? 'ojo' : 'puedes');
+        d.innerHTML = '<strong>' + esc(p.titulo || '') + '</strong><div>' + esc(p.texto || '') + '</div>';
+        pist.appendChild(d);
+      });
+    }
+    const objs = $('[data-pg-objs]');
+    if (objs) {
+      objs.innerHTML = '';
+      (guia.objetivos || []).forEach(function (o) {
+        const li = document.createElement('li');
+        if (o.hecho) li.className = 'hecho';
+        li.textContent = o.label || o.id;
+        objs.appendChild(li);
+      });
+    }
+  }
+
+  function pintarResumenAvance(resumen) {
+    const el = $('[data-taller-debug]');
+    if (!el) return;
+    const lineas = (resumen && resumen.lineas) || [];
+    if (!lineas.length) {
+      el.hidden = true;
+      el.classList.remove('is-on');
+      el.textContent = '';
+      return;
+    }
+    el.hidden = false;
+    el.classList.add('is-on');
+    el.textContent = lineas.map(function (l) { return '· ' + (l.texto || l.tipo || ''); }).join('\n');
+  }
+
+  async function avanzarHoras(horas) {
+    const r = await api('reloj.avanzar', { horas: horas, paso_a_paso: true });
+    await refresh();
+    if (r.playtest_guia) pintarPlaytestGuia(r.playtest_guia, r.playtest_guia_evento);
+    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+    pintarResumenAvance(r.resumen_avance);
+    return r;
+  }
+
+  let pasarRatoEnCurso = false;
+  async function pasarElRato() {
+    const btn = $('[data-pasar-rato]');
+    if (!btn || pasarRatoEnCurso) return;
+    const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
+      !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
+    if (perdida) {
+      toast('La partida ha terminado. Empieza otra con «Nueva partida».');
+      return;
+    }
+    const h = horaActualEstado();
+    const nocturno = esHoraNoche(h);
+    const horas = nocturno ? Math.max(1, (HORA_DIA_DESDE - h + 24) % 24) : 1;
+    pasarRatoEnCurso = true;
+    btn.disabled = true;
+    btn.setAttribute('aria-busy', 'true');
+    btn.classList.add('is-busy');
+    const txt = btn.querySelector('.pasar-rato-txt');
+    if (txt) txt.textContent = 'A ver qué se cuece…';
+    try {
+      const r = await avanzarHoras(horas);
+      if (!r.ok) toast(r.mensaje_ui || 'Ahora no se puede pasar el rato.');
+    } finally {
+      pasarRatoEnCurso = false;
+      btn.disabled = false;
+      btn.removeAttribute('aria-busy');
+      btn.classList.remove('is-busy');
+      pintarModoReloj(esHoraNoche(horaActualEstado()));
+    }
+  }
+
+  async function irProximo() {
+    const r = await api('reloj.proximo_encuentro', {});
+    if (!r.ok) toast(r.mensaje_ui || 'No hay proximo encuentro.');
+    await refresh();
+    if (r.playtest_guia) pintarPlaytestGuia(r.playtest_guia, r.playtest_guia_evento);
+    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+    pintarResumenAvance(r.resumen_avance);
+  }
+  function bindLabHoras() {
+    var scope = document.querySelector('[data-debug-panel]');
+    if (!scope) return;
+    $$('[data-horas]', scope).forEach(function (btn) {
+      if (btn._ahtHorasBound) return;
+      btn._ahtHorasBound = true;
+      btn.addEventListener('click', function () {
+        avanzarHoras(parseInt(btn.getAttribute('data-horas'), 10));
+      });
+    });
+  }
+  bindLabHoras();
+  (function bindEncursosMovil() {
+    const encTrack = document.querySelector('[data-encursos-track]');
+    if (encTrack && !encTrack._ahtEncMovScroll) {
+      encTrack._ahtEncMovScroll = true;
+      encTrack.addEventListener('scroll', renderEncursosMovilIndicador, { passive: true });
+    }
+  })();
+  const btnPasarRato = $('[data-pasar-rato]');
+  if (btnPasarRato) btnPasarRato.addEventListener('click', pasarElRato);
+  const btnProx = $('#btn-debug-proximo');
+  if (btnProx) btnProx.addEventListener('click', irProximo);
+  const btnProxLab = $('#btn-proximo-lab');
+  if (btnProxLab) btnProxLab.addEventListener('click', irProximo);
+  const btnCopy = $('[data-diag-copy]');
+  if (btnCopy) {
+    btnCopy.addEventListener('click', async function () {
+      const pre = $('[data-playtest-diag-log]');
+      const txt = pre ? pre.textContent : '';
+      try {
+        await navigator.clipboard.writeText(txt);
+        toast('Registro copiado.');
+      } catch (e) {
+        toast('No se pudo copiar. Selecciona el texto a mano.');
+      }
+    });
+  }
+  const btnClear = $('[data-diag-clear-ui]');
+  if (btnClear) {
+    btnClear.addEventListener('click', function () {
+      playtestLogClient.entries = [];
+      pintarPlaytestDiag(cacheEstado && cacheEstado.playtest_diag);
+      toast('Vista de cliente limpiada (el log del servidor sigue en la partida).');
+    });
+  }
+
+  document.body.addEventListener('click', function (ev) {
+    const relOverlay = $('[data-ficha-rel-overlay]');
+    if (relOverlay && !relOverlay.hidden) {
+      if (ev.target.closest('[data-ficha-rel-close]') || ev.target === relOverlay) {
+        cerrarFichaRelOverlay();
+        return;
+      }
+      if (ev.target.closest('.velo')) {
+        cerrarFichaRelOverlay();
+        return;
+      }
+    }
+    const animoOv = $('[data-animo-overlay]');
+    if (animoOv && !animoOv.hidden) {
+      if (ev.target.closest('[data-animo-close]') || ev.target === animoOv) {
+        cerrarAnimoOverlay();
+        return;
+      }
+    }
+    const diarioOv = $('[data-diario-overlay]');
+    if (diarioOv && !diarioOv.hidden) {
+      if (ev.target.closest('[data-diario-close]') || ev.target === diarioOv) {
+        cerrarDiarioOverlay();
+        return;
+      }
+    }
+    if (!ev.target.closest('.enc-int-temas')) cerrarSelectorTemas();
+    const atras = ev.target.closest('[data-consulta-atras]');
+    if (atras && uiRootFrom(atras)) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (uiHistDepth > 0) {
+        uiHistDepth--;
+        try { history.back(); } catch (e) { uiHistBack(); }
+      } else uiHistBack();
+      return;
+    }
+    const t = ev.target.closest('[data-close], .velo');
+    if (t && uiRootFrom(t)) {
+      cerrarUiCompleto();
+      return;
+    }
+    const open = ev.target.closest('[data-open]');
+    if (open && uiRootFrom(open)) {
+      const name = open.getAttribute('data-open');
+      cerrarMensajitosPop();
+      setCapa(name);
+      $('.play-root').removeAttribute('data-consulta');
+      syncConsultaOverlay();
+      syncScrollLock();
+      if (name === 'organizar') {
+        if (!orgPresetNuevo) resetOrgForm();
+        orgPresetNuevo = false;
+        fillOrganizar();
+      }
+      if (name === 'agenda') renderAgendaPlanes();
+      if (name === 'diario') {
+        cotiFiltroActivo = '';
+        const d = cacheDiario || {};
+        renderCotilleo(d.cotilleo || { hoy: d.entradas || [], ayer: [], viejos: [] });
+        marcarCotilleoVisto();
+      }
+      if (name === 'vecinos') renderVecinos();
+      if (name === 'buzon') renderBuzon(cacheBuzon);
+      return;
+    }
+    const cotiFiltro = ev.target.closest('[data-coti-filtro]');
+    if (cotiFiltro) {
+      const id = cotiFiltro.getAttribute('data-coti-filtro') || '';
+      cotiFiltroActivo = cotiFiltroActivo === id ? '' : id;
+      renderCotilleoFiltros(cotiTodosItems(cotiCache));
+      renderCotilleoLista(cotiCache);
+      return;
+    }
+    const tab = ev.target.closest('[data-diario-tab]');
+    if (tab) {
+      $('.play-root').setAttribute('data-diario', tab.getAttribute('data-diario-tab'));
+      $$('[data-diario-tab]').forEach(function (b) {
+        b.classList.toggle('is-on', b === tab);
+      });
+      return;
+    }
+    const encMovCta = ev.target.closest('[data-enc-mov-toggle]');
+    if (encMovCta) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const movCard = encMovCta.closest('[data-enc-mov-card]');
+      const movPanel = movCard && movCard.querySelector('[data-enc-mov-panel]');
+      if (movPanel) {
+        const abrir = movPanel.hidden;
+        movPanel.hidden = !abrir;
+        encMovCta.setAttribute('aria-expanded', String(abrir));
+        encMovCta.classList.toggle('is-open', abrir);
+      }
+      return;
+    }
+    const temasTog = ev.target.closest('[data-temas-toggle]');
+    if (temasTog) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var temasWrap = temasTog.closest('.enc-int-temas');
+      var temasRoot = temasTog.closest('[data-enc-int]');
+      if (temasWrap && temasRoot && !temasRoot.classList.contains('is-busy')) {
+        var tPanel = temasWrap.querySelector('[data-temas-panel]');
+        if (tPanel) {
+          var yaAbierto = !tPanel.hidden;
+          cerrarSelectorTemas();
+          if (!yaAbierto) {
+            tPanel.hidden = false;
+            temasTog.setAttribute('aria-expanded', 'true');
+          }
+        }
+      }
+      return;
+    }
+    const encIntBtn = ev.target.closest('[data-enc-int-accion]');
+    if (encIntBtn) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrap = encIntBtn.closest('[data-enc-int]');
+      if (!wrap || wrap.classList.contains('is-busy')) return;
+      wrap.classList.add('is-busy');
+      var encId = wrap.getAttribute('data-enc-id');
+      var acc = encIntBtn.getAttribute('data-enc-int-accion');
+      var extra = {};
+      if (acc === 'hobby') {
+        extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
+        extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+        var optWrap = encIntBtn.closest('.enc-int-temas');
+        if (optWrap) {
+          cerrarSelectorTemas();
+          var togEl = optWrap.querySelector('[data-temas-toggle]');
+          if (togEl) {
+            togEl.classList.add('is-elegido');
+            togEl.textContent = encIntBtn.textContent.trim() + ' ▾';
+            togEl.setAttribute('aria-expanded', 'false');
+          }
+        }
+      }
+      ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
+        wrap.classList.remove('is-busy');
+      });
+      return;
+    }
+    const caraTok = ev.target.closest('.cara-token[data-residente]');
+    if (caraTok) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var zonaHit = caraTok.closest('.mapa-zona-hit');
+      if (zonaHit && zonaHit.blur) zonaHit.blur();
+      abrirFicha(caraTok.getAttribute('data-residente'));
+      return;
+    }
+    var mapHit = null;
+    if (ev.target.closest('[data-mapa-canonico]') && !ev.target.closest('.mapa-zona-hit .hab')) {
+      mapHit = zonaDesdePuntoMapa(ev.clientX, ev.clientY);
+    }
+    if (!mapHit) {
+      const zona = ev.target.closest('.mapa-zona-hit[data-zona]');
+      if (zona) mapHit = { zonaId: zona.getAttribute('data-zona'), zonaBtn: zona };
+    }
+    if (mapHit) {
+      abrirConsultaZona(mapHit.zonaId, mapHit.zonaBtn);
+      return;
+    }
+    const cx = ev.target.closest('.complejo[data-complejo]');
+    if (cx) {
+      abrirConsulta(cx.getAttribute('data-complejo'));
+    }
+  });
+
+  const fichaRelClose = $('[data-ficha-rel-close]');
+  if (fichaRelClose) fichaRelClose.addEventListener('click', cerrarFichaRelOverlay);
+  const fichaRelOverlay = $('[data-ficha-rel-overlay]');
+  if (fichaRelOverlay) {
+    fichaRelOverlay.addEventListener('click', function (ev) {
+      if (ev.target === fichaRelOverlay) cerrarFichaRelOverlay();
+    });
+  }
+
+  const vecRelBtn = $('[data-vec-rel-btn]');
+  if (vecRelBtn) vecRelBtn.addEventListener('click', abrirVecRelOverlay);
+  const vecRelOv = $('[data-vec-rel-overlay]');
+  if (vecRelOv) {
+    vecRelOv.addEventListener('click', function (ev) {
+      if (ev.target === vecRelOv) { cerrarVecRelOverlay(); return; }
+      if (ev.target.closest('[data-vec-rel-volver]') || ev.target.closest('[data-vec-rel-close]')) {
+        ev.stopPropagation();
+        cerrarVecRelOverlay();
+        return;
+      }
+      const filtroBtn = ev.target.closest('[data-vec-rel-filtro]');
+      if (filtroBtn) {
+        ev.stopPropagation();
+        vecRelFiltro = filtroBtn.getAttribute('data-vec-rel-filtro') || '';
+        pintarVecRelFiltros();
+        renderVecRelLista();
+        return;
+      }
+      const pers = ev.target.closest('[data-vec-rel-open]');
+      if (pers && pers.getAttribute('data-vec-rel-open')) {
+        ev.stopPropagation();
+        cerrarVecRelOverlay();
+        abrirFicha(pers.getAttribute('data-vec-rel-open'));
+        return;
+      }
+      if (ev.target.closest('.vec-rel-modal')) ev.stopPropagation();
+    });
+  }
+  const vecRelSel = $('[data-vec-rel-persona]');
+  if (vecRelSel) vecRelSel.addEventListener('change', function () {
+    vecRelPersona = vecRelSel.value || '';
+    renderVecRelLista();
+  });
+
+  const animoCloseBtn = $('[data-animo-close]');
+  if (animoCloseBtn) animoCloseBtn.addEventListener('click', cerrarAnimoOverlay);
+  const animoOv = $('[data-animo-overlay]');
+  if (animoOv) {
+    animoOv.addEventListener('click', function (ev) {
+      if (ev.target === animoOv) cerrarAnimoOverlay();
+    });
+  }
+  const diarioCloseBtn = $('[data-diario-close]');
+  if (diarioCloseBtn) diarioCloseBtn.addEventListener('click', cerrarDiarioOverlay);
+  const diarioOvEl = $('[data-diario-overlay]');
+  if (diarioOvEl) {
+    diarioOvEl.addEventListener('click', function (ev) {
+      if (ev.target === diarioOvEl) cerrarDiarioOverlay();
+    });
+  }
+  const fichaDiarioBtn = $('[data-ficha-diario-btn]');
+  if (fichaDiarioBtn) {
+    fichaDiarioBtn.addEventListener('click', function () {
+      abrirDiarioVecino(fichaActualId, null);
+    });
+  }
+
+  const fichaVolver = $('[data-ficha-volver]');
+  if (fichaVolver) {
+    fichaVolver.addEventListener('click', function () { setCapa('vecinos'); renderVecinos(); });
+  }
+
+  const fichaNavPrev = $('[data-ficha-nav-prev]');
+  if (fichaNavPrev) {
+    fichaNavPrev.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      navegarFicha(-1);
+    });
+  }
+  const fichaNavNext = $('[data-ficha-nav-next]');
+  if (fichaNavNext) {
+    fichaNavNext.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      navegarFicha(1);
+    });
+  }
+
+
+  const buzonLeerTodos = $('[data-buzon-leer-todos]');
+  if (buzonLeerTodos) {
+    buzonLeerTodos.addEventListener('click', async function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      await marcarTodosMensajitosLeidos();
+    });
+  }
+
+  const mensajitosTrig = $('[data-mensajitos-trigger]');
+  if (mensajitosTrig) {
+    mensajitosTrig.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      toggleMensajitosPop();
+    });
+  }
+  const mensajitosPopCerrar = $('[data-mensajitos-cerrar]');
+  if (mensajitosPopCerrar) {
+    mensajitosPopCerrar.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarMensajitosPop();
+    });
+  }
+  const mensajitosVerMas = $('[data-mensajitos-ver-mas]');
+  if (mensajitosVerMas) {
+    mensajitosVerMas.addEventListener('click', function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarMensajitosPop();
+      setCapa('buzon');
+    });
+  }
+  document.addEventListener('click', function (ev) {
+    if (!mensajitosPopAbierto) return;
+    if (ev.target.closest('[data-mensajitos-pop]') || ev.target.closest('[data-mensajitos-trigger]')) return;
+    cerrarMensajitosPop();
+  });
+
+  const vecBuscaInp = $('[data-vec-busca]');
+  if (vecBuscaInp) {
+    vecBuscaInp.addEventListener('input', function () {
+      vecBuscaTxt = vecBuscaInp.value;
+      renderVecinos();
+    });
+  }
+
+  const resBuscaInp = $('[data-res-busca]');
+  if (resBuscaInp) {
+    resBuscaInp.addEventListener('input', function () {
+      resBuscaTxt = resBuscaInp.value;
+    });
+  }
+
+  var orgGo = $('[data-org-go]');
+  var orgBusca = $('[data-org-busca]');
+  if (orgBusca) {
+    orgBusca.addEventListener('input', function () {
+      orgBuscaTxt = orgBusca.value || '';
+      pintarOrgPicker();
+    });
+  }
+  var orgLug = $('[data-org-lugar]');
+  var orgDia = $('[data-org-dia]');
+  if (orgLug) orgLug.addEventListener('change', function () {
+      pintarOrgLugarHorario();
+      refreshOrgHoras();
+    });
+  document.addEventListener('click', function (ev) {
+    if (ev.target.closest('.org-dd')) return;
+    cerrarOrgDds();
+  });
+  if (orgDia) orgDia.addEventListener('change', function () { refreshOrgHoras(); });
+  $$('[data-org-modo]').forEach(function (btn) {
+    btn.addEventListener('click', function () { setOrgModo(btn.getAttribute('data-org-modo')); });
+  });
+  var finOk = $('[data-tut-fin-ok]');
+  if (finOk) finOk.addEventListener('click', cerrarTutFinale);
+  var vidaDerrotaOk = $('[data-vida-derrota-ok]');
+  if (vidaDerrotaOk) vidaDerrotaOk.addEventListener('click', function () {
+    vidaDerrotaCerrada = true;
+    var box = $('[data-vida-derrota]');
+    if (box) box.hidden = true;
+    document.body.classList.remove('vida-derrota-activa');
+    toast('Partida terminada. Empieza otra con «Nueva partida».');
+  });
+  var vidaDerrotaReiniciar = $('[data-vida-derrota-reiniciar]');
+  if (vidaDerrotaReiniciar) vidaDerrotaReiniciar.addEventListener('click', async function () {
+    vidaDerrotaCerrada = true;
+    var box = $('[data-vida-derrota]');
+    if (box) box.hidden = true;
+    document.body.classList.remove('vida-derrota-activa');
+    await nuevaPartidaLimpia();
+  });
+  if (orgGo) orgGo.addEventListener('click', proponer);
+
+  const musicaToggle = $('[data-musica-toggle]');
+  actualizarControlMusica();
+  if (musicaToggle) {
+    musicaToggle.addEventListener('click', function () {
+      cambiarMusica(!musicaActiva);
+    });
+  }
+  iniciarMusicaFondo(true);
+
+  window.addEventListener('popstate', function () {
+    if (uiHistDepth > 0) uiHistDepth--;
+    uiHistBack();
+  });
+
+  window.addEventListener('resize', layout);
+  layout();
+  const btnNuevaMesa = $('#btn-nueva-mesa');
+  if (btnNuevaMesa) btnNuevaMesa.addEventListener('click', nuevaPartidaLimpia);
+  const tutSkip = $('[data-tut-skip]');
+  if (tutSkip) tutSkip.addEventListener('click', function () { cerrarTutIntro(true, false); });
+  const tutSig = $('[data-tut-siguiente]');
+  if (tutSig) tutSig.addEventListener('click', function () {
+    const pasosN2 = tutPasosActuales();
+    if (tutIntroIdx >= pasosN2.length - 1) cerrarTutIntro(true, true);
+    else { tutIntroIdx++; pintarTutIntro(); }
+  });
+  const tutAtras = $('[data-tut-atras]');
+  if (tutAtras) tutAtras.addEventListener('click', function () {
+    if (tutIntroIdx > 0) { tutIntroIdx--; pintarTutIntro(); }
+  });
+  const tutReopen = $('[data-tut-reopen]');
+  if (tutReopen) tutReopen.addEventListener('click', function () {
+    if (!tieneTutorialV3()) return;
+    abrirTutIntro(true);
+  });
+
+  initMapaCanonico().then(function () {
+    return ensurePartida().then(function () {
+      return refresh().then(function () { quizaMostrarTutIntro(); });
+    });
+  });
+})();
