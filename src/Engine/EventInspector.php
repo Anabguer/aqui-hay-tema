@@ -82,7 +82,7 @@ final class EventInspector
         return [
             'fuente' => 'domain_events',
             'tipo' => $e['evento'] ?? '',
-            'ts_juego' => $e['ts_juego'] ?? null,
+            'ts_juego' => self::tsDe($e),
             'actores' => $e['payload']['actores'] ?? [],
             'correlacion_id' => $e['correlacion_id'] ?? null,
             'detalle' => $e,
@@ -94,11 +94,27 @@ final class EventInspector
         return [
             'fuente' => 'event_log',
             'tipo' => $e['tipo'] ?? $e['evento'] ?? 'log',
-            'ts_juego' => $e['ts_juego'] ?? null,
-            'actores' => $e['actores'] ?? [],
+            'ts_juego' => self::tsDe($e),
+            'actores' => $e['payload']['actores'] ?? ($e['actores'] ?? []),
             'correlacion_id' => $e['correlacion_id'] ?? null,
             'detalle' => $e,
         ];
+    }
+
+    /**
+     * Extrae ts_juego de la fila o de sus campos planos (dia/hora, dia_pueblo/hora_actual).
+     */
+    private static function tsDe(array $e): ?array
+    {
+        if (isset($e['ts_juego']) && is_array($e['ts_juego'])) {
+            return $e['ts_juego'];
+        }
+        $dia = $e['dia'] ?? $e['dia_pueblo'] ?? null;
+        $hora = $e['hora'] ?? $e['hora_actual'] ?? null;
+        if ($dia === null || $hora === null) {
+            return null;
+        }
+        return ['dia' => (int) $dia, 'hora' => (int) $hora];
     }
 
     private static function normalizeNpc(array $e): array

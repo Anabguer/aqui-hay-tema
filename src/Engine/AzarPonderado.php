@@ -43,6 +43,8 @@ final class AzarPonderado
                 break;
             }
         }
+        /* Telemetría DEV observacional: registra la tirada REAL sin alterarla. */
+        LabAudit::obsTirada($rng->getState(), $resultados, $carga, $pesos, (float) $sum, (float) $pick, (int) $idx, (string) $resultados[$idx]);
         return [
             '_provisional' => true,
             'resultado' => $resultados[$idx],

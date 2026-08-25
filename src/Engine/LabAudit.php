@@ -11,10 +11,99 @@ final class LabAudit
 {
     /** @var list<array<string, mixed>> */
     private static array $buffer = [];
+    /** @var list<array<string, mixed>> Trazas DEV de tiradas/resoluciones REALES (solo request actual). */
+    private static array $tiradas = [];
+    private static ?string $ctxTirada = null;
 
     public static function reset(): void
     {
         self::$buffer = [];
+        self::$tiradas = [];
+        self::$ctxTirada = null;
+    }
+
+    /* ============================================================
+     * TELEMETRÍA DEV OBSERVACIONAL (caja negra de jugabilidad).
+     * Solo lectura de valores ya calculados: no consume RNG,
+     * no altera pesos, cargas ni resultados, no persiste por sí misma.
+     *============================================================ */
+
+    /**
+     * Fijar contexto de resolución para las trazas (p.ej. 'intervencion:enc_x').
+     */
+    public static function ctxAbrir(?string $ctx): void
+    {
+        self::$ctxTirada = $ctx;
+    }
+
+    public static function capturaActiva(): bool
+    {
+        return self::activaEnRequest();
+    }
+
+    /**
+     * Registra una tirada REAL de AzarPonderado con todos sus componentes.
+     */
+    public static function obsTirada(
+        int $rngStatePost,
+        array $resultados,
+        float $carga,
+        array $pesos,
+        float $sumPesos,
+        float $pick,
+        int $idx,
+        string $resultado
+    ): void {
+        if (!self::capturaActiva()) {
+            return;
+        }
+        self::$tiradas[] = [
+            'familia' => 'tirada_azar_ponderado',
+            'ctx' => self::$ctxTirada,
+            'rng_state_post' => $rngStatePost,
+            'resultados_posibles' => $resultados,
+            'carga' => $carga,
+            'pesos' => $pesos,
+            'sum_pesos' => $sumPesos,
+            'pick' => $pick,
+            'idx_elegido' => $idx,
+            'resultado' => $resultado,
+        ];
+    }
+
+    /**
+     * Registra componentes reales de una resolución (p.ej. desglose de cargaBase).
+     *
+     * @param array<string, mixed> $datos
+     */
+    public static function obsResolucion(string $familia, array $datos): void
+    {
+        if (!self::capturaActiva()) {
+            return;
+        }
+        self::$tiradas[] = array_merge([
+            'familia' => $familia,
+            'ctx' => self::$ctxTirada,
+        ], $datos);
+    }
+
+    /**
+     * Trazas capturadas bajo un contexto ('intervencion:enc_x', 'encuentro_final:enc_y').
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function trazaCtx(string $ctxPrefix): array
+    {
+        $out = [];
+        foreach (self::$tiradas as $t) {
+            $ctx = (string) ($t['ctx'] ?? '');
+            if ($ctx === '' || !str_starts_with($ctx, $ctxPrefix)) {
+                continue;
+            }
+            unset($t['ctx']);
+            $out[] = $t;
+        }
+        return $out;
     }
 
     /**
@@ -531,6 +620,10 @@ final class LabAudit
             'catalog_id' => $res['catalog_id'] ?? $id,
             'nombre' => IdentidadPublica::nombre($partida, $id),
             'vivienda_id' => $res['vivienda_id'] ?? null,
+            'presencia' => $res['presencia'] ?? null,
+            'edad_resuelta' => PerfilPartida::edadResuelta($partida, $id, $catalog),
+            'genero' => $res['identidad_publica']['genero']
+                ?? (is_array($cat) ? ($cat['identidad']['genero'] ?? null) : null),
             'identidad_catalogo' => is_array($cat) ? IdentidadCanon::sanitizarIdentidad($cat['identidad'] ?? null) : null,
             'romance_catalogo' => is_array($cat) ? ($cat['romance'] ?? null) : null,
             'vida_catalogo' => is_array($cat) ? ($cat['vida'] ?? null) : null,
@@ -538,6 +631,10 @@ final class LabAudit
             'perfil_partida_legible' => self::perfilLegible($perfil, $store),
             'estado_emocional' => $res['runtime']['estado_emocional'] ?? null,
             'expresion_visual' => $res['runtime']['expresion_visual'] ?? null,
+            'runtime_social' => [
+                'ultimo_contacto_social_dia' => $res['runtime']['ultimo_contacto_social_dia'] ?? null,
+            ],
+            'descubrimientos' => DiscoveryEngine::listarPorResidente($partida, $id),
             'pack_visual' => is_array($cat) ? ($cat['visual']['pack_id'] ?? null) : null,
         ];
     }
@@ -612,6 +709,7 @@ final class LabAudit
         CompatibilidadOculta::asegurarDireccional($partida, $desde, $hacia, $catalog);
         $cal = CalibracionConfig::load($catalog->getRoot());
         $entre = RelacionEngine::obtenerEntre($partida, $desde, $hacia);
+        $romRow = is_array($entre['romance'] ?? null) ? $entre['romance'] : null;
         $social = RelacionEngine::socialHacia($partida, $desde, $hacia);
         $rom = RelacionEngine::romanceHacia($partida, $desde, $hacia);
         $quim = QuimicaEngine::valorHacia($partida, $desde, $hacia);
@@ -634,6 +732,9 @@ final class LabAudit
             'quimica_par' => $quimRow,
             'compatibilidad_oculta' => $compat,
             'parentesco_veto' => $parentesco,
+            'pareja_estado' => $romRow['estado_pareja'] ?? null,
+            'estabilidad_pareja' => $romRow['estabilidad_pareja'] ?? null,
+            'historial_parejas' => $romRow['historial_parejas'] ?? null,
             'relacion_entre' => $entre,
             'nota_orientacion' => 'RomanceElegibilidad V1: sin filtro género/orientación en motor.',
         ];
@@ -830,13 +931,16 @@ final class LabAudit
     }
 
     /**
-     * Exportación completa para copiar en DEBUG (estado actual + historial opcional).
+     * Exportación completa para copiar en DEBUG (caja negra de la partida).
+     * Estado + config efectiva + NPCs completos + relaciones + mundo + timeline
+     * persistida + resoluciones con valores REALES del motor.
      *
      * @param list<array<string, mixed>> $historialCliente
      * @return array{texto: string, json: array<string, mixed>}
      */
     public static function exportCompleto(array $partida, Catalog $catalog, array $historialCliente = []): array
     {
+        $root = $catalog->getRoot();
         $npcs = [];
         foreach (self::residentesActivos($partida) as $id) {
             $npcs[] = self::perfilNpc($partida, $id, $catalog);
@@ -845,6 +949,10 @@ final class LabAudit
         $encuentros = EncuentroEngine::listarActivos($partida);
         $misiones = MisionDiariaEngine::delDia($partida, (int) ($partida['reloj']['dia_pueblo'] ?? 1));
         $tutorial = $partida['tutorial'] ?? null;
+        $calEfectiva = CalibracionConfig::load($root);
+        $mundo = self::estadoMundo($partida);
+        $timeline = EventInspector::timeline($partida, ['limit' => 500]);
+        $resoluciones = self::resolucionesRecientes($partida, $calEfectiva);
 
         $json = [
             'generado' => date('c'),
@@ -852,21 +960,37 @@ final class LabAudit
                 'partida_id' => $partida['meta']['partida_id'] ?? null,
                 'config_id' => $partida['meta']['config_id'] ?? null,
                 'seed' => $partida['meta']['seed'] ?? null,
+                'schema_version' => $partida['meta']['schema_version'] ?? null,
                 'rng' => $partida['rng'] ?? null,
                 'reloj' => $partida['reloj'] ?? null,
+                'features' => $partida['features'] ?? [],
+                'vida_pueblo_valor' => $partida['vida_pueblo']['valor'] ?? null,
+            ],
+            'config_efectiva' => [
+                'features' => $partida['features'] ?? [],
+                'calibracion' => $calEfectiva,
+                'nota' => 'Pesos/umbrales reales usados por el motor (CalibracionConfig).',
             ],
             'npcs' => $npcs,
             'matriz_relacional' => $matriz,
+            'mundo' => $mundo,
             'encuentros_activos' => $encuentros,
+            'encuentros_todos' => self::encuentrosExport($partida),
             'misiones_hoy' => $misiones,
             'tutorial' => $tutorial,
+            'timeline' => $timeline,
+            'resoluciones' => $resoluciones,
             'historial_sesion' => $historialCliente,
             'nota_canon' => 'Romance V1: sin veto por género/orientación. Química, dealbreakers y parentesco sí aplican.',
+            'nota_telemetria' => 'timeline/resoluciones provienen de datos persistidos del motor y telemetría DEV observacional; no alteran gameplay ni RNG.',
         ];
 
         $bloques = [];
         $bloques[] = '[AHT DEBUG PARTIDA]';
         $bloques[] = json_encode($json['partida'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $bloques[] = '';
+        $bloques[] = '[AHT DEBUG CONFIG EFECTIVA]';
+        $bloques[] = json_encode($json['config_efectiva'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
         $bloques[] = '';
         foreach ($npcs as $npc) {
             $bloques[] = '[AHT DEBUG NPC] ' . ($npc['nombre'] ?? $npc['id'] ?? '?');
@@ -878,9 +1002,21 @@ final class LabAudit
             $bloques[] = json_encode($par, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             $bloques[] = '';
         }
-        if ($encuentros !== []) {
-            $bloques[] = '[AHT DEBUG ENCUENTRO]';
-            $bloques[] = json_encode($encuentros, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $bloques[] = '[AHT DEBUG MUNDO]';
+        $bloques[] = json_encode($mundo, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $bloques[] = '';
+        $bloques[] = '[AHT DEBUG ENCUENTROS/PLANES]';
+        $bloques[] = json_encode([
+            'activos' => $encuentros,
+            'todos' => self::encuentrosExport($partida),
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $bloques[] = '';
+        $bloques[] = '[AHT DEBUG TIMELINE] total=' . ($timeline['total'] ?? 0);
+        $bloques[] = json_encode($timeline, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+        $bloques[] = '';
+        if ($resoluciones !== []) {
+            $bloques[] = '[AHT DEBUG RESOLUCIONES]';
+            $bloques[] = json_encode($resoluciones, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             $bloques[] = '';
         }
         if ($misiones !== []) {
@@ -905,5 +1041,238 @@ final class LabAudit
             'texto' => implode("\n", $bloques),
             'json' => $json,
         ];
+    }
+
+    /**
+     * Estado completo del mundo necesario para reconstruir qué ocurrió.
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>
+     */
+    private static function estadoMundo(array $partida): array
+    {
+        $presentes = [];
+        $noActivos = [];
+        foreach ($partida['residentes'] ?? [] as $rid => $res) {
+            if (!is_string($rid) || $rid === '' || !is_array($res)) {
+                continue;
+            }
+            $row = [
+                'id' => $rid,
+                'nombre' => IdentidadPublica::nombre($partida, $rid),
+                'vivienda_id' => $res['vivienda_id'] ?? null,
+                'presencia' => $res['presencia'] ?? null,
+            ];
+            if (($res['presencia'] ?? 'residente') === 'residente') {
+                $presentes[] = $row;
+            } else {
+                $noActivos[] = $row;
+            }
+        }
+
+        return [
+            'residentes_presentes' => $presentes,
+            'residentes_no_activos' => $noActivos,
+            'propuestas_encuentro' => $partida['propuestas_encuentro'] ?? [],
+            'planes_autonomos_pendientes' => $partida['npc_autonomo']['planes_pendientes'] ?? [],
+            'peticiones' => $partida['peticiones'] ?? [],
+            'buzon_reciente' => array_slice(is_array($partida['buzon'] ?? null) ? $partida['buzon'] : [], -40),
+            'diario_reciente' => array_slice(is_array($partida['diario'] ?? null) ? $partida['diario'] : [], -60),
+            'memoria_eventos' => array_slice(is_array($partida['memoria_eventos'] ?? null) ? $partida['memoria_eventos'] : [], -80),
+            'bitacora_relaciones' => array_slice(is_array($partida['bitacora_relaciones'] ?? null) ? $partida['bitacora_relaciones'] : [], -80),
+            'relaciones_conflicto' => $partida['relaciones_conflicto'] ?? [],
+            'cooldowns' => [
+                'propuestas_cooldown' => $partida['propuestas_cooldown'] ?? [],
+                'rechazos_propuesta' => $partida['rechazos_propuesta'] ?? [],
+            ],
+            'llegadas_en_camino' => $partida['llegadas']['en_camino'] ?? null,
+            'celeste' => [
+                'lugares_desbloqueados' => $partida['celeste']['lugares_desbloqueados'] ?? [],
+                'bloques_abiertos' => $partida['celeste']['bloques_abiertos'] ?? null,
+                'intervenciones_organizadas_usadas_hoy' => $partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0,
+            ],
+            'vida_pueblo' => [
+                'valor' => $partida['vida_pueblo']['valor'] ?? null,
+                'ledger_reciente' => array_slice(
+                    is_array($partida['vida_pueblo']['ledger'] ?? null) ? $partida['vida_pueblo']['ledger'] : [],
+                    -20
+                ),
+            ],
+            'solapes_agenda' => self::solapesAgenda($partida),
+            'nota_solapes' => 'Pares de encuentros que comparten participante con franja horaria solapada (dia*24+hora). Detecta interacciones paralelas incompatibles.',
+        ];
+    }
+
+    /**
+     * Encuentros que comparten participante con horarios solapados.
+     * Lectura pura de las filas almacenadas; permite diagnosticar el caso
+     * «X aparece con Y mientras seguía ocupado con Z» sin conjeturas.
+     *
+     * @param array<string, mixed> $partida
+     * @return list<array<string, mixed>>
+     */
+    private static function solapesAgenda(array $partida): array
+    {
+        $encs = [];
+        foreach (EncuentroEngine::list($partida) as $e) {
+            if (!is_array($e)) {
+                continue;
+            }
+            $est = (string) ($e['estado'] ?? '');
+            if (!in_array($est, ['programado', 'en_curso', 'terminado'], true)) {
+                continue;
+            }
+            $d0 = (int) ($e['dia'] ?? 0);
+            $h0 = (int) ($e['hora'] ?? 0);
+            $dh = max(1, (int) ($e['duracion_horas'] ?? 1));
+            $encs[] = [
+                'id' => $e['id'] ?? null,
+                'estado' => $est,
+                'tipo' => $e['tipo'] ?? null,
+                'participantes' => is_array($e['participantes'] ?? null) ? $e['participantes'] : [],
+                'inicio_abs' => $d0 * 24 + $h0,
+                'fin_abs' => $d0 * 24 + $h0 + $dh,
+                'franja' => ['dia' => $d0, 'hora' => $h0, 'duracion_horas' => $dh],
+            ];
+        }
+        $out = [];
+        $n = count($encs);
+        for ($i = 0; $i < $n; $i++) {
+            for ($j = $i + 1; $j < $n; $j++) {
+                $a = $encs[$i];
+                $b = $encs[$j];
+                $comun = array_values(array_intersect($a['participantes'], $b['participantes']));
+                if ($comun === []) {
+                    continue;
+                }
+                if ($a['inicio_abs'] < $b['fin_abs'] && $b['inicio_abs'] < $a['fin_abs']) {
+                    unset($a['inicio_abs'], $a['fin_abs'], $b['inicio_abs'], $b['fin_abs']);
+                    $out[] = ['participantes_compartidos' => $comun, 'encuentro_a' => $a, 'encuentro_b' => $b];
+                }
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Todos los encuentros (programados/en curso/terminados/cancelados) recortando
+     * duplicación estática (_cal repite calibración).
+     *
+     * @param array<string, mixed> $partida
+     * @return list<array<string, mixed>>
+     */
+    private static function encuentrosExport(array $partida): array
+    {
+        $out = [];
+        foreach (EncuentroEngine::list($partida) as $enc) {
+            if (!is_array($enc)) {
+                continue;
+            }
+            $row = $enc;
+            if (is_array($row['resultado'] ?? null) && isset($row['resultado']['_cal'])) {
+                unset($row['resultado']['_cal']);
+            }
+            $out[] = $row;
+        }
+        return $out;
+    }
+
+    /**
+     * Resoluciones explicadas con los valores REALES almacenados por el motor:
+     * factores snapshot, cargas, desglose determinista de contribuciones,
+     * tirada DEV capturada (pesos/pick) cuando exista y efectos posteriores.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $calFallback
+     * @return list<array<string, mixed>>
+     */
+    private static function resolucionesRecientes(array $partida, array $calFallback): array
+    {
+        $out = [];
+        foreach (EncuentroEngine::list($partida) as $enc) {
+            if (!is_array($enc)) {
+                continue;
+            }
+            $res = is_array($enc['resultado'] ?? null) ? $enc['resultado'] : null;
+            $interv = is_array($enc['intervencion_celeste'] ?? null) ? $enc['intervencion_celeste'] : null;
+            if ($res === null && $interv === null) {
+                continue;
+            }
+            $encId = (string) ($enc['id'] ?? '');
+            $parts = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+            $bloque = [
+                'encuentro_id' => $encId,
+                'tipo' => $enc['tipo'] ?? null,
+                'estado' => $enc['estado'] ?? null,
+                'lugar' => $enc['lugar'] ?? null,
+                'franja' => [
+                    'dia' => $enc['dia'] ?? null,
+                    'hora' => $enc['hora'] ?? null,
+                    'duracion_horas' => $enc['duracion_horas'] ?? null,
+                ],
+                'participantes' => array_map(static function (string $pid) use ($partida): array {
+                    return ['id' => $pid, 'nombre' => IdentidadPublica::nombre($partida, $pid)];
+                }, array_map('strval', $parts)),
+            ];
+
+            if ($interv !== null) {
+                $bloque['intervencion_celeste'] = $interv;
+                $bloque['traza_dev_intervencion'] = self::trazaCtx('intervencion:' . $encId);
+            }
+
+            if ($res !== null) {
+                $exp = is_array($res['experiencia'] ?? null) ? $res['experiencia'] : [];
+                $cal = is_array($res['_cal'] ?? null) ? $res['_cal'] : $calFallback;
+                $temaCargas = is_array(($interv['tema_cargas'] ?? null)) ? $interv['tema_cargas'] : [];
+                $cargaInterv = isset($interv['carga']) && is_numeric($interv['carga']) ? (float) $interv['carga'] : null;
+                $por = [];
+                foreach (($exp['por_participante'] ?? []) as $pid => $row) {
+                    if (!is_array($row)) {
+                        continue;
+                    }
+                    $pidS = (string) $pid;
+                    $desg = EncuentroExperiencia::desgloseCarga($exp, $pidS, $cal);
+                    $cargaFinal = isset($row['carga']) && is_numeric($row['carga']) ? (float) $row['carga'] : null;
+                    $por[$pidS] = [
+                        'resultado_experiencia' => $row['resultado'] ?? null,
+                        'carga_final' => $cargaFinal,
+                        'aviso_racha' => $row['aviso_racha'] ?? null,
+                        'compatibilidad_hacia_otro' => $row['compatibilidad_hacia_otro'] ?? null,
+                        'contribuciones_por_factor' => $desg['contribuciones'],
+                        'componentes_carga' => [
+                            'base_factores_snapshot' => $cargaFinal !== null && $cargaInterv !== null
+                                ? round($cargaFinal - $cargaInterv - (float) ($temaCargas[$pidS] ?? 0), 6)
+                                : ($desg['carga'] ?? null),
+                            'intervencion_celeste_carga' => $cargaInterv,
+                            'tema_carga_individual' => isset($temaCargas[$pidS]) && is_numeric($temaCargas[$pidS])
+                                ? (float) $temaCargas[$pidS]
+                                : 0.0,
+                            'nota' => 'base+intervencion+tema = carga_final almacenada; contribuciones descomponen el snapshot de factores almacenado.',
+                        ],
+                    ];
+                }
+                $bloque['resolucion_final'] = [
+                    'factores_snapshot' => $exp['factores'] ?? null,
+                    'por_participante' => $por,
+                    'delta_social' => $res['delta_social'] ?? null,
+                    'delta_romance' => $res['delta_romance'] ?? null,
+                    'conflicto' => $res['conflicto'] ?? null,
+                    'descubrimientos' => $res['descubrimientos'] ?? null,
+                    'experiencia_narrativa' => $res['experiencia_narrativa'] ?? null,
+                    'texto_resumen' => $res['texto_resumen'] ?? null,
+                    '_placeholder_evaluator' => !empty($res['_placeholder']),
+                    'dev_traza_persistida' => $res['_dev_traza'] ?? null,
+                    'traza_dev_tiradas_finales' => self::trazaCtx('encuentro_final:' . $encId),
+                ];
+            }
+            $out[] = $bloque;
+        }
+        usort($out, static function ($a, $b): int {
+            $fa = $a['franja'] ?? [];
+            $fb = $b['franja'] ?? [];
+            return ((int) ($fa['dia'] ?? 0)) * 24 + ((int) ($fa['hora'] ?? 0))
+                <=> ((int) ($fb['dia'] ?? 0)) * 24 + ((int) ($fb['hora'] ?? 0));
+        });
+        return $out;
     }
 }
