@@ -89,6 +89,11 @@ final class PeticionEngine
                 $peticion[$k] = $datos[$k];
             }
         }
+        // Trazabilidad de origen: quien la generó (autonoma = tick B4, manual = API/jugadora).
+        // Saves antiguos: ausencia de la clave = legacy, sin migración.
+        $peticion['generacion'] = isset($datos['generacion']) && is_array($datos['generacion'])
+            ? $datos['generacion']
+            : ['via' => 'manual'];
 
         $partida['peticiones'][] = $peticion;
 

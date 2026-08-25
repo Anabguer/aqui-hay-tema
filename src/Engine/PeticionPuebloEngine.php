@@ -23,10 +23,14 @@ final class PeticionPuebloEngine
             'validos_dia_n' => 0,
             'encuentros_usados' => [],
             'historial_plantillas' => [],
+            // R08: hora absoluta de juego del último nacimiento autónomo
+            // (dia*24+hora). 0 = nunca ha nacido ninguna (gap inactivo).
+            'ultima_nace_abs' => 0,
             '_canon_b4' => 'E3',
         ];
         $partida['peticiones_pueblo']['encuentros_usados'] ??= [];
         $partida['peticiones_pueblo']['historial_plantillas'] ??= [];
+        $partida['peticiones_pueblo']['ultima_nace_abs'] ??= 0;
     }
 
     public static function activa(array $partida): bool
@@ -41,15 +45,24 @@ final class PeticionPuebloEngine
     {
         $pct = (float) CalibracionConfig::get($cal, 'peticiones_pueblo.cap_pct', 0.33);
         $max = (int) CalibracionConfig::get($cal, 'peticiones_pueblo.cap_max', 10);
+        // R07: suelo de 2 slots. Evita pueblos pequenos (3-5 vecinos) con un
+        // unico slot bloqueado durante demasiado tiempo. Pop >= 8 no cambia.
+        $min = (int) CalibracionConfig::get($cal, 'peticiones_pueblo.cap_min', 2);
         if ($pct < 0.3) {
             $pct = 0.33;
         }
         if ($max < 1) {
             $max = 10;
         }
+        if ($min < 1) {
+            $min = 1;
+        }
+        if ($min > $max) {
+            $min = $max;
+        }
         $n = (int) ceil($nRes * $pct);
-        if ($n < 1) {
-            $n = 1;
+        if ($n < $min) {
+            $n = $min;
         }
         return $n > $max ? $max : $n;
     }
@@ -114,6 +127,28 @@ final class PeticionPuebloEngine
     }
 
     /**
+     * R08: gap mínimo REAL entre nacimientos autónomos. Si nació una petición
+     * en dia X hora H, durante las siguientes gap_min_horas de juego no puede
+     * nacer otra (aunque el RNG salga favorable). Después vuelve a evaluarse
+     * con la probabilidad R07 normal. No toca peticiones manuales ni labs con
+     * _b4_forzar_nacer.
+     */
+    public static function estaEnGap(array $partida, array $cal = []): bool
+    {
+        $gap = (int) CalibracionConfig::get($cal, 'peticiones_pueblo.gap_min_horas', 6);
+        if ($gap <= 0 || !empty($partida['_b4_forzar_nacer'])) {
+            return false;
+        }
+        $ultima = (int) ($partida['peticiones_pueblo']['ultima_nace_abs'] ?? 0);
+        if ($ultima <= 0) {
+            return false;
+        }
+        $abs = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24
+            + (int) ($partida['reloj']['hora_actual'] ?? 0);
+        return ($abs - $ultima) < $gap;
+    }
+
+    /**
      * @param array<string, mixed> $cal
      * @return array<string, mixed>|null
      */
@@ -130,12 +165,25 @@ final class PeticionPuebloEngine
         if ($huecos <= 0) {
             return null;
         }
+        // R08: separación mínima entre nacimientos autónomos. Antes del RNG:
+        // en hora bloqueada ni se consume semilla ni se escanean candidatos.
+        if (self::estaEnGap($partida, $cal)) {
+            return null;
+        }
         if ($rng === null) {
             $rng = RngService::fromPartida($partida);
         }
         $pBase = (float) CalibracionConfig::get($cal, 'peticiones_pueblo.p_nacer_hora_base', 0.045);
         $pHueco = (float) CalibracionConfig::get($cal, 'peticiones_pueblo.p_nacer_hora_hueco', 0.07);
         $p = $pBase + $pHueco * ($huecos / $cap);
+        // R07: impulso SOLO para caps pequenos (suelo 2). Pop >= 7 (cap >= 3)
+        // mantiene la formula intacta; no se toca p_nacer_hora_hueco global.
+        if ($cap <= 2) {
+            $impulso = (float) CalibracionConfig::get($cal, 'peticiones_pueblo.impulso_cap_pequeno', 1.25);
+            if ($impulso > 1.0) {
+                $p *= $impulso;
+            }
+        }
         if (empty($partida['_b4_forzar_nacer']) && $rng->nextFloat() > $p) {
             return null;
         }
@@ -143,8 +191,23 @@ final class PeticionPuebloEngine
         if ($cands === []) {
             return null;
         }
+        $ventana = (int) CalibracionConfig::get($cal, 'peticiones_pueblo.anti_rep_ventana', 3);
+        $penal = (int) CalibracionConfig::get($cal, 'peticiones_pueblo.anti_rep_penalizacion', 25);
+        $histReciente = $ventana > 0
+            ? array_slice($partida['peticiones_pueblo']['historial_plantillas'], -$ventana)
+            : [];
         foreach ($cands as $k => $c) {
-            $cands[$k]['_score'] = (int) ($c['prioridad'] ?? 0) + $rng->nextInt(0, 8);
+            $plantillaId = (string) ($c['plantilla']['id'] ?? '');
+            $repes = 0;
+            foreach ($histReciente as $hp) {
+                if ((string) $hp === $plantillaId) {
+                    $repes++;
+                }
+            }
+            $cands[$k]['_score'] = (int) ($c['prioridad'] ?? 0) + $rng->nextInt(0, 8) - ($penal > 0 ? $penal * $repes : 0);
+            if ($repes > 0) {
+                $cands[$k]['_anti_rep'] = $penal * $repes;
+            }
         }
         usort($cands, static function ($a, $b) {
             return ((int) ($b['_score'] ?? 0)) <=> ((int) ($a['_score'] ?? 0));
@@ -202,6 +265,85 @@ final class PeticionPuebloEngine
     }
 
     public static function encaja(array $peticion, array $encuentro): bool
+    {
+        return self::nivelEncaje($peticion, $encuentro);
+    }
+
+    /**
+     * Petición B4 abierta que esta propuesta de Celestine cubriría, y con qué nivel.
+     *
+     * - 'exacta': el plan ES lo que el peticionario pidió (o cualquier salida válida
+     *   para salir_de_casa / cualquier Conocerse para conocer_a_alguien). El
+     *   peticionario queda comprometido: no vuelve a tirar RNG por lo ya pedido.
+     *   La agenda/cooldown siguen mandando; los TERCEROS conservan voluntad normal.
+     * - 'nucleo': Celestine cumple el núcleo (lugar/tipo) pero añadió compañía que
+     *   el peticionario NO pidió. Sin garantía: bonus fuerte configurable.
+     *
+     * @param list<string> $participantes
+     * @return array{peticion: array<string, mixed>, nivel: string}|null
+     */
+    public static function peticionQueCubre(array $partida, array $participantes, string $tipo, string $lugar): ?array
+    {
+        $tipo = PropuestaNivel::aliasTipo($tipo);
+        $exacta = null;
+        $nucleo = null;
+        foreach (self::abiertas($partida) as $pet) {
+            $rid = (string) ($pet['residente_id'] ?? '');
+            if ($rid === '' || !in_array($rid, $participantes, true)) {
+                continue;
+            }
+            $params = is_array($pet['params'] ?? null) ? $pet['params'] : [];
+            $pid = (string) ($pet['plantilla_id'] ?? '');
+            $n = count($participantes);
+            if ($pid === 'salir_de_casa') {
+                // El núcleo pedido es SALIR; cualquier encuentro celebrado con él vale.
+                // Añadir compañía no modifica lo pedido.
+                return ['peticion' => $pet, 'nivel' => 'exacta'];
+            }
+            if ($pid === 'conocer_a_alguien') {
+                if ($tipo === PropuestaNivel::PRESENTAR) {
+                    return ['peticion' => $pet, 'nivel' => 'exacta'];
+                }
+                continue;
+            }
+            if ($pid === 'ir_al_lugar') {
+                if ((string) ($params['lugar_id'] ?? '') !== $lugar) {
+                    continue;
+                }
+                $nivel = $n === 1 ? 'exacta' : 'nucleo';
+            } elseif ($pid === 'algo_distinto') {
+                $lugarValido = $lugar !== '' && $lugar !== 'lug_cafeteria' && $lugar !== 'lug_casa';
+                if (!$lugarValido) {
+                    continue;
+                }
+                $nivel = $n === 1 ? 'exacta' : 'nucleo';
+            } elseif ($pid === 'volver_a_ver' || $pid === 'quedar_con_x') {
+                $otro = (string) ($params['otro'] ?? '');
+                if ($tipo !== PropuestaNivel::QUEDAR || $otro === '' || !in_array($otro, $participantes, true)) {
+                    continue;
+                }
+                $nivel = $n === 2 ? 'exacta' : 'nucleo';
+            } elseif ($pid === 'primera_cita_pet') {
+                $otro = (string) ($params['otro'] ?? '');
+                if ($tipo !== PropuestaNivel::PRIMERA_CITA || $otro === '' || !in_array($otro, $participantes, true)) {
+                    continue;
+                }
+                $nivel = $n === 2 ? 'exacta' : 'nucleo';
+            } else {
+                continue;
+            }
+            if ($nivel === 'exacta') {
+                $exacta = ['peticion' => $pet, 'nivel' => 'exacta'];
+                break;
+            }
+            if ($nucleo === null) {
+                $nucleo = ['peticion' => $pet, 'nivel' => 'nucleo'];
+            }
+        }
+        return $exacta ?? $nucleo;
+    }
+
+    private static function nivelEncaje(array $peticion, array $encuentro): bool
     {
         $pid = (string) ($peticion['plantilla_id'] ?? '');
         $tipo = PropuestaNivel::aliasTipo((string) ($encuentro['tipo'] ?? ''));
@@ -541,11 +683,24 @@ final class PeticionPuebloEngine
             'plazo_horas' => $plazo,
             'cuenta_latido' => false,
             '_placeholder_copy' => false,
+            'generacion' => [
+                'via' => 'autonoma',
+                'abiertas_al_nacer' => count(self::abiertas($partida)),
+            ],
         ], $logger);
         if (empty($r['ok'])) {
             return null;
         }
         $partida['peticiones_pueblo']['historial_plantillas'][] = (string) ($pl['id'] ?? '');
+        if (count($partida['peticiones_pueblo']['historial_plantillas']) > 24) {
+            $partida['peticiones_pueblo']['historial_plantillas'] = array_slice(
+                $partida['peticiones_pueblo']['historial_plantillas'],
+                -24
+            );
+        }
+        // R08: marca el gap desde AHORA. Cruza medianoches sin problema (abs).
+        $partida['peticiones_pueblo']['ultima_nace_abs'] = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24
+            + (int) ($partida['reloj']['hora_actual'] ?? 0);
         return $r['peticion'] ?? null;
     }
 
@@ -595,6 +750,7 @@ final class PeticionPuebloEngine
             'fuente_id' => $p['id'] ?? null,
         ], $cal, $logger);
         self::marcarBuzon($partida, $p, 'resuelto');
+        PeticionFeedback::alCumplir($partida, $p, $logger);
         self::emit($partida, DomainEvents::PETICION_CUMPLIDA, [
             'peticion' => $partida['peticiones'][$i],
             'actores' => [$p['residente_id'] ?? ''],
@@ -652,7 +808,10 @@ final class PeticionPuebloEngine
                 'fuente_id' => $id,
             ], $cal, $logger);
             $partida['peticiones'][$i]['vida_fallo_aplicada'] = true;
-            self::marcarBuzon($partida, $p, 'resuelto');
+            // Cierre NEUTRO (leído) del mensajito original: 'resuelto' queda reservado
+            // para cumplidas, para que el jugador distinga los desenlaces.
+            self::marcarBuzon($partida, $p, 'leido');
+            PeticionFeedback::alCaducar($partida, $p, $causa === VidaPuebloEngine::CAUSA_PETICION_IGNORADA, $logger);
             return;
         }
     }
