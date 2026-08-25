@@ -146,13 +146,18 @@ final class MotorVidaDiaria
             SimFunnelProbe::on($partida, 'hueco', ['ev' => 'sin_protagonista', '_k' => 'sin_protagonista_agenda', 'capa' => $capa, '_solo_conteo' => true]);
             return null;
         }
+        // PRE FASE 2A — familias_en_play es el CONTRATO EFECTIVO de familias
+        // permitidas fuera de laboratorio. El gate antiguo exigía además
+        // npc_autonomy_enabled, flag global a false, lo que dejaba el filtro
+        // muerto y permitía romance_hito/pareja (declaracion/crisis/ruptura)
+        // en play contra lo documentado en Fase 1. Ahora el criterio es solo
+        // lab vs no-lab; los flags técnicos NO condicionan el contrato.
         $familiasPlay = CalibracionConfig::get($cal, 'acontecimientos_dia.familias_en_play', null);
-        $enPlay = empty($partida['lab_vida_activa']) && FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled');
-        if ($enPlay && is_array($familiasPlay) && $familiasPlay !== []) {
-            $items = array_values(array_filter($items, static function ($item) use ($familiasPlay) {
-                return in_array((string) ($item['familia'] ?? ''), $familiasPlay, true);
-            }));
-        }
+        $items = self::filtrarFamiliasEnPlay(
+            $items,
+            is_array($familiasPlay) ? $familiasPlay : [],
+            !empty($partida['lab_vida_activa'])
+        );
         $elegido = self::elegirEvento($partida, $items, $protagonista, $cal, $rng);
         if ($elegido === null) {
             SimFunnelProbe::on($partida, 'hueco', ['ev' => 'sin_evento_valido', '_k' => 'sin_evento_valido', 'capa' => $capa, 'prot' => $protagonista, '_solo_conteo' => true]);
@@ -520,5 +525,27 @@ self::marcarActividad($partida, [$quien]);
             return ['dia' => $d, 'hora' => $h];
         }
         return null;
+    }
+
+    /**
+     * PRE FASE 2A: contrato de familias del hueco de vida.
+     * - Fuera de laboratorio (play): SOLO familias_en_play (romance_hito/pareja
+     *   quedan fuera: sin declaracion/crisis/ruptura/reconciliacion autónomas).
+     * - En laboratorio (lab_vida_activa): catálogo completo, sin filtro.
+     * - Config vacía/ausente: comportamiento legacy sin filtro.
+     *
+     * @param list<array<string, mixed>> $items
+     * @param array<int|string, mixed> $familiasPlay
+     * @param bool $esLabVidaActiva
+     * @return list<array<string, mixed>>
+     */
+    public static function filtrarFamiliasEnPlay(array $items, array $familiasPlay, bool $esLabVidaActiva): array
+    {
+        if ($esLabVidaActiva || $familiasPlay === []) {
+            return $items;
+        }
+        return array_values(array_filter($items, static function ($item) use ($familiasPlay) {
+            return in_array((string) ($item['familia'] ?? ''), $familiasPlay, true);
+        }));
     }
 }
