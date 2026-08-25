@@ -1102,3 +1102,38 @@ Ejemplo: Celestine elige quién recibe a Marta → Marta y José pasan cuatro ho
 - **Prueba TEST (partida dev borrada):** flechazo forzado → hito+señal → iniciativa autónoma dispara → primera cita AGENDADA (intencion=autonomo_npc, lug_cafeteria, franja futura estricta d1h12 > ahora d1h11, ventana 09-22 OK, par coherente) → HORA_PASADA=0 → peticiones autónomas siguen naciendo → cooldown intacto.
 - **Hashes deployados (md5):** IniciativaRomantica fd322942..., AccionRomantica 0cba28c7..., AcontecimientoDiario 723a9360..., MotorVidaDiaria 5697d0de..., calibracion_vida 8502ad78...
 - **NOTA ENTORNO:** el share \\amg-arriba revirtió ficheros varias veces durante la sesión (edits perdidos). Se re-aplicó todo con script atómico idempotente (`deploy_f1_atomico.php`). Si algo vuelve a revertirse, re-ejecutar ese script + suite F1.
+
+---
+
+## ROMANCE F1 — GATE FAMILIAS PLAY CORREGIDO — PRE FASE 2A (2026-08-25, rama feat/romance-autonomo-fase2a)
+
+**Estado: CORREGIDO EN RAMA — pendiente de integración a canónica. SHA rama: 0951557 (sobre reconciliación 7b0b91a, base 6b2ce56).**
+
+- **Causa exacta:** el filtro `familias_en_play` de `MotorVidaDiaria::ejecutarHuecoVida` exigía además `npc_autonomy_enabled=true` (flag GLOBAL a false en features.json), mientras el tick horario vive por `encuentros_enabled=true` (RelojOperations.php:42-49). Resultado: filtro MUERTO en play y las familias `romance_hito`/`pareja` (declaracion/crisis_pareja/ruptura/reconciliacion) eran alcanzables por hueco de vida (pesos 0.04/0.08), CONTRARIANDO la nota `_nota_familias_fase1` del despliegue F1.
+- **Solución mínima:** el criterio pasa a ser únicamente lab vs no-lab (`lab_vida_activa`). Nuevo helper público puro `MotorVidaDiaria::filtrarFamiliasEnPlay(items, familiasPlay, esLab)`; fuera de laboratorio SOLO entran las familias del contrato; en laboratorio catálogo completo; config ausente/vacía = legacy sin filtro. NO se activan flags globales; NO se tocan probabilidades ni pesos; fix HORA_PASADA preservado íntegro.
+- **Tests nuevos:** `tests/pre_gate_familias_play_test.php` — unidad del contrato + integración PLAY determinista (45 partidas × 34 h con pipeline canónico: cero nacimientos prohibidos; romance_accion/trabajo/ocio/romance/consejo vivos y observados) + control LAB (declaracion sigue alcanzable en lab → la exclusión en play es contrato, no imposibilidad).
+- **Hallazgo estructural corregido en la misma rama (commit 7b0b91a):** la base versionada era internamente inconsistente (PropuestaEncuentroEngine llamaba `CopyRechazoPropuesta::mensajeCooldownPar` inexistente → fatal; evaluador de voluntad sin bonus_primera_cita_reciproca/continuidad_reciente; SimFunnelProbe/DiarioResidenteBridge/PeticionFeedback sin versionar aunque producción los ejecuta). Se versionaron BYTES DE PRODUCCIÓN exactos como commit de reconciliación.
+
+## ROMANCE AUTÓNOMO FASE 2A — IMPLEMENTADA / PENDIENTE DE INTEGRACIÓN (2026-08-25, misma rama)
+
+**Estado: IMPLEMENTADA Y VERDE EN RAMA `feat/romance-autonomo-fase2a`. SHA funcional: 129efc8. SIN deploy, SIN merge a canónica, calibracion_vida.json SIN CAMBIOS.**
+
+- **Producto:** tras una primera cita resuelta razonablemente, el par puede VOLVER A QUEDAR por iniciativa propia. No forma parejas. Historia con recorrido: flechazo → primera cita → continuidad → segundas/siguientes citas → (más adelante 2B/2C) declaración/pareja.
+- **Arquitectura (reutilización, sin motor paralelo):**
+  - `IniciativaRomantica::intentarSiguienteCita()` — gates sin RNG: par válido / conocidos / parentesco_veto / RomanceElegibilidad / no-pareja-crisis ENTRE ELLOS / hito PRIMERA_CITA existente / sin cita activa del par (cualquier intención) / última experiencia NO mal-muy_mal / gap mínimo cumplido / señal viva del iniciador / PropuestaCooldown tipo 'cita'. Voluntad de AMBOS con tipo `cita` y resolución canónica media geométrica √(pA·pB), UNA tirada; rechazo atribuido al de menor p vía motivoRechazoPublic + RechazoMemoria.
+  - Agenda: `AgendaConjunta::primeraFranja` (3 días, 9-22, lugares desbloqueados, apertura verificada) → `EncuentroEngine::programar(tipo CANÓNICO 'cita', cuentaComoCelestine=false)` → `intencion='autonomo_npc'`.
+  - Disparo: al RESOLVERSE una cita romántica (primera_cita o cita), `EncuentroResolver::aplicarResultado` registra MARCADOR de continuidad idempotente por par con `desde_abs = fin_última_cita + gap`. El consumidor `IniciativaRomantica::procesarContinuidad()` corre al final de `MotorVidaDiaria::tickHora` (post-casuales): consume cada marcador UNA vez, inicia quien más romance siente (empate → orden canónico). NUNCA crea la cita en el tick de la resolución anterior. Sin contadores artificiales: el historial se deriva de encuentros terminados reales.
+  - **Anti-aceleración:** REUTILIZA `cooldowns.por_familia.romance = 48h` como gap mínimo entre citas románticas resueltas del par (`IniciativaRomantica::gapMinimoCitas`). No se introdujo ninguna cifra nueva.
+  - **Freno natural:** experiencia mal/muy_mal del último encuentro BLOQUEA la continuidad (`gate_continuidad_ultima_experiencia_mala`, coherente con `continuidad_reciente.corte_si_ultimo_malo`). Continuidad buena suma vía `voluntad.continuidad_reciente` ya existente.
+  - **Celestine:** nuevo parámetro opcional `cuentaComoCelestine` en `EncuentroEngine::validarContexto/programar` (default true, retrocompatible): la cita autónoma no consume ni depende del cupo diario de Celestine; `MisionDiariaEngine::esEncuentroCelestine=false`.
+- **Narrativa:** reutiliza copy canónico existente para citas (EncuentroCotilleoCopy «han tenido una cita…» vía ENCUENTRO_TERMINADO) — sin UI nueva, sin tocar play.php/play-v3.js/CSS/Design System.
+- **Tests:** `tests/fase2_continuidad_citas_test.php` — cobertura A-T completa (gates B,C,D,E,F,G,H,I,J; antiduplicación J/K/L/M; nunca-pareja N; cupo O; HORA_PASADA P; RNG exacto T=4 pasos LCG en éxito y 0 en gates puros). Regresión verde: 19 suites incluidas fase1 ×3, balance P2, media geométrica, cooldown neutro, señales, relaciones, encuentros, solapes, disponibilidad, peticiones R07/e2e, debug parejas. php -l ×4 + JSON calibración válido.
+- **Fallos PREEXISTENTES demostrados A/B (no tocados, heredados de producción):** `vida_relaciones_test` (2 fails: hora resultante ≠11, copy_id preparado y vacío) y `playtest_voluntad_tipo_test` (1 fail: primera cita vs bonus conocerse) fallan IDÉNTICAMENTE en el árbol canónico.
+
+### Pendiente tras 2A
+- **FASE 2B = declaración autónoma** con historial compartido (≥N citas derivadas de encuentros reales), banda romance mínima, reciprocidad (señal ambas direcciones), ventana temporal desde primera cita, unificación de resolución geométrica con el handler actual.
+- **FASE 2C = formación de pareja + exclusividad.**
+- **FASE 3 = crisis/ruptura/reconciliación** (motor y handlers YA existen; falta disparador con sentido y probabilidades hoy huérfanas).
+
+### BUG BLOQUEANTE DE 2C (registrado, NO arreglar dentro de 2A)
+`ParejaEngine::formar()` (src/Engine/ParejaEngine.php:20-70) solo veta parentesco y exige ambos-sí: NO comprueba si `a` o `b` ya tienen `estado_pareja ∈ {pareja,crisis}` con un TERCERO → el motor permite hoy DOS parejas simultáneas para una misma persona vía dos declaraciones. Además `TerceroRomantico::parejaDe()` devuelve solo la primera relación activa (ambigüedad con poli-parejas). Requiere gate de exclusividad + política de rebote antes de activar 2C.
