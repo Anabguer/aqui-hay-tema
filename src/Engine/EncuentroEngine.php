@@ -27,6 +27,10 @@ final class EncuentroEngine
      * Validación compartida (participantes, tipo, límite, lugar).
      * No evalúa agenda ni voluntad: eso lo hace programar (legacy) o PropuestaEncuentroEngine.
      *
+     * FASE 2A: $cuentaComoCelestine=false permite que la iniciativa autónoma
+     * NPC use la misma validación SIN consumir ni estar sujeta al cupo diario
+     * de intervenciones de Celestine (no es un plan organizado por ella).
+     *
      * @param string[] $participantes
      * @return array<string, mixed>
      */
@@ -35,7 +39,8 @@ final class EncuentroEngine
         array $participantes,
         string $tipo = 'conocerse',
         ?string $lugarId = null,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        bool $cuentaComoCelestine = true
     ): array {
         $crudos = [];
         foreach ($participantes as $rid) {
@@ -72,7 +77,7 @@ final class EncuentroEngine
         }
 
         $limite = self::limiteIntervencionesDia($partida);
-        if ($limite !== null) {
+        if ($cuentaComoCelestine && $limite !== null) {
             $usadas = (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0);
             if ($usadas >= $limite) {
                 \aht_log_optional($logger, $partida, 'encuentro_rechazado', [
@@ -102,9 +107,10 @@ final class EncuentroEngine
         string $tipo = 'conocerse',
         ?string $lugarId = null,
         ?string $actividad = null,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        bool $cuentaComoCelestine = true
     ): array {
-        $ctx = self::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
+        $ctx = self::validarContexto($partida, $participantes, $tipo, $lugarId, $logger, $cuentaComoCelestine);
         if (!($ctx['ok'] ?? false)) {
             return $ctx;
         }
@@ -184,7 +190,7 @@ final class EncuentroEngine
 
         $partida['encuentros'] ??= [];
         $partida['encuentros'][] = $encuentro;
-        if ($tipo !== 'individual') {
+        if ($cuentaComoCelestine && $tipo !== 'individual') {
             $partida['celeste']['intervenciones_organizadas_usadas_hoy'] =
                 (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0) + 1;
         }

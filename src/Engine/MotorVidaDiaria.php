@@ -109,6 +109,11 @@ final class MotorVidaDiaria
         }
         $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
+        // FASE 2A: continuidad romántica. Solo consume marcadores VENCIDOS
+        // (última cita + gap 48 h canónicas); nunca crea nada en el tick en
+        // que se resolvió la cita anterior. Sin RNG salvo la tirada de
+        // voluntad cuando un intento llega a evaluarse.
+        $out['continuidad'] = IniciativaRomantica::procesarContinuidad($partida, $cal, $logger);
         $rng->persistToPartida($partida);
         return $out;
     }

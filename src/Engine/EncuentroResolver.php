@@ -283,5 +283,20 @@ final class EncuentroResolver
             (string) ($encuentro['tipo'] ?? 'encuentro'),
             $resultado['por_participante'][$a]['resultado'] ?? null
         );
+
+        // FASE 2A: tras resolver una cita romántica queda FECHADO el intento de
+        // continuidad (última cita + gap canónico 48 h). Aquí solo se registra
+        // el marcador; la cita futura, si llega, la decide un tick posterior
+        // con voluntad real (IniciativaRomantica::procesarContinuidad).
+        if ($tipoEnc === PropuestaNivel::PRIMERA_CITA || $tipoEnc === PropuestaNivel::CITA) {
+            $expA = (string) ($resultado['por_participante'][$a]['resultado'] ?? '');
+            $expB = (string) ($resultado['por_participante'][$b]['resultado'] ?? '');
+            $rank = ['muy_mal' => 0, 'mal' => 1, 'normal' => 2, 'bien' => 3, 'muy_bien' => 4];
+            $peor = $expA;
+            if ($expB !== '' && ($peor === '' || ($rank[$expB] ?? 2) < ($rank[$peor] ?? 2))) {
+                $peor = $expB;
+            }
+            IniciativaRomantica::registrarContinuidadPostCita($partida, $a, $b, $peor !== '' ? $peor : null, is_array($resultado['_cal'] ?? null) ? $resultado['_cal'] : []);
+        }
     }
 }
