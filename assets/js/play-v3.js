@@ -2877,6 +2877,32 @@ function hobbyIconKey(id, texto) {
     return 'Gente: ' + slotGenteTxt(items[0]) + ' · ' + slotGenteTxt(items[1]);
   }
 
+  function pintarLoQueSabes(vista) {
+    const sec = $('[data-ficha-sabes]');
+    const box = $('[data-ficha-sabes-body]');
+    if (!sec || !box) return;
+    const g = (vista && vista.pistas_grupos) || {};
+    const animas = Array.isArray(g.animas) ? g.animas : [];
+    const disgustas = Array.isArray(g.disgustas) ? g.disgustas : [];
+    if (!animas.length && !disgustas.length) {
+      box.innerHTML = '';
+      sec.hidden = true;
+      return;
+    }
+    let html = '';
+    if (animas.length) {
+      html += '<p class="ficha-pref-line"><span class="ficha-sabes-ico">\u2764\uFE0F</span>Le anima: '
+        + esc(animas.map(function (a) { return a.etiqueta || a.id || ''; }).filter(Boolean).join(', '))
+        + '</p>';
+    }
+    if (disgustas.length) {
+      html += '<p class="ficha-pref-line"><span class="ficha-sabes-ico">\uD83D\uDCA2</span>No le gusta: '
+        + esc(disgustas.map(function (d) { return d.etiqueta || d.id || ''; }).filter(Boolean).join(', '))
+        + '</p>';
+    }
+    box.innerHTML = html;
+    sec.hidden = false;
+  }
   function textoPlanesVacios(id) {
     const frases = [
       'Ni un café en el horizonte. O eso cree.',
@@ -2995,6 +3021,7 @@ function hobbyIconKey(id, texto) {
     if (gustaGenteEl) gustaGenteEl.textContent = lineaGente(vista.gusta_en_gente);
     const noGustaGenteEl = $('[data-ficha-nogusta-gente]');
     if (noGustaGenteEl) noGustaGenteEl.textContent = lineaGente(vista.no_gusta_en_gente);
+    pintarLoQueSabes(vista);
     const relBox = $('[data-ficha-relaciones]');
     const relMasBtn = $('[data-ficha-rel-mas]');
     fichaRelCache = relacionesConocidas(f);

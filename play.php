@@ -182,6 +182,8 @@ if (is_file($ahtBusterFile)) {
       font-weight: 800; font-size: .9rem;
     }
     .celestine-nota .obj-vecinos-tit { color: #d0697a; }
+    /* Lo que sabes: iconos pequeños alineados con la línea manuscrita */
+    .capa-ficha .ficha-sabes-ico { font-size: .8em; margin-right: .28rem; }
       </style>
 </head>
 <body class="play-v3" data-ui="v3" data-debug="0">
@@ -562,6 +564,10 @@ if (is_file($ahtBusterFile)) {
               <div class="ficha-seccion-body">
                 <div class="ficha-hobbies" data-ficha-hobbies></div>
               </div>
+            </section>
+            <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
+              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
+              <div class="ficha-seccion-body ficha-seccion-body-prefs" data-ficha-sabes-body></div>
             </section>
             <section class="ficha-seccion">
               <h4 class="ficha-seccion-tit">Relaciones</h4>
