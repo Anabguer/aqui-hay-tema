@@ -1,0 +1,20 @@
+﻿[
+    {
+        "archivo":  "play-v3-responsive.css",
+        "bytes":  134585,
+        "sha256":  "CC2C13628DEAC27C2002264780FA959445631A41B24CA2FEB644FC848A0290BA",
+        "timestamp":  "2026-08-25 14:39:49"
+    },
+    {
+        "archivo":  "play-v3.js",
+        "bytes":  219735,
+        "sha256":  "3AF6CBE1F1BCF5397991937F9A41E352E14502F3492BD0BD0D31CD907C28C886",
+        "timestamp":  "2026-08-25 14:39:49"
+    },
+    {
+        "archivo":  "play.php",
+        "bytes":  51651,
+        "sha256":  "ACD9CD0FE13740B61EB8C634FFDD1112AECD0D7BD2789CCB178AC2A657F59062",
+        "timestamp":  "2026-08-25 14:39:49"
+    }
+]

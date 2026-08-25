@@ -8,9 +8,11 @@ Leyenda de estado: 🔜 pendiente · ✅ migrada · ⛔ fuera de alcance (solo D
 
 ## 1. Inicio (móvil) — D2 APROBADO: feed de 1 columna
 
-**Referencia**: `inicio-mobile.png` · **Estado**: ✅ **APROBADA (OK visual usuaria) e integrada en runtime — referencia/patrón del DS**
+**Referencia**: `inicio-mobile.png` · **Estado**: 🚀 **INICIO MOBILE V3.1 — DESPLEGADO Y VALIDADO EN PRODUCCIÓN** (buster `v3-20260825-182940`; posteriormente el deploy concurrente "entender-p0" preservó íntegro el estado DS y avanzó el buster a `v3-20260825-entender-p0-152744`).
 **Captura contractual**: `dev/screenshots-ds-piloto-inicio/inicio-mobile-393-v3.1.png`
+**Captura de producción validada**: `dev/screenshots-ds-piloto-inicio/inicio-mobile-393-produccion.png`
 **Implementación**: `assets/css/design-system/screens/inicio.css` (cargado tras responsive.css) + hunks en `play.php` (3 links) y `play-v3.js` (candado D9).
+**Registro de deploy (2026-08-25)**: backup PRE en `dev/_pre_v31_backup/` (play.php 51.651 B · responsive 134.585 B · play-v3.js 219.735 B + manifest SHA256); reconciliación sobre blobs remotos (strip 269 `!important` de Inicio, 0 reglas R08 tocadas, marcadores mensajitoTopPreview/mensajitoTsKey preservados); tests 7/7 OK + sintaxis PHP/JS OK; validación en producción con partida TEST `part_80b2fae4d2b6a81b` (393px: tiles alineados, PLAN, Cotilleo/Misiones/Parejas con datos reales, 0 errores JS, PC humo OK) y **partida TEST borrada** tras validación.
 **Patrón a heredar**: marco de familia tinta+costura (radios asimétricos 8 valores), sonda de alineación por píxeles (`dev/sonda_alineacion_tiles.js`), strip de `!important` por módulo (`dev/_ds_strip_inicio_important.js`), regla coral→rosa, capturas a DPR 2.
 
 Estructura aprobada del feed (de arriba a abajo), **solo módulos canónicos reales**:
