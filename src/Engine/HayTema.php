@@ -56,7 +56,7 @@ final class HayTema
         if ($rid === '') {
             return ['hay_tema' => false, 'tema_id' => null, 'tema_vista' => null];
         }
-        $buzon = self::desdeBuzonHoy($partida, $rid, $did);
+        $buzon = self::desdeBuzonHoy($partida, $rid, $did, $idsEnEsteDestino);
         if ($buzon['hay_tema']) {
             return $buzon;
         }
@@ -64,12 +64,19 @@ final class HayTema
     }
 
     /**
+     * Radar espacial: un tema de lugar solo cuenta si sus PROTAGONISTAS
+     * (actores del hecho, dato estructurado del mensaje) están ahora mismo
+     * en ese lugar. Quien solo cuenta/oye el cotilleo no lleva sello.
+     *
      * @param array<string, mixed> $partida
+     * @param list<string> $presentes
      * @return array{hay_tema: bool, tema_id: ?string, tema_vista: ?array}
      */
-    private static function desdeBuzonHoy(array $partida, string $rid, string $did): array
+    private static function desdeBuzonHoy(array $partida, string $rid, string $did, array $presentes = []): array
     {
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $enLugar = array_fill_keys($presentes, true);
+        $enLugar[$rid] = true;
         foreach ($partida['buzon'] ?? [] as $msg) {
             if (!is_array($msg)) {
                 continue;
@@ -81,7 +88,8 @@ final class HayTema
             if (!in_array($tipo, self::TIPOS, true)) {
                 continue;
             }
-            if (!self::mensajeInvolucra($msg, $rid)) {
+            $protas = self::actoresDeMensaje($msg);
+            if (!in_array($rid, $protas, true)) {
                 continue;
             }
             $lugar = self::lugarDeMensaje($msg);
@@ -89,8 +97,15 @@ final class HayTema
             if ($tipo === 'senal_romantica' && $lugar === null) {
                 continue;
             }
-            if ($lugar !== null && $lugar !== $did) {
-                continue;
+            if ($lugar !== null) {
+                if ($lugar !== $did) {
+                    continue;
+                }
+                foreach ($protas as $pid) {
+                    if (!isset($enLugar[$pid])) {
+                        continue 2;
+                    }
+                }
             }
             $tid = (string) ($msg['id'] ?? '');
             $temaId = $tid !== '' ? $tid : null;
@@ -200,20 +215,7 @@ final class HayTema
     /**
      * @param array<string, mixed> $msg
      */
-    private static function mensajeInvolucra(array $msg, string $rid): bool
-    {
-        foreach (self::actoresDeMensaje($msg) as $id) {
-            if ($id === $rid) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * @param array<string, mixed> $msg
-     * @return list<string>
-     */
+    /** @return list<string> */
     private static function actoresDeMensaje(array $msg): array
     {
         $ids = [];

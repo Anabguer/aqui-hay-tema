@@ -13,6 +13,9 @@ final class CopySenalRomantica
         '%s acaba de mirar a %s de ESA manera. Tú no has visto nada. Bueno, sí.',
         'Algo se le ha encendido a %s con %s. Celestine, toma nota.',
         'A %s se le ha ido la pinza un poco con %s. Aquí hay tema.',
+        '%s no ha podido apartar la vista de %s. Y lo hemos visto todo.',
+        'Chispa instantánea: a %s le ha dado fuerte con %s.',
+        '%s ha cruzado miradas con %s y ya no hay vuelta atrás.'
     ];
 
     /**
@@ -23,6 +26,9 @@ final class CopySenalRomantica
         '%s dice que %s le cae “normal”. Lleva veinte minutos hablando de esa persona.',
         '%s está empezando a mirar a %s como quien no quiere la cosa. Quiere la cosa.',
         'A %s se le escapa una sonrisa tonta cuando sale %s. No es alergia.',
+        '%s pregunta por %s con una frecuencia más que curiosa.',
+        'A %s se le nota un tilín especial con %s. Aquí hay tema.',
+        '%s ha guardado el mejor sitio para %s. Casualidad, seguro.'
     ];
 
     /**
@@ -32,15 +38,21 @@ final class CopySenalRomantica
         'Algo se le encendió a %s con %s más temprano.',
         '%s miró a %s de ESA manera hace un rato. Tú no viste nada. Bueno, sí.',
         'A %s ya le ha empezado a interesar %s. Aquí hay tema.',
+        'hace un rato, %s no apartaba la vista de %s.',
+        '%s y %s cruzaron una mirada de esas que dicen mucho. Fue hace un rato.',
+        'a %s le dio fuerte por mirar a %s hace un rato. Sin remedio.'
     ];
 
     /**
      * @var list<string>
      */
-    private const TILIN_HIST = [
+private const TILIN_HIST = [
         'Desde hace un rato a %s le da vueltas %s.',
         'Por lo visto a %s le ha empezado a interesar %s.',
         '%s lleva un rato demasiado pendiente de %s. Aquí hay tema.',
+        'hace un rato, %s anda con %s en la cabeza.',
+        'hace un rato %s se fija bastante en %s. Más de lo normal, vamos.',
+        'a %s se le ha despertado un interés notorio por %s. hace un rato.',
     ];
 
     public static function texto(string $quien, string $hacia, string $motivo): string

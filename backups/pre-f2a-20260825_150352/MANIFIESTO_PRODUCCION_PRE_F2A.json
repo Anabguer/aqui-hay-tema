@@ -1,0 +1,62 @@
+﻿[
+    {
+        "file":  "src/Engine/MotorVidaDiaria.php",
+        "sha256":  "055632a8ab7a07a81d510efc7440e303349b44eb7348dd4fbd8ac46aa67f91f7",
+        "bytes":  23064,
+        "mtime":  "2026-08-25T13:40:48"
+    },
+    {
+        "file":  "src/Engine/IniciativaRomantica.php",
+        "sha256":  "05199e06d089c6017b77dab25fb552c899ab1da7eb543e218eee119915fb8de3",
+        "bytes":  11205,
+        "mtime":  "2026-08-25T11:47:49"
+    },
+    {
+        "file":  "src/Engine/EncuentroResolver.php",
+        "sha256":  "c14a850eb7d03208027f3c49fae57f30b2a7a91a607bc0a9d699245f52003718",
+        "bytes":  16747,
+        "mtime":  "2026-08-25T11:35:05"
+    },
+    {
+        "file":  "src/Engine/EncuentroEngine.php",
+        "sha256":  "245080b17a388924d3453c0f49524a61f1dd3d646ae6cd91d6e3ce136323efed",
+        "bytes":  12310,
+        "mtime":  "2026-08-25T11:35:05"
+    },
+    {
+        "file":  "src/Engine/Voluntad/VoluntadPonderadaEvaluator.php",
+        "sha256":  "c7a5397d01a0fb1b7ad82c3d120a81145520507ccad61eb23b1c9455ba3aa1d3",
+        "bytes":  22108,
+        "mtime":  "2026-08-25T11:35:06"
+    },
+    {
+        "file":  "src/Engine/CopyRechazoPropuesta.php",
+        "sha256":  "0a6fa622f2d8fbf4ef0e6345fdb454a08b3dd1ab984aaeeabd0838d1905542ea",
+        "bytes":  23180,
+        "mtime":  "2026-08-25T10:58:31"
+    },
+    {
+        "file":  "src/Engine/PropuestaEncuentroEngine.php",
+        "sha256":  "4e537633ec27e2d967c0070924be9bf09448d99419c2597f6504cf76e89f61b5",
+        "bytes":  50209,
+        "mtime":  "2026-08-25T11:36:23"
+    },
+    {
+        "file":  "src/Engine/RechazoMemoria.php",
+        "sha256":  "fa3d375668ee1f9cefcbd96838f0731566ff647cbecddf1ee779a01833f65992",
+        "bytes":  4882,
+        "mtime":  "2026-08-25T11:36:23"
+    },
+    {
+        "file":  "src/Engine/IniciativaSocial.php",
+        "sha256":  "c9b791a226610c29164886f35d04d97431ad93d225928fb114b937288019490f",
+        "bytes":  23863,
+        "mtime":  "2026-08-25T13:59:27"
+    },
+    {
+        "file":  "data/configs/calibracion_vida.json",
+        "sha256":  "f8363ab33043d85a9428f0f68e47cc60543ce68a68464e18bfe6a415b78bd18c",
+        "bytes":  18314,
+        "mtime":  "2026-08-25T13:40:43"
+    }
+]

@@ -147,10 +147,16 @@ final class TutorialIncorporaciones
         $cola = is_array($partida['llegadas']['tutorial_cola'] ?? null)
             ? $partida['llegadas']['tutorial_cola']
             : [];
+        // Regla global de partida: sin nombres duplicados. La entrada de cola
+        // con nombre ya usado se descarta y se continúa con la siguiente.
+        $usados = NombresReservadosPartida::usados($partida, $root);
 
         while ($max > 0 && $cola !== [] && count(self::residentesActivos($partida)) < $objetivo) {
             $id = (string) array_shift($cola);
             if ($id === '' || isset($partida['residentes'][$id])) {
+                continue;
+            }
+            if (NombresReservadosPartida::idBloqueado($usados, $root, $id)) {
                 continue;
             }
             if (CapacidadViviendas::huecos($partida) <= 0) {
@@ -160,6 +166,7 @@ final class TutorialIncorporaciones
             if (!($r['ok'] ?? false)) {
                 continue;
             }
+            $usados[NombresReservadosPartida::normalizar(NombresReservadosPartida::nombreCatalogo($root, $id))] = true;
             HistorialPersonajesPartida::marcar($partida, $id);
             $max--;
             $nombre = IdentidadPublica::nombre($partida, $id);

@@ -287,7 +287,12 @@ final class RelacionEngine
         $rel['ultimo_contacto'] ??= null;
         $rel['ultimo_contacto_significativo'] ??= null;
         $rel['ultimo_contacto_calidad'] ??= null;
-        $rel['consolidacion'] ??= null;
+        $rel['consolidacion'] ??= [
+            'nivel' => 0,
+            'desde_dia' => null,
+            'ultimo_refuerzo_dia' => null,
+            'activa' => false,
+        ];
         $rel['a_hacia_b'] ??= [
             'valor' => $rel['intensidad'] ?? null,
             'banda' => $rel['tipo'] ?? null,
@@ -459,8 +464,57 @@ final class RelacionEngine
         $rel[$key]['valor'] = $nuevo;
         $rel[$key]['banda'] = RelacionBandas::social($nuevo, true, $cal);
         $rel['intensidad'] = (int) round((($rel['a_hacia_b']['valor'] ?? 0) + ($rel['b_hacia_a']['valor'] ?? 0)) / 2);
+
+        // Actualizar consolidación si el contacto es significativo o normal
+        if ($signo > 0 && ($calidad === ContactoCalidad::SIGNIFICATIVO || $calidad === ContactoCalidad::NORMAL)) {
+            self::actualizarConsolidacion($rel, $partida['reloj'] ?? [], $cal);
+        }
+
         self::persistirSocial($partida, $rel);
         return ['ok' => true, 'relacion' => $rel, 'delta' => $delta, 'primer_contacto' => !$era];
+    }
+
+    /**
+     * Actualiza el nivel de consolidación basado en el social actual y recencia de contacto.
+     *
+     * @param array<string, mixed> $rel
+     * @param array<string, mixed> $reloj
+     * @param array<string, mixed> $cal
+     */
+    private static function actualizarConsolidacion(array &$rel, array $reloj, array $cal): void
+    {
+        $umbrales = CalibracionConfig::get($cal, 'desgaste_social.consolidacion_umbrales', [40, 62, 82]);
+        $ventanaHoras = (int) CalibracionConfig::get($cal, 'desgaste_social.consolidacion_ventana_horas', 168);
+
+        $social = (int) ($rel['intensidad'] ?? 0);
+        $nivel = 0;
+        if ($social >= ($umbrales[2] ?? 82)) {
+            $nivel = 3;
+        } elseif ($social >= ($umbrales[1] ?? 62)) {
+            $nivel = 2;
+        } elseif ($social >= ($umbrales[0] ?? 40)) {
+            $nivel = 1;
+        }
+
+        $ahora = ((int) ($reloj['dia_pueblo'] ?? 1)) * 24 + (int) ($reloj['hora_actual'] ?? 0);
+        $ultRef = $rel['consolidacion']['ultimo_refuerzo_dia'] ?? null;
+        $activa = true;
+        if ($ultRef !== null && is_array($ultRef)) {
+            $horasDesdeRef = $ahora - (((int) ($ultRef['dia'] ?? 0)) * 24 + (int) ($ultRef['hora'] ?? 0));
+            if ($horasDesdeRef > $ventanaHoras) {
+                $activa = false;
+                $nivel = 0;
+            }
+        }
+
+        $cons = $rel['consolidacion'];
+        $cons['nivel'] = $nivel;
+        $cons['activa'] = $activa;
+        $cons['ultimo_refuerzo_dia'] = ['dia' => (int) ($reloj['dia_pueblo'] ?? 1), 'hora' => (int) ($reloj['hora_actual'] ?? 0)];
+        if ($nivel > 0 && ($cons['desde_dia'] === null || $nivel > ($cons['nivel'] ?? 0))) {
+            $cons['desde_dia'] = ['dia' => (int) ($reloj['dia_pueblo'] ?? 1), 'hora' => (int) ($reloj['hora_actual'] ?? 0)];
+        }
+        $rel['consolidacion'] = $cons;
     }
 
     /**

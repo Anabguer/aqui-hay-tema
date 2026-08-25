@@ -81,7 +81,11 @@ final class RelacionNarrativaBridge
     private static function copyDeHito(array $partida, string $tipo, array $ids): ?array
     {
         $cal = CalibracionConfig::load(dirname(__DIR__, 2));
-        $seed = $tipo . '|' . implode('|', $ids);
+        // Día y hora en la seed: dos hitos consecutivos del mismo tipo rara vez
+        // caen en la misma variante, sin necesidad de memoria de frases usadas.
+        $seed = $tipo . '|' . implode('|', $ids)
+            . '|' . (int) ($partida['reloj']['dia_pueblo'] ?? 1)
+            . '|' . (int) ($partida['reloj']['hora_actual'] ?? 0);
 
         if ($tipo === RelacionBitacora::FLECHAZO && count($ids) >= 2) {
             $dir = self::direccionFlechazo($partida, $ids[0], $ids[1]);

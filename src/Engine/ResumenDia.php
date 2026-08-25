@@ -34,6 +34,41 @@ final class ResumenDia
         return is_array($best) ? self::vistaEncuentro($partida, $best, $catalog) : null;
     }
 
+    /**
+     * TODOS los encuentros EN CURSO AHORA (0..N). Mismo criterio de ventana que
+     * encuentroEnCurso(), sin colapsar a uno: estado programado|en_curso cuyo
+     * dia/hora/duracion cubren el reloj actual. Futuros, terminados, cancelados
+     * y rechazados quedan fuera por construccion.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function encuentrosEnCurso(array $partida, ?Catalog $catalog = null): array
+    {
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $out = [];
+        foreach (EncuentroEngine::list($partida) as $enc) {
+            if (!is_array($enc)) {
+                continue;
+            }
+            $estado = (string) ($enc['estado'] ?? '');
+            if (!in_array($estado, ['programado', 'en_curso'], true)) {
+                continue;
+            }
+            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
+                continue;
+            }
+            $ini = ((int) ($enc['dia'] ?? 0)) * 24 + (int) ($enc['hora'] ?? ($enc['hora_inicio'] ?? 0));
+            $out[] = ['ini' => $ini, 'id' => (string) ($enc['id'] ?? ''), 'vista' => self::vistaEncuentro($partida, $enc, $catalog)];
+        }
+        usort($out, static function (array $a, array $b): int {
+            return [$a['ini'], $a['id']] <=> [$b['ini'], $b['id']];
+        });
+        return array_map(static function (array $row): array {
+            return $row['vista'];
+        }, $out);
+    }
+
     public static function encuentrosHoy(array $partida): int
     {
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
@@ -100,6 +135,9 @@ final class ResumenDia
             'dia_semana_ui' => $diaEnc !== null ? Reloj::diaSemanaUi($diaEnc, $partida['reloj'] ?? []) : null,
             'lugar' => $lugarId !== '' ? $lugarId : null,
             'lugar_nombre' => self::nombreLugar($catalog, $lugarId),
+            'duracion_minutos' => isset($enc['duracion_minutos']) && is_numeric($enc['duracion_minutos'])
+                ? (int) $enc['duracion_minutos']
+                : LugarAtributos::horasDeEncuentro($enc) * 60,
             'participantes' => array_values($ids),
             'participantes_nombres' => $nombres,
             'intervencion' => EncuentroIntervencion::vistaParaPlay($partida, $enc, $catalog),

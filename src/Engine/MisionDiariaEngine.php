@@ -493,7 +493,7 @@ final class MisionDiariaEngine
     public static function esEncuentroCelestine(array $encuentro): bool
     {
         $int = (string) ($encuentro['intencion'] ?? '');
-        if (in_array($int, ['autonomo', 'autonomo_relacion', 'casual_quedada'], true)) {
+        if (in_array($int, ['autonomo', 'autonomo_relacion', 'casual_quedada', 'autonomo_npc', 'autonomo_social'], true)) {
             return false;
         }
         return $int === 'celeste_organizado' || $int === 'jugador_propone' || $int === '';

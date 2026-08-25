@@ -32,8 +32,9 @@ final class DisponibilidadEngine
             return ['ok' => false, 'error' => 'tipo_invalido', 'slots' => []];
         }
 
-        $desdeDia ??= (int) $partida['reloj']['dia_pueblo'];
-        $desdeHora ??= (int) $partida['reloj']['hora_actual'];
+        $diaHoy = (int) $partida['reloj']['dia_pueblo'];
+        $desdeDia ??= $diaHoy;
+        $desdeHora ??= ($desdeDia > $diaHoy) ? 0 : (int) $partida['reloj']['hora_actual'];
         $minuto = (int) ($partida['reloj']['minuto_actual'] ?? 0);
         $durHoras = 1;
         if ($lugarId !== null && $lugarId !== '') {
@@ -47,7 +48,7 @@ final class DisponibilidadEngine
             $horaMin = 0;
             if ($d === 0) {
                 $horaMin = $desdeHora;
-                if ($minuto > 0) {
+                if ($dia === $diaHoy && $minuto > 0) {
                     $horaMin = $desdeHora + 1;
                 }
             }

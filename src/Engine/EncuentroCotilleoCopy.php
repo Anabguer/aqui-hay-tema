@@ -454,15 +454,34 @@ final class EncuentroCotilleoCopy
 
     ): ?array {
 
-        $hito = self::hitoDelDia($partida, $participantes, $quien);
+        // Señales de resultado primero: el hito de primera cita debe convivir con ellas.
+        $conflicto = is_array($resultado['conflicto'] ?? null) ? $resultado['conflicto'] : [];
+
+        $tono = self::tonoExperiencia($res, $participantes);
+
+        $dramaHay = !empty($conflicto['hay'])
+
+            || $tono === 'La cosa ha estado algo fría.'
+
+            || $tono === 'La cosa ha estado algo tensa.';
+
+        $romance = is_array($resultado['romance'] ?? null) ? $resultado['romance'] : [];
+
+        $narr = is_array($resultado['experiencia_narrativa'] ?? null) ? $resultado['experiencia_narrativa'] : null;
+
+        $positivoHay = ($tono === 'Parece que han hecho buenas migas.')
+
+            || (!empty($romance['hay']) && (int) ($romance['delta'] ?? 0) > 0)
+
+            || ($narr !== null && (int) ($narr['resultado_promedio'] ?? 0) > 0);
+
+        $hito = self::hitoDelDia($partida, $participantes, $quien, $dramaHay, $positivoHay);
 
         if ($hito !== null) {
 
             return $hito;
 
         }
-
-        $narr = is_array($resultado['experiencia_narrativa'] ?? null) ? $resultado['experiencia_narrativa'] : null;
 
         if ($narr !== null && (string) ($narr['texto'] ?? '') !== '') {
 
@@ -480,8 +499,6 @@ final class EncuentroCotilleoCopy
 
 
 
-        $romance = is_array($resultado['romance'] ?? null) ? $resultado['romance'] : [];
-
         if (!empty($romance['hay']) && (int) ($romance['delta'] ?? 0) > 0) {
 
             return [
@@ -495,8 +512,6 @@ final class EncuentroCotilleoCopy
         }
 
 
-
-        $conflicto = is_array($resultado['conflicto'] ?? null) ? $resultado['conflicto'] : [];
 
         if (!empty($conflicto['hay'])) {
 
@@ -521,8 +536,6 @@ final class EncuentroCotilleoCopy
         }
 
 
-
-        $tono = self::tonoExperiencia($res, $participantes);
 
         if ($tono !== '') {
 
@@ -586,11 +599,15 @@ final class EncuentroCotilleoCopy
 
      * @param list<string|int> $participantes
 
+     * @param bool $dramaHay  la cita salió mal (conflicto o tono frío/tensa)
+
+     * @param bool $positivoHay  hay señal positiva (tono bueno, romance o narrativa)
+
      * @return array{texto: string, meta: array{categoria: string, destacado: bool}}|null
 
      */
 
-    private static function hitoDelDia(array $partida, array $participantes, string $quien): ?array
+    private static function hitoDelDia(array $partida, array $participantes, string $quien, bool $dramaHay = false, bool $positivoHay = false): ?array
 
     {
 
@@ -625,6 +642,32 @@ final class EncuentroCotilleoCopy
             $tipo = (string) ($h['tipo'] ?? '');
 
             if ($tipo === RelacionBitacora::PRIMERA_CITA) {
+
+                // La primera cita ocurrió; el resultado NO se esconde detrás del hito.
+
+                if ($dramaHay) {
+
+                    return [
+
+                        'texto' => 'Primera cita entre ' . $quien . '… aunque la cosa ha acabado bastante tensa.',
+
+                        'meta' => CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true),
+
+                    ];
+
+                }
+
+                if (!$positivoHay) {
+
+                    return [
+
+                        'texto' => 'Primera cita entre ' . $quien . '. Ya se verá cómo sigue esto.',
+
+                        'meta' => CotilleoCategoria::meta(CotilleoCategoria::ROMANCE, false),
+
+                    ];
+
+                }
 
                 return [
 

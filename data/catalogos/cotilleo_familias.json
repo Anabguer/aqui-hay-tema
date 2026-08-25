@@ -3,27 +3,63 @@
         "Otra vez {quien}{donde}. Casualidad, claro.",
         "Estos dos tienen un talento especial para acabar siempre en el mismo sitio{donde}.",
         "El destino lleva días empeñado en cruzar a {quien}{donde}.",
-        "{quien} vuelven a coincidir{donde}. Tanta casualidad empieza a ser sospechosa…"
+        "{quien} vuelven a coincidir{donde}. Tanta casualidad empieza a ser sospechosa…",
+        "{quien}{donde}, otra vez. A estas alturas, ni lo intentan disimular.",
+        "De nuevo {quien} por los mismos lares{donde}. El pueblo ya lleva la cuenta.",
+        "¿{quien}{donde}? Sorprendería más no verlos juntos."
     ],
     "se_conocieron": [
         "Después de tanto coincidir, {quien} por fin se han hablado.",
-        "Tanta casualidad tenía que acabar así: {quien} ya no son desconocidos."
+        "Tanta casualidad tenía que servir para algo: {quien} ya se conocen.",
+        "{quien} han dejado oficialmente de ser dos desconocidos.",
+        "Parece que {quien} ya se han presentado como personas civilizadas.",
+        "Después de cruzarse medio pueblo, {quien} por fin saben quién es quién.",
+        "{quien} ya pueden saludarse sin fingir que miraban otra cosa.",
+        "Se acabó lo de hacerse los desconocidos: {quien} ya se conocen.",
+        "{quien} han roto el hielo. Milagros del pueblo pequeño.",
+        "Primer contacto oficial entre {quien}. El pueblo da fe.",
+        "{quien} ya se van conociendo. A este paso, hasta quedarán."
     ],
     "amistad_social": [
         "Ya no coinciden por casualidad. {quien} empiezan a buscarse.",
-        "Lo de {quien} ya tiene pinta de costumbre voluntaria."
+        "Lo de {quien} ya tiene pinta de costumbre voluntaria.",
+        "{quien} han pasado de conocidos a buscarse solos.",
+        "Cuando {quien} coinciden, ya se quedan hablando un rato.",
+        "Hay complicidad nueva entre {quien}. Amistad en ciernes.",
+        "{quien} empiezan a tener planes que no incluyen a nadie más."
     ],
     "romance": [
-        "Entre {quien} hay algo que no es solo amistad. El pueblo lo huele."
+        "Entre {quien} hay algo que no es solo amistad. El pueblo lo huele.",
+        "Las miradas entre {quien} ya no son casualidad.",
+        "Lo de {quien} va camino de romance. Y nadie se sorprende.",
+        "{quien} se tratan con una ternura sospechosamente especial.",
+        "Hay chispa entre {quien}. De las que duran.",
+        "A {quien} les cuesta disimular lo suyo. Y cada vez más.",
+        "El ambiente entre {quien} está más dulce de lo habitual."
     ],
     "drama": [
-        "La tensión entre {quien} se ha notado hasta en la plaza."
+        "La tensión entre {quien} se ha notado hasta en la plaza.",
+        "Entre {quien} no hay buen rollo últimamente.",
+        "El ambiente entre {quien} está cargado. Y no de buena manera.",
+        "{quien} cruzan palabras que no son precisamente de bienvenida.",
+        "Algo se ha torcido entre {quien}. Se respira mal.",
+        "El frío entre {quien} se corta con un cuchillo."
     ],
     "pareja": [
-        "{quien} ya son pareja. El secreto mejor guardado del pueblo dura poco."
+        "{quien} ya son pareja. El secreto mejor guardado del pueblo dura poco.",
+        "Oficial: {quien} ya son pareja. Enhorabuena, pueblo.",
+        "Lo de {quien} ya tiene sello oficial: son pareja.",
+        "{quien} han dado el paso. Ahora son pareja formalmente.",
+        "Ya nada es secreto: {quien} son pareja.",
+        "Pareja confirmada: {quien}. Las apuestas del pueblo, resueltas."
     ],
     "ruptura": [
-        "{quien} han roto. El pueblo suspira y se prepara para el drama."
+        "{quien} han roto. El pueblo suspira y se prepara para el drama.",
+        "Se acaba lo de {quien}: han roto.",
+        "{quien} siguen ahora caminos separados.",
+        "Ruptura oficial entre {quien}. Cada uno por su lado.",
+        "Había rumores y al final era cierto: {quien} han dejado lo suyo.",
+        "{quien} lo han dejado. La plaza ya está haciendo apuestas sobre rebrote."
     ],
     "marcha_intencion": [
         "{nombre} está pensando en marcharse del pueblo."

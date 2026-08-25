@@ -63,6 +63,32 @@ final class EncuentroIntervencion
     }
 
     /**
+     * Hobbies YA conocidos por el jugador de UNA persona concreta del encuentro.
+     * Nunca revela conocimiento oculto: solo descartes por DiscoveryReveal.
+     *
+     * @param array<string, mixed> $enc
+     * @return list<array{id: string, etiqueta: string, residente_id: string}>
+     */
+    public static function hobbiesConocidosDe(array $partida, array $enc, string $residenteId, ?Catalog $catalog): array
+    {
+        $residenteId = (string) $residenteId;
+        if ($residenteId === '') {
+            return [];
+        }
+        [$a, $b] = self::par($enc);
+        if ($residenteId !== $a && $residenteId !== $b) {
+            return [];
+        }
+        $out = [];
+        foreach (self::hobbiesConocidos($partida, $a, $b, $catalog) as $opt) {
+            if ((string) ($opt['residente_id'] ?? '') === $residenteId) {
+                $out[] = $opt;
+            }
+        }
+        return $out;
+    }
+
+    /**
      * @param array<string, mixed> $enc
      * @return array<string, mixed>
      */
@@ -79,6 +105,7 @@ final class EncuentroIntervencion
                 'accion' => $prev['accion'] ?? null,
                 'tono' => $prev['tono'] ?? null,
                 'texto' => $prev['texto'] ?? null,
+                'objetivo' => $prev['objetivo'] ?? null,
             ] : null,
         ];
     }
@@ -139,15 +166,44 @@ final class EncuentroIntervencion
 
         [$a, $b] = self::par($enc);
         $cal = CalibracionConfig::load($catalog->getRoot());
+        /* "Meterme en su cabeza": persona objetivo OPCIONAL (ENCUENTRO + PERSONA).
+           Si viene, debe ser participante de ESTE encuentro. No cambia cargas,
+           probabilidades ni efectos: el motor resuelve igual que siempre. */
+        $objetivo = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
+        if ($objetivo !== '' && $objetivo !== $a && $objetivo !== $b) {
+            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'objetivo_no_participante']);
+        }
         if ($accionId === self::HOBBY && !isset($params['hobby_id'])) {
             return GameError::respuesta(GameError::INTERVENCION_ACCION_INVALIDA, ['motivo' => 'elige_hobby']);
         }
         if ($accionId === self::HOBBY && isset($params['hobby_id']) && !isset($params['residente_id'])) {
-            foreach (self::hobbiesConocidos($partida, $a, $b, $catalog) as $opt) {
+            /* Con objetivo, el tema solo puede salir de lo YA conocido de ESA persona. */
+            $optsHobby = $objetivo !== ''
+                ? self::hobbiesConocidosDe($partida, $enc, $objetivo, $catalog)
+                : self::hobbiesConocidos($partida, $a, $b, $catalog);
+            foreach ($optsHobby as $opt) {
                 if (($opt['id'] ?? '') === (string) $params['hobby_id']) {
                     $params['residente_id'] = (string) ($opt['residente_id'] ?? '');
                     break;
                 }
+            }
+        }
+        if ($accionId === self::HOBBY && $objetivo !== ''
+            && isset($params['residente_id'])
+            && (string) $params['residente_id'] !== $objetivo) {
+            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
+        }
+        if ($accionId === self::HOBBY && $objetivo !== '' && isset($params['hobby_id'])) {
+            /* El tema metido en la cabeza debe ser de la persona elegida (dato YA conocido). */
+            $delObjetivo = false;
+            foreach (self::hobbiesConocidosDe($partida, $enc, $objetivo, $catalog) as $opt) {
+                if (($opt['id'] ?? '') === (string) $params['hobby_id']) {
+                    $delObjetivo = true;
+                    break;
+                }
+            }
+            if (!$delObjetivo) {
+                return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
             }
         }
         $req = self::requisitos($partida, $enc, $accionId, $a, $b, $cal, $catalog, $params);
@@ -159,7 +215,15 @@ final class EncuentroIntervencion
         }
 
         $rng = RngService::fromPartida($partida);
-        $res = self::resolverAccion($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog, $rng);
+        // Afinidad temática por participante (solo accion 'hobby' con tema elegido).
+        $temaCargas = [];
+        if ($accionId === self::HOBBY) {
+            $hidTema = (string) ($params['hobby_id'] ?? '');
+            if ($hidTema !== '') {
+                $temaCargas = self::temaCargas($partida, [$a, $b], $hidTema, $cal);
+            }
+        }
+        $res = self::resolverAccion($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog, $rng, $temaCargas);
         $rng->persistToPartida($partida);
 
         foreach ($partida['encuentros'] as &$row) {
@@ -173,7 +237,9 @@ final class EncuentroIntervencion
                 'resultado' => $res['resultado'],
                 'texto' => $res['texto'],
                 'hobby_id' => $params['hobby_id'] ?? null,
+                'objetivo' => $objetivo !== '' ? $objetivo : null,
                 'carga' => $res['carga'] ?? 0.0,
+                'tema_cargas' => $temaCargas,
                 'hito' => $res['hito'] ?? null,
                 'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
                 'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
@@ -366,17 +432,24 @@ final class EncuentroIntervencion
     }
 
     /**
-     * @return list<array{id: string, etiqueta: string, residente_id: string}>
+     * Temas/hobbies que Celestine puede elegir legítimamente por participante:
+     * hobbies propios descubiertos + gustos/rechazos de hobby descubiertos.
+     * Nunca expone lo no descubierto.
+     *
+     * @return list<array{id: string, etiqueta: string, residente_id: string, residente_nombre: string, origen: string}>
      */
     private static function hobbiesConocidos(array $partida, string $a, string $b, ?Catalog $catalog): array
     {
         $out = [];
+        $seen = [];
+        $seenGlobal = [];
         foreach ([$a, $b] as $rid) {
+            $seen[$rid] = [];
             $perfil = $catalog !== null
                 ? PerfilPartida::deOLegacy($partida, $rid, $catalog)
                 : (PerfilPartida::de($partida, $rid) ?? []);
             foreach ($perfil['hobbies'] ?? [] as $hid) {
-                if (!is_string($hid) || $hid === '') {
+                if (!is_string($hid) || $hid === '' || isset($seen[$rid][$hid]) || isset($seenGlobal[$hid])) {
                     continue;
                 }
                 if (!DiscoveryReveal::jugadorSabeHobby($partida, $rid, $hid)) {
@@ -389,13 +462,117 @@ final class EncuentroIntervencion
                     } catch (\Throwable $ignored) {
                     }
                 }
+                $seen[$rid][$hid] = true;
+                $seenGlobal[$hid] = true;
                 $out[] = [
                     'id' => $hid,
                     'etiqueta' => $label,
                     'residente_id' => $rid,
                     'residente_nombre' => IdentidadPublica::nombre($partida, $rid),
+                    'origen' => 'propio',
                 ];
             }
+            foreach (DiscoveryEngine::listarPorResidente($partida, $rid) as $d) {
+                if (!is_array($d) || (($d['estado'] ?? DiscoveryEngine::DESCUBIERTO) !== DiscoveryEngine::DESCUBIERTO)) {
+                    continue;
+                }
+                $campo = (string) ($d['campo'] ?? '');
+                $esGusto = str_starts_with($campo, 'gusto_hobby:');
+                $esRechazo = str_starts_with($campo, 'rechazo_hobby:');
+                if (!$esGusto && !$esRechazo) {
+                    continue;
+                }
+                $hid = CopyDescubrimiento::idDeCampo($campo);
+                if ($hid === '' || isset($seen[$rid][$hid]) || isset($seenGlobal[$hid])) {
+                    continue;
+                }
+                $label = $hid;
+                if ($catalog !== null) {
+                    try {
+                        $label = EtiquetaFicha::hobby($hid, $catalog->store());
+                    } catch (\Throwable $ignored) {
+                    }
+                }
+                $seen[$rid][$hid] = true;
+                $seenGlobal[$hid] = true;
+                $out[] = [
+                    'id' => $hid,
+                    'etiqueta' => $label,
+                    'residente_id' => $rid,
+                    'residente_nombre' => IdentidadPublica::nombre($partida, $rid),
+                    'origen' => $esGusto ? 'gusto' : 'rechazo',
+                ];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Favorabilidad de un tema para UN residente, con precedencia canónica
+     * rechazo > gusto > propio. Devuelve el signo y si es hobby propio.
+     *
+     * @return array{favor: int, propio: bool}
+     */
+    public static function temaFavorabilidad(array $partida, string $rid, string $hobbyId): array
+    {
+        if ($rid === '' || $hobbyId === '') {
+            return ['favor' => 0, 'propio' => false];
+        }
+        $perfil = PerfilPartida::de($partida, $rid)
+            ?? PerfilPartida::deOLegacy($partida, $rid, null);
+        $prefs = is_array($perfil['preferencias'] ?? null) ? $perfil['preferencias'] : [];
+        $neg = is_array($prefs['hobbies_neg'] ?? null) ? $prefs['hobbies_neg'] : [];
+        if (in_array($hobbyId, $neg, true)) {
+            return ['favor' => -1, 'propio' => false];
+        }
+        $pos = is_array($prefs['hobbies_pos'] ?? null) ? $prefs['hobbies_pos'] : [];
+        if (in_array($hobbyId, $pos, true)) {
+            return ['favor' => 1, 'propio' => false];
+        }
+        $propios = is_array($perfil['hobbies'] ?? null) ? $perfil['hobbies'] : [];
+        if (in_array($hobbyId, $propios, true)) {
+            return ['favor' => 1, 'propio' => true];
+        }
+        return ['favor' => 0, 'propio' => false];
+    }
+
+    /**
+     * Carga temática INDIVIDUAL por participante para un hobby elegido.
+     * Se aplica a la tirada de experiencia de cada quien al terminar el encuentro,
+     * de modo que un mismo tema pueda sentar bien a uno y mal al otro.
+     *
+     * @param list<string> $participantes
+     * @return array<string, float>
+     */
+    public static function temaCargas(
+        array $partida,
+        array $participantes,
+        string $hobbyId,
+        array $cal
+    ): array {
+        $out = [];
+        if ($hobbyId === '') {
+            return $out;
+        }
+        $maxAbs = (float) CalibracionConfig::get($cal, 'intervencion_tema.max_abs', 0.35);
+        foreach ($participantes as $rid) {
+            $rid = (string) $rid;
+            if ($rid === '' || !isset($partida['residentes'][$rid])) {
+                continue;
+            }
+            $fav = self::temaFavorabilidad($partida, $rid, $hobbyId);
+            $v = 0.0;
+            if ($fav['favor'] < 0) {
+                $v = (float) CalibracionConfig::get($cal, 'intervencion_tema.carga_rechazo', -0.28);
+            } elseif ($fav['favor'] > 0) {
+                $k = $fav['propio'] ? 'intervencion_tema.carga_propio' : 'intervencion_tema.carga_gusto';
+                $def = $fav['propio'] ? 0.18 : 0.22;
+                $v = (float) CalibracionConfig::get($cal, $k, $def);
+            }
+            if ($maxAbs > 0) {
+                $v = max(-$maxAbs, min($maxAbs, $v));
+            }
+            $out[$rid] = $v;
         }
         return $out;
     }
@@ -415,14 +592,15 @@ final class EncuentroIntervencion
         array $params,
         array $cal,
         Catalog $catalog,
-        RngService $rng
+        RngService $rng,
+        array $temaCargas = []
     ): array {
         $resultados = CalibracionConfig::get($cal, 'resolucion_encuentro.resultados', ['muy_mal', 'mal', 'normal', 'bien', 'muy_bien']);
         if (!is_array($resultados) || $resultados === []) {
             $resultados = ['muy_mal', 'mal', 'normal', 'bien', 'muy_bien'];
         }
 
-        $carga = self::cargaBase($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog);
+        $carga = self::cargaBase($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog, $temaCargas);
         $tirada = AzarPonderado::tirar($rng, $resultados, $carga, $cal);
         $resultado = (string) ($tirada['resultado'] ?? 'normal');
         $tono = self::tonoDe($resultado);
@@ -475,16 +653,28 @@ final class EncuentroIntervencion
             }
         }
 
-        if ($accionId === self::HOBBY && $tono !== 'mal') {
-            $hid = (string) ($params['hobby_id'] ?? '');
-            $residente = (string) ($params['residente_id'] ?? '');
-            if ($hid !== '' && $residente !== '') {
-                $lugar = (string) ($enc['lugar'] ?? '');
-                $plan = PlanAfinidad::paraParticipante($partida, $residente, $lugar, $catalog);
-                $match = is_array($plan) && !empty($plan['hobby_match']);
-                if ($match) {
-                    self::aplicarEmocion($partida, $residente, EmotionalRecovery::estadoDesdeResultado($resultado) ?? EstadoEmocional::NEUTRO);
-                    $efectos['emocion'] = ['residente' => $residente, 'hobby_match' => true];
+        // Reacción emocional inmediata al TEMA elegido (por participante):
+        // - a quien le favorece y el tono no es malo: se anima según resultado;
+        // - a quien el tema le repugna y sale mal: se enfada con el otro.
+        // El veredicto final por participante llega al terminar el encuentro
+        // vía tema_cargas en EncuentroExperiencia.
+        if ($accionId === self::HOBBY && $temaCargas !== []) {
+            foreach ($temaCargas as $rid => $tc) {
+                $rid = (string) $rid;
+                if (!isset($partida['residentes'][$rid]) || (float) $tc === 0.0) {
+                    continue;
+                }
+                $otro = $rid === $a ? $b : $a;
+                if ((float) $tc > 0.0 && $tono !== 'mal') {
+                    self::aplicarEmocion(
+                        $partida,
+                        $rid,
+                        EmotionalRecovery::estadoDesdeResultado($resultado) ?? EstadoEmocional::NEUTRO
+                    );
+                    $efectos['tema_emocion'][] = ['residente' => $rid, 'tema_match' => true];
+                } elseif ((float) $tc < 0.0 && $tono === 'mal') {
+                    self::aplicarEmocion($partida, $rid, EstadoEmocional::ENFADADO, ['hacia' => $otro]);
+                    $efectos['tema_emocion'][] = ['residente' => $rid, 'tema_rechazo' => true];
                 }
             }
         }
@@ -587,7 +777,7 @@ final class EncuentroIntervencion
             RelacionEngine::registrarContacto($partida, $desde, $hacia, ContactoCalidad::LEVE, $cal, -1, -2);
             RelacionEngine::registrarContacto($partida, $hacia, $desde, ContactoCalidad::LEVE, $cal, -1, -1);
             RelacionEngine::upsertConflicto($partida, $a, $b, 2, 'roce', 'beso_rechazado');
-            self::aplicarEmocion($partida, $hacia, EstadoEmocional::ENFADADO);
+            self::aplicarEmocion($partida, $hacia, EstadoEmocional::ENFADADO, ['hacia' => $desde]);
             $efectos['romance'] = ['aceptado' => false];
             $efectos['conflicto'] = 2;
             $hito = RelacionBitacora::RECHAZO_IMPORTANTE;
@@ -610,7 +800,7 @@ final class EncuentroIntervencion
     /**
      * @param array<string, mixed> $enc
      * @param array<string, mixed> $params
-     * @param array<string, mixed> $cal
+     * @param array<string, float> $temaCargas
      */
     private static function cargaBase(
         array $partida,
@@ -620,7 +810,8 @@ final class EncuentroIntervencion
         string $b,
         array $params,
         array $cal,
-        Catalog $catalog
+        Catalog $catalog,
+        array $temaCargas = []
     ): float {
         $snap = EncuentroPonderacion::snapshot($partida, $enc, $catalog);
         $carga = (EncuentroExperiencia::cargaDe($snap, $a, $cal) + EncuentroExperiencia::cargaDe($snap, $b, $cal)) / 2.0;
@@ -633,19 +824,21 @@ final class EncuentroIntervencion
         if ($accionId === self::COQUETEAR) {
             $carga += 0.1;
         }
-        if ($accionId === self::HOBBY) {
-            $rid = (string) ($params['residente_id'] ?? '');
-            $lugar = (string) ($enc['lugar'] ?? '');
-            if ($rid !== '') {
-                $plan = PlanAfinidad::paraParticipante($partida, $rid, $lugar, $catalog);
-                if (is_array($plan) && !empty($plan['hobby_match'])) {
-                    $carga += 0.2;
-                }
+        if ($accionId === self::HOBBY && $temaCargas !== []) {
+            // Acierto temático: la mejor favorabilidad individual carga la tirada global.
+            // Sustituye el antiguo check muerto plan['hobby_match'] (clave inexistente).
+            $mejor = max(0.0, (float) ($temaCargas[$a] ?? 0.0), (float) ($temaCargas[$b] ?? 0.0));
+            if ($mejor > 0.0) {
+                $carga += min(0.2, $mejor);
             }
         }
         return max(-1.0, min(1.0, $carga));
     }
 
+    /**
+     * Magnitud del efecto de la acción según tono. El SIGNO lo aporta el delta base
+     * (ya negativo para mal/muy_mal): nunca negar el signo del delta.
+     */
     private static function factorAccion(string $accionId, string $tono): float
     {
         switch ($accionId) {
@@ -671,9 +864,6 @@ final class EncuentroIntervencion
         if ($tono === 'neutral') {
             return $base * 0.5;
         }
-        if ($tono === 'mal') {
-            return -$base;
-        }
         return $base;
     }
 
@@ -688,8 +878,12 @@ final class EncuentroIntervencion
         return 'neutral';
     }
 
-    private static function aplicarEmocion(array &$partida, string $rid, string $estadoId): void
-    {
+    private static function aplicarEmocion(
+        array &$partida,
+        string $rid,
+        string $estadoId,
+        array $contexto = []
+    ): void {
         if (!isset($partida['residentes'][$rid])) {
             return;
         }
@@ -700,7 +894,7 @@ final class EncuentroIntervencion
             'encuentro_intervencion',
             EstadoEmocional::marcaReloj($partida['reloj'] ?? null),
             EstadoEmocional::hastaDesdeDuracion($partida['reloj'] ?? [], 3),
-            [],
+            $contexto,
             3
         );
     }

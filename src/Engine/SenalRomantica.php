@@ -151,6 +151,13 @@ final class SenalRomantica
             'motivo' => $senal['motivo'],
         ];
         RelacionEngine::persistirRomance($partida, $rel);
+        SimFunnelProbe::on($partida, 'senal', [
+            'ev' => 'emitida',
+            '_k' => 'senal_' . (string) $senal['motivo'],
+            'desde' => $desde,
+            'hacia' => $hacia,
+            'motivo' => $senal['motivo'],
+        ]);
 
         $nomDe = IdentidadPublica::nombre($partida, $desde);
         $nomA = IdentidadPublica::nombre($partida, $hacia);

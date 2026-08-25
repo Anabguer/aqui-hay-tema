@@ -56,6 +56,7 @@ final class HobbyEmocionDev
                     'plan_a' => $afinidad,
                     'emocional_a' => $res['runtime']['estado_emocional']['id'] ?? 'neutro',
                 ],
+                'participantes' => [$residenteId],
                 'por_participante' => [],
             ], $residenteId, $cal);
             $distribucion = self::distribucionAzar($resultados, $carga, $cal);

@@ -142,8 +142,9 @@ final class EncuentroResultadoVista
             $n = (int) $dr['vinculo'];
         }
         if ($n === 0) {
-            $a = (int) ($dr['atraccion_a_hacia_b'] ?? 0);
-            $b = (int) ($dr['atraccion_b_hacia_a'] ?? 0);
+            // El resolver escribe a_hacia_b/b_hacia_a; el legacy usaba atraccion_*/vinculo.
+            $a = (int) ($dr['atraccion_a_hacia_b'] ?? ($dr['a_hacia_b'] ?? 0));
+            $b = (int) ($dr['atraccion_b_hacia_a'] ?? ($dr['b_hacia_a'] ?? 0));
             $n = $a !== 0 ? $a : $b;
         }
         $texto = '';

@@ -63,6 +63,7 @@ final class PlanAfinidad
             'lugar' => $lugarId,
             'hobbies_relacionados' => $relacionados,
             'relacionado' => $relacionados !== [],
+            'plan_lugar_match' => $relacionados !== [],
             'aporte' => $aporte,
             'penalizacion' => $penalizacion,
             'penalizacion_si_ajeno' => 0,

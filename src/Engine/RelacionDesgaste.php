@@ -39,8 +39,11 @@ final class RelacionDesgaste
     private static function aplicarSocial(array &$partida, array $cal): int
     {
         $horasMin = (int) CalibracionConfig::get($cal, 'desgaste_social.horas_sin_contacto', 24);
-        $base = (float) CalibracionConfig::get($cal, 'desgaste_social.base_diaria', 2.0);
-        $exp = (float) CalibracionConfig::get($cal, 'desgaste_social.exponente', 2.0);
+        $exp = (float) CalibracionConfig::get($cal, 'desgaste_social.exponente', 1.4);
+        $basePorNivel = CalibracionConfig::get($cal, 'desgaste_social.base_por_nivel', [0.8, 0.4, 0.2, 0.1]);
+        if (!is_array($basePorNivel) || count($basePorNivel) < 4) {
+            $basePorNivel = [0.8, 0.4, 0.2, 0.1];
+        }
         $n = 0;
         foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {
             if (!is_array($rel) || empty($rel['conocidos'])) {
@@ -52,6 +55,9 @@ final class RelacionDesgaste
                 $partida['relaciones_sociales'][$i] = $rel;
                 continue;
             }
+            $cons = $rel['consolidacion'] ?? ['nivel' => 0, 'activa' => false];
+            $nivel = $cons['activa'] === true ? (int) ($cons['nivel'] ?? 0) : 0;
+            $base = (float) ($basePorNivel[$nivel] ?? $basePorNivel[0]);
             $cambio = false;
             foreach (['a_hacia_b', 'b_hacia_a'] as $key) {
                 $v = (int) ($rel[$key]['valor'] ?? 0);

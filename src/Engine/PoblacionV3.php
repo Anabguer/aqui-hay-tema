@@ -25,19 +25,23 @@ final class PoblacionV3
             return;
         }
         $cat = new Catalog($root);
-        $pool = $cat->listPersonajeIdsJugables();
+        $disponibles = $cat->listPersonajeIdsJugables();
         $rng = RngService::fromPartida($partida);
-        $picked = $rng->pickUnique($pool, min($n, count($pool)));
-        $rng->persistToPartida($partida);
+        // Regla global: sin nombres duplicados en la partida. Se respetan los
+        // nombres de residentes ya presentes (p. ej. residentes_iniciales del config)
+        // y cada escogido reserva su nombre; los descartados se sustituyen por
+        // otro id válido hasta completar la cantidad prevista (o agotar pool).
+        $usados = NombresReservadosPartida::usados($partida, $root);
+        $picked = NombresReservadosPartida::escogerSinRepetirNombre($rng, $disponibles, $n, $usados, $root);
         foreach ($picked as $id) {
-            $ops->incorporarCatalogo($partida, (string) $id, 'residente');
+            $ops->incorporarCatalogo($partida, $id, 'residente');
         }
+        $rng->persistToPartida($partida);
         $inc = (int) ($pv3['incorporaciones_aleatorias'] ?? 0);
         if ($inc > 0) {
-            $rest = array_values(array_diff($pool, $picked));
-            $cola = $rng->pickUnique($rest, min($inc, count($rest)));
+            $cola = NombresReservadosPartida::escogerSinRepetirNombre($rng, $disponibles, $inc, $usados, $root);
             $rng->persistToPartida($partida);
-            $partida['llegadas']['tutorial_cola'] = array_values($cola);
+            $partida['llegadas']['tutorial_cola'] = $cola;
         }
     }
 }

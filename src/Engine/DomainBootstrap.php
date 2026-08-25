@@ -31,6 +31,7 @@ final class DomainBootstrap
 
         ContentReactionSubscriber::register();
         EmotionalEventBridge::register();
+        DiarioResidenteBridge::register();
         BuzonPlayBridge::register();
         MisionPlayBridge::register();
         PeticionPlayBridge::register();

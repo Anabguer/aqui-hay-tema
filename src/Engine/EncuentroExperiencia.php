@@ -22,6 +22,9 @@ final class EncuentroExperiencia
     ): array {
         $snap = EncuentroPonderacion::snapshot($partida, $encuentro, $catalog);
         $ids = array_values($encuentro['participantes'] ?? []);
+        // Los planes (plan_a/plan_b) se resuelven por posición: hay que fijar el orden
+        // ANTES de calcular cargas, o todos los participantes leen plan_b.
+        $snap['participantes'] = $ids;
         $resultados = CalibracionConfig::get($cal, 'resolucion_encuentro.resultados', ['muy_mal', 'mal', 'normal', 'bien', 'muy_bien']);
         if (!is_array($resultados) || $resultados === []) {
             $resultados = ['muy_mal', 'mal', 'normal', 'bien', 'muy_bien'];
@@ -34,12 +37,18 @@ final class EncuentroExperiencia
             $carga = self::cargaDe($snap, $pid, $cal);
             if (isset($encuentro['intervencion_celeste']['carga']) && is_numeric($encuentro['intervencion_celeste']['carga'])) {
                 $carga += (float) $encuentro['intervencion_celeste']['carga'];
-                if ($carga < -1.0) {
-                    $carga = -1.0;
-                }
-                if ($carga > 1.0) {
-                    $carga = 1.0;
-                }
+            }
+            // Afinidad tema elegido por Celestine: carga INDIVIDUAL por participante.
+            $temaCargas = is_array($encuentro['intervencion_celeste']['tema_cargas'] ?? null)
+                ? $encuentro['intervencion_celeste']['tema_cargas'] : [];
+            if (isset($temaCargas[$pid]) && is_numeric($temaCargas[$pid])) {
+                $carga += (float) $temaCargas[$pid];
+            }
+            if ($carga < -1.0) {
+                $carga = -1.0;
+            }
+            if ($carga > 1.0) {
+                $carga = 1.0;
             }
             $recientes = [];
             foreach (MemoriaEventos::recientes($partida, [$pid], 5) as $ev) {
@@ -78,6 +87,9 @@ final class EncuentroExperiencia
         }
         $row = $snap['por_participante'][$pid] ?? [];
         $fact = $snap['factores'] ?? [];
+        $orden = isset($snap['participantes']) && is_array($snap['participantes'])
+            ? array_values($snap['participantes'])
+            : array_keys(is_array($snap['por_participante'] ?? null) ? $snap['por_participante'] : []);
         $acc = 0.0;
         $wsum = 0.0;
         foreach ($pesos as $k => $w) {
@@ -107,7 +119,7 @@ final class EncuentroExperiencia
                 $emo = (string) ($fact['emocional_a'] ?? 'neutro');
                 $v = ((float) EstadoEmocional::modificadores($emo, $cal)['experiencia_encuentro']) / 20.0;
             } elseif ($k === 'lugar' || $k === 'hobbies_plan') {
-                $plan = $pid === ($snap['participantes'][0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
+                $plan = $pid === ($orden[0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
                 $ap = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
                 $pe = is_array($plan) ? (int) ($plan['penalizacion'] ?? 0) : 0;
                 $v = ($ap - $pe) / 20.0;
@@ -143,6 +155,9 @@ final class EncuentroExperiencia
             return ['carga' => 0.0, 'contribuciones' => []];
         }
         $fact = $snap['factores'] ?? [];
+        $orden = isset($snap['participantes']) && is_array($snap['participantes'])
+            ? array_values($snap['participantes'])
+            : array_keys(is_array($snap['por_participante'] ?? null) ? $snap['por_participante'] : []);
         $contrib = [];
         $acc = 0.0;
         $wsum = 0.0;
@@ -176,7 +191,7 @@ final class EncuentroExperiencia
                 }
                 $v = ((float) EstadoEmocional::modificadores($emo, $cal)['experiencia_encuentro']) / 20.0;
             } elseif ($k === 'lugar' || $k === 'hobbies_plan') {
-                $plan = $pid === ($snap['participantes'][0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
+                $plan = $pid === ($orden[0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
                 $ap = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
                 $pe = is_array($plan) ? (int) ($plan['penalizacion'] ?? 0) : 0;
                 $v = ($ap - $pe) / 20.0;

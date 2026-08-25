@@ -409,10 +409,17 @@ final class CandidatoLlegadaEngine
         HistorialPersonajesPartida::ensure($partida);
         $catalog = new Catalog($root);
         $ids = $catalog->listPersonajeIdsJugables();
+        // Regla global de partida: sin nombres duplicados entre personajes.
+        // El histórico excluye por ID, pero el catálogo puede tener dos fichas
+        // distintas con el mismo nombre (p. ej. per_p014 y per_p104 = "Alba").
+        $usados = NombresReservadosPartida::usados($partida, $root);
         $out = [];
         foreach ($ids as $id) {
             $id = (string) $id;
             if (HistorialPersonajesPartida::yaAparecio($partida, $id)) {
+                continue;
+            }
+            if (NombresReservadosPartida::idBloqueado($usados, $root, $id)) {
                 continue;
             }
             $out[] = $id;
@@ -422,12 +429,7 @@ final class CandidatoLlegadaEngine
 
     private static function nombreCatalogo(string $root, string $catalogId): string
     {
-        try {
-            $p = (new Catalog($root))->loadPersonaje($catalogId);
-            return (string) ($p['identidad']['nombre'] ?? $p['nombre'] ?? $catalogId);
-        } catch (\Throwable $e) {
-            return $catalogId;
-        }
+        return NombresReservadosPartida::nombreCatalogo($root, $catalogId);
     }
 
     public static function minutosAbs(array $partida): int

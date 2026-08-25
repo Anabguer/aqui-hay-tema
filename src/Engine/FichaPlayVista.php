@@ -72,9 +72,14 @@ final class FichaPlayVista
         }
 
         $pistas = [];
+        $animas = [];
+        $disgustas = [];
         $nombre = (string) ($ficha['identidad']['nombre'] ?? '');
         foreach ($ficha['descubrimientos'] ?? [] as $d) {
             if (!is_array($d)) {
+                continue;
+            }
+            if (($d['estado'] ?? DiscoveryEngine::DESCUBIERTO) !== DiscoveryEngine::DESCUBIERTO) {
                 continue;
             }
             $campo = (string) ($d['campo'] ?? '');
@@ -82,8 +87,24 @@ final class FichaPlayVista
                 continue;
             }
             $txt = CopyDescubrimiento::texto($nombre, $campo, $d['valor'] ?? null, $store);
-            if (is_string($txt) && $txt !== '') {
-                $pistas[] = $txt;
+            if (!is_string($txt) || $txt === '') {
+                continue;
+            }
+            $pistas[] = $txt;
+            // Grupos para la ficha: solo gustos/rechazos de HOBBY descubiertos.
+            if (str_starts_with($campo, 'gusto_hobby:') || str_starts_with($campo, 'rechazo_hobby:')) {
+                $id = CopyDescubrimiento::idDeCampo($campo);
+                try {
+                    $etiqueta = EtiquetaFicha::hobby($id !== '' ? $id : (string) ($d['valor'] ?? ''), $store);
+                } catch (\Throwable $ignored) {
+                    $etiqueta = $id;
+                }
+                $row = ['id' => $id, 'texto' => $txt, 'etiqueta' => $etiqueta];
+                if (str_starts_with($campo, 'gusto_hobby:')) {
+                    $animas[] = $row;
+                } else {
+                    $disgustas[] = $row;
+                }
             }
         }
 
@@ -105,6 +126,11 @@ final class FichaPlayVista
             'gusta_en_gente' => $gustaGente,
             'no_gusta_en_gente' => $noGustaGente,
             'pistas' => $pistas,
+            'pistas_grupos' => [
+                'animas' => $animas,
+                'disgustas' => $disgustas,
+                '_nota' => 'Solo gustos/rechazos de hobby DESCUBIERTOS. Personalidad sigue en gusta_en_gente/no_gusta_en_gente.',
+            ],
             'estado_animo' => $ficha['estado_emocional']['id'] ?? 'neutro',
             'pista_estado' => EmocionalNarrativa::pistaFicha(
                 is_array($ficha['estado_emocional'] ?? null) ? $ficha['estado_emocional'] : []

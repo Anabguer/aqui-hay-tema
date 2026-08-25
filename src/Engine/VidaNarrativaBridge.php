@@ -99,7 +99,7 @@ final class VidaNarrativaBridge
                 '_placeholder_contenido' => false,
             ];
             if ($clas === BuzonEngine::COTILLEO) {
-                $msg['cotilleo_meta'] = CotilleoCategoria::meta(CotilleoCategoria::DRAMA, false);
+                $msg['cotilleo_meta'] = CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true);
             }
             $r = BuzonEngine::crear($partida, $msg);
             if ($r['ok'] ?? false) {

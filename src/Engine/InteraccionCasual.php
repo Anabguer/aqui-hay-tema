@@ -36,6 +36,7 @@ final class InteraccionCasual
         }
         $bonusPatron = (bool) ($opciones['bonus_patron'] ?? false);
         $soloDesconocidos = (bool) ($opciones['solo_desconocidos'] ?? false);
+        SimFunnelProbe::on($partida, 'casual', ['ev' => 'grupo_copresencia', '_k' => 'grupo_copresencia', 'n' => count($residentes), 'lugar' => $lugarId, '_solo_conteo' => true]);
         $maxPor = (int) CalibracionConfig::get($cal, 'coincidencias.max_significativas_por_salida', 1);
         $ya = [];
         $hechos = [];
@@ -57,7 +58,10 @@ final class InteraccionCasual
 
             $extra = $bonusPatron ? self::bonusPatronPar($partida, [$a, $b], $lugarId, $dia, $cal) : 0.0;
             $p = self::probabilidadPar($partida, $a, $b, $cal, $extra);
-            if ($rng->nextFloat() > $p) {
+            $rollCasual = $rng->nextFloat();
+            $evCas = $rollCasual <= $p ? 'intento_ok' : 'intento_fallido';
+            SimFunnelProbe::on($partida, 'casual', ['ev' => $evCas, '_k' => $evCas, 'a' => $a, 'b' => $b, 'p' => round($p, 3), 'se_conocen' => RelacionEngine::seConocen($partida, $a, $b)]);
+            if ($rollCasual > $p) {
                 continue;
             }
             $r = self::ejecutarPar($partida, $a, $b, $lugarId, $cal, $rng, $catalog);
@@ -168,15 +172,23 @@ final class InteraccionCasual
         RelacionEngine::registrarContacto($partida, $b, $a, $calidad, $cal, 1);
         $socAb = RelacionEngine::valorSocialHacia($partida, $a, $b);
         $socBa = RelacionEngine::valorSocialHacia($partida, $b, $a);
-        if ($socAb >= 12 && $socBa >= 12 && $rng->nextFloat() < 0.18) {
+        if ($socAb < 12 || $socBa < 12) {
+            SimFunnelProbe::on($partida, 'casual', ['ev' => 'quedada_soc_insuficiente', '_k' => 'quedada_soc_insuficiente', 'a' => $a, 'b' => $b, 'sa' => $socAb, 'sb' => $socBa]);
+        } elseif ($rng->nextFloat() < 0.18) {
+            SimFunnelProbe::on($partida, 'casual', ['ev' => 'quedada_roll_ok', '_k' => 'quedada_roll_ok', 'a' => $a, 'b' => $b]);
             self::intentarQuedadaCasual($partida, $a, $b, $cal, $rng);
+        } else {
+            SimFunnelProbe::on($partida, 'casual', ['ev' => 'quedada_roll_fail', '_k' => 'quedada_roll_fail', 'a' => $a, 'b' => $b]);
         }
         $disc = self::descubrimientoCasual($partida, $a, $b, $lugarId, $cal, $catalog);
         $flechazo = null;
         $prob = (float) CalibracionConfig::get($cal, 'flechazo.probabilidad', 0.006);
         $prob *= (float) CalibracionConfig::get($cal, 'flechazo.casual_mult', 0.35);
         $prob *= TerceroRomantico::multiplicador($partida, $a, $b, $cal);
-        if ($rng->nextFloat() < $prob) {
+        $rollFl = $rng->nextFloat();
+        $evFl = $rollFl < $prob ? 'flechazo_casual_ok' : 'flechazo_casual_no';
+        SimFunnelProbe::on($partida, 'flechazo', ['ev' => $evFl, '_k' => $evFl, 'p' => round($prob, 5)]);
+        if ($rollFl < $prob) {
             $store = $catalog !== null ? $catalog->store() : null;
             if ($store !== null) {
                 $flechazo = AccionRomantica::ejecutar($partida, 'flechazo', $a, $b, $store, $cal, true);
@@ -264,6 +276,7 @@ final class InteraccionCasual
             $lugar
         );
         if (!($franja['ok'] ?? false)) {
+            SimFunnelProbe::on($partida, 'quedada_autonoma', ['ev' => 'sin_hueco_agenda', '_k' => 'sin_hueco_agenda', 'via' => 'casual']);
             return;
         }
         $tipo = 'conocerse';
@@ -284,6 +297,7 @@ final class InteraccionCasual
             null,
             null
         );
+        SimFunnelProbe::on($partida, 'quedada_autonoma', ['ev' => (($r['ok'] ?? false) ? 'programada' : 'error_programar'), '_k' => ((($r['ok'] ?? false) ? 'qc_programada_' : 'qc_error_programar') . $tipo), 'via' => 'casual', 'tipo' => $tipo, 'lugar' => $lugar]);
         if (($r['ok'] ?? false) && isset($r['encuentro']['id'])) {
             foreach ($partida['encuentros'] as $i => $enc) {
                 if (($enc['id'] ?? '') === $r['encuentro']['id']) {

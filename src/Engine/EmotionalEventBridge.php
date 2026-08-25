@@ -111,8 +111,15 @@ final class EmotionalEventBridge
             $antes = $partida['residentes'][$rid]['runtime']['estado_emocional'];
             $estadoAntes = (string) ($antes['id'] ?? EstadoEmocional::NEUTRO);
             $resExp = (string) ($resultado['por_participante'][$rid]['resultado'] ?? 'normal');
+            // Afinidad residente-LUGAR (plan del sitio): red de seguridad clásica.
             $afin = PlanAfinidad::paraParticipante($partida, $rid, $lugarId, $catalog);
-            $hobbyMatch = !empty($afin['relacionado']);
+            $lugarMatch = !empty($afin['plan_lugar_match']) || !empty($afin['relacionado']);
+            // Afinidad residente-TEMA elegido por Celestine en la intervención.
+            $temaCargas = is_array($encuentro['intervencion_celeste']['tema_cargas'] ?? null)
+                ? $encuentro['intervencion_celeste']['tema_cargas'] : [];
+            $temaMatch = isset($temaCargas[$rid]) && is_numeric($temaCargas[$rid]) && (float) $temaCargas[$rid] > 0.0;
+            // La recuperación emocional canónica sigue ligada al LUGAR (comportamiento previo).
+            $hobbyMatch = $lugarMatch;
             $eval = EmotionalRecovery::evaluar($estadoAntes, $resExp, $hobbyMatch);
             if ($eval === null) {
                 continue;
@@ -120,11 +127,24 @@ final class EmotionalEventBridge
             $origenAplicar = (string) ($eval['motivo'] === 'hobby_recuperacion' ? 'hobby_recuperacion' : 'encuentro');
             $ctx = [
                 'encuentro_id' => $encuentro['id'] ?? null,
-                'hobby_match' => $hobbyMatch,
+                'plan_lugar_match' => $lugarMatch,
+                'tema_match' => $temaMatch,
+                'hobby_match' => $hobbyMatch, // legacy: alias de plan_lugar_match para saves/tests antiguos
                 'resultado_experiencia' => $resExp,
                 'estado_antes' => $estadoAntes,
                 'motivo' => $eval['motivo'],
             ];
+            // En encuentro de 2, la otra persona implicada es inequívoca: se persiste
+            // para que la voluntad pueda distinguir enfado dirigido vs ajeno.
+            if (count($actores) === 2) {
+                foreach ($actores as $otroActor) {
+                    $otroActor = (string) $otroActor;
+                    if ($otroActor !== '' && $otroActor !== $rid) {
+                        $ctx['hacia'] = $otroActor;
+                        break;
+                    }
+                }
+            }
             $svc->aplicar(
                 $partida,
                 $rid,
@@ -140,7 +160,9 @@ final class EmotionalEventBridge
                 'residente_id' => $rid,
                 'estado' => (string) ($despues['id'] ?? ''),
                 'antes' => $estadoAntes,
-                'hobby_match' => $hobbyMatch,
+                'plan_lugar_match' => $lugarMatch,
+                'tema_match' => $temaMatch,
+                'hobby_match' => $hobbyMatch, // legacy
                 'resultado_experiencia' => $resExp,
                 'motivo' => $eval['motivo'],
             ];

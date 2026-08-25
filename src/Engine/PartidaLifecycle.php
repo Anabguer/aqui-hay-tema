@@ -85,7 +85,10 @@ final class PartidaLifecycle
         Reloj::calcularCatchUpPendiente($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->generarMisionesSiToca($partida);
-        $this->tickPeticiones($partida);
+        // R08: cargar NUNCA tira nacimientos. Solo reconciliación (caducidad
+        // offline + fallos ya devengados). La generación autónoma vive en el
+        // avance canónico del reloj (RelojOperations::avanzar).
+        $this->reconciliarPeticiones($partida);
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
@@ -105,7 +108,8 @@ final class PartidaLifecycle
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->generarMisionesSiToca($partida);
-        $this->tickPeticiones($partida);
+        // R08: igual que cargar(). Un refresh/clic no genera peticiones.
+        $this->reconciliarPeticiones($partida);
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
@@ -233,6 +237,20 @@ final class PartidaLifecycle
             $this->logger,
             1
         );
+    }
+
+    /**
+     * Reconciliación de peticiones SIN avance de reloj: caduca vencidas y
+     * aplica fallos de Vida ya devengados (idempotente). Cero RNG, cero
+     * nacimientos: el nacimiento autónomo depende solo del reloj de juego.
+     */
+    private function reconciliarPeticiones(array &$partida): void
+    {
+        PeticionEngine::caducarVencidas($partida, $this->logger);
+        if (PeticionPuebloEngine::activa($partida)) {
+            $cal = CalibracionConfig::load($this->root);
+            PeticionPuebloEngine::aplicarFalloPendiente($partida, $cal, $this->logger);
+        }
     }
 
     private function generarMisionesSiToca(array &$partida): void

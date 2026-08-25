@@ -47,6 +47,7 @@ final class EncuentroPonderacion
             '_provisional' => true,
             '_bloqueado_decision' => ['formula_definitiva', 'pesos_resolucion'],
             'factores' => $factores,
+            'participantes' => $ids,
             'por_participante' => [
                 $a => [
                     'satisfaccion' => null,
