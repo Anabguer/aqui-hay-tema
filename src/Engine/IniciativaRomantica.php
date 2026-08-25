@@ -331,6 +331,36 @@ final class IniciativaRomantica
         $par = [$a, $b];
         sort($par);
         $parKey = $par[0] . '>' . $par[1];
+
+        // R4 · Vida de pareja autónoma: la pareja sigue quedando con gap canónico
+        // de la familia 'pareja' (36 h). En CRISIS/EX no hay citas recreativas.
+        $est = ParejaEngine::estado($partida, $a, $b);
+        if ($est === ParejaEngine::PAREJA && self::vidaParejaActiva($cal)) {
+            $entry = [
+                'par' => $par,
+                'accion' => 'cita',
+                'desde_abs' => self::ahoraAbs($partida) + self::gapParejaHoras($cal),
+                'gap_horas' => self::gapParejaHoras($cal),
+                'ultima_experiencia' => $resultadoExperiencia,
+                'creado' => [
+                    'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                    'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
+                ],
+            ];
+            $resto = array_values(array_filter(
+                $partida['continuidad_romantica'],
+                static fn ($m) => is_array($m) && (($m['par'][0] ?? '') . '>' . ($m['par'][1] ?? '')) !== $parKey
+            ));
+            $resto[] = $entry;
+            $partida['continuidad_romantica'] = $resto;
+            return;
+        }
+        if ($est !== ParejaEngine::NINGUNA) {
+            // CRISIS/EX: sin citas recreativas y SIN marcadores huérfanos previos.
+            self::purgarMarcadoresPar($partida, $a, $b);
+            return;
+        }
+
         $accion = 'cita';
         $extraDecl = [];
         if (self::declaracionActiva($cal)) {
@@ -610,6 +640,167 @@ final class IniciativaRomantica
         ]);
     }
 
+    /**
+     * R4 · Intento autónomo de cita de PAREJA (estado=pareja, vida_pareja_activa).
+     * Mismo contrato de voluntad geométrica y agenda que la continuidad F2A;
+     * gap canónico de la familia 'pareja'. Nunca forma/rompe nada.
+     */
+    public static function intentarCitaPareja(
+        array &$partida,
+        string $desde,
+        string $hacia,
+        array $cal,
+        ?GameLogger $logger = null
+    ): array {
+        self::ensure($partida);
+
+        // ---- gates (sin RNG) ----
+        $gate = 'ok';
+        while (true) {
+            if ($desde === '' || $hacia === '' || $desde === $hacia) {
+                $gate = 'par_invalido';
+                break;
+            }
+            if (!RelacionEngine::seConocen($partida, $desde, $hacia)) {
+                $gate = 'sin_conocerse';
+                break;
+            }
+            $est = ParejaEngine::estado($partida, $desde, $hacia);
+            if ($est !== ParejaEngine::PAREJA) {
+                $gate = 'no_es_pareja';
+                break;
+            }
+            if (SenalRomantica::enParejaConTercero($partida, $desde, $hacia)) {
+                $gate = 'en_pareja_con_otro';
+                break;
+            }
+            if (self::citaEnMarchaDelPar($partida, $desde, $hacia)) {
+                $gate = 'cita_en_marcha';
+                break;
+            }
+            $ultima = self::ultimaCitaResuelta($partida, $desde, $hacia);
+            if ($ultima !== null
+                && (self::ahoraAbs($partida) - $ultima['abs']) < self::gapParejaHoras($cal)) {
+                $gate = 'cooldown_cita_pareja';
+                break;
+            }
+            if (PropuestaCooldown::activo($partida, $desde, $hacia, self::TIPO_CITA, $cal)) {
+                $gate = 'cooldown_propuesta';
+                break;
+            }
+            break;
+        }
+        if ($gate !== 'ok') {
+            return self::fin($partida, 'gate_' . $gate, $desde, $hacia);
+        }
+
+        // ---- voluntad de AMBOS (tipo 'cita'; conflicto/emocional ya penalizan) ----
+        $prop = [
+            'participantes' => [$desde, $hacia],
+            'tipo' => self::TIPO_CITA,
+            'lugar' => null,
+            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'hora' => (int) ($partida['reloj']['hora_actual'] ?? 12),
+        ];
+        $vol = new VoluntadPonderadaEvaluator($cal);
+        $ra = $vol->evaluar($partida, $prop, $desde);
+        $rb = $vol->evaluar($partida, $prop, $hacia);
+        foreach ([[$ra, $desde, $hacia], [$rb, $hacia, $desde]] as [$r, $quien, $otro]) {
+            if (($r['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            if (($r['clase'] ?? '') === PropuestaEncuentro::CLASE_COOLDOWN
+                || ($r['motivo_tecnico'] ?? '') === 'cooldown_propuesta') {
+                return self::fin($partida, 'cooldown_en_voluntad', $desde, $hacia, ['quien' => $quien]);
+            }
+            $motivo = (string) ($r['motivo_tipo'] ?? 'banal');
+            RechazoMemoria::registrar($partida, $quien, $otro, $motivo, $cal, self::TIPO_CITA);
+            return self::fin($partida, 'rechazo_voluntad_' . $motivo, $desde, $hacia, ['quien_rechaza' => $quien]);
+        }
+
+        // ---- resolución conjunta canon 20/08 ----
+        $pA = (float) ($ra['p'] ?? 0);
+        $pB = (float) ($rb['p'] ?? 0);
+        $pPlan = sqrt(max(0.0, $pA) * max(0.0, $pB));
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+        if (!($tirada < $pPlan)) {
+            $quienRechaza = $pB < $pA ? $hacia : $desde;
+            $otro = $quienRechaza === $desde ? $hacia : $desde;
+            $motivo = VoluntadPonderadaEvaluator::motivoRechazoPublic($partida, $quienRechaza, $otro, $cal);
+            RechazoMemoria::registrar($partida, $quienRechaza, $otro, $motivo, $cal, self::TIPO_CITA);
+            return self::fin($partida, 'plan_geom_rechazado_' . $motivo, $desde, $hacia, [
+                'quien_rechaza' => $quienRechaza,
+                'p_plan' => round($pPlan, 4),
+            ]);
+        }
+
+        // ---- franja conjunta futura + programación (idéntico a F2A) ----
+        $ops = $partida['celeste']['lugares_desbloqueados'] ?? [];
+        if (!is_array($ops) || $ops === []) {
+            $ops = ['lug_cafeteria', 'lug_parque'];
+        }
+        $franja = null;
+        $lugarElegido = null;
+        foreach ($ops as $lid) {
+            if (!is_string($lid) || $lid === '') {
+                continue;
+            }
+            $attr = LugarAtributos::de($lid);
+            $f = AgendaConjunta::primeraFranja(
+                $partida,
+                [$desde, $hacia],
+                max(1, (int) ($attr['horas'] ?? 1)),
+                9,
+                22,
+                (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                3,
+                $lid
+            );
+            if (!empty($f['ok'])) {
+                $horaF = (int) ($f['hora'] ?? -1);
+                if ($horaF < 0 || !ComplejoCatalog::estaAbierto($lid, $horaF)) {
+                    continue;
+                }
+                $franja = $f;
+                $lugarElegido = $lid;
+                break;
+            }
+        }
+        if ($franja === null) {
+            return self::fin($partida, 'sin_franja_agenda', $desde, $hacia);
+        }
+        $r = EncuentroEngine::programar(
+            $partida,
+            [$desde, $hacia],
+            (int) $franja['dia'],
+            (int) $franja['hora'],
+            self::TIPO_CITA,
+            $lugarElegido,
+            null,
+            $logger,
+            false
+        );
+        if (!($r['ok'] ?? false)) {
+            return self::fin($partida, 'error_programar_' . (string) ($r['error'] ?? '?'), $desde, $hacia);
+        }
+        self::marcarAutonoma($partida, (string) ($r['encuentro']['id'] ?? ''));
+        SimFunnelProbe::on($partida, 'encuentro_resuelto', [
+            'ev' => 'cita_pareja_agendada',
+            '_k' => 'cita_pareja',
+            'desde' => $desde,
+            'hacia' => $hacia,
+            'p_plan' => round($pPlan, 4),
+        ]);
+        return self::fin($partida, 'cita_pareja_agendada', $desde, $hacia, [
+            'programado_dia' => (int) $franja['dia'],
+            'programado_hora' => (int) $franja['hora'],
+            'lugar' => $lugarElegido,
+            'p_plan' => round($pPlan, 4),
+        ]);
+    }
+
     private static function marcarAutonoma(array &$partida, string $encuentroId): void
     {
         if ($encuentroId === '') {
@@ -657,9 +848,13 @@ final class IniciativaRomantica
             $desde = $romAB >= $romBA ? $a : $b;
             $hacia = $desde === $a ? $b : $a;
             // R2: dispatch por accion del marcador (cita = F2A; declaracion = F2B).
+            // R4: si el par ya es PAREJA, la cita la gestiona el carril de pareja.
             $accion = (string) ($marker['accion'] ?? 'cita');
             if ($accion === 'declaracion') {
                 $r = self::intentarDeclaracion($partida, $desde, $hacia, $cal, $logger);
+            } elseif (ParejaEngine::estado($partida, $a, $b) === ParejaEngine::PAREJA
+                && self::vidaParejaActiva($cal)) {
+                $r = self::intentarCitaPareja($partida, $desde, $hacia, $cal, $logger);
             } else {
                 $r = self::intentarSiguienteCita($partida, $desde, $hacia, $cal, $logger);
             }
@@ -688,6 +883,18 @@ final class IniciativaRomantica
     {
         return (bool) CalibracionConfig::get($cal, 'romance_autonomo.declaracion_activa', false)
             && (bool) CalibracionConfig::get($cal, 'romance_autonomo.pareja_activa', false);
+    }
+
+    /** R4 · flag de vida de pareja autónoma (citas de pareja). */
+    public static function vidaParejaActiva(array $cal): bool
+    {
+        return (bool) CalibracionConfig::get($cal, 'romance_autonomo.vida_pareja_activa', false);
+    }
+
+    /** Gap canónico entre citas de pareja: cooldowns.por_familia.pareja. */
+    public static function gapParejaHoras(array $cal): int
+    {
+        return max(1, (int) CalibracionConfig::get($cal, 'cooldowns.por_familia.pareja', 36));
     }
 
     private static function citasMinimasDeclaracion(array $cal): int
