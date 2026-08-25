@@ -136,7 +136,8 @@ final class PropuestaNivel
     public static function esTipoCita(string $tipo): bool
     {
         $tipo = self::aliasTipo($tipo);
-        return $tipo === self::PRIMERA_CITA || $tipo === self::CITA || $tipo === 'romantico';
+        // R2: 'declaracion' comparte tratamiento romántico (iniciativa, conflicto).
+        return $tipo === self::PRIMERA_CITA || $tipo === self::CITA || $tipo === 'romantico' || $tipo === 'declaracion';
     }
 
     public static function esTipoQuedar(string $tipo): bool

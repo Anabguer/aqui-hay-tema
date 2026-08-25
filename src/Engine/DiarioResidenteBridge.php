@@ -221,8 +221,11 @@ final class DiarioResidenteBridge
                     return null; // declarar y aceptarse pasa por INICIO_PAREJA/VUELTA
                 }
                 $titulo = 'Una declaración rechazada';
-                $rechazaId = !$aceptaA ? (string) $actores[1] : (string) $actores[0];
-                $declaraId = !$aceptaA ? (string) $actores[0] : (string) $actores[1];
+                // R2 fix: convención de formar() = participantes [a, b] con flags
+                // acepta_a/acepta_b alineados. Si acepta_b=false, B rechaza a A
+                // (A declara). El mapeo anterior invertía declara/rechaza.
+                $rechazaId = !$aceptaA ? (string) $actores[0] : (string) $actores[1];
+                $declaraId = !$aceptaA ? (string) $actores[1] : (string) $actores[0];
                 $texto = self::cuerpo($partida, 'declaracion_rechazada', $actores, self::CUERPOS_DECLARACION_RECHAZADA, [
                     'declara' => IdentidadPublica::nombre($partida, $declaraId),
                     'rechaza' => IdentidadPublica::nombre($partida, $rechazaId),

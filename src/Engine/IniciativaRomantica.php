@@ -28,6 +28,7 @@ final class IniciativaRomantica
 {
     private const TIPO = 'primera_cita';
     private const TIPO_CITA = 'cita';
+    private const TIPO_DECLARACION = 'declaracion';
     private const LOG_MAX = 500;
 
     /** Experiencias que cortan la continuidad autónoma (canon: corte_si_ultimo_malo). */
@@ -310,6 +311,10 @@ final class IniciativaRomantica
      * Marcador de continuidad tras resolver una cita romántica del par.
      * Idempotente por par (reemplaza). No programa nada: solo fecha el intento.
      *
+     * R2 · Si el par es DECLARABLE (elegibilidad determinista completa) el
+     * marcador pasa a accion='declaracion' con la misma respiración temporal
+     * (gap canónico de citas); si no, sigue siendo 'cita' (comportamiento F2A).
+     *
      * @param array<string, mixed> $cal
      */
     public static function registrarContinuidadPostCita(
@@ -326,8 +331,21 @@ final class IniciativaRomantica
         $par = [$a, $b];
         sort($par);
         $parKey = $par[0] . '>' . $par[1];
-        $entry = [
+        $accion = 'cita';
+        $extraDecl = [];
+        if (self::declaracionActiva($cal)) {
+            $el = self::elegibilidadDeclaracion($partida, $a, $b, $cal);
+            if (!empty($el['ok'])) {
+                $accion = 'declaracion';
+                $extraDecl = [
+                    'declara' => (string) ($el['desde'] ?? ''),
+                    'citas' => (int) ($el['citas'] ?? 0),
+                ];
+            }
+        }
+        $entry = array_merge([
             'par' => $par,
+            'accion' => $accion,
             'desde_abs' => self::ahoraAbs($partida) + self::gapMinimoCitas($cal),
             'gap_horas' => self::gapMinimoCitas($cal),
             'ultima_experiencia' => $resultadoExperiencia,
@@ -335,7 +353,7 @@ final class IniciativaRomantica
                 'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
                 'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
             ],
-        ];
+        ], $extraDecl);
         $resto = array_values(array_filter(
             $partida['continuidad_romantica'],
             static fn ($m) => is_array($m) && (($m['par'][0] ?? '') . '>' . ($m['par'][1] ?? '')) !== $parKey
@@ -618,17 +636,18 @@ final class IniciativaRomantica
         self::ensureContinuidad($partida);
         $now = self::ahoraAbs($partida);
         $resultados = [];
-        $restantes = [];
-        foreach ($partida['continuidad_romantica'] as $marker) {
-            if (!is_array($marker)) {
-                continue;
-            }
+        // R2: se trabaja sobre copia y se VACÍA el bag real: un intento puede
+        // re-arma marcadores (declaración fallida → cita) durante el consumo;
+        // esos añadidos NO deben ser pisados por la lista de restantes.
+        $trabajo = array_values(array_filter($partida['continuidad_romantica'], 'is_array'));
+        $partida['continuidad_romantica'] = [];
+        foreach ($trabajo as $marker) {
             $par = is_array($marker['par'] ?? null) ? $marker['par'] : [];
             if (count($par) !== 2) {
                 continue;
             }
             if ((int) ($marker['desde_abs'] ?? PHP_INT_MAX) > $now) {
-                $restantes[] = $marker;
+                $partida['continuidad_romantica'][] = $marker;
                 continue;
             }
             [$a, $b] = [(string) $par[0], (string) $par[1]];
@@ -637,14 +656,386 @@ final class IniciativaRomantica
             $romBA = RelacionEngine::romanceHacia($partida, $b, $a) ?? 0;
             $desde = $romAB >= $romBA ? $a : $b;
             $hacia = $desde === $a ? $b : $a;
-            $r = self::intentarSiguienteCita($partida, $desde, $hacia, $cal, $logger);
+            // R2: dispatch por accion del marcador (cita = F2A; declaracion = F2B).
+            $accion = (string) ($marker['accion'] ?? 'cita');
+            if ($accion === 'declaracion') {
+                $r = self::intentarDeclaracion($partida, $desde, $hacia, $cal, $logger);
+            } else {
+                $r = self::intentarSiguienteCita($partida, $desde, $hacia, $cal, $logger);
+            }
             $resultados[] = [
                 'par' => [$a, $b],
                 'desde' => $desde,
+                'accion' => $accion,
                 'resultado' => (string) ($r['resultado'] ?? '?'),
             ];
         }
-        $partida['continuidad_romantica'] = $restantes;
         return $resultados;
+    }
+
+    // ==================================================================
+    // FASE 2B (R2) — Declaración romántica autónoma.
+    //
+    // NO es inevitable: gate determinista multi-condición + voluntad
+    // geométrica de ambos (canon 20/08) con p_max < 1 + cooldowns. La
+    // declaración NO pasa por familias_en_play ni por el hueco de vida:
+    // usa flag propio romance_autonomo.declaracion_activa (+pareja_activa,
+    // su consumidor natural). Rechazo → memoria canónica completa y la
+    // continuidad de citas se re-arma (la relación no muere por un no).
+    // ==================================================================
+
+    public static function declaracionActiva(array $cal): bool
+    {
+        return (bool) CalibracionConfig::get($cal, 'romance_autonomo.declaracion_activa', false)
+            && (bool) CalibracionConfig::get($cal, 'romance_autonomo.pareja_activa', false);
+    }
+
+    private static function citasMinimasDeclaracion(array $cal): int
+    {
+        return max(1, (int) CalibracionConfig::get($cal, 'romance_autonomo.declaracion.citas_minimas', 2));
+    }
+
+    private static function ventanaDeclaracionHoras(array $cal): int
+    {
+        return max(1, (int) CalibracionConfig::get($cal, 'romance_autonomo.declaracion.ventana_horas', 336));
+    }
+
+    /** Cap global anti-cascada: hitos románticos registrados HOY en todo el pueblo. */
+    public static function hitosRomanticosHoy(array $partida): int
+    {
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $tipos = [
+            RelacionBitacora::DECLARACION,
+            RelacionBitacora::INICIO_PAREJA,
+            RelacionBitacora::VUELTA,
+            RelacionBitacora::CRISIS,
+            RelacionBitacora::RUPTURA,
+            RelacionBitacora::RECONCILIACION,
+        ];
+        $n = 0;
+        foreach ($partida['bitacora_relaciones'] ?? [] as $h) {
+            if (!is_array($h)) {
+                continue;
+            }
+            if ((int) (($h['fecha']['dia'] ?? -1)) !== $dia) {
+                continue;
+            }
+            if (in_array((string) ($h['tipo'] ?? ''), $tipos, true)) {
+                $n++;
+            }
+        }
+        return $n;
+    }
+
+    public static function capHitosDisponible(array $partida, array $cal): bool
+    {
+        $cap = max(1, (int) CalibracionConfig::get($cal, 'romance_autonomo.max_hitos_por_dia', 1));
+        return self::hitosRomanticosHoy($partida) < $cap;
+    }
+
+    /**
+     * Estadísticas de citas románticas RESUELTAS del par (fuente única: encuentros).
+     *
+     * @return array{n:int,abs_ultima:int,peor_ultima:string,abs_ultima_buena:int,n_buenas:int}
+     */
+    private static function estadisticasCitas(array $partida, string $a, string $b): array
+    {
+        $rank = ['muy_mal' => 0, 'mal' => 1, 'normal' => 2, 'bien' => 3, 'muy_bien' => 4];
+        $n = 0;
+        $absUltima = -1;
+        $peorUltima = '';
+        $absUltimaBuena = -1;
+        $nBuenas = 0;
+        foreach (($partida['encuentros'] ?? []) as $enc) {
+            if (!is_array($enc) || ($enc['estado'] ?? '') !== 'terminado') {
+                continue;
+            }
+            $tipo = (string) ($enc['tipo'] ?? '');
+            if ($tipo !== self::TIPO && $tipo !== self::TIPO_CITA) {
+                continue;
+            }
+            $parts = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+            if (!in_array($a, $parts, true) || !in_array($b, $parts, true)) {
+                continue;
+            }
+            $abs = ((int) ($enc['dia'] ?? 0)) * 24 + (int) ($enc['hora'] ?? 0)
+                + max(1, (int) ($enc['duracion_horas'] ?? 1));
+            $res = is_array($enc['resultado'] ?? null) ? $enc['resultado'] : [];
+            $expWorst = '';
+            $rankWorst = 99;
+            foreach ($parts as $pid) {
+                $e = (string) (($res['por_participante'] ?? [])[(string) $pid]['resultado'] ?? '');
+                if ($e === '') {
+                    continue;
+                }
+                $r = $rank[$e] ?? 2;
+                if ($r < $rankWorst) {
+                    $rankWorst = $r;
+                    $expWorst = $e;
+                }
+            }
+            $n++;
+            if ($abs >= $absUltima) {
+                $absUltima = $abs;
+                $peorUltima = $expWorst;
+            }
+            if (in_array($expWorst, ['bien', 'muy_bien'], true)) {
+                $nBuenas++;
+                $absUltimaBuena = max($absUltimaBuena, $abs);
+            }
+        }
+        return [
+            'n' => $n,
+            'abs_ultima' => $absUltima,
+            'peor_ultima' => $peorUltima,
+            'abs_ultima_buena' => $absUltimaBuena,
+            'n_buenas' => $nBuenas,
+        ];
+    }
+
+    /**
+     * Elegibilidad DETERMINISTA de declaración para un par (sin RNG).
+     * Es el gate que decide si tras una cita el marcador pasa a 'declaracion'
+     * y también se re-verifica en el momento del intento.
+     *
+     * @param array<string, mixed> $cal
+     * @return array{ok:bool,motivo:string,desde:string,citas:int}
+     */
+    public static function elegibilidadDeclaracion(array $partida, string $a, string $b, array $cal): array
+    {
+        $no = static fn (string $m): array => ['ok' => false, 'motivo' => $m, 'desde' => '', 'citas' => 0];
+        if (!self::declaracionActiva($cal)) {
+            return $no('flag_off');
+        }
+        if ($a === '' || $b === '' || $a === $b) {
+            return $no('par_invalido');
+        }
+        if (!RelacionEngine::seConocen($partida, $a, $b)) {
+            return $no('sin_conocerse');
+        }
+        if (ParentescoVeto::bloqueaRomance($partida, $a, $b, $cal)) {
+            return $no('parentesco_veto');
+        }
+        $el = RomanceElegibilidad::par($partida, $a, $b, $cal);
+        if (empty($el['ok'])) {
+            return $no('no_elegible_' . (string) ($el['motivo'] ?? '?'));
+        }
+        $est = ParejaEngine::estado($partida, $a, $b);
+        if ($est !== ParejaEngine::NINGUNA) {
+            return $no('estado_no_declarable');
+        }
+        if (SenalRomantica::enParejaConTercero($partida, $a, $b)) {
+            return $no('en_pareja_con_otro');
+        }
+        if (!SenalRomantica::yaHuboPrimeraCita($partida, $a, $b)) {
+            return $no('sin_primera_cita');
+        }
+        $stats = self::estadisticasCitas($partida, $a, $b);
+        if ($stats['n'] < self::citasMinimasDeclaracion($cal)) {
+            return $no('citas_insuficientes');
+        }
+        if ($stats['peor_ultima'] !== '' && in_array($stats['peor_ultima'], self::EXPERIENCIAS_MALAS, true)) {
+            return $no('ultima_experiencia_mala');
+        }
+        if ($stats['abs_ultima_buena'] < 0
+            || (self::ahoraAbs($partida) - $stats['abs_ultima_buena']) > self::ventanaDeclaracionHoras($cal)) {
+            return $no('fuera_ventana');
+        }
+        // Reciprocidad viva: señal mutua (flechazo o tilín) EN AMBAS direcciones.
+        $ab = SenalRomantica::desdeHacia($partida, $a, $b, $cal);
+        $ba = SenalRomantica::desdeHacia($partida, $b, $a, $cal);
+        if (empty($ab['ok']) || empty($ba['ok'])) {
+            return $no('sin_reciprocidad');
+        }
+        // Banda mínima del DECLARANTE (el de mayor romance) ≥ interes.
+        $romAB = RelacionEngine::romanceHacia($partida, $a, $b) ?? 0;
+        $romBA = RelacionEngine::romanceHacia($partida, $b, $a) ?? 0;
+        $desde = $romAB >= $romBA ? $a : $b;
+        $romMax = max($romAB, $romBA);
+        $interes = (int) CalibracionConfig::get($cal, 'romance.cortes.interes', 22);
+        if ($romMax < $interes) {
+            return $no('banda_baja');
+        }
+        if (MemoriaEventos::enCooldown($partida, 'romance_hito', [$a, $b], $cal)) {
+            return $no('cooldown_hito');
+        }
+        if (PropuestaCooldown::activo($partida, $desde, $desde === $a ? $b : $a, self::TIPO_DECLARACION, $cal)
+            || PropuestaCooldown::activo($partida, $desde === $a ? $b : $a, $desde, self::TIPO_DECLARACION, $cal)) {
+            return $no('cooldown_propuesta');
+        }
+        if (!self::capHitosDisponible($partida, $cal)) {
+            return $no('cap_hitos_dia');
+        }
+        return ['ok' => true, 'motivo' => 'ok', 'desde' => $desde, 'citas' => $stats['n']];
+    }
+
+    /**
+     * R2 · Intento autónomo de DECLARACIÓN (desde → hacia). Nunca lanza.
+     * Éxito → ParejaEngine::formar (R3). Fallo → memoria canónica completa +
+     * re-arma marcador de CITA (la continuidad no muere por un no).
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function intentarDeclaracion(
+        array &$partida,
+        string $desde,
+        string $hacia,
+        array $cal,
+        ?GameLogger $logger = null
+    ): array {
+        self::ensure($partida);
+
+        // ---- gates (sin RNG; re-verificación al consumo del marcador) ----
+        $el = self::elegibilidadDeclaracion($partida, $desde, $hacia, $cal);
+        if (empty($el['ok'])) {
+            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            return self::fin($partida, 'gate_declaracion_' . (string) $el['motivo'], $desde, $hacia);
+        }
+
+        // ---- voluntad de AMBOS tipo 'declaracion'; media geométrica difiere tirada ----
+        $prop = [
+            'participantes' => [$desde, $hacia],
+            'tipo' => self::TIPO_DECLARACION,
+            'lugar' => null,
+            'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'hora' => (int) ($partida['reloj']['hora_actual'] ?? 12),
+        ];
+        $vol = new VoluntadPonderadaEvaluator($cal);
+        $ra = $vol->evaluar($partida, $prop, $desde);
+        $rb = $vol->evaluar($partida, $prop, $hacia);
+
+        foreach ([[$ra, $desde, $hacia], [$rb, $hacia, $desde]] as [$r, $quien, $otro]) {
+            if (($r['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
+                continue;
+            }
+            if (($r['clase'] ?? '') === PropuestaEncuentro::CLASE_COOLDOWN
+                || ($r['motivo_tecnico'] ?? '') === 'cooldown_propuesta') {
+                self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+                return self::fin($partida, 'cooldown_en_voluntad', $desde, $hacia, ['quien' => $quien]);
+            }
+            $motivo = (string) ($r['motivo_tipo'] ?? 'banal');
+            RechazoMemoria::registrar($partida, $quien, $otro, $motivo, $cal, self::TIPO_DECLARACION);
+            self::registrarRechazoDeclaracion($partida, $otro, $quien, $cal);
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'rechazada_voluntad',
+                '_k' => 'declaracion_rechazada',
+                'desde' => $desde,
+                'hacia' => $hacia,
+                'motivo' => $motivo,
+            ]);
+            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            return self::fin($partida, 'declaracion_rechazada_' . $motivo, $desde, $hacia, ['quien_rechaza' => $quien]);
+        }
+
+        // ---- resolución conjunta canon 20/08: p_plan=√(pA·pB), UNA tirada ----
+        $pA = (float) ($ra['p'] ?? 0);
+        $pB = (float) ($rb['p'] ?? 0);
+        $pPlan = sqrt(max(0.0, $pA) * max(0.0, $pB));
+        $rng = RngService::fromPartida($partida);
+        $tirada = $rng->nextFloat();
+        $rng->persistToPartida($partida);
+        if (!($tirada < $pPlan)) {
+            $quienRechaza = $pB < $pA ? $hacia : $desde;
+            $otro = $quienRechaza === $desde ? $hacia : $desde;
+            $motivo = VoluntadPonderadaEvaluator::motivoRechazoPublic($partida, $quienRechaza, $otro, $cal);
+            RechazoMemoria::registrar($partida, $quienRechaza, $otro, $motivo, $cal, self::TIPO_DECLARACION);
+            self::registrarRechazoDeclaracion($partida, $otro, $quienRechaza, $cal);
+            SimFunnelProbe::on($partida, 'declaracion', [
+                'ev' => 'rechazada_geom',
+                '_k' => 'declaracion_rechazada',
+                'desde' => $desde,
+                'hacia' => $hacia,
+                'quien_rechaza' => $quienRechaza,
+                'p_plan' => round($pPlan, 4),
+            ]);
+            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            return self::fin($partida, 'declaracion_rechazada_' . $motivo, $desde, $hacia, [
+                'quien_rechaza' => $quienRechaza,
+                'p_plan' => round($pPlan, 4),
+            ]);
+        }
+
+        // ---- aceptación → formación de pareja (R3) ----
+        $form = ParejaEngine::formar($partida, $desde, $hacia, true, true, RelacionBitacora::DECLARACION, $cal);
+        if (!($form['ok'] ?? false)) {
+            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            return self::fin($partida, 'error_formar_' . (string) ($form['error'] ?? '?'), $desde, $hacia);
+        }
+        MemoriaEventos::registrar($partida, 'pareja', [$desde, $hacia], null, 'inicio_pareja');
+        self::purgarMarcadoresPar($partida, $desde, $hacia);
+        SimFunnelProbe::on($partida, 'declaracion', [
+            'ev' => 'aceptada',
+            '_k' => 'declaracion_ok',
+            'desde' => $desde,
+            'hacia' => $hacia,
+            'vuelta' => (bool) ($form['vuelta'] ?? false),
+        ]);
+        return self::fin($partida, 'declaracion_aceptada', $desde, $hacia, [
+            'p_plan' => isset($pPlan) ? round($pPlan, 4) : null,
+            'estado_pareja' => ParejaEngine::PAREJA,
+        ]);
+    }
+
+    /** Memoria canónica de una declaración rechazada (bitácora+cooldowns). */
+    private static function registrarRechazoDeclaracion(array &$partida, string $declara, string $rechaza, array $cal): void
+    {
+        RelacionBitacora::registrar(
+            $partida,
+            RelacionBitacora::DECLARACION,
+            [$declara, $rechaza],
+            $declara . '>' . $rechaza,
+            ['acepta_a' => true, 'acepta_b' => false]
+        );
+        MemoriaEventos::registrar($partida, 'romance_hito', [$declara, $rechaza], null, 'declaracion_rechazada');
+        PropuestaCooldown::marcar($partida, $declara, $rechaza, self::TIPO_DECLARACION, $cal);
+    }
+
+    /**
+     * Re-arma el marcador de SIGUIENTE CITA tras una declaración fallida
+     * (explícito, sin re-evaluar elegibilidad de declaración: evita bucles).
+     */
+    private static function armarMarkerCitaTrasDeclaracion(array &$partida, string $a, string $b, array $cal): void
+    {
+        if ($a === '' || $b === '' || $a === $b) {
+            return;
+        }
+        self::ensureContinuidad($partida);
+        $par = [$a, $b];
+        sort($par);
+        $parKey = $par[0] . '>' . $par[1];
+        $entry = [
+            'par' => $par,
+            'accion' => 'cita',
+            'desde_abs' => self::ahoraAbs($partida) + self::gapMinimoCitas($cal),
+            'gap_horas' => self::gapMinimoCitas($cal),
+            'ultima_experiencia' => null,
+            'creado' => [
+                'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
+            ],
+        ];
+        $resto = array_values(array_filter(
+            $partida['continuidad_romantica'],
+            static fn ($m) => is_array($m) && (($m['par'][0] ?? '') . '>' . ($m['par'][1] ?? '')) !== $parKey
+        ));
+        $resto[] = $entry;
+        $partida['continuidad_romantica'] = $resto;
+    }
+
+    /** Elimina TODOS los marcadores de continuidad de un par (formación/ruptura). */
+    public static function purgarMarcadoresPar(array &$partida, string $a, string $b): void
+    {
+        if (!isset($partida['continuidad_romantica']) || !is_array($partida['continuidad_romantica'])) {
+            return;
+        }
+        $ids = [$a, $b];
+        sort($ids);
+        $parKey = $ids[0] . '>' . $ids[1];
+        $partida['continuidad_romantica'] = array_values(array_filter(
+            $partida['continuidad_romantica'],
+            static fn ($m) => is_array($m) && (($m['par'][0] ?? '') . '>' . ($m['par'][1] ?? '')) !== $parKey
+        ));
     }
 }

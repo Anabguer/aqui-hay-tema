@@ -142,10 +142,15 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $base = (int) CalibracionConfig::get($cal, 'voluntad.base', 48);
         $tipo = PropuestaNivel::aliasTipo((string) ($propuesta['tipo'] ?? ''));
         // P2: peso del conflicto SOLO en tipos de cita jugables (primera_cita, cita).
+        // R2: la declaración comparte el tratamiento (knob propio conflicto_mult_declaracion).
         // No aplica a 'romantico' legacy ni a quedar/conocerse/pareja.
-        $aplicaConfMultCita = $tipo === PropuestaNivel::PRIMERA_CITA || $tipo === PropuestaNivel::CITA;
+        $aplicaConfMultCita = $tipo === PropuestaNivel::PRIMERA_CITA || $tipo === PropuestaNivel::CITA || $tipo === 'declaracion';
         $confMultCita = $aplicaConfMultCita
-            ? max(1.0, (float) CalibracionConfig::get($cal, 'voluntad.conflicto_mult_cita', 1.0))
+            ? max(1.0, (float) CalibracionConfig::get(
+                $cal,
+                $tipo === 'declaracion' ? 'voluntad.conflicto_mult_declaracion' : 'voluntad.conflicto_mult_cita',
+                1.0
+            ))
             : 1.0;
         // Estado emocional: vigencia (anti-stale) y dirección del enfado.
         $emoRow = is_array(($partida['residentes'][$quien]['runtime']['estado_emocional'] ?? null))

@@ -231,12 +231,16 @@
             "conocerse": 34,
             "quedar": 0,
             "primera_cita": 4,
-            "cita": 0
+            "cita": 0,
+            "declaracion": -10
         },
+        "_nota_mod_tipo_declaracion": "ROMANCE_CIERRE R2: declararse cuesta (arriesgado); el romance/social/emocional aportan lo suyo. Cifra _provisional, calibrar con sims.",
         "bonus_primera_cita_reciproca": 12,
         "_nota_bonus_primera_cita_reciproca": "P2: solo primera_cita y SOLO si SenalRomantica::desdeHacia ok en AMBAS direcciones (flechazo o romance>=tilin).",
         "conflicto_mult_cita": 3,
         "_nota_conflicto_mult_cita": "P2: multiplica el peso del conflicto SOLO en tipos cita jugables (primera_cita, cita). No aplica a quedar/conocerse/pareja/romantico-legacy.",
+        "conflicto_mult_declaracion": 3,
+        "_nota_conflicto_mult_declaracion": "ROMANCE_CIERRE R2: mismo peso del conflicto para la declaración.",
         "mod_social_factor": 0.28,
         "resolucion_plan": "media_geometrica",
         "_nota_resolucion_plan": "Canon 20/08 Neni+ChatGPT: p_plan=sqrt(pA*pB). Sustituye producto.",
@@ -356,6 +360,51 @@
     "ruptura": {
         "nunca_auto_por_umbral": true,
         "probabilidad": 0.01
+    },
+    "romance_autonomo": {
+        "_provisional": true,
+        "_nota": "ROMANCE_CIERRE (plan docs/ROMANCE_AUTONOMO_CIERRE_TOTAL.md): gates escalonados de la ruta autónoma F2B→F2C→vida→crisis→ruptura→vuelta. TODO OFF = comportamiento idéntico a producción pre-cierre. La ruta NO pasa por familias_en_play (el hueco de vida sigue blindado).",
+        "declaracion_activa": false,
+        "pareja_activa": false,
+        "vida_pareja_activa": false,
+        "crisis_activa": false,
+        "ruptura_activa": false,
+        "vuelta_activa": false,
+        "max_hitos_por_dia": 1,
+        "_nota_max_hitos": "Anti-cascada global: máximo hitos románticos (declaracion/inicio_pareja/vuelta/crisis/ruptura/reconciliacion) por día de pueblo en todo el pueblo.",
+        "declaracion": {
+            "citas_minimas": 2,
+            "ventana_horas": 336
+        },
+        "_nota_declaracion": "Mínimo de citas románticas reales resueltas (primera_cita incluida) y ventana desde la última cita positiva. 336h = cooldowns.por_familia.romance_hito (mismo valor canónico).",
+        "crisis": {
+            "causas_minimas": 2,
+            "conflicto_min": 6,
+            "racha_mala": 2,
+            "racha_mala_ventana": 3,
+            "estabilidad_riesgo": 30,
+            "dias_abandono": 6,
+            "probabilidad": 0.015,
+            "bonus_si_estabilidad_baja": 0.04,
+            "max_por_par_mes": 2
+        },
+        "_nota_crisis": "Sin causas suficientes p=0 EXACTO (nunca random porque toca RNG). probabilidad/bonus REVIVEN claves muertas ya presentes arriba, con gate causal previo.",
+        "reparacion": {
+            "gap_intentos_horas": 24,
+            "delta_estabilidad": 20,
+            "max_fallos": 2
+        },
+        "ruptura_politica": {
+            "dias_crisis_sin_salida": 7,
+            "factor_por_fallo": 0.03,
+            "triste_receptor_horas": 10,
+            "triste_iniciador_horas": 5
+        },
+        "_nota_ruptura_politica": "Orígenes únicos O1 crisis sin salida / O2 golpe duro; decisión unilateral del de menor romance.",
+        "pareja_vuelta": {
+            "max_vueltas": 2,
+            "penalti_voluntad_por_vuelta": 8
+        }
     },
     "parentesco": {
         "veto_romance_tipos": [
