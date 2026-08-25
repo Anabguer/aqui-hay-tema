@@ -332,6 +332,10 @@ final class RelacionEngine
         ];
         $rel['historial_parejas'] ??= [];
         $rel['flechazos'] ??= [];
+        // ROMANCE_CIERRE R5: campos del carril crisis/reparación (aditivos, legacy-safe).
+        $rel['crisis_desde'] ??= null;
+        $rel['fallos_reparacion'] ??= 0;
+        $rel['ultimo_intento_reparacion'] ??= null;
     }
 
     public static function sincronizarRomanceDireccional(array &$rel): void

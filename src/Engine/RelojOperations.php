@@ -33,6 +33,9 @@ final class RelojOperations
             $cal = CalibracionConfig::load($this->projectRoot);
             $catalog = new Catalog($this->projectRoot);
             RelacionDesgaste::alCerrarDia($partida, $cal);
+            // ROMANCE_CIERRE R5-R8: evaluador diario de parejas (crisis causal,
+            // reparación, ruptura, vuelta). Flags OFF ⇒ no-op sin consumo RNG.
+            IniciativaPareja::evaluarAlCerrarDia($partida, $cal, $this->logger);
             AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
             MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
         }
