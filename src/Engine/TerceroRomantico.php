@@ -27,23 +27,6 @@ final class TerceroRomantico
 
     public static function parejaDe(array $partida, string $id): ?string
     {
-        foreach ($partida['relaciones_romanticas'] ?? [] as $rel) {
-            if (!is_array($rel)) {
-                continue;
-            }
-            $est = (string) ($rel['estado_pareja'] ?? '');
-            if ($est !== ParejaEngine::PAREJA && $est !== ParejaEngine::CRISIS) {
-                continue;
-            }
-            $a = (string) ($rel['persona_a'] ?? '');
-            $b = (string) ($rel['persona_b'] ?? '');
-            if ($a === $id) {
-                return $b;
-            }
-            if ($b === $id) {
-                return $a;
-            }
-        }
-        return null;
+        return ParejaEngine::parejaActivaDe($partida, $id);
     }
 }

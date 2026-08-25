@@ -106,6 +106,11 @@ final class IniciativaRomantica
                 $gate = 'ya_pareja_o_crisis';
                 break;
             }
+            // R1: exclusividad — nadie inicia nada romántico nuevo emparejado con un tercero.
+            if (SenalRomantica::enParejaConTercero($partida, $desde, $hacia)) {
+                $gate = 'en_pareja_con_otro';
+                break;
+            }
             $senal = SenalRomantica::desdeHacia($partida, $desde, $hacia, $cal);
             if (empty($senal['ok'])) {
                 $gate = 'sin_senal';
@@ -216,6 +221,8 @@ final class IniciativaRomantica
         }
 
         // ---- encuentro tipo CAN├ôNICO primera_cita ----
+        // R1/INC-1: la cita autónoma NPC NO gasta el cupo de intervenciones de
+        // Celestine (canon RELACIONES_Y_CITAS; alineado con F2A y A1).
         $r = EncuentroEngine::programar(
             $partida,
             [$desde, $hacia],
@@ -224,7 +231,8 @@ final class IniciativaRomantica
             self::TIPO,
             $lugarElegido,
             null,
-            $logger
+            $logger,
+            false
         );
         if (!($r['ok'] ?? false)) {
             return self::fin($partida, 'error_programar_' . (string) ($r['error'] ?? '?'), $desde, $hacia);
@@ -438,6 +446,11 @@ final class IniciativaRomantica
             $est = ParejaEngine::estado($partida, $desde, $hacia);
             if ($est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS) {
                 $gate = 'ya_pareja_o_crisis';
+                break;
+            }
+            // R1: exclusividad — nadie inicia nada romántico nuevo emparejado con un tercero.
+            if (SenalRomantica::enParejaConTercero($partida, $desde, $hacia)) {
+                $gate = 'en_pareja_con_otro';
                 break;
             }
             if (!SenalRomantica::yaHuboPrimeraCita($partida, $desde, $hacia)) {

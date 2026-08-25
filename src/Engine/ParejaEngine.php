@@ -32,6 +32,14 @@ final class ParejaEngine
                 'tipo' => ParentescoVeto::motivo($partida, $a, $b, $cal),
             ]);
         }
+        // R1 · Exclusividad global: es imposible A-B pareja y A-C pareja.
+        // Única fuente de verdad: relaciones_romanticas con estado pareja|crisis.
+        // Se permite reformar SOLO al mismo par (reconciliación/vuelta).
+        $parejaDeA = self::parejaActivaDe($partida, $a);
+        $parejaDeB = self::parejaActivaDe($partida, $b);
+        if (($parejaDeA !== null && $parejaDeA !== $b) || ($parejaDeB !== null && $parejaDeB !== $a)) {
+            return ['ok' => false, 'error' => 'en_pareja_con_otro', 'pareja_de_a' => $parejaDeA, 'pareja_de_b' => $parejaDeB];
+        }
         if (!$aceptaA || !$aceptaB) {
             RelacionBitacora::registrar($partida, RelacionBitacora::DECLARACION, [$a, $b], null, [
                 'acepta_a' => $aceptaA,
@@ -143,6 +151,36 @@ final class ParejaEngine
         }
         $est = (string) ($rel['estado_pareja'] ?? self::NINGUNA);
         return $est !== '' ? $est : self::NINGUNA;
+    }
+
+    /**
+     * R1 · Pareja ACTIVA de un residente (estado pareja|crisis), o null.
+     * Fuente única para exclusividad: TerceroRomantico y gates de iniciativa
+     * delegan aquí. Nunca devuelve el propio id consultado salvo auto-par.
+     */
+    public static function parejaActivaDe(array $partida, string $id): ?string
+    {
+        if ($id === '') {
+            return null;
+        }
+        foreach ($partida['relaciones_romanticas'] ?? [] as $rel) {
+            if (!is_array($rel)) {
+                continue;
+            }
+            $est = (string) ($rel['estado_pareja'] ?? '');
+            if ($est !== self::PAREJA && $est !== self::CRISIS) {
+                continue;
+            }
+            $pa = (string) ($rel['persona_a'] ?? '');
+            $pb = (string) ($rel['persona_b'] ?? '');
+            if ($pa === $id && $pb !== '') {
+                return $pb;
+            }
+            if ($pb === $id && $pa !== '') {
+                return $pa;
+            }
+        }
+        return null;
     }
 
     /**

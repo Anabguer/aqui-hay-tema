@@ -63,6 +63,23 @@ final class SenalRomantica
     }
 
     /**
+     * R1 · ¿Alguno del par está en pareja (o crisis) con una TERCERA persona?
+     * Gate transversal de exclusividad para iniciativas y señales nuevas.
+     */
+    public static function enParejaConTercero(array $partida, string $a, string $b): bool
+    {
+        if ($a === '' || $b === '' || $a === $b) {
+            return false;
+        }
+        $pa = ParejaEngine::parejaActivaDe($partida, $a);
+        if ($pa !== null && $pa !== $b) {
+            return true;
+        }
+        $pb = ParejaEngine::parejaActivaDe($partida, $b);
+        return $pb !== null && $pb !== $a;
+    }
+
+    /**
      * ¿Celestine puede proponer Primera cita a este par?
      *
      * @param array<string, mixed> $cal
@@ -77,6 +94,10 @@ final class SenalRomantica
         }
         $est = ParejaEngine::estado($partida, $a, $b);
         if ($est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS) {
+            return false;
+        }
+        // R1: nadie inicia nada romántico nuevo si está emparejado con un tercero.
+        if (self::enParejaConTercero($partida, $a, $b)) {
             return false;
         }
         $el = RomanceElegibilidad::par($partida, $a, $b, $cal);
@@ -129,6 +150,10 @@ final class SenalRomantica
         }
         $est = ParejaEngine::estado($partida, $desde, $hacia);
         if ($est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS) {
+            return;
+        }
+        // R1: sin avisos de señal hacia/desde alguien emparejado con un tercero.
+        if (self::enParejaConTercero($partida, $desde, $hacia)) {
             return;
         }
         $senal = self::desdeHacia($partida, $desde, $hacia, $cal);
