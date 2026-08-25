@@ -31,6 +31,7 @@ Si un componente puede confundirse con una web de gestión, está mal.
 6. **Manuscrita narrativa**: nombres, mensajes, cotilleos y descripciones en caligrafía tipo bolígrafo. Los datos duros (horas, contadores, XP) van siempre en sans legible.
 7. **Jerarquía enorme**: el avatar protagonista mide 96–120 px en ficha; los títulos dominan; hay aire entre secciones.
 8. **Color = significado**: coral → acción principal; lavanda → secundario/informativo; mostaza → recompensa/tiempo; verde → positivo; rojo → alerta/NUEVO.
+   **REGLA CROMÁTICA v3 (dirección, pasada 2 del piloto)**: cuando la referencia use **coral/naranja como color PROTAGONISTA**, traducirlo al **ROSA AHT** (familia Nuevo Plan `--ds-pink`/`--ds-pink-deep`, corazones, Parejas). No significa todo rosa: lavandas, verdes, mostazas y beige siguen existiendo como complementarios. El coral queda relegado a acentos secundarios no protagonistas.
 9. **Pills de estado con emoji** siempre que exista emoción o estado (🙂 😐 😠 💔…).
 10. **Decoración con significado** (ver §4): nada de adorno gratuito.
 11. **Descubrimiento y progresión**: lo conocido = tarjeta sólida con ✓; lo desconocido = borde punteado + candado + "?". El juego se *ve* progresar.

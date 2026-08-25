@@ -8,7 +8,10 @@ Leyenda de estado: 🔜 pendiente · ✅ migrada · ⛔ fuera de alcance (solo D
 
 ## 1. Inicio (móvil) — D2 APROBADO: feed de 1 columna
 
-**Referencia**: `inicio-mobile.png` · **Estado**: 🔜 (paso 3 de migración)
+**Referencia**: `inicio-mobile.png` · **Estado**: ✅ **APROBADA (OK visual usuaria) e integrada en runtime — referencia/patrón del DS**
+**Captura contractual**: `dev/screenshots-ds-piloto-inicio/inicio-mobile-393-v3.1.png`
+**Implementación**: `assets/css/design-system/screens/inicio.css` (cargado tras responsive.css) + hunks en `play.php` (3 links) y `play-v3.js` (candado D9).
+**Patrón a heredar**: marco de familia tinta+costura (radios asimétricos 8 valores), sonda de alineación por píxeles (`dev/sonda_alineacion_tiles.js`), strip de `!important` por módulo (`dev/_ds_strip_inicio_important.js`), regla coral→rosa, capturas a DPR 2.
 
 Estructura aprobada del feed (de arriba a abajo), **solo módulos canónicos reales**:
 

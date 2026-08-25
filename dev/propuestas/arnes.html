@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>ARNES - Propuestas visuales DS - Aqui Hay Tema</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="/assets/css/design-system/tokens.css"/>
+<link rel="stylesheet" href="/assets/css/design-system/components.css"/>
+<link rel="stylesheet" href="propuestas.css"/>
+</head>
+<body>
+
+<div class="prop-label"><b>ARNES DE PROPUESTAS DS</b> - 393px - solo revision, nada de esto esta en runtime <span class="estado">PROPUESTA - PENDIENTE DE OK VISUAL</span></div>
+
+<!-- 02 MENSAJITOS -->
+<div class="prop-label">02 - MENSAJITOS - tabs NUEVOS/TODOS (D3), carta nueva/caduca/vista, ticket XP, hint</div>
+<section class="prop" id="p02">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <button class="pg-close" type="button">X</button>
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:10px;">
+      <span style="font-size:1.7rem;transform:rotate(-6deg);">&#9993;</span>
+      <h2 class="pg-tit">Mensajitos</h2>
+      <span class="pg-pill pg-pill--pink">2 nuevos</span>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <span class="pg-tab is-on" style="max-width:130px;">Nuevos <span class="pg-badge" style="transform:none;">2</span></span>
+      <span class="pg-tab" style="max-width:130px;">Todos</span>
+    </div>
+    <div class="pg-card pg-card--pink" style="padding:10px 12px;margin-bottom:10px;">
+      <div style="display:flex;gap:10px;">
+        <span class="pg-avatar"></span>
+        <div style="flex:1;min-width:0;">
+          <div style="display:flex;align-items:center;gap:6px;"><b class="pg-hand" style="font-size:1.15rem;">Fernando</b><span class="pg-flag">Nuevo</span></div>
+          <div class="pg-sub">Hoy &#183; 19:00</div>
+        </div>
+      </div>
+      <p class="pg-hand" style="margin:6px 0 8px;font-size:1.1rem;line-height:1.25;">Esta vez Fernando no estaba por la labor.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="pg-pill pg-pill--mustard">&#11088; +5 XP</span>
+        <span class="pg-cta" style="min-height:40px;padding:6px 14px;">Abrir</span>
+      </div>
+    </div>
+    <div class="pg-card" style="padding:10px 12px;margin-bottom:10px;">
+      <div style="display:flex;gap:10px;">
+        <span class="pg-avatar"></span>
+        <div style="flex:1;"><b class="pg-hand" style="font-size:1.15rem;">Jaime</b><div class="pg-sub">Hoy &#183; 19:00</div></div>
+      </div>
+      <p class="pg-hand" style="margin:6px 0 8px;font-size:1.1rem;">Quiero quedar con Fernando...</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <span class="pg-pill pg-pill--mustard">&#8987; Caduca en 15 h</span>
+        <span class="pg-cta pg-cta--lavanda" style="min-height:40px;padding:6px 16px;">Ver</span>
+      </div>
+    </div>
+    <div class="pg-card" style="padding:10px 12px;">
+      <div style="display:flex;gap:10px;">
+        <span class="pg-avatar" style="opacity:.75;"></span>
+        <div style="flex:1;"><b class="pg-hand" style="font-size:1.15rem;color:var(--ds-text-muted);">Fernando</b><div class="pg-sub">Hoy &#183; 17:00 &#10003; Visto</div></div>
+      </div>
+      <p class="pg-hand" style="margin:6px 0 0;font-size:1.1rem;color:var(--ds-text-muted);">Necesito hacer algo distinto.</p>
+    </div>
+    <div class="pg-hint">&#11088; Abrir mensajitos puede desbloquear planes y cotilleos</div>
+  </div>
+</section>
+
+<!-- 03 COTILLEOS -->
+<div class="prop-label">03 - COTILLEOS - filtros con icono, cabeceras de dia, cards tintadas por categoria</div>
+<section class="prop" id="p03">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <button class="pg-close" type="button">X</button>
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:4px;">
+      <span style="font-size:1.6rem;transform:rotate(-8deg);">&#128226;</span>
+      <h2 class="pg-tit">Cotilleos</h2>
+      <span class="pg-badge">3</span>
+    </div>
+    <p class="pg-hand" style="margin:0 0 10px;font-size:1.05rem;color:var(--ds-text-muted);">Lo ultimo que corre por el pueblo</p>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <span class="pg-pill pg-pill--pink">Todo</span>
+      <span class="pg-pill">Llegadas</span>
+      <span class="pg-pill">Relaciones</span>
+      <span class="pg-pill">Guardados</span>
+    </div>
+    <span class="pg-day">HOY &#183; 24/08</span>
+    <div class="pg-card pg-card--green pg-tilt-l" style="padding:10px 12px;margin-bottom:10px;">
+      <div style="display:flex;gap:10px;">
+        <span class="pg-avatar"></span>
+        <div style="flex:1;">
+          <span class="pg-pill pg-pill--green">Llegada</span>
+          <p class="pg-hand" style="margin:5px 0;font-size:1.1rem;line-height:1.25;">Sergio se ha mudado al pueblo. Ya hay quien vigile el tendedero.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="pg-sub">19:00</span><span class="pg-link">Ver a Sergio &#8250;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="pg-card pg-card--lavender pg-tilt-r" style="padding:10px 12px;">
+      <div style="display:flex;gap:10px;">
+        <span class="pg-avatar"></span><span class="pg-avatar" style="margin-left:-26px;"></span>
+        <div style="flex:1;">
+          <span class="pg-pill pg-pill--lavender">Relacion</span> <span class="pg-flag">Nuevo</span>
+          <p class="pg-hand" style="margin:5px 0;font-size:1.1rem;line-height:1.25;">Fernando y David ya se van conociendo. A este paso, hasta quedaran.</p>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <span class="pg-sub">17:45</span><span class="pg-link">Ver relacion &#8250;</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 VECINOS -->
+<div class="prop-label">04 - VECINOS - una ventana con tabs (D4), buscador, grid con estados</div>
+<section class="prop" id="p04">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <button class="pg-close" type="button">X</button>
+    <h2 class="pg-tit" style="text-align:center;margin-bottom:6px;">Vecinos del pueblo</h2>
+    <div style="text-align:center;margin-bottom:10px;"><span class="pg-pill pg-pill--pink">&#9829; 8 de 46 conocidos</span></div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <span class="pg-tab is-on">Vecinos</span>
+      <span class="pg-tab pg-tab--lavanda">Relaciones</span>
+    </div>
+    <div class="pg-search">&#8981; Buscar vecino...</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div class="pg-card" style="padding:10px 8px;text-align:center;">
+        <span class="pg-avatar" style="width:52px;height:52px;margin:0 auto 4px;display:block;"></span>
+        <b class="pg-hand" style="font-size:1.15rem;">David</b><br/>
+        <span class="pg-pill pg-pill--green" style="margin:3px 0;">&#9786; Feliz</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px;"><span class="pg-sub">&#9829; 20</span><span class="pg-progress"><i style="width:66%;"></i></span></div>
+        <div class="pg-link" style="margin-top:5px;">Ver ficha &#8250;</div>
+      </div>
+      <div class="pg-card" style="padding:10px 8px;text-align:center;position:relative;">
+        <span class="pg-badge" style="position:absolute;top:6px;right:6px;">!</span>
+        <span class="pg-avatar" style="width:52px;height:52px;margin:0 auto 4px;display:block;"></span>
+        <b class="pg-hand" style="font-size:1.15rem;">Jaime</b><br/>
+        <span class="pg-pill pg-pill--red" style="margin:3px 0;">&#9785; Enfadado</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px;"><span class="pg-sub">&#9829; 5</span><span class="pg-progress pg-progress--pink"><i style="width:18%;"></i></span></div>
+        <div class="pg-link" style="margin-top:5px;">Ver ficha &#8250;</div>
+      </div>
+      <div class="pg-card" style="padding:10px 8px;text-align:center;">
+        <span class="pg-avatar" style="width:52px;height:52px;margin:0 auto 4px;display:block;"></span>
+        <b class="pg-hand" style="font-size:1.15rem;">Paula</b><br/>
+        <span class="pg-pill pg-pill--lavender" style="margin:3px 0;">&#9786; Contenta</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px;"><span class="pg-sub">&#9829; 15</span><span class="pg-progress pg-progress--pink"><i style="width:50%;"></i></span></div>
+        <div class="pg-link" style="margin-top:5px;">Ver ficha &#8250;</div>
+      </div>
+      <div class="pg-card pg-card--dashed" style="padding:10px 8px;text-align:center;">
+        <span class="pg-avatar" style="width:52px;height:52px;margin:0 auto 4px;display:block;opacity:.55;"></span>
+        <b class="pg-hand" style="font-size:1.15rem;color:var(--ds-text-muted);">Sergio</b><br/>
+        <span class="pg-pill pg-pill--pink" style="margin:3px 0;">&#9733; Nuevo</span>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px;opacity:.6;"><span class="pg-sub">&#9825; Por conocer</span><span class="pg-progress"><i></i></span></div>
+        <div class="pg-link" style="margin-top:5px;">Ver ficha &#8250;</div>
+      </div>
+    </div>
+    <div class="pg-hint">&#11088; Toca un vecino para ver su historia, estado y relaciones</div>
+  </div>
+</section>
+
+<!-- 05 RELACIONES -->
+<div class="prop-label">05 - RELACIONES - pestana de la misma ventana (D4), tarjetas bidireccionales A-B</div>
+<section class="prop" id="p05">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <button class="pg-close" type="button">X</button>
+    <h2 class="pg-tit" style="text-align:center;margin-bottom:6px;">Vecinos del pueblo</h2>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <span class="pg-tab">Vecinos</span>
+      <span class="pg-tab pg-tab--lavanda is-on">Relaciones</span>
+    </div>
+    <div style="display:flex;gap:6px;justify-content:space-between;margin-bottom:8px;">
+      <span class="pg-chipemoji is-on"><b>T</b>Todas</span>
+      <span class="pg-chipemoji"><b>&#128140;</b>Parejas</span>
+      <span class="pg-chipemoji"><b>&#129309;</b>Amistad</span>
+      <span class="pg-chipemoji"><b>&#128079;</b>Conocidos</span>
+      <span class="pg-chipemoji"><b>&#128148;</b>Malas</span>
+    </div>
+    <div class="pg-dd" style="margin-bottom:10px;"><span>Todo el pueblo</span><small>&#8964;</small></div>
+    <div class="pg-card" style="padding:10px 12px;margin-bottom:10px;">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:6px;">
+        <span class="pg-avatar" style="width:40px;height:40px;"></span>
+        <b class="pg-hand" style="font-size:1.15rem;">Fernando</b>
+        <span style="color:var(--ds-ink-soft);font-size:1.1rem;">&#8596;</span>
+        <b class="pg-hand" style="font-size:1.15rem;">Jaime</b>
+        <span class="pg-avatar" style="width:40px;height:40px;"></span>
+        <span class="pg-badge" style="transform:none;margin-left:2px;">!</span>
+      </div>
+      <div class="pg-card" style="padding:6px 9px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:6px;"><span class="pg-hand" style="font-size:1rem;">Fernando &#8594; Jaime</span><span class="pg-pill pg-pill--green">&#9786; Le cae bien</span></div>
+        <div class="pg-progress" style="margin-top:4px;"><i style="width:62%;"></i></div>
+      </div>
+      <div class="pg-card" style="padding:6px 9px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:6px;"><span class="pg-hand" style="font-size:1rem;">Jaime &#8594; Fernando</span><span class="pg-pill pg-pill--mustard">&#128079; Conocido</span></div>
+        <div class="pg-progress pg-progress--mustard" style="margin-top:4px;"><i style="width:30%;"></i></div>
+      </div>
+      <div class="pg-divider">Diferente en cada sentido</div>
+      <div style="text-align:center;"><span class="pg-link">Ver relacion &#8250;</span></div>
+    </div>
+    <div class="pg-card" style="padding:10px 12px;">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:6px;">
+        <span class="pg-avatar" style="width:40px;height:40px;"></span>
+        <b class="pg-hand" style="font-size:1.15rem;">Fernando</b>
+        <span style="color:var(--ds-ink-soft);font-size:1.1rem;">&#8596;</span>
+        <b class="pg-hand" style="font-size:1.15rem;">David</b>
+        <span class="pg-avatar" style="width:40px;height:40px;"></span>
+      </div>
+      <div class="pg-card" style="padding:6px 9px;margin-bottom:6px;">
+        <div style="display:flex;align-items:center;gap:6px;"><span class="pg-hand" style="font-size:1rem;">Fernando y David</span><span class="pg-pill pg-pill--mustard">&#128079; Conocidos</span></div>
+        <div class="pg-progress pg-progress--mustard" style="margin-top:4px;"><i style="width:42%;"></i></div>
+      </div>
+      <div style="text-align:center;"><span class="pg-link">Ver relacion &#8250;</span></div>
+    </div>
+    <div class="pg-hint">&#9829; Las relaciones pueden cambiar con cada plan</div>
+  </div>
+</section>
+
+<!-- 06 FICHA -->
+<div class="prop-label">06 - FICHA DE VECINO - nav anterior/siguiente (D5), boton DIARIO, ribbons, slots descubrimiento, CTA organizar</div>
+<section class="prop" id="p06">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <button class="pg-close" type="button">X</button>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span class="pg-link" style="color:var(--ds-ink-soft);">&#8592; Vecinos</span>
+      <h2 class="pg-tit" style="margin:0 auto;font-size:1.35rem;">Ficha de vecino</h2>
+    </div>
+    <div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:8px;">
+      <span class="pg-avatar pg-avatar--xl" style="border-color:var(--ds-red-alert);"></span>
+      <div style="flex:1;padding-top:4px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font:800 1.2rem/1 Nunito;color:var(--ds-ink-soft);">&#8249;</span>
+          <b class="pg-hand" style="font-size:1.6rem;color:var(--ds-pink-deep);">Jaime</b>
+          <span style="font:800 1.2rem/1 Nunito;color:var(--ds-ink-soft);">&#8250;</span>
+        </div>
+        <div class="pg-sub">24 anos &#183; Desempleado</div>
+        <div class="pg-sub">En el pueblo desde el dia 1</div>
+        <span class="pg-pill pg-pill--red" style="margin-top:5px;">&#9785; Enfadado</span>
+        <div class="pg-pill pg-pill--mustard" style="margin-top:5px;border-style:dashed;">Algo reciente le ha sentado mal</div>
+        <button class="pg-cta pg-cta--lavanda" type="button" style="min-height:36px;padding:5px 12px;margin-top:7px;font-size:.9375rem;">Diario</button>
+      </div>
+    </div>
+    <div style="margin-bottom:10px;">
+      <span class="pg-ribbon pg-ribbon--green">Lo que sabes de Jaime</span>
+      <span class="pg-sub" style="margin-left:6px;">1 de 3 rasgos</span>
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <div class="pg-slot pg-slot--on" style="flex:1.2;"><span style="font-size:1.2rem;">&#128095;</span><span>Perezoso/a &#10003;</span></div>
+        <div class="pg-slot"><span>&#128274;</span><span>?</span></div>
+        <div class="pg-slot"><span>&#128274;</span><span>?</span></div>
+      </div>
+    </div>
+    <div style="margin-bottom:10px;">
+      <span class="pg-ribbon pg-ribbon--lavender">Aficiones</span>
+      <div style="display:flex;gap:8px;margin-top:6px;">
+        <div class="pg-slot pg-slot--on"><span style="font-size:1.2rem;">&#127939;</span><span>Correr &#10003;</span></div>
+        <div class="pg-slot"><span>&#128274;</span><span>Por descubrir</span></div>
+      </div>
+    </div>
+    <div class="pg-card" style="padding:8px 12px;margin-bottom:10px;">
+      <span class="pg-ribbon pg-ribbon--mustard" style="margin-top:-16px;">Relaciones</span>
+      <div class="pg-row">
+        <span class="pg-avatar" style="width:34px;height:34px;"></span>
+        <span class="pg-hand" style="font-size:1.05rem;flex:1;">Fernando</span>
+        <span class="pg-pill pg-pill--mustard">&#128079; Conocidos</span>
+      </div>
+      <div class="pg-row">
+        <span class="pg-avatar" style="width:34px;height:34px;"></span>
+        <span class="pg-hand" style="font-size:1.05rem;flex:1;">David</span>
+        <span class="pg-pill pg-pill--mustard">&#128079; Conocidos</span>
+      </div>
+      <div style="text-align:right;"><span class="pg-link">Ver todas &#8250;</span></div>
+    </div>
+    <div class="pg-card pg-card--dashed" style="padding:12px;text-align:center;margin-bottom:10px;">
+      <span style="font-size:1.4rem;">&#128197;&#128158;</span>
+      <p class="pg-hand" style="margin:4px 0 0;font-size:1.1rem;color:var(--ds-text-muted);">Su agenda esta sospechosamente tranquila.</p>
+    </div>
+    <span class="pg-cta" style="width:100%;box-sizing:border-box;">+ Organizar plan</span>
+  </div>
+</section>
+
+<!-- 07 ANIMO -->
+<div class="prop-label">07 - ESTADO DE ANIMO (D6) - causa desde animo_explicacion; consecuencias solo con datos reales</div>
+<section class="prop" id="p07">
+  <div class="pg-card" style="margin:0 26px;padding:14px 13px 12px;transform:rotate(-0.4deg);">
+    <button class="pg-close" type="button">X</button>
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px;">
+      <span class="pg-avatar" style="width:40px;height:40px;"></span>
+      <b class="pg-hand" style="font-size:1.3rem;">Que le pasa a Jaime?</b>
+    </div>
+    <div style="text-align:center;margin-bottom:6px;">
+      <span class="pg-pill pg-pill--red" style="font-size:.8125rem;padding:5px 12px;">&#9785; Esta enfadado</span>
+    </div>
+    <div style="text-align:center;margin-bottom:10px;"><span class="pg-pill pg-pill--mustard">&#128339; Desde hoy</span></div>
+    <span class="pg-ribbon pg-ribbon--lavender">Que ha pasado?</span>
+    <div class="pg-card" style="padding:9px 11px;margin:6px 0 10px;">
+      <p class="pg-hand" style="margin:0;font-size:1.1rem;line-height:1.3;">Compartio un rato con otra persona que se torcio, y salio de alli con el animo por los suelos.</p>
+    </div>
+    <span class="pg-ribbon pg-ribbon--mustard">Mientras siga asi</span>
+    <div class="pg-card pg-card--mustard" style="padding:8px 11px;margin:6px 0 10px;">
+      <p class="pg-sub" style="margin:0 0 4px;">(solo con datos reales del motor &#8212; D6)</p>
+      <div class="pg-row" style="border:none;padding:3px 0;"><span>&#10060;</span><span class="pg-hand" style="font-size:1rem;">Puede rechazar algunos planes</span></div>
+      <div class="pg-row" style="border:none;padding:3px 0;"><span>&#128148;</span><span class="pg-hand" style="font-size:1rem;">Sus relaciones pueden cambiar</span></div>
+    </div>
+    <span class="pg-cta" style="width:100%;box-sizing:border-box;margin-bottom:4px;">&#128197; Organizar un plan</span>
+    <div style="text-align:center;margin-bottom:6px;"><span class="pg-cta pg-cta--ghost">Ver en su diario</span></div>
+    <div class="pg-hint">&#128161; Un buen plan podria mejorar su animo</div>
+  </div>
+</section>
+
+<!-- 08 DIARIO -->
+<div class="prop-label">08 - DIARIO DEL VECINO (D7) - timeline con nodos por tipo, filtros, cabeceras de dia</div>
+<section class="prop" id="p08">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <button class="pg-close" type="button">X</button>
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;">
+      <span class="pg-link" style="color:var(--ds-ink-soft);">&#8592; Ficha</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+      <span class="pg-avatar" style="width:48px;height:48px;"></span>
+      <div>
+        <b class="pg-hand" style="font-size:1.35rem;">Diario de Jaime</b>
+        <div class="pg-hand" style="color:var(--ds-text-muted);font-size:1rem;">Su historia en el pueblo</div>
+      </div>
+      <span class="pg-pill" style="margin-left:auto;">6 recuerdos</span>
+    </div>
+    <div class="pg-search">&#8981; Buscar en su historia...</div>
+    <div style="display:flex;gap:7px;margin-bottom:10px;">
+      <span class="pg-pill pg-pill--pink">Todo</span>
+      <span class="pg-pill">Planes</span>
+      <span class="pg-pill">Relaciones</span>
+      <span class="pg-pill">Cambios</span>
+    </div>
+    <span class="pg-day">DIA 4 &#183; 27/08</span>
+    <div class="pg-tl">
+      <div class="pg-tl-item" data-node="&#128545;">
+        <div class="pg-card" style="padding:8px 11px;border-color:var(--ds-red-alert);">
+          <b class="pg-hand" style="font-size:1.1rem;">Una tarde que salio mal</b>
+          <p class="pg-sub" style="margin:3px 0 5px;">Un plan se torcio y Jaime termino enfadado.</p>
+          <div style="display:flex;align-items:center;gap:6px;"><span class="pg-avatar" style="width:26px;height:26px;"></span><span class="pg-hand" style="font-size:.95rem;">Fernando</span><span class="pg-pill pg-pill--red" style="margin-left:auto;">Animo</span></div>
+        </div>
+      </div>
+      <div class="pg-tl-item" data-node="&#128148;">
+        <div class="pg-card" style="padding:8px 11px;border-color:var(--ds-mustard-deep);">
+          <b class="pg-hand" style="font-size:1.1rem;">Las cosas se tensaron</b>
+          <p class="pg-sub" style="margin:3px 0 5px;">Su relacion con Fernando cambio.</p>
+          <div style="display:flex;align-items:center;gap:6px;"><span class="pg-avatar" style="width:26px;height:26px;"></span><span class="pg-hand" style="font-size:.95rem;">Fernando</span><span class="pg-pill pg-pill--mustard" style="margin-left:auto;">Relacion</span></div>
+        </div>
+      </div>
+    </div>
+    <span class="pg-day pg-day--lav" style="background:var(--ds-lavender-soft);">DIA 3 &#183; 26/08</span>
+    <div class="pg-tl">
+      <div class="pg-tl-item" data-node="&#128161;">
+        <div class="pg-card" style="padding:8px 11px;border-color:var(--ds-lavender-deep);">
+          <b class="pg-hand" style="font-size:1.1rem;">Una idea inesperada</b>
+          <p class="pg-sub" style="margin:3px 0 0;">Jaime propuso quedar con Fernando.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 09 NUEVO PLAN -->
+<div class="prop-label">09 - NUEVO PLAN - pasos numerados 1-4 sobre data-org-* (sin cambios funcionales)</div>
+<section class="prop" id="p09">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <span class="pg-tape"></span>
+    <button class="pg-close" type="button">X</button>
+    <div style="text-align:center;margin-bottom:10px;">
+      <h2 class="pg-tit">Nuevo plan</h2>
+      <p class="pg-hand" style="margin:2px 0 0;color:var(--ds-text-muted);font-size:1.05rem;">Prepara un momento en el pueblo</p>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <span class="pg-tab">Solo</span>
+      <span class="pg-tab is-on">Acompanado</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span class="pg-step">1</span><b class="pg-hand" style="font-size:1.2rem;">Quienes van?</b>
+      <span class="pg-pill" style="margin-left:auto;">2 vecinos</span>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:4px;justify-content:space-between;">
+      <span class="pg-avatar" style="width:40px;height:40px;box-shadow:0 0 0 2px var(--ds-pink);"></span>
+      <span class="pg-avatar" style="width:40px;height:40px;box-shadow:0 0 0 2px var(--ds-pink);"></span>
+      <span class="pg-avatar" style="width:40px;height:40px;opacity:.6;"></span>
+      <span class="pg-avatar" style="width:40px;height:40px;opacity:.6;"></span>
+      <span class="pg-avatar" style="width:40px;height:40px;opacity:.6;"></span>
+    </div>
+    <span class="pg-pill pg-pill--lavender" style="margin-bottom:10px;">? Resultado incierto</span>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span class="pg-step">2</span><b class="pg-hand" style="font-size:1.2rem;">Que haran?</b>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:10px;">
+      <span class="pg-pill pg-pill--pink" style="min-height:40px;">&#9749; Quedar</span>
+      <span class="pg-pill" style="min-height:40px;">&#127869; Comer</span>
+      <span class="pg-pill" style="min-height:40px;">&#127807; Pasear</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span class="pg-step">3</span><b class="pg-hand" style="font-size:1.2rem;">Donde?</b>
+    </div>
+    <div class="pg-card" style="padding:8px 10px;margin-bottom:10px;display:flex;gap:10px;align-items:center;">
+      <span style="font-size:1.5rem;">&#127869;</span>
+      <div style="flex:1;">
+        <b class="pg-hand" style="font-size:1.1rem;">Restaurante</b>
+        <div><span class="pg-pill pg-pill--red">Cerrado ahora</span></div>
+        <div class="pg-sub">13:00-16:00 &#183; 20:00-00:00</div>
+      </div>
+      <small style="color:var(--ds-ink-soft);font-size:1.1rem;">&#8964;</small>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+      <span class="pg-step">4</span><b class="pg-hand" style="font-size:1.2rem;">Cuando?</b>
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:6px;">
+      <div class="pg-dd"><span>&#128197; HOY &#183; 24/08</span><small>&#8964;</small></div>
+      <div class="pg-dd"><span>&#128339; 23:00</span><small>&#8964;</small></div>
+    </div>
+    <div class="pg-pill pg-pill--green" style="margin-bottom:10px;">&#10003; Primera hora compatible: hoy a las 23:00</div>
+    <div class="pg-card pg-card--mustard" style="padding:10px 12px;margin-bottom:10px;transform:rotate(-0.4deg);">
+      <b class="pg-hand" style="font-size:1.2rem;">TU PLAN</b>
+      <p class="pg-hand" style="margin:2px 0;font-size:1.05rem;">Jaime y David &#183; Quedar en el Restaurante</p>
+      <div style="display:flex;align-items:center;gap:6px;"><span class="pg-sub">&#128197; Hoy, 24/08 &#183; 23:00</span><span class="pg-pill pg-pill--green" style="margin-left:auto;">&#10003; Todo listo</span></div>
+    </div>
+    <span class="pg-cta" style="width:100%;box-sizing:border-box;">&#128197; Crear plan</span>
+    <p class="pg-hand" style="text-align:center;margin:6px 0 0;color:var(--ds-text-muted);">Podras verlo en Proximos planes</p>
+  </div>
+</section>
+
+<!-- 10 AGENDA -->
+<div class="prop-label">10 - AGENDA (Libreta de Celestine) - planes agrupados por dia</div>
+<section class="prop" id="p10">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <span class="pg-tape"></span>
+    <button class="pg-close" type="button">X</button>
+    <p class="pg-kicker" style="margin:0 0 2px;">Libreta de Celestine</p>
+    <h2 class="pg-tit" style="margin-bottom:2px;">Planes</h2>
+    <p class="pg-hand" style="margin:0 0 10px;color:var(--ds-text-muted);font-size:1.05rem;">Lo que esta por venir.</p>
+    <span class="pg-day">HOY &#183; 24/08</span>
+    <div class="pg-card pg-tilt-l" style="padding:10px 12px;margin-bottom:10px;">
+      <span class="pg-pill pg-pill--lavender" style="margin-bottom:5px;">HOY &#183; 20:00</span>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span class="pg-avatar"></span><span class="pg-avatar" style="margin-left:-26px;"></span>
+        <div><b class="pg-hand" style="font-size:1.1rem;">Paula &#183; Sergio</b><div class="pg-sub">Bingo</div></div>
+        <span style="margin-left:auto;font-size:1.2rem;">&#11088;</span>
+      </div>
+    </div>
+    <span class="pg-day" style="background:var(--ds-lavender-soft);">MANANA &#183; 25/08</span>
+    <div class="pg-card pg-card--dashed pg-tilt-r" style="padding:10px 12px;">
+      <span class="pg-pill pg-pill--lavender" style="margin-bottom:5px;">MANANA &#183; 19:30</span>
+      <div style="display:flex;align-items:center;gap:9px;">
+        <span class="pg-avatar"></span>
+        <div><b class="pg-hand" style="font-size:1.1rem;">David</b><div class="pg-sub">Cine</div></div>
+        <span style="margin-left:auto;font-size:1.2rem;">&#11088;</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 11 MISIONES MODAL -->
+<div class="prop-label">11 - MISIONES (modal Hoy en el pueblo) - estados completada/pendiente</div>
+<section class="prop" id="p11">
+  <div class="pg-sheet" style="padding:14px 13px 12px;">
+    <span class="pg-tape"></span>
+    <button class="pg-close" type="button">X</button>
+    <p class="pg-kicker" style="margin:0 0 2px;">Libreta de Celestine</p>
+    <h2 class="pg-tit" style="margin-bottom:2px;">Hoy en el pueblo</h2>
+    <p class="pg-sub" style="margin:0 0 8px;">2 de 3 completadas &#183; sube la Vida del Pueblo</p>
+    <div class="pg-card" style="padding:6px 12px;margin-bottom:8px;">
+      <div class="pg-row">
+        <span class="pg-check">&#10003;</span>
+        <span class="pg-hand" style="font-size:1.05rem;flex:1;color:var(--ds-green-deep);">Que dos que ya se conozcan queden.</span>
+        <span class="pg-pill pg-pill--green">Hecha</span>
+      </div>
+      <div class="pg-row">
+        <span class="pg-check">&#10003;</span>
+        <span class="pg-hand" style="font-size:1.05rem;flex:1;color:var(--ds-green-deep);">Presenta a dos desconocidos.</span>
+        <span class="pg-pill pg-pill--green">Hecha</span>
+      </div>
+      <div class="pg-row">
+        <span class="pg-radio"></span>
+        <span class="pg-hand" style="font-size:1.05rem;flex:1;">Consigue que alguien mejore su animo.</span>
+        <span class="pg-pill">Pendiente</span>
+      </div>
+    </div>
+    <div class="pg-hint">&#11088; Las misiones diarias suben el corazon del pueblo</div>
+  </div>
+</section>
+
+<!-- 12 VIDA DEL PUEBLO -->
+<div class="prop-label">12 - VIDA DEL PUEBLO - modal corazon (sin referencia: propuesta ADN, D10)</div>
+<section class="prop" id="p12">
+  <div class="pg-card" style="margin:0 26px;padding:16px 14px;text-align:center;transform:rotate(0.3deg);">
+    <button class="pg-close" type="button">X</button>
+    <div style="font-size:2.2rem;">&#128157;</div>
+    <h2 class="pg-tit" style="margin:2px 0;">Vida del pueblo</h2>
+    <span class="pg-pill pg-pill--green" style="font-size:.8125rem;">72 / 100 &#183; Buen rollo</span>
+    <div class="pg-progress" style="margin:10px 14px;"><i style="width:72%;"></i></div>
+    <div class="pg-card pg-card--lavender" style="padding:9px 12px;margin:8px 0;text-align:left;">
+      <p class="pg-hand" style="margin:0;font-size:1.1rem;line-height:1.3;">Esto no es decoracion, aunque lo parezca. Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algun motivo, ahora son responsabilidad tuya.</p>
+    </div>
+    <p class="pg-hand" style="color:var(--ds-text-muted);margin:0 0 8px;">Llegas a 100? &#128157; Hay latido.</p>
+    <span class="pg-cta" style="min-height:40px;padding:6px 18px;">Entendido</span>
+  </div>
+</section>
+
+<!-- 13 INTERVENCION -->
+<div class="prop-label">13 - INTERVENCION DE ENCUENTRO - panel dentro de la tarjeta EN CURSO</div>
+<section class="prop" id="p13">
+  <div class="pg-card" style="margin:0 13px;padding:11px 13px;">
+    <div style="display:flex;align-items:center;gap:9px;margin-bottom:6px;">
+      <span class="pg-avatar" style="width:38px;height:38px;"></span><span class="pg-avatar" style="width:38px;height:38px;margin-left:-24px;"></span>
+      <div><b class="pg-hand" style="font-size:1.15rem;">Paula &#183; Sergio</b><div class="pg-sub">Bingo &#183; AHORA &#183; 21:00</div></div>
+      <span class="pg-pill pg-pill--green" style="margin-left:auto;">En curso</span>
+    </div>
+    <div class="pg-card pg-card--lavender" style="padding:9px 11px;margin-bottom:8px;">
+      <p class="pg-kicker" style="margin:0 0 3px;">El tema de la mesa</p>
+      <p class="pg-hand" style="margin:0;font-size:1.08rem;line-height:1.28;">Se estan conociendo con sonrisas facil, pero el tema de la mudanza flota en el aire.</p>
+    </div>
+    <p class="pg-kicker" style="margin:0 0 5px;">Puedes intervenir</p>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <span class="pg-cta" style="flex:1;min-height:44px;padding:7px 8px;font-size:.9375rem;">Suavizar el tema</span>
+      <span class="pg-cta pg-cta--lavanda" style="flex:1;min-height:44px;padding:7px 8px;font-size:.9375rem;">Cambiar de aire</span>
+    </div>
+    <div class="pg-card pg-card--green" style="padding:7px 10px;">
+      <span class="pg-hand" style="font-size:1rem;">Resultado: &#128522; La charla fluyo mejor.</span>
+    </div>
+  </div>
+</section>
+
+<!-- 14 NOTAS DE MAPA -->
+<div class="prop-label">14 - NOTAS DE MAPA (selector + quien esta) - chincheta, horario real, presencia</div>
+<section class="prop" id="p14">
+  <div class="pg-card" style="margin:0 30px 14px;padding:12px 13px;transform:rotate(-0.5deg);">
+    <span style="position:absolute;top:-9px;left:14px;width:16px;height:16px;border-radius:999px;background:radial-gradient(circle at 35% 30%, #f2a7b4, var(--ds-pink-deep));border:2px solid var(--ds-ink);box-shadow:0 2px 3px rgba(70,50,30,.3);"></span>
+    <button class="pg-close" type="button" style="width:30px;height:30px;line-height:26px;font-size:13px;">X</button>
+    <p class="pg-kicker" style="margin:0 0 2px;">Un vistazo al lugar</p>
+    <b class="pg-hand" style="font-size:1.3rem;">Cafeteria</b>
+    <p class="pg-hand" style="margin:3px 0 8px;font-size:1.05rem;color:var(--ds-text-muted);">Olor a cafe y a cotilleo recien molido.</p>
+    <span class="pg-pill pg-pill--green">Abierto ahora &#183; 08:00-23:00</span>
+    <div style="display:flex;gap:8px;margin-top:9px;">
+      <span class="pg-cta pg-cta--lavanda" style="flex:1;min-height:40px;padding:6px 8px;font-size:.9375rem;">Quien esta?</span>
+      <span class="pg-cta" style="flex:1;min-height:40px;padding:6px 8px;font-size:.9375rem;">Quedarme un rato</span>
+    </div>
+  </div>
+  <div class="pg-card" style="margin:0 30px;padding:12px 13px;transform:rotate(0.4deg);">
+    <span style="position:absolute;top:-9px;left:14px;width:16px;height:16px;border-radius:999px;background:radial-gradient(circle at 35% 30%, #f2a7b4, var(--ds-pink-deep));border:2px solid var(--ds-ink);"></span>
+    <button class="pg-close" type="button" style="width:30px;height:30px;line-height:26px;font-size:13px;">X</button>
+    <p class="pg-kicker" style="margin:0 0 2px;">Quien esta?</p>
+    <b class="pg-hand" style="font-size:1.3rem;">Discoteca</b>
+    <div><span class="pg-pill pg-pill--red">Cerrado ahora &#183; abre 20:00</span></div>
+    <div class="pg-row" style="margin-top:6px;">
+      <span class="pg-avatar" style="width:32px;height:32px;"></span>
+      <span class="pg-hand" style="font-size:1.05rem;flex:1;">Raul</span>
+      <span class="pg-pill pg-pill--mustard">&#9785; Neutral</span>
+    </div>
+    <div class="pg-row">
+      <span class="pg-avatar" style="width:32px;height:32px;"></span>
+      <span class="pg-hand" style="font-size:1.05rem;flex:1;">Neni</span>
+      <span class="pg-pill pg-pill--green">&#9786; Alegre</span>
+    </div>
+  </div>
+</section>
+
+<!-- 15 TUTORIAL -->
+<div class="prop-label">15 - TUTORIAL (intro + finale) - propuesta ADN, D10</div>
+<section class="prop" id="p15">
+  <div class="pg-sheet" style="margin:0 30px 14px;padding:16px 14px;">
+    <span class="pg-tape"></span>
+    <p class="pg-kicker" style="margin:0 0 2px;">Primeros pasos</p>
+    <h2 class="pg-tit" style="font-size:1.5rem;margin-bottom:4px;">Bienvenida al pueblo</h2>
+    <p class="pg-hand" style="font-size:1.12rem;line-height:1.3;margin:0 0 8px;">Celestine apunta desde hoy: presenta, organiza planes y mantente atento a los cotilleos.</p>
+    <div class="pg-row"><span class="pg-check">&#10003;</span><span class="pg-hand" style="font-size:1rem;flex:1;">Abre tus Mensajitos</span></div>
+    <div class="pg-row"><span class="pg-radio"></span><span class="pg-hand" style="font-size:1rem;flex:1;">Conoce a 3 vecinos</span></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:8px;">
+      <span class="pg-cta" style="min-height:40px;padding:6px 16px;">Siguiente</span>
+    </div>
+  </div>
+  <div class="pg-sheet" style="margin:0 30px;padding:16px 14px;text-align:center;">
+    <span class="pg-tape"></span>
+    <div style="font-size:1.8rem;">&#128158;</div>
+    <h2 class="pg-tit" style="font-size:1.5rem;">El pueblo tiene tema</h2>
+    <p class="pg-hand" style="font-size:1.12rem;line-height:1.3;color:var(--ds-text-muted);margin:0 0 10px;">A partir de ahora, cada plan cuenta. Suerte, Celestine.</p>
+    <span class="pg-cta" style="min-height:44px;padding:8px 20px;">Que empiece el tema</span>
+  </div>
+</section>
+
+<!-- 16 AVISOS + DERROTA -->
+<div class="prop-label">16 - AVISOS (toast + plan-notif) y DERROTA - propuesta ADN, D10</div>
+<section class="prop" id="p16">
+  <div class="pg-card pg-card--pink" style="margin:0 13px 12px;padding:10px 13px;display:flex;gap:9px;align-items:center;transform:rotate(-0.5deg);">
+    <span style="font-size:1.3rem;">&#128231;</span>
+    <div><b class="pg-hand" style="font-size:1.1rem;">Plan confirmado</b><div class="pg-hand" style="font-size:1rem;">Paula &#183; Sergio &#183; Bingo &#183; 20:00</div></div>
+  </div>
+  <div class="pg-card" style="margin:0 13px 14px;padding:9px 13px;display:flex;gap:9px;align-items:center;border-color:var(--ds-mustard-deep);background:var(--ds-mustard-soft);">
+    <span style="font-size:1.2rem;">&#9888;&#65039;</span>
+    <span class="pg-hand" style="font-size:1.05rem;">Jaime caduca en 15 h si no lo abres.</span>
+  </div>
+  <div class="pg-card" style="margin:0 30px;padding:16px 14px;text-align:center;border-color:var(--ds-red-alert);transform:rotate(-0.3deg);">
+    <span class="pg-tape"></span>
+    <div style="font-size:2rem;filter:grayscale(60%);">&#128157;</div>
+    <p class="pg-kicker" style="margin:0 0 2px;">El corazon del pueblo</p>
+    <h2 class="pg-tit" style="font-size:1.4rem;color:var(--ds-red-alert);">Se nos va de las manos</h2>
+    <p class="pg-hand" style="font-size:1.05rem;color:var(--ds-text-muted);margin:0 0 10px;">La vida del pueblo ha llegado a un punto critico. Siempre se puede empezar de nuevo.</p>
+    <div style="display:flex;gap:8px;justify-content:center;">
+      <span class="pg-cta" style="min-height:40px;padding:6px 14px;">Entendido</span>
+      <span class="pg-cta pg-cta--lavanda" style="min-height:40px;padding:6px 14px;">Empezar de cero</span>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
+
