@@ -292,10 +292,7 @@
   z-index: 1;
 }
 
-/* Preservar "Marcar todo como leído" (funcional, no siempre en mockup) */
-.play-v3:has(.game-shell) .capa-buzon .mensajitos-leer-todos {
-  display: inline-flex !important;
-}
+/* Marcar leído: ver play-v3-visual-interior.css (:not([hidden])) */
 
 /* Diario vecino: cabecera centrada como mockup */
 .play-v3:has(.game-shell) .capa-ficha-diario .fdi-top {

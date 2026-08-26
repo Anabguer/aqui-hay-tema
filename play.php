@@ -54,6 +54,7 @@ if (is_file($ahtBusterFile)) {
   <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;

@@ -25,22 +25,36 @@ Regla: screenshot/prototipo = diseño; runtime = funcionalidad.
 | Avisos / derrota | toasts + vida-derrota | propuestas 16 | `play-v3-avisos.css` |
 | Inventario / regalos | `capa-inventario` | regalos assets | `play-v3-regalos.css` |
 
-## Progreso sesi�n 2026-08-26
+## Commits sesión 2026-08-26
 
-### Commits
-- 7bf7c8a checkpoint inicial (UI + refs Dise�o_Ayuda)
-- db2bde9 pasada transversal shell modales (play-v3-visual-review.css)
+- `7bf7c8a` checkpoint inicial (UI + refs Diseño_Ayuda)
+- `db2bde9` pasada transversal shell modales (`play-v3-visual-review.css`)
+- `770e22e` log progreso inventario
+- *(pendiente)* pasada interior (`play-v3-visual-interior.css`)
 
-### Iteraciones por pantalla (estado)
-| Pantalla | Iter | M�vil | Desktop | Notas |
-|---|---|---|---|---|
-| Shell transversal | 1 | OK browser | OK browser | libreta, X ficha, auto-height |
-| Inicio | 0 | previo | previo | inicio-override.css; pendiente re-validar |
-| Mensajitos | 1 | OK browser | pendiente | tabs, hint, libreta |
-| Vecinos/Rel | 1 | OK browser | OK browser | tabs, buscador, hints |
-| Ficha/Diario/�nimo | 0 | pendiente | pendiente | CSS existente + shell |
-| Cotilleos | 0 | pendiente | pendiente | |
-| Organizar/Agenda | 0 | pendiente | pendiente | |
-| Misiones/Vida/Tutorial/Avisos/Inv | 0 | shell only | shell only | |
+## Tabla final de revisión
 
-### Sin deploy a producci�n
+| Pantalla | Referencia | Iter. móvil | Iter. desktop | Estado | Diferencias restantes |
+|---|---|---:|---:|---|---|
+| Shell transversal | — | 1 | 1 | OK | — |
+| Inicio | inicio-mobile / inicio_pc | 2 | 2 | OK | Encoding local `?` en textos (no CSS); misiones/parejas con poco contenido en partida vacía |
+| Mensajitos | mensajitos-mobile | 2 | 2 | OK | Vacío sin mensajes; hint lavanda OK |
+| Vecinos | vecinos-mobile | 2 | 2 | OK | Sin vecinos en partida DEBUG local; tabs/buscador/hints OK |
+| Relaciones | relaciones-mobile | 1 | 1 | OK | Sin datos de parejas; estructura tabs OK |
+| Ficha vecino | ficha-vecino-mobile | 2 | 2 | OK | Slots vacíos sin residentes; secciones/CTA/Diario OK |
+| Estado de ánimo | estado-animo-mobile | 1 | 1 | OK | Modal no abierto (sin ánimo activo); estilos en `play-v3-ficha.css` verificados |
+| Diario vecino | diario-mobile | 2 | 2 | OK | Filtros TODO/PLANES/REL/CAMBIOS + buscador OK; sin entradas |
+| Cotilleos | cotilleos-mobile | 2 | 1 | OK | Filtros ocultos sin cotilleos (funcional); libreta/título OK |
+| Nuevo plan | nuevo-plan-mobile | 2 | 1 | OK | Pasos 1-4 + Solo/Acompañado + CTA rosa OK |
+| Agenda | propuesta 10 | 2 | 1 | OK | Vacío «Nada en agenda»; icono calendario OK |
+| Misiones | propuesta 11 | 2 | 1 | OK | «Hoy en el pueblo» + vacío OK |
+| Vida pueblo | propuesta 12 | 2 | 1 | OK | Medidor 0/100 + caja lavanda explicativa OK |
+| Intervención | propuesta 13 | 1 | 1 | OK | CSS `play-v3-enc-int.css` + markup JS revisados; sin encuentro activo en local |
+| Notas mapa | propuesta 14 | 1 | 1 | OK | Consulta lugar (Cafetería) en runtime; X unificada en interior CSS |
+| Tutorial | tutorial-1..5 | 2 | 1 | OK | Intro libreta + Saltar; alturas DS restauradas |
+| Avisos / derrota | propuesta 16 | 2 | 1 | OK | Derrota «Se nos va de las manos» + CTA rosa OK |
+| Inventario | regalos assets | 2 | 1 | OK | Cabecera/subtítulo OK; min-height añadido en interior pass |
+
+### Sin deploy a producción
+
+Comparación visual realizada en `http://127.0.0.1:8765/play.php` (móvil 393px + desktop 1280px) contra PNGs en `Diseño_Ayuda/news/` y propuestas INDEX.

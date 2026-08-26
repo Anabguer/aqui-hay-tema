@@ -1,0 +1,256 @@
+/**
+ * Visual Review — INTERIOR (contenido dentro de modales + inicio)
+ * Carga después de play-v3-visual-review.css
+ */
+
+/* === FIX: marcar leído solo si visible (no forzar siempre) === */
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-leer-todos[hidden] {
+  display: none !important;
+}
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-leer-todos:not([hidden]) {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 8px auto;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+/* === INICIO (ref: inicio-mobile.png) === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-top .btn-guia {
+    font-size: 1rem;
+  }
+
+  .play-v3:has(.game-shell) .top-meta-prim,
+  .play-v3:has(.game-shell) .top-meta-hora {
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .8125rem;
+  }
+
+  .play-v3:has(.game-shell) .obj-misiones-papel,
+  .play-v3:has(.game-shell) .shell-grupo-parejas {
+    border: 2px solid var(--ds-ink);
+    border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
+    background: var(--ds-paper-card);
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .14);
+    padding: 10px 10px 9px;
+  }
+
+  .play-v3:has(.game-shell) .obj-misiones-papel-tit,
+  .play-v3:has(.game-shell) .zona-tit-parejas {
+    font-family: var(--ds-font-hand);
+    font-size: 1.0625rem;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+
+  .play-v3:has(.game-shell) .misiones-body .mision-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 5px 0;
+    border-bottom: 1px dashed rgba(107, 81, 56, .22);
+    font-family: var(--ds-font-hand);
+    font-size: 1rem;
+  }
+
+  .play-v3:has(.game-shell) .misiones-body .mision-item:last-child {
+    border-bottom: 0;
+  }
+}
+
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-main .game-left.zona-actividad {
+    align-items: end;
+  }
+}
+
+/* === MENSAJITOS interior (ref: mensajitos-mobile.png) === */
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab {
+  flex: 0 0 auto;
+  margin-bottom: 4px;
+}
+
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-tit {
+  font-family: Caveat, cursive !important;
+  font-size: 1.75rem !important;
+  color: var(--ds-pink-deep, #c85b78) !important;
+}
+
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-hint {
+  flex: 0 0 auto;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-lavender-soft, #ece6f8);
+  border: 1.5px solid var(--ds-lavender-deep, #7a6a9a);
+  font-family: var(--ds-font-hand);
+  font-size: .95rem;
+  line-height: 1.25;
+  color: var(--ds-ink, #3b3028);
+}
+
+/* === VECINOS hints (ref: vecinos-mobile.png) === */
+.play-v3:has(.game-shell) .capa-vecinos .mensajitos-hint,
+.play-v3:has(.game-shell) .capa-vecinos .vec-hint {
+  flex: 0 0 auto;
+  margin-top: 6px;
+  padding: 8px 10px;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-lavender-soft, #ece6f8);
+  border: 1.5px solid var(--ds-lavender-deep, #7a6a9a);
+  font-family: var(--ds-font-hand);
+  font-size: .95rem;
+  line-height: 1.25;
+}
+
+/* === FICHA + ÁNIMO + DIARIO (refs: ficha, estado-animo, diario-mobile) === */
+.play-v3:has(.game-shell) .capa-ficha .ficha-tit {
+  font-size: 1.45rem !important;
+  color: var(--ds-pink-deep, #c85b78) !important;
+}
+
+.play-v3:has(.game-shell) .capa-ficha .ficha-modal-animo {
+  max-height: min(82vh, 640px);
+}
+
+.play-v3:has(.game-shell) .capa-ficha-diario .fdi-head-tit {
+  font-family: Caveat, cursive !important;
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  text-align: center;
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3:has(.game-shell) .capa-ficha-diario .fdi-entrada {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: var(--ds-paper-card, #fffdf7);
+  padding: 10px 11px;
+  margin-bottom: 10px;
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .1);
+}
+
+/* === COTILLEOS (ref: cotilleos-mobile.png) — refuerzo filtros === */
+.play-v3:has(.game-shell) .capa-diario .coti-filtro--todo.is-on {
+  background: var(--ds-pink-soft, #fbe3ec);
+  border-color: var(--ds-pink-deep, #c85b78);
+  color: var(--ds-pink-deep, #c85b78);
+}
+
+/* === NUEVO PLAN (ref: nuevo-plan-mobile.png) === */
+.play-v3:has(.game-shell) .capa-organizar .org-body {
+  padding-top: 2px;
+}
+
+.play-v3:has(.game-shell) .capa-organizar .org-resumen {
+  border: 2px dashed rgba(107, 81, 56, .35);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: rgba(255, 253, 248, .7);
+  padding: 10px;
+  margin-top: 8px;
+}
+
+/* === AGENDA / MISIONES modal hints === */
+.play-v3:has(.game-shell) .capa-agenda .agenda-vacio,
+.play-v3:has(.game-shell) .capa-misiones .mis-vacio {
+  text-align: center;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  color: var(--ds-text-muted, #7a6a5c);
+  padding: 12px 8px;
+}
+
+/* === VIDA PUEBLO (propuesta 12) === */
+.play-v3:has(.game-shell) .capa-vida-pueblo .vida-cerrar,
+.play-v3:has(.game-shell) .capa-vida-pueblo .cerrar {
+  position: absolute !important;
+  top: 6px !important;
+  right: 6px !important;
+}
+
+/* === NOTAS MAPA (propuesta 14) — X como ficha === */
+.play-v3 .nota-mapa .cerrar {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  min-height: 40px !important;
+  top: 6px !important;
+  right: 6px !important;
+  border: 2px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: var(--ds-paper-card, #fffdf7) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .22) !important;
+  font: 800 17px/1 Nunito, sans-serif !important;
+  transform: rotate(2.5deg) !important;
+  display: grid !important;
+  place-items: center !important;
+}
+
+/* === TUTORIAL — restaurar alturas DS (visual-review no aplasta) === */
+.play-v3 .tut-intro .tut-papel,
+.play-v3 .tut-finale .tut-papel {
+  width: min(92vw, 393px) !important;
+  height: min(87dvh, 580px) !important;
+  min-height: min(87dvh, 580px) !important;
+  max-height: min(87dvh, 580px) !important;
+}
+
+@media (min-width: 769px) {
+  .play-v3 .tut-intro .tut-papel,
+  .play-v3 .tut-finale .tut-papel {
+    width: min(92vw, 480px) !important;
+  }
+}
+
+/* === DESKTOP PARIDAD INTERIOR (mismos elementos, más aire) === */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .capa-buzon .mensajitos-tit,
+  .play-v3:has(.game-shell) .capa-vecinos .ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-organizar .org-tit,
+  .play-v3:has(.game-shell) .capa-agenda .agenda-tit,
+  .play-v3:has(.game-shell) .capa-misiones .mis-tit,
+  .play-v3:has(.game-shell) .capa-diario .coti-tit,
+  .play-v3:has(.game-shell) .capa-ficha .ficha-tit,
+  .play-v3:has(.game-shell) .capa-ficha-diario .fdi-head-tit,
+  .play-v3:has(.game-shell) .capa-inventario .inv-tit,
+  .play-v3:has(.game-shell) .capa-vida-pueblo .vida-tit {
+    font-size: 1.9rem !important;
+  }
+
+  .play-v3:has(.game-shell) .capa-buzon .mensajitos-hint,
+  .play-v3:has(.game-shell) .capa-vecinos .vec-hint,
+  .play-v3:has(.game-shell) .capa-vecinos .mensajitos-hint {
+    font-size: 1.05rem;
+    padding: 9px 12px;
+  }
+
+  .play-v3:has(.game-shell) .capa-vecinos .vecinos-grid {
+    gap: 12px !important;
+  }
+
+  .play-v3:has(.game-shell) .capa-organizar .org-body,
+  .play-v3:has(.game-shell) .capa-agenda .agenda-list,
+  .play-v3:has(.game-shell) .capa-misiones .mis-body,
+  .play-v3:has(.game-shell) .capa-diario .coti-body,
+  .play-v3:has(.game-shell) .capa-ficha .ficha-body,
+  .play-v3:has(.game-shell) .capa-ficha-diario .fdi-scroll {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+}
+
+/* === INVENTARIO vacío: altura mínima libreta === */
+.play-v3:has(.game-shell) .capa-inventario {
+  min-height: min(72vh, 520px);
+}
+.play-v3:has(.game-shell) .capa-inventario .inv-body {
+  flex: 1;
+  min-height: 120px;
+}
