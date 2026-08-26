@@ -20,6 +20,8 @@ require_once dirname(__DIR__) . '/api/bootstrap.php';
 
 require_once __DIR__ . '/VisualApiContext.php';
 
+require_once __DIR__ . '/visual_validate_fixtures.php';
+
 
 
 use AquiHayTema\Api\Handlers\PartidaHandler;
@@ -35,6 +37,12 @@ $partidaId = (string) ($_GET['partida_id'] ?? 'e2erit-part_5af4821');
 $capa = (string) ($_GET['capa'] ?? 'inicio');
 
 $view = ($_GET['view'] ?? 'mobile') === 'desktop' ? 'desktop' : 'mobile';
+
+$openAnimo = ($capa === 'ficha_animo');
+
+$tutStep = max(1, min(5, (int) ($_GET['tut_step'] ?? 1)));
+
+$notasLugar = (string) ($_GET['lugar'] ?? 'parque');
 
 
 
@@ -112,15 +120,47 @@ if ($fichaId === '') {
 
 
 
+if ($capa === 'intervencion') {
+    if (!is_array($refresh['estado'] ?? null)) {
+        $refresh['estado'] = [];
+    }
+    $refresh['estado']['encuentros_en_curso'] = visual_validate_intervencion_fixture($refresh);
+}
+
+if ($capa === 'tutorial') {
+    if (!is_array($refresh['estado'] ?? null)) {
+        $refresh['estado'] = [];
+    }
+    $refresh['estado']['tutorial'] = visual_validate_tutorial_fixture($refresh['partida'] ?? [], $tutStep);
+}
+
+if ($openAnimo && $fichaId !== '' && is_array($refresh['partida']['residentes'][$fichaId] ?? null)) {
+    $refresh['partida']['residentes'][$fichaId]['estado_animo'] = 'enfadado';
+    $refresh['partida']['residentes'][$fichaId]['animo_explicacion'] = visual_validate_animo_fixture(
+        $fichaId,
+        $refresh['partida']
+    );
+}
+
 $capaJs = match ($capa) {
 
-    'inicio' => '',
+    'inicio', 'intervencion', 'notas_mapa', 'tutorial' => '',
+
+    'ficha_animo' => 'ficha',
 
     'vecinos_rel' => 'vecinos',
 
     default => $capa,
 
 };
+
+$animoFixtureJson = 'null';
+if ($openAnimo && $fichaId !== '') {
+    $animoFixtureJson = json_encode(
+        visual_validate_animo_fixture($fichaId, $refresh['partida'] ?? []),
+        JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP
+    ) ?: 'null';
+}
 
 
 
@@ -204,6 +244,10 @@ header('Content-Type: text/html; charset=utf-8');
 
   <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 
+  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+
+  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+
   <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 
   <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -242,11 +286,24 @@ header('Content-Type: text/html; charset=utf-8');
 
     .play-v3.dev-validate .play-root[data-capa=""] .velo { display: none !important; }
 
+    .play-v3.dev-validate .play-root[data-consulta] .selector.nota-mapa,
+    .play-v3.dev-validate .play-root[data-consulta] .quien.nota-mapa { display: block !important; opacity: 1 !important; }
+
+    .play-v3.dev-validate .play-root[data-consulta] .selector.nota-mapa,
+    .play-v3.dev-validate .play-root[data-consulta] .quien.nota-mapa {
+      position: fixed !important;
+      top: 52% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 240 !important;
+      width: min(360px, 92vw) !important;
+    }
+
   </style>
 
 </head>
 
-<body class="play-v3 dev-validate" data-ui="v3" data-partida-id="<?= htmlspecialchars($partidaId, ENT_QUOTES, 'UTF-8') ?>" data-capa-target="<?= htmlspecialchars($capaJs, ENT_QUOTES, 'UTF-8') ?>" data-ficha-id="<?= htmlspecialchars($fichaId, ENT_QUOTES, 'UTF-8') ?>" data-vecinos-rel="<?= $capa === 'vecinos_rel' ? '1' : '0' ?>">
+<body class="play-v3 dev-validate" data-ui="v3" data-partida-id="<?= htmlspecialchars($partidaId, ENT_QUOTES, 'UTF-8') ?>" data-capa-target="<?= htmlspecialchars($capaJs, ENT_QUOTES, 'UTF-8') ?>" data-ficha-id="<?= htmlspecialchars($fichaId, ENT_QUOTES, 'UTF-8') ?>" data-vecinos-rel="<?= $capa === 'vecinos_rel' ? '1' : '0' ?>" data-visual-capa="<?= htmlspecialchars($capa, ENT_QUOTES, 'UTF-8') ?>" data-notas-lugar="<?= htmlspecialchars($notasLugar, ENT_QUOTES, 'UTF-8') ?>" data-tut-step="<?= (int) $tutStep ?>">
 
   <div class="dev-bar">
 
@@ -254,7 +311,7 @@ header('Content-Type: text/html; charset=utf-8');
 
     <?php
 
-    $caps = ['inicio','buzon','vecinos','vecinos_rel','ficha','ficha_diario','diario','organizar','agenda','misiones','vida_pueblo','inventario'];
+    $caps = ['inicio','buzon','vecinos','vecinos_rel','ficha','ficha_animo','ficha_diario','diario','organizar','agenda','misiones','vida_pueblo','inventario','intervencion','notas_mapa','tutorial'];
 
     foreach ($caps as $c) {
 
@@ -305,6 +362,8 @@ header('Content-Type: text/html; charset=utf-8');
   ?>
 
   <script id="aht-refresh-payload" type="application/json"><?= $payload ?></script>
+
+  <script>window.__VIS_ANIMO_FIXTURE__ = <?= $animoFixtureJson ?>;</script>
 
   <script src="dev/visual_validate_boot.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
 

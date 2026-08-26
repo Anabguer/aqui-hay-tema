@@ -660,3 +660,156 @@
   z-index: 2;
 }
 
+
+/* === DESKTOP PARITY (iter 4): misma identidad, adaptado por ancho === */
+@media (min-width: 769px) {
+  .play-v3.dev-validate .play-root.pc {
+    width: min(1280px, 96vw) !important;
+    margin: 0 auto !important;
+  }
+
+  .play-v3.dev-validate .play-root.pc .game-shell {
+    max-width: min(1280px, 96vw);
+    margin: 0 auto;
+  }
+
+  .play-v3.dev-validate .play-root.pc .game-main {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px) !important;
+    gap: 18px !important;
+    align-items: start !important;
+  }
+
+  .play-v3.dev-validate .play-root.pc .game-map-wrap {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .play-v3.dev-validate .play-root.pc .game-right {
+    grid-column: 2;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* modales: misma piel que movil, ancho desktop canonico */
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario {
+    width: min(520px, 92vw) !important;
+    max-width: min(520px, 92vw) !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    top: 50% !important;
+    max-height: min(86vh, 760px) !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .mensajitos-tabs,
+  .play-v3:has(.game-shell) .play-root.pc .vec-tabs,
+  .play-v3:has(.game-shell) .play-root.pc .coti-filtros {
+    display: flex !important;
+    gap: 8px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .capa-vecinos.is-relaciones .vec-rel-empty,
+  .play-v3:has(.game-shell) .play-root.pc .capa-vecinos.is-relaciones .vec-rel-lista:empty::after {
+    content: "Aun no hay parejas registradas en esta partida.";
+    display: block;
+    margin: 14px 8px;
+    padding: 12px;
+    border: 1.5px dashed rgba(107, 81, 56, .35);
+    border-radius: 12px;
+    background: var(--ds-paper-warm, #f8f0de);
+    font-family: Caveat, cursive;
+    font-size: 1.05rem;
+    font-style: italic;
+    text-align: center;
+    color: var(--ds-ink-soft, #594839);
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .ficha-modal-animo .animo-modal-avatar {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 88px;
+    height: 88px;
+    margin: 0 auto 8px;
+    border: 3px solid var(--ds-ink, #3b3028);
+    border-radius: 999px;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .ficha-modal-animo .animo-modal-cta {
+    display: block !important;
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px 14px;
+    border: 2px dashed var(--ds-pink-deep, #c85b78) !important;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #fce8ef, #fff5f8) !important;
+    font-family: Caveat, cursive !important;
+    font-size: 1.15rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    text-align: center;
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .enc-int {
+    margin-top: 8px;
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .enc-int-btns {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.pc .nota-mapa,
+  .play-v3:has(.game-shell) .play-root.pc .quien.nota-mapa {
+    width: min(360px, 42vw) !important;
+    max-width: 360px !important;
+  }
+
+  .play-v3.dev-validate .play-root.pc .game-right .shell-grupo-misiones-par,
+  .play-v3.dev-validate .play-root.pc .game-right .shell-grupo-parejas,
+  .play-v3.dev-validate .play-root.pc .game-right .shell-grupo-cotilleo-par {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* estado animo: hero + CTA cuando existen en runtime */
+.play-v3:has(.game-shell) .ficha-modal-animo .animo-modal-avatar {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  margin: 0 auto 8px;
+  border: 3px solid var(--ds-ink, #3b3028);
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+.play-v3:has(.game-shell) .ficha-modal-animo .animo-modal-cta {
+  display: block !important;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 14px;
+  border: 2px dashed var(--ds-pink-deep, #c85b78) !important;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #fce8ef, #fff5f8) !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.12rem !important;
+  font-weight: 700 !important;
+  color: var(--ds-pink-deep, #c85b78) !important;
+  text-align: center;
+}
+
