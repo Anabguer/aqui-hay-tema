@@ -925,3 +925,81 @@ body.play-v3[data-tut-finale="1"] .tut-finale .tut-papel,
     transform: none !important;
   }
 }
+
+/* FIX movil tutorial: viewport + scroll interno (2026-08-26)
+   Duplicacion/desborde: responsive.css fuerza position:absolute en
+   .game-map-wrap .play-root .tut-intro (gana al fixed del modal).
+   Overflow: min-height 87dvh en tut-papel + absolute dentro del mapa alarga la pagina.
+   Solo max-width 768px; desktop intacto. */
+@media (max-width: 768px) {
+  html:has(body.play-v3[data-tut-activo="1"]),
+  html:has(body.play-v3[data-tut-finale="1"]) {
+    overflow: hidden !important;
+  }
+
+  body.play-v3[data-tut-activo="1"],
+  body.play-v3[data-tut-finale="1"] {
+    overflow: hidden !important;
+  }
+
+  body.play-v3[data-tut-activo="1"] .tutorial-pista,
+  body.play-v3[data-tut-finale="1"] .tutorial-pista {
+    display: none !important;
+  }
+
+  body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro,
+  body.play-v3[data-tut-finale="1"] .game-map-wrap .play-root .tut-finale {
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 520 !important;
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: max(0.75rem, env(safe-area-inset-top, 0px)) 0.75rem max(0.75rem, env(safe-area-inset-bottom, 0px)) !important;
+    box-sizing: border-box !important;
+    display: grid !important;
+    place-items: center !important;
+    align-content: center !important;
+    background: rgba(30, 25, 22, 0.44) !important;
+    pointer-events: auto !important;
+  }
+
+  body.play-v3[data-tut-activo="1"] .tut-intro[hidden],
+  body.play-v3[data-tut-finale="1"] .tut-finale[hidden] {
+    display: none !important;
+  }
+
+  body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro .tut-papel,
+  body.play-v3[data-tut-finale="1"] .game-map-wrap .play-root .tut-finale .tut-papel {
+    width: min(94vw, 380px) !important;
+    max-height: min(86dvh, calc(100dvh - 1.5rem)) !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 auto !important;
+    position: relative !important;
+    z-index: 521 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    box-sizing: border-box !important;
+  }
+
+  body.play-v3[data-tut-activo="1"] .tut-intro .tut-pasos,
+  body.play-v3[data-tut-activo="1"] .tut-intro .tut-acciones,
+  body.play-v3[data-tut-finale="1"] .tut-finale .tut-pasos,
+  body.play-v3[data-tut-finale="1"] .tut-finale .tut-acciones {
+    flex-shrink: 0 !important;
+  }
+
+  body.play-v3[data-tut-activo="1"] .tut-intro .tut-acciones,
+  body.play-v3[data-tut-finale="1"] .tut-finale .tut-acciones {
+    position: sticky !important;
+    bottom: 0 !important;
+    margin-top: auto !important;
+    padding-top: 8px !important;
+    background: linear-gradient(180deg, rgba(249, 244, 238, 0) 0%, rgba(249, 244, 238, 0.94) 32%, #f9f4ee 100%) !important;
+  }
+}
