@@ -12,7 +12,7 @@
     try { localStorage.setItem(DEBUG_KEY, DEBUG_ON ? '1' : '0'); } catch (e2) {}
     document.body.setAttribute('data-debug', DEBUG_ON ? '1' : '0');
     if (DEBUG_ON) {
-      try { console.log('%c[AHT DEBUG] Instrumentación activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
+      try { console.log('%c[AHT DEBUG] Instrumentaci├│n activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
     }
   }
   function isDebugOn() { return DEBUG_ON; }
@@ -186,7 +186,7 @@
     const all = [];
     if (serverText) all.push(serverText);
     if (clientBits.length) all.push('--- CLIENT / API ---\n' + clientBits.join('\n\n'));
-    pre.textContent = all.length ? all.join('\n\n') : '(aún no hay eventos)';
+    pre.textContent = all.length ? all.join('\n\n') : '(a├║n no hay eventos)';
     try { if (fromServer && fromServer.texto) console.log('[AHT playtest_diag]\n' + fromServer.texto); } catch (e) {}
   }
 
@@ -268,7 +268,7 @@
     try {
       data = raw ? JSON.parse(raw) : {};
     } catch (err) {
-      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvió JSON.', raw: raw.slice(0, 400) };
+      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvi├│ JSON.', raw: raw.slice(0, 400) };
       logApiError(action, method, body, resp.status, fail, 'json_parse');
       return fail;
     }
@@ -669,9 +669,9 @@
     const estEl = $('[data-vida-modal-estado]');
     if (estEl) {
       let hint = '';
-      if (vida && vida.critico) hint = 'La cosa se está poniendo fea.';
+      if (vida && vida.critico) hint = 'La cosa se est├í poniendo fea.';
       else if (valor >= 80) hint = 'Por ahora el pueblo respira.';
-      else if (valor <= 39) hint = 'Aquí pasa algo, y no es bueno.';
+      else if (valor <= 39) hint = 'Aqu├¡ pasa algo, y no es bueno.';
       estEl.textContent = hint;
       estEl.hidden = !hint;
       estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
@@ -879,8 +879,8 @@
     const eco = (insp && insp.economia && insp.economia.dinero) ? insp.economia.dinero.balance : null;
     const cel = estado && estado.celeste ? estado.celeste.dinero : null;
     const v = eco !== null && eco !== undefined ? eco : cel;
-    if (v === null || v === undefined || v === '') return '—';
-    return String(Math.round(Number(v))) + ' €';
+    if (v === null || v === undefined || v === '') return 'ÔÇö';
+    return String(Math.round(Number(v))) + ' Ôé¼';
   }
 
 
@@ -1025,8 +1025,8 @@
     if (diaHoy && diaMsg === diaHoy) diaLbl = 'Hoy';
     else if (diaHoy && diaHoy > 1 && diaMsg === diaHoy - 1) diaLbl = 'Ayer';
     else if (fc) diaLbl = fc;
-    else if (diaMsg) diaLbl = 'Día ' + diaMsg;
-    if (diaLbl && hora) return diaLbl + ' · ' + hora;
+    else if (diaMsg) diaLbl = 'D├¡a ' + diaMsg;
+    if (diaLbl && hora) return diaLbl + ' ┬À ' + hora;
     return diaLbl || hora || fc || '';
   }
 
@@ -1091,7 +1091,7 @@
     const cuerpo = cuerpoMensajito(m, nombre);
     row.innerHTML = htmlAvatarMensajito(m, nombre) +
       '<div class="msg-item-copy"><span class="msg-item-nom">' + esc(nombre) + '</span>' +
-      (compact ? ' — ' : '<br/>') +
+      (compact ? ' ÔÇö ' : '<br/>') +
       '<span class="msg-item-txt">' + esc(cuerpo) + '</span></div>';
     row.appendChild(crearMsgLeidoToggle(m));
     return row;
@@ -1340,9 +1340,9 @@
     const reloj = (estado && estado.reloj) || {};
     const enCurso = planEsEnCurso(enc, estado);
 
-    if (enCurso) return lugar + ' · En curso · ' + hora;
-    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' · Hoy ' + hora;
-    return lugar + ' · Día ' + (enc.dia || '?') + ' · ' + hora;
+    if (enCurso) return lugar + ' ┬À En curso ┬À ' + hora;
+    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' ┬À Hoy ' + hora;
+    return lugar + ' ┬À D├¡a ' + (enc.dia || '?') + ' ┬À ' + hora;
   }
   function emocionDe(id) {
     var r = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id];
@@ -1426,7 +1426,7 @@
     const ids = enc.participantes || [];
     const enCurso = planEsEnCurso(enc, estado);
     return '<div class="prox-faces' + (enCurso ? ' prox-faces--en-curso' : '') + '">' + carasPlanHtml(ids) + '</div>' +
-      '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
+      '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' ┬À ')) + '</p>' +
       '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
       esc(formatPlanMeta(enc, estado)) + '</p>' +
       htmlIntervencionEncuentro(enc, estado);
@@ -1466,7 +1466,7 @@
     html += '</div>';
     if (temas && temas.length) {
       html += '<div class="enc-int-temas">' +
-        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">💬 Elegir un tema…</button>' +
+        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">­ƒÆ¼ Elegir un temaÔÇª</button>' +
         '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu">';
       temas.forEach(function (h) {
         html += '<button type="button" class="enc-int-btn enc-int-btn--hobby enc-int-opt" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '" role="menuitem">' +
@@ -1537,7 +1537,7 @@
       const ids = enc.participantes || [];
       btn.innerHTML = '<span class="agenda-fila-fotos">' + carasPlanHtml(ids) + '</span>' +
         '<span class="agenda-fila-cuerpo"><span class="agenda-fila-nombres">' +
-        esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</span>' +
+        esc(ids.map(function (id) { return nombreDe(id); }).join(' ┬À ')) + '</span>' +
         '<span class="agenda-fila-meta">' + esc(formatPlanMeta(enc, cacheEstado)) + '</span></span>';
       box.appendChild(btn);
     });
@@ -1547,10 +1547,10 @@
     var lim = max || 110;
     if (!s) return '';
     if (s.length <= lim) return s;
-    return s.slice(0, lim - 1).trim() + '—';
+    return s.slice(0, lim - 1).trim() + 'ÔÇö';
   }
 
-  /* === Planes en curso — carrusel movil (misma fuente canonica que desktop) === */
+  /* === Planes en curso ÔÇö carrusel movil (misma fuente canonica que desktop) === */
 
   function proximosPlanesFuturos(partida, estado) {
     const reloj = (estado && estado.reloj) || {};
@@ -1613,7 +1613,7 @@
     const listaFull = proximosPlanesFuturos(cacheInsp, estado);
     const total = listaFull.length;
     if (cntEl) {
-      if (total > 0) { cntEl.textContent = ' ' + total; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      if (total > 0) { cntEl.textContent = String(total); cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     const lista = listaFull.slice(0, 6);
@@ -1675,7 +1675,7 @@
     const lista = encuentrosEnCursoAhora(cacheInsp, estado);
     const cntEl = block.querySelector('[data-encursos-count]');
     if (cntEl) {
-      if (lista.length > 0) { cntEl.textContent = ' ' + lista.length; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      if (lista.length > 0) { cntEl.textContent = String(lista.length); cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     if (!lista.length) {
@@ -1732,7 +1732,7 @@
     if (teaser) {
       teaser.textContent = ultRaw
         ? resumenCotilleoUi(ultRaw, 120)
-        : 'Hoy están sospechosamente tranquilos…';
+        : 'Hoy est├ín sospechosamente tranquilosÔÇª';
     }
     if (cotiBadge) {
       if (hoyLista.length >= 1) {
@@ -1820,7 +1820,7 @@
   var cacheMapaZonas = null;
   var cacheMapaPresencia = null;
   const LUGAR_TITULO_UI = {
-    lug_cafeteria: 'Cafetería', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
+    lug_cafeteria: 'Cafeter├¡a', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
     lug_restaurante: 'Restaurante', lug_parque: 'Parque', lug_bar: 'Bar',
     lug_cine: 'Cine', lug_discoteca: 'Discoteca', lug_bingo: 'Bingo'
   };
@@ -1829,7 +1829,7 @@
     return nombreLugarUi(id, fb);
   }
   const LUGAR_NOMBRE_UI = {
-    lug_cafeteria: 'la cafetería', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
+    lug_cafeteria: 'la cafeter├¡a', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
     lug_restaurante: 'el restaurante', lug_parque: 'el parque', lug_bar: 'el bar',
     lug_cine: 'el cine', lug_discoteca: 'la discoteca', lug_bingo: 'el bingo'
   };
@@ -1885,7 +1885,7 @@
     return layer ? layer.querySelector('[data-zona="' + zonaId + '"]') : null;
   }
 
-  /** Hit-test por coordenadas sobre la imagen del mapa (más fiable que botones % en móvil). */
+  /** Hit-test por coordenadas sobre la imagen del mapa (m├ís fiable que botones % en m├│vil). */
   function zonaDesdePuntoMapa(clientX, clientY) {
     if (!cacheMapaZonas || !cacheMapaZonas.zonas) return null;
     var img = document.querySelector('[data-mapa-canonico] .mapa-canonico-bg');
@@ -1941,7 +1941,7 @@
   function lineaHorarioDestino(d) {
     if (!d || !d.horario) return '';
     var est = d.abierto_ahora ? 'Abierto ahora' : 'Cerrado ahora';
-    return est + ' · ' + d.horario;
+    return est + ' ┬À ' + d.horario;
   }
 
   function pintarHorarioQuien(destinos) {
@@ -1965,7 +1965,7 @@
       }
       if (estado) {
         return '<span class="quien-estado ' + estadoCls + '">' + estado + '</span>' +
-          '<span class="quien-horas"> · ' + esc(d.horario) + '</span>';
+          '<span class="quien-horas"> ┬À ' + esc(d.horario) + '</span>';
       }
       return '<span class="quien-horas">Horario: ' + esc(d.horario) + '</span>';
     }).join('<span class="quien-horario-sep"> | </span>');
@@ -1990,7 +1990,7 @@
     var estado = d.abierto_ahora ? 'Abierto ahora' : 'Cerrado ahora';
     var estadoCls = d.abierto_ahora ? 'quien-estado--abierto' : 'quien-estado--cerrado';
     el.innerHTML = '<span class="quien-estado ' + estadoCls + '">' + estado + '</span>' +
-      '<span class="quien-horas"> · ' + esc(d.horario) + '</span>';
+      '<span class="quien-horas"> ┬À ' + esc(d.horario) + '</span>';
     el.hidden = false;
   }
 
@@ -2025,7 +2025,7 @@
     return Math.abs(s);
   }
 
-  /** Slots en franja inferior del hotspot (% left/top). Índice estable por cantidad. */
+  /** Slots en franja inferior del hotspot (% left/top). ├ìndice estable por cantidad. */
   function slotsTokensZona(total) {
     var n = Math.max(1, Math.min(5, total || 1));
     if (n === 1) return [{ left: 50, top: 82 }];
@@ -2126,7 +2126,7 @@
       if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.selector'), zonaId);
       $('[data-s-tit]').textContent = meta ? meta.label : zonaId;
-      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' ┬À ');
       var box = $('[data-s-btns]');
       box.innerHTML = '';
       ops.forEach(function (d) {
@@ -2138,7 +2138,7 @@
       });
       var all = document.createElement('button');
       all.type = 'button';
-      all.textContent = 'Quién hay aquí';
+      all.textContent = 'Qui├®n hay aqu├¡';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, null, zonaBtn); });
       box.appendChild(all);
       posicionarNotaMapa($('.selector'), zonaBtn);
@@ -2197,7 +2197,7 @@
         var sep = document.createElement('span');
         sep.className = 'quien-residente-sep';
         sep.setAttribute('aria-hidden', 'true');
-        sep.textContent = '·';
+        sep.textContent = '┬À';
         list.appendChild(sep);
       }
       var row = document.createElement('span');
@@ -2217,8 +2217,8 @@
         var mark = document.createElement('button');
         mark.type = 'button';
         mark.className = 'quien-tema-mark quien-tema-mark--' + esc((tv && tv.categoria) || 'hecho');
-        mark.setAttribute('aria-label', 'Aquí hay tema');
-        mark.textContent = (tv && tv.categoria_icono) || '◎';
+        mark.setAttribute('aria-label', 'Aqu├¡ hay tema');
+        mark.textContent = (tv && tv.categoria_icono) || 'ÔùÄ';
         (function (temaId) {
           mark.addEventListener('click', function (ev) {
             ev.stopPropagation();
@@ -2258,11 +2258,11 @@
     }
     box.hidden = false;
     box.innerHTML = activos.slice(0, 2).map(function (tv) {
-      var cat = tv.categoria_etiqueta || 'Aquí hay tema';
-      var ico = tv.categoria_icono || '◎';
+      var cat = tv.categoria_etiqueta || 'Aqu├¡ hay tema';
+      var ico = tv.categoria_icono || 'ÔùÄ';
       var dest = tv.destacado ? ' quien-tema--destacado' : '';
       return '<section class="quien-tema-card' + dest + '">' +
-        '<p class="quien-tema-kicker">Aquí hay tema</p>' +
+        '<p class="quien-tema-kicker">Aqu├¡ hay tema</p>' +
         '<p class="quien-tema-cat"><span class="quien-tema-ico" aria-hidden="true">' + esc(ico) + '</span> ' + esc(cat) + '</p>' +
         '<p class="quien-tema-txt">' + esc(tv.texto || '') + '</p>' +
         (tv.pista ? '<p class="quien-tema-pista">' + esc(tv.pista) + '</p>' : '') +
@@ -2352,7 +2352,7 @@
 
   function textoMisionStrip(m) {
     var t = (m && m.texto) || '';
-    if (t.length > 72) t = t.slice(0, 69) + '…';
+    if (t.length > 72) t = t.slice(0, 69) + 'ÔÇª';
     if (!t) t = (m && m.titulo) || 'Objetivo';
     return t;
   }
@@ -2419,7 +2419,7 @@
 
   function bolitaMision(estado) {
     if (estado === 'cumplida') {
-      return '<span class="mision-bolita cumplida" aria-label="Hecha"><span class="mision-check">✓</span></span>';
+      return '<span class="mision-bolita cumplida" aria-label="Hecha"><span class="mision-check">Ô£ô</span></span>';
     }
     if (estado === 'bloqueada') {
       return '<span class="mision-bolita bloqueada" aria-hidden="true"></span>';
@@ -2550,7 +2550,7 @@
     const btn = $('[data-pasar-rato]');
     if (!btn) return;
     btn.classList.toggle('pasar-rato--noche', esNoche);
-    btn.title = esNoche ? 'Avanza hasta las 08:00 de la mañana' : 'Avanza el tiempo exactamente 1 hora';
+    btn.title = esNoche ? 'Avanza hasta las 08:00 de la ma├▒ana' : 'Avanza el tiempo exactamente 1 hora';
     if (!btn.classList.contains('is-busy')) {
       const txt = btn.querySelector('.pasar-rato-txt');
       if (txt) txt.textContent = esNoche ? 'Pasar la noche' : 'Pasar el rato';
@@ -2562,15 +2562,15 @@
     const reloj = estado.reloj || {};
     const diaNum = reloj.dia_pueblo;
     const fechaCorta = rv.fecha_corta || '';
-    const diaLblHud = (diaNum !== undefined && diaNum !== null) ? ('Día ' + diaNum) : '';
+    const diaLblHud = (diaNum !== undefined && diaNum !== null) ? ('D├¡a ' + diaNum) : '';
     const diaNumEl = $('[data-dia-num]');
     if (diaNumEl) {
-      diaNumEl.textContent = diaLblHud || '—';
+      diaNumEl.textContent = diaLblHud || 'ÔÇö';
     }
     const h = rv.hora !== undefined ? rv.hora : reloj.hora_actual;
     const ht = h === undefined ? '' : (String(h).padStart(2, '0') + ':00');
     $$('[data-dow]').forEach(function (el) {
-      el.textContent = rv.dia_semana_ui || (diaNum !== undefined ? ('Día ' + diaNum) : '-');
+      el.textContent = rv.dia_semana_ui || (diaNum !== undefined ? ('D├¡a ' + diaNum) : '-');
     });
     $$('[data-fecha]').forEach(function (el) {
       el.textContent = fechaCorta;
@@ -2587,14 +2587,14 @@
     const metaEl = $('[data-dia-meta]');
     const metaMobEl = $('[data-top-meta-mobile]');
     if (metaEl) {
-      metaEl.textContent = fechaCorta || '—';
+      metaEl.textContent = fechaCorta || 'ÔÇö';
     }
     if (metaMobEl) {
-      const mobDia = diaLblHud || 'Día —';
-      const mobFecha = fechaCorta || '—';
+      const mobDia = diaLblHud || 'D├¡a ÔÇö';
+      const mobFecha = fechaCorta || 'ÔÇö';
       const min = rv.minuto !== undefined ? rv.minuto : reloj.minuto_actual;
-      const mobHora = h === undefined ? '—:—' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
-      metaMobEl.innerHTML = '<span class="top-meta-prim">' + mobDia + ' · ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span>';
+      const mobHora = h === undefined ? 'ÔÇö:ÔÇö' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
+      metaMobEl.innerHTML = '<span class="top-meta-prim">' + mobDia + ' ┬À ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span>';
     }
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
@@ -2762,7 +2762,7 @@
       if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.selector'), id);
       $('[data-s-tit]').textContent = cx.nombre;
-      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' ┬À ');
       const box = $('[data-s-btns]');
       box.innerHTML = '';
       ops.forEach(function (d) {
@@ -2774,7 +2774,7 @@
       });
       const all = document.createElement('button');
       all.type = 'button';
-      all.textContent = 'Quién hay en el complejo';
+      all.textContent = 'Qui├®n hay en el complejo';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, null); });
       box.appendChild(all);
       actualizarNotaAtras();
@@ -2823,12 +2823,12 @@
 
   function copyVacio(cid) {
     const t = {
-      cafe_libros: 'Ni el café humea. No hay ni un alma.',
-      rincon_lola: 'Hoy Lola no tendría a quién servir.',
+      cafe_libros: 'Ni el caf├® humea. No hay ni un alma.',
+      rincon_lola: 'Hoy Lola no tendr├¡a a qui├®n servir.',
       cine_game: 'Pantalla en negro. No hay ni un alma.',
-      mala_idea: 'Hasta el bar está en silencio.',
+      mala_idea: 'Hasta el bar est├í en silencio.',
       parque: 'Solo el banco, esperando.',
-      gimnasio_spa: 'Máquinas quietas. No hay ni un alma.'
+      gimnasio_spa: 'M├íquinas quietas. No hay ni un alma.'
     };
     return t[cid] || 'No hay ni un alma.';
   }
@@ -2936,7 +2936,7 @@
     if (cuenta) cuenta.textContent = String(metVec.vecinos) + ' / ' + String(metVec.cap);
     if (!ids.length) {
       box.innerHTML = '<p class="lista-vacia vecinos-vacio">' +
-        (filtroTxt ? 'Nadie con ese nombre.' : 'Todavía no hay vecinos en esta partida.') + '</p>';
+        (filtroTxt ? 'Nadie con ese nombre.' : 'Todav├¡a no hay vecinos en esta partida.') + '</p>';
       return;
     }
     ids.forEach(function (id) {
@@ -2998,14 +2998,14 @@
 
   function emojiRel(rel) {
     if (!rel) return '';
-    if (rel.etiqueta_vinculo === 'crisis') return '💔 ';
-    if (rel.etiqueta_vinculo === 'pareja') return '❤️ ';
-    if (rel.etiqueta_vinculo === 'ex_pareja') return '💔 ';
+    if (rel.etiqueta_vinculo === 'crisis') return '­ƒÆö ';
+    if (rel.etiqueta_vinculo === 'pareja') return 'ÔØñ´©Å ';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return '­ƒÆö ';
     const s = rel.etiqueta_social || '';
-    if (s === 'cae_mal') return '😒 ';
-    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '🤝 ';
-    if (s === 'amigo') return '🙂 ';
-    if (s === 'conocido') return '👋 ';
+    if (s === 'cae_mal') return '­ƒÿÆ ';
+    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '­ƒñØ ';
+    if (s === 'amigo') return '­ƒÖé ';
+    if (s === 'conocido') return '­ƒæï ';
     return '';
   }
 
@@ -3066,7 +3066,7 @@ function canonEmoId(id) {
   function etiquetaVecinoDesde(vista, dia) {
     const g = vista && vista.genero;
     const rol = g === 'mujer' ? 'Vecina' : (g === 'hombre' ? 'Vecino' : 'Vecino');
-    return rol + ' desde el día ' + dia;
+    return rol + ' desde el d├¡a ' + dia;
   }
 
   function textoAnimoDisplay(emo) {
@@ -3082,9 +3082,9 @@ function canonEmoId(id) {
   function textoEmoVecinoSutil(emo, genero) {
     const e = canonEmoId(emo);
     if (e === 'neutro') return '';
-    if (e === 'alegre') return 'está feliz';
-    if (e === 'triste') return 'está triste';
-    if (e === 'enfadado') return genero === 'mujer' ? 'está enfadada' : 'está enfadado';
+    if (e === 'alegre') return 'est├í feliz';
+    if (e === 'triste') return 'est├í triste';
+    if (e === 'enfadado') return genero === 'mujer' ? 'est├í enfadada' : 'est├í enfadado';
     return '';
   }
 
@@ -3115,7 +3115,7 @@ function canonEmoId(id) {
 
 
   function emoEmojiFicha(emo) {
-    const map = { neutro: '😐', alegre: '😊', triste: '😢', enfadado: '😤' };
+    const map = { neutro: '­ƒÿÉ', alegre: '­ƒÿè', triste: '­ƒÿó', enfadado: '­ƒÿñ' };
     return map[canonEmoId(emo)] || map.neutro;
   }
 
@@ -3161,8 +3161,8 @@ function canonEmoId(id) {
   }
 
   function emoModalIcono(estadoId) {
-    const map = { alegre: '😊', triste: '😢', enfadado: '😤', neutro: '😐' };
-    return map[canonEmoId(estadoId)] || '😐';
+    const map = { alegre: '­ƒÿè', triste: '­ƒÿó', enfadado: '­ƒÿñ', neutro: '­ƒÿÉ' };
+    return map[canonEmoId(estadoId)] || '­ƒÿÉ';
   }
 
   function htmlAnimoModal(exp, nom) {
@@ -3175,35 +3175,35 @@ function canonEmoId(id) {
     let mientras = '';
     if (consec.length) {
       mientras = '<div class="animo-modal-mientras">' +
-        '<span class="animo-modal-mientras-tit"><span class="animo-modal-mientras-ico" aria-hidden="true">!</span> Mientras siga así</span>' +
+        '<span class="animo-modal-mientras-tit"><span class="animo-modal-mientras-ico" aria-hidden="true">!</span> Mientras siga as├¡</span>' +
         '<div class="animo-modal-mientras-list">' +
         consec.map(function (c) {
           return '<span class="animo-modal-badge">' +
-            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || '•') + '</span>' +
+            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || 'ÔÇó') + '</span>' +
             esc(c.texto || '') + '</span>';
         }).join('') +
         '</div></div>';
     }
     const consejo = exp.consejo
-      ? '<p class="animo-modal-hint">💡 ' + esc(exp.consejo) + '</p>'
+      ? '<p class="animo-modal-hint">­ƒÆí ' + esc(exp.consejo) + '</p>'
       : '';
     return '<div class="animo-modal-top">' +
       '<div class="animo-modal-avatar">' + img + '</div>' +
-      '<h3 class="animo-modal-tit">¿Qué le pasa a ' + esc(nom) + '?</h3>' +
+      '<h3 class="animo-modal-tit">┬┐Qu├® le pasa a ' + esc(nom) + '?</h3>' +
       '</div>' +
       '<div class="animo-modal-pills">' +
       '<span class="animo-modal-estado animo-modal-estado--' + esc(emoId) + '">' +
       '<span class="animo-modal-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
       estadoTxt + '</span>' +
-      (desde ? '<span class="animo-modal-desde">🕐 ' + desde + '</span>' : '') +
+      (desde ? '<span class="animo-modal-desde">­ƒòÉ ' + desde + '</span>' : '') +
       '</div>' +
-      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">¿Qué ha pasado?</span>' +
+      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">┬┐Qu├® ha pasado?</span>' +
       '<div class="animo-modal-causa animo-modal-causa--illus">' +
       '<p>' + causa + '</p>' +
       '<span class="animo-modal-conflicto" aria-hidden="true"></span>' +
       '</div>' +
       mientras +
-      '<button type="button" class="animo-modal-cta" data-animo-org>📅 Organizar un plan</button>' +
+      '<button type="button" class="animo-modal-cta" data-animo-org>­ƒôà Organizar un plan</button>' +
       '<button type="button" class="animo-modal-ghost" data-animo-diario>Ver en su diario</button>' +
       consejo;
   }
@@ -3253,21 +3253,21 @@ function canonEmoId(id) {
   function categoriaDiarioMeta(cat) {
     const c = String(cat || '').toLowerCase();
     if (c.indexOf('animo') >= 0 || c.indexOf('emoc') >= 0) {
-      return { cls: 'pg-pill--red', txt: 'Ánimo', icon: '😤', grupo: 'cambios' };
+      return { cls: 'pg-pill--red', txt: '├ünimo', icon: '­ƒÿñ', grupo: 'cambios' };
     }
     if (c.indexOf('relac') >= 0 || c.indexOf('romance') >= 0 || c.indexOf('hito') >= 0) {
-      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '💔', grupo: 'relaciones' };
+      return { cls: 'pg-pill--mustard', txt: 'Relaci├│n', icon: '­ƒÆö', grupo: 'relaciones' };
     }
     if (c.indexOf('encuentro') >= 0) {
-      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '💔', grupo: 'relaciones' };
+      return { cls: 'pg-pill--mustard', txt: 'Relaci├│n', icon: '­ƒÆö', grupo: 'relaciones' };
     }
     if (c.indexOf('plan') >= 0) {
-      return { cls: 'pg-pill--lavender', txt: 'Plan', icon: '💡', grupo: 'planes' };
+      return { cls: 'pg-pill--lavender', txt: 'Plan', icon: '­ƒÆí', grupo: 'planes' };
     }
     if (c.indexOf('llegada') >= 0) {
-      return { cls: 'pg-pill--green', txt: 'Historia', icon: '🏢', grupo: 'cambios' };
+      return { cls: 'pg-pill--green', txt: 'Historia', icon: '­ƒÅó', grupo: 'cambios' };
     }
-    return { cls: 'pg-pill--tan', txt: 'Cambio', icon: '✦', grupo: 'cambios' };
+    return { cls: 'pg-pill--tan', txt: 'Cambio', icon: 'Ô£ª', grupo: 'cambios' };
   }
 
   function diarioEntradaMatchFiltro(e, filtro) {
@@ -3317,7 +3317,7 @@ function canonEmoId(id) {
     }
     html += '</div>' +
       '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>' +
-      '<span class="fdi-chev" aria-hidden="true">›</span>' +
+      '<span class="fdi-chev" aria-hidden="true">ÔÇ║</span>' +
       '</div></article>';
     return html;
   }
@@ -3338,7 +3338,7 @@ function canonEmoId(id) {
       entradas = entradas.slice().reverse();
     }
     if (!entradas.length) {
-      list.innerHTML = '<p class="ficha-vacio ficha-ironico">Aún no ha pasado nada digno de página.</p>';
+      list.innerHTML = '<p class="ficha-vacio ficha-ironico">A├║n no ha pasado nada digno de p├ígina.</p>';
       return;
     }
     let html = '';
@@ -3347,7 +3347,7 @@ function canonEmoId(id) {
     let inTl = false;
     entradas.forEach(function (e) {
       const diaNum = e.dia || '';
-      const diaLbl = e.fecha_corta || ('Día ' + diaNum);
+      const diaLbl = e.fecha_corta || ('D├¡a ' + diaNum);
       const diaKey = String(diaNum) + '|' + diaLbl;
       if (diaKey !== diaPrev) {
         if (inTl) html += '</div></div>';
@@ -3382,7 +3382,7 @@ function canonEmoId(id) {
       '<b class="ficha-diario-head-tit fdi-head-tit">Diario de ' + esc(nom) + '</b>' +
       '<p class="ficha-diario-head-sub fdi-head-sub">Su historia en el pueblo</p>' +
       '</div>' +
-      '<span class="ficha-diario-count fdi-count">📓 ' + total + ' recuerdos</span></div>';
+      '<span class="ficha-diario-count fdi-count">­ƒôô ' + total + ' recuerdos</span></div>';
   }
 
   function syncDiarioVecinoFiltros() {
@@ -3393,7 +3393,7 @@ function canonEmoId(id) {
     });
     const ord = $('[data-diario-orden]');
     if (ord) {
-      ord.textContent = diarioVecinoOrden === 'antiguo' ? '☰ Más antiguo' : '☰ Más reciente';
+      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'Ôÿ░ M├ís antiguo' : 'Ôÿ░ M├ís reciente';
     }
     const busca = $('[data-diario-busca]');
     if (busca && busca.value !== diarioVecinoBusca) busca.value = diarioVecinoBusca;
@@ -3490,9 +3490,9 @@ function hobbyIconKey(id, texto) {
 
   function emojiHobby(txt) {
     const t = String(txt || '').toLowerCase();
-    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '☕ ';
-    if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '📖 ';
-    if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '🌳 ';
+    if (t.indexOf('caf├®') >= 0 || t.indexOf('cafe') >= 0) return 'Ôÿò ';
+    if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '­ƒôû ';
+    if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '­ƒî│ ';
     return '';
   }
 
@@ -3540,7 +3540,7 @@ function hobbyIconKey(id, texto) {
 
   function lineaGente(slots) {
     const items = (slots && slots.length >= 2) ? slots.slice(0, 2) : [null, null];
-    return 'Gente: ' + slotGenteTxt(items[0]) + ' · ' + slotGenteTxt(items[1]);
+    return 'Gente: ' + slotGenteTxt(items[0]) + ' ┬À ' + slotGenteTxt(items[1]);
   }
 
   function pintarLoQueSabes(vista) {
@@ -3571,10 +3571,10 @@ function hobbyIconKey(id, texto) {
   }
   function textoPlanesVacios(id) {
     const frases = [
-      'Ni un café en el horizonte. O eso cree.',
+      'Ni un caf├® en el horizonte. O eso cree.',
       'Agenda libre. Demasiado libre.',
-      'Hoy no tiene nada apuntado. Ni mañana, según parece.',
-      'Cero planes. Cero prisas. Cero drama… por ahora.'
+      'Hoy no tiene nada apuntado. Ni ma├▒ana, seg├║n parece.',
+      'Cero planes. Cero prisas. Cero dramaÔÇª por ahora.'
     ];
     let h = 0;
     const s = String(id || '');
@@ -3598,7 +3598,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function etiquetaRelText(rel) {
-    if (!rel) return '—';
+    if (!rel) return 'ÔÇö';
     if (rel.etiqueta_vinculo === 'crisis') return 'En crisis';
     if (rel.etiqueta_vinculo === 'pareja') return 'Pareja';
     if (rel.etiqueta_vinculo === 'ex_pareja') return 'Ex pareja';
@@ -3614,7 +3614,7 @@ function hobbyIconKey(id, texto) {
       buen_amigo: 'Buen amigo',
       mejor_amigo: 'Mejor amigo'
     };
-    return map[rel.etiqueta_social] || String(rel.etiqueta_social || '—').replace(/_/g, ' ');
+    return map[rel.etiqueta_social] || String(rel.etiqueta_social || 'ÔÇö').replace(/_/g, ' ');
   }
 
   function barRelPct(rel) {
@@ -3695,7 +3695,7 @@ function hobbyIconKey(id, texto) {
     if (relMasBtn) {
       if (fichaRelCache.length > 2) {
         relMasBtn.hidden = false;
-        relMasBtn.textContent = 'Ver más relaciones';
+        relMasBtn.textContent = 'Ver m├ís relaciones';
         relMasBtn.onclick = function () { abrirFichaRelOverlay(nom); };
       } else {
         relMasBtn.hidden = true;
@@ -3708,7 +3708,7 @@ function hobbyIconKey(id, texto) {
       planBox.innerHTML = '';
       const planes = planesDeVecino(id);
       if (!planes.length) {
-        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">«Su agenda está sospechosamente tranquila.»</p>';
+        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">┬½Su agenda est├í sospechosamente tranquila.┬╗</p>';
       } else {
         planes.forEach(function (enc) {
           const p = document.createElement('p');
@@ -3781,11 +3781,11 @@ function hobbyIconKey(id, texto) {
   function estadoCarta(m) {
     const pueblo = m.estado_pueblo || '';
     if (pueblo === 'cumplida') return { cls: 'estado-cumplida', txt: 'Hecho' };
-    if (pueblo === 'caducada') return { cls: 'estado-caducada', txt: 'Se le pasó' };
+    if (pueblo === 'caducada') return { cls: 'estado-caducada', txt: 'Se le pas├│' };
     if ((m.estado || '') === 'pendiente') return { cls: 'estado-pendiente', txt: '' };
     if ((m.estado || '') === 'leido') return { cls: 'estado-leida', txt: '' };
     if ((m.estado || '') === 'en_espera') return { cls: 'estado-espera', txt: 'En espera' };
-    if ((m.estado || '') === 'resuelto') return { cls: 'estado-cumplida', txt: 'Ya está' };
+    if ((m.estado || '') === 'resuelto') return { cls: 'estado-cumplida', txt: 'Ya est├í' };
     return { cls: '', txt: '' };
   }
 
@@ -3865,7 +3865,7 @@ function hobbyIconKey(id, texto) {
     });
     const cartas = filtro === 'todos' ? cartasTodas : nuevos;
     if (!cartas.length) {
-      box.innerHTML = '<p class="lista-vacia buzon-vacio">No hay mensajes por ahora. Cuando llegue algo, lo verás aquí.</p>';
+      box.innerHTML = '<p class="lista-vacia buzon-vacio">No hay mensajes por ahora. Cuando llegue algo, lo ver├ís aqu├¡.</p>';
       return;
     }
     const accion = cartas.filter(mensajitoRequiereAccion);
@@ -3990,12 +3990,12 @@ function hobbyIconKey(id, texto) {
     if (e.fecha_corta) return e.fecha_corta;
     if (bucket === 'ayer') return 'Ayer';
     if (bucket === 'hoy') return '';
-    return e.dia ? ('día ' + e.dia) : '';
+    return e.dia ? ('d├¡a ' + e.dia) : '';
   }
 
   function htmlCotiAvatares(actores) {
     const ids = (actores && actores.length) ? actores.slice(0, 2) : [];
-    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">…</span>';
+    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">ÔÇª</span>';
     return ids.map(function (id) {
       const img = tokenDe(id);
       const nom = nombreDe(id);
@@ -4097,10 +4097,10 @@ function hobbyIconKey(id, texto) {
 
   function orgTipoIco(id) {
     const k = String(id || '').toLowerCase();
-    if (k === 'romance') return '❤️';
-    if (k === 'amistad') return '🤝';
-    if (k === 'conocerse') return '👋';
-    if (k === 'individual') return '🚶';
+    if (k === 'romance') return 'ÔØñ´©Å';
+    if (k === 'amistad') return '­ƒñØ';
+    if (k === 'conocerse') return '­ƒæï';
+    if (k === 'individual') return '­ƒÜÂ';
     return '';
   }
 
@@ -4145,7 +4145,7 @@ function hobbyIconKey(id, texto) {
       return;
     }
     if (!n) hint.textContent = 'Elige hasta 2 vecinos.';
-    else if (n === 1) hint.textContent = 'Elige un vecino más.';
+    else if (n === 1) hint.textContent = 'Elige un vecino m├ís.';
     else hint.textContent = '2 vecinos elegidos.';
   }
 
@@ -4195,7 +4195,7 @@ function hobbyIconKey(id, texto) {
       return pend || 'Elige al menos dos vecinos.';
     }
     if (err === 'lugar_requerido') return 'Elige un lugar.';
-    if (err === 'dia_requerido' || err === 'hora_requerida') return 'Elige cuándo quedar.';
+    if (err === 'dia_requerido' || err === 'hora_requerida') return 'Elige cu├índo quedar.';
     return fallback;
   }
 
@@ -4204,16 +4204,16 @@ function hobbyIconKey(id, texto) {
     org.dia = parseInt($('[data-org-dia]').value, 10);
     org.hora = parseInt($('[data-org-hora]').value, 10);
     if (org.modo === 'solo') {
-      if (!org.a) return { ok: false, msg: 'Elige a quién va el plan.' };
+      if (!org.a) return { ok: false, msg: 'Elige a qui├®n va el plan.' };
       if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
-      if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cuándo quedar.' };
+      if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cu├índo quedar.' };
       return { ok: true };
     }
     if (!org.a || !org.b) return { ok: false, msg: 'Elige al menos dos vecinos.' };
     if (org.a === org.b) return { ok: false, msg: 'Elige a dos personas distintas.' };
-    if (!org.tipo) return { ok: false, msg: 'Elige qué buscáis.' };
+    if (!org.tipo) return { ok: false, msg: 'Elige qu├® busc├íis.' };
     if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
-    if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cuándo quedar.' };
+    if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cu├índo quedar.' };
     return { ok: true };
   }
 
@@ -4290,7 +4290,7 @@ function hobbyIconKey(id, texto) {
     if (!box) return;
     var opts = Array.isArray(options) ? options : [];
     var valStr = value === null || value === undefined ? '' : String(value);
-    var label = 'Elegir…';
+    var label = 'ElegirÔÇª';
     opts.forEach(function (opt) {
       var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
       if (valStr !== '' && optVal === valStr) label = opt.label || optVal;
@@ -4460,7 +4460,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function fillSelect(sel, value, excludeId) {
-    sel.innerHTML = '<option value="">—</option>';
+    sel.innerHTML = '<option value="">ÔÇö</option>';
     idsResidentes().forEach(function (id) {
       if (excludeId && id === excludeId) return;
       const o = document.createElement('option');
@@ -4536,21 +4536,21 @@ function hobbyIconKey(id, texto) {
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
     var parts = (org.modo === 'solo' ? [org.a] : [org.a, org.b]).filter(Boolean);
     if (!orgParticipantesListos()) {
-      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+      pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('', false);
       return;
     }
     if (!org.lugar) {
-      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+      pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('Elige un lugar para ver horarios.', true);
       return;
     }
     if (!org.dia) {
-      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+      pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
       org.hora = 0;
-      setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
+      setOrgHorasHint('Elige cu├índo quedar para ver horarios.', true);
       return;
     }
     var tipo = org.modo === 'solo' ? 'individual' : (org.tipo || 'conocerse');
@@ -4564,7 +4564,7 @@ function hobbyIconKey(id, texto) {
         max_slots: 48
       }, 'GET');
       if (!r.ok) {
-        pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
+        pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
         org.hora = 0;
         setOrgHorasHint(mensajeErrorOrgApi(r, 'No hay horarios disponibles ahora.'), true);
         return;
@@ -4744,9 +4744,9 @@ function hobbyIconKey(id, texto) {
         }
       } else {
         var horaUi = String(org.hora).padStart(2, '0') + ':00';
-        var msg = r.mensaje_ui || ('Plan aceptado: ' + na + ' y ' + nb + ' en ' + lugUi + ', día ' + org.dia + ' a las ' + horaUi + '.');
+        var msg = r.mensaje_ui || ('Plan aceptado: ' + na + ' y ' + nb + ' en ' + lugUi + ', d├¡a ' + org.dia + ' a las ' + horaUi + '.');
         if (r.hora_ajustada || (r.propuesta && r.propuesta.hora_ajustada)) {
-          msg += ' (El motor ajustó la hora al hueco disponible.)';
+          msg += ' (El motor ajust├│ la hora al hueco disponible.)';
         }
         toast(msg);
       }
@@ -4995,7 +4995,7 @@ function hobbyIconKey(id, texto) {
     }
     el.hidden = false;
     el.classList.add('is-on');
-    el.textContent = lineas.map(function (l) { return '· ' + (l.texto || l.tipo || ''); }).join('\n');
+    el.textContent = lineas.map(function (l) { return '┬À ' + (l.texto || l.tipo || ''); }).join('\n');
   }
 
   async function avanzarHoras(horas) {
@@ -5013,7 +5013,7 @@ function hobbyIconKey(id, texto) {
     const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
       !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
     if (perdida) {
-      toast('La partida ha terminado. Empieza otra con «Nueva partida».');
+      toast('La partida ha terminado. Empieza otra con ┬½Nueva partida┬╗.');
       return;
     }
     const h = horaActualEstado();
@@ -5024,7 +5024,7 @@ function hobbyIconKey(id, texto) {
     btn.setAttribute('aria-busy', 'true');
     btn.classList.add('is-busy');
     const txt = btn.querySelector('.pasar-rato-txt');
-    if (txt) txt.textContent = 'A ver qué se cuece…';
+    if (txt) txt.textContent = 'A ver qu├® se cueceÔÇª';
     try {
       const r = await avanzarHoras(horas);
       if (!r.ok) toast(r.mensaje_ui || 'Ahora no se puede pasar el rato.');
@@ -5225,7 +5225,7 @@ function hobbyIconKey(id, texto) {
           var togEl = optWrap.querySelector('[data-temas-toggle]');
           if (togEl) {
             togEl.classList.add('is-elegido');
-            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' ▾';
+            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' Ôû¥';
             togEl.setAttribute('aria-expanded', 'false');
           }
         }

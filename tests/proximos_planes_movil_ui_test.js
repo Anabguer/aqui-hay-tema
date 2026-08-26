@@ -54,6 +54,8 @@ ok(iCoti < iEnc && iEnc < iPP,
   'play.php: orden DOM Cotilleos -> EN CURSO -> Proximos planes');
 ok(php.includes('data-encursos-count') && php.includes('data-proxplanes-count'),
   'play.php: contadores dinamicos en cabeceras');
+ok(php.includes('plan-seccion-badge') && !php.includes('plan-seccion-ver'),
+  'play.php: badge de seccion y sin VER TODOS');
 ok(!php.includes('data-proxplanes-int') && !/pp-mov-(cta|panel)/.test(css),
   'sin acciones de intervencion en Proximos planes');
 
@@ -63,7 +65,7 @@ ok(js.includes('function renderProximosPlanesMovil('), 'js: renderProximosPlanes
 const fnRenderPP = extraerBloque(js, 'function renderShellPanels(');
 ok(fnRenderPP.includes('renderProximosPlanesMovil(estado)'),
   'js: render de Proximos planes cableado junto al de EN CURSO');
-ok(js.includes('[data-proxplanes-count]') && js.includes('listaFull.length'),
+ok(js.includes('[data-proxplanes-count]') && js.includes('String(total)'),
   'js: contador Proximos planes desde total real (proximosPlanesFuturos)');
 ok(js.includes('[data-encursos-count]') && js.includes('encuentrosEnCursoAhora'),
   'js: contador EN CURSO desde encuentrosEnCursoAhora');
