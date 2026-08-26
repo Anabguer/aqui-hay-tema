@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
+use AquiHayTema\Engine\PoolJugableCanon;
 use function AquiHayTema\Api\savePartida;
 use function AquiHayTema\Api\savePartidaRapida;
 
@@ -38,7 +39,18 @@ final class ResidentesHandler
 
     public static function incorporar(ApiContext $ctx, array $body, array &$partida): array
     {
-        $r = $ctx->service->incorporarResidenteCatalogo($partida, (string) ($body['catalog_id'] ?? ''));
+        $catalogId = (string) ($body['catalog_id'] ?? '');
+        if ($catalogId === '' || !PoolJugableCanon::esIdCanonico($catalogId)) {
+            return [
+                'ok' => false,
+                'resultado' => [
+                    'ok' => false,
+                    'error' => 'candidato_no_canonico',
+                    'catalog_id' => $catalogId,
+                ],
+            ];
+        }
+        $r = $ctx->service->incorporarResidenteCatalogo($partida, $catalogId);
         if ($r['ok'] ?? false) {
             savePartida($ctx, $partida);
         }
