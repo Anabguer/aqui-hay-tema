@@ -1,13 +1,11 @@
-# ROMANCE AUTÓNOMO — CIERRE TOTAL (PLAN)
+# ROMANCE AUTÓNOMO — CIERRE TOTAL (PLAN EJECUTADO EN RAMA)
 
-**Estado de este documento:** PLAN (primera pasada). NO se ha implementado nada todavía.
-Tras la aprobación de Neni/ChatGPT («PLAN APROBADO. EJECUTA EL CIERRE TOTAL.»), este mismo
-documento se convertirá en el **documento de cierre**: registraré en él arquitectura final,
-decisiones, SHAs, tests, simulaciones, calibración, deploys, hashes y estado real de producción.
-
-**Base de auditoría:** producción real post-reconciliación `abb1276`
-(`int/recon-romance-f1-a1-pre-f2a-20260825`, deploy atómico 2026-08-25, backup remoto
-`/juegos/_backup_pre_recon_romance_20260825_192900`). NO se usa ninguna base histórica sin reconciliar.
+**Estado de este documento:** PLAN **EJECUTADO COMPLETO (R1–R8)** en rama
+`int/romance-cierre-total` (worktree `C:\Users\agl03\AppData\Local\Temp\opencode\aht_romcierre_wt`,
+base = producción real `abb1276` + fix de drift PRE). **SIN DEPLOY A PRODUCCIÓN** —
+pendiente de revisión final de Neni/ChatGPT. Flags `romance_autonomo.*` siguen OFF
+en la configuración entregada: con ellos OFF, el comportamiento es idéntico al de producción.
+Tras el deploy aprobado, este documento queda como fuente única de verificación del cierre.
 
 ---
 
@@ -715,29 +713,122 @@ Doctrina consolidada de los deploys F1/R08/NARRATIVA-P2/RECON (producción real 
 
 ## 20. REGISTRO DE EJECUCIÓN
 
-*(Se rellena durante la implementación. Este apartado convierte el plan en documento de cierre.)*
+### 20.1 Decisiones finales de diseño (adoptadas en código)
 
-### 20.1 Decisiones finales de diseño
-- (pendiente)
+| ID | Decisión | Justificación |
+|---|---|---|
+| D-PRE | Fix de drift PRE: `abb1276` contenía `intentarSiguienteCita` llamando `programar()` con ARRAY en arg 9 (firma bool) → TypeError. Alineado con blob de producción (`false`) antes de R1. Commit `97ca912` | Producción real manda; `abb1276` era internamente inconsistente |
+| D-ARC1 | **El interés recíproco puede NACER en citas**: en tipos románticos jugables, un participante con experiencia `bien/muy_bien` gana romance DESDE CERO aunque no tuviera señal propia (`EncuentroResolver`, guard relajado solo para ese caso) | El arco aprobado exige «interés recíproco real» emergente; el guard anterior lo hacía imposible (solo heredable del flechazo). Coherente con `RELACIONES_Y_CITAS.md` («una cita puede dejar más atracción») |
+| BUG-F2A-1 | Un NO de la continuidad (voluntad o geométrico) RE-ARMA el marcador de cita en vez de matar la cadena | Sin ello, la cadena moría al primer rechazo y la declaración nunca llegaba a ser intentable; la erosión canónica ya limita los reintentos |
+| D-CAL1 | Calibración provisional adoptada: `voluntad.mod_tipo.cita=6` (+3→+6 tras matriz), `mod_tipo.declaracion=-4`, `mod_tipo.ruptura=-15`, bonus recíproco (+12) también en declaración, conflicto ×3 en declaración | Única iteración que movió el funnel sin tocar claves canónicas de producción (`flechazo.probabilidad`, `pesos_familias`). Todo marcado `_provisional` |
+| D-EXC | Exclusividad por `ParejaEngine::parejaActivaDe()` única fuente; `TerceroRomantico::parejaDe` delega; `DebugParejasEngine` se deja intacto (debug-only, cero riesgo) | Deduplicación sin tocar WIP ajeno |
+| D-VUELTA-CANON | Confirmado canon producción: la vuelta NO hereda barra numérica (`valor=null`, `base_reconciliacion` como metadata). La estabilidad nace del roce real | El árbol vivo tenía una variante distinta; producción real (`abb1276`) manda |
+| D-GATES | Flags `romance_autonomo.*` OFF en el JSON entregado. El hueco de vida sigue blindado por `familias_en_play` (sin cambios). `pre_gate_familias_play_test` verde en todo el proceso | Activación escalonada reversible post-aprobación |
 
-### 20.2 SHAs de trabajo por bloque
-| Bloque | Rama | Commit | Fecha |
-|---|---|---|---|
-| R1 | int/romance-cierre-total | — | — |
+**Bugs encontrados y corregidos durante la ejecución:**
+1. BUG-1 exclusividad (`formar()`) — cerrado en R1.
+2. BUG-2 latente gates de tercero — cerrado en R1.
+3. INC-1 cupo Celestine en primera cita autónoma — cerrado en R1.
+4. Drift abb1276 TypeError `programar()` — cerrado en PRE (`97ca912`).
+5. NARR-BUG atribución declara/rechaza invertida en `DiarioResidenteBridge` — cerrado en R2.
+6. Consumidor de continuidad pisaba re-arms (R2) — refactor lista-local.
+7. Marcadores huérfanos al entrar en crisis/ex (R4) — purga automática.
+8. BUG-F2A-1 cadena muerta tras rechazo de segunda cita (R8/balance) — re-arme.
 
-### 20.3 Tests ejecutados (suite → resultado → fecha)
-- (pendiente)
+### 20.2 SHAs de trabajo por bloque (rama `int/romance-cierre-total`)
 
-### 20.4 Simulaciones (matriz → métricas → cifras de calibración adoptadas)
-- (pendiente)
+| Bloque | SHA | Contenido |
+|---|---|---|
+| PRE | `97ca912` | fix drift abb1276→producción (arg9 programar=false) |
+| Base | `abb1276` | linaje producción real F1+A1+PRE+F2A |
+| R1 | `31d03fa` | exclusividad + gates tercero + INC-1 · test 31 OK |
+| R2 | `0ad23c9` | declaración autónoma + narrativa + knobs · test 31 OK |
+| R3 | `4b3c340` | contrato de formación · test 12 OK |
+| R4 | `4e6b116` | vida de pareja (gap 36h) · test 15 OK |
+| R5 | `d56241c` | crisis causal + hook diario · test 19 OK |
+| R6 | `ace0ba6` | reparación · test 13 OK |
+| R7 | `0410a1f` | ruptura + post-ruptura · test 19 OK |
+| R8a | `2c7e124` | vuelta · test 12 OK |
+| R8b | `ce3ba44` | determinismo + larga duración 90d |
+| R8c | `49762c7` | D-ARC1 + calibración + banco sims + doc cierre |
 
-### 20.5 Deploys (PRE hashes → hunks → POST hashes → partida TEST → limpieza)
-- (pendiente)
+### 20.3 Tests ejecutados (suite → resultado)
 
-### 20.6 Estado final de producción y deudas FUERA de alcance
-- Deuda documentada no bloqueante que queda fuera: `rechazo_cooldown_neutro_test` desfasado (copy-cooldown),
-  versionado de clases runtime (B31), árbol principal sucio ajeno a este proyecto.
-- (resto pendiente)
+**Nuevas suites del cierre (todas verdes):** fase2b_declaracion (31) · fase2c_exclusividad (31)
+· fase2c_formacion (12) · fase3_vida_pareja (15) · fase4_crisis (19) · fase5_reparacion (13)
+· fase6_ruptura (19) · fase7_vuelta (12) · romance_cierre_determinismo (2) · romance_larga_duracion (3, 90d).
+
+**Regresión final: 24/24 suites VERDE**, incluyendo las preexistentes sensibles:
+fase1 ×3 · fase2_continuidad (robustecida a calibración, mismo contrato) · pre_gate_familias_play
+· relaciones · senal_coherencia_temporal · voluntad_media_geometrica · rechazo_clase/copy_coherente
+· hora_pasada · rng · vida_relacional · interaccion_casual_dedup · encuentros.
+
+**Fallo preexistente FUERA de alcance:** `php74_syntax_test` falla en `dev/generar_pool_canonico_200.php`
+(T_MATCH, PHP8-only) — presente en `abb1276` puro, ajeno a este cierre.
+
+### 20.4 Simulaciones (banco `dev/_sim_funnel_romance_cierre.php`, 25 corridas)
+
+Matriz flags ON: pops {3,8,16,24} × días {30,90} × seeds {11,22,33} + baseline flags-OFF.
+Probabilidades DE PRODUCCIÓN salvo D-CAL1. Datos crudos: `tmp/sims_cierre/*.json`.
+
+**Medias por celda (flags ON):**
+
+| celda | flechazos | 1ªs citas | declOK | parejas | crisis | rupturas | concMax |
+|---|---|---|---|---|---|---|---|
+| pop3·90d | 0.67 | 0.33 | 0 | 0 | 0 | 0 | 0 |
+| pop8·30d | 4.00 | 2.00 | 0 | 0 | 0 | 0 | 0 |
+| pop8·90d | 7.33 | 4.33 | 0.33 | 0.33 | 0 | 0 | ≤1 |
+| pop16·90d | 12.0 | 6.33 | 0.33 | 0.33 | 0.33 | 0 | ≤1 |
+| pop24·90d | 17.3 | 10.0 | 0 | 0 | 0 | 0 | 0 |
+
+Hallazgos: exclusividad NUNCA violada en salvaje (concMax=1); cadencia mínima observada entre
+hitos del mismo par = 729 h; vetos de edad cortan ~32 iniciativas/90d en pop8 (canon correcto);
+triángulos bloqueados hasta 10 en pop16; baseline OFF ⇒ 0 hitos nuevos (flags hacen exactamente
+lo prometido y nada más).
+
+**Gap vs objetivos P6 (pop8 ≈1 pareja d30–45; 3–6 al d100):** caudal aún BAJO (~0.33/90d).
+Palanca restante identificada pero NO tocada (decisión de producto, claves canónicas):
+`flechazo.probabilidad` (0.006) y/o `pesos_familias.romance` y/o umbral social de quedadas.
+Recomendación: aprobar deploy con calibración D-CAL1 + decidir esas palancas en sesión de balance.
+
+### 20.5 Deploys
+
+**NINGUNO.** Cero escrituras a producción. Todo el trabajo vive en rama/worktree local.
+Al aprobarse: seguir §19 (fetch PRE con recibos SHA256 → hunks quirúrgicos → tests sobre blobs
+exactos → deploy atómico de ficheros compartidos → POST hashes → partida TEST con limpieza por IDs explícitos → activar flags por gate).
+
+### 20.6 Estado final del roadmap y archivos que requerirán reconciliación con producción
+
+**Roadmap Romance Autónomo: FUNCIONALMENTE CERRADO EN RAMA.** Arco completo implementado:
+señales → primera cita → continuidad → interés recíproco emergente → declaración (acepta/rechaza)
+→ pareja EXCLUSIVA → citas de pareja → crisis CAUSAL → reparación (éxito/fallo) → ruptura
+(O1/O2 con autoría) → post-ruptura (gates ex) → vuelta con cap → historia_cerrada.
+
+**Archivos a reconciliar contra producción real al integrar** (base rama = `abb1276`;
+el árbol principal tiene WIP ajeno SIN commitear en varios de ellos):
+
+| Fichero | Cambio del cierre | Nota de reconciliación |
+|---|---|---|
+| src/Engine/ParejaEngine.php | R1 guard+parejaActivaDe | limpio en main; hunks aplicables directos |
+| src/Engine/TerceroRomantico.php | delegación | ídem |
+| src/Engine/SenalRomantica.php | R1+R7 gates | ídem |
+| src/Engine/IniciativaRomantica.php | R1/R2/R4/R7/R8 | main tiene el fix PRE ya vivo + WIP posible → reconciliar hunks sobre blob remoto |
+| src/Engine/Voluntad/VoluntadPonderadaEvaluator.php | R2 conflicto_declaracion + bonus recíproco declaracion | DIRTY en main (WIP ajeno) → hunk quirúrgico obligatorio |
+| src/Engine/PropuestaNivel.php | esTipoCita declaracion + EX quedar-only | limpio en main |
+| src/Engine/DiarioResidenteBridge.php | fix atribución | ¡UNTRACKED en main! versionado aquí — subir tal cual |
+| src/Engine/EncuentroResolver.php | D-ARC1 | DIRTY en main (WIP ajeno A4) → hunk quirúrgico |
+| src/Engine/RelacionEngine.php | campos crisis legacy-safe | DIRTY en main → hunk quirúrgico |
+| src/Engine/RelojOperations.php | hook IniciativaPareja | limpio en main |
+| src/Engine/IniciativaPareja.php | NUEVO (R5-R8) | fichero nuevo, sin colisión |
+| data/configs/calibracion_vida.json | bloque romance_autonomo + mod_tipo + notas | DIRTY en main con bloques de otros dueños (conflicto.decay R04, ventana_voluntad) → merge semántico |
+| tests/fase2_continuidad_citas_test.php | robustez a calibración (mismo contrato) | viene de recon; aplicar versión rama |
+| dev/_sim_funnel_romance_cierre.php | NUEVO banco sims | sin colisión |
+| docs/ROMANCE_AUTONOMO_CIERRE_TOTAL.md | este documento | nuevo |
+
+**Deudas documentadas FUERA de alcance (no introducidas por este cierre):**
+`rechazo_cooldown_neutro_test` desfasado (copy-cooldown vivo) · `php74_syntax` vs
+`dev/generar_pool_canonico_200.php` · versionado de clases runtime (B31) · árbol principal sucio
+ajeno · calibración fina de caudal (palancas canónicas reservadas a Neni/ChatGPT, §20.4).
 
 ---
 
