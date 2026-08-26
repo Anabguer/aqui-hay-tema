@@ -97,7 +97,7 @@ final class LabAudit
         $out = [];
         foreach (self::$tiradas as $t) {
             $ctx = (string) ($t['ctx'] ?? '');
-            if ($ctx === '' || !str_starts_with($ctx, $ctxPrefix)) {
+            if ($ctx === '' || strpos($ctx, $ctxPrefix) !== 0) {
                 continue;
             }
             unset($t['ctx']);
