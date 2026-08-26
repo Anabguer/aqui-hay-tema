@@ -24,3 +24,23 @@ Regla: screenshot/prototipo = diseÃ±o; runtime = funcionalidad.
 | Tutorial | tutorial DS | `news/tutorial-1..5.png` | `DiseÃ±o_Ayuda/tutorial/` |
 | Avisos / derrota | toasts + vida-derrota | propuestas 16 | `play-v3-avisos.css` |
 | Inventario / regalos | `capa-inventario` | regalos assets | `play-v3-regalos.css` |
+
+## Progreso sesión 2026-08-26
+
+### Commits
+- 7bf7c8a checkpoint inicial (UI + refs Diseño_Ayuda)
+- db2bde9 pasada transversal shell modales (play-v3-visual-review.css)
+
+### Iteraciones por pantalla (estado)
+| Pantalla | Iter | Móvil | Desktop | Notas |
+|---|---|---|---|---|
+| Shell transversal | 1 | OK browser | OK browser | libreta, X ficha, auto-height |
+| Inicio | 0 | previo | previo | inicio-override.css; pendiente re-validar |
+| Mensajitos | 1 | OK browser | pendiente | tabs, hint, libreta |
+| Vecinos/Rel | 1 | OK browser | OK browser | tabs, buscador, hints |
+| Ficha/Diario/Ánimo | 0 | pendiente | pendiente | CSS existente + shell |
+| Cotilleos | 0 | pendiente | pendiente | |
+| Organizar/Agenda | 0 | pendiente | pendiente | |
+| Misiones/Vida/Tutorial/Avisos/Inv | 0 | shell only | shell only | |
+
+### Sin deploy a producción
