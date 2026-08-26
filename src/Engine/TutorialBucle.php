@@ -44,7 +44,19 @@ final class TutorialBucle
             return is_string($id) && $id !== '';
         }));
         $de = isset($partida['residentes']['per_i03']) ? 'per_i03' : (string) ($ids[0] ?? '');
-        $nombre = $de !== '' ? IdentidadPublica::nombre($partida, $de) : 'Alguien';
+
+        // CONTRATO NARRATIVO: el recado lo firma el vecino, no el narrador.
+        $texto = MensajitoVoz::linea(
+            $partida,
+            'bienvenida_bucle',
+            [],
+            'bienvenida_bucle|' . ($de !== '' ? $de : 'nadie'),
+            $de !== '' ? $de : null
+        );
+        if ($texto === '') {
+            $nombre = $de !== '' ? IdentidadPublica::nombre($partida, $de) : 'Alguien';
+            $texto = $nombre . ': el pueblo ya está en marcha. Echa un vistazo y, si te apetece, propón un plan.';
+        }
 
         BuzonEngine::crear($partida, [
             'id' => 'msg_bienvenida_bucle1',
@@ -52,7 +64,7 @@ final class TutorialBucle
             'tipo' => 'bienvenida',
             'de_persona' => $de !== '' ? $de : null,
             'actores' => $de !== '' ? [$de] : [],
-            'texto' => $nombre . ' te ha dejado un recado: el pueblo ya está en marcha. Echa un vistazo a quién hay por aquí y, si te apetece, propón un plan.',
+            'texto' => $texto,
             'origen' => [
                 'evento_id' => null,
                 'tipo_evento' => DomainEvents::PARTIDA_CREADA,

@@ -243,10 +243,10 @@ final class TutorialPrimerosPasos
         if (!self::activo($partida) || !empty($partida['tutorial']['jugable_completado'])) {
             return;
         }
-        $mid = (string) ($partida['tutorial']['mensajito_id'] ?? '');
-        if ($mid !== '' && $mensajeId === $mid) {
-            self::completarMision($partida, self::M2, $catalog);
+        if (!self::esMensajitoTutorialLeido($partida, $mensajeId)) {
+            return;
         }
+        self::completarMision($partida, self::M2, $catalog);
     }
 
     public static function marcarFinaleVisto(array &$partida): void
@@ -454,28 +454,79 @@ final class TutorialPrimerosPasos
             : 'bloqueada';
     }
 
+    private static function mensajitoIdCanonico(array $partida, string $tercero): string
+    {
+        $guardado = (string) ($partida['tutorial']['mensajito_id'] ?? '');
+        if ($guardado !== '') {
+            return $guardado;
+        }
+
+        return 'msg_pp_' . substr(md5((string) ($partida['meta']['partida_id'] ?? '') . '|' . $tercero), 0, 10);
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    private static function mensajitoTutorialExistente(array $partida, string $tercero): ?array
+    {
+        foreach ($partida['buzon'] ?? [] as $mensaje) {
+            if (!is_array($mensaje)) {
+                continue;
+            }
+            if (self::esMensajitoTutorial($mensaje, $tercero)) {
+                return $mensaje;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * @param array<string, mixed> $mensaje
+     */
+    private static function esMensajitoTutorial(array $mensaje, string $tercero): bool
+    {
+        return ($mensaje['tipo'] ?? '') === 'tutorial_primeros_pasos'
+            && (string) ($mensaje['de_persona'] ?? '') === $tercero;
+    }
+
+    private static function esMensajitoTutorialLeido(array &$partida, string $mensajeId): bool
+    {
+        $tercero = (string) ($partida['tutorial']['tercero'] ?? '');
+        if ($tercero === '') {
+            return false;
+        }
+        $msgId = (string) ($partida['tutorial']['mensajito_id'] ?? '');
+        if ($msgId !== '' && $mensajeId === $msgId) {
+            return true;
+        }
+        foreach ($partida['buzon'] ?? [] as $mensaje) {
+            if (!is_array($mensaje) || ($mensaje['id'] ?? '') !== $mensajeId) {
+                continue;
+            }
+            if (!self::esMensajitoTutorial($mensaje, $tercero)) {
+                return false;
+            }
+            $partida['tutorial']['mensajito_id'] = (string) ($mensaje['id'] ?? $mensajeId);
+            return true;
+        }
+
+        return false;
+    }
+
     private static function asegurarMensajito(array &$partida, ?Catalog $catalog): void
     {
         $tercero = (string) ($partida['tutorial']['tercero'] ?? '');
         if ($tercero === '') {
             return;
         }
-        $msgId = (string) ($partida['tutorial']['mensajito_id'] ?? '');
-        if ($msgId === '') {
-            $msgId = 'msg_pp_' . substr(md5($partida['meta']['partida_id'] . '|' . $tercero), 0, 10);
-            $partida['tutorial']['mensajito_id'] = $msgId;
-        }
-        foreach ($partida['buzon'] ?? [] as &$mensaje) {
-            if (($mensaje['id'] ?? '') !== $msgId) {
-                continue;
-            }
-            $mensaje['estado'] = 'pendiente';
-            $mensaje['leido'] = false;
-            unset($mensaje['leido_en']);
-            unset($mensaje);
+        $msgId = self::mensajitoIdCanonico($partida, $tercero);
+        $existente = self::mensajitoTutorialExistente($partida, $tercero);
+        if ($existente !== null) {
+            $partida['tutorial']['mensajito_id'] = (string) ($existente['id'] ?? $msgId);
             return;
         }
-        unset($mensaje);
+        $partida['tutorial']['mensajito_id'] = $msgId;
         self::activarMision2($partida, $catalog ?? new Catalog(dirname(__DIR__, 2)));
     }
 
@@ -509,17 +560,35 @@ final class TutorialPrimerosPasos
         if ($tercero === '') {
             return '';
         }
+        $msgId = self::mensajitoIdCanonico($partida, $tercero);
+        $existente = self::mensajitoTutorialExistente($partida, $tercero);
+        if ($existente !== null) {
+            $partida['tutorial']['mensajito_id'] = (string) ($existente['id'] ?? $msgId);
+            return (string) ($existente['id'] ?? $msgId);
+        }
         $nombre = IdentidadPublica::nombre($partida, $tercero);
-        $msgId = 'msg_pp_' . substr(md5($partida['meta']['partida_id'] . '|' . $tercero), 0, 10);
         $partida['tutorial']['mensajito_id'] = $msgId;
+        // CONTRATO NARRATIVO: primera persona del vecino hacia Celestine.
+        // La línea de instrucción del tutorial se conserva tal cual (es guía
+        // funcional de UI, no narrativa del NPC).
+        $texto = MensajitoVoz::linea(
+            $partida,
+            'tutorial_primeros_pasos',
+            ['nombre' => $nombre],
+            'tutorial_primeros_pasos|' . $tercero,
+            $tercero
+        );
+        if ($texto === '') {
+            $texto = 'Oye, Celestine: me apetece ir al cine. Por si te da por meter las narices.'
+                . "\n\n" . 'Dale a Nuevo plan y elige a ' . $nombre . ' para una salida por su cuenta.';
+        }
         BuzonEngine::crear($partida, [
             'id' => $msgId,
             'clasificacion' => BuzonEngine::OPORTUNIDAD,
             'tipo' => 'tutorial_primeros_pasos',
             'de_persona' => $tercero,
             'actores' => [$tercero],
-            'texto' => $nombre . ' lleva un rato pensando que le apetecería ir al cine. Por si te da por meter las narices.'
-                . "\n\nDale a Nuevo plan y elige a " . $nombre . ' para una salida por su cuenta.',
+            'texto' => $texto,
             'origen' => [
                 'evento_id' => null,
                 'tipo_evento' => DomainEvents::PARTIDA_CREADA,

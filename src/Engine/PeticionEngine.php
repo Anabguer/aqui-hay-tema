@@ -100,9 +100,12 @@ final class PeticionEngine
         $silencio = !empty($partida['_lab_peticiones_b4']) || !empty($partida['_lab_misiones_b3']);
         $buzonId = null;
         if (!$silencio) {
+            // CONTRATO NARRATIVO: el mensajito lo escribe el vecino a Celestine
+            // en primera persona. Sin prefijo "Nombre:" (la UI ya muestra el
+            // remitente) ni jerga de sistema.
             $copyBuzon = $texto !== '' ? $texto : '[PLACEHOLDER] Petición de residente';
             if ($esB4 && $texto !== '') {
-                $copyBuzon = IdentidadPublica::nombre($partida, $residenteId) . ': ' . $texto . ' ' . PeticionPuebloEngine::plazoHumano($peticion, $partida);
+                $copyBuzon = $texto . ' ' . PeticionPuebloEngine::plazoHumano($peticion, $partida);
             }
             $buzon = BuzonEngine::crear($partida, [
                 'de_persona' => $residenteId,

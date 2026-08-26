@@ -1,0 +1,457 @@
+<?php
+declare(strict_types=1);
+
+namespace AquiHayTema\Engine;
+
+/**
+ * Contrato narrativo de MENSAJITOS (docs/BUZON_DE_CELESTINE.md).
+ *
+ * Todo Mensajito del canal buzón lo escribe UN vecino DIRECTAMENTE a
+ * Celestine, en primera persona. Nunca es un log, un aviso del sistema
+ * ni un cotilleo en tercera persona.
+ *
+ * Bancos deterministas (CopyVariante) con variedad por remitente y
+ * modulación ligera usando SOLO datos públicos de la ficha: voz
+ * (registro), tono_coletilla y género. Nunca revela rasgos ocultos,
+ * preferencias privadas ni números internos del motor.
+ *
+ * Paridad RNG: las familias de RESULTADO consumen una tirada canónica
+ * (nextInt(0, N-1) + persist) con los mismos tamaños de pool que el
+ * sistema anterior, para no desalinear el flujo aleatorio de partidas
+ * en curso. El resto de familias usa selección determinista por seed
+ * (no consume RNG, igual que el CopyCotilleoFamilias anterior).
+ */
+final class MensajitoVoz
+{
+    /** @var array<string, array<string, mixed>> */
+    private static array $cacheFichas = [];
+
+    // ------------------------------------------------------------------
+    // Bancos de copy (primera persona, hablante → Celestine)
+    // ------------------------------------------------------------------
+
+    /** @return list<string> */
+    private static function bancoResultadoCumplida(bool $conOtro): array
+    {
+        if ($conOtro) {
+            return [
+                '{otro} y yo lo pasamos genial. Buen ojo, Celestine.',
+                'Al final {otro} se animó y salió redondo. Tú lo viste venir.',
+                'Quedé con {otro} y fue estupendo. Apunta que me debes una.',
+                'Lo de {otro} y yo funcionó. Gracias por empujarlo, Celestine.',
+            ];
+        }
+        return [
+            'Se pudo, Celestine. Y me vino de perlas.',
+            'Hecho. Justo lo que necesitaba.',
+            'Gracias por acordarte de mí. Quedó de lujo.',
+            'Al final se hizo y me encantó. Tienes buen pulso para esto.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoResultadoCaducada(string $grupo): array
+    {
+        if ($grupo === 'seca') {
+            return [
+                'Nada, olvídalo. Ya no me apetece.',
+                'El arroz ya se me ha pasado. Tema zanjado.',
+                'Se acabó lo que era. Siguiente tema.',
+                'Déjalo. Las ganas se me esfumaron.',
+            ];
+        }
+        return [
+            'Nada, olvídalo, Celestine. Se me han pasado las ganas.',
+            'Déjalo correr. Al final no era para tanto.',
+            'Lo de "{texto}" ya lo doy por perdido. Otra vez será.',
+            'La idea se me fue enfriando... Lo dejamos ahí, ¿va?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoResultadoIgnorada(string $grupo): array
+    {
+        if ($grupo === 'seca') {
+            return [
+                'Vi que pasabas. Pues nada, lo doy cerrado.',
+                'Sin respuesta, sin plan. Asunto archivado.',
+                'Ya está. Lo mío quedó en nada.',
+            ];
+        }
+        return [
+            'Ya que no hubo respuesta... nada, Celestine. Lo dejo así.',
+            'Supongo que no llegó el momento. Sin rencor, eh.',
+            'Sin rencor, pero se me fueron pasando las ganas por el camino.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoRechazoTercero(): array
+    {
+        return [
+            'Mal asunto: {otro} prefiere que sea otro día. Yo sigo con las ganas.',
+            'Esta vez no pudo ser: {otro} no estaba por la labor. Lo intentamos luego, ¿vale?',
+            'Que {otro} ha dicho que no... Paciencia. Queda pendiente, no cancelado.',
+            'No contaba con esto: hoy a {otro} no le apetece. Avisaré cuando reintentemos.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaIntencion(): array
+    {
+        return [
+            'Celestine, tengo algo que contarte: estoy pensando en irme del pueblo.',
+            'Llevo tiempo dándole vueltas... Puede que toque hacer las maletas. Quería decírtelo a ti primero.',
+            'Últimamente no me encuentro aquí. Me estoy planteando marcharme, y en serio.',
+            'Te lo digo yo antes de que se entere el pueblo: quiero irme.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaSeQueda(): array
+    {
+        return [
+            'Está bien, me quedo. Por ti, Celestine.',
+            'Me has convencido: un tiempo más en el pueblo.',
+            'Vale, me quedo. Pero que no se diga que soy blandengue.',
+            'Aquí sigo. Supongo que este pueblo aún tiene cosas que decirme.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoCandidatoOferta(): array
+    {
+        return [
+            'Hola, Celestine. Me llamo {nombre} y me encantaría mudarme al pueblo. ¿Me guardas un hueco? Necesito respuesta antes del día {dia}.',
+            'Buenas, soy {nombre}. Dicen que aquí se vive bien... ¿Cae un hueco para mí? Tengo hasta el día {dia} para saberlo.',
+            'Celestine: {nombre}, de paso por el pueblo. Me gustaría quedarme. ¿Me haces sitio hasta el día {dia}?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancosCandidatoEnCamino(): array
+    {
+        return [
+            '¡Genial, acepto! Voy para allá. Me ves llegar en unos {min} minuto{s}.',
+            'Pues me pongo en camino. Cuenta unos {min} minuto{s} y ahí estaré.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoCandidatoLlegado(): array
+    {
+        return [
+            '¡Ya estoy aquí, Celestine! Vivienda asignada y todo. Nos vemos por el pueblo.',
+            'Aquí llega {nombre}. Ya tengo mi rincón en el pueblo. Cuando quieras, nos tomamos algo.',
+            'Instalad{oa} y con llaves propias. Gracias por la bienvenida, Celestine.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoBienvenidaBucle(): array
+    {
+        return [
+            '¡Celestine! El pueblo ya está en marcha. Echa un vistazo a quién hay por aquí y, si te apetece, propón un plan. Yo me apunto a casi todo.',
+            'Mira quién ha aparecido: Celestine en persona. El pueblo ya anda con vida propia; mira qué vecinos hay y, si te apetece, propón un plan.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoTutorialPrimerosPasos(): array
+    {
+        // La segunda línea es instrucción funcional del tutorial: NO tocar formato.
+        return [
+            'Oye, Celestine: me apetece ir al cine. Por si te da por meter las narices.'
+                . "\n\n" . 'Dale a Nuevo plan y elige a {nombre} para una salida por su cuenta.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoPeticionSinTexto(): array
+    {
+        return [
+            'Celestine, ¿tienes un rato? Me gustaría comentarte algo.',
+            'Oye, cuando puedas: quiero comentarte una cosa.',
+        ];
+    }
+
+    // ------------------------------------------------------------------
+    // API principal
+    // ------------------------------------------------------------------
+
+    /**
+     * Línea en primera persona para una familia narrativa del canal buzón.
+     * Selección determinista (CopyVariante), sin consumo de RNG.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, string|int|null> $vars tokens: texto, otro, nombre, dia, min, s, oa
+     */
+    public static function linea(array &$partida, string $familia, array $vars = [], string $seed = '', ?string $rid = null): string
+    {
+        $grupo = self::grupoVoz($partida, $rid);
+        $pool = self::pool($familia, $vars, $grupo);
+        // Variantes que dependen de un token vacío no entran (evitan huecos raros).
+        foreach ($vars as $k => $v) {
+            if ((string) $v === '') {
+                $pool = array_values(array_filter($pool, static function ($tpl) use ($k) {
+                    return is_string($tpl) && strpos($tpl, '{' . $k . '}') === false;
+                }));
+            }
+        }
+        if ($pool === []) {
+            return '';
+        }
+        $claveSeed = $seed !== '' ? $seed : $familia . '|' . implode('|', array_map('strval', $vars));
+        $plantilla = CopyVariante::elegir($partida, 'mensajito_voz|' . $familia, $pool, $claveSeed);
+        $out = strtr((string) $plantilla, self::tokens($vars));
+        // Sin token disponible, la variante muere limpia (nunca llega un "{otro}" al jugador).
+        $out = trim((string) preg_replace('/\{[a-z_]+\}/u', '', $out));
+        $out = trim((string) preg_replace('/\s{2,}/u', ' ', $out));
+        if ($out === '') {
+            return '';
+        }
+        $coletilla = self::coletilla($partida, $rid);
+        if ($coletilla !== '' && self::aplicaColetilla($familia, $claveSeed)) {
+            $out = rtrim($out, '.') . '. ' . $coletilla;
+        }
+        return Utf8Text::paraJson($out);
+    }
+
+    /**
+     * Tamaño canónico de pool por familia de RESULTADO. Fijado para consumir
+     * EXACTAMENTE la misma tirada RNG que el sistema anterior (paridad de
+     * flujo: cero deriva mecánica en simulaciones largas).
+     *
+     * @return array<string, int>
+     */
+    public static function tamanoCanonico(): array
+    {
+        return [
+            'resultado_cumplida' => 4,
+            'resultado_caducada' => 4,
+            'resultado_ignorada' => 3,
+            'resultado_rechazo_tercero' => 4,
+        ];
+    }
+
+    /**
+     * Línea para familias de resultado usando el RNG DE LA PARTIDA (misma
+     * tirada que el sistema anterior: un nextInt(0, N-1) + persist).
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, string|int|null> $vars
+     */
+    public static function lineaRng(array &$partida, string $familia, array $vars, ?string $rid, RngService $rng): string
+    {
+        $canon = self::tamanoCanonico();
+        if (!isset($canon[$familia])) {
+            return self::linea($partida, $familia, $vars, '', $rid);
+        }
+        $grupo = self::grupoVoz($partida, $rid);
+        $pool = self::pool($familia, $vars, $grupo);
+        foreach ($vars as $k => $v) {
+            if ((string) $v === '') {
+                $pool = array_values(array_filter($pool, static function ($tpl) use ($k) {
+                    return is_string($tpl) && strpos($tpl, '{' . $k . '}') === false;
+                }));
+            }
+        }
+        $n = $canon[$familia];
+        if (count($pool) !== $n || $n === 0) {
+            // Contrato roto en bancos: mejor determinista que desalinear el stream.
+            return self::linea($partida, $familia, $vars, $familia . '|' . ($vars['texto'] ?? ''), $rid);
+        }
+        $idx = $rng->nextInt(0, $n - 1);
+        $rng->persistToPartida($partida);
+        $out = strtr((string) $pool[$idx], self::tokens($vars));
+        $out = trim((string) preg_replace('/\{[a-z_]+\}/u', '', $out));
+        $out = trim((string) preg_replace('/\s{2,}/u', ' ', $out));
+        if ($out === '') {
+            return '';
+        }
+        $coletilla = self::coletilla($partida, $rid);
+        if ($coletilla !== '' && abs(crc32('coletilla|' . $idx . '|' . ($vars['texto'] ?? ''))) % 3 === 0) {
+            $out = rtrim($out, '.') . '. ' . $coletilla;
+        }
+        return Utf8Text::paraJson($out);
+    }
+
+    /** Familias soportadas (para gates/tests). @return list<string> */
+    public static function familias(): array
+    {
+        return [
+            'resultado_cumplida',
+            'resultado_caducada',
+            'resultado_ignorada',
+            'resultado_rechazo_tercero',
+            'marcha_intencion',
+            'marcha_se_queda',
+            'candidato_oferta',
+            'candidato_en_camino',
+            'candidato_llegado',
+            'bienvenida_bucle',
+            'tutorial_primeros_pasos',
+            'peticion_sin_texto',
+        ];
+    }
+
+    /**
+     * Perfil público del remitente: nombre real para UI (remitente_nombre),
+     * género para concordancias y grupo de voz. Solo datos ya visibles.
+     *
+     * @param array<string, mixed> $partida
+     * @return array{nombre: string, genero: string, voz: ?string}
+     */
+    public static function perfilPublico(array $partida, string $rid): array
+    {
+        $nombre = IdentidadPublica::nombre($partida, $rid);
+        $ficha = self::ficha($partida, $rid);
+        $genero = '';
+        $voz = null;
+        if (isset($partida['residentes'][$rid]['narrativa']['voz'])) {
+            $vozRaw = $partida['residentes'][$rid]['narrativa']['voz'];
+            $voz = is_string($vozRaw) && $vozRaw !== '' ? $vozRaw : null;
+        }
+        if (isset($partida['residentes'][$rid]['identidad_publica']['genero'])
+            && is_string($partida['residentes'][$rid]['identidad_publica']['genero'])) {
+            $genero = (string) $partida['residentes'][$rid]['identidad_publica']['genero'];
+        }
+        if ($ficha !== null) {
+            if ($voz === null) {
+                $n = $ficha['narrativa']['voz'] ?? null;
+                $voz = is_string($n) && $n !== '' ? $n : null;
+            }
+            if ($genero === '') {
+                $g = $ficha['identidad']['genero'] ?? '';
+                $genero = is_string($g) ? $g : '';
+            }
+        }
+        return ['nombre' => $nombre, 'genero' => $genero, 'voz' => $voz];
+    }
+
+    /** Concordancia o/a según género público (fallback neutro 'o'). */
+    public static function oa(string $genero): string
+    {
+        return $genero === 'mujer' ? 'a' : 'o';
+    }
+
+    // ------------------------------------------------------------------
+    // Internos
+    // ------------------------------------------------------------------
+
+    /** @param array<string, string|int|null> $vars @return list<string> */
+    private static function pool(string $familia, array $vars, string $grupo): array
+    {
+        switch ($familia) {
+            case 'resultado_cumplida':
+                return self::bancoResultadoCumplida(trim((string) ($vars['otro'] ?? '')) !== '');
+            case 'resultado_caducada':
+                return self::bancoResultadoCaducada($grupo);
+            case 'resultado_ignorada':
+                return self::bancoResultadoIgnorada($grupo);
+            case 'resultado_rechazo_tercero':
+                return self::bancoRechazoTercero();
+            case 'marcha_intencion':
+                return self::bancoMarchaIntencion();
+            case 'marcha_se_queda':
+                return self::bancoMarchaSeQueda();
+            case 'candidato_oferta':
+                return self::bancoCandidatoOferta();
+            case 'candidato_en_camino':
+                return self::bancosCandidatoEnCamino();
+            case 'candidato_llegado':
+                return self::bancoCandidatoLlegado();
+            case 'bienvenida_bucle':
+                return self::bancoBienvenidaBucle();
+            case 'tutorial_primeros_pasos':
+                return self::bancoTutorialPrimerosPasos();
+            case 'peticion_sin_texto':
+                return self::bancoPeticionSinTexto();
+            default:
+                return [];
+        }
+    }
+
+    /** @param array<string, string|int|null> $vars @return array<string, string> */
+    private static function tokens(array $vars): array
+    {
+        $t = [];
+        foreach (['texto', 'otro', 'nombre', 'dia', 'min', 's', 'oa'] as $k) {
+            $v = $vars[$k] ?? null;
+            if ($v !== null && $v !== '') {
+                $t['{' . $k . '}'] = (string) $v;
+            }
+        }
+        return $t;
+    }
+
+    /** Grupo de voz derivado SOLO del registro público (VozPerfil). */
+    private static function grupoVoz(array $partida, ?string $rid): string
+    {
+        if ($rid === null || $rid === '') {
+            return 'neutral';
+        }
+        $p = self::perfilPublico($partida, $rid);
+        $voz = VozPerfil::normalizar($p['voz']);
+        $reg = (string) ($voz['registro'] ?? '');
+        if (in_array($reg, ['seca', 'borde'], true)) {
+            return 'seca';
+        }
+        if (in_array($reg, ['tranquila', 'calida', 'candida'], true)) {
+            return 'calida';
+        }
+        return 'neutral';
+    }
+
+    private static function coletilla(array $partida, ?string $rid): string
+    {
+        if ($rid === null || $rid === '') {
+            return '';
+        }
+        if (isset($partida['residentes'][$rid]['narrativa']['tono_coletilla'])) {
+            $c = $partida['residentes'][$rid]['narrativa']['tono_coletilla'];
+            return is_string($c) ? trim($c) : '';
+        }
+        $ficha = self::ficha($partida, $rid);
+        if ($ficha === null) {
+            return '';
+        }
+        $c = $ficha['narrativa']['tono_coletilla'] ?? null;
+        return is_string($c) ? trim($c) : '';
+    }
+
+    /** La coletilla aparece solo en algunos resultados/marchas y de forma determinista. */
+    private static function aplicaColetilla(string $familia, string $seed): bool
+    {
+        if (!in_array($familia, ['resultado_caducada', 'resultado_ignorada', 'marcha_se_queda'], true)) {
+            return false;
+        }
+        return abs(crc32('coletilla|' . $seed)) % 3 === 0;
+    }
+
+    /**
+     * Ficha de catálogo del residente (lectura pública, caché por request).
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>|null
+     */
+    private static function ficha(array $partida, string $rid): ?array
+    {
+        $cid = (string) ($partida['residentes'][$rid]['catalog_id'] ?? $rid);
+        if ($cid === '') {
+            return null;
+        }
+        if (isset(self::$cacheFichas[$cid])) {
+            $hit = self::$cacheFichas[$cid];
+            return is_array($hit) ? $hit : null;
+        }
+        try {
+            $catalog = new Catalog(dirname(__DIR__, 2));
+            $ficha = $catalog->loadPersonaje($cid);
+        } catch (\Throwable $e) {
+            $ficha = null;
+        }
+        self::$cacheFichas[$cid] = $ficha ?? false;
+        return $ficha;
+    }
+}

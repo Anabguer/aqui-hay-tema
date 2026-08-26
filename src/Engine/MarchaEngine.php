@@ -146,8 +146,14 @@ final class MarchaEngine
 
         self::registrarCausaViva($partida, $rid, $causa, $int);
 
-        $seed = 'marcha_se_queda|' . $rid;
-        $texto = CopyCotilleoFamilias::linea('marcha_se_queda', ['nombre' => $nombre], $seed);
+        // CONTRATO NARRATIVO: el propio NPC responde a Celestine (1.ª persona).
+        $texto = MensajitoVoz::linea(
+            $partida,
+            'marcha_se_queda',
+            [],
+            'marcha_se_queda|' . $rid . '|' . $int['resuelto_dia'],
+            $rid
+        );
         if ($texto !== '') {
             BuzonEngine::crear($partida, [
                 'clasificacion' => BuzonEngine::IMPORTANTE,
@@ -178,11 +184,15 @@ final class MarchaEngine
         $msgId = 'msg_marcha_' . $rid . '_' . $dia . '_' . bin2hex(random_bytes(2));
         $intId = 'marcha_' . $rid . '_' . $dia;
 
-        $seed = 'marcha_intencion|' . $rid . '|' . $causa;
-        $texto = CopyCotilleoFamilias::linea('marcha_intencion', ['nombre' => $nombre], $seed);
-        if ($texto === '') {
-            $texto = $nombre . ' está pensando en marcharse.';
-        }
+        // CONTRATO NARRATIVO: la marcha empieza en un Mensajito del propio NPC
+        // a Celestine, en primera persona (docs/BUZON_DE_CELESTINE.md).
+        $texto = MensajitoVoz::linea(
+            $partida,
+            'marcha_intencion',
+            ['nombre' => $nombre],
+            'marcha_intencion|' . $rid . '|' . $causa . '|' . $dia,
+            $rid
+        );
 
         $int = [
             'id' => $intId,

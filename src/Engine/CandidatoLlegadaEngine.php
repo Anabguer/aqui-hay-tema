@@ -176,15 +176,24 @@ final class CandidatoLlegadaEngine
         ];
         $partida['llegadas']['candidato_activo'] = $cand;
 
+        // CONTRATO NARRATIVO: la oferta la firma el propio candidato ante
+        // Celestine. remitente_nombre mantiene visible su nombre en UI aunque
+        // aún no sea residente (no hay ficha en partida).
         BuzonEngine::crear($partida, [
             'id' => $msgId,
             'clasificacion' => BuzonEngine::OPORTUNIDAD,
             'tipo' => self::TIPO_MSG,
             'estado' => 'pendiente',
             'de_persona' => null,
+            'remitente_nombre' => $nombre,
             'actores' => [],
-            'texto' => $nombre . ' quiere mudarse al pueblo. ¿Le dejamos hueco? '
-                . 'Tiene hasta el día ' . $cand['vence_dia'] . ' para una respuesta.',
+            'texto' => MensajitoVoz::linea(
+                $partida,
+                'candidato_oferta',
+                ['nombre' => $nombre, 'dia' => $cand['vence_dia']],
+                'candidato_oferta|' . $catalogId . '|' . $dia,
+                null
+            ),
             'candidato_catalog_id' => $catalogId,
             'acciones' => ['aceptar_candidato', 'rechazar_candidato'],
             'estado_decision' => BuzonEngine::DECISION_PENDIENTE,
@@ -242,13 +251,23 @@ final class CandidatoLlegadaEngine
         if (!empty($cand['mensaje_id'])) {
             BuzonEngine::resolverDecision($partida, (string) $cand['mensaje_id']);
         }
+        $esperaTxt = MensajitoVoz::linea(
+            $partida,
+            'candidato_en_camino',
+            ['min' => $esperaMin, 's' => $esperaMin === 1 ? '' : 's'],
+            'candidato_en_camino|' . $enCamino['catalog_id'] . '|' . $abs,
+            null
+        );
+        if ($esperaTxt === '') {
+            $esperaTxt = 'Voy camino del pueblo. Llego en unos ' . $esperaMin . ' minuto' . ($esperaMin === 1 ? '' : 's') . '.';
+        }
         BuzonEngine::crear($partida, [
             'id' => 'msg_espera_' . $enCamino['catalog_id'] . '_' . bin2hex(random_bytes(2)),
             'clasificacion' => BuzonEngine::IMPORTANTE,
             'tipo' => self::TIPO_ESPERA,
             'estado' => 'en_espera',
-            'texto' => 'Estamos esperando a ' . $enCamino['nombre'] . '. '
-                . 'Debería aparecer en unos ' . $esperaMin . ' minuto' . ($esperaMin === 1 ? '' : 's') . '.',
+            'remitente_nombre' => (string) $enCamino['nombre'],
+            'texto' => $esperaTxt,
             'candidato_catalog_id' => $enCamino['catalog_id'],
             'origen' => ['tipo_evento' => 'candidato_en_camino', 'es_narrativo' => false],
         ]);
@@ -350,12 +369,23 @@ final class CandidatoLlegadaEngine
         ];
         self::aplicarCooldown($partida, $root, 'llegada');
         $nombre = IdentidadPublica::nombre($partida, $catalogId);
+        $llegadaTxt = MensajitoVoz::linea(
+            $partida,
+            'candidato_llegado',
+            ['nombre' => $nombre, 'oa' => MensajitoVoz::oa(MensajitoVoz::perfilPublico($partida, $catalogId)['genero'])],
+            'candidato_llegado|' . $catalogId . '|' . (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            PoolJugableCanon::esIdCanonico($catalogId) ? $catalogId : null
+        );
+        if ($llegadaTxt === '') {
+            $llegadaTxt = '¡Ya estoy aquí! Con vivienda y todo. Nos vemos por el pueblo.';
+        }
         BuzonEngine::crear($partida, [
             'id' => 'msg_llegada_' . $catalogId . '_' . bin2hex(random_bytes(2)),
             'clasificacion' => BuzonEngine::IMPORTANTE,
             'tipo' => 'llegada_efectiva',
-            'texto' => $nombre . ' ya está en el pueblo. Tiene vivienda y puede salir.',
+            'texto' => $llegadaTxt,
             'de_persona' => $catalogId,
+            'remitente_nombre' => $nombre !== $catalogId ? $nombre : null,
             'actores' => [$catalogId],
             'origen' => ['tipo_evento' => DomainEvents::RESIDENTE_INCORPORADO, 'es_narrativo' => false],
         ]);
@@ -409,10 +439,17 @@ final class CandidatoLlegadaEngine
         HistorialPersonajesPartida::ensure($partida);
         $catalog = new Catalog($root);
         $ids = $catalog->listPersonajeIdsJugables();
+        // Regla global de partida: sin nombres duplicados entre personajes.
+        // El histórico excluye por ID, pero el catálogo puede tener dos fichas
+        // distintas con el mismo nombre (p. ej. per_p014 y per_p104 = "Alba").
+        $usados = NombresReservadosPartida::usados($partida, $root);
         $out = [];
         foreach ($ids as $id) {
             $id = (string) $id;
             if (HistorialPersonajesPartida::yaAparecio($partida, $id)) {
+                continue;
+            }
+            if (NombresReservadosPartida::idBloqueado($usados, $root, $id)) {
                 continue;
             }
             $out[] = $id;
@@ -422,12 +459,7 @@ final class CandidatoLlegadaEngine
 
     private static function nombreCatalogo(string $root, string $catalogId): string
     {
-        try {
-            $p = (new Catalog($root))->loadPersonaje($catalogId);
-            return (string) ($p['identidad']['nombre'] ?? $p['nombre'] ?? $catalogId);
-        } catch (\Throwable $e) {
-            return $catalogId;
-        }
+        return NombresReservadosPartida::nombreCatalogo($root, $catalogId);
     }
 
     public static function minutosAbs(array $partida): int

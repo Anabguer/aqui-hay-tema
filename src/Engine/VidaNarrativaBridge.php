@@ -33,11 +33,15 @@ final class VidaNarrativaBridge
 
         if ($eventoId === 'perder_trabajo' && count($participantes) >= 1) {
             $rid = (string) $participantes[0];
-            $texto = EmocionalNarrativa::cotilleoParaOrigen($partida, $rid, 'perder_trabajo');
+            $clas = AcontecimientoDiario::clasificacionVisibilidad($vis);
+            // CONTRATO NARRATIVO: canal cotilleo = 3.ª persona; canal Mensajitos
+            // = el propio vecino escribe a Celestine en primera persona.
+            $texto = $clas === BuzonEngine::COTILLEO
+                ? EmocionalNarrativa::cotilleoParaOrigen($partida, $rid, 'perder_trabajo')
+                : EmocionalNarrativa::mensajitoParaOrigen($partida, $rid, 'perder_trabajo');
             if ($texto === null || $texto === '') {
                 return null;
             }
-            $clas = AcontecimientoDiario::clasificacionVisibilidad($vis);
             $msg = [
                 'clasificacion' => $clas,
                 'tipo' => 'acontecimiento_perder_trabajo',
@@ -74,11 +78,13 @@ final class VidaNarrativaBridge
 
         if ($eventoId === 'encontrar_trabajo' && count($participantes) >= 1) {
             $rid = (string) $participantes[0];
-            $texto = EmocionalNarrativa::cotilleoParaOrigen($partida, $rid, 'encontrar_trabajo');
+            $clas = AcontecimientoDiario::clasificacionVisibilidad($vis);
+            $texto = $clas === BuzonEngine::COTILLEO
+                ? EmocionalNarrativa::cotilleoParaOrigen($partida, $rid, 'encontrar_trabajo')
+                : EmocionalNarrativa::mensajitoParaOrigen($partida, $rid, 'encontrar_trabajo');
             if ($texto === null || $texto === '') {
                 return null;
             }
-            $clas = AcontecimientoDiario::clasificacionVisibilidad($vis);
             $msg = [
                 'clasificacion' => $clas,
                 'tipo' => 'acontecimiento_encontrar_trabajo',
@@ -99,7 +105,7 @@ final class VidaNarrativaBridge
                 '_placeholder_contenido' => false,
             ];
             if ($clas === BuzonEngine::COTILLEO) {
-                $msg['cotilleo_meta'] = CotilleoCategoria::meta(CotilleoCategoria::DRAMA, false);
+                $msg['cotilleo_meta'] = CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true);
             }
             $r = BuzonEngine::crear($partida, $msg);
             if ($r['ok'] ?? false) {

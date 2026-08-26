@@ -239,6 +239,10 @@ ok(count($births) >= 1, 'nacen peticiones espontaneas (nacidas=' . count($births
 ok(count($histo) >= 2, 'variedad de plantillas segun estado/relaciones (tipos=' . count($histo) . ')');
 
 // Mensajitos (buzon)
+$birthDe = [];
+foreach ($births as $b) {
+    $birthDe[$b['id']] = $b['residente'];
+}
 $msgPetOk = 0;
 $byClas = [];
 foreach ($p['buzon'] ?? [] as $m) {
@@ -248,8 +252,12 @@ foreach ($p['buzon'] ?? [] as $m) {
         continue;
     }
     $tx = (string) ($m['texto'] ?? '');
-    $nombre = IdentidadPublica::nombre($p, (string) ($m['de_persona'] ?? ''));
-    if ($nombre !== '' && strpos($tx, $nombre) !== false && strpos($tx, 'pet_') === false) {
+    // Contrato narrativo: el remitente va en de_persona (la UI lo pinta);
+    // el texto es 1.ª persona del vecino, sin prefijo "Nombre:" ni jerga.
+    $deOk = isset($birthDe[(string) ($m['peticion_id'] ?? '')])
+        && (string) ($m['de_persona'] ?? '') === $birthDe[(string) ($m['peticion_id'] ?? '')];
+    $nombreEnTx = (bool) preg_match('/^[A-ZÁÉÍÓÚÑ][^:]{1,24}: /u', $tx);
+    if ($deOk && $tx !== '' && !$nombreEnTx && strpos($tx, 'pet_') === false) {
         $msgPetOk++;
     }
 }

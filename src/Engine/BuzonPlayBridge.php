@@ -73,26 +73,31 @@ final class BuzonPlayBridge
             if (($prop['estado'] ?? '') !== 'rechazada') {
                 return null;
             }
-            $rechazo = self::rechazoDePropuesta($prop);
-            if ($rechazo === null) {
+            $canon = PropuestaEncuentroEngine::rechazoCanonico($prop);
+            $hablante = $canon['hablante'];
+            if (!is_array($hablante)) {
                 return null;
             }
-            $de = (string) ($rechazo['residente_id'] ?? '');
+            $de = (string) ($hablante['residente_id'] ?? '');
             $nom = $de !== '' ? IdentidadPublica::nombre($partida, $de) : '';
             if ($nom === '') {
                 return null;
             }
-            $copyId = !empty($rechazo['copy_id']) ? (string) $rechazo['copy_id'] : '';
-            $copy = !empty($prop['mensaje_rechazo_ui'])
-                ? (string) $prop['mensaje_rechazo_ui']
-                : ($copyId !== ''
-                    ? CopyVoluntad::rechazoConHablante($nom, $copyId)
-                    : CopyRechazoPropuesta::mensajeRechazo(
-                        $partida,
-                        $prop,
-                        is_array($prop['contrapropuesta'] ?? null) ? $prop['contrapropuesta'] : null
-                    ));
+            $copyId = !empty($hablante['copy_id']) ? (string) $hablante['copy_id'] : '';
+            $copy = self::textoRespuestaPlan($partida, $prop);
+            if ($copy === null || $copy === '') {
+                $copy = !empty($prop['mensaje_rechazo_ui'])
+                    ? (string) $prop['mensaje_rechazo_ui']
+                    : ($copyId !== ''
+                        ? CopyVoluntad::rechazoConHablante($nom, $copyId)
+                        : CopyRechazoPropuesta::mensajeRechazo(
+                            $partida,
+                            $prop,
+                            is_array($prop['contrapropuesta'] ?? null) ? $prop['contrapropuesta'] : null
+                        ));
+            }
             $partes = is_array($prop['participantes'] ?? null) ? $prop['participantes'] : [];
+            $habriaAceptado = $canon['habria_aceptado'];
             return [
                 'clasificacion' => BuzonEngine::IMPORTANTE,
                 'tipo' => 'respuesta_plan',
@@ -107,6 +112,9 @@ final class BuzonPlayBridge
                     'es_narrativo' => false,
                     'informacion_revelada' => [
                         'rechazado_por' => $de,
+                        'otro_habria_aceptado' => is_array($habriaAceptado)
+                            ? (string) ($habriaAceptado['residente_id'] ?? '')
+                            : null,
                         'copy_id' => $copyId !== '' ? $copyId : null,
                         'rechazo_tipo' => $prop['rechazo_tipo'] ?? null,
                         'contrapropuesta' => $prop['contrapropuesta'] ?? null,
@@ -125,16 +133,26 @@ final class BuzonPlayBridge
                 return null;
             }
             $de = (string) ($pet['residente_id'] ?? $envelope['de_persona'] ?? ($actores[0] ?? ''));
-            $nom = $de !== '' ? IdentidadPublica::nombre($partida, $de) : 'Alguien';
             $texto = (string) ($pet['texto'] ?? '');
             if ($texto !== '') {
-                $copy = $nom . ': ' . $texto;
+                // CONTRATO NARRATIVO: primera persona del vecino a Celestine.
+                // Sin prefijo "Nombre:"; la UI ya pinta el remitente.
+                $copy = $texto;
                 $plazo = PeticionPuebloEngine::plazoHumano($pet);
                 if ($plazo !== '') {
                     $copy .= ' ' . $plazo;
                 }
             } else {
-                $copy = $nom . ' quiere hablar contigo.';
+                $copy = MensajitoVoz::linea(
+                    $partida,
+                    'peticion_sin_texto',
+                    [],
+                    'peticion_sin_texto|' . (string) ($pet['id'] ?? ''),
+                    $de !== '' ? $de : null
+                );
+                if ($copy === '') {
+                    return null;
+                }
             }
             return [
                 'clasificacion' => BuzonEngine::PETICION,
@@ -325,31 +343,49 @@ final class BuzonPlayBridge
     }
 
     /**
+     * Texto del Mensajito de respuesta a un plan. Delega la atribución en la
+     * fuente canónica. Cuando el motor marcó "el otro habría aceptado",
+     * compone causa humana + esa información real (no duplica literalmente
+     * el toast: variante propia y datos internos aparte). Sin datos ocultos.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $propuesta
+     */
+    public static function textoRespuestaPlan(array $partida, array $propuesta): ?string
+    {
+        $canon = PropuestaEncuentroEngine::rechazoCanonico($propuesta);
+        $hablante = $canon['hablante'];
+        if (!is_array($hablante)) {
+            return null;
+        }
+        if ($canon['habria_aceptado'] !== null) {
+            $otroId = (string) ($canon['habria_aceptado']['residente_id'] ?? '');
+            $causa = CopyRechazoPropuesta::fraseCausaHumana($partida, $hablante, $otroId);
+            if ($causa !== '') {
+                $dispuesta = CopyRechazoPropuesta::lineaOtroDispuesto($partida, $propuesta, 'buzon:');
+                return trim($causa . ($dispuesta !== '' ? ' ' . $dispuesta : ''));
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Delega en la fuente canónica única (PropuestaEncuentroEngine::rechazoCanonico).
+     * Nunca decide por posición A/B.
+     *
      * @param array<string, mixed> $propuesta
      * @return array{residente_id: string, copy_id: ?string}|null
      */
     private static function rechazoDePropuesta(array $propuesta): ?array
     {
-        $ids = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
-        $preferido = (string) ($ids[1] ?? '');
-        $elegido = null;
-        foreach ($propuesta['reacciones'] ?? [] as $reac) {
-            if (!is_array($reac) || ($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
-                continue;
-            }
-            $row = [
-                'residente_id' => (string) ($reac['residente_id'] ?? ''),
-                'copy_id' => !empty($reac['copy_id']) ? (string) $reac['copy_id'] : null,
-            ];
-            if (($row['residente_id'] ?? '') === '') {
-                continue;
-            }
-            $elegido = $elegido ?? $row;
-            if ($preferido !== '' && $row['residente_id'] === $preferido) {
-                return $row;
-            }
+        $hablante = PropuestaEncuentroEngine::rechazoCanonico($propuesta)['hablante'];
+        if (!is_array($hablante)) {
+            return null;
         }
-        return $elegido;
+        return [
+            'residente_id' => (string) ($hablante['residente_id'] ?? ''),
+            'copy_id' => !empty($hablante['copy_id']) ? (string) $hablante['copy_id'] : null,
+        ];
     }
 
     /**

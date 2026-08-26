@@ -16,6 +16,173 @@ final class EmocionalNarrativa
     }
 
     /**
+     * Explicación humana completa del estado actual, derivada de origen+contexto.
+     * Null si el estado es neutro o el origen no es explicable.
+     * Nunca expone IDs técnicos, valores internos ni deltas.
+     *
+     * @param array<string, mixed> $estado
+     * @return array{texto_estado: string, explicacion: string, desde_texto: string, diario_evento_id: ?string}|null
+     */
+    public static function explicacionCompleta(array $partida, string $residenteId, array $estado): ?array
+    {
+        $estadoId = EstadoEmocional::canonId((string) ($estado['id'] ?? ''));
+        if ($estadoId === EstadoEmocional::NEUTRO || !self::esSignificativo($estadoId)) {
+            return null;
+        }
+        $origen = (string) ($estado['origen'] ?? '');
+        $ctx = is_array($estado['contexto'] ?? null) ? $estado['contexto'] : [];
+        $nombre = IdentidadPublica::nombre($partida, $residenteId);
+        if ($nombre === '') {
+            return null;
+        }
+
+        $explicacion = null;
+        $diarioEventoId = null;
+
+        switch ($origen) {
+            case 'encuentro':
+            case 'encuentro_intervencion':
+                $res = (string) ($ctx['resultado_experiencia'] ?? '');
+                $otroNombre = self::nombreOtroDeEncuentro($partida, $residenteId, $ctx);
+                $motivo = (string) ($ctx['motivo'] ?? '');
+                if ($motivo === 'hobby_recuperacion' || $origen === 'hobby_recuperacion') {
+                    $explicacion = 'Un rato con su hobby le ha sentado de fábula.';
+                } elseif ($res === 'muy_mal') {
+                    $explicacion = 'Su encuentro con ' . $otroNombre . ' no salió como esperaba. Aquello la dejó hecha polv' . self::oA($partida, $residenteId) . '.';
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                } elseif ($res === 'mal') {
+                    $explicacion = 'Compartió un rato con ' . $otroNombre . ' que se torció, y salió de allí con el ánimo por los suelos.';
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                } elseif ($estadoId === EstadoEmocional::ALEGRE) {
+                    $explicacion = 'Ha tenido un encuentro que le ha animado el día.';
+                    $diarioEventoId = null;
+                } else {
+                    $explicacion = 'Su estado cambió después de un encuentro reciente.';
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                }
+                break;
+
+            case 'perder_trabajo':
+                $explicacion = 'Le han soltado del trabajo. Anda con la moral por los suelos y mucho tiempo libre entre manos.';
+                $diarioEventoId = self::eventoDiarioDeTrabajo($partida, $residenteId, 'perder', $estado);
+                break;
+
+            case 'encontrar_trabajo':
+                $explicacion = 'Ha encontrado trabajo y hoy se le ve por las nubes.';
+                $diarioEventoId = self::eventoDiarioDeTrabajo($partida, $residenteId, 'encontrar', $estado);
+                break;
+
+            case 'rechazo_repetido':
+                $hacia = (string) ($ctx['hacia'] ?? '');
+                $nombreOtro = $hacia !== '' && $hacia !== $residenteId ? IdentidadPublica::nombre($partida, $hacia) : '';
+                if ($nombreOtro !== '') {
+                    $explicacion = $nombreOtro . ' le ha dicho que no demasiadas veces. A la larga, eso pesa.';
+                    $diaDesde = (int) ($estado['desde']['dia'] ?? 0);
+                    if ($diaDesde > 0) {
+                        // Mismo evento_id determinista que DiarioResidenteBridge.
+                        $candidato = 'rechazo_repetido:' . $residenteId . ':' . $hacia . ':' . $diaDesde;
+                        if (DiarioEngine::entradaPorEvento($partida, $candidato) !== null) {
+                            $diarioEventoId = $candidato;
+                        }
+                    }
+                } else {
+                    $explicacion = 'Le han rechazado planes demasiadas veces seguidas.';
+                }
+                break;
+
+            case 'hobby_recuperacion':
+            case 'encuentro_y_hobby':
+                $explicacion = 'Un rato a solas con su hobby le ha levantado el ánimo.';
+                break;
+
+            default:
+                return null; // inicial, expiración, manual: nada explicable
+        }
+
+        return [
+            'texto_estado' => 'Está ' . self::textoEstado($estadoId, $partida, $residenteId),
+            'explicacion' => $explicacion,
+            'desde_texto' => self::desdeTexto($estado, $partida),
+            'diario_evento_id' => ($diarioEventoId !== null && DiarioEngine::entradaPorEvento($partida, $diarioEventoId) !== null)
+                ? $diarioEventoId
+                : null,
+        ];
+    }
+
+    private static function textoEstado(string $estadoId, array $partida, string $rid): string
+    {
+        switch ($estadoId) {
+            case EstadoEmocional::ALEGRE:
+                return 'feliz';
+            case EstadoEmocional::TRISTE:
+                return 'triste';
+            case EstadoEmocional::ENFADADO:
+                return 'enfadad' . self::oA($partida, $rid);
+        }
+        return $estadoId;
+    }
+
+    /** @param array<string, mixed> $estado */
+    private static function desdeTexto(array $estado, array $partida): string
+    {
+        $desde = is_array($estado['desde'] ?? null) ? $estado['desde'] : [];
+        $diaDesde = (int) ($desde['dia'] ?? 0);
+        $hoy = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ($diaDesde <= 0) {
+            return 'Desde hace poco.';
+        }
+        $dias = max(0, $hoy - $diaDesde);
+        if ($dias === 0) {
+            return 'Desde hoy mismo.';
+        }
+        return 'Desde hace ' . $dias . ' día' . ($dias === 1 ? '.' : 's.');
+    }
+
+    /** @param array<string, mixed> $ctx */
+    private static function nombreOtroDeEncuentro(array $partida, string $residenteId, array $ctx): string
+    {
+        $encId = (string) ($ctx['encuentro_id'] ?? '');
+        foreach ($partida['encuentros'] ?? [] as $enc) {
+            if (!is_array($enc) || (string) ($enc['id'] ?? '') !== $encId) {
+                continue;
+            }
+            foreach (($enc['participantes'] ?? []) as $pid) {
+                $pid = (string) $pid;
+                if ($pid !== $residenteId && isset($partida['residentes'][$pid])) {
+                    $n = IdentidadPublica::nombre($partida, $pid);
+                    if ($n !== '') {
+                        return $n;
+                    }
+                }
+            }
+        }
+        return 'otra persona'; // sin nombre resolvible: copy genérico sin IDs
+    }
+
+    /** @param array<string, mixed> $ctx */
+    private static function eventoDiarioDeEncuentro(array $ctx): ?string
+    {
+        $encId = (string) ($ctx['encuentro_id'] ?? '');
+        return $encId !== '' ? 'encuentro:' . $encId : null;
+    }
+
+    /**
+     * Evento_id del diario para ánimos de trabajo (mismo formato que DiarioResidenteBridge).
+     * Solo se devuelve si la entrada existe: partidas antiguas sin diario no enlazan.
+     *
+     * @param array<string, mixed> $estado
+     */
+    private static function eventoDiarioDeTrabajo(array $partida, string $residenteId, string $variante, array $estado): ?string
+    {
+        $dia = (int) ($estado['desde']['dia'] ?? ($partida['reloj']['dia_pueblo'] ?? 0));
+        if ($dia <= 0) {
+            return null;
+        }
+        $candidato = 'trabajo_' . $variante . ':' . $residenteId . ':' . $dia;
+        return DiarioEngine::entradaPorEvento($partida, $candidato) !== null ? $candidato : null;
+    }
+
+    /**
      * Pista breve en ficha (sin exponer reglas internas).
      *
      * @param array<string, mixed> $estado
@@ -51,6 +218,33 @@ final class EmocionalNarrativa
             case 'hobby_recuperacion':
             case 'encuentro_y_hobby':
                 return 'Un rato con su hobby le ha sentado bien.';
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Copy en PRIMERA PERSONA para el canal Mensajitos (canal buzón):
+     * el propio vecino cuenta lo suyo a Celestine. Solo orígenes explicables;
+     * null si no hay nada que el NPC contaría por mensajito.
+     */
+    public static function mensajitoParaOrigen(
+        array $partida,
+        string $residenteId,
+        string $origen,
+        array $contexto = []
+    ): ?string {
+        $nombre = IdentidadPublica::nombre($partida, $residenteId);
+        if ($nombre === '') {
+            return null;
+        }
+        switch ($origen) {
+            case 'perder_trabajo':
+                return 'Celestine, te lo cuento yo antes de que corra: me han soltado del trabajo.';
+            case 'encontrar_trabajo':
+                return '¡Tengo trabajo nuevo! Estoy que me salgo y quería decirlo.';
+            case 'rechazo_repetido':
+                return 'Esta vez no doy más. Necesito un respiro de planes, ¿de acuerdo?';
             default:
                 return null;
         }

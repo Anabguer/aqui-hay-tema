@@ -378,7 +378,9 @@ final class PeticionPuebloEngine
     }
 
     /**
-     * Copy de plazo humano. Sin fechas técnicas ni IDs.
+     * Copy de plazo humano, dirigido a Celestine. Sin fechas técnicas ni IDs.
+     * Formas canónicas: la UI las muestra como chip y sabe recortarlas del
+     * cuerpo del Mensajito (ver cuerpoMensajito en play-v3.js).
      */
     public static function plazoHumano(array $peticion, ?array $partida = null): string
     {
@@ -387,14 +389,7 @@ final class PeticionPuebloEngine
             return 'Cuando puedas.';
         }
         if ($h <= 0) {
-            return 'Se le ha pasado el arroz.';
-        }
-        if ($h <= 2) {
-            $n = $h === 1 ? '1 h' : $h . ' h';
-            return 'Le quedan ' . $n . ' y ya está mirando el reloj.';
-        }
-        if ($h <= 6) {
-            return 'Esto empieza a oler a plantón.';
+            return 'El tiempo se acaba.';
         }
         if ($h === 1) {
             return 'Te queda 1 h';
