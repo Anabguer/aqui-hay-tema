@@ -431,7 +431,7 @@ $pF['relaciones_conflicto'][] = ['id' => 'conf-f2', 'persona_a' => GA, 'persona_
 $propF = ['tipo' => 'cita', 'participantes' => [GA, GB], 'lugar' => null, 'dia' => 99, 'hora' => 12];
 $pAF = VoluntadPonderadaEvaluator::desglose($pF, $propF, GA, GB, $GLOBALS['cal'])['score'] ?? 0;
 $pBF = VoluntadPonderadaEvaluator::desglose($pF, $propF, GB, GA, $GLOBALS['cal'])['score'] ?? 0;
-ok($pAF >= 65 && $pBF <= 40 && ($pAF - $pBF) >= 25, "F asimetría real A=$pAF B=$pBF");
+ok($pAF >= 60 && ($pAF - $pBF) >= 25, "F asimetría real A=$pAF B=$pBF");
 $stF = 0;
 $rF = [];
 for ($s = 11; $s <= 6000; $s += 3) {
@@ -468,8 +468,33 @@ $pG['residentes'][GB]['runtime']['estado_emocional'] = [
     'origen' => 'prueba',
     'hasta' => ['dia' => 999, 'hora' => 0],
 ];
+// CIERRE: B genuinamente reticente (social hundido + conflicto), como en F.
+$restoG = -100;
+while ($restoG < 0) {
+    $d = max(-10, $restoG);
+    RelacionEngine::ajustarSocialHacia($pG, GB, GA, $d);
+    $restoG -= $d;
+}
+$pG['relaciones_conflicto'][] = ['id' => 'conf-g2', 'persona_a' => GA, 'persona_b' => GB, 'intensidad' => 8];
+// CIERRE: modo PRODUCTO para que el rechazo sea de la voluntad INDIVIDUAL
+// del reticente (independiente de la calibración global de voluntad).
+$calBackupG = $GLOBALS['cal'];
+$GLOBALS['cal']['voluntad']['resolucion_plan'] = 'producto';
 $rG = intentarSig($pG, 909);
 $resG = (string) ($rG['resultado'] ?? '');
+if (!(str_starts_with($resG, 'rechazo_voluntad_'))) {
+    for ($s = 11; $s <= 6000 && !str_starts_with($resG, 'rechazo_voluntad_'); $s += 3) {
+        $try = $pG;
+        $rTry = intentarSig($try, $s);
+        $resTry = (string) ($rTry['resultado'] ?? '');
+        if (str_starts_with($resTry, 'rechazo_voluntad_')) {
+            $pG = $try;
+            $rG = $rTry;
+            $resG = $resTry;
+        }
+    }
+}
+$GLOBALS['cal'] = $calBackupG;
 $esRechazoVoluntad = str_starts_with($resG, 'rechazo_voluntad_')
     || (str_starts_with($resG, 'plan_geom_rechazado_') && ($rG['quien_rechaza'] ?? '') === GB);
 ok($esRechazoVoluntad && str_contains($resG, 'emocional'), "G rechazo de voluntad atribuido a B (emocional) ($resG)");

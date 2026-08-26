@@ -1,6 +1,6 @@
 {
     "_provisional": true,
-    "_nota": "CALIBRACI├ôN vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan m├®tricas.",
+    "_nota": "CALIBRACI?????N vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan m?????tricas.",
     "social": {
         "min": -100,
         "max": 100,
@@ -66,7 +66,7 @@
         "consolidacion_ventana_horas": 168,
         "proteccion_curva": 0.005,
         "proteccion_min": 0.3,
-        "nivel3_primer_muy_mal_max_daño": 5
+        "nivel3_primer_muy_mal_max_da??o": 5
     },
     "desgaste_pareja": {
         "activo": true,
@@ -231,18 +231,19 @@
             "conocerse": 34,
             "quedar": 0,
             "primera_cita": 4,
-            "cita": 0,
-            "declaracion": -10,
+            "cita": 6,
+            "declaracion": -4,
             "ruptura": -15
         },
+        "_nota_mod_tipo_cita": "ROMANCE_CIERRE calibraci??n ??17: +3 para que la continuidad (segundas citas) supere la tirada geom??trica con el receptor a??n fr??o. _provisional.",
         "_nota_mod_tipo_declaracion": "ROMANCE_CIERRE R2: declararse cuesta (arriesgado); el romance/social/emocional aportan lo suyo. Cifra _provisional, calibrar con sims.",
-        "_nota_mod_tipo_ruptura": "ROMANCE_CIERRE R7: romper no es barato; decisión unilateral del de menor romance con SU voluntad.",
+        "_nota_mod_tipo_ruptura": "ROMANCE_CIERRE R7: romper no es barato; decisi??n unilateral del de menor romance con SU voluntad.",
         "bonus_primera_cita_reciproca": 12,
         "_nota_bonus_primera_cita_reciproca": "P2: solo primera_cita y SOLO si SenalRomantica::desdeHacia ok en AMBAS direcciones (flechazo o romance>=tilin).",
         "conflicto_mult_cita": 3,
         "_nota_conflicto_mult_cita": "P2: multiplica el peso del conflicto SOLO en tipos cita jugables (primera_cita, cita). No aplica a quedar/conocerse/pareja/romantico-legacy.",
         "conflicto_mult_declaracion": 3,
-        "_nota_conflicto_mult_declaracion": "ROMANCE_CIERRE R2: mismo peso del conflicto para la declaración.",
+        "_nota_conflicto_mult_declaracion": "ROMANCE_CIERRE R2: mismo peso del conflicto para la declaraci??n.",
         "mod_social_factor": 0.28,
         "resolucion_plan": "media_geometrica",
         "_nota_resolucion_plan": "Canon 20/08 Neni+ChatGPT: p_plan=sqrt(pA*pB). Sustituye producto.",
@@ -365,7 +366,7 @@
     },
     "romance_autonomo": {
         "_provisional": true,
-        "_nota": "ROMANCE_CIERRE (plan docs/ROMANCE_AUTONOMO_CIERRE_TOTAL.md): gates escalonados de la ruta autónoma F2B→F2C→vida→crisis→ruptura→vuelta. TODO OFF = comportamiento idéntico a producción pre-cierre. La ruta NO pasa por familias_en_play (el hueco de vida sigue blindado).",
+        "_nota": "ROMANCE_CIERRE (plan docs/ROMANCE_AUTONOMO_CIERRE_TOTAL.md): gates escalonados de la ruta aut??noma F2B???F2C???vida???crisis???ruptura???vuelta. TODO OFF = comportamiento id??ntico a producci??n pre-cierre. La ruta NO pasa por familias_en_play (el hueco de vida sigue blindado).",
         "declaracion_activa": false,
         "pareja_activa": false,
         "vida_pareja_activa": false,
@@ -373,12 +374,12 @@
         "ruptura_activa": false,
         "vuelta_activa": false,
         "max_hitos_por_dia": 1,
-        "_nota_max_hitos": "Anti-cascada global: máximo hitos románticos (declaracion/inicio_pareja/vuelta/crisis/ruptura/reconciliacion) por día de pueblo en todo el pueblo.",
+        "_nota_max_hitos": "Anti-cascada global: m??ximo hitos rom??nticos (declaracion/inicio_pareja/vuelta/crisis/ruptura/reconciliacion) por d??a de pueblo en todo el pueblo.",
         "declaracion": {
             "citas_minimas": 2,
             "ventana_horas": 336
         },
-        "_nota_declaracion": "Mínimo de citas románticas reales resueltas (primera_cita incluida) y ventana desde la última cita positiva. 336h = cooldowns.por_familia.romance_hito (mismo valor canónico).",
+        "_nota_declaracion": "M??nimo de citas rom??nticas reales resueltas (primera_cita incluida) y ventana desde la ??ltima cita positiva. 336h = cooldowns.por_familia.romance_hito (mismo valor can??nico).",
         "crisis": {
             "causas_minimas": 2,
             "conflicto_min": 6,
@@ -402,7 +403,7 @@
             "triste_receptor_horas": 10,
             "triste_iniciador_horas": 5
         },
-        "_nota_ruptura_politica": "Orígenes únicos O1 crisis sin salida / O2 golpe duro; decisión unilateral del de menor romance.",
+        "_nota_ruptura_politica": "Or??genes ??nicos O1 crisis sin salida / O2 golpe duro; decisi??n unilateral del de menor romance.",
         "pareja_vuelta": {
             "max_vueltas": 2,
             "penalti_voluntad_por_vuelta": 8
@@ -440,7 +441,7 @@
         "max_por_experiencia": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de catálogo amplio. No recalibrar ritmos ahora."
+        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de cat??logo amplio. No recalibrar ritmos ahora."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,
@@ -450,7 +451,7 @@
     "escaner_compatibilidad": {
         "deprecated": true,
         "desbloqueable": false,
-        "_nota": "Eliminado del dise├▒o jugable. Compat/qu├¡mica siguen internas."
+        "_nota": "Eliminado del dise??????o jugable. Compat/qu?????mica siguen internas."
     },
     "laboratorio_relacional": {
         "_provisional": true,
@@ -481,7 +482,7 @@
                 "id": "alerta",
                 "min": 20,
                 "max": 39,
-                "etiqueta": "Aquí pasa algo"
+                "etiqueta": "Aqu?? pasa algo"
             },
             {
                 "id": "tirando",
@@ -525,7 +526,7 @@
     "misiones_diarias": {
         "_provisional": false,
         "_canon_r3": true,
-        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo único por día con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
+        "_nota": "R3 23/08/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo ??nico por d??a con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
         "dias_sin_salir": 2,
         "social_floja_max": 12,
         "vida_cumplida": 1,
@@ -535,7 +536,7 @@
     },
     "peticiones_pueblo": {
         "_canon_b4": true,
-        "_nota": "B4 cerrado en E3. fácil/relevante/difícil son categorías internas: no se muestran en buzón ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalización por plantilla repetida en la ventana de últimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el núcleo pero añade compañía no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos pequeños (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global.",
+        "_nota": "B4 cerrado en E3. f??cil/relevante/dif??cil son categor??as internas: no se muestran en buz??n ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalizaci??n por plantilla repetida en la ventana de ??ltimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el n??cleo pero a??ade compa????a no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos peque??os (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global.",
         "esquema_activo": "E3",
         "cap_pct": 0.33,
         "cap_min": 2,

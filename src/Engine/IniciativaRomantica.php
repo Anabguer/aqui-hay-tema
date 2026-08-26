@@ -569,6 +569,8 @@ final class IniciativaRomantica
             }
             $motivo = (string) ($r['motivo_tipo'] ?? 'banal');
             RechazoMemoria::registrar($partida, $quien, $otro, $motivo, $cal, self::TIPO_CITA);
+            // BUG-F2A-1 (cierre): un NO de la continuidad no mata la cadena.
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'rechazo_voluntad_' . $motivo, $desde, $hacia, ['quien_rechaza' => $quien]);
         }
 
@@ -584,6 +586,8 @@ final class IniciativaRomantica
             $otro = $quienRechaza === $desde ? $hacia : $desde;
             $motivo = VoluntadPonderadaEvaluator::motivoRechazoPublic($partida, $quienRechaza, $otro, $cal);
             RechazoMemoria::registrar($partida, $quienRechaza, $otro, $motivo, $cal, self::TIPO_CITA);
+            // BUG-F2A-1 (cierre): re-arme también tras rechazo geométrico.
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'plan_geom_rechazado_' . $motivo, $desde, $hacia, [
                 'quien_rechaza' => $quienRechaza,
                 'p_plan' => round($pPlan, 4),
@@ -725,6 +729,7 @@ final class IniciativaRomantica
             }
             $motivo = (string) ($r['motivo_tipo'] ?? 'banal');
             RechazoMemoria::registrar($partida, $quien, $otro, $motivo, $cal, self::TIPO_CITA);
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'rechazo_voluntad_' . $motivo, $desde, $hacia, ['quien_rechaza' => $quien]);
         }
 
@@ -740,6 +745,7 @@ final class IniciativaRomantica
             $otro = $quienRechaza === $desde ? $hacia : $desde;
             $motivo = VoluntadPonderadaEvaluator::motivoRechazoPublic($partida, $quienRechaza, $otro, $cal);
             RechazoMemoria::registrar($partida, $quienRechaza, $otro, $motivo, $cal, self::TIPO_CITA);
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'plan_geom_rechazado_' . $motivo, $desde, $hacia, [
                 'quien_rechaza' => $quienRechaza,
                 'p_plan' => round($pPlan, 4),
@@ -1107,7 +1113,7 @@ final class IniciativaRomantica
         // ---- gates (sin RNG; re-verificación al consumo del marcador) ----
         $el = self::elegibilidadDeclaracion($partida, $desde, $hacia, $cal);
         if (empty($el['ok'])) {
-            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'gate_declaracion_' . (string) $el['motivo'], $desde, $hacia);
         }
 
@@ -1129,7 +1135,7 @@ final class IniciativaRomantica
             }
             if (($r['clase'] ?? '') === PropuestaEncuentro::CLASE_COOLDOWN
                 || ($r['motivo_tecnico'] ?? '') === 'cooldown_propuesta') {
-                self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+                self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
                 return self::fin($partida, 'cooldown_en_voluntad', $desde, $hacia, ['quien' => $quien]);
             }
             $motivo = (string) ($r['motivo_tipo'] ?? 'banal');
@@ -1142,7 +1148,7 @@ final class IniciativaRomantica
                 'hacia' => $hacia,
                 'motivo' => $motivo,
             ]);
-            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'declaracion_rechazada_' . $motivo, $desde, $hacia, ['quien_rechaza' => $quien]);
         }
 
@@ -1167,7 +1173,7 @@ final class IniciativaRomantica
                 'quien_rechaza' => $quienRechaza,
                 'p_plan' => round($pPlan, 4),
             ]);
-            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'declaracion_rechazada_' . $motivo, $desde, $hacia, [
                 'quien_rechaza' => $quienRechaza,
                 'p_plan' => round($pPlan, 4),
@@ -1177,7 +1183,7 @@ final class IniciativaRomantica
         // ---- aceptación → formación de pareja (R3) ----
         $form = ParejaEngine::formar($partida, $desde, $hacia, true, true, RelacionBitacora::DECLARACION, $cal);
         if (!($form['ok'] ?? false)) {
-            self::armarMarkerCitaTrasDeclaracion($partida, $desde, $hacia, $cal);
+            self::rearmarMarkerCita($partida, $desde, $hacia, $cal);
             return self::fin($partida, 'error_formar_' . (string) ($form['error'] ?? '?'), $desde, $hacia);
         }
         MemoriaEventos::registrar($partida, 'pareja', [$desde, $hacia], null, 'inicio_pareja');
@@ -1210,10 +1216,10 @@ final class IniciativaRomantica
     }
 
     /**
-     * Re-arma el marcador de SIGUIENTE CITA tras una declaración fallida
-     * (explícito, sin re-evaluar elegibilidad de declaración: evita bucles).
+     * Re-arma el marcador de SIGUIENTE CITA (tras declaración fallida o tras
+     * rechazo de continuidad: BUG-F2A-1). Explícito, sin re-evaluar elegibilidad.
      */
-    private static function armarMarkerCitaTrasDeclaracion(array &$partida, string $a, string $b, array $cal): void
+    private static function rearmarMarkerCita(array &$partida, string $a, string $b, array $cal): void
     {
         if ($a === '' || $b === '' || $a === $b) {
             return;

@@ -246,10 +246,12 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $modTipo = self::modTipo($tipo, $cal);
         $s += $modTipo;
-        // P2: Bonus de primera cita SOLO con señal romántica real en AMBAS direcciones
+        // P2: Bonus SOLO con señal romántica real en AMBAS direcciones
         // (canon: SenalRomantica::desdeHacia; flechazo o romance >= tilín).
+        // CIERRE §5: también en la DECLARACIÓN — si la señal ya es mutua,
+        // decir que sí tiene apoyo real del vínculo.
         $bonusReciprocaPC = 0;
-        if ($otro !== '' && $tipo === PropuestaNivel::PRIMERA_CITA) {
+        if ($otro !== '' && ($tipo === PropuestaNivel::PRIMERA_CITA || $tipo === 'declaracion')) {
             $brCfg = (int) CalibracionConfig::get($cal, 'voluntad.bonus_primera_cita_reciproca', 0);
             if ($brCfg > 0
                 && !empty(SenalRomantica::desdeHacia($partida, $quien, $otro, $cal)['ok'])

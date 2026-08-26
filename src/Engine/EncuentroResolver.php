@@ -89,10 +89,18 @@ final class EncuentroResolver
                 $yaB = RelacionEngine::romanceHacia($partida, $b, $a);
                 $senalA = SenalRomantica::desdeHacia($partida, $a, $b, $cal);
                 $senalB = SenalRomantica::desdeHacia($partida, $b, $a, $cal);
-                if (empty($senalA['ok']) && ($yaA === null || $yaA === 0) && $romA > 0) {
+                // CIERRE §5 (arco aprobado): el interés recíproco REAL puede
+                // NACER en citas buenas. Si el participante vivió la cita
+                // bien/muy_bien en un tipo romántico jugable, su romance puede
+                // crecer DESDE CERO aunque aún no tuviera señal propia.
+                $florecibleA = in_array($resA, ['bien', 'muy_bien'], true)
+                    && PropuestaNivel::esTipoCita((string) $tipo);
+                $florecibleB = in_array($resB, ['bien', 'muy_bien'], true)
+                    && PropuestaNivel::esTipoCita((string) $tipo);
+                if (empty($senalA['ok']) && ($yaA === null || $yaA === 0) && $romA > 0 && !$florecibleA) {
                     $romA = 0;
                 }
-                if (empty($senalB['ok']) && ($yaB === null || $yaB === 0) && $romB > 0) {
+                if (empty($senalB['ok']) && ($yaB === null || $yaB === 0) && $romB > 0 && !$florecibleB) {
                     $romB = 0;
                 }
             }
