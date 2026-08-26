@@ -254,3 +254,65 @@
   .play-v3:has(.game-shell) .game-right > .shell-grupo-misiones-par { order: 4 !important; }
   .play-v3:has(.game-shell) .game-right > .shell-grupo-parejas { order: 5 !important; }
 }
+
+
+/* === Inicio real: proximo evento bajo mapa + orden feed canonico === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-proximo-evento:not([hidden]) {
+    display: block !important;
+    order: 3 !important;
+    width: 100% !important;
+    padding: 0 13px !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap {
+    order: 2 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right {
+    order: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right > .encursos-movil.is-on { order: 1 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-cotilleo-par { order: 2 !important; }
+  .play-v3:has(.game-shell) .game-right > .proxplanes-movil.is-on { order: 3 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-misiones-par { order: 4 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-parejas { order: 5 !important; }
+
+  /* Sin bloque verde legacy en EN CURSO */
+  .play-v3:has(.game-shell) .game-right .encursos-movil.is-on {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}
+
+
+/* === CRITICO: responsive pone display:contents en .game-right.zona-personas === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-right.zona-personas {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 13px !important;
+    box-sizing: border-box !important;
+    order: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil:not(.is-on),
+  .play-v3:has(.game-shell) .encursos-movil:not(.is-on) {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right .encursos-movil.is-on { order: 1 !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 2 !important; }
+  .play-v3:has(.game-shell) .game-right .proxplanes-movil.is-on { order: 3 !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { order: 4 !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { order: 5 !important; }
+}

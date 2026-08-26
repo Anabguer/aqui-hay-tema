@@ -23,8 +23,7 @@
 
   /* ---------- 1. Orden del feed (D2) ---------- */
 
-  /* Orden feed móvil (ref: inicio-mobile-393-v3.1-estados.png) */
-  .play-v3:has(.game-shell) .game-right .ds-event            { order: 0; }
+  /* Orden feed movil: EN CURSO -> Cotilleo -> Proximos -> Misiones -> Parejas */
   .play-v3:has(.game-shell) .game-right .encursos-movil           { order: 1; }
   .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 2; }
   .play-v3:has(.game-shell) .game-right .proxplanes-movil         { order: 3; }
@@ -459,9 +458,18 @@
     pointer-events: none;
   }
 
-  /* ---------- 5. PROXIMO EVENTO (EV - solo hay DOM en el arnes de captura) ---------- */
-  /* posicion canonica: MAPA -> EVENTO -> COTILLEO (order 0 en game-right) */
+  /* ---------- 5. PROXIMO EVENTO (debajo del mapa; datos reales via data-proximo-evento-*) ---------- */
 
+  .play-v3:has(.game-shell) .inicio-proximo-evento {
+    padding: 0 13px;
+    margin: 0;
+  }
+
+  .play-v3:has(.game-shell) .inicio-proximo-evento[hidden] {
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .inicio-proximo-evento .inicio-evento-card,
   .play-v3:has(.game-shell) .game-right .ds-event {
     display: flex;
     align-items: center;
@@ -477,6 +485,7 @@
     position: relative;
   }
 
+  .play-v3:has(.game-shell) .inicio-proximo-evento .inicio-evento-card::after,
   .play-v3:has(.game-shell) .game-right .ds-event::after {
     content: "";
     position: absolute;
@@ -488,6 +497,7 @@
 
   .play-v3:has(.game-shell) .ds-event-tag { display: none; }
 
+  .play-v3:has(.game-shell) .inicio-evento-ico,
   .play-v3:has(.game-shell) .ds-event-ico {
     flex: none;
     font-size: 1.75rem;
@@ -495,6 +505,7 @@
     filter: drop-shadow(1px 2px 1px rgba(70, 50, 30, .2));
   }
 
+  .play-v3:has(.game-shell) .inicio-evento-body,
   .play-v3:has(.game-shell) .ds-event-body {
     display: flex;
     flex-direction: column;
@@ -503,6 +514,7 @@
     flex: 1;
   }
 
+  .play-v3:has(.game-shell) .inicio-evento-tit,
   .play-v3:has(.game-shell) .ds-event-title {
     font-family: var(--ds-font-hand);
     font-weight: 700;
@@ -513,6 +525,7 @@
     color: var(--ds-pink-deep);
   }
 
+  .play-v3:has(.game-shell) .inicio-evento-meta,
   .play-v3:has(.game-shell) .ds-event-meta {
     font-family: var(--ds-font-ui);
     font-weight: 700;
@@ -648,6 +661,8 @@
   /* ---------- 8. Planes EN CURSO (carrusel compacto) ---------- */
 
   /* los wrappers de secciÃƒÂ³n llegan desnudos: el papel lo ponen las tarjetas */
+  .play-v3:has(.game-shell) .proxplanes-movil:not(.is-on) { display: none; }
+
   .play-v3:has(.game-shell) .game-right .encursos-movil,
   .play-v3:has(.game-shell) .game-right .proxplanes-movil {
     background: none;
