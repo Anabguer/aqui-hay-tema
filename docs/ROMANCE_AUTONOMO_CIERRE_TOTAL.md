@@ -793,9 +793,24 @@ Recomendación: aprobar deploy con calibración D-CAL1 + decidir esas palancas e
 
 ### 20.5 Deploys
 
-**NINGUNO.** Cero escrituras a producción. Todo el trabajo vive en rama/worktree local.
-Al aprobarse: seguir §19 (fetch PRE con recibos SHA256 → hunks quirúrgicos → tests sobre blobs
-exactos → deploy atómico de ficheros compartidos → POST hashes → partida TEST con limpieza por IDs explícitos → activar flags por gate).
+**DEPLOY SELECTIVO REALIZADO 2026-08-26** (`backups/pre-romcierre-20260826-062600`, MANIFEST con
+recibos PRE SHA256 + POST_DEPLOY):
+
+- PRE/fetch real: 11 ficheros existentes respaldados byte-exactos; `IniciativaPareja.php` NUEVO.
+- Drift concurrente preservado: `EncuentroResolver` llevaba telemetría **LabAudit/caja-negra**
+  (+373 líneas LabAudit propias ya desplegadas) → merge semántico = blob PRE + SOLO hunk D-ARC1;
+  `calibracion_vida.json` merge semántico JSON (bloque `romance_autonomo` OFF + mod_tipo cierre)
+  conservando bloques ajenos; resto SIN drift vs abb1276 → blob de rama directo.
+- Doble-check pre-copia: DRIFT_DESDE_PRE = NINGUNO.
+- Deploy atómico de 12 ficheros → **12/12 POST_OK byte-idéntico**.
+- Validación dirigida post-deploy: php -l 11/11 · smoke producción 16/16 OK
+  (clases cargan · FLAGS romance_autonomo.* = OFF los 6 · flechazo.probabilidad=0.006 INTOCADO ·
+  familias_en_play=5 sin romance_hito/pareja · evaluador diario NO-OP con cero RNG ·
+  guard exclusividad EN GUARDIA · declaración BLOQUEADA por flag).
+- No se subieron tests/docs/banco-sims (viven en esta rama). Sin cache-buster (cero JS/CSS).
+- No se tocó balance canónico (`flechazo.probabilidad`, `pesos_familias`) ni partidas reales.
+
+*(Histórico previo: ningún otro deploy de este cierre.)*
 
 ### 20.6 Estado final del roadmap y archivos que requerirán reconciliación con producción
 
