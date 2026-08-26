@@ -1,0 +1,120 @@
+/* INICIO-OVERRIDE — gana a responsive legacy con !important */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-top {
+    display: grid !important;
+    grid-template-columns: auto 1fr auto auto !important;
+    grid-template-areas:
+      "brand brand guia vida"
+      "meta  meta  guia  vida"
+      "hora  rato  rato  vida" !important;
+    align-items: start !important;
+    column-gap: 8px !important;
+    row-gap: 5px !important;
+    padding: 10px 13px 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .brand-col,
+  .play-v3:has(.game-shell) .top-center {
+    display: contents !important;
+  }
+
+  .play-v3:has(.game-shell) .top-meta-line {
+    display: contents !important;
+    width: auto !important;
+    white-space: normal !important;
+    text-align: left !important;
+    font-size: inherit !important;
+    line-height: inherit !important;
+  }
+
+  .play-v3:has(.game-shell) .top-meta-prim {
+    grid-area: meta !important;
+    display: inline-flex !important;
+    font-weight: 800 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    margin: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .top-meta-hora {
+    grid-area: hora !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    font-weight: 700 !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3:has(.game-shell) .top-reloj {
+    grid-area: rato !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left.zona-actividad {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: end !important;
+    gap: 10px !important;
+    padding: 0 13px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: auto !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    width: 100% !important;
+    min-height: 108px !important;
+    padding: 10px 8px !important;
+    border: 2px solid var(--ds-ink, #3b3028) !important;
+    background:
+      linear-gradient(178deg, rgba(255, 255, 255, .30), rgba(255, 255, 255, 0) 48%),
+      linear-gradient(180deg, #F2A3BC 0%, var(--ds-pink, #f3b1c3) 52%, #E2749A 100%) !important;
+    box-shadow: 2px 3px 0 rgba(51, 38, 30, .22), 0 6px 12px rgba(196, 43, 74, .28) !important;
+    transform: rotate(-0.35deg) !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
+    display: block !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .8125rem !important;
+    font-weight: 800 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-badge {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--ds-red-alert, #c42b4a) !important;
+    border: 2px solid #fff !important;
+    border-radius: 999px !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .6875rem !important;
+    font-weight: 800 !important;
+    color: #fff !important;
+    text-transform: none !important;
+    letter-spacing: 0 !important;
+    line-height: 1 !important;
+    transform: rotate(3deg);
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-badge[hidden] {
+    display: none !important;
+  }
+}

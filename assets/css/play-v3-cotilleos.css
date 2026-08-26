@@ -1,0 +1,239 @@
+﻿/**
+ * Capa COTILLEOS (03) — fidelidad a dev/propuestas/arnes.html #p03
+ */
+/* shell modal: solo cuando la capa está activa (ver FIX-COTILLEOS-BOLITA al final) */
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel::before,
+.play-v3 .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel::before {
+  content: ""; position: absolute; inset: 5px;
+  border: 1.5px dashed rgba(107,81,56,.34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none; z-index: 1;
+}
+.play-v3 .capa-diario .coti-speech-tail { display: none !important; }
+.play-v3 .capa-diario > *:not(.cerrar) { position: relative; z-index: 2; }
+.play-v3 .capa-diario .coti-cerrar.ds-modal-close {
+  top: 6px !important; right: 6px !important; z-index: 8 !important;
+  width: 40px !important; height: 40px !important;
+  border: 2px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: var(--ds-paper-card, #fffdf7) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
+  font: 800 17px/1 Nunito, sans-serif !important;
+  color: var(--ds-ink, #3b3028) !important;
+  transform: rotate(2.5deg) !important;
+  display: grid !important; place-items: center; padding: 0 !important;
+}
+.play-v3 .capa-diario .coti-top { display: block !important; padding: .35rem .15rem 0 !important; margin: 0 0 .35rem !important; }
+.play-v3 .capa-diario .ds-modal-head { padding-right: 2.4rem; }
+.play-v3 .capa-diario .ds-modal-head-row { align-items: center; gap: 9px; }
+.play-v3 .capa-diario .ds-modal-icon { font-size: 1.6rem; transform: rotate(-8deg); }
+.play-v3 .capa-diario .coti-tit.ds-modal-tit {
+  font-family: Caveat, cursive !important; font-size: 1.75rem !important;
+  font-weight: 700 !important; color: var(--ds-ink, #3b3028) !important;
+  transform: none !important; flex: 1;
+}
+.play-v3 .capa-diario .coti-badge {
+  min-width: auto; height: auto; padding: 4px 11px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 999px; background: #cf3e7e;
+  border: 2px solid #fff; font: 800 .72rem/1.1 Nunito, sans-serif; color: #fff;
+  box-shadow: 0 2px 5px rgba(160, 40, 100, .34); transform: rotate(2deg);
+  white-space: nowrap; letter-spacing: .02em;
+}
+.play-v3 .capa-diario .coti-badge:empty, .play-v3 .capa-diario .coti-badge[hidden] { display: none !important; }
+.play-v3 .capa-diario .ds-modal-sub {
+  font-family: Caveat, cursive; font-size: 1.05rem; font-weight: 600;
+  color: var(--ds-text-muted, #7a6a5c); margin: 0 0 10px !important;
+}
+.play-v3 .capa-diario .coti-filtros {
+  display: flex !important; flex-wrap: wrap; gap: 8px;
+  margin: 0 0 12px !important; padding: 0 !important;
+  justify-content: center !important; align-self: center !important; width: 100%; max-width: none !important;
+}
+.play-v3 .capa-diario .coti-filtro {
+  display: inline-flex; align-items: center; gap: 5px;
+  min-height: 0; height: auto; width: auto; min-width: 0;
+  padding: 3px 10px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-ink-soft, #594839);
+  background: var(--ds-paper-warm, #f8f0de);
+  font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .4px;
+  text-transform: uppercase; color: var(--ds-ink, #3b3028);
+  box-shadow: none; transform: none; cursor: pointer;
+}
+.play-v3 .capa-diario .coti-filtro.is-on, .play-v3 .capa-diario .coti-filtro--todo.is-on {
+  background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78);
+}
+.play-v3 .capa-diario .coti-filtro .coti-cat, .play-v3 .capa-diario .coti-filtro .coti-svg { display: none !important; }
+.play-v3 .capa-diario .coti-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: clip; padding: 0 .05rem .15rem !important; }
+.play-v3 .capa-diario .coti-list {
+  display: flex; flex-direction: column; gap: 0;
+}
+.play-v3 .capa-diario .coti-dia-cab {
+  display: inline-flex; margin: 4px 0 8px; padding: 2px 12px;
+  background: var(--ds-pink-soft, #fbe3ec); border: 1.5px solid var(--ds-ink-soft, #594839);
+  border-radius: 7px 5px 8px 6px / 5px 8px 6px 7px;
+  font: 700 1rem/1.4 Caveat, cursive; color: var(--ds-ink, #3b3028); transform: rotate(-0.8deg);
+}
+.play-v3 .capa-diario .coti-vacio { margin: 1rem 0; text-align: center; font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c); }
+.play-v3 .capa-diario .coti-item {
+  position: relative; display: block !important; margin: 0 0 12px; padding: 14px 12px 11px;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12), 0 3px 7px rgba(70,50,30,.09);
+}
+.play-v3 .capa-diario .coti-item:nth-child(odd) { transform: rotate(-0.5deg); }
+.play-v3 .capa-diario .coti-item:nth-child(even) { transform: rotate(0.45deg); }
+.play-v3 .capa-diario .coti-item--descubrimiento, .play-v3 .capa-diario .coti-item--encuentro, .play-v3 .capa-diario .coti-item--pueblo {
+  background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52);
+}
+.play-v3 .capa-diario .coti-item--romance, .play-v3 .capa-diario .coti-item--relacion {
+  background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a);
+}
+.play-v3 .capa-diario .coti-item--drama, .play-v3 .capa-diario .coti-item--conflicto {
+  background: var(--ds-mustard-soft, #f8efd4); border-color: #9a6a2e;
+}
+.play-v3 .capa-diario .coti-item-tape {
+  position: absolute; top: -6px; left: 14px; width: 42px; height: 15px;
+  background: rgba(228, 210, 170, .94); border: 1px solid rgba(107, 81, 56, .2);
+  box-shadow: 0 1px 2px rgba(60, 44, 28, .12); transform: rotate(-5deg); z-index: 4;
+  pointer-events: none;
+}
+.play-v3 .capa-diario .coti-item-hoy,
+.play-v3 .capa-diario .coti-item-col .coti-cat-sello,
+.play-v3 .capa-diario .coti-item-star,
+.play-v3 .capa-diario .coti-item-pie,
+.play-v3 .capa-diario .coti-item-tape-l,
+.play-v3 .capa-diario .coti-item-tape-r { display: none !important; }
+.play-v3 .capa-diario .coti-item-inner { display: flex; gap: 12px; align-items: flex-start; }
+.play-v3 .capa-diario .coti-item-izq {
+  flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 68px;
+}
+.play-v3 .capa-diario .coti-item-avatares { display: flex; align-items: center; flex: 0 0 auto; padding: 2px 0 0; }
+.play-v3 .capa-diario .coti-item-cara {
+  width: 62px; height: 62px; border-radius: 999px; border: 2.5px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839); overflow: hidden; background: #e8dcc4; margin-left: -34px;
+}
+.play-v3 .capa-diario .coti-item-cara:first-child { margin-left: 0; z-index: 2; }
+.play-v3 .capa-diario .coti-item-cara img { width: 100%; height: 100%; object-fit: cover; }
+.play-v3 .capa-diario .coti-item-ini { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Caveat, cursive; font-weight: 700; font-size: 1.35rem; color: #8a7460; }
+.play-v3 .capa-diario .coti-item-sin-cara { width: 62px; height: 62px; border-radius: 999px; border: 2px dashed rgba(107,81,56,.3); background: #e8dcc4; }
+.play-v3 .capa-diario .coti-item-cuerpo { flex: 1; min-width: 0; padding: 2px 0 0 !important; }
+.play-v3 .capa-diario .coti-item-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; padding-right: 52px; }
+.play-v3 .capa-diario .coti-item-cat-pill {
+  display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-ink-soft, #594839); background: var(--ds-paper-warm, #f8f0de);
+  font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .4px; text-transform: uppercase;
+}
+.play-v3 .capa-diario .coti-item-cat-ico { font-size: .82rem; line-height: 1; transform: translateY(-.5px); }
+.play-v3 .capa-diario .coti-item--descubrimiento .coti-item-cat-pill, .play-v3 .capa-diario .coti-item--encuentro .coti-item-cat-pill, .play-v3 .capa-diario .coti-item--pueblo .coti-item-cat-pill {
+  background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52);
+}
+.play-v3 .capa-diario .coti-item--romance .coti-item-cat-pill, .play-v3 .capa-diario .coti-item--relacion .coti-item-cat-pill {
+  background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a); color: var(--ds-lavender-deep, #7a6a9a);
+}
+.play-v3 .capa-diario .coti-item-flag {
+  position: absolute; top: -2px; right: 10px; z-index: 5;
+  display: inline-flex; padding: 4px 10px 5px;
+  background: var(--ds-red-alert, #c42b4a); border: 2px solid var(--ds-ink, #3b3028);
+  border-radius: 3px 3px 7px 7px / 3px 3px 8px 8px;
+  font: 700 .9rem/1.1 Caveat, cursive; letter-spacing: .5px; text-transform: uppercase;
+  color: #fff; transform: rotate(3deg); box-shadow: 1px 2px 0 rgba(51,38,30,.18);
+}
+.play-v3 .capa-diario .coti-item-txt { margin: 0; font-family: Caveat, cursive; font-weight: 600; font-size: 1.35rem !important; line-height: 1.25; color: var(--ds-ink, #3b3028); }
+.play-v3 .capa-diario .coti-item-cuando {
+  margin: 0; font: 700 .78rem/1.2 Nunito, sans-serif; letter-spacing: .02em;
+  color: var(--ds-text-muted, #7a6a5c); text-align: center; white-space: nowrap;
+}
+@media (min-width: 769px) {
+  .play-v3 .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel {
+    width: min(420px, 92vw) !important; max-width: min(420px, 92vw) !important;
+  }
+}
+
+/* Override scrapbook rosa (bloques-residencias) */
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel,
+.play-v3 .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: min(100%, 393px) !important;
+  max-width: min(100%, 393px) !important;
+  max-height: min(88vh, 720px) !important;
+  transform: translate(-50%, -50%) rotate(-0.25deg) !important;
+  padding: 1rem .85rem .75rem !important;
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
+  border: 2.5px solid var(--ds-ink, #3b3028) !important;
+  background-color: #f7f0de !important;
+  background-image:
+    radial-gradient(ellipse 130% 85% at 50% -5%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, rgba(255,253,249,.58) 0%, rgba(255,248,236,.22) 45%, rgba(235,220,190,.12) 100%),
+    linear-gradient(90deg, rgba(120,96,72,.05) 0%, transparent 7%, transparent 93%, rgba(120,96,72,.05) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center, center, center !important;
+  background-size: cover, cover, cover, cover !important;
+  background-repeat: no-repeat !important;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
+  overflow: hidden !important;
+}
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel::before,
+.play-v3 .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel::before {
+  display: block !important;
+}
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel::after,
+.play-v3 .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel::after {
+  display: none !important;
+}
+
+/* FIX-COTILLEOS-BOLITA */
+/* Cerrada: no reservar hueco ni mostrar fragmento sobre el mapa */
+.play-v3:has(.game-shell) .play-root:not([data-capa]) .capa-diario.coti-modal-papel {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  position: fixed !important;
+  width: 0 !important;
+  height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+/* Abierta: modal centrado en viewport (como Vecinos/Mensajitos) */
+.play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel {
+  position: fixed !important;
+  left: 50% !important;
+  right: auto !important;
+  top: 50% !important;
+  bottom: auto !important;
+  width: min(100%, 393px) !important;
+  max-width: min(100%, 393px) !important;
+  max-height: min(88vh, 720px) !important;
+  transform: translate(-50%, -50%) rotate(-0.25deg) !important;
+  z-index: 110 !important;
+  padding: 1rem .85rem .75rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  border: 2.5px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
+  background-color: #f7f0de !important;
+  background-image:
+    radial-gradient(ellipse 130% 85% at 50% -5%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
+    linear-gradient(180deg, rgba(255,253,249,.58) 0%, rgba(255,248,236,.22) 45%, rgba(235,220,190,.12) 100%),
+    linear-gradient(90deg, rgba(120,96,72,.05) 0%, transparent 7%, transparent 93%, rgba(120,96,72,.05) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center, center, center !important;
+  background-size: cover, cover, cover, cover !important;
+  background-repeat: no-repeat !important;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
+}

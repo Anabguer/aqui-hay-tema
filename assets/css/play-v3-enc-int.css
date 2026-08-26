@@ -1,0 +1,31 @@
+/** Intervencion encuentro (13) */
+.play-v3 .encursos-movil .enc-mov-panel {
+  border: 2px solid var(--ds-ink-soft, #594839) !important;
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important;
+  background: var(--ds-paper-card, #fffdf7) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12) !important;
+  padding: 11px 13px !important;
+}
+.play-v3 .encursos-movil .enc-int-tema {
+  border: 2px solid var(--ds-lavender-deep, #7a6a9a) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: var(--ds-lavender-soft, #ece6f8) !important; padding: 9px 11px !important; margin-bottom: 8px !important;
+}
+.play-v3 .encursos-movil .enc-int-kicker { font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .4px; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin: 0 0 3px; }
+.play-v3 .encursos-movil .enc-int-tema-txt { font-family: Caveat, cursive; font-size: 1.08rem; line-height: 1.28; margin: 0; }
+.play-v3 .encursos-movil .enc-int-acciones { display: flex; gap: 8px; margin-bottom: 8px; }
+.play-v3 .encursos-movil .enc-int-btn {
+  flex: 1; min-height: 44px; padding: 7px 8px !important;
+  border: 2px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px !important;
+  background: var(--ds-pink, #f3b1c3) !important;
+  font: 800 .9375rem/1.2 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.18) !important;
+}
+.play-v3 .encursos-movil .enc-int-btn--temas { background: var(--ds-lavender, #c4b5e8) !important; }
+.play-v3 .encursos-movil .enc-int-resultado {
+  border: 2px solid var(--ds-green-deep, #4a7a52) !important;
+  background: var(--ds-green-soft, #e8f3e6) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  padding: 7px 10px !important; font-family: Caveat, cursive; font-size: 1rem;
+}

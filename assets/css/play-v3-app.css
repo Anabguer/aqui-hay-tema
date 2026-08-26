@@ -137,6 +137,7 @@ body.play-v3 {
 }
 .play-root[data-capa="vecinos"] .capa-vecinos,
 .play-root[data-capa="ficha"] .capa-ficha,
+.play-root[data-capa="ficha_diario"] .capa-ficha-diario,
 .play-root[data-capa="buzon"] .capa-buzon,
 .play-root[data-capa="diario"] .capa-diario,
 .play-root[data-capa="organizar"] .capa-organizar,

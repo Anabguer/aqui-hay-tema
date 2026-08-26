@@ -1,0 +1,69 @@
+/** Nuevo plan (09) */
+
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
+.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
+  position: absolute !important;
+  left: 50% !important; top: 50% !important; right: auto !important; bottom: auto !important;
+  width: min(100%, 393px) !important; max-width: min(100%, 393px) !important;
+  max-height: min(88vh, 720px) !important;
+  transform: translate(-50%, -50%) rotate(-0.2deg) !important;
+  z-index: 12 !important;
+  padding: 14px 13px 12px !important;
+  display: flex !important; flex-direction: column !important;
+  overflow: hidden !important;
+  border: 2.5px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%), var(--ds-paper-modal, #fffaf0) !important;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
+}
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar::before,
+.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar::before {
+  content: "" !important; display: block !important; position: absolute; inset: 5px;
+  border: 1.5px dashed rgba(107,81,56,.34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none; z-index: 1;
+}
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar::after,
+.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar::after { display: none !important; }
+.play-v3 .capa-organizar > * { position: relative; z-index: 2; }
+.play-v3 .capa-organizar .ds-modal-close,
+.play-v3 .capa-organizar .cerrar {
+  position: absolute !important; top: 6px !important; right: 6px !important; z-index: 8 !important;
+  width: 40px !important; height: 40px !important;
+  border: 2px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: var(--ds-paper-card, #fffdf7) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
+  font: 800 17px/1 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
+  transform: rotate(2.5deg) !important; display: grid !important; place-items: center; padding: 0 !important;
+}
+.play-v3 .capa-organizar .ficha-tape, .play-v3 .capa-organizar .org-pin, .play-v3 .capa-organizar .agenda-pin, .play-v3 .capa-organizar .mis-pin, .play-v3 .capa-organizar .vecinos-pin { display: none !important; }
+.play-v3 .capa-organizar .org-top { text-align: center; margin-bottom: 10px; padding-right: 2.2rem; }
+.play-v3 .capa-organizar .ds-modal-icon { display: none !important; }
+.play-v3 .capa-organizar .org-tit { font-family: Caveat, cursive !important; font-size: 1.75rem !important; width: 100%; text-align: center; }
+.play-v3 .capa-organizar .org-top::after { content: "Prepara un momento en el pueblo"; display: block; font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c); margin-top: 2px; }
+.play-v3 .capa-organizar .org-modo-chip {
+  display: inline-flex; padding: 6px 14px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-ink-soft, #594839); background: var(--ds-paper-warm, #f8f0de);
+  font: 800 .75rem/1.2 Nunito, sans-serif; text-transform: uppercase; cursor: pointer;
+}
+.play-v3 .capa-organizar .org-modo-chip.is-on { background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .capa-organizar .org-seccion .ficha-seccion-tit::before {
+  content: counter(org-step); display: inline-grid; place-items: center;
+  width: 22px; height: 22px; margin-right: 8px; border-radius: 999px;
+  background: var(--ds-pink, #f3b1c3); border: 2px solid var(--ds-ink, #3b3028);
+  font: 800 .75rem/1 Nunito, sans-serif;
+}
+.play-v3 .capa-organizar .ficha-seccion-tit { font-family: Caveat, cursive !important; font-size: 1.2rem !important; display: flex; align-items: center; }
+.play-v3 .capa-organizar .org-tipo-chip, .play-v3 .capa-organizar .org-dd {
+  border: 2px solid var(--ds-ink-soft, #594839); border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7); font-family: Caveat, cursive;
+}
+.play-v3 .capa-organizar .org-tipo-chip.is-on { background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .capa-organizar .org-crear {
+  width: 100%; min-height: 44px; border: 2px solid var(--ds-ink, #3b3028);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: var(--ds-pink, #f3b1c3) !important; font: 800 .9375rem/1.2 Nunito, sans-serif !important;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.18) !important;
+}
+.play-v3 .capa-organizar .org-crear-tape { display: none !important; }

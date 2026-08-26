@@ -18,7 +18,7 @@ if (is_file($ahtBusterFile)) {
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="aht-ui" content="v3"/>
-  <title>Aquí Hay Tema</title>
+  <title>Aqu� Hay Tema</title>
   <link rel="icon" href="favicon.png" type="image/png" sizes="512x512"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -32,8 +32,27 @@ if (is_file($ahtBusterFile)) {
   <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -89,8 +108,8 @@ if (is_file($ahtBusterFile)) {
     .playtest-guia .pista.puedes { border-left: 3px solid #7a9e6a; }
     .playtest-guia .objs { list-style: none; padding-left: 0; }
     .playtest-guia .objs li { padding-left: 1.4rem; position: relative; }
-    .playtest-guia .objs li::before { content: "☐"; position: absolute; left: 0; }
-    .playtest-guia .objs li.hecho::before { content: "☑"; color: #4a7a3a; }
+    .playtest-guia .objs li::before { content: "?"; position: absolute; left: 0; }
+    .playtest-guia .objs li.hecho::before { content: "?"; color: #4a7a3a; }
     .playtest-guia .objs li.hecho { color: #4a7a3a; }
     .playtest-guia details.debug-tec { margin-top: .6rem; font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #555; }
     .playtest-guia .meta-reloj { font-size: .85rem; color: #6a5848; margin: 0 0 .4rem; }
@@ -160,7 +179,7 @@ if (is_file($ahtBusterFile)) {
     }
     .carta-msg.leida { opacity: .88; }
     .carta-msg.leida .cuerpo { color: #5a5248; }
-    /* Retratos: rostro visible sin rediseñar capas */
+    /* Retratos: rostro visible sin redise�ar capas */
     .capa-vecinos .vecino img,
     .vecino-celda img,
     .ficha-hero .cara img,
@@ -182,13 +201,13 @@ if (is_file($ahtBusterFile)) {
       font-weight: 800; font-size: .9rem;
     }
     .celestine-nota .obj-vecinos-tit { color: #d0697a; }
-    /* Lo que sabes: iconos pequeños alineados con la línea manuscrita */
+    /* Lo que sabes: iconos peque�os alineados con la l�nea manuscrita */
     .capa-ficha .ficha-sabes-ico { font-size: .8em; margin-right: .28rem; }
       </style>
 </head>
 <body class="play-v3" data-ui="v3" data-debug="0">
   <div class="aht-debug-float" data-debug-float>
-    <button type="button" class="aht-debug-toggle" data-debug-toggle aria-expanded="false" title="Herramientas DEBUG">🧪 DEBUG</button>
+    <button type="button" class="aht-debug-toggle" data-debug-toggle aria-expanded="false" title="Herramientas DEBUG">?? DEBUG</button>
     <div class="aht-debug-panel" data-debug-panel hidden>
       <p class="aht-debug-title">DEBUG</p>
       <button type="button" id="btn-debug-lab-open" class="btn-open-lab">Abrir laboratorio</button>
@@ -196,11 +215,11 @@ if (is_file($ahtBusterFile)) {
       <button type="button" id="btn-debug-guardar">Guardar</button>
       <button type="button" data-horas="1">+1h</button>
       <button type="button" data-horas="8">+8h</button>
-      <button type="button" data-horas="24">+1 día</button>
-      <button type="button" data-horas="72">+3 días</button>
-      <button type="button" data-horas="168">+7 días</button>
-      <button type="button" data-horas="720">+30 días</button>
-      <button type="button" id="btn-debug-proximo">Ir al próximo</button>
+      <button type="button" data-horas="24">+1 d�a</button>
+      <button type="button" data-horas="72">+3 d�as</button>
+      <button type="button" data-horas="168">+7 d�as</button>
+      <button type="button" data-horas="720">+30 d�as</button>
+      <button type="button" id="btn-debug-proximo">Ir al pr�ximo</button>
       <button type="button" id="btn-debug-copy">Copiar debug</button>
       <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
       <button type="button" id="btn-debug-parejas-crear">Crear parejas de prueba</button>
@@ -209,12 +228,12 @@ if (is_file($ahtBusterFile)) {
         <p class="aht-sfx-debug-title">Prueba de sonidos</p>
         <button type="button" data-aht-sfx="mensajito">Mensajito</button>
         <button type="button" data-aht-sfx="cotilleo">Cotilleo</button>
-        <button type="button" data-aht-sfx="mision">Misión</button>
+        <button type="button" data-aht-sfx="mision">Misi�n</button>
         <button type="button" data-aht-sfx="descubrimiento">Descubrimiento</button>
         <button type="button" data-aht-sfx="romance">Romance</button>
         <button type="button" data-aht-sfx="conflicto">Conflicto</button>
         <button type="button" data-aht-sfx="llegada">Llegada</button>
-        <button type="button" data-aht-sfx="nuevo_dia">Nuevo día</button>
+        <button type="button" data-aht-sfx="nuevo_dia">Nuevo d�a</button>
       </div>
       <span class="msg" data-debug-msg></span>
     </div>
@@ -231,7 +250,7 @@ if (is_file($ahtBusterFile)) {
         <button type="button" data-lab-tab="vecinos">Vecinos</button>
         <button type="button" data-lab-tab="relaciones">Relaciones</button>
         <button type="button" data-lab-tab="historial">Historial</button>
-        <button type="button" data-lab-tab="tecnico">Datos técnicos</button>
+        <button type="button" data-lab-tab="tecnico">Datos t�cnicos</button>
       </nav>
       <div class="play-lab-body">
         <section class="play-lab-panel" data-lab-panel="resumen" data-lab-resumen></section>
@@ -255,7 +274,7 @@ if (is_file($ahtBusterFile)) {
           <div data-lab-cronologia></div>
         </section>
         <section class="play-lab-panel" data-lab-panel="tecnico" hidden>
-          <p style="font-size:.78rem;color:#6a5d4f">Exportación técnica completa (estado + historial de sesión DEBUG).</p>
+          <p style="font-size:.78rem;color:#6a5d4f">Exportaci�n t�cnica completa (estado + historial de sesi�n DEBUG).</p>
           <div class="lab-export-bar">
             <button type="button" id="btn-lab-debug-export">Copiar debug completo</button>
             <button type="button" id="btn-lab-debug-estado">Copiar solo estado</button>
@@ -270,8 +289,8 @@ if (is_file($ahtBusterFile)) {
     <span class="pc-label">Acelerar tiempo</span>
     <button type="button" data-horas="1">+1h</button>
     <button type="button" data-horas="8">+8h</button>
-    <button type="button" data-horas="24">+1 día</button>
-    <button type="button" id="btn-proximo-lab">Ir al próximo</button>
+    <button type="button" data-horas="24">+1 d�a</button>
+    <button type="button" id="btn-proximo-lab">Ir al pr�ximo</button>
     <span class="pc-msg" data-taller-msg-lab></span>
   </div>
   <aside class="playtest-guia" data-playtest-guia hidden>
@@ -279,54 +298,62 @@ if (is_file($ahtBusterFile)) {
     <p class="meta-reloj" data-pg-reloj></p>
     <h3>Ahora mismo</h3>
     <ul data-pg-ahora></ul>
-    <h3>Qué hacer ahora</h3>
+    <h3>Qu� hacer ahora</h3>
     <ol data-pg-hacer></ol>
     <div class="evento" data-pg-evento hidden></div>
     <div data-pg-pistas></div>
     <h3>Objetivos de esta partida</h3>
     <ul class="objs" data-pg-objs></ul>
     <details class="playtest-diag" data-playtest-diag open>
-      <summary>Registro técnico del playtest (copiar para ChatGPT / Carlos I)</summary>
+      <summary>Registro t�cnico del playtest (copiar para ChatGPT / Carlos I)</summary>
       <div class="diag-actions">
         <button type="button" data-diag-copy>Copiar todo</button>
         <button type="button" data-diag-clear-ui>Limpiar vista</button>
       </div>
-      <pre data-playtest-diag-log>(aún no hay eventos)</pre>
+      <pre data-playtest-diag-log>(a�n no hay eventos)</pre>
     </details>
     <details class="debug-tec">
-      <summary>Datos técnicos (resumen avance)</summary>
+      <summary>Datos t�cnicos (resumen avance)</summary>
       <pre data-taller-debug hidden></pre>
     </details>
   </aside>
   <div class="game-shell">
     <header class="game-top">
       <div class="brand-col">
-        <h1 class="brand" aria-label="Aquí Hay Tema">
-          <span class="brand-text">AQUÍ HAY TEMA</span>
+        <h1 class="brand" aria-label="Aqu� Hay Tema">
+          <span class="brand-text">AQU� HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
         <p class="top-meta-line" data-top-meta-mobile></p>
-        <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
+        <button type="button" class="btn-guia" data-tut-reopen hidden>�C�mo va esto?</button>
       </div>
       <div class="top-center">
         <div class="top-reloj">
           <div class="obj-dia" style="--rot:-2deg">
             <div class="obj-dia-placa">
-              <span class="obj-dia-num" data-dia-num>—</span>
+              <span class="obj-dia-num" data-dia-num>�</span>
             </div>
             <div class="obj-dia-cuerpo">
               <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
-              <span class="obj-dia-meta" data-dia-meta>·</span>
+              <span class="obj-dia-meta" data-dia-meta>�</span>
             </div>
             <span class="sr-only" data-fecha></span>
           </div>
           <div class="obj-hora" style="--rot:3deg" aria-label="Hora del pueblo">
             <span class="obj-hora-ico" aria-hidden="true"></span>
-            <span class="obj-hora-val" data-hora>—</span>
+            <span class="obj-hora-val" data-hora>�</span>
           </div>
+          <span class="es-noche" data-es-noche hidden>
+            <svg class="es-noche-luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <span class="es-noche-txt">Es de noche</span>
+          </span>
+          <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora">
+            <span class="pasar-rato-ico" aria-hidden="true">?</span>
+            <span class="pasar-rato-txt">Pasar el rato</span>
+          </button>
         </div>
       </div>
-      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para más información">
+      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para m�s informaci�n">
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <defs>
@@ -345,11 +372,14 @@ if (is_file($ahtBusterFile)) {
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
       <div class="control-audio" aria-label="Controles de audio">
-        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar música" title="Desactivar música">
-          <span class="control-musica-ico" aria-hidden="true">♪</span>
+        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar m�sica" title="Desactivar m�sica">
+          <span class="control-musica-ico" aria-hidden="true">?</span>
         </button>
         <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
-          <span class="control-efectos-ico" aria-hidden="true">✦</span>
+          <span class="control-efectos-ico" aria-hidden="true">?</span>
+        </button>
+        <button type="button" class="control-inventario" data-open="inventario" aria-label="Abrir inventario" title="Inventario">
+          <span class="control-inventario-ico" aria-hidden="true">&#127873;</span>
         </button>
       </div>
     </header>
@@ -358,9 +388,10 @@ if (is_file($ahtBusterFile)) {
         <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
-              <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
               <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
               <span class="obj-buzon-txt game-left-tile-label">Mensajitos</span>
+              <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
+              <span class="obj-buzon-flecha" aria-hidden="true">&#8250;</span>
             </button>
           </div>
         </section>
@@ -368,26 +399,34 @@ if (is_file($ahtBusterFile)) {
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
             <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
-            <span class="obj-vecinos-tit game-left-tile-label">Vecinos</span>
-            <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
+            <div class="obj-vecinos-head">
+              <span class="obj-vecinos-tit game-left-tile-label">VECINOS</span>
+              <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
+            </div>
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
         <section class="shell-grupo shell-grupo-planes">
-          <div class="obj-proximo obj-proximo-polaroid">
-            <span class="obj-proximo-tit">Próximo plan</span>
-            <div class="obj-curso-nav" data-curso-nav hidden>
-              <button type="button" class="obj-curso-btn" data-curso-prev aria-label="Encuentro en curso anterior">‹</button>
-              <span class="obj-curso-cont" data-curso-cont>1 / 2</span>
-              <button type="button" class="obj-curso-btn" data-curso-next aria-label="Siguiente encuentro en curso">›</button>
+          <div class="obj-planes-lateral">
+            <div class="obj-proximo obj-proximo-polaroid">
+              <span class="obj-proximo-tit">Plan en curso</span>
+              <div class="obj-curso-nav" data-curso-nav hidden>
+                <button type="button" class="obj-curso-btn" data-curso-prev aria-label="Encuentro en curso anterior">&#8249;</button>
+                <span class="obj-curso-cont" data-curso-cont>1 / 2</span>
+                <button type="button" class="obj-curso-btn" data-curso-next aria-label="Siguiente encuentro en curso">&#8250;</button>
+              </div>
+              <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en curso ahora.</p></div>
             </div>
-            <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en agenda. Sospechoso.</p></div>
-            <button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Nuevo plan">
-              <span class="obj-nuevo-plan-ico game-left-tile-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt game-left-tile-label">Nuevo plan</span>
-            </button>
-            <button type="button" class="obj-ver-planes" data-open="agenda" aria-label="Ver todos los planes">
-              <span class="obj-ver-planes-txt">ver todos los planes</span>
+            <div class="obj-planes-prox-block" data-planes-prox-block hidden>
+              <header class="obj-planes-prox-cab">
+                <span class="obj-planes-prox-tit">Pr&oacute;ximos planes</span>
+                <button type="button" class="obj-planes-prox-ver" data-open="agenda">ver todos &#8250;</button>
+              </header>
+              <div class="obj-planes-prox-grid" data-planes-prox-list></div>
+            </div>
+            <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
+              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
+              <span class="obj-nuevo-plan-txt">Nuevo plan</span>
             </button>
           </div>
         </section>
@@ -410,23 +449,23 @@ if (is_file($ahtBusterFile)) {
             <div class="mapa-zonas-layer" data-mapa-zonas></div>
           </div>
           <div class="edificios-layer" data-edificios-layer aria-hidden="true"></div>
-          <aside class="selector nota-mapa">
-            <button type="button" class="cerrar" data-close aria-label="Cerrar">×</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrás">← Atrás</button>
+          <aside class="selector nota-mapa ds-modal-sheet">
+            <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr�s">? Atr�s</button>
             <p class="libreta-kicker">Un vistazo al lugar</p>
             <h3 data-s-tit></h3>
             <p class="cotilleo" data-s-coti></p>
             <div class="destinos" data-s-btns></div>
           </aside>
-          <aside class="quien nota-mapa">
-            <button type="button" class="cerrar" data-close aria-label="Cerrar">×</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrás">← Atrás</button>
+          <aside class="quien nota-mapa ds-modal-sheet">
+            <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr�s">? Atr�s</button>
             <header class="quien-bloque quien-bloque--lugar">
               <h3 class="quien-lugar-tit" data-q-tit></h3>
               <p class="quien-horario" data-q-horario hidden></p>
             </header>
             <section class="quien-bloque quien-bloque--presencia">
-              <p class="libreta-kicker quien-kicker">¿Quién está?</p>
+              <p class="libreta-kicker quien-kicker">�Qui�n est�?</p>
               <p class="quien-vacio" data-q-sum hidden></p>
               <div class="quien-list quien-residentes" data-q-list></div>
             </section>
@@ -444,16 +483,16 @@ if (is_file($ahtBusterFile)) {
             </span>
           </span>
           <div class="dia">
-            <div class="dow" data-dow>—</div>
+            <div class="dow" data-dow>�</div>
             <div class="fecha" data-fecha></div>
-            <div class="hora" data-hora>—</div>
+            <div class="hora" data-hora>�</div>
           </div>
           <div class="tiempo-juego" aria-label="Avanzar el tiempo">
             <button type="button" class="tique-hora" data-horas="1" title="Avanzar una hora">+1 h</button>
-            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un día">+1 día</button>
+            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un d�a">+1 d�a</button>
           </div>
           <div class="hud-right">
-            <div class="dinero" data-dinero>—</div>
+            <div class="dinero" data-dinero>�</div>
             <button type="button" class="buzon" data-open="buzon" aria-label="Abrir mensajitos">
               <img src="assets/play-v3/hud/sobre.png" alt=""/>
               <span class="badge">0</span>
@@ -474,8 +513,8 @@ if (is_file($ahtBusterFile)) {
       <p class="feedback-toast" data-toast></p>
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
         <div class="tut-papel" data-tut-papel>
-          <button type="button" class="cerrar tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
-          <p class="libreta-kicker">Primeros pasos</p>
+          <button type="button" class="cerrar tut-skip ds-modal-close" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
+          <div class="tut-hero" data-tut-hero hidden></div>
           <h2 class="tut-titulo" data-tut-tit></h2>
           <p class="tut-intro-line" data-tut-intro-line hidden></p>
           <p class="tut-intro-extra" data-tut-intro-extra hidden></p>
@@ -486,78 +525,115 @@ if (is_file($ahtBusterFile)) {
           <p class="tut-cierre" data-tut-cierre hidden></p>
           <div class="tut-pasos" data-tut-pasos></div>
           <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atr�s</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
         </div>
       </aside>
       <aside class="tut-finale" data-tut-finale hidden aria-live="polite">
         <div class="tut-papel">
-          <h2 data-tut-fin-tit></h2>
-          <p class="tut-texto" data-tut-fin-texto></p>
-          <button type="button" class="cta" data-tut-fin-ok>Que empiece el tema</button>
+          <div class="tut-fin-hero" data-tut-fin-hero aria-hidden="true"></div>
+          <h2 class="tut-fin-titulo" data-tut-fin-tit></h2>
+          <p class="tut-fin-lead" data-tut-fin-lead></p>
+          <hr class="tut-fin-rule" aria-hidden="true"/>
+          <p class="tut-fin-rest" data-tut-fin-rest></p>
+          <p class="tut-texto" data-tut-fin-texto hidden></p>
+          <button type="button" class="cta tut-fin-cta" data-tut-fin-ok>Que empiece el tema</button>
         </div>
       </aside>
       <aside class="vida-derrota" data-vida-derrota hidden aria-live="assertive">
-        <div class="tut-papel">
-          <h2>Se nos va de las manos</h2>
-          <p class="tut-texto">La vida del pueblo ha llegado a un punto crítico. Celestine no ha podido mantener el equilibrio.</p>
+        <div class="tut-papel vida-derrota-papel">
+          <p class="vida-derrota-ico" aria-hidden="true">&#128148;</p>
+          <h2 class="ds-modal-tit ds-modal-tit--ink">Se nos va de las manos</h2>
+          <p class="tut-texto">La vida del pueblo ha llegado a un punto cr�tico. Celestine no ha podido mantener el equilibrio.</p>
           <button type="button" class="cta" data-vida-derrota-ok>Entendido</button>
         </div>
       </aside>
 
       <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
-        <span class="vecinos-pin vecinos-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar vecinos-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar vecinos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vecinos-cab">
-          <h2>Vecinos del pueblo</h2>
-          <span class="vecinos-cuenta" data-vecinos-count></span>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row vecinos-head-row">
+              <h2 class="ds-modal-tit ds-modal-tit--ink">Vecinos del pueblo</h2>
+              <span class="vecinos-cuenta-wrap" data-vec-cuenta-wrap><span class="vecinos-cuenta ds-pill ds-pill--pink" data-vecinos-count></span></span>
+            </div>
+          </div>
         </header>
-        <div class="vec-busca-tira">
-          <label class="vec-busca-wrap">
-            <span class="vec-busca-ico" aria-hidden="true">⌕</span>
-            <input type="search" class="vec-busca-inp" data-vec-busca placeholder="¿Dónde está?" autocomplete="off" spellcheck="false"/>
-          </label>
+        <div class="vec-tabs" role="tablist" aria-label="Vecinos y relaciones">
+          <button type="button" class="vec-tab is-on" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
+          <button type="button" class="vec-tab vec-tab--lavanda" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
         </div>
-        <div class="vecinos-grid" data-vecinos-list></div>
-        <p class="vecinos-pie">Haz clic en un vecino para ver su ficha.</p>
+        <div class="vec-panel" data-vec-panel="vecinos">
+          <div class="vec-busca-tira">
+            <label class="vec-busca-wrap">
+              <span class="vec-busca-ico" aria-hidden="true">&#8981;</span>
+              <input type="search" class="vec-busca-inp" data-vec-busca placeholder="Buscar vecino..." autocomplete="off" spellcheck="false"/>
+            </label>
+          </div>
+          <div class="vecinos-grid" data-vecinos-list></div>
+          <p class="mensajitos-hint vecinos-hint">&#11088; Toca un vecino para ver su historia, estado y relaciones</p>
+        </div>
+        <div class="vec-panel" data-vec-panel="relaciones" hidden>
+          <div class="vec-rel-filtros" data-vec-rel-filtros></div>
+          <label class="vec-rel-dd-wrap">
+            <select class="vec-rel-persona" data-vec-rel-persona aria-label="Filtrar por vecino"></select>
+          </label>
+          <div class="vec-rel-scroll capa-scroll" data-vec-rel-list></div>
+          <p class="mensajitos-hint vec-rel-hint">&#128156; Las relaciones pueden cambiar con cada plan</p>
+        </div>
       </aside>
-      <aside class="capa capa-agenda agenda-modal" aria-label="Planes de Celestine">
+      <aside class="capa capa-agenda agenda-modal ds-modal-sheet" aria-label="Planes de Celestine">
         <span class="agenda-pin agenda-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar agenda-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar agenda-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="agenda-cab">
-          <p class="libreta-kicker agenda-kicker">Libreta de Celestine</p>
-          <h2 class="agenda-tit">Planes</h2>
-          <p class="agenda-sub mini">Lo que está por venir.</p>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#128197;</span>
+              <h2 class="agenda-tit ds-modal-tit ds-modal-tit--brown">Planes</h2>
+            </div>
+            <p class="ds-modal-sub agenda-sub">Lo que est� por venir.</p>
+          </div>
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
       </aside>
-      <aside class="capa capa-ficha" aria-label="Ficha de vecino">
+      <aside class="capa capa-ficha ds-modal-sheet" aria-label="Ficha de vecino">
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar ficha-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <button type="button" class="ficha-btn-diario" data-ficha-diario-btn><span class="ficha-btn-diario-ico" aria-hidden="true">&#128211;</span> Diario</button>
         <header class="ficha-top">
-          <button type="button" class="ficha-volver" data-ficha-volver>← Volver a vecinos</button>
-          <h2 class="ficha-tit">Ficha de vecino</h2>
+          <h2 class="ficha-tit ds-modal-tit ds-modal-tit--ink">Ficha de vecino</h2>
+          <button type="button" class="ficha-volver" data-ficha-volver>&larr; VECINOS</button>
         </header>
-        <div class="ficha-body">
-          <div class="ficha-col ficha-col-perfil">
-            <div class="ficha-cara-ring">
-              <div class="ficha-cara" data-ficha-img></div>
+        <section class="ficha-hero" aria-label="Perfil del vecino">
+          <div class="ficha-cara-ring" data-ficha-cara-ring>
+            <div class="ficha-cara" data-ficha-img></div>
+          </div>
+          <div class="ficha-hero-info">
+            <div class="ficha-nombre-nav">
+              <button type="button" class="ficha-nav ficha-nav-prev" data-ficha-nav-prev aria-label="Vecino anterior">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <h3 class="ficha-nombre" data-ficha-nombre></h3>
+              <button type="button" class="ficha-nav ficha-nav-next" data-ficha-nav-next aria-label="Vecino siguiente">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
             </div>
-            <h3 class="ficha-nombre" data-ficha-nombre></h3>
             <p class="ficha-edad" data-ficha-edad hidden></p>
             <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
             <p class="ficha-desde" data-ficha-desde></p>
-            <div class="ficha-animo-row">
-              <p class="ficha-animo-line">
-                <span class="ficha-animo-label">Ánimo:</span>
+            <div class="ficha-animo-row" data-ficha-animo-row>
+              <div class="ficha-animo-pill" data-ficha-animo-pill>
+                <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                 <span class="ficha-animo-val" data-ficha-animo-text></span>
-              </p>
-              <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="�Por qu� est� as�?">?</button>
+              </div>
             </div>
-            <div class="ficha-rasgos" data-ficha-rasgos></div>
           </div>
+        </section>
+        <div class="ficha-body">
+          <div class="ficha-rasgos" data-ficha-rasgos></div>
           <div class="ficha-col ficha-col-detalles capa-scroll">
             <section class="ficha-seccion">
               <h4 class="ficha-seccion-tit">Hobbies</h4>
@@ -573,87 +649,161 @@ if (is_file($ahtBusterFile)) {
               <h4 class="ficha-seccion-tit">Relaciones</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-relaciones" data-ficha-relaciones></div>
-              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver más relaciones</button>
+              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver m�s relaciones</button>
               </div>
             </section>
             <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">Próximos planes</h4>
+              <h4 class="ficha-seccion-tit">Pr�ximos planes</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
             </section>
             <button type="button" class="ficha-btn-org" data-ficha-org>+ Organizar plan</button>
+            <button type="button" class="ficha-btn-regalo" data-ficha-regalar>REGALAR</button>
+            <p class="ficha-aprecio" data-ficha-aprecio hidden></p>
           </div>
         </div>
         <div class="ficha-rel-overlay" data-ficha-rel-overlay hidden>
           <div class="ficha-rel-modal" role="dialog" aria-label="Relaciones del vecino">
             <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
             <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-            <button type="button" class="cerrar ficha-cerrar" data-ficha-rel-close aria-label="Cerrar">×</button>
-            <h3 class="ficha-rel-modal-tit" data-ficha-rel-modal-tit>Relaciones</h3>
+            <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-ficha-rel-close aria-label="Cerrar">X</button>
+            <h3 class="ficha-rel-modal-tit ds-modal-tit ds-modal-tit--ink" data-ficha-rel-modal-tit>Relaciones</h3>
             <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
         </div>
+        <div class="ficha-rel-overlay" data-animo-overlay hidden>
+          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="�Por qu� est� as�?">
+            <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
+            <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
+          </div>
+        </div>
       </aside>
-      <aside class="capa capa-misiones mis-modal-papel" aria-label="Misiones de hoy">
+      <aside class="capa capa-ficha-diario ds-modal-sheet" aria-label="Diario del vecino">
+        <span class="ficha-tape ficha-tape-r fdi-tape-r" aria-hidden="true"></span>
+        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-diario-vecino-close aria-label="Cerrar">X</button>
+        <header class="fdi-top">
+          <button type="button" class="fdi-volver" data-diario-volver>&larr; FICHA</button>
+          <div class="fdi-hero" data-diario-hero></div>
+          <label class="fdi-busca-wrap">
+            <span class="fdi-busca-ico" aria-hidden="true">&#8981;</span>
+            <input type="search" class="fdi-busca-inp" data-diario-busca placeholder="Buscar en su historia..." autocomplete="off" spellcheck="false"/>
+          </label>
+          <div class="fdi-filtros" role="tablist" aria-label="Filtrar entradas">
+            <button type="button" class="fdi-filt is-on" data-diario-filt="todo" role="tab" aria-selected="true">Todo</button>
+            <button type="button" class="fdi-filt" data-diario-filt="planes" role="tab" aria-selected="false">Planes</button>
+            <button type="button" class="fdi-filt" data-diario-filt="relaciones" role="tab" aria-selected="false">Relaciones</button>
+            <button type="button" class="fdi-filt" data-diario-filt="cambios" role="tab" aria-selected="false">Cambios</button>
+          </div>
+          <button type="button" class="fdi-orden" data-diario-orden aria-label="Ordenar">&#9783; M&aacute;s reciente</button>
+        </header>
+        <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
+      </aside>
+      <aside class="capa capa-misiones mis-modal-papel ds-modal-sheet" aria-label="Misiones de hoy">
         <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
         <span class="mis-pin mis-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar mis-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar mis-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="mis-top">
-          <p class="libreta-kicker">Libreta de Celestine</p>
-          <h2 class="mis-tit">Hoy en el pueblo</h2>
-          <p class="mis-sub mini" data-misiones-teaser>—</p>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#9733;</span>
+              <h2 class="mis-tit ds-modal-tit ds-modal-tit--brown">Hoy en el pueblo</h2>
+            </div>
+          </div>
+          <p class="mis-sub mini" data-misiones-teaser>�</p>
         </header>
         <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
       </aside>
-      <aside class="capa capa-vida-pueblo vida-modal-papel" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
-        <button type="button" class="cerrar vida-cerrar" data-close aria-label="Cerrar">×</button>
+      <aside class="capa capa-vida-pueblo vida-modal-papel ds-modal-sheet" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
+        <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vida-top">
-          <p class="vida-modal-ico" aria-hidden="true">❤️</p>
-          <h2 class="vida-tit">Vida del pueblo</h2>
-          <p class="vida-valor" data-vida-modal-valor>— / 100</p>
+          <p class="vida-modal-ico" aria-hidden="true">??</p>
+          <h2 class="vida-tit ds-modal-tit ds-modal-tit--pink">Vida del pueblo</h2>
+          <p class="vida-valor" data-vida-modal-valor>� / 100</p>
+          <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
           <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
         </header>
         <div class="vida-body capa-scroll">
           <div class="vida-copy">
-            <p>Esto no es decoración, aunque lo parezca.</p>
-            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algún motivo, ahora son responsabilidad tuya.</p>
-            <p>Haz que las cosas salgan bien y el corazón subirá. Déjalos a su suerte demasiado tiempo y… bueno, procura que esto no llegue a 0.</p>
+            <p>Esto no es decoraci�n, aunque lo parezca.</p>
+            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por alg�n motivo, ahora son responsabilidad tuya.</p>
+            <p>Haz que las cosas salgan bien y el coraz�n subir�. D�jalos a su suerte demasiado tiempo y� bueno, procura que esto no llegue a 0.</p>
           </div>
-          <p class="vida-latido mini">¿Llegas a 100? 💓 Hay latido.<br>Sí, conseguir que este pueblo funcione tiene premio. Increíble, pero cierto.</p>
+          <p class="vida-latido mini">�Llegas a 100? ?? Hay latido.<br>S�, conseguir que este pueblo funcione tiene premio. Incre�ble, pero cierto.</p>
         </div>
       </aside>
       <aside class="capa capa-buzon" aria-label="Mensajitos">
-        <button type="button" class="cerrar mensajitos-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar mensajitos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="mensajitos-cab">
           <div class="mensajitos-cab-row">
-            <h2 class="mensajitos-tit">Mensajitos</h2>
-            <button type="button" class="mensajitos-leer-todos" data-buzon-leer-todos hidden>
-              Marcar todo como leído
-            </button>
+            <span class="mensajitos-icono" aria-hidden="true">&#9993;</span>
+            <h2 class="mensajitos-tit ds-modal-tit ds-modal-tit--pink">Mensajitos</h2>
+            <span class="mensajitos-contador" data-buzon-nuevos-count hidden></span>
+          </div>
+          <div class="mensajitos-tabs" role="tablist" aria-label="Filtrar mensajitos">
+            <button type="button" class="mensajitos-tab is-on" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
+            <button type="button" class="mensajitos-tab" data-buzon-tab="todos" role="tab" aria-selected="false">TODOS</button>
           </div>
         </header>
+        <div class="mensajitos-toolbar">
+          <button type="button" class="mensajitos-leer-todos" data-buzon-leer-todos hidden>
+            <span class="mensajitos-leer-todos-box" aria-hidden="true"></span>
+            <span class="mensajitos-leer-todos-txt">Marcar todo como le&iacute;do</span>
+          </button>
+        </div>
         <div data-buzon-list></div>
+        <p class="mensajitos-hint">&#11088; Abrir mensajitos puede desbloquear planes y cotilleos</p>
       </aside>
+      <aside class="capa capa-inventario" aria-label="Inventario de Celestine">
+        <button type="button" class="cerrar inv-cerrar" data-close aria-label="Cerrar">&times;</button>
+        <header class="inv-cab">
+          <h2 class="inv-tit">Inventario</h2>
+          <p class="inv-sub" data-inv-sub>Detalles guardados para regalar a los vecinos.</p>
+        </header>
+        <div class="inv-body capa-scroll">
+          <div class="inv-lista" data-inv-lista></div>
+          <div class="inv-regalo" data-inv-regalo hidden>
+            <p class="inv-regalo-titulo">Regalar <strong data-inv-objeto-nombre></strong> a&hellip;</p>
+            <div class="inv-vecinos" data-inv-vecinos></div>
+            <div class="inv-acciones">
+              <button type="button" class="inv-entregar" data-inv-entregar disabled>Regalar</button>
+              <button type="button" class="inv-cancelar" data-inv-cancelar>Cancelar</button>
+            </div>
+          </div>
+          <p class="inv-feedback" data-inv-feedback hidden aria-live="polite"></p>
+        </div>
+      </aside>
+
       <aside class="capa capa-diario coti-modal-papel" aria-label="Cotilleos">
-        <span class="coti-speech-tail" aria-hidden="true"></span>
-        <button type="button" class="cerrar coti-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar coti-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="coti-top">
-          <h2 class="coti-tit">Cotilleos</h2>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--lavender" aria-hidden="true">&#128226;</span>
+              <h2 class="coti-tit ds-modal-tit ds-modal-tit--lavender">Cotilleos</h2>
+              <span class="coti-badge" data-coti-count hidden></span>
+            </div>
+            <p class="ds-modal-sub">Lo �ltimo que corre por el pueblo</p>
+          </div>
           <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
         </header>
         <div class="coti-body capa-scroll">
           <div class="coti-list" data-coti-list></div>
         </div>
       </aside>
-      <aside class="capa capa-organizar org-plan-papel" aria-label="Nuevo plan">
+      <aside class="capa capa-organizar org-plan-papel ds-modal-sheet" aria-label="Nuevo plan">
         <span class="ficha-tape ficha-tape-l org-tape-tl" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r org-tape-tr" aria-hidden="true"></span>
         <span class="org-pin org-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar org-cerrar" data-close aria-label="Cerrar">×</button>
+        <button type="button" class="cerrar org-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="org-top">
-          <h2 class="org-tit">Nuevo plan</h2>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#10024;</span>
+              <h2 class="org-tit ds-modal-tit ds-modal-tit--ink">Nuevo plan</h2>
+            </div>
+          </div>
           <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
@@ -661,31 +811,31 @@ if (is_file($ahtBusterFile)) {
             <div class="org-seccion-head org-seccion-head--center">
               <div class="org-modo-chips" data-org-modo-row>
                 <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
-                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompañado</button>
+                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompa�ado</button>
               </div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
-              <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
+              <h4 class="ficha-seccion-tit">�Qui�nes van?</h4>
               <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
               <div class="org-busca-wrap">
-                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
+                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino�" autocomplete="off" aria-label="Buscar vecino"/>
                 <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
               </div>
               <div class="org-picker-strip capa-scroll" data-org-picker></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--que">
-            <h4 class="ficha-seccion-tit">¿Qué buscamos?</h4>
+            <h4 class="ficha-seccion-tit">�Qu� buscamos?</h4>
             <div class="ficha-seccion-body">
               <div class="org-tipos" data-org-tipos></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--donde">
-            <h4 class="ficha-seccion-tit">¿Dónde?</h4>
+            <h4 class="ficha-seccion-tit">�D�nde?</h4>
             <div class="ficha-seccion-body org-donde-fila">
               <div class="org-dd" data-org-dd-lugar></div>
               <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
@@ -693,7 +843,7 @@ if (is_file($ahtBusterFile)) {
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--cuando">
-            <h4 class="ficha-seccion-tit">¿Cuándo?</h4>
+            <h4 class="ficha-seccion-tit">�Cu�ndo?</h4>
             <div class="ficha-seccion-body">
               <div class="org-cuando">
                 <div class="org-dd org-dd--dia" data-org-dd-dia></div>
@@ -727,10 +877,20 @@ if (is_file($ahtBusterFile)) {
             <div class="obj-misiones-strip" data-misiones-strip></div>
           </div>
         </section>
+        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Pr�ximos planes programados">
+                    <header class="pp-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <h3 class="pp-mov-tit">PR�XIMOS PLANES</h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS �</button>
+          </header>
+          <div class="pp-mov-track" data-proxplanes-track></div>
+        </section>
         <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
-          <header class="enc-mov-cab">
-            <span class="enc-mov-live" aria-hidden="true"></span>
-            <h3 class="enc-mov-tit">EN CURSO</h3>
+                    <header class="enc-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 class="enc-mov-tit">PLANES EN CURSO</h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
           </header>
           <div class="enc-mov-track" data-encursos-track></div>
           <p class="enc-mov-indice" data-encursos-indice hidden aria-hidden="true"></p>
@@ -739,10 +899,10 @@ if (is_file($ahtBusterFile)) {
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
             <span class="obj-cotilleo-cuerpo">
-              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy están sospechosamente tranquilos…</span>
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est�n sospechosamente tranquilos�</span>
               <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
-            <span class="obj-cotilleo-flecha" aria-hidden="true">›</span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">�</span>
           </button>
         </section>
         <section class="shell-grupo shell-grupo-parejas" id="mob-parejas">

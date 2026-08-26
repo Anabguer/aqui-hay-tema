@@ -1,0 +1,155 @@
+﻿/* DS V3.1 — Cabeceras de modales (X estandar + titulo manuscrito) */
+
+.play-v3 .capa > .cerrar.ds-modal-close,
+.play-v3 .capa .cerrar.ds-modal-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  left: auto;
+  bottom: auto;
+  z-index: 12;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .22) !important;
+  font: 800 17px/1 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+  transform: rotate(2.5deg);
+  display: grid !important;
+  place-items: center;
+  cursor: pointer;
+}
+
+.play-v3 .capa > .cerrar.ds-modal-close::before,
+.play-v3 .capa .cerrar.ds-modal-close::before {
+  display: none !important;
+  content: none !important;
+}
+
+.play-v3 .capa > .cerrar.ds-modal-close:hover,
+.play-v3 .capa .cerrar.ds-modal-close:hover {
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3 .capa .ds-modal-tit {
+  font-family: Caveat, cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  transform: rotate(-0.5deg);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+.play-v3 .capa .ds-modal-tit--pink { color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .capa .ds-modal-tit--ink { color: var(--ds-ink, #3b3028); }
+.play-v3 .capa .ds-modal-tit--brown { color: var(--ds-ink-soft, #594839); }
+.play-v3 .capa .ds-modal-tit--lavender { color: var(--ds-lavender-deep, #7a6a9a); }
+
+.play-v3 .capa-vecinos .vecinos-cab .ds-modal-tit,
+.play-v3 .capa-diario .coti-tit.ds-modal-tit,
+.play-v3 .capa-vida-pueblo .vida-tit.ds-modal-tit,
+.play-v3 .capa-organizar .org-tit.ds-modal-tit,
+.play-v3 .capa-ficha .ficha-tit.ds-modal-tit,
+.play-v3 .capa-agenda .agenda-tit.ds-modal-tit,
+.play-v3 .capa-misiones .mis-tit.ds-modal-tit {
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* DS V3.1 — cabecera compartida (patron Mensajitos) */
+.play-v3 .ds-modal-head {
+  display: flex;
+  flex-direction: column;
+  gap: .2rem;
+  min-width: 0;
+  padding-right: 2.1rem;
+}
+.play-v3 .ds-modal-head-row {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.play-v3 .ds-modal-icon {
+  flex: 0 0 auto;
+  font-size: 1.55rem;
+  line-height: 1;
+  transform: rotate(-5deg);
+  filter: none;
+}
+.play-v3 .ds-modal-icon--pink { color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .ds-modal-icon--lavender { color: var(--ds-lavender-deep, #7a6a9a); }
+.play-v3 .ds-modal-icon--brown { color: var(--ds-ink-soft, #594839); }
+.play-v3 .ds-modal-sub {
+  margin: 0;
+  font: 600 .78rem/1.35 Nunito, "Segoe UI", sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+.play-v3 .ds-modal-hint {
+  margin: .55rem 0 0;
+  padding: .4rem .55rem;
+  border: 1.5px dashed rgba(107, 81, 56, .28);
+  border-radius: 10px 8px 11px 7px / 8px 11px 7px 10px;
+  background: rgba(255, 252, 244, .72);
+  font: 600 .72rem/1.4 Nunito, sans-serif;
+  color: #6a5a48;
+  text-align: center;
+}
+.play-v3 .ds-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .12rem .55rem;
+  border: 2px solid var(--ds-pink-deep, #c85b78);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec));
+  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .14);
+  font: 800 .62rem/1.2 Nunito, sans-serif;
+  letter-spacing: .06em;
+  color: var(--ds-pink-deep, #c85b78);
+  transform: rotate(.8deg);
+}
+.play-v3 .ds-pill:empty { display: none; }
+
+.play-v3 .capa.ds-modal-sheet:not(.capa-buzon) {
+  border: 2.5px solid var(--ds-ink, #3b3028) !important;
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14) !important;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 58%),
+    var(--ds-paper-modal, #fffaf0) !important;
+}
+.play-v3 .capa.ds-modal-sheet:not(.capa-buzon)::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1.5px dashed rgba(107, 81, 56, .34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none;
+  z-index: 1;
+}
+.play-v3 .capa.ds-modal-sheet > *:not(.cerrar):not([class*="pin"]):not([class*="tape"]):not([class*="speech"]) {
+  position: relative;
+  z-index: 2;
+}
+
+.play-v3 .nota-mapa > .cerrar.ds-modal-close,
+.play-v3 .tut-papel > .cerrar.ds-modal-close {
+  top: 6px;
+  right: 6px;
+}

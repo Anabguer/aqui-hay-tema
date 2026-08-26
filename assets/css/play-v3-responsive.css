@@ -688,6 +688,7 @@
   .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones,
@@ -1367,68 +1368,37 @@
   display: none;
 }
 
+/* batch 5 legacy retirado: el DS inicio.css posee la cabecera movil.
+   El bloque anterior ocultaba .top-center (display:none !important) y rompia
+   Pasar el rato en movil (pointer-events:none). */
+
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .game-top {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    grid-template-areas: "brand vida" !important;
-    align-items: center !important;
-    gap: .1rem .7rem !important;
-    padding: .28rem .45rem .32rem !important;
-    padding-top: max(.28rem, env(safe-area-inset-top, 0)) !important;
-    padding-left: max(.45rem, env(safe-area-inset-left, 0)) !important;
-    padding-right: max(.45rem, env(safe-area-inset-right, 0)) !important;
-  }
-
-  .play-v3:has(.game-shell) .brand-col {
-    grid-area: brand !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    justify-content: center !important;
-    gap: .14rem !important;
-    min-width: 0 !important;
-    align-self: center !important;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-line {
-    display: block !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: clamp(.66rem, 3.15vw, .76rem) !important;
-    font-weight: 700 !important;
-    color: #5a4e42 !important;
-    line-height: 1.15 !important;
-    letter-spacing: .01em !important;
-    white-space: pre-line !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
-  }
-
   .play-v3:has(.game-shell) .top-center {
-    display: none !important;
-    visibility: hidden !important;
-    width: 0 !important;
-    height: 0 !important;
-    overflow: hidden !important;
-    pointer-events: none !important;
-  }
-
-  .play-v3:has(.game-shell) .top-vida {
-    grid-area: vida !important;
-    justify-self: end !important;
-    align-self: center !important;
-    flex-shrink: 0 !important;
-    margin: 0 !important;
-    padding: 0 0 0 .15rem !important;
-  }
-
-  .play-v3:has(.game-shell) .top-vida .corazon-svg {
-    width: 54px !important;
+    display: contents !important;
+    visibility: visible !important;
+    width: auto !important;
     height: auto !important;
+    overflow: visible !important;
+    pointer-events: auto !important;
+  }
+
+  .play-v3:has(.game-shell) .top-reloj .obj-dia,
+  .play-v3:has(.game-shell) .top-reloj .obj-hora {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .top-reloj .es-noche {
+    position: static;
     margin: 0 !important;
+    transform: none;
+    display: inline-flex;
+    align-items: center;
+    gap: .24rem;
+    pointer-events: none;
+  }
+
+  .play-v3:has(.game-shell) .top-reloj .es-noche[hidden] {
+    display: none !important;
   }
 }
 
@@ -1540,14 +1510,24 @@
   }
 
   .play-v3:has(.game-shell) .obj-cotilleo-badge {
-    display: inline !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--ds-red-alert, #c42b4a);
+    border: 2px solid #fff;
+    border-radius: 999px;
     font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .52rem;
+    font-size: .6875rem;
     font-weight: 800;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: #9a4a62;
-    line-height: 1.1;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #fff;
+    line-height: 1;
+    transform: rotate(3deg);
   }
 
   .play-v3:has(.game-shell) .obj-cotilleo-badge[hidden] {
@@ -1685,7 +1665,9 @@
 
   .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-rasgo-tag {
     width: auto !important;
-    display: inline-block !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     clip-path: none !important;
     padding: .2rem .48rem !important;
     font-size: .68rem !important;
@@ -1902,78 +1884,7 @@
   }
 }
 
-/* === MÃ³vil: 3 cards superiores alineadas (batch 10) === */
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
-    aspect-ratio: auto !important;
-    height: 80px !important;
-    min-height: 80px !important;
-    max-height: 80px !important;
-    display: flex !important;
-    align-items: stretch !important;
-  }
 
-  .play-v3:has(.game-shell) .game-left .mensajitos-wrap,
-  .play-v3:has(.game-shell) .game-left .obj-buzon,
-  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-proximo {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.14rem !important;
-    padding: 0.32rem 0.28rem !important;
-    box-sizing: border-box !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
-    height: 100% !important;
-    min-height: 0 !important;
-    flex: 1 1 auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0.14rem !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .game-left-tile-ico,
-  .play-v3:has(.game-shell) .game-left .obj-buzon-ico-wrap,
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview,
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
-    flex: 0 0 auto !important;
-    height: 26px !important;
-    min-height: 26px !important;
-    margin: 0 !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-img {
-    margin-top: 0 !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
-    display: block !important;
-    font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: 0.8125rem !important;
-    font-weight: 700 !important;
-    line-height: 1.1 !important;
-    letter-spacing: 0.02em !important;
-    color: #7a6450 !important;
-    margin: 0 !important;
-    text-align: center !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-stats {
-    display: none !important;
-  }
-}
 
 @media (min-width: 769px) {
   .play-v3 .obj-vecinos-poblacion {
@@ -1987,92 +1898,6 @@
 
 /* === MÃ³vil UX batch 11 (pruebas funcionales) === */
 @media (max-width: 768px) {
-  /* A. Cabecera: mÃ¡s aire + meta en una lÃ­nea */
-  .play-v3:has(.game-shell) .game-top {
-    padding-top: max(.52rem, calc(env(safe-area-inset-top, 0px) + .22rem)) !important;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-line {
-    display: flex !important;
-    align-items: baseline !important;
-    justify-content: space-between !important;
-    gap: .45rem !important;
-    width: 100% !important;
-    white-space: nowrap !important;
-    line-height: 1.2 !important;
-    font-size: clamp(.68rem, 3.2vw, .78rem) !important;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-dia {
-    flex: 0 1 auto;
-    font-weight: 800 !important;
-    color: #3d342c !important;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-fecha-hora {
-    flex: 0 1 auto;
-    margin-left: auto;
-    text-align: right;
-    font-weight: 700 !important;
-    color: #5a4e42 !important;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* B. Tres cards hermanas: misma caja y tipografÃ­a */
-  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
-    height: 82px !important;
-    min-height: 82px !important;
-    max-height: 82px !important;
-    display: flex !important;
-    align-items: stretch !important;
-    align-self: stretch !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .mensajitos-wrap,
-  .play-v3:has(.game-shell) .game-left .obj-buzon,
-  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-proximo,
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
-    height: 100% !important;
-    min-height: 100% !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: .1rem !important;
-    padding: .28rem .24rem !important;
-    box-sizing: border-box !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .game-left-tile-label,
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
-  .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
-    font-size: .66rem !important;
-    line-height: 1.08 !important;
-    letter-spacing: .075em !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
-    font-size: .5rem !important;
-    font-weight: 600 !important;
-    line-height: 1 !important;
-    letter-spacing: .03em !important;
-    color: #9a8572 !important;
-    margin: 0 !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview {
-    flex: 0 0 24px !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    margin: 0 !important;
-  }
-
   /* C. Ficha vecino mÃ³vil: mÃ¡s limpia y legible */
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha {
     background-color: #fdf8f2 !important;
@@ -2180,173 +2005,8 @@
   }
 }
 
-/* === Fix batch 12: cards grid + meta temporal agrupada === */
-@media (max-width: 768px) {
-  /* Meta temporal: bloque ÃƒÂºnico bajo el tÃƒÂ­tulo, alineado a la izquierda */
-  .play-v3:has(.game-shell) .top-meta-line {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    text-align: left !important;
-    white-space: normal !important;
-    line-height: 1.2 !important;
-    font-size: clamp(.68rem, 3.1vw, .76rem) !important;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-prim,
-  .play-v3:has(.game-shell) .top-meta-hora {
-    display: block;
-    text-align: left;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-prim {
-    font-weight: 800;
-    color: #3d342c;
-  }
-
-  .play-v3:has(.game-shell) .top-meta-hora {
-    margin-top: .06rem;
-    font-weight: 700;
-    color: #5a4e42;
-    font-variant-numeric: tabular-nums;
-  }
-
-  /* Tres cards: grid comÃƒÂºn, misma caja exterior por stretch de fila */
-  .play-v3:has(.game-shell) .game-left.zona-actividad {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    align-items: stretch !important;
-    gap: 6px !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .shell-grupo {
-    display: flex !important;
-    flex-direction: column !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    min-height: 0 !important;
-    height: auto !important;
-    max-height: none !important;
-    aspect-ratio: unset !important;
-    align-self: stretch !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon > .mensajitos-wrap,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen > .obj-vecinos-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes > .obj-proximo {
-    flex: 1 1 auto !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: .22rem .18rem !important;
-    gap: .06rem !important;
-    box-sizing: border-box !important;
-    transform: none !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-buzon,
-  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen,
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
-    width: 100% !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: .06rem !important;
-    transform: none !important;
-    box-sizing: border-box !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-proximo-tit,
-  .play-v3:has(.game-shell) .game-left .obj-proximo-body,
-  .play-v3:has(.game-shell) .game-left .obj-ver-planes,
-  .play-v3:has(.game-shell) .game-left .libreta-kicker,
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-stats {
-    display: none !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .game-left-tile-label,
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
-  .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
-    font-size: .66rem !important;
-    line-height: 1.08 !important;
-    letter-spacing: .075em !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
-    font-size: .48rem !important;
-    font-weight: 600 !important;
-    line-height: 1 !important;
-    color: #9a8572 !important;
-    margin: 0 !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview {
-    flex: 0 0 22px !important;
-    height: 22px !important;
-    min-height: 22px !important;
-    max-height: 22px !important;
-    gap: 2px !important;
-    margin: 0 !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview-cara,
-  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview-ini {
-    width: 18px !important;
-    height: 18px !important;
-    font-size: .46rem !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left .game-left-tile-ico,
-  .play-v3:has(.game-shell) .game-left .obj-buzon-ico-wrap,
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
-    flex: 0 0 24px !important;
-    height: 24px !important;
-    min-height: 24px !important;
-    margin: 0 !important;
-  }
-}
-
-
-/* === Fix batch 12b: anular alturas fijas batch 10/11, igualar fila grid === */
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
-    height: 100% !important;
-    min-height: 0 !important;
-    max-height: none !important;
-    align-self: stretch !important;
-  }
-
-  .play-v3:has(.game-shell) .game-left.zona-actividad {
-    align-items: stretch !important;
-  }
-}
-
-
 /* === Fix batch 13: altura cards + overlay desktop consulta === */
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
-  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
-    height: 88px !important;
-    min-height: 88px !important;
-    max-height: 88px !important;
-  }
-}
+/* batch 13 tile heights removed — DS inicio.css */
 
 
 
@@ -2386,6 +2046,10 @@
   .play-v3:has(.game-shell) .shell-grupo-parejas .zona-tit-parejas {
     margin: 0 0 .55rem !important;
     padding: 0 0 .38rem !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-parejas .obj-parejas-ver {
+    display: none !important;
   }
 
   .play-v3:has(.game-shell) .shell-grupo-parejas .obj-parejas-list {
@@ -3191,8 +2855,8 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   }
 
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha .ficha-animo-ico {
-    width: 34px !important;
-    height: 30px !important;
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha .ficha-rasgos {
@@ -3672,4 +3336,73 @@ html:has(body.play-v3.play-v3--scroll-lock) {
 @media (prefers-reduced-motion: reduce) {
   .encursos-movil .enc-mov-live,
   .encursos-movil .enc-mov-punto { animation: none !important; }
+}
+
+/* === Fix regresion desktop: móvil mapa + tiles canónicos === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-left .obj-buzon-flecha,
+  .play-v3:has(.game-shell) .game-left .obj-planes-prox-block,
+  .play-v3:has(.game-shell) .game-left .obj-proximo-tit,
+  .play-v3:has(.game-shell) .game-left .obj-proximo-body,
+  .play-v3:has(.game-shell) .game-left .obj-curso-nav {
+    display: none !important;
+  }
+
+  /* Capas/modales del mapa fuera del flujo (evita hueco blanco bajo el mapa) */
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .capa,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .capa.ds-modal-sheet,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .tut-intro,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .tut-finale,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .vida-derrota {
+    position: absolute !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .play-root {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .board-scroll {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
+
+/* === Fix regresion desktop: movil mapa + tiles canonicos === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-left .obj-buzon-flecha,
+  .play-v3:has(.game-shell) .game-left .obj-planes-prox-block,
+  .play-v3:has(.game-shell) .game-left .obj-proximo-tit,
+  .play-v3:has(.game-shell) .game-left .obj-proximo-body,
+  .play-v3:has(.game-shell) .game-left .obj-curso-nav {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-head {
+    display: contents !important;
+  }
+
+  /* capa-buzon en relative (mensajitos DS) estiraba play-root ~279px */
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .capa,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .capa-buzon,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .capa.ds-modal-sheet,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .tut-intro,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .tut-finale,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .vida-derrota {
+    position: absolute !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .play-root {
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .play-root .board-scroll {
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
 }

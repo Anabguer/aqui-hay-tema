@@ -214,7 +214,7 @@
   .play-v3:has(.game-shell) .zona-actividad .obj-buzon,
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
     margin: 0;
-    min-height: 96px;
+    min-height: 86px;
     padding: 10px 8px 9px;
     background:
       radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
@@ -224,29 +224,30 @@
     box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10);
   }
 
-  /* los tres items de grid comparten altura exacta */
-  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon,
-  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-resumen,
-  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-planes {
-    min-height: 96px;
-  }
-
-  /* cero offsets heredados dentro de la familia */
-  .play-v3:has(.game-shell) .zona-actividad .mensajitos-wrap,
-  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-planes .obj-proximo {
-    margin: 0;
-    padding: 0;
-  }
-
-  /* costura interior dibujada (misma familia que Nuevo Plan) */
+  /* tres piezas desiguales — alturas y giros artesanales, sin costura interior */
   .play-v3:has(.game-shell) .zona-actividad .obj-buzon::before,
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen::before {
-    content: "";
-    position: absolute;
-    inset: 4px;
-    border: 1.5px dashed rgba(107, 81, 56, .38);
-    border-radius: 14px 10px 16px 12px / 10px 16px 12px 14px;
-    pointer-events: none;
+    content: none;
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .game-main .game-left.zona-actividad {
+    align-items: end;
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon {
+    align-self: end;
+    transform: translateY(3px) rotate(-0.7deg);
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-resumen {
+    align-self: end;
+    transform: translateY(-2px) rotate(0.55deg);
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-planes {
+    align-self: end;
+    transform: translateY(-4px) rotate(-0.35deg);
   }
 
   .play-v3:has(.game-shell) .zona-actividad .obj-buzon {
@@ -255,18 +256,19 @@
 
   /* el wrap estira a la altura comun de la familia */
   .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon .mensajitos-wrap {
-    min-height: 96px;
+    min-height: 86px;
     display: flex;
   }
 
   .play-v3:has(.game-shell) .zona-actividad .mensajitos-wrap .obj-buzon {
-    min-height: 96px;
+    min-height: 86px;
     margin: 0;
     flex: 1;
     width: 100%;
   }
 
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
+    min-height: 98px;
     border-radius: 15px 21px 13px 21px / 21px 13px 21px 15px;
   }
 
@@ -371,7 +373,7 @@
     border: none;
     box-shadow: none;
     padding: 0;
-    min-height: 96px;
+    min-height: 0;
   }
 
   .play-v3:has(.game-shell) .obj-proximo-tit,
@@ -382,7 +384,7 @@
   }
 
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
-    min-height: 96px;
+    min-height: 108px;
     padding: 10px 8px 10px;
     background:
       linear-gradient(178deg, rgba(255, 255, 255, .30), rgba(255, 255, 255, 0) 48%),
