@@ -1,12 +1,12 @@
-/* ============================================================
-   AQUI HAY TEMA â€” DS Â· screens/inicio.css  (v2 â€” fidelidad a referencia)
-   Pantalla: INICIO (mÃ³vil) Â· Referencia AUTORITATIVA: DiseÃ±o_Ayuda/news/inicio-mobile.png
+﻿/* ============================================================
+   AQUI HAY TEMA Ã¢â‚¬â€ DS Ã‚Â· screens/inicio.css  (v2 Ã¢â‚¬â€ fidelidad a referencia)
+   Pantalla: INICIO (mÃƒÂ³vil) Ã‚Â· Referencia AUTORITATIVA: DiseÃƒÂ±o_Ayuda/news/inicio-mobile.png
    Decisiones: D2 (feed) + D9 (candado cerrado-ahora) + EV (banner solo captura)
-   GEOMETRÃA ARTESANAL: radios asimÃ©tricos, tilts â‰¤0.8Â°, dobles lÃ­neas,
-   costuras â€” papelerÃ­a hecha a mano, nunca rectÃ¡ngulos web perfectos.
-   FASE 3 Â· pasada 2 Â· solo mÃ³vil (max-width:768px). Desktop intacto.
-   Contrato: sin !important Â· sin anillas Â· data-* intactos Â·
-   cargado DESPUÃ‰S de play-v3-responsive.css.
+   GEOMETRÃƒÂA ARTESANAL: radios asimÃƒÂ©tricos, tilts Ã¢â€°Â¤0.8Ã‚Â°, dobles lÃƒÂ­neas,
+   costuras Ã¢â‚¬â€ papelerÃƒÂ­a hecha a mano, nunca rectÃƒÂ¡ngulos web perfectos.
+   FASE 3 Ã‚Â· pasada 2 Ã‚Â· solo mÃƒÂ³vil (max-width:768px). Desktop intacto.
+   Contrato: sin !important Ã‚Â· sin anillas Ã‚Â· data-* intactos Ã‚Â·
+   cargado DESPUÃƒâ€°S de play-v3-responsive.css.
    ============================================================ */
 
 @media (max-width: 768px) {
@@ -49,7 +49,7 @@
   .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { grid-column: 1; order: 4; }
   .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { grid-column: 2; order: 4; }
 
-  /* Superficies DS del feed: ningÃºn border-image/mask legacy */
+  /* Superficies DS del feed: ningÃƒÂºn border-image/mask legacy */
   .play-v3:has(.game-shell) .obj-cotilleo.obj-cotilleo-par,
   .play-v3:has(.game-shell) .encursos-movil .enc-mov-card,
   .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-card,
@@ -61,7 +61,7 @@
     mask-image: none;
   }
 
-  /* ---------- 2. Cabecera (ref: marca + Â¿CÃ³mo va esto? + corazÃ³n / dÃ­aÂ·hora + pasar) ---------- */
+  /* ---------- 2. Cabecera (ref: marca + Ã‚Â¿CÃƒÂ³mo va esto? + corazÃƒÂ³n / dÃƒÂ­aÃ‚Â·hora + pasar) ---------- */
 
   .play-v3:has(.game-shell) .game-top {
     display: grid;
@@ -210,7 +210,7 @@
     padding: 0 13px;
   }
 
-  /* Familia de marco comÃºn: borde tinta 2px + costura interior + radios artesanales */
+  /* Familia de marco comÃƒÂºn: borde tinta 2px + costura interior + radios artesanales */
   .play-v3:has(.game-shell) .zona-actividad .obj-buzon,
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
     margin: 0;
@@ -224,7 +224,7 @@
     box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10);
   }
 
-  /* tres piezas desiguales — alturas y giros artesanales, sin costura interior */
+  /* tres piezas desiguales â€” alturas y giros artesanales, sin costura interior */
   .play-v3:has(.game-shell) .zona-actividad .obj-buzon::before,
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen::before {
     content: none;
@@ -331,9 +331,9 @@
     visibility: hidden;
   }
 
-  /* etiqueta PLAN (sin NUEVO) */
+  /* etiqueta + NUEVO PLAN (ref inicio-mobile.png) */
   .play-v3:has(.game-shell) .obj-nuevo-plan-txt::before {
-    content: "PLAN";
+    content: "+ NUEVO PLAN";
     visibility: visible;
     font-family: var(--ds-font-hand);
     font-weight: 700;
@@ -451,7 +451,7 @@
   }
 
   .play-v3:has(.game-shell) .mapa-zona--cerrada-ahora::after {
-    content: "🔒";
+    content: "ðŸ”’";
     position: absolute;
     right: 5%;
     bottom: 5%;
@@ -612,9 +612,19 @@
     transform: rotate(-0.4deg) scale(.985);
   }
 
-  /* ---------- 7. Cabeceras de secciÃ³n (compactas, tipo referencia) ---------- */
+  /* ---------- 7. Cabeceras de secciÃƒÂ³n (compactas, tipo referencia) ---------- */
 
   .play-v3:has(.game-shell) .enc-mov-cab,
+  
+  .play-v3:has(.game-shell) .plan-seccion-ico,
+  .play-v3:has(.game-shell) .pp-mov-ico,
+  .play-v3:has(.game-shell) .enc-mov-ico {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex: 0 0 1.125rem;
+    color: var(--ds-ink-soft, #594839);
+  }
+
   .play-v3:has(.game-shell) .pp-mov-cab {
     display: flex;
     align-items: center;
@@ -643,7 +653,7 @@
 
   /* ---------- 8. Planes EN CURSO (carrusel compacto) ---------- */
 
-  /* los wrappers de secciÃ³n llegan desnudos: el papel lo ponen las tarjetas */
+  /* los wrappers de secciÃƒÂ³n llegan desnudos: el papel lo ponen las tarjetas */
   .play-v3:has(.game-shell) .game-right .encursos-movil,
   .play-v3:has(.game-shell) .game-right .proxplanes-movil {
     background: none;
@@ -754,7 +764,7 @@
     font-size: 1rem;
   }
 
-  /* ---------- 9. PrÃ³ximos planes (2 tarjetas punteadas compactas) ---------- */
+  /* ---------- 9. PrÃƒÂ³ximos planes (2 tarjetas punteadas compactas) ---------- */
 
   .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-track {
     display: grid;
@@ -858,7 +868,7 @@
   }
 
   .play-v3:has(.game-shell) .obj-misiones-papel-tit::before {
-    content: "📋";
+    content: "ðŸ“‹";
     font-size: .8125rem;
   }
 
@@ -919,7 +929,7 @@
     color: var(--ds-text-muted);
   }
 
-  /* ---------- 11. Parejas (compacto, corazones, vacÃ­o con voz) ---------- */
+  /* ---------- 11. Parejas (compacto, corazones, vacÃƒÂ­o con voz) ---------- */
 
   .play-v3:has(.game-shell) .shell-grupo-parejas {
     padding: 10px 13px 12px;
@@ -946,7 +956,7 @@
   }
 
   .play-v3:has(.game-shell) .zona-tit-parejas::before {
-    content: "♥";
+    content: "â™¥";
     color: var(--ds-pink-deep);
     font-size: 1rem;
   }
@@ -963,7 +973,7 @@
   }
 
   .play-v3:has(.game-shell) .obj-parejas-list p.muted::before {
-    content: "♥ ♥";
+    content: "â™¥ â™¥";
     display: block;
     font-size: 1.5rem;
     letter-spacing: 10px;
