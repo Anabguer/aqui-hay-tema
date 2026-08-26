@@ -18,7 +18,7 @@ if (is_file($ahtBusterFile)) {
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="aht-ui" content="v3"/>
-  <title>Aquï¿½ Hay Tema</title>
+  <title>Aquí Hay Tema</title>
   <link rel="icon" href="favicon.png" type="image/png" sizes="512x512"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -323,12 +323,12 @@ if (is_file($ahtBusterFile)) {
   <div class="game-shell">
     <header class="game-top">
       <div class="brand-col">
-        <h1 class="brand" aria-label="Aquï¿½ Hay Tema">
-          <span class="brand-text">AQUï¿½ HAY TEMA</span>
+        <h1 class="brand" aria-label="Aquí Hay Tema">
+          <span class="brand-text">AQUÍ HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
         <p class="top-meta-line" data-top-meta-mobile></p>
-        <button type="button" class="btn-guia" data-tut-reopen hidden>ï¿½Cï¿½mo va esto?</button>
+        <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
       </div>
       <div class="top-center">
         <div class="top-reloj">
@@ -883,7 +883,7 @@ if (is_file($ahtBusterFile)) {
         <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Prï¿½ximos planes programados">
                     <header class="pp-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PRï¿½XIMOS PLANES</h3>
+            <h3 class="pp-mov-tit">PRÓXIMOS PLANES</h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
             <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS ï¿½</button>
           </header>
@@ -892,7 +892,7 @@ if (is_file($ahtBusterFile)) {
         <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
                     <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLANES EN CURSO</h3>
+            <h3 class="enc-mov-tit">EN CURSO</h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
           </header>
           <div class="enc-mov-track" data-encursos-track></div>

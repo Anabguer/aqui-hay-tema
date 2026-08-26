@@ -5,28 +5,28 @@ declare(strict_types=1);
 
     <header class="game-top">
       <div class="brand-col">
-        <h1 class="brand" aria-label="Aqu� Hay Tema">
-          <span class="brand-text">AQU� HAY TEMA</span>
+        <h1 class="brand" aria-label="Aquí Hay Tema">
+          <span class="brand-text">AQUÍ HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
         <p class="top-meta-line" data-top-meta-mobile></p>
-        <button type="button" class="btn-guia" data-tut-reopen hidden>�C�mo va esto?</button>
+        <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
       </div>
       <div class="top-center">
         <div class="top-reloj">
           <div class="obj-dia" style="--rot:-2deg">
             <div class="obj-dia-placa">
-              <span class="obj-dia-num" data-dia-num>�</span>
+              <span class="obj-dia-num" data-dia-num>ï¿½</span>
             </div>
             <div class="obj-dia-cuerpo">
               <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
-              <span class="obj-dia-meta" data-dia-meta>�</span>
+              <span class="obj-dia-meta" data-dia-meta>ï¿½</span>
             </div>
             <span class="sr-only" data-fecha></span>
           </div>
           <div class="obj-hora" style="--rot:3deg" aria-label="Hora del pueblo">
             <span class="obj-hora-ico" aria-hidden="true"></span>
-            <span class="obj-hora-val" data-hora>�</span>
+            <span class="obj-hora-val" data-hora>ï¿½</span>
           </div>
           <span class="es-noche" data-es-noche hidden>
             <svg class="es-noche-luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -38,7 +38,7 @@ declare(strict_types=1);
           </button>
         </div>
       </div>
-      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para m�s informaci�n">
+      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para mï¿½s informaciï¿½n">
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <defs>
@@ -57,7 +57,7 @@ declare(strict_types=1);
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
       <div class="control-audio" aria-label="Controles de audio">
-        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar m�sica" title="Desactivar m�sica">
+        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar mï¿½sica" title="Desactivar mï¿½sica">
           <span class="control-musica-ico" aria-hidden="true">?</span>
         </button>
         <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
@@ -136,7 +136,7 @@ declare(strict_types=1);
           <div class="edificios-layer" data-edificios-layer aria-hidden="true"></div>
           <aside class="selector nota-mapa ds-modal-sheet">
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr�s">? Atr�s</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrï¿½s">? Atrï¿½s</button>
             <p class="libreta-kicker">Un vistazo al lugar</p>
             <h3 data-s-tit></h3>
             <p class="cotilleo" data-s-coti></p>
@@ -144,13 +144,13 @@ declare(strict_types=1);
           </aside>
           <aside class="quien nota-mapa ds-modal-sheet">
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr�s">? Atr�s</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrï¿½s">? Atrï¿½s</button>
             <header class="quien-bloque quien-bloque--lugar">
               <h3 class="quien-lugar-tit" data-q-tit></h3>
               <p class="quien-horario" data-q-horario hidden></p>
             </header>
             <section class="quien-bloque quien-bloque--presencia">
-              <p class="libreta-kicker quien-kicker">�Qui�n est�?</p>
+              <p class="libreta-kicker quien-kicker">ï¿½Quiï¿½n estï¿½?</p>
               <p class="quien-vacio" data-q-sum hidden></p>
               <div class="quien-list quien-residentes" data-q-list></div>
             </section>
@@ -168,16 +168,16 @@ declare(strict_types=1);
             </span>
           </span>
           <div class="dia">
-            <div class="dow" data-dow>�</div>
+            <div class="dow" data-dow>ï¿½</div>
             <div class="fecha" data-fecha></div>
-            <div class="hora" data-hora>�</div>
+            <div class="hora" data-hora>ï¿½</div>
           </div>
           <div class="tiempo-juego" aria-label="Avanzar el tiempo">
             <button type="button" class="tique-hora" data-horas="1" title="Avanzar una hora">+1 h</button>
-            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un d�a">+1 d�a</button>
+            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un dï¿½a">+1 dï¿½a</button>
           </div>
           <div class="hud-right">
-            <div class="dinero" data-dinero>�</div>
+            <div class="dinero" data-dinero>ï¿½</div>
             <button type="button" class="buzon" data-open="buzon" aria-label="Abrir mensajitos">
               <img src="assets/play-v3/hud/sobre.png" alt=""/>
               <span class="badge">0</span>
@@ -210,7 +210,7 @@ declare(strict_types=1);
           <p class="tut-cierre" data-tut-cierre hidden></p>
           <div class="tut-pasos" data-tut-pasos></div>
           <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>Atr�s</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atrï¿½s</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
         </div>
@@ -230,7 +230,7 @@ declare(strict_types=1);
         <div class="tut-papel vida-derrota-papel">
           <p class="vida-derrota-ico" aria-hidden="true">&#128148;</p>
           <h2 class="ds-modal-tit ds-modal-tit--ink">Se nos va de las manos</h2>
-          <p class="tut-texto">La vida del pueblo ha llegado a un punto cr�tico. Celestine no ha podido mantener el equilibrio.</p>
+          <p class="tut-texto">La vida del pueblo ha llegado a un punto crï¿½tico. Celestine no ha podido mantener el equilibrio.</p>
           <button type="button" class="cta" data-vida-derrota-ok>Entendido</button>
         </div>
       </aside>
@@ -277,7 +277,7 @@ declare(strict_types=1);
               <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#128197;</span>
               <h2 class="agenda-tit ds-modal-tit ds-modal-tit--brown">Planes</h2>
             </div>
-            <p class="ds-modal-sub agenda-sub">Lo que est� por venir.</p>
+            <p class="ds-modal-sub agenda-sub">Lo que estï¿½ por venir.</p>
           </div>
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
@@ -312,7 +312,7 @@ declare(strict_types=1);
               <div class="ficha-animo-pill" data-ficha-animo-pill>
                 <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                 <span class="ficha-animo-val" data-ficha-animo-text></span>
-                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="�Por qu� est� as�?">?</button>
+                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="ï¿½Por quï¿½ estï¿½ asï¿½?">?</button>
               </div>
             </div>
           </div>
@@ -334,11 +334,11 @@ declare(strict_types=1);
               <h4 class="ficha-seccion-tit">Relaciones</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-relaciones" data-ficha-relaciones></div>
-              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver m�s relaciones</button>
+              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver mï¿½s relaciones</button>
               </div>
             </section>
             <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">Pr�ximos planes</h4>
+              <h4 class="ficha-seccion-tit">Prï¿½ximos planes</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
@@ -358,7 +358,7 @@ declare(strict_types=1);
           </div>
         </div>
         <div class="ficha-rel-overlay" data-animo-overlay hidden>
-          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="�Por qu� est� as�?">
+          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="ï¿½Por quï¿½ estï¿½ asï¿½?">
             <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
             <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
           </div>
@@ -396,7 +396,7 @@ declare(strict_types=1);
               <h2 class="mis-tit ds-modal-tit ds-modal-tit--brown">Hoy en el pueblo</h2>
             </div>
           </div>
-          <p class="mis-sub mini" data-misiones-teaser>�</p>
+          <p class="mis-sub mini" data-misiones-teaser>ï¿½</p>
         </header>
         <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
       </aside>
@@ -405,17 +405,17 @@ declare(strict_types=1);
         <header class="vida-top">
           <p class="vida-modal-ico" aria-hidden="true">??</p>
           <h2 class="vida-tit ds-modal-tit ds-modal-tit--pink">Vida del pueblo</h2>
-          <p class="vida-valor" data-vida-modal-valor>� / 100</p>
+          <p class="vida-valor" data-vida-modal-valor>ï¿½ / 100</p>
           <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
           <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
         </header>
         <div class="vida-body capa-scroll">
           <div class="vida-copy">
-            <p>Esto no es decoraci�n, aunque lo parezca.</p>
-            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por alg�n motivo, ahora son responsabilidad tuya.</p>
-            <p>Haz que las cosas salgan bien y el coraz�n subir�. D�jalos a su suerte demasiado tiempo y� bueno, procura que esto no llegue a 0.</p>
+            <p>Esto no es decoraciï¿½n, aunque lo parezca.</p>
+            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algï¿½n motivo, ahora son responsabilidad tuya.</p>
+            <p>Haz que las cosas salgan bien y el corazï¿½n subirï¿½. Dï¿½jalos a su suerte demasiado tiempo yï¿½ bueno, procura que esto no llegue a 0.</p>
           </div>
-          <p class="vida-latido mini">�Llegas a 100? ?? Hay latido.<br>S�, conseguir que este pueblo funcione tiene premio. Incre�ble, pero cierto.</p>
+          <p class="vida-latido mini">ï¿½Llegas a 100? ?? Hay latido.<br>Sï¿½, conseguir que este pueblo funcione tiene premio. Increï¿½ble, pero cierto.</p>
         </div>
       </aside>
       <aside class="capa capa-buzon" aria-label="Mensajitos">
@@ -469,7 +469,7 @@ declare(strict_types=1);
               <h2 class="coti-tit ds-modal-tit ds-modal-tit--lavender">Cotilleos</h2>
               <span class="coti-badge" data-coti-count hidden></span>
             </div>
-            <p class="ds-modal-sub">Lo �ltimo que corre por el pueblo</p>
+            <p class="ds-modal-sub">Lo ï¿½ltimo que corre por el pueblo</p>
           </div>
           <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
         </header>
@@ -496,31 +496,31 @@ declare(strict_types=1);
             <div class="org-seccion-head org-seccion-head--center">
               <div class="org-modo-chips" data-org-modo-row>
                 <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
-                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompa�ado</button>
+                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompaï¿½ado</button>
               </div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
-              <h4 class="ficha-seccion-tit">�Qui�nes van?</h4>
+              <h4 class="ficha-seccion-tit">ï¿½Quiï¿½nes van?</h4>
               <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
               <div class="org-busca-wrap">
-                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino�" autocomplete="off" aria-label="Buscar vecino"/>
+                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecinoï¿½" autocomplete="off" aria-label="Buscar vecino"/>
                 <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
               </div>
               <div class="org-picker-strip capa-scroll" data-org-picker></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--que">
-            <h4 class="ficha-seccion-tit">�Qu� buscamos?</h4>
+            <h4 class="ficha-seccion-tit">ï¿½Quï¿½ buscamos?</h4>
             <div class="ficha-seccion-body">
               <div class="org-tipos" data-org-tipos></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--donde">
-            <h4 class="ficha-seccion-tit">�D�nde?</h4>
+            <h4 class="ficha-seccion-tit">ï¿½Dï¿½nde?</h4>
             <div class="ficha-seccion-body org-donde-fila">
               <div class="org-dd" data-org-dd-lugar></div>
               <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
@@ -528,7 +528,7 @@ declare(strict_types=1);
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--cuando">
-            <h4 class="ficha-seccion-tit">�Cu�ndo?</h4>
+            <h4 class="ficha-seccion-tit">ï¿½Cuï¿½ndo?</h4>
             <div class="ficha-seccion-body">
               <div class="org-cuando">
                 <div class="org-dd org-dd--dia" data-org-dd-dia></div>
@@ -562,19 +562,19 @@ declare(strict_types=1);
             <div class="obj-misiones-strip" data-misiones-strip></div>
           </div>
         </section>
-        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Pr�ximos planes programados">
+        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Prï¿½ximos planes programados">
                     <header class="pp-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PR�XIMOS PLANES</h3>
+            <h3 class="pp-mov-tit">PRÓXIMOS PLANES</h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
-            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS �</button>
+            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS ï¿½</button>
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
         </section>
         <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
                     <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLANES EN CURSO</h3>
+            <h3 class="enc-mov-tit">EN CURSO</h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
           </header>
           <div class="enc-mov-track" data-encursos-track></div>
@@ -584,10 +584,10 @@ declare(strict_types=1);
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
             <span class="obj-cotilleo-cuerpo">
-              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est�n sospechosamente tranquilos�</span>
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy estï¿½n sospechosamente tranquilosï¿½</span>
               <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
-            <span class="obj-cotilleo-flecha" aria-hidden="true">�</span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">ï¿½</span>
           </button>
         </section>
         <section class="shell-grupo shell-grupo-parejas" id="mob-parejas">

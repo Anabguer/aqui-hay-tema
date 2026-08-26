@@ -78,12 +78,51 @@
     width: 100% !important;
     min-height: 108px !important;
     padding: 10px 8px !important;
-    border: 2px solid var(--ds-ink, #3b3028) !important;
+    border: 2.5px dashed var(--ds-pink-deep, #c85b78) !important;
     background:
-      linear-gradient(178deg, rgba(255, 255, 255, .30), rgba(255, 255, 255, 0) 48%),
-      linear-gradient(180deg, #F2A3BC 0%, var(--ds-pink, #f3b1c3) 52%, #E2749A 100%) !important;
-    box-shadow: 2px 3px 0 rgba(51, 38, 30, .22), 0 6px 12px rgba(196, 43, 74, .28) !important;
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%) !important;
+    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12) !important;
     transform: rotate(-0.35deg) !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico,
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
+    color: var(--ds-pink-deep, #c85b78) !important;
+    text-shadow: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-top .btn-guia:not([hidden]) {
+    display: inline-flex !important;
+    grid-area: guia !important;
+    align-self: start !important;
+    justify-self: end !important;
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 2px 4px !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: none !important;
+    gap: 12px !important;
+    padding: 0 13px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par,
+  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas {
+    grid-column: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
@@ -117,4 +156,101 @@
   .play-v3:has(.game-shell) .obj-cotilleo-badge[hidden] {
     display: none !important;
   }
+}
+/* appended by piloto fix iter2 */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
+    height: auto !important;
+    flex: none !important;
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
+    background-image:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%) !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
+    flex: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+    font-size: 2.35rem !important;
+    line-height: .85 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right .ds-event { order: 0 !important; }
+  .play-v3:has(.game-shell) .game-right .encursos-movil.is-on { order: 1 !important; display: block !important; background: none !important; border: none !important; box-shadow: none !important; padding: 0 !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 2 !important; }
+  .play-v3:has(.game-shell) .game-right .proxplanes-movil.is-on { order: 3 !important; display: block !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { order: 4 !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { order: 5 !important; }
+
+  .play-v3.dev-validate:has(.game-shell) .game-top .btn-guia[data-tut-reopen] {
+    display: inline-flex !important;
+  }
+
+  .play-v3:has(.game-shell) .enc-mov-tit,
+  .play-v3:has(.game-shell) .pp-mov-tit,
+  .play-v3:has(.game-shell) .obj-misiones-papel-tit,
+  .play-v3:has(.game-shell) .zona-tit-parejas {
+    color: var(--ds-pink-deep, #c85b78) !important;
+    font-style: italic !important;
+  }
+}
+
+
+/* === Piloto v3.1 iter3: gana a responsive batch 17 en +PLAN === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
+    height: auto !important;
+    min-height: 108px !important;
+    max-height: none !important;
+    align-self: end !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-planes-lateral {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 108px !important;
+    align-items: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-planes-lateral > .obj-proximo,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-planes-prox-block {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 108px !important;
+    padding: 10px 8px !important;
+    margin: 0 !important;
+    border: 2.5px dashed var(--ds-pink-deep, #c85b78) !important;
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%) !important;
+    background-image:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%) !important;
+    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12) !important;
+    transform: rotate(-0.35deg) !important;
+    gap: 2px !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-nuevo-plan-txt::before {
+    color: var(--ds-pink-deep, #c85b78) !important;
+    text-shadow: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right > .shell-grupo,
+  .play-v3:has(.game-shell) .game-right > section {
+    order: var(--inicio-feed-order, 0) !important;
+  }
+  .play-v3:has(.game-shell) .game-right > .ds-event { --inicio-feed-order: 0; order: 0 !important; }
+  .play-v3:has(.game-shell) .game-right > .encursos-movil.is-on { order: 1 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-cotilleo-par { order: 2 !important; }
+  .play-v3:has(.game-shell) .game-right > .proxplanes-movil.is-on { order: 3 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-misiones-par { order: 4 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-parejas { order: 5 !important; }
 }

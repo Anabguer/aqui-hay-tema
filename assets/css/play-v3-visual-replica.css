@@ -354,7 +354,7 @@
     display: flex !important;
     align-items: center;
     gap: 8px;
-    min-height: 56px !important;
+    min-height: 72px !important;
     padding: 10px 12px !important;
     border: 2px solid var(--ds-lavender-deep, #7a6a9a) !important;
     border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px !important;
@@ -457,7 +457,7 @@
     display: flex !important;
     align-items: center;
     gap: 8px;
-    min-height: 56px !important;
+    min-height: 72px !important;
     padding: 10px 12px !important;
     border: 2px solid var(--ds-lavender-deep, #7a6a9a) !important;
     border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px !important;

@@ -23,31 +23,31 @@
 
   /* ---------- 1. Orden del feed (D2) ---------- */
 
+  /* Orden feed móvil (ref: inicio-mobile-393-v3.1-estados.png) */
   .play-v3:has(.game-shell) .game-right .ds-event            { order: 0; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 1; }
-  .play-v3:has(.game-shell) .game-right .encursos-movil           { order: 2; }
+  .play-v3:has(.game-shell) .game-right .encursos-movil           { order: 1; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 2; }
   .play-v3:has(.game-shell) .game-right .proxplanes-movil         { order: 3; }
   .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { order: 4; }
   .play-v3:has(.game-shell) .game-right .shell-grupo-parejas      { order: 5; }
 
   .play-v3:has(.game-shell) .game-main { gap: 12px; }
   .play-v3:has(.game-shell) .game-right {
-    display: grid;
-    grid-template-columns: 1.12fr 1fr;
+    display: flex;
+    flex-direction: column;
     align-items: stretch;
     padding: 0 13px;
     gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  .play-v3:has(.game-shell) .game-right .ds-event,
-  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par,
-  .play-v3:has(.game-shell) .game-right .encursos-movil,
-  .play-v3:has(.game-shell) .game-right .proxplanes-movil {
-    grid-column: 1 / -1;
+  .play-v3:has(.game-shell) .game-right > .shell-grupo,
+  .play-v3:has(.game-shell) .game-right > section {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
-
-  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { grid-column: 1; order: 4; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { grid-column: 2; order: 4; }
 
   /* Superficies DS del feed: ningÃƒÂºn border-image/mask legacy */
   .play-v3:has(.game-shell) .obj-cotilleo.obj-cotilleo-par,
@@ -106,19 +106,22 @@
   .play-v3:has(.game-shell) .btn-guia {
     grid-area: guia;
     align-self: start;
+    justify-self: end;
     white-space: nowrap;
-    min-height: 34px;
+    min-height: 0;
     margin-top: 2px;
-    padding: 3px 10px;
-    background: var(--ds-paper-card);
-    border: 1.5px solid var(--ds-ink-soft);
-    border-radius: 12px 9px 13px 10px / 10px 13px 9px 12px;
-    box-shadow: 1px 2px 0 rgba(51, 38, 30, .18);
+    padding: 2px 4px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
     font-family: var(--ds-font-hand);
-    font-weight: 600;
-    font-size: 1rem;
-    color: var(--ds-ink);
-    transform: rotate(-1.6deg);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ds-pink-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transform: rotate(-1deg);
   }
 
   .play-v3:has(.game-shell) .top-meta-line { display: contents; }
@@ -342,8 +345,8 @@
     margin-right: -.7px;
     text-transform: uppercase;
     line-height: 1.1;
-    color: #fff;
-    text-shadow: 0 1.5px 0 rgba(146, 39, 73, .40);
+    color: var(--ds-pink-deep);
+    text-shadow: none;
   }
 
   /* VECINOS: retratos + contador coral */
@@ -383,57 +386,45 @@
     display: none;
   }
 
+  /* + PLAN: borde rosa discontinuo (ref piloto v3.1) */
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
     min-height: 108px;
     padding: 10px 8px 10px;
     background:
-      linear-gradient(178deg, rgba(255, 255, 255, .30), rgba(255, 255, 255, 0) 48%),
-      linear-gradient(180deg, #F2A3BC 0%, var(--ds-pink) 52%, #E2749A 100%);
-    border: 2px solid var(--ds-ink);
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%);
+    border: 2.5px dashed var(--ds-pink-deep);
     border-image: none;
     -webkit-mask-image: none;
     mask-image: none;
     -webkit-clip-path: none;
     clip-path: none;
-    border-radius: 24px 16px 26px 18px / 16px 26px 18px 24px;
-    box-shadow: 2px 3px 0 rgba(51, 38, 30, .22), 0 6px 12px rgba(196, 43, 74, .28), inset 0 -3px 0 rgba(146, 39, 73, .30);
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px;
+    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12);
     position: relative;
     justify-content: center;
     gap: 2px;
+    transform: rotate(-0.35deg);
   }
 
-  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta::before {
-    content: "";
-    position: absolute;
-    inset: 5px;
-    border: 2px dashed rgba(255, 255, 255, .85);
-    border-radius: 18px 12px 20px 14px / 12px 20px 14px 18px;
-    pointer-events: none;
-  }
-
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta::before,
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta::after {
-    content: "";
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    width: 18px;
-    height: 18px;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 15 L11 7 M9 21 L19 9 M16 22 L22 16' fill='none' stroke='%23ffffff' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain;
-    opacity: .95;
+    content: none;
+    display: none;
   }
 
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
-    font-size: 2.1rem;
-    line-height: .9;
+    font-size: 2.35rem;
+    line-height: .85;
     font-family: var(--ds-font-hand);
     font-weight: 700;
-    color: #fff;
-    text-shadow: 0 2px 0 rgba(146, 39, 73, .40);
+    color: var(--ds-pink-deep);
+    text-shadow: none;
   }
 
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
-    color: #fff;
-    text-shadow: 0 1.5px 0 rgba(146, 39, 73, .40);
+    color: var(--ds-pink-deep);
+    text-shadow: none;
     padding: 0 4px;
   }
 
@@ -634,13 +625,16 @@
   }
 
   .play-v3:has(.game-shell) .enc-mov-tit,
-  .play-v3:has(.game-shell) .pp-mov-tit {
+  .play-v3:has(.game-shell) .pp-mov-tit,
+  .play-v3:has(.game-shell) .obj-misiones-papel-tit,
+  .play-v3:has(.game-shell) .zona-tit-parejas {
     font-family: var(--ds-font-hand);
     font-weight: 700;
     font-size: 1.1875rem;
+    font-style: italic;
     letter-spacing: .6px;
     text-transform: uppercase;
-    color: var(--ds-ink-soft);
+    color: var(--ds-pink-deep);
   }
 
   .play-v3:has(.game-shell) .enc-mov-live {
