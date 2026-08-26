@@ -129,7 +129,8 @@ final class BuzonHandler
             (string) ($body['mensaje_id'] ?? ''),
             (string) ($body['accion'] ?? ''),
             $ctx->root,
-            $ctx->logger
+            $ctx->logger,
+            is_array($body) ? $body : []
         );
         if ($r['ok'] ?? false) {
             savePartidaRapida($ctx, $partida);

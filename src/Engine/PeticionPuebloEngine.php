@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace AquiHayTema\Engine;
 
+use AquiHayTema\Engine\Voluntad\VoluntadEvaluator;
+
 /**
  * Peticiones de habitantes (B4). Encargos personales realizables.
  * Reloj REAL. Una pendiente por residente. Complementa B3, no lo duplica.
@@ -14,6 +16,11 @@ final class PeticionPuebloEngine
     public const EST_RESUELTA = 'resuelta';
     public const EST_CADUCADA = 'caducada';
     public const EST_IGNORADA = 'ignorada';
+
+    /** Máximo de personas reales que Celestine evalúa en conocer_a_alguien (UX: pocas opciones). */
+    public const MAX_OPCIONES_SELECTOR = 3;
+    /** Lugar canónico para la presentación que Celestine organiza tras la elección. */
+    public const LUGAR_PRESENTACION = 'lug_cafeteria';
 
     public static function ensure(array &$partida): void
     {
@@ -645,6 +652,264 @@ final class PeticionPuebloEngine
     }
 
     /**
+     * Residentes presentes a quienes el peticionario AÚN puede ser presentado
+     * según el contrato canónico PRESENTAR (conocimiento, gates, parentesco).
+     * Excluye al peticionario. Orden estable (orden del save). Sin duplicados.
+     *
+     * @param array<string, mixed> $cal
+     * @return list<string>
+     */
+    public static function presentablesParaConocer(array $partida, string $rid, array $cal = []): array
+    {
+        if (!isset($partida['residentes'][$rid])) {
+            return [];
+        }
+        $out = [];
+        foreach (self::residentes($partida) as $otro) {
+            if ($otro === $rid) {
+                continue;
+            }
+            if (!PropuestaNivel::permite($partida, $rid, $otro, PropuestaNivel::PRESENTAR, $cal)) {
+                continue;
+            }
+            if (!in_array($otro, $out, true)) {
+                $out[] = $otro;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Snapshot del selector de Celestine para conocer_a_alguien: SOLO información
+     * que Celestine conoce legítimamente (nombre público + como mucho UNA pista
+     * ya revelada por Discovery). Muestreo determinista tipo stride.
+     *
+     * @param array<string, mixed> $cal
+     * @return list<array{personaje_id: string, nombre: string, pista: ?string}>
+     */
+    public static function opcionesConocer(array $partida, string $rid, array $cal = []): array
+    {
+        return self::snapshotOpcionesConocer($partida, $rid, self::presentablesParaConocer($partida, $rid, $cal));
+    }
+
+    /**
+     * @param list<string> $ids
+     * @return list<array{personaje_id: string, nombre: string, pista: ?string}>
+     */
+    private static function snapshotOpcionesConocer(array $partida, string $rid, array $ids): array
+    {
+        unset($rid);
+        $n = count($ids);
+        if ($n === 0) {
+            return [];
+        }
+        $k = min(self::MAX_OPCIONES_SELECTOR, $n);
+        $sel = [];
+        if ($k >= $n) {
+            $sel = $ids;
+        } else {
+            for ($j = 0; $j < $k; $j++) {
+                $idx = (int) round($j * ($n - 1) / ($k - 1));
+                if (!in_array($ids[$idx], $sel, true)) {
+                    $sel[] = $ids[$idx];
+                }
+            }
+        }
+        $store = new CatalogStore(dirname(__DIR__, 2));
+        $out = [];
+        foreach ($sel as $pid) {
+            $out[] = self::opcionDto($partida, $pid, $store);
+        }
+        return $out;
+    }
+
+    /**
+     * @return array{personaje_id: string, nombre: string, pista: ?string}
+     */
+    private static function opcionDto(array $partida, string $pid, CatalogStore $store): array
+    {
+        $o = [
+            'personaje_id' => $pid,
+            'nombre' => IdentidadPublica::nombre($partida, $pid),
+            'pista' => null,
+        ];
+        $perfil = PerfilPartida::de($partida, $pid);
+        $hobbies = is_array($perfil['hobbies'] ?? null) ? $perfil['hobbies'] : [];
+        foreach ($hobbies as $h) {
+            $h = (string) $h;
+            if ($h === '') {
+                continue;
+            }
+            if (DiscoveryReveal::jugadorSabeHobby($partida, $pid, $h)) {
+                $o['pista'] = HobbyAccionable::pista($h, $store)
+                    ?: ('Le gusta ' . EtiquetaFicha::hobby($h, $store) . '.');
+                break;
+            }
+        }
+        return $o;
+    }
+
+    /**
+     * @param list<array{personaje_id: string, nombre: string, pista: ?string}> $opciones
+     */
+    private static function adjuntarSelector(array &$partida, string $buzonId, array $opciones): void
+    {
+        foreach ($partida['buzon'] as &$m) {
+            if (!is_array($m) || (string) ($m['id'] ?? '') !== $buzonId) {
+                continue;
+            }
+            $m['acciones'] = [MensajitoAcciones::ELEGIR_PERSONA];
+            $m['estado_decision'] = BuzonEngine::DECISION_PENDIENTE;
+            $m['selector_opciones'] = $opciones;
+            $m['selector_titulo'] = '¿A quién presentas?';
+            $m['selector_estado'] = 'pendiente';
+            break;
+        }
+        unset($m);
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    public static function nacerConocer(array &$partida, string $rid, array $cal = [], ?RngService $rng = null, ?GameLogger $logger = null): ?array
+    {
+        if (!self::activa($partida)) {
+            return null;
+        }
+        self::ensure($partida);
+        if (!isset($partida['residentes'][$rid]) || self::pendienteDe($partida, $rid)) {
+            return null;
+        }
+        $pl = PeticionPlantillas::porId('conocer_a_alguien');
+        if ($pl === null) {
+            return null;
+        }
+        if ($rng === null) {
+            $rng = RngService::fromPartida($partida);
+        }
+        $pick = [
+            'residente_id' => $rid,
+            'plantilla' => $pl,
+            'params' => [],
+            'prioridad' => (int) ($pl['prioridad'] ?? 0),
+        ];
+        return self::nacerDesde($partida, $pick, $cal, $rng, $logger);
+    }
+
+    /**
+     * Celestine elige persona y dispara el flujo canónico PRESENTAR.
+     *
+     * @param array<string, mixed> $payload
+     * @return array<string, mixed>
+     */
+    public static function elegirCandidato(
+        array &$partida,
+        string $mensajeId,
+        string $personajeId,
+        array $payload = [],
+        ?VoluntadEvaluator $voluntad = null,
+        ?GameLogger $logger = null
+    ): array {
+        unset($payload);
+        $mensaje = null;
+        foreach ($partida['buzon'] ?? [] as $m) {
+            if (is_array($m) && (string) ($m['id'] ?? '') === $mensajeId) {
+                $mensaje = $m;
+                break;
+            }
+        }
+        if ($mensaje === null) {
+            return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
+        }
+        $petIdx = null;
+        $pid = (string) ($mensaje['peticion_id'] ?? '');
+        foreach ($partida['peticiones'] ?? [] as $i => $p) {
+            if ((string) ($p['id'] ?? '') === $pid) {
+                $petIdx = $i;
+                break;
+            }
+        }
+        if ($petIdx === null) {
+            return ['ok' => false, 'error' => 'peticion_no_encontrada'];
+        }
+        $pet = $partida['peticiones'][$petIdx];
+        if (empty($pet['schema_b4']) || (string) ($pet['plantilla_id'] ?? '') !== 'conocer_a_alguien') {
+            return ['ok' => false, 'error' => 'plantilla_sin_selector'];
+        }
+        if ((string) ($pet['estado'] ?? '') !== self::EST_ABIERTA) {
+            return ['ok' => false, 'error' => 'peticion_cerrada', 'estado' => (string) $pet['estado']];
+        }
+        if (!empty($pet['candidato_elegido'])) {
+            return [
+                'ok' => true,
+                'ya_elegido' => true,
+                'peticion_id' => $pid,
+                'candidato_elegido' => (string) $pet['candidato_elegido'],
+                'mensaje_ui' => 'Ya había elegido a alguien para esta presentación.',
+            ];
+        }
+        $opciones = is_array($pet['params']['opciones'] ?? null) ? $pet['params']['opciones'] : [];
+        if ($opciones === []) {
+            return ['ok' => false, 'error' => 'sin_opciones_legacy'];
+        }
+        $idsSnapshot = [];
+        foreach ($opciones as $o) {
+            if (is_array($o) && (string) ($o['personaje_id'] ?? '') !== '') {
+                $idsSnapshot[] = (string) $o['personaje_id'];
+            }
+        }
+        if (!in_array($personajeId, $idsSnapshot, true)) {
+            return ['ok' => false, 'error' => 'candidato_fuera_snapshot', 'snapshot' => $idsSnapshot];
+        }
+        $cal = CalibracionConfig::load(dirname(__DIR__, 2));
+        $rid = (string) ($pet['residente_id'] ?? '');
+        if ($personajeId === $rid
+            || !isset($partida['residentes'][$personajeId])
+            || ($partida['residentes'][$personajeId]['presencia'] ?? '') !== 'residente'
+            || !PropuestaNivel::permite($partida, $rid, $personajeId, PropuestaNivel::PRESENTAR, $cal)
+        ) {
+            return ['ok' => false, 'error' => 'candidato_no_disponible'];
+        }
+        $diaAhora = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $horaAhora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $slot = $diaAhora * 24 + $horaAhora + 1;
+        $partida['peticiones'][$petIdx]['candidato_elegido'] = $personajeId;
+        $partida['peticiones'][$petIdx]['selector'] = [
+            'via' => 'celestine',
+            'elegido_dia' => $diaAhora,
+            'elegido_hora' => $horaAhora,
+            'opciones_ids' => $idsSnapshot,
+        ];
+        \aht_log_optional($logger, $partida, 'peticion_elegir_candidato', [
+            'peticion_id' => $pid,
+            'peticionario' => $rid,
+            'candidato' => $personajeId,
+            'opciones_snapshot' => $idsSnapshot,
+        ]);
+        $r = PropuestaEncuentroEngine::proponer(
+            $partida,
+            [$rid, $personajeId],
+            intdiv($slot, 24),
+            $slot % 24,
+            PropuestaNivel::PRESENTAR,
+            self::LUGAR_PRESENTACION,
+            null,
+            $voluntad,
+            $logger
+        );
+        return [
+            'ok' => true,
+            'ya_elegido' => false,
+            'peticion_id' => $pid,
+            'candidato_elegido' => $personajeId,
+            'propuesta_estado' => $r['propuesta']['estado'] ?? null,
+            'programado' => !empty($r['programado']),
+            'rechazo_clase' => $r['rechazo_clase'] ?? null,
+            'mensaje_ui' => $r['mensaje_ui'] ?? null,
+        ];
+    }
+
+    /**
      * @param array<string, mixed> $pick
      * @param array<string, mixed> $cal
      * @return array<string, mixed>|null
@@ -657,7 +922,17 @@ final class PeticionPuebloEngine
         if ($rid === '' || $pl === []) {
             return null;
         }
-        if (isset($params['lugar_id']) && count(self::candidatosDe($partida, $rid, $pl, $cal)) > 1) {
+        if ((string) ($pl['id'] ?? '') === 'conocer_a_alguien') {
+            $presentables = self::presentablesParaConocer($partida, $rid, $cal);
+            if ($presentables === []) {
+                return null;
+            }
+            if (count($presentables) === 1) {
+                $params = ['otro' => $presentables[0]];
+            } else {
+                $params = ['opciones' => self::snapshotOpcionesConocer($partida, $rid, $presentables)];
+            }
+        } elseif (isset($params['lugar_id']) && count(self::candidatosDe($partida, $rid, $pl, $cal)) > 1) {
             $opts = self::candidatosDe($partida, $rid, $pl, $cal);
             $params = $opts[$rng->nextInt(0, count($opts) - 1)];
         } elseif (isset($params['otro']) && count(self::candidatosDe($partida, $rid, $pl, $cal)) > 1) {
@@ -685,6 +960,10 @@ final class PeticionPuebloEngine
         ], $logger);
         if (empty($r['ok'])) {
             return null;
+        }
+        $bid = (string) ($r['peticion']['buzon_id'] ?? '');
+        if (isset($params['opciones']) && is_array($params['opciones']) && $params['opciones'] !== [] && $bid !== '') {
+            self::adjuntarSelector($partida, $bid, $params['opciones']);
         }
         $partida['peticiones_pueblo']['historial_plantillas'][] = (string) ($pl['id'] ?? '');
         if (count($partida['peticiones_pueblo']['historial_plantillas']) > 24) {

@@ -13,6 +13,7 @@ final class MensajitoAcciones
     public const RECHAZAR_CANDIDATO = 'rechazar_candidato';
     public const DEJAR_MARCHAR = 'dejar_marchar';
     public const PEDIR_QUEDARSE = 'pedir_quedarse';
+    public const ELEGIR_PERSONA = 'elegir_persona';
 
     /** @var array<string, array{id: string, etiqueta: string, estilo: string, api: string}> */
     private const DEFS = [
@@ -39,6 +40,12 @@ final class MensajitoAcciones
             'etiqueta' => 'Pedirle que se quede',
             'estilo' => 'primario',
             'api' => 'marcha.quedarse',
+        ],
+        self::ELEGIR_PERSONA => [
+            'id' => self::ELEGIR_PERSONA,
+            'etiqueta' => 'Elegir persona',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
         ],
     ];
 
@@ -82,7 +89,9 @@ final class MensajitoAcciones
 
     /**
      * Resuelve semánticamente una acción sobre un mensaje del buzón.
+     * $payload lleva datos estructurados extra (p. ej. personaje_id en elegir_persona).
      *
+     * @param array<string, mixed> $payload
      * @return array<string, mixed>
      */
     public static function resolver(
@@ -90,7 +99,8 @@ final class MensajitoAcciones
         string $mensajeId,
         string $accionId,
         string $root,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        array $payload = []
     ): array {
         $mensaje = BuzonEngine::buscar($partida, $mensajeId);
         if ($mensaje === null) {
@@ -134,6 +144,16 @@ final class MensajitoAcciones
                     $partida,
                     $root,
                     $mensajeId,
+                    $logger
+                );
+                break;
+            case self::ELEGIR_PERSONA:
+                $r = PeticionPuebloEngine::elegirCandidato(
+                    $partida,
+                    $mensajeId,
+                    (string) ($payload['personaje_id'] ?? ''),
+                    $payload,
+                    null,
                     $logger
                 );
                 break;

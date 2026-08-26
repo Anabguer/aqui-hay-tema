@@ -943,6 +943,9 @@
 
   function mensajitoRequiereAccion(m) {
     if (!m || typeof m !== 'object') return false;
+    if (m.requiere_decision === true) return true;
+    if (Array.isArray(m.acciones_ui) && m.acciones_ui.length > 0) return true;
+    if (Array.isArray(m.selector_opciones) && m.selector_opciones.length && m.selector_estado === 'pendiente') return true;
     if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') return true;
     if ((m.clasificacion || '') === 'peticion' && m.peticion_id && (m.estado || '') === 'pendiente') return true;
     return false;
@@ -1040,7 +1043,72 @@
   }
 
   function mensajitoEstaLeido(m) {
+    if (!m || typeof m !== 'object') return true;
+    if (typeof m.leido === 'boolean') return m.leido;
     return (m.estado || '') !== 'pendiente';
+  }
+
+  function htmlAccionesMensajito(m) {
+    if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
+        m.selector_estado === 'pendiente' &&
+        (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
+      const optsHtml = m.selector_opciones.map(function (o) {
+        if (!o || !o.personaje_id) return '';
+        const pista = o.pista ? '<span class="msg-opcion-pista">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="carta-cta carta-cta--suave msg-opcion" data-elegir-persona="' + esc(o.personaje_id) + '">' +
+          '<span class="msg-opcion-nom">' + esc(o.nombre || '') + '</span>' + pista + '</button>';
+      }).join('');
+      return '<div class="acciones-msg msg-opciones">' +
+        '<span class="msg-opciones-tit">' + esc(m.selector_titulo || '\u00bfA qui\u00e9n presentas?') + '</span>' +
+        optsHtml + '</div>';
+    }
+    const acciones = Array.isArray(m.acciones_ui) ? m.acciones_ui : [];
+    if (!acciones.length) return '';
+    return '<div class="acciones-msg">' + acciones.map(function (a) {
+      const suave = (a.estilo || '') === 'suave';
+      const cls = suave ? 'carta-cta carta-cta--suave' : 'carta-cta carta-cta--abrir';
+      return '<button type="button" class="' + cls + '" data-accion-id="' + esc(a.id || '') + '">' +
+        esc(a.etiqueta || a.id || '') + '</button>';
+    }).join('') + '</div>';
+  }
+
+  async function resolverAccionMensajito(m, accionId, extra) {
+    if (!m || !m.id || !accionId) return false;
+    const payload = { mensaje_id: m.id, accion: accionId };
+    if (extra && typeof extra === 'object') Object.assign(payload, extra);
+    const r = await api('buzon.resolver', payload);
+    if (!r.ok) {
+      toast(r.mensaje_ui || r.error || 'No se pudo completar la acci\u00f3n.');
+      return false;
+    }
+    if (r.mensaje_ui) toast(r.mensaje_ui);
+    return true;
+  }
+
+  function wireAccionesMensajito(art, m) {
+    art.querySelectorAll('[data-accion-id]').forEach(function (btn) {
+      btn.addEventListener('click', async function (ev) {
+        ev.stopPropagation();
+        const accionId = btn.getAttribute('data-accion-id');
+        if (!accionId || btn.disabled) return;
+        btn.disabled = true;
+        const ok = await resolverAccionMensajito(m, accionId);
+        if (ok) await refresh();
+        else btn.disabled = false;
+      });
+    });
+    art.querySelectorAll('[data-elegir-persona]').forEach(function (btn) {
+      btn.addEventListener('click', async function (ev) {
+        ev.stopPropagation();
+        if (btn.disabled) return;
+        btn.disabled = true;
+        const ok = await resolverAccionMensajito(m, 'elegir_persona', {
+          personaje_id: btn.getAttribute('data-elegir-persona')
+        });
+        if (ok) await refresh();
+        else btn.disabled = false;
+      });
+    });
   }
 
   async function toggleMensajitoLeido(m, leido) {
@@ -3886,12 +3954,10 @@ function hobbyIconKey(id, texto) {
       const flagHtml = !leido
         ? '<span class="carta-flag carta-flag--nuevo" aria-hidden="true">Nuevo</span>'
         : '<span class="carta-flag carta-flag--visto"><span class="carta-flag-ico" aria-hidden="true">\u2606</span><span>Visto</span></span>';
+      const accionesDecision = htmlAccionesMensajito(m);
       let accionesHtml = '';
-      if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') {
-        accionesHtml = '<div class="acciones-msg">' +
-          '<button type="button" class="carta-cta carta-cta--abrir" data-accion="aceptar">Abrir</button>' +
-          '<button type="button" class="carta-cta carta-cta--suave" data-accion="rechazar">Ahora no</button>' +
-          '</div>';
+      if (accionesDecision) {
+        accionesHtml = accionesDecision;
       } else {
         const ctaLabel = leido ? 'Ver' : 'Abrir';
         const ctaClass = leido ? 'carta-cta carta-cta--ver' : 'carta-cta carta-cta--abrir';
@@ -3928,15 +3994,7 @@ function hobbyIconKey(id, texto) {
           await refresh();
         });
       });
-      art.querySelectorAll('[data-accion]').forEach(function (btn) {
-        btn.addEventListener('click', async function (ev) {
-          ev.stopPropagation();
-          const acc = btn.getAttribute('data-accion');
-          if (acc === 'aceptar') await api('llegada.aceptar', { mensaje_id: m.id });
-          else if (acc === 'rechazar') await api('llegada.rechazar', { mensaje_id: m.id });
-          await refresh();
-        });
-      });
+      wireAccionesMensajito(art, m);
       return art;
     }
 
