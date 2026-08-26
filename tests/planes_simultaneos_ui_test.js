@@ -53,14 +53,14 @@ ok(iNav > php.indexOf('obj-proximo-polaroid') && iNav < php.indexOf('data-proxim
 ok(php.includes('data-curso-prev') && php.includes('data-curso-next') && php.includes('data-curso-cont'),
   'play.php: nav con ‹ › y contador 1/N');
 
-/* --- 2b. play.php: bloque movil EN CURSO (encima de Cotilleos) --- */
+/* --- 2b. play.php: bloque movil EN CURSO (debajo de Cotilleos) --- */
 const iMov = php.indexOf('data-encursos-block');
 ok(iMov > -1, 'play.php: existe bloque movil data-encursos-block');
 ok(php.indexOf('data-encursos-block', iMov + 1) === -1, 'play.php: UN solo bloque movil');
 ok(php.includes('data-encursos-track') && php.includes('data-encursos-indice') && php.includes('enc-mov-cab'),
   'play.php: bloque movil con cabecera, track e indicador');
 const iCoti = php.indexOf('shell-grupo-cotilleo-par');
-ok(iMov < iCoti, 'play.php: carrusel movil ENCIMA de Cotilleos');
+ok(iCoti < iMov, 'play.php: Cotilleos encima del carrusel movil EN CURSO');
 
 /* --- 3. Frontend: seleccion estable por id, sin API en la navigation --- */
 ok(js.includes('var cursoSelId = null;'), 'js: seleccion de curso estable por id');

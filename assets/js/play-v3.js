@@ -1609,7 +1609,14 @@
     if (!block) return;
     const track = block.querySelector('[data-proxplanes-track]');
     if (!track) return;
-    const lista = proximosPlanesFuturos(cacheInsp, estado).slice(0, 6);
+    const cntEl = block.querySelector('[data-proxplanes-count]');
+    const listaFull = proximosPlanesFuturos(cacheInsp, estado);
+    const total = listaFull.length;
+    if (cntEl) {
+      if (total > 0) { cntEl.textContent = ' ' + total; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
+    }
+    const lista = listaFull.slice(0, 6);
     if (!lista.length) { block.classList.remove('is-on'); track.innerHTML = ''; return; }
     block.classList.add('is-on');
     track.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardMovil(enc, estado); }).join('');
@@ -1621,16 +1628,21 @@
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
     let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<p class="enc-mov-hora"><span class="enc-mov-punto" aria-hidden="true"></span>' +
-      esc('AHORA · ' + (String(horaEnc(enc)).padStart(2, '0') + ':00')) + '</p>' +
+      '<div class="enc-mov-row">' +
       '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
-      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
-      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>';
+      '<div class="enc-mov-copy">' +
+      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
+      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
+      '<span class="enc-mov-estado">EN CURSO</span>' +
+      '</div>';
     if (hayInt) {
       html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-txt">Ver encuentro</span>' +
-        '<span class="enc-mov-cta-flecha" aria-hidden="true">›</span></button>' +
-        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
+        '<span class="enc-mov-cta-txt">Intervenir</span>' +
+        '<span class="enc-mov-cta-flecha" aria-hidden="true">\u203a</span></button>';
+    }
+    html += '</div>';
+    if (hayInt) {
+      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
         htmlIntervencionEncuentro(enc, estado) + '</div>';
     }
     return html + '</article>';
@@ -1661,6 +1673,11 @@
     const track = block.querySelector('[data-encursos-track]');
     if (!track) return;
     const lista = encuentrosEnCursoAhora(cacheInsp, estado);
+    const cntEl = block.querySelector('[data-encursos-count]');
+    if (cntEl) {
+      if (lista.length > 0) { cntEl.textContent = ' ' + lista.length; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
+    }
     if (!lista.length) {
       block.classList.remove('is-on');
       track.innerHTML = '';

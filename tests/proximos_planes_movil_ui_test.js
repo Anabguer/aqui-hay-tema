@@ -11,6 +11,8 @@ const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
 const css = fs.readFileSync(path.join(root, 'assets/css/play-v3-responsive.css'), 'utf8');
+const cssOv = fs.readFileSync(path.join(root, 'assets/css/play-v3-inicio-override.css'), 'utf8');
+const cssM = css + '\n' + cssOv;
 
 let failures = 0;
 function ok(c, m) {
@@ -40,7 +42,7 @@ function ultimaRegla(src, needle, prop) {
   return last || '';
 }
 
-/* --- 1. play.php: bloque unico, entre Cotilleo y EN CURSO --- */
+/* --- 1. play.php: bloque unico, orden Cotilleo -> EN CURSO -> Proximos --- */
 ok(php.includes('data-proxplanes-block') && php.includes('data-proxplanes-track'),
   'play.php: existe el bloque Proximos planes (cabecera + track)');
 ok((php.match(/data-proxplanes-block/g) || []).length === 1,
@@ -48,8 +50,10 @@ ok((php.match(/data-proxplanes-block/g) || []).length === 1,
 const iCoti = php.indexOf('shell-grupo-cotilleo-par');
 const iPP = php.indexOf('data-proxplanes-block');
 const iEnc = php.indexOf('data-encursos-block');
-ok(iPP > iCoti && iPP < iEnc,
-  'play.php: orden DOM Cotilleos -> Proximos planes -> EN CURSO');
+ok(iCoti < iEnc && iEnc < iPP,
+  'play.php: orden DOM Cotilleos -> EN CURSO -> Proximos planes');
+ok(php.includes('data-encursos-count') && php.includes('data-proxplanes-count'),
+  'play.php: contadores dinamicos en cabeceras');
 ok(!php.includes('data-proxplanes-int') && !/pp-mov-(cta|panel)/.test(css),
   'sin acciones de intervencion en Proximos planes');
 
@@ -59,6 +63,10 @@ ok(js.includes('function renderProximosPlanesMovil('), 'js: renderProximosPlanes
 const fnRenderPP = extraerBloque(js, 'function renderShellPanels(');
 ok(fnRenderPP.includes('renderProximosPlanesMovil(estado)'),
   'js: render de Proximos planes cableado junto al de EN CURSO');
+ok(js.includes('[data-proxplanes-count]') && js.includes('listaFull.length'),
+  'js: contador Proximos planes desde total real (proximosPlanesFuturos)');
+ok(js.includes('[data-encursos-count]') && js.includes('encuentrosEnCursoAhora'),
+  'js: contador EN CURSO desde encuentrosEnCursoAhora');
 const fnFuturos = extraerBloque(js, 'function proximosPlanesFuturos(');
 ok(fnFuturos.includes("planEsEnCurso(e, estado)") && fnFuturos.includes("'programado'"),
   'js: solo PROGRAMADOS que no estan en curso (excluye cancelados/rechazados por estado)');
@@ -96,7 +104,6 @@ ok(fnFuturos.includes('relojAbs(a.dia, horaEnc(a)) - relojAbs(b.dia, horaEnc(b))
 })();
 
 /* --- 4. CSS cards superiores (<=768px): cascada FINAL corregida --- */
-const cssM = css;
 ok(/\.game-left \.shell-grupo-buzon > \.mensajitos-wrap[\s\S]*?overflow:\s*visible\s*!important/.test(cssM),
   'css: wrap interior sin overflow hidden (sobre no recortado)');
 const ds = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio.css'), 'utf8');
@@ -137,12 +144,16 @@ ok(cssM.includes('.play-v3 .proxplanes-movil:not(.is-on) { display: none; }'),
   'css: bloque oculto si no hay planes futuros');
 ok(/@media \(min-width: 769px\)\s*\{\s*\.play-v3 \.proxplanes-movil\s*\{\s*display:\s*none !important;\s*\}\s*\}/.test(cssM),
   'css: gate desktop del bloque (solo <=768px)');
-ok(/\.proxplanes-movil\.is-on[^{]*\{[^}]*order:\s*3/.test(cssM),
-  'css: order 3 (entre Cotilleos y EN CURSO en la fila movil)');
-ok(/\.proxplanes-movil \.pp-mov-card\s*\{[^}]*flex:\s*1 1 calc\(50% - \.23rem\)/.test(cssM),
-  'css: 2 cards por fila cuando hay espacio');
-ok(/\.proxplanes-movil \.pp-mov-card \.prox-faces img,\s*\.proxplanes-movil \.pp-mov-card \.prox-faces \.cara-ini\s*\{[^}]*width:\s*30px/.test(cssM),
-  'css: caras de participantes visibles en las tarjetas');
+ok(/shell-grupo-cotilleo-par[^}]*order:\s*1/.test(cssOv),
+  'css: order 1 Cotilleo en feed movil');
+ok(/encursos-movil\.is-on[^}]*order:\s*2/.test(cssOv),
+  'css: order 2 EN CURSO en feed movil');
+ok(/proxplanes-movil\.is-on[^}]*order:\s*3/.test(cssOv),
+  'css: order 3 Proximos planes en feed movil');
+ok(/\.proxplanes-movil \.pp-mov-track[\s\S]*overflow-x:\s*auto/.test(cssOv),
+  'css: carrusel horizontal Proximos planes');
+ok(/\.encursos-movil \.enc-mov-track[\s\S]*overflow-x:\s*auto/.test(cssOv),
+  'css: carrusel horizontal EN CURSO');
 
 /* --- 7. EN CURSO intacto --- */
 ok(js.includes('function encuentrosEnCursoAhora(') && js.includes('renderEncursosMovil(estado);'),
