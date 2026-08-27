@@ -6023,7 +6023,6 @@ function hobbyIconKey(id, texto) {
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
         extra.residente_id = encIntBtn.getAttribute('data-residente-id');
       }
-      }
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');
       });

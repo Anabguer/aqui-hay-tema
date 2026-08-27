@@ -75,6 +75,25 @@ function Update-AhtCacheBuster {
     return $value
 }
 
+function Test-AhtPlayV3JsSyntax {
+    param([hashtable]$Ctx)
+
+    $jsPath = Join-Path $Ctx.RepoRoot 'assets\js\play-v3.js'
+    if (-not (Test-Path -LiteralPath $jsPath)) {
+        throw 'Falta assets/js/play-v3.js para comprobar sintaxis.'
+    }
+    $node = Get-Command node -ErrorAction SilentlyContinue
+    if (-not $node) {
+        throw 'node no encontrado: no se puede ejecutar node --check en play-v3.js'
+    }
+    & node --check $jsPath 2>&1 | Out-String | ForEach-Object { $_.Trim() } | ForEach-Object {
+        if ($_ -and $_ -notmatch '^$') { Write-Host $_ }
+    }
+    if ($LASTEXITCODE -ne 0) {
+        throw 'play-v3.js falla node --check; abortando deploy.'
+    }
+}
+
 function Add-AhtDeployFile {
     param(
         [System.Collections.Generic.List[object]]$Files,
@@ -179,6 +198,13 @@ function Invoke-AhtWinScpUpload {
 
     if ($Files.Count -eq 0) {
         return @{ Ok = $true; Code = 0; Count = 0 }
+    }
+
+    foreach ($f in $Files) {
+        if ([string]$f.Rel -eq 'assets/js/play-v3.js') {
+            Test-AhtPlayV3JsSyntax -Ctx $Ctx
+            break
+        }
     }
 
     $cfg = Get-Content -LiteralPath $Ctx.CredsPath -Raw -Encoding UTF8 | ConvertFrom-Json

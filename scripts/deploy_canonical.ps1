@@ -102,6 +102,20 @@ foreach ($f in $result.Files) {
     Write-DeployLog -LogFile $LogFile -Message $line
 }
 
+$hasPlayV3 = $false
+foreach ($f in $result.Files) {
+    if ([string]$f.Rel -eq 'assets/js/play-v3.js') { $hasPlayV3 = $true; break }
+}
+if ($hasPlayV3) {
+    $jsPath = Join-Path $projectRoot 'assets\js\play-v3.js'
+    Write-DeployLog -LogFile $LogFile -Message 'Preflight: node --check assets/js/play-v3.js' -ToHost
+    & node --check $jsPath 2>&1 | ForEach-Object { Write-DeployLog -LogFile $LogFile -Message $_ -ToHost }
+    if ($LASTEXITCODE -ne 0) {
+        Write-DeployLog -LogFile $LogFile -Message 'ERROR: play-v3.js falla node --check; abortando deploy.' -ToHost
+        exit 1
+    }
+}
+
 if ($DryRun) {
     Write-DeployLog -LogFile $LogFile -Message 'DRY-RUN: no se ejecutara WinSCP ni conexion a Hostalia.' -ToHost
     Write-DeployLog -LogFile $LogFile -Message "Log: $LogFile" -ToHost
