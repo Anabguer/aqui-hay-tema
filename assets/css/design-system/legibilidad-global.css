@@ -124,11 +124,22 @@
   font-size: var(--aht-type-caption) !important;
 }
 
+/* === Inicio: tiles izquierda (Mensajitos / Vecinos / Plan) === */
+.play-v3:has(.game-shell) .game-left .game-left-tile-label,
+.play-v3:has(.game-shell) .game-left .obj-buzon-txt,
+.play-v3:has(.game-shell) .game-left .obj-vecinos-tit,
+.play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before {
+  font-size: max(1.1875rem, var(--aht-type-block)) !important;
+}
+
+.play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
+  font-size: max(.8125rem, var(--aht-type-caption)) !important;
+}
+
 /* === Vecinos / buzón preview (Inicio) === */
 .play-v3:has(.game-shell) .vecinos-stat,
 .play-v3:has(.game-shell) .obj-pueblo-txt,
-.play-v3:has(.game-shell) .obj-buzon-preview,
-.play-v3:has(.game-shell) .obj-buzon-txt {
+.play-v3:has(.game-shell) .obj-buzon-preview {
   font-size: var(--aht-type-secondary) !important;
 }
 

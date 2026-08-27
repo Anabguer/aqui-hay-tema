@@ -62,13 +62,13 @@ const fontSizes = [...dsInicio.matchAll(/font-size:\s*([\d.]+)r?e?m/g)].map(m =>
 ok(fontSizes.length > 0 && Math.min(...fontSizes) >= 0.6875,
   'inicio.css: sin textos <11px (mínimo absoluto)');
 ok(!/font-size:\s*\.[0-5]/.test(dsInicio), 'inicio.css: sin microtexto .5x rem');
-ok(/font-size:\s*1\.0[625]*r?e?m|font-size:\s*1\.125rem|font-size:\s*1\.25rem/.test(dsInicio),
+ok(/font-size:\s*1\.0[625]*r?e?m|font-size:\s*1\.1875rem|font-size:\s*1\.25rem/.test(dsInicio),
   'inicio.css: manuscrita de contenido en rango legible (17-20px)');
 
 // 6. Targets táctiles DS (excepción documentada v3: controles de la cabecera
 // compactos a petición de dirección visual; primarios siguen >=44).
-ok(/\.obj-nuevo-plan\.obj-proximo-cta\s*\{[^}]*min-height:\s*96px/.test(dsInicio),
-  'inicio.css: tile Nuevo Plan con presencia (96px, familia compacta v3)');
+ok(/\.obj-nuevo-plan\.obj-proximo-cta\s*\{[^}]*min-height:\s*108px/.test(dsInicio),
+  'inicio.css: tile Nuevo Plan con presencia (108px, familia compacta v3)');
 ok(/\.top-reloj \.pasar-rato\s*\{[^}]*min-height:\s*40px/.test(dsInicio),
   'inicio.css: Pasar el rato compacto 40px (decisión v3)');
 ok(/\.enc-mov-cta\s*\{[^}]*min-height:\s*44px/.test(dsInicio),

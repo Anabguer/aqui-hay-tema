@@ -112,27 +112,27 @@ ok(!/height:\s*32px\s*!important/.test(reglaSlot || '') &&
    /\.game-left-tile-ico\s*,?\s*[^{]*\{[^}]*background:\s*none/.test(ds),
   'ds: slot de icono sin caja fija 32px (transparente, escala por contenido)');
 const reglaSobre = ultimaRegla(cssM, '.zona-actividad .obj-buzon-img', 'width');
-ok(/\.obj-buzon-img\s*\{[^}]*width:\s*42px/.test(ds) &&
-   !/\.obj-buzon-img[^{]*\{[^}]*width:\s*32px\s*!important/.test(cssM),
-  'ds: sobre de Mensajitos 42px (escala DS, responsive sin width !important)');
-const reglaCaras = ultimaRegla(cssM, '.obj-vecinos-preview-cara', 'width');
-ok(/width:\s*28px\s*!important/.test(reglaCaras),
-  'css: caritas de Vecinos 28px');
+ok(/\.obj-buzon-img\s*\{[^}]*width:\s*56px/.test(ds),
+  'ds: sobre de Mensajitos 56px (escala DS móvil)');
+const cssOvFull = fs.readFileSync(path.join(root, 'assets/css/play-v3-inicio-override.css'), 'utf8');
+ok(/INICIO-TILES-MOVIL-v7[\s\S]*obj-buzon-img[\s\S]*width:\s*56px\s*!important/.test(cssOvFull),
+  'override v7: sobre 56px gana a batch 17');
+const reglaCaras = ultimaRegla(cssOvFull, '.game-left .obj-vecinos-preview-cara', 'width');
+ok(/width:\s*30px\s*!important/.test(reglaCaras),
+  'override v7: caritas de Vecinos 30px agrupadas');
 ok(/\.obj-nuevo-plan-ico\s*\{[^}]*font-size:\s*(2(?:\.\d+)?|3(?:\.\d+)?)r?e?m/.test(ds),
   'ds: + de Nuevo Plan con presencia (>=2rem, screens/inicio.css)');
 const reglaLabels = ultimaRegla(cssM, '.game-left-tile-label', 'font-size');
-ok(!/font-size:\s*\.6[68]rem\s*!important/.test(reglaLabels || '') &&
-   /\.game-left-tile-label[^{]*\{[^}]*font-size:\s*1\.125rem/.test(ds),
-  'ds: labels de tiles 18px (manuscrita legible, fin del microtexto .66rem)');
+ok(/INICIO-TILES-MOVIL-v7[\s\S]*font-size:\s*1\.1875rem\s*!important/.test(cssOvFull),
+  'override v7: labels tiles 1.1875rem alineados (fin microtexto batch 17)');
 const reglaWrap17 = extraerBloque(
   cssM.slice(cssM.indexOf('Fix batch 17')),
   '.play-v3:has(.game-shell) .game-left .shell-grupo-buzon > .mensajitos-wrap'
 );
 ok(reglaWrap17.includes('gap: .18rem !important'),
   'css: separacion icono<->texto ~.18rem donde manda la cascada (batch 17)');
-ok(/height:\s*90px\s*!important[\s\S]*?max-height:\s*90px/.test(
-  extraerBloque(cssM.slice(cssM.indexOf('Fix batch 17')), '.shell-grupo-buzon,')),
-  'css: las tres cards mantienen la misma altura (90px)');
+ok(/INICIO-TILES-MOVIL-v7[\s\S]*min-height:\s*92px\s*!important/.test(cssOvFull),
+  'override v7: tiles Mensajitos/Vecinos altura común 92px sin caja rígida batch 17');
 
 /* --- 5. CSS cabecera: clamp restaurado en la regla final --- */
 const reglaMeta = ultimaRegla(cssM, '.top-meta-line', 'font-size');
