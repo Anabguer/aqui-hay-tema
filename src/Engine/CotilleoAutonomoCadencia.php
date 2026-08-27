@@ -165,7 +165,8 @@ final class CotilleoAutonomoCadencia
             }
             $msg = is_array($c['mensaje'] ?? null) ? $c['mensaje'] : [];
             $msg['id'] = 'msg_auto_' . $eid;
-            BuzonEngine::crear($partida, $msg);
+            $r = BuzonEngine::crear($partida, $msg);
+            DiarioNarrativaBridge::mirrorCotilleoBuzon($partida, $r);
         }
     }
 

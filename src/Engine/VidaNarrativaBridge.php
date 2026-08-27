@@ -65,6 +65,9 @@ final class VidaNarrativaBridge
                 $msg['cotilleo_meta'] = CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true);
             }
             $r = BuzonEngine::crear($partida, $msg);
+            if ($clas === BuzonEngine::COTILLEO) {
+                DiarioNarrativaBridge::mirrorCotilleoBuzon($partida, $r);
+            }
             if ($r['ok'] ?? false) {
                 DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
                     'mensaje' => $r['mensaje'] ?? null,
@@ -108,6 +111,9 @@ final class VidaNarrativaBridge
                 $msg['cotilleo_meta'] = CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true);
             }
             $r = BuzonEngine::crear($partida, $msg);
+            if ($clas === BuzonEngine::COTILLEO) {
+                DiarioNarrativaBridge::mirrorCotilleoBuzon($partida, $r);
+            }
             if ($r['ok'] ?? false) {
                 DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
                     'mensaje' => $r['mensaje'] ?? null,

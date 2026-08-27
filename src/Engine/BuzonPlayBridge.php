@@ -39,6 +39,7 @@ final class BuzonPlayBridge
             return ['ok' => true, 'skipped' => 'sin_copy'];
         }
         $r = BuzonEngine::crear($partida, $msg);
+        DiarioNarrativaBridge::mirrorCotilleoBuzon($partida, $r);
         DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
             'mensaje' => $r['mensaje'] ?? null,
             'origen_evento' => $evento,

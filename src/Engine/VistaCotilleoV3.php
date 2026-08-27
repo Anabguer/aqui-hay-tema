@@ -40,7 +40,7 @@ final class VistaCotilleoV3
 
         $seq = 0;
 
-
+        $clavesBuzon = self::clavesEventoCotilleoBuzon($partida);
 
         foreach (self::entradasDesdeBuzon($partida, $seq) as $e) {
 
@@ -67,6 +67,12 @@ final class VistaCotilleoV3
         foreach ($partida['diario'] ?? [] as $e) {
 
             if (!is_array($e)) {
+
+                continue;
+
+            }
+
+            if (self::diarioDuplicadoEnCotilleoBuzon($e, $clavesBuzon)) {
 
                 continue;
 
@@ -227,6 +233,56 @@ final class VistaCotilleoV3
     }
 
 
+
+    /**
+     * Claves canónicas de cotilleos ya representados en el buzón (dedup vista global).
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, true>
+     */
+    private static function clavesEventoCotilleoBuzon(array $partida): array
+    {
+        $out = [];
+        foreach ($partida['buzon'] ?? [] as $m) {
+            if (!is_array($m)) {
+                continue;
+            }
+            $clas = (string) ($m['clasificacion'] ?? '');
+            $canal = (string) ($m['canal'] ?? BuzonEngine::canalDe($clas));
+            if ($clas !== BuzonEngine::COTILLEO && $canal !== BuzonEngine::CANAL_COTILLEO) {
+                continue;
+            }
+            if (trim((string) ($m['texto'] ?? '')) === '') {
+                continue;
+            }
+            $clave = DiarioNarrativaBridge::claveEventoDeMensaje($m);
+            if ($clave !== '') {
+                $out[$clave] = true;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @param array<string, mixed> $entradaDiario
+     * @param array<string, true> $clavesBuzon
+     */
+    private static function diarioDuplicadoEnCotilleoBuzon(array $entradaDiario, array $clavesBuzon): bool
+    {
+        if ($clavesBuzon === []) {
+            return false;
+        }
+        $origen = is_array($entradaDiario['origen'] ?? null) ? $entradaDiario['origen'] : [];
+        $eventoId = (string) ($origen['evento_id'] ?? '');
+        if ($eventoId !== '' && isset($clavesBuzon[$eventoId])) {
+            return true;
+        }
+        $buzonId = (string) ($origen['buzon_id'] ?? '');
+        if ($buzonId !== '' && isset($clavesBuzon['buzon:' . $buzonId])) {
+            return true;
+        }
+        return false;
+    }
 
     /**
 

@@ -62,6 +62,7 @@ final class RelacionNarrativaBridge
             '_placeholder_contenido' => false,
         ];
         $r = BuzonEngine::crear($partida, $msg);
+        DiarioNarrativaBridge::mirrorCotilleoBuzon($partida, $r);
         if ($r['ok'] ?? false) {
             $partida['narrativa_hitos_publicados'][$clave] = $dia;
             DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
