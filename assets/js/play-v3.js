@@ -1772,31 +1772,6 @@
     return '<div class="enc-mov-vista"><p class="enc-mov-vista-txt">' +
       esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
   }
-  function htmlEncursoCardDesktop(enc, estado) {
-    const ids = enc.participantes || [];
-    const iv = intervencionVistaDe(enc, estado);
-    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
-      (iv.disponible && iv.acciones && iv.acciones.length));
-    let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-mov-row">' +
-      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
-      '<div class="enc-mov-copy">' +
-      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
-      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
-      '<span class="enc-mov-estado">EN CURSO</span>' +
-      '</div>';
-    if (hayInt) {
-      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-txt">Intervenir</span>' +
-        '<span class="enc-mov-cta-flecha" aria-hidden="true">\u203a</span></button>';
-    }
-    html += '</div>';
-    if (hayInt) {
-      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
-        htmlIntervencionEncuentro(enc, estado) + '</div>';
-    }
-    return html + '</article>';
-  }
   function htmlEncursoCardMovilV14(enc, estado) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
@@ -1819,8 +1794,7 @@
     return html + '</article>';
   }
   function htmlEncursoCardMovil(enc, estado) {
-    if (esInicioLayoutMovil()) return htmlEncursoCardMovilV14(enc, estado);
-    return htmlEncursoCardDesktop(enc, estado);
+    return htmlEncursoCardMovilV14(enc, estado);
   }
     function encMovPaso(track) {
     const cards = track.querySelectorAll('[data-enc-mov-card]');

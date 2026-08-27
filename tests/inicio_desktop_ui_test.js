@@ -39,8 +39,10 @@ ok(/@media \(min-width: 769px\)/.test(dsDesktop),
   'inicio-desktop.css: bloque >=769px');
 ok(/\.obj-cotilleo\.obj-cotilleo-par[\s\S]*display:\s*flex/.test(dsDesktop),
   'inicio-desktop.css: cotilleo flex DS');
-ok(/\.shell-grupo-parejas/.test(dsDesktop) && /\.enc-mov-card/.test(dsDesktop),
-  'inicio-desktop.css: parejas y planes DS');
+ok(/\.enc-mov-card-tit/.test(dsDesktop) && /\.pp-mov-card[\s\S]{0,400}border:\s*2px dashed/.test(dsDesktop),
+  'inicio-desktop.css: planes DS v17 (tarjeta papel + borde punteado)');
+ok(/\.shell-grupo-parejas/.test(dsDesktop),
+  'inicio-desktop.css: parejas DS');
 ok(/obj-planes-lateral > \.obj-proximo[\s\S]*display:\s*none/.test(dsDesktop),
   'inicio-desktop.css: oculta polaroid legacy izquierda');
 
