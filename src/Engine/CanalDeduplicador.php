@@ -87,9 +87,12 @@ final class CanalDeduplicador
             'espontaneo_f_confidencia' => [BuzonEngine::CANAL_BUZON],
             'espontaneo_f_alerta_vecinal' => [BuzonEngine::CANAL_BUZON],
             'espontaneo_f_curiosidad_celestine' => [BuzonEngine::CANAL_BUZON],
+            'espontaneo_f_promesa' => [BuzonEngine::CANAL_BUZON],
+            'espontaneo_f_colectivo' => [BuzonEngine::CANAL_BUZON],
             // Seguimiento: Mensajitos
             'seguimiento_consejo' => [BuzonEngine::CANAL_BUZON],
             'seguimiento_peticion' => [BuzonEngine::CANAL_BUZON],
+            'anuncio_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
         ];
     }
 

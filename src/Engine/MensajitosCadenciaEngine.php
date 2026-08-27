@@ -146,6 +146,7 @@ final class MensajitosCadenciaEngine
             case 'f_opinion':
             case 'f_dilema':
             case 'f_alerta_vecinal':
+            case 'f_colectivo':
                 return 2;
             case 'f_confidencia':
             case 'f_seguimiento':

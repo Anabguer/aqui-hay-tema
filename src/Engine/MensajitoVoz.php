@@ -227,12 +227,72 @@ final class MensajitoVoz
     }
 
     /** @return list<string> */
-    private static function bancoF9Seguimiento(): array
+    private static function bancoFConfidenciaCrush(): array
     {
         return [
+            'Te confieso algo, Celestine: creo que me gusta {otro}.',
+            'No se lo he dicho a nadie, pero {otro} me pone nervioso/a.',
+            'Entre nosotros: {otro} me gusta. No sé qué hacer.',
+            'Celestine, necesito desahogarme. {otro} me tiene loco/a.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFColectivo(): array
+    {
+        return [
+            'Somos unos cuantos que queremos organizar {texto}. ¿Te apuntas, Celestine?',
+            'Oye, estamos montando {texto} y nos vendría bien tu ayuda.',
+            '¿Te animas a echar una mano con {texto}? Sería genial.',
+            'Celestine, ¿nos ayudas a organizar {texto}?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoAnuncioEventoPueblo(): array
+    {
+        return [
+            'Celestine, ¡este {dia_semana} hay {nombre_evento}! {asistencia}.',
+            'Te aviso: este {dia_semana} toca {nombre_evento}. {asistencia}.',
+            'Oye, Celestine, que este {dia_semana} hay {nombre_evento}. {asistencia}.',
+            'Por si no te habías enterado: este {dia_semana} hay {nombre_evento}. {asistencia}.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoF9Seguimiento(string $resultado = ''): array
+    {
+        switch ($resultado) {
+            case 'bien':
+                return [
+                    '¿Te acuerdas de lo que me dijiste? Pues mira: {texto}. Tenías razón.',
+                    'Lo que me dijiste me vino bien. {texto} y todo ha ido genial.',
+                ];
+            case 'mal':
+            case 'rechazo':
+                return [
+                    'Te cuento: {texto}. No salió como esperaba.',
+                    'Bueno, {texto}. Menos mal que te lo comenté antes.',
+                ];
+            case 'nada':
+                return [
+                    'Al final {texto}. Supongo que no era el momento.',
+                    'Nada, {texto}. Lo dejo ahí.',
+                ];
+            case 'pendiente':
+                return [
+                    'Por cierto: {texto}. Te aviso cuando pase.',
+                ];
+            case 'calma':
+                return [
+                    'Tienes razón en lo de ir con calma. {texto}.',
+                ];
+            default:
+                break;
+        }
+        return [
             '¡{texto}! Al final sí que pasó. Gracias por lo de antes.',
-            '¿Te acuerdas de lo que me dijiste? Pues mira: {texto}. Tenías razón.',
-            'Lo que me dijiste me vino bien. {texto} y todo ha ido genial.',
+            '¿Te acuerdas de lo que me dijiste? Pues mira: {texto}.',
             'Bueno, te cuento: {texto}. No estaba tan mal como pensaba.',
             'Contigo se habla bien. {texto} y me ha quedado clarísimo.',
         ];
@@ -381,10 +441,13 @@ final class MensajitoVoz
             'f_opinion',
             'f_dilema',
             'f_confidencia',
+            'f_confidencia_crush',
             'f_alerta_vecinal',
+            'f_colectivo',
             'seguimiento_consejo',
             'f_promesa',
             'f_curiosidad_celestine',
+            'anuncio_evento_pueblo',
         ];
     }
 
@@ -466,14 +529,20 @@ final class MensajitoVoz
                 return self::bancoFDilema();
             case 'f_confidencia':
                 return self::bancoFConfidencia();
+            case 'f_confidencia_crush':
+                return self::bancoFConfidenciaCrush();
             case 'f_alerta_vecinal':
                 return self::bancoFAlertaVecinal();
+            case 'f_colectivo':
+                return self::bancoFColectivo();
             case 'seguimiento_consejo':
-                return self::bancoF9Seguimiento();
+                return self::bancoF9Seguimiento((string) ($vars['resultado'] ?? ''));
             case 'f_promesa':
                 return self::bancoF14Promesa();
             case 'f_curiosidad_celestine':
                 return self::bancoFCuriosidadCelestine();
+            case 'anuncio_evento_pueblo':
+                return self::bancoAnuncioEventoPueblo();
             default:
                 return [];
         }
@@ -483,7 +552,7 @@ final class MensajitoVoz
     private static function tokens(array $vars): array
     {
         $t = [];
-        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa'] as $k) {
+        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa', 'dia_semana', 'nombre_evento', 'asistencia'] as $k) {
             $v = $vars[$k] ?? null;
             if ($v !== null && $v !== '') {
                 $t['{' . $k . '}'] = (string) $v;

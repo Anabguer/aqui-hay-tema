@@ -20,6 +20,8 @@ final class MensajitoAcciones
     public const INVESTIGAR = 'investigar';
     public const ORGANIZAR_ALGO = 'organizar_algo';
     public const NO_METERSE = 'no_meterse';
+    public const ACEPTAR_EVENTO = 'aceptar_evento';
+    public const DECLINAR_EVENTO = 'declinar_evento';
 
     /** @var array<string, array{id: string, etiqueta: string, estilo: string, api: string}> */
     private const DEFS = [
@@ -68,6 +70,18 @@ final class MensajitoAcciones
         self::NO_METERSE => [
             'id' => self::NO_METERSE,
             'etiqueta' => 'Dejarlo por ahora',
+            'estilo' => 'suave',
+            'api' => 'buzon.resolver',
+        ],
+        self::ACEPTAR_EVENTO => [
+            'id' => self::ACEPTAR_EVENTO,
+            'etiqueta' => 'Me apunto',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::DECLINAR_EVENTO => [
+            'id' => self::DECLINAR_EVENTO,
+            'etiqueta' => 'Esta vez no',
             'estilo' => 'suave',
             'api' => 'buzon.resolver',
         ],
@@ -202,6 +216,12 @@ final class MensajitoAcciones
                 break;
             case self::NO_METERSE:
                 $r = MensajitoConsejoEngine::noMeterse($partida, $mensajeId);
+                break;
+            case self::ACEPTAR_EVENTO:
+                $r = MensajitoColectivoEngine::aceptar($partida, $mensajeId, $root, $logger);
+                break;
+            case self::DECLINAR_EVENTO:
+                $r = MensajitoColectivoEngine::declinar($partida, $mensajeId);
                 break;
             default:
                 $r = ['ok' => false, 'error' => 'accion_sin_resolver', 'accion' => $accionId];

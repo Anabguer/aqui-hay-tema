@@ -37,6 +37,9 @@ final class MensajitoConsejoEngine
             case 'f_confidencia':
                 $opciones = self::opcionesEscuchar();
                 break;
+            case 'f_promesa':
+                $opciones = self::opcionesF14();
+                break;
             default:
                 $opciones = [];
         }
@@ -52,6 +55,9 @@ final class MensajitoConsejoEngine
                     break;
                 case 'f_confidencia':
                     $mensaje['consejo_titulo'] = '¿Qué le contestas?';
+                    break;
+                case 'f_promesa':
+                    $mensaje['consejo_titulo'] = '¿Qué le dices?';
                     break;
                 default:
                     $mensaje['consejo_titulo'] = '¿Qué le dices?';
@@ -100,14 +106,36 @@ final class MensajitoConsejoEngine
 
         if ($consejoId !== '' && $consejoId !== 'decide_tu') {
             ConsejoEngine::responder($partida, $rid, $consejoId, $objetivoId, $tema);
+            self::enlazarSeguimiento($partida, $rid, $consejoId, $mensajeId, $objetivoId);
         }
         self::microEmocion($partida, $rid, (string) ($op['emocion'] ?? ''));
 
-        self::cerrarHilo($partida, $mensajeId, [
+        if ($familia === 'f_confidencia' && in_array($opcionId, ['op_escucha', 'op_apoyo'], true)) {
+            MensajitoPromesaEngine::registrarDesdeConfidencia(
+                $partida,
+                $rid,
+                $datos,
+                $mensajeId,
+                (string) ($mensaje['hilo_id'] ?? $mensajeId)
+            );
+        }
+        if ($familia === 'f_promesa') {
+            MensajitoPromesaEngine::cerrarPromesa(
+                $partida,
+                $rid,
+                (string) ($datos['clave'] ?? MensajitoPromesaEngine::claveDe($rid, $datos))
+            );
+        }
+
+        $metaCierre = [
             'opcion_id' => $opcionId,
             'consejo_id' => $consejoId,
             'objetivo_id' => $objetivoId,
-        ]);
+        ];
+        if ($familia === 'f_confidencia') {
+            $metaCierre['detallito_hook'] = ['pendiente' => true, 'motivo' => 'confidencia_escuchada'];
+        }
+        self::cerrarHilo($partida, $mensajeId, $metaCierre);
 
         return [
             'ok' => true,
@@ -301,6 +329,31 @@ final class MensajitoConsejoEngine
     }
 
     /** @return list<array<string, mixed>> */
+    private static function opcionesF14(): array
+    {
+        return [
+            [
+                'id' => 'op_recuerda',
+                'etiqueta' => 'Tienes razón, lo recuerdo',
+                'estilo' => 'primario',
+                'consejo_id' => 'decide_tu',
+                'tema' => 'personal',
+                'emocion' => '',
+                'eco_ui' => 'Gracias por avisarme.',
+            ],
+            [
+                'id' => 'op_animo',
+                'etiqueta' => 'Ánimo, puedes con esto',
+                'estilo' => 'suave',
+                'consejo_id' => 'decide_tu',
+                'tema' => 'personal',
+                'emocion' => 'alegre',
+                'eco_ui' => 'Lo intentaré.',
+            ],
+        ];
+    }
+
+    /** @return list<array<string, mixed>> */
     private static function opcionesEscuchar(): array
     {
         return [
@@ -338,6 +391,8 @@ final class MensajitoConsejoEngine
                 return self::opcionesF15();
             case 'f_confidencia':
                 return self::opcionesEscuchar();
+            case 'f_promesa':
+                return self::opcionesF14();
             default:
                 return [];
         }
@@ -367,6 +422,32 @@ final class MensajitoConsejoEngine
             break;
         }
         unset($m);
+    }
+
+    private static function enlazarSeguimiento(
+        array &$partida,
+        string $rid,
+        string $consejoId,
+        string $mensajeId,
+        ?string $objetivoId
+    ): void {
+        $pend = $partida['seguimientos_consejo_pendientes'] ?? [];
+        for ($i = count($pend) - 1; $i >= 0; $i--) {
+            if (!is_array($pend[$i])) {
+                continue;
+            }
+            if (($pend[$i]['residente_id'] ?? '') !== $rid || ($pend[$i]['consejo_id'] ?? '') !== $consejoId) {
+                continue;
+            }
+            if (!empty($pend[$i]['resuelto'])) {
+                continue;
+            }
+            $partida['seguimientos_consejo_pendientes'][$i]['mensaje_origen_id'] = $mensajeId;
+            if ($objetivoId !== null && $objetivoId !== '') {
+                $partida['seguimientos_consejo_pendientes'][$i]['objetivo_id'] = $objetivoId;
+            }
+            return;
+        }
     }
 
     private static function microEmocion(array &$partida, string $rid, string $hacia): void

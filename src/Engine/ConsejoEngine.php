@@ -33,7 +33,13 @@ final class ConsejoEngine
 
         // Registrar seguimiento (F9) si el buzón está activo
         if (FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
-            SeguimientoConsejoEngine::registrar($partida, $residenteId, $consejoId, $tema ?? 'romance');
+            SeguimientoConsejoEngine::registrar(
+                $partida,
+                $residenteId,
+                $consejoId,
+                $tema ?? 'romance',
+                $objetivoId
+            );
         }
 
         return ['ok' => true, 'inclinacion' => $entry];

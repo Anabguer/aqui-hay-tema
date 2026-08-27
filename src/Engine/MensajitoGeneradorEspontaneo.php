@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Generador espontaneo de Mensajitos (familias F1, F2, F6, F7, F15).
+ * Generador espontaneo de Mensajitos (familias F1, F2, F4, F6, F7, F14, F15).
  *
  * Los NPCs se dirigen a Celestine cuando tienen algo que decir, disparado
  * por su estado real (emociones, relaciones, eventos recientes, personalidad).
@@ -40,14 +40,31 @@ final class MensajitoGeneradorEspontaneo
     private static function familiasCandidatas(array $partida, string $residenteId, array $cal): array
     {
         $c = [];
+        $catalog = new Catalog(dirname(__DIR__, 2));
+        $f4 = MensajitoColectivoEngine::candidato($partida, $residenteId, $cal, $catalog);
+        if ($f4 !== null) {
+            $c[] = $f4;
+        }
         $f1 = self::candidatoF1($partida, $residenteId, $cal);
-        if ($f1 !== null) { $c[] = $f1; }
+        if ($f1 !== null) {
+            $c[] = $f1;
+        }
         $f2 = self::candidatoF2($partida, $residenteId);
-        if ($f2 !== null) { $c[] = $f2; }
+        if ($f2 !== null) {
+            $c[] = $f2;
+        }
+        $f6 = self::candidatoF6($partida, $residenteId);
+        if ($f6 !== null) {
+            $c[] = $f6;
+        }
         $f7 = self::candidatoF7($partida, $residenteId);
-        if ($f7 !== null) { $c[] = $f7; }
+        if ($f7 !== null) {
+            $c[] = $f7;
+        }
         $f15 = self::candidatoF15($partida, $residenteId, $cal);
-        if ($f15 !== null) { $c[] = $f15; }
+        if ($f15 !== null) {
+            $c[] = $f15;
+        }
         return $c;
     }
 
@@ -80,10 +97,82 @@ final class MensajitoGeneradorEspontaneo
 
     private static function candidatoF6(array $partida, string $rid): ?array
     {
+        $crush = self::crushLatente($partida, $rid);
+        if ($crush !== null) {
+            $clave = 'confidencia|crush|' . ($crush['otro_id'] ?? '');
+            $rec = MensajitoPromesaEngine::datosRecuerdoSiAplica($partida, $rid, [
+                'subtipo' => 'crush',
+                'otro_id' => $crush['otro_id'],
+                'clave' => $clave,
+            ]);
+            if ($rec !== null) {
+                return ['familia' => 'f_promesa', 'peso' => 1, 'datos' => $rec];
+            }
+            if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_confidencia', $clave)) {
+                return null;
+            }
+            return [
+                'familia' => 'f_confidencia',
+                'peso' => 3,
+                'datos' => [
+                    'subtipo' => 'crush',
+                    'otro_id' => $crush['otro_id'],
+                    'otro_nombre' => $crush['otro_nombre'],
+                    'emocion' => 'nervioso/a',
+                    'clave' => $clave,
+                ],
+            ];
+        }
         $ems = self::emocionesFuertes($partida, $rid);
-        if ($ems === []) { return null; }
+        if ($ems === []) {
+            return null;
+        }
         $em = $ems[array_rand($ems)];
-        return ['familia' => 'f_confidencia', 'peso' => 3, 'datos' => ['emocion' => $em['tipo'], 'intensidad' => $em['intensidad']]];
+        $clave = 'confidencia|' . ($em['tipo'] ?? 'general') . '|' . $rid;
+        $rec = MensajitoPromesaEngine::datosRecuerdoSiAplica($partida, $rid, [
+            'emocion' => $em['tipo'],
+            'subtipo' => $em['tipo'],
+            'clave' => $clave,
+        ]);
+        if ($rec !== null) {
+            return ['familia' => 'f_promesa', 'peso' => 1, 'datos' => $rec];
+        }
+        if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_confidencia', $clave)) {
+            return null;
+        }
+        return [
+            'familia' => 'f_confidencia',
+            'peso' => 3,
+            'datos' => [
+                'emocion' => $em['tipo'],
+                'subtipo' => $em['tipo'],
+                'intensidad' => $em['intensidad'],
+                'clave' => $clave,
+            ],
+        ];
+    }
+
+    /**
+     * @return array{otro_id: string, otro_nombre: string}|null
+     */
+    private static function crushLatente(array $partida, string $rid): ?array
+    {
+        foreach (self::senalesRomanticas($partida, $rid) as $r) {
+            $otro = (string) ($r['otro_id'] ?? '');
+            if ($otro === '') {
+                continue;
+            }
+            $rom = 0.0;
+            if (isset($partida['relaciones'][$rid][$otro]['romance'])) {
+                $rom = (float) $partida['relaciones'][$rid][$otro]['romance'];
+            } elseif (isset($partida['relaciones'][$otro][$rid]['romance'])) {
+                $rom = (float) $partida['relaciones'][$otro][$rid]['romance'];
+            }
+            if ($rom >= 12 && $rom <= 28) {
+                return $r;
+            }
+        }
+        return null;
     }
 
     private static function candidatoF7(array $partida, string $rid): ?array
@@ -116,6 +205,9 @@ final class MensajitoGeneradorEspontaneo
             case 'f_alerta_vecinal':
                 $clas = BuzonEngine::IMPORTANTE;
                 break;
+            case 'f_colectivo':
+                $clas = BuzonEngine::OPORTUNIDAD;
+                break;
             default:
                 $clas = BuzonEngine::OPORTUNIDAD;
         }
@@ -125,7 +217,11 @@ final class MensajitoGeneradorEspontaneo
                 $acciones = ['responder_consejo'];
                 break;
             case 'f_confidencia':
+            case 'f_promesa':
                 $acciones = ['responder_escuchar'];
+                break;
+            case 'f_colectivo':
+                $acciones = ['aceptar_evento', 'declinar_evento'];
                 break;
             case 'f_alerta_vecinal':
                 $acciones = ['investigar', 'organizar_algo', 'no_meterse'];
@@ -137,7 +233,7 @@ final class MensajitoGeneradorEspontaneo
                 $acciones = [];
         }
         $msgId = 'msg_' . bin2hex(random_bytes(4));
-        $r = BuzonEngine::crear($partida, [
+        $r = CanalDeduplicador::crearSiAplica($partida, [
             'id' => $msgId,
             'clasificacion' => $clas,
             'tipo' => 'espontaneo_' . $fam['familia'],
@@ -150,11 +246,13 @@ final class MensajitoGeneradorEspontaneo
             'datos_familia' => $fam['datos'],
             'hilo_id' => $msgId,
             'hilo_estado' => 'abierto',
-            'seguimiento_pendiente' => in_array($fam['familia'], ['f_opinion', 'f_dilema'], true),
+            'seguimiento_pendiente' => in_array($fam['familia'], ['f_opinion', 'f_dilema', 'f_confidencia'], true),
             'origen' => ['evento_id' => $msgId, 'tipo_evento' => 'espontaneo_' . $fam['familia'], 'es_narrativo' => true, 'informacion_revelada' => [], '_placeholder' => false],
             '_placeholder_contenido' => false,
         ]);
-        if (!($r['ok'] ?? false)) { return null; }
+        if ($r === null || !($r['ok'] ?? false)) {
+            return null;
+        }
         MensajitosCadenciaEngine::registrar($partida, $rid, $fam['familia'], 'espontaneo', (string) ($fam['datos']['clave'] ?? ''));
         DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
             'mensaje' => $r['mensaje'] ?? null,
@@ -171,7 +269,38 @@ final class MensajitoGeneradorEspontaneo
             case 'f_dilema':
                 return MensajitoVoz::linea($partida, 'f_dilema', ['nombre_a' => $datos['opcion_a_nombre'] ?? '', 'nombre_b' => $datos['opcion_b_nombre'] ?? '', 'texto' => 'dos personas'], 'f_dilema|' . $rid, $rid);
             case 'f_confidencia':
-                return MensajitoVoz::linea($partida, 'f_confidencia', ['texto' => $datos['emocion'] ?? 'algo personal'], 'f_confidencia|' . $rid, $rid);
+                if (($datos['subtipo'] ?? '') === 'crush') {
+                    return MensajitoVoz::linea(
+                        $partida,
+                        'f_confidencia_crush',
+                        ['otro' => $datos['otro_nombre'] ?? ''],
+                        'f_confidencia_crush|' . $rid . '|' . ($datos['otro_id'] ?? ''),
+                        $rid
+                    );
+                }
+                return MensajitoVoz::linea(
+                    $partida,
+                    'f_confidencia',
+                    ['texto' => $datos['emocion'] ?? 'algo personal'],
+                    'f_confidencia|' . $rid . '|' . ($datos['subtipo'] ?? ''),
+                    $rid
+                );
+            case 'f_promesa':
+                return MensajitoVoz::linea(
+                    $partida,
+                    'f_promesa',
+                    ['texto' => $datos['tema'] ?? 'lo de siempre'],
+                    'f_promesa|' . $rid . '|' . ($datos['clave'] ?? ''),
+                    $rid
+                );
+            case 'f_colectivo':
+                return MensajitoVoz::linea(
+                    $partida,
+                    'f_colectivo',
+                    ['texto' => $datos['evento_nombre'] ?? 'algo en el pueblo'],
+                    'f_colectivo|' . $rid . '|' . ($datos['evento_catalogo_id'] ?? ''),
+                    $rid
+                );
             case 'f_alerta_vecinal':
                 return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado'], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
             case 'f_curiosidad_celestine':

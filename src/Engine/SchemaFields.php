@@ -36,6 +36,11 @@ final class SchemaFields
         CompatibilidadOculta::ensure($partida);
         QuimicaEngine::ensure($partida);
         MemoriaEventos::ensure($partida);
+        MensajitoPromesaEngine::ensure($partida);
+        $partida['canales_publicados'] ??= [];
+        $partida['mensajitos_historial'] ??= [];
+        $partida['mensajitos_hilos'] ??= [];
+        $partida['seguimientos_consejo_pendientes'] ??= [];
         RelacionBitacora::ensure($partida);
         $partida['parentesco'] ??= [];
         $partida['inclinaciones_consejo'] ??= [];
