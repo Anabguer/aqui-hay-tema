@@ -79,8 +79,35 @@ final class EncuentroIntervencion
                 'accion' => $prev['accion'] ?? null,
                 'tono' => $prev['tono'] ?? null,
                 'texto' => $prev['texto'] ?? null,
+                'objetivo' => $prev['objetivo'] ?? null,
             ] : null,
         ];
+    }
+
+    /**
+     * Hobbies YA conocidos por el jugador de UNA persona concreta del encuentro.
+     * Nunca revela conocimiento oculto: solo descartes por DiscoveryReveal.
+     *
+     * @param array<string, mixed> $enc
+     * @return list<array{id: string, etiqueta: string, residente_id: string}>
+     */
+    public static function hobbiesConocidosDe(array $partida, array $enc, string $residenteId, ?Catalog $catalog): array
+    {
+        $residenteId = (string) $residenteId;
+        if ($residenteId === '') {
+            return [];
+        }
+        [$a, $b] = self::par($enc);
+        if ($residenteId !== $a && $residenteId !== $b) {
+            return [];
+        }
+        $out = [];
+        foreach (self::hobbiesConocidos($partida, $a, $b, $catalog) as $opt) {
+            if ((string) ($opt['residente_id'] ?? '') === $residenteId) {
+                $out[] = $opt;
+            }
+        }
+        return $out;
     }
 
     /**
@@ -139,15 +166,44 @@ final class EncuentroIntervencion
 
         [$a, $b] = self::par($enc);
         $cal = CalibracionConfig::load($catalog->getRoot());
+        /* "Meterme en su cabeza": persona objetivo OPCIONAL (ENCUENTRO + PERSONA).
+           Si viene, debe ser participante de ESTE encuentro. No cambia cargas,
+           probabilidades ni efectos: el motor resuelve igual que siempre. */
+        $objetivo = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
+        if ($objetivo !== '' && $objetivo !== $a && $objetivo !== $b) {
+            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'objetivo_no_participante']);
+        }
         if ($accionId === self::HOBBY && !isset($params['hobby_id'])) {
             return GameError::respuesta(GameError::INTERVENCION_ACCION_INVALIDA, ['motivo' => 'elige_hobby']);
         }
         if ($accionId === self::HOBBY && isset($params['hobby_id']) && !isset($params['residente_id'])) {
-            foreach (self::hobbiesConocidos($partida, $a, $b, $catalog) as $opt) {
+            /* Con objetivo, el tema solo puede salir de lo YA conocido de ESA persona. */
+            $optsHobby = $objetivo !== ''
+                ? self::hobbiesConocidosDe($partida, $enc, $objetivo, $catalog)
+                : self::hobbiesConocidos($partida, $a, $b, $catalog);
+            foreach ($optsHobby as $opt) {
                 if (($opt['id'] ?? '') === (string) $params['hobby_id']) {
                     $params['residente_id'] = (string) ($opt['residente_id'] ?? '');
                     break;
                 }
+            }
+        }
+        if ($accionId === self::HOBBY && $objetivo !== ''
+            && isset($params['residente_id'])
+            && (string) $params['residente_id'] !== $objetivo) {
+            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
+        }
+        if ($accionId === self::HOBBY && $objetivo !== '' && isset($params['hobby_id'])) {
+            /* El tema metido en la cabeza debe ser de la persona elegida (dato YA conocido). */
+            $delObjetivo = false;
+            foreach (self::hobbiesConocidosDe($partida, $enc, $objetivo, $catalog) as $opt) {
+                if (($opt['id'] ?? '') === (string) $params['hobby_id']) {
+                    $delObjetivo = true;
+                    break;
+                }
+            }
+            if (!$delObjetivo) {
+                return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
             }
         }
         $req = self::requisitos($partida, $enc, $accionId, $a, $b, $cal, $catalog, $params);
@@ -159,9 +215,7 @@ final class EncuentroIntervencion
         }
 
         $rng = RngService::fromPartida($partida);
-        LabAudit::ctxAbrir('intervencion:' . $encuentroId);
         $res = self::resolverAccion($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog, $rng);
-        LabAudit::ctxAbrir(null);
         $rng->persistToPartida($partida);
 
         foreach ($partida['encuentros'] as &$row) {
@@ -175,10 +229,9 @@ final class EncuentroIntervencion
                 'resultado' => $res['resultado'],
                 'texto' => $res['texto'],
                 'hobby_id' => $params['hobby_id'] ?? null,
+                'objetivo' => $objetivo !== '' ? $objetivo : null,
                 'carga' => $res['carga'] ?? 0.0,
                 'hito' => $res['hito'] ?? null,
-                /* Telemetría DEV observacional (solo con debug activo): traza REAL de la resolución. */
-                'dev_traza' => LabAudit::trazaCtx('intervencion:' . $encuentroId),
                 'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
                 'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
             ];
@@ -192,6 +245,7 @@ final class EncuentroIntervencion
             'accion' => $accionId,
             'tono' => $res['tono'],
             'resultado' => $res['resultado'],
+            'objetivo' => $objetivo !== '' ? $objetivo : null,
         ]);
 
         return [
@@ -569,17 +623,6 @@ final class EncuentroIntervencion
         $p = max(0.05, min(0.92, $p));
 
         $aceptado = $rng->nextFloat() < $p;
-        /* Telemetría DEV observacional: probabilidad y tirada REALES del beso. */
-        LabAudit::obsResolucion('beso_tirada', [
-            'p' => $p,
-            'p_rango_clamp' => ['min' => 0.05, 'max' => 0.92],
-            'pareja_estado' => ParejaEngine::estado($partida, $a, $b),
-            'tipo_es_cita' => PropuestaNivel::esTipoCita((string) ($enc['tipo'] ?? '')),
-            'quimica_desde_hacia' => QuimicaEngine::valorHacia($partida, $desde, $hacia),
-            'emocion_hacia' => $emo,
-            'rng_state_post' => $rng->getState(),
-            'aceptado' => $aceptado,
-        ]);
         $efectos = [];
         $hito = null;
         $cotilleo = null;
@@ -638,46 +681,27 @@ final class EncuentroIntervencion
         Catalog $catalog
     ): float {
         $snap = EncuentroPonderacion::snapshot($partida, $enc, $catalog);
-        $cargaA = EncuentroExperiencia::cargaDe($snap, $a, $cal);
-        $cargaB = EncuentroExperiencia::cargaDe($snap, $b, $cal);
-        $carga = ($cargaA + $cargaB) / 2.0;
-        $bonoAccion = 0.0;
+        $carga = (EncuentroExperiencia::cargaDe($snap, $a, $cal) + EncuentroExperiencia::cargaDe($snap, $b, $cal)) / 2.0;
         if ($accionId === self::BROMA) {
-            $bonoAccion += 0.08;
+            $carga += 0.08;
         }
         if ($accionId === self::PERSONAL) {
-            $bonoAccion += 0.05;
+            $carga += 0.05;
         }
         if ($accionId === self::COQUETEAR) {
-            $bonoAccion += 0.1;
+            $carga += 0.1;
         }
-        $carga += $bonoAccion;
-        $bonoTema = 0.0;
         if ($accionId === self::HOBBY) {
             $rid = (string) ($params['residente_id'] ?? '');
             $lugar = (string) ($enc['lugar'] ?? '');
             if ($rid !== '') {
                 $plan = PlanAfinidad::paraParticipante($partida, $rid, $lugar, $catalog);
                 if (is_array($plan) && !empty($plan['hobby_match'])) {
-                    $bonoTema = 0.2;
-                    $carga += $bonoTema;
+                    $carga += 0.2;
                 }
             }
         }
-        $clampeada = max(-1.0, min(1.0, $carga));
-        /* Telemetría DEV observacional: componentes REALES usados para la carga. */
-        LabAudit::obsResolucion('carga_base_intervencion', [
-            'accion' => $accionId,
-            'carga_a' => $cargaA,
-            'carga_b' => $cargaB,
-            'media_participantes' => ($cargaA + $cargaB) / 2.0,
-            'bono_accion' => $bonoAccion,
-            'bono_hobby_match' => $bonoTema,
-            'antes_clamp' => $carga,
-            'carga_final' => $clampeada,
-            'factores_snapshot' => $snap['factores'] ?? null,
-        ]);
-        return $clampeada;
+        return max(-1.0, min(1.0, $carga));
     }
 
     private static function factorAccion(string $accionId, string $tono): float

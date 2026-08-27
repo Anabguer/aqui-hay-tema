@@ -1511,17 +1511,54 @@
     }
     return null;
   }
+  function caraIntervencionHtml(id) {
+    var rid = String(id || '');
+    if (!rid) return '<span class="enc-int-pers-cara enc-int-pers-cara--ini">?</span>';
+    return '<span class="enc-int-pers-cara enc-int-pers-cara--ini">' + esc((nombreDe(rid)[0] || '?')) + '</span>';
+  }
+  function hobbyVisibleParaObjetivo(hobbyResidenteId, objetivoId) {
+    if (!objetivoId) return true;
+    return !hobbyResidenteId || hobbyResidenteId === objetivoId;
+  }
+  function textoFeedbackIntervencion(iv) {
+    if (!iv || !iv.ultimo) return '';
+    var t = iv.ultimo.texto || '';
+    var obj = iv.ultimo.objetivo;
+    if (!t) return '';
+    if (!obj) return t;
+    var nombre = obj ? nombreDe(obj) : '';
+    if (iv.ultimo.tono === 'bien') {
+      return nombre + ' ¡recibe la idea! ' + t;
+    }
+    if (iv.ultimo.tono === 'mal') {
+      return nombre + ' no conecta: ' + t;
+    }
+    return nombre + ': ' + t;
+  }
   function htmlIntervencionEncuentro(enc, estado) {
     if (!planEsEnCurso(enc, estado)) return '';
     var iv = intervencionVistaDe(enc, estado);
     if (!iv) return '';
     if (iv.usada && iv.ultimo && iv.ultimo.texto) {
       var tono = iv.ultimo.tono || 'neutral';
-      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(iv.ultimo.texto) + '</p></div>';
+      var txt = textoFeedbackIntervencion(iv);
+      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(txt) + '</p></div>';
     }
     if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
+    var ids = enc.participantes || [];
     var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
-      '<p class="enc-int-kicker">Intervenir una vez</p><div class="enc-int-btns">';
+      '<div class="enc-int-step" data-enc-int-paso="persona">' +
+      '<p class="enc-int-kicker">¿En quién quieres meterte?</p>' +
+      '<div class="enc-int-personas">';
+    ids.forEach(function (rid) {
+      html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
+        caraIntervencionHtml(rid) + '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
+    });
+    html += '</div></div>';
+    html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
+      '<button type="button" class="enc-int-volver" data-enc-int-volver>‹ Volver</button>' +
+      '<p class="enc-int-kicker">¿Qué quieres meterle en la cabeza?</p>' +
+      '<div class="enc-int-btns">';
     var temas = null;
     iv.acciones.forEach(function (a) {
       if (!a.disponible) return;
@@ -1542,6 +1579,7 @@
       });
       html += '</div></div>';
     }
+    html += '</div>';
     html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
     return html;
   }
@@ -1555,6 +1593,7 @@
     var payload = { encuentro_id: encId, accion: accion };
     if (extra && extra.hobby_id) payload.hobby_id = extra.hobby_id;
     if (extra && extra.residente_id) payload.residente_id = extra.residente_id;
+    if (extra && extra.objetivo) payload.objetivo = extra.objetivo;
     var r = await api('encuentro.intervencion.ejecutar', payload);
     if (!r.ok) {
       toast(r.mensaje_ui || 'No se pudo intervenir.');
@@ -5496,10 +5535,16 @@ function hobbyIconKey(id, texto) {
       wrap.classList.add('is-busy');
       var encId = wrap.getAttribute('data-enc-id');
       var acc = encIntBtn.getAttribute('data-enc-int-accion');
-      var extra = {};
+      var objetivoId = wrap.getAttribute('data-enc-int-objetivo') || '';
+      var extra = { objetivo: objetivoId || undefined };
       if (acc === 'hobby') {
+        var hobbyResidenteId = encIntBtn.getAttribute('data-residente-id');
+        if (objetivoId && !hobbyVisibleParaObjetivo(hobbyResidenteId, objetivoId)) {
+          wrap.classList.remove('is-busy');
+          return;
+        }
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
-        extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+        extra.residente_id = hobbyResidenteId;
         var optWrap = encIntBtn.closest('.enc-int-temas');
         if (optWrap) {
           cerrarSelectorTemas();
@@ -5513,6 +5558,40 @@ function hobbyIconKey(id, texto) {
       }
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');
+      });
+      return;
+    }
+    const encPersona = ev.target.closest('[data-enc-int-persona]');
+    if (encPersona) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrapP = encPersona.closest('[data-enc-int]');
+      if (!wrapP) return;
+      var personaId = encPersona.getAttribute('data-enc-int-persona');
+      wrapP.setAttribute('data-enc-int-objetivo', personaId);
+      var stepPersona = wrapP.querySelector('[data-enc-int-paso="persona"]');
+      var stepAccion = wrapP.querySelector('[data-enc-int-paso="accion"]');
+      if (stepPersona) stepPersona.hidden = true;
+      if (stepAccion) stepAccion.hidden = false;
+      wrapP.querySelectorAll('.enc-int-btn--hobby[data-residente-id]').forEach(function (b) {
+        var rid = b.getAttribute('data-residente-id');
+        b.hidden = !hobbyVisibleParaObjetivo(rid, personaId);
+      });
+      return;
+    }
+    const encVolver = ev.target.closest('[data-enc-int-volver]');
+    if (encVolver) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrapV = encVolver.closest('[data-enc-int]');
+      if (!wrapV) return;
+      wrapV.removeAttribute('data-enc-int-objetivo');
+      var stepPA = wrapV.querySelector('[data-enc-int-paso="persona"]');
+      var stepAC = wrapV.querySelector('[data-enc-int-paso="accion"]');
+      if (stepAC) stepAC.hidden = true;
+      if (stepPA) stepPA.hidden = false;
+      wrapV.querySelectorAll('.enc-int-btn--hobby[data-residente-id]').forEach(function (b) {
+        b.hidden = false;
       });
       return;
     }

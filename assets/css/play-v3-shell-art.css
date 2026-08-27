@@ -1,6 +1,6 @@
 /**
 
- * Direccion artistica shell ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â objetos visuales, no dashboard.
+ * Direccion artistica shell Ã¢â‚¬â€ objetos visuales, no dashboard.
 
  */
 
@@ -456,6 +456,8 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 .top-reloj {
 
+  position: relative;
+
   display: flex;
 
   align-items: flex-end;
@@ -624,6 +626,244 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   color: #2c261f;
 
   white-space: nowrap;
+
+}
+
+
+
+/* Pasar el rato: control de jugador junto al reloj */
+
+.pasar-rato {
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: .28rem;
+
+  padding: .3rem .55rem .32rem;
+
+  margin-bottom: 3px;
+
+  background: linear-gradient(180deg, #fff6c8 0%, #f7e59b 100%);
+
+  border: 2px solid #2c261f;
+
+  border-radius: 4px 6px 5px 4px;
+
+  box-shadow: 2px 2px 0 rgba(44,38,31,.12);
+
+  transform: rotate(var(--rot, -2deg));
+
+  filter: drop-shadow(1px 2px 0 rgba(44,38,31,.12));
+
+  font-family: Nunito, "Segoe UI", sans-serif;
+
+  font-weight: 800;
+
+  color: #2c261f;
+
+  cursor: pointer;
+
+  touch-action: manipulation;
+
+}
+
+.pasar-rato:hover {
+
+  background: linear-gradient(180deg, #fffbd9 0%, #ffefa8 100%);
+
+  transform: rotate(var(--rot, -2deg)) translateY(-1px);
+
+}
+
+.pasar-rato:active {
+
+  transform: rotate(var(--rot, -2deg)) translateY(1px);
+
+  box-shadow: 1px 1px 0 rgba(44,38,31,.14);
+
+}
+
+.pasar-rato:focus-visible {
+
+  outline: 2px dashed #c45;
+
+  outline-offset: 2px;
+
+}
+
+.pasar-rato-ico {
+
+  font-size: .72rem;
+
+  line-height: 1;
+
+}
+
+.pasar-rato-txt {
+
+  font-size: .68rem;
+
+  line-height: 1;
+
+  letter-spacing: .01em;
+
+  white-space: nowrap;
+
+}
+
+.pasar-rato.is-busy,
+
+.pasar-rato:disabled {
+
+  cursor: wait;
+
+  opacity: .72;
+
+  transform: rotate(var(--rot, -2deg));
+
+}
+
+
+
+/* Es de noche: indicador pequeño y secundario, colgado bajo el bloque reloj/botón */
+
+.es-noche {
+
+  position: absolute;
+
+  top: 100%;
+
+  left: 50%;
+
+  margin: .24rem 0 0;
+
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: .26rem;
+
+  padding: .26rem .48rem;
+
+  background: linear-gradient(180deg, #ece7f6 0%, #ddd5ee 100%);
+
+  border: 2px solid rgba(44,38,31,.82);
+
+  border-radius: 4px 6px 5px 4px;
+
+  box-shadow: 2px 2px 0 rgba(44,38,31,.12);
+
+  transform: translateX(-50%) rotate(var(--rot, -1.5deg));
+
+  font-family: Nunito, "Segoe UI", sans-serif;
+
+  font-weight: 800;
+
+  font-size: .62rem;
+
+  letter-spacing: .02em;
+
+  line-height: 1;
+
+  color: #2c261f;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+
+  z-index: 4;
+
+}
+
+.es-noche[hidden] { display: none; }
+
+.es-noche-luna {
+
+  width: .78rem;
+
+  height: .78rem;
+
+  fill: none;
+
+  stroke: #2c261f;
+
+  stroke-width: 2;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+  flex: none;
+
+}
+
+.pasar-rato--noche {
+
+  background: linear-gradient(180deg, #eae4f8 0%, #d9cff1 100%);
+
+}
+
+
+
+/* Noche activa (23:00–07:59): velo azulado global sobre la partida.
+
+   Capa decorativa pura: pointer-events none, no bloquea clics, no oculta nada.
+
+   position:fixed + inset:0 → cubre TODO el viewport (la página tiene una franja
+
+   superior fuera de .game-shell). Jerarquía: interfaz base < velo < modales
+
+   (capa=8+, consulta 10/90/110, lab 200, tutorial 520/12000…), que conservan
+
+   su z-index propio por encima. Reversible vía .noche-activa. */
+
+.game-shell {
+
+  position: relative;
+
+}
+
+.game-shell::after {
+
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  pointer-events: none;
+
+  z-index: 2;
+
+  background: linear-gradient(180deg, rgba(38,44,96,.16) 0%, rgba(26,28,68,.30) 100%);
+
+  mix-blend-mode: multiply;
+
+  opacity: 0;
+
+  transition: opacity .9s ease;
+
+}
+
+.game-shell.noche-activa::after {
+
+  opacity: 1;
+
+}
+
+/* Noche: la tarjeta base de Mensajitos queda BAJO el velo (su z-index:4 diurno,
+
+   en play-v3-mensajitos.css, se mantiene intacto de día). Mismo patrón que el
+
+   fix previo de consultas (responsive: [data-consulta] .mensajitos-wrap z1).
+
+   El popover de preview interno y el modal abierto siguen por encima. */
+
+.game-shell.noche-activa .mensajitos-wrap {
+
+  z-index: 1;
 
 }
 
@@ -1205,7 +1445,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 
-.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a {
+.play-v3 .capa-cerrar-pestaÃƒÂ±a {
 
   font-size: .72rem !important;
 
@@ -1219,7 +1459,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 }
 
-.play-v3 .capa-cerrar-pestaÃƒÆ’Ã‚Â±a::before { z-index: -1; }
+.play-v3 .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
 
 
 
@@ -1458,6 +1698,49 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   z-index: 2;
   box-shadow: 0 1px 1px rgba(60, 44, 28, 0.08);
 }
+
+/* === Planes en curso: navegacion discreta ‹ 1/N › (solo visible con N>1) ===
+   Una sola polaroid activa; cambiar de encuentro solo re-renderiza. */
+.obj-curso-nav {
+  position: absolute;
+  top: .58rem;
+  right: .6rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: .22rem;
+}
+.obj-curso-nav[hidden] { display: none !important; }
+.obj-curso-btn {
+  width: 1.35rem;
+  height: 1.35rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px dashed rgba(122, 158, 106, .6);
+  border-radius: 50%;
+  background: #eef4e4;
+  color: #3d5c32;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 1px 1px 0 rgba(74, 110, 58, .12);
+}
+.obj-curso-btn:hover { background: #e2efdb; }
+.obj-curso-btn:active { transform: translateY(1px); box-shadow: none; }
+.obj-curso-btn[disabled] { opacity: .45; cursor: default; }
+.obj-curso-cont {
+  min-width: 2.1rem;
+  text-align: center;
+  font-family: Caveat, cursive;
+  font-size: .84rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: #7a6450;
+}
 .obj-proximo-polaroid .obj-proximo-tit {
   display: block;
   margin: 0 0 .55rem;
@@ -1504,7 +1787,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   flex-shrink: 0;
 }
 
-/* plan-cara-token: clic â†’ ficha */
+/* plan-cara-token: clic → ficha */
 .obj-proximo-polaroid .prox-faces .cara-token .cara {
   width: 46px;
   height: 46px;
@@ -2020,7 +2303,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   display: block;
 }
 
-/* Plan en curso â€” polaroid y agenda */
+/* Plan en curso — polaroid y agenda */
 @keyframes plan-curso-respiro {
   0%, 100% {
     box-shadow:
@@ -2119,7 +2402,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 }
 
 
-/* AquÃ­ hay tema â€” bloque en nota del edificio */
+/* Aquí hay tema — bloque en nota del edificio */
 .play-v3 .quien-tema { margin: .45rem 0 .55rem; }
 .play-v3 .quien-tema-card {
   padding: .5rem .55rem .55rem;
@@ -2166,7 +2449,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   color: #6a5348;
 }
 
-/* Popover Â«QuiÃ©n estÃ¡Â» â€” listado compacto + temas */
+/* Popover «Quién está» — listado compacto + temas */
 .quien-kicker { text-align: center; }
 aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; font-style: italic; }
 .quien-residentes { display: flex; margin: 0; }
@@ -2188,7 +2471,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .quien-tema-mark--drama { background: rgba(220, 140, 60, 0.2); color: #9a5a10; }
 .quien-tema-mas { text-align: center; font-size: 0.8rem; opacity: 0.75; margin: 0.2rem 0 0; }
 .quien-tema-card .quien-tema-quien { font-size: 0.85rem; opacity: 0.85; margin: 0 0 0.25rem; }
-/* Popover Quiï¿½n estï¿½ ï¿½ bloques jerï¿½rquicos */
+/* Popover Qui�n est� � bloques jer�rquicos */
 .play-v3 aside.quien .quien-bloque {
   margin: 0 0 0.55rem;
   padding: 0.5rem 0.55rem 0.55rem;
@@ -2269,7 +2552,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .play-v3 aside.quien .destinos { margin-top: 0.35rem; }
 
 
-/* Intervenciï¿½n durante encuentro (polaroid) */
+/* Intervenci�n durante encuentro (polaroid) */
 :is(.shell-grupo-planes, .encursos-movil) .enc-int {
   margin-top: .55rem;
   padding-top: .55rem;
@@ -2314,7 +2597,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   box-shadow: 1.5px 2.5px 0 rgba(120,96,72,.18);
 }
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 rgba(120,96,72,.14); }
-/* Pastel suave por acciÃ³n */
+/* Pastel suave por acción */
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="hablar"]::before { content: "\01F4AC"; }
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="hablar"] { background: #e2edf8; border-color: #b9cde2; }
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="broma"]::before { content: "\01F602"; }
@@ -2336,7 +2619,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--mal { color: #8b3a32; }
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--neutral { color: #5c5044; }
 
-/* Selector agrupado de temas (P07 â€” reorganizaciÃ³n UX, sin semÃ¡ntica nueva) */
+/* Selector agrupado de temas (P07 — reorganización UX, sin semántica nueva) */
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas {
   position: relative;
   margin-top: .5rem;
@@ -2359,13 +2642,6 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   content: "";
 }
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel {
-  position: absolute;
-  top: calc(100% + .4rem);
-  left: 0;
-  right: 0;
-  z-index: 30;
-  margin: 0 auto;
-  width: min(300px, 100%, calc(100vw - 32px));
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -2393,8 +2669,76 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   background-color: #f3ead4;
   transform: none;
 }
+/* Desktop (polaroid overflow:visible): popover anclado al ancho de la tarjeta */
+.shell-grupo-planes .enc-int-temas-panel {
+  position: absolute;
+  top: calc(100% + .4rem);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0 auto;
+  width: min(300px, 100%, calc(100vw - 32px));
+}
+/* Móvil (carrusel con overflow-x:auto): bloque estático dentro de la tarjeta,
+   sin recortes ni desbordes; scroll solo en el listado */
+.encursos-movil .enc-int-temas-panel {
+  position: static;
+  width: 100%;
+  margin-top: .4rem;
+}
 
-/* Consulta edificio + Nuevo plan: alineaciÃ³n estilo mockup */
+/* === METERME EN SU CABEZA — eleccion de persona (flujo 2 pasos, contenido) === */
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-step[hidden] { display: none; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-temas[hidden] { display: none; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--hobby[hidden] { display: none; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-pers {
+  flex-direction: column;
+  gap: .18rem;
+  min-width: 5.4rem;
+  padding: .5rem .6rem .4rem;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-btn.enc-int-pers::before { content: none; }
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-pers.is-on {
+  outline: 2px solid #c9a86a;
+  outline-offset: -2px;
+  background: #fff8ea;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-pers-cara {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #efe6d6;
+  border: 1px solid #d8c9ac;
+  font-size: .95rem;
+  color: #7a6450;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-pers-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-pers-nombre {
+  font-size: .72rem;
+  line-height: 1.15;
+  color: #5c5044;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-volver {
+  background: none;
+  border: none;
+  padding: .05rem .25rem;
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  color: #7a6450;
+  cursor: pointer;
+}
+:is(.shell-grupo-planes, .encursos-movil) .enc-int-volver:hover { color: #4a3a2a; }
+
+/* Consulta edificio + Nuevo plan: alineación estilo mockup */
 .play-v3 .play-root[data-consulta="quien"] .quien.nota-mapa {
   text-align: center;
 }
@@ -2413,53 +2757,4 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   padding: 0;
   border: none;
   background: transparent;
-}
-
-/* === Planes en curso: navegacion discreta â€¹ 1/N â€º en la polaroid.
-   Una sola tarjeta activa; cambiar de encuentro solo re-renderiza. === */
-.obj-curso-nav {
-  position: absolute;
-  top: .58rem;
-  right: .6rem;
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  gap: .22rem;
-}
-.obj-curso-nav[hidden] { display: none !important; }
-.obj-curso-btn {
-  width: 1.35rem;
-  height: 1.35rem;
-  padding: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1.5px dashed rgba(122, 158, 106, .6);
-  border-radius: 50%;
-  background: #eef4e4;
-  color: #3d5c32;
-  font-family: Caveat, cursive;
-  font-size: 1.05rem;
-  font-weight: 700;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: 1px 1px 0 rgba(74, 110, 58, .12);
-}
-.obj-curso-btn:hover { background: #e2efdb; }
-.obj-curso-btn:active { transform: translateY(1px); box-shadow: none; }
-.obj-curso-btn[disabled] { opacity: .45; cursor: default; }
-.obj-curso-cont {
-  min-width: 2.1rem;
-  text-align: center;
-  font-family: Caveat, cursive;
-  font-size: .84rem;
-  font-weight: 700;
-  letter-spacing: .06em;
-  color: #7a6450;
-}
-
-/* Guardia desktop: el carrusel EN CURSO es exclusivo de <=768px.
-   Con .is-on a ancho mayor no se muestra (evita duplicar la polaroid). */
-@media (min-width: 769px) {
-  .play-v3 .encursos-movil.is-on { display: none; }
 }

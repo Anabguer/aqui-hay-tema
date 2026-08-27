@@ -9,6 +9,7 @@ use function AquiHayTema\Api\requireDev;
 use function AquiHayTema\Api\savePartida;
 use function AquiHayTema\Api\withLabAudit;
 use AquiHayTema\Engine\Catalog;
+use AquiHayTema\Engine\CalibracionConfig;
 use AquiHayTema\Engine\CitaEngine;
 use AquiHayTema\Engine\EncuentroEngine;
 use AquiHayTema\Engine\EncuentroIntervencion;
@@ -17,11 +18,16 @@ use AquiHayTema\Engine\EncuentroResultadoVista;
 use AquiHayTema\Engine\GameError;
 use AquiHayTema\Engine\LabAudit;
 use AquiHayTema\Engine\ResumenDia;
+use AquiHayTema\Engine\VidaPuebloEngine;
 
 final class EncuentrosHandler
 {
     public static function programar(ApiContext $ctx, array $body, array &$partida): array
     {
+        $perdida = VidaPuebloEngine::rechazoSiPerdida($partida, CalibracionConfig::load($ctx->root));
+        if ($perdida !== null) {
+            return withLabAudit($perdida);
+        }
         $r = $ctx->service->programarEncuentro(
             $partida,
             is_array($body['participantes'] ?? null) ? $body['participantes'] : [
@@ -41,6 +47,10 @@ final class EncuentrosHandler
 
     public static function proponer(ApiContext $ctx, array $body, array &$partida): array
     {
+        $perdida = VidaPuebloEngine::rechazoSiPerdida($partida, CalibracionConfig::load($ctx->root));
+        if ($perdida !== null) {
+            return withLabAudit($perdida);
+        }
         $lab = labActiva($body);
         $antesRes = $lab ? LabAudit::residentesActivos($partida) : [];
         $r = $ctx->service->proponerEncuentro(
@@ -82,6 +92,7 @@ final class EncuentrosHandler
         return [
             'proximo_encuentro' => $estado['proximo_encuentro'] ?? null,
             'encuentro_en_curso' => $estado['encuentro_en_curso'] ?? null,
+            'encuentros_en_curso' => $estado['encuentros_en_curso'] ?? [],
             'encuentros_hoy' => $estado['encuentros_hoy'] ?? [],
             'encuentros_activos' => $estado['encuentros_activos'] ?? 0,
             'encuentros_activos_label' => $estado['encuentros_activos_label'] ?? '',
@@ -233,6 +244,9 @@ final class EncuentrosHandler
         if (isset($body['residente_id'])) {
             $params['residente_id'] = (string) $body['residente_id'];
         }
+        if (isset($body['objetivo'])) {
+            $params['objetivo'] = (string) $body['objetivo'];
+        }
         $r = EncuentroIntervencion::ejecutar(
             $partida,
             (string) ($body['encuentro_id'] ?? ''),
@@ -246,6 +260,7 @@ final class EncuentrosHandler
             $estado = $ctx->service->estadoResumido($partida);
             $r['estado_delta'] = [
                 'encuentro_en_curso' => $estado['encuentro_en_curso'] ?? null,
+                'encuentros_en_curso' => $estado['encuentros_en_curso'] ?? [],
                 'buzon_pendientes' => $estado['buzon_pendientes'] ?? 0,
             ];
         }
