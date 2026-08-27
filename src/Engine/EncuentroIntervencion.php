@@ -111,6 +111,63 @@ final class EncuentroIntervencion
     }
 
     /**
+     * Temas que la persona influida (A) puede sacar para interesar al interlocutor (B):
+     * hobbies reales de B que A conoce y el jugador ya ha descubierto de B.
+     *
+     * @param array<string, mixed> $enc
+     * @return list<array{id: string, etiqueta: string, residente_id: string, residente_nombre: string, objetivo_id: string}>
+     */
+    public static function hobbiesTemaConocidos(
+        array $partida,
+        array $enc,
+        string $objetivoId,
+        ?Catalog $catalog
+    ): array {
+        $objetivoId = (string) $objetivoId;
+        $interlocutor = self::interlocutorDe($enc, $objetivoId);
+        if ($objetivoId === '' || $interlocutor === '') {
+            return [];
+        }
+        $out = [];
+        foreach (ConocimientoNpc::hobbiesConocidos($partida, $objetivoId, $interlocutor) as $hid) {
+            if (!DiscoveryReveal::jugadorSabeHobby($partida, $interlocutor, $hid)) {
+                continue;
+            }
+            $label = $hid;
+            if ($catalog !== null) {
+                try {
+                    $label = EtiquetaFicha::hobby($hid, $catalog->store());
+                } catch (\Throwable $ignored) {
+                }
+            }
+            $out[] = [
+                'id' => $hid,
+                'etiqueta' => $label,
+                'residente_id' => $interlocutor,
+                'residente_nombre' => IdentidadPublica::nombre($partida, $interlocutor),
+                'objetivo_id' => $objetivoId,
+            ];
+        }
+        return $out;
+    }
+
+    /**
+     * @param array<string, mixed> $enc
+     */
+    public static function interlocutorDe(array $enc, string $objetivoId): string
+    {
+        $objetivoId = (string) $objetivoId;
+        [$a, $b] = self::par($enc);
+        if ($objetivoId === $a) {
+            return $b;
+        }
+        if ($objetivoId === $b) {
+            return $a;
+        }
+        return '';
+    }
+
+    /**
      * @param array<string, mixed> $enc
      * @return list<array<string, mixed>>
      */
@@ -130,8 +187,16 @@ final class EncuentroIntervencion
                 'disponible' => (bool) ($req['ok'] ?? false),
                 'motivo' => $req['motivo'] ?? null,
             ];
-            if ($id === self::HOBBY && !empty($req['hobbies'])) {
-                $row['hobbies'] = $req['hobbies'];
+            if ($id === self::HOBBY) {
+                $temasA = self::hobbiesTemaConocidos($partida, $enc, $a, $catalog);
+                $temasB = self::hobbiesTemaConocidos($partida, $enc, $b, $catalog);
+                $row['temas_por_objetivo'] = [
+                    $a => $temasA,
+                    $b => $temasB,
+                ];
+                if (!empty($req['hobbies'])) {
+                    $row['hobbies'] = $req['hobbies'];
+                }
             }
             $out[] = $row;
         }
@@ -176,33 +241,23 @@ final class EncuentroIntervencion
         if ($accionId === self::HOBBY && !isset($params['hobby_id'])) {
             return GameError::respuesta(GameError::INTERVENCION_ACCION_INVALIDA, ['motivo' => 'elige_hobby']);
         }
-        if ($accionId === self::HOBBY && isset($params['hobby_id']) && !isset($params['residente_id'])) {
-            /* Con objetivo, el tema solo puede salir de lo YA conocido de ESA persona. */
+        if ($accionId === self::HOBBY && isset($params['hobby_id'])) {
             $optsHobby = $objetivo !== ''
-                ? self::hobbiesConocidosDe($partida, $enc, $objetivo, $catalog)
+                ? self::hobbiesTemaConocidos($partida, $enc, $objetivo, $catalog)
                 : self::hobbiesConocidos($partida, $a, $b, $catalog);
+            $hid = (string) $params['hobby_id'];
+            $encontrado = false;
             foreach ($optsHobby as $opt) {
-                if (($opt['id'] ?? '') === (string) $params['hobby_id']) {
+                if (($opt['id'] ?? '') === $hid) {
                     $params['residente_id'] = (string) ($opt['residente_id'] ?? '');
+                    $encontrado = true;
                     break;
                 }
             }
-        }
-        if ($accionId === self::HOBBY && $objetivo !== ''
-            && isset($params['residente_id'])
-            && (string) $params['residente_id'] !== $objetivo) {
-            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
-        }
-        if ($accionId === self::HOBBY && $objetivo !== '' && isset($params['hobby_id'])) {
-            /* El tema metido en la cabeza debe ser de la persona elegida (dato YA conocido). */
-            $delObjetivo = false;
-            foreach (self::hobbiesConocidosDe($partida, $enc, $objetivo, $catalog) as $opt) {
-                if (($opt['id'] ?? '') === (string) $params['hobby_id']) {
-                    $delObjetivo = true;
-                    break;
-                }
+            if (!$encontrado) {
+                return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_no_conocido']);
             }
-            if (!$delObjetivo) {
+            if ($objetivo !== '' && (string) ($params['residente_id'] ?? '') === $objetivo) {
                 return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
             }
         }
@@ -222,6 +277,7 @@ final class EncuentroIntervencion
             if (($row['id'] ?? '') !== $encuentroId) {
                 continue;
             }
+            $interlocutor = $objetivo !== '' ? self::interlocutorDe($enc, $objetivo) : null;
             $row['intervencion_celeste'] = [
                 'usada' => true,
                 'accion' => $accionId,
@@ -230,6 +286,8 @@ final class EncuentroIntervencion
                 'texto' => $res['texto'],
                 'hobby_id' => $params['hobby_id'] ?? null,
                 'objetivo' => $objetivo !== '' ? $objetivo : null,
+                'interlocutor' => $interlocutor !== '' ? $interlocutor : null,
+                'beneficiario' => isset($params['residente_id']) ? (string) $params['residente_id'] : null,
                 'carga' => $res['carga'] ?? 0.0,
                 'hito' => $res['hito'] ?? null,
                 'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
@@ -275,7 +333,7 @@ final class EncuentroIntervencion
             case self::BROMA:
                 return 'Soltar una broma';
             case self::HOBBY:
-                return 'Hablar de un hobby';
+                return 'Sacar un tema que le guste';
             case self::PERSONAL:
                 return 'Contar algo personal';
             case self::COQUETEAR:
@@ -315,7 +373,7 @@ final class EncuentroIntervencion
                     ? ['ok' => true]
                     : ['ok' => false, 'motivo' => 'aun_no_se_conocen'];
             case self::HOBBY:
-                return self::requisitosHobby($partida, $a, $b, $catalog, $params);
+                return self::requisitosHobby($partida, $enc, $a, $b, $catalog, $params);
             case self::PERSONAL:
                 return self::requisitosPersonal($partida, $a, $b);
             case self::COQUETEAR:
@@ -332,26 +390,36 @@ final class EncuentroIntervencion
      */
     private static function requisitosHobby(
         array $partida,
+        array $enc,
         string $a,
         string $b,
         ?Catalog $catalog,
         array $params
     ): array {
-        $opts = self::hobbiesConocidos($partida, $a, $b, $catalog);
-        if ($opts === []) {
+        $objetivo = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
+        $legacy = self::hobbiesConocidos($partida, $a, $b, $catalog);
+        $temasA = self::hobbiesTemaConocidos($partida, $enc, $a, $catalog);
+        $temasB = self::hobbiesTemaConocidos($partida, $enc, $b, $catalog);
+        $tieneTemas = $temasA !== [] || $temasB !== [];
+        if ($objetivo !== '') {
+            $opts = self::hobbiesTemaConocidos($partida, $enc, $objetivo, $catalog);
+        } else {
+            $opts = $legacy;
+        }
+        if (!$tieneTemas && $legacy === []) {
             return ['ok' => false, 'motivo' => 'sin_hobby_conocido'];
         }
         $hid = isset($params['hobby_id']) ? (string) $params['hobby_id'] : '';
         if ($hid === '') {
             return [
-                'ok' => $opts !== [],
-                'motivo' => $opts === [] ? 'sin_hobby_conocido' : null,
-                'hobbies' => $opts,
+                'ok' => $tieneTemas || $legacy !== [],
+                'motivo' => (!$tieneTemas && $legacy === []) ? 'sin_hobby_conocido' : null,
+                'hobbies' => $legacy,
             ];
         }
         foreach ($opts as $o) {
             if (($o['id'] ?? '') === $hid) {
-                return ['ok' => true, 'hobbies' => $opts];
+                return ['ok' => true, 'hobbies' => $legacy];
             }
         }
         return ['ok' => false, 'motivo' => 'hobby_no_conocido'];
@@ -535,14 +603,33 @@ final class EncuentroIntervencion
 
         if ($accionId === self::HOBBY && $tono !== 'mal') {
             $hid = (string) ($params['hobby_id'] ?? '');
-            $residente = (string) ($params['residente_id'] ?? '');
-            if ($hid !== '' && $residente !== '') {
-                $lugar = (string) ($enc['lugar'] ?? '');
-                $plan = PlanAfinidad::paraParticipante($partida, $residente, $lugar, $catalog);
-                $match = is_array($plan) && !empty($plan['hobby_match']);
-                if ($match) {
-                    self::aplicarEmocion($partida, $residente, EmotionalRecovery::estadoDesdeResultado($resultado) ?? EstadoEmocional::NEUTRO);
-                    $efectos['emocion'] = ['residente' => $residente, 'hobby_match' => true];
+            $beneficiario = (string) ($params['residente_id'] ?? '');
+            $influido = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
+            if ($hid !== '' && $beneficiario !== '') {
+                $perfilB = PerfilPartida::deOLegacy($partida, $beneficiario, $catalog);
+                $tieneHobby = in_array($hid, $perfilB['hobbies'] ?? [], true);
+                if ($tieneHobby) {
+                    self::aplicarEmocion(
+                        $partida,
+                        $beneficiario,
+                        EmotionalRecovery::estadoDesdeResultado($resultado) ?? EstadoEmocional::NEUTRO
+                    );
+                    $efectos['emocion'] = [
+                        'residente' => $beneficiario,
+                        'hobby_match' => true,
+                        'influido' => $influido !== '' ? $influido : null,
+                    ];
+                }
+                if ($influido !== '' && $influido !== $beneficiario && $tono === 'bien') {
+                    $perfilA = PerfilPartida::deOLegacy($partida, $influido, $catalog);
+                    if (in_array($hid, $perfilA['hobbies'] ?? [], true)) {
+                        self::aplicarEmocion(
+                            $partida,
+                            $influido,
+                            EmotionalRecovery::estadoDesdeResultado($resultado) ?? EstadoEmocional::NEUTRO
+                        );
+                        $efectos['emocion_compartida'] = ['residente' => $influido];
+                    }
                 }
             }
         }
@@ -682,6 +769,9 @@ final class EncuentroIntervencion
     ): float {
         $snap = EncuentroPonderacion::snapshot($partida, $enc, $catalog);
         $carga = (EncuentroExperiencia::cargaDe($snap, $a, $cal) + EncuentroExperiencia::cargaDe($snap, $b, $cal)) / 2.0;
+        if ($accionId === self::HABLAR) {
+            $carga += 0.06;
+        }
         if ($accionId === self::BROMA) {
             $carga += 0.08;
         }
@@ -693,11 +783,16 @@ final class EncuentroIntervencion
         }
         if ($accionId === self::HOBBY) {
             $rid = (string) ($params['residente_id'] ?? '');
-            $lugar = (string) ($enc['lugar'] ?? '');
-            if ($rid !== '') {
-                $plan = PlanAfinidad::paraParticipante($partida, $rid, $lugar, $catalog);
-                if (is_array($plan) && !empty($plan['hobby_match'])) {
+            $hid = (string) ($params['hobby_id'] ?? '');
+            if ($rid !== '' && $hid !== '') {
+                $perfil = PerfilPartida::deOLegacy($partida, $rid, $catalog);
+                if (in_array($hid, $perfil['hobbies'] ?? [], true)) {
                     $carga += 0.2;
+                }
+                $lugar = (string) ($enc['lugar'] ?? '');
+                $plan = PlanAfinidad::paraParticipante($partida, $rid, $lugar, $catalog);
+                if (is_array($plan) && !empty($plan['relacionado'])) {
+                    $carga += 0.1;
                 }
             }
         }
@@ -780,8 +875,22 @@ final class EncuentroIntervencion
         $na = IdentidadPublica::nombre($partida, $a);
         $nb = IdentidadPublica::nombre($partida, $b);
         $par = $na . ' y ' . $nb;
+        $objetivo = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
+        $nInfluido = $objetivo !== '' ? IdentidadPublica::nombre($partida, $objetivo) : '';
+        $beneficiario = (string) ($params['residente_id'] ?? '');
+        $nBenef = $beneficiario !== '' ? IdentidadPublica::nombre($partida, $beneficiario) : '';
 
         if ($accionId === self::HABLAR) {
+            if ($objetivo !== '') {
+                switch ($tono) {
+                    case 'bien':
+                        return 'Le has dado un empujoncito a ' . $nInfluido . ' y la charla fluye con más soltura.';
+                    case 'mal':
+                        return 'Le has dado un empujoncito a ' . $nInfluido . ', pero la conversación se enfría un poco.';
+                    default:
+                        return 'Le has dado un empujoncito a ' . $nInfluido . '. Charlan sin más sobresaltos.';
+                }
+            }
             switch ($tono) {
                 case 'bien':
                     return 'La charla fluye entre ' . $par . '.';
@@ -808,6 +917,19 @@ final class EncuentroIntervencion
                 try {
                     $label = EtiquetaFicha::hobby($hid, $catalog->store());
                 } catch (\Throwable $ignored) {
+                }
+            }
+            if ($objetivo !== '' && $nBenef !== '') {
+                switch ($tono) {
+                    case 'bien':
+                        return 'Le has sugerido a ' . $nInfluido . ' que saque el tema de ' . $label
+                            . '. A ' . $nBenef . ' le interesa, y la conversación despega.';
+                    case 'mal':
+                        return 'Le has sugerido a ' . $nInfluido . ' que hable de ' . $label
+                            . ', pero a ' . $nBenef . ' no le entra.';
+                    default:
+                        return 'Le has sugerido a ' . $nInfluido . ' que saque el tema de ' . $label
+                            . '. A ' . $nBenef . ' le interesa, así que la charla tiene más opciones de arrancar.';
                 }
             }
             switch ($tono) {

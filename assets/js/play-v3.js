@@ -1596,24 +1596,41 @@
     if (!rid) return '<span class="enc-int-pers-cara enc-int-pers-cara--ini">?</span>';
     return '<span class="enc-int-pers-cara enc-int-pers-cara--ini">' + esc((nombreDe(rid)[0] || '?')) + '</span>';
   }
-  function hobbyVisibleParaObjetivo(hobbyResidenteId, objetivoId) {
-    if (!objetivoId) return true;
-    return !hobbyResidenteId || hobbyResidenteId === objetivoId;
+  function temasIntervencionDe(iv) {
+    var hobbyAcc = (iv.acciones || []).find(function (a) { return a.id === 'hobby'; });
+    return (hobbyAcc && hobbyAcc.temas_por_objetivo) ? hobbyAcc.temas_por_objetivo : null;
+  }
+  function pintarTemasIntervencion(wrap, iv, objetivoId) {
+    var panel = wrap.querySelector('[data-temas-panel]');
+    var toggle = wrap.querySelector('[data-temas-toggle]');
+    var box = wrap.querySelector('.enc-int-temas');
+    if (!panel || !box) return;
+    var map = temasIntervencionDe(iv);
+    var temas = (map && objetivoId && map[objetivoId]) ? map[objetivoId] : [];
+    panel.innerHTML = '';
+    if (toggle) {
+      toggle.classList.remove('is-elegido', 'is-open');
+      toggle.textContent = '\ud83d\udcac Sacar un tema que le guste\u2026';
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.disabled = !temas.length;
+    }
+    box.hidden = !temas.length;
+    temas.forEach(function (h) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'enc-int-btn enc-int-btn--hobby enc-int-opt';
+      btn.setAttribute('data-enc-int-accion', 'hobby');
+      btn.setAttribute('data-hobby-id', h.id || '');
+      btn.setAttribute('data-residente-id', h.residente_id || '');
+      btn.setAttribute('role', 'menuitem');
+      btn.textContent = h.etiqueta || h.id || '';
+      panel.appendChild(btn);
+    });
+    panel.hidden = true;
   }
   function textoFeedbackIntervencion(iv) {
     if (!iv || !iv.ultimo) return '';
-    var t = iv.ultimo.texto || '';
-    var obj = iv.ultimo.objetivo;
-    if (!t) return '';
-    if (!obj) return t;
-    var nombre = obj ? nombreDe(obj) : '';
-    if (iv.ultimo.tono === 'bien') {
-      return nombre + ' \u00a1recibe la idea! ' + t;
-    }
-    if (iv.ultimo.tono === 'mal') {
-      return nombre + ' no conecta: ' + t;
-    }
-    return nombre + ': ' + t;
+    return iv.ultimo.texto || '';
   }
   function htmlIntervencionEncuentro(enc, estado) {
     if (!planEsEnCurso(enc, estado)) return '';
@@ -1628,7 +1645,7 @@
     var ids = enc.participantes || [];
     var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
       '<div class="enc-int-step" data-enc-int-paso="persona">' +
-      '<p class="enc-int-kicker">\u00bfEn qui\u00E9n quieres meterte?</p>' +
+      '<p class="enc-int-kicker">\u00bfA qui\u00E9n quieres darle un empujoncito?</p>' +
       '<div class="enc-int-personas">';
     ids.forEach(function (rid) {
       html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
@@ -1637,27 +1654,26 @@
     html += '</div></div>';
     html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
       '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
-      '<p class="enc-int-kicker">\u00bfQu\u00E9 quieres meterle en la cabeza?</p>' +
+      '<p class="enc-int-kicker">\u00bfQu\u00E9 le quieres sugerir?</p>' +
       '<div class="enc-int-btns">';
-    var temas = null;
+    var tieneTemas = false;
     iv.acciones.forEach(function (a) {
       if (!a.disponible) return;
       if (a.id === 'hobby') {
-        if (a.hobbies && a.hobbies.length) temas = a.hobbies;
+        if (a.temas_por_objetivo) {
+          Object.keys(a.temas_por_objetivo).forEach(function (k) {
+            if ((a.temas_por_objetivo[k] || []).length) tieneTemas = true;
+          });
+        }
         return;
       }
       html += '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(a.id) + '">' + esc(a.etiqueta) + '</button>';
     });
     html += '</div>';
-    if (temas && temas.length) {
-      html += '<div class="enc-int-temas">' +
-        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">\ud83d\udcac Elegir un tema\u2026</button>' +
-        '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu">';
-      temas.forEach(function (h) {
-        html += '<button type="button" class="enc-int-btn enc-int-btn--hobby enc-int-opt" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '" role="menuitem">' +
-          esc(h.etiqueta) + '</button>';
-      });
-      html += '</div></div>';
+    if (tieneTemas) {
+      html += '<div class="enc-int-temas" hidden>' +
+        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false" disabled>\ud83d\udcac Sacar un tema que le guste\u2026</button>' +
+        '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu"></div></div>';
     }
     html += '</div>';
     html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
@@ -1869,7 +1885,7 @@
     const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
-    const ctaTxt = puedeIntervenir ? 'Intervenir' : 'Ver encuentro';
+    const ctaTxt = puedeIntervenir ? '¿Qué se cuece ahí?' : 'Ver encuentro';
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
@@ -1890,7 +1906,7 @@
     const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
-    const ctaTxt = puedeIntervenir ? 'Intervenir' : 'Ver encuentro';
+    const ctaTxt = puedeIntervenir ? '¿Qué se cuece ahí?' : 'Ver encuentro';
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
@@ -6010,13 +6026,8 @@ function hobbyIconKey(id, texto) {
       var objetivoId = wrap.getAttribute('data-enc-int-objetivo') || '';
       var extra = { objetivo: objetivoId || undefined };
       if (acc === 'hobby') {
-        var hobbyResidenteId = encIntBtn.getAttribute('data-residente-id');
-        if (objetivoId && !hobbyVisibleParaObjetivo(hobbyResidenteId, objetivoId)) {
-          wrap.classList.remove('is-busy');
-          return;
-        }
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
-        extra.residente_id = hobbyResidenteId;
+        extra.residente_id = encIntBtn.getAttribute('data-residente-id');
         var optWrap = encIntBtn.closest('.enc-int-temas');
         if (optWrap) {
           cerrarSelectorTemas();
@@ -6045,10 +6056,11 @@ function hobbyIconKey(id, texto) {
       var stepAccion = wrapP.querySelector('[data-enc-int-paso="accion"]');
       if (stepPersona) stepPersona.hidden = true;
       if (stepAccion) stepAccion.hidden = false;
-      wrapP.querySelectorAll('.enc-int-btn--hobby[data-residente-id]').forEach(function (b) {
-        var rid = b.getAttribute('data-residente-id');
-        b.hidden = !hobbyVisibleParaObjetivo(rid, personaId);
-      });
+      var encRow = (cacheEstado && cacheEstado.encuentros_en_curso || []).find(function (e) {
+        return e && String(e.id) === String(wrapP.getAttribute('data-enc-id'));
+      }) || (cacheEstado && cacheEstado.encuentro_en_curso && String(cacheEstado.encuentro_en_curso.id) === String(wrapP.getAttribute('data-enc-id')) ? cacheEstado.encuentro_en_curso : null);
+      var ivP = encRow ? intervencionVistaDe(encRow, cacheEstado) : null;
+      if (ivP) pintarTemasIntervencion(wrapP, ivP, personaId);
       return;
     }
     const encVolver = ev.target.closest('[data-enc-int-volver]');
@@ -6062,9 +6074,8 @@ function hobbyIconKey(id, texto) {
       var stepAC = wrapV.querySelector('[data-enc-int-paso="accion"]');
       if (stepAC) stepAC.hidden = true;
       if (stepPA) stepPA.hidden = false;
-      wrapV.querySelectorAll('.enc-int-btn--hobby[data-residente-id]').forEach(function (b) {
-        b.hidden = false;
-      });
+      var temasBox = wrapV.querySelector('.enc-int-temas');
+      if (temasBox) temasBox.hidden = true;
       return;
     }
     const caraTok = ev.target.closest('.cara-token[data-residente]');

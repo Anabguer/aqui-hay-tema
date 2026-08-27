@@ -170,41 +170,60 @@ $rowSin = EncuentroIntervencion::buscar($partida2, $enc2);
 ok(($rowSin['intervencion_celeste']['objetivo'] ?? null) === null, 'sin objetivo: campo queda a null');
 ok(($rSin['vista']['ultimo']['objetivo'] ?? null) === null, 'vista: ultimo.objetivo null sin objetivo');
 
-/* --- 7. Hobby: el tema debe pertenecer a la persona elegida (dato ya conocido) --- */
+/* --- 7. Hobby: el tema debe ser del INTERLOCUTOR (interés de B), no del influido (A) --- */
 [$svc3, $partida3, $enc3, , $qa3, $p13, , , $catalog3] = setupDosEncuentrosSimultaneos();
 $row3 = EncuentroIntervencion::buscar($partida3, $enc3);
 $part3 = array_map('strval', $row3['participantes']);
-$dueno = (string) $part3[0];
-$otro = (string) $part3[1];
-$perfilDueno = \AquiHayTema\Engine\PerfilPartida::deOLegacy($partida3, $dueno, $catalog3);
+$influido = (string) $part3[0];
+$interlocutor = (string) $part3[1];
+$perfilInter = \AquiHayTema\Engine\PerfilPartida::deOLegacy($partida3, $interlocutor, $catalog3);
 $hid = '';
-foreach ($perfilDueno['hobbies'] ?? [] as $hh) {
+foreach ($perfilInter['hobbies'] ?? [] as $hh) {
     if (is_string($hh) && $hh !== '') {
         $hid = $hh;
         break;
     }
 }
 if ($hid === '') {
-    echo "SKIP: placeholder sin hobbies\n";
+    echo "SKIP: placeholder sin hobbies de interlocutor\n";
 } else {
-    DiscoveryReveal::registrarJugador($partida3, $dueno, ConocimientoNpc::campoHobby($hid), $hid, 'test');
-    ok(count(EncuentroIntervencion::hobbiesConocidosDe($partida3, $row3, $dueno, $catalog3)) >= 1,
-        'hobby conocido de la persona elegido visible');
-    $visiblesOtro = array_map(
-        static fn($o) => (string) ($o['id'] ?? ''),
-        EncuentroIntervencion::hobbiesConocidosDe($partida3, $row3, $otro, $catalog3)
-    );
-    ok(!in_array($hid, $visiblesOtro, true),
-        'el hobby descubierto del dueno NO aparece como de la otra persona');
-    $rAjeno = EncuentroIntervencion::ejecutar(
+    ConocimientoNpc::revelar($partida3, $influido, $interlocutor, [ConocimientoNpc::campoHobby($hid)], 'test');
+    DiscoveryReveal::registrarJugador($partida3, $interlocutor, ConocimientoNpc::campoHobby($hid), $hid, 'test');
+    $temas = EncuentroIntervencion::hobbiesTemaConocidos($partida3, $row3, $influido, $catalog3);
+    ok(count($temas) >= 1 && (string) ($temas[0]['residente_id'] ?? '') === $interlocutor,
+        'tema visible es hobby del interlocutor, no del influido');
+    $perfilInfluido = \AquiHayTema\Engine\PerfilPartida::deOLegacy($partida3, $influido, $catalog3);
+    $hidPropio = '';
+    foreach ($perfilInfluido['hobbies'] ?? [] as $hh) {
+        if (is_string($hh) && $hh !== '' && $hh !== $hid) {
+            $hidPropio = $hh;
+            DiscoveryReveal::registrarJugador($partida3, $influido, ConocimientoNpc::campoHobby($hidPropio), $hidPropio, 'test');
+            break;
+        }
+    }
+    if ($hidPropio !== '') {
+        $rAjeno = EncuentroIntervencion::ejecutar(
+            $partida3,
+            $enc3,
+            EncuentroIntervencion::HOBBY,
+            ['hobby_id' => $hidPropio, 'residente_id' => $influido, 'objetivo' => $influido],
+            $catalog3
+        );
+        ok(!($rAjeno['ok'] ?? true), 'tema del influido rechazado (debe ser del interlocutor)');
+        $detAjeno = (string) (($rAjeno['detalle'] ?? '') ?: ($rAjeno['contexto']['detalle'] ?? '') ?: ($rAjeno['motivo'] ?? ''));
+        ok(in_array($detAjeno, ['hobby_de_otro_residente', 'hobby_no_conocido'], true),
+            'detalle hobby_de_otro_residente o hobby_no_conocido');
+    }
+    $rOkTema = EncuentroIntervencion::ejecutar(
         $partida3,
         $enc3,
         EncuentroIntervencion::HOBBY,
-        ['hobby_id' => $hid, 'residente_id' => $dueno, 'objetivo' => $otro],
+        ['hobby_id' => $hid, 'objetivo' => $influido],
         $catalog3
     );
-    ok(!($rAjeno['ok'] ?? true), 'tema de la otra persona rechazado con objetivo distinto');
-    ok((string) (($rAjeno['contexto']['detalle'] ?? '')) === 'hobby_de_otro_residente', 'detalle hobby_de_otro_residente');
+    ok(($rOkTema['ok'] ?? false), 'tema del interlocutor ejecuta con influido como objetivo');
+    ok((string) ($rOkTema['intervencion']['beneficiario'] ?? '') === $interlocutor,
+        'beneficiario = interlocutor');
 }
 
 /* --- 8. Cotilleo/diario no duplicados por pasar objetivo (hablar trivial) --- */
