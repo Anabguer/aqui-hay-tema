@@ -9,7 +9,7 @@
       "hora  rato  rato  vida" !important;
     align-items: start !important;
     column-gap: 8px !important;
-    row-gap: 5px !important;
+    row-gap: 2px !important;
     padding: 10px 13px 0 !important;
   }
 
@@ -47,9 +47,12 @@
 
   .play-v3:has(.game-shell) .top-reloj {
     grid-area: rato !important;
-    display: flex !important;
+    display: inline-flex !important;
     align-items: center !important;
-    gap: 8px !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    align-self: center !important;
+    justify-self: start !important;
   }
 
   .play-v3:has(.game-shell) .game-left.zona-actividad {
@@ -109,20 +112,7 @@
     text-underline-offset: 3px !important;
   }
 
-  .play-v3:has(.game-shell) .game-right {
-    display: flex !important;
-    flex-direction: column !important;
-    grid-template-columns: none !important;
-    gap: 12px !important;
-    padding: 0 13px !important;
-  }
-
-  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par,
-  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas {
-    grid-column: auto !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
+  /* game-right: display:contents vía LAYOUT-v8; sin flex que encoge el feed */
 
   .play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
     display: block !important;
@@ -289,31 +279,16 @@
 }
 
 
-/* === CRITICO: responsive pone display:contents en .game-right.zona-personas === */
+/* CRITICO feed: display:contents + grid full-width (INICIO-MOVIL-REGRESSION-v9) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-right.zona-personas {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 12px !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-    padding: 0 13px !important;
-    box-sizing: border-box !important;
-    order: 4 !important;
+    display: contents !important;
   }
 
   .play-v3:has(.game-shell) .proxplanes-movil:not(.is-on),
   .play-v3:has(.game-shell) .encursos-movil:not(.is-on) {
     display: none !important;
   }
-
-  .play-v3:has(.game-shell) .game-right .encursos-movil.is-on { order: 1 !important; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 2 !important; }
-  .play-v3:has(.game-shell) .game-right .proxplanes-movil.is-on { order: 3 !important; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { order: 4 !important; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { order: 5 !important; }
 }
 
 /* === Tres bloques Inicio movil (ref captura 2026-08-26): Cotilleo + Planes en curso + Proximos === */
@@ -737,7 +712,7 @@
     gap: 0 !important;
   }
 
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon,
+  .play-v3:has(.game-shell) .game-left.zona-actividad .obj-buzon,
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
     width: 100% !important;
     min-height: 92px !important;
@@ -758,7 +733,7 @@
     position: relative !important;
   }
 
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon {
+  .play-v3:has(.game-shell) .game-left.zona-actividad .obj-buzon {
     border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
   }
 
@@ -782,7 +757,7 @@
     justify-content: center !important;
   }
 
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-img {
+  .play-v3:has(.game-shell) .game-left.zona-actividad .obj-buzon-img {
     width: 56px !important;
     height: auto !important;
     max-height: none !important;
@@ -824,7 +799,7 @@
   }
 
   .play-v3:has(.game-shell) .game-left .game-left-tile-label,
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
+  .play-v3:has(.game-shell) .game-left.zona-actividad .obj-buzon-txt,
   .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before {
     font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
@@ -856,7 +831,7 @@
     gap: 2px !important;
   }
 
-  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-badge {
+  .play-v3:has(.game-shell) .game-left.zona-actividad .obj-buzon-badge {
     top: 4px !important;
     right: 6px !important;
     min-width: 22px !important;
@@ -867,14 +842,32 @@
 
 
 
-/* INICIO-OVERRIDE-LAYOUT-v8: no pisar grid game-main del DS */
+/* INICIO-OVERRIDE-LAYOUT-v8 + REGRESSION-v9: grid móvil ancho completo feed */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-main {
     display: grid !important;
     grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    column-gap: 10px !important;
+    row-gap: 12px !important;
   }
   .play-v3:has(.game-shell) .game-left,
   .play-v3:has(.game-shell) .game-right {
     display: contents !important;
+  }
+  .play-v3:has(.game-shell) .shell-grupo-buzon { grid-column: 1 !important; grid-row: 1 !important; }
+  .play-v3:has(.game-shell) .shell-grupo-resumen { grid-column: 2 !important; grid-row: 1 !important; }
+  .play-v3:has(.game-shell) .shell-grupo-planes { grid-column: 3 !important; grid-row: 1 !important; }
+  .play-v3:has(.game-shell) .game-map-wrap { grid-column: 1 / -1 !important; grid-row: 2 !important; }
+  .play-v3:has(.game-shell) .encursos-movil { grid-column: 1 / -1 !important; grid-row: 3 !important; width: 100% !important; max-width: 100% !important; padding: 0 13px !important; box-sizing: border-box !important; }
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par { grid-column: 1 / -1 !important; grid-row: 4 !important; width: 100% !important; max-width: 100% !important; padding: 0 13px !important; box-sizing: border-box !important; }
+  .play-v3:has(.game-shell) .proxplanes-movil { grid-column: 1 / -1 !important; grid-row: 5 !important; width: 100% !important; max-width: 100% !important; padding: 0 13px !important; box-sizing: border-box !important; }
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par { grid-column: 1 / -1 !important; grid-row: 6 !important; width: 100% !important; max-width: 100% !important; padding: 0 13px !important; box-sizing: border-box !important; }
+  .play-v3:has(.game-shell) .shell-grupo-parejas { grid-column: 1 / -1 !important; grid-row: 7 !important; width: 100% !important; max-width: 100% !important; padding: 0 13px !important; box-sizing: border-box !important; }
+  .play-v3:has(.game-shell) .top-meta-hora { align-self: center !important; }
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato {
+    min-height: 26px !important;
+    padding: 2px 9px !important;
+    font-size: .75rem !important;
+    line-height: 1.1 !important;
   }
 }

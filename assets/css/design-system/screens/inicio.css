@@ -45,21 +45,19 @@
   .play-v3:has(.game-shell) .shell-grupo-parejas { grid-column: 1 / -1; grid-row: 7; }
 
   .play-v3:has(.game-shell) .game-main { gap: 12px; }
-  .play-v3:has(.game-shell) .game-right {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    padding: 0 13px;
-    gap: 12px;
-    width: 100%;
-    box-sizing: border-box;
-  }
 
-  .play-v3:has(.game-shell) .game-right > .shell-grupo,
-  .play-v3:has(.game-shell) .game-right > section {
+  /* Feed ancho completo: padding en bloques, no contenedor game-right (display:contents) */
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par,
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par,
+  .play-v3:has(.game-shell) .shell-grupo-parejas,
+  .play-v3:has(.game-shell) .encursos-movil,
+  .play-v3:has(.game-shell) .proxplanes-movil {
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    box-sizing: border-box;
+    padding-left: 13px;
+    padding-right: 13px;
   }
 
   /* Superficies DS del feed: ningÃƒÂºn border-image/mask legacy */
@@ -85,7 +83,7 @@
       "hora  rato  rato  vida";
     align-items: start;
     column-gap: 8px;
-    row-gap: 5px;
+    row-gap: 2px;
     padding: 10px 13px 0;
   }
 
@@ -149,7 +147,7 @@
 
   .play-v3:has(.game-shell) .top-meta-hora {
     grid-area: hora;
-    align-self: end;
+    align-self: center;
     justify-self: start;
     display: inline-flex;
     align-items: center;
@@ -179,22 +177,25 @@
 
   .play-v3:has(.game-shell) .top-reloj {
     grid-area: rato;
-    align-self: end;
-    display: flex;
+    align-self: center;
+    justify-self: start;
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 4px;
+    margin: 0;
   }
 
   .play-v3:has(.game-shell) .top-reloj .pasar-rato {
-    min-height: 32px;
-    padding: 5px 11px;
+    min-height: 26px;
+    padding: 2px 9px;
     background: var(--ds-lavender-soft);
     border: 1.5px solid var(--ds-lavender-deep);
     border-radius: 12px 9px 13px 10px / 10px 13px 9px 12px;
     box-shadow: 1.5px 2.5px 0 rgba(124, 107, 174, .35);
     font-family: var(--ds-font-ui);
     font-weight: 800;
-    font-size: .8125rem;
+    font-size: .75rem;
+    line-height: 1.1;
     color: var(--ds-lavender-deep);
     transform: rotate(-1.2deg);
   }
@@ -956,7 +957,7 @@
   }
 
   .play-v3:has(.game-shell) .obj-misiones-papel-tit::before {
-    content: "ðŸ“‹";
+    content: "\1F4CB";
     font-size: .8125rem;
   }
 
@@ -1044,7 +1045,7 @@
   }
 
   .play-v3:has(.game-shell) .zona-tit-parejas::before {
-    content: "â™¥";
+    content: "\2665";
     color: var(--ds-pink-deep);
     font-size: 1rem;
   }
@@ -1061,13 +1062,12 @@
   }
 
   .play-v3:has(.game-shell) .obj-parejas-list p.muted::before {
-    content: "â™¥ â™¥";
+    content: "\2665  \2665";
     display: block;
     font-size: 1.5rem;
     letter-spacing: 10px;
-    color: var(--ds-pink);
-    text-shadow: 0 1.5px 0 var(--ds-pink-deep);
-    margin-bottom: 3px;
+    line-height: 1;
+    margin-bottom: 4px;
   }
 
   .play-v3:has(.game-shell) .obj-pareja-piece {
@@ -1110,4 +1110,6 @@
   .play-v3:has(.game-shell) .obj-planes-prox-ver {
     display: none !important;
   }
+
+  /* INICIO-MOVIL-REGRESSION-v9 */
 }

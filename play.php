@@ -378,10 +378,10 @@ if (is_file($ahtBusterFile)) {
       </button>
       <div class="control-audio" aria-label="Controles de audio">
         <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar mï¿½sica" title="Desactivar mï¿½sica">
-          <span class="control-musica-ico" aria-hidden="true">?</span>
+          <span class="control-musica-ico" aria-hidden="true">&#9834;</span>
         </button>
         <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
-          <span class="control-efectos-ico" aria-hidden="true">?</span>
+          <span class="control-efectos-ico" aria-hidden="true">&#10022;</span>
         </button>
         <button type="button" class="control-inventario" data-open="inventario" aria-label="Abrir inventario" title="Inventario">
           <span class="control-inventario-ico" aria-hidden="true">&#127873;</span>

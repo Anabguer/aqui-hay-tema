@@ -43,8 +43,8 @@ check(4,
 // 5 pasar rato PLAY compacto móvil
 check(5,
   /pasar-rato-ico[\s\S]{0,120}9654/.test(php) &&
-  /\.top-reloj \.pasar-rato[\s\S]{0,120}min-height:\s*32px/.test(inicio),
-  'PLAY icon + min-height 32px móvil');
+  /\.top-reloj \.pasar-rato[\s\S]{0,120}min-height:\s*26px/.test(inicio),
+  'PLAY icon + min-height 26px móvil');
 
 // 6 desktop prox en columna izquierda
 check(6,
