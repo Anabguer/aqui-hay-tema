@@ -1651,27 +1651,6 @@
       '</div>' +
       '</div></article>';
   }
-  function htmlProximoPlanCardDesktop(enc, estado) {
-    const ids = enc.participantes || [];
-    const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
-    const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
-      ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
-    return '<article class="obj-planes-prox-card">' +
-      '<span class="obj-planes-prox-hora">' + esc(sello) + '</span>' +
-      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
-      '<p class="obj-planes-prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
-      '<p class="obj-planes-prox-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
-      '</article>';
-  }
-  function renderProximosPlanesDesktop(estado) {
-    const block = document.querySelector('[data-planes-prox-block]');
-    const grid = block && block.querySelector('[data-planes-prox-list]');
-    if (!block || !grid) return;
-    const lista = proximosPlanesFuturos(cacheInsp, estado).slice(0, 4);
-    if (!lista.length) { block.hidden = true; grid.innerHTML = ''; return; }
-    block.hidden = false;
-    grid.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardDesktop(enc, estado); }).join('');
-  }
   function renderProximosPlanesMovil(estado) {
     const block = document.querySelector('[data-proxplanes-block]');
     if (!block) return;
@@ -1856,7 +1835,6 @@
       }
     }
 
-    renderProximosPlanesDesktop(estado);
     renderProximosPlanesMovil(estado);
     renderEncursosMovil(estado);
 

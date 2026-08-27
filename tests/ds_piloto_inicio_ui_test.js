@@ -15,6 +15,7 @@ const dsDir = path.join(root, 'assets', 'css', 'design-system');
 const dsTokens = fs.readFileSync(path.join(dsDir, 'tokens.css'), 'utf8');
 const dsComp = fs.readFileSync(path.join(dsDir, 'components.css'), 'utf8');
 const dsInicio = fs.readFileSync(path.join(dsDir, 'screens', 'inicio.css'), 'utf8');
+const dsInicioDesktop = fs.readFileSync(path.join(dsDir, 'screens', 'inicio-desktop.css'), 'utf8');
 
 let failures = 0;
 function ok(c, m) {
@@ -40,7 +41,11 @@ ok(/\(@media \(max-width: 768px\)\s*\{[\s\S]*\}\s*$/.test(dsInicio.trim()) ||
 ok(!/\}\s*[^{}\s@][^{}]*\{/.test(fueraDeMedia.replace(/^\{/, '')) || true,
   'inicio.css: sin reglas fuera de media (revisión)');
 ok(!/@media[^{]*min-width[^{]*\{/.test(dsInicio),
-  'inicio.css: no redefine desktop (smoke PC protegido)');
+  'inicio.css: piloto móvil no redefine desktop');
+ok(/@media \(min-width: 769px\)/.test(dsInicioDesktop),
+  'inicio-desktop.css: adaptación DS escritorio separada del piloto móvil');
+ok(/design-system\/screens\/inicio-desktop\.css/.test(php),
+  'play.php: enlaza inicio-desktop.css');
 
 // 3. CERO anillas en el DS (regla global) — solo se permiten menciones de prohibición.
 const sinComentarios = t => t.replace(/\/\*[\s\S]*?\*\//g, ' ');
