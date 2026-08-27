@@ -1119,3 +1119,9 @@
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-left .shell-grupo-buzon .obj-buzon { position: relative; top: -5px; }
 }
+
+
+/* Ajuste de maqueta mobile: Pasar el rato x=16, y=0, alto=20. */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato { position: relative; left: 16px; top: 0; height: 20px; min-height: 20px !important; }
+}
