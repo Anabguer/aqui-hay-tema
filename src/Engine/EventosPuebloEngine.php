@@ -247,6 +247,57 @@ final class EventosPuebloEngine
         ];
     }
 
+    /**
+     * Vista UI del próximo evento del pueblo (contrato B3 / Inicio).
+     *
+     * @return array<string, mixed>|null
+     */
+    public static function vistaProximoEvento(array $partida, ?Catalog $catalog = null): ?array
+    {
+        $raw = self::proximoEvento($partida, $catalog);
+        if ($raw === null) {
+            return null;
+        }
+        $lugarId = (string) ($raw['lugar'] ?? '');
+        $lugarNombre = self::nombreLugarUi($catalog, $lugarId);
+        $dia = (int) ($raw['dia'] ?? 0);
+        $hora = (int) ($raw['hora'] ?? 0);
+        $reloj = is_array($partida['reloj'] ?? null) ? $partida['reloj'] : [];
+        $diaSemana = $dia > 0 ? Reloj::diaSemanaUi($dia, $reloj) : '';
+        $horaUi = sprintf('%02d:00', max(0, min(23, $hora)));
+        $n = (int) ($raw['participantes_n'] ?? 0);
+        $estado = (string) ($raw['estado'] ?? 'programado');
+        $nombre = EventosPuebloAnuncioEngine::nombreNaturalPublico((string) ($raw['nombre'] ?? ''));
+        $catalogoId = (string) ($raw['catalogo_id'] ?? '');
+        $tipo = (string) ($raw['tipo'] ?? '');
+
+        $metaParts = [];
+        if ($estado === 'en_curso') {
+            $metaParts[] = 'En curso';
+        } else {
+            if ($diaSemana !== '') {
+                $metaParts[] = $diaSemana;
+            }
+            $metaParts[] = $horaUi;
+        }
+        if ($lugarNombre !== '') {
+            $metaParts[] = $lugarNombre;
+        }
+        if ($n > 0) {
+            $metaParts[] = $n === 1 ? '1 vecino apuntado' : ($n . ' vecinos apuntados');
+        }
+
+        return array_merge($raw, [
+            'nombre_ui' => $nombre,
+            'lugar_nombre' => $lugarNombre,
+            'dia_semana_ui' => $diaSemana !== '' ? $diaSemana : null,
+            'hora_ui' => $horaUi,
+            'meta_ui' => implode(' · ', $metaParts),
+            'icono' => self::iconoCatalogo($catalogoId, $tipo),
+            'es_evento_pueblo' => true,
+        ]);
+    }
+
     public static function eventoActivo(array $partida, string $catalogoId): bool
     {
         self::ensure($partida);
@@ -275,6 +326,14 @@ final class EventosPuebloEngine
             }
         }
         return (string) ($ev['estado'] ?? 'programado');
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     */
+    public static function activa(array $partida, array $cal): bool
+    {
+        return self::activo($partida, $cal);
     }
 
     /**
@@ -460,5 +519,32 @@ final class EventosPuebloEngine
             $row['ok'] = str_starts_with($resultado, 'evento_programado');
         }
         return $row;
+    }
+
+    private static function nombreLugarUi(?Catalog $catalog, string $lugarId): string
+    {
+        if ($lugarId === '') {
+            return '';
+        }
+        if ($catalog === null) {
+            return $lugarId;
+        }
+        try {
+            return EtiquetaFicha::lugar($lugarId, $catalog->store());
+        } catch (\Throwable $ignored) {
+            return $lugarId;
+        }
+    }
+
+    private static function iconoCatalogo(string $catalogoId, string $familia): string
+    {
+        if ($catalogoId === 'noche_bingo') {
+            return '🎱';
+        }
+        if ($familia === 'ocio_colectivo') {
+            return '🎉';
+        }
+
+        return '📅';
     }
 }

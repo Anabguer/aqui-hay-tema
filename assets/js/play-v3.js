@@ -2077,7 +2077,27 @@
     const vm = buildInicioViewModel(estado, buzon, diario);
     renderInicioMobile(vm, estado);
     renderInicioDesktop(vm, estado);
+    renderProximoEventoPueblo(estado);
     actualizarCotiBadgesUI();
+  }
+
+  function renderProximoEventoPueblo(estado) {
+    const slot = document.querySelector('[data-proximo-evento-slot]');
+    if (!slot) return;
+    const ev = estado && estado.proximo_evento_pueblo;
+    if (!ev || (!ev.nombre_ui && !ev.nombre)) {
+      slot.hidden = true;
+      slot.setAttribute('aria-hidden', 'true');
+      return;
+    }
+    slot.hidden = false;
+    slot.removeAttribute('aria-hidden');
+    const tit = slot.querySelector('[data-proximo-evento-tit]');
+    const meta = slot.querySelector('[data-proximo-evento-meta]');
+    const ico = slot.querySelector('[data-proximo-evento-ico]');
+    if (tit) tit.textContent = ev.nombre_ui || ev.nombre || '';
+    if (meta) meta.textContent = ev.meta_ui || '';
+    if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
   }
 
   function bootSyncInicioViewVisibility() {

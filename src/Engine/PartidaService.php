@@ -552,6 +552,12 @@ final class PartidaService
         if (MisionDiariaEngine::activa($partida)) {
             $out['misiones_hoy'] = MisionDiariaEngine::vistaHoy($partida, $cal);
         }
+        if (EventosPuebloEngine::activa($partida, $cal)) {
+            $proxEvt = EventosPuebloEngine::vistaProximoEvento($partida, $this->catalog);
+            if ($proxEvt !== null) {
+                $out['proximo_evento_pueblo'] = $proxEvt;
+            }
+        }
         $out['buzon_no_leidos'] = BuzonEngine::contarNoLeidos($partida);
         if (PeticionPuebloEngine::activa($partida)) {
             $out['peticiones_pueblo'] = [

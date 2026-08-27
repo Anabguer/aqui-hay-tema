@@ -895,3 +895,18 @@
     color: var(--ds-lavender-deep, #7c6bae) !important;
   }
 }
+
+/* B3 — Próximo evento del pueblo: debajo del mapa en desktop */
+@media (min-width: 769px) {
+  .inicio-stage > .inicio-proximo-evento {
+    grid-column: 2 !important;
+    grid-row: 3 !important;
+    align-self: start !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .inicio-stage {
+    grid-template-rows: auto auto auto !important;
+  }
+}
