@@ -131,6 +131,7 @@
   let cachePueblo = null;
   let cacheBuzon = [];
   let cacheDiario = null;
+  let cacheMisionesStripItems = null;
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
   const ORG_MAX_VECINOS = 3;
@@ -2020,6 +2021,7 @@
     setAllText('[data-cotilleo-teaser]', vm.cotilleoTeaser);
     renderVecinosPreviewIn('.inicio-mobile');
     renderParejasStripIn('.inicio-mobile', vm.parejas);
+    if (cacheMisionesStripItems) renderMisionesStripIn('.inicio-mobile.inicio-mobile-feed', cacheMisionesStripItems);
     renderProximosPlanesMovil(estado);
     renderEncursosMovil(estado);
   }
@@ -2030,6 +2032,7 @@
     setAllText('[data-cotilleo-teaser]', vm.cotilleoTeaser);
     renderVecinosPreviewIn('.inicio-desktop');
     renderParejasStripIn('.inicio-desktop', vm.parejas);
+    if (cacheMisionesStripItems) renderMisionesStripIn('.inicio-desktop', cacheMisionesStripItems);
     renderProximosPlanesMovil(estado);
     renderEncursosMovil(estado);
   }
@@ -2615,8 +2618,15 @@
       el.classList.toggle('misiones-completadas', todas);
     });
   }
+  function renderMisionesStripIn(scopeSel, items) {
+    var root = document.querySelector(scopeSel);
+    if (!root) return;
+    renderMisionesStripEl(root.querySelector("[data-misiones-strip]"), items);
+  }
   function renderMisionesStrip(items) {
-    inicioAll('[data-misiones-strip]').forEach(function (strip) { renderMisionesStripEl(strip, items); });
+    cacheMisionesStripItems = items || [];
+    renderMisionesStripIn(".inicio-mobile.inicio-mobile-feed", cacheMisionesStripItems);
+    renderMisionesStripIn(".inicio-desktop", cacheMisionesStripItems);
     actualizarMisionesCompletadas(items);
   }
   function renderMisionesStripEl(strip, items) {

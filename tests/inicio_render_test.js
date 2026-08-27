@@ -55,6 +55,7 @@ function cssDisplay(sel) {
         feedVis: feedEl ? getComputedStyle(feedEl).display !== 'none' : false,
         deskVis: deskEl ? getComputedStyle(deskEl).display === 'none' : true,
         cotilleo: document.querySelector('[data-cotilleo-teaser]')?.textContent?.trim().length || 0,
+        misionesFeed: document.querySelectorAll('.inicio-mobile.inicio-mobile-feed [data-misiones-strip] .mision-strip-row').length,
         vecinos: document.querySelector('[data-resumen-stats]')?.innerHTML?.length || 0,
         headerHtml: [...document.querySelectorAll('.inicio-mobile:not(.inicio-mobile-feed) .game-top')].map(function (e) { return e.innerHTML; }).join(''),
       };
@@ -63,6 +64,7 @@ function cssDisplay(sel) {
     ok(m.feedVis, 'mobile: feed visible');
     ok(m.deskVis, 'mobile: desktop oculto');
     ok(m.cotilleo > 5, 'mobile: cotilleo con texto');
+    ok(m.misionesFeed >= 1, 'mobile: misiones feed con filas');
     ok(m.vecinos > 10, 'mobile: vecinos renderizados');
     ok(!MOJIBAKE.test(m.headerHtml), 'mobile: cabecera sin mojibake');
 
@@ -78,6 +80,7 @@ function cssDisplay(sel) {
         left: document.querySelectorAll('.inicio-desktop-left .shell-grupo').length,
         right: document.querySelectorAll('.inicio-desktop-right .shell-grupo').length,
         misiones: document.querySelectorAll('[data-misiones-strip] > *').length,
+        misionesFeed: document.querySelectorAll('.inicio-mobile.inicio-mobile-feed [data-misiones-strip] .mision-strip-row').length,
         vecinos: document.querySelector('[data-resumen-stats]')?.innerHTML?.length || 0,
         meta: document.querySelector('[data-dia-meta]')?.textContent || '',
         headerHtml: [...document.querySelectorAll('.inicio-desktop .game-top')].map(function (e) { return e.innerHTML; }).join(''),

@@ -1944,4 +1944,19 @@
     font-size: 1.35rem !important;
     font-weight: 800 !important;
   }
+  /* --- 4. Misiones feed: texto visible (evita colapso -webkit-box en iOS) --- */
+  .play-v3 .inicio-mobile.inicio-mobile-feed .obj-misiones-strip {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .mision-strip-row {
+    display: grid !important;
+  }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
+    display: block !important;
+    -webkit-line-clamp: unset !important;
+    -webkit-box-orient: unset !important;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
