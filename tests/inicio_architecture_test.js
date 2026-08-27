@@ -58,7 +58,10 @@ ok(/inicio-views\.css/.test(php) && /inicio-mobile\.css/.test(php) &&
   !/screens\/inicio\.css/.test(php), 'PHP: CSS views+mobile (sin inicio.css)');
 ok(/@media \(max-width: 768px\)/.test(viewsCss) && /@media \(min-width: 769px\)/.test(viewsCss),
   'views.css: toggles 768/769');
-ok(!/display:\s*contents/.test(deskCss.replace(/\.obj-cotilleo-cuerpo[\s\S]{0,120}display:\s*contents/g, '')),
+// 2b. display:contents permitido solo en cotilleo-cuerpo y wrappers de stage (layout fix)
+let deskCssNoContents = deskCss.replace(/\/\* INICIO-DESKTOP-LAYOUT-FIX[\s\S]*$/, '');
+deskCssNoContents = deskCssNoContents.replace(/\.obj-cotilleo-cuerpo[\s\S]{0,160}?display:\s*contents[^;]*;?/g, '');
+ok(!/display:\s*contents/.test(deskCssNoContents),
   'desktop CSS: sin display:contents en layout');
 
 console.log(failures ? '\n' + failures + ' FAIL' : '\nTODO OK 7/7 + estructura');

@@ -963,12 +963,10 @@ if (is_file($ahtBusterFile)) {
             <div class="obj-misiones-strip" data-misiones-strip></div>
           </div>
         </section>
-            <section class="shell-grupo shell-grupo-planes">
-<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
-              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt">Nuevo plan</span>
-            </button>
-</section>
+            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
+          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
+          <div class="obj-parejas-list" data-parejas-strip></div>
+        </section>
           </aside>
           <aside class="inicio-chrome-right inicio-desktop-right">
             <section class="shell-grupo shell-grupo-cotilleo-par">
@@ -1005,10 +1003,12 @@ if (is_file($ahtBusterFile)) {
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
         </section>
-            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
-          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
-          <div class="obj-parejas-list" data-parejas-strip></div>
-        </section>
+            <section class="shell-grupo shell-grupo-planes">
+<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
+              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
+              <span class="obj-nuevo-plan-txt">Nuevo plan</span>
+            </button>
+</section>
           </aside>
         </div>
       </section>
