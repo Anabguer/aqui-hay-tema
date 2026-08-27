@@ -1,6 +1,6 @@
 {
-    "_comentario": "Feature flags tecnicos. Separado de balance de juego.",
-    "buzon_enabled": false,
+    "_comentario": "Feature flags tecnicos. buzon_enabled global para B2 eventos pueblo en partidas nuevas.",
+    "buzon_enabled": true,
     "diario_enabled": false,
     "npc_autonomy_enabled": false,
     "economy_enabled": false,
