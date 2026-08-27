@@ -41,6 +41,36 @@ final class EventosPuebloEngine
     }
 
     /**
+     * Elige una definicion del catalogo segun campo opcional `peso` (default 1).
+     *
+     * @param list<array<string, mixed>> $items
+     * @return array<string, mixed>|null
+     */
+    public static function elegirItemCatalogo(array $items, RngService $rng): ?array
+    {
+        if ($items === []) {
+            return null;
+        }
+        $total = 0;
+        foreach ($items as $item) {
+            $total += max(1, (int) ($item['peso'] ?? 1));
+        }
+        if ($total <= 0) {
+            return $items[0];
+        }
+        $roll = $rng->nextInt(1, $total);
+        $acc = 0;
+        foreach ($items as $item) {
+            $acc += max(1, (int) ($item['peso'] ?? 1));
+            if ($roll <= $acc) {
+                return $item;
+            }
+        }
+
+        return $items[count($items) - 1];
+    }
+
+    /**
      * @param array<string, mixed> $cal
      */
     public static function alComenzarDia(
@@ -58,11 +88,10 @@ final class EventosPuebloEngine
             return null;
         }
         $items = self::catalogItems($catalog);
-        if ($items === []) {
+        $def = self::elegirItemCatalogo($items, $rng);
+        if ($def === null) {
             return null;
         }
-        $idx = $rng->nextInt(0, count($items) - 1);
-        $def = $items[$idx];
         $id = (string) ($def['id'] ?? '');
         if ($id === '') {
             return null;
@@ -293,7 +322,7 @@ final class EventosPuebloEngine
             'dia_semana_ui' => $diaSemana !== '' ? $diaSemana : null,
             'hora_ui' => $horaUi,
             'meta_ui' => implode(' · ', $metaParts),
-            'icono' => self::iconoCatalogo($catalogoId, $tipo),
+            'icono' => self::iconoCatalogo($catalog, $catalogoId, $tipo),
             'es_evento_pueblo' => true,
         ]);
     }
@@ -536,13 +565,20 @@ final class EventosPuebloEngine
         }
     }
 
-    private static function iconoCatalogo(string $catalogoId, string $familia): string
+    private static function iconoCatalogo(?Catalog $catalog, string $catalogoId, string $familia): string
     {
-        if ($catalogoId === 'noche_bingo') {
-            return '🎱';
+        if ($catalog !== null && $catalogoId !== '') {
+            $def = self::catalogItem($catalog, $catalogoId);
+            $ico = (string) ($def['icono'] ?? '');
+            if ($ico !== '') {
+                return $ico;
+            }
         }
         if ($familia === 'ocio_colectivo') {
             return '🎉';
+        }
+        if ($familia === 'deporte_benefico') {
+            return '⚽';
         }
 
         return '📅';

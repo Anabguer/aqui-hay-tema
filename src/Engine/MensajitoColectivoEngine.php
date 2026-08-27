@@ -28,7 +28,12 @@ final class MensajitoColectivoEngine
         if (mt_rand(1, 10000) > $prob * 10000) {
             return null;
         }
-        $def = $items[array_rand($items)];
+        $rng = RngService::fromPartida($partida);
+        $def = EventosPuebloEngine::elegirItemCatalogo($items, $rng);
+        $rng->persistToPartida($partida);
+        if ($def === null) {
+            return null;
+        }
         $eventoId = (string) ($def['id'] ?? '');
         if ($eventoId === '') {
             return null;
@@ -65,9 +70,12 @@ final class MensajitoColectivoEngine
             return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
         }
         $datos = is_array($mensaje['datos_familia'] ?? null) ? $mensaje['datos_familia'] : [];
-        $eventoId = (string) ($datos['evento_catalogo_id'] ?? 'noche_bingo');
+        $eventoId = (string) ($datos['evento_catalogo_id'] ?? '');
         $cal = CalibracionConfig::load($root);
         $catalog = new Catalog($root);
+        if ($eventoId === '' || EventosPuebloEngine::catalogItem($catalog, $eventoId) === null) {
+            return ['ok' => false, 'error' => 'evento_catalogo_invalido'];
+        }
         if (!self::eventosDisponibles($partida, $cal, $catalog)) {
             return ['ok' => false, 'error' => 'eventos_no_disponibles'];
         }
