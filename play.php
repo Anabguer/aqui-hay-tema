@@ -11,6 +11,7 @@ if (is_file($ahtBusterFile)) {
         $ahtUi = $ahtBusterRaw;
     }
 }
+$ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/play.php')), '/') . '/';
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -24,8 +25,8 @@ if (is_file($ahtBusterFile)) {
   <meta name="apple-mobile-web-app-title" content="Aquí Hay Tema"/>
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
-  <link rel="manifest" href="manifest.webmanifest?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="icon" href="assets/brand/favicon-aht.png" type="image/png" sizes="512x512"/>
+  <link rel="manifest" href="<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>manifest.webmanifest"/>
+  <link rel="icon" href="assets/brand/pwa-icon-192.png" type="image/png" sizes="192x192"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -1083,8 +1084,8 @@ if (is_file($ahtBusterFile)) {
   <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>', { scope: './' })
-        .catch(function () { /* PWA opcional: el juego sigue en navegador */ });
+      navigator.serviceWorker.register('<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>sw.js', { scope: '<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>' })
+        .catch(function (err) { console.warn('PWA service worker:', err); });
     });
   }
   </script>

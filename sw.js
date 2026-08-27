@@ -1,6 +1,7 @@
 /**
  * Service worker mínimo para instalación PWA (Android/Chrome).
  * Estrategia: red directa. Sin caché de assets, APIs ni partidas.
+ * v2-installability: URL sin query string; scope = /juegos/aqui-hay-tema/
  */
 self.addEventListener('install', function (event) {
   self.skipWaiting();
