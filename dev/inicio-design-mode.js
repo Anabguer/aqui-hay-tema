@@ -11,8 +11,10 @@
     ['columna-central','.game-map-wrap'],['columna-derecha','.game-right'],
     ['celestine-apunta','.obj-vecinos-resumen'],['hud','.game-top']
   ];
-  var storage='aht_inicio_maqueta_v1', viewport=innerWidth<=720?'mobile':'desktop';
+  function getViewport(){var w=document.documentElement.clientWidth||(window.visualViewport&&window.visualViewport.width)||window.innerWidth;return w<=720?'mobile':'desktop';}
+  var storage='aht_inicio_maqueta_v1', viewport=getViewport();
   var state=JSON.parse(localStorage.getItem(storage)||'{}'); state.mobile=state.mobile||{}; state.desktop=state.desktop||{};
+  if(viewport==='mobile'&&!state.mobile['pasar-rato']&&state.desktop['pasar-rato']&&state.desktop['pasar-rato'].x===16&&state.desktop['pasar-rato'].y===0&&state.desktop['pasar-rato'].height===20){state.mobile['pasar-rato']=state.desktop['pasar-rato'];delete state.desktop['pasar-rato'];localStorage.setItem(storage,JSON.stringify(state));}
   var tool=document.createElement('aside'); tool.className='aht-design-tool'; tool.innerHTML=
     '<div class="aht-design-head"><h2>Modo diseño · Inicio</h2><button type="button" data-act="collapse">−</button></div><div class="aht-design-body"><select aria-label="Elemento"></select>'+
     '<label>Ancho <output></output><input data-p="width" type="range"></label>'+
@@ -32,6 +34,7 @@
   function cfg(){return state[viewport][select.value]||{};}
   function editableCfg(){return state[viewport][select.value]||(state[viewport][select.value]={});}
   function save(){localStorage.setItem(storage,JSON.stringify(state));}
+  function refreshViewport(){var next=getViewport();if(next===viewport)return;viewport=next;var p=tool.querySelector('p');if(p)p.innerHTML='Arrastra el elemento seleccionado.<br>Maqueta: '+viewport;apply();}
   var textTargets={'cotilleo':'.obj-cotilleo-txt','mensajitos':'.obj-buzon-txt','vecinos':'.obj-vecinos-tit','nuevo-plan':'.obj-nuevo-plan-txt','pasar-rato':'.pasar-rato-txt','misiones':'.obj-misiones-papel-tit','parejas':'.zona-tit-parejas','proximos-planes':'.pp-mov-tit,.obj-planes-prox-tit','planes-en-curso':'.obj-proximo-tit'};
   var iconTargets={'mensajitos':'.obj-buzon-img','nuevo-plan':'.obj-nuevo-plan-ico','proximos-planes':'.pp-mov-ico,.obj-planes-prox-card .prox-faces img','planes-en-curso':'.enc-mov-ico,.obj-proximo-polaroid .prox-faces img'};
   function iconTarget(e){return e.querySelector(iconTargets[select.value]||'img,.obj-buzon-ico-wrap,.obj-nuevo-plan-ico,.plan-seccion-ico')||null;}
@@ -52,5 +55,5 @@
   document.addEventListener('pointerdown',function(e){var t=el();if(!t||tool.contains(e.target)||(!t.contains(e.target)&&e.target!==t))return;var c=editableCfg();drag={x:e.clientX,y:e.clientY,ox:c.x||0,oy:c.y||0};});
   document.addEventListener('pointermove',function(e){if(!drag||tool.contains(e.target))return;var c=editableCfg();c.x=drag.ox+e.clientX-drag.x;c.y=drag.oy+e.clientY-drag.y;save();apply();});document.addEventListener('pointerup',function(){drag=null;});
   document.addEventListener('click',function(e){if(tool.contains(e.target))return;var d=defs.filter(function(x){var t=document.querySelector(x[1]);return t&&t.contains(e.target);})[0];if(!d)return;e.preventDefault();e.stopPropagation();select.value=d[0];document.querySelectorAll('.aht-design-selected').forEach(function(t){t.classList.remove('aht-design-selected');});apply();},true);
-  if(localStorage.getItem(storage+'_collapsed')==='1')tool.classList.add('is-collapsed');document.body.classList.add('aht-design-mode');apply();
+  window.addEventListener('resize',refreshViewport);if(localStorage.getItem(storage+'_collapsed')==='1')tool.classList.add('is-collapsed');document.body.classList.add('aht-design-mode');apply();
 }());
