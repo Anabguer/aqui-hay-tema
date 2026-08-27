@@ -6,13 +6,7 @@
     gap: 12px;
     padding: 10px 12px;
   }
-
-  .play-v3:has(.game-shell) .game-right .proxplanes-movil,
-  .play-v3:has(.game-shell) .game-right .encursos-movil {
-    display: none !important;
-  }
-
-  .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara,
+.play-v3:has(.game-shell) .mapa-zona-hit .hab .cara,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara img,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara .cara-ini,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara {
