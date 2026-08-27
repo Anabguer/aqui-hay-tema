@@ -148,6 +148,18 @@ final class RelacionNarrativaBridge
                     'categoria' => CotilleoCategoria::RELACION,
                     'destacado' => false,
                 ];
+            case RelacionBitacora::REGALO:
+                return [
+                    'texto' => CopyCotilleoFamilias::linea('romance', ['quien' => $quien], $seed),
+                    'categoria' => CotilleoCategoria::ROMANCE,
+                    'destacado' => true,
+                ];
+            case RelacionBitacora::RECHAZO_IMPORTANTE:
+                return [
+                    'texto' => CopyCotilleoFamilias::linea('drama', ['quien' => $quien], $seed),
+                    'categoria' => CotilleoCategoria::DRAMA,
+                    'destacado' => true,
+                ];
             case RelacionBitacora::FLECHAZO:
             case RelacionBitacora::HITO_ROMANTICO:
             case RelacionBitacora::DECLARACION:

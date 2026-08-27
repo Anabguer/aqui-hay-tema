@@ -148,6 +148,7 @@ final class DiarioNarrativaBridge
             'cotilleo_patron',
             'cotilleo_hito',
             'cotilleo_autonomo',
+            'cotilleo_casual_descubrimiento',
             'discusion',
             'senal_romantica',
             'acontecimiento_perder_trabajo',
