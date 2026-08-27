@@ -1,3 +1,13 @@
+/* INICIO-MOBILE-STAGE-CHILD-ORDER */
+
+@media (max-width: 768px) {
+  .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) { order: 1; }
+  .inicio-stage > .inicio-map-host { order: 2; }
+  .inicio-stage > .inicio-mobile.inicio-mobile-feed { order: 3; }
+  .inicio-stage > .inicio-desktop { order: 99; }
+  .inicio-stage > .inicio-proximo-evento { order: 4; }
+}
+
 /* INICIO-MOBILE — presentación móvil namespaced (.inicio-mobile) */
 
 .inicio-mobile .inicio-mobile-layout {
@@ -52,14 +62,14 @@
   /* ---------- 1. Orden del feed (D2) ---------- */
 
   /* Orden feed movil: EN CURSO -> Cotilleo -> Proximos -> Misiones -> Parejas */
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .encursos-movil           { order: 1; }
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .shell-grupo-cotilleo-par { order: 2; }
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .proxplanes-movil         { order: 3; }
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .shell-grupo-misiones-par { order: 4; }
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .shell-grupo-parejas      { order: 5; }
+  .inicio-mobile .inicio-mobile-feed-inner .encursos-movil           { order: 1; }
+  .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 2; }
+  .inicio-mobile .inicio-mobile-feed-inner .proxplanes-movil         { order: 3; }
+  .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-misiones-par { order: 4; }
+  .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-parejas      { order: 5; }
 
-  .inicio-mobile .inicio-mobile .inicio-layout { gap: 12px; }
-  .inicio-mobile .inicio-mobile .inicio-chrome-right {
+  .inicio-mobile .inicio-layout { gap: 12px; }
+  .inicio-mobile .inicio-mobile-feed-inner {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -69,8 +79,8 @@
     box-sizing: border-box;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-right > .shell-grupo,
-  .inicio-mobile .inicio-mobile .inicio-chrome-right > section {
+  .inicio-mobile .inicio-mobile-feed-inner > .shell-grupo,
+  .inicio-mobile .inicio-mobile-feed-inner > section {
     width: 100%;
     max-width: 100%;
     min-width: 0;
@@ -90,7 +100,7 @@
 
   /* ---------- 2. Cabecera (ref: marca + Ã‚Â¿CÃƒÂ³mo va esto? + corazÃƒÂ³n / dÃƒÂ­aÃ‚Â·hora + pasar) ---------- */
 
-  .inicio-mobile .inicio-mobile .game-top {
+  .inicio-mobile .game-top {
     display: grid;
     grid-template-columns: auto 1fr auto auto;
     grid-template-areas:
@@ -235,14 +245,14 @@
 
   /* ---------- 3. Tres piezas de la misma familia (marco tipo Nuevo Plan) ---------- */
 
-  .inicio-mobile .inicio-mobile .inicio-layout .inicio-mobile .inicio-chrome-left.zona-actividad {
+  .inicio-mobile .inicio-layout .inicio-mobile .inicio-chrome-left.zona-actividad {
     gap: 14px;
     padding: 0 13px;
   }
 
   /* Familia de marco comÃƒÂºn: borde tinta 2px + costura interior + radios artesanales */
   .inicio-mobile .zona-actividad .obj-buzon,
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
+  .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
     margin: 0;
     min-height: 86px;
     padding: 10px 8px 9px;
@@ -256,12 +266,12 @@
 
   /* tres piezas desiguales â€” alturas y giros artesanales, sin costura interior */
   .inicio-mobile .zona-actividad .obj-buzon::before,
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen::before {
+  .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen::before {
     content: none;
     display: none;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-layout .inicio-mobile .inicio-chrome-left.zona-actividad {
+  .inicio-mobile .inicio-layout .inicio-mobile .inicio-chrome-left.zona-actividad {
     align-items: end;
   }
 
@@ -297,20 +307,20 @@
     width: 100%;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
+  .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
     min-height: 98px;
     border-radius: 15px 21px 13px 21px / 21px 13px 21px 15px;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-buzon:active,
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen:active,
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan:active {
+  .inicio-mobile .inicio-chrome-left .obj-buzon:active,
+  .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen:active,
+  .inicio-mobile .inicio-chrome-left .obj-nuevo-plan:active {
     transform: scale(.97);
   }
 
   /* Slot de icono transparente (el papel lo pone la tarjeta) */
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .inicio-mobile .inicio-chrome-left-tile-ico,
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-buzon-ico-wrap {
+  .inicio-mobile .inicio-chrome-left .inicio-mobile .inicio-chrome-left-tile-ico,
+  .inicio-mobile .inicio-chrome-left .obj-buzon-ico-wrap {
     background: none;
     border: none;
     box-shadow: none;
@@ -345,7 +355,7 @@
     transform: rotate(4deg);
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-left-tile-label,
+  .inicio-mobile .inicio-chrome-left-tile-label,
   .inicio-mobile .zona-actividad .obj-buzon-txt,
   .inicio-mobile .celestine-nota .obj-vecinos-tit {
     font-family: var(--ds-font-hand);
@@ -398,7 +408,7 @@
   }
 
   /* + NUEVO PLAN: pieza ROSA protagonista (rosa de Parejas/corazones) */
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .shell-grupo-planes .obj-proximo {
+  .inicio-mobile .inicio-chrome-left .shell-grupo-planes .obj-proximo {
     background: none;
     border: none;
     box-shadow: none;
@@ -414,7 +424,7 @@
   }
 
   /* + PLAN: borde rosa discontinuo (ref piloto v3.1) */
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta {
+  .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta {
     min-height: 108px;
     padding: 10px 8px 10px;
     background:
@@ -434,13 +444,13 @@
     transform: rotate(-0.35deg);
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta::before,
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta::after {
+  .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta::before,
+  .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta::after {
     content: none;
     display: none;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan-ico {
+  .inicio-mobile .inicio-chrome-left .obj-nuevo-plan-ico {
     font-size: 2.35rem;
     line-height: .85;
     font-family: var(--ds-font-hand);
@@ -449,7 +459,7 @@
     text-shadow: none;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan-txt {
+  .inicio-mobile .inicio-chrome-left .obj-nuevo-plan-txt {
     color: var(--ds-pink-deep);
     text-shadow: none;
     padding: 0 4px;
@@ -498,7 +508,7 @@
   }
 
   .inicio-mobile .inicio-proximo-evento .inicio-evento-card,
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .ds-event {
+  .inicio-mobile .inicio-mobile-feed-inner .ds-event {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -514,7 +524,7 @@
   }
 
   .inicio-mobile .inicio-proximo-evento .inicio-evento-card::after,
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .ds-event::after {
+  .inicio-mobile .inicio-mobile-feed-inner .ds-event::after {
     content: "";
     position: absolute;
     inset: 3px;
@@ -565,7 +575,7 @@
 
   /* ---------- 6. Tira de Cotilleo (fiel a referencia) ---------- */
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par {
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par {
     min-height: 72px;
     padding: 11px 12px;
     display: flex;
@@ -580,14 +590,14 @@
   }
 
   /* sin celo/tape: la referencia no lo lleva */
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo-par::before,
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo-par::after {
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-par::before,
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-par::after {
     content: none;
     display: none;
     background: none;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo-tit {
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit {
     flex: none;
     white-space: nowrap;
     writing-mode: horizontal-tb;
@@ -640,7 +650,7 @@
     font-weight: 800;
   }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par:active {
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par:active {
     transform: rotate(-0.4deg) scale(.985);
   }
 
@@ -691,8 +701,8 @@
   /* los wrappers de secciÃƒÂ³n llegan desnudos: el papel lo ponen las tarjetas */
   .inicio-mobile .proxplanes-movil:not(.is-on) { display: none; }
 
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .encursos-movil,
-  .inicio-mobile .inicio-mobile .inicio-chrome-right .proxplanes-movil {
+  .inicio-mobile .inicio-mobile-feed-inner .encursos-movil,
+  .inicio-mobile .inicio-mobile-feed-inner .proxplanes-movil {
     background: none;
     border: none;
     box-shadow: none;
@@ -1444,3 +1454,22 @@
     color: var(--ds-text-muted, #6a5f55) !important;
     text-align: center !important;
   }
+
+
+/* INICIO-MAP-HOST-SIZE */
+
+.inicio-stage > .inicio-map-host {
+  min-height: 220px;
+  position: relative;
+}
+.inicio-stage > .inicio-map-host .play-stage {
+  min-height: 200px;
+  height: auto;
+}
+.inicio-stage > .inicio-map-host .mapa-canonico,
+.inicio-stage > .inicio-map-host .mapa-canonico-bg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+

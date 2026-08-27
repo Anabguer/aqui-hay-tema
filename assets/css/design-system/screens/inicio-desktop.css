@@ -64,1384 +64,610 @@
   }
 }
 
-@supports not (grid-template-columns: subgrid) {
-  @media (min-width: 769px) {
-    .inicio-desktop {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .inicio-desktop-layout {
-      display: grid;
-      grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
-      gap: 14px;
-    }
-    .inicio-stage > .inicio-map-host {
-      margin-top: -100%;
-      visibility: hidden;
-    }
-  }
+
 }
 
-.inicio-stage {
-    display: grid;
-    grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
-    grid-template-rows: auto auto;
-    gap: 14px;
-    padding: 0 14px 14px;
-    align-items: start;
-    box-sizing: border-box;
+
+/* PORTED-DESKTOP-SHELL */
+@media (min-width: 769px) {
+
+  .inicio-desktop .inicio-desktop-layout {
+    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr) minmax(250px, 320px);
+    gap: 12px;
+    padding: 10px 12px;
+  }
+.inicio-desktop .mapa-zona-hit .hab .cara,
+  .inicio-desktop .mapa-zona-hit .hab .cara img,
+  .inicio-desktop .mapa-zona-hit .hab .cara .cara-ini,
+  .inicio-desktop .mapa-zona-hit .hab.cara-token .cara {
+    width: 80px !important;
+    height: 80px !important;
   }
 
-  .inicio-desktop {
-    grid-column: 1 / -1;
-    grid-row: 1 / span 2;
-    display: grid;
-    grid-template-columns: subgrid;
-    grid-template-rows: subgrid;
-    gap: 14px;
+  .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::before {
+    inset: -12px;
+    border-width: 3px;
   }
 
-  .inicio-desktop > .inicio-desktop .game-top {
-    grid-column: 1 / -1;
-    grid-row: 1;
+  .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::after {
+    bottom: -8px;
+    height: 10px;
   }
 
-  .inicio-desktop-left {
-    grid-column: 1;
-    grid-row: 2;
+  .inicio-desktop .game-top .btn-guia {
+    font-size: .82rem;
+    padding: .32rem .62rem;
+    margin-top: .65rem;
   }
 
-  .inicio-desktop-right {
-    grid-column: 3;
-    grid-row: 2;
+  .inicio-desktop-left .shell-grupo-buzon {
+    margin-top: 2.75rem !important;
   }
 
-  .inicio-stage > .inicio-map-host {
-    grid-column: 2;
-    grid-row: 2;
-  }
-}
-
-@supports not (grid-template-columns: subgrid) {
-  @media (min-width: 769px) {
-    .inicio-desktop {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .inicio-desktop-layout {
-      display: grid;
-      grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
-      gap: 14px;
-    }
-    .inicio-stage > .inicio-map-host {
-      margin-top: -100%;
-      visibility: hidden;
-    }
-  }
-}
-
-/* --- Planes legacy columna izquierda: ocultar polaroid/próximos antiguos --- */
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .shell-grupo-planes .obj-planes-lateral > .obj-proximo,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .shell-grupo-planes .obj-planes-prox-block {
-    display: none !important;
+  .inicio-desktop-right .shell-grupo-misiones-par {
+    margin-top: 2.75rem !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .shell-grupo-planes .obj-planes-lateral {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    min-height: 108px;
-    align-items: stretch;
-  }
-
-  /* + Nuevo plan: mismo lenguaje rosa discontinuo que móvil */
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    min-height: 108px;
-    padding: 10px 8px;
-    margin: 0;
-    background:
-      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
-      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%);
-    border: 2.5px dashed var(--ds-pink-deep, #c85b78);
-    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px;
-    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12);
-    transform: rotate(-0.35deg);
-    cursor: pointer;
-    color: var(--ds-pink-deep, #c85b78);
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta:hover {
-    filter: brightness(1.02);
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-nuevo-plan-ico {
-    font-size: 2.1rem;
-    line-height: .85;
-    font-family: var(--ds-font-hand, Caveat, cursive);
-    font-weight: 700;
-    color: var(--ds-pink-deep, #c85b78);
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-nuevo-plan-txt {
-    font-family: var(--ds-font-hand, Caveat, cursive);
-    font-weight: 700;
-    font-size: 1.125rem;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: var(--ds-pink-deep, #c85b78);
-  }
-
-  /* --- Feed derecho: bloques DS visibles --- */
-  .inicio-desktop .proxplanes-movil:not(.is-on),
-  .inicio-desktop .encursos-movil:not(.is-on) {
-    display: none;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .encursos-movil,
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .proxplanes-movil {
-    background: none;
-    border: none;
-    box-shadow: none;
-    padding: 0;
-    margin: 0 0 .65rem;
-    width: 100%;
-    max-width: 100%;
-    min-width: 0;
-  }
-
-  /* --- Cotilleo (lavanda + etiqueta + badge) --- */
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-    min-height: 62px;
-    padding: 9px 11px 9px 9px;
-    border: 1px solid rgba(122, 106, 154, .35);
-    border-radius: 10px;
-    background: linear-gradient(180deg, #ebe3f8 0%, #e8dff5 100%);
-    box-shadow: 0 1px 3px rgba(44, 38, 31, .06);
-    transform: none;
-    cursor: pointer;
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo-par::before,
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo-par::after {
-    content: none;
-    display: none;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo-tit {
-    flex: none;
-    margin: 0;
-    padding: 6px 9px;
-    border-radius: 6px;
-    background: #4f4378;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .62rem;
-    font-weight: 800;
-    letter-spacing: .11em;
-    text-transform: uppercase;
-    color: #fff;
-    line-height: 1;
-    transform: none;
-  }
-
-  .inicio-desktop .obj-cotilleo-cuerpo {
-    display: flex;
+  .inicio-desktop-left .obj-buzon {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    gap: 8px;
-    min-width: 0;
-    flex: 1 1 auto;
-  }
-
-  .inicio-desktop .obj-cotilleo-txt {
-    flex: 1 1 auto;
-    min-width: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-style: italic;
-    font-weight: 500;
-    font-size: .84rem;
-    line-height: 1.32;
-    color: #2c261f;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-
-  .inicio-desktop .obj-cotilleo-badge {
-    flex: none;
-    min-width: 20px;
-    height: 20px;
-    padding: 0 6px;
-    background: var(--ds-red-alert, #c42b4a);
-    border: 2px solid #fff;
-    border-radius: 999px;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-weight: 800;
-    font-size: .6875rem;
-    color: #fff;
-    transform: rotate(3deg);
-  }
-
-  .inicio-desktop .obj-cotilleo-badge[hidden] {
-    display: none !important;
-  }
-
-  .inicio-desktop .obj-cotilleo-flecha {
-    flex: none;
-    font-size: 1.15rem;
-    font-weight: 800;
-    color: #5a4d78;
-    opacity: .9;
-  }
-
-  /* --- Cabeceras sección planes --- */
-  .inicio-desktop .enc-mov-cab,
-  .inicio-desktop .pp-mov-cab {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding: 0 2px;
-    margin: 0 0 8px;
-  }
-
-  .inicio-desktop .enc-mov-tit,
-  .inicio-desktop .pp-mov-tit {
-    margin: 0;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .74rem;
-    font-weight: 800;
-    font-style: normal;
-    letter-spacing: .08em;
-    text-transform: uppercase;
-    color: #3b3028;
-  }
-
-  .inicio-desktop .plan-seccion-cnt {
-    font-weight: 800;
-    letter-spacing: .08em;
-  }
-
-  .inicio-desktop .plan-seccion-rule {
-    flex: 1 1 auto;
-    min-width: 8px;
-    height: 1px;
-    background: rgba(89, 72, 57, .12);
-    margin: 0;
-  }
-
-  .inicio-desktop .plan-seccion-ver {
-    flex: none;
-    margin: 0;
-    padding: 0;
-    border: none;
-    background: none;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .64rem;
-    font-weight: 800;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: #6a7d9a;
-    cursor: pointer;
-  }
-
-  .inicio-desktop .plan-seccion-ico,
-  .inicio-desktop .pp-mov-ico,
-  .inicio-desktop .enc-mov-ico {
-    width: 1rem;
-    height: 1rem;
-    flex: 0 0 1rem;
-    color: #594839;
-  }
-
-  /* --- Planes en curso: carrusel --- */
-  .inicio-desktop .encursos-movil .enc-mov-track {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 8px;
-    padding: 2px 2px 6px;
-    scrollbar-width: thin;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-indice {
-    margin: 0;
-    padding: 0 2px 4px;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .6875rem;
-    font-weight: 700;
-    color: #6a5f55;
-    text-align: right;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-card {
-    flex: 0 0 min(100%, 248px);
-    width: min(100%, 248px);
-    min-width: 200px;
-    scroll-snap-align: start;
-    display: flex;
-    flex-direction: column;
-    padding: 9px 10px;
-    border: 1.5px solid #c9b8a4;
-    border-radius: 10px;
-    background: #fffdf9;
-    box-shadow: 0 1px 3px rgba(44, 38, 31, .06);
-    transform: none;
-    box-sizing: border-box;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-row {
-    display: flex;
-    align-items: center;
-    gap: 7px;
+    gap: .55rem;
     width: 100%;
-    min-width: 0;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-card .prox-faces {
-    flex: none;
-    display: flex;
-    align-items: center;
     margin: 0;
-    gap: 0;
-  }
-
-  .inicio-desktop .encursos-movil .prox-faces img,
-  .inicio-desktop .encursos-movil .prox-faces .cara-ini {
-    width: 36px;
-    height: 36px;
-    margin-right: -8px;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 1px rgba(89, 72, 57, .25);
-    object-fit: cover;
-    border-radius: 50%;
-  }
-
-  .inicio-desktop .encursos-movil .prox-faces img:last-child,
-  .inicio-desktop .encursos-movil .prox-faces .cara-ini:last-child {
-    margin-right: 0;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-copy {
-    flex: 1 1 auto;
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 1px;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-nombres {
-    margin: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-size: .86rem;
-    font-weight: 700;
-    line-height: 1.15;
-    color: #2c261f;
+    padding: .62rem .72rem .58rem .65rem;
+    border: 2px solid #2c261f;
+    border-radius: 14px 18px 12px 16px / 16px 12px 18px 14px;
+    background: #fffdf8;
+    box-shadow: 1px 2px 0 rgba(44, 38, 31, .1), 2px 4px 10px rgba(44, 38, 31, .06);
+    transform: rotate(-0.4deg);
     text-align: left;
   }
 
-  .inicio-desktop .encursos-movil .enc-mov-lugar {
+  .inicio-desktop-left .obj-buzon-ico-wrap {
+    flex: 0 0 auto;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0;
+  }
+
+  .inicio-desktop-left .obj-buzon-img {
+    width: 34px !important;
+    max-height: none !important;
+    margin: 0;
+    transform: rotate(-6deg);
+  }
+
+  .inicio-desktop-left .obj-buzon-txt {
+    flex: 1 1 auto;
     margin: 0;
     font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .7rem;
-    font-weight: 600;
-    color: #6a5f55;
-    text-align: left;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-estado {
-    display: inline-flex;
-    align-self: flex-start;
-    margin-top: 3px;
-    padding: 1px 6px;
-    border-radius: 999px;
-    background: #e3f0dc;
-    border: 1px solid #8fbc78;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .5625rem;
+    font-size: .92rem;
     font-weight: 800;
-    letter-spacing: .06em;
+    letter-spacing: .14em;
     text-transform: uppercase;
-    color: #3d5c32;
-    line-height: 1.3;
+    color: #2c261f;
   }
 
-  .inicio-desktop .encursos-movil .enc-mov-hora,
-  .inicio-desktop .encursos-movil .enc-mov-punto {
-    display: none;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-cta {
-    flex: none;
-    align-self: center;
-    margin: 0;
-    padding: 0;
-    min-height: 44px;
-    border: none;
-    background: none;
-    box-shadow: none;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .6rem;
-    font-weight: 800;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: #c85b4a;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-cta-flecha {
-    color: #c85b4a;
-    font-size: .9em;
-  }
-
-  .inicio-desktop .encursos-movil .enc-mov-panel {
-    width: 100%;
-    margin-top: 8px;
-  }
-
-  /* --- Próximos planes: carrusel --- */
-  .inicio-desktop .proxplanes-movil .pp-mov-track {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 8px;
-    padding: 2px 2px 6px;
-    scrollbar-width: thin;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-card {
-    flex: 0 0 min(100%, 248px);
-    width: min(100%, 248px);
-    min-width: 200px;
-    scroll-snap-align: start;
-    padding: 9px 10px 10px;
-    background: #fdfaf1;
-    border: 1.5px dashed #b8a8c8;
-    border-radius: 10px;
-    box-shadow: none;
-    transform: none;
-    box-sizing: border-box;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-top {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-    margin: 0 0 6px;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-hora {
-    margin: 0;
-    padding: 2px 7px;
-    background: #ebe3f8;
-    border: 1px solid #9a8ab8;
-    border-radius: 6px;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .5625rem;
-    font-weight: 800;
-    letter-spacing: .05em;
-    color: #5a4d78;
-    text-transform: uppercase;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-star {
+  .inicio-desktop-left .obj-buzon-badge {
+    position: static;
+    top: auto;
+    right: auto;
+    min-width: 1.55rem;
+    height: 1.55rem;
+    padding: 0 .28rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 24px;
-    height: 24px;
-    border: 1.5px solid #c9b8a4;
-    border-radius: 7px;
-    background: #fffdf7;
-    font-size: .75rem;
-    color: #d4a82a;
-    line-height: 1;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-body {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    width: 100%;
-  }
-
-  .inicio-desktop .proxplanes-movil .prox-faces img,
-  .inicio-desktop .proxplanes-movil .prox-faces .cara-ini {
-    width: 34px;
-    height: 34px;
-    margin-right: -8px;
-    border: 2px solid #fff;
-    box-shadow: 0 0 0 1px rgba(89, 72, 57, .25);
-    object-fit: cover;
+    font-size: .82rem;
+    font-weight: 800;
+    background: #e85a6b;
+    border: 2.5px solid #fff;
     border-radius: 50%;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-nombres {
-    margin: 0;
-    font-family: Fraunces, Georgia, serif;
-    font-size: .84rem;
-    font-weight: 700;
-    line-height: 1.15;
-    color: #2c261f;
-  }
-
-  .inicio-desktop .proxplanes-movil .pp-mov-lugar {
-    margin: 0;
-    font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .6875rem;
-    font-weight: 600;
-    color: #6a5f55;
-  }
-
-  /* --- Parejas: tarjeta papel DS --- */
-  .inicio-desktop .shell-grupo-parejas {
-    padding: 10px 12px 12px;
-    background: var(--ds-paper-card, #fffdf9);
-    border: 2px solid var(--ds-ink-soft, #6b5138);
-    border-radius: 16px 20px 14px 20px / 20px 14px 20px 16px;
-    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .13), 0 4px 9px rgba(70, 50, 30, .10);
-    transform: rotate(-0.3deg);
-    width: 100%;
-    max-width: 100%;
-    box-sizing: border-box;
-  }
-
-  .inicio-desktop .zona-tit-parejas {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    padding-bottom: 7px;
-    margin-bottom: 4px;
-    border-bottom: 1.5px solid rgba(107, 81, 56, .30);
-    font-family: var(--ds-font-hand, Caveat, cursive);
-    font-weight: 700;
-    font-size: 1.0625rem;
-    letter-spacing: .6px;
-    text-transform: uppercase;
-    color: var(--ds-ink-soft, #6b5138);
-    background: none !important;
-  }
-
-  .inicio-desktop .zona-tit-parejas::before {
-    content: "\2665";
-    color: var(--ds-pink-deep, #c85b78);
-    font-size: .95rem;
-  }
-
-  .inicio-desktop .zona-tit-parejas::after {
-    display: none !important;
-  }
-
-  .inicio-desktop .obj-parejas-list p.muted {
-    margin: 0;
-    padding: 8px 0 2px;
-    font-family: var(--ds-font-hand, Caveat, cursive);
-    font-weight: 600;
-    font-size: 1rem;
-    line-height: 1.25;
-    color: var(--ds-text-muted, #6a5f55);
-    text-align: center;
-  }
-
-  .inicio-desktop .obj-pareja-piece {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-    padding: 5px 0;
-    overflow: visible;
-  }
-
-  .inicio-desktop .obj-pareja-fotos {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: 0;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(196, 43, 74, .35);
     flex: 0 0 auto;
   }
 
-  .inicio-desktop .obj-pareja-cara {
-    width: 40px !important;
-    height: 40px !important;
-    margin: 0 !important;
-    border: 2px solid #fff !important;
-    box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #6b5138) !important;
-    object-fit: cover;
-    object-position: 50% 20%;
+  .inicio-desktop-left .obj-buzon-flecha {
+    flex: 0 0 auto;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #5a5048;
+    line-height: 1;
+    margin-left: .1rem;
+  }
+
+  .inicio-desktop .celestine-nota.obj-vecinos-resumen {
+    padding: 1.15rem 1.1rem 1rem .95rem !important;
+    border: 2px solid #c9a87a !important;
+    border-radius: 3px 11px 5px 8px / 8px 5px 11px 3px !important;
+    background-color: #fdf9f4 !important;
+    background-image: linear-gradient(180deg, rgba(255, 253, 249, .85) 0%, rgba(255, 253, 249, .45) 50%, rgba(255, 253, 249, .2) 100%), url("../play-v3/capas/libreta_hoja.png") !important;
+    box-shadow: 1px 2px 0 rgba(188, 158, 118, .2), 3px 6px 18px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(255, 255, 255, .55) !important;
+    transform: rotate(-0.5deg) !important;
+    text-align: left !important;
+  }
+
+  .inicio-desktop .celestine-nota.obj-vecinos-resumen::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .inicio-desktop .celestine-nota.obj-vecinos-resumen::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 14px;
+    width: 42px;
+    height: 14px;
+    background: rgba(255, 228, 190, .92);
+    transform: rotate(-5deg);
+    z-index: 3;
+    box-shadow: 0 1px 2px rgba(60, 44, 28, .12);
+    pointer-events: none;
+    border-radius: 1px;
+  }
+
+  .inicio-desktop .celestine-nota .libreta-kicker {
+    font-size: 1.45rem !important;
+    margin-bottom: .75rem !important;
+    color: #2c261f !important;
+  }
+
+  .inicio-desktop .celestine-nota .obj-vecinos-preview {
+    display: flex !important;
+    justify-content: flex-start !important;
+    gap: 6px !important;
+    margin-bottom: .65rem !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  .inicio-desktop .celestine-nota .obj-vecinos-preview-cara,
+  .inicio-desktop .celestine-nota .obj-vecinos-preview-ini {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: .78rem !important;
+    border: 2px solid rgba(120, 96, 72, .35);
     border-radius: 50%;
   }
 
-  .inicio-desktop .obj-pareja-cara:first-child {
-    transform: rotate(-3deg) !important;
-    z-index: 1;
+  .inicio-desktop .celestine-nota .obj-vecinos-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .42rem;
+    padding-bottom: .35rem;
+    border-bottom: 1.5px solid rgba(120, 96, 72, .22);
   }
 
-  .inicio-desktop .obj-pareja-cara:last-child {
-    transform: rotate(3deg) !important;
-    z-index: 1;
-  }
-
-  .inicio-desktop .obj-pareja-enlace {
-    width: 12px !important;
-    height: 10px !important;
-    flex: 0 0 12px !important;
-    margin: 0 4px !important;
-  }
-
-  .inicio-desktop .obj-pareja-nombres {
-    font-family: var(--ds-font-hand, Caveat, cursive) !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    font-style: normal !important;
-    color: var(--ds-ink, #2c261f) !important;
-    text-align: left !important;
+  .inicio-desktop .celestine-nota .obj-vecinos-tit {
+    display: inline !important;
     margin: 0 !important;
+    font-size: .95rem !important;
+    letter-spacing: .12em !important;
+    color: var(--pink-deep, #c42b4a) !important;
   }
 
-  .inicio-desktop .pareja-crisis-sello {
-    margin-left: auto;
+  .inicio-desktop .celestine-nota .obj-vecinos-poblacion {
+    display: inline !important;
     font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .5625rem;
+    font-size: .95rem !important;
     font-weight: 800;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--ds-red-alert, #c42b4a);
+    color: #2c261f;
+    letter-spacing: .04em;
   }
 
-  /* INICIO-DESKTOP-CORRECCION-v8 */
-  .inicio-desktop .inicio-desktop .inicio-layout {
-    display: grid;
-    grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
-    align-items: start;
-    gap: 14px;
+  .inicio-desktop .celestine-nota .obj-vecinos-stats { display: block !important; }
+
+  .inicio-desktop .celestine-nota .obj-vecinos-stats .celeste-cuenta-vecinos {
+    display: none !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left {
-    grid-column: 1;
-    grid-row: 1;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    align-content: start;
+  .inicio-desktop .celestine-nota .obj-vecinos-stats .stat-row,
+  .inicio-desktop .celestine-nota .obj-vecinos-stats .vecinos-stat {
+    font-size: .88rem !important;
+    padding: .22rem 0 !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-right {
-    display: flex; flex-direction: column; gap: 12px;
+  .inicio-desktop .celestine-nota .obj-vecinos-stats .stat-row strong,
+  .inicio-desktop .celestine-nota .obj-vecinos-stats .vecinos-stat-v {
+    font-size: .92rem !important;
   }
 
-  .inicio-desktop .inicio-map-host {
-    grid-column: 2;
-    grid-row: 1 / span 12;
+  .inicio-desktop .shell-grupo-planes .obj-proximo-polaroid {
+    display: flex;
+    flex-direction: column;
+    gap: .85rem;
+    width: 100%;
   }
 
-  .inicio-desktop .shell-grupo-buzon { grid-column: 1; grid-row: 1; }
-  .inicio-desktop .shell-grupo-resumen { grid-column: 2; grid-row: 1; }
-  .inicio-desktop .encursos-movil { grid-column: 1 / -1; grid-row: 2; width: 100%; }
-  .inicio-desktop .proxplanes-movil { grid-column: 1 / -1; grid-row: 3; width: 100%; }
-  .inicio-desktop .shell-grupo-planes { grid-column: 1 / -1; grid-row: 4; width: 100%; }
+  .inicio-desktop .shell-grupo-planes { margin-top: 1.1rem !important; }
 
-  .inicio-desktop .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 1; width: 100%; }
-  .inicio-desktop .shell-grupo-misiones-par { grid-column: 3; grid-row: 2; width: 100%; }
-  .inicio-desktop .shell-grupo-parejas { grid-column: 3; grid-row: 3; width: 100%; }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .encursos-movil,
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .proxplanes-movil {
+  .inicio-desktop .obj-proximo-polaroid {
+    padding: 1rem .95rem .75rem .9rem;
     margin: 0;
   }
 
-  .inicio-desktop .plan-seccion-ver,
+  .inicio-desktop .obj-proximo-polaroid .obj-proximo-tit {
+    font-size: 1.05rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-weight: 800;
+    color: #2c261f;
+    margin-bottom: .5rem;
+  }
+
+  .inicio-desktop .obj-proximo-polaroid.is-en-curso .obj-proximo-tit { color: #3d5c32; }
+
+  .inicio-desktop .obj-proximo-polaroid .obj-proximo-body { font-size: .92rem; }
+
+  .inicio-desktop .obj-proximo-polaroid .prox-faces img,
+  .inicio-desktop .obj-proximo-polaroid .prox-faces .cara-ini,
+  .inicio-desktop .obj-proximo-polaroid .prox-faces .cara-token .cara {
+    width: 52px !important;
+    height: 52px !important;
+  }
+
+  .inicio-desktop .obj-proximo-polaroid .prox-nombres { font-size: 1.12rem; }
+  .inicio-desktop .obj-proximo-polaroid .prox-meta { font-size: .88rem; }
+
+  .inicio-desktop .obj-curso-nav { top: .72rem; right: .65rem; gap: .28rem; }
+  .inicio-desktop .obj-curso-btn { width: 1.65rem; height: 1.65rem; font-size: 1.2rem; }
+  .inicio-desktop .obj-curso-cont { font-size: .95rem; }
+
+  .inicio-desktop .obj-planes-prox-block {
+    position: relative;
+    padding: .85rem .8rem .7rem;
+    border: 2px solid #c9a87a;
+    border-radius: 3px 9px 5px 7px / 7px 5px 9px 3px;
+    background-color: #fdf9f4;
+    background-image: linear-gradient(180deg, rgba(255, 253, 249, .8) 0%, rgba(255, 253, 249, .35) 100%), url("../play-v3/capas/libreta_hoja.png");
+    background-size: cover, cover;
+    transform: rotate(0.35deg);
+    box-shadow: 1px 2px 0 rgba(188, 158, 118, .16), 2px 4px 12px rgba(40, 28, 16, .1);
+  }
+
+  .inicio-desktop .obj-planes-prox-block[hidden] { display: none !important; }
+
+  .inicio-desktop .obj-planes-prox-cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .55rem;
+  }
+
+  .inicio-desktop .obj-planes-prox-tit {
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #2c261f;
+  }
+
   .inicio-desktop .obj-planes-prox-ver {
-    display: none !important;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    font-family: Caveat, cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #6a5848;
+    white-space: nowrap;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-desktop .game-top .btn-guia:not([hidden]) {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+  .inicio-desktop .obj-planes-prox-ver:hover { color: #3a3028; }
+
+  .inicio-desktop .obj-planes-prox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .55rem;
+  }
+
+  .inicio-desktop .obj-planes-prox-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    padding: .55rem .5rem .5rem;
+    background: #fdfaf1;
+    border: 2px dashed #9a88c8;
+    border-radius: 12px 16px 10px 14px / 16px 10px 14px 12px;
+    box-shadow: 0 1px 3px rgba(70, 50, 30, .06);
+  }
+
+  .inicio-desktop .obj-planes-prox-card:nth-child(odd) { transform: rotate(-0.4deg); }
+  .inicio-desktop .obj-planes-prox-card:nth-child(even) { transform: rotate(0.35deg); }
+
+  .inicio-desktop .obj-planes-prox-card .obj-planes-prox-hora {
+    display: inline-flex;
+    align-items: center;
+    padding: .12rem .42rem;
+    margin-bottom: .35rem;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #6a5090;
+    background: #ebe4f8;
+    border: 1.5px solid #b9a8dc;
+    border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px;
+  }
+
+  .inicio-desktop .obj-planes-prox-card .prox-faces { margin-bottom: .28rem; }
+
+  .inicio-desktop .obj-planes-prox-card .prox-faces img,
+  .inicio-desktop .obj-planes-prox-card .prox-faces .cara-ini {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .inicio-desktop .obj-planes-prox-card .obj-planes-prox-nombres {
+    margin: 0;
+    font-family: Caveat, cursive;
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #2c261f;
+  }
+
+  .inicio-desktop .obj-planes-prox-card .obj-planes-prox-lugar {
+    margin: .1rem 0 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .72rem;
+    font-weight: 600;
+    color: #6a5848;
+  }
+
+  .inicio-desktop .obj-planes-prox-vacio {
+    grid-column: 1 / -1;
+    margin: 0;
+    font-family: Fraunces, Georgia, serif;
+    font-style: italic;
+    font-size: .88rem;
+    color: #6a5848;
+    text-align: center;
+    padding: .35rem 0;
+  }
+
+  .inicio-desktop .obj-nuevo-plan-horiz {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    width: 100%;
+    margin: .15rem 0 0;
+    padding: .62rem 1rem .65rem;
+    border: 2.5px solid #2c261f;
+    border-radius: 16px 20px 14px 18px / 18px 14px 20px 16px;
+    background: linear-gradient(165deg, #f8a8b8 0%, #e87a90 48%, #d95f78 100%);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), inset 0 -2px 0 rgba(160, 50, 70, .2), 2px 4px 0 rgba(44, 38, 31, .14);
+    cursor: pointer;
+    transform: rotate(-0.5deg);
+    color: #fff;
+  }
+
+  .inicio-desktop .obj-nuevo-plan-horiz:hover { filter: brightness(1.03); }
+
+  .inicio-desktop .obj-nuevo-plan-horiz .obj-nuevo-plan-ico {
+    width: auto;
+    height: auto;
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transform: none;
+    font-family: Caveat, cursive;
+    font-size: 1.65rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+  }
+
+  .inicio-desktop .obj-nuevo-plan-horiz .obj-nuevo-plan-txt {
+    font-family: Caveat, cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 1px 0 rgba(120, 30, 50, .25);
+  }
+
+  /* Mapa un poco mas compacto */
+  .inicio-desktop .game-map-wrap .board-fit,
+  .inicio-desktop .play-root.pc .board-fit {
+    width: 91% !important;
+    max-height: min(76vh, 660px) !important;
+  }
+
+  /* Mapa: capas/modales no empujan scroll */
+  .inicio-desktop .game-map-wrap .play-stage {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .inicio-desktop .game-map-wrap .play-root.pc {
+    height: 100% !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .inicio-desktop .game-map-wrap .play-root.pc .board-scroll {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+
+  .inicio-desktop .play-root.pc .capa,
+  .inicio-desktop .play-root.pc .capa.ds-modal-sheet {
+    position: absolute !important;
+  }
+
+  /* Columna derecha: tipografia mas legible */
+  .inicio-desktop-right .obj-misiones-papel-tit {
     font-size: 1.05rem !important;
-    font-weight: 700 !important;
-    color: var(--ds-pink-deep, #c85b78) !important;
-    text-decoration: underline !important;
-    text-underline-offset: 3px !important;
-    padding: 2px 4px !important;
-    margin-top: 2px !important;
-    transform: rotate(-1deg);
   }
 
-  .inicio-desktop .top-reloj .pasar-rato {
-    min-height: 32px !important;
-    padding: 3px 10px !important;
-    background: var(--ds-lavender-soft, #ebe3f8) !important;
-    border: 1.5px solid var(--ds-lavender-deep, #7c6bae) !important;
-    border-radius: 12px 9px 13px 10px / 10px 13px 9px 12px !important;
-    box-shadow: 1.5px 2.5px 0 rgba(124, 107, 174, .35) !important;
-    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
-    font-weight: 800 !important;
-    font-size: .75rem !important;
-    color: var(--ds-lavender-deep, #7c6bae) !important;
-    transform: rotate(-1.2deg) !important;
+  .inicio-desktop-right .mision-strip-txt {
+    font-size: 1.28rem !important;
+    line-height: 1.24 !important;
   }
 
-  .inicio-desktop .top-reloj .pasar-rato-ico {
-    display: inline-block !important;
-    font-size: .62rem !important;
-    line-height: 1 !important;
-    margin-right: 2px !important;
+  .inicio-desktop-right .mision-ico-svg {
+    width: 30px !important;
+    height: 26px !important;
   }
 
-  .inicio-desktop .obj-cotilleo-txt {
-    font-size: .72rem !important;
-    line-height: 1.35 !important;
-    -webkit-line-clamp: 3;
+  .inicio-desktop-right .obj-misiones-vacio {
+    font-size: 1.1rem !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
-    align-items: center !important;
-    text-align: center !important;
-    justify-content: center !important;
+  .inicio-desktop-right .obj-parejas-cab {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: .5rem;
+    margin-bottom: .55rem;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .libreta-kicker {
-    display: block !important;
-    width: 100%;
-    text-align: center !important;
-    margin: 0 0 4px !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-size: .95rem !important;
-    font-weight: 700 !important;
-    color: var(--ds-pink-deep, #c85b78) !important;
+  .inicio-desktop-right .obj-parejas-cab .zona-tit-parejas {
+    margin: 0 !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-vecinos-preview,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-vecinos-head {
-    justify-content: center !important;
-    align-items: center !important;
-    text-align: center !important;
-    width: 100%;
+  .inicio-desktop-right .obj-parejas-ver {
+    display: inline;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    font-family: Caveat, cursive;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #6a5848;
+    white-space: nowrap;
   }
 
-  .inicio-desktop .encursos-movil .prox-faces img,
-  .inicio-desktop .encursos-movil .prox-faces .cara-ini,
-  .inicio-desktop .proxplanes-movil .prox-faces img,
-  .inicio-desktop .proxplanes-movil .prox-faces .cara-ini {
-    aspect-ratio: 1 !important;
-    border-radius: 50% !important;
-    object-fit: cover !important;
+  .inicio-desktop-right .obj-parejas-ver:hover { color: #3a3028; }
+
+  .inicio-desktop-right .zona-tit-parejas {
+    font-size: 1rem !important;
   }
 
-  .inicio-desktop .encursos-movil .enc-mov-nombres,
-  .inicio-desktop .proxplanes-movil .pp-mov-nombres {
-    font-size: 0.875rem !important;
-  }
-  /* INICIO-DESKTOP-LEFT-v10: bloques apilados ancho columna (no tiles móvil) */
-  .inicio-desktop .inicio-desktop .inicio-chrome-left {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 14px !important;
-    grid-template-columns: unset !important;
+  .inicio-desktop-right .obj-parejas-list p.muted,
+  .inicio-desktop-right .obj-parejas-vacio {
+    font-size: 1.15rem !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .shell-grupo-buzon,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .shell-grupo-resumen,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .encursos-movil,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .proxplanes-movil,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .shell-grupo-planes {
-    width: 100% !important;
-    max-width: 100% !important;
-    flex: 0 0 auto !important;
+  .inicio-desktop-right .obj-pareja-nombres {
+    font-size: 1rem !important;
   }
 
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .shell-grupo-buzon,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left > .shell-grupo-resumen {
-    transform: none !important;
-    align-self: stretch !important;
-  }
-
-  .inicio-desktop .zona-actividad .shell-grupo-buzon .mensajitos-wrap {
-    min-height: 0 !important;
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .inicio-desktop .zona-actividad .obj-buzon {
-    width: 100% !important;
-    min-height: 0 !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    text-align: left !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
-    width: 100% !important;
-    min-height: 0 !important;
-    align-items: stretch !important;
-    text-align: left !important;
-    justify-content: flex-start !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .libreta-kicker,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-vecinos-preview,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .obj-vecinos-head {
-    text-align: left !important;
-    justify-content: flex-start !important;
-  }
-
-  /* INICIO-DESKTOP-MAP-v11: recuperar mapa central (altura colapsada por align-items:start) */
-  .inicio-desktop .inicio-desktop .inicio-layout {
-    align-items: stretch !important;
-  }
-
-  .inicio-desktop .inicio-map-host {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-    align-self: stretch !important;
-    justify-self: stretch !important;
-    min-width: 0 !important;
-    min-height: min(76vh, 660px) !important;
-    display: flex !important;
-    visibility: visible !important;
+  /* Cotilleo: badge ladeada bajo la etiqueta */
+  .inicio-desktop-right .obj-cotilleo.obj-cotilleo-par {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      "tit txt flecha"
+      "badge txt flecha";
+    align-items: start !important;
+    gap: 5px 11px !important;
     overflow: visible !important;
   }
 
-  .inicio-desktop .inicio-map-host .play-stage,
-  .inicio-desktop .inicio-map-host .play-root.pc {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    height: 100% !important;
+  .inicio-desktop-right .obj-cotilleo-cuerpo {
+    display: contents !important;
   }
 
-  .inicio-desktop .inicio-map-host .mapa-canonico,
-  .inicio-desktop .inicio-map-host .mapa-canonico-bg {
-    visibility: visible !important;
+  .inicio-desktop-right .obj-cotilleo-tit {
+    grid-area: tit;
+    align-self: start;
+    font-size: 1.05rem !important;
+    padding: 7px 10px !important;
+    background: #4f4378 !important;
+    border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
+    color: #fffdf8 !important;
+    transform: rotate(-1.2deg);
+    letter-spacing: .08em !important;
   }
 
+  .inicio-desktop-right .obj-cotilleo-txt {
+    grid-area: txt;
+    align-self: center;
+    font-size: 1.22rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .inicio-desktop-right .obj-cotilleo-badge {
+    grid-area: badge;
+    position: static !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    align-self: flex-start !important;
+    margin: 0 !important;
+    transform: rotate(3deg) !important;
+    font-size: .78rem !important;
+    min-height: 22px;
+    padding: 1px 8px !important;
+  }
+
+  .inicio-desktop-right .obj-cotilleo-flecha {
+    grid-area: flecha;
+    align-self: center;
+    font-size: 1.45rem !important;
+  }
 }
 
 
-/* Ajustes reales de maqueta - solo desktop. */
+/* VISUAL-FINAL desktop modals width */
 @media (min-width: 769px) {
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par { width: 724px; max-width: none; height: 77px; min-height: 77px; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo-par .obj-cotilleo-txt { font-size: 15px !important; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo-par .obj-cotilleo-tit { font-size: .55rem; padding: 4px 6px; }
-  .inicio-desktop .top-reloj .pasar-rato { width: 205px; height: 20px; min-height: 20px !important; box-sizing: border-box; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .shell-grupo-misiones-par { grid-column: 3; grid-row: 1; margin-top: 0 !important; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 2; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .shell-grupo-parejas { grid-column: 3; grid-row: 3; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-misiones-papel-tit { font-size: 17.5px; }
+  .play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon,
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
+  .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
+  .play-v3 .play-root.pc .capa-ficha-diario,
+  .play-v3 .play-root.pc .capa-ficha .ficha-animo-overlay .ficha-animo-modal {
+    width: min(100%, 480px) !important;
+    max-width: min(100%, 480px) !important;
+    max-height: min(88vh, 720px) !important;
+  }
+
 }
 
 
-/* Ajustes finales desktop solicitados - no afectan mobile. */
-@media (min-width: 769px) {
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo-par .obj-cotilleo-tit { width: 63px; height: 63px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .celestine-nota.obj-vecinos-resumen .libreta-kicker,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-preview { align-self: center !important; width: auto !important; text-align: center !important; justify-content: center !important; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-head { align-self: stretch !important; justify-content: space-between !important; text-align: left !important; }
-}
-
-
-/* Ajustes desktop exactos solicitados - no afectan mobile ni el orden. */
-@media (min-width: 769px) {
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .shell-grupo-buzon .obj-buzon { height: 63px; min-height: 63px; box-sizing: border-box; }
-  .inicio-desktop .top-reloj .pasar-rato { width: 115px; height: 25px; min-height: 25px !important; box-sizing: border-box; }
-}
-
-
-/* Orden desktop solicitado: Cotilleo sobre Misiones; anchos iguales. */
-@media (min-width: 769px) {
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 1; width: 100%; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .shell-grupo-misiones-par { grid-column: 3; grid-row: 2; width: 100%; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par { width: 100%; max-width: 100%; }
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-misiones-papel { width: 100%; }
-}
-
-/* INICIO-DESKTOP-ENCURSO-REF: Plan en curso columna izquierda = ref movil v14 */
-@media (min-width: 769px) {
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-cab {
-    display: none !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-indice,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil [data-encursos-indice] {
-    display: none !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-shell {
-    display: flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-shell .enc-mov-track {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    scroll-snap-type: x mandatory !important;
-    gap: 10px !important;
-    padding: 2px 2px 6px !important;
-    scrollbar-width: none;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-shell .enc-mov-track::-webkit-scrollbar {
-    display: none;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-nav-btn {
-    flex: 0 0 30px !important;
-    width: 30px !important;
-    height: 30px !important;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: 1.5px solid rgba(89, 72, 57, 0.28) !important;
-    border-radius: 999px !important;
-    background: rgba(255, 253, 249, 0.92) !important;
-    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
-    color: var(--ds-ink, #3b3028) !important;
-    cursor: pointer !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-nav-btn[hidden] {
-    display: none !important;
-    visibility: hidden !important;
-    pointer-events: none !important;
-    opacity: 0 !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-nav-btn svg {
-    width: 14px !important;
-    height: 14px !important;
-    display: block !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-card {
-    position: relative !important;
-    flex: 0 0 calc(100% - 6px) !important;
-    width: calc(100% - 6px) !important;
-    min-width: 0 !important;
-    max-width: 100% !important;
-    scroll-snap-align: start !important;
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 8px !important;
-    padding: 18px 12px 10px !important;
-    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
-    border-radius: 12px !important;
-    background:
-      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%),
-      #fff5f0 !important;
-    box-shadow: 0 1px 4px rgba(44, 38, 31, 0.08) !important;
-    transform: none !important;
-    box-sizing: border-box !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-card::before {
-    content: "" !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 50% !important;
-    width: 52px !important;
-    height: 14px !important;
-    transform: translate(-50%, -42%) rotate(-1deg) !important;
-    background: rgba(255, 214, 120, 0.72) !important;
-    border: 1px solid rgba(89, 72, 57, 0.12) !important;
-    border-radius: 2px !important;
-    pointer-events: none !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-card-tit {
-    margin: 0 !important;
-    padding: 0 2px !important;
-    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
-    font-size: 0.6875rem !important;
-    font-weight: 800 !important;
-    font-style: normal !important;
-    letter-spacing: 0.08em !important;
-    text-transform: uppercase !important;
-    color: var(--ds-ink, #3b3028) !important;
-    line-height: 1.1 !important;
-    text-align: left !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-body {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    gap: 6px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    text-align: center !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-row,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-copy,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-nombres,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-lugar,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-estado {
-    display: none !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-faces {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 0 !important;
-    margin: 2px 0 0 !important;
-    flex: none !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-faces img,
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-faces .cara-ini {
-    width: 44px !important;
-    height: 44px !important;
-    min-width: 44px !important;
-    min-height: 44px !important;
-    aspect-ratio: 1 !important;
-    border-radius: 50% !important;
-    object-fit: cover !important;
-    object-position: 50% 20% !important;
-    margin: 0 !important;
-    border: 2px solid #fff !important;
-    box-shadow: 0 0 0 1.5px rgba(89, 72, 57, 0.28) !important;
-    flex: 0 0 44px !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-tipo-ico {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 22px !important;
-    height: 22px !important;
-    margin: 0 -10px !important;
-    border-radius: 50% !important;
-    background: #fff !important;
-    border: 1.5px solid rgba(89, 72, 57, 0.18) !important;
-    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
-    color: var(--ds-pink-deep, #c85b78) !important;
-    z-index: 1 !important;
-    flex: 0 0 22px !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-tipo-ico svg {
-    width: 12px !important;
-    height: 12px !important;
-    display: block !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-meta {
-    margin: 0 !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-size: 1.0625rem !important;
-    font-weight: 700 !important;
-    font-style: normal !important;
-    line-height: 1.15 !important;
-    color: var(--ds-ink, #3b3028) !important;
-    text-align: center !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-resumen {
-    margin: 0 !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-size: 0.9375rem !important;
-    font-weight: 600 !important;
-    font-style: normal !important;
-    line-height: 1.2 !important;
-    color: var(--ds-text-muted, #6a5f55) !important;
-    text-align: center !important;
-    max-width: 100% !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-cta {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    width: 100% !important;
-    margin: 2px 0 0 !important;
-    padding: 8px 10px !important;
-    min-height: 40px !important;
-    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
-    border-radius: 999px !important;
-    background: var(--ds-pink, #e8887a) !important;
-    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
-    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
-    font-size: 0.6875rem !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase !important;
-    color: var(--ds-ink, #3b3028) !important;
-    transform: none !important;
-    align-self: stretch !important;
-    white-space: nowrap !important;
-    cursor: pointer !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-cta-ico {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    width: 16px !important;
-    height: 16px !important;
-    flex: 0 0 16px !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-cta-ico svg {
-    width: 16px !important;
-    height: 16px !important;
-    display: block !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-cta-flecha {
-    display: none !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-cta.is-open {
-    background: #f6c4bc !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-panel {
-    width: 100% !important;
-    margin: 0 !important;
-    padding-top: 2px !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .encursos-movil .enc-mov-vista-txt {
-    margin: 0 !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-size: 0.9375rem !important;
-    line-height: 1.2 !important;
-    color: var(--ds-ink, #3b3028) !important;
-    text-align: center !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left .pp-mov-tit {
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-size: 1.0625rem !important;
-    font-weight: 700 !important;
-    font-style: italic !important;
-    letter-spacing: 0.04em !important;
-    text-transform: none !important;
-    color: var(--ds-ink-soft, #6b5138) !important;
-  }
-}
-
-/* INICIO-DESKTOP-LAYOUT-v11: Mensajitos+Vecinos apilados col1-2; Misiones bajo vecinos; planes bajo cotilleo */
-@media (min-width: 769px) {
-  .inicio-desktop .inicio-desktop .inicio-layout {
-    display: grid !important;
-    grid-template-columns: minmax(160px, 200px) minmax(160px, 200px) minmax(0, 1fr) minmax(250px, 320px) !important;
-    align-items: start !important;
-    gap: 14px !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-left,
-  .inicio-desktop .inicio-desktop .inicio-chrome-right {
-    display: flex; flex-direction: column; gap: 12px;!important;
-  }
-
-  .inicio-desktop .inicio-map-host {
-    grid-column: 3 !important;
-    grid-row: 1 / span 8 !important;
-  }
-
-  .inicio-desktop .shell-grupo-buzon {
-    grid-column: 1 / 3 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .inicio-desktop .shell-grupo-resumen {
-    grid-column: 1 / 3 !important;
-    grid-row: 2 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .inicio-desktop .shell-grupo-misiones-par {
-    grid-column: 1 / 3 !important;
-    grid-row: 3 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin-top: 0 !important;
-  }
-
-  .inicio-desktop .shell-grupo-cotilleo-par {
-    grid-column: 4 !important;
-    grid-row: 1 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .inicio-desktop .encursos-movil {
-    grid-column: 4 !important;
-    grid-row: 2 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .inicio-desktop .proxplanes-movil {
-    grid-column: 4 !important;
-    grid-row: 3 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-  }
-
-  .inicio-desktop .shell-grupo-planes {
-    grid-column: 4 !important;
-    grid-row: 4 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .inicio-desktop .shell-grupo-parejas {
-    grid-column: 4 !important;
-    grid-row: 5 !important;
-    width: 100% !important;
-    max-width: 100% !important;
-  }
-
-  .inicio-desktop .inicio-desktop .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par {
-    width: 100% !important;
-    max-width: 100% !important;
-    height: auto !important;
-    min-height: 62px !important;
-  }
-}
-
-/* INICIO-DESKTOP-CREAR-PLAN-v12: boton horizontal CREAR PLAN (solo escritorio) */
-.inicio-desktop .obj-nuevo-plan-cal {
-  display: none;
-}
+/* INICIO-MAP-HOST-SIZE */
 
 @media (min-width: 769px) {
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta.obj-nuevo-plan-horiz {
+  .inicio-stage > .inicio-map-host {
+    min-height: 320px;
+    align-self: start;
     position: relative;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-    width: 100% !important;
-    min-height: 46px !important;
+  }
+  .inicio-stage > .inicio-map-host .play-stage {
+    min-height: 280px;
     height: auto !important;
-    padding: 9px 18px 10px !important;
-    margin: 0 !important;
-    border: none !important;
-    border-radius: 999px !important;
-    background:
-      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 62%),
-      #d66a5e !important;
-    box-shadow: 0 2px 0 rgba(120, 45, 40, 0.2), 0 1px 3px rgba(44, 38, 31, 0.1) !important;
-    transform: none !important;
-    cursor: pointer;
-    color: #fff !important;
   }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta.obj-nuevo-plan-horiz:hover {
-    filter: brightness(1.04);
+  .inicio-stage > .inicio-map-host .play-root.pc {
+    min-height: 260px;
+    height: auto !important;
   }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta.obj-nuevo-plan-horiz::after {
-    content: "" !important;
-    display: block !important;
-    position: absolute;
-    inset: 4px;
-    border: 2px dashed rgba(255, 255, 255, 0.9);
-    border-radius: 999px;
-    pointer-events: none;
+  .inicio-stage > .inicio-map-host .game-map-wrap .play-stage {
+    overflow: visible !important;
   }
+}
 
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta::before {
-    content: none !important;
-    display: none !important;
-  }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan-plus {
-    display: none !important;
-  }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan-cal {
-    display: block !important;
-    flex: 0 0 28px;
-    width: 28px;
-    height: 28px;
-  }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan-ico {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex: 0 0 28px !important;
-    width: 28px !important;
-    height: 28px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    color: transparent !important;
-    background: none !important;
-    border: none !important;
-    box-shadow: none !important;
-    transform: none !important;
-  }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan-txt {
-    visibility: visible !important;
-    font-size: 0 !important;
-    line-height: 0 !important;
-    margin: 0 !important;
-    color: transparent !important;
-  }
-
-  .inicio-desktop .shell-grupo-planes .obj-nuevo-plan-txt::before {
-    content: "CREAR PLAN" !important;
-    visibility: visible !important;
-    display: block !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-weight: 700 !important;
-    font-size: 1.28rem !important;
-    font-style: italic !important;
-    letter-spacing: 0.03em !important;
-    line-height: 1 !important;
-    text-transform: uppercase !important;
-    color: #fff !important;
-    text-shadow: 0 1px 1px rgba(80, 30, 25, 0.22) !important;

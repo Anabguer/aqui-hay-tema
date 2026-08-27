@@ -1723,7 +1723,8 @@
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     const lista = listaFull.slice(0, 6);
-    if (!lista.length) { block.classList.remove('is-on'); track.innerHTML = ''; return; }
+    if (!lista.length) { block.classList.remove('is-on'); block.classList.add('is-empty'); track.innerHTML = ''; return; }
+    block.classList.remove('is-empty');
     block.classList.add('is-on');
     track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
   }
@@ -1910,10 +1911,12 @@
     }
     if (!lista.length) {
       block.classList.remove('is-on');
+      block.classList.add('is-empty');
       track.innerHTML = '';
       renderEncursosMovilNavFor(block);
       return;
     }
+    block.classList.remove('is-empty');
     const abiertos = {};
     track.querySelectorAll('[data-enc-mov-panel]:not([hidden])').forEach(function (p) {
       const card = p.closest('[data-enc-mov-card]');
@@ -1956,7 +1959,7 @@
     return {
       statsHtml: htmlResumenCelestine(met),
       vecinosPoblacion: String(met.vecinos) + ' de ' + String(met.cap),
-      cotilleoTeaser: ultRaw ? resumenCotilleoUi(ultRaw, 120) : 'Hoy están sospechosamente tranquilos…',
+      cotilleoTeaser: ultRaw ? resumenCotilleoUi(ultRaw, 120) : 'Hoy est\u00e1n sospechosamente tranquilos\u2026',
       buzonPreview: !pend.length ? 'Sin mensajes pendientes.' : ((pend[0].remitente_nombre || pend[0].de || 'Mensaje') + ': ' + (pend[0].preview || pend[0].asunto || pend[0].texto || '').slice(0, 80)),
       parejas: parejas,
     };
@@ -2031,11 +2034,13 @@
     const desktop = document.querySelector('.inicio-desktop');
     const isMob = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
     mobileSections.forEach(function (mobile) {
-      mobile.hidden = !isMob;
+      mobile.classList.toggle('is-inicio-view-active', isMob);
+      mobile.removeAttribute('hidden');
       mobile.toggleAttribute('inert', !isMob);
     });
     if (desktop) {
-      desktop.hidden = isMob;
+      desktop.classList.toggle('is-inicio-view-active', !isMob);
+      desktop.removeAttribute('hidden');
       desktop.toggleAttribute('inert', isMob);
     }
   }
@@ -2791,15 +2796,14 @@
     const reloj = estado.reloj || {};
     const diaNum = reloj.dia_pueblo;
     const fechaCorta = rv.fecha_corta || '';
-    const diaLblHud = (diaNum !== undefined && diaNum !== null) ? ('Día ' + diaNum) : '';
-    const diaNumEl = $('[data-dia-num]');
-    if (diaNumEl) {
-      diaNumEl.textContent = diaLblHud || '—';
-    }
+    const diaLblHud = (diaNum !== undefined && diaNum !== null) ? ('D\u00eda ' + diaNum) : '';
+    inicioAll('[data-dia-num]').forEach(function (diaNumEl) {
+      diaNumEl.textContent = diaLblHud || '\u2014';
+    });
     const h = rv.hora !== undefined ? rv.hora : reloj.hora_actual;
-    const ht = h === undefined ? '' : (String(h).padStart(2, '0') + ':00');
+    const ht = h === undefined ? '\u2014:\u2014' : (String(h).padStart(2, '0') + ':00');
     $$('[data-dow]').forEach(function (el) {
-      el.textContent = rv.dia_semana_ui || (diaNum !== undefined ? ('Día ' + diaNum) : '-');
+      el.textContent = rv.dia_semana_ui || (diaNum !== undefined ? ('D\u00eda ' + diaNum) : '-');
     });
     $$('[data-fecha]').forEach(function (el) {
       el.textContent = fechaCorta;
@@ -2808,27 +2812,25 @@
       el.textContent = ht || '-';
     });
     pintarModoReloj(esHoraNoche(typeof h === 'number' ? h : null));
-    const estEl = $('[data-dia-estacion]');
-    if (estEl) {
+    inicioAll('[data-dia-estacion]').forEach(function (estEl) {
       estEl.textContent = '';
       estEl.hidden = true;
-    }
-    const metaEl = $('[data-dia-meta]');
-    const metaMobEl = $('[data-top-meta-mobile]');
-    if (metaEl) {
-      metaEl.textContent = fechaCorta || '—';
-    }
-    if (metaMobEl) {
-      const mobDia = diaLblHud || 'Día —';
-      const mobFecha = fechaCorta || '—';
+    });
+    inicioAll('[data-dia-meta]').forEach(function (metaEl) {
+      metaEl.textContent = fechaCorta || '\u2014';
+    });
+    inicioAll('[data-top-meta-mobile]').forEach(function (metaMobEl) {
+      const mobDia = diaLblHud || 'D\u00eda \u2014';
+      const mobFecha = fechaCorta || '\u2014';
       const min = rv.minuto !== undefined ? rv.minuto : reloj.minuto_actual;
-      const mobHora = h === undefined ? '—:—' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
-      metaMobEl.innerHTML = '<span class="top-meta-prim">' + mobDia + ' · ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span>';
-    }
+      const mobHora = h === undefined ? '\u2014:\u2014' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
+      metaMobEl.innerHTML = '<span class="top-meta-prim">' + mobDia + ' \u00b7 ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span>';
+    });
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
     const critico = !!(vida && vida.critico);
-    const fillEl = $('[data-corazon-fill]');
+    const fillEls = inicioAll('[data-corazon-fill]');
+    const fillEl = fillEls[0];
     const surfaceEl = $('[data-corazon-surface]');
     if (fillEl) {
       var fillH = 52 * (pct / 100);
@@ -3805,7 +3807,7 @@ function canonEmoId(id) {
     let inTl = false;
     entradas.forEach(function (e) {
       const diaNum = e.dia || '';
-      const diaLbl = e.fecha_corta || ('Día ' + diaNum);
+      const diaLbl = e.fecha_corta || ('D\u00eda ' + diaNum);
       const diaKey = String(diaNum) + '|' + diaLbl;
       if (diaKey !== diaPrev) {
         if (inTl) html += '</div></div>';

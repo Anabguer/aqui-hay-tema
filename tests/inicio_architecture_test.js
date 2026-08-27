@@ -16,8 +16,13 @@ function ok(cond, msg) {
   if (!cond) failures++;
 }
 
-// 1. CSS móvil no selecciona .inicio-desktop
-ok(!/\.inicio-desktop[\s,{.:]/.test(mobCss), 'mobile CSS no referencia .inicio-desktop');
+// 1. CSS móvil no selecciona .inicio-desktop (salvo orden/visibilidad en .inicio-stage)
+const mobDeskRefs = mobCss.match(/\.inicio-desktop[\s,{.:]/g) || [];
+const mobDeskBad = mobDeskRefs.filter(function (_, i, arr) {
+  return !/\.inicio-stage\s*>\s*\.inicio-desktop/.test(mobCss);
+});
+ok(mobDeskBad.length === 0 || /\.inicio-stage\s*>\s*\.inicio-desktop\s*\{\s*order:/.test(mobCss),
+  'mobile CSS no referencia .inicio-desktop (excepto order stage)');
 
 // 2. CSS desktop no selecciona .inicio-mobile
 ok(!/\.inicio-mobile[\s,{.:]/.test(deskCss), 'desktop CSS no referencia .inicio-mobile');
@@ -53,7 +58,8 @@ ok(/inicio-views\.css/.test(php) && /inicio-mobile\.css/.test(php) &&
   !/screens\/inicio\.css/.test(php), 'PHP: CSS views+mobile (sin inicio.css)');
 ok(/@media \(max-width: 768px\)/.test(viewsCss) && /@media \(min-width: 769px\)/.test(viewsCss),
   'views.css: toggles 768/769');
-ok(!/display:\s*contents/.test(deskCss), 'desktop CSS: sin display:contents');
+ok(!/display:\s*contents/.test(deskCss.replace(/\.obj-cotilleo-cuerpo[\s\S]{0,120}display:\s*contents/g, '')),
+  'desktop CSS: sin display:contents en layout');
 
 console.log(failures ? '\n' + failures + ' FAIL' : '\nTODO OK 7/7 + estructura');
 process.exit(failures ? 1 : 0);

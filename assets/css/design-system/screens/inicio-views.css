@@ -1,18 +1,21 @@
-/* INICIO-VIEWS — solo visibilidad por breakpoint; sin layout compartido */
+/* INICIO-VIEWS — visibilidad por breakpoint; mapa compartido fuera de hidden */
 @media (max-width: 768px) {
-  .inicio-desktop {
+  .inicio-stage > .inicio-desktop {
     display: none !important;
   }
-  .inicio-mobile {
+  .inicio-stage > .inicio-mobile {
     display: block;
+  }
+  .inicio-stage > .inicio-map-host {
+    display: block !important;
   }
 }
 
 @media (min-width: 769px) {
-  .inicio-mobile {
+  .inicio-stage > .inicio-mobile {
     display: none !important;
   }
-  .inicio-desktop {
+  .inicio-stage > .inicio-desktop {
     display: block;
   }
 }
