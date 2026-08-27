@@ -1101,3 +1101,59 @@ body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro .tut-pape
     margin-top: 0 !important;
   }
 }
+@media (min-width: 769px) {
+  /* TUTORIAL-DESKTOP-TIPO: Manual legible en PC (solo intro, movil intacto) */
+  .play-v3 .tut-intro .tut-papel-cabecera .tut-titulo,
+  .play-v3 .tut-intro .tut-papel-cabecera .tut-titulo .tut-tit-txt,
+  .play-v3 .tut-intro .tut-paso-2 .tut-titulo .tut-tit-txt {
+    font-size: clamp(1.45rem, 1.85vw, 1.95rem) !important;
+    line-height: 1.08 !important;
+  }
+  .play-v3 .tut-intro .tut-intro-line,
+  .play-v3 .tut-intro .tut-intro-extra,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-line,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-extra {
+    font-size: 1.32rem !important;
+    line-height: 1.4 !important;
+  }
+  .play-v3 .tut-intro .tut-bloques-pref {
+    font-size: 1.24rem !important;
+    line-height: 1.35 !important;
+  }
+  .play-v3 .tut-intro .tut-bloque-tit,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-tit,
+  .play-v3 .tut-intro .tut-paso-3 .tut-bloque-tit {
+    font-size: 1.2rem !important;
+    line-height: 1.25 !important;
+  }
+  .play-v3 .tut-intro .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-paso-3 .tut-bloque-txt {
+    font-size: 1.16rem !important;
+    line-height: 1.36 !important;
+  }
+  .play-v3 .tut-intro .tut-bloques.is-inline .tut-bloque-txt {
+    font-size: 1.12rem !important;
+    line-height: 1.34 !important;
+  }
+  .play-v3 .tut-intro .tut-cierre,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-cierre {
+    font-size: 1.2rem !important;
+    line-height: 1.38 !important;
+  }
+  .play-v3 .tut-intro .tut-cara-nombre,
+  .play-v3 .tut-intro .tut-cara-nombre-txt {
+    font-size: 1.08rem !important;
+    line-height: 1.25 !important;
+  }
+  .play-v3 .tut-intro .tut-acciones .cta,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-acciones .cta {
+    font-size: 1.32rem !important;
+    min-height: 46px !important;
+    line-height: 1.1 !important;
+  }
+  .play-v3 .tut-intro .tut-skip.ds-modal-close {
+    font-size: 0.92rem !important;
+    line-height: 1.15 !important;
+  }
+}
