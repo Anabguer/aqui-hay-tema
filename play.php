@@ -533,7 +533,7 @@ if (is_file($ahtBusterFile)) {
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
             <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>Atrï¿½s</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
             </div>
