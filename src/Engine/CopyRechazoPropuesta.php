@@ -12,6 +12,8 @@ final class CopyRechazoPropuesta
     public const TIPO_NO_PUEDO = 'no_puedo';
     public const TIPO_NO_QUIERO = 'no_quiero';
 
+    private const COOLDOWN_GENERICO = 'Necesitan un poco de espacio.';
+
     /** @var array<string, list<string>> */
     private const VARIANTES = [
         'sueno' => [
@@ -285,6 +287,50 @@ final class CopyRechazoPropuesta
         }
         $cuando = Reloj::diaSemanaUi($dia, $reloj);
         return '¿Te va el ' . $cuando . ' a las ' . $hh . ':00?';
+    }
+
+    /**
+     * Copy neutro cuando un par tiene cooldown de propuesta activo (pre-chequeo en proponer).
+     *
+     * @param list<string> $participantes
+     */
+    public static function mensajeCooldownPar(array $partida, array $participantes, string $tipo = ''): string
+    {
+        if (count($participantes) < 2) {
+            return self::COOLDOWN_GENERICO;
+        }
+        $a = (string) $participantes[0];
+        $b = (string) $participantes[1];
+        $mejor = null;
+        $tsMejor = -1;
+        foreach ($partida['rechazos_propuesta'] ?? [] as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $q = (string) ($row['quien'] ?? '');
+            $h = (string) ($row['hacia'] ?? '');
+            $esPar = (($q === $a && $h === $b) || ($q === $b && $h === $a));
+            if (!$esPar) {
+                continue;
+            }
+            if ($tipo !== '' && (string) ($row['tipo'] ?? '') !== $tipo) {
+                continue;
+            }
+            $ts = ((int) ($row['dia'] ?? 0)) * 24 + ((int) ($row['hora'] ?? 0));
+            if ($ts > $tsMejor) {
+                $tsMejor = $ts;
+                $mejor = ['quien' => $q, 'hacia' => $h];
+            }
+        }
+        if ($mejor === null) {
+            return self::COOLDOWN_GENERICO;
+        }
+        $nq = IdentidadPublica::nombre($partida, $mejor['quien']);
+        $nh = IdentidadPublica::nombre($partida, $mejor['hacia']);
+        if ($nq === '' || $nh === '' || $nq === $mejor['quien'] || $nh === $mejor['hacia']) {
+            return self::COOLDOWN_GENERICO;
+        }
+        return $nq . ' rechazó hace poco una propuesta de ' . $nh . '. Mejor dales un poco de espacio.';
     }
 
     /**
