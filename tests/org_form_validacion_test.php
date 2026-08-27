@@ -63,6 +63,11 @@ if (count($parts) !== 1) {
     $fail[] = 'backend proponer individual debe tener 1 participante';
 }
 
+$r3 = PropuestaEncuentroEngine::proponer($partida, [$ids[0], $ids[1], $ids[2]], 1, 21, 'conocerse', 'lug_cine');
+if (!empty($r3['ok']) || ($r3['error'] ?? '') !== 'PARTICIPANTES_EXCESO') {
+    $fail[] = 'backend proponer 3 participantes debe devolver PARTICIPANTES_EXCESO';
+}
+
 // Regla AgendaHandler (mínimo 2 en pareja, 1 en individual)
 $partsFiltrados = array_values(array_filter([$a], static fn($p) => is_string($p) && $p !== ''));
 if (count($partsFiltrados) >= 2) {

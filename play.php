@@ -807,7 +807,7 @@ if (is_file($ahtBusterFile)) {
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
               <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
-              <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 3 vecinos.</p>
+              <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
               <div class="org-busca-wrap">

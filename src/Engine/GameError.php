@@ -31,6 +31,7 @@ final class GameError
     public const FASE_TRANSICION_INVALIDA = 'FASE_TRANSICION_INVALIDA';
     public const TIPO_ENCUENTRO_NO_DISPONIBLE = 'TIPO_ENCUENTRO_NO_DISPONIBLE';
     public const MISMA_PERSONA = 'MISMA_PERSONA';
+    public const PARTICIPANTES_EXCESO = 'PARTICIPANTES_EXCESO';
     public const HORA_PASADA = 'HORA_PASADA';
     public const INTERVENCION_NO_DISPONIBLE = 'INTERVENCION_NO_DISPONIBLE';
     public const INTERVENCION_YA_USADA = 'INTERVENCION_YA_USADA';
@@ -92,6 +93,8 @@ final class GameError
                 return 'Esa hora ya ha pasado.';
             case self::MISMA_PERSONA:
                 return 'Elige a dos personas distintas.';
+            case self::PARTICIPANTES_EXCESO:
+                return 'Puedes organizar planes con hasta 2 vecinos.';
             case self::INTERVENCION_NO_DISPONIBLE:
                 return 'Ahora no puedes intervenir en este encuentro.';
             case self::INTERVENCION_YA_USADA:

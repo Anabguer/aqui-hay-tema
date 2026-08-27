@@ -51,6 +51,16 @@ final class PropuestaEncuentroEngine
         ?GameLogger $logger = null,
         ?string $peticionId = null
     ): array {
+        $crudos = [];
+        foreach ($participantes as $rid) {
+            if (is_string($rid) && $rid !== '') {
+                $crudos[] = $rid;
+            }
+        }
+        if (count(array_values(array_unique($crudos))) > 2) {
+            return GameError::respuesta(GameError::PARTICIPANTES_EXCESO);
+        }
+
         $ctx = EncuentroEngine::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
         if (!($ctx['ok'] ?? false)) {
             return $ctx;

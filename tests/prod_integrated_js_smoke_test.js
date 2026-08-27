@@ -7,7 +7,7 @@ let f = 0;
 function ok(c, m) { console.log((c ? 'OK' : 'FAIL') + ': ' + m); if (!c) f++; }
 ok(js.includes('function renderBuzon(msgs)'), 'mensajitos: renderBuzon');
 ok(js.includes('function renderMensajitosPop'), 'mensajitos: renderMensajitosPop');
-ok(js.includes('const ORG_MAX_VECINOS = 3'), 'organizar: ORG_MAX_VECINOS');
+ok(js.includes('const ORG_MAX_VECINOS = 2'), 'organizar: ORG_MAX_VECINOS');
 ok(js.includes('function orgModo()'), 'organizar: orgModo');
 ok(js.includes('function actualizarOrgModoEstado'), 'organizar: modo auto estado');
 ok(!js.includes('data-org-modo-solo') || js.includes('function orgModo()'), 'organizar: sin chips solo legacy o con modo auto');

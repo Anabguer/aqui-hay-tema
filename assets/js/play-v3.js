@@ -134,7 +134,7 @@
   let cacheMisionesStripItems = null;
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
-  const ORG_MAX_VECINOS = 3;
+  const ORG_MAX_VECINOS = 2;
   let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null };
   let orgPresetNuevo = false;
   const playtestLogClient = { entries: [] };
@@ -4949,7 +4949,7 @@ function hobbyIconKey(id, texto) {
     const strip = $('[data-org-picker]');
     if (hint) {
       hint.classList.add('is-limit');
-      hint.textContent = 'M\u00e1ximo ' + ORG_MAX_VECINOS + ' vecinos por plan.';
+      hint.textContent = 'Puedes organizar planes con hasta ' + ORG_MAX_VECINOS + ' vecinos.';
     }
     if (strip) {
       strip.classList.add('is-limit');
