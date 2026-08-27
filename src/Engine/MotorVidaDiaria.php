@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace AquiHayTema\Engine;
 
+use AquiHayTema\Engine\Voluntad\VoluntadSalidaIndividual;
+
 /**
  * Motor diario 09:00–22:00. Al empezar el día solo se deciden HUECOS, no quién ni qué.
  * Al llegar el hueco se evalúa el estado real.
@@ -344,6 +346,17 @@ final class MotorVidaDiaria
         $ops = $partida['celeste']['lugares_desbloqueados'] ?? [];
         if ($ops === []) {
             $ops = ['lug_cafeteria', 'lug_parque', 'lug_biblioteca'];
+        }
+        $evVol = VoluntadSalidaIndividual::evaluar($partida, $quien, $ops, $catalog, $cal, $rng);
+        if (!($evVol['acepta'] ?? false)) {
+            SimFunnelProbe::on($partida, 'salida_individual', [
+                'ev' => 'voluntad_rechaza',
+                '_k' => 'voluntad_rechaza',
+                'quien' => $quien,
+                'score' => $evVol['score'] ?? null,
+                'p' => $evVol['p'] ?? null,
+            ]);
+            return null;
         }
         // Candidato C: si el residente está aislado, subir bonus de atracción por lugar ocupado
         $calLugar = $cal;

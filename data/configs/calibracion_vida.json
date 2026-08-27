@@ -332,7 +332,14 @@
         "atraccion_ocupacion_cap": 3,
         "anti_aislamiento_umbral_dias": 0,
         "anti_aislamiento_bonus_salida": 0,
-        "anti_aislamiento_bonus_lugar": 0
+        "anti_aislamiento_bonus_lugar": 0,
+        "salida_individual_voluntad": {
+            "_provisional": true,
+            "_nota": "A3: evaluador barato previo a LugarAutonomo::elegir (H3).",
+            "base": 40,
+            "mod_social_medio_factor": 0.32,
+            "bonus_hobby_match": 10
+        }
     },
     "eventos_pueblo": {
         "_provisional": true,
