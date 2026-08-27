@@ -8,7 +8,7 @@ let css = fs.readFileSync(cssPath, 'utf8');
 css = css.replace(/\n\/\* INICIO-DESKTOP-LAYOUT-FIX[\s\S]*$/, '');
 
 const block = `
-/* INICIO-DESKTOP-LAYOUT-FIX — mapa centro + icono prox planes (display:contents) */
+/* INICIO-DESKTOP-LAYOUT-FIX — grid stage + mapa visible en host compartido */
 @media (min-width: 769px) {
   .inicio-stage {
     display: grid !important;
@@ -41,7 +41,57 @@ const block = `
     justify-self: stretch !important;
     width: 100% !important;
     min-width: 0 !important;
+    min-height: 320px !important;
     z-index: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: visible !important;
+  }
+
+  /* Host compartido: reglas legacy .inicio-desktop .game-map-wrap no aplican (mapa fuera de .inicio-desktop) */
+  .play-v3 .inicio-stage > .inicio-map-host .play-stage {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 280px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc {
+    min-height: 260px !important;
+    height: 100% !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 260px !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc .board-fit {
+    position: relative !important;
+    top: auto !important;
+    width: 91% !important;
+    max-height: min(76vh, 660px) !important;
+    height: auto !important;
+    aspect-ratio: 618 / 404 !important;
+    margin: 0 auto !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico,
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-zonas-layer {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
   }
 
   .inicio-stage .inicio-desktop-right {
@@ -49,7 +99,6 @@ const block = `
     grid-row: 2 !important;
   }
 
-  /* .pp-mov-ico (SVG calendario) heredaba el ancho de columna (~320px) */
   .inicio-desktop-right .plan-seccion-cab {
     display: flex !important;
     align-items: center !important;
@@ -74,4 +123,4 @@ const block = `
 
 css = css.trimEnd() + block;
 fs.writeFileSync(cssPath, css);
-console.log('OK replaced INICIO-DESKTOP-LAYOUT-FIX');
+console.log('OK updated INICIO-DESKTOP-LAYOUT-FIX with map-host visibility');
