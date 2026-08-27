@@ -814,3 +814,12 @@
   .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { grid-column: 3; grid-row: 3; }
   .play-v3:has(.game-shell) .game-right .obj-misiones-papel-tit { font-size: 17.5px; }
 }
+
+
+/* Ajustes finales desktop solicitados - no afectan mobile. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-par .obj-cotilleo-tit { width: 63px; height: 63px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .libreta-kicker,
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-preview { align-self: center !important; width: auto !important; text-align: center !important; justify-content: center !important; }
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-head { align-self: stretch !important; justify-content: space-between !important; text-align: left !important; }
+}
