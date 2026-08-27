@@ -117,6 +117,32 @@
      No modificar aqui; ver docs/design-system/05-responsive.md §3. */
 }
 
+
+/* --- Escala tipografica AHT (legibilidad global) --- */
+.play-v3 {
+  --aht-type-display: clamp(1.62rem, 3.8vw, 2.08rem);
+  --aht-type-title: clamp(1.28rem, 2.8vw, 1.48rem);
+  --aht-type-block: clamp(1.12rem, 2.4vw, 1.28rem);
+  --aht-type-body: clamp(1.02rem, 2.1vw, 1.16rem);
+  --aht-type-name: clamp(0.98rem, 2vw, 1.12rem);
+  --aht-type-secondary: clamp(0.9rem, 1.85vw, 1.04rem);
+  --aht-type-caption: clamp(0.82rem, 1.65vw, 0.96rem);
+  --aht-type-micro: clamp(0.74rem, 1.45vw, 0.86rem);
+}
+
+@media (min-width: 769px) {
+  .play-v3 {
+    --aht-type-display: clamp(1.72rem, 2.2vw, 2.2rem);
+    --aht-type-title: clamp(1.38rem, 1.8vw, 1.58rem);
+    --aht-type-block: clamp(1.2rem, 1.6vw, 1.36rem);
+    --aht-type-body: clamp(1.1rem, 1.4vw, 1.22rem);
+    --aht-type-name: clamp(1.06rem, 1.3vw, 1.18rem);
+    --aht-type-secondary: clamp(0.98rem, 1.2vw, 1.1rem);
+    --aht-type-caption: clamp(0.88rem, 1.1vw, 1rem);
+    --aht-type-micro: clamp(0.8rem, 1vw, 0.92rem);
+  }
+}
+
 /* ============================================================
    PUENTE LEGACY — SE ACTIVA EN FASE 3 (paso 0 de migración).
    Remapea las variables actuales al nuevo sistema para que el
