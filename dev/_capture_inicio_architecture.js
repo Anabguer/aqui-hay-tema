@@ -73,7 +73,7 @@ function evalInicio(page) {
       vecinosPob: text('[data-vecinos-poblacion]'),
       cotilleoLen: allText('[data-cotilleo-teaser]').length,
       misionesItems: document.querySelectorAll('[data-misiones-strip] > *').length,
-      parejasItems: document.querySelectorAll('[data-parejas-strip] .obj-pareja-piece, [data-parejas-strip] > *').length,
+      parejasItems: document.querySelectorAll('[data-parejas-strip] .obj-pareja-piece').length,
       encCards: document.querySelectorAll('[data-encursos-track] .enc-mov-card').length,
       proxCards: document.querySelectorAll('[data-proxplanes-track] .pp-mov-card, [data-proxplanes-track] .prox-card').length,
       headerMeta: allText('[data-dia-meta]'),

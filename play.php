@@ -864,19 +864,6 @@ if (is_file($ahtBusterFile)) {
   </div>
       </div>
 
-<section class="inicio-mobile inicio-mobile-feed" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil feed">
-        <div class="inicio-chrome-right inicio-mobile-feed-inner">
-            <section class="shell-grupo shell-grupo-cotilleo-par">
-          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
-            <span class="obj-cotilleo-tit">Cotilleo</span>
-            <span class="obj-cotilleo-cuerpo">
-              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est&aacute;n sospechosamente tranquilos&hellip;</span>
-              <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
-            </span>
-            <span class="obj-cotilleo-flecha" aria-hidden="true">&#8250;</span>
-          </button>
-        </section>
-
 <section class="inicio-desktop" data-inicio-view="desktop" aria-label="Inicio escritorio">
         <header class="game-top">
       <div class="brand-col">
@@ -1035,9 +1022,60 @@ if (is_file($ahtBusterFile)) {
           </span>
         </div>
       </aside>
-      
 
-      
+      <section class="inicio-mobile inicio-mobile-feed" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil feed">
+        <div class="inicio-chrome-right inicio-mobile-feed-inner">
+            <section class="shell-grupo shell-grupo-cotilleo-par">
+          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
+            <span class="obj-cotilleo-tit">Cotilleo</span>
+            <span class="obj-cotilleo-cuerpo">
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est&aacute;n sospechosamente tranquilos&hellip;</span>
+              <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
+            </span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">â€º</span>
+          </button>
+        </section>
+            <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+          <header class="enc-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 class="enc-mov-tit">PLAN EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="enc-mov-shell" data-encursos-shell hidden aria-hidden="true">
+            <button type="button" class="enc-mov-nav-btn enc-mov-nav-prev" data-enc-mov-prev aria-label="Plan anterior" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 7l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="enc-mov-track" data-encursos-track></div>
+            <button type="button" class="enc-mov-nav-btn enc-mov-nav-next" data-enc-mov-next aria-label="Plan siguiente" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </section>
+            <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Pr&oacute;ximos planes programados">
+          <header class="pp-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <h3 class="pp-mov-tit">PR&Oacute;XIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="pp-mov-track" data-proxplanes-track></div>
+        </section>
+            <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
+          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
+            <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
+            <span class="obj-misiones-papel-tit">MISIONES</span>
+            <div class="obj-misiones-strip" data-misiones-strip></div>
+          </div>
+        </section>
+            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
+          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
+          <div class="obj-parejas-list" data-parejas-strip></div>
+        </section>
+        </div>
+      </section>
+
     </div>
   </div>  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
