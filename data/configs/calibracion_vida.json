@@ -573,8 +573,15 @@
             "musica"
         ],
         "max_temas": 6,
-        "carga_afin": 0.22,
-        "carga_neutro": 0.04,
-        "carga_aversion": -0.18
+        "carga_afin": 0.36,
+        "carga_neutro": 0.05,
+        "carga_aversion": -0.28,
+        "_nota_iter2": "Peso asimétrico en experiencia final; empuje_momento solo para copy inmediato.",
+        "carga_afin_beneficiario": 0.36,
+        "carga_afin_rompe": 0.1,
+        "carga_neutro_beneficiario": 0.05,
+        "carga_aversion_beneficiario": -0.28,
+        "carga_empuje_momento": 0.1,
+        "carga_accion_hobby": 0.04
     }
 }

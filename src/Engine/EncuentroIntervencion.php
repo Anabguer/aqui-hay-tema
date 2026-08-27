@@ -44,22 +44,33 @@ final class EncuentroIntervencion
      */
     public static function puedeIntervenir(array $partida, array $enc): bool
     {
+        return self::motivoNoIntervenir($partida, $enc) === null;
+    }
+
+    /**
+     * @param array<string, mixed> $enc
+     */
+    public static function motivoNoIntervenir(array $partida, array $enc): ?string
+    {
         if (($enc['estado'] ?? '') !== 'en_curso') {
-            return false;
+            return 'encuentro_no_en_curso';
         }
         if (($enc['intencion'] ?? '') !== 'celeste_organizado') {
-            return false;
+            return 'no_organizado_por_celestine';
         }
         $ids = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
         if (count($ids) !== 2) {
-            return false;
+            return 'no_pareja';
         }
         if (!empty($enc['intervencion_celeste']['usada'])) {
-            return false;
+            return 'intervencion_ya_usada';
         }
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
-        return LugarAtributos::ocupaHora($enc, $dia, $hora);
+        if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
+            return 'fuera_de_franja';
+        }
+        return null;
     }
 
     /**
@@ -69,12 +80,26 @@ final class EncuentroIntervencion
     public static function vistaParaPlay(array $partida, array $enc, ?Catalog $catalog = null): array
     {
         $usada = !empty($enc['intervencion_celeste']['usada']);
-        $puede = self::puedeIntervenir($partida, $enc);
+        $motivo = self::motivoNoIntervenir($partida, $enc);
+        $puede = $motivo === null;
+        $acciones = $puede ? self::accionesDisponibles($partida, $enc, $catalog) : [];
+        $tieneAccion = false;
+        foreach ($acciones as $ac) {
+            if (!empty($ac['disponible'])) {
+                $tieneAccion = true;
+                break;
+            }
+        }
         $prev = is_array($enc['intervencion_celeste'] ?? null) ? $enc['intervencion_celeste'] : null;
         return [
-            'disponible' => $puede,
+            'disponible' => $puede && $tieneAccion,
+            'puede_intervenir_motor' => $puede,
+            'tiene_accion' => $tieneAccion,
+            'motivo_no_disponible' => $motivo,
+            'intencion' => (string) ($enc['intencion'] ?? ''),
+            'estado' => (string) ($enc['estado'] ?? ''),
             'usada' => $usada,
-            'acciones' => $puede ? self::accionesDisponibles($partida, $enc, $catalog) : [],
+            'acciones' => $acciones,
             'ultimo' => $usada && $prev !== null ? [
                 'accion' => $prev['accion'] ?? null,
                 'tono' => $prev['tono'] ?? null,
@@ -309,7 +334,7 @@ final class EncuentroIntervencion
                 continue;
             }
             $interlocutor = $objetivo !== '' ? self::interlocutorDe($enc, $objetivo) : null;
-            $row['intervencion_celeste'] = [
+            $intervRow = [
                 'usada' => true,
                 'accion' => $accionId,
                 'tono' => $res['tono'],
@@ -323,10 +348,17 @@ final class EncuentroIntervencion
                 'afinidad_tema' => $params['afinidad_tema'] ?? null,
                 'beneficiario' => isset($params['residente_id']) ? (string) $params['residente_id'] : null,
                 'carga' => $res['carga'] ?? 0.0,
+                'cargas_experiencia' => $res['cargas_experiencia'] ?? null,
                 'hito' => $res['hito'] ?? null,
                 'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
                 'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
             ];
+            $intervRow['tema_cargas'] = MentesTemas::cargasExperienciaPorParticipante(
+                $intervRow,
+                [$a, $b],
+                $cal
+            );
+            $row['intervencion_celeste'] = $intervRow;
             $enc = $row;
             break;
         }
@@ -581,6 +613,11 @@ final class EncuentroIntervencion
         Catalog $catalog,
         RngService $rng
     ): array {
+        $objetivoMentes = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
+        if ($accionId === self::HOBBY && $objetivoMentes !== '') {
+            return self::resolverMentesHobby($partida, $enc, $a, $b, $params, $cal, $catalog, $rng);
+        }
+
         $resultados = CalibracionConfig::get($cal, 'resolucion_encuentro.resultados', ['muy_mal', 'mal', 'normal', 'bien', 'muy_bien']);
         if (!is_array($resultados) || $resultados === []) {
             $resultados = ['muy_mal', 'mal', 'normal', 'bien', 'muy_bien'];
@@ -819,27 +856,13 @@ final class EncuentroIntervencion
         if ($accionId === self::HOBBY) {
             $hid = (string) ($params['hobby_id'] ?? '');
             $afinidad = (string) ($params['afinidad_tema'] ?? 'neutro');
-            $calM = CalibracionConfig::get($cal, 'mentes.carga_' . $afinidad, null);
-            if ($calM !== null) {
-                $carga += (float) $calM;
-            } elseif ($afinidad === 'afin') {
-                $carga += 0.22;
+            $empuje = (float) CalibracionConfig::get($cal, 'mentes.carga_empuje_momento', 0.10);
+            if ($afinidad === 'afin') {
+                $carga += $empuje;
             } elseif ($afinidad === 'aversion') {
-                $carga -= 0.18;
+                $carga -= $empuje;
             } else {
-                $carga += 0.04;
-            }
-            $interlocutor = '';
-            $objetivoCarga = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
-            if ($objetivoCarga !== '') {
-                $interlocutor = self::interlocutorDe($enc, $objetivoCarga);
-            }
-            if ($interlocutor !== '' && $hid !== '') {
-                $lugar = (string) ($enc['lugar'] ?? '');
-                $plan = PlanAfinidad::paraParticipante($partida, $interlocutor, $lugar, $catalog);
-                if (is_array($plan) && !empty($plan['relacionado']) && $afinidad === 'afin') {
-                    $carga += 0.08;
-                }
+                $carga += 0.03;
             }
         }
         return max(-1.0, min(1.0, $carga));

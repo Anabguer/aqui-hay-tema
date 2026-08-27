@@ -29,17 +29,26 @@ final class EncuentroExperiencia
         $por = [];
         $rachaUmbral = CalibracionConfig::get($cal, 'azar_ponderado.racha_penaliza_tras', null);
         $rachaN = is_numeric($rachaUmbral) ? (int) $rachaUmbral : null;
+        $interv = is_array($encuentro['intervencion_celeste'] ?? null) ? $encuentro['intervencion_celeste'] : null;
+        $temaCargas = is_array($interv['tema_cargas'] ?? null) ? $interv['tema_cargas'] : [];
+        $cargaAccion = 0.0;
+        if ($interv !== null && isset($interv['carga']) && is_numeric($interv['carga'])) {
+            if (($interv['accion'] ?? '') === EncuentroIntervencion::HOBBY) {
+                $cargaAccion = (float) CalibracionConfig::get($cal, 'mentes.carga_accion_hobby', 0.04);
+            } else {
+                $cargaAccion = (float) $interv['carga'];
+            }
+        }
         foreach ($ids as $pid) {
             $pid = (string) $pid;
             $carga = self::cargaDe($snap, $pid, $cal);
-            if (isset($encuentro['intervencion_celeste']['carga']) && is_numeric($encuentro['intervencion_celeste']['carga'])) {
-                $carga += (float) $encuentro['intervencion_celeste']['carga'];
-                if ($carga < -1.0) {
-                    $carga = -1.0;
-                }
-                if ($carga > 1.0) {
-                    $carga = 1.0;
-                }
+            $carga += $cargaAccion;
+            $carga += (float) ($temaCargas[$pid] ?? 0.0);
+            if ($carga < -1.0) {
+                $carga = -1.0;
+            }
+            if ($carga > 1.0) {
+                $carga = 1.0;
             }
             $recientes = [];
             foreach (MemoriaEventos::recientes($partida, [$pid], 5) as $ev) {
@@ -50,11 +59,25 @@ final class EncuentroExperiencia
             $avisoRacha = AzarPonderado::rachaArtificial($recientes, 'excelente', $rachaN)
                 || AzarPonderado::rachaArtificial($recientes, 'malo', $rachaN);
             $tirada = AzarPonderado::tirar($rng, $resultados, $carga, $cal);
+            $resultadoExp = (string) ($tirada['resultado'] ?? 'normal');
+            $textoMentes = null;
+            if ($interv !== null && $catalog !== null) {
+                $textoMentes = MentesTemas::copyExperienciaParticipante(
+                    $partida,
+                    $encuentro,
+                    $pid,
+                    $resultadoExp,
+                    $interv,
+                    $catalog
+                );
+            }
             $por[$pid] = [
                 'satisfaccion' => null,
-                'texto' => null,
-                'resultado' => $tirada['resultado'],
+                'texto' => $textoMentes,
+                'resultado' => $resultadoExp,
                 'carga' => $carga,
+                'carga_tema' => (float) ($temaCargas[$pid] ?? 0.0),
+                'carga_accion' => $cargaAccion,
                 'aviso_racha' => $avisoRacha,
                 'compatibilidad_hacia_otro' => $snap['por_participante'][$pid]['compatibilidad_hacia_otro'] ?? null,
                 '_bloqueado_decision' => ['satisfaccion_numerica', 'copy'],

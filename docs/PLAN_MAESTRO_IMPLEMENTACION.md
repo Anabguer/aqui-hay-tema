@@ -1242,3 +1242,16 @@ Familia semántica: campo `categoria` del catálogo de hobbies (reutilizado, sin
 - Gracia post-tutorial: `llegadas.dias_gracia_post_tutorial` (2 días sin ofertas tras activar modo normal).
 - Partidas existentes no migradas: el cambio aplica solo a **partidas nuevas** vía config.
 
+
+### MENTES iteración 2 — peso real y coherencia narrativa (2026-08-28)
+
+**Principio:** el conocimiento del jugador **inclina de forma significativa** la experiencia del beneficiario del tema, pero **no garantiza** el resultado. Las experiencias pueden ser **asimétricas** (genial para uno, horrible para otro).
+
+**Causa del caso Hugo+Tamara:** la intervención MENTES resolvía una tirada compartida (copy del momento) mientras la experiencia final se calculaba **por participante** con la misma `carga` simétrica; el texto del momento podía sonar positivo y el resultado final contradictorio.
+
+**Implementación:**
+- `tema_cargas` asimétricas por participante (beneficiario vs rompe hielo) en experiencia final.
+- Calibración: `carga_afin_beneficiario` 0.36, `carga_afin_rompe` 0.10, etc.
+- Copy de cierre por participante (`texto` en experiencia) explica tema + resultado.
+- CTA unificado: `¿Qué se cuece ahí?` solo si `celeste_organizado` + MENTES disponible; `Ver encuentro` si organizado sin acciones; `Ver qué pasa` si espontáneo.
+

@@ -1,6 +1,16 @@
 (function () {
   'use strict';
 
+  function ctaTxtEncuentroMov(enc, iv) {
+    var org = enc && enc.intencion === 'celeste_organizado';
+    var curso = enc && enc.estado === 'en_curso';
+    var mentes = iv && iv.disponible && iv.acciones && iv.acciones.length;
+    if (org && curso && mentes) return '\u00bfQu\u00e9 se cuece ah\u00ed?';
+    if (org && curso) return 'Ver encuentro';
+    return 'Ver qu\u00e9 pasa';
+  }
+
+
   const API = 'api/index.php';
   const qs = new URLSearchParams(location.search);
   const CONFIG_JUEGO = { config_id: 'juego_v1' };
@@ -1879,7 +1889,7 @@
     const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
-    const ctaTxt = puedeIntervenir ? '¿Qué se cuece ahí?' : 'Ver encuentro';
+    const ctaTxt = ctaTxtEncuentroMov(enc, iv);
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
@@ -1900,7 +1910,7 @@
     const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
-    const ctaTxt = puedeIntervenir ? '¿Qué se cuece ahí?' : 'Ver encuentro';
+    const ctaTxt = ctaTxtEncuentroMov(enc, iv);
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +

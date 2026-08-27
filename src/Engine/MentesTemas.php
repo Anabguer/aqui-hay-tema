@@ -215,11 +215,185 @@ final class MentesTemas
         $nb = IdentidadPublica::nombre($partida, $interlocutor);
         $bancos = self::bancosCopy($na, $nb, $labelTema);
         $clave = $afinidad . '_' . $tono;
+        if ($afinidad === 'afin' && ($tono === 'neutral' || $tono === 'bien')) {
+            $clave = 'afin_momento';
+        }
         if (!isset($bancos[$clave]) || $bancos[$clave] === []) {
             $clave = 'neutro_neutral';
         }
         $opts = $bancos[$clave];
         return $opts[$rng->nextInt(0, count($opts) - 1)];
+    }
+
+    /**
+     * Carga adicional en la experiencia final por participante (asimétrica).
+     *
+     * @param list<string> $participantes
+     * @return array<string, float>
+     */
+    public static function cargasExperienciaPorParticipante(
+        array $intervencion,
+        array $participantes,
+        array $cal
+    ): array {
+        if (($intervencion['accion'] ?? '') !== EncuentroIntervencion::HOBBY) {
+            return [];
+        }
+        $afinidad = (string) ($intervencion['afinidad_tema'] ?? 'neutro');
+        $beneficiario = (string) ($intervencion['beneficiario'] ?? '');
+        $rompe = (string) ($intervencion['rompe_hielo'] ?? $intervencion['objetivo'] ?? '');
+        $out = [];
+        foreach ($participantes as $pid) {
+            $pid = (string) $pid;
+            $out[$pid] = 0.0;
+        }
+        if ($beneficiario === '' || !isset($out[$beneficiario])) {
+            return $out;
+        }
+        $cBen = self::cargaCalibrada($cal, $afinidad, 'beneficiario');
+        $cRompe = self::cargaCalibrada($cal, $afinidad, 'rompe');
+        $out[$beneficiario] = $cBen;
+        if ($rompe !== '' && isset($out[$rompe])) {
+            $out[$rompe] = $cRompe;
+        }
+        return $out;
+    }
+
+    /**
+     * Copy de cierre por participante: explica el resultado final en relación al tema MENTES.
+     *
+     * @param array<string, mixed> $encuentro
+     * @param array<string, mixed> $intervencion
+     */
+    public static function copyExperienciaParticipante(
+        array $partida,
+        array $encuentro,
+        string $participanteId,
+        string $resultadoExperiencia,
+        array $intervencion,
+        Catalog $catalog
+    ): ?string {
+        if (($intervencion['accion'] ?? '') !== EncuentroIntervencion::HOBBY) {
+            return null;
+        }
+        $afinidad = (string) ($intervencion['afinidad_tema'] ?? 'neutro');
+        $beneficiario = (string) ($intervencion['beneficiario'] ?? '');
+        $rompe = (string) ($intervencion['rompe_hielo'] ?? $intervencion['objetivo'] ?? '');
+        $hid = (string) ($intervencion['tema_id'] ?? $intervencion['hobby_id'] ?? '');
+        if ($hid === '') {
+            return null;
+        }
+        try {
+            $label = self::etiquetaTema($hid, $catalog->store());
+        } catch (\Throwable $ignored) {
+            $label = $hid;
+        }
+        $label = preg_replace('/^\S+\s+/', '', $label) ?? $label;
+        $esBenef = $participanteId === $beneficiario;
+        $esRompe = $participanteId === $rompe;
+        if (!$esBenef && !$esRompe) {
+            return null;
+        }
+        $na = $rompe !== '' ? IdentidadPublica::nombre($partida, $rompe) : '';
+        $nb = $beneficiario !== '' ? IdentidadPublica::nombre($partida, $beneficiario) : '';
+        $score = self::scoreResultado($resultadoExperiencia);
+
+        if ($esBenef) {
+            if ($afinidad === 'afin') {
+                if ($score >= 1) {
+                    return 'El tema de ' . $label . ' le vino de perlas y el encuentro remontó.';
+                }
+                if ($score === 0) {
+                    return 'Le encajó hablar de ' . $label . ', aunque el encuentro se quedó en tierra de nadie.';
+                }
+                return 'Aunque ' . $label . ' le interesó, el encuentro con ' . $na . ' no acabó de cuajar.';
+            }
+            if ($afinidad === 'aversion') {
+                return 'Sacar ' . $label . ' no fue buena idea: a ' . $nb . ' no le hizo gracia.';
+            }
+            if ($score < 0) {
+                return 'El tema de ' . $label . ' no bastó para salvar un encuentro que se torció.';
+            }
+            return 'El tema de ' . $label . ' pasó sin demasiado brillo.';
+        }
+
+        // rompe hielo
+        if ($afinidad === 'afin' && $score >= 1) {
+            return 'Acertaste con ' . $label . ': ' . $nb . ' se animó y tú lo notaste.';
+        }
+        if ($afinidad === 'afin' && $score < 0) {
+            return 'Con ' . $label . ' enganchaste a ' . $nb . ' un rato, pero el encuentro no terminó bien para ti.';
+        }
+        if ($afinidad === 'afin') {
+            return 'El tema de ' . $label . ' ayudó a ' . $nb . ', aunque a ti el encuentro te dejó regular.';
+        }
+        return null;
+    }
+
+    /**
+     * Distribución de resultados para simulación (misma semilla, distintas cargas MENTES).
+     *
+     * @param list<string> $resultados
+     * @return array<string, int>
+     */
+    public static function simularDistribucion(
+        RngService $rng,
+        array $resultados,
+        float $cargaBase,
+        float $cargaMentes,
+        array $cal,
+        int $iteraciones = 500
+    ): array {
+        $hist = array_fill_keys($resultados, 0);
+        for ($i = 0; $i < $iteraciones; $i++) {
+            $t = AzarPonderado::tirar($rng, $resultados, max(-1.0, min(1.0, $cargaBase + $cargaMentes)), $cal);
+            $r = (string) ($t['resultado'] ?? 'normal');
+            if (isset($hist[$r])) {
+                $hist[$r]++;
+            }
+        }
+        return $hist;
+    }
+
+    private static function cargaCalibrada(array $cal, string $afinidad, string $rol): float
+    {
+        $key = 'mentes.carga_' . $afinidad . '_' . $rol;
+        $v = CalibracionConfig::get($cal, $key, null);
+        if ($v !== null) {
+            return (float) $v;
+        }
+        if ($rol === 'beneficiario') {
+            if ($afinidad === 'afin') {
+                return (float) CalibracionConfig::get($cal, 'mentes.carga_afin', 0.36);
+            }
+            if ($afinidad === 'aversion') {
+                return (float) CalibracionConfig::get($cal, 'mentes.carga_aversion', -0.28);
+            }
+            return (float) CalibracionConfig::get($cal, 'mentes.carga_neutro', 0.05);
+        }
+        if ($afinidad === 'afin') {
+            return (float) CalibracionConfig::get($cal, 'mentes.carga_afin_rompe', 0.10);
+        }
+        if ($afinidad === 'aversion') {
+            return -0.06;
+        }
+        return 0.03;
+    }
+
+    private static function scoreResultado(string $res): int
+    {
+        switch ($res) {
+            case 'muy_bien':
+                return 2;
+            case 'bien':
+                return 1;
+            case 'mal':
+                return -1;
+            case 'muy_mal':
+                return -2;
+            default:
+                return 0;
+        }
     }
 
     /**
@@ -229,6 +403,11 @@ final class MentesTemas
     {
         $t = $label;
         return [
+            'afin_momento' => [
+                $na . ' plantea ' . $t . ' y ' . $nb . ' muestra interés de verdad.',
+                $na . ' saca ' . $t . ' y a ' . $nb . ' le pica la curiosidad.',
+                'Buen ojo: ' . $na . ' tira por ' . $t . ' y ' . $nb . ' se engancha.',
+            ],
             'afin_bien' => [
                 $na . ' tira por ' . $t . ' y ' . $nb . ' entra enseguida al trapo. La charla coge ritmo.',
                 $na . ' saca ' . $t . ' y a ' . $nb . ' le encaja. Conectan al momento.',
