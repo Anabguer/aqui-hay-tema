@@ -1711,7 +1711,41 @@
     track.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardMovil(enc, estado); }).join('');
   }
   var encMovIndice = 0;
-    function formatEncursoMetaLine(enc, estado) {
+    function esInicioLayoutMovil() {
+    return typeof window !== 'undefined' && window.matchMedia &&
+      window.matchMedia('(max-width: 768px)').matches;
+  }
+  function familiaTipoEncuentro(enc) {
+    const ids = (enc && enc.participantes) || [];
+    if (ids.length > 2) return 'grupal';
+    const t = String((enc && enc.tipo) || '').toLowerCase();
+    if (t === 'individual') return 'individual';
+    if (t === 'primera_cita' || t === 'cita' || t === 'romantico') return 'romantico';
+    if (t === 'conocerse') return 'conocerse';
+    if (t === 'conflicto') return 'conflicto';
+    if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
+    return 'social';
+  }
+  function iconoEncuentroCentroHtml(enc) {
+    const ids = (enc && enc.participantes) || [];
+    if (ids.length < 2) return '';
+    const fam = familiaTipoEncuentro(enc);
+    const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + fam;
+    if (fam === 'romantico') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>';
+    }
+    if (fam === 'conocerse') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 19c.8-3 2.8-4.5 4.5-4.5S12.7 16 13.5 19M10.5 19c.8-3 2.8-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>';
+    }
+    if (fam === 'grupal') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.5 19c.6-2.4 2.2-3.8 4-3.8M17 19c.6-2.4 2.2-3.8 4-3.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>';
+    }
+    if (fam === 'conflicto') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>';
+    }
+    return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6 18c.5-2 2-3 2-3M16 18c.5-2 2-3 2-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
+  }
+  function formatEncursoMetaLine(enc, estado) {
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     const reloj = (estado && estado.reloj) || {};
@@ -1719,12 +1753,11 @@
     if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' \u00b7 Hoy ' + hora;
     return lugar + ' \u00b7 D\u00eda ' + (enc.dia || '?') + ' \u00b7 ' + hora;
   }
-  function encCursoFacesHtml(ids) {
+  function encCursoFacesHtml(enc) {
+    const ids = (enc && enc.participantes) || [];
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
-    return htmlCaraToken(slice[0]) +
-      '<span class="enc-mov-heart" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>' +
-      htmlCaraToken(slice[1]);
+    return htmlCaraToken(slice[0]) + iconoEncuentroCentroHtml(enc) + htmlCaraToken(slice[1]);
   }
   function resumenEncursoMovil(enc, estado) {
     const iv = intervencionVistaDe(enc, estado);
@@ -1746,7 +1779,32 @@
     return '<div class="enc-mov-vista"><p class="enc-mov-vista-txt">' +
       esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
   }
-  function htmlEncursoCardMovil(enc, estado) {
+  function htmlEncursoCardDesktop(enc, estado) {
+    const ids = enc.participantes || [];
+    const iv = intervencionVistaDe(enc, estado);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<div class="enc-mov-row">' +
+      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
+      '<div class="enc-mov-copy">' +
+      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
+      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
+      '<span class="enc-mov-estado">EN CURSO</span>' +
+      '</div>';
+    if (hayInt) {
+      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">Intervenir</span>' +
+        '<span class="enc-mov-cta-flecha" aria-hidden="true">\u203a</span></button>';
+    }
+    html += '</div>';
+    if (hayInt) {
+      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
+        htmlIntervencionEncuentro(enc, estado) + '</div>';
+    }
+    return html + '</article>';
+  }
+  function htmlEncursoCardMovilV14(enc, estado) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
@@ -1754,10 +1812,10 @@
       (iv.disponible && iv.acciones && iv.acciones.length));
     const ctaTxt = puedeIntervenir ? 'Intervenir' : 'Ver encuentro';
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
-    let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+    let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
       '<div class="enc-mov-body">' +
-      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(ids) + '</div>' +
+      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
       '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
       '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>' +
       '</div>' +
@@ -1767,7 +1825,11 @@
       '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
     return html + '</article>';
   }
-  function encMovPaso(track) {
+  function htmlEncursoCardMovil(enc, estado) {
+    if (esInicioLayoutMovil()) return htmlEncursoCardMovilV14(enc, estado);
+    return htmlEncursoCardDesktop(enc, estado);
+  }
+    function encMovPaso(track) {
     const cards = track.querySelectorAll('[data-enc-mov-card]');
     if (!cards.length) return 0;
     const st = getComputedStyle(track);

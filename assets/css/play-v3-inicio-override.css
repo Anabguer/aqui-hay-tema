@@ -1368,3 +1368,122 @@
     text-align: center !important;
   }
 }
+
+/* === INICIO-ENCURSO-FIX-v15: tipo real + avatares separados + orden feed móvil === */
+@media (max-width: 768px) {
+  /* grid-row gana a flex order con display:contents (inicio.css ponía encursos antes que cotilleo) */
+  .play-v3:has(.game-shell) .game-main .shell-grupo-cotilleo-par {
+    grid-row: 3 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main .encursos-movil.is-on {
+    grid-row: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main .proxplanes-movil.is-on {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)) .proxplanes-movil.is-on {
+    grid-row: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:has(.encursos-movil.is-on):has(.proxplanes-movil.is-on) .shell-grupo-misiones-par {
+    grid-row: 6 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:has(.encursos-movil.is-on):not(:has(.proxplanes-movil.is-on)) .shell-grupo-misiones-par {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):has(.proxplanes-movil.is-on) .shell-grupo-misiones-par {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):not(:has(.proxplanes-movil.is-on)) .shell-grupo-misiones-par {
+    grid-row: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:has(.encursos-movil.is-on):has(.proxplanes-movil.is-on) .shell-grupo-parejas {
+    grid-row: 7 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:has(.encursos-movil.is-on):not(:has(.proxplanes-movil.is-on)) .shell-grupo-parejas {
+    grid-row: 6 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):has(.proxplanes-movil.is-on) .shell-grupo-parejas {
+    grid-row: 6 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):not(:has(.proxplanes-movil.is-on)) .shell-grupo-parejas {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-cotilleo-par { order: 1 !important; }
+  .play-v3:has(.game-shell) .game-right > .encursos-movil.is-on { order: 2 !important; }
+  .play-v3:has(.game-shell) .game-right > .proxplanes-movil.is-on { order: 3 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-misiones-par { order: 4 !important; }
+  .play-v3:has(.game-shell) .game-right > .shell-grupo-parejas { order: 5 !important; }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-faces {
+    gap: 12px !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-heart {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 2px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.18) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    z-index: 1 !important;
+    flex: 0 0 24px !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico--social,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico--conocerse,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico--grupal {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico--conflicto {
+    color: #c85b4a !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico svg,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-heart svg {
+    width: 13px !important;
+    height: 13px !important;
+    display: block !important;
+  }
+}
+
+/* Desktop: blindaje frente a markup v14 móvil (ojo gigante / tarjeta ref) */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card--ref .enc-mov-card-tit,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card--ref .enc-mov-body,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card--ref .enc-mov-meta,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card--ref .enc-mov-resumen,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card--ref .enc-mov-cta-ico {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta-ico {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta-ico svg {
+    width: 0 !important;
+    height: 0 !important;
+  }
+}

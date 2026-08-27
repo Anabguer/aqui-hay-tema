@@ -13,7 +13,8 @@ function ok(c, m) { console.log((c ? 'OK' : 'FAIL') + ': ' + m); if (!c) fail++;
 
 const v14 = (() => {
   const i = ov.indexOf('INICIO-ENCURSO-REF-v14');
-  return i < 0 ? '' : ov.slice(i);
+  const j = ov.indexOf('INICIO-ENCURSO-FIX-v15');
+  return i < 0 ? '' : ov.slice(i, j > i ? j : undefined);
 })();
 
 ok(v14.includes('@media (max-width: 768px)'), 'v14 solo móvil');
@@ -22,14 +23,14 @@ ok(/\.encursos-movil \.enc-mov-cab[\s\S]{0,80}display:\s*none/.test(v14), 'cabec
 ok(/\.encursos-movil \.enc-mov-card-tit/.test(v14), 'título en tarjeta');
 ok(/\.encursos-movil \.enc-mov-body[\s\S]{0,120}flex-direction:\s*column/.test(v14), 'cuerpo vertical');
 ok(/\.encursos-movil \.enc-mov-faces[\s\S]{0,120}justify-content:\s*center/.test(v14), 'avatares centrados');
-ok(/\.encursos-movil \.enc-mov-heart/.test(v14), 'corazón entre avatares');
+ok(/\.encursos-movil \.enc-mov-(heart|tipo-ico)/.test(v14), 'icono central entre avatares');
 ok(/\.encursos-movil \.enc-mov-meta[\s\S]{0,120}ds-font-hand/.test(v14), 'meta manuscrita');
 ok(/\.encursos-movil \.enc-mov-resumen/.test(v14), 'resumen corto');
 ok(/\.encursos-movil \.enc-mov-cta[\s\S]{0,200}width:\s*100%/.test(v14), 'CTA ancho completo');
 ok(!/INICIO-ENCURSO-REF-v14/.test(desk), 'desktop sin v14');
 
 ok(js.includes('function formatEncursoMetaLine'), 'js: meta actividad+hora');
-ok(js.includes('function encCursoFacesHtml'), 'js: caras con corazón');
+ok(js.includes('function encCursoFacesHtml'), 'js: caras con icono central');
 ok(js.includes('function resumenEncursoMovil'), 'js: resumen');
 ok(js.includes('enc-mov-card-tit'), 'js: título en tarjeta');
 ok(js.includes('enc-mov-meta'), 'js: línea meta');

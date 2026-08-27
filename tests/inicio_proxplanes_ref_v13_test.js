@@ -11,7 +11,8 @@ function ok(c, m) { console.log((c ? 'OK' : 'FAIL') + ': ' + m); if (!c) fail++;
 
 const v13 = (() => {
   const i = ov.indexOf('INICIO-PROXPLANES-REF-v13');
-  return i < 0 ? '' : ov.slice(i);
+  const j = ov.indexOf('INICIO-ENCURSO-REF-v14');
+  return i < 0 ? '' : ov.slice(i, j > i ? j : undefined);
 })();
 
 ok(v13.includes('@media (max-width: 768px)'), 'v13 solo móvil');
