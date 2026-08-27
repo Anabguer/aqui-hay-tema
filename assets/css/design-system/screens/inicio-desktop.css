@@ -1117,7 +1117,7 @@
   }
 }
 
-/* INICIO-DESKTOP-LAYOUT-v11: Misiones bajo vecinos; planes + nuevo plan bajo cotilleo */
+/* INICIO-DESKTOP-LAYOUT-v11: Mensajitos+Vecinos apilados col1-2; Misiones bajo vecinos; planes bajo cotilleo */
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .game-main {
     display: grid !important;
@@ -1137,22 +1137,22 @@
   }
 
   .play-v3:has(.game-shell) .shell-grupo-buzon {
-    grid-column: 1 !important;
+    grid-column: 1 / 3 !important;
     grid-row: 1 !important;
     width: 100% !important;
     max-width: 100% !important;
   }
 
   .play-v3:has(.game-shell) .shell-grupo-resumen {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
+    grid-column: 1 / 3 !important;
+    grid-row: 2 !important;
     width: 100% !important;
     max-width: 100% !important;
   }
 
   .play-v3:has(.game-shell) .shell-grupo-misiones-par {
     grid-column: 1 / 3 !important;
-    grid-row: 2 !important;
+    grid-row: 3 !important;
     width: 100% !important;
     max-width: 100% !important;
     margin-top: 0 !important;
