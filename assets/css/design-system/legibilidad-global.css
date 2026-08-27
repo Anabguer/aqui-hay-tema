@@ -313,6 +313,18 @@
   min-height: 0 !important;
 }
 
+/* Desktop: mismo aire tabs ? marcar leído que en móvil (avisos .phone tabs mb 12px) */
+@media (min-width: 769px) {
+  .play-v3 .capa-buzon .mensajitos-tabs {
+    margin-bottom: 10px !important;
+  }
+
+  .play-v3 .capa-buzon .mensajitos-toolbar {
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+  }
+}
+
 .play-v3 .capa-buzon .ds-modal-head .ds-modal-tit,
 .play-v3 .capa-buzon .mensajitos-tit {
   font-family: Caveat, cursive !important;
