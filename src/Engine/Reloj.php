@@ -10,6 +10,9 @@ final class Reloj
     /** Lunes 17 ago 2026 08:00. Tests CLI congelan aquí para no romper agendas laborales. */
     public const TEST_AHORA = '2026-08-17 08:00:00';
 
+    /** Contrato de inicio: toda partida nueva empieza el día 1 a las 09:00 (reloj de juego). */
+    public const HORA_INICIO_PARTIDA = 9;
+
     private const DIAS_SEMANA = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo'];
     private const DIAS_UI = [
         1 => 'Lunes',
@@ -69,20 +72,19 @@ final class Reloj
     }
 
     /**
-     * Nueva partida: ancla y hora inicial desde el dispositivo (una sola vez).
-     * Granularidad horaria: truncado a la hora en curso (minuto 0).
+     * Nueva partida: fecha ancla opcional desde el dispositivo; reloj de juego fijo día 1 @ 09:00.
      *
      * @param array<string, mixed> $partida
-     * @param array<string, mixed>|null $horaLocalCliente {fecha: Y-m-d, hora: 0-23}
+     * @param array<string, mixed>|null $horaLocalCliente {fecha: Y-m-d, hora: 0-23} — solo fecha se usa
      */
     public static function aplicarAlCrear(array &$partida, ?array $horaLocalCliente = null): void
     {
-        $inicio = self::resolverHoraInicialCreacion($horaLocalCliente);
+        $ancla = self::resolverFechaAnclaCreacion($horaLocalCliente);
         $partida['reloj']['zona'] = self::ZONA;
-        $partida['reloj']['fecha_ancla'] = $inicio['fecha'];
+        $partida['reloj']['fecha_ancla'] = $ancla['fecha'];
         $partida['reloj']['dia_pueblo'] = 1;
         $partida['reloj']['dia_en_temporada'] = 1;
-        $partida['reloj']['hora_actual'] = $inicio['hora'];
+        $partida['reloj']['hora_actual'] = self::HORA_INICIO_PARTIDA;
         $partida['reloj']['minuto_actual'] = 0;
         $partida['reloj']['ultima_sesion_iso'] = (new \DateTimeImmutable('now', new \DateTimeZone('UTC')))->format(DATE_ATOM);
     }
@@ -124,20 +126,29 @@ final class Reloj
 
     /**
      * @param array<string, mixed>|null $horaLocalCliente
-     * @return array{fecha: string, hora: int, origen: string}
+     * @return array{fecha: string, origen: string}
      */
-    public static function resolverHoraInicialCreacion(?array $horaLocalCliente = null): array
+    public static function resolverFechaAnclaCreacion(?array $horaLocalCliente = null): array
     {
         $cliente = self::normalizarHoraLocalCliente($horaLocalCliente);
         if ($cliente !== null) {
-            return ['fecha' => $cliente['fecha'], 'hora' => $cliente['hora'], 'origen' => 'cliente'];
+            return ['fecha' => $cliente['fecha'], 'origen' => 'cliente'];
         }
         $now = self::ahoraLocal();
         return [
             'fecha' => $now->format('Y-m-d'),
-            'hora' => (int) $now->format('G'),
             'origen' => 'fallback',
         ];
+    }
+
+    /**
+     * @param array<string, mixed>|null $horaLocalCliente
+     * @return array{fecha: string, hora: int, origen: string}
+     */
+    public static function resolverHoraInicialCreacion(?array $horaLocalCliente = null): array
+    {
+        $ancla = self::resolverFechaAnclaCreacion($horaLocalCliente);
+        return array_merge($ancla, ['hora' => self::HORA_INICIO_PARTIDA]);
     }
 
     /**
