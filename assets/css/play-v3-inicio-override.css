@@ -693,3 +693,57 @@
   pointer-events: none !important;
   opacity: 0 !important;
 }
+
+/* INICIO-MOBILE-ISOLATE-v1: anula grid/contents desktop en <=768 (carga override tras inicio-desktop) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-main {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: unset !important;
+    grid-template-areas: unset !important;
+    align-items: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left.zona-actividad {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: end !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right.zona-personas {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left,
+  .play-v3:has(.game-shell) .game-right {
+    display: revert !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left.zona-actividad {
+    display: grid !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right.zona-personas {
+    display: flex !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .shell-grupo-planes,
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par,
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par,
+  .play-v3:has(.game-shell) .shell-grupo-parejas,
+  .play-v3:has(.game-shell) .encursos-movil,
+  .play-v3:has(.game-shell) .proxplanes-movil {
+    grid-column: unset !important;
+    grid-row: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}

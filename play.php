@@ -1,3 +1,17 @@
+<?php
+declare(strict_types=1);
+header('Content-Type: text/html; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
+$ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
+$ahtUi = 'v3-static';
+if (is_file($ahtBusterFile)) {
+    $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
+    if ($ahtBusterRaw !== '') {
+        $ahtUi = $ahtBusterRaw;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,43 +21,43 @@
   <title>AquÃ­ Hay Tema</title>
   <link rel="icon" href="favicon.png" type="image/png" sizes="512x512"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
-  <link rel="stylesheet" href="assets/css/play-v3.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/components.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=ï»¿v3-20260827-130403"/>
-  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=ï»¿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -861,10 +875,10 @@
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
             <span class="obj-cotilleo-cuerpo">
-              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy estÃ¡n sospechosamente tranquilosâ¦</span>
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy estÃ¡n sospechosamente tranquilosâ€¦</span>
               <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
-            <span class="obj-cotilleo-flecha" aria-hidden="true">âº</span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">â€º</span>
           </button>
         </section>
         <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
@@ -908,11 +922,11 @@
       </aside>
     </div>
   </div>
-  <script src="assets/js/lab-audit.js?v=ï»¿v3-20260827-130403"></script>
-  <script src="assets/js/play-v3-audio.js?v=ï»¿v3-20260827-130403"></script>
-  <script src="assets/js/hobby-icons.js?v=ï»¿v3-20260827-130403"></script>
-  <script src="assets/js/play-v3.js?v=ï»¿v3-20260827-130403"></script>
-  <script src="assets/js/play-v3-lab.js?v=ï»¿v3-20260827-130403"></script>
+  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
 <script>if(new URLSearchParams(location.search).get('design')==='1'){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/design-mode-global.js';document.body.appendChild(s)}</script>
 </body>
 </html>
