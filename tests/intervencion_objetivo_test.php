@@ -75,19 +75,44 @@ function setupDosEncuentrosSimultaneos(): array
     $p2 = (string) $ph2['residente']['catalog_id'];
     $p3 = (string) $ph3['residente']['catalog_id'];
 
-    $hora = encontrarHoraLibre($partida, [$qa, $p1], 1);
+    $hora = null;
+    $reloj = $partida['reloj'] ?? [];
+    for ($h = 8; $h < 23; $h++) {
+        if (!\AquiHayTema\Engine\Reloj::esFuturo($reloj, 1, $h)) {
+            continue;
+        }
+        $libreA = true;
+        foreach ([$qa, $p1] as $rid) {
+            if (!AgendaEngine::estaDisponible($partida, $rid, 1, $h)['disponible']) {
+                $libreA = false;
+                break;
+            }
+        }
+        $libreB = true;
+        foreach ([$p2, $p3] as $rid) {
+            if (!AgendaEngine::estaDisponible($partida, $rid, 1, $h)['disponible']) {
+                $libreB = false;
+                break;
+            }
+        }
+        if ($libreA && $libreB) {
+            $hora = $h;
+            break;
+        }
+    }
+    if ($hora === null) {
+        throw new RuntimeException('no hay hora libre simultanea para ambos encuentros');
+    }
     $rA = $svc->programarEncuentro($partida, [$qa, $p1], 1, $hora, 'conocerse', 'lug_cafeteria');
     if (!($rA['ok'] ?? false)) {
         throw new RuntimeException('no programa encuentro A: ' . json_encode($rA));
     }
-    $horaB = encontrarHoraLibre($partida, [$p2, $p3], 1);
-    $rB = $svc->programarEncuentro($partida, [$p2, $p3], 1, $horaB, 'conocerse', 'lug_parque');
+    $rB = $svc->programarEncuentro($partida, [$p2, $p3], 1, $hora, 'conocerse', 'lug_parque');
     if (!($rB['ok'] ?? false)) {
         throw new RuntimeException('no programa encuentro B: ' . json_encode($rB));
     }
 
-    $horaMax = max($hora, $horaB);
-    while ((int) $partida['reloj']['hora_actual'] < $horaMax) {
+    while ((int) $partida['reloj']['hora_actual'] < $hora) {
         $svc->avanzarReloj($partida, 1);
     }
     EncuentroLifecycle::sincronizarConReloj($partida, null, $svc->getCatalog());
