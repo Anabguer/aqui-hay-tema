@@ -24,21 +24,38 @@ final class MensajitoConsejoEngine
             return $mensaje;
         }
         $datos = is_array($mensaje['datos_familia'] ?? null) ? $mensaje['datos_familia'] : [];
-        $opciones = match ($familia) {
-            'f_opinion' => self::opcionesF1($partida, $datos),
-            'f_dilema' => self::opcionesF2($partida, $datos),
-            'f_curiosidad_celestine' => self::opcionesF15(),
-            'f_confidencia' => self::opcionesEscuchar(),
-            default => [],
-        };
+        switch ($familia) {
+            case 'f_opinion':
+                $opciones = self::opcionesF1($partida, $datos);
+                break;
+            case 'f_dilema':
+                $opciones = self::opcionesF2($partida, $datos);
+                break;
+            case 'f_curiosidad_celestine':
+                $opciones = self::opcionesF15();
+                break;
+            case 'f_confidencia':
+                $opciones = self::opcionesEscuchar();
+                break;
+            default:
+                $opciones = [];
+        }
         if ($opciones !== []) {
             $mensaje['opciones_consejo'] = $opciones;
-            $mensaje['consejo_titulo'] = match ($familia) {
-                'f_opinion', 'f_dilema' => '¿Qué le dices?',
-                'f_curiosidad_celestine' => '¿Cómo respondes?',
-                'f_confidencia' => '¿Qué le contestas?',
-                default => '¿Qué le dices?',
-            };
+            switch ($familia) {
+                case 'f_opinion':
+                case 'f_dilema':
+                    $mensaje['consejo_titulo'] = '¿Qué le dices?';
+                    break;
+                case 'f_curiosidad_celestine':
+                    $mensaje['consejo_titulo'] = '¿Cómo respondes?';
+                    break;
+                case 'f_confidencia':
+                    $mensaje['consejo_titulo'] = '¿Qué le contestas?';
+                    break;
+                default:
+                    $mensaje['consejo_titulo'] = '¿Qué le dices?';
+            }
         }
         return $mensaje;
     }
@@ -312,13 +329,18 @@ final class MensajitoConsejoEngine
      */
     private static function opcionesDeFamilia(array $partida, string $familia, array $datos): array
     {
-        return match ($familia) {
-            'f_opinion' => self::opcionesF1($partida, $datos),
-            'f_dilema' => self::opcionesF2($partida, $datos),
-            'f_curiosidad_celestine' => self::opcionesF15(),
-            'f_confidencia' => self::opcionesEscuchar(),
-            default => [],
-        };
+        switch ($familia) {
+            case 'f_opinion':
+                return self::opcionesF1($partida, $datos);
+            case 'f_dilema':
+                return self::opcionesF2($partida, $datos);
+            case 'f_curiosidad_celestine':
+                return self::opcionesF15();
+            case 'f_confidencia':
+                return self::opcionesEscuchar();
+            default:
+                return [];
+        }
     }
 
     /**

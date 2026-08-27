@@ -134,14 +134,29 @@ final class MensajitosCadenciaEngine
      */
     public static function prioridad(string $familia): int
     {
-        return match ($familia) {
-            'importante', 'respuesta_plan', 'peticion_resultado' => 0,
-            'peticion', 'candidato_oferta', 'marcha_intencion' => 1,
-            'f_opinion', 'f_dilema', 'f_alerta_vecinal' => 2,
-            'f_confidencia', 'f_seguimiento', 'f_promesa', 'f_curiosidad_celestine' => 3,
-            'espontaneo' => 4,
-            default => 3,
-        };
+        switch ($familia) {
+            case 'importante':
+            case 'respuesta_plan':
+            case 'peticion_resultado':
+                return 0;
+            case 'peticion':
+            case 'candidato_oferta':
+            case 'marcha_intencion':
+                return 1;
+            case 'f_opinion':
+            case 'f_dilema':
+            case 'f_alerta_vecinal':
+                return 2;
+            case 'f_confidencia':
+            case 'f_seguimiento':
+            case 'f_promesa':
+            case 'f_curiosidad_celestine':
+                return 3;
+            case 'espontaneo':
+                return 4;
+            default:
+                return 3;
+        }
     }
 
     /**

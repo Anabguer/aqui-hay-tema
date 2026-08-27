@@ -112,17 +112,30 @@ final class MensajitoGeneradorEspontaneo
     {
         $texto = self::textoFamilia($partida, $rid, $fam['familia'], $fam['datos']);
         if ($texto === '') { return null; }
-        $clas = match ($fam['familia']) {
-            'f_alerta_vecinal' => BuzonEngine::IMPORTANTE,
-            default => BuzonEngine::OPORTUNIDAD,
-        };
-        $acciones = match ($fam['familia']) {
-            'f_opinion', 'f_dilema' => ['responder_consejo'],
-            'f_confidencia' => ['responder_escuchar'],
-            'f_alerta_vecinal' => ['investigar', 'organizar_algo', 'no_meterse'],
-            'f_curiosidad_celestine' => ['responder_celestine'],
-            default => [],
-        };
+        switch ($fam['familia']) {
+            case 'f_alerta_vecinal':
+                $clas = BuzonEngine::IMPORTANTE;
+                break;
+            default:
+                $clas = BuzonEngine::OPORTUNIDAD;
+        }
+        switch ($fam['familia']) {
+            case 'f_opinion':
+            case 'f_dilema':
+                $acciones = ['responder_consejo'];
+                break;
+            case 'f_confidencia':
+                $acciones = ['responder_escuchar'];
+                break;
+            case 'f_alerta_vecinal':
+                $acciones = ['investigar', 'organizar_algo', 'no_meterse'];
+                break;
+            case 'f_curiosidad_celestine':
+                $acciones = ['responder_celestine'];
+                break;
+            default:
+                $acciones = [];
+        }
         $msgId = 'msg_' . bin2hex(random_bytes(4));
         $r = BuzonEngine::crear($partida, [
             'id' => $msgId,
