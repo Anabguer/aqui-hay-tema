@@ -1,6 +1,7 @@
 (function () {
   'use strict';
-  if (new URLSearchParams(location.search).get('design') !== '1') return;
+  var designView = new URLSearchParams(location.search).get('design');
+  if (designView !== 'mobile' && designView !== 'desktop') return;
   var defs = [
     ['cabecera','.game-top'],['mapa','.inicio-map-host'],['pasar-rato','[data-pasar-rato]'],
     ['cotilleo','.obj-cotilleo-par'],['planes-en-curso','[data-encursos-block]'],
@@ -11,11 +12,8 @@
     ['columna-central','.inicio-map-host'],['columna-derecha','.inicio-mobile-feed-inner, .inicio-desktop-right'],
     ['celestine-apunta','.obj-vecinos-resumen'],['hud','.game-top']
   ];
-  function getViewport(){var w=document.documentElement.clientWidth||(window.visualViewport&&window.visualViewport.width)||window.innerWidth;return w<=768?'mobile':'desktop';}
-  function viewRoot(){return getViewport()==='mobile'?'.inicio-mobile':'.inicio-desktop';}
-  var storage='aht_inicio_maqueta_v1', viewport=getViewport();
-  var state=JSON.parse(localStorage.getItem(storage)||'{}'); state.mobile=state.mobile||{}; state.desktop=state.desktop||{};
-  if(viewport==='mobile'&&!state.mobile['pasar-rato']&&state.desktop['pasar-rato']&&state.desktop['pasar-rato'].x===16&&state.desktop['pasar-rato'].y===0&&state.desktop['pasar-rato'].height===20){state.mobile['pasar-rato']=state.desktop['pasar-rato'];delete state.desktop['pasar-rato'];localStorage.setItem(storage,JSON.stringify(state));}
+  var viewport=designView, state={mobile:{},desktop:{}};
+  function viewRoot(){return viewport==='mobile'?'.inicio-mobile':'.inicio-desktop';}
   var tool=document.createElement('aside'); tool.className='aht-design-tool'; tool.innerHTML=
     '<div class="aht-design-head"><h2>Modo diseño · Inicio</h2><button type="button" data-act="collapse">−</button></div><div class="aht-design-body"><select aria-label="Elemento"></select>'+
     '<label>Ancho <output></output><input data-p="width" type="range"></label>'+
@@ -28,14 +26,13 @@
     '<button type="button" data-act="up">↑ arriba</button><button type="button" data-act="down">abajo ↓</button>'+
     '<button type="button" data-act="center">CENTRAR</button><button type="button" data-act="center-v">CENTRAR VERTICAL</button>'+
     '<button data-act="reset">Reset elemento</button><button data-act="all">Reset maqueta</button>'+
-    '<button data-act="copy">COPIAR AJUSTES</button><p>Arrastra el elemento seleccionado.<br>Vista: '+(viewport==='mobile'?'INICIO MOBILE':'INICIO DESKTOP')+'</p></div>';
+    '<button type="button" data-act="copy">COPIAR AJUSTES</button><p>Arrastra el elemento seleccionado.<br>Vista: '+(viewport==='mobile'?'INICIO MOBILE':'INICIO DESKTOP')+'<br><small>Los cambios solo viven en esta previsualización.</small></p></div>';
   document.body.appendChild(tool); var select=tool.querySelector('select');
   defs.forEach(function(d){var o=document.createElement('option');o.value=d[0];o.textContent=d[0];select.appendChild(o);});
   function el(){var d=defs.filter(function(x){return x[0]===select.value;})[0];if(!d)return null;var root=document.querySelector(viewRoot());return root?root.querySelector(d[1]):document.querySelector(d[1]);}
   function cfg(){return state[viewport][select.value]||{};}
   function editableCfg(){return state[viewport][select.value]||(state[viewport][select.value]={});}
-  function save(){localStorage.setItem(storage,JSON.stringify(state));}
-  function refreshViewport(){var next=getViewport();if(next===viewport)return;viewport=next;var p=tool.querySelector('p');if(p)p.innerHTML='Arrastra el elemento seleccionado.<br>Vista: '+(viewport==='mobile'?'INICIO MOBILE':'INICIO DESKTOP');apply();}
+  function save(){}
   var textTargets={'cotilleo':'.obj-cotilleo-txt','mensajitos':'.obj-buzon-txt','vecinos':'.obj-vecinos-tit','nuevo-plan':'.obj-nuevo-plan-txt','pasar-rato':'.pasar-rato-txt','misiones':'.obj-misiones-papel-tit','parejas':'.zona-tit-parejas','proximos-planes':'.pp-mov-tit,.obj-planes-prox-tit','planes-en-curso':'.obj-proximo-tit'};
   var iconTargets={'mensajitos':'.obj-buzon-img','nuevo-plan':'.obj-nuevo-plan-ico','proximos-planes':'.pp-mov-ico,.obj-planes-prox-card .prox-faces img','planes-en-curso':'.enc-mov-ico,.obj-proximo-polaroid .prox-faces img'};
   function iconTarget(e){return e.querySelector(iconTargets[select.value]||'img,.obj-buzon-ico-wrap,.obj-nuevo-plan-ico,.plan-seccion-ico')||null;}
@@ -49,12 +46,12 @@
   }
   select.addEventListener('change',function(){document.querySelectorAll('.aht-design-selected').forEach(function(e){e.classList.remove('aht-design-selected');});apply();});
   tool.querySelectorAll('input[data-p]').forEach(function(i){i.addEventListener('input',function(){if(i.disabled)return;editableCfg()[i.dataset.p]=Number(i.value);save();apply();});});
-  tool.addEventListener('click',function(e){var a=e.target.dataset.act;if(a==='collapse'){tool.classList.toggle('is-collapsed');localStorage.setItem(storage+'_collapsed',tool.classList.contains('is-collapsed')?'1':'0');}if(a==='left'||a==='right'||a==='up'||a==='down'){var c=editableCfg(),step=e.shiftKey?10:1;c.x=(c.x||0)+(a==='left'?-step:a==='right'?step:0);c.y=(c.y||0)+(a==='up'?-step:a==='down'?step:0);save();apply();}if(a==='center'||a==='center-v'){var e1=el(),p=e1&&e1.parentElement;if(e1&&p){var er=e1.getBoundingClientRect(),pr=p.getBoundingClientRect(),c1=editableCfg();if(a==='center')c1.x=(c1.x||0)+(pr.left+pr.width/2-(er.left+er.width/2));else c1.y=(c1.y||0)+(pr.top+pr.height/2-(er.top+er.height/2));save();apply();}}if(a==='reset'){delete state[viewport][select.value];save();apply();}if(a==='all'){state[viewport]={};save();apply();}if(a==='copy'){var s='';['desktop','mobile'].forEach(function(v){s+=v.toUpperCase()+'\n';Object.keys(state[v]).forEach(function(n){s+=n+':\n';Object.keys(state[v][n]).forEach(function(p){s+='  '+p.replace('fontSize','font-size').replace('iconSize','icon-size')+': '+state[v][n][p]+'px\n';});});s+='\n';});if(navigator.clipboard)navigator.clipboard.writeText(s);alert(s);}});
+  tool.addEventListener('click',function(e){var a=e.target.dataset.act;if(a==='collapse'){tool.classList.toggle('is-collapsed');}if(a==='left'||a==='right'||a==='up'||a==='down'){var c=editableCfg(),step=e.shiftKey?10:1;c.x=(c.x||0)+(a==='left'?-step:a==='right'?step:0);c.y=(c.y||0)+(a==='up'?-step:a==='down'?step:0);save();apply();}if(a==='center'||a==='center-v'){var e1=el(),p=e1&&e1.parentElement;if(e1&&p){var er=e1.getBoundingClientRect(),pr=p.getBoundingClientRect(),c1=editableCfg();if(a==='center')c1.x=(c1.x||0)+(pr.left+pr.width/2-(er.left+er.width/2));else c1.y=(c1.y||0)+(pr.top+pr.height/2-(er.top+er.height/2));save();apply();}}if(a==='reset'){delete state[viewport][select.value];save();apply();}if(a==='all'){state[viewport]={};save();apply();}if(a==='copy'){var s='MODO DISEÑO: '+viewport.toUpperCase()+'\n';Object.keys(state[viewport]).forEach(function(n){s+='Elemento: '+n+'\n';Object.keys(state[viewport][n]).forEach(function(p){s+='  '+p.replace('fontSize','font-size').replace('iconSize','icon-size')+': '+state[viewport][n][p]+'px\n';});s+='\n';});if(navigator.clipboard)navigator.clipboard.writeText(s);alert(s);}});
   var drag=null;tool.querySelector('.aht-design-head').addEventListener('pointerdown',function(e){var r=tool.getBoundingClientRect();drag={x:e.clientX,y:e.clientY,ox:r.left,oy:r.top};tool.setPointerCapture(e.pointerId);});
   tool.addEventListener('pointermove',function(e){if(!drag)return;tool.style.left=Math.max(0,drag.ox+e.clientX-drag.x)+'px';tool.style.top=Math.max(0,drag.oy+e.clientY-drag.y)+'px';tool.style.right='auto';tool.style.bottom='auto';});
   tool.addEventListener('pointerup',function(){drag=null;});
   document.addEventListener('pointerdown',function(e){var t=el();if(!t||tool.contains(e.target)||(!t.contains(e.target)&&e.target!==t))return;var c=editableCfg();drag={x:e.clientX,y:e.clientY,ox:c.x||0,oy:c.y||0};});
   document.addEventListener('pointermove',function(e){if(!drag||tool.contains(e.target))return;var c=editableCfg();c.x=drag.ox+e.clientX-drag.x;c.y=drag.oy+e.clientY-drag.y;save();apply();});document.addEventListener('pointerup',function(){drag=null;});
-  document.addEventListener('click',function(e){if(tool.contains(e.target))return;var d=defs.filter(function(x){var t=document.querySelector(x[1]);return t&&t.contains(e.target);})[0];if(!d)return;e.preventDefault();e.stopPropagation();select.value=d[0];document.querySelectorAll('.aht-design-selected').forEach(function(t){t.classList.remove('aht-design-selected');});apply();},true);
-  window.addEventListener('resize',refreshViewport);if(localStorage.getItem(storage+'_collapsed')==='1')tool.classList.add('is-collapsed');document.body.classList.add('aht-design-mode');apply();
+  document.addEventListener('click',function(e){if(tool.contains(e.target))return;var root=document.querySelector(viewRoot()),d=defs.filter(function(x){var t=root&&root.querySelector(x[1]);if(!t&&x[0]==='mapa')t=document.querySelector(x[1]);return t&&t.contains(e.target);})[0];if(!d)return;e.preventDefault();e.stopPropagation();select.value=d[0];document.querySelectorAll('.aht-design-selected').forEach(function(t){t.classList.remove('aht-design-selected');});apply();},true);
+  document.body.classList.add('aht-design-mode','aht-design-'+viewport);apply();
 }());
