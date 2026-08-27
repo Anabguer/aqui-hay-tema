@@ -176,6 +176,92 @@ final class MensajitoVoz
     }
 
     // ------------------------------------------------------------------
+    // Bancos espontaneos: F1, F2, F6, F7, F9, F14, F15
+    // ------------------------------------------------------------------
+
+    /** @return list<string> */
+    private static function bancoFOpinion(): array
+    {
+        return [
+            '¿Qué me dices de {otro}? No sé si estoy haciéndome ilusiones.',
+            'Te voy a contar una cosa de {otro}... ¿tú qué opinas?',
+            'Últimamente no sé qué pensar de {otro}. ¿Me ayudas a aclararme?',
+            'Necesito que me des tu opinión sobre {otro}. En serio.',
+            '{otro} me tiene un poco confundido/a. ¿Tú lo conoces bien?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFDilema(): array
+    {
+    return [
+            'No sé qué hacer, Celestine. {nombre_a} y {nombre_b}... no puedo decidirme.',
+            'Estoy entre {nombre_a} y {nombre_b}. ¿Tú qué harías?',
+            'Dos personas me gustan: {nombre_a} y {nombre_b}. Soy un desastre.',
+            '¿{nombre_a} o {nombre_b}? Llevo días dándole vueltas.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFConfidencia(): array
+    {
+        return [
+            'Te confieso algo, Celestine: últimamente estoy {texto}.',
+            'No se lo cuento a nadie, pero tú... últimamente me siento {texto}.',
+            'Contigo puedo ser sincero/a: estoy {texto}. No sé qué hacer.',
+            'Celestine, necesito desahogarme. Estoy {texto} y no sé cuánto aguanto.',
+            'Oye, entre nosotros: estoy {texto}. No quiero que se entere nadie.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFAlertaVecinal(): array
+    {
+        return [
+            '¿Has visto a {otro}? Lleva unos días bastante apagado/a.',
+            'Me preocupa {otro}. No sé si está bien, lleva un tiempo raro.',
+            '{otro} no está nada bien. ¿Podrías echarle un ojo?',
+            'Celestine, algo le pasa a {otro}. No es el mismo de siempre.',
+            'He visto a {otro} un poco bajoneado/a. ¿Tú sabes algo?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoF9Seguimiento(): array
+    {
+        return [
+            '¡{texto}! Al final sí que pasó. Gracias por lo de antes.',
+            '¿Te acuerdas de lo que me dijiste? Pues mira: {texto}. Tenías razón.',
+            'Lo que me dijiste me vino bien. {texto} y todo ha ido genial.',
+            'Bueno, te cuento: {texto}. No estaba tan mal como pensaba.',
+            'Contigo se habla bien. {texto} y me ha quedado clarísimo.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoF14Promesa(): array
+    {
+        return [
+            'Oye, que te acuerdes: si vuelvo a quejarme de esto, recuérdamelo.',
+            '¿Me haces el favor de recordármelo si vuelvo a lo mismo?',
+            'Prométeme que si vuelvo a hacer esto, me lo dices.',
+            'Si vuelvo a lo de siempre, avísame. En serio.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFCuriosidadCelestine(): array
+    {
+        return [
+            '¿Tú alguna vez te has enamorado, Celestine?',
+            'Dime una cosa: ¿con quién te llevarías bien de aquí?',
+            '¿No te da envidia ver a la gente tan a su rollo?',
+            '¿Tú qué haces cuando no estás con nosotros?',
+            '¿Alguna vez has pensado en dejar el pueblo?',
+        ];
+    }
+
+    // ------------------------------------------------------------------
     // API principal
     // ------------------------------------------------------------------
 
@@ -292,6 +378,13 @@ final class MensajitoVoz
             'bienvenida_bucle',
             'tutorial_primeros_pasos',
             'peticion_sin_texto',
+            'f_opinion',
+            'f_dilema',
+            'f_confidencia',
+            'f_alerta_vecinal',
+            'seguimiento_consejo',
+            'f_promesa',
+            'f_curiosidad_celestine',
         ];
     }
 
@@ -367,6 +460,20 @@ final class MensajitoVoz
                 return self::bancoTutorialPrimerosPasos();
             case 'peticion_sin_texto':
                 return self::bancoPeticionSinTexto();
+            case 'f_opinion':
+                return self::bancoFOpinion();
+            case 'f_dilema':
+                return self::bancoFDilema();
+            case 'f_confidencia':
+                return self::bancoFConfidencia();
+            case 'f_alerta_vecinal':
+                return self::bancoFAlertaVecinal();
+            case 'seguimiento_consejo':
+                return self::bancoF9Seguimiento();
+            case 'f_promesa':
+                return self::bancoF14Promesa();
+            case 'f_curiosidad_celestine':
+                return self::bancoFCuriosidadCelestine();
             default:
                 return [];
         }
@@ -376,7 +483,7 @@ final class MensajitoVoz
     private static function tokens(array $vars): array
     {
         $t = [];
-        foreach (['texto', 'otro', 'nombre', 'dia', 'min', 's', 'oa'] as $k) {
+        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa'] as $k) {
             $v = $vars[$k] ?? null;
             if ($v !== null && $v !== '') {
                 $t['{' . $k . '}'] = (string) $v;

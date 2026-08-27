@@ -1,5 +1,5 @@
 {
-    "_comentario": "Feature flags técnicos. Separado de balance de juego.",
+    "_comentario": "Feature flags tecnicos. Separado de balance de juego.",
     "buzon_enabled": false,
     "diario_enabled": false,
     "npc_autonomy_enabled": false,
@@ -15,5 +15,6 @@
     "consequences_enabled": false,
     "vida_pueblo_enabled": false,
     "misiones_diarias_enabled": false,
-    "peticiones_pueblo_enabled": false
+    "peticiones_pueblo_enabled": false,
+    "mensajitos_espontaneos_enabled": false
 }

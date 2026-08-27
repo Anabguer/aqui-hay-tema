@@ -35,6 +35,24 @@ final class RelojOperations
             RelacionDesgaste::alCerrarDia($partida, $cal);
             AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
             MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
+
+            // Mensajitos espontaneos: generar al inicio del nuevo dia
+            if (FeatureConfig::isEnabled($partida, 'mensajitos_espontaneos_enabled')) {
+                $calMens = CalibracionConfig::load($this->projectRoot);
+                $rngMens = RngService::fromPartida($partida);
+                foreach (PeticionPuebloEngine::residentes($partida) as $mRes) {
+                    MensajitoGeneradorEspontaneo::evaluar($partida, $mRes, $calMens, $rngMens);
+                }
+                $rngMens->persistToPartida($partida);
+                // Compactar mensajes antiguos
+                MensajitosCadenciaEngine::compactarResueltos($partida, $calMens);
+            }
+
+            // Seguimiento de consejos (F9)
+            if (FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
+                $calSeg = CalibracionConfig::load($this->projectRoot);
+                SeguimientoConsejoEngine::evaluarPendientes($partida, $calSeg, $this->logger);
+            }
         }
         $calTick = CalibracionConfig::load($this->projectRoot);
         // Vida horaria autónoma (huecos, casuales, declaración/ruptura): independiente del
