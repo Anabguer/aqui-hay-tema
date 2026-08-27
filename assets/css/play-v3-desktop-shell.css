@@ -25,11 +25,7 @@
     height: 8px;
   }
 
-  .play-v3:has(.game-shell) .game-top .btn-guia {
-    font-size: .82rem;
-    padding: .32rem .62rem;
-    margin-top: .65rem;
-  }
+  /* btn-guia: piel DS en inicio-desktop.css */
 
   .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon {
     margin-top: 2.75rem !important;

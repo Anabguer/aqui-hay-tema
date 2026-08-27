@@ -1663,7 +1663,7 @@
     const listaFull = proximosPlanesFuturos(cacheInsp, estado);
     const total = listaFull.length;
     if (cntEl) {
-      if (total > 0) { cntEl.textContent = ' ' + total; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      if (total > 0) { cntEl.textContent = String(total); cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     const lista = listaFull.slice(0, 6);
@@ -1725,7 +1725,7 @@
     const lista = encuentrosEnCursoAhora(cacheInsp, estado);
     const cntEl = block.querySelector('[data-encursos-count]');
     if (cntEl) {
-      if (lista.length > 0) { cntEl.textContent = ' ' + lista.length; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      if (lista.length > 0) { cntEl.textContent = String(lista.length); cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     if (!lista.length) {
