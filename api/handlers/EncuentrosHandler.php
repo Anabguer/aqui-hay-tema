@@ -62,7 +62,8 @@ final class EncuentrosHandler
             (int) ($body['dia'] ?? $partida['reloj']['dia_pueblo']),
             (int) ($body['hora'] ?? 17),
             (string) ($body['tipo'] ?? 'conocerse'),
-            isset($body['lugar']) ? (string) $body['lugar'] : null
+            isset($body['lugar']) ? (string) $body['lugar'] : null,
+            isset($body['peticion_id']) ? (string) $body['peticion_id'] : null
         );
         savePartida($ctx, $partida);
         if ($lab) {

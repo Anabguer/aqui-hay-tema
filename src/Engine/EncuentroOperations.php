@@ -45,7 +45,8 @@ final class EncuentroOperations
         int $dia,
         int $hora,
         string $tipo = 'conocerse',
-        ?string $lugar = null
+        ?string $lugar = null,
+        ?string $peticionId = null
     ): array {
         $r = PropuestaEncuentroEngine::proponer(
             $partida,
@@ -56,7 +57,8 @@ final class EncuentroOperations
             $lugar,
             null,
             null,
-            $this->logger
+            $this->logger,
+            $peticionId
         );
         if (($r['ok'] ?? false) && isset($r['encuentro']) && is_array($r['encuentro'])) {
             DomainEventDispatcher::emit($partida, DomainEvents::ENCUENTRO_PROGRAMADO, [

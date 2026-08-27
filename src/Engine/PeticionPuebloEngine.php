@@ -277,6 +277,144 @@ final class PeticionPuebloEngine
     }
 
     /**
+     * Petición B4 abierta por id canónico.
+     *
+     * @return array<string, mixed>|null
+     */
+    public static function porIdAbierta(array $partida, string $peticionId): ?array
+    {
+        if ($peticionId === '') {
+            return null;
+        }
+        foreach (self::abiertas($partida) as $pet) {
+            if ((string) ($pet['id'] ?? '') === $peticionId) {
+                return $pet;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Nivel de cobertura de un plan concreto sobre una petición concreta.
+     *
+     * @param list<string> $participantes
+     */
+    public static function nivelCoberturaPara(array $peticion, array $participantes, string $tipo, string $lugar): ?string
+    {
+        $tipo = PropuestaNivel::aliasTipo($tipo);
+        $lugar = (string) $lugar;
+        $rid = (string) ($peticion['residente_id'] ?? '');
+        if ($rid === '' || !in_array($rid, $participantes, true)) {
+            return null;
+        }
+        $params = is_array($peticion['params'] ?? null) ? $peticion['params'] : [];
+        $pid = (string) ($peticion['plantilla_id'] ?? '');
+        $n = count($participantes);
+        if ($pid === 'salir_de_casa') {
+            return 'exacta';
+        }
+        if ($pid === 'conocer_a_alguien') {
+            return $tipo === PropuestaNivel::PRESENTAR ? 'exacta' : null;
+        }
+        if ($pid === 'ir_al_lugar') {
+            if ((string) ($params['lugar_id'] ?? '') !== $lugar) {
+                return null;
+            }
+            return $n === 1 ? 'exacta' : 'nucleo';
+        }
+        if ($pid === 'algo_distinto') {
+            $lugarValido = $lugar !== '' && $lugar !== 'lug_cafeteria' && $lugar !== 'lug_casa';
+            if (!$lugarValido) {
+                return null;
+            }
+            return $n === 1 ? 'exacta' : 'nucleo';
+        }
+        if ($pid === 'volver_a_ver' || $pid === 'quedar_con_x') {
+            $otro = (string) ($params['otro'] ?? '');
+            if ($tipo !== PropuestaNivel::QUEDAR || $otro === '' || !in_array($otro, $participantes, true)) {
+                return null;
+            }
+            return $n === 2 ? 'exacta' : 'nucleo';
+        }
+        if ($pid === 'primera_cita_pet') {
+            $otro = (string) ($params['otro'] ?? '');
+            if ($tipo !== PropuestaNivel::PRIMERA_CITA || $otro === '' || !in_array($otro, $participantes, true)) {
+                return null;
+            }
+            return $n === 2 ? 'exacta' : 'nucleo';
+        }
+        return null;
+    }
+
+    /**
+     * Snapshot mínimo para trazabilidad petición → propuesta.
+     *
+     * @param array<string, mixed> $peticion
+     * @return array<string, mixed>
+     */
+    public static function metadataOrigenPeticion(array $peticion, string $nivel): array
+    {
+        $params = is_array($peticion['params'] ?? null) ? $peticion['params'] : [];
+        $snap = [];
+        if (isset($params['otro']) && (string) $params['otro'] !== '') {
+            $snap['otro'] = (string) $params['otro'];
+        }
+        if (isset($params['lugar_id']) && (string) $params['lugar_id'] !== '') {
+            $snap['lugar_id'] = (string) $params['lugar_id'];
+        }
+        return [
+            'peticion_id' => (string) ($peticion['id'] ?? ''),
+            'residente_id' => (string) ($peticion['residente_id'] ?? ''),
+            'plantilla_id' => (string) ($peticion['plantilla_id'] ?? ''),
+            'nivel' => $nivel,
+            'params' => $snap,
+        ];
+    }
+
+    /**
+     * Resuelve el origen petición de una propuesta.
+     * 1) peticion_id explícito válido y encajante
+     * 2) fallback heurístico peticionQueCubre
+     * 3) sin petición
+     *
+     * @param list<string> $participantes
+     * @return array{peticion: array<string, mixed>, nivel: string, origen_peticion: array<string, mixed>}|null
+     */
+    public static function resolverOrigenPropuesta(
+        array $partida,
+        array $participantes,
+        string $tipo,
+        string $lugar,
+        ?string $peticionIdExplicita = null
+    ): ?array {
+        if (!self::activa($partida)) {
+            return null;
+        }
+        if ($peticionIdExplicita !== null && $peticionIdExplicita !== '') {
+            $pet = self::porIdAbierta($partida, $peticionIdExplicita);
+            if ($pet !== null) {
+                $nivel = self::nivelCoberturaPara($pet, $participantes, $tipo, $lugar);
+                if ($nivel !== null) {
+                    return [
+                        'peticion' => $pet,
+                        'nivel' => $nivel,
+                        'origen_peticion' => self::metadataOrigenPeticion($pet, $nivel),
+                    ];
+                }
+            }
+        }
+        $cubre = self::peticionQueCubre($partida, $participantes, $tipo, $lugar);
+        if ($cubre === null) {
+            return null;
+        }
+        return [
+            'peticion' => $cubre['peticion'],
+            'nivel' => $cubre['nivel'],
+            'origen_peticion' => self::metadataOrigenPeticion($cubre['peticion'], $cubre['nivel']),
+        ];
+    }
+
+    /**
      * Petición B4 abierta que esta propuesta de Celestine cubriría, y con qué nivel.
      *
      * - 'exacta': el plan ES lo que el peticionario pidió (o cualquier salida válida
@@ -295,48 +433,8 @@ final class PeticionPuebloEngine
         $exacta = null;
         $nucleo = null;
         foreach (self::abiertas($partida) as $pet) {
-            $rid = (string) ($pet['residente_id'] ?? '');
-            if ($rid === '' || !in_array($rid, $participantes, true)) {
-                continue;
-            }
-            $params = is_array($pet['params'] ?? null) ? $pet['params'] : [];
-            $pid = (string) ($pet['plantilla_id'] ?? '');
-            $n = count($participantes);
-            if ($pid === 'salir_de_casa') {
-                // El núcleo pedido es SALIR; cualquier encuentro celebrado con él vale.
-                // Añadir compañía no modifica lo pedido.
-                return ['peticion' => $pet, 'nivel' => 'exacta'];
-            }
-            if ($pid === 'conocer_a_alguien') {
-                if ($tipo === PropuestaNivel::PRESENTAR) {
-                    return ['peticion' => $pet, 'nivel' => 'exacta'];
-                }
-                continue;
-            }
-            if ($pid === 'ir_al_lugar') {
-                if ((string) ($params['lugar_id'] ?? '') !== $lugar) {
-                    continue;
-                }
-                $nivel = $n === 1 ? 'exacta' : 'nucleo';
-            } elseif ($pid === 'algo_distinto') {
-                $lugarValido = $lugar !== '' && $lugar !== 'lug_cafeteria' && $lugar !== 'lug_casa';
-                if (!$lugarValido) {
-                    continue;
-                }
-                $nivel = $n === 1 ? 'exacta' : 'nucleo';
-            } elseif ($pid === 'volver_a_ver' || $pid === 'quedar_con_x') {
-                $otro = (string) ($params['otro'] ?? '');
-                if ($tipo !== PropuestaNivel::QUEDAR || $otro === '' || !in_array($otro, $participantes, true)) {
-                    continue;
-                }
-                $nivel = $n === 2 ? 'exacta' : 'nucleo';
-            } elseif ($pid === 'primera_cita_pet') {
-                $otro = (string) ($params['otro'] ?? '');
-                if ($tipo !== PropuestaNivel::PRIMERA_CITA || $otro === '' || !in_array($otro, $participantes, true)) {
-                    continue;
-                }
-                $nivel = $n === 2 ? 'exacta' : 'nucleo';
-            } else {
+            $nivel = self::nivelCoberturaPara($pet, $participantes, $tipo, $lugar);
+            if ($nivel === null) {
                 continue;
             }
             if ($nivel === 'exacta') {
@@ -477,6 +575,17 @@ final class PeticionPuebloEngine
         $lugar = (string) ($enc['lugar'] ?? '');
         if ($lugar !== '') {
             $preset['lugar'] = $lugar;
+        }
+        $petId = (string) ($peticion['id'] ?? '');
+        if ($petId !== '') {
+            $preset['peticion_id'] = $petId;
+        }
+        $tipoCanon = (string) ($enc['tipo'] ?? PropuestaNivel::QUEDAR);
+        if ($tipoCanon !== '') {
+            $preset['tipo'] = $tipoCanon;
+        }
+        if ($parts !== []) {
+            $preset['participantes'] = $parts;
         }
         return $preset !== [] ? $preset : null;
     }
@@ -925,7 +1034,8 @@ final class PeticionPuebloEngine
             self::LUGAR_PRESENTACION,
             null,
             $voluntad,
-            $logger
+            $logger,
+            $pid
         );
         return [
             'ok' => true,

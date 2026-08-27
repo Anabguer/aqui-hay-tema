@@ -48,7 +48,8 @@ final class PropuestaEncuentroEngine
         ?string $lugarId = null,
         ?string $actividad = null,
         ?VoluntadEvaluator $voluntad = null,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        ?string $peticionId = null
     ): array {
         $ctx = EncuentroEngine::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
         if (!($ctx['ok'] ?? false)) {
@@ -161,12 +162,15 @@ final class PropuestaEncuentroEngine
             $voluntad = new VoluntadPonderadaEvaluator($calDef);
         }
 
-        // B4: ¿esta propuesta cubre una petición abierta? 'exacta' compromete al
-        // peticionario (no repite RNG por lo ya pedido); 'nucleo' (Celestine añadió
-        // compañía no pedida) solo da un bonus fuerte configurable. Agenda y
-        // cooldown siguen mandando para todos.
-        $petCubre = PeticionPuebloEngine::activa($partida)
-            ? PeticionPuebloEngine::peticionQueCubre($partida, $participantes, $tipo, (string) $lugarId)
+        // B4: origen petición (id explícito → fallback heurístico).
+        $origenPet = PeticionPuebloEngine::activa($partida)
+            ? PeticionPuebloEngine::resolverOrigenPropuesta(
+                $partida,
+                $participantes,
+                $tipo,
+                (string) $lugarId,
+                $peticionId
+            )
             : null;
 
         $rng = RngService::fromPartida($partida);
@@ -191,11 +195,18 @@ final class PropuestaEncuentroEngine
             '_placeholder_copy' => true,
         ];
 
-        if ($petCubre !== null && $petCubre['nivel'] === 'nucleo') {
+        if ($origenPet !== null) {
+            $propuesta['origen_peticion'] = $origenPet['origen_peticion'];
+            if ($peticionId !== null && $peticionId !== '') {
+                $propuesta['peticion_id'] = $peticionId;
+            }
+        }
+
+        if ($origenPet !== null && $origenPet['nivel'] === 'nucleo') {
             $bonus = (int) CalibracionConfig::get($calDef, 'peticiones_pueblo.bonus_nucleo_modificado', 30);
             if ($bonus > 0) {
                 $propuesta['_bonus_voluntad'] = [
-                    (string) ($petCubre['peticion']['residente_id'] ?? '') => $bonus,
+                    (string) ($origenPet['peticion']['residente_id'] ?? '') => $bonus,
                 ];
             }
         }
@@ -212,8 +223,13 @@ final class PropuestaEncuentroEngine
             );
         }
 
-        if ($petCubre !== null && $petCubre['nivel'] === 'exacta') {
-            self::aplicarCompromisoPeticionario($partida, $propuesta, (string) ($petCubre['peticion']['residente_id'] ?? ''), (string) ($petCubre['peticion']['id'] ?? ''));
+        if ($origenPet !== null && $origenPet['nivel'] === 'exacta') {
+            self::aplicarCompromisoPeticionario(
+                $partida,
+                $propuesta,
+                (string) ($origenPet['peticion']['residente_id'] ?? ''),
+                (string) ($origenPet['peticion']['id'] ?? '')
+            );
         }
 
         self::aplicarResolucionPlan($partida, $propuesta, $calDef);
@@ -641,6 +657,9 @@ final class PropuestaEncuentroEngine
             if (empty($r['_joint_plan'])) {
                 continue;
             }
+            if (self::esCompromisoPeticionReaccion($r)) {
+                continue;
+            }
             if (($r['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
                 && ($r['clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
             ) {
@@ -769,6 +788,18 @@ final class PropuestaEncuentroEngine
             [],
             (string) ($propuesta['tipo'] ?? 'conocerse')
         );
+    }
+
+    /**
+     * @param array<string, mixed> $reac
+     */
+    private static function esCompromisoPeticionReaccion(array $reac): bool
+    {
+        if (($reac['motivo_tecnico'] ?? '') === self::MARCA_COMPROMISO_PETICION) {
+            return true;
+        }
+        $f = is_array($reac['factores'] ?? null) ? $reac['factores'] : [];
+        return !empty($f['compromiso_peticion']);
     }
 
     /**

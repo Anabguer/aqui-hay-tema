@@ -62,6 +62,11 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
 
         $desglose = self::desglose($partida, $propuesta, $residenteId, $otro, $cal);
         $score = (int) ($desglose['score'] ?? 0);
+        $bonusNucleo = self::bonusPeticionNucleo($propuesta, $residenteId, $cal);
+        if ($bonusNucleo > 0) {
+            $score += $bonusNucleo;
+            $desglose['bonus_peticion_nucleo'] = $bonusNucleo;
+        }
         $pMin = (float) CalibracionConfig::get($cal, 'voluntad.p_min', 0.08);
         $pMax = (float) CalibracionConfig::get($cal, 'voluntad.p_max', 0.94);
         $excelente = (int) CalibracionConfig::get($cal, 'voluntad.score_excelente', 88);
@@ -318,5 +323,31 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $idx = $rng->nextInt(0, count($pool) - 1);
         return (string) $pool[$idx];
+    }
+
+    /**
+     * Boost fuerte al peticionario cuando el plan cubre el núcleo pero no es exacto.
+     *
+     * @param array<string, mixed> $propuesta
+     * @param array<string, mixed> $cal
+     */
+    private static function bonusPeticionNucleo(array $propuesta, string $residenteId, array $cal): int
+    {
+        if ($residenteId === '') {
+            return 0;
+        }
+        $origen = is_array($propuesta['origen_peticion'] ?? null) ? $propuesta['origen_peticion'] : null;
+        if ($origen !== null && (string) ($origen['nivel'] ?? '') === 'nucleo'
+            && (string) ($origen['residente_id'] ?? '') === $residenteId
+        ) {
+            $bonusMap = is_array($propuesta['_bonus_voluntad'] ?? null) ? $propuesta['_bonus_voluntad'] : [];
+            $b = (int) ($bonusMap[$residenteId] ?? 0);
+            if ($b > 0) {
+                return $b;
+            }
+            return (int) CalibracionConfig::get($cal, 'peticiones_pueblo.bonus_nucleo_modificado', 30);
+        }
+        $bonusMap = is_array($propuesta['_bonus_voluntad'] ?? null) ? $propuesta['_bonus_voluntad'] : [];
+        return (int) ($bonusMap[$residenteId] ?? 0);
     }
 }
