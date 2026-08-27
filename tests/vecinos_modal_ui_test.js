@@ -29,7 +29,7 @@ ok(!/play-v3-inicio/.test(php.match(/capa-vecinos[\s\S]{0,200}/)?.[0] || ''), 'p
 ok(/function emoPillVecino/.test(js), 'js: emoPillVecino para pills reales');
 ok(/vecino-celda--decor-/.test(js), 'js: decoración variada por índice');
 ok(/emoPillVecino\(emo, genero\)/.test(js), 'js: pill con estado real en renderVecinos');
-ok(/VER FICHA/.test(js), 'js: botón VER FICHA en tarjeta');
+ok(!/vecino-ver/.test(js.match(/function renderVecinos[\s\S]{0,1200}/)?.[0] || ''), 'js: sin VER FICHA (la tarjeta entera abre ficha)');
 ok(/function setVecTab/.test(js) && /function cargarVecRelaciones/.test(js), 'js: pestaña Relaciones operativa');
 ok(/metricasSociales\(cacheInsp/.test(js), 'js: contador dinámico vecinos/cap');
 ok(/textoAnimoFichaPill/.test(js), 'js: labels de ánimo del sistema (no inventados)');
@@ -42,7 +42,8 @@ ok(/\.capa-vecinos::after[\s\S]{0,120}cinta|washi|235,215,175/i.test(css) ||
    /\.capa-vecinos::after/.test(css), 'css: cinta decorativa modal');
 ok(/\.vecino-celda--decor-0::before/.test(css), 'css: decoraciones tarjeta variadas');
 ok(/\.vecino-cara[\s\S]{0,80}76px/.test(css), 'css móvil: avatar grande (~76px)');
-ok(/\.vecino-ver/.test(css) && /\.vecino-emo-pill/.test(css), 'css: pill emo + VER FICHA');
+ok(/content: "\\2665"|content: "\\273F"|content: "\\2605"/.test(css), 'css: decoraciones con escapes CSS válidos');
+ok(/\.vecino-emo-pill/.test(css), 'css: pill emo en tarjeta');
 ok(/\.vec-tab\.is-on[\s\S]{0,80}background:\s*var\(--ds-pink/.test(css), 'css: tab Vecinos activo rosa');
 ok(/\.vec-tab:not\(\.is-on\)|\.vec-tab\s*\{[^}]*dashed|border:\s*2px dashed/.test(css), 'css: tab inactivo borde discontinuo');
 ok(css.includes('.vecinos-cuenta.ds-pill') && css.includes('color: #fff !important'),

@@ -290,23 +290,8 @@
 }
 
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vecino-celda {
-  min-height: 168px !important;
-  padding-bottom: 30px !important;
+  min-height: 148px !important;
   position: relative !important;
-}
-
-.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vecino-celda::after {
-  content: "VER FICHA \203A";
-  position: absolute;
-  left: 8px; right: 8px; bottom: 4px;
-  padding: 7px 4px 2px;
-  border-top: 1px dashed rgba(107, 81, 56, .28);
-  font: 700 .62rem/1.1 Nunito, sans-serif;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #9a8a78;
-  text-align: center;
-  pointer-events: none;
 }
 
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario .coti-tit {

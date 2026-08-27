@@ -30,6 +30,21 @@ final class ResidentesHandler
         return ['ok' => true, 'ficha' => $ficha, 'tutorial' => $tut];
     }
 
+    public static function diario(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $rid = $body['residente_id'] ?? ($_GET['residente_id'] ?? null);
+        if (!$rid) {
+            return ['ok' => false, 'error' => 'residente_id_requerido'];
+        }
+        if (!isset($partida['residentes'][(string) $rid])) {
+            return ['ok' => false, 'error' => 'residente_no_encontrado'];
+        }
+        return [
+            'ok' => true,
+            'entradas' => \AquiHayTema\Engine\DiarioEngine::listarPorResidente($partida, (string) $rid),
+        ];
+    }
+
     public static function placeholder(ApiContext $ctx, array $body, array &$partida): array
     {
         $r = $ctx->service->crearResidentePlaceholderDev($partida);

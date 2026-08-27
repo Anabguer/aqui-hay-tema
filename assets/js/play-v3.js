@@ -1716,30 +1716,37 @@
     return typeof window !== 'undefined' && window.matchMedia &&
       window.matchMedia('(max-width: 768px)').matches;
   }
-  function orgTipoIdDesdeEnc(enc) {
+  function familiaTipoEncuentro(enc) {
     const ids = (enc && enc.participantes) || [];
     if (ids.length > 2) return 'grupal';
     const t = String((enc && enc.tipo) || '').toLowerCase();
     if (t === 'individual') return 'individual';
-    if (t === 'primera_cita' || t === 'cita' || t === 'romantico') return 'romance';
+    if (t === 'primera_cita' || t === 'cita' || t === 'romantico') return 'romantico';
     if (t === 'conocerse') return 'conocerse';
-    return 'amistad';
+    if (t === 'conflicto') return 'conflicto';
+    if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
+    return 'social';
   }
   function iconoEncuentroCentroHtml(enc) {
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
-    const orgId = orgTipoIdDesdeEnc(enc);
-    const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + orgId;
-    const emoji = orgTipoIco(orgId);
-    if (emoji) {
-      return '<span class="' + cls + ' org-tipo-ico" aria-hidden="true">' + emoji + '</span>';
+    const fam = familiaTipoEncuentro(enc);
+    const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + fam;
+    if (fam === 'romantico') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>';
     }
-    var fam = 'quedar';
-    if (orgId === 'grupal' || orgId === 'conocerse') fam = 'conocerse';
-    else if (orgId === 'romance') fam = 'cita';
-    return '<span class="' + cls + ' mision-strip-ico" aria-hidden="true">' + iconoMision({ familia: fam }) + '</span>';
+    if (fam === 'conocerse') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 19c.8-3 2.8-4.5 4.5-4.5S12.7 16 13.5 19M10.5 19c.8-3 2.8-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>';
+    }
+    if (fam === 'grupal') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.5 19c.6-2.4 2.2-3.8 4-3.8M17 19c.6-2.4 2.2-3.8 4-3.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>';
+    }
+    if (fam === 'conflicto') {
+      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>';
+    }
+    return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6 18c.5-2 2-3 2-3M16 18c.5-2 2-3 2-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
   }
-    function formatEncursoMetaLine(enc, estado) {
+  function formatEncursoMetaLine(enc, estado) {
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     const reloj = (estado && estado.reloj) || {};
@@ -1773,6 +1780,27 @@
     return '<div class="enc-mov-vista"><p class="enc-mov-vista-txt">' +
       esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
   }
+  function htmlEncursoCardDesktop(enc, estado) {
+    const ids = enc.participantes || [];
+    const iv = intervencionVistaDe(enc, estado);
+    const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    const ctaTxt = puedeIntervenir ? 'Intervenir' : 'Ver encuentro';
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
+    let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
+      '<div class="enc-mov-body">' +
+      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
+      '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
+      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>' +
+      '</div>' +
+      '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+      '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
+      '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+      '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    return html + '</article>';
+  }
   function htmlEncursoCardMovilV14(enc, estado) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
@@ -1795,7 +1823,8 @@
     return html + '</article>';
   }
   function htmlEncursoCardMovil(enc, estado) {
-    return htmlEncursoCardMovilV14(enc, estado);
+    if (esInicioLayoutMovil()) return htmlEncursoCardMovilV14(enc, estado);
+    return htmlEncursoCardDesktop(enc, estado);
   }
     function encMovPaso(track) {
     const cards = track.querySelectorAll('[data-enc-mov-card]');
@@ -3124,8 +3153,7 @@
         '</div>' +
         '<p class="vecino-nom">' + esc(nom) + '</p>' +
         emoPillVecino(emo, genero) +
-        '</div>' +
-        '<span class="vecino-ver">VER FICHA <span class="vecino-ver-arr" aria-hidden="true">\u203A</span></span>';
+        '</div>';
       b.addEventListener('click', function () { abrirFicha(id); });
       box.appendChild(b);
     });
@@ -3793,7 +3821,10 @@ function canonEmoId(id) {
     const root = $('.play-root');
     diarioVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
     const r = await api('residente.diario', { residente_id: rid }, 'GET');
-    if (!r.ok) return;
+    if (!r.ok) {
+      toast(r.mensaje_ui || r.error || 'No se pudo abrir el diario.');
+      return;
+    }
     const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
     diarioVecinoCache = Array.isArray(r.entradas) ? r.entradas : [];
@@ -4084,7 +4115,7 @@ function hobbyIconKey(id, texto) {
     if (relMasBtn) {
       if (fichaRelCache.length > 2) {
         relMasBtn.hidden = false;
-        relMasBtn.textContent = 'Ver más relaciones';
+        relMasBtn.textContent = 'Ver m\u00e1s relaciones';
         relMasBtn.onclick = function () { abrirFichaRelOverlay(nom); };
       } else {
         relMasBtn.hidden = true;
@@ -4097,7 +4128,7 @@ function hobbyIconKey(id, texto) {
       planBox.innerHTML = '';
       const planes = planesDeVecino(id);
       if (!planes.length) {
-        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">«Su agenda está sospechosamente tranquila.»</p>';
+        planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">\u00abSu agenda est\u00e1 sospechosamente tranquila.\u00bb</p>';
       } else {
         planes.forEach(function (enc) {
           const p = document.createElement('p');
@@ -4132,12 +4163,38 @@ function hobbyIconKey(id, texto) {
     syncFichaNav();
   }
 
+  function fichaNavBotones() {
+    const capa = document.querySelector('.capa-ficha');
+    if (!capa) return { prev: null, next: null };
+    return {
+      prev: capa.querySelector('[data-ficha-nav-prev]'),
+      next: capa.querySelector('[data-ficha-nav-next]')
+    };
+  }
+
+  function fichaIndiceEnLista(ids) {
+    const cur = String(fichaActualId || '');
+    for (let i = 0; i < ids.length; i++) {
+      if (String(ids[i]) === cur) return i;
+    }
+    return -1;
+  }
+
+  function vecinoFichaCircular(ids, delta) {
+    const n = ids.length;
+    if (n < 2) return null;
+    const idx = fichaIndiceEnLista(ids);
+    const base = idx >= 0 ? idx : (delta > 0 ? 0 : n - 1);
+    return ids[(base + delta + n) % n];
+  }
+
   function syncFichaNav() {
-    const ok = vecinosIdsOrdenados().length > 1;
-    const prev = $('[data-ficha-nav-prev]');
-    const next = $('[data-ficha-nav-next]');
-    if (prev) prev.disabled = !ok;
-    if (next) next.disabled = !ok;
+    const ids = vecinosIdsOrdenados();
+    const ok = ids.length > 1;
+    const nav = fichaNavBotones();
+    // Navegación circular: con 2+ vecinos ambas flechas siempre activas
+    if (nav.prev) nav.prev.disabled = !ok;
+    if (nav.next) nav.next.disabled = !ok;
   }
 
   var fichaNavegando = false;
@@ -4145,10 +4202,8 @@ function hobbyIconKey(id, texto) {
   async function navegarFicha(delta) {
     if (fichaNavegando) return;
     const ids = vecinosIdsOrdenados();
-    if (ids.length < 2) return;
-    const idx = ids.indexOf(fichaActualId);
-    const base = idx < 0 ? 0 : idx;
-    const destino = ids[(base + delta + ids.length) % ids.length];
+    const destino = vecinoFichaCircular(ids, delta);
+    if (!destino) return;
     fichaNavegando = true;
     try {
       await abrirFicha(destino);
@@ -4157,14 +4212,33 @@ function hobbyIconKey(id, texto) {
     }
   }
 
-  async function abrirFicha(id) {
-    const r = await api('residente.ficha', { residente_id: id }, 'GET');
-    if (!r.ok) return;
+  async function abrirFicha(id, opts) {
+    opts = opts || {};
+    const rid = String(id || '');
+    if (!rid) return;
+    let r = await api('residente.ficha', { residente_id: rid }, 'GET');
+    if (!r.ok && !opts._noRetry) {
+      const err = String(r.error || '');
+      if (err === 'excepcion' || /residente/.test(err) || /no_encontrad/i.test(String(r.mensaje || ''))) {
+        await refresh();
+        renderVecinos();
+        r = await api('residente.ficha', { residente_id: rid }, 'GET');
+      }
+    }
+    if (!r.ok) {
+      toast(r.mensaje_ui || r.mensaje || r.error || 'No se pudo abrir la ficha de este vecino.');
+      return;
+    }
     if (r.tutorial) pintarTutorialMotor(r.tutorial);
     const f = r.ficha || {};
     const vista = f.vista_play || f;
-    pintarFicha(id, f, vista);
-    setCapa('ficha');
+    try {
+      pintarFicha(rid, f, vista);
+      setCapa('ficha');
+    } catch (err) {
+      console.error('pintarFicha', err);
+      toast('No se pudo mostrar la ficha de este vecino.');
+    }
   }
 
   function estadoCarta(m) {
@@ -5823,22 +5897,27 @@ function hobbyIconKey(id, texto) {
     });
   }
 
-  const fichaNavPrev = $('[data-ficha-nav-prev]');
-  if (fichaNavPrev) {
-    fichaNavPrev.addEventListener('click', function (ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      navegarFicha(-1);
-    });
-  }
-  const fichaNavNext = $('[data-ficha-nav-next]');
-  if (fichaNavNext) {
-    fichaNavNext.addEventListener('click', function (ev) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      navegarFicha(1);
-    });
-  }
+  (function bindFichaNavCircular() {
+    const capa = document.querySelector('.capa-ficha');
+    if (!capa || capa._ahtFichaNavBound) return;
+    capa._ahtFichaNavBound = true;
+    const prev = capa.querySelector('[data-ficha-nav-prev]');
+    const next = capa.querySelector('[data-ficha-nav-next]');
+    if (prev) {
+      prev.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        navegarFicha(-1);
+      });
+    }
+    if (next) {
+      next.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        navegarFicha(1);
+      });
+    }
+  })();
   const diarioBusca = $('[data-diario-busca]');
   if (diarioBusca) {
     diarioBusca.addEventListener('input', function () {

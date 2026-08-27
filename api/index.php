@@ -109,6 +109,10 @@ $routes = [
         $p = requirePartidaLigera($ctx, $body);
         return ResidentesHandler::ficha($ctx, $body, $p);
     },
+    'residente.diario' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return ResidentesHandler::diario($ctx, $body, $p);
+    },
     'residente.placeholder' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return ResidentesHandler::placeholder($ctx, $body, $p);
@@ -281,6 +285,10 @@ $routes = [
     'diario.listar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return DiarioHandler::listar($ctx, $body, $p);
+    },
+    'diario.cotilleo_visto' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return DiarioHandler::cotilleoVisto($ctx, $body, $p);
     },
     'dev.snapshot.guardar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

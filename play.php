@@ -653,7 +653,7 @@ if (is_file($ahtBusterFile)) {
               <div class="ficha-animo-pill" data-ficha-animo-pill>
                 <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                 <span class="ficha-animo-val" data-ficha-animo-text></span>
-                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="ï¿½Por quï¿½ estï¿½ asï¿½?">?</button>
+                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="¿Por qué está así?">?</button>
               </div>
             </div>
           </div>
@@ -675,11 +675,11 @@ if (is_file($ahtBusterFile)) {
               <h4 class="ficha-seccion-tit">Relaciones</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-relaciones" data-ficha-relaciones></div>
-              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver mï¿½s relaciones</button>
+              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver más relaciones</button>
               </div>
             </section>
             <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">Prï¿½ximos planes</h4>
+              <h4 class="ficha-seccion-tit">Próximos planes</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
@@ -699,7 +699,7 @@ if (is_file($ahtBusterFile)) {
           </div>
         </div>
         <div class="ficha-rel-overlay" data-animo-overlay hidden>
-          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="ï¿½Por quï¿½ estï¿½ asï¿½?">
+          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="¿Por qué está así?">
             <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
             <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
           </div>

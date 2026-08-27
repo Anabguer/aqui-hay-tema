@@ -243,6 +243,12 @@
 .play-v3 .capa-vecinos .vecino-celda:nth-child(odd) { transform: rotate(-0.35deg) !important; }
 .play-v3 .capa-vecinos .vecino-celda:nth-child(even) { transform: rotate(0.3deg) !important; }
 
+.play-v3 .capa-vecinos .vecino-celda:hover,
+.play-v3 .capa-vecinos .vecino-celda:focus-within,
+.play-v3 .capa-vecinos .vecino-celda:focus-visible {
+  z-index: 4 !important;
+}
+
 .play-v3 .capa-vecinos .vecino-celda-top {
   flex: 1 1 auto;
   display: flex;
@@ -264,23 +270,23 @@
   z-index: 1;
 }
 
-.play-v3 .capa-vecinos .vecino-celda--decor-0::before { content: "\u2665"; top: 6px; left: 8px; color: #e88ba8; }
-.play-v3 .capa-vecinos .vecino-celda--decor-0::after { content: "\u273F"; bottom: 38px; right: 8px; color: #9a8a78; }
+.play-v3 .capa-vecinos .vecino-celda--decor-0::before { content: "\2665"; top: 6px; left: 8px; color: #e88ba8; }
+.play-v3 .capa-vecinos .vecino-celda--decor-0::after { content: "\273F"; bottom: 38px; right: 8px; color: #9a8a78; }
 
-.play-v3 .capa-vecinos .vecino-celda--decor-1::before { content: "\u273F"; top: 8px; right: 10px; color: #7a9e6a; }
-.play-v3 .capa-vecinos .vecino-celda--decor-1::after { content: "\u2605"; bottom: 42px; left: 10px; color: #b8a8d8; font-size: .7rem; }
+.play-v3 .capa-vecinos .vecino-celda--decor-1::before { content: "\273F"; top: 8px; right: 10px; color: #7a9e6a; }
+.play-v3 .capa-vecinos .vecino-celda--decor-1::after { content: "\2605"; bottom: 42px; left: 10px; color: #b8a8d8; font-size: .7rem; }
 
-.play-v3 .capa-vecinos .vecino-celda--decor-2::before { content: "\u273F"; top: 6px; left: 9px; color: #c85b78; }
-.play-v3 .capa-vecinos .vecino-celda--decor-2::after { content: "\u2665"; bottom: 40px; right: 9px; color: #e88ba8; font-size: .75rem; }
+.play-v3 .capa-vecinos .vecino-celda--decor-2::before { content: "\273F"; top: 6px; left: 9px; color: #c85b78; }
+.play-v3 .capa-vecinos .vecino-celda--decor-2::after { content: "\2665"; bottom: 40px; right: 9px; color: #e88ba8; font-size: .75rem; }
 
-.play-v3 .capa-vecinos .vecino-celda--decor-3::before { content: "\u2605"; top: 7px; right: 9px; color: #d4b84a; }
-.play-v3 .capa-vecinos .vecino-celda--decor-3::after { content: "\u273F"; bottom: 38px; left: 8px; color: #7a6a9a; }
+.play-v3 .capa-vecinos .vecino-celda--decor-3::before { content: "\2605"; top: 7px; right: 9px; color: #d4b84a; }
+.play-v3 .capa-vecinos .vecino-celda--decor-3::after { content: "\273F"; bottom: 38px; left: 8px; color: #7a6a9a; }
 
-.play-v3 .capa-vecinos .vecino-celda--decor-4::before { content: "\u2665"; top: 8px; left: 10px; color: #c4b5e8; }
-.play-v3 .capa-vecinos .vecino-celda--decor-4::after { content: "\u2605"; bottom: 41px; right: 10px; color: #7a9e6a; font-size: .68rem; }
+.play-v3 .capa-vecinos .vecino-celda--decor-4::before { content: "\2665"; top: 8px; left: 10px; color: #c4b5e8; }
+.play-v3 .capa-vecinos .vecino-celda--decor-4::after { content: "\2605"; bottom: 41px; right: 10px; color: #7a9e6a; font-size: .68rem; }
 
-.play-v3 .capa-vecinos .vecino-celda--decor-5::before { content: "\u273F"; top: 6px; right: 8px; color: #9a6a28; }
-.play-v3 .capa-vecinos .vecino-celda--decor-5::after { content: "\u2665"; bottom: 39px; left: 9px; color: #e88ba8; font-size: .72rem; }
+.play-v3 .capa-vecinos .vecino-celda--decor-5::before { content: "\273F"; top: 6px; right: 8px; color: #9a6a28; }
+.play-v3 .capa-vecinos .vecino-celda--decor-5::after { content: "\2665"; bottom: 39px; left: 9px; color: #e88ba8; font-size: .72rem; }
 
 .play-v3 .capa-vecinos .vecino-cara {
   position: relative !important;

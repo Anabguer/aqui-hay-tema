@@ -84,6 +84,8 @@
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos::before,
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar::before,
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha_diario"] .capa-ficha-diario::before,
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario.coti-modal-papel::before {
   content: "" !important;
   display: block !important;
@@ -98,6 +100,8 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos > *:not(.cerrar):not(.ds-modal-close),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar > *:not(.cerrar):not(.ds-modal-close),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario > *:not(.cerrar):not(.ds-modal-close),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-diario.coti-modal-papel > *:not(.cerrar):not(.ds-modal-close) {
   position: relative;
   z-index: 2;

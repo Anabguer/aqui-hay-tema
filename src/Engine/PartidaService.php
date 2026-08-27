@@ -249,8 +249,8 @@ final class PartidaService
             '_ui' => 'provisional_v0',
             'id' => $residenteId,
             'identidad' => [
-                'nombre' => $runtime['identidad_publica']['nombre'],
-                'slot_catalogo' => $runtime['identidad_publica']['slot_catalogo'],
+                'nombre' => IdentidadPublica::nombre($partida, $residenteId),
+                'slot_catalogo' => $runtime['identidad_publica']['slot_catalogo'] ?? null,
                 'edad' => PerfilPartida::edadResuelta($partida, $residenteId, $this->catalog)
                     ?? ($catalogo['identidad']['edad'] ?? null),
                 'genero' => $catalogo['identidad']['genero'] ?? null,

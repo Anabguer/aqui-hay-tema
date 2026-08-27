@@ -12,7 +12,10 @@ final class DiarioEngine
             'id' => $id,
             'dia' => $partida['reloj']['dia_pueblo'] ?? 1,
             'tipo' => 'ruido',
+            'titulo' => null,
             'texto' => '',
+            'consecuencias' => [],
+            'actores' => [],
             'origen' => [
                 'evento_id' => null,
                 'tipo_evento' => null,
@@ -22,6 +25,13 @@ final class DiarioEngine
             ],
             '_placeholder_contenido' => true,
         ], $entrada);
+        $eventoId = (string) ($entry['origen']['evento_id'] ?? '');
+        if ($eventoId !== '') {
+            $existente = self::entradaPorEvento($partida, $eventoId);
+            if ($existente !== null) {
+                return ['ok' => true, 'duplicado' => true, 'entrada' => $existente];
+            }
+        }
         $reloj = $partida['reloj'] ?? [];
         $diaMsg = (int) ($entry['dia'] ?? ($reloj['dia_pueblo'] ?? 1));
         $entry['dia'] = $diaMsg;
@@ -31,7 +41,7 @@ final class DiarioEngine
 
         $partida['diario'] ??= [];
         $partida['diario'][] = $entry;
-        return ['ok' => true, 'entrada' => $entry];
+        return ['ok' => true, 'duplicado' => false, 'entrada' => $entry];
     }
 
     public static function listarPorDia(array $partida, ?int $dia = null): array
@@ -41,5 +51,35 @@ final class DiarioEngine
             $partida['diario'] ?? [],
             static fn($e) => (int) ($e['dia'] ?? -1) === $dia
         ));
+    }
+
+    /** Entrada por origen.evento_id (idempotencia). */
+    public static function entradaPorEvento(array $partida, string $eventoId): ?array
+    {
+        if ($eventoId === '') {
+            return null;
+        }
+        foreach ($partida['diario'] ?? [] as $e) {
+            if (is_array($e) && (($e['origen']['evento_id'] ?? null)) === $eventoId) {
+                return $e;
+            }
+        }
+        return null;
+    }
+
+    /** Acontecimientos del vecino, más reciente primero. Solo lectura. */
+    public static function listarPorResidente(array $partida, string $residenteId): array
+    {
+        $out = [];
+        foreach ($partida['diario'] ?? [] as $e) {
+            if (!is_array($e)) {
+                continue;
+            }
+            if (in_array($residenteId, is_array($e['actores'] ?? null) ? $e['actores'] : [], true)) {
+                $out[] = $e;
+            }
+        }
+        usort($out, static fn(array $a, array $b) => ($b['dia'] ?? 0) <=> ($a['dia'] ?? 0));
+        return $out;
     }
 }
