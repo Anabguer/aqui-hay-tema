@@ -110,7 +110,7 @@ final class EventosPuebloAnuncioEngine
             $msgId = (string) (($r['mensaje']['id'] ?? '') ?: '');
             self::marcarEmitido($partida, $evtId, $msgId !== '' ? $msgId : null, $hiloId);
             if ($logger !== null) {
-                $logger->info('evento_pueblo_anuncio_mensajito', [
+                $logger->log($partida, 'evento_pueblo_anuncio_mensajito', [
                     'evento_pueblo_id' => $evtId,
                     'mensajito_id' => $msgId,
                     'remitente' => $remitente,

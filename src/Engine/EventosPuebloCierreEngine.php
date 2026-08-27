@@ -172,7 +172,7 @@ final class EventosPuebloCierreEngine
             $msgId = (string) (($r['mensaje']['id'] ?? '') ?: '');
             self::marcarCerrado($partida, $evtId, $estadoFinal, $msgId !== '' ? $msgId : null);
             if ($logger !== null) {
-                $logger->info('evento_pueblo_cierre_mensajito', [
+                $logger->log($partida, 'evento_pueblo_cierre_mensajito', [
                     'evento_pueblo_id' => $evtId,
                     'mensajito_id' => $msgId,
                     'tono' => $tono,
