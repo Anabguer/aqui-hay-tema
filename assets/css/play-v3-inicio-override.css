@@ -781,6 +781,15 @@
     background: none !important;
     box-shadow: none !important;
   }
+  .play-v3:has(.game-shell) .zona-actividad .mensajitos-wrap .obj-buzon {
+    border: 2px solid var(--ds-ink, #3b3028) !important;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      var(--ds-paper-card, #f7f1e8) !important;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10) !important;
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
+  }
+
 
   .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon {
     transform: translateY(3px) rotate(-0.7deg) !important;
@@ -887,3 +896,49 @@
     color: var(--ds-pink-deep, #c85b78) !important;
   }
 }
+/* INICIO-MOBILE-LAYOUT-v3: anula desktop grid/contents sin pisar estilos tiles */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-main {
+    display: flex !important;
+    flex-direction: column !important;
+    grid-template-columns: unset !important;
+    grid-template-areas: unset !important;
+    align-items: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left,
+  .play-v3:has(.game-shell) .game-right {
+    display: revert !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left.zona-actividad {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: end !important;
+    gap: 10px !important;
+    padding: 0 13px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right.zona-personas {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0 13px !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil,
+  .play-v3:has(.game-shell) .proxplanes-movil,
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par,
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par,
+  .play-v3:has(.game-shell) .shell-grupo-parejas {
+    grid-column: unset !important;
+    grid-row: unset !important;
+  }
+}
+
