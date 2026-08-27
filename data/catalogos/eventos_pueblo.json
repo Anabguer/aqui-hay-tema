@@ -1,0 +1,21 @@
+{
+    "_provisional": true,
+    "_nota": "B1: catalogo eventos colectivos del pueblo. MOTOR != DATOS. Solo MVP noche_bingo.",
+    "items": [
+        {
+            "id": "noche_bingo",
+            "nombre": "Noche de bingo",
+            "familia": "ocio_colectivo",
+            "lugares": [
+                "lug_bingo"
+            ],
+            "duracion_horas": 2,
+            "participantes_min": 3,
+            "participantes_max": 8,
+            "hora_min": 18,
+            "hora_max": 21,
+            "dias_anticipacion_min": 1,
+            "dias_anticipacion_max": 4
+        }
+    ]
+}

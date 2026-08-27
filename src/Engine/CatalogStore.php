@@ -74,6 +74,9 @@ final class CatalogStore
             case 'consejos':
                 $file = 'consejos.json';
                 break;
+            case 'eventos_pueblo':
+                $file = 'eventos_pueblo.json';
+                break;
             default:
                 $file = null;
         }

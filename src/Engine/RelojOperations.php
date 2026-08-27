@@ -124,6 +124,24 @@ final class RelojOperations
             );
         }
 
+        if ($diaDespues > $diaAntes) {
+            $calEvt = CalibracionConfig::load($this->projectRoot);
+            if (EventosPuebloEngine::catalogItems(new Catalog($this->projectRoot)) !== []
+                && ((bool) CalibracionConfig::get($calEvt, 'eventos_pueblo.activo', false)
+                    || FeatureConfig::isEnabled($partida, 'eventos_pueblo_enabled'))
+            ) {
+                $rngEvt = RngService::fromPartida($partida);
+                EventosPuebloEngine::alComenzarDia(
+                    $partida,
+                    $calEvt,
+                    $rngEvt,
+                    new Catalog($this->projectRoot),
+                    $this->logger
+                );
+                $rngEvt->persistToPartida($partida);
+            }
+        }
+
         DomainEventDispatcher::emit($partida, DomainEvents::TIEMPO_AVANZADO, [
             'horas' => $horas,
             'antes' => $antes,

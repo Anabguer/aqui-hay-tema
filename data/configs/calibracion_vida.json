@@ -334,6 +334,13 @@
         "anti_aislamiento_bonus_salida": 0,
         "anti_aislamiento_bonus_lugar": 0
     },
+    "eventos_pueblo": {
+        "_provisional": true,
+        "_nota": "B1: eventos colectivos del pueblo (sistema). MVP noche_bingo.",
+        "activo": false,
+        "prob_planificar_dia": 0.22,
+        "max_activos": 1
+    },
     "iniciativa_social": {
         "_provisional": true,
         "_nota": "A1: iniciativa social deliberada NPC→NPC. NO romántica. Cifras de lab.",
