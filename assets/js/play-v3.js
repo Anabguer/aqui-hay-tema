@@ -2608,8 +2608,16 @@
     return t;
   }
 
+  function actualizarMisionesCompletadas(items) {
+    var hoy = items || [];
+    var todas = hoy.length > 0 && hoy.every(function (m) { return (m.estado || '') === 'cumplida'; });
+    inicioAll('.obj-misiones-papel').forEach(function (el) {
+      el.classList.toggle('misiones-completadas', todas);
+    });
+  }
   function renderMisionesStrip(items) {
     inicioAll('[data-misiones-strip]').forEach(function (strip) { renderMisionesStripEl(strip, items); });
+    actualizarMisionesCompletadas(items);
   }
   function renderMisionesStripEl(strip, items) {
     if (!strip) return;

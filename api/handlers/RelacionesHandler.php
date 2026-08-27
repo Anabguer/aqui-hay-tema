@@ -35,6 +35,15 @@ final class RelacionesHandler
         return $r;
     }
 
+    /**
+     * Vista global de relaciones para la pestaña «Relaciones» de Vecinos del pueblo.
+     * Solo lectura; reutiliza el DTO canónico de ficha (RelacionVistaJugador).
+     */
+    public static function vistaPueblo(ApiContext $ctx, array $body, array $partida): array
+    {
+        return $ctx->service->vistaRelacionesPueblo($partida);
+    }
+
     public static function listar(ApiContext $ctx, array $body, array $partida): array
     {
         return [

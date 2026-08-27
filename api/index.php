@@ -213,6 +213,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return RelacionesHandler::fase($ctx, $body, $p);
     },
+    'relacion.vista_pueblo' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return RelacionesHandler::vistaPueblo($ctx, $body, $p);
+    },
     'peticion.listar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return PeticionesHandler::listar($ctx, $body, $p);

@@ -156,6 +156,155 @@ final class PartidaService
         return $r;
     }
 
+    public function vistaRelacionesPueblo(array $partida): array
+    {
+        $cal = CalibracionConfig::load($this->root);
+
+        $pares = [];
+        foreach (['relaciones_sociales', 'relaciones_romanticas', 'relaciones_conflicto'] as $bag) {
+            foreach ($partida[$bag] ?? [] as $rel) {
+                if (!is_array($rel)) {
+                    continue;
+                }
+                $a = (string) ($rel['persona_a'] ?? '');
+                $b = (string) ($rel['persona_b'] ?? '');
+                if ($a !== '' && $b !== '') {
+                    $pares[$a . '|' . $b] = true;
+                }
+            }
+        }
+
+        $conflictos = [];
+        foreach ($partida['relaciones_conflicto'] ?? [] as $c) {
+            if (is_array($c)) {
+                $conflictos[(string) ($c['id'] ?? '')] = $c;
+            }
+        }
+
+        $filas = [];
+        foreach (array_keys($pares) as $key) {
+            [$a, $b] = explode('|', (string) $key);
+            if (!isset($partida['residentes'][$a]) || !isset($partida['residentes'][$b])) {
+                continue;
+            }
+
+            $ab = RelacionVistaJugador::de($partida, $a, $b, $cal);
+            $ba = RelacionVistaJugador::de($partida, $b, $a, $cal);
+
+            $conflicto = null;
+            $confId = "conf_{$a}_{$b}";
+            if (isset($conflictos[$confId])) {
+                $conflicto = ['tipo' => $conflictos[$confId]['tipo'] ?? null];
+            }
+
+            $relevante = $ab['conocidos'] || $ba['conocidos']
+                || (int) $ab['social_valor'] !== 0 || (int) $ba['social_valor'] !== 0
+                || $ab['etiqueta_vinculo'] !== null || $ba['etiqueta_vinculo'] !== null
+                || $ab['romance_visible'] || $ba['romance_visible']
+                || $conflicto !== null;
+            if (!$relevante) {
+                continue;
+            }
+
+            $filas[] = [
+                'persona_a' => ['id' => $a, 'nombre' => IdentidadPublica::nombre($partida, $a)],
+                'persona_b' => ['id' => $b, 'nombre' => IdentidadPublica::nombre($partida, $b)],
+                'a_hacia_b' => self::dirVistaRelacion($ab),
+                'b_hacia_a' => self::dirVistaRelacion($ba),
+                'conflicto' => $conflicto,
+                '_relevancia' => max(
+                    self::relevanciaDirRelacion($ab),
+                    self::relevanciaDirRelacion($ba),
+                    $conflicto !== null ? 850 : 0
+                ),
+            ];
+        }
+
+        usort($filas, static function (array $x, array $y): int {
+            if ($y['_relevancia'] !== $x['_relevancia']) {
+                return $y['_relevancia'] <=> $x['_relevancia'];
+            }
+            $nx = $x['persona_a']['nombre'] . "\u{0}" . $x['persona_b']['nombre'];
+            $ny = $y['persona_a']['nombre'] . "\u{0}" . $y['persona_b']['nombre'];
+            return strcasecmp($nx, $ny);
+        });
+        $filas = array_map(static function (array $f): array {
+            unset($f['_relevancia']);
+            return $f;
+        }, $filas);
+
+        return ['ok' => true, 'relaciones' => $filas];
+    }
+
+    /**
+     * Proyeccion de una direccion A→B sin valores numericos internos.
+     *
+     * @param array<string, mixed> $v
+     * @return array<string, mixed>
+     */
+    private static function dirVistaRelacion(array $v): array
+    {
+        return [
+            'conocidos' => $v['conocidos'],
+            'etiqueta_social' => $v['etiqueta_social'],
+            'etiqueta_social_ui' => $v['etiqueta_social_ui'],
+            'emoji_social' => $v['emoji_social'],
+            'social_bar_pct' => $v['social_bar_pct'],
+            'social_negativo' => $v['social_negativo'],
+            'etiqueta_vinculo' => $v['etiqueta_vinculo'],
+            'romance_visible' => $v['romance_visible'],
+            'etiqueta_romance' => $v['etiqueta_romance'],
+            'emoji_romance' => $v['emoji_romance'],
+            'romance_banda' => $v['romance_banda'],
+        ];
+    }
+
+    /**
+     * Puntuacion de relevancia narrativa para el orden de la vista global.
+     *
+     * @param array<string, mixed> $v
+     */
+    private static function relevanciaDirRelacion(array $v): int
+    {
+        switch ($v['etiqueta_vinculo']) {
+            case 'pareja':
+                return 1000;
+            case 'crisis':
+                return 950;
+            case 'ex_pareja':
+                return 700;
+        }
+
+        $s = 0;
+        switch ($v['romance_banda']) {
+            case 'flechazo':
+                $s = 900;
+                break;
+            case 'enamorado':
+                $s = 880;
+                break;
+            case 'pillado':
+                $s = 860;
+                break;
+            case 'interes':
+            case 'tilin':
+                $s = 620;
+                break;
+        }
+
+        $banda = (string) $v['etiqueta_social'];
+        if ($v['social_negativo']) {
+            $s = max($s, 500);
+        } elseif (in_array($banda, ['amigo', 'buen_amigo', 'mejor_amigo'], true)) {
+            $s = max($s, 200);
+        } elseif ($banda === 'cae_bien') {
+            $s = max($s, 150);
+        } elseif ($banda === 'conocido') {
+            $s = max($s, 50);
+        }
+        return $s;
+    }
+
     public function fichaResidente(array $partida, string $residenteId, bool $respuestaLigera = false): array
     {
         $runtime = $partida['residentes'][$residenteId] ?? null;
