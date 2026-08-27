@@ -282,6 +282,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return DiarioHandler::listar($ctx, $body, $p);
     },
+    'diario.cotilleo_visto' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return DiarioHandler::cotilleoVisto($ctx, $body, $p);
+    },
     'dev.snapshot.guardar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return DevHandler::snapshotGuardar($ctx, $body, $p);

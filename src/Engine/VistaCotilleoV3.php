@@ -26,7 +26,7 @@ final class VistaCotilleoV3
 
      * @param array<string, mixed> $partida
 
-     * @return array{hoy: list<array>, ayer: list<array>, viejos: list<array>, ultimo: ?array}
+     * @return array{hoy: list<array>, ayer: list<array>, viejos: list<array>, ultimo: ?array, importantes_sin_ver: int}
 
      */
 
@@ -114,13 +114,76 @@ final class VistaCotilleoV3
 
         $buckets['ultimo'] = self::ultimoDe($buckets);
 
-
+        $buckets['importantes_sin_ver'] = self::contarImportantesSinVer($partida, $buckets);
 
         return $buckets;
 
     }
 
+    /**
+     * Importantes (destacado) aún no consultados por el jugador.
+     *
+     * @param array<string, mixed> $partida
+     * @param array{hoy: list<array>, ayer: list<array>, viejos: list<array>} $buckets
+     */
+    private static function contarImportantesSinVer(array $partida, array $buckets): int
+    {
+        $vistos = self::idsVistos($partida);
+        $n = 0;
+        foreach (['hoy', 'ayer', 'viejos'] as $bucket) {
+            foreach ($buckets[$bucket] ?? [] as $e) {
+                if (!is_array($e) || ($e['destacado'] ?? false) !== true) {
+                    continue;
+                }
+                if (!isset($vistos[(string) ($e['id'] ?? '')])) {
+                    $n++;
+                }
+            }
+        }
+        return $n;
+    }
 
+    /** @param array<string, mixed> $partida @return array<string, true> */
+    private static function idsVistos(array $partida): array
+    {
+        $out = [];
+        foreach ($partida['cotilleo_vistos'] ?? [] as $id) {
+            if (is_string($id) && $id !== '') {
+                $out[$id] = true;
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * Marca como consultados los importantes cuyo id llega del feed visible.
+     * No borra cotilleos ni altera su orden histórico.
+     *
+     * @param array<string, mixed> $partida
+     * @param list<string> $ids
+     * @return array{ok: bool, marcados: int, importantes_sin_ver: int}
+     */
+    public static function marcarVistas(array &$partida, array $ids): array
+    {
+        $vistos = self::idsVistos($partida);
+        $marcados = 0;
+        foreach ($ids as $id) {
+            if (!is_string($id) || $id === '' || isset($vistos[$id])) {
+                continue;
+            }
+            $vistos[$id] = true;
+            $marcados++;
+        }
+        if (count($vistos) > 200) {
+            $vistos = array_slice($vistos, -200, null, true);
+        }
+        $partida['cotilleo_vistos'] = array_keys($vistos);
+        return [
+            'ok' => true,
+            'marcados' => $marcados,
+            'importantes_sin_ver' => self::contarImportantesSinVer($partida, self::de($partida)),
+        ];
+    }
 
     /**
 

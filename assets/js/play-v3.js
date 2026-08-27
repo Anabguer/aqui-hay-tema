@@ -1784,15 +1784,7 @@
         ? resumenCotilleoUi(ultRaw, 120)
         : 'Hoy están sospechosamente tranquilos…';
     }
-    if (cotiBadge) {
-      if (hoyLista.length >= 1) {
-        cotiBadge.textContent = hoyLista.length === 1 ? 'nuevo' : (hoyLista.length + ' nuevos');
-        cotiBadge.hidden = false;
-      } else {
-        cotiBadge.textContent = '';
-        cotiBadge.hidden = true;
-      }
-    }
+    actualizarCotiBadgesUI();
 
     const prev = $('[data-buzon-preview]');
     const pend = (buzon || []).filter(function (m) {
@@ -4067,6 +4059,7 @@ function hobbyIconKey(id, texto) {
 
   let cotiCache = { hoy: [], ayer: [], viejos: [] };
   let cotiFiltroActivo = '';
+  let cotiSinVerPrev = null;
 
   function cotiTodosItems(coti) {
     const items = [];
@@ -4076,6 +4069,83 @@ function hobbyIconKey(id, texto) {
       });
     });
     return items;
+  }
+
+
+  function cotiSinVerDe(diario) {
+    const d = diario || cacheDiario;
+    return Math.max(0, Number(d && d.cotilleo && d.cotilleo.importantes_sin_ver) || 0);
+  }
+
+  function cotiIdsVisiblesDe(coti) {
+    const ids = [];
+    ['hoy', 'ayer', 'viejos'].forEach(function (bucket) {
+      ((coti && coti[bucket]) || []).forEach(function (e) {
+        if (e && e.destacado === true && e.id) ids.push(String(e.id));
+      });
+    });
+    return ids;
+  }
+
+  function cotiBadgeNuevosTxt(n) {
+    n = Math.max(0, Number(n) || 0);
+    if (n <= 0) return '';
+    return String(n) + ' nuevo' + (n === 1 ? '' : 's');
+  }
+
+  function pulsoCotilleoBadge(badge) {
+    badge.classList.remove('is-pulso');
+    void badge.offsetWidth;
+    badge.classList.add('is-pulso');
+    badge.addEventListener('animationend', function () {
+      badge.classList.remove('is-pulso');
+    }, { once: true });
+  }
+
+  function actualizarCotiBadgesUI() {
+    const sinVer = cotiSinVerDe(cacheDiario);
+    const subio = cotiSinVerPrev !== null && sinVer > cotiSinVerPrev;
+    cotiSinVerPrev = sinVer;
+
+    const cotiCard = $('.obj-cotilleo-par');
+    if (cotiCard) cotiCard.classList.toggle('is-aviso-importante', sinVer > 0);
+
+    const homeBadge = $('[data-cotilleo-badge]');
+    if (homeBadge) {
+      if (sinVer > 0) {
+        homeBadge.textContent = cotiBadgeNuevosTxt(sinVer);
+        homeBadge.hidden = false;
+        if (subio) pulsoCotilleoBadge(homeBadge);
+      } else {
+        homeBadge.textContent = '';
+        homeBadge.hidden = true;
+      }
+    }
+
+    const modalBadge = $('[data-coti-count]');
+    if (modalBadge) {
+      if (sinVer > 0) {
+        modalBadge.textContent = cotiBadgeNuevosTxt(sinVer);
+        modalBadge.hidden = false;
+      } else {
+        modalBadge.textContent = '';
+        modalBadge.hidden = true;
+      }
+    }
+  }
+
+  async function marcarCotilleoVisto() {
+    const sinVerCache = cotiSinVerDe(cacheDiario);
+    if (!sinVerCache) return;
+    const ids = cotiIdsVisiblesDe(cotiCache);
+    try {
+      const r = await api('diario.cotilleo_visto', { ids: ids });
+      if (!r || !r.ok) return;
+      const restan = Math.max(0, Number(r.importantes_sin_ver) || 0);
+      if (cacheDiario && cacheDiario.cotilleo) cacheDiario.cotilleo.importantes_sin_ver = restan;
+      cotiSinVerPrev = restan;
+      actualizarCotiBadgesUI();
+    } catch (e) {}
   }
 
   function renderCotilleoFiltros(items) {
@@ -4125,6 +4195,14 @@ function hobbyIconKey(id, texto) {
 
   function renderCotilleo(coti) {
     cotiCache = coti || { hoy: [], ayer: [], viejos: [] };
+    if (cacheDiario && cacheDiario.cotilleo) {
+      cacheDiario.cotilleo.hoy = cotiCache.hoy || [];
+      cacheDiario.cotilleo.ayer = cotiCache.ayer || [];
+      cacheDiario.cotilleo.viejos = cotiCache.viejos || [];
+      if (typeof cotiCache.importantes_sin_ver === 'number') {
+        cacheDiario.cotilleo.importantes_sin_ver = cotiCache.importantes_sin_ver;
+      }
+    }
     const items = cotiTodosItems(cotiCache);
     renderCotilleoFiltros(items);
     renderCotilleoLista(cotiCache);
@@ -4853,6 +4931,7 @@ function hobbyIconKey(id, texto) {
       renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
     renderBuzon(buzon.mensajes || []);
     renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
+    actualizarCotiBadgesUI();
     renderVecinos();
     if (isDebugOn()) {
       const tm = $('[data-taller-msg]');
@@ -5183,6 +5262,7 @@ function hobbyIconKey(id, texto) {
         cotiFiltroActivo = '';
         const d = cacheDiario || {};
         renderCotilleo(d.cotilleo || { hoy: d.entradas || [], ayer: [], viejos: [] });
+        marcarCotilleoVisto();
       }
       if (name === 'vecinos') renderVecinos();
       if (name === 'buzon') renderBuzon(cacheBuzon);
