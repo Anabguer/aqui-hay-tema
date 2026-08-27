@@ -133,7 +133,8 @@
   let cacheDiario = null;
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
-  let org = { modo: 'pareja', tipo: '', a: '', b: '', lugar: '', dia: null, hora: 17 };
+  const ORG_MAX_VECINOS = 3;
+  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17 };
   let orgPresetNuevo = false;
   const playtestLogClient = { entries: [] };
   const ahtDebugSessionLog = [];
@@ -358,6 +359,9 @@
       if (pasoNum === 1) {
         heroEl.hidden = false;
         heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('illus-pueblo.png')) + '" alt=""/>';
+      } else if (pasoNum === 2) {
+        heroEl.hidden = false;
+        heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('icon-vecinos.png')) + '" alt=""/>';
       } else { heroEl.hidden = true; heroEl.innerHTML = ''; }
     }
     var titEl = $('[data-tut-tit]');
@@ -1528,7 +1532,7 @@
     if (!obj) return t;
     var nombre = obj ? nombreDe(obj) : '';
     if (iv.ultimo.tono === 'bien') {
-      return nombre + ' ¡recibe la idea! ' + t;
+      return nombre + ' \u00a1recibe la idea! ' + t;
     }
     if (iv.ultimo.tono === 'mal') {
       return nombre + ' no conecta: ' + t;
@@ -1548,7 +1552,7 @@
     var ids = enc.participantes || [];
     var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
       '<div class="enc-int-step" data-enc-int-paso="persona">' +
-      '<p class="enc-int-kicker">¿En quién quieres meterte?</p>' +
+      '<p class="enc-int-kicker">\u00bfEn qui\u00E9n quieres meterte?</p>' +
       '<div class="enc-int-personas">';
     ids.forEach(function (rid) {
       html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
@@ -1556,8 +1560,8 @@
     });
     html += '</div></div>';
     html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
-      '<button type="button" class="enc-int-volver" data-enc-int-volver>‹ Volver</button>' +
-      '<p class="enc-int-kicker">¿Qué quieres meterle en la cabeza?</p>' +
+      '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
+      '<p class="enc-int-kicker">\u00bfQu\u00E9 quieres meterle en la cabeza?</p>' +
       '<div class="enc-int-btns">';
     var temas = null;
     iv.acciones.forEach(function (a) {
@@ -1571,7 +1575,7 @@
     html += '</div>';
     if (temas && temas.length) {
       html += '<div class="enc-int-temas">' +
-        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">💬 Elegir un tema…</button>' +
+        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">\ud83d\udcac Elegir un tema\u2026</button>' +
         '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu">';
       temas.forEach(function (h) {
         html += '<button type="button" class="enc-int-btn enc-int-btn--hobby enc-int-opt" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '" role="menuitem">' +
@@ -1690,27 +1694,6 @@
       '</div>' +
       '</div></article>';
   }
-  function htmlProximoPlanCardDesktop(enc, estado) {
-    const ids = enc.participantes || [];
-    const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
-    const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
-      ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
-    return '<article class="obj-planes-prox-card">' +
-      '<span class="obj-planes-prox-hora">' + esc(sello) + '</span>' +
-      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
-      '<p class="obj-planes-prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
-      '<p class="obj-planes-prox-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
-      '</article>';
-  }
-  function renderProximosPlanesDesktop(estado) {
-    const block = document.querySelector('[data-planes-prox-block]');
-    const grid = block && block.querySelector('[data-planes-prox-list]');
-    if (!block || !grid) return;
-    const lista = proximosPlanesFuturos(cacheInsp, estado).slice(0, 4);
-    if (!lista.length) { block.hidden = true; grid.innerHTML = ''; return; }
-    block.hidden = false;
-    grid.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardDesktop(enc, estado); }).join('');
-  }
   function renderProximosPlanesMovil(estado) {
     const block = document.querySelector('[data-proxplanes-block]');
     if (!block) return;
@@ -1720,7 +1703,7 @@
     const listaFull = proximosPlanesFuturos(cacheInsp, estado);
     const total = listaFull.length;
     if (cntEl) {
-      if (total > 0) { cntEl.textContent = ' ' + total; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      if (total > 0) { cntEl.textContent = String(total); cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     const lista = listaFull.slice(0, 6);
@@ -1729,52 +1712,137 @@
     track.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardMovil(enc, estado); }).join('');
   }
   var encMovIndice = 0;
-  function htmlEncursoCardMovil(enc, estado) {
+    function esInicioLayoutMovil() {
+    return typeof window !== 'undefined' && window.matchMedia &&
+      window.matchMedia('(max-width: 768px)').matches;
+  }
+  function orgTipoIdDesdeEnc(enc) {
+    const ids = (enc && enc.participantes) || [];
+    if (ids.length > 2) return 'grupal';
+    const t = String((enc && enc.tipo) || '').toLowerCase();
+    if (t === 'individual') return 'individual';
+    if (t === 'primera_cita' || t === 'cita' || t === 'romantico') return 'romance';
+    if (t === 'conocerse') return 'conocerse';
+    return 'amistad';
+  }
+  function iconoEncuentroCentroHtml(enc) {
+    const ids = (enc && enc.participantes) || [];
+    if (ids.length < 2) return '';
+    const orgId = orgTipoIdDesdeEnc(enc);
+    const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + orgId;
+    const emoji = orgTipoIco(orgId);
+    if (emoji) {
+      return '<span class="' + cls + ' org-tipo-ico" aria-hidden="true">' + emoji + '</span>';
+    }
+    var fam = 'quedar';
+    if (orgId === 'grupal' || orgId === 'conocerse') fam = 'conocerse';
+    else if (orgId === 'romance') fam = 'cita';
+    return '<span class="' + cls + ' mision-strip-ico" aria-hidden="true">' + iconoMision({ familia: fam }) + '</span>';
+  }
+    function formatEncursoMetaLine(enc, estado) {
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
+    const reloj = (estado && estado.reloj) || {};
+    if (planEsEnCurso(enc, estado)) return lugar + ' \u00b7 En curso \u00b7 ' + hora;
+    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' \u00b7 Hoy ' + hora;
+    return lugar + ' \u00b7 D\u00eda ' + (enc.dia || '?') + ' \u00b7 ' + hora;
+  }
+  function encCursoFacesHtml(enc) {
+    const ids = (enc && enc.participantes) || [];
+    const slice = ids.slice(0, 2);
+    if (slice.length < 2) return carasPlanHtml(slice);
+    return htmlCaraToken(slice[0]) + iconoEncuentroCentroHtml(enc) + htmlCaraToken(slice[1]);
+  }
+  function resumenEncursoMovil(enc, estado) {
+    const iv = intervencionVistaDe(enc, estado);
+    if (iv && iv.usada && iv.ultimo && iv.ultimo.texto) {
+      const t = textoFeedbackIntervencion(iv);
+      if (t.length > 78) return t.slice(0, 75) + '\u2026';
+      return t;
+    }
+    if (iv && iv.disponible && iv.acciones && iv.acciones.length) {
+      return 'Puedes intervenir en el encuentro.';
+    }
+    if (iv && iv.ultimo && iv.ultimo.tono === 'mal') return 'La cosa se ha puesto tensa\u2026';
+    return 'Parece que la cosa va bien\u2026';
+  }
+  function htmlEncursoVistaPanel(enc) {
+    const ids = enc.participantes || [];
+    const nombres = ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ');
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    return '<div class="enc-mov-vista"><p class="enc-mov-vista-txt">' +
+      esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
+  }
+  function htmlEncursoCardMovilV14(enc, estado) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
+    const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
-    let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-mov-row">' +
-      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
-      '<div class="enc-mov-copy">' +
-      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
-      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
-      '<span class="enc-mov-estado">EN CURSO</span>' +
-      '</div>';
-    if (hayInt) {
-      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-txt">Intervenir</span>' +
-        '<span class="enc-mov-cta-flecha" aria-hidden="true">\u203a</span></button>';
-    }
-    html += '</div>';
-    if (hayInt) {
-      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
-        htmlIntervencionEncuentro(enc, estado) + '</div>';
-    }
+    const ctaTxt = puedeIntervenir ? 'Intervenir' : 'Ver encuentro';
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
+    let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
+      '<div class="enc-mov-body">' +
+      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
+      '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
+      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>' +
+      '</div>' +
+      '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+      '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
+      '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+      '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
     return html + '</article>';
   }
-  function encMovPaso(track) {
+  function htmlEncursoCardMovil(enc, estado) {
+    return htmlEncursoCardMovilV14(enc, estado);
+  }
+    function encMovPaso(track) {
     const cards = track.querySelectorAll('[data-enc-mov-card]');
     if (!cards.length) return 0;
     const st = getComputedStyle(track);
     const gap = parseFloat(st.columnGap || st.gap) || 0;
     return cards[0].offsetWidth + gap;
   }
-  function renderEncursosMovilIndicador() {
+  function encMovIrA(idx) {
     const block = document.querySelector('[data-encursos-block]');
     const track = block && block.querySelector('[data-encursos-track]');
-    const ind = block && block.querySelector('[data-encursos-indice]');
-    if (!block || !track || !ind) return;
+    if (!block || !track) return;
     const n = track.querySelectorAll('[data-enc-mov-card]').length;
-    if (!block.classList.contains('is-on') || n < 2) { ind.hidden = true; ind.textContent = ''; return; }
+    if (n < 2) return;
+    const paso = encMovPaso(track);
+    if (paso <= 0) return;
+    encMovIndice = Math.max(0, Math.min(n - 1, idx));
+    track.scrollTo({ left: encMovIndice * paso, behavior: 'smooth' });
+    renderEncursosMovilNav();
+  }
+  function renderEncursosMovilNav() {
+    const block = document.querySelector('[data-encursos-block]');
+    const track = block && block.querySelector('[data-encursos-track]');
+    const shell = block && block.querySelector('[data-encursos-shell]');
+    const prev = block && block.querySelector('[data-enc-mov-prev]');
+    const next = block && block.querySelector('[data-enc-mov-next]');
+    if (!block || !track || !shell || !prev || !next) return;
+    const n = track.querySelectorAll('[data-enc-mov-card]').length;
+    if (!block.classList.contains('is-on') || n < 1) {
+      shell.hidden = true;
+      shell.setAttribute('aria-hidden', 'true');
+      prev.hidden = true;
+      next.hidden = true;
+      return;
+    }
     const paso = encMovPaso(track);
     const idx = paso > 0 ? Math.min(n - 1, Math.max(0, Math.round(track.scrollLeft / paso))) : 0;
     encMovIndice = idx;
-    ind.hidden = false;
-    ind.textContent = (idx + 1) + ' / ' + n;
+    shell.hidden = false;
+    shell.removeAttribute('aria-hidden');
+    prev.hidden = n < 2 || idx <= 0;
+    next.hidden = n < 2 || idx >= n - 1;
   }
-  function renderEncursosMovil(estado) {
+  function renderEncursosMovilIndicador() {
+    renderEncursosMovilNav();
+  }
+    function renderEncursosMovil(estado) {
     const block = document.querySelector('[data-encursos-block]');
     if (!block) return;
     const track = block.querySelector('[data-encursos-track]');
@@ -1782,7 +1850,7 @@
     const lista = encuentrosEnCursoAhora(cacheInsp, estado);
     const cntEl = block.querySelector('[data-encursos-count]');
     if (cntEl) {
-      if (lista.length > 0) { cntEl.textContent = ' ' + lista.length; cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
+      if (lista.length > 0) { cntEl.textContent = String(lista.length); cntEl.hidden = false; cntEl.removeAttribute('aria-hidden'); }
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     if (!lista.length) {
@@ -1841,15 +1909,7 @@
         ? resumenCotilleoUi(ultRaw, 120)
         : 'Hoy están sospechosamente tranquilos…';
     }
-    if (cotiBadge) {
-      if (hoyLista.length >= 1) {
-        cotiBadge.textContent = hoyLista.length === 1 ? 'nuevo' : (hoyLista.length + ' nuevos');
-        cotiBadge.hidden = false;
-      } else {
-        cotiBadge.textContent = '';
-        cotiBadge.hidden = true;
-      }
-    }
+    actualizarCotiBadgesUI();
 
     const prev = $('[data-buzon-preview]');
     const pend = (buzon || []).filter(function (m) {
@@ -1895,7 +1955,6 @@
       }
     }
 
-    renderProximosPlanesDesktop(estado);
     renderProximosPlanesMovil(estado);
     renderEncursosMovil(estado);
 
@@ -3171,20 +3230,20 @@
 
   var VEC_REL_FILTROS = [
     { id: '', txt: 'Todas', icono: '' },
-    { id: 'romance', txt: 'Parejas', icono: '\uD83D\uDC8C' },
-    { id: 'bien', txt: 'Amistad', icono: '\uD83E\uDD1D' },
-    { id: 'conocidos', txt: 'Conocidos', icono: '\uD83D\uDC4F' },
-    { id: 'mal', txt: 'Malas', icono: '\uD83D\uDC94' }
+    { id: 'romance', txt: 'Parejas', icono: '\\uD83D\\uDC8C' },
+    { id: 'bien', txt: 'Amistad', icono: '\\uD83E\\uDD1D' },
+    { id: 'conocidos', txt: 'Conocidos', icono: '\\uD83D\\uDC4F' },
+    { id: 'mal', txt: 'Malas', icono: '\\uD83D\\uDC94' }
   ];
   var vecRelCache = [];
   var vecRelFiltro = '';
   var vecRelPersona = '';
   var vecRelCargado = false;
-  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\u2194</span>';
+  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\\u2194</span>';
 
   function aplicarVecTabUI() {
     const isRel = vecTabActiva === 'relaciones';
-    $('[data-vec-tab]').forEach(function (btn) {
+    $$('[data-vec-tab]').forEach(function (btn) {
       const t = btn.getAttribute('data-vec-tab');
       const on = t === vecTabActiva;
       btn.classList.toggle('is-on', on);
@@ -3192,7 +3251,7 @@
     });
     const cuentaWrap = $('[data-vec-cuenta-wrap]');
     if (cuentaWrap) cuentaWrap.hidden = isRel;
-    $('[data-vec-panel]').forEach(function (p) {
+    $$('[data-vec-panel]').forEach(function (p) {
       p.hidden = p.getAttribute('data-vec-panel') !== vecTabActiva;
     });
     const capa = document.querySelector('.capa-vecinos');
@@ -3208,7 +3267,7 @@
   async function cargarVecRelaciones() {
     const list = $('[data-vec-rel-list]');
     if (list && !vecRelCargado) {
-      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">Mirando el cotilleo del pueblo\u2026</p>';
+      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">Mirando el cotilleo del pueblo\\u2026</p>';
     }
     if (vecRelCargado) {
       renderVecRelLista();
@@ -3255,14 +3314,14 @@
   function vecRelTextoDir(dir) {
     dir = dir || {};
     const parts = [];
-    if (dir.etiqueta_vinculo === 'pareja') parts.push('\u2764\uFE0F Pareja');
-    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\uD83D\uDC94 En crisis');
-    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\uD83D\uDC94 Ex pareja');
-    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\uD83D\uDC98') + ' ' + dir.etiqueta_romance);
+    if (dir.etiqueta_vinculo === 'pareja') parts.push('\\u2764\\uFE0F Pareja');
+    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\\uD83D\\uDC94 En crisis');
+    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\\uD83D\\uDC94 Ex pareja');
+    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\\uD83D\\uDC98') + ' ' + dir.etiqueta_romance);
     if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
       parts.push(((dir.emoji_social || '') + ' ' + dir.etiqueta_social_ui).trim());
     }
-    return parts.join(' \u00B7 ');
+    return parts.join(' \\u00B7 ');
   }
 
   function vecRelPillClass(dir) {
@@ -3319,7 +3378,7 @@
     const barExtra = dir.etiqueta_social === 'conocido' ? ' vec-rel-barra--mustard' : '';
     return '<div class="vec-rel-dir-card">' +
       '<div class="vec-rel-dir-head">' +
-      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \u2192 ' + esc(nomTo) + '</span>' +
+      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \\u2192 ' + esc(nomTo) + '</span>' +
       pill +
       '</div>' +
       vecRelBarra(dir, barExtra) +
@@ -3369,7 +3428,7 @@
     if (!rows.length) {
       const quien = vecRelPersona ? nombreDe(vecRelPersona) : '';
       list.innerHTML = '<p class="lista-vacia vec-rel-vacio">' +
-        (quien ? esc(quien) + ' no tiene nada que contar por ahora.' : 'Aqu\u00ED no hay nada de nada todav\u00EDa.') + '</p>';
+        (quien ? esc(quien) + ' no tiene nada que contar por ahora.' : 'Aqu\\u00ED no hay nada de nada todav\\u00EDa.') + '</p>';
       return;
     }
     list.innerHTML = rows.map(htmlVecRelCard).join('');
@@ -4173,11 +4232,6 @@ function hobbyIconKey(id, texto) {
       tabCount.textContent = String(nuevos.length);
       tabCount.hidden = nuevos.length === 0;
     }
-    const hdrCount = $('[data-buzon-nuevos-count]');
-    if (hdrCount) {
-      hdrCount.textContent = nuevos.length + ' NUEVOS';
-      hdrCount.hidden = nuevos.length === 0;
-    }
     let filtro = box.getAttribute('data-buzon-filtro') || 'nuevos';
     document.querySelectorAll('[data-buzon-tab]').forEach(function (tab) {
       tab.onclick = function () {
@@ -4348,6 +4402,7 @@ function hobbyIconKey(id, texto) {
 
   let cotiCache = { hoy: [], ayer: [], viejos: [] };
   let cotiFiltroActivo = '';
+  let cotiSinVerPrev = null;
 
   function cotiTodosItems(coti) {
     const items = [];
@@ -4357,6 +4412,83 @@ function hobbyIconKey(id, texto) {
       });
     });
     return items;
+  }
+
+
+  function cotiSinVerDe(diario) {
+    const d = diario || cacheDiario;
+    return Math.max(0, Number(d && d.cotilleo && d.cotilleo.importantes_sin_ver) || 0);
+  }
+
+  function cotiIdsVisiblesDe(coti) {
+    const ids = [];
+    ['hoy', 'ayer', 'viejos'].forEach(function (bucket) {
+      ((coti && coti[bucket]) || []).forEach(function (e) {
+        if (e && e.destacado === true && e.id) ids.push(String(e.id));
+      });
+    });
+    return ids;
+  }
+
+  function cotiBadgeNuevosTxt(n) {
+    n = Math.max(0, Number(n) || 0);
+    if (n <= 0) return '';
+    return String(n) + ' nuevo' + (n === 1 ? '' : 's');
+  }
+
+  function pulsoCotilleoBadge(badge) {
+    badge.classList.remove('is-pulso');
+    void badge.offsetWidth;
+    badge.classList.add('is-pulso');
+    badge.addEventListener('animationend', function () {
+      badge.classList.remove('is-pulso');
+    }, { once: true });
+  }
+
+  function actualizarCotiBadgesUI() {
+    const sinVer = cotiSinVerDe(cacheDiario);
+    const subio = cotiSinVerPrev !== null && sinVer > cotiSinVerPrev;
+    cotiSinVerPrev = sinVer;
+
+    const cotiCard = $('.obj-cotilleo-par');
+    if (cotiCard) cotiCard.classList.toggle('is-aviso-importante', sinVer > 0);
+
+    const homeBadge = $('[data-cotilleo-badge]');
+    if (homeBadge) {
+      if (sinVer > 0) {
+        homeBadge.textContent = cotiBadgeNuevosTxt(sinVer);
+        homeBadge.hidden = false;
+        if (subio) pulsoCotilleoBadge(homeBadge);
+      } else {
+        homeBadge.textContent = '';
+        homeBadge.hidden = true;
+      }
+    }
+
+    const modalBadge = $('[data-coti-count]');
+    if (modalBadge) {
+      if (sinVer > 0) {
+        modalBadge.textContent = cotiBadgeNuevosTxt(sinVer);
+        modalBadge.hidden = false;
+      } else {
+        modalBadge.textContent = '';
+        modalBadge.hidden = true;
+      }
+    }
+  }
+
+  async function marcarCotilleoVisto() {
+    const sinVerCache = cotiSinVerDe(cacheDiario);
+    if (!sinVerCache) return;
+    const ids = cotiIdsVisiblesDe(cotiCache);
+    try {
+      const r = await api('diario.cotilleo_visto', { ids: ids });
+      if (!r || !r.ok) return;
+      const restan = Math.max(0, Number(r.importantes_sin_ver) || 0);
+      if (cacheDiario && cacheDiario.cotilleo) cacheDiario.cotilleo.importantes_sin_ver = restan;
+      cotiSinVerPrev = restan;
+      actualizarCotiBadgesUI();
+    } catch (e) {}
   }
 
   function renderCotilleoFiltros(items) {
@@ -4406,6 +4538,14 @@ function hobbyIconKey(id, texto) {
 
   function renderCotilleo(coti) {
     cotiCache = coti || { hoy: [], ayer: [], viejos: [] };
+    if (cacheDiario && cacheDiario.cotilleo) {
+      cacheDiario.cotilleo.hoy = cotiCache.hoy || [];
+      cacheDiario.cotilleo.ayer = cotiCache.ayer || [];
+      cacheDiario.cotilleo.viejos = cotiCache.viejos || [];
+      if (typeof cotiCache.importantes_sin_ver === 'number') {
+        cacheDiario.cotilleo.importantes_sin_ver = cotiCache.importantes_sin_ver;
+      }
+    }
     const items = cotiTodosItems(cotiCache);
     renderCotilleoFiltros(items);
     renderCotilleoLista(cotiCache);
@@ -4449,35 +4589,65 @@ function hobbyIconKey(id, texto) {
   }
 
   function orgSeleccionados() {
-    if (org.modo === 'solo') return org.a ? [org.a] : [];
+    return (org.sel || []).filter(Boolean);
+  }
+
+  function orgModo() {
+    return orgSeleccionados().length <= 1 ? 'solo' : 'pareja';
+  }
+
+  function syncOrgTipoDesdeSeleccion() {
+    if (orgModo() === 'solo') {
+      org.tipo = 'individual';
+    } else if (org.tipo === 'individual') {
+      org.tipo = '';
+    }
+  }
+
+  function orgIdsDesdePreset(preset) {
     const out = [];
-    if (org.a) out.push(org.a);
-    if (org.b && org.b !== org.a) out.push(org.b);
-    return out;
+    if (preset && preset.a) out.push(preset.a);
+    if (preset && preset.b && preset.b !== preset.a) out.push(preset.b);
+    if (preset && preset.c && preset.c !== preset.a && preset.c !== preset.b) out.push(preset.c);
+    return out.slice(0, ORG_MAX_VECINOS);
   }
 
   function actualizarOrgPickerHint() {
     const hint = $('[data-org-picker-hint]');
     if (!hint) return;
     const n = orgSeleccionados().length;
-    if (org.modo === 'solo') {
-      hint.textContent = n ? '1 vecino elegido.' : 'Elige 1 vecino.';
+    hint.classList.remove('is-limit');
+    if (!n) {
+      hint.textContent = 'Elige hasta ' + ORG_MAX_VECINOS + ' vecinos.';
       return;
     }
-    if (!n) hint.textContent = 'Elige hasta 2 vecinos.';
-    else if (n === 1) hint.textContent = 'Elige un vecino más.';
-    else hint.textContent = '2 vecinos elegidos.';
+    if (n === 1) hint.textContent = 'Plan en solitario. Puedes a\u00f1adir hasta ' + ORG_MAX_VECINOS + ' vecinos.';
+    else if (n < ORG_MAX_VECINOS) hint.textContent = n + ' vecinos elegidos. Puedes a\u00f1adir uno m\u00e1s.';
+    else hint.textContent = ORG_MAX_VECINOS + ' vecinos elegidos (m\u00e1ximo).';
+  }
+
+  function actualizarOrgModoEstado() {
+    const el = $('[data-org-modo-estado]');
+    if (!el) return;
+    const n = orgSeleccionados().length;
+    if (!n) {
+      el.hidden = true;
+      el.textContent = '';
+      return;
+    }
+    el.hidden = false;
+    el.textContent = n === 1 ? 'Plan en solitario' : 'Plan acompa\u00f1ado';
   }
 
   function orgParticipantesListos() {
     var parts = orgSeleccionados();
-    if (org.modo === 'solo') return parts.length >= 1;
+    if (orgModo() === 'solo') return parts.length >= 1;
     return parts.length >= 2;
   }
 
   function mensajeOrgParticipantesPendientes() {
-    if (org.modo === 'solo') {
-      return org.a ? '' : 'Elige a qui\u00e9n va el plan.';
+    if (orgModo() === 'solo') {
+      return orgSeleccionados().length ? '' : 'Elige a qui\u00e9n va el plan.';
     }
     var n = orgSeleccionados().length;
     if (n === 0) return 'Elige al menos dos vecinos.';
@@ -4510,7 +4680,7 @@ function hobbyIconKey(id, texto) {
     if (r.mensaje_ui) return r.mensaje_ui;
     var err = String(r.error || '');
     if (err === 'participantes_requeridos' || err === 'participantes_insuficientes') {
-      if (org.modo === 'solo') return 'Elige a qui\u00e9n va el plan.';
+      if (orgModo() === 'solo') return 'Elige a qui\u00e9n va el plan.';
       var pend = mensajeOrgParticipantesPendientes();
       return pend || 'Elige al menos dos vecinos.';
     }
@@ -4523,41 +4693,50 @@ function hobbyIconKey(id, texto) {
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     org.hora = parseInt($('[data-org-hora]').value, 10);
-    if (org.modo === 'solo') {
-      if (!org.a) return { ok: false, msg: 'Elige a quién va el plan.' };
+    const parts = orgSeleccionados();
+    if (orgModo() === 'solo') {
+      if (!parts.length) return { ok: false, msg: 'Elige a qui\u00e9n va el plan.' };
       if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
-      if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cuándo quedar.' };
+      if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cu\u00e1ndo quedar.' };
       return { ok: true };
     }
-    if (!org.a || !org.b) return { ok: false, msg: 'Elige al menos dos vecinos.' };
-    if (org.a === org.b) return { ok: false, msg: 'Elige a dos personas distintas.' };
-    if (!org.tipo) return { ok: false, msg: 'Elige qué buscáis.' };
+    if (parts.length < 2) return { ok: false, msg: 'Elige al menos dos vecinos.' };
+    if (new Set(parts).size !== parts.length) return { ok: false, msg: 'Elige a personas distintas.' };
+    if (!org.tipo) return { ok: false, msg: 'Elige qu\u00e9 busc\u00e1is.' };
     if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
-    if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cuándo quedar.' };
+    if (!org.dia || !org.hora) return { ok: false, msg: 'Elige cu\u00e1ndo quedar.' };
     return { ok: true };
+  }
+  function feedbackOrgPickerLimite() {
+    const hint = $('[data-org-picker-hint]');
+    const strip = $('[data-org-picker]');
+    if (hint) {
+      hint.classList.add('is-limit');
+      hint.textContent = 'M\u00e1ximo ' + ORG_MAX_VECINOS + ' vecinos por plan.';
+    }
+    if (strip) {
+      strip.classList.add('is-limit');
+      window.setTimeout(function () { strip.classList.remove('is-limit'); }, 420);
+    }
   }
 
   function toggleOrgPicker(id) {
     if (!id) return;
     limpiarOrgAviso();
-    if (org.modo === 'solo') {
-      org.a = org.a === id ? '' : id;
-      org.b = '';
-    } else if (org.a === id) {
-      org.a = org.b || '';
-      org.b = '';
-    } else if (org.b === id) {
-      org.b = '';
-    } else if (!org.a) {
-      org.a = id;
-    } else if (!org.b) {
-      org.b = id;
-    } else {
-      toast('Ya elegiste a dos vecinos.');
+    const sel = orgSeleccionados();
+    const idx = sel.indexOf(id);
+    if (idx >= 0) {
+      org.sel = sel.filter(function (x) { return x !== id; });
+    } else if (sel.length >= ORG_MAX_VECINOS) {
+      feedbackOrgPickerLimite();
       return;
+    } else {
+      org.sel = sel.concat([id]);
     }
+    syncOrgTipoDesdeSeleccion();
     pintarOrgPicker();
     actualizarOrgPickerHint();
+    actualizarOrgModoEstado();
     refreshTipos();
     refreshOrgHoras();
     actualizarOrgCrearBtn();
@@ -4803,18 +4982,18 @@ function hobbyIconKey(id, texto) {
   function pintarOrgCaras() {
     pintarOrgPicker();
     actualizarOrgPickerHint();
+    actualizarOrgModoEstado();
   }
 
   function resetOrgForm(preset) {
     var p = preset || {};
-    org.modo = p.modo === 'solo' ? 'solo' : 'pareja';
-    org.tipo = org.modo === 'solo' ? 'individual' : '';
-    org.a = p.a || '';
-    org.b = org.modo === 'solo' ? '' : (p.b || '');
+    org.sel = orgIdsDesdePreset(p);
+    org.tipo = '';
     org.lugar = p.lugar || '';
     org.dia = null;
     org.hora = 17;
-    syncOrgModoUi();
+    syncOrgTipoDesdeSeleccion();
+    actualizarOrgModoEstado();
   }
 
   function abrirOrganizarConPreset(preset) {
@@ -4827,26 +5006,8 @@ function hobbyIconKey(id, texto) {
   }
 
   function syncOrgModoUi() {
-    var rowB = $('[data-org-row-b]');
-    if (rowB) rowB.hidden = org.modo === 'solo';
-    $$('[data-org-modo]').forEach(function (btn) {
-      btn.classList.toggle('is-on', btn.getAttribute('data-org-modo') === org.modo);
-    });
     actualizarOrgPickerHint();
-  }
-
-  function setOrgModo(modo) {
-    org.modo = modo === 'solo' ? 'solo' : 'pareja';
-    if (org.modo === 'solo') {
-      org.b = '';
-      org.tipo = 'individual';
-    } else {
-      org.tipo = '';
-      if (org.a && org.b && org.a === org.b) org.b = '';
-    }
-    limpiarOrgAviso();
-    syncOrgModoUi();
-    fillOrganizar();
+    actualizarOrgModoEstado();
   }
   async function refreshOrgHoras() {
     var hora = $('[data-org-hora]');
@@ -4854,7 +5015,7 @@ function hobbyIconKey(id, texto) {
     org.lugar = $('[data-org-lugar]').value;
     org.dia = parseInt($('[data-org-dia]').value, 10);
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
-    var parts = (org.modo === 'solo' ? [org.a] : [org.a, org.b]).filter(Boolean);
+    var parts = orgSeleccionados();
     if (!orgParticipantesListos()) {
       pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
@@ -4873,7 +5034,7 @@ function hobbyIconKey(id, texto) {
       setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
       return;
     }
-    var tipo = org.modo === 'solo' ? 'individual' : (org.tipo || 'conocerse');
+    var tipo = orgModo() === 'solo' ? 'individual' : (org.tipo || 'conocerse');
     try {
       var r = await api('agenda.slots_compatibles', {
         participantes: parts,
@@ -4968,21 +5129,26 @@ function hobbyIconKey(id, texto) {
 
   async function refreshTipos() {
     const box = $('[data-org-tipos]');
-    if (org.modo === 'solo') {
-      if (!org.a) {
+    const sel = orgSeleccionados();
+    if (orgModo() === 'solo') {
+      if (!sel.length) {
         box.innerHTML = '';
         return;
       }
-      const rSolo = await api('encuentro.tipos_permitidos', { participantes: [org.a], modo: 'solo' }, 'GET');
+      const rSolo = await api('encuentro.tipos_permitidos', { participantes: [sel[0]], modo: 'solo' }, 'GET');
       org.tipo = 'individual';
       box.innerHTML = orgTipoHtml('individual', 'Por su cuenta', true);
       return;
     }
-    if (!org.a || !org.b || org.a === org.b) {
+    if (sel.length < 2) {
       box.innerHTML = '';
-        return;
+      return;
     }
-    const r = await api('encuentro.tipos_permitidos', { residente_a: org.a, residente_b: org.b }, 'GET');
+    const r = await api('encuentro.tipos_permitidos', {
+      participantes: sel,
+      residente_a: sel[0],
+      residente_b: sel[1]
+    }, 'GET');
     box.innerHTML = '';
     const ops = r.opciones || [];
     const ids = ops.map(function (op) { return op.id; });
@@ -5032,13 +5198,14 @@ function hobbyIconKey(id, texto) {
       mostrarOrgAviso(val.msg);
       return;
     }
+    const parts = orgSeleccionados();
     const payload = {
-      participantes: org.modo === 'solo' ? [org.a] : [org.a, org.b],
+      participantes: parts,
       dia: org.dia,
       hora: org.hora,
-      tipo: org.modo === 'solo' ? 'individual' : (org.tipo || ''),
+      tipo: orgModo() === 'solo' ? 'individual' : (org.tipo || ''),
       lugar: org.lugar,
-      modo: org.modo
+      modo: orgModo()
     };
     const r = await api('encuentro.proponer', payload);
     if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
@@ -5053,8 +5220,9 @@ function hobbyIconKey(id, texto) {
       });
     } catch (e) {}
     if (r.ok) {
-      var na = nombreDe(org.a);
-      var nb = nombreDe(org.b);
+      var partsUi = orgSeleccionados();
+      var na = nombreDe(partsUi[0]);
+      var nb = nombreDe(partsUi[1] || '');
       var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
       if (r.rechazada) {
         toast(r.mensaje_ui || ('Plan rechazado: ' + na + ' y ' + nb + ' en ' + lugUi + '.'));
@@ -5134,6 +5302,7 @@ function hobbyIconKey(id, texto) {
       renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
     renderBuzon(buzon.mensajes || []);
     renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
+    actualizarCotiBadgesUI();
     renderVecinos();
     if (isDebugOn()) {
       const tm = $('[data-taller-msg]');
@@ -5162,7 +5331,7 @@ function hobbyIconKey(id, texto) {
     cacheBuzon = [];
     vidaCorazonPctPrev = null;
     vidaCorazonReady = false;
-    org = { modo: 'pareja', tipo: '', a: '', b: '', lugar: '', dia: null, hora: 17 };
+    org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17 };
     playtestLogClient.entries = [];
     setCapa('');
     const r = await api('partida.nueva', configNueva(true));
@@ -5389,7 +5558,7 @@ function hobbyIconKey(id, texto) {
     const encTrack = document.querySelector('[data-encursos-track]');
     if (encTrack && !encTrack._ahtEncMovScroll) {
       encTrack._ahtEncMovScroll = true;
-      encTrack.addEventListener('scroll', renderEncursosMovilIndicador, { passive: true });
+      encTrack.addEventListener('scroll', renderEncursosMovilNav, { passive: true });
     }
   })();
   const btnPasarRato = $('[data-pasar-rato]');
@@ -5464,6 +5633,7 @@ function hobbyIconKey(id, texto) {
         cotiFiltroActivo = '';
         const d = cacheDiario || {};
         renderCotilleo(d.cotilleo || { hoy: d.entradas || [], ayer: [], viejos: [] });
+        marcarCotilleoVisto();
       }
       if (name === 'vecinos') { vecTabActiva = 'vecinos'; aplicarVecTabUI(); renderVecinos(); }
       if (name === 'buzon') renderBuzon(cacheBuzon);
@@ -5551,7 +5721,7 @@ function hobbyIconKey(id, texto) {
           var togEl = optWrap.querySelector('[data-temas-toggle]');
           if (togEl) {
             togEl.classList.add('is-elegido');
-            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' ▾';
+            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' \u25be';
             togEl.setAttribute('aria-expanded', 'false');
           }
         }
@@ -5739,7 +5909,7 @@ function hobbyIconKey(id, texto) {
     });
   }
 
-  $('[data-vec-tab]').forEach(function (btn) {
+  $$('[data-vec-tab]').forEach(function (btn) {
     btn.addEventListener('click', function () {
       setVecTab(btn.getAttribute('data-vec-tab') || 'vecinos');
     });
@@ -5793,10 +5963,7 @@ function hobbyIconKey(id, texto) {
     cerrarOrgDds();
   });
   if (orgDia) orgDia.addEventListener('change', function () { refreshOrgHoras(); });
-  $$('[data-org-modo]').forEach(function (btn) {
-    btn.addEventListener('click', function () { setOrgModo(btn.getAttribute('data-org-modo')); });
-  });
-  var finOk = $('[data-tut-fin-ok]');
+var finOk = $('[data-tut-fin-ok]');
   if (finOk) finOk.addEventListener('click', cerrarTutFinale);
   var vidaDerrotaOk = $('[data-vida-derrota-ok]');
   if (vidaDerrotaOk) vidaDerrotaOk.addEventListener('click', function () {

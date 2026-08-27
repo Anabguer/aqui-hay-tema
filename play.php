@@ -53,9 +53,11 @@ if (is_file($ahtBusterFile)) {
   <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -351,7 +353,7 @@ if (is_file($ahtBusterFile)) {
             <span class="es-noche-txt">Es de noche</span>
           </span>
           <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora">
-            <span class="pasar-rato-ico" aria-hidden="true">?</span>
+            <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
             <span class="pasar-rato-txt">Pasar el rato</span>
           </button>
         </div>
@@ -376,10 +378,10 @@ if (is_file($ahtBusterFile)) {
       </button>
       <div class="control-audio" aria-label="Controles de audio">
         <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar mï¿½sica" title="Desactivar mï¿½sica">
-          <span class="control-musica-ico" aria-hidden="true">?</span>
+          <span class="control-musica-ico" aria-hidden="true">&#9834;</span>
         </button>
         <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
-          <span class="control-efectos-ico" aria-hidden="true">?</span>
+          <span class="control-efectos-ico" aria-hidden="true">&#10022;</span>
         </button>
         <button type="button" class="control-inventario" data-open="inventario" aria-label="Abrir inventario" title="Inventario">
           <span class="control-inventario-ico" aria-hidden="true">&#127873;</span>
@@ -409,6 +411,30 @@ if (is_file($ahtBusterFile)) {
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
+        <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+                    <header class="enc-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 class="enc-mov-tit">PLAN EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="enc-mov-shell" data-encursos-shell hidden aria-hidden="true">
+            <button type="button" class="enc-mov-nav-btn enc-mov-nav-prev" data-enc-mov-prev aria-label="Plan anterior" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 7l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="enc-mov-track" data-encursos-track></div>
+            <button type="button" class="enc-mov-nav-btn enc-mov-nav-next" data-enc-mov-next aria-label="Plan siguiente" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </section>
+        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
+                    <header class="pp-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="pp-mov-track" data-proxplanes-track></div>
+        </section>
         <section class="shell-grupo shell-grupo-planes">
           <div class="obj-planes-lateral">
             <div class="obj-proximo obj-proximo-polaroid">
@@ -419,13 +445,6 @@ if (is_file($ahtBusterFile)) {
                 <button type="button" class="obj-curso-btn" data-curso-next aria-label="Siguiente encuentro en curso">&#8250;</button>
               </div>
               <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en curso ahora.</p></div>
-            </div>
-            <div class="obj-planes-prox-block" data-planes-prox-block hidden>
-              <header class="obj-planes-prox-cab">
-                <span class="obj-planes-prox-tit">Pr&oacute;ximos planes</span>
-                <button type="button" class="obj-planes-prox-ver" data-open="agenda">ver todos &#8250;</button>
-              </header>
-              <div class="obj-planes-prox-grid" data-planes-prox-list></div>
             </div>
             <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
@@ -517,8 +536,11 @@ if (is_file($ahtBusterFile)) {
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
         <div class="tut-papel" data-tut-papel>
           <button type="button" class="cerrar tut-skip ds-modal-close" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
+          <div class="tut-papel-cabecera">
           <div class="tut-hero" data-tut-hero hidden></div>
           <h2 class="tut-titulo" data-tut-tit></h2>
+          </div>
+          <div class="tut-papel-cuerpo">
           <p class="tut-intro-line" data-tut-intro-line hidden></p>
           <p class="tut-intro-extra" data-tut-intro-extra hidden></p>
           <div class="tut-caras" data-tut-caras hidden></div>
@@ -526,11 +548,14 @@ if (is_file($ahtBusterFile)) {
           <div class="tut-bloques" data-tut-bloques hidden></div>
           <div class="tut-tareas" data-tut-tareas hidden></div>
           <p class="tut-cierre" data-tut-cierre hidden></p>
-          <div class="tut-pasos" data-tut-pasos></div>
-          <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>Atrï¿½s</button>
+          </div>
+          <div class="tut-papel-pie">
+            <div class="tut-pasos" data-tut-pasos></div>
+            <div class="tut-acciones">
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
+            </div>
         </div>
       </aside>
       <aside class="tut-finale" data-tut-finale hidden aria-live="polite">
@@ -734,13 +759,13 @@ if (is_file($ahtBusterFile)) {
           <p class="vida-latido mini">ï¿½Llegas a 100? ?? Hay latido.<br>Sï¿½, conseguir que este pueblo funcione tiene premio. Increï¿½ble, pero cierto.</p>
         </div>
       </aside>
-      <aside class="capa capa-buzon" aria-label="Mensajitos">
+      <aside class="capa capa-buzon ds-modal-sheet" aria-label="Mensajitos">
         <button type="button" class="cerrar mensajitos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="mensajitos-cab">
-          <div class="mensajitos-cab-row">
-            <span class="mensajitos-icono" aria-hidden="true">&#9993;</span>
-            <h2 class="mensajitos-tit ds-modal-tit ds-modal-tit--pink">Mensajitos</h2>
-            <span class="mensajitos-contador" data-buzon-nuevos-count hidden></span>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <h2 class="ds-modal-tit ds-modal-tit--ink">Mensajitos</h2>
+            </div>
           </div>
           <div class="mensajitos-tabs" role="tablist" aria-label="Filtrar mensajitos">
             <button type="button" class="mensajitos-tab is-on" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
@@ -801,25 +826,18 @@ if (is_file($ahtBusterFile)) {
         <header class="org-top">
           <div class="ds-modal-head">
             <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#10024;</span>
+              <span class="obj-nuevo-plan-ico org-modal-ico" aria-hidden="true">+</span>
               <h2 class="org-tit ds-modal-tit ds-modal-tit--ink">Nuevo plan</h2>
             </div>
           </div>
+          <p class="org-modo-estado" data-org-modo-estado hidden></p>
           <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
-          <section class="ficha-seccion org-seccion org-seccion--modo">
-            <div class="org-seccion-head org-seccion-head--center">
-              <div class="org-modo-chips" data-org-modo-row>
-                <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
-                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompaï¿½ado</button>
-              </div>
-            </div>
-          </section>
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
               <h4 class="ficha-seccion-tit">ï¿½Quiï¿½nes van?</h4>
-              <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
+              <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 3 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
               <div class="org-busca-wrap">
@@ -887,24 +905,6 @@ if (is_file($ahtBusterFile)) {
             <span class="obj-cotilleo-flecha" aria-hidden="true">›</span>
           </button>
         </section>
-        <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
-                    <header class="enc-mov-cab plan-seccion-cab">
-            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
-            <span class="plan-seccion-rule" aria-hidden="true"></span>
-          </header>
-          <div class="enc-mov-track" data-encursos-track></div>
-          <p class="enc-mov-indice" data-encursos-indice hidden aria-hidden="true"></p>
-        </section>
-        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
-                    <header class="pp-mov-cab plan-seccion-cab">
-            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
-            <span class="plan-seccion-rule" aria-hidden="true"></span>
-            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS ›</button>
-          </header>
-          <div class="pp-mov-track" data-proxplanes-track></div>
-        </section>
         <section class="shell-grupo shell-grupo-misiones-par" id="mob-misiones">
           <div class="obj-misiones-papel" aria-label="Misiones de hoy">
             <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
@@ -927,5 +927,6 @@ if (is_file($ahtBusterFile)) {
   <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+<script>if(new URLSearchParams(location.search).get('design')==='1'){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/design-mode-global.js';document.body.appendChild(s)}</script>
 </body>
 </html>
