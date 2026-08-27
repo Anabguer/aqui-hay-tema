@@ -452,6 +452,36 @@ final class PeticionPuebloEngine
     }
 
     /**
+     * Preset para abrir Organizar desde un Mensajito de petición B4 abierta.
+     *
+     * @param array<string, mixed> $peticion
+     * @return array<string, mixed>|null
+     */
+    public static function presetOrganizarParaUi(array $partida, array $peticion): ?array
+    {
+        if (($peticion['estado'] ?? '') !== self::EST_ABIERTA || empty($peticion['schema_b4'])) {
+            return null;
+        }
+        $enc = self::encuentroSinteticoPara($peticion, $partida);
+        $parts = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+        $parts = array_values(array_filter($parts, static fn($id) => is_string($id) && $id !== ''));
+        $preset = [];
+        if (count($parts) >= 2) {
+            $preset['modo'] = 'pareja';
+            $preset['a'] = $parts[0];
+            $preset['b'] = $parts[1];
+        } elseif (count($parts) === 1) {
+            $preset['modo'] = 'solo';
+            $preset['a'] = $parts[0];
+        }
+        $lugar = (string) ($enc['lugar'] ?? '');
+        if ($lugar !== '') {
+            $preset['lugar'] = $lugar;
+        }
+        return $preset !== [] ? $preset : null;
+    }
+
+    /**
      * Copy de pueblo: quién, qué, plazo, estado. Sin peso, recompensa ni jerga.
      *
      * @param array<string, mixed> $peticion

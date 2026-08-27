@@ -48,6 +48,13 @@ final class BuzonHandler
             if (($m['texto'] ?? '') === '' && ($v['texto'] ?? '') !== '') {
                 $m['texto'] = (string) $v['texto'];
             }
+            $pet = $pets[$pid];
+            if (($pet['estado'] ?? '') === PeticionPuebloEngine::EST_ABIERTA && empty($m['selector_opciones'])) {
+                $preset = PeticionPuebloEngine::presetOrganizarParaUi($partida, $pet);
+                if ($preset !== null) {
+                    $m['preset_organizar'] = $preset;
+                }
+            }
         }
         unset($m);
         return [

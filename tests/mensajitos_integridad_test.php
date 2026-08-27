@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 use AquiHayTema\Engine\BuzonEngine;
 use AquiHayTema\Engine\DomainBootstrap;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\PropuestaEncuentro;
 use AquiHayTema\Engine\PropuestaEncuentroEngine;
 use AquiHayTema\Engine\Voluntad\VoluntadEvaluator;
 
@@ -47,9 +48,18 @@ ok($conVacio === BuzonEngine::contarNoLeidos($partida), 'legacy vacío no entra 
 $rechazo = new class implements VoluntadEvaluator {
     public function evaluar(array &$partida, array $propuesta, string $residenteId): array
     {
+        if ($residenteId !== 'per_p002') {
+            return [
+                'decision' => PropuestaEncuentro::DECISION_ACEPTA,
+                'clase' => null,
+                'motivo_tecnico' => 'test_acepta',
+                'copy_id' => null,
+                '_bloqueado_decision' => false,
+            ];
+        }
         return [
-            'decision' => 'rechaza',
-            'clase' => 'voluntad',
+            'decision' => PropuestaEncuentro::DECISION_RECHAZA,
+            'clase' => PropuestaEncuentro::CLASE_VOLUNTAD,
             'motivo_tecnico' => 'test_rechazo',
             'copy_id' => 'lavadora',
             '_bloqueado_decision' => false,

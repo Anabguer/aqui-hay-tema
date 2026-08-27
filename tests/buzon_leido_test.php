@@ -11,6 +11,7 @@ $root = dirname(__DIR__);
 $svc = new PartidaService($root);
 $p = $svc->nuevaPartida('juego_v1', 'buzon_leido_' . time());
 $failures = 0;
+$baseNoLeidos = BuzonEngine::contarNoLeidos($p);
 
 function ok(bool $c, string $m): void
 {
@@ -47,16 +48,19 @@ BuzonEngine::crear($p, [
     'canal' => BuzonEngine::CANAL_COTILLEO,
 ]);
 
-ok(BuzonEngine::contarNoLeidos($p) === 2, 'badge inicial 2 no leídos');
+ok(BuzonEngine::contarNoLeidos($p) === $baseNoLeidos + 2, 'badge +2 no leídos');
 
 $r = BuzonEngine::marcarLeido($p, 'msg_test_a');
 ok($r['ok'] ?? false, 'marcar leido ok');
 ok(!empty($r['mensaje']['leido_en']), 'leido_en persistido');
-ok(BuzonEngine::contarNoLeidos($p) === 1, 'badge 2→1');
+ok(BuzonEngine::contarNoLeidos($p) === $baseNoLeidos + 1, 'badge -1 tras leer uno');
 
 BuzonEngine::marcarLeido($p, 'msg_test_b');
-ok(BuzonEngine::contarNoLeidos($p) === 0, 'badge 1→0');
+ok(BuzonEngine::contarNoLeidos($p) === $baseNoLeidos, 'badge vuelve a base tras leer ambos');
 
+if ($baseNoLeidos > 0) {
+    BuzonEngine::marcarTodosLeidos($p);
+}
 $rTodos = BuzonEngine::marcarTodosLeidos($p);
 ok(($rTodos['marcados'] ?? 0) === 0, 'marcar todos con 0 pendientes no marca nada');
 

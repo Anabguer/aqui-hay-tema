@@ -1109,7 +1109,10 @@ final class PropuestaEncuentroEngine
             );
             $propuesta['reacciones'][$i]['rechazo_tipo'] = CopyRechazoPropuesta::tipoDeClase((string) ($reac['clase'] ?? ''));
             $propuesta['reacciones'][$i]['rechazo_familia'] = $familia;
-            $propuesta['reacciones'][$i]['copy_id'] = $familia;
+            $copyVol = (string) ($reac['copy_id'] ?? '');
+            if ($copyVol === '' || !isset(CopyVoluntad::TEXTOS[$copyVol])) {
+                $propuesta['reacciones'][$i]['copy_id'] = $familia;
+            }
         }
         $contrap = null;
         if ($clase === PropuestaEncuentro::CLASE_INDISPONIBILIDAD

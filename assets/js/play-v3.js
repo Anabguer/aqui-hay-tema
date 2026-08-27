@@ -962,14 +962,33 @@
   }
 
 
-  function mensajitoRequiereAccion(m) {
+  function mensajitoTieneAccionReal(m) {
     if (!m || typeof m !== 'object') return false;
     if (m.requiere_decision === true) return true;
     if (Array.isArray(m.acciones_ui) && m.acciones_ui.length > 0) return true;
-    if (Array.isArray(m.selector_opciones) && m.selector_opciones.length && m.selector_estado === 'pendiente') return true;
-    if (m.tipo === 'candidato_llegada' && (m.estado || '') === 'pendiente') return true;
-    if ((m.clasificacion || '') === 'peticion' && m.peticion_id && (m.estado || '') === 'pendiente') return true;
+    if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
+        m.selector_estado === 'pendiente' &&
+        (m.estado_pueblo || 'pendiente') === 'pendiente' &&
+        (m.estado || '') === 'pendiente') return true;
+    if (m.tipo === 'candidato_llegada' &&
+        (m.estado || '') === 'pendiente' &&
+        (m.estado_decision || '') !== 'resuelto') return true;
+    if (m.preset_organizar && typeof m.preset_organizar === 'object' &&
+        (m.estado_pueblo || 'pendiente') === 'pendiente' &&
+        (m.estado || '') === 'pendiente') return true;
     return false;
+  }
+
+  function mensajitoDestinoFicha(m) {
+    if (!m || typeof m !== 'object') return false;
+    const soloLectura = ['respuesta_plan', 'peticion_resultado', 'marcha_publica'];
+    if (soloLectura.indexOf(String(m.tipo || '')) >= 0) return false;
+    const rid = remitenteIdDe(m);
+    return rid && !m.candidato_catalog_id;
+  }
+
+  function mensajitoRequiereAccion(m) {
+    return mensajitoTieneAccionReal(m);
   }
 
   async function marcarMensajitoLeido(m) {
@@ -4391,7 +4410,11 @@ function hobbyIconKey(id, texto) {
       let accionesHtml = '';
       if (accionesDecision) {
         accionesHtml = accionesDecision;
-      } else {
+      } else if (m.preset_organizar && (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
+        accionesHtml = '<div class="acciones-msg">' +
+          '<button type="button" class="carta-cta carta-cta--abrir" data-carta-organizar="1">Organizar</button>' +
+          '</div>';
+      } else if (mensajitoDestinoFicha(m)) {
         const ctaLabel = leido ? 'Ver' : 'Abrir';
         const ctaClass = leido ? 'carta-cta carta-cta--ver' : 'carta-cta carta-cta--abrir';
         accionesHtml = '<div class="acciones-msg">' +
@@ -4420,12 +4443,25 @@ function hobbyIconKey(id, texto) {
           if (!mensajitoEstaLeido(m)) {
             await marcarMensajitoLeido(m);
           } else {
-            const actores = (m && m.actores && m.actores.length) ? m.actores : [];
-            const rid = actores[0] || m.de || m.residente_id || '';
+            const rid = remitenteIdDe(m);
             if (rid) await abrirFicha(rid);
           }
           await refresh();
         });
+      });
+      art.querySelectorAll('[data-carta-organizar]').forEach(function (btn) {
+        btn.addEventListener('click', async function (ev) {
+          ev.stopPropagation();
+          if (!mensajitoEstaLeido(m)) await marcarMensajitoLeido(m);
+          abrirOrganizarConPreset(m.preset_organizar);
+        });
+      });
+      art.addEventListener('click', async function (ev) {
+        if (ev.target.closest('button') || ev.target.closest('.msg-leido-toggle')) return;
+        if (!mensajitoEstaLeido(m) && !mensajitoTieneAccionReal(m) && !mensajitoDestinoFicha(m)) {
+          await marcarMensajitoLeido(m);
+          await refresh();
+        }
       });
       wireAccionesMensajito(art, m);
       return art;

@@ -170,7 +170,7 @@ final class CopyRechazoPropuesta
      */
     public static function mensajeRechazo(array $partida, array $propuesta, ?array $contrapropuesta = null): string
     {
-        $hablante = self::hablanteRechazo($propuesta);
+        $hablante = self::hablanteRechazo($partida, $propuesta);
         $nombre = (string) ($hablante['nombre'] ?? 'Alguien');
         $reac = is_array($hablante['reaccion'] ?? null) ? $hablante['reaccion'] : [];
         $reac['propuesta_ctx'] = [
@@ -178,7 +178,7 @@ final class CopyRechazoPropuesta
             'hora' => $propuesta['hora'] ?? null,
         ];
         $seed = (string) ($propuesta['id'] ?? '') . ':' . ($reac['residente_id'] ?? '');
-        $frase = self::linea($partida, $reac, $seed);
+        $frase = self::fraseRechazoDeReaccion($partida, $reac, $seed);
         $msg = $nombre . ' ha rechazado la propuesta: "' . $frase . '."';
         if ($contrapropuesta !== null && !empty($contrapropuesta['texto'])) {
             $msg .= ' ' . (string) $contrapropuesta['texto'];
@@ -187,32 +187,78 @@ final class CopyRechazoPropuesta
     }
 
     /**
+     * Copy de Mensajito cuando un participante rechaza pero el otro habría aceptado.
+     *
+     * @param array<string, mixed> $hablante Reacción canónica del rechazador
+     */
+    public static function fraseCausaHumana(array $partida, array $hablante, string $otroId): string
+    {
+        unset($otroId);
+        $rid = (string) ($hablante['residente_id'] ?? '');
+        $nombre = $rid !== ''
+            ? IdentidadPublica::nombre($partida, $rid)
+            : (string) ($hablante['nombre'] ?? '');
+        if ($nombre === '') {
+            return '';
+        }
+        $copyId = (string) ($hablante['copy_id'] ?? '');
+        if ($copyId !== '' && isset(CopyVoluntad::TEXTOS[$copyId])) {
+            return trim($nombre . ' ' . CopyVoluntad::texto($copyId));
+        }
+        $reac = $hablante;
+        $reac['propuesta_ctx'] = is_array($hablante['propuesta_ctx'] ?? null) ? $hablante['propuesta_ctx'] : [];
+        $frase = self::fraseRechazoDeReaccion($partida, $reac, $rid . ':buzon');
+        return trim($nombre . ' ' . $frase . '.');
+    }
+
+    /**
+     * @param array<string, mixed> $propuesta
+     */
+    public static function lineaOtroDispuesto(array $partida, array $propuesta, string $seedPrefix = ''): string
+    {
+        unset($seedPrefix);
+        $canon = PropuestaEncuentroEngine::rechazoCanonico($propuesta);
+        $otro = $canon['habria_aceptado'];
+        if (!is_array($otro)) {
+            return '';
+        }
+        $otroId = (string) ($otro['residente_id'] ?? '');
+        if ($otroId === '') {
+            return '';
+        }
+        $nombre = IdentidadPublica::nombre($partida, $otroId);
+        if ($nombre === '') {
+            return '';
+        }
+        return 'Pero a ' . $nombre . ' le habría venido bien.';
+    }
+
+    /**
+     * @param array<string, mixed> $reac
+     */
+    private static function fraseRechazoDeReaccion(array $partida, array $reac, string $seed): string
+    {
+        $copyId = (string) ($reac['copy_id'] ?? '');
+        if ($copyId !== '' && isset(CopyVoluntad::TEXTOS[$copyId])) {
+            return rtrim(CopyVoluntad::texto($copyId), '.');
+        }
+        return self::linea($partida, $reac, $seed);
+    }
+
+    /**
      * @param array<string, mixed> $propuesta
      * @return array{nombre: string, reaccion: array<string, mixed>|null}
      */
-    private static function hablanteRechazo(array $propuesta): array
+    private static function hablanteRechazo(array $partida, array $propuesta): array
     {
-        $ids = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
-        $preferido = (string) ($ids[1] ?? '');
-        $elegido = null;
-        foreach ($propuesta['reacciones'] ?? [] as $reac) {
-            if (!is_array($reac) || ($reac['decision'] ?? '') !== PropuestaEncuentro::DECISION_RECHAZA) {
-                continue;
-            }
-            if ($elegido === null) {
-                $elegido = $reac;
-            }
-            if ($preferido !== '' && (string) ($reac['residente_id'] ?? '') === $preferido) {
-                $elegido = $reac;
-                break;
-            }
-        }
-        if ($elegido === null) {
+        $hablante = PropuestaEncuentroEngine::rechazoCanonico($propuesta)['hablante'];
+        if (!is_array($hablante)) {
             return ['nombre' => '', 'reaccion' => null];
         }
+        $rid = (string) ($hablante['residente_id'] ?? '');
         return [
-            'nombre' => (string) ($elegido['nombre'] ?? ''),
-            'reaccion' => $elegido,
+            'nombre' => $rid !== '' ? IdentidadPublica::nombre($partida, $rid) : (string) ($hablante['nombre'] ?? ''),
+            'reaccion' => $hablante,
         ];
     }
 
