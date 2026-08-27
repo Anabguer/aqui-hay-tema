@@ -25,6 +25,7 @@ function httpGet(string $url): array
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_TIMEOUT => 30,
         CURLOPT_HEADER => true,
+        CURLOPT_SSL_VERIFYPEER => false,
     ]);
     $raw = (string) curl_exec($ch);
     $status = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
