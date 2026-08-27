@@ -1157,3 +1157,123 @@ body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro .tut-pape
     line-height: 1.15 !important;
   }
 }
+
+
+/* TUTORIAL-LEGIBILIDAD-v6: tipografia legible en los pasos del Manual
+   Solo font-size/line-height. Marco fijo TUTORIAL-ESTABLE-v5 intacto. */
+
+.play-v3 .tut-intro .tut-intro-line,
+.play-v3 .tut-intro .tut-intro-extra,
+.play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-line,
+.play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-extra,
+.play-v3 .tut-intro .tut-paso-1 .tut-intro-line,
+.play-v3 .tut-intro .tut-paso-1 .tut-intro-extra {
+  font-size: clamp(1.18rem, 3.9vw, 1.32rem) !important;
+  line-height: 1.4 !important;
+}
+
+.play-v3 .tut-intro .tut-bloques-pref {
+  font-size: 1.16rem !important;
+  line-height: 1.38 !important;
+}
+
+.play-v3 .tut-intro .tut-bloque-tit,
+.play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-tit,
+.play-v3 .tut-intro .tut-paso-3 .tut-bloque-tit {
+  font-size: 1.18rem !important;
+  line-height: 1.3 !important;
+}
+
+.play-v3 .tut-intro .tut-bloque-txt,
+.play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-txt,
+.play-v3 .tut-intro .tut-paso-3 .tut-bloque-txt {
+  font-size: 1.14rem !important;
+  line-height: 1.36 !important;
+}
+
+.play-v3 .tut-intro .tut-bloques.is-inline .tut-bloque-txt {
+  font-size: 1.1rem !important;
+  line-height: 1.34 !important;
+}
+
+.play-v3 .tut-intro .tut-cierre,
+.play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-cierre {
+  font-size: 1.16rem !important;
+  line-height: 1.38 !important;
+}
+
+.play-v3 .tut-intro .tut-cara-nombre,
+.play-v3 .tut-intro .tut-cara-nombre-txt {
+  font-size: 1.08rem !important;
+  line-height: 1.3 !important;
+}
+
+.play-v3 .tut-intro .tut-papel .libreta-kicker {
+  font-size: 0.78rem !important;
+  line-height: 1.15 !important;
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .play-v3 .tut-intro .tut-intro-line,
+  .play-v3 .tut-intro .tut-intro-extra,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-line,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-extra {
+    font-size: 1.28rem !important;
+    line-height: 1.42 !important;
+  }
+  .play-v3 .tut-intro .tut-bloques-pref { font-size: 1.22rem !important; }
+  .play-v3 .tut-intro .tut-bloque-tit,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-tit,
+  .play-v3 .tut-intro .tut-paso-3 .tut-bloque-tit { font-size: 1.24rem !important; }
+  .play-v3 .tut-intro .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-paso-3 .tut-bloque-txt { font-size: 1.2rem !important; }
+  .play-v3 .tut-intro .tut-bloques.is-inline .tut-bloque-txt { font-size: 1.16rem !important; }
+  .play-v3 .tut-intro .tut-cierre,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-cierre { font-size: 1.22rem !important; }
+  .play-v3 .tut-intro .tut-cara-nombre,
+  .play-v3 .tut-intro .tut-cara-nombre-txt { font-size: 1.14rem !important; }
+}
+
+@media (min-width: 769px) {
+  .play-v3 .tut-intro .tut-intro-line,
+  .play-v3 .tut-intro .tut-intro-extra,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-line,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-intro-extra {
+    font-size: 1.4rem !important;
+    line-height: 1.44 !important;
+  }
+  .play-v3 .tut-intro .tut-bloques-pref {
+    font-size: 1.3rem !important;
+    line-height: 1.4 !important;
+  }
+  .play-v3 .tut-intro .tut-bloque-tit,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-tit,
+  .play-v3 .tut-intro .tut-paso-3 .tut-bloque-tit {
+    font-size: 1.3rem !important;
+    line-height: 1.32 !important;
+  }
+  .play-v3 .tut-intro .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-paso-3 .tut-bloque-txt {
+    font-size: 1.26rem !important;
+    line-height: 1.4 !important;
+  }
+  .play-v3 .tut-intro .tut-bloques.is-inline .tut-bloque-txt {
+    font-size: 1.22rem !important;
+    line-height: 1.38 !important;
+  }
+  .play-v3 .tut-intro .tut-cierre,
+  .play-v3 .tut-intro .tut-papel.tut-paso-1 .tut-cierre {
+    font-size: 1.28rem !important;
+    line-height: 1.42 !important;
+  }
+  .play-v3 .tut-intro .tut-cara-nombre,
+  .play-v3 .tut-intro .tut-cara-nombre-txt {
+    font-size: 1.18rem !important;
+    line-height: 1.32 !important;
+  }
+  .play-v3 .tut-intro .tut-papel .libreta-kicker {
+    font-size: 0.86rem !important;
+  }
+}
