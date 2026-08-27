@@ -22,7 +22,7 @@ ok(/enc-mov-faces[\s\S]{0,80}gap:\s*12px/.test(v15), 'v15 avatares separados');
 ok(/enc-mov-tipo-ico/.test(v15), 'v15 icono tipo');
 ok(/min-width:\s*769px[\s\S]{0,400}enc-mov-cta-ico/.test(v15), 'v15 desktop oculta ojo');
 
-ok(js.includes('function familiaTipoEncuentro'), 'js familia tipo');
+ok(js.includes('function orgTipoIdDesdeEnc'), 'js familia tipo');
 ok(js.includes('function iconoEncuentroCentroHtml'), 'js icono centro');
 ok(!js.includes('enc-mov-heart" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21'), 'js sin corazon fijo');
 ok(js.includes('htmlEncursoCardDesktop'), 'js desktop card');

@@ -1487,3 +1487,75 @@
     height: 0 !important;
   }
 }
+
+/* === INICIO-ENCURSO-NAV-v16: flechas carrusel + iconos canónicos (solo móvil) === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-indice,
+  .play-v3:has(.game-shell) .encursos-movil [data-encursos-indice] {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-shell {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-shell .enc-mov-track {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nav-btn {
+    flex: 0 0 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.28) !important;
+    border-radius: 999px !important;
+    background: rgba(255, 253, 249, 0.92) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    color: var(--ds-ink, #3b3028) !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nav-btn[hidden] {
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nav-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nav-btn:active {
+    transform: scale(0.96) !important;
+    background: #fff5f0 !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico.org-tipo-ico {
+    font-size: 0.8125rem !important;
+    line-height: 1 !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico.mision-strip-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-tipo-ico.mision-strip-ico .mision-ico-svg {
+    width: 18px !important;
+    height: 16px !important;
+    display: block !important;
+  }
+}
