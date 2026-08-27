@@ -1,0 +1,33 @@
+{
+  "name": "Aquí Hay Tema",
+  "short_name": "AHT",
+  "description": "Gestiona vínculos y convivencia en un pueblo entero. Celestine eres tú.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "play.php",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "theme_color": "#2a2218",
+  "background_color": "#f7f1e8",
+  "icons": [
+    {
+      "src": "assets/brand/favicon-aht.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/favicon-aht.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/brand/favicon-aht.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

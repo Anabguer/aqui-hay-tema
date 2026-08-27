@@ -17,9 +17,15 @@ if (is_file($ahtBusterFile)) {
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="theme-color" content="#2a2218"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="Aquí Hay Tema"/>
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
-  <link rel="icon" href="favicon.png" type="image/png" sizes="512x512"/>
+  <link rel="manifest" href="manifest.webmanifest?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="icon" href="assets/brand/favicon-aht.png" type="image/png" sizes="512x512"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -1074,6 +1080,14 @@ if (is_file($ahtBusterFile)) {
   <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>', { scope: './' })
+        .catch(function () { /* PWA opcional: el juego sigue en navegador */ });
+    });
+  }
+  </script>
 <script>if(/^(mobile|desktop)$/.test(new URLSearchParams(location.search).get('design')||'')){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/inicio-design-mode.js';document.body.appendChild(s)}</script>
 </body>
 </html>
