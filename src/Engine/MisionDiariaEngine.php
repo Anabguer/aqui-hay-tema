@@ -94,7 +94,7 @@ final class MisionDiariaEngine
             && self::cumplidasNormalesDelDia($partida, $diaCerrado) === 0
             && FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)
         ) {
-            $delta = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -3);
+            $delta = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -2);
             if ($delta < 0) {
                 VidaPuebloEngine::aplicar($partida, $delta, [
                     'causa' => VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO,

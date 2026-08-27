@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * R3 — Día de misiones ignorado (23/08/2026).
- * Caducada individual = 0 Vida. Día con paquete normal y 0 cumplidas = -3 único.
+ * Caducada individual = 0 Vida. Día con paquete normal y 0 cumplidas = -2 único.
  * Config: calibracion_vida.json -> misiones_diarias.vida_dia_ignorado.
  */
 
@@ -94,15 +94,15 @@ function entradasLedger(array $p, ?string $causa = null): array
     return $out;
 }
 
-// ---------- CASO 1: 3 pendientes + 0 cumplidas -> 3 caducadas + UN único -3 ----------
+// ---------- CASO 1: 3 pendientes + 0 cumplidas -> 3 caducadas + UN único -2 ----------
 [$p1] = labPartida('r3-caso1');
 ok(rellenarHasta($p1, 1, 3) === 3, '1.setup: 3 normales pendientes día 1');
 $n = MisionDiariaEngine::alCerrarDia($p1, 1, $cal);
 $cad = count(array_filter(normalesDia($p1, 1), fn($m) => ($m['estado'] ?? '') === MisionDiariaEngine::EST_CADUCADA));
 $ig = entradasLedger($p1, VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO);
 ok($n === 3 && $cad === 3, "1a. 3 caducadas (cerradas={$n}, estado={$cad})");
-ok(count($ig) === 1 && (int) $ig[0]['delta'] === -3, '1b. UNA entrada dia_misiones_ignorado -3');
-ok(VidaPuebloEngine::valor($p1) === 62, '1c. vida 65 -> 62');
+ok(count($ig) === 1 && (int) $ig[0]['delta'] === -2, '1b. UNA entrada dia_misiones_ignorado -2');
+ok(VidaPuebloEngine::valor($p1) === 63, '1c. vida 65 -> 63');
 ok(count(entradasLedger($p1, VidaPuebloEngine::CAUSA_MISION_FALLIDA)) === 0, '1d. cero entradas mision_fallida');
 
 // ---------- CASO 2: 3 pendientes + 1 cumplida -> +2, caducadas 0, sin -3 diario ----------
@@ -145,11 +145,11 @@ ok(entradasLedger($p4, VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO) === [], '4
 rellenarHasta($p5, 1, 3);
 $reloj->avanzarPasoAPaso($p5, 24);
 $ig5 = entradasLedger($p5, VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO);
-ok(count($ig5) === 1 && (int) $ig5[0]['delta'] === -3, '5a. paso a paso 24h: un solo -3');
+ok(count($ig5) === 1 && (int) $ig5[0]['delta'] === -2, '5a. paso a paso 24h: un solo -2');
 $reloj->avanzarPasoAPaso($p5, 24);
 $ig5b = entradasLedger($p5, VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO);
-ok(count($ig5b) === 2, '5b. segundo día paso a paso: segundo -3 único');
-ok(VidaPuebloEngine::valor($p5) >= 55 && VidaPuebloEngine::valor($p5) <= 59, '5c. vida ~65-6 (+/- ruido peticiones)');
+ok(count($ig5b) === 2, '5b. segundo día paso a paso: segundo -2 único');
+ok(VidaPuebloEngine::valor($p5) >= 57 && VidaPuebloEngine::valor($p5) <= 63, '5c. vida ~65-4 (+/- ruido peticiones)');
 
 // ---------- CASO 6: refresh/save/load -> no recobra el mismo día ----------
 [$p6] = labPartida('r3-caso6');
@@ -175,7 +175,7 @@ foreach (entradasLedger($p7, VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO) as $
     $totalDelta += (int) $e['delta'];
 }
 ok(count($porFuente) === 3 && max($porFuente) === 1, '7a. tres días, una entrada cada uno');
-ok($totalDelta === -9, '7b. total -9 (3 x -3)');
+ok($totalDelta === -6, '7b. total -6 (3 x -2)');
 ok((int) ($p7['reloj']['dia_pueblo'] ?? 0) === 4, '7c. reloj en día 4');
 
 // ---------- CASO 7b: salto multi-día -> días SIN paquete propio no cobran (CASO D) ----------

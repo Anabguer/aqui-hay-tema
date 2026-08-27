@@ -40,7 +40,7 @@ final class SimuladorCatchUpOffline
         return [
             '_provisional' => true,
             '_nota' => 'Catch-up REAL: misiones caducan, vida_dia_ignorado por día. Sin aplicarAusencia.',
-            'vida_dia_ignorado' => (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -3),
+            'vida_dia_ignorado' => (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -2),
             'catch_up_cfg' => CatchUpEngine::cfg($cal),
             'tabla' => $tabla,
             'cumple_intencion' => self::evaluarIntencion($tabla, $cal),
@@ -120,7 +120,7 @@ final class SimuladorCatchUpOffline
      */
     private static function evaluarIntencion(array $tabla, array $cal): array
     {
-        $vidaIgn = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -3);
+        $vidaIgn = (int) CalibracionConfig::get($cal, 'misiones_diarias.vida_dia_ignorado', -2);
         $obs = [];
         $parametro = 'misiones_diarias.vida_dia_ignorado (actual ' . $vidaIgn . ')';
 

@@ -495,7 +495,7 @@
         "social_floja_max": 12,
         "vida_cumplida": 1,
         "vida_caducada": 0,
-        "vida_dia_ignorado": -3,
+        "vida_dia_ignorado": -2,
         "latido_slots_por_dia": 1
     },
     "peticiones_pueblo": {

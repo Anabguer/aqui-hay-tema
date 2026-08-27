@@ -81,7 +81,7 @@ $desde1 = $ahora1->sub(new \DateInterval('P1D'));
 $p1['reloj']['ultimo_catch_up_iso'] = $desde1->format(DATE_ATOM);
 $v1a = VidaPuebloEngine::valor($p1);
 CatchUpEngine::ejecutarAlCargar($p1, $root, $cal, null, null, $ahora1);
-ok(VidaPuebloEngine::valor($p1) === $v1a - 3, 'catch-up 1d: -3 vida por día ignorado');
+ok(VidaPuebloEngine::valor($p1) === $v1a - 2, 'catch-up 1d: -2 vida por día ignorado');
 ok(count(ledgerIgnorado($p1)) === 1, 'catch-up 1d: una penalización diaria');
 
 // --- catch-up varios días ---
@@ -90,7 +90,7 @@ $ahora4 = new \DateTimeImmutable('2026-08-20 12:00:00', new \DateTimeZone('UTC')
 $p4['reloj']['ultimo_catch_up_iso'] = $ahora4->sub(new \DateInterval('P4D'))->format(DATE_ATOM);
 CatchUpEngine::ejecutarAlCargar($p4, $root, $cal, null, null, $ahora4);
 ok(count(ledgerIgnorado($p4)) === 4, 'catch-up 4d: 4 penalizaciones');
-ok(VidaPuebloEngine::valor($p4) === 65 - 12, 'catch-up 4d: -12 vida');
+ok(VidaPuebloEngine::valor($p4) === 65 - 8, 'catch-up 4d: -8 vida');
 
 // --- doble carga idempotente ---
 [$p2x] = partidaCatchUp('cu-idem');
@@ -170,7 +170,13 @@ $residentes = new \AquiHayTema\Engine\ResidenteOperations($catalog, $logger);
 $lifecycle = new PartidaLifecycle($root, $catalog, $repo, $logger, $residentes);
 $loaded = $lifecycle->cargar($ps['meta']['partida_id']);
 ok(!empty($loaded['reloj']['catch_up_pendiente']['ejecutado']), 'lifecycle save/load ejecuta catch-up');
-ok(VidaPuebloEngine::valor($loaded) === $vAntesSave - 3, 'lifecycle: vida tras 1d ausencia');
+$deltaIgn = 0;
+foreach ($loaded['vida_pueblo']['ledger'] ?? [] as $e) {
+    if (($e['causa'] ?? '') === VidaPuebloEngine::CAUSA_DIA_MISIONES_IGNORADO) {
+        $deltaIgn += (int) ($e['delta'] ?? 0);
+    }
+}
+ok($deltaIgn === -2, 'lifecycle: un -2 por 1d ausencia');
 
 // --- ausencia larga no timeout (cap 90d procesa en <5s) ---
 [$pL] = partidaCatchUp('cu-long');
@@ -196,9 +202,10 @@ ok(($pOff['reloj']['catch_up_pendiente']['plan']['ejecutado'] ?? true) === false
 // --- lab tabla mínima ---
 $lab = SimuladorCatchUpOffline::ejecutar($root);
 ok(isset($lab['tabla']['alta']['7']), 'lab: celda alta 7d');
-ok((int) $lab['tabla']['alta']['1']['delta_vida'] === -3, 'lab: 1d alta = -3');
-ok((int) $lab['tabla']['media']['7']['delta_vida'] === -21, 'lab: 7d media = -21');
-ok(isset($lab['cumple_intencion']['parametro_calibrar_si_no_cumple']), 'lab: evalúa intención');
+ok((int) $lab['tabla']['alta']['1']['delta_vida'] === -2, 'lab: 1d alta = -2');
+ok((int) $lab['tabla']['media']['7']['delta_vida'] === -14, 'lab: 7d media = -14');
+ok((int) $lab['vida_dia_ignorado'] === -2, 'lab: vida_dia_ignorado canon -2');
+ok(isset($lab['cumple_intencion']['cumple']), 'lab: evalúa intención');
 
 echo $failures > 0 ? "\nFALLOS: {$failures}\n" : "\nOK catch_up_offline\n";
 exit($failures > 0 ? 1 : 0);

@@ -27,7 +27,8 @@
         "debug_tools_enabled": false,
         "vida_pueblo_enabled": true,
         "misiones_diarias_enabled": true,
-        "peticiones_pueblo_enabled": true
+        "peticiones_pueblo_enabled": true,
+        "offline_events_enabled": true
     },
     "tutorial_objetivo_residentes": 8,
     "poblacion_v3": {
