@@ -20,6 +20,9 @@ final class PropuestaEncuentroEngine
     /** Marcador B4: acepta porque el ES el plan que pidió por Mensajitos. */
     public const MARCA_COMPROMISO_PETICION = 'compromiso_peticion_propia';
 
+    /** M1 tutorial: aceptación pedagógica determinista (solo mientras M1 pendiente). */
+    public const MARCA_COMPROMISO_TUTORIAL_M1 = 'compromiso_tutorial_m1';
+
     public static function listar(array $partida): array
     {
         return $partida['propuestas_encuentro'] ?? [];
@@ -74,8 +77,10 @@ final class PropuestaEncuentroEngine
         }
         $tipo = PropuestaNivel::aliasTipo($tipo);
         $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
+        $pedagogicaM1 = TutorialPrimerosPasos::esPropuestaPedagogicaM1($partida, $participantes, $tipo);
         if (count($participantes) >= 2
             && $tipo !== 'individual'
+            && !$pedagogicaM1
             && !PropuestaNivel::permite($partida, (string) $participantes[0], (string) $participantes[1], $tipo, $calDef)
         ) {
             $motivo = OrganizarMotivo::de(
@@ -97,7 +102,7 @@ final class PropuestaEncuentroEngine
             }
             return $r;
         }
-        if (count($participantes) >= 1 && $tipo !== 'individual') {
+        if (!$pedagogicaM1 && count($participantes) >= 1 && $tipo !== 'individual') {
             foreach ($participantes as $rid) {
                 $otro = self::otroParticipante($participantes, (string) $rid);
                 if ($otro === '') {
@@ -240,6 +245,10 @@ final class PropuestaEncuentroEngine
                 (string) ($origenPet['peticion']['residente_id'] ?? ''),
                 (string) ($origenPet['peticion']['id'] ?? '')
             );
+        }
+
+        if ($pedagogicaM1) {
+            TutorialPrimerosPasos::aplicarGarantiaPedagogicaM1($partida, $propuesta);
         }
 
         self::aplicarResolucionPlan($partida, $propuesta, $calDef);
@@ -672,7 +681,7 @@ final class PropuestaEncuentroEngine
             if (empty($r['_joint_plan'])) {
                 continue;
             }
-            if (self::esCompromisoPeticionReaccion($r)) {
+            if (self::esReaccionCompromisoExenta($r)) {
                 continue;
             }
             if (($r['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
@@ -815,6 +824,19 @@ final class PropuestaEncuentroEngine
         }
         $f = is_array($reac['factores'] ?? null) ? $reac['factores'] : [];
         return !empty($f['compromiso_peticion']);
+    }
+
+    /** @param array<string, mixed> $reac */
+    private static function esReaccionCompromisoExenta(array $reac): bool
+    {
+        if (self::esCompromisoPeticionReaccion($reac)) {
+            return true;
+        }
+        if (($reac['motivo_tecnico'] ?? '') === self::MARCA_COMPROMISO_TUTORIAL_M1) {
+            return true;
+        }
+        $f = is_array($reac['factores'] ?? null) ? $reac['factores'] : [];
+        return !empty($f['compromiso_tutorial_m1']);
     }
 
     /**

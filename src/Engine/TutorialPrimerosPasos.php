@@ -208,6 +208,76 @@ final class TutorialPrimerosPasos
     }
 
     /**
+     * Propuesta pedagógica M1: pareja tutorial + presentar mientras M1 siga pendiente.
+     *
+     * @param list<string> $participantes
+     */
+    public static function esPropuestaPedagogicaM1(array $partida, array $participantes, string $tipo): bool
+    {
+        if (!self::activo($partida) || !empty($partida['tutorial']['jugable_completado'])) {
+            return false;
+        }
+        if (self::estadoMision($partida, self::M1) !== MisionDiariaEngine::EST_PENDIENTE) {
+            return false;
+        }
+        if (PropuestaNivel::aliasTipo($tipo) !== PropuestaNivel::PRESENTAR) {
+            return false;
+        }
+        $crudos = [];
+        foreach ($participantes as $rid) {
+            if (is_string($rid) && $rid !== '') {
+                $crudos[] = $rid;
+            }
+        }
+        $crudos = array_values(array_unique($crudos));
+        if (count($crudos) !== 2) {
+            return false;
+        }
+        return self::bloqueaAutonomiaSobreParejaMision1($partida, $crudos[0], $crudos[1]);
+    }
+
+    /**
+     * Garantía focal del primer plan M1: aceptación determinista sin rechazo/cooldown/memoria
+     * de voluntad. Solo indisponibilidad real de agenda se respeta.
+     *
+     * @param array<string, mixed> $propuesta
+     */
+    public static function aplicarGarantiaPedagogicaM1(array &$partida, array &$propuesta): void
+    {
+        $parts = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+        if (!self::esPropuestaPedagogicaM1($partida, $parts, (string) ($propuesta['tipo'] ?? ''))) {
+            return;
+        }
+        $marca = PropuestaEncuentroEngine::MARCA_COMPROMISO_TUTORIAL_M1;
+        foreach ($propuesta['reacciones'] as $i => $reac) {
+            if (!is_array($reac)) {
+                continue;
+            }
+            if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
+                && ($reac['clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+            ) {
+                continue;
+            }
+            $pAntes = $reac['p'] ?? null;
+            $propuesta['reacciones'][$i]['decision'] = PropuestaEncuentro::DECISION_ACEPTA;
+            $propuesta['reacciones'][$i]['clase'] = null;
+            $propuesta['reacciones'][$i]['motivo_tecnico'] = $marca;
+            $propuesta['reacciones'][$i]['motivo_tipo'] = null;
+            $propuesta['reacciones'][$i]['copy_id'] = null;
+            $propuesta['reacciones'][$i]['_bloqueado_decision'] = false;
+            if (!isset($propuesta['reacciones'][$i]['factores']) || !is_array($propuesta['reacciones'][$i]['factores'])) {
+                $propuesta['reacciones'][$i]['factores'] = [];
+            }
+            if ($pAntes !== null) {
+                $propuesta['reacciones'][$i]['factores']['p_sin_garantia_tutorial_m1'] = $pAntes;
+            }
+            $propuesta['reacciones'][$i]['factores']['compromiso_tutorial_m1'] = self::M1;
+            unset($propuesta['reacciones'][$i]['_joint_plan']);
+        }
+        $propuesta['garantia_tutorial_m1'] = true;
+    }
+
+    /**
      * @param array<string, mixed> $partida
      */
     public static function alProponer(array &$partida, array &$respuestaApi, Catalog $catalog): void

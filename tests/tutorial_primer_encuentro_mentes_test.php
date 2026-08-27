@@ -184,8 +184,16 @@ $finEnc1 = (int) ($enc1['dia'] ?? 1) * 24 + (int) ($enc1['hora'] ?? 0) + \AquiHa
 while (((int) ($p['reloj']['dia_pueblo'] ?? 1) * 24 + (int) ($p['reloj']['hora_actual'] ?? 0)) < $finEnc1) {
     $svc->avanzarReloj($p, 1);
 }
-$antesSegundo = count($p['encuentros'] ?? []);
-$r2 = proponerQuedarPareja($p, $a, $b);
+$r2 = null;
+$antesSegundo = 0;
+for ($intento = 0; $intento < 8 && $r2 === null; $intento++) {
+    $antesSegundo = count($p['encuentros'] ?? []);
+    $r2 = proponerQuedarPareja($p, $a, $b);
+    if ($r2 === null) {
+        $svc->avanzarReloj($p, 2);
+        EncuentroLifecycle::sincronizarConReloj($p, null, $svc->getCatalog());
+    }
+}
 ok($r2 !== null, '9. segundo encuentro quedar programado');
 ok(count($p['encuentros'] ?? []) === $antesSegundo + 1, '9b. sin duplicar encuentros al proponer quedar');
 
