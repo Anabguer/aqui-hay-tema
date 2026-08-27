@@ -256,6 +256,38 @@ final class VidaPuebloEngine
     }
 
     /**
+     * @param array<string, mixed> $cal
+     */
+    public static function partidaPerdida(array $partida, array $cal = []): bool
+    {
+        if (!FeatureConfig::isEnabled($partida, self::FLAG)) {
+            return false;
+        }
+        $vp = $partida['vida_pueblo'] ?? [];
+        if (self::derrotaVisibleEnPlay($partida, $cal)) {
+            return true;
+        }
+        return !empty($vp['game_over_pendiente']) && !empty($vp['llego_a_cero']);
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>|null
+     */
+    public static function rechazoSiPerdida(array $partida, array $cal = []): ?array
+    {
+        if (!self::partidaPerdida($partida, $cal)) {
+            return null;
+        }
+        return [
+            'ok' => false,
+            'error' => 'partida_perdida',
+            'partida_perdida' => true,
+            'mensaje_ui' => 'La partida ha terminado. El pueblo no aguantó más.',
+        ];
+    }
+
+    /**
      * Único escritor de Vida. Rechaza orígenes no atribuibles a Celestine.
      *
      * @param array<string, mixed> $meta causa, origen, atribuible_celestine, positivo_valido_latido, fuente_id, lab
