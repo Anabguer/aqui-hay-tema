@@ -67,3 +67,17 @@
   box-shadow: 2px 3px 0 rgba(51,38,30,.18) !important;
 }
 .play-v3 .capa-organizar .org-crear-tape { display: none !important; }
+
+/* Nuevo plan — estados CTA Organizar */
+.play-v3 .capa-organizar .org-crear.is-busy,
+.play-v3 .capa-organizar .org-crear:disabled {
+  opacity: 0.72;
+  cursor: wait;
+}
+.play-v3 .capa-organizar .org-crear.is-disabled:not(:disabled) {
+  opacity: 0.55;
+}
+.play-v3 .capa-organizar .org-aviso:not([hidden]) {
+  color: #7a2e2e;
+  font-weight: 600;
+}

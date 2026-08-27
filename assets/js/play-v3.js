@@ -137,6 +137,9 @@
   const ORG_MAX_VECINOS = 2;
   let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null };
   let orgPresetNuevo = false;
+  let orgProponiendo = false;
+  const ORG_BTN_LABEL = 'Organizar';
+  const ORG_BTN_BUSY = 'Organizando\u2026';
   const playtestLogClient = { entries: [] };
   const ahtDebugSessionLog = [];
   playtestLogClient.push = function (e) {
@@ -4896,8 +4899,12 @@ function hobbyIconKey(id, texto) {
     var btn = $('[data-org-go]');
     if (!btn) return;
     var val = validarOrgForm();
-    btn.disabled = !val.ok;
-    btn.setAttribute('aria-disabled', val.ok ? 'false' : 'true');
+    btn.disabled = orgProponiendo;
+    btn.classList.toggle('is-disabled', !val.ok && !orgProponiendo);
+    btn.classList.toggle('is-busy', orgProponiendo);
+    btn.setAttribute('aria-disabled', (!val.ok || orgProponiendo) ? 'true' : 'false');
+    var txt = btn.querySelector('.org-crear-txt');
+    if (txt) txt.textContent = orgProponiendo ? ORG_BTN_BUSY : ORG_BTN_LABEL;
   }
 
   function setOrgHorasHint(txt, show) {
@@ -4913,16 +4920,20 @@ function hobbyIconKey(id, texto) {
   }
 
   function mensajeErrorOrgApi(r, fallback) {
+    fallback = fallback || 'No se ha podido organizar el plan. Int\u00e9ntalo de nuevo.';
     if (!r) return fallback;
     if (r.mensaje_ui) return r.mensaje_ui;
     var err = String(r.error || '');
-    if (err === 'participantes_requeridos' || err === 'participantes_insuficientes') {
+    if (err === 'participantes_requeridos' || err === 'participantes_insuficientes' || err === 'individual_un_participante') {
       if (orgModo() === 'solo') return 'Elige a qui\u00e9n va el plan.';
       var pend = mensajeOrgParticipantesPendientes();
       return pend || 'Elige al menos dos vecinos.';
     }
-    if (err === 'lugar_requerido') return 'Elige un lugar.';
-    if (err === 'dia_requerido' || err === 'hora_requerida') return 'Elige cuándo quedar.';
+    if (err === 'PARTICIPANTES_EXCESO') return 'Puedes organizar planes con hasta 2 vecinos.';
+    if (err === 'lugar_requerido' || err === 'LUGAR_NO_OPERATIVO') return 'Elige un lugar.';
+    if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cuándo quedar.';
+    if (err === 'LIMITE_INTERVENCIONES') return 'Has alcanzado el l\u00edmite de intervenciones de hoy.';
+    if (err === 'network_error' || err === 'respuesta_no_json' || err === 'excepcion') return fallback;
     return fallback;
   }
 
@@ -5258,18 +5269,21 @@ function hobbyIconKey(id, texto) {
       pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('', false);
+      actualizarOrgCrearBtn();
       return;
     }
     if (!org.lugar) {
       pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('Elige un lugar para ver horarios.', true);
+      actualizarOrgCrearBtn();
       return;
     }
     if (!org.dia) {
       pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
+      actualizarOrgCrearBtn();
       return;
     }
     var tipo = orgModo() === 'solo' ? 'individual' : (org.tipo || 'conocerse');
@@ -5286,6 +5300,7 @@ function hobbyIconKey(id, texto) {
         pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
         org.hora = 0;
         setOrgHorasHint(mensajeErrorOrgApi(r, 'No hay horarios disponibles ahora.'), true);
+        actualizarOrgCrearBtn();
         return;
       }
       var slots = (r.slots || []).filter(function (s) {
@@ -5429,7 +5444,72 @@ function hobbyIconKey(id, texto) {
     }
   }
 
+  function mensajeExitoProponer(r) {
+    var partsUi = orgSeleccionados();
+    var na = nombreDe(partsUi[0]);
+    var nb = nombreDe(partsUi[1] || '');
+    var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
+    var horaUi = String(org.hora).padStart(2, '0') + ':00';
+    var msg = r.mensaje_ui;
+    if (!msg) {
+      if (orgModo() === 'solo') {
+        msg = 'Plan organizado: ' + na + ' en ' + lugUi + ', d\u00eda ' + org.dia + ' a las ' + horaUi + '.';
+      } else {
+        msg = 'Plan organizado: ' + na + ' y ' + nb + ' en ' + lugUi + ', d\u00eda ' + org.dia + ' a las ' + horaUi + '.';
+      }
+    }
+    if (r.hora_ajustada || (r.propuesta && r.propuesta.hora_ajustada)) {
+      msg += ' (El motor ajust\u00f3 la hora al hueco disponible.)';
+    }
+    return msg;
+  }
+
+  function mensajeRechazoProponer(r) {
+    if (r.mensaje_ui) return r.mensaje_ui;
+    var partsUi = orgSeleccionados();
+    var na = nombreDe(partsUi[0]);
+    var nb = nombreDe(partsUi[1] || '');
+    var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
+    if (orgModo() === 'solo') return 'Plan rechazado: ' + na + ' en ' + lugUi + '.';
+    return 'Plan rechazado: ' + na + ' y ' + nb + ' en ' + lugUi + '.';
+  }
+
+  async function aplicarRespuestaProponer(r) {
+    if (!r || typeof r !== 'object') {
+      mostrarOrgAviso('No se ha podido organizar el plan. Int\u00e9ntalo de nuevo.');
+      return;
+    }
+    if (r.ok) {
+      if (r.rechazada) {
+        var msgRech = mensajeRechazoProponer(r);
+        mostrarOrgAviso(msgRech);
+        if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
+          org.dia = r.contrapropuesta.dia;
+          org.hora = r.contrapropuesta.hora;
+          await fillOrganizar();
+        }
+        await refresh();
+        return;
+      }
+      var msgOk = mensajeExitoProponer(r);
+      mostrarOrgAviso(msgOk);
+      toast(msgOk);
+      if (r.nuevo_mensajito) {
+        toast(r.mensajito_aviso_ui || 'Tienes un nuevo Mensajito.');
+        $('.play-root').setAttribute('data-importante', '1');
+      }
+      setCapa('');
+      await refresh();
+      if (r.tutorial) pintarTutorialMotor(r.tutorial);
+      quizaMostrarTutFinale();
+      return;
+    }
+    mostrarOrgAviso(mensajeErrorOrgApi(r, 'No se ha podido organizar el plan. Int\u00e9ntalo de nuevo.'));
+    await refresh();
+  }
+
   async function proponer() {
+    if (orgProponiendo) return;
     limpiarOrgAviso();
     var val = validarOrgForm();
     if (!val.ok) {
@@ -5446,48 +5526,28 @@ function hobbyIconKey(id, texto) {
       modo: orgModo()
     };
     if (org.peticion_id) payload.peticion_id = org.peticion_id;
-    const r = await api('encuentro.proponer', payload);
-    if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+    orgProponiendo = true;
+    actualizarOrgCrearBtn();
     try {
-      console.log('[AHT plan]', payload, {
-        ok: r.ok,
-        rechazada: r.rechazada,
-        rechazo_clase: r.rechazo_clase,
-        error: r.error,
-        mensaje_ui: r.mensaje_ui,
-        reacciones: r.propuesta && r.propuesta.reacciones
-      });
-    } catch (e) {}
-    if (r.ok) {
-      var partsUi = orgSeleccionados();
-      var na = nombreDe(partsUi[0]);
-      var nb = nombreDe(partsUi[1] || '');
-      var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
-      if (r.rechazada) {
-        toast(r.mensaje_ui || ('Plan rechazado: ' + na + ' y ' + nb + ' en ' + lugUi + '.'));
-        if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
-          org.dia = r.contrapropuesta.dia;
-          org.hora = r.contrapropuesta.hora;
-        }
-      } else {
-        var horaUi = String(org.hora).padStart(2, '0') + ':00';
-        var msg = r.mensaje_ui || ('Plan aceptado: ' + na + ' y ' + nb + ' en ' + lugUi + ', día ' + org.dia + ' a las ' + horaUi + '.');
-        if (r.hora_ajustada || (r.propuesta && r.propuesta.hora_ajustada)) {
-          msg += ' (El motor ajustó la hora al hueco disponible.)';
-        }
-        toast(msg);
-      }
-      if (r.nuevo_mensajito) {
-        toast(r.mensajito_aviso_ui || 'Tienes un nuevo Mensajito.');
-        $('.play-root').setAttribute('data-importante', '1');
-      }
-      setCapa('');
-      await refresh();
-      if (r.tutorial) pintarTutorialMotor(r.tutorial);
-      quizaMostrarTutFinale();
-    } else {
-      mostrarOrgAviso(mensajeErrorOrgApi(r, 'No se ha podido organizar el plan.'));
-      await refresh();
+      const r = await api('encuentro.proponer', payload);
+      if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
+      try {
+        console.log('[AHT plan]', payload, {
+          ok: r.ok,
+          rechazada: r.rechazada,
+          rechazo_clase: r.rechazo_clase,
+          error: r.error,
+          mensaje_ui: r.mensaje_ui,
+          reacciones: r.propuesta && r.propuesta.reacciones
+        });
+      } catch (e) {}
+      await aplicarRespuestaProponer(r);
+    } catch (e) {
+      mostrarOrgAviso('No se ha podido organizar el plan. Int\u00e9ntalo de nuevo.');
+      try { console.error('[AHT plan] excepcion', e); } catch (x) {}
+    } finally {
+      orgProponiendo = false;
+      actualizarOrgCrearBtn();
     }
   }
   function persistPartidaId(id) {
