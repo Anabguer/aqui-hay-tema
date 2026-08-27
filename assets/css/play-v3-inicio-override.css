@@ -871,3 +871,106 @@
     line-height: 1.1 !important;
   }
 }
+
+/* === INICIO-MOVIL-HOME-v12: tiles iguales + mapa simétrico + Próximos planes columna (solo móvil) === */
+@media (max-width: 768px) {
+  /* 1. Mensajitos / Vecinos / Plan — misma caja (altura Plan = referencia) */
+  .play-v3:has(.game-shell) .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .shell-grupo-planes {
+    align-self: stretch !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 108px !important;
+    height: auto !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon > .mensajitos-wrap,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen > .obj-vecinos-resumen,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes > .obj-planes-lateral {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 108px !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 108px !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left.zona-actividad .obj-buzon,
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    min-height: 108px !important;
+    height: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap {
+    margin-top: 4px !important;
+    margin-bottom: 0 !important;
+  }
+
+
+  /* 2. Mapa — mismo margen arriba/abajo: sin filas fantasma cuando bloques ocultos */
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)) .shell-grupo-cotilleo-par {
+    grid-row: 3 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):not(:has(.proxplanes-movil.is-on)) .shell-grupo-misiones-par {
+    grid-row: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):not(:has(.proxplanes-movil.is-on)) .shell-grupo-parejas {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):has(.proxplanes-movil.is-on) .proxplanes-movil {
+    grid-row: 4 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):has(.proxplanes-movil.is-on) .shell-grupo-misiones-par {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:not(:has(.encursos-movil.is-on)):has(.proxplanes-movil.is-on) .shell-grupo-parejas {
+    grid-row: 6 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:has(.encursos-movil.is-on):not(:has(.proxplanes-movil.is-on)) .shell-grupo-misiones-par {
+    grid-row: 5 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-main:has(.encursos-movil.is-on):not(:has(.proxplanes-movil.is-on)) .shell-grupo-parejas {
+    grid-row: 6 !important;
+  }
+
+  /* 3. Próximos planes — cabecera arriba, tarjetas debajo (responsive .game-left .shell-grupo = row) */
+  .play-v3:has(.game-shell) .encursos-movil,
+  .play-v3:has(.game-shell) .proxplanes-movil {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cab,
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-cab {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-track,
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-track {
+    width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+}
