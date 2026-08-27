@@ -27,6 +27,22 @@ function Export-GitFile([string]$Repo, [string]$Commit, [string]$Rel, [string]$D
     if (-not (Test-Path -LiteralPath $parent)) {
         New-Item -ItemType Directory -Path $parent -Force | Out-Null
     }
+    if ($Rel -match '\.(png|jpe?g|gif|webp|ico|woff2?)$') {
+        $hash = (& git -C $Repo rev-parse "${Commit}:${Rel}" 2>$null | Out-String).Trim()
+        if (-not $hash) { return $false }
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = 'git'
+        $psi.Arguments = "-C `"$Repo`" cat-file blob $hash"
+        $psi.RedirectStandardOutput = $true
+        $psi.UseShellExecute = $false
+        $psi.CreateNoWindow = $true
+        $proc = [System.Diagnostics.Process]::Start($psi)
+        $fs = [IO.File]::Create($Dest)
+        $proc.StandardOutput.BaseStream.CopyTo($fs)
+        $fs.Close()
+        $proc.WaitForExit()
+        return ($proc.ExitCode -eq 0)
+    }
     $psi = New-Object System.Diagnostics.ProcessStartInfo
     $psi.FileName = 'git'
     $psi.Arguments = "-C `"$Repo`" show `"${Commit}:${Rel}`""
@@ -42,6 +58,12 @@ function Export-GitFile([string]$Repo, [string]$Commit, [string]$Rel, [string]$D
     return $true
 }
 
+function Test-PngMagicBytes([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $false }
+    $bytes = [IO.File]::ReadAllBytes($Path)
+    return ($bytes.Length -ge 8 -and $bytes[0] -eq 0x89 -and $bytes[1] -eq 0x50 -and $bytes[2] -eq 0x4E -and $bytes[3] -eq 0x47)
+}
+
 $resolvedHead = (& git -C $Ctx.RepoRoot rev-parse $TargetCommit 2>&1 | Out-String).Trim()
 Write-DeployLog -LogFile $logFile -Message "=== PWA STANDALONE DELTA PROD vs $resolvedHead ===" -ToHost
 
@@ -51,6 +73,10 @@ $headFiles = @()
 foreach ($rel in $candidates) {
     $dest = Join-Path $staging ($rel -replace '/', '\')
     if (Export-GitFile -Repo $Ctx.RepoRoot -Commit $resolvedHead -Rel $rel -Dest $dest) {
+        if ($rel -match '\.png$' -and -not (Test-PngMagicBytes -Path $dest)) {
+            Write-DeployLog -LogFile $logFile -Message "ERROR: PNG corrupto en staging: $rel" -ToHost
+            exit 1
+        }
         $headFiles += $rel
     } else {
         Write-DeployLog -LogFile $logFile -Message "ERROR: no HEAD $rel" -ToHost
@@ -173,6 +199,22 @@ foreach ($rel in ($toDeploy | Select-Object -Unique)) {
 $winscpLog = Join-Path $Ctx.LogsDir "deploy-pwa-standalone-winscp-$ts.log"
 $upload = Invoke-AhtWinScpUpload -Ctx $Ctx -Files $files -WinScpLogPath $winscpLog
 if (-not $upload.Ok) { exit $upload.Code }
+foreach ($rel in @('assets/brand/pwa-icon-192.png', 'assets/brand/pwa-icon-512.png')) {
+    if ($toDeploy -contains $rel) {
+        $url = "$($Ctx.CheckUrl -replace 'play\.php$','')$rel"
+        $tmp = Join-Path $env:TEMP ("aht-pwa-icon-check-" + [guid]::NewGuid().ToString('N') + '.png')
+        try {
+            Invoke-WebRequest -Uri $url -OutFile $tmp -UseBasicParsing | Out-Null
+            if (-not (Test-PngMagicBytes -Path $tmp)) {
+                Write-DeployLog -LogFile $logFile -Message "ERROR: PNG corrupto en prod tras deploy: $rel" -ToHost
+                exit 1
+            }
+            Write-DeployLog -LogFile $logFile -Message "OK PNG prod verificado: $rel" -ToHost
+        } finally {
+            Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+        }
+    }
+}
 Test-AhtPublicUrl -Ctx $Ctx -LogFile $logFile
 Write-DeployLog -LogFile $logFile -Message "OK deploy $($upload.Count) archivo(s). Backup: $backupDir" -ToHost
 Write-DeployLog -LogFile $logFile -Message "ROLLBACK: powershell -File scripts\_rollback_pwa_standalone.ps1 -BackupDir `"$backupDir`"" -ToHost
