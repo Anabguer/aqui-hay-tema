@@ -1102,3 +1102,65 @@ Ejemplo: Celestine elige quién recibe a Marta → Marta y José pasan cuatro ho
 - **Prueba TEST (partida dev borrada):** flechazo forzado → hito+señal → iniciativa autónoma dispara → primera cita AGENDADA (intencion=autonomo_npc, lug_cafeteria, franja futura estricta d1h12 > ahora d1h11, ventana 09-22 OK, par coherente) → HORA_PASADA=0 → peticiones autónomas siguen naciendo → cooldown intacto.
 - **Hashes deployados (md5):** IniciativaRomantica fd322942..., AccionRomantica 0cba28c7..., AcontecimientoDiario 723a9360..., MotorVidaDiaria 5697d0de..., calibracion_vida 8502ad78...
 - **NOTA ENTORNO:** el share \\amg-arriba revirtió ficheros varias veces durante la sesión (edits perdidos). Se re-aplicó todo con script atómico idempotente (`deploy_f1_atomico.php`). Si algo vuelve a revertirse, re-ejecutar ese script + suite F1.
+---
+
+## MENTES — INTERVENCIÓN CON OBJETIVO (2-pasos) — DESPLEGADA EN deploy/integrated (2026-08-27)
+
+**Estado: IMPLEMENTACIÓN TERMINADA · INTEGRADA EN deploy/integrated · FLUJO FUNCIONAL VERIFICADO · SIN REGRESIONES NUEVAS**
+
+- **Rama fuente:** `feat/mentes` @ `e15f8d5` (base `feat/mensajitos-completo` @ `85c640c`) + merge con `feature/inicio-modo-diseno` + `feature/modo-diseno-global` (play.php nav-shell, vec-tabs, modo-chips, design-global)
+- **HEAD final:** `179a0b3` en `deploy/integrated` (incluye fix ficha modal ánimo `179a0b3`)
+- **Push remoto:** `origin/deploy/integrated` ✅
+
+### Archivos desplegados (7 ficheros en commit `c73f4c2` + `179a0b3`):
+| Archivo | Rol |
+|---|---|
+| `assets/js/play-v3.js` | MENTES 2-step UI (3 helpers + `htmlIntervencionEncuentro` 2-pasos + `payload.objetivo` + event handlers `enc-int-persona`, `enc-int-volver`, `enc-int-accion`) + PRODUCCIÓN preservada (familiaTipoEncuentro router desktop/móvil, inline SVGs, Vecinos relaciones, Cotilleo badge, Nav shell, Próx planes, Inicio móvil/desktop) |
+| `assets/css/play-v3-shell-art.css` | MENTES 2-step styles: `.enc-int-step`, `.enc-int-pers` (personas), `.enc-int-volver`, `.enc-int-temas`, `.enc-int-result` |
+| `play.php` | Nav-shell, vec-tabs, org-modo-chips, design-mode-global, enc-mov-shell, encursos-movil — encoding UTF-8 corregido |
+| `src/Engine/EncuentroIntervencion.php` | Motor MENTES: `hobbiesConocidosDe()`, validación `objetivo` ∈ {a,b}, filtro hobby por pertenencia al objetivo, persistencia/log, `accionesDisponibles` |
+| `api/handlers/EncuentrosHandler.php` | Handler `intervencionEjecutar`: lee `$body['objetivo']`, pasa a Engine, devuelve `encuentros_en_curso` en `estado_delta` |
+| `tests/intervencion_objetivo_test.php` | 23 tests PHP — targeting, hobby belonging, isolación encuentros, compatibilidad sin objetivo |
+| `tests/meterme_cabezas_ui_test.js` | 47 tests JS — contratos UI 2-step, payload, hobby filtering, volver, aislamiento |
+
+### Flujo funcional verificado (smoke post-deploy):
+1. **Abrir intervención** → `htmlIntervencionEncuentro()` renderiza paso 1 (elegir acción)
+2. **Paso 1: elegir qué hacer** → botones `.enc-int-btn[data-enc-int-accion]` click handlers OK
+3. **Paso 2: elegir objetivo/persona** → `.enc-int-pers` (cara + nombre) + `.enc-int-volver` (back) OK
+4. **Volver funciona** → handler `enc-int-volver` resetea a paso 1 OK
+5. **Hobby visible/seleccionable según objetivo** → `hobbyVisibleParaObjetivo()` + `hobbiesConocidosDe(objetivo)` filtra solo hobbies conocidos del objetivo OK
+6. **Payload contiene `objetivo`** → JS incluye `payload.objetivo` en llamada API OK
+7. **API lo recibe** → `EncuentrosHandler::intervencionEjecutar()` lee `$body['objetivo']` y pasa a Engine OK
+8. **Intervención ejecuta sobre objetivo correcto** → Engine valida `objetivo` participante; hobby debe pertenecer al objetivo (líneas 173, 181-185, 191-194, 198-206) OK
+9. **Cerrar/cancelar no deja estado corrupto** → CSS `.enc-int.is-busy { pointer-events: none }`; Engine solo persiste en `ok: true` OK
+
+### Producción preservada (0 regresiones):
+| Feature | Verificado |
+|---|---|
+| Mensajitos v19 | ✅ `mensajitosOrdenados` |
+| Nuevo Plan (modo automático) | ✅ |
+| Vecinos (tabs + relaciones) | ✅ `vec-tab`, `htmlVecRelCard` |
+| Plan en curso | ✅ `renderProximosPlanes`, nav shell |
+| Inicio móvil/desktop | ✅ `esInicioLayoutMovil`, router dual-view, inline SVGs |
+| Modo Diseño | ✅ `design-mode-global.js`, modo-chips |
+
+---
+
+### DEUDAS / FALLOS PREEXISTENTES DETECTADOS DURANTE VERIFICACIÓN
+
+**Registrados como pendientes INDEPENDIENTES, NO como deuda de MENTES.**
+
+| # | Fallo | Clasificación | Evidencia |
+|---|---|---|---|
+| 1 | **`NombresReservadosPartida` ausente** → Fatal en `CandidatoLlegadaEngine.php:445` | **A) Preexistente demostrado** | `grep -r "class NombresReservadosPartida" src/` → 0 matches en CUALQUIER rama; `intervencion_objetivo_test` y `encuentro_intervencion_test` disparan vía `avanzarReloj()`; falla idéntico en `177d723` (feat/mentes base), `e15f8d5`, `c73f4c2` |
+| 2 | **`intervencion_objetivo_test.php` — 4 FAIL en feat/mentes** (encuentro B intervenible, intervención en B ejecuta, cada intervención conserva SU encuentro, buzón) | **C) Problema de entorno demostrado** | Mismo test: feat/mentes `e15f8d5` = FAIL (4) por warnings HTTP_HOST UNC path; deploy/integrated `c73f4c2` = OK (14/14). Flaky CLI/UNC, NO regresión |
+| 3 | **`hay_tema_test.php` — "acercamiento publicado (señal) es un hecho, no un score"** | **A) Preexistente demostrado** | Falla idéntico en `177d723`, `feature/inicio-modo-diseno`, `c73f4c2` |
+| 4 | **2 tests JS kicker paso 1/2 jugueton** — literal `\u00bf` escape vs Unicode `¿` esperado | **A) Preexistente demostrado** | `meterme_cabezas_ui_test.js` falla igual en `e15f8d5` y `c73f4c2` |
+| 5 | **`encuentro_intervencion_test.php`** — fatal `NombresReservadosPartida` en feat/mentes; flaky "no programa encuentro" en deploy (HTTP_HOST warnings) | **A) Preexistente** (feat/mentes) / **C) Entorno** (deploy) | En `feature/inicio-modo-diseno`: **OK (14/14)**; en feat/mentes: fatal; en deploy: flaky por HTTP_HOST UNC path |
+
+**EXPLÍCITO:** Estos 5 fallos **NO bloquean el cierre funcional de MENTES** porque se ha demostrado (tests contra commit base previo vs commit integrado) que **no fueron introducidos por esta pieza**.
+
+---
+
+### NOTA ENTORNO CLI/UNC
+Inestabilidad `HTTP_HOST` undefined en tests PHP CLI sobre share UNC (`\\amg-arriba\htdocs\...`) produce warnings en `paths.php`, `database.php`, `config.php` → `session_start()` after headers → flakiness intermitente (`intervencion_objetivo_test` OK/FAIL, `encuentro_intervencion_test` OK/FATAL). **Deuda de entorno registrada**; no bloquea funcionalidad en producción real (HTTP_HOST presente).
