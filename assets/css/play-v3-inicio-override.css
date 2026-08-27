@@ -974,3 +974,165 @@
     flex: 0 0 auto !important;
   }
 }
+
+/* === INICIO-PROXPLANES-REF-v13: Próximos planes móvil = ref captura (cabecera arriba + tarjetas verticales) === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-cab {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    padding: 0 2px !important;
+    margin: 0 0 10px !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-tit {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.1875rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    letter-spacing: .6px !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .plan-seccion-ico.pp-mov-ico {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+    flex: 0 0 1.125rem !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 2px 6px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-card {
+    flex: 0 0 calc(50% - 5px) !important;
+    width: calc(50% - 5px) !important;
+    min-width: 158px !important;
+    max-width: 210px !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 10px 10px 12px !important;
+    background: #fdfaf1 !important;
+    border: 2px dashed var(--ds-lavender-deep, #9a8ab8) !important;
+    border-radius: 14px 18px 12px 16px / 18px 12px 16px 14px !important;
+    box-shadow: 0 2px 5px rgba(70, 50, 30, .07) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-card:nth-child(odd) {
+    transform: rotate(-0.45deg) !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-card:nth-child(even) {
+    transform: rotate(0.4deg) !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-top {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    margin: 0 0 8px !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-star {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-hora {
+    margin: 0 !important;
+    padding: 2px 8px !important;
+    background: var(--ds-lavender-soft, #ebe3f8) !important;
+    border: 1.5px solid var(--ds-lavender-deep, #9a8ab8) !important;
+    border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .5px !important;
+    text-transform: uppercase !important;
+    color: var(--ds-lavender-deep, #5a4d78) !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 0 4px !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-copy {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces img,
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces .cara-ini {
+    width: 32px !important;
+    height: 32px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    object-position: 50% 20% !important;
+    margin-right: -8px !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft, rgba(89, 72, 57, .25)) !important;
+    background: #fff !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces img:last-child,
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces .cara-ini:last-child {
+    margin-right: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
+    margin: 0 !important;
+    text-align: center !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-lugar {
+    margin: 2px 0 0 !important;
+    text-align: center !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .78125rem !important;
+    font-weight: 600 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+  }
+}
