@@ -517,8 +517,11 @@ if (is_file($ahtBusterFile)) {
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
         <div class="tut-papel" data-tut-papel>
           <button type="button" class="cerrar tut-skip ds-modal-close" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
+          <div class="tut-papel-cabecera">
           <div class="tut-hero" data-tut-hero hidden></div>
           <h2 class="tut-titulo" data-tut-tit></h2>
+          </div>
+          <div class="tut-papel-cuerpo">
           <p class="tut-intro-line" data-tut-intro-line hidden></p>
           <p class="tut-intro-extra" data-tut-intro-extra hidden></p>
           <div class="tut-caras" data-tut-caras hidden></div>
@@ -526,6 +529,7 @@ if (is_file($ahtBusterFile)) {
           <div class="tut-bloques" data-tut-bloques hidden></div>
           <div class="tut-tareas" data-tut-tareas hidden></div>
           <p class="tut-cierre" data-tut-cierre hidden></p>
+          </div>
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
             <div class="tut-acciones">
