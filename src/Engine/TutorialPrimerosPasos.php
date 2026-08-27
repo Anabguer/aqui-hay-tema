@@ -182,6 +182,32 @@ final class TutorialPrimerosPasos
     }
 
     /**
+     * Mientras M1 siga pendiente, la pareja del tutorial no debe recibir encuentros
+     * autónomos (p. ej. iniciativa_social → autonomo_npc_social). El primer plan de
+     * ese par debe nacer del pipeline canónico del jugador (celeste_organizado).
+     */
+    public static function bloqueaAutonomiaSobreParejaMision1(array $partida, string $a, string $b): bool
+    {
+        if (!self::activo($partida) || !empty($partida['tutorial']['jugable_completado'])) {
+            return false;
+        }
+        if (self::estadoMision($partida, self::M1) === MisionDiariaEngine::EST_CUMPLIDA) {
+            return false;
+        }
+        $pareja = $partida['tutorial']['pareja_mision1'] ?? [];
+        $ta = (string) ($pareja['a'] ?? '');
+        $tb = (string) ($pareja['b'] ?? '');
+        if ($ta === '' || $tb === '') {
+            return false;
+        }
+        $ids = [$a, $b];
+        sort($ids);
+        $par = [$ta, $tb];
+        sort($par);
+        return $ids === $par;
+    }
+
+    /**
      * @param array<string, mixed> $partida
      */
     public static function alProponer(array &$partida, array &$respuestaApi, Catalog $catalog): void

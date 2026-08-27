@@ -34,6 +34,36 @@ final class ResumenDia
         return is_array($best) ? self::vistaEncuentro($partida, $best, $catalog) : null;
     }
 
+    /**
+     * Todos los encuentros en curso en la franja actual (0..N), con vista e intervención.
+     *
+     * @return list<array<string, mixed>>
+     */
+    public static function encuentrosEnCurso(array $partida, ?Catalog $catalog = null): array
+    {
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $rows = [];
+        foreach (EncuentroEngine::list($partida) as $enc) {
+            if (($enc['estado'] ?? '') !== 'en_curso') {
+                continue;
+            }
+            if (!LugarAtributos::ocupaHora($enc, $dia, $hora)) {
+                continue;
+            }
+            $ini = ((int) ($enc['dia'] ?? 0)) * 24 + (int) ($enc['hora'] ?? ($enc['hora_inicio'] ?? 0));
+            $rows[] = ['ini' => $ini, 'vista' => self::vistaEncuentro($partida, $enc, $catalog)];
+        }
+        usort($rows, static function (array $x, array $y): int {
+            $cmp = ($x['ini'] <=> $y['ini']);
+            if ($cmp !== 0) {
+                return $cmp;
+            }
+            return strcmp((string) ($x['vista']['id'] ?? ''), (string) ($y['vista']['id'] ?? ''));
+        });
+        return array_values(array_map(static fn(array $row): array => $row['vista'], $rows));
+    }
+
     public static function encuentrosHoy(array $partida): int
     {
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);

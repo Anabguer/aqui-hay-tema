@@ -77,6 +77,10 @@ final class IniciativaRomantica
     ): array {
         self::ensure($partida);
 
+        if (TutorialPrimerosPasos::bloqueaAutonomiaSobreParejaMision1($partida, $desde, $hacia)) {
+            return self::fin($partida, 'tutorial_reserva_pareja_m1', $desde, $hacia);
+        }
+
         // ---- gates de elegibilidad (sin RNG) ----
         $gate = 'ok';
         while (true) {

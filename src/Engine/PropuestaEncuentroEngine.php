@@ -598,6 +598,11 @@ final class PropuestaEncuentroEngine
             return $r;
         }
 
+        EncuentroEngine::asegurarContratoOrganizadoJugador(
+            $partida,
+            (string) ($r['encuentro']['id'] ?? '')
+        );
+
         $prop['estado'] = 'programada';
         $prop['encuentro_id'] = $r['encuentro']['id'] ?? null;
         $partida['propuestas_encuentro'][$idx] = $prop;

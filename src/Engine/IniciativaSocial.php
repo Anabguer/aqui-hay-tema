@@ -96,6 +96,10 @@ final class IniciativaSocial
         self::ensure($partida);
         $rng = $rng ?? RngService::fromPartida($partida);
 
+        if (TutorialPrimerosPasos::bloqueaAutonomiaSobreParejaMision1($partida, $desde, $hacia)) {
+            return self::fin($partida, 'tutorial_reserva_pareja_m1', $desde, $hacia);
+        }
+
         $gate = 'ok';
         $tipo = 'conocerse';
         while (true) {

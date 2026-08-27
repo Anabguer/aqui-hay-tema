@@ -200,6 +200,28 @@ final class EncuentroEngine
         return ['ok' => true, 'encuentro' => $encuentro];
     }
 
+    /**
+     * Contrato canónico de un plan organizado por el jugador (MENTES, agenda, UI).
+     */
+    public static function asegurarContratoOrganizadoJugador(array &$partida, string $encuentroId): void
+    {
+        if ($encuentroId === '') {
+            return;
+        }
+        foreach ($partida['encuentros'] as &$row) {
+            if (($row['id'] ?? '') !== $encuentroId) {
+                continue;
+            }
+            if (($row['tipo'] ?? '') === 'individual') {
+                break;
+            }
+            $row['intencion'] = 'celeste_organizado';
+            $row['reserva_agenda'] = ['tipo' => 'encuentro', 'origen' => 'celeste'];
+            break;
+        }
+        unset($row);
+    }
+
     public static function limiteIntervencionesDia(array $partida): ?int
     {
         $max = $partida['celeste']['intervenciones_organizadas_max_dia'] ?? null;

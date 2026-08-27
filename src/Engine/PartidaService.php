@@ -505,6 +505,7 @@ final class PartidaService
             'encuentros_hoy' => ResumenDia::encuentrosHoy($partida),
             'proximo_encuentro' => ResumenDia::proximoEncuentro($partida, $this->catalog),
             'encuentro_en_curso' => ResumenDia::encuentroEnCurso($partida, $this->catalog),
+            'encuentros_en_curso' => ResumenDia::encuentrosEnCurso($partida, $this->catalog),
             'relaciones_sociales' => count($partida['relaciones_sociales']),
             'relaciones_romanticas' => count($partida['relaciones_romanticas']),
             'buzon_pendientes' => BuzonEngine::contarNoLeidos($partida, null),
