@@ -358,6 +358,9 @@
       if (pasoNum === 1) {
         heroEl.hidden = false;
         heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('illus-pueblo.png')) + '" alt=""/>';
+      } else if (pasoNum === 2) {
+        heroEl.hidden = false;
+        heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('icon-vecinos.png')) + '" alt=""/>';
       } else { heroEl.hidden = true; heroEl.innerHTML = ''; }
     }
     var titEl = $('[data-tut-tit]');
