@@ -823,3 +823,10 @@
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-preview { align-self: center !important; width: auto !important; text-align: center !important; justify-content: center !important; }
   .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-head { align-self: stretch !important; justify-content: space-between !important; text-align: left !important; }
 }
+
+
+/* Ajustes desktop exactos solicitados - no afectan mobile ni el orden. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon .obj-buzon { height: 63px; min-height: 63px; box-sizing: border-box; }
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato { width: 115px; height: 25px; min-height: 25px !important; box-sizing: border-box; }
+}
