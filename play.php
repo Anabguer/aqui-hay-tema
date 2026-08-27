@@ -526,11 +526,13 @@ if (is_file($ahtBusterFile)) {
           <div class="tut-bloques" data-tut-bloques hidden></div>
           <div class="tut-tareas" data-tut-tareas hidden></div>
           <p class="tut-cierre" data-tut-cierre hidden></p>
-          <div class="tut-pasos" data-tut-pasos></div>
-          <div class="tut-acciones">
+          <div class="tut-papel-pie">
+            <div class="tut-pasos" data-tut-pasos></div>
+            <div class="tut-acciones">
             <button type="button" class="cta ghost" data-tut-atras hidden>Atrï¿½s</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
+            </div>
         </div>
       </aside>
       <aside class="tut-finale" data-tut-finale hidden aria-live="polite">
