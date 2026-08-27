@@ -80,7 +80,7 @@ final class BuzonEngine
 
         $partida['buzon'] ??= [];
         $partida['buzon'][] = $entry;
-        return ['ok' => true, 'mensaje' => self::enriquecerParaUi($entry)];
+        return ['ok' => true, 'mensaje' => self::enriquecerParaUi($entry, $partida)];
     }
 
     /**
@@ -137,7 +137,7 @@ final class BuzonEngine
     {
         foreach ($partida['buzon'] ?? [] as $m) {
             if (is_array($m) && ($m['id'] ?? '') === $mensajeId) {
-                return self::enriquecerParaUi($m);
+                return self::enriquecerParaUi($m, $partida);
             }
         }
         return null;
@@ -145,9 +145,10 @@ final class BuzonEngine
 
     /**
      * @param array<string, mixed> $mensaje
+     * @param array<string, mixed>|null $partida
      * @return array<string, mixed>
      */
-    public static function enriquecerParaUi(array $mensaje): array
+    public static function enriquecerParaUi(array $mensaje, ?array $partida = null): array
     {
         $m = self::normalizar($mensaje);
         $acciones = is_array($m['acciones'] ?? null) ? $m['acciones'] : [];
@@ -155,6 +156,9 @@ final class BuzonEngine
         $m['requiere_decision'] = $pendiente;
         $m['acciones_ui'] = MensajitoAcciones::vistaDe($acciones, $pendiente);
         $m['leido'] = self::estaLeido($m);
+        if ($pendiente && !empty($m['familia_mensajito']) && $partida !== null) {
+            $m = MensajitoConsejoEngine::enriquecerParaUi($partida, $m);
+        }
         return $m;
     }
 
@@ -167,7 +171,7 @@ final class BuzonEngine
             $m = self::normalizar($m);
             $m['estado_decision'] = self::DECISION_RESUELTO;
             $m['estado'] = 'resuelto';
-            return ['ok' => true, 'mensaje' => self::enriquecerParaUi($m)];
+            return ['ok' => true, 'mensaje' => self::enriquecerParaUi($m, $partida)];
         }
         return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
     }
@@ -238,7 +242,7 @@ final class BuzonEngine
                 } else {
                     $m['estado'] = $estado;
                 }
-                return ['ok' => true, 'mensaje' => self::enriquecerParaUi($m)];
+                return ['ok' => true, 'mensaje' => self::enriquecerParaUi($m, $partida)];
             }
         }
         return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
@@ -267,7 +271,10 @@ final class BuzonEngine
                 return $c === $canal;
             }));
         }
-        return array_map(static fn($m) => is_array($m) ? self::enriquecerParaUi($m) : $m, $items);
+        return array_map(
+            static fn($m) => is_array($m) ? self::enriquecerParaUi($m, $partida) : $m,
+            $items
+        );
     }
 
     /**

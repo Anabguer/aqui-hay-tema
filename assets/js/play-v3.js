@@ -967,6 +967,9 @@
     if (!m || typeof m !== 'object') return false;
     if (m.requiere_decision === true) return true;
     if (Array.isArray(m.acciones_ui) && m.acciones_ui.length > 0) return true;
+    if (Array.isArray(m.opciones_consejo) && m.opciones_consejo.length &&
+        (m.estado_decision || '') === 'pendiente' &&
+        (m.estado || '') === 'pendiente') return true;
     if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' &&
         (m.estado_pueblo || 'pendiente') === 'pendiente' &&
@@ -1090,6 +1093,21 @@
   }
 
   function htmlAccionesMensajito(m) {
+    if (Array.isArray(m.opciones_consejo) && m.opciones_consejo.length &&
+        (m.estado_decision || '') === 'pendiente' &&
+        (m.estado || '') === 'pendiente') {
+      const tit = m.consejo_titulo || '\u00bfQu\u00e9 le dices?';
+      const optsHtml = m.opciones_consejo.map(function (o) {
+        if (!o || !o.id) return '';
+        const suave = (o.estilo || '') === 'suave';
+        const cls = suave ? 'carta-cta carta-cta--suave' : 'carta-cta carta-cta--abrir';
+        return '<button type="button" class="' + cls + ' msg-opcion" data-consejo-opcion="' + esc(o.id) + '">' +
+          esc(o.etiqueta || o.id) + '</button>';
+      }).join('');
+      return '<div class="acciones-msg msg-opciones">' +
+        '<span class="msg-opciones-tit">' + esc(tit) + '</span>' +
+        optsHtml + '</div>';
+    }
     if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' &&
         (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
@@ -1123,6 +1141,8 @@
       return false;
     }
     if (r.mensaje_ui) toast(r.mensaje_ui);
+    if (r.abrir_ficha) await abrirFicha(r.abrir_ficha);
+    if (r.preset_organizar) abrirOrganizarConPreset(r.preset_organizar);
     return true;
   }
 
@@ -1145,6 +1165,22 @@
         btn.disabled = true;
         const ok = await resolverAccionMensajito(m, 'elegir_persona', {
           personaje_id: btn.getAttribute('data-elegir-persona')
+        });
+        if (ok) await refresh();
+        else btn.disabled = false;
+      });
+    });
+    const accionesRaw = Array.isArray(m.acciones) ? m.acciones : [];
+    const accionConsejo = accionesRaw.indexOf('responder_celestine') >= 0
+      ? 'responder_celestine'
+      : (accionesRaw.indexOf('responder_escuchar') >= 0 ? 'responder_escuchar' : 'responder_consejo');
+    art.querySelectorAll('[data-consejo-opcion]').forEach(function (btn) {
+      btn.addEventListener('click', async function (ev) {
+        ev.stopPropagation();
+        if (btn.disabled) return;
+        btn.disabled = true;
+        const ok = await resolverAccionMensajito(m, accionConsejo, {
+          opcion_id: btn.getAttribute('data-consejo-opcion')
         });
         if (ok) await refresh();
         else btn.disabled = false;

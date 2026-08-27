@@ -44,8 +44,6 @@ final class MensajitoGeneradorEspontaneo
         if ($f1 !== null) { $c[] = $f1; }
         $f2 = self::candidatoF2($partida, $residenteId);
         if ($f2 !== null) { $c[] = $f2; }
-        $f6 = self::candidatoF6($partida, $residenteId);
-        if ($f6 !== null) { $c[] = $f6; }
         $f7 = self::candidatoF7($partida, $residenteId);
         if ($f7 !== null) { $c[] = $f7; }
         $f15 = self::candidatoF15($partida, $residenteId, $cal);
@@ -60,7 +58,11 @@ final class MensajitoGeneradorEspontaneo
         $prob = (float) CalibracionConfig::get($cal, 'mensajitos.f1_prob_base', 0.15);
         if (mt_rand(1, 10000) > $prob * 10000) { return null; }
         $rel = $rels[array_rand($rels)];
-        return ['familia' => 'f_opinion', 'peso' => 2, 'datos' => ['otro_id' => $rel['otro_id'], 'otro_nombre' => $rel['otro_nombre'], 'tipo_relacion' => $rel['tipo']]];
+        $clave = 'f_opinion|' . ($rel['otro_id'] ?? '');
+        if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_opinion', $clave)) {
+            return null;
+        }
+        return ['familia' => 'f_opinion', 'peso' => 2, 'datos' => ['otro_id' => $rel['otro_id'], 'otro_nombre' => $rel['otro_nombre'], 'tipo_relacion' => $rel['tipo'], 'clave' => $clave]];
     }
 
     private static function candidatoF2(array $partida, string $rid): ?array
@@ -69,7 +71,11 @@ final class MensajitoGeneradorEspontaneo
         if (count($rom) < 2) { return null; }
         shuffle($rom);
         $pair = array_slice($rom, 0, 2);
-        return ['familia' => 'f_dilema', 'peso' => 2, 'datos' => ['opcion_a_id' => $pair[0]['otro_id'], 'opcion_a_nombre' => $pair[0]['otro_nombre'], 'opcion_b_id' => $pair[1]['otro_id'], 'opcion_b_nombre' => $pair[1]['otro_nombre']]];
+        $clave = 'f_dilema|' . ($pair[0]['otro_id'] ?? '') . '|' . ($pair[1]['otro_id'] ?? '');
+        if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_dilema', $clave)) {
+            return null;
+        }
+        return ['familia' => 'f_dilema', 'peso' => 2, 'datos' => ['opcion_a_id' => $pair[0]['otro_id'], 'opcion_a_nombre' => $pair[0]['otro_nombre'], 'opcion_b_id' => $pair[1]['otro_id'], 'opcion_b_nombre' => $pair[1]['otro_nombre'], 'clave' => $clave]];
     }
 
     private static function candidatoF6(array $partida, string $rid): ?array
@@ -85,7 +91,11 @@ final class MensajitoGeneradorEspontaneo
         $ap = self::vecinosApagados($partida, $rid);
         if ($ap === []) { return null; }
         $t = $ap[array_rand($ap)];
-        return ['familia' => 'f_alerta_vecinal', 'peso' => 2, 'datos' => ['observado_id' => $t['residente_id'], 'observado_nombre' => $t['nombre']]];
+        $clave = 'f_alerta|' . ($t['residente_id'] ?? '');
+        if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_alerta_vecinal', $clave)) {
+            return null;
+        }
+        return ['familia' => 'f_alerta_vecinal', 'peso' => 2, 'datos' => ['observado_id' => $t['residente_id'], 'observado_nombre' => $t['nombre'], 'clave' => $clave]];
     }
 
     private static function candidatoF15(array $partida, string $rid, array $cal): ?array
@@ -109,11 +119,13 @@ final class MensajitoGeneradorEspontaneo
         $acciones = match ($fam['familia']) {
             'f_opinion', 'f_dilema' => ['responder_consejo'],
             'f_confidencia' => ['responder_escuchar'],
-            'f_alerta_vecinal' => ['investigar', 'no_meterse'],
+            'f_alerta_vecinal' => ['investigar', 'organizar_algo', 'no_meterse'],
             'f_curiosidad_celestine' => ['responder_celestine'],
             default => [],
         };
+        $msgId = 'msg_' . bin2hex(random_bytes(4));
         $r = BuzonEngine::crear($partida, [
+            'id' => $msgId,
             'clasificacion' => $clas,
             'tipo' => 'espontaneo_' . $fam['familia'],
             'canal' => BuzonEngine::CANAL_BUZON,
@@ -123,11 +135,14 @@ final class MensajitoGeneradorEspontaneo
             'acciones' => $acciones,
             'familia_mensajito' => $fam['familia'],
             'datos_familia' => $fam['datos'],
-            'origen' => ['evento_id' => null, 'tipo_evento' => 'espontaneo_' . $fam['familia'], 'es_narrativo' => true, 'informacion_revelada' => [], '_placeholder' => false],
+            'hilo_id' => $msgId,
+            'hilo_estado' => 'abierto',
+            'seguimiento_pendiente' => in_array($fam['familia'], ['f_opinion', 'f_dilema'], true),
+            'origen' => ['evento_id' => $msgId, 'tipo_evento' => 'espontaneo_' . $fam['familia'], 'es_narrativo' => true, 'informacion_revelada' => [], '_placeholder' => false],
             '_placeholder_contenido' => false,
         ]);
         if (!($r['ok'] ?? false)) { return null; }
-        MensajitosCadenciaEngine::registrar($partida, $rid, $fam['familia'], 'espontaneo');
+        MensajitosCadenciaEngine::registrar($partida, $rid, $fam['familia'], 'espontaneo', (string) ($fam['datos']['clave'] ?? ''));
         DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
             'mensaje' => $r['mensaje'] ?? null,
             'origen_evento' => 'espontaneo_' . $fam['familia'],
@@ -210,16 +225,30 @@ final class MensajitoGeneradorEspontaneo
     private static function vecinosApagados(array $partida, string $rid): array
     {
         $out = [];
+        $bajos = ['triste', 'solo', 'aislado', 'preocupado', 'apagado', 'neutro'];
         foreach ($partida['residentes'] ?? [] as $otro => $rData) {
             if ($otro === $rid || !is_array($rData)) { continue; }
             if (!self::seConocen($partida, $rid, $otro)) { continue; }
+            $motivo = null;
             $ems = $rData['emociones'] ?? [];
-            if (!is_array($ems)) { continue; }
-            foreach ($ems as $em) {
-                if (is_array($em) && in_array($em['estado'] ?? '', ['triste', 'solo', 'aislado', 'preocupado'], true)) {
-                    $out[] = ['residente_id' => $otro, 'nombre' => IdentidadPublica::nombre($partida, $otro)];
-                    break;
+            if (is_array($ems)) {
+                foreach ($ems as $em) {
+                    if (!is_array($em)) { continue; }
+                    $est = (string) ($em['estado'] ?? $em['tipo'] ?? '');
+                    if (in_array($est, $bajos, true) && (int) ($em['intensidad'] ?? 1) >= 2) {
+                        $motivo = $est;
+                        break;
+                    }
                 }
+            }
+            if ($motivo === null) {
+                $emoRt = (string) ($rData['runtime']['estado_emocional']['id'] ?? '');
+                if (in_array($emoRt, ['triste', 'apagado'], true)) {
+                    $motivo = $emoRt;
+                }
+            }
+            if ($motivo !== null) {
+                $out[] = ['residente_id' => $otro, 'nombre' => IdentidadPublica::nombre($partida, $otro), 'motivo' => $motivo];
             }
         }
         return $out;

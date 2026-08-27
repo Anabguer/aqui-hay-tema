@@ -63,6 +63,7 @@ final class SeguimientoConsejoEngine
             $texto = self::generarSeguimiento($partida, $rid, $consejoId, $s['tema'] ?? 'romance');
 
             if ($texto !== '') {
+                $hiloOrigen = self::buscarHiloPorConsejo($partida, $rid, $consejoId);
                 $r = BuzonEngine::crear($partida, [
                     'clasificacion' => BuzonEngine::OPORTUNIDAD,
                     'tipo' => 'seguimiento_consejo',
@@ -71,8 +72,11 @@ final class SeguimientoConsejoEngine
                     'actores' => [$rid],
                     'texto' => $texto,
                     'acciones' => [],
+                    'familia_mensajito' => 'f_seguimiento',
                     'seguimiento_pendiente' => false,
                     'consejo_seguimiento' => $consejoId,
+                    'hilo_id' => $hiloOrigen['hilo_id'] ?? null,
+                    'mensaje_origen_id' => $hiloOrigen['mensaje_id'] ?? null,
                     'origen' => [
                         'evento_id' => $consejoId,
                         'tipo_evento' => 'seguimiento_consejo',
@@ -110,5 +114,26 @@ final class SeguimientoConsejoEngine
         $vars = ['consejo_id' => $consejoId, 'texto' => $tema];
         $seed = 'seguimiento|' . $rid . '|' . $consejoId;
         return MensajitoVoz::linea($partida, 'seguimiento_consejo', $vars, $seed, $rid);
+    }
+
+    /**
+     * @return array{hilo_id: ?string, mensaje_id: ?string}
+     */
+    private static function buscarHiloPorConsejo(array $partida, string $rid, string $consejoId): array
+    {
+        foreach ($partida['buzon'] ?? [] as $m) {
+            if (!is_array($m) || ($m['de_persona'] ?? '') !== $rid) {
+                continue;
+            }
+            $resp = is_array($m['respuesta_celestine'] ?? null) ? $m['respuesta_celestine'] : [];
+            if ((string) ($resp['consejo_id'] ?? '') !== $consejoId) {
+                continue;
+            }
+            return [
+                'hilo_id' => (string) ($m['hilo_id'] ?? $m['id'] ?? ''),
+                'mensaje_id' => (string) ($m['id'] ?? ''),
+            ];
+        }
+        return ['hilo_id' => null, 'mensaje_id' => null];
     }
 }

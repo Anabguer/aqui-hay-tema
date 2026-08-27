@@ -14,6 +14,12 @@ final class MensajitoAcciones
     public const DEJAR_MARCHAR = 'dejar_marchar';
     public const PEDIR_QUEDARSE = 'pedir_quedarse';
     public const ELEGIR_PERSONA = 'elegir_persona';
+    public const RESPONDER_CONSEJO = 'responder_consejo';
+    public const RESPONDER_ESCUCHAR = 'responder_escuchar';
+    public const RESPONDER_CELESTINE = 'responder_celestine';
+    public const INVESTIGAR = 'investigar';
+    public const ORGANIZAR_ALGO = 'organizar_algo';
+    public const NO_METERSE = 'no_meterse';
 
     /** @var array<string, array{id: string, etiqueta: string, estilo: string, api: string}> */
     private const DEFS = [
@@ -47,6 +53,24 @@ final class MensajitoAcciones
             'estilo' => 'primario',
             'api' => 'buzon.resolver',
         ],
+        self::INVESTIGAR => [
+            'id' => self::INVESTIGAR,
+            'etiqueta' => 'Ver ficha',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::ORGANIZAR_ALGO => [
+            'id' => self::ORGANIZAR_ALGO,
+            'etiqueta' => 'Organizar',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::NO_METERSE => [
+            'id' => self::NO_METERSE,
+            'etiqueta' => 'Dejarlo por ahora',
+            'estilo' => 'suave',
+            'api' => 'buzon.resolver',
+        ],
     ];
 
     /**
@@ -77,6 +101,9 @@ final class MensajitoAcciones
         $out = [];
         foreach ($acciones as $aid) {
             if (!is_string($aid) || $aid === '') {
+                continue;
+            }
+            if (in_array($aid, [self::RESPONDER_CONSEJO, self::RESPONDER_ESCUCHAR, self::RESPONDER_CELESTINE], true)) {
                 continue;
             }
             $def = self::def($aid);
@@ -156,6 +183,25 @@ final class MensajitoAcciones
                     null,
                     $logger
                 );
+                break;
+            case self::RESPONDER_CONSEJO:
+            case self::RESPONDER_ESCUCHAR:
+            case self::RESPONDER_CELESTINE:
+                $r = MensajitoConsejoEngine::responderOpcion(
+                    $partida,
+                    $mensajeId,
+                    (string) ($payload['opcion_id'] ?? ''),
+                    $payload
+                );
+                break;
+            case self::INVESTIGAR:
+                $r = MensajitoConsejoEngine::investigar($partida, $mensajeId);
+                break;
+            case self::ORGANIZAR_ALGO:
+                $r = MensajitoConsejoEngine::organizarAlgo($partida, $mensajeId);
+                break;
+            case self::NO_METERSE:
+                $r = MensajitoConsejoEngine::noMeterse($partida, $mensajeId);
                 break;
             default:
                 $r = ['ok' => false, 'error' => 'accion_sin_resolver', 'accion' => $accionId];

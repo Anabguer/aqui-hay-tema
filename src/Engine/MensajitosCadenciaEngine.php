@@ -113,16 +113,20 @@ final class MensajitosCadenciaEngine
     /**
      * Registra un mensaje en el historial de cadencia.
      */
-    public static function registrar(array &$partida, string $residenteId, string $familia, string $tipo = 'espontaneo'): void
+    public static function registrar(array &$partida, string $residenteId, string $familia, string $tipo = 'espontaneo', string $clave = ''): void
     {
         $partida['mensajitos_historial'] ??= [];
-        $partida['mensajitos_historial'][] = [
+        $entry = [
             'residente_id' => $residenteId,
             'familia' => $familia,
             'tipo' => $tipo,
             'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
             'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
         ];
+        if ($clave !== '') {
+            $entry['clave'] = $clave;
+        }
+        $partida['mensajitos_historial'][] = $entry;
     }
 
     /**
