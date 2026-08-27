@@ -140,12 +140,14 @@ ok(strpos($texto, 'bonus') === false && strpos($texto, 'modificador') === false 
     'copy sin jerga tecnica');
 
 $efectos = is_array($r['efectos'] ?? null) ? $r['efectos'] : [];
-$emo = is_array($efectos['emocion'] ?? null) ? $efectos['emocion'] : [];
 $afin = (string) ($r['intervencion']['afinidad_tema'] ?? '');
-if ($afin === 'afin' && ($r['intervencion']['tono'] ?? '') !== 'mal') {
-    ok((string) ($emo['residente'] ?? '') === $interlocutor, '2b. emocion al interlocutor si afinidad');
+$temaCargas = is_array($r['intervencion']['tema_cargas'] ?? null) ? $r['intervencion']['tema_cargas'] : [];
+if ($afin === 'afin') {
+    ok((float) ($temaCargas[$interlocutor] ?? 0) > (float) ($temaCargas[$influido] ?? 0),
+        '2b. carga experiencia mayor en beneficiario si afinidad');
+    ok(isset($efectos['mentes_tema']['afinidad']), '2b. sin emoción inmediata; efecto diferido a cierre');
 } else {
-    ok(true, '2b. sin emocion positiva si no afin o tono mal (skip)');
+    ok(true, '2b. sin carga afín si no afin (skip)');
 }
 
 /* hobby del influido rechazado cuando objetivo apunta al interlocutor */
@@ -206,11 +208,11 @@ if ($compartido !== '') {
         'objetivo' => $influido4,
         'hobby_id' => $compartido,
     ], $catalog4);
-    if (($rComp['intervencion']['tono'] ?? '') === 'bien') {
-        $ef4 = is_array($rComp['efectos'] ?? null) ? $rComp['efectos'] : [];
-        ok(isset($ef4['emocion_compartida']) || isset($ef4['emocion']), '4. hobby compartido puede beneficiar');
+    if (($rComp['intervencion']['afinidad_tema'] ?? '') === 'afin') {
+        $tc = is_array($rComp['intervencion']['tema_cargas'] ?? null) ? $rComp['intervencion']['tema_cargas'] : [];
+        ok((float) ($tc[$interlocutor4] ?? 0) > 0, '4. hobby compartido afín carga al beneficiario');
     } else {
-        ok(true, '4. hobby compartido: tono no bien, skip emocion compartida');
+        ok(true, '4. hobby compartido: sin afinidad clara (skip)');
     }
 } else {
     ok(true, '4. SKIP: sin hobby compartido en fixtures');

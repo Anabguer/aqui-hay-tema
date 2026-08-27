@@ -124,11 +124,10 @@ $r = EncuentroIntervencion::ejecutar($partida, $encId, EncuentroIntervencion::HO
 ], $catalog);
 ok(($r['ok'] ?? false), 'ejecutar hobby con objetivo ok');
 $ef = $r['efectos'] ?? [];
-if (($r['intervencion']['tono'] ?? '') !== 'mal') {
-    ok(($ef['emocion']['residente'] ?? '') === $german, '2 Germán recibe emoción principal si no es mal');
-} else {
-    ok(true, '2 tono mal: sin emoción positiva (skip)');
-}
+$interv = is_array($r['intervencion'] ?? null) ? $r['intervencion'] : [];
+ok(isset($interv['tema_cargas'][$german]) && (float) $interv['tema_cargas'][$german] > 0.0,
+    '2 Germán (beneficiario) recibe carga de experiencia si tema afín');
+ok(isset($ef['mentes_tema']['afinidad']), '2 efecto MENTES registrado sin emoción inmediata');
 ok(strpos((string) ($r['intervencion']['texto'] ?? ''), 'recibe la idea') === false, '10 sin copy técnico recibe la idea');
 ok(($r['intervencion']['rompe_hielo'] ?? '') === $tamara, 'rompe_hielo = Tamara');
 

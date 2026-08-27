@@ -734,6 +734,84 @@ final class EncuentroIntervencion
     }
 
     /**
+     * MENTES iter2: el tema no resuelve el encuentro aquí; marca el momento y deja
+     * las cargas asimétricas para EncuentroExperiencia al cerrar.
+     *
+     * @param array<string, mixed> $enc
+     * @param array<string, mixed> $params
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    private static function resolverMentesHobby(
+        array &$partida,
+        array $enc,
+        string $a,
+        string $b,
+        array $params,
+        array $cal,
+        Catalog $catalog,
+        RngService $rng
+    ): array {
+        $objetivo = (string) ($params['objetivo'] ?? '');
+        $interlocutor = self::interlocutorDe($enc, $objetivo);
+        $hid = (string) ($params['hobby_id'] ?? '');
+        $afinidad = (string) ($params['afinidad_tema'] ?? 'neutro');
+        $label = $hid;
+        if ($hid !== '') {
+            try {
+                $label = MentesTemas::etiquetaTema($hid, $catalog->store());
+            } catch (\Throwable $ignored) {
+            }
+        }
+        if ($afinidad === 'afin') {
+            $tono = 'neutral';
+        } elseif ($afinidad === 'aversion') {
+            $tono = 'mal';
+        } else {
+            $tono = 'neutral';
+        }
+        $texto = MentesTemas::copyResultado(
+            $partida,
+            $objetivo,
+            $interlocutor,
+            $label,
+            $afinidad,
+            $tono,
+            $rng
+        );
+        $intervProvisional = [
+            'accion' => self::HOBBY,
+            'afinidad_tema' => $afinidad,
+            'beneficiario' => (string) ($params['residente_id'] ?? $interlocutor),
+            'rompe_hielo' => $objetivo,
+            'objetivo' => $objetivo,
+        ];
+        $cargasExperiencia = MentesTemas::cargasExperienciaPorParticipante(
+            $intervProvisional,
+            [$a, $b],
+            $cal
+        );
+        $empuje = (float) CalibracionConfig::get($cal, 'mentes.carga_empuje_momento', 0.10);
+        if ($afinidad === 'afin') {
+            $carga = $empuje;
+        } elseif ($afinidad === 'aversion') {
+            $carga = -$empuje;
+        } else {
+            $carga = 0.03;
+        }
+        return [
+            'tono' => $tono,
+            'resultado' => 'normal',
+            'texto' => $texto,
+            'carga' => $carga,
+            'cargas_experiencia' => $cargasExperiencia,
+            'efectos' => ['mentes_tema' => ['afinidad' => $afinidad, 'beneficiario' => $interlocutor]],
+            'hito' => null,
+            'cotilleo' => false,
+        ];
+    }
+
+    /**
      * @param array<string, mixed> $enc
      * @param array<string, mixed> $cal
      * @return array<string, mixed>

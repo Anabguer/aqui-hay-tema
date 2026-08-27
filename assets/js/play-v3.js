@@ -9,7 +9,16 @@
     if (org && curso) return 'Ver encuentro';
     return 'Ver qu\u00e9 pasa';
   }
-
+  function resumenEncursoSinMentes(enc, iv) {
+    if (iv && iv.usada) return '';
+    if (enc && enc.intencion === 'celeste_organizado') {
+      var m = iv && iv.motivo_no_disponible;
+      if (m === 'intervencion_ya_usada') return 'Ya has metido mano en este encuentro.';
+      if (m === 'fuera_de_franja') return 'El encuentro sigue, pero ahora no puedes intervenir.';
+      if (m === 'no_organizado_por_celestine') return 'Es un encuentro espont\u00e1neo: solo puedes mirar.';
+    }
+    return 'Parece que la cosa va bien\u2026';
+  }
 
   const API = 'api/index.php';
   const qs = new URLSearchParams(location.search);
@@ -1874,7 +1883,7 @@
       return 'Puedes intervenir en el encuentro.';
     }
     if (iv && iv.ultimo && iv.ultimo.tono === 'mal') return 'La cosa se ha puesto tensa\u2026';
-    return 'Parece que la cosa va bien\u2026';
+    return resumenEncursoSinMentes(enc, iv);
   }
   function htmlEncursoVistaPanel(enc) {
     const ids = enc.participantes || [];
