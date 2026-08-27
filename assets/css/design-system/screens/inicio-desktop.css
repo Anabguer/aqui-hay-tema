@@ -771,4 +771,33 @@
     justify-content: flex-start !important;
   }
 
+  /* INICIO-DESKTOP-MAP-v11: recuperar mapa central (altura colapsada por align-items:start) */
+  .play-v3:has(.game-shell) .game-main {
+    align-items: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: stretch !important;
+    justify-self: stretch !important;
+    min-width: 0 !important;
+    min-height: min(76vh, 660px) !important;
+    display: flex !important;
+    visibility: visible !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .play-stage,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root.pc {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .mapa-canonico,
+  .play-v3:has(.game-shell) .game-map-wrap .mapa-canonico-bg {
+    visibility: visible !important;
+  }
+
 }
