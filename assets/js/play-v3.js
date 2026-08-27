@@ -1514,17 +1514,54 @@
     }
     return null;
   }
+  function caraIntervencionHtml(id) {
+    var rid = String(id || '');
+    if (!rid) return '<span class="enc-int-pers-cara enc-int-pers-cara--ini">?</span>';
+    return '<span class="enc-int-pers-cara enc-int-pers-cara--ini">' + esc((nombreDe(rid)[0] || '?')) + '</span>';
+  }
+  function hobbyVisibleParaObjetivo(hobbyResidenteId, objetivoId) {
+    if (!objetivoId) return true;
+    return !hobbyResidenteId || hobbyResidenteId === objetivoId;
+  }
+  function textoFeedbackIntervencion(iv) {
+    if (!iv || !iv.ultimo) return '';
+    var t = iv.ultimo.texto || '';
+    var obj = iv.ultimo.objetivo;
+    if (!t) return '';
+    if (!obj) return t;
+    var nombre = obj ? nombreDe(obj) : '';
+    if (iv.ultimo.tono === 'bien') {
+      return nombre + ' \u00a1recibe la idea! ' + t;
+    }
+    if (iv.ultimo.tono === 'mal') {
+      return nombre + ' no conecta: ' + t;
+    }
+    return nombre + ': ' + t;
+  }
   function htmlIntervencionEncuentro(enc, estado) {
     if (!planEsEnCurso(enc, estado)) return '';
     var iv = intervencionVistaDe(enc, estado);
     if (!iv) return '';
     if (iv.usada && iv.ultimo && iv.ultimo.texto) {
       var tono = iv.ultimo.tono || 'neutral';
-      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(iv.ultimo.texto) + '</p></div>';
+      var txt = textoFeedbackIntervencion(iv);
+      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(txt) + '</p></div>';
     }
     if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
+    var ids = enc.participantes || [];
     var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
-      '<p class="enc-int-kicker">Intervenir una vez</p><div class="enc-int-btns">';
+      '<div class="enc-int-step" data-enc-int-paso="persona">' +
+      '<p class="enc-int-kicker">\u00bfEn qui\u00E9n quieres meterte?</p>' +
+      '<div class="enc-int-personas">';
+    ids.forEach(function (rid) {
+      html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
+        caraIntervencionHtml(rid) + '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
+    });
+    html += '</div></div>';
+    html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
+      '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
+      '<p class="enc-int-kicker">\u00bfQu\u00E9 quieres meterle en la cabeza?</p>' +
+      '<div class="enc-int-btns">';
     var temas = null;
     iv.acciones.forEach(function (a) {
       if (!a.disponible) return;
@@ -1537,7 +1574,7 @@
     html += '</div>';
     if (temas && temas.length) {
       html += '<div class="enc-int-temas">' +
-        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">💬 Elegir un tema…</button>' +
+        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false">\ud83d\udcac Elegir un tema\u2026</button>' +
         '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu">';
       temas.forEach(function (h) {
         html += '<button type="button" class="enc-int-btn enc-int-btn--hobby enc-int-opt" data-enc-int-accion="hobby" data-hobby-id="' + esc(h.id) + '" data-residente-id="' + esc(h.residente_id) + '" role="menuitem">' +
@@ -1545,6 +1582,7 @@
       });
       html += '</div></div>';
     }
+    html += '</div>';
     html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
     return html;
   }
@@ -1558,6 +1596,7 @@
     var payload = { encuentro_id: encId, accion: accion };
     if (extra && extra.hobby_id) payload.hobby_id = extra.hobby_id;
     if (extra && extra.residente_id) payload.residente_id = extra.residente_id;
+    if (extra && extra.objetivo) payload.objetivo = extra.objetivo;
     var r = await api('encuentro.intervencion.ejecutar', payload);
     if (!r.ok) {
       toast(r.mensaje_ui || 'No se pudo intervenir.');
@@ -1672,29 +1711,60 @@
     track.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardMovil(enc, estado); }).join('');
   }
   var encMovIndice = 0;
+    function formatEncursoMetaLine(enc, estado) {
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
+    const reloj = (estado && estado.reloj) || {};
+    if (planEsEnCurso(enc, estado)) return lugar + ' \u00b7 En curso \u00b7 ' + hora;
+    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' \u00b7 Hoy ' + hora;
+    return lugar + ' \u00b7 D\u00eda ' + (enc.dia || '?') + ' \u00b7 ' + hora;
+  }
+  function encCursoFacesHtml(ids) {
+    const slice = ids.slice(0, 2);
+    if (slice.length < 2) return carasPlanHtml(slice);
+    return htmlCaraToken(slice[0]) +
+      '<span class="enc-mov-heart" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>' +
+      htmlCaraToken(slice[1]);
+  }
+  function resumenEncursoMovil(enc, estado) {
+    const iv = intervencionVistaDe(enc, estado);
+    if (iv && iv.usada && iv.ultimo && iv.ultimo.texto) {
+      const t = textoFeedbackIntervencion(iv);
+      if (t.length > 78) return t.slice(0, 75) + '\u2026';
+      return t;
+    }
+    if (iv && iv.disponible && iv.acciones && iv.acciones.length) {
+      return 'Puedes intervenir en el encuentro.';
+    }
+    if (iv && iv.ultimo && iv.ultimo.tono === 'mal') return 'La cosa se ha puesto tensa\u2026';
+    return 'Parece que la cosa va bien\u2026';
+  }
+  function htmlEncursoVistaPanel(enc) {
+    const ids = enc.participantes || [];
+    const nombres = ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ');
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    return '<div class="enc-mov-vista"><p class="enc-mov-vista-txt">' +
+      esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
+  }
   function htmlEncursoCardMovil(enc, estado) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
+    const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
+    const ctaTxt = puedeIntervenir ? 'Intervenir' : 'Ver encuentro';
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-mov-row">' +
-      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
-      '<div class="enc-mov-copy">' +
-      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
-      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
-      '<span class="enc-mov-estado">EN CURSO</span>' +
-      '</div>';
-    if (hayInt) {
-      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-txt">Intervenir</span>' +
-        '<span class="enc-mov-cta-flecha" aria-hidden="true">\u203a</span></button>';
-    }
-    html += '</div>';
-    if (hayInt) {
-      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' +
-        htmlIntervencionEncuentro(enc, estado) + '</div>';
-    }
+      '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
+      '<div class="enc-mov-body">' +
+      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(ids) + '</div>' +
+      '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
+      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>' +
+      '</div>' +
+      '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+      '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
+      '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+      '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
     return html + '</article>';
   }
   function encMovPaso(track) {
@@ -5334,23 +5404,63 @@ function hobbyIconKey(id, texto) {
       wrap.classList.add('is-busy');
       var encId = wrap.getAttribute('data-enc-id');
       var acc = encIntBtn.getAttribute('data-enc-int-accion');
-      var extra = {};
+      var objetivoId = wrap.getAttribute('data-enc-int-objetivo') || '';
+      var extra = { objetivo: objetivoId || undefined };
       if (acc === 'hobby') {
+        var hobbyResidenteId = encIntBtn.getAttribute('data-residente-id');
+        if (objetivoId && !hobbyVisibleParaObjetivo(hobbyResidenteId, objetivoId)) {
+          wrap.classList.remove('is-busy');
+          return;
+        }
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
-        extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+        extra.residente_id = hobbyResidenteId;
         var optWrap = encIntBtn.closest('.enc-int-temas');
         if (optWrap) {
           cerrarSelectorTemas();
           var togEl = optWrap.querySelector('[data-temas-toggle]');
           if (togEl) {
             togEl.classList.add('is-elegido');
-            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' ▾';
+            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' \u25be';
             togEl.setAttribute('aria-expanded', 'false');
           }
         }
       }
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');
+      });
+      return;
+    }
+    const encPersona = ev.target.closest('[data-enc-int-persona]');
+    if (encPersona) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrapP = encPersona.closest('[data-enc-int]');
+      if (!wrapP) return;
+      var personaId = encPersona.getAttribute('data-enc-int-persona');
+      wrapP.setAttribute('data-enc-int-objetivo', personaId);
+      var stepPersona = wrapP.querySelector('[data-enc-int-paso="persona"]');
+      var stepAccion = wrapP.querySelector('[data-enc-int-paso="accion"]');
+      if (stepPersona) stepPersona.hidden = true;
+      if (stepAccion) stepAccion.hidden = false;
+      wrapP.querySelectorAll('.enc-int-btn--hobby[data-residente-id]').forEach(function (b) {
+        var rid = b.getAttribute('data-residente-id');
+        b.hidden = !hobbyVisibleParaObjetivo(rid, personaId);
+      });
+      return;
+    }
+    const encVolver = ev.target.closest('[data-enc-int-volver]');
+    if (encVolver) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      var wrapV = encVolver.closest('[data-enc-int]');
+      if (!wrapV) return;
+      wrapV.removeAttribute('data-enc-int-objetivo');
+      var stepPA = wrapV.querySelector('[data-enc-int-paso="persona"]');
+      var stepAC = wrapV.querySelector('[data-enc-int-paso="accion"]');
+      if (stepAC) stepAC.hidden = true;
+      if (stepPA) stepPA.hidden = false;
+      wrapV.querySelectorAll('.enc-int-btn--hobby[data-residente-id]').forEach(function (b) {
+        b.hidden = false;
       });
       return;
     }

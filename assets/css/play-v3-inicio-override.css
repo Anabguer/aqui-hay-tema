@@ -1136,3 +1136,235 @@
     color: var(--ds-text-muted, #6a5f55) !important;
   }
 }
+
+/* === INICIO-ENCURSO-REF-v14: Plan en curso móvil = ref captura (tarjeta papel vertical compacta) === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cab {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 2px 6px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card {
+    position: relative !important;
+    flex: 0 0 calc(100% - 6px) !important;
+    width: calc(100% - 6px) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 18px 12px 10px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 12px !important;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%),
+      #fff5f0 !important;
+    box-shadow: 0 1px 4px rgba(44, 38, 31, 0.08) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    width: 52px !important;
+    height: 14px !important;
+    transform: translate(-50%, -42%) rotate(-1deg) !important;
+    background: rgba(255, 214, 120, 0.72) !important;
+    border: 1px solid rgba(89, 72, 57, 0.12) !important;
+    border-radius: 2px !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card-tit {
+    margin: 0 !important;
+    padding: 0 2px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 800 !important;
+    font-style: normal !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-row,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-copy,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nombres,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-lugar,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-estado {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-faces {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    margin: 2px 0 0 !important;
+    flex: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-faces img,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-faces .cara-ini {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    object-position: 50% 20% !important;
+    margin: 0 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px rgba(89, 72, 57, 0.28) !important;
+    flex: 0 0 44px !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-heart {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    margin: 0 -10px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.18) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    z-index: 1 !important;
+    flex: 0 0 22px !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-heart svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-meta {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-resumen {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    line-height: 1.2 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 2px 0 0 !important;
+    padding: 8px 10px !important;
+    min-height: 40px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink, #e8887a) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    transform: none !important;
+    align-self: stretch !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 16px !important;
+    height: 16px !important;
+    flex: 0 0 16px !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta-ico svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta-flecha {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta.is-open {
+    background: #f6c4bc !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-panel {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 2px !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-vista-txt {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.9375rem !important;
+    line-height: 1.2 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-indice {
+    margin: 4px 0 0 !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    text-align: center !important;
+  }
+}
