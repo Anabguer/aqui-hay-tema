@@ -42,6 +42,13 @@ final class RelojOperations
             }
             MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
 
+            // F10 — rituales contextuales (cumpleaños) al inicio del nuevo día
+            if (!$catchUp && FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
+                $calCtx = CalibracionConfig::load($this->projectRoot);
+                $catalogCtx = new Catalog($this->projectRoot);
+                MensajitoContextualEngine::evaluarAlComenzarDia($partida, $calCtx, $catalogCtx, $this->logger);
+            }
+
             // Mensajitos espontaneos: generar al inicio del nuevo dia
             if (!$catchUp && FeatureConfig::isEnabled($partida, 'mensajitos_espontaneos_enabled')) {
                 $calMens = CalibracionConfig::load($this->projectRoot);

@@ -22,6 +22,9 @@ final class MensajitoAcciones
     public const NO_METERSE = 'no_meterse';
     public const ACEPTAR_EVENTO = 'aceptar_evento';
     public const DECLINAR_EVENTO = 'declinar_evento';
+    public const PARTICIPAR_CUMPLE = 'participar_cumple';
+    public const ORGANIZAR_CUMPLE = 'organizar_cumple';
+    public const IGNORAR_CONTEXTUAL = 'ignorar_contextual';
 
     /** @var array<string, array{id: string, etiqueta: string, estilo: string, api: string}> */
     private const DEFS = [
@@ -82,6 +85,24 @@ final class MensajitoAcciones
         self::DECLINAR_EVENTO => [
             'id' => self::DECLINAR_EVENTO,
             'etiqueta' => 'Esta vez no',
+            'estilo' => 'suave',
+            'api' => 'buzon.resolver',
+        ],
+        self::PARTICIPAR_CUMPLE => [
+            'id' => self::PARTICIPAR_CUMPLE,
+            'etiqueta' => 'Felicitar',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::ORGANIZAR_CUMPLE => [
+            'id' => self::ORGANIZAR_CUMPLE,
+            'etiqueta' => 'Organizar algo',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::IGNORAR_CONTEXTUAL => [
+            'id' => self::IGNORAR_CONTEXTUAL,
+            'etiqueta' => 'Dejarlo por ahora',
             'estilo' => 'suave',
             'api' => 'buzon.resolver',
         ],
@@ -222,6 +243,15 @@ final class MensajitoAcciones
                 break;
             case self::DECLINAR_EVENTO:
                 $r = MensajitoColectivoEngine::declinar($partida, $mensajeId);
+                break;
+            case self::PARTICIPAR_CUMPLE:
+                $r = MensajitoContextualEngine::participarCumple($partida, $mensajeId);
+                break;
+            case self::ORGANIZAR_CUMPLE:
+                $r = MensajitoContextualEngine::organizarCumple($partida, $mensajeId);
+                break;
+            case self::IGNORAR_CONTEXTUAL:
+                $r = MensajitoContextualEngine::ignorarContextual($partida, $mensajeId);
                 break;
             default:
                 $r = ['ok' => false, 'error' => 'accion_sin_resolver', 'accion' => $accionId];

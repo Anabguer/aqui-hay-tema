@@ -94,6 +94,7 @@ final class CanalDeduplicador
             'seguimiento_peticion' => [BuzonEngine::CANAL_BUZON],
             'anuncio_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
             'cierre_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
+            'ritual_contextual_cumpleanos' => [BuzonEngine::CANAL_BUZON],
         ];
     }
 

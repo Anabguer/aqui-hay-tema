@@ -249,6 +249,28 @@ final class MensajitoVoz
     }
 
     /** @return list<string> */
+    private static function bancoFRitualCumpleAviso(): array
+    {
+        return [
+            'Celestine, hoy es el cumpleaños de {otro}. ¿Le decimos algo?',
+            'Oye, que hoy cumple años {otro}. ¿Le felicitamos?',
+            'Por si no te habías enterado: hoy es el cumple de {otro}.',
+            'Hoy toca celebrar a {otro}. ¿Le echamos una mano?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFRitualCumpleInvitacion(): array
+    {
+        return [
+            'Celestine, hoy es mi cumpleaños. ¿Te apuntas a celebrarlo conmigo?',
+            'Oye, que hoy cumplo años. ¿Montamos algo?',
+            'Hoy es mi día. ¿Me acompañas a celebrarlo?',
+            'Celestine, hoy cumplo. ¿Te animas?',
+        ];
+    }
+
+    /** @return list<string> */
     private static function bancoAnuncioEventoPueblo(): array
     {
         return [
@@ -487,6 +509,8 @@ final class MensajitoVoz
             'f_curiosidad_celestine',
             'anuncio_evento_pueblo',
             'cierre_evento_pueblo',
+            'f_ritual_cumple_aviso',
+            'f_ritual_cumple_invitacion',
         ];
     }
 
@@ -584,6 +608,10 @@ final class MensajitoVoz
                 return self::bancoAnuncioEventoPueblo();
             case 'cierre_evento_pueblo':
                 return self::bancoCierreEventoPueblo((string) ($vars['tono'] ?? 'ocurrio'));
+            case 'f_ritual_cumple_aviso':
+                return self::bancoFRitualCumpleAviso();
+            case 'f_ritual_cumple_invitacion':
+                return self::bancoFRitualCumpleInvitacion();
             default:
                 return [];
         }
