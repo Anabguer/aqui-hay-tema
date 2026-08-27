@@ -804,14 +804,6 @@ if (is_file($ahtBusterFile)) {
           <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
-          <section class="ficha-seccion org-seccion org-seccion--modo">
-            <div class="org-seccion-head org-seccion-head--center">
-              <div class="org-modo-chips" data-org-modo-row>
-                <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
-                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompañado</button>
-              </div>
-            </div>
-          </section>
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
               <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
@@ -856,7 +848,7 @@ if (is_file($ahtBusterFile)) {
           <button type="button" class="org-crear" data-org-go>
             <span class="org-crear-tape org-crear-tape-l" aria-hidden="true"></span>
             <span class="org-crear-tape org-crear-tape-r" aria-hidden="true"></span>
-            <span class="org-crear-txt">Crear plan</span>
+            <span class="org-crear-txt">Organizar</span>
           </button>
         </footer>
       </aside>

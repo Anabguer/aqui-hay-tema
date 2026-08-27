@@ -3406,3 +3406,27 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     min-height: 0 !important;
   }
 }
+
+/* === Fix móvil Nuevo plan: footer CTA visible (regresión eee4306 / max-height org-body) === */
+@media (max-width: 768px) {
+  .play-v3 .capa-organizar .org-seccion--modo {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar .org-body {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow-y: auto !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-footer {
+    flex-shrink: 0 !important;
+    position: sticky !important;
+    bottom: 0 !important;
+    z-index: 4 !important;
+    margin-top: auto !important;
+    background: linear-gradient(180deg, rgba(253, 248, 242, 0) 0%, rgba(253, 248, 242, .94) 32%, rgba(253, 248, 242, 1) 58%) !important;
+    padding-top: .45rem !important;
+  }
+}

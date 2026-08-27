@@ -40,8 +40,11 @@ if (strpos($js, 'renderMisionesStrip') === false) {
 if (strpos($js, 'resetOrgForm') === false) {
     $fail[] = 'falta resetOrgForm para Nuevo plan limpio';
 }
-if (strpos($js, 'setOrgModo(btn.getAttribute') === false) {
-    $fail[] = 'faltan listeners data-org-modo (Por su cuenta)';
+if (strpos($js, 'function orgModo()') === false) {
+    $fail[] = 'falta orgModo() auto (solo/acompañado por selección)';
+}
+if (strpos($php, 'data-org-modo-row') !== false) {
+    $fail[] = 'play.php no debe restaurar chips legacy Solo/Acompañado';
 }
 if (strpos($js, 'nuevo_mensajito') === false) {
     $fail[] = 'falta feedback nuevo_mensajito tras plan tutorial';
