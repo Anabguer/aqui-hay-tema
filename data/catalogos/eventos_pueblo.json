@@ -1,1 +1,96 @@
-{"_provisional":true,"_nota":"Catalogo eventos colectivos del pueblo. MOTOR != DATOS.","items":[{"id":"noche_bingo","nombre":"Noche de bingo","familia":"ocio_colectivo","icono":"\ud83c\udfb1","peso":1,"lugares":["lug_bingo"],"duracion_horas":2,"participantes_min":3,"participantes_max":8,"hora_min":18,"hora_max":21,"dias_anticipacion_min":1,"dias_anticipacion_max":4},{"id":"partido_futbol_benefico","nombre":"Partido de f\u00fatbol ben\u00e9fico","familia":"deporte_benefico","icono":"\u26bd","peso":1,"lugares":["lug_parque"],"duracion_horas":2,"participantes_min":4,"participantes_max":12,"hora_min":9,"hora_max":12,"dias_anticipacion_min":1,"dias_anticipacion_max":5}]}
+{
+    "_provisional": true,
+    "_nota": "Pack inicial eventos colectivos del pueblo. MOTOR != DATOS.",
+    "items": [
+        {
+            "id": "noche_bingo",
+            "nombre": "Noche de bingo",
+            "familia": "ocio_colectivo",
+            "icono": "\ud83c\udfb1",
+            "peso": 2,
+            "lugares": ["lug_bingo"],
+            "duracion_horas": 2,
+            "participantes_min": 3,
+            "participantes_max": 8,
+            "hora_min": 18,
+            "hora_max": 21,
+            "dias_anticipacion_min": 1,
+            "dias_anticipacion_max": 4
+        },
+        {
+            "id": "partido_futbol_benefico",
+            "nombre": "Partido de f\u00fatbol ben\u00e9fico",
+            "familia": "deporte_benefico",
+            "icono": "\u26bd",
+            "peso": 2,
+            "lugares": ["lug_parque"],
+            "duracion_horas": 2,
+            "participantes_min": 4,
+            "participantes_max": 12,
+            "hora_min": 9,
+            "hora_max": 12,
+            "dias_anticipacion_min": 1,
+            "dias_anticipacion_max": 5
+        },
+        {
+            "id": "sesion_cine_comunitaria",
+            "nombre": "Sesi\u00f3n de cine comunitaria",
+            "familia": "ocio_colectivo",
+            "icono": "\ud83c\udfac",
+            "peso": 1,
+            "lugares": ["lug_cine"],
+            "duracion_horas": 3,
+            "participantes_min": 5,
+            "participantes_max": 8,
+            "hora_min": 17,
+            "hora_max": 20,
+            "dias_anticipacion_min": 2,
+            "dias_anticipacion_max": 5
+        },
+        {
+            "id": "tardeo_en_el_bar",
+            "nombre": "Tardeo en el bar",
+            "familia": "ocio_colectivo",
+            "icono": "\ud83c\udf7b",
+            "peso": 1,
+            "lugares": ["lug_bar"],
+            "duracion_horas": 2,
+            "participantes_min": 4,
+            "participantes_max": 7,
+            "hora_min": 18,
+            "hora_max": 21,
+            "dias_anticipacion_min": 1,
+            "dias_anticipacion_max": 4
+        },
+        {
+            "id": "clase_abierta_gimnasio",
+            "nombre": "Clase abierta en el gimnasio",
+            "familia": "deporte_colectivo",
+            "icono": "\ud83d\udcaa",
+            "peso": 1,
+            "lugares": ["lug_gimnasio"],
+            "duracion_horas": 1,
+            "participantes_min": 4,
+            "participantes_max": 8,
+            "hora_min": 9,
+            "hora_max": 11,
+            "dias_anticipacion_min": 1,
+            "dias_anticipacion_max": 3
+        },
+        {
+            "id": "club_lectura",
+            "nombre": "Club de lectura",
+            "familia": "cultura_comunitaria",
+            "icono": "\ud83d\udcda",
+            "peso": 1,
+            "lugares": ["lug_biblioteca"],
+            "duracion_horas": 2,
+            "participantes_min": 3,
+            "participantes_max": 5,
+            "hora_min": 11,
+            "hora_max": 17,
+            "dias_anticipacion_min": 2,
+            "dias_anticipacion_max": 5
+        }
+    ]
+}
