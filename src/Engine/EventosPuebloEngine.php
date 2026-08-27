@@ -170,6 +170,8 @@ final class EventosPuebloEngine
         ];
         $partida['eventos_pueblo']['programados'][] = $row;
 
+        EventosPuebloAnuncioEngine::anunciarTrasProgramar($partida, $row, $catalog, $cal, $rng, $logger);
+
         return self::fin($partida, 'evento_programado', $eventoId, [
             'ok' => true,
             'evento' => $row,
