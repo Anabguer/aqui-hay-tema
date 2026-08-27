@@ -355,7 +355,7 @@
     transform: rotate(4deg);
   }
 
-  .inicio-mobile .inicio-mobile-tiles-tile-label,
+  .inicio-mobile .inicio-mobile-tiles .game-left-tile-label,
   .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt,
   .inicio-mobile .celestine-nota .obj-vecinos-tit {
     font-family: var(--ds-font-hand);
@@ -1474,8 +1474,9 @@
 }
 
 
-/* INICIO-MOBILE-OVERRIDE — gana a play-v3-responsive legacy (ref c5f73d3) */
+/* INICIO-MOBILE-OVERRIDE-v2 — gana a play-v3-responsive; ref c5f73d3 + piloto v3.1 */
 @media (max-width: 768px) {
+  /* --- 1. Cabecera movil (c5f73d3 inicio.css + override + responsive reloj) --- */
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .game-top {
     display: grid !important;
     grid-template-columns: auto 1fr auto auto !important;
@@ -1495,11 +1496,50 @@
     display: contents !important;
   }
 
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .brand-text {
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.6875rem !important;
+    line-height: 1 !important;
+    letter-spacing: .5px !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .brand-heart {
+    width: 16px !important;
+    height: 15px !important;
+    margin-top: -6px !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .game-top .btn-guia:not([hidden]) {
+    display: inline-flex !important;
+    grid-area: guia !important;
+    align-self: start !important;
+    justify-self: end !important;
+    margin: 0 !important;
+    padding: 2px 4px !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    transform: rotate(-1deg) !important;
+  }
+
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-meta-prim {
     grid-area: meta !important;
     display: inline-flex !important;
-    font-weight: 800 !important;
+    align-self: end !important;
+    justify-self: start !important;
     margin: 0 !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .8125rem !important;
+    color: var(--ds-ink, #3b3028) !important;
   }
 
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-meta-hora {
@@ -1507,14 +1547,113 @@
     display: inline-flex !important;
     align-items: center !important;
     gap: 4px !important;
+    align-self: end !important;
+    justify-self: start !important;
     margin: 0 !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 700 !important;
+    font-size: .8125rem !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-meta-line .top-meta-hora::before {
+    content: "" !important;
+    width: 14px !important;
+    height: 14px !important;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%236B5138' stroke-width='2.2'/%3E%3Cpath d='M12 7v5l3.4 2' fill='none' stroke='%236B5138' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain !important;
   }
 
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj {
     grid-area: rato !important;
     display: flex !important;
-    align-items: center !important;
-    gap: 8px !important;
+    align-items: flex-end !important;
+    gap: .45rem !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia {
+    width: 86px !important;
+    min-width: 86px !important;
+    margin: 0 !important;
+    filter: drop-shadow(1px 2px 0 rgba(44, 38, 31, .1)) !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia-cuerpo {
+    padding: .52rem .28rem .3rem !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia-estacion {
+    font-size: .64rem !important;
+    line-height: 1.12 !important;
+    white-space: normal !important;
+    text-align: center !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia-meta {
+    font-size: .72rem !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora {
+    padding: .28rem .62rem .32rem !important;
+    margin-bottom: 2px !important;
+    transform: rotate(var(--rot, 3deg)) scale(.88) !important;
+    transform-origin: left bottom !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora-val {
+    font-size: .76rem !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora-ico {
+    transform: scale(.88) !important;
+    transform-origin: center !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .pasar-rato {
+    min-height: 40px !important;
+    padding: 5px 11px !important;
+    background: var(--ds-lavender-soft, #ebe3f8) !important;
+    border: 1.5px solid var(--ds-lavender-deep, #7c6bae) !important;
+    border-radius: 12px 9px 13px 10px / 10px 13px 9px 12px !important;
+    box-shadow: 1.5px 2.5px 0 rgba(124, 107, 174, .35) !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .8125rem !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    transform: rotate(-1.2deg) !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-vida {
+    grid-area: vida !important;
+    align-self: center !important;
+    justify-self: end !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-vida .corazon-svg {
+    width: 56px !important;
+    height: 51px !important;
+    filter: drop-shadow(1px 3px 3px rgba(70, 50, 30, .25)) !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-vida .obj-vida-kicker {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .game-top .control-audio {
+    position: fixed !important;
+    right: max(.5rem, env(safe-area-inset-right, 0)) !important;
+    bottom: max(.5rem, env(safe-area-inset-bottom, 0)) !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 28 !important;
+  }
+
+  /* --- 2. Tres tiles (c5f73d3 + mobile_tiles_restore) --- */
+  .play-v3 .inicio-mobile .inicio-mobile-tiles {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    align-items: end !important;
+    gap: 10px !important;
+    padding: 0 13px !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon,
@@ -1528,24 +1667,281 @@
     overflow: visible !important;
   }
 
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon {
+    transform: translateY(3px) rotate(-0.7deg) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-resumen {
+    transform: translateY(-2px) rotate(0.55deg) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
+    transform: translateY(-4px) rotate(-0.35deg) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon .mensajitos-wrap {
+    flex: 1 1 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 86px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
     display: flex !important;
-    visibility: visible !important;
-    opacity: 1 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: relative !important;
     width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 10px 8px 9px !important;
+    border: 2px solid var(--ds-ink, #3b3028) !important;
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      var(--ds-paper-card, #f7f1e8) !important;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10) !important;
+    text-align: center !important;
+    gap: .12rem !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
+    min-height: 86px !important;
+    flex: 1 1 auto !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota {
+    min-height: 98px !important;
+    border-radius: 15px 21px 13px 21px / 21px 13px 21px 15px !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-ico-wrap,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
+    flex: 0 0 auto !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-img {
+    width: 46px !important;
+    height: auto !important;
+    margin: 0 !important;
+    transform: rotate(-5deg) !important;
+    filter: drop-shadow(1px 2px 1px rgba(70, 50, 30, .18)) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-badge {
+    position: absolute !important;
+    top: 6px !important;
+    right: 10px !important;
+    min-width: 24px !important;
+    height: 24px !important;
+    padding: 0 7px !important;
+    background: var(--ds-red-alert, #c42b4a) !important;
+    border: 2px solid #fff !important;
+    border-radius: 999px !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .75rem !important;
+    color: #fff !important;
+    box-shadow: 0 2px 4px rgba(70, 50, 30, .3) !important;
+    transform: rotate(4deg) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-tit,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .game-left-tile-label {
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.0625rem !important;
+    letter-spacing: .7px !important;
+    text-transform: uppercase !important;
+    line-height: 1.1 !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .libreta-kicker,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-stats {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview-cara,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview-ini {
+    width: 36px !important;
+    height: 36px !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #6b5138), 0 2px 3px rgba(70, 50, 30, .18) !important;
+    background: #fff !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-poblacion {
+    display: inline !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .8125rem !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
     min-height: 108px !important;
-    padding: 10px 8px !important;
+    padding: 10px 8px 10px !important;
     border: 2.5px dashed var(--ds-pink-deep, #c85b78) !important;
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
     background:
       radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
       linear-gradient(180deg, #fff8fb 0%, #fceef4 100%) !important;
     box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12) !important;
     transform: rotate(-0.35deg) !important;
+    gap: 2px !important;
   }
 
-  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
+    visibility: hidden !important;
+    font-size: inherit !important;
+    margin: 0 !important;
+    max-width: none !important;
+    white-space: normal !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    content: "+ NUEVO PLAN" !important;
+    visibility: visible !important;
+    display: block !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.0625rem !important;
+    letter-spacing: .7px !important;
+    text-transform: uppercase !important;
+    line-height: 1.1 !important;
     color: var(--ds-pink-deep, #c85b78) !important;
-    text-shadow: none !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
+    font-size: 2.35rem !important;
+    line-height: .85 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    background: transparent !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-flecha {
+    display: none !important;
+  }
+
+  /* --- 3. Cotilleo feed (c5f73d3 sec.6; gana a responsive generico) --- */
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 11px !important;
+    width: 100% !important;
+    min-height: 72px !important;
+    padding: 11px 12px !important;
+    margin: 0 !important;
+    overflow: visible !important;
+    max-height: none !important;
+    background: linear-gradient(180deg, #EBE3F8 0%, var(--ds-lavender-soft, #ebe3f8) 100%) !important;
+    border: 2px solid var(--ds-lavender-deep, #7c6bae) !important;
+    border-radius: 18px 13px 20px 15px / 13px 20px 15px 18px !important;
+    box-shadow: 1.5px 3px 0 rgba(124, 107, 174, .30), 0 4px 8px rgba(70, 50, 30, .08) !important;
+    transform: rotate(-0.4deg) !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-par::before,
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-par::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit {
+    flex: none !important;
+    display: inline-block !important;
+    white-space: nowrap !important;
+    transform: rotate(-1.2deg) !important;
+    padding: 7px 9px !important;
+    margin: 0 !important;
+    background: #4F4378 !important;
+    border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px !important;
+    box-shadow: 1px 2px 0 rgba(51, 38, 30, .3) !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    letter-spacing: .8px !important;
+    text-transform: uppercase !important;
+    line-height: 1.1 !important;
+    color: var(--ds-paper-card, #f7f1e8) !important;
+    text-align: center !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-cuerpo {
+    display: contents !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt {
+    display: -webkit-box !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 600 !important;
+    font-size: 1.0625rem !important;
+    line-height: 1.28 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-align: left !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-badge {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: none !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 6px !important;
+    background: var(--ds-red-alert, #c42b4a) !important;
+    border: 2px solid #fff !important;
+    border-radius: 999px !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .6875rem !important;
+    color: #fff !important;
+    transform: rotate(3deg) !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-badge[hidden] {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-flecha {
+    display: inline !important;
+    flex: none !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    font-size: 1.35rem !important;
+    font-weight: 800 !important;
   }
 }
