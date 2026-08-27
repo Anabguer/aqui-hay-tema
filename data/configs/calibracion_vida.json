@@ -550,4 +550,11 @@
         "segundos_por_hora_juego": 3600,
         "_nota": "1h real = 1h juego. Ausencia < umbral ignorada."
     }
+,
+    "seleccion_social": {
+        "_provisional": true,
+        "_nota": "A2: H1 signo + evitacion por conflicto en colas de seleccion.",
+        "penalizacion_por_punto_conflicto": 0.12,
+        "evitar_conflicto_intensidad_min": 9
+    }
 }

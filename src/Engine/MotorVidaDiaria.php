@@ -236,14 +236,18 @@ final class MotorVidaDiaria
                 }
                 $el = AcontecimientoElegibilidad::cumple($partida, $item, [$protagonista, $otro], $cal);
                 if ($el['ok']) {
+                    if (SeleccionSocialPeso::debeOmitirPorConflicto($partida, $protagonista, $otro, $cal)) {
+                        continue;
+                    }
                     if ((string) $item['id'] === 'flechazo') {
                         $flechazoCands++;
                     }
                     $w = max(0.05, $wFam);
                     if (RelacionEngine::seConocen($partida, $protagonista, $otro)) {
                         $w *= 1.6;
-                        $w += abs(RelacionEngine::valorSocialHacia($partida, $protagonista, $otro)) / 25.0;
+                        $w += SeleccionSocialPeso::bonusSocialDirigido($partida, $protagonista, $otro) / 25.0;
                     }
+                    $w = SeleccionSocialPeso::aplicarConflicto($w, $partida, $protagonista, $otro, $cal);
                     $cands[] = [
                         'id' => (string) $item['id'],
                         'participantes' => [$protagonista, $otro],

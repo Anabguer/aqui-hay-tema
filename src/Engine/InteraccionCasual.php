@@ -129,11 +129,15 @@ final class InteraccionCasual
                 $w = 1.0;
                 $a = (string) $ids[$i];
                 $b = (string) $ids[$j];
+                if (SeleccionSocialPeso::debeOmitirPorConflicto($partida, $a, $b, $cal)) {
+                    continue;
+                }
                 if (RelacionEngine::seConocen($partida, $a, $b)) {
                     $w += 2.2;
                 }
-                $soc = abs(RelacionEngine::valorSocialHacia($partida, $a, $b));
+                $soc = SeleccionSocialPeso::bonusSocialDirigido($partida, $a, $b);
                 $w += $soc / 30.0;
+                $w = SeleccionSocialPeso::aplicarConflicto($w, $partida, $a, $b, $cal);
                 $pares[] = ['a' => $a, 'b' => $b, 'w' => $w];
             }
         }
