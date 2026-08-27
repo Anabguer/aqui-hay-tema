@@ -150,6 +150,23 @@
     });
   }
   const $ = (sel, root) => (root || document).querySelector(sel);
+  function inicioViewRoot(view) {
+    if (view === 'mobile') return document.querySelector('.inicio-mobile');
+    if (view === 'desktop') return document.querySelector('.inicio-desktop');
+    return null;
+  }
+  function inicioAll(sel) {
+    return Array.prototype.slice.call(document.querySelectorAll('.inicio-mobile ' + sel + ', .inicio-desktop ' + sel));
+  }
+  function inicioBlocks(sel) {
+    return Array.prototype.slice.call(document.querySelectorAll('.inicio-mobile ' + sel + ', .inicio-desktop ' + sel));
+  }
+  function setAllText(sel, text) {
+    inicioAll(sel).forEach(function (el) { el.textContent = text; });
+  }
+  function setAllHtml(sel, html) {
+    inicioAll(sel).forEach(function (el) { el.innerHTML = html; });
+  }
   const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
   function initDebugPanel() {
     setDebugOn(DEBUG_ON);
@@ -1694,8 +1711,7 @@
       '</div>' +
       '</div></article>';
   }
-  function renderProximosPlanesMovil(estado) {
-    const block = document.querySelector('[data-proxplanes-block]');
+  function renderProximosPlanesBlock(block, estado, cardFn) {
     if (!block) return;
     const track = block.querySelector('[data-proxplanes-track]');
     if (!track) return;
@@ -1709,9 +1725,16 @@
     const lista = listaFull.slice(0, 6);
     if (!lista.length) { block.classList.remove('is-on'); track.innerHTML = ''; return; }
     block.classList.add('is-on');
-    track.innerHTML = lista.map(function (enc) { return htmlProximoPlanCardMovil(enc, estado); }).join('');
+    track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
   }
-  var encMovIndice = 0;
+  function renderProximosPlanesMovil(estado) {
+    inicioBlocks('[data-proxplanes-block]').forEach(function (block) {
+      const view = block.closest('.inicio-mobile') ? 'mobile' : 'desktop';
+      const cardFn = view === 'mobile' ? htmlProximoPlanCardMovil : htmlProximoPlanCardMovil;
+      renderProximosPlanesBlock(block, estado, cardFn);
+    });
+  }
+    var encMovIndice = 0;
     function esInicioLayoutMovil() {
     return typeof window !== 'undefined' && window.matchMedia &&
       window.matchMedia('(max-width: 768px)').matches;
@@ -1823,7 +1846,9 @@
     return html + '</article>';
   }
   function htmlEncursoCardMovil(enc, estado) {
-    if (esInicioLayoutMovil()) return htmlEncursoCardMovilV14(enc, estado);
+    return htmlEncursoCardMovilV14(enc, estado);
+  }
+  function htmlEncursoCardDesktopView(enc, estado) {
     return htmlEncursoCardDesktop(enc, estado);
   }
     function encMovPaso(track) {
@@ -1833,20 +1858,19 @@
     const gap = parseFloat(st.columnGap || st.gap) || 0;
     return cards[0].offsetWidth + gap;
   }
-  function encMovIrA(idx) {
-    const block = document.querySelector('[data-encursos-block]');
+  function encMovIrA(block, idx) {
     const track = block && block.querySelector('[data-encursos-track]');
     if (!block || !track) return;
     const n = track.querySelectorAll('[data-enc-mov-card]').length;
     if (n < 2) return;
     const paso = encMovPaso(track);
     if (paso <= 0) return;
-    encMovIndice = Math.max(0, Math.min(n - 1, idx));
-    track.scrollTo({ left: encMovIndice * paso, behavior: 'smooth' });
-    renderEncursosMovilNav();
+    const i = Math.max(0, Math.min(n - 1, idx));
+    block._encMovIndice = i;
+    track.scrollTo({ left: i * paso, behavior: 'smooth' });
+    renderEncursosMovilNavFor(block);
   }
-  function renderEncursosMovilNav() {
-    const block = document.querySelector('[data-encursos-block]');
+  function renderEncursosMovilNavFor(block) {
     const track = block && block.querySelector('[data-encursos-track]');
     const shell = block && block.querySelector('[data-encursos-shell]');
     const prev = block && block.querySelector('[data-enc-mov-prev]');
@@ -1862,17 +1886,19 @@
     }
     const paso = encMovPaso(track);
     const idx = paso > 0 ? Math.min(n - 1, Math.max(0, Math.round(track.scrollLeft / paso))) : 0;
-    encMovIndice = idx;
+    block._encMovIndice = idx;
     shell.hidden = false;
     shell.removeAttribute('aria-hidden');
     prev.hidden = n < 2 || idx <= 0;
     next.hidden = n < 2 || idx >= n - 1;
   }
+  function renderEncursosMovilNav() {
+    inicioBlocks('[data-encursos-block]').forEach(renderEncursosMovilNavFor);
+  }
   function renderEncursosMovilIndicador() {
     renderEncursosMovilNav();
   }
-    function renderEncursosMovil(estado) {
-    const block = document.querySelector('[data-encursos-block]');
+      function renderEncursosBlock(block, estado, cardFn) {
     if (!block) return;
     const track = block.querySelector('[data-encursos-track]');
     if (!track) return;
@@ -1885,8 +1911,7 @@
     if (!lista.length) {
       block.classList.remove('is-on');
       track.innerHTML = '';
-      encMovIndice = 0;
-      renderEncursosMovilIndicador();
+      renderEncursosMovilNavFor(block);
       return;
     }
     const abiertos = {};
@@ -1894,14 +1919,9 @@
       const card = p.closest('[data-enc-mov-card]');
       if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
     });
-    encMovIndice = Math.min(encMovIndice, lista.length - 1);
     block.classList.add('is-on');
-    track.innerHTML = lista.map(function (enc) { return htmlEncursoCardMovil(enc, estado); }).join('');
+    track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
     requestAnimationFrame(function () {
-      if (encMovIndice > 0) {
-        const paso = encMovPaso(track);
-        if (paso > 0) track.scrollLeft = encMovIndice * paso;
-      }
       const cards = track.querySelectorAll('[data-enc-mov-card]');
       Object.keys(abiertos).forEach(function (id) {
         Array.prototype.forEach.call(cards, function (card) {
@@ -1912,105 +1932,117 @@
           if (cta) { cta.setAttribute('aria-expanded', 'true'); cta.classList.add('is-open'); }
         });
       });
-      renderEncursosMovilIndicador();
+      renderEncursosMovilNavFor(block);
+    });
+  }
+    function renderEncursosMovil(estado) {
+    inicioBlocks('[data-encursos-block]').forEach(function (block) {
+      const view = block.closest('.inicio-mobile') ? 'mobile' : 'desktop';
+      const cardFn = view === 'mobile' ? htmlEncursoCardMovil : htmlEncursoCardDesktopView;
+      renderEncursosBlock(block, estado, cardFn);
     });
   }
 
-  function renderShellPanels(estado, buzon, diario) {
+  function buildInicioViewModel(estado, buzon, diario) {
     const partida = cacheInsp || {};
+    const met = metricasSociales(partida);
     const parejas = parejasParaUI(partida);
-        const met = metricasSociales(partida);
-    const stats = $('[data-resumen-stats]');
-    if (stats) stats.innerHTML = htmlResumenCelestine(met);
-    const pob = $('[data-vecinos-poblacion]');
-    if (pob) pob.textContent = String(met.vecinos) + ' de ' + String(met.cap);
-
-    renderVecinosPreview();
-
-
-    const teaser = $('[data-cotilleo-teaser]');
-    const cotiBadge = $('[data-cotilleo-badge]');
     const hoy = (diario && diario.cotilleo && diario.cotilleo.hoy) || diario.entradas || [];
     const hoyLista = Array.isArray(hoy) ? hoy : [];
     const ultRaw = (hoyLista[0] && (hoyLista[0].texto || hoyLista[0].cuerpo || hoyLista[0].titulo)) || '';
-    if (teaser) {
-      teaser.textContent = ultRaw
-        ? resumenCotilleoUi(ultRaw, 120)
-        : 'Hoy están sospechosamente tranquilos…';
-    }
-    actualizarCotiBadgesUI();
-
-    const prev = $('[data-buzon-preview]');
     const pend = (buzon || []).filter(function (m) {
       return (m.canal || 'buzon') === 'buzon' && (m.estado || '') === 'pendiente';
     });
-    if (prev) {
-      if (!pend.length) prev.textContent = 'Sin mensajes pendientes.';
-      else {
-        const m = pend[0];
-        prev.textContent = (m.remitente_nombre || m.de || 'Mensaje') + ': ' + (m.preview || m.asunto || m.texto || '').slice(0, 80);
-      }
-    }
+    return {
+      statsHtml: htmlResumenCelestine(met),
+      vecinosPoblacion: String(met.vecinos) + ' de ' + String(met.cap),
+      cotilleoTeaser: ultRaw ? resumenCotilleoUi(ultRaw, 120) : 'Hoy están sospechosamente tranquilos…',
+      buzonPreview: !pend.length ? 'Sin mensajes pendientes.' : ((pend[0].remitente_nombre || pend[0].de || 'Mensaje') + ': ' + (pend[0].preview || pend[0].asunto || pend[0].texto || '').slice(0, 80)),
+      parejas: parejas,
+    };
+  }
 
-    const proxBox = $('[data-proximo-plan]');
-    const polaroid = $('.obj-proximo-polaroid');
-    const proxTit = $('.obj-proximo-tit');
-    const enCursoLista = encuentrosEnCursoAhora(partida, estado);
-    let pos = -1;
-    for (var ci = 0; ci < enCursoLista.length; ci++) {
-      if (String(enCursoLista[ci].id) === String(cursoSelId)) { pos = ci; break; }
-    }
-    if (pos < 0) pos = 0;
-    const n = enCursoLista.length;
-    cursoSelId = n ? String(enCursoLista[pos].id) : null;
-    const hayEnCurso = enCursoLista.length > 0;
-    const cursoEnc = hayEnCurso ? enCursoLista[pos] : null;
-    if (polaroid) {
-      polaroid.classList.toggle('is-en-curso', hayEnCurso);
-      polaroid.classList.toggle('is-proximo', false);
-      polaroid.classList.toggle('is-vacio', !hayEnCurso);
-    }
-    if (proxTit) proxTit.textContent = 'Plan en curso';
-    if (proxBox) {
-      if (!cursoEnc) proxBox.innerHTML = '<p class=\"obj-proximo-vacio\">Nada en curso ahora.</p>';
-      else proxBox.innerHTML = htmlProximoPlan(cursoEnc, estado);
-    }
-    const cursoNav = $('[data-curso-nav]');
-    if (cursoNav) {
-      cursoNav.hidden = !(hayEnCurso && n > 1);
-      if (!cursoNav.hidden) {
-        var contEl = cursoNav.querySelector('[data-curso-cont]');
-        if (contEl) contEl.textContent = (pos + 1) + ' / ' + n;
-      }
-    }
-
-    renderProximosPlanesMovil(estado);
-    renderEncursosMovil(estado);
-
-    const strip = $('[data-parejas-strip]');
-    if (strip) {
-      strip.innerHTML = '';
-      parejas.forEach(function (rel) {
-        const ids = idsPareja(rel);
-        if (!ids || ids.length < 2) return;
-        const crisis = esCrisisPareja(rel);
-        const row = document.createElement('div');
-        row.className = 'obj-pareja-piece' + (crisis ? ' is-crisis' : '');
-        const tok = function (id) {
-          return htmlCaraToken(id, { imgClass: 'obj-pareja-cara' });
-        };
-        row.innerHTML = '<span class="obj-pareja-fotos">' + tok(ids[0]) +
-          '<span class="obj-pareja-enlace" aria-hidden="true"></span>' + tok(ids[1]) + '</span>' +
-          '<span class="obj-pareja-nombres">' + esc(nombreDe(ids[0])) + ' \u00b7 ' + esc(nombreDe(ids[1])) + '</span>' +
-          (crisis ? '<span class="pareja-crisis-sello">EN CRISIS</span>' : '');
-        strip.appendChild(row);
-      });
-      if (!parejas.length) {
-        strip.innerHTML = '<p class="muted">A\u00fan no hay parejas registradas.</p>';
-      }
+  function renderParejasStripEl(strip, parejas) {
+    if (!strip) return;
+    strip.innerHTML = '';
+  (parejas || []).forEach(function (rel) {
+      const ids = idsPareja(rel);
+      if (!ids || ids.length < 2) return;
+      const crisis = esCrisisPareja(rel);
+      const row = document.createElement('div');
+      row.className = 'obj-pareja-piece' + (crisis ? ' is-crisis' : '');
+      const tok = function (id) {
+        return htmlCaraToken(id, { imgClass: 'obj-pareja-cara' });
+      };
+      row.innerHTML = '<span class="obj-pareja-fotos">' + tok(ids[0]) +
+        '<span class="obj-pareja-enlace" aria-hidden="true"></span>' + tok(ids[1]) + '</span>' +
+        '<span class="obj-pareja-nombres">' + esc(nombreDe(ids[0])) + ' \u00b7 ' + esc(nombreDe(ids[1])) + '</span>' +
+        (crisis ? '<span class="pareja-crisis-sello">EN CRISIS</span>' : '');
+      strip.appendChild(row);
+    });
+    if (!parejas || !parejas.length) {
+      strip.innerHTML = '<p class="muted">A\u00fan no hay parejas registradas.</p>';
     }
   }
 
+  function renderParejasStripIn(scopeSel, parejas) {
+    const root = document.querySelector(scopeSel);
+    if (!root) return;
+    const strip = root.querySelector('[data-parejas-strip]');
+    renderParejasStripEl(strip, parejas);
+  }
+
+  function renderInicioMobile(vm, estado) {
+    setAllHtml('[data-resumen-stats]', vm.statsHtml);
+    setAllText('[data-vecinos-poblacion]', vm.vecinosPoblacion);
+    setAllText('[data-cotilleo-teaser]', vm.cotilleoTeaser);
+    renderVecinosPreviewIn('.inicio-mobile');
+    renderParejasStripIn('.inicio-mobile', vm.parejas);
+    renderProximosPlanesMovil(estado);
+    renderEncursosMovil(estado);
+  }
+
+  function renderInicioDesktop(vm, estado) {
+    setAllHtml('[data-resumen-stats]', vm.statsHtml);
+    setAllText('[data-vecinos-poblacion]', vm.vecinosPoblacion);
+    setAllText('[data-cotilleo-teaser]', vm.cotilleoTeaser);
+    renderVecinosPreviewIn('.inicio-desktop');
+    renderParejasStripIn('.inicio-desktop', vm.parejas);
+    renderProximosPlanesMovil(estado);
+    renderEncursosMovil(estado);
+  }
+
+  function renderInicio(estado, buzon, diario) {
+    const vm = buildInicioViewModel(estado, buzon, diario);
+    renderInicioMobile(vm, estado);
+    renderInicioDesktop(vm, estado);
+    actualizarCotiBadgesUI();
+  }
+
+  function bootSyncInicioViewVisibility() {
+    syncInicioViewVisibility();
+    window.addEventListener('resize', syncInicioViewVisibility);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootSyncInicioViewVisibility);
+  else bootSyncInicioViewVisibility();
+
+  function syncInicioViewVisibility() {
+    const mobileSections = document.querySelectorAll('.inicio-mobile');
+    const desktop = document.querySelector('.inicio-desktop');
+    const isMob = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    mobileSections.forEach(function (mobile) {
+      mobile.hidden = !isMob;
+      mobile.toggleAttribute('inert', !isMob);
+    });
+    if (desktop) {
+      desktop.hidden = isMob;
+      desktop.toggleAttribute('inert', isMob);
+    }
+  }
+
+  function renderShellPanels(estado, buzon, diario) {
+    renderInicio(estado, buzon, diario);
+  }
 
   var cacheMapaZonas = null;
   var cacheMapaPresencia = null;
@@ -2553,7 +2585,9 @@
   }
 
   function renderMisionesStrip(items) {
-    var strip = $('[data-misiones-strip]');
+    inicioAll('[data-misiones-strip]').forEach(function (strip) { renderMisionesStripEl(strip, items); });
+  }
+  function renderMisionesStripEl(strip, items) {
     if (!strip) return;
     var sorted = (items || []).slice().sort(function (a, b) {
       return ((a.orden || 0) - (b.orden || 0)) || String(a.titulo || '').localeCompare(String(b.titulo || ''));
@@ -2828,11 +2862,10 @@
       badgeHud.textContent = String(nPend);
       badgeHud.classList.toggle('is-on', nPend > 0);
     }
-    const badgeObj = $('[data-buzon-badge]');
-    if (badgeObj) {
+    inicioAll('[data-buzon-badge]').forEach(function (badgeObj) {
       badgeObj.textContent = String(nPend);
       badgeObj.hidden = nPend <= 0;
-    }
+    });
     const cartas = (buzon || []).filter(function (m) {
       return (m.estado || '') === 'pendiente' || (m.estado || '') === 'en_espera';
     });
@@ -3079,8 +3112,16 @@
     });
   }
 
+  function renderVecinosPreviewIn(scopeSel) {
+    var root = document.querySelector(scopeSel);
+    if (!root) return;
+    var box = root.querySelector('[data-vecinos-preview]');
+    renderVecinosPreviewBox(box);
+  }
   function renderVecinosPreview() {
-    var box = $('[data-vecinos-preview]');
+    inicioAll('[data-vecinos-preview]').forEach(renderVecinosPreviewBox);
+  }
+  function renderVecinosPreviewBox(box) {
     if (!box) return;
     var res = (cacheInsp && cacheInsp.residentes) || {};
     var ids = Object.keys(res).filter(function (id) {
@@ -4524,11 +4565,11 @@ function hobbyIconKey(id, texto) {
     const subio = cotiSinVerPrev !== null && sinVer > cotiSinVerPrev;
     cotiSinVerPrev = sinVer;
 
-    const cotiCard = $('.obj-cotilleo-par');
-    if (cotiCard) cotiCard.classList.toggle('is-aviso-importante', sinVer > 0);
+    document.querySelectorAll('.obj-cotilleo-par').forEach(function (cotiCard) {
+      cotiCard.classList.toggle('is-aviso-importante', sinVer > 0);
+    });
 
-    const homeBadge = $('[data-cotilleo-badge]');
-    if (homeBadge) {
+    inicioAll('[data-cotilleo-badge]').forEach(function (homeBadge) {
       if (sinVer > 0) {
         homeBadge.textContent = cotiBadgeNuevosTxt(sinVer);
         homeBadge.hidden = false;
@@ -4537,7 +4578,7 @@ function hobbyIconKey(id, texto) {
         homeBadge.textContent = '';
         homeBadge.hidden = true;
       }
-    }
+    });
 
     const modalBadge = $('[data-coti-count]');
     if (modalBadge) {
@@ -5629,11 +5670,14 @@ function hobbyIconKey(id, texto) {
     if (nextBtn) nextBtn.addEventListener('click', function () { moverCursoSeleccion(1); });
   })();
   (function bindEncursosMovil() {
-    const encTrack = document.querySelector('[data-encursos-track]');
-    if (encTrack && !encTrack._ahtEncMovScroll) {
+    document.querySelectorAll('[data-encursos-track]').forEach(function (encTrack) {
+      if (encTrack._ahtEncMovScroll) return;
       encTrack._ahtEncMovScroll = true;
-      encTrack.addEventListener('scroll', renderEncursosMovilNav, { passive: true });
-    }
+      encTrack.addEventListener('scroll', function () {
+        const b = encTrack.closest('[data-encursos-block]');
+        if (b) renderEncursosMovilNavFor(b);
+      }, { passive: true });
+    });
   })();
   const btnPasarRato = $('[data-pasar-rato]');
   if (btnPasarRato) btnPasarRato.addEventListener('click', pasarElRato);

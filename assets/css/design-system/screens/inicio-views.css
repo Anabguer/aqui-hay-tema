@@ -1,0 +1,34 @@
+/* INICIO-VIEWS — solo visibilidad por breakpoint; sin layout compartido */
+@media (max-width: 768px) {
+  .inicio-desktop {
+    display: none !important;
+  }
+  .inicio-mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 769px) {
+  .inicio-mobile {
+    display: none !important;
+  }
+  .inicio-desktop {
+    display: block;
+  }
+}
+
+.inicio-mobile[hidden],
+.inicio-desktop[hidden] {
+  display: none !important;
+}
+
+.inicio-mobile[inert],
+.inicio-desktop[inert] {
+  pointer-events: none !important;
+  user-select: none;
+}
+
+.inicio-stage {
+  width: 100%;
+  box-sizing: border-box;
+}

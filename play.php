@@ -37,7 +37,8 @@ if (is_file($ahtBusterFile)) {
   <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -322,8 +323,10 @@ if (is_file($ahtBusterFile)) {
       <pre data-taller-debug hidden></pre>
     </details>
   </aside>
-  <div class="game-shell">
-    <header class="game-top">
+    <div class="game-shell">
+    <div class="inicio-stage">
+      <section class="inicio-mobile" data-inicio-view="mobile" aria-label="Inicio móvil">
+        <header class="game-top">
       <div class="brand-col">
         <h1 class="brand" aria-label="AquÃ­ Hay Tema">
           <span class="brand-text">AQUÃ HAY TEMA</span>
@@ -362,16 +365,16 @@ if (is_file($ahtBusterFile)) {
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <defs>
-            <clipPath id="corazon-clip"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
-            <linearGradient id="corazon-agua-grad" x1="29" y1="52" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+            <clipPath id="corazon-clip-mob"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
+            <linearGradient id="corazon-agua-grad-mob" x1="29" y1="52" x2="29" y2="0" gradientUnits="userSpaceOnUse">
               <stop offset="0%" stop-color="#d46278"/>
               <stop offset="55%" stop-color="#e57d90"/>
               <stop offset="100%" stop-color="#f0a8b6"/>
             </linearGradient>
           </defs>
           <path class="corazon-bg" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
-          <path class="corazon-fill-path" clip-path="url(#corazon-clip)" fill="url(#corazon-agua-grad)" d="" data-corazon-fill/>
-          <path class="corazon-fill-surface" clip-path="url(#corazon-clip)" fill="none" stroke="rgba(255,255,255,.62)" stroke-width="1.15" stroke-linecap="round" d="" data-corazon-surface/>
+          <path class="corazon-fill-path" clip-path="url(#corazon-clip-mob)" fill="url(#corazon-agua-grad-mob)" d="" data-corazon-fill/>
+          <path class="corazon-fill-surface" clip-path="url(#corazon-clip-mob)" fill="none" stroke="rgba(255,255,255,.62)" stroke-width="1.15" stroke-linecap="round" d="" data-corazon-surface/>
           <path class="corazon-stroke" fill="none" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
@@ -388,9 +391,9 @@ if (is_file($ahtBusterFile)) {
         </button>
       </div>
     </header>
-    <div class="game-main">
-      <aside class="game-left zona-actividad">
-        <section class="shell-grupo shell-grupo-buzon">
+        <div class="inicio-layout inicio-mobile-layout">
+          <div class="inicio-chrome-left inicio-mobile-tiles">
+            <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
               <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
@@ -400,7 +403,7 @@ if (is_file($ahtBusterFile)) {
             </button>
           </div>
         </section>
-        <section class="shell-grupo shell-grupo-resumen">
+            <section class="shell-grupo shell-grupo-resumen">
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
             <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
@@ -411,26 +414,166 @@ if (is_file($ahtBusterFile)) {
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
-        <section class="shell-grupo shell-grupo-planes">
-          <div class="obj-planes-lateral">
-            <div class="obj-proximo obj-proximo-polaroid">
-              <span class="obj-proximo-tit">Plan en curso</span>
-              <div class="obj-curso-nav" data-curso-nav hidden>
-                <button type="button" class="obj-curso-btn" data-curso-prev aria-label="Encuentro en curso anterior">&#8249;</button>
-                <span class="obj-curso-cont" data-curso-cont>1 / 2</span>
-                <button type="button" class="obj-curso-btn" data-curso-next aria-label="Siguiente encuentro en curso">&#8250;</button>
-              </div>
-              <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en curso ahora.</p></div>
-            </div>
-            <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
+            <section class="shell-grupo shell-grupo-planes">
+<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
               <span class="obj-nuevo-plan-txt">Nuevo plan</span>
             </button>
+</section>
+          </div>
+        </div>
+      </section>
+
+      <section class="inicio-desktop" data-inicio-view="desktop" hidden aria-label="Inicio escritorio">
+        <header class="game-top">
+      <div class="brand-col">
+        <h1 class="brand" aria-label="AquÃ­ Hay Tema">
+          <span class="brand-text">AQUÃ HAY TEMA</span>
+          <span class="brand-heart" aria-hidden="true"></span>
+        </h1>
+        <p class="top-meta-line" data-top-meta-mobile></p>
+        <button type="button" class="btn-guia" data-tut-reopen hidden>Â¿CÃ³mo va esto?</button>
+      </div>
+      <div class="top-center">
+        <div class="top-reloj">
+          <div class="obj-dia" style="--rot:-2deg">
+            <div class="obj-dia-placa">
+              <span class="obj-dia-num" data-dia-num>Ã¯Â¿Â½</span>
+            </div>
+            <div class="obj-dia-cuerpo">
+              <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
+              <span class="obj-dia-meta" data-dia-meta>Ã¯Â¿Â½</span>
+            </div>
+            <span class="sr-only" data-fecha></span>
+          </div>
+          <div class="obj-hora" style="--rot:3deg" aria-label="Hora del pueblo">
+            <span class="obj-hora-ico" aria-hidden="true"></span>
+            <span class="obj-hora-val" data-hora>Ã¯Â¿Â½</span>
+          </div>
+          <span class="es-noche" data-es-noche hidden>
+            <svg class="es-noche-luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <span class="es-noche-txt">Es de noche</span>
+          </span>
+          <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora">
+            <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
+            <span class="pasar-rato-txt">Pasar el rato</span>
+          </button>
+        </div>
+      </div>
+      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para mÃ¯Â¿Â½s informaciÃ¯Â¿Â½n">
+        <span class="obj-vida-kicker">Vida del pueblo</span>
+        <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
+          <defs>
+            <clipPath id="corazon-clip-desk"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
+            <linearGradient id="corazon-agua-grad-desk" x1="29" y1="52" x2="29" y2="0" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#d46278"/>
+              <stop offset="55%" stop-color="#e57d90"/>
+              <stop offset="100%" stop-color="#f0a8b6"/>
+            </linearGradient>
+          </defs>
+          <path class="corazon-bg" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
+          <path class="corazon-fill-path" clip-path="url(#corazon-clip-desk)" fill="url(#corazon-agua-grad-desk)" d="" data-corazon-fill/>
+          <path class="corazon-fill-surface" clip-path="url(#corazon-clip-desk)" fill="none" stroke="rgba(255,255,255,.62)" stroke-width="1.15" stroke-linecap="round" d="" data-corazon-surface/>
+          <path class="corazon-stroke" fill="none" d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/>
+        </svg>
+        <span class="sr-only" data-vida-pct>0%</span>
+      </button>
+      <div class="control-audio" aria-label="Controles de audio">
+        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar mÃ¯Â¿Â½sica" title="Desactivar mÃ¯Â¿Â½sica">
+          <span class="control-musica-ico" aria-hidden="true">&#9834;</span>
+        </button>
+        <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
+          <span class="control-efectos-ico" aria-hidden="true">&#10022;</span>
+        </button>
+        <button type="button" class="control-inventario" data-open="inventario" aria-label="Abrir inventario" title="Inventario">
+          <span class="control-inventario-ico" aria-hidden="true">&#127873;</span>
+        </button>
+      </div>
+    </header>
+        <div class="inicio-layout inicio-desktop-layout">
+          <aside class="inicio-chrome-left inicio-desktop-left">
+            <section class="shell-grupo shell-grupo-buzon">
+          <div class="mensajitos-wrap">
+            <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
+              <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
+              <span class="obj-buzon-txt game-left-tile-label">Mensajitos</span>
+              <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
+              <span class="obj-buzon-flecha" aria-hidden="true">&#8250;</span>
+            </button>
           </div>
         </section>
+            <section class="shell-grupo shell-grupo-resumen">
+          <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
+            <span class="libreta-kicker">Celestine apunta</span>
+            <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
+            <div class="obj-vecinos-head">
+              <span class="obj-vecinos-tit game-left-tile-label">VECINOS</span>
+              <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
+            </div>
+            <div class="obj-vecinos-stats" data-resumen-stats></div>
+          </button>
+        </section>
+            <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
+          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
+            <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
+            <span class="obj-misiones-papel-tit">MISIONES</span>
+            <div class="obj-misiones-strip" data-misiones-strip></div>
+          </div>
+        </section>
+            <section class="shell-grupo shell-grupo-planes">
+<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
+              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
+              <span class="obj-nuevo-plan-txt">Nuevo plan</span>
+            </button>
+</section>
+          </aside>
+          <aside class="inicio-chrome-right inicio-desktop-right">
+            <section class="shell-grupo shell-grupo-cotilleo-par">
+          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
+            <span class="obj-cotilleo-tit">Cotilleo</span>
+            <span class="obj-cotilleo-cuerpo">
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy estÃ¡n sospechosamente tranquilosâ€¦</span>
+              <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
+            </span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">â€º</span>
+          </button>
+        </section>
+            <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+          <header class="enc-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 class="enc-mov-tit">PLAN EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="enc-mov-shell" data-encursos-shell hidden aria-hidden="true">
+            <button type="button" class="enc-mov-nav-btn enc-mov-nav-prev" data-enc-mov-prev aria-label="Plan anterior" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 7l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="enc-mov-track" data-encursos-track></div>
+            <button type="button" class="enc-mov-nav-btn enc-mov-nav-next" data-enc-mov-next aria-label="Plan siguiente" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
+        </section>
+            <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
+          <header class="pp-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="pp-mov-track" data-proxplanes-track></div>
+        </section>
+            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
+          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
+          <div class="obj-parejas-list" data-parejas-strip></div>
+        </section>
+          </aside>
+        </div>
+      </section>
 
-      </aside>
-      <div class="game-map-wrap">
+      <div class="inicio-map-host game-map-wrap">
         <div class="plan-notif" data-plan-notif hidden role="status" aria-live="polite">
           <button type="button" class="plan-notif-inner" data-plan-notif-btn>
             <span class="plan-notif-kicker">Plan confirmado</span>
@@ -810,9 +953,17 @@ if (is_file($ahtBusterFile)) {
           <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
+          <section class="ficha-seccion org-seccion org-seccion--modo">
+            <div class="org-seccion-head org-seccion-head--center">
+              <div class="org-modo-chips" data-org-modo-row>
+                <button type="button" class="org-modo-chip" data-org-modo="solo">Solo</button>
+                <button type="button" class="org-modo-chip is-on" data-org-modo="pareja">Acompañado</button>
+              </div>
+            </div>
+          </section>
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
-              <h4 class="ficha-seccion-tit">Ã¯Â¿Â½QuiÃ¯Â¿Â½nes van?</h4>
+              <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
               <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 3 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
@@ -870,8 +1021,11 @@ if (is_file($ahtBusterFile)) {
           </span>
         </div>
       </aside>
-      <aside class="game-right zona-personas">
-        <section class="shell-grupo shell-grupo-cotilleo-par">
+      
+
+      <section class="inicio-mobile inicio-mobile-feed" data-inicio-view="mobile" aria-label="Inicio móvil feed">
+        <div class="inicio-chrome-right inicio-mobile-feed-inner">
+            <section class="shell-grupo shell-grupo-cotilleo-par">
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
             <span class="obj-cotilleo-cuerpo">
@@ -881,7 +1035,7 @@ if (is_file($ahtBusterFile)) {
             <span class="obj-cotilleo-flecha" aria-hidden="true">â€º</span>
           </button>
         </section>
-        <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+            <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <h3 class="enc-mov-tit">PLAN EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
@@ -897,7 +1051,7 @@ if (is_file($ahtBusterFile)) {
             </button>
           </div>
         </section>
-        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
+            <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
           <header class="pp-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
             <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
@@ -905,7 +1059,7 @@ if (is_file($ahtBusterFile)) {
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
         </section>
-        <section class="shell-grupo shell-grupo-misiones-par" id="mob-misiones">
+            <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
           <div class="obj-misiones-papel" aria-label="Misiones de hoy">
             <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
@@ -915,11 +1069,12 @@ if (is_file($ahtBusterFile)) {
             <div class="obj-misiones-strip" data-misiones-strip></div>
           </div>
         </section>
-        <section class="shell-grupo shell-grupo-parejas" id="mob-parejas">
+            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
-      </aside>
+        </div>
+      </section>
     </div>
   </div>
   <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>

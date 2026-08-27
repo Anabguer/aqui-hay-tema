@@ -1,0 +1,1446 @@
+/* INICIO-MOBILE — presentación móvil namespaced (.inicio-mobile) */
+
+.inicio-mobile .inicio-mobile-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 13px 12px;
+  box-sizing: border-box;
+}
+
+.inicio-mobile .inicio-mobile-tiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 13px 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.inicio-stage > .inicio-map-host {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .inicio-stage {
+    display: flex;
+    flex-direction: column;
+  }
+  .inicio-mobile .inicio-mobile-tiles { order: 1; }
+  .inicio-stage > .inicio-map-host { order: 2; padding: 0 13px; }
+  .inicio-mobile.inicio-mobile-feed { order: 3; }
+}
+
+/* ---------- 0. Papel de la mesa ---------- */
+
+  body.play-v3 .inicio-mobile {
+    background:
+      radial-gradient(1100px 480px at 15% -6%, rgba(255, 252, 240, .95), rgba(255, 252, 240, 0) 58%),
+      radial-gradient(900px 460px at 90% 104%, rgba(228, 212, 178, .55), rgba(228, 212, 178, 0) 60%),
+      var(--ds-paper-app);
+    overflow-x: hidden;
+  }
+
+  /* ---------- 1. Orden del feed (D2) ---------- */
+
+  /* Orden feed movil: EN CURSO -> Cotilleo -> Proximos -> Misiones -> Parejas */
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .encursos-movil           { order: 1; }
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .shell-grupo-cotilleo-par { order: 2; }
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .proxplanes-movil         { order: 3; }
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .shell-grupo-misiones-par { order: 4; }
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .shell-grupo-parejas      { order: 5; }
+
+  .inicio-mobile .inicio-mobile .inicio-layout { gap: 12px; }
+  .inicio-mobile .inicio-mobile .inicio-chrome-right {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0 13px;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-right > .shell-grupo,
+  .inicio-mobile .inicio-mobile .inicio-chrome-right > section {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* Superficies DS del feed: ningÃƒÂºn border-image/mask legacy */
+  .inicio-mobile .obj-cotilleo.obj-cotilleo-par,
+  .inicio-mobile .encursos-movil .enc-mov-card,
+  .inicio-mobile .proxplanes-movil .pp-mov-card,
+  .inicio-mobile .obj-misiones-papel,
+  .inicio-mobile .shell-grupo-parejas,
+  .inicio-mobile .mapa-canonico {
+    border-image: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* ---------- 2. Cabecera (ref: marca + Ã‚Â¿CÃƒÂ³mo va esto? + corazÃƒÂ³n / dÃƒÂ­aÃ‚Â·hora + pasar) ---------- */
+
+  .inicio-mobile .inicio-mobile .game-top {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    grid-template-areas:
+      "brand brand guia vida"
+      "meta  meta  guia  vida"
+      "hora  rato  rato  vida";
+    align-items: start;
+    column-gap: 8px;
+    row-gap: 5px;
+    padding: 10px 13px 0;
+  }
+
+  .inicio-mobile .brand-col { display: contents; }
+  .inicio-mobile .top-center { display: contents; }
+  .inicio-mobile .top-meta-line { display: contents; }
+
+  .inicio-mobile .brand {
+    grid-area: brand;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .inicio-mobile .brand-text {
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.6875rem;
+    line-height: 1;
+    letter-spacing: .5px;
+    color: var(--ds-ink);
+  }
+
+  .inicio-mobile .brand-heart {
+    width: 16px;
+    height: 15px;
+    margin-top: -6px;
+  }
+
+  .inicio-mobile .btn-guia {
+    grid-area: guia;
+    align-self: start;
+    justify-self: end;
+    white-space: nowrap;
+    min-height: 0;
+    margin-top: 2px;
+    padding: 2px 4px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: var(--ds-pink-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transform: rotate(-1deg);
+  }
+
+  .inicio-mobile .top-meta-line { display: contents; }
+
+  .inicio-mobile .top-meta-prim {
+    grid-area: meta;
+    align-self: end;
+    justify-self: start;
+    display: inline-flex;
+    margin: 0;
+  }
+
+  .inicio-mobile .top-meta-hora {
+    grid-area: hora;
+    align-self: end;
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    color: var(--ds-ink);
+  }
+
+  .inicio-mobile .top-meta-line .top-meta-hora {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
+    color: var(--ds-ink);
+  }
+
+  .inicio-mobile .top-meta-line .top-meta-prim {
+    margin: 0;
+  }
+
+  .inicio-mobile .top-meta-line .top-meta-hora::before {
+    content: "";
+    width: 14px;
+    height: 14px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%236B5138' stroke-width='2.2'/%3E%3Cpath d='M12 7v5l3.4 2' fill='none' stroke='%236B5138' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  .inicio-mobile .top-reloj {
+    grid-area: rato;
+    align-self: end;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .inicio-mobile .top-reloj .pasar-rato {
+    min-height: 40px;
+    padding: 5px 11px;
+    background: var(--ds-lavender-soft);
+    border: 1.5px solid var(--ds-lavender-deep);
+    border-radius: 12px 9px 13px 10px / 10px 13px 9px 12px;
+    box-shadow: 1.5px 2.5px 0 rgba(124, 107, 174, .35);
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .8125rem;
+    color: var(--ds-lavender-deep);
+    transform: rotate(-1.2deg);
+  }
+
+  .inicio-mobile .top-reloj .pasar-rato:active {
+    transform: rotate(-1.2deg) scale(.97);
+  }
+
+  .inicio-mobile .top-vida {
+    grid-area: vida;
+    align-self: center;
+    justify-self: end;
+  }
+
+  .inicio-mobile .top-vida .corazon-svg {
+    width: 56px;
+    height: 51px;
+    filter: drop-shadow(1px 3px 3px rgba(70, 50, 30, .25));
+  }
+
+  .inicio-mobile .top-vida .obj-vida-kicker {
+    display: none;
+  }
+
+  /* ---------- 3. Tres piezas de la misma familia (marco tipo Nuevo Plan) ---------- */
+
+  .inicio-mobile .inicio-mobile .inicio-layout .inicio-mobile .inicio-chrome-left.zona-actividad {
+    gap: 14px;
+    padding: 0 13px;
+  }
+
+  /* Familia de marco comÃƒÂºn: borde tinta 2px + costura interior + radios artesanales */
+  .inicio-mobile .zona-actividad .obj-buzon,
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
+    margin: 0;
+    min-height: 86px;
+    padding: 10px 8px 9px;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      var(--ds-paper-card);
+    border: 2px solid var(--ds-ink);
+    border-image: none;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10);
+  }
+
+  /* tres piezas desiguales â€” alturas y giros artesanales, sin costura interior */
+  .inicio-mobile .zona-actividad .obj-buzon::before,
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen::before {
+    content: none;
+    display: none;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-layout .inicio-mobile .inicio-chrome-left.zona-actividad {
+    align-items: end;
+  }
+
+  .inicio-mobile .zona-actividad .shell-grupo-buzon {
+    align-self: end;
+    transform: translateY(3px) rotate(-0.7deg);
+  }
+
+  .inicio-mobile .zona-actividad .shell-grupo-resumen {
+    align-self: end;
+    transform: translateY(-2px) rotate(0.55deg);
+  }
+
+  .inicio-mobile .zona-actividad .shell-grupo-planes {
+    align-self: end;
+    transform: translateY(-4px) rotate(-0.35deg);
+  }
+
+  .inicio-mobile .zona-actividad .obj-buzon {
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px;
+  }
+
+  /* el wrap estira a la altura comun de la familia */
+  .inicio-mobile .zona-actividad .shell-grupo-buzon .mensajitos-wrap {
+    min-height: 86px;
+    display: flex;
+  }
+
+  .inicio-mobile .zona-actividad .mensajitos-wrap .obj-buzon {
+    min-height: 86px;
+    margin: 0;
+    flex: 1;
+    width: 100%;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen {
+    min-height: 98px;
+    border-radius: 15px 21px 13px 21px / 21px 13px 21px 15px;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-buzon:active,
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .celestine-nota.obj-vecinos-resumen:active,
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan:active {
+    transform: scale(.97);
+  }
+
+  /* Slot de icono transparente (el papel lo pone la tarjeta) */
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .inicio-mobile .inicio-chrome-left-tile-ico,
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-buzon-ico-wrap {
+    background: none;
+    border: none;
+    box-shadow: none;
+    height: auto;
+    min-height: 0;
+    flex: 0 0 auto;
+  }
+
+  /* MENSAJITOS: sobre grande y protagonista, ligeramente girado */
+  .inicio-mobile .zona-actividad .obj-buzon-img {
+    width: 46px;
+    margin: 0;
+    transform: rotate(-5deg);
+    filter: drop-shadow(1px 2px 1px rgba(70, 50, 30, .18));
+  }
+
+  .inicio-mobile .zona-actividad .obj-buzon-badge {
+    position: absolute;
+    top: 6px;
+    right: 10px;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    background: var(--ds-red-alert);
+    border: 2px solid #fff;
+    border-radius: var(--ds-radius-pill);
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .75rem;
+    color: #fff;
+    box-shadow: 0 2px 4px rgba(70, 50, 30, .3);
+    transform: rotate(4deg);
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-left-tile-label,
+  .inicio-mobile .zona-actividad .obj-buzon-txt,
+  .inicio-mobile .celestine-nota .obj-vecinos-tit {
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: .7px;
+    text-transform: uppercase;
+    color: var(--ds-ink);
+    line-height: 1.1;
+  }
+
+  .inicio-mobile .obj-nuevo-plan-txt {
+    visibility: hidden;
+  }
+
+  /* etiqueta + NUEVO PLAN (ref inicio-mobile.png) */
+  .inicio-mobile .obj-nuevo-plan-txt::before {
+    content: "+ NUEVO PLAN";
+    visibility: visible;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: .7px;
+    margin-right: -.7px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--ds-pink-deep);
+    text-shadow: none;
+  }
+
+  /* VECINOS: retratos + contador coral */
+  .inicio-mobile .celestine-nota .libreta-kicker,
+  .inicio-mobile .obj-vecinos-stats {
+    display: none;
+  }
+
+  .inicio-mobile .obj-vecinos-preview-cara {
+    width: 36px;
+    height: 36px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft), 0 2px 3px rgba(70, 50, 30, .18);
+    background: #fff;
+  }
+
+  .inicio-mobile .obj-vecinos-poblacion {
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .8125rem;
+    color: var(--ds-pink-deep);
+  }
+
+  /* + NUEVO PLAN: pieza ROSA protagonista (rosa de Parejas/corazones) */
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .shell-grupo-planes .obj-proximo {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    min-height: 0;
+  }
+
+  .inicio-mobile .obj-proximo-tit,
+  .inicio-mobile .obj-curso-nav,
+  .inicio-mobile .obj-proximo-body,
+  .inicio-mobile .obj-ver-planes {
+    display: none;
+  }
+
+  /* + PLAN: borde rosa discontinuo (ref piloto v3.1) */
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta {
+    min-height: 108px;
+    padding: 10px 8px 10px;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%);
+    border: 2.5px dashed var(--ds-pink-deep);
+    border-image: none;
+    -webkit-mask-image: none;
+    mask-image: none;
+    -webkit-clip-path: none;
+    clip-path: none;
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px;
+    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12);
+    position: relative;
+    justify-content: center;
+    gap: 2px;
+    transform: rotate(-0.35deg);
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta::before,
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan.obj-proximo-cta::after {
+    content: none;
+    display: none;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan-ico {
+    font-size: 2.35rem;
+    line-height: .85;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    color: var(--ds-pink-deep);
+    text-shadow: none;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-left .obj-nuevo-plan-txt {
+    color: var(--ds-pink-deep);
+    text-shadow: none;
+    padding: 0 4px;
+  }
+
+  /* ---------- 4. Mapa protagonista ---------- */
+
+  .inicio-mobile .inicio-map-host {
+    padding: 0 13px;
+  }
+
+  .inicio-mobile .mapa-canonico {
+    border-radius: 24px 20px 26px 18px / 20px 26px 18px 24px;
+    border: 2px solid rgba(107, 81, 56, .30);
+    box-shadow: 2px 3px 0 rgba(51, 38, 30, .10), 0 6px 14px rgba(70, 50, 30, .12);
+    overflow: hidden;
+  }
+
+  .inicio-mobile .mapa-zona--cerrada-ahora::after {
+    content: "ðŸ”’";
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .7rem;
+    background: rgba(255, 252, 245, .95);
+    border: 1.5px solid var(--ds-ink-soft);
+    border-radius: var(--ds-radius-pill);
+    box-shadow: var(--ds-shadow-rest);
+    pointer-events: none;
+  }
+
+  /* ---------- 5. PROXIMO EVENTO (debajo del mapa; datos reales via data-proximo-evento-*) ---------- */
+
+  .inicio-mobile .inicio-proximo-evento {
+    padding: 0 13px;
+    margin: 0;
+  }
+
+  .inicio-mobile .inicio-proximo-evento[hidden] {
+    display: none;
+  }
+
+  .inicio-mobile .inicio-proximo-evento .inicio-evento-card,
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .ds-event {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 60%),
+      var(--ds-paper-card);
+    border: 2px solid var(--ds-mustard-deep);
+    border-radius: 18px 14px 20px 16px / 14px 20px 16px 18px;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .12), 0 4px 9px rgba(70, 50, 30, .10);
+    transform: rotate(-0.3deg);
+    position: relative;
+  }
+
+  .inicio-mobile .inicio-proximo-evento .inicio-evento-card::after,
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .ds-event::after {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border: 1.5px solid rgba(185, 138, 47, .30);
+    border-radius: 14px 10px 16px 12px / 10px 16px 12px 14px;
+    pointer-events: none;
+  }
+
+  .inicio-mobile .ds-event-tag { display: none; }
+
+  .inicio-mobile .inicio-evento-ico,
+  .inicio-mobile .ds-event-ico {
+    flex: none;
+    font-size: 1.75rem;
+    transform: rotate(-4deg);
+    filter: drop-shadow(1px 2px 1px rgba(70, 50, 30, .2));
+  }
+
+  .inicio-mobile .inicio-evento-body,
+  .inicio-mobile .ds-event-body {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .inicio-mobile .inicio-evento-tit,
+  .inicio-mobile .ds-event-title {
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.1875rem;
+    line-height: 1.1;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--ds-pink-deep);
+  }
+
+  .inicio-mobile .inicio-evento-meta,
+  .inicio-mobile .ds-event-meta {
+    font-family: var(--ds-font-ui);
+    font-weight: 700;
+    font-size: .84375rem;
+    color: var(--ds-ink);
+  }
+
+  .inicio-mobile .ds-event-cta { display: none; }
+
+  /* ---------- 6. Tira de Cotilleo (fiel a referencia) ---------- */
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par {
+    min-height: 72px;
+    padding: 11px 12px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    overflow: visible;
+    background: linear-gradient(180deg, #EBE3F8 0%, var(--ds-lavender-soft) 100%);
+    border: 2px solid var(--ds-lavender-deep);
+    border-radius: 18px 13px 20px 15px / 13px 20px 15px 18px;
+    box-shadow: 1.5px 3px 0 rgba(124, 107, 174, .30), 0 4px 8px rgba(70, 50, 30, .08);
+    transform: rotate(-0.4deg);
+  }
+
+  /* sin celo/tape: la referencia no lo lleva */
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo-par::before,
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo-par::after {
+    content: none;
+    display: none;
+    background: none;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo-tit {
+    flex: none;
+    white-space: nowrap;
+    writing-mode: horizontal-tb;
+    transform: rotate(-1.2deg);
+    padding: 7px 9px;
+    background: #4F4378;
+    border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
+    box-shadow: 1px 2px 0 rgba(51, 38, 30, .3);
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: .8px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    color: var(--ds-paper-card);
+  }
+
+  .inicio-mobile .obj-cotilleo-txt {
+    flex: 1;
+    font-family: var(--ds-font-hand);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    line-height: 1.28;
+    color: var(--ds-ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .inicio-mobile .obj-cotilleo-badge {
+    flex: none;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--ds-red-alert);
+    border: 2px solid #fff;
+    border-radius: var(--ds-radius-pill);
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .6875rem;
+    color: #fff;
+    transform: rotate(3deg);
+  }
+
+  .inicio-mobile .obj-cotilleo-flecha {
+    flex: none;
+    color: var(--ds-lavender-deep);
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .obj-cotilleo.obj-cotilleo-par:active {
+    transform: rotate(-0.4deg) scale(.985);
+  }
+
+  /* ---------- 7. Cabeceras de secciÃƒÂ³n (compactas, tipo referencia) ---------- */
+
+  .inicio-mobile .enc-mov-cab,
+  
+  .inicio-mobile .plan-seccion-ico,
+  .inicio-mobile .pp-mov-ico,
+  .inicio-mobile .enc-mov-ico {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex: 0 0 1.125rem;
+    color: var(--ds-ink-soft, #594839);
+  }
+
+  .inicio-mobile .pp-mov-cab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 15px;
+    margin: 0 0 8px;
+  }
+
+  .inicio-mobile .enc-mov-tit,
+  .inicio-mobile .pp-mov-tit,
+  .inicio-mobile .obj-misiones-papel-tit,
+  .inicio-mobile .zona-tit-parejas {
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.1875rem;
+    font-style: italic;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--ds-pink-deep);
+  }
+
+  .inicio-mobile .enc-mov-live {
+    width: 11px;
+    height: 11px;
+    background: var(--ds-red-alert);
+    border: 2px solid var(--ds-paper-card);
+    box-shadow: 0 0 0 1.5px var(--ds-red-alert);
+  }
+
+  /* ---------- 8. Planes EN CURSO (carrusel compacto) ---------- */
+
+  /* los wrappers de secciÃƒÂ³n llegan desnudos: el papel lo ponen las tarjetas */
+  .inicio-mobile .proxplanes-movil:not(.is-on) { display: none; }
+
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .encursos-movil,
+  .inicio-mobile .inicio-mobile .inicio-chrome-right .proxplanes-movil {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-track {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 10px;
+    padding: 2px 13px 6px;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card {
+    flex: 0 0 auto;
+    width: 208px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 12px 10px;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .6), rgba(255, 255, 255, 0) 62%),
+      var(--ds-paper-card);
+    border: 2px solid var(--ds-ink-soft);
+    border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(70, 50, 30, .09);
+    scroll-snap-align: start;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card:nth-child(even) {
+    transform: rotate(0.4deg);
+  }
+
+  .inicio-mobile .encursos-movil .prox-faces img,
+  .inicio-mobile .encursos-movil .prox-faces .cara-ini {
+    width: 38px;
+    height: 38px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft);
+    background: #fff;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-nombres {
+    margin-top: 5px;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    line-height: 1.15;
+    color: var(--ds-ink);
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-lugar {
+    margin-top: 0;
+    font-family: var(--ds-font-ui);
+    font-weight: 600;
+    font-size: .8125rem;
+    color: var(--ds-text-muted);
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-hora {
+    margin-top: 7px;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 2px 8px;
+    background: var(--ds-green-soft);
+    border: 1.5px solid var(--ds-green-deep);
+    border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px;
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .6875rem;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--ds-green-deep);
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-punto {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--ds-green-deep);
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta {
+    margin-top: auto;
+    padding: 6px 0 0;
+    min-height: 44px;
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .8125rem;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+    color: var(--ds-pink-deep);
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta-flecha {
+    color: var(--ds-pink);
+    font-size: 1rem;
+  }
+
+  /* ---------- 9. PrÃƒÂ³ximos planes (2 tarjetas punteadas compactas) ---------- */
+
+  .inicio-mobile .proxplanes-movil .pp-mov-track {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 2px 13px 4px;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    padding: 9px 10px 11px;
+    background: #FDFAF1;
+    border: 2px dashed var(--ds-lavender-deep);
+    border-radius: 14px 18px 12px 16px / 18px 12px 16px 14px;
+    box-shadow: 0 2px 5px rgba(70, 50, 30, .07);
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-card:nth-child(odd) {
+    transform: rotate(-0.45deg);
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-card:nth-child(even) {
+    transform: rotate(0.4deg);
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-hora {
+    align-self: flex-start;
+    margin: 0 0 6px;
+    padding: 2px 8px;
+    background: var(--ds-lavender-soft);
+    border: 1.5px solid var(--ds-lavender-deep);
+    border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px;
+    font-family: var(--ds-font-ui);
+    font-weight: 800;
+    font-size: .6875rem;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--ds-lavender-deep);
+  }
+
+  .inicio-mobile .proxplanes-movil .prox-faces img,
+  .inicio-mobile .proxplanes-movil .prox-faces .cara-ini {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft);
+    background: #fff;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-nombres {
+    margin-top: 5px;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.15;
+    color: var(--ds-ink);
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-lugar {
+    font-family: var(--ds-font-ui);
+    font-weight: 600;
+    font-size: .78125rem;
+    color: var(--ds-text-muted);
+  }
+
+  /* ---------- 10. Misiones (papel compacto, filas bajas) ---------- */
+
+  .inicio-mobile .obj-misiones-papel {
+    padding: 8px 12px 4px;
+    background:
+      radial-gradient(130% 90% at 50% 0%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 60%),
+      var(--ds-paper-card);
+    border: 2px solid var(--ds-ink-soft);
+    border-radius: 18px 14px 20px 15px / 14px 20px 15px 18px;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .13), 0 4px 9px rgba(70, 50, 30, .10);
+    transform: rotate(0.3deg);
+    position: relative;
+  }
+
+  .inicio-mobile .obj-misiones-papel .mision-tape-bl,
+  .inicio-mobile .obj-misiones-papel .mision-tape-br {
+    display: none;
+  }
+
+  .inicio-mobile .obj-misiones-papel-tit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 5px;
+    margin-bottom: 1px;
+    border-bottom: 1px solid rgba(107, 81, 56, .30);
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.03125rem;
+    letter-spacing: .5px;
+    text-transform: uppercase;
+    color: var(--ds-ink-soft);
+  }
+
+  .inicio-mobile .obj-misiones-papel-tit::before {
+    content: "ðŸ“‹";
+    font-size: .8125rem;
+  }
+
+  .inicio-mobile .mision-strip-row {
+    display: grid;
+    grid-template-columns: 20px 1fr auto;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    padding: 2px 0;
+    border-bottom: 1px dashed rgba(107, 81, 56, .30);
+  }
+
+  .inicio-mobile .mision-strip-row:last-child {
+    border-bottom: none;
+  }
+
+  .inicio-mobile .mision-strip-ico {
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ds-paper-warm);
+    border: 1.5px solid var(--ds-ink-soft);
+    border-radius: 7px 5px 8px 6px / 5px 8px 6px 7px;
+    font-size: .6875rem;
+  }
+
+  .inicio-mobile .mision-strip-txt {
+    font-family: var(--ds-font-hand);
+    font-weight: 600;
+    font-size: .9375rem;
+    line-height: 1.15;
+    color: var(--ds-ink);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .inicio-mobile .mision-strip-row > span:last-child {
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--ds-ink-soft);
+    border-radius: var(--ds-radius-pill);
+    background: #fff;
+  }
+
+  .inicio-mobile .mision-strip-row.mision-hecha .mision-strip-txt,
+  .inicio-mobile .mision-strip-row.mision-completada .mision-strip-txt {
+    color: var(--ds-green-deep);
+  }
+
+  .inicio-mobile .obj-misiones-vacio {
+    font-family: var(--ds-font-hand);
+    font-size: 1rem;
+    color: var(--ds-text-muted);
+  }
+
+  /* ---------- 11. Parejas (compacto, corazones, vacÃƒÂ­o con voz) ---------- */
+
+  .inicio-mobile .shell-grupo-parejas {
+    padding: 10px 13px 12px;
+    background: var(--ds-paper-card);
+    border: 2px solid var(--ds-ink-soft);
+    border-radius: 16px 20px 14px 20px / 20px 14px 20px 16px;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .13), 0 4px 9px rgba(70, 50, 30, .10);
+    transform: rotate(-0.3deg);
+  }
+
+  .inicio-mobile .zona-tit-parejas {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 4px;
+    border-bottom: 1.5px solid rgba(107, 81, 56, .30);
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.1875rem;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--ds-ink-soft);
+  }
+
+  .inicio-mobile .zona-tit-parejas::before {
+    content: "â™¥";
+    color: var(--ds-pink-deep);
+    font-size: 1rem;
+  }
+
+  .inicio-mobile .obj-parejas-list p.muted {
+    margin: 0;
+    padding: 8px 0 2px;
+    font-family: var(--ds-font-hand);
+    font-weight: 600;
+    font-size: 1.0625rem;
+    line-height: 1.25;
+    color: var(--ds-text-muted);
+    text-align: center;
+  }
+
+  .inicio-mobile .obj-parejas-list p.muted::before {
+    content: "â™¥ â™¥";
+    display: block;
+    font-size: 1.5rem;
+    letter-spacing: 10px;
+    color: var(--ds-pink);
+    text-shadow: 0 1.5px 0 var(--ds-pink-deep);
+    margin-bottom: 3px;
+  }
+
+  .inicio-mobile .obj-pareja-piece {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+  }
+
+  .inicio-mobile .obj-pareja-cara {
+    width: 44px;
+    height: 44px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft);
+    background: #fff;
+    object-fit: cover;
+    object-position: 50% 20%;
+    border-radius: var(--ds-radius-pill);
+  }
+
+  .inicio-mobile .obj-pareja-fotos {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .inicio-mobile .obj-pareja-fotos .obj-pareja-cara + .obj-pareja-cara {
+    margin-left: -12px;
+  }
+
+  .inicio-mobile .obj-pareja-nombres {
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    color: var(--ds-ink);
+  }
+
+
+
+/* === INICIO-PROXPLANES-REF-v13 (móvil) === */
+.inicio-mobile .proxplanes-movil .pp-mov-cab {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    padding: 0 2px !important;
+    margin: 0 0 10px !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-tit {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.1875rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    letter-spacing: .6px !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .plan-seccion-ico.pp-mov-ico {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+    flex: 0 0 1.125rem !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 2px 6px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-card {
+    flex: 0 0 calc(50% - 5px) !important;
+    width: calc(50% - 5px) !important;
+    min-width: 158px !important;
+    max-width: 210px !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 10px 10px 12px !important;
+    background: #fdfaf1 !important;
+    border: 2px dashed var(--ds-lavender-deep, #9a8ab8) !important;
+    border-radius: 14px 18px 12px 16px / 18px 12px 16px 14px !important;
+    box-shadow: 0 2px 5px rgba(70, 50, 30, .07) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-card:nth-child(odd) {
+    transform: rotate(-0.45deg) !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-card:nth-child(even) {
+    transform: rotate(0.4deg) !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-top {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    margin: 0 0 8px !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-star {
+    display: none !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-hora {
+    margin: 0 !important;
+    padding: 2px 8px !important;
+    background: var(--ds-lavender-soft, #ebe3f8) !important;
+    border: 1.5px solid var(--ds-lavender-deep, #9a8ab8) !important;
+    border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .5px !important;
+    text-transform: uppercase !important;
+    color: var(--ds-lavender-deep, #5a4d78) !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .prox-faces {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 0 4px !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-copy {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .prox-faces img,
+  .inicio-mobile .proxplanes-movil .prox-faces .cara-ini {
+    width: 32px !important;
+    height: 32px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    object-position: 50% 20% !important;
+    margin-right: -8px !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft, rgba(89, 72, 57, .25)) !important;
+    background: #fff !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .prox-faces img:last-child,
+  .inicio-mobile .proxplanes-movil .prox-faces .cara-ini:last-child {
+    margin-right: 0 !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-nombres {
+    margin: 0 !important;
+    text-align: center !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.875rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .inicio-mobile .proxplanes-movil .pp-mov-lugar {
+    margin: 2px 0 0 !important;
+    text-align: center !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .78125rem !important;
+    font-weight: 600 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+  }
+
+/* === INICIO-ENCURSO-REF-v14 (móvil) === */
+.inicio-mobile .encursos-movil .enc-mov-cab {
+    display: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 2px 6px !important;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card {
+    position: relative !important;
+    flex: 0 0 calc(100% - 6px) !important;
+    width: calc(100% - 6px) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 18px 12px 10px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 12px !important;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%),
+      #fff5f0 !important;
+    box-shadow: 0 1px 4px rgba(44, 38, 31, 0.08) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    width: 52px !important;
+    height: 14px !important;
+    transform: translate(-50%, -42%) rotate(-1deg) !important;
+    background: rgba(255, 214, 120, 0.72) !important;
+    border: 1px solid rgba(89, 72, 57, 0.12) !important;
+    border-radius: 2px !important;
+    pointer-events: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card-tit {
+    margin: 0 !important;
+    padding: 0 2px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 800 !important;
+    font-style: normal !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-row,
+  .inicio-mobile .encursos-movil .enc-mov-copy,
+  .inicio-mobile .encursos-movil .enc-mov-nombres,
+  .inicio-mobile .encursos-movil .enc-mov-lugar,
+  .inicio-mobile .encursos-movil .enc-mov-estado {
+    display: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-faces {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    margin: 2px 0 0 !important;
+    flex: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-faces img,
+  .inicio-mobile .encursos-movil .enc-mov-faces .cara-ini {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    object-position: 50% 20% !important;
+    margin: 0 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px rgba(89, 72, 57, 0.28) !important;
+    flex: 0 0 44px !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-heart {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    margin: 0 -10px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.18) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    z-index: 1 !important;
+    flex: 0 0 22px !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-heart svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-meta {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    text-align: center !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-resumen {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    line-height: 1.2 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 2px 0 0 !important;
+    padding: 8px 10px !important;
+    min-height: 40px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink, #e8887a) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    transform: none !important;
+    align-self: stretch !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 16px !important;
+    height: 16px !important;
+    flex: 0 0 16px !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta-ico svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: block !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta-flecha {
+    display: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-cta.is-open {
+    background: #f6c4bc !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-panel {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 2px !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-vista-txt {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.9375rem !important;
+    line-height: 1.2 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    text-align: center !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-indice {
+    margin: 4px 0 0 !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    text-align: center !important;
+  }
