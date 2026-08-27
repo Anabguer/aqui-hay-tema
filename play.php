@@ -1,63 +1,49 @@
-﻿<?php
-declare(strict_types=1);
-header('Content-Type: text/html; charset=utf-8');
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Pragma: no-cache');
-$ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-static';
-if (is_file($ahtBusterFile)) {
-    $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
-    if ($ahtBusterRaw !== '') {
-        $ahtUi = $ahtBusterRaw;
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="aht-ui" content="v3"/>
-  <title>AquÃ­ Hay Tema</title>
+  <title>Aquí Hay Tema</title>
   <link rel="icon" href="favicon.png" type="image/png" sizes="512x512"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
-  <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/components.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=﻿v3-20260827-130403"/>
+  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=﻿v3-20260827-130403"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -184,7 +170,7 @@ if (is_file($ahtBusterFile)) {
     }
     .carta-msg.leida { opacity: .88; }
     .carta-msg.leida .cuerpo { color: #5a5248; }
-    /* Retratos: rostro visible sin rediseÃ¯Â¿Â½ar capas */
+    /* Retratos: rostro visible sin rediseï¿½ar capas */
     .capa-vecinos .vecino img,
     .vecino-celda img,
     .ficha-hero .cara img,
@@ -206,7 +192,7 @@ if (is_file($ahtBusterFile)) {
       font-weight: 800; font-size: .9rem;
     }
     .celestine-nota .obj-vecinos-tit { color: #d0697a; }
-    /* Lo que sabes: iconos pequeÃ¯Â¿Â½os alineados con la lÃ¯Â¿Â½nea manuscrita */
+    /* Lo que sabes: iconos pequeï¿½os alineados con la lï¿½nea manuscrita */
     .capa-ficha .ficha-sabes-ico { font-size: .8em; margin-right: .28rem; }
       </style>
 </head>
@@ -220,11 +206,11 @@ if (is_file($ahtBusterFile)) {
       <button type="button" id="btn-debug-guardar">Guardar</button>
       <button type="button" data-horas="1">+1h</button>
       <button type="button" data-horas="8">+8h</button>
-      <button type="button" data-horas="24">+1 dÃ¯Â¿Â½a</button>
-      <button type="button" data-horas="72">+3 dÃ¯Â¿Â½as</button>
-      <button type="button" data-horas="168">+7 dÃ¯Â¿Â½as</button>
-      <button type="button" data-horas="720">+30 dÃ¯Â¿Â½as</button>
-      <button type="button" id="btn-debug-proximo">Ir al prÃ¯Â¿Â½ximo</button>
+      <button type="button" data-horas="24">+1 dï¿½a</button>
+      <button type="button" data-horas="72">+3 dï¿½as</button>
+      <button type="button" data-horas="168">+7 dï¿½as</button>
+      <button type="button" data-horas="720">+30 dï¿½as</button>
+      <button type="button" id="btn-debug-proximo">Ir al prï¿½ximo</button>
       <button type="button" id="btn-debug-copy">Copiar debug</button>
       <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
       <button type="button" id="btn-debug-parejas-crear">Crear parejas de prueba</button>
@@ -233,12 +219,12 @@ if (is_file($ahtBusterFile)) {
         <p class="aht-sfx-debug-title">Prueba de sonidos</p>
         <button type="button" data-aht-sfx="mensajito">Mensajito</button>
         <button type="button" data-aht-sfx="cotilleo">Cotilleo</button>
-        <button type="button" data-aht-sfx="mision">MisiÃ¯Â¿Â½n</button>
+        <button type="button" data-aht-sfx="mision">Misiï¿½n</button>
         <button type="button" data-aht-sfx="descubrimiento">Descubrimiento</button>
         <button type="button" data-aht-sfx="romance">Romance</button>
         <button type="button" data-aht-sfx="conflicto">Conflicto</button>
         <button type="button" data-aht-sfx="llegada">Llegada</button>
-        <button type="button" data-aht-sfx="nuevo_dia">Nuevo dÃ¯Â¿Â½a</button>
+        <button type="button" data-aht-sfx="nuevo_dia">Nuevo dï¿½a</button>
       </div>
       <span class="msg" data-debug-msg></span>
     </div>
@@ -255,7 +241,7 @@ if (is_file($ahtBusterFile)) {
         <button type="button" data-lab-tab="vecinos">Vecinos</button>
         <button type="button" data-lab-tab="relaciones">Relaciones</button>
         <button type="button" data-lab-tab="historial">Historial</button>
-        <button type="button" data-lab-tab="tecnico">Datos tÃ¯Â¿Â½cnicos</button>
+        <button type="button" data-lab-tab="tecnico">Datos tï¿½cnicos</button>
       </nav>
       <div class="play-lab-body">
         <section class="play-lab-panel" data-lab-panel="resumen" data-lab-resumen></section>
@@ -279,7 +265,7 @@ if (is_file($ahtBusterFile)) {
           <div data-lab-cronologia></div>
         </section>
         <section class="play-lab-panel" data-lab-panel="tecnico" hidden>
-          <p style="font-size:.78rem;color:#6a5d4f">ExportaciÃ¯Â¿Â½n tÃ¯Â¿Â½cnica completa (estado + historial de sesiÃ¯Â¿Â½n DEBUG).</p>
+          <p style="font-size:.78rem;color:#6a5d4f">Exportaciï¿½n tï¿½cnica completa (estado + historial de sesiï¿½n DEBUG).</p>
           <div class="lab-export-bar">
             <button type="button" id="btn-lab-debug-export">Copiar debug completo</button>
             <button type="button" id="btn-lab-debug-estado">Copiar solo estado</button>
@@ -294,8 +280,8 @@ if (is_file($ahtBusterFile)) {
     <span class="pc-label">Acelerar tiempo</span>
     <button type="button" data-horas="1">+1h</button>
     <button type="button" data-horas="8">+8h</button>
-    <button type="button" data-horas="24">+1 dÃ¯Â¿Â½a</button>
-    <button type="button" id="btn-proximo-lab">Ir al prÃ¯Â¿Â½ximo</button>
+    <button type="button" data-horas="24">+1 dï¿½a</button>
+    <button type="button" id="btn-proximo-lab">Ir al prï¿½ximo</button>
     <span class="pc-msg" data-taller-msg-lab></span>
   </div>
   <aside class="playtest-guia" data-playtest-guia hidden>
@@ -303,50 +289,50 @@ if (is_file($ahtBusterFile)) {
     <p class="meta-reloj" data-pg-reloj></p>
     <h3>Ahora mismo</h3>
     <ul data-pg-ahora></ul>
-    <h3>QuÃ¯Â¿Â½ hacer ahora</h3>
+    <h3>Quï¿½ hacer ahora</h3>
     <ol data-pg-hacer></ol>
     <div class="evento" data-pg-evento hidden></div>
     <div data-pg-pistas></div>
     <h3>Objetivos de esta partida</h3>
     <ul class="objs" data-pg-objs></ul>
     <details class="playtest-diag" data-playtest-diag open>
-      <summary>Registro tÃ¯Â¿Â½cnico del playtest (copiar para ChatGPT / Carlos I)</summary>
+      <summary>Registro tï¿½cnico del playtest (copiar para ChatGPT / Carlos I)</summary>
       <div class="diag-actions">
         <button type="button" data-diag-copy>Copiar todo</button>
         <button type="button" data-diag-clear-ui>Limpiar vista</button>
       </div>
-      <pre data-playtest-diag-log>(aÃ¯Â¿Â½n no hay eventos)</pre>
+      <pre data-playtest-diag-log>(aï¿½n no hay eventos)</pre>
     </details>
     <details class="debug-tec">
-      <summary>Datos tÃ¯Â¿Â½cnicos (resumen avance)</summary>
+      <summary>Datos tï¿½cnicos (resumen avance)</summary>
       <pre data-taller-debug hidden></pre>
     </details>
   </aside>
   <div class="game-shell">
     <header class="game-top">
       <div class="brand-col">
-        <h1 class="brand" aria-label="AquÃ­ Hay Tema">
-          <span class="brand-text">AQUÃ HAY TEMA</span>
+        <h1 class="brand" aria-label="Aquí Hay Tema">
+          <span class="brand-text">AQUÍ HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
         <p class="top-meta-line" data-top-meta-mobile></p>
-        <button type="button" class="btn-guia" data-tut-reopen hidden>Â¿CÃ³mo va esto?</button>
+        <button type="button" class="btn-guia" data-tut-reopen hidden>¿Cómo va esto?</button>
       </div>
       <div class="top-center">
         <div class="top-reloj">
           <div class="obj-dia" style="--rot:-2deg">
             <div class="obj-dia-placa">
-              <span class="obj-dia-num" data-dia-num>Ã¯Â¿Â½</span>
+              <span class="obj-dia-num" data-dia-num>ï¿½</span>
             </div>
             <div class="obj-dia-cuerpo">
               <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
-              <span class="obj-dia-meta" data-dia-meta>Ã¯Â¿Â½</span>
+              <span class="obj-dia-meta" data-dia-meta>ï¿½</span>
             </div>
             <span class="sr-only" data-fecha></span>
           </div>
           <div class="obj-hora" style="--rot:3deg" aria-label="Hora del pueblo">
             <span class="obj-hora-ico" aria-hidden="true"></span>
-            <span class="obj-hora-val" data-hora>Ã¯Â¿Â½</span>
+            <span class="obj-hora-val" data-hora>ï¿½</span>
           </div>
           <span class="es-noche" data-es-noche hidden>
             <svg class="es-noche-luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -358,7 +344,7 @@ if (is_file($ahtBusterFile)) {
           </button>
         </div>
       </div>
-      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para mÃ¯Â¿Â½s informaciÃ¯Â¿Â½n">
+      <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para mï¿½s informaciï¿½n">
         <span class="obj-vida-kicker">Vida del pueblo</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <defs>
@@ -377,7 +363,7 @@ if (is_file($ahtBusterFile)) {
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
       <div class="control-audio" aria-label="Controles de audio">
-        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar mÃ¯Â¿Â½sica" title="Desactivar mÃ¯Â¿Â½sica">
+        <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar mï¿½sica" title="Desactivar mï¿½sica">
           <span class="control-musica-ico" aria-hidden="true">&#9834;</span>
         </button>
         <button type="button" class="control-efectos" data-efectos-toggle aria-pressed="true" aria-label="Desactivar efectos de sonido" title="Desactivar efectos de sonido">
@@ -427,10 +413,10 @@ if (is_file($ahtBusterFile)) {
             </button>
           </div>
         </section>
-        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="PrÃ³ximos planes programados">
+        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
                     <header class="pp-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PRÃ“XIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
+            <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
@@ -473,7 +459,7 @@ if (is_file($ahtBusterFile)) {
           <div class="edificios-layer" data-edificios-layer aria-hidden="true"></div>
           <aside class="selector nota-mapa ds-modal-sheet">
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="AtrÃ¯Â¿Â½s">? AtrÃ¯Â¿Â½s</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrï¿½s">? Atrï¿½s</button>
             <p class="libreta-kicker">Un vistazo al lugar</p>
             <h3 data-s-tit></h3>
             <p class="cotilleo" data-s-coti></p>
@@ -481,13 +467,13 @@ if (is_file($ahtBusterFile)) {
           </aside>
           <aside class="quien nota-mapa ds-modal-sheet">
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="AtrÃ¯Â¿Â½s">? AtrÃ¯Â¿Â½s</button>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atrï¿½s">? Atrï¿½s</button>
             <header class="quien-bloque quien-bloque--lugar">
               <h3 class="quien-lugar-tit" data-q-tit></h3>
               <p class="quien-horario" data-q-horario hidden></p>
             </header>
             <section class="quien-bloque quien-bloque--presencia">
-              <p class="libreta-kicker quien-kicker">Ã¯Â¿Â½QuiÃ¯Â¿Â½n estÃ¯Â¿Â½?</p>
+              <p class="libreta-kicker quien-kicker">ï¿½Quiï¿½n estï¿½?</p>
               <p class="quien-vacio" data-q-sum hidden></p>
               <div class="quien-list quien-residentes" data-q-list></div>
             </section>
@@ -505,16 +491,16 @@ if (is_file($ahtBusterFile)) {
             </span>
           </span>
           <div class="dia">
-            <div class="dow" data-dow>Ã¯Â¿Â½</div>
+            <div class="dow" data-dow>ï¿½</div>
             <div class="fecha" data-fecha></div>
-            <div class="hora" data-hora>Ã¯Â¿Â½</div>
+            <div class="hora" data-hora>ï¿½</div>
           </div>
           <div class="tiempo-juego" aria-label="Avanzar el tiempo">
             <button type="button" class="tique-hora" data-horas="1" title="Avanzar una hora">+1 h</button>
-            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un dÃ¯Â¿Â½a">+1 dÃ¯Â¿Â½a</button>
+            <button type="button" class="tique-dia" data-horas="24" title="Avanzar un dï¿½a">+1 dï¿½a</button>
           </div>
           <div class="hud-right">
-            <div class="dinero" data-dinero>Ã¯Â¿Â½</div>
+            <div class="dinero" data-dinero>ï¿½</div>
             <button type="button" class="buzon" data-open="buzon" aria-label="Abrir mensajitos">
               <img src="assets/play-v3/hud/sobre.png" alt=""/>
               <span class="badge">0</span>
@@ -552,7 +538,7 @@ if (is_file($ahtBusterFile)) {
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
             <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>AtrÃ¡s</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
             </div>
@@ -573,7 +559,7 @@ if (is_file($ahtBusterFile)) {
         <div class="tut-papel vida-derrota-papel">
           <p class="vida-derrota-ico" aria-hidden="true">&#128148;</p>
           <h2 class="ds-modal-tit ds-modal-tit--ink">Se nos va de las manos</h2>
-          <p class="tut-texto">La vida del pueblo ha llegado a un punto crÃ¯Â¿Â½tico. Celestine no ha podido mantener el equilibrio.</p>
+          <p class="tut-texto">La vida del pueblo ha llegado a un punto crï¿½tico. Celestine no ha podido mantener el equilibrio.</p>
           <button type="button" class="cta" data-vida-derrota-ok>Entendido</button>
         </div>
       </aside>
@@ -618,7 +604,7 @@ if (is_file($ahtBusterFile)) {
               <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#128197;</span>
               <h2 class="agenda-tit ds-modal-tit ds-modal-tit--brown">Planes</h2>
             </div>
-            <p class="ds-modal-sub agenda-sub">Lo que estÃ¯Â¿Â½ por venir.</p>
+            <p class="ds-modal-sub agenda-sub">Lo que estï¿½ por venir.</p>
           </div>
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
@@ -653,7 +639,7 @@ if (is_file($ahtBusterFile)) {
               <div class="ficha-animo-pill" data-ficha-animo-pill>
                 <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                 <span class="ficha-animo-val" data-ficha-animo-text></span>
-                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="Â¿Por quÃ© estÃ¡ asÃ­?">?</button>
+                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="¿Por qué está así?">?</button>
               </div>
             </div>
           </div>
@@ -675,11 +661,11 @@ if (is_file($ahtBusterFile)) {
               <h4 class="ficha-seccion-tit">Relaciones</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-relaciones" data-ficha-relaciones></div>
-              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver mÃ¡s relaciones</button>
+              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver más relaciones</button>
               </div>
             </section>
             <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">PrÃ³ximos planes</h4>
+              <h4 class="ficha-seccion-tit">Próximos planes</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
@@ -699,7 +685,7 @@ if (is_file($ahtBusterFile)) {
           </div>
         </div>
         <div class="ficha-rel-overlay" data-animo-overlay hidden>
-          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="Â¿Por quÃ© estÃ¡ asÃ­?">
+          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="¿Por qué está así?">
             <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
             <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
           </div>
@@ -737,7 +723,7 @@ if (is_file($ahtBusterFile)) {
               <h2 class="mis-tit ds-modal-tit ds-modal-tit--brown">Hoy en el pueblo</h2>
             </div>
           </div>
-          <p class="mis-sub mini" data-misiones-teaser>Ã¯Â¿Â½</p>
+          <p class="mis-sub mini" data-misiones-teaser>ï¿½</p>
         </header>
         <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
       </aside>
@@ -746,17 +732,17 @@ if (is_file($ahtBusterFile)) {
         <header class="vida-top">
           <p class="vida-modal-ico" aria-hidden="true">??</p>
           <h2 class="vida-tit ds-modal-tit ds-modal-tit--pink">Vida del pueblo</h2>
-          <p class="vida-valor" data-vida-modal-valor>Ã¯Â¿Â½ / 100</p>
+          <p class="vida-valor" data-vida-modal-valor>ï¿½ / 100</p>
           <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
           <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
         </header>
         <div class="vida-body capa-scroll">
           <div class="vida-copy">
-            <p>Esto no es decoraciÃ¯Â¿Â½n, aunque lo parezca.</p>
-            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algÃ¯Â¿Â½n motivo, ahora son responsabilidad tuya.</p>
-            <p>Haz que las cosas salgan bien y el corazÃ¯Â¿Â½n subirÃ¯Â¿Â½. DÃ¯Â¿Â½jalos a su suerte demasiado tiempo yÃ¯Â¿Â½ bueno, procura que esto no llegue a 0.</p>
+            <p>Esto no es decoraciï¿½n, aunque lo parezca.</p>
+            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algï¿½n motivo, ahora son responsabilidad tuya.</p>
+            <p>Haz que las cosas salgan bien y el corazï¿½n subirï¿½. Dï¿½jalos a su suerte demasiado tiempo yï¿½ bueno, procura que esto no llegue a 0.</p>
           </div>
-          <p class="vida-latido mini">Ã¯Â¿Â½Llegas a 100? ?? Hay latido.<br>SÃ¯Â¿Â½, conseguir que este pueblo funcione tiene premio. IncreÃ¯Â¿Â½ble, pero cierto.</p>
+          <p class="vida-latido mini">ï¿½Llegas a 100? ?? Hay latido.<br>Sï¿½, conseguir que este pueblo funcione tiene premio. Increï¿½ble, pero cierto.</p>
         </div>
       </aside>
       <aside class="capa capa-buzon ds-modal-sheet" aria-label="Mensajitos">
@@ -810,7 +796,7 @@ if (is_file($ahtBusterFile)) {
               <h2 class="coti-tit ds-modal-tit ds-modal-tit--lavender">Cotilleos</h2>
               <span class="coti-badge" data-coti-count hidden></span>
             </div>
-            <p class="ds-modal-sub">Lo Ã¯Â¿Â½ltimo que corre por el pueblo</p>
+            <p class="ds-modal-sub">Lo ï¿½ltimo que corre por el pueblo</p>
           </div>
           <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
         </header>
@@ -836,25 +822,25 @@ if (is_file($ahtBusterFile)) {
         <div class="org-body capa-scroll">
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
-              <h4 class="ficha-seccion-tit">Ã¯Â¿Â½QuiÃ¯Â¿Â½nes van?</h4>
+              <h4 class="ficha-seccion-tit">ï¿½Quiï¿½nes van?</h4>
               <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 3 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
               <div class="org-busca-wrap">
-                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecinoÃ¯Â¿Â½" autocomplete="off" aria-label="Buscar vecino"/>
+                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecinoï¿½" autocomplete="off" aria-label="Buscar vecino"/>
                 <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
               </div>
               <div class="org-picker-strip capa-scroll" data-org-picker></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--que">
-            <h4 class="ficha-seccion-tit">Ã¯Â¿Â½QuÃ¯Â¿Â½ buscamos?</h4>
+            <h4 class="ficha-seccion-tit">ï¿½Quï¿½ buscamos?</h4>
             <div class="ficha-seccion-body">
               <div class="org-tipos" data-org-tipos></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--donde">
-            <h4 class="ficha-seccion-tit">Ã¯Â¿Â½DÃ¯Â¿Â½nde?</h4>
+            <h4 class="ficha-seccion-tit">ï¿½Dï¿½nde?</h4>
             <div class="ficha-seccion-body org-donde-fila">
               <div class="org-dd" data-org-dd-lugar></div>
               <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
@@ -862,7 +848,7 @@ if (is_file($ahtBusterFile)) {
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--cuando">
-            <h4 class="ficha-seccion-tit">Ã¯Â¿Â½CuÃ¯Â¿Â½ndo?</h4>
+            <h4 class="ficha-seccion-tit">ï¿½Cuï¿½ndo?</h4>
             <div class="ficha-seccion-body">
               <div class="org-cuando">
                 <div class="org-dd org-dd--dia" data-org-dd-dia></div>
@@ -885,7 +871,7 @@ if (is_file($ahtBusterFile)) {
     </div>
   </div>
       </div>
-      <aside class="inicio-proximo-evento" data-proximo-evento-slot hidden aria-label="PrÃ³ximo evento">
+      <aside class="inicio-proximo-evento" data-proximo-evento-slot hidden aria-label="Próximo evento">
         <div class="inicio-evento-card" role="status">
           <span class="inicio-evento-ico" data-proximo-evento-ico aria-hidden="true"></span>
           <span class="inicio-evento-body">
@@ -899,10 +885,10 @@ if (is_file($ahtBusterFile)) {
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
             <span class="obj-cotilleo-cuerpo">
-              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy estÃ¡n sospechosamente tranquilosâ€¦</span>
+              <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy están sospechosamente tranquilos…</span>
               <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
-            <span class="obj-cotilleo-flecha" aria-hidden="true">â€º</span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">›</span>
           </button>
         </section>
         <section class="shell-grupo shell-grupo-misiones-par" id="mob-misiones">
@@ -922,11 +908,11 @@ if (is_file($ahtBusterFile)) {
       </aside>
     </div>
   </div>
-  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/lab-audit.js?v=﻿v3-20260827-130403"></script>
+  <script src="assets/js/play-v3-audio.js?v=﻿v3-20260827-130403"></script>
+  <script src="assets/js/hobby-icons.js?v=﻿v3-20260827-130403"></script>
+  <script src="assets/js/play-v3.js?v=﻿v3-20260827-130403"></script>
+  <script src="assets/js/play-v3-lab.js?v=﻿v3-20260827-130403"></script>
 <script>if(new URLSearchParams(location.search).get('design')==='1'){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/design-mode-global.js';document.body.appendChild(s)}</script>
 </body>
 </html>

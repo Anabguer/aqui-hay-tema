@@ -1,0 +1,390 @@
+/* LEGIBILIDAD-GLOBAL-v1 — pasada tipográfica sin tocar layout.
+   Usa --aht-type-* (tokens.css). Carga al final de play.php.
+   Tutorial: complementa TUTORIAL-LEGIBILIDAD-v6; no altera marco fijo. */
+
+/* === Títulos principales / display === */
+.play-v3:has(.game-shell) .obj-dia-hora,
+.play-v3:has(.game-shell) .obj-dinero-val {
+  font-size: var(--aht-type-body) !important;
+}
+
+.play-v3:has(.game-shell) .obj-dia-num {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+.play-v3:has(.game-shell) .obj-dia-dow,
+.play-v3:has(.game-shell) .obj-dinero-lbl {
+  font-size: var(--aht-type-caption) !important;
+}
+
+/* === Inicio: títulos de bloque === */
+.play-v3:has(.game-shell) .enc-mov-tit,
+.play-v3:has(.game-shell) .pp-mov-tit,
+.play-v3:has(.game-shell) .obj-misiones-papel-tit,
+.play-v3:has(.game-shell) .zona-tit-parejas,
+.play-v3:has(.game-shell) .obj-cotilleo-tit,
+.play-v3:has(.game-shell) .obj-proximo-tit,
+.play-v3:has(.game-shell) .obj-vecinos-tit {
+  font-size: var(--aht-type-block) !important;
+}
+
+/* === Cotilleo teaser === */
+.play-v3:has(.game-shell) .obj-cotilleo-txt {
+  font-size: var(--aht-type-body) !important;
+  line-height: 1.38 !important;
+}
+
+/* === Parejas === */
+.play-v3:has(.game-shell) .obj-pareja-nombres {
+  font-size: var(--aht-type-name) !important;
+  line-height: 1.28 !important;
+}
+
+.play-v3:has(.game-shell) .obj-parejas-vacio,
+.play-v3:has(.game-shell) .obj-parejas-list p.muted,
+.play-v3:has(.game-shell) .obj-resumen {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+.play-v3:has(.game-shell) .obj-parejas-tab,
+.play-v3:has(.game-shell) .obj-pestaña,
+.play-v3:has(.game-shell) .pareja-crisis-sello {
+  font-size: var(--aht-type-caption) !important;
+}
+
+/* === Planes en curso / próximos (tarjetas) === */
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-nombres,
+.play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
+  font-size: 0.875rem !important;
+  line-height: 1.2 !important;
+}
+
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-lugar,
+.play-v3:has(.game-shell) .proxplanes-movil .pp-mov-lugar,
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-estado,
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-indice {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-hora,
+.play-v3:has(.game-shell) .proxplanes-movil .pp-mov-hora {
+  font-size: var(--aht-type-caption) !important;
+}
+
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-cta {
+  font-size: var(--aht-type-caption) !important;
+}
+
+.play-v3:has(.game-shell) .plan-seccion-ver,
+.play-v3:has(.game-shell) .obj-planes-prox-ver {
+  display: none !important;
+}
+
+.play-v3:has(.game-shell) .obj-proximo-body,
+.play-v3:has(.game-shell) .obj-proximo-vacio,
+.play-v3:has(.game-shell) .prox-nombres,
+.play-v3:has(.game-shell) .prox-meta {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+/* === Misiones (Inicio strip) === */
+.play-v3:has(.game-shell) .obj-misiones-papel-tit::before {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+.play-v3:has(.game-shell) .mision-strip-txt,
+.play-v3:has(.game-shell) .obj-misiones-vacio {
+  font-size: var(--aht-type-body) !important;
+}
+
+.play-v3:has(.game-shell) .mision-strip-ico {
+  font-size: var(--aht-type-caption) !important;
+}
+
+/* === Capa Misiones (modal) === */
+.play-v3 .capa-misiones .mis-top::before {
+  font-size: var(--aht-type-caption) !important;
+}
+
+.play-v3 .capa-misiones .mis-tit {
+  font-size: var(--aht-type-display) !important;
+}
+
+.play-v3 .capa-misiones .mis-sub {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+.play-v3 .capa-misiones .mis-txt,
+.play-v3 .capa-misiones .mis-item .mis-txt {
+  font-size: var(--aht-type-body) !important;
+  line-height: 1.35 !important;
+}
+
+.play-v3 .capa-misiones .mis-item-cumplida .mis-txt {
+  font-size: var(--aht-type-body) !important;
+}
+
+.play-v3 .capa-misiones .mis-estado {
+  font-size: var(--aht-type-caption) !important;
+}
+
+/* === Inicio: tiles izquierda (Mensajitos / Vecinos / Plan) === */
+.play-v3:has(.game-shell) .game-left .game-left-tile-label,
+.play-v3:has(.game-shell) .game-left .obj-buzon-txt,
+.play-v3:has(.game-shell) .game-left .obj-vecinos-tit,
+.play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before {
+  font-size: max(1.1875rem, var(--aht-type-block)) !important;
+}
+
+.play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
+  font-size: max(.8125rem, var(--aht-type-caption)) !important;
+}
+
+/* === Vecinos / buzón preview (Inicio) === */
+.play-v3:has(.game-shell) .vecinos-stat,
+.play-v3:has(.game-shell) .obj-pueblo-txt,
+.play-v3:has(.game-shell) .obj-buzon-preview {
+  font-size: var(--aht-type-secondary) !important;
+}
+
+/* === Tutorial Manual: mínimo legible (no reduce v6) === */
+.play-v3 .tut-intro .tut-intro-line,
+.play-v3 .tut-intro .tut-intro-extra {
+  font-size: max(1.18rem, var(--aht-type-body)) !important;
+}
+
+.play-v3 .tut-intro .tut-bloques-pref {
+  font-size: max(1.16rem, var(--aht-type-secondary)) !important;
+}
+
+.play-v3 .tut-intro .tut-bloque-tit {
+  font-size: max(1.18rem, var(--aht-type-block)) !important;
+}
+
+.play-v3 .tut-intro .tut-bloque-txt {
+  font-size: max(1.14rem, var(--aht-type-body)) !important;
+}
+
+.play-v3 .tut-intro .tut-bloques.is-inline .tut-bloque-txt {
+  font-size: max(1.1rem, var(--aht-type-secondary)) !important;
+}
+
+.play-v3 .tut-intro .tut-cierre {
+  font-size: max(1.16rem, var(--aht-type-body)) !important;
+}
+
+.play-v3 .tut-intro .tut-cara-nombre,
+.play-v3 .tut-intro .tut-cara-nombre-txt {
+  font-size: max(1.08rem, var(--aht-type-name)) !important;
+}
+
+@media (min-width: 769px) {
+  .play-v3 .tut-intro .tut-intro-line,
+  .play-v3 .tut-intro .tut-intro-extra {
+    font-size: max(1.4rem, var(--aht-type-body)) !important;
+  }
+
+  .play-v3 .tut-intro .tut-bloque-tit {
+    font-size: max(1.3rem, var(--aht-type-block)) !important;
+  }
+
+  .play-v3 .tut-intro .tut-bloque-txt {
+    font-size: max(1.26rem, var(--aht-type-body)) !important;
+  }
+}
+
+
+/* Badge contador planes (Próximos / En curso) */
+.play-v3:has(.game-shell) .plan-seccion-cnt {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: 11px;
+  background: var(--ds-lavender-deep, #7c6bae) !important;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  font-family: Nunito, "Segoe UI", sans-serif !important;
+  font-size: 0.6875rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  color: #fff !important;
+  line-height: 1 !important;
+  vertical-align: middle;
+}
+.play-v3:has(.game-shell) .plan-seccion-cnt[hidden] {
+  display: none !important;
+}
+
+/* === Mensajitos: titulo VECINOS + texto legible + sin degradados === */
+.play-v3 .capa-buzon .mensajitos-cab .ds-modal-head,
+.play-v3 .capa-buzon .mensajitos-cab .ds-modal-head-row {
+  width: 100% !important;
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.play-v3 .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3 .capa-buzon .mensajitos-tit {
+  font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+  font-size: max(1.5rem, var(--aht-type-block, 1.35rem)) !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.1em !important;
+  color: var(--ds-pink-deep, #c85b78) !important;
+  transform: none !important;
+  text-align: center !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.play-v3 .capa-buzon .carta-msg .cuerpo {
+  font-family: Fraunces, Georgia, serif !important;
+  font-size: max(1.34rem, var(--aht-type-body, 1.22rem)) !important;
+  font-weight: 500 !important;
+  font-style: italic !important;
+  line-height: 1.42 !important;
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3 .capa-buzon .carta-msg,
+.play-v3:has(.game-shell) .capa-buzon .carta-msg.no-leida,
+.play-v3:has(.game-shell) .capa-buzon .carta-msg.carta-accion.no-leida,
+.play-v3 .capa-buzon .carta-msg.no-leida,
+.play-v3 .capa-buzon .carta-msg.carta-accion.no-leida {
+  background: var(--ds-paper-card, #fffdf7) !important;
+  background-image: none !important;
+}
+
+.play-v3 .capa-buzon .carta-msg.no-leida,
+.play-v3:has(.game-shell) .capa-buzon .carta-msg.no-leida,
+.play-v3:has(.game-shell) .capa-buzon .carta-msg.carta-accion.no-leida {
+  background: var(--ds-pink-soft, #fff0f4) !important;
+  background-image: none !important;
+  border-color: var(--ds-pink-deep, #c85b78) !important;
+}
+
+.play-v3 .capa-buzon .carta-msg.leida {
+  background: #fff9f0 !important;
+  background-image: none !important;
+}
+
+.play-v3 .mensajitos-tab.is-on,
+.play-v3:has(.game-shell) .mensajitos-tab.is-on {
+  background: var(--ds-pink, #e86b8f) !important;
+  background-image: none !important;
+}
+
+.play-v3 .capa-buzon .carta-cta--abrir,
+.play-v3 .capa-buzon .acciones-msg button,
+.play-v3:has(.game-shell) .capa-buzon .carta-cta--abrir,
+.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-pendiente {
+  background: var(--ds-pink, #e86b8f) !important;
+  background-image: none !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, 0.22) !important;
+}
+
+.play-v3 .capa-buzon .carta-cta--ver,
+.play-v3 .capa-buzon .carta-cta--suave,
+.play-v3 .capa-buzon .acciones-msg button.btn-suave,
+.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-leido {
+  background: var(--ds-lavender, #c5b8e8) !important;
+  background-image: none !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, 0.18) !important;
+}
+
+/* === Mensajitos v2: tipografia = vecinos (.vec-tab 1.05rem) + marcar leido mas arriba === */
+.play-v3 .capa-buzon .mensajitos-cab {
+  margin-bottom: 4px !important;
+  padding-bottom: 0 !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-tabs {
+  margin-bottom: 2px !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-toolbar {
+  margin: -2px 0 6px !important;
+  padding: 0 2px !important;
+  min-height: 0 !important;
+}
+
+.play-v3 .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3 .capa-buzon .mensajitos-tit {
+  font-family: Caveat, cursive !important;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+  color: var(--ds-ink, #3b3028) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.4px !important;
+  line-height: 1.1 !important;
+  margin: 0 0 6px !important;
+}
+
+.play-v3 .mensajitos-tab,
+.play-v3:has(.game-shell) .mensajitos-tab,
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-tab {
+  font: 700 1.05rem/1 Caveat, cursive !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+  min-height: 44px !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-leer-todos,
+.play-v3 .capa-buzon .mensajitos-leer-todos-txt {
+  font: 700 1.05rem/1.2 Caveat, cursive !important;
+  letter-spacing: 0.5px !important;
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3 .capa-buzon .carta-copy .de,
+.play-v3 .capa-buzon .carta-head .de {
+  font: 700 1.05rem/1.15 Caveat, cursive !important;
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3 .capa-buzon .carta-cuando {
+  font: 700 1.05rem/1.25 Caveat, cursive !important;
+  color: var(--ds-text-muted, #7a6a5c) !important;
+  letter-spacing: 0.02em !important;
+}
+
+.play-v3 .capa-buzon .carta-msg .cuerpo {
+  font: 700 1.05rem/1.32 Caveat, cursive !important;
+  font-style: normal !important;
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3 .capa-buzon .carta-flag--nuevo {
+  font: 700 1.05rem/1.1 Caveat, cursive !important;
+}
+
+.play-v3 .capa-buzon .carta-flag--visto {
+  font: 700 1.05rem/1.1 Caveat, cursive !important;
+}
+
+.play-v3 .capa-buzon .carta-msg .plazo,
+.play-v3 .capa-buzon .carta-msg .sello-estado,
+.play-v3 .capa-buzon .carta-pie-meta .plazo,
+.play-v3 .capa-buzon .carta-pie-meta .sello-estado {
+  font: 800 1.05rem/1.2 Nunito, sans-serif !important;
+}
+
+.play-v3 .capa-buzon .carta-cta,
+.play-v3 .capa-buzon .acciones-msg button,
+.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta {
+  font: 700 1.05rem/1 Caveat, cursive !important;
+  letter-spacing: 0.5px !important;
+  text-transform: uppercase !important;
+}
+
+.play-v3 .capa-buzon .mensajitos-hint,
+.play-v3 .capa-buzon .lista-vacia,
+.play-v3 .capa-buzon .buzon-vacio {
+  font: 700 1.05rem/1.28 Caveat, cursive !important;
+}

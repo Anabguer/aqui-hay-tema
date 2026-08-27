@@ -1,0 +1,1313 @@
+﻿/* ============================================================
+   INICIO · DS compartido escritorio/tablet (>=769px)
+   Misma referencia visual que móvil (inicio-override iter3 + inicio.css).
+   Solo Cotilleo, Parejas y Planes en la home — sin tocar otras pantallas.
+   ============================================================ */
+
+@media (min-width: 769px) {
+
+  /* --- Planes legacy columna izquierda: ocultar polaroid/próximos antiguos --- */
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-planes-lateral > .obj-proximo,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-planes-prox-block {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes .obj-planes-lateral {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 108px;
+    align-items: stretch;
+  }
+
+  /* + Nuevo plan: mismo lenguaje rosa discontinuo que móvil */
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 108px;
+    padding: 10px 8px;
+    margin: 0;
+    background:
+      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
+      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%);
+    border: 2.5px dashed var(--ds-pink-deep, #c85b78);
+    border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px;
+    box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12);
+    transform: rotate(-0.35deg);
+    cursor: pointer;
+    color: var(--ds-pink-deep, #c85b78);
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan.obj-proximo-cta:hover {
+    filter: brightness(1.02);
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-ico {
+    font-size: 2.1rem;
+    line-height: .85;
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-weight: 700;
+    color: var(--ds-pink-deep, #c85b78);
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-weight: 700;
+    font-size: 1.125rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ds-pink-deep, #c85b78);
+  }
+
+  /* --- Feed derecho: bloques DS visibles --- */
+  .play-v3:has(.game-shell) .proxplanes-movil:not(.is-on),
+  .play-v3:has(.game-shell) .encursos-movil:not(.is-on) {
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .game-right .encursos-movil,
+  .play-v3:has(.game-shell) .game-right .proxplanes-movil {
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 0 .65rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  /* --- Cotilleo (lavanda + etiqueta + badge) --- */
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo.obj-cotilleo-par {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 62px;
+    padding: 9px 11px 9px 9px;
+    border: 1px solid rgba(122, 106, 154, .35);
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ebe3f8 0%, #e8dff5 100%);
+    box-shadow: 0 1px 3px rgba(44, 38, 31, .06);
+    transform: none;
+    cursor: pointer;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-par::before,
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-par::after {
+    content: none;
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-tit {
+    flex: none;
+    margin: 0;
+    padding: 6px 9px;
+    border-radius: 6px;
+    background: #4f4378;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .62rem;
+    font-weight: 800;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: #fff;
+    line-height: 1;
+    transform: none;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-cuerpo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-txt {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: Fraunces, Georgia, serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: .84rem;
+    line-height: 1.32;
+    color: #2c261f;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-badge {
+    flex: none;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    background: var(--ds-red-alert, #c42b4a);
+    border: 2px solid #fff;
+    border-radius: 999px;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-weight: 800;
+    font-size: .6875rem;
+    color: #fff;
+    transform: rotate(3deg);
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-badge[hidden] {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-flecha {
+    flex: none;
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #5a4d78;
+    opacity: .9;
+  }
+
+  /* --- Cabeceras sección planes --- */
+  .play-v3:has(.game-shell) .enc-mov-cab,
+  .play-v3:has(.game-shell) .pp-mov-cab {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 0 2px;
+    margin: 0 0 8px;
+  }
+
+  .play-v3:has(.game-shell) .enc-mov-tit,
+  .play-v3:has(.game-shell) .pp-mov-tit {
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .74rem;
+    font-weight: 800;
+    font-style: normal;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #3b3028;
+  }
+
+  .play-v3:has(.game-shell) .plan-seccion-cnt {
+    font-weight: 800;
+    letter-spacing: .08em;
+  }
+
+  .play-v3:has(.game-shell) .plan-seccion-rule {
+    flex: 1 1 auto;
+    min-width: 8px;
+    height: 1px;
+    background: rgba(89, 72, 57, .12);
+    margin: 0;
+  }
+
+  .play-v3:has(.game-shell) .plan-seccion-ver {
+    flex: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .64rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #6a7d9a;
+    cursor: pointer;
+  }
+
+  .play-v3:has(.game-shell) .plan-seccion-ico,
+  .play-v3:has(.game-shell) .pp-mov-ico,
+  .play-v3:has(.game-shell) .enc-mov-ico {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 1rem;
+    color: #594839;
+  }
+
+  /* --- Planes en curso: carrusel --- */
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-track {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    padding: 2px 2px 6px;
+    scrollbar-width: thin;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-indice {
+    margin: 0;
+    padding: 0 2px 4px;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .6875rem;
+    font-weight: 700;
+    color: #6a5f55;
+    text-align: right;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card {
+    flex: 0 0 min(100%, 248px);
+    width: min(100%, 248px);
+    min-width: 200px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    padding: 9px 10px;
+    border: 1.5px solid #c9b8a4;
+    border-radius: 10px;
+    background: #fffdf9;
+    box-shadow: 0 1px 3px rgba(44, 38, 31, .06);
+    transform: none;
+    box-sizing: border-box;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-card .prox-faces {
+    flex: none;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    gap: 0;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .prox-faces img,
+  .play-v3:has(.game-shell) .encursos-movil .prox-faces .cara-ini {
+    width: 36px;
+    height: 36px;
+    margin-right: -8px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(89, 72, 57, .25);
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .prox-faces img:last-child,
+  .play-v3:has(.game-shell) .encursos-movil .prox-faces .cara-ini:last-child {
+    margin-right: 0;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-copy {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nombres {
+    margin: 0;
+    font-family: Fraunces, Georgia, serif;
+    font-size: .86rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #2c261f;
+    text-align: left;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-lugar {
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .7rem;
+    font-weight: 600;
+    color: #6a5f55;
+    text-align: left;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-estado {
+    display: inline-flex;
+    align-self: flex-start;
+    margin-top: 3px;
+    padding: 1px 6px;
+    border-radius: 999px;
+    background: #e3f0dc;
+    border: 1px solid #8fbc78;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .5625rem;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #3d5c32;
+    line-height: 1.3;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-hora,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-punto {
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta {
+    flex: none;
+    align-self: center;
+    margin: 0;
+    padding: 0;
+    min-height: 44px;
+    border: none;
+    background: none;
+    box-shadow: none;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .6rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: #c85b4a;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-cta-flecha {
+    color: #c85b4a;
+    font-size: .9em;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-panel {
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  /* --- Próximos planes: carrusel --- */
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-track {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    padding: 2px 2px 6px;
+    scrollbar-width: thin;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-card {
+    flex: 0 0 min(100%, 248px);
+    width: min(100%, 248px);
+    min-width: 200px;
+    scroll-snap-align: start;
+    padding: 9px 10px 10px;
+    background: #fdfaf1;
+    border: 1.5px dashed #b8a8c8;
+    border-radius: 10px;
+    box-shadow: none;
+    transform: none;
+    box-sizing: border-box;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0 0 6px;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-hora {
+    margin: 0;
+    padding: 2px 7px;
+    background: #ebe3f8;
+    border: 1px solid #9a8ab8;
+    border-radius: 6px;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .5625rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    color: #5a4d78;
+    text-transform: uppercase;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-star {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: 1.5px solid #c9b8a4;
+    border-radius: 7px;
+    background: #fffdf7;
+    font-size: .75rem;
+    color: #d4a82a;
+    line-height: 1;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-body {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    width: 100%;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces img,
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces .cara-ini {
+    width: 34px;
+    height: 34px;
+    margin-right: -8px;
+    border: 2px solid #fff;
+    box-shadow: 0 0 0 1px rgba(89, 72, 57, .25);
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
+    margin: 0;
+    font-family: Fraunces, Georgia, serif;
+    font-size: .84rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: #2c261f;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-lugar {
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .6875rem;
+    font-weight: 600;
+    color: #6a5f55;
+  }
+
+  /* --- Parejas: tarjeta papel DS --- */
+  .play-v3:has(.game-shell) .shell-grupo-parejas {
+    padding: 10px 12px 12px;
+    background: var(--ds-paper-card, #fffdf9);
+    border: 2px solid var(--ds-ink-soft, #6b5138);
+    border-radius: 16px 20px 14px 20px / 20px 14px 20px 16px;
+    box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .13), 0 4px 9px rgba(70, 50, 30, .10);
+    transform: rotate(-0.3deg);
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .play-v3:has(.game-shell) .zona-tit-parejas {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding-bottom: 7px;
+    margin-bottom: 4px;
+    border-bottom: 1.5px solid rgba(107, 81, 56, .30);
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: var(--ds-ink-soft, #6b5138);
+    background: none !important;
+  }
+
+  .play-v3:has(.game-shell) .zona-tit-parejas::before {
+    content: "\2665";
+    color: var(--ds-pink-deep, #c85b78);
+    font-size: .95rem;
+  }
+
+  .play-v3:has(.game-shell) .zona-tit-parejas::after {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-parejas-list p.muted {
+    margin: 0;
+    padding: 8px 0 2px;
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.25;
+    color: var(--ds-text-muted, #6a5f55);
+    text-align: center;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-piece {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 0;
+    overflow: visible;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-fotos {
+    display: inline-flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 0;
+    flex: 0 0 auto;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-cara {
+    width: 40px !important;
+    height: 40px !important;
+    margin: 0 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #6b5138) !important;
+    object-fit: cover;
+    object-position: 50% 20%;
+    border-radius: 50%;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-cara:first-child {
+    transform: rotate(-3deg) !important;
+    z-index: 1;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-cara:last-child {
+    transform: rotate(3deg) !important;
+    z-index: 1;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-enlace {
+    width: 12px !important;
+    height: 10px !important;
+    flex: 0 0 12px !important;
+    margin: 0 4px !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-pareja-nombres {
+    font-family: var(--ds-font-hand, Caveat, cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1rem !important;
+    font-style: normal !important;
+    color: var(--ds-ink, #2c261f) !important;
+    text-align: left !important;
+    margin: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .pareja-crisis-sello {
+    margin-left: auto;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .5625rem;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ds-red-alert, #c42b4a);
+  }
+
+  /* INICIO-DESKTOP-CORRECCION-v8 */
+  .play-v3:has(.game-shell) .game-main {
+    display: grid;
+    grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
+    align-items: start;
+    gap: 14px;
+  }
+
+  .play-v3:has(.game-shell) .game-left {
+    grid-column: 1;
+    grid-row: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    align-content: start;
+  }
+
+  .play-v3:has(.game-shell) .game-right {
+    display: contents;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap {
+    grid-column: 2;
+    grid-row: 1 / span 12;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-buzon { grid-column: 1; grid-row: 1; }
+  .play-v3:has(.game-shell) .shell-grupo-resumen { grid-column: 2; grid-row: 1; }
+  .play-v3:has(.game-shell) .encursos-movil { grid-column: 1 / -1; grid-row: 2; width: 100%; }
+  .play-v3:has(.game-shell) .proxplanes-movil { grid-column: 1 / -1; grid-row: 3; width: 100%; }
+  .play-v3:has(.game-shell) .shell-grupo-planes { grid-column: 1 / -1; grid-row: 4; width: 100%; }
+
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 1; width: 100%; }
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par { grid-column: 3; grid-row: 2; width: 100%; }
+  .play-v3:has(.game-shell) .shell-grupo-parejas { grid-column: 3; grid-row: 3; width: 100%; }
+
+  .play-v3:has(.game-shell) .game-right .encursos-movil,
+  .play-v3:has(.game-shell) .game-right .proxplanes-movil {
+    margin: 0;
+  }
+
+  .play-v3:has(.game-shell) .plan-seccion-ver,
+  .play-v3:has(.game-shell) .obj-planes-prox-ver {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-top .btn-guia:not([hidden]) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.05rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px !important;
+    padding: 2px 4px !important;
+    margin-top: 2px !important;
+    transform: rotate(-1deg);
+  }
+
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato {
+    min-height: 32px !important;
+    padding: 3px 10px !important;
+    background: var(--ds-lavender-soft, #ebe3f8) !important;
+    border: 1.5px solid var(--ds-lavender-deep, #7c6bae) !important;
+    border-radius: 12px 9px 13px 10px / 10px 13px 9px 12px !important;
+    box-shadow: 1.5px 2.5px 0 rgba(124, 107, 174, .35) !important;
+    font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .75rem !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    transform: rotate(-1.2deg) !important;
+  }
+
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato-ico {
+    display: inline-block !important;
+    font-size: .62rem !important;
+    line-height: 1 !important;
+    margin-right: 2px !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-txt {
+    font-size: .72rem !important;
+    line-height: 1.35 !important;
+    -webkit-line-clamp: 3;
+  }
+
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
+    align-items: center !important;
+    text-align: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .libreta-kicker {
+    display: block !important;
+    width: 100%;
+    text-align: center !important;
+    margin: 0 0 4px !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: .95rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-head {
+    justify-content: center !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100%;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .prox-faces img,
+  .play-v3:has(.game-shell) .encursos-movil .prox-faces .cara-ini,
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces img,
+  .play-v3:has(.game-shell) .proxplanes-movil .prox-faces .cara-ini {
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-nombres,
+  .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
+    font-size: 0.875rem !important;
+  }
+  /* INICIO-DESKTOP-LEFT-v10: bloques apilados ancho columna (no tiles móvil) */
+  .play-v3:has(.game-shell) .game-left {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    grid-template-columns: unset !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .game-left > .encursos-movil,
+  .play-v3:has(.game-shell) .game-left > .proxplanes-movil,
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-planes {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-resumen {
+    transform: none !important;
+    align-self: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon .mensajitos-wrap {
+    min-height: 0 !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .obj-buzon {
+    width: 100% !important;
+    min-height: 0 !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
+    width: 100% !important;
+    min-height: 0 !important;
+    align-items: stretch !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .libreta-kicker,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-head {
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  /* INICIO-DESKTOP-MAP-v11: recuperar mapa central (altura colapsada por align-items:start) */
+  .play-v3:has(.game-shell) .game-main {
+    align-items: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: stretch !important;
+    justify-self: stretch !important;
+    min-width: 0 !important;
+    min-height: min(76vh, 660px) !important;
+    display: flex !important;
+    visibility: visible !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .play-stage,
+  .play-v3:has(.game-shell) .game-map-wrap .play-root.pc {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    height: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap .mapa-canonico,
+  .play-v3:has(.game-shell) .game-map-wrap .mapa-canonico-bg {
+    visibility: visible !important;
+  }
+
+}
+
+
+/* Ajustes reales de maqueta - solo desktop. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo.obj-cotilleo-par { width: 724px; max-width: none; height: 77px; min-height: 77px; }
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-par .obj-cotilleo-txt { font-size: 15px !important; }
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-par .obj-cotilleo-tit { font-size: .55rem; padding: 4px 6px; }
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato { width: 205px; height: 20px; min-height: 20px !important; box-sizing: border-box; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { grid-column: 3; grid-row: 1; margin-top: 0 !important; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 2; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas { grid-column: 3; grid-row: 3; }
+  .play-v3:has(.game-shell) .game-right .obj-misiones-papel-tit { font-size: 17.5px; }
+}
+
+
+/* Ajustes finales desktop solicitados - no afectan mobile. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo-par .obj-cotilleo-tit { width: 63px; height: 63px; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .libreta-kicker,
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-preview { align-self: center !important; width: auto !important; text-align: center !important; justify-content: center !important; }
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen .obj-vecinos-head { align-self: stretch !important; justify-content: space-between !important; text-align: left !important; }
+}
+
+
+/* Ajustes desktop exactos solicitados - no afectan mobile ni el orden. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon .obj-buzon { height: 63px; min-height: 63px; box-sizing: border-box; }
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato { width: 115px; height: 25px; min-height: 25px !important; box-sizing: border-box; }
+}
+
+
+/* Orden desktop solicitado: Cotilleo sobre Misiones; anchos iguales. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 1; width: 100%; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { grid-column: 3; grid-row: 2; width: 100%; }
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo.obj-cotilleo-par { width: 100%; max-width: 100%; }
+  .play-v3:has(.game-shell) .game-right .obj-misiones-papel { width: 100%; }
+}
+
+/* INICIO-DESKTOP-ENCURSO-REF: Plan en curso columna izquierda = ref movil v14 */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-cab {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-indice,
+  .play-v3:has(.game-shell) .game-left .encursos-movil [data-encursos-indice] {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-shell {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-shell .enc-mov-track {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 2px 6px !important;
+    scrollbar-width: none;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-shell .enc-mov-track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-nav-btn {
+    flex: 0 0 30px !important;
+    width: 30px !important;
+    height: 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.28) !important;
+    border-radius: 999px !important;
+    background: rgba(255, 253, 249, 0.92) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    color: var(--ds-ink, #3b3028) !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-nav-btn[hidden] {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-nav-btn svg {
+    width: 14px !important;
+    height: 14px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-card {
+    position: relative !important;
+    flex: 0 0 calc(100% - 6px) !important;
+    width: calc(100% - 6px) !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 8px !important;
+    padding: 18px 12px 10px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 12px !important;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%),
+      #fff5f0 !important;
+    box-shadow: 0 1px 4px rgba(44, 38, 31, 0.08) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 50% !important;
+    width: 52px !important;
+    height: 14px !important;
+    transform: translate(-50%, -42%) rotate(-1deg) !important;
+    background: rgba(255, 214, 120, 0.72) !important;
+    border: 1px solid rgba(89, 72, 57, 0.12) !important;
+    border-radius: 2px !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-card-tit {
+    margin: 0 !important;
+    padding: 0 2px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 800 !important;
+    font-style: normal !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-row,
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-copy,
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-nombres,
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-lugar,
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-estado {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-faces {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    margin: 2px 0 0 !important;
+    flex: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-faces img,
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-faces .cara-ini {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    object-position: 50% 20% !important;
+    margin: 0 !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px rgba(89, 72, 57, 0.28) !important;
+    flex: 0 0 44px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-tipo-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    margin: 0 -10px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.18) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    z-index: 1 !important;
+    flex: 0 0 22px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-tipo-ico svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-meta {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-resumen {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    line-height: 1.2 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    text-align: center !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 2px 0 0 !important;
+    padding: 8px 10px !important;
+    min-height: 40px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink, #e8887a) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 0.6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.06em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    transform: none !important;
+    align-self: stretch !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-cta-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 16px !important;
+    height: 16px !important;
+    flex: 0 0 16px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-cta-ico svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-cta-flecha {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-cta.is-open {
+    background: #f6c4bc !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-panel {
+    width: 100% !important;
+    margin: 0 !important;
+    padding-top: 2px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .encursos-movil .enc-mov-vista-txt {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 0.9375rem !important;
+    line-height: 1.2 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .pp-mov-tit {
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.0625rem !important;
+    font-weight: 700 !important;
+    font-style: italic !important;
+    letter-spacing: 0.04em !important;
+    text-transform: none !important;
+    color: var(--ds-ink-soft, #6b5138) !important;
+  }
+}
+
+/* INICIO-DESKTOP-LAYOUT-v11: Misiones bajo vecinos; planes + nuevo plan bajo cotilleo */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-main {
+    display: grid !important;
+    grid-template-columns: minmax(160px, 200px) minmax(160px, 200px) minmax(0, 1fr) minmax(250px, 320px) !important;
+    align-items: start !important;
+    gap: 14px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left,
+  .play-v3:has(.game-shell) .game-right {
+    display: contents !important;
+  }
+
+  .play-v3:has(.game-shell) .game-map-wrap {
+    grid-column: 3 !important;
+    grid-row: 1 / span 8 !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-buzon {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-resumen {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par {
+    grid-column: 1 / 3 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-top: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par {
+    grid-column: 4 !important;
+    grid-row: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil {
+    grid-column: 4 !important;
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.game-shell) .proxplanes-movil {
+    grid-column: 4 !important;
+    grid-row: 3 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes {
+    grid-column: 4 !important;
+    grid-row: 4 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-parejas {
+    grid-column: 4 !important;
+    grid-row: 5 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo.obj-cotilleo-par {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 62px !important;
+  }
+}
+
+/* INICIO-DESKTOP-CREAR-PLAN-v12: boton horizontal CREAR PLAN (solo escritorio) */
+.play-v3:has(.game-shell) .obj-nuevo-plan-cal {
+  display: none;
+}
+
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta.obj-nuevo-plan-horiz {
+    position: relative;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-height: 46px !important;
+    height: auto !important;
+    padding: 9px 18px 10px !important;
+    margin: 0 !important;
+    border: none !important;
+    border-radius: 999px !important;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0) 62%),
+      #d66a5e !important;
+    box-shadow: 0 2px 0 rgba(120, 45, 40, 0.2), 0 1px 3px rgba(44, 38, 31, 0.1) !important;
+    transform: none !important;
+    cursor: pointer;
+    color: #fff !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta.obj-nuevo-plan-horiz:hover {
+    filter: brightness(1.04);
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta.obj-nuevo-plan-horiz::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute;
+    inset: 4px;
+    border: 2px dashed rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    pointer-events: none;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta::before {
+    content: none !important;
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan-plus {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan-cal {
+    display: block !important;
+    flex: 0 0 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan-ico {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 28px !important;
+    width: 28px !important;
+    height: 28px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    color: transparent !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan-txt {
+    visibility: visible !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    margin: 0 !important;
+    color: transparent !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-nuevo-plan-txt::before {
+    content: "CREAR PLAN" !important;
+    visibility: visible !important;
+    display: block !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.28rem !important;
+    font-style: italic !important;
+    letter-spacing: 0.03em !important;
+    line-height: 1 !important;
+    text-transform: uppercase !important;
+    color: #fff !important;
+    text-shadow: 0 1px 1px rgba(80, 30, 25, 0.22) !important;
+  }
+}
