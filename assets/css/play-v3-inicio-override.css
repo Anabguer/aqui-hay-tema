@@ -685,3 +685,11 @@
     color: #6a5f55 !important;
   }
 }
+
+/* INICIO-ENCURSO-NAV: flechas ocultas no reservan hueco (movil + desktop) */
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-nav-btn[hidden] {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+}
