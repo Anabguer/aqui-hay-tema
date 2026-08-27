@@ -289,7 +289,8 @@
             "romance_hito": 336,
             "pareja": 36,
             "crisis": 48,
-            "trabajo": 72
+            "trabajo": 72,
+            "iniciativa_social": 18
         }
     },
     "acontecimientos_dia": {
@@ -332,6 +333,14 @@
         "anti_aislamiento_umbral_dias": 0,
         "anti_aislamiento_bonus_salida": 0,
         "anti_aislamiento_bonus_lugar": 0
+    },
+    "iniciativa_social": {
+        "_provisional": true,
+        "_nota": "A1: iniciativa social deliberada NPC→NPC. NO romántica. Cifras de lab.",
+        "prob_por_tick": 0.08,
+        "cupo_dia_sqrt": 0.45,
+        "cupo_dia_offset": 0.25,
+        "romance_umbral_bloqueo": 22
     },
     "buzon": {
         "max_dia": null,

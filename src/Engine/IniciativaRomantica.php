@@ -220,7 +220,8 @@ final class IniciativaRomantica
             self::TIPO,
             $lugarElegido,
             null,
-            $logger
+            $logger,
+            false
         );
         if (!($r['ok'] ?? false)) {
             return self::fin($partida, 'error_programar_' . (string) ($r['error'] ?? '?'), $desde, $hacia);

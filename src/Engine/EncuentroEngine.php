@@ -35,7 +35,8 @@ final class EncuentroEngine
         array $participantes,
         string $tipo = 'conocerse',
         ?string $lugarId = null,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        bool $intervencionCeleste = true
     ): array {
         $crudos = [];
         foreach ($participantes as $rid) {
@@ -71,7 +72,7 @@ final class EncuentroEngine
             return ['ok' => false, 'error' => 'tipo_invalido'];
         }
 
-        $limite = self::limiteIntervencionesDia($partida);
+        $limite = $intervencionCeleste ? self::limiteIntervencionesDia($partida) : null;
         if ($limite !== null) {
             $usadas = (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0);
             if ($usadas >= $limite) {
@@ -102,9 +103,10 @@ final class EncuentroEngine
         string $tipo = 'conocerse',
         ?string $lugarId = null,
         ?string $actividad = null,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        bool $intervencionCeleste = true
     ): array {
-        $ctx = self::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
+        $ctx = self::validarContexto($partida, $participantes, $tipo, $lugarId, $logger, $intervencionCeleste);
         if (!($ctx['ok'] ?? false)) {
             return $ctx;
         }
@@ -184,7 +186,7 @@ final class EncuentroEngine
 
         $partida['encuentros'] ??= [];
         $partida['encuentros'][] = $encuentro;
-        if ($tipo !== 'individual') {
+        if ($intervencionCeleste && $tipo !== 'individual') {
             $partida['celeste']['intervenciones_organizadas_usadas_hoy'] =
                 (int) ($partida['celeste']['intervenciones_organizadas_usadas_hoy'] ?? 0) + 1;
         }

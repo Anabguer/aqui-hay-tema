@@ -108,6 +108,7 @@ final class MotorVidaDiaria
             $partida['huecos_vida']['ejecutados'][] = $hora;
         }
         $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
+        $out['iniciativa_social'] = IniciativaSocial::quizasDelTick($partida, $catalog, $cal, $rng, $logger);
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
         $rng->persistToPartida($partida);
         return $out;
