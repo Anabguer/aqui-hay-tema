@@ -1,6 +1,9 @@
-﻿/**
- * Capa VECINOS (04) — fidelidad a dev/propuestas/arnes.html #p04
+/**
+ * Capa VECINOS — rediseño visual (ref mockup vecinos modal)
+ * Alcance: .capa-vecinos únicamente
  */
+
+/* --- Modal papel / cuaderno --- */
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
 .play-v3 .play-root.phone[data-capa="vecinos"] .capa-vecinos {
   position: absolute !important;
@@ -8,415 +11,238 @@
   top: 50% !important;
   right: auto !important;
   bottom: auto !important;
-  width: min(100%, 393px) !important;
-  max-width: min(100%, 393px) !important;
-  max-height: min(88vh, 720px) !important;
-  transform: translate(-50%, -50%) rotate(-0.2deg) !important;
+  width: min(100% - 16px, 393px) !important;
+  max-width: min(100% - 16px, 393px) !important;
+  max-height: min(92vh, 780px) !important;
+  transform: translate(-50%, -50%) rotate(-0.25deg) !important;
   z-index: 12 !important;
-  padding: 14px 13px 12px !important;
+  padding: 16px 14px 12px !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 0 !important;
   overflow: hidden !important;
   border: 2.5px solid var(--ds-ink, #3b3028) !important;
   border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
-  background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%), var(--ds-paper-modal, #fffaf0) !important;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.55), rgba(255,255,255,0) 58%),
+    var(--ds-paper-modal, #fffaf0) !important;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 8px 18px rgba(70,50,30,.14) !important;
 }
+
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos::before,
 .play-v3 .play-root.phone[data-capa="vecinos"] .capa-vecinos::before {
-  content: "" !important; display: block !important; position: absolute; inset: 5px;
-  border: 1.5px dashed rgba(107,81,56,.34);
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  inset: 6px;
+  border: 1.5px dashed rgba(107,81,56,.28);
   border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
-  pointer-events: none; z-index: 1;
+  pointer-events: none;
+  z-index: 1;
 }
-.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos::after,
-.play-v3 .play-root.phone[data-capa="vecinos"] .capa-vecinos::after { display: none !important; }
-.play-v3 .capa-vecinos .vecinos-pin { display: none !important; }
+
+/* Cinta washi discreta (esquina superior) */
+.play-v3 .capa-vecinos::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  top: 10px;
+  left: 18px;
+  width: 46px;
+  height: 16px;
+  transform: rotate(-7deg);
+  background: linear-gradient(180deg, rgba(235,215,175,.92), rgba(205,180,135,.88));
+  box-shadow: 0 1px 2px rgba(70,50,30,.15);
+  border-radius: 2px;
+  z-index: 6;
+  pointer-events: none;
+}
+
 .play-v3 .capa-vecinos > * { position: relative; z-index: 2; }
+
 .play-v3 .capa-vecinos .vecinos-cerrar.ds-modal-close {
-  position: absolute !important; top: 6px !important; right: 6px !important;
-  width: 40px !important; height: 40px !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 42px !important;
+  height: 42px !important;
   border: 2px solid var(--ds-ink, #3b3028) !important;
   border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
   background: var(--ds-paper-card, #fffdf7) !important;
   box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
-  font: 800 17px/1 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
-  transform: rotate(2.5deg) !important; display: grid !important; place-items: center; padding: 0 !important;
+  font: 800 18px/1 Nunito, sans-serif !important;
+  color: var(--ds-ink, #3b3028) !important;
+  transform: rotate(2deg) !important;
+  display: grid !important;
+  place-items: center;
+  padding: 0 !important;
+  z-index: 8 !important;
 }
+
+/* --- Cabecera --- */
 .play-v3 .capa-vecinos .vecinos-cab {
-  display: block !important; text-align: center !important;
-  padding: .2rem 2rem .35rem !important; margin: 0 0 6px !important;
+  display: block !important;
+  text-align: center !important;
+  padding: 0 2.5rem 4px !important;
+  margin: 0 0 8px !important;
 }
-.play-v3 .capa-vecinos .ds-modal-head { padding: 0; }
-.play-v3 .capa-vecinos .ds-modal-head-row { justify-content: center; flex-wrap: wrap; gap: 0; }
-.play-v3 .capa-vecinos .ds-modal-icon { display: none !important; }
+
+.play-v3 .capa-vecinos .vecinos-head {
+  padding: 0 !important;
+  text-align: center !important;
+}
+
 .play-v3 .capa-vecinos .ds-modal-tit {
-  width: 100%; margin: 0 0 6px !important; text-align: center !important;
-  font-family: Caveat, cursive !important; font-size: 1.75rem !important;
-  font-weight: 700 !important; color: var(--ds-ink, #3b3028) !important;
-  text-transform: none !important; letter-spacing: 0 !important;
+  width: 100% !important;
+  margin: 0 0 6px !important;
+  text-align: center !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+  color: var(--ds-ink, #3b3028) !important;
+  text-transform: uppercase !important;
+  letter-spacing: .4px !important;
+  line-height: 1.1 !important;
 }
-.play-v3 .capa-vecinos .vecinos-cuenta-wrap { margin: 0 0 10px; text-align: center; }
+
+.play-v3 .capa-vecinos .vecinos-cuenta-wrap,
+.play-v3 .capa-vecinos [data-vec-cuenta-wrap] {
+  display: block !important;
+  width: 100% !important;
+  margin: 0 0 2px !important;
+  text-align: center !important;
+}
+
 .play-v3 .capa-vecinos .vecinos-cuenta.ds-pill {
-  display: inline-flex; align-items: center; gap: 4px;
-  margin: 0 !important; padding: 3px 10px;
-  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
-  border: 1.5px solid var(--ds-pink-deep, #c85b78);
-  background: var(--ds-pink-soft, #fbe3ec);
-  font: 800 .6875rem/1.2 Nunito, sans-serif;
-  letter-spacing: .3px; color: var(--ds-pink-deep, #c85b78);
-  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 3px 11px !important;
+  border-radius: 999px !important;
+  border: none !important;
+  background: var(--ds-pink, #e86b8f) !important;
+  font: 700 .72rem/1.2 Nunito, sans-serif !important;
+  letter-spacing: .2px !important;
+  color: #fff !important;
+  box-shadow: 1px 1.5px 0 rgba(51,38,30,.12) !important;
 }
+
+/* --- Tabs --- */
+.play-v3 .capa-vecinos .vec-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.play-v3 .capa-vecinos .vec-tab {
+  flex: 1;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--ds-lavender, #b8a8d8);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7);
+  font: 700 1.05rem/1 Caveat, cursive;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--ds-lavender-deep, #7a6a9a);
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.play-v3 .capa-vecinos .vec-tab.is-on {
+  border-style: solid;
+  border-color: var(--ds-ink, #3b3028);
+  background: var(--ds-pink, #e88ba8);
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(146,39,73,.35);
+  box-shadow: 1.5px 2px 0 rgba(51,38,30,.2);
+}
+
+.play-v3 .capa-vecinos .vec-tab--lavanda.is-on {
+  background: var(--ds-lavender, #c4b5e8);
+  color: var(--ds-ink, #3b3028);
+  text-shadow: none;
+}
+
+.play-v3 .capa-vecinos .vec-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.play-v3 .capa-vecinos .vec-panel[hidden] { display: none !important; }
+
+.play-v3 .capa-vecinos.is-relaciones .vecinos-cuenta-wrap { display: none !important; }
+
+/* --- Buscador --- */
 .play-v3 .capa-vecinos .vec-busca-tira { margin: 0 0 10px !important; }
+
 .play-v3 .capa-vecinos .vec-busca-wrap {
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px !important;
   border: 2px solid var(--ds-ink-soft, #594839) !important;
   border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
   background: #fff !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.85);
 }
-.play-v3 .capa-vecinos .vec-busca-ico { font-size: 1rem; color: var(--ds-text-muted, #7a6a5c); opacity: 1; }
+
+.play-v3 .capa-vecinos .vec-busca-ico {
+  font-size: 1rem;
+  color: var(--ds-text-muted, #7a6a5c);
+  opacity: .9;
+  line-height: 1;
+}
+
 .play-v3 .capa-vecinos .vec-busca-inp {
-  flex: 1; min-width: 0;
-  border: none !important; background: transparent !important;
-  font: 600 .875rem/1.3 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
+  flex: 1;
+  min-width: 0;
+  border: none !important;
+  background: transparent !important;
+  font: 600 .875rem/1.3 Nunito, sans-serif !important;
+  color: var(--ds-ink, #3b3028) !important;
 }
+
+/* --- Grid vecinos --- */
 .play-v3 .capa-vecinos .vecinos-grid,
 .play-v3 .capa-vecinos [data-vecinos-list].vecinos-grid {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
   gap: 10px !important;
-  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: clip;
-  padding: 0 0 10px !important; max-height: none !important;
-}
-.play-v3 .capa-vecinos .vecino-celda {
-  display: flex !important; flex-direction: column !important; align-items: center !important;
-  text-align: center !important; padding: 10px 8px !important;
-  border: 2px solid var(--ds-ink-soft, #594839) !important;
-  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important;
-  background: var(--ds-paper-card, #fffdf7) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12), 0 3px 7px rgba(70,50,30,.09) !important;
-  transform: none !important; cursor: pointer; width: 100%; min-width: 0;
-}
-.play-v3 .capa-vecinos .vecino-celda:nth-child(odd) { transform: rotate(-0.4deg) !important; }
-.play-v3 .capa-vecinos .vecino-celda:nth-child(even) { transform: rotate(0.35deg) !important; }
-.play-v3 .capa-vecinos .vecino-celda.is-desconocido {
-  border-style: dashed !important; background: rgba(255,252,244,.55) !important;
-}
-.play-v3 .capa-vecinos .vecino-cara {
-  width: 52px !important; height: 52px !important; margin: 0 auto 4px !important;
-  border: 2px solid #fff !important; box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839) !important;
-}
-.play-v3 .capa-vecinos .vecino-ini { font-family: Caveat, cursive !important; font-size: 1.25rem !important; }
-.play-v3 .capa-vecinos .vecino-nom {
-  margin: 0 !important; font-family: Caveat, cursive !important;
-  font-size: 1.15rem !important; font-weight: 700 !important; color: var(--ds-ink, #3b3028) !important;
-  white-space: normal !important; overflow: visible !important; text-overflow: unset !important;
-}
-.play-v3 .capa-vecinos .vecino-emo { display: none !important; }
-.play-v3 .capa-vecinos .vecino-emo-pill {
-  display: inline-flex; margin: 3px 0; padding: 3px 10px;
-  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .3px;
-}
-.play-v3 .capa-vecinos .vecino-emo-pill--alegre {
-  background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52);
-}
-.play-v3 .capa-vecinos .vecino-emo-pill--triste {
-  background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a); color: var(--ds-lavender-deep, #7a6a9a);
-}
-.play-v3 .capa-vecinos .vecino-emo-pill--enfadado {
-  background: var(--ds-red-soft, #fde8ec); border-color: var(--ds-red-alert, #c42b4a); color: var(--ds-red-alert, #c42b4a);
-}
-.play-v3 .capa-vecinos .vecino-ver {
-  margin-top: 5px; font: 700 .9375rem/1.2 Caveat, cursive;
-  color: var(--ds-pink-deep, #c85b78); text-decoration: none;
-}
-/* Tabs Vecinos / Relaciones (04-05) */
-.play-v3 .capa-vecinos .vec-tabs {
-  display: flex; gap: 8px; margin: 0 0 10px;
-}
-.play-v3 .capa-vecinos .vec-tab {
-  flex: 1; min-height: 44px;
-  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  border: 2px dashed var(--ds-lavender, #b8a8d8);
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--ds-paper-card, #fffdf7);
-  font: 700 1.0625rem/1 Caveat, cursive;
-  letter-spacing: .5px; text-transform: uppercase;
-  color: var(--ds-lavender-deep, #7a6a9a);
-  cursor: pointer; padding: 0 8px;
-}
-.play-v3 .capa-vecinos .vec-tab.is-on {
-  border-style: solid; border-color: var(--ds-ink, #3b3028);
-  background: var(--ds-pink, #e88ba8); color: #fff;
-  text-shadow: 0 1.5px 0 rgba(146, 39, 73, .4);
-  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .2);
-  position: relative;
-}
-.play-v3 .capa-vecinos .vec-tab.is-on::before {
-  content: ""; position: absolute; inset: 4px;
-  border: 1.5px dashed rgba(255,255,255,.8);
-  border-radius: 8px 6px 10px 7px / 6px 10px 7px 8px; pointer-events: none;
-}
-.play-v3 .capa-vecinos .vec-tab--lavanda.is-on {
-  background: var(--ds-lavender, #c4b5e8);
-}
-.play-v3 .capa-vecinos .vec-panel { display: flex; flex-direction: column; flex: 1 1 auto; min-height: 0; }
-.play-v3 .capa-vecinos .vec-panel[hidden] { display: none !important; }
-.play-v3 .capa-vecinos.is-relaciones .vecinos-cuenta-wrap { display: none; }
-.play-v3 .capa-vecinos .vec-rel-filtros {
-  display: flex; gap: 6px; justify-content: space-between; margin: 0 0 8px; flex-wrap: nowrap;
-}
-.play-v3 .capa-vecinos .vec-rel-chip {
-  display: inline-flex; flex-direction: column; align-items: center; gap: 2px;
-  border: none; background: none; padding: 0; cursor: pointer; min-width: 0; flex: 1;
-  font: 600 .5625rem/1.1 Nunito, sans-serif; color: var(--ds-text-muted, #7a6a5c);
-}
-.play-v3 .capa-vecinos .vec-rel-chip > b {
-  width: 28px; height: 28px; display: grid; place-items: center;
-  border: 2px solid var(--ds-ink-soft, #594839); border-radius: 999px;
-  background: var(--ds-paper-card, #fffdf7);
-  font: 700 .75rem/1 Nunito, sans-serif;
-}
-.play-v3 .capa-vecinos .vec-rel-chip.is-on > b {
-  border: 2px solid var(--ds-ink, #3b3028);
-  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .2);
-}
-.play-v3 .capa-vecinos .vec-rel-chip.is-on { color: var(--ds-ink, #3b3028); font-weight: 800; }
-.play-v3 .capa-vecinos .vec-rel-dd-wrap { margin: 0 0 10px; }
-.play-v3 .capa-vecinos select.vec-rel-persona {
-  width: 100%; min-height: 40px; padding: 8px 12px;
-  border: 2px solid var(--ds-ink-soft, #594839);
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--ds-paper-card, #fffdf7);
-  font: 600 .875rem/1.3 Nunito, sans-serif; color: var(--ds-ink, #3b3028);
-  appearance: none;
-  background-image: linear-gradient(45deg, transparent 50%, var(--ds-text-muted) 50%), linear-gradient(135deg, var(--ds-text-muted) 50%, transparent 50%);
-  background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%;
-  background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
-}
-.play-v3 .capa-vecinos .vec-rel-scroll {
-  flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: clip;
-  display: flex; flex-direction: column; gap: 10px; padding: 0 0 6px;
-}
-.play-v3 .capa-vecinos .vec-rel-card {
-  padding: 10px 12px;
-  border: 2px solid var(--ds-ink-soft, #594839);
-  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
-  background: var(--ds-paper-card, #fffdf7);
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12);
-}
-.play-v3 .capa-vecinos .vec-rel-card.is-amor { border-color: var(--ds-pink-deep, #c85b78); }
-.play-v3 .capa-vecinos .vec-rel-card.is-mal { border-color: var(--ds-red-alert, #c42b4a); }
-.play-v3 .capa-vecinos .vec-rel-par {
-  display: flex; align-items: center; gap: 8px; justify-content: center;
-  margin-bottom: 6px; position: relative; flex-wrap: wrap;
-}
-.play-v3 .capa-vecinos .vec-rel-pers {
-  display: flex; flex-direction: column; align-items: center; gap: 2px;
-  border: none; background: none; padding: 0; cursor: pointer; min-width: 0;
-}
-.play-v3 .capa-vecinos .vec-rel-cara {
-  width: 40px; height: 40px; border-radius: 999px; overflow: hidden;
-  border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839);
-  background: #e8dcc4; display: grid; place-items: center;
-}
-.play-v3 .capa-vecinos .vec-rel-cara img { width: 100%; height: 100%; object-fit: cover; }
-.play-v3 .capa-vecinos .vec-rel-nom {
-  font: 700 1rem/1.2 Caveat, cursive; color: var(--ds-ink, #3b3028);
-}
-.play-v3 .capa-vecinos .vec-rel-vinculo-ico { color: var(--ds-ink-soft, #594839); font-size: 1.1rem; }
-.play-v3 .capa-vecinos .vec-rel-badge {
-  position: absolute; top: 0; right: 0;
-  min-width: 22px; height: 22px; padding: 0 6px;
-  display: inline-flex; align-items: center; justify-content: center;
-  border-radius: 999px; background: var(--ds-red-alert, #c42b4a);
-  border: 2px solid #fff; font: 800 .6875rem/1 Nunito, sans-serif; color: #fff;
-}
-.play-v3 .capa-vecinos .vec-rel-dir-card {
-  padding: 6px 9px; margin-bottom: 6px;
-  border: 2px solid rgba(107,81,56,.25);
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: rgba(255,252,244,.7);
-}
-.play-v3 .capa-vecinos .vec-rel-dir-head {
-  display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 4px;
-}
-.play-v3 .capa-vecinos .vec-rel-dir-nom {
-  font: 700 1rem/1.2 Caveat, cursive; color: var(--ds-ink, #3b3028);
-}
-.play-v3 .capa-vecinos .vec-rel-pill {
-  display: inline-flex; padding: 3px 9px;
-  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  font: 800 .625rem/1.2 Nunito, sans-serif; letter-spacing: .2px;
-}
-.play-v3 .capa-vecinos .vec-rel-pill--green { background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52); }
-.play-v3 .capa-vecinos .vec-rel-pill--mustard { background: var(--ds-mustard-soft, #f5ecd0); border-color: var(--ds-mustard-deep, #a88a30); color: var(--ds-mustard-deep, #a88a30); }
-.play-v3 .capa-vecinos .vec-rel-pill--pink { background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78); }
-.play-v3 .capa-vecinos .vec-rel-pill--red { background: var(--ds-red-soft, #fde8ec); border-color: var(--ds-red-alert, #c42b4a); color: var(--ds-red-alert, #c42b4a); }
-.play-v3 .capa-vecinos .vec-rel-barra {
-  display: block; height: 8px; border-radius: 999px;
-  background: var(--ds-paper-dim, #efe5cc); border: 1px solid rgba(107,81,56,.3); overflow: hidden;
-}
-.play-v3 .capa-vecinos .vec-rel-barra > span {
-  display: block; height: 100%; background: var(--ds-emo-alegre, #7a9e6a);
-}
-.play-v3 .capa-vecinos .vec-rel-barra.is-neg > span { background: var(--ds-red-alert, #c42b4a); }
-.play-v3 .capa-vecinos .vec-rel-barra--mustard > span { background: var(--ds-mustard, #d4b84a); }
-.play-v3 .capa-vecinos .vec-rel-divider {
-  display: flex; align-items: center; gap: 8px; margin: 4px 0 2px;
-  color: var(--ds-text-faint, #a89888);
-  font: 800 .625rem/1 Nunito, sans-serif; letter-spacing: 1px; text-transform: uppercase;
-}
-.play-v3 .capa-vecinos .vec-rel-divider::before,
-.play-v3 .capa-vecinos .vec-rel-divider::after {
-  content: ""; flex: 1; border-top: 1.5px dashed rgba(107,81,56,.3);
-}
-.play-v3 .capa-vecinos .vec-rel-vacio { text-align: center; padding: 1rem .5rem; }
-
-.play-v3 .capa-vecinos .mensajitos-hint {
-  margin: 10px 0 0; flex-shrink: 0;
-}
-
-/* RETOQUE-QUIRURGICO-V2-VECINOS */
-.play-v3 .capa-vecinos .vecinos-cab {
-  padding: 0 2.2rem 2px !important;
-  margin: 0 0 4px !important;
-}
-.play-v3 .capa-vecinos .ds-modal-tit {
-  margin: 0 !important;
-  font-size: 1.55rem !important;
-  line-height: 1.1 !important;
-}
-.play-v3 .capa-vecinos .vecinos-head-row {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  flex-wrap: wrap !important;
-}
-.play-v3 .capa-vecinos .vecinos-cuenta-wrap,
-.play-v3 .capa-vecinos [data-vec-cuenta-wrap] {
-  margin: 0 !important;
-  flex: 0 0 auto !important;
-}
-.play-v3 .capa-vecinos .vecinos-cuenta.ds-pill {
-  padding: 2px 8px !important;
-  font-size: .625rem !important;
-  letter-spacing: .25px !important;
-}
-.play-v3 .capa-vecinos .vec-tabs {
-  margin: 0 0 6px !important;
-  gap: 6px !important;
-}
-.play-v3 .capa-vecinos .vec-tab {
-  min-height: 38px !important;
-  font-size: .98rem !important;
-  padding: 0 6px !important;
-}
-.play-v3 .capa-vecinos .vec-busca-tira { margin: 0 0 6px !important; }
-.play-v3 .capa-vecinos .vec-busca-wrap { padding: 6px 10px !important; }
-.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-.play-v3 .play-root.phone[data-capa="vecinos"] .capa-vecinos {
-  max-height: min(92vh, 800px) !important;
-  padding: 12px 12px 10px !important;
-}
-.play-v3 .capa-vecinos .vecinos-grid,
-.play-v3 .capa-vecinos [data-vecinos-list].vecinos-grid {
-  grid-template-columns: repeat(3, 1fr) !important;
-  gap: 7px !important;
-  padding: 0 0 6px !important;
-}
-.play-v3 .capa-vecinos .vecino-celda {
-  padding: 7px 5px 6px !important;
-  border-radius: 12px 10px 14px 11px / 10px 14px 11px 12px !important;
-}
-.play-v3 .capa-vecinos .vecino-cara {
-  width: 42px !important;
-  height: 42px !important;
-  margin: 0 auto 2px !important;
-}
-.play-v3 .capa-vecinos .vecino-nom {
-  font-size: .98rem !important;
-  line-height: 1.05 !important;
-}
-.play-v3 .capa-vecinos .vecino-emo-pill {
-  margin: 2px 0 !important;
-  padding: 2px 6px !important;
-  font-size: .5625rem !important;
-}
-.play-v3 .capa-vecinos .vecino-ver {
-  margin-top: 2px !important;
-  font-size: .8125rem !important;
-}
-.play-v3 .capa-vecinos .mensajitos-hint {
-  margin: 8px 0 0 !important;
-  padding: 8px 10px !important;
-  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px !important;
-  border: 1.5px dashed rgba(107, 81, 56, .35) !important;
-  background: var(--ds-lavender-soft, #efe8f8) !important;
-  color: var(--ds-ink-soft, #594839) !important;
-  font: 700 .78rem Nunito, sans-serif !important;
-  text-align: center !important;
-  flex-shrink: 0;
-}
-
-
-/* ULTIMA-RONDA-VISUAL-VECINOS */
-.play-v3 .capa-vecinos .vecinos-cab {
-  padding: 0 2.2rem 0 !important;
-  margin: 0 0 2px !important;
-}
-.play-v3 .capa-vecinos .vecinos-cuenta.ds-pill {
-  padding: 1px 7px !important;
-  min-height: 0 !important;
-  line-height: 1.15 !important;
-  font-size: .58rem !important;
-  letter-spacing: .2px !important;
-}
-.play-v3 .capa-vecinos .vecinos-head-row {
-  gap: 6px !important;
-  align-items: baseline !important;
-}
-
-/* VECINOS-CARDS-MOCKUP-V1 */
-.play-v3 .capa-vecinos .vecinos-head {
-  text-align: center !important;
-  padding: 0 2rem .15rem !important;
-}
-.play-v3 .capa-vecinos .vecinos-head .ds-modal-tit {
-  width: 100% !important;
-  margin: 0 0 2px !important;
-  text-align: center !important;
-}
-.play-v3 .capa-vecinos .vecinos-cuenta-wrap,
-.play-v3 .capa-vecinos [data-vec-cuenta-wrap] {
-  display: block !important;
-  width: 100% !important;
-  margin: -2px 0 14px !important;
-  text-align: center !important;
-}
-.play-v3 .capa-vecinos .vec-tabs {
-  margin: 0 0 10px !important;
-}
-.play-v3 .capa-vecinos .vecinos-grid,
-.play-v3 .capa-vecinos [data-vecinos-list].vecinos-grid {
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: clip;
+  padding: 0 0 8px !important;
   align-items: stretch !important;
 }
+
+/* --- Tarjeta vecino --- */
 .play-v3 .capa-vecinos .vecino-celda {
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
-  min-height: 178px !important;
+  text-align: center !important;
+  min-height: 188px !important;
   padding: 12px 10px 8px !important;
+  border: 2px solid var(--ds-ink-soft, #594839) !important;
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important;
+  background: var(--ds-paper-card, #fffdf7) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.1), 0 4px 8px rgba(70,50,30,.08) !important;
+  cursor: pointer;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  overflow: visible;
 }
+
+.play-v3 .capa-vecinos .vecino-celda:nth-child(odd) { transform: rotate(-0.35deg) !important; }
+.play-v3 .capa-vecinos .vecino-celda:nth-child(even) { transform: rotate(0.3deg) !important; }
+
 .play-v3 .capa-vecinos .vecino-celda-top {
   flex: 1 1 auto;
   display: flex;
@@ -424,22 +250,56 @@
   align-items: center;
   width: 100%;
   min-width: 0;
+  position: relative;
 }
+
+/* Decoraciones discretas por tarjeta */
+.play-v3 .capa-vecinos .vecino-celda::before,
+.play-v3 .capa-vecinos .vecino-celda::after {
+  position: absolute;
+  font-size: .85rem;
+  line-height: 1;
+  opacity: .55;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.play-v3 .capa-vecinos .vecino-celda--decor-0::before { content: "\u2665"; top: 6px; left: 8px; color: #e88ba8; }
+.play-v3 .capa-vecinos .vecino-celda--decor-0::after { content: "\u273F"; bottom: 38px; right: 8px; color: #9a8a78; }
+
+.play-v3 .capa-vecinos .vecino-celda--decor-1::before { content: "\u273F"; top: 8px; right: 10px; color: #7a9e6a; }
+.play-v3 .capa-vecinos .vecino-celda--decor-1::after { content: "\u2605"; bottom: 42px; left: 10px; color: #b8a8d8; font-size: .7rem; }
+
+.play-v3 .capa-vecinos .vecino-celda--decor-2::before { content: "\u273F"; top: 6px; left: 9px; color: #c85b78; }
+.play-v3 .capa-vecinos .vecino-celda--decor-2::after { content: "\u2665"; bottom: 40px; right: 9px; color: #e88ba8; font-size: .75rem; }
+
+.play-v3 .capa-vecinos .vecino-celda--decor-3::before { content: "\u2605"; top: 7px; right: 9px; color: #d4b84a; }
+.play-v3 .capa-vecinos .vecino-celda--decor-3::after { content: "\u273F"; bottom: 38px; left: 8px; color: #7a6a9a; }
+
+.play-v3 .capa-vecinos .vecino-celda--decor-4::before { content: "\u2665"; top: 8px; left: 10px; color: #c4b5e8; }
+.play-v3 .capa-vecinos .vecino-celda--decor-4::after { content: "\u2605"; bottom: 41px; right: 10px; color: #7a9e6a; font-size: .68rem; }
+
+.play-v3 .capa-vecinos .vecino-celda--decor-5::before { content: "\u273F"; top: 6px; right: 8px; color: #9a6a28; }
+.play-v3 .capa-vecinos .vecino-celda--decor-5::after { content: "\u2665"; bottom: 39px; left: 9px; color: #e88ba8; font-size: .72rem; }
+
 .play-v3 .capa-vecinos .vecino-cara {
   position: relative !important;
-  width: 72px !important;
-  height: 72px !important;
-  margin: 0 auto 6px !important;
+  width: 76px !important;
+  height: 76px !important;
+  margin: 4px auto 8px !important;
   border-radius: 50% !important;
-  overflow: visible !important;
+  overflow: hidden !important;
   border: 3px solid var(--ds-ink-soft, #594839) !important;
   box-shadow: none !important;
   background: #fffdf8 !important;
+  flex-shrink: 0;
 }
+
 .play-v3 .capa-vecinos .vecino-cara--alegre { border-color: #4a7a52 !important; }
 .play-v3 .capa-vecinos .vecino-cara--neutro { border-color: #c48a3a !important; }
 .play-v3 .capa-vecinos .vecino-cara--enfadado { border-color: #c42b4a !important; }
 .play-v3 .capa-vecinos .vecino-cara--triste { border-color: #7a6a9a !important; }
+
 .play-v3 .capa-vecinos .vecino-cara img,
 .play-v3 .capa-vecinos .vecino-cara .vecino-ini {
   width: 100% !important;
@@ -448,125 +308,366 @@
   object-fit: cover !important;
   display: block !important;
 }
+
 .play-v3 .capa-vecinos .vecino-ini {
   display: grid !important;
   place-items: center !important;
-  font-size: 1.6rem !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.65rem !important;
 }
-.play-v3 .capa-vecinos .vecino-emo-badge {
-  position: absolute;
-  left: 50%;
-  bottom: -5px;
-  transform: translateX(-50%);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid #fff;
-  background: #fffdf8;
-  display: grid;
-  place-items: center;
-  font-size: .72rem;
-  line-height: 1;
-  box-shadow: 0 0 0 1px rgba(89, 72, 57, .35);
-}
+
 .play-v3 .capa-vecinos .vecino-nom {
-  margin: 0 0 4px !important;
-  font-size: 1.12rem !important;
+  margin: 0 0 6px !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: var(--ds-ink, #3b3028) !important;
   line-height: 1.1 !important;
 }
+
+.play-v3 .capa-vecinos .vecino-emo { display: none !important; }
+
 .play-v3 .capa-vecinos .vecino-emo-pill {
-  margin: 0 0 6px !important;
-  padding: 3px 10px !important;
-  font-size: .64rem !important;
-}
-.play-v3 .capa-vecinos .vecino-emo-pill--neutro {
-  background: #fff0dc;
-  border-color: #c48a3a;
-  color: #9a6a28;
-}
-.play-v3 .capa-vecinos .vecino-afinidad {
-  display: inline-flex;
+  display: inline-flex !important;
   align-items: center;
-  gap: 4px;
-  margin: 0 0 4px;
-  font: 800 .72rem/1 Nunito, sans-serif;
-  color: #c85b78;
+  gap: 5px;
+  margin: 0 0 4px !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  border: 1.5px solid var(--ds-ink-soft, #594839) !important;
+  font: 800 .64rem/1.2 Nunito, sans-serif !important;
+  letter-spacing: .25px !important;
+  text-transform: uppercase !important;
 }
-.play-v3 .capa-vecinos .vecino-afinidad-ico {
-  font-size: .78rem;
-  line-height: 1;
+
+.play-v3 .capa-vecinos .vecino-emo-pill-ico { font-size: .78rem; line-height: 1; }
+
+.play-v3 .capa-vecinos .vecino-emo-pill--alegre {
+  background: var(--ds-green-soft, #e8f3e6) !important;
+  border-color: var(--ds-green-deep, #4a7a52) !important;
+  color: var(--ds-green-deep, #4a7a52) !important;
 }
+
+.play-v3 .capa-vecinos .vecino-emo-pill--neutro {
+  background: #fff0dc !important;
+  border-color: #c48a3a !important;
+  color: #9a6a28 !important;
+}
+
+.play-v3 .capa-vecinos .vecino-emo-pill--triste {
+  background: var(--ds-lavender-soft, #ece6f8) !important;
+  border-color: var(--ds-lavender-deep, #7a6a9a) !important;
+  color: var(--ds-lavender-deep, #7a6a9a) !important;
+}
+
+.play-v3 .capa-vecinos .vecino-emo-pill--enfadado {
+  background: var(--ds-red-soft, #fde8ec) !important;
+  border-color: var(--ds-red-alert, #c42b4a) !important;
+  color: var(--ds-red-alert, #c42b4a) !important;
+}
+
 .play-v3 .capa-vecinos .vecino-ver {
   margin-top: auto !important;
   width: 100%;
-  padding: 8px 4px 2px !important;
-  border-top: 1px dashed rgba(107, 81, 56, .28) !important;
+  padding: 7px 6px 2px !important;
+  border-top: 1px dashed rgba(107,81,56,.28) !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  gap: 6px !important;
+  gap: 4px !important;
   font: 700 .62rem/1.1 Nunito, sans-serif !important;
   letter-spacing: .06em !important;
   text-transform: uppercase !important;
-  color: #9a8a78 !important;
+  color: #c85b78 !important;
   text-decoration: none !important;
 }
+
 .play-v3 .capa-vecinos .vecino-ver-arr {
-  font-size: .9rem;
+  font-size: .95rem;
   line-height: 1;
-  opacity: .85;
 }
 
-/* VECINOS-HEAD-CENTER-FIX: centrado real del modal (la X no desplaza) */
-.play-v3 .capa-vecinos .vecinos-cab {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
-.play-v3 .capa-vecinos .vecinos-cab .ds-modal-head.vecinos-head {
-  display: block !important;
-  width: 100% !important;
-  padding-right: 0 !important;
-  padding-left: 0 !important;
+/* --- Hint pie --- */
+.play-v3 .capa-vecinos .mensajitos-hint.vecinos-hint {
+  margin: 8px 0 0 !important;
+  padding: 9px 12px !important;
+  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px !important;
+  border: none !important;
+  background: rgba(196,181,232,.45) !important;
+  color: var(--ds-ink-soft, #594839) !important;
+  font: 600 .78rem/1.35 Nunito, sans-serif !important;
+  font-style: italic !important;
   text-align: center !important;
-}
-.play-v3 .capa-vecinos .vecinos-cuenta.ds-pill {
-  margin-left: 0 !important;
-  margin-right: 0 !important;
+  flex-shrink: 0;
 }
 
-/* VECINOS-ROM-BADGES */
-.play-v3 .capa-vecinos .vecino-celda-top {
-  position: relative;
+/* --- Relaciones (pestaña) --- */
+.play-v3 .capa-vecinos .vec-rel-filtros {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+  margin: 0 0 8px;
+  flex-wrap: nowrap;
 }
-.play-v3 .capa-vecinos .vecino-rom-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  z-index: 2;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 1.5px solid rgba(89, 72, 57, .45);
-  background: #fffdf8;
-  box-shadow: 0 1px 2px rgba(44, 38, 31, .12);
+
+.play-v3 .capa-vecinos .vec-rel-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+  flex: 1;
+  font: 600 .5625rem/1.1 Nunito, sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+.play-v3 .capa-vecinos .vec-rel-chip > b {
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
-  font-size: .68rem;
-  line-height: 1;
-  pointer-events: none;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 999px;
+  background: var(--ds-paper-card, #fffdf7);
+  font: 700 .75rem/1 Nunito, sans-serif;
 }
-.play-v3 .capa-vecinos .vecino-rom-badge--crush {
-  color: #c85b78;
-  border-color: #e88ba8;
-  background: #fff5f8;
+
+.play-v3 .capa-vecinos .vec-rel-chip.is-on > b {
+  border: 2px solid var(--ds-ink, #3b3028);
+  box-shadow: 1.5px 2px 0 rgba(51,38,30,.2);
 }
-.play-v3 .capa-vecinos .vecino-rom-badge--pareja {
-  font-size: .62rem;
-  border-color: #c85b78;
-  background: #fde8ef;
+
+.play-v3 .capa-vecinos .vec-rel-chip.is-on { color: var(--ds-ink, #3b3028); font-weight: 800; }
+
+.play-v3 .capa-vecinos .vec-rel-dd-wrap { margin: 0 0 10px; }
+
+.play-v3 .capa-vecinos select.vec-rel-persona {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7);
+  font: 600 .875rem/1.3 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ds-text-muted) 50%), linear-gradient(135deg, var(--ds-text-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
 }
-.play-v3 .capa-vecinos .vecino-rom-badge--crisis {
-  font-size: .62rem;
-  border-color: #c42b4a;
-  background: #fde8ec;
+
+.play-v3 .capa-vecinos .vec-rel-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: clip;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 0 0 6px;
+}
+
+.play-v3 .capa-vecinos .vec-rel-card {
+  padding: 10px 12px;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12);
+}
+
+.play-v3 .capa-vecinos .vec-rel-card.is-amor { border-color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .capa-vecinos .vec-rel-card.is-mal { border-color: var(--ds-red-alert, #c42b4a); }
+
+.play-v3 .capa-vecinos .vec-rel-par {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 6px;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.play-v3 .capa-vecinos .vec-rel-pers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.play-v3 .capa-vecinos .vec-rel-cara {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839);
+  background: #e8dcc4;
+  display: grid;
+  place-items: center;
+}
+
+.play-v3 .capa-vecinos .vec-rel-cara img { width: 100%; height: 100%; object-fit: cover; }
+
+.play-v3 .capa-vecinos .vec-rel-nom {
+  font: 700 1rem/1.2 Caveat, cursive;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .capa-vecinos .vec-rel-vinculo-ico { color: var(--ds-ink-soft, #594839); font-size: 1.1rem; }
+
+.play-v3 .capa-vecinos .vec-rel-badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--ds-red-alert, #c42b4a);
+  border: 2px solid #fff;
+  font: 800 .6875rem/1 Nunito, sans-serif;
+  color: #fff;
+}
+
+.play-v3 .capa-vecinos .vec-rel-dir-card {
+  padding: 6px 9px;
+  margin-bottom: 6px;
+  border: 2px solid rgba(107,81,56,.25);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: rgba(255,252,244,.7);
+}
+
+.play-v3 .capa-vecinos .vec-rel-dir-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+
+.play-v3 .capa-vecinos .vec-rel-dir-nom {
+  font: 700 1rem/1.2 Caveat, cursive;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .capa-vecinos .vec-rel-pill {
+  display: inline-flex;
+  padding: 3px 9px;
+  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-ink-soft, #594839);
+  font: 800 .625rem/1.2 Nunito, sans-serif;
+  letter-spacing: .2px;
+}
+
+.play-v3 .capa-vecinos .vec-rel-pill--green { background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52); }
+.play-v3 .capa-vecinos .vec-rel-pill--mustard { background: var(--ds-mustard-soft, #f5ecd0); border-color: var(--ds-mustard-deep, #a88a30); color: var(--ds-mustard-deep, #a88a30); }
+.play-v3 .capa-vecinos .vec-rel-pill--pink { background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .capa-vecinos .vec-rel-pill--red { background: var(--ds-red-soft, #fde8ec); border-color: var(--ds-red-alert, #c42b4a); color: var(--ds-red-alert, #c42b4a); }
+
+.play-v3 .capa-vecinos .vec-rel-barra {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--ds-paper-dim, #efe5cc);
+  border: 1px solid rgba(107,81,56,.3);
+  overflow: hidden;
+}
+
+.play-v3 .capa-vecinos .vec-rel-barra > span {
+  display: block;
+  height: 100%;
+  background: var(--ds-emo-alegre, #7a9e6a);
+}
+
+.play-v3 .capa-vecinos .vec-rel-barra.is-neg > span { background: var(--ds-red-alert, #c42b4a); }
+.play-v3 .capa-vecinos .vec-rel-barra--mustard > span { background: var(--ds-mustard, #d4b84a); }
+
+.play-v3 .capa-vecinos .vec-rel-divider {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0 2px;
+  color: var(--ds-text-faint, #a89888);
+  font: 800 .625rem/1 Nunito, sans-serif;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.play-v3 .capa-vecinos .vec-rel-divider::before,
+.play-v3 .capa-vecinos .vec-rel-divider::after {
+  content: "";
+  flex: 1;
+  border-top: 1.5px dashed rgba(107,81,56,.3);
+}
+
+.play-v3 .capa-vecinos .vec-rel-vacio,
+.play-v3 .capa-vecinos .vec-rel-hint {
+  text-align: center;
+}
+
+.play-v3 .capa-vecinos .vec-rel-hint {
+  margin: 8px 0 0 !important;
+  padding: 9px 12px !important;
+  border-radius: 10px !important;
+  background: rgba(196,181,232,.45) !important;
+  font: 600 .78rem/1.35 Nunito, sans-serif !important;
+  font-style: italic !important;
+  flex-shrink: 0;
+}
+
+/* --- Desktop: modal más ancha, más columnas --- */
+@media (min-width: 769px) {
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
+    width: min(100% - 32px, 720px) !important;
+    max-width: min(100% - 32px, 720px) !important;
+    max-height: min(90vh, 820px) !important;
+    padding: 18px 20px 14px !important;
+  }
+
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos .vecinos-grid,
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos [data-vecinos-list].vecinos-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 12px !important;
+  }
+
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos .vecino-celda {
+    min-height: 175px !important;
+    padding: 10px 8px 8px !important;
+  }
+
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos .vecino-cara {
+    width: 68px !important;
+    height: 68px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos .ds-modal-tit {
+    font-size: 2rem !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
+    width: min(100% - 48px, 840px) !important;
+    max-width: min(100% - 48px, 840px) !important;
+  }
+
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos .vecinos-grid,
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos [data-vecinos-list].vecinos-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
 }

@@ -2929,6 +2929,7 @@
   }
 
   let vecBuscaTxt = '';
+  let vecTabActiva = 'vecinos';
 
   function txtBuscaNorm(s) {
     return String(s || '')
@@ -3004,24 +3005,29 @@
     if (cuenta) cuenta.textContent = String(metVec.vecinos) + ' / ' + String(metVec.cap);
     if (!ids.length) {
       box.innerHTML = '<p class="lista-vacia vecinos-vacio">' +
-        (filtroTxt ? 'Nadie con ese nombre.' : 'Todavía no hay vecinos en esta partida.') + '</p>';
+        (filtroTxt ? 'Nadie con ese nombre.' : 'Todav\u00EDa no hay vecinos en esta partida.') + '</p>';
       return;
     }
-    ids.forEach(function (id) {
+    ids.forEach(function (id, idx) {
       const r = res[id];
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'vecino-celda';
+      b.className = 'vecino-celda vecino-celda--decor-' + (idx % 6);
       const img = tokenDe(id);
       const nom = (r.identidad_publica && r.identidad_publica.nombre) || id;
       const ini = nom.charAt(0) || '?';
       const emo = emocionDe(id);
       const genero = (r.identidad_publica && r.identidad_publica.genero) || '';
-      const emoTxt = textoEmoVecinoSutil(emo, genero);
-      b.innerHTML = '<div class="vecino-cara" data-emocion="' + esc(emo) + '">' +
+      const eEmo = canonEmoId(emo);
+      b.innerHTML =
+        '<div class="vecino-celda-top">' +
+        '<div class="vecino-cara vecino-cara--' + eEmo + '" data-emocion="' + esc(emo) + '">' +
         (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="vecino-ini">' + esc(ini) + '</span>') +
-        '</div><p class="vecino-nom">' + esc(nom) + '</p>' +
-        (emoTxt ? '<p class="vecino-emo" data-emocion="' + esc(emo) + '">' + esc(emoTxt) + '</p>' : '');
+        '</div>' +
+        '<p class="vecino-nom">' + esc(nom) + '</p>' +
+        emoPillVecino(emo, genero) +
+        '</div>' +
+        '<span class="vecino-ver">VER FICHA <span class="vecino-ver-arr" aria-hidden="true">\u203A</span></span>';
       b.addEventListener('click', function () { abrirFicha(id); });
       box.appendChild(b);
     });
@@ -3124,6 +3130,213 @@
     overlay.hidden = false;
   }
 
+  var VEC_REL_FILTROS = [
+    { id: '', txt: 'Todas', icono: '' },
+    { id: 'romance', txt: 'Parejas', icono: '\uD83D\uDC8C' },
+    { id: 'bien', txt: 'Amistad', icono: '\uD83E\uDD1D' },
+    { id: 'conocidos', txt: 'Conocidos', icono: '\uD83D\uDC4F' },
+    { id: 'mal', txt: 'Malas', icono: '\uD83D\uDC94' }
+  ];
+  var vecRelCache = [];
+  var vecRelFiltro = '';
+  var vecRelPersona = '';
+  var vecRelCargado = false;
+  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\u2194</span>';
+
+  function aplicarVecTabUI() {
+    const isRel = vecTabActiva === 'relaciones';
+    $('[data-vec-tab]').forEach(function (btn) {
+      const t = btn.getAttribute('data-vec-tab');
+      const on = t === vecTabActiva;
+      btn.classList.toggle('is-on', on);
+      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+    });
+    const cuentaWrap = $('[data-vec-cuenta-wrap]');
+    if (cuentaWrap) cuentaWrap.hidden = isRel;
+    $('[data-vec-panel]').forEach(function (p) {
+      p.hidden = p.getAttribute('data-vec-panel') !== vecTabActiva;
+    });
+    const capa = document.querySelector('.capa-vecinos');
+    if (capa) capa.classList.toggle('is-relaciones', isRel);
+  }
+
+  function setVecTab(tab) {
+    vecTabActiva = tab === 'relaciones' ? 'relaciones' : 'vecinos';
+    aplicarVecTabUI();
+    if (vecTabActiva === 'relaciones') cargarVecRelaciones();
+  }
+
+  async function cargarVecRelaciones() {
+    const list = $('[data-vec-rel-list]');
+    if (list && !vecRelCargado) {
+      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">Mirando el cotilleo del pueblo\u2026</p>';
+    }
+    if (vecRelCargado) {
+      renderVecRelLista();
+      return;
+    }
+    const r = await api('relacion.vista_pueblo', {}, 'GET');
+    if (!r.ok) {
+      if (list) list.innerHTML = '<p class="lista-vacia vec-rel-vacio">' + esc(r.mensaje_ui || 'No se pudieron cargar las relaciones.') + '</p>';
+      toast(r.mensaje_ui || 'No se pudieron cargar las relaciones.');
+      return;
+    }
+    vecRelCache = Array.isArray(r.relaciones) ? r.relaciones : [];
+    vecRelCargado = true;
+    vecRelFiltro = '';
+    vecRelPersona = '';
+    pintarVecRelFiltros();
+    pintarVecRelPersonas();
+    renderVecRelLista();
+  }
+
+  function pintarVecRelFiltros() {
+    const box = $('[data-vec-rel-filtros]');
+    if (!box) return;
+    box.innerHTML = VEC_REL_FILTROS.map(function (f) {
+      const activo = vecRelFiltro === f.id;
+      if (!f.icono) {
+        return '<button type="button" class="vec-rel-chip' + (activo ? ' is-on' : '') +
+          '" data-vec-rel-filtro=""><b>T</b><span>' + f.txt + '</span></button>';
+      }
+      return '<button type="button" class="vec-rel-chip' + (activo ? ' is-on' : '') +
+        '" data-vec-rel-filtro="' + f.id + '" aria-label="' + f.txt + '"><b>' + f.icono + '</b><span>' + f.txt + '</span></button>';
+    }).join('');
+  }
+
+  function pintarVecRelPersonas() {
+    const sel = $('[data-vec-rel-persona]');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Todo el pueblo</option>' + vecinosIdsOrdenados().map(function (id) {
+      const nom = nombreDe(id);
+      return '<option value="' + esc(id) + '"' + (vecRelPersona === id ? ' selected' : '') + '>' + esc(nom) + '</option>';
+    }).join('');
+  }
+
+  function vecRelTextoDir(dir) {
+    dir = dir || {};
+    const parts = [];
+    if (dir.etiqueta_vinculo === 'pareja') parts.push('\u2764\uFE0F Pareja');
+    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\uD83D\uDC94 En crisis');
+    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\uD83D\uDC94 Ex pareja');
+    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\uD83D\uDC98') + ' ' + dir.etiqueta_romance);
+    if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
+      parts.push(((dir.emoji_social || '') + ' ' + dir.etiqueta_social_ui).trim());
+    }
+    return parts.join(' \u00B7 ');
+  }
+
+  function vecRelPillClass(dir) {
+    dir = dir || {};
+    if (dir.social_negativo || dir.etiqueta_social === 'cae_mal') return 'vec-rel-pill--red';
+    if (dir.etiqueta_vinculo === 'pareja' || dir.romance_visible) return 'vec-rel-pill--pink';
+    if (dir.etiqueta_social === 'conocido') return 'vec-rel-pill--mustard';
+    return 'vec-rel-pill--green';
+  }
+
+  function vecRelFlags(row) {
+    const ab = row.a_hacia_b || {};
+    const ba = row.b_hacia_a || {};
+    const f = { romance: false, bien: false, mal: false, conflicto: !!row.conflicto };
+    [ab, ba].forEach(function (d) {
+      if (d.etiqueta_vinculo || d.romance_visible) f.romance = true;
+      const sx = d.etiqueta_social || '';
+      if (d.social_negativo || sx === 'cae_mal') f.mal = true;
+      else if (sx === 'cae_bien' || sx === 'amigo' || sx === 'buen_amigo' || sx === 'mejor_amigo' || sx === 'buena_amistad' || sx === 'muy_buena_amistad') f.bien = true;
+    });
+    f.conocidos = !(f.romance || f.bien || f.mal || f.conflicto) && !!(ab.conocidos || ba.conocidos);
+    return f;
+  }
+
+  function vecRelMatchFiltro(row, filtro) {
+    if (!filtro) return true;
+    const f = vecRelFlags(row);
+    if (filtro === 'romance') return f.romance;
+    if (filtro === 'bien') return f.bien;
+    if (filtro === 'mal') return f.mal || f.conflicto;
+    if (filtro === 'conocidos') return f.conocidos;
+    return true;
+  }
+
+  function caraVecRel(id, nombre) {
+    const img = tokenDe(id);
+    const ini = (nombre || '?').charAt(0);
+    return img ? '<img src="' + esc(img) + '" alt=""/>' : '<span>' + esc(ini) + '</span>';
+  }
+
+  function vecRelBarra(dir, extraCls) {
+    dir = dir || {};
+    const pct = typeof dir.social_bar_pct === 'number'
+      ? Math.max(4, Math.min(100, dir.social_bar_pct))
+      : 8;
+    const cls = 'vec-rel-barra' + (dir.social_negativo ? ' is-neg' : '') + (extraCls || '');
+    return '<span class="' + cls + '" aria-hidden="true"><span style="width:' + pct + '%"></span></span>';
+  }
+
+  function vecRelDirCard(nomFrom, nomTo, dir) {
+    const txt = vecRelTextoDir(dir);
+    if (!txt && !(dir && dir.conocidos)) return '';
+    const pill = '<span class="vec-rel-pill ' + vecRelPillClass(dir) + '">' + esc(txt || 'Se conocen de vista') + '</span>';
+    const barExtra = dir.etiqueta_social === 'conocido' ? ' vec-rel-barra--mustard' : '';
+    return '<div class="vec-rel-dir-card">' +
+      '<div class="vec-rel-dir-head">' +
+      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \u2192 ' + esc(nomTo) + '</span>' +
+      pill +
+      '</div>' +
+      vecRelBarra(dir, barExtra) +
+      '</div>';
+  }
+
+  function htmlVecRelCard(row) {
+    const a = row.persona_a || {};
+    const b = row.persona_b || {};
+    const ab = row.a_hacia_b || {};
+    const ba = row.b_hacia_a || {};
+    const tAb = vecRelTextoDir(ab);
+    const tBa = vecRelTextoDir(ba);
+    const f = vecRelFlags(row);
+    const cls = 'vec-rel-card' + (f.romance ? ' is-amor' : '') + (f.mal ? ' is-mal' : '') + (f.conflicto ? ' is-conflicto' : '');
+    const cardAb = vecRelDirCard(a.nombre || a.id || '', b.nombre || b.id || '', ab);
+    const cardBa = vecRelDirCard(b.nombre || b.id || '', a.nombre || a.id || '', ba);
+    let dirs = cardAb + cardBa;
+    if (!dirs) dirs = '<p class="vec-rel-linea">Se conocen de vista.</p>';
+    const asim = tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0);
+    const div = asim && cardAb && cardBa ? '<div class="vec-rel-divider">Diferente en cada sentido</div>' : '';
+    const badge = f.conflicto ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
+    return (
+      '<article class="' + cls + '">' +
+      '<div class="vec-rel-par">' +
+      '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(a.id || '') + '">' +
+      '<span class="vec-rel-cara">' + caraVecRel(a.id, a.nombre) + '</span>' +
+      '<span class="vec-rel-nom">' + esc(a.nombre || a.id || '?') + '</span></button>' +
+      VEC_REL_ICONO_PAR +
+      '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(b.id || '') + '">' +
+      '<span class="vec-rel-cara">' + caraVecRel(b.id, b.nombre) + '</span>' +
+      '<span class="vec-rel-nom">' + esc(b.nombre || b.id || '?') + '</span></button>' +
+      badge +
+      '</div>' +
+      '<div class="vec-rel-estados">' + dirs + div + '</div>' +
+      '</article>'
+    );
+  }
+
+  function renderVecRelLista() {
+    const list = $('[data-vec-rel-list]');
+    if (!list) return;
+    const rows = vecRelCache.filter(function (r) {
+      if (vecRelPersona && (r.persona_a || {}).id !== vecRelPersona && (r.persona_b || {}).id !== vecRelPersona) return false;
+      return vecRelMatchFiltro(r, vecRelFiltro);
+    });
+    if (!rows.length) {
+      const quien = vecRelPersona ? nombreDe(vecRelPersona) : '';
+      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">' +
+        (quien ? esc(quien) + ' no tiene nada que contar por ahora.' : 'Aqu\u00ED no hay nada de nada todav\u00EDa.') + '</p>';
+      return;
+    }
+    list.innerHTML = rows.map(htmlVecRelCard).join('');
+  }
+
+
 function canonEmoId(id) {
     const e = String(id || 'neutro').toLowerCase();
     if (e === 'neutral' || e === 'neutro') return 'neutro';
@@ -3145,6 +3358,16 @@ function canonEmoId(id) {
       enfadado: 'enfadada'
     };
     return map[emo] || emo.replace(/_/g, ' ');
+  }
+
+  
+  function emoPillVecino(emo, genero) {
+    const e = canonEmoId(emo);
+    const label = textoAnimoFichaPill(e, genero);
+    const icon = emoEmojiFicha(e);
+    return '<span class="vecino-emo-pill vecino-emo-pill--' + e + '">' +
+      '<span class="vecino-emo-pill-ico" aria-hidden="true">' + icon + '</span>' +
+      '<span class="vecino-emo-pill-txt">' + esc(label) + '</span></span>';
   }
 
   function textoEmoVecinoSutil(emo, genero) {
@@ -5203,7 +5426,7 @@ function hobbyIconKey(id, texto) {
         const d = cacheDiario || {};
         renderCotilleo(d.cotilleo || { hoy: d.entradas || [], ayer: [], viejos: [] });
       }
-      if (name === 'vecinos') renderVecinos();
+      if (name === 'vecinos') { vecTabActiva = 'vecinos'; aplicarVecTabUI(); renderVecinos(); }
       if (name === 'buzon') renderBuzon(cacheBuzon);
       return;
     }
@@ -5434,6 +5657,34 @@ function hobbyIconKey(id, texto) {
     vecBuscaInp.addEventListener('input', function () {
       vecBuscaTxt = vecBuscaInp.value;
       renderVecinos();
+    });
+  }
+
+  $('[data-vec-tab]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      setVecTab(btn.getAttribute('data-vec-tab') || 'vecinos');
+    });
+  });
+  document.addEventListener('click', function (ev) {
+    const filtroBtn = ev.target.closest('[data-vec-rel-filtro]');
+    if (filtroBtn && ev.target.closest('.capa-vecinos')) {
+      vecRelFiltro = filtroBtn.getAttribute('data-vec-rel-filtro') || '';
+      pintarVecRelFiltros();
+      renderVecRelLista();
+      return;
+    }
+    const pers = ev.target.closest('[data-vec-rel-open]');
+    if (pers && pers.getAttribute('data-vec-rel-open') && ev.target.closest('.capa-vecinos')) {
+      ev.preventDefault();
+      abrirFicha(pers.getAttribute('data-vec-rel-open'));
+      return;
+    }
+  });
+  const vecRelSel = $('[data-vec-rel-persona]');
+  if (vecRelSel) {
+    vecRelSel.addEventListener('change', function () {
+      vecRelPersona = vecRelSel.value || '';
+      renderVecRelLista();
     });
   }
 

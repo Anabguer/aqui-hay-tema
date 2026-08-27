@@ -556,11 +556,9 @@ if (is_file($ahtBusterFile)) {
       <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
         <button type="button" class="cerrar vecinos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vecinos-cab">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row vecinos-head-row">
-              <h2 class="ds-modal-tit ds-modal-tit--ink">Vecinos del pueblo</h2>
-              <span class="vecinos-cuenta-wrap" data-vec-cuenta-wrap><span class="vecinos-cuenta ds-pill ds-pill--pink" data-vecinos-count></span></span>
-            </div>
+          <div class="ds-modal-head vecinos-head">
+            <h2 class="ds-modal-tit ds-modal-tit--ink">Vecinos del pueblo</h2>
+            <span class="vecinos-cuenta-wrap" data-vec-cuenta-wrap><span class="vecinos-cuenta ds-pill ds-pill--pink" data-vecinos-count></span></span>
           </div>
         </header>
         <div class="vec-tabs" role="tablist" aria-label="Vecinos y relaciones">
