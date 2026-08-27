@@ -55,7 +55,8 @@
 /* === Planes en curso / próximos (tarjetas) === */
 .play-v3:has(.game-shell) .encursos-movil .enc-mov-nombres,
 .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
-  font-size: var(--aht-type-name) !important;
+  font-size: 0.875rem !important;
+  line-height: 1.2 !important;
 }
 
 .play-v3:has(.game-shell) .encursos-movil .enc-mov-lugar,
@@ -70,10 +71,13 @@
   font-size: var(--aht-type-caption) !important;
 }
 
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-cta,
-.play-v3:has(.game-shell) .plan-seccion-ver,
-.play-v3:has(.game-shell) .plan-seccion-cnt {
+.play-v3:has(.game-shell) .encursos-movil .enc-mov-cta {
   font-size: var(--aht-type-caption) !important;
+}
+
+.play-v3:has(.game-shell) .plan-seccion-ver,
+.play-v3:has(.game-shell) .obj-planes-prox-ver {
+  display: none !important;
 }
 
 .play-v3:has(.game-shell) .obj-proximo-body,
@@ -187,4 +191,29 @@
   .play-v3 .tut-intro .tut-bloque-txt {
     font-size: max(1.26rem, var(--aht-type-body)) !important;
   }
+}
+
+
+/* Badge contador planes (Próximos / En curso) */
+.play-v3:has(.game-shell) .plan-seccion-cnt {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  margin-left: 6px;
+  background: var(--ds-lavender-deep, #7c6bae) !important;
+  border: 2px solid #fff;
+  border-radius: 999px;
+  font-family: Nunito, "Segoe UI", sans-serif !important;
+  font-size: 0.6875rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0 !important;
+  color: #fff !important;
+  line-height: 1 !important;
+  vertical-align: middle;
+}
+.play-v3:has(.game-shell) .plan-seccion-cnt[hidden] {
+  display: none !important;
 }

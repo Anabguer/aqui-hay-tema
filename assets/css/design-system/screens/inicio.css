@@ -23,12 +23,26 @@
 
   /* ---------- 1. Orden del feed (D2) ---------- */
 
-  /* Orden feed movil: EN CURSO -> Cotilleo -> Proximos -> Misiones -> Parejas */
-  .play-v3:has(.game-shell) .game-right .encursos-movil           { order: 1; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { order: 2; }
-  .play-v3:has(.game-shell) .game-right .proxplanes-movil         { order: 3; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { order: 4; }
-  .play-v3:has(.game-shell) .game-right .shell-grupo-parejas      { order: 5; }
+  /* INICIO-LAYOUT-v8 móvil: planes en game-left; feed vía grid game-main */
+  .play-v3:has(.game-shell) .game-main {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 10px;
+    row-gap: 12px;
+  }
+  .play-v3:has(.game-shell) .game-left,
+  .play-v3:has(.game-shell) .game-right {
+    display: contents;
+  }
+  .play-v3:has(.game-shell) .shell-grupo-buzon { grid-column: 1; grid-row: 1; }
+  .play-v3:has(.game-shell) .shell-grupo-resumen { grid-column: 2; grid-row: 1; }
+  .play-v3:has(.game-shell) .shell-grupo-planes { grid-column: 3; grid-row: 1; }
+  .play-v3:has(.game-shell) .game-map-wrap { grid-column: 1 / -1; grid-row: 2; }
+  .play-v3:has(.game-shell) .encursos-movil { grid-column: 1 / -1; grid-row: 3; }
+  .play-v3:has(.game-shell) .shell-grupo-cotilleo-par { grid-column: 1 / -1; grid-row: 4; }
+  .play-v3:has(.game-shell) .proxplanes-movil { grid-column: 1 / -1; grid-row: 5; }
+  .play-v3:has(.game-shell) .shell-grupo-misiones-par { grid-column: 1 / -1; grid-row: 6; }
+  .play-v3:has(.game-shell) .shell-grupo-parejas { grid-column: 1 / -1; grid-row: 7; }
 
   .play-v3:has(.game-shell) .game-main { gap: 12px; }
   .play-v3:has(.game-shell) .game-right {
@@ -172,7 +186,7 @@
   }
 
   .play-v3:has(.game-shell) .top-reloj .pasar-rato {
-    min-height: 40px;
+    min-height: 32px;
     padding: 5px 11px;
     background: var(--ds-lavender-soft);
     border: 1.5px solid var(--ds-lavender-deep);
@@ -183,6 +197,13 @@
     font-size: .8125rem;
     color: var(--ds-lavender-deep);
     transform: rotate(-1.2deg);
+  }
+
+  .play-v3:has(.game-shell) .top-reloj .pasar-rato-ico {
+    display: inline-block;
+    font-size: .62rem;
+    line-height: 1;
+    margin-right: 2px;
   }
 
   .play-v3:has(.game-shell) .top-reloj .pasar-rato:active {
@@ -711,8 +732,8 @@
   /* los wrappers de secciÃƒÂ³n llegan desnudos: el papel lo ponen las tarjetas */
   .play-v3:has(.game-shell) .proxplanes-movil:not(.is-on) { display: none; }
 
-  .play-v3:has(.game-shell) .game-right .encursos-movil,
-  .play-v3:has(.game-shell) .game-right .proxplanes-movil {
+  .play-v3:has(.game-shell) .encursos-movil,
+  .play-v3:has(.game-shell) .proxplanes-movil {
     background: none;
     border: none;
     box-shadow: none;
@@ -749,8 +770,13 @@
 
   .play-v3:has(.game-shell) .encursos-movil .prox-faces img,
   .play-v3:has(.game-shell) .encursos-movil .prox-faces .cara-ini {
-    width: 38px;
-    height: 38px;
+    width: 32px;
+    height: 32px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 20%;
+    flex: 0 0 32px;
     border: 2px solid #fff;
     box-shadow: 0 0 0 1.5px var(--ds-ink-soft);
     background: #fff;
@@ -760,7 +786,7 @@
     margin-top: 5px;
     font-family: var(--ds-font-hand);
     font-weight: 700;
-    font-size: 1.0625rem;
+    font-size: 0.875rem;
     line-height: 1.15;
     color: var(--ds-ink);
   }
@@ -869,6 +895,11 @@
   .play-v3:has(.game-shell) .proxplanes-movil .prox-faces .cara-ini {
     width: 32px;
     height: 32px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: 50% 20%;
+    flex: 0 0 32px;
     border: 2px solid #fff;
     box-shadow: 0 0 0 1.5px var(--ds-ink-soft);
     background: #fff;
@@ -878,7 +909,7 @@
     margin-top: 5px;
     font-family: var(--ds-font-hand);
     font-weight: 700;
-    font-size: 1rem;
+    font-size: 0.875rem;
     line-height: 1.15;
     color: var(--ds-ink);
   }
@@ -1073,4 +1104,10 @@
     color: var(--ds-ink);
   }
 
+
+  /* INICIO-CORRECCION-v8: sin VER TODOS en markup residual */
+  .play-v3:has(.game-shell) .plan-seccion-ver,
+  .play-v3:has(.game-shell) .obj-planes-prox-ver {
+    display: none !important;
+  }
 }

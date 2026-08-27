@@ -53,8 +53,7 @@
   }
 
   .play-v3:has(.game-shell) .game-left.zona-actividad {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    display: contents !important;
     align-items: end !important;
     gap: 10px !important;
     padding: 0 13px !important;
@@ -429,19 +428,9 @@
     margin: 0 !important;
   }
 
-  .play-v3:has(.game-shell) .plan-seccion-ver {
-    flex: none !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    border: none !important;
-    background: none !important;
-    font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: 0.62rem !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.06em !important;
-    text-transform: uppercase !important;
-    color: #6a7d9a !important;
-    cursor: pointer;
+  .play-v3:has(.game-shell) .plan-seccion-ver,
+  .play-v3:has(.game-shell) .obj-planes-prox-ver {
+    display: none !important;
   }
 
   .play-v3:has(.game-shell) .plan-seccion-ico {
@@ -501,6 +490,15 @@
   .play-v3:has(.game-shell) .encursos-movil .prox-faces .cara-ini {
     width: 34px !important;
     height: 34px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
     margin-right: -8px !important;
     border: 2px solid #fff !important;
     box-shadow: 0 0 0 1px rgba(89, 72, 57, 0.25) !important;
@@ -663,6 +661,15 @@
   .play-v3:has(.game-shell) .proxplanes-movil .prox-faces .cara-ini {
     width: 32px !important;
     height: 32px !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    aspect-ratio: 1 !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
     margin-right: -8px !important;
     border: 2px solid #fff !important;
     box-shadow: 0 0 0 1px rgba(89, 72, 57, 0.25) !important;
@@ -858,3 +865,16 @@
   }
 }
 
+
+
+/* INICIO-OVERRIDE-LAYOUT-v8: no pisar grid game-main del DS */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-main {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+  .play-v3:has(.game-shell) .game-left,
+  .play-v3:has(.game-shell) .game-right {
+    display: contents !important;
+  }
+}

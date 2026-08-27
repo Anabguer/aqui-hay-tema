@@ -353,7 +353,7 @@ if (is_file($ahtBusterFile)) {
             <span class="es-noche-txt">Es de noche</span>
           </span>
           <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora">
-            <span class="pasar-rato-ico" aria-hidden="true">?</span>
+            <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
             <span class="pasar-rato-txt">Pasar el rato</span>
           </button>
         </div>
@@ -411,6 +411,23 @@ if (is_file($ahtBusterFile)) {
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
+        <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+                    <header class="enc-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="enc-mov-track" data-encursos-track></div>
+          <p class="enc-mov-indice" data-encursos-indice hidden aria-hidden="true"></p>
+        </section>
+        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
+                    <header class="pp-mov-cab plan-seccion-cab">
+            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
+            <span class="plan-seccion-rule" aria-hidden="true"></span>
+          </header>
+          <div class="pp-mov-track" data-proxplanes-track></div>
+        </section>
         <section class="shell-grupo shell-grupo-planes">
           <div class="obj-planes-lateral">
             <div class="obj-proximo obj-proximo-polaroid">
@@ -421,13 +438,6 @@ if (is_file($ahtBusterFile)) {
                 <button type="button" class="obj-curso-btn" data-curso-next aria-label="Siguiente encuentro en curso">&#8250;</button>
               </div>
               <div class="obj-proximo-body" data-proximo-plan><p class="obj-proximo-vacio">Nada en curso ahora.</p></div>
-            </div>
-            <div class="obj-planes-prox-block" data-planes-prox-block hidden>
-              <header class="obj-planes-prox-cab">
-                <span class="obj-planes-prox-tit">Pr&oacute;ximos planes</span>
-                <button type="button" class="obj-planes-prox-ver" data-open="agenda">ver todos &#8250;</button>
-              </header>
-              <div class="obj-planes-prox-grid" data-planes-prox-list></div>
             </div>
             <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
@@ -896,24 +906,6 @@ if (is_file($ahtBusterFile)) {
             </span>
             <span class="obj-cotilleo-flecha" aria-hidden="true">›</span>
           </button>
-        </section>
-        <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
-                    <header class="enc-mov-cab plan-seccion-cab">
-            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
-            <span class="plan-seccion-rule" aria-hidden="true"></span>
-          </header>
-          <div class="enc-mov-track" data-encursos-track></div>
-          <p class="enc-mov-indice" data-encursos-indice hidden aria-hidden="true"></p>
-        </section>
-        <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Próximos planes programados">
-                    <header class="pp-mov-cab plan-seccion-cab">
-            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PRÓXIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
-            <span class="plan-seccion-rule" aria-hidden="true"></span>
-            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS ›</button>
-          </header>
-          <div class="pp-mov-track" data-proxplanes-track></div>
         </section>
         <section class="shell-grupo shell-grupo-misiones-par" id="mob-misiones">
           <div class="obj-misiones-papel" aria-label="Misiones de hoy">
