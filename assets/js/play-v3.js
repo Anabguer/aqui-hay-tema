@@ -135,7 +135,7 @@
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
   const ORG_MAX_VECINOS = 3;
-  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17 };
+  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null };
   let orgPresetNuevo = false;
   const playtestLogClient = { entries: [] };
   const ahtDebugSessionLog = [];
@@ -5225,8 +5225,9 @@ function hobbyIconKey(id, texto) {
   function resetOrgForm(preset) {
     var p = preset || {};
     org.sel = orgIdsDesdePreset(p);
-    org.tipo = '';
+    org.tipo = p.tipo || '';
     org.lugar = p.lugar || '';
+    org.peticion_id = p.peticion_id || null;
     org.dia = null;
     org.hora = 17;
     syncOrgTipoDesdeSeleccion();
@@ -5444,6 +5445,7 @@ function hobbyIconKey(id, texto) {
       lugar: org.lugar,
       modo: orgModo()
     };
+    if (org.peticion_id) payload.peticion_id = org.peticion_id;
     const r = await api('encuentro.proponer', payload);
     if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
     try {
