@@ -1164,3 +1164,63 @@ Ejemplo: Celestine elige quién recibe a Marta → Marta y José pasan cuatro ho
 
 ### NOTA ENTORNO CLI/UNC
 Inestabilidad `HTTP_HOST` undefined en tests PHP CLI sobre share UNC (`\\amg-arriba\htdocs\...`) produce warnings en `paths.php`, `database.php`, `config.php` → `session_start()` after headers → flakiness intermitente (`intervencion_objetivo_test` OK/FAIL, `encuentro_intervencion_test` OK/FATAL). **Deuda de entorno registrada**; no bloquea funcionalidad en producción real (HTTP_HOST presente).
+---
+
+## MENTES — ITERACIÓN 2 (conocimiento jugable) — PENDIENTE VALIDACIÓN NENI
+
+**Estado: IMPLEMENTADO EN `deploy/integrated` — NO DESPLEGADO — CIERRE TRAS PRUEBA MANUAL DE NENI**
+
+### Principio de producto (canónico)
+
+**Conocer a los vecinos debe tener utilidad jugable.**
+
+El pueblo es pequeño (~16 residentes activos) para que el jugador pueda llegar a conocerlos. Descubrir hobbies, gustos, personalidad, afinidades, lugares que les encajan e información social **no es decoración**: permite a Celestine tomar mejores decisiones.
+
+**MENTES** materializa este principio: el jugador elige **quién rompe el hielo** y **de qué habla**, recordando qué puede funcionar con el interlocutor. El motor evalúa la elección; **influye, no determina**, el encuentro.
+
+### Qué NO es MENTES
+
+- No es un botón abstracto “mejorar la conversación”.
+- No es que el motor elija automáticamente el hobby correcto.
+- No es marcar la “respuesta correcta” en UI (sin ✓, ♥, +10, “recomendado”).
+- Ausencia de hobby en B **≠** odio; solo penaliza con señal real (`hobbies_neg`).
+
+### Flujo UX (iteración 2)
+
+1. CTA aprobado: **¿Qué se cuece ahí?**
+2. Paso 1: **¿Quién va a romper el hielo?** (participantes del encuentro)
+3. Paso 2: kicker variante con nombre de A (+ a veces B) + **botones de temas concretos** (emoji + frase)
+4. El jugador elige tema; resultado narrativo: elección → reacción de B → consecuencia
+
+### Origen de temas visibles
+
+Unión de:
+- **Temas generales** (`mentes.temas_generales` en calibración): charla plantable sin revelar secreto (ej. cine, leer, música).
+- **Hobbies descubiertos por el jugador** de A o de B (`DiscoveryReveal`).
+- **Hobbies que A sabe de B** (`ConocimientoNpc`) solo si el jugador también los descubrió de B.
+
+Nunca se filtra a “solo el hobby óptimo de B”.
+
+### Afinidad al resolver
+
+| Señal | Efecto |
+| --- | --- |
+| B tiene el hobby / misma `categoria` catálogo / `hobbies_pos` | **afin** → impulso positivo |
+| Sin señal especial | **neutro** → impulso mínimo, sin penalizar a A |
+| `hobbies_neg` explícito de B | **aversión** → impulso negativo |
+
+Familia semántica: campo `categoria` del catálogo de hobbies (reutilizado, sin IA).
+
+### Persistencia `intervencion_celeste`
+
+`rompe_hielo`, `interlocutor`, `tema_id`, `afinidad_tema`, `tono`, `texto`, `beneficiario` (= interlocutor que reacciona).
+
+### Auditorías relacionadas (sin ampliar en esta pieza)
+
+- **Personalidad bromista/irónica:** ver entrega `PERSONALIDAD — OBSERVACIÓN` en commit iteración 2.
+- **Hobby → lugar:** `PlanAfinidad` + `HobbyAccionable` — ver entrega iteración 2.
+
+### Retirado del flujo visible
+
+- **“Animar la conversación”** (`hablar`) ya no se ofrece en MENTES de encuentro organizado Celestine.
+

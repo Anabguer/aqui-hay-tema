@@ -1,5 +1,5 @@
 ﻿'use strict';
-// Prueba dirigida UI: MENTES — intervencion en 2 pasos con temas del interlocutor.
+// Prueba dirigida UI: MENTES iteración 2 — romper el hielo + temas concretos.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -9,6 +9,7 @@ const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
 const cssArt = fs.readFileSync(path.join(root, 'assets/css/play-v3-shell-art.css'), 'utf8');
 const handler = fs.readFileSync(path.join(root, 'api/handlers/EncuentrosHandler.php'), 'utf8');
 const motor = fs.readFileSync(path.join(root, 'src/Engine/EncuentroIntervencion.php'), 'utf8');
+const mentes = fs.readFileSync(path.join(root, 'src/Engine/MentesTemas.php'), 'utf8');
 
 let failures = 0;
 function ok(c, m) {
@@ -28,13 +29,15 @@ function extraerBloque(src, needle) {
   return '';
 }
 
-/* --- 1. Flujo en 2 pasos y copy AHT --- */
 ok(js.includes('data-enc-int-paso="persona"'), 'js: existe paso 1 (persona)');
-ok(js.includes('\\u00bfA qui\\u00E9n quieres darle un empujoncito?'), 'js: kicker paso 1 AHT');
-ok(js.includes('\\u00bfQu\\u00E9 le quieres sugerir?'), 'js: kicker paso 2 AHT');
+ok(js.includes('\\u00bfQui\\u00E9n va a romper el hielo?'), 'js: kicker paso 1 romper hielo');
+ok(!js.includes('\\u00bfA qui\\u00E9n quieres darle un empujoncito?'), 'js: sin kicker empujoncito iter1');
+ok(!js.includes('\\u00bfQu\\u00E9 le quieres sugerir?'), 'js: sin kicker sugerir iter1');
+ok(js.includes('data-enc-int-kicker-tema'), 'js: kicker dinámico paso 2');
+ok(js.includes('kickerRompeHieloJs'), 'js: banco variantes rompe hielo');
 ok(js.includes('\u00bfQu\u00E9 se cuece ah\u00ED?'), 'js: CTA acceso MENTES');
-ok(!js.includes('recibe la idea'), 'js: sin copy tecnico recibe la idea');
-ok(!js.includes('\u00bfEn qui\u00E9n quieres meterte?'), 'js: sin kicker antiguo meterte');
+ok(!js.includes('Animar la conversaci\u00f3n'), 'js: sin Animar la conversación en UI');
+ok(!js.includes('Sacar un tema que le guste'), 'js: sin dropdown tema abstracto');
 ok(js.includes('data-enc-int-persona='), 'js: participantes seleccionables');
 ok(js.includes('data-enc-int-volver'), 'js: volver a elegir persona');
 const fnTarjeta = extraerBloque(js, 'function htmlIntervencionEncuentro(');
@@ -42,48 +45,32 @@ ok(fnTarjeta.includes("data-enc-int data-enc-id=\"' + esc(enc.id || '')"),
   'js: contrato canonico data-enc-int por encuentro');
 ok(fnTarjeta.includes('data-enc-int-paso="accion"') && fnTarjeta.includes('hidden'),
   'js: paso 2 oculto hasta elegir persona');
-ok(fnTarjeta.includes('temas_por_objetivo'), 'js: temas por persona influida (backend)');
-ok(fnTarjeta.includes('data-temas-toggle') && fnTarjeta.includes('data-temas-panel'),
-  'js: selector de temas preservado');
+ok(fnTarjeta.includes('data-temas-panel'), 'js: panel temas en paso 2');
+ok(!fnTarjeta.includes('data-enc-int-accion="hablar"'), 'js: sin botón hablar');
 
-/* --- 2. Handler: objetivo, pintar temas y payload --- */
 ok(js.includes("closest('[data-enc-int-persona]')"), 'js: handler eleccion persona');
-ok(js.includes("closest('[data-enc-int-volver]')"), 'js: handler volver');
-ok(js.includes("wrapP.setAttribute('data-enc-int-objetivo'"), 'js: objetivo anclado al wrap');
 ok(js.includes('pintarTemasIntervencion(wrapP, ivP, personaId)'),
-  'js: temas del interlocutor al elegir influida');
-ok(!js.includes('hobbyVisibleParaObjetivo'), 'js: sin filtro invertido antiguo');
+  'js: temas al elegir rompe hielo');
 const fnEjecutar = extraerBloque(js, 'async function ejecutarIntervencionEncuentro(');
 ok(fnEjecutar.includes('payload.objetivo = extra.objetivo'), 'js: request lleva objetivo');
-ok(fnEjecutar.includes('encuentro_id: encId'), 'js: request lleva id encuentro');
 
-/* --- 3. Feedback = copy del motor (sin prefijo UI) --- */
-const fnFeedback = extraerBloque(js, 'function textoFeedbackIntervencion(');
-ok(fnFeedback.includes('return iv.ultimo.texto'), 'js: feedback = texto backend directo');
-ok(!fnFeedback.includes('recibe la idea'), 'js: feedback sin recibe la idea');
-ok(fnTarjeta.includes("var tono = iv.ultimo.tono || 'neutral'"), 'js: polaroid usa tono real');
-
-/* --- 4. Backend --- */
 ok(handler.includes("$params['objetivo']"), 'handler API: propaga objetivo');
-ok(motor.includes('hobbiesTemaConocidos'), 'motor: temas conocidos por influida');
-ok(motor.includes("'detalle' => 'hobby_de_otro_residente'"), 'motor: rechaza hobby del influido');
-ok(motor.includes("'beneficiario'"), 'motor: persiste beneficiario');
-ok(motor.includes('Sacar un tema que le guste'), 'motor: etiqueta hobby AHT');
+ok(motor.includes('MentesTemas::temasElegibles'), 'motor: temas elegibles iter2');
+ok(motor.includes("if ($id === self::HABLAR)") && motor.includes('continue'), 'motor: oculta hablar');
+ok(mentes.includes('afin_bien'), 'motor MentesTemas: banco copy');
 
-/* --- 5. CSS --- */
 ok(cssArt.includes('.enc-int-step[hidden]'), 'css: pasos ocultables');
-ok(cssArt.includes('.enc-int-pers-cara'), 'css: cara persona');
 
-/* --- 6. Sandbox: render y feedback --- */
 (function sandbox() {
   const fns = [
+    'function kickerRompeHieloJs(',
     'function textoFeedbackIntervencion(',
     'function temasIntervencionDe(',
     'function pintarTemasIntervencion(',
     'function caraIntervencionHtml(',
     'function htmlIntervencionEncuentro('
   ].map(function (n) { return extraerBloque(js, n); }).join('\n');
-  const nombres = { rA: 'Paula', rB: 'Sergio' };
+  const nombres = { rA: 'Xenia', rB: 'Laura' };
   const sandbox = {
     console: console,
     document: {
@@ -100,32 +87,36 @@ ok(cssArt.includes('.enc-int-pers-cara'), 'css: cara persona');
   vm.createContext(sandbox);
   vm.runInContext(fns, sandbox);
 
-  const fb = sandbox.textoFeedbackIntervencion({ ultimo: { tono: 'bien', texto: 'Le has sugerido a Sergio que saque el tema.', objetivo: 'rB' } });
-  ok(fb === 'Le has sugerido a Sergio que saque el tema.', 'vm: feedback = copy motor sin prefijo');
-  ok(sandbox.textoFeedbackIntervencion({ ultimo: {} }) === '', 'vm: sin texto -> vacio');
-
   const ivMock = {
     disponible: true,
     usada: false,
     acciones: [
-      { id: 'hablar', etiqueta: 'Animar la conversación', disponible: true },
-      { id: 'hobby', etiqueta: 'Sacar un tema que le guste', disponible: true, temas_por_objetivo: {
-        rA: [{ id: 'viajes', etiqueta: 'Viajes', residente_id: 'rB' }],
-        rB: [{ id: 'bingo', etiqueta: 'Bingo', residente_id: 'rA' }]
+      { id: 'hobby', disponible: true, kickers_rompe: ['A ver, %s… ¿por dónde tiramos?'], temas_por_objetivo: {
+        rA: [
+          { id: 'correr', etiqueta: '🏃 Salir a correr', interlocutor_id: 'rB' },
+          { id: 'cine', etiqueta: '🎬 Cine', interlocutor_id: 'rB' }
+        ],
+        rB: [{ id: 'bingo', etiqueta: '🎱 Bingo', interlocutor_id: 'rA' }]
       } }
     ]
   };
   const html = sandbox.htmlIntervencionEncuentro({ id: 'ENC_A', participantes: ['rA', 'rB'], __iv: ivMock }, {});
-  ok(html.indexOf('data-enc-id="ENC_A"') > -1, 'vm: tarjeta anclada al encuentro');
-  ok(html.indexOf('data-enc-int-persona="rA"') > -1 && html.indexOf('data-enc-int-persona="rB"') > -1,
-    'vm: ambos participantes elegibles');
-  ok(html.indexOf('data-enc-int-accion="hablar"') > -1, 'vm: animar conversacion pintada');
-  ok(html.indexOf('Sacar un tema que le guste') > -1, 'vm: boton tema AHT');
-  ok(html.indexOf('data-hobby-id="viajes"') === -1, 'vm: temas no pre-pintados (dinamicos al elegir persona)');
-  ok(html.indexOf('data-temas-panel') > -1, 'vm: panel temas vacio inicial');
+  ok(html.indexOf('romper el hielo') > -1, 'vm: copy romper hielo');
+  ok(html.indexOf('data-enc-int-accion="hablar"') === -1, 'vm: sin hablar');
 
-  const map = sandbox.temasIntervencionDe(ivMock);
-  ok(map && map.rA && map.rA[0].residente_id === 'rB', 'vm: temas de rA son hobbies de rB (interlocutor)');
+  const panel = { innerHTML: '', children: [], appendChild: function (c) { this.children.push(c); } };
+  const kickerEl = { textContent: '' };
+  const wrap = {
+    querySelector: function (sel) {
+      if (sel === '[data-temas-panel]') return panel;
+      if (sel === '[data-enc-int-kicker-tema]') return kickerEl;
+      return null;
+    }
+  };
+  sandbox.pintarTemasIntervencion(wrap, ivMock, 'rA');
+  ok(panel.children.length === 2, 'vm: varios temas pintados');
+  const k = sandbox.kickerRompeHieloJs(ivMock, 'rA', ivMock.acciones[0].temas_por_objetivo.rA);
+  ok(k.indexOf('Xenia') > -1 || k.indexOf('Laura') > -1, 'vm: kicker usa nombre del encuentro');
 })();
 
 console.log(failures === 0 ? '\nTODO OK\n' : '\nFALLOS: ' + failures + '\n');

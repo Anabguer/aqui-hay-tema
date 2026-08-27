@@ -1600,33 +1600,47 @@
     var hobbyAcc = (iv.acciones || []).find(function (a) { return a.id === 'hobby'; });
     return (hobbyAcc && hobbyAcc.temas_por_objetivo) ? hobbyAcc.temas_por_objetivo : null;
   }
+  function kickerRompeHieloJs(iv, rompeId, temas) {
+    var hobbyAcc = (iv.acciones || []).find(function (a) { return a.id === 'hobby'; });
+    var kickers = (hobbyAcc && hobbyAcc.kickers_rompe) ? hobbyAcc.kickers_rompe.slice() : [
+      'A ver, %s\u2026 \u00bfpor d\u00f3nde tiramos?',
+      'Venga, %s\u2026 a ver si damos en el clavo.'
+    ];
+    var na = nombreDe(rompeId);
+    var nb = '';
+    if (temas && temas.length && temas[0].interlocutor_id) {
+      nb = nombreDe(temas[0].interlocutor_id);
+    } else if (temas && temas.length && temas[0].residente_id) {
+      nb = nombreDe(temas[0].residente_id);
+    }
+    if (nb) {
+      kickers.push('A ver si encontramos un tema que le entre a ' + nb + '\u2026');
+      kickers.push(na + ', \u00bfqu\u00e9 le planteamos a ' + nb + '?');
+    }
+    var tpl = kickers[Math.floor(Math.random() * kickers.length)];
+    if (tpl.indexOf('%s') >= 0) return tpl.replace('%s', na);
+    return tpl;
+  }
   function pintarTemasIntervencion(wrap, iv, objetivoId) {
     var panel = wrap.querySelector('[data-temas-panel]');
-    var toggle = wrap.querySelector('[data-temas-toggle]');
-    var box = wrap.querySelector('.enc-int-temas');
-    if (!panel || !box) return;
+    var kicker = wrap.querySelector('[data-enc-int-kicker-tema]');
+    if (!panel) return;
     var map = temasIntervencionDe(iv);
     var temas = (map && objetivoId && map[objetivoId]) ? map[objetivoId] : [];
-    panel.innerHTML = '';
-    if (toggle) {
-      toggle.classList.remove('is-elegido', 'is-open');
-      toggle.textContent = '\ud83d\udcac Sacar un tema que le guste\u2026';
-      toggle.setAttribute('aria-expanded', 'false');
-      toggle.disabled = !temas.length;
+    if (kicker) {
+      kicker.textContent = kickerRompeHieloJs(iv, objetivoId, temas);
     }
-    box.hidden = !temas.length;
+    panel.innerHTML = '';
     temas.forEach(function (h) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'enc-int-btn enc-int-btn--hobby enc-int-opt';
       btn.setAttribute('data-enc-int-accion', 'hobby');
       btn.setAttribute('data-hobby-id', h.id || '');
-      btn.setAttribute('data-residente-id', h.residente_id || '');
-      btn.setAttribute('role', 'menuitem');
+      btn.setAttribute('data-residente-id', h.interlocutor_id || h.residente_id || '');
       btn.textContent = h.etiqueta || h.id || '';
       panel.appendChild(btn);
     });
-    panel.hidden = true;
   }
   function textoFeedbackIntervencion(iv) {
     if (!iv || !iv.ultimo) return '';
@@ -1645,7 +1659,7 @@
     var ids = enc.participantes || [];
     var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
       '<div class="enc-int-step" data-enc-int-paso="persona">' +
-      '<p class="enc-int-kicker">\u00bfA qui\u00E9n quieres darle un empujoncito?</p>' +
+      '<p class="enc-int-kicker">\u00bfQui\u00E9n va a romper el hielo?</p>' +
       '<div class="enc-int-personas">';
     ids.forEach(function (rid) {
       html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
@@ -1654,28 +1668,8 @@
     html += '</div></div>';
     html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
       '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
-      '<p class="enc-int-kicker">\u00bfQu\u00E9 le quieres sugerir?</p>' +
-      '<div class="enc-int-btns">';
-    var tieneTemas = false;
-    iv.acciones.forEach(function (a) {
-      if (!a.disponible) return;
-      if (a.id === 'hobby') {
-        if (a.temas_por_objetivo) {
-          Object.keys(a.temas_por_objetivo).forEach(function (k) {
-            if ((a.temas_por_objetivo[k] || []).length) tieneTemas = true;
-          });
-        }
-        return;
-      }
-      html += '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(a.id) + '">' + esc(a.etiqueta) + '</button>';
-    });
-    html += '</div>';
-    if (tieneTemas) {
-      html += '<div class="enc-int-temas" hidden>' +
-        '<button type="button" class="enc-int-btn enc-int-btn--temas" data-temas-toggle aria-haspopup="true" aria-expanded="false" disabled>\ud83d\udcac Sacar un tema que le guste\u2026</button>' +
-        '<div class="enc-int-temas-panel" data-temas-panel hidden role="menu"></div></div>';
-    }
-    html += '</div>';
+      '<p class="enc-int-kicker" data-enc-int-kicker-tema></p>' +
+      '<div class="enc-int-btns" data-temas-panel></div></div>';
     html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
     return html;
   }
@@ -6028,16 +6022,7 @@ function hobbyIconKey(id, texto) {
       if (acc === 'hobby') {
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
         extra.residente_id = encIntBtn.getAttribute('data-residente-id');
-        var optWrap = encIntBtn.closest('.enc-int-temas');
-        if (optWrap) {
-          cerrarSelectorTemas();
-          var togEl = optWrap.querySelector('[data-temas-toggle]');
-          if (togEl) {
-            togEl.classList.add('is-elegido');
-            togEl.textContent = esc(encIntBtn.textContent.trim()) + ' \u25be';
-            togEl.setAttribute('aria-expanded', 'false');
-          }
-        }
+      }
       }
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');

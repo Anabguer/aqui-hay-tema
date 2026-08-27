@@ -1,6 +1,6 @@
 {
     "_provisional": true,
-    "_nota": "CALIBRACIÔö£├┤N vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan mÔö£┬«tricas.",
+    "_nota": "CALIBRACIÃ”Ã¶Â£â”œâ”¤N vida relacional post-424fe940. NO es canon. Cifras de laboratorio para pueblo razonable. ChatGPT + Neni revisan mÃ”Ã¶Â£â”¬Â«tricas.",
     "social": {
         "min": -100,
         "max": 100,
@@ -75,7 +75,7 @@
         "consolidacion_ventana_horas": 168,
         "proteccion_curva": 0.005,
         "proteccion_min": 0.3,
-        "nivel3_primer_muy_mal_max_da├▒o": 5
+        "nivel3_primer_muy_mal_max_daâ”œâ–’o": 5
     },
     "conflicto": {
         "_decision_producto": "2026-08-24: el canal conflicto ya no es eterno. Decae por tiempo limpio (7+7 dias) y se repara 1 nivel por encuentro bien\/muy_bien. Cualquier nuevo conflicto reinicia el reloj. NO toca el social negativo (canal distinto).",
@@ -350,7 +350,7 @@
     },
     "iniciativa_social": {
         "_provisional": true,
-        "_nota": "A1: iniciativa social deliberada NPC→NPC. NO romántica. Cifras de lab.",
+        "_nota": "A1: iniciativa social deliberada NPCâ†’NPC. NO romÃ¡ntica. Cifras de lab.",
         "prob_por_tick": 0.08,
         "cupo_dia_sqrt": 0.45,
         "cupo_dia_offset": 0.25,
@@ -428,7 +428,7 @@
         "max_por_experiencia": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de cat├ílogo amplio. No recalibrar ritmos ahora."
+        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de catâ”œÃ­logo amplio. No recalibrar ritmos ahora."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,
@@ -438,7 +438,7 @@
     "escaner_compatibilidad": {
         "deprecated": true,
         "desbloqueable": false,
-        "_nota": "Eliminado del diseÔö£ÔûÆo jugable. Compat\/quÔö£┬ímica siguen internas."
+        "_nota": "Eliminado del diseÃ”Ã¶Â£Ã”Ã»Ã†o jugable. Compat\/quÃ”Ã¶Â£â”¬Ã­mica siguen internas."
     },
     "laboratorio_relacional": {
         "_provisional": true,
@@ -469,7 +469,7 @@
                 "id": "alerta",
                 "min": 20,
                 "max": 39,
-                "etiqueta": "Aqu├¡ pasa algo"
+                "etiqueta": "Aquâ”œÂ¡ pasa algo"
             },
             {
                 "id": "tirando",
@@ -513,7 +513,7 @@
     "misiones_diarias": {
         "_provisional": false,
         "_canon_r3": true,
-        "_nota": "R3 23\/08\/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo ├║nico por d├¡a con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
+        "_nota": "R3 23\/08\/2026: caducada individual NO mueve Vida (Maestro V3: 0). Castigo â”œâ•‘nico por dâ”œÂ¡a con paquete normal y 0 cumplidas: vida_dia_ignorado. vida_cumplida y vida_caducada son legacy sin lectura en play (+2 de cumplida sigue hardcodeado en VidaPuebloEngine::DELTA_MISION_CUMPLIDA).",
         "dias_sin_salir": 2,
         "social_floja_max": 12,
         "vida_cumplida": 1,
@@ -523,7 +523,7 @@
     },
     "peticiones_pueblo": {
         "_canon_b4": true,
-        "_nota": "B4 cerrado en E3. f├ícil\/relevante\/dif├¡cil son categor├¡as internas: no se muestran en buz├│n ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalizaci├│n por plantilla repetida en la ventana de ├║ltimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el n├║cleo pero a├▒ade compa├▒├¡a no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos peque├▒os (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global. R08 (playtest 25\/08): gap_min_horas=6 separa nacimientos autónomos (ultima_nace_abs); no limita manuales ni labs forzados.",
+        "_nota": "B4 cerrado en E3. fâ”œÃ­cil\/relevante\/difâ”œÂ¡cil son categorâ”œÂ¡as internas: no se muestran en buzâ”œâ”‚n ni PLAY. No toca vida_pueblo ni misiones_diarias. anti_rep_* = penalizaciâ”œâ”‚n por plantilla repetida en la ventana de â”œâ•‘ltimos nacimientos (lee historial_plantillas). bonus_nucleo_modificado = score extra del peticionario cuando Celestine cumple el nâ”œâ•‘cleo pero aâ”œâ–’ade compaâ”œâ–’â”œÂ¡a no pedida. R07 (aprobado): cap_min=2 evita el cap=1 bloqueado en pueblos pequeâ”œâ–’os (3-5 vecinos) e impulso_cap_pequeno=1.25 multiplica p_nacer SOLO cuando cap<=2; pop>=7 (cap>=3) queda intacta y NO se toca p_nacer_hora_hueco global. R08 (playtest 25\/08): gap_min_horas=6 separa nacimientos autÃ³nomos (ultima_nace_abs); no limita manuales ni labs forzados.",
         "esquema_activo": "E3",
         "cap_pct": 0.33,
         "cap_min": 2,
@@ -562,5 +562,17 @@
         "_nota": "A2: H1 signo + evitacion por conflicto en colas de seleccion.",
         "penalizacion_por_punto_conflicto": 0.12,
         "evitar_conflicto_intensidad_min": 9
+    },
+    "mentes": {
+        "_nota": "MENTES iteración 2: temas generales siempre plantables; el jugador elige.",
+        "temas_generales": [
+            "cine",
+            "leer",
+            "musica"
+        ],
+        "max_temas": 6,
+        "carga_afin": 0.22,
+        "carga_neutro": 0.04,
+        "carga_aversion": -0.18
     }
 }
