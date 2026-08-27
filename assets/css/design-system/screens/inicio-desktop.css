@@ -830,3 +830,12 @@
   .play-v3:has(.game-shell) .game-left .shell-grupo-buzon .obj-buzon { height: 63px; min-height: 63px; box-sizing: border-box; }
   .play-v3:has(.game-shell) .top-reloj .pasar-rato { width: 115px; height: 25px; min-height: 25px !important; box-sizing: border-box; }
 }
+
+
+/* Orden desktop solicitado: Cotilleo sobre Misiones; anchos iguales. */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .game-right .shell-grupo-cotilleo-par { grid-column: 3; grid-row: 1; width: 100%; }
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par { grid-column: 3; grid-row: 2; width: 100%; }
+  .play-v3:has(.game-shell) .game-right .obj-cotilleo.obj-cotilleo-par { width: 100%; max-width: 100%; }
+  .play-v3:has(.game-shell) .game-right .obj-misiones-papel { width: 100%; }
+}
