@@ -2,9 +2,9 @@
 
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .game-main {
-    grid-template-columns: minmax(280px, 340px) minmax(0, 1fr) minmax(250px, 320px);
-    gap: 12px;
-    padding: 10px 12px;
+    grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
+    gap: 14px;
+    padding: 10px 14px;
   }
 
   .play-v3:has(.game-shell) .game-right .proxplanes-movil,
@@ -16,18 +16,18 @@
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara img,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara .cara-ini,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara {
-    width: 80px !important;
-    height: 80px !important;
+    width: 58px !important;
+    height: 58px !important;
   }
 
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara::before {
-    inset: -12px;
-    border-width: 3px;
+    inset: -9px;
+    border-width: 2.5px;
   }
 
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -8px;
-    height: 10px;
+    bottom: -6px;
+    height: 8px;
   }
 
   .play-v3:has(.game-shell) .game-top .btn-guia {
@@ -568,6 +568,62 @@
     align-self: center;
     font-size: 1.45rem !important;
   }
+  /* HOME-DESKTOP-COMP-v1: laterales mas anchos, presencia sutil, contenido respira */
+  .play-v3:has(.game-shell) .game-left.zona-actividad {
+    gap: 14px !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .game-left .shell-grupo-planes {
+    min-width: 0;
+  }
+
+  .play-v3:has(.game-shell) .celestine-nota.obj-vecinos-resumen {
+    padding: 1.22rem 1.18rem 1.08rem 1.05rem !important;
+    box-shadow: 1px 2px 0 rgba(188, 158, 118, .24), 4px 8px 20px rgba(40, 28, 16, .14), inset 0 0 0 1px rgba(255, 255, 255, .62) !important;
+  }
+
+  .play-v3:has(.game-shell) .shell-grupo-planes .obj-proximo-polaroid,
+  .play-v3:has(.game-shell) .obj-proximo-polaroid {
+    padding: 1.08rem 1rem .82rem .95rem;
+    box-shadow: 1px 2px 0 rgba(188, 158, 118, .2), 3px 7px 16px rgba(40, 28, 16, .11), inset 0 0 0 1px rgba(255, 255, 255, .5);
+  }
+
+  .play-v3:has(.game-shell) .obj-proximo-polaroid .obj-proximo-body {
+    font-size: .94rem;
+    line-height: 1.38;
+  }
+
+  .play-v3:has(.game-shell) .obj-proximo-polaroid .prox-meta {
+    line-height: 1.32;
+  }
+
+  .play-v3:has(.game-shell) .obj-nuevo-plan-horiz {
+    padding: .68rem 1.05rem .72rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .38), inset 0 -2px 0 rgba(160, 50, 70, .2), 2px 5px 0 rgba(44, 38, 31, .16), 0 6px 16px rgba(44, 38, 31, .08);
+  }
+
+  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par .obj-misiones-papel {
+    padding: 10px 14px 6px;
+    border-width: 2px;
+    box-shadow: 1px 2px 0 rgba(188, 158, 118, .22), 3px 7px 18px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(255, 255, 255, .55);
+  }
+
+  .play-v3:has(.game-shell) .game-right .mision-strip-txt {
+    font-size: 1.22rem !important;
+    line-height: 1.28 !important;
+    -webkit-line-clamp: 2;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+
+  .play-v3:has(.game-shell) .game-right .mision-strip-row {
+    gap: 10px;
+    min-height: 34px;
+    padding: 3px 0;
+  }
+
 }
 
 
