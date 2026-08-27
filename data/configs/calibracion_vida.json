@@ -548,7 +548,9 @@
         "espera_minutos_max": 10,
         "un_candidato_activo": true,
         "cooldown_cara_dias": 14,
-        "placeholders_si_catalogo_vacio": true
+        "placeholders_si_catalogo_vacio": true,
+        "dias_gracia_post_tutorial": 2,
+        "_nota_gracia": "Días sin ofertas tras activar modo normal (núcleo inicial)."
     },
     "catch_up": {
         "_provisional": true,

@@ -89,8 +89,8 @@ $pPost['llegadas']['modo'] = 'normal';
 $pPost['llegadas']['cooldown_hasta_dia'] = 0;
 $pPost['llegadas']['candidato_activo'] = null;
 $pPost['llegadas']['en_camino'] = null;
-ok(CandidatoLlegadaEngine::gapMin(24) === 22, 'gap_min N=24');
-ok(CandidatoLlegadaEngine::pDiaV3(24) > 0.29, 'p_dia N=24 alta');
+ok(CandidatoLlegadaEngine::gapMin(12) === 13, 'gap_min N=12');
+ok(CandidatoLlegadaEngine::pDiaV3(12) > 0.09, 'p_dia N=12 moderada');
 ok(CapacidadViviendas::huecos($pPost) === 22, 'huecos con n=24 (no bloqueo en 24)');
 ok(
     count(TutorialIncorporaciones::residentesActivos($pPost)) < CapacidadViviendas::CAP_PRODUCTO,

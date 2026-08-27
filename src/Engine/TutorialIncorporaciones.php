@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Incorporaciones tutorializadas 3 → ≈8 en el día 1.
- * No usan el sistema de candidatos; solo mientras tutorial activo/recién completado.
+ * Incorporaciones tutorializadas opcionales (cola día 1).
+ * Por defecto el núcleo inicial queda en ~3; el crecimiento posterior usa CandidatoLlegadaEngine.
  */
 final class TutorialIncorporaciones
 {
-    public const META_OBJETIVO = 8;
+    public const META_OBJETIVO = 3;
 
     /**
      * @param array<string, mixed> $partida
@@ -72,7 +72,7 @@ final class TutorialIncorporaciones
         if (empty($partida['llegadas']['tutorial_pendiente_resto'])
             && empty($partida['llegadas']['tutorial_cola'])) {
             if (($partida['llegadas']['modo'] ?? '') === 'tutorial') {
-                CandidatoLlegadaEngine::activarModoNormal($partida);
+                CandidatoLlegadaEngine::activarModoNormal($partida, $root);
             }
             return [];
         }
@@ -96,7 +96,7 @@ final class TutorialIncorporaciones
         $n2 = count(self::residentesActivos($partida));
         if ($n2 >= $objetivo || ($partida['llegadas']['tutorial_cola'] ?? []) === []) {
             $partida['llegadas']['tutorial_pendiente_resto'] = false;
-            CandidatoLlegadaEngine::activarModoNormal($partida);
+            CandidatoLlegadaEngine::activarModoNormal($partida, $root);
         }
 
         // Si se acabó el día 1 sin llegar a 8, forzar el resto al cierre
@@ -104,7 +104,7 @@ final class TutorialIncorporaciones
             && !empty($partida['llegadas']['tutorial_cola'])) {
             $hechas = array_merge($hechas, self::incorporarHasta($partida, $root, 99, $logger));
             $partida['llegadas']['tutorial_pendiente_resto'] = false;
-            CandidatoLlegadaEngine::activarModoNormal($partida);
+            CandidatoLlegadaEngine::activarModoNormal($partida, $root);
         }
 
         return $hechas;
@@ -124,7 +124,7 @@ final class TutorialIncorporaciones
             if ($compDia === 1 && $dia >= 2 && !empty($partida['llegadas']['tutorial_cola'])) {
                 $h = self::incorporarHasta($partida, $root, 99, $logger);
                 $partida['llegadas']['tutorial_pendiente_resto'] = false;
-                CandidatoLlegadaEngine::activarModoNormal($partida);
+                CandidatoLlegadaEngine::activarModoNormal($partida, $root);
                 return $h;
             }
             return [];

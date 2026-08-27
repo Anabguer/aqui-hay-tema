@@ -53,11 +53,23 @@ final class CandidatoLlegadaEngine
         return true;
     }
 
-    public static function activarModoNormal(array &$partida): void
+    public static function activarModoNormal(array &$partida, ?string $root = null): void
     {
         self::ensure($partida);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $partida['llegadas']['modo'] = 'normal';
-        $partida['llegadas']['normal_desde_dia'] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $partida['llegadas']['normal_desde_dia'] = $dia;
+        $grace = 2;
+        if ($root !== null && $root !== '') {
+            $cal = CalibracionConfig::load($root);
+            $grace = (int) CalibracionConfig::get($cal, 'llegadas.dias_gracia_post_tutorial', 2);
+        }
+        if ($grace > 0) {
+            $partida['llegadas']['cooldown_hasta_dia'] = max(
+                (int) ($partida['llegadas']['cooldown_hasta_dia'] ?? 0),
+                $dia + $grace
+            );
+        }
     }
 
     /**
@@ -116,7 +128,7 @@ final class CandidatoLlegadaEngine
             return null;
         }
         $n = count(TutorialIncorporaciones::residentesActivos($partida));
-        if ($n >= CapacidadViviendas::CAP_PRODUCTO) {
+        if ($n >= CapacidadViviendas::capObjetivoPoblacionActiva()) {
             return null;
         }
         if (($partida['llegadas']['candidato_activo'] ?? null) !== null) {
@@ -412,13 +424,15 @@ final class CandidatoLlegadaEngine
 
     public static function gapMin(int $n): int
     {
-        $n = max(8, min(CapacidadViviendas::CAP_PRODUCTO - 1, $n));
-        return 2 + (int) floor(($n - 8) * 1.25);
+        $cap = CapacidadViviendas::capObjetivoPoblacionActiva();
+        $n = max(3, min($cap - 1, $n));
+        return 2 + (int) floor(($n - 3) * 1.25);
     }
 
     public static function pDiaV3(int $n): float
     {
-        $h = max(0, CapacidadViviendas::CAP_PRODUCTO - $n);
+        $cap = CapacidadViviendas::capObjetivoPoblacionActiva();
+        $h = max(0, $cap - $n);
         return min(0.30, 0.04 + 0.015 * $h);
     }
 

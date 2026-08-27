@@ -1,7 +1,7 @@
 {
-    "_comentario": "Arranque V3: 3 aleatorios + 5 incorporaciones tutorial aleatorias. 9 lugares desde inicio.",
+    "_comentario": "Arranque V3: 3 aleatorios. Crecimiento progresivo post-tutorial hasta Bloque A (~16).",
     "id": "juego_v1",
-    "descripcion": "Nueva partida V3: trio aleatorio, tutorial, 8 vecinos dia 1.",
+    "descripcion": "Nueva partida V3: trio aleatorio, tutorial, crecimiento progresivo.",
     "seed_sugerida": "juego-v1",
     "tutorial_bucle_1": false,
     "lugares_operativos_dia_1": [
@@ -30,10 +30,10 @@
         "peticiones_pueblo_enabled": true,
         "offline_events_enabled": true
     },
-    "tutorial_objetivo_residentes": 8,
+    "tutorial_objetivo_residentes": 3,
     "poblacion_v3": {
         "iniciales_aleatorios": 3,
-        "incorporaciones_aleatorias": 5
+        "incorporaciones_aleatorias": 0
     },
     "tutorial_primeros_pasos": true
 }

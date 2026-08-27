@@ -12,6 +12,12 @@ final class CapacidadViviendas
 {
     public const CAP_PRODUCTO = 46;
     public const CAP_BLOQUE_A = 16;
+    /** Objetivo de población activa en fase Bloque A (llegadas y UI «vecinos»). */
+    public static function capObjetivoPoblacionActiva(): int
+    {
+        return self::CAP_BLOQUE_A;
+    }
+
     public const CAP_BLOQUE_B = 8;
     public const CAP_BLOQUE_C = 16;
     public const CAP_BLOQUE_D = 6;

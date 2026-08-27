@@ -1224,3 +1224,21 @@ Familia semántica: campo `categoria` del catálogo de hobbies (reutilizado, sin
 
 - **“Animar la conversación”** (`hablar`) ya no se ofrece en MENTES de encuentro organizado Celestine.
 
+
+### 19.12 Recalibración población inicial y llegadas progresivas (2026-08-27)
+
+**Decisión de producto:** partidas nuevas (`juego_v1`) arrancan con **~3 residentes** y crecen por el motor de llegadas existente hasta el objetivo de **Bloque A (~16)**, sin oleada tutorial a 8 el día 1.
+
+**Por qué cambia la decisión histórica de 8 iniciales:**
+- **Antes (playtest 20/08):** tutorial 3→8 el día 1 porque el pueblo podía aspirar a ~46, no existía «pasar el rato» y un encuentro bloqueaba mucho tiempo real → hacía falta masa social temprana.
+- **Ahora:** objetivo jugable ~16 (Bloque A), «pasar el rato», mayor profundidad por vecino (personalidad, MENTES, Mensajitos, eventos…) → interesa **conocer** al núcleo antes de que crezca el pueblo.
+
+**Mantra:** *El pueblo debe sentirse como un lugar que Neni ve crecer y cuyos habitantes aprende a conocer, no como una lista de residentes entregada de golpe.*
+
+**Implementación (calibración, sin segundo sistema):**
+- `juego_v1`: `tutorial_objetivo_residentes=3`, `incorporaciones_aleatorias=0`.
+- Llegadas post-tutorial: reutiliza `CandidatoLlegadaEngine` (`pDiaV3`, `gapMin`, cooldown V3).
+- Tope de llegadas = `CapacidadViviendas::capObjetivoPoblacionActiva()` → `CAP_BLOQUE_A` (16), no el pool físico de 46.
+- Gracia post-tutorial: `llegadas.dias_gracia_post_tutorial` (2 días sin ofertas tras activar modo normal).
+- Partidas existentes no migradas: el cambio aplica solo a **partidas nuevas** vía config.
+

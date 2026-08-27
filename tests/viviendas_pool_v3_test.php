@@ -34,13 +34,12 @@ $loaded = $service->cargar($p2['meta']['partida_id']);
 ok(count($loaded['viviendas']['slots']) === 46, 'round-trip pool');
 ok((int) ($loaded['meta']['schema_version'] ?? 0) === 3, 'round-trip schema v3');
 
-ok(CandidatoLlegadaEngine::gapMin(8) === 2, 'gap_min N=8');
-ok(CandidatoLlegadaEngine::gapMin(12) === 7, 'gap_min N=12');
-ok(CandidatoLlegadaEngine::gapMin(23) === 20, 'gap_min N=23');
-ok(CandidatoLlegadaEngine::gapMin(45) === 48, 'gap_min N=45');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(8) - 0.30) < 0.001, 'p_dia N=8');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(23) - 0.30) < 0.001, 'p_dia N=23');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(45) - 0.055) < 0.001, 'p_dia N=45');
+ok(CandidatoLlegadaEngine::gapMin(3) === 2, 'gap_min N=3');
+ok(CandidatoLlegadaEngine::gapMin(8) === 8, 'gap_min N=8');
+ok(CandidatoLlegadaEngine::gapMin(12) === 13, 'gap_min N=12');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(3) - 0.235) < 0.001, 'p_dia N=3');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(8) - 0.16) < 0.001, 'p_dia N=8');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(15) - 0.055) < 0.001, 'p_dia N=15');
 
 // Migración aditiva: partida guardada con pool legacy de 24 slots
 $pLegacy = $service->nuevaPartida('test_fixtures_v0', 'pool-v3-legacy');

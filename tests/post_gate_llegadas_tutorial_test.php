@@ -44,13 +44,13 @@ $tercero = (string) $p['tutorial']['tercero'];
 PropuestaEncuentroEngine::proponer($p, [$tercero], 1, 19, 'individual', 'lug_cine');
 ok(!empty($p['tutorial']['jugable_completado']), 'primeros pasos completados');
 $nTras = count(TutorialIncorporaciones::residentesActivos($p));
-ok($nTras >= 5, "tras completar primeros pasos ya hay oleada (n=$nTras)");
+ok($nTras === 3, "tras completar primeros pasos sigue en núcleo (n=$nTras)");
 
 for ($h = 0; $h < 14; $h++) {
     $svc->avanzarReloj($p, 1);
 }
 $nFin = count(TutorialIncorporaciones::residentesActivos($p));
-ok($nFin >= 8, "fin día 1 ≈8 (n=$nFin)");
+ok($nFin === 3, "fin día 1 sigue en núcleo (n=$nFin)");
 ok(($p['llegadas']['modo'] ?? '') === 'normal', 'modo normal tras tutorial');
 ok(empty($p['tutorial']['activo'] ?? true) || !empty($p['tutorial']['jugable_completado']), 'tutorial jugable cerrado');
 

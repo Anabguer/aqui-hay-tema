@@ -17,31 +17,33 @@ function ok(bool $c, string $m): void
     }
 }
 
+$cap = CapacidadViviendas::capObjetivoPoblacionActiva();
+ok($cap === 16, 'cap objetivo Bloque A = 16');
+
+ok(CandidatoLlegadaEngine::gapMin(3) === 2, 'gap_min N=3');
+ok(CandidatoLlegadaEngine::gapMin(8) === 8, 'gap_min N=8');
+ok(CandidatoLlegadaEngine::gapMin(12) === 13, 'gap_min N=12');
+ok(CandidatoLlegadaEngine::gapMin(15) === 17, 'gap_min N=15');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(3) - 0.235) < 0.001, 'p_dia N=3');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(8) - 0.16) < 0.001, 'p_dia N=8');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(15) - 0.055) < 0.001, 'p_dia N=15');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(16) - 0.04) < 0.001, 'p_dia N=16 (sin huecos)');
+
 $et = [];
-for ($n = 8; $n <= 45; $n++) {
+for ($n = 3; $n <= $cap - 1; $n++) {
     $gap = CandidatoLlegadaEngine::gapMin($n);
     $p = CandidatoLlegadaEngine::pDiaV3($n);
-    $et[$n] = $gap + 1 + (1 / $p);
+    $et[$n] = $gap + 1 + (1 / max(0.001, $p));
 }
 
-ok(abs($et[8] - 6.33) < 0.2, 'E[T] N=8 ~6.3');
-ok(abs($et[12] - 11.33) < 0.3, 'E[T] N=12 ~11.3');
-ok($et[23] > $et[8], 'curva creciente');
-ok($et[45] > $et[23], 'curva sigue creciendo hasta N=45');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(45) - 0.055) < 0.001, 'p_dia N=45 mínima');
+ok($et[3] < $et[12], 'curva creciente (espera media sube con N)');
+ok($et[15] > $et[8], 'desacelera cerca del cap');
 
-$sum8_23 = 0.0;
-for ($n = 8; $n <= 23; $n++) {
-    $sum8_23 += $et[$n];
+$sum3_15 = 0.0;
+for ($n = 3; $n <= 15; $n++) {
+    $sum3_15 += $et[$n];
 }
-ok(abs($sum8_23 - 245) < 5, 'bloque 8-23 ~245 dias (espíritu curva original)');
-
-$sum8_45 = 0.0;
-for ($n = 8; $n <= 45; $n++) {
-    $sum8_45 += $et[$n];
-}
-ok($sum8_45 > 900, 'horizonte 8-45 >> 245 (relleno hasta 46 progresivamente lento)');
-ok($sum8_45 < 1400, 'horizonte 8-45 acotado (~1172 días esperados)');
+ok($sum3_15 > 60 && $sum3_15 < 260, 'bloque 3-15 ritmo acumulado razonable (~' . round($sum3_15) . ' días)');
 
 echo $failures === 0 ? "OK llegadas_curva_v3\n" : "FAIL llegadas_curva_v3 ({$failures})\n";
 exit($failures > 0 ? 1 : 0);

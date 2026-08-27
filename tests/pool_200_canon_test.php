@@ -77,7 +77,7 @@ ok((int) ($manifest['capacidad_simultanea'] ?? 0) === 46, 'manifest capacidad_si
 $svc = new PartidaService($root);
 $p = $svc->nuevaPartida('juego_v1', 'pool200-hist');
 $iniciales = count($p['residentes']);
-ok($iniciales >= 3 && $iniciales <= 8, 'Primeros pasos: inicio 3–8 residentes');
+ok($iniciales === 3, 'Primeros pasos: inicio con 3 residentes');
 
 $aparecidos = HistorialPersonajesPartida::idsAparecidos($p);
 ok(count($aparecidos) >= $iniciales, 'ya_aparecieron incluye iniciales');
