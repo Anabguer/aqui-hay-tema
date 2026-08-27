@@ -1113,3 +1113,9 @@
 
   /* INICIO-MOVIL-REGRESSION-v9 */
 }
+
+
+/* Ajuste de maqueta mobile: Mensajitos arriba 5px. */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-left .shell-grupo-buzon .obj-buzon { position: relative; top: -5px; }
+}
