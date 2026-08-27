@@ -282,7 +282,18 @@ final class PartidaService
         ];
         $out['perfil_partida'] = PerfilPartida::de($partida, $residenteId)
             ?? PerfilPartida::deOLegacy($partida, $residenteId, $this->catalog);
-        $out['vista_play'] = FichaPlayVista::de($out, $this->catalog->store());
+        $vistaPlay = FichaPlayVista::de($out, $this->catalog->store());
+        $estadoEmo = is_array($out['estado_emocional'] ?? null) ? $out['estado_emocional'] : [];
+        $animoModal = EmocionalNarrativa::vistaModalAnimo(
+            $partida,
+            $residenteId,
+            $estadoEmo,
+            CalibracionConfig::load($this->root)
+        );
+        if ($animoModal !== null) {
+            $vistaPlay['animo_explicacion'] = $animoModal;
+        }
+        $out['vista_play'] = $vistaPlay;
         unset($out['perfil_partida']);
 
         if ($respuestaLigera) {

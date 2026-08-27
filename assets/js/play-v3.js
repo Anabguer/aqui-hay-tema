@@ -3622,14 +3622,24 @@ function canonEmoId(id) {
       qBtn.hidden = !showAnimoQ;
       qBtn.onclick = abrirAnimoModal;
     }
+  const bindAnimoOpen = showAnimoQ ? abrirAnimoModal : null;
     if (txtEl) {
       txtEl.classList.toggle('is-clickable', showAnimoQ);
-      txtEl.onclick = showAnimoQ ? abrirAnimoModal : null;
+      txtEl.onclick = bindAnimoOpen;
       const pill = txtEl.closest('.ficha-animo-pill');
       if (pill) {
         pill.classList.toggle('is-clickable', showAnimoQ);
-        pill.onclick = showAnimoQ ? abrirAnimoModal : null;
+        pill.onclick = bindAnimoOpen;
       }
+    }
+    const animoRow = $('[data-ficha-animo-row]');
+    if (animoRow) {
+      animoRow.classList.toggle('is-clickable', showAnimoQ);
+      animoRow.onclick = bindAnimoOpen;
+    }
+    if (icoEl) {
+      icoEl.classList.toggle('is-clickable', showAnimoQ);
+      icoEl.onclick = bindAnimoOpen;
     }
     cerrarAnimoOverlay();
   }

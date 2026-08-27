@@ -109,6 +109,77 @@ final class EmocionalNarrativa
         ];
     }
 
+
+    /**
+     * Payload para modal de animo en ficha (vista jugador).
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $estado
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>|null
+     */
+    public static function vistaModalAnimo(array $partida, string $residenteId, array $estado, array $cal = []): ?array
+    {
+        $estadoId = EstadoEmocional::canonId((string) ($estado['id'] ?? ''));
+        if (!self::esSignificativo($estadoId)) {
+            return null;
+        }
+
+        $base = self::explicacionCompleta($partida, $residenteId, $estado);
+        if ($base === null) {
+            $pista = self::pistaFicha($estado);
+            $base = [
+                'texto_estado' => 'Está ' . self::textoEstado($estadoId, $partida, $residenteId),
+                'explicacion' => is_string($pista) && $pista !== ''
+                    ? $pista
+                    : 'Algo le ha afectado últimamente.',
+                'desde_texto' => self::desdeTexto($estado, $partida),
+                'diario_evento_id' => null,
+            ];
+        }
+
+        $base['estado_id'] = $estadoId;
+        $base['consecuencias'] = self::consecuenciasModal($estadoId, $cal);
+        $consejo = self::consejoModal($estadoId);
+        if ($consejo !== null) {
+            $base['consejo'] = $consejo;
+        }
+
+        return $base;
+    }
+
+    /**
+     * @param array<string, mixed> $cal
+     * @return list<array{icono: string, texto: string}>
+     */
+    public static function consecuenciasModal(string $estadoId, array $cal = []): array
+    {
+        $mods = EstadoEmocional::modificadores(EstadoEmocional::canonId($estadoId), $cal);
+        $out = [];
+
+        if ((int) ($mods['aceptar_planes'] ?? 0) < 0) {
+            $out[] = ['icono' => '✕', 'texto' => 'Puede rechazar algunos planes'];
+        }
+        if ((int) ($mods['riesgo_conflicto'] ?? 0) > 0 || (int) ($mods['experiencia_encuentro'] ?? 0) < 0) {
+            $out[] = ['icono' => '💔', 'texto' => 'Sus relaciones pueden cambiar'];
+        }
+        if ((int) ($mods['iniciativa_social'] ?? 0) < 0) {
+            $out[] = ['icono' => '💬', 'texto' => 'Puede evitar quedar con la gente'];
+        }
+
+        return $out;
+    }
+
+    public static function consejoModal(string $estadoId): ?string
+    {
+        $id = EstadoEmocional::canonId($estadoId);
+        if (in_array($id, [EstadoEmocional::TRISTE, EstadoEmocional::ENFADADO], true)) {
+            return 'Un buen plan podría mejorar su ánimo';
+        }
+
+        return null;
+    }
+
     private static function textoEstado(string $estadoId, array $partida, string $rid): string
     {
         switch ($estadoId) {
