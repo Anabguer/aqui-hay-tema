@@ -716,4 +716,59 @@
   .play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
     font-size: 0.875rem !important;
   }
+  /* INICIO-DESKTOP-LEFT-v10: bloques apilados ancho columna (no tiles móvil) */
+  .play-v3:has(.game-shell) .game-left {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 14px !important;
+    grid-template-columns: unset !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .game-left > .encursos-movil,
+  .play-v3:has(.game-shell) .game-left > .proxplanes-movil,
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-planes {
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 0 0 auto !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .game-left > .shell-grupo-resumen {
+    transform: none !important;
+    align-self: stretch !important;
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon .mensajitos-wrap {
+    min-height: 0 !important;
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .zona-actividad .obj-buzon {
+    width: 100% !important;
+    min-height: 0 !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .celestine-nota.obj-vecinos-resumen {
+    width: 100% !important;
+    min-height: 0 !important;
+    align-items: stretch !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  .play-v3:has(.game-shell) .game-left .libreta-kicker,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-preview,
+  .play-v3:has(.game-shell) .game-left .obj-vecinos-head {
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
 }
