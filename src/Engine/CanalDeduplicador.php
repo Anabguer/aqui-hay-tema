@@ -93,6 +93,7 @@ final class CanalDeduplicador
             'seguimiento_consejo' => [BuzonEngine::CANAL_BUZON],
             'seguimiento_peticion' => [BuzonEngine::CANAL_BUZON],
             'anuncio_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
+            'cierre_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
         ];
     }
 

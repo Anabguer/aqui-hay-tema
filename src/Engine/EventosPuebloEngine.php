@@ -182,6 +182,24 @@ final class EventosPuebloEngine
     }
 
     /**
+     * @return array<string, mixed>|null
+     */
+    public static function buscarProgramadoPorEncuentro(array $partida, string $encuentroId): ?array
+    {
+        self::ensure($partida);
+        foreach ($partida['eventos_pueblo']['programados'] as $ev) {
+            if (!is_array($ev)) {
+                continue;
+            }
+            if ((string) ($ev['encuentro_id'] ?? '') === $encuentroId) {
+                return $ev;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Próximo evento del pueblo (contrato backend para futura B3).
      *
      * @return array<string, mixed>|null

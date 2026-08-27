@@ -35,6 +35,7 @@ final class DomainBootstrap
         MisionPlayBridge::register();
         PeticionPlayBridge::register();
         ConsecuenciaReactionSubscriber::register();
+        EventosPuebloBridge::register();
     }
 
     public static function resetForTests(): void

@@ -52,6 +52,7 @@ final class EventosPuebloAnuncioEngine
         $nombreNatural = self::nombreNatural($nombreEvt);
         $diaSemana = strtolower(Reloj::diaSemanaUi($diaEvt, $partida['reloj'] ?? []));
         $asistencia = self::textoAsistencia($partida, $participantes);
+        $hiloId = 'hilo_evt_pueblo_' . $evtId;
 
         $seed = self::FAMILIA_VOZ . '|' . $evtId . '|' . $remitente;
         $texto = MensajitoVoz::linea($partida, self::FAMILIA_VOZ, [
@@ -90,6 +91,7 @@ final class EventosPuebloAnuncioEngine
             'acciones' => [],
             'familia_mensajito' => self::FAMILIA_VOZ,
             'datos_familia' => $datos,
+            'hilo_id' => $hiloId,
             'seguimiento_pendiente' => false,
             'origen' => [
                 'evento_id' => $eventoCanonId,
@@ -106,7 +108,7 @@ final class EventosPuebloAnuncioEngine
 
         if ($r !== null && ($r['ok'] ?? false)) {
             $msgId = (string) (($r['mensaje']['id'] ?? '') ?: '');
-            self::marcarEmitido($partida, $evtId, $msgId !== '' ? $msgId : null);
+            self::marcarEmitido($partida, $evtId, $msgId !== '' ? $msgId : null, $hiloId);
             if ($logger !== null) {
                 $logger->info('evento_pueblo_anuncio_mensajito', [
                     'evento_pueblo_id' => $evtId,
@@ -169,6 +171,11 @@ final class EventosPuebloAnuncioEngine
         return 'vamos pocos pero con ganas';
     }
 
+    public static function nombreNaturalPublico(string $nombre): string
+    {
+        return self::nombreNatural($nombre);
+    }
+
     private static function nombreNatural(string $nombre): string
     {
         $n = trim($nombre);
@@ -179,7 +186,7 @@ final class EventosPuebloAnuncioEngine
         return function_exists('mb_strtolower') ? mb_strtolower($n, 'UTF-8') : strtolower($n);
     }
 
-    private static function marcarEmitido(array &$partida, string $eventoPuebloId, ?string $mensajitoId): void
+    private static function marcarEmitido(array &$partida, string $eventoPuebloId, ?string $mensajitoId, ?string $hiloId = null): void
     {
         EventosPuebloEngine::ensure($partida);
         foreach ($partida['eventos_pueblo']['programados'] as &$ev) {
@@ -189,6 +196,9 @@ final class EventosPuebloAnuncioEngine
             $ev['anuncio_emitido'] = true;
             if ($mensajitoId !== null && $mensajitoId !== '') {
                 $ev['anuncio_mensajito_id'] = $mensajitoId;
+            }
+            if ($hiloId !== null && $hiloId !== '') {
+                $ev['hilo_mensajito_id'] = $hiloId;
             }
             break;
         }

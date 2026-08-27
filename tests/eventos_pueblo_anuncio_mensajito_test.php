@@ -9,7 +9,9 @@ use AquiHayTema\Engine\BuzonEngine;
 use AquiHayTema\Engine\CalibracionConfig;
 use AquiHayTema\Engine\Catalog;
 use AquiHayTema\Engine\EncuentroEngine;
+use AquiHayTema\Engine\EncuentroLifecycle;
 use AquiHayTema\Engine\EventosPuebloAnuncioEngine;
+use AquiHayTema\Engine\EventosPuebloCierreEngine;
 use AquiHayTema\Engine\EventosPuebloEngine;
 use AquiHayTema\Engine\RngService;
 
@@ -172,6 +174,114 @@ foreach ($pFake['buzon'] ?? [] as $m) {
     }
 }
 ok($fake === null, '7 sin participantes no inventa anuncio');
+
+// --- B2 mitad B: cierre post-evento ---
+function countCierres(array $p): int
+{
+    $n = 0;
+    foreach ($p['buzon'] ?? [] as $m) {
+        if (is_array($m) && ($m['tipo'] ?? '') === EventosPuebloCierreEngine::TIPO_EVENTO) {
+            $n++;
+        }
+    }
+
+    return $n;
+}
+
+function findCierre(array $p): ?array
+{
+    foreach ($p['buzon'] ?? [] as $m) {
+        if (is_array($m) && ($m['tipo'] ?? '') === EventosPuebloCierreEngine::TIPO_EVENTO) {
+            return $m;
+        }
+    }
+
+    return null;
+}
+
+function avanzarHastaFinEncuentro(array &$p, array $enc): void
+{
+    $diaFin = (int) ($enc['dia'] ?? 5);
+    $horaFin = (int) ($enc['hora'] ?? 18) + max(1, (int) ($enc['duracion_horas'] ?? 2));
+    while ($horaFin >= 24) {
+        $horaFin -= 24;
+        $diaFin++;
+    }
+    $p['reloj'] = ['dia_pueblo' => $diaFin, 'hora_actual' => $horaFin, 'dia_semana_inicio' => 1];
+}
+
+$encProg = null;
+foreach (EncuentroEngine::list($p) as $e) {
+    if (($e['intencion'] ?? '') === 'evento_pueblo') {
+        $encProg = $e;
+        break;
+    }
+}
+ok($encProg !== null, 'B2 encuentro evento_pueblo existe');
+ok(findCierre($p) === null, 'B2 sin cierre prematuro antes de lifecycle');
+
+$cierresAntes = countCierres($p);
+$anuncioId = (string) ($msg['id'] ?? '');
+$hiloAnuncio = (string) ($msg['hilo_id'] ?? '');
+if ($encProg !== null) {
+    avanzarHastaFinEncuentro($p, $encProg);
+    EncuentroLifecycle::sincronizarConReloj($p, null, $catalog);
+}
+
+$cierre = findCierre($p);
+ok($cierre !== null, 'B2 genera mensajito cierre tras lifecycle');
+ok(countCierres($p) === $cierresAntes + 1, 'B2 exactamente un mensajito cierre nuevo');
+
+$datosCierre = is_array($cierre['datos_familia'] ?? null) ? $cierre['datos_familia'] : [];
+ok(($datosCierre['evento_pueblo_id'] ?? '') === $evtId, 'B2 cierre referencia mismo evento_pueblo_id');
+ok(($datosCierre['encuentro_id'] ?? '') === (string) ($evt['encuentro_id'] ?? ''), 'B2 cierre referencia mismo encuentro');
+ok(($datosCierre['evento_pueblo_catalogo_id'] ?? '') === 'noche_bingo', 'B2 cierre catalogo_id coherente');
+ok(($datosCierre['estado_final'] ?? '') === 'terminado', 'B2 cierre estado_final terminado');
+ok(in_array((string) ($datosCierre['tono_experiencia'] ?? ''), ['cancelado', 'celebrado_fuerte', 'celebrado_normal', 'celebrado_tenue', 'ocurrio'], true), 'B2 tono basado en datos reales');
+
+$textoCierre = trim((string) ($cierre['texto'] ?? ''));
+ok($textoCierre !== '', 'B2 copy cierre no vacio');
+ok(stripos($textoCierre, 'increíble') === false && stripos($textoCierre, 'increible') === false, 'B2 no inventa superlativo no demostrable');
+
+if ($anuncioId !== '') {
+    ok((string) ($cierre['mensaje_origen_id'] ?? '') === $anuncioId, 'B2 cierre enlaza anuncio_mensajito_id');
+}
+if ($hiloAnuncio !== '') {
+    ok((string) ($cierre['hilo_id'] ?? '') === $hiloAnuncio, 'B2 cierre comparte hilo con anuncio');
+}
+
+$evtRowPost = null;
+foreach ($p['eventos_pueblo']['programados'] as $ev) {
+    if (is_array($ev) && (string) ($ev['id'] ?? '') === $evtId) {
+        $evtRowPost = $ev;
+        break;
+    }
+}
+ok($evtRowPost !== null && !empty($evtRowPost['cierre_emitido']), 'B2 evento marcado cierre_emitido');
+ok(($evtRowPost['estado_final'] ?? '') === 'terminado', 'B2 fila evento sincroniza estado_final');
+
+$buzTrasCierre = countCierres($p);
+EncuentroLifecycle::sincronizarConReloj($p, null, $catalog);
+ok(countCierres($p) === $buzTrasCierre, 'B2 reevaluar lifecycle no duplica cierre');
+ok(EventosPuebloCierreEngine::yaCerrado($p, $evtId), 'B2 dedup yaCerrado');
+
+// Cancelación: cierre coherente sin celebración
+$pCan = labPartida();
+planificar($pCan, $stOk);
+$encCan = null;
+foreach (EncuentroEngine::list($pCan) as $e) {
+    if (($e['intencion'] ?? '') === 'evento_pueblo') {
+        $encCan = $e;
+    }
+}
+if ($encCan !== null) {
+    EncuentroEngine::cancelar($pCan, (string) ($encCan['id'] ?? ''));
+    $cierreCan = findCierre($pCan);
+    ok($cierreCan !== null, 'B2 cancelado genera cierre');
+    $dc = is_array($cierreCan['datos_familia'] ?? null) ? $cierreCan['datos_familia'] : [];
+    ok(($dc['estado_final'] ?? '') === 'cancelado', 'B2 cancelado estado_final cancelado');
+    ok(($dc['tono_experiencia'] ?? '') === 'cancelado', 'B2 cancelado tono cancelado');
+}
 
 echo $fail === 0 ? "\nOK eventos_pueblo_anuncio_mensajito_test\n" : "\nFAIL eventos_pueblo_anuncio_mensajito_test ($fail)\n";
 exit($fail > 0 ? 1 : 0);

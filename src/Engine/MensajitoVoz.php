@@ -260,6 +260,44 @@ final class MensajitoVoz
     }
 
     /** @return list<string> */
+    private static function bancoCierreEventoPueblo(string $tono): array
+    {
+        switch ($tono) {
+            case 'cancelado':
+                return [
+                    'Al final lo de {nombre_evento} no pudo ser, Celestine.',
+                    'Celestine, al final {nombre_evento} se cayó. Nada que hacer.',
+                    'Pues nada, {nombre_evento} no salió al final.',
+                ];
+            case 'celebrado_fuerte':
+                return [
+                    'Celestine, al final {nombre_evento} estuvo genial. {asistencia}.',
+                    'Te cuento: {nombre_evento} salió de lujo. {asistencia}.',
+                    'Qué bien salió {nombre_evento}. {asistencia}, Celestine.',
+                ];
+            case 'celebrado_normal':
+                return [
+                    'Al final {nombre_evento} salió bien. {asistencia}.',
+                    'Celestine, {nombre_evento} estuvo bien. {asistencia}.',
+                    'Nada mal {nombre_evento}. {asistencia}.',
+                ];
+            case 'celebrado_tenue':
+                return [
+                    'Bueno… {nombre_evento} tuvo sus momentos.',
+                    'Celestine, {nombre_evento} no estuvo mal, pero tampoco fue la gran cosa.',
+                    'Pues {nombre_evento}… se salvó, vamos.',
+                ];
+            case 'ocurrio':
+            default:
+                return [
+                    'Al final se hizo {nombre_evento}. {asistencia}.',
+                    'Celestine, ya pasó {nombre_evento}. {asistencia}.',
+                    'Te cuento que {nombre_evento} ya se celebró. {asistencia}.',
+                ];
+        }
+    }
+
+    /** @return list<string> */
     private static function bancoF9Seguimiento(string $resultado = ''): array
     {
         switch ($resultado) {
@@ -448,6 +486,7 @@ final class MensajitoVoz
             'f_promesa',
             'f_curiosidad_celestine',
             'anuncio_evento_pueblo',
+            'cierre_evento_pueblo',
         ];
     }
 
@@ -543,6 +582,8 @@ final class MensajitoVoz
                 return self::bancoFCuriosidadCelestine();
             case 'anuncio_evento_pueblo':
                 return self::bancoAnuncioEventoPueblo();
+            case 'cierre_evento_pueblo':
+                return self::bancoCierreEventoPueblo((string) ($vars['tono'] ?? 'ocurrio'));
             default:
                 return [];
         }
