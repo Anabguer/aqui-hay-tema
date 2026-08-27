@@ -526,5 +526,12 @@
         "un_candidato_activo": true,
         "cooldown_cara_dias": 14,
         "placeholders_si_catalogo_vacio": true
+    },
+    "catch_up": {
+        "_provisional": true,
+        "umbral_segundos": 60,
+        "max_dias": 90,
+        "segundos_por_hora_juego": 3600,
+        "_nota": "1h real = 1h juego. Ausencia < umbral ignorada."
     }
 }

@@ -19,12 +19,16 @@ final class RelojOperations
         $this->emociones = $emociones;
     }
 
-    public function avanzar(array &$partida, int $horas): array
+    /**
+     * @param array<string, mixed> $opts catch_up: true omite RNG horario/coincidencias/mensajitos espontáneos
+     */
+    public function avanzar(array &$partida, int $horas, array $opts = []): array
     {
         if ($horas < 0) {
             return GameError::respuesta(GameError::RELOJ_NO_REWIND, ['horas' => $horas]);
         }
 
+        $catchUp = (bool) ($opts['catch_up'] ?? false);
         $antes = $partida['reloj'];
         Reloj::avanzarHoras($partida, $horas);
         $diaAntes = (int) ($antes['dia_pueblo'] ?? 1);
@@ -33,11 +37,13 @@ final class RelojOperations
             $cal = CalibracionConfig::load($this->projectRoot);
             $catalog = new Catalog($this->projectRoot);
             RelacionDesgaste::alCerrarDia($partida, $cal);
-            AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
+            if (!$catchUp) {
+                AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
+            }
             MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
 
             // Mensajitos espontaneos: generar al inicio del nuevo dia
-            if (FeatureConfig::isEnabled($partida, 'mensajitos_espontaneos_enabled')) {
+            if (!$catchUp && FeatureConfig::isEnabled($partida, 'mensajitos_espontaneos_enabled')) {
                 $calMens = CalibracionConfig::load($this->projectRoot);
                 $rngMens = RngService::fromPartida($partida);
                 foreach (PeticionPuebloEngine::residentes($partida) as $mRes) {
@@ -57,10 +63,12 @@ final class RelojOperations
         $calTick = CalibracionConfig::load($this->projectRoot);
         // Vida horaria autónoma (huecos, casuales, declaración/ruptura): independiente del
         // planificador diario batch (acontecimientos_dia.activo_en_play).
-        $runVidaHoraria = !empty($partida['lab_vida_activa'])
+        $runVidaHoraria = !$catchUp && (
+            !empty($partida['lab_vida_activa'])
             || (bool) CalibracionConfig::get($calTick, 'acontecimientos_dia.activo_en_play', false)
             || FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled')
-            || FeatureConfig::isEnabled($partida, 'encuentros_enabled');
+            || FeatureConfig::isEnabled($partida, 'encuentros_enabled')
+        );
         if ($runVidaHoraria) {
             $rngTick = RngService::fromPartida($partida);
             MotorVidaDiaria::tickHora($partida, new Catalog($this->projectRoot), $calTick, $rngTick, $this->logger);
@@ -68,13 +76,16 @@ final class RelojOperations
         }
         // Coincidencias ANTES de sincronizar: los encuentros siguen programado/en_curso
         // y aún ocupan lugar. Coincidir ≠ interactuar.
-        $coins = CoincidenciasEngine::detectarEnIntervalo(
-            $partida,
-            $this->projectRoot,
-            $antes,
-            $horas,
-            $this->logger
-        );
+        $coins = [];
+        if (!$catchUp) {
+            $coins = CoincidenciasEngine::detectarEnIntervalo(
+                $partida,
+                $this->projectRoot,
+                $antes,
+                $horas,
+                $this->logger
+            );
+        }
         $sync = EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, new Catalog($this->projectRoot));
         $expirados = $this->emociones !== null ? $this->emociones->expirarVencidos($partida) : 0;
         $peticionesCaducadas = PeticionEngine::caducarVencidas($partida, $this->logger);

@@ -82,7 +82,13 @@ final class PartidaLifecycle
 
         SchemaFields::ensure($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
-        Reloj::calcularCatchUpPendiente($partida);
+        $cal = CalibracionConfig::load($this->root);
+        if (CatchUpEngine::activo($partida)) {
+            CatchUpEngine::ejecutarAlCargar($partida, $this->root, $cal, $this->logger, $this->catalog);
+        } else {
+            Reloj::calcularCatchUpPendiente($partida);
+        }
+        CatchUpEngine::marcarSesion($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->generarMisionesSiToca($partida);
         $this->tickPeticiones($partida);
@@ -145,6 +151,7 @@ final class PartidaLifecycle
     {
         $reloj = is_array($partida['reloj'] ?? null) ? $partida['reloj'] : [];
         unset($reloj['ultima_sesion_iso'], $reloj['catch_up_pendiente']);
+        // ultimo_catch_up_iso sí es estado de gameplay (idempotencia offline)
         $slice = [
             'encuentros' => $partida['encuentros'] ?? [],
             'buzon' => $partida['buzon'] ?? [],

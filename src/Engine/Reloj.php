@@ -332,7 +332,7 @@ final class Reloj
         self::avanzarHoras($partida, $dias * 24);
     }
 
-    /** Estructura catch-up sin generar eventos narrativos. */
+    /** Estructura catch-up sin ejecutar (legacy / flag apagado). */
     public static function calcularCatchUpPendiente(array &$partida): array
     {
         $ultima = $partida['reloj']['ultima_sesion_iso'] ?? null;
@@ -347,23 +347,6 @@ final class Reloj
             return ['segundos' => 0, 'aplicado' => false];
         }
 
-        $plan = CatchUpPlanner::planificar($segundos);
-        $partida['reloj']['catch_up_pendiente']['segundos_pendientes'] = $segundos;
-        $partida['reloj']['catch_up_pendiente']['eventos_pendientes'] = [];
-        $partida['reloj']['catch_up_pendiente']['plan'] = $plan;
-        $partida['reloj']['ultima_sesion_iso'] = $now->format(DATE_ATOM);
-
-        if ($segundos > 0) {
-            DomainEventDispatcher::emit($partida, DomainEvents::CATCH_UP_PLANIFICADO, [
-                'plan' => $plan,
-            ], null, 'Reloj::calcularCatchUpPendiente');
-        }
-
-        return [
-            'segundos' => $segundos,
-            'aplicado' => true,
-            'plan' => $plan,
-            'nota' => 'tiempo registrado; eventos offline no ejecutados (BLOQUEADO_DECISION cantidades).',
-        ];
+        return CatchUpEngine::marcarPlanSinEjecutar($partida, $segundos, $now);
     }
 }

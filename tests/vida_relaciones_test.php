@@ -216,9 +216,9 @@ ok(((int) ($advPet['peticiones_caducadas'] ?? 0)) === 1, 'reloj caduca petición
 ok(count(PeticionEngine::listar($partida, 'caducada')) === 1, 'queda una caducada');
 ok(count(PeticionEngine::listar($partida, 'abierta')) === 0, 'no quedan abiertas tras caducar');
 
-// --- Catch-up planifica, no ejecuta ---
+// --- Catch-up planifica si flag apagado ---
 $plan = CatchUpPlanner::planificar(3 * 86400);
-ok($plan['ejecutado'] === false, 'catch-up no ejecuta');
+ok($plan['ejecutado'] === false, 'catch-up plan no ejecuta');
 ok($plan['eventos_generados'] === [], 'sin eventos inventados');
 ok($plan['cantidades'] === null, 'sin cantidades');
 ok($plan['dias_calendario_aprox'] === 3, 'días = aritmética de reloj, no diseño');
@@ -229,7 +229,7 @@ ok(in_array('acontecimiento_importante', $plan['prioridades'], true), 'prioridad
 $hace = (new DateTimeImmutable('now', new DateTimeZone('UTC')))->sub(new DateInterval('P3D'));
 $partida['reloj']['ultima_sesion_iso'] = $hace->format(DATE_ATOM);
 $cu = Reloj::calcularCatchUpPendiente($partida);
-ok(($cu['plan']['ejecutado'] ?? true) === false, 'catch-up al cargar no simula pueblo');
+ok(($cu['ejecutado'] ?? true) === false, 'flag off: catch-up al cargar no simula pueblo');
 ok(($partida['reloj']['catch_up_pendiente']['eventos_pendientes'] ?? ['x']) === [], 'eventos_pendientes vacío');
 ok(isset($partida['reloj']['catch_up_pendiente']['plan']['prioridades']), 'plan enganchado al reloj');
 
