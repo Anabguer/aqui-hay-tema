@@ -929,6 +929,6 @@ if (is_file($ahtBusterFile)) {
   <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-<script>if(new URLSearchParams(location.search).get('design')==='1'){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/inicio-design-mode.js';document.body.appendChild(s)}</script>
+<script>if(new URLSearchParams(location.search).get('design')==='1'){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/design-mode-global.js';document.body.appendChild(s)}</script>
 </body>
 </html>
