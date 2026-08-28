@@ -4135,9 +4135,3 @@
   background: none !important;
   border: 0 !important;
 }
-
-/* Prueba tipográfica móvil: texto manuscrito de cada misión. */
-.play-v3 .play-root.phone .capa-misiones.mis-modal-papel .mis-item-txt {
-  font-size: 30px !important;
-  line-height: 1.3;
-}

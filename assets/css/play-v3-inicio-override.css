@@ -13,3 +13,9 @@
   pointer-events: none !important;
   opacity: 0 !important;
 }
+
+/* MISION-STRIP-22PX-TEST: solo feed móvil. */
+.play-v3 .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
+  font-size: 22px !important;
+  line-height: 1.18;
+}
