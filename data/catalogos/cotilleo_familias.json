@@ -44,5 +44,10 @@
     "marcha_efectiva_causa": [
         "{nombre} ha dejado el pueblo. {causa}",
         "Ha marchado {nombre}. {causa} La vivienda queda libre."
+    ],
+    "regalo_celeste": [
+        "{quien} no ha soltado en toda la tarde lo del detalle que le ha llegado. Ilusión, la justo.",
+        "A {quien} se le ha visto por el pueblo con cara de haber recibido algo bonito.",
+        "{quien} anda sospechosamente de buen humor. Alguien acertó con un regalo."
     ]
 }

@@ -290,7 +290,9 @@
             "pareja": 36,
             "crisis": 48,
             "trabajo": 72,
-            "iniciativa_social": 18
+            "iniciativa_social": 18,
+            "regalo": 20,
+            "regalo_gracias": 72
         }
     },
     "acontecimientos_dia": {
@@ -583,5 +585,71 @@
         "carga_aversion_beneficiario": -0.28,
         "carga_empuje_momento": 0.1,
         "carga_accion_hobby": 0.04
+    },
+    "regalos": {
+        "degradar_repetido": true,
+        "duracion_horas": {
+            "le_encanta": 6,
+            "le_gusta": 3,
+            "no_le_gusta": 4
+        },
+        "deltas_aprecio": {
+            "le_encanta": 2,
+            "le_gusta": 1,
+            "indiferente": 0,
+            "no_le_gusta": -1
+        },
+        "recompensa_peticion": {
+            "activa": true,
+            "prob_por_peso": {
+                "facil": 0,
+                "relevante": 0.35,
+                "dificil": 1
+            },
+            "max_por_dia": 1,
+            "objetos": [
+                "tarro_mermelada",
+                "caja_dulces",
+                "taza",
+                "bolsa_cafe",
+                "cuaderno",
+                "marcapaginas",
+                "vela_casera",
+                "kit_costura",
+                "maceta_pintada",
+                "postal_pueblo",
+                "puzzle",
+                "peluche"
+            ],
+            "_nota": "F2: fuente organica via PeticionFeedback::alCumplir."
+        },
+        "bandas_aprecio": [
+            {
+                "banda": "confianza",
+                "min": 60,
+                "texto": "Confía en ti."
+            },
+            {
+                "banda": "cariño",
+                "min": 20,
+                "texto": "Le caes bien."
+            },
+            {
+                "banda": "neutral",
+                "min": -19,
+                "texto": "Trato correcto, sin más."
+            },
+            {
+                "banda": "distancia",
+                "min": -59,
+                "texto": "Está distante contigo."
+            },
+            {
+                "banda": "molestia",
+                "min": -100,
+                "texto": "Algo le molestas."
+            }
+        ],
+        "_nota": "Regalos F1\/F2: cooldown por vecino via cooldowns.por_familia.regalo."
     }
 }

@@ -105,6 +105,7 @@ final class FichaPlayVista
             'gusta_en_gente' => $gustaGente,
             'no_gusta_en_gente' => $noGustaGente,
             'pistas' => $pistas,
+            'aprecio_celeste' => is_array($ficha['aprecio_celeste'] ?? null) ? $ficha['aprecio_celeste'] : null,
             'estado_animo' => $ficha['estado_emocional']['id'] ?? 'neutro',
             'pista_estado' => EmocionalNarrativa::pistaFicha(
                 is_array($ficha['estado_emocional'] ?? null) ? $ficha['estado_emocional'] : []

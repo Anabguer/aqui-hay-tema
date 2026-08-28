@@ -1,14 +1,14 @@
 #Requires -Version 5.1
-# Deploy selectivo: backend Inventario/Regalos (inventario.listar + regalo.entregar)
+# Deploy selectivo: sistema Regalos/Inventario F1+F2+F3 (backend completo)
 $ErrorActionPreference = 'Stop'
 . (Join-Path $PSScriptRoot 'deploy_lib_aht.ps1')
 $Ctx = Initialize-AhtDeployContext -ScriptDir $PSScriptRoot
 $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
-$logFile = Join-Path $Ctx.LogsDir "deploy-inventario-regalos-$ts.log"
-$winscpLog = Join-Path $Ctx.LogsDir "deploy-inventario-regalos-winscp-$ts.log"
-$backupDir = Join-Path $Ctx.LogsDir "rollback-inventario-regalos-$ts"
+$logFile = Join-Path $Ctx.LogsDir "deploy-regalos-funcional-$ts.log"
+$winscpLog = Join-Path $Ctx.LogsDir "deploy-regalos-funcional-winscp-$ts.log"
+$backupDir = Join-Path $Ctx.LogsDir "rollback-regalos-funcional-$ts"
 
-Write-DeployLog -LogFile $logFile -Message '=== DEPLOY SELECTIVO INVENTARIO/REGALOS BACKEND ===' -ToHost
+Write-DeployLog -LogFile $logFile -Message '=== DEPLOY SELECTIVO REGALOS/INVENTARIO FUNCIONAL ===' -ToHost
 
 $deployRels = @(
     'api/index.php',
@@ -17,9 +17,18 @@ $deployRels = @(
     'src/Engine/RegaloEngine.php',
     'src/Engine/RegaloHints.php',
     'src/Engine/RegaloRecompensaEngine.php',
+    'src/Engine/AprecioCelesteVista.php',
+    'src/Engine/PeticionFeedback.php',
+    'src/Engine/SchemaFields.php',
+    'src/Engine/PartidaService.php',
+    'src/Engine/FichaPlayVista.php',
+    'src/Engine/RelacionNarrativaBridge.php',
     'src/Engine/CatalogStore.php',
     'src/Engine/GameError.php',
-    'data/catalogos/regalos.json'
+    'data/catalogos/regalos.json',
+    'data/catalogos/cotilleo_familias.json',
+    'data/configs/calibracion_vida.json',
+    'data/configs/persistencia.json'
 ) + @(
     Get-ChildItem -LiteralPath (Join-Path $Ctx.RepoRoot 'assets/play-v3/regalos') -Filter '*.png' |
         ForEach-Object { 'assets/play-v3/regalos/' + $_.Name }
@@ -33,7 +42,6 @@ foreach ($rel in $deployRels) {
     }
 }
 
-# Backup produccion (solo archivos que existen en remoto)
 New-Item -ItemType Directory -Path $backupDir -Force | Out-Null
 $cfg = Get-Content -LiteralPath $Ctx.CredsPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $winscp = Find-WinScpCom -JsonExplicitPath ([string]$cfg.HOSTALIA_WINSCP_PATH)
@@ -51,7 +59,7 @@ foreach ($rel in $deployRels) {
     $getLines.Add("get `"$remote`" `"$localBak`"")
 }
 $getLines.Add('exit')
-$getScript = Join-Path $env:TEMP ("aht-backup-inventario-regalos-$ts.txt")
+$getScript = Join-Path $env:TEMP ("aht-backup-regalos-funcional-$ts.txt")
 [IO.File]::WriteAllText($getScript, ($getLines -join "`r`n") + "`r`n", (New-Object System.Text.UTF8Encoding $false))
 Write-DeployLog -LogFile $logFile -Message "Backup remoto -> $backupDir" -ToHost
 & $winscp /ini=nul "/log=$winscpLog.backup" /script=$getScript
@@ -66,34 +74,28 @@ if (-not $upload.Ok) {
 
 Test-AhtPublicUrl -Ctx $Ctx -LogFile $logFile
 
-# Validacion API inventario.listar en produccion (partida lab, no Neni)
 $apiBase = "$($Ctx.PublicUrl)/api/index.php"
 $testPartida = 'part_d88e5094c565e1db'
-$testUrl = "$apiBase?action=inventario.listar&partida_id=$testPartida"
 try {
-    $resp = Invoke-WebRequest -Uri $testUrl -UseBasicParsing -TimeoutSec 60
+    $resp = Invoke-WebRequest -Uri "$apiBase?action=inventario.listar&partida_id=$testPartida" -UseBasicParsing -TimeoutSec 60
     Write-DeployLog -LogFile $logFile -Message "PROD inventario.listar HTTP $($resp.StatusCode)" -ToHost
     $json = $resp.Content | ConvertFrom-Json
-    if ($json.ok -eq $true -and $null -ne $json.inventario) {
-        Write-DeployLog -LogFile $logFile -Message 'OK: inventario.listar JSON valido en produccion' -ToHost
-    } else {
-        Write-DeployLog -LogFile $logFile -Message "FAIL: respuesta inesperada: $($resp.Content.Substring(0, [Math]::Min(200, $resp.Content.Length)))" -ToHost
+    if ($json.ok -ne $true -or $null -eq $json.inventario) {
+        Write-DeployLog -LogFile $logFile -Message "FAIL inventario.listar: $($resp.Content.Substring(0, [Math]::Min(200, $resp.Content.Length)))" -ToHost
         exit 1
     }
 } catch {
-    Write-DeployLog -LogFile $logFile -Message "FAIL validacion produccion: $_" -ToHost
+    Write-DeployLog -LogFile $logFile -Message "FAIL inventario.listar prod: $_" -ToHost
     exit 1
 }
 
-# partida.refresh sin regresion
-$refreshUrl = "$apiBase?action=partida.refresh&partida_id=$testPartida"
 try {
-    $r2 = Invoke-WebRequest -Uri $refreshUrl -UseBasicParsing -TimeoutSec 90
+    $r2 = Invoke-WebRequest -Uri "$apiBase?action=partida.refresh&partida_id=$testPartida" -UseBasicParsing -TimeoutSec 90
     Write-DeployLog -LogFile $logFile -Message "PROD partida.refresh HTTP $($r2.StatusCode)" -ToHost
 } catch {
-    Write-DeployLog -LogFile $logFile -Message "AVISO: partida.refresh check: $_" -ToHost
+    Write-DeployLog -LogFile $logFile -Message "AVISO partida.refresh: $_" -ToHost
 }
 
 Write-DeployLog -LogFile $logFile -Message "Backup: $backupDir" -ToHost
-Write-DeployLog -LogFile $logFile -Message "OK: $($upload.Count) archivo(s) — inventario/regalos backend." -ToHost
+Write-DeployLog -LogFile $logFile -Message "OK: $($upload.Count) archivo(s) regalos funcional." -ToHost
 exit 0

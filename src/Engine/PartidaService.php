@@ -429,6 +429,7 @@ final class PartidaService
             'placeholder' => $runtime['_placeholder'] ?? false,
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
             'presentacion_visual' => $presentacion,
+            'aprecio_celeste' => AprecioCelesteVista::vista((int) ($rt['aprecio_celeste'] ?? 0), $calFicha),
         ];
         $out['perfil_partida'] = PerfilPartida::de($partida, $residenteId)
             ?? PerfilPartida::deOLegacy($partida, $residenteId, $this->catalog);

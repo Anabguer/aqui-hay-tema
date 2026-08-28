@@ -24,6 +24,7 @@ final class PeticionFeedback
     public static function alCumplir(array &$partida, array $peticion, ?GameLogger $logger = null): void
     {
         self::emitir($partida, $peticion, 'resultado_cumplida', [], false, $logger);
+        RegaloRecompensaEngine::porPeticionCumplida($partida, $peticion, $logger);
     }
 
     /**

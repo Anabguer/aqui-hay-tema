@@ -16,6 +16,7 @@ final class SchemaFields
         CandidatoLlegadaEngine::ensure($partida);
         $partida['audit_trail'] ??= [];
         $partida['descubrimientos'] ??= [];
+        InventarioEngine::ensure($partida);
         $partida['historial_relaciones'] ??= [];
         $partida['domain_events'] ??= [];
         $partida['audit_trail_archivo'] ??= [];

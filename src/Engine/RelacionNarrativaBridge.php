@@ -149,10 +149,21 @@ final class RelacionNarrativaBridge
                     'destacado' => false,
                 ];
             case RelacionBitacora::REGALO:
+                // Regalos F3: un solo cotilleo por vecino (primer regalo; dedupe por hito_clave).
+                if (!FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
+                    return null;
+                }
+                if (!empty($partida['_lab_peticiones_b4']) || !empty($partida['_lab_misiones_b3'])) {
+                    return null;
+                }
+                $textoRegalo = CopyCotilleoFamilias::linea('regalo_celeste', ['quien' => $quien], $seed);
+                if ($textoRegalo === '') {
+                    return null;
+                }
                 return [
-                    'texto' => CopyCotilleoFamilias::linea('romance', ['quien' => $quien], $seed),
-                    'categoria' => CotilleoCategoria::ROMANCE,
-                    'destacado' => true,
+                    'texto' => $textoRegalo,
+                    'categoria' => CotilleoCategoria::RELACION,
+                    'destacado' => false,
                 ];
             case RelacionBitacora::RECHAZO_IMPORTANTE:
                 return [
