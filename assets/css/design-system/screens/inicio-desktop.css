@@ -896,7 +896,7 @@
   }
 }
 
-/* B3 — Próximo evento del pueblo: debajo del mapa en desktop */
+/* B3 ï¿½ Prï¿½ximo evento del pueblo: debajo del mapa en desktop */
 @media (min-width: 769px) {
   .inicio-stage > .inicio-proximo-evento {
     grid-column: 2 !important;
@@ -908,5 +908,30 @@
 
   .inicio-stage {
     grid-template-rows: auto auto auto !important;
+  }
+}
+/* INICIO-MAP-TALLER-v1 â€” mapa desktop mÃ¡s alto (host compartido) */
+@media (min-width: 769px) {
+  .inicio-stage > .inicio-map-host {
+    min-height: 460px !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .play-stage {
+    min-height: 420px !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc {
+    min-height: 400px !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
+    min-height: 400px !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc .board-fit {
+    width: 100% !important;
+    max-height: min(88vh, 860px) !important;
+    min-height: 440px !important;
   }
 }
