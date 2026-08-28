@@ -210,7 +210,11 @@
   }
 
   .inicio-mobile .top-reloj .pasar-rato {
-    min-height: 40px;
+    position: relative;
+    left: 8px;
+    top: 0;
+    height: 10px;
+    min-height: 10px;
     padding: 5px 11px;
     background: var(--ds-lavender-soft);
     border: 1.5px solid var(--ds-lavender-deep);
@@ -1609,7 +1613,11 @@
   }
 
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .pasar-rato {
-    min-height: 40px !important;
+    position: relative;
+    left: 8px;
+    top: 0;
+    height: 10px;
+    min-height: 10px !important;
     padding: 5px 11px !important;
     background: var(--ds-lavender-soft, #ebe3f8) !important;
     border: 1.5px solid var(--ds-lavender-deep, #7c6bae) !important;
