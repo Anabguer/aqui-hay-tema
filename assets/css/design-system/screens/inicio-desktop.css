@@ -910,30 +910,31 @@
     grid-template-rows: auto auto auto !important;
   }
 }
-/* INICIO-MAP-TALLER-v3 — mapa alto sin recorte (proporción + columna central) */
+/* INICIO-MAP-TALLER-v4 — mapa alto sin recorte (gana a desktop-shell) */
 @media (min-width: 769px) {
   .inicio-stage {
-    grid-template-columns: minmax(240px, 300px) minmax(380px, 1.55fr) minmax(230px, 290px) !important;
+    grid-template-columns: minmax(230px, 290px) minmax(400px, 1.8fr) minmax(220px, 280px) !important;
   }
 
-  .inicio-stage > .inicio-map-host {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap {
+    display: block !important;
     min-height: 0 !important;
     height: auto !important;
     overflow: visible !important;
   }
 
-  .play-v3 .inicio-stage > .inicio-map-host .play-stage,
-  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-stage,
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc {
     position: relative !important;
     inset: auto !important;
-    flex: 0 0 auto !important;
+    flex: none !important;
     width: 100% !important;
     height: auto !important;
     min-height: 0 !important;
     overflow: visible !important;
   }
 
-  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-scroll {
     position: relative !important;
     inset: auto !important;
     width: 100% !important;
@@ -943,28 +944,27 @@
     display: block !important;
   }
 
-  .play-v3 .inicio-stage > .inicio-map-host .board-fit,
-  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc .board-fit {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
     position: relative !important;
     top: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
-    min-height: 0 !important;
+    min-height: min(58vh, 540px) !important;
     max-height: none !important;
     aspect-ratio: 618 / 404 !important;
     margin: 0 auto !important;
   }
 
-  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico,
-  .play-v3 .inicio-stage > .inicio-map-host .mapa-zonas-layer {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .mapa-canonico,
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .mapa-zonas-layer {
     position: absolute !important;
     inset: 0 !important;
     width: 100% !important;
     height: 100% !important;
   }
 
-  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico-bg {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .mapa-canonico-bg {
     width: 100% !important;
     height: 100% !important;
     object-fit: fill !important;
@@ -974,6 +974,6 @@
 
 @media (min-width: 1100px) {
   .inicio-stage {
-    grid-template-columns: minmax(250px, 310px) minmax(460px, 1.75fr) minmax(240px, 300px) !important;
+    grid-template-columns: minmax(240px, 300px) minmax(480px, 2fr) minmax(230px, 290px) !important;
   }
 }
