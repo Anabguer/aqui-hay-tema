@@ -1384,7 +1384,14 @@
   }
 
 
-  const CELESTINE_CAP_VECINOS = 46;
+  const CELESTINE_OBJETIVO_POBLACION_FALLBACK = 16;
+
+  function capObjetivoPoblacionVisible(partida) {
+    const raw = partida && partida.celeste && partida.celeste.objetivo_poblacion_activa;
+    const cap = Number(raw);
+    return cap > 0 ? cap : CELESTINE_OBJETIVO_POBLACION_FALLBACK;
+  }
+
   const CELESTINE_EMO_RESUMEN = [
     { id: 'alegre', icon: '\ud83d\ude0a', label: 'Felices' },
     { id: 'triste', icon: '\ud83d\ude22', label: 'Tristes' },
@@ -1408,8 +1415,7 @@
     parejasList.forEach(function (r) {
       if (esCrisisPareja(r)) crisis++;
     });
-    const capRaw = partida && partida.celeste && partida.celeste.vivienda_capacidad_max;
-    const cap = Number(capRaw) > 0 ? Number(capRaw) : CELESTINE_CAP_VECINOS;
+    const cap = capObjetivoPoblacionVisible(partida);
     return { vecinos: ids.length, cap: cap, parejas: parejasList.length, crisis: crisis, emo: emo };
   }
 

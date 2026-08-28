@@ -65,6 +65,7 @@ final class CapacidadViviendas
         }
         $partida['viviendas']['cap'] = self::CAP_PRODUCTO;
         $partida['celeste']['vivienda_capacidad_max'] = self::CAP_PRODUCTO;
+        $partida['celeste']['objetivo_poblacion_activa'] = self::capObjetivoPoblacionActiva();
         $partida['celeste']['bloques_abiertos'] = ['a', 'b'];
         self::syncLegacyMirror($partida);
         self::normalizarViviendaIds($partida);

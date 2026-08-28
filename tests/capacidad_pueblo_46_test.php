@@ -99,7 +99,8 @@ ok(
 
 // Tutorial sigue terminando en 8 (smoke mínimo)
 $js = file_get_contents($root . '/assets/js/play-v3.js');
-ok(strpos($js, 'CELESTINE_CAP_VECINOS = 46') !== false, 'JS CELESTINE_CAP_VECINOS 46');
+ok(strpos($js, 'capObjetivoPoblacionVisible') !== false, 'JS capObjetivoPoblacionVisible');
+ok(strpos($js, 'objetivo_poblacion_activa') !== false, 'JS lee objetivo_poblacion_activa');
 ok(strpos($js, 'En el pueblo') !== false, 'JS Celestine En el pueblo');
 ok(strpos($js, 'metricasSociales(cacheInsp') !== false && strpos($js, ' / ') !== false, 'JS Vecinos N / cap');
 

@@ -500,6 +500,7 @@ final class PartidaService
             'residentes_count' => count($partida['residentes']),
             'pueblo_residentes_activos' => count($activos),
             'pueblo_capacidad_max' => CapacidadViviendas::CAP_PRODUCTO,
+            'pueblo_objetivo_poblacion_activa' => CapacidadViviendas::capObjetivoPoblacionActiva(),
             'encuentros_activos' => count($encuentrosActivos),
             'encuentros_activos_label' => self::labelEncuentrosActivos(count($encuentrosActivos)),
             'encuentros_hoy' => ResumenDia::encuentrosHoy($partida),
