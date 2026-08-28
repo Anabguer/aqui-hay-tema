@@ -223,6 +223,31 @@
   const ORG_BTN_BUSY_EVENTO = 'Apuntando\u2026';
   const playtestLogClient = { entries: [] };
   const ahtDebugSessionLog = [];
+  const ahtJsErrorLog = [];
+  (function bindAhtJsErrorCapture() {
+    function pushJsErr(entry) {
+      ahtJsErrorLog.push(entry);
+      if (ahtJsErrorLog.length > 100) ahtJsErrorLog.splice(0, ahtJsErrorLog.length - 100);
+    }
+    window.addEventListener('error', function (ev) {
+      pushJsErr({
+        ts: new Date().toISOString(),
+        tipo: 'JS_ERROR',
+        mensaje: ev && ev.message ? String(ev.message) : 'error',
+        archivo: ev && ev.filename ? String(ev.filename) : null,
+        linea: ev && ev.lineno != null ? ev.lineno : null,
+        columna: ev && ev.colno != null ? ev.colno : null
+      });
+    });
+    window.addEventListener('unhandledrejection', function (ev) {
+      var reason = ev && ev.reason;
+      pushJsErr({
+        ts: new Date().toISOString(),
+        tipo: 'JS_UNHANDLED_REJECTION',
+        mensaje: reason && reason.message ? String(reason.message) : String(reason)
+      });
+    });
+  })();
   playtestLogClient.push = function (e) {
     this.entries.push(e);
     if (this.entries.length > 300) this.entries = this.entries.slice(-300);
@@ -328,6 +353,173 @@
     } catch (e) {
       toast('No se pudo copiar al portapapeles.');
     }
+  }
+
+  const AHT_DIAG_SENSITIVE_KEYS = /^(password|passwd|pass|token|cookie|cookies|authorization|auth|secret|credentials|api[_-]?key)$/i;
+
+  function ahtFrontendVersion() {
+    var v = '';
+    var script = document.querySelector('script[src*="play-v3.js"]');
+    if (script && script.src) {
+      var m = script.src.match(/[?&]v=([^&]+)/);
+      if (m) v = decodeURIComponent(m[1]);
+    }
+    if (!v) {
+      var link = document.querySelector('link[href*="play-v3"]');
+      if (link && link.href) {
+        var m2 = link.href.match(/[?&]v=([^&]+)/);
+        if (m2) v = decodeURIComponent(m2[1]);
+      }
+    }
+    return v || null;
+  }
+
+  function ahtSanitizarDiagnostico(value, depth) {
+    depth = depth || 0;
+    if (depth > 12) return '[truncado]';
+    if (value == null || typeof value === 'number' || typeof value === 'boolean') return value;
+    if (typeof value === 'string') {
+      if (/^Bearer\s+/i.test(value)) return '[redactado:authorization]';
+      return value;
+    }
+    if (Array.isArray(value)) {
+      return value.map(function (item) { return ahtSanitizarDiagnostico(item, depth + 1); });
+    }
+    if (typeof value === 'object') {
+      var out = {};
+      Object.keys(value).forEach(function (key) {
+        if (AHT_DIAG_SENSITIVE_KEYS.test(key)) {
+          out[key] = '[redactado]';
+          return;
+        }
+        out[key] = ahtSanitizarDiagnostico(value[key], depth + 1);
+      });
+      return out;
+    }
+    return String(value);
+  }
+
+  function ahtResumenClienteDiagnostico() {
+    var estado = cacheEstado || {};
+    var insp = cacheInsp || {};
+    var encuentros = Array.isArray(insp.encuentros) ? insp.encuentros : [];
+    var activos = encuentros.filter(function (e) {
+      var st = e && e.estado ? String(e.estado) : '';
+      return st === 'programado' || st === 'en_curso';
+    });
+    return {
+      partida_id: partidaId || estado.partida_id || null,
+      config_id: estado.config_id || (insp.meta && insp.meta.config_id) || null,
+      reloj: estado.reloj || (insp.reloj || null),
+      vecinos_activos: estado.pueblo_residentes_activos != null ? estado.pueblo_residentes_activos : null,
+      encuentros_activos: activos.length,
+      debug_ui_activo: isDebugOn(),
+      capa_actual: ($('.play-root') && $('.play-root').getAttribute('data-capa')) || null
+    };
+  }
+
+  function ahtNombreArchivoDiagnostico() {
+    var d = new Date();
+    function pad(n) { return String(n).padStart(2, '0'); }
+    return 'AHT-debug-' + d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate())
+      + '-' + pad(d.getHours()) + pad(d.getMinutes()) + pad(d.getSeconds()) + '.json';
+  }
+
+  function ahtTextoDiagnosticoLegible(obj) {
+    try { return JSON.stringify(obj, null, 2); } catch (e) { return String(obj); }
+  }
+
+  async function recolectarDiagnosticoAht() {
+    var historial = ahtDebugSessionLog.slice();
+    var motor = null;
+    var motorError = null;
+    try {
+      var r = await api('partida.diagnostico_export', { historial: historial });
+      if (r.ok && r.diagnostico_export) motor = r.diagnostico_export.json || null;
+      else motorError = r.mensaje_ui || r.error || 'diagnostico_export_fallido';
+    } catch (e) {
+      motorError = (e && e.message) ? String(e.message) : 'diagnostico_export_excepcion';
+    }
+    var diag = {
+      meta: {
+        generado: new Date().toISOString(),
+        url: location.href.split('#')[0],
+        user_agent: navigator.userAgent || null,
+        frontend_version: ahtFrontendVersion(),
+        viewport: { width: window.innerWidth || null, height: window.innerHeight || null }
+      },
+      resumen: ahtResumenClienteDiagnostico(),
+      cliente: {
+        errores_api: playtestLogClient.entries.slice(),
+        errores_js: ahtJsErrorLog.slice(),
+        historial_lab_sesion: historial,
+        acciones_recientes: playtestLogClient.entries.slice(-40)
+      },
+      motor: motor,
+      motor_error: motorError
+    };
+    if (!motor && cacheInsp) {
+      diag.cliente.cache_partida = {
+        meta: cacheInsp.meta || null,
+        reloj: cacheInsp.reloj || null,
+        residentes_activos: cacheInsp.residentes ? Object.keys(cacheInsp.residentes).length : null,
+        encuentros: cacheInsp.encuentros || null
+      };
+    }
+    return ahtSanitizarDiagnostico(diag);
+  }
+
+  function ahtMostrarFeedbackDiagnostico(msg) {
+    var el = $('[data-ajustes-debug-feedback]');
+    if (!el) { toast(msg); return; }
+    el.textContent = msg;
+    el.hidden = false;
+    clearTimeout(ahtMostrarFeedbackDiagnostico._t);
+    ahtMostrarFeedbackDiagnostico._t = setTimeout(function () { el.hidden = true; }, 5000);
+  }
+
+  async function copiarDiagnosticoAht() {
+    var diag;
+    try { diag = await recolectarDiagnosticoAht(); }
+    catch (e) { ahtMostrarFeedbackDiagnostico('No se pudo generar el diagn\u00f3stico.'); return; }
+    var txt = ahtTextoDiagnosticoLegible(diag);
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(txt);
+        ahtMostrarFeedbackDiagnostico('Debug copiado al portapapeles.');
+        return;
+      }
+    } catch (e) {}
+    ahtMostrarFeedbackDiagnostico('No se pudo copiar. Usa Descargar debug.');
+  }
+
+  async function descargarDiagnosticoAht() {
+    var diag;
+    try { diag = await recolectarDiagnosticoAht(); }
+    catch (e) { ahtMostrarFeedbackDiagnostico('No se pudo generar el diagn\u00f3stico.'); return; }
+    var txt = ahtTextoDiagnosticoLegible(diag);
+    var nombre = ahtNombreArchivoDiagnostico();
+    var blob = new Blob([txt], { type: 'application/json;charset=utf-8' });
+    try {
+      if (navigator.share && navigator.canShare) {
+        var file = new File([blob], nombre, { type: 'application/json' });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'AHT debug', text: 'Diagn\u00f3stico Aqu\u00ed Hay Tema' });
+          ahtMostrarFeedbackDiagnostico('Diagn\u00f3stico compartido.');
+          return;
+        }
+      }
+    } catch (e) {}
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = nombre;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    ahtMostrarFeedbackDiagnostico('Archivo descargado: ' + nombre);
   }
 
   async function api(action, body, method) {
@@ -7250,6 +7442,18 @@ function hobbyIconKey(id, texto) {
       if (!tieneTutorialV3()) return;
       setCapa('');
       abrirTutIntro(true);
+      return;
+    }
+    const copyDiagAjustes = ev.target.closest('[data-ajustes-debug-copy]');
+    if (copyDiagAjustes && uiRootFrom(copyDiagAjustes)) {
+      ev.preventDefault();
+      copiarDiagnosticoAht();
+      return;
+    }
+    const dlDiagAjustes = ev.target.closest('[data-ajustes-debug-download]');
+    if (dlDiagAjustes && uiRootFrom(dlDiagAjustes)) {
+      ev.preventDefault();
+      descargarDiagnosticoAht();
       return;
     }
     const reiniciarAjustes = ev.target.closest('[data-ajustes-reiniciar]');

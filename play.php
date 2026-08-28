@@ -398,9 +398,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
       <div class="control-audio" aria-label="Controles de audio">
-        <button type="button" class="btn-guia control-guia" data-tut-reopen hidden aria-label="&iquest;C&oacute;mo va esto?" title="&iquest;C&oacute;mo va esto?">
-          <span class="control-guia-ico" aria-hidden="true">?</span>
-        </button>
         <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar m&uacute;sica" title="Desactivar m&uacute;sica">
           <span class="control-musica-ico" aria-hidden="true">&#9834;</span>
         </button>
@@ -417,9 +414,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
-              <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
+              <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/><span class="obj-buzon-badge" data-buzon-badge hidden>0</span></span>
               <span class="obj-buzon-txt game-left-tile-label">Mensajitos</span>
-              <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
               <span class="obj-buzon-flecha" aria-hidden="true">&#8250;</span>
             </button>
           </div>
@@ -842,6 +838,17 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <span class="ajustes-vol-lbl">Volumen</span>
               <input type="range" class="ajustes-range" min="0" max="100" value="55" data-sfx-vol aria-label="Volumen de efectos"/>
             </label>
+          </section>
+          <section class="ajustes-grupo ajustes-diag" aria-label="Diagn&oacute;stico">
+            <div class="ajustes-grupo-head">
+              <span class="ajustes-grupo-tit">Diagn&oacute;stico</span>
+            </div>
+            <p class="ajustes-diag-hint">Herramienta t&eacute;cnica para copiar o guardar el estado de depuraci&oacute;n.</p>
+            <div class="ajustes-diag-actions">
+              <button type="button" class="ajustes-diag-btn" data-ajustes-debug-copy>Copiar debug</button>
+              <button type="button" class="ajustes-diag-btn" data-ajustes-debug-download>Descargar debug</button>
+            </div>
+            <p class="ajustes-diag-feedback" data-ajustes-debug-feedback hidden aria-live="polite"></p>
           </section>
           <button type="button" class="ajustes-reiniciar" data-ajustes-reiniciar>Reiniciar partida</button>
         </div>
