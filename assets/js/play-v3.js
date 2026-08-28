@@ -2715,7 +2715,7 @@
 
   function textoMisionStrip(m) {
     var t = (m && m.texto) || '';
-    if (t.length > 72) t = t.slice(0, 69) + '…';
+    if (t.length > 72) t = t.slice(0, 69) + '\u2026';
     if (!t) t = (m && m.titulo) || 'Objetivo';
     return t;
   }
@@ -2799,7 +2799,7 @@
 
   function bolitaMision(estado) {
     if (estado === 'cumplida') {
-      return '<span class="mision-bolita cumplida" aria-label="Hecha"><span class="mision-check">✓</span></span>';
+      return '<span class="mision-bolita cumplida" aria-label="Hecha"><span class="mision-check">\u2713</span></span>';
     }
     if (estado === 'bloqueada') {
       return '<span class="mision-bolita bloqueada" aria-hidden="true"></span>';

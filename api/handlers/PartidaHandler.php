@@ -16,6 +16,7 @@ use AquiHayTema\Engine\FeatureConfig;
 use AquiHayTema\Engine\LabAudit;
 use AquiHayTema\Engine\PartidaValidator;
 use AquiHayTema\Engine\RetratoResolver;
+use AquiHayTema\Engine\TutorialPrimerosPasos;
 
 final class PartidaHandler
 {
@@ -131,6 +132,11 @@ final class PartidaHandler
     {
         if (!$ctx->partidaCargadaSincronizada) {
             self::sincronizarEncuentrosSiToca($ctx, $partida);
+        }
+
+        if (($partida['tutorial']['id'] ?? '') === TutorialPrimerosPasos::ID
+            && empty($partida['tutorial']['jugable_completado'])) {
+            TutorialPrimerosPasos::asegurarMisiones($partida, new Catalog($ctx->root));
         }
 
         $labOn = labActiva($body);

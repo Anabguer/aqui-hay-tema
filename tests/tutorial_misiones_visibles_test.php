@@ -28,6 +28,18 @@ ok(($pp[0]['titulo'] ?? '') === 'Romper el hielo', 'orden 1 romper hielo');
 ok(($pp[1]['titulo'] ?? '') === 'Alguien quiere contarte algo', 'orden 2 mensajito');
 ok(($pp[2]['titulo'] ?? '') === 'Pues habrá que hacerle caso', 'orden 3 cine');
 
+foreach ($p['misiones_diarias']['items'] as $i => $m) {
+    if (($m['familia'] ?? '') === 'primeros_pasos' && ($m['id'] ?? '') === TutorialPrimerosPasos::M1) {
+        $p['misiones_diarias']['items'][$i]['texto'] = 'Empecemos con algo f├¡cil.';
+        break;
+    }
+}
+TutorialPrimerosPasos::asegurarMisiones($p);
+$vRepair = MisionDiariaEngine::vistaHoy($p);
+$ppRepair = array_values(array_filter($vRepair['misiones'] ?? [], static fn($m) => ($m['id'] ?? '') === TutorialPrimerosPasos::M1));
+ok(str_contains((string) ($ppRepair[0]['texto'] ?? ''), 'fácil'), 'repara copy tutorial con acentos tras merge canónico');
+ok(!str_contains((string) ($ppRepair[0]['texto'] ?? ''), '├'), 'sin mojibake en mision tutorial');
+
 $pareja = $p['tutorial']['pareja_mision1'] ?? [];
 $a = (string) ($pareja['a'] ?? '');
 $b = (string) ($pareja['b'] ?? '');

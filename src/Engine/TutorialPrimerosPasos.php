@@ -105,10 +105,10 @@ final class TutorialPrimerosPasos
             if (isset($indices[$id])) {
                 $i = $indices[$id];
                 $actual = $estados[$id];
-                $partida['misiones_diarias']['items'][$i] = array_merge(
-                    $fila,
-                    $partida['misiones_diarias']['items'][$i]
-                );
+                // Copy canónico desde $fila; solo conservar progreso guardado (estado).
+                $partida['misiones_diarias']['items'][$i] = array_merge($fila, [
+                    'estado' => $actual !== '' ? $actual : $necesario,
+                ]);
                 if ($actual === MisionDiariaEngine::EST_CADUCADA
                     || ($actual === 'bloqueada' && $necesario === MisionDiariaEngine::EST_PENDIENTE)
                 ) {
