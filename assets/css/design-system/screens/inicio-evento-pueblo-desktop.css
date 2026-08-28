@@ -1,0 +1,245 @@
+/* INICIO-EVENTO-POBLLO-DESKTOP — .inicio-desktop-right namespaced */
+
+/* INICIO-EVENTO-TILT-v51 — ligera rotacion scrapbook en evento pueblo */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta {
+    transform: rotate(-0.65deg) !important;
+  }
+}
+/* INICIO-EVENTO-v76 - ref mockup: crema+naranja, calendario rosa, sin flecha (gana v39/v44/v51) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento {
+    margin-bottom: .55rem !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta {
+    position: relative !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto !important;
+    gap: 0 !important;
+    transform: none !important;
+    padding: 14px 14px 12px !important;
+    margin-top: 0 !important;
+    background: #fff8f2 !important;
+    background-image: linear-gradient(180deg, rgba(255, 250, 244, .98) 0%, rgba(255, 242, 228, .96) 100%) !important;
+    border: 1.5px solid rgba(232, 148, 72, .38) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(232, 136, 168, .14) !important;
+    overflow: visible !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta.inicio-evento-card--marcha {
+    background: #fff8f2 !important;
+    background-image: linear-gradient(180deg, rgba(255, 250, 244, .98) 0%, rgba(246, 252, 238, .96) 100%) !important;
+    border-color: rgba(118, 168, 72, .38) !important;
+    box-shadow: 0 2px 12px rgba(168, 200, 130, .16) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: -7px !important;
+    right: 14px !important;
+    width: 38px !important;
+    height: 14px !important;
+    background: rgba(255, 176, 96, .72) !important;
+    border: 1px solid rgba(210, 130, 60, .18) !important;
+    transform: rotate(5deg) !important;
+    z-index: 2 !important;
+    pointer-events: none !important;
+    box-shadow: 0 1px 2px rgba(60, 44, 28, .08) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta::after,
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-card::after,
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-main::after,
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-body::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tag {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 7px !important;
+    margin: 0 0 10px 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tag::before {
+    content: "" !important;
+    display: block !important;
+    flex: 0 0 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Crect x='3.5' y='5.5' width='17' height='15' rx='2' stroke='%23e8889e' stroke-width='1.65'/%3E%3Cpath d='M3.5 9.5h17' stroke='%23e8889e' stroke-width='1.65'/%3E%3Cpath d='M8 3.8v3.2M16 3.8v3.2' stroke='%23e8889e' stroke-width='1.65' stroke-linecap='round'/%3E%3Ccircle cx='8.2' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='12' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='15.8' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='8.2' cy='16.4' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='12' cy='16.4' r='1.15' fill='%23e8889e'/%3E%3C/svg%3E") center / contain no-repeat !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tag-txt {
+    display: inline !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .1em !important;
+    text-transform: uppercase !important;
+    color: #4a4a4a !important;
+    line-height: 1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-card--marcha .inicio-evento-tag-txt {
+    color: #3d6b38 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-main {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding-right: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico,
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico--evento,
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico--lugar {
+    flex: 0 0 auto !important;
+    width: 56px !important;
+    min-width: 56px !important;
+    max-width: 56px !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 3px 3px 7px !important;
+    margin-top: 1px !important;
+    background: #fff !important;
+    border: 1px solid rgba(89, 72, 57, .16) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 7px rgba(44, 38, 31, .12) !important;
+    transform: rotate(-2deg) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico img {
+    display: block !important;
+    width: 100% !important;
+    height: 44px !important;
+    max-height: 44px !important;
+    object-fit: cover !important;
+    object-position: center bottom !important;
+    border-radius: 3px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    gap: 3px !important;
+    min-width: 0 !important;
+    flex: 1 1 auto !important;
+    padding-top: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tit {
+    margin: 0 !important;
+    font-family: "Caveat", "Caveat Brush", cursive !important;
+    font-size: 1.62rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    line-height: 1.08 !important;
+    letter-spacing: .01em !important;
+    text-transform: none !important;
+    text-decoration: none !important;
+    color: #d4567a !important;
+    -webkit-line-clamp: 2 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-meta {
+    margin: 0 !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .78rem !important;
+    font-weight: 600 !important;
+    line-height: 1.35 !important;
+    color: #5f544a !important;
+    -webkit-line-clamp: 2 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-meta::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-pie {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+    padding-top: 9px !important;
+    border-top: 1px dashed rgba(232, 148, 72, .28) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-pie[hidden] {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces {
+    display: inline-flex !important;
+    align-items: center !important;
+    flex-shrink: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces .cara-token + .cara-token {
+    margin-left: -8px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces img,
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces .cara-ini {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    border: 2px solid rgba(232, 196, 160, .72) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-asisten {
+    margin: 0 !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .78rem !important;
+    font-weight: 600 !important;
+    color: #5f544a !important;
+    line-height: 1.2 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta {
+    margin-top: 4px !important;
+  }
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tit {
+    font-size: 2rem !important;
+  }
+}

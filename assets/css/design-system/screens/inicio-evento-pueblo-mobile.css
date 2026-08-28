@@ -1,0 +1,183 @@
+/* INICIO-EVENTO-POBLLO-MOBILE — presentación móvil namespaced (.inicio-mobile)
+   Independiente de desktop. INICIO-EVENTO-COMPACT-v68 */
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento {
+  padding: 0 13px;
+  margin: 0;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento[hidden] {
+  display: none;
+}
+
+
+/* INICIO-EVENTO-COMPACT-v68 — fila compacta solo móvil (ref mockup) */
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta {
+  display: grid !important;
+  grid-template-columns: 44px minmax(0, 1fr) auto auto !important;
+  grid-template-rows: auto auto !important;
+  column-gap: 8px !important;
+  row-gap: 1px !important;
+  padding: 8px 10px !important;
+  margin-top: 4px !important;
+  align-items: center !important;
+  background: #fffdf8 !important;
+  background-image: none !important;
+  border: 1.5px solid rgba(218, 142, 168, .52) !important;
+  border-radius: 11px !important;
+  box-shadow: 0 2px 8px rgba(196, 43, 74, .07) !important;
+  overflow: hidden !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta::before {
+  display: none !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-main {
+  display: contents !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-ico,
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-ico--evento,
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-ico--lugar {
+  grid-column: 1 !important;
+  grid-row: 1 / 3 !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  height: 44px !important;
+  min-height: 44px !important;
+  padding: 2px !important;
+  margin: 0 !important;
+  transform: none !important;
+  border-radius: 8px !important;
+  border: 1px solid rgba(218, 142, 168, .32) !important;
+  box-shadow: none !important;
+  align-self: center !important;
+  background: #fff !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-ico img {
+  height: 40px !important;
+  max-height: 40px !important;
+  object-fit: cover !important;
+  border-radius: 6px !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tag {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  margin: 0 !important;
+  align-self: end !important;
+  justify-self: start !important;
+  z-index: 2 !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tag-txt {
+  font-size: .52rem !important;
+  padding: 2px 6px !important;
+  background: rgba(232, 148, 72, .2) !important;
+  border: 1px solid rgba(232, 148, 72, .42) !important;
+  color: #8b4a12 !important;
+  letter-spacing: .06em !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-card--marcha .inicio-evento-tag-txt {
+  background: rgba(168, 214, 154, .28) !important;
+  border-color: rgba(72, 128, 62, .34) !important;
+  color: #3d6b38 !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-body {
+  display: contents !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  align-self: end !important;
+  margin: 0 0 0 54px !important;
+  padding: 0 !important;
+  font-size: 1.02rem !important;
+  line-height: 1.15 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-meta {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  margin: 0 !important;
+  font-size: .67rem !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  -webkit-box-orient: unset !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-pie {
+  grid-column: 3 !important;
+  grid-row: 1 / 3 !important;
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-asisten {
+  display: none !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-faces img,
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-faces .cara-ini {
+  width: 22px !important;
+  height: 22px !important;
+  min-width: 22px !important;
+  min-height: 22px !important;
+  border-width: 1.5px !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-faces .cara-token + .cara-token {
+  margin-left: -6px !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta {
+  grid-column: 4 !important;
+  grid-row: 1 / 3 !important;
+  margin: 0 !important;
+  padding: 7px 8px !important;
+  min-height: 0 !important;
+  border-radius: 8px !important;
+  align-self: center !important;
+  white-space: nowrap !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-txt {
+  font-size: .56rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .05em !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-spark {
+  display: none !important;
+}
+
+/* Anula layout scrapbook legacy en móvil para la libreta compacta */
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-card.inicio-evento-libreta {
+  display: grid !important;
+  transform: none !important;
+  border: 1.5px solid rgba(218, 142, 168, .52) !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-card.inicio-evento-libreta::after {
+  display: none !important;
+  content: none !important;
+}
