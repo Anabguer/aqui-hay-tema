@@ -1294,3 +1294,25 @@
     width: min(100%, 760px) !important;
   }
 }
+
+/* INICIO-MAP-SIZE-UP-v1 - mapa ~2cm mas grande; mantiene ratio 618/404 */
+@media (min-width: 769px) {
+  .inicio-stage {
+    grid-template-columns: minmax(220px, 21fr) minmax(0, 58fr) minmax(220px, 21fr) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    max-height: min(76vh, calc(100vh - 200px)) !important;
+    aspect-ratio: 618 / 404 !important;
+    margin: 0 auto !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .inicio-stage {
+    grid-template-columns: minmax(230px, 21fr) minmax(0, 58fr) minmax(230px, 21fr) !important;
+  }
+}
