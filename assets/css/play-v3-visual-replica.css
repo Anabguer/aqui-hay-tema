@@ -202,7 +202,7 @@
   }
 
   .play-v3:has(.game-shell) .obj-misiones-papel-tit::before {
-    content: "📋";
+    content: "\1F4CB";
     font-size: .95rem;
   }
 

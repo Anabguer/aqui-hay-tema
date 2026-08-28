@@ -1316,3 +1316,35 @@
     grid-template-columns: minmax(230px, 21fr) minmax(0, 58fr) minmax(230px, 21fr) !important;
   }
 }
+
+/* INICIO-TYPE-MISIONES-COTILLEO-v1 - texto mas grande + acentos fiables (solo desktop) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt,
+  .play-v3 .inicio-desktop-left .mision-strip-txt,
+  .play-v3 .inicio-desktop-left .obj-misiones-vacio {
+    font-family: "Caveat", "Segoe Print", "Comic Sans MS", cursive !important;
+    font-weight: 600 !important;
+    font-synthesis: none !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt {
+    font-size: 1.38rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .mision-strip-txt {
+    font-size: 1.48rem !important;
+    line-height: 1.28 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-misiones-vacio {
+    font-size: 1.22rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-misiones-papel-tit::before {
+    content: "\1F4CB" !important;
+  }
+}

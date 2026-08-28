@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&display=swap");
+﻿@import url("https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&display=swap");
 
 .play-v3 .play-root { background: #fafaf8 !important; }
 .play-v3 .play-root::after { display: none !important; }
@@ -232,7 +232,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
   .corazon-fill-path { transition: none; }
 }
 
-/* Día — ticket vertical irregular */
+/* DÃ­a â€” ticket vertical irregular */
 .obj-dia {
   display: flex; flex-direction: column; gap: .04rem; padding: .34rem .58rem .4rem;
   background: linear-gradient(168deg, #fff8c4, #ffef9e);
@@ -244,7 +244,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .obj-dia-dow { font-size: .66rem; font-weight: 800; color: #5a5048; }
 .obj-dia-hora { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: .84rem; }
 
-/* Dinero — tira horizontal distinta */
+/* Dinero â€” tira horizontal distinta */
 .obj-dinero {
   display: flex; flex-direction: column; align-items: flex-start; gap: .02rem;
   padding: .18rem .55rem .22rem .45rem; min-width: 78px;
@@ -255,7 +255,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .obj-dinero-lbl { font-size: .5rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #7a7164; }
 .obj-dinero-val { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: .88rem; line-height: 1.1; }
 
-/* === Zona ACTIVIDAD (izquierda) — proximidad, sin caja === */
+/* === Zona ACTIVIDAD (izquierda) â€” proximidad, sin caja === */
 .zona-actividad { display: flex; flex-direction: column; gap: .65rem; align-items: stretch; padding-top: .15rem; }
 .obj-buzon {
   position: relative; display: flex; flex-direction: column; align-items: center;
@@ -343,8 +343,8 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .obj-parejas { padding: 0; background: transparent; }
 .obj-parejas-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: .3rem; gap: .25rem; }
 .obj-parejas-tab { font-size: .58rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; color: #7a7164; }
-.obj-pestaña { border: 0; background: none; font: inherit; font-size: .58rem; font-weight: 800; color: #8a7a66; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 0; }
-.obj-pestaña:disabled { opacity: .35; cursor: not-allowed; text-decoration: none; }
+.obj-pestaÃ±a { border: 0; background: none; font: inherit; font-size: .58rem; font-weight: 800; color: #8a7a66; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; padding: 0; }
+.obj-pestaÃ±a:disabled { opacity: .35; cursor: not-allowed; text-decoration: none; }
 .obj-parejas-list { display: flex; flex-direction: column; gap: .45rem; }
 .obj-pareja-fila { display: flex; flex-direction: column; gap: .1rem; }
 .obj-pareja-fotos { display: flex; align-items: center; }
@@ -361,7 +361,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .play-v3 .edificios-layer .edif.is-on {
   filter: none; opacity: 1;
 }
-/* Prototipo biblioteca → mismo sistema .is-off */
+/* Prototipo biblioteca â†’ mismo sistema .is-off */
 .play-v3 .edificios-layer .edif.b-biblioteca.is-off,
 .play-v3 .edificios-layer .edif.is-off {
   opacity: 1 !important;
@@ -385,7 +385,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
   border: 1px solid rgba(44,38,31,.35);
 }
 
-/* Buzón modal */
+/* BuzÃ³n modal */
 .play-v3 .play-root.pc .capa-buzon { width: min(520px, 94vw) !important; max-width: 520px !important; }
 .play-v3 .capa-buzon [data-buzon-list] { max-height: calc(88vh - 120px); overflow-x: clip; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #c9b59a rgba(243, 230, 204, .35); }
 .play-v3 .capa-buzon .carta-msg { display: block !important; grid-template-columns: unset !important; }
@@ -393,7 +393,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .play-v3 .capa-buzon .carta-copy { flex: 1 1 auto; min-width: 0; }
 
 
-/* === Coherencia: aire, overflow, vecinos, bloques, buzón === */
+/* === Coherencia: aire, overflow, vecinos, bloques, buzÃ³n === */
 body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 .game-left, .game-right { overflow-x: visible; overflow-y: visible; max-width: 100%; }
 .zona-actividad { gap: 1.1rem; padding-bottom: .5rem; }
@@ -440,14 +440,14 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 
 .obj-lab-note { font-size: .55rem; font-style: italic; color: #8a7a66; margin: 0 0 .25rem; }
 
-/* Tienda = instalación funcional */
+/* Tienda = instalaciÃ³n funcional */
 .play-v3 .edificios-layer .edif.is-funcional.is-on {
   filter: drop-shadow(0 0 4px rgba(120, 90, 200, .35));
   outline: 2px solid rgba(120, 90, 200, .45);
   outline-offset: 1px;
 }
 
-/* Buzón modal — menos ventana, más papel */
+/* BuzÃ³n modal â€” menos ventana, mÃ¡s papel */
 .play-v3 .capa-buzon {
   background: #fff9ee !important;
   border: 2px solid #2c261f !important;
@@ -476,7 +476,7 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 .game-left, .zona-actividad { min-width:0; }
 .obj-vecinos-resumen, .obj-cotilleo, .obj-proximo, .obj-buzon { max-width:100%; box-sizing:border-box; }
 
-/* --- Agenda planes + notificación confirmado --- */
+/* --- Agenda planes + notificaciÃ³n confirmado --- */
 .obj-planes-pend {
   display: flex; align-items: center; justify-content: space-between; gap: .35rem;
   width: 100%; margin-top: .55rem; padding: .28rem .1rem .1rem;
