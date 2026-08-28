@@ -3016,19 +3016,38 @@
     if (shell) shell.classList.toggle('noche-activa', !!esNoche);
   }
 
+  function pasarRatoBtns() {
+    return $$('[data-pasar-rato]');
+  }
+  function setPasarRatoBusy(busy, busyLabel) {
+    pasarRatoBtns().forEach(function (btn) {
+      btn.disabled = !!busy;
+      if (busy) {
+        btn.setAttribute('aria-busy', 'true');
+        btn.classList.add('is-busy');
+        if (busyLabel) {
+          const txt = btn.querySelector('.pasar-rato-txt');
+          if (txt) txt.textContent = busyLabel;
+        }
+      } else {
+        btn.removeAttribute('aria-busy');
+        btn.classList.remove('is-busy');
+      }
+    });
+  }
   function pintarModoReloj(esNoche) {
     aplicarNocheVisual(esNoche);
     $$('[data-es-noche]').forEach(function (el) {
       el.hidden = !esNoche;
     });
-    const btn = $('[data-pasar-rato]');
-    if (!btn) return;
-    btn.classList.toggle('pasar-rato--noche', esNoche);
-    btn.title = esNoche ? 'Avanza hasta las 08:00 de la mañana' : 'Avanza el tiempo exactamente 1 hora';
-    if (!btn.classList.contains('is-busy')) {
-      const txt = btn.querySelector('.pasar-rato-txt');
-      if (txt) txt.textContent = esNoche ? 'Pasar la noche' : 'Pasar el rato';
-    }
+    pasarRatoBtns().forEach(function (btn) {
+      btn.classList.toggle('pasar-rato--noche', esNoche);
+      btn.title = esNoche ? 'Avanza hasta las 08:00 de la mañana' : 'Avanza el tiempo exactamente 1 hora';
+      if (!btn.classList.contains('is-busy')) {
+        const txt = btn.querySelector('.pasar-rato-txt');
+        if (txt) txt.textContent = esNoche ? 'Pasar la noche' : 'Pasar el rato';
+      }
+    });
   }
 
   function renderHud(estado, buzon) {
@@ -5995,8 +6014,7 @@ function hobbyIconKey(id, texto) {
   }
   let pasarRatoEnCurso = false;
   async function pasarElRato() {
-    const btn = $('[data-pasar-rato]');
-    if (!btn || pasarRatoEnCurso) return;
+    if (!pasarRatoBtns().length || pasarRatoEnCurso) return;
     const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
       !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
     if (perdida) {
@@ -6007,19 +6025,13 @@ function hobbyIconKey(id, texto) {
     const nocturno = esHoraNoche(h);
     const horas = nocturno ? Math.max(1, (HORA_DIA_DESDE - h + 24) % 24) : 1;
     pasarRatoEnCurso = true;
-    btn.disabled = true;
-    btn.setAttribute('aria-busy', 'true');
-    btn.classList.add('is-busy');
-    const txt = btn.querySelector('.pasar-rato-txt');
-    if (txt) txt.textContent = 'A ver qué se cuece…';
+    setPasarRatoBusy(true, 'A ver qué se cuece…');
     try {
       const r = await avanzarHoras(horas);
       if (!r.ok) toast(r.mensaje_ui || 'Ahora no se puede pasar el rato.');
     } finally {
       pasarRatoEnCurso = false;
-      btn.disabled = false;
-      btn.removeAttribute('aria-busy');
-      btn.classList.remove('is-busy');
+      setPasarRatoBusy(false);
       pintarModoReloj(esHoraNoche(horaActualEstado()));
     }
   }
@@ -6062,8 +6074,11 @@ function hobbyIconKey(id, texto) {
       }, { passive: true });
     });
   })();
-  const btnPasarRato = $('[data-pasar-rato]');
-  if (btnPasarRato) btnPasarRato.addEventListener('click', pasarElRato);
+  pasarRatoBtns().forEach(function (btnPasarRato) {
+    if (btnPasarRato._ahtPasarBound) return;
+    btnPasarRato._ahtPasarBound = true;
+    btnPasarRato.addEventListener('click', pasarElRato);
+  });
   const btnProx = $('#btn-debug-proximo');
   if (btnProx) btnProx.addEventListener('click', irProximo);
   const btnProxLab = $('#btn-proximo-lab');

@@ -18,10 +18,10 @@ function ok(c, m) {
 }
 
 // ── 1. Sistema único: mismos nodos, sin duplicados móviles ──
-ok((php.match(/data-pasar-rato/g) || []).length === 1, 'play.php: UN solo botón de avance (sin clon móvil)');
-ok((php.match(/data-es-noche/g) || []).length === 1, 'play.php: UN solo indicador de noche');
+ok((php.match(/data-pasar-rato/g) || []).length >= 2, 'play.php: botones dual-view móvil+desktop (mismo contrato)');
+ok((php.match(/data-es-noche/g) || []).length >= 2, 'play.php: indicador noche en cada vista');
 ok(!/(pasar-rato-movil|data-pasar-rato-movil|es-noche-movil|avance-movil-btn)/.test(php + js + cssResp), 'sin segunda versión funcional móvil');
-ok((js.match(/\[data-pasar-rato\]/g) || []).length >= 1 && !/getElementById\('btnPasar/.test(js), 'JS: handlers sobre el nodo canónico');
+ok(/function pasarRatoBtns\(\)/.test(js) && /_ahtPasarBound/.test(js), 'JS: handler enlazado a todos los botones dual-view');
 
 // ── 2. La cabecera móvil ya NO oculta .top-center ──
 ok(!/\.play-v3:has\(\.game-shell\) \.top-center\s*\{[^}]*display:\s*none/.test(cssResp), 'responsive: .top-center ya no display:none en móvil');
@@ -80,7 +80,7 @@ ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo b
     const shell = { classList: { toggle(c, on) {}, contains() { return false; } } };
     const fn = new Function('$$', '$', 'document', codigo + '\n return pintarModoReloj;');
     const pintar = fn(
-      (sel) => (sel === '[data-es-noche]' ? [indicador] : []),
+      (sel) => (sel === '[data-es-noche]' ? [indicador] : (sel === '[data-pasar-rato]' ? [btn] : [])),
       (sel) => (sel === '[data-pasar-rato]' ? btn : null),
       { querySelector: () => shell }
     );
