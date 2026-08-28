@@ -61,9 +61,9 @@
 
   /* ---------- 1. Orden del feed (D2) ---------- */
 
-  /* Orden feed movil: EN CURSO -> Cotilleo -> Proximos -> Misiones -> Parejas */
-  .inicio-mobile .inicio-mobile-feed-inner .encursos-movil           { order: 1; }
-  .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 2; }
+  /* Orden feed movil: Cotilleo -> EN CURSO -> Proximos -> Misiones -> Parejas */
+  .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 1; }
+  .inicio-mobile .inicio-mobile-feed-inner .encursos-movil           { order: 2; }
   .inicio-mobile .inicio-mobile-feed-inner .proxplanes-movil         { order: 3; }
   .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-misiones-par { order: 4; }
   .inicio-mobile .inicio-mobile-feed-inner .shell-grupo-parejas      { order: 5; }
