@@ -977,3 +977,14 @@
     grid-template-columns: minmax(210px, 260px) minmax(560px, 1.2fr) minmax(210px, 260px) !important;
   }
 }
+/* INICIO-MENSAJITOS-H63-v1 — altura fija Mensajitos desktop */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-buzon {
+    height: 63px !important;
+    min-height: 63px !important;
+    max-height: 63px !important;
+    box-sizing: border-box !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
