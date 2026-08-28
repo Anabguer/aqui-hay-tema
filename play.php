@@ -977,8 +977,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLAN EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
+            <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
+            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
           </header>
           <div class="enc-mov-shell" data-encursos-shell hidden aria-hidden="true">
             <button type="button" class="enc-mov-nav-btn enc-mov-nav-prev" data-enc-mov-prev aria-label="Plan anterior" hidden>
@@ -995,6 +996,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
             <h3 class="pp-mov-tit">PR&Oacute;XIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
+            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
         </section>
@@ -1037,8 +1039,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLAN EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
+            <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
+            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
           </header>
           <div class="enc-mov-shell" data-encursos-shell hidden aria-hidden="true">
             <button type="button" class="enc-mov-nav-btn enc-mov-nav-prev" data-enc-mov-prev aria-label="Plan anterior" hidden>
@@ -1055,6 +1058,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
             <h3 class="pp-mov-tit">PR&Oacute;XIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
+            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
         </section>

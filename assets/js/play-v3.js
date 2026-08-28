@@ -1927,31 +1927,34 @@
     }
     return html + '</article>';
   }
-  function htmlEncursoCardMovilV14(enc, estado) {
+    function htmlEncursoCardMovilV14(enc, estado) {
+    const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
-    const ctaTxt = ctaTxtEncuentroMov(enc, iv);
-    let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
-      '<div class="enc-mov-body">' +
+    let html = '<article class="enc-mov-card enc-mov-card--compact" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<div class="enc-mov-row">' +
       '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
-      '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
-      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>';
-    if (!ctaVisible && panelHtml) {
-      html += panelHtml;
+      '<div class="enc-mov-copy">' +
+      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
+      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
+      '<p class="enc-mov-estado"><span class="enc-mov-hora"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</span></p>' +
+      '</div>';
+    if (ctaVisible) {
+      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        'INTERVENIR<span class="enc-mov-cta-flecha" aria-hidden="true"> &#8250;</span></button>';
     }
     html += '</div>';
     if (ctaVisible) {
-      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
-        '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
-        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    } else if (panelHtml) {
+      html += panelHtml;
     }
     return html + '</article>';
   }
+
   function htmlEncursoCardMovil(enc, estado) {
     return htmlEncursoCardMovilV14(enc, estado);
   }
@@ -2967,7 +2970,7 @@
       const mobFecha = fechaCorta || '\u2014';
       const min = rv.minuto !== undefined ? rv.minuto : reloj.minuto_actual;
       const mobHora = h === undefined ? '\u2014:\u2014' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
-      metaMobEl.innerHTML = '<span class="top-meta-prim">' + mobDia + ' \u00b7 ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span>';
+      metaMobEl.innerHTML = '<span class="top-meta-stack"><span class="top-meta-prim">' + mobDia + ' \u00b7 ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span></span>';
     });
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
