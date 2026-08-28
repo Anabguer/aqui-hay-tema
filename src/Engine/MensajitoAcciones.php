@@ -24,6 +24,8 @@ final class MensajitoAcciones
     public const DECLINAR_EVENTO = 'declinar_evento';
     public const PARTICIPAR_CUMPLE = 'participar_cumple';
     public const ORGANIZAR_CUMPLE = 'organizar_cumple';
+    public const ORGANIZAR_ENCARGO = 'organizar_encargo';
+    public const MEDIAR_REPARAR = 'mediar_reparar';
     public const IGNORAR_CONTEXTUAL = 'ignorar_contextual';
 
     /** @var array<string, array{id: string, etiqueta: string, estilo: string, api: string}> */
@@ -67,6 +69,18 @@ final class MensajitoAcciones
         self::ORGANIZAR_ALGO => [
             'id' => self::ORGANIZAR_ALGO,
             'etiqueta' => 'Organizar',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::ORGANIZAR_ENCARGO => [
+            'id' => self::ORGANIZAR_ENCARGO,
+            'etiqueta' => 'Organizar',
+            'estilo' => 'primario',
+            'api' => 'buzon.resolver',
+        ],
+        self::MEDIAR_REPARAR => [
+            'id' => self::MEDIAR_REPARAR,
+            'etiqueta' => 'Mediar',
             'estilo' => 'primario',
             'api' => 'buzon.resolver',
         ],
@@ -234,6 +248,12 @@ final class MensajitoAcciones
                 break;
             case self::ORGANIZAR_ALGO:
                 $r = MensajitoConsejoEngine::organizarAlgo($partida, $mensajeId);
+                break;
+            case self::ORGANIZAR_ENCARGO:
+                $r = MensajitoPeticionEngine::organizarEncargo($partida, $mensajeId);
+                break;
+            case self::MEDIAR_REPARAR:
+                $r = MensajitoMediacionEngine::mediar($partida, $mensajeId);
                 break;
             case self::NO_METERSE:
                 $r = MensajitoConsejoEngine::noMeterse($partida, $mensajeId);

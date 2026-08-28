@@ -13,6 +13,7 @@ use AquiHayTema\Engine\DomainBootstrap;
 use AquiHayTema\Engine\MensajitoAcciones;
 use AquiHayTema\Engine\MensajitoConsejoEngine;
 use AquiHayTema\Engine\MensajitoGeneradorEspontaneo;
+use AquiHayTema\Engine\MensajitoPeticionEngine;
 use AquiHayTema\Engine\MensajitosCadenciaEngine;
 use AquiHayTema\Engine\PartidaService;
 use AquiHayTema\Engine\PeticionPuebloEngine;
@@ -118,7 +119,7 @@ if ($rid !== null) {
     $pet = PeticionPuebloEngine::nacerConocer($p1, $rid);
     ok($pet !== null, 'F3/F5: petición nacida');
     $msgPet = BuzonEngine::buscar($p1, (string) ($pet['buzon_id'] ?? ''));
-    ok(($msgPet['tipo'] ?? '') === 'peticion' || !empty($msgPet['peticion_id']), 'F3: mensajito de petición');
+    ok(($msgPet['familia_mensajito'] ?? '') === MensajitoPeticionEngine::F5 || ($msgPet['tipo'] ?? '') === 'peticion' || !empty($msgPet['peticion_id']), 'F3/F5: mensajito de petición');
     ok(trim((string) ($msgPet['texto'] ?? '')) !== '', 'F3: copy con contexto');
     $otroId = 'per_p002';
     $preset = PeticionPuebloEngine::presetOrganizarParaUi($p1, [
@@ -146,6 +147,8 @@ $p7b['features']['buzon_enabled'] = true;
 $p7b['relaciones']['per_p001']['per_p002'] = ['social' => 30, 'romance' => 0];
 $p7b['residentes']['per_p002']['runtime']['estado_emocional'] = ['id' => 'triste', 'origen' => 'test'];
 $p7b['reloj']['dia_pueblo'] = 3;
+\AquiHayTema\Engine\RelacionEngine::registrarContacto($p7b, 'per_p001', 'per_p002', 'normal', $cal);
+$p7b['residentes']['per_p001']['runtime']['ultimo_contacto_social_dia'] = 3;
 $gen7 = null;
 for ($i = 0; $i < 30; $i++) {
     $gen7 = MensajitoGeneradorEspontaneo::evaluar($p7b, 'per_p001', $cal, new RngService("f7-$i"));

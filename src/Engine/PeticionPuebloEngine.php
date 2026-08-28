@@ -905,6 +905,7 @@ final class PeticionPuebloEngine
             break;
         }
         unset($m);
+        MensajitoPeticionEngine::marcarPresentacionSelector($partida, $buzonId, $opciones);
     }
 
     /**

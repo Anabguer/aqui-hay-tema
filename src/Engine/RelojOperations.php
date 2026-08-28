@@ -40,6 +40,10 @@ final class RelojOperations
             if (!$catchUp) {
                 AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
             }
+            $calMarcha = CalibracionConfig::load($this->projectRoot);
+            if (!$catchUp && FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
+                MensajitoDudaPermanenciaEngine::evaluarAlCerrarDia($partida, $calMarcha, $this->logger);
+            }
             MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
 
             // F10 — rituales contextuales (cumpleaños) al inicio del nuevo día

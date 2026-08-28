@@ -385,6 +385,49 @@ final class MensajitoVoz
         ];
     }
 
+    /** @return list<string> */
+    private static function bancoFPeticion(): array
+    {
+        return [
+            'Celestine, ¿me echas una mano con {texto}?',
+            'Te escribo porque necesito que me ayudes con {texto}.',
+            'Oye, cuando puedas: {texto}. ¿Me ayudas?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFPresentacion(): array
+    {
+        return [
+            'Me gustaría conocer a {otro}. ¿Me lo presentas?',
+            'He oído hablar de {otro} y me cae bien de lejos. ¿Puedes presentarnos?',
+            'Celestine, ¿me conectas con {otro}? {historial}',
+            'No conozco a mucha gente… ¿me presentas a alguien? Tengo {texto} opciones en mente.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFDudaPermanencia(): array
+    {
+        return [
+            'Celestine… últimamente me siento {texto} por aquí. ¿De verdad encajo?',
+            'No sé si este pueblo es lo mío. Llevo días con poco trato y me lo planteo.',
+            'Te lo digo en confianza: me siento {texto}. ¿Qué harías tú?',
+            'A veces pienso que nadie me echa de menos. ¿Tú crees que debería quedarme?',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoFMediacion(): array
+    {
+        return [
+            'Con {otro} hemos tenido un mal rollo. ¿Me ayudas a arreglarlo?',
+            'No sé cómo hablar con {otro} después de lo que pasó. {historial}',
+            'He visto el lío entre gente del pueblo. Con {otro} me gustaría recomponer.',
+            'Celestine, ¿puedes echarnos una mano a {otro} y a mí? Esto no puede seguir así.',
+        ];
+    }
+
     // ------------------------------------------------------------------
     // API principal
     // ------------------------------------------------------------------
@@ -511,6 +554,10 @@ final class MensajitoVoz
             'seguimiento_consejo',
             'f_promesa',
             'f_curiosidad_celestine',
+            'f_peticion',
+            'f_presentacion',
+            'f_duda_permanencia',
+            'f_mediacion',
             'anuncio_evento_pueblo',
             'cierre_evento_pueblo',
             'f_ritual_cumple_aviso',
@@ -608,6 +655,14 @@ final class MensajitoVoz
                 return self::bancoF14Promesa();
             case 'f_curiosidad_celestine':
                 return self::bancoFCuriosidadCelestine();
+            case 'f_peticion':
+                return self::bancoFPeticion();
+            case 'f_presentacion':
+                return self::bancoFPresentacion();
+            case 'f_duda_permanencia':
+                return self::bancoFDudaPermanencia();
+            case 'f_mediacion':
+                return self::bancoFMediacion();
             case 'anuncio_evento_pueblo':
                 return self::bancoAnuncioEventoPueblo();
             case 'cierre_evento_pueblo':

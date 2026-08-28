@@ -140,10 +140,15 @@ final class MensajitosCadenciaEngine
             case 'peticion_resultado':
                 return 0;
             case 'peticion':
+            case 'f_peticion':
+            case 'f_presentacion':
             case 'candidato_oferta':
             case 'marcha_intencion':
             case 'f_ritual_contextual':
+            case 'f_mediacion':
                 return 1;
+            case 'f_duda_permanencia':
+                return 0;
             case 'f_opinion':
             case 'f_dilema':
             case 'f_alerta_vecinal':

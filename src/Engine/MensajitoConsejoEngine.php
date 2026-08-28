@@ -40,6 +40,12 @@ final class MensajitoConsejoEngine
             case 'f_promesa':
                 $opciones = self::opcionesF14();
                 break;
+            case 'f_duda_permanencia':
+                $opciones = self::opcionesF8();
+                break;
+            case 'f_mediacion':
+                $opciones = self::opcionesF11($partida, $datos);
+                break;
             default:
                 $opciones = [];
         }
@@ -110,6 +116,9 @@ final class MensajitoConsejoEngine
         }
         self::microEmocion($partida, $rid, (string) ($op['emocion'] ?? ''));
 
+        if ($familia === 'f_duda_permanencia') {
+            MensajitoDudaPermanenciaEngine::marcarAtendidaPublico($partida, $rid, 'consejo');
+        }
         if ($familia === 'f_confidencia' && in_array($opcionId, ['op_escucha', 'op_apoyo'], true)) {
             MensajitoPromesaEngine::registrarDesdeConfidencia(
                 $partida,
@@ -180,6 +189,10 @@ final class MensajitoConsejoEngine
         if ($mensaje === null) {
             return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
         }
+        $fam = (string) ($mensaje['familia_mensajito'] ?? '');
+        if ($fam === MensajitoDudaPermanenciaEngine::FAMILIA) {
+            return MensajitoDudaPermanenciaEngine::organizarContacto($partida, $mensajeId);
+        }
         $datos = is_array($mensaje['datos_familia'] ?? null) ? $mensaje['datos_familia'] : [];
         $observado = (string) ($datos['observado_id'] ?? '');
         if ($observado === '') {
@@ -206,6 +219,14 @@ final class MensajitoConsejoEngine
         $mensaje = self::buscarRaw($partida, $mensajeId);
         if ($mensaje === null) {
             return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
+        }
+        $fam = (string) ($mensaje['familia_mensajito'] ?? '');
+        if ($fam === MensajitoDudaPermanenciaEngine::FAMILIA) {
+            MensajitoDudaPermanenciaEngine::marcarEscaladaPublico(
+                $partida,
+                (string) ($mensaje['de_persona'] ?? ''),
+                $mensajeId
+            );
         }
         self::cerrarHilo($partida, $mensajeId, ['accion' => 'no_meterse']);
         return ['ok' => true, 'mensaje_ui' => 'De acuerdo, no me meto.'];
@@ -376,6 +397,76 @@ final class MensajitoConsejoEngine
         ];
     }
 
+    /** @return list<array<string, mixed>> */
+    private static function opcionesF8(): array
+    {
+        return [
+            [
+                'id' => 'op_quedamos',
+                'etiqueta' => 'Claro que sí, aquí tienes sitio',
+                'estilo' => 'primario',
+                'consejo_id' => 'decide_tu',
+                'tema' => 'personal',
+                'emocion' => 'alegre',
+                'eco_ui' => 'Gracias… de verdad.',
+            ],
+            [
+                'id' => 'op_escucha',
+                'etiqueta' => 'Te escucho, cuéntame más',
+                'estilo' => 'suave',
+                'consejo_id' => 'decide_tu',
+                'tema' => 'personal',
+                'emocion' => '',
+            ],
+            [
+                'id' => 'op_animo',
+                'etiqueta' => 'Ánimo, esto se arregla',
+                'estilo' => 'suave',
+                'consejo_id' => 'decide_tu',
+                'tema' => 'personal',
+                'emocion' => 'alegre',
+            ],
+        ];
+    }
+
+    /**
+     * @param array<string, mixed> $datos
+     * @return list<array<string, mixed>>
+     */
+    private static function opcionesF11(array $partida, array $datos): array
+    {
+        $otro = (string) ($datos['otro_nombre'] ?? 'esa persona');
+        $otroId = (string) ($datos['otro_id'] ?? '');
+        return [
+            [
+                'id' => 'op_hablar',
+                'etiqueta' => 'Habladlo con calma, yo os echo una mano',
+                'estilo' => 'primario',
+                'consejo_id' => 'queda_mas',
+                'objetivo_id' => $otroId !== '' ? $otroId : null,
+                'tema' => 'social',
+                'emocion' => '',
+            ],
+            [
+                'id' => 'op_neutral',
+                'etiqueta' => 'Dale tiempo a ' . $otro . ', no fuerces',
+                'estilo' => 'suave',
+                'consejo_id' => 'no_es_el_momento',
+                'objetivo_id' => $otroId !== '' ? $otroId : null,
+                'tema' => 'social',
+                'emocion' => '',
+            ],
+            [
+                'id' => 'op_apoyo',
+                'etiqueta' => 'Estoy contigo, lo que necesites',
+                'estilo' => 'suave',
+                'consejo_id' => 'decide_tu',
+                'tema' => 'personal',
+                'emocion' => 'alegre',
+            ],
+        ];
+    }
+
     /**
      * @param array<string, mixed> $datos
      * @return list<array<string, mixed>>
@@ -393,9 +484,21 @@ final class MensajitoConsejoEngine
                 return self::opcionesEscuchar();
             case 'f_promesa':
                 return self::opcionesF14();
+            case 'f_duda_permanencia':
+                return self::opcionesF8();
+            case 'f_mediacion':
+                return self::opcionesF11($partida, $datos);
             default:
                 return [];
         }
+    }
+
+    /**
+     * @param array<string, mixed> $meta
+     */
+    public static function cerrarHiloPublico(array &$partida, string $mensajeId, array $meta): void
+    {
+        self::cerrarHilo($partida, $mensajeId, $meta);
     }
 
     /**

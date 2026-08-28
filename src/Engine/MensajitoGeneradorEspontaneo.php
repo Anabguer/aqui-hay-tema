@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Generador espontaneo de Mensajitos (familias F1, F2, F4, F6, F7, F14, F15).
+ * Generador espontaneo de Mensajitos (familias F1, F2, F4, F6, F7, F8, F11, F14, F15).
  *
  * Los NPCs se dirigen a Celestine cuando tienen algo que decir, disparado
  * por su estado real (emociones, relaciones, eventos recientes, personalidad).
@@ -60,6 +60,14 @@ final class MensajitoGeneradorEspontaneo
         $f7 = self::candidatoF7($partida, $residenteId);
         if ($f7 !== null) {
             $c[] = $f7;
+        }
+        $f8 = MensajitoDudaPermanenciaEngine::candidatoEspontaneo($partida, $residenteId, $cal);
+        if ($f8 !== null) {
+            $c[] = $f8;
+        }
+        $f11 = MensajitoMediacionEngine::candidato($partida, $residenteId);
+        if ($f11 !== null) {
+            $c[] = $f11;
         }
         $f15 = self::candidatoF15($partida, $residenteId, $cal);
         if ($f15 !== null) {
@@ -200,6 +208,9 @@ final class MensajitoGeneradorEspontaneo
             case 'f_alerta_vecinal':
                 $clas = BuzonEngine::IMPORTANTE;
                 break;
+            case 'f_duda_permanencia':
+                $clas = BuzonEngine::IMPORTANTE;
+                break;
             case 'f_colectivo':
                 $clas = BuzonEngine::OPORTUNIDAD;
                 break;
@@ -220,6 +231,12 @@ final class MensajitoGeneradorEspontaneo
                 break;
             case 'f_alerta_vecinal':
                 $acciones = ['investigar', 'organizar_algo', 'no_meterse'];
+                break;
+            case 'f_duda_permanencia':
+                $acciones = ['organizar_algo', 'responder_escuchar', 'no_meterse'];
+                break;
+            case 'f_mediacion':
+                $acciones = ['mediar_reparar', 'responder_consejo', 'no_meterse'];
                 break;
             case 'f_curiosidad_celestine':
                 $acciones = ['responder_celestine'];
@@ -247,6 +264,13 @@ final class MensajitoGeneradorEspontaneo
         ]);
         if ($r === null || !($r['ok'] ?? false)) {
             return null;
+        }
+        if ($fam['familia'] === MensajitoDudaPermanenciaEngine::FAMILIA) {
+            MensajitoDudaPermanenciaEngine::registrarPendientePublico(
+                $partida,
+                $rid,
+                (string) ($r['mensaje']['id'] ?? $msgId)
+            );
         }
         MensajitosCadenciaEngine::registrar($partida, $rid, $fam['familia'], 'espontaneo', (string) ($fam['datos']['clave'] ?? ''));
         DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
@@ -302,6 +326,16 @@ final class MensajitoGeneradorEspontaneo
                 $observado = $datos['observado_id'] ?? '';
                 $historial = $observado !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $observado) : '';
                 return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado', 'historial' => $historial], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
+            case 'f_duda_permanencia':
+                return MensajitoVoz::linea(
+                    $partida,
+                    'f_duda_permanencia',
+                    ['texto' => $datos['motivo'] ?? 'un poco invisible'],
+                    'f_duda|' . $rid . '|' . ($datos['clave'] ?? ''),
+                    $rid
+                );
+            case 'f_mediacion':
+                return MensajitoMediacionEngine::texto($partida, $rid, $datos);
             case 'f_curiosidad_celestine':
                 return MensajitoVoz::linea($partida, 'f_curiosidad_celestine', [], 'f_curiosidad|' . $rid, $rid);
         }

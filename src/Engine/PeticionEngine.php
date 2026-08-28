@@ -122,10 +122,13 @@ final class PeticionEngine
                     '_placeholder' => !$esB4,
                 ],
             ]);
-            $buzonId = $buzon['mensaje']['id'] ?? null;
+            $buzonId = (string) ($buzon['mensaje']['id'] ?? '');
             $last = count($partida['peticiones']) - 1;
             $partida['peticiones'][$last]['buzon_id'] = $buzonId;
             $peticion['buzon_id'] = $buzonId;
+            if ($esB4 && $buzonId !== '') {
+                MensajitoPeticionEngine::aplicarFamilia($partida, $buzonId, $peticion);
+            }
 
             DomainEventDispatcher::emit($partida, DomainEvents::PETICION_CREADA, [
                 'peticion' => $peticion,
