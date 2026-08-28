@@ -42,6 +42,7 @@ final class EncuentroResultadoVista
             : [];
         $emociones = $terminado ? self::emocionesPublicas($partida, $res) : [];
         $consecuencias = $terminado ? self::consecuenciasPublicas($res) : [];
+        $mentesLineas = $terminado ? self::mentesVisibilidad($partida, $enc, $res) : [];
 
         $experienciaNarrativa = is_array($res['experiencia_narrativa'] ?? null) ? $res['experiencia_narrativa'] : null;
 
@@ -68,6 +69,9 @@ final class EncuentroResultadoVista
             foreach ($consecuencias as $c) {
                 $lineas[] = $c['texto'];
             }
+            foreach ($mentesLineas as $ml) {
+                $lineas[] = $ml;
+            }
         }
 
         $resultado = [
@@ -77,6 +81,7 @@ final class EncuentroResultadoVista
             'descubrimientos' => $descubrimientos,
             'emociones' => $emociones,
             'consecuencias' => $consecuencias,
+            'mentes' => $mentesLineas,
             'lineas' => $lineas,
         ];
         if (FeatureConfig::isEnabled($partida, 'debug_tools_enabled')) {
@@ -317,6 +322,46 @@ final class EncuentroResultadoVista
             $out[] = ['texto' => $texto];
         }
         return $out;
+    }
+
+    /**
+     * Líneas de texto sobre la intervención de MENTES visible al jugador.
+     *
+     * @param array<string, mixed> $enc
+     * @param array<string, mixed> $res
+     * @return list<string>
+     */
+    private static function mentesVisibilidad(array $partida, array $enc, array $res): array
+    {
+        $interv = $enc['intervencion_celeste'] ?? null;
+        if (!is_array($interv)) {
+            return [];
+        }
+        $accion = (string) ($interv['accion'] ?? '');
+        $beneficiario = (string) ($interv['beneficiario'] ?? '');
+        $rompeHielo = (string) ($interv['rompe_hielo'] ?? '');
+        $temaId = (string) ($interv['tema_id'] ?? '');
+
+        if ($beneficiario === '' || $rompeHielo === '') {
+            return [];
+        }
+
+        $nombreBen = IdentidadPublica::nombre($partida, $beneficiario);
+        $nombreHielo = IdentidadPublica::nombre($partida, $rompeHielo);
+        if ($nombreBen === '' || $nombreHielo === '') {
+            return [];
+        }
+
+        $lineas = [];
+        if ($accion === 'hobby' && $temaId !== '') {
+            $lineas[] = 'La intervención de Celestine con un tema de interés hizo que ' . $nombreBen . ' se animara más.';
+        } elseif ($accion === 'consejo') {
+            $lineas[] = 'Celestine dio un consejo que influyó en el encuentro.';
+        } elseif ($accion === 'romper_hielo') {
+            $lineas[] = 'Celestine rompió el hielo entre ' . $nombreHielo . ' y ' . $nombreBen . '.';
+        }
+
+        return $lineas;
     }
 
     private static function valorCatalogo(array $partida, string $rid, string $campo, ?Catalog $catalog)

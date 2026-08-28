@@ -99,7 +99,7 @@ final class EncuentroExperiencia
         if (!is_array($pesos)) {
             return 0.0;
         }
-        $row = $snap['por_participante'][$pid] ?? [];
+        $ids = $snap['participantes'] ?? array_keys($snap['por_participante'] ?? []);
         $fact = $snap['factores'] ?? [];
         $acc = 0.0;
         $wsum = 0.0;
@@ -128,9 +128,12 @@ final class EncuentroExperiencia
                 $v = is_numeric($c) ? -((float) $c) / 20.0 : 0.0;
             } elseif ($k === 'emocional') {
                 $emo = (string) ($fact['emocional_a'] ?? 'neutro');
+                if ($pid !== ($ids[0] ?? '')) {
+                    $emo = (string) ($fact['emocional_b'] ?? 'neutro');
+                }
                 $v = ((float) EstadoEmocional::modificadores($emo, $cal)['experiencia_encuentro']) / 20.0;
             } elseif ($k === 'lugar' || $k === 'hobbies_plan') {
-                $plan = $pid === ($snap['participantes'][0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
+                $plan = $pid === ($ids[0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
                 $ap = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
                 $pe = is_array($plan) ? (int) ($plan['penalizacion'] ?? 0) : 0;
                 $v = ($ap - $pe) / 20.0;
@@ -166,6 +169,7 @@ final class EncuentroExperiencia
             return ['carga' => 0.0, 'contribuciones' => []];
         }
         $fact = $snap['factores'] ?? [];
+        $ids = $snap['participantes'] ?? array_keys($snap['por_participante'] ?? []);
         $contrib = [];
         $acc = 0.0;
         $wsum = 0.0;
@@ -194,12 +198,12 @@ final class EncuentroExperiencia
                 $v = is_numeric($c) ? -((float) $c) / 20.0 : 0.0;
             } elseif ($k === 'emocional') {
                 $emo = (string) ($fact['emocional_a'] ?? 'neutro');
-                if ($pid !== ($snap['participantes'][0] ?? '')) {
+                if ($pid !== ($ids[0] ?? '')) {
                     $emo = (string) ($fact['emocional_b'] ?? 'neutro');
                 }
                 $v = ((float) EstadoEmocional::modificadores($emo, $cal)['experiencia_encuentro']) / 20.0;
             } elseif ($k === 'lugar' || $k === 'hobbies_plan') {
-                $plan = $pid === ($snap['participantes'][0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
+                $plan = $pid === ($ids[0] ?? '') ? ($fact['plan_a'] ?? null) : ($fact['plan_b'] ?? null);
                 $ap = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
                 $pe = is_array($plan) ? (int) ($plan['penalizacion'] ?? 0) : 0;
                 $v = ($ap - $pe) / 20.0;

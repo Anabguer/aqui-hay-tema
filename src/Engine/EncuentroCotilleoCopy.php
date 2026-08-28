@@ -853,13 +853,41 @@ final class EncuentroCotilleoCopy
         }
 
         if ($hasNeg && !$hasPos) {
-
             return 'La cosa ha estado algo tensa.';
+        }
 
+        if ($hasPos && $hasNeg) {
+            return self::tonoAsimetrico($res, $participantes);
         }
 
         return self::tonoDeDeltas($res);
+    }
 
+    /**
+     * Resultado mixto: uno pasó bien, otro mal. Copia que refleja la asimetría.
+     *
+     * @param array<string, mixed> $res
+     * @param list<string|int> $participantes
+     */
+    private static function tonoAsimetrico(array $res, array $participantes): string
+    {
+        $por = $res['por_participante'] ?? [];
+        $pos = ['bien', 'muy_bien'];
+        $bien = [];
+        $mal = [];
+        foreach ($participantes as $pid) {
+            $pid = (string) $pid;
+            $r = (string) ($por[$pid]['resultado'] ?? '');
+            if (in_array($r, $pos, true)) {
+                $bien[] = $pid;
+            } elseif ($r !== '') {
+                $mal[] = $pid;
+            }
+        }
+        if ($bien !== [] && $mal !== []) {
+            return 'A uno le ha ido bien, pero el otro no conectó demasiado.';
+        }
+        return self::tonoDeDeltas($res);
     }
 
 

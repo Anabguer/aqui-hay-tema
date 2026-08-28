@@ -114,6 +114,7 @@ final class EncuentroResolver
                 'experiencia' => $exp,
                 'experiencia_narrativa' => is_array($exp['experiencia_narrativa'] ?? null) ? $exp['experiencia_narrativa'] : null,
                 'texto_resumen' => 'Encuentro ' . $tipo . ' (' . $resA . '/' . $resB . ').',
+                'historial_par' => HistorialPar::entre($partida, $a, $b),
             ];
             /* Telemetría DEV observacional: persiste la traza REAL de tiradas si hubo captura. */
             $trazaDev = LabAudit::trazaCtx('encuentro_final:' . (string) ($encuentro['id'] ?? ''));
@@ -145,6 +146,9 @@ final class EncuentroResolver
                 'eventos_derivados' => [],
                 'por_participante' => $por,
                 'texto_resumen' => '[PLACEHOLDER] Encuentro ' . $tipo . ' terminado.',
+                'historial_par' => count($participantes) >= 2
+                    ? HistorialPar::entre($partida, (string) $participantes[0], (string) $participantes[1])
+                    : null,
             ];
         }
 

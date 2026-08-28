@@ -95,6 +95,14 @@ final class EmocionalNarrativa
                 $explicacion = 'Un rato a solas con su hobby le ha levantado el ánimo.';
                 break;
 
+            case 'cumple_felicidad':
+                $explicacion = 'Ha recibido la enhorabuena de sus vecinos y se le nota content' . self::oA($partida, $residenteId) . '.';
+                break;
+
+            case 'consejo_celestine':
+                $explicacion = 'Un buen consejo a tiempo puede cambiar el día de cualquiera.';
+                break;
+
             default:
                 return null; // inicial, expiración, manual: nada explicable
         }
@@ -289,6 +297,10 @@ final class EmocionalNarrativa
             case 'hobby_recuperacion':
             case 'encuentro_y_hobby':
                 return 'Un rato con su hobby le ha sentado bien.';
+            case 'cumple_felicidad':
+                return 'Ha tenido un día especial con sus vecinos.';
+            case 'consejo_celestine':
+                return 'Le han dado un buen consejo.';
             default:
                 return null;
         }
@@ -358,6 +370,10 @@ final class EmocionalNarrativa
                     return $nombre . ' ha salido de un encuentro con el ánimo por los suelos.';
                 }
                 return null;
+            case 'cumple_felicidad':
+                return $nombre . ' está de enhorabuena. Le han felicitado y se le nota.';
+            case 'consejo_celestine':
+                return $nombre . ' parece más animad' . $oA . ' tras un buen consejo.';
             default:
                 return null;
         }
