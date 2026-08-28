@@ -14,8 +14,11 @@
   opacity: 0 !important;
 }
 
-/* MISION-STRIP-22PX-TEST: solo feed móvil. */
-.play-v3 .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
-  font-size: 22px !important;
-  line-height: 1.18;
+/* Bloque A: contenido manuscrito principal del feed móvil. */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
+    font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive) !important;
+    font-size: 22px !important;
+    line-height: 1.18 !important;
+  }
 }
