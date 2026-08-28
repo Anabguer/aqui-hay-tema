@@ -1031,7 +1031,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est&aacute;n sospechosamente tranquilos&hellip;</span>
               <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
-            <span class="obj-cotilleo-flecha" aria-hidden="true">â€º</span>
+            <span class="obj-cotilleo-flecha" aria-hidden="true">&#8250;</span>
           </button>
         </section>
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
