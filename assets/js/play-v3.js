@@ -1045,6 +1045,7 @@
   let invSelVecino = null;
   let invFichaRid = null;
   let invFichaNombre = '';
+  let invEntregando = false;
 
   function abrirRegalosDesdeFicha(id, nombre) {
     invFichaRid = id || null;
@@ -1180,9 +1181,12 @@
   async function entregarRegalo() {
     const root = $('.play-root');
     if (!root || !invSelObjeto || !invSelVecino) return;
+    if (invEntregando) return;
+    invEntregando = true;
     const btnEntregar = $('[data-inv-entregar]', root);
     const feedback = $('[data-inv-feedback]', root);
     if (btnEntregar) btnEntregar.disabled = true;
+    try {
     const r = await api('regalo.entregar', { objeto_id: invSelObjeto.id, residente_id: invSelVecino.id });
     const texto = (r && (r.texto || r.mensaje_ui)) || '';
     if (r && r.ok) {
@@ -1213,6 +1217,9 @@
       } else if (btnEntregar) {
         btnEntregar.disabled = false;
       }
+    }
+    } finally {
+      invEntregando = false;
     }
   }
   // --- fin Inventario / Regalos (F1) ---
@@ -7584,6 +7591,18 @@ function hobbyIconKey(id, texto) {
       }
       if (name === 'vecinos') { vecTabActiva = 'vecinos'; aplicarVecTabUI(); renderVecinos(); }
       if (name === 'buzon') renderBuzon(cacheBuzon);
+      return;
+    }
+    const invEntregar = ev.target.closest('[data-inv-entregar]');
+    if (invEntregar && uiRootFrom(invEntregar)) {
+      ev.preventDefault();
+      entregarRegalo();
+      return;
+    }
+    const invCancelar = ev.target.closest('[data-inv-cancelar]');
+    if (invCancelar && uiRootFrom(invCancelar)) {
+      ev.preventDefault();
+      renderInventario();
       return;
     }
 
