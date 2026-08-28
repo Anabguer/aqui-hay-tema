@@ -16,6 +16,7 @@ final class PersistenciaCaps
                 'historial_relaciones_cap' => 2000,
                 'event_log_cap' => 100,
                 'historial_coincidencias_cap' => 500,
+                'memoria_eventos_cap' => 500,
                 'archivar_al_recortar' => true,
             ];
         }
@@ -113,5 +114,6 @@ final class PersistenciaCaps
         self::recortarLista($partida, 'event_log', self::cap($partida, 'event_log_cap', 100), 'event_log_archivo');
         self::recortarHistorialRelaciones($partida, self::cap($partida, 'historial_relaciones_cap', 2000));
         self::recortarLista($partida, 'historial_coincidencias', self::cap($partida, 'historial_coincidencias_cap', 500), 'historial_coincidencias_archivo');
+        MemoriaEventos::compactar($partida, self::cap($partida, 'memoria_eventos_cap', 500));
     }
 }

@@ -14,6 +14,51 @@ final class MemoriaEventos
     }
 
     /**
+     * Compacta memoria_eventos preservando hitos narrativos.
+     *
+     * Hito narrativo = entrada con intensidad >= 3 O resultado_experiencia no nulo O familia significativa.
+     * Se preservan los últimos N hitos + los últimos entries que no son hito hasta llegar al cap.
+     */
+    public static function compactar(array &$partida, int $cap): void
+    {
+        self::ensure($partida);
+        $items = $partida['memoria_eventos'];
+        if (count($items) <= $cap) {
+            return;
+        }
+        $hitoFamilias = [
+            'encuentro', 'conflicto', 'reconciliacion', 'declaracion',
+            'ruptura', 'boda', 'llegada', 'marcha', 'promesa',
+        ];
+        $hitos = [];
+        $noHitos = [];
+        foreach ($items as $i => $ev) {
+            if (!is_array($ev)) {
+                continue;
+            }
+            $esHito = ((int) ($ev['intensidad'] ?? 0)) >= 3
+                || ($ev['resultado_experiencia'] ?? null) !== null
+                || in_array($ev['familia'] ?? '', $hitoFamilias, true);
+            if ($esHito) {
+                $hitos[$i] = $ev;
+            } else {
+                $noHitos[$i] = $ev;
+            }
+        }
+        $maxHitos = (int) ceil($cap * 0.6);
+        $maxNoHitos = $cap - $maxHitos;
+        $lastHitos = array_slice($hitos, -$maxHitos, preserve_keys: true);
+        $lastNoHitos = array_slice($noHitos, -$maxNoHitos, preserve_keys: true);
+        $mantener = array_merge($lastNoHitos, $lastHitos);
+        usort($mantener, static function (array $a, array $b): int {
+            $ta = ((int) ($a['dia'] ?? 0)) * 24 + (int) ($a['hora'] ?? 0);
+            $tb = ((int) ($b['dia'] ?? 0)) * 24 + (int) ($b['hora'] ?? 0);
+            return $ta <=> $tb;
+        });
+        $partida['memoria_eventos'] = array_values($mantener);
+    }
+
+    /**
      * @param list<string> $participantes
      * @return array<string, mixed>
      */
