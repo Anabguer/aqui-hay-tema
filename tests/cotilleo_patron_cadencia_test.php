@@ -113,7 +113,13 @@ $partidaD = [
     'reloj' => ['dia_pueblo' => 4, 'hora_actual' => 20],
     'buzon' => [],
     'residentes' => [
-        'per_a' => [], 'per_b' => [], 'per_c' => [], 'per_d' => [],
+        'per_a' => ['identidad_publica' => ['nombre' => 'A']], 'per_b' => ['identidad_publica' => ['nombre' => 'B']],
+        'per_c' => ['identidad_publica' => ['nombre' => 'C']], 'per_d' => ['identidad_publica' => ['nombre' => 'D']],
+    ],
+    'bitacora_relaciones' => [
+        ['tipo' => RelacionBitacora::SE_CONOCIERON, 'par' => ['per_a', 'per_b'], 'fecha' => ['dia' => 1]],
+        ['tipo' => RelacionBitacora::SE_CONOCIERON, 'par' => ['per_c', 'per_d'], 'fecha' => ['dia' => 1]],
+        ['tipo' => RelacionBitacora::SE_CONOCIERON, 'par' => ['per_a', 'per_c'], 'fecha' => ['dia' => 1]],
     ],
     'historial_coincidencias' => [],
 ];

@@ -97,13 +97,18 @@ final class CotilleoPatronCadencia
 
     /**
      * @param list<string> $ids
-     * @return array{patron_nivel: int, patron_estado: array{se_conocen: bool, familia: string, romance: bool}}
+     * @return array{
+     *   patron_nivel: int,
+     *   patron_estado: array{se_conocen: bool, familia: string, romance: bool},
+     *   interes_narrativo: array{interes: bool, score: int, razon: string, familia: string, se_conocen: bool, romance: bool, hito_reciente: bool, emocion_reciente: bool}
+     * }
      */
     public static function metaPublicacion(array $partida, array $ids, string $lugar, int $dia, array $cal = []): array
     {
         return [
             'patron_nivel' => CotilleoNarrativo::diasPatronParLugar($partida, $ids, $lugar, $dia, $cal),
             'patron_estado' => self::estadoRelacional($partida, $ids),
+            'interes_narrativo' => CotilleoNarrativo::esInteresNarrativo($partida, $ids),
         ];
     }
 
@@ -180,6 +185,11 @@ final class CotilleoPatronCadencia
         }
 
         if (count($ids) >= 2 && self::hitoNuevoEntre($partida, $ids[0], $ids[1], $ultima['dia'])) {
+            return true;
+        }
+
+        $interes = CotilleoNarrativo::esInteresNarrativo($partida, $ids);
+        if ($interes['hito_reciente'] || $interes['emocion_reciente']) {
             return true;
         }
 

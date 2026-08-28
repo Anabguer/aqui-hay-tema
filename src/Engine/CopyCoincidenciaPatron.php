@@ -5,6 +5,8 @@ namespace AquiHayTema\Engine;
 
 /**
  * Copy de patrones par+lugar. Una sola fuente para Cotilleos y Aquí hay tema.
+ *
+ * FASE 5: Copy enriquecido con contexto relacional.
  */
 final class CopyCoincidenciaPatron
 {
@@ -30,6 +32,19 @@ final class CopyCoincidenciaPatron
         'Otra vez %s%s. Cuando hay pareja, hasta el destino coopera.',
     ];
 
+    /** @var list<string> */
+    private const VARIANTES_EX = [
+        '%s se han visto otra vez. Han roto, pero algo los sigue juntando.',
+        'Otra vez %s. El pueblo no sabe si son ex o si aún queda algo.',
+        '%s acaban de cruzarse. Lo que fue, aún pesa.',
+    ];
+
+    /** @var list<string> */
+    private const VARIANTES_CON_TENSION = [
+        '%s han coincidido. El ambiente entre ellos no está del todo bien.',
+        'Se han topado %s. La cosa entre ellos aún está caldeada.',
+    ];
+
     /**
      * @param list<string> $ids
      * @return array{
@@ -41,11 +56,17 @@ final class CopyCoincidenciaPatron
      *   destacado: bool,
      *   cotilleo_meta: array{categoria: string, destacado: bool},
      *   nivel: string,
-     *   se_conocen: bool
+     *   se_conocen: bool,
+     *   contexto_hint: string
      * }
      */
-    public static function vista(array $partida, array $ids, string $lugarId, ?Catalog $catalog = null): array
-    {
+    public static function vista(
+        array $partida,
+        array $ids,
+        string $lugarId,
+        ?Catalog $catalog = null,
+        ?array $contexto = null
+    ): array {
         $ids = array_values(array_unique($ids));
         sort($ids);
         if (count($ids) > 2) {
@@ -69,36 +90,55 @@ final class CopyCoincidenciaPatron
         $seConocen = count($ids) >= 2 && RelacionEngine::seConocen($partida, $ids[0], $ids[1]);
         $familiaRel = count($ids) >= 2 ? RelacionBitacora::familiaCopy($partida, $ids[0], $ids[1]) : 'desconocidos';
         $senalRomance = count($ids) >= 2 && self::senalRomanticaReal($partida, $ids[0], $ids[1]);
+        $tension = self::tieneTension($partida, $ids);
 
         $nivel = 'coincidencia';
         $categoria = CotilleoCategoria::COINCIDENCIAS;
         $destacado = false;
         $familiaCopy = 'coincidencia_sospechosa';
         $pista = 'Mira un poco más antes de mover ficha.';
+        $contextoHint = '';
 
-        if ($familiaRel === 'pareja' || $familiaRel === 'ex_reconexion') {
+        if ($familiaRel === 'ex_reconexion') {
+            $nivel = 'romance';
+            $categoria = CotilleoCategoria::ROMANCE;
+            $destacado = true;
+            $familiaCopy = 'ex_reconexion';
+            $pista = 'Aunque lo dejaron, algo los sigue juntando. Puede volver a pasar.';
+            $contextoHint = 'ex';
+        } elseif ($familiaRel === 'pareja') {
             $nivel = 'romance';
             $categoria = CotilleoCategoria::ROMANCE;
             $destacado = true;
             $familiaCopy = 'pareja';
             $pista = 'Aquí hay historia. Si quieres mover algo, este es buen sitio.';
+            $contextoHint = 'pareja';
         } elseif ($senalRomance) {
             $nivel = 'romance';
             $categoria = CotilleoCategoria::ROMANCE;
             $destacado = true;
             $familiaCopy = 'romance';
             $pista = 'No es solo casualidad. Podrías proponer que queden de verdad.';
+            $contextoHint = 'romance';
         } elseif ($seConocen || $familiaRel === 'conocidos') {
             $nivel = 'relacion';
             $categoria = CotilleoCategoria::RELACION;
             $familiaCopy = 'amistad_social';
             $pista = 'Si quieres que hablen de verdad, organízalo tú.';
+            $contextoHint = 'conocidos';
+        }
+
+        if ($tension && $familiaCopy !== 'pareja' && $familiaCopy !== 'ex_reconexion') {
+            $contextoHint = 'tension';
         }
 
         $seed = CotilleoNarrativo::clavePar($ids, $lugarId) . '|' . (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $texto = CopyCotilleoFamilias::linea($familiaCopy, ['quien' => $quien, 'donde' => $donde], $seed);
         if ($texto === '') {
             switch ($familiaCopy) {
+                case 'ex_reconexion':
+                    $pool = self::VARIANTES_EX;
+                    break;
                 case 'pareja':
                     $pool = self::VARIANTES_PAREJA;
                     break;
@@ -106,7 +146,7 @@ final class CopyCoincidenciaPatron
                     $pool = self::VARIANTES_ROMANCE;
                     break;
                 case 'amistad_social':
-                    $pool = self::VARIANTES_CONOCIDOS;
+                    $pool = $tension ? self::VARIANTES_CON_TENSION : self::VARIANTES_CONOCIDOS;
                     break;
                 default:
                     $pool = ['%s vuelven a acabar juntos%s. Tanta casualidad empieza a ser sospechosa…'];
@@ -134,6 +174,7 @@ final class CopyCoincidenciaPatron
             'cotilleo_meta' => CotilleoCategoria::meta($categoria, $destacado),
             'nivel' => $nivel,
             'se_conocen' => $seConocen,
+            'contexto_hint' => $contextoHint,
         ];
     }
 
@@ -154,6 +195,40 @@ final class CopyCoincidenciaPatron
             }
             $actores = is_array($msg['actores'] ?? null) ? $msg['actores'] : [];
             if (in_array($a, $actores, true) && in_array($b, $actores, true)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * ¿Hay tensión entre el par? (discusión fuerte, rechazo reciente, enfado mutuo)
+     *
+     * @param list<string> $ids
+     */
+    private static function tieneTension(array $partida, array $ids): bool
+    {
+        if (count($ids) < 2) {
+            return false;
+        }
+        $a = $ids[0];
+        $b = $ids[1];
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $ventana = 4;
+        $tiposTension = [
+            RelacionBitacora::DISCUSION_FUERTE,
+            RelacionBitacora::RECHAZO_IMPORTANTE,
+        ];
+        foreach (RelacionBitacora::entre($partida, $a, $b) as $h) {
+            if (!is_array($h)) {
+                continue;
+            }
+            $tipo = (string) ($h['tipo'] ?? '');
+            if (!in_array($tipo, $tiposTension, true)) {
+                continue;
+            }
+            $fd = (int) (($h['fecha']['dia'] ?? $h['dia'] ?? 0));
+            if ($fd >= $dia - $ventana) {
                 return true;
             }
         }
