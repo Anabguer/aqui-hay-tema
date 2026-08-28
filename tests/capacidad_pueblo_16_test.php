@@ -108,7 +108,7 @@ ok(CapacidadViviendas::capacidadTotal($pLegacy) === 16, 'legacy: cap funcional 1
 ok(CapacidadViviendas::huecos($pLegacy) === max(0, 16 - $nAntes), 'legacy: huecos contra 16');
 
 // Llegadas motor: frena en 16 (p_dia con N=16 es mínima)
-ok(abs(CandidatoLlegadaEngine::pDiaV3(16) - 0.04) < 0.001, 'llegadas: p_dia mínima en cap');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(16) - 0.12) < 0.001, 'llegadas: p_dia mínima en cap');
 
 $js = file_get_contents($root . '/assets/js/play-v3.js');
 ok(strpos($js, 'capObjetivoPoblacionVisible') !== false, 'JS contador objetivo');

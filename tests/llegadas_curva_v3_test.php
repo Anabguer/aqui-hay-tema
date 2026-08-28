@@ -20,14 +20,15 @@ function ok(bool $c, string $m): void
 $cap = CapacidadViviendas::capObjetivoPoblacionActiva();
 ok($cap === 16, 'cap objetivo Bloque A = 16');
 
-ok(CandidatoLlegadaEngine::gapMin(3) === 2, 'gap_min N=3');
-ok(CandidatoLlegadaEngine::gapMin(8) === 8, 'gap_min N=8');
-ok(CandidatoLlegadaEngine::gapMin(12) === 13, 'gap_min N=12');
-ok(CandidatoLlegadaEngine::gapMin(15) === 17, 'gap_min N=15');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(3) - 0.235) < 0.001, 'p_dia N=3');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(8) - 0.16) < 0.001, 'p_dia N=8');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(15) - 0.055) < 0.001, 'p_dia N=15');
-ok(abs(CandidatoLlegadaEngine::pDiaV3(16) - 0.04) < 0.001, 'p_dia N=16 (sin huecos)');
+ok(CandidatoLlegadaEngine::gapMin(3) === 1, 'gap_min N=3');
+ok(CandidatoLlegadaEngine::gapMin(8) === 7, 'gap_min N=8');
+ok(CandidatoLlegadaEngine::gapMin(12) === 12, 'gap_min N=12');
+ok(CandidatoLlegadaEngine::gapMin(15) === 16, 'gap_min N=15');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(3) - 0.458) < 0.001, 'p_dia N=3');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(8) - 0.328) < 0.001, 'p_dia N=8');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(15) - 0.146) < 0.001, 'p_dia N=15');
+ok(abs(CandidatoLlegadaEngine::pDiaV3(16) - 0.12) < 0.001, 'p_dia N=16 (sin huecos)');
+ok(CandidatoLlegadaEngine::forzarOfertaPorPity(3, 3), 'pity garantiza oferta tras 3 días sin oferta (N bajo)');
 
 $et = [];
 for ($n = 3; $n <= $cap - 1; $n++) {
