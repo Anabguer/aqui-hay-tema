@@ -1004,3 +1004,19 @@
     grid-template-columns: minmax(210px, 260px) minmax(520px, 1.2fr) minmax(210px, 260px) !important;
   }
 }
+/* INICIO-MAP-REDUCE-MORE-v1 — mapa desktop aún más compacto */
+@media (min-width: 769px) {
+  .inicio-stage {
+    grid-template-columns: minmax(210px, 260px) minmax(430px, 1fr) minmax(210px, 260px) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    min-height: min(calc(62vh - 2cm), calc(580px - 2cm)) !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .inicio-stage {
+    grid-template-columns: minmax(220px, 270px) minmax(470px, 1.1fr) minmax(220px, 270px) !important;
+  }
+}
