@@ -119,6 +119,66 @@ final class MensajitoVoz
     }
 
     /** @return list<string> */
+    private static function bancoMarchaIntencionAislamiento(): array
+    {
+        return [
+            'Celestine, llevo días sin hablar con nadie. No sé si aquí es mi sitio.',
+            'Últimamente paso desapercibido. Me estoy planteando irme.',
+            'Aquí nadie me llama. Empiezo a pensar en marcharme.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaIntencionEmocion(): array
+    {
+        return [
+            'Celestine, no me encuentro bien. Llevo un tiempo muy bajo y me planteo irme.',
+            'Últimamente me cuesta levantarme con ilusión. Quizá debería marcharme.',
+            'No es un día malo: es una racha. Y me da vueltas la idea de irme.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaIntencionConflicto(): array
+    {
+        return [
+            'Celestine, hay tensión con gente del pueblo. No sé si puedo seguir aquí.',
+            'Últimamente las cosas se han puesto difíciles con otros vecinos. Me planteo irme.',
+            'No quiero más mal rollo. Estoy pensando en marcharme.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaIntencionCrisis(): array
+    {
+        return [
+            'Celestine, he pasado por un momento muy duro. Necesito pensar si sigo aquí.',
+            'No ha sido fácil estos días. Me estoy planteando dejar el pueblo.',
+            'Algo se ha roto para mí aquí. Quería contártelo antes de decidir.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaDespedida(): array
+    {
+        return [
+            'Gracias por todo, Celestine. Me llevo buenos recuerdos.',
+            'No ha sido fácil decidirlo, pero es hora. Cuídate.',
+            'Me voy con lo justo. Gracias por haberme acogido.',
+        ];
+    }
+
+    /** @return list<string> */
+    private static function bancoMarchaLegado(): array
+    {
+        return [
+            'No me cabe en la maleta. Creo que aquí tendrá mejor vida.',
+            'Para ti, Celestine. No sabía qué regalarte, así que he elegido esto.',
+            'Quiero que esto quede contigo. Me hace ilusión que lo uses.',
+        ];
+    }
+
+    /** @return list<string> */
     private static function bancoCandidatoOferta(): array
     {
         return [
@@ -576,8 +636,20 @@ final class MensajitoVoz
                 return self::bancoRechazoTercero();
             case 'marcha_intencion':
                 return self::bancoMarchaIntencion();
+            case 'marcha_intencion_aislamiento':
+                return self::bancoMarchaIntencionAislamiento();
+            case 'marcha_intencion_emocion_negativa':
+                return self::bancoMarchaIntencionEmocion();
+            case 'marcha_intencion_conflicto':
+                return self::bancoMarchaIntencionConflicto();
+            case 'marcha_intencion_crisis':
+                return self::bancoMarchaIntencionCrisis();
             case 'marcha_se_queda':
                 return self::bancoMarchaSeQueda();
+            case 'marcha_despedida':
+                return self::bancoMarchaDespedida();
+            case 'marcha_legado':
+                return self::bancoMarchaLegado();
             case 'candidato_oferta':
                 return self::bancoCandidatoOferta();
             case 'candidato_en_camino':

@@ -55,6 +55,14 @@ final class CotilleoCategoria
                 $id = self::PUEBLO;
                 $destacado = true;
                 break;
+            case 'llegada_bienvenida':
+                $id = self::PUEBLO;
+                $destacado = true;
+                break;
+            case 'marcha_publica':
+                $id = self::PUEBLO;
+                $destacado = true;
+                break;
             case 'cotilleo_autonomo':
                 $id = self::PUEBLO;
                 break;

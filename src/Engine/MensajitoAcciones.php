@@ -183,7 +183,9 @@ final class MensajitoAcciones
                     $partida,
                     $root,
                     $mensajeId,
-                    $logger
+                    $logger,
+                    isset($payload['acompanante_id']) ? (string) $payload['acompanante_id']
+                        : (isset($payload['personaje_id']) ? (string) $payload['personaje_id'] : null)
                 );
                 break;
             case self::RECHAZAR_CANDIDATO:

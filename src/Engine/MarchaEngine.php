@@ -83,6 +83,7 @@ final class MarchaEngine
 
         $nombre = IdentidadPublica::nombre($partida, $rid);
         $viviendaId = (string) ($partida['residentes'][$rid]['vivienda_id'] ?? '');
+        $causa = (string) ($int['causa'] ?? '');
         CapacidadViviendas::liberarResidente($partida, $rid);
         $partida['residentes'][$rid]['presencia'] = 'antiguo_residente';
         HistorialPersonajesPartida::marcar($partida, $rid);
@@ -91,24 +92,11 @@ final class MarchaEngine
         $int['resuelto_dia'] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $partida['marchas']['intenciones'][$int['id']] = $int;
 
-        $seed = 'marcha_efectiva|' . $rid;
-        $texto = CopyCotilleoFamilias::linea('marcha_efectiva', ['nombre' => $nombre], $seed);
-        if ($texto === '') {
-            $texto = $nombre . ' se ha ido del pueblo. La vivienda queda libre.';
-        }
-        BuzonEngine::crear($partida, [
-            'clasificacion' => BuzonEngine::COTILLEO,
-            'tipo' => 'marcha_publica',
-            'texto' => $texto,
-            'cotilleo_meta' => CotilleoCategoria::meta(CotilleoCategoria::PUEBLO, true),
-            'actores' => [$rid],
-            'de_persona' => $rid,
-            'origen' => ['tipo_evento' => DomainEvents::MARCHA_EFECTIVA, 'es_narrativo' => true],
-        ]);
+        MarchaPresentacionEngine::alDejarIr($partida, $rid, $causa, $logger);
 
         DomainEventDispatcher::emit($partida, DomainEvents::MARCHA_EFECTIVA, [
             'residente_id' => $rid,
-            'causa' => $int['causa'] ?? null,
+            'causa' => $causa !== '' ? $causa : ($int['causa'] ?? null),
             'actores' => [$rid],
         ], $logger, 'MarchaEngine::dejarIr');
 
