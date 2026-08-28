@@ -291,10 +291,24 @@ final class EncuentroResultadoVista
             }
             $rid = (string) ($em['residente'] ?? $em['residente_id'] ?? '');
             $nombre = $rid !== '' ? IdentidadPublica::nombre($partida, $rid) : 'Alguien';
+
+            $explicacion = null;
+            if ($rid !== '' && isset($partida['residentes'][$rid])) {
+                $estadoData = $partida['residentes'][$rid]['runtime']['estado_emocional'] ?? [];
+                $completa = EmocionalNarrativa::explicacionCompleta($partida, $rid, $estadoData);
+                if ($completa !== null) {
+                    $explicacion = $completa['explicacion'] ?? null;
+                }
+            }
+
+            $texto = $explicacion !== null
+                ? $nombre . ': ' . strtolower(substr($explicacion, 0, 1)) . substr($explicacion, 1)
+                : $nombre . ' ha cambiado de humor.';
+
             $out[] = [
                 'residente' => $rid !== '' ? $rid : null,
                 'estado' => $estado,
-                'texto' => $nombre . ' ha cambiado de humor.',
+                'texto' => $texto,
             ];
         }
         return $out;
