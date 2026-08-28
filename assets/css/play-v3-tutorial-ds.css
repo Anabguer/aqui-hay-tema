@@ -1003,3 +1003,53 @@ body.play-v3[data-tut-finale="1"] .tut-finale .tut-papel,
     background: linear-gradient(180deg, rgba(249, 244, 238, 0) 0%, rgba(249, 244, 238, 0.94) 32%, #f9f4ee 100%) !important;
   }
 }
+
+/* TUTORIAL-LEGIBILIDAD-v5: texto legible y modal alta coherente en PC/móvil. */
+.play-v3 .tut-intro-line,
+.play-v3 .tut-intro-extra,
+.play-v3 .tut-bloques-pref,
+.play-v3 .tut-bloque-txt,
+.play-v3 .tut-cierre {
+  font-size: 1.15rem !important;
+  line-height: 1.35 !important;
+}
+.play-v3 .tut-intro .tut-papel,
+.play-v3 .tut-finale .tut-papel {
+  height: min(90dvh, 660px) !important;
+  min-height: min(90dvh, 660px) !important;
+  max-height: min(90dvh, 660px) !important;
+}
+.play-v3 .tut-intro .tut-papel {
+  display: flex !important;
+  flex-direction: column !important;
+}
+.play-v3 .tut-intro .tut-papel-cuerpo {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  overflow-y: auto !important;
+}
+.play-v3 .tut-papel-pie {
+  flex: 0 0 auto !important;
+  margin-top: auto !important;
+}
+.play-v3 .tut-acciones {
+  justify-content: stretch !important;
+  align-items: stretch !important;
+}
+@media (max-width: 768px) {
+  .play-v3 .tut-intro .tut-papel,
+  .play-v3 .tut-finale .tut-papel {
+    width: min(94vw, 380px) !important;
+    height: min(90dvh, calc(100dvh - 1rem)) !important;
+    min-height: min(90dvh, calc(100dvh - 1rem)) !important;
+    max-height: min(90dvh, calc(100dvh - 1rem)) !important;
+  }
+  .play-v3 .tut-intro-line,
+  .play-v3 .tut-intro-extra,
+  .play-v3 .tut-bloques-pref,
+  .play-v3 .tut-bloque-txt,
+  .play-v3 .tut-cierre {
+    font-size: 1.08rem !important;
+    line-height: 1.35 !important;
+  }
+}
