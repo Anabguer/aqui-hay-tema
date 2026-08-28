@@ -236,10 +236,14 @@
     transform: rotate(-1.2deg);
   }
 
-  .inicio-mobile .top-reloj .obj-dia,
-  .inicio-mobile .top-reloj .obj-hora {
+  .inicio-mobile .top-reloj .obj-dia {
     position: relative;
     top: -4px;
+  }
+
+  .inicio-mobile .top-reloj .obj-hora {
+    position: relative;
+    top: -10px;
   }
 
   .inicio-mobile .top-reloj .pasar-rato:active {
@@ -1616,10 +1620,14 @@
     gap: .45rem !important;
   }
 
-  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia,
-  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora {
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia {
     position: relative !important;
     top: -4px !important;
+  }
+
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora {
+    position: relative !important;
+    top: -10px !important;
   }
 
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia {
@@ -1646,7 +1654,7 @@
 
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora {
     padding: .28rem .62rem .32rem !important;
-    margin-bottom: 2px !important;
+    margin-bottom: 0 !important;
     transform: rotate(var(--rot, 3deg)) scale(.88) !important;
     transform-origin: left bottom !important;
   }
