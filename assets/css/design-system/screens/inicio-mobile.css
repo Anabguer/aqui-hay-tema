@@ -702,6 +702,8 @@
     text-transform: uppercase;
     color: #fff;
     line-height: 1;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
     transform: none;
     white-space: nowrap;
   }
@@ -2072,7 +2074,7 @@
   }
 
   /* --- 3. Cotilleo feed (igual que sobremesa; gana a responsive; badge nuevos intacto) --- */
-  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par {
+  .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par {
     display: grid !important;
     grid-template-columns: auto minmax(0, 1fr) auto !important;
     grid-template-rows: auto auto !important;
@@ -2103,12 +2105,13 @@
     display: none !important;
   }
 
-  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-cuerpo {
+  .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .obj-cotilleo-cuerpo {
     display: contents !important;
   }
 
-  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit {
+  .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-tit {
     grid-area: tit !important;
+    display: inline-block !important;
     flex: none !important;
     margin: 0 !important;
     padding: 6px 9px !important;
@@ -2121,6 +2124,8 @@
     text-transform: uppercase !important;
     color: #fff !important;
     line-height: 1 !important;
+    writing-mode: horizontal-tb !important;
+    text-orientation: mixed !important;
     transform: none !important;
     white-space: nowrap !important;
     border: none !important;
