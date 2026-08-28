@@ -158,9 +158,66 @@ final class DiarioNarrativaBridge
         if (in_array($tipoBuzon, $known, true)) {
             return $tipoBuzon;
         }
-        if ($tipoEvento !== '') {
+        if ($tipoEvento !== '' && $tipoEvento !== 'mensaje') {
             return $tipoEvento;
         }
         return 'cotilleo';
+    }
+
+    /**
+     * Genera entrada de diario propia cuando cambia el estado emocional de un
+     * residente. NO espeja el cotilleo: usa EmocionalNarrativa para copy propio.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $estadoData runtime.estado_emocional
+     */
+    public static function desdeEmocion(array &$partida, string $residenteId, array $estadoData): ?array
+    {
+        if (!FeatureConfig::isEnabled($partida, 'diario_enabled')) {
+            return null;
+        }
+        $estadoId = EstadoEmocional::canonId((string) ($estadoData['id'] ?? ''));
+        if ($estadoId === EstadoEmocional::NEUTRO) {
+            return null;
+        }
+        $completa = EmocionalNarrativa::explicacionCompleta($partida, $residenteId, $estadoData);
+        if ($completa === null) {
+            return null;
+        }
+        $texto = $completa['explicacion'] ?? '';
+        if ($texto === '') {
+            return null;
+        }
+
+        $dia = (int) ($estadoData['desde']['dia'] ?? ($partida['reloj']['dia_pueblo'] ?? 1));
+        $origen = (string) ($estadoData['origen'] ?? '');
+        $eventoId = 'emocion:' . $residenteId . ':' . $origen . ':' . $dia;
+
+        $existente = DiarioEngine::entradaPorEvento($partida, $eventoId);
+        if ($existente !== null) {
+            return $existente;
+        }
+
+        $entrada = [
+            'id' => 'dia_emocion_' . $residenteId . '_' . $dia,
+            'dia' => $dia,
+            'tipo' => 'estado_emocional',
+            'texto' => $texto,
+            'actores' => [$residenteId],
+            'origen' => [
+                'evento_id' => $eventoId,
+                'tipo_evento' => 'estado_emocional',
+                'es_narrativo' => true,
+                'informacion_revelada' => [
+                    'origen_emocional' => $origen,
+                    'estado' => $estadoId,
+                ],
+                '_placeholder' => false,
+            ],
+            '_placeholder_contenido' => false,
+        ];
+
+        $r = DiarioEngine::crear($partida, $entrada);
+        return is_array($r['entrada'] ?? null) ? $r['entrada'] : null;
     }
 }

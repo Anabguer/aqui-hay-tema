@@ -136,6 +136,7 @@ final class EmotionalEventBridge
                 $dur
             );
             $despues = $partida['residentes'][$rid]['runtime']['estado_emocional'];
+            DiarioNarrativaBridge::desdeEmocion($partida, $rid, $despues);
             $emocionesRes[] = [
                 'residente_id' => $rid,
                 'estado' => (string) ($despues['id'] ?? ''),
