@@ -85,6 +85,15 @@ for ($st = 1; $st <= 5000; $st++) {
     if (!str_starts_with((string) ($rEvt['resultado'] ?? ''), 'evento_programado')) {
         continue;
     }
+    $evTry = $rEvt['evento'] ?? null;
+    if (!is_array($evTry)) {
+        continue;
+    }
+    $ids = array_slice(array_keys($pTry['residentes']), 0, 3);
+    $rConf = EventosPuebloEngine::confirmarAsistentes($pTry, (string) ($evTry['id'] ?? ''), $ids, $cal, $catalog);
+    if (!($rConf['ok'] ?? false)) {
+        continue;
+    }
     foreach ($pTry['encuentros'] ?? [] as $enc) {
         if (($enc['intencion'] ?? '') === 'evento_pueblo') {
             $encEvt = $enc;

@@ -10,6 +10,7 @@ use AquiHayTema\Api\Handlers\BuzonHandler;
 use AquiHayTema\Api\Handlers\DevHandler;
 use AquiHayTema\Api\Handlers\DebugLabHandler;
 use AquiHayTema\Api\Handlers\DiarioHandler;
+use AquiHayTema\Api\Handlers\EventosPuebloHandler;
 use AquiHayTema\Api\Handlers\EncuentrosHandler;
 use AquiHayTema\Api\Handlers\LlegadaHandler;
 use AquiHayTema\Api\Handlers\MapaHandler;
@@ -148,6 +149,18 @@ $routes = [
     'encuentro.proponer' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::proponer($ctx, $body, $p);
+    },
+    'evento_pueblo.apuntar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EventosPuebloHandler::apuntar($ctx, $body, $p);
+    },
+    'evento_pueblo.elegibles' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EventosPuebloHandler::elegibles($ctx, $body, $p);
+    },
+    'evento_pueblo.confirmar_asistentes' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EventosPuebloHandler::confirmarAsistentes($ctx, $body, $p);
     },
     'encuentro.tipos_permitidos' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

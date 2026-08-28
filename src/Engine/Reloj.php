@@ -320,6 +320,15 @@ final class Reloj
         return ($dia * 24 + $hora) > ($nowD * 24 + $nowH);
     }
 
+    /** Coincide exactamente con el slot del reloj actual. */
+    public static function esSlotActual(array $reloj, int $dia, int $hora): bool
+    {
+        $nowD = (int) ($reloj['dia_pueblo'] ?? 1);
+        $nowH = (int) ($reloj['hora_actual'] ?? 0);
+
+        return $dia === $nowD && $hora === $nowH;
+    }
+
     public static function avanzarHoras(array &$partida, int $horas): void
     {
         if ($horas < 0) {

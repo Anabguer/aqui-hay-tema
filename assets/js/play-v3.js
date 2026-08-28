@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   'use strict';
 
   function ctaEncuentroMovVisible(enc, iv) {
@@ -158,11 +158,13 @@
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
   const ORG_MAX_VECINOS = 2;
-  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null };
+  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null };
   let orgPresetNuevo = false;
   let orgProponiendo = false;
   const ORG_BTN_LABEL = 'Crear plan';
+  const ORG_BTN_LABEL_EVENTO = 'Apuntar vecinos';
   const ORG_BTN_BUSY = 'Organizando\u2026';
+  const ORG_BTN_BUSY_EVENTO = 'Apuntando\u2026';
   const playtestLogClient = { entries: [] };
   const ahtDebugSessionLog = [];
   playtestLogClient.push = function (e) {
@@ -1043,6 +1045,14 @@
     return null;
   }
 
+  function mensajitoTintDeRemitente(id) {
+    const s = String(id || '');
+    if (!s) return 0;
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    return (Math.abs(h) % 3);
+  }
+
   function remitenteIdDe(m) {
     if (!m || typeof m !== 'object') return null;
     const direct = m.de_persona || m.de;
@@ -1628,8 +1638,9 @@
       '" data-emocion="' + esc(emo) + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
   }
 
-  function carasPlanHtml(ids) {
-    return ids.slice(0, 2).map(function (id) { return htmlCaraToken(id); }).join('');
+  function carasPlanHtml(ids, max) {
+    var lim = (max == null) ? 2 : max;
+    return (ids || []).slice(0, lim).map(function (id) { return htmlCaraToken(id); }).join('');
   }
   function encuentroOcupaAhora(enc, estado) {
     if (!enc) return false;
@@ -1864,11 +1875,150 @@
 
   /* === Planes en curso — carrusel movil (misma fuente canonica que desktop) === */
 
+  function planEsEventoPueblo(enc) {
+    if (!enc) return false;
+    if (enc.intencion === 'evento_pueblo') return true;
+    if (enc.evento_pueblo_id || enc.evento_pueblo_catalogo_id) return true;
+    if (enc.es_evento_pueblo === true) return true;
+    var idsEvt = enc.participantes || [];
+    if (idsEvt.length >= 3 && enc.intencion !== 'celeste_organizado') return true;
+    return false;
+  }
+
+  function maxCarasProxPlan(enc, ids) {
+    var n = (ids || []).length;
+    if (planEsEventoPueblo(enc)) return Math.min(4, Math.max(1, n));
+    return Math.min(2, Math.max(1, n));
+  }
+
+  const EVENTO_PUEBLO_NOMBRE_UI = {
+    noche_bingo: 'Noche de bingo',
+    partido_futbol_benefico: 'Partido de fútbol benéfico',
+    sesion_cine_comunitaria: 'Sesión de cine comunitaria',
+    tardeo_en_el_bar: 'Tardeo en el bar',
+    clase_abierta_gimnasio: 'Clase abierta en el gimnasio',
+    club_lectura: 'Club de lectura'
+  };
+
+  const EVENTO_PUEBLO_IMG = {
+    noche_bingo: 'assets/play-v3/eventos/noche_bingo.png',
+    partido_futbol_benefico: 'assets/play-v3/eventos/partido_futbol_benefico.png',
+    sesion_cine_comunitaria: 'assets/play-v3/eventos/sesion_cine_comunitaria.png',
+    tardeo_en_el_bar: 'assets/play-v3/eventos/tardeo_en_el_bar.png',
+    clase_abierta_gimnasio: 'assets/play-v3/eventos/clase_abierta_gimnasio.png',
+    club_lectura: 'assets/play-v3/eventos/club_lectura.png'
+  };
+
+  function eventoPuebloCatalogoId(enc, partida) {
+    if (!enc) return '';
+    if (enc.evento_pueblo_catalogo_id) return String(enc.evento_pueblo_catalogo_id);
+    partida = partida || cacheInsp || {};
+    var encId = String(enc.id || '');
+    var prog = (partida.eventos_pueblo && partida.eventos_pueblo.programados) || [];
+    var i;
+    for (i = 0; i < prog.length; i++) {
+      var ev = prog[i];
+      if (!ev) continue;
+      if (String(ev.encuentro_id || '') === encId || String(ev.id || '') === String(enc.evento_pueblo_id || '')) {
+        if (ev.catalogo_id) return String(ev.catalogo_id);
+      }
+    }
+    return '';
+  }
+
+  function eventoPuebloImgSrc(enc, partida, evEstado) {
+    var catId = enc ? eventoPuebloCatalogoId(enc, partida) : '';
+    if (!catId && evEstado && evEstado.catalogo_id) catId = String(evEstado.catalogo_id);
+    if (catId && EVENTO_PUEBLO_IMG[catId]) return EVENTO_PUEBLO_IMG[catId];
+    if (evEstado && evEstado.illustracion) return String(evEstado.illustracion);
+    var lug = (enc && enc.lugar) || (evEstado && evEstado.lugar) || '';
+    return orgLugarImg(lug);
+  }
+
+  function eventoPuebloIcoHtml(enc, partida, evEstado) {
+    var catId = enc ? eventoPuebloCatalogoId(enc, partida) : '';
+    if (!catId && evEstado && evEstado.catalogo_id) catId = String(evEstado.catalogo_id);
+    if (!catId) catId = 'evento';
+    var src = eventoPuebloImgSrc(enc, partida, evEstado);
+    var inner = src
+      ? '<img src="' + esc(src) + '" alt="" loading="lazy" decoding="async"/>'
+      : '<span class="pp-evt-ico-fallback" aria-hidden="true"></span>';
+    return '<span class="pp-evt-ico-frame pp-evt-ico-frame--' + esc(catId) + '" aria-hidden="true">' + inner + '</span>';
+  }
+
+  function nombreEventoPuebloDe(enc, partida) {
+    partida = partida || cacheInsp || {};
+    var encId = String((enc && enc.id) || '');
+    var prog = (partida.eventos_pueblo && partida.eventos_pueblo.programados) || [];
+    var i;
+    for (i = 0; i < prog.length; i++) {
+      var ev = prog[i];
+      if (!ev) continue;
+      if (String(ev.encuentro_id || '') === encId || String(ev.id || '') === String(enc.evento_pueblo_id || '')) {
+        var nm = String(ev.nombre || '').trim();
+        if (nm) return nm;
+      }
+    }
+    var catId = String((enc && enc.evento_pueblo_catalogo_id) || '');
+    if (EVENTO_PUEBLO_NOMBRE_UI[catId]) return EVENTO_PUEBLO_NOMBRE_UI[catId];
+    return nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+  }
+
+  function diaSemanaProxPlan(enc, estado) {
+    if (enc && enc.dia_semana_ui) return enc.dia_semana_ui;
+    var ev = estado && estado.proximo_evento_pueblo;
+    if (ev && String(ev.encuentro_id || '') === String(enc.id || '') && ev.dia_semana_ui) {
+      return ev.dia_semana_ui;
+    }
+    var diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
+    if (Number(enc.dia) === diaHoy) return 'Hoy';
+    return 'D\u00eda ' + (enc.dia || '?');
+  }
+
+  function metaEventoPuebloLinea(enc, estado) {
+    return diaSemanaProxPlan(enc, estado) + ' \u00b7 ' +
+      String(horaEnc(enc)).padStart(2, '0') + ':00 \u00b7 ' +
+      nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+  }
+
+  function asistentesEventoPuebloTxt(ids) {
+    var lista = (ids || []).map(function (id) { return nombreDe(id); }).filter(Boolean);
+    var n = lista.length;
+    if (n <= 0) return '';
+    if (n === 1) return lista[0];
+    if (n === 2) return lista.join(' y ');
+    return lista.slice(0, 2).join(', ') + ' y ' + (n - 2) + ' m\u00e1s';
+  }
+
+  function htmlProximoPlanCardEvento(enc, estado) {
+    var ids = enc.participantes || [];
+    var maxCaras = maxCarasProxPlan(enc, ids);
+    var titulo = nombreEventoPuebloDe(enc, cacheInsp);
+    var meta = metaEventoPuebloLinea(enc, estado);
+    var asist = asistentesEventoPuebloTxt(ids);
+    var ico = eventoPuebloIcoHtml(enc, cacheInsp, null);
+    return '<article class="pp-mov-card pp-mov-card--evento pp-mov-card--evento-v31" data-pp-evento-pueblo="1" role="status">' +
+      '<span class="pp-evt-tag">EVENTO PUEBLO</span>' +
+      '<div class="pp-evt-main">' +
+      '<div class="pp-evt-ico">' + ico + '</div>' +
+      '<div class="pp-evt-copy">' +
+      '<p class="pp-evt-tit">' + esc(titulo) + '</p>' +
+      '<p class="pp-evt-meta">' + esc(meta) + '</p>' +
+      '</div>' +
+      '</div>' +
+      '<div class="pp-evt-pie">' +
+      '<div class="pp-evt-faces prox-faces prox-faces--grupo">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<p class="pp-evt-asisten">' + esc(asist) + '</p>' +
+      '</div>' +
+      '</article>';
+  }
+
   function proximosPlanesFuturos(partida, estado) {
     const reloj = (estado && estado.reloj) || {};
     const now = relojAbs(reloj.dia_pueblo, reloj.hora_actual);
     return ((partida && partida.encuentros) || []).filter(function (e) {
       if (!e || !e.id) return false;
+      if (planEsEventoPueblo(e)) return false;
       if (String(e.estado || '') !== 'programado') return false;
       if (planEsEnCurso(e, estado)) return false;
       return now < relojAbs(e.dia, horaEnc(e)) + duracionEncHoras(e);
@@ -1878,7 +2028,11 @@
     });
   }
   function htmlProximoPlanCardMovil(enc, estado) {
+    if (planEsEventoPueblo(enc)) {
+      return htmlProximoPlanCardEvento(enc, estado);
+    }
     const ids = enc.participantes || [];
+    const maxCaras = maxCarasProxPlan(enc, ids);
     const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
     const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
       ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
@@ -1888,7 +2042,7 @@
       '<span class="pp-mov-star" aria-hidden="true">\u2605</span>' +
       '</div>' +
       '<div class="pp-mov-body">' +
-      '<div class="prox-faces">' + carasPlanHtml(ids) + '</div>' +
+      '<div class="prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
       '<div class="pp-mov-copy">' +
       '<p class="pp-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
       '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
@@ -1939,6 +2093,7 @@
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
     const fam = familiaTipoEncuentro(enc);
+    if (fam !== 'romantico') return '';
     const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + fam;
     if (fam === 'romantico') {
       return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>';
@@ -1966,7 +2121,9 @@
     const ids = (enc && enc.participantes) || [];
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
-    return htmlCaraToken(slice[0]) + iconoEncuentroCentroHtml(enc) + htmlCaraToken(slice[1]);
+    return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
+      iconoEncuentroCentroHtml(enc) +
+      htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {
     const iv = intervencionVistaDe(enc, estado);
@@ -1988,59 +2145,54 @@
     return '<div class="enc-mov-vista"><p class="enc-mov-vista-txt">' +
       esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
   }
-  function htmlEncursoCardDesktop(enc, estado) {
-    const iv = intervencionVistaDe(enc, estado);
-    const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
-      (iv.disponible && iv.acciones && iv.acciones.length));
-    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
-    const ctaTxt = ctaTxtEncuentroMov(enc, iv);
-    let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
-      '<div class="enc-mov-body">' +
-      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
-      '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
-      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>';
-    if (!ctaVisible && panelHtml) {
-      html += panelHtml;
+  function encCursoNombresHtml(ids) {
+    const list = ids || [];
+    if (list.length === 2) {
+      return esc(nombreDe(list[0])) + ' + ' + esc(nombreDe(list[1]));
     }
-    html += '</div>';
-    if (ctaVisible) {
-      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
-        '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
-        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
-    }
-    return html + '</article>';
+    return esc(list.map(function (id) { return nombreDe(id); }).join(' · '));
   }
-    function htmlEncursoCardMovilV14(enc, estado) {
+  function encCursoLugarStampHtml(enc) {
+    const src = orgLugarImg(enc && enc.lugar);
+    if (!src) return '';
+    return '<div class="enc-mov-lugar-stamp" aria-hidden="true"><img src="' + esc(src) + '" alt="" loading="lazy" decoding="async"></div>';
+  }
+  function htmlEncursoCardEscena(enc, estado) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
     const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
-    let html = '<article class="enc-mov-card enc-mov-card--compact" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-mov-row">' +
+    const ctaTxt = ctaTxtEncuentroMov(enc, iv);
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
+    let html = '<article class="enc-mov-card enc-mov-card--escena" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<div class="enc-mov-escena">' +
+      encCursoLugarStampHtml(enc) +
+      '<div class="enc-mov-escena-core">' +
       '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
-      '<div class="enc-mov-copy">' +
-      '<p class="enc-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
-      '<p class="enc-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
-      '<p class="enc-mov-estado"><span class="enc-mov-hora"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</span></p>' +
-      '</div>';
+      '<p class="enc-mov-nombres">' + encCursoNombresHtml(ids) + '</p>' +
+      '<p class="enc-mov-estado-pill"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</p>' +
+      '<div class="enc-mov-donde-cuando">' +
+      '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
+      '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
+      '</div></div></div>';
     if (ctaVisible) {
       html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        'INTERVENIR<span class="enc-mov-cta-flecha" aria-hidden="true"> &#8250;</span></button>';
-    }
-    html += '</div>';
-    if (ctaVisible) {
-      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+        '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
+        '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
     } else if (panelHtml) {
       html += panelHtml;
     }
     return html + '</article>';
   }
-
+  function htmlEncursoCardDesktop(enc, estado) {
+    return htmlEncursoCardEscena(enc, estado);
+  }    function htmlEncursoCardMovilV14(enc, estado) {
+    return htmlEncursoCardEscena(enc, estado);
+  }
   function htmlEncursoCardMovil(enc, estado) {
     return htmlEncursoCardMovilV14(enc, estado);
   }
@@ -2224,27 +2376,69 @@
   }
 
   function renderProximoEventoPueblo(estado) {
-    const slot = document.querySelector('[data-proximo-evento-slot]');
-    if (!slot) return;
+    const slots = document.querySelectorAll('[data-proximo-evento-slot]');
+    if (!slots.length) return;
     const ev = estado && estado.proximo_evento_pueblo;
-    if (!ev || (!ev.nombre_ui && !ev.nombre)) {
-      slot.hidden = true;
-      slot.setAttribute('aria-hidden', 'true');
-      return;
+    const vacio = !ev || (!ev.nombre_ui && !ev.nombre);
+    slots.forEach(function (slot) {
+      if (vacio) {
+        slot.hidden = true;
+        slot.setAttribute('aria-hidden', 'true');
+        return;
+      }
+      slot.hidden = false;
+      slot.removeAttribute('aria-hidden');
+      const card = slot.querySelector('[data-proximo-evento-card]');
+      const tagTxt = slot.querySelector('[data-proximo-evento-tag-txt]');
+      const tit = slot.querySelector('[data-proximo-evento-tit]');
+      const meta = slot.querySelector('[data-proximo-evento-meta]');
+      const ico = slot.querySelector('[data-proximo-evento-ico]');
+      const enMarcha = String(ev.estado || '') === 'en_curso';
+      if (card) card.classList.toggle('inicio-evento-card--marcha', enMarcha);
+      if (tagTxt) tagTxt.textContent = enMarcha ? '\u00a1Est\u00e1 pasando ahora!' : 'Evento del pueblo';
+      if (tit) tit.textContent = ev.nombre_ui || ev.nombre || '';
+      if (typeof pintarProximoEventoIco === 'function') pintarProximoEventoIco(ico, ev);
+      else if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
+      var metaTxt = ev.meta_ui || '';
+      if (ev.aforo_ui) metaTxt = metaTxt ? (metaTxt + ' \u00b7 ' + ev.aforo_ui) : ev.aforo_ui;
+      if (meta) meta.textContent = metaTxt;
+      var cta = slot.querySelector('[data-proximo-evento-cta]') || (card && card.querySelector('[data-proximo-evento-participar]'));
+      var plazas = parseInt(ev.plazas_disponibles, 10);
+      if (isNaN(plazas)) plazas = 0;
+      var pendienteSel = !!(ev.pendiente_seleccion || ev.seleccion_estado === 'pendiente_asistentes'); var puedeApuntar = pendienteSel;
+      if (!cta && card) {
+        cta = document.createElement('button');
+        cta.type = 'button';
+        cta.className = 'inicio-evento-cta';
+        cta.setAttribute('data-proximo-evento-participar', '1');
+        cta.innerHTML = '<span class="inicio-evento-cta-txt">Elegir qui\u00e9n va</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
+        card.appendChild(cta);
+      }
+      if (cta) {
+        cta.hidden = !puedeApuntar;
+        cta.disabled = !puedeApuntar;
+        if (puedeApuntar) {
+          cta.onclick = function (evClick) {
+            evClick.preventDefault();
+            evClick.stopPropagation();
+            abrirOrganizarEventoPueblo(ev);
+          };
+        }
+      }
+    });
+  }
+
+  function pintarProximoEventoIco(ico, ev) {
+    if (!ico) return;
+    const src = eventoPuebloImgSrc(null, cacheInsp, ev);
+    ico.className = 'inicio-evento-ico';
+    if (src) {
+      ico.classList.add('inicio-evento-ico--lugar');
+      ico.innerHTML = '<img src="' + esc(src) + '" alt="" loading="lazy" decoding="async">';
+    } else {
+      ico.classList.add('inicio-evento-ico--doodle');
+      ico.textContent = ev.icono || '';
     }
-    slot.hidden = false;
-    slot.removeAttribute('aria-hidden');
-    const card = slot.querySelector('[data-proximo-evento-card]');
-    const tagTxt = slot.querySelector('[data-proximo-evento-tag-txt]');
-    const tit = slot.querySelector('[data-proximo-evento-tit]');
-    const meta = slot.querySelector('[data-proximo-evento-meta]');
-    const ico = slot.querySelector('[data-proximo-evento-ico]');
-    const enMarcha = String(ev.estado || '') === 'en_curso';
-    if (card) card.classList.toggle('inicio-evento-card--marcha', enMarcha);
-    if (tagTxt) tagTxt.textContent = enMarcha ? 'EN MARCHA' : 'SE APROXIMA EVENTO';
-    if (tit) tit.textContent = ev.nombre_ui || ev.nombre || '';
-    if (meta) meta.textContent = ev.meta_ui || '';
-    if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
   }
 
   function bootSyncInicioViewVisibility() {
@@ -3458,7 +3652,11 @@
       const r = res[id];
       const b = document.createElement('button');
       b.type = 'button';
-      b.className = 'vecino-celda vecino-celda--decor-' + (idx % 6);
+      const vecTint = mensajitoTintDeRemitente(id);
+      b.className = 'vecino-celda vecino-celda--decor-' + (idx % 6) +
+        ' vecino-tinta-' + vecTint +
+        (vecTint === 1 || vecTint === 2 ? ' vecino-borde-rallado' : '');
+      b.setAttribute('data-residente', id);
       const img = tokenDe(id);
       const nom = (r.identidad_publica && r.identidad_publica.nombre) || id;
       const ini = nom.charAt(0) || '?';
@@ -4662,11 +4860,14 @@ function hobbyIconKey(id, texto) {
       const art = document.createElement('article');
       const st = estadoCarta(m);
       const leido = (m.estado || '') !== 'pendiente';
+      const nombre = nombrePublicoDe(m);
+      const ridRem = remitenteIdDe(m);
       art.className = 'carta-msg' +
         (esAccion ? ' carta-accion' : ' carta-info') +
         (leido ? ' leida' : ' no-leida') +
-        (st.cls ? ' ' + st.cls : '');
-      const nombre = nombrePublicoDe(m);
+        (st.cls ? ' ' + st.cls : '') +
+        ' carta-tinta-' + mensajitoTintDeRemitente(ridRem || nombre);
+      if (ridRem) art.setAttribute('data-remitente', ridRem);
       const cuerpo = cuerpoMensajito(m, nombre);
       const perfilLlegadaHtml = (m.tipo === 'candidato_llegada') ? htmlPerfilCandidato(m) : '';
       const plazo = (m.estado_pueblo === 'caducada') ? '' : (m.plazo_humano || '');
@@ -5007,6 +5208,15 @@ function hobbyIconKey(id, texto) {
     if (!file) { var slug = String(lugId || '').replace(/^lug_/, ''); if (slug) file = slug + '.png'; }
     return file ? ('assets/play-v3/edificios/' + file) : '';
   }
+
+  function orgLugarThumbHtml(lugId) {
+    var img = orgLugarImg(lugId);
+    var inner = img
+      ? '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>'
+      : '<span class="org-lugar-thumb-fallback" aria-hidden="true"></span>';
+    return '<span class="org-lugar-thumb" aria-hidden="true">' + inner + '</span>';
+  }
+
   function pintarOrgLugares(lugares, value, onChange) {
     var box = $('[data-org-lugares]');
     var native = $('[data-org-lugar]');
@@ -5078,19 +5288,95 @@ function hobbyIconKey(id, texto) {
     }
   }
 
+
+  function orgEsEventoPueblo() {
+    return org && (org.modo === 'evento' || org.modo === 'evento_pueblo') && !!org.evento_pueblo_id;
+  }
+
+  function orgMaxVecinos() {
+    if (!orgEsEventoPueblo()) return ORG_MAX_VECINOS;
+    var plazas = org.evento_ctx && org.evento_ctx.plazas_disponibles;
+    if (plazas === 0) return 0;
+    if (typeof plazas === 'number' && plazas > 0) return plazas;
+    return ORG_MAX_VECINOS;
+  }
+
+  function orgApuntadosEvento() {
+    var ids = (org.evento_ctx && org.evento_ctx.participantes_apuntados) || [];
+    var out = {};
+    ids.forEach(function (id) { if (id) out[id] = true; });
+    return out;
+  }
+
+  function abrirOrganizarEventoPueblo(ev) {
+    var preset = (ev && ev.preset_organizar) ? ev.preset_organizar : ev;
+    if (!preset || !preset.evento_pueblo_id) return;
+    abrirOrganizarConPreset(preset);
+  }
+
+  function aplicarOrgModoEventoUi() {
+    var capa = document.querySelector('.capa-organizar');
+    var tit = document.querySelector('.capa-organizar .org-tit');
+    var modoToggle = document.querySelector('[data-org-modo-toggle]');
+    var seccQue = document.querySelector('.org-seccion--que');
+    var seccDonde = document.querySelector('.org-seccion--donde');
+    var seccCuando = document.querySelector('.org-seccion--cuando');
+    var quienTit = document.querySelector('.org-seccion--quienes .ficha-seccion-tit');
+    var contador = document.querySelector('[data-org-vecinos-contador]');
+    var esEvt = orgEsEventoPueblo();
+    if (capa) capa.classList.toggle('org-plan-papel--evento', esEvt);
+    if (tit) {
+      if (esEvt) {
+        var nom = (org.evento_ctx && (org.evento_ctx.nombre_ui || org.evento_ctx.nombre)) || 'Evento del pueblo';
+        tit.innerHTML = '<span class="org-evento-kicker">EVENTO DEL PUEBLO</span><span class="org-evento-nombre">' + esc(nom) + '</span>';
+      } else {
+        tit.textContent = 'Nuevo plan';
+      }
+    }
+    if (modoToggle) modoToggle.hidden = esEvt;
+    if (seccQue) seccQue.hidden = esEvt;
+    if (seccDonde) seccDonde.hidden = esEvt;
+    if (seccCuando) seccCuando.hidden = esEvt;
+    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '¿Quiénes van?';
+    if (contador) {
+      if (esEvt && org.evento_ctx && org.evento_ctx.aforo_total) {
+        var act = (org.evento_ctx.participantes_apuntados || []).length;
+        contador.textContent = act + ' / ' + org.evento_ctx.aforo_total + ' plazas';
+        contador.hidden = false;
+      } else {
+        contador.hidden = true;
+        contador.textContent = '';
+      }
+    }
+  }
   function orgIdsDesdePreset(preset) {
     const out = [];
     if (preset && preset.a) out.push(preset.a);
     if (preset && preset.b && preset.b !== preset.a) out.push(preset.b);
     if (preset && preset.c && preset.c !== preset.a && preset.c !== preset.b) out.push(preset.c);
-    return out.slice(0, ORG_MAX_VECINOS);
+    return out.slice(0, orgMaxVecinos());
   }
 
   function actualizarOrgPickerHint() {
     const hint = $('[data-org-picker-hint]');
     if (!hint) return;
     const n = orgSeleccionados().length;
+    const max = orgMaxVecinos();
     hint.classList.remove('is-limit');
+    if (orgEsEventoPueblo()) {
+      if (max <= 0) {
+        hint.textContent = 'Aforo completo.';
+        hint.classList.add('is-limit');
+        return;
+      }
+      if (!n) {
+        hint.textContent = 'Selecciona vecinos para apuntarlos (hasta ' + max + ').';
+        return;
+      }
+      if (n < max) hint.textContent = n + ' vecino' + (n === 1 ? '' : 's') + ' elegido' + (n === 1 ? '' : 's') + '. Puedes a\u00f1adir hasta ' + max + '.';
+      else hint.textContent = max + ' vecinos elegidos (m\u00e1ximo para este evento).';
+      return;
+    }
     if (!n) {
       hint.textContent = 'Elige hasta ' + ORG_MAX_VECINOS + ' vecinos.';
       return;
@@ -5115,6 +5401,7 @@ function hobbyIconKey(id, texto) {
 
   function orgParticipantesListos() {
     var parts = orgSeleccionados();
+    if (orgEsEventoPueblo()) return parts.length >= 1 && orgMaxVecinos() > 0;
     if (orgModo() === 'solo') return parts.length >= 1;
     return parts.length >= 2;
   }
@@ -5138,7 +5425,10 @@ function hobbyIconKey(id, texto) {
     btn.classList.toggle('is-busy', orgProponiendo);
     btn.setAttribute('aria-disabled', (!val.ok || orgProponiendo) ? 'true' : 'false');
     var txt = btn.querySelector('.org-crear-txt');
-    if (txt) txt.textContent = orgProponiendo ? ORG_BTN_BUSY : ORG_BTN_LABEL;
+    if (txt) {
+      if (orgProponiendo) txt.textContent = orgEsEventoPueblo() ? ORG_BTN_BUSY_EVENTO : ORG_BTN_BUSY;
+      else txt.textContent = orgEsEventoPueblo() ? ORG_BTN_LABEL_EVENTO : ORG_BTN_LABEL;
+    }
   }
 
   function setOrgHorasHint(txt, show) {
@@ -5164,6 +5454,10 @@ function hobbyIconKey(id, texto) {
       return pend || 'Elige al menos dos vecinos.';
     }
     if (err === 'PARTICIPANTES_EXCESO') return 'Puedes organizar planes con hasta 2 vecinos.';
+    if (err === 'AFORO_COMPLETO') return 'El evento ya está completo.';
+    if (err === 'PARTICIPANTE_YA_APUNTADO') return 'Ese vecino ya está apuntado al evento.';
+    if (err === 'EVENTO_PUEBLO_NO_ENCONTRADO') return 'No se ha encontrado ese evento del pueblo.';
+    if (err === 'EVENTO_PUEBLO_CERRADO') return 'Ese evento ya no admite apuntados.';
     if (err === 'lugar_requerido' || err === 'LUGAR_NO_OPERATIVO') return 'Elige un lugar.';
     if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cuándo quedar.';
     if (err === 'LIMITE_INTERVENCIONES') return 'Has alcanzado el l\u00edmite de intervenciones de hoy.';
@@ -5176,6 +5470,13 @@ function hobbyIconKey(id, texto) {
     org.dia = parseInt($('[data-org-dia]').value, 10);
     org.hora = parseInt($('[data-org-hora]').value, 10);
     const parts = orgSeleccionados();
+    if (orgEsEventoPueblo()) {
+      if (orgMaxVecinos() <= 0) return { ok: false, msg: 'Aforo completo.' };
+      var minEvt = (org.evento_ctx && org.evento_ctx.participantes_min) || 3; if (parts.length < minEvt) return { ok: false, msg: 'Elige al menos ' + minEvt + ' vecinos para el evento.' };
+      if (new Set(parts).size !== parts.length) return { ok: false, msg: 'Elige a personas distintas.' };
+      if (parts.length > orgMaxVecinos()) return { ok: false, msg: 'Has superado las plazas disponibles del evento.' };
+      return { ok: true };
+    }
     if (orgModo() === 'solo') {
       if (!parts.length) return { ok: false, msg: 'Elige a qui\u00e9n va el plan.' };
       if (!org.lugar) return { ok: false, msg: 'Elige un lugar.' };
@@ -5194,7 +5495,7 @@ function hobbyIconKey(id, texto) {
     const strip = $('[data-org-picker]');
     if (hint) {
       hint.classList.add('is-limit');
-      hint.textContent = 'Puedes organizar planes con hasta ' + ORG_MAX_VECINOS + ' vecinos.';
+      hint.textContent = orgEsEventoPueblo() ? 'Has alcanzado las plazas disponibles del evento.' : ('Puedes organizar planes con hasta ' + ORG_MAX_VECINOS + ' vecinos.');
     }
     if (strip) {
       strip.classList.add('is-limit');
@@ -5209,7 +5510,7 @@ function hobbyIconKey(id, texto) {
     const idx = sel.indexOf(id);
     if (idx >= 0) {
       org.sel = sel.filter(function (x) { return x !== id; });
-    } else if (sel.length >= ORG_MAX_VECINOS) {
+    } else if (sel.length >= orgMaxVecinos()) {
       feedbackOrgPickerLimite();
       return;
     } else {
@@ -5419,23 +5720,27 @@ function hobbyIconKey(id, texto) {
       box.innerHTML = '<p class="mini">Nadie con ese nombre.</p>';
       return;
     }
+    var apuntados = orgApuntadosEvento();
     ids.forEach(function (id) {
       const r = res[id] || {};
       const nom = (r.identidad_publica && r.identidad_publica.nombre) || nombreDe(id) || id;
       const ini = String(nom).charAt(0) || '?';
       const img = tokenDe(id);
+      const yaApuntado = !!apuntados[id];
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '');
-      btn.title = nom;
-      btn.setAttribute('aria-label', nom);
+      btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '') + (yaApuntado ? ' is-apuntado' : '');
+      btn.title = yaApuntado ? (nom + ' (ya apuntado/a)') : nom;
+      btn.setAttribute('aria-label', yaApuntado ? (nom + ', ya apuntado al evento') : nom);
+      if (yaApuntado) btn.disabled = true;
       btn.innerHTML = '<span class="org-picker-stack">' +
         '<span class="org-picker-cara">' +
         (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="org-picker-ini">' + esc(ini) + '</span>') +
         '</span>' +
         (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">?</span>' : '') +
+        (yaApuntado ? '<span class="org-picker-apuntado" aria-hidden="true">✓</span>' : '') +
         '</span><span class="org-picker-nom">' + esc(nom) + '</span>';
-      btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); toggleOrgPicker(id); });
+      btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); if (!yaApuntado) toggleOrgPicker(id); });
       box.appendChild(btn);
     });
   }
@@ -5469,12 +5774,20 @@ function hobbyIconKey(id, texto) {
 
   function resetOrgForm(preset) {
     var p = preset || {};
+    org.modo = (p.modo === 'evento' || p.modo === 'evento_pueblo' || p.evento_pueblo_id) ? 'evento_pueblo' : (p.modo || null);
+    org.evento_pueblo_id = p.evento_pueblo_id || null;
+    org.evento_ctx = (p.modo === 'evento' || p.modo === 'evento_pueblo' || p.evento_pueblo_id) ? p : null;
     org.sel = orgIdsDesdePreset(p);
-    org.tipo = p.tipo || '';
+    org.tipo = p.tipo || ((p.modo === 'evento' || p.modo === 'evento_pueblo') ? 'otro' : '');
     org.lugar = p.lugar || '';
     org.peticion_id = p.peticion_id || null;
-    org.dia = null;
-    org.hora = 17;
+    if (org.modo === 'evento_pueblo') {
+      org.dia = p.dia || null;
+      org.hora = (p.hora !== undefined && p.hora !== null) ? p.hora : 17;
+    } else {
+      org.dia = null;
+      org.hora = 17;
+    }
     syncOrgTipoDesdeSeleccion();
     actualizarOrgModoEstado();
   }
@@ -5489,6 +5802,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function syncOrgModoUi() {
+    aplicarOrgModoEventoUi();
     actualizarOrgPickerHint();
     actualizarOrgModoEstado();
   }
@@ -5583,6 +5897,13 @@ function hobbyIconKey(id, texto) {
 
   async function fillOrganizar() {
     syncOrgModoUi();
+    if (orgEsEventoPueblo()) {
+      pintarOrgPicker();
+      actualizarOrgPickerHint();
+      actualizarOrgModoEstado();
+      actualizarOrgCrearBtn();
+      return;
+    }
     const lugares = destinosOperativos();
     const lugOpts = lugares.map(function (d) { return { value: d.id, label: d.nombre }; });
     if (org.lugar && !lugOpts.some(function (o) { return o.value === org.lugar; })) org.lugar = '';
@@ -5751,19 +6072,37 @@ function hobbyIconKey(id, texto) {
       return;
     }
     const parts = orgSeleccionados();
-    const payload = {
-      participantes: parts,
-      dia: org.dia,
-      hora: org.hora,
-      tipo: orgModo() === 'solo' ? 'individual' : (org.tipo || ''),
-      lugar: org.lugar,
-      modo: orgModo()
-    };
-    if (org.peticion_id) payload.peticion_id = org.peticion_id;
     orgProponiendo = true;
     actualizarOrgCrearBtn();
     try {
-      const r = await api('encuentro.proponer', payload);
+      var r;
+      if (orgEsEventoPueblo()) {
+        r = await api('evento_pueblo.apuntar', {
+          evento_pueblo_id: org.evento_pueblo_id,
+          participantes: parts
+        });
+        if (r && r.ok) {
+          var msgEvt = r.mensaje_ui || 'Vecinos apuntados al evento.';
+          mostrarOrgAviso(msgEvt);
+          toast(msgEvt);
+          setCapa('');
+          await refresh();
+          return;
+        }
+        mostrarOrgAviso(mensajeErrorOrgApi(r, 'No se han podido apuntar los vecinos.'));
+        await refresh();
+        return;
+      }
+      const payload = {
+        participantes: parts,
+        dia: org.dia,
+        hora: org.hora,
+        tipo: orgModo() === 'solo' ? 'individual' : (org.tipo || ''),
+        lugar: org.lugar,
+        modo: orgModo()
+      };
+      if (org.peticion_id) payload.peticion_id = org.peticion_id;
+      r = await api('encuentro.proponer', payload);
       if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
       try {
         console.log('[AHT plan]', payload, {

@@ -39,18 +39,50 @@ const fn = (function () {
   return null;
 })();
 
+const fnIco = (function () {
+  const i = js.indexOf('function pintarProximoEventoIco(');
+  if (i < 0) return null;
+  let prof = 0;
+  const start = js.indexOf('{', i);
+  for (let j = start; j < js.length; j++) {
+    if (js[j] === '{') prof++;
+    else if (js[j] === '}') { prof--; if (prof === 0) return js.slice(i, j + 1); }
+  }
+  return null;
+})();
+
 ok(fn !== null, 'js: extrae funcion renderProximoEventoPueblo');
+ok(fnIco !== null, 'js: extrae funcion pintarProximoEventoIco');
+ok(js.includes("querySelectorAll('[data-proximo-evento-slot]')"), 'js: actualiza todos los slots de evento');
 
 if (fn) {
+  const cardMock = {
+    classList: { toggle: function () {} },
+    querySelector: function () { return null; },
+    appendChild: function () {}
+  };
   const slot = { hidden: true, querySelector: function (sel) {
+    if (sel === '[data-proximo-evento-card]') return cardMock;
+    if (sel === '[data-proximo-evento-tag-txt]') return { textContent: '' };
     if (sel === '[data-proximo-evento-tit]') return { textContent: '' };
     if (sel === '[data-proximo-evento-meta]') return { textContent: '' };
-    if (sel === '[data-proximo-evento-ico]') return { textContent: '' };
+    if (sel === '[data-proximo-evento-ico]') return { textContent: '', className: '', classList: { add: function () {} }, innerHTML: '' };
+    if (sel === '[data-proximo-evento-cta]') return { hidden: true, disabled: true, onclick: null };
     return null;
   }, setAttribute: function () {}, removeAttribute: function () {} };
   const orig = global.document;
-  global.document = { querySelector: function () { return slot; } };
-  const render = eval('(' + fn + ')');
+  global.orgLugarImg = function () { return ''; };
+  global.esc = function (s) { return String(s); };
+  global.cacheInsp = {};
+  global.eventoPuebloImgSrc = function (_enc, _partida, evEstado) {
+    if (evEstado && evEstado.illustracion) return String(evEstado.illustracion);
+    if (evEstado && evEstado.lugar) return global.orgLugarImg(evEstado.lugar);
+    return '';
+  };
+  global.document = {
+    querySelectorAll: function () { return [slot]; }
+  };
+  const render = eval('(function () {' + (fnIco || '') + (fn || '') + ' return renderProximoEventoPueblo; })()');
   render({ proximo_evento_pueblo: { nombre_ui: 'la noche de bingo', meta_ui: 'Martes · 19:00 · Bingo · 6 vecinos', icono: '🎱' } });
   ok(slot.hidden === false, 'render: muestra slot con evento');
   render({});

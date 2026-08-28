@@ -95,7 +95,7 @@ $evtAntes = count($p['eventos_pueblo']['programados'] ?? []);
 $buzAntes = count($p['buzon'] ?? []);
 $r = planificar($p, $stOk);
 ok(str_starts_with((string) ($r['resultado'] ?? ''), 'evento_programado'), '1 programa evento real');
-ok(count(EncuentroEngine::list($p)) === $encAntes + 1, '5 no crea segundo encuentro en planificar');
+ok(count(EncuentroEngine::list($p)) === $encAntes, '5 no crea encuentro hasta confirmar asistentes');
 ok(count($p['eventos_pueblo']['programados'] ?? []) === $evtAntes + 1, '5 una sola fila eventos_pueblo');
 
 $msg = null;
@@ -117,7 +117,7 @@ ok(($datos['encuentro_id'] ?? '') === (string) ($evt['encuentro_id'] ?? ''), '3 
 ok((int) ($datos['dia'] ?? 0) === (int) ($evt['dia'] ?? 0), '3 dia coherente');
 ok((int) ($datos['hora'] ?? 0) === (int) ($evt['hora'] ?? 0), '3 hora coherente');
 ok(($datos['lugar'] ?? '') === (string) ($evt['lugar'] ?? ''), '3 lugar coherente');
-ok((int) ($datos['participantes_n'] ?? 0) >= 3, '3 participantes_n >= min bingo');
+ok((int) ($datos['participantes_n'] ?? 0) === 0, '3 anuncio sin asistentes previos a Celestine');
 
 $texto = trim((string) ($msg['texto'] ?? ''));
 ok($texto !== '', '4 copy no vacio');
@@ -173,7 +173,7 @@ foreach ($pFake['buzon'] ?? [] as $m) {
         $fake = $m;
     }
 }
-ok($fake === null, '7 sin participantes no inventa anuncio');
+ok($fake !== null, '7 anuncio con participantes vacios (pendiente Celestine)');
 
 // --- B2 mitad B: cierre post-evento ---
 function countCierres(array $p): int
@@ -209,6 +209,10 @@ function avanzarHastaFinEncuentro(array &$p, array $enc): void
     }
     $p['reloj'] = ['dia_pueblo' => $diaFin, 'hora_actual' => $horaFin, 'dia_semana_inicio' => 1];
 }
+
+$idsConfirm = array_slice(array_keys($p['residentes']), 0, 3);
+EventosPuebloEngine::confirmarAsistentes($p, $evtId, $idsConfirm, $cal, $catalog);
+$evt = EventosPuebloEngine::buscarProgramadoPorId($p, $evtId) ?? $evt;
 
 $encProg = null;
 foreach (EncuentroEngine::list($p) as $e) {

@@ -104,13 +104,18 @@ final class EncuentroEngine
         ?string $lugarId = null,
         ?string $actividad = null,
         ?GameLogger $logger = null,
-        bool $intervencionCeleste = true
+        bool $intervencionCeleste = true,
+        bool $permitirSlotActual = false
     ): array {
         $ctx = self::validarContexto($partida, $participantes, $tipo, $lugarId, $logger, $intervencionCeleste);
         if (!($ctx['ok'] ?? false)) {
             return $ctx;
         }
-        if (!Reloj::esFuturo($partida['reloj'] ?? [], $dia, $hora)) {
+        $reloj = $partida['reloj'] ?? [];
+        if (
+            !Reloj::esFuturo($reloj, $dia, $hora)
+            && !($permitirSlotActual && Reloj::esSlotActual($reloj, $dia, $hora))
+        ) {
             return GameError::respuesta(GameError::HORA_PASADA, ['dia' => $dia, 'hora' => $hora]);
         }
         $participantes = $ctx['participantes'];

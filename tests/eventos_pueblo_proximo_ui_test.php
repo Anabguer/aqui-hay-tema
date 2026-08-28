@@ -57,7 +57,19 @@ function labPartida(): array
         'relaciones_sociales' => [],
         'relaciones_romanticas' => [],
         'propuestas_encuentro' => [],
+        'eventos_pueblo' => ['programados' => [], 'log' => []],
     ];
+}
+
+function eventoDePartida(array $p): ?array
+{
+    foreach ($p['eventos_pueblo']['programados'] ?? [] as $ev) {
+        if (is_array($ev)) {
+            return $ev;
+        }
+    }
+
+    return null;
 }
 
 function findSeedOk(): int
@@ -88,7 +100,8 @@ ok(($vista['catalogo_id'] ?? '') === 'noche_bingo', '2 catalogo_id noche_bingo')
 ok(($vista['nombre_ui'] ?? '') !== '', '2 nombre_ui no vacio');
 ok(stripos((string) ($vista['nombre_ui'] ?? ''), 'bingo') !== false, '2 nombre_ui menciona bingo');
 ok(($vista['meta_ui'] ?? '') !== '', '2 meta_ui no vacia');
-ok((int) ($vista['participantes_n'] ?? 0) >= 3, '2 participantes_n real');
+ok((int) ($vista['participantes_n'] ?? -1) === 0, '2 participantes_n cero hasta seleccion');
+ok(!empty($vista['pendiente_seleccion']), '2 pendiente seleccion antes de hora');
 ok(!empty($vista['es_evento_pueblo']), '2 marca es_evento_pueblo');
 ok(($vista['icono'] ?? '') !== '', '2 icono presente');
 
@@ -104,6 +117,22 @@ $enc = null;
 foreach (EncuentroEngine::list($p) as $e) {
     if (($e['intencion'] ?? '') === 'evento_pueblo') {
         $enc = $e;
+    }
+}
+if ($enc === null) {
+    $evRow = eventoDePartida($p);
+    if (is_array($evRow)) {
+        $p['reloj'] = [
+            'dia_pueblo' => (int) ($evRow['dia'] ?? 5),
+            'hora_actual' => (int) ($evRow['hora'] ?? 18),
+            'dia_semana_inicio' => 1,
+        ];
+        EncuentroLifecycle::sincronizarConReloj($p, null, $catalog);
+        foreach (EncuentroEngine::list($p) as $e) {
+            if (($e['intencion'] ?? '') === 'evento_pueblo') {
+                $enc = $e;
+            }
+        }
     }
 }
 if ($enc !== null) {

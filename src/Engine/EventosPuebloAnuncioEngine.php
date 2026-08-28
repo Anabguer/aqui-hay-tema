@@ -36,11 +36,24 @@ final class EventosPuebloAnuncioEngine
         }
 
         $participantes = is_array($evento['participantes'] ?? null) ? $evento['participantes'] : [];
-        if ($participantes === []) {
+
+        $remitente = '';
+        if ($participantes !== []) {
+            $remitente = (string) $participantes[$rng->nextInt(0, count($participantes) - 1)];
+        } else {
+            $activos = [];
+            foreach ($partida['residentes'] ?? [] as $rid => $res) {
+                if (is_array($res) && (string) ($res['presencia'] ?? '') === 'residente') {
+                    $activos[] = (string) $rid;
+                }
+            }
+            if ($activos !== []) {
+                $remitente = $activos[$rng->nextInt(0, count($activos) - 1)];
+            }
+        }
+        if ($remitente === '') {
             return null;
         }
-
-        $remitente = (string) $participantes[$rng->nextInt(0, count($participantes) - 1)];
         $diaEvt = (int) ($evento['dia'] ?? 0);
         $horaEvt = (int) ($evento['hora'] ?? 0);
         $catalogoId = (string) ($evento['catalogo_id'] ?? '');
@@ -155,6 +168,9 @@ final class EventosPuebloAnuncioEngine
     private static function textoAsistencia(array $partida, array $participantes): string
     {
         $n = count($participantes);
+        if ($n === 0) {
+            return 'falta que apuntes a quién va';
+        }
         $total = 0;
         foreach ($partida['residentes'] ?? [] as $res) {
             if (is_array($res) && (string) ($res['presencia'] ?? '') === 'residente') {

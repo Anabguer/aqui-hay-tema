@@ -36,6 +36,10 @@ final class GameError
     public const INTERVENCION_NO_DISPONIBLE = 'INTERVENCION_NO_DISPONIBLE';
     public const INTERVENCION_YA_USADA = 'INTERVENCION_YA_USADA';
     public const INTERVENCION_ACCION_INVALIDA = 'INTERVENCION_ACCION_INVALIDA';
+    public const AFORO_COMPLETO = 'AFORO_COMPLETO';
+    public const PARTICIPANTE_YA_APUNTADO = 'PARTICIPANTE_YA_APUNTADO';
+    public const EVENTO_PUEBLO_NO_ENCONTRADO = 'EVENTO_PUEBLO_NO_ENCONTRADO';
+    public const EVENTO_PUEBLO_CERRADO = 'EVENTO_PUEBLO_CERRADO';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -101,6 +105,14 @@ final class GameError
                 return 'Ya has intervenido en este encuentro.';
             case self::INTERVENCION_ACCION_INVALIDA:
                 return 'Esa acción no está disponible ahora.';
+            case self::AFORO_COMPLETO:
+                return 'El evento ya está completo.';
+            case self::PARTICIPANTE_YA_APUNTADO:
+                return 'Ese vecino ya está apuntado al evento.';
+            case self::EVENTO_PUEBLO_NO_ENCONTRADO:
+                return 'No se ha encontrado ese evento del pueblo.';
+            case self::EVENTO_PUEBLO_CERRADO:
+                return 'Ese evento del pueblo ya no admite apuntados.';
             default:
                 return 'Ha ocurrido un error.';
         }

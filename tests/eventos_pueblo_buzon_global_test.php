@@ -125,6 +125,18 @@ $vista = EventosPuebloEngine::vistaProximoEvento($p, $catalog);
 ok(($vista['catalogo_id'] ?? '') === $eventoId, 'B3 proximo club_lectura');
 ok(($vista['icono'] ?? '') === '📚', 'B3 icono club');
 
+$evRow = $p['eventos_pueblo']['programados'][0] ?? null;
+ok(is_array($evRow), 'fila evento programada');
+$evtId = (string) ($evRow['id'] ?? '');
+ok($evtId !== '', 'evento tiene id');
+ok((string) ($evRow['encuentro_id'] ?? '') === '', 'sin encuentro hasta hora del evento');
+
+$p['reloj'] = [
+    'dia_pueblo' => (int) ($evRow['dia'] ?? 8),
+    'hora_actual' => (int) ($evRow['hora'] ?? 11),
+];
+EncuentroLifecycle::sincronizarConReloj($p, null, $catalog);
+
 $encId = (string) ($p['eventos_pueblo']['programados'][0]['encuentro_id'] ?? '');
 $enc = null;
 foreach ($p['encuentros'] as $e) {
@@ -133,7 +145,7 @@ foreach ($p['encuentros'] as $e) {
         break;
     }
 }
-ok($enc !== null, 'encuentro evento_pueblo existe');
+ok($enc !== null, 'encuentro evento_pueblo existe tras fallback autonomo');
 
 if ($enc !== null) {
     $diaFin = (int) ($enc['dia'] ?? 8);

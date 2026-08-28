@@ -1,4 +1,4 @@
-﻿/* Nuevo Plan — rediseño móvil + desktop (v5) */
+/* Nuevo Plan — rediseño móvil + desktop (v5) */
 
 .play-v3 .capa-organizar {
   counter-reset: org-step;
@@ -17,7 +17,7 @@
   max-height: min(90vh, 860px) !important;
   transform: translate(-50%, -50%) !important;
   z-index: 13 !important;
-  padding: 1.15rem 1rem .9rem !important;
+  padding: 1.15rem 1rem 1.2rem !important;
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;
@@ -153,7 +153,6 @@
 }
 
 .play-v3 .capa-organizar .ficha-seccion-tit::before {
-  counter-increment: org-step;
   content: counter(org-step);
   display: inline-grid;
   place-items: center;
@@ -220,7 +219,7 @@
 .play-v3 .capa-organizar .org-busca {
   width: 100%;
   margin: 0;
-  padding: .55rem .65rem .55rem 2.1rem;
+  padding: .55rem .65rem .55rem 2.45rem;
   border: 1.5px solid rgba(44,38,31,.14);
   border-radius: 12px;
   background: rgba(255,252,245,.95);
@@ -299,13 +298,19 @@
   height: 1.15rem;
   border-radius: 50%;
   background: #e07a98;
-  color: #fff;
-  font-size: .62rem;
-  font-weight: 800;
-  line-height: 1.15rem;
-  text-align: center;
   border: 1.5px solid #fffdf8;
   box-shadow: 0 1px 3px rgba(44,38,31,.18);
+  display: grid;
+  place-items: center;
+}
+
+.play-v3 .capa-organizar .org-picker-check::after {
+  content: "";
+  width: .44rem;
+  height: .24rem;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) translateY(-.05rem);
 }
 
 .play-v3 .capa-organizar .org-picker-nom {
@@ -325,20 +330,23 @@
 .play-v3 .capa-organizar .org-tipos {
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem;
+  align-items: center;
+  gap: .4rem;
 }
 
 .play-v3 .capa-organizar .org-tipo-card {
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: .35rem;
-  min-width: 5.5rem;
-  min-height: 4.6rem;
-  padding: .55rem .65rem;
+  justify-content: flex-start;
+  gap: .45rem;
+  width: auto;
+  max-width: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: .38rem .75rem;
   border: 1.5px solid rgba(44,38,31,.14);
-  border-radius: 14px;
+  border-radius: 999px;
   background: rgba(255,252,245,.95);
   cursor: pointer;
   box-shadow: 1px 2px 0 rgba(44,38,31,.06);
@@ -358,8 +366,9 @@
 .play-v3 .capa-organizar .org-tipo-card-ico {
   display: grid;
   place-items: center;
-  width: 1.75rem;
-  height: 1.75rem;
+  flex: 0 0 auto;
+  width: 1.35rem;
+  height: 1.35rem;
   color: #5a4838;
 }
 
@@ -374,11 +383,12 @@
 }
 
 .play-v3 .capa-organizar .org-tipo-card-txt {
-  font: 800 .68rem/1.15 Nunito, sans-serif;
+  font: 800 .7rem/1.1 Nunito, sans-serif;
   letter-spacing: .05em;
   text-transform: uppercase;
-  text-align: center;
+  text-align: left;
   color: #3a3028;
+  white-space: nowrap;
 }
 
 /* --- Dónde --- */
@@ -493,8 +503,9 @@
 /* --- Cuándo --- */
 .play-v3 .capa-organizar .org-cuando {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .55rem;
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.9fr);
+  gap: .5rem;
+  align-items: stretch;
 }
 
 .play-v3 .capa-organizar .org-cuando-campo {
@@ -618,7 +629,9 @@
 .play-v3 .capa-organizar .org-footer {
   display: flex;
   justify-content: center;
-  padding: .45rem 0 .15rem;
+  flex-shrink: 0;
+  padding: .75rem .35rem .55rem;
+  overflow: visible;
 }
 
 .play-v3 .capa-organizar .org-crear {
@@ -627,26 +640,53 @@
   align-items: center;
   justify-content: center;
   width: auto;
-  min-width: 11rem;
-  min-height: 2.75rem;
-  padding: .55rem 1.65rem;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec)) !important;
-  color: var(--ds-ink, #2c261f) !important;
-  font-family: Caveat, cursive !important;
-  font-size: 1.15rem !important;
-  font-weight: 700 !important;
-  letter-spacing: .06em !important;
-  text-transform: uppercase !important;
-  box-shadow: 2px 4px 0 rgba(44, 38, 31, .12) !important;
-  transform: rotate(-.5deg) !important;
+  min-width: 0;
+  min-height: 0;
+  margin: .15rem auto .1rem;
+  padding: .58rem 1.15rem .6rem;
+  overflow: visible;
+  border: 2px solid #a84f48 !important;
+  border-radius: 16px 19px 14px 18px / 18px 14px 19px 16px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .08) 0%, rgba(0, 0, 0, 0) 38%),
+    linear-gradient(165deg, #dd7a72 0%, #cf645c 52%, #c4564f 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 0 rgba(120, 40, 35, .22), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+  transform: rotate(-.35deg) !important;
   cursor: pointer;
 }
 
+.play-v3 .capa-organizar .org-crear::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px dashed rgba(255, 248, 240, .92);
+  border-radius: 12px 15px 10px 14px / 14px 10px 15px 12px;
+  pointer-events: none;
+}
+
+.play-v3 .capa-organizar .org-crear-txt {
+  position: relative;
+  z-index: 1;
+  font-family: "Caveat", "Segoe Print", cursive !important;
+  font-size: 1.22rem !important;
+  font-weight: 700 !important;
+  font-style: italic !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  text-shadow: 0 1px 0 rgba(120, 35, 30, .28);
+}
+
+.play-v3 .capa-organizar .org-crear-txt::before {
+  content: "+ ";
+  font-weight: 700;
+}
+
 .play-v3 .capa-organizar .org-crear:hover {
-  filter: brightness(1.03);
-  transform: rotate(-.5deg) translateY(-1px) !important;
+  filter: brightness(1.04);
+  transform: rotate(-.35deg) translateY(-1px) !important;
+  box-shadow: 0 3px 0 rgba(120, 40, 35, .25), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
 }
 
 .play-v3 .capa-organizar .org-crear-ico {
@@ -654,25 +694,7 @@
 }
 
 .play-v3 .capa-organizar .org-crear-tape {
-  position: absolute;
-  width: 22px;
-  height: 10px;
-  background: rgba(228, 198, 118, .88);
-  pointer-events: none;
-  z-index: 2;
-  box-shadow: 0 1px 1px rgba(60, 44, 28, .12);
-}
-
-.play-v3 .capa-organizar .org-crear-tape-l {
-  top: -4px;
-  left: 10px;
-  transform: rotate(-14deg);
-}
-
-.play-v3 .capa-organizar .org-crear-tape-r {
-  top: -4px;
-  right: 10px;
-  transform: rotate(12deg);
+  display: none !important;
 }
 
 .play-v3 .capa-organizar .org-crear.is-busy,
@@ -710,12 +732,14 @@
   }
 
   .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-tipos {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+    justify-content: flex-start;
   }
 
   .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-tipo-card {
-    flex: 1 1 0;
+    flex: 0 1 auto;
     min-width: 0;
+    max-width: none;
   }
 
   .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-lugares-strip {
@@ -750,27 +774,32 @@
 .play-v3 .capa-organizar .org-lugar-horario { margin-top: .4rem; }
 
 
-/* ORG-CREAR-DESKTOP-UNIFIED */
+/* ORG-CREAR-DESKTOP-UNIFIED — mismo botón coral que sidebar */
 .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear {
   width: auto !important;
-  min-width: 11rem !important;
-  min-height: 2.75rem !important;
-  padding: .55rem 1.65rem !important;
-  font-family: Caveat, cursive !important;
-  font-size: 1.15rem !important;
-  font-weight: 700 !important;
-  letter-spacing: .06em !important;
-  text-transform: uppercase !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec)) !important;
-  color: var(--ds-ink, #2c261f) !important;
-  box-shadow: 2px 4px 0 rgba(44, 38, 31, .12) !important;
-  transform: rotate(-.5deg) !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: .58rem 1.15rem .6rem !important;
+  border: 2px solid #a84f48 !important;
+  border-radius: 16px 19px 14px 18px / 18px 14px 19px 16px !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .08) 0%, rgba(0, 0, 0, 0) 38%),
+    linear-gradient(165deg, #dd7a72 0%, #cf645c 52%, #c4564f 100%) !important;
+  color: #fff !important;
+  box-shadow: 0 2px 0 rgba(120, 40, 35, .22), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+  transform: rotate(-.35deg) !important;
+  clip-path: none !important;
+  -webkit-clip-path: none !important;
 }
+
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear .org-crear-txt {
+  font-size: 1.26rem !important;
+}
+
 .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear-tape,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear-tape {
-  display: block !important;
+  display: none !important;
 }
 
 /* v6: fondo identico Mensajitos - pisa libreta rayada */
@@ -791,9 +820,123 @@
 .play-v3 .capa-organizar .org-lugares-strip { display: none !important; }
 
 .play-v3 .capa-organizar .org-donde-fila .org-dd--lugar { width: 100%; }
-.play-v3 .capa-organizar .org-donde-fila .org-dd--lugar .org-dd-trigger { min-height: 2.85rem; }
-.play-v3 .capa-organizar .org-dd-ico--lugar {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z' fill='%235a4838'/%3E%3C/svg%3E");
+.play-v3 .capa-organizar .org-donde-fila .org-dd--lugar .org-dd-trigger { min-height: 3.1rem; padding-left: .45rem; }
+
+/* Miniatura edificio en select Dónde */
+.play-v3 .capa-organizar .org-lugar-thumb {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 2.65rem;
+  height: 2.05rem;
+  padding: .14rem;
+  border-radius: 10px 10px 8px 8px / 9px 9px 7px 7px;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, rgba(255,255,255,.55), rgba(255,255,255,0) 42%),
+    linear-gradient(180deg, #f8f1e6, #ebe0d0);
+  border: 1.5px solid rgba(92,64,48,.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.75),
+    inset 0 -2px 4px rgba(92,64,48,.08),
+    0 2px 0 rgba(44,38,31,.06);
+  clip-path: polygon(5% 0, 95% 0, 100% 9%, 100% 91%, 95% 100%, 5% 100%, 0 91%, 0 9%);
+}
+
+.play-v3 .capa-organizar .org-lugar-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  transform: scale(.92);
+  filter: saturate(.96);
+}
+
+.play-v3 .capa-organizar .org-lugar-thumb-fallback {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z' fill='%23b8a48e'/%3E%3C/svg%3E")
+    center / 42% no-repeat;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-trigger--lugar .org-lugar-thumb {
+  width: 2.8rem;
+  height: 2.2rem;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-menu {
+  max-height: 14rem;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-opt--lugar {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  padding: .42rem .5rem;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-opt-txt {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
+/* Dónde: ancho completo — legible con miniatura */
+.play-v3 .capa-organizar .org-donde-fila {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: .4rem;
+  padding-left: 0 !important;
+}
+
+.play-v3 .capa-organizar .org-donde-fila .org-dd,
+.play-v3 .capa-organizar .org-donde-fila .org-dd--lugar {
+  flex: 1 1 auto;
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.play-v3 .capa-organizar .org-donde-fila .org-lugar-horario {
+  width: 100%;
+  margin: .35rem 0 0 !important;
+  text-align: left;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-menu {
+  min-width: 100%;
+  width: 100%;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-opt--lugar {
+  min-height: 2.75rem;
+}
+
+.play-v3 .capa-organizar .org-dd--lugar .org-dd-opt-txt {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  line-height: 1.2;
+}
+
+@media (min-width: 900px) {
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--donde {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-donde-fila .org-dd {
+    flex-basis: auto !important;
+    max-width: none !important;
+  }
 }
 
 /* Llegada candidato — perfil previo en Mensajito */
@@ -861,4 +1004,102 @@
   font-size: 0.85rem;
   margin: 4px 0;
   color: #666;
+}
+
+
+/* v7: tipografía Nuevo plan más legible */
+.play-v3 .capa-organizar .ficha-seccion-tit {
+  font-size: .82rem !important;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit::before {
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: .74rem;
+}
+
+.play-v3 .capa-organizar .org-seccion-meta,
+.play-v3 .capa-organizar .org-picker-hint {
+  font-size: 1.08rem !important;
+}
+
+.play-v3 .capa-organizar .org-dd-trigger {
+  font-size: .94rem !important;
+}
+
+.play-v3 .capa-organizar .org-dd-opt {
+  font-size: .94rem !important;
+}
+
+.play-v3 .capa-organizar .org-tipo-card-txt {
+  font-size: .78rem !important;
+}
+
+.play-v3 .capa-organizar .org-lugar-horario,
+.play-v3 .capa-organizar .org-horas-hint {
+  font-size: .86rem !important;
+}
+
+.play-v3 .capa-organizar .org-busca {
+  font-size: .94rem !important;
+}
+
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear {
+  min-height: 0 !important;
+  padding: .58rem 1.15rem .6rem !important;
+}
+
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear .org-crear-txt {
+  font-size: 1.22rem !important;
+}
+
+
+/* v8: buscador — no tapar la lupa */
+.play-v3 .capa-organizar .org-busca-ico {
+  left: .75rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  z-index: 1;
+}
+
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-busca {
+  padding: .5rem .65rem .5rem 2.5rem !important;
+}
+
+/* v9: Cuando — dia legible, hora compacta al lado */
+.play-v3 .capa-organizar .org-cuando-campo--hora .org-dd-trigger {
+  padding-left: .5rem;
+  padding-right: .5rem;
+}
+
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-cuando,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-cuando {
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.9fr) !important;
+  gap: .5rem !important;
+}
+
+/* EVENTO-PUEBLO-AFORO-v1 — cabecera modo evento en organizador */
+.play-v3 .capa-organizar.org-plan-papel--evento .org-tit {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.1;
+}
+.play-v3 .capa-organizar.org-plan-papel--evento .org-evento-kicker {
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .625rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #b8643f;
+}
+.play-v3 .capa-organizar.org-plan-papel--evento .org-evento-nombre {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #3b3028;
+}
+.play-v3 .capa-organizar.org-plan-papel--evento .org-picker-celda.is-apuntado {
+  opacity: .55;
+  cursor: not-allowed;
 }

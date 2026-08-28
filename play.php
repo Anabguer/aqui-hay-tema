@@ -50,6 +50,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/vecinos-celdas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -65,6 +66,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
@@ -422,9 +424,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </section>
             <section class="shell-grupo shell-grupo-planes">
-<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
+<button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Crear plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt">Nuevo plan</span>
+              <span class="obj-nuevo-plan-txt game-left-tile-label">PLAN</span>
             </button>
 </section>
           </div>
@@ -630,7 +632,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <div class="ficha-animo-pill" data-ficha-animo-pill>
                 <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                 <span class="ficha-animo-val" data-ficha-animo-text></span>
-                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="Â¿Por quÃ© estÃ¡ asÃ­?">?</button>
+                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">?</button>
               </div>
             </div>
           </div>
@@ -652,7 +654,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <h4 class="ficha-seccion-tit">Relaciones</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-relaciones" data-ficha-relaciones></div>
-              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver mÃ¡s relaciones</button>
+              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver m&aacute;s relaciones</button>
               </div>
             </section>
             <section class="ficha-seccion">
@@ -676,7 +678,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
         <div class="ficha-rel-overlay" data-animo-overlay hidden>
-          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="Â¿Por quÃ© estÃ¡ asÃ­?">
+          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">
             <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
             <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
           </div>
@@ -803,37 +805,44 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <header class="org-top">
           <div class="ds-modal-head">
             <div class="ds-modal-head-row">
-              <span class="obj-nuevo-plan-ico org-modal-ico" aria-hidden="true">+</span>
               <h2 class="org-tit ds-modal-tit ds-modal-tit--ink">Nuevo plan</h2>
             </div>
           </div>
-          <p class="org-modo-estado" data-org-modo-estado hidden></p>
+          <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
+            <span class="org-modo-pill" data-org-modo-solo>Solo</span>
+            <span class="org-modo-pill" data-org-modo-pareja>Acompa&ntilde;ado</span>
+          </div>
+          <p class="org-modo-estado sr-only" data-org-modo-estado hidden></p>
           <p class="org-aviso" data-org-aviso hidden></p>
         </header>
         <div class="org-body capa-scroll">
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
-              <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
+              <div class="org-seccion-head-row">
+                <h4 class="ficha-seccion-tit">&iquest;Qui&eacute;nes van?</h4>
+                <span class="org-vecinos-contador" data-org-vecinos-contador hidden></span>
+              </div>
               <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
             </div>
             <div class="ficha-seccion-body">
               <div class="org-busca-wrap">
-                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino&#8212;" autocomplete="off" aria-label="Buscar vecino"/>
+                <span class="org-busca-ico" aria-hidden="true"></span>
+                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino&hellip;" autocomplete="off" aria-label="Buscar vecino"/>
                 <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
               </div>
               <div class="org-picker-strip capa-scroll" data-org-picker></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--que">
-            <h4 class="ficha-seccion-tit">&#8212;Qu&#8212; buscamos?</h4>
+            <h4 class="ficha-seccion-tit">&iquest;Qu&eacute; har&aacute;n?</h4>
             <div class="ficha-seccion-body">
               <div class="org-tipos" data-org-tipos></div>
             </div>
           </section>
           <section class="ficha-seccion org-seccion org-seccion--donde">
-            <h4 class="ficha-seccion-tit">&#8212;D&#8212;nde?</h4>
+            <h4 class="ficha-seccion-tit">&iquest;D&oacute;nde?</h4>
             <div class="ficha-seccion-body org-donde-fila">
-              <div class="org-dd" data-org-dd-lugar></div>
+              <div class="org-dd org-dd--lugar" data-org-dd-lugar></div>
               <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
               <p class="org-lugar-horario mini" data-org-lugar-horario hidden></p>
             </div>
@@ -842,8 +851,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <h4 class="ficha-seccion-tit">&iquest;Cu&aacute;ndo?</h4>
             <div class="ficha-seccion-body">
               <div class="org-cuando">
-                <div class="org-dd org-dd--dia" data-org-dd-dia></div>
-                <div class="org-dd org-dd--hora" data-org-dd-hora></div>
+                <div class="org-cuando-campo org-cuando-campo--dia">
+                  <span class="org-cuando-ico org-cuando-ico--dia" aria-hidden="true"></span>
+                  <div class="org-dd org-dd--dia" data-org-dd-dia></div>
+                </div>
+                <div class="org-cuando-campo org-cuando-campo--hora">
+                  <span class="org-cuando-ico org-cuando-ico--hora" aria-hidden="true"></span>
+                  <div class="org-dd org-dd--hora" data-org-dd-hora></div>
+                </div>
                 <select class="org-select org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
                 <select class="org-select org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
               </div>
@@ -855,7 +870,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <button type="button" class="org-crear" data-org-go>
             <span class="org-crear-tape org-crear-tape-l" aria-hidden="true"></span>
             <span class="org-crear-tape org-crear-tape-r" aria-hidden="true"></span>
-            <span class="org-crear-txt">Organizar</span>
+            <span class="org-crear-txt">Crear plan</span>
           </button>
         </footer>
       </aside>
@@ -974,6 +989,24 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </section>
           </aside>
           <aside class="inicio-chrome-right inicio-desktop-right">
+            <aside class="inicio-proximo-evento" data-proximo-evento-slot hidden aria-label="Pr&oacute;ximo evento">
+        <div class="inicio-evento-card inicio-evento-libreta" data-proximo-evento-card role="status">
+          <span class="inicio-evento-tag" data-proximo-evento-tag aria-hidden="true">
+            <span class="inicio-evento-tag-txt" data-proximo-evento-tag-txt>Evento del pueblo</span>
+          </span>
+          <span class="inicio-evento-main">
+            <span class="inicio-evento-ico" data-proximo-evento-ico aria-hidden="true"></span>
+            <span class="inicio-evento-body">
+              <span class="inicio-evento-tit" data-proximo-evento-tit></span>
+              <span class="inicio-evento-meta" data-proximo-evento-meta></span>
+            </span>
+          </span>
+          <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Elegir qui&eacute;n va</span>
+            <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
+          </button>
+        </div>
+      </aside>
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1005,27 +1038,35 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
             <section class="shell-grupo shell-grupo-planes">
-<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
+<button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Crear plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt">Nuevo plan</span>
+              <span class="obj-nuevo-plan-txt">Crear plan</span>
             </button>
 </section>
           </aside>
         </div>
       </section>
 
-      <aside class="inicio-proximo-evento" data-proximo-evento-slot hidden aria-label="Pr&oacute;ximo evento">
-        <div class="inicio-evento-card" role="status">
-          <span class="inicio-evento-ico" data-proximo-evento-ico aria-hidden="true"></span>
-          <span class="inicio-evento-body">
-            <span class="inicio-evento-tit" data-proximo-evento-tit></span>
-            <span class="inicio-evento-meta" data-proximo-evento-meta></span>
-          </span>
-        </div>
-      </aside>
-
       <section class="inicio-mobile inicio-mobile-feed" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil feed">
         <div class="inicio-chrome-right inicio-mobile-feed-inner">
+            <aside class="inicio-proximo-evento" data-proximo-evento-slot hidden aria-label="Pr&oacute;ximo evento">
+        <div class="inicio-evento-card inicio-evento-libreta" data-proximo-evento-card role="status">
+          <span class="inicio-evento-tag" data-proximo-evento-tag aria-hidden="true">
+            <span class="inicio-evento-tag-txt" data-proximo-evento-tag-txt>Evento del pueblo</span>
+          </span>
+          <span class="inicio-evento-main">
+            <span class="inicio-evento-ico" data-proximo-evento-ico aria-hidden="true"></span>
+            <span class="inicio-evento-body">
+              <span class="inicio-evento-tit" data-proximo-evento-tit></span>
+              <span class="inicio-evento-meta" data-proximo-evento-meta></span>
+            </span>
+          </span>
+          <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Elegir qui&eacute;n va</span>
+            <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
+          </button>
+        </div>
+      </aside>
             <section class="shell-grupo shell-grupo-cotilleo-par">
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>

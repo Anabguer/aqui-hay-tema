@@ -114,8 +114,18 @@ $evF = is_array($rF['evento'] ?? null) ? $rF['evento'] : [];
 ok(($evF['catalogo_id'] ?? '') === 'partido_futbol_benefico', '2 futbol catalogo_id');
 ok(($evF['lugar'] ?? '') === 'lug_parque', '3 futbol usa lug_parque');
 $partF = is_array($evF['participantes'] ?? null) ? $evF['participantes'] : [];
-ok(count($partF) >= 4 && count($partF) <= 12, '4 participantes min/max futbol (' . count($partF) . ')');
+ok(count($partF) === 0, '4 sin asistentes fijados al programar futbol');
+ok(EventosPuebloEngine::seleccionEstado($evF) === 'pendiente_asistentes', '4 pendiente asistentes futbol');
 ok((int) ($evF['hora'] ?? 0) >= 9 && (int) ($evF['hora'] ?? 0) <= 12, '3 futbol franja manana');
+
+$pF['reloj'] = [
+    'dia_pueblo' => (int) ($evF['dia'] ?? 5),
+    'hora_actual' => (int) ($evF['hora'] ?? 10),
+];
+EncuentroLifecycle::sincronizarConReloj($pF, null, $catalog);
+$evF = $pF['eventos_pueblo']['programados'][0] ?? $evF;
+$partF = EventosPuebloEngine::participantesCanon($pF, is_array($evF) ? $evF : []);
+ok(count($partF) >= 4 && count($partF) <= 12, '4 participantes min/max futbol tras fallback (' . count($partF) . ')');
 
 $encF = null;
 foreach ($pF['encuentros'] ?? [] as $e) {

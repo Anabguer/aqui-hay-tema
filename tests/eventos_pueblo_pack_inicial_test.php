@@ -190,13 +190,13 @@ $stClub = findSeed('club_lectura', $allLugares);
 ok($stClub > 0, '10 club_lectura (pequeno) programa');
 $pClub = labPartida($allLugares, 12);
 planificarId($pClub, 'club_lectura', $stClub);
-$nClub = count($pClub['eventos_pueblo']['programados'][0]['participantes'] ?? []);
-ok($nClub >= 3 && $nClub <= 5, "10 participantes club en rango ($nClub)");
+$aforoClub = (int) ($pClub['eventos_pueblo']['programados'][0]['aforo'] ?? 0);
+ok($aforoClub >= 3 && $aforoClub <= 5, "10 aforo club en rango ($aforoClub)");
 
 $pFut = labPartida($allLugares, 12);
 planificarId($pFut, 'partido_futbol_benefico', $stFut);
-$nFut = count($pFut['eventos_pueblo']['programados'][0]['participantes'] ?? []);
-ok($nFut >= 4 && $nFut <= 12, "11 participantes futbol en rango ($nFut)");
+$aforoFut = (int) ($pFut['eventos_pueblo']['programados'][0]['aforo'] ?? 0);
+ok($aforoFut >= 4 && $aforoFut <= 12, "11 aforo futbol en rango ($aforoFut)");
 
 // 12-14) B2/B3 con evento nuevo (cine)
 $stCine = findSeed('sesion_cine_comunitaria', $allLugares);
@@ -205,7 +205,22 @@ $pCine = labPartida($allLugares, 12);
 $rCine = planificarId($pCine, 'sesion_cine_comunitaria', $stCine);
 ok(!empty($rCine['ok']), 'cine planificado');
 $evCine = $rCine['evento'] ?? [];
-$encId = (string) ($evCine['encuentro_id'] ?? '');
+$evtCineId = (string) ($evCine['id'] ?? '');
+$elegCine = EventosPuebloEngine::vecinosElegibles($pCine, $evtCineId, $cal, $catalog);
+$minCine = (int) ($elegCine['participantes_min'] ?? 3);
+$idsCine = [];
+foreach ($elegCine['vecinos'] ?? [] as $row) {
+    if (!is_array($row) || !($row['elegible'] ?? false)) {
+        continue;
+    }
+    $idsCine[] = (string) ($row['id'] ?? '');
+    if (count($idsCine) >= $minCine) {
+        break;
+    }
+}
+$rConfCine = EventosPuebloEngine::confirmarAsistentes($pCine, $evtCineId, $idsCine, $cal, $catalog);
+ok(($rConfCine['ok'] ?? false) && count($idsCine) >= $minCine, 'cine confirmar asistentes: ' . ($rConfCine['error'] ?? '') . ' n=' . count($idsCine));
+$encId = (string) (EventosPuebloEngine::buscarProgramadoPorId($pCine, $evtCineId)['encuentro_id'] ?? '');
 
 $anuncios = 0;
 foreach ($pCine['buzon'] as $m) {
@@ -222,12 +237,16 @@ $vista = EventosPuebloEngine::vistaProximoEvento($pCine, $catalog);
 ok(($vista['catalogo_id'] ?? '') === 'sesion_cine_comunitaria', '14 B3 catalogo cine');
 ok(($vista['icono'] ?? '') === '🎬', '14 B3 icono cine');
 
+$evCineRow = EventosPuebloEngine::buscarProgramadoPorId($pCine, $evtCineId);
+$encId = (string) ($evCineRow['encuentro_id'] ?? '');
 // B2 cierre generico
 $encCine = null;
-foreach ($pCine['encuentros'] as $enc) {
-    if (($enc['id'] ?? '') === $encId) {
-        $encCine = $enc;
-        break;
+if ($encId !== '') {
+    foreach ($pCine['encuentros'] as $enc) {
+        if (($enc['id'] ?? '') === $encId) {
+            $encCine = $enc;
+            break;
+        }
     }
 }
 if ($encCine !== null) {

@@ -111,7 +111,9 @@ $r4b = planificar($p4b);
 ok(($r4a['evento']['dia'] ?? null) === ($r4b['evento']['dia'] ?? null), '4 mismo día con mismo RNG');
 ok(($r4a['evento']['hora'] ?? null) === ($r4b['evento']['hora'] ?? null), '4 misma hora con mismo RNG');
 
-// 5) Respeta aforo (participantes <= aforo lugar)
+// 5) Tras confirmar asistentes: encuentro evento_pueblo
+$selIds = array_slice(array_keys($p['residentes']), 0, 3);
+EventosPuebloEngine::confirmarAsistentes($p, (string) ($ev['id'] ?? ''), $selIds, $cal, $catalog);
 $enc = null;
 foreach (($p['encuentros'] ?? []) as $e) {
     if (($e['intencion'] ?? '') === 'evento_pueblo') {
@@ -150,10 +152,20 @@ ok($antes === $despues, '8 no incrementa intervenciones Celestine');
 ok(($enc['intencion'] ?? '') === 'evento_pueblo', '9 intencion evento_pueblo');
 ok(($enc['actividad'] ?? '') === 'noche_bingo', '9 actividad catalogo_id');
 
-// 10) Lifecycle normal
+// 10) Lifecycle normal (con asistentes confirmados)
 $p10 = labPartida();
 $p10['rng']['state'] = $stOk;
-planificar($p10);
+$r10 = planificar($p10);
+$ev10 = $r10['evento'] ?? null;
+if (is_array($ev10)) {
+    EventosPuebloEngine::confirmarAsistentes(
+        $p10,
+        (string) ($ev10['id'] ?? ''),
+        array_slice(array_keys($p10['residentes']), 0, 3),
+        $cal,
+        $catalog
+    );
+}
 $enc10 = null;
 foreach (($p10['encuentros'] ?? []) as $e) {
     if (($e['intencion'] ?? '') === 'evento_pueblo') {
@@ -187,7 +199,7 @@ $prox = EventosPuebloEngine::proximoEvento($p11, $catalog);
 ok($prox !== null, '11 proximoEvento devuelve fila');
 ok(($prox['catalogo_id'] ?? '') === 'noche_bingo', '11 proximo catalogo_id');
 ok(($prox['estado'] ?? '') === 'programado', '11 proximo estado');
-ok(($prox['participantes_n'] ?? 0) >= 3, '11 proximo resume participantes');
+ok(($prox['participantes_n'] ?? 0) === 0 || ($prox['seleccion_estado'] ?? '') === 'pendiente_asistentes', '11 proximo sin participantes hasta confirmar');
 
 // 12) Fallo limpio sin estado corrupto
 $p12 = labPartida();

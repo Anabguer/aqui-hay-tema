@@ -9,6 +9,10 @@ final class EncuentroLifecycle
     public static function sincronizarConReloj(array &$partida, ?GameLogger $logger = null, ?Catalog $catalog = null): array
     {
         $partida['encuentros'] ??= [];
+        if ($catalog !== null) {
+            $calEvt = CalibracionConfig::load($catalog->getRoot());
+            EventosPuebloEngine::resolverAsistentesPendientesConReloj($partida, $calEvt, $catalog, $logger);
+        }
         $dia = (int) $partida['reloj']['dia_pueblo'];
         $hora = (int) $partida['reloj']['hora_actual'];
         $now = $dia * 24 + $hora;
