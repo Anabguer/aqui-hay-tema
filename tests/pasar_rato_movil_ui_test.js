@@ -21,7 +21,7 @@ function ok(c, m) {
 ok((php.match(/data-pasar-rato/g) || []).length >= 2, 'play.php: botones dual-view móvil+desktop (mismo contrato)');
 ok((php.match(/data-es-noche/g) || []).length >= 2, 'play.php: indicador noche en cada vista');
 ok(!/(pasar-rato-movil|data-pasar-rato-movil|es-noche-movil|avance-movil-btn)/.test(php + js + cssResp), 'sin segunda versión funcional móvil');
-ok(/function pasarRatoBtns\(\)/.test(js) && /_ahtPasarBound/.test(js), 'JS: handler enlazado a todos los botones dual-view');
+ok(/function pasarRatoBtns\(\)/.test(js) && /bindPasarRatoDelegacion/.test(js) && /relojAvanceRespuestaOk/.test(js), 'JS: delegacion unica y feedback coherente de avance');
 
 // ── 2. La cabecera móvil ya NO oculta .top-center ──
 ok(!/\.play-v3:has\(\.game-shell\) \.top-center\s*\{[^}]*display:\s*none/.test(cssResp), 'responsive: .top-center ya no display:none en móvil');
@@ -112,6 +112,25 @@ ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo b
   ctxD.pintar(false);
   ctxD.pintar(false);
   ok(ctxD.indicador.hidden === true && ctxD.etiqueta === 'Pasar el rato', 'refresh directo 14:00: controles correctos');
+})();
+
+
+// ── 5. Feedback: no toast si el reloj avanzo aunque r.ok sea falso ──
+(function () {
+  const ini = js.indexOf('function relojAbsDesdeEstado');
+  const fin = js.indexOf('function pintarModoReloj', ini);
+  const codigo = js.slice(ini, fin);
+  const fn = new Function('cacheEstado', codigo + '\n return { relojAvanceRespuestaOk, relojAbsDesdeEstado, relojAbsAvanzo };');
+  const api = fn({ reloj: { dia_pueblo: 10, hora_actual: 16 } });
+  ok(api.relojAvanceRespuestaOk({ ok: true }), 'relojAvanceRespuestaOk: ok top-level');
+  ok(api.relojAvanceRespuestaOk({ reloj: { ok: true } }), 'relojAvanceRespuestaOk: ok anidado');
+  ok(!api.relojAvanceRespuestaOk({ ok: false }), 'relojAvanceRespuestaOk: rechaza ok false');
+  ok(api.relojAbsAvanzo(10 * 24 + 16, 10 * 24 + 17), 'relojAbsAvanzo: +1h');
+  ok(!api.relojAbsAvanzo(10 * 24 + 16, 10 * 24 + 16), 'relojAbsAvanzo: sin cambio');
+  const debeToast = !api.relojAvanceRespuestaOk({ ok: false }) && !api.relojAbsAvanzo(10 * 24 + 16, 10 * 24 + 16);
+  ok(debeToast, 'relojAvanceRespuestaOk en arnes: toast solo si no avanzo y respuesta ko');
+  const showToastTrasAvance = !api.relojAvanceRespuestaOk({ ok: false }) && !api.relojAbsAvanzo(10 * 24 + 16, 10 * 24 + 17);
+  ok(!showToastTrasAvance, 'relojAvanceRespuestaOk en arnes: sin toast si avanzo pese a ok false');
 })();
 
 console.log(failures === 0 ? '\nTODO OK\n' : '\nFALLOS: ' + failures + '\n');

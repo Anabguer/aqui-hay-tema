@@ -3035,6 +3035,23 @@
       }
     });
   }
+  function relojAbsDesdeEstado(estado) {
+    const e = estado || cacheEstado;
+    const reloj = (e && e.reloj) || {};
+    const d = Number(reloj.dia_pueblo);
+    const h = Number(reloj.hora_actual);
+    if (!Number.isFinite(d) || !Number.isFinite(h)) return null;
+    return d * 24 + h;
+  }
+  function relojAvanceRespuestaOk(r) {
+    if (!r || typeof r !== 'object') return false;
+    if (r.ok === true) return true;
+    const nested = r.reloj;
+    return !!(nested && typeof nested === 'object' && nested.ok === true);
+  }
+  function relojAbsAvanzo(antesAbs, despuesAbs) {
+    return antesAbs !== null && despuesAbs !== null && despuesAbs > antesAbs;
+  }
   function pintarModoReloj(esNoche) {
     aplicarNocheVisual(esNoche);
     $$('[data-es-noche]').forEach(function (el) {
@@ -6015,20 +6032,25 @@ function hobbyIconKey(id, texto) {
   let pasarRatoEnCurso = false;
   async function pasarElRato() {
     if (!pasarRatoBtns().length || pasarRatoEnCurso) return;
-    const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
-      !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
-    if (perdida) {
-      toast('La partida ha terminado. Empieza otra con «Nueva partida».');
-      return;
-    }
-    const h = horaActualEstado();
-    const nocturno = esHoraNoche(h);
-    const horas = nocturno ? Math.max(1, (HORA_DIA_DESDE - h + 24) % 24) : 1;
     pasarRatoEnCurso = true;
     setPasarRatoBusy(true, 'A ver qué se cuece…');
+    const relojAntes = relojAbsDesdeEstado();
     try {
+      const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
+        !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
+      if (perdida) {
+        toast('La partida ha terminado. Empieza otra con «Nueva partida».');
+        return;
+      }
+      const h = horaActualEstado();
+      const nocturno = esHoraNoche(h);
+      const horas = nocturno ? Math.max(1, (HORA_DIA_DESDE - h + 24) % 24) : 1;
       const r = await avanzarHoras(horas);
-      if (!r.ok) toast(r.mensaje_ui || 'Ahora no se puede pasar el rato.');
+      const relojDespues = relojAbsDesdeEstado();
+      const avanzo = relojAbsAvanzo(relojAntes, relojDespues);
+      if (!relojAvanceRespuestaOk(r) && !avanzo) {
+        toast(r.mensaje_ui || r.mensaje || 'Ahora no se puede pasar el rato.');
+      }
     } finally {
       pasarRatoEnCurso = false;
       setPasarRatoBusy(false);
@@ -6074,11 +6096,16 @@ function hobbyIconKey(id, texto) {
       }, { passive: true });
     });
   })();
-  pasarRatoBtns().forEach(function (btnPasarRato) {
-    if (btnPasarRato._ahtPasarBound) return;
-    btnPasarRato._ahtPasarBound = true;
-    btnPasarRato.addEventListener('click', pasarElRato);
-  });
+  (function bindPasarRatoDelegacion() {
+    const root = document.querySelector('.inicio-stage') || document.querySelector('.game-shell') || document.body;
+    if (!root || root._ahtPasarDelegBound) return;
+    root._ahtPasarDelegBound = true;
+    root.addEventListener('click', function (ev) {
+      if (!ev.target.closest('[data-pasar-rato]')) return;
+      ev.preventDefault();
+      pasarElRato();
+    });
+  })();
   const btnProx = $('#btn-debug-proximo');
   if (btnProx) btnProx.addEventListener('click', irProximo);
   const btnProxLab = $('#btn-proximo-lab');
