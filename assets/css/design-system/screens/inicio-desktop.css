@@ -910,20 +910,49 @@
     grid-template-rows: auto auto auto !important;
   }
 }
-/* INICIO-MAP-TALLER-v2 — mapa desktop más alto (imagen rellena el board) */
+/* INICIO-MAP-TALLER-v3 — mapa alto sin recorte (proporción + columna central) */
 @media (min-width: 769px) {
+  .inicio-stage {
+    grid-template-columns: minmax(240px, 300px) minmax(380px, 1.55fr) minmax(230px, 290px) !important;
+  }
+
+  .inicio-stage > .inicio-map-host {
+    min-height: 0 !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc {
+    position: relative !important;
+    inset: auto !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+  }
+
   .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
-    align-items: flex-start !important;
-    justify-content: center !important;
+    position: relative !important;
+    inset: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    display: block !important;
   }
 
   .play-v3 .inicio-stage > .inicio-map-host .board-fit,
   .play-v3 .inicio-stage > .inicio-map-host .play-root.pc .board-fit {
+    position: relative !important;
+    top: auto !important;
     width: 100% !important;
-    height: min(52vh, 500px) !important;
-    min-height: 420px !important;
-    max-height: min(88vh, 860px) !important;
-    aspect-ratio: auto !important;
+    max-width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    aspect-ratio: 618 / 404 !important;
     margin: 0 auto !important;
   }
 
@@ -941,17 +970,10 @@
     object-fit: fill !important;
     display: block !important;
   }
+}
 
-  .inicio-stage > .inicio-map-host {
-    min-height: min(52vh, 500px) !important;
-    height: auto !important;
-    overflow: hidden !important;
-  }
-
-  .play-v3 .inicio-stage > .inicio-map-host .play-stage,
-  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc,
-  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
-    min-height: 420px !important;
-    height: 100% !important;
+@media (min-width: 1100px) {
+  .inicio-stage {
+    grid-template-columns: minmax(250px, 310px) minmax(460px, 1.75fr) minmax(240px, 300px) !important;
   }
 }
