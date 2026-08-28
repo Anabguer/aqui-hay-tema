@@ -6303,6 +6303,10 @@ function hobbyIconKey(id, texto) {
     if (err === 'PARTICIPANTE_YA_APUNTADO') return 'Ese vecino ya está apuntado al evento.';
     if (err === 'EVENTO_PUEBLO_NO_ENCONTRADO') return 'No se ha encontrado ese evento del pueblo.';
     if (err === 'EVENTO_PUEBLO_CERRADO') return 'Ese evento ya no admite apuntados.';
+    if (err === 'vecino_no_elegible') return 'Ese vecino no está disponible en el horario del evento.';
+    if (err === 'seleccion_ya_confirmada') return 'Ese evento ya tiene asistentes confirmados.';
+    if (err === 'catalogo_desconocido') return 'El evento no está disponible en este momento.';
+    if (err === 'participantes_requeridos') return 'Elige al menos un vecino para el evento.';
     if (err === 'lugar_requerido' || err === 'LUGAR_NO_OPERATIVO') return 'Elige un lugar.';
     if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cuándo quedar.';
     if (err === 'LIMITE_INTERVENCIONES') return 'Has alcanzado el l\u00edmite de intervenciones de hoy.';
@@ -6317,7 +6321,9 @@ function hobbyIconKey(id, texto) {
     const parts = orgSeleccionados();
     if (orgEsEventoPueblo()) {
       if (orgMaxVecinos() <= 0) return { ok: false, msg: 'Aforo completo.' };
-      var minEvt = (org.evento_ctx && org.evento_ctx.participantes_min) || 3; if (parts.length < minEvt) return { ok: false, msg: 'Elige al menos ' + minEvt + ' vecinos para el evento.' };
+      var minEvt = (org.evento_ctx && org.evento_ctx.participantes_min) || 3;
+      if (orgMaxVecinos() < minEvt) return { ok: false, msg: 'Ahora mismo no hay suficiente aforo libre para este evento (necesita ' + minEvt + ' plazas).' };
+      if (parts.length < minEvt) return { ok: false, msg: 'Elige al menos ' + minEvt + ' vecinos para el evento.' };
       if (new Set(parts).size !== parts.length) return { ok: false, msg: 'Elige a personas distintas.' };
       if (parts.length > orgMaxVecinos()) return { ok: false, msg: 'Has superado las plazas disponibles del evento.' };
       return { ok: true };
