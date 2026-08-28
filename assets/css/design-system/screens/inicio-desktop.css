@@ -1536,3 +1536,419 @@
     line-height: 1.4 !important;
   }
 }
+
+/* INICIO-PLANES-DESKTOP-v1 - Plan en curso + Proximos planes (columna derecha) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .encursos-movil,
+  .play-v3 .inicio-desktop-right .proxplanes-movil {
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 0 .65rem !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-cab,
+  .play-v3 .inicio-desktop-right .pp-mov-cab {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    padding: 0 2px !important;
+    margin: 0 0 8px !important;
+    position: relative !important;
+  }
+
+  .play-v3 .inicio-desktop-right .plan-seccion-rule,
+  .play-v3 .inicio-desktop-right .plan-seccion-ver {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-tit,
+  .play-v3 .inicio-desktop-right .pp-mov-tit {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+    font-style: normal !important;
+    letter-spacing: .1em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #2c261f) !important;
+    line-height: 1.1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .plan-seccion-cnt--curso {
+    background: var(--ds-pink-deep, #c42b4a) !important;
+    border-color: #fff !important;
+  }
+
+  .play-v3 .inicio-desktop-right .plan-seccion-cnt--prox {
+    background: var(--ds-lavender-deep, #7c6bae) !important;
+    border-color: #fff !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-nav-btn,
+  .play-v3 .inicio-desktop-right .plan-seccion-nav {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 28px !important;
+    height: 28px !important;
+    padding: 0 !important;
+    border: 1.5px solid rgba(89, 72, 57, .22) !important;
+    border-radius: 999px !important;
+    background: #fff !important;
+    color: var(--ds-ink, #2c261f) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, .08) !important;
+    cursor: pointer !important;
+    flex: 0 0 28px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-nav-btn svg,
+  .play-v3 .inicio-desktop-right .plan-seccion-nav svg {
+    width: 16px !important;
+    height: 16px !important;
+    display: block !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil {
+    display: grid !important;
+    grid-template-columns: 1fr auto auto !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-cab {
+    grid-column: 1 !important;
+    grid-row: 1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-shell {
+    display: contents !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-nav-prev {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-nav-next {
+    grid-column: 3 !important;
+    grid-row: 1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-track {
+    grid-column: 1 / -1 !important;
+    grid-row: 2 !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 2px 4px !important;
+    scrollbar-width: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .enc-mov-track::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card {
+    position: relative !important;
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 6px !important;
+    padding: 14px 10px 8px !important;
+    border: 1.5px solid rgba(89, 72, 57, .35) !important;
+    border-radius: 12px !important;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 62%),
+      #fff5f0 !important;
+    box-shadow: 0 1px 4px rgba(44, 38, 31, .08) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card::before {
+    content: "" !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 12px !important;
+    width: 46px !important;
+    height: 13px !important;
+    transform: translateY(-42%) rotate(4deg) !important;
+    background: rgba(255, 214, 120, .78) !important;
+    border: 1px solid rgba(89, 72, 57, .12) !important;
+    border-radius: 2px !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card-tit {
+    margin: 0 !important;
+    padding: 0 2px !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+    text-align: left !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-body {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 4px !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-row,
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-copy,
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-nombres,
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-lugar,
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-estado,
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-cta-flecha {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-faces {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    margin: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-faces img,
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-faces .cara-ini {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    min-height: 40px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px rgba(89, 72, 57, .28) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-heart {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 -8px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(89, 72, 57, .18) !important;
+    z-index: 1 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-meta {
+    margin: 0 !important;
+    font-family: "Caveat", "Segoe Print", cursive !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-resumen {
+    margin: 0 !important;
+    font-family: "Caveat", "Segoe Print", cursive !important;
+    font-size: .9rem !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-cta {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 2px 0 0 !important;
+    padding: 7px 10px !important;
+    min-height: 36px !important;
+    border: 1.5px solid rgba(89, 72, 57, .35) !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink, #e8887a) !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .6875rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    align-self: stretch !important;
+    white-space: nowrap !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-cta-ico {
+    display: inline-flex !important;
+    width: 15px !important;
+    height: 15px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 8px !important;
+    padding: 2px 2px 4px !important;
+    scrollbar-width: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-track::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-card {
+    flex: 0 0 calc(50% - 4px) !important;
+    width: calc(50% - 4px) !important;
+    min-width: calc(50% - 4px) !important;
+    scroll-snap-align: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    min-height: 0 !important;
+    padding: 8px 8px 9px !important;
+    background: #fdfaf1 !important;
+    border: 2px dashed rgba(124, 107, 174, .55) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 1px 3px rgba(44, 38, 31, .06) !important;
+    transform: none !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-top {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 6px !important;
+    margin: 0 0 6px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-hora {
+    margin: 0 !important;
+    padding: 2px 7px !important;
+    background: rgba(196, 181, 232, .45) !important;
+    border: 1.5px solid var(--ds-lavender-deep, #7c6bae) !important;
+    border-radius: 8px !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .625rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-star {
+    color: #e2b93a !important;
+    font-size: .85rem !important;
+    line-height: 1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-body {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 6px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .prox-faces img,
+  .play-v3 .inicio-desktop-right .proxplanes-movil .prox-faces .cara-ini {
+    width: 30px !important;
+    height: 30px !important;
+    border-radius: 50% !important;
+    border: 2px solid #fff !important;
+    box-shadow: 0 0 0 1.5px rgba(89, 72, 57, .22) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-nombres {
+    margin: 0 !important;
+    font-family: "Caveat", "Segoe Print", cursive !important;
+    font-size: .95rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    color: var(--ds-ink, #3b3028) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .proxplanes-movil .pp-mov-lugar {
+    margin: 0 !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .75rem !important;
+    font-weight: 600 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+  }
+}
+
+/* INICIO-PLANES-DESKTOP-v1b - icono central entre caras */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-tipo-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 20px !important;
+    height: 20px !important;
+    margin: 0 -8px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(89, 72, 57, .18) !important;
+    z-index: 1 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-tipo-ico svg {
+    width: 12px !important;
+    height: 12px !important;
+    display: block !important;
+  }
+}
+
+/* INICIO-BUZON-BADGE-v2 - bolita mensajitos mas visible y numero centrado */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-buzon-badge {
+    min-width: 1.95rem !important;
+    width: 1.95rem !important;
+    height: 1.95rem !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: .92rem !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+    text-align: center !important;
+    font-variant-numeric: tabular-nums !important;
+    border-width: 2.5px !important;
+    box-shadow: 0 1px 4px rgba(196, 43, 74, .38) !important;
+  }
+}
+
+/* INICIO-TYPE-LECTURA-17PX-v1 - cuerpo cotilleo y misiones a 17px */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt,
+  .play-v3 .inicio-desktop-left .mision-strip-txt,
+  .play-v3 .inicio-desktop-left .obj-misiones-vacio {
+    font-size: 17px !important;
+    line-height: 1.4 !important;
+  }
+}
