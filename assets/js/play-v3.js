@@ -335,24 +335,63 @@
     });
   }
 
-  async function copiarDebugExport(soloEstado) {
+  async function obtenerDebugExport(soloEstado) {
     if (!isDebugOn()) {
       toast('Activa DEBUG primero.');
-      return;
+      return null;
     }
     const body = { historial: soloEstado ? [] : ahtDebugSessionLog.slice() };
     const r = await api('partida.debug_export', body);
     if (!r.ok || !r.debug_export) {
       toast(r.mensaje_ui || 'No se pudo exportar debug.');
-      return;
+      return null;
     }
-    const txt = r.debug_export.texto || '';
+    return r.debug_export;
+  }
+
+  async function copiarDebugExport(soloEstado) {
+    const exportData = await obtenerDebugExport(soloEstado);
+    if (!exportData) return;
+    const txt = exportData.texto || '';
     try {
       await navigator.clipboard.writeText(txt);
       toast('Debug copiado.');
     } catch (e) {
       toast('No se pudo copiar al portapapeles.');
     }
+  }
+
+  async function descargarDebugExport(soloEstado) {
+    const exportData = await obtenerDebugExport(soloEstado);
+    if (!exportData) return;
+    let datos = exportData.json;
+    if (!datos || typeof datos !== 'object') {
+      datos = { texto: exportData.texto || '' };
+    }
+    datos = ahtSanitizarDiagnostico(datos);
+    const contenido = ahtTextoDiagnosticoLegible(datos);
+    const nombre = ahtNombreArchivoDiagnostico();
+    const blob = new Blob([contenido], { type: 'application/json;charset=utf-8' });
+    try {
+      if (navigator.share && navigator.canShare) {
+        const file = new File([blob], nombre, { type: 'application/json' });
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({ files: [file], title: 'AHT debug', text: 'Diagnóstico Aquí Hay Tema' });
+          toast('Diagnóstico compartido.');
+          return;
+        }
+      }
+    } catch (e) {}
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombre;
+    a.rel = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    toast('Debug descargado: ' + nombre);
   }
 
   const AHT_DIAG_SENSITIVE_KEYS = /^(password|passwd|pass|token|cookie|cookies|authorization|auth|secret|credentials|api[_-]?key)$/i;
@@ -6142,9 +6181,13 @@ function hobbyIconKey(id, texto) {
   function orgMaxVecinos() {
     if (!orgEsEventoPueblo()) return ORG_MAX_VECINOS;
     var plazas = org.evento_ctx && org.evento_ctx.plazas_disponibles;
-    if (plazas === 0) return 0;
-    if (typeof plazas === 'number' && plazas > 0) return plazas;
-    return ORG_MAX_VECINOS;
+    if (typeof plazas !== 'number' || plazas <= 0) {
+      if (plazas === 0) return 0;
+      plazas = ORG_MAX_VECINOS;
+    }
+    var nEleg = orgEventoElegiblesCount();
+    if (nEleg !== null) return Math.min(plazas, nEleg);
+    return plazas;
   }
 
   function orgApuntadosEvento() {
@@ -6152,6 +6195,26 @@ function hobbyIconKey(id, texto) {
     var out = {};
     ids.forEach(function (id) { if (id) out[id] = true; });
     return out;
+  }
+
+  // Mapa de elegibilidad para Eventos del Pueblo (contrato compartido con el backend).
+  // Devuelve null si el contexto no es evento_pueblo o no trae elegibles.
+  function orgEventoElegibles() {
+    if (!orgEsEventoPueblo()) return null;
+    var ctx = org.evento_ctx || {};
+    var lista = ctx.elegibles || (ctx.preset_organizar && ctx.preset_organizar.elegibles) || null;
+    if (!lista || !lista.length) return null;
+    var m = {};
+    lista.forEach(function (x) { if (x && x.id) m[String(x.id)] = x; });
+    return m;
+  }
+
+  function orgEventoElegiblesCount() {
+    var m = orgEventoElegibles();
+    if (!m) return null;
+    var n = 0;
+    for (var k in m) { if (m.hasOwnProperty(k) && m[k].elegible) n++; }
+    return n;
   }
 
   function abrirOrganizarEventoPueblo(ev) {
@@ -6320,6 +6383,15 @@ function hobbyIconKey(id, texto) {
       var minEvt = (org.evento_ctx && org.evento_ctx.participantes_min) || 3; if (parts.length < minEvt) return { ok: false, msg: 'Elige al menos ' + minEvt + ' vecinos para el evento.' };
       if (new Set(parts).size !== parts.length) return { ok: false, msg: 'Elige a personas distintas.' };
       if (parts.length > orgMaxVecinos()) return { ok: false, msg: 'Has superado las plazas disponibles del evento.' };
+      var em = orgEventoElegibles();
+      if (em) {
+        for (var i = 0; i < parts.length; i++) {
+          var e = em[String(parts[i])];
+          if (!e || !e.elegible) {
+            return { ok: false, msg: 'Alguno de los vecinos elegidos no est\u00e1 disponible a esa hora. Quita los que aparecen bloqueados.' };
+          }
+        }
+      }
       return { ok: true };
     }
     if (orgModo() === 'solo') {
@@ -6350,6 +6422,13 @@ function hobbyIconKey(id, texto) {
 
   function toggleOrgPicker(id) {
     if (!id) return;
+    if (orgEsEventoPueblo()) {
+      var em = orgEventoElegibles();
+      if (em && em[id] && !em[id].elegible) {
+        feedbackOrgPickerLimite();
+        return;
+      }
+    }
     limpiarOrgAviso();
     const sel = orgSeleccionados();
     const idx = sel.indexOf(id);
@@ -6620,26 +6699,40 @@ function hobbyIconKey(id, texto) {
       return;
     }
     var apuntados = orgApuntadosEvento();
+    var eleg = orgEventoElegibles();
     ids.forEach(function (id) {
       const r = res[id] || {};
       const nom = (r.identidad_publica && r.identidad_publica.nombre) || nombreDe(id) || id;
       const ini = String(nom).charAt(0) || '?';
       const img = tokenDe(id);
       const yaApuntado = !!apuntados[id];
+      var noElegible = false;
+      var motivo = '';
+      if (eleg && eleg[id] && !eleg[id].elegible) {
+        noElegible = true;
+        motivo = eleg[id].motivo || 'no_disponible';
+      }
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '') + (yaApuntado ? ' is-apuntado' : '');
-      btn.title = yaApuntado ? (nom + ' (ya apuntado/a)') : nom;
-      btn.setAttribute('aria-label', yaApuntado ? (nom + ', ya apuntado al evento') : nom);
-      if (yaApuntado) btn.disabled = true;
+      btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '') + (yaApuntado ? ' is-apuntado' : '') + (noElegible ? ' is-bloqueado' : '');
+      var title = yaApuntado ? (nom + ' (ya apuntado/a)') : nom;
+      if (noElegible) {
+        title = nom + ' — no disponible para este evento';
+        if (motivo === 'agenda_ocupada') title = nom + ' — tiene otro plan a esa hora';
+        else if (motivo === 'no_residente') title = nom + ' — no es residente';
+      }
+      btn.title = title;
+      btn.setAttribute('aria-label', title);
+      if (yaApuntado || noElegible) btn.disabled = true;
       btn.innerHTML = '<span class="org-picker-stack">' +
         '<span class="org-picker-cara">' +
         (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="org-picker-ini">' + esc(ini) + '</span>') +
         '</span>' +
         (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">?</span>' : '') +
         (yaApuntado ? '<span class="org-picker-apuntado" aria-hidden="true">✓</span>' : '') +
+        (noElegible ? '<span class="org-picker-bloq" aria-hidden="true">🔒</span>' : '') +
         '</span><span class="org-picker-nom">' + esc(nom) + '</span>';
-      btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); if (!yaApuntado) toggleOrgPicker(id); });
+      btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); if (!yaApuntado && !noElegible) toggleOrgPicker(id); });
       box.appendChild(btn);
     });
   }
@@ -7162,6 +7255,8 @@ function hobbyIconKey(id, texto) {
     });
     const btnCopy = $('#btn-debug-copy');
     if (btnCopy) btnCopy.addEventListener('click', function () { copiarDebugExport(false); });
+    const btnDownload = $('#btn-debug-download');
+    if (btnDownload) btnDownload.addEventListener('click', function () { descargarDebugExport(false); });
     const btnCopyEstado = $('#btn-debug-copy-estado');
     if (btnCopyEstado) btnCopyEstado.addEventListener('click', function () { copiarDebugExport(true); });
     const btnParejasCrear = $('#btn-debug-parejas-crear');

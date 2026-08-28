@@ -242,6 +242,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <button type="button" data-horas="720">+30 d—as</button>
       <button type="button" id="btn-debug-proximo">Ir al pr—ximo</button>
       <button type="button" id="btn-debug-copy">Copiar debug</button>
+      <button type="button" id="btn-debug-download">Descargar debug</button>
       <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
       <button type="button" id="btn-debug-parejas-crear">Crear parejas de prueba</button>
       <button type="button" id="btn-debug-parejas-quitar">Quitar parejas de prueba</button>
