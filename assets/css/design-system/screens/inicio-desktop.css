@@ -1076,3 +1076,27 @@
     grid-template-columns: minmax(230px, 280px) minmax(400px, 1fr) minmax(230px, 280px) !important;
   }
 }
+/* INICIO-MAP-NOSCROLL-v1 — mapa cabe en viewport sin scrollbar vertical */
+@media (min-width: 769px) {
+  .inicio-stage {
+    grid-template-columns: minmax(220px, 270px) minmax(320px, 1fr) minmax(220px, 270px) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap {
+    overflow: hidden !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    min-height: 0 !important;
+    max-height: min(calc(100vh - 340px), calc(100dvh - 340px), calc(52vh - 2cm)) !important;
+    width: 100% !important;
+    height: auto !important;
+    aspect-ratio: 618 / 404 !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .inicio-stage {
+    grid-template-columns: minmax(230px, 280px) minmax(350px, 1fr) minmax(230px, 280px) !important;
+  }
+}
