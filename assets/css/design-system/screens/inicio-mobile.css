@@ -258,11 +258,10 @@
   .inicio-mobile .inicio-mobile-tiles .obj-buzon,
   .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen {
     margin: 0;
-    min-height: 86px;
+    height: 101px;
+    min-height: 101px;
     padding: 10px 8px 9px;
-    background:
-      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
-      var(--ds-paper-card);
+    background: transparent;
     border: 2px solid var(--ds-ink);
     border-image: none;
     box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10);
@@ -300,19 +299,22 @@
 
   /* el wrap estira a la altura comun de la familia */
   .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon .mensajitos-wrap {
-    min-height: 86px;
+    height: 101px;
+    min-height: 101px;
     display: flex;
   }
 
   .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
-    min-height: 86px;
+    height: 101px;
+    min-height: 101px;
     margin: 0;
     flex: 1;
     width: 100%;
   }
 
   .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen {
-    min-height: 98px;
+    height: 101px;
+    min-height: 101px;
     border-radius: 15px 21px 13px 21px / 21px 13px 21px 15px;
   }
 
@@ -377,14 +379,14 @@
 
   /* etiqueta + NUEVO PLAN (ref inicio-mobile.png) */
   .inicio-mobile .obj-nuevo-plan-txt::before {
-    content: "+ NUEVO PLAN";
+    content: "plan";
     visibility: visible;
     font-family: var(--ds-font-hand);
     font-weight: 700;
     font-size: 1.0625rem;
     letter-spacing: .7px;
     margin-right: -.7px;
-    text-transform: uppercase;
+    text-transform: none;
     line-height: 1.1;
     color: var(--ds-pink-deep);
     text-shadow: none;
@@ -397,8 +399,8 @@
   }
 
   .inicio-mobile .obj-vecinos-preview-cara {
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border: 2px solid #fff;
     box-shadow: 0 0 0 1.5px var(--ds-ink-soft), 0 2px 3px rgba(70, 50, 30, .18);
     background: #fff;
@@ -429,11 +431,10 @@
 
   /* + PLAN: borde rosa discontinuo (ref piloto v3.1) */
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
-    min-height: 108px;
-    padding: 10px 8px 10px;
-    background:
-      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
-      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%);
+    height: 101px;
+    min-height: 101px;
+    padding: 8px 6px 6px;
+    background: transparent;
     border: 2.5px dashed var(--ds-pink-deep);
     border-image: none;
     -webkit-mask-image: none;
@@ -455,8 +456,8 @@
   }
 
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
-    font-size: 2.35rem;
-    line-height: .85;
+    font-size: 1.65rem;
+    line-height: 1;
     font-family: var(--ds-font-hand);
     font-weight: 700;
     color: var(--ds-pink-deep);
@@ -467,6 +468,14 @@
     color: var(--ds-pink-deep);
     text-shadow: none;
     padding: 0 4px;
+  }
+
+  .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
+  .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    height: 18px;
+    min-height: 18px;
+    line-height: 1;
+    font-size: .8125rem;
   }
 
   /* ---------- 4. Mapa protagonista ---------- */
@@ -1690,8 +1699,8 @@
   .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon .mensajitos-wrap {
     flex: 1 1 auto !important;
     width: 100% !important;
-    height: auto !important;
-    min-height: 86px !important;
+    height: 101px !important;
+    min-height: 101px !important;
     padding: 0 !important;
     margin: 0 !important;
     border: none !important;
@@ -1720,9 +1729,7 @@
     padding: 10px 8px 9px !important;
     border: 2px solid var(--ds-ink, #3b3028) !important;
     border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
-    background:
-      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
-      var(--ds-paper-card, #f7f1e8) !important;
+    background: transparent !important;
     box-shadow: 1.5px 3px 0 rgba(51, 38, 30, .16), 0 4px 9px rgba(70, 50, 30, .10) !important;
     text-align: center !important;
     gap: .12rem !important;
@@ -1730,12 +1737,14 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
-    min-height: 86px !important;
+    height: 101px !important;
+    min-height: 101px !important;
     flex: 1 1 auto !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota {
-    min-height: 98px !important;
+    height: 101px !important;
+    min-height: 101px !important;
     border-radius: 15px 21px 13px 21px / 21px 13px 21px 15px !important;
   }
 
@@ -1795,8 +1804,8 @@
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview-cara,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview-ini {
-    width: 36px !important;
-    height: 36px !important;
+    width: 30px !important;
+    height: 30px !important;
     border: 2px solid #fff !important;
     box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #6b5138), 0 2px 3px rgba(70, 50, 30, .18) !important;
     background: #fff !important;
@@ -1811,13 +1820,12 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
-    min-height: 108px !important;
-    padding: 10px 8px 10px !important;
+    height: 101px !important;
+    min-height: 101px !important;
+    padding: 8px 6px 6px !important;
     border: 2.5px dashed var(--ds-pink-deep, #c85b78) !important;
     border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
-    background:
-      radial-gradient(130% 100% at 50% 0%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 64%),
-      linear-gradient(180deg, #fff8fb 0%, #fceef4 100%) !important;
+    background: transparent !important;
     box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(196, 43, 74, .12) !important;
     transform: rotate(-0.35deg) !important;
     gap: 2px !important;
@@ -1832,21 +1840,21 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
-    content: "+ NUEVO PLAN" !important;
+    content: "plan" !important;
     visibility: visible !important;
     display: block !important;
     font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
     font-weight: 700 !important;
     font-size: 1.0625rem !important;
     letter-spacing: .7px !important;
-    text-transform: uppercase !important;
+    text-transform: none !important;
     line-height: 1.1 !important;
     color: var(--ds-pink-deep, #c85b78) !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
-    font-size: 2.35rem !important;
-    line-height: .85 !important;
+    font-size: 1.65rem !important;
+    line-height: 1 !important;
     font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
     font-weight: 700 !important;
     color: var(--ds-pink-deep, #c85b78) !important;
@@ -1855,6 +1863,15 @@
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-flecha {
     display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    height: 18px !important;
+    min-height: 18px !important;
+    line-height: 1 !important;
+    font-size: .8125rem !important;
+    text-transform: none !important;
   }
 
   /* --- 3. Cotilleo feed (c5f73d3 sec.6; gana a responsive generico) --- */
