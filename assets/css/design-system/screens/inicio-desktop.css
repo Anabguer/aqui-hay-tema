@@ -910,28 +910,48 @@
     grid-template-rows: auto auto auto !important;
   }
 }
-/* INICIO-MAP-TALLER-v1 — mapa desktop más alto (host compartido) */
+/* INICIO-MAP-TALLER-v2 — mapa desktop más alto (imagen rellena el board) */
 @media (min-width: 769px) {
-  .inicio-stage > .inicio-map-host {
-    min-height: 460px !important;
-  }
-
-  .play-v3 .inicio-stage > .inicio-map-host .play-stage {
-    min-height: 420px !important;
-  }
-
-  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc {
-    min-height: 400px !important;
-  }
-
   .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
-    min-height: 400px !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
   }
 
   .play-v3 .inicio-stage > .inicio-map-host .board-fit,
   .play-v3 .inicio-stage > .inicio-map-host .play-root.pc .board-fit {
     width: 100% !important;
+    height: min(52vh, 500px) !important;
+    min-height: 420px !important;
     max-height: min(88vh, 860px) !important;
-    min-height: 440px !important;
+    aspect-ratio: auto !important;
+    margin: 0 auto !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico,
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-zonas-layer {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico-bg {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: fill !important;
+    display: block !important;
+  }
+
+  .inicio-stage > .inicio-map-host {
+    min-height: min(52vh, 500px) !important;
+    height: auto !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3 .inicio-stage > .inicio-map-host .play-root.pc,
+  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
+    min-height: 420px !important;
+    height: 100% !important;
   }
 }
