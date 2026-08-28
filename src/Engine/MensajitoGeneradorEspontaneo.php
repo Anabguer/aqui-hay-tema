@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Generador espontaneo de Mensajitos (familias F1, F2, F4, F6, F7, F14, F15).
+ * Generador espontaneo de Mensajitos (familias F1, F2, F4, F6, F7, F8, F11, F14, F15).
  *
  * Los NPCs se dirigen a Celestine cuando tienen algo que decir, disparado
  * por su estado real (emociones, relaciones, eventos recientes, personalidad).
@@ -29,9 +29,60 @@ final class MensajitoGeneradorEspontaneo
         if ($familias === []) {
             return null;
         }
-        usort($familias, static fn(array $a, array $b) => $a['peso'] <=> $b['peso']);
+        usort($familias, static function (array $a, array $b): int {
+            $pa = MensajitosCadenciaEngine::prioridad((string) ($a['familia'] ?? ''));
+            $pb = MensajitosCadenciaEngine::prioridad((string) ($b['familia'] ?? ''));
+            if ($pa !== $pb) {
+                return $pa <=> $pb;
+            }
+            return ((int) ($a['peso'] ?? 99)) <=> ((int) ($b['peso'] ?? 99));
+        });
         $elegida = $familias[0];
-        return self::generar($partida, $residenteId, $elegida, $cal, $rng);
+        $candidato = [
+            'residente_id' => $residenteId,
+            'familia' => (string) ($elegida['familia'] ?? ''),
+            'peso' => (int) ($elegida['peso'] ?? 3),
+            'datos' => is_array($elegida['datos'] ?? null) ? $elegida['datos'] : [],
+        ];
+        return self::publicar($partida, $residenteId, $candidato, $cal, $rng);
+    }
+
+    /**
+     * @return list<array{residente_id: string, familia: string, peso: int, datos: array<string, mixed>}>
+     */
+    public static function recolectarCandidatos(array $partida, array $cal): array
+    {
+        $out = [];
+        foreach (PeticionPuebloEngine::residentes($partida) as $rid) {
+            if (MensajitosCadenciaEngine::enCooldownVecino($partida, $rid, $cal)) {
+                continue;
+            }
+            foreach (self::familiasCandidatas($partida, $rid, $cal) as $fam) {
+                $out[] = [
+                    'residente_id' => $rid,
+                    'familia' => (string) ($fam['familia'] ?? ''),
+                    'peso' => (int) ($fam['peso'] ?? 3),
+                    'datos' => is_array($fam['datos'] ?? null) ? $fam['datos'] : [],
+                ];
+            }
+        }
+        return $out;
+    }
+
+    /**
+     * @param array{residente_id?: string, familia: string, peso?: int, datos?: array<string, mixed>} $candidato
+     */
+    public static function publicar(array &$partida, string $residenteId, array $candidato, array $cal, RngService $rng): ?array
+    {
+        $fam = [
+            'familia' => (string) ($candidato['familia'] ?? ''),
+            'peso' => (int) ($candidato['peso'] ?? 3),
+            'datos' => is_array($candidato['datos'] ?? null) ? $candidato['datos'] : [],
+        ];
+        if ($fam['familia'] === '') {
+            return null;
+        }
+        return self::generar($partida, $residenteId, $fam, $cal, $rng);
     }
 
     /**
@@ -60,6 +111,14 @@ final class MensajitoGeneradorEspontaneo
         $f7 = self::candidatoF7($partida, $residenteId);
         if ($f7 !== null) {
             $c[] = $f7;
+        }
+        $f8 = MensajitoDudaPermanenciaEngine::candidatoEspontaneo($partida, $residenteId, $cal);
+        if ($f8 !== null) {
+            $c[] = $f8;
+        }
+        $f11 = MensajitoMediacionEngine::candidato($partida, $residenteId);
+        if ($f11 !== null) {
+            $c[] = $f11;
         }
         $f15 = self::candidatoF15($partida, $residenteId, $cal);
         if ($f15 !== null) {
@@ -200,6 +259,9 @@ final class MensajitoGeneradorEspontaneo
             case 'f_alerta_vecinal':
                 $clas = BuzonEngine::IMPORTANTE;
                 break;
+            case 'f_duda_permanencia':
+                $clas = BuzonEngine::IMPORTANTE;
+                break;
             case 'f_colectivo':
                 $clas = BuzonEngine::OPORTUNIDAD;
                 break;
@@ -221,6 +283,12 @@ final class MensajitoGeneradorEspontaneo
             case 'f_alerta_vecinal':
                 $acciones = ['investigar', 'organizar_algo', 'no_meterse'];
                 break;
+            case 'f_duda_permanencia':
+                $acciones = ['organizar_algo', 'responder_escuchar', 'no_meterse'];
+                break;
+            case 'f_mediacion':
+                $acciones = ['mediar_reparar', 'responder_consejo', 'no_meterse'];
+                break;
             case 'f_curiosidad_celestine':
                 $acciones = ['responder_celestine'];
                 break;
@@ -228,6 +296,12 @@ final class MensajitoGeneradorEspontaneo
                 $acciones = [];
         }
         $msgId = 'msg_' . bin2hex(random_bytes(4));
+        $clave = (string) ($fam['datos']['clave'] ?? '');
+        if ($clave === '') {
+            $clave = $fam['familia'] . '|' . $rid . '|d' . (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        }
+        $horaJuego = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24 + (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $eventoId = CanalDeduplicador::eventoIdVentana($fam['familia'], $rid, $clave, $horaJuego);
         $r = CanalDeduplicador::crearSiAplica($partida, [
             'id' => $msgId,
             'clasificacion' => $clas,
@@ -238,17 +312,25 @@ final class MensajitoGeneradorEspontaneo
             'texto' => $texto,
             'acciones' => $acciones,
             'familia_mensajito' => $fam['familia'],
-            'datos_familia' => $fam['datos'],
+            'datos_familia' => array_merge($fam['datos'], ['clave' => $clave]),
+            'dedup_clave' => $clave,
             'hilo_id' => $msgId,
             'hilo_estado' => 'abierto',
             'seguimiento_pendiente' => in_array($fam['familia'], ['f_opinion', 'f_dilema', 'f_confidencia'], true),
-            'origen' => ['evento_id' => $msgId, 'tipo_evento' => 'espontaneo_' . $fam['familia'], 'es_narrativo' => true, 'informacion_revelada' => [], '_placeholder' => false],
+            'origen' => ['evento_id' => $eventoId, 'tipo_evento' => 'espontaneo_' . $fam['familia'], 'es_narrativo' => true, 'informacion_revelada' => [], '_placeholder' => false],
             '_placeholder_contenido' => false,
         ]);
         if ($r === null || !($r['ok'] ?? false)) {
             return null;
         }
-        MensajitosCadenciaEngine::registrar($partida, $rid, $fam['familia'], 'espontaneo', (string) ($fam['datos']['clave'] ?? ''));
+        if ($fam['familia'] === MensajitoDudaPermanenciaEngine::FAMILIA) {
+            MensajitoDudaPermanenciaEngine::registrarPendientePublico(
+                $partida,
+                $rid,
+                (string) ($r['mensaje']['id'] ?? $msgId)
+            );
+        }
+        MensajitosCadenciaEngine::registrar($partida, $rid, $fam['familia'], 'espontaneo', $clave);
         DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
             'mensaje' => $r['mensaje'] ?? null,
             'origen_evento' => 'espontaneo_' . $fam['familia'],
@@ -302,6 +384,16 @@ final class MensajitoGeneradorEspontaneo
                 $observado = $datos['observado_id'] ?? '';
                 $historial = $observado !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $observado) : '';
                 return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado', 'historial' => $historial], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
+            case 'f_duda_permanencia':
+                return MensajitoVoz::linea(
+                    $partida,
+                    'f_duda_permanencia',
+                    ['texto' => $datos['motivo'] ?? 'un poco invisible'],
+                    'f_duda|' . $rid . '|' . ($datos['clave'] ?? ''),
+                    $rid
+                );
+            case 'f_mediacion':
+                return MensajitoMediacionEngine::texto($partida, $rid, $datos);
             case 'f_curiosidad_celestine':
                 return MensajitoVoz::linea($partida, 'f_curiosidad_celestine', [], 'f_curiosidad|' . $rid, $rid);
         }

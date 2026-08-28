@@ -40,6 +40,10 @@ final class RelojOperations
             if (!$catchUp) {
                 AcontecimientoDiario::alCerrarDia($partida, $catalog, $cal, $this->logger);
             }
+            $calMarcha = CalibracionConfig::load($this->projectRoot);
+            if (!$catchUp && FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
+                MensajitoDudaPermanenciaEngine::evaluarAlCerrarDia($partida, $calMarcha, $this->logger);
+            }
             MarchaEngine::evaluarAlCerrarDia($partida, $this->projectRoot, $this->logger);
 
             // F10 — rituales contextuales (cumpleaños) al inicio del nuevo día
@@ -49,16 +53,12 @@ final class RelojOperations
                 MensajitoContextualEngine::evaluarAlComenzarDia($partida, $calCtx, $catalogCtx, $this->logger);
             }
 
-            // Mensajitos espontaneos: generar al inicio del nuevo dia
+            // Mensajitos espontaneos: cola + prioridad + presupuesto al inicio del nuevo dia
             if (!$catchUp && FeatureConfig::isEnabled($partida, 'mensajitos_espontaneos_enabled')) {
                 $calMens = CalibracionConfig::load($this->projectRoot);
                 $rngMens = RngService::fromPartida($partida);
-                foreach (PeticionPuebloEngine::residentes($partida) as $mRes) {
-                    MensajitoGeneradorEspontaneo::evaluar($partida, $mRes, $calMens, $rngMens);
-                }
+                MensajitosCadenciaEngine::tickEspontaneosAlCerrarDia($partida, $calMens, $rngMens);
                 $rngMens->persistToPartida($partida);
-                // Compactar mensajes antiguos
-                MensajitosCadenciaEngine::compactarResueltos($partida, $calMens);
             }
 
             // Seguimiento de consejos (F9)

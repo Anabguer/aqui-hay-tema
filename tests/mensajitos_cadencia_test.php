@@ -89,6 +89,34 @@ BuzonEngine::crear($p3c, ['texto' => 'reciente', 'tipo' => 'test']);
 $compactados = MensajitosCadenciaEngine::compactarResueltos($p3c, $cal);
 ok($compactados >= 1, "compactacion: $compactados mensajes compactados");
 
+// --- 6) Cola al día siguiente ---
+$pCola = $svc->nuevaPartida('juego_v1', 'cadencia-cola-' . time());
+$pCola['reloj']['dia_pueblo'] = 3;
+$pres = MensajitosCadenciaEngine::presupuestoDiario(count($pCola['residentes']), $cal);
+for ($i = 0; $i < $pres; $i++) {
+    BuzonEngine::crear($pCola, [
+        'texto' => "lleno $i",
+        'tipo' => 'espontaneo_f_opinion',
+        'canal' => BuzonEngine::CANAL_BUZON,
+        'clasificacion' => BuzonEngine::OPORTUNIDAD,
+    ]);
+}
+ok(!MensajitosCadenciaEngine::hayPresupuesto($pCola, $cal), 'cola: presupuesto lleno');
+MensajitosCadenciaEngine::encolar($pCola, [
+    'residente_id' => 'per_p001',
+    'familia' => 'f_opinion',
+    'peso' => 2,
+    'datos' => ['clave' => 'f_opinion|per_p002', 'otro_id' => 'per_p002', 'otro_nombre' => 'Test'],
+], $cal);
+ok(count($pCola['mensajitos_cola'] ?? []) === 1, 'cola: candidato encolado');
+$pCola2 = $pCola;
+$pCola2['reloj']['dia_pueblo'] = 4;
+$pCola2['buzon'] = [];
+$rng = \AquiHayTema\Engine\RngService::fromPartida($pCola2);
+MensajitosCadenciaEngine::procesarCola($pCola2, $cal, $rng);
+ok(count($pCola2['mensajitos_cola'] ?? []) === 0, 'cola: vacía tras publicar con hueco');
+ok(count($pCola2['buzon'] ?? []) >= 1, 'cola: mensaje publicado desde cola');
+
 echo "\n";
 echo $failures === 0 ? "OK mensajitos_cadencia\n" : "FAIL mensajitos_cadencia ({$failures})\n";
 exit($failures > 0 ? 1 : 0);

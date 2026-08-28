@@ -226,8 +226,13 @@ final class MarchaEngine
      */
     private static function senalDeMarcha(array $partida, string $rid, int $dia, array $cal): ?array
     {
-        $minSenales = (int) CalibracionConfig::get($cal, 'marchas.min_senales', 2);
+        $minSenales = MensajitoDudaPermanenciaEngine::minSenalesReducido(
+            $partida,
+            $rid,
+            (int) CalibracionConfig::get($cal, 'marchas.min_senales', 2)
+        );
         $pBase = (float) CalibracionConfig::get($cal, 'marchas.p_base', 0.12);
+        $pBase *= MensajitoDudaPermanenciaEngine::factorEscaladaMarcha($partida, $rid);
         $senales = [];
 
         $emo = (string) ($partida['residentes'][$rid]['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);

@@ -16,5 +16,5 @@
     "vida_pueblo_enabled": false,
     "misiones_diarias_enabled": false,
     "peticiones_pueblo_enabled": false,
-    "mensajitos_espontaneos_enabled": false
+    "mensajitos_espontaneos_enabled": true
 }

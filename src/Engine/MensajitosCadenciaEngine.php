@@ -140,10 +140,15 @@ final class MensajitosCadenciaEngine
             case 'peticion_resultado':
                 return 0;
             case 'peticion':
+            case 'f_peticion':
+            case 'f_presentacion':
             case 'candidato_oferta':
             case 'marcha_intencion':
             case 'f_ritual_contextual':
+            case 'f_mediacion':
                 return 1;
+            case 'f_duda_permanencia':
+                return 0;
             case 'f_opinion':
             case 'f_dilema':
             case 'f_alerta_vecinal':
@@ -216,5 +221,113 @@ final class MensajitosCadenciaEngine
         }
         unset($m);
         return $compactados;
+    }
+
+    /**
+     * Orquesta espontáneos al cerrar día: cola pendiente → candidatos priorizados → presupuesto (§22.5).
+     */
+    public static function tickEspontaneosAlCerrarDia(array &$partida, array $cal, RngService $rng): void
+    {
+        self::procesarCola($partida, $cal, $rng);
+        $candidatos = MensajitoGeneradorEspontaneo::recolectarCandidatos($partida, $cal);
+        usort($candidatos, static function (array $a, array $b): int {
+            $pa = self::prioridad((string) ($a['familia'] ?? ''));
+            $pb = self::prioridad((string) ($b['familia'] ?? ''));
+            if ($pa !== $pb) {
+                return $pa <=> $pb;
+            }
+            return ((int) ($a['peso'] ?? 99)) <=> ((int) ($b['peso'] ?? 99));
+        });
+        foreach ($candidatos as $c) {
+            $rid = (string) ($c['residente_id'] ?? '');
+            if ($rid === '') {
+                continue;
+            }
+            if (self::hayPresupuesto($partida, $cal)) {
+                if (MensajitoGeneradorEspontaneo::publicar($partida, $rid, $c, $cal, $rng) !== null) {
+                    continue;
+                }
+            }
+            self::encolar($partida, $c, $cal);
+        }
+        self::compactarResueltos($partida, $cal);
+    }
+
+    /**
+     * Publica candidatos en cola mientras haya presupuesto (prioridad FIFO dentro de la cola).
+     *
+     * @param array<string, mixed> $cal
+     */
+    public static function procesarCola(array &$partida, array $cal, RngService $rng): void
+    {
+        $cola = is_array($partida['mensajitos_cola'] ?? null) ? $partida['mensajitos_cola'] : [];
+        if ($cola === []) {
+            return;
+        }
+        usort($cola, static function (array $a, array $b): int {
+            $pa = (int) ($a['prioridad'] ?? 99);
+            $pb = (int) ($b['prioridad'] ?? 99);
+            if ($pa !== $pb) {
+                return $pa <=> $pb;
+            }
+            return ((int) ($a['dia_encolado'] ?? 0)) <=> ((int) ($b['dia_encolado'] ?? 0));
+        });
+        $restante = [];
+        foreach ($cola as $c) {
+            if (!is_array($c)) {
+                continue;
+            }
+            $rid = (string) ($c['residente_id'] ?? '');
+            if ($rid === '' || self::enCooldownVecino($partida, $rid, $cal)) {
+                $restante[] = $c;
+                continue;
+            }
+            if (!self::hayPresupuesto($partida, $cal)) {
+                $restante[] = $c;
+                continue;
+            }
+            if (MensajitoGeneradorEspontaneo::publicar($partida, $rid, $c, $cal, $rng) === null) {
+                $restante[] = $c;
+            }
+        }
+        $partida['mensajitos_cola'] = $restante;
+    }
+
+    /**
+     * Encola un candidato para el día siguiente si no hay hueco (§22.5, sin pérdida).
+     *
+     * @param array<string, mixed> $candidato
+     * @param array<string, mixed> $cal
+     */
+    public static function encolar(array &$partida, array $candidato, array $cal): void
+    {
+        $cfg = self::config($cal);
+        $max = max(0, (int) ($cfg['max_cola'] ?? 10));
+        $partida['mensajitos_cola'] ??= [];
+        $familia = (string) ($candidato['familia'] ?? '');
+        $rid = (string) ($candidato['residente_id'] ?? '');
+        $clave = (string) (($candidato['datos'] ?? [])['clave'] ?? '');
+        foreach ($partida['mensajitos_cola'] as $enCola) {
+            if (!is_array($enCola)) {
+                continue;
+            }
+            if (($enCola['residente_id'] ?? '') === $rid
+                && ($enCola['familia'] ?? '') === $familia
+                && (string) (($enCola['datos'] ?? [])['clave'] ?? '') === $clave) {
+                return;
+            }
+        }
+        if (count($partida['mensajitos_cola']) >= $max) {
+            return;
+        }
+        $partida['mensajitos_cola'][] = [
+            'residente_id' => $rid,
+            'familia' => $familia,
+            'peso' => (int) ($candidato['peso'] ?? 3),
+            'prioridad' => self::prioridad($familia),
+            'datos' => is_array($candidato['datos'] ?? null) ? $candidato['datos'] : [],
+            'dia_encolado' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+            'estado' => self::ESTADO_COLA,
+        ];
     }
 }

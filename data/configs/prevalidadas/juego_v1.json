@@ -28,7 +28,8 @@
         "vida_pueblo_enabled": true,
         "misiones_diarias_enabled": true,
         "peticiones_pueblo_enabled": true,
-        "offline_events_enabled": true
+        "offline_events_enabled": true,
+        "mensajitos_espontaneos_enabled": true
     },
     "tutorial_objetivo_residentes": 3,
     "poblacion_v3": {
@@ -37,3 +38,5 @@
     },
     "tutorial_primeros_pasos": true
 }
+
+
