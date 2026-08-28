@@ -28,7 +28,7 @@ final class NombresReservadosPartida
                 try {
                     $pj = $catalog->loadPersonaje($id);
                     $nombre = strtolower((string) ($pj['identidad']['nombre'] ?? ''));
-                } catch (\Throwable) {
+                } catch (\Throwable $e) {
                     continue;
                 }
             }
@@ -44,7 +44,7 @@ final class NombresReservadosPartida
         $catalog = new Catalog($root);
         try {
             $pj = $catalog->loadPersonaje($id);
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             return false;
         }
         $nombre = strtolower((string) ($pj['identidad']['nombre'] ?? ''));
@@ -63,7 +63,7 @@ final class NombresReservadosPartida
         try {
             $pj = $catalog->loadPersonaje($catalogId);
             return (string) ($pj['identidad']['nombre'] ?? '');
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             return '';
         }
     }

@@ -38,7 +38,7 @@ final class LlegadaPresentacionEngine
         try {
             $catalog = new Catalog($root);
             $ficha = $catalog->loadPersonaje($catalogId);
-        } catch (\Throwable) {
+        } catch (\Throwable $e) {
             return ['ok' => false, 'error' => 'ficha_no_encontrada'];
         }
         $ident = is_array($ficha['identidad'] ?? null) ? $ficha['identidad'] : [];

@@ -277,7 +277,7 @@
   async function api(action, body, method) {
     body = body || {};
     method = method || 'POST';
-    const opts = { method: method, cache: 'no-store' };
+    const opts = { method: method, cache: 'no-store', credentials: 'same-origin' };
     let url;
     if (isDebugOn()) body.debug = 1;
     if (method === 'GET') {
@@ -1909,6 +1909,26 @@
     club_lectura: 'assets/play-v3/eventos/club_lectura.png'
   };
 
+
+  function mensajitoEventoPuebloImg(m) {
+    if (!m) return '';
+    var df = m.datos_familia || {};
+    if (df.illustracion) return String(df.illustracion);
+    var catId = String(df.evento_pueblo_catalogo_id || '');
+    if (catId && EVENTO_PUEBLO_IMG[catId]) return EVENTO_PUEBLO_IMG[catId];
+    var tipo = String(m.tipo || m.familia_mensajito || '');
+    if ((tipo === 'anuncio_evento_pueblo' || tipo === 'cierre_evento_pueblo') && catId) {
+      return 'assets/play-v3/eventos/' + catId + '.png';
+    }
+    return '';
+  }
+
+  function htmlMensajitoEventoIllo(m) {
+    var src = mensajitoEventoPuebloImg(m);
+    if (!src) return '';
+    return '<div class="carta-illo-evento" aria-hidden="true"><img class="carta-illo-evento-img" src="' + esc(src) + '" alt="" loading="lazy" decoding="async"/></div>';
+  }
+
   function eventoPuebloCatalogoId(enc, partida) {
     if (!enc) return '';
     if (enc.evento_pueblo_catalogo_id) return String(enc.evento_pueblo_catalogo_id);
@@ -2671,23 +2691,16 @@
   function pintarOrgLugarHorario(lugId) {
     var el = $('[data-org-lugar-horario]');
     if (!el) return;
+    el.innerHTML = '';
+    el.hidden = true;
+    var box = $('[data-org-dd-lugar]');
+    if (!box) return;
     var id = lugId || ($('[data-org-lugar]') && $('[data-org-lugar]').value) || org.lugar || '';
-    if (!id) {
-      el.innerHTML = '';
-      el.hidden = true;
-      return;
-    }
-    var d = destinoOperativoPorId(id);
-    if (!d || !d.horario) {
-      el.innerHTML = '';
-      el.hidden = true;
-      return;
-    }
-    var estado = d.abierto_ahora ? 'Abierto ahora' : 'Cerrado ahora';
-    var estadoCls = d.abierto_ahora ? 'quien-estado--abierto' : 'quien-estado--cerrado';
-    el.innerHTML = '<span class="quien-estado ' + estadoCls + '">' + estado + '</span>' +
-      '<span class="quien-horas"> · ' + esc(d.horario) + '</span>';
-    el.hidden = false;
+    var trig = box.querySelector('.org-dd-trigger');
+    if (!trig || !id) return;
+    var label = trig.querySelector('.org-lugar-card-nom');
+    var nom = label ? label.textContent : (nombreLugarTitulo(id, id) || 'Elegir…');
+    trig.innerHTML = orgDdTriggerContent('lugar', nom, id);
   }
 
   var MAPA_TEMA_PRIORIDAD = { romance: 0, drama: 1, relacion: 2, coincidencias: 3 };
@@ -5257,18 +5270,68 @@ function hobbyIconKey(id, texto) {
     cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/><circle cx="17.5" cy="6.5" r="3.2"/></svg>',
     individual: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zm0 2c-3.9 0-7 2.1-7 4.7V21h14v-2.3C19 16.1 15.9 14 12 14z"/></svg>'
   };
+  var ORG_TIPO_DESC = {
+    conocerse: 'Centraros en charlar y conocer más al vecino.',
+    quedar: 'Un rato tranquilo juntos, sin más presión.',
+    primera_cita: 'Algo especial para dar el primer paso romántico.',
+    cita: 'Tiempo a solas, con más confianza entre vosotros.',
+    individual: 'Un plan en solitario, a su ritmo.',
+    amistad: 'Un rato tranquilo juntos, sin más presión.',
+    romance: 'Algo especial para dar el primer paso romántico.',
+    romantico: 'Tiempo a solas, con más confianza entre vosotros.'
+  };
+  var ORG_LUGAR_DESC = {
+    lug_cafeteria: 'El lugar perfecto para tomar algo y charlar tranquilamente.',
+    lug_bar: 'Ambiente relajado para una copa y buena conversación.',
+    lug_biblioteca: 'Rincones tranquilos para leer o charlar en voz baja.',
+    lug_parque: 'Aire libre y calma para pasear o sentarse un rato.',
+    lug_cine: 'Una sesión de cine para compartir sin prisas.',
+    lug_gimnasio: 'Moverse juntos o animar un plan activo.',
+    lug_restaurante: 'Mesa puesta para comer bien y hablar con calma.',
+    lug_bingo: 'Partida de bingo y risas en comunidad.',
+    lug_discoteca: 'Música y ambiente para soltar el cuerpo.',
+    lug_karaoke: 'Cantar, reír y pasarlo bien.',
+    lug_mirador: 'Vistas del pueblo para un momento especial.',
+    lug_picnic: 'Manta, comida y charla al aire libre.',
+    lug_arcade: 'Juegos y diversión en el recreativo.',
+    lug_recreativo: 'Juegos y diversión en el recreativo.',
+    lug_spa: 'Relax y cuidado para desconectar un poco.',
+    lug_tienda: 'Un paseo por la tienda del pueblo.'
+  };
+  var ORG_HORAS_HINT_DEFAULT = 'Los horarios disponibles pueden variar según el lugar.';
+  function orgTipoDesc(id) {
+    var k = String(id || '').toLowerCase();
+    if (k === 'amistad') return ORG_TIPO_DESC.quedar;
+    if (k === 'romance' || k === 'romantico') return ORG_TIPO_DESC.primera_cita;
+    return ORG_TIPO_DESC[k] || '';
+  }
+  function orgLugarDesc(lugId) {
+    var d = destinoOperativoPorId(lugId);
+    if (d && d.descripcion) return String(d.descripcion);
+    return ORG_LUGAR_DESC[String(lugId || '')] || 'Un sitio del pueblo para quedar.';
+  }
+  function orgLugarHastaTxt(horario) {
+    if (!horario) return '';
+    var m = String(horario).match(/(\d{1,2}:\d{2})\s*[-\u2013]\s*(\d{1,2}:\d{2})/);
+    return m ? ('Abierto hasta ' + m[2]) : '';
+  }
   function orgTipoIcoSvg(id) {
     const k = String(id || '').toLowerCase();
     if (k === 'amistad') return ORG_TIPO_SVG.quedar;
     if (k === 'romance' || k === 'romantico') return ORG_TIPO_SVG.primera_cita;
     return ORG_TIPO_SVG[k] || ORG_TIPO_SVG.quedar;
   }
-  function orgTipoHtml(id, label, on) {
+  function orgTipoHtml(id, label, on, descExtra) {
     const ico = orgTipoIcoSvg(id);
     const cls = 'org-tipo-card' + (on ? ' is-on' : '');
+    const desc = descExtra || orgTipoDesc(id);
+    const check = '<span class="org-tipo-card-check" aria-hidden="true"></span>';
     return '<button type="button" class="' + cls + '" data-org-tipo="' + esc(id) + '">' +
       '<span class="org-tipo-card-ico" aria-hidden="true">' + ico + '</span>' +
-      '<span class="org-tipo-card-txt">' + esc(String(label || '')) + '</span></button>';
+      '<span class="org-tipo-card-copy">' +
+      '<span class="org-tipo-card-tit">' + esc(String(label || '')) + '</span>' +
+      (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
+      '</span>' + check + '</button>';
   }
   var ORG_LUGAR_IMG = {
     lug_bar: 'bar.png', lug_biblioteca: 'biblioteca.png', lug_bingo: 'bingo.png', lug_cafeteria: 'cafeteria.png',
@@ -5509,11 +5572,10 @@ function hobbyIconKey(id, texto) {
     if (!hintEl) return;
     if (show && txt) {
       hintEl.textContent = txt;
-      hintEl.hidden = false;
     } else {
-      hintEl.textContent = '';
-      hintEl.hidden = true;
+      hintEl.textContent = ORG_HORAS_HINT_DEFAULT;
     }
+    hintEl.hidden = false;
   }
 
   function mensajeErrorOrgApi(r, fallback) {
@@ -5633,10 +5695,41 @@ function hobbyIconKey(id, texto) {
   }
 
 
+  function orgLugarTriggerHtml(lugId, label) {
+    var d = destinoOperativoPorId(lugId) || {};
+    var desc = orgLugarDesc(lugId);
+    var horario = d.horario || '';
+    var abierto = d.abierto_ahora;
+    var badge = '';
+    if (abierto === true) badge = '<span class="org-lugar-card-badge org-lugar-card-badge--abierto">Abierto</span>';
+    else if (abierto === false) badge = '<span class="org-lugar-card-badge org-lugar-card-badge--cerrado">Cerrado</span>';
+    var hasta = orgLugarHastaTxt(horario);
+    var meta = '<span class="org-lugar-card-meta">' + badge +
+      (hasta ? '<span class="org-lugar-card-hasta"><span class="org-lugar-card-reloj" aria-hidden="true"></span>' + esc(hasta) + '</span>' : '') +
+      '</span>';
+    var pie = '';
+    if (horario) {
+      var estado = abierto === true ? 'Abierto ahora' : (abierto === false ? 'Cerrado ahora' : '');
+      pie = '<span class="org-lugar-card-foot"><span class="org-lugar-card-pie">' +
+        (estado ? '<span class="org-lugar-card-pie-dot" aria-hidden="true"></span><span>' + esc(estado) + '</span><span class="org-lugar-card-pie-sep">·</span>' : '') +
+        '<span>' + esc(horario) + '</span></span></span>';
+    }
+    return '<span class="org-lugar-card-trigger">' +
+      '<span class="org-lugar-card-row">' +
+      orgLugarThumbHtml(lugId) +
+      '<span class="org-lugar-card-body">' +
+      '<span class="org-lugar-card-nom">' + esc(label) + '</span>' +
+      '<span class="org-lugar-card-desc">' + esc(desc) + '</span>' + meta +
+      '</span>' +
+      '<span class="org-dd-chev" aria-hidden="true"></span>' +
+      '</span>' + pie + '</span>';
+  }
+
   function orgDdTriggerContent(kind, label, valStr) {
     var chev = '<span class="org-dd-chev" aria-hidden="true"></span>';
     if (kind === 'lugar') {
-      return orgLugarThumbHtml(valStr) + '<span class="org-dd-label">' + esc(label) + '</span>' + chev;
+      if (valStr) return orgLugarTriggerHtml(valStr, label);
+      return '<span class="org-lugar-card-trigger org-lugar-card-trigger--empty"><span class="org-dd-label">' + esc(label) + '</span>' + chev + '</span>';
     }
     var ico = kind === 'dia'
       ? '<span class="org-dd-ico org-dd-ico--dia" aria-hidden="true"></span>'
@@ -5979,8 +6072,8 @@ function hobbyIconKey(id, texto) {
           hintEl.textContent = r.diagnostico.resumen_ui;
           hintEl.hidden = false;
         } else {
-          hintEl.textContent = '';
-          hintEl.hidden = true;
+          hintEl.textContent = ORG_HORAS_HINT_DEFAULT;
+          hintEl.hidden = false;
         }
       }
     } catch (e) {
@@ -6228,7 +6321,15 @@ function hobbyIconKey(id, texto) {
   async function adoptSqlPartidaIfAny() {
     const list = await api('partida.listar', {}, 'GET');
     if (!list.ok || !Array.isArray(list.partidas) || list.partidas.length === 0) return false;
-    const serverId = list.partidas[0] && list.partidas[0].partida_id;
+    const prev = partidaId;
+    let serverId = null;
+    if (prev) {
+      const hit = list.partidas.find(function (row) { return row && row.partida_id === prev; });
+      if (hit && hit.partida_id) serverId = hit.partida_id;
+    }
+    if (!serverId) {
+      serverId = list.partidas[0] && list.partidas[0].partida_id;
+    }
     if (!serverId) return false;
     if (partidaId !== serverId) persistPartidaId(serverId);
     return true;
@@ -6242,6 +6343,10 @@ function hobbyIconKey(id, texto) {
     if (probe.ok) return true;
     const err = String(probe.error || '').toUpperCase();
     if (err !== 'PARTIDA_NO_ENCONTRADA' && err !== 'SAVE_CORRUPTO') return false;
+    if (await adoptSqlPartidaIfAny()) {
+      const retry = await api('partida.estado', {}, 'GET');
+      if (retry.ok) return true;
+    }
     try { localStorage.removeItem(storageKey()); } catch (e) {}
     partidaId = null;
     return adoptSqlPartidaIfAny();
