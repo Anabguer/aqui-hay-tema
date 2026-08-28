@@ -156,6 +156,28 @@ final class BuzonEngine
         $m['requiere_decision'] = $pendiente;
         $m['acciones_ui'] = MensajitoAcciones::vistaDe($acciones, $pendiente);
         $m['leido'] = self::estaLeido($m);
+        if (($m['tipo'] ?? '') === CandidatoLlegadaEngine::TIPO_MSG && $partida !== null) {
+            $catalogId = (string) ($m['candidato_catalog_id'] ?? '');
+            if ($catalogId === '' && is_array($m['perfil_candidato'] ?? null)) {
+                $catalogId = (string) ($m['perfil_candidato']['catalog_id'] ?? '');
+            }
+            if ($catalogId !== '' && !is_array($m['perfil_candidato'] ?? null)) {
+                $perfil = LlegadaPresentacionEngine::perfilCandidato(
+                    dirname(__DIR__, 2),
+                    $catalogId
+                );
+                if ($perfil['ok'] ?? false) {
+                    $m['perfil_candidato'] = $perfil;
+                }
+            }
+            if (!is_array($m['acompanantes_opciones'] ?? null) || $m['acompanantes_opciones'] === []) {
+                $m['acompanantes_opciones'] = LlegadaPresentacionEngine::acompanantesDisponibles(
+                    $partida,
+                    dirname(__DIR__, 2)
+                );
+                $m['selector_titulo_acompanante'] = '¿Quién le enseña Villaborde?';
+            }
+        }
         if ($pendiente && !empty($m['familia_mensajito']) && $partida !== null) {
             $m = MensajitoConsejoEngine::enriquecerParaUi($partida, $m);
         }

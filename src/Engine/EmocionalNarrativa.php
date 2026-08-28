@@ -44,14 +44,22 @@ final class EmocionalNarrativa
             case 'encuentro_intervencion':
                 $res = (string) ($ctx['resultado_experiencia'] ?? '');
                 $otroNombre = self::nombreOtroDeEncuentro($partida, $residenteId, $ctx);
+                $otroId = self::idOtroDeEncuentro($partida, $residenteId, $ctx);
                 $motivo = (string) ($ctx['motivo'] ?? '');
+                $histCtx = $otroId !== '' ? HistorialPar::contextoNarrativo($partida, $residenteId, $otroId) : '';
                 if ($motivo === 'hobby_recuperacion' || $origen === 'hobby_recuperacion') {
                     $explicacion = 'Un rato con su hobby le ha sentado de fábula.';
                 } elseif ($res === 'muy_mal') {
                     $explicacion = 'Su encuentro con ' . $otroNombre . ' no salió como esperaba. Aquello la dejó hecha polv' . self::oA($partida, $residenteId) . '.';
+                    if ($histCtx !== '') {
+                        $explicacion .= ' ' . ucfirst($histCtx) . '.';
+                    }
                     $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
                 } elseif ($res === 'mal') {
                     $explicacion = 'Compartió un rato con ' . $otroNombre . ' que se torció, y salió de allí con el ánimo por los suelos.';
+                    if ($histCtx !== '') {
+                        $explicacion .= ' ' . ucfirst($histCtx) . '.';
+                    }
                     $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
                 } elseif ($estadoId === EstadoEmocional::ALEGRE) {
                     $explicacion = 'Ha tenido un encuentro que le ha animado el día.';
@@ -238,6 +246,26 @@ final class EmocionalNarrativa
         return 'otra persona'; // sin nombre resolvible: copy genérico sin IDs
     }
 
+    /**
+     * ID del otro participante del encuentro (para HistorialPar).
+     */
+    private static function idOtroDeEncuentro(array $partida, string $residenteId, array $ctx): string
+    {
+        $encId = (string) ($ctx['encuentro_id'] ?? '');
+        foreach ($partida['encuentros'] ?? [] as $enc) {
+            if (!is_array($enc) || (string) ($enc['id'] ?? '') !== $encId) {
+                continue;
+            }
+            foreach (($enc['participantes'] ?? []) as $pid) {
+                $pid = (string) $pid;
+                if ($pid !== $residenteId && isset($partida['residentes'][$pid])) {
+                    return $pid;
+                }
+            }
+        }
+        return '';
+    }
+
     /** @param array<string, mixed> $ctx */
     private static function eventoDiarioDeEncuentro(array $ctx): ?string
     {
@@ -328,6 +356,23 @@ final class EmocionalNarrativa
                 return '¡Tengo trabajo nuevo! Estoy que me salgo y quería decirlo.';
             case 'rechazo_repetido':
                 return 'Esta vez no doy más. Necesito un respiro de planes, ¿de acuerdo?';
+            case 'hobby_recuperacion':
+            case 'encuentro_y_hobby':
+                return 'Me he dedicado un rato a lo mío y estoy mucho mejor. A veces hace falta.';
+            case 'cumple_felicidad':
+                return 'Hoy me han dedicado unas palabras muy bonitas. Me ha encantado.';
+            case 'consejo_celestine':
+                return 'Oye, que me has dado un buen consejo. Se te nota.';
+            case 'encuentro':
+            case 'encuentro_intervencion':
+                $res = (string) ($contexto['resultado_experiencia'] ?? '');
+                if ($res === 'muy_mal' || $res === 'mal') {
+                    return 'No me ha ido bien en el último plan. Estoy de bajón.';
+                }
+                if ($res === 'muy_bien' || $res === 'bien') {
+                    return 'He pasado un buen rato y se me ha pasado el mal humor.';
+                }
+                return null;
             default:
                 return null;
         }

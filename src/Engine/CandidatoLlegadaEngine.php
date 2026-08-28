@@ -38,6 +38,9 @@ final class CandidatoLlegadaEngine
         if (!isset($l['normal_desde_dia'])) {
             $l['normal_desde_dia'] = null;
         }
+        $l['dias_sin_oferta'] ??= 0;
+        $l['ultimo_dia_intento_pity'] ??= 0;
+        self::sincronizarPityLegacy($partida);
     }
 
     public static function modoNormalActivo(array $partida): bool
@@ -139,8 +142,9 @@ final class CandidatoLlegadaEngine
         }
 
         $cal = CalibracionConfig::load($root);
+        $diasSinOferta = (int) ($partida['llegadas']['dias_sin_oferta'] ?? 0);
         if (self::modoNormalActivo($partida)) {
-            $pDia = self::pDiaV3($n);
+            $pDia = self::pDiaEfectiva($n, $diasSinOferta);
         } else {
             $pBase = (float) CalibracionConfig::get($cal, 'llegadas.p_base', 0.08);
             $pPorHueco = (float) CalibracionConfig::get($cal, 'llegadas.p_por_hueco', 0.04);
@@ -152,16 +156,21 @@ final class CandidatoLlegadaEngine
         $fracDias = max(1, $horasAvanzadas) / 24.0;
         $p = 1.0 - pow(1.0 - $pDia, $fracDias);
 
+        $forzarPity = self::modoNormalActivo($partida) && self::forzarOfertaPorPity($n, $diasSinOferta);
         $rng = RngService::fromPartida($partida);
-        $tirada = $rng->nextFloat();
-        if ($tirada >= $p) {
-            $rng->persistToPartida($partida);
-            return null;
+        if (!$forzarPity) {
+            $tirada = $rng->nextFloat();
+            if ($tirada >= $p) {
+                $rng->persistToPartida($partida);
+                self::registrarDiaSinOferta($partida, $dia);
+                return null;
+            }
         }
 
         $pool = self::poolDisponible($partida, $root);
         if ($pool === []) {
             $rng->persistToPartida($partida);
+            self::registrarDiaSinOferta($partida, $dia);
             return null;
         }
         $pick = $rng->pickUnique($pool, 1);
@@ -187,6 +196,8 @@ final class CandidatoLlegadaEngine
             'huecos' => $huecos,
         ];
         $partida['llegadas']['candidato_activo'] = $cand;
+        $partida['llegadas']['dias_sin_oferta'] = 0;
+        $partida['llegadas']['ultimo_dia_intento_pity'] = $dia;
 
         // CONTRATO NARRATIVO: la oferta la firma el propio candidato ante
         // Celestine. remitente_nombre mantiene visible su nombre en UI aunque
@@ -217,6 +228,8 @@ final class CandidatoLlegadaEngine
             ],
         ]);
 
+        LlegadaPresentacionEngine::adjuntarUiMensajeCandidato($partida, $msgId, $catalogId, $root);
+
         return $cand;
     }
 
@@ -227,7 +240,8 @@ final class CandidatoLlegadaEngine
         array &$partida,
         string $root,
         ?string $mensajeId = null,
-        ?GameLogger $logger = null
+        ?GameLogger $logger = null,
+        ?string $acompananteId = null
     ): array {
         self::ensure($partida);
         $cand = $partida['llegadas']['candidato_activo'] ?? null;
@@ -241,11 +255,25 @@ final class CandidatoLlegadaEngine
             return ['ok' => false, 'error' => 'sin_hueco'];
         }
 
+        $acompananteId = trim((string) ($acompananteId ?? ''));
+        if ($acompananteId === '') {
+            return ['ok' => false, 'error' => 'falta_acompanante'];
+        }
+
         $rng = RngService::fromPartida($partida);
         $esperaMin = $rng->nextInt(1, 10);
         $rng->persistToPartida($partida);
 
         $abs = self::minutosAbs($partida) + $esperaMin;
+        $valAcomp = LlegadaPresentacionEngine::validarAcompanante($partida, $acompananteId, $abs);
+        if (!($valAcomp['ok'] ?? false)) {
+            return [
+                'ok' => false,
+                'error' => (string) ($valAcomp['error'] ?? 'acompanante_invalido'),
+                'detalle' => $valAcomp['detalle'] ?? null,
+            ];
+        }
+
         $enCamino = [
             'catalog_id' => (string) $cand['catalog_id'],
             'nombre' => (string) ($cand['nombre'] ?? $cand['catalog_id']),
@@ -253,6 +281,7 @@ final class CandidatoLlegadaEngine
             'espera_minutos' => $esperaMin,
             'llega_en_minutos_abs' => $abs,
             'mensaje_id' => $cand['mensaje_id'] ?? null,
+            'acompanante_id' => $acompananteId,
             'aceptado_dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
             'aceptado_hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
             'aceptado_minuto' => (int) ($partida['reloj']['minuto_actual'] ?? 0),
@@ -363,6 +392,7 @@ final class CandidatoLlegadaEngine
             return null;
         }
         $catalogId = (string) ($ec['catalog_id'] ?? '');
+        $ecSnapshot = $ec;
         $ops = new ResidenteOperations(new Catalog($root), $logger);
         if (!PoolJugableCanon::esIdCanonico($catalogId)) {
             $partida['llegadas']['en_camino'] = null;
@@ -373,6 +403,7 @@ final class CandidatoLlegadaEngine
         if (!($r['ok'] ?? false)) {
             return ['ok' => false, 'error' => $r['error'] ?? 'incorporar_fallo', 'catalog_id' => $catalogId];
         }
+        LlegadaPresentacionEngine::alLlegadaEfectiva($partida, $catalogId, $root, $ecSnapshot, $logger);
         $partida['llegadas']['historial'][] = [
             'catalog_id' => $catalogId,
             'resultado' => self::ESTADO_LLEGADO,
@@ -426,14 +457,114 @@ final class CandidatoLlegadaEngine
     {
         $cap = CapacidadViviendas::capObjetivoPoblacionActiva();
         $n = max(3, min($cap - 1, $n));
-        return 2 + (int) floor(($n - 3) * 1.25);
+        return 1 + (int) floor(($n - 3) * 1.25);
     }
 
     public static function pDiaV3(int $n): float
     {
         $cap = CapacidadViviendas::capObjetivoPoblacionActiva();
         $h = max(0, $cap - $n);
-        return min(0.30, 0.04 + 0.015 * $h);
+        return min(0.48, 0.12 + 0.026 * $h);
+    }
+
+    public static function pDiaEfectiva(int $n, int $diasSinOferta): float
+    {
+        $p = self::pDiaV3($n);
+        if ($n > 8 || $diasSinOferta <= 0) {
+            return $p;
+        }
+        $boost = 0.20 * max(0, $diasSinOferta - 1);
+        return min(1.0, $p + $boost);
+    }
+
+    public static function forzarOfertaPorPity(int $n, int $diasSinOferta): bool
+    {
+        return $diasSinOferta >= self::umbralPityOferta($n);
+    }
+
+    public static function umbralPityOferta(int $n): int
+    {
+        if ($n <= 6) {
+            return 3;
+        }
+        if ($n <= 8) {
+            return 4;
+        }
+        return PHP_INT_MAX;
+    }
+
+    /**
+     * Backfill idempotente para saves anteriores al contador de pity.
+     * No altera población: solo prepara dias_sin_oferta si el ritmo va claramente retrasado.
+     */
+    public static function sincronizarPityLegacy(array &$partida): void
+    {
+        if (!empty($partida['llegadas']['_pity_legacy_backfill_v1'])) {
+            return;
+        }
+        if (($partida['llegadas']['modo'] ?? '') !== 'normal') {
+            return;
+        }
+        $tut = $partida['tutorial'] ?? [];
+        if (!empty($tut['activo']) && empty($tut['jugable_completado'])) {
+            return;
+        }
+        if (($partida['llegadas']['candidato_activo'] ?? null) !== null
+            || ($partida['llegadas']['en_camino'] ?? null) !== null) {
+            return;
+        }
+
+        $n = count(TutorialIncorporaciones::residentesActivos($partida));
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ($n > 8 || $dia < 1) {
+            $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+            return;
+        }
+
+        $desde = (int) ($partida['llegadas']['normal_desde_dia'] ?? 1);
+        $primerElegible = $desde + 2;
+        if ($dia < $primerElegible) {
+            $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+            return;
+        }
+
+        $llegadasEfectivas = 0;
+        foreach ($partida['llegadas']['historial'] ?? [] as $h) {
+            if (!is_array($h)) {
+                continue;
+            }
+            if (($h['resultado'] ?? '') === self::ESTADO_LLEGADO) {
+                $llegadasEfectivas++;
+            }
+        }
+
+        $umbral = self::umbralPityOferta($n);
+        if ($umbral === PHP_INT_MAX) {
+            $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+            return;
+        }
+
+        $diasElegibles = max(0, $dia - $primerElegible + 1);
+        $residentesPostTutorial = max(0, $n - 3);
+        $retraso = $diasElegibles - $residentesPostTutorial - ($llegadasEfectivas * 2);
+        if ($retraso >= ($umbral - 1)) {
+            $partida['llegadas']['dias_sin_oferta'] = max(
+                (int) ($partida['llegadas']['dias_sin_oferta'] ?? 0),
+                $umbral
+            );
+        }
+
+        $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+    }
+
+    private static function registrarDiaSinOferta(array &$partida, int $dia): void
+    {
+        $ultimo = (int) ($partida['llegadas']['ultimo_dia_intento_pity'] ?? 0);
+        if ($dia <= $ultimo) {
+            return;
+        }
+        $partida['llegadas']['dias_sin_oferta'] = (int) ($partida['llegadas']['dias_sin_oferta'] ?? 0) + 1;
+        $partida['llegadas']['ultimo_dia_intento_pity'] = $dia;
     }
 
     private static function aplicarCooldownV3(array &$partida): void

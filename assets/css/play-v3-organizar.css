@@ -1,83 +1,864 @@
-/** Nuevo plan (09) */
+﻿/* Nuevo Plan — rediseño móvil + desktop (v5) */
 
+.play-v3 .capa-organizar {
+  counter-reset: org-step;
+}
+
+/* --- Modal shell --- */
 .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
 .play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
   position: absolute !important;
-  left: 50% !important; top: 50% !important; right: auto !important; bottom: auto !important;
-  width: min(100%, 393px) !important; max-width: min(100%, 393px) !important;
-  max-height: min(88vh, 720px) !important;
-  transform: translate(-50%, -50%) rotate(-0.2deg) !important;
-  z-index: 12 !important;
-  padding: 14px 13px 12px !important;
-  display: flex !important; flex-direction: column !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(100%, 420px) !important;
+  max-width: min(100%, 420px) !important;
+  max-height: min(90vh, 860px) !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 13 !important;
+  padding: 1.15rem 1rem .9rem !important;
+  display: flex !important;
+  flex-direction: column !important;
   overflow: hidden !important;
   border: 2.5px solid var(--ds-ink, #3b3028) !important;
   border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
-  background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%), var(--ds-paper-modal, #fffaf0) !important;
+  background-color: var(--ds-paper-modal, #fffaf0) !important;
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.48), rgba(255,255,255,0) 58%),
+    linear-gradient(180deg, rgba(255,253,249,.7) 0%, rgba(248,241,223,.38) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center, center !important;
+  background-size: cover, cover, cover !important;
+  background-repeat: no-repeat !important;
   box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
 }
-.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar::before,
-.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar::before {
-  content: "" !important; display: block !important; position: absolute; inset: 5px;
-  border: 1.5px dashed rgba(107,81,56,.34);
-  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
-  pointer-events: none; z-index: 1;
+
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar {
+  width: min(760px, 94vw) !important;
+  max-width: min(760px, 94vw) !important;
+  max-height: min(88vh, 820px) !important;
+  padding: 1.35rem 1.25rem 1rem !important;
 }
-.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar::after,
-.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar::after { display: none !important; }
-.play-v3 .capa-organizar > * { position: relative; z-index: 2; }
-.play-v3 .capa-organizar .ds-modal-close,
-.play-v3 .capa-organizar .cerrar {
-  position: absolute !important; top: 6px !important; right: 6px !important; z-index: 8 !important;
-  width: 40px !important; height: 40px !important;
+
+.play-v3 .capa-organizar::after {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .ficha-tape,
+.play-v3 .capa-organizar .org-pin {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .org-cerrar,
+.play-v3 .capa-organizar .ds-modal-close {
+  top: .55rem !important;
+  right: .55rem !important;
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  border-radius: 50% !important;
+  border: 1.5px solid rgba(44,38,31,.2) !important;
+  background: rgba(255,252,245,.95) !important;
+  font: 700 1rem/1 Nunito, sans-serif !important;
+  transform: none !important;
+}
+
+/* --- Header --- */
+.play-v3 .capa-organizar .org-top {
+  text-align: center;
+  padding: 0 2rem .35rem;
+  margin-bottom: .15rem;
+}
+
+.play-v3 .capa-organizar .org-top::after {
+  content: "Prepara un momento en el pueblo";
+  display: block;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  color: var(--ds-text-muted, #7a6a5c);
+  margin-top: .1rem;
+}
+
+.play-v3 .capa-organizar .org-tit {
+  margin: 0 !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.85rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .05em !important;
+  text-transform: uppercase !important;
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3 .capa-organizar .org-modal-ico {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .org-modo-toggle {
+  display: none;
+  justify-content: center;
+  gap: 0;
+  margin: .55rem auto 0;
+  padding: 3px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(44,38,31,.14);
+  background: rgba(255,252,245,.85);
+  box-shadow: inset 0 1px 2px rgba(44,38,31,.05);
+}
+
+.play-v3 .capa-organizar .org-modo-toggle.is-visible {
+  display: inline-flex;
+}
+
+.play-v3 .capa-organizar .org-modo-pill {
+  padding: .32rem .85rem;
+  border-radius: 999px;
+  font: 700 .72rem/1.2 Nunito, sans-serif;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: #7a6450;
+  pointer-events: none;
+  user-select: none;
+  transition: background .15s ease, color .15s ease;
+}
+
+.play-v3 .capa-organizar .org-modo-pill.is-on {
+  background: #e07a98;
+  color: #fffdf8;
+  box-shadow: 0 1px 3px rgba(44,38,31,.14);
+}
+
+/* --- Body / steps --- */
+.play-v3 .capa-organizar .org-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 .1rem .2rem;
+}
+
+.play-v3 .capa-organizar .org-seccion {
+  margin-bottom: .85rem;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit {
+  display: flex !important;
+  align-items: center !important;
+  gap: .5rem !important;
+  margin: 0 0 .45rem !important;
+  font-family: Nunito, sans-serif !important;
+  font-size: .72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .08em !important;
+  text-transform: uppercase !important;
+  color: #8a7460 !important;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit::before {
+  counter-increment: org-step;
+  content: counter(org-step);
+  display: inline-grid;
+  place-items: center;
+  width: 1.35rem;
+  height: 1.35rem;
+  border-radius: 50%;
+  background: #f3b1c3;
+  border: 1.5px solid var(--ds-ink, #3b3028);
+  font: 800 .68rem/1 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028);
+  flex: 0 0 auto;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-tit::after {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .org-seccion-head-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+}
+
+.play-v3 .capa-organizar .org-vecinos-contador {
+  font: 700 .68rem/1.2 Nunito, sans-serif;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #c85b78;
+  white-space: nowrap;
+}
+
+.play-v3 .capa-organizar .org-seccion-meta {
+  margin: 0 0 .45rem;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  color: #8a7460;
+}
+
+.play-v3 .capa-organizar .ficha-seccion-body {
+  padding-left: 0 !important;
+}
+
+/* --- Quiénes van --- */
+.play-v3 .capa-organizar .org-busca-wrap {
+  position: relative;
+  margin-bottom: .5rem;
+}
+
+.play-v3 .capa-organizar .org-busca-ico {
+  position: absolute;
+  left: .65rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1rem;
+  height: 1rem;
+  opacity: .55;
+  pointer-events: none;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5' fill='none' stroke='%235a4838' stroke-width='2'/%3E%3Cpath d='M15.5 15.5L20 20' stroke='%235a4838' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.play-v3 .capa-organizar .org-busca {
+  width: 100%;
+  margin: 0;
+  padding: .55rem .65rem .55rem 2.1rem;
+  border: 1.5px solid rgba(44,38,31,.14);
+  border-radius: 12px;
+  background: rgba(255,252,245,.95);
+  font: 600 .88rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028);
+  box-shadow: inset 0 1px 2px rgba(44,38,31,.04);
+}
+
+.play-v3 .capa-organizar .org-picker-strip {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: .65rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: .2rem .05rem .5rem;
+  min-height: 5.4rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.play-v3 .capa-organizar .org-picker-celda {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .25rem;
+  max-width: 4.6rem;
+  border: 0;
+  background: transparent;
+  padding: .1rem;
+  cursor: pointer;
+  scroll-snap-align: start;
+}
+
+.play-v3 .capa-organizar .org-picker-stack {
+  position: relative;
+}
+
+.play-v3 .capa-organizar .org-picker-cara {
+  width: 3.35rem;
+  height: 3.35rem;
+  border-radius: 50%;
+  border: 2px solid rgba(44,38,31,.14);
+  overflow: hidden;
+  background: #fffdf8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color .12s ease, box-shadow .12s ease;
+}
+
+.play-v3 .capa-organizar .org-picker-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-v3 .capa-organizar .org-picker-ini {
+  font-family: Caveat, cursive;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #8a7460;
+}
+
+.play-v3 .capa-organizar .org-picker-celda.is-on .org-picker-cara {
+  border-color: #e07a98;
+  border-width: 2.5px;
+  box-shadow: 0 0 0 3px rgba(224,122,152,.18);
+}
+
+.play-v3 .capa-organizar .org-picker-check {
+  position: absolute;
+  right: -.05rem;
+  bottom: .1rem;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 50%;
+  background: #e07a98;
+  color: #fff;
+  font-size: .62rem;
+  font-weight: 800;
+  line-height: 1.15rem;
+  text-align: center;
+  border: 1.5px solid #fffdf8;
+  box-shadow: 0 1px 3px rgba(44,38,31,.18);
+}
+
+.play-v3 .capa-organizar .org-picker-nom {
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #5a4838;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* --- Qué harán --- */
+.play-v3 .capa-organizar .org-tipos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem;
+}
+
+.play-v3 .capa-organizar .org-tipo-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: .35rem;
+  min-width: 5.5rem;
+  min-height: 4.6rem;
+  padding: .55rem .65rem;
+  border: 1.5px solid rgba(44,38,31,.14);
+  border-radius: 14px;
+  background: rgba(255,252,245,.95);
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(44,38,31,.06);
+  transition: border-color .12s ease, background .12s ease, transform .12s ease;
+}
+
+.play-v3 .capa-organizar .org-tipo-card:hover {
+  transform: translateY(-1px);
+}
+
+.play-v3 .capa-organizar .org-tipo-card.is-on {
+  background: #f8d4df;
+  border-color: #e07a98;
+  box-shadow: 0 0 0 2px rgba(224,122,152,.16);
+}
+
+.play-v3 .capa-organizar .org-tipo-card-ico {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #5a4838;
+}
+
+.play-v3 .capa-organizar .org-tipo-card-ico svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
+.play-v3 .capa-organizar .org-tipo-card.is-on .org-tipo-card-ico {
+  color: #c85b78;
+}
+
+.play-v3 .capa-organizar .org-tipo-card-txt {
+  font: 800 .68rem/1.15 Nunito, sans-serif;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  text-align: center;
+  color: #3a3028;
+}
+
+/* --- Dónde --- */
+.play-v3 .capa-organizar .org-lugares-strip {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  gap: .55rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: .15rem .05rem .45rem;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+.play-v3 .capa-organizar .org-lugar-card {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  width: 5.6rem;
+  padding: .4rem .35rem .45rem;
+  border: 1.5px solid rgba(44,38,31,.12);
+  border-radius: 14px 14px 12px 12px;
+  background: rgba(255,252,245,.92);
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(44,38,31,.05);
+  scroll-snap-align: start;
+  transition: border-color .12s ease, box-shadow .12s ease, transform .12s ease;
+}
+
+.play-v3 .capa-organizar .org-lugar-card.is-on {
+  border-color: #e07a98;
+  background: #fff8fa;
+  box-shadow: 0 0 0 2px rgba(224,122,152,.14);
+  transform: translateY(-1px);
+}
+
+.play-v3 .capa-organizar .org-lugar-card-art {
+  display: grid;
+  place-items: center;
+  width: 3.35rem;
+  height: 2.55rem;
+  padding: .18rem;
+  border-radius: 11px 11px 9px 9px / 10px 10px 8px 8px;
+  overflow: hidden;
+  background:
+  linear-gradient(145deg, rgba(255,255,255,.55), rgba(255,255,255,0) 42%),
+  linear-gradient(180deg, #f8f1e6, #ebe0d0);
+  border: 1.5px solid rgba(92,64,48,.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.75),
+    inset 0 -2px 4px rgba(92,64,48,.08),
+    0 2px 0 rgba(44,38,31,.06);
+  clip-path: polygon(4% 0, 96% 0, 100% 8%, 100% 92%, 96% 100%, 4% 100%, 0 92%, 0 8%);
+}
+
+.play-v3 .capa-organizar .org-lugar-card-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  transform: scale(.92);
+  filter: saturate(.96);
+}
+
+.play-v3 .capa-organizar .org-lugar-card-fallback {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z' fill='%23b8a48e'/%3E%3C/svg%3E")
+    center / 42% no-repeat;
+}
+
+.play-v3 .capa-organizar .org-lugar-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+  min-width: 0;
+  width: 100%;
+}
+
+.play-v3 .capa-organizar .org-lugar-card-nom {
+  font: 700 .68rem/1.15 Nunito, sans-serif;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: #2c261f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-v3 .capa-organizar .org-lugar-estado {
+  font: 700 .58rem/1.15 Nunito, sans-serif;
+}
+
+.play-v3 .capa-organizar .org-lugar-estado--abierto { color: #3d7a52; }
+.play-v3 .capa-organizar .org-lugar-estado--cerrado { color: #b85c5c; }
+
+.play-v3 .capa-organizar .org-lugar-horas {
+  display: none;
+}
+
+.play-v3 .capa-organizar .org-lugar-horario {
+  margin: .35rem 0 0;
+}
+
+/* --- Cuándo --- */
+.play-v3 .capa-organizar .org-cuando {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .55rem;
+}
+
+.play-v3 .capa-organizar .org-cuando-campo {
+  position: relative;
+  min-width: 0;
+}
+
+.play-v3 .capa-organizar .org-cuando-ico {
+  display: none;
+}
+
+.play-v3 .capa-organizar .org-dd {
+  position: relative;
+  width: 100%;
+}
+
+.play-v3 .capa-organizar .org-dd-trigger {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  width: 100%;
+  min-height: 2.85rem;
+  padding: .5rem .65rem;
+  border: 1.5px solid rgba(44,38,31,.14);
+  border-radius: 12px;
+  background: rgba(255,252,245,.95);
+  font: 700 .82rem/1.2 Nunito, sans-serif;
+  color: #2c261f;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: inset 0 1px 2px rgba(44,38,31,.04);
+}
+
+.play-v3 .capa-organizar .org-dd-trigger:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+}
+
+.play-v3 .capa-organizar .org-dd-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.play-v3 .capa-organizar .org-dd-ico {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  opacity: .7;
+  background: center / contain no-repeat;
+}
+
+.play-v3 .capa-organizar .org-dd-ico--dia {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3' y='5' width='18' height='16' rx='2' fill='none' stroke='%235a4838' stroke-width='1.8'/%3E%3Cpath d='M3 9h18M8 3v4M16 3v4' stroke='%235a4838' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+.play-v3 .capa-organizar .org-dd-ico--hora {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8.5' fill='none' stroke='%235a4838' stroke-width='1.8'/%3E%3Cpath d='M12 7.5V12l3.5 2' stroke='%235a4838' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
+
+
+.play-v3 .capa-organizar .org-dd-chev {
+  width: .75rem;
+  height: .75rem;
+  flex: 0 0 auto;
+  opacity: .55;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235a4838' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E")
+    center / contain no-repeat;
+}
+
+.play-v3 .capa-organizar .org-dd-menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 20;
+  margin: 0;
+  padding: .25rem;
+  list-style: none;
+  max-height: 11rem;
+  overflow-y: auto;
+  border: 1.5px solid rgba(44,38,31,.14);
+  border-radius: 12px;
+  background: #fffdf7;
+  box-shadow: 0 8px 20px rgba(44,38,31,.12);
+}
+
+.play-v3 .capa-organizar .org-dd--flip .org-dd-menu {
+  top: auto;
+  bottom: calc(100% + 4px);
+}
+
+.play-v3 .capa-organizar .org-dd-opt {
+  padding: .45rem .55rem;
+  border-radius: 8px;
+  font: 600 .82rem/1.2 Nunito, sans-serif;
+  color: #3a3028;
+  cursor: pointer;
+}
+
+.play-v3 .capa-organizar .org-dd-opt.is-on,
+.play-v3 .capa-organizar .org-dd-opt:hover {
+  background: #f8d4df;
+}
+
+.play-v3 .capa-organizar .org-horas-hint {
+  margin: .45rem 0 0;
+  padding: .45rem .55rem;
+  border-radius: 10px;
+  background: rgba(120,170,120,.12);
+  border: 1px solid rgba(80,130,80,.18);
+  font: 600 .76rem/1.3 Nunito, sans-serif;
+  color: #3d6b45;
+}
+
+/* --- Footer --- */
+.play-v3 .capa-organizar .org-footer {
+  display: flex;
+  justify-content: center;
+  padding: .45rem 0 .15rem;
+}
+
+.play-v3 .capa-organizar .org-crear {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  min-width: 11rem;
+  min-height: 2.75rem;
+  padding: .55rem 1.65rem;
   border: 2px solid var(--ds-ink, #3b3028) !important;
   border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: var(--ds-paper-card, #fffdf7) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
-  font: 800 17px/1 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
-  transform: rotate(2.5deg) !important; display: grid !important; place-items: center; padding: 0 !important;
+  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec)) !important;
+  color: var(--ds-ink, #2c261f) !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase !important;
+  box-shadow: 2px 4px 0 rgba(44, 38, 31, .12) !important;
+  transform: rotate(-.5deg) !important;
+  cursor: pointer;
 }
-.play-v3 .capa-organizar .ficha-tape, .play-v3 .capa-organizar .org-pin, .play-v3 .capa-organizar .agenda-pin, .play-v3 .capa-organizar .mis-pin, .play-v3 .capa-organizar .vecinos-pin { display: none !important; }
-.play-v3 .capa-organizar .org-top { text-align: center; margin-bottom: 10px; padding-right: 2.2rem; }
-.play-v3 .capa-organizar .ds-modal-icon { display: none !important; }
-.play-v3 .capa-organizar .org-tit { font-family: Caveat, cursive !important; font-size: 1.75rem !important; width: 100%; text-align: center; }
-.play-v3 .capa-organizar .org-top::after { content: "Prepara un momento en el pueblo"; display: block; font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c); margin-top: 2px; }
-.play-v3 .capa-organizar .org-modo-chip {
-  display: inline-flex; padding: 6px 14px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
-  border: 1.5px solid var(--ds-ink-soft, #594839); background: var(--ds-paper-warm, #f8f0de);
-  font: 800 .75rem/1.2 Nunito, sans-serif; text-transform: uppercase; cursor: pointer;
-}
-.play-v3 .capa-organizar .org-modo-chip.is-on { background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78); }
-.play-v3 .capa-organizar .org-seccion .ficha-seccion-tit::before {
-  content: counter(org-step); display: inline-grid; place-items: center;
-  width: 22px; height: 22px; margin-right: 8px; border-radius: 999px;
-  background: var(--ds-pink, #f3b1c3); border: 2px solid var(--ds-ink, #3b3028);
-  font: 800 .75rem/1 Nunito, sans-serif;
-}
-.play-v3 .capa-organizar .ficha-seccion-tit { font-family: Caveat, cursive !important; font-size: 1.2rem !important; display: flex; align-items: center; }
-.play-v3 .capa-organizar .org-tipo-chip, .play-v3 .capa-organizar .org-dd {
-  border: 2px solid var(--ds-ink-soft, #594839); border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--ds-paper-card, #fffdf7); font-family: Caveat, cursive;
-}
-.play-v3 .capa-organizar .org-tipo-chip.is-on { background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); }
-.play-v3 .capa-organizar .org-crear {
-  width: 100%; min-height: 44px; border: 2px solid var(--ds-ink, #3b3028);
-  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
-  background: var(--ds-pink, #f3b1c3) !important; font: 800 .9375rem/1.2 Nunito, sans-serif !important;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.18) !important;
-}
-.play-v3 .capa-organizar .org-crear-tape { display: none !important; }
 
-/* Nuevo plan � estados CTA Organizar */
+.play-v3 .capa-organizar .org-crear:hover {
+  filter: brightness(1.03);
+  transform: rotate(-.5deg) translateY(-1px) !important;
+}
+
+.play-v3 .capa-organizar .org-crear-ico {
+  display: none !important;
+}
+
+.play-v3 .capa-organizar .org-crear-tape {
+  position: absolute;
+  width: 22px;
+  height: 10px;
+  background: rgba(228, 198, 118, .88);
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 1px 1px rgba(60, 44, 28, .12);
+}
+
+.play-v3 .capa-organizar .org-crear-tape-l {
+  top: -4px;
+  left: 10px;
+  transform: rotate(-14deg);
+}
+
+.play-v3 .capa-organizar .org-crear-tape-r {
+  top: -4px;
+  right: 10px;
+  transform: rotate(12deg);
+}
+
 .play-v3 .capa-organizar .org-crear.is-busy,
 .play-v3 .capa-organizar .org-crear:disabled {
-  opacity: 0.72;
+  opacity: .72;
   cursor: wait;
 }
+
 .play-v3 .capa-organizar .org-crear.is-disabled:not(:disabled) {
-  opacity: 0.55;
+  opacity: .55;
 }
+
 .play-v3 .capa-organizar .org-aviso:not([hidden]) {
+  margin: .25rem 0 0;
   color: #7a2e2e;
   font-weight: 600;
+  font-size: .82rem;
+}
+
+/* --- Desktop layout --- */
+@media (min-width: 900px) {
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .65rem 1rem;
+    align-content: start;
+  }
+
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--quienes {
+    grid-column: 1 / -1;
+  }
+
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--que {
+    grid-column: 1 / -1;
+  }
+
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-tipos {
+    flex-wrap: nowrap;
+  }
+
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-tipo-card {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-lugares-strip {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    max-height: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
+    width: min(96vw, 96vw) !important;
+    max-width: 96vw !important;
+    padding-top: 1rem !important;
+  }
+
+  .play-v3 .capa-organizar .org-picker-cara {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .play-v3 .capa-organizar .org-lugar-card {
+    width: 5.2rem;
+  }
+
+  .play-v3 .capa-organizar .org-lugar-card-art {
+    width: 3.1rem;
+    height: 2.35rem;
+  }
+}
+
+.play-v3 .capa-organizar .org-lugar-horario { margin-top: .4rem; }
+
+
+/* ORG-CREAR-DESKTOP-UNIFIED */
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear {
+  width: auto !important;
+  min-width: 11rem !important;
+  min-height: 2.75rem !important;
+  padding: .55rem 1.65rem !important;
+  font-family: Caveat, cursive !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  letter-spacing: .06em !important;
+  text-transform: uppercase !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec)) !important;
+  color: var(--ds-ink, #2c261f) !important;
+  box-shadow: 2px 4px 0 rgba(44, 38, 31, .12) !important;
+  transform: rotate(-.5deg) !important;
+}
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear-tape,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear-tape {
+  display: block !important;
+}
+
+/* v6: fondo identico Mensajitos - pisa libreta rayada */
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
+.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar,
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
+.play-v3 .capa-organizar {
+  background-color: var(--ds-paper-modal, #fffaf0) !important;
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.48), rgba(255,255,255,0) 58%),
+    linear-gradient(180deg, rgba(255,253,249,.7) 0%, rgba(248,241,223,.38) 100%),
+    url("../play-v3/capas/libreta_hoja.png") !important;
+  background-position: center, center, center !important;
+  background-size: cover, cover, cover !important;
+  background-repeat: no-repeat !important;
+}
+.play-v3 .capa-organizar .org-lugares-strip { display: none !important; }
+
+.play-v3 .capa-organizar .org-donde-fila .org-dd--lugar { width: 100%; }
+.play-v3 .capa-organizar .org-donde-fila .org-dd--lugar .org-dd-trigger { min-height: 2.85rem; }
+.play-v3 .capa-organizar .org-dd-ico--lugar {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5v-6H10v6H5a1 1 0 0 1-1-1v-9.5z' fill='%235a4838'/%3E%3C/svg%3E");
+}
+
+/* Llegada candidato — perfil previo en Mensajito */
+.llegada-perfil {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(255, 248, 230, 0.65);
+  border: 1px solid rgba(180, 140, 60, 0.25);
+}
+.llegada-perfil-foto {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.llegada-perfil-foto--ini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.25rem;
+  background: #e8dcc8;
+  color: #5a4a32;
+}
+.llegada-perfil-nom {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.llegada-perfil-tag {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #7a5c20;
+  background: rgba(210, 170, 80, 0.2);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 4px;
+}
+.llegada-perfil-txt {
+  font-size: 0.9rem;
+  margin: 0 0 6px;
+  line-height: 1.35;
+}
+.llegada-perfil-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.llegada-perfil-chip {
+  font-size: 0.75rem;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.06);
+}
+.llegada-acciones .llegada-acomp-opt.is-selected {
+  outline: 2px solid #c9a227;
+}
+.llegada-acciones-pie {
+  margin-top: 8px;
+}
+.llegada-sin-acomp {
+  font-size: 0.85rem;
+  margin: 4px 0;
+  color: #666;
 }

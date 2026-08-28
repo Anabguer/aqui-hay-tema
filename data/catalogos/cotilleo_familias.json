@@ -29,9 +29,20 @@
         "{nombre} está pensando en marcharse del pueblo."
     ],
     "marcha_efectiva": [
-        "{nombre} se ha ido del pueblo. La vivienda queda libre."
+        "{nombre} se ha ido del pueblo. La vivienda queda libre.",
+        "{nombre} ha dejado el pueblo.",
+        "Ha marchado {nombre}. La vivienda queda libre."
     ],
     "marcha_se_queda": [
         "{nombre} ha decidido darle otra oportunidad al pueblo."
+    ],
+    "bienvenida_tour": [
+        "{guia} le enseña el pueblo a {nuevo}. Franja de bienvenida en marcha.",
+        "{guia} recibe a {nuevo} y le muestra Villaborde.",
+        "{nuevo} llega y {guia} le hace de guía por el pueblo."
+    ],
+    "marcha_efectiva_causa": [
+        "{nombre} ha dejado el pueblo. {causa}",
+        "Ha marchado {nombre}. {causa} La vivienda queda libre."
     ]
 }

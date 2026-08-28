@@ -161,7 +161,7 @@
   let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null };
   let orgPresetNuevo = false;
   let orgProponiendo = false;
-  const ORG_BTN_LABEL = 'Organizar';
+  const ORG_BTN_LABEL = 'Crear plan';
   const ORG_BTN_BUSY = 'Organizando\u2026';
   const playtestLogClient = { entries: [] };
   const ahtDebugSessionLog = [];
@@ -1011,7 +1011,7 @@
 
   function mensajitoDestinoFicha(m) {
     if (!m || typeof m !== 'object') return false;
-    const soloLectura = ['respuesta_plan', 'peticion_resultado', 'marcha_publica'];
+    const soloLectura = ['respuesta_plan', 'peticion_resultado', 'marcha_publica', 'marcha_despedida', 'legado_despedida'];
     if (soloLectura.indexOf(String(m.tipo || '')) >= 0) return false;
     const rid = remitenteIdDe(m);
     return rid && !m.candidato_catalog_id;
@@ -1118,6 +1118,52 @@
     return (m.estado || '') !== 'pendiente';
   }
 
+
+  function htmlPerfilCandidato(m) {
+    const p = m && m.perfil_candidato;
+    if (!p || typeof p !== 'object' || !p.nombre) return '';
+    const retrato = p.retrato_url
+      ? '<img class="llegada-perfil-foto" src="' + esc(p.retrato_url) + '" alt=""/>'
+      : '<span class="llegada-perfil-foto llegada-perfil-foto--ini">' + esc(inicialDe(p.nombre)) + '</span>';
+    const chips = [];
+    if (p.edad) chips.push('<span class="llegada-perfil-chip">' + esc(String(p.edad)) + ' a\u00f1os</span>');
+    if (p.hobby_visible) chips.push('<span class="llegada-perfil-chip">' + esc(p.hobby_visible) + '</span>');
+    (p.rasgos_visibles || []).forEach(function (r) {
+      if (r) chips.push('<span class="llegada-perfil-chip">' + esc(r) + '</span>');
+    });
+    return '<div class="llegada-perfil" data-llegada-perfil="1">' + retrato +
+      '<div class="llegada-perfil-body">' +
+      '<div class="llegada-perfil-nom">' + esc(p.nombre) + ' <span class="llegada-perfil-tag">Nuevo candidato</span></div>' +
+      (p.presentacion ? '<p class="llegada-perfil-txt">' + esc(p.presentacion) + '</p>' : '') +
+      (chips.length ? '<div class="llegada-perfil-chips">' + chips.join('') + '</div>' : '') +
+      '</div></div>';
+  }
+
+  let llegadaCelebradaKey = null;
+
+  function pintarLlegadaCelebracionSiToca() {
+    const insp = cacheInsp || {};
+    const llegadas = insp.llegadas || {};
+    const pres = llegadas.presentacion && llegadas.presentacion.ultima;
+    if (!pres || !pres.residente_id) return;
+    const key = String(pres.residente_id) + '|' + String(pres.dia || 0) + '|' + String(pres.hora || 0);
+    if (llegadaCelebradaKey === key) return;
+    try {
+      if (sessionStorage.getItem('aht_llegada_celebra') === key) {
+        llegadaCelebradaKey = key;
+        return;
+      }
+    } catch (e) {}
+    llegadaCelebradaKey = key;
+    try { sessionStorage.setItem('aht_llegada_celebra', key); } catch (e) {}
+    const nom = pres.nombre || nombreDe(pres.residente_id) || 'Un nuevo vecino';
+    let txt = nom + ' se ha incorporado al pueblo.';
+    if (pres.acompanante_id) {
+      const nomA = nombreDe(pres.acompanante_id);
+      if (nomA) txt += ' ' + nomA + ' le ense\u00f1a Villaborde.';
+    }
+    toast(txt);
+  }
   function htmlAccionesMensajito(m) {
     if (Array.isArray(m.opciones_consejo) && m.opciones_consejo.length &&
         (m.estado_decision || '') === 'pendiente' &&
@@ -1146,6 +1192,24 @@
       return '<div class="acciones-msg msg-opciones">' +
         '<span class="msg-opciones-tit">' + esc(m.selector_titulo || '\u00bfA qui\u00e9n presentas?') + '</span>' +
         optsHtml + '</div>';
+    }
+    if (m.tipo === 'candidato_llegada' &&
+        (m.estado || '') === 'pendiente' &&
+        (m.estado_decision || '') !== 'resuelto') {
+      const opts = Array.isArray(m.acompanantes_opciones) ? m.acompanantes_opciones : [];
+      const titA = m.selector_titulo_acompanante || '\u00bfQui\u00e9n le ense\u00f1a Villaborde?';
+      const optsHtml = opts.map(function (o) {
+        if (!o || !o.personaje_id) return '';
+        const pista = o.pista ? '<span class="msg-opcion-pista">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="carta-cta carta-cta--suave msg-opcion llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
+          '<span class="msg-opcion-nom">' + esc(o.nombre || '') + '</span>' + pista + '</button>';
+      }).join('');
+      return '<div class="acciones-msg msg-opciones llegada-acciones">' +
+        '<span class="msg-opciones-tit">' + esc(titA) + '</span>' +
+        (optsHtml || '<p class="llegada-sin-acomp">Nadie libre ahora para la bienvenida.</p>') +
+        '<div class="llegada-acciones-pie">' +
+        '<button type="button" class="carta-cta carta-cta--suave" data-llegada-rechazar="1">Ahora no</button>' +
+        '</div></div>';
     }
     const acciones = Array.isArray(m.acciones_ui) ? m.acciones_ui : [];
     if (!acciones.length) return '';
@@ -1200,6 +1264,28 @@
     const accionConsejo = accionesRaw.indexOf('responder_celestine') >= 0
       ? 'responder_celestine'
       : (accionesRaw.indexOf('responder_escuchar') >= 0 ? 'responder_escuchar' : 'responder_consejo');
+    art.querySelectorAll('[data-llegada-acomp]').forEach(function (btn) {
+      btn.addEventListener('click', async function (ev) {
+        ev.stopPropagation();
+        if (btn.disabled) return;
+        const acomp = btn.getAttribute('data-llegada-acomp');
+        if (!acomp) return;
+        art.querySelectorAll('[data-llegada-acomp]').forEach(function (b) { b.disabled = true; });
+        const ok = await resolverAccionMensajito(m, 'aceptar_candidato', { acompanante_id: acomp });
+        if (ok) await refresh();
+        else art.querySelectorAll('[data-llegada-acomp]').forEach(function (b) { b.disabled = false; });
+      });
+    });
+    art.querySelectorAll('[data-llegada-rechazar]').forEach(function (btn) {
+      btn.addEventListener('click', async function (ev) {
+        ev.stopPropagation();
+        if (btn.disabled) return;
+        btn.disabled = true;
+        const ok = await resolverAccionMensajito(m, 'rechazar_candidato');
+        if (ok) await refresh();
+        else btn.disabled = false;
+      });
+    });
     art.querySelectorAll('[data-consejo-opcion]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
         ev.stopPropagation();
@@ -2021,6 +2107,7 @@
     if (!lista.length) {
       block.classList.remove('is-on');
       block.classList.add('is-empty');
+      block.classList.remove('encursos-movil--solo', 'encursos-movil--multi');
       track.innerHTML = '';
       renderEncursosMovilNavFor(block);
       return;
@@ -2032,6 +2119,8 @@
       if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
     });
     block.classList.add('is-on');
+    block.classList.toggle('encursos-movil--solo', lista.length === 1);
+    block.classList.toggle('encursos-movil--multi', lista.length > 1);
     track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
     requestAnimationFrame(function () {
       const cards = track.querySelectorAll('[data-enc-mov-card]');
@@ -2145,9 +2234,14 @@
     }
     slot.hidden = false;
     slot.removeAttribute('aria-hidden');
+    const card = slot.querySelector('[data-proximo-evento-card]');
+    const tagTxt = slot.querySelector('[data-proximo-evento-tag-txt]');
     const tit = slot.querySelector('[data-proximo-evento-tit]');
     const meta = slot.querySelector('[data-proximo-evento-meta]');
     const ico = slot.querySelector('[data-proximo-evento-ico]');
+    const enMarcha = String(ev.estado || '') === 'en_curso';
+    if (card) card.classList.toggle('inicio-evento-card--marcha', enMarcha);
+    if (tagTxt) tagTxt.textContent = enMarcha ? 'EN MARCHA' : 'SE APROXIMA EVENTO';
     if (tit) tit.textContent = ev.nombre_ui || ev.nombre || '';
     if (meta) meta.textContent = ev.meta_ui || '';
     if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
@@ -4538,6 +4632,7 @@ function hobbyIconKey(id, texto) {
         (st.cls ? ' ' + st.cls : '');
       const nombre = nombrePublicoDe(m);
       const cuerpo = cuerpoMensajito(m, nombre);
+      const perfilLlegadaHtml = (m.tipo === 'candidato_llegada') ? htmlPerfilCandidato(m) : '';
       const plazo = (m.estado_pueblo === 'caducada') ? '' : (m.plazo_humano || '');
       const cuando = mensajitoCuandoLabel(m);
       const flagHtml = !leido
@@ -4845,23 +4940,76 @@ function hobbyIconKey(id, texto) {
     return Object.keys((cacheInsp && cacheInsp.residentes) || {});
   }
 
-  function orgTipoIco(id) {
+  var ORG_TIPO_SVG = {
+    conocerse: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4zm12 0c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4zM2 20c0-3.3 2.7-5 6-5h.8c1.2 0 2.3.3 3.2.9-1.6 1.1-2.7 2.8-2.9 4.6H2v-.5zm14 0c-.2-1.8-1.3-3.5-2.9-4.6.9-.6 2-.9 3.2-.9H17c3.3 0 6 1.7 6 5h-7z"/></svg>',
+    quedar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-3.2l-2.3 2.3a1 1 0 0 1-1.7-.7V18H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm2 5.5h6v-1.5H9v1.5zm0 3h4v-1.5H9v1.5z"/></svg>',
+    primera_cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/></svg>',
+    cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/><circle cx="17.5" cy="6.5" r="3.2"/></svg>',
+    individual: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zm0 2c-3.9 0-7 2.1-7 4.7V21h14v-2.3C19 16.1 15.9 14 12 14z"/></svg>'
+  };
+  function orgTipoIcoSvg(id) {
     const k = String(id || '').toLowerCase();
-    if (k === 'romance') return '❤️';
-    if (k === 'amistad') return '🤝';
-    if (k === 'conocerse') return '👋';
-    if (k === 'individual') return '🚶';
-    return '';
+    if (k === 'amistad') return ORG_TIPO_SVG.quedar;
+    if (k === 'romance' || k === 'romantico') return ORG_TIPO_SVG.primera_cita;
+    return ORG_TIPO_SVG[k] || ORG_TIPO_SVG.quedar;
   }
-
   function orgTipoHtml(id, label, on) {
-    const ico = orgTipoIco(id);
-    const cls = 'org-tipo-chip' + (on ? ' is-on' : '');
+    const ico = orgTipoIcoSvg(id);
+    const cls = 'org-tipo-card' + (on ? ' is-on' : '');
     return '<button type="button" class="' + cls + '" data-org-tipo="' + esc(id) + '">' +
-      (ico ? '<span class="org-tipo-ico" aria-hidden="true">' + ico + '</span>' : '') +
-      esc(String(label || '').toUpperCase()) + '</button>';
+      '<span class="org-tipo-card-ico" aria-hidden="true">' + ico + '</span>' +
+      '<span class="org-tipo-card-txt">' + esc(String(label || '')) + '</span></button>';
   }
-
+  var ORG_LUGAR_IMG = {
+    lug_bar: 'bar.png', lug_biblioteca: 'biblioteca.png', lug_bingo: 'bingo.png', lug_cafeteria: 'cafeteria.png',
+    lug_cine: 'cine.png', lug_discoteca: 'discoteca.png', lug_gimnasio: 'gimnasio.png', lug_parque: 'parque.png',
+    lug_restaurante: 'restaurante.png', lug_karaoke: 'karaoke.png', lug_mirador: 'mirador.png', lug_picnic: 'picnic.png',
+    lug_arcade: 'recreativo.png', lug_recreativo: 'recreativo.png', lug_spa: 'spa.png', lug_tienda: 'tienda.png'
+  };
+  function orgLugarImg(lugId) {
+    var file = ORG_LUGAR_IMG[String(lugId || '')];
+    if (!file) { var slug = String(lugId || '').replace(/^lug_/, ''); if (slug) file = slug + '.png'; }
+    return file ? ('assets/play-v3/edificios/' + file) : '';
+  }
+  function pintarOrgLugares(lugares, value, onChange) {
+    var box = $('[data-org-lugares]');
+    var native = $('[data-org-lugar]');
+    if (!box) return;
+    var opts = Array.isArray(lugares) ? lugares : [];
+    var valStr = value === null || value === undefined ? '' : String(value);
+    box.innerHTML = '';
+    if (native) {
+      native.innerHTML = '';
+      opts.forEach(function (d) {
+        var o = document.createElement('option');
+        o.value = d.id; o.textContent = d.nombre || d.id;
+        if (valStr !== '' && String(d.id) === valStr) o.selected = true;
+        native.appendChild(o);
+      });
+      if (valStr !== '') native.value = valStr;
+    }
+    if (!opts.length) { box.innerHTML = '<p class="mini org-lugares-vacio">Sin lugares disponibles.</p>'; return; }
+    opts.forEach(function (d) {
+      var id = d.id, on = valStr !== '' && String(id) === valStr, img = orgLugarImg(id);
+      var estado = '', estadoCls = '';
+      if (d.abierto_ahora === true) { estado = 'Abierto ahora'; estadoCls = 'org-lugar-estado--abierto'; }
+      else if (d.abierto_ahora === false) { estado = 'Cerrado ahora'; estadoCls = 'org-lugar-estado--cerrado'; }
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'org-lugar-card' + (on ? ' is-on' : '');
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', d.nombre || id);
+      btn.innerHTML = '<span class="org-lugar-card-art">' + (img ? '<img src="' + esc(img) + '" alt="" loading="lazy"/>' : '<span class="org-lugar-card-fallback" aria-hidden="true"></span>') + '</span><span class="org-lugar-card-body"><span class="org-lugar-card-nom">' + esc(d.nombre || id) + '</span>' + (estado ? '<span class="org-lugar-estado ' + estadoCls + '">' + esc(estado) + '</span>' : '') + '</span>';
+      if (onChange) {
+        btn.addEventListener('click', function (ev) {
+          ev.preventDefault(); ev.stopPropagation();
+          if (native) { native.value = id; native.dispatchEvent(new Event('change', { bubbles: true })); }
+          onChange(id); pintarOrgLugares(opts, id, onChange); pintarOrgLugarHorario(id);
+        });
+      }
+      box.appendChild(btn);
+    });
+  }
   function orgIdsFiltrados() {
     const res = (cacheInsp && cacheInsp.residentes) || {};
     const filtroTxt = txtBuscaNorm(orgBuscaTxt);
@@ -5093,7 +5241,7 @@ function hobbyIconKey(id, texto) {
       if (valStr !== '' && optVal === valStr) label = opt.label || optVal;
     });
     box.innerHTML = '';
-    box.className = 'org-dd' + (kind === 'dia' ? ' org-dd--dia' : (kind === 'hora' ? ' org-dd--hora' : ''));
+    box.className = 'org-dd' + (kind === 'lugar' ? ' org-dd--lugar' : (kind === 'dia' ? ' org-dd--dia' : (kind === 'hora' ? ' org-dd--hora' : '')));
     if (native) {
       native.innerHTML = '';
       opts.forEach(function (opt) {
@@ -5650,6 +5798,7 @@ function hobbyIconKey(id, texto) {
     renderShellPanels(cacheEstado, buzon.mensajes || [], diario);
       renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
     renderBuzon(buzon.mensajes || []);
+    pintarLlegadaCelebracionSiToca();
     renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
     actualizarCotiBadgesUI();
     renderVecinos();

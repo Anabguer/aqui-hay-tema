@@ -98,6 +98,8 @@ if ($a3 !== null && $b3 !== null) {
         ok(count($ui3['acciones_ui'] ?? []) >= 1, 'F3: CTA organizar');
         $r3 = MensajitoAcciones::resolver($p3, (string) ($msg3['id'] ?? ''), MensajitoAcciones::ORGANIZAR_ENCARGO, $root);
         ok(($r3['ok'] ?? false) && isset($r3['preset_organizar']), 'F3: preset organizar');
+        $msg3post = BuzonEngine::buscar($p3, (string) ($msg3['id'] ?? ''));
+        ok(BuzonEngine::tieneDecisionPendiente($msg3post ?? []), 'F3: Organizar no resuelve mensaje');
     }
 }
 

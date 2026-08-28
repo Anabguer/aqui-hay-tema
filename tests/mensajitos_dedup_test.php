@@ -66,6 +66,38 @@ ok(!CanalDeduplicador::elegibleParaCanal('discusion', BuzonEngine::CANAL_BUZON, 
 // --- 5) Evento sin permiso explícito: permite por defecto ---
 ok(CanalDeduplicador::elegibleParaCanal('evento_desconocido', BuzonEngine::CANAL_BUZON, $perm), 'evento sin regla: permite');
 
+// --- 6) eventoIdVentana estable ---
+$eid = CanalDeduplicador::eventoIdVentana('f_opinion', 'per_p001', 'f_opinion|per_p002', 120);
+ok($eid === CanalDeduplicador::eventoIdVentana('f_opinion', 'per_p001', 'f_opinion|per_p002', 130), 'eventoIdVentana estable en ventana 72h');
+
+// --- 7) existeEnBuzon bloquea re-publicación ---
+$p4 = ['buzon' => [], 'reloj' => ['dia_pueblo' => 2, 'hora_actual' => 8], 'canales_publicados' => []];
+CanalDeduplicador::crearSiAplica($p4, [
+    'texto' => 'primera',
+    'clasificacion' => BuzonEngine::OPORTUNIDAD,
+    'canal' => BuzonEngine::CANAL_BUZON,
+    'de_persona' => 'per_p001',
+    'familia_mensajito' => 'f_opinion',
+    'datos_familia' => ['clave' => 'f_opinion|per_p002'],
+    'origen' => ['evento_id' => $eid, 'tipo_evento' => 'espontaneo_f_opinion'],
+    '_placeholder_contenido' => false,
+]);
+$rDup = CanalDeduplicador::crearSiAplica($p4, [
+    'texto' => 'duplicada refresh',
+    'clasificacion' => BuzonEngine::OPORTUNIDAD,
+    'canal' => BuzonEngine::CANAL_BUZON,
+    'de_persona' => 'per_p001',
+    'familia_mensajito' => 'f_opinion',
+    'datos_familia' => ['clave' => 'f_opinion|per_p002'],
+    'origen' => ['evento_id' => $eid, 'tipo_evento' => 'espontaneo_f_opinion'],
+    '_placeholder_contenido' => false,
+]);
+ok($rDup === null, 'existeEnBuzon: bloquea duplicado por evento_id');
+
+// --- 8) Permisos familias nuevas ---
+ok(CanalDeduplicador::elegibleParaCanal('espontaneo_f_mediacion', BuzonEngine::CANAL_BUZON, $perm), 'F11 elegible en buzon');
+ok(CanalDeduplicador::elegibleParaCanal('peticion_f_peticion', BuzonEngine::CANAL_BUZON, $perm), 'F3 elegible en buzon');
+
 echo "\n";
 echo $failures === 0 ? "OK mensajitos_dedup\n" : "FAIL mensajitos_dedup ({$failures})\n";
 exit($failures > 0 ? 1 : 0);

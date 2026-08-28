@@ -594,6 +594,9 @@ final class MensajitoConsejoEngine
      */
     public static function yaExisteHiloReciente(array $partida, string $residenteId, string $familia, string $clave): bool
     {
+        if ($clave === '') {
+            return false;
+        }
         $now = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24 + (int) ($partida['reloj']['hora_actual'] ?? 0);
         foreach ($partida['mensajitos_historial'] ?? [] as $h) {
             if (!is_array($h)) {
@@ -609,6 +612,31 @@ final class MensajitoConsejoEngine
                 continue;
             }
             $t = ((int) ($h['dia'] ?? 0)) * 24 + (int) ($h['hora'] ?? 0);
+            if ($now - $t < 72) {
+                return true;
+            }
+        }
+        foreach ($partida['buzon'] ?? [] as $m) {
+            if (!is_array($m)) {
+                continue;
+            }
+            if (!BuzonEngine::tieneContenido($m)) {
+                continue;
+            }
+            if (!empty($m['_compactado'])) {
+                continue;
+            }
+            if ((string) ($m['de_persona'] ?? '') !== $residenteId) {
+                continue;
+            }
+            if ((string) ($m['familia_mensajito'] ?? '') !== $familia) {
+                continue;
+            }
+            $datos = is_array($m['datos_familia'] ?? null) ? $m['datos_familia'] : [];
+            if ((string) ($datos['clave'] ?? '') !== $clave) {
+                continue;
+            }
+            $t = ((int) ($m['dia'] ?? 0)) * 24 + (int) (($m['ts_juego']['hora'] ?? $partida['reloj']['hora_actual'] ?? 0));
             if ($now - $t < 72) {
                 return true;
             }

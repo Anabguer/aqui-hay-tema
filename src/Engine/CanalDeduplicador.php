@@ -95,7 +95,58 @@ final class CanalDeduplicador
             'anuncio_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
             'cierre_evento_pueblo' => [BuzonEngine::CANAL_BUZON],
             'ritual_contextual_cumpleanos' => [BuzonEngine::CANAL_BUZON],
+            'espontaneo_f_duda_permanencia' => [BuzonEngine::CANAL_BUZON],
+            'espontaneo_f_mediacion' => [BuzonEngine::CANAL_BUZON],
+            'espontaneo_f_ritual_contextual' => [BuzonEngine::CANAL_BUZON],
+            'espontaneo_f_seguimiento' => [BuzonEngine::CANAL_BUZON],
+            'peticion_f_peticion' => [BuzonEngine::CANAL_BUZON],
+            'peticion_f_presentacion' => [BuzonEngine::CANAL_BUZON],
         ];
+    }
+
+    /**
+     * Identidad estable por ventana temporal (§22.6): misma causa no duplica en tick/refresh/catch-up.
+     */
+    public static function eventoIdVentana(
+        string $familia,
+        string $residenteId,
+        string $clave,
+        int $horaJuego,
+        int $ventanaHoras = 72
+    ): string {
+        $slot = (int) floor($horaJuego / max(1, $ventanaHoras));
+        $base = implode('|', [$familia, $residenteId, $clave, (string) $slot]);
+        return 'evt_v_' . substr(hash('sha256', $base), 0, 20);
+    }
+
+    /**
+     * ¿Ya hay un mensaje en buzón con este evento_id?
+     */
+    public static function existeEnBuzon(array $partida, string $eventoId, string $canal): bool
+    {
+        if ($eventoId === '') {
+            return false;
+        }
+        foreach ($partida['buzon'] ?? [] as $m) {
+            if (!is_array($m)) {
+                continue;
+            }
+            if (!BuzonEngine::tieneContenido($m)) {
+                continue;
+            }
+            if (!empty($m['_compactado'])) {
+                continue;
+            }
+            $canalMsg = (string) ($m['canal'] ?? BuzonEngine::canalDe((string) ($m['clasificacion'] ?? BuzonEngine::PETICION)));
+            if ($canalMsg !== $canal) {
+                continue;
+            }
+            $eid = (string) ($m['origen']['evento_id'] ?? '');
+            if ($eid !== '' && $eid === $eventoId) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -114,6 +165,17 @@ final class CanalDeduplicador
         $tipoEvento = $mensaje['origen']['tipo_evento'] ?? ($mensaje['tipo'] ?? '');
 
         if ($eventoId !== null && self::yaPublicado($partida, $eventoId, $canal)) {
+            return null;
+        }
+        if ($eventoId !== null && self::existeEnBuzon($partida, $eventoId, $canal)) {
+            return null;
+        }
+
+        $rid = (string) ($mensaje['de_persona'] ?? '');
+        $familia = (string) ($mensaje['familia_mensajito'] ?? '');
+        $clave = (string) (($mensaje['datos_familia'] ?? [])['clave'] ?? ($mensaje['dedup_clave'] ?? ''));
+        if ($rid !== '' && $familia !== '' && $clave !== ''
+            && MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, $familia, $clave)) {
             return null;
         }
 

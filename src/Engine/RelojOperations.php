@@ -53,16 +53,12 @@ final class RelojOperations
                 MensajitoContextualEngine::evaluarAlComenzarDia($partida, $calCtx, $catalogCtx, $this->logger);
             }
 
-            // Mensajitos espontaneos: generar al inicio del nuevo dia
+            // Mensajitos espontaneos: cola + prioridad + presupuesto al inicio del nuevo dia
             if (!$catchUp && FeatureConfig::isEnabled($partida, 'mensajitos_espontaneos_enabled')) {
                 $calMens = CalibracionConfig::load($this->projectRoot);
                 $rngMens = RngService::fromPartida($partida);
-                foreach (PeticionPuebloEngine::residentes($partida) as $mRes) {
-                    MensajitoGeneradorEspontaneo::evaluar($partida, $mRes, $calMens, $rngMens);
-                }
+                MensajitosCadenciaEngine::tickEspontaneosAlCerrarDia($partida, $calMens, $rngMens);
                 $rngMens->persistToPartida($partida);
-                // Compactar mensajes antiguos
-                MensajitosCadenciaEngine::compactarResueltos($partida, $calMens);
             }
 
             // Seguimiento de consejos (F9)

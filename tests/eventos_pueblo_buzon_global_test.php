@@ -33,7 +33,7 @@ $catalog = new Catalog($root);
 $defaults = FeatureConfig::defaults($root);
 
 ok(($defaults['buzon_enabled'] ?? false) === true, 'global buzon_enabled=true en features.json');
-ok(($defaults['mensajitos_espontaneos_enabled'] ?? false) === false, 'espontaneos siguen apagados globalmente');
+ok(($defaults['mensajitos_espontaneos_enabled'] ?? false) === true, 'espontaneos activos globalmente');
 ok((bool) CalibracionConfig::get($cal, 'eventos_pueblo.activo', false), 'eventos_pueblo.activo global');
 
 $items = EventosPuebloEngine::catalogItems($catalog);
@@ -45,7 +45,7 @@ $seed = 'buzon-global-flags-' . gmdate('YmdHis');
 $nueva = $svc->nuevaPartida('debug_v0', $seed);
 ok(!($nueva['features']['eventos_pueblo_enabled'] ?? false), 'partida nueva sin override eventos_pueblo_enabled');
 ok(FeatureConfig::isEnabled($nueva, 'buzon_enabled'), 'partida nueva buzon por default global');
-ok(!FeatureConfig::isEnabled($nueva, 'mensajitos_espontaneos_enabled'), 'partida nueva sin espontaneos');
+ok(FeatureConfig::isEnabled($nueva, 'mensajitos_espontaneos_enabled'), 'partida nueva con espontaneos por default global');
 ok(EventosPuebloEngine::activa($nueva, $cal), 'partida nueva eventos activos por calibracion');
 
 /**

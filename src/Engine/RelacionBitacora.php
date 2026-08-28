@@ -63,6 +63,7 @@ final class RelacionBitacora
         ];
         $partida['bitacora_relaciones'][] = $entry;
         RelacionNarrativaBridge::alHito($partida, $tipo, array_values($participantes));
+        DiarioHitoEngine::alHito($partida, $entry);
         return $entry;
     }
 

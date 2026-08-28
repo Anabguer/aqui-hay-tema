@@ -78,6 +78,18 @@ final class VistaCotilleoV3
 
             }
 
+            // Canon: DIARIO = memoria personal; COTILLEOS = subconjunto público.
+            // Solo es publicable la entrada que declara clasificación de Cotilleo
+            // explícita (cotilleo_meta.categoria). Sin esa señal → memoria privada.
+
+            $metaPublicable = is_array($e['cotilleo_meta'] ?? null) ? $e['cotilleo_meta'] : [];
+
+            if (!isset($metaPublicable['categoria']) || !is_string($metaPublicable['categoria']) || $metaPublicable['categoria'] === '') {
+
+                continue;
+
+            }
+
             $d = (int) ($e['dia'] ?? 0);
 
             $row = self::normalizarDiario($e);

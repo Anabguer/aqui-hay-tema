@@ -274,6 +274,14 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return LlegadaHandler::rechazar($ctx, $body, $p);
     },
+    'llegada.perfil' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return LlegadaHandler::perfil($ctx, $body, $p);
+    },
+    'llegada.acompanantes' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return LlegadaHandler::acompanantes($ctx, $body, $p);
+    },
     'marcha.dejar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return MarchaHandler::dejar($ctx, $body, $p);
