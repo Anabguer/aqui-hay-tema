@@ -2212,11 +2212,27 @@
    controles, badges, contadores, títulos ni iconografía. */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt,
-  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-proximo-body,
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg .cuerpo,
-  .play-v3:has(.game-shell) .play-root.phone .enc-int-result-txt,
-  .play-v3:has(.game-shell) .play-root.phone .ficha-diario-texto,
-  .play-v3:has(.game-shell) .inicio-mobile .mision-strip-txt,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-proximo-body {
+    font-size: 1.25rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg .cuerpo {
+    font-size: 1.375rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone .enc-int-result-txt {
+    font-size: 1.0625rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone .ficha-diario-texto {
+    font-size: 1.125rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Resúmenes narrativos equivalentes; se mantienen fuera los metadatos. */
   .play-v3:has(.game-shell) .inicio-mobile .enc-mov-resumen,
   .play-v3:has(.game-shell) .inicio-mobile .enc-mov-vista-txt {
     font-size: 1rem !important;
