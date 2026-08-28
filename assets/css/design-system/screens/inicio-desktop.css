@@ -1346,3 +1346,42 @@
     content: "\1F4CB" !important;
   }
 }
+
+/* INICIO-COTILLEO-STACK-v1 - texto debajo del titulo (no en columna lateral) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par {
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-areas:
+      "tit flecha"
+      "txt txt"
+      "badge badge" !important;
+    gap: 8px 10px !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-tit {
+    grid-area: tit !important;
+    justify-self: start !important;
+    align-self: start !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt {
+    grid-area: txt !important;
+    align-self: start !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-flecha {
+    grid-area: flecha !important;
+    align-self: start !important;
+    justify-self: end !important;
+    margin-top: 2px !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-badge {
+    grid-area: badge !important;
+    justify-self: start !important;
+  }
+}
