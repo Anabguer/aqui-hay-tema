@@ -980,7 +980,7 @@
   .inicio-mobile .mision-strip-txt {
     font-family: var(--ds-font-hand);
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 1.125rem;
     line-height: 1.15;
     color: var(--ds-ink);
     display: -webkit-box;
