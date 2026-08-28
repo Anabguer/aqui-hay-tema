@@ -211,10 +211,10 @@
 
   .inicio-mobile .top-reloj .pasar-rato {
     position: relative;
-    left: 8px;
-    top: 0;
-    height: 10px;
-    min-height: 10px;
+    left: 29px;
+    top: -15px;
+    height: 22px;
+    min-height: 22px;
     padding: 5px 11px;
     background: var(--ds-lavender-soft);
     border: 1.5px solid var(--ds-lavender-deep);
@@ -225,6 +225,12 @@
     font-size: .8125rem;
     color: var(--ds-lavender-deep);
     transform: rotate(-1.2deg);
+  }
+
+  .inicio-mobile .top-reloj .obj-dia,
+  .inicio-mobile .top-reloj .obj-hora {
+    position: relative;
+    top: -4px;
   }
 
   .inicio-mobile .top-reloj .pasar-rato:active {
@@ -1583,6 +1589,12 @@
     gap: .45rem !important;
   }
 
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia,
+  .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-hora {
+    position: relative !important;
+    top: -4px !important;
+  }
+
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .obj-dia {
     width: 86px !important;
     min-width: 86px !important;
@@ -1623,10 +1635,10 @@
 
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .top-reloj .pasar-rato {
     position: relative;
-    left: 8px;
-    top: 0;
-    height: 10px;
-    min-height: 10px !important;
+    left: 29px;
+    top: -15px;
+    height: 22px;
+    min-height: 22px !important;
     padding: 5px 11px !important;
     background: var(--ds-lavender-soft, #ebe3f8) !important;
     border: 1.5px solid var(--ds-lavender-deep, #7c6bae) !important;
