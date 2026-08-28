@@ -188,6 +188,8 @@ final class MensajitoVoz
             'Últimamente no sé qué pensar de {otro}. ¿Me ayudas a aclararme?',
             'Necesito que me des tu opinión sobre {otro}. En serio.',
             '{otro} me tiene un poco confundido/a. ¿Tú lo conoces bien?',
+            'Contigo hablo de {otro}. {historial}, y no sé qué pensar.',
+            '{otro} me ronda la cabeza. {historial}, y eso me deja con dudas.',
         ];
     }
 
@@ -223,6 +225,8 @@ final class MensajitoVoz
             '{otro} no está nada bien. ¿Podrías echarle un ojo?',
             'Celestine, algo le pasa a {otro}. No es el mismo de siempre.',
             'He visto a {otro} un poco bajoneado/a. ¿Tú sabes algo?',
+            'Oye, {otro}. {historial}, y ahora me preocupa.',
+            'Me da vueltas lo de {otro}. {historial}, y últimamente no lo veo bien.',
         ];
     }
 
@@ -621,7 +625,7 @@ final class MensajitoVoz
     private static function tokens(array $vars): array
     {
         $t = [];
-        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa', 'dia_semana', 'nombre_evento', 'asistencia'] as $k) {
+        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa', 'dia_semana', 'nombre_evento', 'asistencia', 'historial'] as $k) {
             $v = $vars[$k] ?? null;
             if ($v !== null && $v !== '') {
                 $t['{' . $k . '}'] = (string) $v;

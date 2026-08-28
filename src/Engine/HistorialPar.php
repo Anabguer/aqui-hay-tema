@@ -146,6 +146,46 @@ final class HistorialPar
     }
 
     /**
+     * Frase concisa sobre la historia entre A y B, para uso en copy narrativo.
+     * NO inventa nada: solo describe lo que realmente ocurrió.
+     *
+     * @return string Frase en español (sin puntuación final).
+     */
+    public static function contextoNarrativo(array $partida, string $a, string $b): string
+    {
+        $res = self::resumen($partida, $a, $b);
+        $hitos = self::hitos($partida, $a, $b);
+
+        if (!$res['se_conocen']) {
+            return 'aún no nos conocemos';
+        }
+        if ($res['es_pareja']) {
+            return 'somos pareja';
+        }
+        if ($res['ha_habido_cita']) {
+            return 'hemos salido juntos';
+        }
+        if ($res['total_encuentros'] > 0) {
+            $plural = $res['total_encuentros'] > 1 ? 'nos hemos visto' : 'nos hemos visto';
+            $cuantos = $res['total_encuentros'] > 1
+                ? $res['total_encuentros'] . ' veces'
+                : 'una vez';
+            return $plural . ' ' . $cuantos;
+        }
+        if (count($hitos) > 0) {
+            $ultimo = end($hitos);
+            $tipo = (string) ($ultimo['tipo'] ?? '');
+            if ($tipo === RelacionBitacora::SE_CONOCIERON) {
+                return 'nos conocimos hace poco';
+            }
+            if ($tipo === RelacionBitacora::PRIMERA_CITA) {
+                return 'tuvimos nuestra primera cita';
+            }
+        }
+        return 'nos conocemos';
+    }
+
+    /**
      * Tendencia de los últimos encuentros: 'positiva', 'negativa', 'estable', o ''.
      */
     private static function tendencia(array $encs): string

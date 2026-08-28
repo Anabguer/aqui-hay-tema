@@ -260,7 +260,9 @@ final class MensajitoGeneradorEspontaneo
     {
         switch ($familia) {
             case 'f_opinion':
-                return MensajitoVoz::linea($partida, 'f_opinion', ['otro' => $datos['otro_nombre'] ?? '', 'texto' => $datos['tipo_relacion'] ?? 'amigo'], 'f_opinion|' . $rid . '|' . ($datos['otro_id'] ?? ''), $rid);
+                $otro = $datos['otro_id'] ?? '';
+                $historial = $otro !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $otro) : '';
+                return MensajitoVoz::linea($partida, 'f_opinion', ['otro' => $datos['otro_nombre'] ?? '', 'texto' => $datos['tipo_relacion'] ?? 'amigo', 'historial' => $historial], 'f_opinion|' . $rid . '|' . ($datos['otro_id'] ?? ''), $rid);
             case 'f_dilema':
                 return MensajitoVoz::linea($partida, 'f_dilema', ['nombre_a' => $datos['opcion_a_nombre'] ?? '', 'nombre_b' => $datos['opcion_b_nombre'] ?? '', 'texto' => 'dos personas'], 'f_dilema|' . $rid, $rid);
             case 'f_confidencia':
@@ -297,7 +299,9 @@ final class MensajitoGeneradorEspontaneo
                     $rid
                 );
             case 'f_alerta_vecinal':
-                return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado'], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
+                $observado = $datos['observado_id'] ?? '';
+                $historial = $observado !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $observado) : '';
+                return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado', 'historial' => $historial], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
             case 'f_curiosidad_celestine':
                 return MensajitoVoz::linea($partida, 'f_curiosidad_celestine', [], 'f_curiosidad|' . $rid, $rid);
         }
