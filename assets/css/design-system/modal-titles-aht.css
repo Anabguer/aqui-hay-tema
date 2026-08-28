@@ -1,0 +1,102 @@
+/* MODAL-TITLES-AHT — títulos principales unificados (Mensajitos, Vecinos, Ficha, Cotilleos, Nuevo plan) */
+
+.play-v3:has(.game-shell) .modal-title-aht,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon .mensajitos-tit,
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vecinos-cab .ds-modal-tit,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha .ficha-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario .coti-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar .org-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-tit,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit,
+.play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit {
+  font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive) !important;
+  font-size: 2.05rem !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  line-height: 1.05 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  transform: none !important;
+  margin: 0 0 0.4rem !important;
+  padding: 0 !important;
+  width: 100% !important;
+  text-shadow: none !important;
+}
+
+/* Colores semánticos por modal */
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon .mensajitos-tit,
+.play-v3:has(.game-shell) .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-tit {
+  color: var(--ds-pink-deep, #c85b78) !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vecinos-cab .ds-modal-tit,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit {
+  color: var(--ds-ink, #3b3028) !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha .ficha-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit {
+  color: var(--ds-pink-deep, #c85b78) !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario .coti-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit {
+  color: var(--ds-lavender-deep, #7a6a9a) !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar .org-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit {
+  color: #c43545 !important;
+}
+
+/* Cabeceras: título arriba, aire antes de subtítulo/tabs */
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head-row,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-head,
+.play-v3:has(.game-shell) .capa-ficha .ficha-top,
+.play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head,
+.play-v3:has(.game-shell) .capa-organizar .org-top .ds-modal-head,
+.play-v3:has(.game-shell) .capa-organizar .org-top .ds-modal-head-row {
+  justify-content: center !important;
+  text-align: center !important;
+}
+
+.play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head-row {
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+}
+
+.play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-sub {
+  margin-top: 0.15rem !important;
+}
+
+.play-v3:has(.game-shell) .capa-organizar .org-top::after {
+  margin-top: 0.2rem !important;
+}
+
+@media (max-width: 520px) {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon .ds-modal-head .ds-modal-tit,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon .mensajitos-tit,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos .vecinos-cab .ds-modal-tit,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha .ficha-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario .coti-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar .org-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .modal-title-aht,
+  .play-v3:has(.game-shell) .capa-buzon .ds-modal-head .ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-buzon .mensajitos-tit,
+  .play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit {
+    font-size: 1.95rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+}
