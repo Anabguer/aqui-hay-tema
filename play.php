@@ -341,16 +341,17 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     <div class="game-shell">
     <div class="inicio-stage">
       <section class="inicio-mobile" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil">
-        <header class="game-top">
+        <header class="game-top game-top-mock">
       <div class="brand-col">
         <h1 class="brand" aria-label="Aqu&iacute; Hay Tema">
+          <span class="brand-heart brand-heart--lead" aria-hidden="true"></span>
           <span class="brand-text">AQU&Iacute; HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
-        <p class="top-meta-line" data-top-meta-mobile></p>
-        <button type="button" class="btn-guia" data-tut-reopen hidden>&iquest;C&oacute;mo va esto?</button>
       </div>
-      <div class="top-center">
+      <div class="top-meta-row">
+        <p class="top-meta-line" data-top-meta-mobile></p>
+        <div class="top-center">
         <div class="top-reloj">
           <div class="obj-dia" style="--rot:-2deg">
             <div class="obj-dia-placa">
@@ -370,14 +371,16 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <svg class="es-noche-luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
             <span class="es-noche-txt">Es de noche</span>
           </span>
-          <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora">
+          <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora" aria-label="Pasar el rato">
             <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
             <span class="pasar-rato-txt">Pasar el rato</span>
           </button>
         </div>
+        </div>
       </div>
       <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para m&aacute;s informaci&oacute;n">
         <span class="obj-vida-kicker">Vida del pueblo</span>
+        <span class="top-vida-num" data-vida-num aria-hidden="true">0</span>
         <svg class="corazon-svg corazon-org" viewBox="0 0 58 52" aria-hidden="true">
           <defs>
             <clipPath id="corazon-clip-mob"><path d="M29 48.5 C29 48.5 5.5 31 4.5 17.5 C3.5 8.5 11.5 2.5 19.5 3.5 C24.5 4 28 8.5 29 9.5 C30 8 33.5 3.5 38.5 3 C46.5 2 53.5 9 52.5 18.5 C51 32 29 48.5 29 48.5 Z"/></clipPath>
@@ -395,6 +398,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
       <div class="control-audio" aria-label="Controles de audio">
+        <button type="button" class="btn-guia control-guia" data-tut-reopen hidden aria-label="&iquest;C&oacute;mo va esto?" title="&iquest;C&oacute;mo va esto?">
+          <span class="control-guia-ico" aria-hidden="true">?</span>
+        </button>
         <button type="button" class="control-musica" data-musica-toggle aria-pressed="true" aria-label="Desactivar m&uacute;sica" title="Desactivar m&uacute;sica">
           <span class="control-musica-ico" aria-hidden="true">&#9834;</span>
         </button>
@@ -612,7 +618,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
         <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <button type="button" class="ficha-btn-diario" data-ficha-diario-btn><span class="ficha-btn-diario-ico" aria-hidden="true">&#128211;</span> Diario</button>
         <header class="ficha-top">
           <h2 class="ficha-tit ds-modal-tit ds-modal-tit--ink">Ficha de vecino</h2>
           <button type="button" class="ficha-volver" data-ficha-volver>&larr; VECINOS</button>
@@ -642,6 +647,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               </div>
             </div>
           </div>
+          <div class="ficha-hero-acciones" aria-label="Acciones con el vecino">
+            <button type="button" class="ficha-btn-diario ficha-hero-btn" data-ficha-diario-btn>Diario</button>
+            <button type="button" class="ficha-btn-org ficha-hero-btn" data-ficha-org>Nuevo plan</button>
+            <button type="button" class="ficha-btn-regalo ficha-hero-btn" data-ficha-regalar>Regalar</button>
+          </div>
         </section>
         <div class="ficha-body">
           <div class="ficha-rasgos" data-ficha-rasgos></div>
@@ -669,8 +679,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
             </section>
-            <button type="button" class="ficha-btn-org" data-ficha-org>+ Organizar plan</button>
-            <button type="button" class="ficha-btn-regalo" data-ficha-regalar>REGALAR</button>
             <p class="ficha-aprecio" data-ficha-aprecio hidden></p>
           </div>
         </div>
@@ -725,6 +733,22 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <p class="mis-sub mini" data-misiones-teaser>&#8212;</p>
         </header>
         <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
+      </aside>
+
+      <aside class="capa capa-parejas par-modal-papel ds-modal-sheet" aria-label="Parejas del pueblo">
+        <span class="ficha-tape ficha-tape-l par-tape-tl" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r par-tape-tr" aria-hidden="true"></span>
+        <button type="button" class="cerrar par-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <header class="par-top">
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#9829;</span>
+              <h2 class="par-tit ds-modal-tit ds-modal-tit--pink">Parejas</h2>
+            </div>
+          </div>
+          <p class="par-sub mini" data-parejas-teaser">&mdash;</p>
+        </header>
+        <div class="par-body capa-scroll" data-parejas-modal-list></div>
       </aside>
       <aside class="capa capa-vida-pueblo vida-modal-papel ds-modal-sheet" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
         <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
@@ -783,6 +807,43 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </div>
           </div>
           <p class="inv-feedback" data-inv-feedback hidden aria-live="polite"></p>
+        </div>
+      </aside>
+
+      <aside class="capa capa-ajustes ds-modal-sheet" aria-label="Ajustes">
+        <button type="button" class="cerrar ajustes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <header class="ajustes-top">
+          <div class="ds-modal-head">
+            <h2 class="ds-modal-tit ds-modal-tit--ink">Ajustes</h2>
+          </div>
+        </header>
+        <div class="ajustes-body capa-scroll">
+          <button type="button" class="ajustes-link" data-ajustes-tut>&iquest;C&oacute;mo se juega?</button>
+          <section class="ajustes-grupo" aria-label="M&uacute;sica de fondo">
+            <div class="ajustes-grupo-head">
+              <span class="ajustes-grupo-tit">M&uacute;sica de fondo</span>
+              <button type="button" class="ajustes-toggle" data-musica-toggle aria-pressed="true">
+                <span class="ajustes-toggle-track" aria-hidden="true"><span class="ajustes-toggle-knob"></span></span>
+              </button>
+            </div>
+            <label class="ajustes-vol">
+              <span class="ajustes-vol-lbl">Volumen</span>
+              <input type="range" class="ajustes-range" min="0" max="100" value="22" data-musica-vol aria-label="Volumen de m&uacute;sica"/>
+            </label>
+          </section>
+          <section class="ajustes-grupo" aria-label="Efectos de sonido">
+            <div class="ajustes-grupo-head">
+              <span class="ajustes-grupo-tit">Efectos de sonido</span>
+              <button type="button" class="ajustes-toggle" data-efectos-toggle aria-pressed="true">
+                <span class="ajustes-toggle-track" aria-hidden="true"><span class="ajustes-toggle-knob"></span></span>
+              </button>
+            </div>
+            <label class="ajustes-vol">
+              <span class="ajustes-vol-lbl">Volumen</span>
+              <input type="range" class="ajustes-range" min="0" max="100" value="55" data-sfx-vol aria-label="Volumen de efectos"/>
+            </label>
+          </section>
+          <button type="button" class="ajustes-reiniciar" data-ajustes-reiniciar>Reiniciar partida</button>
         </div>
       </aside>
 
@@ -885,6 +946,34 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       </aside>
     </div>
   </div>
+
+    <nav class="play-bottom-nav" aria-label="Accesos r&aacute;pidos">
+      <button type="button" class="play-bottom-nav-btn" data-open="ajustes">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Ajustes</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="inventario">
+        <span class="play-bottom-nav-ico play-bottom-nav-ico--inv" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M8 7V6a4 4 0 0 1 8 0v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 11v4M14.5 11v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span class="play-bottom-nav-badge" data-inv-nav-badge hidden>0</span>
+        </span>
+        <span class="play-bottom-nav-txt">Mochila</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="vecinos">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M16 11a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 19.5c.6-2.5 2.8-4 6.5-4s5.9 1.5 6.5 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 11.2a2.6 2.6 0 1 0-1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20.8 18.2c-.4-1.8-1.7-3-3.8-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5.5 11.2a2.6 2.6 0 1 1 1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3.2 18.2c.4-1.8 1.7-3 3.8-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Vecinos</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="relaciones">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Relaciones</span>
+      </button>
+    </nav>
       </div>
 
 <section class="inicio-desktop" data-inicio-view="desktop" aria-label="Inicio escritorio">
@@ -977,11 +1066,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </section>
             <section class="shell-grupo shell-grupo-cotilleo-par">
-          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
-            <span class="obj-cotilleo-tit">Cotilleo</span>
+          <button type="button" class="obj-cotilleo obj-cotilleo-par obj-cotilleo-compact" data-open="diario" aria-label="Abrir cotilleo del pueblo">
+            <span class="obj-cotilleo-ico" aria-hidden="true"></span>
             <span class="obj-cotilleo-cuerpo">
+              <span class="obj-cotilleo-badges">
+                <span class="obj-cotilleo-tit">COTILLEOS</span>
+                <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
+              </span>
               <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est&aacute;n sospechosamente tranquilos&hellip;</span>
-              <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
             <span class="obj-cotilleo-flecha" aria-hidden="true">&#8250;</span>
           </button>
@@ -1040,7 +1132,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="plan-seccion-rule" aria-hidden="true"></span>
             <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
           </header>
-          <div class="pp-mov-track" data-proxplanes-track></div>
+          <div class="pp-mov-shell" data-proxplanes-shell hidden aria-hidden="true">
+            <button type="button" class="pp-mov-nav-btn pp-mov-nav-prev" data-pp-mov-prev aria-label="Planes anteriores" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 7l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+            <div class="pp-mov-track" data-proxplanes-track></div>
+            <button type="button" class="pp-mov-nav-btn pp-mov-nav-next" data-pp-mov-next aria-label="Siguientes planes" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          </div>
         </section>
             <section class="shell-grupo shell-grupo-planes">
 <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Crear plan">
@@ -1077,54 +1177,58 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
             <section class="shell-grupo shell-grupo-cotilleo-par">
-          <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
-            <span class="obj-cotilleo-tit">Cotilleo</span>
+          <button type="button" class="obj-cotilleo obj-cotilleo-par obj-cotilleo-compact" data-open="diario" aria-label="Abrir cotilleo del pueblo">
+            <span class="obj-cotilleo-ico" aria-hidden="true"></span>
             <span class="obj-cotilleo-cuerpo">
+              <span class="obj-cotilleo-badges">
+                <span class="obj-cotilleo-tit">COTILLEOS</span>
+                <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
+              </span>
               <span class="obj-cotilleo-txt" data-cotilleo-teaser>Hoy est&aacute;n sospechosamente tranquilos&hellip;</span>
-              <span class="obj-cotilleo-badge" data-cotilleo-badge hidden></span>
             </span>
             <span class="obj-cotilleo-flecha" aria-hidden="true">&#8250;</span>
           </button>
         </section>
-            <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
-          <header class="enc-mov-cab plan-seccion-cab">
-            <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
-            <span class="plan-seccion-rule" aria-hidden="true"></span>
-            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
+            <section class="shell-grupo planes-movil-unif" data-planes-unif-block aria-label="Planes">
+          <header class="planes-unif-cab">
+            <div class="planes-unif-cab-izq">
+            <svg class="plan-seccion-ico planes-unif-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3 class="planes-unif-tit">PLANES</h3>
+            </div>
+            <p class="planes-unif-resumen" data-planes-unif-resumen hidden aria-live="polite"></p>
           </header>
-          <div class="enc-mov-shell" data-encursos-shell hidden aria-hidden="true">
-            <button type="button" class="enc-mov-nav-btn enc-mov-nav-prev" data-enc-mov-prev aria-label="Plan anterior" hidden>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 7l-5 5 5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <div class="enc-mov-track" data-encursos-track></div>
-            <button type="button" class="enc-mov-nav-btn enc-mov-nav-next" data-enc-mov-next aria-label="Plan siguiente" hidden>
+          <div class="planes-unif-track-wrap">
+            <div class="planes-unif-track" data-planes-unif-track></div>
+            <button type="button" class="planes-unif-more" data-planes-unif-more hidden aria-label="Ver m&aacute;s planes">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
           </div>
         </section>
-            <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Pr&oacute;ximos planes programados">
-          <header class="pp-mov-cab plan-seccion-cab">
-            <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PR&Oacute;XIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
-            <span class="plan-seccion-rule" aria-hidden="true"></span>
-            <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
-          </header>
-          <div class="pp-mov-track" data-proxplanes-track></div>
-        </section>
-            <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
-          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
-            <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
-            <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
-            <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
-            <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
-            <span class="obj-misiones-papel-tit">MISIONES</span>
-            <div class="obj-misiones-strip" data-misiones-strip></div>
-          </div>
-        </section>
-            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
-          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
-          <div class="obj-parejas-list" data-parejas-strip></div>
+            <section class="shell-grupo inicio-mp-duo" data-inicio-mp-duo aria-label="Misiones y parejas">
+          <button type="button" class="inicio-mp-card inicio-mp-card--mis" data-open="misiones" aria-label="Ver misiones de hoy">
+            <div class="inicio-mp-cuerpo">
+              <span class="inicio-mp-ico inicio-mp-ico--mis" aria-hidden="true"></span>
+              <div class="inicio-mp-main">
+                <span class="inicio-mp-tit" data-misiones-tit-corta>MISIONES</span>
+                <span class="inicio-mp-resumen" data-misiones-resumen-corta></span>
+                <span class="inicio-mp-progreso" data-misiones-progreso aria-hidden="true"></span>
+              </div>
+            </div>
+            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
+          </button>
+          <button type="button" class="inicio-mp-card inicio-mp-card--par" data-open="parejas" aria-label="Ver parejas del pueblo">
+            <div class="inicio-mp-cuerpo">
+              <span class="inicio-mp-tit" data-parejas-tit-corta>PAREJAS</span>
+              <div class="inicio-mp-par-mid">
+                <div class="inicio-mp-par-izq">
+                  <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
+                  <span class="inicio-mp-resumen" data-parejas-resumen-corta></span>
+                </div>
+                <span class="inicio-mp-par-faces" data-parejas-preview-faces aria-hidden="true"></span>
+              </div>
+            </div>
+            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
+          </button>
         </section>
         </div>
       </section>

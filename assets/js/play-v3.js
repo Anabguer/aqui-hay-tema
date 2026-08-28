@@ -65,23 +65,79 @@
     return o;
   }
   const MUSICA_STORAGE_KEY = 'aht_musica_fondo';
+  const MUSICA_VOL_KEY = 'aht_musica_vol';
+  const MUSICA_VOL_DEFAULT = 0.22;
   let musicaActiva = true;
   try { musicaActiva = localStorage.getItem(MUSICA_STORAGE_KEY) !== '0'; } catch (e) {}
+  let musicaVolumen = MUSICA_VOL_DEFAULT;
+  try {
+    const storedVol = parseFloat(localStorage.getItem(MUSICA_VOL_KEY));
+    if (isFinite(storedVol) && storedVol >= 0 && storedVol <= 1) musicaVolumen = storedVol;
+  } catch (e) {}
   const musicaFondo = new Audio('assets/audio/musica-fondo.mp3');
   musicaFondo.loop = true;
-  musicaFondo.volume = 0.22;
+  musicaFondo.volume = musicaVolumen;
   musicaFondo.preload = 'auto';
   let musicaPlayEnCurso = null;
   let musicaPrimerGestoPendiente = false;
 
   function actualizarControlMusica() {
-    const control = $('[data-musica-toggle]');
-    if (!control) return;
-    control.dataset.musica = musicaActiva ? 'on' : 'off';
-    control.setAttribute('aria-pressed', musicaActiva ? 'true' : 'false');
-    const etiqueta = musicaActiva ? 'Desactivar m?sica' : 'Activar m?sica';
-    control.setAttribute('aria-label', etiqueta);
-    control.setAttribute('title', etiqueta);
+    const etiqueta = musicaActiva ? 'Desactivar música' : 'Activar música';
+    $$('[data-musica-toggle]').forEach(function (control) {
+      control.dataset.musica = musicaActiva ? 'on' : 'off';
+      control.setAttribute('aria-pressed', musicaActiva ? 'true' : 'false');
+      control.setAttribute('aria-label', etiqueta);
+      control.setAttribute('title', etiqueta);
+    });
+  }
+
+  function setMusicaVolumen(pct) {
+    const v = Math.max(0, Math.min(100, pct)) / 100;
+    musicaVolumen = v;
+    musicaFondo.volume = v;
+    try { localStorage.setItem(MUSICA_VOL_KEY, String(v)); } catch (e) {}
+    $$('[data-musica-vol]').forEach(function (input) {
+      const val = String(Math.round(v * 100));
+      if (input.value !== val) input.value = val;
+    });
+  }
+
+  function syncBottomNav(name) {
+    $$('.play-bottom-nav-btn').forEach(function (b) {
+      const open = b.getAttribute('data-open');
+      let on = false;
+      if (open === 'relaciones') on = name === 'vecinos' && vecTabActiva === 'relaciones';
+      else if (open === 'vecinos') on = name === 'vecinos' && vecTabActiva !== 'relaciones';
+      else on = open === name;
+      b.classList.toggle('is-on', !!on);
+      b.setAttribute('aria-current', on ? 'page' : 'false');
+    });
+  }
+
+  function syncAjustesUI() {
+    $$('[data-musica-vol]').forEach(function (input) {
+      input.value = String(Math.round(musicaVolumen * 100));
+    });
+    if (window.AhtAudioFeedback && typeof window.AhtAudioFeedback.getVolume === 'function') {
+      const v = Math.round(window.AhtAudioFeedback.getVolume() * 100);
+      $$('[data-sfx-vol]').forEach(function (input) {
+        if (input.value !== String(v)) input.value = String(v);
+      });
+    }
+  }
+
+  function actualizarInvNavBadge(items) {
+    const badge = $('[data-inv-nav-badge]');
+    if (!badge) return;
+    let n = 0;
+    (items || []).forEach(function (it) { n += (it && it.cantidad) ? it.cantidad : 0; });
+    if (n > 0) {
+      badge.textContent = String(n);
+      badge.hidden = false;
+    } else {
+      badge.textContent = '0';
+      badge.hidden = true;
+    }
   }
 
   function retirarEsperaPrimerGesto() {
@@ -740,12 +796,16 @@
     if (!name) root.removeAttribute('data-capa');
     else root.setAttribute('data-capa', name);
     if (name === 'vida_pueblo') renderVidaPuebloModal();
+    if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
     if (name === 'inventario') renderInventario();
+    if (name === 'ajustes') syncAjustesUI();
     if (name && name !== prev && !uiHistSilent) uiHistPush();
-    $$('.dock button').forEach(function (b) {
+    $$('.dock button, .play-bottom-nav-btn').forEach(function (b) {
       const open = b.getAttribute('data-open');
+      if (b.classList.contains('play-bottom-nav-btn')) return;
       b.classList.toggle('is-on', name ? open === name : !open);
     });
+    syncBottomNav(name || '');
     syncScrollLock();
   }
 
@@ -775,6 +835,7 @@
     const params = invFichaRid ? { residente_id: invFichaRid } : {};
     const r = await api('inventario.listar', params, 'GET');
     const items = (r && r.ok && Array.isArray(r.inventario)) ? r.inventario : [];
+    actualizarInvNavBadge(items);
     const sub = $('[data-inv-sub]', root);
     if (sub) {
       sub.textContent = invFichaRid && r && r.residente_nombre
@@ -1332,9 +1393,11 @@
   function wireMsgLeidoToggle(btn, m) {
     const leido = mensajitoEstaLeido(m);
     btn.className = 'msg-leido-toggle' + (leido ? ' is-leido' : ' is-pendiente');
-    btn.textContent = leido ? 'le\u00eddo' : 'marcar';
+    btn.innerHTML = '<span class="msg-leido-ico" aria-hidden="true"></span>';
     btn.setAttribute('aria-pressed', leido ? 'true' : 'false');
     btn.setAttribute('aria-label', leido ? 'Marcar como no le\u00eddo' : 'Marcar como le\u00eddo');
+    btn.removeAttribute('title');
+    btn.setAttribute('data-tip', leido ? 'Volver a dejarlo como nuevo' : 'Marcar como visto');
     btn.onclick = null;
     btn.addEventListener('click', async function (ev) {
       ev.preventDefault();
@@ -1624,6 +1687,12 @@
     return emo;
   }
 
+
+  function htmlMpParFace(id) {
+    var img = tokenDe(id);
+    if (!img) return '';
+    return '<span class="inicio-mp-par-cara-wrap" aria-hidden="true"><img class="inicio-mp-par-cara" src="' + esc(img) + '" alt=""/></span>';
+  }
   function htmlCaraToken(id, opts) {
     opts = opts || {};
     var emo = opts.emocion || emocionDe(id);
@@ -1667,13 +1736,13 @@
     var cur = estado && estado.encuentro_en_curso;
     var coleccion = estado && Array.isArray(estado.encuentros_en_curso) ? estado.encuentros_en_curso : null;
     var lista = coleccion
-      ? coleccion.filter(function (e) { return e && e.id; })
+      ? coleccion.filter(function (e) { return e && e.id && !planEsEventoPueblo(e); })
       : ((partida && partida.encuentros) || []).filter(function (e) {
-          if (!e) return false;
+          if (!e || !e.id || planEsEventoPueblo(e)) return false;
           if (cur && cur.id === e.id) return true;
           return encuentroOcupaAhora(e, estado);
         });
-    if (cur && cur.id && !lista.some(function (e) { return e.id === cur.id; })) {
+    if (cur && cur.id && !planEsEventoPueblo(cur) && !lista.some(function (e) { return e.id === cur.id; })) {
       lista = lista.concat([cur]);
     }
     return lista.slice().sort(function (a, b) {
@@ -1880,6 +1949,9 @@
     if (enc.intencion === 'evento_pueblo') return true;
     if (enc.evento_pueblo_id || enc.evento_pueblo_catalogo_id) return true;
     if (enc.es_evento_pueblo === true) return true;
+    if (eventoPuebloCatalogoId(enc, cacheInsp)) return true;
+    var lug = String(enc.lugar || enc.lugar_id || '');
+    if (lug === 'lug_bingo') return true;
     var idsEvt = enc.participantes || [];
     if (idsEvt.length >= 3 && enc.intencion !== 'celeste_organizado') return true;
     return false;
@@ -1900,6 +1972,18 @@
     club_lectura: 'Club de lectura'
   };
 
+  function ahtAssetUrl(path) {
+    var p = String(path || '').trim();
+    if (!p) return '';
+    if (/^https?:\/\//i.test(p) || p.indexOf('data:') === 0) return p;
+    if (p.charAt(0) === '/') return p;
+    var base = (typeof window !== 'undefined' && window.AHT_BASE) ? String(window.AHT_BASE) : '';
+    if (!base && typeof document !== 'undefined' && document.location) {
+      base = String(document.location.pathname || '').replace(/[^/]*$/, '');
+    }
+    return base + p.replace(/^\//, '');
+  }
+
   const EVENTO_PUEBLO_IMG = {
     noche_bingo: 'assets/play-v3/eventos/noche_bingo.png',
     partido_futbol_benefico: 'assets/play-v3/eventos/partido_futbol_benefico.png',
@@ -1913,12 +1997,12 @@
   function mensajitoEventoPuebloImg(m) {
     if (!m) return '';
     var df = m.datos_familia || {};
-    if (df.illustracion) return String(df.illustracion);
+    if (df.illustracion) return ahtAssetUrl(df.illustracion);
     var catId = String(df.evento_pueblo_catalogo_id || '');
-    if (catId && EVENTO_PUEBLO_IMG[catId]) return EVENTO_PUEBLO_IMG[catId];
+    if (catId && EVENTO_PUEBLO_IMG[catId]) return ahtAssetUrl(EVENTO_PUEBLO_IMG[catId]);
     var tipo = String(m.tipo || m.familia_mensajito || '');
     if ((tipo === 'anuncio_evento_pueblo' || tipo === 'cierre_evento_pueblo') && catId) {
-      return 'assets/play-v3/eventos/' + catId + '.png';
+      return ahtAssetUrl('assets/play-v3/eventos/' + catId + '.png');
     }
     return '';
   }
@@ -1949,8 +2033,8 @@
   function eventoPuebloImgSrc(enc, partida, evEstado) {
     var catId = enc ? eventoPuebloCatalogoId(enc, partida) : '';
     if (!catId && evEstado && evEstado.catalogo_id) catId = String(evEstado.catalogo_id);
-    if (catId && EVENTO_PUEBLO_IMG[catId]) return EVENTO_PUEBLO_IMG[catId];
-    if (evEstado && evEstado.illustracion) return String(evEstado.illustracion);
+    if (catId && EVENTO_PUEBLO_IMG[catId]) return ahtAssetUrl(EVENTO_PUEBLO_IMG[catId]);
+    if (evEstado && evEstado.illustracion) return ahtAssetUrl(evEstado.illustracion);
     var lug = (enc && enc.lugar) || (evEstado && evEstado.lugar) || '';
     return orgLugarImg(lug);
   }
@@ -2016,7 +2100,7 @@
     var titulo = nombreEventoPuebloDe(enc, cacheInsp);
     var meta = metaEventoPuebloLinea(enc, estado);
     var asist = asistentesEventoPuebloTxt(ids);
-    var ico = eventoPuebloIcoHtml(enc, cacheInsp, null);
+    var ico = eventoPuebloIcoHtml(enc, cacheInsp, estado && estado.proximo_evento_pueblo);
     return '<article class="pp-mov-card pp-mov-card--evento pp-mov-card--evento-v31" data-pp-evento-pueblo="1" role="status">' +
       '<span class="pp-evt-tag">EVENTO PUEBLO</span>' +
       '<div class="pp-evt-main">' +
@@ -2047,6 +2131,16 @@
         String(a.id).localeCompare(String(b.id));
     });
   }
+
+  function ppMovPersonasHtml(ids, max) {
+    var lim = (max == null) ? 2 : max;
+    return (ids || []).slice(0, lim).map(function (id) {
+      return '<div class="pp-mov-persona">' +
+        '<div class="pp-mov-persona-face">' + htmlCaraToken(id) + '</div>' +
+        '<p class="pp-mov-persona-nombre">' + esc(nombreDe(id)) + '</p>' +
+        '</div>';
+    }).join('');
+  }
   function htmlProximoPlanCardMovil(enc, estado) {
     if (planEsEventoPueblo(enc)) {
       return htmlProximoPlanCardEvento(enc, estado);
@@ -2056,10 +2150,10 @@
     const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
     const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
       ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
-    return '<article class="pp-mov-card">' +
+    return '<article class="pp-mov-card pp-mov-card--mock">' +
       '<div class="pp-mov-top">' +
       '<p class="pp-mov-hora">' + esc(sello) + '</p>' +
-      '<span class="pp-mov-star" aria-hidden="true">\u2605</span>' +
+      '<span class="pp-mov-star" aria-hidden="true"><span class="pp-mov-star-ico">\u2605</span></span>' +
       '</div>' +
       '<div class="pp-mov-body">' +
       '<div class="prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
@@ -2067,6 +2161,26 @@
       '<p class="pp-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
       '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
       '</div>' +
+      '</div></article>';
+  }
+
+  function htmlProximoPlanCardDesktop(enc, estado) {
+    if (planEsEventoPueblo(enc)) {
+      return htmlProximoPlanCardEvento(enc, estado);
+    }
+    const ids = enc.participantes || [];
+    const maxCaras = maxCarasProxPlan(enc, ids);
+    const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
+    const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
+      ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
+    return '<article class="pp-mov-card pp-mov-card--mock pp-mov-card--desk-duo">' +
+      '<div class="pp-mov-top">' +
+      '<p class="pp-mov-hora">' + esc(sello) + '</p>' +
+      '<span class="pp-mov-star" aria-hidden="true"><span class="pp-mov-star-ico">\u2605</span></span>' +
+      '</div>' +
+      '<div class="pp-mov-body pp-mov-body--desk-duo">' +
+      '<div class="pp-mov-personas">' + ppMovPersonasHtml(ids, maxCaras) + '</div>' +
+      '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
       '</div></article>';
   }
   function renderProximosPlanesBlock(block, estado, cardFn) {
@@ -2081,16 +2195,153 @@
       else { cntEl.textContent = ''; cntEl.hidden = true; cntEl.setAttribute('aria-hidden', 'true'); }
     }
     const lista = listaFull.slice(0, 6);
-    if (!lista.length) { block.classList.remove('is-on'); block.classList.add('is-empty'); track.innerHTML = ''; return; }
+    if (!lista.length) {
+      block.classList.remove('is-on');
+      block.classList.add('is-empty');
+      block.classList.remove('proxplanes-movil--solo', 'proxplanes-movil--multi');
+      track.innerHTML = '';
+      renderProxplanesNavFor(block);
+      return;
+    }
     block.classList.remove('is-empty');
     block.classList.add('is-on');
+    block.classList.toggle('proxplanes-movil--solo', lista.length === 1);
+    block.classList.toggle('proxplanes-movil--multi', lista.length > 1);
     track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
+    requestAnimationFrame(function () { renderProxplanesNavFor(block); });
   }
   function renderProximosPlanesMovil(estado) {
     inicioBlocks('[data-proxplanes-block]').forEach(function (block) {
       const view = block.closest('.inicio-mobile') ? 'mobile' : 'desktop';
-      const cardFn = view === 'mobile' ? htmlProximoPlanCardMovil : htmlProximoPlanCardMovil;
+      const cardFn = view === 'mobile' ? htmlProximoPlanCardMovil : htmlProximoPlanCardDesktop;
       renderProximosPlanesBlock(block, estado, cardFn);
+    });
+  }
+  function htmlPlanUnifCardCurso(enc, estado) {
+    const ids = (enc && enc.participantes) || [];
+    const iv = intervencionVistaDe(enc, estado);
+    const ctaVisible = ctaEncuentroMovVisible(enc, iv);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const nombres = ids.map(function (id) { return nombreDe(id); }).filter(Boolean).join(' \u00b7 ');
+    const maxCaras = Math.min(2, Math.max(1, ids.length));
+    var html = '<article class="plan-unif-card plan-unif-card--curso enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<span class="plan-unif-badge plan-unif-badge--curso">EN CURSO</span>' +
+      '<span class="plan-unif-menu" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 7h8M8 12h8M8 17h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
+      '<div class="plan-unif-faces prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<p class="plan-unif-nombres">' + esc(nombres) + '</p>' +
+      '<p class="plan-unif-lugar">' + esc(lugar) + '</p>';
+    if (ctaVisible) {
+      html += '<button type="button" class="plan-unif-cta plan-unif-cta--curso enc-mov-cta" data-enc-mov-toggle aria-expanded="false">INTERVENIR</button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    } else if (panelHtml) {
+      html += '<div class="enc-mov-panel enc-mov-panel--solo" data-enc-mov-panel>' + panelHtml + '</div>';
+    }
+    return html + '</article>';
+  }
+  function htmlPlanUnifCardProx(enc, estado) {
+    if (planEsEventoPueblo(enc)) {
+      return htmlProximoPlanCardEvento(enc, estado);
+    }
+    const ids = enc.participantes || [];
+    const maxCaras = maxCarasProxPlan(enc, ids);
+    const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
+    const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
+      ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
+    return '<article class="plan-unif-card plan-unif-card--prox pp-mov-card" data-pp-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<span class="plan-unif-badge plan-unif-badge--prox">' + esc(sello) + '</span>' +
+      '<div class="plan-unif-faces prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<p class="plan-unif-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
+      '<p class="plan-unif-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
+      '</article>';
+  }
+  function planUnifPaso(track) {
+    const cards = track.querySelectorAll('.plan-unif-card');
+    if (!cards.length) return 0;
+    const st = getComputedStyle(track);
+    const gap = parseFloat(st.columnGap || st.gap) || 0;
+    return cards[0].offsetWidth + gap;
+  }
+  function renderPlanesUnifMoreFor(block) {
+    const track = block && block.querySelector('[data-planes-unif-track]');
+    const more = block && block.querySelector('[data-planes-unif-more]');
+    if (!track || !more) return;
+    const overflow = track.scrollWidth > track.clientWidth + 4;
+    const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 6;
+    more.hidden = !overflow || atEnd;
+  }
+  function planesUnifScrollNext(block) {
+    const track = block && block.querySelector('[data-planes-unif-track]');
+    if (!track) return;
+    const paso = planUnifPaso(track);
+    if (paso <= 0) return;
+    track.scrollBy({ left: paso, behavior: 'smooth' });
+    setTimeout(function () { renderPlanesUnifMoreFor(block); }, 320);
+  }
+  function renderPlanesUnifBlock(block, estado) {
+    if (!block) return;
+    const track = block.querySelector('[data-planes-unif-track]');
+    const resumen = block.querySelector('[data-planes-unif-resumen]');
+    if (!track) return;
+    const curso = encuentrosEnCursoAhora(cacheInsp, estado);
+    const proxFull = proximosPlanesFuturos(cacheInsp, estado);
+    const prox = proxFull.slice(0, 6);
+    const nCurso = curso.length;
+    const nProx = proxFull.length;
+    if (resumen) {
+      var parts = [];
+      if (nCurso > 0) {
+        parts.push('<span class="planes-unif-stat planes-unif-stat--curso">' + '<svg class="planes-unif-stat-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + '<span>' + String(nCurso) + ' en curso</span></span>');
+      }
+      if (nProx > 0) {
+        parts.push('<span class="planes-unif-stat planes-unif-stat--prox">' + '<svg class="planes-unif-stat-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + '<span>' + String(nProx) + ' pr\u00f3ximos</span></span>');
+      }
+      if (parts.length) {
+        resumen.innerHTML = parts.join('<span class="planes-unif-stat-sep" aria-hidden="true">\u00b7</span>');
+        resumen.hidden = false;
+        resumen.removeAttribute('aria-hidden');
+      } else {
+        resumen.innerHTML = '';
+        resumen.hidden = true;
+        resumen.setAttribute('aria-hidden', 'true');
+      }
+    }
+    const total = nCurso + prox.length;
+    if (!total) {
+      block.classList.remove('is-on');
+      block.classList.add('is-empty');
+      track.innerHTML = '';
+      renderPlanesUnifMoreFor(block);
+      return;
+    }
+    block.classList.remove('is-empty');
+    block.classList.add('is-on');
+    const abiertos = {};
+    track.querySelectorAll('[data-enc-mov-panel]:not([hidden])').forEach(function (p) {
+      const card = p.closest('[data-enc-mov-card]');
+      if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
+    });
+    track.innerHTML = curso.map(function (enc) { return htmlPlanUnifCardCurso(enc, estado); }).join('') +
+      prox.map(function (enc) { return htmlPlanUnifCardProx(enc, estado); }).join('');
+    requestAnimationFrame(function () {
+      const cards = track.querySelectorAll('[data-enc-mov-card]');
+      Object.keys(abiertos).forEach(function (id) {
+        Array.prototype.forEach.call(cards, function (card) {
+          if ((card.getAttribute('data-enc-id') || '') !== id) return;
+          const panel = card.querySelector('[data-enc-mov-panel]');
+          const cta = card.querySelector('[data-enc-mov-toggle]');
+          if (panel) panel.hidden = false;
+          if (cta) { cta.setAttribute('aria-expanded', 'true'); cta.classList.add('is-open'); }
+        });
+      });
+      renderPlanesUnifMoreFor(block);
+    });
+  }
+  function renderPlanesUnifMovil(estado) {
+    inicioBlocks('[data-planes-unif-block]').forEach(function (block) {
+      renderPlanesUnifBlock(block, estado);
     });
   }
     var encMovIndice = 0;
@@ -2113,7 +2364,6 @@
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
     const fam = familiaTipoEncuentro(enc);
-    if (fam !== 'romantico') return '';
     const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + fam;
     if (fam === 'romantico') {
       return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>';
@@ -2168,14 +2418,57 @@
   function encCursoNombresHtml(ids) {
     const list = ids || [];
     if (list.length === 2) {
-      return esc(nombreDe(list[0])) + ' + ' + esc(nombreDe(list[1]));
+      return esc(nombreDe(list[0])) + ' y ' + esc(nombreDe(list[1]));
     }
     return esc(list.map(function (id) { return nombreDe(id); }).join(' · '));
+  }
+
+  function encCursoTituloDe(enc) {
+    if (planEsEventoPueblo(enc)) return nombreEventoPuebloDe(enc, cacheInsp);
+    var ids = (enc && enc.participantes) || [];
+    if (ids.length === 2) return nombreDe(ids[0]) + ' y ' + nombreDe(ids[1]);
+    return nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+  }
+  function encCursoAforoDe(enc, partida) {
+    partida = partida || cacheInsp || {};
+    var prog = (partida.eventos_pueblo && partida.eventos_pueblo.programados) || [];
+    var i;
+    for (i = 0; i < prog.length; i++) {
+      var ev = prog[i];
+      if (!ev) continue;
+      if (String(ev.encuentro_id || '') === String((enc && enc.id) || '')) {
+        if (ev.aforo_total) return ev.aforo_total;
+        if (ev.aforo_ui) return String(ev.aforo_ui).replace(/[^\d]/g, '') || null;
+      }
+    }
+    return null;
+  }
+  function encCursoMetaRichDe(enc, estado) {
+    var lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    var ids = (enc && enc.participantes) || [];
+    var parts = ['En curso', lugar];
+    var aforo = encCursoAforoDe(enc, cacheInsp);
+    if (aforo) parts.push('Aforo: ' + aforo);
+    var n = ids.length;
+    parts.push(n + ' vecino' + (n === 1 ? '' : 's') + ' apuntado' + (n === 1 ? '' : 's'));
+    return parts.join(' \u00b7 ');
+  }
+  function encCursoPieFacesHtml(enc) {
+    var ids = (enc && enc.participantes) || [];
+    var max = Math.min(3, Math.max(1, ids.length));
+    return carasPlanHtml(ids, max);
   }
   function encCursoLugarStampHtml(enc) {
     const src = orgLugarImg(enc && enc.lugar);
     if (!src) return '';
     return '<div class="enc-mov-lugar-stamp" aria-hidden="true"><img src="' + esc(src) + '" alt="" width="46" height="40" loading="lazy" decoding="async"></div>';
+  }
+
+  function encCursoCardHeadIconsHtml() {
+    return '<div class="enc-mov-card-deco" aria-hidden="true">' +
+      '<span class="enc-mov-deco-ico enc-mov-deco-ico--scroll"><svg viewBox="0 0 24 24" focusable="false"><path d="M6 4h9l3 3v13H6V4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M15 4v4h4M8 11h8M8 15h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>' +
+      '<span class="enc-mov-deco-ico enc-mov-deco-ico--people"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 19c.8-3 2.8-4.5 4.5-4.5S12.7 16 13.5 19M10.5 19c.8-3 2.8-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>' +
+      '</div>';
   }
   function htmlEncursoCardEscena(enc, estado) {
     const ids = enc.participantes || [];
@@ -2187,23 +2480,23 @@
     const ctaTxt = ctaTxtEncuentroMov(enc, iv);
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
-    let html = '<article class="enc-mov-card enc-mov-card--escena" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-mov-escena">' +
-      encCursoLugarStampHtml(enc) +
-      '<div class="enc-mov-escena-core">' +
-      '<div class="enc-mov-escena-top">' +
-      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
-      '<p class="enc-mov-estado-pill"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</p>' +
+    let html = '<article class="enc-mov-card enc-mov-card--escena enc-mov-card--ref-desk" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<div class="enc-mov-card-head">' +
+      '<p class="enc-mov-estado-pill enc-mov-estado-pill--fuera"><span class="enc-mov-punto" aria-hidden="true"></span>PLAN EN CURSO</p>' +
+      encCursoCardHeadIconsHtml() +
       '</div>' +
+      '<div class="enc-mov-escena">' +
+      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
+      '<div class="enc-mov-escena-core">' +
       '<p class="enc-mov-nombres">' + encCursoNombresHtml(ids) + '</p>' +
       '<div class="enc-mov-donde-cuando">' +
       '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
       '</div></div></div>';
     if (ctaVisible) {
-      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-        '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
-        '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+      html += '<p class="enc-mov-resumen enc-mov-resumen--cuece">' + esc(ctaTxt) + '</p>' +
+        '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">INTERVENIR</span></button>' +
         '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
     } else if (panelHtml) {
       html += panelHtml;
@@ -2212,8 +2505,40 @@
   }
   function htmlEncursoCardDesktop(enc, estado) {
     return htmlEncursoCardEscena(enc, estado);
-  }    function htmlEncursoCardMovilV14(enc, estado) {
-    return htmlEncursoCardEscena(enc, estado);
+  }
+    function htmlEncursoCardMovilV15(enc, estado) {
+    const ids = (enc && enc.participantes) || [];
+    const iv = intervencionVistaDe(enc, estado);
+    const ctaVisible = ctaEncuentroMovVisible(enc, iv);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const nombres = ids.map(function (id) { return nombreDe(id); }).filter(Boolean).join(' \u00b7 ');
+    const maxCaras = Math.min(2, Math.max(1, ids.length));
+    var html = '<article class="enc-mov-card enc-mov-card--mock" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
+      '<div class="enc-mov-mock-grid">' +
+      '<div class="enc-mov-faces prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<div class="enc-mov-mock-main">' +
+      '<p class="enc-mov-nombres">' + esc(nombres) + '</p>' +
+      '<p class="enc-mov-lugar">' + esc(lugar) + '</p>' +
+      '</div>' +
+      '<div class="enc-mov-mock-side">' +
+      '<p class="enc-mov-estado-pill"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</p>';
+    if (ctaVisible) {
+      html += '<button type="button" class="enc-mov-cta enc-mov-cta--mock" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">INTERVENIR</span><span class="enc-mov-cta-flecha" aria-hidden="true">&rsaquo;</span></button>';
+    }
+    html += '</div></div>';
+    if (ctaVisible && panelHtml) {
+      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    } else if (panelHtml) {
+      html += '<div class="enc-mov-panel enc-mov-panel--solo" data-enc-mov-panel>' + panelHtml + '</div>';
+    }
+    return html + '</article>';
+  }
+  function htmlEncursoCardMovilV14(enc, estado) {
+    return htmlEncursoCardMovilV15(enc, estado);
   }
   function htmlEncursoCardMovil(enc, estado) {
     return htmlEncursoCardMovilV14(enc, estado);
@@ -2265,9 +2590,92 @@
   function renderEncursosMovilNav() {
     inicioBlocks('[data-encursos-block]').forEach(renderEncursosMovilNavFor);
   }
+  function ppMovEsDesktop(block) {
+    return !!(block && block.closest('.inicio-desktop-right') &&
+      typeof window !== 'undefined' && window.matchMedia &&
+      window.matchMedia('(min-width: 769px)').matches);
+  }
+  function ppMovPaso(track, block) {
+    if (!track) return 0;
+    if (ppMovEsDesktop(block)) return track.clientWidth || 0;
+    const cards = track.querySelectorAll('.pp-mov-card');
+    if (!cards.length) return 0;
+    const st = getComputedStyle(track);
+    const gap = parseFloat(st.columnGap || st.gap) || 0;
+    return cards[0].offsetWidth + gap;
+  }
+  function ppMovIrA(block, idx) {
+    const track = block && block.querySelector('[data-proxplanes-track]');
+    if (!block || !track) return;
+    const n = track.querySelectorAll('.pp-mov-card').length;
+    const paso = ppMovPaso(track, block);
+    if (paso <= 0) return;
+    if (ppMovEsDesktop(block) && n > 2) {
+      const max = Math.max(0, track.scrollWidth - track.clientWidth);
+      const cur = typeof block._ppMovIndice === 'number' ? block._ppMovIndice : 0;
+      var left = track.scrollLeft;
+      if (typeof idx === 'number' && idx !== cur) {
+        left = idx > cur ? Math.min(max, left + paso) : Math.max(0, left - paso);
+      }
+      block._ppMovIndice = idx > cur ? cur + 1 : (idx < cur ? Math.max(0, cur - 1) : cur);
+      track.scrollTo({ left: left, behavior: 'smooth' });
+      renderProxplanesNavFor(block);
+      return;
+    }
+    if (n < 2) return;
+    const i = Math.max(0, Math.min(n - 1, idx));
+    block._ppMovIndice = i;
+    track.scrollTo({ left: i * paso, behavior: 'smooth' });
+    renderProxplanesNavFor(block);
+  }
+  function renderProxplanesNavFor(block) {
+    const track = block && block.querySelector('[data-proxplanes-track]');
+    const shell = block && block.querySelector('[data-proxplanes-shell]');
+    const prev = block && block.querySelector('[data-pp-mov-prev]');
+    const next = block && block.querySelector('[data-pp-mov-next]');
+    if (!block || !track || !shell || !prev || !next) return;
+    const n = track.querySelectorAll('.pp-mov-card').length;
+    if (!block.classList.contains('is-on') || n < 1) {
+      shell.hidden = true;
+      shell.setAttribute('aria-hidden', 'true');
+      prev.hidden = true;
+      next.hidden = true;
+      block.classList.remove('proxplanes-movil--many');
+      return;
+    }
+    const paso = ppMovPaso(track, block);
+    const idx = paso > 0 ? Math.min(n - 1, Math.max(0, Math.round(track.scrollLeft / paso))) : 0;
+    block._ppMovIndice = idx;
+    shell.hidden = false;
+    shell.removeAttribute('aria-hidden');
+    const desktopMany = ppMovEsDesktop(block) && n > 2;
+    block.classList.toggle('proxplanes-movil--many', desktopMany);
+    if (desktopMany) {
+      const max = Math.max(0, track.scrollWidth - track.clientWidth);
+      prev.hidden = true;
+      next.hidden = track.scrollLeft >= max - 2;
+    } else {
+      prev.hidden = n < 2 || idx <= 0;
+      next.hidden = n < 2 || idx >= n - 1;
+    }
+  }
+  function renderProxplanesNav() {
+    inicioBlocks('[data-proxplanes-block]').forEach(renderProxplanesNavFor);
+  }
   function renderEncursosMovilIndicador() {
     renderEncursosMovilNav();
   }
+  function bindPlanesUnifScroll() {
+    if (bindPlanesUnifScroll._ok) return;
+    bindPlanesUnifScroll._ok = true;
+    document.addEventListener('scroll', function (ev) {
+      const track = ev.target.closest && ev.target.closest('[data-planes-unif-track]');
+      if (!track) return;
+      const block = track.closest('[data-planes-unif-block]');
+      if (block) renderPlanesUnifMoreFor(block);
+    }, true);
+  }
+
       function renderEncursosBlock(block, estado, cardFn) {
     if (!block) return;
     const track = block.querySelector('[data-encursos-track]');
@@ -2351,7 +2759,7 @@
       };
       row.innerHTML = '<span class="obj-pareja-fotos">' + tok(ids[0]) +
         '<span class="obj-pareja-enlace" aria-hidden="true"></span>' + tok(ids[1]) + '</span>' +
-        '<span class="obj-pareja-nombres">' + esc(nombreDe(ids[0])) + ' \u00b7 ' + esc(nombreDe(ids[1])) + '</span>' +
+        '<span class="obj-pareja-nombres">' + esc(nombreDe(ids[0])) + ' - ' + esc(nombreDe(ids[1])) + '</span>' +
         (crisis ? '<span class="pareja-crisis-sello">EN CRISIS</span>' : '');
       strip.appendChild(row);
     });
@@ -2360,11 +2768,89 @@
     }
   }
 
+
+  function renderParejasModalList(parejas) {
+    var list = $('[data-parejas-modal-list]');
+    var teaser = $('[data-parejas-teaser]');
+    if (!list) return;
+    var arr = parejas || [];
+    var crisis = arr.filter(function (r) { return esCrisisPareja(r); }).length;
+    if (teaser) {
+      if (!arr.length) teaser.textContent = 'A\u00fan no hay parejas registradas.';
+      else if (crisis > 0) teaser.textContent = crisis + ' en crisis \u00b7 ' + arr.length + ' pareja' + (arr.length === 1 ? '' : 's');
+      else teaser.textContent = arr.length + ' pareja' + (arr.length === 1 ? '' : 's') + ' en el pueblo';
+    }
+    if (!arr.length) {
+      list.innerHTML = '<p class="par-vacio">A\u00fan no hay parejas registradas.</p>';
+      return;
+    }
+    list.innerHTML = arr.map(function (rel) {
+      var ids = idsPareja(rel);
+      if (!ids || ids.length < 2) return '';
+      var c = esCrisisPareja(rel);
+      var tok = function (id) { return htmlCaraToken(id, { imgClass: 'obj-pareja-cara' }); };
+      return '<article class="par-modal-item' + (c ? ' is-crisis' : '') + '">' +
+        '<span class="obj-pareja-fotos">' + tok(ids[0]) +
+        '<span class="obj-pareja-enlace" aria-hidden="true"></span>' + tok(ids[1]) + '</span>' +
+        '<div class="par-modal-copy">' +
+        '<p class="obj-pareja-nombres">' + esc(nombreDe(ids[0])) + ' - ' + esc(nombreDe(ids[1])) + '</p>' +
+        (c ? '<p class="par-modal-crisis">En crisis</p>' : '') +
+        '</div></article>';
+    }).join('');
+  }
+  function updateMpDuoMisiones(items) {
+    var hoy = items || [];
+    var cumplidas = hoy.filter(function (m) { return (m.estado || '') === 'cumplida'; }).length;
+    var pend = hoy.filter(function (m) {
+      var est = m.estado || 'pendiente';
+      return est === 'pendiente' || est === 'activa';
+    }).length;
+    inicioAll('[data-misiones-tit-corta]').forEach(function (el) {
+      el.textContent = hoy.length ? ('MISIONES \u00b7 ' + hoy.length) : 'MISIONES';
+    });
+    inicioAll('[data-misiones-resumen-corta]').forEach(function (el) {
+      if (!hoy.length) { el.textContent = 'Sin misiones hoy'; return; }
+      if (cumplidas > 0) el.textContent = cumplidas + ' completada' + (cumplidas === 1 ? '' : 's');
+      else if (pend > 0) el.textContent = pend + ' pendiente' + (pend === 1 ? '' : 's');
+      else el.textContent = hoy.length + ' misi\u00f3n' + (hoy.length === 1 ? '' : 'es');
+    });
+    inicioAll('[data-misiones-progreso]').forEach(function (el) {
+      if (!hoy.length) { el.innerHTML = ''; return; }
+      var bits = [];
+      hoy.slice(0, 3).forEach(function (m, idx) {
+        if (idx > 0) bits.push('<span class="inicio-mp-sep" aria-hidden="true"></span>');
+        var ok = (m.estado || '') === 'cumplida';
+        bits.push('<span class="inicio-mp-dot' + (ok ? ' is-ok' : '') + '" aria-hidden="true">' + (ok ? '\u2713' : '') + '</span>');
+      });
+      el.innerHTML = bits.join('');
+    });
+  }
+  function updateMpDuoParejas(parejas) {
+    var arr = parejas || [];
+    var crisis = arr.filter(function (r) { return esCrisisPareja(r); }).length;
+    inicioAll('[data-parejas-tit-corta]').forEach(function (el) {
+      el.textContent = arr.length ? ('PAREJAS \u00b7 ' + arr.length) : 'PAREJAS';
+    });
+    inicioAll('[data-parejas-resumen-corta]').forEach(function (el) {
+      if (!arr.length) el.textContent = 'Sin parejas a\u00fan';
+      else if (crisis > 0) el.textContent = crisis + ' en crisis';
+      else el.textContent = arr.length + ' pareja' + (arr.length === 1 ? '' : 's');
+    });
+    inicioAll('[data-parejas-preview-faces]').forEach(function (el) {
+      if (!arr.length) { el.innerHTML = ''; el.removeAttribute('hidden'); return; }
+      var pick = arr[0];
+      var ids = idsPareja(pick) || [];
+      if (ids.length < 2) { el.innerHTML = ''; return; }
+      el.innerHTML = htmlMpParFace(ids[0]) + htmlMpParFace(ids[1]);
+      el.removeAttribute('hidden');
+    });
+  }
   function renderParejasStripIn(scopeSel, parejas) {
-    const root = document.querySelector(scopeSel);
-    if (!root) return;
-    const strip = root.querySelector('[data-parejas-strip]');
-    renderParejasStripEl(strip, parejas);
+    document.querySelectorAll(scopeSel).forEach(function (root) {
+      renderParejasStripEl(root.querySelector('[data-parejas-strip]'), parejas);
+    });
+    updateMpDuoParejas(parejas);
+    renderParejasModalList(parejas);
   }
 
   function renderInicioMobile(vm, estado) {
@@ -2374,6 +2860,7 @@
     renderVecinosPreviewIn('.inicio-mobile');
     renderParejasStripIn('.inicio-mobile', vm.parejas);
     if (cacheMisionesStripItems) renderMisionesStripIn('.inicio-mobile.inicio-mobile-feed', cacheMisionesStripItems);
+    renderPlanesUnifMovil(estado);
     renderProximosPlanesMovil(estado);
     renderEncursosMovil(estado);
   }
@@ -2423,7 +2910,7 @@
       const ico = slot.querySelector('[data-proximo-evento-ico]');
       const enMarcha = String(ev.estado || '') === 'en_curso';
       if (card) card.classList.toggle('inicio-evento-card--marcha', enMarcha);
-      if (tagTxt) tagTxt.textContent = enMarcha ? '\u00a1Est\u00e1 pasando ahora!' : 'EVENTO PUEBLO';
+      if (tagTxt) tagTxt.textContent = enMarcha ? '\u00a1AHORA!' : 'EVENTO PUEBLO';
       var pie = card && card.querySelector('[data-proximo-evento-pie]');
       if (card && !pie) {
         pie = document.createElement('div');
@@ -2458,7 +2945,7 @@
         cta.type = 'button';
         cta.className = 'inicio-evento-cta';
         cta.setAttribute('data-proximo-evento-participar', '1');
-        cta.innerHTML = '<span class="inicio-evento-cta-txt">Elegir qui\u00e9n va</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
+        cta.innerHTML = '<span class="inicio-evento-cta-txt">PARTICIPAR \u203A</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
         card.appendChild(cta);
       }
       if (cta) {
@@ -2530,7 +3017,8 @@
   }
 
   function renderShellPanels(estado, buzon, diario) {
-    renderInicio(estado, buzon, diario);
+    bindPlanesUnifScroll();
+  renderInicio(estado, buzon, diario);
   }
 
   var cacheMapaZonas = null;
@@ -3066,12 +3554,37 @@
     return t;
   }
 
+  function updateMisionesPapelMeta(items) {
+    var hoy = items || [];
+    var pend = hoy.filter(function (m) {
+      var est = m.estado || 'pendiente';
+      return est === 'pendiente' || est === 'activa';
+    }).length;
+    inicioAll('.obj-misiones-papel').forEach(function (el) {
+      var meta = el.querySelector('.obj-misiones-papel-meta');
+      if (!meta) {
+        meta = document.createElement('span');
+        meta.className = 'obj-misiones-papel-meta';
+        var tit = el.querySelector('.obj-misiones-papel-tit');
+        if (tit && tit.parentNode) tit.parentNode.insertBefore(meta, tit.nextSibling);
+      }
+      if (pend > 0) {
+        meta.textContent = pend + ' pendiente' + (pend === 1 ? '' : 's');
+        meta.hidden = false;
+      } else {
+        meta.textContent = '';
+        meta.hidden = true;
+      }
+    });
+  }
+
   function actualizarMisionesCompletadas(items) {
     var hoy = items || [];
     var todas = hoy.length > 0 && hoy.every(function (m) { return (m.estado || '') === 'cumplida'; });
     inicioAll('.obj-misiones-papel').forEach(function (el) {
       el.classList.toggle('misiones-completadas', todas);
     });
+    updateMisionesPapelMeta(hoy);
   }
   function renderMisionesStripIn(scopeSel, items) {
     var root = document.querySelector(scopeSel);
@@ -3083,6 +3596,7 @@
     renderMisionesStripIn(".inicio-mobile.inicio-mobile-feed", cacheMisionesStripItems);
     renderMisionesStripIn(".inicio-desktop", cacheMisionesStripItems);
     actualizarMisionesCompletadas(items);
+    updateMpDuoMisiones(items);
   }
   function renderMisionesStripEl(strip, items) {
     if (!strip) return;
@@ -3383,6 +3897,7 @@
     if (fill) fill.style.setProperty('--fill', pct + '%');
     const pctN = $('[data-vida-pct]');
     if (pctN) pctN.textContent = Math.round(pct) + '%';
+    inicioAll('[data-vida-num]').forEach(function (el) { el.textContent = String(Math.round(pct)); });
     corazonVidaSvgs().forEach(function (corazonSvg) {
       corazonSvg.classList.toggle('corazon-vida--critico', critico);
       if (vida && vida.latido_anim) {
@@ -3877,6 +4392,8 @@
     vecTabActiva = tab === 'relaciones' ? 'relaciones' : 'vecinos';
     aplicarVecTabUI();
     if (vecTabActiva === 'relaciones') cargarVecRelaciones();
+    const root = $('.play-root');
+    syncBottomNav((root && root.getAttribute('data-capa')) || '');
   }
 
   async function cargarVecRelaciones() {
@@ -5006,6 +5523,7 @@ function hobbyIconKey(id, texto) {
         }
       });
       wireAccionesMensajito(art, m);
+      art.appendChild(crearMsgLeidoToggle(m));
       return art;
     }
 
@@ -5342,7 +5860,7 @@ function hobbyIconKey(id, texto) {
   function orgLugarImg(lugId) {
     var file = ORG_LUGAR_IMG[String(lugId || '')];
     if (!file) { var slug = String(lugId || '').replace(/^lug_/, ''); if (slug) file = slug + '.png'; }
-    return file ? ('assets/play-v3/edificios/' + file) : '';
+    return file ? ahtAssetUrl('assets/play-v3/edificios/' + file) : '';
   }
 
   function orgLugarThumbHtml(lugId) {
@@ -6176,6 +6694,7 @@ function hobbyIconKey(id, texto) {
     if (el) {
       el.textContent = txt;
       el.hidden = false;
+      try { el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) { /* noop */ }
     }
     toast(txt);
   }
@@ -6653,6 +7172,16 @@ function hobbyIconKey(id, texto) {
       }, { passive: true });
     });
   })();
+  (function bindProxplanesMovil() {
+    document.querySelectorAll('[data-proxplanes-track]').forEach(function (ppTrack) {
+      if (ppTrack._ahtPpMovScroll) return;
+      ppTrack._ahtPpMovScroll = true;
+      ppTrack.addEventListener('scroll', function () {
+        const b = ppTrack.closest('[data-proxplanes-block]');
+        if (b) renderProxplanesNavFor(b);
+      }, { passive: true });
+    });
+  })();
   (function bindPasarRatoDelegacion() {
     const root = document.querySelector('.inicio-stage') || document.querySelector('.game-shell') || document.body;
     if (!root || root._ahtPasarDelegBound) return;
@@ -6716,10 +7245,29 @@ function hobbyIconKey(id, texto) {
       cerrarUiCompleto();
       return;
     }
+    const tutAjustes = ev.target.closest('[data-ajustes-tut]');
+    if (tutAjustes && uiRootFrom(tutAjustes)) {
+      if (!tieneTutorialV3()) return;
+      setCapa('');
+      abrirTutIntro(true);
+      return;
+    }
+    const reiniciarAjustes = ev.target.closest('[data-ajustes-reiniciar]');
+    if (reiniciarAjustes && uiRootFrom(reiniciarAjustes)) {
+      nuevaPartidaLimpia();
+      return;
+    }
     const open = ev.target.closest('[data-open]');
     if (open && uiRootFrom(open)) {
       const name = open.getAttribute('data-open');
       cerrarMensajitosPop();
+      if (name === 'relaciones') {
+        setCapa('vecinos');
+        setVecTab('relaciones');
+        $('.play-root').removeAttribute('data-consulta');
+        syncScrollLock();
+        return;
+      }
       setCapa(name);
       $('.play-root').removeAttribute('data-consulta');
       syncScrollLock();
@@ -6779,6 +7327,58 @@ function hobbyIconKey(id, texto) {
         panelTemas.hidden = !abrirTemas;
         temasToggle.setAttribute('aria-expanded', String(abrirTemas));
         temasToggle.classList.toggle('is-open', abrirTemas);
+      }
+      return;
+    }
+    const planesUnifMore = ev.target.closest('[data-planes-unif-more]');
+    if (planesUnifMore) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const puBlock = planesUnifMore.closest('[data-planes-unif-block]');
+      if (puBlock) planesUnifScrollNext(puBlock);
+      return;
+    }
+    const encMovPrev = ev.target.closest('[data-enc-mov-prev]');
+    if (encMovPrev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const encBlock = encMovPrev.closest('[data-encursos-block]');
+      if (encBlock) {
+        const idx = typeof encBlock._encMovIndice === 'number' ? encBlock._encMovIndice : 0;
+        encMovIrA(encBlock, idx - 1);
+      }
+      return;
+    }
+    const encMovNext = ev.target.closest('[data-enc-mov-next]');
+    if (encMovNext) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const encBlock = encMovNext.closest('[data-encursos-block]');
+      if (encBlock) {
+        const idx = typeof encBlock._encMovIndice === 'number' ? encBlock._encMovIndice : 0;
+        encMovIrA(encBlock, idx + 1);
+      }
+      return;
+    }
+    const ppMovPrev = ev.target.closest('[data-pp-mov-prev]');
+    if (ppMovPrev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const ppBlock = ppMovPrev.closest('[data-proxplanes-block]');
+      if (ppBlock) {
+        const idx = typeof ppBlock._ppMovIndice === 'number' ? ppBlock._ppMovIndice : 0;
+        ppMovIrA(ppBlock, idx - 1);
+      }
+      return;
+    }
+    const ppMovNext = ev.target.closest('[data-pp-mov-next]');
+    if (ppMovNext) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const ppBlock = ppMovNext.closest('[data-proxplanes-block]');
+      if (ppBlock) {
+        const idx = typeof ppBlock._ppMovIndice === 'number' ? ppBlock._ppMovIndice : 0;
+        ppMovIrA(ppBlock, idx + 1);
       }
       return;
     }
@@ -7063,13 +7663,20 @@ var finOk = $('[data-tut-fin-ok]');
   });
   if (orgGo) orgGo.addEventListener('click', proponer);
 
-  const musicaToggle = $('[data-musica-toggle]');
   actualizarControlMusica();
-  if (musicaToggle) {
-    musicaToggle.addEventListener('click', function () {
-      cambiarMusica(!musicaActiva);
+  $$('[data-musica-toggle]').forEach(function (btn) {
+    if (btn.__ahtMusicaBound) return;
+    btn.__ahtMusicaBound = true;
+    btn.addEventListener('click', function () { cambiarMusica(!musicaActiva); });
+  });
+  $$('[data-musica-vol]').forEach(function (input) {
+    if (input.__ahtMusVolBound) return;
+    input.__ahtMusVolBound = true;
+    input.addEventListener('input', function () {
+      setMusicaVolumen(parseInt(input.value, 10) || 0);
     });
-  }
+  });
+  syncAjustesUI();
   iniciarMusicaFondo(true);
 
   window.addEventListener('popstate', function () {

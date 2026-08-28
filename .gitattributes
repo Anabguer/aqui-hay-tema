@@ -1,0 +1,5 @@
+# Preservar bytes exactos de producción (sin conversión CRLF/LF en Git)
+play.php -text
+assets/js/play-v3.js -text
+assets/css/design-system/modal-titles-aht.css -text
+assets/aht-cache-buster.txt -text

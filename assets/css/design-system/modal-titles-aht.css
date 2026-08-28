@@ -133,3 +133,51 @@
     font-size: 1.05rem !important;
   }
 }
+
+/* INICIO-CREAM-BG v63 — gana a shell-art + inicio-desktop en movil */
+@media (max-width: 768px) {
+  html,
+  body.play-v3,
+  body.play-v3:has(.game-shell),
+  body.play-v3:has(.inicio-stage),
+  body.play-v3:has(.inicio-mobile.inicio-mobile-feed.is-inicio-view-active),
+  body.play-v3 .game-shell,
+  body.play-v3 .game-shell > div,
+  body.play-v3 .game-shell .game-top,
+  body.play-v3 .inicio-stage,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-chrome-right,
+  .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner {
+    background-color: #fff8f061 !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav {
+    background-color: #fff8f061 !important;
+  }
+}
+
+/* INICIO-BG-WHITE-v72 — gana a v63 crema en movil */
+@media (max-width: 768px) {
+  html,
+  body.play-v3,
+  body.play-v3:has(.game-shell),
+  body.play-v3:has(.inicio-stage),
+  body.play-v3:has(.inicio-mobile.inicio-mobile-feed.is-inicio-view-active),
+  body.play-v3 .game-shell,
+  body.play-v3 .game-shell > div,
+  body.play-v3 .game-shell .game-top,
+  body.play-v3 .inicio-stage,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-chrome-right,
+  .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner {
+    background-color: #fff !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav {
+    background-color: #fff !important;
+  }
+}
