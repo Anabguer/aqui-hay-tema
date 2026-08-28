@@ -42,10 +42,20 @@ $p2['reloj']['dia_pueblo'] = 5;
 $p2['reloj']['hora_actual'] = 12;
 
 // Darle relaciones para F1
-$p2['relaciones'] = [
-    'per_p001' => [
-        'per_p002' => ['social' => 25, 'romance' => 0],
-        'per_p003' => ['social' => 30, 'romance' => 0],
+$p2['relaciones_sociales'] = [
+    [
+        'id' => 'soc_per_p001_per_p002',
+        'persona_a' => 'per_p001', 'persona_b' => 'per_p002',
+        'conocidos' => true,
+        'a_hacia_b' => ['valor' => 25],
+        'b_hacia_a' => ['valor' => 20],
+    ],
+    [
+        'id' => 'soc_per_p001_per_p003',
+        'persona_a' => 'per_p001', 'persona_b' => 'per_p003',
+        'conocidos' => true,
+        'a_hacia_b' => ['valor' => 30],
+        'b_hacia_a' => ['valor' => 28],
     ],
 ];
 $p2['residentes']['per_p002']['identidad_publica']['nombre'] = 'Carlos';

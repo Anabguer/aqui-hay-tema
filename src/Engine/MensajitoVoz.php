@@ -261,6 +261,7 @@ final class MensajitoVoz
             'Estoy entre {nombre_a} y {nombre_b}. ¿Tú qué harías?',
             'Dos personas me gustan: {nombre_a} y {nombre_b}. Soy un desastre.',
             '¿{nombre_a} o {nombre_b}? Llevo días dándole vueltas.',
+            'Contigo hablo, Celestine. {historial}, y no sé qué hacer.',
         ];
     }
 
@@ -298,6 +299,7 @@ final class MensajitoVoz
             'No se lo he dicho a nadie, pero {otro} me pone nervioso/a.',
             'Entre nosotros: {otro} me gusta. No sé qué hacer.',
             'Celestine, necesito desahogarme. {otro} me tiene loco/a.',
+            'Te voy a decir una cosa de {otro}. {historial}, y eso me tiene así.',
         ];
     }
 

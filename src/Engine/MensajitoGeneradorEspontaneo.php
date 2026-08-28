@@ -25,7 +25,7 @@ final class MensajitoGeneradorEspontaneo
         if (!MensajitosCadenciaEngine::hayPresupuesto($partida, $cal)) {
             return null;
         }
-        $familias = self::familiasCandidatas($partida, $residenteId, $cal);
+        $familias = self::familiasCandidatas($partida, $residenteId, $cal, $rng);
         if ($familias === []) {
             return null;
         }
@@ -52,12 +52,13 @@ final class MensajitoGeneradorEspontaneo
      */
     public static function recolectarCandidatos(array $partida, array $cal): array
     {
+        $rng = RngService::fromPartida($partida);
         $out = [];
         foreach (PeticionPuebloEngine::residentes($partida) as $rid) {
             if (MensajitosCadenciaEngine::enCooldownVecino($partida, $rid, $cal)) {
                 continue;
             }
-            foreach (self::familiasCandidatas($partida, $rid, $cal) as $fam) {
+            foreach (self::familiasCandidatas($partida, $rid, $cal, $rng) as $fam) {
                 $out[] = [
                     'residente_id' => $rid,
                     'familia' => (string) ($fam['familia'] ?? ''),
@@ -88,7 +89,7 @@ final class MensajitoGeneradorEspontaneo
     /**
      * @return list<array{familia: string, peso: int, datos: array<string, mixed>}>
      */
-    private static function familiasCandidatas(array $partida, string $residenteId, array $cal): array
+    private static function familiasCandidatas(array $partida, string $residenteId, array $cal, RngService $rng): array
     {
         $c = [];
         $catalog = new Catalog(dirname(__DIR__, 2));
@@ -96,19 +97,19 @@ final class MensajitoGeneradorEspontaneo
         if ($f4 !== null) {
             $c[] = $f4;
         }
-        $f1 = self::candidatoF1($partida, $residenteId, $cal);
+        $f1 = self::candidatoF1($partida, $residenteId, $cal, $rng);
         if ($f1 !== null) {
             $c[] = $f1;
         }
-        $f2 = self::candidatoF2($partida, $residenteId);
+        $f2 = self::candidatoF2($partida, $residenteId, $rng);
         if ($f2 !== null) {
             $c[] = $f2;
         }
-        $f6 = self::candidatoF6($partida, $residenteId);
+        $f6 = self::candidatoF6($partida, $residenteId, $rng);
         if ($f6 !== null) {
             $c[] = $f6;
         }
-        $f7 = self::candidatoF7($partida, $residenteId);
+        $f7 = self::candidatoF7($partida, $residenteId, $rng);
         if ($f7 !== null) {
             $c[] = $f7;
         }
@@ -120,20 +121,20 @@ final class MensajitoGeneradorEspontaneo
         if ($f11 !== null) {
             $c[] = $f11;
         }
-        $f15 = self::candidatoF15($partida, $residenteId, $cal);
+        $f15 = self::candidatoF15($partida, $residenteId, $cal, $rng);
         if ($f15 !== null) {
             $c[] = $f15;
         }
         return $c;
     }
 
-    private static function candidatoF1(array $partida, string $rid, array $cal): ?array
+    private static function candidatoF1(array $partida, string $rid, array $cal, RngService $rng): ?array
     {
         $rels = self::relacionesSignificativas($partida, $rid);
         if ($rels === []) { return null; }
         $prob = (float) CalibracionConfig::get($cal, 'mensajitos.f1_prob_base', 0.15);
-        if (mt_rand(1, 10000) > $prob * 10000) { return null; }
-        $rel = $rels[array_rand($rels)];
+        if ($rng->nextInt(1, 10000) > $prob * 10000) { return null; }
+        $rel = $rels[$rng->nextInt(0, count($rels) - 1)];
         $clave = 'f_opinion|' . ($rel['otro_id'] ?? '');
         if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_opinion', $clave)) {
             return null;
@@ -141,12 +142,11 @@ final class MensajitoGeneradorEspontaneo
         return ['familia' => 'f_opinion', 'peso' => 2, 'datos' => ['otro_id' => $rel['otro_id'], 'otro_nombre' => $rel['otro_nombre'], 'tipo_relacion' => $rel['tipo'], 'clave' => $clave]];
     }
 
-    private static function candidatoF2(array $partida, string $rid): ?array
+    private static function candidatoF2(array $partida, string $rid, RngService $rng): ?array
     {
         $rom = self::senalesRomanticas($partida, $rid);
         if (count($rom) < 2) { return null; }
-        shuffle($rom);
-        $pair = array_slice($rom, 0, 2);
+        $pair = $rng->pickUnique($rom, 2);
         $clave = 'f_dilema|' . ($pair[0]['otro_id'] ?? '') . '|' . ($pair[1]['otro_id'] ?? '');
         if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_dilema', $clave)) {
             return null;
@@ -154,7 +154,7 @@ final class MensajitoGeneradorEspontaneo
         return ['familia' => 'f_dilema', 'peso' => 2, 'datos' => ['opcion_a_id' => $pair[0]['otro_id'], 'opcion_a_nombre' => $pair[0]['otro_nombre'], 'opcion_b_id' => $pair[1]['otro_id'], 'opcion_b_nombre' => $pair[1]['otro_nombre'], 'clave' => $clave]];
     }
 
-    private static function candidatoF6(array $partida, string $rid): ?array
+    private static function candidatoF6(array $partida, string $rid, RngService $rng): ?array
     {
         $crush = self::crushLatente($partida, $rid);
         if ($crush !== null) {
@@ -186,7 +186,7 @@ final class MensajitoGeneradorEspontaneo
         if ($ems === []) {
             return null;
         }
-        $em = $ems[array_rand($ems)];
+        $em = $ems[$rng->nextInt(0, count($ems) - 1)];
         $clave = 'confidencia|' . ($em['tipo'] ?? 'general') . '|' . $rid;
         $rec = MensajitoPromesaEngine::datosRecuerdoSiAplica($partida, $rid, [
             'emocion' => $em['tipo'],
@@ -229,11 +229,11 @@ final class MensajitoGeneradorEspontaneo
         return null;
     }
 
-    private static function candidatoF7(array $partida, string $rid): ?array
+    private static function candidatoF7(array $partida, string $rid, RngService $rng): ?array
     {
         $ap = self::vecinosApagados($partida, $rid);
         if ($ap === []) { return null; }
-        $t = $ap[array_rand($ap)];
+        $t = $ap[$rng->nextInt(0, count($ap) - 1)];
         $clave = 'f_alerta|' . ($t['residente_id'] ?? '');
         if (MensajitoConsejoEngine::yaExisteHiloReciente($partida, $rid, 'f_alerta_vecinal', $clave)) {
             return null;
@@ -241,13 +241,13 @@ final class MensajitoGeneradorEspontaneo
         return ['familia' => 'f_alerta_vecinal', 'peso' => 2, 'datos' => ['observado_id' => $t['residente_id'], 'observado_nombre' => $t['nombre'], 'clave' => $clave]];
     }
 
-    private static function candidatoF15(array $partida, string $rid, array $cal): ?array
+    private static function candidatoF15(array $partida, string $rid, array $cal, RngService $rng): ?array
     {
         $cen = self::cercaniaNarrativa($partida, $rid);
         $umbral = (float) CalibracionConfig::get($cal, 'mensajitos.f15_cercania_umbral', 0.6);
         if ($cen < $umbral) { return null; }
         $prob = (float) CalibracionConfig::get($cal, 'mensajitos.f15_prob_base', 0.08);
-        if (mt_rand(1, 10000) > $prob * 10000) { return null; }
+        if ($rng->nextInt(1, 10000) > $prob * 10000) { return null; }
         return ['familia' => 'f_curiosidad_celestine', 'peso' => 3, 'datos' => []];
     }
 
@@ -346,13 +346,17 @@ final class MensajitoGeneradorEspontaneo
                 $historial = $otro !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $otro) : '';
                 return MensajitoVoz::linea($partida, 'f_opinion', ['otro' => $datos['otro_nombre'] ?? '', 'texto' => $datos['tipo_relacion'] ?? 'amigo', 'historial' => $historial], 'f_opinion|' . $rid . '|' . ($datos['otro_id'] ?? ''), $rid);
             case 'f_dilema':
-                return MensajitoVoz::linea($partida, 'f_dilema', ['nombre_a' => $datos['opcion_a_nombre'] ?? '', 'nombre_b' => $datos['opcion_b_nombre'] ?? '', 'texto' => 'dos personas'], 'f_dilema|' . $rid, $rid);
+                $histA = ($datos['opcion_a_id'] ?? '') !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $datos['opcion_a_id']) : '';
+                $histB = ($datos['opcion_b_id'] ?? '') !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $datos['opcion_b_id']) : '';
+                return MensajitoVoz::linea($partida, 'f_dilema', ['nombre_a' => $datos['opcion_a_nombre'] ?? '', 'nombre_b' => $datos['opcion_b_nombre'] ?? '', 'texto' => 'dos personas', 'historial' => $histA !== '' ? $histA : $histB], 'f_dilema|' . $rid, $rid);
             case 'f_confidencia':
                 if (($datos['subtipo'] ?? '') === 'crush') {
+                    $otro = $datos['otro_id'] ?? '';
+                    $historial = $otro !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $otro) : '';
                     return MensajitoVoz::linea(
                         $partida,
                         'f_confidencia_crush',
-                        ['otro' => $datos['otro_nombre'] ?? ''],
+                        ['otro' => $datos['otro_nombre'] ?? '', 'historial' => $historial],
                         'f_confidencia_crush|' . $rid . '|' . ($datos['otro_id'] ?? ''),
                         $rid
                     );

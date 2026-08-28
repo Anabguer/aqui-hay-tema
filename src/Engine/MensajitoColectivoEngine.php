@@ -25,10 +25,10 @@ final class MensajitoColectivoEngine
             return null;
         }
         $prob = (float) CalibracionConfig::get($cal, 'mensajitos.f4_prob_base', 0.06);
-        if (mt_rand(1, 10000) > $prob * 10000) {
+        $rng = RngService::fromPartida($partida);
+        if ($rng->nextInt(1, 10000) > $prob * 10000) {
             return null;
         }
-        $rng = RngService::fromPartida($partida);
         $def = EventosPuebloEngine::elegirItemCatalogo($items, $rng);
         $rng->persistToPartida($partida);
         if ($def === null) {
