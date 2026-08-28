@@ -40,6 +40,9 @@ final class GameError
     public const PARTICIPANTE_YA_APUNTADO = 'PARTICIPANTE_YA_APUNTADO';
     public const EVENTO_PUEBLO_NO_ENCONTRADO = 'EVENTO_PUEBLO_NO_ENCONTRADO';
     public const EVENTO_PUEBLO_CERRADO = 'EVENTO_PUEBLO_CERRADO';
+    public const REGALO_OBJETO_DESCONOCIDO = 'REGALO_OBJETO_DESCONOCIDO';
+    public const REGALO_SIN_UNIDADES = 'REGALO_SIN_UNIDADES';
+    public const REGALO_COOLDOWN = 'REGALO_COOLDOWN';
 
     /** Mensajes UI placeholder (no narrativa final). */
     public static function mensajeUi(string $codigo): string
@@ -113,6 +116,12 @@ final class GameError
                 return 'No se ha encontrado ese evento del pueblo.';
             case self::EVENTO_PUEBLO_CERRADO:
                 return 'Ese evento del pueblo ya no admite apuntados.';
+            case self::REGALO_OBJETO_DESCONOCIDO:
+                return 'Ese objeto no existe en tu inventario.';
+            case self::REGALO_SIN_UNIDADES:
+                return 'Ya no te queda ninguna unidad de ese objeto.';
+            case self::REGALO_COOLDOWN:
+                return 'Mejor no atosigarle con otro detalle tan pronto.';
             default:
                 return 'Ha ocurrido un error.';
         }

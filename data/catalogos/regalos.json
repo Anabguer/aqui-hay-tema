@@ -1,0 +1,37 @@
+{
+    "meta": {
+        "catalogo": "regalos",
+        "descripcion": "Regalos jugables de Celestine (Fase 1). hobby_ids SOLO con IDs canonicos de aficiones.json. Sin rareza, precio ni economia. Resolucion de reaccion: rechazo > gusto > hobby propio > neutro.",
+        "estado": "regalos_f1",
+        "asset_base": "assets/play-v3/",
+        "_duplicado_asset": "mermelada_casera.png y tarro_mermelada.png en Diseno_Ayuda/regalos son byte-identicos (MD5 B5FA11FF9805420ADDBC57173A63DF70). Canonico jugable: tarro_mermelada. mermelada_casera NO es regalo jugable en Fase 1; asset original conservado sin borrar para limpieza futura.",
+        "campos_item": ["id", "nombre", "asset", "hobby_ids"]
+    },
+    "items": [
+        { "id": "bolsa_cafe", "nombre": "Bolsa de café", "asset": "regalos/bolsa_cafe.png", "hobby_ids": ["cafe_social"] },
+        { "id": "bufanda_tejida", "nombre": "Bufanda tejida", "asset": "regalos/bufanda_tejida.png", "hobby_ids": ["costura", "manualidades"] },
+        { "id": "caja_dulces", "nombre": "Caja de dulces", "asset": "regalos/caja_dulces.png", "hobby_ids": ["cocina"] },
+        { "id": "cantimplora", "nombre": "Cantimplora", "asset": "regalos/cantimplora.png", "hobby_ids": ["senderismo", "deporte", "correr"] },
+        { "id": "carton_bingo", "nombre": "Cartón de bingo", "asset": "regalos/carton_bingo.png", "hobby_ids": ["bingo"] },
+        { "id": "cartucho_retro", "nombre": "Cartucho retro", "asset": "regalos/cartucho_retro.png", "hobby_ids": ["videojuegos"] },
+        { "id": "cojin_bordado", "nombre": "Cojín bordado", "asset": "regalos/cojin_bordado.png", "hobby_ids": ["costura", "manualidades"] },
+        { "id": "cuaderno", "nombre": "Cuaderno", "asset": "regalos/cuaderno.png", "hobby_ids": ["escribir", "leer"] },
+        { "id": "jarron", "nombre": "Jarrón pintado", "asset": "regalos/jarron.png", "hobby_ids": ["manualidades"] },
+        { "id": "kit_costura", "nombre": "Kit de costura", "asset": "regalos/kit_costura.png", "hobby_ids": ["costura"] },
+        { "id": "kit_creativo", "nombre": "Kit creativo", "asset": "regalos/kit_creativo.png", "hobby_ids": ["manualidades"] },
+        { "id": "libro", "nombre": "Libro", "asset": "regalos/libro.png", "hobby_ids": ["leer", "escribir"] },
+        { "id": "llave_vieja", "nombre": "Llave vieja", "asset": "regalos/llave_vieja.png", "hobby_ids": [] },
+        { "id": "maceta_pintada", "nombre": "Maceta pintada", "asset": "regalos/maceta_pintada.png", "hobby_ids": ["plantas", "manualidades"] },
+        { "id": "marcapaginas", "nombre": "Marcapáginas", "asset": "regalos/marcapaginas.png", "hobby_ids": ["leer"] },
+        { "id": "patito_goma", "nombre": "Patito de goma", "asset": "regalos/patito_goma.png", "hobby_ids": ["videojuegos"] },
+        { "id": "pelota", "nombre": "Pelota", "asset": "regalos/pelota.png", "hobby_ids": ["deporte", "correr", "pasear"] },
+        { "id": "peluche", "nombre": "Peluche", "asset": "regalos/peluche.png", "hobby_ids": [] },
+        { "id": "planta", "nombre": "Planta", "asset": "regalos/planta.png", "hobby_ids": ["plantas"] },
+        { "id": "postal_pueblo", "nombre": "Postal del pueblo", "asset": "regalos/postal_pueblo.png", "hobby_ids": [] },
+        { "id": "puzzle", "nombre": "Puzzle", "asset": "regalos/puzzle.png", "hobby_ids": ["videojuegos"] },
+        { "id": "tarro_mermelada", "nombre": "Tarro de mermelada", "asset": "regalos/tarro_mermelada.png", "hobby_ids": ["cocina"] },
+        { "id": "taza", "nombre": "Taza", "asset": "regalos/taza.png", "hobby_ids": ["cafe_social", "cocina"] },
+        { "id": "vela_casera", "nombre": "Vela casera", "asset": "regalos/vela_casera.png", "hobby_ids": ["manualidades"] },
+        { "id": "vinilo", "nombre": "Vinilo", "asset": "regalos/vinilo.png", "hobby_ids": ["musica"] }
+    ]
+}

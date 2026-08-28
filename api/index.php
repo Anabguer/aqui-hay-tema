@@ -17,6 +17,7 @@ use AquiHayTema\Api\Handlers\MapaHandler;
 use AquiHayTema\Api\Handlers\MarchaHandler;
 use AquiHayTema\Api\Handlers\PartidaHandler;
 use AquiHayTema\Api\Handlers\PeticionesHandler;
+use AquiHayTema\Api\Handlers\RegalosHandler;
 use AquiHayTema\Api\Handlers\RelacionesHandler;
 use AquiHayTema\Api\Handlers\RelojHandler;
 use AquiHayTema\Api\Handlers\ResidentesHandler;
@@ -419,6 +420,19 @@ $routes = [
     'dev.hobby.emocion' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return DevHandler::hobbyEmocionDiagnostico($ctx, $body, $p);
+    },
+    'inventario.listar' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return RegalosHandler::inventario($ctx, $body, $p);
+    },
+    'regalo.entregar' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return RegalosHandler::entregar($ctx, $body, $p);
+    },
+    'dev.regalo.otorgar' => static function () use ($ctx, $body) {
+        \AquiHayTema\Api\requireDev();
+        $p = requirePartida($ctx, $body);
+        return RegalosHandler::otorgarDev($ctx, $body, $p);
     },
 ];
 
