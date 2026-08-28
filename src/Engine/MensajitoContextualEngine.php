@@ -200,14 +200,25 @@ final class MensajitoContextualEngine
     private static function elegirRemitente(array $partida, string $cumpleaneroId): ?string
     {
         $candidatos = [];
-        foreach ($partida['relaciones'][$cumpleaneroId] ?? [] as $otro => $val) {
-            if (!is_string($otro) || $otro === $cumpleaneroId || !is_array($val)) {
+        foreach ($partida['relaciones_sociales'] ?? [] as $rel) {
+            if (!is_array($rel)) {
                 continue;
             }
-            if (!self::esResidenteActivo($partida, $otro)) {
+            $a = (string) ($rel['persona_a'] ?? '');
+            $b = (string) ($rel['persona_b'] ?? '');
+            $otro = null;
+            if ($a === $cumpleaneroId) {
+                $otro = $b;
+            } elseif ($b === $cumpleaneroId) {
+                $otro = $a;
+            } else {
                 continue;
             }
-            $social = (float) ($val['social'] ?? 0);
+            if ($otro === $cumpleaneroId || !self::esResidenteActivo($partida, $otro)) {
+                continue;
+            }
+            $dir = RelacionEngine::socialHacia($partida, $cumpleaneroId, $otro);
+            $social = (float) (($dir['valor']) ?? 0);
             if ($social >= 20) {
                 $candidatos[] = $otro;
             }

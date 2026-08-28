@@ -162,12 +162,7 @@ final class MensajitoGeneradorEspontaneo
             if ($otro === '') {
                 continue;
             }
-            $rom = 0.0;
-            if (isset($partida['relaciones'][$rid][$otro]['romance'])) {
-                $rom = (float) $partida['relaciones'][$rid][$otro]['romance'];
-            } elseif (isset($partida['relaciones'][$otro][$rid]['romance'])) {
-                $rom = (float) $partida['relaciones'][$otro][$rid]['romance'];
-            }
+            $rom = (float) (RelacionEngine::romanceHacia($partida, $rid, $otro) ?? 0);
             if ($rom >= 12 && $rom <= 28) {
                 return $r;
             }
@@ -313,21 +308,41 @@ final class MensajitoGeneradorEspontaneo
     {
         $out = [];
         $seen = [];
-        foreach ($partida['relaciones'] ?? [] as $rA => $rels) {
-            if (!is_array($rels)) { continue; }
-            foreach ($rels as $rB => $val) {
-                if (!is_array($val) || !is_string($rB)) { continue; }
-                if ($rA !== $rid && $rB !== $rid) { continue; }
-                $otro = $rA === $rid ? $rB : $rA;
-                if (isset($seen[$otro])) { continue; }
-                $social = (float) ($val['social'] ?? 0);
-                $romance = (float) ($val['romance'] ?? 0);
-                $tipo = $romance > 10 ? 'romance' : ($social > 30 ? 'muy_cercano' : ($social > 20 ? 'cercano' : 'amigo'));
-                $nombre = IdentidadPublica::nombre($partida, $otro);
-                if ($social > 20 || $romance > 10) {
-                    $out[] = ['otro_id' => $otro, 'otro_nombre' => $nombre, 'tipo' => $tipo];
-                    $seen[$otro] = true;
-                }
+        foreach ($partida['relaciones_sociales'] ?? [] as $rel) {
+            if (!is_array($rel)) { continue; }
+            $a = (string) ($rel['persona_a'] ?? '');
+            $b = (string) ($rel['persona_b'] ?? '');
+            if ($a !== $rid && $b !== $rid) { continue; }
+            $otro = $a === $rid ? $b : $a;
+            if (isset($seen[$otro])) { continue; }
+            $dir = RelacionEngine::socialHacia($partida, $rid, $otro);
+            $social = (float) (($dir['valor']) ?? 0);
+            $romDir = RelacionEngine::romanceHacia($partida, $rid, $otro);
+            $romance = (float) ($romDir ?? 0);
+            $tipo = $romance > 10 ? 'romance' : ($social > 30 ? 'muy_cercano' : ($social > 20 ? 'cercano' : 'amigo'));
+            $nombre = IdentidadPublica::nombre($partida, $otro);
+            if ($social > 20 || $romance > 10) {
+                $out[] = ['otro_id' => $otro, 'otro_nombre' => $nombre, 'tipo' => $tipo];
+                $seen[$otro] = true;
+            }
+        }
+        foreach ($partida['relaciones_romanticas'] ?? [] as $rel) {
+            if (!is_array($rel)) { continue; }
+            $a = (string) ($rel['persona_a'] ?? '');
+            $b = (string) ($rel['persona_b'] ?? '');
+            if ($a !== $rid && $b !== $rid) { continue; }
+            $otro = $a === $rid ? $b : $a;
+            if (isset($seen[$otro])) { continue; }
+            $romDir = RelacionEngine::romanceHacia($partida, $rid, $otro);
+            $romance = (float) ($romDir ?? 0);
+            $social = 0.0;
+            $dir = RelacionEngine::socialHacia($partida, $rid, $otro);
+            $social = (float) (($dir['valor']) ?? 0);
+            $tipo = $romance > 10 ? 'romance' : ($social > 30 ? 'muy_cercano' : ($social > 20 ? 'cercano' : 'amigo'));
+            $nombre = IdentidadPublica::nombre($partida, $otro);
+            if ($social > 20 || $romance > 10) {
+                $out[] = ['otro_id' => $otro, 'otro_nombre' => $nombre, 'tipo' => $tipo];
+                $seen[$otro] = true;
             }
         }
         return $out;
@@ -337,17 +352,18 @@ final class MensajitoGeneradorEspontaneo
     {
         $out = [];
         $seen = [];
-        foreach ($partida['relaciones'] ?? [] as $rA => $rels) {
-            if (!is_array($rels)) { continue; }
-            foreach ($rels as $rB => $val) {
-                if (!is_array($val) || !is_string($rB)) { continue; }
-                if ($rA !== $rid && $rB !== $rid) { continue; }
-                $otro = $rA === $rid ? $rB : $rA;
-                if (isset($seen[$otro])) { continue; }
-                if ((float) ($val['romance'] ?? 0) > 15) {
-                    $out[] = ['otro_id' => $otro, 'otro_nombre' => IdentidadPublica::nombre($partida, $otro)];
-                    $seen[$otro] = true;
-                }
+        foreach ($partida['relaciones_romanticas'] ?? [] as $rel) {
+            if (!is_array($rel)) { continue; }
+            $a = (string) ($rel['persona_a'] ?? '');
+            $b = (string) ($rel['persona_b'] ?? '');
+            if ($a !== $rid && $b !== $rid) { continue; }
+            $otro = $a === $rid ? $b : $a;
+            if (isset($seen[$otro])) { continue; }
+            $romDir = RelacionEngine::romanceHacia($partida, $rid, $otro);
+            $romance = (float) ($romDir ?? 0);
+            if ($romance > 15) {
+                $out[] = ['otro_id' => $otro, 'otro_nombre' => IdentidadPublica::nombre($partida, $otro)];
+                $seen[$otro] = true;
             }
         }
         return $out;
@@ -398,9 +414,7 @@ final class MensajitoGeneradorEspontaneo
 
     private static function seConocen(array $partida, string $a, string $b): bool
     {
-        $rels = $partida['relaciones'][$a] ?? [];
-        if (!is_array($rels)) { return false; }
-        return isset($rels[$b]) && is_array($rels[$b]);
+        return RelacionEngine::seConocen($partida, $a, $b);
     }
 
     private static function cercaniaNarrativa(array $partida, string $rid): float

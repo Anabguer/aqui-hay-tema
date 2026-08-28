@@ -106,6 +106,11 @@ final class SimuladorPuebloVivo
             ],
             'lab_vida_activa' => true,
             'lab_deltas_reales' => true,
+            'features' => [
+                'npc_autonomy_enabled' => true,
+                'encuentros_enabled' => true,
+                'buzon_enabled' => true,
+            ],
             'npc_autonomo' => ['planes_pendientes' => [], 'historial_eventos' => []],
         ];
         for ($i = 0; $i < $n; $i++) {

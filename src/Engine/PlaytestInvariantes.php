@@ -143,23 +143,24 @@ final class PlaytestInvariantes
         }
 
         // Relaciones fuera de rango
-        foreach ($partida['relaciones'] ?? [] as $rel) {
-            if (!is_array($rel)) {
-                continue;
-            }
-            foreach (['social', 'romance'] as $campo) {
-                if (!isset($rel[$campo])) {
+        $rangosRel = [
+            'relaciones_sociales' => ['a_hacia_b.valor', 'b_hacia_a.valor', 'intensidad'],
+            'relaciones_romanticas' => ['romance_a_hacia_b', 'romance_b_hacia_a', 'atraccion_a_hacia_b', 'atraccion_b_hacia_a'],
+        ];
+        foreach ($rangosRel as $bag => $campos) {
+            foreach ($partida[$bag] ?? [] as $rel) {
+                if (!is_array($rel)) {
                     continue;
                 }
-                $v = $rel[$campo];
-                if (is_array($v)) {
-                    foreach ($v as $vv) {
-                        if (is_numeric($vv) && ((float) $vv < -100 || (float) $vv > 100)) {
-                            $fallos[] = 'relacion_fuera_rango:' . $campo;
-                        }
+                foreach ($campos as $campo) {
+                    $parts = explode('.', $campo);
+                    $v = $rel;
+                    foreach ($parts as $p) {
+                        $v = $v[$p] ?? null;
                     }
-                } elseif (is_numeric($v) && ((float) $v < -100 || (float) $v > 100)) {
-                    $fallos[] = 'relacion_fuera_rango:' . $campo;
+                    if (is_numeric($v) && ((float) $v < -100 || (float) $v > 100)) {
+                        $fallos[] = 'relacion_fuera_rango:' . $bag . ':' . $campo;
+                    }
                 }
             }
         }
