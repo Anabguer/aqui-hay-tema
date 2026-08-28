@@ -202,6 +202,18 @@ final class MentesTemas
         return $emoji . ' ' . $frase;
     }
 
+    /** Tono UI del momento MENTES (título CSS), derivado solo de afinidad del tema. */
+    public static function tonoMomentoDeAfinidad(string $afinidad): string
+    {
+        if ($afinidad === 'afin') {
+            return 'bien';
+        }
+        if ($afinidad === 'aversion') {
+            return 'mal';
+        }
+        return 'neutral';
+    }
+
     public static function copyResultado(
         array $partida,
         string $rompeHielo,

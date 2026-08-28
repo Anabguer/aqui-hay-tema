@@ -763,13 +763,7 @@ final class EncuentroIntervencion
             } catch (\Throwable $ignored) {
             }
         }
-        if ($afinidad === 'afin') {
-            $tono = 'neutral';
-        } elseif ($afinidad === 'aversion') {
-            $tono = 'mal';
-        } else {
-            $tono = 'neutral';
-        }
+        $tono = MentesTemas::tonoMomentoDeAfinidad($afinidad);
         $texto = MentesTemas::copyResultado(
             $partida,
             $objetivo,

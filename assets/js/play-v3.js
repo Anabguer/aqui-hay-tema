@@ -1,13 +1,17 @@
 (function () {
   'use strict';
 
+  function ctaEncuentroMovVisible(enc, iv) {
+    if (!enc || enc.estado !== 'en_curso') return false;
+    if (enc.intencion !== 'celeste_organizado') return false;
+    if (enc.tipo === 'individual') return false;
+    var ids = enc.participantes || [];
+    if (ids.length !== 2) return false;
+    return !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
+  }
   function ctaTxtEncuentroMov(enc, iv) {
-    var org = enc && enc.intencion === 'celeste_organizado';
-    var curso = enc && enc.estado === 'en_curso';
-    var mentes = iv && iv.disponible && iv.acciones && iv.acciones.length;
-    if (org && curso && mentes) return '\u00bfQu\u00e9 se cuece ah\u00ed?';
-    if (org && curso) return 'Ver encuentro';
-    return 'Ver qu\u00e9 pasa';
+    if (!ctaEncuentroMovVisible(enc, iv)) return '';
+    return '\u00bfQu\u00e9 se cuece ah\u00ed?';
   }
   function resumenEncursoSinMentes(enc, iv) {
     if (iv && iv.usada) return '';
@@ -1893,45 +1897,53 @@
       esc(nombres) + ' \u00b7 ' + esc(lugar) + '</p></div>';
   }
   function htmlEncursoCardDesktop(enc, estado) {
-    const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
-    const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
+    const ctaVisible = ctaEncuentroMovVisible(enc, iv);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
     const ctaTxt = ctaTxtEncuentroMov(enc, iv);
-    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
       '<div class="enc-mov-body">' +
       '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
       '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
-      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>' +
-      '</div>' +
-      '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-      '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
-      '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
-      '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>';
+    if (!ctaVisible && panelHtml) {
+      html += panelHtml;
+    }
+    html += '</div>';
+    if (ctaVisible) {
+      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
+        '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    }
     return html + '</article>';
   }
   function htmlEncursoCardMovilV14(enc, estado) {
-    const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
-    const puedeIntervenir = !!(iv && iv.disponible && iv.acciones && iv.acciones.length);
+    const ctaVisible = ctaEncuentroMovVisible(enc, iv);
     const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
       (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
     const ctaTxt = ctaTxtEncuentroMov(enc, iv);
-    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : htmlEncursoVistaPanel(enc);
     let html = '<article class="enc-mov-card enc-mov-card--ref" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<p class="enc-mov-card-tit">PLAN EN CURSO</p>' +
       '<div class="enc-mov-body">' +
       '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
       '<p class="enc-mov-meta">' + esc(formatEncursoMetaLine(enc, estado)) + '</p>' +
-      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>' +
-      '</div>' +
-      '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
-      '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
-      '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
-      '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+      '<p class="enc-mov-resumen">' + esc(resumenEncursoMovil(enc, estado)) + '</p>';
+    if (!ctaVisible && panelHtml) {
+      html += panelHtml;
+    }
+    html += '</div>';
+    if (ctaVisible) {
+      html += '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-ico" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="2"/></svg></span>' +
+        '<span class="enc-mov-cta-txt">' + esc(ctaTxt) + '</span></button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    }
     return html + '</article>';
   }
   function htmlEncursoCardMovil(enc, estado) {
