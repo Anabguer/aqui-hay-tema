@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace AquiHayTema\Engine;
 
-/** Slots horarios objetivamente compatibles para varios participantes. */
+/** Slots horarios objetibles compatibles para varios participantes. */
 final class DisponibilidadEngine
 {
+    /** Copy jugador cuando no hay ninguna franja compatible en el horizonte buscado. */
+    public const COPY_SIN_HUECOS_PAREJA = 'Estos dos no encuentran ni un huequito para verse 😅';
+
     public static function slotsCompatibles(
         array $partida,
         array $participantes,
@@ -33,7 +36,14 @@ final class DisponibilidadEngine
         }
 
         $desdeDia ??= (int) $partida['reloj']['dia_pueblo'];
-        $desdeHora ??= (int) $partida['reloj']['hora_actual'];
+        $nowDia = (int) $partida['reloj']['dia_pueblo'];
+        if ($desdeHora === null) {
+            $desdeHora = $desdeDia > $nowDia
+                ? 0
+                : (int) $partida['reloj']['hora_actual'];
+        } else {
+            $desdeHora = (int) $desdeHora;
+        }
         $minuto = (int) ($partida['reloj']['minuto_actual'] ?? 0);
         $durHoras = 1;
         if ($lugarId !== null && $lugarId !== '') {
@@ -80,7 +90,15 @@ final class DisponibilidadEngine
 
         $out = ['ok' => true, 'slots' => $slots, 'total' => count($slots), 'por_dia' => self::agruparPorDia($slots)];
         if ($slots === []) {
-            $out['diagnostico'] = self::diagnosticarBloqueos($partida, $participantes, $desdeDia, $desdeHora, $maxDias);
+            $out['diagnostico'] = self::diagnosticarBloqueos(
+                $partida,
+                $participantes,
+                $desdeDia,
+                $desdeHora,
+                $maxDias,
+                $lugarId,
+                $durHoras
+            );
         } else {
             $out = array_merge($out, self::hintsPrimeraCompatible(
                 $partida,
@@ -104,11 +122,16 @@ final class DisponibilidadEngine
         array $participantes,
         int $desdeDia,
         int $desdeHora,
-        int $maxDias = 7
+        int $maxDias = 7,
+        ?string $lugarId = null,
+        int $duracionHoras = 1
     ): array {
         $porResidente = [];
         $muestras = [];
+        $lugarCerrado = 0;
+        $lugarDuracion = 0;
         $now = $desdeDia * 24 + $desdeHora;
+        $duracionHoras = max(1, $duracionHoras);
 
         for ($d = 0; $d < $maxDias; $d++) {
             $dia = $desdeDia + $d;
@@ -129,10 +152,17 @@ final class DisponibilidadEngine
                 if ($bloqueos !== [] && count($muestras) < 6) {
                     $muestras[] = ['dia' => $dia, 'hora' => $h, 'bloqueos' => $bloqueos];
                 }
-                if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $h)) {
+                if (EncuentroEngine::hayConflictoHorario($partida, $participantes, $dia, $h, $duracionHoras)) {
                     foreach ($participantes as $rid) {
                         $porResidente[$rid]['encuentro_programado'] =
                             ($porResidente[$rid]['encuentro_programado'] ?? 0) + 1;
+                    }
+                }
+                if ($bloqueos === [] && $lugarId !== null && $lugarId !== '') {
+                    if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                        $lugarCerrado++;
+                    } elseif (!self::franjaValida($partida, $participantes, $dia, $h, $lugarId, $duracionHoras)) {
+                        $lugarDuracion++;
                     }
                 }
             }
@@ -152,17 +182,25 @@ final class DisponibilidadEngine
                 $partesUi[] = "{$nombre}: " . $etiqueta;
             }
         }
+        if ($lugarCerrado > 0) {
+            $partes[] = 'lugar: cerrado en franjas revisadas';
+            $partesUi[] = 'lugar: cerrado en franjas revisadas';
+        }
+        if ($lugarDuracion > 0) {
+            $partes[] = 'lugar: sin tiempo suficiente antes del cierre';
+            $partesUi[] = 'lugar: sin tiempo suficiente antes del cierre';
+        }
 
         return [
             'resumen' => $partes !== []
                 ? 'Sin horas compatibles en los próximos ' . $maxDias . ' días. Motivos principales: ' . implode('; ', $partes)
                 : 'Sin horas compatibles en el rango buscado.',
-            'resumen_ui' => $partesUi !== []
-                ? 'Sin horas compatibles en los próximos ' . $maxDias . ' días. Motivos principales: ' . implode('; ', $partesUi)
-                : 'Sin horas compatibles en el rango buscado.',
+            'resumen_ui' => self::COPY_SIN_HUECOS_PAREJA,
             'nombres' => $nombres,
             'por_residente' => $porResidente,
             'muestras' => $muestras,
+            'lugar_cerrado_franjas' => $lugarCerrado,
+            'lugar_duracion_insuficiente' => $lugarDuracion,
         ];
     }
 

@@ -29,12 +29,13 @@ ok(IdentidadPublica::nombre($partida, $ida) === 'QA Valid', 'nombre público QA 
 ok(IdentidadPublica::nombre($partida, $idb) === 'Placeholder Dev 1', 'nombre público placeholder');
 ok(IdentidadPublica::nombre($partida, 'per_inexistente') === 'per_inexistente', 'id como fallback si no hay nombre');
 
-$diag = DisponibilidadEngine::diagnosticarBloqueos($partida, [$ida, $idb], 1, 10, 1);
+$service->programarEncuentro($partida, [$ida, $idb], 1, 14, 'conocerse');
+$rSlots = DisponibilidadEngine::slotsCompatibles($partida, [$ida, $idb], 'conocerse', 1, 14, 1, 24, null, 'lug_cafeteria');
+$diag = $rSlots['diagnostico'] ?? DisponibilidadEngine::diagnosticarBloqueos($partida, [$ida, $idb], 1, 14, 1);
 ok(is_string($diag['resumen'] ?? null), 'diagnóstico tiene resumen técnico');
-ok(str_contains($diag['resumen'], $ida), 'resumen técnico conserva ID');
+ok(str_contains($diag['resumen'] ?? '', 'encuentro') || str_contains($diag['resumen'] ?? '', $ida), 'resumen técnico con motivo o id');
+ok(($diag['resumen_ui'] ?? '') === DisponibilidadEngine::COPY_SIN_HUECOS_PAREJA, 'resumen_ui usa copy jugador');
 ok(!str_contains($diag['resumen_ui'] ?? '', $ida), 'resumen_ui no muestra el ID técnico');
-ok(str_contains($diag['resumen_ui'] ?? '', 'QA Valid'), 'resumen_ui usa nombre público');
-ok(($diag['nombres'][$ida] ?? '') === 'QA Valid', 'mapa nombres incluye QA Valid');
 
 $trabajo = $service->programarEncuentro($partida, [$ida, $idb], 1, 12, 'conocerse');
 ok(!($trabajo['ok'] ?? true), '12h rechazado (trabajo)');

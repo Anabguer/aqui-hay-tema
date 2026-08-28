@@ -5322,7 +5322,7 @@ function hobbyIconKey(id, texto) {
         tipo: tipo,
         lugar_id: org.lugar,
         desde_dia: org.dia,
-        max_dias: 1,
+        max_dias: 7,
         max_slots: 48
       }, 'GET');
       if (!r.ok) {
