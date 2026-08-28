@@ -195,7 +195,6 @@ final class CopyRechazoPropuesta
      */
     public static function fraseCausaHumana(array $partida, array $hablante, string $otroId): string
     {
-        unset($otroId);
         $rid = (string) ($hablante['residente_id'] ?? '');
         $nombre = $rid !== ''
             ? IdentidadPublica::nombre($partida, $rid)
@@ -205,12 +204,53 @@ final class CopyRechazoPropuesta
         }
         $copyId = (string) ($hablante['copy_id'] ?? '');
         if ($copyId !== '' && isset(CopyVoluntad::TEXTOS[$copyId])) {
-            return trim($nombre . ' ' . CopyVoluntad::texto($copyId));
+            $frase = rtrim(trim(CopyVoluntad::texto($copyId)), '.');
+            $ctx = self::historialContexto($partida, $rid, $otroId);
+            if ($ctx !== '') {
+                return trim($nombre . ' ' . $frase . '. ' . $ctx . '.');
+            }
+            return trim($nombre . ' ' . $frase . '.');
         }
         $reac = $hablante;
         $reac['propuesta_ctx'] = is_array($hablante['propuesta_ctx'] ?? null) ? $hablante['propuesta_ctx'] : [];
         $frase = self::fraseRechazoDeReaccion($partida, $reac, $rid . ':buzon');
+        $ctx = self::historialContexto($partida, $rid, $otroId);
+        if ($ctx !== '') {
+            return trim($nombre . ' ' . $frase . '. ' . $ctx . '.');
+        }
         return trim($nombre . ' ' . $frase . '.');
+    }
+
+    /**
+     * Contexto breve de la relación entre el rechazador y el proponente,
+     * para enriquecer copy de rechazo cuando hay historia relevante.
+     * NO inventa nada: solo describe lo que realmente ocurrió.
+     *
+     * @return string Frase en español sin puntuación final, o '' si no hay contexto.
+     */
+    public static function historialContexto(array $partida, string $rechazadorId, string $proponenteId): string
+    {
+        if ($rechazadorId === '' || $proponenteId === '' || $rechazadorId === $proponenteId) {
+            return '';
+        }
+        $res = HistorialPar::resumen($partida, $rechazadorId, $proponenteId);
+
+        if (!$res['se_conocen']) {
+            return '';
+        }
+        if ($res['es_pareja']) {
+            return 'A pesar de que son pareja';
+        }
+        if ($res['ha_habido_cita']) {
+            return 'Aunque hemos salido juntos';
+        }
+        if ($res['total_encuentros'] > 2) {
+            return 'Aunque nos hemos visto varias veces';
+        }
+        if ($res['total_encuentros'] >= 1) {
+            return 'Aunque nos hemos visto';
+        }
+        return '';
     }
 
     /**
