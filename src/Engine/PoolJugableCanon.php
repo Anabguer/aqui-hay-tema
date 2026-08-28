@@ -5,7 +5,7 @@ namespace AquiHayTema\Engine;
 
 /**
  * Fuente canónica del pool jugable de producción: 200 personajes per_p001…per_p200.
- * La capacidad simultánea del pueblo (46) es independiente — ver CapacidadViviendas::CAP_PRODUCTO.
+ * La capacidad simultánea del pueblo (16) es independiente — ver CapacidadViviendas::CAP_PRODUCTO.
  */
 final class PoolJugableCanon
 {

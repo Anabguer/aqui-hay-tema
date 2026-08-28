@@ -39,8 +39,8 @@ ok(count($canonIds) === 200, 'PoolJugableCanon::ids = 200');
 ok(count($pool) === $totalSel, 'listPersonajeIdsJugables = total seleccionables');
 ok(count(array_unique($pool)) === $totalSel, 'IDs únicos en pool seleccionable');
 ok(PoolJugableCanon::TOTAL === 200, 'PoolJugableCanon::TOTAL = 200');
-ok(CapacidadViviendas::CAP_PRODUCTO === 46, 'capacidad simultánea = 46');
-ok(PoolJugableCanon::TOTAL !== CapacidadViviendas::CAP_PRODUCTO, 'catálogo 200 ≠ capacidad 46');
+ok(CapacidadViviendas::CAP_PRODUCTO === 16, 'capacidad simultánea = 16');
+ok(PoolJugableCanon::TOTAL !== CapacidadViviendas::CAP_PRODUCTO, 'catálogo 200 ≠ capacidad 16');
 
 $prohibidos = ['per_qa_valid', 'per_i02', 'per_i03'];
 foreach ($prohibidos as $bad) {
@@ -72,7 +72,7 @@ foreach ($pool as $catalogId) {
 
 $manifest = PoolJugableCanon::manifest($root);
 ok((int) ($manifest['total'] ?? 0) === 200, 'manifest total 200');
-ok((int) ($manifest['capacidad_simultanea'] ?? 0) === 46, 'manifest capacidad_simultanea 46');
+ok((int) ($manifest['capacidad_simultanea'] ?? 0) === 16, 'manifest capacidad_simultanea 16');
 
 $svc = new PartidaService($root);
 $p = $svc->nuevaPartida('juego_v1', 'pool200-hist');
@@ -122,19 +122,19 @@ ok($siguiente !== null, 'hay candidato no usado para plaza liberada');
 $rNuevo = $ops->incorporarCatalogo($pLeave, $siguiente, 'residente');
 ok($rNuevo['ok'] ?? false, 'nuevo personaje ocupa plaza liberada');
 
-// Cap 46 simultáneos
-$pCap = $svc->nuevaPartida('test_fixtures_v0', 'pool200-cap46');
-while (count(TutorialIncorporaciones::residentesActivos($pCap)) < 46) {
+// Cap 16 simultáneos
+$pCap = $svc->nuevaPartida('test_fixtures_v0', 'pool200-cap16');
+while (count(TutorialIncorporaciones::residentesActivos($pCap)) < 16) {
     $disp = CandidatoLlegadaEngine::poolDisponible($pCap, $root);
     if ($disp === []) {
         break;
     }
     $ops->incorporarCatalogo($pCap, $disp[0], 'residente');
 }
-ok(count(TutorialIncorporaciones::residentesActivos($pCap)) === 46, 'n=46 activos');
-ok(CapacidadViviendas::huecos($pCap) === 0, 'sin huecos en n=46');
-$r47 = $svc->crearResidentePlaceholderDev($pCap);
-ok(($r47['ok'] ?? false) !== true, 'residente 47 simultáneo rechazado');
+ok(count(TutorialIncorporaciones::residentesActivos($pCap)) === 16, 'n=16 activos');
+ok(CapacidadViviendas::huecos($pCap) === 0, 'sin huecos en n=16');
+$r17 = $svc->crearResidentePlaceholderDev($pCap);
+ok(($r17['ok'] ?? false) !== true, 'residente 17 simultáneo rechazado');
 
 // Candidato ofrecido queda marcado
 $pCand = $svc->nuevaPartida('juego_v1', 'pool200-cand');

@@ -1385,3 +1385,154 @@
     justify-self: start !important;
   }
 }
+
+/* INICIO-COTILLEO-ALDEA-v1 - nota de chisme: titulo ladeado + recorte de pueblo */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par {
+    position: relative !important;
+    overflow: visible !important;
+    transform: rotate(0.65deg) !important;
+    padding: 12px 12px 11px 11px !important;
+    border: 2px solid rgba(106, 88, 142, .4) !important;
+    border-radius: 14px 10px 16px 11px / 11px 15px 10px 14px !important;
+    background-color: #faf5ff !important;
+    background-image:
+      linear-gradient(180deg, rgba(255, 252, 248, .94) 0%, rgba(244, 236, 255, .82) 100%),
+      url("../../../play-v3/capas/libreta_hoja.png") !important;
+    background-size: auto, cover !important;
+    background-position: center, center !important;
+    box-shadow:
+      1px 2px 0 rgba(106, 88, 142, .14),
+      3px 8px 18px rgba(44, 38, 31, .1) !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: -8px !important;
+    left: 20px !important;
+    width: 42px !important;
+    height: 14px !important;
+    background: rgba(255, 228, 190, .94) !important;
+    transform: rotate(-7deg) !important;
+    z-index: 2 !important;
+    box-shadow: 0 1px 2px rgba(60, 44, 28, .14) !important;
+    border-radius: 1px !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: -11px !important;
+    right: 10px !important;
+    width: 22px !important;
+    height: 22px !important;
+    background: url("../../../play-v3/capas/chincheta.png") center / contain no-repeat !important;
+    transform: rotate(8deg) !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+    opacity: .9 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-tit {
+    display: inline-block !important;
+    position: relative !important;
+    z-index: 1 !important;
+    margin: 1px 0 0 5px !important;
+    padding: 7px 11px 6px !important;
+    transform: rotate(-3.4deg) !important;
+    border-radius: 9px 7px 11px 8px / 8px 11px 7px 10px !important;
+    background: linear-gradient(165deg, #6f5f9a 0%, #4f4378 52%, #433766 100%) !important;
+    box-shadow: 1px 2px 0 rgba(44, 38, 31, .22), 0 3px 8px rgba(79, 67, 120, .26) !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .14em !important;
+    line-height: 1 !important;
+    color: #fffdf8 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt {
+    margin-top: 3px !important;
+    padding: 0 2px 1px 5px !important;
+    color: #3a3028 !important;
+    transform: rotate(-0.4deg) !important;
+    transform-origin: left top !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-flecha {
+    transform: rotate(5deg) !important;
+    opacity: .86 !important;
+  }
+}
+
+/* INICIO-MAP-AIRE-v2 - mas espacio entre cabecera/fechas y mapa */
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .inicio-stage {
+    row-gap: 48px !important;
+    column-gap: 14px !important;
+  }
+}
+
+/* INICIO-COTILLEO-SIN-CELO-v1 - quitar cinta superior izquierda */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par::before {
+    content: none !important;
+    display: none !important;
+  }
+}
+
+/* INICIO-TYPE-JERARQUIA-v1 - AHT protagonista + lectura sans en cuerpos izquierda */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop > .game-top .brand-col {
+    padding-top: .2rem !important;
+    padding-bottom: .25rem !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop .brand {
+    gap: .5rem !important;
+    margin-bottom: .12rem !important;
+  }
+
+  .play-v3 .inicio-desktop .brand-text {
+    font-family: "Caveat", "Segoe Print", "Comic Sans MS", cursive !important;
+    font-size: clamp(2.9rem, 4.55vw, 3.95rem) !important;
+    line-height: 1.04 !important;
+    letter-spacing: .01em !important;
+  }
+
+  .play-v3 .inicio-desktop .brand-heart {
+    width: 39px !important;
+    height: 35px !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt,
+  .play-v3 .inicio-desktop-left .mision-strip-txt,
+  .play-v3 .inicio-desktop-left .obj-misiones-vacio {
+    font-family: Nunito, "Segoe UI", system-ui, sans-serif !important;
+    font-weight: 600 !important;
+    font-style: normal !important;
+    font-synthesis: none !important;
+    text-rendering: optimizeLegibility !important;
+    -webkit-font-smoothing: antialiased !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-cotilleo-txt {
+    font-size: 1.38rem !important;
+    line-height: 1.42 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .mision-strip-txt {
+    font-size: 1.48rem !important;
+    line-height: 1.38 !important;
+  }
+
+  .play-v3 .inicio-desktop-left .obj-misiones-vacio {
+    font-size: 1.22rem !important;
+    line-height: 1.4 !important;
+  }
+}

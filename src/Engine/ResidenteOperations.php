@@ -35,6 +35,7 @@ final class ResidenteOperations
 
         $asig = BloqueA::asignarAutomatico($partida, $catalogId);
         if ($asig['error'] !== null) {
+            unset($partida['residentes'][$catalogId]);
             return ['ok' => false, 'error' => $asig['error'], 'residente' => $runtime];
         }
 
