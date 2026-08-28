@@ -2206,3 +2206,20 @@
     text-overflow: ellipsis;
   }
 }
+
+/* === BLOQUE B: cuerpo de lectura móvil (máximo 16px) ===
+   Aislado a móvil y a contenido principal; no afecta labels, metadatos,
+   controles, badges, contadores, títulos ni iconografía. */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-proximo-body,
+  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg .cuerpo,
+  .play-v3:has(.game-shell) .play-root.phone .enc-int-result-txt,
+  .play-v3:has(.game-shell) .play-root.phone .ficha-diario-texto,
+  .play-v3:has(.game-shell) .inicio-mobile .mision-strip-txt,
+  .play-v3:has(.game-shell) .inicio-mobile .enc-mov-resumen,
+  .play-v3:has(.game-shell) .inicio-mobile .enc-mov-vista-txt {
+    font-size: 1rem !important;
+    line-height: 1.4 !important;
+  }
+}
