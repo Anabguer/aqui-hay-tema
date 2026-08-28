@@ -952,22 +952,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
-            <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
-          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
-            <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
-            <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
-            <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
-            <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
-            <span class="obj-misiones-papel-tit">MISIONES</span>
-            <div class="obj-misiones-strip" data-misiones-strip></div>
-          </div>
-        </section>
-            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
-          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
-          <div class="obj-parejas-list" data-parejas-strip></div>
-        </section>
-          </aside>
-          <aside class="inicio-chrome-right inicio-desktop-right">
             <section class="shell-grupo shell-grupo-cotilleo-par">
           <button type="button" class="obj-cotilleo obj-cotilleo-par" data-open="diario" aria-label="Abrir cotilleo del pueblo">
             <span class="obj-cotilleo-tit">Cotilleo</span>
@@ -978,6 +962,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="obj-cotilleo-flecha" aria-hidden="true">&#8250;</span>
           </button>
         </section>
+            <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
+          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
+            <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
+            <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
+            <span class="obj-misiones-papel-tit">MISIONES</span>
+            <div class="obj-misiones-strip" data-misiones-strip></div>
+          </div>
+        </section>
+          </aside>
+          <aside class="inicio-chrome-right inicio-desktop-right">
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1001,6 +997,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="plan-seccion-rule" aria-hidden="true"></span>
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
+        </section>
+            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
+          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
+          <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
             <section class="shell-grupo shell-grupo-planes">
 <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Nuevo plan">
