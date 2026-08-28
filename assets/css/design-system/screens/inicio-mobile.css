@@ -51,12 +51,21 @@
 
 /* ---------- 0. Papel de la mesa ---------- */
 
-  body.play-v3 .inicio-mobile {
+  body.play-v3 .inicio-mobile.inicio-mobile-feed {
     background:
       radial-gradient(1100px 480px at 15% -6%, rgba(255, 252, 240, .95), rgba(255, 252, 240, 0) 58%),
       radial-gradient(900px 460px at 90% 104%, rgba(228, 212, 178, .55), rgba(228, 212, 178, 0) 60%),
       var(--ds-paper-app);
     overflow-x: hidden;
+  }
+
+  body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) {
+    background: transparent;
+    overflow-x: hidden;
+  }
+
+  body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
+    background: transparent;
   }
 
   /* ---------- 1. Orden del feed (D2) ---------- */
@@ -1495,6 +1504,24 @@
 
 /* INICIO-MOBILE-OVERRIDE-v2 — gana a play-v3-responsive; ref c5f73d3 + piloto v3.1 */
 @media (max-width: 768px) {
+  /* Feed movil: orden canonico (gana a responsive .shell-grupo-cotilleo-par order:3 !important) */
+  .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 1 !important; }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .encursos-movil           { order: 2 !important; }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .proxplanes-movil         { order: 3 !important; }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .shell-grupo-misiones-par { order: 4 !important; }
+  .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .shell-grupo-parejas      { order: 5 !important; }
+
+  /* Cabecera+tiles: sin banda beige en .inicio-mobile-layout */
+  body.play-v3 .inicio-mobile:not(.inicio-mobile-feed),
+  body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
+    background: transparent !important;
+  }
+
+
   /* --- 1. Cabecera movil (c5f73d3 inicio.css + override + responsive reloj) --- */
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .game-top {
     display: grid !important;
