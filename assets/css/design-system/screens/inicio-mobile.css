@@ -465,12 +465,12 @@
 
   /* etiqueta + NUEVO PLAN (ref inicio-mobile.png) */
   .inicio-mobile .obj-nuevo-plan-txt::before {
-    content: "NUEVO PLAN";
+    content: "PLAN";
     visibility: visible;
-    font-family: var(--ds-font-ui);
-    font-weight: 800;
-    font-size: .6875rem;
-    letter-spacing: .55px;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    letter-spacing: .7px;
     margin-right: 0;
     text-transform: uppercase;
     line-height: 1.1;
@@ -521,6 +521,14 @@
 
   /* + NUEVO PLAN: pieza rosa protagonista (ref piloto, rosa de siempre) */
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
     height: 101px;
     min-height: 101px;
     padding: 7px 6px 6px;
@@ -582,10 +590,10 @@
     width: auto;
     height: auto;
     min-height: 0;
-    font-size: 2.65rem;
-    line-height: .9;
-    font-family: var(--ds-font-ui);
-    font-weight: 800;
+    font-size: 3rem;
+    line-height: .75;
+    font-family: var(--ds-font-hand);
+    font-weight: 700;
     color: #fff;
     text-shadow: 0 1px 0 rgba(120, 30, 50, .2);
     filter: none;
@@ -605,8 +613,15 @@
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
     line-height: 1.1;
-    font-size: .6875rem;
+    font-size: 1.0625rem;
     text-transform: uppercase;
+    text-align: center;
+  }
+
+  .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    display: block;
+    width: 100%;
+    margin: 0 auto;
   }
 
   .inicio-mobile .inicio-mobile-tiles .obj-vecinos-head {
@@ -2207,8 +2222,7 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-ico-wrap,
-  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview,
-  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-preview {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -2219,6 +2233,23 @@
     width: auto !important;
     min-height: 46px !important;
     height: auto !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: center !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    text-align: center !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-img {
@@ -2369,15 +2400,15 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
-    content: "NUEVO PLAN" !important;
+    content: "PLAN" !important;
     visibility: visible !important;
     display: block !important;
     text-align: center !important;
     width: 100% !important;
-    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
-    font-weight: 800 !important;
-    font-size: .6875rem !important;
-    letter-spacing: .55px !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.0625rem !important;
+    letter-spacing: .7px !important;
     color: #fff !important;
     text-shadow: 0 1px 0 rgba(120, 30, 50, .22) !important;
   }
@@ -2387,10 +2418,10 @@
     width: auto !important;
     height: auto !important;
     min-height: 0 !important;
-    font-size: 2.65rem !important;
-    line-height: .9 !important;
-    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
-    font-weight: 800 !important;
+    font-size: 3rem !important;
+    line-height: .75 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
     color: #fff !important;
     background: transparent !important;
     filter: none !important;
@@ -2406,7 +2437,7 @@
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
     line-height: 1.1 !important;
-    font-size: .6875rem !important;
+    font-size: 1.0625rem !important;
     text-transform: uppercase !important;
   }
 
@@ -2417,13 +2448,6 @@
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
     margin: 0 !important;
     flex: 0 0 auto !important;
-  }
-
-  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
-  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
-    line-height: 1.1 !important;
-    font-size: 1.0625rem !important;
-    text-transform: uppercase !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-head {
@@ -2593,7 +2617,6 @@
    Cuerpos de lectura: tipografía UI (como desktop). Títulos sin tocar. */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt,
-  .play-v3:has(.game-shell) .inicio-mobile .mision-strip-txt,
   .play-v3:has(.game-shell) .inicio-mobile .obj-misiones-vacio {
     font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
     font-style: normal !important;
@@ -2626,6 +2649,459 @@
   .play-v3:has(.game-shell) .inicio-mobile .enc-mov-resumen,
   .play-v3:has(.game-shell) .inicio-mobile .enc-mov-vista-txt {
     font-size: 1rem !important;
+    line-height: 1.4 !important;
+  }
+}
+
+
+
+/* INICIO-ENCURSO-MOBILE-v15 */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-shell {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-nav-btn {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    gap: 10px !important;
+    padding: 2px 13px 6px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card {
+    flex: 0 0 min(248px, calc(100% - 26px)) !important;
+    width: min(248px, calc(100% - 26px)) !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    padding: 10px 11px 9px !important;
+    gap: 6px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 12px !important;
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%),
+      #fff5f0 !important;
+    background-image:
+      radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0) 62%),
+      linear-gradient(#fff5f0, #fff5f0) !important;
+    box-shadow: 0 1px 4px rgba(44, 38, 31, 0.08) !important;
+    transform: none !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact {
+    padding: 9px 10px 8px !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces {
+    flex: 0 0 auto !important;
+    align-self: flex-start !important;
+    justify-content: flex-start !important;
+    margin: 1px 0 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-copy {
+    display: flex !important;
+    flex: 1 1 auto !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 1px !important;
+    min-width: 0 !important;
+    text-align: left !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-nombres,
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-lugar,
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-estado {
+    display: block !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-cta {
+    flex: 0 0 auto !important;
+    align-self: center !important;
+    margin: 0 0 0 2px !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    font-size: .625rem !important;
+    letter-spacing: .05em !important;
+    white-space: nowrap !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-cta {
+    background: none !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-hora {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 2px 0 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    font-size: .625rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-punto {
+    width: 6px !important;
+    height: 6px !important;
+    background: var(--ds-pink-deep, #c85b78) !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+}
+
+/* INICIO-NUEVO-PLAN-CENTER */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
+    display: flex !important;
+    align-items: stretch !important;
+    width: 100% !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes .obj-nuevo-plan.obj-proximo-cta {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: stretch !important;
+    flex: 1 1 auto !important;
+    gap: .12rem !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
+    align-self: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    align-self: center !important;
+    width: 100% !important;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+
+  /* INICIO-NUEVO-PLAN-TYPE-v1: misma tipografia que Mensajitos / Vecinos */
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.0625rem !important;
+    letter-spacing: .7px !important;
+    line-height: 1.1 !important;
+    text-transform: uppercase !important;
+  }
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    display: block !important;
+    text-align: center !important;
+  }
+}
+
+
+
+/* INICIO-NUEVO-PLAN-v2 — solo PLAN, + grande, centrado */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    padding: 6px 6px 8px !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    align-self: center !important;
+    width: auto !important;
+    min-width: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 3rem !important;
+    line-height: .72 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    text-align: center !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
+    content: "PLAN" !important;
+    display: block !important;
+    width: auto !important;
+    margin: -2px 0 0 !important;
+    text-align: center !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-weight: 700 !important;
+    font-size: 1.0625rem !important;
+    letter-spacing: .7px !important;
+    line-height: 1 !important;
+  }
+
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
+    width: auto !important;
+    flex: 0 0 auto !important;
+    align-self: center !important;
+    text-align: center !important;
+  }
+}
+
+/* INICIO-ENCURSO-MOBILE-v16 — ref piloto compacto */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile.inicio-mobile-feed .encursos-movil.is-on {
+    margin: 0 13px 4px !important;
+    padding: 10px 10px 8px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.35) !important;
+    border-radius: 14px !important;
+    background: #fffaf5 !important;
+    box-shadow: 0 1px 4px rgba(44, 38, 31, 0.06) !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .plan-seccion-ver {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-cab .plan-seccion-nav {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: 0 0 24px !important;
+    width: 24px !important;
+    height: 24px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.22) !important;
+    border-radius: 999px !important;
+    background: rgba(255, 253, 249, 0.95) !important;
+    color: var(--ds-ink, #3b3028) !important;
+    box-shadow: 0 1px 2px rgba(44, 38, 31, 0.08) !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-cab .plan-seccion-nav svg {
+    width: 14px !important;
+    height: 14px !important;
+    display: block !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-cab .plan-seccion-nav[hidden] {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-cab {
+    padding: 0 2px 8px !important;
+    margin: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-track {
+    padding: 0 0 4px !important;
+    gap: 8px !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card {
+    flex: 0 0 calc(50% - 4px) !important;
+    width: calc(50% - 4px) !important;
+    min-width: 158px !important;
+    max-width: 220px !important;
+    padding: 8px 8px 7px !important;
+    gap: 0 !important;
+    min-height: 74px !important;
+    border: 1.5px solid rgba(89, 72, 57, 0.32) !important;
+    border-radius: 11px !important;
+    background: #fff5f0 !important;
+    background-image: none !important;
+    box-shadow: 0 1px 3px rgba(44, 38, 31, 0.07) !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card::before {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-row {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-rows: auto auto auto !important;
+    column-gap: 7px !important;
+    row-gap: 1px !important;
+    align-items: start !important;
+    width: 100% !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces {
+    grid-column: 1 !important;
+    grid-row: 1 / span 3 !important;
+    align-self: start !important;
+    margin: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces img,
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces .cara-ini {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    flex: 0 0 38px !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-copy {
+    grid-column: 2 !important;
+    grid-row: 1 / span 3 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 1px !important;
+    min-width: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-nombres {
+    display: block !important;
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: .9375rem !important;
+    font-weight: 700 !important;
+    font-style: italic !important;
+    line-height: 1.1 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-lugar {
+    display: block !important;
+    margin: 0 !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .6875rem !important;
+    font-weight: 600 !important;
+    line-height: 1.15 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-estado {
+    display: block !important;
+    margin: 3px 0 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-hora {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    margin: 0 !important;
+    padding: 1px 6px !important;
+    background: #e8f2df !important;
+    border: 1.5px solid #7a9e6a !important;
+    border-radius: 6px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .5625rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .05em !important;
+    text-transform: uppercase !important;
+    color: #3d5c32 !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-punto {
+    width: 5px !important;
+    height: 5px !important;
+    background: #5a8a48 !important;
+    box-shadow: none !important;
+    animation: none !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-cta {
+    grid-column: 3 !important;
+    grid-row: 2 / span 2 !important;
+    align-self: end !important;
+    justify-self: end !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .5625rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    white-space: nowrap !important;
+  }
+
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-cta-flecha {
+    display: inline !important;
+    font-size: .9em !important;
+  }
+}
+
+
+/* INICIO-TYPE-MISIONES-MOBILE-v2 — cuerpo misiones: lectura UI (canónico) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 1.125rem !important;
     line-height: 1.4 !important;
   }
 }

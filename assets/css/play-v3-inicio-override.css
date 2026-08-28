@@ -1,5 +1,5 @@
-/* INICIO-OVERRIDE — legacy mínimo post-arquitectura dual-view */
-/* Presentación migrada a inicio-mobile.css / inicio-desktop.css */
+/* INICIO-OVERRIDE ? legacy m?nimo post-arquitectura dual-view */
+/* Presentaci?n migrada a inicio-mobile.css / inicio-desktop.css */
 
 .inicio-mobile .enc-mov-nav-btn[hidden],
 .inicio-desktop .enc-mov-nav-btn[hidden] {
@@ -12,13 +12,4 @@
   visibility: hidden !important;
   pointer-events: none !important;
   opacity: 0 !important;
-}
-
-/* Bloque A: contenido manuscrito principal del feed móvil. */
-@media (max-width: 768px) {
-  .play-v3 .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
-    font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive) !important;
-    font-size: 22px !important;
-    line-height: 1.18 !important;
-  }
 }
