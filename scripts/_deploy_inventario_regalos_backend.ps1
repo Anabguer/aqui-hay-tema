@@ -20,6 +20,7 @@ $deployRels = @(
     'src/Engine/AprecioCelesteVista.php',
     'src/Engine/PeticionFeedback.php',
     'src/Engine/SchemaFields.php',
+    'src/Engine/DiarioHitoEngine.php',
     'src/Engine/PartidaService.php',
     'src/Engine/FichaPlayVista.php',
     'src/Engine/RelacionNarrativaBridge.php',
@@ -74,10 +75,11 @@ if (-not $upload.Ok) {
 
 Test-AhtPublicUrl -Ctx $Ctx -LogFile $logFile
 
-$apiBase = "$($Ctx.PublicUrl)/api/index.php"
+$apiBase = (($Ctx.PublicUrl -replace '/play\.php$', '') -replace '/$', '') + '/api/index.php'
 $testPartida = 'part_d88e5094c565e1db'
+$invUri = '{0}?action=inventario.listar&partida_id={1}' -f $apiBase, $testPartida
 try {
-    $resp = Invoke-WebRequest -Uri "$apiBase?action=inventario.listar&partida_id=$testPartida" -UseBasicParsing -TimeoutSec 60
+    $resp = Invoke-WebRequest -Uri $invUri -UseBasicParsing -TimeoutSec 60
     Write-DeployLog -LogFile $logFile -Message "PROD inventario.listar HTTP $($resp.StatusCode)" -ToHost
     $json = $resp.Content | ConvertFrom-Json
     if ($json.ok -ne $true -or $null -eq $json.inventario) {
@@ -90,7 +92,8 @@ try {
 }
 
 try {
-    $r2 = Invoke-WebRequest -Uri "$apiBase?action=partida.refresh&partida_id=$testPartida" -UseBasicParsing -TimeoutSec 90
+    $refUri = '{0}?action=partida.refresh&partida_id={1}' -f $apiBase, $testPartida
+    $r2 = Invoke-WebRequest -Uri $refUri -UseBasicParsing -TimeoutSec 90
     Write-DeployLog -LogFile $logFile -Message "PROD partida.refresh HTTP $($r2.StatusCode)" -ToHost
 } catch {
     Write-DeployLog -LogFile $logFile -Message "AVISO partida.refresh: $_" -ToHost
