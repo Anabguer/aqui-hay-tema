@@ -49,10 +49,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/cotilleos-scrapbook-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/vecinos-celdas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/org-plan-scrapbook-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -66,8 +68,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -789,13 +792,16 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <h2 class="coti-tit ds-modal-tit ds-modal-tit--lavender">Cotilleos</h2>
               <span class="coti-badge" data-coti-count hidden></span>
             </div>
-            <p class="ds-modal-sub">Lo &#8212;ltimo que corre por el pueblo</p>
+            <p class="ds-modal-sub">Lo &uacute;ltimo que corre por el pueblo</p>
           </div>
           <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
         </header>
         <div class="coti-body capa-scroll">
           <div class="coti-list" data-coti-list></div>
         </div>
+        <footer class="coti-pie">
+          <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">&#128161;</span> Estos rumores cambian con el tiempo. Contin&uacute;a conociendo a los vecinos para descubrir m&aacute;s.</p>
+        </footer>
       </aside>
       <aside class="capa capa-organizar org-plan-papel ds-modal-sheet" aria-label="Nuevo plan">
         <span class="ficha-tape ficha-tape-l org-tape-tl" aria-hidden="true"></span>
@@ -1033,16 +1039,16 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </header>
           <div class="pp-mov-track" data-proxplanes-track></div>
         </section>
-            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
-          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
-          <div class="obj-parejas-list" data-parejas-strip></div>
-        </section>
             <section class="shell-grupo shell-grupo-planes">
 <button type="button" class="obj-nuevo-plan obj-proximo-cta obj-nuevo-plan-horiz" data-open="organizar" aria-label="Crear plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
               <span class="obj-nuevo-plan-txt">Crear plan</span>
             </button>
 </section>
+            <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
+          <span class="zona-tit zona-tit-parejas">PAREJAS</span>
+          <div class="obj-parejas-list" data-parejas-strip></div>
+        </section>
           </aside>
         </div>
       </section>

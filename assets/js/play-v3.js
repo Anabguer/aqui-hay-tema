@@ -1050,7 +1050,7 @@
     if (!s) return 0;
     let h = 0;
     for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-    return (Math.abs(h) % 3);
+    return (Math.abs(h) % 4);
   }
 
   function remitenteIdDe(m) {
@@ -2155,7 +2155,7 @@
   function encCursoLugarStampHtml(enc) {
     const src = orgLugarImg(enc && enc.lugar);
     if (!src) return '';
-    return '<div class="enc-mov-lugar-stamp" aria-hidden="true"><img src="' + esc(src) + '" alt="" loading="lazy" decoding="async"></div>';
+    return '<div class="enc-mov-lugar-stamp" aria-hidden="true"><img src="' + esc(src) + '" alt="" width="46" height="40" loading="lazy" decoding="async"></div>';
   }
   function htmlEncursoCardEscena(enc, estado) {
     const ids = enc.participantes || [];
@@ -2171,9 +2171,11 @@
       '<div class="enc-mov-escena">' +
       encCursoLugarStampHtml(enc) +
       '<div class="enc-mov-escena-core">' +
+      '<div class="enc-mov-escena-top">' +
       '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
-      '<p class="enc-mov-nombres">' + encCursoNombresHtml(ids) + '</p>' +
       '<p class="enc-mov-estado-pill"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</p>' +
+      '</div>' +
+      '<p class="enc-mov-nombres">' + encCursoNombresHtml(ids) + '</p>' +
       '<div class="enc-mov-donde-cuando">' +
       '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
@@ -2375,6 +2377,12 @@
     actualizarCotiBadgesUI();
   }
 
+
+  function tituloEventoPuebloUi(txt) {
+    var s = String(txt || '').trim();
+    if (!s) return '';
+    return s.charAt(0).toUpperCase() + s.slice(1);
+  }
   function renderProximoEventoPueblo(estado) {
     const slots = document.querySelectorAll('[data-proximo-evento-slot]');
     if (!slots.length) return;
@@ -2395,8 +2403,27 @@
       const ico = slot.querySelector('[data-proximo-evento-ico]');
       const enMarcha = String(ev.estado || '') === 'en_curso';
       if (card) card.classList.toggle('inicio-evento-card--marcha', enMarcha);
-      if (tagTxt) tagTxt.textContent = enMarcha ? '\u00a1Est\u00e1 pasando ahora!' : 'Evento del pueblo';
-      if (tit) tit.textContent = ev.nombre_ui || ev.nombre || '';
+      if (tagTxt) tagTxt.textContent = enMarcha ? '\u00a1Est\u00e1 pasando ahora!' : 'EVENTO PUEBLO';
+      var pie = card && card.querySelector('[data-proximo-evento-pie]');
+      if (card && !pie) {
+        pie = document.createElement('div');
+        pie.className = 'inicio-evento-pie';
+        pie.setAttribute('data-proximo-evento-pie', '');
+        card.appendChild(pie);
+      }
+      var idsAp = Array.isArray(ev.participantes_apuntados) ? ev.participantes_apuntados : [];
+      if (pie) {
+        if (idsAp.length) {
+          pie.hidden = false;
+          pie.innerHTML = '<div class="inicio-evento-faces prox-faces prox-faces--grupo">' +
+            carasPlanHtml(idsAp, Math.min(4, idsAp.length)) + '</div>' +
+            '<p class="inicio-evento-asisten">' + esc(asistentesEventoPuebloTxt(idsAp)) + '</p>';
+        } else {
+          pie.hidden = true;
+          pie.innerHTML = '';
+        }
+      }
+      if (tit) tit.textContent = tituloEventoPuebloUi(ev.nombre_ui || ev.nombre || '');
       if (typeof pintarProximoEventoIco === 'function') pintarProximoEventoIco(ico, ev);
       else if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
       var metaTxt = ev.meta_ui || '';
@@ -2431,13 +2458,31 @@
   function pintarProximoEventoIco(ico, ev) {
     if (!ico) return;
     const src = eventoPuebloImgSrc(null, cacheInsp, ev);
+    const catId = ev && ev.catalogo_id ? String(ev.catalogo_id) : '';
+    const esEvtImg = !!(catId && EVENTO_PUEBLO_IMG[catId]) || !!(ev && ev.illustracion);
     ico.className = 'inicio-evento-ico';
     if (src) {
-      ico.classList.add('inicio-evento-ico--lugar');
+      ico.classList.add(esEvtImg ? 'inicio-evento-ico--evento' : 'inicio-evento-ico--lugar');
       ico.innerHTML = '<img src="' + esc(src) + '" alt="" loading="lazy" decoding="async">';
+      var img = ico.querySelector('img');
+      if (img) {
+        img.onerror = function () {
+          var lugSrc = orgLugarImg((ev && ev.lugar) || '');
+          if (lugSrc && img.src.indexOf(lugSrc) < 0) {
+            img.onerror = null;
+            img.src = lugSrc;
+            ico.classList.remove('inicio-evento-ico--evento');
+            ico.classList.add('inicio-evento-ico--lugar');
+            return;
+          }
+          ico.classList.remove('inicio-evento-ico--lugar', 'inicio-evento-ico--evento');
+          ico.classList.add('inicio-evento-ico--fallback');
+          ico.innerHTML = '';
+        };
+      }
     } else {
-      ico.classList.add('inicio-evento-ico--doodle');
-      ico.textContent = ev.icono || '';
+      ico.classList.add('inicio-evento-ico--fallback');
+      ico.innerHTML = '';
     }
   }
 
@@ -3123,6 +3168,14 @@
     return parts.join(' ');
   }
 
+  function corazonAguaPairs() {
+    return inicioAll('[data-corazon-fill]').map(function (fillEl) {
+      var svg = fillEl.closest('svg');
+      var surfaceEl = svg ? svg.querySelector('[data-corazon-surface]') : null;
+      return { fillEl: fillEl, surfaceEl: surfaceEl };
+    });
+  }
+
   function aplicarCorazonAgua(fillEl, surfaceEl, fillY, fillH, phase) {
     if (!fillEl) return;
     if (fillH <= 0.5) {
@@ -3134,26 +3187,32 @@
     if (surfaceEl) surfaceEl.setAttribute('d', corazonSurfacePathD(fillY, phase));
   }
 
+  function aplicarCorazonAguaTodos(fillY, fillH, phase) {
+    corazonAguaPairs().forEach(function (pair) {
+      aplicarCorazonAgua(pair.fillEl, pair.surfaceEl, fillY, fillH, phase);
+    });
+  }
+
   function animarCorazonAgua() {
     if (corazonOlaTimer) return;
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     corazonOlaTimer = setInterval(function () {
       if (corazonOlaFillH <= 0.5) return;
       corazonOlaPhase += 0.24;
-      aplicarCorazonAgua(
-        document.querySelector('[data-corazon-fill]'),
-        document.querySelector('[data-corazon-surface]'),
-        corazonOlaFillY,
-        corazonOlaFillH,
-        corazonOlaPhase
-      );
+      aplicarCorazonAguaTodos(corazonOlaFillY, corazonOlaFillH, corazonOlaPhase);
     }, 130);
   }
 
+  function corazonVidaSvgs() {
+    var svgs = inicioAll('.top-vida .corazon-svg');
+    if (svgs.length) return svgs;
+    var one = $('.corazon-svg');
+    return one ? [one] : [];
+  }
+
   function corazonVidaSvg() {
-    var el = $('.top-vida .corazon-svg');
-    if (el) return el;
-    return $('.corazon-svg');
+    var svgs = corazonVidaSvgs();
+    return svgs[0] || null;
   }
 
   function corazonVidaOnReactionEnd(svg, cls) {
@@ -3299,23 +3358,19 @@
     const vida = estado.vida_pueblo || null;
     const pct = vida && typeof vida.corazon_pct === 'number' ? vida.corazon_pct : 0;
     const critico = !!(vida && vida.critico);
-    const fillEls = inicioAll('[data-corazon-fill]');
-    const fillEl = fillEls[0];
-    const surfaceEl = $('[data-corazon-surface]');
-    if (fillEl) {
+    if (corazonAguaPairs().length) {
       var fillH = 52 * (pct / 100);
       var fillY = 52 - fillH;
       corazonOlaFillY = fillY;
       corazonOlaFillH = fillH;
-      aplicarCorazonAgua(fillEl, surfaceEl, fillY, fillH, corazonOlaPhase);
+      aplicarCorazonAguaTodos(fillY, fillH, corazonOlaPhase);
       animarCorazonAgua();
     }
     const fill = $('.corazon-fill') || $('.corazon-dibujo');
     if (fill) fill.style.setProperty('--fill', pct + '%');
     const pctN = $('[data-vida-pct]');
     if (pctN) pctN.textContent = Math.round(pct) + '%';
-    const corazonSvg = corazonVidaSvg();
-    if (corazonSvg) {
+    corazonVidaSvgs().forEach(function (corazonSvg) {
       corazonSvg.classList.toggle('corazon-vida--critico', critico);
       if (vida && vida.latido_anim) {
         triggerCorazonLatido(corazonSvg);
@@ -3324,6 +3379,8 @@
       } else if (!vidaCorazonReady) {
         corazonSvg.classList.add('corazon-vida--reposo');
       }
+    });
+    if (corazonVidaSvgs().length) {
       vidaCorazonPctPrev = pct;
       vidaCorazonReady = true;
     }
@@ -4856,17 +4913,20 @@ function hobbyIconKey(id, texto) {
     const accion = cartas.filter(mensajitoRequiereAccion);
     const info = cartas.filter(function (m) { return !mensajitoRequiereAccion(m); });
 
-    function pintarCarta(m, esAccion) {
+    function pintarCarta(m, esAccion, inclinIdx) {
       const art = document.createElement('article');
       const st = estadoCarta(m);
       const leido = (m.estado || '') !== 'pendiente';
       const nombre = nombrePublicoDe(m);
       const ridRem = remitenteIdDe(m);
+      const inclin = ((inclinIdx || 0) % 4 + 4) % 4;
+      const tint = (mensajitoTintDeRemitente(ridRem || nombre) + inclin) % 4;
       art.className = 'carta-msg' +
         (esAccion ? ' carta-accion' : ' carta-info') +
         (leido ? ' leida' : ' no-leida') +
         (st.cls ? ' ' + st.cls : '') +
-        ' carta-tinta-' + mensajitoTintDeRemitente(ridRem || nombre);
+        ' carta-tinta-' + tint +
+        ' carta-inclin-' + inclin;
       if (ridRem) art.setAttribute('data-remitente', ridRem);
       const cuerpo = cuerpoMensajito(m, nombre);
       const perfilLlegadaHtml = (m.tipo === 'candidato_llegada') ? htmlPerfilCandidato(m) : '';
@@ -4936,17 +4996,28 @@ function hobbyIconKey(id, texto) {
       return art;
     }
 
+    let inclinGlobal = 0;
     function pintarSeccion(titulo, items, esAccion) {
       if (!items.length) return;
       const sec = document.createElement('section');
       sec.className = 'mensajitos-seccion';
       sec.innerHTML = '<h3 class="mensajitos-seccion-tit">' + titulo + '</h3>';
-      items.forEach(function (m) { sec.appendChild(pintarCarta(m, esAccion)); });
+      items.forEach(function (m) {
+        sec.appendChild(pintarCarta(m, esAccion, inclinGlobal++));
+      });
       box.appendChild(sec);
     }
 
     pintarSeccion('Piden algo', accion, true);
     pintarSeccion('Lo que circula', info, false);
+  }
+
+  function cotiFiltroIco(catId) {
+    const k = String(catId || '').toLowerCase();
+    if (!k || k === 'todo') {
+      return '<svg class="coti-svg coti-svg--filtro" viewBox="0 0 32 32" aria-hidden="true"><rect x="5" y="5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="18" y="5" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="18" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="18" y="18" width="9" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>';
+    }
+    return cotiCatSvg(k).replace('class="coti-svg"', 'class="coti-svg coti-svg--filtro"');
   }
 
   function cotiCatSvg(catId) {
@@ -5008,18 +5079,18 @@ function hobbyIconKey(id, texto) {
     const etiqueta = e.categoria_etiqueta || 'Cotilleo';
     const dest = e.destacado === true ? ' coti-item--destacado' : '';
     const cuando = cotiEtiquetaTiempo(e, bucket);
-    return '<article class="coti-item' + dest + '">' +
-      '<span class="coti-item-tape coti-item-tape-l" aria-hidden="true"></span>' +
-      '<span class="coti-item-tape coti-item-tape-r" aria-hidden="true"></span>' +
+    const doblado = (cat === 'romance' || cat === 'relacion') ? '<span class="coti-item-doblado" aria-hidden="true"></span>' : '';
+    return '<article class="coti-item coti-item--' + esc(cat) + dest + '">' +
+      '<span class="coti-item-tape" aria-hidden="true"></span>' +
       (bucket === 'hoy' ? '<span class="coti-item-hoy">HOY</span>' : '') +
-      '<div class="coti-item-col">' +
-      '<div class="coti-item-avatares">' + htmlCotiAvatares(e.actores) + '</div>' +
-      htmlCotiCat(cat, etiqueta) +
-      '</div>' +
+      '<div class="coti-item-inner">' +
+      '<div class="coti-item-izq"><div class="coti-item-avatares">' + htmlCotiAvatares(e.actores) + '</div></div>' +
       '<div class="coti-item-cuerpo">' +
       '<p class="coti-item-txt">' + esc(e.texto || '') + '</p>' +
       (cuando ? '<p class="coti-item-cuando">' + esc(cuando) + '</p>' : '') +
-      '</div></article>';
+      '</div>' +
+      '<div class="coti-item-ico" title="' + esc(etiqueta) + '" aria-label="' + esc(etiqueta) + '">' + cotiCatSvg(cat) + '</div>' +
+      '</div>' + doblado + '</article>';
   }
 
   let cotiCache = { hoy: [], ayer: [], viejos: [] };
@@ -5127,18 +5198,20 @@ function hobbyIconKey(id, texto) {
       }
     });
     const keys = Object.keys(cats);
-    if (keys.length <= 1) {
+    if (!keys.length) {
       box.hidden = true;
       box.innerHTML = '';
       return;
     }
     box.hidden = false;
-    box.innerHTML = keys.map(function (id) {
+    let filtrosHtml = '<button type="button" class="coti-filtro coti-filtro--todo' + (cotiFiltroActivo === '' ? ' is-on' : '') + '" data-coti-filtro="" aria-label="Todos" title="Todos"><span class="coti-filtro-pill" aria-hidden="true">' + cotiFiltroIco('todo') + '</span></button>';
+    filtrosHtml += keys.map(function (id) {
       const c = cats[id];
       const on = cotiFiltroActivo === id ? ' is-on' : '';
       return '<button type="button" class="coti-filtro coti-cat--' + esc(id) + on + '" data-coti-filtro="' + esc(id) + '" aria-label="' + esc(c.etiqueta) + '" title="' + esc(c.etiqueta) + '">' +
-        '<span class="coti-cat" aria-hidden="true">' + cotiCatSvg(id) + '</span></button>';
+        '<span class="coti-filtro-pill" aria-hidden="true">' + cotiFiltroIco(id) + '</span></button>';
     }).join('');
+    box.innerHTML = filtrosHtml;
   }
 
   function renderCotilleoLista(coti) {
@@ -5559,6 +5632,27 @@ function hobbyIconKey(id, texto) {
     });
   }
 
+
+  function orgDdTriggerContent(kind, label, valStr) {
+    var chev = '<span class="org-dd-chev" aria-hidden="true"></span>';
+    if (kind === 'lugar') {
+      return orgLugarThumbHtml(valStr) + '<span class="org-dd-label">' + esc(label) + '</span>' + chev;
+    }
+    var ico = kind === 'dia'
+      ? '<span class="org-dd-ico org-dd-ico--dia" aria-hidden="true"></span>'
+      : (kind === 'hora' ? '<span class="org-dd-ico org-dd-ico--hora" aria-hidden="true"></span>' : '');
+    return ico + '<span class="org-dd-label">' + esc(label) + '</span>' + chev;
+  }
+
+  function orgDdOptContent(kind, opt) {
+    var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
+    var txt = esc(opt.label || optVal);
+    if (kind === 'lugar') {
+      return orgLugarThumbHtml(optVal) + '<span class="org-dd-opt-txt">' + txt + '</span>';
+    }
+    return txt;
+  }
+
   function pintarOrgDropdown(kind, options, value, onChange) {
     var map = {
       lugar: { box: '[data-org-dd-lugar]', native: '[data-org-lugar]' },
@@ -5594,10 +5688,10 @@ function hobbyIconKey(id, texto) {
     }
     var trigger = document.createElement('button');
     trigger.type = 'button';
-    trigger.className = 'org-dd-trigger';
+    trigger.className = 'org-dd-trigger' + (kind === 'lugar' ? ' org-dd-trigger--lugar' : '');
     trigger.setAttribute('aria-haspopup', 'listbox');
     trigger.setAttribute('aria-expanded', 'false');
-    trigger.innerHTML = '<span class="org-dd-label">' + esc(label) + '</span>';
+    trigger.innerHTML = orgDdTriggerContent(kind, label, valStr);
     var menu = document.createElement('ul');
     menu.className = 'org-dd-menu capa-scroll';
     menu.setAttribute('role', 'listbox');
@@ -5618,7 +5712,9 @@ function hobbyIconKey(id, texto) {
         else if (valStr !== '' && optVal === valStr) li.className += ' is-on';
         li.setAttribute('role', 'option');
         li.setAttribute('aria-selected', li.classList.contains('is-on') ? 'true' : 'false');
-        li.textContent = opt.label || optVal;
+        if (kind === 'lugar') li.className += ' org-dd-opt--lugar';
+        if (kind === 'lugar') li.innerHTML = orgDdOptContent(kind, opt);
+        else li.textContent = opt.label || optVal;
         if (!opt.disabled && onChange) {
           li.addEventListener('click', function (ev) {
             ev.preventDefault();
@@ -6137,6 +6233,19 @@ function hobbyIconKey(id, texto) {
     if (partidaId !== serverId) persistPartidaId(serverId);
     return true;
   }
+
+  async function recuperarPartidaIdPerdida() {
+    if (!partidaId) {
+      return adoptSqlPartidaIfAny();
+    }
+    const probe = await api('partida.estado', {}, 'GET');
+    if (probe.ok) return true;
+    const err = String(probe.error || '').toUpperCase();
+    if (err !== 'PARTIDA_NO_ENCONTRADA' && err !== 'SAVE_CORRUPTO') return false;
+    try { localStorage.removeItem(storageKey()); } catch (e) {}
+    partidaId = null;
+    return adoptSqlPartidaIfAny();
+  }
   async function ensurePartida() {
     if (await adoptSqlPartidaIfAny()) return true;
     if (partidaId) return true;
@@ -6375,6 +6484,10 @@ function hobbyIconKey(id, texto) {
     setPasarRatoBusy(true, 'A ver qué se cuece…');
     const relojAntes = relojAbsDesdeEstado();
     try {
+      if (!(await recuperarPartidaIdPerdida())) {
+        toast('No encuentro tu partida guardada. Recarga la página o inicia sesión en Intocables.');
+        return;
+      }
       const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
         !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
       if (perdida) {
