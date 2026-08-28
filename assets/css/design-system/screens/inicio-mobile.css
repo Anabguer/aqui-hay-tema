@@ -556,7 +556,7 @@
   }
 
   .inicio-mobile .mapa-zona--cerrada-ahora::after {
-    content: "ðŸ”’";
+    content: "\1F512";
     position: absolute;
     right: 5%;
     bottom: 5%;
@@ -1024,7 +1024,7 @@
   }
 
   .inicio-mobile .obj-misiones-papel-tit::before {
-    content: "ðŸ“‹";
+    content: "\1F4CB";
     font-size: .8125rem;
   }
 
@@ -1112,7 +1112,7 @@
   }
 
   .inicio-mobile .zona-tit-parejas::before {
-    content: "â™¥";
+    content: "\2665";
     color: var(--ds-pink-deep);
     font-size: 1rem;
   }
@@ -1129,7 +1129,7 @@
   }
 
   .inicio-mobile .obj-parejas-list p.muted::before {
-    content: "â™¥ â™¥";
+    content: "\2665 \2665";
     display: block;
     font-size: 1.5rem;
     letter-spacing: 10px;
