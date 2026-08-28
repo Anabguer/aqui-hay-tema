@@ -40,6 +40,7 @@ final class CandidatoLlegadaEngine
         }
         $l['dias_sin_oferta'] ??= 0;
         $l['ultimo_dia_intento_pity'] ??= 0;
+        self::sincronizarPityLegacy($partida);
     }
 
     public static function modoNormalActivo(array $partida): bool
@@ -478,13 +479,82 @@ final class CandidatoLlegadaEngine
 
     public static function forzarOfertaPorPity(int $n, int $diasSinOferta): bool
     {
+        return $diasSinOferta >= self::umbralPityOferta($n);
+    }
+
+    public static function umbralPityOferta(int $n): int
+    {
         if ($n <= 6) {
-            return $diasSinOferta >= 3;
+            return 3;
         }
         if ($n <= 8) {
-            return $diasSinOferta >= 4;
+            return 4;
         }
-        return false;
+        return PHP_INT_MAX;
+    }
+
+    /**
+     * Backfill idempotente para saves anteriores al contador de pity.
+     * No altera población: solo prepara dias_sin_oferta si el ritmo va claramente retrasado.
+     */
+    public static function sincronizarPityLegacy(array &$partida): void
+    {
+        if (!empty($partida['llegadas']['_pity_legacy_backfill_v1'])) {
+            return;
+        }
+        if (($partida['llegadas']['modo'] ?? '') !== 'normal') {
+            return;
+        }
+        $tut = $partida['tutorial'] ?? [];
+        if (!empty($tut['activo']) && empty($tut['jugable_completado'])) {
+            return;
+        }
+        if (($partida['llegadas']['candidato_activo'] ?? null) !== null
+            || ($partida['llegadas']['en_camino'] ?? null) !== null) {
+            return;
+        }
+
+        $n = count(TutorialIncorporaciones::residentesActivos($partida));
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ($n > 8 || $dia < 1) {
+            $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+            return;
+        }
+
+        $desde = (int) ($partida['llegadas']['normal_desde_dia'] ?? 1);
+        $primerElegible = $desde + 2;
+        if ($dia < $primerElegible) {
+            $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+            return;
+        }
+
+        $llegadasEfectivas = 0;
+        foreach ($partida['llegadas']['historial'] ?? [] as $h) {
+            if (!is_array($h)) {
+                continue;
+            }
+            if (($h['resultado'] ?? '') === self::ESTADO_LLEGADO) {
+                $llegadasEfectivas++;
+            }
+        }
+
+        $umbral = self::umbralPityOferta($n);
+        if ($umbral === PHP_INT_MAX) {
+            $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
+            return;
+        }
+
+        $diasElegibles = max(0, $dia - $primerElegible + 1);
+        $residentesPostTutorial = max(0, $n - 3);
+        $retraso = $diasElegibles - $residentesPostTutorial - ($llegadasEfectivas * 2);
+        if ($retraso >= ($umbral - 1)) {
+            $partida['llegadas']['dias_sin_oferta'] = max(
+                (int) ($partida['llegadas']['dias_sin_oferta'] ?? 0),
+                $umbral
+            );
+        }
+
+        $partida['llegadas']['_pity_legacy_backfill_v1'] = true;
     }
 
     private static function registrarDiaSinOferta(array &$partida, int $dia): void
