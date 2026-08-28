@@ -465,7 +465,7 @@
 
   /* etiqueta + NUEVO PLAN (ref inicio-mobile.png) */
   .inicio-mobile .obj-nuevo-plan-txt::before {
-    content: "+ NUEVO PLAN";
+    content: "NUEVO PLAN";
     visibility: visible;
     font-family: var(--ds-font-ui);
     font-weight: 800;
@@ -527,7 +527,7 @@
     background:
       radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, .28), rgba(255, 255, 255, 0) 58%),
       linear-gradient(165deg, #f8a8b8 0%, #e87a90 48%, #d95f78 100%);
-    border: 2px solid rgba(255, 246, 238, .95);
+    border: 2.5px dashed rgba(255, 246, 238, .95);
     border-image: none;
     -webkit-mask-image: none;
     mask-image: none;
@@ -568,11 +568,17 @@
     display: none;
   }
 
+  .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-nuevo-plan-horiz {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex: 1 1 auto;
+    flex: 0 0 auto;
     width: auto;
     height: auto;
     min-height: 0;
@@ -590,8 +596,10 @@
     color: #fff;
     text-shadow: 0 1px 0 rgba(120, 30, 50, .22);
     padding: 0 4px 1px;
-    margin-top: auto;
+    margin: 0;
     flex: 0 0 auto;
+    text-align: center;
+    width: 100%;
   }
 
   .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt,
@@ -804,11 +812,11 @@
     align-self: start;
     margin-top: 2px;
     min-width: 0;
-    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif);
     font-style: normal;
     font-weight: 600;
-    font-size: 1.05rem;
-    line-height: 1.3;
+    font-size: 1.125rem;
+    line-height: 1.4;
     color: var(--ds-ink, #3b3028);
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -1148,10 +1156,10 @@
   }
 
   .inicio-mobile .mision-strip-txt {
-    font-family: var(--ds-font-hand);
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif);
     font-weight: 600;
     font-size: 1.125rem;
-    line-height: 1.15;
+    line-height: 1.4;
     color: var(--ds-ink);
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -1173,8 +1181,10 @@
   }
 
   .inicio-mobile .obj-misiones-vacio {
-    font-family: var(--ds-font-hand);
-    font-size: 1rem;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif);
+    font-weight: 600;
+    font-size: 1.125rem;
+    line-height: 1.4;
     color: var(--ds-text-muted);
   }
 
@@ -1428,8 +1438,56 @@
   }
 
 /* === INICIO-ENCURSO-REF-v14 (móvil) === */
-.inicio-mobile .encursos-movil .enc-mov-cab {
-    display: none !important;
+  .inicio-mobile .encursos-movil .enc-mov-cab {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 7px !important;
+    width: 100% !important;
+    padding: 0 2px !important;
+    margin: 0 0 10px !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-tit {
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1.1875rem !important;
+    font-weight: 700 !important;
+    font-style: normal !important;
+    letter-spacing: .6px !important;
+    text-transform: uppercase !important;
+    color: var(--ds-ink, #3b3028) !important;
+    line-height: 1.1 !important;
+  }
+
+  .inicio-mobile .encursos-movil .plan-seccion-ico.enc-mov-ico {
+    width: 1.125rem !important;
+    height: 1.125rem !important;
+    flex: 0 0 1.125rem !important;
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+  }
+
+  .inicio-mobile .encursos-movil .plan-seccion-rule {
+    flex: 1 1 auto !important;
+    height: 0 !important;
+    border-top: 1.5px dashed rgba(89, 72, 57, .28) !important;
+    margin: 0 6px !important;
+  }
+
+  .inicio-mobile .encursos-movil .plan-seccion-ver {
+    flex: 0 0 auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: none !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .625rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    cursor: pointer !important;
+    white-space: nowrap !important;
   }
 
   .inicio-mobile .encursos-movil .enc-mov-track {
@@ -1449,8 +1507,8 @@
 
   .inicio-mobile .encursos-movil .enc-mov-card {
     position: relative !important;
-    flex: 0 0 calc(100% - 6px) !important;
-    width: calc(100% - 6px) !important;
+    flex: 0 0 min(208px, calc(100% - 6px)) !important;
+    width: min(208px, calc(100% - 6px)) !important;
     min-width: 0 !important;
     max-width: 100% !important;
     scroll-snap-align: start !important;
@@ -1507,12 +1565,83 @@
     text-align: center !important;
   }
 
-  .inicio-mobile .encursos-movil .enc-mov-row,
-  .inicio-mobile .encursos-movil .enc-mov-copy,
-  .inicio-mobile .encursos-movil .enc-mov-nombres,
-  .inicio-mobile .encursos-movil .enc-mov-lugar,
-  .inicio-mobile .encursos-movil .enc-mov-estado {
+  .inicio-mobile .encursos-movil .enc-mov-card-tit,
+  .inicio-mobile .encursos-movil .enc-mov-body,
+  .inicio-mobile .encursos-movil .enc-mov-meta,
+  .inicio-mobile .encursos-movil .enc-mov-resumen {
     display: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card--compact {
+    padding: 10px 10px 8px !important;
+    gap: 6px !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card--compact::before {
+    display: none !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-copy {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    gap: 1px !important;
+    text-align: left !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-nombres {
+    display: block !important;
+    margin: 0 !important;
+    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    line-height: 1.1 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-lugar {
+    display: block !important;
+    margin: 0 !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .75rem !important;
+    font-weight: 600 !important;
+    color: var(--ds-text-muted, #6a5f55) !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-estado {
+    display: block !important;
+    margin: 2px 0 0 !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-hora {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 4px !important;
+    padding: 1px 6px !important;
+    background: var(--ds-green-soft, #e8f5e9) !important;
+    border: 1.5px solid var(--ds-green-deep, #2e7d32) !important;
+    border-radius: 6px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .625rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+    color: var(--ds-green-deep, #2e7d32) !important;
   }
 
   .inicio-mobile .encursos-movil .enc-mov-faces {
@@ -1625,8 +1754,24 @@
     display: block !important;
   }
 
-  .inicio-mobile .encursos-movil .enc-mov-cta-flecha {
-    display: none !important;
+  .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-cta {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    font-size: .6875rem !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    align-self: center !important;
+    white-space: nowrap !important;
+  }
+
+  .inicio-mobile .encursos-movil .enc-mov-card--compact .enc-mov-cta-flecha {
+    display: inline !important;
   }
 
   .inicio-mobile .encursos-movil .enc-mov-cta.is-open {
@@ -1673,6 +1818,31 @@
   width: 100%;
   height: auto;
   display: block;
+}
+
+/* INICIO-MAP-TOKENS-SIZE */
+@media (max-width: 768px) {
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara,
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara img,
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara .cara-ini,
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara-ini {
+    font-size: .62rem !important;
+  }
+
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::before {
+    inset: -6px !important;
+    border-width: 2px !important;
+  }
+
+  .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::after {
+    bottom: -4px !important;
+    height: 6px !important;
+  }
 }
 
 
@@ -2106,7 +2276,7 @@
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-head {
-    margin-top: auto !important;
+    margin: 0 !important;
     flex: 0 0 auto !important;
   }
 
@@ -2131,6 +2301,12 @@
     gap: 0 !important;
   }
 
+  .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-nuevo-plan-horiz {
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
     display: flex !important;
     flex-direction: column !important;
@@ -2142,7 +2318,7 @@
     min-height: 101px !important;
     margin: 0 !important;
     padding: 7px 6px 6px !important;
-    border: 2px solid rgba(255, 246, 238, .95) !important;
+    border: 2.5px dashed rgba(255, 246, 238, .95) !important;
     border-radius: 20px 15px 23px 14px / 15px 23px 14px 20px !important;
     background:
       radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, .28), rgba(255, 255, 255, 0) 58%),
@@ -2185,16 +2361,19 @@
     visibility: hidden !important;
     font-size: inherit !important;
     margin: 0 !important;
-    margin-top: auto !important;
     max-width: none !important;
+    text-align: center !important;
+    width: 100% !important;
     white-space: normal !important;
     color: #fff !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt::before {
-    content: "+ NUEVO PLAN" !important;
+    content: "NUEVO PLAN" !important;
     visibility: visible !important;
     display: block !important;
+    text-align: center !important;
+    width: 100% !important;
     font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
     font-weight: 800 !important;
     font-size: .6875rem !important;
@@ -2204,7 +2383,7 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-ico {
-    flex: 1 1 auto !important;
+    flex: 0 0 auto !important;
     width: auto !important;
     height: auto !important;
     min-height: 0 !important;
@@ -2220,7 +2399,7 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
-    margin-top: auto !important;
+    margin: 0 !important;
     flex: 0 0 auto !important;
   }
 
@@ -2236,7 +2415,7 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
-    margin-top: auto !important;
+    margin: 0 !important;
     flex: 0 0 auto !important;
   }
 
@@ -2344,11 +2523,11 @@
     margin-top: 2px !important;
     display: -webkit-box !important;
     min-width: 0 !important;
-    font-family: var(--ds-font-hand, Caveat, cursive) !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
     font-style: normal !important;
     font-weight: 600 !important;
-    font-size: 1.05rem !important;
-    line-height: 1.3 !important;
+    font-size: 1.125rem !important;
+    line-height: 1.4 !important;
     color: var(--ds-ink, #3b3028) !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -2410,11 +2589,19 @@
   }
 }
 
-/* === BLOQUE B: cuerpo de lectura móvil (máximo 16px) ===
-   Aislado a móvil y a contenido principal; no afecta labels, metadatos,
-   controles, badges, contadores, títulos ni iconografía. */
+/* === INICIO-TYPE-MISIONES-COTILLEO-MOBILE-v1 ===
+   Cuerpos de lectura: tipografía UI (como desktop). Títulos sin tocar. */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt,
+  .play-v3:has(.game-shell) .inicio-mobile .mision-strip-txt,
+  .play-v3:has(.game-shell) .inicio-mobile .obj-misiones-vacio {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    font-size: 1.125rem !important;
+    line-height: 1.4 !important;
+  }
+
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-proximo-body {
     font-size: 1.25rem !important;
     line-height: 1.4 !important;
