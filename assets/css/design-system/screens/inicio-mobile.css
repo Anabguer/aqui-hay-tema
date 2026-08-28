@@ -32,6 +32,7 @@
   padding: 0 13px 12px;
   width: 100%;
   box-sizing: border-box;
+  background: #fff;
 }
 
 .inicio-stage > .inicio-map-host {
@@ -52,10 +53,8 @@
 /* ---------- 0. Papel de la mesa ---------- */
 
   body.play-v3 .inicio-mobile.inicio-mobile-feed {
-    background:
-      radial-gradient(1100px 480px at 15% -6%, rgba(255, 252, 240, .95), rgba(255, 252, 240, 0) 58%),
-      radial-gradient(900px 460px at 90% 104%, rgba(228, 212, 178, .55), rgba(228, 212, 178, 0) 60%),
-      var(--ds-paper-app);
+    background: #fff;
+    background-image: none;
     overflow-x: hidden;
   }
 
@@ -93,6 +92,8 @@
     width: 100%;
     max-width: 100%;
     min-width: 0;
+    background: transparent;
+    background-image: none;
   }
 
   /* Superficies DS del feed: ningÃƒÂºn border-image/mask legacy */
@@ -188,6 +189,8 @@
     align-items: center;
     gap: 4px;
     margin: 0;
+    position: relative;
+    top: -4px;
     color: var(--ds-ink);
   }
 
@@ -304,12 +307,12 @@
 
   .inicio-mobile .inicio-mobile-tiles .shell-grupo-resumen {
     align-self: end;
-    transform: translateY(-2px) rotate(0.55deg);
+    transform: translate(0, 4px) rotate(0.55deg);
   }
 
   .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
     align-self: end;
-    transform: translateY(-4px) rotate(-0.35deg);
+    transform: translate(0, 3px) rotate(-0.35deg);
   }
 
   .inicio-mobile .inicio-mobile-tiles .obj-buzon {
@@ -608,17 +611,17 @@
   /* ---------- 6. Tira de Cotilleo (fiel a referencia) ---------- */
 
   .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par {
-    min-height: 72px;
-    padding: 11px 12px;
+    min-height: 58px;
+    padding: 8px 10px 8px 8px;
     display: flex;
     align-items: center;
-    gap: 11px;
+    gap: 10px;
     overflow: visible;
-    background: linear-gradient(180deg, #EBE3F8 0%, var(--ds-lavender-soft) 100%);
-    border: 2px solid var(--ds-lavender-deep);
-    border-radius: 18px 13px 20px 15px / 13px 20px 15px 18px;
-    box-shadow: 1.5px 3px 0 rgba(124, 107, 174, .30), 0 4px 8px rgba(70, 50, 30, .08);
-    transform: rotate(-0.4deg);
+    background: #f0edf2;
+    border: 1px solid #d1ced5;
+    border-radius: 12px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
+    transform: none;
   }
 
   /* sin celo/tape: la referencia no lo lleva */
@@ -629,38 +632,68 @@
     background: none;
   }
 
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-cuerpo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit {
+    position: relative;
     flex: none;
     white-space: nowrap;
     writing-mode: horizontal-tb;
-    transform: rotate(-1.2deg);
-    padding: 7px 9px;
-    background: #4F4378;
-    border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
-    box-shadow: 1px 2px 0 rgba(51, 38, 30, .3);
-    font-family: var(--ds-font-hand);
-    font-weight: 700;
-    font-size: 1rem;
-    letter-spacing: .8px;
+    transform: none;
+    padding: 7px 16px 7px 10px;
+    background: #e4e1e9;
+    border: 1px solid #d1ced5;
+    border-radius: 8px 0 0 8px;
+    box-shadow: none;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .1em;
     text-transform: uppercase;
     line-height: 1.1;
-    color: var(--ds-paper-card);
+    color: #4f4a56;
+  }
+
+  .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit::after {
+    content: "";
+    position: absolute;
+    top: -1px;
+    right: -9px;
+    width: 0;
+    height: 0;
+    border-top: calc(50% + 1px) solid transparent;
+    border-bottom: calc(50% + 1px) solid transparent;
+    border-left: 9px solid #e4e1e9;
+    filter: drop-shadow(1px 0 0 #d1ced5);
   }
 
   .inicio-mobile .obj-cotilleo-txt {
-    flex: 1;
-    font-family: var(--ds-font-hand);
-    font-weight: 600;
-    font-size: 1.0625rem;
-    line-height: 1.28;
-    color: var(--ds-ink);
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif);
+    font-style: italic;
+    font-weight: 500;
+    font-size: .8125rem;
+    line-height: 1.32;
+    color: #3d3838;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
 
+  /* Badge nuevos cotilleos: NO eliminar ? lo rellena play-v3.js via data-cotilleo-badge */
   .inicio-mobile .obj-cotilleo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex: none;
     min-width: 20px;
     height: 20px;
@@ -675,15 +708,20 @@
     transform: rotate(3deg);
   }
 
+  .inicio-mobile .obj-cotilleo-badge[hidden] {
+    display: none;
+  }
+
   .inicio-mobile .obj-cotilleo-flecha {
     flex: none;
-    color: var(--ds-lavender-deep);
-    font-size: 1.35rem;
-    font-weight: 800;
+    color: #8a8690;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1;
   }
 
   .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par:active {
-    transform: rotate(-0.4deg) scale(.985);
+    transform: scale(.99);
   }
 
   /* ---------- 7. Cabeceras de secciÃƒÂ³n (compactas, tipo referencia) ---------- */
@@ -1525,6 +1563,28 @@
     background: transparent !important;
   }
 
+  /* Feed + escenario: fondo blanco (sin papel crema) */
+  body.play-v3:has(.inicio-stage),
+  body.play-v3:has(.inicio-mobile.inicio-mobile-feed.is-inicio-view-active) {
+    background: #fff !important;
+    background-image: none !important;
+  }
+  body.play-v3 .game-shell,
+  body.play-v3 .game-shell > div,
+  body.play-v3 .inicio-stage,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed.is-inicio-view-active,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-chrome-right {
+    background: #fff !important;
+    background-image: none !important;
+  }
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .shell-grupo,
+  body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > section {
+    background: transparent !important;
+    background-image: none !important;
+  }
+
 
   /* --- 1. Cabecera movil (c5f73d3 inicio.css + override + responsive reloj) --- */
   .play-v3 .inicio-mobile:not(.inicio-mobile-feed) .game-top {
@@ -1600,6 +1660,8 @@
     align-self: end !important;
     justify-self: start !important;
     margin: 0 !important;
+    position: relative !important;
+    top: -4px !important;
     font-family: var(--ds-font-ui, Nunito, sans-serif) !important;
     font-weight: 700 !important;
     font-size: .8125rem !important;
@@ -1736,11 +1798,11 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-resumen {
-    transform: translateY(-2px) rotate(0.55deg) !important;
+    transform: translate(0, 4px) rotate(0.55deg) !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
-    transform: translateY(-4px) rotate(-0.35deg) !important;
+    transform: translate(0, 3px) rotate(-0.35deg) !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon .mensajitos-wrap {
@@ -1921,24 +1983,24 @@
     text-transform: none !important;
   }
 
-  /* --- 3. Cotilleo feed (c5f73d3 sec.6; gana a responsive generico) --- */
+  /* --- 3. Cotilleo feed (ref imagen; gana a responsive; badge nuevos intacto) --- */
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par {
     display: flex !important;
     flex-direction: row !important;
     align-items: center !important;
     justify-content: flex-start !important;
-    gap: 11px !important;
+    gap: 10px !important;
     width: 100% !important;
-    min-height: 72px !important;
-    padding: 11px 12px !important;
+    min-height: 58px !important;
+    padding: 8px 10px 8px 8px !important;
     margin: 0 !important;
     overflow: visible !important;
     max-height: none !important;
-    background: linear-gradient(180deg, #EBE3F8 0%, var(--ds-lavender-soft, #ebe3f8) 100%) !important;
-    border: 2px solid var(--ds-lavender-deep, #7c6bae) !important;
-    border-radius: 18px 13px 20px 15px / 13px 20px 15px 18px !important;
-    box-shadow: 1.5px 3px 0 rgba(124, 107, 174, .30), 0 4px 8px rgba(70, 50, 30, .08) !important;
-    transform: rotate(-0.4deg) !important;
+    background: #f0edf2 !important;
+    border: 1px solid #d1ced5 !important;
+    border-radius: 12px !important;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55) !important;
+    transform: none !important;
     box-sizing: border-box !important;
   }
 
@@ -1949,44 +2011,66 @@
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit {
+    position: relative !important;
     flex: none !important;
     display: inline-block !important;
     white-space: nowrap !important;
-    transform: rotate(-1.2deg) !important;
-    padding: 7px 9px !important;
+    transform: none !important;
+    padding: 7px 16px 7px 10px !important;
     margin: 0 !important;
-    background: #4F4378 !important;
-    border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px !important;
-    box-shadow: 1px 2px 0 rgba(51, 38, 30, .3) !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-weight: 700 !important;
-    font-size: 1rem !important;
-    letter-spacing: .8px !important;
+    background: #e4e1e9 !important;
+    border: 1px solid #d1ced5 !important;
+    border-radius: 8px 0 0 8px !important;
+    box-shadow: none !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .72rem !important;
+    letter-spacing: .1em !important;
     text-transform: uppercase !important;
     line-height: 1.1 !important;
-    color: var(--ds-paper-card, #f7f1e8) !important;
+    color: #4f4a56 !important;
     text-align: center !important;
   }
 
+  .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit::after {
+    content: "" !important;
+    position: absolute !important;
+    top: -1px !important;
+    right: -9px !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-top: calc(50% + 1px) solid transparent !important;
+    border-bottom: calc(50% + 1px) solid transparent !important;
+    border-left: 9px solid #e4e1e9 !important;
+    filter: drop-shadow(1px 0 0 #d1ced5) !important;
+  }
+
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-cuerpo {
-    display: contents !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 6px !important;
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
   }
 
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt {
     display: -webkit-box !important;
     flex: 1 1 auto !important;
     min-width: 0 !important;
-    font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
-    font-weight: 600 !important;
-    font-size: 1.0625rem !important;
-    line-height: 1.28 !important;
-    color: var(--ds-ink, #3b3028) !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-style: italic !important;
+    font-weight: 500 !important;
+    font-size: .8125rem !important;
+    line-height: 1.32 !important;
+    color: #3d3838 !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
     overflow: hidden !important;
     text-align: left !important;
   }
 
+  /* data-cotilleo-badge: contador nuevos ? play-v3.js actualizarCotiBadgesUI() */
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-badge {
     display: inline-flex !important;
     align-items: center !important;
@@ -2012,9 +2096,10 @@
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-flecha {
     display: inline !important;
     flex: none !important;
-    color: var(--ds-lavender-deep, #7c6bae) !important;
-    font-size: 1.35rem !important;
-    font-weight: 800 !important;
+    color: #8a8690 !important;
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    line-height: 1 !important;
   }
   /* --- 4. Misiones feed: texto visible (evita colapso -webkit-box en iOS) --- */
   .play-v3 .inicio-mobile.inicio-mobile-feed .obj-misiones-strip {
