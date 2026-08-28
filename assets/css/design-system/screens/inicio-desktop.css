@@ -910,10 +910,10 @@
     grid-template-rows: auto auto auto !important;
   }
 }
-/* INICIO-MAP-TALLER-v4 — mapa alto sin recorte (gana a desktop-shell) */
+/* INICIO-MAP-TALLER-v4b — mapa alto sin recorte (gana a desktop-shell) */
 @media (min-width: 769px) {
   .inicio-stage {
-    grid-template-columns: minmax(230px, 290px) minmax(400px, 1.8fr) minmax(220px, 280px) !important;
+    grid-template-columns: minmax(200px, 250px) minmax(520px, 1fr) minmax(200px, 250px) !important;
   }
 
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap {
@@ -950,7 +950,7 @@
     width: 100% !important;
     max-width: 100% !important;
     height: auto !important;
-    min-height: min(58vh, 540px) !important;
+    min-height: min(62vh, 580px) !important;
     max-height: none !important;
     aspect-ratio: 618 / 404 !important;
     margin: 0 auto !important;
@@ -974,6 +974,6 @@
 
 @media (min-width: 1100px) {
   .inicio-stage {
-    grid-template-columns: minmax(240px, 300px) minmax(480px, 2fr) minmax(230px, 290px) !important;
+    grid-template-columns: minmax(210px, 260px) minmax(560px, 1.2fr) minmax(210px, 260px) !important;
   }
 }
