@@ -212,9 +212,7 @@
     color: #2c261f !important;
   }
 
-  .inicio-desktop .celestine-nota .obj-vecinos-preview {
-    display: flex !important;
-    justify-content: flex-start !important;
+  .inicio-desktop .celestine-nota .obj-vecinos-preview { display: flex !important; justify-content: center !important;
     gap: 6px !important;
     margin-bottom: .65rem !important;
     min-height: 0 !important;
