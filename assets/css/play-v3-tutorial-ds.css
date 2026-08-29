@@ -39,3 +39,108 @@
     overflow-y: auto !important;
   }
 }
+
+/* ============================================================
+   TUTORIAL — LEGIBILIDAD DEFINITIVA (v6)
+   Única dirección canónica para TODO el texto de lectura.
+   Usa tipografía UI (Nunito), NO Caveat/manuscrita.
+   Tamaños móviles: cuerpo ≥15px, secundario ≥14px, line-height 1.4.
+   Excluye: títulos, Saltar, labels botones (OBSERVA/PROPÓN/MIRA), CTAs.
+   ============================================================ */
+.play-v3 .tut-intro .tut-papel,
+.play-v3 .tut-finale .tut-papel {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+}
+
+/* Texto de lectura — selector canónico de máxima especificidad */
+.play-v3 .tut-intro .tut-intro-line,
+.play-v3 .tut-intro .tut-intro-extra,
+.play-v3 .tut-intro .tut-bloques-pref,
+.play-v3 .tut-intro .tut-bloque-txt,
+.play-v3 .tut-intro .tut-cierre,
+.play-v3 .tut-finale .tut-fin-lead,
+.play-v3 .tut-finale .tut-fin-rest,
+.play-v3 .tut-paso-1 .tut-intro-line,
+.play-v3 .tut-paso-1 .tut-intro-extra,
+.play-v3 .tut-paso-1 .tut-bloques-pref,
+.play-v3 .tut-paso-1 .tut-bloque-txt,
+.play-v3 .tut-paso-1 .tut-cierre,
+.play-v3 .tut-paso-2 .tut-intro-line,
+.play-v3 .tut-paso-2 .tut-intro-extra,
+.play-v3 .tut-paso-2 .tut-bloques-pref,
+.play-v3 .tut-paso-2 .tut-bloque-txt,
+.play-v3 .tut-paso-2 .tut-cierre,
+.play-v3 .tut-paso-3 .tut-intro-line,
+.play-v3 .tut-paso-3 .tut-intro-extra,
+.play-v3 .tut-paso-3 .tut-bloques-pref,
+.play-v3 .tut-paso-3 .tut-bloque-txt,
+.play-v3 .tut-paso-3 .tut-cierre,
+.play-v3 .tut-paso-4 .tut-intro-line,
+.play-v3 .tut-paso-4 .tut-intro-extra,
+.play-v3 .tut-paso-4 .tut-bloques-pref,
+.play-v3 .tut-paso-4 .tut-bloque-txt,
+.play-v3 .tut-paso-4 .tut-cierre,
+.play-v3 .tut-paso-5 .tut-intro-line,
+.play-v3 .tut-paso-5 .tut-intro-extra,
+.play-v3 .tut-paso-5 .tut-bloques-pref,
+.play-v3 .tut-paso-5 .tut-bloque-txt,
+.play-v3 .tut-paso-5 .tut-cierre {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: 1rem !important;
+  line-height: 1.45 !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+@media (max-width: 768px) {
+  .play-v3 .tut-intro .tut-intro-line,
+  .play-v3 .tut-intro .tut-intro-extra,
+  .play-v3 .tut-intro .tut-bloques-pref,
+  .play-v3 .tut-intro .tut-bloque-txt,
+  .play-v3 .tut-intro .tut-cierre,
+  .play-v3 .tut-finale .tut-fin-lead,
+  .play-v3 .tut-finale .tut-fin-rest,
+  .play-v3 .tut-paso-1 .tut-intro-line,
+  .play-v3 .tut-paso-1 .tut-intro-extra,
+  .play-v3 .tut-paso-1 .tut-bloques-pref,
+  .play-v3 .tut-paso-1 .tut-bloque-txt,
+  .play-v3 .tut-paso-1 .tut-cierre,
+  .play-v3 .tut-paso-2 .tut-intro-line,
+  .play-v3 .tut-paso-2 .tut-intro-extra,
+  .play-v3 .tut-paso-2 .tut-bloques-pref,
+  .play-v3 .tut-paso-2 .tut-bloque-txt,
+  .play-v3 .tut-paso-2 .tut-cierre,
+  .play-v3 .tut-paso-3 .tut-intro-line,
+  .play-v3 .tut-paso-3 .tut-intro-extra,
+  .play-v3 .tut-paso-3 .tut-bloques-pref,
+  .play-v3 .tut-paso-3 .tut-bloque-txt,
+  .play-v3 .tut-paso-3 .tut-cierre,
+  .play-v3 .tut-paso-4 .tut-intro-line,
+  .play-v3 .tut-paso-4 .tut-intro-extra,
+  .play-v3 .tut-paso-4 .tut-bloques-pref,
+  .play-v3 .tut-paso-4 .tut-bloque-txt,
+  .play-v3 .tut-paso-4 .tut-cierre,
+  .play-v3 .tut-paso-5 .tut-intro-line,
+  .play-v3 .tut-paso-5 .tut-intro-extra,
+  .play-v3 .tut-paso-5 .tut-bloques-pref,
+  .play-v3 .tut-paso-5 .tut-bloque-txt,
+  .play-v3 .tut-paso-5 .tut-cierre {
+    font-size: 0.94rem !important;
+    line-height: 1.5 !important;
+  }
+}
+
+/* Asegurar que títulos, Saltar, labels botones y CTAs NO cambian */
+.play-v3 .tut-titulo,
+.play-v3 .tut-fin-titulo,
+.play-v3 .tut-skip,
+.play-v3 .tut-acciones .cta,
+.play-v3 .tut-fin-cta,
+.play-v3 .tut-bloque-tit,
+.play-v3 .tut-cara-nombre,
+.play-v3 .tut-pasos,
+.play-v3 .libreta-kicker {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
