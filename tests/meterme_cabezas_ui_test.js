@@ -35,7 +35,8 @@ ok(!js.includes('\\u00bfA qui\\u00E9n quieres darle un empujoncito?'), 'js: sin 
 ok(!js.includes('\\u00bfQu\\u00E9 le quieres sugerir?'), 'js: sin kicker sugerir iter1');
 ok(js.includes('data-enc-int-kicker-tema'), 'js: kicker dinámico paso 2');
 ok(js.includes('kickerRompeHieloJs'), 'js: banco variantes rompe hielo');
-ok(js.includes('\u00bfQu\u00E9 se cuece ah\u00ED?'), 'js: CTA acceso MENTES');
+ok(js.includes('data-enc-mentes-open'), 'js: CTA abre modal MENTES');
+ok(js.includes('ctaTxtEncuentroMov'), 'js: helper CTA acceso MENTES');
 ok(!js.includes('Animar la conversaci\u00f3n'), 'js: sin Animar la conversación en UI');
 ok(!js.includes('Sacar un tema que le guste'), 'js: sin dropdown tema abstracto');
 ok(js.includes('data-enc-int-persona='), 'js: participantes seleccionables');
@@ -63,11 +64,12 @@ ok(cssArt.includes('.enc-int-step[hidden]'), 'css: pasos ocultables');
 
 (function sandbox() {
   const fns = [
+    'function htmlCaraAvatar(',
+    'function htmlIntervencionResultado(',
     'function kickerRompeHieloJs(',
     'function textoFeedbackIntervencion(',
     'function temasIntervencionDe(',
     'function pintarTemasIntervencion(',
-    'function caraIntervencionHtml(',
     'function htmlIntervencionEncuentro('
   ].map(function (n) { return extraerBloque(js, n); }).join('\n');
   const nombres = { rA: 'Xenia', rB: 'Laura' };
@@ -80,6 +82,8 @@ ok(cssArt.includes('.enc-int-step[hidden]'), 'css: pasos ocultables');
       }
     },
     nombreDe: function (id) { return nombres[id] || id; },
+    tokenDe: function () { return ''; },
+    emocionDe: function () { return 'neutral'; },
     esc: function (s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); },
     planEsEnCurso: function () { return true; },
     intervencionVistaDe: function (enc) { return enc.__iv; }

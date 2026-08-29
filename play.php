@@ -615,6 +615,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
       </aside>
+      <aside class="capa capa-mentes mentes-modal ds-modal-sheet" aria-label="&iquest;Qu&eacute; se cuece ah&iacute;?" role="dialog" aria-modal="true">
+        <button type="button" class="cerrar mentes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <header class="mentes-top">
+          <div class="ds-modal-head">
+            <h2 class="mentes-tit ds-modal-tit ds-modal-tit--lavender">&iquest;Qu&eacute; se cuece ah&iacute;?</h2>
+          </div>
+        </header>
+        <div class="mentes-body capa-scroll" data-mentes-body></div>
+      </aside>
       <aside class="capa capa-ficha ds-modal-sheet" aria-label="Ficha de vecino">
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
