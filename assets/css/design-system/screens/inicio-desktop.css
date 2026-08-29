@@ -6113,9 +6113,10 @@
     color: #4a4a4a !important;
   }
   .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tit {
-    color: #c85a18 !important;
+    color: #d4567a !important;
     font-family: "Caveat", "Caveat Brush", cursive !important;
   }
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta,
   .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-main::after,
   .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-body::after {
     display: none !important;
@@ -7933,97 +7934,121 @@
   }
 }
 
-/* INICIO-BOTTOM-NAV-DESKTOP-v119 ? iconos tinta neutra; acento solo en tab activo */
+/* INICIO-CROMATICA-DESKTOP-v1 - paleta lavanda aprobada (solo pantalla principal desktop) */
 @media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn {
-    color: var(--ds-ink, #33261e) !important;
+  /* 1. Fondo general */
+  html:has(body.play-v3 .inicio-desktop.is-inicio-view-active),
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active),
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active) .game-shell,
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active) .game-main,
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-root.pc,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-scroll {
+    background-color: #F3EFF7 !important;
+    background-image: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt {
-    color: var(--ds-ink, #33261e) !important;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico {
-    color: var(--ds-ink-soft, #6b5138) !important;
+  /* Columnas sin panel blanco de fondo */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .shell-grupo,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .proxplanes-movil {
     background: transparent !important;
-    border-radius: 6px !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg path {
-    fill: none !important;
-    stroke: currentColor !important;
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta::after {
+    content: none !important;
+    display: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on .play-bottom-nav-ico {
-    color: var(--ds-ink, #33261e) !important;
-    background: transparent !important;
+  /* 2. Cabecera superior */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #D9D2E1 !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
-    color: var(--ds-lavender-deep, #7c6bae) !important;
-    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  /* Sin marcas decorativas tras AQUI HAY TEMA */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .brand-col::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .brand-col::after {
+    content: none !important;
+    display: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
-    color: var(--ds-pink-deep, #c42b4a) !important;
-    background: transparent !important;
+  /* 3. Panel dia / hora / pasar el rato */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-reloj {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border-color: #D9D2E1 !important;
+    box-shadow: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico svg path {
-    fill: currentColor !important;
-    stroke: none !important;
+  /* 4. Mensajitos */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
-    background: var(--ds-pink-deep, #c42b4a) !important;
-  }
-}
-
-/* INICIO-BOTTOM-NAV-DESKTOP-v120 ? color semantico siempre visible por icono */
-@media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico {
-    color: var(--ds-ink-soft, #6b5138) !important;
-    background: transparent !important;
-    border-radius: 7px !important;
-    box-sizing: border-box !important;
-    padding: 1px !important;
+  /* 5. Celestine apunta */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop .celestine-nota.obj-vecinos-resumen {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border-color: #D8D1DE !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg path {
-    fill: none !important;
-    stroke: currentColor !important;
+  /* 6. Cotilleos - lavanda propio */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par {
+    background: linear-gradient(180deg, #ebe3f8 0%, #e8dff5 100%) !important;
+    background-color: #ebe3f8 !important;
+    background-image: linear-gradient(180deg, #ebe3f8 0%, #e8dff5 100%) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
-    color: var(--ds-pink-deep, #c42b4a) !important;
-    background: transparent !important;
+  /* 7. Misiones - verde salvia */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-papel,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-papel.misiones-completadas {
+    background-color: #f6faf3 !important;
+    background-image: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
-    color: var(--ds-ink, #33261e) !important;
-    background: transparent !important;
+  /* 8. Tarjeta mapa */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #D8D1DE !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
-    color: var(--ds-lavender-deep, #7c6bae) !important;
-    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  /* 9. Plan en curso / proximos planes - carcasa blanca */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--escena,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--desk-mock,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .proxplanes-movil .pp-mov-card {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
-    color: var(--ds-pink-deep, #c42b4a) !important;
-    background: transparent !important;
+  /* 10. Footer / navegacion inferior */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #D9D2E1 !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
-    fill: currentColor !important;
-    stroke: none !important;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
-    color: var(--ds-ink, #33261e) !important;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
-    background: var(--ds-pink-deep, #c42b4a) !important;
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav::before {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
   }
 }

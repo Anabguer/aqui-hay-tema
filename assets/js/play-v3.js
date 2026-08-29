@@ -6502,7 +6502,8 @@ function hobbyIconKey(id, texto) {
   function orgMaxVecinos() {
     if (!orgEsEventoPueblo()) return ORG_MAX_VECINOS;
     var plazas = org.evento_ctx && org.evento_ctx.plazas_disponibles;
-    if (typeof plazas !== 'number' || plazas <= 0) {
+    plazas = Number(plazas);
+    if (!isFinite(plazas) || plazas <= 0) {
       if (plazas === 0) return 0;
       plazas = ORG_MAX_VECINOS;
     }
@@ -6541,7 +6542,15 @@ function hobbyIconKey(id, texto) {
   function abrirOrganizarEventoPueblo(ev) {
     var preset = (ev && ev.preset_organizar) ? ev.preset_organizar : ev;
     if (!preset || !preset.evento_pueblo_id) return;
-    abrirOrganizarConPreset(preset);
+    var evtId = preset.evento_pueblo_id;
+    api('evento_pueblo.elegibles', { evento_pueblo_id: evtId }).then(function (r) {
+      if (r && r.ok && r.vecinos) {
+        preset.elegibles = r.vecinos;
+      }
+      abrirOrganizarConPreset(preset);
+    }).catch(function () {
+      abrirOrganizarConPreset(preset);
+    });
   }
 
   function aplicarOrgModoEventoUi() {
@@ -6804,29 +6813,40 @@ function hobbyIconKey(id, texto) {
     var desc = orgLugarDesc(lugId);
     var horario = d.horario || '';
     var abierto = d.abierto_ahora;
-    var badge = '';
-    if (abierto === true) badge = '<span class="org-lugar-card-badge org-lugar-card-badge--abierto">Abierto</span>';
-    else if (abierto === false) badge = '<span class="org-lugar-card-badge org-lugar-card-badge--cerrado">Cerrado</span>';
-    var hasta = orgLugarHastaTxt(horario);
-    var meta = '<span class="org-lugar-card-meta">' + badge +
-      (hasta ? '<span class="org-lugar-card-hasta"><span class="org-lugar-card-reloj" aria-hidden="true"></span>' + esc(hasta) + '</span>' : '') +
-      '</span>';
-    var pie = '';
+    var estadoLinea = '';
+
     if (horario) {
-      var estado = abierto === true ? 'Abierto ahora' : (abierto === false ? 'Cerrado ahora' : '');
-      pie = '<span class="org-lugar-card-foot"><span class="org-lugar-card-pie">' +
-        (estado ? '<span class="org-lugar-card-pie-dot" aria-hidden="true"></span><span>' + esc(estado) + '</span><span class="org-lugar-card-pie-sep">·</span>' : '') +
-        '<span>' + esc(horario) + '</span></span></span>';
+      var m = String(horario).match(/(\d{1,2}:\d{2})\s*[-\u2013]\s*(\d{1,2}:\d{2})/);
+      if (m) {
+        var apertura = m[1];
+        var cierre = m[2];
+        var es24h = (apertura === '00:00' || apertura === '0:00') && (cierre === '23:59' || cierre === '24:00');
+        if (es24h) {
+          estadoLinea = 'Abierto 24 h';
+        } else if (abierto === true) {
+          estadoLinea = 'Abierto ahora · hasta ' + cierre;
+        } else if (abierto === false) {
+          estadoLinea = 'Cerrado · abre a las ' + apertura;
+        } else {
+          estadoLinea = 'Horario: ' + apertura + '–' + cierre;
+        }
+      }
     }
+
+    var estadoHtml = estadoLinea
+      ? '<span class="org-lugar-card-estado">' + esc(estadoLinea) + '</span>'
+      : '';
+
     return '<span class="org-lugar-card-trigger">' +
       '<span class="org-lugar-card-row">' +
       orgLugarThumbHtml(lugId) +
       '<span class="org-lugar-card-body">' +
       '<span class="org-lugar-card-nom">' + esc(label) + '</span>' +
-      '<span class="org-lugar-card-desc">' + esc(desc) + '</span>' + meta +
+      '<span class="org-lugar-card-desc">' + esc(desc) + '</span>' +
+      estadoHtml +
       '</span>' +
       '<span class="org-dd-chev" aria-hidden="true"></span>' +
-      '</span>' + pie + '</span>';
+      '</span></span>';
   }
 
   function orgDdTriggerContent(kind, label, valStr) {

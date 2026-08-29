@@ -113,7 +113,7 @@ ok(count($ev['participantes'] ?? []) === 0, '2 sin asistentes fijados al program
 $vista = EventosPuebloEngine::vistaProximoEvento($p, $catalog);
 ok(($vista['preset_organizar']['modo'] ?? '') === 'evento_pueblo', '15 preset modo evento_pueblo');
 ok(($vista['pendiente_seleccion'] ?? false) === true, '2 disponible para seleccionar');
-ok(($vista['cta_label'] ?? '') === 'Elegir quién va', 'CTA elegir quien va');
+ok(($vista['cta_label'] ?? '') === '¿Quién va?', 'CTA elegir quien va');
 ok((int) ($vista['aforo'] ?? 0) > 0, 'aforo expuesto en vista');
 
 $eleg = EventosPuebloEngine::vecinosElegibles($p, $evtId, $cal, $catalog);
