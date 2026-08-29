@@ -138,12 +138,15 @@ body.play-v3 {
 .play-root[data-capa="vecinos"] .capa-vecinos,
 .play-root[data-capa="ficha"] .capa-ficha,
 .play-root[data-capa="ficha_diario"] .capa-ficha-diario,
+.play-root[data-capa="ficha_relaciones"] .capa-ficha-relaciones,
 .play-root[data-capa="buzon"] .capa-buzon,
 .play-root[data-capa="diario"] .capa-diario,
 .play-root[data-capa="organizar"] .capa-organizar,
 .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo,
 .play-root[data-capa="misiones"] .capa-misiones,
-.play-root[data-capa="residencias"] .capa-residencias { transform: none; pointer-events: auto; }
+.play-root[data-capa="parejas"] .capa-parejas,
+.play-root[data-capa="residencias"] .capa-residencias,
+.play-root[data-capa="ajustes"] .capa-ajustes { transform: none; pointer-events: auto; }
 .cerrar { align-self: flex-start; border: 2px solid #c9b59a; background: var(--day); font: inherit; font-weight: 800; cursor: pointer; padding: .18rem .5rem; }
 .capa h2 { font-family: Fraunces, Georgia, serif; margin: 0; font-size: 1.45rem; }
 .capa p { margin: 0; line-height: 1.4; }

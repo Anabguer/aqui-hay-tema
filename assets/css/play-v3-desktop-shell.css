@@ -1,4 +1,4 @@
-/* play-v3-desktop-shell.css - ajustes columna izquierda y mapa (solo sobremesa >=769px) */
+﻿/* play-v3-desktop-shell.css - ajustes columna izquierda y mapa (solo sobremesa >=769px) */
 
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .game-main {
@@ -148,7 +148,8 @@
 
   .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-preview {
     display: flex !important;
-    justify-content: flex-start !important;
+    justify-content: center !important;
+    width: 100% !important;
     gap: 6px !important;
     margin-bottom: .65rem !important;
     min-height: 0 !important;

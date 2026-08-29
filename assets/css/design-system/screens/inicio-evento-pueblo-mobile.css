@@ -181,3 +181,46 @@
   display: none !important;
   content: none !important;
 }
+
+/* INICIO-EVENTO-TAG-FLOAT-v77 — badge ¡AHORA! / EVENTO fuera del marco, arriba izq */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento {
+    position: relative !important;
+    padding-top: 7px !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .inicio-proximo-evento {
+    padding-top: 7px !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta {
+    position: relative !important;
+    overflow: visible !important;
+    margin-top: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tag {
+    position: absolute !important;
+    top: -9px !important;
+    left: 10px !important;
+    grid-column: unset !important;
+    grid-row: unset !important;
+    margin: 0 !important;
+    align-self: unset !important;
+    justify-self: unset !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tag-txt {
+    display: inline-block !important;
+    box-shadow: 0 1px 4px rgba(70, 50, 30, .12) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
+    margin: 0 !important;
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    align-self: end !important;
+  }
+}

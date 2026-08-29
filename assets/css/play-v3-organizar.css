@@ -718,7 +718,7 @@
 @media (min-width: 900px) {
   .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-body {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: .65rem 1rem;
     align-content: start;
   }
@@ -927,7 +927,8 @@
 }
 
 @media (min-width: 900px) {
-  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--donde {
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--donde,
+  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--cuando {
     grid-column: 1 / -1;
   }
 }
