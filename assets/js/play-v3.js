@@ -3370,9 +3370,7 @@
       if (tit) tit.textContent = tituloEventoPuebloUi(ev.nombre_ui || ev.nombre || '');
       if (typeof pintarProximoEventoIco === 'function') pintarProximoEventoIco(ico, ev);
       else if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
-      var metaTxt = ev.meta_ui || '';
-      if (ev.aforo_ui) metaTxt = metaTxt ? (metaTxt + ' \u00b7 ' + ev.aforo_ui) : ev.aforo_ui;
-      if (meta) meta.textContent = metaTxt;
+      if (meta) meta.textContent = ev.meta_ui || '';
       var cta = slot.querySelector('[data-proximo-evento-cta]') || (card && card.querySelector('[data-proximo-evento-participar]'));
       var plazas = parseInt(ev.plazas_disponibles, 10);
       if (isNaN(plazas)) plazas = 0;
@@ -3382,10 +3380,12 @@
         cta.type = 'button';
         cta.className = 'inicio-evento-cta';
         cta.setAttribute('data-proximo-evento-participar', '1');
-        cta.innerHTML = '<span class="inicio-evento-cta-txt">PARTICIPAR \u203A</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
+        cta.innerHTML = '<span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>' + esc(ev.cta_label || 'Elegir quién va') + '</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
         card.appendChild(cta);
       }
       if (cta) {
+        var ctaTxtEl = cta.querySelector('[data-proximo-evento-cta-txt]') || cta.querySelector('.inicio-evento-cta-txt');
+        if (ctaTxtEl && ev.cta_label) ctaTxtEl.textContent = ev.cta_label;
         cta.hidden = !puedeApuntar;
         cta.disabled = !puedeApuntar;
         if (puedeApuntar) {

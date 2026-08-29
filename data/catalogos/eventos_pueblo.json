@@ -41,6 +41,7 @@
         {
             "id": "sesion_cine_comunitaria",
             "nombre": "Sesión de cine comunitaria",
+            "nombre_inicio": "Sesión de cine",
             "familia": "ocio_colectivo",
             "icono": "🎬",
             "peso": 1,

@@ -231,7 +231,43 @@
   }
 
   .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta {
+    grid-column: 1 / -1 !important;
+    grid-row: 3 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    margin: 10px 0 0 !important;
+    padding: 9px 14px !important;
+    min-height: 38px !important;
+    border: 1.5px solid rgba(196, 43, 74, .34) !important;
+    border-radius: 12px !important;
+    background: linear-gradient(180deg, #f9b4c6 0%, #e87898 100%) !important;
+    box-shadow: 0 2px 8px rgba(196, 43, 74, .18) !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    transition: transform .12s ease, box-shadow .12s ease !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta[hidden] {
     display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta-txt {
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .03em !important;
+    color: #fff !important;
+    text-transform: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta-spark {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-pie {
+    grid-row: 4 !important;
   }
 }
 

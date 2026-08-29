@@ -6116,7 +6116,6 @@
     color: #d4567a !important;
     font-family: "Caveat", "Caveat Brush", cursive !important;
   }
-  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta,
   .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-main::after,
   .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-body::after {
     display: none !important;

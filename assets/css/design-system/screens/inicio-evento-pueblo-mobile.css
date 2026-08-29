@@ -224,3 +224,39 @@
     align-self: end !important;
   }
 }
+
+/* INICIO-EVENTO-CTA-v133 — boton elegir mas bonito en movil */
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta {
+  background: linear-gradient(180deg, #f9b4c6 0%, #e87898 100%) !important;
+  border: 1.5px solid rgba(196, 43, 74, .34) !important;
+  box-shadow: 0 2px 7px rgba(196, 43, 74, .2) !important;
+  color: #fff !important;
+  padding: 8px 10px !important;
+  min-height: 34px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  transition: transform .12s ease, box-shadow .12s ease !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta:active:not(:disabled) {
+  transform: translateY(1px) !important;
+  box-shadow: 0 1px 4px rgba(196, 43, 74, .18) !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-txt {
+  color: #fff !important;
+  font-family: Nunito, "Segoe UI", sans-serif !important;
+  font-size: .58rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .04em !important;
+  text-transform: none !important;
+  line-height: 1.1 !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
+  text-transform: none !important;
+  font-family: "Caveat", "Caveat Brush", cursive !important;
+  font-size: 1.08rem !important;
+  letter-spacing: .01em !important;
+  white-space: nowrap !important;
+}

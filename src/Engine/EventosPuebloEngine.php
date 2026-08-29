@@ -275,7 +275,7 @@ final class EventosPuebloEngine
     public static function vecinosElegibles(
         array $partida,
         string $eventoId,
-        array $cal,
+        ?array $cal,
         Catalog $catalog
     ): array {
         self::ensure($partida);
@@ -304,7 +304,7 @@ final class EventosPuebloEngine
             ? array_fill_keys(array_map('strval', $ev['participantes']), true)
             : [];
         $disponibles = array_fill_keys(self::residentesDisponibles($partida, $dia, $hora, $durH), true);
-        $recomendados = self::ordenRecomendados($partida, $def, array_keys($disponibles), $cal);
+        $recomendados = self::ordenRecomendados($partida, $def, array_keys($disponibles), $cal ?? []);
         $vecinos = [];
         foreach (array_keys($partida['residentes'] ?? []) as $id) {
             $id = (string) $id;
@@ -718,6 +718,8 @@ final class EventosPuebloEngine
         $horaUi = sprintf('%02d:00', max(0, min(23, $hora)));
         $selEstado = self::seleccionEstado($evento);
 
+        $elegVecinos = self::vecinosElegibles($partida, (string) ($evento['id'] ?? ''), null, $catalog)['vecinos'] ?? [];
+
         return [
             'evento_pueblo_id' => (string) ($evento['id'] ?? ''),
             'catalogo_id' => (string) ($evento['catalogo_id'] ?? ''),
@@ -737,6 +739,7 @@ final class EventosPuebloEngine
             'seleccion_estado' => $selEstado,
             'pendiente_seleccion' => $selEstado === 'pendiente_asistentes',
             'cta_label' => 'Elegir quién va',
+            'elegibles' => $elegVecinos,
             'preset_organizar' => [
                 'modo' => 'evento_pueblo',
                 'evento_pueblo_id' => (string) ($evento['id'] ?? ''),
@@ -751,6 +754,7 @@ final class EventosPuebloEngine
                 'plazas_disponibles' => $plazas,
                 'participantes_apuntados' => $parts,
                 'participantes_min' => (int) ($evento['participantes_min'] ?? 3),
+                'elegibles' => $elegVecinos,
             ],
         ];
     }
@@ -848,10 +852,15 @@ final class EventosPuebloEngine
         $n = (int) ($raw['participantes_n'] ?? 0);
         $estado = (string) ($raw['estado'] ?? 'programado');
         $selEstado = (string) ($raw['seleccion_estado'] ?? 'pendiente_asistentes');
-        $nombre = EventosPuebloAnuncioEngine::nombreNaturalPublico((string) ($raw['nombre'] ?? ''));
         $catalogoId = (string) ($raw['catalogo_id'] ?? '');
         $tipo = (string) ($raw['tipo'] ?? '');
         $def = $catalog !== null && $catalogoId !== '' ? self::catalogItem($catalog, $catalogoId) : null;
+        $nombreInicio = is_array($def) && isset($def['nombre_inicio']) && (string) $def['nombre_inicio'] !== ''
+            ? (string) $def['nombre_inicio']
+            : '';
+        $nombre = $nombreInicio !== ''
+            ? $nombreInicio
+            : EventosPuebloAnuncioEngine::nombreNaturalPublico((string) ($raw['nombre'] ?? ''));
         $aforo = (int) ($raw['aforo'] ?? 0);
         if ($aforo <= 0) {
             $aforo = self::aforoEvento($partida, $raw, is_array($def) ? $def : null, $catalog);
@@ -860,6 +869,9 @@ final class EventosPuebloEngine
         if ($plazas <= 0 && $selEstado === 'pendiente_asistentes') {
             $plazas = self::plazasDisponibles($partida, $raw, is_array($def) ? $def : null, $catalog);
         }
+        $elegVecinos = $selEstado === 'pendiente_asistentes'
+            ? (self::vecinosElegibles($partida, (string) ($raw['id'] ?? ''), null, $catalog)['vecinos'] ?? [])
+            : [];
         $partsCanon = self::participantesCanon($partida, $raw);
 
         $metaParts = [];
@@ -874,14 +886,6 @@ final class EventosPuebloEngine
         if ($lugarNombre !== '') {
             $metaParts[] = $lugarNombre;
         }
-        if ($aforo > 0) {
-            $metaParts[] = 'Aforo: ' . $aforo;
-        }
-        if ($selEstado === 'confirmado' && $n > 0) {
-            $metaParts[] = $n === 1 ? '1 vecino apuntado' : ($n . ' vecinos apuntados');
-        } elseif ($selEstado === 'pendiente_asistentes' && $plazas > 0) {
-            $metaParts[] = $plazas === 1 ? '1 plaza disponible' : ($plazas . ' plazas disponibles');
-        }
 
         return array_merge($raw, [
             'nombre_ui' => $nombre,
@@ -895,6 +899,7 @@ final class EventosPuebloEngine
             'aforo' => $aforo,
             'plazas_disponibles' => $plazas,
             'participantes_apuntados' => $partsCanon,
+            'elegibles' => $elegVecinos,
             'pendiente_seleccion' => $selEstado === 'pendiente_asistentes',
             'cta_label' => 'Elegir quién va',
             'preset_organizar' => [
@@ -911,6 +916,7 @@ final class EventosPuebloEngine
                 'plazas_disponibles' => $plazas,
                 'participantes_apuntados' => $partsCanon,
                 'participantes_min' => (int) ($raw['participantes_min'] ?? 3),
+                'elegibles' => $elegVecinos,
             ],
         ]);
     }
@@ -1083,10 +1089,13 @@ final class EventosPuebloEngine
             return [];
         }
         $pesos = [];
+        $tieneCal = $cal !== [];
         foreach ($disponibles as $id) {
             $w = 1.0;
-            $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
-            $w += ((int) EstadoEmocional::modificadores($emo, $cal)['iniciativa_social']) / 40.0;
+            if ($tieneCal) {
+                $emo = (string) ($partida['residentes'][$id]['runtime']['estado_emocional']['id'] ?? 'neutro');
+                $w += ((int) EstadoEmocional::modificadores($emo, $cal)['iniciativa_social']) / 40.0;
+            }
             $pesos[] = ['id' => $id, 'w' => max(0.05, $w)];
         }
         usort($pesos, static function ($a, $b) {
