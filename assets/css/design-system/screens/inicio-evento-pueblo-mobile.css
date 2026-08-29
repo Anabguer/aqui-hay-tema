@@ -225,21 +225,81 @@
   }
 }
 
-/* INICIO-EVENTO-CTA-VALIGN-v136 — texto del boton centrado vertical en movil */
+/* INICIO-EVENTO-CTA-v133 — boton naranja en movil */
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(180deg, #ffc978 0%, #e89448 100%) !important;
+  border: 1.5px solid rgba(180, 95, 24, .38) !important;
+  box-shadow: 0 2px 7px rgba(180, 95, 24, .2) !important;
+  color: #fff !important;
+  padding: 8px 10px !important;
+  min-height: 36px !important;
+  border-radius: 10px !important;
+  cursor: pointer !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  transition: transform .12s ease, box-shadow .12s ease !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta:active:not(:disabled) {
+  transform: translateY(1px) !important;
+  box-shadow: 0 1px 4px rgba(180, 95, 24, .16) !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-txt {
+  color: #fff !important;
+  font-family: Nunito, "Segoe UI", sans-serif !important;
+  font-size: .62rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .03em !important;
+  text-transform: none !important;
+  line-height: 1.1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
+  color: #c85a18 !important;
+  text-transform: none !important;
+  font-family: "Caveat", "Caveat Brush", cursive !important;
+  font-size: 1.08rem !important;
+  letter-spacing: .01em !important;
+  white-space: nowrap !important;
+}
+
+/* INICIO-EVENTO-CENTRO-MOVIL-v135 — etiqueta y textos centrados */
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta {
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    line-height: 1 !important;
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tag {
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
   }
 
-  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-txt {
-    display: block !important;
-    line-height: 1.05 !important;
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
+    grid-column: 2 !important;
+    grid-row: 1 !important;
+    justify-self: center !important;
+    align-self: end !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
     margin: 0 !important;
-    padding: 0 !important;
+    padding: 8px 4px 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-proximo-evento .inicio-evento-meta {
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    justify-self: center !important;
+    align-self: start !important;
+    text-align: center !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 4px !important;
   }
 }
+
+/* INICIO-EVENTO-CTA-FIX-v137 — restaura boton naranja legible (fix v136 enano/gris) */
