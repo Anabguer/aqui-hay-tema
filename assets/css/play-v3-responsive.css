@@ -734,6 +734,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon,
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha,
+.play-v3:has(.game-shell) .play-root[data-capa="mentes"] .capa-mentes,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .capa-ficha-animo,
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario,
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda,

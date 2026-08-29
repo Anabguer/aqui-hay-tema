@@ -10,6 +10,7 @@ const cssArt = fs.readFileSync(path.join(root, 'assets/css/play-v3-shell-art.css
 const handler = fs.readFileSync(path.join(root, 'api/handlers/EncuentrosHandler.php'), 'utf8');
 const motor = fs.readFileSync(path.join(root, 'src/Engine/EncuentroIntervencion.php'), 'utf8');
 const mentes = fs.readFileSync(path.join(root, 'src/Engine/MentesTemas.php'), 'utf8');
+const encInt = fs.readFileSync(path.join(root, 'assets/css/play-v3-enc-int.css'), 'utf8');
 
 let failures = 0;
 function ok(c, m) {
@@ -36,6 +37,7 @@ ok(!js.includes('\\u00bfQu\\u00E9 le quieres sugerir?'), 'js: sin kicker sugerir
 ok(js.includes('data-enc-int-kicker-tema'), 'js: kicker dinámico paso 2');
 ok(js.includes('kickerRompeHieloJs'), 'js: banco variantes rompe hielo');
 ok(js.includes('data-enc-mentes-open'), 'js: CTA abre modal MENTES');
+ok(encInt.includes('MENTES-CAPA-HOTFIX-v1'), 'css: capa mentes visible en whitelist');
 ok(js.includes('ctaTxtEncuentroMov'), 'js: helper CTA acceso MENTES');
 ok(!js.includes('Animar la conversaci\u00f3n'), 'js: sin Animar la conversación en UI');
 ok(!js.includes('Sacar un tema que le guste'), 'js: sin dropdown tema abstracto');
