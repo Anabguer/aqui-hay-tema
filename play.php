@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
@@ -22,9 +22,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="apple-mobile-web-app-title" content="Aquí Hay Tema"/>
+  <meta name="apple-mobile-web-app-title" content="AquÃ­ Hay Tema"/>
   <meta name="aht-ui" content="v3"/>
-  <title>Aquí Hay Tema</title>
+  <title>AquÃ­ Hay Tema</title>
   <link rel="manifest" href="<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>manifest.webmanifest"/>
   <link rel="icon" href="assets/brand/pwa-icon-192.png" type="image/png" sizes="192x192"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
@@ -75,6 +75,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modals-shell-lavanda-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -201,7 +202,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     }
     .carta-msg.leida { opacity: .88; }
     .carta-msg.leida .cuerpo { color: #5a5248; }
-    /* Retratos: rostro visible sin redise—ar capas */
+    /* Retratos: rostro visible sin rediseâ€”ar capas */
     .capa-vecinos .vecino img,
     .vecino-celda img,
     .ficha-hero .cara img,
@@ -223,7 +224,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       font-weight: 800; font-size: .9rem;
     }
     .celestine-nota .obj-vecinos-tit { color: #d0697a; }
-    /* Lo que sabes: iconos peque—os alineados con la l—nea manuscrita */
+    /* Lo que sabes: iconos pequeâ€”os alineados con la lâ€”nea manuscrita */
     .capa-ficha .ficha-sabes-ico { font-size: .8em; margin-right: .28rem; }
       </style>
 </head>
@@ -237,11 +238,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <button type="button" id="btn-debug-guardar">Guardar</button>
       <button type="button" data-horas="1">+1h</button>
       <button type="button" data-horas="8">+8h</button>
-      <button type="button" data-horas="24">+1 d—a</button>
-      <button type="button" data-horas="72">+3 d—as</button>
-      <button type="button" data-horas="168">+7 d—as</button>
-      <button type="button" data-horas="720">+30 d—as</button>
-      <button type="button" id="btn-debug-proximo">Ir al pr—ximo</button>
+      <button type="button" data-horas="24">+1 dâ€”a</button>
+      <button type="button" data-horas="72">+3 dâ€”as</button>
+      <button type="button" data-horas="168">+7 dâ€”as</button>
+      <button type="button" data-horas="720">+30 dâ€”as</button>
+      <button type="button" id="btn-debug-proximo">Ir al prâ€”ximo</button>
       <button type="button" id="btn-debug-copy" data-debug-copy>Copiar debug</button>
       <button type="button" id="btn-debug-download" data-debug-download>Descargar debug</button>
       <button type="button" id="btn-debug-copy-estado" data-debug-copy-estado>Copiar estado</button>
@@ -251,12 +252,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <p class="aht-sfx-debug-title">Prueba de sonidos</p>
         <button type="button" data-aht-sfx="mensajito">Mensajito</button>
         <button type="button" data-aht-sfx="cotilleo">Cotilleo</button>
-        <button type="button" data-aht-sfx="mision">Misi—n</button>
+        <button type="button" data-aht-sfx="mision">Misiâ€”n</button>
         <button type="button" data-aht-sfx="descubrimiento">Descubrimiento</button>
         <button type="button" data-aht-sfx="romance">Romance</button>
         <button type="button" data-aht-sfx="conflicto">Conflicto</button>
         <button type="button" data-aht-sfx="llegada">Llegada</button>
-        <button type="button" data-aht-sfx="nuevo_dia">Nuevo d—a</button>
+        <button type="button" data-aht-sfx="nuevo_dia">Nuevo dâ€”a</button>
       </div>
       <span class="msg" data-debug-msg></span>
     </div>
@@ -273,7 +274,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <button type="button" data-lab-tab="vecinos">Vecinos</button>
         <button type="button" data-lab-tab="relaciones">Relaciones</button>
         <button type="button" data-lab-tab="historial">Historial</button>
-        <button type="button" data-lab-tab="tecnico">Datos t—cnicos</button>
+        <button type="button" data-lab-tab="tecnico">Datos tâ€”cnicos</button>
       </nav>
       <div class="play-lab-body">
         <section class="play-lab-panel" data-lab-panel="resumen" data-lab-resumen></section>
@@ -297,7 +298,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div data-lab-cronologia></div>
         </section>
         <section class="play-lab-panel" data-lab-panel="tecnico" hidden>
-          <p style="font-size:.78rem;color:#6a5d4f">Exportaci—n t—cnica completa (estado + historial de sesi—n DEBUG).</p>
+          <p style="font-size:.78rem;color:#6a5d4f">Exportaciâ€”n tâ€”cnica completa (estado + historial de sesiâ€”n DEBUG).</p>
           <div class="lab-export-bar">
             <button type="button" id="btn-lab-debug-export" data-debug-copy>Copiar debug completo</button>
             <button type="button" id="btn-lab-debug-estado" data-debug-copy-estado>Copiar solo estado</button>
@@ -313,8 +314,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     <span class="pc-label">Acelerar tiempo</span>
     <button type="button" data-horas="1">+1h</button>
     <button type="button" data-horas="8">+8h</button>
-    <button type="button" data-horas="24">+1 d—a</button>
-    <button type="button" id="btn-proximo-lab">Ir al pr—ximo</button>
+    <button type="button" data-horas="24">+1 dâ€”a</button>
+    <button type="button" id="btn-proximo-lab">Ir al prâ€”ximo</button>
     <span class="pc-msg" data-taller-msg-lab></span>
   </div>
   <aside class="playtest-guia" data-playtest-guia hidden>
@@ -322,22 +323,22 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     <p class="meta-reloj" data-pg-reloj></p>
     <h3>Ahora mismo</h3>
     <ul data-pg-ahora></ul>
-    <h3>Qu— hacer ahora</h3>
+    <h3>Quâ€” hacer ahora</h3>
     <ol data-pg-hacer></ol>
     <div class="evento" data-pg-evento hidden></div>
     <div data-pg-pistas></div>
     <h3>Objetivos de esta partida</h3>
     <ul class="objs" data-pg-objs></ul>
     <details class="playtest-diag" data-playtest-diag open>
-      <summary>Registro t—cnico del playtest (copiar para ChatGPT / Carlos I)</summary>
+      <summary>Registro tâ€”cnico del playtest (copiar para ChatGPT / Carlos I)</summary>
       <div class="diag-actions">
         <button type="button" data-diag-copy>Copiar todo</button>
         <button type="button" data-diag-clear-ui>Limpiar vista</button>
       </div>
-      <pre data-playtest-diag-log>(a—n no hay eventos)</pre>
+      <pre data-playtest-diag-log>(aâ€”n no hay eventos)</pre>
     </details>
     <details class="debug-tec">
-      <summary>Datos t—cnicos (resumen avance)</summary>
+      <summary>Datos tâ€”cnicos (resumen avance)</summary>
       <pre data-taller-debug hidden></pre>
     </details>
   </aside>
@@ -543,7 +544,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
             <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>AtrÃ¡s</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
             </div>
@@ -711,12 +712,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
         </div>
-        <div class="ficha-rel-overlay" data-animo-overlay hidden>
-          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">
-            <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
-            <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
-          </div>
-        </div>
+      </aside>
+      <aside class="capa capa-ficha-animo ds-modal-sheet" aria-label="Estado de animo del vecino">
+        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
+        <header class="fani-top">
+          <button type="button" class="fani-volver" data-animo-volver>&larr; FICHA</button>
+        </header>
+        <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
       </aside>
       <aside class="capa capa-ficha-diario ds-modal-sheet" aria-label="Diario del vecino">
         <span class="ficha-tape ficha-tape-r fdi-tape-r" aria-hidden="true"></span>
@@ -1147,7 +1149,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </span>
           </span>
           <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
-            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>¿Qui&eacute;n va?</span>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Â¿Qui&eacute;n va?</span>
             <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
           </button>
         </div>
@@ -1215,7 +1217,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </span>
           </span>
           <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
-            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>¿Qui&eacute;n va?</span>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Â¿Qui&eacute;n va?</span>
             <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
           </button>
         </div>

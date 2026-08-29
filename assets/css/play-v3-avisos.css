@@ -48,7 +48,6 @@
 .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_relaciones"] .capa-ficha-relaciones,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
@@ -88,7 +87,6 @@
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda::before,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha::before,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha_diario"] .capa-ficha-diario::before,
-.play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .capa-ficha-animo::before,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha_relaciones"] .capa-ficha-relaciones::before,
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario.coti-modal-papel::before {
   content: "" !important;
@@ -229,7 +227,6 @@
 .play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_relaciones"] .capa-ficha-relaciones {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
   background-image:

@@ -916,6 +916,7 @@
 }
 
 .play-v3 .play-root[data-capa="ficha_diario"] .velo,
+.play-v3 .play-root[data-capa="ficha_animo"] .velo,
 .play-v3 .play-root[data-capa="ficha_relaciones"] .velo {
   opacity: 1;
   pointer-events: auto;

@@ -5133,8 +5133,7 @@ function canonEmoId(id) {
   }
 
   function cerrarAnimoOverlay() {
-    const overlay = $('[data-animo-overlay]');
-    if (overlay) overlay.hidden = true;
+    setCapa(animoVolverCapa || 'ficha');
   }
 
   function emoModalIcono(estadoId) {
@@ -5187,9 +5186,10 @@ function canonEmoId(id) {
 
   function abrirAnimoModal() {
     const exp = fichaAnimoExplicacion;
-    const overlay = $('[data-animo-overlay]');
     const body = $('[data-animo-body]');
-    if (!exp || !overlay || !body) return;
+    const root = $('.play-root');
+    if (!exp || !body) return;
+    animoVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
     const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
     body.innerHTML = htmlAnimoModal(exp, nom);
     const orgBtn = body.querySelector('[data-animo-org]');
@@ -5212,7 +5212,7 @@ function canonEmoId(id) {
         diarioBtn.onclick = null;
       }
     }
-    overlay.hidden = false;
+    setCapa('ficha_animo');
   }
 
 
@@ -5222,6 +5222,7 @@ function canonEmoId(id) {
   let diarioVecinoOrden = 'reciente';
   let diarioHighlightId = null;
   let diarioVolverCapa = 'ficha';
+  let animoVolverCapa = 'ficha';
 
   function cerrarDiarioVecino() {
     setCapa(diarioVolverCapa || 'ficha');
@@ -7756,6 +7757,20 @@ function hobbyIconKey(id, texto) {
   }
 
   document.body.addEventListener('click', function (ev) {
+    const animoCloseBtn = ev.target.closest('[data-animo-close]');
+    if (animoCloseBtn) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarAnimoOverlay();
+      return;
+    }
+    const animoVolverBtn = ev.target.closest('[data-animo-volver]');
+    if (animoVolverBtn) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarAnimoOverlay();
+      return;
+    }
     const relOverlay = $('[data-ficha-rel-overlay]');
     if (relOverlay && !relOverlay.hidden) {
       if (ev.target.closest('[data-ficha-rel-close]') || ev.target === relOverlay) {
@@ -8051,12 +8066,8 @@ function hobbyIconKey(id, texto) {
 
   const animoClose = $('[data-animo-close]');
   if (animoClose) animoClose.addEventListener('click', cerrarAnimoOverlay);
-  const animoOvEl = $('[data-animo-overlay]');
-  if (animoOvEl) {
-    animoOvEl.addEventListener('click', function (ev) {
-      if (ev.target === animoOvEl) cerrarAnimoOverlay();
-    });
-  }
+  const animoVolver = $('[data-animo-volver]');
+  if (animoVolver) animoVolver.addEventListener('click', cerrarAnimoOverlay);
 
   const diarioVecinoClose = $('[data-diario-vecino-close]');
   if (diarioVecinoClose) diarioVecinoClose.addEventListener('click', cerrarDiarioVecino);

@@ -689,6 +689,7 @@
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones,
@@ -2294,7 +2295,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   }
 
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-top {
-    padding: 0 .15rem .08rem !important;
+    padding: 0 3rem .08rem !important;
   }
 
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-tit {
