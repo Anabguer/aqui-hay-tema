@@ -29,12 +29,21 @@
   const qs = new URLSearchParams(location.search);
   const CONFIG_JUEGO = { config_id: 'juego_v1' };
   const DEBUG_KEY = 'aht_debug_on';
+  const DEBUG_ENV = qs.get('debug') === '1' || qs.get('lab') === '1'
+    || /localhost|127\.0\.0\.1/i.test(location.hostname);
   let DEBUG_ON = false;
-  try { DEBUG_ON = localStorage.getItem(DEBUG_KEY) === '1'; } catch (e) {}
+  if (DEBUG_ENV) {
+    try { DEBUG_ON = localStorage.getItem(DEBUG_KEY) === '1'; } catch (e) {}
+  }
+  function syncDebugFloatVisibility() {
+    const el = document.querySelector('[data-debug-float]');
+    if (el) el.hidden = !DEBUG_ON;
+  }
   function setDebugOn(on) {
     DEBUG_ON = !!on;
     try { localStorage.setItem(DEBUG_KEY, DEBUG_ON ? '1' : '0'); } catch (e2) {}
     document.body.setAttribute('data-debug', DEBUG_ON ? '1' : '0');
+    syncDebugFloatVisibility();
     if (DEBUG_ON) {
       try { console.log('%c[AHT DEBUG] Instrumentación activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
     }

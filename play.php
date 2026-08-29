@@ -153,7 +153,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       margin: 0; max-height: 22rem; overflow: auto; white-space: pre-wrap;
       font: 11px/1.4 ui-monospace, Consolas, monospace; color: #cfc6b8;
     }
-    .aht-debug-float { position: fixed; z-index: 90; left: 10px; bottom: 10px; }
+    .aht-debug-float { position: fixed; z-index: 90; left: 10px; bottom: 10px; display: none !important; }
+    body.play-v3[data-debug="1"] .aht-debug-float { display: block !important; }
     .aht-debug-toggle { border: 1px solid #8a7a66; background: #fff6c8; font: 700 .72rem Nunito,sans-serif; padding: .35rem .55rem; border-radius: 999px; cursor: pointer; opacity: .92; }
     .aht-debug-panel { position: absolute; left: 0; bottom: calc(100% + 6px); width: min(260px, 88vw); padding: .5rem; background: #fffdf6; border: 1px solid #8a7a66; display: flex; flex-wrap: wrap; gap: .3rem; box-shadow: 2px 3px 8px rgba(0,0,0,.12); }
     .aht-debug-panel[hidden] { display: none !important; }
