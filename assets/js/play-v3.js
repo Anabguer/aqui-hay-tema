@@ -4786,14 +4786,14 @@
 
   function emojiRel(rel) {
     if (!rel) return '';
-    if (rel.etiqueta_vinculo === 'crisis') return '?? ';
-    if (rel.etiqueta_vinculo === 'pareja') return '?? ';
-    if (rel.etiqueta_vinculo === 'ex_pareja') return '?? ';
+    if (rel.etiqueta_vinculo === 'crisis') return '\uD83D\uDCA5 ';
+    if (rel.etiqueta_vinculo === 'pareja') return '\uD83D\uDC95 ';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return '\uD83D\uDC94 ';
     const s = rel.etiqueta_social || '';
-    if (s === 'cae_mal') return '?? ';
-    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '?? ';
-    if (s === 'amigo') return '?? ';
-    if (s === 'conocido') return '?? ';
+    if (s === 'cae_mal') return '\uD83D\uDE21 ';
+    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '\uD83D\uDC9A ';
+    if (s === 'amigo') return '\uD83D\uDE0A ';
+    if (s === 'conocido') return '\uD83D\uDC4B ';
     return '';
   }
 
@@ -5122,7 +5122,12 @@ function canonEmoId(id) {
 
 
   function emoEmojiFicha(emo) {
-    const map = { neutro: '??', alegre: '??', triste: '??', enfadado: '??' };
+    const map = {
+      neutro: '\uD83D\uDE10',
+      alegre: '\uD83D\uDE0A',
+      triste: '\uD83D\uDE22',
+      enfadado: '\uD83D\uDE24'
+    };
     return map[canonEmoId(emo)] || map.neutro;
   }
 
@@ -5177,8 +5182,13 @@ function canonEmoId(id) {
   }
 
   function emoModalIcono(estadoId) {
-    const map = { alegre: '??', triste: '??', enfadado: '??', neutro: '??' };
-    return map[canonEmoId(estadoId)] || '??';
+    const map = {
+      alegre: '\uD83D\uDE0A',
+      triste: '\uD83D\uDE22',
+      enfadado: '\uD83D\uDE24',
+      neutro: '\uD83D\uDE10'
+    };
+    return map[canonEmoId(estadoId)] || map.neutro;
   }
 
   function htmlAnimoModal(exp, nom) {
@@ -5195,31 +5205,31 @@ function canonEmoId(id) {
         '<div class="animo-modal-mientras-list">' +
         consec.map(function (c) {
           return '<span class="animo-modal-badge">' +
-            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || '•') + '</span>' +
+            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || '\u2022') + '</span>' +
             esc(c.texto || '') + '</span>';
         }).join('') +
         '</div></div>';
     }
     const consejo = exp.consejo
-      ? '<p class="animo-modal-hint">?? ' + esc(exp.consejo) + '</p>'
+      ? '<p class="animo-modal-hint">\uD83D\uDCA1 ' + esc(exp.consejo) + '</p>'
       : '';
     return '<div class="animo-modal-top">' +
       '<div class="animo-modal-avatar">' + img + '</div>' +
-      '<h3 class="animo-modal-tit">¿Qué le pasa a ' + esc(nom) + '?</h3>' +
+      '<h3 class="animo-modal-tit">\u00bfQu\u00e9 le pasa a ' + esc(nom) + '?</h3>' +
       '</div>' +
       '<div class="animo-modal-pills">' +
       '<span class="animo-modal-estado animo-modal-estado--' + esc(emoId) + '">' +
       '<span class="animo-modal-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
       estadoTxt + '</span>' +
-      (desde ? '<span class="animo-modal-desde">?? ' + desde + '</span>' : '') +
+      (desde ? '<span class="animo-modal-desde">\uD83D\uDD50 ' + desde + '</span>' : '') +
       '</div>' +
-      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">¿Qué ha pasado?</span>' +
+      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">\u00bfQu\u00e9 ha pasado?</span>' +
       '<div class="animo-modal-causa animo-modal-causa--illus">' +
       '<p>' + causa + '</p>' +
       '<span class="animo-modal-conflicto" aria-hidden="true"></span>' +
       '</div>' +
       mientras +
-      '<button type="button" class="animo-modal-cta" data-animo-org>?? Organizar un plan</button>' +
+      '<button type="button" class="animo-modal-cta" data-animo-org>\uD83D\uDCC5 Organizar un plan</button>' +
       '<button type="button" class="animo-modal-ghost" data-animo-diario>Ver en su diario</button>' +
       consejo;
   }

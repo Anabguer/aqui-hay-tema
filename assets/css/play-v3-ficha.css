@@ -1933,3 +1933,20 @@
 .play-v3 .capa-ficha .ficha-rel-overlay[data-animo-overlay] {
   display: none !important;
 }
+
+
+/* FICHA-ANIMO-CAPA-v137 - sobre velo game-shell, centrada fija */
+.play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .capa-ficha-animo {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: translate(-50%, -50%) rotate(-0.2deg) !important;
+  z-index: 110 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
+}
+.play-v3 .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo {
+  z-index: 110 !important;
+}
