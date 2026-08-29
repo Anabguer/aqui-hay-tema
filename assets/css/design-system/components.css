@@ -644,6 +644,70 @@
 .ds-event-title { font-size: 1.2rem; font-weight: 700; color: var(--ds-ink); }
 .ds-event-meta { font-size: 1rem; color: var(--ds-text-muted); }
 
+
+/* ---------- 8. Tipografía semántica AHT ---------- */
+
+.ds-text-display {
+  font-family: var(--ds-font-hand);
+  font-size: var(--aht-type-display);
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.ds-text-block {
+  font-family: var(--ds-font-hand);
+  font-size: var(--aht-type-block);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ds-text-body {
+  font-family: var(--ds-font-ui);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.ds-text-body--strong {
+  font-weight: 600;
+}
+
+.ds-text-secondary {
+  font-family: var(--ds-font-ui);
+  font-size: var(--aht-type-secondary);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--ds-text-muted);
+}
+
+.ds-text-caption {
+  font-family: var(--ds-font-ui);
+  font-size: var(--aht-type-caption);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ds-text-muted);
+}
+
+.ds-text-name {
+  font-family: var(--ds-font-hand);
+  font-size: var(--aht-type-name);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.ds-text-decorative {
+  font-family: var(--ds-font-hand);
+  font-size: var(--aht-type-body);
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@media (max-width: 768px) {
+  .ds-text-body { font-size: 1rem; line-height: 1.5; }
+  .ds-text-secondary { font-size: 0.875rem; line-height: 1.45; }
+  .ds-text-caption { font-size: 0.8125rem; }
+}
+
 /* ---------- 9. Desktop ---------- */
 
 @media (min-width: 1024px) {

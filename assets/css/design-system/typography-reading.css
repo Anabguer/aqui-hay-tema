@@ -1,0 +1,504 @@
+﻿/* ============================================================
+   AHT ÔÇö TIPOGRAF├ìA GLOBAL: LECTURA NORMAL / MANUSCRITA DECORATIVA
+   Migraci├│n sist├®mica: cuerpos de texto ÔåÆ Nunito (--ds-font-ui)
+   T├¡tulos, acentos, elementos decorativos ÔåÆ Caveat (--ds-font-hand)
+   ============================================================ */
+
+/* --- Tokens de tama├▒o legibles en m├│vil --- */
+@media (max-width: 768px) {
+  :root {
+    --aht-type-body: 1rem;      /* 16px base */
+    --aht-type-secondary: 0.875rem; /* 14px m├¡nimo */
+    --aht-type-caption: 0.8125rem;  /* 13px metadata */
+  }
+}
+
+/* ============================================================
+   1. MENSAJITOS ÔÇö Cuerpos de lectura ÔåÆ Nunito
+   ============================================================ */
+
+/* Cuerpo del mensajito (texto principal que el jugador lee) */
+.play-v3 .capa-buzon .carta-msg .cuerpo {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  line-height: 1.5 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+/* Pregunta de elecci├│n ("┬┐A qui├®n presentas?") */
+.play-v3 .capa-buzon .mensajitos-seccion-tit,
+.play-v3 .msg-eleccion-tit {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Explicaciones de opciones (pistas) */
+.play-v3 .msg-eleccion-hint,
+.play-v3 .msg-eleccion-opt-copy {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+/* Preview popover */
+.play-v3 .msg-item-copy,
+.play-v3 .msg-item-txt {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+.play-v3 .msg-item-nom {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-secondary) !important;
+  font-weight: 700 !important;
+}
+
+/* Empty state */
+.play-v3 .capa-buzon .buzon-vacio,
+.play-v3 .capa-buzon .lista-vacia {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+/* Hint / ayuda */
+.play-v3 .capa-buzon .mensajitos-hint {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-secondary) !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================================
+   2. FICHA VECINO ÔÇö Textos de lectura ÔåÆ Nunito
+   ============================================================ */
+
+/* Descripciones, rasgos, hobbies, relaciones, planes */
+.play-v3 .capa-ficha .ficha-seccion-body,
+.play-v3 .capa-ficha .ficha-rasgo-tag,
+.play-v3 .capa-ficha .ficha-hobby-card,
+.play-v3 .capa-ficha .ficha-rel-nom,
+.play-v3 .capa-ficha .ficha-plan-item,
+.play-v3 .capa-ficha .ficha-vacio,
+.play-v3 .capa-ficha .ficha-pref-line,
+.play-v3 .capa-ficha .ficha-sabes-body {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  font-style: normal !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+}
+
+/* Etiquetas de secci├│n (RASGOS, HOBBIES, RELACIONES) ÔÇö MANTENER Caveat como decorativo */
+.play-v3 .capa-ficha .ficha-seccion-tit {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* Nombre del vecino ÔÇö MANTENER Caveat como hero */
+.play-v3 .capa-ficha .ficha-nombre {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ├ünimo ÔÇö MANTENER Caveat como acento */
+.play-v3 .capa-ficha .ficha-animo-val {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   3. COTILLEOS / DIARIO ÔÇö Cuerpos ÔåÆ Nunito
+   ============================================================ */
+
+.play-v3 .capa-diario .coti-item-txt,
+.play-v3 .obj-cotilleo-txt {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  font-style: normal !important;
+}
+
+/* Metadatos (cu├índo, categor├¡a) */
+.play-v3 .capa-diario .coti-item-cuando,
+.play-v3 .coti-item-cat-pill {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-caption) !important;
+  font-weight: 600 !important;
+}
+
+/* T├¡tulo COTILLEOS ÔÇö MANTENER Caveat */
+.play-v3 .capa-diario .coti-tit,
+.play-v3 .obj-cotilleo-tit {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   4. MISIONES ÔÇö Textos ÔåÆ Nunito
+   ============================================================ */
+
+.play-v3 .capa-misiones .mis-txt,
+.play-v3 .obj-misiones-vacio {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  font-style: normal !important;
+}
+
+/* T├¡tulo MISIONES ÔÇö MANTENER Caveat */
+.play-v3 .capa-misiones .mis-tit {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   5. TUTORIAL ÔÇö Textos de lectura ÔåÆ Nunito (ya implementado en v6)
+   ============================================================ */
+
+/* Reforzar que los textos de lectura usan Nunito */
+.play-v3 .tut-intro-line,
+.play-v3 .tut-intro-extra,
+.play-v3 .tut-bloques-pref,
+.play-v3 .tut-bloque-txt,
+.play-v3 .tut-cierre,
+.play-v3 .tut-fin-lead,
+.play-v3 .tut-fin-rest {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  font-style: normal !important;
+}
+
+/* T├¡tulos, botones, labels ÔÇö MANTENER Caveat */
+.play-v3 .tut-titulo,
+.play-v3 .tut-fin-titulo,
+.play-v3 .tut-skip,
+.play-v3 .tut-acciones .cta,
+.play-v3 .tut-fin-cta,
+.play-v3 .tut-bloque-tit,
+.play-v3 .tut-cara-nombre,
+.play-v3 .libreta-kicker {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   6. NUEVO PLAN ÔÇö Textos de lectura ÔåÆ Nunito
+   ============================================================ */
+
+.play-v3 .capa-organizar .org-seccion-meta,
+.play-v3 .capa-organizar .org-picker-hint,
+.play-v3 .capa-organizar .org-dd-label,
+.play-v3 .capa-organizar .org-dd-opt,
+.play-v3 .capa-organizar .org-tipo-card-txt,
+.play-v3 .capa-organizar .org-lugar-horario,
+.play-v3 .capa-organizar .org-horas-hint,
+.play-v3 .capa-organizar .org-busca,
+.play-v3 .capa-organizar .org-aviso,
+.play-v3 .capa-organizar .org-picker-nom {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  font-style: normal !important;
+  text-transform: none !important;
+}
+
+/* T├¡tulos de secci├│n y bot├│n CREAR ÔÇö MANTENER Caveat */
+.play-v3 .capa-organizar .org-tit,
+.play-v3 .capa-organizar .ficha-seccion-tit,
+.play-v3 .capa-organizar .org-crear-txt {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   7. INICIO (mobile/desktop) ÔÇö Textos de lectura ÔåÆ Nunito
+   ============================================================ */
+
+/* Cotilleo teaser */
+.play-v3:has(.game-shell) .obj-cotilleo-txt {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  line-height: 1.4 !important;
+}
+
+/* Planes en curso / pr├│ximos */
+.play-v3:has(.game-shell) .enc-mov-nombres,
+.play-v3:has(.game-shell) .pp-mov-nombres,
+.play-v3:has(.game-shell) .prox-nombres {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important; /* Nombres decorativos */
+}
+
+.play-v3:has(.game-shell) .enc-mov-lugar,
+.play-v3:has(.game-shell) .pp-mov-lugar,
+.play-v3:has(.game-shell) .prox-meta {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-secondary) !important;
+}
+
+/* Misiones strip */
+.play-v3:has(.game-shell) .mision-strip-txt,
+.play-v3:has(.game-shell) .obj-misiones-vacio {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  line-height: 1.4 !important;
+}
+
+/* Parejas */
+.play-v3:has(.game-shell) .obj-pareja-nombres {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important; /* Nombres decorativos */
+}
+
+.play-v3:has(.game-shell) .obj-parejas-vacio,
+.play-v3:has(.game-shell) .obj-parejas-list p.muted {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-secondary) !important;
+}
+
+/* Tiles izquierda (Mensajitos, Vecinos, Plan) */
+.play-v3:has(.game-shell) .game-left .game-left-tile-label,
+.play-v3:has(.game-shell) .game-left .obj-buzon-txt,
+.play-v3:has(.game-shell) .game-left .obj-vecinos-tit,
+.play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important; /* Labels decorativos */
+}
+
+/* Vecinos/buz├│n preview */
+.play-v3:has(.game-shell) .vecinos-stat,
+.play-v3:has(.game-shell) .obj-pueblo-txt,
+.play-v3:has(.game-shell) .obj-buzon-preview {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-secondary) !important;
+}
+
+/* ============================================================
+   8. AVISOS / DERROTA / PLAN NOTIF ÔÇö Textos ÔåÆ Nunito
+   ============================================================ */
+
+.play-v3 .vida-derrota .tut-texto,
+.play-v3 .plan-notif-nombres,
+.play-v3 .plan-notif-meta {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+}
+
+/* T├¡tulos ÔÇö MANTENER Caveat */
+.play-v3 .vida-derrota h2,
+.play-v3 .vida-derrota .ds-modal-tit {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   9. REGLAS GLOBALES ÔÇö No microtexto
+   ============================================================ */
+
+/* Forzar tama├▒os m├¡nimos en m├│vil */
+@media (max-width: 768px) {
+  .play-v3 .capa .mini,
+  .play-v3 .capa .org-picker-hint,
+  .play-v3 .capa .org-horas-hint,
+  .play-v3 .capa .org-lugar-horario,
+  .play-v3 .capa .org-aviso,
+  .play-v3 .capa .agenda-sub,
+  .play-v3 .capa .vecinos-pie,
+  .play-v3 .capa .mensajitos-seccion-tit,
+  .play-v3 .capa .carta-meta,
+  .play-v3 .capa .msg-leido-toggle,
+  .play-v3 .capa .carta-copy,
+  .play-v3 .capa .ficha-animo-line,
+  .play-v3 .capa .ficha-animo-val,
+  .play-v3 .capa .ficha-edad,
+  .play-v3 .capa .ficha-trabajo,
+  .play-v3 .capa .ficha-desde,
+  .play-v3 .capa .ficha-rasgo-tag,
+  .play-v3 .capa .ficha-pref-line,
+  .play-v3 .capa .ficha-hobby-lab,
+  .play-v3 .capa .ficha-vacio,
+  .play-v3 .capa .ficha-plan-item,
+  .play-v3 .capa .ficha-rel-nom,
+  .play-v3 .capa .ficha-rel-etiq,
+  .play-v3 .capa .ficha-seccion-tit-sm,
+  .play-v3 .capa .coti-item-cuando,
+  .play-v3 .capa .org-dd-label,
+  .play-v3 .capa .org-dd-opt {
+    font-size: var(--aht-type-secondary) !important;
+    line-height: 1.4 !important;
+  }
+}
+
+/* ============================================================
+   10. EXCEPCIONES DECORATIVAS ÔÇö MANTENER Caveat
+   ============================================================ */
+
+/* Estos elementos CONSERVAN la manuscrita por ser decorativos/t├¡tulos: */
+.play-v3 .mensajitos-tit,           /* "MENSAJITOS" */
+.play-v3 .mensajitos-tab,           /* Tabs NUEVOS/TODOS */
+.play-v3 .mensajitos-leer-todos-txt,/* "Marcar todo como le├¡do" */
+.play-v3 .carta-copy .de,           /* Nombre remitente (decorativo) */
+.play-v3 .acciones-msg button,      /* Botones de acci├│n (decorativos) */
+.play-v3 .msg-leido-toggle,         /* Toggle le├¡do (decorativo) */
+.play-v3 .capa-ficha .ficha-tit,    /* "FICHA DE VECINO" */
+.play-v3 .capa-ficha .ficha-nombre, /* Nombre vecino hero */
+.play-v3 .capa-ficha .ficha-animo-val, /* Estado an├¡mico (acento) */
+.play-v3 .capa-ficha .ficha-seccion-tit, /* RASGOS, HOBBIES, RELACIONES */
+.play-v3 .capa-ficha .ficha-btn-org, /* "Nuevo plan" */
+.play-v3 .capa-organizar .org-tit,  /* "NUEVO PLAN" */
+.play-v3 .capa-organizar .ficha-seccion-tit, /* QUI├ëNES, QU├ë, D├ôNDE, CU├üNDO */
+.play-v3 .capa-organizar .org-crear-txt, /* Bot├│n CREAR */
+.play-v3 .capa-diario .coti-tit,    /* "DIARIO / COTILLEOS" */
+.play-v3 .capa-misiones .mis-tit,   /* "HOY EN EL PUEBLO" */
+.play-v3 .capa-vida-pueblo .vida-tit, /* "VIDA DEL PUEBLO" */
+.play-v3 .tut-titulo,               /* T├¡tulos tutorial */
+.play-v3 .tut-fin-titulo,           /* T├¡tulo finale */
+.play-v3 .tut-bloque-tit,           /* OBSERVA / PROP├ôN / MIRA */
+.play-v3 .tut-cara-nombre,          /* Nombres en tutorial */
+.play-v3 .libreta-kicker,           /* "Celestine apunta" etc */
+.play-v3 .obj-vecinos-tit,          /* "VECINOS" en tile */
+.play-v3 .obj-buzon-txt,            /* "MENSAJITOS" en tile */
+.play-v3 .obj-nuevo-plan-txt::before, /* "PLAN" en tile */
+.play-v3 .enc-mov-tit,              /* "EN CURSO" */
+.play-v3 .pp-mov-tit,               /* "PR├ôXIMOS" */
+.play-v3 .obj-misiones-papel-tit,   /* "MISIONES" */
+.play-v3 .zona-tit-parejas,         /* "PAREJAS" */
+.play-v3 .obj-proximo-tit,          /* "PR├ôXIMO PLAN" */
+.play-v3 .obj-cotilleo-tit,         /* "COTILLEO" */
+.play-v3 .ds-modal-tit,             /* T├¡tulos modales gen├®ricos */
+.play-v3 .ds-btn--primary,          /* Botones primarios */
+.play-v3 .ds-tab,                   /* Tabs DS */
+.play-v3 .ds-step,                  /* Steps */
+.play-v3 .ds-ribbon,                /* Ribbons */
+.play-v3 .ds-hint,                  /* Hints decorativos */
+.play-v3 .ds-empty,                 /* Empty states decorativos */
+.play-v3 .ds-tl-day,                /* D├¡as en timeline */
+.play-v3 .ds-event-title,           /* T├¡tulos eventos */
+.play-v3 .ds-flag-new,              /* Flag "NUEVO" */
+.play-v3 .animo-modal-tit,          /* T├¡tulo modal ├ínimo */
+.play-v3 .animo-modal-ribbon,       /* Ribbon ├ínimo */
+.play-v3 .ficha-diario-head-tit,    /* T├¡tulo diario vecino */
+.play-v3 .ficha-rel-modal-tit,      /* T├¡tulo modal relaciones */
+.play-v3 .par-tit,                  /* "PAREJAS" */
+.play-v3 .agenda-tit,               /* "PLANES" */
+.play-v3 .obj-pareja-nombres {      /* Nombres pareja */
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* ============================================================
+   11. AVATARES EN ELECCIONES DE PERSONA
+   ============================================================ */
+
+.play-v3 .msg-eleccion-avatar-wrap {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.play-v3 .msg-eleccion-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(40, 28, 16, 0.12);
+  flex-shrink: 0;
+}
+
+.play-v3 .msg-eleccion-avatar.cara-ini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f3e6cc;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .msg-eleccion-opt {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+}
+
+.play-v3 .msg-eleccion-opt-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.play-v3 .msg-eleccion-nom {
+  display: block;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .msg-eleccion-hint {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-secondary) !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+@media (max-width: 768px) {
+  .play-v3 .msg-eleccion-avatar-wrap {
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+  }
+  
+  .play-v3 .msg-eleccion-avatar,
+  .play-v3 .msg-eleccion-avatar.cara-ini {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .play-v3 .msg-eleccion-nom {
+    font-size: 1rem !important;
+  }
+  
+  .play-v3 .msg-eleccion-hint {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* ============================================================
+   12. MENTES — textos explicativos legibles (título/avatares intactos)
+   ============================================================ */
+
+.play-v3 .capa-mentes .enc-int-kicker--q,
+.play-v3 .capa-mentes .enc-int-kicker-tema {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-caption) !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+.play-v3 .capa-mentes .enc-int-result-txt,
+.play-v3 .capa-mentes .enc-int-temas-grid .enc-int-btn,
+.play-v3 .capa-mentes .enc-int-volver {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body) !important;
+  line-height: 1.45 !important;
+}

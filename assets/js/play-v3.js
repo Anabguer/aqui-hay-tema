@@ -1431,6 +1431,15 @@
     return '<span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span>';
   }
 
+  function htmlAvatarEleccion(personaje_id, nombre, cls) {
+    const tok = personaje_id ? tokenDe(personaje_id) : null;
+    const base = cls || 'msg-eleccion-avatar';
+    if (tok) {
+      return '<span class="msg-eleccion-avatar-wrap"><img class="' + base + '" src="' + esc(tok) + '" alt=""/></span>';
+    }
+    return '<span class="msg-eleccion-avatar-wrap"><span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span></span>';
+  }
+
   function mensajitosCartas(msgs) {
     return (msgs || []).filter(function (m) {
       return m && (m.canal || 'buzon') !== 'cotilleo' && String(m.texto || '').trim() !== '';
@@ -1717,6 +1726,7 @@
         if (!o || !o.personaje_id) return '';
         const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
         return '<button type="button" class="msg-eleccion-opt" data-elegir-persona="' + esc(o.personaje_id) + '">' +
+          htmlAvatarEleccion(o.personaje_id, o.nombre) +
           '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
           '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
       }).join('');
@@ -1731,6 +1741,7 @@
         if (!o || !o.personaje_id) return '';
         const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
         return '<button type="button" class="msg-eleccion-opt llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
+          htmlAvatarEleccion(o.personaje_id, o.nombre) +
           '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
           '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
       }).join('');

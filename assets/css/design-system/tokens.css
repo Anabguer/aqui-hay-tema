@@ -57,6 +57,16 @@
   --ds-font-hand: "Caveat", "Segoe Print", cursive;
   --ds-font-ui: "Nunito", "Segoe UI", sans-serif;
 
+  /* --- Escala tipográfica AHT (legibilidad global) --- */
+  --aht-type-display: clamp(1.75rem, 5vw, 2.25rem);
+  --aht-type-title: clamp(1.28rem, 2.8vw, 1.48rem);
+  --aht-type-block: clamp(1.35rem, 4vw, 1.6rem);
+  --aht-type-body: clamp(1rem, 2.8vw, 1.125rem);
+  --aht-type-name: clamp(1rem, 2.8vw, 1.125rem);
+  --aht-type-secondary: clamp(0.875rem, 2.4vw, 1rem);
+  --aht-type-caption: clamp(0.8125rem, 2vw, 0.875rem);
+  --aht-type-micro: clamp(0.75rem, 1.8vw, 0.8125rem);
+
   /* --- Espaciado --- */
   --ds-space-1: 4px;
   --ds-space-2: 8px;
@@ -127,6 +137,15 @@
      phone:  <= 767px   |  tablet: 768–1023px  |  desktop: >= 1024px
      NOTA: el corte JS .phone/.pc es <720px (play-v3.js layout()).
      No modificar aqui; ver docs/design-system/05-responsive.md §3. */
+}
+
+
+@media (max-width: 768px) {
+  :root {
+    --aht-type-body: 1rem;
+    --aht-type-secondary: 0.875rem;
+    --aht-type-caption: 0.8125rem;
+  }
 }
 
 /* ============================================================
