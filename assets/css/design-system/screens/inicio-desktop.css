@@ -1,4 +1,4 @@
-﻿/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
+/* INICIO-DESKTOP — presentación desktop namespaced (.inicio-desktop) */
 
 .inicio-desktop .inicio-desktop-layout {
   display: grid;
@@ -94,6 +94,10 @@
     font-size: .82rem;
     padding: .32rem .62rem;
     margin-top: .65rem;
+  }
+
+  .inicio-desktop .game-top .control-audio {
+    display: none !important;
   }
 
   .inicio-desktop-left .shell-grupo-buzon {
@@ -664,7 +668,7 @@
     overflow: visible !important;
   }
 }
-/* INICIO-DESKTOP-OVERRIDE-v1 â€” gana a shell-art/legibilidad; ref fa92ff6 + PORTED block */
+/* INICIO-DESKTOP-OVERRIDE-v1 — gana a shell-art/legibilidad; ref fa92ff6 + PORTED block */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop > .game-top {
     background: transparent !important;
@@ -782,7 +786,7 @@
     grid-template-columns: minmax(300px, 360px) minmax(320px, 1fr) minmax(260px, 340px) !important;
   }
 }
-/* INICIO-DESKTOP-LAYOUT-FIX â€” grid stage + mapa visible en host compartido */
+/* INICIO-DESKTOP-LAYOUT-FIX — grid stage + mapa visible en host compartido */
 @media (min-width: 769px) {
   .inicio-stage {
     display: grid !important;
@@ -894,7 +898,7 @@
   }
 }
 
-/* B3 ï¿½ Prï¿½ximo evento del pueblo: debajo del mapa en desktop */
+/* B3 � Pr�ximo evento del pueblo: debajo del mapa en desktop */
 @media (min-width: 769px) {
   .inicio-stage > .inicio-proximo-evento {
     grid-column: 2 !important;
@@ -908,7 +912,7 @@
     grid-template-rows: auto auto auto !important;
   }
 }
-/* INICIO-MAP-TALLER-v4b â€” mapa alto sin recorte (gana a desktop-shell) */
+/* INICIO-MAP-TALLER-v4b — mapa alto sin recorte (gana a desktop-shell) */
 @media (min-width: 769px) {
   .inicio-stage {
     grid-template-columns: minmax(200px, 250px) minmax(520px, 1fr) minmax(200px, 250px) !important;
@@ -975,7 +979,7 @@
     grid-template-columns: minmax(210px, 260px) minmax(560px, 1.2fr) minmax(210px, 260px) !important;
   }
 }
-/* INICIO-MENSAJITOS-H63-v1 â€” altura fija Mensajitos desktop */
+/* INICIO-MENSAJITOS-H63-v1 — altura fija Mensajitos desktop */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-left .obj-buzon {
     height: 63px !important;
@@ -986,7 +990,7 @@
     padding-bottom: 0 !important;
   }
 }
-/* INICIO-MAP-REDUCE-1CM-v1 â€” mapa desktop ~1cm mÃ¡s compacto */
+/* INICIO-MAP-REDUCE-1CM-v1 — mapa desktop ~1cm más compacto */
 @media (min-width: 769px) {
   .inicio-stage {
     grid-template-columns: minmax(200px, 250px) minmax(480px, 1fr) minmax(200px, 250px) !important;
@@ -1002,7 +1006,7 @@
     grid-template-columns: minmax(210px, 260px) minmax(520px, 1.2fr) minmax(210px, 260px) !important;
   }
 }
-/* INICIO-MAP-REDUCE-MORE-v1 â€” mapa desktop aÃºn mÃ¡s compacto */
+/* INICIO-MAP-REDUCE-MORE-v1 — mapa desktop aún más compacto */
 @media (min-width: 769px) {
   .inicio-stage {
     grid-template-columns: minmax(210px, 260px) minmax(430px, 1fr) minmax(210px, 260px) !important;
@@ -1018,7 +1022,7 @@
     grid-template-columns: minmax(220px, 270px) minmax(470px, 1.1fr) minmax(220px, 270px) !important;
   }
 }
-/* INICIO-MAP-REDUCE-3CM-v1 â€” mapa desktop -1cm adicional */
+/* INICIO-MAP-REDUCE-3CM-v1 — mapa desktop -1cm adicional */
 @media (min-width: 769px) {
   .inicio-stage {
     grid-template-columns: minmax(220px, 270px) minmax(390px, 1fr) minmax(220px, 270px) !important;
@@ -1034,7 +1038,7 @@
     grid-template-columns: minmax(230px, 280px) minmax(430px, 1fr) minmax(230px, 280px) !important;
   }
 }
-/* INICIO-MAP-TOKENS-TUNE-v1 â€” mapa un poco mÃ¡s pequeÃ±o + tokens vecinos */
+/* INICIO-MAP-TOKENS-TUNE-v1 — mapa un poco más pequeño + tokens vecinos */
 @media (min-width: 769px) {
   .inicio-stage {
     grid-template-columns: minmax(220px, 270px) minmax(360px, 1fr) minmax(220px, 270px) !important;
@@ -1074,7 +1078,7 @@
     grid-template-columns: minmax(230px, 280px) minmax(400px, 1fr) minmax(230px, 280px) !important;
   }
 }
-/* INICIO-MAP-BALANCE-v1 â€” recuperar tamaÃ±o mapa; tope suave anti-scroll */
+/* INICIO-MAP-BALANCE-v1 — recuperar tamaño mapa; tope suave anti-scroll */
 @media (min-width: 769px) {
   .inicio-stage {
     grid-template-columns: minmax(220px, 270px) minmax(360px, 1fr) minmax(220px, 270px) !important;
@@ -1099,7 +1103,7 @@
   }
 }
 
-/* INICIO-PASAR-RATO-MOBILE-v1 - mismo diseño móvil en desktop; posición fija día/noche */
+/* INICIO-PASAR-RATO-MOBILE-v1 - mismo dise�o m�vil en desktop; posici�n fija d�a/noche */
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .inicio-desktop .top-reloj .pasar-rato,
   .play-v3:has(.game-shell) .inicio-desktop .top-reloj .pasar-rato.pasar-rato--noche {
@@ -2305,7 +2309,7 @@
 
 
 
-/* INICIO-CHROME-RESTORE-v37 — parejas + crear plan + buzon + cotilleo */
+/* INICIO-CHROME-RESTORE-v37 � parejas + crear plan + buzon + cotilleo */
 /* INICIO-PAREJAS-ROW-v1 - filas con tono rosa, caras separadas y corazon visible */
 .play-v3:has(.game-shell) .shell-grupo-parejas .obj-pareja-piece {
   background: linear-gradient(135deg, rgba(255, 248, 251, .96) 0%, rgba(248, 206, 222, .94) 100%) !important;
@@ -2573,7 +2577,7 @@
 }
 
 
-/* INICIO-ENC-ESCENA-STAMP-v38 — polaroid mini (no tamano real del asset) + fila caras/badge */
+/* INICIO-ENC-ESCENA-STAMP-v38 � polaroid mini (no tamano real del asset) + fila caras/badge */
 .play-v3:has(.game-shell) .encursos-movil .enc-mov-escena {
   grid-template-columns: auto minmax(0, 1fr) !important;
   align-items: start !important;
@@ -2696,7 +2700,7 @@
 }
 
 
-/* INICIO-CREAR-PLAN-POS-v41 — debajo de proximos planes, antes de parejas; sin translate flotante */
+/* INICIO-CREAR-PLAN-POS-v41 � debajo de proximos planes, antes de parejas; sin translate flotante */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .proxplanes-movil {
     margin-bottom: 0 !important;
@@ -2727,7 +2731,7 @@
 }
 
 
-/* INICIO-VIEW-NOSCROLL-v42 — restaura sin barra vertical en inicio desktop */
+/* INICIO-VIEW-NOSCROLL-v42 � restaura sin barra vertical en inicio desktop */
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
     min-height: min(calc(58vh - 5.2cm), calc(520px - 5.2cm)) !important;
@@ -2772,7 +2776,7 @@
   }
 }
 
-/* INICIO-VECINOS-ESTADOS-v43 — filas de estado mas legibles en la libreta Celestine */
+/* INICIO-VECINOS-ESTADOS-v43 � filas de estado mas legibles en la libreta Celestine */
 .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .stat-row,
 .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .vecinos-stat {
   font-size: 1.05rem !important;
@@ -2838,7 +2842,7 @@
   }
 }
 
-/* INICIO-PAREJAS-CUQUI-v46 — sin degradado, mas amor/cuqui + corazones titulo visibles */
+/* INICIO-PAREJAS-CUQUI-v46 � sin degradado, mas amor/cuqui + corazones titulo visibles */
 .play-v3:has(.game-shell) .shell-grupo-parejas .obj-pareja-piece {
   background: #fff1f6 !important;
   border: 1.5px solid rgba(232, 120, 152, .38) !important;
@@ -2876,7 +2880,7 @@
   }
 }
 
-/* INICIO-PLANES-LIBRETA-v47 — bloque unico scrapbook Celestine (en curso + proximos + crear) */
+/* INICIO-PLANES-LIBRETA-v47 � bloque unico scrapbook Celestine (en curso + proximos + crear) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta {
     position: relative;
@@ -3040,7 +3044,7 @@
   }
 }
 
-/* INICIO-PLANES-LIBRETA-v48 — libreta distinta, en curso vivo, caras+icono, CTA grande, crear plan recto */
+/* INICIO-PLANES-LIBRETA-v48 � libreta distinta, en curso vivo, caras+icono, CTA grande, crear plan recto */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta {
     background-color: #eef6fb !important;
@@ -3195,7 +3199,7 @@
   }
 }
 
-/* INICIO-PLANES-LIBRETA-v49 — scrapbook Celestine coherente con el pueblo (gana v48 azul/verde) */
+/* INICIO-PLANES-LIBRETA-v49 � scrapbook Celestine coherente con el pueblo (gana v48 azul/verde) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta {
     padding: 1.35rem 1rem 1rem .95rem !important;
@@ -3414,7 +3418,7 @@
   }
 }
 
-/* INICIO-PLANES-LIBRETA-v50 — refinado: sin kicker, titulos+linea+bolita, en curso neutro, crear plan compacto */
+/* INICIO-PLANES-LIBRETA-v50 � refinado: sin kicker, titulos+linea+bolita, en curso neutro, crear plan compacto */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta {
     padding: .95rem .95rem .85rem !important;
@@ -3563,7 +3567,7 @@
 }
 
 
-/* INICIO-ENC-CAROUSEL-v52 — flecha al lateral, una tarjeta sin asomar la siguiente */
+/* INICIO-ENC-CAROUSEL-v52 � flecha al lateral, una tarjeta sin asomar la siguiente */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .encursos-movil {
     display: grid !important;
@@ -3626,7 +3630,7 @@
   }
 }
 
-/* INICIO-ENC-CARD-v53 — tarjeta en curso mas viva + titulo color bolita */
+/* INICIO-ENC-CARD-v53 � tarjeta en curso mas viva + titulo color bolita */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-tit {
     color: #b8894a !important;
@@ -3746,7 +3750,7 @@
   }
 }
 
-/* INICIO-ENC-CARD-v54 — en curso verde sutil (gana dorado v53) */
+/* INICIO-ENC-CARD-v54 � en curso verde sutil (gana dorado v53) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-tit {
     color: #6d9b76 !important;
@@ -3830,7 +3834,7 @@
   }
 }
 
-/* INICIO-PP-CAROUSEL-v55 — proximos: flecha lateral, una tarjeta */
+/* INICIO-PP-CAROUSEL-v55 � proximos: flecha lateral, una tarjeta */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil {
     display: grid !important;
@@ -3894,7 +3898,7 @@
   }
 }
 
-/* INICIO-VIEW-NOSCROLL-v56 — refuerzo anti barra vertical (gana carousel v52/v55) */
+/* INICIO-VIEW-NOSCROLL-v56 � refuerzo anti barra vertical (gana carousel v52/v55) */
 @media (min-width: 769px) {
   html:has(body.play-v3 .inicio-desktop.is-inicio-view-active),
   body.play-v3:has(.inicio-desktop.is-inicio-view-active) {
@@ -3948,7 +3952,7 @@
   }
 }
 
-/* INICIO-PP-DUO-v57 — proximos planes: dos cards visibles */
+/* INICIO-PP-DUO-v57 � proximos planes: dos cards visibles */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-track {
     gap: 8px !important;
@@ -3973,7 +3977,7 @@
   }
 }
 
-/* INICIO-ENC-CLIP-v58 — no recortar sello EN CURSO ni borde de la card */
+/* INICIO-ENC-CLIP-v58 � no recortar sello EN CURSO ni borde de la card */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .encursos-movil {
     overflow: visible !important;
@@ -3998,7 +4002,7 @@
   }
 }
 
-/* INICIO-LIBRETA-NOPIN-v59 — quitar chincheta del bloque planes */
+/* INICIO-LIBRETA-NOPIN-v59 � quitar chincheta del bloque planes */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta::after {
     content: none !important;
@@ -4006,7 +4010,7 @@
   }
 }
 
-/* INICIO-ENC-NOMBRES-v60 — mostrar nombre en tarjeta en curso (gana hide v1) */
+/* INICIO-ENC-NOMBRES-v60 � mostrar nombre en tarjeta en curso (gana hide v1) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card--escena .enc-mov-nombres {
     display: block !important;
@@ -4022,7 +4026,7 @@
   }
 }
 
-/* INICIO-TOP-REF-v61 — cabecera desktop como referencia (barra crema + panel centro + vida) */
+/* INICIO-TOP-REF-v61 � cabecera desktop como referencia (barra crema + panel centro + vida) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop > .game-top {
     display: grid !important;
@@ -4056,7 +4060,7 @@
   }
 
   .play-v3 .inicio-desktop > .game-top .brand-col::before {
-    content: "✦" !important;
+    content: "?" !important;
     position: absolute !important;
     left: 0 !important;
     top: 50% !important;
@@ -4188,7 +4192,7 @@
   }
 
   .play-v3 .inicio-desktop > .game-top .obj-dia-num::after {
-    content: " · " !important;
+    content: " � " !important;
     font-weight: 800 !important;
   }
 
@@ -4311,7 +4315,7 @@
   }
 }
 
-/* INICIO-TOP-REF-v62 — mas vida: tipografia, bordes melocoton, detalles (gana v61) */
+/* INICIO-TOP-REF-v62 � mas vida: tipografia, bordes melocoton, detalles (gana v61) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop > .game-top {
     gap: 12px 22px !important;
@@ -4440,7 +4444,7 @@
 }
 
 
-/* INICIO-TOP-REF-v63 — titulo Caveat grande + estrellitas separadas (gana v62) */
+/* INICIO-TOP-REF-v63 � titulo Caveat grande + estrellitas separadas (gana v62) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop > .game-top .brand-col {
     padding-left: 54px !important;
@@ -4497,7 +4501,7 @@
 }
 
 
-/* INICIO-TOP-REF-v64 — subir cabecera + AHT mas grande (gana v63) */
+/* INICIO-TOP-REF-v64 � subir cabecera + AHT mas grande (gana v63) */
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .game-main {
     padding-top: 2px !important;
@@ -4530,7 +4534,7 @@
 }
 
 
-/* INICIO-TOP-RELOJ-v65 — panel centro calibrado (orden, iconos, separadores) */
+/* INICIO-TOP-RELOJ-v65 � panel centro calibrado (orden, iconos, separadores) */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop > .game-top .top-reloj {
     display: flex !important;
@@ -7786,5 +7790,241 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
     grid-template-columns: minmax(300px, 30fr) minmax(0, 40fr) minmax(282px, 30fr) !important;
     column-gap: 14px !important;
+  }
+}
+
+/* INICIO-LAYOUT-CALIB-NENI-v102 - valores calibrador (gana v100/v101) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 340px minmax(0, 1fr) 340px !important;
+    column-gap: 9px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    width: 95% !important;
+    max-width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    aspect-ratio: 618 / 404 !important;
+    max-height: min(85vh, calc(100dvh - 250px), calc(100vh - 250px)) !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav {
+    width: 95% !important;
+    max-width: 95% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* INICIO-LAYOUT-LAT-BUMP-NENI-v103 - laterales un poco mas anchos; mapa 100% columna (gana v100/v102) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 248px minmax(0, 1fr) 248px !important;
+    column-gap: 9px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    aspect-ratio: 618 / 404 !important;
+    max-height: min(78vh, calc(100dvh - 270px), calc(100vh - 270px)) !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 258px minmax(0, 1fr) 258px !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 268px minmax(0, 1fr) 268px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 278px minmax(0, 1fr) 278px !important;
+  }
+}
+
+/* INICIO-LAYOUT-LAT-WIDE-GAP-NENI-v104 - laterales mas anchos + mas aire hacia mapa (gana v103) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 310px minmax(0, 1fr) 310px !important;
+    column-gap: 16px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    aspect-ratio: 618 / 404 !important;
+    max-height: min(78vh, calc(100dvh - 270px), calc(100vh - 270px)) !important;
+    overflow: hidden !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+@media (min-width: 1100px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 325px minmax(0, 1fr) 325px !important;
+    column-gap: 18px !important;
+  }
+}
+
+@media (min-width: 1440px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 340px minmax(0, 1fr) 340px !important;
+    column-gap: 18px !important;
+  }
+}
+
+@media (min-width: 1600px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-columns: 350px minmax(0, 1fr) 350px !important;
+    column-gap: 20px !important;
+  }
+}
+
+/* INICIO-MAP-NUDGE-NARROW-NENI-v105 - mapa un poco mas estrecho; laterales/gap intactos (gana v104 mapa) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    width: 93% !important;
+    max-width: 93% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav {
+    width: 93% !important;
+    max-width: 93% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-DESKTOP-v119 ? iconos tinta neutra; acento solo en tab activo */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn {
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt {
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico {
+    color: var(--ds-ink-soft, #6b5138) !important;
+    background: transparent !important;
+    border-radius: 6px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg path {
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on .play-bottom-nav-ico {
+    color: var(--ds-ink, #33261e) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
+    background: var(--ds-pink-deep, #c42b4a) !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-DESKTOP-v120 ? color semantico siempre visible por icono */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico {
+    color: var(--ds-ink-soft, #6b5138) !important;
+    background: transparent !important;
+    border-radius: 7px !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg path {
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
+    color: var(--ds-ink, #33261e) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
+    background: var(--ds-pink-deep, #c42b4a) !important;
   }
 }

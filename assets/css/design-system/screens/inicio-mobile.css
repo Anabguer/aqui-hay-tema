@@ -9283,3 +9283,243 @@
     display: none !important;
   }
 }
+/* INICIO-TILES-GEOM-v114 â€” mas altura interna + badges diferenciados y mas visibles */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles {
+    --aht-tile-h: 68px;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
+    padding: 8px 6px 8px !important;
+    gap: 4px !important;
+    align-content: center !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
+    gap: 4px !important;
+  }
+
+  /* MENSAJITOS: bolita rosa clasica, mas grande */
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-buzon-badge,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-buzon-ico-wrap > .obj-buzon-badge {
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 5px !important;
+    font-size: .62rem !important;
+    border-width: 2px !important;
+    top: 3px !important;
+    right: 3px !important;
+    box-shadow: 0 2px 4px rgba(200, 91, 120, .32) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-ico-wrap > .obj-buzon-badge {
+    top: -3px !important;
+    right: -5px !important;
+  }
+
+  /* VECINOS: pastilla clara con borde tinta â€” distinta a mensajitos */
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-total-badge {
+    top: 5px !important;
+    right: 5px !important;
+    min-width: 22px !important;
+    height: 22px !important;
+    padding: 0 5px !important;
+    border-radius: 7px 5px 7px 5px / 5px 7px 5px 7px !important;
+    background: #fff8f0 !important;
+    border: 2px solid var(--ds-ink, #3b3028) !important;
+    font-size: .64rem !important;
+    font-weight: 900 !important;
+    color: var(--ds-ink, #3b3028) !important;
+    box-shadow: 1px 2px 0 rgba(51, 38, 30, .14) !important;
+    transform: rotate(-2deg) !important;
+  }
+}
+/* INICIO-TILES-GEOM-v115 â€” burbuja vecinos sutil + bolita mensajitos mas visible */
+@media (max-width: 768px) {
+  /* MENSAJITOS: bolita mas grande y legible */
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-buzon-badge,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-buzon-ico-wrap > .obj-buzon-badge {
+    min-width: 24px !important;
+    height: 24px !important;
+    padding: 0 6px !important;
+    font-size: .72rem !important;
+    border-width: 2px !important;
+    top: 2px !important;
+    right: 2px !important;
+    box-shadow: 0 2px 5px rgba(200, 91, 120, .34) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-ico-wrap > .obj-buzon-badge {
+    top: -4px !important;
+    right: -6px !important;
+  }
+
+  /* VECINOS: pastilla suave, discreta */
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-total-badge {
+    top: 5px !important;
+    right: 5px !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 4px !important;
+    border-radius: 999px !important;
+    background: rgba(255, 255, 255, .82) !important;
+    border: 1px solid rgba(200, 91, 120, .42) !important;
+    font-size: .54rem !important;
+    font-weight: 700 !important;
+    color: var(--ds-pink-deep, #c85b78) !important;
+    box-shadow: none !important;
+    transform: none !important;
+    backdrop-filter: blur(2px) !important;
+    -webkit-backdrop-filter: blur(2px) !important;
+  }
+}
+/* INICIO-TILES-GEOM-v116 â€” bolita mensajitos grande (gana v106 por selector) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-ico-wrap > .obj-buzon-badge {
+    position: absolute !important;
+    top: -7px !important;
+    right: -9px !important;
+    left: auto !important;
+    bottom: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    min-width: 28px !important;
+    height: 28px !important;
+    padding: 0 7px !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-weight: 800 !important;
+    font-size: .82rem !important;
+    line-height: 1 !important;
+    font-variant-numeric: tabular-nums !important;
+    color: #fff !important;
+    background: var(--ds-pink-deep, #c85b78) !important;
+    border: 2.5px solid #fff !important;
+    border-radius: 999px !important;
+    box-shadow: 0 2px 6px rgba(200, 91, 120, .38) !important;
+    transform: none !important;
+    z-index: 3 !important;
+  }
+}
+/* INICIO-TILES-GEOM-v117 â€” bolita mensajitos tamano medio */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-ico-wrap > .obj-buzon-badge {
+    top: -5px !important;
+    right: -6px !important;
+    min-width: 20px !important;
+    height: 20px !important;
+    padding: 0 5px !important;
+    font-size: .64rem !important;
+    border-width: 2px !important;
+    box-shadow: 0 2px 4px rgba(200, 91, 120, .3) !important;
+  }
+}
+/* INICIO-CABECERA-GEOM-v118 â€” un poco menos de aire bajo bloque dia */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
+    padding-bottom: 9px !important;
+    row-gap: 6px !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
+    margin-bottom: 0 !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-v119 ? iconos tinta neutra; acento solo en tab activo */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .play-bottom-nav-btn {
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-txt {
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-ico {
+    color: var(--ds-ink-soft, #6b5138) !important;
+    background: transparent !important;
+    border-radius: 6px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-ico svg path {
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn.is-on .play-bottom-nav-ico {
+    color: var(--ds-ink, #33261e) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn.is-on::after {
+    background: var(--ds-pink-deep, #c42b4a) !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-v120 ? color semantico siempre visible por icono */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .play-bottom-nav-ico {
+    color: var(--ds-ink-soft, #6b5138) !important;
+    background: transparent !important;
+    border-radius: 7px !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-ico svg path {
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
+    color: var(--ds-ink, #33261e) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn.is-on::after {
+    background: var(--ds-pink-deep, #c42b4a) !important;
+  }
+}

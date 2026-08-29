@@ -1,18 +1,3 @@
-<?php
-declare(strict_types=1);
-header('Content-Type: text/html; charset=utf-8');
-header('Cache-Control: no-store, no-cache, must-revalidate');
-header('Pragma: no-cache');
-$ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-static';
-if (is_file($ahtBusterFile)) {
-    $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
-    if ($ahtBusterRaw !== '') {
-        $ahtUi = $ahtBusterRaw;
-    }
-}
-$ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/play.php')), '/') . '/';
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,55 +10,56 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <meta name="apple-mobile-web-app-title" content="Aquí Hay Tema"/>
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
-  <link rel="manifest" href="<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>manifest.webmanifest"/>
+  <link rel="manifest" href="/juegos/aqui-hay-tema/manifest.webmanifest"/>
   <link rel="icon" href="assets/brand/pwa-icon-192.png" type="image/png" sizes="192x192"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
-  <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/cotilleos-scrapbook-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/vecinos-celdas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/org-plan-scrapbook-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/components.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-mobile.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/cotilleos-scrapbook-v1.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/vecinos-celdas-persona-v1.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/org-plan-scrapbook-v1.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=v3-20260829-104240"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -426,6 +412,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
             <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
+            <span class="obj-vecinos-total-badge" data-vecinos-total-badge hidden></span>
             <div class="obj-vecinos-head">
               <span class="obj-vecinos-tit game-left-tile-label">VECINOS</span>
               <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
@@ -684,7 +671,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
             </section>
-            <p class="ficha-aprecio" data-ficha-aprecio hidden></p>
+            <section class="ficha-seccion ficha-seccion-aprecio" data-ficha-aprecio hidden>
+              <h4 class="ficha-seccion-tit">C&Oacute;MO TE VE</h4>
+              <div class="ficha-seccion-body">
+                <p class="ficha-aprecio" data-ficha-aprecio-texto></p>
+              </div>
+            </section>
           </div>
         </div>
         <div class="ficha-rel-overlay" data-ficha-rel-overlay hidden>
@@ -692,7 +684,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
             <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
             <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-ficha-rel-close aria-label="Cerrar">X</button>
-            <h3 class="ficha-rel-modal-tit ds-modal-tit ds-modal-tit--ink" data-ficha-rel-modal-tit>Relaciones</h3>
+            <header class="ficha-rel-top">
+              <div class="ds-modal-head">
+                <div class="ds-modal-head-row">
+                  <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#128149;</span>
+                  <h3 class="ficha-rel-modal-tit ds-modal-tit ds-modal-tit--pink" data-ficha-rel-modal-tit>Relaciones</h3>
+                </div>
+                <p class="ds-modal-sub ficha-rel-modal-sub">Qui&eacute;n le cae bien (o mal)</p>
+              </div>
+            </header>
             <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
         </div>
@@ -758,7 +758,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="capa capa-vida-pueblo vida-modal-papel ds-modal-sheet" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
         <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vida-top">
-          <p class="vida-modal-ico" aria-hidden="true">??</p>
+          <p class="vida-modal-ico" aria-hidden="true">&#127793;</p>
           <h2 class="vida-tit ds-modal-tit ds-modal-tit--pink">Vida del pueblo</h2>
           <p class="vida-valor" data-vida-modal-valor>&#8212; / 100</p>
           <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
@@ -795,11 +795,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div data-buzon-list></div>
         <p class="mensajitos-hint">&#11088; Abrir mensajitos puede desbloquear planes y cotilleos</p>
       </aside>
-      <aside class="capa capa-inventario" aria-label="Inventario de Celestine">
-        <button type="button" class="cerrar inv-cerrar" data-close aria-label="Cerrar">&times;</button>
+      <aside class="capa capa-inventario inv-modal-papel ds-modal-sheet" aria-label="Inventario de Celestine">
+        <span class="ficha-tape ficha-tape-l inv-tape-tl" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r inv-tape-tr" aria-hidden="true"></span>
+        <button type="button" class="cerrar inv-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="inv-cab">
-          <h2 class="inv-tit">Inventario</h2>
-          <p class="inv-sub" data-inv-sub>Detalles guardados para regalar a los vecinos.</p>
+          <div class="ds-modal-head">
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#127890;</span>
+              <h2 class="inv-tit ds-modal-tit ds-modal-tit--brown">Inventario</h2>
+            </div>
+            <p class="inv-sub ds-modal-sub" data-inv-sub>Detalles guardados para regalar a los vecinos.</p>
+          </div>
         </header>
         <div class="inv-body capa-scroll">
           <div class="inv-lista" data-inv-lista></div>
@@ -815,11 +822,17 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="capa capa-ajustes ds-modal-sheet" aria-label="Ajustes">
+      <aside class="capa capa-ajustes ajust-modal-papel ds-modal-sheet" aria-label="Ajustes">
+        <span class="ficha-tape ficha-tape-l ajust-tape-tl" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r ajust-tape-tr" aria-hidden="true"></span>
         <button type="button" class="cerrar ajustes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="ajustes-top">
           <div class="ds-modal-head">
-            <h2 class="ds-modal-tit ds-modal-tit--ink">Ajustes</h2>
+            <div class="ds-modal-head-row">
+              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#9881;</span>
+              <h2 class="ds-modal-tit ds-modal-tit--ink">Ajustes</h2>
+            </div>
+            <p class="ds-modal-sub">Sonido, tutorial y partida</p>
           </div>
         </header>
         <div class="ajustes-body capa-scroll">
@@ -975,7 +988,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <svg viewBox="0 0 24 24" focusable="false"><path d="M8 7V6a4 4 0 0 1 8 0v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 11v4M14.5 11v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
           <span class="play-bottom-nav-badge" data-inv-nav-badge hidden>0</span>
         </span>
-        <span class="play-bottom-nav-txt">Mochila</span>
+        <span class="play-bottom-nav-txt">Inventario</span>
       </button>
       <button type="button" class="play-bottom-nav-btn" data-open="vecinos">
         <span class="play-bottom-nav-ico" aria-hidden="true">
@@ -1206,18 +1219,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </section>
             <section class="shell-grupo planes-movil-unif" data-planes-unif-block aria-label="Planes">
-          <header class="planes-unif-cab">
-            <div class="planes-unif-cab-izq">
-            <svg class="plan-seccion-ico planes-unif-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <h3 class="planes-unif-tit">PLANES</h3>
+          <div class="planes-unif-body">
+            <aside class="planes-unif-spine" aria-label="Planes">
+              <svg class="planes-unif-spine-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <h3 class="planes-unif-spine-tit">PLANES</h3>
+              <div class="planes-unif-spine-badges" data-planes-unif-badges hidden aria-live="polite"></div>
+            </aside>
+            <div class="planes-unif-track-wrap">
+              <div class="planes-unif-track" data-planes-unif-track></div>
+              <button type="button" class="planes-unif-more" data-planes-unif-more hidden aria-label="Ver m&aacute;s planes">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
             </div>
-            <p class="planes-unif-resumen" data-planes-unif-resumen hidden aria-live="polite"></p>
-          </header>
-          <div class="planes-unif-track-wrap">
-            <div class="planes-unif-track" data-planes-unif-track></div>
-            <button type="button" class="planes-unif-more" data-planes-unif-more hidden aria-label="Ver m&aacute;s planes">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M10 7l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
           </div>
         </section>
             <section class="shell-grupo inicio-mp-duo" data-inicio-mp-duo aria-label="Misiones y parejas">
@@ -1250,15 +1263,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       </section>
 
     </div>
-  </div>  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
-  <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  </div>  <script src="assets/js/lab-audit.js?v=v3-20260829-104240"></script>
+  <script src="assets/js/play-v3-audio.js?v=v3-20260829-104240"></script>
+  <script src="assets/js/hobby-icons.js?v=v3-20260829-104240"></script>
+  <script src="assets/js/play-v3.js?v=v3-20260829-104240"></script>
+  <script src="assets/js/play-v3-lab.js?v=v3-20260829-104240"></script>
   <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>sw.js', { scope: '<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>' })
+      navigator.serviceWorker.register('/juegos/aqui-hay-tema/sw.js', { scope: '/juegos/aqui-hay-tema/' })
         .catch(function (err) { console.warn('PWA service worker:', err); });
     });
   }

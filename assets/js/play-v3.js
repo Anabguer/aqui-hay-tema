@@ -3165,6 +3165,7 @@
     return {
       statsHtml: htmlResumenCelestine(met),
       vecinosPoblacion: String(met.vecinos) + ' de ' + String(met.cap),
+      vecinosTotalBadge: String(met.vecinos),
       cotilleoTeaser: ultRaw ? resumenCotilleoUi(ultRaw, 120) : 'Hoy est\u00e1n sospechosamente tranquilos\u2026',
       buzonPreview: !pend.length ? 'Sin mensajes pendientes.' : ((pend[0].remitente_nombre || pend[0].de || 'Mensaje') + ': ' + (pend[0].preview || pend[0].asunto || pend[0].texto || '').slice(0, 80)),
       parejas: parejas,
@@ -3283,6 +3284,16 @@
     setAllHtml('[data-resumen-stats]', vm.statsHtml);
     setAllText('[data-vecinos-poblacion]', vm.vecinosPoblacion);
     setAllText('[data-cotilleo-teaser]', vm.cotilleoTeaser);
+    document.querySelectorAll('.inicio-mobile-tiles [data-vecinos-total-badge]').forEach(function (el) {
+      const n = parseInt(vm.vecinosTotalBadge, 10) || 0;
+      if (n > 0) {
+        el.textContent = String(n);
+        el.hidden = false;
+      } else {
+        el.textContent = '';
+        el.hidden = true;
+      }
+    });
     renderVecinosPreviewIn('.inicio-mobile');
     renderParejasStripIn('.inicio-mobile', vm.parejas);
     if (cacheMisionesStripItems) renderMisionesStripIn('.inicio-mobile.inicio-mobile-feed', cacheMisionesStripItems);
@@ -4793,16 +4804,16 @@
 
   var VEC_REL_FILTROS = [
     { id: '', txt: 'Todas', icono: '' },
-    { id: 'romance', txt: 'Parejas', icono: '\\uD83D\\uDC8C' },
-    { id: 'bien', txt: 'Amistad', icono: '\\uD83E\\uDD1D' },
-    { id: 'conocidos', txt: 'Conocidos', icono: '\\uD83D\\uDC4F' },
-    { id: 'mal', txt: 'Malas', icono: '\\uD83D\\uDC94' }
+    { id: 'romance', txt: 'Parejas', icono: '\uD83D\uDC8C' },
+    { id: 'bien', txt: 'Amistad', icono: '\uD83E\uDD1D' },
+    { id: 'conocidos', txt: 'Conocidos', icono: '\uD83D\uDC4F' },
+    { id: 'mal', txt: 'Malas', icono: '\uD83D\uDC94' }
   ];
   var vecRelCache = [];
   var vecRelFiltro = '';
   var vecRelPersona = '';
   var vecRelCargado = false;
-  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\\u2194</span>';
+  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\u2194</span>';
 
   function aplicarVecTabUI() {
     const isRel = vecTabActiva === 'relaciones';
@@ -4832,7 +4843,7 @@
   async function cargarVecRelaciones() {
     const list = $('[data-vec-rel-list]');
     if (list && !vecRelCargado) {
-      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">Mirando el cotilleo del pueblo\\u2026</p>';
+      list.innerHTML = '<p class="lista-vacia vec-rel-vacio">Mirando el cotilleo del pueblo\u2026</p>';
     }
     if (vecRelCargado) {
       renderVecRelLista();
@@ -4879,14 +4890,14 @@
   function vecRelTextoDir(dir) {
     dir = dir || {};
     const parts = [];
-    if (dir.etiqueta_vinculo === 'pareja') parts.push('\\u2764\\uFE0F Pareja');
-    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\\uD83D\\uDC94 En crisis');
-    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\\uD83D\\uDC94 Ex pareja');
-    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\\uD83D\\uDC98') + ' ' + dir.etiqueta_romance);
+    if (dir.etiqueta_vinculo === 'pareja') parts.push('\u2764\uFE0F Pareja');
+    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\uD83D\uDC94 En crisis');
+    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\uD83D\uDC94 Ex pareja');
+    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\uD83D\uDC98') + ' ' + dir.etiqueta_romance);
     if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
       parts.push(((dir.emoji_social || '') + ' ' + dir.etiqueta_social_ui).trim());
     }
-    return parts.join(' \\u00B7 ');
+    return parts.join(' \u00B7 ');
   }
 
   function vecRelPillClass(dir) {
@@ -4943,7 +4954,7 @@
     const barExtra = dir.etiqueta_social === 'conocido' ? ' vec-rel-barra--mustard' : '';
     return '<div class="vec-rel-dir-card">' +
       '<div class="vec-rel-dir-head">' +
-      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \\u2192 ' + esc(nomTo) + '</span>' +
+      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \u2192 ' + esc(nomTo) + '</span>' +
       pill +
       '</div>' +
       vecRelBarra(dir, barExtra) +
@@ -4993,7 +5004,7 @@
     if (!rows.length) {
       const quien = vecRelPersona ? nombreDe(vecRelPersona) : '';
       list.innerHTML = '<p class="lista-vacia vec-rel-vacio">' +
-        (quien ? esc(quien) + ' no tiene nada que contar por ahora.' : 'Aqu\\u00ED no hay nada de nada todav\\u00EDa.') + '</p>';
+        (quien ? esc(quien) + ' no tiene nada que contar por ahora.' : 'Aqu\u00ED no hay nada de nada todav\u00EDa.') + '</p>';
       return;
     }
     list.innerHTML = rows.map(htmlVecRelCard).join('');
