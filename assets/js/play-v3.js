@@ -13,7 +13,6 @@
     if (!ctaEncuentroMovVisible(enc, iv)) return '';
     return '\u00bfQu\u00e9 se cuece ah\u00ed?';
   }
-  var mentesEncIdActivo = null;
   function resumenEncursoSinMentes(enc, iv) {
     if (iv && iv.usada) return '';
     if (enc && enc.intencion === 'celeste_organizado') {
@@ -1040,7 +1039,6 @@
     const prev = (root && root.getAttribute('data-capa')) || '';
     if (!name) root.removeAttribute('data-capa');
     else root.setAttribute('data-capa', name);
-    if (name !== 'mentes') mentesEncIdActivo = null;
     if (name === 'vida_pueblo') renderVidaPuebloModal();
     if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
     if (name === 'inventario') renderInventario();
@@ -2135,19 +2133,6 @@
       '" data-emocion="' + esc(emo) + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
   }
 
-  function htmlCaraAvatar(id, opts) {
-    opts = opts || {};
-    var emo = opts.emocion || emocionDe(id);
-    var img = tokenDe(id);
-    var extra = opts.wrapClass ? ' ' + opts.wrapClass : '';
-    var imgCls = opts.imgClass ? ' class="' + esc(opts.imgClass) + '"' : '';
-    var inner = img
-      ? '<img' + imgCls + ' src="' + esc(img) + '" alt=""/>'
-      : '<span class="cara-ini' + (opts.imgClass ? ' ' + esc(opts.imgClass) : '') + '">' +
-        esc((nombreDe(id)[0] || '?')) + '</span>';
-    return '<span class="cara-token cara-token--static' + extra + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
-  }
-
   function carasPlanHtml(ids, max) {
     var lim = (max == null) ? 2 : max;
     return (ids || []).slice(0, lim).map(function (id) { return htmlCaraToken(id); }).join('');
@@ -2213,7 +2198,7 @@
       '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
       '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
       esc(formatPlanMeta(enc, estado)) + '</p>' +
-      htmlIntervencionResultado(enc, estado);
+      htmlIntervencionEncuentro(enc, estado);
   }
   function intervencionVistaDe(enc, estado) {
     if (!enc) return null;
@@ -2282,99 +2267,32 @@
     if (!iv || !iv.ultimo) return '';
     return iv.ultimo.texto || '';
   }
-  function htmlIntervencionResultado(enc, estado) {
-    if (!planEsEnCurso(enc, estado)) return '';
-    var iv = intervencionVistaDe(enc, estado);
-    if (!iv || !iv.usada || !iv.ultimo || !iv.ultimo.texto) return '';
-    var tono = iv.ultimo.tono || 'neutral';
-    var txt = textoFeedbackIntervencion(iv);
-    return '<div class="enc-int-result enc-int-result--card"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(txt) + '</p></div>';
-  }
   function htmlIntervencionEncuentro(enc, estado) {
     if (!planEsEnCurso(enc, estado)) return '';
     var iv = intervencionVistaDe(enc, estado);
     if (!iv) return '';
-    if (iv.usada && iv.ultimo && iv.ultimo.texto) return htmlIntervencionResultado(enc, estado);
+    if (iv.usada && iv.ultimo && iv.ultimo.texto) {
+      var tono = iv.ultimo.tono || 'neutral';
+      var txt = textoFeedbackIntervencion(iv);
+      return '<div class="enc-int-result"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(txt) + '</p></div>';
+    }
     if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
     var ids = enc.participantes || [];
-    var html = '<div class="enc-int enc-int--modal" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
+    var html = '<div class="enc-int" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
       '<div class="enc-int-step" data-enc-int-paso="persona">' +
-      '<div class="enc-int-duo" aria-hidden="true">';
-    ids.forEach(function (rid) {
-      html += '<div class="enc-int-duo-persona">' + htmlCaraAvatar(rid, { wrapClass: 'enc-int-duo-cara' }) +
-        '<span class="enc-int-duo-nombre">' + esc(nombreDe(rid)) + '</span></div>';
-    });
-    html += '</div><p class="enc-int-kicker enc-int-kicker--q">\u00bfQui\u00E9n va a romper el hielo?</p>' +
+      '<p class="enc-int-kicker">\u00bfQui\u00E9n va a romper el hielo?</p>' +
       '<div class="enc-int-personas">';
     ids.forEach(function (rid) {
       html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
-        htmlCaraAvatar(rid, { wrapClass: 'enc-int-persona-cara' }) +
-        '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
+        caraIntervencionHtml(rid) + '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
     });
     html += '</div></div>';
     html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
       '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
-      '<p class="enc-int-kicker enc-int-kicker-tema" data-enc-int-kicker-tema></p>' +
-      '<div class="enc-int-btns enc-int-temas-grid" data-temas-panel></div></div>';
-    html += '<div class="enc-int-step" data-enc-int-paso="resultado" hidden>' +
-      '<div class="enc-int-result" data-enc-int-resultado></div></div>';
+      '<p class="enc-int-kicker" data-enc-int-kicker-tema></p>' +
+      '<div class="enc-int-btns" data-temas-panel></div></div>';
     html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
     return html;
-  }
-  function encuentroPorId(encId) {
-    var id = String(encId || '');
-    if (!id || !cacheEstado) return null;
-    var col = Array.isArray(cacheEstado.encuentros_en_curso) ? cacheEstado.encuentros_en_curso : [];
-    for (var i = 0; i < col.length; i++) {
-      if (col[i] && String(col[i].id) === id) return col[i];
-    }
-    if (cacheEstado.encuentro_en_curso && String(cacheEstado.encuentro_en_curso.id) === id) {
-      return cacheEstado.encuentro_en_curso;
-    }
-    return null;
-  }
-  function htmlMentesCta(enc, iv) {
-    var txt = ctaTxtEncuentroMov(enc, iv);
-    return '<button type="button" class="plan-unif-cta plan-unif-cta--curso enc-mov-cta enc-mov-cta--mentes" data-enc-mentes-open data-enc-id="' + esc(enc.id || '') + '">' + esc(txt) + '</button>';
-  }
-  function htmlMentesCtaResumen(enc, iv) {
-    var txt = ctaTxtEncuentroMov(enc, iv);
-    return '<p class="enc-mov-resumen enc-mov-resumen--cuece" data-enc-mentes-open data-enc-id="' + esc(enc.id || '') + '" role="button" tabindex="0">' + esc(txt) + '</p>';
-  }
-  function htmlMentesCtaMock(enc, iv) {
-    var txt = ctaTxtEncuentroMov(enc, iv);
-    return '<button type="button" class="enc-mov-cta enc-mov-cta--mock" data-enc-mentes-open data-enc-id="' + esc(enc.id || '') + '">' +
-      '<span class="enc-mov-cta-txt">' + esc(txt) + '</span><span class="enc-mov-cta-flecha" aria-hidden="true">&rsaquo;</span></button>';
-  }
-  function mostrarMentesResultado(iv) {
-    var body = document.querySelector('[data-mentes-body]');
-    if (!body) return;
-    var wrap = body.querySelector('[data-enc-int]');
-    if (!wrap) return;
-    var stepPersona = wrap.querySelector('[data-enc-int-paso="persona"]');
-    var stepAccion = wrap.querySelector('[data-enc-int-paso="accion"]');
-    var stepResult = wrap.querySelector('[data-enc-int-paso="resultado"]');
-    if (stepPersona) stepPersona.hidden = true;
-    if (stepAccion) stepAccion.hidden = true;
-    if (stepResult) {
-      var tono = (iv && iv.ultimo && iv.ultimo.tono) || 'neutral';
-      var txt = textoFeedbackIntervencion(iv);
-      var box = stepResult.querySelector('[data-enc-int-resultado]');
-      if (box) {
-        box.innerHTML = '<p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(txt) + '</p>';
-      }
-      stepResult.hidden = false;
-    }
-  }
-  function montarMentesModal(encId) {
-    var enc = encuentroPorId(encId);
-    var body = document.querySelector('[data-mentes-body]');
-    if (!enc || !body) return;
-    var contenido = htmlIntervencionEncuentro(enc, cacheEstado);
-    if (!contenido || contenido.indexOf('data-enc-int') < 0) return;
-    mentesEncIdActivo = String(encId || '');
-    body.innerHTML = contenido;
-    setCapa('mentes');
   }
   function cerrarSelectorTemas() {
     $$('[data-temas-panel]').forEach(function (p) { p.hidden = true; });
@@ -2420,10 +2338,6 @@
           if (r.vista) e.intervencion = r.vista;
         }
       });
-    }
-    var capaActual = ($('.play-root') && $('.play-root').getAttribute('data-capa')) || '';
-    if (r.ok && capaActual === 'mentes' && String(mentesEncIdActivo) === String(encId)) {
-      mostrarMentesResultado(vistaIntervencion);
     }
     renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
     return r;
@@ -2733,7 +2647,9 @@
     const ids = (enc && enc.participantes) || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const resultHtml = htmlIntervencionResultado(enc, estado);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const nombres = ids.map(function (id) { return nombreDe(id); }).filter(Boolean).join(' \u00b7 ');
     const maxCaras = Math.min(2, Math.max(1, ids.length));
@@ -2744,9 +2660,10 @@
       '<p class="plan-unif-nombres">' + esc(nombres) + '</p>' +
       '<p class="plan-unif-lugar">' + esc(lugar) + '</p>';
     if (ctaVisible) {
-      html += htmlMentesCta(enc, iv);
-    } else if (resultHtml) {
-      html += resultHtml;
+      html += '<button type="button" class="plan-unif-cta plan-unif-cta--curso enc-mov-cta" data-enc-mov-toggle aria-expanded="false">INTERVENIR</button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    } else if (panelHtml) {
+      html += '<div class="enc-mov-panel enc-mov-panel--solo" data-enc-mov-panel>' + panelHtml + '</div>';
     }
     return html + '</article>';
   }
@@ -2827,9 +2744,24 @@
     }
     block.classList.remove('is-empty');
     block.classList.add('is-on');
+    const abiertos = {};
+    track.querySelectorAll('[data-enc-mov-panel]:not([hidden])').forEach(function (p) {
+      const card = p.closest('[data-enc-mov-card]');
+      if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
+    });
     track.innerHTML = curso.map(function (enc) { return htmlPlanUnifCardCurso(enc, estado); }).join('') +
       prox.map(function (enc) { return htmlPlanUnifCardProx(enc, estado); }).join('');
     requestAnimationFrame(function () {
+      const cards = track.querySelectorAll('[data-enc-mov-card]');
+      Object.keys(abiertos).forEach(function (id) {
+        Array.prototype.forEach.call(cards, function (card) {
+          if ((card.getAttribute('data-enc-id') || '') !== id) return;
+          const panel = card.querySelector('[data-enc-mov-panel]');
+          const cta = card.querySelector('[data-enc-mov-toggle]');
+          if (panel) panel.hidden = false;
+          if (cta) { cta.setAttribute('aria-expanded', 'true'); cta.classList.add('is-open'); }
+        });
+      });
       renderPlanesUnifMoreFor(block);
     });
   }
@@ -2968,7 +2900,10 @@
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const resultHtml = htmlIntervencionResultado(enc, estado);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
+    const ctaTxt = ctaTxtEncuentroMov(enc, iv);
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     let html = '<article class="enc-mov-card enc-mov-card--escena enc-mov-card--ref-desk" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
@@ -2985,9 +2920,12 @@
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
       '</div></div></div>';
     if (ctaVisible) {
-      html += htmlMentesCtaResumen(enc, iv);
-    } else if (resultHtml) {
-      html += resultHtml;
+      html += '<p class="enc-mov-resumen enc-mov-resumen--cuece">' + esc(ctaTxt) + '</p>' +
+        '<button type="button" class="enc-mov-cta" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">INTERVENIR</span></button>' +
+        '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    } else if (panelHtml) {
+      html += panelHtml;
     }
     return html + '</article>';
   }
@@ -2998,7 +2936,9 @@
     const ids = (enc && enc.participantes) || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const resultHtml = htmlIntervencionResultado(enc, estado);
+    const hayInt = !!iv && ((iv.usada && iv.ultimo && iv.ultimo.texto) ||
+      (iv.disponible && iv.acciones && iv.acciones.length));
+    const panelHtml = hayInt ? htmlIntervencionEncuentro(enc, estado) : '';
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const nombres = ids.map(function (id) { return nombreDe(id); }).filter(Boolean).join(' \u00b7 ');
     const maxCaras = Math.min(2, Math.max(1, ids.length));
@@ -3012,11 +2952,14 @@
       '<div class="enc-mov-mock-side">' +
       '<p class="enc-mov-estado-pill"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</p>';
     if (ctaVisible) {
-      html += htmlMentesCtaMock(enc, iv);
+      html += '<button type="button" class="enc-mov-cta enc-mov-cta--mock" data-enc-mov-toggle aria-expanded="false">' +
+        '<span class="enc-mov-cta-txt">INTERVENIR</span><span class="enc-mov-cta-flecha" aria-hidden="true">&rsaquo;</span></button>';
     }
     html += '</div></div>';
-    if (!ctaVisible && resultHtml) {
-      html += resultHtml;
+    if (ctaVisible && panelHtml) {
+      html += '<div class="enc-mov-panel" data-enc-mov-panel hidden>' + panelHtml + '</div>';
+    } else if (panelHtml) {
+      html += '<div class="enc-mov-panel enc-mov-panel--solo" data-enc-mov-panel>' + panelHtml + '</div>';
     }
     return html + '</article>';
   }
@@ -3178,11 +3121,26 @@
       return;
     }
     block.classList.remove('is-empty');
+    const abiertos = {};
+    track.querySelectorAll('[data-enc-mov-panel]:not([hidden])').forEach(function (p) {
+      const card = p.closest('[data-enc-mov-card]');
+      if (card) abiertos[card.getAttribute('data-enc-id') || ''] = true;
+    });
     block.classList.add('is-on');
     block.classList.toggle('encursos-movil--solo', lista.length === 1);
     block.classList.toggle('encursos-movil--multi', lista.length > 1);
     track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
     requestAnimationFrame(function () {
+      const cards = track.querySelectorAll('[data-enc-mov-card]');
+      Object.keys(abiertos).forEach(function (id) {
+        Array.prototype.forEach.call(cards, function (card) {
+          if ((card.getAttribute('data-enc-id') || '') !== id) return;
+          const panel = card.querySelector('[data-enc-mov-panel]');
+          const cta = card.querySelector('[data-enc-mov-toggle]');
+          if (panel) panel.hidden = false;
+          if (cta) { cta.setAttribute('aria-expanded', 'true'); cta.classList.add('is-open'); }
+        });
+      });
       renderEncursosMovilNavFor(block);
     });
   }
@@ -3412,7 +3370,9 @@
       if (tit) tit.textContent = tituloEventoPuebloUi(ev.nombre_ui || ev.nombre || '');
       if (typeof pintarProximoEventoIco === 'function') pintarProximoEventoIco(ico, ev);
       else if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
-      if (meta) meta.textContent = ev.meta_ui || '';
+      var metaTxt = ev.meta_ui || '';
+      if (ev.aforo_ui) metaTxt = metaTxt ? (metaTxt + ' \u00b7 ' + ev.aforo_ui) : ev.aforo_ui;
+      if (meta) meta.textContent = metaTxt;
       var cta = slot.querySelector('[data-proximo-evento-cta]') || (card && card.querySelector('[data-proximo-evento-participar]'));
       var plazas = parseInt(ev.plazas_disponibles, 10);
       if (isNaN(plazas)) plazas = 0;
@@ -3422,12 +3382,12 @@
         cta.type = 'button';
         cta.className = 'inicio-evento-cta';
         cta.setAttribute('data-proximo-evento-participar', '1');
-        cta.innerHTML = '<span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>' + esc(ev.cta_label || 'Elegir quién va') + '</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
+        cta.innerHTML = '<span class="inicio-evento-cta-txt">PARTICIPAR \u203A</span><span class="inicio-evento-cta-spark" aria-hidden="true"></span>';
         card.appendChild(cta);
       }
       if (cta) {
         var ctaTxtEl = cta.querySelector('[data-proximo-evento-cta-txt]') || cta.querySelector('.inicio-evento-cta-txt');
-        if (ctaTxtEl && ev.cta_label) ctaTxtEl.textContent = ev.cta_label;
+        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || '¿Quién va?';
         cta.hidden = !puedeApuntar;
         cta.disabled = !puedeApuntar;
         if (puedeApuntar) {
@@ -4786,14 +4746,14 @@
 
   function emojiRel(rel) {
     if (!rel) return '';
-    if (rel.etiqueta_vinculo === 'crisis') return '\uD83D\uDC94 ';
-    if (rel.etiqueta_vinculo === 'pareja') return '\u2764\uFE0F ';
-    if (rel.etiqueta_vinculo === 'ex_pareja') return '\uD83D\uDC94 ';
+    if (rel.etiqueta_vinculo === 'crisis') return '?? ';
+    if (rel.etiqueta_vinculo === 'pareja') return '?? ';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return '?? ';
     const s = rel.etiqueta_social || '';
-    if (s === 'cae_mal') return '\uD83D\uDE12 ';
-    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '\uD83E\uDD1D ';
-    if (s === 'amigo') return '\uD83D\uDE42 ';
-    if (s === 'conocido') return '\uD83D\uDC4B ';
+    if (s === 'cae_mal') return '?? ';
+    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '?? ';
+    if (s === 'amigo') return '?? ';
+    if (s === 'conocido') return '?? ';
     return '';
   }
 
@@ -5122,12 +5082,7 @@ function canonEmoId(id) {
 
 
   function emoEmojiFicha(emo) {
-    const map = {
-      neutro: '\uD83D\uDE10',
-      alegre: '\uD83D\uDE0A',
-      triste: '\uD83D\uDE22',
-      enfadado: '\uD83D\uDE24'
-    };
+    const map = { neutro: '??', alegre: '??', triste: '??', enfadado: '??' };
     return map[canonEmoId(emo)] || map.neutro;
   }
 
@@ -5178,17 +5133,13 @@ function canonEmoId(id) {
   }
 
   function cerrarAnimoOverlay() {
-    setCapa(animoVolverCapa || 'ficha');
+    const overlay = $('[data-animo-overlay]');
+    if (overlay) overlay.hidden = true;
   }
 
   function emoModalIcono(estadoId) {
-    const map = {
-      alegre: '\uD83D\uDE0A',
-      triste: '\uD83D\uDE22',
-      enfadado: '\uD83D\uDE24',
-      neutro: '\uD83D\uDE10'
-    };
-    return map[canonEmoId(estadoId)] || map.neutro;
+    const map = { alegre: '??', triste: '??', enfadado: '??', neutro: '??' };
+    return map[canonEmoId(estadoId)] || '??';
   }
 
   function htmlAnimoModal(exp, nom) {
@@ -5201,45 +5152,44 @@ function canonEmoId(id) {
     let mientras = '';
     if (consec.length) {
       mientras = '<div class="animo-modal-mientras">' +
-        '<span class="animo-modal-mientras-tit"><span class="animo-modal-mientras-ico" aria-hidden="true">!</span> Mientras siga as\u00ed</span>' +
+        '<span class="animo-modal-mientras-tit"><span class="animo-modal-mientras-ico" aria-hidden="true">!</span> Mientras siga así</span>' +
         '<div class="animo-modal-mientras-list">' +
         consec.map(function (c) {
           return '<span class="animo-modal-badge">' +
-            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || '\u2022') + '</span>' +
+            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || '•') + '</span>' +
             esc(c.texto || '') + '</span>';
         }).join('') +
         '</div></div>';
     }
     const consejo = exp.consejo
-      ? '<p class="animo-modal-hint">\uD83D\uDCA1 ' + esc(exp.consejo) + '</p>'
+      ? '<p class="animo-modal-hint">?? ' + esc(exp.consejo) + '</p>'
       : '';
     return '<div class="animo-modal-top">' +
       '<div class="animo-modal-avatar">' + img + '</div>' +
-      '<h3 class="animo-modal-tit">\u00bfQu\u00e9 le pasa a ' + esc(nom) + '?</h3>' +
+      '<h3 class="animo-modal-tit">¿Qué le pasa a ' + esc(nom) + '?</h3>' +
       '</div>' +
       '<div class="animo-modal-pills">' +
       '<span class="animo-modal-estado animo-modal-estado--' + esc(emoId) + '">' +
       '<span class="animo-modal-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
       estadoTxt + '</span>' +
-      (desde ? '<span class="animo-modal-desde">\uD83D\uDD50 ' + desde + '</span>' : '') +
+      (desde ? '<span class="animo-modal-desde">?? ' + desde + '</span>' : '') +
       '</div>' +
-      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">\u00bfQu\u00e9 ha pasado?</span>' +
+      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">¿Qué ha pasado?</span>' +
       '<div class="animo-modal-causa animo-modal-causa--illus">' +
       '<p>' + causa + '</p>' +
       '<span class="animo-modal-conflicto" aria-hidden="true"></span>' +
       '</div>' +
       mientras +
-      '<button type="button" class="animo-modal-cta" data-animo-org>\uD83D\uDCC5 Organizar un plan</button>' +
+      '<button type="button" class="animo-modal-cta" data-animo-org>?? Organizar un plan</button>' +
       '<button type="button" class="animo-modal-ghost" data-animo-diario>Ver en su diario</button>' +
       consejo;
   }
 
   function abrirAnimoModal() {
     const exp = fichaAnimoExplicacion;
+    const overlay = $('[data-animo-overlay]');
     const body = $('[data-animo-body]');
-    const root = $('.play-root');
-    if (!exp || !body) return;
-    animoVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
+    if (!exp || !overlay || !body) return;
     const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
     body.innerHTML = htmlAnimoModal(exp, nom);
     const orgBtn = body.querySelector('[data-animo-org]');
@@ -5262,7 +5212,7 @@ function canonEmoId(id) {
         diarioBtn.onclick = null;
       }
     }
-    setCapa('ficha_animo');
+    overlay.hidden = false;
   }
 
 
@@ -5272,90 +5222,85 @@ function canonEmoId(id) {
   let diarioVecinoOrden = 'reciente';
   let diarioHighlightId = null;
   let diarioVolverCapa = 'ficha';
-  let animoVolverCapa = 'ficha';
 
   function cerrarDiarioVecino() {
     setCapa(diarioVolverCapa || 'ficha');
   }
 
-  function diarioCategoriaMeta(e) {
-    const filtro = e.filtro_grupo || 'relaciones';
-    const txt = e.categoria_etiqueta || 'Relación';
-    const clsMap = {
-      planes: 'pg-pill--lavender',
-      relaciones: 'pg-pill--mustard',
-      cambios: 'pg-pill--tan'
-    };
-    const low = String(txt).toLowerCase();
-    if (low.indexOf('ánimo') >= 0 || low.indexOf('animo') >= 0) {
-      return { cls: 'pg-pill--red', txt: txt, grupo: 'cambios' };
+  function categoriaDiarioMeta(cat) {
+    const c = String(cat || '').toLowerCase();
+    if (c.indexOf('animo') >= 0 || c.indexOf('emoc') >= 0) {
+      return { cls: 'pg-pill--red', txt: 'Ánimo', icon: '??', grupo: 'cambios' };
     }
-    return { cls: clsMap[filtro] || 'pg-pill--mustard', txt: txt, grupo: filtro };
+    if (c.indexOf('relac') >= 0 || c.indexOf('romance') >= 0 || c.indexOf('hito') >= 0) {
+      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '??', grupo: 'relaciones' };
+    }
+    if (c.indexOf('encuentro') >= 0) {
+      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '??', grupo: 'relaciones' };
+    }
+    if (c.indexOf('plan') >= 0) {
+      return { cls: 'pg-pill--lavender', txt: 'Plan', icon: '??', grupo: 'planes' };
+    }
+    if (c.indexOf('llegada') >= 0) {
+      return { cls: 'pg-pill--green', txt: 'Historia', icon: '??', grupo: 'cambios' };
+    }
+    return { cls: 'pg-pill--tan', txt: 'Cambio', icon: '?', grupo: 'cambios' };
   }
 
   function diarioEntradaMatchFiltro(e, filtro) {
     if (filtro === 'todo') return true;
-    if (e.filtro_grupo) return e.filtro_grupo === filtro;
-    return diarioCategoriaMeta(e).grupo === filtro;
+    const meta = categoriaDiarioMeta(e.categoria || e.tipo || '');
+    return meta.grupo === filtro;
   }
 
   function diarioEntradaMatchBusca(e, q) {
     if (!q) return true;
-    const personas = Array.isArray(e.personas)
-      ? e.personas.map(function (p) { return p.nombre || ''; }).join(' ')
-      : '';
     const hay = [
       e.titulo || '',
-      e.explicacion || e.texto || '',
-      personas
+      e.texto || '',
+      (Array.isArray(e.consecuencias) ? e.consecuencias.join(' ') : '')
     ].join(' ').toLowerCase();
     return hay.indexOf(q) >= 0;
   }
 
-  function diarioPersonasHtml(e, rid) {
-    if (Array.isArray(e.personas) && e.personas.length) {
-      return e.personas.map(function (p) {
-        const cara = p.retrato_url || tokenDe(p.id);
-        return '<span class="fdi-con">' +
-          (cara
-            ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>'
-            : '<span class="fdi-con-ava fdi-con-ava--ph" aria-hidden="true"></span>') +
-          '<span class="fdi-con-nom">' + esc(p.nombre || 'Alguien del pueblo') + '</span></span>';
-      }).join('');
-    }
+  function actoresIdDiario(e, rid) {
     const actores = Array.isArray(e.actores) ? e.actores : [];
     const otro = actores.find(function (a) { return a !== rid; });
+    return otro || '';
+  }
+
+  function nombreActorDiario(e, rid) {
+    const otro = actoresIdDiario(e, rid);
     if (!otro) return '';
     const res = (cacheInsp && cacheInsp.residentes) || {};
     const r = res[otro];
-    const nombre = (r && r.identidad_publica && r.identidad_publica.nombre) || otro;
-    const cara = tokenDe(otro);
-    return '<span class="fdi-con">' +
-      (cara ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>' : '') +
-      '<span class="fdi-con-nom">' + esc(nombre) + '</span></span>';
+    return (r && r.identidad_publica && r.identidad_publica.nombre) || otro;
   }
 
   function entradaDiarioHtml(e, rid) {
-    const meta = diarioCategoriaMeta(e);
+    const meta = categoriaDiarioMeta(e.categoria || e.tipo || '');
     const eventoId = (e.origen && e.origen.evento_id) || e.evento_id || '';
-    const titulo = String(e.titulo || '').trim() || 'Algo pasó';
-    const explicacion = String(e.explicacion || e.texto || '').trim();
-    const tono = e.tono || '';
-    const tonoCls = tono ? ' fdi-card--' + tono : '';
-    const personasHtml = diarioPersonasHtml(e, rid);
+    const actor = nombreActorDiario(e, rid);
     let html = '<article class="ficha-diario-entrada fdi-entrada" data-diario-evento="' + esc(eventoId) + '">' +
-      '<div class="ficha-diario-card fdi-card' + tonoCls + '">' +
-      '<div class="fdi-card-body">' +
-      '<b class="ficha-diario-titulo">' + esc(titulo) + '</b>';
-    if (personasHtml) {
-      html += '<div class="fdi-personas">' + personasHtml + '</div>';
+      '<span class="fdi-node" aria-hidden="true">' + meta.icon + '</span>' +
+      '<div class="ficha-diario-card fdi-card" data-cat="' + esc(meta.txt) + '">' +
+      '<div class="fdi-card-main">' +
+      '<b class="ficha-diario-titulo">' + esc(e.titulo || '') + '</b>';
+    if (actor) {
+      const cara = tokenDe(actoresIdDiario(e, rid));
+      html += '<span class="fdi-con">' +
+        (cara ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>' : '') +
+        esc(actor) + '</span>';
     }
-    if (explicacion && explicacion !== titulo) {
-      html += '<p class="ficha-diario-texto">' + esc(explicacion) + '</p>';
-    }
-    html += '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>' +
-      '</div></div></article>';
+    html += '</div>' +
+      '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>' +
+      '<span class="fdi-chev" aria-hidden="true">›</span>' +
+      '</div></article>';
     return html;
+  }
+
+  function fdiDiaTone(idx) {
+    return ['pink', 'lav', 'green', 'mustard'][idx % 4];
   }
 
   function pintarDiarioVecinoLista() {
@@ -5375,6 +5320,7 @@ function canonEmoId(id) {
     }
     let html = '';
     let diaPrev = null;
+    let toneIdx = -1;
     let inTl = false;
     entradas.forEach(function (e) {
       const diaNum = e.dia || '';
@@ -5382,7 +5328,8 @@ function canonEmoId(id) {
       const diaKey = String(diaNum) + '|' + diaLbl;
       if (diaKey !== diaPrev) {
         if (inTl) html += '</div></div>';
-        html += '<div class="fdi-dia-grupo">' +
+        toneIdx += 1;
+        html += '<div class="fdi-dia-grupo" data-tone="' + fdiDiaTone(toneIdx) + '">' +
           '<span class="ficha-diario-dia fdi-dia-lbl">' + esc(diaLbl) + '</span>' +
           '<div class="ficha-diario-tl fdi-tl">';
         diaPrev = diaKey;
@@ -5412,7 +5359,7 @@ function canonEmoId(id) {
       '<b class="ficha-diario-head-tit fdi-head-tit">Diario de ' + esc(nom) + '</b>' +
       '<p class="ficha-diario-head-sub fdi-head-sub">Su historia en el pueblo</p>' +
       '</div>' +
-      '<span class="ficha-diario-count fdi-count">' + total + ' recuerdos</span></div>';
+      '<span class="ficha-diario-count fdi-count">?? ' + total + ' recuerdos</span></div>';
   }
 
   function syncDiarioVecinoFiltros() {
@@ -5423,7 +5370,7 @@ function canonEmoId(id) {
     });
     const ord = $('[data-diario-orden]');
     if (ord) {
-      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'Más antiguo' : 'Más reciente';
+      ord.textContent = diarioVecinoOrden === 'antiguo' ? '? Más antiguo' : '? Más reciente';
     }
     const busca = $('[data-diario-busca]');
     if (busca && busca.value !== diarioVecinoBusca) busca.value = diarioVecinoBusca;
@@ -5447,6 +5394,7 @@ function canonEmoId(id) {
     pintarDiarioVecinoLista();
     setCapa('ficha_diario');
   }
+
 
 function slotsDesdeLista(lista) {
     const l = (lista || []).slice(0, 3);
@@ -5763,14 +5711,18 @@ function hobbyIconKey(id, texto) {
         abrirRegalosDesdeFicha(id, nom);
       };
     }
-    // Regalos F2/F3: aprecio del vecino hacia Celestine como banda de texto.
+    // Regalos F2/F3: aprecio del vecino hacia Celestine como banda de texto
+    // (sección "CÓMO TE VE": título + frase dinámica, sin cambiar lógica).
     const apEl = $('[data-ficha-aprecio]');
     if (apEl) {
       const ap = vista.aprecio_celeste || null;
       const txt = ap && ap.texto ? String(ap.texto) : '';
-      apEl.textContent = txt;
+      const txtEl = apEl.querySelector('[data-ficha-aprecio-texto]');
+      if (txtEl) {
+        txtEl.textContent = txt;
+        txtEl.setAttribute('data-aprecio-banda', ap && ap.banda ? ap.banda : '');
+      }
       apEl.hidden = !txt;
-      apEl.setAttribute('data-aprecio-banda', ap && ap.banda ? ap.banda : '');
     }
     syncFichaNav();
   }
@@ -7804,20 +7756,6 @@ function hobbyIconKey(id, texto) {
   }
 
   document.body.addEventListener('click', function (ev) {
-    const animoCloseBtn = ev.target.closest('[data-animo-close]');
-    if (animoCloseBtn) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      cerrarAnimoOverlay();
-      return;
-    }
-    const animoVolverBtn = ev.target.closest('[data-animo-volver]');
-    if (animoVolverBtn) {
-      ev.preventDefault();
-      ev.stopPropagation();
-      cerrarAnimoOverlay();
-      return;
-    }
     const relOverlay = $('[data-ficha-rel-overlay]');
     if (relOverlay && !relOverlay.hidden) {
       if (ev.target.closest('[data-ficha-rel-close]') || ev.target === relOverlay) {
@@ -8005,16 +7943,18 @@ function hobbyIconKey(id, texto) {
       }
       return;
     }
-    const encMentesOpen = ev.target.closest('[data-enc-mentes-open]');
-    if (encMentesOpen) {
+    const encMovCta = ev.target.closest('[data-enc-mov-toggle]');
+    if (encMovCta) {
       ev.preventDefault();
       ev.stopPropagation();
-      var encIdMentes = encMentesOpen.getAttribute('data-enc-id') || '';
-      if (!encIdMentes) {
-        var movCardM = encMentesOpen.closest('[data-enc-mov-card]');
-        if (movCardM) encIdMentes = movCardM.getAttribute('data-enc-id') || '';
+      const movCard = encMovCta.closest('[data-enc-mov-card]');
+      const movPanel = movCard && movCard.querySelector('[data-enc-mov-panel]');
+      if (movPanel) {
+        const abrirMov = movPanel.hidden;
+        movPanel.hidden = !abrirMov;
+        encMovCta.setAttribute('aria-expanded', String(abrirMov));
+        encMovCta.classList.toggle('is-open', abrirMov);
       }
-      if (encIdMentes) montarMentesModal(encIdMentes);
       return;
     }
     const encIntBtn = ev.target.closest('[data-enc-int-accion]');
@@ -8067,8 +8007,6 @@ function hobbyIconKey(id, texto) {
       var stepAC = wrapV.querySelector('[data-enc-int-paso="accion"]');
       if (stepAC) stepAC.hidden = true;
       if (stepPA) stepPA.hidden = false;
-      var stepRE = wrapV.querySelector('[data-enc-int-paso="resultado"]');
-      if (stepRE) stepRE.hidden = true;
       var temasBox = wrapV.querySelector('.enc-int-temas');
       if (temasBox) temasBox.hidden = true;
       return;
@@ -8113,8 +8051,12 @@ function hobbyIconKey(id, texto) {
 
   const animoClose = $('[data-animo-close]');
   if (animoClose) animoClose.addEventListener('click', cerrarAnimoOverlay);
-  const animoVolver = $('[data-animo-volver]');
-  if (animoVolver) animoVolver.addEventListener('click', cerrarAnimoOverlay);
+  const animoOvEl = $('[data-animo-overlay]');
+  if (animoOvEl) {
+    animoOvEl.addEventListener('click', function (ev) {
+      if (ev.target === animoOvEl) cerrarAnimoOverlay();
+    });
+  }
 
   const diarioVecinoClose = $('[data-diario-vecino-close]');
   if (diarioVecinoClose) diarioVecinoClose.addEventListener('click', cerrarDiarioVecino);

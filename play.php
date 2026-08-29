@@ -75,7 +75,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/modals-shell-lavanda-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -475,18 +474,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
             <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr&aacute;s">? Atr&aacute;s</button>
             <header class="quien-bloque quien-bloque--lugar">
-              <figure class="quien-edificio-art" data-q-edificio hidden>
-                <img data-q-edificio-img alt="" loading="lazy" decoding="async"/>
-              </figure>
               <h3 class="quien-lugar-tit" data-q-tit></h3>
               <p class="quien-horario" data-q-horario hidden></p>
             </header>
             <section class="quien-bloque quien-bloque--presencia">
-              <p class="quien-kicker">&#191;Qui&#233;n est&#225;?</p>
-              <div class="quien-presencia-cuerpo">
-                <p class="quien-vacio" data-q-sum hidden></p>
-                <div class="quien-list quien-residentes" data-q-list></div>
-              </div>
+              <p class="libreta-kicker quien-kicker">&#8212;Qui&#8212;n est&#8212;?</p>
+              <p class="quien-vacio" data-q-sum hidden></p>
+              <div class="quien-list quien-residentes" data-q-list></div>
             </section>
             <div class="quien-bloque quien-bloque--tema quien-tema" data-q-tema hidden></div>
             <div class="destinos" data-q-btns></div>
@@ -620,15 +614,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
       </aside>
-      <aside class="capa capa-mentes mentes-modal ds-modal-sheet" aria-label="&iquest;Qu&eacute; se cuece ah&iacute;?" role="dialog" aria-modal="true">
-        <button type="button" class="cerrar mentes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="mentes-top">
-          <div class="ds-modal-head">
-            <h2 class="mentes-tit ds-modal-tit ds-modal-tit--lavender">&iquest;Qu&eacute; se cuece ah&iacute;?</h2>
-          </div>
-        </header>
-        <div class="mentes-body capa-scroll" data-mentes-body></div>
-      </aside>
       <aside class="capa capa-ficha ds-modal-sheet" aria-label="Ficha de vecino">
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
@@ -640,13 +625,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <section class="ficha-hero" aria-label="Perfil del vecino">
           <div class="ficha-cara-ring" data-ficha-cara-ring>
             <div class="ficha-cara" data-ficha-img></div>
-          </div>
-          <div class="ficha-animo-row" data-ficha-animo-row>
-            <div class="ficha-animo-pill" data-ficha-animo-pill>
-              <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-              <span class="ficha-animo-val" data-ficha-animo-text></span>
-              <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">?</button>
-            </div>
           </div>
           <div class="ficha-hero-info">
             <div class="ficha-nombre-nav">
@@ -661,6 +639,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <p class="ficha-edad" data-ficha-edad hidden></p>
             <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
             <p class="ficha-desde" data-ficha-desde></p>
+            <div class="ficha-animo-row" data-ficha-animo-row>
+              <div class="ficha-animo-pill" data-ficha-animo-pill>
+                <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                <span class="ficha-animo-val" data-ficha-animo-text></span>
+                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">?</button>
+              </div>
+            </div>
           </div>
           <div class="ficha-hero-acciones" aria-label="Acciones con el vecino">
             <button type="button" class="ficha-btn-diario ficha-hero-btn" data-ficha-diario-btn>Diario</button>
@@ -726,15 +711,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
         </div>
-      </aside>
-      <aside class="capa capa-ficha-animo ds-modal-sheet" aria-label="Estado de animo del vecino">
-        <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
-        <header class="fani-top">
-          <button type="button" class="fani-volver" data-animo-volver>&larr; FICHA</button>
-        </header>
-        <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
+        <div class="ficha-rel-overlay" data-animo-overlay hidden>
+          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">
+            <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
+            <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
+          </div>
+        </div>
       </aside>
       <aside class="capa capa-ficha-diario ds-modal-sheet" aria-label="Diario del vecino">
         <span class="ficha-tape ficha-tape-r fdi-tape-r" aria-hidden="true"></span>
@@ -784,7 +766,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <h2 class="par-tit ds-modal-tit ds-modal-tit--pink">Parejas</h2>
             </div>
           </div>
-          <p class="par-sub mini" data-parejas-teaser hidden></p>
+          <p class="par-sub mini" data-parejas-teaser">&mdash;</p>
         </header>
         <div class="par-body capa-scroll" data-parejas-modal-list></div>
       </aside>
@@ -1165,14 +1147,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </span>
           </span>
           <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
-            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Elegir qui&eacute;n va</span>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>¿Qui&eacute;n va?</span>
             <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
           </button>
         </div>
       </aside>
-            
-            <div class="inicio-planes-agenda" data-inicio-planes-agenda aria-label="Agenda de planes">
-<section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+            <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
@@ -1212,7 +1192,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <span class="obj-nuevo-plan-txt">Crear plan</span>
             </button>
 </section>
-            </div>
             <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
@@ -1236,7 +1215,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </span>
           </span>
           <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
-            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Elegir qui&eacute;n va</span>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>¿Qui&eacute;n va?</span>
             <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
           </button>
         </div>
@@ -1271,27 +1250,28 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </section>
             <section class="shell-grupo inicio-mp-duo" data-inicio-mp-duo aria-label="Misiones y parejas">
           <button type="button" class="inicio-mp-card inicio-mp-card--mis" data-open="misiones" aria-label="Ver misiones de hoy">
-            <span class="inicio-mp-ico inicio-mp-ico--mis" aria-hidden="true"></span>
-            <div class="inicio-mp-main">
-              <div class="inicio-mp-head">
+            <div class="inicio-mp-cuerpo">
+              <span class="inicio-mp-ico inicio-mp-ico--mis" aria-hidden="true"></span>
+              <div class="inicio-mp-main">
                 <span class="inicio-mp-tit" data-misiones-tit-corta>MISIONES</span>
-                <span class="inicio-mp-badge" data-misiones-count hidden></span>
-              </div>
-              <div class="inicio-mp-sub">
                 <span class="inicio-mp-resumen" data-misiones-resumen-corta></span>
-                <span class="inicio-mp-pill" data-misiones-progreso hidden aria-hidden="true"></span>
+                <span class="inicio-mp-progreso" data-misiones-progreso aria-hidden="true"></span>
               </div>
             </div>
-            <span class="inicio-mp-chevron" aria-hidden="true">&#8250;</span>
+            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
           </button>
           <button type="button" class="inicio-mp-card inicio-mp-card--par" data-open="parejas" aria-label="Ver parejas del pueblo">
-            <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
-            <div class="inicio-mp-main">
+            <div class="inicio-mp-cuerpo">
               <span class="inicio-mp-tit" data-parejas-tit-corta>PAREJAS</span>
-              <span class="inicio-mp-resumen" data-parejas-resumen-corta></span>
-              <span class="inicio-mp-par-faces" data-parejas-preview-faces hidden aria-hidden="true"></span>
+              <div class="inicio-mp-par-mid">
+                <div class="inicio-mp-par-izq">
+                  <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
+                  <span class="inicio-mp-resumen" data-parejas-resumen-corta></span>
+                </div>
+                <span class="inicio-mp-par-faces" data-parejas-preview-faces aria-hidden="true"></span>
+              </div>
             </div>
-            <span class="inicio-mp-chevron" aria-hidden="true">&#8250;</span>
+            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
           </button>
         </section>
         </div>

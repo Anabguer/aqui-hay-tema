@@ -718,8 +718,6 @@ final class EventosPuebloEngine
         $horaUi = sprintf('%02d:00', max(0, min(23, $hora)));
         $selEstado = self::seleccionEstado($evento);
 
-        $elegVecinos = self::vecinosElegibles($partida, (string) ($evento['id'] ?? ''), null, $catalog)['vecinos'] ?? [];
-
         return [
             'evento_pueblo_id' => (string) ($evento['id'] ?? ''),
             'catalogo_id' => (string) ($evento['catalogo_id'] ?? ''),
@@ -738,7 +736,7 @@ final class EventosPuebloEngine
             'plazas_disponibles' => $plazas,
             'seleccion_estado' => $selEstado,
             'pendiente_seleccion' => $selEstado === 'pendiente_asistentes',
-            'cta_label' => 'Elegir quién va',
+            'cta_label' => '¿Quién va?',
             'elegibles' => $elegVecinos,
             'preset_organizar' => [
                 'modo' => 'evento_pueblo',
@@ -852,15 +850,10 @@ final class EventosPuebloEngine
         $n = (int) ($raw['participantes_n'] ?? 0);
         $estado = (string) ($raw['estado'] ?? 'programado');
         $selEstado = (string) ($raw['seleccion_estado'] ?? 'pendiente_asistentes');
+        $nombre = EventosPuebloAnuncioEngine::nombreNaturalPublico((string) ($raw['nombre'] ?? ''));
         $catalogoId = (string) ($raw['catalogo_id'] ?? '');
         $tipo = (string) ($raw['tipo'] ?? '');
         $def = $catalog !== null && $catalogoId !== '' ? self::catalogItem($catalog, $catalogoId) : null;
-        $nombreInicio = is_array($def) && isset($def['nombre_inicio']) && (string) $def['nombre_inicio'] !== ''
-            ? (string) $def['nombre_inicio']
-            : '';
-        $nombre = $nombreInicio !== ''
-            ? $nombreInicio
-            : EventosPuebloAnuncioEngine::nombreNaturalPublico((string) ($raw['nombre'] ?? ''));
         $aforo = (int) ($raw['aforo'] ?? 0);
         if ($aforo <= 0) {
             $aforo = self::aforoEvento($partida, $raw, is_array($def) ? $def : null, $catalog);
@@ -886,6 +879,14 @@ final class EventosPuebloEngine
         if ($lugarNombre !== '') {
             $metaParts[] = $lugarNombre;
         }
+        if ($aforo > 0) {
+            $metaParts[] = 'Aforo: ' . $aforo;
+        }
+        if ($selEstado === 'confirmado' && $n > 0) {
+            $metaParts[] = $n === 1 ? '1 vecino apuntado' : ($n . ' vecinos apuntados');
+        } elseif ($selEstado === 'pendiente_asistentes' && $plazas > 0) {
+            $metaParts[] = $plazas === 1 ? '1 plaza disponible' : ($plazas . ' plazas disponibles');
+        }
 
         return array_merge($raw, [
             'nombre_ui' => $nombre,
@@ -901,7 +902,7 @@ final class EventosPuebloEngine
             'participantes_apuntados' => $partsCanon,
             'elegibles' => $elegVecinos,
             'pendiente_seleccion' => $selEstado === 'pendiente_asistentes',
-            'cta_label' => 'Elegir quién va',
+            'cta_label' => '¿Quién va?',
             'preset_organizar' => [
                 'modo' => 'evento_pueblo',
                 'evento_pueblo_id' => (string) ($raw['id'] ?? ''),
