@@ -245,7 +245,7 @@
 /* COTILLEOS-LIBRETA-SUTIL */
 .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel {
-  background-color: #f7f0de !important;
+  background-color: var(--modal-shell-bg, #FCFBFE) !important;
   background-image:
     radial-gradient(ellipse 130% 85% at 50% -5%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
     linear-gradient(180deg, rgba(255,253,249,.58) 0%, rgba(255,248,236,.22) 45%, rgba(235,220,190,.12) 100%),

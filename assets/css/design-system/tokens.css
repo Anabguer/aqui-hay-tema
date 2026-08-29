@@ -12,7 +12,7 @@
   /* --- Papel y superficies --- */
   --ds-paper-app: #F6EFDC;
   --ds-paper-card: #FBF5E6;
-  --ds-paper-modal: #F8F1DF;
+  --ds-paper-modal: var(--modal-shell-bg, #FCFBFE);
   --ds-paper-warm: #F3E7CE;
   --ds-paper-dim: #EFE5CC;
 
@@ -66,6 +66,18 @@
   --ds-space-6: 24px;
   --ds-space-7: 32px;
   --ds-space-8: 40px;
+
+  /* --- Piel modal comun (CANON) --- */
+  --modal-shell-bg: #FCFBFE;
+  --modal-header-bg: #FFFFFF;
+  --modal-content-bg: #F6F3F8;
+  --modal-title-mark: #F1EDF6;
+  --modal-footer-bg: #EEE8FA;
+  --modal-border: #D8D1DE;
+  --modal-footer-border: #A99ADF;
+  --modal-shadow: 0 8px 24px rgba(48, 40, 58, 0.20);
+  --modal-overlay: rgba(38, 31, 47, 0.45);
+
 
   /* --- Radios --- */
   --ds-radius-card: 20px;

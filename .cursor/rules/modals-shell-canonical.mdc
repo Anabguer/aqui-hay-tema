@@ -1,0 +1,39 @@
+---
+description: Proteccion de la piel modal lavanda canonica. Aplicar siempre que se toquen modales, capas, CSS de play-v3-* o deploy visual.
+alwaysApply: true
+---
+
+# Piel modal canonica (Aquí Hay Tema)
+
+## Fuente unica de colores de carcasa
+
+Los colores de **carcasa** de modales (fondo, borde, velo, cabecera, contenido, pie) viven en:
+
+1. `assets/css/design-system/tokens.css` — variables `--modal-*` y `--ds-paper-modal`
+2. `assets/css/design-system/modals-shell-lavanda-mobile.css` — override final (CANON, movil + desktop)
+
+**NO** reintroducir en otros archivos:
+
+- `#fffaf0`, `#F8F1DF`, `#f7f0de` como fondo de `.capa-*` / `.capa`
+- `url("../play-v3/capas/libreta_hoja.png")` en carcasas de modales principales
+- Bloques `CAPAS-PRINCIPALES-SHELL` / `CAPAS-LIBRETA-SUTIL` con colores scrapbook (solo geometria o `var(--modal-*)`)
+
+## Orden en play.php
+
+`modals-shell-lavanda-mobile.css` debe cargar **despues** de `modals-secondary-unified.css` y **antes** del `<style>` inline. No anadir hojas de capas modales despues de la lavanda.
+
+## Tareas acotadas (boton, copy, logica)
+
+Si la peticion es un boton, texto o JS:
+
+- **No** editar fondos/bordes de `.capa-*` en `play-v3-avisos.css`, `play-v3-mensajitos.css`, `play-v3-organizar.css`, etc.
+- **No** sobrescribir ni acortar `modals-shell-lavanda-mobile.css` a solo movil salvo peticion explicita.
+- Tras cambios CSS en modales, ejecutar `scripts/aht_guard_modal_shell.ps1`.
+
+## Excepciones (mantener fuera de lavanda)
+
+Tutorial, derrota, panel DEBUG/lab, avisos toast, modal Mentes (`capa-mentes`) salvo peticion contraria.
+
+## Marcador de integridad
+
+El CSS canonico debe contener `MODALS-SHELL-LAVANDA-CANON-v3` y selectores `.play-root[data-capa]` (no solo `.play-root.phone`).
