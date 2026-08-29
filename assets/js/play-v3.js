@@ -6522,7 +6522,8 @@ function hobbyIconKey(id, texto) {
   function orgMaxVecinos() {
     if (!orgEsEventoPueblo()) return ORG_MAX_VECINOS;
     var plazas = org.evento_ctx && org.evento_ctx.plazas_disponibles;
-    if (typeof plazas !== 'number' || plazas <= 0) {
+    plazas = Number(plazas);
+    if (!isFinite(plazas) || plazas <= 0) {
       if (plazas === 0) return 0;
       plazas = ORG_MAX_VECINOS;
     }
@@ -6561,7 +6562,15 @@ function hobbyIconKey(id, texto) {
   function abrirOrganizarEventoPueblo(ev) {
     var preset = (ev && ev.preset_organizar) ? ev.preset_organizar : ev;
     if (!preset || !preset.evento_pueblo_id) return;
-    abrirOrganizarConPreset(preset);
+    var evtId = preset.evento_pueblo_id;
+    api('evento_pueblo.elegibles', { evento_pueblo_id: evtId }).then(function (r) {
+      if (r && r.ok && r.vecinos) {
+        preset.elegibles = r.vecinos;
+      }
+      abrirOrganizarConPreset(preset);
+    }).catch(function () {
+      abrirOrganizarConPreset(preset);
+    });
   }
 
   function aplicarOrgModoEventoUi() {
@@ -6589,8 +6598,16 @@ function hobbyIconKey(id, texto) {
     if (seccCuando) seccCuando.hidden = esEvt;
     if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '¿Quiénes van?';
     if (contador) {
-      contador.hidden = true;
-      contador.textContent = '';
+      if (esEvt && org.evento_ctx && org.evento_ctx.aforo_total) {
+        var act = (org.evento_ctx.participantes_apuntados || []).length;
+        var selCount = orgSeleccionados().length;
+        var total = org.evento_ctx.aforo_total;
+        contador.textContent = (act + selCount) + ' / ' + total + ' plazas';
+        contador.hidden = false;
+      } else {
+        contador.hidden = true;
+        contador.textContent = '';
+      }
     }
   }
   function orgIdsDesdePreset(preset) {
@@ -6779,6 +6796,7 @@ function hobbyIconKey(id, texto) {
     pintarOrgPicker();
     actualizarOrgPickerHint();
     actualizarOrgModoEstado();
+    if (orgEsEventoPueblo()) aplicarOrgModoEventoUi();
     refreshTipos();
     refreshOrgHoras();
     actualizarOrgCrearBtn();
