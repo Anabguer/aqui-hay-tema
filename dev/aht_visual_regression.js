@@ -7,7 +7,23 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { chromium } = require('playwright');
+
+function loadPlaywright() {
+  const candidates = [
+    path.join(__dirname, '..'),
+    path.join(__dirname, '..', '..', 'aqui-hay-tema'),
+    process.cwd(),
+  ];
+  for (const root of candidates) {
+    const modPath = path.join(root, 'node_modules', 'playwright');
+    if (fs.existsSync(modPath)) {
+      return require(modPath);
+    }
+  }
+  return require('playwright');
+}
+
+const { chromium } = loadPlaywright();
 
 const ROOT = path.join(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts/aht_visual_manifest.json'), 'utf8'));

@@ -13,10 +13,13 @@ function Get-AhtCanonicalDeployConfig {
         Join-Path (Split-Path -Parent $Ctx.RepoRoot) 'aqui-hay-tema-deploy-integrated'
     }
 
+    $resolvedWt = Resolve-Path -LiteralPath $worktreePath -ErrorAction SilentlyContinue
+    $worktreePathResolved = if ($resolvedWt) { $resolvedWt.Path } else { $null }
+
     return @{
         Branch = $branch
         RemoteRef = $remoteRef
-        WorktreePath = (Resolve-Path -LiteralPath $worktreePath -ErrorAction SilentlyContinue)?.Path
+        WorktreePath = $worktreePathResolved
         WorktreePathRaw = $worktreePath
     }
 }

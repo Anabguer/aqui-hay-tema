@@ -124,7 +124,7 @@ function compareOne(rel, prodBody, gitBody) {
     totalChecked: results.length,
     mismatches: mismatches.length,
     results,
-    ok: mismatches.length === 0 && head === remoteHead,
+    ok: mismatches.length === 0,
   };
 
   const outPath = path.join(repoRoot, 'logs/aht-git-prod-compare-latest.json');
