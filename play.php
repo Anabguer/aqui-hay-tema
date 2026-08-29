@@ -651,14 +651,21 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </section>
         <div class="ficha-body">
-          <div class="ficha-rasgos" data-ficha-rasgos></div>
-          <div class="ficha-col ficha-col-detalles capa-scroll">
-            <section class="ficha-seccion">
+          <div class="ficha-rasgos-hobbies">
+            <section class="ficha-seccion ficha-seccion-rasgos">
+              <h4 class="ficha-seccion-tit">Rasgos</h4>
+              <div class="ficha-seccion-body">
+                <div class="ficha-rasgos" data-ficha-rasgos></div>
+              </div>
+            </section>
+            <section class="ficha-seccion ficha-seccion-hobbies">
               <h4 class="ficha-seccion-tit">Hobbies</h4>
               <div class="ficha-seccion-body">
                 <div class="ficha-hobbies" data-ficha-hobbies></div>
               </div>
             </section>
+          </div>
+          <div class="ficha-col ficha-col-detalles capa-scroll">
             <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
               <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
               <div class="ficha-seccion-body ficha-seccion-body-prefs" data-ficha-sabes-body></div>

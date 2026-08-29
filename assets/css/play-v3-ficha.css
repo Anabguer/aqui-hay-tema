@@ -1783,3 +1783,101 @@
 .play-v3 .capa-ficha .ficha-animo-q[hidden] {
   display: none !important;
 }
+
+/* === FICHA: RASGOS + HOBBIES en fila (mitad/mitad) — solo layout, estética de tarjeta intacta === */
+.play-v3 .capa-ficha .ficha-rasgos-hobbies {
+  display: grid !important;
+  grid-template-columns: 53fr 47fr !important;
+  gap: .55rem .8rem !important;
+  align-items: stretch !important;
+  margin-top: 8px !important;
+}
+
+/* Título de RASGOS con el mismo tratamiento visual que el de HOBBIES (bloques equivalentes/paralelos) */
+.play-v3 .capa-ficha .ficha-seccion:has([data-ficha-rasgos]) .ficha-seccion-tit {
+  background: var(--ds-lavender-soft, #ece6f8);
+  border-color: var(--ds-lavender-deep, #7a6a9a);
+}
+
+/* RASGOS: filas verticales, una por rasgo */
+.play-v3 .capa-ficha .ficha-rasgos {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: .38rem !important;
+  align-items: stretch !important;
+  width: 100% !important;
+  margin: 0 !important;
+}
+.play-v3 .capa-ficha .ficha-rasgo-tag {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  text-align: left !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  padding: .42rem .6rem !important;
+  font-size: .8rem !important;
+  letter-spacing: .04em !important;
+  line-height: 1.2 !important;
+}
+
+/* HOBBIES: filas verticales, una por hobby (elimina el reparto en 3 columnas estrechas) */
+.play-v3 .capa-ficha .ficha-hobbies {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+  gap: .38rem !important;
+  align-items: stretch !important;
+  width: 100% !important;
+}
+.play-v3 .capa-ficha .ficha-hobby-card {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  max-width: none !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: .55rem !important;
+  padding: .42rem .55rem !important;
+}
+.play-v3 .capa-ficha .ficha-hobby-card.is-desconocido {
+  justify-content: flex-start !important;
+  padding: .5rem .55rem !important;
+}
+.play-v3 .capa-ficha .ficha-hobby-ico {
+  width: 1.9rem !important;
+  height: 1.9rem !important;
+  flex: 0 0 auto !important;
+}
+.play-v3 .capa-ficha .ficha-hobby-lab {
+  text-align: left !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  font-size: .92rem !important;
+  line-height: 1.15 !important;
+}
+
+/* Móvil estrecho: mismo concepto (2 columnas), solo se afinan tamaños */
+@media (max-width: 360px) {
+  .play-v3 .capa-ficha .ficha-rasgos-hobbies {
+    gap: .45rem .5rem !important;
+  }
+  .play-v3 .capa-ficha .ficha-rasgo-tag {
+    padding: .38rem .5rem !important;
+    font-size: .74rem !important;
+  }
+  .play-v3 .capa-ficha .ficha-hobby-card {
+    gap: .45rem !important;
+    padding: .38rem .48rem !important;
+  }
+  .play-v3 .capa-ficha .ficha-hobby-ico {
+    width: 1.6rem !important;
+    height: 1.6rem !important;
+  }
+  .play-v3 .capa-ficha .ficha-hobby-lab {
+    font-size: .84rem !important;
+  }
+}
