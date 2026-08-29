@@ -75,6 +75,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modals-shell-lavanda-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -619,6 +620,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
       </aside>
+      <aside class="capa capa-mentes mentes-modal ds-modal-sheet" aria-label="&iquest;Qu&eacute; se cuece ah&iacute;?" role="dialog" aria-modal="true">
+        <button type="button" class="cerrar mentes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <header class="mentes-top">
+          <div class="ds-modal-head">
+            <h2 class="mentes-tit ds-modal-tit ds-modal-tit--lavender">&iquest;Qu&eacute; se cuece ah&iacute;?</h2>
+          </div>
+        </header>
+        <div class="mentes-body capa-scroll" data-mentes-body></div>
+      </aside>
       <aside class="capa capa-ficha ds-modal-sheet" aria-label="Ficha de vecino">
         <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
@@ -630,6 +640,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <section class="ficha-hero" aria-label="Perfil del vecino">
           <div class="ficha-cara-ring" data-ficha-cara-ring>
             <div class="ficha-cara" data-ficha-img></div>
+          </div>
+          <div class="ficha-animo-row" data-ficha-animo-row>
+            <div class="ficha-animo-pill" data-ficha-animo-pill>
+              <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+              <span class="ficha-animo-val" data-ficha-animo-text></span>
+              <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">?</button>
+            </div>
           </div>
           <div class="ficha-hero-info">
             <div class="ficha-nombre-nav">
@@ -644,13 +661,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <p class="ficha-edad" data-ficha-edad hidden></p>
             <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
             <p class="ficha-desde" data-ficha-desde></p>
-            <div class="ficha-animo-row" data-ficha-animo-row>
-              <div class="ficha-animo-pill" data-ficha-animo-pill>
-                <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                <span class="ficha-animo-val" data-ficha-animo-text></span>
-                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">?</button>
-              </div>
-            </div>
           </div>
           <div class="ficha-hero-acciones" aria-label="Acciones con el vecino">
             <button type="button" class="ficha-btn-diario ficha-hero-btn" data-ficha-diario-btn>Diario</button>
@@ -716,12 +726,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
         </div>
-        <div class="ficha-rel-overlay" data-animo-overlay hidden>
-          <div class="ficha-rel-modal ficha-modal-animo" role="dialog" aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">
-            <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
-            <div class="ficha-diario-scroll capa-scroll" data-animo-body></div>
-          </div>
-        </div>
+      </aside>
+      <aside class="capa capa-ficha-animo ds-modal-sheet" aria-label="Estado de animo del vecino">
+        <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
+        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
+        <header class="fani-top">
+          <button type="button" class="fani-volver" data-animo-volver>&larr; FICHA</button>
+        </header>
+        <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
       </aside>
       <aside class="capa capa-ficha-diario ds-modal-sheet" aria-label="Diario del vecino">
         <span class="ficha-tape ficha-tape-r fdi-tape-r" aria-hidden="true"></span>

@@ -1791,3 +1791,67 @@
     gap: .45rem .5rem !important;
   }
 }
+
+
+/* FICHA-POLISH-v135 — foto grande sin borde blanco, pill al pie, verde sutil */
+.play-v3 .capa-ficha .ficha-cara-ring {
+  grid-row: 1 !important;
+  max-width: 158px !important;
+  max-height: none !important;
+  padding: 0 !important;
+  background: transparent !important;
+  box-shadow: 0 0 0 3px rgba(196, 138, 58, .82) !important;
+}
+.play-v3 .capa-ficha .ficha-cara-ring[data-emocion="alegre"] {
+  box-shadow: 0 0 0 3px rgba(122, 168, 130, .88) !important;
+}
+.play-v3 .capa-ficha .ficha-cara-ring[data-emocion="triste"] {
+  box-shadow: 0 0 0 3px rgba(122, 106, 154, .82) !important;
+}
+.play-v3 .capa-ficha .ficha-cara-ring[data-emocion="enfadado"] {
+  box-shadow: 0 0 0 3px rgba(196, 42, 74, .82) !important;
+}
+.play-v3 .capa-ficha .ficha-cara {
+  width: 154px !important;
+  height: 154px !important;
+  min-width: 154px !important;
+  min-height: 154px !important;
+  max-width: 154px !important;
+  max-height: 154px !important;
+}
+.play-v3 .play-root.phone .capa-ficha .ficha-cara,
+.play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-cara,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha .ficha-cara {
+  width: 150px !important;
+  height: 150px !important;
+  min-width: 150px !important;
+  min-height: 150px !important;
+  max-width: 150px !important;
+  max-height: 150px !important;
+}
+.play-v3 .capa-ficha .ficha-cara img {
+  transform: scale(1.2) !important;
+  transform-origin: 50% 12% !important;
+}
+.play-v3 .capa-ficha .ficha-animo-row {
+  grid-row: 2 !important;
+  max-width: 154px !important;
+  margin: 3px 0 0 !important;
+}
+.play-v3 .play-root.phone .capa-ficha .ficha-animo-row,
+.play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-animo-row {
+  max-width: 150px !important;
+  margin-top: 2px !important;
+}
+.play-v3 .capa-ficha .ficha-animo-pill--alegre {
+  background: rgba(122, 168, 130, .24) !important;
+  border-color: rgba(90, 140, 98, .42) !important;
+}
+.play-v3 .capa-ficha .ficha-animo-pill--alegre .ficha-animo-val {
+  color: #3d6b47 !important;
+}
+.play-v3 .capa-ficha .ficha-animo-pill--alegre .ficha-animo-q {
+  color: #3d6b47 !important;
+  border-color: rgba(90, 140, 98, .35) !important;
+  background: rgba(255, 255, 255, .45) !important;
+}
