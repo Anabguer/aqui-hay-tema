@@ -152,7 +152,7 @@ final class MensajitoAcciones
             if (!is_string($aid) || $aid === '') {
                 continue;
             }
-            if (in_array($aid, [self::RESPONDER_CONSEJO, self::RESPONDER_ESCUCHAR, self::RESPONDER_CELESTINE], true)) {
+            if (in_array($aid, [self::RESPONDER_CONSEJO, self::RESPONDER_ESCUCHAR, self::RESPONDER_CELESTINE, self::ELEGIR_PERSONA], true)) {
                 continue;
             }
             $def = self::def($aid);

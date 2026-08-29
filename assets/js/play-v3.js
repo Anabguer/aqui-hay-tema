@@ -1764,6 +1764,13 @@
 
   async function resolverAccionMensajito(m, accionId, extra) {
     if (!m || !m.id || !accionId) return false;
+    if (accionId === 'elegir_persona') {
+      const pid = (extra && extra.personaje_id) || '';
+      if (!pid) {
+        toast('Selecciona una persona primero.');
+        return false;
+      }
+    }
     const payload = { mensaje_id: m.id, accion: accionId };
     if (extra && typeof extra === 'object') Object.assign(payload, extra);
     const r = await api('buzon.resolver', payload);
