@@ -5318,80 +5318,84 @@ function canonEmoId(id) {
     setCapa(diarioVolverCapa || 'ficha');
   }
 
-  function categoriaDiarioMeta(cat) {
-    const c = String(cat || '').toLowerCase();
-    if (c.indexOf('animo') >= 0 || c.indexOf('emoc') >= 0) {
-      return { cls: 'pg-pill--red', txt: 'Ánimo', icon: '??', grupo: 'cambios' };
+  function diarioCategoriaMeta(e) {
+    const filtro = e.filtro_grupo || 'relaciones';
+    const txt = e.categoria_etiqueta || 'Relación';
+    const clsMap = {
+      planes: 'pg-pill--lavender',
+      relaciones: 'pg-pill--mustard',
+      cambios: 'pg-pill--tan'
+    };
+    const low = String(txt).toLowerCase();
+    if (low.indexOf('ánimo') >= 0 || low.indexOf('animo') >= 0) {
+      return { cls: 'pg-pill--red', txt: txt, grupo: 'cambios' };
     }
-    if (c.indexOf('relac') >= 0 || c.indexOf('romance') >= 0 || c.indexOf('hito') >= 0) {
-      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '??', grupo: 'relaciones' };
-    }
-    if (c.indexOf('encuentro') >= 0) {
-      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '??', grupo: 'relaciones' };
-    }
-    if (c.indexOf('plan') >= 0) {
-      return { cls: 'pg-pill--lavender', txt: 'Plan', icon: '??', grupo: 'planes' };
-    }
-    if (c.indexOf('llegada') >= 0) {
-      return { cls: 'pg-pill--green', txt: 'Historia', icon: '??', grupo: 'cambios' };
-    }
-    return { cls: 'pg-pill--tan', txt: 'Cambio', icon: '?', grupo: 'cambios' };
+    return { cls: clsMap[filtro] || 'pg-pill--mustard', txt: txt, grupo: filtro };
   }
 
   function diarioEntradaMatchFiltro(e, filtro) {
     if (filtro === 'todo') return true;
-    const meta = categoriaDiarioMeta(e.categoria || e.tipo || '');
-    return meta.grupo === filtro;
+    if (e.filtro_grupo) return e.filtro_grupo === filtro;
+    return diarioCategoriaMeta(e).grupo === filtro;
   }
 
   function diarioEntradaMatchBusca(e, q) {
     if (!q) return true;
+    const personas = Array.isArray(e.personas)
+      ? e.personas.map(function (p) { return p.nombre || ''; }).join(' ')
+      : '';
     const hay = [
       e.titulo || '',
-      e.texto || '',
-      (Array.isArray(e.consecuencias) ? e.consecuencias.join(' ') : '')
+      e.explicacion || e.texto || '',
+      personas
     ].join(' ').toLowerCase();
     return hay.indexOf(q) >= 0;
   }
 
-  function actoresIdDiario(e, rid) {
+  function diarioPersonasHtml(e, rid) {
+    if (Array.isArray(e.personas) && e.personas.length) {
+      return e.personas.map(function (p) {
+        const cara = p.retrato_url || tokenDe(p.id);
+        return '<span class="fdi-con">' +
+          (cara
+            ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>'
+            : '<span class="fdi-con-ava fdi-con-ava--ph" aria-hidden="true"></span>') +
+          '<span class="fdi-con-nom">' + esc(p.nombre || 'Alguien del pueblo') + '</span></span>';
+      }).join('');
+    }
     const actores = Array.isArray(e.actores) ? e.actores : [];
     const otro = actores.find(function (a) { return a !== rid; });
-    return otro || '';
-  }
-
-  function nombreActorDiario(e, rid) {
-    const otro = actoresIdDiario(e, rid);
     if (!otro) return '';
     const res = (cacheInsp && cacheInsp.residentes) || {};
     const r = res[otro];
-    return (r && r.identidad_publica && r.identidad_publica.nombre) || otro;
+    const nombre = (r && r.identidad_publica && r.identidad_publica.nombre) || otro;
+    const cara = tokenDe(otro);
+    return '<span class="fdi-con">' +
+      (cara ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>' : '') +
+      '<span class="fdi-con-nom">' + esc(nombre) + '</span></span>';
   }
 
   function entradaDiarioHtml(e, rid) {
-    const meta = categoriaDiarioMeta(e.categoria || e.tipo || '');
+    const meta = diarioCategoriaMeta(e);
     const eventoId = (e.origen && e.origen.evento_id) || e.evento_id || '';
-    const actor = nombreActorDiario(e, rid);
+    const titulo = String(e.titulo || '').trim() || 'Algo pasó';
+    const explicacion = String(e.explicacion || e.texto || '').trim();
+    const tono = e.tono || '';
+    const tonoCls = tono ? ' fdi-card--' + tono : '';
+    const personasHtml = diarioPersonasHtml(e, rid);
     let html = '<article class="ficha-diario-entrada fdi-entrada" data-diario-evento="' + esc(eventoId) + '">' +
-      '<span class="fdi-node" aria-hidden="true">' + meta.icon + '</span>' +
-      '<div class="ficha-diario-card fdi-card" data-cat="' + esc(meta.txt) + '">' +
-      '<div class="fdi-card-main">' +
-      '<b class="ficha-diario-titulo">' + esc(e.titulo || '') + '</b>';
-    if (actor) {
-      const cara = tokenDe(actoresIdDiario(e, rid));
-      html += '<span class="fdi-con">' +
-        (cara ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>' : '') +
-        esc(actor) + '</span>';
+      '<div class="ficha-diario-card fdi-card' + tonoCls + '">' +
+      '<div class="fdi-card-body">' +
+      '<b class="ficha-diario-titulo">' + esc(titulo) + '</b>';
+    if (personasHtml) {
+      html += '<div class="fdi-personas">' + personasHtml + '</div>';
     }
-    html += '</div>' +
-      '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>' +
-      '<span class="fdi-chev" aria-hidden="true">›</span>' +
-      '</div></article>';
+    if (explicacion && explicacion !== titulo) {
+      html += '<p class="ficha-diario-texto">' + esc(explicacion) + '</p>';
+    }
+    html += '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>' +
+      '</div></div></article>';
     return html;
-  }
-
-  function fdiDiaTone(idx) {
-    return ['pink', 'lav', 'green', 'mustard'][idx % 4];
   }
 
   function pintarDiarioVecinoLista() {
@@ -5411,16 +5415,14 @@ function canonEmoId(id) {
     }
     let html = '';
     let diaPrev = null;
-    let toneIdx = -1;
     let inTl = false;
     entradas.forEach(function (e) {
       const diaNum = e.dia || '';
-      const diaLbl = e.fecha_corta || ('D\u00eda ' + diaNum);
+      const diaLbl = e.fecha_corta || ('Día ' + diaNum);
       const diaKey = String(diaNum) + '|' + diaLbl;
       if (diaKey !== diaPrev) {
         if (inTl) html += '</div></div>';
-        toneIdx += 1;
-        html += '<div class="fdi-dia-grupo" data-tone="' + fdiDiaTone(toneIdx) + '">' +
+        html += '<div class="fdi-dia-grupo">' +
           '<span class="ficha-diario-dia fdi-dia-lbl">' + esc(diaLbl) + '</span>' +
           '<div class="ficha-diario-tl fdi-tl">';
         diaPrev = diaKey;
@@ -5431,7 +5433,7 @@ function canonEmoId(id) {
     if (inTl) html += '</div></div>';
     list.innerHTML = html;
     if (diarioHighlightId) {
-      const sel = '[data-diario-evento="' + String(diarioHighlightId).replace(/"/g, '\\"') + '"]';
+      const sel = '[data-diario-evento="' + String(diarioHighlightId).replace(/"/g, '\"') + '"]';
       const dest = list.querySelector(sel);
       if (dest) {
         dest.classList.add('is-destacada');
@@ -5450,7 +5452,7 @@ function canonEmoId(id) {
       '<b class="ficha-diario-head-tit fdi-head-tit">Diario de ' + esc(nom) + '</b>' +
       '<p class="ficha-diario-head-sub fdi-head-sub">Su historia en el pueblo</p>' +
       '</div>' +
-      '<span class="ficha-diario-count fdi-count">?? ' + total + ' recuerdos</span></div>';
+      '<span class="ficha-diario-count fdi-count">' + total + ' recuerdos</span></div>';
   }
 
   function syncDiarioVecinoFiltros() {
@@ -5461,7 +5463,7 @@ function canonEmoId(id) {
     });
     const ord = $('[data-diario-orden]');
     if (ord) {
-      ord.textContent = diarioVecinoOrden === 'antiguo' ? '? Más antiguo' : '? Más reciente';
+      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'Más antiguo' : 'Más reciente';
     }
     const busca = $('[data-diario-busca]');
     if (busca && busca.value !== diarioVecinoBusca) busca.value = diarioVecinoBusca;
