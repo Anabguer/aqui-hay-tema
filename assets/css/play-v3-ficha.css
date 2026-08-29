@@ -1789,7 +1789,7 @@
   display: grid !important;
   grid-template-columns: 53fr 47fr !important;
   gap: .55rem .8rem !important;
-  align-items: stretch !important;
+  align-items: start !important;
   margin-top: 8px !important;
 }
 
@@ -1880,4 +1880,16 @@
   .play-v3 .capa-ficha .ficha-hobby-lab {
     font-size: .84rem !important;
   }
+}
+
+/* === FICHA: compactar RELACIONES (menos aire vertical, legible, sin tocar avatares) === */
+.play-v3 .capa-ficha .ficha-seccion:has([data-ficha-relaciones]) .ficha-seccion-body {
+  padding: 7px 10px 6px !important;
+}
+.play-v3 .capa-ficha .ficha-relaciones {
+  gap: .38rem !important;
+}
+.play-v3 .capa-ficha .ficha-rel-row {
+  padding: 5px 0 !important;
+  gap: 8px 10px !important;
 }
