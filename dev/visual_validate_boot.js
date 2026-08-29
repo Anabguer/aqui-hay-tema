@@ -52,7 +52,8 @@
       }));
     }
     if (u.indexOf('residentes.diario') !== -1 || u.indexOf('residente.diario') !== -1) {
-      return Promise.resolve(new Response(JSON.stringify({ ok: true, entradas: [] }), {
+      var entradas = Array.isArray(payload.diario_fixture) ? payload.diario_fixture : [];
+      return Promise.resolve(new Response(JSON.stringify({ ok: true, entradas: entradas }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' }
       }));

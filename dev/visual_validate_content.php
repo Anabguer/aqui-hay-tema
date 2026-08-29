@@ -25,6 +25,7 @@ require_once __DIR__ . '/visual_validate_fixtures.php';
 
 
 use AquiHayTema\Api\Handlers\PartidaHandler;
+use AquiHayTema\Engine\DiarioVista;
 
 use AquiHayTema\Dev\VisualApiContextFactory;
 
@@ -140,6 +141,10 @@ if ($openAnimo && $fichaId !== '' && is_array($refresh['partida']['residentes'][
         $fichaId,
         $refresh['partida']
     );
+}
+
+if ($fichaId !== '' && is_array($refresh['partida'] ?? null)) {
+    $refresh['diario_fixture'] = DiarioVista::listarParaResidente($refresh['partida'], $fichaId);
 }
 
 $capaJs = match ($capa) {

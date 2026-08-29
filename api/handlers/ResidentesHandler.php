@@ -41,7 +41,7 @@ final class ResidentesHandler
         }
         return [
             'ok' => true,
-            'entradas' => \AquiHayTema\Engine\DiarioEngine::listarPorResidente($partida, (string) $rid),
+            'entradas' => \AquiHayTema\Engine\DiarioVista::listarParaResidente($partida, (string) $rid),
         ];
     }
 
