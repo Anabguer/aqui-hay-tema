@@ -274,6 +274,7 @@ button.primary { background: #3d3520; border-color: var(--accent); }
 .lugar-card {
   min-height: 2.75rem;
   cursor: pointer;
+  width: 100%;
 }
 .lugar-card.marca-proximo { border-color: var(--accent); }
 .lugar-card.marca-en-curso { border-color: var(--ok); border-width: 2px; }
@@ -282,6 +283,9 @@ button.primary { background: #3d3520; border-color: var(--accent); }
   display: none;
   margin-top: 0.4rem;
   font-size: 0.85rem;
+  width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 .lugar-card.abierto .lugar-detalle { display: block; }
 
