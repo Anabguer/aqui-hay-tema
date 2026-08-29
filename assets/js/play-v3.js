@@ -14,6 +14,28 @@
     return '\u00bfQu\u00e9 se cuece ah\u00ed?';
   }
   var mentesEncIdActivo = null;
+
+  var mentesFeedbackCardFlash = {};
+  var MENTES_FEEDBACK_CARD_MS = 8000;
+  function activarMentesFeedbackCard(encId, iv) {
+    var id = String(encId || '');
+    if (!id || !iv || !iv.ultimo || !iv.ultimo.texto) return;
+    var prev = mentesFeedbackCardFlash[id];
+    if (prev && prev.timer) clearTimeout(prev.timer);
+    mentesFeedbackCardFlash[id] = {
+      tono: iv.ultimo.tono || 'neutral',
+      txt: textoFeedbackIntervencion(iv),
+      timer: setTimeout(function () {
+        delete mentesFeedbackCardFlash[id];
+        if (typeof renderShellPanels === 'function' && cacheEstado) {
+          renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
+        }
+      }, MENTES_FEEDBACK_CARD_MS)
+    };
+  }
+  function mentesFeedbackCardActivo(encId) {
+    return mentesFeedbackCardFlash[String(encId || '')] || null;
+  }
   function resumenEncursoSinMentes(enc, iv) {
     if (iv && iv.usada) return '';
     if (enc && enc.intencion === 'celeste_organizado') {
@@ -2209,7 +2231,7 @@
       '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
       '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
       esc(formatPlanMeta(enc, estado)) + '</p>' +
-      htmlIntervencionResultado(enc, estado);
+      htmlIntervencionResultado(enc, estado, enCurso ? { cardFlash: true } : {});
   }
   function intervencionVistaDe(enc, estado) {
     if (!enc) return null;
@@ -2278,12 +2300,22 @@
     if (!iv || !iv.ultimo) return '';
     return iv.ultimo.texto || '';
   }
-  function htmlIntervencionResultado(enc, estado) {
+  function htmlIntervencionResultado(enc, estado, opts) {
+    opts = opts || {};
     if (!planEsEnCurso(enc, estado)) return '';
     var iv = intervencionVistaDe(enc, estado);
     if (!iv || !iv.usada || !iv.ultimo || !iv.ultimo.texto) return '';
-    var tono = iv.ultimo.tono || 'neutral';
-    var txt = textoFeedbackIntervencion(iv);
+    var tono;
+    var txt;
+    if (opts.cardFlash) {
+      var flash = mentesFeedbackCardActivo(enc.id);
+      if (!flash) return '';
+      tono = flash.tono;
+      txt = flash.txt;
+    } else {
+      tono = iv.ultimo.tono || 'neutral';
+      txt = textoFeedbackIntervencion(iv);
+    }
     return '<div class="enc-int-result enc-int-result--card"><p class="enc-int-result-txt enc-int-result-txt--' + esc(tono) + '">' + esc(txt) + '</p></div>';
   }
   function htmlIntervencionEncuentro(enc, estado) {
@@ -2418,6 +2450,7 @@
       });
     }
     var capaActual = ($('.play-root') && $('.play-root').getAttribute('data-capa')) || '';
+    activarMentesFeedbackCard(encId, vistaIntervencion);
     if (r.ok && capaActual === 'mentes' && String(mentesEncIdActivo) === String(encId)) {
       mostrarMentesResultado(vistaIntervencion);
     }
@@ -2729,7 +2762,7 @@
     const ids = (enc && enc.participantes) || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const resultHtml = htmlIntervencionResultado(enc, estado);
+    const resultHtml = htmlIntervencionResultado(enc, estado, { cardFlash: true });
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const nombres = ids.map(function (id) { return nombreDe(id); }).filter(Boolean).join(' \u00b7 ');
     const maxCaras = Math.min(2, Math.max(1, ids.length));
@@ -2964,7 +2997,7 @@
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const resultHtml = htmlIntervencionResultado(enc, estado);
+    const resultHtml = htmlIntervencionResultado(enc, estado, { cardFlash: true });
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     let html = '<article class="enc-mov-card enc-mov-card--escena enc-mov-card--ref-desk" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
@@ -2994,7 +3027,7 @@
     const ids = (enc && enc.participantes) || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
-    const resultHtml = htmlIntervencionResultado(enc, estado);
+    const resultHtml = htmlIntervencionResultado(enc, estado, { cardFlash: true });
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const nombres = ids.map(function (id) { return nombreDe(id); }).filter(Boolean).join(' \u00b7 ');
     const maxCaras = Math.min(2, Math.max(1, ids.length));

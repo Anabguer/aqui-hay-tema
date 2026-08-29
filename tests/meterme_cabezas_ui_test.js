@@ -39,6 +39,8 @@ ok(js.includes('kickerRompeHieloJs'), 'js: banco variantes rompe hielo');
 ok(js.includes('data-enc-mentes-open'), 'js: CTA abre modal MENTES');
 ok(encInt.includes('MENTES-CAPA-HOTFIX-v1'), 'css: capa mentes visible en whitelist');
 ok(encInt.includes('MENTES-AVATAR-ENCUADRE-v1'), 'css: encuadre canonico avatares MENTES');
+ok(js.includes('activarMentesFeedbackCard'), 'js: feedback tarjeta efimero');
+ok(js.includes('cardFlash: true'), 'js: tarjeta plan en curso usa flash efimero');
 ok(js.includes('htmlCaraToken(rid, { wrapClass: \'enc-int-duo-cara\' })'), 'js: MENTES usa htmlCaraToken canonico');
 ok(js.includes('ctaTxtEncuentroMov'), 'js: helper CTA acceso MENTES');
 ok(!js.includes('Animar la conversaci\u00f3n'), 'js: sin Animar la conversación en UI');
