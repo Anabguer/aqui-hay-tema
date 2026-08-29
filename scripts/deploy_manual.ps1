@@ -79,6 +79,13 @@ if ($Mode -eq 'Full') {
 }
 
 if ($Mode -eq 'Files') {
+    try {
+        $guardStart = Assert-AhtCanonicalDeployGuards -Ctx $Ctx -LogFile $logFile
+        $headAtStart = $guardStart.RemoteHead
+    } catch {
+        Write-DeployLog -LogFile $logFile -Message "ABORT: $($_.Exception.Message)" -ToHost
+        exit 1
+    }
     $paths = @($FilePaths)
     if ($paths.Count -eq 0) {
         Write-Host ''
@@ -119,6 +126,8 @@ if ($Mode -eq 'Files') {
         exit 0
     }
 
+    [void](Assert-AhtCanonicalDeployGuards -Ctx $Ctx -LogFile $logFile -ExpectedHeadAtStart $headAtStart)
+
     $upload = Invoke-AhtWinScpUpload -Ctx $Ctx -Files $pack.Files -WinScpLogPath $winscpLog
     if ($upload.Ok) {
         Test-AhtPublicUrl -Ctx $Ctx -LogFile $logFile
@@ -132,7 +141,12 @@ if ($Mode -eq 'Files') {
 }
 
 # --- NORMAL ---
-Write-DeployLog -LogFile $logFile -Message 'Modo NORMAL: cambios locales (modificados + nuevos) + cache-buster' -ToHost
+Write-DeployLog -LogFile $logFile -Message 'Modo NORMAL deshabilitado: requiere lista explicita de archivos.' -ToHost
+Write-DeployLog -LogFile $logFile -Message 'Usa DEPLOY_SURGICAL.bat o deploy_manual.ps1 -Mode Files -FilePaths <rutas>' -ToHost
+Write-DeployLog -LogFile $logFile -Message 'Motivo: evitar publicar WIP accidental desde working tree sucio.' -ToHost
+exit 1
+
+# --- NORMAL (legacy, deshabilitado) ---
 $dirty = (& git -C $Ctx.RepoRoot status --porcelain 2>&1 | Out-String).Trim()
 if ($dirty) {
     Write-DeployLog -LogFile $logFile -Message 'Cambios locales detectados (sin commit necesario).' -ToHost

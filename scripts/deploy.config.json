@@ -1,8 +1,13 @@
 ﻿{
-  "projectRoot": "W:\\juegos\\aqui-hay-tema",
+  "projectRoot": "W:\\juegos\\aqui-hay-tema-deploy-integrated",
   "gitRemote": "origin",
   "gitRepo": "git@github.com:Anabguer/aqui-hay-tema.git",
   "defaultBranch": "playtest-01-php74",
+  "canonicalDeploy": {
+    "worktreePath": "W:\\juegos\\aqui-hay-tema-deploy-integrated",
+    "branch": "deploy/integrated",
+    "remoteRef": "origin/deploy/integrated"
+  },
   "credentialsConfig": "W:\\anabel\\deploy\\hostalia.publish.local.json",
   "winscpLogHint": "W:\\juegos\\deploy\\logs\\deploy-aht-canonical-*.log",
   "deployDefault": "incremental",
@@ -47,5 +52,5 @@
     "*.jsonl",
     "tests/dev/"
   ],
-  "notes": "DEPLOY.bat = menu manual (NORMAL / ARCHIVOS / FULL). DEPLOY_CANONICAL.bat y DEPLOY_FULL.bat siguen disponibles."
+  "notes": "Deploy canónico SOLO desde worktree aqui-hay-tema-deploy-integrated @ origin/deploy/integrated. DEPLOY_SURGICAL.bat = lista explícita. CHECKPOINT.bat = Git=Prod."
 }

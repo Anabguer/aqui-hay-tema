@@ -1,0 +1,44 @@
+{
+  "capturedAt": "2026-08-29T08:54:32.110Z",
+  "prodBase": "https://intocables13.com/juegos/aqui-hay-tema",
+  "seed": "forensic-desktop-081105-v1",
+  "originDeployIntegratedHead": "92ac1aefc85b48ce1b26d5672d0a26f96a0dedb2",
+  "mobile": {
+    "file": "golden-master/GOLDEN_INICIO_MOBILE.png",
+    "sha256": "65b4df286948ab627b4df7f4865a356a09b7eccdbb82a621da69800b3ddf2ab2",
+    "bytes": 225657,
+    "audit": {
+      "playRootClass": "play-root phone",
+      "inicioMobileDisplay": "block",
+      "inicioDesktopDisplay": "none",
+      "tilesHeight": 68,
+      "stageGrid": "none",
+      "mapaHits": 9,
+      "designToolVisible": false,
+      "hasMensajitosTile": true,
+      "hasCotilleosBlock": true,
+      "stylesheetCount": 47,
+      "hasInicioMobileCss": true,
+      "hasInicioDesktopCss": true
+    }
+  },
+  "desktop": {
+    "file": "golden-master/GOLDEN_INICIO_DESKTOP.png",
+    "sha256": "96454aafc44ba766743250f34b4478f61e7aa542c9f31ab7ff34d68b7efe87d8",
+    "bytes": 493376,
+    "audit": {
+      "playRootClass": "play-root pc",
+      "inicioMobileDisplay": "none",
+      "inicioDesktopDisplay": "contents",
+      "tilesHeight": 0,
+      "stageGrid": "340px 676px 340px",
+      "mapaHits": 9,
+      "designToolVisible": false,
+      "hasMensajitosTile": true,
+      "hasCotilleosBlock": true,
+      "stylesheetCount": 47,
+      "hasInicioMobileCss": true,
+      "hasInicioDesktopCss": true
+    }
+  }
+}

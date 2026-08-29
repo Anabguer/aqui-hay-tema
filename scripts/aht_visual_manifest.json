@@ -1,0 +1,33 @@
+{
+  "description": "Assets visuales criticos: checkpoint Git=Prod y deploy quirurgico.",
+  "prodBase": "https://intocables13.com/juegos/aqui-hay-tema",
+  "textAssets": [
+    "play.php",
+    "assets/js/play-v3.js",
+    "assets/css/design-system/screens/inicio-mobile.css",
+    "assets/css/design-system/screens/inicio-desktop.css",
+    "assets/css/play-v3-responsive.css",
+    "assets/css/play-v3-app.css",
+    "assets/css/play-v3-desktop-shell.css",
+    "assets/css/play-v3-organizar.css",
+    "assets/css/play-v3-tutorial-ds.css",
+    "assets/css/play-v3-ficha.css",
+    "assets/css/play-v3-mensajitos.css",
+    "assets/css/design-system/ficha-neni-ref-v1.css",
+    "assets/css/design-system/tokens.css",
+    "assets/css/design-system/components.css"
+  ],
+  "volatileAssets": [
+    "assets/aht-cache-buster.txt"
+  ],
+  "goldenMaster": {
+    "seed": "forensic-desktop-081105-v1",
+    "mobile": { "width": 390, "height": 844, "file": "golden-master/GOLDEN_INICIO_MOBILE.png" },
+    "desktop": { "width": 1440, "height": 900, "file": "golden-master/GOLDEN_INICIO_DESKTOP.png" },
+    "auditThresholds": {
+      "mapaHitsMin": 9,
+      "tilesHeightMin": 60,
+      "tilesHeightMax": 130
+    }
+  }
+}

@@ -8,6 +8,11 @@ if (-not (Test-Path -LiteralPath $__ahtDeployHelpers)) {
 }
 . $__ahtDeployHelpers
 
+$__ahtGuards = Join-Path $PSScriptRoot 'aht_deploy_guards.ps1'
+if (Test-Path -LiteralPath $__ahtGuards) {
+    . $__ahtGuards
+}
+
 function Initialize-AhtDeployContext {
     param([string]$ScriptDir)
 
