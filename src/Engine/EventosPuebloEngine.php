@@ -879,14 +879,6 @@ final class EventosPuebloEngine
         if ($lugarNombre !== '') {
             $metaParts[] = $lugarNombre;
         }
-        if ($aforo > 0) {
-            $metaParts[] = 'Aforo: ' . $aforo;
-        }
-        if ($selEstado === 'confirmado' && $n > 0) {
-            $metaParts[] = $n === 1 ? '1 vecino apuntado' : ($n . ' vecinos apuntados');
-        } elseif ($selEstado === 'pendiente_asistentes' && $plazas > 0) {
-            $metaParts[] = $plazas === 1 ? '1 plaza disponible' : ($plazas . ' plazas disponibles');
-        }
 
         return array_merge($raw, [
             'nombre_ui' => $nombre,

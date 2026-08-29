@@ -3412,9 +3412,7 @@
       if (tit) tit.textContent = tituloEventoPuebloUi(ev.nombre_ui || ev.nombre || '');
       if (typeof pintarProximoEventoIco === 'function') pintarProximoEventoIco(ico, ev);
       else if (ico) ico.textContent = ev.icono || '\u{1F4C5}';
-      var metaTxt = ev.meta_ui || '';
-      if (ev.aforo_ui) metaTxt = metaTxt ? (metaTxt + ' \u00b7 ' + ev.aforo_ui) : ev.aforo_ui;
-      if (meta) meta.textContent = metaTxt;
+      if (meta) meta.textContent = ev.meta_ui || '';
       var cta = slot.querySelector('[data-proximo-evento-cta]') || (card && card.querySelector('[data-proximo-evento-participar]'));
       var plazas = parseInt(ev.plazas_disponibles, 10);
       if (isNaN(plazas)) plazas = 0;
@@ -6532,14 +6530,8 @@ function hobbyIconKey(id, texto) {
     if (seccCuando) seccCuando.hidden = esEvt;
     if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '¿Quiénes van?';
     if (contador) {
-      if (esEvt && org.evento_ctx && org.evento_ctx.aforo_total) {
-        var act = (org.evento_ctx.participantes_apuntados || []).length;
-        contador.textContent = act + ' / ' + org.evento_ctx.aforo_total + ' plazas';
-        contador.hidden = false;
-      } else {
-        contador.hidden = true;
-        contador.textContent = '';
-      }
+      contador.hidden = true;
+      contador.textContent = '';
     }
   }
   function orgIdsDesdePreset(preset) {
