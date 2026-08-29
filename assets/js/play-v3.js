@@ -4161,6 +4161,13 @@
       badgeObj.textContent = String(nPend);
       badgeObj.hidden = nPend <= 0;
     });
+    inicioAll('.inicio-mobile-tiles .obj-buzon-txt').forEach(function (txtEl) {
+      if (nPend > 0) {
+        txtEl.setAttribute('data-sub', String(nPend) + ' sin leer');
+      } else {
+        txtEl.removeAttribute('data-sub');
+      }
+    });
     const cartas = (buzon || []).filter(function (m) {
       return (m.estado || '') === 'pendiente' || (m.estado || '') === 'en_espera';
     });
