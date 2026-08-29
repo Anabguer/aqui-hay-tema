@@ -66,7 +66,7 @@
 /* --- Header --- */
 .play-v3 .capa-organizar .org-top {
   text-align: center;
-  padding: 0 2rem .35rem;
+  padding: 0 3rem .35rem;
   margin-bottom: .15rem;
 }
 
@@ -219,7 +219,7 @@
 .play-v3 .capa-organizar .org-busca {
   width: 100%;
   margin: 0;
-  padding: .55rem .65rem .55rem 2.45rem;
+  padding: .55rem .65rem .55rem 2.85rem;
   border: 1.5px solid rgba(44,38,31,.14);
   border-radius: 12px;
   background: rgba(255,252,245,.95);
@@ -382,13 +382,30 @@
   color: #c85b78;
 }
 
-.play-v3 .capa-organizar .org-tipo-card-txt {
+.play-v3 .capa-organizar .org-tipo-card-copy {
+  display: flex;
+  flex-direction: column;
+  gap: .1rem;
+  min-width: 0;
+}
+
+.play-v3 .capa-organizar .org-tipo-card-tit {
   font: 800 .7rem/1.1 Nunito, sans-serif;
   letter-spacing: .05em;
   text-transform: uppercase;
   text-align: left;
   color: #3a3028;
   white-space: nowrap;
+}
+
+.play-v3 .capa-organizar .org-tipo-card-desc {
+  font: 500 .62rem/1.2 Nunito, sans-serif;
+  letter-spacing: .02em;
+  text-transform: none;
+  text-align: left;
+  color: #7a6a5c;
+  white-space: nowrap;
+  opacity: .85;
 }
 
 /* --- Dónde --- */
@@ -491,6 +508,14 @@
 
 .play-v3 .capa-organizar .org-lugar-estado--abierto { color: #3d7a52; }
 .play-v3 .capa-organizar .org-lugar-estado--cerrado { color: #b85c5c; }
+
+.play-v3 .capa-organizar .org-lugar-card-estado {
+  display: block;
+  margin-top: .2rem;
+  font: 600 .62rem/1.2 Nunito, sans-serif;
+  letter-spacing: .02em;
+  color: #5a4a3a;
+}
 
 .play-v3 .capa-organizar .org-lugar-horas {
   display: none;
@@ -1032,8 +1057,12 @@
   font-size: .94rem !important;
 }
 
-.play-v3 .capa-organizar .org-tipo-card-txt {
+.play-v3 .capa-organizar .org-tipo-card-tit {
   font-size: .78rem !important;
+}
+
+.play-v3 .capa-organizar .org-tipo-card-desc {
+  font-size: .7rem !important;
 }
 
 .play-v3 .capa-organizar .org-lugar-horario,
@@ -1064,7 +1093,7 @@
 }
 
 .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-busca {
-  padding: .5rem .65rem .5rem 2.5rem !important;
+  padding: .5rem .65rem .5rem 2.9rem !important;
 }
 
 /* v9: Cuando — dia legible, hora compacta al lado */

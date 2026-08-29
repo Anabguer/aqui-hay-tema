@@ -6817,29 +6817,40 @@ function hobbyIconKey(id, texto) {
     var desc = orgLugarDesc(lugId);
     var horario = d.horario || '';
     var abierto = d.abierto_ahora;
-    var badge = '';
-    if (abierto === true) badge = '<span class="org-lugar-card-badge org-lugar-card-badge--abierto">Abierto</span>';
-    else if (abierto === false) badge = '<span class="org-lugar-card-badge org-lugar-card-badge--cerrado">Cerrado</span>';
-    var hasta = orgLugarHastaTxt(horario);
-    var meta = '<span class="org-lugar-card-meta">' + badge +
-      (hasta ? '<span class="org-lugar-card-hasta"><span class="org-lugar-card-reloj" aria-hidden="true"></span>' + esc(hasta) + '</span>' : '') +
-      '</span>';
-    var pie = '';
+    var estadoLinea = '';
+
     if (horario) {
-      var estado = abierto === true ? 'Abierto ahora' : (abierto === false ? 'Cerrado ahora' : '');
-      pie = '<span class="org-lugar-card-foot"><span class="org-lugar-card-pie">' +
-        (estado ? '<span class="org-lugar-card-pie-dot" aria-hidden="true"></span><span>' + esc(estado) + '</span><span class="org-lugar-card-pie-sep">·</span>' : '') +
-        '<span>' + esc(horario) + '</span></span></span>';
+      var m = String(horario).match(/(\d{1,2}:\d{2})\s*[-\u2013]\s*(\d{1,2}:\d{2})/);
+      if (m) {
+        var apertura = m[1];
+        var cierre = m[2];
+        var es24h = (apertura === '00:00' || apertura === '0:00') && (cierre === '23:59' || cierre === '24:00');
+        if (es24h) {
+          estadoLinea = 'Abierto 24 h';
+        } else if (abierto === true) {
+          estadoLinea = 'Abierto ahora · hasta ' + cierre;
+        } else if (abierto === false) {
+          estadoLinea = 'Cerrado · abre a las ' + apertura;
+        } else {
+          estadoLinea = 'Horario: ' + apertura + '–' + cierre;
+        }
+      }
     }
+
+    var estadoHtml = estadoLinea
+      ? '<span class="org-lugar-card-estado">' + esc(estadoLinea) + '</span>'
+      : '';
+
     return '<span class="org-lugar-card-trigger">' +
       '<span class="org-lugar-card-row">' +
       orgLugarThumbHtml(lugId) +
       '<span class="org-lugar-card-body">' +
       '<span class="org-lugar-card-nom">' + esc(label) + '</span>' +
-      '<span class="org-lugar-card-desc">' + esc(desc) + '</span>' + meta +
+      '<span class="org-lugar-card-desc">' + esc(desc) + '</span>' +
+      estadoHtml +
       '</span>' +
       '<span class="org-dd-chev" aria-hidden="true"></span>' +
-      '</span>' + pie + '</span>';
+      '</span></span>';
   }
 
   function orgDdTriggerContent(kind, label, valStr) {
