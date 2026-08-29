@@ -8,7 +8,7 @@
   .inicio-stage > .inicio-proximo-evento { order: 4; }
 }
 
-/* INICIO-MOBILE — presentación móvil namespaced (.inicio-mobile) */
+/* INICIO-MOBILE â€” presentaciÃ³n mÃ³vil namespaced (.inicio-mobile) */
 
 .inicio-mobile .inicio-mobile-layout {
   display: flex;
@@ -97,7 +97,7 @@
     background-image: none;
   }
 
-  /* Superficies DS del feed: ningÃƒÂºn border-image/mask legacy */
+  /* Superficies DS del feed: ningÃƒÆ’Ã‚Âºn border-image/mask legacy */
   .inicio-mobile .obj-cotilleo.obj-cotilleo-par,
   .inicio-mobile .encursos-movil .enc-mov-card,
   .inicio-mobile .proxplanes-movil .pp-mov-card,
@@ -109,7 +109,7 @@
     mask-image: none;
   }
 
-  /* ---------- 2. Cabecera (ref: marca + Ã‚Â¿CÃƒÂ³mo va esto? + corazÃƒÂ³n / dÃƒÂ­aÃ‚Â·hora + pasar) ---------- */
+  /* ---------- 2. Cabecera (ref: marca + Ãƒâ€šÃ‚Â¿CÃƒÆ’Ã‚Â³mo va esto? + corazÃƒÆ’Ã‚Â³n / dÃƒÆ’Ã‚Â­aÃƒâ€šÃ‚Â·hora + pasar) ---------- */
 
   .inicio-mobile .game-top {
     display: grid;
@@ -317,7 +317,7 @@
     padding: 0 13px;
   }
 
-  /* Familia de marco comÃƒÂºn: borde tinta 2px + costura interior + radios artesanales */
+  /* Familia de marco comÃƒÆ’Ã‚Âºn: borde tinta 2px + costura interior + radios artesanales */
   .inicio-mobile .inicio-mobile-tiles .obj-buzon {
     margin: 0;
     height: 101px;
@@ -345,7 +345,7 @@
       0 4px 9px rgba(200, 91, 120, .12);
   }
 
-  /* tres piezas desiguales â€” alturas y giros artesanales, sin costura interior */
+  /* tres piezas desiguales Ã¢â‚¬â€ alturas y giros artesanales, sin costura interior */
   .inicio-mobile .inicio-mobile-tiles .obj-buzon::before,
   .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen::before {
     content: none;
@@ -839,7 +839,7 @@
     overflow: hidden;
   }
 
-  /* Badge nuevos cotilleos: NO eliminar — lo rellena play-v3.js via data-cotilleo-badge */
+  /* Badge nuevos cotilleos: NO eliminar â€” lo rellena play-v3.js via data-cotilleo-badge */
   .inicio-mobile .obj-cotilleo-badge {
     grid-area: badge;
     position: static;
@@ -879,7 +879,7 @@
   .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par:active {
     transform: scale(.99);
   }
-  /* ---------- 7. Cabeceras de secciÃƒÂ³n (compactas, tipo referencia) ---------- */
+  /* ---------- 7. Cabeceras de secciÃƒÆ’Ã‚Â³n (compactas, tipo referencia) ---------- */
 
   .inicio-mobile .enc-mov-cab,
   
@@ -923,7 +923,7 @@
 
   /* ---------- 8. Planes EN CURSO (carrusel compacto) ---------- */
 
-  /* los wrappers de secciÃƒÂ³n llegan desnudos: el papel lo ponen las tarjetas */
+  /* los wrappers de secciÃƒÆ’Ã‚Â³n llegan desnudos: el papel lo ponen las tarjetas */
   .inicio-mobile .proxplanes-movil:not(.is-on) { display: none; }
 
   .inicio-mobile .inicio-mobile-feed-inner .encursos-movil,
@@ -1036,7 +1036,7 @@
     font-size: 1rem;
   }
 
-  /* ---------- 9. PrÃƒÂ³ximos planes (2 tarjetas punteadas compactas) ---------- */
+  /* ---------- 9. PrÃƒÆ’Ã‚Â³ximos planes (2 tarjetas punteadas compactas) ---------- */
 
   .inicio-mobile .proxplanes-movil .pp-mov-track {
     display: grid;
@@ -1203,7 +1203,7 @@
     color: var(--ds-text-muted);
   }
 
-  /* ---------- 11. Parejas (compacto, corazones, vacÃƒÂ­o con voz) ---------- */
+  /* ---------- 11. Parejas (compacto, corazones, vacÃƒÆ’Ã‚Â­o con voz) ---------- */
 
   .inicio-mobile .shell-grupo-parejas {
     padding: 10px 13px 12px;
@@ -1292,7 +1292,7 @@
 
 
 
-/* === INICIO-PROXPLANES-REF-v13 (móvil) === */
+/* === INICIO-PROXPLANES-REF-v13 (mÃ³vil) === */
 .inicio-mobile .proxplanes-movil .pp-mov-cab {
     display: flex !important;
     flex-direction: row !important;
@@ -1452,7 +1452,7 @@
     color: var(--ds-text-muted, #6a5f55) !important;
   }
 
-/* === INICIO-ENCURSO-REF-v14 (móvil) === */
+/* === INICIO-ENCURSO-REF-v14 (mÃ³vil) === */
   .inicio-mobile .encursos-movil .enc-mov-cab {
     display: flex !important;
     flex-direction: row !important;
@@ -1861,7 +1861,7 @@
 }
 
 
-/* INICIO-MOBILE-OVERRIDE-v2 — gana a play-v3-responsive; ref c5f73d3 + piloto v3.1 */
+/* INICIO-MOBILE-OVERRIDE-v2 â€” gana a play-v3-responsive; ref c5f73d3 + piloto v3.1 */
 @media (max-width: 768px) {
   /* Feed movil: orden canonico (gana a responsive .shell-grupo-cotilleo-par order:3 !important) */
   .play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner {
@@ -2559,7 +2559,7 @@
     text-align: left !important;
   }
 
-  /* data-cotilleo-badge: contador nuevos — play-v3.js actualizarCotiBadgesUI() */
+  /* data-cotilleo-badge: contador nuevos â€” play-v3.js actualizarCotiBadgesUI() */
   .play-v3 .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-badge {
     grid-area: badge !important;
     position: static !important;
@@ -2614,7 +2614,7 @@
 }
 
 /* === INICIO-TYPE-MISIONES-COTILLEO-MOBILE-v1 ===
-   Cuerpos de lectura: tipografía UI (como desktop). Títulos sin tocar. */
+   Cuerpos de lectura: tipografÃ­a UI (como desktop). TÃ­tulos sin tocar. */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-txt,
   .play-v3:has(.game-shell) .inicio-mobile .obj-misiones-vacio {
@@ -2645,7 +2645,7 @@
     line-height: 1.4 !important;
   }
 
-  /* Resúmenes narrativos equivalentes; se mantienen fuera los metadatos. */
+  /* ResÃºmenes narrativos equivalentes; se mantienen fuera los metadatos. */
   .play-v3:has(.game-shell) .inicio-mobile .enc-mov-resumen,
   .play-v3:has(.game-shell) .inicio-mobile .enc-mov-vista-txt {
     font-size: 1rem !important;
@@ -2851,7 +2851,7 @@
 
 
 
-/* INICIO-NUEVO-PLAN-v2 — solo PLAN, + grande, centrado */
+/* INICIO-NUEVO-PLAN-v2 â€” solo PLAN, + grande, centrado */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
     display: flex !important;
@@ -2900,7 +2900,7 @@
   }
 }
 
-/* INICIO-ENCURSO-MOBILE-v16 — ref piloto compacto */
+/* INICIO-ENCURSO-MOBILE-v16 â€” ref piloto compacto */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile.inicio-mobile-feed .encursos-movil.is-on {
     margin: 0 13px 4px !important;
@@ -3095,7 +3095,7 @@
 }
 
 
-/* INICIO-TYPE-MISIONES-MOBILE-v2 — cuerpo misiones: lectura UI (canónico) */
+/* INICIO-TYPE-MISIONES-MOBILE-v2 â€” cuerpo misiones: lectura UI (canÃ³nico) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .mision-strip-txt {
     font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
@@ -3479,7 +3479,7 @@
 
 
 
-/* INICIO-CHROME-RESTORE-v37 — parejas + crear plan + buzon + cotilleo */
+/* INICIO-CHROME-RESTORE-v37 â€” parejas + crear plan + buzon + cotilleo */
 /* INICIO-PAREJAS-ROW-v1 - filas con tono rosa, caras separadas y corazon visible */
 .play-v3:has(.game-shell) .shell-grupo-parejas .obj-pareja-piece {
   background: linear-gradient(135deg, rgba(255, 248, 251, .96) 0%, rgba(248, 206, 222, .94) 100%) !important;
@@ -3747,7 +3747,7 @@
 }
 
 
-/* INICIO-ENC-ESCENA-STAMP-v38 — polaroid mini (no tamano real del asset) + fila caras/badge */
+/* INICIO-ENC-ESCENA-STAMP-v38 â€” polaroid mini (no tamano real del asset) + fila caras/badge */
 .play-v3:has(.game-shell) .encursos-movil .enc-mov-escena {
   grid-template-columns: auto minmax(0, 1fr) !important;
   align-items: start !important;
@@ -3870,7 +3870,7 @@
 }
 
 
-/* INICIO-CREAR-PLAN-POS-v41 — debajo de proximos planes, antes de parejas; sin translate flotante */
+/* INICIO-CREAR-PLAN-POS-v41 â€” debajo de proximos planes, antes de parejas; sin translate flotante */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .proxplanes-movil {
     margin-bottom: 0 !important;
@@ -3901,7 +3901,7 @@
 }
 
 
-/* INICIO-MOBILE-SCROLLBAR-HIDE-v42 — refuerzo sin raya vertical en inicio movil */
+/* INICIO-MOBILE-SCROLLBAR-HIDE-v42 â€” refuerzo sin raya vertical en inicio movil */
 @media (max-width: 768px) {
   html:has(body.play-v3 .inicio-mobile.is-inicio-view-active),
   body.play-v3:has(.inicio-mobile.is-inicio-view-active) {
@@ -3932,7 +3932,7 @@
   }
 }
 
-/* INICIO-VECINOS-ESTADOS-v43 — filas de estado mas legibles en la libreta Celestine */
+/* INICIO-VECINOS-ESTADOS-v43 â€” filas de estado mas legibles en la libreta Celestine */
 .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .stat-row,
 .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .vecinos-stat {
   font-size: 1.05rem !important;
@@ -3975,7 +3975,7 @@
   }
 }
 
-/* INICIO-PAREJAS-CUQUI-v46 — sin degradado, mas amor/cuqui + corazones titulo visibles */
+/* INICIO-PAREJAS-CUQUI-v46 â€” sin degradado, mas amor/cuqui + corazones titulo visibles */
 .play-v3:has(.game-shell) .shell-grupo-parejas .obj-pareja-piece {
   background: #fff1f6 !important;
   border: 1.5px solid rgba(232, 120, 152, .38) !important;
@@ -4602,7 +4602,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v52 — tarjeta crema, meta en fila, corazon con numero, guia abajo */
+/* INICIO-CABECERA-MOCK-v52 â€” tarjeta crema, meta en fila, corazon con numero, guia abajo */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     display: grid !important;
@@ -4836,7 +4836,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v53 — sin numero corazon, meta mas abajo, sin desbordar derecha */
+/* INICIO-CABECERA-MOCK-v53 â€” sin numero corazon, meta mas abajo, sin desbordar derecha */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     width: calc(100% - 26px) !important;
@@ -4893,7 +4893,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v54 — play mas grande y alineado con dia/hora */
+/* INICIO-CABECERA-MOCK-v54 â€” play mas grande y alineado con dia/hora */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     align-items: center !important;
@@ -4930,7 +4930,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v55 — corazon espejo al inicio como comilla */
+/* INICIO-CABECERA-MOCK-v55 â€” corazon espejo al inicio como comilla */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .brand-sparkles {
     display: none !important;
@@ -4957,7 +4957,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v56 — play junto al reloj mas pequeno, titulo un poco mayor */
+/* INICIO-CABECERA-MOCK-v56 â€” play junto al reloj mas pequeno, titulo un poco mayor */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .brand-text {
     font-size: 1.56rem !important;
@@ -5012,7 +5012,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v57 — titulo recto sin recorte, meta centrada, play alineado */
+/* INICIO-CABECERA-MOCK-v57 â€” titulo recto sin recorte, meta centrada, play alineado */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     overflow: visible !important;
@@ -5084,7 +5084,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v58 — borde naranja sutil en fila dia/play, play un poco mas arriba */
+/* INICIO-CABECERA-MOCK-v58 â€” borde naranja sutil en fila dia/play, play un poco mas arriba */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     display: inline-flex !important;
@@ -5111,7 +5111,7 @@
   }
 }
 
-/* INICIO-MAPA-BORDE-v59 — borde al mapa (inicio-map-host no cuelga de .inicio-mobile) */
+/* INICIO-MAPA-BORDE-v59 â€” borde al mapa (inicio-map-host no cuelga de .inicio-mobile) */
 .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .board-fit {
   border: 2px solid rgba(107, 81, 56, .34) !important;
   border-radius: 20px 18px 22px 16px / 18px 22px 16px 20px !important;
@@ -5135,7 +5135,7 @@
   }
 }
 
-/* INICIO-MAPA-BORDE-v60 — mapa sin hueco abajo, sombra equilibrada */
+/* INICIO-MAPA-BORDE-v60 â€” mapa sin hueco abajo, sombra equilibrada */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host {
     min-height: 0 !important;
@@ -5392,7 +5392,7 @@
   }
 }
 
-/* INICIO-CREAM-BG v62 — crema muy suave pero perceptible */
+/* INICIO-CREAM-BG v62 â€” crema muy suave pero perceptible */
 @media (max-width: 768px) {
   html,
   body.play-v3:has(.game-shell) {
@@ -5411,7 +5411,7 @@
   }
 }
 
-/* INICIO-BOTTOM-NAV-v64 — barra opaca final + DEBUG sobre la barra */
+/* INICIO-BOTTOM-NAV-v64 â€” barra opaca final + DEBUG sobre la barra */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-bottom-nav {
     background: #fff8f0 !important;
@@ -5445,7 +5445,7 @@
   }
 }
 
-/* INICIO-MAPA-BG-v65 — fondo del marco del mapa = crema pagina */
+/* INICIO-MAPA-BG-v65 â€” fondo del marco del mapa = crema pagina */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host,
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .play-stage,
@@ -5457,7 +5457,7 @@
   }
 }
 
-/* INICIO-BOTTOM-NAV-v66 — icono arriba, texto abajo, barra blanca con mas aire */
+/* INICIO-BOTTOM-NAV-v66 â€” icono arriba, texto abajo, barra blanca con mas aire */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-bottom-nav {
     padding: 10px 0 calc(12px + env(safe-area-inset-bottom, 0)) !important;
@@ -5520,7 +5520,7 @@
   }
 }
 
-/* INICIO-BOTTOM-NAV-v69 — bloque flotante + línea rosa bajo tab activo */
+/* INICIO-BOTTOM-NAV-v69 â€” bloque flotante + lÃ­nea rosa bajo tab activo */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-bottom-nav {
     left: 10px !important;
@@ -5582,7 +5582,7 @@
   }
 }
 
-/* INICIO-PLANES-UNIF-v70 — carrusel unificado en curso + próximos */
+/* INICIO-PLANES-UNIF-v70 â€” carrusel unificado en curso + prÃ³ximos */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .planes-movil-unif:not(.is-on) {
     display: none !important;
@@ -5824,7 +5824,7 @@
   }
 }
 
-/* INICIO-MP-DUO-v71 — misiones + parejas compactas con modal */
+/* INICIO-MP-DUO-v71 â€” misiones + parejas compactas con modal */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile-feed-inner .inicio-mp-duo {
     order: 4 !important;
@@ -6008,7 +6008,7 @@
   }
 }
 
-/* INICIO-CABECERA-MOCK-v67 — pastilla dia/hora: menos radio, contenido bajado */
+/* INICIO-CABECERA-MOCK-v67 â€” pastilla dia/hora: menos radio, contenido bajado */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     padding: 7px 11px 9px 10px !important;
@@ -6038,7 +6038,7 @@
 
 
 
-/* INICIO-BG-WHITE-v72 — fondo pagina y mapa blanco (sin crema) */
+/* INICIO-BG-WHITE-v72 â€” fondo pagina y mapa blanco (sin crema) */
 @media (max-width: 768px) {
   html,
   body.play-v3,
@@ -6072,7 +6072,7 @@
 }
 
 
-/* INICIO-CABECERA-ALIGN-v73 — dia/hora y play alineados en la pastilla */
+/* INICIO-CABECERA-ALIGN-v73 â€” dia/hora y play alineados en la pastilla */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     display: inline-flex !important;
@@ -6129,7 +6129,7 @@
 }
 
 
-/* INICIO-COTILLEO-COMPACT-v74 — fila horizontal compacta como mockup */
+/* INICIO-COTILLEO-COMPACT-v74 â€” fila horizontal compacta como mockup */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .shell-grupo-cotilleo-par {
     margin: 0 13px 10px !important;
@@ -6287,9 +6287,9 @@
   }
 }
 
-/* INICIO-FEED-ALIGN-v75 — bloques mismo ancho que mapa; cotilleo compacto gana en feed */
+/* INICIO-FEED-ALIGN-v75 â€” bloques mismo ancho que mapa; cotilleo compacto gana en feed */
 @media (max-width: 768px) {
-  /* Gutter único 13px (igual que .inicio-map-host); sin doble inset en hijos */
+  /* Gutter Ãºnico 13px (igual que .inicio-map-host); sin doble inset en hijos */
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .inicio-proximo-evento,
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .shell-grupo-cotilleo-par,
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .planes-movil-unif,
@@ -6392,7 +6392,7 @@
   }
 }
 
-/* INICIO-COTILLEO-MOCKUP-v76 — icono izq, titulo recto arriba, badge nuevos rosa */
+/* INICIO-COTILLEO-MOCKUP-v76 â€” icono izq, titulo recto arriba, badge nuevos rosa */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .obj-cotilleo.obj-cotilleo-par.obj-cotilleo-compact {
     grid-template-columns: auto minmax(0, 1fr) auto !important;
@@ -6524,7 +6524,7 @@
   }
 }
 
-/* INICIO-PLANES-MOCKUP-v78 — colores/formas como mockup PLANES */
+/* INICIO-PLANES-MOCKUP-v78 â€” colores/formas como mockup PLANES */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .planes-movil-unif {
     padding: 12px 12px 13px !important;
@@ -6733,7 +6733,7 @@
   }
 }
 
-/* INICIO-MP-DUO-MOCKUP-v79 — misiones + parejas como mockup */
+/* INICIO-MP-DUO-MOCKUP-v79 â€” misiones + parejas como mockup */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile-feed-inner .inicio-mp-duo {
     margin-left: 0 !important;
@@ -6963,7 +6963,7 @@
   }
 }
 
-/* INICIO-BOTTOM-NAV-v80 — barra mas bajita como mockup */
+/* INICIO-BOTTOM-NAV-v80 â€” barra mas bajita como mockup */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-bottom-nav {
     padding: 3px 0 4px !important;
@@ -7031,7 +7031,7 @@
   }
 }
 
-/* INICIO-TILES-LABEL-v81 — labels misma fila + tipografia legible */
+/* INICIO-TILES-LABEL-v81 â€” labels misma fila + tipografia legible */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota,
@@ -7121,7 +7121,7 @@
   }
 }
 
-/* INICIO-CABECERA-TIGHT-v82 — un poco menos hueco titulo / pastilla dia-hora */
+/* INICIO-CABECERA-TIGHT-v82 â€” un poco menos hueco titulo / pastilla dia-hora */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     row-gap: 5px !important;
@@ -7133,7 +7133,7 @@
   }
 }
 
-/* INICIO-COTILLEO-TIT-RECTO-v83 — titulo y pill COTILLEOS sin ladear (gana v37) */
+/* INICIO-COTILLEO-TIT-RECTO-v83 â€” titulo y pill COTILLEOS sin ladear (gana v37) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .obj-cotilleo.obj-cotilleo-par.obj-cotilleo-compact .obj-cotilleo-tit {
     transform: none !important;
@@ -7314,7 +7314,7 @@
   }
 }
 
-/* INICIO-PLANES-INSET-v85 — sin VER PLAN + respiro lateral en bloque */
+/* INICIO-PLANES-INSET-v85 â€” sin VER PLAN + respiro lateral en bloque */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .plan-unif-cta--prox {
     display: none !important;
@@ -7341,7 +7341,7 @@
   }
 }
 
-/* INICIO-MP-PAR-FACES-v86 — caras parejas: un solo borde, bien centradas */
+/* INICIO-MP-PAR-FACES-v86 â€” caras parejas: un solo borde, bien centradas */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-par-faces {
     display: flex !important;
@@ -7394,7 +7394,7 @@
   }
 }
 
-/* INICIO-GUIA-BOLITA-v87 — ayuda en bolita mona, tipografia UI */
+/* INICIO-GUIA-BOLITA-v87 â€” ayuda en bolita mona, tipografia UI */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .control-audio .control-guia,
   .play-v3:has(.game-shell) .inicio-mobile .control-audio .btn-guia.control-guia {
@@ -7439,7 +7439,7 @@
   }
 }
 
-/* INICIO-TILES-ALIGN-v88 — sobre+badge, labels alineados, PLAN grande, + centrado */
+/* INICIO-TILES-ALIGN-v88 â€” sobre+badge, labels alineados, PLAN grande, + centrado */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon,
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota,
@@ -7526,7 +7526,7 @@
   }
 }
 
-/* INICIO-CABECERA-PILL-v89 — texto y play un pelin mas abajo en pastilla dia/hora */
+/* INICIO-CABECERA-PILL-v89 â€” texto y play un pelin mas abajo en pastilla dia/hora */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     padding: 7px 10px 8px 9px !important;
@@ -7548,7 +7548,7 @@
   }
 }
 
-/* INICIO-CABECERA-PILL-v90 — pastilla compacta como mockup */
+/* INICIO-CABECERA-PILL-v90 â€” pastilla compacta como mockup */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     display: inline-flex !important;
@@ -7619,7 +7619,7 @@
   }
 }
 
-/* INICIO-GUIA-FLOAT-v91 — bolita flotante sin hueco en layout */
+/* INICIO-GUIA-FLOAT-v91 â€” bolita flotante sin hueco en layout */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .game-top .control-audio {
     position: fixed !important;
@@ -7659,7 +7659,7 @@
   }
 }
 
-/* INICIO-COTILLEO-TIT-v92 — etiqueta COTILLEOS mas baja, texto centrado */
+/* INICIO-COTILLEO-TIT-v92 â€” etiqueta COTILLEOS mas baja, texto centrado */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .obj-cotilleo-compact .obj-cotilleo-badges {
     align-items: center !important;
@@ -7692,7 +7692,7 @@
     font-size: .56rem !important;
   }
 }
-/* INICIO-COTILLEO-TIT-v93 — etiqueta COTILLEOS un poco más alta + aire con el texto */
+/* INICIO-COTILLEO-TIT-v93 â€” etiqueta COTILLEOS un poco mÃ¡s alta + aire con el texto */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .obj-cotilleo-compact .obj-cotilleo-cuerpo,
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .obj-cotilleo-compact .obj-cotilleo-cuerpo {
@@ -7708,7 +7708,7 @@
     font-size: .58rem !important;
   }
 }
-/* INICIO-TILES-COMPACT-v94 — botones mitad de alto como mockup */
+/* INICIO-TILES-COMPACT-v94 â€” botones mitad de alto como mockup */
 @media (max-width: 768px) {
   body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     padding-top: 6px !important;
@@ -7888,7 +7888,7 @@
     width: auto !important;
   }
 }
-/* INICIO-GUIA-OFF-v95 — sin bolita ayuda flotante (ya en Ajustes) */
+/* INICIO-GUIA-OFF-v95 â€” sin bolita ayuda flotante (ya en Ajustes) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .control-audio .control-guia,
   .play-v3:has(.game-shell) .inicio-mobile .control-audio .btn-guia.control-guia,
@@ -7898,7 +7898,7 @@
     pointer-events: none !important;
   }
 }
-/* INICIO-TILES-POLISH-v96 — margen simetrico, sobre rosa, badge, vecinos y plan */
+/* INICIO-TILES-POLISH-v96 â€” margen simetrico, sobre rosa, badge, vecinos y plan */
 @media (max-width: 768px) {
   body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     padding-top: 12px !important;
@@ -8067,7 +8067,7 @@
     line-height: 1 !important;
   }
 }
-/* AHT-DIAG-AJUSTES — copiar/descargar debug en Ajustes (móvil + desktop) */
+/* AHT-DIAG-AJUSTES â€” copiar/descargar debug en Ajustes (mÃ³vil + desktop) */
 .play-v3:has(.game-shell) .capa-ajustes .ajustes-diag-hint {
   margin: 0 0 8px;
   font-size: .72rem;
@@ -8099,7 +8099,7 @@
   color: #2f6b3f;
   font-weight: 700;
 }
-/* INICIO-BUZON-FIX-v97 — sobre mas grande, texto separado (gana v81/v88) */
+/* INICIO-BUZON-FIX-v97 â€” sobre mas grande, texto separado (gana v81/v88) */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
     display: flex !important;
@@ -8177,7 +8177,7 @@
     line-height: 1.1 !important;
   }
 }
-/* INICIO-CABECERA-AIRE-v98 — mas aire bajo pastilla dia/hora y bloque un poco mas alto */
+/* INICIO-CABECERA-AIRE-v98 â€” mas aire bajo pastilla dia/hora y bloque un poco mas alto */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     padding-top: 13px !important;
@@ -8192,7 +8192,7 @@
     padding-bottom: 0 !important;
   }
 }
-/* INICIO-VECINOS-ALIGN-v99 — "6 de 16" alineado con VECINOS */
+/* INICIO-VECINOS-ALIGN-v99 â€” "6 de 16" alineado con VECINOS */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-vecinos-head {
     display: flex !important;
@@ -8225,7 +8225,7 @@
     transform: translateY(1px) !important;
   }
 }
-/* INICIO-PLAN-ALIGN-v100 — + y PLAN mas separados y un poco mas abajo */
+/* INICIO-PLAN-ALIGN-v100 â€” + y PLAN mas separados y un poco mas abajo */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
     display: flex !important;
@@ -8259,7 +8259,7 @@
     line-height: 1 !important;
   }
 }
-/* INICIO-COTILLEO-BADGE-FIX-v101 — quitar raya roja (badge oculto forzado visible) */
+/* INICIO-COTILLEO-BADGE-FIX-v101 â€” quitar raya roja (badge oculto forzado visible) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .obj-cotilleo-compact .obj-cotilleo-badge[hidden],
   .play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner .obj-cotilleo-compact .obj-cotilleo-badge[hidden] {
@@ -8275,7 +8275,7 @@
     pointer-events: none !important;
   }
 }
-/* INICIO-PAREJAS-CORAZON-v102 — corazon mas grande en tarjeta parejas */
+/* INICIO-PAREJAS-CORAZON-v102 â€” corazon mas grande en tarjeta parejas */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-ico--par {
     width: 36px !important;
@@ -8284,7 +8284,7 @@
     box-shadow: 0 0 0 5px rgba(255, 190, 205, .45) !important;
   }
 }
-/* INICIO-BUZON-BADGE-v103 — badge sobre el sobre, sin tapar MENSAJITOS */
+/* INICIO-BUZON-BADGE-v103 â€” badge sobre el sobre, sin tapar MENSAJITOS */
 @media (max-width: 768px) {
   .play-v3 .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
     gap: 10px !important;
@@ -8324,7 +8324,7 @@
     white-space: nowrap !important;
   }
 }
-/* INICIO-VECINOS-ALIGN-v104 — VECINOS y "6 de 16" en la misma linea alineados */
+/* INICIO-VECINOS-ALIGN-v104 â€” VECINOS y "6 de 16" en la misma linea alineados */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-resumen.celestine-nota {
     display: grid !important;
@@ -8381,7 +8381,7 @@
     font-weight: 700 !important;
   }
 }
-/* INICIO-PLAN-CENTER-v105 — + y PLAN centrados verticalmente con mas aire */
+/* INICIO-PLAN-CENTER-v105 â€” + y PLAN centrados verticalmente con mas aire */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan.obj-proximo-cta {
     display: flex !important;
@@ -8429,7 +8429,7 @@
     line-height: 1 !important;
   }
 }
-/* INICIO-BUZON-MOCKUP-v106 — MENSAJITOS: sobre grande, badge en esquina, texto entero */
+/* INICIO-BUZON-MOCKUP-v106 â€” MENSAJITOS: sobre grande, badge en esquina, texto entero */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
     display: flex !important;
@@ -8521,7 +8521,7 @@
     color: var(--ds-ink, #3b3028) !important;
   }
 }
-/* INICIO-MP-ICONOS-v107 — libro y corazon igual, sin circulo, alineados, caras mas grandes */
+/* INICIO-MP-ICONOS-v107 â€” libro y corazon igual, sin circulo, alineados, caras mas grandes */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--mis .inicio-mp-cuerpo {
     grid-template-columns: 36px minmax(0, 1fr) !important;
@@ -8578,7 +8578,7 @@
     height: 36px !important;
   }
 }
-/* INICIO-CABECERA-PILL-ALT-v108 — pastilla dia/hora mas alta, contenido centrado */
+/* INICIO-CABECERA-PILL-ALT-v108 â€” pastilla dia/hora mas alta, contenido centrado */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
     display: inline-flex !important;
@@ -8615,7 +8615,7 @@
   }
 }
 
-/* INICIO-PLANES-SPINE-v87 � barra lateral + carrusel (mockup unificado) */
+/* INICIO-PLANES-SPINE-v87 ï¿½ barra lateral + carrusel (mockup unificado) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .planes-movil-unif {
     padding: 0 !important;
@@ -8784,7 +8784,7 @@
     right: 4px !important;
   }
 }
-/* INICIO-TILES-GEOM-v108 â€” tres accesos: ancho Ãºtil alineado, icono arriba / tÃ­tulo abajo */
+/* INICIO-TILES-GEOM-v108 Ã¢â‚¬â€ tres accesos: ancho ÃƒÂºtil alineado, icono arriba / tÃƒÂ­tulo abajo */
 @media (max-width: 768px) {
   body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     padding-left: 13px !important;
@@ -9068,7 +9068,7 @@
     height: 8px !important;
   }
 }
-/* INICIO-TILES-GEOM-v109 â€” baseline tÃ­tulos unificada */
+/* INICIO-TILES-GEOM-v109 Ã¢â‚¬â€ baseline tÃƒÂ­tulos unificada */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-head {
     display: contents !important;
@@ -9096,7 +9096,7 @@
     visibility: hidden !important;
   }
 }
-/* INICIO-TILES-GEOM-v110 â€” mas compactos + titulos mas grandes */
+/* INICIO-TILES-GEOM-v110 Ã¢â‚¬â€ mas compactos + titulos mas grandes */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles {
     --aht-tile-h: 58px;
@@ -9164,7 +9164,7 @@
     right: -3px !important;
   }
 }
-/* INICIO-TILES-GEOM-v111 â€” Mensajitos: titulo grande (gana v106) */
+/* INICIO-TILES-GEOM-v111 Ã¢â‚¬â€ Mensajitos: titulo grande (gana v106) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-txt {
     font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
@@ -9195,7 +9195,7 @@
     white-space: nowrap !important;
   }
 }
-/* INICIO-TILES-GEOM-v112 â€” caras vecinos y + plan mas grandes */
+/* INICIO-TILES-GEOM-v112 Ã¢â‚¬â€ caras vecinos y + plan mas grandes */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles {
     --aht-tile-icon: 34px;
@@ -9231,7 +9231,7 @@
     font-weight: 700 !important;
   }
 }
-/* INICIO-TILES-GEOM-v113 â€” titulos mas pequenos + bolita total vecinos */
+/* INICIO-TILES-GEOM-v113 Ã¢â‚¬â€ titulos mas pequenos + bolita total vecinos */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt,
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-tit,
@@ -9283,7 +9283,7 @@
     display: none !important;
   }
 }
-/* INICIO-TILES-GEOM-v114 â€” mas altura interna + badges diferenciados y mas visibles */
+/* INICIO-TILES-GEOM-v114 Ã¢â‚¬â€ mas altura interna + badges diferenciados y mas visibles */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles {
     --aht-tile-h: 68px;
@@ -9319,7 +9319,7 @@
     right: -5px !important;
   }
 
-  /* VECINOS: pastilla clara con borde tinta â€” distinta a mensajitos */
+  /* VECINOS: pastilla clara con borde tinta Ã¢â‚¬â€ distinta a mensajitos */
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-vecinos-total-badge {
     top: 5px !important;
     right: 5px !important;
@@ -9336,7 +9336,7 @@
     transform: rotate(-2deg) !important;
   }
 }
-/* INICIO-TILES-GEOM-v115 â€” burbuja vecinos sutil + bolita mensajitos mas visible */
+/* INICIO-TILES-GEOM-v115 Ã¢â‚¬â€ burbuja vecinos sutil + bolita mensajitos mas visible */
 @media (max-width: 768px) {
   /* MENSAJITOS: bolita mas grande y legible */
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .obj-buzon-badge,
@@ -9375,7 +9375,7 @@
     -webkit-backdrop-filter: blur(2px) !important;
   }
 }
-/* INICIO-TILES-GEOM-v116 â€” bolita mensajitos grande (gana v106 por selector) */
+/* INICIO-TILES-GEOM-v116 Ã¢â‚¬â€ bolita mensajitos grande (gana v106 por selector) */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-ico-wrap > .obj-buzon-badge {
     position: absolute !important;
@@ -9404,7 +9404,7 @@
     z-index: 3 !important;
   }
 }
-/* INICIO-TILES-GEOM-v117 â€” bolita mensajitos tamano medio */
+/* INICIO-TILES-GEOM-v117 Ã¢â‚¬â€ bolita mensajitos tamano medio */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mobile-tiles .mensajitos-wrap .obj-buzon .obj-buzon-ico-wrap > .obj-buzon-badge {
     top: -5px !important;
@@ -9417,7 +9417,7 @@
     box-shadow: 0 2px 4px rgba(200, 91, 120, .3) !important;
   }
 }
-/* INICIO-CABECERA-GEOM-v118 â€” un poco menos de aire bajo bloque dia */
+/* INICIO-CABECERA-GEOM-v118 Ã¢â‚¬â€ un poco menos de aire bajo bloque dia */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     padding-bottom: 9px !important;
@@ -9521,5 +9521,494 @@
 
   .play-v3:has(.game-shell) .play-bottom-nav-btn.is-on::after {
     background: var(--ds-pink-deep, #c42b4a) !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-v121 - iconos y texto mas grandes (PC + movil) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav {
+    padding: 14px 0 16px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn {
+    gap: 9px !important;
+    padding: 12px 6px 18px !important;
+    font-size: .8rem !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico {
+    width: 38px !important;
+    height: 38px !important;
+    flex: 0 0 38px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg {
+    width: 36px !important;
+    height: 36px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt {
+    font-size: .8rem !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-badge {
+    top: -5px !important;
+    right: -9px !important;
+    min-width: 19px !important;
+    height: 19px !important;
+    font-size: .64rem !important;
+    line-height: 19px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
+    bottom: 6px !important;
+    height: 4px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .play-bottom-nav {
+    padding: 8px 0 10px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn {
+    gap: 5px !important;
+    min-height: 0 !important;
+    padding: 8px 4px 12px !important;
+    font-size: .66rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-ico {
+    width: 28px !important;
+    height: 28px !important;
+    flex: 0 0 28px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-ico svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-txt {
+    font-size: .66rem !important;
+    line-height: 1.1 !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-btn.is-on::after {
+    bottom: 3px !important;
+    width: min(72%, 56px) !important;
+    height: 3px !important;
+  }
+
+  .play-v3:has(.game-shell) .play-bottom-nav-badge {
+    top: -4px !important;
+    right: -6px !important;
+    min-width: 15px !important;
+    height: 15px !important;
+    font-size: .56rem !important;
+    line-height: 15px !important;
+  }
+
+  body.play-v3:has(.game-shell) {
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0)) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top .control-audio {
+    bottom: calc(76px + max(.35rem, env(safe-area-inset-bottom, 0))) !important;
+  }
+}
+
+/* INICIO-MP-DUO-COMPACT-v123 - misiones + parejas compactos (mockup Neni) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile-feed-inner .inicio-mp-duo {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 9px 8px 9px 9px !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    box-shadow: 0 2px 7px rgba(70, 50, 30, .08) !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--mis {
+    background: #f0f4e8 !important;
+    border: 1.5px solid rgba(108, 122, 82, .42) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--par {
+    background: #fdf0f2 !important;
+    border: 1.5px solid rgba(198, 108, 132, .4) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-cuerpo,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-par-mid,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-par-izq,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-pie {
+    display: contents !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    min-height: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-ver {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-ico {
+    flex: 0 0 34px !important;
+    width: 34px !important;
+    height: 34px !important;
+    margin: 0 !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: contain !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-ico--mis {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='6' y='3.8' width='12' height='16.2' rx='2.2' fill='%23f8faf2' stroke='%235a6b45' stroke-width='1.6'/%3E%3Cpath d='M9 8.2l1.4 1.5 2.8-3.1M9 12.2l1.4 1.5 2.8-3.1M9 16.2l1.4 1.5 2.8-3.1' fill='none' stroke='%235a6b45' stroke-width='1.35' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-ico--par {
+    border-radius: 0 !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.8 18.8s-4.2-2.8-4.2-6.1c0-2.4 1.8-4 3.6-3.1 1 .5 1.7 1.5 2.1 2.1.4-.6 1.1-1.6 2.1-2.1 1.8-.9 3.6.7 3.6 3.1 0 3.3-4.2 6.1-4.2 6.1z' fill='%23f3a8bc' stroke='%23c44d72' stroke-width='1.2'/%3E%3Cpath d='M9.2 17.2s-3.6-2.4-3.6-5.3c0-2.1 1.5-3.5 3.1-2.7.8.4 1.4 1.3 1.8 1.8.4-.5 1-1.4 1.8-1.8 1.6-.8 3.1.6 3.1 2.7 0 2.9-3.6 5.3-3.6 5.3z' fill='none' stroke='%23d66a8d' stroke-width='1.3'/%3E%3C/svg%3E") !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-main {
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 2px !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-head {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-tit {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .72rem !important;
+    font-weight: 900 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+    line-height: 1.05 !important;
+    white-space: nowrap !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--mis .inicio-mp-tit {
+    color: #4f6340 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--par .inicio-mp-tit {
+    color: #9a3d58 !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--par .inicio-mp-tit::before {
+    content: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-badge {
+    flex: 0 0 auto !important;
+    min-width: 18px !important;
+    height: 18px !important;
+    padding: 0 5px !important;
+    border-radius: 999px !important;
+    background: #5a6b45 !important;
+    color: #fff !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .62rem !important;
+    font-weight: 900 !important;
+    line-height: 18px !important;
+    text-align: center !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-badge[hidden] {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-sub {
+    display: flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    flex-wrap: wrap !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-resumen {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .62rem !important;
+    font-weight: 700 !important;
+    line-height: 1.15 !important;
+    min-width: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--mis .inicio-mp-resumen {
+    color: #5f6f52 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--par .inicio-mp-resumen {
+    color: #8f4a5f !important;
+    text-align: left !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-pill,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-progreso {
+    flex: 0 0 auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-width: 30px !important;
+    height: 17px !important;
+    padding: 0 6px !important;
+    border-radius: 999px !important;
+    background: rgba(186, 206, 154, .55) !important;
+    color: #4f6340 !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .58rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    min-height: 0 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-pill[hidden],
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-progreso[hidden] {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-sep,
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-dot {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-par-faces {
+    display: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-chevron {
+    flex: 0 0 auto !important;
+    align-self: center !important;
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: 1.15rem !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
+    opacity: .9 !important;
+    margin-right: 1px !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--mis .inicio-mp-chevron {
+    color: #5a6b45 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-card--par .inicio-mp-chevron {
+    color: #b83d62 !important;
+  }
+}
+/* INICIO-PLANES-TYPO-v125 - tipografia planes alineada con misiones/parejas (layout spine intacto) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine-tit {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .72rem !important;
+    font-weight: 900 !important;
+    letter-spacing: .04em !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine-badge,
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine-badge-num {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .62rem !important;
+    font-weight: 900 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-badge {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .58rem !important;
+    font-weight: 900 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-nombres {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .62rem !important;
+    font-weight: 700 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-lugar {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .62rem !important;
+    font-weight: 700 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-cta {
+    font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif) !important;
+    font-size: .58rem !important;
+    font-weight: 900 !important;
+  }
+}
+/* INICIO-PLANES-AZUL-v126 - tema azul claro (cotilleos conserva lila) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile .planes-movil-unif {
+    border-color: rgba(90, 140, 180, .34) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine {
+    background: #e8f3fb !important;
+    border-right-color: rgba(74, 124, 170, .24) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine-ico,
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine-tit {
+    color: #3d6f9b !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-spine-badge--prox {
+    background: #cfe8f7 !important;
+    border-color: rgba(61, 111, 155, .24) !important;
+    color: #2f5f87 !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-card--prox {
+    background: #eef6fc !important;
+    border-color: rgba(90, 140, 180, .4) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-badge--prox {
+    background: #d8eaf7 !important;
+    border-color: rgba(61, 111, 155, .28) !important;
+    color: #3d6f9b !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .plan-unif-cta--prox {
+    background: #d4ebf8 !important;
+    border-color: rgba(61, 111, 155, .38) !important;
+    color: #2f5f87 !important;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, .5) !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-ico,
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-tit,
+  .play-v3:has(.game-shell) .inicio-mobile .planes-unif-ver {
+    color: #3d6f9b !important;
+  }
+}
+/* INICIO-CROMATICA-MOVIL-v128 â€” paleta lavanda aprobada (solo zona superior movil) */
+@media (max-width: 768px) {
+  /* 1. Fondo general zona superior (sin feed, mapa, stage ni footer) */
+  body.play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed),
+  body.play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
+    background-color: #F3EFF7 !important;
+    background-image: none !important;
+  }
+
+  /* 2. Cabecera superior */
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #D9D2E1 !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
+  }
+
+  /* 3. Pildora dia / fecha / hora */
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-meta-row {
+    background-color: #FFFFFF !important;
+    border: 1.5px solid #F2A0B5 !important;
+    box-shadow: 0 2px 5px rgba(70, 55, 85, 0.08) !important;
+  }
+
+  /* 4. Corazon grande â€” relleno aislado en cabecera movil */
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top-mock .top-vida .corazon-bg {
+    fill: #FBEAF0 !important;
+  }
+
+  /* 5. Franja accesos rapidos (MENSAJITOS / VECINOS / PLAN) */
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles {
+    background-color: #F8F5FA !important;
+    border: 1px solid #E3DDE8 !important;
+    border-radius: 16px !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* INICIO-CROMATICA-MOVIL-v129 — fondo lavanda pagina completa (bordes mapa + feed) */
+@media (max-width: 768px) {
+  html,
+  body.play-v3:has(.game-shell),
+  body.play-v3:has(.game-shell) .game-shell,
+  body.play-v3:has(.game-shell) .game-shell > div,
+  body.play-v3:has(.game-shell) .inicio-stage,
+  body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed,
+  body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner,
+  body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-chrome-right {
+    background-color: #F3EFF7 !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host,
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .play-root,
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .board-scroll {
+    background-color: #F3EFF7 !important;
+    background-image: none !important;
+  }
+
+  body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .shell-grupo,
+  body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > section {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+}
+
+/* INICIO-CROMATICA-MOVIL-v130 — franja accesos mismo fondo pagina (sin banda blanda) */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles,
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
+    background-color: #F3EFF7 !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles {
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles .shell-grupo-buzon,
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles .shell-grupo-resumen,
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles .shell-grupo-planes,
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles .mensajitos-wrap {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+}
+
+/* INICIO-CROMATICA-MOVIL-v131 — tile MENSAJITOS fondo blanco */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-tiles .mensajitos-wrap .obj-buzon {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
   }
 }
