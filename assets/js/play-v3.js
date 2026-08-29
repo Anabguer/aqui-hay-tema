@@ -2144,19 +2144,6 @@
       '" data-emocion="' + esc(emo) + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
   }
 
-  function htmlCaraAvatar(id, opts) {
-    opts = opts || {};
-    var emo = opts.emocion || emocionDe(id);
-    var img = tokenDe(id);
-    var extra = opts.wrapClass ? ' ' + opts.wrapClass : '';
-    var imgCls = opts.imgClass ? ' class="' + esc(opts.imgClass) + '"' : '';
-    var inner = img
-      ? '<img' + imgCls + ' src="' + esc(img) + '" alt=""/>'
-      : '<span class="cara-ini' + (opts.imgClass ? ' ' + esc(opts.imgClass) : '') + '">' +
-        esc((nombreDe(id)[0] || '?')) + '</span>';
-    return '<span class="cara-token cara-token--static' + extra + '"><span class="cara" data-emocion="' + esc(emo) + '">' + inner + '</span></span>';
-  }
-
   function carasPlanHtml(ids, max) {
     var lim = (max == null) ? 2 : max;
     return (ids || []).slice(0, lim).map(function (id) { return htmlCaraToken(id); }).join('');
@@ -2310,14 +2297,14 @@
       '<div class="enc-int-step" data-enc-int-paso="persona">' +
       '<div class="enc-int-duo" aria-hidden="true">';
     ids.forEach(function (rid) {
-      html += '<div class="enc-int-duo-persona">' + htmlCaraAvatar(rid, { wrapClass: 'enc-int-duo-cara' }) +
+      html += '<div class="enc-int-duo-persona">' + htmlCaraToken(rid, { wrapClass: 'enc-int-duo-cara' }) +
         '<span class="enc-int-duo-nombre">' + esc(nombreDe(rid)) + '</span></div>';
     });
     html += '</div><p class="enc-int-kicker enc-int-kicker--q">\u00bfQui\u00E9n va a romper el hielo?</p>' +
       '<div class="enc-int-personas">';
     ids.forEach(function (rid) {
       html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
-        htmlCaraAvatar(rid, { wrapClass: 'enc-int-persona-cara' }) +
+        htmlCaraToken(rid, { wrapClass: 'enc-int-persona-cara' }) +
         '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
     });
     html += '</div></div>';

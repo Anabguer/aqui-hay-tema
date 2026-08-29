@@ -50,6 +50,20 @@
 .play-v3 .capa-mentes .enc-int-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-bottom: .2rem; }
 .play-v3 .capa-mentes .enc-int-persona { display: flex; flex-direction: column; align-items: center; gap: .45rem; min-height: 118px; padding: .75rem .55rem; border: 2px solid rgba(122, 106, 154, .28) !important; border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important; background: #fff !important; box-shadow: 1px 2px 0 rgba(122, 106, 154, .1) !important; cursor: pointer; }
 .play-v3 .capa-mentes .enc-int-persona-cara .cara { width: 64px; height: 64px; }
+
+/* MENTES-AVATAR-ENCUADRE-v1: mismo encuadre canonico que bloques-residencias / htmlCaraToken */
+.play-v3 .capa-mentes .enc-int-duo-cara .cara,
+.play-v3 .capa-mentes .enc-int-persona-cara .cara { overflow: hidden; }
+.play-v3 .capa-mentes .enc-int-duo-cara .cara img,
+.play-v3 .capa-mentes .enc-int-persona-cara .cara img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: 50% 20%;
+  transform: scale(1.1);
+  transform-origin: 50% 14%;
+}
 .play-v3 .capa-mentes .enc-int-volver { display: inline-flex; align-items: center; margin: 0 0 .55rem; padding: .2rem 0; border: 0; background: transparent; font: 700 .875rem/1.2 Nunito, sans-serif; color: var(--ds-lavender-deep, #7a6a9a); cursor: pointer; }
 .play-v3 .capa-mentes .enc-int-temas-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
 .play-v3 .capa-mentes .enc-int-temas-grid .enc-int-btn { min-height: 52px; padding: .65rem .55rem !important; border: 2px solid rgba(122, 106, 154, .24) !important; border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px !important; background: #fff !important; font: 700 .9375rem/1.25 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important; box-shadow: 1px 2px 0 rgba(122, 106, 154, .08) !important; text-align: center; white-space: normal; }

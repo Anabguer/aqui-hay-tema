@@ -38,6 +38,8 @@ ok(js.includes('data-enc-int-kicker-tema'), 'js: kicker dinámico paso 2');
 ok(js.includes('kickerRompeHieloJs'), 'js: banco variantes rompe hielo');
 ok(js.includes('data-enc-mentes-open'), 'js: CTA abre modal MENTES');
 ok(encInt.includes('MENTES-CAPA-HOTFIX-v1'), 'css: capa mentes visible en whitelist');
+ok(encInt.includes('MENTES-AVATAR-ENCUADRE-v1'), 'css: encuadre canonico avatares MENTES');
+ok(js.includes('htmlCaraToken(rid, { wrapClass: \'enc-int-duo-cara\' })'), 'js: MENTES usa htmlCaraToken canonico');
 ok(js.includes('ctaTxtEncuentroMov'), 'js: helper CTA acceso MENTES');
 ok(!js.includes('Animar la conversaci\u00f3n'), 'js: sin Animar la conversación en UI');
 ok(!js.includes('Sacar un tema que le guste'), 'js: sin dropdown tema abstracto');
@@ -66,7 +68,7 @@ ok(cssArt.includes('.enc-int-step[hidden]'), 'css: pasos ocultables');
 
 (function sandbox() {
   const fns = [
-    'function htmlCaraAvatar(',
+    'function htmlCaraToken(',
     'function htmlIntervencionResultado(',
     'function kickerRompeHieloJs(',
     'function textoFeedbackIntervencion(',
