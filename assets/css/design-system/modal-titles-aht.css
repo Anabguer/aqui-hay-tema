@@ -124,6 +124,13 @@
   .play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-agenda .agenda-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-mentes .mentes-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-misiones .mis-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-vida-pueblo .vida-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-parejas .par-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-inventario .inv-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-ajustes .ds-modal-tit,
   .play-v3:has(.game-shell) .modal-title-aht {
     font-size: 1.95rem !important;
   }

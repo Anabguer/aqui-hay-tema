@@ -288,9 +288,6 @@
 
 /* --- Móvil: submodales y secundarios --- */
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .capa-ajustes .ds-modal-tit {
-    font-size: 1.75rem !important;
-  }
 
   .play-v3:has(.game-shell) .capa-ficha .ficha-rel-overlay {
     padding: .55rem;
@@ -558,12 +555,6 @@
   font-weight: 700;
 }
 
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .capa-inventario .inv-tit,
-  .play-v3:has(.game-shell) .capa-ajustes .ds-modal-tit {
-    font-size: 1.75rem !important;
-  }
-}
 
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .play-root.pc[data-capa="ajustes"] .capa-ajustes.ajust-modal-papel,
