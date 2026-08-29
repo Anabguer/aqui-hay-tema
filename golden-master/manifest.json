@@ -1,12 +1,12 @@
 {
-  "capturedAt": "2026-08-29T08:54:32.110Z",
+  "capturedAt": "2026-08-29T08:58:03.651Z",
   "prodBase": "https://intocables13.com/juegos/aqui-hay-tema",
   "seed": "forensic-desktop-081105-v1",
-  "originDeployIntegratedHead": "92ac1aefc85b48ce1b26d5672d0a26f96a0dedb2",
+  "originDeployIntegratedHead": "80b013e3e56ed34480c4f841f2057341544de2cc",
   "mobile": {
     "file": "golden-master/GOLDEN_INICIO_MOBILE.png",
-    "sha256": "65b4df286948ab627b4df7f4865a356a09b7eccdbb82a621da69800b3ddf2ab2",
-    "bytes": 225657,
+    "sha256": "126b71132468d284722e992a86b3cd8decff45fe1b4fab6075a049e43e55a8b6",
+    "bytes": 227354,
     "audit": {
       "playRootClass": "play-root phone",
       "inicioMobileDisplay": "block",
@@ -24,8 +24,8 @@
   },
   "desktop": {
     "file": "golden-master/GOLDEN_INICIO_DESKTOP.png",
-    "sha256": "96454aafc44ba766743250f34b4478f61e7aa542c9f31ab7ff34d68b7efe87d8",
-    "bytes": 493376,
+    "sha256": "99acb93f44d696cf4851c7f2ffc09d0925e0b2908509c11548e13881545d8a8d",
+    "bytes": 507910,
     "audit": {
       "playRootClass": "play-root pc",
       "inicioMobileDisplay": "none",
