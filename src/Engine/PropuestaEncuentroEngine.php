@@ -20,8 +20,11 @@ final class PropuestaEncuentroEngine
     /** Marcador B4: acepta porque el ES el plan que pidió por Mensajitos. */
     public const MARCA_COMPROMISO_PETICION = 'compromiso_peticion_propia';
 
-    /** M1 tutorial: aceptación pedagógica determinista (solo mientras M1 pendiente). */
+    /** M1 tutorial: aceptación pedagógica determinista (solo mientras M1 pendiente). @deprecated Usar MARCA_COMPROMISO_TUTORIAL */
     public const MARCA_COMPROMISO_TUTORIAL_M1 = 'compromiso_tutorial_m1';
+
+    /** Garantía pedagógica tutorial genérica (cualquier misión activa). */
+    public const MARCA_COMPROMISO_TUTORIAL = 'compromiso_tutorial';
 
     public static function listar(array $partida): array
     {
@@ -77,10 +80,12 @@ final class PropuestaEncuentroEngine
         }
         $tipo = PropuestaNivel::aliasTipo($tipo);
         $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
-        $pedagogicaM1 = TutorialPrimerosPasos::esPropuestaPedagogicaM1($partida, $participantes, $tipo);
+        $misionTutorial = TutorialPrimerosPasos::esPropuestaPedagogicaTutorial($partida, $participantes, $tipo);
+        $pedagogicaTutorial = $misionTutorial !== '';
+        $pedagogicaM1 = $misionTutorial === TutorialPrimerosPasos::M1;
         if (count($participantes) >= 2
             && $tipo !== 'individual'
-            && !$pedagogicaM1
+            && !$pedagogicaTutorial
             && !PropuestaNivel::permite($partida, (string) $participantes[0], (string) $participantes[1], $tipo, $calDef)
         ) {
             $motivo = OrganizarMotivo::de(
@@ -102,7 +107,7 @@ final class PropuestaEncuentroEngine
             }
             return $r;
         }
-        if (!$pedagogicaM1 && count($participantes) >= 1 && $tipo !== 'individual') {
+        if (!$pedagogicaTutorial && count($participantes) >= 1 && $tipo !== 'individual') {
             foreach ($participantes as $rid) {
                 $otro = self::otroParticipante($participantes, (string) $rid);
                 if ($otro === '') {
@@ -114,7 +119,7 @@ final class PropuestaEncuentroEngine
                     return $err;
                 }
             }
-        } elseif ($tipo === 'individual' && count($participantes) === 1) {
+        } elseif (!$pedagogicaTutorial && $tipo === 'individual' && count($participantes) === 1) {
             // Cooldown de plan individual: tras un rechazo real, el propio
             // residente marca cooldown hacia sí mismo para ese tipo. Reintento
             // inmediato = bloqueo neutro temporal; NO es rechazo nuevo.
@@ -247,8 +252,8 @@ final class PropuestaEncuentroEngine
             );
         }
 
-        if ($pedagogicaM1) {
-            TutorialPrimerosPasos::aplicarGarantiaPedagogicaM1($partida, $propuesta);
+        if ($pedagogicaTutorial) {
+            TutorialPrimerosPasos::aplicarGarantiaPedagogica($partida, $propuesta, $misionTutorial);
         }
 
         self::aplicarResolucionPlan($partida, $propuesta, $calDef);
@@ -832,11 +837,12 @@ final class PropuestaEncuentroEngine
         if (self::esCompromisoPeticionReaccion($reac)) {
             return true;
         }
-        if (($reac['motivo_tecnico'] ?? '') === self::MARCA_COMPROMISO_TUTORIAL_M1) {
+        $mt = (string) ($reac['motivo_tecnico'] ?? '');
+        if ($mt === self::MARCA_COMPROMISO_TUTORIAL_M1 || $mt === self::MARCA_COMPROMISO_TUTORIAL) {
             return true;
         }
         $f = is_array($reac['factores'] ?? null) ? $reac['factores'] : [];
-        return !empty($f['compromiso_tutorial_m1']);
+        return !empty($f['compromiso_tutorial_m1']) || !empty($f['compromiso_tutorial']);
     }
 
     /**

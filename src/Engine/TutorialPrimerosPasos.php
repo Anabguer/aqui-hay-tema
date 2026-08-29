@@ -16,6 +16,9 @@ final class TutorialPrimerosPasos
     public const M2 = 'pp_mensajito';
     public const M3 = 'pp_plan_solo_cine';
 
+    /** Marca genérica de garantía pedagógica tutorial (reemplaza la M1-específica). */
+    public const MARCA_COMPROMISO_TUTORIAL = 'compromiso_tutorial';
+
     /**
      * @param array<string, mixed> $config
      */
@@ -208,6 +211,98 @@ final class TutorialPrimerosPasos
     }
 
     /**
+     * Detecta si una propuesta satisface los requisitos de la misión tutorial activa.
+     * Devuelve el ID de la misión o '' si no coincide ninguna.
+     *
+     * @param list<string> $participantes
+     */
+    public static function esPropuestaPedagogicaTutorial(array $partida, array $participantes, string $tipo): string
+    {
+        if (!self::activo($partida) || !empty($partida['tutorial']['jugable_completado'])) {
+            return '';
+        }
+        if (self::estadoMision($partida, self::M1) === MisionDiariaEngine::EST_PENDIENTE) {
+            if (self::esPropuestaPedagogicaM1($partida, $participantes, $tipo)) {
+                return self::M1;
+            }
+        }
+        if (self::estadoMision($partida, self::M3) === MisionDiariaEngine::EST_PENDIENTE) {
+            $tercero = (string) ($partida['tutorial']['tercero'] ?? '');
+            if ($tercero !== '' && PropuestaNivel::aliasTipo($tipo) === 'individual'
+                && count($participantes) === 1 && (string) $participantes[0] === $tercero
+            ) {
+                return self::M3;
+            }
+        }
+        return '';
+    }
+
+    /**
+     * Garantía pedagógica genérica: aceptación determinista para cualquier misión tutorial activa.
+     * Solo indisponibilidad real de agenda se respeta.
+     *
+     * @param array<string, mixed> $propuesta
+     */
+    public static function aplicarGarantiaPedagogica(array &$partida, array &$propuesta, string $misionId): void
+    {
+        $parts = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
+        $tipo = (string) ($propuesta['tipo'] ?? '');
+        $lugar = (string) ($propuesta['lugar'] ?? '');
+
+        $detectada = self::esPropuestaPedagogicaTutorial($partida, $parts, $tipo);
+        if ($detectada === '' || $detectada !== $misionId) {
+            return;
+        }
+
+        if ($misionId === self::M3) {
+            $lugM3 = (string) ($partida['tutorial']['lugar_mision3'] ?? 'lug_cine');
+            if ($lugar !== $lugM3) {
+                return;
+            }
+        }
+
+        $esM1 = ($misionId === self::M1);
+        $marca = $esM1
+            ? PropuestaEncuentroEngine::MARCA_COMPROMISO_TUTORIAL_M1
+            : self::MARCA_COMPROMISO_TUTORIAL;
+        $factorKey = $esM1 ? 'compromiso_tutorial_m1' : 'compromiso_tutorial';
+
+        foreach ($propuesta['reacciones'] as $i => $reac) {
+            if (!is_array($reac)) {
+                continue;
+            }
+            if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
+                && ($reac['clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
+            ) {
+                continue;
+            }
+            $pAntes = $reac['p'] ?? null;
+            $propuesta['reacciones'][$i]['decision'] = PropuestaEncuentro::DECISION_ACEPTA;
+            $propuesta['reacciones'][$i]['clase'] = null;
+            $propuesta['reacciones'][$i]['motivo_tecnico'] = $marca;
+            $propuesta['reacciones'][$i]['motivo_tipo'] = null;
+            $propuesta['reacciones'][$i]['copy_id'] = null;
+            $propuesta['reacciones'][$i]['_bloqueado_decision'] = false;
+            if (!isset($propuesta['reacciones'][$i]['factores']) || !is_array($propuesta['reacciones'][$i]['factores'])) {
+                $propuesta['reacciones'][$i]['factores'] = [];
+            }
+            if ($pAntes !== null) {
+                $propuesta['reacciones'][$i]['factores']['p_sin_garantia_tutorial'] = $pAntes;
+                if ($esM1) {
+                    $propuesta['reacciones'][$i]['factores']['p_sin_garantia_tutorial_m1'] = $pAntes;
+                }
+            }
+            $propuesta['reacciones'][$i]['factores'][$factorKey] = $misionId;
+            unset($propuesta['reacciones'][$i]['_joint_plan']);
+        }
+        $propuesta['garantia_tutorial'] = true;
+        $propuesta['garantia_tutorial_mision'] = $misionId;
+        if ($esM1) {
+            $propuesta['garantia_tutorial_m1'] = true;
+        }
+    }
+
+    /**
      * Propuesta pedagógica M1: pareja tutorial + presentar mientras M1 siga pendiente.
      *
      * @param list<string> $participantes
@@ -237,44 +332,13 @@ final class TutorialPrimerosPasos
     }
 
     /**
-     * Garantía focal del primer plan M1: aceptación determinista sin rechazo/cooldown/memoria
-     * de voluntad. Solo indisponibilidad real de agenda se respeta.
+     * Wrapper backward-compat: aplica garantía M1 (delega a la genérica).
      *
      * @param array<string, mixed> $propuesta
      */
     public static function aplicarGarantiaPedagogicaM1(array &$partida, array &$propuesta): void
     {
-        $parts = is_array($propuesta['participantes'] ?? null) ? $propuesta['participantes'] : [];
-        if (!self::esPropuestaPedagogicaM1($partida, $parts, (string) ($propuesta['tipo'] ?? ''))) {
-            return;
-        }
-        $marca = PropuestaEncuentroEngine::MARCA_COMPROMISO_TUTORIAL_M1;
-        foreach ($propuesta['reacciones'] as $i => $reac) {
-            if (!is_array($reac)) {
-                continue;
-            }
-            if (($reac['decision'] ?? '') === PropuestaEncuentro::DECISION_RECHAZA
-                && ($reac['clase'] ?? '') === PropuestaEncuentro::CLASE_INDISPONIBILIDAD
-            ) {
-                continue;
-            }
-            $pAntes = $reac['p'] ?? null;
-            $propuesta['reacciones'][$i]['decision'] = PropuestaEncuentro::DECISION_ACEPTA;
-            $propuesta['reacciones'][$i]['clase'] = null;
-            $propuesta['reacciones'][$i]['motivo_tecnico'] = $marca;
-            $propuesta['reacciones'][$i]['motivo_tipo'] = null;
-            $propuesta['reacciones'][$i]['copy_id'] = null;
-            $propuesta['reacciones'][$i]['_bloqueado_decision'] = false;
-            if (!isset($propuesta['reacciones'][$i]['factores']) || !is_array($propuesta['reacciones'][$i]['factores'])) {
-                $propuesta['reacciones'][$i]['factores'] = [];
-            }
-            if ($pAntes !== null) {
-                $propuesta['reacciones'][$i]['factores']['p_sin_garantia_tutorial_m1'] = $pAntes;
-            }
-            $propuesta['reacciones'][$i]['factores']['compromiso_tutorial_m1'] = self::M1;
-            unset($propuesta['reacciones'][$i]['_joint_plan']);
-        }
-        $propuesta['garantia_tutorial_m1'] = true;
+        self::aplicarGarantiaPedagogica($partida, $propuesta, self::M1);
     }
 
     /**
