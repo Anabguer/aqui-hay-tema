@@ -717,6 +717,7 @@ final class EventosPuebloEngine
         $hora = (int) ($evento['hora'] ?? 0);
         $horaUi = sprintf('%02d:00', max(0, min(23, $hora)));
         $selEstado = self::seleccionEstado($evento);
+        $elegVecinos = self::vecinosElegibles($partida, (string) ($evento['id'] ?? ''), null, $catalog)['vecinos'] ?? [];
 
         return [
             'evento_pueblo_id' => (string) ($evento['id'] ?? ''),
