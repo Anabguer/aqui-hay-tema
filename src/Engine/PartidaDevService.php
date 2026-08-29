@@ -64,6 +64,7 @@ final class PartidaDevService
             $enc['estado'] = 'terminado';
             $enc['resultado'] = EncuentroResolver::resolver($partida, $enc, $logger);
             EncuentroResolver::aplicarResultado($partida, $enc, $enc['resultado'], $logger);
+            EncuentroResultadoSlim::limpiarEncuentro($enc);
             return ['ok' => true, 'encuentro' => $enc];
         }
         return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['encuentro_id' => $encuentroId]);

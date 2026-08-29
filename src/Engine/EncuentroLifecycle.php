@@ -49,6 +49,7 @@ final class EncuentroLifecycle
                     $enc['vida_pueblo_aplicada'] = true;
                 }
                 $enc['resultado'] = $resultado;
+                EncuentroResultadoSlim::limpiarEncuentro($enc);
                 DomainBootstrap::boot();
                 DomainEventDispatcher::emit($partida, DomainEvents::ENCUENTRO_TERMINADO, [
                     'encuentro' => $enc,
