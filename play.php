@@ -1,3 +1,18 @@
+<?php
+declare(strict_types=1);
+header('Content-Type: text/html; charset=utf-8');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
+$ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
+$ahtUi = 'v3-static';
+if (is_file($ahtBusterFile)) {
+    $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
+    if ($ahtBusterRaw !== '') {
+        $ahtUi = $ahtBusterRaw;
+    }
+}
+$ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/play.php')), '/') . '/';
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -10,56 +25,56 @@
   <meta name="apple-mobile-web-app-title" content="Aquí Hay Tema"/>
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
-  <link rel="manifest" href="/juegos/aqui-hay-tema/manifest.webmanifest"/>
+  <link rel="manifest" href="<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>manifest.webmanifest"/>
   <link rel="icon" href="assets/brand/pwa-icon-192.png" type="image/png" sizes="192x192"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
-  <link rel="stylesheet" href="assets/css/play-v3.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/components.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-mobile.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/cotilleos-scrapbook-v1.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/vecinos-celdas-persona-v1.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/org-plan-scrapbook-v1.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=v3-20260829-104240"/>
-  <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=v3-20260829-104240"/>
+  <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mensajitos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-mapa-canonico.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-bloques-residencias.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/capas-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/cotilleos-scrapbook-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/vecinos-celdas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-ficha.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/org-plan-scrapbook-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-review.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-interior.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .88rem;
@@ -459,13 +474,18 @@
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
             <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr&aacute;s">? Atr&aacute;s</button>
             <header class="quien-bloque quien-bloque--lugar">
+              <figure class="quien-edificio-art" data-q-edificio hidden>
+                <img data-q-edificio-img alt="" loading="lazy" decoding="async"/>
+              </figure>
               <h3 class="quien-lugar-tit" data-q-tit></h3>
               <p class="quien-horario" data-q-horario hidden></p>
             </header>
             <section class="quien-bloque quien-bloque--presencia">
-              <p class="libreta-kicker quien-kicker">&#8212;Qui&#8212;n est&#8212;?</p>
-              <p class="quien-vacio" data-q-sum hidden></p>
-              <div class="quien-list quien-residentes" data-q-list></div>
+              <p class="quien-kicker">&#191;Qui&#233;n est&#225;?</p>
+              <div class="quien-presencia-cuerpo">
+                <p class="quien-vacio" data-q-sum hidden></p>
+                <div class="quien-list quien-residentes" data-q-list></div>
+              </div>
             </section>
             <div class="quien-bloque quien-bloque--tema quien-tema" data-q-tema hidden></div>
             <div class="destinos" data-q-btns></div>
@@ -751,7 +771,7 @@
               <h2 class="par-tit ds-modal-tit ds-modal-tit--pink">Parejas</h2>
             </div>
           </div>
-          <p class="par-sub mini" data-parejas-teaser">&mdash;</p>
+          <p class="par-sub mini" data-parejas-teaser hidden></p>
         </header>
         <div class="par-body capa-scroll" data-parejas-modal-list></div>
       </aside>
@@ -1137,7 +1157,9 @@
           </button>
         </div>
       </aside>
-            <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
+            
+            <div class="inicio-planes-agenda" data-inicio-planes-agenda aria-label="Agenda de planes">
+<section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             <h3 class="enc-mov-tit">PLANES EN CURSO<span class="plan-seccion-cnt" data-encursos-count hidden aria-hidden="true"></span></h3>
@@ -1177,6 +1199,7 @@
               <span class="obj-nuevo-plan-txt">Crear plan</span>
             </button>
 </section>
+            </div>
             <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
@@ -1235,43 +1258,42 @@
         </section>
             <section class="shell-grupo inicio-mp-duo" data-inicio-mp-duo aria-label="Misiones y parejas">
           <button type="button" class="inicio-mp-card inicio-mp-card--mis" data-open="misiones" aria-label="Ver misiones de hoy">
-            <div class="inicio-mp-cuerpo">
-              <span class="inicio-mp-ico inicio-mp-ico--mis" aria-hidden="true"></span>
-              <div class="inicio-mp-main">
+            <span class="inicio-mp-ico inicio-mp-ico--mis" aria-hidden="true"></span>
+            <div class="inicio-mp-main">
+              <div class="inicio-mp-head">
                 <span class="inicio-mp-tit" data-misiones-tit-corta>MISIONES</span>
+                <span class="inicio-mp-badge" data-misiones-count hidden></span>
+              </div>
+              <div class="inicio-mp-sub">
                 <span class="inicio-mp-resumen" data-misiones-resumen-corta></span>
-                <span class="inicio-mp-progreso" data-misiones-progreso aria-hidden="true"></span>
+                <span class="inicio-mp-pill" data-misiones-progreso hidden aria-hidden="true"></span>
               </div>
             </div>
-            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
+            <span class="inicio-mp-chevron" aria-hidden="true">&#8250;</span>
           </button>
           <button type="button" class="inicio-mp-card inicio-mp-card--par" data-open="parejas" aria-label="Ver parejas del pueblo">
-            <div class="inicio-mp-cuerpo">
+            <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
+            <div class="inicio-mp-main">
               <span class="inicio-mp-tit" data-parejas-tit-corta>PAREJAS</span>
-              <div class="inicio-mp-par-mid">
-                <div class="inicio-mp-par-izq">
-                  <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
-                  <span class="inicio-mp-resumen" data-parejas-resumen-corta></span>
-                </div>
-                <span class="inicio-mp-par-faces" data-parejas-preview-faces aria-hidden="true"></span>
-              </div>
+              <span class="inicio-mp-resumen" data-parejas-resumen-corta></span>
+              <span class="inicio-mp-par-faces" data-parejas-preview-faces hidden aria-hidden="true"></span>
             </div>
-            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
+            <span class="inicio-mp-chevron" aria-hidden="true">&#8250;</span>
           </button>
         </section>
         </div>
       </section>
 
     </div>
-  </div>  <script src="assets/js/lab-audit.js?v=v3-20260829-104240"></script>
-  <script src="assets/js/play-v3-audio.js?v=v3-20260829-104240"></script>
-  <script src="assets/js/hobby-icons.js?v=v3-20260829-104240"></script>
-  <script src="assets/js/play-v3.js?v=v3-20260829-104240"></script>
-  <script src="assets/js/play-v3-lab.js?v=v3-20260829-104240"></script>
+  </div>  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-      navigator.serviceWorker.register('/juegos/aqui-hay-tema/sw.js', { scope: '/juegos/aqui-hay-tema/' })
+      navigator.serviceWorker.register('<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>sw.js', { scope: '<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>' })
         .catch(function (err) { console.warn('PWA service worker:', err); });
     });
   }
