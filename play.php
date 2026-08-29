@@ -241,9 +241,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <button type="button" data-horas="168">+7 d—as</button>
       <button type="button" data-horas="720">+30 d—as</button>
       <button type="button" id="btn-debug-proximo">Ir al pr—ximo</button>
-      <button type="button" id="btn-debug-copy">Copiar debug</button>
-      <button type="button" id="btn-debug-download">Descargar debug</button>
-      <button type="button" id="btn-debug-copy-estado">Copiar estado</button>
+      <button type="button" id="btn-debug-copy" data-debug-copy>Copiar debug</button>
+      <button type="button" id="btn-debug-download" data-debug-download>Descargar debug</button>
+      <button type="button" id="btn-debug-copy-estado" data-debug-copy-estado>Copiar estado</button>
       <button type="button" id="btn-debug-parejas-crear">Crear parejas de prueba</button>
       <button type="button" id="btn-debug-parejas-quitar">Quitar parejas de prueba</button>
       <div class="aht-sfx-debug" aria-label="Prueba de efectos de sonido">
@@ -298,8 +298,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <section class="play-lab-panel" data-lab-panel="tecnico" hidden>
           <p style="font-size:.78rem;color:#6a5d4f">Exportaci—n t—cnica completa (estado + historial de sesi—n DEBUG).</p>
           <div class="lab-export-bar">
-            <button type="button" id="btn-lab-debug-export">Copiar debug completo</button>
-            <button type="button" id="btn-lab-debug-estado">Copiar solo estado</button>
+            <button type="button" id="btn-lab-debug-export" data-debug-copy>Copiar debug completo</button>
+            <button type="button" id="btn-lab-debug-estado" data-debug-copy-estado>Copiar solo estado</button>
+            <button type="button" data-debug-download>Descargar debug</button>
           </div>
           <pre class="lab-json-pre" data-lab-tecnico-pre>(usa los botones de arriba)</pre>
         </section>

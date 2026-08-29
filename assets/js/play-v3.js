@@ -7464,12 +7464,21 @@ function hobbyIconKey(id, texto) {
       ahtDebugSessionLog.length = 0;
       await nuevaPartidaLimpia();
     });
-    const btnCopy = $('#btn-debug-copy');
-    if (btnCopy) btnCopy.addEventListener('click', function () { copiarDebugExport(false); });
-    const btnDownload = $('#btn-debug-download');
-    if (btnDownload) btnDownload.addEventListener('click', function () { descargarDebugExport(false); });
-    const btnCopyEstado = $('#btn-debug-copy-estado');
-    if (btnCopyEstado) btnCopyEstado.addEventListener('click', function () { copiarDebugExport(true); });
+    $$('[data-debug-copy]').forEach(function (btn) {
+      if (btn._ahtDebugCopyBound) return;
+      btn._ahtDebugCopyBound = true;
+      btn.addEventListener('click', function () { copiarDebugExport(false); });
+    });
+    $$('[data-debug-copy-estado]').forEach(function (btn) {
+      if (btn._ahtDebugCopyEstadoBound) return;
+      btn._ahtDebugCopyEstadoBound = true;
+      btn.addEventListener('click', function () { copiarDebugExport(true); });
+    });
+    $$('[data-debug-download]').forEach(function (btn) {
+      if (btn._ahtDebugDownloadBound) return;
+      btn._ahtDebugDownloadBound = true;
+      btn.addEventListener('click', function () { descargarDebugExport(false); });
+    });
     const btnParejasCrear = $('#btn-debug-parejas-crear');
     if (btnParejasCrear) btnParejasCrear.addEventListener('click', crearParejasPruebaDebug);
     const btnParejasQuitar = $('#btn-debug-parejas-quitar');
