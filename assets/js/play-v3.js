@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   'use strict';
 
   function ctaEncuentroMovVisible(enc, iv) {
@@ -653,6 +653,15 @@
   var TUT_CARA_ICONS = ['\u2661', '\u2605', '?'];
   var TUT_POL_MARKS = ['\u2605', '\u2661', '\u273F'];
   var TUT_POL_MODS = ['tut-pol--rose', 'tut-pol--sky', 'tut-pol--leaf'];
+  var TUT_ICON_SVG = {
+    observa: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="13" r="7" stroke="#3b3028" stroke-width="1.8"/><line x1="18.2" y1="18.2" x2="25" y2="25" stroke="#3b3028" stroke-width="1.8" stroke-linecap="round"/><circle cx="13" cy="13" r="2.6" fill="#e9b4c0"/></svg>',
+    propon: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16 5c-3.4 4-7 6-7 11a7 7 0 0 0 14 0c0-5-3.6-7-7-11z" stroke="#3b3028" stroke-width="1.7" fill="#fff0cf"/><path d="M16 23v4M12.5 27h7" stroke="#3b3028" stroke-width="1.6" stroke-linecap="round"/><path d="M11 11.5c1.6-1.3 4.4-1.3 6 0" stroke="#3b3028" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    mira: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><ellipse cx="11" cy="15" rx="6" ry="4.4" stroke="#3b3028" stroke-width="1.7"/><ellipse cx="21" cy="15" rx="6" ry="4.4" stroke="#3b3028" stroke-width="1.7"/><circle cx="11" cy="15" r="1.8" fill="#3b3028"/><circle cx="21" cy="15" r="1.8" fill="#3b3028"/><path d="M4 22c4-4.5 19-4.5 24 0" stroke="#3b3028" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    mapa: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 8l8-3 6 3 8-3v20l-8 3-6-3-8 3z" stroke="#3b3028" stroke-width="1.7" fill="#e7f0ff"/><path d="M14 5v20M20 8v20" stroke="#3b3028" stroke-width="1.4"/></svg>',
+    vecinos: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="11.5" cy="11" r="4" stroke="#3b3028" stroke-width="1.7" fill="#f6e2ef"/><circle cx="21" cy="12.5" r="3.4" stroke="#3b3028" stroke-width="1.7" fill="#e2f0e6"/><path d="M4.5 25c0-4.5 3.6-7.4 7-7.4S19 20.5 19 25" stroke="#3b3028" stroke-width="1.6" stroke-linecap="round"/><path d="M16 25c0-3.6 2.4-6.2 5.5-6.2S27.5 21.4 27.5 25" stroke="#3b3028" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    mensajitos: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="8" width="24" height="15" rx="3" stroke="#3b3028" stroke-width="1.7" fill="#fff6e8"/><path d="M4 10.5l12 8 12-8" stroke="#3b3028" stroke-width="1.6" stroke-linejoin="round"/><path d="M11 23v3l4-3" stroke="#3b3028" stroke-width="1.6" stroke-linejoin="round" fill="#fff6e8"/></svg>',
+    plan: '<svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="6" y="7" width="20" height="19" rx="3" stroke="#3b3028" stroke-width="1.7" fill="#fff6e8"/><path d="M6 12h20" stroke="#3b3028" stroke-width="1.5"/><path d="M11 5v4M21 5v4" stroke="#3b3028" stroke-width="1.6" stroke-linecap="round"/><path d="M16 16v6M13 19h6" stroke="#3b3028" stroke-width="1.7" stroke-linecap="round"/></svg>'
+  };
 
   function tutIntroKey() {
     return TUT_INTRO_KEY_PREFIX + (partidaId || 'sin_partida');
@@ -759,10 +768,14 @@
           var sym = document.createElement('span');
           sym.className = 'tut-bloque-sym';
           if (pasoNum === 1 && TUT_CARD_ICONS[i]) {
-            sym.innerHTML = '<img src="' + esc(tutAssetUrl(TUT_CARD_ICONS[i])) + '" alt=""/>';
+            var cardKey = ['observa', 'propon', 'mira'][i] || '';
+            sym.className = 'tut-bloque-sym tut-bloque-ico tut-bloque-ico--' + cardKey;
+            sym.innerHTML = TUT_ICON_SVG[cardKey] || '';
             div.classList.add('tut-bloque--card');
           } else if (pasoNum === 3 && b.tit && TUT_ROW_ICONS[b.tit]) {
-            sym.innerHTML = '<img src="' + esc(tutAssetUrl(TUT_ROW_ICONS[b.tit])) + '" alt=""/>';
+            var rowKey = ({ 'MAPA': 'mapa', 'VECINOS': 'vecinos', 'MENSAJITOS': 'mensajitos', 'NUEVO PLAN': 'plan' })[b.tit] || '';
+            sym.className = 'tut-bloque-sym tut-bloque-ico tut-bloque-ico--' + rowKey;
+            sym.innerHTML = TUT_ICON_SVG[rowKey] || '';
             div.classList.add('tut-bloque--row');
           } else { sym.textContent = b.simbolo || ''; }
           div.appendChild(sym);
@@ -2696,29 +2709,29 @@
   function renderPlanesUnifBlock(block, estado) {
     if (!block) return;
     const track = block.querySelector('[data-planes-unif-track]');
-    const resumen = block.querySelector('[data-planes-unif-resumen]');
+    const badges = block.querySelector('[data-planes-unif-badges]');
     if (!track) return;
     const curso = encuentrosEnCursoAhora(cacheInsp, estado);
     const proxFull = proximosPlanesFuturos(cacheInsp, estado);
     const prox = proxFull.slice(0, 6);
     const nCurso = curso.length;
     const nProx = proxFull.length;
-    if (resumen) {
+    if (badges) {
       var parts = [];
       if (nCurso > 0) {
-        parts.push('<span class="planes-unif-stat planes-unif-stat--curso">' + '<svg class="planes-unif-stat-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + '<span>' + String(nCurso) + ' en curso</span></span>');
+        parts.push('<span class="planes-unif-spine-badge planes-unif-spine-badge--curso" title="' + String(nCurso) + ' en curso">' + '<svg class="planes-unif-spine-badge-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + '<span class="planes-unif-spine-badge-num">' + String(nCurso) + '</span></span>');
       }
       if (nProx > 0) {
-        parts.push('<span class="planes-unif-stat planes-unif-stat--prox">' + '<svg class="planes-unif-stat-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + '<span>' + String(nProx) + ' pr\u00f3ximos</span></span>');
+        parts.push('<span class="planes-unif-spine-badge planes-unif-spine-badge--prox" title="' + String(nProx) + ' pr\u00f3ximos">' + '<svg class="planes-unif-spine-badge-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' + '<span class="planes-unif-spine-badge-num">' + String(nProx) + '</span></span>');
       }
       if (parts.length) {
-        resumen.innerHTML = parts.join('<span class="planes-unif-stat-sep" aria-hidden="true">\u00b7</span>');
-        resumen.hidden = false;
-        resumen.removeAttribute('aria-hidden');
+        badges.innerHTML = parts.join('');
+        badges.hidden = false;
+        badges.removeAttribute('aria-hidden');
       } else {
-        resumen.innerHTML = '';
-        resumen.hidden = true;
-        resumen.setAttribute('aria-hidden', 'true');
+        badges.innerHTML = '';
+        badges.hidden = true;
+        badges.setAttribute('aria-hidden', 'true');
       }
     }
     const total = nCurso + prox.length;
@@ -3828,7 +3841,7 @@
         mark.type = 'button';
         mark.className = 'quien-tema-mark quien-tema-mark--' + esc((tv && tv.categoria) || 'hecho');
         mark.setAttribute('aria-label', 'Aquí hay tema');
-        mark.textContent = (tv && tv.categoria_icono) || '◎';
+        mark.textContent = (tv && tv.categoria_icono) || '?';
         (function (temaId) {
           mark.addEventListener('click', function (ev) {
             ev.stopPropagation();
@@ -3869,7 +3882,7 @@
     box.hidden = false;
     box.innerHTML = activos.slice(0, 2).map(function (tv) {
       var cat = tv.categoria_etiqueta || 'Aquí hay tema';
-      var ico = tv.categoria_icono || '◎';
+      var ico = tv.categoria_icono || '?';
       var dest = tv.destacado ? ' quien-tema--destacado' : '';
       return '<section class="quien-tema-card' + dest + '">' +
         '<p class="quien-tema-kicker">Aquí hay tema</p>' +
@@ -4720,14 +4733,14 @@
 
   function emojiRel(rel) {
     if (!rel) return '';
-    if (rel.etiqueta_vinculo === 'crisis') return '💔 ';
-    if (rel.etiqueta_vinculo === 'pareja') return '❤️ ';
-    if (rel.etiqueta_vinculo === 'ex_pareja') return '💔 ';
+    if (rel.etiqueta_vinculo === 'crisis') return '?? ';
+    if (rel.etiqueta_vinculo === 'pareja') return '?? ';
+    if (rel.etiqueta_vinculo === 'ex_pareja') return '?? ';
     const s = rel.etiqueta_social || '';
-    if (s === 'cae_mal') return '😒 ';
-    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '🤝 ';
-    if (s === 'amigo') return '🙂 ';
-    if (s === 'conocido') return '👋 ';
+    if (s === 'cae_mal') return '?? ';
+    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '?? ';
+    if (s === 'amigo') return '?? ';
+    if (s === 'conocido') return '?? ';
     return '';
   }
 
@@ -5056,7 +5069,7 @@ function canonEmoId(id) {
 
 
   function emoEmojiFicha(emo) {
-    const map = { neutro: '😐', alegre: '😊', triste: '😢', enfadado: '😤' };
+    const map = { neutro: '??', alegre: '??', triste: '??', enfadado: '??' };
     return map[canonEmoId(emo)] || map.neutro;
   }
 
@@ -5112,8 +5125,8 @@ function canonEmoId(id) {
   }
 
   function emoModalIcono(estadoId) {
-    const map = { alegre: '😊', triste: '😢', enfadado: '😤', neutro: '😐' };
-    return map[canonEmoId(estadoId)] || '😐';
+    const map = { alegre: '??', triste: '??', enfadado: '??', neutro: '??' };
+    return map[canonEmoId(estadoId)] || '??';
   }
 
   function htmlAnimoModal(exp, nom) {
@@ -5136,7 +5149,7 @@ function canonEmoId(id) {
         '</div></div>';
     }
     const consejo = exp.consejo
-      ? '<p class="animo-modal-hint">💡 ' + esc(exp.consejo) + '</p>'
+      ? '<p class="animo-modal-hint">?? ' + esc(exp.consejo) + '</p>'
       : '';
     return '<div class="animo-modal-top">' +
       '<div class="animo-modal-avatar">' + img + '</div>' +
@@ -5146,7 +5159,7 @@ function canonEmoId(id) {
       '<span class="animo-modal-estado animo-modal-estado--' + esc(emoId) + '">' +
       '<span class="animo-modal-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
       estadoTxt + '</span>' +
-      (desde ? '<span class="animo-modal-desde">🕐 ' + desde + '</span>' : '') +
+      (desde ? '<span class="animo-modal-desde">?? ' + desde + '</span>' : '') +
       '</div>' +
       '<span class="animo-modal-ribbon animo-modal-ribbon--lav">¿Qué ha pasado?</span>' +
       '<div class="animo-modal-causa animo-modal-causa--illus">' +
@@ -5154,7 +5167,7 @@ function canonEmoId(id) {
       '<span class="animo-modal-conflicto" aria-hidden="true"></span>' +
       '</div>' +
       mientras +
-      '<button type="button" class="animo-modal-cta" data-animo-org>📅 Organizar un plan</button>' +
+      '<button type="button" class="animo-modal-cta" data-animo-org>?? Organizar un plan</button>' +
       '<button type="button" class="animo-modal-ghost" data-animo-diario>Ver en su diario</button>' +
       consejo;
   }
@@ -5204,21 +5217,21 @@ function canonEmoId(id) {
   function categoriaDiarioMeta(cat) {
     const c = String(cat || '').toLowerCase();
     if (c.indexOf('animo') >= 0 || c.indexOf('emoc') >= 0) {
-      return { cls: 'pg-pill--red', txt: 'Ánimo', icon: '😤', grupo: 'cambios' };
+      return { cls: 'pg-pill--red', txt: 'Ánimo', icon: '??', grupo: 'cambios' };
     }
     if (c.indexOf('relac') >= 0 || c.indexOf('romance') >= 0 || c.indexOf('hito') >= 0) {
-      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '💔', grupo: 'relaciones' };
+      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '??', grupo: 'relaciones' };
     }
     if (c.indexOf('encuentro') >= 0) {
-      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '💔', grupo: 'relaciones' };
+      return { cls: 'pg-pill--mustard', txt: 'Relación', icon: '??', grupo: 'relaciones' };
     }
     if (c.indexOf('plan') >= 0) {
-      return { cls: 'pg-pill--lavender', txt: 'Plan', icon: '💡', grupo: 'planes' };
+      return { cls: 'pg-pill--lavender', txt: 'Plan', icon: '??', grupo: 'planes' };
     }
     if (c.indexOf('llegada') >= 0) {
-      return { cls: 'pg-pill--green', txt: 'Historia', icon: '🏢', grupo: 'cambios' };
+      return { cls: 'pg-pill--green', txt: 'Historia', icon: '??', grupo: 'cambios' };
     }
-    return { cls: 'pg-pill--tan', txt: 'Cambio', icon: '✦', grupo: 'cambios' };
+    return { cls: 'pg-pill--tan', txt: 'Cambio', icon: '?', grupo: 'cambios' };
   }
 
   function diarioEntradaMatchFiltro(e, filtro) {
@@ -5333,7 +5346,7 @@ function canonEmoId(id) {
       '<b class="ficha-diario-head-tit fdi-head-tit">Diario de ' + esc(nom) + '</b>' +
       '<p class="ficha-diario-head-sub fdi-head-sub">Su historia en el pueblo</p>' +
       '</div>' +
-      '<span class="ficha-diario-count fdi-count">📓 ' + total + ' recuerdos</span></div>';
+      '<span class="ficha-diario-count fdi-count">?? ' + total + ' recuerdos</span></div>';
   }
 
   function syncDiarioVecinoFiltros() {
@@ -5344,7 +5357,7 @@ function canonEmoId(id) {
     });
     const ord = $('[data-diario-orden]');
     if (ord) {
-      ord.textContent = diarioVecinoOrden === 'antiguo' ? '☰ Más antiguo' : '☰ Más reciente';
+      ord.textContent = diarioVecinoOrden === 'antiguo' ? '? Más antiguo' : '? Más reciente';
     }
     const busca = $('[data-diario-busca]');
     if (busca && busca.value !== diarioVecinoBusca) busca.value = diarioVecinoBusca;
@@ -5444,9 +5457,9 @@ function hobbyIconKey(id, texto) {
 
   function emojiHobby(txt) {
     const t = String(txt || '').toLowerCase();
-    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '☕ ';
-    if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '📖 ';
-    if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '🌳 ';
+    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '? ';
+    if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '?? ';
+    if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '?? ';
     return '';
   }
 
@@ -6940,8 +6953,8 @@ function hobbyIconKey(id, texto) {
         (img ? '<img src="' + esc(img) + '" alt=""/>' : '<span class="org-picker-ini">' + esc(ini) + '</span>') +
         '</span>' +
         (sel.indexOf(id) >= 0 ? '<span class="org-picker-check" aria-hidden="true">?</span>' : '') +
-        (yaApuntado ? '<span class="org-picker-apuntado" aria-hidden="true">✓</span>' : '') +
-        (noElegible ? '<span class="org-picker-bloq" aria-hidden="true">🔒</span>' : '') +
+        (yaApuntado ? '<span class="org-picker-apuntado" aria-hidden="true">?</span>' : '') +
+        (noElegible ? '<span class="org-picker-bloq" aria-hidden="true">??</span>' : '') +
         '</span><span class="org-picker-nom">' + esc(nom) + '</span>';
       btn.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); if (!yaApuntado && !noElegible) toggleOrgPicker(id); });
       box.appendChild(btn);
