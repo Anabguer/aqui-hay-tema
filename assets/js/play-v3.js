@@ -1473,6 +1473,183 @@
     }
     toast(txt);
   }
+
+  function mensajitoPlazoLabel(m) {
+    if (!m || m.estado_pueblo === 'caducada') return '';
+    const raw = String(m.plazo_humano || '').trim();
+    if (!raw || raw === 'Cuando puedas.') return '';
+    if (raw === 'El tiempo se acaba.') return 'Últimas horas';
+    let label = raw.replace(/^Te quedan\s+/i, 'Quedan ').replace(/^Te queda\s+/i, 'Queda ');
+    if (/^quedan?\s+\d+\s*h/i.test(label)) {
+      return label.charAt(0).toUpperCase() + label.slice(1);
+    }
+    return raw;
+  }
+
+  function mensajitoEstadoNatural(m) {
+    const pueblo = m.estado_pueblo || '';
+    const tipo = String(m.tipo || '');
+    const familia = String(m.familia_mensajito || '');
+    const origenTipo = String((m.origen && m.origen.tipo_evento) || '');
+    if (pueblo === 'cumplida') {
+      if (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado') return 'Petición resuelta';
+      return 'Hecho';
+    }
+    if (pueblo === 'caducada') {
+      if (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado') return '';
+      return 'Ya no necesita ayuda';
+    }
+    if ((m.estado || '') === 'en_espera') return 'En espera';
+    if ((m.estado || '') === 'resuelto' && !mensajitoTieneAccionReal(m)) {
+      if (familia === 'f_seguimiento') return 'Seguimiento cerrado';
+      if (familia === 'cierre_evento_pueblo') return 'Evento cerrado';
+      return 'Cerrado';
+    }
+    return '';
+  }
+
+  function mensajitoEstadoIcono(txt) {
+    if (!txt) return '';
+    if (/resuelta|hecho|cerrado/i.test(txt)) return '\u2713';
+    if (/espera|ya no/i.test(txt)) return '\u25CB';
+    return '\u2022';
+  }
+
+
+  function mensajitoTsOrden(m) {
+    if (!m) return 0;
+    const dia = (m.ts_juego && m.ts_juego.dia) || m.dia || 0;
+    const hora = typeof mensajitoHora === 'function' ? mensajitoHora(m) : 0;
+    return dia * 24 + hora;
+  }
+
+  function mensajitoPermiteOrigenPorHilo(m) {
+    if (!m) return false;
+    const hilo = String(m.hilo_id || '').trim();
+    if (!hilo) return false;
+    const tipo = String(m.tipo || '');
+    const fam = String(m.familia_mensajito || '');
+    if (tipo === 'peticion_resultado') return true;
+    if (fam === 'f_seguimiento' || fam === 'cierre_evento_pueblo') return true;
+    if (tipo === 'respuesta_plan') return true;
+    return false;
+  }
+
+  function mensajitoBuscarOrigen(m, allMsgs) {
+    if (!m) return null;
+    const mid = String(m.mensaje_origen_id || '').trim();
+    if (mid) {
+      const found = (allMsgs || []).find(function (x) { return x && String(x.id) === mid; });
+      if (found) return found;
+    }
+    const pid = String(m.peticion_id || '').trim();
+    const tipo = String(m.tipo || '');
+    const origenTipo = String((m.origen && m.origen.tipo_evento) || '');
+    if (pid && (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado')) {
+      const candidatos = (allMsgs || []).filter(function (x) {
+        if (!x || x.id === m.id) return false;
+        if (String(x.peticion_id || '') !== pid) return false;
+        const t = String(x.tipo || '');
+        const fam = String(x.familia_mensajito || '');
+        return t === 'peticion' || fam === 'f_peticion' || fam === 'f_presentacion';
+      }).sort(function (a, b) { return mensajitoTsOrden(a) - mensajitoTsOrden(b); });
+      if (candidatos.length) return candidatos[0];
+    }
+    const hilo = String(m.hilo_id || '').trim();
+    if (hilo && mensajitoPermiteOrigenPorHilo(m)) {
+      const miTs = mensajitoTsOrden(m);
+      const candidatos = (allMsgs || []).filter(function (x) {
+        if (!x || x.id === m.id) return false;
+        if (String(x.hilo_id || '') !== hilo) return false;
+        return mensajitoTsOrden(x) < miTs;
+      }).sort(function (a, b) { return mensajitoTsOrden(a) - mensajitoTsOrden(b); });
+      if (candidatos.length) return candidatos[candidatos.length - 1];
+    }
+    return null;
+  }
+
+  function mensajitoTituloHilo(origen) {
+    if (!origen) return 'Mensaje anterior';
+    const fam = String(origen.familia_mensajito || '');
+    const nom = nombrePublicoDe(origen);
+    if (fam === 'f_peticion' || fam === 'f_presentacion' || origen.tipo === 'peticion') {
+      return 'Petición de ' + nom;
+    }
+    if (fam === 'anuncio_evento_pueblo') return 'Anuncio del evento';
+    if (fam === 'f_colectivo') return 'Propuesta del pueblo';
+    if (fam === 'f_seguimiento') return 'Consejo anterior';
+    return 'Mensaje de ' + nom;
+  }
+
+  function htmlMensajitoHilo(origen) {
+    if (!origen) return '';
+    const nomOrig = nombrePublicoDe(origen);
+    let cuerpo = cuerpoMensajito(origen, nomOrig);
+    if (cuerpo.length > 120) cuerpo = cuerpo.slice(0, 117) + '\u2026';
+    const cuando = mensajitoCuandoLabel(origen);
+    return '<div class="carta-hilo" aria-label="Contexto del mensaje">' +
+      '<div class="carta-hilo-origen">' +
+      '<span class="carta-hilo-tit">' + esc(mensajitoTituloHilo(origen)) + '</span>' +
+      '<p class="carta-hilo-cuerpo">\u201C' + esc(cuerpo) + '\u201D</p>' +
+      (cuando ? '<span class="carta-hilo-cuando">' + esc(cuando) + '</span>' : '') +
+      '</div>' +
+      '<div class="carta-hilo-flecha" aria-hidden="true"></div>' +
+      '</div>';
+  }
+
+  function mensajitoCtaAccionLabel(m, accionId, etiquetaDefecto) {
+    const fam = String(m.familia_mensajito || '');
+    const datos = (m.datos_familia && typeof m.datos_familia === 'object') ? m.datos_familia : {};
+    const plantilla = String(datos.plantilla_id || '');
+    switch (accionId) {
+      case 'organizar_algo':
+        if (fam === 'f_duda_permanencia') return 'Ayudarle a quedarse';
+        if (fam === 'f_alerta_vecinal') return 'Organizar algo con él';
+        return 'Organizar plan';
+      case 'organizar_encargo':
+        if (fam === 'f_presentacion' || plantilla === 'conocer_a_alguien') return 'Elegir plan';
+        if (plantilla === 'algo_distinto') return 'Organizar algo distinto';
+        return 'Ayudarle a organizarlo';
+      case 'organizar_cumple':
+        return 'Organizar su cumple';
+      case 'investigar':
+        return 'Ver perfil';
+      case 'mediar_reparar':
+        return 'Mediar entre ellos';
+      case 'participar_cumple':
+        return 'Felicitarle';
+      default:
+        return etiquetaDefecto || '';
+    }
+  }
+
+  function mensajitoCtaOrganizarLabel(m) {
+    const preset = m.preset_organizar;
+    if (!preset || typeof preset !== 'object') return 'Organizar plan';
+    const modo = String(preset.modo || preset.tipo || '').toLowerCase();
+    const fam = String(m.familia_mensajito || '');
+    if (fam === 'f_presentacion' || modo === 'presentar') return 'Elegir plan';
+    if (modo === 'pareja') return 'Organizar quedada';
+    if (modo === 'solo') return 'Organizar plan';
+    return 'Ayudarle a organizarlo';
+  }
+
+  function mensajitoCtaDestinoLabel(m) {
+    const tipo = String(m.tipo || '');
+    if (tipo === 'respuesta_plan') return 'Leer respuesta';
+    if (tipo === 'peticion_resultado') return '';
+    if (tipo === 'marcha_publica' || tipo === 'marcha_despedida' || tipo === 'legado_despedida') return '';
+    if (!mensajitoDestinoFicha(m)) return '';
+    return mensajitoEstaLeido(m) ? 'Ver perfil' : 'Abrir mensaje';
+  }
+
+  function htmlOpcionesEleccion(titulo, opcionesHtml, extraCls) {
+    return '<div class="msg-eleccion' + (extraCls ? ' ' + extraCls : '') + '">' +
+      '<p class="msg-eleccion-tit">' + esc(titulo) + '</p>' +
+      '<div class="msg-eleccion-lista">' + opcionesHtml + '</div>' +
+      '</div>';
+  }
+
   function htmlAccionesMensajito(m) {
     if (Array.isArray(m.opciones_consejo) && m.opciones_consejo.length &&
         (m.estado_decision || '') === 'pendiente' &&
@@ -1480,27 +1657,24 @@
       const tit = m.consejo_titulo || '\u00bfQu\u00e9 le dices?';
       const optsHtml = m.opciones_consejo.map(function (o) {
         if (!o || !o.id) return '';
-        const suave = (o.estilo || '') === 'suave';
-        const cls = suave ? 'carta-cta carta-cta--suave' : 'carta-cta carta-cta--abrir';
-        return '<button type="button" class="' + cls + ' msg-opcion" data-consejo-opcion="' + esc(o.id) + '">' +
-          esc(o.etiqueta || o.id) + '</button>';
+        return '<button type="button" class="msg-eleccion-opt msg-opcion" data-consejo-opcion="' + esc(o.id) + '">' +
+          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.etiqueta || o.id) + '</span></span>' +
+          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones">' +
-        '<span class="msg-opciones-tit">' + esc(tit) + '</span>' +
-        optsHtml + '</div>';
+      return '<div class="acciones-msg msg-opciones msg-eleccion msg-eleccion--consejo">' + htmlOpcionesEleccion(tit, optsHtml) + '</div>';
     }
     if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' &&
         (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
+      const titSel = m.selector_titulo || '\u00bfA qui\u00e9n le presentar\u00edas?';
       const optsHtml = m.selector_opciones.map(function (o) {
         if (!o || !o.personaje_id) return '';
-        const pista = o.pista ? '<span class="msg-opcion-pista">' + esc(o.pista) + '</span>' : '';
-        return '<button type="button" class="carta-cta carta-cta--suave msg-opcion" data-elegir-persona="' + esc(o.personaje_id) + '">' +
-          '<span class="msg-opcion-nom">' + esc(o.nombre || '') + '</span>' + pista + '</button>';
+        const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="msg-eleccion-opt" data-elegir-persona="' + esc(o.personaje_id) + '">' +
+          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
+          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones">' +
-        '<span class="msg-opciones-tit">' + esc(m.selector_titulo || '\u00bfA qui\u00e9n presentas?') + '</span>' +
-        optsHtml + '</div>';
+      return '<div class="acciones-msg msg-opciones msg-eleccion">' + htmlOpcionesEleccion(titSel, optsHtml) + '</div>';
     }
     if (m.tipo === 'candidato_llegada' &&
         (m.estado || '') === 'pendiente' &&
@@ -1509,13 +1683,13 @@
       const titA = m.selector_titulo_acompanante || '\u00bfQui\u00e9n le ense\u00f1a Villaborde?';
       const optsHtml = opts.map(function (o) {
         if (!o || !o.personaje_id) return '';
-        const pista = o.pista ? '<span class="msg-opcion-pista">' + esc(o.pista) + '</span>' : '';
-        return '<button type="button" class="carta-cta carta-cta--suave msg-opcion llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
-          '<span class="msg-opcion-nom">' + esc(o.nombre || '') + '</span>' + pista + '</button>';
+        const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="msg-eleccion-opt llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
+          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
+          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones llegada-acciones">' +
-        '<span class="msg-opciones-tit">' + esc(titA) + '</span>' +
-        (optsHtml || '<p class="llegada-sin-acomp">Nadie libre ahora para la bienvenida.</p>') +
+      return '<div class="acciones-msg msg-opciones msg-eleccion llegada-acciones">' +
+        htmlOpcionesEleccion(titA, optsHtml || '<p class="llegada-sin-acomp">Nadie libre ahora para la bienvenida.</p>') +
         '<div class="llegada-acciones-pie">' +
         '<button type="button" class="carta-cta carta-cta--suave" data-llegada-rechazar="1">Ahora no</button>' +
         '</div></div>';
@@ -1524,9 +1698,10 @@
     if (!acciones.length) return '';
     return '<div class="acciones-msg">' + acciones.map(function (a) {
       const suave = (a.estilo || '') === 'suave';
-      const cls = suave ? 'carta-cta carta-cta--suave' : 'carta-cta carta-cta--abrir';
+      const cls = 'carta-cta carta-cta--primario' + (suave ? ' carta-cta--suave' : ' carta-cta--abrir');
+      const lab = mensajitoCtaAccionLabel(m, a.id || '', a.etiqueta || a.id || '');
       return '<button type="button" class="' + cls + '" data-accion-id="' + esc(a.id || '') + '">' +
-        esc(a.etiqueta || a.id || '') + '</button>';
+        esc(lab) + '</button>';
     }).join('') + '</div>';
   }
 
@@ -1561,12 +1736,12 @@
       btn.addEventListener('click', async function (ev) {
         ev.stopPropagation();
         if (btn.disabled) return;
-        btn.disabled = true;
+        art.querySelectorAll('[data-elegir-persona]').forEach(function (b) { b.disabled = true; });
         const ok = await resolverAccionMensajito(m, 'elegir_persona', {
           personaje_id: btn.getAttribute('data-elegir-persona')
         });
         if (ok) await refresh();
-        else btn.disabled = false;
+        else art.querySelectorAll('[data-elegir-persona]').forEach(function (b) { b.disabled = false; });
       });
     });
     const accionesRaw = Array.isArray(m.acciones) ? m.acciones : [];
@@ -1599,12 +1774,12 @@
       btn.addEventListener('click', async function (ev) {
         ev.stopPropagation();
         if (btn.disabled) return;
-        btn.disabled = true;
+        art.querySelectorAll('[data-consejo-opcion]').forEach(function (b) { b.disabled = true; });
         const ok = await resolverAccionMensajito(m, accionConsejo, {
           opcion_id: btn.getAttribute('data-consejo-opcion')
         });
         if (ok) await refresh();
-        else btn.disabled = false;
+        else art.querySelectorAll('[data-consejo-opcion]').forEach(function (b) { b.disabled = false; });
       });
     });
   }
@@ -5602,13 +5777,14 @@ function hobbyIconKey(id, texto) {
 
   function estadoCarta(m) {
     const pueblo = m.estado_pueblo || '';
-    if (pueblo === 'cumplida') return { cls: 'estado-cumplida', txt: 'Hecho' };
-    if (pueblo === 'caducada') return { cls: 'estado-caducada', txt: 'Se le pasó' };
+    const natural = mensajitoEstadoNatural(m);
+    if (pueblo === 'cumplida') return { cls: 'estado-cumplida', txt: natural || 'Hecho' };
+    if (pueblo === 'caducada') return { cls: 'estado-caducada', txt: natural };
     if ((m.estado || '') === 'pendiente') return { cls: 'estado-pendiente', txt: '' };
     if ((m.estado || '') === 'leido') return { cls: 'estado-leida', txt: '' };
-    if ((m.estado || '') === 'en_espera') return { cls: 'estado-espera', txt: 'En espera' };
-    if ((m.estado || '') === 'resuelto') return { cls: 'estado-cumplida', txt: 'Ya está' };
-    return { cls: '', txt: '' };
+    if ((m.estado || '') === 'en_espera') return { cls: 'estado-espera', txt: natural || 'En espera' };
+    if ((m.estado || '') === 'resuelto') return { cls: 'estado-cumplida', txt: natural };
+    return { cls: '', txt: natural };
   }
 
   function cuerpoCarta(m, de) {
@@ -5696,16 +5872,22 @@ function hobbyIconKey(id, texto) {
       const ridRem = remitenteIdDe(m);
       const inclin = ((inclinIdx || 0) % 4 + 4) % 4;
       const tint = (mensajitoTintDeRemitente(ridRem || nombre) + inclin) % 4;
+      const origen = mensajitoBuscarOrigen(m, cacheBuzon);
+      const esActualizacion = !!origen;
+      const tieneEleccion = Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
+        m.selector_estado === 'pendiente' && (m.estado_pueblo || 'pendiente') === 'pendiente';
       art.className = 'carta-msg' +
         (esAccion ? ' carta-accion' : ' carta-info') +
         (leido ? ' leida' : ' no-leida') +
         (st.cls ? ' ' + st.cls : '') +
+        (esActualizacion ? ' carta-hilo-card' : '') +
+        (tieneEleccion ? ' carta-eleccion' : '') +
         ' carta-tinta-' + tint +
         ' carta-inclin-' + inclin;
       if (ridRem) art.setAttribute('data-remitente', ridRem);
       const cuerpo = cuerpoMensajito(m, nombre);
       const perfilLlegadaHtml = (m.tipo === 'candidato_llegada') ? htmlPerfilCandidato(m) : '';
-      const plazo = (m.estado_pueblo === 'caducada') ? '' : (m.plazo_humano || '');
+      const plazoLbl = mensajitoPlazoLabel(m);
       const cuando = mensajitoCuandoLabel(m);
       const flagHtml = !leido
         ? '<span class="carta-flag carta-flag--nuevo" aria-hidden="true">Nuevo</span>'
@@ -5715,32 +5897,47 @@ function hobbyIconKey(id, texto) {
       if (accionesDecision) {
         accionesHtml = accionesDecision;
       } else if (m.preset_organizar && (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
+        const orgLab = mensajitoCtaOrganizarLabel(m);
         accionesHtml = '<div class="acciones-msg">' +
-          '<button type="button" class="carta-cta carta-cta--abrir" data-carta-organizar="1">Organizar</button>' +
+          '<button type="button" class="carta-cta carta-cta--abrir carta-cta--primario" data-carta-organizar="1">' + esc(orgLab) + '</button>' +
           '</div>';
-      } else if (mensajitoDestinoFicha(m)) {
-        const ctaLabel = leido ? 'Ver' : 'Abrir';
-        const ctaClass = leido ? 'carta-cta carta-cta--ver' : 'carta-cta carta-cta--abrir';
-        accionesHtml = '<div class="acciones-msg">' +
-          '<button type="button" class="' + ctaClass + '" data-carta-cta="1">' + ctaLabel + '</button>' +
-          '</div>';
+      } else {
+        const destLab = mensajitoCtaDestinoLabel(m);
+        if (destLab) {
+          const ctaClass = mensajitoEstaLeido(m) ? 'carta-cta carta-cta--ver' : 'carta-cta carta-cta--abrir';
+          accionesHtml = '<div class="acciones-msg">' +
+            '<button type="button" class="' + ctaClass + ' carta-cta--primario" data-carta-cta="1">' + esc(destLab) + '</button>' +
+            '</div>';
+        }
       }
-      const metaBits = [];
-      if (st.txt) metaBits.push('<span class="sello-estado">' + esc(st.txt) + '</span>');
-      if (plazo) metaBits.push('<span class="plazo">' + esc(plazo) + '</span>');
+      const estadoTxt = st.txt || mensajitoEstadoNatural(m);
+      const estadoHtml = estadoTxt
+        ? '<div class="carta-estado"><span class="carta-estado-ico" aria-hidden="true">' + esc(mensajitoEstadoIcono(estadoTxt)) + '</span><span>' + esc(estadoTxt) + '</span></div>'
+        : '';
+      const plazoHtml = plazoLbl
+        ? '<p class="carta-plazo"><span class="carta-plazo-ico" aria-hidden="true">\uD83D\uDD52</span><span>' + esc(plazoLbl) + '</span></p>'
+        : '';
+      const actualizacionEtq = esActualizacion
+        ? '<span class="carta-actualizacion-etq">Actualización' + (cuando ? ' \u00b7 ' + esc(cuando.split(' \u00b7 ').pop()) : '') + '</span>'
+        : '';
       art.innerHTML = flagHtml +
-        '<div class="carta-inner">' + htmlAvatarMensajito(m, nombre, 'carta-avatar') +
-        '<div class="carta-copy">' +
+        '<div class="carta-inner">' +
+        '<header class="carta-top">' + htmlAvatarMensajito(m, nombre, 'carta-avatar') +
         '<div class="carta-head">' +
         (nombre ? '<div class="de">' + esc(nombre) + '</div>' : '') +
         (cuando ? '<div class="carta-cuando">' + esc(cuando) + '</div>' : '') +
-        '</div>' +
+        '</div></header>' +
+        (esActualizacion ? htmlMensajitoHilo(origen) : '') +
+        '<div class="carta-copy"><div class="carta-cuerpo-wrap">' +
+        actualizacionEtq +
         '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
-        '</div></div>' +
+        perfilLlegadaHtml +
+        '</div>' +
+        plazoHtml +
         '<div class="carta-pie">' +
-        '<div class="carta-pie-meta">' + metaBits.join('') + '</div>' +
-        '<div class="carta-pie-cta">' + accionesHtml + '</div>' +
-        '</div>';
+        '<div class="carta-pie-meta"></div>' +
+        '<div class="carta-pie-cta">' + accionesHtml + estadoHtml + '</div>' +
+        '</div></div></div>';
       art.querySelectorAll('[data-carta-cta]').forEach(function (btn) {
         btn.addEventListener('click', async function (ev) {
           ev.stopPropagation();

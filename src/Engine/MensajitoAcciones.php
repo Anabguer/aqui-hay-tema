@@ -62,19 +62,19 @@ final class MensajitoAcciones
         ],
         self::INVESTIGAR => [
             'id' => self::INVESTIGAR,
-            'etiqueta' => 'Ver ficha',
+            'etiqueta' => 'Ver perfil',
             'estilo' => 'primario',
             'api' => 'buzon.resolver',
         ],
         self::ORGANIZAR_ALGO => [
             'id' => self::ORGANIZAR_ALGO,
-            'etiqueta' => 'Organizar',
+            'etiqueta' => 'Organizar plan',
             'estilo' => 'primario',
             'api' => 'buzon.resolver',
         ],
         self::ORGANIZAR_ENCARGO => [
             'id' => self::ORGANIZAR_ENCARGO,
-            'etiqueta' => 'Organizar',
+            'etiqueta' => 'Ayudarle a organizarlo',
             'estilo' => 'primario',
             'api' => 'buzon.resolver',
         ],
