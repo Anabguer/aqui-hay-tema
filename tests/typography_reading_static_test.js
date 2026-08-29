@@ -17,7 +17,11 @@ assert(components.includes('.ds-text-body'), 'falta clase ds-text-body');
 assert(components.includes('font-family: var(--ds-font-ui)'), 'ds-text-body debe usar Nunito');
 
 assert(play.includes('typography-reading.css'), 'play.php debe cargar typography-reading.css');
-assert(reading.includes('font-family: var(--ds-font-ui'), 'lectura debe forzar Nunito');
+assert(reading.includes('TYPO-READING-v2'), 'falta capa TYPO-READING-v2');
+assert(reading.includes('--aht-read-font'), 'falta token lectura shorthand');
+assert(reading.includes('.capa-buzon .carta-msg .cuerpo'), 'falta override cuerpo mensajitos');
+assert(/\.msg-eleccion-nom[\s\S]*Caveat/.test(reading), 'nombres eleccion deben ser Caveat');
+assert(/\.carta-msg \.cuerpo[\s\S]*--aht-read-font/.test(reading), 'cuerpo debe usar aht-read-font');
 assert(reading.includes('.capa-mentes'), 'MENTES debe tener reglas legibles');
 
 assert(js.includes('function htmlAvatarEleccion'), 'falta htmlAvatarEleccion');

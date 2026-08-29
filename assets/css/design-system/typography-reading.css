@@ -444,10 +444,7 @@
 
 .play-v3 .msg-eleccion-nom {
   display: block;
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 600 !important;
-  line-height: 1.3 !important;
+  font: var(--aht-name-font, 700 var(--aht-type-name)/1.2 var(--ds-font-hand, "Caveat", cursive)) !important;
   color: var(--ds-ink, #3b3028);
 }
 
@@ -502,3 +499,169 @@
   font-size: var(--aht-type-body) !important;
   line-height: 1.45 !important;
 }
+
+/* TYPO-READING-v2 — capa final: LECTURA=Nunito / NOMBRE=Caveat */
+/* Regla: NOMBRE/personalidad → Caveat. Frase/párrafo/metadato → Nunito.
+   Usa font: shorthand para ganar a mensajitos-cartas-persona-v1 y legibilidad-global. */
+
+.play-v3 {
+  --aht-read-font: 400 var(--aht-type-body)/1.5 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  --aht-read-font-secondary: 400 var(--aht-type-secondary)/1.45 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  --aht-read-font-caption: 600 var(--aht-type-caption)/1.35 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  --aht-name-font: 700 var(--aht-type-name)/1.2 var(--ds-font-hand, "Caveat", cursive);
+}
+
+/* --- MENSAJITOS: lectura y metadatos --- */
+.play-v3 .capa-buzon .carta-msg .cuerpo,
+.play-v3 .capa-buzon .carta-cuerpo-wrap .cuerpo,
+.play-v3 .capa-buzon .cuerpo,
+.play-v3 .capa-buzon .carta-hilo-cuerpo,
+.play-v3 .capa-buzon .carta-cuando,
+.play-v3 .capa-buzon .carta-meta,
+.play-v3 .capa-buzon .carta-pie-meta,
+.play-v3 .capa-buzon .carta-msg .plazo,
+.play-v3 .capa-buzon .carta-msg .sello-estado,
+.play-v3 .capa-buzon .carta-pie-meta .plazo,
+.play-v3 .capa-buzon .carta-pie-meta .sello-estado,
+.play-v3 .capa-buzon .mensajitos-hint,
+.play-v3 .capa-buzon .buzon-vacio,
+.play-v3 .capa-buzon .lista-vacia,
+.play-v3 .capa-buzon .msg-item-txt,
+.play-v3 .capa-buzon .msg-item-copy,
+.play-v3 .capa-buzon .mensajitos-seccion-tit,
+.play-v3 .msg-eleccion-tit,
+.play-v3 .msg-eleccion-hint,
+.play-v3 .msg-eleccion-opt-copy,
+.play-v3 .llegada-sin-acomp {
+  font: var(--aht-read-font) !important;
+  font-style: normal !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+.play-v3 .capa-buzon .carta-cuando,
+.play-v3 .capa-buzon .carta-meta,
+.play-v3 .capa-buzon .carta-msg .plazo,
+.play-v3 .capa-buzon .carta-msg .sello-estado {
+  font: var(--aht-read-font-secondary) !important;
+}
+
+/* Nombres en mensajitos / elecciones */
+.play-v3 .capa-buzon .carta-msg .de,
+.play-v3 .capa-buzon .carta-head .de,
+.play-v3 .capa-buzon .carta-copy .de,
+.play-v3 .msg-eleccion-nom {
+  font: var(--aht-name-font) !important;
+  font-style: normal !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+/* --- FICHA: cuerpos legibles; nombre hero manuscrito --- */
+.play-v3 .capa-ficha .ficha-seccion-body,
+.play-v3 .capa-ficha .ficha-seccion-body p,
+.play-v3 .capa-ficha .ficha-seccion-body li,
+.play-v3 .capa-ficha .ficha-rasgo-tag,
+.play-v3 .capa-ficha .ficha-hobby-card,
+.play-v3 .capa-ficha .ficha-hobby-lab,
+.play-v3 .capa-ficha .ficha-plan-item,
+.play-v3 .capa-ficha .ficha-vacio,
+.play-v3 .capa-ficha .ficha-pref-line,
+.play-v3 .capa-ficha .ficha-sabes-body,
+.play-v3 .capa-ficha .ficha-animo-line,
+.play-v3 .capa-ficha .ficha-edad,
+.play-v3 .capa-ficha .ficha-trabajo,
+.play-v3 .capa-ficha .ficha-desde,
+.play-v3 .capa-ficha .ficha-rel-etiq {
+  font: var(--aht-read-font) !important;
+  font-style: normal !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+.play-v3 .capa-ficha .ficha-nombre,
+.play-v3 .capa-ficha .ficha-rel-nom,
+.play-v3 .capa-ficha .ficha-animo-val {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+/* --- DIARIO / COTILLEOS / MISIONES --- */
+.play-v3 .capa-diario .coti-item-txt,
+.play-v3 .capa-diario .coti-item-cuando,
+.play-v3 .capa-diario .coti-item-cat-pill,
+.play-v3 .obj-cotilleo-txt,
+.play-v3 .capa-misiones .mis-txt,
+.play-v3 .capa-misiones .mis-sub,
+.play-v3 .capa-misiones .mis-estado,
+.play-v3 .obj-misiones-vacio,
+.play-v3 .mision-strip-txt {
+  font: var(--aht-read-font) !important;
+  font-style: normal !important;
+}
+
+.play-v3 .capa-diario .coti-item-cuando,
+.play-v3 .capa-misiones .mis-estado {
+  font: var(--aht-read-font-caption) !important;
+}
+
+/* --- TUTORIAL: párrafos Nunito; títulos/nombres Caveat (sección 10) --- */
+.play-v3 .tut-intro-line,
+.play-v3 .tut-intro-extra,
+.play-v3 .tut-bloques-pref,
+.play-v3 .tut-bloque-txt,
+.play-v3 .tut-bloque-sym,
+.play-v3 .tut-cierre,
+.play-v3 .tut-fin-lead,
+.play-v3 .tut-fin-rest,
+.play-v3 .tut-texto,
+.play-v3 .tut-papel-cuerpo,
+.play-v3 .tut-papel-cuerpo p {
+  font: var(--aht-read-font) !important;
+  font-style: normal !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+/* --- NUEVO PLAN / INICIO / AVISOS --- */
+.play-v3 .capa-organizar .org-seccion-meta,
+.play-v3 .capa-organizar .org-picker-hint,
+.play-v3 .capa-organizar .org-dd-label,
+.play-v3 .capa-organizar .org-dd-opt,
+.play-v3 .capa-organizar .org-tipo-card-txt,
+.play-v3 .capa-organizar .org-lugar-horario,
+.play-v3 .capa-organizar .org-lugar-card-desc,
+.play-v3 .capa-organizar .org-lugar-card-estado,
+.play-v3 .capa-organizar .org-horas-hint,
+.play-v3 .capa-organizar .org-busca,
+.play-v3 .capa-organizar .org-aviso,
+.play-v3 .capa-organizar .org-picker-nom,
+.play-v3:has(.game-shell) .enc-mov-lugar,
+.play-v3:has(.game-shell) .pp-mov-lugar,
+.play-v3:has(.game-shell) .prox-meta,
+.play-v3:has(.game-shell) .vecinos-stat,
+.play-v3:has(.game-shell) .obj-pueblo-txt,
+.play-v3:has(.game-shell) .obj-buzon-preview,
+.play-v3:has(.game-shell) .obj-parejas-vacio,
+.play-v3:has(.game-shell) .obj-parejas-list p.muted,
+.play-v3 .vida-derrota .tut-texto,
+.play-v3 .plan-notif-meta {
+  font: var(--aht-read-font) !important;
+  font-style: normal !important;
+  text-transform: none !important;
+}
+
+.play-v3:has(.game-shell) .enc-mov-nombres,
+.play-v3:has(.game-shell) .pp-mov-nombres,
+.play-v3:has(.game-shell) .prox-nombres,
+.play-v3:has(.game-shell) .obj-pareja-nombres {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+}
+
+@media (max-width: 768px) {
+  .play-v3 {
+    --aht-read-font: 400 1rem/1.5 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+    --aht-read-font-secondary: 400 0.875rem/1.45 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+    --aht-read-font-caption: 600 0.8125rem/1.35 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  }
+}
+
