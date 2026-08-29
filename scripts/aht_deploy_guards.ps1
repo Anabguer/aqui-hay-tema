@@ -196,7 +196,7 @@ function Invoke-AhtGitProdCompare {
     $node = Get-Command node -ErrorAction SilentlyContinue
     if (-not $node) { throw 'node no encontrado para comparacion Git=Prod' }
 
-    $script = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) 'aht_git_prod_compare.js'
+    $script = Join-Path $PSScriptRoot 'aht_git_prod_compare.js'
     if (-not (Test-Path -LiteralPath $script)) {
         throw "Falta $script"
     }

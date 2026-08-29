@@ -61,8 +61,12 @@ foreach ($rel in $deployRels) {
     if ($rel -match '^(assets/|api/|src/)') { $needsPlayPhp = $true; break }
 }
 
-$buster = Update-AhtCacheBuster -Ctx $Ctx
-Write-DeployLog -LogFile $logFile -Message "Cache-buster: $buster" -ToHost
+if (-not $DryRun) {
+    $buster = Update-AhtCacheBuster -Ctx $Ctx
+    Write-DeployLog -LogFile $logFile -Message "Cache-buster: $buster" -ToHost
+} else {
+    Write-DeployLog -LogFile $logFile -Message 'DRY-RUN: cache-buster no se modifica.' -ToHost
+}
 
 $packed = [System.Collections.Generic.List[object]]::new()
 foreach ($rel in $deployRels) {
@@ -74,7 +78,9 @@ foreach ($rel in $deployRels) {
 if ($needsPlayPhp) {
     Add-AhtDeployFile -Files $packed -Ctx $Ctx -RelPath 'play.php'
 }
-Add-AhtDeployFile -Files $packed -Ctx $Ctx -RelPath $Ctx.CacheBusterRel
+if (-not $DryRun) {
+    Add-AhtDeployFile -Files $packed -Ctx $Ctx -RelPath $Ctx.CacheBusterRel
+}
 
 Assert-AhtDeployFileListExplicit -RequestedFiles $deployRels -PackedFiles $packed -LogFile $logFile
 
@@ -91,7 +97,6 @@ if (-not (Read-DeployYesNo 'Confirmas DEPLOY QUIRURGICO a PRODUCCION?')) {
     exit 0
 }
 
-# Revalidar origin no avanzo
 [void](Assert-AhtCanonicalDeployGuards -Ctx $Ctx -LogFile $logFile -ExpectedHeadAtStart $headAtStart)
 
 $backupRels = @($packed | ForEach-Object { [string]$_.Rel })
