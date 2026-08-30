@@ -3322,43 +3322,46 @@
       return est === 'pendiente' || est === 'activa';
     }).length;
     inicioAll('[data-misiones-tit-corta]').forEach(function (el) {
-      el.textContent = hoy.length ? ('MISIONES \u00b7 ' + hoy.length) : 'MISIONES';
+      el.textContent = 'MISIONES';
+    });
+    inicioAll('[data-misiones-badge]').forEach(function (el) {
+      if (!hoy.length) {
+        el.textContent = '';
+        el.hidden = true;
+        el.setAttribute('aria-hidden', 'true');
+        return;
+      }
+      el.textContent = String(hoy.length);
+      el.hidden = false;
+      el.removeAttribute('aria-hidden');
     });
     inicioAll('[data-misiones-resumen-corta]').forEach(function (el) {
       if (!hoy.length) { el.textContent = 'Sin misiones hoy'; return; }
-      if (cumplidas > 0) el.textContent = cumplidas + ' completada' + (cumplidas === 1 ? '' : 's');
-      else if (pend > 0) el.textContent = pend + ' pendiente' + (pend === 1 ? '' : 's');
+      if (pend > 0) el.textContent = pend + ' pendiente' + (pend === 1 ? '' : 's');
       else el.textContent = hoy.length + ' misi\u00f3n' + (hoy.length === 1 ? '' : 'es');
     });
     inicioAll('[data-misiones-progreso]').forEach(function (el) {
-      if (!hoy.length) { el.innerHTML = ''; return; }
-      var bits = [];
-      hoy.slice(0, 3).forEach(function (m, idx) {
-        if (idx > 0) bits.push('<span class="inicio-mp-sep" aria-hidden="true"></span>');
-        var ok = (m.estado || '') === 'cumplida';
-        bits.push('<span class="inicio-mp-dot' + (ok ? ' is-ok' : '') + '" aria-hidden="true">' + (ok ? '\u2713' : '') + '</span>');
-      });
-      el.innerHTML = bits.join('');
+      if (!hoy.length) {
+        el.textContent = '';
+        el.hidden = true;
+        el.setAttribute('aria-hidden', 'true');
+        return;
+      }
+      el.textContent = cumplidas + '/' + hoy.length;
+      el.hidden = false;
+      el.removeAttribute('aria-hidden');
     });
   }
   function updateMpDuoParejas(parejas) {
     var arr = parejas || [];
     var crisis = arr.filter(function (r) { return esCrisisPareja(r); }).length;
     inicioAll('[data-parejas-tit-corta]').forEach(function (el) {
-      el.textContent = arr.length ? ('PAREJAS \u00b7 ' + arr.length) : 'PAREJAS';
+      el.textContent = 'PAREJAS';
     });
     inicioAll('[data-parejas-resumen-corta]').forEach(function (el) {
-      if (!arr.length) el.textContent = 'Sin parejas a\u00fan';
+      if (!arr.length) el.textContent = 'A\u00fan no hay parejas';
       else if (crisis > 0) el.textContent = crisis + ' en crisis';
       else el.textContent = arr.length + ' pareja' + (arr.length === 1 ? '' : 's');
-    });
-    inicioAll('[data-parejas-preview-faces]').forEach(function (el) {
-      if (!arr.length) { el.innerHTML = ''; el.removeAttribute('hidden'); return; }
-      var pick = arr[0];
-      var ids = idsPareja(pick) || [];
-      if (ids.length < 2) { el.innerHTML = ''; return; }
-      el.innerHTML = htmlMpParFace(ids[0]) + htmlMpParFace(ids[1]);
-      el.removeAttribute('hidden');
     });
   }
   function renderParejasStripIn(scopeSel, parejas) {
@@ -7251,6 +7254,22 @@ function hobbyIconKey(id, texto) {
     actualizarOrgCrearBtn();
   }
 
+  async function cargarElegiblesEvento() {
+    if (!orgEsEventoPueblo() || !org.evento_pueblo_id) return;
+    try {
+      var r = await api('evento_pueblo.elegibles', { evento_pueblo_id: org.evento_pueblo_id });
+      if (r && r.ok && r.vecinos && org.evento_ctx) {
+        org.evento_ctx.elegibles = r.vecinos;
+        org.evento_ctx.aforo = r.aforo;
+        org.evento_ctx.plazas_disponibles = r.plazas_disponibles;
+        org.evento_ctx.participantes_min = r.participantes_min;
+        pintarOrgPicker();
+        actualizarOrgPickerHint();
+        actualizarOrgCrearBtn();
+      }
+    } catch (e) {}
+  }
+
   async function fillOrganizar() {
     syncOrgModoUi();
     if (orgEsEventoPueblo()) {
@@ -7258,6 +7277,7 @@ function hobbyIconKey(id, texto) {
       actualizarOrgPickerHint();
       actualizarOrgModoEstado();
       actualizarOrgCrearBtn();
+      cargarElegiblesEvento();
       return;
     }
     const lugares = destinosOperativos();

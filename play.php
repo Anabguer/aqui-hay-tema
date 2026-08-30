@@ -70,6 +70,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-visual-replica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: cromatica desktop blindada — no mover ni fusionar con inicio-desktop.css */ ?>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop-cromatica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -1005,34 +1007,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       </aside>
     </div>
   </div>
-
-    <nav class="play-bottom-nav" aria-label="Accesos r&aacute;pidos">
-      <button type="button" class="play-bottom-nav-btn" data-open="ajustes">
-        <span class="play-bottom-nav-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </span>
-        <span class="play-bottom-nav-txt">Ajustes</span>
-      </button>
-      <button type="button" class="play-bottom-nav-btn" data-open="inventario">
-        <span class="play-bottom-nav-ico play-bottom-nav-ico--inv" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false"><path d="M8 7V6a4 4 0 0 1 8 0v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 11v4M14.5 11v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-          <span class="play-bottom-nav-badge" data-inv-nav-badge hidden>0</span>
-        </span>
-        <span class="play-bottom-nav-txt">Inventario</span>
-      </button>
-      <button type="button" class="play-bottom-nav-btn" data-open="vecinos">
-        <span class="play-bottom-nav-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false"><path d="M16 11a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 19.5c.6-2.5 2.8-4 6.5-4s5.9 1.5 6.5 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 11.2a2.6 2.6 0 1 0-1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20.8 18.2c-.4-1.8-1.7-3-3.8-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5.5 11.2a2.6 2.6 0 1 1 1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3.2 18.2c.4-1.8 1.7-3 3.8-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <span class="play-bottom-nav-txt">Vecinos</span>
-      </button>
-      <button type="button" class="play-bottom-nav-btn" data-open="relaciones">
-        <span class="play-bottom-nav-ico" aria-hidden="true">
-          <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
-        </span>
-        <span class="play-bottom-nav-txt">Relaciones</span>
-      </button>
-    </nav>
       </div>
 
 <section class="inicio-desktop" data-inicio-view="desktop" aria-label="Inicio escritorio">
@@ -1167,6 +1141,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </div>
       </aside>
+            <div class="inicio-planes-libreta" data-inicio-planes-bloque>
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1184,6 +1159,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </button>
           </div>
         </section>
+            <div class="inicio-planes-agenda">
             <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Pr&oacute;ximos planes programados">
           <header class="pp-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
@@ -1207,6 +1183,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <span class="obj-nuevo-plan-txt">Crear plan</span>
             </button>
 </section>
+            </div>
+            </div>
             <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
@@ -1268,29 +1246,63 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="inicio-mp-cuerpo">
               <span class="inicio-mp-ico inicio-mp-ico--mis" aria-hidden="true"></span>
               <div class="inicio-mp-main">
-                <span class="inicio-mp-tit" data-misiones-tit-corta>MISIONES</span>
-                <span class="inicio-mp-resumen" data-misiones-resumen-corta></span>
-                <span class="inicio-mp-progreso" data-misiones-progreso aria-hidden="true"></span>
+                <div class="inicio-mp-head">
+                  <span class="inicio-mp-tit" data-misiones-tit-corta>MISIONES</span>
+                  <span class="inicio-mp-badge" data-misiones-badge hidden aria-hidden="true"></span>
+                </div>
+                <div class="inicio-mp-sub">
+                  <span class="inicio-mp-resumen" data-misiones-resumen-corta></span>
+                  <span class="inicio-mp-pill" data-misiones-progreso hidden aria-hidden="true"></span>
+                </div>
               </div>
             </div>
-            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
+            <span class="inicio-mp-chevron" aria-hidden="true">&#8250;</span>
           </button>
           <button type="button" class="inicio-mp-card inicio-mp-card--par" data-open="parejas" aria-label="Ver parejas del pueblo">
             <div class="inicio-mp-cuerpo">
-              <span class="inicio-mp-tit" data-parejas-tit-corta>PAREJAS</span>
-              <div class="inicio-mp-par-mid">
-                <div class="inicio-mp-par-izq">
-                  <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
-                  <span class="inicio-mp-resumen" data-parejas-resumen-corta></span>
+              <span class="inicio-mp-ico inicio-mp-ico--par" aria-hidden="true"></span>
+              <div class="inicio-mp-main">
+                <div class="inicio-mp-head">
+                  <span class="inicio-mp-tit" data-parejas-tit-corta>PAREJAS</span>
                 </div>
-                <span class="inicio-mp-par-faces" data-parejas-preview-faces aria-hidden="true"></span>
+                <div class="inicio-mp-sub">
+                  <span class="inicio-mp-resumen" data-parejas-resumen-corta>A&uacute;n no hay parejas</span>
+                </div>
               </div>
             </div>
-            <span class="inicio-mp-pie"><span class="inicio-mp-ver">VER &#8250;</span></span>
+            <span class="inicio-mp-chevron" aria-hidden="true">&#8250;</span>
           </button>
         </section>
         </div>
       </section>
+
+    <nav class="play-bottom-nav" aria-label="Accesos r&aacute;pidos">
+      <button type="button" class="play-bottom-nav-btn" data-open="ajustes">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.26.604.852.997 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Ajustes</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="inventario">
+        <span class="play-bottom-nav-ico play-bottom-nav-ico--inv" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M8 7V6a4 4 0 0 1 8 0v1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M6 7h12l-1.2 12.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M9.5 11v4M14.5 11v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          <span class="play-bottom-nav-badge" data-inv-nav-badge hidden>0</span>
+        </span>
+        <span class="play-bottom-nav-txt">Inventario</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="vecinos">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M16 11a3 3 0 1 0-6 0 3 3 0 0 0 6 0Z" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5.5 19.5c.6-2.5 2.8-4 6.5-4s5.9 1.5 6.5 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M18.5 11.2a2.6 2.6 0 1 0-1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M20.8 18.2c-.4-1.8-1.7-3-3.8-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M5.5 11.2a2.6 2.6 0 1 1 1.8-1.8" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M3.2 18.2c.4-1.8 1.7-3 3.8-3.3" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Vecinos</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="relaciones">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Relaciones</span>
+      </button>
+    </nav>
 
     </div>
   </div>  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
