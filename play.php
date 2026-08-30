@@ -22,9 +22,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
-  <meta name="apple-mobile-web-app-title" content="AquÃ­ Hay Tema"/>
+  <meta name="apple-mobile-web-app-title" content="Aquí Hay Tema"/>
   <meta name="aht-ui" content="v3"/>
-  <title>AquÃ­ Hay Tema</title>
+  <title>Aquí Hay Tema</title>
   <link rel="manifest" href="<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>manifest.webmanifest"/>
   <link rel="icon" href="assets/brand/pwa-icon-192.png" type="image/png" sizes="192x192"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
