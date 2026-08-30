@@ -8063,3 +8063,13 @@
     transform-origin: center center !important;
   }
 }
+
+/* INICIO-CELESTINE-v85 - mas zoom retrato para tapar hueco blanco bajo caras */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview-cara {
+    object-fit: cover !important;
+    object-position: 50% 2% !important;
+    transform: scale(1.28) !important;
+    transform-origin: 50% 24% !important;
+  }
+}
