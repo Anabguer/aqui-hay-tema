@@ -194,6 +194,7 @@ echo "\n== B3 control: peticionario obligado + otro acepta => plan ACEPTADO ==\n
     $par = $p['tutorial']['pareja_mision1'];
     $aId = (string) $par['a'];
     $bId = (string) $par['b'];
+    $p['propuestas_cooldown'] = [];
     $pet = crearPet($p, $aId, 'volver_a_ver', ['otro' => $bId]);
     $petId = (string) ($pet['id'] ?? '');
     aislarPet($p, $petId);
