@@ -163,36 +163,8 @@
 }
 
 /* ============================================================
-   5. TUTORIAL ÔÇö Textos de lectura ÔåÆ Nunito (ya implementado en v6)
+   5. TUTORIAL -> AUTORIDAD CANONICA: play-v3-tutorial-ds.css
    ============================================================ */
-
-/* Reforzar que los textos de lectura usan Nunito */
-.play-v3 .tut-intro-line,
-.play-v3 .tut-intro-extra,
-.play-v3 .tut-bloques-pref,
-.play-v3 .tut-bloque-txt,
-.play-v3 .tut-cierre,
-.play-v3 .tut-fin-lead,
-.play-v3 .tut-fin-rest {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  font-style: normal !important;
-}
-
-/* T├¡tulos, botones, labels ÔÇö MANTENER Caveat */
-.play-v3 .tut-titulo,
-.play-v3 .tut-fin-titulo,
-.play-v3 .tut-skip,
-.play-v3 .tut-acciones .cta,
-.play-v3 .tut-fin-cta,
-.play-v3 .tut-bloque-tit,
-.play-v3 .tut-cara-nombre,
-.play-v3 .libreta-kicker {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
-}
-
 /* ============================================================
    6. NUEVO PLAN ÔÇö Textos de lectura ÔåÆ Nunito
    ============================================================ */
@@ -361,10 +333,6 @@
 .play-v3 .capa-diario .coti-tit,    /* "DIARIO / COTILLEOS" */
 .play-v3 .capa-misiones .mis-tit,   /* "HOY EN EL PUEBLO" */
 .play-v3 .capa-vida-pueblo .vida-tit, /* "VIDA DEL PUEBLO" */
-.play-v3 .tut-titulo,               /* T├¡tulos tutorial */
-.play-v3 .tut-fin-titulo,           /* T├¡tulo finale */
-.play-v3 .tut-bloque-tit,           /* OBSERVA / PROP├ôN / MIRA */
-.play-v3 .tut-cara-nombre,          /* Nombres en tutorial */
 .play-v3 .libreta-kicker,           /* "Celestine apunta" etc */
 .play-v3 .obj-vecinos-tit,          /* "VECINOS" en tile */
 .play-v3 .obj-buzon-txt,            /* "MENSAJITOS" en tile */
@@ -604,51 +572,7 @@
   font: var(--aht-read-font-caption) !important;
 }
 
-/* --- TUTORIAL: párrafos Nunito; títulos/nombres Caveat (sección 10) --- */
-.play-v3 .tut-intro-line,
-.play-v3 .tut-intro-extra,
-.play-v3 .tut-bloques-pref,
-.play-v3 .tut-bloque-txt,
-.play-v3 .tut-bloque-sym,
-.play-v3 .tut-cierre,
-.play-v3 .tut-fin-lead,
-.play-v3 .tut-fin-rest,
-.play-v3 .tut-texto,
-.play-v3 .tut-papel-cuerpo,
-.play-v3 .tut-papel-cuerpo p {
-  font: var(--aht-read-font) !important;
-  font-style: normal !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
-}
 
-/* --- NUEVO PLAN / INICIO / AVISOS --- */
-.play-v3 .capa-organizar .org-seccion-meta,
-.play-v3 .capa-organizar .org-picker-hint,
-.play-v3 .capa-organizar .org-dd-label,
-.play-v3 .capa-organizar .org-dd-opt,
-.play-v3 .capa-organizar .org-tipo-card-txt,
-.play-v3 .capa-organizar .org-lugar-horario,
-.play-v3 .capa-organizar .org-lugar-card-desc,
-.play-v3 .capa-organizar .org-lugar-card-estado,
-.play-v3 .capa-organizar .org-horas-hint,
-.play-v3 .capa-organizar .org-busca,
-.play-v3 .capa-organizar .org-aviso,
-.play-v3 .capa-organizar .org-picker-nom,
-.play-v3:has(.game-shell) .enc-mov-lugar,
-.play-v3:has(.game-shell) .pp-mov-lugar,
-.play-v3:has(.game-shell) .prox-meta,
-.play-v3:has(.game-shell) .vecinos-stat,
-.play-v3:has(.game-shell) .obj-pueblo-txt,
-.play-v3:has(.game-shell) .obj-buzon-preview,
-.play-v3:has(.game-shell) .obj-parejas-vacio,
-.play-v3:has(.game-shell) .obj-parejas-list p.muted,
-.play-v3 .vida-derrota .tut-texto,
-.play-v3 .plan-notif-meta {
-  font: var(--aht-read-font) !important;
-  font-style: normal !important;
-  text-transform: none !important;
-}
 
 .play-v3:has(.game-shell) .enc-mov-nombres,
 .play-v3:has(.game-shell) .pp-mov-nombres,

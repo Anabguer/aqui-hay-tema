@@ -10,6 +10,7 @@ const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
 const cssApp = fs.readFileSync(path.join(root, 'assets/css/play-v3-app.css'), 'utf8');
+const cssDS = fs.readFileSync(path.join(root, 'assets/css/play-v3-tutorial-ds.css'), 'utf8');
 const cssResp = fs.readFileSync(path.join(root, 'assets/css/play-v3-responsive.css'), 'utf8');
 
 let failures = 0;
@@ -78,9 +79,11 @@ async function arnesReal() {
     const fuente = extraerFuncion('quizaMostrarTutFinale') + '\n' + extraerFuncion('cerrarTutFinale');
     // AsyncFunction: cerrarTutFinale es async y usa await dentro.
     const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
-    const fabrica = await new AsyncFunction('$', 'cacheEstado', 'syncScrollLock', 'api', 'refresh', 'setCapa', 'document',
+    const esc = (s) => s;
+    const tutAssetUrl = (name) => 'assets/play-v3/tutorial/' + name;
+    const fabrica = await new AsyncFunction('$', 'cacheEstado', 'syncScrollLock', 'api', 'refresh', 'setCapa', 'document', 'esc', 'tutAssetUrl',
       fuente + '\n return { mostrar: quizaMostrarTutFinale, cerrar: cerrarTutFinale };')(
-      dom.$, cacheEstado, dom.syncScrollLock, dom.api, dom.refresh, dom.setCapa, { body: dom.body, querySelector: dom.$ });
+      dom.$, cacheEstado, dom.syncScrollLock, dom.api, dom.refresh, dom.setCapa, { body: dom.body, querySelector: dom.$ }, esc, tutAssetUrl);
     return fabrica;
   }
   const tutViva = () => ({ finale_pendiente: true, finale: { tit: 'T', txt: 'X', boton: 'OK' } });
@@ -107,17 +110,18 @@ async function arnesReal() {
   ok(dom.apiCalls === 1, 'arnés C: partida.tutorial_finale llamada exactamente una vez');
 }
 
-// --- CSS desktop: reglas base modales (patrón .tut-intro) ---
-ok(/\.tut-finale\s*\{[^}]*position:\s*fixed/.test(cssApp), 'CSS base: .tut-finale position:fixed (desktop incluido)');
-ok(/\.tut-finale\s*\{[^}]*inset:\s*0/.test(cssApp), 'CSS base: .tut-finale cubre viewport (inset:0)');
-ok(/\.tut-finale\s*\{[^}]*z-index:\s*520/.test(cssApp), 'CSS base: .tut-finale z-index 520 (mismo canon que móvil)');
-ok(/\.tut-finale\s*\{[^}]*display:\s*grid[^}]*place-items:\s*center/.test(cssApp.replace(/\n/g, ' ')), 'CSS base: .tut-finale centrado (grid place-items:center)');
-ok(/\.tut-finale\s*\{[^}]*background:\s*rgba\(30,\s*25,\s*25/.test(cssApp.replace(/\n/g, ' ')), 'CSS base: .tut-finale backdrop oscuro');
-ok(/\.tut-finale\[hidden\]\s*\{\s*display:\s*none\s*!important;\s*\}/.test(cssApp), 'CSS base: [hidden] oculta de verdad el modal');
+// --- CSS desktop: reglas base modales (patrón .tut-intro) — autoridad canonical = tutorial-ds.css ---
+ok(/\.tut-finale\s*\{[^}]*position:\s*fixed/.test(cssDS), 'CSS base: .tut-finale position:fixed (desktop incluido)');
+ok(/\.tut-finale\s*\{[^}]*inset:\s*0/.test(cssDS), 'CSS base: .tut-finale cubre viewport (inset:0)');
+ok(/\.tut-finale\s*\{[^}]*z-index:\s*520/.test(cssDS), 'CSS base: .tut-finale z-index 520 (mismo canon que móvil)');
+ok(/\.tut-finale\s*\{[^}]*display:\s*grid[^}]*place-items:\s*center/.test(cssDS.replace(/\n/g, ' ')), 'CSS base: .tut-finale centrado (grid place-items:center)');
+ok(/\.tut-finale\s*\{[^}]*background:.*rgba\(30,\s*25,\s*2[25]/.test(cssDS.replace(/\n/g, ' ')), 'CSS base: .tut-finale backdrop oscuro');
+ok(/\.tut-finale\[hidden\]\s*\{\s*display:\s*none\s*!important;\s*\}/.test(cssDS), 'CSS base: [hidden] oculta de verdad el modal');
 
 arnesReal().then(() => {
-  // --- Móvil: variante batch15 intacta (coherente con pasar_noche_ui_test.js) ---
-  ok(/data-tut-finale="1"\]\s*\.tut-finale\s*\{[^}]*z-index:\s*520/.test(cssResp) && /\.tut-finale \.tut-papel\s*\{[^}]*z-index:\s*521/.test(cssResp), 'CSS móvil: batch 15 (520/521) intacto');
+  // --- Z-index canonico: 520 overlay, 521 papel (ahora en tutorial-ds.css, aplica mobile+desktop) ---
+  ok(/\.tut-finale\s*\{[^}]*z-index:\s*520/.test(cssDS), 'CSS: .tut-finale z-index 520 (canonico)');
+  ok(/\.tut-finale \.tut-papel\s*\{[^}]*z-index:\s*521/.test(cssDS), 'CSS: .tut-finale .tut-papel z-index 521 (canonico)');
 
   console.log(failures === 0 ? '\nTODO OK\n' : '\nFALLOS: ' + failures + '\n');
   process.exit(failures === 0 ? 0 : 1);

@@ -1,4 +1,4 @@
-/* play-v3-responsive.css â€” mÃ³vil real (game-shell). Desktop intacto vÃ­a media queries. */
+﻿/* play-v3-responsive.css â€” mÃ³vil real (game-shell). Desktop intacto vÃ­a media queries. */
 
 /* â”€â”€ Tablet: quitar mÃ¡rgenes de impresiÃ³n â”€â”€ */
 @media (max-width: 900px) {
@@ -2013,38 +2013,9 @@
 
 
 
-/* === Fix batch 15: tut-finale + parejas aire === */
+/* === Fix batch 15: parejas aire === */
+/* Tutorial finale: AUTORIDAD CANONICA = play-v3-tutorial-ds.css */
 @media (max-width: 768px) {
-  /* Tutorial finale: modal real sobre tokens/mapa */
-  body.play-v3[data-tut-finale="1"] .tut-finale {
-    display: grid !important;
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 520 !important;
-    place-items: center;
-    padding: max(1rem, env(safe-area-inset-top, 0)) 1rem max(1rem, env(safe-area-inset-bottom, 0));
-    background: rgba(30, 25, 25, 0.42) !important;
-    pointer-events: auto !important;
-    box-sizing: border-box;
-  }
-
-  body.play-v3[data-tut-finale="1"] .tut-finale[hidden] {
-    display: none !important;
-  }
-
-  body.play-v3[data-tut-finale="1"] .tut-finale .tut-papel {
-    position: relative;
-    z-index: 521;
-    width: min(92vw, 380px);
-    max-height: min(80dvh, 520px);
-    overflow: auto;
-    pointer-events: auto;
-  }
-
-  /* Parejas: mÃ¡s aire vertical */
-  .play-v3:has(.game-shell) .shell-grupo-parejas {
-    padding: .72rem .7rem .78rem !important;
-  }
 
   .play-v3:has(.game-shell) .shell-grupo-parejas .zona-tit-parejas {
     margin: 0 0 .55rem !important;
