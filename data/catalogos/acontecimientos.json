@@ -123,7 +123,8 @@
                 "se_conocen",
                 "interes_o_historia",
                 "no_parentesco_veto",
-                "no_son_pareja"
+                "no_son_pareja",
+                "primera_cita"
             ],
             "prerequisito_nivel": "importante",
             "requiere_respuesta_ambos": true,

@@ -45,6 +45,9 @@ final class AcontecimientoElegibilidad
             if ($c === 'no_parentesco_veto' && $b !== '' && ParentescoVeto::bloqueaRomance($partida, $a, $b, $cal)) {
                 $fallos[] = $c;
             }
+            if ($c === 'primera_cita' && $b !== '' && !RelacionBitacora::tienenHito($partida, $a, $b, RelacionBitacora::PRIMERA_CITA)) {
+                $fallos[] = $c;
+            }
             if ($c === 'interes_o_historia' && $b !== '' && !self::interesOHistoria($partida, $a, $b)) {
                 $fallos[] = $c;
             }

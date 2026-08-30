@@ -321,9 +321,10 @@
             "romance",
             "consejo",
             "romance_accion",
-            "romance_hito"
+            "romance_hito",
+            "pareja"
         ],
-        "_nota_familias_fase2": "P5: romance_hito habilitado para declaración autónoma. peso=0.04 (bajo, no domina)."
+        "_nota_familias_fase2": "FASE 2: romance_hito y pareja habilitados. declaracion requiere primera_cita."
     },
     "autonomia": {
         "salidas_individuales_sqrt": 1.2,
