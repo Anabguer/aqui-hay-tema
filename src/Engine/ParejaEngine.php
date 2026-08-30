@@ -100,6 +100,13 @@ final class ParejaEngine
         $rel['estabilidad_pareja']['activa'] = false;
         $rel['estabilidad_pareja']['memoria'] = $mem;
         $rel['estabilidad_pareja']['valor'] = null;
+        // Tras la ruptura el vínculo es EX: el romance direccional debe
+        // resetearse a 0 o el mapa funcional mostraría "ex" y "romance vivo"
+        // a la vez (contradicción). Se resetea en ambas direcciones.
+        $rel['romance_a_hacia_b'] = 0;
+        $rel['romance_b_hacia_a'] = 0;
+        $rel['atraccion_a_hacia_b'] = 0;
+        $rel['atraccion_b_hacia_a'] = 0;
         $n = count($rel['historial_parejas']);
         if ($n > 0) {
             $rel['historial_parejas'][$n - 1]['fin'] = [
