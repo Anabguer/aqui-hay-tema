@@ -651,5 +651,26 @@
             }
         ],
         "_nota": "Regalos F1\/F2: cooldown por vecino via cooldowns.por_familia.regalo."
+    },
+    "detallitos": {
+        "_provisional": true,
+        "_nota": "§23.6 Detallitos sorpresa: regalo ocasionional al cumplir misiones diarias. No todas las misiones dan objeto (la mayoría sigue dando Latido). Patrón análogo a cuenta_latido.",
+        "probabilidad": 0.15,
+        "max_por_dia": 1,
+        "cooldown_minimo_dias": 2,
+        "objetos": [
+            "tarro_mermelada",
+            "caja_dulces",
+            "taza",
+            "bolsa_cafe",
+            "cuaderno",
+            "marcapaginas",
+            "vela_casera",
+            "kit_costura",
+            "maceta_pintada",
+            "postal_pueblo",
+            "puzzle",
+            "peluche"
+        ]
     }
 }
