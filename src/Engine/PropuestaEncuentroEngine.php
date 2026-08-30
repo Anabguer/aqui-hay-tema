@@ -67,6 +67,13 @@ final class PropuestaEncuentroEngine
             return GameError::respuesta(GameError::PARTICIPANTES_EXCESO);
         }
 
+        $tipo = PropuestaNivel::aliasTipo($tipo);
+        if ($tipo === '') {
+            // El payload real del JS puede enviar tipo vacío (modo 'pareja' deja
+            // org.tipo === ''); sin esto se pierde la garantía pedagógica del
+            // tutorial M1. Restaurar el default canónico 'conocerse' (PRESENTAR).
+            $tipo = PropuestaNivel::PRESENTAR;
+        }
         $ctx = EncuentroEngine::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
         if (!($ctx['ok'] ?? false)) {
             return $ctx;
@@ -78,7 +85,6 @@ final class PropuestaEncuentroEngine
         if (!Reloj::esFuturo($partida['reloj'] ?? [], $dia, $hora)) {
             return GameError::respuesta(GameError::HORA_PASADA, ['dia' => $dia, 'hora' => $hora]);
         }
-        $tipo = PropuestaNivel::aliasTipo($tipo);
         $calDef = CalibracionConfig::load(dirname(__DIR__, 2));
         $misionTutorial = TutorialPrimerosPasos::esPropuestaPedagogicaTutorial($partida, $participantes, $tipo);
         $pedagogicaTutorial = $misionTutorial !== '';

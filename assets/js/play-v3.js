@@ -7454,7 +7454,7 @@ function hobbyIconKey(id, texto) {
         participantes: parts,
         dia: org.dia,
         hora: org.hora,
-        tipo: orgModo() === 'solo' ? 'individual' : (org.tipo || ''),
+        tipo: orgModo() === 'solo' ? 'individual' : (org.tipo || 'conocerse'),
         lugar: org.lugar,
         modo: orgModo()
       };
