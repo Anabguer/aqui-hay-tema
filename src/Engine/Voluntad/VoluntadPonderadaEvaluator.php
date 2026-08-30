@@ -11,6 +11,7 @@ use AquiHayTema\Engine\PlanAfinidad;
 use AquiHayTema\Engine\PropuestaCooldown;
 use AquiHayTema\Engine\PropuestaEncuentro;
 use AquiHayTema\Engine\PropuestaNivel;
+use AquiHayTema\Engine\MemoriaEventos;
 use AquiHayTema\Engine\RechazoMemoria;
 use AquiHayTema\Engine\RelacionEngine;
 use AquiHayTema\Engine\RngService;
@@ -208,6 +209,8 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $modTipo = self::modTipo($tipo, $cal);
         $s += $modTipo;
+        $modContinuidad = self::modContinuidadReciente($partida, $quien, $otro, $cal);
+        $s += $modContinuidad;
         $score = max(0, min(100, $s));
         return [
             'score' => $score,
@@ -231,6 +234,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             'tipo' => $tipo,
             'mod_tipo' => $modTipo,
             'mod_iniciativa_romantica' => $modRomTipo,
+            'mod_continuidad_reciente' => $modContinuidad,
         ];
     }
 
@@ -255,6 +259,97 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         }
         $v = CalibracionConfig::get($cal, 'voluntad.mod_tipo.' . $tipo, 0);
         return is_numeric($v) ? (int) $v : 0;
+    }
+
+    /**
+     * Modificador por continuidad reciente: si hubo encuentros recientes entre
+     * ambos, modula la predisposición según el resultado vivido.
+     *
+     * Direccional: consulta recientes DESDE $quien hacia $otro.
+     * Si el último fue malo, corta el bono (corte_si_ultimo_malo).
+     * Decay por halflife configurable.
+     *
+     * @param array<string, mixed> $cal
+     */
+    public static function modContinuidadReciente(array $partida, string $quien, string $otro, array $cal): int
+    {
+        if ($quien === '' || $otro === '') {
+            return 0;
+        }
+        $cfg = CalibracionConfig::get($cal, 'voluntad.continuidad_reciente', []);
+        if (!is_array($cfg) || empty($cfg['activo'])) {
+            return 0;
+        }
+        $bonusMuyBien = (int) ($cfg['bonus_muy_bien'] ?? 10);
+        $bonusBien = (int) ($cfg['bonus_bien'] ?? 5);
+        $bonusDosBuenos = (int) ($cfg['bonus_dos_buenos_48h'] ?? 3);
+        $halflife = (int) ($cfg['decay_halflife_horas'] ?? 12);
+        $maxBonus = (int) ($cfg['max_bonus'] ?? 12);
+        $corteMalo = !empty($cfg['corte_si_ultimo_malo']);
+        $mirar = (int) ($cfg['mirar_ultimos'] ?? 5);
+
+        $recientes = MemoriaEventos::recientes($partida, [$quien, $otro], $mirar);
+        if ($recientes === []) {
+            return 0;
+        }
+
+        $now = ((int) ($partida['reloj']['dia_pueblo'] ?? 1)) * 24 + (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $mod = 0;
+        $ultimoResultado = null;
+        $buenos48h = 0;
+
+        foreach ($recientes as $ev) {
+            // Solo contar encuentros ENTRE ambos (directional: $quien ↔ $otro)
+            $participantes = $ev['participantes'] ?? [];
+            if (!in_array($quien, $participantes, true) || !in_array($otro, $participantes, true)) {
+                continue;
+            }
+            $resultado = $ev['resultado_experiencia'] ?? null;
+            if ($resultado === null) {
+                continue;
+            }
+            $diaEv = (int) ($ev['dia'] ?? 0);
+            $horaEv = (int) ($ev['hora'] ?? 0);
+            $tEv = $diaEv * 24 + $horaEv;
+            $horasAtras = $now - $tEv;
+            if ($horasAtras < 0) {
+                $horasAtras = 0;
+            }
+
+            // Decay exponencial por halflife
+            $decay = pow(0.5, $horasAtras / max(1, $halflife));
+
+            if ($resultado === 'muy_bien') {
+                $mod += (int) round($bonusMuyBien * $decay);
+                if ($horasAtras <= 48) {
+                    $buenos48h++;
+                }
+            } elseif ($resultado === 'bien') {
+                $mod += (int) round($bonusBien * $decay);
+                if ($horasAtras <= 48) {
+                    $buenos48h++;
+                }
+            } elseif ($resultado === 'mal' || $resultado === 'muy_mal') {
+                $mod -= (int) round(abs($bonusBien) * $decay);
+            }
+
+            if ($ultimoResultado === null) {
+                $ultimoResultado = $resultado;
+            }
+        }
+
+        // Bonus por dos buenos en 48h
+        if ($buenos48h >= 2) {
+            $mod += $bonusDosBuenos;
+        }
+
+        // Corte: si el último fue malo, anula bonos positivos
+        if ($corteMalo && $ultimoResultado !== null
+            && ($ultimoResultado === 'mal' || $ultimoResultado === 'muy_mal')) {
+            $mod = min($mod, 0);
+        }
+
+        return max(-$maxBonus, min($maxBonus, $mod));
     }
 
     /**
