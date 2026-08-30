@@ -1,5 +1,5 @@
-ï»¿/**
- * MENSAJITOS â€” Carlita Luna â€” tarjetas persona v1
+/**
+ * MENSAJITOS — Carlita Luna — tarjetas persona v1
  * Carga al final del stack de Mensajitos; mobile-first.
  */
 
@@ -67,7 +67,10 @@
 
 .play-v3 .capa-buzon .carta-msg .cuerpo {
   margin: 0 0 8px !important;
-  font: 600 1.2rem/1.35 Caveat, cursive !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: 1.2rem !important;
+  font-weight: 600 !important;
+  line-height: 1.35 !important;
   white-space: normal !important;
   overflow-wrap: anywhere;
   word-break: break-word;

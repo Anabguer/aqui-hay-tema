@@ -1,4 +1,4 @@
-Ôªø/** Ficha vecino (06) */
+/** Ficha vecino (06) */
 
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha {
@@ -72,7 +72,7 @@
 }
 .play-v3 .capa-ficha .ficha-rasgo-tag, .play-v3 .capa-ficha .ficha-hobby-card {
   border: 2px solid var(--ds-ink-soft, #594839); border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--ds-paper-card, #fffdf7); padding: 8px; font-family: Caveat, cursive;
+  background: var(--ds-paper-card, #fffdf7); padding: 8px; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
 }
 .play-v3 .capa-ficha .ficha-rasgo-tag.is-desconocido, .play-v3 .capa-ficha .ficha-hobby-card.is-desconocido { border-style: dashed; opacity: .75; }
 .play-v3 .capa-ficha .ficha-rel-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px dashed rgba(107,81,56,.2); }
@@ -81,7 +81,7 @@
 .play-v3 .capa-ficha .ficha-rel-nom { font-family: Caveat, cursive; font-size: 1.05rem; flex: 1; }
 .play-v3 .capa-ficha .ficha-ver-mas { font: 700 .9375rem/1.2 Caveat, cursive; color: var(--ds-ink, #3b3028); background: none; border: 0; text-align: right; width: 100%; cursor: pointer; }
 .play-v3 .capa-ficha .ficha-planes:empty::after {
-  content: "Su agenda est√° sospechosamente tranquila."; display: block; padding: 12px; text-align: center;
+  content: "Su agenda est· sospechosamente tranquila."; display: block; padding: 12px; text-align: center;
   border: 2px dashed var(--ds-ink-soft, #594839); border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
   font-family: Caveat, cursive; font-size: 1.1rem; color: var(--ds-text-muted, #7a6a5c);
 }
@@ -163,7 +163,7 @@
   border: 2px solid var(--ds-ink-soft, #594839); border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
   background: var(--ds-paper-card, #fffdf7); padding: 9px 11px; margin: 0 0 10px;
 }
-.play-v3 .animo-modal-causa p { margin: 0; font-family: Caveat, cursive; font-size: 1.1rem; line-height: 1.3; }
+.play-v3 .animo-modal-causa p { margin: 0; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: 1.1rem; line-height: 1.3; }
 .play-v3 .animo-modal-cta {
   width: 100%; box-sizing: border-box; min-height: 44px; margin-bottom: 6px;
   border: 2px solid var(--ds-ink, #3b3028); border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
@@ -174,7 +174,7 @@
   display: block; width: 100%; margin: 0 0 6px; padding: 6px; border: 0; background: none;
   font: 700 .9375rem/1.2 Caveat, cursive; color: var(--ds-ink, #3b3028); cursor: pointer; text-align: center;
 }
-.play-v3 .animo-modal-hint { margin: 0; text-align: center; font-family: Caveat, cursive; font-size: .95rem; color: var(--ds-text-muted, #7a6a5c); }
+.play-v3 .animo-modal-hint { margin: 0; text-align: center; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: .95rem; color: var(--ds-text-muted, #7a6a5c); }
 .play-v3 .ficha-diario-head-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; padding-right: 2rem; }
 .play-v3 .ficha-diario-head-avatar { width: 48px; height: 48px; border-radius: 999px; overflow: hidden; border: 2px solid #fff; box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839); flex: 0 0 auto; }
 .play-v3 .ficha-diario-head-avatar img { width: 100%; height: 100%; object-fit: cover; }
@@ -194,7 +194,7 @@
 .play-v3 .ficha-diario-tl { position: relative; padding-left: 18px; margin-bottom: 8px; border-left: 2px dashed rgba(107,81,56,.35); }
 .play-v3 .ficha-diario-entrada { position: relative; margin: 0 0 10px; }
 .play-v3 .ficha-diario-entrada::before {
-  content: "‚óè"; position: absolute; left: -25px; top: 12px; font-size: .7rem; color: var(--ds-pink-deep, #c85b78);
+  content: "?"; position: absolute; left: -25px; top: 12px; font-size: .7rem; color: var(--ds-pink-deep, #c85b78);
 }
 .play-v3 .ficha-diario-entrada.is-destacada .ficha-diario-card { box-shadow: 0 0 0 2px var(--ds-pink-deep, #c85b78); }
 .play-v3 .ficha-diario-card {
@@ -211,7 +211,7 @@
 .play-v3 .ficha-diario-cat.pg-pill--mustard { background: var(--ds-mustard-soft, #f8efd4); border-color: #9a6a2e; color: #9a6a2e; }
 .play-v3 .ficha-diario-cat.pg-pill--lavender { background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a); color: var(--ds-lavender-deep, #7a6a9a); }
 .play-v3 .capa-ficha .ficha-planes:empty::after {
-  content: "Su agenda est√° sospechosamente tranquila.";
+  content: "Su agenda est· sospechosamente tranquila.";
 }
 
 
@@ -597,7 +597,7 @@
   letter-spacing: .06em !important;
 }
 
-/* FICHA-HERO-MOCKUP-V2-PHONE ‚Äî gana sobre play-v3-responsive.css */
+/* FICHA-HERO-MOCKUP-V2-PHONE ó gana sobre play-v3-responsive.css */
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
   background-image: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%) !important;
@@ -651,7 +651,7 @@
   font-size: 1.3rem !important;
 }
 
-/* FICHA-ANIMO-PILL-V3 ‚Äî pastilla mockup + interrogante integrado */
+/* FICHA-ANIMO-PILL-V3 ó pastilla mockup + interrogante integrado */
 .play-v3 .capa-ficha .ficha-animo-row {
   margin-top: 10px !important;
 }
@@ -734,7 +734,7 @@
   font-size: 1.32rem !important;
 }
 
-/* FICHA-BG-MATCH-MODALES ‚Äî mismo fondo que Vecinos / ds-modal-sheet */
+/* FICHA-BG-MATCH-MODALES ó mismo fondo que Vecinos / ds-modal-sheet */
 .play-v3 .play-root.pc[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
 .play-v3 .play-root.phone[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
@@ -772,7 +772,7 @@
   display: none !important;
 }
 
-/* FICHA-SCROLL-SIN-BARRA ‚Äî scroll funcional, barra invisible */
+/* FICHA-SCROLL-SIN-BARRA ó scroll funcional, barra invisible */
 .play-v3 .capa-ficha .ficha-top,
 .play-v3 .capa-ficha .ficha-hero {
   flex-shrink: 0 !important;
@@ -842,7 +842,7 @@
   letter-spacing: .04em !important;
 }
 
-/* √Ånimo m√°s plano (mockup ENFADADO) */
+/* ¡nimo m·s plano (mockup ENFADADO) */
 .play-v3 .capa-ficha .ficha-animo-pill {
   min-height: 34px !important;
   padding: 3px 7px 3px 4px !important;
@@ -930,7 +930,7 @@
   color: var(--ds-red-alert, #c42b4a) !important;
 }
 
-/* Pr√≥ximos planes */
+/* PrÛximos planes */
 .play-v3 .capa-ficha .ficha-seccion-planes .ficha-seccion-tit {
   background: var(--ds-coral-soft, #fde4dc) !important;
   border-color: #c96a52 !important;
@@ -975,7 +975,7 @@
   color: var(--ds-ink, #3b3028) !important;
 }
 
-/* Bot√≥n organizar + hint */
+/* BotÛn organizar + hint */
 .play-v3 .capa-ficha .ficha-btn-org {
   display: block !important;
   width: 100% !important;
@@ -1005,7 +1005,7 @@
   margin-right: 4px !important;
 }
 
-/* FICHA-POLISH-V5 ‚Äî √°nimo neutro m√°s fino + rasgos en rejilla pintada */
+/* FICHA-POLISH-V5 ó ·nimo neutro m·s fino + rasgos en rejilla pintada */
 .play-v3 .capa-ficha .ficha-animo-pill {
   display: inline-flex !important;
   align-items: center !important;
@@ -1133,7 +1133,7 @@
   opacity: 1 !important;
 }
 
-/* FICHA-POLISH-V6 ‚Äî rasgos rosa compactos + m√°s color en r√≥tulos */
+/* FICHA-POLISH-V6 ó rasgos rosa compactos + m·s color en rÛtulos */
 .play-v3 .capa-ficha .ficha-hero {
   margin-bottom: 2px !important;
 }
@@ -1149,13 +1149,13 @@
   margin-bottom: 6px !important;
 }
 
-/* R√≥tulo principal con m√°s presencia */
+/* RÛtulo principal con m·s presencia */
 .play-v3 .capa-ficha .ficha-tit {
   color: var(--ds-pink-deep, #c85b78) !important;
   text-shadow: 0 1px 0 rgba(255, 255, 255, .65) !important;
 }
 
-/* Cinta de secci√≥n: rosa de la casa */
+/* Cinta de secciÛn: rosa de la casa */
 .play-v3 .capa-ficha .ficha-seccion-rasgos .ficha-seccion-tit {
   background: var(--ds-pink-soft, #fbe3ec) !important;
   border: 1.5px solid var(--ds-pink-deep, #c85b78) !important;
@@ -1208,7 +1208,7 @@
   font-size: 1rem !important;
 }
 
-/* FICHA-POLISH-V7 ‚Äî margen rasgos, √°nimo suave, relaciones mockup */
+/* FICHA-POLISH-V7 ó margen rasgos, ·nimo suave, relaciones mockup */
 .play-v3 .capa-ficha .ficha-body {
   margin-top: 6px !important;
   padding-top: 8px !important;
@@ -1225,7 +1225,7 @@
   margin-bottom: 8px !important;
 }
 
-/* √Ånimo: etiqueta suave (no pastilla gris tosca) */
+/* ¡nimo: etiqueta suave (no pastilla gris tosca) */
 .play-v3 .capa-ficha .ficha-animo-row {
   margin-top: 8px !important;
 }
@@ -1379,7 +1379,7 @@
   color: var(--ds-pink-deep, #c85b78) !important;
 }
 
-/* === DIARIO VECINO ‚Äî modal independiente (mockup) === */
+/* === DIARIO VECINO ó modal independiente (mockup) === */
 .play-v3 .capa-ficha-diario {
   display: flex;
   flex-direction: column;
@@ -1567,7 +1567,7 @@
 }
 
 
-/* === DIARIO NARRATIVO v2 ‚Äî lectura clara, menos cajas === */
+/* === DIARIO NARRATIVO v2 ó lectura clara, menos cajas === */
 .play-v3 .capa-ficha-diario .fdi-entrada {
   display: block;
   margin: 0 0 12px;
@@ -1668,7 +1668,7 @@
   }
 }
 
-/* === MODAL √ÅNIMO ‚Äî mockup (consecuencias reales) === */
+/* === MODAL ¡NIMO ó mockup (consecuencias reales) === */
 .play-v3 .capa-ficha .ficha-modal-animo {
   width: min(360px, 94%);
   max-height: 90%;
@@ -1780,7 +1780,7 @@
 }
 .play-v3 .animo-modal-hint .animo-hint-kw { text-decoration: underline wavy var(--ds-pink-deep, #c85b78); }
 
-/* FICHA-ANIMO-PILL-COMPACT ‚Äî pastilla m√°s baja */
+/* FICHA-ANIMO-PILL-COMPACT ó pastilla m·s baja */
 .play-v3 .capa-ficha .ficha-animo-row {
   margin-top: 6px !important;
 }
@@ -1830,7 +1830,7 @@
   height: 18px !important;
 }
 
-/* FICHA-RASGOS-VCENTER ‚Äî texto centrado en el cuadrado */
+/* FICHA-RASGOS-VCENTER ó texto centrado en el cuadrado */
 .play-v3 .capa-ficha .ficha-rasgo-tag {
   display: flex !important;
   align-items: center !important;
@@ -1886,7 +1886,7 @@
   display: none !important;
 }
 
-/* === FICHA: RASGOS + HOBBIES en fila (mitad/mitad) ‚Äî solo layout, est√©tica de tarjeta intacta === */
+/* === FICHA: RASGOS + HOBBIES en fila (mitad/mitad) ó solo layout, estÈtica de tarjeta intacta === */
 .play-v3 .capa-ficha .ficha-rasgos-hobbies {
   display: grid !important;
   grid-template-columns: 53fr 47fr !important;
@@ -1895,7 +1895,7 @@
   margin-top: 8px !important;
 }
 
-/* T√≠tulo de RASGOS con el mismo tratamiento visual que el de HOBBIES (bloques equivalentes/paralelos) */
+/* TÌtulo de RASGOS con el mismo tratamiento visual que el de HOBBIES (bloques equivalentes/paralelos) */
 .play-v3 .capa-ficha .ficha-seccion:has([data-ficha-rasgos]) .ficha-seccion-tit {
   background: var(--ds-lavender-soft, #ece6f8);
   border-color: var(--ds-lavender-deep, #7a6a9a);
@@ -1962,7 +1962,7 @@
   line-height: 1.15 !important;
 }
 
-/* M√≥vil estrecho: mismo concepto (2 columnas), solo se afinan tama√±os */
+/* MÛvil estrecho: mismo concepto (2 columnas), solo se afinan tamaÒos */
 @media (max-width: 360px) {
   .play-v3 .capa-ficha .ficha-rasgos-hobbies {
     gap: .45rem .5rem !important;
@@ -1997,7 +1997,7 @@
 }
 
 
-/* FICHA-ANIMO-CAPA-v136 ‚Äî centrada como ficha vecino, mas compacta */
+/* FICHA-ANIMO-CAPA-v136 ó centrada como ficha vecino, mas compacta */
 .play-v3 .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo {
   position: absolute !important;
   left: 50% !important;

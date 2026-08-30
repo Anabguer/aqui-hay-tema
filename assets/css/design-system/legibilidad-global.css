@@ -1,4 +1,4 @@
-﻿/* LEGIBILIDAD-GLOBAL-v1 â€” pasada tipogrÃ¡fica sin tocar layout.
+/* LEGIBILIDAD-GLOBAL-v1 — pasada tipográfica sin tocar layout.
 
 
 
@@ -14,7 +14,7 @@
 
 
 
-/* === TÃ­tulos principales / display === */
+/* === Títulos principales / display === */
 
 
 
@@ -74,7 +74,7 @@
 
 
 
-/* === Inicio: tÃ­tulos de bloque === */
+/* === Inicio: títulos de bloque === */
 
 
 
@@ -194,7 +194,7 @@
 
 
 
-.play-v3:has(.game-shell) .obj-pestaÃ±a,
+.play-v3:has(.game-shell) .obj-pestaña,
 
 
 
@@ -214,7 +214,7 @@
 
 
 
-/* === Planes en curso / prÃ³ximos (tarjetas) === */
+/* === Planes en curso / próximos (tarjetas) === */
 
 
 
@@ -566,7 +566,7 @@
 
 
 
-/* === Vecinos / buzÃ³n preview (Inicio) === */
+/* === Vecinos / buzón preview (Inicio) === */
 
 
 
@@ -594,7 +594,7 @@
 
 
 
-/* === Tutorial → AUTORIDAD CANÓNICA: play-v3-tutorial-ds.css === */
+/* === Tutorial ? AUTORIDAD CAN�NICA: play-v3-tutorial-ds.css === */
 
 
 
@@ -606,7 +606,7 @@
 
 
 
-/* Badge contador planes (PrÃ³ximos / En curso) */
+/* Badge contador planes (Próximos / En curso) */
 
 
 
@@ -1082,7 +1082,7 @@
 
 
 
-/* Desktop: mismo aire tabs ? marcar leído que en móvil (avisos .phone tabs mb 12px) */
+/* Desktop: mismo aire tabs ? marcar le�do que en m�vil (avisos .phone tabs mb 12px) */
 
 
 
@@ -1274,7 +1274,8 @@
 
 
 
-  font: 700 1.05rem/1.25 Caveat, cursive !important;
+  font-size: 1.05rem !important;
+  line-height: 1.25 !important;
 
 
 
@@ -1298,7 +1299,8 @@
 
 
 
-  font: 700 1.05rem/1.32 Caveat, cursive !important;
+  font-size: 1.05rem !important;
+  line-height: 1.32 !important;
 
 
 
@@ -1422,7 +1424,9 @@
 
 
 
-  font: 700 1.05rem/1.28 Caveat, cursive !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
+  line-height: 1.28 !important;
 
 
 

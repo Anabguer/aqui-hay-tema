@@ -1,7 +1,7 @@
-ï»¿/**
- * Capa COTILLEOS (03) â€” fidelidad a dev/propuestas/arnes.html #p03
+/**
+ * Capa COTILLEOS (03) — fidelidad a dev/propuestas/arnes.html #p03
  */
-/* shell modal: solo cuando la capa estÃ¡ activa (ver FIX-COTILLEOS-BOLITA al final) */
+/* shell modal: solo cuando la capa está activa (ver FIX-COTILLEOS-BOLITA al final) */
 .play-v3 .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel::before,
 .play-v3 .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel::before {
   content: ""; position: absolute; inset: 5px;
@@ -141,7 +141,7 @@
   font: 700 .9rem/1.1 Caveat, cursive; letter-spacing: .5px; text-transform: uppercase;
   color: #fff; transform: rotate(3deg); box-shadow: 1px 2px 0 rgba(51,38,30,.18);
 }
-.play-v3 .capa-diario .coti-item-txt { margin: 0; font-family: Caveat, cursive; font-weight: 600; font-size: 1.35rem !important; line-height: 1.25; color: var(--ds-ink, #3b3028); }
+.play-v3 .capa-diario .coti-item-txt { margin: 0; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-weight: 600; font-size: 1.35rem !important; line-height: 1.25; color: var(--ds-ink, #3b3028); }
 .play-v3 .capa-diario .coti-item-cuando {
   margin: 0; font: 700 .78rem/1.2 Nunito, sans-serif; letter-spacing: .02em;
   color: var(--ds-text-muted, #7a6a5c); text-align: center; white-space: nowrap;

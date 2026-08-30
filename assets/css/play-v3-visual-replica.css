@@ -1,9 +1,9 @@
-ï»¿/**
- * Visual Replica Pass â€” REF PNG vs runtime (mÃ³vil primero)
- * Carga despuÃ©s de play-v3-visual-interior.css
+/**
+ * Visual Replica Pass — REF PNG vs runtime (móvil primero)
+ * Carga después de play-v3-visual-interior.css
  */
 
-/* === INICIO: iconos de secciÃ³n (fix calendario gigante) === */
+/* === INICIO: iconos de sección (fix calendario gigante) === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .plan-seccion-ico,
   .play-v3:has(.game-shell) .pp-mov-ico,
@@ -157,7 +157,7 @@
   color: var(--ds-lavender-deep, #5c4f82);
 }
 
-/* === INICIO iter 2: feed columna Ãºnica misiones+parejas === */
+/* === INICIO iter 2: feed columna única misiones+parejas === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par,
   .play-v3:has(.game-shell) .game-right .shell-grupo-parejas {
@@ -346,7 +346,7 @@
     background: linear-gradient(180deg, #f3ecff 0%, #ebe4f8 100%) !important;
   }
   .play-v3:has(.game-shell) .obj-cotilleo-badge { display: inline-flex !important; }
-  .play-v3:has(.game-shell) .obj-cotilleo-txt { flex: 1 1 auto; font-family: Caveat, cursive !important; font-style: italic !important; }
+  .play-v3:has(.game-shell) .obj-cotilleo-txt { flex: 1 1 auto; font-style: italic !important; }
 }
 
 @media (min-width: 769px) {
@@ -371,10 +371,10 @@
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab-row { justify-content: center; gap: 6px; }
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-icono { font-size: 1.65rem; line-height: 1; }
 .play-v3:has(.game-shell) .capa-buzon .carta-msg .de { font-family: Caveat, cursive !important; font-size: 1.35rem !important; font-weight: 700 !important; }
-.play-v3:has(.game-shell) .capa-buzon .carta-msg .cuerpo { font-family: Caveat, cursive !important; font-size: 1rem !important; font-style: italic; }
+.play-v3:has(.game-shell) .capa-buzon .carta-msg .cuerpo { font-size: 1rem !important; font-style: italic; }
 
 
-/* === iter 2: estado Ã¡nimo + diario refinements === */
+/* === iter 2: estado ánimo + diario refinements === */
 .play-v3:has(.game-shell) .capa-ficha .ficha-modal-animo::before,
 .play-v3:has(.game-shell) .capa-ficha .ficha-modal-animo::after {
   content: "";

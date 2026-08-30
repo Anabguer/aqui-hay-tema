@@ -49,7 +49,7 @@
   border-bottom: 1px dashed rgba(107,81,56,.22);
 }
 .play-v3 .capa-misiones .mis-item:last-child { border-bottom: 0; }
-.play-v3 .capa-misiones .mis-item-cumplida .mis-txt { color: var(--ds-green-deep, #4a7a52) !important; font-family: Caveat, cursive; font-size: 1.05rem; }
+.play-v3 .capa-misiones .mis-item-cumplida .mis-txt { color: var(--ds-green-deep, #4a7a52) !important; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: 1.05rem; }
 .play-v3 .capa-misiones .mis-item-cumplida::before { content: "\2713"; font-weight: 800; color: var(--ds-green-deep, #4a7a52); }
 .play-v3 .capa-misiones .mis-item:not(.mis-item-cumplida)::before { content: ""; width: 14px; height: 14px; border: 2px solid var(--ds-ink-soft, #594839); border-radius: 999px; flex: 0 0 auto; }
 .play-v3 .capa-misiones .mis-estado { padding: 3px 10px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px; border: 1.5px solid var(--ds-ink-soft, #594839); font: 800 .6875rem/1.2 Nunito, sans-serif; }
