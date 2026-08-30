@@ -6356,7 +6356,8 @@
     flex: 0 1 auto !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav::before {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav::before {
     content: "" !important;
     position: absolute !important;
     inset: 0 !important;
@@ -8144,5 +8145,53 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     margin: 0 !important;
+  }
+}
+
+/* INICIO-CELESTINE-v88 - caritas Celestine apunta un poco mas grandes (interior + token) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview-cara-wrap {
+    flex: 0 0 46px !important;
+    width: 46px !important;
+    height: 46px !important;
+  }
+
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview-cara-wrap > .obj-vecinos-preview-cara {
+    object-position: 50% 7% !important;
+    transform: scale(1.28) !important;
+    transform-origin: 50% 16% !important;
+  }
+
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview > .obj-vecinos-preview-cara,
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview > .obj-vecinos-preview-ini {
+    width: 46px !important;
+    height: 46px !important;
+    flex: 0 0 46px !important;
+  }
+}
+/* INICIO-BOTTOM-NAV-FIX-v136 — nav en map-host: no absolute en elemento (solo ::before) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    height: auto !important;
+    min-height: 56px !important;
+    flex: 0 0 auto !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
   }
 }
