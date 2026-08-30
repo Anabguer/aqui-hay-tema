@@ -68,7 +68,8 @@ final class SimuladorCatchUpOffline
             VidaPuebloEngine::FLAG => true,
             MisionDiariaEngine::FLAG => true,
             CatchUpEngine::FLAG => true,
-            'encuentros_enabled' => true,
+            'encuentros_enabled' => false,
+            'npc_autonomy_enabled' => false,
         ];
         VidaPuebloEngine::ensure($partida, $cal);
         $deltaSetup = $vidaInicial - VidaPuebloEngine::valor($partida);

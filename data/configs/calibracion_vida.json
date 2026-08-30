@@ -561,7 +561,9 @@
         "umbral_segundos": 60,
         "max_dias": 90,
         "segundos_por_hora_juego": 3600,
-        "_nota": "1h real = 1h juego. Ausencia < umbral ignorada."
+        "eventos_por_dia": 3,
+        "salidas_por_dia": 1,
+        "_nota": "1h real = 1h juego. Ausencia < umbral ignorada. eventos/salidas = tope batch por día offline."
     },
     "seleccion_social": {
         "_provisional": true,

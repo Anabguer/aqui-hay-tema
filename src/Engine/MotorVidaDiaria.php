@@ -539,4 +539,66 @@ self::marcarActividad($partida, [$quien]);
         }
         return null;
     }
+
+    /**
+     * Catch-up batch: registra actividad NPC plausible para un día offline.
+     * NO ejecuta motores reales (encuentros, acontecimientos) — solo registra que la vida continuó.
+     * Los encuentros programados previamente al ausente sí se resuelven por EncuentroLifecycle.
+     *
+     * @param array<string, mixed> $cal
+     * @return array{eventos:int,salidas:int}
+     */
+    public static function catchUpBatchDia(
+        array &$partida,
+        Catalog $catalog,
+        array $cal,
+        RngService $rng,
+        ?GameLogger $logger = null
+    ): array {
+        $maxEv = (int) CalibracionConfig::get($cal, 'catch_up.eventos_por_dia', 3);
+        $maxSal = (int) CalibracionConfig::get($cal, 'catch_up.salidas_por_dia', 1);
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $eventos = 0;
+        $salidas = 0;
+
+        $vidaActual = FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)
+            ? VidaPuebloEngine::valor($partida)
+            : 100;
+        $suelo = (int) CalibracionConfig::get($cal, 'vida_pueblo.offline_suelo', 5);
+        if ($vidaActual <= $suelo + 5) {
+            return ['eventos' => 0, 'salidas' => 0];
+        }
+
+        $ids = array_keys($partida['residentes'] ?? []);
+        if ($ids === []) {
+            return ['eventos' => 0, 'salidas' => 0];
+        }
+
+        $nEv = min($maxEv, max(1, (int) round(sqrt(count($ids)))));
+        $eventos = $nEv;
+
+        $cupoSal = (int) max(1, round(
+            (float) CalibracionConfig::get($cal, 'autonomia.salidas_individuales_sqrt', 0.7) * sqrt(max(1, count($ids)))
+            + (float) CalibracionConfig::get($cal, 'autonomia.salidas_individuales_offset', 0.4)
+        ));
+        $hechas = 0;
+        foreach ($partida['npc_autonomo']['historial_eventos'] ?? [] as $ev) {
+            if ((int) ($ev['dia'] ?? 0) === $dia && ($ev['accion'] ?? '') === 'visitar_lugar') {
+                $hechas++;
+            }
+        }
+        $salidas = min($maxSal, max(0, $cupoSal - $hechas));
+
+        if ($eventos > 0 || $salidas > 0) {
+            $partida['catch_up_log'] = $partida['catch_up_log'] ?? [];
+            $partida['catch_up_log'][] = [
+                'dia' => $dia,
+                'eventos' => $eventos,
+                'salidas' => $salidas,
+            ];
+        }
+
+        $rng->persistToPartida($partida);
+        return ['eventos' => $eventos, 'salidas' => $salidas];
+    }
 }

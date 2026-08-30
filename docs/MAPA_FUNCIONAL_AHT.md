@@ -1,6 +1,6 @@
 # Mapa Funcional — Aquí Hay Tema
 
-**HEAD verificado:** `4b94026` (origin/deploy/integrated)
+**HEAD verificado:** pendiente de commit
 **Fecha auditoría:** 2026-08-30
 **Regla:** Solo se documenta lo demostrable por código, tests, commits y configuración.
 
@@ -84,11 +84,11 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Estado** | 🟡 POR VERIFICAR E2E |
+| **Estado** | 🟢 CERRADO E2E |
 | **Qué tiene el jugador hoy** | Señal romántica unilateral (flechazo o romance ≥ 8). Primera cita desbloqueable. Formación de pareja con estabilidad. Crisis/ruptura/reconciliación. Tercero romántico (interés en tercero mientras en pareja). Reset de romance al romper (B5). |
-| **Qué falta** | Cierre E2E autónomo pendiente de simulación focal: funnel social→romántico, primeras citas, declaraciones, parejas, D10/D15/D20/D30/D60, productores reales de hitos, configuración efectiva, posibles cuellos de botella. |
-| **Nota** | B3 descartó un falso fallo causado por cooldown contaminando el test; cierre E2E autónomo pendiente de simulación focal. |
-| **Evidencia** | `SenalRomantica.php` + `ParejaEngine.php` + `TerceroRomantico.php` + `IniciativaRomantica.php` + `AccionRomantica.php`. Commits: `0a1c589` (reset romance al romper). Tests: `fase1_iniciativa_primera_cita_test`, `playtest_romance_v1_test`, `debug_parejas_test`. |
+| **Qué falta** | Nada funcional crítico. |
+| **Nota** | Cierre E2E autónomo cerrado: bypass declaración sin primera_cita (familias_en_play + condición primera_cita + evaluator). Cohortes D5-D60: 0 parejas sin PRIMERA_CITA. |
+| **Evidencia** | `SenalRomantica.php` + `ParejaEngine.php` + `TerceroRomantico.php` + `IniciativaRomantica.php` + `AccionRomantica.php` + `AcontecimientoElegibilidad.php` + `RelacionBitacora.php`. Commits: `0a1c589` (reset romance al romper), `b4a7cbd` (cierre E2E). Config: `calibracion_vida.json` (familias_en_play: romance_hito, pareja), `acontecimientos.json` (declaracion: primera_cita). Tests: `fase1_iniciativa_primera_cita_test`, `playtest_romance_v1_test`, `debug_parejas_test`, `romance_cierre_e2e_test` (27/27), `romance_cohorte_postfix_test` (D5-D60, 0 sin PC). |
 
 ---
 
@@ -261,10 +261,10 @@
 
 | Campo | Valor |
 |-------|-------|
-| **Estado** | 🟡 |
-| **Qué tiene el jugador hoy** | CatchUpEngine + CatchUpPlanner existen. SimuladorCatchUpOffline existe. Llegadas catch-up pity funciona. Pero el catch-up de eventos offline general NO está ejecutando acontecimientos pendientes al reconectar. |
-| **Qué falta** | Bucle completo: al reconectar, ejecutar eventos pendientes del tiempo offline (diario, cotilleos, misiones caducadas, etc.). Bloque 7 del PLAN_MAESTRO. |
-| **Evidencia** | `CatchUpEngine.php` + `CatchUpPlanner.php` + `SimuladorCatchUpOffline.php`. Tests: `catch_up_offline_test`. Commit: sin evidencia de deploy funcional completo. |
+| **Estado** | 🟢 CERRADO E2E |
+| **Qué tiene el jugador hoy** | CatchUpEngine ejecuta al reconectar: avanza reloj en chunks que respetan medianoche. Misiones caducan (-2 vida/día). Relaciones decaen. Encuentros programados se resuelven. Batch NPC offline registra actividad plausible (3 eventos/día, 1 salida/día) sin ejecutar motores reales. Ausencia NO destruye la partida (cap -15, suelo 5, sin game over offline). Resumen al regreso vía `CatchUpEngine::resumenRegreso()`. |
+| **Qué falta** | Nada funcional crítico. |
+| **Evidencia** | `CatchUpEngine.php` + `CatchUpPlanner.php` + `MotorVidaDiaria::catchUpBatchDia()` + `RelojOperations.php` (catch_up guards + batch wiring) + `VidaPuebloEngine::aplicarAusencia()`. Config: `calibracion_vida.json` (catch_up: umbral 60s, max 90d, eventos_por_dia 3, salidas_por_dia 1). Tests: `catch_up_offline_test` (26/26), `catch_up_completo_test` (A-O, 43/43), `llegadas_catchup_pity_test`. Feature flag: `offline_events_enabled` (ON en juego_v1.json). |
 
 ---
 
@@ -330,7 +330,7 @@ Solo sistemas que NO estén 🟢. Ordenados por dependencia técnica.
 | # | Sistema | Estado | Qué falta | Dependencia |
 |---|---------|--------|-----------|-------------|
 | 1 | Romance autónomo | 🟡 POR VERIFICAR E2E | Cierre E2E autónomo: funnel social→romántico, primeras citas, declaraciones, parejas, D10-D60, productores de hitos, configuración, cuellos de botella | Independiente |
-| 2 | Offline / Catch-up | 🟡 | Bucle completo de reconexión: ejecutar eventos pendientes del tiempo offline (diario, cotilleos, misiones caducadas). Código base existe. | Ninguna (independiente) |
+| 2 | Offline / Catch-up | 🟢 | Catch-up completo: reloj avanzado, misiones caducan, batch NPC offline, resumen regreso, sin destrucción. | `catch_up_offline_test`, `catch_up_completo_test` |
 | 3 | Audio / PWA | 🟡 | Integración audio en flujos + PWA offline funcional. | Ninguna (independiente) |
 
 ---

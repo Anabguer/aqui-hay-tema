@@ -29,6 +29,8 @@ final class RelojOperations
         }
 
         $catchUp = (bool) ($opts['catch_up'] ?? false);
+        $offlineEventos = 0;
+        $offlineSalidas = 0;
         $antes = $partida['reloj'];
         Reloj::avanzarHoras($partida, $horas);
         $diaAntes = (int) ($antes['dia_pueblo'] ?? 1);
@@ -65,6 +67,17 @@ final class RelojOperations
             if (FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
                 $calSeg = CalibracionConfig::load($this->projectRoot);
                 SeguimientoConsejoEngine::evaluarPendientes($partida, $calSeg, $this->logger);
+            }
+
+            // Catch-up batch: generar actividad NPC limitada por día offline
+            if ($catchUp && FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled')) {
+                $calBatch = CalibracionConfig::load($this->projectRoot);
+                $catalogBatch = new Catalog($this->projectRoot);
+                $rngBatch = RngService::fromPartida($partida);
+                $batchResult = MotorVidaDiaria::catchUpBatchDia($partida, $catalogBatch, $calBatch, $rngBatch, $this->logger);
+                $rngBatch->persistToPartida($partida);
+                $offlineEventos += ($batchResult['eventos'] ?? 0);
+                $offlineSalidas += ($batchResult['salidas'] ?? 0);
             }
         }
         $calTick = CalibracionConfig::load($this->projectRoot);
@@ -169,6 +182,8 @@ final class RelojOperations
             'propuestas_caducadas' => $propuestasCaducadas,
             'llegadas' => $llegadasTick,
             'horas' => $horas,
+            'offline_eventos' => $offlineEventos,
+            'offline_salidas' => $offlineSalidas,
         ];
     }
 
