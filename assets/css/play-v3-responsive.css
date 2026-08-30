@@ -75,6 +75,11 @@
     box-sizing: border-box;
   }
 
+  body.play-v3 { height: 100vh !important; }
+  .game-shell { height: 100% !important; flex: none !important; }
+  .inicio-stage { flex: 1 !important; min-height: 0 !important; }
+  .game-map-wrap { flex: 1 !important; min-height: 200px !important; max-height: calc(100vh - 455px) !important; }
+
   .game-top {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto auto;
