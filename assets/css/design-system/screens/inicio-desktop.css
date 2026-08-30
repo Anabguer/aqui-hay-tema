@@ -8133,3 +8133,16 @@
     transform: none !important;
   }
 }
+
+/* INICIO-BOTTOM-NAV-GAP-v135 — nav a 0,5 cm del mapa (dentro de map-host, no fila grid) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap {
+    gap: 0.5cm !important;
+    align-self: start !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    margin: 0 !important;
+  }
+}
