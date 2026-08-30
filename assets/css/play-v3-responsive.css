@@ -53,6 +53,7 @@
     max-width: 100vw;
     overflow-x: hidden;
     min-height: 0;
+    height: auto;
     box-sizing: border-box;
   }
 
@@ -70,6 +71,7 @@
     min-height: 0;
     max-height: none;
     overflow: visible;
+    padding-bottom: 16px;
     box-sizing: border-box;
   }
 
@@ -2438,7 +2440,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   font-size: .88rem !important;
 }
 
-/* AquÃ­ hay tema: caja rosa Ãºnica */
+/* Aquí hay tema: caja rosa única */
 .play-v3 aside.quien .quien-bloque--tema {
   padding: 0 !important;
   margin-bottom: .34rem !important;
