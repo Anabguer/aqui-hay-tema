@@ -4731,14 +4731,19 @@
       box.innerHTML = '<span class="obj-vecinos-preview-ini">?</span>';
       return;
     }
+    var inDesktopCelestine = !!(box.closest && box.closest('.inicio-desktop'));
     box.innerHTML = pick.map(function (id) {
       var r = res[id];
       var img = tokenDe(id);
       var nom = (r.identidad_publica && r.identidad_publica.nombre) || id;
       var ini = nom.charAt(0) || '?';
-      return img
-        ? '<img class="obj-vecinos-preview-cara" src="' + esc(img) + '" alt=""/>'
-        : '<span class="obj-vecinos-preview-cara obj-vecinos-preview-ini">' + esc(ini) + '</span>';
+      if (!img) {
+        return '<span class="obj-vecinos-preview-cara obj-vecinos-preview-ini">' + esc(ini) + '</span>';
+      }
+      if (inDesktopCelestine) {
+        return '<span class="obj-vecinos-preview-cara-wrap" aria-hidden="true"><img class="obj-vecinos-preview-cara" src="' + esc(img) + '" alt=""/></span>';
+      }
+      return '<img class="obj-vecinos-preview-cara" src="' + esc(img) + '" alt=""/>';
     }).join('');
   }
 

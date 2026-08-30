@@ -8084,3 +8084,52 @@
     transform-origin: 50% 14% !important;
   }
 }
+
+/* INICIO-CELESTINE-v87 - zoom solo interior retrato; token 42px intacto (rebobina v84-v86) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview {
+    gap: 7px !important;
+    margin: 0 0 .62rem !important;
+  }
+
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview-cara-wrap {
+    flex: 0 0 42px !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 50% !important;
+    overflow: hidden !important;
+    border: 2px solid #2c261f !important;
+    box-shadow: 0 0 0 2px rgba(234, 223, 207, .95) !important;
+    background: #f5ebe0 !important;
+    display: block !important;
+    position: relative !important;
+    isolation: isolate !important;
+  }
+
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview-cara-wrap > .obj-vecinos-preview-cara {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: none !important;
+    max-height: none !important;
+    flex: none !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    object-fit: cover !important;
+    object-position: 50% 8% !important;
+    transform: scale(1.22) !important;
+    transform-origin: 50% 18% !important;
+  }
+
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview > .obj-vecinos-preview-cara,
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview > .obj-vecinos-preview-ini {
+    width: 42px !important;
+    height: 42px !important;
+    flex: 0 0 42px !important;
+    transform: none !important;
+  }
+}
