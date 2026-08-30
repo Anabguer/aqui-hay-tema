@@ -352,9 +352,9 @@
     },
     "iniciativa_social": {
         "_provisional": true,
-        "_nota": "A1: iniciativa social deliberada NPCâ†’NPC. NO romÃ¡ntica. Cifras de lab.",
-        "prob_por_tick": 0.08,
-        "cupo_dia_sqrt": 0.45,
+        "_nota": "A1: iniciativa social deliberada NPC→NPC. NO romántica. Cifras de lab. P4: cupo×1.5, prob×1.5.",
+        "prob_por_tick": 0.12,
+        "cupo_dia_sqrt": 0.70,
         "cupo_dia_offset": 0.25,
         "romance_umbral_bloqueo": 22
     },
