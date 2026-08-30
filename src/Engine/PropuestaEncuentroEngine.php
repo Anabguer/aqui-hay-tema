@@ -707,6 +707,45 @@ final class PropuestaEncuentroEngine
         }
         if (count($idxs) === 1) {
             $i = $idxs[0];
+            $dec = $propuesta['reacciones'][$i]['decision'] ?? '';
+            if ($dec === PropuestaEncuentro::DECISION_RECHAZA) {
+                // Rechazo genuino de la Voluntad en el único participante del
+                // plan conjunto (el otro fue eximido por compromiso/tutorial y
+                // forzado a aceptar). No sobreescribir la decisión con una tirada:
+                // el plan se rechaza y se registra la memoria para no perder las
+                // consecuencias de rechazo.
+                $ridSolo = (string) ($propuesta['reacciones'][$i]['residente_id'] ?? '');
+                if ($ridSolo !== '') {
+                    $motivoSolo = VoluntadPonderadaEvaluator::motivoRechazoPublic(
+                        $partida,
+                        $ridSolo,
+                        '',
+                        $cal
+                    );
+                    $propuesta['reacciones'][$i]['motivo_tipo'] = $motivoSolo;
+                    $propuesta['reacciones'][$i]['copy_id'] = $motivoSolo;
+                    RechazoMemoria::registrar(
+                        $partida,
+                        $ridSolo,
+                        $ridSolo,
+                        $motivoSolo,
+                        [],
+                        (string) ($propuesta['tipo'] ?? 'individual')
+                    );
+                }
+                unset($propuesta['reacciones'][$i]['_joint_plan']);
+                return;
+            }
+            if ($dec === PropuestaEncuentro::DECISION_ACEPTA) {
+                // Aceptación ya decidida por la Voluntad: respetarla (el otro
+                // participante está forzado a aceptar por obligación/compromiso).
+                $propuesta['resolucion_plan'] = [
+                    'modo' => 'individual',
+                    'respetada' => true,
+                ];
+                unset($propuesta['reacciones'][$i]['_joint_plan']);
+                return;
+            }
             $p = (float) ($propuesta['reacciones'][$i]['p'] ?? 0);
             $rng = RngService::fromPartida($partida);
             $tirada = $rng->nextFloat();
