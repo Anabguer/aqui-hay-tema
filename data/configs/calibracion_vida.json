@@ -320,9 +320,10 @@
             "ocio",
             "romance",
             "consejo",
-            "romance_accion"
+            "romance_accion",
+            "romance_hito"
         ],
-        "_nota_familias_fase1": "FASE 1: romance_accion da ruta de acercamiento tras flechazo. EXCLUIDAS romance_hito\/pareja."
+        "_nota_familias_fase2": "P5: romance_hito habilitado para declaración autónoma. peso=0.04 (bajo, no domina)."
     },
     "autonomia": {
         "salidas_individuales_sqrt": 1.2,
@@ -352,9 +353,9 @@
     },
     "iniciativa_social": {
         "_provisional": true,
-        "_nota": "A1: iniciativa social deliberada NPCâ†’NPC. NO romÃ¡ntica. Cifras de lab.",
-        "prob_por_tick": 0.08,
-        "cupo_dia_sqrt": 0.45,
+        "_nota": "A1: iniciativa social deliberada NPC→NPC. NO romántica. Cifras de lab. P4: cupo×1.5, prob×1.5.",
+        "prob_por_tick": 0.12,
+        "cupo_dia_sqrt": 0.70,
         "cupo_dia_offset": 0.25,
         "romance_umbral_bloqueo": 22
     },
