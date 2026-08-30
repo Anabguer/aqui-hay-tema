@@ -95,58 +95,106 @@ final class EmotionalEventBridge
         $resultado = is_array($envelope['resultado'] ?? null) ? $envelope['resultado'] : [];
         $encuentro = is_array($envelope['encuentro'] ?? null) ? $envelope['encuentro'] : [];
         $actores = is_array($encuentro['participantes'] ?? null) ? $encuentro['participantes'] : ($envelope['actores'] ?? []);
-        $lugarId = isset($encuentro['lugar']) ? (string) $encuentro['lugar'] : null;
         $cal = CalibracionConfig::load(dirname(__DIR__, 2));
         $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas', 6);
-        $catalog = new Catalog(dirname(__DIR__, 2));
-        $svc = new EmotionalStateService(new VisualPackStore(dirname(__DIR__, 2)), $catalog->store(), $logger);
+        $svc = new EmotionalStateService(new VisualPackStore(dirname(__DIR__, 2)), (new Catalog(dirname(__DIR__, 2)))->store(), $logger);
+
+        // P1: Consumir SocialOutcome si existe (fuente canonica).
+        // Si no existe (partida antigua), fallback al calculo legacy.
+        $outcome = SocialOutcome::deEncuentro($encuentro);
+        if ($outcome === null && is_array($encuentro['resultado'] ?? null)) {
+            $outcome = SocialOutcome::desdeResultado($partida, $encuentro, $encuentro['resultado']);
+        }
+
         $n = 0;
         $emocionesRes = [];
-        foreach ($actores as $rid) {
-            $rid = (string) $rid;
-            if ($rid === '' || !isset($partida['residentes'][$rid])) {
-                continue;
+        if ($outcome !== null) {
+            // P1: Usar emociones_causales pre-calculadas del SocialOutcome.
+            foreach ($outcome->emociones_causales as $rid => $emoData) {
+                if (!isset($partida['residentes'][$rid])) {
+                    continue;
+                }
+                $estadoAntes = (string) ($emoData['estado_antes'] ?? EstadoEmocional::NEUTRO);
+                $origenAplicar = (string) ($emoData['motivo'] === 'hobby_recuperacion' ? 'hobby_recuperacion' : 'encuentro');
+                $ctx = [
+                    'encuentro_id' => $outcome->encuentro_id,
+                    'hobby_match' => $emoData['hobby_match'] ?? false,
+                    'resultado_experiencia' => $emoData['resultado_experiencia'] ?? 'normal',
+                    'estado_antes' => $estadoAntes,
+                    'motivo' => $emoData['motivo'] ?? 'encuentro',
+                    'social_outcome_canonical' => true,
+                ];
+                $svc->aplicar(
+                    $partida,
+                    $rid,
+                    (string) $emoData['estado'],
+                    $origenAplicar,
+                    null,
+                    null,
+                    $ctx,
+                    $dur
+                );
+                $despues = $partida['residentes'][$rid]['runtime']['estado_emocional'];
+                DiarioNarrativaBridge::desdeEmocion($partida, $rid, $despues);
+                $emocionesRes[] = [
+                    'residente_id' => $rid,
+                    'estado' => (string) ($despues['id'] ?? ''),
+                    'antes' => $estadoAntes,
+                    'hobby_match' => $emoData['hobby_match'] ?? false,
+                    'resultado_experiencia' => $emoData['resultado_experiencia'] ?? 'normal',
+                    'motivo' => $emoData['motivo'] ?? 'encuentro',
+                ];
+                $n++;
             }
-            EstadoEmocional::ensureResidente($partida['residentes'][$rid], $partida['reloj'] ?? null);
-            $antes = $partida['residentes'][$rid]['runtime']['estado_emocional'];
-            $estadoAntes = (string) ($antes['id'] ?? EstadoEmocional::NEUTRO);
-            $resExp = (string) ($resultado['por_participante'][$rid]['resultado'] ?? 'normal');
-            $afin = PlanAfinidad::paraParticipante($partida, $rid, $lugarId, $catalog);
-            $hobbyMatch = !empty($afin['relacionado']);
-            $eval = EmotionalRecovery::evaluar($estadoAntes, $resExp, $hobbyMatch);
-            if ($eval === null) {
-                continue;
+        } else {
+            // Legacy: calculo independiente (partidas antiguas sin SocialOutcome).
+            $lugarId = isset($encuentro['lugar']) ? (string) $encuentro['lugar'] : null;
+            $catalog = new Catalog(dirname(__DIR__, 2));
+            foreach ($actores as $rid) {
+                $rid = (string) $rid;
+                if ($rid === '' || !isset($partida['residentes'][$rid])) {
+                    continue;
+                }
+                EstadoEmocional::ensureResidente($partida['residentes'][$rid], $partida['reloj'] ?? null);
+                $antes = $partida['residentes'][$rid]['runtime']['estado_emocional'];
+                $estadoAntes = (string) ($antes['id'] ?? EstadoEmocional::NEUTRO);
+                $resExp = (string) ($resultado['por_participante'][$rid]['resultado'] ?? 'normal');
+                $afin = PlanAfinidad::paraParticipante($partida, $rid, $lugarId, $catalog);
+                $hobbyMatch = !empty($afin['relacionado']);
+                $eval = EmotionalRecovery::evaluar($estadoAntes, $resExp, $hobbyMatch);
+                if ($eval === null) {
+                    continue;
+                }
+                $origenAplicar = (string) ($eval['motivo'] === 'hobby_recuperacion' ? 'hobby_recuperacion' : 'encuentro');
+                $ctx = [
+                    'encuentro_id' => $encuentro['id'] ?? null,
+                    'hobby_match' => $hobbyMatch,
+                    'resultado_experiencia' => $resExp,
+                    'estado_antes' => $estadoAntes,
+                    'motivo' => $eval['motivo'],
+                ];
+                $svc->aplicar(
+                    $partida,
+                    $rid,
+                    (string) $eval['estado'],
+                    $origenAplicar,
+                    null,
+                    null,
+                    $ctx,
+                    $dur
+                );
+                $despues = $partida['residentes'][$rid]['runtime']['estado_emocional'];
+                DiarioNarrativaBridge::desdeEmocion($partida, $rid, $despues);
+                $emocionesRes[] = [
+                    'residente_id' => $rid,
+                    'estado' => (string) ($despues['id'] ?? ''),
+                    'antes' => $estadoAntes,
+                    'hobby_match' => $hobbyMatch,
+                    'resultado_experiencia' => $resExp,
+                    'motivo' => $eval['motivo'],
+                ];
+                $n++;
             }
-            $origenAplicar = (string) ($eval['motivo'] === 'hobby_recuperacion' ? 'hobby_recuperacion' : 'encuentro');
-            $ctx = [
-                'encuentro_id' => $encuentro['id'] ?? null,
-                'hobby_match' => $hobbyMatch,
-                'resultado_experiencia' => $resExp,
-                'estado_antes' => $estadoAntes,
-                'motivo' => $eval['motivo'],
-            ];
-            $svc->aplicar(
-                $partida,
-                $rid,
-                (string) $eval['estado'],
-                $origenAplicar,
-                null,
-                null,
-                $ctx,
-                $dur
-            );
-            $despues = $partida['residentes'][$rid]['runtime']['estado_emocional'];
-            DiarioNarrativaBridge::desdeEmocion($partida, $rid, $despues);
-            $emocionesRes[] = [
-                'residente_id' => $rid,
-                'estado' => (string) ($despues['id'] ?? ''),
-                'antes' => $estadoAntes,
-                'hobby_match' => $hobbyMatch,
-                'resultado_experiencia' => $resExp,
-                'motivo' => $eval['motivo'],
-                'encuentro_id' => $encuentro['id'] ?? null,
-            ];
-            $n++;
         }
 
         if ($emocionesRes !== [] && isset($encuentro['id'])) {

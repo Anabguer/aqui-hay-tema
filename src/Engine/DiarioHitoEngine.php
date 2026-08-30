@@ -145,6 +145,13 @@ final class DiarioHitoEngine
         'El aire entre {par} se cargó un poco.',
     ];
 
+    /** @var list<string> */
+    private const CUERPOS_ENCUENTRO_POSITIVO = [
+        '{par} la pasaron bien juntos. Se nota.',
+        'Buen rollo entre {par}. Cosas que se notan.',
+        '{par} disfrutaron de un rato que merece la pena recordar.',
+    ];
+
     public static function register(): void
     {
         EventBus::on(DomainEvents::ENCUENTRO_TERMINADO, static function (array &$partida, array $envelope, ?GameLogger $logger): array {
@@ -241,19 +248,41 @@ final class DiarioHitoEngine
             return;
         }
 
-        $peor = 'normal';
-        foreach ($res['por_participante'] ?? [] as $row) {
-            $r = (string) (is_array($row) ? ($row['resultado'] ?? '') : '');
-            if ($r === 'muy_mal') {
-                $peor = 'muy_mal';
-                break;
+                // P1: Usar SocialOutcome canonico si existe.
+        $outcome = SocialOutcome::deEncuentro($enc);
+        if ($outcome === null) {
+            // Legacy: recalcular desde resultado (partidas antiguas).
+            $peor = 'normal';
+            foreach ($res['por_participante'] ?? [] as $row) {
+                $r = (string) (is_array($row) ? ($row['resultado'] ?? '') : '');
+                if ($r === 'muy_mal') {
+                    $peor = 'muy_mal';
+                    break;
+                }
+                if ($r === 'mal') {
+                    $peor = 'mal';
+                }
             }
-            if ($r === 'mal') {
-                $peor = 'mal';
+            $huboConflicto = (($res['conflicto'] ?? null) !== null) && (int) ($res['conflicto'] ?? 0) !== 0;
+            $esNegativo = $huboConflicto || $peor === 'mal' || $peor === 'muy_mal';
+            $esPositivoSignificativo = false;
+            if (!$esNegativo) {
+                foreach ($res['por_participante'] ?? [] as $row) {
+                    $r = (string) (is_array($row) ? ($row['resultado'] ?? '') : '');
+                    if ($r === 'bien' || $r === 'muy_bien') {
+                        $esPositivoSignificativo = true;
+                        break;
+                    }
+                }
             }
+        } else {
+            $peor = $outcome->resultado_global;
+            $esNegativo = $outcome->es_negativo;
+            $esPositivoSignificativo = $outcome->es_positivo_significativo;
         }
-        $huboConflicto = (($res['conflicto'] ?? null) !== null) && (int) ($res['conflicto'] ?? 0) !== 0;
-        if (!$huboConflicto && $peor !== 'mal' && $peor !== 'muy_mal') {
+
+        // Gate: registrar si es negativo O si es positivo significativo.
+        if (!$esNegativo && !$esPositivoSignificativo) {
             return;
         }
 
@@ -264,7 +293,12 @@ final class DiarioHitoEngine
 
         $par = self::nombresPar($partida, $actores);
         $consecuencias = [];
-        if ($peor === 'muy_mal') {
+        if ($esPositivoSignificativo && !$esNegativo) {
+            $titulo = 'Un buen momento';
+            $texto = self::cuerpo($partida, 'encuentro_positivo', $actores, self::CUERPOS_ENCUENTRO_POSITIVO, [
+                'par' => ucfirst($par),
+            ]);
+        } elseif ($peor === 'muy_mal') {
             $titulo = 'Un encuentro incómodo';
             $texto = self::cuerpo($partida, 'encuentro_muy_mal', $actores, self::CUERPOS_ENCUENTRO_MUY_MAL, [
                 'par' => ucfirst($par),
@@ -300,6 +334,7 @@ final class DiarioHitoEngine
                 'tipo_evento' => 'encuentro_terminado',
                 'es_narrativo' => true,
                 'hito_tipo' => 'encuentro_significativo',
+                'social_outcome_canonical' => $outcome !== null,
                 '_placeholder' => false,
             ],
             '_placeholder_contenido' => false,

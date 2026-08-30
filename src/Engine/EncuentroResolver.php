@@ -294,5 +294,16 @@ final class EncuentroResolver
             (string) ($encuentro['tipo'] ?? 'encuentro'),
             $resultado['por_participante'][$a]['resultado'] ?? null
         );
+
+
+        // P1: SocialOutcome atómico
+        $outcome = SocialOutcome::desdeResultado($partida, $encuentro, $resultado);
+        foreach ($partida['encuentros'] ?? [] as $i => $enc) {
+            if (!is_array($enc) || (string) ($enc['id'] ?? '') !== (string) ($encuentro['id'] ?? '')) {
+                continue;
+            }
+            $partida['encuentros'][$i]['social_outcome'] = $outcome->toArray();
+            break;
+        }
     }
 }
