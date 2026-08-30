@@ -62,8 +62,13 @@ final class EmocionalNarrativa
                     }
                     $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
                 } elseif ($estadoId === EstadoEmocional::ALEGRE) {
-                    $explicacion = 'Ha tenido un encuentro que le ha animado el día.';
-                    $diarioEventoId = null;
+                    $otroNombreLimpio = ($otroNombre !== '' && $otroNombre !== 'otra persona') ? $otroNombre : '';
+                    if ($otroNombreLimpio !== '') {
+                        $explicacion = 'Su encuentro con ' . $otroNombreLimpio . ' le ha animado el día.';
+                    } else {
+                        $explicacion = 'Ha tenido un encuentro que le ha animado el día.';
+                    }
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
                 } else {
                     $explicacion = 'Su estado cambió después de un encuentro reciente.';
                     $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);

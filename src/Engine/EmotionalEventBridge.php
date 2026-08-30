@@ -144,6 +144,7 @@ final class EmotionalEventBridge
                 'hobby_match' => $hobbyMatch,
                 'resultado_experiencia' => $resExp,
                 'motivo' => $eval['motivo'],
+                'encuentro_id' => $encuentro['id'] ?? null,
             ];
             $n++;
         }

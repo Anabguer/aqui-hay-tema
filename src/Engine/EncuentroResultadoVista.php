@@ -295,6 +295,14 @@ final class EncuentroResultadoVista
             $explicacion = null;
             if ($rid !== '' && isset($partida['residentes'][$rid])) {
                 $estadoData = $partida['residentes'][$rid]['runtime']['estado_emocional'] ?? [];
+                $encIdFromEm = (string) ($em['encuentro_id'] ?? '');
+                if ($encIdFromEm !== '') {
+                    $ctxOverride = array_merge(
+                        is_array($estadoData['contexto'] ?? null) ? $estadoData['contexto'] : [],
+                        ['encuentro_id' => $encIdFromEm]
+                    );
+                    $estadoData = array_merge($estadoData, ['contexto' => $ctxOverride]);
+                }
                 $completa = EmocionalNarrativa::explicacionCompleta($partida, $rid, $estadoData);
                 if ($completa !== null) {
                     $explicacion = $completa['explicacion'] ?? null;
