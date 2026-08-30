@@ -1,4 +1,4 @@
-﻿/** Ficha vecino (06) */
+/** Ficha vecino (06) */
 
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha {
@@ -2051,4 +2051,175 @@
 }
 .play-v3 .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo {
   z-index: 110 !important;
+}
+
+/* FICHA-ANIMO-MODAL-v157 — legibilidad, volver, sin CTAs, móvil+desktop */
+.play-v3 .capa-ficha-animo {
+  height: auto !important;
+  max-height: min(72dvh, 560px) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  overflow: hidden !important;
+}
+
+.play-v3 .capa-ficha-animo > .cerrar.ds-modal-close,
+.play-v3 .capa-ficha-animo > .cerrar[data-animo-close] {
+  z-index: 20 !important;
+  pointer-events: auto !important;
+}
+
+.play-v3 .capa-ficha-animo .fani-top {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  margin: 0 0 8px;
+  padding: 0 2.75rem 0 0;
+}
+
+.play-v3 .capa-ficha-animo .fani-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+  padding: 6px 12px;
+  border: 1.5px solid rgba(107, 81, 56, .28);
+  border-radius: 999px;
+  background: rgba(255, 253, 248, .92);
+  font: 700 .8125rem/1.2 Nunito, sans-serif;
+  letter-spacing: .01em;
+  text-transform: none;
+  color: var(--ds-ink-soft, #594839);
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(51, 38, 30, .08);
+}
+
+.play-v3 .capa-ficha-animo .fani-volver:hover {
+  background: rgba(248, 241, 232, .98);
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .capa-ficha-animo .fani-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 2px 4px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  margin: 0 0 10px;
+  padding: 0;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-avatar {
+  width: 56px;
+  height: 56px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-tit {
+  font-family: Caveat, cursive;
+  font-size: 1.55rem;
+  line-height: 1.1;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-pills {
+  margin-bottom: 12px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-estado {
+  font-family: Caveat, cursive;
+  font-size: 1.25rem;
+  font-weight: 700;
+  padding: 8px 14px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-desde {
+  font: 600 .875rem/1.35 Nunito, sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-ribbon {
+  display: inline-flex;
+  margin: 0 0 8px;
+  font: 700 1rem/1.3 Nunito, sans-serif;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-causa {
+  margin-bottom: 12px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-causa p {
+  font: 400 1rem/1.45 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-mientras {
+  margin-bottom: 10px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-mientras-tit {
+  font: 700 .9375rem/1.35 Nunito, sans-serif;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-mientras-list {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-badge {
+  flex: 1 1 calc(50% - 4px);
+  min-width: 0;
+  font: 600 .875rem/1.4 Nunito, sans-serif;
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-hint {
+  margin: 4px 0 0;
+  font: 500 .875rem/1.45 Nunito, sans-serif;
+  font-style: italic;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+.play-v3 .capa-ficha-animo .animo-modal-cta,
+.play-v3 .capa-ficha-animo .animo-modal-ghost {
+  display: none !important;
+}
+
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo {
+    z-index: 140 !important;
+    max-height: min(68dvh, 520px) !important;
+  }
+
+  .play-v3 .capa-ficha-animo .animo-modal-mientras-list {
+    flex-direction: column;
+  }
+
+  .play-v3 .capa-ficha-animo .animo-modal-badge {
+    flex: 1 1 auto;
+  }
+}
+
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo {
+    width: min(420px, 92vw) !important;
+    max-width: 420px !important;
+    max-height: min(78vh, 600px) !important;
+    padding: 14px 14px 12px !important;
+  }
+
+  .play-v3 .capa-ficha-animo .animo-modal-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .play-v3 .capa-ficha-animo .animo-modal-tit {
+    font-size: 1.75rem;
+  }
 }

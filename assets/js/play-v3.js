@@ -5329,7 +5329,10 @@ function canonEmoId(id) {
   }
 
   function cerrarAnimoOverlay() {
-    setCapa(animoVolverCapa || 'ficha');
+    const root = $('.play-root');
+    if (!root || root.getAttribute('data-capa') !== 'ficha_animo') return;
+    const dest = (animoVolverCapa && animoVolverCapa !== 'ficha_animo') ? animoVolverCapa : 'ficha';
+    setCapa(dest);
   }
 
   function emoModalIcono(estadoId) {
@@ -5380,8 +5383,6 @@ function canonEmoId(id) {
       '<span class="animo-modal-conflicto" aria-hidden="true"></span>' +
       '</div>' +
       mientras +
-      '<button type="button" class="animo-modal-cta" data-animo-org>\uD83D\uDCC5 Organizar un plan</button>' +
-      '<button type="button" class="animo-modal-ghost" data-animo-diario>Ver en su diario</button>' +
       consejo;
   }
 
@@ -5390,29 +5391,9 @@ function canonEmoId(id) {
     const body = $('[data-animo-body]');
     const root = $('.play-root');
     if (!exp || !body) return;
-    animoVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
+    animoVolverCapa = 'ficha';
     const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
     body.innerHTML = htmlAnimoModal(exp, nom);
-    const orgBtn = body.querySelector('[data-animo-org]');
-    if (orgBtn) {
-      orgBtn.onclick = function () {
-        cerrarAnimoOverlay();
-        abrirOrganizarConPreset({ a: fichaActualId });
-      };
-    }
-    const diarioBtn = body.querySelector('[data-animo-diario]');
-    if (diarioBtn) {
-      if (exp.diario_evento_id) {
-        diarioBtn.hidden = false;
-        diarioBtn.onclick = function () {
-          cerrarAnimoOverlay();
-          abrirDiarioVecino(fichaActualId, exp.diario_evento_id);
-        };
-      } else {
-        diarioBtn.hidden = true;
-        diarioBtn.onclick = null;
-      }
-    }
     setCapa('ficha_animo');
   }
 
@@ -8024,6 +8005,13 @@ function hobbyIconKey(id, texto) {
         uiHistDepth--;
         try { history.back(); } catch (e) { uiHistBack(); }
       } else uiHistBack();
+      return;
+    }
+    const rootAnimoCapa = $('.play-root');
+    if (rootAnimoCapa && rootAnimoCapa.getAttribute('data-capa') === 'ficha_animo' && ev.target.closest('.velo')) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarAnimoOverlay();
       return;
     }
     const t = ev.target.closest('[data-close], .velo');

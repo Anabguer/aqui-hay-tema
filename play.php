@@ -721,7 +721,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="capa capa-ficha-animo ds-modal-sheet" aria-label="Estado de animo del vecino">
         <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
         <header class="fani-top">
-          <button type="button" class="fani-volver" data-animo-volver>&larr; FICHA</button>
+          <button type="button" class="fani-volver" data-animo-volver>&larr; Volver a ficha</button>
         </header>
         <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
       </aside>
