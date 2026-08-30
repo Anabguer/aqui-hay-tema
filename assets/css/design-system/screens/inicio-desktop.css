@@ -1,4 +1,4 @@
-﻿/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
+/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
 
 .inicio-desktop .inicio-desktop-layout {
   display: grid;
@@ -184,7 +184,7 @@
     border: 2px solid #c9a87a !important;
     border-radius: 3px 11px 5px 8px / 8px 5px 11px 3px !important;
     background-color: #fdf9f4 !important;
-    background-image: linear-gradient(180deg, rgba(255, 253, 249, .85) 0%, rgba(255, 253, 249, .45) 50%, rgba(255, 253, 249, .2) 100%), url("../play-v3/capas/libreta_hoja.png") !important;
+    background-image: linear-gradient(180deg, rgba(255, 253, 249, .85) 0%, rgba(255, 253, 249, .45) 50%, rgba(255, 253, 249, .2) 100%), url("../../../play-v3/capas/libreta_hoja.png") !important;
     box-shadow: 1px 2px 0 rgba(188, 158, 118, .2), 3px 6px 18px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(255, 255, 255, .55) !important;
     transform: rotate(-0.5deg) !important;
     text-align: left !important;
@@ -324,7 +324,7 @@
     border: 2px solid #c9a87a;
     border-radius: 3px 9px 5px 7px / 7px 5px 9px 3px;
     background-color: #fdf9f4;
-    background-image: linear-gradient(180deg, rgba(255, 253, 249, .8) 0%, rgba(255, 253, 249, .35) 100%), url("../play-v3/capas/libreta_hoja.png");
+    background-image: linear-gradient(180deg, rgba(255, 253, 249, .8) 0%, rgba(255, 253, 249, .35) 100%), url("../../../play-v3/capas/libreta_hoja.png");
     background-size: cover, cover;
     transform: rotate(0.35deg);
     box-shadow: 1px 2px 0 rgba(188, 158, 118, .16), 2px 4px 12px rgba(40, 28, 16, .1);
@@ -8193,5 +8193,220 @@
     left: auto !important;
     height: auto !important;
     min-height: 0 !important;
+  }
+}
+/* INICIO-BOTTOM-NAV-DESKTOP-v137 — diseño móvil + ancho = mapa (gana v80–v136 y selectores coma rotos) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.5cm !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-stage {
+    order: 1 !important;
+    flex: 0 1 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    order: 2 !important;
+    position: relative !important;
+    inset: auto !important;
+    display: flex !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 6px 0 8px !important;
+    box-sizing: border-box !important;
+    align-items: stretch !important;
+    justify-content: space-around !important;
+    gap: 0 !important;
+    background: #fff !important;
+    border: 1.5px solid rgba(107, 81, 56, .2) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 4px 18px rgba(70, 50, 30, .12) !important;
+    isolation: isolate !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav::before {
+    content: "" !important;
+    position: absolute !important;
+    inset: 0 !important;
+    background: #fff !important;
+    border-radius: inherit !important;
+    z-index: -1 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 8px 4px 12px !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-right: 1px dotted rgba(107, 81, 56, .32) !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    color: var(--ds-ink, #33261e) !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .58rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .05em !important;
+    line-height: 1.1 !important;
+    text-transform: uppercase !important;
+    cursor: pointer !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    position: relative !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn:last-child,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:last-child {
+    border-right: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on {
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
+    display: block !important;
+    white-space: nowrap !important;
+    font-size: .56rem !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on .play-bottom-nav-txt,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
+    font-weight: 900 !important;
+    color: var(--ds-ink, #33261e) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    flex: 0 0 26px !important;
+    position: relative !important;
+    color: var(--ds-ink-soft, #6b5138) !important;
+    background: transparent !important;
+    border-radius: 7px !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg {
+    width: 24px !important;
+    height: 24px !important;
+    display: block !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg path,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg path {
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
+    color: var(--ds-ink, #33261e) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 3px !important;
+    transform: translateX(-50%) !important;
+    width: min(72%, 56px) !important;
+    height: 3.5px !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink-deep, #c42b4a) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
+    color: var(--ds-lavender-deep, #7c6bae) !important;
+    background: var(--ds-lavender-soft, #e4dcf4) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
+    color: var(--ds-pink-deep, #c42b4a) !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-badge,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-badge {
+    position: absolute !important;
+    top: -4px !important;
+    right: -8px !important;
+    min-width: 16px !important;
+    height: 16px !important;
+    padding: 0 4px !important;
+    border-radius: 999px !important;
+    background: #e8487a !important;
+    color: #fff !important;
+    font-size: .58rem !important;
+    font-weight: 800 !important;
+    line-height: 16px !important;
+    text-align: center !important;
   }
 }
