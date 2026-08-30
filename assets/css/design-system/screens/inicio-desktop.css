@@ -8073,3 +8073,14 @@
     transform-origin: 50% 24% !important;
   }
 }
+
+/* INICIO-CELESTINE-v86 - zoom agresivo retrato Celestine apunta (sin blanco bajo caras) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop .celestine-nota .obj-vecinos-preview-cara {
+    background: transparent !important;
+    object-fit: cover !important;
+    object-position: 50% -6% !important;
+    transform: scale(1.46) !important;
+    transform-origin: 50% 14% !important;
+  }
+}
