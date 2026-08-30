@@ -79,6 +79,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <?php /* CANON: ultima hoja de piel modal; no anadir CSS de capas despues de modals-shell-lavanda-mobile.css */ ?>
   <link rel="stylesheet" href="assets/css/design-system/modals-shell-lavanda-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-consulta-edificio-v2.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-tutorial-lavanda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/typography-reading.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
@@ -477,20 +478,22 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <p class="cotilleo" data-s-coti></p>
             <div class="destinos" data-s-btns></div>
           </aside>
-          <aside class="quien nota-mapa ds-modal-sheet">
+          <aside class="quien nota-mapa ds-modal-sheet consulta-edificio-v2">
             <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr&aacute;s">? Atr&aacute;s</button>
-            <header class="quien-bloque quien-bloque--lugar">
-              <h3 class="quien-lugar-tit" data-q-tit></h3>
-              <p class="quien-horario" data-q-horario hidden></p>
+            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr&aacute;s">&larr; Atr&aacute;s</button>
+            <header class="consulta-ed-head">
+              <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
+              <div class="consulta-ed-head-copy">
+                <h3 class="consulta-ed-tit" data-q-tit></h3>
+                <div class="consulta-ed-meta" data-q-horario hidden></div>
+              </div>
             </header>
-            <section class="quien-bloque quien-bloque--presencia">
-              <p class="libreta-kicker quien-kicker">&#8212;Qui&#8212;n est&#8212;?</p>
-              <p class="quien-vacio" data-q-sum hidden></p>
-              <div class="quien-list quien-residentes" data-q-list></div>
+            <section class="consulta-ed-presencia">
+              <p class="consulta-ed-vacio" data-q-sum hidden></p>
+              <div class="consulta-ed-avatars" data-q-list></div>
             </section>
-            <div class="quien-bloque quien-bloque--tema quien-tema" data-q-tema hidden></div>
-            <div class="destinos" data-q-btns></div>
+            <div class="consulta-ed-tema-wrap" data-q-tema hidden></div>
+            <div class="consulta-ed-acciones" data-q-btns></div>
           </aside>
         </div>
       </div>
@@ -702,31 +705,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
             </section>
-            <section class="ficha-seccion ficha-seccion-aprecio" data-ficha-aprecio hidden>
-              <h4 class="ficha-seccion-tit">C&Oacute;MO TE VE</h4>
-              <div class="ficha-seccion-body">
-                <p class="ficha-aprecio" data-ficha-aprecio-texto></p>
-              </div>
-            </section>
           </div>
         </div>
-        <div class="ficha-rel-overlay" data-ficha-rel-overlay hidden>
-          <div class="ficha-rel-modal" role="dialog" aria-label="Relaciones del vecino">
-            <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
-            <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-            <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-ficha-rel-close aria-label="Cerrar">X</button>
-            <header class="ficha-rel-top">
-              <div class="ds-modal-head">
-                <div class="ds-modal-head-row">
-                  <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#128149;</span>
-                  <h3 class="ficha-rel-modal-tit ds-modal-tit ds-modal-tit--pink" data-ficha-rel-modal-tit>Relaciones</h3>
-                </div>
-                <p class="ds-modal-sub ficha-rel-modal-sub">Qui&eacute;n le cae bien (o mal)</p>
-              </div>
-            </header>
-            <div class="ficha-rel-scroll capa-scroll" data-ficha-rel-list></div>
-          </div>
-        </div>
+      </aside>
+      <aside class="capa capa-ficha-relaciones ds-modal-sheet" aria-label="Relaciones del vecino">
+        <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
+        <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
+        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-ficha-rel-close aria-label="Cerrar">X</button>
+        <header class="frel-top">
+          <button type="button" class="frel-volver" data-frel-volver>&larr; FICHA</button>
+          <h3 class="frel-tit" data-ficha-rel-modal-tit>Relaciones</h3>
+        </header>
+        <div class="frel-scroll capa-scroll" data-ficha-rel-list></div>
       </aside>
       <aside class="capa capa-ficha-animo ds-modal-sheet" aria-label="Estado de animo del vecino">
         <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
@@ -1170,6 +1160,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
             <div class="inicio-planes-libreta" data-inicio-planes-bloque>
+            <header class="inicio-planes-libreta-head" aria-label="Planes">
+              <h3 class="inicio-planes-libreta-tit">PLANES</h3>
+              <div class="inicio-planes-libreta-badges" data-inicio-planes-badges hidden aria-live="polite"></div>
+            </header>
             <section class="shell-grupo encursos-movil" data-encursos-block aria-label="Planes en curso ahora">
           <header class="enc-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico enc-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 3.5V8h-4.5M7.5 20.5V16H12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1191,7 +1185,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo proxplanes-movil" data-proxplanes-block aria-label="Pr&oacute;ximos planes programados">
           <header class="pp-mov-cab plan-seccion-cab">
             <svg class="plan-seccion-ico pp-mov-ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.2" y="5" width="17.6" height="15.4" rx="2.4" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M3.4 9.6h17.2" stroke="currentColor" stroke-width="1.7"/><path d="M8.2 3.2v3.4M15.8 3.2v3.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-            <h3 class="pp-mov-tit">PR&Oacute;XIMOS PLANES<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
+            <h3 class="pp-mov-tit">PR&Oacute;XIMOS<span class="plan-seccion-cnt" data-proxplanes-count hidden aria-hidden="true"></span></h3>
             <span class="plan-seccion-rule" aria-hidden="true"></span>
             <button type="button" class="plan-seccion-ver" data-open="agenda">VER TODOS &#8250;</button>
           </header>

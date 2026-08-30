@@ -2723,6 +2723,24 @@
       '</div></article>';
   }
 
+  function planDuoFacesDesktopHtml(enc, ids) {
+    var slice = (ids || []).slice(0, 2);
+    if (slice.length < 2) {
+      return '<div class="plan-desk-duo-wrap">' +
+        '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' + carasPlanHtml(slice) + '</div>' +
+        '<p class="plan-desk-duo-nombre">' + esc(nombreDe(slice[0] || '')) + '</p></div>';
+    }
+    return '<div class="plan-desk-duo-wrap">' +
+      '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' +
+      htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
+      iconoRelacionesCentroHtml() +
+      htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
+      '</div>' +
+      '<div class="plan-desk-duo-nombres">' +
+      '<span class="plan-desk-duo-nombre plan-desk-duo-nombre--l">' + esc(nombreDe(slice[0])) + '</span>' +
+      '<span class="plan-desk-duo-nombre plan-desk-duo-nombre--r">' + esc(nombreDe(slice[1])) + '</span>' +
+      '</div></div>';
+  }
   function htmlProximoPlanCardDesktop(enc, estado) {
     if (planEsEventoPueblo(enc)) {
       return htmlProximoPlanCardEvento(enc, estado);
@@ -2738,7 +2756,7 @@
       '<span class="pp-mov-star" aria-hidden="true"><span class="pp-mov-star-ico">\u2605</span></span>' +
       '</div>' +
       '<div class="pp-mov-body pp-mov-body--desk-duo">' +
-      '<div class="pp-mov-personas">' + ppMovPersonasHtml(ids, maxCaras) + '</div>' +
+      planDuoFacesDesktopHtml(enc, ids) +
       '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
       '</div></article>';
   }
@@ -2901,6 +2919,9 @@
     if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
     return 'social';
   }
+  function iconoRelacionesCentroHtml() {
+    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--relaciones" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>';
+  }
   function iconoEncuentroCentroHtml(enc) {
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
@@ -2933,7 +2954,7 @@
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
     return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoEncuentroCentroHtml(enc) +
+      iconoRelacionesCentroHtml() +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {
@@ -3019,10 +3040,7 @@
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
     const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
     let html = '<article class="enc-mov-card enc-mov-card--escena enc-mov-card--ref-desk" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-mov-card-head">' +
-      '<p class="enc-mov-estado-pill enc-mov-estado-pill--fuera"><span class="enc-mov-punto" aria-hidden="true"></span>PLAN EN CURSO</p>' +
-      encCursoCardHeadIconsHtml() +
-      '</div>' +
+      '<p class="enc-mov-estado-pill enc-mov-estado-pill--fuera"><span class="enc-mov-punto" aria-hidden="true"></span>EN CURSO</p>' +
       '<div class="enc-mov-escena">' +
       '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
       '<div class="enc-mov-escena-core">' +
@@ -3030,7 +3048,8 @@
       '<div class="enc-mov-donde-cuando">' +
       '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
-      '</div></div></div>';
+      '</div></div>' +
+      '<span class="enc-mov-desk-chevron" aria-hidden="true">&#8250;</span></div>';
     if (ctaVisible) {
       html += htmlMentesCtaResumen(enc, iv);
     } else if (resultHtml) {
@@ -3233,6 +3252,34 @@
       renderEncursosMovilNavFor(block);
     });
   }
+  function renderInicioPlanesLibretaBadges(estado) {
+    inicioBlocks('[data-inicio-planes-bloque]').forEach(function (bloque) {
+      var badges = bloque.querySelector('[data-inicio-planes-badges]');
+      if (!badges) return;
+      var nCurso = encuentrosEnCursoAhora(cacheInsp, estado).length;
+      var nProx = proximosPlanesFuturos(cacheInsp, estado).length;
+      var parts = [];
+      if (nCurso > 0) {
+        parts.push('<span class="inicio-planes-libreta-badge inicio-planes-libreta-badge--curso" title="' + String(nCurso) + ' en curso">' +
+          '<svg class="inicio-planes-libreta-badge-ico" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 0 1 13.3-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M20 12a8 8 0 0 1-13.3 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' +
+          '<span>' + String(nCurso) + ' en curso</span></span>');
+      }
+      if (nProx > 0) {
+        parts.push('<span class="inicio-planes-libreta-badge inicio-planes-libreta-badge--prox" title="' + String(nProx) + ' pr\u00f3ximos">' +
+          '<svg class="inicio-planes-libreta-badge-ico" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>' +
+          '<span>' + String(nProx) + ' pr\u00f3ximos</span></span>');
+      }
+      if (parts.length) {
+        badges.innerHTML = parts.join('');
+        badges.hidden = false;
+        badges.removeAttribute('aria-hidden');
+      } else {
+        badges.innerHTML = '';
+        badges.hidden = true;
+        badges.setAttribute('aria-hidden', 'true');
+      }
+    });
+  }
     function renderEncursosMovil(estado) {
     inicioBlocks('[data-encursos-block]').forEach(function (block) {
       const view = block.closest('.inicio-mobile') ? 'mobile' : 'desktop';
@@ -3403,6 +3450,7 @@
     if (cacheMisionesStripItems) renderMisionesStripIn('.inicio-desktop', cacheMisionesStripItems);
     renderProximosPlanesMovil(estado);
     renderEncursosMovil(estado);
+    renderInicioPlanesLibretaBadges(estado);
   }
 
   function renderInicio(estado, buzon, diario) {
@@ -3677,6 +3725,20 @@
     return est + ' · ' + d.horario;
   }
 
+  function pintarConsultaEdArt(lugId) {
+    var el = $('[data-q-art]');
+    if (!el) return;
+    var img = orgLugarImg(lugId);
+    if (img) {
+      el.innerHTML = '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>';
+      el.hidden = false;
+      el.setAttribute('aria-hidden', 'false');
+    } else {
+      el.innerHTML = '';
+      el.hidden = true;
+      el.setAttribute('aria-hidden', 'true');
+    }
+  }
   function pintarHorarioQuien(destinos) {
     var el = $('[data-q-horario]');
     if (!el) return;
@@ -3691,17 +3753,18 @@
       var estadoCls = '';
       if (d.abierto_ahora === true) {
         estado = 'Abierto ahora';
-        estadoCls = 'quien-estado--abierto';
+        estadoCls = 'consulta-ed-estado--abierto';
       } else if (d.abierto_ahora === false) {
         estado = 'Cerrado ahora';
-        estadoCls = 'quien-estado--cerrado';
+        estadoCls = 'consulta-ed-estado--cerrado';
       }
+      var inner = '';
       if (estado) {
-        return '<span class="quien-estado ' + estadoCls + '">' + estado + '</span>' +
-          '<span class="quien-horas"> · ' + esc(d.horario) + '</span>';
+        inner += '<span class="consulta-ed-estado ' + estadoCls + '">' + estado + '</span>';
       }
-      return '<span class="quien-horas">Horario: ' + esc(d.horario) + '</span>';
-    }).join('<span class="quien-horario-sep"> | </span>');
+      inner += '<span class="consulta-ed-horas">' + esc(d.horario) + '</span>';
+      return '<div class="consulta-ed-meta-block">' + inner + '</div>';
+    }).join('');
     el.hidden = false;
   }
 
@@ -3876,6 +3939,9 @@
 
 
   var quienTemaActivo = null;
+  var quienGenteCache = null;
+  var quienAvatarFlip = false;
+  var CONSULTA_ED_SWAP_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M7 7h11.2l-2.6-2.6L17 3l5 5-5 5-1.4-1.4L18.2 9H7V7zm10 10H5.8l2.6 2.6L7 21l-5-5 5-5 1.4 1.4L5.8 15H17v2z"/></svg>';
 
   function recolectarTemasQuien(gente) {
     var vistos = {};
@@ -3904,6 +3970,7 @@
     var list = $('[data-q-list]');
     var vacio = $('[data-q-sum]');
     if (!list) return;
+    quienGenteCache = gente || [];
     list.innerHTML = '';
     if (!gente || !gente.length) {
       list.hidden = true;
@@ -3915,48 +3982,33 @@
     }
     list.hidden = false;
     if (vacio) vacio.hidden = true;
-    list.className = 'quien-list quien-residentes quien-residentes--inline';
-    var temaPorRes = mapaTemaResidenteQuien(gente);
-    var temas = recolectarTemasQuien(gente);
-    (gente || []).forEach(function (p, idx) {
-      if (idx > 0) {
-        var sep = document.createElement('span');
-        sep.className = 'quien-residente-sep';
-        sep.setAttribute('aria-hidden', 'true');
-        sep.textContent = '·';
-        list.appendChild(sep);
+    list.className = 'consulta-ed-avatars';
+    var ordered = quienAvatarFlip ? gente.slice().reverse() : gente.slice();
+    ordered.forEach(function (p, idx) {
+      if (idx === 1 && ordered.length === 2) {
+        var swap = document.createElement('button');
+        swap.type = 'button';
+        swap.className = 'consulta-ed-swap';
+        swap.setAttribute('aria-label', 'Intercambiar orden');
+        swap.innerHTML = CONSULTA_ED_SWAP_SVG;
+        swap.addEventListener('click', function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          quienAvatarFlip = !quienAvatarFlip;
+          pintarQuienResidentes(quienGenteCache, quienTemaActivo, vacioTxt);
+        });
+        list.appendChild(swap);
       }
-      var row = document.createElement('span');
-      row.className = 'quien-residente';
-      var nameBtn = document.createElement('button');
-      nameBtn.type = 'button';
-      nameBtn.className = 'quien-residente-nombre cara-token';
-      nameBtn.setAttribute('data-residente', p.id);
-      nameBtn.textContent = p.nombre;
-      row.appendChild(nameBtn);
-      var tid = temaPorRes[p.id];
-      if (tid) {
-        var tv = null;
-        for (var i = 0; i < temas.length; i++) {
-          if (temas[i].tema_id === tid) { tv = temas[i]; break; }
-        }
-        var mark = document.createElement('button');
-        mark.type = 'button';
-        mark.className = 'quien-tema-mark quien-tema-mark--' + esc((tv && tv.categoria) || 'hecho');
-        mark.setAttribute('aria-label', 'Aquí hay tema');
-        mark.textContent = (tv && tv.categoria_icono) || '?';
-        (function (temaId) {
-          mark.addEventListener('click', function (ev) {
-            ev.stopPropagation();
-            quienTemaActivo = quienTemaActivo === temaId ? null : temaId;
-            pintarQuienTema(gente, quienTemaActivo);
-            pintarQuienResidentes(gente, quienTemaActivo, vacioTxt);
-          });
-        })(tid);
-        row.appendChild(mark);
-        if (temaActivo === tid) row.classList.add('quien-residente--activo');
-      }
-      list.appendChild(row);
+      var card = document.createElement('div');
+      card.className = 'consulta-ed-persona';
+      var caraWrap = document.createElement('div');
+      caraWrap.innerHTML = htmlCaraToken(p.id, { wrapClass: 'consulta-ed-cara' });
+      card.appendChild(caraWrap.firstChild);
+      var nom = document.createElement('span');
+      nom.className = 'consulta-ed-nombre';
+      nom.textContent = p.nombre || p.id || '';
+      card.appendChild(nom);
+      list.appendChild(card);
     });
   }
 
@@ -3969,13 +4021,18 @@
       box.innerHTML = '';
       return;
     }
+    temas.sort(function (a, b) {
+      var pa = MAPA_TEMA_PRIORIDAD[a.categoria];
+      var pb = MAPA_TEMA_PRIORIDAD[b.categoria];
+      if (pa == null) pa = 99;
+      if (pb == null) pb = 99;
+      return pa - pb;
+    });
     var activos = temas;
     if (temaActivoId) {
       activos = temas.filter(function (t) { return t.tema_id === temaActivoId; });
-    } else if (temas.length > 1) {
-      box.hidden = true;
-      box.innerHTML = '';
-      return;
+    } else {
+      activos = [temas[0]];
     }
     if (!activos.length) {
       box.hidden = true;
@@ -3983,15 +4040,15 @@
       return;
     }
     box.hidden = false;
-    box.innerHTML = activos.slice(0, 2).map(function (tv) {
-      var cat = tv.categoria_etiqueta || 'Aquí hay tema';
-      var ico = tv.categoria_icono || '?';
-      var dest = tv.destacado ? ' quien-tema--destacado' : '';
-      return '<section class="quien-tema-card' + dest + '">' +
-        '<p class="quien-tema-kicker">Aquí hay tema</p>' +
-        '<p class="quien-tema-cat"><span class="quien-tema-ico" aria-hidden="true">' + esc(ico) + '</span> ' + esc(cat) + '</p>' +
-        '<p class="quien-tema-txt">' + esc(tv.texto || '') + '</p>' +
-        (tv.pista ? '<p class="quien-tema-pista">' + esc(tv.pista) + '</p>' : '') +
+    box.innerHTML = activos.slice(0, 1).map(function (tv) {
+      var tag = tv.categoria_etiqueta || 'Tema';
+      return '<section class="consulta-ed-tema-card">' +
+        '<div class="consulta-ed-tema-head">' +
+        '<p class="consulta-ed-tema-kicker">Aquí hay tema</p>' +
+        '<span class="consulta-ed-tema-tag">' + esc(tag) + '</span>' +
+        '</div>' +
+        '<p class="consulta-ed-tema-txt">' + esc(tv.texto || '') + '</p>' +
+        (tv.pista ? '<p class="consulta-ed-tema-pista">' + esc(tv.pista) + '</p>' : '') +
         '</section>';
     }).join('');
   }
@@ -4017,6 +4074,8 @@
     }
     pintarHorarioQuien(destinosHorario);
     quienTemaActivo = null;
+    quienAvatarFlip = false;
+    pintarConsultaEdArt(destId || (destinosHorario[0] && destinosHorario[0].id) || '');
     pintarQuienResidentes(gente, null, gente.length ? '' : 'No hay ni un alma.');
     pintarQuienTema(gente, null);
     var box = $('[data-q-btns]');
@@ -4024,6 +4083,7 @@
     destinosOperativosZona(zonaId).forEach(function (d) {
       var b = document.createElement('button');
       b.type = 'button';
+      b.className = 'consulta-ed-cta';
       b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
       b.addEventListener('click', function (ev) {
         ev.preventDefault();
@@ -4624,6 +4684,8 @@
     }
     pintarHorarioQuien(destinosHorarioCx);
     quienTemaActivo = null;
+    quienAvatarFlip = false;
+    pintarConsultaEdArt(destId || id);
     pintarQuienResidentes(gente, null, gente.length ? '' : copyVacio(id));
     pintarQuienTema(gente, null);
     const box = $('[data-q-btns]');
@@ -4631,6 +4693,7 @@
     (cx.destinos_operativos || []).forEach(function (d) {
       const b = document.createElement('button');
       b.type = 'button';
+      b.className = 'consulta-ed-cta';
       b.textContent = 'Organizar en ' + nombreLugarUi(d.id, d.nombre);
       b.addEventListener('click', function (ev) {
         ev.preventDefault();
@@ -4852,14 +4915,16 @@
     return '';
   }
 
-  function htmlRelRow(rel) {
+  function htmlRelRow(rel, opts) {
+    opts = opts || {};
     const cara = tokenDe(rel.id);
     const ini = (rel.nombre || '?').charAt(0);
     const pct = barRelPct(rel);
     const lbl = etiquetaRelText(rel);
     const crisis = rel.etiqueta_vinculo === 'crisis';
+    const compact = !!opts.compact;
     return (
-      '<div class="ficha-rel-row' + (crisis ? ' is-crisis' : '') + '">' +
+      '<div class="ficha-rel-row' + (crisis ? ' is-crisis' : '') + (compact ? ' is-compact' : '') + '">' +
       '<div class="ficha-rel-cara">' +
       (cara ? '<img src="' + esc(cara) + '" alt=""/>' : '<span>' + esc(ini) + '</span>') +
       '</div>' +
@@ -4872,7 +4937,7 @@
     );
   }
 
-  function pintarRelacionesEn(box, rels, limit) {
+  function pintarRelacionesEn(box, rels, limit, opts) {
     if (!box) return;
     box.innerHTML = '';
     if (!rels.length) {
@@ -4880,23 +4945,54 @@
       return;
     }
     rels.slice(0, limit).forEach(function (rel) {
-      box.insertAdjacentHTML('beforeend', htmlRelRow(rel));
+      box.insertAdjacentHTML('beforeend', htmlRelRow(rel, opts));
     });
   }
 
+
+  function htmlFichaPlanItem(enc, vecinoId, estado) {
+    const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
+    const reloj = (estado && estado.reloj) || {};
+    const enCurso = planEsEnCurso(enc, estado);
+    const hora = String(horaEnc(enc)).padStart(2, '0') + ':00';
+    let meta;
+    if (enCurso) meta = 'En curso \u00b7 ' + hora;
+    else if (Number(enc.dia) === Number(reloj.dia_pueblo)) meta = 'Hoy \u00b7 ' + hora;
+    else meta = 'D\u00eda ' + (enc.dia || '?') + ' \u00b7 ' + hora;
+    const ids = enc.participantes || [];
+    const otros = ids.filter(function (pid) { return String(pid) !== String(vecinoId); });
+    let compHtml = '';
+    if (otros.length) {
+      const compId = otros[0];
+      const img = tokenDe(compId);
+      const nom = nombreDe(compId);
+      compHtml = '<div class="ficha-plan-comp" title="' + esc(nom) + '">' +
+        (img ? '<img class="ficha-plan-comp-cara" src="' + esc(img) + '" alt=""/>' :
+          '<span class="ficha-plan-comp-ini">' + esc((nom.charAt(0) || '?')) + '</span>') +
+        '</div>';
+    }
+    return '<article class="ficha-plan-item' + (compHtml ? ' has-comp' : '') + '">' +
+      compHtml +
+      '<div class="ficha-plan-main">' +
+      '<span class="ficha-plan-lugar">' + esc(lugar) + '</span>' +
+      '<span class="ficha-plan-meta">' + esc(meta) + '</span>' +
+      (otros.length > 1 ? '<span class="ficha-plan-extra">+' + (otros.length - 1) + '</span>' : '') +
+      '</div></article>';
+  }
+
   function cerrarFichaRelOverlay() {
-    const overlay = $('[data-ficha-rel-overlay]');
-    if (overlay) overlay.hidden = true;
+    setCapa(relVolverCapa || 'ficha');
   }
 
   function abrirFichaRelOverlay(nombre) {
-    const overlay = $('[data-ficha-rel-overlay]');
     const list = $('[data-ficha-rel-list]');
     const tit = $('[data-ficha-rel-modal-tit]');
-    if (!overlay || !list) return;
+    if (!list) return;
+    const root = $('.play-root');
+    relVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
     if (tit) tit.textContent = 'Relaciones de ' + (nombre || 'vecino');
     pintarRelacionesEn(list, fichaRelCache, fichaRelCache.length);
-    overlay.hidden = false;
+    setCapa('ficha_relaciones');
   }
 
   var VEC_REL_FILTROS = [
@@ -5328,6 +5424,7 @@ function canonEmoId(id) {
   let diarioHighlightId = null;
   let diarioVolverCapa = 'ficha';
   let animoVolverCapa = 'ficha';
+  let relVolverCapa = 'ficha';
 
   function cerrarDiarioVecino() {
     setCapa(diarioVolverCapa || 'ficha');
@@ -5779,7 +5876,7 @@ function hobbyIconKey(id, texto) {
     const relBox = $('[data-ficha-relaciones]');
     const relMasBtn = $('[data-ficha-rel-mas]');
     fichaRelCache = relacionesConocidas(f);
-    pintarRelacionesEn(relBox, fichaRelCache, 2);
+    pintarRelacionesEn(relBox, fichaRelCache, 2, { compact: true });
     if (relMasBtn) {
       if (fichaRelCache.length > 2) {
         relMasBtn.hidden = false;
@@ -5799,10 +5896,7 @@ function hobbyIconKey(id, texto) {
         planBox.innerHTML = '<p class="ficha-vacio ficha-ironico">\u00abSu agenda est\u00e1 sospechosamente tranquila.\u00bb</p>';
       } else {
         planes.forEach(function (enc) {
-          const p = document.createElement('p');
-          p.className = 'ficha-plan-item';
-          p.textContent = formatPlanMeta(enc, cacheEstado);
-          planBox.appendChild(p);
+          planBox.insertAdjacentHTML('beforeend', htmlFichaPlanItem(enc, id, cacheEstado));
         });
       }
     }
@@ -5818,19 +5912,6 @@ function hobbyIconKey(id, texto) {
       regBtn.onclick = function () {
         abrirRegalosDesdeFicha(id, nom);
       };
-    }
-    // Regalos F2/F3: aprecio del vecino hacia Celestine como banda de texto
-    // (sección "CÓMO TE VE": título + frase dinámica, sin cambiar lógica).
-    const apEl = $('[data-ficha-aprecio]');
-    if (apEl) {
-      const ap = vista.aprecio_celeste || null;
-      const txt = ap && ap.texto ? String(ap.texto) : '';
-      const txtEl = apEl.querySelector('[data-ficha-aprecio-texto]');
-      if (txtEl) {
-        txtEl.textContent = txt;
-        txtEl.setAttribute('data-aprecio-banda', ap && ap.banda ? ap.banda : '');
-      }
-      apEl.hidden = !txt;
     }
     syncFichaNav();
   }
@@ -7918,16 +7999,22 @@ function hobbyIconKey(id, texto) {
       cerrarAnimoOverlay();
       return;
     }
-    const relOverlay = $('[data-ficha-rel-overlay]');
-    if (relOverlay && !relOverlay.hidden) {
-      if (ev.target.closest('[data-ficha-rel-close]') || ev.target === relOverlay) {
+    const relCloseBtn = ev.target.closest('[data-ficha-rel-close]');
+    if (relCloseBtn) {
+      const rootRel = $('.play-root');
+      if (rootRel && rootRel.getAttribute('data-capa') === 'ficha_relaciones') {
+        ev.preventDefault();
+        ev.stopPropagation();
         cerrarFichaRelOverlay();
         return;
       }
-      if (ev.target.closest('.velo')) {
-        cerrarFichaRelOverlay();
-        return;
-      }
+    }
+    const relVolverBtn = ev.target.closest('[data-frel-volver]');
+    if (relVolverBtn) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarFichaRelOverlay();
+      return;
     }
     const atras = ev.target.closest('[data-consulta-atras]');
     if (atras && uiRootFrom(atras)) {
@@ -8202,12 +8289,8 @@ function hobbyIconKey(id, texto) {
 
   const fichaRelClose = $('[data-ficha-rel-close]');
   if (fichaRelClose) fichaRelClose.addEventListener('click', cerrarFichaRelOverlay);
-  const fichaRelOverlay = $('[data-ficha-rel-overlay]');
-  if (fichaRelOverlay) {
-    fichaRelOverlay.addEventListener('click', function (ev) {
-      if (ev.target === fichaRelOverlay) cerrarFichaRelOverlay();
-    });
-  }
+  const fichaRelVolver = $('[data-frel-volver]');
+  if (fichaRelVolver) fichaRelVolver.addEventListener('click', cerrarFichaRelOverlay);
 
 
 
