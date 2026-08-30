@@ -13,6 +13,7 @@ use AquiHayTema\Engine\ResidenteOperations;
 use AquiHayTema\Engine\TutorialIncorporaciones;
 
 $root = dirname(__DIR__);
+putenv('AHT_DEV=1');
 $ctx = new ApiContext($root);
 $svc = new PartidaService($root);
 $cat = new Catalog($root);

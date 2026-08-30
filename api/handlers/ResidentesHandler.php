@@ -5,6 +5,7 @@ namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
 use AquiHayTema\Engine\PoolJugableCanon;
+use function AquiHayTema\Api\requireDev;
 use function AquiHayTema\Api\savePartida;
 use function AquiHayTema\Api\savePartidaRapida;
 
@@ -47,6 +48,7 @@ final class ResidentesHandler
 
     public static function placeholder(ApiContext $ctx, array $body, array &$partida): array
     {
+        requireDev();
         $r = $ctx->service->crearResidentePlaceholderDev($partida);
         savePartida($ctx, $partida);
         return ['ok' => true, 'resultado' => $r];
@@ -54,6 +56,7 @@ final class ResidentesHandler
 
     public static function incorporar(ApiContext $ctx, array $body, array &$partida): array
     {
+        requireDev();
         $catalogId = (string) ($body['catalog_id'] ?? '');
         if ($catalogId === '' || !PoolJugableCanon::esIdCanonico($catalogId)) {
             return [
