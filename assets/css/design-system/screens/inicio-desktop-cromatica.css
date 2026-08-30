@@ -1,0 +1,547 @@
+/*
+ * INICIO-DESKTOP-CROMATICA — blindaje cromático desktop (paleta lavanda aprobada)
+ *
+ * Hoja canónica aislada: fondos #F3EFF7, superficies blancas, bordes #D9D2E1.
+ * No editar colores aquí salvo petición explícita.
+ * Mantener marcadores de versión (v1, v2, v106, v107, v108).
+ * Cargar en play.php DESPUÉS de inicio-desktop.css.
+ */
+
+/* INICIO-CROMATICA-DESKTOP-v1 - paleta lavanda aprobada (solo pantalla principal desktop) */
+@media (min-width: 769px) {
+  html:has(body.play-v3 .inicio-desktop.is-inicio-view-active),
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active),
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active) .game-shell,
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active) .game-main,
+  body.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-root.pc,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-scroll {
+    background-color: #F3EFF7 !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .shell-grupo,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .proxplanes-movil {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #D9D2E1 !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .brand-col::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .brand-col::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-reloj {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border-color: #D9D2E1 !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop .celestine-nota.obj-vecinos-resumen {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border-color: #D8D1DE !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par {
+    background: linear-gradient(180deg, #ebe3f8 0%, #e8dff5 100%) !important;
+    background-color: #ebe3f8 !important;
+    background-image: linear-gradient(180deg, #ebe3f8 0%, #e8dff5 100%) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-papel,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-papel.misiones-completadas {
+    background-color: #f6faf3 !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #D8D1DE !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--escena,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--desk-mock,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .proxplanes-movil .pp-mov-card {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+    border: 1px solid #D9D2E1 !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav::before {
+    background-color: #FFFFFF !important;
+    background-image: none !important;
+  }
+}
+
+/* INICIO-CROMATICA-DESKTOP-v2 - restaurar identidad planes/parejas (gana v1 en columna derecha) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .proxplanes-movil.is-on {
+    background: #fff !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    border: 1.5px solid rgba(111, 95, 154, .22) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(111, 95, 154, .1) !important;
+    padding: 12px 12px 10px !important;
+    margin: 0 0 .55rem !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .proxplanes-movil .pp-mov-card {
+    background: #f3f0f8 !important;
+    background-color: #f3f0f8 !important;
+    background-image: none !important;
+    border: 1px solid rgba(111, 95, 154, .16) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--ref-desk,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--escena.enc-mov-card--ref-desk {
+    border: 1.5px solid rgba(109, 155, 118, .48) !important;
+    background: #f3faf4 !important;
+    background-color: #f3faf4 !important;
+    background-image:
+      radial-gradient(ellipse 90% 70% at 12% 8%, rgba(220, 240, 224, .75) 0%, transparent 58%),
+      radial-gradient(ellipse 60% 50% at 88% 92%, rgba(196, 224, 202, .45) 0%, transparent 55%),
+      linear-gradient(165deg, #f8fcf9 0%, #eef7f0 52%, #e6f2e8 100%) !important;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, .92) inset,
+      0 2px 12px rgba(109, 155, 118, .14) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--ref-desk .enc-mov-resumen--cuece {
+    border-color: rgba(109, 155, 118, .28) !important;
+    background: rgba(255, 255, 255, .88) !important;
+    background-color: rgba(255, 255, 255, .88) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--ref-desk .enc-mov-resumen--cuece::before {
+    border-top-color: rgba(109, 155, 118, .28) !important;
+    border-left-color: rgba(109, 155, 118, .28) !important;
+    background: rgba(255, 255, 255, .88) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    margin: 0 0 .55rem !important;
+    padding: 12px 14px 10px !important;
+    box-sizing: border-box !important;
+    background: #fff9fa !important;
+    background-color: #fff9fa !important;
+    background-image: none !important;
+    border: 1.5px solid rgba(232, 160, 180, .38) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 12px rgba(232, 136, 168, .12) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas .zona-tit-parejas {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 0 10px 0 !important;
+    padding: 0 0 9px 0 !important;
+    border-bottom: 1.5px solid rgba(232, 160, 180, .32) !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .1em !important;
+    text-transform: uppercase !important;
+    color: #2c261f !important;
+    line-height: 1 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas .zona-tit-parejas::before {
+    content: "" !important;
+    display: block !important;
+    flex: 0 0 22px !important;
+    width: 22px !important;
+    height: 22px !important;
+    border-radius: 6px !important;
+    background:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.5s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 20.5 12 20.5z' fill='%23fff'/%3E%3C/svg%3E") center / 14px 14px no-repeat,
+      linear-gradient(180deg, #f2a0b4 0%, #e8889e 100%) !important;
+    box-shadow: 0 1px 3px rgba(232, 100, 130, .22) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo-planes .obj-nuevo-plan.obj-nuevo-plan-horiz {
+    border: 1.5px solid #6f5f9a !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo-planes .obj-nuevo-plan-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo-planes .obj-nuevo-plan-txt {
+    color: #6f5f9a !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--desk-mock {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: 1.5px dashed rgba(109, 155, 118, .46) !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-DESKTOP-v106 - iconos/texto mas grandes sin cambiar caja; colores semanticos (ref movil v120) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+    gap: 4px !important;
+    padding: 6px 4px 11px !important;
+    font-size: .88rem !important;
+    color: #33261e !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+    width: 40px !important;
+    height: 40px !important;
+    flex: 0 0 40px !important;
+    color: #6b5138 !important;
+    background: transparent !important;
+    border-radius: 7px !important;
+    box-sizing: border-box !important;
+    padding: 1px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg {
+    width: 38px !important;
+    height: 38px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico svg path,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg path {
+    fill: none !important;
+    stroke: currentColor !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
+    color: #c42b4a !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
+    color: #33261e !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
+    color: #7c6bae !important;
+    background: #e4dcf4 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
+    color: #c42b4a !important;
+    background: transparent !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
+    fill: currentColor !important;
+    stroke: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
+    font-size: .88rem !important;
+    font-weight: 800 !important;
+    color: #33261e !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on .play-bottom-nav-txt,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
+    color: #33261e !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
+    background: #c42b4a !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
+    color: #7c6bae !important;
+    background: #e4dcf4 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
+    color: #c42b4a !important;
+    background: transparent !important;
+  }
+}
+
+/* INICIO-PLANES-BLOQUE-DESKTOP-v107 - bloque unico: en curso + proximos + crear (gana libreta v47-v50 y cromatica v2) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin: 0 0 .55rem !important;
+    padding: 12px 14px 11px !important;
+    box-sizing: border-box !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    border: 1.5px solid #D9D2E1 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(70, 55, 85, 0.10) !important;
+    transform: none !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta > .shell-grupo,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .encursos-movil,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .shell-grupo-planes,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .inicio-planes-agenda {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-cab {
+    display: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .encursos-movil.is-on {
+    margin: 0 0 10px 0 !important;
+    padding: 0 0 10px 0 !important;
+    border-bottom: 1.5px dashed rgba(111, 95, 154, .24) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .inicio-planes-agenda {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    padding: 10px 10px 8px !important;
+    border: 1.5px dashed rgba(111, 95, 154, .28) !important;
+    border-radius: 12px !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .encursos-movil.is-on + .inicio-planes-agenda {
+    margin-top: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.is-on {
+    margin: 0 0 8px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-cab {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    margin: 0 0 10px 0 !important;
+    padding: 0 2px !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-cab .plan-seccion-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-cab .plan-seccion-rule,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-cab .plan-seccion-ver {
+    display: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-tit {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0 !important;
+    margin: 0 !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .82rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .1em !important;
+    text-transform: uppercase !important;
+    color: #6f5f9a !important;
+    line-height: 1 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-tit::after {
+    display: none !important;
+    content: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-tit .plan-seccion-cnt {
+    order: 2 !important;
+    margin-left: auto !important;
+    background: #6f5f9a !important;
+    border: 2px solid #fff !important;
+    color: #fff !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+    min-width: 1.5rem !important;
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    padding: 0 !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    box-shadow: 0 1px 4px rgba(111, 95, 154, .22) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card {
+    background: #f3f0f8 !important;
+    background-color: #f3f0f8 !important;
+    border: 1px solid rgba(111, 95, 154, .16) !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .shell-grupo-planes {
+    display: flex !important;
+    justify-content: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan.obj-nuevo-plan-horiz {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: .52rem 1rem .54rem !important;
+    border: 1.5px solid #6f5f9a !important;
+    border-radius: 12px !important;
+    background: #fff !important;
+    background-color: #fff !important;
+    box-shadow: none !important;
+    transform: none !important;
+    justify-content: center !important;
+    gap: .4rem !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan-txt {
+    color: #6f5f9a !important;
+    font-family: Nunito, "Segoe UI", sans-serif !important;
+    font-size: .78rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    text-shadow: none !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--escena.enc-mov-card--ref-desk {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+}
+
+/* INICIO-TOP-RELOJ-CROMATICA-DESKTOP-v108 - pastillas dia/hora blanco-lavanda (gana v81 vainilla) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora {
+    background: #fff !important;
+    background-color: #fff !important;
+    background-image: none !important;
+    border: 1.5px solid #D9D2E1 !important;
+    border-radius: 18px !important;
+    box-shadow: 0 2px 8px rgba(70, 55, 85, 0.08) !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora {
+    border-left: 1.5px solid #D9D2E1 !important;
+    border-right: 1.5px solid #D9D2E1 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-num,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora-val {
+    color: #33261e !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-meta {
+    color: #6b5f78 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora-ico {
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%237c6bae' stroke-width='1.8'/%3E%3Cpath d='M12 7v5l3 2' stroke='%237c6bae' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat !important;
+  }
+}
+
+/* INICIO-BOTTOM-NAV-DESKTOP-v134 - blindaje nav accesos rapidos en desktop (hijo directo de stage) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+    min-height: 56px !important;
+  }
+}

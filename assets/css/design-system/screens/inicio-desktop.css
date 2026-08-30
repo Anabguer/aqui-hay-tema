@@ -6326,7 +6326,7 @@
     gap: 10px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     display: flex !important;
     position: relative !important;
     left: auto !important;
@@ -6356,7 +6356,7 @@
     flex: 0 1 auto !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav::before {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav::before {
     content: "" !important;
     position: absolute !important;
     inset: 0 !important;
@@ -6365,7 +6365,7 @@
     z-index: -1 !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
     flex: 1 1 0 !important;
     min-width: 0 !important;
     display: flex !important;
@@ -6392,20 +6392,20 @@
     position: relative !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:last-child {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:last-child {
     border-right: 0 !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on {
     background: transparent !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
     font-weight: 900 !important;
     color: #2c261f !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
     content: "" !important;
     position: absolute !important;
     left: 50% !important;
@@ -6417,7 +6417,7 @@
     background: #e8487a !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -6427,13 +6427,13 @@
     position: relative !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg {
     width: 24px !important;
     height: 24px !important;
     display: block !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-badge, .inicio-stage > .play-bottom-nav .play-bottom-nav-badge {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-badge, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-badge {
     position: absolute !important;
     top: -4px !important;
     right: -8px !important;
@@ -6450,7 +6450,7 @@
     box-shadow: 0 1px 2px rgba(0, 0, 0, .12) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt, .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
     display: block !important;
     white-space: nowrap !important;
     font-size: .56rem !important;
@@ -6878,29 +6878,29 @@
     gap: 20px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     margin: 10px 0 0 !important;
     padding: 12px 0 14px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
     gap: 8px !important;
     padding: 10px 6px 16px !important;
     font-size: .72rem !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
     width: 34px !important;
     height: 34px !important;
     flex: 0 0 34px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg {
     width: 32px !important;
     height: 32px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-badge, .inicio-stage > .play-bottom-nav .play-bottom-nav-badge {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-badge, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-badge {
     top: -5px !important;
     right: -9px !important;
     min-width: 18px !important;
@@ -6909,11 +6909,11 @@
     line-height: 18px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt, .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
     font-size: .72rem !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
     bottom: 5px !important;
     height: 4px !important;
   }
@@ -7248,7 +7248,7 @@
     padding-bottom: 0 !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     margin-bottom: 0 !important;
     flex-shrink: 0 !important;
   }
@@ -7402,7 +7402,7 @@
     transform: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 100% !important;
     max-width: 100% !important;
     margin-top: 2px !important;
@@ -7604,7 +7604,7 @@
     max-height: min(72vh, calc(100dvh - 295px), calc(100vh - 295px)) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 96% !important;
     max-width: 96% !important;
     margin-left: auto !important;
@@ -7658,7 +7658,7 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 83% !important;
     max-width: 83% !important;
     margin-left: auto !important;
@@ -7695,7 +7695,7 @@
     max-height: min(69vh, calc(100dvh - 300px), calc(100vh - 300px)) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 84% !important;
     max-width: 84% !important;
   }
@@ -7709,7 +7709,7 @@
     max-height: min(70vh, calc(100dvh - 290px), calc(100vh - 290px)) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 85% !important;
     max-width: 85% !important;
   }
@@ -7728,7 +7728,7 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 74% !important;
     max-width: 74% !important;
     margin-left: auto !important;
@@ -7744,7 +7744,7 @@
     max-height: min(67vh, calc(100dvh - 310px), calc(100vh - 310px)) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 76% !important;
     max-width: 76% !important;
   }
@@ -7758,7 +7758,7 @@
     max-height: min(68vh, calc(100dvh - 300px), calc(100vh - 300px)) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 78% !important;
     max-width: 78% !important;
   }
@@ -7810,7 +7810,7 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 95% !important;
     max-width: 95% !important;
     margin-left: auto !important;
@@ -7836,7 +7836,7 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 100% !important;
     max-width: 100% !important;
     margin-left: auto !important;
@@ -7886,7 +7886,7 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 100% !important;
     max-width: 100% !important;
     margin-left: auto !important;
@@ -7925,7 +7925,7 @@
     margin-right: auto !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .inicio-stage > .play-bottom-nav {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     width: 93% !important;
     max-width: 93% !important;
     margin-left: auto !important;
@@ -7935,53 +7935,53 @@
 
 /* INICIO-BOTTOM-NAV-DESKTOP-v119 ? iconos tinta neutra; acento solo en tab activo */
 @media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
     color: var(--ds-ink, #33261e) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt, .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
     color: var(--ds-ink, #33261e) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
     color: var(--ds-ink-soft, #6b5138) !important;
     background: transparent !important;
     border-radius: 6px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg path {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg path {
     fill: none !important;
     stroke: currentColor !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-ico {
     color: var(--ds-ink, #33261e) !important;
     background: transparent !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"].is-on .play-bottom-nav-ico {
     color: var(--ds-lavender-deep, #7c6bae) !important;
     background: var(--ds-lavender-soft, #e4dcf4) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico {
     color: var(--ds-pink-deep, #c42b4a) !important;
     background: transparent !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico svg path {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"].is-on .play-bottom-nav-ico svg path {
     fill: currentColor !important;
     stroke: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
     background: var(--ds-pink-deep, #c42b4a) !important;
   }
 }
 
 /* INICIO-BOTTOM-NAV-DESKTOP-v120 ? color semantico siempre visible por icono */
 @media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
     color: var(--ds-ink-soft, #6b5138) !important;
     background: transparent !important;
     border-radius: 7px !important;
@@ -7989,41 +7989,41 @@
     padding: 1px !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg path {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-ico, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico svg path {
     fill: none !important;
     stroke: currentColor !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
     color: var(--ds-pink-deep, #c42b4a) !important;
     background: transparent !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico {
     color: var(--ds-ink, #33261e) !important;
     background: transparent !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
     color: var(--ds-lavender-deep, #7c6bae) !important;
     background: var(--ds-lavender-soft, #e4dcf4) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
     color: var(--ds-pink-deep, #c42b4a) !important;
     background: transparent !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
     fill: currentColor !important;
     stroke: none !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on .play-bottom-nav-txt {
     color: var(--ds-ink, #33261e) !important;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn, .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn.is-on::after {
     background: var(--ds-pink-deep, #c42b4a) !important;
   }
 }
