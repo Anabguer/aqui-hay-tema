@@ -312,14 +312,15 @@
 
 ---
 
-### Audio / PWA
+### PWA / Instalable + Standalone
 
 | Campo | Valor |
 |-------|-------|
-| **Estado** | 🟡 |
-| **Qué tiene el jugador hoy** | PWA con manifest y service worker. Title corregido (mojibake fix). Audio de romance existe en JS (`play-v3-audio.js`). Efectos de sonido configurados. |
-| **Qué falta** | Integración completa de audio en todos los flujos. PWA offline completo (sin service worker funcional verificado). |
-| **Evidencia** | `play-v3-audio.js` + PWA manifest. Commits: `01a5eb9` (title mojibake fix). Tests: `pwa_standalone_test`. |
+| **Estado** | 🟢 CERRADO E2E |
+| **Qué tiene el jugador hoy** | PWA instalable: manifest válido, SW registrado, standalone, icons 192/512, Apple metadata. Shell carga online. Title corregido. |
+| **Gameplay offline** | FUERA DE ALCANCE ACTUAL. AHT gestiona ausencia con Catch-up server-side. No se requiere save local, sincronización cliente/servidor ni reloj offline. |
+| **Mejora futura opcional** | Shell offline informativo: abrir la app sin conexión y mostrar estado de solo lectura / "sin conexión". No bloqueo. |
+| **Evidencia** | `manifest.webmanifest`, `sw.js`, `play.php` (SW registration + meta tags). Tests: `pwa_standalone_test` (26/26). Producción verificada. |
 
 ---
 
@@ -331,7 +332,7 @@ Solo sistemas que NO estén 🟢. Ordenados por dependencia técnica.
 |---|---------|--------|-----------|-------------|
 | 1 | Romance autónomo | 🟡 POR VERIFICAR E2E | Cierre E2E autónomo: funnel social→romántico, primeras citas, declaraciones, parejas, D10-D60, productores de hitos, configuración, cuellos de botella | Independiente |
 | 2 | Offline / Catch-up | 🟢 | Catch-up completo: reloj avanzado, misiones caducan, batch NPC offline, resumen regreso, sin destrucción. | `catch_up_offline_test`, `catch_up_completo_test` |
-| 3 | Audio / PWA | 🟡 | Integración audio en flujos + PWA offline funcional. | Ninguna (independiente) |
+| 3 | PWA / Audio | 🟢 PWA / 🟡 Audio | PWA instalable+standalone cerrada. Audio pieza separada. | `pwa_standalone_test` |
 
 ---
 
