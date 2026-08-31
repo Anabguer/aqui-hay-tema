@@ -1423,15 +1423,24 @@
 
 
 
-/* MODAL-STACK-v2 - map-host sobre feed; velo/modal conservan 90/110 canonicos */
+/* MODAL-STACK-v3 - bleed-through fix:
+   v2 failed because:
+   (a) .inicio-desktop has display:contents on desktop → no box → z-index:0 meaningless;
+       its children (.game-top, .inicio-desktop-layout) become direct grid children untargeted.
+   (b) section.inicio-mobile (tiles) was never targeted; only .inicio-mobile-feed was. */
 
+/* All siblings of .inicio-map-host that are NOT the map-host → z-index:0 */
+.play-v3:has(.play-root[data-capa]) .inicio-stage > .game-top,
+.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-desktop-layout,
+.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed),
+.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-desktop,
 .play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-mobile.inicio-mobile-feed,
 
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-desktop,
-
-.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-mobile.inicio-mobile-feed,
-
-.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-desktop {
+.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .game-top,
+.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-desktop-layout,
+.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed),
+.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-desktop,
+.play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-mobile.inicio-mobile-feed {
 
   position: relative;
 
