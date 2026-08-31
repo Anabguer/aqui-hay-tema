@@ -45,6 +45,11 @@ final class DiarioNarrativaBridge
             return null;
         }
 
+        $tipoBuzon = (string) ($mensaje['tipo'] ?? 'cotilleo');
+        if (in_array($tipoBuzon, ['cotilleo_autonomo', 'cotilleo_patron'], true)) {
+            return null;
+        }
+
         $eventoId = self::claveEventoDeMensaje($mensaje);
         if ($eventoId === '') {
             return null;
@@ -52,7 +57,6 @@ final class DiarioNarrativaBridge
 
         $origenMsg = is_array($mensaje['origen'] ?? null) ? $mensaje['origen'] : [];
         $tipoEvento = (string) ($origenMsg['tipo_evento'] ?? '');
-        $tipoBuzon = (string) ($mensaje['tipo'] ?? 'cotilleo');
         $actores = self::actoresDe($mensaje);
         $msgId = (string) ($mensaje['id'] ?? '');
         $dia = (int) ($mensaje['dia'] ?? ($partida['reloj']['dia_pueblo'] ?? 1));
@@ -196,6 +200,15 @@ final class DiarioNarrativaBridge
         $existente = DiarioEngine::entradaPorEvento($partida, $eventoId);
         if ($existente !== null) {
             return $existente;
+        }
+
+        $textoHash = md5($texto);
+        foreach (($partida['diario'] ?? []) as $e) {
+            if (($e['tipo'] ?? '') !== 'estado_emocional') continue;
+            if (!in_array($residenteId, $e['actores'] ?? [], true)) continue;
+            if (md5($e['texto'] ?? '') === $textoHash) {
+                return $e;
+            }
         }
 
         $entrada = [
