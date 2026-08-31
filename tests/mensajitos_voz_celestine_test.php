@@ -308,7 +308,7 @@ ok((bool) preg_match('/(me quedo|aquí sigo|me has convencido)/i', $queda), '"se
 $bien = MensajitoVoz::linea($pu, 'bienvenida_bucle', [], 'b|1', $ridA);
 ok(strpos($bien, 'te ha dejado un recado') === false && (bool) preg_match('/celestine/i', $bien), 'bienvenida directa al jugador');
 $tut = MensajitoVoz::linea($pu, 'tutorial_primeros_pasos', ['nombre' => 'Ana'], 't|1', $ridA);
-ok(strpos($tut, 'Nuevo plan') !== false, 'tutorial conserva instrucción funcional');
+ok(strpos($tut, 'Nuevo plan') === false, 'tutorial NPC sin instrucción UI');
 ok(strpos($tut, 'llevo un rato pensando') === false && (bool) preg_match('/me apetece ir al cine/i', $tut), 'tutorial en 1.ª persona');
 $solo = MensajitoVoz::linea($pu, 'resultado_cumplida', ['otro' => ''], 'rc|vacio', $ridA);
 ok($solo !== '' && strpos($solo, '{') === false, 'variantes sin tokens vacíos quedan limpias');

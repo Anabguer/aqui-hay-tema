@@ -176,7 +176,7 @@ final class MensajitoVoz
         return [
             'No me cabe en la maleta. Creo que aquí tendrá mejor vida.',
             'Para ti, Celestine. No sabía qué regalarte, así que he elegido esto.',
-            'Quiero que esto quede contigo. Me hace ilusión que lo uses.',
+            'Quiero que esto quede contigo. Cuídalo.',
         ];
     }
 
@@ -205,7 +205,7 @@ final class MensajitoVoz
         return [
             '¡Ya estoy aquí, Celestine! Vivienda asignada y todo. Nos vemos por el pueblo.',
             'Aquí llega {nombre}. Ya tengo mi rincón en el pueblo. Cuando quieras, nos tomamos algo.',
-            'Instalad{oa} y con llaves propias. Gracias por la bienvenida, Celestine.',
+            'Ya estoy instalad{oa}. Gracias por la bienvenida, Celestine.',
         ];
     }
 
