@@ -59,7 +59,7 @@
 
   body.play-v3 .tutorial-pista {
     padding: .28rem .5rem;
-    font-size: .78rem;
+    font-size: .875rem;
   }
 
   .game-shell {
@@ -342,7 +342,7 @@
 
   .zona-actividad .obj-buzon-img { width: 30px !important; height: auto; }
   .zona-actividad .obj-buzon-txt {
-    font-size: .52rem !important;
+    font-size: .8125rem !important;
     margin-top: .12rem !important;
     letter-spacing: .06em;
     line-height: 1.1;
@@ -378,7 +378,7 @@
   .celestine-nota .obj-vecinos-stats { display: none !important; }
 
   .celestine-nota .obj-vecinos-tit {
-    font-size: .58rem !important;
+    font-size: .8125rem !important;
     margin: 0 !important;
     letter-spacing: .08em;
     text-transform: uppercase;
@@ -443,7 +443,7 @@
 
   .obj-nuevo-plan-ico { font-size: 1.15rem; line-height: 1; }
   .obj-nuevo-plan-txt {
-    font-size: .58rem !important;
+    font-size: .8125rem !important;
     font-weight: 800;
     letter-spacing: .05em;
     line-height: 1.15;
@@ -481,7 +481,7 @@
   }
 
   .obj-cotilleo-tit {
-    font-size: .62rem !important;
+    font-size: .8125rem !important;
     margin: 0 !important;
     letter-spacing: .1em;
     text-align: center;
@@ -508,7 +508,7 @@
   .mision-tape { display: none; }
 
   .obj-misiones-papel-tit {
-    font-size: .72rem !important;
+    font-size: .8125rem !important;
     margin-bottom: .35rem !important;
     padding-bottom: .28rem !important;
   }
@@ -531,7 +531,7 @@
   }
 
   .shell-grupo-parejas .zona-tit-parejas {
-    font-size: .68rem !important;
+    font-size: .8125rem !important;
     margin: 0 0 .4rem !important;
     padding: 0 0 .25rem !important;
     letter-spacing: .1em;
@@ -866,7 +866,7 @@
   .zona-actividad .obj-buzon-txt,
   .celestine-nota .obj-vecinos-tit {
     font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: .62rem !important;
+    font-size: .8125rem !important;
     font-weight: 800 !important;
     letter-spacing: .07em !important;
     line-height: 1.15 !important;
@@ -907,7 +907,7 @@
   .obj-nuevo-plan-txt {
     display: block !important;
     font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: .56rem !important;
+    font-size: .8125rem !important;
     font-weight: 800 !important;
     letter-spacing: .04em !important;
     line-height: 1.1 !important;
@@ -1161,7 +1161,7 @@
   .celestine-nota .obj-vecinos-tit,
   .obj-nuevo-plan-txt {
     font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: .58rem !important;
+    font-size: .8125rem !important;
     font-weight: 800 !important;
     letter-spacing: .07em !important;
     line-height: 1.1 !important;
@@ -1484,7 +1484,7 @@
     display: block !important;
     margin: 0 !important;
     font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: .58rem !important;
+    font-size: .8125rem !important;
     font-weight: 800 !important;
     letter-spacing: .11em !important;
     text-transform: uppercase !important;
@@ -1578,7 +1578,7 @@
   }
 
   .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-volver {
-    font-size: .72rem;
+    font-size: .875rem;
   }
 
   .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-body {
@@ -2164,7 +2164,7 @@
   .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
   .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt {
-    font-size: .66rem !important;
+    font-size: .8125rem !important;
     line-height: 1.08 !important;
     letter-spacing: .075em !important;
   }
@@ -3409,5 +3409,21 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     margin-top: auto !important;
     background: linear-gradient(180deg, rgba(253, 248, 242, 0) 0%, rgba(253, 248, 242, .94) 32%, rgba(253, 248, 242, 1) 58%) !important;
     padding-top: .45rem !important;
+  }
+}
+
+/* === BATCH 10 — Legibilidad: labels funcionales ~13px (corrige 8-9px) === */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-mobile-tiles .obj-buzon-txt,
+  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-tit,
+  .play-v3:has(.game-shell) .obj-nuevo-plan-txt,
+  .play-v3:has(.game-shell) .obj-cotilleo-tit,
+  .play-v3:has(.game-shell) .obj-misiones-papel-tit,
+  .play-v3:has(.game-shell) .shell-grupo-parejas .zona-tit-parejas {
+    font-size: .8125rem !important;
+  }
+
+  .play-v3:has(.game-shell) .obj-cotilleo-par .obj-cotilleo-tit {
+    font-size: .8125rem !important;
   }
 }

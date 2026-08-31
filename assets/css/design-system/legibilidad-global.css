@@ -538,7 +538,7 @@
 
 
 
-  font-size: max(1.1875rem, var(--aht-type-block)) !important;
+  font-size: var(--aht-type-caption) !important;
 
 
 
@@ -594,7 +594,7 @@
 
 
 
-/* === Tutorial ? AUTORIDAD CANÓNICA: play-v3-tutorial-ds.css === */
+/* === Tutorial ? AUTORIDAD CANï¿½NICA: play-v3-tutorial-ds.css === */
 
 
 
@@ -799,22 +799,10 @@
 
 
 .play-v3 .capa-buzon .carta-msg .cuerpo {
-
-
-
-  font-family: Fraunces, Georgia, serif !important;
-
-
-
-  font-size: max(1.34rem, var(--aht-type-body, 1.22rem)) !important;
-
-
-
-  font-weight: 500 !important;
-
-
-
-  font-style: italic !important;
+  /* Autoridad: typography-reading.css */
+  font-size: var(--aht-type-body) !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
 
 
 
@@ -1082,7 +1070,7 @@
 
 
 
-/* Desktop: mismo aire tabs ? marcar leído que en móvil (avisos .phone tabs mb 12px) */
+/* Desktop: mismo aire tabs ? marcar leï¿½do que en mï¿½vil (avisos .phone tabs mb 12px) */
 
 
 
@@ -1299,8 +1287,9 @@
 
 
 
-  font-size: 1.05rem !important;
-  line-height: 1.32 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body, 1rem) !important;
+  line-height: 1.5 !important;
 
 
 

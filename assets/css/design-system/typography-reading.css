@@ -617,3 +617,57 @@
 .play-v3 .capa-vida-pueblo .vida-latido {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
 }
+
+/* ============================================================
+   TYPO-READING-v3 — labels funcionales movil (piso ~13px)
+   Autoridad final sobre play-v3-responsive legado.
+   ============================================================ */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .game-left .game-left-tile-label,
+  .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
+  .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt,
+  .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before,
+  .play-v3:has(.game-shell) .obj-cotilleo-par .obj-cotilleo-tit,
+  .play-v3:has(.game-shell) .obj-misiones-papel-tit,
+  .play-v3:has(.game-shell) .shell-grupo-parejas .zona-tit-parejas,
+  .play-v3 .zona-actividad .obj-buzon-txt,
+  .play-v3 .celestine-nota .obj-vecinos-tit,
+  .play-v3 .obj-nuevo-plan-txt,
+  .play-v3 .obj-cotilleo-tit,
+  .play-v3 .obj-misiones-papel-tit,
+  .play-v3 .shell-grupo-parejas .zona-tit-parejas {
+    font-size: var(--aht-type-caption, 0.8125rem) !important;
+    line-height: 1.15 !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-volver,
+  .play-v3 .capa-ficha .ficha-volver {
+    font-size: var(--aht-type-secondary, 0.875rem) !important;
+    line-height: 1.25 !important;
+  }
+
+  body.play-v3 .tutorial-pista,
+  .play-v3 .tutorial-pista {
+    font-size: var(--aht-type-secondary, 0.875rem) !important;
+    line-height: 1.35 !important;
+  }
+}
+
+/* ============================================================
+   TYPO-READING-v4 — cuerpo mensajitos: autoridad vs visual-replica/avisos
+   Misma especificidad :has(.game-shell); carga al final del archivo.
+   ============================================================ */
+.play-v3:has(.game-shell) .capa-buzon .carta-msg .cuerpo,
+.play-v3:has(.game-shell) .capa-buzon .carta-cuerpo-wrap .cuerpo,
+.play-v3:has(.game-shell) .capa-buzon .carta-hilo-cuerpo {
+  font: var(--aht-read-font) !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: var(--aht-type-body, 1rem) !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+  line-height: 1.5 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
