@@ -107,18 +107,17 @@ $n = DiarioHitoEngine::sincronizarDesdeBitacora($p7);
 $clavePc = 'diario_hito:' . RelacionBitacora::PRIMERA_CITA . ':' . implode('|', $xa < $xb ? [$xa, $xb] : [$xb, $xa]);
 ok($n >= 1 && DiarioEngine::entradaPorEvento($p7, $clavePc) !== null, '7. backfill bitácora → diario_hito');
 
-// --- 8) Contenido propio distinto del espejo cotilleo ---
+// --- 8) Entrada propia persiste (espejo cotilleo ya no se refleja al diario) ---
 $p8 = $service->nuevaPartida('juego_v1', 'diario-hito-diff');
 $p8['features']['buzon_enabled'] = true;
 RelacionBitacora::registrar($p8, RelacionBitacora::SE_CONOCIERON, [$ida, $idb]);
 $claveCot = RelacionBitacora::SE_CONOCIERON . ':' . implode('|', $ida < $idb ? [$ida, $idb] : [$idb, $ida]);
 $espejo = DiarioEngine::entradaPorEvento($p8, $claveCot);
 $propia8 = DiarioEngine::entradaPorEvento($p8, 'diario_hito:' . $claveCot);
-ok($espejo !== null && $propia8 !== null, '8. coexisten espejo cotilleo y entrada propia');
+ok($espejo === null && $propia8 !== null, '8. espejo cotilleo no persiste, entrada propia sí');
 ok(
-    trim((string) ($espejo['texto'] ?? '')) !== trim((string) ($propia8['texto'] ?? ''))
-    || ($propia8['titulo'] ?? '') !== '',
-    '8. entrada propia aporta titulo/memoria distinta del espejo'
+    ($propia8['titulo'] ?? '') !== '',
+    '8. entrada propia aporta titulo'
 );
 
 echo $failures === 0 ? "OK diario_hito_engine\n" : "FAIL diario_hito_engine ({$failures})\n";

@@ -122,7 +122,7 @@ $rRup = AcontecimientoDiario::ejecutar($pVida, 'ruptura', [$va, $vb], $store, $c
 ok($rRup['ok'] ?? false, '3. ruptura ejecuta');
 $cotiRup = cotilleos($pVida);
 ok(count($cotiRup) > $nAntesRup, '3. ruptura genera cotilleo');
-$claveRup = RelacionBitacora::RUPTURA . ':' . implode('|', $va < $vb ? [$va, $vb] : [$vb, $va]);
+$claveRup = 'diario_hito:' . RelacionBitacora::RUPTURA . ':' . implode('|', $va < $vb ? [$va, $vb] : [$vb, $va]);
 $diarioRup = DiarioEngine::entradaPorEvento($pVida, $claveRup);
 ok($diarioRup !== null, '3. ruptura → diario');
 

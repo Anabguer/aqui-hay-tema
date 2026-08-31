@@ -50,13 +50,17 @@ final class DiarioNarrativaBridge
             return null;
         }
 
+        $origenMsg = is_array($mensaje['origen'] ?? null) ? $mensaje['origen'] : [];
+        $tipoEvento = (string) ($origenMsg['tipo_evento'] ?? '');
+        if ($tipoBuzon === 'cotilleo_hito' || $tipoEvento === 'relacion_hito') {
+            return null;
+        }
+
         $eventoId = self::claveEventoDeMensaje($mensaje);
         if ($eventoId === '') {
             return null;
         }
 
-        $origenMsg = is_array($mensaje['origen'] ?? null) ? $mensaje['origen'] : [];
-        $tipoEvento = (string) ($origenMsg['tipo_evento'] ?? '');
         $actores = self::actoresDe($mensaje);
         $msgId = (string) ($mensaje['id'] ?? '');
         $dia = (int) ($mensaje['dia'] ?? ($partida['reloj']['dia_pueblo'] ?? 1));
