@@ -1,9 +1,8 @@
 # Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-08-30 (§19 pendientes/decisiones · §21 consolidación de diseño · §22 Mensajitos 2.0 · §23 Espacio de Celestine — DISEÑO APROBADO, pendiente arquitectura/implementación · §24 llegadas jugables, rituales/calendario y mantra de producto · §25 Expansión del loop de juego — Vida del Pueblo — PENDIENTE BLOQUEADO POR PLAYTEST/CALIBRACIÓN LONGITUDINAL; MI RINCÓN DE CELESTINE pendiente en §23; móvil NPC APARCADO en §21.3/§22.7; sin dependencia de vínculo Celestine, F12, economía o bypass del motor relacional)
+**Versión:** 2026-08-31 (Auditoría maestra reconciliada · §28 Feature Flags realidad · §27 reloj pendiente PlayTest · §22 Mensajitos 2.0 motor completo · §23 Espacio de Celestine Fase 1 desplegada · §25 Expansión loop juego PENDIENTE · móvil NPC APARCADO · vínculo Celestine APARCADO · F12/F13 APARCADAS)
 
-El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida está apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y laboratorio 3/6/16/32.  
-**Punto de partida:** ~8 % (Turno 1) → **~28 %** tras Bloques 0–6 ejecutados en Turno 2
+**Estado post-auditoría:** Ver §28 para reconciliación completa plan ↔ código. El código está significativamente más avanzado de lo que esta tabla histórica refleja. Varios sistemas aparecen como "hechos" en bloques anteriores pero están apagados por feature flags — ver §28.
 
 ---
 
@@ -44,29 +43,27 @@ El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el 
 
 ---
 
-## 2. Estado actual del código (post Turno 2)
+## 2. Estado actual del código (reconciliado auditoría 2026-08-31)
 
-| Sistema | Archivo(s) | Estado |
-|---------|------------|--------|
-| Schema v2 + migración | `SchemaMigrator.php` | Funciona |
-| RNG | `RngService.php` | Funciona + tests |
-| Logging | `GameLogger.php` | Funciona |
-| Encuentros | `EncuentroEngine.php`, `EncuentroLifecycle.php`, `EncuentroResolver.php` | Funciona |
-| Compatibilidad | `CompatibilityEvaluator` + `CompatibilidadCalculator` + `CompatibilidadOculta` | Encaje A→B/B→A auditable; pesos **provisionales** |
-| Química | `QuimicaEngine.php` | Persistida; V1 simétrica; almacén dual |
-| Generador residente | `GeneradorResidente.php`, `PerfilPartida.php` | Seed; no reescribe ficha Pxxx |
-| Simulador / laboratorio | `SimuladorPueblos.php` | Distribuciones; no escribe partidas |
-| Agenda genérica | `AgendaEngine.php` | Funciona |
-| Mapa/presencia | `PresenciaEngine.php` | Técnico placeholder |
-| Buzón/Diario | `BuzonEngine.php`, `DiarioEngine.php` | Estructura vacía |
-| NPC autónomo | `AutonomousPlanner.php` | Arquitectura + dev |
-| Economía | `EconomyLedger.php` | Ledger sin cifras |
-| UI bucle | `play.php`, `play.js` | Bucle Neni end-to-end (**sin cambios este turno**) |
-| Propuesta encuentro | `PropuestaEncuentroEngine.php` | Dominio + API; play sigue en `programar` |
-| Peticiones | `PeticionEngine.php` | Estructura + plazo; sin catálogo |
-| Catch-up plan | `CatchUpPlanner.php` | Prioridades; no ejecuta eventos |
-| Dev gate | `dev_gate.php`, `dev.local.php` | Funciona |
-| Tests | `tests/*.php`, `run_all.php` | ALL PASS |
+**Ver §28 para tabla completa y Feature Flags.** Resumen ejecutivo:
+
+- **🟢 Operativo (flag ON, accesible en producto):** Schema v2→v3, RNG, Logging, FeatureConfig, Calibración, Persistencia, Partida lifecycle, Domain Events, Población/Llegadas (PoolCanónico, GeneradorResidente, PerfilPartida, PoblaciónV3, CapacidadViviendas, CandidatoLlegada, LlegadaPresentación, NombresReservados), Tutorial (PrimerosPasos+Incorporaciones), Encuentros (EncuentroEngine+lifecycle+resolver+experiencia+intervencion, PropuestaEncuentroEngine, PropuestaNivel, Rechazo/Memoria, Disponibilidad), Reloj motor+Agenda, Relaciones core (Engine+Bitacora+Fase+Grafo+Historial+Bandas+VistaJugador+NarrativaBridge), Romance (Elegibilidad, ProgressiveProgression+Bridge, AcciónRomántica, SenalRomantica, IniciativaRomantica, TerceroRomantico), Compatibilidad/Química, Buzón/Mensajitos 2.0 (15 motores completos), Cotilleos, Coincidencias/Interacción casual, Lugares (9 canónicos+presencia+afecto+autónomo), HayTema, Marchas, Cumpleaños, Regalos/Inventario (Fase 1), Pareja/Parentesco, MENTES 2-pasos.
+- **🟣 Implementado pero apagado (flag OFF):** Diario (4 motores), Discovery (5 motores), Emociones (5 motores), CatchUp, VidaPueblo, MisionesDiarias, PeticionesPueblo, Consecuencias (3 motores).
+- **🟡 Parcial/stub:** EconomyLedger, AutonomousPlanner, CatchUpPlanner.
+- **🔴 No implementado:** Romance Fase 2, crisis/ruptura autónomas, Historia del Pueblo, misión semanal, eventos interactivos (§25), §26 3 voces.
+- **❓ Reloj:** motor implementado; comportamiento con pestaña abierta = PlayTest pendiente (§27).
+
+### Infraestructura técnica no documentada previamente en este plan
+
+| Componente | Estado | Nota |
+|------------|--------|------|
+| FeatureConfig (17 flags) | 🟢 | §28 |
+| Domain Events + EventBus (35 eventos) | 🟢 | Infraestructura de todos los bridges |
+| CanalDeduplicador | 🟢 | Dedup cruzada buzón/diario |
+| Simuladores lab (8 ficheros) | Lab | Herramientas calibración, no producción |
+| PlaytestIntegralRunner + PostGate | Lab | Gate de validación longitudinal |
+| PlaytestGuia + PlaytestDiag | Lab | Observación 9 objetivos |
+| PlayLab | Lab | Debug lab 1481 líneas |
 
 ---
 
@@ -198,8 +195,8 @@ El **~58 %** no infla el playtest: `play.php` sigue programando encuentros en di
 
 | Cuestión | Afecta |
 |----------|--------|
-| B/C día 1 | Población inicial |
-| I10 tutorial | Onboarding |
+| B/C día 1 | Población inicial | ✅ Resuelto: 3+5→8 con PoblaciónV3 + curva llegadas V3 |
+| I10 tutorial | Onboarding | ✅ Resuelto: TutorialPrimerosPasos completo (977 líneas, 3 misiones, garantía pedagógica) |
 | Cifra intervenciones/día | Balance Celestine |
 | Cupos buzón/diario | Ruido vs silencio |
 | Reiniciar vs nueva en UX multi-dispositivo | Persistencia |
@@ -1663,7 +1660,165 @@ La investigación deberá devolver:
 
 ### 27.8 Clasificación
 
-**BUG / INVESTIGACIÓN DE PLAYTEST PENDIENTE.** Prioridad ALTA. No marcar como resuelto solo porque backend procese tiempo. Criterio real de resolución: la UI abierta debe mostrar el avance temporal correcto sin intervención manual del jugador.
+**Motor del reloj:** implementado y funcional (§2 Reloj). Avance por horas, catch-up, sincronización con encuentros — todo operativo.
+
+**Comportamiento con pestaña abierta:** INVESTIGACIÓN DE PLAYTEST PENDIENTE. Prioridad ALTA. No marcar como resuelto solo porque backend procese tiempo. Criterio real de resolución: la UI abierta debe mostrar el avance temporal correcto sin intervención manual del jugador.
 
 **No implementar mientras estemos en la cola actual de playtest funcional.** Investigación aislada, sin mezclar con otros bloques.
+
+---
+
+## 28. Feature Flags y estado real del código — Auditoría maestra reconciliada (2026-08-31)
+
+**Reconciliación documental** basada en auditoría completa del código en `origin/deploy/integrated` (SHA corte: `de268a5`). Cada sistema tiene UNA categoría principal de estado. No hay doble conteo.
+
+### 28.1 Feature Flags (`data/configs/features.json`)
+
+**17 flags. ON = 6 / OFF = 11.**
+
+| Flag | Estado | Categoría |
+|------|--------|-----------|
+| `buzon_enabled` | ✅ ON | Global buzón |
+| `debug_tools_enabled` | ✅ ON | Dev tools |
+| `mapa_presencia_enabled` | ✅ ON | Mapa/presencia |
+| `encuentros_enabled` | ✅ ON | Encuentros |
+| `expression_resolver_enabled` | ✅ ON | Expresión visual |
+| `mensajitos_espontaneos_enabled` | ✅ ON | Mensajitos espontáneos |
+| `diario_enabled` | ❌ OFF | Sistema diario |
+| `npc_autonomy_enabled` | ❌ OFF | Autonomía NPC |
+| `economy_enabled` | ❌ OFF | Economía |
+| `offline_events_enabled` | ❌ OFF | Catch-up offline |
+| `narrative_reactions_enabled` | ❌ OFF | Reacciones narrativas |
+| `discovery_enabled` | ❌ OFF | Descubrimiento |
+| `emotional_state_from_events_enabled` | ❌ OFF | Emociones desde eventos |
+| `consequences_enabled` | ❌ OFF | Consecuencias |
+| `vida_pueblo_enabled` | ❌ OFF | Vida del pueblo |
+| `misiones_diarias_enabled` | ❌ OFF | Misiones diarias |
+| `peticiones_pueblo_enabled` | ❌ OFF | Peticiones pueblo |
+
+**Flags/config internos adicionales (no en features.json):**
+- `desgaste_social.activo` / `desgaste_pareja.activo` → en `calibracion_vida.json` (OFF por defecto)
+- `activo_en_play` en `AcontecimientoDiario` → flag interno del motor (OFF)
+
+### 28.2 Resumen por categoría (58 sistemas, sin doble conteo)
+
+#### 🟢 HECHO Y OPERATIVO (30 sistemas)
+
+Código completo + flag ON + accesible en producto actual.
+
+1. Schema v2→v3 + migración
+2. RNG determinista
+3. Logging (GameLogger)
+4. FeatureConfig (feature flags)
+5. Calibración (CalibracionConfig + JSON)
+6. Persistencia (SchemaFields + PersistenciaCaps)
+7. Partida lifecycle (nueva/cargar/guardar/reiniciar)
+8. Domain Events + EventBus + Dispatcher
+9. Pool jugable canónico (200 IDs)
+10. Generador residente + PerfilPartida (seed)
+11. Población V3 (arranque 3 + curva llegadas)
+12. Capacidad viviendas (CAP=16)
+13. CandidatoLlegadaEngine (offer→accept→arrive)
+14. LlegadaPresentación (perfil previo + acompañantes)
+15. NombresReservadosPartida
+16. Tutorial (PrimerosPasos + Incorporaciones)
+17. Encuentros (Engine + lifecycle + resolver + experiencia + intervencion)
+18. MentesTemas (MENTES 2-pasos)
+19. PropuestaEncuentroEngine + PropuestaNivel
+20. Rechazo/Memoria/Cooldown + CopyRechazoPropuesta
+21. DisponibilidadEngine
+22. Reloj motor + Agenda (Engine + Conjunta + Templates)
+23. Relaciones core (Engine + Bitacora + Fase + Grafo + Historial + Bandas + VistaJugador + NarrativaBridge)
+24. Romance (Elegibilidad + ProgressiveProgression + Bridge + AcciónRomántica + SenalRomantica + IniciativaRomantica + TerceroRomantico + Copys)
+25. Compatibilidad/Química (Calculator + Oculta + QuimicaEngine)
+26. Buzón + Mensajitos 2.0 (BuzonEngine + BuzonPlayBridge + 15 motores de familias + ConsejoEngine + SeguimientoConsejo + CanalDeduplicador + MensajitoVoz)
+27. Cotilleos (AutonomoCadencia + Categoría + Narrativo + PatrónCadencia + VistaV3 + EncuentroCopy + Copys)
+28. Coincidencias + Interacción casual + ContactoCalidad + SeleccionSocialPeso + IniciativaSocial
+29. Lugares (PresenciaEngine + LugaresCanonicos + LugarAtributos + LugarAutonomo + AforoEngine + HayTema)
+30. Marchas + Cumpleaños + Regalos/Inventario (Fase 1) + ParejaEngine + ParentescoVeto + Copys narrativos
+
+#### 🟣 IMPLEMENTADO PERO APAGADO (8 sistemas)
+
+Código sustancial completo, pero feature flag o gate impide funcionamiento en producto.
+
+1. **Diario** (DiarioEngine + DiarioHitoEngine + DiarioNarrativaBridge + DiarioVista) — flag `diario_enabled=false`
+2. **Discovery** (DiscoveryEngine + Reveal + Projection + Visibility*) — flag `discovery_enabled=false`
+3. **Emociones** (EmotionalStateService + EmotionalEventBridge + EmotionalRecovery + EmocionalNarrativa) — flag `emotional_state_from_events_enabled=false` + EmotionalEventBridge solo 1/14 handlers activos
+4. **CatchUp** (CatchUpEngine completo, CatchUpPlanner stub interno) — flag `offline_events_enabled=false`
+5. **VidaPueblo** (VidaPuebloEngine, 739 líneas) — flag `vida_pueblo_enabled=false`
+6. **MisionesDiarias** (MisionDiariaEngine, 771 líneas) — flag `misiones_diarias_enabled=false`
+7. **PeticionesPueblo** (PeticionPuebloEngine, 1307 líneas) — flag `peticiones_pueblo_enabled=false`
+8. **Consecuencias** (ConsecuenciaReactionSubscriber + ConsecuenciaTriggerRegistry + ContentReactionSubscriber) — flag `consequences_enabled=false` + todos los triggers `enabled: false`
+
+#### 🟡 PARCIAL / STUB (3 sistemas)
+
+Código existe pero es scaffolding o stub sin funcionalidad real.
+
+1. **EconomyLedger** — `_placeholder: true` en toda parte, solo dev handler, sin cifras
+2. **AutonomousPlanner** — `_placeholder_dev`, solo "visitar_lugar", sin prioridades reales
+3. **CatchUpPlanner** — `cantidades: null`, TODO BLOQUEADO_DECISION, no ejecuta eventos
+
+#### 🔴 PLANIFICADO NO IMPLEMENTADO (6 sistemas)
+
+No existe implementación funcional.
+
+1. Romance Fase 2 (declaración + pareja autónoma) — `romance_hito` y `pareja` excluidas de `familias_en_play`
+2. Crisis/ruptura/reconciliación autónomas — umbrales RelacionFase BLOQUEADO_DECISION
+3. Historia del Pueblo (álbum hitos) — §25, explícitamente "NO implementar nada"
+4. Misión semanal — §25, propuesta conceptual
+5. Eventos grandes interactivos — §25.3, propuesta conceptual
+6. §26 Diario/Cotilleo/Ánimo 3 voces — "NO implementar todavía"
+
+#### ⚪ HISTÓRICO / APARCADO / DESCARTADO (9 sistemas)
+
+No reactivar automáticamente.
+
+1. Escáner compatibilidad — `deprecated: true, desbloqueable: false`
+2. Móvil NPC↔NPC — APARCADO (§21.3)
+3. Vínculo Celestine numérico — APARCADO (§22.4)
+4. F12 Carta del que se fue — APARCADA (§22.3)
+5. F13 Plan discreto — APARCADA (§22.3)
+6. Sistema de secretos — DESCARTADO (dirección C)
+7. 6 complejos / 14 destinos — DESCARTADO (DOC V3: solo 9 lugares)
+8. Economía V3 visible — DESCARTADO en V3
+9. Compra/desbloqueo lugares — DESCARTADO
+
+#### ❓ NECESITA PLAYTEST (2)
+
+Comportamiento no certificable por código.
+
+1. **Reloj comportamiento auto** (§27) — motor implementado; actualización con pestaña abierta = pendiente
+2. **Marchas frecuencia/pacing** — §19.4 observó 54 días sin intención en partida observada
+
+### 28.3 Corrección histórica del plan
+
+**Bloques 0–6 del §3:** El plan los marca "✅ EJECUTADO" y efectivamente el código de esos bloques EXISTE. Sin embargo, varios de esos bloques entregaron código que hoy está apagado por flags:
+
+| Bloque | Qué marcaba el plan | Estado real |
+|--------|---------------------|-------------|
+| Bloque 5 — NPC autonomía | "✅ EJECUTADO" | AutonomousPlanner = stub 🟡 |
+| Bloque 6 — Economía | "✅ EJECUTADO" | EconomyLedger = stub 🟡 |
+
+Los demás bloques (0–4) están correctamente marcados como ejecutados y operativos.
+
+**§14 "Auditoría vs implementación":** Esta tabla está desactualizada (data del Turno 2). Se mantiene como referencia histórica. La fuente de verdad actual es §28.
+
+**§9 BLOQUEADO_DECISION:** I10 tutorial y B/C día 1 ahora resueltos (TutorialPrimerosPasos + PoblaciónV3).
+
+**§8 Estimación %:** Las cifras son aproximaciones históricas. El porcentaje exacto depende de qué se cuente como "hecho" (flag ON vs código existente). Ver §28.2 para estado real.
+
+### 28.4 Propuestas para PlayTest
+
+Estas hipótesis salen de la auditoría. Neni decidirá cuáles incorporar al PlayTest.
+
+| # | Propuesta | Qué comprobar |
+|---|-----------|---------------|
+| P-01 | Reloj automático (§27) | Ya en curso |
+| P-02 | Misiones diarias visibilidad | Si al activar flag el jugador las ve y comprende |
+| P-03 | Vida del pueblo significado | Si al activar flag el HUD refleja cambios relevantes |
+| P-04 | Peticiones como Mensajitos | Si las B4 llegan como F3/F5 de forma coherente |
+
+### 28.5 Protecciones
+
+**NO se activaron flags, NO se implementó código, NO se cambió balance, NO se alteró funcionalidad.** Esta sección es exclusivamente documental.
 
