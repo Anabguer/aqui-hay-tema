@@ -116,6 +116,22 @@ final class EmocionalNarrativa
                 $explicacion = 'Un buen consejo a tiempo puede cambiar el día de cualquiera.';
                 break;
 
+            case 'formacion_pareja':
+                $parejaId = (string) ($ctx['pareja_id'] ?? '');
+                $nombrePareja = $parejaId !== '' ? IdentidadPublica::nombre($partida, $parejaId) : '';
+                if ($nombrePareja !== '') {
+                    $explicacion = 'Está muy content' . self::oA($partida, $residenteId)
+                        . ' desde que empezó a salir con ' . $nombrePareja . '.';
+                } else {
+                    $explicacion = 'Está muy content' . self::oA($partida, $residenteId)
+                        . ' desde que empezó una relación.';
+                }
+                $diaDesde = (int) ($estado['desde']['dia'] ?? 0);
+                if ($diaDesde > 0) {
+                    $diarioEventoId = 'formacion_pareja:' . $residenteId . ':' . $diaDesde;
+                }
+                break;
+
             default:
                 return null; // inicial, expiración, manual: nada explicable
         }
@@ -334,6 +350,8 @@ final class EmocionalNarrativa
                 return 'Ha tenido un día especial con sus vecinos.';
             case 'consejo_celestine':
                 return 'Le han dado un buen consejo.';
+            case 'formacion_pareja':
+                return 'Acaba de empezar una relación.';
             default:
                 return null;
         }
@@ -368,6 +386,8 @@ final class EmocionalNarrativa
                 return 'Hoy me han dedicado unas palabras muy bonitas. Me ha encantado.';
             case 'consejo_celestine':
                 return 'Oye, que me has dado un buen consejo. Se te nota.';
+            case 'formacion_pareja':
+                return '¡Estoy de enhorabuena! He empezado una relación y quería contártelo.';
             case 'encuentro':
             case 'encuentro_intervencion':
                 $res = (string) ($contexto['resultado_experiencia'] ?? '');
@@ -424,6 +444,13 @@ final class EmocionalNarrativa
                 return $nombre . ' está de enhorabuena. Le han felicitado y se le nota.';
             case 'consejo_celestine':
                 return $nombre . ' parece más animad' . $oA . ' tras un buen consejo.';
+            case 'formacion_pareja':
+                $parejaId = (string) ($contexto['pareja_id'] ?? '');
+                $nomPareja = $parejaId !== '' ? IdentidadPublica::nombre($partida, $parejaId) : '';
+                if ($nomPareja !== '') {
+                    return $nombre . ' y ' . $nomPareja . ' han empezado a salir. Se les ve ilusionad' . $oA . '.';
+                }
+                return $nombre . ' parece muy content' . $oA . ' últimamente.';
             default:
                 return null;
         }

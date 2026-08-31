@@ -66,6 +66,11 @@ final class ParejaEngine
             null,
             ['hito' => $hito]
         );
+
+        if (!$esVuelta) {
+            self::aplicarEmocionFormacion($partida, $a, $b, $cal);
+        }
+
         return ['ok' => true, 'relacion' => $rel, 'vuelta' => $esVuelta];
     }
 
@@ -167,5 +172,24 @@ final class ParejaEngine
     private static function persistRomance(array &$partida, array $rel): void
     {
         RelacionEngine::persistirRomance($partida, $rel);
+    }
+
+    private static function aplicarEmocionFormacion(
+        array &$partida,
+        string $a,
+        string $b,
+        array $cal
+    ): void {
+        $reloj = $partida['reloj'] ?? [];
+        $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.alegre', 6);
+        $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
+        $root = dirname(__DIR__, 2);
+        $emoSvc = new EmotionalStateService(
+            new VisualPackStore($root),
+            new CatalogStore($root),
+            null
+        );
+        $emoSvc->aplicar($partida, $a, EstadoEmocional::ALEGRE, 'formacion_pareja', null, $hasta, ['pareja_id' => $b], $dur);
+        $emoSvc->aplicar($partida, $b, EstadoEmocional::ALEGRE, 'formacion_pareja', null, $hasta, ['pareja_id' => $a], $dur);
     }
 }
