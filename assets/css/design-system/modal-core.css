@@ -3,14 +3,19 @@
    Gate: .ds-migrada — solo modales marcadas reciben autoridad nueva.
    Carga ANTES de los locales; gana porque los locales limpian sus reglas de shell. */
 
-/* === Shell base (phone + PC) === */
-/* Inactive .ds-migrada modals are hidden by:
-   - PC: capas-shell.css .play-root.pc[data-capa] .capa (visibility:hidden !important, sp 0,5,0)
-   - Phone: responsive.css phone hide-all (visibility:hidden !important, sp 0,3,0)
-   Active .ds-migrada overrides by:
-   - PC: not needed — capas-shell hide-all wins (0,5,0 > DS 0,4,0)
-   - Phone: DS wins by source order (modal-core loads after responsive) */
+/* === Hide inactive .ds-migrada (fallback) === */
+/* Specificity 0,6,0 — lower than per-capa show rules below (0,6,0 + !important).
+   On PC: capas-shell hide-all (0,4,0) also hides, this is a safety net.
+   On phone: responsive.css hide-all (0,7,0 + imp) hides, this is a safety net. */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* === Per-capa show: only the ACTIVE .ds-migrada gets shown === */
+/* Specificity 0,6,0 + !important beats both hide rules and legacy whitelist.
+   Must be per-capa because CSS cannot check data-capa value against capa class. */
+.play-v3:has(.game-shell) .play-root[data-capa="misiones"] .capa-misiones.ds-migrada {
   position: fixed;
   left: 50%;
   top: 50%;
