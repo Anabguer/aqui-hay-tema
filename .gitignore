@@ -62,3 +62,5 @@ docs/referencias_visuales/**/*.jpg
 /dev/screenshots-bloques/
 /dev/screenshots-ui/
 /dev/_regression_*.png
+_AHT_ARCHIVO/
+backups/
