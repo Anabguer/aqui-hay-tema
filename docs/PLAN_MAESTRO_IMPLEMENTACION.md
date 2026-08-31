@@ -1,6 +1,6 @@
 # Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-08-24 (§19 pendientes/decisiones · §21 consolidación de diseño · §22 Mensajitos 2.0 · §23 Espacio de Celestine — DISEÑO APROBADO, pendiente arquitectura/implementación · §24 llegadas jugables, rituales/calendario y mantra de producto · §25 MI RINCÓN DE CELESTINE — nombre definitivo del espacio, auditoría UI/motores, alcance por fases; móvil NPC APARCADO en §21.3/§22.7; sin dependencia de vínculo Celestine, F12, economía o bypass del motor relacional)
+**Versión:** 2026-08-30 (§19 pendientes/decisiones · §21 consolidación de diseño · §22 Mensajitos 2.0 · §23 Espacio de Celestine — DISEÑO APROBADO, pendiente arquitectura/implementación · §24 llegadas jugables, rituales/calendario y mantra de producto · §25 Expansión del loop de juego — Vida del Pueblo — PENDIENTE BLOQUEADO POR PLAYTEST/CALIBRACIÓN LONGITUDINAL; MI RINCÓN DE CELESTINE pendiente en §23; móvil NPC APARCADO en §21.3/§22.7; sin dependencia de vínculo Celestine, F12, economía o bypass del motor relacional)
 
 El **~70 %** no infla el playtest: `play.php` sigue con deltas placeholder y el diario de vida está apagado en play. Lo nuevo es desconocidos 0+flag, discovery, desgaste, voluntad, agenda/aforo y laboratorio 3/6/16/32.  
 **Punto de partida:** ~8 % (Turno 1) → **~28 %** tras Bloques 0–6 ejecutados en Turno 2
@@ -1004,6 +1004,193 @@ La mejora más importante NO es añadir veinte actividades: es conseguir que cad
 Unidad de diversión deseada: **DECISIÓN → CONSECUENCIA → MEMORIA → POSIBLE CONTINUIDAD.**
 
 Ejemplo: Celestine elige quién recibe a Marta → Marta y José pasan cuatro horas juntos → algo ocurre → dos días después Marta recuerda aquello → una semana después esa primera impresión puede seguir teniendo eco. Eso es preferible a generar cinco notificaciones inmediatas diciendo lo mismo.
+
+---
+
+## 25. Expansión del loop de juego — Vida del Pueblo (2026-08-30)
+
+**Estado: PENDIENTE — BLOQUEADO POR PLAYTEST/CALIBRACIÓN LONGITUDINAL.**
+
+SOLO DOCUMENTACIÓN/DISEÑO. Sin runtime, sin deploy, sin cache-buster. Sin implementar nada de lo descrito en este apartado.
+
+**BLOQUEADO hasta finalizar el playtest funcional y la calibración longitudinal actualmente en curso.** NO implementar estas funcionalidades mientras no se conozcan mediante playtest/simulación las ventanas naturales del juego: cuándo empiezan a conocerse los residentes, cuándo aparecen amistades, cuándo aparece interés romántico, cuándo aparecen primeras citas, cuándo aparecen parejas, ritmo de eventos, densidad social, felicidad/estados, rupturas/reconciliaciones si ya existen, y demás hitos sociales relevantes. Los requisitos temporales y cuantitativos de las funcionalidades descritas debajo NO deben inventarse ahora. Primero medir el comportamiento real del juego. Después calibrar esta capa sobre esos datos.
+
+### 25.1 Problema de producto
+
+El loop central actual permite: conocer habitantes, consultar sus rasgos/hobbies/estado, observar relaciones, intervenir, provocar encuentros, organizar citas, ayudar a formar parejas y seguir la vida autónoma del pueblo.
+
+Pero durante playtest humano se ha detectado un riesgo de medio/largo plazo: una vez que el jugador ya tiene una o varias parejas favoritas y ha organizado varias citas, puede aparecer la sensación «Ya he puesto a mis favoritos en citas. ¿Ahora qué hago?».
+
+No queremos solucionar esto añadiendo sistemas arbitrarios o minijuegos desconectados. La expansión debe utilizar los motores que AHT ya posee: relaciones, memoria, emociones, hobbies, rasgos, estados, encuentros, citas, eventos, mensajitos, cotilleos, diario/memoria narrativa y autonomía social.
+
+**Principio:** AHT debe ofrecer más cosas que HACER con las personas, no distraer al jugador de las personas.
+
+### 25.2 Estructura de objetivos: diario / semanal / largo plazo
+
+AHT ya dispone de 3 misiones diarias sencillas. Conceptualmente deben seguir siendo acciones pequeñas que hagan al jugador tocar distintas partes del juego (llevar a alguien al bar, conseguir que dos personas queden, organizar una actividad sencilla, realizar una intervención concreta). No convertir las diarias en misiones largas.
+
+**Propuesta futura:** añadir inicialmente UNA misión semanal más elaborada. No asumir tres misiones semanales de entrada (3 diarias + 3 semanales puede convertir AHT en una checklist). La misión semanal debe: durar varios días, utilizar el estado REAL del pueblo, preferentemente surgir de personajes/situaciones existentes, admitir preparación y requerir algo más de estrategia que una diaria.
+
+Ejemplos conceptuales:
+- «Carmen lleva varios días bastante aislada. Consigue que tenga dos encuentros positivos esta semana.»
+- «Hugo quiere acercarse a Sergio. Ayuda a que vuelvan a quedar y mejora su vínculo.»
+- «Alguien nuevo no termina de integrarse. Ayúdale a crear vínculos reales.»
+
+**IMPORTANTE:** los requisitos concretos y su dificultad se decidirán DESPUÉS de la calibración longitudinal.
+
+### 25.3 Eventos grandes interactivos
+
+AHT YA TIENE eventos. No crear más eventos simplemente para solucionar la falta de jugabilidad. El objetivo futuro es HACER JUGABLES ALGUNOS EVENTOS QUE YA EXISTEN.
+
+Ejemplo de referencia — EVENTO DE BINGO: actualmente varios habitantes quedan para ir al bingo, el evento sucede, el motor resuelve y el jugador observa el resultado. Evolución propuesta: cuando exista un evento social grande compatible, mostrar una acción `[ ENTRAR AL BINGO ]`. El jugador entra en una escena especial del evento donde aparecen los habitantes participantes.
+
+Celestine NO controla directamente a los personajes. Puede realizar un número limitado de intervenciones sociales:
+- **A) Acercar a dos personas:** empujar a que interactúen. NO garantiza que se lleven bien; el motor social real debe resolver.
+- **B) Formar mesa/equipo:** elegir qué personajes comparten una actividad del evento.
+- **C) Proponer un brindis/acción grupal:** intervención que puede afectar al ambiente o provocar interacciones.
+- **D) Sembrar una conversación:** sugerir que alguien saque determinado tema con otra persona.
+
+**Principio fundamental:** Celestine EMPUJA. Celestine NO decide el resultado. Los motores existentes de personalidad, relación, memoria, emoción y compatibilidad deben resolver las consecuencias.
+
+### 25.4 Los eventos deben producir historia real
+
+Las intervenciones realizadas dentro de un evento no deben desaparecer al cerrar la escena. Ejemplo: durante el bingo, Celestine intenta acercar a Carmen y Hugo; resultado posible: «Carmen intentó acercarse a Hugo. Hugo estuvo encantado. Carmen, bastante menos.» Esto debe poder alimentar, según corresponda: relación direccional, memoria, emoción, predisposición futura, diario/hitos, cotilleos y futuros encuentros. El evento debe formar parte de la vida persistente del pueblo. No crear un minijuego aislado cuya puntuación desaparezca al terminar.
+
+### 25.5 Feedback de intervención / entrar en la mente
+
+**PRIORIDAD ALTA FUTURA.** Durante playtest humano se ha detectado un problema claro en una mecánica YA EXISTENTE. Actualmente el jugador puede: observar a los personajes, estudiar hobbies/rasgos/estado, entrar en la mente, seleccionar un tema e intentar influir en una conversación.
+
+Ejemplo real de razonamiento del jugador: «Sergio está triste. Sé que le gusta el deporte. Voy a hacer que Carmen saque deporte para intentar animarlo y mejorar su relación.» Esto YA ES GAMEPLAY ESTRATÉGICO.
+
+**Problema:** el feedback final actual es demasiado pobre. El jugador puede recibir algo equivalente a «Ha ido bien» y no comprender claramente: qué ocurrió, cómo reaccionó cada participante, si mejoró algo, si empeoró algo, si su investigación previa sirvió y qué debería aprender para la próxima vez. Eso elimina gran parte de la recompensa de haber pensado la intervención.
+
+### 25.6 Resultado visual de intervención
+
+Diseñar en el futuro una pequeña escena/tarjeta de RESULTADO que sea visual, breve, divertida, inequívoca, centrada en las dos personas y coherente con SocialOutcome y los motores reales.
+
+Ejemplo POSITIVO conceptual:
+```
+CARMEN 🙂  →  ⚽ DEPORTE  →  😄 SERGIO
+
+"Carmen acabó sacando el tema del deporte.
+Sergio se animó enseguida y la conversación fluyó mucho mejor de lo esperado."
+```
+
+Después mostrar visualmente consecuencias relevantes:
+```
+Carmen: 🙂 → 😄  "Se lo pasó bien."
+Sergio: 😔 → 🙂  "Le levantó el ánimo."
+Carmen → Sergio: Afinidad ↑
+Memoria posible: "Ha sido agradable hablar con él."
+```
+
+NO convertir obligatoriamente la pantalla en `+3 relación / +2 humor / +4 romance`. Los números pueden existir internamente. El jugador debe percibir principalmente CONSECUENCIAS HUMANAS.
+
+### 25.7 Resultado negativo / aprendizaje
+
+El fallo también debe ser satisfactorio y comprensible.
+
+Ejemplo conceptual:
+```
+CARMEN 😐  →  💬 MODA  →  😒 SERGIO
+
+"Carmen intentó hablarle de moda.
+Sergio respondió un par de veces por educación y acabó buscando una vía de escape."
+```
+
+**RESULTADO:** REGULAR / MALO. Consejo posible: «Quizá deberías conocer mejor a Sergio antes de volver a intervenir.» El objetivo es que el jugador piense: «La próxima vez voy a investigar mejor.» El fracaso debe producir aprendizaje, no confusión. Después del resultado: LOS PERSONAJES CONTINÚAN AUTÓNOMAMENTE. La intervención de Celestine es un empujón, no una resolución completa.
+
+### 25.8 La Historia del Pueblo
+
+Crear en el futuro una capa de progresión narrativa de largo plazo. Nombre de trabajo: **LA HISTORIA DEL PUEBLO**. Puede presentarse visualmente como: álbum, bitácora, libro, colección de escenas/estampas u otro formato equivalente coherente con el diseño final. NO tratarlo simplemente como una lista clásica de achievements.
+
+Idea: al comenzar una partida existe una colección amplia de escenas/hitos, muchas inicialmente cerradas. Conforme el pueblo vive acontecimientos reales, se desbloquean. Cada desbloqueo registra: qué ocurrió, qué personajes participaron y en qué día ocurrió. Por tanto, la colección final cuenta LA HISTORIA DE ESA PARTIDA.
+
+### 25.9 Ejemplos de hitos narrativos
+
+NO convertir estos ejemplos ahora en requisitos definitivos. Son referencias de diseño que deberán calibrarse con datos reales.
+
+| Día | Título | Texto conceptual |
+|-----|--------|------------------|
+| 4 | «Aquí nadie conoce a nadie» | «El pueblo dejó de ser un grupo de desconocidos.» |
+| 9 | «AQUÍ HAY TEMA» | «Por primera vez, alguien empezó a mirar a otra persona de otra manera.» Carmen → Diana ❤️ |
+| 12 | «ESTO YA PARECE UN PUEBLO» | «Se celebró el primer gran evento.» |
+| 17 | «¡QUE SE BESEN!» | «Carmen y Diana se convirtieron en la primera pareja del pueblo.» |
+
+Otros posibles hitos futuros: primera amistad significativa, primera persona que quiere volver a quedar, primer interés romántico, primera cita, primer evento importante, primer rechazo importante, primera pareja, primera ruptura, primera reconciliación, varias amistades fuertes, dos parejas felices simultáneamente, tres parejas, una pareja que supera una crisis, un residente inicialmente aislado que termina integrado y otros hitos emergentes detectados por los motores.
+
+### 25.10 Los hitos no tienen que desbloquearse en orden
+
+Característica deseada. La colección puede mostrar, por ejemplo: `1 ✓  2 ✓  3 🔒  4 ✓  5 ✓  6 🔒`. El jugador puede conseguir un hito posterior antes que uno anterior. Esto genera misterio, objetivos autoimpuestos, curiosidad y rejugabilidad. El jugador puede pensar: «¿Qué demonios me falta en el número 3?» y empezar a investigar/intervenir para descubrirlo. No convertir necesariamente cada casilla en una instrucción explícita; algunas pueden mantener parcialmente oculto su requisito.
+
+### 25.11 Tipos de hitos
+
+Tras la calibración, estudiar una mezcla de:
+- **A) Hitos naturales:** probablemente ocurren durante una partida normal. Sirven para narrar el crecimiento del pueblo.
+- **B) Hitos de intervención:** requieren que Celestine juegue bien o provoque determinadas situaciones.
+- **C) Hitos raros/especiales:** no tienen por qué aparecer en todas las partidas. Pueden depender de combinaciones poco habituales de personajes, relaciones o acontecimientos. Esto debe favorecer que dos partidas escriban historias distintas.
+
+### 25.12 No confundir historia con misiones
+
+Tres capas diferentes:
+- **MISIONES DIARIAS:** «¿Qué puedo hacer hoy?»
+- **MISIÓN SEMANAL:** «¿Qué pequeño objetivo quiero conseguir durante estos días?»
+- **HISTORIA DEL PUEBLO:** «¿Qué ha conseguido vivir este pueblo desde que llegué?»
+
+No fusionarlas en una única checklist.
+
+### 25.13 Pareja no significa fin de contenido
+
+Principio futuro importante. Conseguir una pareja NO debe convertir a esos personajes en contenido terminado. La pareja debe permitir futuras historias derivadas de los motores sociales. Ejemplos conceptuales: época especialmente feliz, planes juntos, sorpresa, petición de consejo, pequeña crisis, discusión, necesidad de espacio, reconciliación, ruptura, recuperación y participación conjunta en eventos.
+
+NO implementar estos sistemas todavía. Registrar únicamente el principio de diseño: **«FORMAR PAREJA DESBLOQUEA NUEVAS POSIBILIDADES NARRATIVAS; NO CIERRA LA HISTORIA DE ESOS PERSONAJES.»**
+
+### 25.14 Loop de juego objetivo
+
+La visión futura queda en 5 capas:
+- **CAPA 1 — VIDA AUTÓNOMA:** los personajes viven, quedan, recuerdan, se gustan, se enfadan, se hacen amigos, se enamoran, pueden formar parejas, generan historias sin esperar siempre al jugador.
+- **CAPA 2 — INTERVENCIÓN DE CELESTINE:** el jugador observa, investiga, propone, entra en la mente, sugiere temas, organiza citas, interviene en eventos e intenta ayudar o provocar situaciones.
+- **CAPA 3 — OBJETIVOS CORTOS:** 3 misiones diarias.
+- **CAPA 4 — OBJETIVO MEDIO:** 1 misión semanal más elaborada.
+- **CAPA 5 — PROGRESIÓN NARRATIVA:** la Historia del Pueblo.
+
+Todo debe alimentarse de la MISMA simulación social. Evitar sistemas paralelos que inventen relaciones o resultados que el motor real no respalde.
+
+### 25.15 Orden futuro propuesto
+
+NO ejecutar ahora. Cuando termine el playtest/calibración actual, reevaluar y ordenar. Prioridad conceptual actual:
+
+1. **FEEDBACK DE INTERVENCIÓN / ENTRAR EN LA MENTE** — la mecánica ya existe y ya requiere estrategia; el problema actual es que el juego no devuelve adecuadamente el mérito o fracaso de la decisión (§25.5–25.7).
+2. **HISTORIA DEL PUEBLO** — usar las estadísticas reales del playtest para establecer hitos, ventanas y rareza (§25.8–25.11).
+3. **MISIÓN SEMANAL** — generada preferentemente desde el estado real del pueblo (§25.2).
+4. **EVENTOS GRANDES INTERACTIVOS** — convertir eventos sociales seleccionados en espacios de intervención sin transformarlos en minijuegos aislados (§25.3–25.4).
+
+Este orden NO es compromiso de implementación. Debe revisarse tras el playtest completo.
+
+### 25.16 Gate obligatorio antes de implementar
+
+**HUMAN / PLAYTEST GATE.** NO empezar esta expansión hasta:
+1. terminar la cola actual de playtests funcionales;
+2. estabilizar romance y declaraciones;
+3. validar densidad social/autonomía;
+4. disponer de estadísticas longitudinales suficientes;
+5. conocer aproximadamente en qué días/rangos suelen ocurrir: conocidos, amistades, interés, citas, parejas, eventos y otros hitos importantes;
+6. revisar estos datos con Neni;
+7. decidir entonces requisitos y dificultad.
+
+El plan debe dejar explícitamente marcado: **NO CALIBRAR LA HISTORIA DEL PUEBLO POR INTUICIÓN. UTILIZAR LAS DISTRIBUCIONES REALES DEL PLAYTEST.** Ejemplo: si una amistad significativa normalmente aparece alrededor de D8-D12, no diseñar arbitrariamente un hito que exija cuatro amistades en D5.
+
+### 25.17 Criterio de éxito final
+
+Pregunta actual del playtest: «¿Puedo conseguir una pareja de manera natural, coherente y divertida?»
+
+Pregunta que esta expansión deberá responder después: **«Una vez consigo mi primera pareja, ¿SIGO TENIENDO RAZONES PARA PREOCUPARME POR ESTA GENTE?»**
+
+El jugador debería llegar a D30/D60 y poder mirar La Historia del Pueblo y reconocer: «Esto es lo que pasó en MI pueblo.» No una secuencia prefabricada.
+
+### 25.18 Restricciones de implementación
+
+NO implementar nada. NO crear código preparatorio. NO crear schemas. NO añadir flags. NO modificar balance. NO modificar tests salvo que exista un test puramente documental obligatorio por gobernanza. Esta sección es EXCLUSIVAMENTE documental.
 
 ---
 
