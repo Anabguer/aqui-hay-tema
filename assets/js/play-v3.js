@@ -730,13 +730,29 @@
     }
     var heroEl = $('[data-tut-hero]');
     if (heroEl) {
-      if (pasoNum === 1) {
+      if (pasoNum === 1 || pasoNum === 3 || pasoNum === 4) {
         heroEl.hidden = false;
         heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('illus-pueblo.png')) + '" alt=""/>';
       } else if (pasoNum === 2) {
         heroEl.hidden = false;
         heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('icon-vecinos.png')) + '" alt=""/>';
       } else { heroEl.hidden = true; heroEl.innerHTML = ''; }
+    }
+    var oldBadge = papel ? papel.querySelector('.tut-badge') : null;
+    if (oldBadge) oldBadge.remove();
+    if (papel) {
+      var badge = document.createElement('div');
+      badge.className = 'tut-badge';
+      badge.textContent = 'PRIMEROS PASOS';
+      papel.insertBefore(badge, papel.querySelector('.tut-papel-cabecera'));
+    }
+    var oldPin = papel ? papel.querySelector('.tut-pin') : null;
+    if (oldPin) oldPin.remove();
+    if (papel) {
+      var pin = document.createElement('span');
+      pin.className = 'tut-pin';
+      pin.setAttribute('aria-hidden', 'true');
+      papel.insertBefore(pin, papel.firstChild);
     }
     var titEl = $('[data-tut-tit]');
     if (titEl) {
@@ -802,12 +818,12 @@
           if (pasoNum === 1 && TUT_CARD_ICONS[i]) {
             var cardKey = ['observa', 'propon', 'mira'][i] || '';
             sym.className = 'tut-bloque-sym tut-bloque-ico tut-bloque-ico--' + cardKey;
-            sym.innerHTML = TUT_ICON_SVG[cardKey] || '';
+            sym.innerHTML = '<img src="' + esc(tutAssetUrl(TUT_CARD_ICONS[i])) + '" alt="" loading="lazy"/>';
             div.classList.add('tut-bloque--card');
           } else if (pasoNum === 3 && b.tit && TUT_ROW_ICONS[b.tit]) {
             var rowKey = ({ 'MAPA': 'mapa', 'VECINOS': 'vecinos', 'MENSAJITOS': 'mensajitos', 'NUEVO PLAN': 'plan' })[b.tit] || '';
             sym.className = 'tut-bloque-sym tut-bloque-ico tut-bloque-ico--' + rowKey;
-            sym.innerHTML = TUT_ICON_SVG[rowKey] || '';
+            sym.innerHTML = '<img src="' + esc(tutAssetUrl(TUT_ROW_ICONS[b.tit])) + '" alt="" loading="lazy"/>';
             div.classList.add('tut-bloque--row');
           } else { sym.textContent = b.simbolo || ''; }
           div.appendChild(sym);
@@ -891,7 +907,7 @@
     if (restEl) restEl.textContent = partes.slice(1).join('\n\n');
     if (textoEl) textoEl.textContent = texto;
     var heroFin = $('[data-tut-fin-hero]');
-    if (heroFin) heroFin.innerHTML = '<img class="tut-fin-hero-img" src="' + esc(tutAssetUrl('illus-finale.png')) + '" alt=""/>';
+    if (heroFin) heroFin.innerHTML = '<img class="tut-fin-hero-img" src="' + esc(tutAssetUrl('Cabecera.png')) + '" alt=""/>';
     var btn = $('[data-tut-fin-ok]');
     if (btn) btn.textContent = tut.finale.boton || 'Que empiece el tema';
     box.hidden = false;

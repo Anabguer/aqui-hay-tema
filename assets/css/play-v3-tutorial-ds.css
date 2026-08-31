@@ -1,8 +1,13 @@
 ﻿/* ============================================================
-   TUTORIAL CANONICO — UNA SOLA AUTORIDAD VISUAL
+   TUTORIAL CANONICO v2 — UNA SOLA AUTORIDAD VISUAL (AISLADA)
    Shell, geometria, tipografia, SALTAR, footer, Responsive.
    Las 5 pantallas son el mismo tutorial. Solo cambia el contenido.
    Carga DESPUES de play-v3-tutorial-lavanda.css (color vars).
+
+   AISLAMIENTO: Este stylesheet es la autoridad visual unica del tutorial.
+   Ningun cambio en modals-shell-lavanda-mobile.css, modals.css o
+   capas-ds.css debe alterar selectores .tut-*.
+   El tutorial NO es una capa (.capa). NO usa data-capa.
    ============================================================ */
 
 /* --- 1. OVERLAY --- */
@@ -42,8 +47,13 @@
   border: 1px solid var(--tut-border, #D8D1DE) !important;
   border-radius: 16px !important;
   box-shadow: var(--tut-shadow, 0 8px 24px rgba(48, 40, 58, 0.20)) !important;
-  color: var(--tut-ink, #2d2a26) !important;
+  color: var(--tut-ink, #3b3028) !important;
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+}
+/* Override capas-ds.css scrapbook border on tutorial papel */
+.play-v3 .tut-papel {
+  border: 1px solid var(--tut-border, #D8D1DE) !important;
+  border-radius: 16px !important;
 }
 
 .play-v3 .tut-finale .tut-papel {
@@ -106,14 +116,61 @@
 .play-v3 .tut-fin-hero-img {
   display: block;
   width: 100%;
-  max-height: 110px;
+  max-height: 130px;
   object-fit: contain;
   margin: 0 auto;
 }
 
+/* --- 6b. BADGE "PRIMEROS PASOS" --- */
+.play-v3 .tut-badge {
+  display: inline-block !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-size: 0.68rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.10em !important;
+  text-transform: uppercase !important;
+  color: var(--tut-lavender, #7a6a9a) !important;
+  background: rgba(196, 181, 232, 0.18) !important;
+  border: 1px solid rgba(196, 181, 232, 0.40) !important;
+  border-radius: 999px !important;
+  padding: 3px 12px 4px !important;
+  margin-bottom: 6px !important;
+}
+
+/* --- 6c. DECORACIONES --- */
+.play-v3 .tut-pin {
+  position: absolute !important;
+  top: 10px !important;
+  left: 14px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle at 40% 35%, #F7A8A0, #E86B5A) !important;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.18), inset 0 -2px 3px rgba(0,0,0,0.10) !important;
+  z-index: 5 !important;
+}
+.play-v3 .tut-heart-deco {
+  display: inline-block !important;
+  font-size: 0.9rem !important;
+  color: var(--tut-coral-soft, #F9A89A) !important;
+  margin-left: 4px !important;
+  vertical-align: middle !important;
+}
+.play-v3 .tut-spark-deco {
+  display: inline-block !important;
+  font-size: 0.7rem !important;
+  color: var(--tut-lavender-soft, #C4B5E8) !important;
+  margin: 0 2px !important;
+  vertical-align: middle !important;
+}
+
 /* --- 7. TITULO PRINCIPAL DE PAGINA ---
    "Bienvenida al pueblo" / "Tus primeros vecinos" / "Lo basico" / etc.
-   MISMA fuente, tamano, peso, posicion en las 5 pantallas. */
+   MISMA fuente, tamano, peso, posicion en las 5 pantallas.
+   Nota: selector con .tut-papel para ganar a capas-ds.css. */
+.play-v3 .tut-papel .tut-titulo,
+.play-v3 .tut-papel h2[data-tut-tit],
+.play-v3 .tut-finale h2,
 .play-v3 .tut-titulo,
 .play-v3 .tut-fin-titulo {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
@@ -122,9 +179,9 @@
   line-height: 1.15 !important;
   margin: 0 0 6px !important;
   text-align: center !important;
-  text-transform: none !important;
+  text-transform: uppercase !important;
   letter-spacing: 0.02em !important;
-  color: var(--tut-lavender, #7a6a9a) !important;
+  color: var(--tut-ink, #3b3028) !important;
 }
 
 .play-v3 .tut-tit-deco {
@@ -134,7 +191,15 @@
   margin: 0 0 4px;
   line-height: 1;
 }
-.play-v3 .tut-tit-spark { display: none; }
+.play-v3 .tut-tit-spark {
+  display: inline !important;
+  font-size: 0.85rem !important;
+  color: var(--tut-coral-soft, #F9A89A) !important;
+  margin: 0 3px !important;
+  vertical-align: middle !important;
+}
+.play-v3 .tut-tit-spark::before { content: '\203A' !important; }
+.play-v3 .tut-tit-spark--r::before { content: '\2039' !important; }
 
 /* --- 8. TEXTO DE LECTURA — Nunito SIEMPRE --- */
 .play-v3 .tut-intro-line,
@@ -176,9 +241,12 @@
 .play-v3 .tut-cierre {
   margin: 8px 0 10px !important;
   padding-top: 6px !important;
-  border-top: 1px solid rgba(169, 154, 223, 0.3) !important;
-  color: var(--tut-muted, #6b5f78) !important;
+  border-top: 1px solid rgba(196, 181, 232, 0.30) !important;
+  color: var(--tut-ink, #3b3028) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
   font-style: italic !important;
+  font-size: 1.05rem !important;
+  font-weight: 500 !important;
 }
 
 .play-v3 .tut-fin-lead {
@@ -189,22 +257,22 @@
 }
 .play-v3 .tut-fin-rule {
   border: none !important;
-  border-top: 1px solid rgba(169, 154, 223, 0.35) !important;
-  margin: 8px 0 !important;
+  border-top: 2px dashed rgba(196, 181, 232, 0.40) !important;
+  margin: 10px 14px !important;
 }
 
 /* --- 9. TITULO DE ACCION / CONCEPTO ---
    OBSERVA / PROPON / MIRA / MAPA / VECINOS / etc.
-   Jerarquia comun: Nunito 800 uppercase. */
+   Jerarquia comun: Caveat bold. */
 .play-v3 .tut-bloque-tit {
   display: block !important;
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
-  font-size: 1rem !important;
+  font-size: 1.05rem !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em !important;
-  text-transform: none !important;
+  text-transform: uppercase !important;
   margin-bottom: 2px !important;
-  color: var(--tut-lavender, #7a6a9a) !important;
+  color: var(--tut-coral, #E86B5A) !important;
 }
 
 .play-v3 .tut-bloque-sym {
@@ -221,25 +289,45 @@
   border-radius: 10px !important;
   background: #FFFFFF !important;
 }
-.play-v3 .tut-bloque-ico {
-  width: 28px !important;
-  height: 28px !important;
+.play-v3 .tut-bloque--card .tut-bloque-ico {
+  width: 72px !important;
+  height: 72px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
   background: #FFFFFF !important;
   background-image: none !important;
   border-radius: 8px !important;
-  box-shadow: inset 0 0 0 1.5px rgba(169, 154, 223, 0.45) !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
 }
-.play-v3 .tut-bloque-ico svg {
-  width: 18px !important;
-  height: 18px !important;
+.play-v3 .tut-bloque--card .tut-bloque-ico img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+.play-v3 .tut-bloque--card .tut-bloque-ico svg {
+  width: 48px !important;
+  height: 48px !important;
 }
 
 /* Row icons (paso 3: MAPA/VECINOS/MENSAJITOS/NUEVO PLAN) */
 .play-v3 .tut-bloque--row .tut-bloque-ico {
-  border-radius: 50% !important;
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+.play-v3 .tut-bloque--row .tut-bloque-ico img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+.play-v3 .tut-bloque--row .tut-bloque-ico svg {
+  width: 44px !important;
+  height: 44px !important;
 }
 
 /* --- 10. BLOQUES / LISTA --- */
@@ -251,11 +339,11 @@
 }
 .play-v3 .tut-bloque {
   display: grid !important;
-  grid-template-columns: 32px minmax(0, 1fr) !important;
-  gap: 2px 8px !important;
+  grid-template-columns: 76px minmax(0, 1fr) !important;
+  gap: 2px 10px !important;
   padding: 6px 0 !important;
   border-bottom: 1px solid rgba(216, 209, 222, 0.45) !important;
-  align-items: start !important;
+  align-items: center !important;
 }
 .play-v3 .tut-bloque:last-child {
   border-bottom: 0 !important;
@@ -395,7 +483,7 @@
   transform-origin: left center !important;
 }
 .play-v3 .tut-pasos span.is-on {
-  background: var(--tut-accent, #9B8AC4) !important;
+  background: var(--tut-coral, #E86B5A) !important;
 }
 
 /* --- 14. NAVEGACION (botones ATRAS / SIGUIENTE) --- */
@@ -406,14 +494,14 @@
   align-items: center !important;
 }
 .play-v3 .tut-acciones .cta {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-weight: 800 !important;
-  font-size: 0.92rem !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-weight: 700 !important;
+  font-size: 1.05rem !important;
   letter-spacing: 0.04em !important;
   text-transform: uppercase !important;
   border-radius: 10px !important;
   box-shadow: none !important;
-  padding: 8px 16px !important;
+  padding: 8px 18px !important;
   border: none !important;
   cursor: pointer !important;
 }
@@ -421,19 +509,37 @@
   background: #FFFFFF !important;
   border: 1.5px solid var(--tut-lavender-soft, #C4B5E8) !important;
   color: var(--tut-lavender, #7a6a9a) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
 }
 .play-v3 .tut-acciones .cta:not(.ghost),
 .play-v3 .tut-cta-final,
 .play-v3 .tut-fin-cta {
-  background: linear-gradient(180deg, #B8A8E8, var(--tut-accent, #9B8AC4)) !important;
-  border: 1.5px solid #8F7DBF !important;
+  background: var(--tut-coral-bg, linear-gradient(180deg, #F0856E, #E86B5A)) !important;
+  border: 1.5px solid var(--tut-coral-border, #D14D3C) !important;
   color: #FFFFFF !important;
-  box-shadow: 0 2px 6px rgba(122, 106, 154, 0.28) !important;
+  box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30)) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-size: 1.05rem !important;
+}
+/* Override capas-ds.css pink CTA on tutorial */
+.play-v3 .tut-papel .tut-cta-final,
+.play-v3 .tut-finale .tut-cta-final,
+.play-v3 .tut-finale .cta {
+  background: var(--tut-coral-bg, linear-gradient(180deg, #F0856E, #E86B5A)) !important;
+  border: 1.5px solid var(--tut-coral-border, #D14D3C) !important;
+  color: #FFFFFF !important;
+  box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30)) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-size: 1.05rem !important;
 }
 
 /* --- 15. SALTAR --- */
-.play-v3 .tut-skip.ds-modal-close,
-.play-v3 .tut-papel > .cerrar.tut-skip.ds-modal-close {
+.play-v3 .tut-skip,
+.play-v3 .tut-papel > .tut-skip {
   position: absolute !important;
   top: 8px !important;
   right: 8px !important;
@@ -469,6 +575,15 @@
 .play-v3 .tut-finale .tut-fin-cta {
   margin-left: 14px !important;
   margin-right: 14px !important;
+}
+.play-v3 .tut-finale .tut-fin-titulo {
+  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-size: 1.7rem !important;
+  font-weight: 700 !important;
+  line-height: 1.10 !important;
+  color: var(--tut-ink, #3b3028) !important;
+  text-align: center !important;
+  margin-top: 8px !important;
 }
 .play-v3 .tut-finale .tut-fin-rule {
   margin-left: 14px !important;
@@ -569,6 +684,13 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
     position: relative !important;
     z-index: 9001 !important;
   }
+  /* Override capas-ds.css 2rem title on desktop */
+  .play-v3 .tut-papel .tut-titulo,
+  .play-v3 .tut-papel h2[data-tut-tit],
+  .play-v3 .tut-finale h2 {
+    font-size: 1.5rem !important;
+    color: var(--tut-ink, #3b3028) !important;
+  }
 }
 
 /* --- 20. RESPONSIVE: MOVIL (max-width 768px) --- */
@@ -578,9 +700,10 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
     background: var(--tut-footer-bg, #EEE8FA) !important;
   }
   .play-v3 .tut-papel .tut-titulo,
-  .play-v3 .tut-papel h2[data-tut-tit] {
+  .play-v3 .tut-papel h2[data-tut-tit],
+  .play-v3 .tut-finale h2 {
     font-size: 1.28rem !important;
-    margin-bottom: 4px !important;
+    color: var(--tut-ink, #3b3028) !important;
   }
   .play-v3 .tut-cara { width: 56px !important; height: 56px !important; }
   .play-v3 .tut-caras { gap: 8px !important; margin: 8px 0 10px !important; }

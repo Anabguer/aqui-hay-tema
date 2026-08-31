@@ -198,7 +198,7 @@ declare(strict_types=1);
       <p class="feedback-toast" data-toast></p>
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
         <div class="tut-papel" data-tut-papel>
-          <button type="button" class="cerrar tut-skip ds-modal-close" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
+          <button type="button" class="tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
           <div class="tut-hero" data-tut-hero hidden></div>
           <h2 class="tut-titulo" data-tut-tit></h2>
           <p class="tut-intro-line" data-tut-intro-line hidden></p>

@@ -353,7 +353,7 @@ if ($ahtLab) {
       <button type="button" class="btn-guia" data-tut-reopen hidden>Â¿CÃ³mo va esto?</button>
       <aside class="tut-intro" data-tut-intro hidden aria-live="polite">
         <div class="tut-papel">
-          <button type="button" class="cerrar tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
+          <button type="button" class="tut-skip" data-tut-skip aria-label="Saltar tutorial">Saltar</button>
           <p class="libreta-kicker">Primeros pasos</p>
           <h2 data-tut-tit></h2>
           <p class="tut-texto" data-tut-texto></p>
