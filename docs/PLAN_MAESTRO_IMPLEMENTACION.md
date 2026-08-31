@@ -48,8 +48,8 @@
 **Ver §28 para tabla completa y Feature Flags.** Resumen ejecutivo:
 
 - **🟢 Operativo (flag ON, accesible en producto):** Schema v2→v3, RNG, Logging, FeatureConfig, Calibración, Persistencia, Partida lifecycle, Domain Events, Población/Llegadas (PoolCanónico, GeneradorResidente, PerfilPartida, PoblaciónV3, CapacidadViviendas, CandidatoLlegada, LlegadaPresentación, NombresReservados), Tutorial (PrimerosPasos+Incorporaciones), Encuentros (EncuentroEngine+lifecycle+resolver+experiencia+intervencion, PropuestaEncuentroEngine, PropuestaNivel, Rechazo/Memoria, Disponibilidad), Reloj motor+Agenda, Relaciones core (Engine+Bitacora+Fase+Grafo+Historial+Bandas+VistaJugador+NarrativaBridge), Romance (Elegibilidad, ProgressiveProgression+Bridge, AcciónRomántica, SenalRomantica, IniciativaRomantica, TerceroRomantico), Compatibilidad/Química, Buzón/Mensajitos 2.0 (15 motores completos), Cotilleos, Coincidencias/Interacción casual, Lugares (9 canónicos+presencia+afecto+autónomo), HayTema, Marchas, Cumpleaños, Regalos/Inventario (Fase 1), Pareja/Parentesco, MENTES 2-pasos.
-- **🟣 Implementado pero apagado (flag OFF):** Diario (4 motores), Discovery (5 motores), Emociones (5 motores), CatchUp, VidaPueblo, MisionesDiarias, PeticionesPueblo, Consecuencias (3 motores).
-- **🟡 Parcial/stub:** EconomyLedger, AutonomousPlanner, CatchUpPlanner.
+- **🟣 Implementado pero apagado (flag OFF):** Diario (4 motores), Discovery (5 motores), Emociones (5 motores), CatchUp (CatchUpPlanner = stub interno, no sistema independiente), VidaPueblo, MisionesDiarias, PeticionesPueblo, Consecuencias (3 motores).
+- **🟡 Parcial/stub:** EconomyLedger, AutonomousPlanner.
 - **🔴 No implementado:** Romance Fase 2, crisis/ruptura autónomas, Historia del Pueblo, misión semanal, eventos interactivos (§25), §26 3 voces.
 - **❓ Reloj:** motor implementado; comportamiento con pestaña abierta = PlayTest pendiente (§27).
 
