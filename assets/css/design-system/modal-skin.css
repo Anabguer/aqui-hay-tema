@@ -65,7 +65,7 @@
 .play-v3:has(.game-shell) .capa.ds-migrada .cerrar.ds-modal-close {
   border: 2px solid var(--ds-ink, #3b3028);
   border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--ds-paper-card, #fffdf7);
+  background: var(--modal-title-mark, #F1EDF6);
   box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .22);
   font: 800 17px/1 Nunito, sans-serif;
   color: var(--ds-ink, #3b3028);
