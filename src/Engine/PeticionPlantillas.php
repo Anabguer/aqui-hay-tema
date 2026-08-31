@@ -69,7 +69,7 @@ final class PeticionPlantillas
                 'copy_pool' => [
                     'Me gustaría conocer a alguien.',
                     'Quiero conocer gente nueva. ¿Me presentas a alguien?',
-                    'No conozco a casi nadie aquí. ¿Me echas una mano?',
+                    'Me apetece conocer a alguien.',
                     'Me apetece conocer a alguien. ¿Tú a quién me presentarías?',
                 ],
             ],
@@ -87,7 +87,7 @@ final class PeticionPlantillas
                     'Quiero volver a ver a {otro}.',
                     'Me apetece quedar con {otro} otra vez.',
                     'No sé si será posible, pero me gustaría ver a {otro} de nuevo.',
-                    'Me apetece retomar con {otro}.',
+                    'Me apetece ver a {otro} de nuevo.',
                 ],
             ],
             [
@@ -136,7 +136,7 @@ final class PeticionPlantillas
                 'copy' => 'Quiero una primera cita con {otro}.',
                 'copy_pool' => [
                     'Quiero una primera cita con {otro}.',
-                    'Me gustaría quedar con {otro}, algo tranquilo.',
+                    'Me gustaría quedar con {otro}.',
                     'No sé cómo plantearlo, pero me apetece quedar con {otro}.',
                     'Tengo que quedar con {otro}.',
                 ],
