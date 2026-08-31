@@ -685,7 +685,7 @@
 
 /* Modales movil: solo la capa activa (evita que Nuevo plan tape Vecinos/Mensajitos) */
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone[data-capa] .capa:not(.ds-migrada) {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa] .capa {
     visibility: hidden !important;
     pointer-events: none !important;
     display: none !important;

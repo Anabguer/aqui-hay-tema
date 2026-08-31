@@ -29,8 +29,8 @@
 
 
 .play-v3 .play-root.pc[data-capa] .capa {
-  visibility: hidden;
-  pointer-events: none;
+  visibility: hidden !important;
+  pointer-events: none !important;
 }
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,

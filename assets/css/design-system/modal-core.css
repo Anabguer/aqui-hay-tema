@@ -4,6 +4,12 @@
    Carga ANTES de los locales; gana porque los locales limpian sus reglas de shell. */
 
 /* === Shell base (phone + PC) === */
+/* Inactive .ds-migrada modals are hidden by:
+   - PC: capas-shell.css .play-root.pc[data-capa] .capa (visibility:hidden !important, sp 0,5,0)
+   - Phone: responsive.css phone hide-all (visibility:hidden !important, sp 0,3,0)
+   Active .ds-migrada overrides by:
+   - PC: not needed — capas-shell hide-all wins (0,5,0 > DS 0,4,0)
+   - Phone: DS wins by source order (modal-core loads after responsive) */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada {
   position: fixed;
   left: 50%;
@@ -18,13 +24,13 @@
   margin: 0;
   padding: 14px 13px 12px;
   transform: translate(-50%, -50%) rotate(-0.2deg);
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
   z-index: 110;
-  visibility: visible;
-  pointer-events: auto;
+  visibility: visible !important;
+  pointer-events: auto !important;
   opacity: 1;
 }
 
