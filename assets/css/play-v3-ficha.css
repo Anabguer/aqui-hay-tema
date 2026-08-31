@@ -27,7 +27,7 @@
 .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha::after { display: none !important; }
 .play-v3 .capa-ficha > * { position: relative; z-index: 2; }
 .play-v3 .capa-ficha .ficha-tape, .play-v3 .capa-ficha .org-pin, .play-v3 .capa-ficha .agenda-pin, .play-v3 .capa-ficha .mis-pin, .play-v3 .capa-ficha .vecinos-pin { display: none !important; }
-.play-v3 .capa-ficha .ficha-tit { margin: 0 auto !important; font-family: Caveat, cursive !important; font-size: 1.35rem !important; text-align: center; flex: 1; }
+.play-v3 .capa-ficha .ficha-tit { margin: 0 auto !important; text-align: center; flex: 1; }
 .play-v3 .capa-ficha .ficha-body { display: block !important; flex: 1; min-height: 0; overflow-y: auto; overflow-x: clip; }
 .play-v3 .capa-ficha .ficha-col-perfil { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; text-align: left; }
 .play-v3 .capa-ficha .ficha-cara-ring { flex: 0 0 auto; }
@@ -244,7 +244,6 @@
   justify-self: center;
   margin: 0 !important;
   font-family: Caveat, cursive !important;
-  font-size: 1.28rem !important;
   font-weight: 700 !important;
   text-align: center !important;
   text-transform: uppercase;
@@ -487,7 +486,6 @@
   margin: 0 0 6px !important;
   padding: 0 !important;
   font-family: Caveat, cursive !important;
-  font-size: 1.75rem !important;
   font-weight: 700 !important;
   line-height: 1.05 !important;
   text-align: center !important;
@@ -604,11 +602,7 @@
   font-weight: 700 !important;
   color: var(--ds-ink-soft, #594839) !important;
 }
-.play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-tit {
-  font-size: 1.75rem !important;
-  text-align: center !important;
-  margin: 0 0 6px !important;
-}
+.play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-tit { text-align: center !important; margin: 0 0 6px !important; }
 .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-cara {
   width: 128px !important;
   height: 128px !important;

@@ -485,18 +485,6 @@
   flex: 0 0 auto;
 }
 
-.play-v3 .capa-buzon .mensajitos-tit {
-  font-family: Caveat, cursive;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--ds-pink-deep, #c85b78);
-  margin: 0;
-  padding: 0 !important;
-  line-height: 1;
-  transform: rotate(-0.5deg);
-  flex: 0 0 auto;
-}
-
 .play-v3 .mensajitos-contador {
   margin-left: auto;
   padding: 4px 10px;
@@ -805,18 +793,6 @@
   font-size: 1.75rem;
   transform: rotate(-6deg);
   line-height: 1;
-  flex: 0 0 auto;
-}
-
-.play-v3 .capa-buzon .mensajitos-tit {
-  font-family: Caveat, cursive;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--ds-pink-deep, #c85b78);
-  margin: 0;
-  padding: 0 !important;
-  line-height: 1;
-  transform: rotate(-0.5deg);
   flex: 0 0 auto;
 }
 

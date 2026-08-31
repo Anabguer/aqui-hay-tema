@@ -1,11 +1,29 @@
-/* MODAL-TITLES-AHT — cabeceras principales (patrón canónico: Nuevo plan / org-plan-mockup-v2) */
+﻿/* MODAL-TITLES-AHT — cabeceras principales (patron canonico) */
 
-/* Títulos principales de las 5 modales */
+/* Familia A piloto — escala unificada (ref. Ficha de vecino movil aprobada) */
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit,
 .play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit,
 .play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit,
-.play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
 .play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-agenda .agenda-tit.ds-modal-tit {
+  font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive) !important;
+  font-size: 1.75rem !important;
+  font-weight: 700 !important;
+  font-style: normal !important;
+  line-height: 1.05 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  text-align: center !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
+  text-shadow: none !important;
+  display: block !important;
+}
+
+/* Fuera piloto / Diario — escala propia (no tocar en lote Familia A) */
+.play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
 .play-v3:has(.game-shell) .modal-title-aht {
   font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive) !important;
   font-size: 2.05rem !important;
@@ -23,7 +41,7 @@
   display: block !important;
 }
 
-/* Decoración ✦ lateral (misma que Nuevo plan) */
+/* Decoracion estrella lateral (piloto + diario) */
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit::before,
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit::after,
 .play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit::before,
@@ -48,7 +66,7 @@
   text-transform: none;
 }
 
-/* Colores semánticos */
+/* Colores semanticos */
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit { color: var(--ds-pink-deep, #c85b78) !important; }
 .play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit { color: var(--ds-ink, #3b3028) !important; }
 .play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit { color: var(--ds-pink-deep, #c85b78) !important; }
@@ -61,6 +79,8 @@
 .play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-head,
 .play-v3:has(.game-shell) .capa-vecinos .vecinos-head,
 .play-v3:has(.game-shell) .capa-ficha .ficha-top,
+.play-v3:has(.game-shell) .capa-agenda .agenda-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa-agenda .agenda-cab .ds-modal-head-row,
 .play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head,
 .play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head-row,
 .play-v3:has(.game-shell) .capa-organizar .org-top .ds-modal-head,
@@ -77,7 +97,7 @@
   width: 100% !important;
 }
 
-/* Subtítulos existentes — mismo tratamiento que Nuevo plan */
+/* Subtitulos existentes — mismo tratamiento que Nuevo plan */
 .play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-sub,
 .play-v3:has(.game-shell) .modal-subtitle-aht {
   display: block !important;
@@ -102,7 +122,7 @@
   margin-top: 0.2rem !important;
 }
 
-/* Cotilleos: quitar megáfono de la fila del título (patrón Nuevo plan) */
+/* Cotilleos: quitar megafono de la fila del titulo (patron Nuevo plan) */
 .play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-icon {
   display: none !important;
 }
@@ -119,12 +139,7 @@
 }
 
 @media (max-width: 520px) {
-  .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit,
-  .play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit,
-  .play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
-  .play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit,
-  .play-v3:has(.game-shell) .capa-agenda .agenda-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-mentes .mentes-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-misiones .mis-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-vida-pueblo .vida-tit.ds-modal-tit,

@@ -29,7 +29,7 @@
 .play-v3 .capa-agenda .ficha-tape, .play-v3 .capa-agenda .org-pin, .play-v3 .capa-agenda .agenda-pin, .play-v3 .capa-agenda .mis-pin, .play-v3 .capa-agenda .vecinos-pin { display: none !important; }
 .play-v3 .capa-agenda .ds-modal-icon { display: none !important; }
 .play-v3 .capa-agenda .agenda-cab::before { content: "Libreta de Celestine"; display: block; font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .5px; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin-bottom: 2px; }
-.play-v3 .capa-agenda .agenda-tit { font-family: Caveat, cursive !important; font-size: 1.75rem !important; margin-bottom: 2px !important; }
+.play-v3 .capa-agenda .agenda-tit { margin-bottom: 2px !important; }
 .play-v3 .capa-agenda .agenda-sub { font-family: Caveat, cursive !important; font-size: 1.05rem !important; color: var(--ds-text-muted, #7a6a5c) !important; margin-bottom: 10px !important; }
 .play-v3 .capa-agenda .agenda-list { flex: 1; min-height: 0; overflow-y: auto; }
 .play-v3 .capa-agenda .agenda-dia-cab {

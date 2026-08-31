@@ -627,10 +627,6 @@
     height: 68px !important;
     margin-bottom: 6px !important;
   }
-
-  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos .ds-modal-tit {
-    font-size: 2rem !important;
-  }
 }
 
 @media (min-width: 1024px) {
