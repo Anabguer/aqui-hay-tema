@@ -3,8 +3,10 @@
   'use strict';
 
   var EFFECTS_KEY = 'aht_efectos_sonido';
+  var SFX_VOL_KEY = 'aht_sfx_vol';
   var STATE_PREFIX = 'aht_sfx_estado_v1:';
   var effectsOn = true;
+  var sfxVolume = 0.55;
   var active = 0;
   var maxActive = 2;
   var context = null;
@@ -27,6 +29,10 @@
   };
 
   try { effectsOn = localStorage.getItem(EFFECTS_KEY) !== '0'; } catch (e) {}
+  try {
+    var storedSfxVol = parseFloat(localStorage.getItem(SFX_VOL_KEY));
+    if (isFinite(storedSfxVol) && storedSfxVol >= 0 && storedSfxVol <= 1) sfxVolume = storedSfxVol;
+  } catch (e) {}
 
   function noop() {}
 
@@ -58,6 +64,22 @@
     updateEffectsControl();
   }
 
+  function getVolume() {
+    return sfxVolume;
+  }
+
+  function setVolume(v) {
+    sfxVolume = Math.max(0, Math.min(1, Number(v) || 0));
+    setStored(SFX_VOL_KEY, String(sfxVolume));
+    if (master && master.gain) {
+      try { master.gain.value = sfxVolume * (0.16 / 0.55); } catch (e) {}
+    }
+    Object.keys(sampleCache).forEach(function (name) {
+      var audio = sampleCache[name];
+      if (audio) try { audio.volume = sfxVolume; } catch (e) {}
+    });
+  }
+
   function ensureContext() {
     if (context) return context;
     var Ctx = global.AudioContext || global.webkitAudioContext;
@@ -65,7 +87,7 @@
     try {
       context = new Ctx();
       master = context.createGain();
-      master.gain.value = .16;
+      master.gain.value = sfxVolume * (0.16 / 0.55);
       master.connect(context.destination);
     } catch (e) {
       context = null;
@@ -85,7 +107,7 @@
     if (!audio) {
       audio = new Audio(src);
       audio.preload = 'auto';
-      audio.volume = .55;
+      audio.volume = sfxVolume;
       sampleCache[name] = audio;
     }
     active++;
@@ -406,6 +428,13 @@
       button.__ahtBound = true;
       button.addEventListener('click', function () { play(button.getAttribute('data-aht-sfx')); });
     });
+    document.querySelectorAll('[data-sfx-vol]').forEach(function (input) {
+      if (input.__ahtSfxVolBound) return;
+      input.__ahtSfxVolBound = true;
+      input.addEventListener('input', function () {
+        setVolume(parseInt(input.value, 10) / 100);
+      });
+    });
     updateEffectsControl();
   }
 
@@ -413,6 +442,8 @@
     play: play,
     pauseAll: pauseAll,
     setEffects: setEffects,
+    getVolume: getVolume,
+    setVolume: setVolume,
     isEnabled: function () { return effectsOn; },
     names: Object.keys(samples).concat(Object.keys(patterns))
   };

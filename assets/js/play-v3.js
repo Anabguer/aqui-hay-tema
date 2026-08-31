@@ -8478,6 +8478,15 @@ var finOk = $('[data-tut-fin-ok]');
       setMusicaVolumen(parseInt(input.value, 10) || 0);
     });
   });
+  $$('[data-sfx-vol]').forEach(function (input) {
+    if (input.__ahtSfxVolBound) return;
+    input.__ahtSfxVolBound = true;
+    input.addEventListener('input', function () {
+      if (window.AhtAudioFeedback && typeof window.AhtAudioFeedback.setVolume === 'function') {
+        window.AhtAudioFeedback.setVolume(parseInt(input.value, 10) / 100);
+      }
+    });
+  });
   syncAjustesUI();
   iniciarMusicaFondo(true);
 

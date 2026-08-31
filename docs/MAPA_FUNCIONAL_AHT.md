@@ -1,7 +1,7 @@
 # Mapa Funcional — Aquí Hay Tema
 
-**HEAD verificado:** pendiente de commit
-**Fecha auditoría:** 2026-08-30
+**HEAD verificado:** 6cc6dae (origin/deploy/integrated alineado)
+**Fecha auditoría:** 2026-08-31
 **Regla:** Solo se documenta lo demostrable por código, tests, commits y configuración.
 
 ---
@@ -392,3 +392,4 @@ Sistemas completamente cerrados que NO deben ser re-diagnosticados como pendient
 | B5 Breakup Romance | 🟢 | Reset romance direccional al romper = sin contradicción mapa | Commit `0a1c589`, test `romper_resetea_romance_mapa_test` |
 | B3 Voluntad | 🟢 | Rechazo genuino no se volteó por obligación + tirada | Test `propuesta_resolucion_obligacion_rechazo_test` |
 | B4 Mensajitos | 🟢 | Doble resolución bloqueada (idempotencia) | Test `mensajitos_interactivo_recuperado_test` |
+| Audio | 🟢 | Música fondo + efectos reactivos + controles + persistencia + autoplay seguro | Test `audio_e2e_test` (83/83), commit cierre E2E |
