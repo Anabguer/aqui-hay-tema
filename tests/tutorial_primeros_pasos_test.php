@@ -54,8 +54,7 @@ foreach ($p['buzon'] ?? [] as $m) {
 assert($msg !== null, 'mensajito en buzon');
 $texto = (string) ($msg['texto'] ?? '');
 assert(str_contains($texto, 'ir al cine'), 'mensajito menciona cine');
-assert(str_contains($texto, 'Nuevo plan'), 'mensajito indica Nuevo plan');
-assert(str_contains($texto, 'por su cuenta'), 'mensajito indica salida individual');
+assert(!str_contains($texto, 'Nuevo plan'), 'mensajito NPC no contiene instruccion UI');
 
 BuzonEngine::marcarLeido($p, $msgId);
 TutorialPrimerosPasos::alLeerMensaje($p, $msgId, new Catalog($root));

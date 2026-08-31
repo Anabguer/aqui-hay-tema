@@ -739,8 +739,7 @@ final class TutorialPrimerosPasos
             $tercero
         );
         if ($texto === '') {
-            $texto = 'Oye, Celestine: me apetece ir al cine. Por si te da por meter las narices.'
-                . "\n\n" . 'Dale a Nuevo plan y elige a ' . $nombre . ' para una salida por su cuenta.';
+            $texto = 'Oye, Celestine: me apetece ir al cine. Por si te da por meter las narices.';
         }
         BuzonEngine::crear($partida, [
             'id' => $msgId,

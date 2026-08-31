@@ -39,6 +39,7 @@ final class MensajitoVoz
                 'Al final {otro} se animó y salió redondo. Tú lo viste venir.',
                 'Quedé con {otro} y fue estupendo. Apunta que me debes una.',
                 'Lo de {otro} y yo funcionó. Gracias por empujarlo, Celestine.',
+                '{otro} y yo la pasamos de lujo. No me lo esperaba.',
             ];
         }
         return [
@@ -46,6 +47,7 @@ final class MensajitoVoz
             'Hecho. Justo lo que necesitaba.',
             'Gracias por acordarte de mí. Quedó de lujo.',
             'Al final se hizo y me encantó. Tienes buen pulso para esto.',
+            'Estupendo. Exacto lo que necesitaba.',
         ];
     }
 
@@ -73,9 +75,9 @@ final class MensajitoVoz
     {
         if ($grupo === 'seca') {
             return [
-                'Vi que pasabas. Pues nada, lo doy cerrado.',
+                'Vi que pasabas. Pues nada, lo doy por cerrado.',
                 'Sin respuesta, sin plan. Asunto archivado.',
-                'Ya está. Lo mío quedó en nada.',
+                'Ya está. Quedó en nada.',
             ];
         }
         return [
@@ -219,10 +221,11 @@ final class MensajitoVoz
     /** @return list<string> */
     private static function bancoTutorialPrimerosPasos(): array
     {
-        // La segunda línea es instrucción funcional del tutorial: NO tocar formato.
         return [
-            'Oye, Celestine: me apetece ir al cine. Por si te da por meter las narices.'
-                . "\n\n" . 'Dale a Nuevo plan y elige a {nombre} para una salida por su cuenta.',
+            'Oye, Celestine: me apetece ir al cine. Por si te da por meter las narices.',
+            'Celestine, tengo unas ganas de cine que no puedo más. Si puedes hacer algo, ya sabes.',
+            'Me apetece ir al cine, Celestine. No sé si se puede montar algo.',
+            'Celestine, hoy me apetece cine. Si te apetece mover los hilos, perfecto.',
         ];
     }
 
@@ -542,7 +545,7 @@ final class MensajitoVoz
     public static function tamanoCanonico(): array
     {
         return [
-            'resultado_cumplida' => 4,
+            'resultado_cumplida' => 5,
             'resultado_caducada' => 4,
             'resultado_ignorada' => 3,
             'resultado_rechazo_tercero' => 4,

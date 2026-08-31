@@ -1080,7 +1080,14 @@ final class PeticionPuebloEngine
             $opts = self::candidatosDe($partida, $rid, $pl, $cal);
             $params = $opts[$rng->nextInt(0, count($opts) - 1)];
         }
-        $texto = self::renderCopy((string) ($pl['copy'] ?? ''), $params, $partida);
+        $copyPool = $pl['copy_pool'] ?? null;
+        if (is_array($copyPool) && count($copyPool) > 0) {
+            $seed = 'peticion|' . (string) ($pl['id'] ?? '') . '|' . $rid;
+            $tpl = CopyVariante::elegir($partida, 'peticion_copy|' . ($pl['id'] ?? ''), $copyPool, $seed);
+        } else {
+            $tpl = (string) ($pl['copy'] ?? '');
+        }
+        $texto = self::renderCopy($tpl, $params, $partida);
         $plazo = (int) ($pl['plazo_horas'] ?? 24);
         $r = PeticionEngine::crear($partida, $rid, (string) ($pl['tipo_legado'] ?? 'otro'), [
             'schema_b4' => true,
