@@ -69,6 +69,12 @@ final class RelojOperations
                 SeguimientoConsejoEngine::evaluarPendientes($partida, $calSeg, $this->logger);
             }
 
+            // Progresion romantica visible (P8): senales narrativas diarias
+            if (!$catchUp && FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
+                $calProg = CalibracionConfig::load($this->projectRoot);
+                RomanticProgressionBridge::tickProgresion($partida, $calProg);
+            }
+
             // Catch-up batch: generar actividad NPC limitada por día offline
             if ($catchUp && FeatureConfig::isEnabled($partida, 'npc_autonomy_enabled')) {
                 $calBatch = CalibracionConfig::load($this->projectRoot);

@@ -32,6 +32,16 @@ final class RelacionVistaJugador
 
         $romance = EtiquetaRelacionPlay::romanceHacia($partida, $yo, $otro, $cal);
 
+        $pistaRom = '';
+        $senalNarrativa = RomanticProgression::SENAL_NINGUNA;
+        if ($conocidos && !in_array($vinculo, ['pareja', 'ex_pareja'], true)) {
+            $resProg = RomanticProgression::evaluarDireccion($partida, $yo, $otro, $cal);
+            $senalNarrativa = $resProg['senal'];
+            if ($resProg['senal'] !== RomanticProgression::SENAL_NINGUNA) {
+                $pistaRom = CopyRomanticProgression::pistaFichaRomantica($partida, $yo, $otro, $cal);
+            }
+        }
+
         return [
             'conocidos' => $conocidos,
             'etiqueta_social' => $socialBanda,
@@ -45,6 +55,8 @@ final class RelacionVistaJugador
             'etiqueta_romance' => $romance !== null ? $romance['etiqueta'] : null,
             'emoji_romance' => $romance !== null ? $romance['emoji'] : null,
             'romance_banda' => $romance !== null ? $romance['banda'] : null,
+            'pista_romantica' => $pistaRom,
+            'senal_narrativa' => $senalNarrativa,
         ];
     }
 }

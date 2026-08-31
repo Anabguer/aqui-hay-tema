@@ -257,6 +257,8 @@ final class PartidaService
             'etiqueta_romance' => $v['etiqueta_romance'],
             'emoji_romance' => $v['emoji_romance'],
             'romance_banda' => $v['romance_banda'],
+            'pista_romantica' => $v['pista_romantica'] ?? '',
+            'senal_narrativa' => $v['senal_narrativa'] ?? 'ninguna',
         ];
     }
 
@@ -348,6 +350,8 @@ final class PartidaService
                 'etiqueta_romance' => $vista['etiqueta_romance'],
                 'emoji_romance' => $vista['emoji_romance'],
                 'romance_banda' => $vista['romance_banda'],
+                'pista_romantica' => $vista['pista_romantica'] ?? '',
+                'senal_narrativa' => $vista['senal_narrativa'] ?? 'ninguna',
             ];
         }
 
