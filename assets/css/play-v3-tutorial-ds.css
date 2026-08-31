@@ -48,7 +48,7 @@
   border-radius: 16px !important;
   box-shadow: var(--tut-shadow, 0 8px 24px rgba(48, 40, 58, 0.20)) !important;
   color: var(--tut-ink, #3b3028) !important;
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
 }
 /* Override capas-ds.css scrapbook border on tutorial papel */
 .play-v3 .tut-papel {
@@ -124,7 +124,7 @@
 /* --- 6b. BADGE "PRIMEROS PASOS" --- */
 .play-v3 .tut-badge {
   display: inline-block !important;
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: 0.68rem !important;
   font-weight: 800 !important;
   letter-spacing: 0.10em !important;
@@ -173,7 +173,7 @@
 .play-v3 .tut-finale h2,
 .play-v3 .tut-titulo,
 .play-v3 .tut-fin-titulo {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-weight: 700 !important;
   font-size: 1.42rem !important;
   line-height: 1.15 !important;
@@ -210,7 +210,7 @@
 .play-v3 .tut-fin-lead,
 .play-v3 .tut-fin-rest,
 .play-v3 .tut-texto {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-style: normal !important;
   letter-spacing: normal !important;
   text-transform: none !important;
@@ -243,7 +243,7 @@
   padding-top: 6px !important;
   border-top: 1px solid rgba(196, 181, 232, 0.30) !important;
   color: var(--tut-ink, #3b3028) !important;
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-style: italic !important;
   font-size: 1.05rem !important;
   font-weight: 500 !important;
@@ -266,7 +266,7 @@
    Jerarquia comun: Caveat bold. */
 .play-v3 .tut-bloque-tit {
   display: block !important;
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-size: 1.05rem !important;
   font-weight: 700 !important;
   letter-spacing: 0.02em !important;
@@ -494,7 +494,7 @@
   align-items: center !important;
 }
 .play-v3 .tut-acciones .cta {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-weight: 700 !important;
   font-size: 1.05rem !important;
   letter-spacing: 0.04em !important;
@@ -509,7 +509,7 @@
   background: #FFFFFF !important;
   border: 1.5px solid var(--tut-lavender-soft, #C4B5E8) !important;
   color: var(--tut-lavender, #7a6a9a) !important;
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-size: 1.05rem !important;
   font-weight: 700 !important;
   text-transform: uppercase !important;
@@ -522,7 +522,7 @@
   border: 1.5px solid var(--tut-coral-border, #D14D3C) !important;
   color: #FFFFFF !important;
   box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30)) !important;
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-size: 1.05rem !important;
 }
 /* Override capas-ds.css pink CTA on tutorial */
@@ -533,7 +533,7 @@
   border: 1.5px solid var(--tut-coral-border, #D14D3C) !important;
   color: #FFFFFF !important;
   box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30)) !important;
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-size: 1.05rem !important;
 }
 
@@ -577,7 +577,7 @@
   margin-right: 14px !important;
 }
 .play-v3 .tut-finale .tut-fin-titulo {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-size: 1.7rem !important;
   font-weight: 700 !important;
   line-height: 1.10 !important;

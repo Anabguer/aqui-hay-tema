@@ -1,10 +1,11 @@
-﻿/* TUTORIAL-LAVANDA-v3 — Variables de color INDEPENDIENTES del tutorial.
+﻿/* TUTORIAL-LAVANDA-v4 — Variables de color Y tipografia INDEPENDIENTES.
    PIEL BLANCA/LAVANDA. Solo variables y colores.
    La autoridad visual (shell/tipografia/layout) es play-v3-tutorial-ds.css.
    AISLADO: NO depende de --modal-* ni de --ds-*. Valores hardcoded.
    NO tocar selectores .capa (riesgo regresion). */
 
 :root {
+  /* Colores */
   --tut-shell-bg: #FCFBFE;
   --tut-header-bg: #FFFFFF;
   --tut-content-bg: #F6F3F8;
@@ -24,4 +25,7 @@
   --tut-coral-bg: linear-gradient(180deg, #F0856E, #E86B5A);
   --tut-coral-border: #D14D3C;
   --tut-coral-shadow: 0 2px 6px rgba(209, 77, 60, 0.30);
+  /* Fuentes — autoridad propia, sin dependencia de --ds-font-* */
+  --tut-font-ui: "Nunito", "Segoe UI", sans-serif;
+  --tut-font-hand: "Caveat", cursive;
 }
