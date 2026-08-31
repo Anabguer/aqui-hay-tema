@@ -1,0 +1,727 @@
+/* CONSULTA-EDIFICIO-v2 — modal «quién está» (mapa) */
+
+.play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.consulta-edificio-v2 {
+  width: min(392px, 92vw) !important;
+  max-width: min(392px, 92vw) !important;
+  max-height: min(86vh, 680px) !important;
+  padding: 1.1rem 1.05rem .95rem !important;
+  border: 1.5px solid var(--ds-ink, #33261e) !important;
+  border-radius: 16px !important;
+  background: #fff !important;
+  background-image: none !important;
+  box-shadow: 0 12px 36px rgba(40, 32, 26, .16) !important;
+  transform: translate(-50%, -50%) !important;
+  font-family: "Nunito", system-ui, sans-serif;
+  color: var(--ds-ink, #33261e);
+  display: flex !important;
+  flex-direction: column !important;
+  overflow-y: auto !important;
+  gap: 0 !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.consulta-edificio-v2::before {
+  display: none !important;
+  content: none !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-consulta="quien"] .consulta-edificio-v2 .cerrar {
+  top: .55rem !important;
+  right: .55rem !important;
+  width: 1.85rem !important;
+  height: 1.85rem !important;
+  border: 1.5px solid var(--ds-ink, #33261e) !important;
+  border-radius: 7px !important;
+  background: #fff !important;
+  font-family: "Nunito", system-ui, sans-serif !important;
+  font-size: .92rem !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  color: var(--ds-ink, #33261e) !important;
+  box-shadow: none !important;
+  z-index: 2;
+}
+
+.play-v3:has(.game-shell) .play-root[data-consulta="quien"] .consulta-edificio-v2 .nota-atras {
+  margin: 0 0 .45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  color: var(--ds-ink-soft, #6b5138);
+  cursor: pointer;
+}
+
+/* Cabecera: icono arriba-izq + titulo centrado (mockup BAR) */
+.play-v3 .consulta-ed-head {
+  position: relative;
+  margin: 0 1.85rem .7rem 0;
+  min-height: 0;
+}
+
+.play-v3 .consulta-ed-art {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 4.35rem;
+  height: 4.35rem;
+  z-index: 1;
+}
+
+.play-v3 .consulta-ed-art[hidden] {
+  display: none !important;
+}
+
+.play-v3 .consulta-ed-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.play-v3 .consulta-ed-head-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding-top: .15rem;
+  min-width: 0;
+}
+
+.play-v3 .consulta-ed-tit {
+  margin: 0 0 .45rem !important;
+  padding: 0 .35rem;
+  font-family: Caveat, cursive !important;
+  font-size: 2.65rem !important;
+  font-weight: 700 !important;
+  line-height: 1.08 !important;
+  letter-spacing: .01em !important;
+  color: var(--ds-ink, #33261e) !important;
+  background: linear-gradient(180deg, transparent 56%, var(--ds-lavender-soft, #e4dcf4) 56%, var(--ds-lavender-soft, #e4dcf4) 86%, transparent 86%);
+  display: inline-block;
+  text-align: center;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.play-v3 .consulta-ed-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .42rem;
+  width: 100%;
+}
+
+.play-v3 .consulta-ed-meta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .36rem;
+  width: 100%;
+}
+
+/* Estado sutil pero legible */
+.play-v3 .consulta-ed-estado {
+  display: inline-block;
+  padding: .16rem .52rem;
+  border-radius: 999px;
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: #5e7a55;
+  background: rgba(94, 122, 85, .14);
+  border: 1px solid rgba(94, 122, 85, .22);
+}
+
+.play-v3 .consulta-ed-estado--abierto {
+  color: #5e7a55;
+  background: rgba(94, 122, 85, .14);
+  border-color: rgba(94, 122, 85, .22);
+}
+
+.play-v3 .consulta-ed-estado--cerrado {
+  color: #c9563e;
+  background: rgba(232, 93, 86, .12);
+  border-color: rgba(232, 93, 86, .24);
+}
+
+.play-v3 .consulta-ed-horas {
+  font-size: .84rem;
+  font-weight: 600;
+  color: var(--ds-ink, #33261e);
+  text-align: center;
+}
+
+/* Presencia */
+.play-v3 .consulta-ed-presencia {
+  margin: .15rem 0 .75rem;
+  flex-shrink: 0;
+}
+
+.play-v3 .consulta-ed-vacio {
+  margin: 0;
+  text-align: center;
+  font-family: Caveat, cursive;
+  font-size: 1.2rem;
+  color: var(--ds-text-muted, #75634f);
+}
+
+.play-v3 .consulta-ed-avatars {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.play-v3 .consulta-ed-persona {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .38rem;
+  min-width: 5.25rem;
+}
+
+.play-v3 .consulta-ed-persona .cara-token.consulta-ed-cara {
+  width: 5.1rem;
+  height: 5.1rem;
+  border: 1.5px solid var(--ds-ink, #33261e);
+  border-radius: 50%;
+  overflow: hidden;
+  background: #fff;
+  padding: 0;
+  cursor: pointer;
+}
+
+.play-v3 .consulta-ed-persona .cara-token.consulta-ed-cara .cara {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.play-v3 .consulta-ed-persona .cara-token.consulta-ed-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-v3 .consulta-ed-persona .cara-token.consulta-ed-cara .cara-ini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-family: Caveat, cursive;
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+.play-v3 .consulta-ed-nombre {
+  font-family: Caveat, cursive;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ds-ink, #33261e);
+}
+
+.play-v3 .consulta-ed-swap {
+  align-self: center;
+  flex: 0 0 auto;
+  width: 1.55rem;
+  height: 1.55rem;
+  margin-top: 1.65rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #e85d56;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(232, 93, 86, .28);
+}
+
+.play-v3 .consulta-ed-swap svg {
+  width: .85rem;
+  height: .85rem;
+  display: block;
+}
+
+/* Tema */
+.play-v3 .consulta-ed-tema-wrap {
+  margin: 0 0 .85rem;
+  flex-shrink: 0;
+}
+
+.play-v3 .consulta-ed-tema-card {
+  margin: 0;
+  padding: .72rem .8rem .68rem;
+  border: 1.5px solid #e8a8b0;
+  border-radius: 13px;
+  background: #fff0f3;
+  text-align: center;
+}
+
+.play-v3 .consulta-ed-tema-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .42rem;
+  margin-bottom: .58rem;
+}
+
+.play-v3 .consulta-ed-tema-kicker {
+  margin: 0;
+  line-height: 1.35;
+  display: block;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #e85d56;
+}
+
+.play-v3 .consulta-ed-tema-tag {
+  display: inline-block;
+  padding: .1rem .42rem;
+  border-radius: 999px;
+  font-size: .58rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ds-lavender-deep, #7c6bae);
+  background: var(--ds-lavender-soft, #e4dcf4);
+}
+
+.play-v3 .consulta-ed-tema-txt {
+  margin: 0 0 .32rem;
+  font-family: Caveat, cursive;
+  font-size: 1.32rem;
+  font-weight: 700;
+  line-height: 1.18;
+  color: var(--ds-ink, #33261e);
+}
+
+.play-v3 .consulta-ed-tema-pista {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: .98rem;
+  font-style: italic;
+  line-height: 1.18;
+  color: var(--ds-text-muted, #75634f);
+}
+
+/* CTA: pegado abajo solo si hay altura sobrante, sin hueco vacío forzado */
+.play-v3 .consulta-ed-acciones {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-top: .55rem;
+  padding-top: .65rem;
+  flex-shrink: 0;
+}
+
+.play-v3 .consulta-ed-cta {
+  position: relative;
+  width: 100%;
+  margin: 0;
+  padding: .68rem 2rem .68rem .95rem;
+  border: 1.5px solid #d14f48 !important;
+  border-radius: 11px !important;
+  background: #e85d56 !important;
+  font-family: "Nunito", system-ui, sans-serif !important;
+  font-size: .78rem !important;
+  font-weight: 800 !important;
+  letter-spacing: .055em !important;
+  text-transform: uppercase !important;
+  color: #fff !important;
+  box-shadow: 0 3px 0 rgba(180, 55, 48, .22) !important;
+  cursor: pointer;
+}
+
+.play-v3 .consulta-ed-cta::after {
+  content: "";
+  position: absolute;
+  right: .8rem;
+  top: 50%;
+  width: 1rem;
+  height: .7rem;
+  transform: translateY(-50%);
+  background:
+    linear-gradient(125deg, transparent 42%, #fff 42%, #fff 48%, transparent 48%),
+    linear-gradient(125deg, transparent 58%, #fff 58%, #fff 64%, transparent 64%),
+    linear-gradient(125deg, transparent 74%, #fff 74%, #fff 80%, transparent 80%);
+  opacity: .9;
+}
+
+.play-v3 .consulta-ed-cta:hover {
+  filter: brightness(1.04);
+}
+
+
+@media (max-width: 520px) {
+  .play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.consulta-edificio-v2 {
+    padding: 1rem .95rem .9rem !important;
+  }
+
+  .play-v3 .consulta-ed-head {
+    margin: 0 1.65rem .85rem 0;
+    min-height: 0;
+  }
+
+  .play-v3 .consulta-ed-art {
+    width: 3.9rem;
+    height: 3.9rem;
+  }
+
+  .play-v3 .consulta-ed-head-copy {
+    padding-top: .35rem;
+  }
+
+  .play-v3 .consulta-ed-tit {
+    font-size: 2.4rem !important;
+    margin: 0 0 1.15rem !important;
+    line-height: 1.1 !important;
+    padding-bottom: .08rem;
+  }
+
+  .play-v3 .consulta-ed-meta {
+    gap: .5rem;
+    margin-top: .12rem;
+  }
+
+  .play-v3 .consulta-ed-meta-block {
+    gap: .44rem;
+  }
+
+  .play-v3 .consulta-ed-estado {
+    margin-top: .05rem;
+  }
+
+  .play-v3 .consulta-ed-horas {
+    margin-top: .04rem;
+    line-height: 1.25;
+  }
+
+  .play-v3 .consulta-ed-presencia {
+    margin: .25rem 0 .8rem;
+  }
+
+  .play-v3 .consulta-ed-persona .cara-token.consulta-ed-cara {
+    width: 4.55rem;
+    height: 4.55rem;
+  }
+
+  .play-v3 .consulta-ed-tema-card {
+    padding: .85rem .75rem .78rem;
+  }
+
+  .play-v3 .consulta-ed-tema-head {
+    gap: .52rem;
+    margin-bottom: .62rem;
+  }
+
+  .play-v3 .consulta-ed-tema-kicker {
+    font-size: .66rem;
+    line-height: 1.4;
+  }
+
+  .play-v3 .consulta-ed-tema-tag {
+    margin-top: .02rem;
+    line-height: 1.2;
+  }
+
+  .play-v3 .consulta-ed-tema-txt {
+    margin-top: .08rem;
+  }
+}
+
+/* CONSULTA-EDIFICIO-v153 - modal compacto: sin hueco blanco forzado */
+.play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.consulta-edificio-v2 {
+  height: fit-content !important;
+  max-height: min(86vh, 680px) !important;
+}
+
+.play-v3 .consulta-ed-avatars[hidden],
+.play-v3 .consulta-ed-avatars:empty {
+  display: none !important;
+}
+
+.play-v3 .consulta-ed-tema-wrap[hidden] {
+  display: none !important;
+  margin: 0 !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-presencia {
+  margin: .1rem 0 .35rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-acciones {
+  margin-top: .4rem !important;
+  padding-top: 0 !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-head {
+  margin-bottom: .45rem !important;
+}
+
+/* CONSULTA-EDIFICIO-v154 — composición mockup: cabecera horizontal, título protagonista, altura por contenido */
+.play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.consulta-edificio-v2 {
+  width: min(400px, calc(100vw - 1.35rem)) !important;
+  max-width: min(400px, calc(100vw - 1.35rem)) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: min(88dvh, 720px) !important;
+  padding: 1rem .95rem .85rem !important;
+  gap: 0 !important;
+  overflow-y: auto !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-head {
+  display: grid !important;
+  grid-template-columns: 5.35rem minmax(0, 1fr) !important;
+  grid-template-areas: "art copy" !important;
+  gap: .7rem .8rem !important;
+  align-items: start !important;
+  margin: 0 1.7rem .55rem 0 !important;
+  min-height: 0 !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-head:not(:has(.consulta-ed-art:not([hidden]))) {
+  grid-template-columns: minmax(0, 1fr) !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-art {
+  position: relative !important;
+  left: auto !important;
+  top: auto !important;
+  grid-area: art !important;
+  width: 5.35rem !important;
+  height: 5.35rem !important;
+  margin: .05rem 0 0 .05rem !important;
+  transform: rotate(-4deg) !important;
+  filter: drop-shadow(0 3px 10px rgba(40, 32, 26, .14)) !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-art img {
+  object-fit: contain !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-head-copy {
+  grid-area: copy !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  text-align: left !important;
+  padding: .1rem 0 0 !important;
+  min-width: 0 !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-tit {
+  margin: 0 0 .32rem !important;
+  padding: 0 !important;
+  font-family: Caveat, "Caveat Brush", cursive !important;
+  font-size: 2.95rem !important;
+  font-weight: 700 !important;
+  line-height: .98 !important;
+  letter-spacing: .01em !important;
+  color: var(--ds-ink, #33261e) !important;
+  background: none !important;
+  text-align: left !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-meta,
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-meta-block {
+  align-items: flex-start !important;
+  text-align: left !important;
+  gap: .34rem !important;
+  width: 100% !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-estado {
+  padding: .2rem .62rem !important;
+  font-size: .66rem !important;
+  letter-spacing: .06em !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-horas {
+  font-size: .86rem !important;
+  font-weight: 600 !important;
+  line-height: 1.3 !important;
+  text-align: left !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-presencia {
+  margin: .2rem 0 .5rem !important;
+  flex-shrink: 0 !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-vacio {
+  margin: 0 !important;
+  padding: .7rem .95rem .66rem !important;
+  border-radius: 14px !important;
+  border: 1.5px solid rgba(90, 72, 56, .11) !important;
+  background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%) !important;
+  font-family: Caveat, "Caveat Brush", cursive !important;
+  font-size: 1.38rem !important;
+  line-height: 1.2 !important;
+  color: #6b5a48 !important;
+  position: relative !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-vacio::before,
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-vacio::after {
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 1.45rem !important;
+  line-height: 1 !important;
+  color: rgba(107, 90, 72, .42) !important;
+  pointer-events: none !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-vacio::before {
+  content: "\201C" !important;
+  margin-right: .12rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-vacio::after {
+  content: "\201D" !important;
+  margin-left: .08rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-avatars {
+  gap: .75rem !important;
+  padding: .15rem 0 .1rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-persona {
+  gap: .42rem !important;
+  min-width: 5rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-persona .cara-token.consulta-ed-cara {
+  width: 5.2rem !important;
+  height: 5.2rem !important;
+  border-width: 2px !important;
+  box-shadow: 0 2px 8px rgba(40, 32, 26, .1) !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-nombre {
+  font-size: 1.42rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-swap {
+  margin-top: 1.55rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-tema-wrap {
+  margin: 0 0 .55rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-acciones {
+  margin-top: .45rem !important;
+  padding-top: 0 !important;
+  gap: .35rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-cta {
+  padding: .56rem 2.35rem .56rem .92rem !important;
+  border-radius: 10px !important;
+  font-size: .74rem !important;
+  letter-spacing: .05em !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2 .consulta-ed-cta::after {
+  content: "" !important;
+  right: .82rem !important;
+  width: 1.05rem !important;
+  height: 1.05rem !important;
+  opacity: 1 !important;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 3v8a4 4 0 0 0 4 4h4'/%3E%3Cpath d='M8 21v-5'/%3E%3Cpath d='M12 21v-7'/%3E%3Cpath d='M16 21v-3'/%3E%3Cpath d='M20 14V3'/%3E%3C/svg%3E") center / contain no-repeat !important;
+  transform: translateY(-50%) !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-presencia {
+  margin: .15rem 0 .4rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-acciones {
+  margin-top: .35rem !important;
+}
+
+.play-v3 .quien.consulta-edificio-v2:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-head {
+  margin-bottom: .5rem !important;
+}
+
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.consulta-edificio-v2 {
+    width: min(540px, calc(100vw - 2.5rem)) !important;
+    max-width: min(540px, calc(100vw - 2.5rem)) !important;
+    padding: 1.1rem 1.1rem .95rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-head {
+    grid-template-columns: 6.75rem minmax(0, 1fr) !important;
+    gap: .85rem 1rem !important;
+    margin: 0 1.85rem .65rem 0 !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-art {
+    width: 6.75rem !important;
+    height: 6.75rem !important;
+    transform: rotate(-3deg) !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-tit {
+    font-size: 3.25rem !important;
+    margin-bottom: .38rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-estado {
+    font-size: .68rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-horas {
+    font-size: .9rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-presencia {
+    margin: .25rem 0 .55rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-persona .cara-token.consulta-ed-cara {
+    width: 5.45rem !important;
+    height: 5.45rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-acciones {
+    margin-top: .55rem !important;
+    align-items: stretch !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-cta {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 520px) {
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-head {
+    margin: 0 1.55rem .5rem 0 !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-art {
+    width: 4.85rem !important;
+    height: 4.85rem !important;
+  }
+
+  .play-v3 .quien.consulta-edificio-v2 .consulta-ed-tit {
+    font-size: 2.65rem !important;
+    margin-bottom: .28rem !important;
+  }
+}
