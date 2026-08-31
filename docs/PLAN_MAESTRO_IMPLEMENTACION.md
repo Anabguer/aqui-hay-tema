@@ -1442,3 +1442,132 @@ Familia semántica: campo `categoria` del catálogo de hobbies (reutilizado, sin
 - Copy de cierre por participante (`texto` en experiencia) explica tema + resultado.
 - CTA unificado: `¿Qué se cuece ahí?` solo si `celeste_organizado` + MENTES disponible; `Ver encuentro` si organizado sin acciones; `Ver qué pasa` si espontáneo.
 
+---
+
+## 26. Diario / Cotilleo / Ánimo — Un mismo hecho, tres voces (2026-08-31)
+
+**Estado: PENDIENTE. NO IMPLEMENTAR AHORA.** Debe quedar explícitamente reservado para una fase narrativa posterior del playtest.
+
+SOLO DOCUMENTACIÓN/DISEÑO. Sin runtime, sin deploy. Registro de decisión de diseño futuro.
+
+### 26.1 Principio
+
+Un mismo hecho social puede alimentar varias superficies, pero cada superficie tiene una función narrativa diferente. NO deben limitarse a copiar el mismo texto.
+
+La fuente factual debe ser la misma: `SocialOutcome` / memoria / hecho canónico correspondiente. Pero la narración cambia según la superficie.
+
+**Principio: UNA SOLA VERDAD DEL MOTOR. VARIAS FORMAS DE CONTARLA.**
+
+### 26.2 Diario
+
+El Diario pertenece al personaje. Debe funcionar como memoria autobiográfica de experiencias PERSONALMENTE relevantes. No debe ser un feed de cada acción cotidiana.
+
+Un encuentro malo/tenso relevante debería poder quedar como:
+
+> ⚡ QUEDADA CON RAFA · PARQUE
+> "Pensé que nos íbamos a entender mejor. Al final la tarde se torció y me fui bastante quemado."
+
+**Características deseadas:**
+- Perspectiva del propio vecino.
+- Fecha/momento.
+- Persona implicada.
+- Lugar/contexto cuando aporte.
+- Señal visual inmediata del tono (señales conceptuales: 😡 💥 💔 ⚡ ❤️ ✨ 😬 — NO fijar catálogo definitivo todavía).
+- Texto personal.
+- Dirección emocional real.
+
+**IMPORTANTE:** Si Ángel y Rafa viven el mismo encuentro de manera diferente, sus diarios pueden y deberían contar experiencias diferentes. El Diario debe respetar la direccionalidad del resultado.
+
+### 26.3 Cotilleos
+
+Cotilleos es la versión PÚBLICA del pueblo. Conceptualmente: el Twitter/corrillo de AHT. Puede ser irónico, exagerado, observador, gracioso o un poco cabrón, pero NO puede contradecir el hecho real.
+
+Ejemplo del MISMO encuentro:
+
+> "Ángel y Rafa se fueron al parque a conocerse. El parque sobrevivió. La conversación, regular."
+
+Cotilleos NO debe convertirse en el diario privado de Ángel. Cuenta lo observable desde fuera.
+
+### 26.4 Ánimo
+
+Ánimo explica la consecuencia emocional ACTUAL que dejó el hecho. Responde: "¿Cómo está y POR QUÉ?"
+
+Ejemplo:
+
+> 😠 ENFADADO
+> "La quedada con Rafa no salió como esperaba y todavía le está dando vueltas."
+
+NO responde "¿Qué ocurrió exactamente?" (eso pertenece al Diario) ni "¿Qué comenta el pueblo?" (eso pertenece a Cotilleos).
+
+### 26.5 Diferencia entre superficies — tabla canónica
+
+| Superficie | Función | Ejemplo (mismo hecho: Ángel+Rafa, parque, encuentro tenso) |
+|---|---|---|
+| **HECHO CANÓNICO** | Fuente factual del motor | Ángel + Rafa, parque, encuentro tenso/malo |
+| **COTILLEO** | Versión pública / irónica | "Ángel y Rafa se fueron al parque a conocerse. El parque sobrevivió. La conversación, regular." |
+| **DIARIO DE ÁNGEL** | Experiencia autobiográfica de Ángel | ⚡ QUEDADA CON RAFA · PARQUE — "Pensé que nos íbamos a entender mejor. Al final la tarde se torció y me fui bastante quemado." |
+| **DIARIO DE RAFA** | Su propia experiencia, potencialmente diferente | (Podría ser decepción neutral, enfado leve, u otra perspectiva) |
+| **ÁNIMO DE ÁNGEL** | Consecuencia emocional actual + causa | 😠 ENFADADO — "La quedada con Rafa no salió como esperaba y todavía le está dando vueltas." |
+
+**Regla transversal: NO copiar automáticamente el mismo copy entre superficies.**
+
+### 26.6 Cursor como guionista — workflow futuro
+
+**ANTES DE PROGRAMAR la reescritura narrativa**, hacer una fase específica de GUION. Usar un agente nuevo de Cursor como "Guionista de Aquí Hay Tema". Su trabajo NO será programar inicialmente.
+
+Se le proporcionarán:
+- Contrato narrativo.
+- Personalidad/tono AHT.
+- Hechos reales producidos por el motor.
+- Distintos `SocialOutcome`: encuentros buenos, malos, tensos, rechazos, citas, flechazos, conflictos, declaraciones, etc.
+
+Y deberá proponer cómo cuenta CADA SUPERFICIE esos hechos. Objetivo: crear primero una biblioteca/contrato de voces narrativas antes de integrarla en código.
+
+### 26.7 Ejemplo canónico a conservar
+
+**HECHO:** Ángel y Rafa van al parque a conocerse. El encuentro sale mal/tenso.
+
+**COTILLEOS:**
+> "Ángel y Rafa se fueron al parque a conocerse. El parque sobrevivió. La conversación, regular."
+
+**DIARIO DE ÁNGEL:**
+> ⚡ QUEDADA CON RAFA · PARQUE
+> "Pensé que nos íbamos a entender mejor. Al final la tarde se torció y me fui bastante quemado."
+
+**ÁNIMO DE ÁNGEL:**
+> 😠 ENFADADO
+> "La quedada con Rafa no salió como esperaba y todavía le está dando vueltas."
+
+Conservar este ejemplo porque explica muy bien la diferencia entre las tres superficies.
+
+### 26.8 Relación con hallazgos P7
+
+Relacionar este bloque con AHT-P7:
+- Diario actualmente saturado (~18/día) con mala señal/ruido.
+- Cotilleos existen (~9.5/día) pero les falta progresión temporal.
+- Emociones tienen causa rastreable pero su narración/evolución puede mejorar.
+- Un mismo hecho ya puede existir en varias capas, pero necesitamos especializar cómo lo cuenta cada una.
+
+Esta pieza NO consiste simplemente en "añadir más textos". También debe ayudar a:
+- Reducir ruido del Diario.
+- Destacar hitos.
+- Diferenciar superficies.
+- Preservar causalidad.
+- Mejorar continuidad narrativa.
+
+### 26.9 NO implementar todavía
+
+**NO ejecutar esta pieza mientras estemos resolviendo los bloques actuales del playtest.** Primero terminar las prioridades funcionales/narrativas que correspondan.
+
+Cuando llegue esta pieza, fases previstas:
+
+| Fase | Descripción |
+|---|---|
+| **A** | Guionista Cursor → contrato + biblioteca de voces |
+| **B** | Revisión humana/Neni de tono y ejemplos |
+| **C** | Solo después, implementación técnica |
+
+### 26.10 Clasificación
+
+**IDEA FUTURA · INTERESANTE PERO FUTURA.** No bloquea ningún bloque funcional actual. Requiere que los sistemas de narrativa base (Cotilleos, Diario, Ánimo/Emociones) estén estabilizados y medidos en playtest antes de abordar la especialización de voces.
+
