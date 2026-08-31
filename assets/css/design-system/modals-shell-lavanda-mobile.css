@@ -180,3 +180,81 @@
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha .ficha-rel-top {
   background-color: var(--modal-header-bg) !important;
 }
+/* MODAL-SHELL-PILOTO-v1 — Familia A (Agenda, Vecinos, Ficha, Nuevo Plan, Mensajitos) */
+.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda,
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon {
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  min-width: 0;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos::after {
+  display: none !important;
+  content: none !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar {
+  overflow-x: hidden !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .org-body {
+  overflow-x: clip;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .org-picker-strip,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .org-lugares-strip,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .org-tipo-strip {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha .ficha-top {
+  display: grid !important;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 6px;
+  padding: 0 !important;
+  margin-bottom: 8px !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha .ficha-volver {
+  grid-column: 1;
+  justify-self: start;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha .ficha-tit {
+  grid-column: 2;
+  justify-self: center;
+  margin: 0 !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon .mensajitos-cab {
+  padding-right: 0 !important;
+  padding-top: 0 !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon [data-buzon-list] {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vec-panel:not([hidden]) {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vecinos-grid,
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vec-rel-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+}

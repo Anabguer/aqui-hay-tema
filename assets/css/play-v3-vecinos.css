@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Capa VECINOS — rediseño visual (ref mockup vecinos modal)
  * Alcance: .capa-vecinos únicamente
  */
@@ -60,50 +60,17 @@
 
 .play-v3 .capa-vecinos > * { position: relative; z-index: 2; }
 
-.play-v3 .capa-vecinos .vecinos-cerrar.ds-modal-close {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  width: 42px !important;
-  height: 42px !important;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: var(--ds-paper-card, #fffdf7) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
-  font: 800 18px/1 Nunito, sans-serif !important;
-  color: var(--ds-ink, #3b3028) !important;
-  transform: rotate(2deg) !important;
-  display: grid !important;
-  place-items: center;
-  padding: 0 !important;
-  z-index: 8 !important;
-}
-
 /* --- Cabecera --- */
 .play-v3 .capa-vecinos .vecinos-cab {
   display: block !important;
   text-align: center !important;
-  padding: 0 2.5rem 4px !important;
+  padding: 0 0 4px !important;
   margin: 0 0 8px !important;
 }
 
 .play-v3 .capa-vecinos .vecinos-head {
   padding: 0 !important;
   text-align: center !important;
-}
-
-.play-v3 .capa-vecinos .ds-modal-tit {
-  width: 100% !important;
-  margin: 0 0 6px !important;
-  text-align: center !important;
-  font-family: Caveat, cursive !important;
-  font-size: 1.85rem !important;
-  font-weight: 700 !important;
-  font-style: italic !important;
-  color: var(--ds-ink, #3b3028) !important;
-  text-transform: uppercase !important;
-  letter-spacing: .4px !important;
-  line-height: 1.1 !important;
 }
 
 .play-v3 .capa-vecinos .vecinos-cuenta-wrap,

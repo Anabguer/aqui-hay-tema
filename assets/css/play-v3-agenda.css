@@ -1,4 +1,4 @@
-/** Agenda (10) */
+﻿/** Agenda (10) */
 
 .play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda,
 .play-v3 .play-root.phone[data-capa="agenda"] .capa-agenda {
@@ -26,19 +26,7 @@
 .play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda::after,
 .play-v3 .play-root.phone[data-capa="agenda"] .capa-agenda::after { display: none !important; }
 .play-v3 .capa-agenda > * { position: relative; z-index: 2; }
-.play-v3 .capa-agenda .ds-modal-close,
-.play-v3 .capa-agenda .cerrar {
-  position: absolute !important; top: 6px !important; right: 6px !important; z-index: 8 !important;
-  width: 40px !important; height: 40px !important;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: var(--ds-paper-card, #fffdf7) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
-  font: 800 17px/1 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
-  transform: rotate(2.5deg) !important; display: grid !important; place-items: center; padding: 0 !important;
-}
 .play-v3 .capa-agenda .ficha-tape, .play-v3 .capa-agenda .org-pin, .play-v3 .capa-agenda .agenda-pin, .play-v3 .capa-agenda .mis-pin, .play-v3 .capa-agenda .vecinos-pin { display: none !important; }
-.play-v3 .capa-agenda .agenda-cab { padding-right: 2.2rem; }
 .play-v3 .capa-agenda .ds-modal-icon { display: none !important; }
 .play-v3 .capa-agenda .agenda-cab::before { content: "Libreta de Celestine"; display: block; font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .5px; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin-bottom: 2px; }
 .play-v3 .capa-agenda .agenda-tit { font-family: Caveat, cursive !important; font-size: 1.75rem !important; margin-bottom: 2px !important; }

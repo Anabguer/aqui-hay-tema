@@ -7,7 +7,6 @@
   font-size: 1.55rem;
   font-weight: 700;
   margin: .35rem 0 1.1rem;
-  padding-right: 2.5rem;
   letter-spacing: .02em;
   color: #2c261f;
 }
@@ -403,32 +402,7 @@
 }
 
 /* === Modal completo (capa) === */
-.play-v3 .capa-buzon .mensajitos-cerrar {
-  position: absolute;
-  top: 1.65rem;
-  right: .85rem;
-  z-index: 6;
-  border: 0 !important;
-  background: transparent !important;
-  padding: 0;
-  font-family: Caveat, cursive;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: .02em;
-  text-transform: lowercase;
-  color: #6a5848;
-  cursor: pointer;
-  box-shadow: none;
-}
-
-.play-v3 .capa-buzon .mensajitos-cerrar:hover { color: #2c261f; }
 .play-v3 .capa-buzon .capa-cerrar-pestaÃƒÂ±a { display: none !important; }
-
-.play-v3 .capa-buzon .mensajitos-cab {
-  margin: 0 0 .55rem;
-  padding-top: .85rem;
-  padding-right: 2.5rem;
-}
 
 .play-v3 .capa-buzon .mensajitos-tit {
   margin: 0;
@@ -492,11 +466,10 @@
 
 .play-v3 .capa-buzon .mensajitos-cab {
   margin: 0 0 12px;
-  padding: 2.1rem 2rem 0 0;
+  padding: 0;
   position: relative;
   z-index: 3;
 }
-
 .play-v3 .capa-buzon .mensajitos-cab-row {
   display: flex;
   align-items: center;
@@ -816,11 +789,10 @@
 
 .play-v3 .capa-buzon .mensajitos-cab {
   margin: 0 0 12px;
-  padding: 2.1rem 2rem 0 0;
+  padding: 0;
   position: relative;
   z-index: 3;
 }
-
 .play-v3 .capa-buzon .mensajitos-cab-row {
   display: flex;
   align-items: center;

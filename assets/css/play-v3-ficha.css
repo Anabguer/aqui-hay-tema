@@ -1,4 +1,4 @@
-/** Ficha vecino (06) */
+ï»¿/** Ficha vecino (06) */
 
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha {
@@ -26,20 +26,7 @@
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha::after,
 .play-v3 .play-root.phone[data-capa="ficha"] .capa-ficha::after { display: none !important; }
 .play-v3 .capa-ficha > * { position: relative; z-index: 2; }
-.play-v3 .capa-ficha .ds-modal-close,
-.play-v3 .capa-ficha .cerrar {
-  position: absolute !important; top: 6px !important; right: 6px !important; z-index: 8 !important;
-  width: 40px !important; height: 40px !important;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: var(--ds-paper-card, #fffdf7) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.22) !important;
-  font: 800 17px/1 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
-  transform: rotate(2.5deg) !important; display: grid !important; place-items: center; padding: 0 !important;
-}
 .play-v3 .capa-ficha .ficha-tape, .play-v3 .capa-ficha .org-pin, .play-v3 .capa-ficha .agenda-pin, .play-v3 .capa-ficha .mis-pin, .play-v3 .capa-ficha .vecinos-pin { display: none !important; }
-.play-v3 .capa-ficha .ficha-top { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-right: 2.2rem; }
-.play-v3 .capa-ficha .ficha-volver { font: 700 .9375rem/1.2 Caveat, cursive; color: var(--ds-ink-soft, #594839); background: none; border: 0; padding: 0; cursor: pointer; }
 .play-v3 .capa-ficha .ficha-tit { margin: 0 auto !important; font-family: Caveat, cursive !important; font-size: 1.35rem !important; text-align: center; flex: 1; }
 .play-v3 .capa-ficha .ficha-body { display: block !important; flex: 1; min-height: 0; overflow-y: auto; overflow-x: clip; }
 .play-v3 .capa-ficha .ficha-col-perfil { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 10px; text-align: left; }
@@ -81,7 +68,7 @@
 .play-v3 .capa-ficha .ficha-rel-nom { font-family: Caveat, cursive; font-size: 1.05rem; flex: 1; }
 .play-v3 .capa-ficha .ficha-ver-mas { font: 700 .9375rem/1.2 Caveat, cursive; color: var(--ds-ink, #3b3028); background: none; border: 0; text-align: right; width: 100%; cursor: pointer; }
 .play-v3 .capa-ficha .ficha-planes:empty::after {
-  content: "Su agenda está sospechosamente tranquila."; display: block; padding: 12px; text-align: center;
+  content: "Su agenda estï¿½ sospechosamente tranquila."; display: block; padding: 12px; text-align: center;
   border: 2px dashed var(--ds-ink-soft, #594839); border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
   font-family: Caveat, cursive; font-size: 1.1rem; color: var(--ds-text-muted, #7a6a5c);
 }
@@ -211,7 +198,7 @@
 .play-v3 .ficha-diario-cat.pg-pill--mustard { background: var(--ds-mustard-soft, #f8efd4); border-color: #9a6a2e; color: #9a6a2e; }
 .play-v3 .ficha-diario-cat.pg-pill--lavender { background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a); color: var(--ds-lavender-deep, #7a6a9a); }
 .play-v3 .capa-ficha .ficha-planes:empty::after {
-  content: "Su agenda está sospechosamente tranquila.";
+  content: "Su agenda estï¿½ sospechosamente tranquila.";
 }
 
 
@@ -246,24 +233,12 @@
 }
 
 /* FICHA-HERO-MOCKUP-V1 */
-.play-v3 .capa-ficha .ficha-top {
-  display: block !important;
-  margin: 0 0 10px !important;
-  padding: 0 2.4rem 0 0 !important;
-}
 .play-v3 .capa-ficha .ficha-top-bar {
   display: grid !important;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
   gap: 6px;
   width: 100%;
-}
-.play-v3 .capa-ficha .ficha-volver {
-  justify-self: start;
-  font: 700 .78rem/1.2 Nunito, sans-serif !important;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: var(--ds-ink-soft, #594839) !important;
 }
 .play-v3 .capa-ficha .ficha-tit {
   justify-self: center;
@@ -597,7 +572,7 @@
   letter-spacing: .06em !important;
 }
 
-/* FICHA-HERO-MOCKUP-V2-PHONE — gana sobre play-v3-responsive.css */
+/* FICHA-HERO-MOCKUP-V2-PHONE ï¿½ gana sobre play-v3-responsive.css */
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
   background-image: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%) !important;
@@ -651,7 +626,7 @@
   font-size: 1.3rem !important;
 }
 
-/* FICHA-ANIMO-PILL-V3 — pastilla mockup + interrogante integrado */
+/* FICHA-ANIMO-PILL-V3 ï¿½ pastilla mockup + interrogante integrado */
 .play-v3 .capa-ficha .ficha-animo-row {
   margin-top: 10px !important;
 }
@@ -734,7 +709,7 @@
   font-size: 1.32rem !important;
 }
 
-/* FICHA-BG-MATCH-MODALES — mismo fondo que Vecinos / ds-modal-sheet */
+/* FICHA-BG-MATCH-MODALES ï¿½ mismo fondo que Vecinos / ds-modal-sheet */
 .play-v3 .play-root.pc[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
 .play-v3 .play-root.phone[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
@@ -772,7 +747,7 @@
   display: none !important;
 }
 
-/* FICHA-SCROLL-SIN-BARRA — scroll funcional, barra invisible */
+/* FICHA-SCROLL-SIN-BARRA ï¿½ scroll funcional, barra invisible */
 .play-v3 .capa-ficha .ficha-top,
 .play-v3 .capa-ficha .ficha-hero {
   flex-shrink: 0 !important;
@@ -842,7 +817,7 @@
   letter-spacing: .04em !important;
 }
 
-/* Ánimo más plano (mockup ENFADADO) */
+/* ï¿½nimo mï¿½s plano (mockup ENFADADO) */
 .play-v3 .capa-ficha .ficha-animo-pill {
   min-height: 34px !important;
   padding: 3px 7px 3px 4px !important;
@@ -930,7 +905,7 @@
   color: var(--ds-red-alert, #c42b4a) !important;
 }
 
-/* Próximos planes */
+/* Prï¿½ximos planes */
 .play-v3 .capa-ficha .ficha-seccion-planes .ficha-seccion-tit {
   background: var(--ds-coral-soft, #fde4dc) !important;
   border-color: #c96a52 !important;
@@ -975,7 +950,7 @@
   color: var(--ds-ink, #3b3028) !important;
 }
 
-/* Botón organizar + hint */
+/* Botï¿½n organizar + hint */
 .play-v3 .capa-ficha .ficha-btn-org {
   display: block !important;
   width: 100% !important;
@@ -1005,7 +980,7 @@
   margin-right: 4px !important;
 }
 
-/* FICHA-POLISH-V5 — ánimo neutro más fino + rasgos en rejilla pintada */
+/* FICHA-POLISH-V5 ï¿½ ï¿½nimo neutro mï¿½s fino + rasgos en rejilla pintada */
 .play-v3 .capa-ficha .ficha-animo-pill {
   display: inline-flex !important;
   align-items: center !important;
@@ -1133,7 +1108,7 @@
   opacity: 1 !important;
 }
 
-/* FICHA-POLISH-V6 — rasgos rosa compactos + más color en rótulos */
+/* FICHA-POLISH-V6 ï¿½ rasgos rosa compactos + mï¿½s color en rï¿½tulos */
 .play-v3 .capa-ficha .ficha-hero {
   margin-bottom: 2px !important;
 }
@@ -1149,13 +1124,13 @@
   margin-bottom: 6px !important;
 }
 
-/* Rótulo principal con más presencia */
+/* Rï¿½tulo principal con mï¿½s presencia */
 .play-v3 .capa-ficha .ficha-tit {
   color: var(--ds-pink-deep, #c85b78) !important;
   text-shadow: 0 1px 0 rgba(255, 255, 255, .65) !important;
 }
 
-/* Cinta de sección: rosa de la casa */
+/* Cinta de secciï¿½n: rosa de la casa */
 .play-v3 .capa-ficha .ficha-seccion-rasgos .ficha-seccion-tit {
   background: var(--ds-pink-soft, #fbe3ec) !important;
   border: 1.5px solid var(--ds-pink-deep, #c85b78) !important;
@@ -1208,7 +1183,7 @@
   font-size: 1rem !important;
 }
 
-/* FICHA-POLISH-V7 — margen rasgos, ánimo suave, relaciones mockup */
+/* FICHA-POLISH-V7 ï¿½ margen rasgos, ï¿½nimo suave, relaciones mockup */
 .play-v3 .capa-ficha .ficha-body {
   margin-top: 6px !important;
   padding-top: 8px !important;
@@ -1225,7 +1200,7 @@
   margin-bottom: 8px !important;
 }
 
-/* Ánimo: etiqueta suave (no pastilla gris tosca) */
+/* ï¿½nimo: etiqueta suave (no pastilla gris tosca) */
 .play-v3 .capa-ficha .ficha-animo-row {
   margin-top: 8px !important;
 }
@@ -1379,7 +1354,7 @@
   color: var(--ds-pink-deep, #c85b78) !important;
 }
 
-/* === DIARIO VECINO — modal independiente (mockup) === */
+/* === DIARIO VECINO ï¿½ modal independiente (mockup) === */
 .play-v3 .capa-ficha-diario {
   display: flex;
   flex-direction: column;
@@ -1567,7 +1542,7 @@
 }
 
 
-/* === DIARIO NARRATIVO v2 — lectura clara, menos cajas === */
+/* === DIARIO NARRATIVO v2 ï¿½ lectura clara, menos cajas === */
 .play-v3 .capa-ficha-diario .fdi-entrada {
   display: block;
   margin: 0 0 12px;
@@ -1668,7 +1643,7 @@
   }
 }
 
-/* === MODAL ÁNIMO — mockup (consecuencias reales) === */
+/* === MODAL ï¿½NIMO ï¿½ mockup (consecuencias reales) === */
 .play-v3 .capa-ficha .ficha-modal-animo {
   width: min(360px, 94%);
   max-height: 90%;
@@ -1780,7 +1755,7 @@
 }
 .play-v3 .animo-modal-hint .animo-hint-kw { text-decoration: underline wavy var(--ds-pink-deep, #c85b78); }
 
-/* FICHA-ANIMO-PILL-COMPACT — pastilla más baja */
+/* FICHA-ANIMO-PILL-COMPACT ï¿½ pastilla mï¿½s baja */
 .play-v3 .capa-ficha .ficha-animo-row {
   margin-top: 6px !important;
 }
@@ -1830,7 +1805,7 @@
   height: 18px !important;
 }
 
-/* FICHA-RASGOS-VCENTER — texto centrado en el cuadrado */
+/* FICHA-RASGOS-VCENTER ï¿½ texto centrado en el cuadrado */
 .play-v3 .capa-ficha .ficha-rasgo-tag {
   display: flex !important;
   align-items: center !important;
@@ -1886,7 +1861,7 @@
   display: none !important;
 }
 
-/* === FICHA: RASGOS + HOBBIES en fila (mitad/mitad) — solo layout, estética de tarjeta intacta === */
+/* === FICHA: RASGOS + HOBBIES en fila (mitad/mitad) ï¿½ solo layout, estï¿½tica de tarjeta intacta === */
 .play-v3 .capa-ficha .ficha-rasgos-hobbies {
   display: grid !important;
   grid-template-columns: 53fr 47fr !important;
@@ -1895,7 +1870,7 @@
   margin-top: 8px !important;
 }
 
-/* Título de RASGOS con el mismo tratamiento visual que el de HOBBIES (bloques equivalentes/paralelos) */
+/* Tï¿½tulo de RASGOS con el mismo tratamiento visual que el de HOBBIES (bloques equivalentes/paralelos) */
 .play-v3 .capa-ficha .ficha-seccion:has([data-ficha-rasgos]) .ficha-seccion-tit {
   background: var(--ds-lavender-soft, #ece6f8);
   border-color: var(--ds-lavender-deep, #7a6a9a);
@@ -1962,7 +1937,7 @@
   line-height: 1.15 !important;
 }
 
-/* Móvil estrecho: mismo concepto (2 columnas), solo se afinan tamaños */
+/* Mï¿½vil estrecho: mismo concepto (2 columnas), solo se afinan tamaï¿½os */
 @media (max-width: 360px) {
   .play-v3 .capa-ficha .ficha-rasgos-hobbies {
     gap: .45rem .5rem !important;
@@ -1997,7 +1972,7 @@
 }
 
 
-/* FICHA-ANIMO-CAPA-v136 — centrada como ficha vecino, mas compacta */
+/* FICHA-ANIMO-CAPA-v136 ï¿½ centrada como ficha vecino, mas compacta */
 .play-v3 .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo {
   position: absolute !important;
   left: 50% !important;

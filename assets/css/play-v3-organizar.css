@@ -1,4 +1,4 @@
-/* Nuevo Plan — rediseño móvil + desktop (v5) */
+﻿/* Nuevo Plan — rediseño móvil + desktop (v5) */
 
 .play-v3 .capa-organizar {
   counter-reset: org-step;
@@ -50,23 +50,10 @@
   display: none !important;
 }
 
-.play-v3 .capa-organizar .org-cerrar,
-.play-v3 .capa-organizar .ds-modal-close {
-  top: .55rem !important;
-  right: .55rem !important;
-  width: 2.25rem !important;
-  height: 2.25rem !important;
-  border-radius: 50% !important;
-  border: 1.5px solid rgba(44,38,31,.2) !important;
-  background: rgba(255,252,245,.95) !important;
-  font: 700 1rem/1 Nunito, sans-serif !important;
-  transform: none !important;
-}
-
 /* --- Header --- */
 .play-v3 .capa-organizar .org-top {
   text-align: center;
-  padding: 0 3rem .35rem;
+  padding: 0 0 .35rem;
   margin-bottom: .15rem;
 }
 
@@ -132,7 +119,9 @@
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: clip;
   padding: 0 .1rem .2rem;
+  max-width: 100%;
 }
 
 .play-v3 .capa-organizar .org-seccion {
