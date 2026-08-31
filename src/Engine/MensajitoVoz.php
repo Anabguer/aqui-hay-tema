@@ -289,7 +289,7 @@ final class MensajitoVoz
             '{otro} no está nada bien. ¿Podrías echarle un ojo?',
             'Celestine, algo le pasa a {otro}. No es el mismo de siempre.',
             'He visto a {otro} un poco bajoneado/a. ¿Tú sabes algo?',
-            'Oye, {otro}. {historial}, y ahora me preocupa.',
+            '¿Sabes de {otro}? {historial}, y me tiene preocupado/a.',
             'Me da vueltas lo de {otro}. {historial}, y últimamente no lo veo bien.',
         ];
     }
@@ -467,7 +467,7 @@ final class MensajitoVoz
             'Me gustaría conocer a {otro}. ¿Me lo presentas?',
             'He oído hablar de {otro} y me cae bien de lejos. ¿Puedes presentarnos?',
             'Celestine, ¿me conectas con {otro}? {historial}',
-            'No conozco a mucha gente… ¿me presentas a alguien? Tengo {texto} opciones en mente.',
+            '¿Me presentas a alguien? Tengo {texto} opciones en mente.',
         ];
     }
 
