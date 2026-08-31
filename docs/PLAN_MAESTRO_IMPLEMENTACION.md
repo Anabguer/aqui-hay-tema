@@ -1571,3 +1571,99 @@ Cuando llegue esta pieza, fases previstas:
 
 **IDEA FUTURA · INTERESANTE PERO FUTURA.** No bloquea ningún bloque funcional actual. Requiere que los sistemas de narrativa base (Cotilleos, Diario, Ánimo/Emociones) estén estabilizados y medidos en playtest antes de abordar la especialización de voces.
 
+---
+
+## 27. Reloj automático con partida abierta — investigación pendiente (2026-08-31)
+
+**Estado: BUG / INVESTIGACIÓN DE PLAYTEST PENDIENTE.** NO implementar, NO tocar código, NO hacer tests, NO mezclar con otros bloques, NO commit de código, NO push, NO deploy. Solo documentación.
+
+**Prioridad: ALTA** — afecta directamente a la percepción de que el pueblo está vivo mientras la partida permanece abierta.
+
+### 27.1 Contrato de producto
+
+Mientras una partida permanece ABIERTA, el tiempo del juego debe avanzar con el tiempo real según la equivalencia configurada (1 h real = 1 h juego). La UI debe reflejar el avance sin necesidad de cerrar, recargar, volver a entrar ni pulsar "Siguiente".
+
+**Criterio real de resolución:** con la partida abierta, el jugador debe ver el reloj avanzar correcto sin intervención manual. No basta con que el backend haya avanzado internamente.
+
+### 27.2 Caso real observado
+
+Neni dejó una ventana del juego abierta durante horas. Visualmente seguía viendo Día 1, la hora parecía no moverse y el reloj de pantalla no se actualizaba solo. Al pulsar manualmente "Siguiente" se produjo un salto grande de hora (~17 → ~23).
+
+**Hipótesis abiertas:**
+
+| ID | Hipótesis |
+|---|---|
+| A | El backend procesa tiempo real pero la UI abierta no refresca |
+| B | El tiempo solo se procesa cuando se produce una petición posterior |
+| C | Backend y UI divergen temporalmente |
+| D | "Siguiente" procesa además tiempo pendiente → salto |
+| E | Catch-up interviene con pestaña abierta cuando no debería |
+| F | Podría existir riesgo de doble procesamiento |
+
+### 27.3 Debug real disponible
+
+**Archivo:** Drive → Aqui Hay Tema → Debug → `AHT-debug-2026-08-31-152651.json`
+
+**Datos observados:**
+- Generado ~15:26 hora española.
+- Reloj exportado: Día 1, hora 16.
+- Catch-up registra 14.400 segundos procesados (= 4 horas).
+- `hora_antes = 10`, `hora_después = 14`.
+- 2 encuentros resueltos.
+- Quedan ~1.693 segundos pendientes.
+- Aparece `ejecutado: false` pese a existir horas procesadas.
+- Durante exportación de diagnóstico aparece `PARTIDA_NO_ENCONTRADA` en `partida.diagnostico_export`.
+
+### 27.4 Preguntas que la investigación debe responder
+
+1. ¿El tiempo real se procesa mientras la pestaña permanece abierta?
+2. Si no: ¿solo se procesa cuando se produce una petición posterior?
+3. ¿El backend avanza pero la UI no refresca?
+4. ¿UI y backend mantienen estados/relojes diferentes temporalmente?
+5. ¿"Siguiente" procesa además tiempo real pendiente y por eso puede saltar?
+6. ¿Catch-up está interviniendo con pestaña abierta cuando no debería?
+7. ¿Existe doble procesamiento de las mismas horas?
+8. ¿Qué significa exactamente `ejecutado:false`? ¿Es correcto semánticamente o refleja una inconsistencia de diagnóstico?
+9. ¿El 404 `PARTIDA_NO_ENCONTRADA` en `partida.diagnostico_export` es un bug independiente o está relacionado con el flujo de reloj?
+
+### 27.5 Prueba futura obligatoria
+
+Cuando esta pieza se abra en PlayTest, hacer prueba controlada con una partida conocida:
+
+| Paso | Acción |
+|---|---|
+| A | Abrir partida y no tocar nada |
+| B | Mantenerla abierta suficiente tiempo (o simular paso seguro de tiempo real) |
+| C | Sin recargar: comprobar si la hora visible cambia |
+| D | Consultar estado backend real y comparar con la UI |
+| E | Realizar después una acción manual y comprobar si aparece salto |
+| F | Repetir cerrando/reabriendo y comparar con catch-up |
+| G | Verificar que ninguna hora se procesa dos veces |
+
+No es obligatorio esperar horas reales si puede simularse de forma segura sin alterar la lógica que queremos validar.
+
+### 27.6 Entrega futura de investigación
+
+La investigación deberá devolver:
+- Causa raíz.
+- Comportamiento actual con pestaña abierta.
+- Comportamiento al volver a entrar.
+- Comportamiento al pulsar Siguiente.
+- Divergencia backend/UI.
+- Interpretación completa del debug.
+- Significado de `ejecutado:false`.
+- Explicación del 404.
+- Archivos y funciones implicados.
+- Propuesta mínima de corrección si existe bug.
+- Si hace falta, añadir test permanente a la batería de PlayTest para evitar regresiones.
+
+### 27.7 Protecciones
+
+**NO cambiar:** balance, pacing, romance, autonomía, población, Diario, Cotilleos, Mensajitos ni otras mecánicas. Esta pieza debe investigarse AISLADA.
+
+### 27.8 Clasificación
+
+**BUG / INVESTIGACIÓN DE PLAYTEST PENDIENTE.** Prioridad ALTA. No marcar como resuelto solo porque backend procese tiempo. Criterio real de resolución: la UI abierta debe mostrar el avance temporal correcto sin intervención manual del jugador.
+
+**No implementar mientras estemos en la cola actual de playtest funcional.** Investigación aislada, sin mezclar con otros bloques.
+
