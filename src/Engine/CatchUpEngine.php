@@ -197,7 +197,7 @@ final class CatchUpEngine
             }
 
             $diaAntes = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
-            $r = $relojOps->avanzar($partida, $chunk, ['catch_up' => true]);
+            $r = $relojOps->avanzarPasoAPaso($partida, $chunk);
             $diaDespues = (int) ($partida['reloj']['dia_pueblo'] ?? $diaAntes);
             if ($diaDespues > $diaAntes) {
                 $stats['dias_cruzados'] += ($diaDespues - $diaAntes);

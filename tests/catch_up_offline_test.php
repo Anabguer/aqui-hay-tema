@@ -178,14 +178,14 @@ foreach ($loaded['vida_pueblo']['ledger'] ?? [] as $e) {
 }
 ok($deltaIgn === -2, 'lifecycle: un -2 por 1d ausencia');
 
-// --- ausencia larga no timeout (cap 90d procesa en <5s) ---
+// --- ausencia larga no timeout (cap 90d, paso a paso ~2160 ticks, <120s) ---
 [$pL] = partidaCatchUp('cu-long');
 $ahoraL = new \DateTimeImmutable('2026-08-20 12:00:00', new \DateTimeZone('UTC'));
 $pL['reloj']['ultimo_catch_up_iso'] = $ahoraL->sub(new \DateInterval('P120D'))->format(DATE_ATOM);
 $t0 = microtime(true);
 CatchUpEngine::ejecutarAlCargar($pL, $root, $cal, null, null, $ahoraL);
 $elapsed = microtime(true) - $t0;
-ok($elapsed < 30.0, 'ausencia 120d real cap 90d: sin timeout (' . round($elapsed, 2) . 's)');
+ok($elapsed < 120.0, 'ausencia 120d real cap 90d: sin timeout (' . round($elapsed, 2) . 's)');
 ok((int) ($pL['reloj']['catch_up_pendiente']['horas_juego_avanzadas'] ?? 0) === 90 * 24, 'cap técnico 90d');
 
 // --- flag apagado: solo plan ---
