@@ -444,8 +444,8 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.game-shell) .play-root.pc .capa,
-  .play-v3:has(.game-shell) .play-root.pc .capa.ds-modal-sheet {
+  .play-v3:has(.game-shell) .play-root.pc .capa:not(.ds-migrada),
+  .play-v3:has(.game-shell) .play-root.pc .capa.ds-modal-sheet:not(.ds-migrada) {
     position: absolute !important;
   }
 

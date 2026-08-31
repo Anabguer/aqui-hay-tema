@@ -184,8 +184,8 @@
 }
 
 /* CERRAR-X-FICHA-TODAS-CAPAS */
-.play-v3 .capa > .cerrar.ds-modal-close,
-.play-v3 .capa .cerrar.ds-modal-close {
+.play-v3 .capa:not(.ds-migrada) > .cerrar.ds-modal-close,
+.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close {
   position: absolute !important;
   top: 6px !important;
   right: 6px !important;
@@ -214,8 +214,8 @@
   place-items: center !important;
   cursor: pointer;
 }
-.play-v3 .capa > .cerrar.ds-modal-close::before,
-.play-v3 .capa .cerrar.ds-modal-close::before {
+.play-v3 .capa:not(.ds-migrada) > .cerrar.ds-modal-close::before,
+.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close::before {
   display: none !important;
   content: none !important;
 }

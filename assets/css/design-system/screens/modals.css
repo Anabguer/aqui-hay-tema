@@ -1,7 +1,7 @@
 ﻿/* DS V3.1 — Cabeceras de modales (X estandar + titulo manuscrito) */
 
-.play-v3 .capa > .cerrar.ds-modal-close,
-.play-v3 .capa .cerrar.ds-modal-close {
+.play-v3 .capa:not(.ds-migrada) > .cerrar.ds-modal-close,
+.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close {
   position: absolute;
   top: 6px;
   right: 6px;
@@ -173,7 +173,7 @@
 }
 .play-v3 .ds-pill:empty { display: none; }
 
-.play-v3 .capa.ds-modal-sheet:not(.capa-buzon) {
+.play-v3 .capa.ds-modal-sheet:not(.capa-buzon):not(.ds-migrada) {
   border: 2.5px solid var(--ds-ink, #3b3028) !important;
   border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
   box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14) !important;
@@ -181,7 +181,7 @@
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .55), rgba(255, 255, 255, 0) 58%),
     var(--ds-paper-modal, #fffaf0) !important;
 }
-.play-v3 .capa.ds-modal-sheet:not(.capa-buzon)::before {
+.play-v3 .capa.ds-modal-sheet:not(.capa-buzon):not(.ds-migrada)::before {
   content: "";
   position: absolute;
   inset: 5px;

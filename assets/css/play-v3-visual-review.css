@@ -60,7 +60,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-diario.coti-modal-papel::before,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones:not(.ds-migrada)::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-vida-pueblo::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ajustes::before {
@@ -147,8 +147,8 @@
   -webkit-overflow-scrolling: touch;
 }
 
-.play-v3 .capa > .cerrar:not(.tut-skip),
-.play-v3 .capa .cerrar.ds-modal-close,
+.play-v3 .capa:not(.ds-migrada) > .cerrar:not(.tut-skip),
+.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close,
 .play-v3 .capa-inventario > .inv-cerrar,
 .play-v3 .capa-buzon > .mensajitos-cerrar {
   position: absolute !important;
@@ -180,8 +180,8 @@
   cursor: pointer;
 }
 
-.play-v3 .capa > .cerrar:not(.tut-skip)::before,
-.play-v3 .capa .cerrar.ds-modal-close::before,
+.play-v3 .capa:not(.ds-migrada) > .cerrar:not(.tut-skip)::before,
+.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close::before,
 .play-v3 .capa-inventario > .inv-cerrar::before,
 .play-v3 .capa-buzon > .mensajitos-cerrar::before {
   display: none !important;
@@ -201,7 +201,7 @@
   .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel,
-  .play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones:not(.ds-migrada),
   .play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
   .play-v3 .play-root.pc .capa-ficha .ficha-modal-animo {

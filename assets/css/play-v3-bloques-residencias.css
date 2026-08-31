@@ -3681,15 +3681,7 @@
   filter: brightness(1.03);
 }
 
-@media (max-width: 560px) {
-  .play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones.mis-modal-papel {
-    left: 50% !important;
-    top: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: min(96vw, 96vw) !important;
-    max-width: 96vw !important;
-  }
-}
+/* Phone centering for .mis-modal-papel moved to design-system/modal-core.css via .ds-migrada */
 
 /* Aro emocional en modal Vecinos del pueblo (igual que cara-token del mapa) */
 .play-v3 .capa-vecinos .vecino-cara {

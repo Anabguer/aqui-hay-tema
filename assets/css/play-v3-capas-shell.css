@@ -1,6 +1,6 @@
 ﻿/* Capas libreta — apertura lateral, sin modal web */
 
-.play-v3 .play-root.pc .capa {
+.play-v3 .play-root.pc .capa:not(.ds-migrada) {
   top: 0;
   bottom: 0;
   width: min(420px, 46%);
@@ -36,7 +36,6 @@
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
 .play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon,
 .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones,
 .play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda,
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3 .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
@@ -47,6 +46,11 @@
 .play-v3 .play-root.pc[data-capa="diario"] .capa-diario {
   visibility: visible;
   transform: translateX(0);
+  pointer-events: auto;
+}
+/* ds-migrada: visibility + pointer-events handled by modal-core; transform by modal-core */
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.ds-migrada {
+  visibility: visible;
   pointer-events: auto;
 }
 
