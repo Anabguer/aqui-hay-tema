@@ -164,6 +164,20 @@ final class CotilleoAutonomoCadencia
                 continue;
             }
             $msg = is_array($c['mensaje'] ?? null) ? $c['mensaje'] : [];
+            $encId = (string) ($c['encuentro_id'] ?? '');
+            $encData = null;
+            foreach ($partida['encuentros'] ?? [] as $e) {
+                if (is_array($e) && (string) ($e['id'] ?? '') === $encId) {
+                    $encData = $e;
+                    break;
+                }
+            }
+            if ($encData !== null) {
+                $enriched = EncuentroCotilleoCopy::mensajeAutonomoEnriquecido($partida, $encData);
+                if ($enriched !== null && $enriched !== '') {
+                    $msg['texto'] = $enriched;
+                }
+            }
             $msg['id'] = 'msg_auto_' . $eid;
             $r = BuzonEngine::crear($partida, $msg);
             DiarioNarrativaBridge::mirrorCotilleoBuzon($partida, $r);

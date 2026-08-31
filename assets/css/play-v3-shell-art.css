@@ -943,7 +943,7 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 .corazon-org .corazon-bg { fill: #fceef0; }
 
-.corazon-org .corazon-fill-path { fill: url(#corazon-agua-grad); }
+.corazon-org .corazon-fill-path { /* fill via inline SVG attribute — IDs differ mob/desk */ }
 
 .corazon-org .corazon-stroke {
 

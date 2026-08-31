@@ -111,7 +111,16 @@ ok(str_contains($textoAuto, 'Cine') || str_contains($textoAuto, 'cine'), 'autón
 ok(
     str_contains($textoAuto, 'por su cuenta')
     || str_contains($textoAuto, 'despejarse')
-    || str_contains($textoAuto, 'No haremos preguntas'),
+    || str_contains($textoAuto, 'No haremos preguntas')
+    || str_contains($textoAuto, 'por la mañana')
+    || str_contains($textoAuto, 'por la tarde')
+    || str_contains($textoAuto, 'por la noche')
+    || str_contains($textoAuto, 'necesitaba')
+    || str_contains($textoAuto, 'repite plan')
+    || str_contains($textoAuto, 'ha decidido')
+    || str_contains($textoAuto, 'ha salido')
+    || str_contains($textoAuto, 'ha animado')
+    || str_contains($textoAuto, 'ha necesitado'),
     'autónomo copy reconocible'
 );
 $copyDirect = EncuentroCotilleoCopy::mensajeAutonomo($partida2, $partida2['encuentros'][0], $service2->getCatalog(), $root);

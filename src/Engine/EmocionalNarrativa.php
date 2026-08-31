@@ -409,7 +409,7 @@ final class EmocionalNarrativa
                 if ($nomQ === '') {
                     $nomQ = 'alguien';
                 }
-                return $nombre . ' está desanimad' . $oA . ': ' . $nomQ . ' le ha dicho que no demasiadas veces.';
+                return $nombre . ' y ' . $nomQ . ' no parecen congeniar últimamente.';
             case 'encuentro':
             case 'encuentro_intervencion':
                 $res = (string) ($contexto['resultado_experiencia'] ?? '');

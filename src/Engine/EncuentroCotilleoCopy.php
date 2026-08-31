@@ -244,6 +244,62 @@ final class EncuentroCotilleoCopy
 
     }
 
+    /**
+     * Copy enriquecido post-selección: añade momento del día y contexto emocional observable.
+     */
+    public static function mensajeAutonomoEnriquecido(
+        array $partida,
+        array $enc,
+        ?Catalog $catalog = null,
+        ?string $projectRoot = null
+    ): ?string {
+        $participantes = is_array($enc['participantes'] ?? null) ? $enc['participantes'] : [];
+        if (count($participantes) !== 1) {
+            return null;
+        }
+        $rid = (string) $participantes[0];
+        $nombre = IdentidadPublica::nombre($partida, $rid);
+        if ($nombre === '') {
+            return null;
+        }
+        $root = $projectRoot ?? ($catalog !== null ? $catalog->getRoot() : dirname(__DIR__, 2));
+        if ($catalog === null) {
+            $catalog = new Catalog($root);
+        }
+        $lugarId = (string) ($enc['lugar'] ?? $enc['lugar_id'] ?? '');
+        $lugar = $lugarId !== '' ? EtiquetaFicha::lugar($lugarId, $catalog->store()) : '';
+        $lugarTxt = $lugar !== '' ? ' ' . self::prepLugar($lugarId, $lugar) : '';
+        $hora = (int) ($enc['hora'] ?? $enc['hora_inicio'] ?? 12);
+        $momento = self::momentoDia($hora);
+        $emo = (string) ($partida['residentes'][$rid]['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);
+        $emo = EstadoEmocional::canonId($emo);
+        $rutinario = CotilleoAutonomoCadencia::esLugarRutinarioPublico($partida, $rid, $lugarId);
+        $g = (string) ($partida['residentes'][$rid]['identidad_publica']['genero'] ?? '');
+        $oA = $g === 'mujer' ? 'a' : 'o';
+
+        $variantes = [];
+        if ($emo === 'triste') {
+            $variantes[] = $nombre . ' ha necesitado aire fresco y se ha ido' . $lugarTxt . $momento . '.';
+            $variantes[] = $nombre . ' ha salido' . $lugarTxt . $momento . '. Se le nota.';
+        } elseif ($emo === 'enfadado') {
+            $variantes[] = $nombre . ' ha salido' . $lugarTxt . $momento . ' a despejarse.';
+            $variantes[] = $nombre . ' ha necesitado aire fresco' . $lugarTxt . $momento . '.';
+        } elseif ($emo === 'alegre') {
+            $variantes[] = $nombre . ' se ha animado y se ha ido' . $lugarTxt . $momento . '.';
+            $variantes[] = $nombre . ' ha salido' . $lugarTxt . $momento . '.';
+        } else {
+            $variantes[] = $nombre . ' se ha ido' . $lugarTxt . $momento . '.';
+            $variantes[] = $nombre . ' ha pasado' . $lugarTxt . $momento . '.';
+        }
+        if ($rutinario && $lugar !== '') {
+            $variantes[] = $nombre . ' repite plan:' . $lugarTxt . $momento . '.';
+        }
+
+        $idx = abs(crc32($rid . $lugarId . $hora)) % count($variantes);
+        return $variantes[$idx];
+
+    }
+
 
 
     /**
