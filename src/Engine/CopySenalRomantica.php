@@ -11,7 +11,7 @@ final class CopySenalRomantica
      */
     private const FLECHAZO = [
         '%s acaba de mirar a %s de ESA manera. Tú no has visto nada. Bueno, sí.',
-        'Algo se le ha encendido a %s con %s. Celestine, toma nota.',
+        'Algo se le ha encendido a %s con %s. Esto ya es otra cosa.',
         'A %s se le ha ido la pinza un poco con %s. Aquí hay tema.',
     ];
 
@@ -31,7 +31,7 @@ final class CopySenalRomantica
     private const FLECHAZO_HIST = [
         'Algo se le encendió a %s con %s más temprano.',
         '%s miró a %s de ESA manera hace un rato. Tú no viste nada. Bueno, sí.',
-        'A %s ya le ha empezado a interesar %s. Aquí hay tema.',
+        'A %s se le nota elrollo con %s. Algo ha cambiado.',
     ];
 
     /**
@@ -39,7 +39,7 @@ final class CopySenalRomantica
      */
     private const TILIN_HIST = [
         'Desde hace un rato a %s le da vueltas %s.',
-        'Por lo visto a %s le ha empezado a interesar %s.',
+        'Por lo visto %s no para de pensar en %s.',
         '%s lleva un rato demasiado pendiente de %s. Aquí hay tema.',
     ];
 

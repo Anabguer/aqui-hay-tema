@@ -218,7 +218,7 @@ final class EncuentroCotilleoCopy
 
         if ($emo === EstadoEmocional::NEUTRO && !$rutinario && $lugar !== '') {
 
-            return $nombre . ' ha decidido que hoy necesitaba ' . $lugar . '. No haremos preguntas.';
+            return $nombre . ' ha decidido que hoy necesitaba ' . $lugar . '. Algo habrá sido.';
 
         }
 

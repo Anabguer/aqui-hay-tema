@@ -31,19 +31,19 @@ final class DiarioVista
 
     /** @var array<string, string> */
     private const TITULOS_TIPO = [
-        'cotilleo' => 'Se vieron',
-        'cotilleo_hito' => 'Algo entre vecinos',
-        'cotilleo_patron' => 'Coincidencia en el pueblo',
-        'cotilleo_autonomo' => 'En el pueblo',
+        'cotilleo' => 'Nos vimos',
+        'cotilleo_hito' => 'Algo con vecinos',
+        'cotilleo_patron' => 'Otra coincidencia',
+        'cotilleo_autonomo' => 'Pasó algo',
         'cotilleo_casual_descubrimiento' => 'Descubrimiento',
-        'estado_emocional' => 'Cambió de ánimo',
-        'llegada_pueblo' => 'Llegó al pueblo',
+        'estado_emocional' => 'Mi ánimo cambió',
+        'llegada_pueblo' => 'Llegué al pueblo',
         'llegada_bienvenida' => 'Bienvenida al pueblo',
-        'marcha_publica' => 'Se marchó',
+        'marcha_publica' => 'Me marché',
         'discusion' => 'Discusión',
         'senal_romantica' => 'Señal romántica',
-        'acontecimiento_perder_trabajo' => 'Perdió el trabajo',
-        'acontecimiento_encontrar_trabajo' => 'Encontró trabajo',
+        'acontecimiento_perder_trabajo' => 'Me quedé sin trabajo',
+        'acontecimiento_encontrar_trabajo' => 'Encontré trabajo',
     ];
 
     /**

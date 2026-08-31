@@ -338,8 +338,14 @@ ok(cumpleContrato($msgQ, ['de_persona' => $ridM]) && ($msgQ['tipo'] ?? '') === '
 MarchaEngine::forzarIntencionDev($pm, $ridM, MarchaEngine::CAUSA_CRISIS);
 $rD = MarchaEngine::dejarIr($pm, $root, null, null);
 ok(!empty($rD['ok']), 'dejarIr ok');
-$msgPub = ultimoMsg($pm);
-ok(($msgPub['clasificacion'] ?? '') === BuzonEngine::COTILLEO && ($msgPub['canal'] ?? '') === BuzonEngine::CANAL_COTILLEO, 'marcha efectiva = canal COTILLEO (separación respetada)');
+$msgPub = null;
+for ($i = count($pm['buzon']) - 1; $i >= 0; $i--) {
+    if (($pm['buzon'][$i]['tipo'] ?? '') === 'marcha_publica') {
+        $msgPub = $pm['buzon'][$i];
+        break;
+    }
+}
+ok($msgPub !== null && ($msgPub['clasificacion'] ?? '') === BuzonEngine::COTILLEO && ($msgPub['canal'] ?? '') === BuzonEngine::CANAL_COTILLEO, 'marcha efectiva = canal COTILLEO (separación respetada)');
 
 echo "\n== 10) Candidato integrado: oferta firmada + remitente visible en UI ==\n";
 [, $pc] = partidaJuegoV1($root, 'voz-cand-0');

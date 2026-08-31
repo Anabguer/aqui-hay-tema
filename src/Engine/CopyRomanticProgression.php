@@ -27,14 +27,14 @@ final class CopyRomanticProgression
             'Entre %s y %s hay algo que no es solo amistad. Todo el mundo lo ve.',
         ],
         RomanticProgression::SENAL_CITA => [
-            'Primera cita entre %s. Esto ya es otra cosa.',
-            '%s han quedado fuera del edificio con intención. El pueblo suspira.',
-            'Algo se mueve entre %s. Y no es el viento.',
+            'Primera cita entre %s y %s. Esto ya es otra cosa.',
+            '%s y %s han quedado fuera del edificio con intención. El pueblo suspira.',
+            'Algo se mueve entre %s y %s. Y no es el viento.',
         ],
         RomanticProgression::SENAL_PRE_PAREJA => [
-            'Oficial: %s ya son pareja. El secreto mejor guardado del pueblo dura poco.',
-            '%s han decidido dar el paso. El pueblo lo celebraba.',
-            'Lo de %s por fin tiene nombre. Son pareja.',
+            'Oficial: %s y %s ya son pareja. El secreto mejor guardado del pueblo dura poco.',
+            '%s y %s han decidido dar el paso. El pueblo lo celebraba.',
+            'Lo de %s y %s por fin tiene nombre. Son pareja.',
         ],
     ];
 
@@ -74,7 +74,7 @@ final class CopyRomanticProgression
     /** @var list<string> */
     private const FICHA_PISTA_MUTUO = [
         'Los dos se buscan. No es casualidad.',
-        'Hay química entre %s. Y los dos lo saben.',
+        'Hay química entre %s y %s. Y los dos lo saben.',
         'El pueblo entero lo ve menos ellos.',
     ];
 
@@ -115,7 +115,7 @@ final class CopyRomanticProgression
         }
         $idx = abs(crc32($nombreYo . '>' . $nombreOtro . '|ficha')) % count($pool);
 
-        return sprintf($pool[$idx], $nombreOtro);
+        return sprintf($pool[$idx], $nombreOtro, $nombreYo);
     }
 
     /**

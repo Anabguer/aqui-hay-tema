@@ -76,7 +76,7 @@ final class EmocionalNarrativa
                 break;
 
             case 'perder_trabajo':
-                $explicacion = 'Le han soltado del trabajo. Anda con la moral por los suelos y mucho tiempo libre entre manos.';
+                $explicacion = 'Le han soltado del trabajo. Anda con la moral por los suelos.';
                 $diarioEventoId = self::eventoDiarioDeTrabajo($partida, $residenteId, 'perder', $estado);
                 break;
 
