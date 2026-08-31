@@ -10,7 +10,7 @@ final class CopySenalRomantica
      * @var list<string>
      */
     private const FLECHAZO = [
-        '%s acaba de mirar a %s de ESA manera. Tú no has visto nada. Bueno, sí.',
+        '%s acaba de mirar a %s de ESA manera. Disimular, lo que se dice disimular, poco.',
         'Algo se le ha encendido a %s con %s. Esto ya es otra cosa.',
         'A %s se le ha ido la pinza un poco con %s. Aquí hay tema.',
     ];
@@ -30,8 +30,8 @@ final class CopySenalRomantica
      */
     private const FLECHAZO_HIST = [
         'Algo se le encendió a %s con %s más temprano.',
-        '%s miró a %s de ESA manera hace un rato. Tú no viste nada. Bueno, sí.',
-        'A %s se le nota elrollo con %s. Algo ha cambiado.',
+        '%s miró a %s de ESA manera hace un rato. Que no se ha enterado nadie, eso no.',
+        'A %s se le nota el rollo con %s. Algo ha cambiado.',
     ];
 
     /**
