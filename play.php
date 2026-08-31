@@ -26,6 +26,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <meta name="aht-ui" content="v3"/>
   <title>Aquí Hay Tema</title>
   <link rel="manifest" href="<?= htmlspecialchars($ahtPwaBase, ENT_QUOTES, 'UTF-8') ?>manifest.webmanifest"/>
+  <link rel="icon" href="assets/brand/favicon-heart.svg" type="image/svg+xml"/>
   <link rel="icon" href="assets/brand/pwa-icon-192.png" type="image/png" sizes="192x192"/>
   <link rel="apple-touch-icon" href="assets/brand/logo-aht.png"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>

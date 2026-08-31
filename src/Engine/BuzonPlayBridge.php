@@ -185,6 +185,15 @@ final class BuzonPlayBridge
             }
             $desde = $envelope['desde'] ?? null;
             $hacia = $envelope['hacia'] ?? null;
+            $motivo = (string) ($envelope['motivo'] ?? '');
+            $esObservable = in_array($motivo, ['cita_aceptada', 'cita_compartida', 'flechazo_mutuo', 'plan_repetido'], true);
+            if (!$esObservable && $desde !== null && $hacia !== null) {
+                $nDesde = self::nombreDe($partida, (string) $desde);
+                $nHacia = self::nombreDe($partida, (string) $hacia);
+                if ($nDesde !== '' && $nHacia !== '') {
+                    $texto = "{$nDesde} y {$nHacia} parecen llevarse bien últimamente.";
+                }
+            }
             $ts = is_array($envelope['ts_juego'] ?? null) ? $envelope['ts_juego'] : [];
             if ($ts === []) {
                 $reloj = $partida['reloj'] ?? [];
@@ -310,13 +319,23 @@ final class BuzonPlayBridge
         if ($partes === [] && is_array($envelope['actores'] ?? null)) {
             $partes = $envelope['actores'];
         }
+
+        $actoresIds = self::idsDe($partes);
+        $resultadoEnc = (string) ($res['global'] ?? ($enc['resultado']['global'] ?? ''));
+        $eval = CotilleoMemoria::evaluar($partida, $actoresIds, $resultadoEnc);
+        if (!$eval['deberia_publicar']) {
+            return null;
+        }
+        $texto = self::aplicarSemantica($texto, $eval['semantica']);
+        CotilleoMemoria::registrar($partida, $actoresIds, 'encuentro', $resultadoEnc);
+
         $lugar = $enc['lugar'] ?? $enc['lugar_id'] ?? $envelope['lugar'] ?? $envelope['lugar_id'] ?? null;
         return [
             'clasificacion' => BuzonEngine::COTILLEO,
             'tipo' => 'cotilleo',
             'texto' => $texto,
             'cotilleo_meta' => is_array($cotilleoMeta) ? $cotilleoMeta : CotilleoCategoria::meta(CotilleoCategoria::ENCUENTRO, false),
-            'actores' => self::idsDe($partes),
+            'actores' => $actoresIds,
             'lugar_id' => is_string($lugar) && $lugar !== '' ? $lugar : null,
             'origen' => [
                 'evento_id' => $enc['id'] ?? null,
@@ -332,6 +351,13 @@ final class BuzonPlayBridge
      * @param array $raw
      * @return list<string>
      */
+    private static function nombreDe(array $partida, string $id): string
+    {
+        return (string) ($partida['residentes'][$id]['identidad_publica']['nombre']
+            ?? $partida['residentes'][$id]['nombre']
+            ?? '');
+    }
+
     private static function idsDe(array $raw): array
     {
         $ids = [];
@@ -341,6 +367,42 @@ final class BuzonPlayBridge
             }
         }
         return array_values(array_unique($ids));
+    }
+
+    private static function aplicarSemantica(string $texto, string $semantica): string
+    {
+        if ($semantica === 'primera_vez') {
+            return $texto;
+        }
+        $reemplazos = [
+            'han pasado el rato' => 'vuelven a verse',
+            'han coincidido' => 'vuelven a coincidir',
+            'han quedado' => 'vuelven a quedar',
+            'han pasado la tarde' => 'otra vez juntos',
+            'han pasado la mañana' => 'otra vez juntos',
+        ];
+        if ($semantica === 'repeticion') {
+            foreach ($reemplazos as $busca => $sust) {
+                if (str_contains($texto, $busca)) {
+                    return str_replace($busca, $sust, $texto);
+                }
+            }
+        }
+        if ($semantica === 'patron') {
+            $reemplazosPatron = [
+                'han pasado el rato' => 'esto ya empieza a ser costumbre entre',
+                'han coincidido' => 'ya no es casualidad:',
+                'han quedado' => 'ya se buscan:',
+                'han pasado la tarde' => 'parece que se buscan:',
+                'han pasado la mañana' => 'parece que se buscan:',
+            ];
+            foreach ($reemplazosPatron as $busca => $sust) {
+                if (str_contains($texto, $busca)) {
+                    return str_replace($busca, $sust, $texto);
+                }
+            }
+        }
+        return $texto;
     }
 
     /**

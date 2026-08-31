@@ -95,7 +95,7 @@ final class RelacionNarrativaBridge
                     $seed . '|' . $dir['desde'] . '>' . $dir['hacia']
                 );
                 if ($texto === '') {
-                    $texto = $desde . ' últimamente se fija bastante en ' . $hacia . '…';
+                    $texto = $desde . ' últimamente anda muy pendiente de ' . $hacia . '.';
                 }
                 return [
                     'texto' => $texto,
