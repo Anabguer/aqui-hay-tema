@@ -4581,12 +4581,16 @@
     try {
       var r = await api('reloj.sincronizar', {});
       if (!r.ok) return;
-      if (cacheEstado) {
-        cacheEstado.reloj = r.reloj || cacheEstado.reloj;
-        cacheEstado.reloj_vista = r.reloj_vista || cacheEstado.reloj_vista;
-        cacheEstado.reloj_texto = r.reloj_texto || cacheEstado.reloj_texto;
+      if (r.hay_cambios_visibles) {
+        await refresh();
+      } else {
+        if (cacheEstado) {
+          cacheEstado.reloj = r.reloj || cacheEstado.reloj;
+          cacheEstado.reloj_vista = r.reloj_vista || cacheEstado.reloj_vista;
+          cacheEstado.reloj_texto = r.reloj_texto || cacheEstado.reloj_texto;
+        }
+        renderClockOnly(r.reloj_vista, r.reloj);
       }
-      renderClockOnly(r.reloj_vista, r.reloj);
       if (isDebugOn()) {
         var tm = $('[data-taller-msg]');
         if (tm) tm.textContent = r.reloj_texto || '';

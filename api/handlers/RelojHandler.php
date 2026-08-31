@@ -64,7 +64,8 @@ final class RelojHandler
 
     /**
      * Sincronización ligera: procesa tiempo real pendiente (catch-up) sin avance manual.
-     * Devuelve el reloj canónico actualizado. Ideal para heartbeat periódico.
+     * Devuelve el reloj canónico actualizado + flag de cambios visibles.
+     * Ideal para heartbeat periódico.
      *
      * NOTA: requirePartida() en la ruta ya ejecuta cargar() → CatchUpEngine::ejecutarAlCargar()
      * antes de llegar aquí. Solo reportamos el estado resultante.
@@ -72,20 +73,27 @@ final class RelojHandler
     public static function sincronizar(ApiContext $ctx, array $body, array &$partida): array
     {
         $cu = $partida['reloj']['catch_up_pendiente'] ?? [];
+        $horasProcesadas = (int) ($cu['horas_juego_avanzadas'] ?? 0);
+        $ejecutado = !empty($cu['ejecutado']);
+        $hayCambiosVisibles = $ejecutado && $horasProcesadas > 0;
         savePartida($ctx, $partida);
         return withLabAudit([
             'ok' => true,
             'reloj' => $partida['reloj'],
             'reloj_vista' => Reloj::vista($partida['reloj']),
             'reloj_texto' => Reloj::formatear($partida['reloj']),
+            'hay_cambios_visibles' => $hayCambiosVisibles,
             'catch_up' => [
-                'ejecutado' => !empty($cu['ejecutado']),
-                'horas_procesadas' => (int) ($cu['horas_juego_avanzadas'] ?? 0),
+                'ejecutado' => $ejecutado,
+                'horas_procesadas' => $horasProcesadas,
                 'segundos_pendientes' => (int) ($cu['segundos_pendientes'] ?? 0),
                 'hora_antes' => isset($cu['hora_antes']) ? (int) $cu['hora_antes'] : null,
                 'hora_despues' => isset($cu['hora_despues']) ? (int) $cu['hora_despues'] : null,
                 'dia_antes' => isset($cu['dia_antes']) ? (int) $cu['dia_antes'] : null,
                 'dia_despues' => isset($cu['dia_despues']) ? (int) $cu['dia_despues'] : null,
+                'encuentros_offline' => (int) ($cu['encuentros_offline'] ?? 0),
+                'eventos_offline' => (int) ($cu['eventos_offline'] ?? 0),
+                'salidas_offline' => (int) ($cu['salidas_offline'] ?? 0),
             ],
         ]);
     }
