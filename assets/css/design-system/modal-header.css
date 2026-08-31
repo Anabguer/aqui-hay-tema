@@ -1,0 +1,112 @@
+/* MODAL-HEADER — cabecera canónica de modales AHT
+   Título, X, Volver, subtítulo, decoración.
+   Una sola fuente de verdad para TODAS las cabeceras de modales del juego. */
+
+/* === Título — Family A scale (Buzón, Vecinos, Ficha, Organizar, Agenda) === */
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit,
+.play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-agenda .agenda-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-misiones .mis-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-vida-pueblo .vida-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-parejas .par-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-inventario .inv-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa-ajustes .ds-modal-tit {
+  font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive);
+  font-size: var(--modal-title-size, 1.75rem);
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  transform: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  text-shadow: none;
+  display: block;
+}
+
+/* === Title size mobile override === */
+@media (max-width: 520px) {
+  .play-v3:has(.game-shell) .capa-misiones .mis-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-mentes .mentes-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-vida-pueblo .vida-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-parejas .par-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-inventario .inv-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa-ajustes .ds-modal-tit,
+  .play-v3:has(.game-shell) .modal-title-aht {
+    font-size: 1.95rem;
+  }
+}
+
+/* === Decoración ✦ === */
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit::before,
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-tit::after,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit::before,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-tit::after,
+.play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit::before,
+.play-v3:has(.game-shell) .capa-ficha .ficha-tit.ds-modal-tit::after,
+.play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit::before,
+.play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit::after,
+.play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit::before,
+.play-v3:has(.game-shell) .capa-organizar .org-tit.ds-modal-tit::after,
+.play-v3:has(.game-shell) .modal-title-aht::before,
+.play-v3:has(.game-shell) .modal-title-aht::after {
+  content: "\2726";
+  display: inline-block;
+  margin: 0 0.28em;
+  font-size: 0.55em;
+  color: #e8b84a;
+  vertical-align: middle;
+  transform: translateY(-0.08em);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* === Subtítulo === */
+.play-v3 .capa .ds-modal-sub,
+.play-v3 .capa-agenda .agenda-sub,
+.play-v3 .capa-misiones .mis-sub {
+  text-align: center;
+  width: 100%;
+  margin: 8px 0 12px;
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+/* === Cabeceras centradas === */
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head-row,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa-vecinos .vecinos-head,
+.play-v3:has(.game-shell) .capa-ficha .ficha-top,
+.play-v3:has(.game-shell) .capa-agenda .agenda-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa-agenda .agenda-cab .ds-modal-head-row,
+.play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head,
+.play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head-row,
+.play-v3:has(.game-shell) .capa-organizar .org-top .ds-modal-head,
+.play-v3:has(.game-shell) .capa-organizar .org-top .ds-modal-head-row,
+.play-v3:has(.game-shell) .capa-misiones .mis-top .ds-modal-head,
+.play-v3:has(.game-shell) .capa-misiones .mis-top .ds-modal-head-row {
+  justify-content: center;
+  text-align: center;
+}
+
+/* === Icon hide (Misiones) === */
+.play-v3 .capa-misiones .ds-modal-icon {
+  display: none;
+}
+
+/* === Misiones ::before hide (redundant with lavanda, but safe) === */
+.play-v3 .capa-agenda .agenda-cab::before,
+.play-v3 .capa-misiones .mis-top::before {
+  display: none;
+  content: none;
+}

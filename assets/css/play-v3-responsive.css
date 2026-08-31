@@ -699,7 +699,6 @@
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="residencias"] .capa-residencias {
     visibility: visible !important;
     pointer-events: auto !important;
@@ -746,7 +745,6 @@
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario,
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda,
 .play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo,
-.play-v3:has(.game-shell) .play-root[data-capa="misiones"] .capa-misiones,
 .play-v3:has(.game-shell) .play-root[data-capa="residencias"] .capa-residencias {
   z-index: 100 !important;
 }
@@ -1226,7 +1224,6 @@
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="residencias"] .capa-residencias {
     top: 50% !important;
     bottom: auto !important;

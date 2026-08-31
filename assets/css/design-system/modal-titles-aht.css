@@ -141,7 +141,6 @@
 @media (max-width: 520px) {
   .play-v3:has(.game-shell) .capa-diario .coti-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-mentes .mentes-tit.ds-modal-tit,
-  .play-v3:has(.game-shell) .capa-misiones .mis-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-vida-pueblo .vida-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-parejas .par-tit.ds-modal-tit,
   .play-v3:has(.game-shell) .capa-inventario .inv-tit.ds-modal-tit,

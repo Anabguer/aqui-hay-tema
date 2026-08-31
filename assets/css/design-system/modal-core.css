@@ -1,0 +1,127 @@
+/* MODAL-CORE — estructura canónica de modales AHT
+   Shell: position, size, display, flex, overflow, z-index.
+   Una sola fuente de verdad para TODAS las modales del juego.
+   Carga ANTES de los locales; gana porque los locales limpian sus reglas de shell. */
+
+/* === Shell base (phone) === */
+.play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa-inventario,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ajustes"] .capa-ajustes,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="parejas"] .capa-parejas,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(100%, 393px);
+  max-width: min(100%, 393px);
+  height: auto;
+  min-height: 0;
+  max-height: min(88vh, 720px);
+  margin: 0;
+  padding: 14px 13px 12px;
+  transform: translate(-50%, -50%) rotate(-0.2deg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 110;
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* === Shell base (PC) === */
+.play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ajustes"] .capa-ajustes,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="parejas"] .capa-parejas,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(100%, 393px);
+  max-width: min(100%, 393px);
+  height: auto;
+  min-height: 0;
+  max-height: min(88vh, 720px);
+  margin: 0;
+  padding: 14px 13px 12px;
+  transform: translate(-50%, -50%) rotate(-0.2deg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 110;
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* === X / cerrar — estructura === */
+.play-v3 .capa > .cerrar:not(.tut-skip),
+.play-v3 .capa .cerrar.ds-modal-close,
+.play-v3 .capa-inventario > .inv-cerrar,
+.play-v3 .capa-buzon > .mensajitos-cerrar {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  left: auto;
+  bottom: auto;
+  z-index: 12;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+/* === Hijos del shell — capa z-index === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa > *:not(.cerrar):not(.ds-modal-close):not(.capa-cerrar-pestaña),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario > *:not(.cerrar):not(.inv-cerrar),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ajustes > *:not(.cerrar):not(.ds-modal-close) {
+  position: relative;
+  z-index: 2;
+}
+
+/* === Body / scroll estructural === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones .mis-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon [data-buzon-list],
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos .vec-panel:not([hidden]),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar .org-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda .agenda-list,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-diario .coti-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario .inv-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-vida-pueblo .vida-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha .ficha-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario .fdi-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}

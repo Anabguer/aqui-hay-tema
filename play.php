@@ -79,6 +79,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-consulta-edificio-v2.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-tutorial-lavanda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/typography-reading.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: modal architecture — shell, skin, header, responsive */ ?>
+  <link rel="stylesheet" href="assets/css/design-system/modal-core.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modal-skin.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modal-header.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/modal-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .875rem;
@@ -744,7 +749,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </header>
         <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
       </aside>
-      <aside class="capa capa-misiones mis-modal-papel ds-modal-sheet" aria-label="Misiones de hoy">
+      <aside class="capa capa-misiones mis-modal-papel ds-modal-sheet ds-migrada" aria-label="Misiones de hoy">
         <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
         <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
         <span class="mis-pin mis-pin-l" aria-hidden="true"></span>

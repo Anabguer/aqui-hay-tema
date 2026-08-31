@@ -3469,52 +3469,7 @@
 }
 
 
-/* === Misiones: modal papel (como agenda / ver todos los planes) === */
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.mis-modal-papel,
-.play-v3 .play-root.phone[data-capa="misiones"] .capa-misiones.mis-modal-papel {
-  position: absolute !important;
-  left: 50% !important;
-  top: 46% !important;
-  right: auto !important;
-  bottom: auto !important;
-  width: min(440px, 92vw) !important;
-  max-width: min(440px, 92vw) !important;
-  max-height: min(74vh, 600px) !important;
-  min-height: min(280px, 48vh);
-  transform: translate(-50%, -50%) !important;
-  z-index: 12;
-  padding: 1.05rem 1.1rem .9rem !important;
-  border-radius: 3px 10px 6px 5px !important;
-  border: 2px solid rgba(44, 38, 31, .16) !important;
-  box-shadow:
-    4px 8px 28px rgba(40, 28, 16, .2),
-    inset 0 0 0 1px rgba(180, 150, 110, .32) !important;
-  background-color: #fdf9f4 !important;
-  background-image:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0,
-      transparent 1.35rem,
-      rgba(217, 107, 138, .06) 1.35rem,
-      rgba(217, 107, 138, .06) calc(1.35rem + 1px)
-    ),
-    linear-gradient(180deg, rgba(255, 253, 249, .9) 0%, rgba(255, 253, 249, .62) 100%),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  background-position: 0 3rem, center, center !important;
-  background-size: auto, cover, cover !important;
-  overflow: hidden;
-  display: flex !important;
-  flex-direction: column;
-  gap: .45rem;
-  box-sizing: border-box;
-  pointer-events: auto !important;
-  visibility: visible !important;
-}
-
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.mis-modal-papel::before,
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.mis-modal-papel::after {
-  display: none !important;
-}
+/* === Misiones: shell delegado a modal-core/skin (piloto migración) === */
 
 .play-v3 .capa-misiones.mis-modal-papel .mis-speech-tail {
   display: none;

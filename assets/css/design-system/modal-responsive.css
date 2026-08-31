@@ -1,0 +1,19 @@
+/* MODAL-RESPONSIVE — dimensiones por viewport de modales AHT
+   Desktop y móvil: mismo sistema. Solo adapta tamaño, separación, wrapping.
+   Una sola fuente de verdad para TODAS las modales del juego. */
+
+@media (min-width: 769px) {
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
+  .play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo {
+    width: min(100%, 480px);
+    max-width: min(100%, 480px);
+    max-height: min(88vh, 720px);
+  }
+}

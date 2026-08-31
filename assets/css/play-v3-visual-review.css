@@ -12,7 +12,6 @@
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="parejas"] .capa-parejas,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa-inventario,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo,
@@ -24,7 +23,6 @@
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="parejas"] .capa-parejas,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
@@ -81,7 +79,6 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ajustes {
   background-color: var(--ds-paper-modal, #fffaf0) !important;

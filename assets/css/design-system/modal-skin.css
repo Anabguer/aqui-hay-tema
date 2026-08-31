@@ -1,0 +1,153 @@
+/* MODAL-SKIN — piel visual canónica de modales AHT
+   Background, border, border-radius, box-shadow.
+   Una sola fuente de verdad para TODAS las modales del juego.
+   Carga ANTES de los locales; los locales no deben definir propiedades de skin. */
+
+/* === Skin base (todas las modales con .ds-modal-sheet) === */
+.play-v3:has(.game-shell) .ds-modal-sheet {
+  background-color: var(--modal-shell-bg, #FCFBFE);
+  background-image: none;
+  border: var(--modal-border-w, 1px) solid var(--modal-border, #D8D1DE);
+  border-radius: var(--modal-radius, 22px 16px 24px 15px / 16px 24px 15px 22px);
+  box-shadow: var(--modal-shadow, 0 8px 24px rgba(48, 40, 58, 0.20));
+}
+
+/* === Skin scrapbook (modales con texto scritto) === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-ajustes {
+  background-color: var(--ds-paper-modal, #fffaf0);
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
+    url("../../play-v3/capas/libreta_hoja.png");
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat;
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14);
+}
+
+/* === Header bg === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .mensajitos-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .vecinos-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .coti-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .org-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .par-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .vida-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ajustes-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .agenda-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-rel-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .fdi-top {
+  background-color: var(--modal-header-bg, #FFFFFF);
+  background-image: none;
+}
+
+/* === Body bg === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .org-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .coti-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .par-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ajustes-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .agenda-list,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .vida-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-col-detalles,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-rel-scroll,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-diario-scroll,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .fdi-scroll,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .capa-scroll,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa [data-buzon-list],
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .vec-panel,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .vec-rel-scroll {
+  background-color: var(--modal-content-bg, #F6F3F8);
+  background-image: none;
+}
+
+/* === Head-row position:relative === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ds-modal-head-row,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ds-modal-head.vecinos-head,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .vida-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-top:has(.ficha-tit),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-cab .ds-modal-head-row,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-top .ds-modal-head-row,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .par-top .ds-modal-head-row,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .agenda-cab .ds-modal-head-row {
+  position: relative;
+}
+
+/* === ::before decorative — hide for migrated modals === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-modal-sheet::before,
+.play-v3:has(.game-shell) .play-root[data-capa="parejas"] .capa.capa-parejas::before,
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa.capa-vecinos::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa.capa-ficha::before,
+.play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa.capa-diario.coti-modal-papel::before {
+  display: none;
+  content: none;
+}
+
+/* === ::before scrapbook — show for migrated modals with dashed border === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 5px;
+  border: 1.5px dashed rgba(107, 81, 56, .34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* === Hide ::after === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones::after {
+  display: none;
+}
+
+/* === Hide pins/tapes === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa > .ficha-tape,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa > .mis-pin,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa > .org-pin,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa > .agenda-pin {
+  display: none;
+}
+
+/* === X / cerrar — decorative === */
+.play-v3 .capa > .cerrar:not(.tut-skip),
+.play-v3 .capa .cerrar.ds-modal-close,
+.play-v3 .capa-inventario > .inv-cerrar,
+.play-v3 .capa-buzon > .mensajitos-cerrar {
+  border: 2px solid var(--ds-ink, #3b3028);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .22);
+  font: 800 17px/1 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028);
+  text-transform: none;
+  letter-spacing: 0;
+  text-shadow: none;
+  transform: rotate(2.5deg);
+}
+
+/* === X ::before hide === */
+.play-v3 .capa > .cerrar:not(.tut-skip)::before,
+.play-v3 .capa .cerrar.ds-modal-close::before,
+.play-v3 .capa-inventario > .inv-cerrar::before,
+.play-v3 .capa-buzon > .mensajitos-cerrar::before {
+  display: none;
+  content: none;
+}
+
+/* === hide capa-cerrar-pestaña === */
+.play-v3 .capa .capa-cerrar-pestaña,
+.play-v3 .capa > .capa-cerrar-pestaña {
+  display: none;
+}

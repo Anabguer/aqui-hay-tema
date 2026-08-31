@@ -26,7 +26,6 @@
 .play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .capa.capa-ficha-animo.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa.capa-diario.coti-modal-papel,
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa.capa-agenda.agenda-modal.ds-modal-sheet,
-.play-v3:has(.game-shell) .play-root[data-capa="misiones"] .capa.capa-misiones.mis-modal-papel.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="parejas"] .capa.capa-parejas.par-modal-papel.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa.capa-vida-pueblo.vida-modal-papel.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="inventario"] .capa.capa-inventario.inv-modal-papel.ds-modal-sheet,
@@ -39,8 +38,8 @@
   box-shadow: var(--modal-shadow) !important;
 }
 
-.play-v3:has(.game-shell) .play-root[data-capa] .capa::before,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-modal-sheet::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa:not(.ds-migrada)::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-modal-sheet:not(.ds-migrada)::before,
 .play-v3:has(.game-shell) .play-root[data-capa="parejas"] .capa.capa-parejas::before,
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa.capa-vecinos::before,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa.capa-ficha::before,
@@ -61,7 +60,6 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .coti-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .org-top,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .par-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .vida-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-cab,
@@ -78,7 +76,6 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .vida-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-top:has(.ficha-tit),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-cab .ds-modal-head-row,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-top .ds-modal-head-row,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .par-top .ds-modal-head-row,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .agenda-cab .ds-modal-head-row {
   position: relative;
@@ -111,7 +108,6 @@
 
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .org-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .coti-body,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .par-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .ajustes-body,

@@ -1,9 +1,9 @@
 /**
- * Visual Replica Pass — REF PNG vs runtime (móvil primero)
- * Carga después de play-v3-visual-interior.css
+ * Visual Replica Pass ï¿½ REF PNG vs runtime (mï¿½vil primero)
+ * Carga despuï¿½s de play-v3-visual-interior.css
  */
 
-/* === INICIO: iconos de sección (fix calendario gigante) === */
+/* === INICIO: iconos de secciï¿½n (fix calendario gigante) === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .plan-seccion-ico,
   .play-v3:has(.game-shell) .pp-mov-ico,
@@ -157,7 +157,7 @@
   color: var(--ds-lavender-deep, #5c4f82);
 }
 
-/* === INICIO iter 2: feed columna única misiones+parejas === */
+/* === INICIO iter 2: feed columna ï¿½nica misiones+parejas === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par,
   .play-v3:has(.game-shell) .game-right .shell-grupo-parejas {
@@ -374,7 +374,7 @@
 .play-v3:has(.game-shell) .capa-buzon .carta-msg .cuerpo { font-size: 1rem !important; font-style: italic; }
 
 
-/* === iter 2: estado ánimo + diario refinements === */
+/* === iter 2: estado ï¿½nimo + diario refinements === */
 .play-v3:has(.game-shell) .capa-ficha .ficha-modal-animo::before,
 .play-v3:has(.game-shell) .capa-ficha .ficha-modal-animo::after {
   content: "";
@@ -683,7 +683,6 @@
   .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
-  .play-v3:has(.game-shell) .play-root.pc[data-capa="misiones"] .capa-misiones,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
   .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario {
