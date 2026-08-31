@@ -1,0 +1,23 @@
+﻿<?php declare(strict_types=1);
+require_once dirname(__DIR__) . '/src/autoload.php';
+echo "=== AHT-P5.2 TOOLING GUARD ===\n\n";
+$testsDir = dirname(__DIR__) . '/tests';
+$archivos = glob($testsDir . '/*.php');
+$violaciones = [];
+$ok = [];
+$autoP = ['p3_', 'p4_', 'p5_', 'p6_', 'baseline', 'densidad', 'romance', 'trayectoria', 'rebaseline', 'playtest_'];
+foreach ($archivos as $file) {
+    $bn = basename($file);
+    $c = file_get_contents($file);
+    $match = false;
+    foreach ($autoP as $p) { if (str_contains($bn, $p)) { $match = true; break; } }
+    if (!$match) continue;
+    preg_match_all('/avanzarReloj\s*\(\s*\$\w+\s*,\s*(?!1\b|\$)/', $c, $bm);
+    preg_match_all('/avanzarRelojPasoAPaso/', $c, $pm);
+    if (count($bm[0]) > 0 && count($pm[0]) === 0) { $violaciones[] = $bn; } else { $ok[] = $bn; }
+}
+if ($violaciones !== []) { echo "VIOLACIONES:\n"; foreach ($violaciones as $v) { echo "  X {$v}\n"; } }
+else { echo "OK: Todos usan metodo valido.\n"; }
+echo "\nOK (" . count($ok) . "):\n";
+foreach ($ok as $f) { echo "  {$f}\n"; }
+echo "\n=== TOOLING GUARD COMPLETADO ===\n";
