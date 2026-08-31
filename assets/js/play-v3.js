@@ -505,7 +505,7 @@
     var motor = null;
     var motorError = null;
     try {
-      var r = await api('partida.diagnostico_export', { historial: historial });
+      var r = await api('dev.diagnostico.export', { historial: historial });
       if (r.ok && r.diagnostico_export) motor = r.diagnostico_export.json || null;
       else motorError = r.mensaje_ui || r.error || 'diagnostico_export_fallido';
     } catch (e) {
@@ -4543,6 +4543,71 @@
     else $('.play-root').removeAttribute('data-importante');
   }
 
+  /* ── Auto-sync: sincronización periódica del reloj ── */
+  var _syncClockTimer = null;
+  var _syncClockBusy = false;
+  var SYNC_CLOCK_INTERVAL_MS = 45000;
+
+  function renderClockOnly(relojVista, relojRaw) {
+    if (!relojVista) return;
+    var rv = relojVista;
+    var rl = relojRaw || {};
+    var diaNum = rl.dia_pueblo;
+    var h = rv.hora !== undefined ? rv.hora : rl.hora_actual;
+    var fechaCorta = rv.fecha_corta || '';
+    var diaLblHud = (diaNum !== undefined && diaNum !== null) ? ('D\u00eda ' + diaNum) : '';
+    inicioAll('[data-dia-num]').forEach(function (el) { el.textContent = diaLblHud || '\u2014'; });
+    var ht = h === undefined ? '\u2014:\u2014' : (String(h).padStart(2, '0') + ':00');
+    $$('[data-dow]').forEach(function (el) {
+      el.textContent = rv.dia_semana_ui || (diaNum !== undefined ? ('D\u00eda ' + diaNum) : '-');
+    });
+    $$('[data-fecha]').forEach(function (el) { el.textContent = fechaCorta; });
+    $$('[data-hora]').forEach(function (el) { el.textContent = ht || '-'; });
+    pintarModoReloj(esHoraNoche(typeof h === 'number' ? h : null));
+    inicioAll('[data-dia-meta]').forEach(function (el) { el.textContent = fechaCorta || '\u2014'; });
+    inicioAll('[data-top-meta-mobile]').forEach(function (el) {
+      var mobDia = diaLblHud || 'D\u00eda \u2014';
+      var mobFecha = fechaCorta || '\u2014';
+      var min = rv.minuto !== undefined ? rv.minuto : rl.minuto_actual;
+      var mobHora = h === undefined ? '\u2014:\u2014' : (String(h).padStart(2, '0') + ':' + String(min === undefined || min === null ? 0 : min).padStart(2, '0'));
+      el.innerHTML = '<span class="top-meta-stack"><span class="top-meta-prim">' + mobDia + ' \u00b7 ' + mobFecha + '</span><span class="top-meta-hora">' + mobHora + '</span></span>';
+    });
+  }
+
+  async function syncClock() {
+    if (_syncClockBusy) return;
+    if (!partidaId) return;
+    _syncClockBusy = true;
+    try {
+      var r = await api('reloj.sincronizar', {});
+      if (!r.ok) return;
+      if (cacheEstado) {
+        cacheEstado.reloj = r.reloj || cacheEstado.reloj;
+        cacheEstado.reloj_vista = r.reloj_vista || cacheEstado.reloj_vista;
+        cacheEstado.reloj_texto = r.reloj_texto || cacheEstado.reloj_texto;
+      }
+      renderClockOnly(r.reloj_vista, r.reloj);
+      if (isDebugOn()) {
+        var tm = $('[data-taller-msg]');
+        if (tm) tm.textContent = r.reloj_texto || '';
+      }
+    } finally {
+      _syncClockBusy = false;
+    }
+  }
+
+  function startSyncClock() {
+    stopSyncClock();
+    _syncClockTimer = setInterval(syncClock, SYNC_CLOCK_INTERVAL_MS);
+  }
+  function stopSyncClock() {
+    if (_syncClockTimer) { clearInterval(_syncClockTimer); _syncClockTimer = null; }
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'visible') syncClock();
+  });
+
   function placeHab(box, p, i, cid) {
     const el = document.createElement('span');
     el.className = 'hab';
@@ -8535,7 +8600,10 @@ var finOk = $('[data-tut-fin-ok]');
 
   initMapaCanonico().then(function () {
     return ensurePartida().then(function () {
-      return refresh().then(function () { quizaMostrarTutIntro(); });
+      return refresh().then(function () {
+        quizaMostrarTutIntro();
+        startSyncClock();
+      });
     });
   });
 })();

@@ -137,10 +137,12 @@ final class CatchUpEngine
     ): array {
         $ahora = $ahora ?? self::ahoraUtc();
         $plan = CatchUpPlanner::planificar($segundos);
-        $partida['reloj']['catch_up_pendiente']['segundos_pendientes'] = $segundos;
-        $partida['reloj']['catch_up_pendiente']['eventos_pendientes'] = [];
-        $partida['reloj']['catch_up_pendiente']['plan'] = $plan;
-        $partida['reloj']['catch_up_pendiente']['ejecutado'] = false;
+        $partida['reloj']['catch_up_pendiente'] = [
+            'segundos_pendientes' => $segundos,
+            'eventos_pendientes' => [],
+            'plan' => $plan,
+            'ejecutado' => false,
+        ];
 
         if ($segundos > 0) {
             DomainEventDispatcher::emit($partida, DomainEvents::CATCH_UP_PLANIFICADO, [
