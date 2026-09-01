@@ -8181,7 +8181,7 @@
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     padding-top: 13px !important;
-    padding-bottom: 14px !important;
+    padding-bottom: 0 !important;
     row-gap: 8px !important;
   }
 
@@ -10018,7 +10018,7 @@
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .board-fit {
     aspect-ratio: auto !important;
     height: auto !important;
-    padding-bottom: 14px !important;
+    padding-bottom: 0 !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
   }
@@ -10141,3 +10141,14 @@
   }
 }
 
+/* INICIO-MAPA-BALANCE — respiro inferior = gap .inicio-stage (12px), sin estirar host */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap {
+    flex: 0 0 auto !important;
+    max-height: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .board-fit {
+    padding-bottom: 0 !important;
+  }
+}
