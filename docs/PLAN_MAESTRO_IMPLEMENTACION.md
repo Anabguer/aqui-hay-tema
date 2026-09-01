@@ -1426,6 +1426,30 @@ Familia semántica: campo `categoria` del catálogo de hobbies (reutilizado, sin
 - Gracia post-tutorial: `llegadas.dias_gracia_post_tutorial` (2 días sin ofertas tras activar modo normal).
 - Partidas existentes no migradas: el cambio aplica solo a **partidas nuevas** vía config.
 
+### 19.13 Observación playtest — ritmo de incorporación de residentes (2026-08-31)
+
+**Estado: 🧪 EN PLAYTEST — ABIERTA.** No clasificar como bug. No decidir balance. No modificar código ni configuración.
+
+**Partida longitudinal real observada (Neni):**
+
+| Momento | Residentes |
+|---|---|
+| D1 ~09:00 | 3 |
+| D1 ~11:00 | 6 |
+
+En unas 2 horas de juego la población inicial ha pasado de 3 a 6.
+
+**Percepción jugable:** Neni percibe la incorporación como demasiado rápida. Puede no dejar suficiente tiempo al jugador para: conocer a los residentes iniciales, identificar sus personalidades, seguir sus primeras relaciones, generar apego y percibir cada nueva incorporación como un acontecimiento. Además, un crecimiento tan rápido puede acelerar indirectamente la densidad social (encuentros, relaciones, flechazos, parejas, Cotilleos y Mensajitos).
+
+**Qué observar antes de decidir:**
+- Próximas incorporaciones durante D1.
+- Población al final de D1.
+- Evolución durante D2.
+- Cadencia real entre incorporaciones.
+- Si el 3→6 fue una concentración puntual o representa el ritmo normal actual.
+- Si la cadencia actual ha cambiado respecto al comportamiento/configuración anterior (§19.12).
+
+**Protecciones:** no inventar cadencia objetivo. No cerrar la incidencia sin evidencia suficiente. Esta observación NO modifica §19.12 ni sus decisiones; la cuestiona empiricalmente para que pueda revisarse si el playtest lo confirma.
 
 ### MENTES iteración 2 — peso real y coherencia narrativa (2026-08-28)
 
