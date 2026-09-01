@@ -2831,7 +2831,8 @@
       '<span class="pp-mov-star" aria-hidden="true"><span class="pp-mov-star-ico">\u2605</span></span>' +
       '</div>' +
       '<div class="pp-mov-body">' +
-      '<div class="prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<div class="prox-faces' + (ids.length >= 2 ? ' prox-faces--duo' : '') + '">' +
+      (ids.length >= 2 ? planDuoFacesMovilHtml(enc, ids) : carasPlanHtml(ids, maxCaras)) + '</div>' +
       '<div class="pp-mov-copy">' +
       '<p class="pp-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
       '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
@@ -2857,6 +2858,14 @@
       '<span class="plan-desk-duo-nombre plan-desk-duo-nombre--r">' + esc(nombreDe(slice[1])) + '</span>' +
       '</div></div>';
   }
+  function planDuoFacesMovilHtml(enc, ids) {
+    var slice = (ids || []).slice(0, 2);
+    if (slice.length < 2) return carasPlanHtml(slice);
+    return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
+      iconoPlanCentroHtml(enc) +
+      htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
+  }
+
   function htmlProximoPlanCardDesktop(enc, estado) {
     if (planEsEventoPueblo(enc)) {
       return htmlProximoPlanCardEvento(enc, estado);
@@ -3098,7 +3107,7 @@
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
     return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {
