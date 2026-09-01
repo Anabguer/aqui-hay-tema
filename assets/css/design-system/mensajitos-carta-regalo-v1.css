@@ -1,0 +1,69 @@
+/**
+ * MENSAJITOS — carta objeto recibido (regalo_recompensa / detallito_sorpresa)
+ */
+
+.play-v3 .capa-buzon .carta-msg.carta-regalo-recibido {
+  border-radius: 14px !important;
+  border: 2px solid rgba(232, 107, 143, .45) !important;
+  background: linear-gradient(180deg, #fffefb 0%, #fff8f4 100%) !important;
+  box-shadow: 0 2px 0 rgba(44, 38, 31, .06), inset 0 0 0 1px rgba(255, 255, 255, .65) !important;
+}
+
+.play-v3 .capa-buzon .carta-msg.carta-regalo-recibido.no-leida {
+  background: linear-gradient(180deg, #fff9f0 0%, #fff4ea 100%) !important;
+  border-color: rgba(232, 107, 143, .62) !important;
+}
+
+.play-v3 .capa-buzon .carta-regalo-objeto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0 4px;
+  padding: 12px 10px 10px;
+  border-radius: 14px;
+  border: 2px solid rgba(197, 184, 232, .55);
+  background: linear-gradient(180deg, rgba(255, 254, 251, .98) 0%, rgba(246, 240, 255, .72) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .8);
+}
+
+.play-v3 .capa-buzon .carta-regalo-objeto-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(100%, 148px);
+  min-height: 108px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .82);
+  box-shadow: inset 0 0 0 1px rgba(154, 138, 184, .18);
+}
+
+.play-v3 .capa-buzon .carta-regalo-objeto-img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 96px;
+  object-fit: contain;
+}
+
+.play-v3 .capa-buzon .carta-regalo-objeto-nom {
+  margin: 0;
+  font: 700 1.2rem/1.2 Caveat, cursive;
+  color: var(--ds-ink, #3b3028);
+  text-align: center;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.play-v3 .capa-buzon .carta-regalo-recibido .cuerpo {
+  margin-bottom: 6px !important;
+}
+
+.play-v3 .capa-buzon .carta-cuando--solo {
+  margin: 0 0 8px;
+  padding-right: 52px;
+  font: 600 .8rem/1.3 Nunito, sans-serif !important;
+  color: var(--ds-text-muted, #7a6a5c) !important;
+}
