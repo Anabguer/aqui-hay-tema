@@ -807,17 +807,17 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 
-/* NOCHE-MAP-v2 — tinte nocturno solo sobre el mapa (23:00–07:59).
+/* Noche activa (23:00–07:59): velo azulado global sobre la partida.
 
-   El velo fullscreen `.game-shell::after` (position:fixed, z-index:2) oscurecía
+   Capa decorativa pura: pointer-events none, no bloquea clics, no oculta nada.
 
-   TODO el HOME sin modal, imitando un backdrop roto. Además apilaba distinto
+   position:fixed + inset:0 → cubre TODO el viewport (la página tiene una franja
 
-   entre tarjetas (Mensajitos forzada a z-index:1 bajo el velo; Celestine sin
+   superior fuera de .game-shell). Jerarquía: interfaz base < velo < modales
 
-   regla quedaba visualmente por encima). Autoridad: tinte local en map-host;
+   (capa=8+, consulta 10/90/110, lab 200, tutorial 520/12000…), que conservan
 
-   HOME chrome sin velo; modales conservan su z-index propio. */
+   su z-index propio por encima. Reversible vía .noche-activa. */
 
 .game-shell {
 
@@ -825,37 +825,59 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 }
 
-/* Retirado: velo fullscreen sobre viewport — sustituido por map-host local */
-
 .game-shell::after {
-
-  display: none !important;
-
-  content: none !important;
-
-}
-
-.game-shell.noche-activa .inicio-map-host::after {
 
   content: "";
 
-  position: absolute;
+  position: fixed;
 
   inset: 0;
 
   pointer-events: none;
 
-  z-index: 5;
-
-  border-radius: inherit;
+  z-index: 2;
 
   background: linear-gradient(180deg, rgba(38,44,96,.16) 0%, rgba(26,28,68,.30) 100%);
 
   mix-blend-mode: multiply;
 
-  opacity: 1;
+  opacity: 0;
 
   transition: opacity .9s ease;
+
+}
+
+.game-shell.noche-activa::after {
+
+  opacity: 1;
+
+}
+
+/* Noche: chrome HOME bajo el velo nocturno (z-index:2).
+   Mensajitos ya tenía z-index:1; Celestine necesita capa contenida (CELESTINE-STACK-v1)
+   para que ::before/::after decorativos (z-index 3–5 internos) no escapen al contexto
+   de .game-shell y queden bajo el velo. */
+
+.game-shell.noche-activa .mensajitos-wrap {
+
+  z-index: 1;
+
+}
+
+/* CELESTINE-STACK-v1 — contiene pseudos decorativos dentro del botón.
+   Sin isolation, ::before (z-index 3–4) participa en el contexto de .game-shell
+   y puede pintar por encima del velo nocturno (z-index:2). */
+.play-v3:has(.game-shell) .celestine-nota.obj-vecinos-resumen {
+
+  isolation: isolate;
+
+}
+
+.game-shell.noche-activa .celestine-nota.obj-vecinos-resumen {
+
+  position: relative;
+
+  z-index: 1;
 
 }
 
