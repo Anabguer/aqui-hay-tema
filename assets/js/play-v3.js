@@ -2935,6 +2935,9 @@
     if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
     return 'social';
   }
+  function iconoRelacionesCentroHtml() {
+    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--relaciones" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>';
+  }
   function iconoEncuentroCentroHtml(enc) {
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
@@ -2957,7 +2960,7 @@
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
     return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoEncuentroCentroHtml(enc) +
+      iconoRelacionesCentroHtml() +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {

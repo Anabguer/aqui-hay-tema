@@ -837,11 +837,20 @@
 }
 
 
-/* INICIO-PLANES-SAFE-TWEAKS-DESKTOP-v140 - restaurar geometria v137; compactar EN CURSO y alinear interior PROXIMOS sin tocar carrusel */
+/* INICIO-PLANES-SAFE-TWEAKS-DESKTOP-v141 - fijar avatares EN CURSO aprobados; alinear interior PROXIMOS sin tocar carrusel */
 @media (min-width: 769px) {
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk {
-    gap: 6px !important;
-    padding: 10px 12px 9px !important;
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces {
+    gap: 0 !important;
+    min-width: 78px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-cara--r {
+    margin-left: -18px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .cara-token .cara {
+    width: 50px !important;
+    height: 50px !important;
   }
 
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-resumen--cuece {
