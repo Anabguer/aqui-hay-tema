@@ -17,7 +17,7 @@
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
     linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
-    url("../play-v3/capas/libreta_hoja.png") !important;
+    url("../../play-v3/capas/libreta_hoja.png") !important;
   background-position: center, center, center !important;
   background-size: cover, cover, cover !important;
   background-repeat: no-repeat !important;
@@ -69,13 +69,13 @@
   z-index: 3;
 }
 
-.play-v3:has(.game-shell) .capa-ajustes .ajustes-top {
+.play-v3:has(.game-shell) .capa-ajustes:not(.ds-migrada) .ajustes-top {
   flex: 0 0 auto;
   margin: 0 0 .35rem;
   padding: .15rem 0 0;
 }
 
-.play-v3:has(.game-shell) .capa-ajustes .ds-modal-tit {
+.play-v3:has(.game-shell) .capa-ajustes:not(.ds-migrada) .ds-modal-tit {
   font-family: Caveat, cursive !important;
   font-size: 2rem !important;
   font-weight: 700 !important;
@@ -202,7 +202,7 @@
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
     linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
-    url("../play-v3/capas/libreta_hoja.png") !important;
+    url("../../play-v3/capas/libreta_hoja.png") !important;
   background-position: center, center, center !important;
   background-size: cover, cover, cover !important;
   background-repeat: no-repeat !important;
@@ -690,7 +690,7 @@
 
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-parejas.par-modal-papel {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
-  background-image: url("../play-v3/capas/libreta_hoja.png") !important;
+  background-image: url("../../play-v3/capas/libreta_hoja.png") !important;
   background-position: center !important;
   background-size: cover !important;
   background-repeat: no-repeat !important;

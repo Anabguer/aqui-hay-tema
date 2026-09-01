@@ -5268,58 +5268,37 @@
     return img ? '<img src="' + esc(img) + '" alt=""/>' : '<span>' + esc(ini) + '</span>';
   }
 
-  function vecRelBarra(dir, extraCls) {
-    dir = dir || {};
-    const pct = typeof dir.social_bar_pct === 'number'
-      ? Math.max(4, Math.min(100, dir.social_bar_pct))
-      : 8;
-    const cls = 'vec-rel-barra' + (dir.social_negativo ? ' is-neg' : '') + (extraCls || '');
-    return '<span class="' + cls + '" aria-hidden="true"><span style="width:' + pct + '%"></span></span>';
-  }
-
-  function vecRelDirCard(nomFrom, nomTo, dir) {
-    const txt = vecRelTextoDir(dir);
-    if (!txt && !(dir && dir.conocidos)) return '';
-    const pill = '<span class="vec-rel-pill ' + vecRelPillClass(dir) + '">' + esc(txt || 'Se conocen de vista') + '</span>';
-    const barExtra = dir.etiqueta_social === 'conocido' ? ' vec-rel-barra--mustard' : '';
-    return '<div class="vec-rel-dir-card">' +
-      '<div class="vec-rel-dir-head">' +
-      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \u2192 ' + esc(nomTo) + '</span>' +
-      pill +
-      '</div>' +
-      vecRelBarra(dir, barExtra) +
-      '</div>';
-  }
-
   function htmlVecRelCard(row) {
     const a = row.persona_a || {};
     const b = row.persona_b || {};
     const ab = row.a_hacia_b || {};
     const ba = row.b_hacia_a || {};
-    const tAb = vecRelTextoDir(ab);
-    const tBa = vecRelTextoDir(ba);
+    const tAb = vecRelPillTexto(ab);
+    const tBa = vecRelPillTexto(ba);
     const f = vecRelFlags(row);
-    const cls = 'vec-rel-card' + (f.romance ? ' is-amor' : '') + (f.mal ? ' is-mal' : '') + (f.conflicto ? ' is-conflicto' : '');
-    const cardAb = vecRelDirCard(a.nombre || a.id || '', b.nombre || b.id || '', ab);
-    const cardBa = vecRelDirCard(b.nombre || b.id || '', a.nombre || a.id || '', ba);
-    let dirs = cardAb + cardBa;
-    if (!dirs) dirs = '<p class="vec-rel-linea">Se conocen de vista.</p>';
-    const asim = tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0);
-    const div = asim && cardAb && cardBa ? '<div class="vec-rel-divider">Diferente en cada sentido</div>' : '';
-    const badge = f.conflicto ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
+    const tone = vecRelCardTone(f);
+    const hasAb = vecRelHasDir(ab);
+    const hasBa = vecRelHasDir(ba);
+    const asim = hasAb && hasBa && (tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0));
+    const cls = 'vec-rel-card vec-rel-card--tone-' + tone +
+      (f.romance ? ' is-amor' : '') +
+      (f.mal ? ' is-mal' : '') +
+      (f.conflicto ? ' is-conflicto' : '');
+    const badge = (f.conflicto || asim) ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
+    const puente = vecRelPuenteHtml(ab, ba);
     return (
       '<article class="' + cls + '">' +
-      '<div class="vec-rel-par">' +
+      '<span class="vec-rel-card-accent" aria-hidden="true"></span>' +
+      badge +
+      '<div class="vec-rel-card-grid">' +
       '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(a.id || '') + '">' +
       '<span class="vec-rel-cara">' + caraVecRel(a.id, a.nombre) + '</span>' +
       '<span class="vec-rel-nom">' + esc(a.nombre || a.id || '?') + '</span></button>' +
-      VEC_REL_ICONO_PAR +
+      '<div class="vec-rel-puente">' + puente + '</div>' +
       '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(b.id || '') + '">' +
       '<span class="vec-rel-cara">' + caraVecRel(b.id, b.nombre) + '</span>' +
       '<span class="vec-rel-nom">' + esc(b.nombre || b.id || '?') + '</span></button>' +
-      badge +
       '</div>' +
-      '<div class="vec-rel-estados">' + dirs + div + '</div>' +
       '</article>'
     );
   }
