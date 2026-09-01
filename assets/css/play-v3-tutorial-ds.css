@@ -35,6 +35,7 @@
 .play-v3 .tut-intro .tut-papel,
 .play-v3 .tut-finale .tut-papel {
   width: min(92vw, 380px) !important;
+  height: min(87dvh, 580px) !important;
   min-height: min(87dvh, 580px) !important;
   max-height: min(87dvh, 580px) !important;
   box-sizing: border-box !important;
@@ -43,8 +44,7 @@
   transform: none !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
   background: var(--tut-shell-bg, #FCFBFE) !important;
   background-image: none !important;
   border: 1px solid var(--tut-border, #D8D1DE) !important;
@@ -57,6 +57,7 @@
 .play-v3 .tut-papel {
   border: 1px solid var(--tut-border, #D8D1DE) !important;
   border-radius: 16px !important;
+  overflow: hidden !important;
 }
 
 .play-v3 .tut-finale .tut-papel {
@@ -78,7 +79,7 @@
 /* --- 3. ZONA HEADER (cabecera) --- */
 .play-v3 .tut-papel-cabecera {
   flex: 0 0 auto !important;
-  padding: 28px 14px 10px !important;
+  padding: 20px 12px 6px !important;
   text-align: center;
 }
 
@@ -87,15 +88,20 @@
   flex: 1 1 auto !important;
   min-height: 0 !important;
   padding: 0 14px !important;
-  overflow-y: auto !important;
+  overflow: hidden !important;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.play-v3 .tut-papel-cuerpo::-webkit-scrollbar {
+  display: none;
 }
 
 /* --- 5. ZONA FOOTER (pie fijo) --- */
 .play-v3 .tut-papel-pie {
   flex: 0 0 auto !important;
   margin-top: auto !important;
-  padding: 8px 14px 12px !important;
+  padding: 6px 12px 10px !important;
   border-top: 1px solid rgba(216, 209, 222, 0.55) !important;
   background: var(--tut-header-bg, #FFFFFF) !important;
 }
@@ -108,18 +114,7 @@
 .play-v3 .tut-hero-img {
   display: block;
   width: 100%;
-  max-height: 120px;
-  object-fit: contain;
-  margin: 0 auto;
-}
-.play-v3 .tut-fin-hero {
-  padding: 0 0 8px;
-  text-align: center;
-}
-.play-v3 .tut-fin-hero-img {
-  display: block;
-  width: 100%;
-  max-height: 130px;
+  max-height: 72px;
   object-fit: contain;
   margin: 0 auto;
 }
@@ -231,8 +226,8 @@
   color: var(--tut-ink, #2d2a26) !important;
 }
 
-.play-v3 .tut-intro-line { margin: 0 0 4px !important; }
-.play-v3 .tut-intro-extra { margin: 0 0 8px !important; }
+.play-v3 .tut-intro-line { font-size: 0.9rem !important; margin: 0 0 2px !important; }
+.play-v3 .tut-intro-extra { font-size: 0.82rem !important; margin: 0 0 4px !important; line-height: 1.35 !important; }
 
 .play-v3 .tut-bloques-pref {
   font-size: 0.875rem !important;
@@ -242,14 +237,32 @@
 }
 
 .play-v3 .tut-cierre {
-  margin: 8px 0 10px !important;
+  margin: 4px 0 4px !important;
   padding-top: 6px !important;
   border-top: 1px solid rgba(196, 181, 232, 0.30) !important;
   color: var(--tut-ink, #3b3028) !important;
   font-family: var(--tut-font-hand, "Caveat", cursive) !important;
   font-style: italic !important;
-  font-size: 1.05rem !important;
+  font-size: 0.95rem !important;
   font-weight: 500 !important;
+}
+
+.play-v3 .tut-paso-1 .tut-titulo,
+.play-v3 .tut-paso-1 h2[data-tut-tit] {
+  color: var(--tut-coral, #E86B5A) !important;
+  font-size: 1.5rem !important;
+}
+
+.play-v3 .tut-paso-vecinos .tut-caras {
+  justify-content: center !important;
+  gap: 10px !important;
+}
+.play-v3 .tut-paso-vecinos .tut-caras .tut-cara {
+  width: 52px !important;
+  height: 52px !important;
+}
+.play-v3 .tut-paso-vecinos .tut-bloques.is-inline {
+  justify-content: center !important;
 }
 
 .play-v3 .tut-fin-lead {
@@ -258,12 +271,6 @@
 .play-v3 .tut-fin-rest {
   margin: 0 !important;
 }
-.play-v3 .tut-fin-rule {
-  border: none !important;
-  border-top: 2px dashed rgba(196, 181, 232, 0.40) !important;
-  margin: 10px 14px !important;
-}
-
 /* --- 9. TITULO DE ACCION / CONCEPTO ---
    OBSERVA / PROPON / MIRA / MAPA / VECINOS / etc.
    Jerarquia comun: Caveat bold. */
@@ -293,8 +300,8 @@
   background: #FFFFFF !important;
 }
 .play-v3 .tut-bloque--card .tut-bloque-ico {
-  width: 72px !important;
-  height: 72px !important;
+  width: 52px !important;
+  height: 52px !important;
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -317,8 +324,8 @@
 
 /* Row icons (paso 3: MAPA/VECINOS/MENSAJITOS/NUEVO PLAN) */
 .play-v3 .tut-bloque--row .tut-bloque-ico {
-  width: 72px !important;
-  height: 72px !important;
+  width: 48px !important;
+  height: 48px !important;
   border-radius: 10px !important;
   overflow: hidden !important;
 }
@@ -337,8 +344,8 @@
 .play-v3 .tut-bloques {
   display: flex !important;
   flex-direction: column !important;
-  gap: 2px !important;
-  margin: 6px 0 10px !important;
+  gap: 1px !important;
+  margin: 4px 0 6px !important;
 }
 .play-v3 .tut-bloque {
   display: grid !important;
@@ -379,8 +386,8 @@
   display: flex !important;
   justify-content: center !important;
   align-items: flex-start !important;
-  gap: 12px !important;
-  margin: 10px 0 12px !important;
+  gap: 10px !important;
+  margin: 6px 0 6px !important;
 }
 .play-v3 .tut-cara-wrap {
   display: flex !important;
@@ -434,12 +441,12 @@
 .play-v3 .tut-tareas {
   display: flex !important;
   justify-content: center !important;
-  gap: 10px !important;
-  margin: 10px 0 12px !important;
+  gap: 8px !important;
+  margin: 6px 0 8px !important;
 }
 .play-v3 .tut-polaroid {
-  width: 80px !important;
-  height: 96px !important;
+  width: 68px !important;
+  height: 80px !important;
   border: 1px solid var(--tut-border, #D8D1DE) !important;
   border-radius: 8px !important;
   background: #FFFFFF !important;
@@ -565,32 +572,21 @@
 .play-v3 .tut-skip:hover { color: var(--tut-ink, #2d2a26) !important; }
 
 /* --- 16. FINALE (pantalla 5 post-tutorial) --- */
-.play-v3 .tut-finale .tut-papel {
-  padding: 0 !important;
+.play-v3 .tut-paso-5 .tut-fin-lead,
+.play-v3 .tut-paso-5 .tut-fin-rest {
+  font-size: 0.85rem !important;
+  line-height: 1.4 !important;
+  margin: 0 0 6px !important;
 }
-.play-v3 .tut-finale .tut-fin-hero {
-  padding: 12px 14px 0 !important;
-  background: var(--tut-header-bg, #FFFFFF) !important;
+.play-v3 .tut-paso-5 .tut-fin-rest {
+  margin-bottom: 0 !important;
 }
-.play-v3 .tut-finale .tut-fin-titulo,
-.play-v3 .tut-finale .tut-fin-lead,
-.play-v3 .tut-finale .tut-fin-rest,
-.play-v3 .tut-finale .tut-fin-cta {
-  margin-left: 14px !important;
-  margin-right: 14px !important;
+.play-v3 .tut-pasos--finale span {
+  flex: 1 1 0 !important;
+  max-width: 48px !important;
 }
-.play-v3 .tut-finale .tut-fin-titulo {
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-size: 1.7rem !important;
-  font-weight: 700 !important;
-  line-height: 1.10 !important;
-  color: var(--tut-ink, #3b3028) !important;
-  text-align: center !important;
-  margin-top: 8px !important;
-}
-.play-v3 .tut-finale .tut-fin-rule {
-  margin-left: 14px !important;
-  margin-right: 14px !important;
+.play-v3 .tut-pasos--finale span.is-on {
+  background: var(--tut-coral, #E86B5A) !important;
 }
 
 /* --- 17. ESTADOS / INTERACCION --- */
@@ -680,9 +676,9 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
   body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro .tut-papel,
   body.play-v3[data-tut-finale="1"] .game-map-wrap .play-root .tut-finale .tut-papel {
     width: min(92vw, 560px) !important;
-    max-height: min(88dvh, calc(100dvh - 2rem)) !important;
-    height: auto !important;
-    min-height: 0 !important;
+    height: min(88dvh, 580px) !important;
+    min-height: min(88dvh, 580px) !important;
+    max-height: min(88dvh, 580px) !important;
     margin: 0 auto !important;
     position: relative !important;
     z-index: 9001 !important;

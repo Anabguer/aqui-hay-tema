@@ -682,7 +682,7 @@
     'MENSAJITOS': 'icon-mensajitos.png',
     'NUEVO PLAN': 'icon-plan.png'
   };
-  var TUT_CARA_ICONS = ['\u2661', '\u2605', '?'];
+  var TUT_CARA_ICONS = ['\u2661', '\u2605', '\u273F'];
   var TUT_POL_MARKS = ['\u2605', '\u2661', '\u273F'];
   var TUT_POL_MODS = ['tut-pol--rose', 'tut-pol--sky', 'tut-pol--leaf'];
   var TUT_ICON_SVG = {
@@ -730,13 +730,8 @@
     }
     var heroEl = $('[data-tut-hero]');
     if (heroEl) {
-      if (pasoNum === 1 || pasoNum === 3 || pasoNum === 4) {
-        heroEl.hidden = false;
-        heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('illus-pueblo.png')) + '" alt=""/>';
-      } else if (pasoNum === 2) {
-        heroEl.hidden = false;
-        heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('icon-vecinos.png')) + '" alt=""/>';
-      } else { heroEl.hidden = true; heroEl.innerHTML = ''; }
+      heroEl.hidden = false;
+      heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('Cabecera.png')) + '" alt=""/>';
     }
     var oldBadge = papel ? papel.querySelector('.tut-badge') : null;
     if (oldBadge) oldBadge.remove();
@@ -907,7 +902,7 @@
     if (restEl) restEl.textContent = partes.slice(1).join('\n\n');
     if (textoEl) textoEl.textContent = texto;
     var heroFin = $('[data-tut-fin-hero]');
-    if (heroFin) heroFin.innerHTML = '<img class="tut-fin-hero-img" src="' + esc(tutAssetUrl('Cabecera.png')) + '" alt=""/>';
+    if (heroFin) heroFin.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('Cabecera.png')) + '" alt=""/>';
     var btn = $('[data-tut-fin-ok]');
     if (btn) btn.textContent = tut.finale.boton || 'Que empiece el tema';
     box.hidden = false;

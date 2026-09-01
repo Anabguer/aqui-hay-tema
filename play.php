@@ -556,21 +556,31 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
             <div class="tut-acciones">
-            <button type="button" class="cta ghost" data-tut-atras hidden>AtrÃ¡s</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atr&aacute;s</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
             </div>
         </div>
       </aside>
       <aside class="tut-finale" data-tut-finale hidden aria-live="polite">
-        <div class="tut-papel">
-          <div class="tut-fin-hero" data-tut-fin-hero aria-hidden="true"></div>
-          <h2 class="tut-fin-titulo" data-tut-fin-tit></h2>
-          <p class="tut-fin-lead" data-tut-fin-lead></p>
-          <hr class="tut-fin-rule" aria-hidden="true"/>
-          <p class="tut-fin-rest" data-tut-fin-rest></p>
-          <p class="tut-texto" data-tut-fin-texto hidden></p>
-          <button type="button" class="cta tut-fin-cta" data-tut-fin-ok>Que empiece el tema</button>
+        <div class="tut-papel tut-paso-5">
+          <div class="tut-papel-cabecera">
+            <div class="tut-hero" data-tut-fin-hero aria-hidden="true"></div>
+            <h2 class="tut-titulo tut-fin-titulo" data-tut-fin-tit></h2>
+          </div>
+          <div class="tut-papel-cuerpo">
+            <p class="tut-fin-lead" data-tut-fin-lead></p>
+            <p class="tut-fin-rest" data-tut-fin-rest></p>
+            <p class="tut-texto" data-tut-fin-texto hidden></p>
+          </div>
+          <div class="tut-papel-pie">
+            <div class="tut-pasos tut-pasos--finale" aria-hidden="true">
+              <span class="is-on"></span><span class="is-on"></span><span class="is-on"></span><span class="is-on"></span>
+            </div>
+            <div class="tut-acciones">
+              <button type="button" class="cta tut-fin-cta tut-cta-final" data-tut-fin-ok>Que empiece el tema</button>
+            </div>
+          </div>
         </div>
       </aside>
       <aside class="vida-derrota" data-vida-derrota hidden aria-live="assertive">
