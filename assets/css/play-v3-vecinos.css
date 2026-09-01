@@ -1,6 +1,6 @@
-ï»¿/**
- * Capa VECINOS â€” rediseÃ±o visual (ref mockup vecinos modal)
- * Alcance: .capa-vecinos Ãºnicamente
+/**
+ * Capa VECINOS — rediseño visual (ref mockup vecinos modal)
+ * Alcance: .capa-vecinos únicamente
  */
 
 /* --- Modal papel / cuaderno --- */
@@ -374,7 +374,7 @@
   flex-shrink: 0;
 }
 
-/* --- Relaciones (pestaÃ±a) --- */
+/* --- Relaciones (pestaña) --- */
 .play-v3 .capa-vecinos .vec-rel-filtros {
   display: flex;
   gap: 6px;
@@ -441,8 +441,16 @@
   overflow-x: clip;
   display: flex;
   flex-direction: column;
+  align-content: flex-start;
   gap: 8px;
   padding: 0 0 6px;
+}
+
+.play-v3 .capa-vecinos.is-relaciones .vec-rel-scroll {
+  display: flex !important;
+  flex-direction: column !important;
+  align-content: flex-start !important;
+  gap: 8px !important;
 }
 
 .play-v3 .capa-vecinos .vec-rel-card {
@@ -457,7 +465,9 @@
 }
 
 .play-v3 .capa-vecinos.is-relaciones .vec-rel-card {
-  min-height: 0;
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  min-height: auto;
 }
 
 .play-v3 .capa-vecinos .vec-rel-card-accent {
@@ -695,7 +705,7 @@
   flex-shrink: 0;
 }
 
-/* --- Desktop: modal mÃ¡s ancha, mÃ¡s columnas --- */
+/* --- Desktop: modal más ancha, más columnas --- */
 @media (min-width: 769px) {
   .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
     width: min(100% - 32px, 720px) !important;
@@ -734,7 +744,7 @@
   }
 }
 
-/* === PATRON DS BLANCO (ds-migrada) â€” solo contenido interno vecinos === */
+/* === PATRON DS BLANCO (ds-migrada) — solo contenido interno vecinos === */
 .play-v3 .capa-vecinos.ds-migrada .mensajitos-hint.vecinos-hint {
   display: none !important;
 }
