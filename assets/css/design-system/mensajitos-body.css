@@ -1,0 +1,489 @@
+/* ============================================================
+   MENSAJITOS BODY — Estilo visual AHT para el body del piloto
+   Dependencias: modal-ds.css (frame), tokens.css (variables)
+   
+   Este archivo define SOLO el contenido interno de Mensajitos.
+   NO toca el frame/modal DS.
+   
+   Metáfora: "notas y cartas sobre la mesa de la Celestine"
+   ============================================================ */
+
+/* === TOKENS LOCALES === */
+.aht-msg {
+  --msg-ink: var(--ds-ink, #3b3028);
+  --msg-ink-soft: var(--ds-ink-soft, #6B5138);
+  --msg-muted: var(--ds-text-muted, #75634F);
+  --msg-paper: #fffdf8;
+  --msg-paper-unread: rgba(255, 246, 220, .45);
+  --msg-paper-action: #fffef8;
+  --msg-accent-gold: #e8b84a;
+  --msg-accent-lavender: var(--ds-lavender-deep, #7C6BAE);
+  --msg-accent-pink: var(--ds-pink-deep, #C42B4A);
+  --msg-border: rgba(120, 96, 72, .18);
+  --msg-border-action: #c9a87a;
+  --msg-font-hand: var(--ds-font-hand, "Caveat", "Segoe Print", cursive);
+  --msg-font-body: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  --msg-font-serif: "Fraunces", Georgia, serif;
+}
+
+/* === CONTENEDOR DEL BODY === */
+.aht-msg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px 12px 16px;
+}
+
+/* === SECCIÓN === */
+.aht-msg-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.aht-msg-section + .aht-msg-section {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--msg-border);
+}
+
+.aht-msg-section-title {
+  margin: 0 0 2px;
+  font: 800 0.58rem/1.2 var(--msg-font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--msg-muted);
+}
+
+/* === CARTA (mensaje individual) === */
+.aht-msg-card {
+  position: relative;
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: var(--msg-paper);
+  border-radius: 10px 8px 11px 7px / 8px 11px 7px 10px;
+  box-shadow: 0 1px 0 rgba(44, 38, 31, .06);
+  transition: box-shadow 150ms ease;
+  overflow: visible;
+}
+
+/* No leído */
+.aht-msg-card[data-unread="true"] {
+  background: var(--msg-paper-unread);
+}
+
+/* Requiere acción */
+.aht-msg-card[data-action="true"] {
+  background: var(--msg-paper-action);
+  box-shadow: inset 3px 0 0 var(--msg-border-action), 0 1px 0 rgba(44, 38, 31, .05);
+}
+
+/* Información */
+.aht-msg-card[data-info="true"] {
+  box-shadow: inset 3px 0 0 rgba(180, 150, 110, .35), 0 1px 0 rgba(44, 38, 31, .04);
+}
+
+/* Hilo */
+.aht-msg-card[data-thread="true"] {
+  background: linear-gradient(180deg, #faf7ff 0%, #fffdf9 100%);
+  border: 1px solid rgba(154, 138, 184, .35);
+}
+
+/* Regalo recibido */
+.aht-msg-card[data-gift="true"] {
+  background: linear-gradient(180deg, #fff8f0 0%, #fffdf9 100%);
+  box-shadow: inset 3px 0 0 var(--msg-accent-gold), 0 1px 0 rgba(44, 38, 31, .05);
+}
+
+/* === AVATAR === */
+.aht-msg-avatar {
+  flex: 0 0 52px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(40, 28, 16, .12);
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  background: #f3e6cc;
+  color: var(--msg-ink-soft);
+  overflow: hidden;
+}
+.aht-msg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+/* === CONTENIDO === */
+.aht-msg-content {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Remitente */
+.aht-msg-from {
+  margin: 0 0 2px;
+  font: 700 1.3rem/1.12 var(--msg-font-hand);
+  color: var(--msg-ink);
+}
+
+/* Fecha */
+.aht-msg-date {
+  margin: 2px 0 0;
+  font: 600 0.78rem/1.3 var(--msg-font-body);
+  color: var(--msg-muted);
+}
+
+/* Cuerpo del mensaje */
+.aht-msg-body {
+  margin: 8px 0;
+  font: 600 1.15rem/1.35 var(--msg-font-body);
+  color: var(--msg-ink);
+}
+
+/* === BADGES === */
+.aht-msg-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+.aht-msg-badge--new {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font: 800 0.62rem/1 var(--msg-font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--msg-accent-pink);
+  color: #fff;
+}
+.aht-msg-badge--read {
+  padding: 2px 8px;
+  border-radius: 999px;
+  font: 700 0.62rem/1 var(--msg-font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: rgba(120, 96, 72, .12);
+  color: var(--msg-muted);
+}
+.aht-msg-badge--state {
+  padding: 3px 8px;
+  border-radius: 999px;
+  font: 700 0.65rem/1 var(--msg-font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: var(--msg-accent-lavender);
+  color: #fff;
+}
+
+/* === PLAZO / ESTADO === */
+.aht-msg-deadline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 8px;
+  font: 600 0.76rem/1.3 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+}
+
+.aht-msg-state {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 8px 0 0;
+  font: 600 0.82rem/1.35 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+}
+
+/* === HILO (thread context) === */
+.aht-msg-thread {
+  margin: 0 0 10px;
+}
+.aht-msg-thread-origin {
+  margin-left: 6px;
+  padding: 8px 10px 8px 14px;
+  border-left: 3px solid rgba(184, 168, 216, .75);
+  border-radius: 0 10px 10px 0;
+  background: rgba(239, 232, 248, .45);
+}
+.aht-msg-thread-label {
+  display: block;
+  margin: 0 0 4px;
+  font: 800 0.68rem/1.2 var(--msg-font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--msg-accent-lavender);
+}
+.aht-msg-thread-text {
+  margin: 0 0 4px;
+  font: 600 0.95rem/1.3 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+  font-style: italic;
+}
+.aht-msg-thread-date {
+  font: 600 0.72rem/1.2 var(--msg-font-body);
+  color: var(--msg-muted);
+}
+.aht-msg-thread-arrow {
+  width: 0;
+  height: 0;
+  margin: 4px 0 4px 22px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid rgba(184, 168, 216, .55);
+}
+
+/* === REGALO (objeto) === */
+.aht-msg-gift {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  padding: 8px 10px;
+  border: 1.5px dashed var(--msg-border);
+  border-radius: 10px 8px 11px 7px / 8px 11px 7px 10px;
+  background: rgba(255, 252, 244, .72);
+}
+.aht-msg-gift-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.aht-msg-gift-name {
+  font: 700 1rem/1.2 var(--msg-font-hand);
+  color: var(--msg-ink);
+}
+.aht-msg-gift-desc {
+  font: 600 0.75rem/1.3 var(--msg-font-body);
+  color: var(--msg-muted);
+}
+
+/* === ACCIONES (botones) === */
+.aht-msg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.aht-msg-btn {
+  padding: 8px 16px;
+  border: 2px solid var(--msg-ink);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  font: 800 0.82rem/1 var(--msg-font-body);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transform: rotate(-0.4deg);
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.aht-msg-btn:hover {
+  transform: rotate(0deg) translateY(-1px);
+  box-shadow: 2px 3px 0 rgba(44, 38, 31, .1);
+}
+.aht-msg-btn:active {
+  transform: rotate(-0.4deg) translateY(0);
+}
+
+/* Primario (acción principal) */
+.aht-msg-btn--primary {
+  background: #fff6c8;
+  color: var(--msg-ink);
+  box-shadow: 1.5px 2px 0 rgba(44, 38, 31, .08);
+}
+
+/* Suave (acción secundaria) */
+.aht-msg-btn--soft {
+  background: var(--msg-paper);
+  border-color: #a89888;
+  font-weight: 700;
+  color: var(--msg-ink-soft);
+  box-shadow: 1px 1.5px 0 rgba(44, 38, 31, .05);
+}
+
+/* === ELECCIÓN (selector de opciones) === */
+.aht-msg-choice {
+  margin: 8px 0 0;
+  width: 100%;
+}
+.aht-msg-choice-title {
+  display: block;
+  margin: 0 0 8px;
+  font: 700 1.05rem/1.25 var(--msg-font-hand);
+  color: var(--msg-ink);
+}
+.aht-msg-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.aht-msg-choice-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 12px;
+  border: 2px solid var(--msg-accent-lavender);
+  border-radius: 12px 10px 13px 11px;
+  background: linear-gradient(180deg, #fffefb 0%, #f6f0ff 100%);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+}
+.aht-msg-choice-opt:hover {
+  transform: translateY(-1px);
+  box-shadow: 2px 3px 0 rgba(124, 107, 174, .15);
+}
+.aht-msg-choice-opt:active {
+  transform: translateY(0);
+}
+.aht-msg-choice-opt-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.aht-msg-choice-opt-name {
+  font: 700 1.1rem/1.2 var(--msg-font-hand);
+  color: var(--msg-ink);
+}
+.aht-msg-choice-opt-hint {
+  font: 600 0.78rem/1.35 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+}
+.aht-msg-choice-opt-arrow {
+  flex: 0 0 auto;
+  font: 700 1.35rem/1 var(--msg-font-hand);
+  color: var(--msg-accent-lavender);
+}
+
+/* === TOGGLE LEÍDO === */
+.aht-msg-read-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border: 1.5px solid var(--msg-border);
+  border-radius: 999px;
+  background: transparent;
+  font: 600 0.68rem/1 var(--msg-font-body);
+  color: var(--msg-muted);
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+}
+.aht-msg-read-toggle[data-read="true"] {
+  background: rgba(124, 107, 174, .12);
+  color: var(--msg-accent-lavender);
+  border-color: rgba(124, 107, 174, .3);
+}
+.aht-msg-read-toggle[data-read="false"] {
+  background: rgba(196, 43, 74, .08);
+  color: var(--msg-accent-pink);
+  border-color: rgba(196, 43, 74, .2);
+}
+
+/* === HINT (footer) === */
+.aht-msg-hint {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  background-color: var(--modal-footer-bg, #EEE8FA);
+  border-top: 1px solid var(--modal-footer-border, #A99ADF);
+  font: 600 0.78rem/1.4 var(--msg-font-body);
+  color: var(--msg-muted);
+  text-align: center;
+}
+
+/* === RESPONSIVE: MOBILE === */
+@media (max-width: 768px) {
+  .aht-msg-list {
+    padding: 8px 10px 14px;
+  }
+
+  .aht-msg-card {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .aht-msg-avatar {
+    flex: 0 0 44px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .aht-msg-from {
+    font-size: 1.2rem;
+  }
+
+  .aht-msg-body {
+    font-size: 1.05rem;
+  }
+
+  .aht-msg-btn {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+
+  .aht-msg-choice-opt {
+    min-height: 48px;
+  }
+
+  .aht-modal-lab-panel {
+    padding: 6px 10px;
+    gap: 6px;
+    font-size: 0.7rem;
+  }
+}
+
+/* === LAB PANEL — selector de variantes (solo ?modal_catalog=1) === */
+.aht-modal-lab-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 16px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font: 600 0.78rem/1 var(--msg-font-body);
+  border-bottom: 2px solid var(--msg-accent-gold);
+}
+.aht-modal-lab-panel[hidden] {
+  display: none;
+}
+
+.aht-modal-lab-label {
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--msg-accent-gold);
+  margin-right: 4px;
+}
+
+.aht-modal-lab-tab {
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+  user-select: none;
+}
+.aht-modal-lab-tab:hover {
+  background: rgba(232, 184, 74, .15);
+}
+.aht-modal-lab-tab.is-active {
+  background: var(--msg-accent-gold);
+  color: #1a1a2e;
+  font-weight: 800;
+}

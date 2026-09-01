@@ -88,6 +88,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/modal-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <?php /* CANON: modal catálogo — frame limpio de laboratorio, sin herencia legacy */ ?>
   <link rel="stylesheet" href="assets/css/design-system/modal-catalog.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: DS Modal nuevo + body Mensajitos piloto */ ?>
+  <link rel="stylesheet" href="assets/css/design-system/modal-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/mensajitos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .875rem;
@@ -1293,216 +1296,39 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     </div>
   </div>
 
-  <!-- ====== MODAL CATÁLOGO — Laboratorio visual ====== -->
-  <div class="aht-catalog-overlay" id="catalogOverlay" aria-hidden="true">
+  <!-- ====== MENSAJITOS LAB — Piloto DS Modal ====== -->
+  <div class="aht-modal-overlay" id="msgLabOverlay" aria-hidden="true">
 
-    <!-- LAB PANEL — solo visible con ?modal_catalog=1 -->
-    <div class="aht-catalog-lab-panel" id="catalogLabPanel" hidden>
-      <span class="aht-catalog-lab-label">LAB</span>
-      <label class="aht-catalog-lab-toggle"><input type="checkbox" id="catLabToggleTabs" checked/> Tabs</label>
-      <label class="aht-catalog-lab-toggle"><input type="checkbox" id="catLabToggleSearch" checked/> Buscador</label>
-      <label class="aht-catalog-lab-toggle"><input type="checkbox" id="catLabToggleFooter" checked/> Footer</label>
+    <!-- LAB PANEL — selector de variantes (solo visible con ?modal_catalog=1) -->
+    <div class="aht-modal-lab-panel" id="msgLabPanel" hidden>
+      <span class="aht-modal-lab-label">LAB</span>
+      <label class="aht-modal-lab-tab is-active" data-msg-lab="simple">Simple</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="decision">Decisión</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="regalo">Regalo</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="peticion">Petición</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="hilo">Hilo</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="leido">Leído/No</label>
     </div>
 
-    <div class="aht-catalog aht-catalog-frame" role="dialog" aria-modal="true" aria-label="Catálogo de laboratorio">
-      <button type="button" class="aht-catalog-close" id="catalogClose" aria-label="Cerrar catálogo">X</button>
-      <header class="aht-catalog-header">
-        <h2 class="aht-catalog-title" id="catalogTitle">Catálogo</h2>
+    <!-- DS MODAL FRAME -->
+    <div class="aht-modal" role="dialog" aria-modal="true" aria-label="Mensajitos — piloto DS">
+      <button type="button" class="aht-modal-close" id="msgLabClose" aria-label="Cerrar">X</button>
+      <header class="aht-modal-header">
+        <h2 class="aht-modal-title">Mensajitos</h2>
       </header>
 
-      <!-- SLOT: Tabs -->
-      <nav class="aht-catalog-tabs" id="catalogTabs" role="tablist" aria-label="Vistas del catálogo">
-        <button type="button" class="aht-catalog-tab is-active" data-cat-tab="caras" role="tab" aria-selected="true">Caras</button>
-        <button type="button" class="aht-catalog-tab" data-cat-tab="relaciones" role="tab" aria-selected="false">Relaciones</button>
-        <button type="button" class="aht-catalog-tab" data-cat-tab="lista" role="tab" aria-selected="false">Lista</button>
-        <button type="button" class="aht-catalog-tab" data-cat-tab="estanteria" role="tab" aria-selected="false">Estantería</button>
-        <button type="button" class="aht-catalog-tab" data-cat-tab="formulario" role="tab" aria-selected="false">Formulario</button>
-      </nav>
-
-      <!-- SLOT: Buscador -->
-      <div class="aht-catalog-search" id="catalogSearch">
-        <input type="search" class="aht-catalog-search-input" placeholder="Buscar en catálogo..." autocomplete="off" spellcheck="false"/>
+      <!-- BODY: Contenido dinámico según variante -->
+      <div class="aht-modal-body" id="msgLabBody">
+        <div class="aht-msg-list" id="msgLabList"></div>
       </div>
 
-      <!-- BODY: Grid de caras -->
-      <div class="aht-catalog-body" id="catalogBody">
-        <div class="cat-grid" data-cat-view="caras">
-          <div class="cat-grid-item"><div class="cat-grid-avatar">👩‍🦰</div><span class="cat-grid-name">Celestine</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">🧑‍🍳</div><span class="cat-grid-name">Marc</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">👩‍🎨</div><span class="cat-grid-name">Nora</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">🧔</div><span class="cat-grid-name">Hugo</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">👩‍⚕️</div><span class="cat-grid-name">Lina</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">🧑‍🌾</div><span class="cat-grid-name">Teo</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">👩‍💼</div><span class="cat-grid-name">Ariadna</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">🧑‍🏫</div><span class="cat-grid-name">Dario</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">👩‍🔧</div><span class="cat-grid-name">Valentina</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">🧔‍♀️</div><span class="cat-grid-name">Rafa</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">👩‍🍳</div><span class="cat-grid-name">Carlita</span></div>
-          <div class="cat-grid-item"><div class="cat-grid-avatar">🧑‍🎨</div><span class="cat-grid-name">Luna</span></div>
-        </div>
-
-        <!-- BODY: Relaciones -->
-        <div class="cat-list" data-cat-view="relaciones" hidden>
-          <div class="cat-rel-card is-love">
-            <div class="cat-rel-card-head">
-              <span class="cat-rel-card-emoji">💕</span>
-              <span class="cat-rel-card-pair">Celestine &amp; Marc</span>
-            </div>
-            <div class="cat-rel-card-body">Se conocen desde la infancia. Comparten una cocina y mil secretos.</div>
-          </div>
-          <div class="cat-rel-card">
-            <div class="cat-rel-card-head">
-              <span class="cat-rel-card-emoji">🤝</span>
-              <span class="cat-rel-card-pair">Nora &amp; Hugo</span>
-            </div>
-            <div class="cat-rel-card-body">Amigos del alma. Siempre se apoyan en los momentos difíciles.</div>
-          </div>
-          <div class="cat-rel-card">
-            <div class="cat-rel-card-head">
-              <span class="cat-rel-card-emoji">💜</span>
-              <span class="cat-rel-card-pair">Lina &amp; Teo</span>
-            </div>
-            <div class="cat-rel-card-body">Vecinos de enfrente. Comparten jardín y herramientas.</div>
-          </div>
-          <div class="cat-rel-card is-love">
-            <div class="cat-rel-card-head">
-              <span class="cat-rel-card-emoji">💕</span>
-              <span class="cat-rel-card-pair">Ariadna &amp; Dario</span>
-            </div>
-            <div class="cat-rel-card-body">Una pareja reciente. El pueblo entero les desea lo mejor.</div>
-          </div>
-          <div class="cat-rel-card">
-            <div class="cat-rel-card-head">
-              <span class="cat-rel-card-emoji">⚡</span>
-              <span class="cat-rel-card-pair">Valentina &amp; Rafa</span>
-            </div>
-            <div class="cat-rel-card-body">Rivales en el deporte, amigos después del partido.</div>
-          </div>
-        </div>
-
-        <!-- BODY: Lista / Tabla -->
-        <div class="cat-list" data-cat-view="lista" hidden>
-          <div class="cat-list-row">
-            <span class="cat-list-icon">📍</span>
-            <div class="cat-list-text">
-              <div class="cat-list-label">Plaza del Pueblo</div>
-              <div class="cat-list-sub">Corazón del pueblo, siempre animado</div>
-            </div>
-            <span class="cat-list-badge">Activo</span>
-          </div>
-          <div class="cat-list-row">
-            <span class="cat-list-icon">☕</span>
-            <div class="cat-list-text">
-              <div class="cat-list-label">Café de Nora</div>
-              <div class="cat-list-sub">El mejor café con vistas al río</div>
-            </div>
-            <span class="cat-list-badge">Abierto</span>
-          </div>
-          <div class="cat-list-row">
-            <span class="cat-list-icon">🌳</span>
-            <div class="cat-list-text">
-              <div class="cat-list-label">Parque de Teo</div>
-              <div class="cat-list-sub">Un rincón verde para descansar</div>
-            </div>
-            <span class="cat-list-badge">Libre</span>
-          </div>
-          <div class="cat-list-row">
-            <span class="cat-list-icon">📚</span>
-            <div class="cat-list-text">
-              <div class="cat-list-label">Biblioteca</div>
-              <div class="cat-list-sub">Silencio y conocimiento</div>
-            </div>
-            <span class="cat-list-badge">Tranquilo</span>
-          </div>
-          <div class="cat-list-row">
-            <span class="cat-list-icon">🎭</span>
-            <div class="cat-list-text">
-              <div class="cat-list-label">Teatro Municipal</div>
-              <div class="cat-list-sub">Funciones los fines de semana</div>
-            </div>
-            <span class="cat-list-badge">Evento</span>
-          </div>
-        </div>
-
-        <!-- BODY: Estantería / Inventario -->
-        <div class="cat-shelf" data-cat-view="estanteria" hidden>
-          <div class="cat-shelf-item">
-            <span class="cat-shelf-icon">🍰</span>
-            <span class="cat-shelf-name">Tarta de manzana</span>
-            <span class="cat-shelf-desc">Receta de la abuela Nora</span>
-          </div>
-          <div class="cat-shelf-item">
-            <span class="cat-shelf-icon">🪴</span>
-            <span class="cat-shelf-name">Geranio rojo</span>
-            <span class="cat-shelf-desc">Cuidado por Teo</span>
-          </div>
-          <div class="cat-shelf-item">
-            <span class="cat-shelf-icon">📖</span>
-            <span class="cat-shelf-name">Diario viejo</span>
-            <span class="cat-shelf-desc">Con anotaciones de Dario</span>
-          </div>
-          <div class="cat-shelf-item">
-            <span class="cat-shelf-icon">🎨</span>
-            <span class="cat-shelf-name">Paleta de colores</span>
-            <span class="cat-shelf-desc">De la colección de Nora</span>
-          </div>
-          <div class="cat-shelf-item">
-            <span class="cat-shelf-icon">🔧</span>
-            <span class="cat-shelf-name">Llave inglesa</span>
-            <span class="cat-shelf-desc">Prestada por Valentina</span>
-          </div>
-          <div class="cat-shelf-item">
-            <span class="cat-shelf-icon">🧶</span>
-            <span class="cat-shelf-name">Madeja de lana</span>
-            <span class="cat-shelf-desc">Color lavanda, suave</span>
-          </div>
-        </div>
-
-        <!-- BODY: Formulario / Nuevo plan -->
-        <div class="cat-form" data-cat-view="formulario" hidden>
-          <div class="cat-form-group">
-            <label class="cat-form-label" for="catPlanName">Nombre del plan</label>
-            <input type="text" class="cat-form-input" id="catPlanName" placeholder="Ej: Merendar en el parque"/>
-          </div>
-          <div class="cat-form-group">
-            <label class="cat-form-label" for="catPlanDesc">Descripción</label>
-            <textarea class="cat-form-textarea" id="catPlanDesc" placeholder="Cuéntanos de qué va este plan..."></textarea>
-          </div>
-          <div class="cat-form-group">
-            <label class="cat-form-label" for="catPlanType">Tipo de actividad</label>
-            <select class="cat-form-select" id="catPlanType">
-              <option value="">Seleccionar...</option>
-              <option value="cafe">Tomar un café</option>
-              <option value="paseo">Paseo</option>
-              <option value="deporte">Deporte</option>
-              <option value="arte">Arte y cultura</option>
-              <option value="cocina">Cocinar juntos</option>
-            </select>
-          </div>
-          <div class="cat-form-group">
-            <label class="cat-form-label" for="catPlanLugar">Lugar</label>
-            <select class="cat-form-select" id="catPlanLugar">
-              <option value="">Seleccionar...</option>
-              <option value="plaza">Plaza del Pueblo</option>
-              <option value="cafe">Café de Nora</option>
-              <option value="parque">Parque de Teo</option>
-              <option value="biblio">Biblioteca</option>
-              <option value="teatro">Teatro Municipal</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- SLOT: Footer / Botones -->
-      <footer class="aht-catalog-footer" id="catalogFooter">
-        <button type="button" class="aht-catalog-btn" id="catalogBtnCancel">Cancelar</button>
-        <button type="button" class="aht-catalog-btn aht-catalog-btn--primary" id="catalogBtnConfirm">Confirmar</button>
-      </footer>
+      <!-- HINT FOOTER -->
+      <div class="aht-msg-hint">⭐ Abrir mensajitos puede desbloquear planes y cotilleos</div>
     </div>
   </div>
-  <!-- ====== FIN MODAL CATÁLOGO ====== -->
+  <!-- ====== FIN MENSAJITOS LAB ====== -->
 
-  <script src="assets/js/play-v3-catalog.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/play-v3-mensajitos-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
