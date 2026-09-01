@@ -1308,6 +1308,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <label class="aht-modal-lab-tab" data-msg-lab="peticion">Petición</label>
       <label class="aht-modal-lab-tab" data-msg-lab="hilo">Hilo</label>
       <label class="aht-modal-lab-tab" data-msg-lab="leido">Leído/No</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="varios">Varios</label>
     </div>
 
     <!-- DS MODAL FRAME -->
@@ -1316,6 +1317,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <header class="aht-modal-header">
         <h2 class="aht-modal-title">Mensajitos</h2>
       </header>
+
+      <!-- ZONA DE NAVEGACIÓN: tabs + marcar todos -->
+      <nav class="aht-msg-nav" role="tablist" aria-label="Filtros de mensajitos">
+        <button type="button" class="aht-msg-tab is-on" data-msg-filtro="nuevos" role="tab" aria-selected="true">
+          <span>NUEVOS</span>
+          <span class="aht-msg-tab-count" id="msgLabCount" hidden>0</span>
+        </button>
+        <button type="button" class="aht-msg-tab" data-msg-filtro="todos" role="tab" aria-selected="false">TODOS</button>
+        <button type="button" class="aht-msg-mark-all" id="msgLabMarkAll" hidden>
+          <span>Marcar todos como leídos</span>
+        </button>
+      </nav>
 
       <!-- BODY: Contenido dinámico según variante -->
       <div class="aht-modal-body" id="msgLabBody">
