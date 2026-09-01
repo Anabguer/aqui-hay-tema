@@ -749,7 +749,7 @@
   z-index: 100 !important;
 }
 
-.play-v3:has(.play-root[data-capa]) .mensajitos-wrap,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .mensajitos-wrap,
 .play-v3:has(.play-root[data-consulta="sel"]) .mensajitos-wrap,
 .play-v3:has(.play-root[data-consulta="quien"]) .mensajitos-wrap {
   z-index: 1;
@@ -1731,14 +1731,14 @@
 }
 
 /* Cualquier capa/modal del juego */
-.play-v3 .play-root[data-capa] .velo,
+.play-v3 .play-root[data-capa]:not([data-capa=""]) .velo,
 .play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
   opacity: 1 !important;
   pointer-events: auto !important;
 }
 
 /* Velo a pantalla completa (capas y consulta edificio) */
-.play-v3:has(.game-shell) .play-root[data-capa] .velo,
+.play-v3:has(.game-shell) .play-root[data-capa]:not([data-capa=""]) .velo,
 .play-v3:has(.game-shell) .play-root[data-consulta]:not([data-consulta=""]) .velo {
   position: fixed !important;
   inset: 0 !important;
@@ -1766,14 +1766,14 @@
 
 
 @media (min-width: 769px) {
-  .play-v3 .play-root.pc[data-capa] .velo,
+  .play-v3 .play-root.pc[data-capa]:not([data-capa=""]) .velo,
   .play-v3 .play-root.pc[data-consulta]:not([data-consulta=""]) .velo {
     background: rgba(30, 25, 25, 0.30) !important;
   }
 }
 
 @media (max-width: 768px) {
-  .play-v3 .play-root.phone[data-capa] .velo,
+  .play-v3 .play-root.phone[data-capa]:not([data-capa=""]) .velo,
   .play-v3 .play-root.phone[data-consulta]:not([data-consulta=""]) .velo {
     background: rgba(30, 25, 25, 0.37) !important;
   }

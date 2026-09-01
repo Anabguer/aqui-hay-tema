@@ -1430,11 +1430,11 @@
    (b) section.inicio-mobile (tiles) was never targeted; only .inicio-mobile-feed was. */
 
 /* All siblings of .inicio-map-host that are NOT the map-host → z-index:0 */
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .game-top,
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-desktop-layout,
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed),
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-desktop,
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-mobile.inicio-mobile-feed,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .game-top,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-desktop-layout,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed),
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-desktop,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-mobile.inicio-mobile-feed,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .game-top,
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-desktop-layout,
@@ -1450,7 +1450,7 @@
 
 
 
-.play-v3:has(.play-root[data-capa]) .inicio-stage > .inicio-map-host,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-map-host,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-map-host {
 
@@ -1464,19 +1464,19 @@
 
 
 
-.play-v3:has(.play-root[data-capa]) .control-audio,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .control-audio,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .control-audio,
 
-.play-v3:has(.play-root[data-capa]) .aht-debug-float,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .aht-debug-float,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .aht-debug-float,
 
-.play-v3:has(.play-root[data-capa]) .playtest-float,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .playtest-float,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .playtest-float,
 
-.play-v3:has(.play-root[data-capa]) .plan-notif,
+.play-v3:has(.play-root[data-capa]:not([data-capa=""])) .plan-notif,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .plan-notif {
 

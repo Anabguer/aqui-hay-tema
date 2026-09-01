@@ -13,7 +13,7 @@
   --modal-overlay: rgba(38, 31, 47, 0.45);
 }
 
-.play-v3:has(.game-shell) .play-root[data-capa] .velo,
+.play-v3:has(.game-shell) .play-root[data-capa]:not([data-capa=""]) .velo,
 .play-v3:has(.game-shell) .play-root[data-consulta]:not([data-consulta=""]) .velo {
   background-color: var(--modal-overlay) !important;
 }
