@@ -3341,16 +3341,22 @@
     block._ppMovIndice = idx;
     shell.hidden = false;
     shell.removeAttribute('aria-hidden');
-    const desktopMany = ppMovEsDesktop(block) && n > 2;
-    block.classList.toggle('proxplanes-movil--many', desktopMany);
-    if (desktopMany) {
+    if (ppMovEsDesktop(block)) {
       const max = Math.max(0, track.scrollWidth - track.clientWidth);
-      prev.hidden = true;
+      const needsCarousel = n > 2 && max > 2;
+      block.classList.toggle('proxplanes-movil--many', needsCarousel);
+      if (!needsCarousel) {
+        prev.hidden = true;
+        next.hidden = true;
+        return;
+      }
+      prev.hidden = track.scrollLeft <= 2;
       next.hidden = track.scrollLeft >= max - 2;
-    } else {
-      prev.hidden = n < 2 || idx <= 0;
-      next.hidden = n < 2 || idx >= n - 1;
+      return;
     }
+    block.classList.remove('proxplanes-movil--many');
+    prev.hidden = n < 2 || idx <= 0;
+    next.hidden = n < 2 || idx >= n - 1;
   }
   function renderProxplanesNav() {
     inicioBlocks('[data-proxplanes-block]').forEach(renderProxplanesNavFor);

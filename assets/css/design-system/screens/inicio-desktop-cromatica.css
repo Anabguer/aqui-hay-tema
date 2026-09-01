@@ -1290,3 +1290,73 @@
   }
 }
 
+/* INICIO-PLANES-PROX-DUO-COMPACT-v147 - proximos duo: caras mas juntas, emoji centrado sin tapar */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara--r {
+    margin-left: -12px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    flex: 0 0 auto !important;
+    z-index: 3 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 1px !important;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+  }
+}
+
+
+/* INICIO-BOTTOM-NAV-DESKTOP-v138 - anula transform coma-roto en btns map-host; ::after intacto */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn {
+    transform: none !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    top: auto !important;
+    content: normal !important;
+  }
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 3px !important;
+    transform: translateX(-50%) !important;
+    width: min(72%, 56px) !important;
+    height: 3.5px !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink-deep, #c42b4a) !important;
+  }
+}
