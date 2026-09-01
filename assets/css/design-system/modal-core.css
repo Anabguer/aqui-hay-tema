@@ -39,6 +39,30 @@
   opacity: 1;
 }
 
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon.ds-migrada {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(100%, 393px);
+  max-width: min(100%, 393px);
+  height: auto;
+  min-height: 0;
+  max-height: min(88vh, 720px);
+  margin: 0;
+  padding: 14px 13px 12px;
+  transform: translate(-50%, -50%) rotate(-0.2deg);
+  display: flex !important;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: 110;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1;
+}
+
 /* === X / cerrar — estructura (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .capa.ds-migrada > .cerrar:not(.tut-skip),
 .play-v3:has(.game-shell) .capa.ds-migrada .cerrar.ds-modal-close {
@@ -68,9 +92,14 @@
 }
 
 /* === Body / scroll estructural (solo dentro de .ds-migrada) === */
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-body {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada [data-buzon-list] {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mensajitos-hint {
+  flex: 0 0 auto;
 }

@@ -708,7 +708,7 @@
 }
 
 @media (max-width: 600px) {
-  .play-v3 .capa-buzon { width: min(100%, 393px); }
+  .play-v3 .capa-buzon:not(.ds-migrada) { width: min(100%, 393px); }
   .play-v3 .mensajitos-leer-todos { display: none !important; }
   .play-v3 .mensajitos-tabs { gap: 6px; }
   .play-v3 .mensajitos-tab { max-width: none; flex: 1 1 0; font-size: .98rem; }
@@ -768,8 +768,8 @@
   display: none !important;
 }
 
-/* DS Mensajitos — acabado visual (ref. 02-mensajitos.png) */
-.play-v3 .capa-buzon {
+/* DS Mensajitos — acabado visual (ref. 02-mensajitos.png); shell delegado a modal-core/skin */
+.play-v3 .capa-buzon:not(.ds-migrada) {
   background: var(--ds-paper, #fffaf1);
   padding: 14px 13px 12px;
   overflow-y: auto;
@@ -1019,7 +1019,7 @@
 }
 
 @media (max-width: 600px) {
-  .play-v3 .capa-buzon { width: min(100%, 393px); }
+  .play-v3 .capa-buzon:not(.ds-migrada) { width: min(100%, 393px); }
   .play-v3 .mensajitos-leer-todos { display: none !important; }
   .play-v3 .mensajitos-tabs { gap: 6px; }
   .play-v3 .mensajitos-tab { max-width: none; flex: 1 1 0; font-size: .98rem; }

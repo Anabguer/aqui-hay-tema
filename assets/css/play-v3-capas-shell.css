@@ -34,7 +34,7 @@
 }
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon,
+.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
 .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
 .play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda,
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
@@ -49,7 +49,8 @@
   pointer-events: auto;
 }
 /* ds-migrada: visibility + pointer-events handled by modal-core; transform by modal-core */
-.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.ds-migrada {
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.ds-migrada,
+.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon.ds-migrada {
   visibility: visible;
   pointer-events: auto;
 }
@@ -122,16 +123,16 @@
   padding-right: 4.75rem;
 }
 
-/* Buzon — marco suave */
-.play-v3 .capa-buzon {
+/* Buzon — marco suave (legacy; ds-migrada gobernada por modal-core/skin) */
+.play-v3 .capa-buzon:not(.ds-migrada) {
   background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat !important;
   border: 0 !important;
   box-shadow: 8px 6px 28px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(180, 150, 110, .2) !important;
 }
-.play-v3 .capa-buzon > .capa-cerrar-pestaña { background: transparent !important; }
-.play-v3 .capa-buzon > .cerrar[data-close] { display: grid; }
-.play-v3 .capa-buzon h2 { margin-top: .35rem; padding-right: 4.75rem; }
-.play-v3 .capa-buzon .carta-msg.importante {
+.play-v3 .capa-buzon:not(.ds-migrada) > .capa-cerrar-pestaña { background: transparent !important; }
+.play-v3 .capa-buzon:not(.ds-migrada) > .cerrar[data-close] { display: grid; }
+.play-v3 .capa-buzon:not(.ds-migrada) h2 { margin-top: .35rem; padding-right: 4.75rem; }
+.play-v3 .capa-buzon:not(.ds-migrada) .carta-msg.importante {
   border: 0 !important;
   box-shadow: inset 4px 0 0 #c42b4a, 0 1px 0 rgba(44,38,31,.06) !important;
   transform: rotate(-0.3deg);

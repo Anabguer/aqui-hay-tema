@@ -19,13 +19,15 @@
 }
 
 /* === Header bg (solo dentro de .ds-migrada) === */
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-top {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mensajitos-cab {
   background-color: var(--modal-header-bg, #FFFFFF);
   background-image: none;
 }
 
 /* === Body bg (solo dentro de .ds-migrada) === */
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-body {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada [data-buzon-list] {
   background-color: var(--modal-content-bg, #F6F3F8);
   background-image: none;
 }

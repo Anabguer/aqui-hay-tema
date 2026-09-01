@@ -3,7 +3,8 @@
    Gate: .ds-migrada — solo modales marcadas reciben autoridad nueva. */
 
 /* === Título (solo dentro de .ds-migrada) === */
-.play-v3:has(.game-shell) .capa.ds-migrada .mis-tit.ds-modal-tit {
+.play-v3:has(.game-shell) .capa.ds-migrada .mis-tit.ds-modal-tit,
+.play-v3:has(.game-shell) .capa.ds-migrada .mensajitos-cab .ds-modal-tit {
   font-family: var(--ds-font-hand, "Caveat", "Segoe Print", cursive);
   font-size: var(--modal-title-size, 1.75rem);
   font-weight: 700;
@@ -22,7 +23,8 @@
 
 /* === Title size mobile override (solo dentro de .ds-migrada) === */
 @media (max-width: 520px) {
-  .play-v3:has(.game-shell) .capa.ds-migrada .mis-tit.ds-modal-tit {
+  .play-v3:has(.game-shell) .capa.ds-migrada .mis-tit.ds-modal-tit,
+  .play-v3:has(.game-shell) .capa.ds-migrada .mensajitos-cab .ds-modal-tit {
     font-size: 1.95rem;
   }
 }
@@ -40,7 +42,9 @@
 
 /* === Cabecera centrada (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .capa.ds-migrada .mis-top .ds-modal-head,
-.play-v3:has(.game-shell) .capa.ds-migrada .mis-top .ds-modal-head-row {
+.play-v3:has(.game-shell) .capa.ds-migrada .mis-top .ds-modal-head-row,
+.play-v3:has(.game-shell) .capa.ds-migrada .mensajitos-cab .ds-modal-head,
+.play-v3:has(.game-shell) .capa.ds-migrada .mensajitos-cab .ds-modal-head-row {
   justify-content: center;
   text-align: center;
 }

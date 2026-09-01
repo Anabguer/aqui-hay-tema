@@ -18,7 +18,7 @@
   background-color: var(--modal-overlay) !important;
 }
 
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa.capa-buzon.ds-modal-sheet,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa.capa-buzon.ds-modal-sheet:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa.capa-vecinos,
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa.capa-organizar.org-plan-papel.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
@@ -181,7 +181,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar,
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon {
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) {
   display: flex !important;
   flex-direction: column !important;
   overflow: hidden !important;

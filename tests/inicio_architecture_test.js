@@ -38,7 +38,10 @@ ok(/setAllText\('\[data-vecinos-poblacion\]'/.test(js) && /buildInicioViewModel/
 // 5. Acciones compartidas data-open en ambas vistas
 const openBuzonMob = (php.match(/class="inicio-mobile[\s\S]*?data-open="buzon"/g) || []).length;
 const openBuzonDesk = (php.match(/class="inicio-desktop[\s\S]*?data-open="buzon"/g) || []).length;
+const openMisionesMob = (php.match(/class="inicio-mobile[\s\S]*?data-open="misiones"/g) || []).length;
+const openMisionesDesk = (php.match(/class="inicio-desktop[\s\S]*?data-open="misiones"/g) || []).length;
 ok(openBuzonMob >= 1 && openBuzonDesk >= 1, 'PHP: data-open buzón en móvil y desktop');
+ok(openMisionesMob >= 1 && openMisionesDesk >= 1, 'PHP: data-open misiones en móvil y desktop');
 
 // 6. Sin IDs duplicados problemáticos
 ok(!/id="mob-misiones"/.test(php) && !/id="mob-parejas"/.test(php),

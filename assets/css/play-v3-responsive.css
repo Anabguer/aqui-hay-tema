@@ -703,8 +703,13 @@
     pointer-events: auto !important;
   }
 
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon.ds-migrada {
+    display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+
   .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
@@ -749,7 +754,7 @@
 
 /* Capa activa por encima del HUD */
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root[data-capa="mentes"] .capa-mentes,

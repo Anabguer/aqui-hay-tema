@@ -42,7 +42,7 @@
 
 
 /* CAPAS-PRINCIPALES-SHELL-UNIFICADO */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
@@ -51,7 +51,7 @@
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_relaciones"] .capa-ficha-relaciones,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
@@ -82,7 +82,7 @@
   background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%), var(--ds-paper-modal, #fffaf0) !important;
   box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
 }
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon::before,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada)::before,
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos::before,
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar::before,
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda::before,
@@ -100,7 +100,7 @@
   pointer-events: none;
   z-index: 1;
 }
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon:not(.ds-migrada) > *:not(.cerrar):not(.ds-modal-close),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos > *:not(.cerrar):not(.ds-modal-close),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar > *:not(.cerrar):not(.ds-modal-close),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda > *:not(.cerrar):not(.ds-modal-close),
@@ -111,7 +111,7 @@
   position: relative;
   z-index: 2;
 }
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon [data-buzon-list],
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) [data-buzon-list],
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vec-panel:not([hidden]),
 .play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar .org-body,
 .play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda .agenda-list,
@@ -121,7 +121,7 @@
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
 }
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon .mensajitos-hint,
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) .mensajitos-hint,
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .mensajitos-hint {
   flex: 0 0 auto;
 }
@@ -221,10 +221,10 @@
 }
 
 /* CAPAS-LIBRETA-SUTIL */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,

@@ -800,7 +800,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <p class="vida-latido mini">&#8212;Llegas a 100? ?? Hay latido.<br>S&#8212;, conseguir que este pueblo funcione tiene premio. Incre&#8212;ble, pero cierto.</p>
         </div>
       </aside>
-      <aside class="capa capa-buzon ds-modal-sheet" aria-label="Mensajitos">
+      <aside class="capa capa-buzon ds-modal-sheet ds-migrada" aria-label="Mensajitos">
         <button type="button" class="cerrar mensajitos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="mensajitos-cab">
           <div class="ds-modal-head">
@@ -1135,14 +1135,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </section>
             <section class="shell-grupo shell-grupo-misiones-par" data-inicio-misiones>
-          <div class="obj-misiones-papel" aria-label="Misiones de hoy">
+          <button type="button" class="obj-misiones-papel" data-open="misiones" aria-label="Ver misiones de hoy">
             <span class="mision-tape mision-tape-tl" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-tr" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-bl" aria-hidden="true"></span>
             <span class="mision-tape mision-tape-br" aria-hidden="true"></span>
             <span class="obj-misiones-papel-tit">MISIONES</span>
             <div class="obj-misiones-strip" data-misiones-strip></div>
-          </div>
+          </button>
         </section>
           </aside>
           <aside class="inicio-chrome-right inicio-desktop-right">

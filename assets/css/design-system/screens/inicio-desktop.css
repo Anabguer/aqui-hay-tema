@@ -5303,6 +5303,17 @@
 
 /* INICIO-MISIONES-v70 - tarjeta crema ref: redondeada, header, filas, circulos (gana scrapbook) */
 @media (min-width: 769px) {
+  .play-v3 .inicio-desktop-left button.obj-misiones-papel {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    width: 100%;
+  }
+
   .play-v3 .inicio-desktop-left .obj-misiones-papel {
     display: grid !important;
     grid-template-columns: minmax(0, 1fr) auto !important;
