@@ -75,10 +75,9 @@
     box-sizing: border-box;
   }
 
-  body.play-v3 { height: 100vh !important; }
-  .game-shell { height: 100% !important; flex: none !important; }
-  .inicio-stage { flex: 1 !important; min-height: 0 !important; }
-  .game-map-wrap { flex: 1 !important; min-height: 200px !important; max-height: calc(100vh - 455px) !important; }
+  /* e0c831c9 removed: height:100vh on body locked viewport, killing scroll.
+     body grows naturally → game-shell overflow:visible → page scrolls.
+     Map spacing preserved via d8a29b06 padding-bottom:0 in inicio-mobile.css. */
 
   .game-top {
     display: grid;
