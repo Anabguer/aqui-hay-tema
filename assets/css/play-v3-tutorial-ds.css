@@ -26,6 +26,9 @@
 .tut-finale[hidden] {
   display: none !important;
 }
+.play-v3 .tut-intro[hidden] {
+  display: none !important;
+}
 
 /* --- 2. SHELL / PAPEL — misma geometria en las 5 pantallas --- */
 .play-v3 .tut-intro .tut-papel,

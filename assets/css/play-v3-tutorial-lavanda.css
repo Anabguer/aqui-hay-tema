@@ -29,3 +29,7 @@
   --tut-font-ui: "Nunito", "Segoe UI", sans-serif;
   --tut-font-hand: "Caveat", cursive;
 }
+
+.play-v3 .tut-intro[hidden] {
+  display: none !important;
+}
