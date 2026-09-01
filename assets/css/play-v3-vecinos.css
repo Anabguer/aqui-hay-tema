@@ -4,8 +4,8 @@
  */
 
 /* --- Modal papel / cuaderno --- */
-.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-.play-v3 .play-root.phone[data-capa="vecinos"] .capa-vecinos {
+.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos:not(.ds-migrada),
+.play-v3 .play-root.phone[data-capa="vecinos"] .capa-vecinos:not(.ds-migrada) {
   position: absolute !important;
   left: 50% !important;
   top: 50% !important;
@@ -734,7 +734,7 @@
 
 /* --- Desktop: modal más ancha, más columnas --- */
 @media (min-width: 769px) {
-  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
+  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos:not(.ds-migrada) {
     width: min(100% - 32px, 720px) !important;
     max-width: min(100% - 32px, 720px) !important;
     max-height: min(90vh, 820px) !important;

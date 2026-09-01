@@ -917,14 +917,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <h2 class="org-tit ds-modal-tit ds-modal-tit--ink modal-title-aht">NUEVO PLAN</h2>
             </div>
           </div>
+        </header>
+        <div class="org-body capa-scroll">
           <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
             <span class="org-modo-pill" data-org-modo-solo>Solo</span>
             <span class="org-modo-pill" data-org-modo-pareja>Acompa&ntilde;ado</span>
           </div>
           <p class="org-modo-estado sr-only" data-org-modo-estado hidden></p>
           <p class="org-aviso" data-org-aviso hidden></p>
-        </header>
-        <div class="org-body capa-scroll">
           <section class="ficha-seccion org-seccion org-seccion--quienes">
             <div class="org-seccion-head">
               <div class="org-seccion-head-row">
@@ -1195,10 +1195,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 </section>
             </div>
             </div>
+            <button type="button" class="shell-grupo-parejas-open" data-open="parejas" aria-label="Ver parejas del pueblo">
             <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
+            </button>
           </aside>
         </div>
       </section>

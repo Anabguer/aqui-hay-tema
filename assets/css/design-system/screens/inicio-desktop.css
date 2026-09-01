@@ -1,4 +1,4 @@
-/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
+﻿/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
 
 .inicio-desktop .inicio-desktop-layout {
   display: grid;
@@ -8429,5 +8429,23 @@
     font-weight: 800 !important;
     line-height: 16px !important;
     text-align: center !important;
+  }
+}
+
+
+/* PAREJAS-DESKTOP-OPEN — trigger modal (patron misiones) */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right button.shell-grupo-parejas-open {
+    appearance: none;
+    -webkit-appearance: none;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    text-align: inherit;
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
 }

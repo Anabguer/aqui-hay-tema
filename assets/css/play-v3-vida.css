@@ -1,6 +1,6 @@
-/** Vida del pueblo (12) */
-.play-v3 .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
-.play-v3 .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo,
+﻿/** Vida del pueblo (12) */
+.play-v3 .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo:not(.ds-migrada),
+.play-v3 .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo:not(.ds-migrada),
 .play-v3 .capa-vida-pueblo.vida-modal-papel {
   position: absolute !important; left: 50% !important; top: 50% !important;
   width: min(100%, 340px) !important; max-width: min(100%, 340px) !important;
@@ -32,7 +32,7 @@
 .play-v3 .capa-vida-pueblo .vida-latido { font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); color: var(--ds-text-muted, #7a6a5c); margin: 0 0 8px; }
 
 /* VISUAL-REVIEW vida pueblo: shell modal unificado */
-.play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo {
+.play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo:not(.ds-migrada) {
   width: min(100%, 393px) !important;
   max-width: min(100%, 393px) !important;
   max-height: min(88vh, 720px) !important;

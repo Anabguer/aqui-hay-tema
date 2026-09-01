@@ -5,8 +5,8 @@
 }
 
 /* --- Modal shell --- */
-.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
-.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar {
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar:not(.ds-migrada),
+.play-v3 .play-root.phone[data-capa="organizar"] .capa-organizar:not(.ds-migrada) {
   position: absolute !important;
   left: 50% !important;
   top: 50% !important;
@@ -34,7 +34,7 @@
   box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
 }
 
-.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar {
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar:not(.ds-migrada) {
   width: min(760px, 94vw) !important;
   max-width: min(760px, 94vw) !important;
   max-height: min(88vh, 820px) !important;
