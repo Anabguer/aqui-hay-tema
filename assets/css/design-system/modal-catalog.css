@@ -1,6 +1,11 @@
 /* MODAL-CATALOG — Frame canónico de laboratorio/catálogo AHT
    Nace limpia. Sin herencia de modales legacy.
-   Gate: .aht-catalog — solo esta modal recibe estas reglas. */
+   Gate: .aht-catalog — solo esta modal recibe estas reglas.
+
+   SECCIONES:
+   A) CONTRATO DE FRAME (overlay, shell, header, tabs, search, body, footer, responsive)
+   B) DEMOS DE BODY (grid, relaciones, lista, estantería, formulario)
+   C) LAB PANEL (debug, solo visible con ?modal_catalog=1) */
 
 /* === TOKENS LOCALES (override solo dentro de .aht-catalog) === */
 .aht-catalog {
@@ -541,4 +546,54 @@
     top: 4px;
     right: 4px;
   }
+
+  .aht-catalog-lab-panel {
+    padding: 6px 10px;
+    gap: 8px;
+    font-size: 0.72rem;
+  }
+}
+
+/* === C) LAB PANEL — debug (solo con ?modal_catalog=1) === */
+.aht-catalog-lab-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font: 600 0.78rem/1 Nunito, sans-serif;
+  border-bottom: 2px solid #e8b84a;
+}
+.aht-catalog-lab-panel[hidden] {
+  display: none;
+}
+
+.aht-catalog-lab-label {
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #e8b84a;
+  margin-right: 4px;
+}
+
+.aht-catalog-lab-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.aht-catalog-lab-toggle input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  accent-color: #e8b84a;
+  cursor: pointer;
 }

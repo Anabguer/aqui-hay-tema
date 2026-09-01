@@ -1295,6 +1295,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 
   <!-- ====== MODAL CATÁLOGO — Laboratorio visual ====== -->
   <div class="aht-catalog-overlay" id="catalogOverlay" aria-hidden="true">
+
+    <!-- LAB PANEL — solo visible con ?modal_catalog=1 -->
+    <div class="aht-catalog-lab-panel" id="catalogLabPanel" hidden>
+      <span class="aht-catalog-lab-label">LAB</span>
+      <label class="aht-catalog-lab-toggle"><input type="checkbox" id="catLabToggleTabs" checked/> Tabs</label>
+      <label class="aht-catalog-lab-toggle"><input type="checkbox" id="catLabToggleSearch" checked/> Buscador</label>
+      <label class="aht-catalog-lab-toggle"><input type="checkbox" id="catLabToggleFooter" checked/> Footer</label>
+    </div>
+
     <div class="aht-catalog aht-catalog-frame" role="dialog" aria-modal="true" aria-label="Catálogo de laboratorio">
       <button type="button" class="aht-catalog-close" id="catalogClose" aria-label="Cerrar catálogo">X</button>
       <header class="aht-catalog-header">

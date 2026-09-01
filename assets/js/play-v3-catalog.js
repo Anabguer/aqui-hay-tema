@@ -1,5 +1,7 @@
-/* MODAL-CATALOG — Interacción mínima del catálogo de laboratorio AHT
-   Tabs, búsqueda, apertura/cierre. Sin dependencias del motor del juego. */
+/* MODAL-CATALOG — Interacción del catálogo de laboratorio AHT
+   Tabs, búsqueda, apertura/cierre, toggles de slots.
+   Trigger: ?modal_catalog=1 (debug, no visible para jugadores).
+   Sin dependencias del motor del juego. */
 
 (function () {
   'use strict';
@@ -7,9 +9,17 @@
   var overlay = document.getElementById('catalogOverlay');
   var closeBtn = document.getElementById('catalogClose');
   var tabsWrap = document.getElementById('catalogTabs');
+  var searchSlot = document.getElementById('catalogSearch');
+  var footerSlot = document.getElementById('catalogFooter');
   var searchInput = overlay ? overlay.querySelector('.aht-catalog-search-input') : null;
   var cancelBtn = document.getElementById('catalogBtnCancel');
   var confirmBtn = document.getElementById('catalogBtnConfirm');
+
+  /* Lab controls */
+  var labPanel = document.getElementById('catalogLabPanel');
+  var toggleTabs = document.getElementById('catLabToggleTabs');
+  var toggleSearch = document.getElementById('catLabToggleSearch');
+  var toggleFooter = document.getElementById('catLabToggleFooter');
 
   if (!overlay) return;
 
@@ -87,5 +97,38 @@
         item.style.display = (!q || text.indexOf(q) !== -1) ? '' : 'none';
       });
     });
+  }
+
+  /* --- Lab toggles (solo visibles con ?modal_catalog=1) --- */
+  function applyToggle(el, slot, checked) {
+    if (!slot) return;
+    slot.hidden = !checked;
+    if (el) el.checked = checked;
+  }
+
+  if (toggleTabs) {
+    toggleTabs.addEventListener('change', function () {
+      applyToggle(toggleTabs, tabsWrap, this.checked);
+    });
+  }
+  if (toggleSearch) {
+    toggleSearch.addEventListener('change', function () {
+      applyToggle(toggleSearch, searchSlot, this.checked);
+    });
+  }
+  if (toggleFooter) {
+    toggleFooter.addEventListener('change', function () {
+      applyToggle(toggleFooter, footerSlot, this.checked);
+    });
+  }
+
+  /* --- Trigger: ?modal_catalog=1 --- */
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('modal_catalog') === '1') {
+    /* Mostrar panel de laboratorio */
+    if (labPanel) labPanel.hidden = false;
+
+    /* Auto-abrir el catálogo tras un tick para que el DOM esté listo */
+    setTimeout(openCatalog, 80);
   }
 })();
