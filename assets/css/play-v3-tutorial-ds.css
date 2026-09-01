@@ -802,12 +802,95 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
   }
   .play-v3 .tut-cara { width: 56px !important; height: 56px !important; }
   .play-v3 .tut-caras { gap: 8px !important; margin: 8px 0 10px !important; }
-}
+
+  /* --- 20b. MOVIL: scroll interno + compactacion (pasos 1-5, finale) --- */
+  .play-v3 .tut-intro .tut-papel,
+  .play-v3 .tut-finale .tut-papel {
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+  }
+  .play-v3 .tut-papel-cabecera {
+    flex-shrink: 0 !important;
+    min-height: 88px !important;
+    max-height: 108px !important;
+    padding: 10px 12px 2px !important;
+  }
+  .play-v3 .tut-hero { margin: 0 0 2px !important; }
+  .play-v3 .tut-hero-img { max-height: 52px !important; }
+  .play-v3 .tut-papel-cuerpo {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding: 0 10px !important;
+    justify-content: flex-start !important;
+    gap: 4px !important;
+  }
+  .play-v3 .tut-papel-cuerpo::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+  .play-v3 .tut-papel-pie {
+    flex-shrink: 0 !important;
+    flex: 0 0 auto !important;
+    padding: 4px 10px 8px !important;
+  }
+  .play-v3 .tut-papel .tut-titulo,
+  .play-v3 .tut-papel h2[data-tut-tit],
+  .play-v3 .tut-finale h2 {
+    margin: 0 0 2px !important;
+  }
+  .play-v3 .tut-intro-line { margin: 0 0 4px !important; }
+  .play-v3 .tut-intro-extra { margin: 0 0 6px !important; }
+  .play-v3 .tut-bloques-pref { margin: 4px 0 6px !important; }
+  .play-v3 .tut-cierre { margin-top: 6px !important; padding-top: 6px !important; }
+  .play-v3 .tut-paso-1 .tut-papel-cuerpo { justify-content: flex-start !important; }
+  .play-v3 .tut-paso-1 .tut-intro-line { margin: 0 0 4px !important; }
+  .play-v3 .tut-paso-1 .tut-intro-extra { margin: 0 0 6px !important; }
+  .play-v3 .tut-paso-1 .tut-bloques { margin: 4px auto 6px !important; gap: 4px !important; }
+  .play-v3 .tut-paso-1 .tut-bloque { padding: 6px 4px !important; }
+  .play-v3 .tut-paso-1 .tut-cierre { margin-top: 6px !important; padding-top: 6px !important; }
+  .play-v3 .tut-paso-vecinos .tut-intro-line,
+  .play-v3 .tut-paso-2 .tut-intro-line { margin: 0 0 4px !important; }
+  .play-v3 .tut-paso-vecinos .tut-caras,
+  .play-v3 .tut-paso-2 .tut-caras { margin: 6px 0 8px !important; }
+  .play-v3 .tut-paso-vecinos .tut-bloques-pref,
+  .play-v3 .tut-paso-2 .tut-bloques-pref { margin: 4px 0 6px !important; }
+  .play-v3 .tut-paso-vecinos .tut-bloques.is-inline,
+  .play-v3 .tut-paso-2 .tut-bloques.is-inline { margin: 4px 0 6px !important; }
+  .play-v3 .tut-paso-vecinos .tut-cierre,
+  .play-v3 .tut-paso-2 .tut-cierre { margin-top: 6px !important; }
+  .play-v3 .tut-paso-3 .tut-papel-cuerpo { justify-content: flex-start !important; }
+  .play-v3 .tut-paso-3 .tut-bloques { margin: 4px auto !important; gap: 2px !important; }
+  .play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0 !important; }
+  .play-v3 .tut-paso-misiones .tut-intro-line,
+  .play-v3 .tut-paso-4 .tut-intro-line { margin: 0 0 6px !important; }
+  .play-v3 .tut-paso-misiones .tut-intro-extra,
+  .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 2px !important; }
+  .play-v3 .tut-paso-misiones .tut-cierre,
+  .play-v3 .tut-paso-4 .tut-cierre { margin-top: 8px !important; padding-top: 6px !important; }
+  .play-v3 .tut-paso-misiones .tut-tareas,
+  .play-v3 .tut-paso-4 .tut-tareas { margin: 2px 0 6px !important; gap: 8px !important; }
+  .play-v3 .tut-paso-5 .tut-papel-cuerpo {
+    gap: 2px !important;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+  }
+  .play-v3 .tut-paso-5 .tut-titulo,
+  .play-v3 .tut-paso-5 h2[data-tut-tit] { margin: 0 0 2px !important; }
+  .play-v3 .tut-paso-5 .tut-fin-lead,
+  .play-v3 .tut-paso-5 .tut-fin-rest { margin: 0 0 2px !important; }
+  .play-v3 .tut-finale .tut-papel-cuerpo { justify-content: flex-start !important; }}
 
 @media (max-width: 520px) {
-  .play-v3 .tut-papel-cabecera { padding: 24px 12px 8px !important; }
-  .play-v3 .tut-papel-cuerpo { padding: 0 12px !important; }
-  .play-v3 .tut-papel-pie { padding: 6px 12px 10px !important; }
+  .play-v3 .tut-papel-cabecera { padding: 10px 12px 2px !important; }
+  .play-v3 .tut-papel-cuerpo { padding: 0 10px !important; }
+  .play-v3 .tut-papel-pie { padding: 4px 10px 8px !important; }
   .play-v3 .tut-titulo { font-size: 1.18rem !important; }
   .play-v3 .tut-cara { width: 52px !important; height: 52px !important; }
   .play-v3 .tut-bloques.is-inline { gap: 4px 6px !important; }
