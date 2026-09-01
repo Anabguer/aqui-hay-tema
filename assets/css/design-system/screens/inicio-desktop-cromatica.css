@@ -1265,3 +1265,28 @@
   }
 }
 
+/* INICIO-PLANES-PROX-DUO-COMPACT-v146 - proximos duo: caras mas juntas, emoji cafe legible */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
+    gap: 2px !important;
+    min-width: 72px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara--r {
+    margin-left: -10px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji {
+    margin: 0 2px !important;
+    padding: 0 !important;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    font-size: 1.3rem !important;
+    line-height: 1 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+

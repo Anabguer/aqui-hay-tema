@@ -2849,7 +2849,7 @@
     return '<div class="plan-desk-duo-wrap">' +
       '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' +
       htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
       '</div>' +
       '<div class="plan-desk-duo-nombres">' +
@@ -3034,6 +3034,34 @@
     if (t === 'conflicto') return 'conflicto';
     if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
     return 'social';
+  }
+  var PLAN_TIPO_EMOJI = {
+    conocerse: "\uD83D\uDC4B",
+    quedar: "\u2615",
+    amistad: "\uD83E\uDD1D",
+    primera_cita: "\uD83D\uDC95",
+    cita: "\u2764\uFE0F",
+    romance: "\uD83D\uDC95",
+    romantico: "\u2764\uFE0F",
+    conflicto: "\u26A1",
+    grupal: "\uD83D\uDC65",
+    individual: "\uD83D\uDEB6",
+    otro: "\u2728",
+    social: "\u2615"
+  };
+  function planTipoEmojiDe(enc) {
+    const tipo = String((enc && enc.tipo) || '').toLowerCase();
+    if (PLAN_TIPO_EMOJI[tipo]) return PLAN_TIPO_EMOJI[tipo];
+    const fam = familiaTipoEncuentro(enc);
+    if (fam === 'social') return PLAN_TIPO_EMOJI.quedar;
+    if (PLAN_TIPO_EMOJI[fam]) return PLAN_TIPO_EMOJI[fam];
+    return PLAN_TIPO_EMOJI.otro;
+  }
+  function iconoPlanCentroHtml(enc) {
+    const ids = (enc && enc.participantes) || [];
+    if (ids.length < 2) return '';
+    const emoji = planTipoEmojiDe(enc);
+    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--emoji" aria-hidden="true">' + emoji + '</span>';
   }
   function iconoRelacionesCentroHtml() {
     return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--relaciones" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>';
