@@ -3093,7 +3093,7 @@
       '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
       '</div></div>' +
-      ((opts && opts.encursosTotal > 1) ? '<span class="enc-mov-desk-chevron" aria-hidden="true">&#8250;</span>' : '') +
+      '' +
       '</div>';
     if (ctaVisible) {
       html += htmlMentesCtaResumen(enc, iv);
@@ -3140,7 +3140,9 @@
   function htmlEncursoCardDesktopView(enc, estado, opts) {
     return htmlEncursoCardDesktop(enc, estado, opts);
   }
-    function encMovPaso(track) {
+    function encMovPaso(track, block) {
+    if (!track) return 0;
+    if (ppMovEsDesktop(block)) return track.clientWidth || 0;
     const cards = track.querySelectorAll('[data-enc-mov-card]');
     if (!cards.length) return 0;
     const st = getComputedStyle(track);
@@ -3152,7 +3154,7 @@
     if (!block || !track) return;
     const n = track.querySelectorAll('[data-enc-mov-card]').length;
     if (n < 2) return;
-    const paso = encMovPaso(track);
+    const paso = encMovPaso(track, block);
     if (paso <= 0) return;
     const i = Math.max(0, Math.min(n - 1, idx));
     block._encMovIndice = i;
@@ -3173,13 +3175,19 @@
       next.hidden = true;
       return;
     }
-    const paso = encMovPaso(track);
+    const paso = encMovPaso(track, block);
     const idx = paso > 0 ? Math.min(n - 1, Math.max(0, Math.round(track.scrollLeft / paso))) : 0;
     block._encMovIndice = idx;
     shell.hidden = false;
     shell.removeAttribute('aria-hidden');
-    prev.hidden = n < 2 || idx <= 0;
-    next.hidden = n < 2 || idx >= n - 1;
+    if (ppMovEsDesktop(block) && n > 1) {
+      const max = Math.max(0, track.scrollWidth - track.clientWidth);
+      prev.hidden = track.scrollLeft <= 2;
+      next.hidden = track.scrollLeft >= max - 2;
+    } else {
+      prev.hidden = n < 2 || idx <= 0;
+      next.hidden = n < 2 || idx >= n - 1;
+    }
   }
   function renderEncursosMovilNav() {
     inicioBlocks('[data-encursos-block]').forEach(renderEncursosMovilNavFor);
