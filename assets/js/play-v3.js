@@ -2749,7 +2749,7 @@
     return '<div class="plan-desk-duo-wrap">' +
       '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' +
       htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoEncuentroCentroHtml(enc) +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
       '</div>' +
       '<div class="plan-desk-duo-nombres">' +
@@ -2935,17 +2935,36 @@
     if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
     return 'social';
   }
-  function iconoRelacionesCentroHtml() {
-    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--relaciones" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>';
+  var PLAN_TIPO_EMOJI = {
+    conocerse: '\uD83D\uDC4B',
+    quedar: '\u2615',
+    amistad: '\uD83E\uDD1D',
+    primera_cita: '\uD83D\uDC95',
+    cita: '\u2764\uFE0F',
+    romance: '\uD83D\uDC95',
+    romantico: '\u2764\uFE0F',
+    conflicto: '\u26A1',
+    grupal: '\uD83D\uDC65',
+    individual: '\uD83D\uDEB6',
+    otro: '\u2728',
+    social: '\u2615'
+  };
+  function planTipoEmojiDe(enc) {
+    const tipo = String((enc && enc.tipo) || '').toLowerCase();
+    if (PLAN_TIPO_EMOJI[tipo]) return PLAN_TIPO_EMOJI[tipo];
+    const fam = familiaTipoEncuentro(enc);
+    if (fam === 'social') return PLAN_TIPO_EMOJI.quedar;
+    if (PLAN_TIPO_EMOJI[fam]) return PLAN_TIPO_EMOJI[fam];
+    return PLAN_TIPO_EMOJI.otro;
   }
-  function iconoEncuentroCentroHtml(enc) {
+  function iconoPlanCentroHtml(enc) {
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
-    const fam = familiaTipoEncuentro(enc);
-    const tipo = String((enc && enc.tipo) || '').toLowerCase();
-    const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + fam;
-    const svg = orgTipoIcoSvg(tipo || fam);
-    return '<span class="' + cls + '" aria-hidden="true">' + svg + '</span>';
+    const emoji = planTipoEmojiDe(enc);
+    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--emoji" aria-hidden="true">' + emoji + '</span>';
+  }
+  function iconoEncuentroCentroHtml(enc) {
+    return iconoPlanCentroHtml(enc);
   }
   function formatEncursoMetaLine(enc, estado) {
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
@@ -2960,7 +2979,7 @@
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
     return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {
@@ -3038,7 +3057,7 @@
       '<span class="enc-mov-deco-ico enc-mov-deco-ico--people"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 19c.8-3 2.8-4.5 4.5-4.5S12.7 16 13.5 19M10.5 19c.8-3 2.8-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>' +
       '</div>';
   }
-  function htmlEncursoCardEscena(enc, estado) {
+  function htmlEncursoCardEscena(enc, estado, opts) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
@@ -3055,7 +3074,8 @@
       '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
       '</div></div>' +
-      '<span class="enc-mov-desk-chevron" aria-hidden="true">&#8250;</span></div>';
+      ((opts && opts.encursosTotal > 1) ? '<span class="enc-mov-desk-chevron" aria-hidden="true">&#8250;</span>' : '') +
+      '</div>';
     if (ctaVisible) {
       html += htmlMentesCtaResumen(enc, iv);
     } else if (resultHtml) {
@@ -3063,8 +3083,8 @@
     }
     return html + '</article>';
   }
-  function htmlEncursoCardDesktop(enc, estado) {
-    return htmlEncursoCardEscena(enc, estado);
+  function htmlEncursoCardDesktop(enc, estado, opts) {
+    return htmlEncursoCardEscena(enc, estado, opts);
   }
     function htmlEncursoCardMovilV15(enc, estado) {
     const ids = (enc && enc.participantes) || [];
@@ -3098,8 +3118,8 @@
   function htmlEncursoCardMovil(enc, estado) {
     return htmlEncursoCardMovilV14(enc, estado);
   }
-  function htmlEncursoCardDesktopView(enc, estado) {
-    return htmlEncursoCardDesktop(enc, estado);
+  function htmlEncursoCardDesktopView(enc, estado, opts) {
+    return htmlEncursoCardDesktop(enc, estado, opts);
   }
     function encMovPaso(track) {
     const cards = track.querySelectorAll('[data-enc-mov-card]');
@@ -3253,7 +3273,7 @@
     block.classList.add('is-on');
     block.classList.toggle('encursos-movil--solo', lista.length === 1);
     block.classList.toggle('encursos-movil--multi', lista.length > 1);
-    track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
+    track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado, { encursosTotal: lista.length }); }).join('');
     requestAnimationFrame(function () {
       renderEncursosMovilNavFor(block);
     });
