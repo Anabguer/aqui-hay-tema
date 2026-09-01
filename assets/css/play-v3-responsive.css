@@ -51,7 +51,7 @@
     margin: 0 !important;
     width: 100%;
     max-width: 100vw;
-    overflow-x: hidden;
+    overflow: visible;
     min-height: 0;
     height: auto;
     box-sizing: border-box;
