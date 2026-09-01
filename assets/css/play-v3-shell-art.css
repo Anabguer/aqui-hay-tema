@@ -807,17 +807,17 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 
-/* Noche activa (23:00–07:59): velo azulado global sobre la partida.
+/* NOCHE-MAP-v2 — tinte nocturno solo sobre el mapa (23:00–07:59).
 
-   Capa decorativa pura: pointer-events none, no bloquea clics, no oculta nada.
+   El velo fullscreen `.game-shell::after` (position:fixed, z-index:2) oscurecía
 
-   position:fixed + inset:0 → cubre TODO el viewport (la página tiene una franja
+   TODO el HOME sin modal, imitando un backdrop roto. Además apilaba distinto
 
-   superior fuera de .game-shell). Jerarquía: interfaz base < velo < modales
+   entre tarjetas (Mensajitos forzada a z-index:1 bajo el velo; Celestine sin
 
-   (capa=8+, consulta 10/90/110, lab 200, tutorial 520/12000…), que conservan
+   regla quedaba visualmente por encima). Autoridad: tinte local en map-host;
 
-   su z-index propio por encima. Reversible vía .noche-activa. */
+   HOME chrome sin velo; modales conservan su z-index propio. */
 
 .game-shell {
 
@@ -825,45 +825,37 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 }
 
+/* Retirado: velo fullscreen sobre viewport — sustituido por map-host local */
+
 .game-shell::after {
+
+  display: none !important;
+
+  content: none !important;
+
+}
+
+.game-shell.noche-activa .inicio-map-host::after {
 
   content: "";
 
-  position: fixed;
+  position: absolute;
 
   inset: 0;
 
   pointer-events: none;
 
-  z-index: 2;
+  z-index: 5;
+
+  border-radius: inherit;
 
   background: linear-gradient(180deg, rgba(38,44,96,.16) 0%, rgba(26,28,68,.30) 100%);
 
   mix-blend-mode: multiply;
 
-  opacity: 0;
-
-  transition: opacity .9s ease;
-
-}
-
-.game-shell.noche-activa::after {
-
   opacity: 1;
 
-}
-
-/* Noche: la tarjeta base de Mensajitos queda BAJO el velo (su z-index:4 diurno,
-
-   en play-v3-mensajitos.css, se mantiene intacto de día). Mismo patrón que el
-
-   fix previo de consultas (responsive: [data-consulta] .mensajitos-wrap z1).
-
-   El popover de preview interno y el modal abierto siguen por encima. */
-
-.game-shell.noche-activa .mensajitos-wrap {
-
-  z-index: 1;
+  transition: opacity .9s ease;
 
 }
 
