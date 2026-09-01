@@ -1034,3 +1034,42 @@
     display: none !important;
   }
 }
+
+
+/* INICIO-MAP-HOST-COLLAPSE-v139 - eliminar hueco bajo mapa: contenedor termina donde termina el mapa */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 0 auto !important;
+    align-self: start !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-root.pc,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-scroll {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    display: block !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
