@@ -494,23 +494,24 @@
   flex-direction: row !important;
   flex-wrap: nowrap !important;
   align-items: center !important;
-  gap: 6px !important;
+  justify-content: center !important;
+  gap: 2px !important;
   width: 100% !important;
   min-width: 0;
 }
 
 .play-v3 .capa-vecinos.is-relaciones .vec-rel-card-grid > .vec-rel-pers {
-  flex: 0 0 48px !important;
-  width: 48px !important;
-  max-width: 48px !important;
-  min-width: 48px !important;
+  flex: 0 0 58px !important;
+  width: 58px !important;
+  max-width: 58px !important;
+  min-width: 58px !important;
 }
 
 .play-v3 .capa-vecinos.is-relaciones .vec-rel-card-grid > .vec-rel-puente {
-  flex: 1 1 auto !important;
+  flex: 0 1 auto !important;
   width: auto !important;
-  min-width: 0 !important;
-  max-width: none !important;
+  min-width: 44px !important;
+  max-width: 118px !important;
 }
 
 .play-v3 .capa-vecinos .vec-rel-pers {
@@ -523,6 +524,11 @@
   padding: 0;
   cursor: pointer;
   min-width: 0;
+}
+
+.play-v3 .capa-vecinos.is-relaciones .vec-rel-cara {
+  width: 56px;
+  height: 56px;
 }
 
 .play-v3 .capa-vecinos .vec-rel-cara {
@@ -539,6 +545,11 @@
 }
 
 .play-v3 .capa-vecinos .vec-rel-cara img { width: 100%; height: 100%; object-fit: cover; }
+
+.play-v3 .capa-vecinos.is-relaciones .vec-rel-nom {
+  max-width: 58px;
+  font-size: .88rem;
+}
 
 .play-v3 .capa-vecinos .vec-rel-nom {
   font: 700 .9rem/1.1 Caveat, cursive;
