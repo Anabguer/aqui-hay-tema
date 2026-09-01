@@ -543,7 +543,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
             <div class="tut-acciones tut-acciones--finale">
-            <button type="button" class="cta ghost" data-tut-atras hidden>Atr&aacute;s</button>
+            <button type="button" class="cta ghost" data-tut-atras hidden>Atrás</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
             </div>

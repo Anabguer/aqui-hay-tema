@@ -96,6 +96,42 @@
 .play-v3 .tut-papel-cuerpo::-webkit-scrollbar {
   display: none;
 }
+/* --- 4b. DISTRIBUCION VERTICAL POR PASO --- */
+.play-v3 .tut-papel-cuerpo {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-evenly !important;
+  align-items: stretch !important;
+}
+.play-v3 .tut-paso-1 .tut-papel-cuerpo { align-items: center !important; justify-content: space-evenly !important; }
+.play-v3 .tut-paso-1 .tut-intro-line, .play-v3 .tut-paso-1 .tut-intro-extra, .play-v3 .tut-paso-1 .tut-cierre { text-align: center !important; max-width: 100% !important; }
+.play-v3 .tut-paso-1 .tut-intro-line { margin: 0 0 8px !important; }
+.play-v3 .tut-paso-1 .tut-intro-extra { margin: 0 0 12px !important; }
+.play-v3 .tut-paso-1 .tut-bloques { width: 100% !important; max-width: 320px !important; margin: 8px auto 12px !important; gap: 6px !important; }
+.play-v3 .tut-paso-1 .tut-bloque { grid-template-columns: 48px minmax(0, 1fr) !important; gap: 2px 6px !important; padding: 8px 6px !important; }
+.play-v3 .tut-paso-1 .tut-bloque--card .tut-bloque-ico { width: 44px !important; height: 44px !important; }
+.play-v3 .tut-paso-1 .tut-cierre { margin-top: 10px !important; padding-top: 10px !important; }
+.play-v3 .tut-paso-vecinos .tut-papel-cuerpo, .play-v3 .tut-paso-2 .tut-papel-cuerpo { justify-content: space-evenly !important; align-items: center !important; }
+.play-v3 .tut-paso-vecinos .tut-intro-line, .play-v3 .tut-paso-vecinos .tut-intro-extra, .play-v3 .tut-paso-vecinos .tut-bloques-pref, .play-v3 .tut-paso-vecinos .tut-cierre,
+.play-v3 .tut-paso-2 .tut-intro-line, .play-v3 .tut-paso-2 .tut-intro-extra, .play-v3 .tut-paso-2 .tut-bloques-pref, .play-v3 .tut-paso-2 .tut-cierre { text-align: center !important; width: 100% !important; }
+.play-v3 .tut-paso-vecinos .tut-intro-line, .play-v3 .tut-paso-2 .tut-intro-line { margin: 0 0 8px !important; }
+.play-v3 .tut-paso-vecinos .tut-caras, .play-v3 .tut-paso-2 .tut-caras { margin: 10px 0 12px !important; }
+.play-v3 .tut-paso-vecinos .tut-bloques-pref, .play-v3 .tut-paso-2 .tut-bloques-pref { margin: 8px 0 10px !important; }
+.play-v3 .tut-paso-vecinos .tut-bloques.is-inline, .play-v3 .tut-paso-2 .tut-bloques.is-inline { margin: 6px 0 10px !important; justify-content: center !important; }
+.play-v3 .tut-paso-vecinos .tut-cierre, .play-v3 .tut-paso-2 .tut-cierre { margin-top: 10px !important; }
+.play-v3 .tut-paso-3 .tut-papel-cuerpo { justify-content: space-evenly !important; align-items: center !important; }
+.play-v3 .tut-paso-3 .tut-intro-line, .play-v3 .tut-paso-3 .tut-intro-extra, .play-v3 .tut-paso-3 .tut-cierre { text-align: center !important; width: 100% !important; }
+.play-v3 .tut-paso-3 .tut-bloques { width: 100% !important; max-width: 340px !important; margin: 8px auto !important; gap: 4px !important; }
+.play-v3 .tut-paso-3 .tut-bloque { grid-template-columns: 46px minmax(0, 1fr) !important; gap: 2px 6px !important; padding: 6px 0 !important; }
+.play-v3 .tut-paso-3 .tut-bloque--row .tut-bloque-ico { width: 42px !important; height: 42px !important; }
+.play-v3 .tut-paso-misiones .tut-papel-cuerpo, .play-v3 .tut-paso-4 .tut-papel-cuerpo { justify-content: space-evenly !important; align-items: center !important; }
+.play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-misiones .tut-cierre,
+.play-v3 .tut-paso-4 .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-extra, .play-v3 .tut-paso-4 .tut-cierre { text-align: center !important; width: 100% !important; }
+.play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-line { margin: 0 0 10px !important; }
+.play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 12px !important; }
+.play-v3 .tut-paso-misiones .tut-cierre, .play-v3 .tut-paso-4 .tut-cierre { margin-top: 12px !important; padding-top: 10px !important; }
+
+
 
 /* --- 5. ZONA FOOTER (pie fijo) --- */
 .play-v3 .tut-papel-pie {
@@ -445,8 +481,8 @@
   margin: 6px 0 8px !important;
 }
 .play-v3 .tut-polaroid {
-  width: 68px !important;
-  height: 80px !important;
+  width: 88px !important;
+  height: 104px !important;
   border: 1px solid var(--tut-border, #D8D1DE) !important;
   border-radius: 8px !important;
   background: #FFFFFF !important;
@@ -494,6 +530,19 @@
 }
 .play-v3 .tut-pasos span.is-on {
   background: var(--tut-coral, #E86B5A) !important;
+}
+
+
+/* --- 14b. ATRAS: texto limpio (sin pseudo-decoracion) --- */
+.play-v3 .tut-acciones [data-tut-atras]::before,
+.play-v3 .tut-acciones [data-tut-atras]::after,
+.play-v3 .tut-acciones .cta.ghost[data-tut-atras]::before,
+.play-v3 .tut-acciones .cta.ghost[data-tut-atras]::after {
+  content: none !important;
+  display: none !important;
+}
+.play-v3 .tut-acciones [data-tut-atras] {
+  text-transform: uppercase !important;
 }
 
 /* --- 14. NAVEGACION (botones ATRAS / SIGUIENTE) --- */
@@ -677,8 +726,10 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
 }
 .play-v3 .tut-paso-3 .tut-bloques { margin: 2px 0 4px !important; gap: 0 !important; }
 .play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0 !important; }
-.play-v3 .tut-paso-misiones .tut-tareas { margin: 4px 0 2px !important; gap: 6px !important; }
-.play-v3 .tut-paso-misiones .tut-polaroid { width: 66px !important; height: 80px !important; }
+.play-v3 .tut-paso-misiones .tut-tareas,
+.play-v3 .tut-paso-4 .tut-tareas { margin: 10px 0 8px !important; gap: 10px !important; justify-content: center !important; }
+.play-v3 .tut-paso-misiones .tut-polaroid,
+.play-v3 .tut-paso-4 .tut-polaroid { width: 92px !important; height: 110px !important; }
 
 /* --- 19. RESPONSIVE: DESKTOP --- */
 @media (min-width: 769px) {
@@ -746,5 +797,6 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
   .play-v3 .tut-cara { width: 52px !important; height: 52px !important; }
   .play-v3 .tut-bloques.is-inline { gap: 4px 6px !important; }
   .play-v3 .tut-tareas { gap: 8px !important; }
-  .play-v3 .tut-polaroid { width: 70px !important; height: 84px !important; }
+  .play-v3 .tut-paso-misiones .tut-polaroid,
+  .play-v3 .tut-paso-4 .tut-polaroid { width: 84px !important; height: 100px !important; }
 }
