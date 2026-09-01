@@ -1,4 +1,4 @@
-﻿/* ============================================================
+/* ============================================================
    TUTORIAL CANONICO v2 — UNA SOLA AUTORIDAD VISUAL (AISLADA)
    Shell, geometria, tipografia, SALTAR, footer, Responsive.
    Las 5 pantallas son el mismo tutorial. Solo cambia el contenido.
@@ -124,11 +124,11 @@
 .play-v3 .tut-paso-3 .tut-bloques { width: 100% !important; max-width: 340px !important; margin: 8px auto !important; gap: 4px !important; }
 .play-v3 .tut-paso-3 .tut-bloque { grid-template-columns: 46px minmax(0, 1fr) !important; gap: 2px 6px !important; padding: 6px 0 !important; }
 .play-v3 .tut-paso-3 .tut-bloque--row .tut-bloque-ico { width: 42px !important; height: 42px !important; }
-.play-v3 .tut-paso-misiones .tut-papel-cuerpo, .play-v3 .tut-paso-4 .tut-papel-cuerpo { justify-content: space-evenly !important; align-items: center !important; }
+.play-v3 .tut-paso-misiones .tut-papel-cuerpo, .play-v3 .tut-paso-4 .tut-papel-cuerpo { justify-content: flex-start !important; align-items: center !important; gap: 6px !important; }
 .play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-misiones .tut-cierre,
 .play-v3 .tut-paso-4 .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-extra, .play-v3 .tut-paso-4 .tut-cierre { text-align: center !important; width: 100% !important; }
 .play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-line { margin: 0 0 10px !important; }
-.play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 12px !important; }
+.play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 4px !important; }
 .play-v3 .tut-paso-misiones .tut-cierre, .play-v3 .tut-paso-4 .tut-cierre { margin-top: 12px !important; padding-top: 10px !important; }
 
 
@@ -621,14 +621,29 @@
 .play-v3 .tut-skip:hover { color: var(--tut-ink, #2d2a26) !important; }
 
 /* --- 16. FINALE (pantalla 5 post-tutorial) --- */
+.play-v3 .tut-paso-5 .tut-papel-cuerpo {
+  justify-content: flex-start !important;
+  align-items: center !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  gap: 4px !important;
+}
+.play-v3 .tut-paso-5 .tut-titulo,
+.play-v3 .tut-paso-5 h2[data-tut-tit] {
+  margin: 0 0 4px !important;
+}
 .play-v3 .tut-paso-5 .tut-fin-lead,
 .play-v3 .tut-paso-5 .tut-fin-rest {
   font-size: 0.85rem !important;
   line-height: 1.4 !important;
-  margin: 0 0 6px !important;
+  margin: 0 0 4px !important;
+  text-align: center !important;
+  width: 100% !important;
 }
 .play-v3 .tut-paso-5 .tut-fin-rest {
-  margin-bottom: 0 !important;
+  max-width: 90% !important;
+  margin: 0 auto !important;
+  text-align: left !important;
 }
 .play-v3 .tut-pasos--finale span {
   flex: 1 1 0 !important;
@@ -727,7 +742,7 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
 .play-v3 .tut-paso-3 .tut-bloques { margin: 2px 0 4px !important; gap: 0 !important; }
 .play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0 !important; }
 .play-v3 .tut-paso-misiones .tut-tareas,
-.play-v3 .tut-paso-4 .tut-tareas { margin: 10px 0 8px !important; gap: 10px !important; justify-content: center !important; }
+.play-v3 .tut-paso-4 .tut-tareas { margin: 2px 0 8px !important; gap: 10px !important; justify-content: center !important; }
 .play-v3 .tut-paso-misiones .tut-polaroid,
 .play-v3 .tut-paso-4 .tut-polaroid { width: 92px !important; height: 110px !important; }
 
