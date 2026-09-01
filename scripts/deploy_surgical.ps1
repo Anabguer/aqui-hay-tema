@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   Deploy quirurgico AHT con guardas canonicas y lista explicita de archivos.
@@ -14,7 +14,7 @@ param(
     [string[]]$Files,
     [switch]$DryRun,
     [switch]$SkipVisualCheck,
-    [switch]$SkipGitProdCheck
+    [switch]$SkipGitProdCheck, [switch]$AutoConfirm
 )
 
 $ErrorActionPreference = 'Stop'
@@ -95,7 +95,7 @@ if ($DryRun) {
     exit 0
 }
 
-if (-not (Read-DeployYesNo 'Confirmas DEPLOY QUIRURGICO a PRODUCCION?')) {
+if (-not $AutoConfirm -and -not (Read-DeployYesNo 'Confirmas DEPLOY QUIRURGICO a PRODUCCION?')) {
     Write-DeployLog -LogFile $logFile -Message 'Cancelado.' -ToHost
     exit 0
 }
