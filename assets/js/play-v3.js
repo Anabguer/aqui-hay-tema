@@ -2749,7 +2749,7 @@
     return '<div class="plan-desk-duo-wrap">' +
       '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' +
       htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
       '</div>' +
       '<div class="plan-desk-duo-nombres">' +
@@ -2935,27 +2935,36 @@
     if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
     return 'social';
   }
-  function iconoRelacionesCentroHtml() {
-    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--relaciones" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>';
+  var PLAN_TIPO_EMOJI = {
+    conocerse: "\uD83D\uDC4B",
+    quedar: "\u2615",
+    amistad: "\uD83E\uDD1D",
+    primera_cita: "\uD83D\uDC95",
+    cita: "\u2764\uFE0F",
+    romance: "\uD83D\uDC95",
+    romantico: "\u2764\uFE0F",
+    conflicto: "\u26A1",
+    grupal: "\uD83D\uDC65",
+    individual: "\uD83D\uDEB6",
+    otro: "\u2728",
+    social: "\u2615"
+  };
+  function planTipoEmojiDe(enc) {
+    const tipo = String((enc && enc.tipo) || '').toLowerCase();
+    if (PLAN_TIPO_EMOJI[tipo]) return PLAN_TIPO_EMOJI[tipo];
+    const fam = familiaTipoEncuentro(enc);
+    if (fam === 'social') return PLAN_TIPO_EMOJI.quedar;
+    if (PLAN_TIPO_EMOJI[fam]) return PLAN_TIPO_EMOJI[fam];
+    return PLAN_TIPO_EMOJI.otro;
   }
-  function iconoEncuentroCentroHtml(enc) {
+  function iconoPlanCentroHtml(enc) {
     const ids = (enc && enc.participantes) || [];
     if (ids.length < 2) return '';
-    const fam = familiaTipoEncuentro(enc);
-    const cls = 'enc-mov-tipo-ico enc-mov-tipo-ico--' + fam;
-    if (fam === 'romantico') {
-      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 21s-7.2-4.35-9.6-8.1C.6 9.75 2.4 6.6 5.7 6.6c1.8 0 3.15.9 4.05 2.1.9-1.2 2.25-2.1 4.05-2.1 3.3 0 5.1 3.15 3.3 6.3C19.2 16.65 12 21 12 21z" fill="currentColor"/></svg></span>';
-    }
-    if (fam === 'conocerse') {
-      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 19c.8-3 2.8-4.5 4.5-4.5S12.7 16 13.5 19M10.5 19c.8-3 2.8-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>';
-    }
-    if (fam === 'grupal') {
-      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="16" cy="9" r="2.6" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="12" cy="7" r="2.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M3.5 19c.6-2.4 2.2-3.8 4-3.8M17 19c.6-2.4 2.2-3.8 4-3.8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>';
-    }
-    if (fam === 'conflicto') {
-      return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></span>';
-    }
-    return '<span class="' + cls + '" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="16" cy="10" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M6 18c.5-2 2-3 2-3M16 18c.5-2 2-3 2-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>';
+    const emoji = planTipoEmojiDe(enc);
+    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--emoji" aria-hidden="true">' + emoji + '</span>';
+  }
+  function iconoEncuentroCentroHtml(enc) {
+    return iconoPlanCentroHtml(enc);
   }
   function formatEncursoMetaLine(enc, estado) {
     const lugar = nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar);
@@ -2970,7 +2979,7 @@
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
     return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {
