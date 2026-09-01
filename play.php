@@ -849,17 +849,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="capa capa-ajustes ajust-modal-papel ds-modal-sheet ds-migrada" aria-label="Ajustes">
-        <span class="ficha-tape ficha-tape-l ajust-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r ajust-tape-tr" aria-hidden="true"></span>
+      <aside class="capa capa-ajustes ds-migrada" aria-label="Ajustes">
         <button type="button" class="cerrar ajustes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="ajustes-top">
-          <div class="ds-modal-head">
+        <header class="ajustes-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
             <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#9881;</span>
-              <h2 class="ds-modal-tit ds-modal-tit--ink">Ajustes</h2>
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">AJUSTES</h2>
             </div>
-            <p class="ds-modal-sub">Sonido, tutorial y partida</p>
           </div>
         </header>
         <div class="ajustes-body capa-scroll">

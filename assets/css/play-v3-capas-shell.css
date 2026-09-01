@@ -50,7 +50,8 @@
 }
 /* ds-migrada: visibility + pointer-events handled by modal-core; transform by modal-core */
 .play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.ds-migrada,
-.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon.ds-migrada {
+.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon.ds-migrada,
+.play-v3 .play-root.pc[data-capa="ajustes"] .capa-ajustes.ds-migrada {
   visibility: visible;
   pointer-events: auto;
 }

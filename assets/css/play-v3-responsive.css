@@ -709,6 +709,22 @@
     pointer-events: auto !important;
   }
 
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="ajustes"] .capa-ajustes.ds-migrada {
+    display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(100%, 393px) !important;
+    max-width: min(100%, 393px) !important;
+    max-height: min(88vh, 720px) !important;
+    transform: translate(-50%, -50%) rotate(-0.2deg) !important;
+    box-sizing: border-box !important;
+  }
+
   .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
