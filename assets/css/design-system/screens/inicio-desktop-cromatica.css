@@ -837,69 +837,23 @@
 }
 
 
-/* INICIO-PLANES-CARDS-COMPACT-DESKTOP-v138 - compactar cards en curso/proximos; reticula fija proximos; cuece integrado */
+/* INICIO-PLANES-SAFE-TWEAKS-DESKTOP-v140 - restaurar geometria v137; compactar EN CURSO y alinear interior PROXIMOS sin tocar carrusel */
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk {
-    gap: 4px !important;
-    padding: 8px 12px 7px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-escena {
-    gap: 10px !important;
-    align-items: center !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces {
-    min-width: 72px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .cara-token .cara {
-    width: 44px !important;
-    height: 44px !important;
-    border-width: 2px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-cara--r {
-    margin-left: -16px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-tipo-ico {
-    width: 22px !important;
-    height: 22px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-tipo-ico svg {
-    width: 14px !important;
-    height: 14px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-nombres {
-    font-size: 1.22rem !important;
-    line-height: 1 !important;
-    margin: 0 !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-donde-cuando {
-    margin-top: 2px !important;
-    font-size: .7rem !important;
-    line-height: 1.2 !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-desk-chevron {
-    font-size: 1.15rem !important;
-    line-height: 1 !important;
+    gap: 6px !important;
+    padding: 10px 12px 9px !important;
   }
 
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-resumen--cuece {
-    margin: 3px 0 0 !important;
-    padding: 4px 10px 5px !important;
+    margin: 2px 0 0 !important;
+    padding: 5px 12px 6px !important;
     max-width: 100% !important;
     border-radius: 9px !important;
     border: 1px dashed rgba(109, 155, 118, .38) !important;
     background: rgba(255, 255, 255, .5) !important;
     box-shadow: none !important;
     font-family: "Caveat", "Caveat Brush", cursive !important;
-    font-size: .98rem !important;
+    font-size: 1rem !important;
     font-style: normal !important;
     font-weight: 600 !important;
     line-height: 1.1 !important;
@@ -913,125 +867,56 @@
     content: none !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-duo .pp-mov-body--desk-duo {
     display: flex !important;
     flex-direction: column !important;
-    gap: 0 !important;
-    padding: 7px 9px 6px !important;
-    min-height: 0 !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    width: 100% !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid .pp-mov-top {
-    flex: 0 0 24px !important;
-    min-height: 24px !important;
-    max-height: 24px !important;
-    margin: 0 0 4px !important;
-    align-items: center !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid .pp-mov-hora {
-    padding: 3px 9px 2px !important;
-    line-height: 1.15 !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-body--desk-grid {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-wrap {
     display: grid !important;
-    grid-template-rows: 42px 26px 17px !important;
+    grid-template-rows: 44px minmax(28px, auto) !important;
     align-items: center !important;
     justify-items: center !important;
-    gap: 1px !important;
+    gap: 4px !important;
     width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-desk-grid-faces {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
     grid-row: 1 !important;
-    width: 100% !important;
-    height: 42px !important;
-    min-height: 42px !important;
-    max-height: 42px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
+    min-height: 44px !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-desk-grid-faces .cara-token .cara {
-    width: 36px !important;
-    height: 36px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-desk-grid-nombres {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombre,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombres {
     grid-row: 2 !important;
     width: 100% !important;
-    height: 26px !important;
-    min-height: 26px !important;
-    max-height: 26px !important;
-    margin: 0 !important;
+    max-width: 100% !important;
+    min-height: 28px !important;
+    margin: 0 auto !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    overflow: hidden !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-desk-grid-nombres--solo {
-    font-family: "Caveat", "Caveat Brush", cursive !important;
-    font-size: .9rem !important;
-    font-weight: 700 !important;
-    line-height: 1 !important;
-    text-align: center !important;
-    color: #3b3028 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    max-width: 100% !important;
-    padding: 0 4px !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-desk-grid-nombres--duo {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombres {
     display: grid !important;
     grid-template-columns: 1fr 1fr !important;
     gap: 0 8px !important;
-    max-width: 120px !important;
-    margin: 0 auto !important;
-    padding: 0 2px !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-desk-grid-nombre {
-    font-family: "Caveat", "Caveat Brush", cursive !important;
-    font-size: .88rem !important;
-    font-weight: 700 !important;
-    line-height: 1 !important;
-    text-align: center !important;
-    color: #3b3028 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid .pp-mov-lugar {
-    grid-row: 3 !important;
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-lugar {
+    min-height: 18px !important;
     width: 100% !important;
-    height: 17px !important;
-    min-height: 17px !important;
-    max-height: 17px !important;
-    margin: 0 !important;
-    padding: 0 2px !important;
-    text-align: center !important;
-    font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: .68rem !important;
-    font-weight: 600 !important;
-    line-height: 1.1 !important;
-    color: #655c54 !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid .plan-desk-duo-wrap,
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid .plan-desk-duo-nombres,
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-grid .plan-desk-duo-nombre {
-    display: none !important;
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-hora {
+    padding: 4px 10px 3px !important;
   }
 }
 

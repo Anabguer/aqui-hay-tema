@@ -2739,28 +2739,23 @@
       '</div></article>';
   }
 
-  function planDeskGridBodyHtml(enc, ids) {
+  function planDuoFacesDesktopHtml(enc, ids) {
     var slice = (ids || []).slice(0, 2);
-    var facesHtml = '';
     if (slice.length < 2) {
-      facesHtml = '<div class="pp-desk-grid-faces prox-faces plan-desk-duo-faces">' + carasPlanHtml(slice) + '</div>';
-    } else {
-      facesHtml = '<div class="pp-desk-grid-faces enc-mov-faces prox-faces plan-desk-duo-faces">' +
-        htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-        iconoEncuentroCentroHtml(enc) +
-        htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
-        '</div>';
+      return '<div class="plan-desk-duo-wrap">' +
+        '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' + carasPlanHtml(slice) + '</div>' +
+        '<p class="plan-desk-duo-nombre">' + esc(nombreDe(slice[0] || '')) + '</p></div>';
     }
-    var nombresHtml = '';
-    if (slice.length < 2) {
-      nombresHtml = '<p class="pp-desk-grid-nombres pp-desk-grid-nombres--solo">' + esc(nombreDe(slice[0] || '')) + '</p>';
-    } else {
-      nombresHtml = '<div class="pp-desk-grid-nombres pp-desk-grid-nombres--duo">' +
-        '<span class="pp-desk-grid-nombre pp-desk-grid-nombre--l">' + esc(nombreDe(slice[0])) + '</span>' +
-        '<span class="pp-desk-grid-nombre pp-desk-grid-nombre--r">' + esc(nombreDe(slice[1])) + '</span>' +
-        '</div>';
-    }
-    return facesHtml + nombresHtml;
+    return '<div class="plan-desk-duo-wrap">' +
+      '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' +
+      htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
+      iconoEncuentroCentroHtml(enc) +
+      htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
+      '</div>' +
+      '<div class="plan-desk-duo-nombres">' +
+      '<span class="plan-desk-duo-nombre plan-desk-duo-nombre--l">' + esc(nombreDe(slice[0])) + '</span>' +
+      '<span class="plan-desk-duo-nombre plan-desk-duo-nombre--r">' + esc(nombreDe(slice[1])) + '</span>' +
+      '</div></div>';
   }
   function htmlProximoPlanCardDesktop(enc, estado) {
     if (planEsEventoPueblo(enc)) {
@@ -2771,13 +2766,13 @@
     const diaHoy = Number((estado && estado.reloj && estado.reloj.dia_pueblo));
     const sello = (Number(enc.dia) === diaHoy ? 'HOY' : 'D\u00cdA ' + (enc.dia || '?')) +
       ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
-    return '<article class="pp-mov-card pp-mov-card--mock pp-mov-card--desk-duo pp-mov-card--desk-grid">' +
+    return '<article class="pp-mov-card pp-mov-card--mock pp-mov-card--desk-duo">' +
       '<div class="pp-mov-top">' +
       '<p class="pp-mov-hora">' + esc(sello) + '</p>' +
       '<span class="pp-mov-star" aria-hidden="true"><span class="pp-mov-star-ico">\u2605</span></span>' +
       '</div>' +
-      '<div class="pp-mov-body pp-mov-body--desk-duo pp-mov-body--desk-grid">' +
-      planDeskGridBodyHtml(enc, ids) +
+      '<div class="pp-mov-body pp-mov-body--desk-duo">' +
+      planDuoFacesDesktopHtml(enc, ids) +
       '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
       '</div></article>';
   }
