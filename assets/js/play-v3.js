@@ -1165,7 +1165,7 @@
     if (!root) return;
     invSelObjeto = item;
     invSelVecino = null;
-    $$('.inv-objeto', root).forEach(function (b) { b.classList.remove('is-sel'); });
+    $('.inv-objeto', root).forEach(function (b) { b.classList.remove('is-sel'); });
     btn.classList.add('is-sel');
     const caja = $('[data-inv-regalo]', root);
     const nombre = $('[data-inv-objeto-nombre]', root);
@@ -1203,7 +1203,7 @@
       chip.textContent = v.nombre;
       chip.addEventListener('click', function () {
         invSelVecino = v;
-        $$('.inv-vecino', root).forEach(function (c) { c.classList.remove('is-sel'); });
+        $('.inv-vecino', root).forEach(function (c) { c.classList.remove('is-sel'); });
         chip.classList.add('is-sel');
         btnEntregar.disabled = false;
         pintarHintChip(item, v);
@@ -1372,10 +1372,26 @@
     return false;
   }
 
+  function mensajitoEsRegaloObjeto(m) {
+    if (!m || typeof m !== 'object') return false;
+    const tipo = String(m.tipo || '');
+    return tipo === 'regalo_recompensa' || tipo === 'detallito_sorpresa';
+  }
+
+  function htmlRegaloObjetoMensajito(m) {
+    const url = String(m.objeto_asset_url || '').trim();
+    if (!url) return '';
+    const nom = String(m.objeto_nombre || '').trim();
+    return '<div class="carta-regalo-objeto" aria-hidden="false">' +
+      '<img class="carta-regalo-objeto-img" src="' + esc(url) + '" alt="' + esc(nom) + '" loading="lazy" decoding="async"/>' +
+      '</div>';
+  }
+
   function mensajitoDestinoFicha(m) {
     if (!m || typeof m !== 'object') return false;
     const soloLectura = ['respuesta_plan', 'peticion_resultado', 'marcha_publica', 'marcha_despedida', 'legado_despedida'];
     if (soloLectura.indexOf(String(m.tipo || '')) >= 0) return false;
+    if (mensajitoEsRegaloObjeto(m)) return false;
     const rid = remitenteIdDe(m);
     return rid && !m.candidato_catalog_id;
   }
@@ -1710,6 +1726,9 @@
     if (tipo === 'respuesta_plan') return 'Leer respuesta';
     if (tipo === 'peticion_resultado') return '';
     if (tipo === 'marcha_publica' || tipo === 'marcha_despedida' || tipo === 'legado_despedida') return '';
+    if (mensajitoEsRegaloObjeto(m)) {
+      return mensajitoEstaLeido(m) ? '' : '¡Gracias!';
+    }
     if (!mensajitoDestinoFicha(m)) return '';
     return mensajitoEstaLeido(m) ? 'Ver perfil' : 'Abrir mensaje';
   }
@@ -2936,18 +2955,18 @@
     return 'social';
   }
   var PLAN_TIPO_EMOJI = {
-    conocerse: "\uD83D\uDC4B",
-    quedar: "\u2615",
-    amistad: "\uD83E\uDD1D",
-    primera_cita: "\uD83D\uDC95",
-    cita: "\u2764\uFE0F",
-    romance: "\uD83D\uDC95",
-    romantico: "\u2764\uFE0F",
-    conflicto: "\u26A1",
-    grupal: "\uD83D\uDC65",
-    individual: "\uD83D\uDEB6",
-    otro: "\u2728",
-    social: "\u2615"
+    conocerse: '\uD83D\uDC4B',
+    quedar: '\u2615',
+    amistad: '\uD83E\uDD1D',
+    primera_cita: '\uD83D\uDC95',
+    cita: '\u2764\uFE0F',
+    romance: '\uD83D\uDC95',
+    romantico: '\u2764\uFE0F',
+    conflicto: '\u26A1',
+    grupal: '\uD83D\uDC65',
+    individual: '\uD83D\uDEB6',
+    otro: '\u2728',
+    social: '\u2615'
   };
   function planTipoEmojiDe(enc) {
     const tipo = String((enc && enc.tipo) || '').toLowerCase();
@@ -3057,7 +3076,7 @@
       '<span class="enc-mov-deco-ico enc-mov-deco-ico--people"><svg viewBox="0 0 24 24" focusable="false"><circle cx="8" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="16" cy="9" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4 19c.8-3 2.8-4.5 4.5-4.5S12.7 16 13.5 19M10.5 19c.8-3 2.8-4.5 4.5-4.5s3.7 1.5 4.5 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span>' +
       '</div>';
   }
-  function htmlEncursoCardEscena(enc, estado) {
+  function htmlEncursoCardEscena(enc, estado, opts) {
     const ids = enc.participantes || [];
     const iv = intervencionVistaDe(enc, estado);
     const ctaVisible = ctaEncuentroMovVisible(enc, iv);
@@ -3074,7 +3093,8 @@
       '<span class="enc-mov-lugar-line"><span class="enc-mov-pin" aria-hidden="true"></span> ' + esc(lugar) + '</span>' +
       '<span class="enc-mov-hora-line"><span class="enc-mov-reloj" aria-hidden="true"></span> ' + esc(hora) + '</span>' +
       '</div></div>' +
-      '<span class="enc-mov-desk-chevron" aria-hidden="true">&#8250;</span></div>';
+      ((opts && opts.encursosTotal > 1) ? '<span class="enc-mov-desk-chevron" aria-hidden="true">&#8250;</span>' : '') +
+      '</div>';
     if (ctaVisible) {
       html += htmlMentesCtaResumen(enc, iv);
     } else if (resultHtml) {
@@ -3082,8 +3102,8 @@
     }
     return html + '</article>';
   }
-  function htmlEncursoCardDesktop(enc, estado) {
-    return htmlEncursoCardEscena(enc, estado);
+  function htmlEncursoCardDesktop(enc, estado, opts) {
+    return htmlEncursoCardEscena(enc, estado, opts);
   }
     function htmlEncursoCardMovilV15(enc, estado) {
     const ids = (enc && enc.participantes) || [];
@@ -3117,8 +3137,8 @@
   function htmlEncursoCardMovil(enc, estado) {
     return htmlEncursoCardMovilV14(enc, estado);
   }
-  function htmlEncursoCardDesktopView(enc, estado) {
-    return htmlEncursoCardDesktop(enc, estado);
+  function htmlEncursoCardDesktopView(enc, estado, opts) {
+    return htmlEncursoCardDesktop(enc, estado, opts);
   }
     function encMovPaso(track) {
     const cards = track.querySelectorAll('[data-enc-mov-card]');
@@ -3226,7 +3246,7 @@
     block.classList.toggle('proxplanes-movil--many', desktopMany);
     if (desktopMany) {
       const max = Math.max(0, track.scrollWidth - track.clientWidth);
-      prev.hidden = true;
+      prev.hidden = track.scrollLeft <= 2;
       next.hidden = track.scrollLeft >= max - 2;
     } else {
       prev.hidden = n < 2 || idx <= 0;
@@ -3272,7 +3292,7 @@
     block.classList.add('is-on');
     block.classList.toggle('encursos-movil--solo', lista.length === 1);
     block.classList.toggle('encursos-movil--multi', lista.length > 1);
-    track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado); }).join('');
+    track.innerHTML = lista.map(function (enc) { return cardFn(enc, estado, { encursosTotal: lista.length }); }).join('');
     requestAnimationFrame(function () {
       renderEncursosMovilNavFor(block);
     });
@@ -5100,6 +5120,7 @@
   var vecRelFiltro = '';
   var vecRelPersona = '';
   var vecRelCargado = false;
+  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\u2194</span>';
 
   function aplicarVecTabUI() {
     const isRel = vecTabActiva === 'relaciones';
@@ -5173,70 +5194,17 @@
     }).join('');
   }
 
-  function vecRelPillTexto(dir) {
+  function vecRelTextoDir(dir) {
     dir = dir || {};
-    if (dir.etiqueta_vinculo === 'pareja') return 'PAREJA';
-    if (dir.etiqueta_vinculo === 'crisis') return 'EN CRISIS';
-    if (dir.etiqueta_vinculo === 'ex_pareja') return 'EX PAREJA';
-    if (dir.romance_visible && dir.etiqueta_romance) return String(dir.etiqueta_romance).toUpperCase();
-    if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
-      return String(dir.etiqueta_social_ui).toUpperCase();
-    }
-    if (dir.conocidos) return 'CONOCIDO';
-    return '';
-  }
-
-  function vecRelHasDir(dir) {
-    return !!vecRelPillTexto(dir);
-  }
-
-  function vecRelToneFromDir(dir) {
-    const cls = vecRelPillClass(dir);
-    if (cls === 'vec-rel-pill--red') return 'red';
-    if (cls === 'vec-rel-pill--pink') return 'pink';
-    if (cls === 'vec-rel-pill--mustard') return 'mustard';
-    return 'green';
-  }
-
-  function vecRelCardTone(f) {
-    if (f.conflicto || f.mal) return 'red';
-    if (f.romance) return 'pink';
-    if (f.bien) return 'green';
-    if (f.conocidos) return 'mustard';
-    return 'neutral';
-  }
-
-  function vecRelFlechaHtml(dir, mutual, reverse) {
-    const txt = vecRelPillTexto(dir) || 'CONOCIDO';
-    const tone = vecRelToneFromDir(dir);
-    const pillCls = vecRelPillClass(dir);
-    const mutualCls = mutual ? ' vec-rel-flecha--mutual' : '';
-    const revCls = reverse ? ' vec-rel-flecha--rev' : '';
-    return '<div class="vec-rel-flecha' + mutualCls + revCls + '">' +
-      '<span class="vec-rel-flecha-linea vec-rel-flecha-linea--' + tone + (mutual ? ' vec-rel-flecha-linea--dbl' : '') + '" aria-hidden="true"></span>' +
-      '<span class="vec-rel-pill ' + pillCls + '">' + esc(txt) + '</span>' +
-      '</div>';
-  }
-
-  function vecRelPuenteHtml(ab, ba) {
-    const tAb = vecRelPillTexto(ab);
-    const tBa = vecRelPillTexto(ba);
-    const hasAb = vecRelHasDir(ab);
-    const hasBa = vecRelHasDir(ba);
-    if (!hasAb && !hasBa) {
-      return '<p class="vec-rel-puente-vacio">Se conocen de vista.</p>';
-    }
-    const same = hasAb && hasBa && tAb === tBa && (ab.social_bar_pct || 0) === (ba.social_bar_pct || 0);
     const parts = [];
-    if (same) {
-      parts.push(vecRelFlechaHtml(ab, true, false));
-      parts.push('<p class="vec-rel-puente-nota">MISMO V\u00CDNCULO</p>');
-    } else {
-      if (hasAb) parts.push(vecRelFlechaHtml(ab, false, false));
-      if (hasBa) parts.push(vecRelFlechaHtml(ba, false, true));
-      if (hasAb && hasBa) parts.push('<p class="vec-rel-puente-nota">DISTINTO EN CADA SENTIDO</p>');
+    if (dir.etiqueta_vinculo === 'pareja') parts.push('\u2764\uFE0F Pareja');
+    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\uD83D\uDC94 En crisis');
+    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\uD83D\uDC94 Ex pareja');
+    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\uD83D\uDC98') + ' ' + dir.etiqueta_romance);
+    if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
+      parts.push(((dir.emoji_social || '') + ' ' + dir.etiqueta_social_ui).trim());
     }
-    return parts.join('');
+    return parts.join(' \u00B7 ');
   }
 
   function vecRelPillClass(dir) {
@@ -5277,37 +5245,58 @@
     return img ? '<img src="' + esc(img) + '" alt=""/>' : '<span>' + esc(ini) + '</span>';
   }
 
+  function vecRelBarra(dir, extraCls) {
+    dir = dir || {};
+    const pct = typeof dir.social_bar_pct === 'number'
+      ? Math.max(4, Math.min(100, dir.social_bar_pct))
+      : 8;
+    const cls = 'vec-rel-barra' + (dir.social_negativo ? ' is-neg' : '') + (extraCls || '');
+    return '<span class="' + cls + '" aria-hidden="true"><span style="width:' + pct + '%"></span></span>';
+  }
+
+  function vecRelDirCard(nomFrom, nomTo, dir) {
+    const txt = vecRelTextoDir(dir);
+    if (!txt && !(dir && dir.conocidos)) return '';
+    const pill = '<span class="vec-rel-pill ' + vecRelPillClass(dir) + '">' + esc(txt || 'Se conocen de vista') + '</span>';
+    const barExtra = dir.etiqueta_social === 'conocido' ? ' vec-rel-barra--mustard' : '';
+    return '<div class="vec-rel-dir-card">' +
+      '<div class="vec-rel-dir-head">' +
+      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \u2192 ' + esc(nomTo) + '</span>' +
+      pill +
+      '</div>' +
+      vecRelBarra(dir, barExtra) +
+      '</div>';
+  }
+
   function htmlVecRelCard(row) {
     const a = row.persona_a || {};
     const b = row.persona_b || {};
     const ab = row.a_hacia_b || {};
     const ba = row.b_hacia_a || {};
-    const tAb = vecRelPillTexto(ab);
-    const tBa = vecRelPillTexto(ba);
+    const tAb = vecRelTextoDir(ab);
+    const tBa = vecRelTextoDir(ba);
     const f = vecRelFlags(row);
-    const tone = vecRelCardTone(f);
-    const hasAb = vecRelHasDir(ab);
-    const hasBa = vecRelHasDir(ba);
-    const asim = hasAb && hasBa && (tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0));
-    const cls = 'vec-rel-card vec-rel-card--tone-' + tone +
-      (f.romance ? ' is-amor' : '') +
-      (f.mal ? ' is-mal' : '') +
-      (f.conflicto ? ' is-conflicto' : '');
-    const badge = (f.conflicto || asim) ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
-    const puente = vecRelPuenteHtml(ab, ba);
+    const cls = 'vec-rel-card' + (f.romance ? ' is-amor' : '') + (f.mal ? ' is-mal' : '') + (f.conflicto ? ' is-conflicto' : '');
+    const cardAb = vecRelDirCard(a.nombre || a.id || '', b.nombre || b.id || '', ab);
+    const cardBa = vecRelDirCard(b.nombre || b.id || '', a.nombre || a.id || '', ba);
+    let dirs = cardAb + cardBa;
+    if (!dirs) dirs = '<p class="vec-rel-linea">Se conocen de vista.</p>';
+    const asim = tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0);
+    const div = asim && cardAb && cardBa ? '<div class="vec-rel-divider">Diferente en cada sentido</div>' : '';
+    const badge = f.conflicto ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
     return (
       '<article class="' + cls + '">' +
-      '<span class="vec-rel-card-accent" aria-hidden="true"></span>' +
-      badge +
-      '<div class="vec-rel-card-grid">' +
+      '<div class="vec-rel-par">' +
       '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(a.id || '') + '">' +
       '<span class="vec-rel-cara">' + caraVecRel(a.id, a.nombre) + '</span>' +
       '<span class="vec-rel-nom">' + esc(a.nombre || a.id || '?') + '</span></button>' +
-      '<div class="vec-rel-puente">' + puente + '</div>' +
+      VEC_REL_ICONO_PAR +
       '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(b.id || '') + '">' +
       '<span class="vec-rel-cara">' + caraVecRel(b.id, b.nombre) + '</span>' +
       '<span class="vec-rel-nom">' + esc(b.nombre || b.id || '?') + '</span></button>' +
+      badge +
       '</div>' +
+      '<div class="vec-rel-estados">' + dirs + div + '</div>' +
       '</article>'
     );
   }
@@ -6274,7 +6263,7 @@ function hobbyIconKey(id, texto) {
         (esActualizacion ? htmlMensajitoHilo(origen) : '') +
         '<div class="carta-copy"><div class="carta-cuerpo-wrap">' +
         actualizacionEtq +
-        '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
+        '<p class="cuerpo">' + esc(cuerpo) + '</p>' + (mensajitoEsRegaloObjeto(m) ? htmlRegaloObjetoMensajito(m) : '') + ' ' +
         perfilLlegadaHtml +
         '</div>' +
         plazoHtml +
@@ -6287,7 +6276,7 @@ function hobbyIconKey(id, texto) {
           ev.stopPropagation();
           if (!mensajitoEstaLeido(m)) {
             await marcarMensajitoLeido(m);
-          } else {
+          } else if (!mensajitoEsRegaloObjeto(m)) {
             const rid = remitenteIdDe(m);
             if (rid) await abrirFicha(rid);
           }
@@ -6570,9 +6559,15 @@ function hobbyIconKey(id, texto) {
   var ORG_TIPO_SVG = {
     conocerse: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4zm12 0c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4zM2 20c0-3.3 2.7-5 6-5h.8c1.2 0 2.3.3 3.2.9-1.6 1.1-2.7 2.8-2.9 4.6H2v-.5zm14 0c-.2-1.8-1.3-3.5-2.9-4.6.9-.6 2-.9 3.2-.9H17c3.3 0 6 1.7 6 5h-7z"/></svg>',
     quedar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-3.2l-2.3 2.3a1 1 0 0 1-1.7-.7V18H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm2 5.5h6v-1.5H9v1.5zm0 3h4v-1.5H9v1.5z"/></svg>',
-    primera_cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/></svg>',
-    cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/><circle cx="17.5" cy="6.5" r="3.2"/></svg>',
-    individual: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zm0 2c-3.9 0-7 2.1-7 4.7V21h14v-2.3C19 16.1 15.9 14 12 14z"/></svg>'
+    amistad: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.2 11.4 4.8 13.8a2.2 2.2 0 0 0 0 3.1l1.3 1.3a2.2 2.2 0 0 0 3.1 0l2.8-2.8 2.8 2.8a2.2 2.2 0 0 0 3.1 0l1.3-1.3a2.2 2.2 0 0 0 0-3.1l-2.4-2.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 10.6 12 7.4l3.2 3.2" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+    primera_cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z" fill="#e8889e"/></svg>',
+    cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z" fill="#d96f8a"/><circle cx="17.5" cy="6.5" r="3.2" fill="#f2a0b4"/></svg>',
+    romance: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z" fill="#e8889e"/></svg>',
+    romantico: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z" fill="#d96f8a"/><path d="M16.8 5.2l1.4 2.8 3.1.5-2.2 2.1.5 3.1-2.8-1.5-2.8 1.5.5-3.1-2.2-2.1 3.1-.5z" fill="#f2c94c"/></svg>',
+    conflicto: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l1.8 6.2L20 11l-6.2 1.8L12 19l-1.8-6.2L4 11l6.2-1.8L12 3z" fill="#f0b429" stroke="#c98a12" stroke-width="1"/></svg>',
+    grupal: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="2.6" fill="#8ec9f0" stroke="#5a9fd4" stroke-width="1.2"/><circle cx="16" cy="9" r="2.6" fill="#8ec9f0" stroke="#5a9fd4" stroke-width="1.2"/><circle cx="12" cy="7" r="2.2" fill="#b8dff7" stroke="#5a9fd4" stroke-width="1.1"/><path d="M3.5 19c.6-2.4 2.2-3.8 4-3.8M17 19c.6-2.4 2.2-3.8 4-3.8" fill="none" stroke="#5a9fd4" stroke-width="1.4" stroke-linecap="round"/></svg>',
+    otro: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="3" fill="#d8d0e8" stroke="#8f7fbf" stroke-width="1.4"/><path d="M9 12h6M12 9v6" stroke="#6f5f9a" stroke-width="1.6" stroke-linecap="round"/></svg>',
+    individual: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zm0 2c-3.9 0-7 2.1-7 4.7V21h14v-2.3C19 16.1 15.9 14 12 14z" fill="#c9b8e8" stroke="#8f7fbf" stroke-width="1"/></svg>'
   };
   var ORG_TIPO_DESC = {
     conocerse: 'Centraros en charlar y conocer más al vecino.',
@@ -6621,9 +6616,11 @@ function hobbyIconKey(id, texto) {
   }
   function orgTipoIcoSvg(id) {
     const k = String(id || '').toLowerCase();
-    if (k === 'amistad') return ORG_TIPO_SVG.quedar;
-    if (k === 'romance' || k === 'romantico') return ORG_TIPO_SVG.primera_cita;
-    return ORG_TIPO_SVG[k] || ORG_TIPO_SVG.quedar;
+    if (k === 'social') return ORG_TIPO_SVG.quedar;
+    if (ORG_TIPO_SVG[k]) return ORG_TIPO_SVG[k];
+    if (k === 'amistad') return ORG_TIPO_SVG.amistad || ORG_TIPO_SVG.quedar;
+    if (k === 'romance' || k === 'romantico') return ORG_TIPO_SVG.romantico || ORG_TIPO_SVG.primera_cita;
+    return ORG_TIPO_SVG.quedar;
   }
   function orgTipoHtml(id, label, on, descExtra) {
     const ico = orgTipoIcoSvg(id);
