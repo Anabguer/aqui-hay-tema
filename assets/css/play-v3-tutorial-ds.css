@@ -650,6 +650,36 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
   }
 }
 
+/* --- 18b. CABECERA FIJA + FINALE PIE (Neni) --- */
+.play-v3 .tut-papel-cabecera {
+ display: flex !important;
+ flex-direction: column !important;
+ align-items: center !important;
+ justify-content: flex-start !important;
+ min-height: 104px !important;
+ max-height: 120px !important;
+ overflow: hidden !important;
+ padding: 14px 12px 4px !important;
+}
+.play-v3 .tut-hero { margin: 0 0 4px !important; flex: 0 0 auto !important; }
+.play-v3 .tut-hero-img { max-height: 58px !important; width: auto !important; max-width: 100% !important; }
+.play-v3 .tut-badge,
+.play-v3 .tut-pin,
+.play-v3 .tut-tit-deco { display: none !important; }
+.play-v3 .tut-finale .tut-acciones--finale {
+ justify-content: stretch !important;
+ width: 100% !important;
+}
+.play-v3 .tut-finale .tut-acciones--finale .tut-fin-cta {
+ flex: 1 1 auto !important;
+ width: 100% !important;
+ margin: 0 !important;
+}
+.play-v3 .tut-paso-3 .tut-bloques { margin: 2px 0 4px !important; gap: 0 !important; }
+.play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0 !important; }
+.play-v3 .tut-paso-misiones .tut-tareas { margin: 4px 0 2px !important; gap: 6px !important; }
+.play-v3 .tut-paso-misiones .tut-polaroid { width: 66px !important; height: 80px !important; }
+
 /* --- 19. RESPONSIVE: DESKTOP --- */
 @media (min-width: 769px) {
   body.play-v3[data-tut-activo="1"] .game-map-wrap,

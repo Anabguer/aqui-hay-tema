@@ -169,19 +169,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     .aht-debug-panel[hidden] { display: none !important; }
     .aht-debug-title { width: 100%; margin: 0; font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #7a7164; }
     .aht-debug-panel button { border: 1px solid #8a7a66; background: #fff; font: inherit; font-size: .7rem; font-weight: 700; padding: .2rem .4rem; cursor: pointer; }
-    .tut-caras {
-      display: flex; justify-content: center; gap: .35rem; flex-wrap: wrap;
-      margin: .45rem 0 .55rem; max-width: 100%; overflow: hidden;
-    }
-    .tut-caras .cara {
-      width: 52px; height: 52px; flex: 0 0 52px; overflow: hidden;
-      border-radius: 50%; border: 2px solid rgba(120,96,72,.35); background: #fff;
-      display: inline-flex; align-items: center; justify-content: center;
-    }
-    .tut-caras img, .tut-caras .cara img {
-      width: 52px; height: 52px; max-width: 52px; max-height: 52px;
-      object-fit: cover; object-position: 50% 20%; transform: scale(1.1); transform-origin: 50% 14%; display: block; border-radius: 50%;
-    }
     .caras-clip { display: flex; justify-content: center; gap: .35rem; margin-bottom: .35rem; flex-wrap: wrap; overflow: hidden; }
     .caras-clip .cara {
       width: 52px; height: 52px; flex: 0 0 52px; overflow: hidden;
@@ -555,7 +542,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
           <div class="tut-papel-pie">
             <div class="tut-pasos" data-tut-pasos></div>
-            <div class="tut-acciones">
+            <div class="tut-acciones tut-acciones--finale">
             <button type="button" class="cta ghost" data-tut-atras hidden>Atr&aacute;s</button>
             <button type="button" class="cta tut-cta-final" data-tut-siguiente>Siguiente</button>
           </div>
@@ -592,7 +579,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
+      <aside class="capa capa-vecinos ds-migrada" aria-label="Vecinos del pueblo">
         <button type="button" class="cerrar vecinos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vecinos-cab">
           <div class="ds-modal-head vecinos-head">
@@ -614,7 +601,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </label>
           </div>
           <div class="vecinos-grid" data-vecinos-list></div>
-          <p class="mensajitos-hint vecinos-hint">&#11088; Toca un vecino para ver su historia, estado y relaciones</p>
         </div>
         <div class="vec-panel" data-vec-panel="relaciones" hidden>
           <div class="vec-rel-filtros" data-vec-rel-filtros></div>

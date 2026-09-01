@@ -733,34 +733,12 @@
       heroEl.hidden = false;
       heroEl.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('Cabecera.png')) + '" alt=""/>';
     }
-    var oldBadge = papel ? papel.querySelector('.tut-badge') : null;
-    if (oldBadge) oldBadge.remove();
-    if (papel) {
-      var badge = document.createElement('div');
-      badge.className = 'tut-badge';
-      badge.textContent = 'PRIMEROS PASOS';
-      papel.insertBefore(badge, papel.querySelector('.tut-papel-cabecera'));
-    }
-    var oldPin = papel ? papel.querySelector('.tut-pin') : null;
-    if (oldPin) oldPin.remove();
-    if (papel) {
-      var pin = document.createElement('span');
-      pin.className = 'tut-pin';
-      pin.setAttribute('aria-hidden', 'true');
-      papel.insertBefore(pin, papel.firstChild);
-    }
-    var titEl = $('[data-tut-tit]');
+     if (papel) {
+ papel.querySelectorAll('.tut-badge, .tut-pin, .tut-tit-deco').forEach(function (el) { el.remove(); });
+ }
+var titEl = $('[data-tut-tit]');
     if (titEl) {
       titEl.innerHTML = '<span class="tut-tit-spark" aria-hidden="true"></span><span class="tut-tit-txt">' + esc(paso.tit || '') + '</span><span class="tut-tit-spark tut-tit-spark--r" aria-hidden="true"></span>';
-    }
-    var oldTitDeco = papel ? papel.querySelector('.tut-tit-deco') : null;
-    if (oldTitDeco) oldTitDeco.remove();
-    if (pasoNum === 1 && titEl && titEl.parentNode) {
-      var titDeco = document.createElement('p');
-      titDeco.className = 'tut-tit-deco';
-      titDeco.setAttribute('aria-hidden', 'true');
-      titDeco.textContent = '\u2661';
-      titEl.parentNode.insertBefore(titDeco, titEl.nextSibling);
     }
     var introEl = $('[data-tut-intro-line]');
     if (introEl) { introEl.textContent = paso.intro || ''; introEl.hidden = !paso.intro; }
