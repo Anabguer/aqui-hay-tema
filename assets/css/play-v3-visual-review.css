@@ -7,25 +7,25 @@
 /* === SHELL MODAL UNIFICADO (todas las capas game-shell) === */
 .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar:not(.ds-migrada),
+.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
 .play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="parejas"] .capa-parejas,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa-inventario,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo,
+.play-v3:has(.game-shell) .play-root.phone[data-capa="parejas"] .capa-parejas:not(.ds-migrada),
+.play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa-inventario:not(.ds-migrada),
+.play-v3:has(.game-shell) .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.phone[data-capa="ajustes"] .capa-ajustes:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar:not(.ds-migrada),
+.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
 .play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="parejas"] .capa-parejas,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="parejas"] .capa-parejas:not(.ds-migrada),
+.play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario:not(.ds-migrada),
+.play-v3:has(.game-shell) .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root.pc[data-capa="ajustes"] .capa-ajustes:not(.ds-migrada) {
   position: fixed !important;
   left: 50% !important;
@@ -55,14 +55,14 @@
 
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos::before,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar::before,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar:not(.ds-migrada)::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda:not(.ds-migrada)::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-diario.coti-modal-papel::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-misiones:not(.ds-migrada)::before,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario::before,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-vida-pueblo::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario:not(.ds-migrada)::before,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-vida-pueblo:not(.ds-migrada)::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ajustes:not(.ds-migrada)::before {
   content: "" !important;
   display: block !important;
@@ -76,10 +76,10 @@
 
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-inventario:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-ajustes:not(.ds-migrada) {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
   background-image:
@@ -91,7 +91,7 @@
   background-repeat: no-repeat !important;
 }
 
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar:not(.ds-migrada) {
   background-color: #f7f0de !important;
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .42), rgba(255, 255, 255, 0) 58%),
@@ -113,7 +113,7 @@
   background-repeat: no-repeat !important;
 }
 
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-vida-pueblo {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa-vida-pueblo:not(.ds-migrada) {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 58%),

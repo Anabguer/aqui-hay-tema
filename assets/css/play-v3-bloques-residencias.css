@@ -545,6 +545,12 @@
 }
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
+.play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.ds-migrada,
+.play-v3 .play-root.pc[data-capa="parejas"] .capa-parejas.ds-migrada,
+.play-v3 .play-root.pc[data-capa="inventario"] .capa-inventario.ds-migrada,
+.play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda.ds-migrada,
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar.ds-migrada,
+.play-v3 .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo.ds-migrada,
 .play-v3 .play-root.pc[data-capa="ajustes"] .capa-ajustes.ds-migrada {
   position: absolute;
   left: 50% !important;

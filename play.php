@@ -615,16 +615,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <p class="mensajitos-hint vec-rel-hint">&#128156; Las relaciones pueden cambiar con cada plan</p>
         </div>
       </aside>
-      <aside class="capa capa-agenda agenda-modal ds-modal-sheet" aria-label="Planes de Celestine">
-        <span class="agenda-pin agenda-pin-l" aria-hidden="true"></span>
+      <aside class="capa capa-agenda ds-migrada" aria-label="Planes de Celestine">
         <button type="button" class="cerrar agenda-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="agenda-cab">
-          <div class="ds-modal-head">
+        <header class="agenda-cab vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
             <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#128197;</span>
-              <h2 class="agenda-tit ds-modal-tit ds-modal-tit--brown">Planes</h2>
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">PLANES</h2>
             </div>
-            <p class="ds-modal-sub agenda-sub">Lo que est&#8212; por venir.</p>
           </div>
         </header>
         <div class="agenda-list capa-scroll" data-agenda-list></div>
@@ -750,43 +747,39 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </header>
         <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
       </aside>
-      <aside class="capa capa-misiones mis-modal-papel ds-modal-sheet ds-migrada" aria-label="Misiones de hoy">
-        <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
-        <span class="mis-pin mis-pin-l" aria-hidden="true"></span>
+      <aside class="capa capa-misiones ds-migrada" aria-label="Misiones de hoy">
         <button type="button" class="cerrar mis-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="mis-top">
-          <div class="ds-modal-head">
+        <header class="mis-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
             <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#9733;</span>
-              <h2 class="mis-tit ds-modal-tit ds-modal-tit--brown">Hoy en el pueblo</h2>
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">MISIONES</h2>
             </div>
           </div>
-          <p class="mis-sub mini" data-misiones-teaser>&#8212;</p>
         </header>
         <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
+        <p class="mis-sub mini" data-misiones-teaser hidden>&#8212;</p>
       </aside>
 
-      <aside class="capa capa-parejas par-modal-papel ds-modal-sheet" aria-label="Parejas del pueblo">
-        <span class="ficha-tape ficha-tape-l par-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r par-tape-tr" aria-hidden="true"></span>
+      <aside class="capa capa-parejas ds-migrada" aria-label="Parejas del pueblo">
         <button type="button" class="cerrar par-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="par-top">
-          <div class="ds-modal-head">
+        <header class="par-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
             <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#9829;</span>
-              <h2 class="par-tit ds-modal-tit ds-modal-tit--pink">Parejas</h2>
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">PAREJAS</h2>
             </div>
           </div>
-          <p class="par-sub mini" data-parejas-teaser">&mdash;</p>
         </header>
         <div class="par-body capa-scroll" data-parejas-modal-list></div>
+        <p class="par-sub mini" data-parejas-teaser hidden>&mdash;</p>
       </aside>
-      <aside class="capa capa-vida-pueblo vida-modal-papel ds-modal-sheet" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
+      <aside class="capa capa-vida-pueblo ds-migrada" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
         <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="vida-top">
-          <p class="vida-modal-ico" aria-hidden="true">&#127793;</p>
-          <h2 class="vida-tit ds-modal-tit ds-modal-tit--pink">Vida del pueblo</h2>
+        <header class="vida-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
+            <div class="ds-modal-head-row">
+              <h2 class="vida-tit ds-modal-tit ds-modal-tit--ink modal-title-aht">VIDA DEL PUEBLO</h2>
+            </div>
+          </div>
           <p class="vida-valor" data-vida-modal-valor>&#8212; / 100</p>
           <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
           <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
@@ -822,20 +815,17 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div data-buzon-list></div>
         <p class="mensajitos-hint">&#11088; Abrir mensajitos puede desbloquear planes y cotilleos</p>
       </aside>
-      <aside class="capa capa-inventario inv-modal-papel ds-modal-sheet" aria-label="Inventario de Celestine">
-        <span class="ficha-tape ficha-tape-l inv-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r inv-tape-tr" aria-hidden="true"></span>
+      <aside class="capa capa-inventario ds-migrada" aria-label="Inventario de Celestine">
         <button type="button" class="cerrar inv-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="inv-cab">
-          <div class="ds-modal-head">
+        <header class="inv-cab vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
             <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#127890;</span>
-              <h2 class="inv-tit ds-modal-tit ds-modal-tit--brown">Inventario</h2>
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">INVENTARIO</h2>
             </div>
-            <p class="inv-sub ds-modal-sub" data-inv-sub>Detalles guardados para regalar a los vecinos.</p>
           </div>
         </header>
         <div class="inv-body capa-scroll">
+          <p class="inv-sub mini" data-inv-sub hidden>Detalles guardados para regalar a los vecinos.</p>
           <div class="inv-lista" data-inv-lista></div>
           <div class="inv-regalo" data-inv-regalo hidden>
             <p class="inv-regalo-titulo">Regalar <strong data-inv-objeto-nombre></strong> a&hellip;</p>
@@ -919,15 +909,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">&#128161;</span> Estos rumores cambian con el tiempo. Contin&uacute;a conociendo a los vecinos para descubrir m&aacute;s.</p>
         </footer>
       </aside>
-      <aside class="capa capa-organizar org-plan-papel ds-modal-sheet" aria-label="Nuevo plan">
-        <span class="ficha-tape ficha-tape-l org-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r org-tape-tr" aria-hidden="true"></span>
-        <span class="org-pin org-pin-l" aria-hidden="true"></span>
+      <aside class="capa capa-organizar ds-migrada" aria-label="Nuevo plan">
         <button type="button" class="cerrar org-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="org-top">
-          <div class="ds-modal-head">
+        <header class="org-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
             <div class="ds-modal-head-row">
-              <h2 class="org-tit ds-modal-tit ds-modal-tit--ink">Nuevo plan</h2>
+              <h2 class="org-tit ds-modal-tit ds-modal-tit--ink modal-title-aht">NUEVO PLAN</h2>
             </div>
           </div>
           <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
