@@ -690,6 +690,18 @@
     pointer-events: none !important;
     display: none !important;
   }
+  /* ds-migrada inactiva: fuera del flujo en móvil (anti ghost-tap) */
+  .play-v3:has(.game-shell) .play-root.phone .capa.ds-migrada {
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones.ds-migrada {
+    display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
 
   .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon,
@@ -1728,6 +1740,17 @@
   pointer-events: none !important;
   transition: opacity .22s ease;
   -webkit-tap-highlight-color: transparent;
+}
+/* VELO-OFF-PHYSICAL-v1 — sin modal/consulta el velo no ocupa capa ni pinta */
+.play-v3:has(.game-shell) .play-root:not([data-capa]):not([data-consulta]) .velo,
+.play-v3:has(.game-shell) .play-root[data-capa=""] .velo,
+.play-v3:has(.game-shell) .play-root[data-consulta=""] .velo {
+  display: none !important;
+}
+
+.play-v3:has(.game-shell) .play-root[data-capa]:not([data-capa=""]) .velo,
+.play-v3:has(.game-shell) .play-root[data-consulta]:not([data-consulta=""]) .velo {
+  display: block !important;
 }
 
 /* Cualquier capa/modal del juego */
