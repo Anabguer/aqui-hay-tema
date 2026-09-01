@@ -210,6 +210,40 @@ function Invoke-AhtGitProdCompare {
     return @{ Ok = $true; Output = $out }
 }
 
+function Expand-AhtDeployEngineDependencies {
+    param(
+        [string[]]$RequestedFiles,
+        [string]$RepoRoot,
+        [string]$LogFile
+    )
+
+    $depsPath = Join-Path $RepoRoot 'scripts/deploy_engine_deps.json'
+    if (-not (Test-Path -LiteralPath $depsPath)) {
+        return ,$RequestedFiles
+    }
+
+    $raw = Get-Content -LiteralPath $depsPath -Raw -Encoding UTF8
+    $map = $raw | ConvertFrom-Json
+    $expanded = [System.Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($rel in $RequestedFiles) {
+        [void]$expanded.Add($rel.Replace('\', '/').TrimStart('/'))
+    }
+
+    foreach ($rel in @($RequestedFiles)) {
+        $norm = $rel.Replace('\', '/').TrimStart('/')
+        $prop = $map.PSObject.Properties | Where-Object { $_.Name -eq $norm }
+        if (-not $prop) { continue }
+        foreach ($dep in @($prop.Value)) {
+            $depNorm = [string]$dep
+            if ($expanded.Add($depNorm)) {
+                Write-DeployLog -LogFile $LogFile -Message "  + dep engine: $depNorm (por $norm)" -ToHost
+            }
+        }
+    }
+
+    return ,@($expanded)
+}
+
 function Invoke-AhtVisualRegression {
     param(
         [hashtable]$Ctx,

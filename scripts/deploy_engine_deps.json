@@ -1,0 +1,14 @@
+{
+  "src/Engine/RelojOperations.php": [
+    "src/Engine/MensajitoDudaPermanenciaEngine.php"
+  ],
+  "src/Engine/MensajitoConsejoEngine.php": [
+    "src/Engine/MensajitoDudaPermanenciaEngine.php"
+  ],
+  "src/Engine/MensajitoGeneradorEspontaneo.php": [
+    "src/Engine/MensajitoDudaPermanenciaEngine.php"
+  ],
+  "src/Engine/MarchaEngine.php": [
+    "src/Engine/MensajitoDudaPermanenciaEngine.php"
+  ]
+}

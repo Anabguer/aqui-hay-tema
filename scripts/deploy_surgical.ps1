@@ -40,6 +40,9 @@ if ($deployRels.Count -eq 0) {
     exit 1
 }
 
+Write-DeployLog -LogFile $logFile -Message '--- Expandiendo dependencias engine ---' -ToHost
+$deployRels = Expand-AhtDeployEngineDependencies -RequestedFiles $deployRels -RepoRoot $Ctx.RepoRoot -LogFile $logFile
+
 Write-DeployLog -LogFile $logFile -Message '--- Lista explicita solicitada ---' -ToHost
 foreach ($rel in $deployRels) {
     Write-DeployLog -LogFile $logFile -Message "  $rel" -ToHost
