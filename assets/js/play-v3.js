@@ -1372,10 +1372,26 @@
     return false;
   }
 
+  function mensajitoEsRegaloObjeto(m) {
+    if (!m || typeof m !== 'object') return false;
+    const tipo = String(m.tipo || '');
+    return tipo === 'regalo_recompensa' || tipo === 'detallito_sorpresa';
+  }
+
+  function htmlRegaloObjetoMensajito(m) {
+    const url = String(m.objeto_asset_url || '').trim();
+    if (!url) return '';
+    const nom = String(m.objeto_nombre || '').trim();
+    return '<div class="carta-regalo-objeto" aria-hidden="false">' +
+      '<img class="carta-regalo-objeto-img" src="' + esc(url) + '" alt="' + esc(nom) + '" loading="lazy" decoding="async"/>' +
+      '</div>';
+  }
+
   function mensajitoDestinoFicha(m) {
     if (!m || typeof m !== 'object') return false;
     const soloLectura = ['respuesta_plan', 'peticion_resultado', 'marcha_publica', 'marcha_despedida', 'legado_despedida'];
     if (soloLectura.indexOf(String(m.tipo || '')) >= 0) return false;
+    if (mensajitoEsRegaloObjeto(m)) return false;
     const rid = remitenteIdDe(m);
     return rid && !m.candidato_catalog_id;
   }
@@ -1710,6 +1726,9 @@
     if (tipo === 'respuesta_plan') return 'Leer respuesta';
     if (tipo === 'peticion_resultado') return '';
     if (tipo === 'marcha_publica' || tipo === 'marcha_despedida' || tipo === 'legado_despedida') return '';
+    if (mensajitoEsRegaloObjeto(m)) {
+      return mensajitoEstaLeido(m) ? '' : '¡Gracias!';
+    }
     if (!mensajitoDestinoFicha(m)) return '';
     return mensajitoEstaLeido(m) ? 'Ver perfil' : 'Abrir mensaje';
   }
@@ -3227,7 +3246,7 @@
     block.classList.toggle('proxplanes-movil--many', desktopMany);
     if (desktopMany) {
       const max = Math.max(0, track.scrollWidth - track.clientWidth);
-      prev.hidden = true;
+      prev.hidden = track.scrollLeft <= 2;
       next.hidden = track.scrollLeft >= max - 2;
     } else {
       prev.hidden = n < 2 || idx <= 0;
@@ -6257,7 +6276,7 @@ function hobbyIconKey(id, texto) {
           ev.stopPropagation();
           if (!mensajitoEstaLeido(m)) {
             await marcarMensajitoLeido(m);
-          } else {
+          } else if (!mensajitoEsRegaloObjeto(m)) {
             const rid = remitenteIdDe(m);
             if (rid) await abrirFicha(rid);
           }
