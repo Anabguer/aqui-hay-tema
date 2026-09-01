@@ -1,4 +1,4 @@
-ï»¿/* MODALS-SECONDARY-UNIFIED-v91 â€” Ajustes, Relaciones, Parejas, submodales mÃ³vil */
+/* MODALS-SECONDARY-UNIFIED-v91 — Ajustes, Relaciones, Parejas, submodales móvil */
 
 /* --- Parejas: mismo shell que misiones/cotilleos --- */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-parejas::before {
@@ -134,7 +134,7 @@
   font-weight: 700 !important;
 }
 
-/* --- Vecinos > Relaciones: panel mÃ¡s scrapbook --- */
+/* --- Vecinos > Relaciones: panel más scrapbook --- */
 .play-v3:has(.game-shell) .capa-vecinos.is-relaciones .vec-rel-filtros {
   padding: .25rem 0 .15rem;
 }
@@ -286,7 +286,7 @@
   transform: rotate(-4deg);
 }
 
-/* --- MÃ³vil: submodales y secundarios --- */
+/* --- Móvil: submodales y secundarios --- */
 @media (max-width: 768px) {
 
   .play-v3:has(.game-shell) .capa-ficha .ficha-rel-overlay {
@@ -307,7 +307,7 @@
     gap: 10px !important;
   }
 }
-ï»¿
+?
 /* --- Cintas scrapbook: ajustes + inventario (+ parejas) --- */
 .play-v3:has(.game-shell) .capa-ajustes.ajust-modal-papel .ficha-tape,
 .play-v3:has(.game-shell) .capa-inventario.inv-modal-papel .ficha-tape,
@@ -587,29 +587,29 @@
   flex: 1 1 0 !important;
   min-width: 0 !important;
   max-width: none !important;
-  gap: 1px !important;
+  gap: 2px !important;
   padding: 0 1px !important;
 }
 
 .play-v3:has(.game-shell) .capa-vecinos.is-relaciones .vec-rel-chip > b {
   width: auto !important;
   height: auto !important;
-  min-height: 1.55rem;
+  min-height: 1.72rem;
   display: block !important;
   border: none !important;
   border-radius: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
-  font-size: 1.45rem !important;
-  line-height: 1.15 !important;
+  font-size: 1.65rem !important;
+  line-height: 1.12 !important;
   padding-top: 1px;
   font-weight: 700 !important;
 }
 
 .play-v3:has(.game-shell) .capa-vecinos.is-relaciones .vec-rel-chip > span {
   display: block;
-  font-size: .5rem !important;
-  line-height: 1.05 !important;
+  font-size: .58rem !important;
+  line-height: 1.1 !important;
   letter-spacing: 0 !important;
   white-space: nowrap;
   overflow: hidden;
@@ -633,7 +633,7 @@
   color: var(--ds-pink-deep, #c85b78) !important;
 }
 
-/* v91: Relaciones â€” filtros sin recorte superior; scroll solo en lista */
+/* v91: Relaciones — filtros sin recorte superior; scroll solo en lista */
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos.is-relaciones .vec-panel:not([hidden]) {
   overflow: hidden !important;
 }
@@ -683,7 +683,7 @@
   }
 }
 
-/* PAREJAS-ROMANTICO-v2 â€” scrapbook: contraste, sin degradado rosa */
+/* PAREJAS-ROMANTICO-v2 — scrapbook: contraste, sin degradado rosa */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa-parejas::before {
   border-color: rgba(107, 81, 56, .32) !important;
 }
@@ -875,7 +875,7 @@
   }
 }
 
-/* INICIO-CROMATICA-MOVIL-v129 â€” gana a modal-titles v72 (fondo pagina movil) */
+/* INICIO-CROMATICA-MOVIL-v129 — gana a modal-titles v72 (fondo pagina movil) */
 @media (max-width: 768px) {
   html,
   body.play-v3,
