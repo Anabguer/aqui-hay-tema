@@ -3870,6 +3870,15 @@
     margin: 0 0 0 2px !important;
   }
 
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil:has(.pp-mov-nav-prev[hidden]):has(.pp-mov-nav-next[hidden]) {
+    grid-template-columns: minmax(0, 1fr) !important;
+    column-gap: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil:has(.pp-mov-nav-prev[hidden]):has(.pp-mov-nav-next[hidden]) .pp-mov-track {
+    grid-column: 1 / -1 !important;
+  }
+
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-track {
     grid-column: 2 !important;
     grid-row: 2 !important;
@@ -6003,7 +6012,8 @@
     display: none !important;
   }
 
-  .play-v3 .inicio-desktop-right .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-next {
+  .play-v3 .inicio-desktop-right .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-next:not([hidden]) {
+    display: inline-flex !important;
     position: absolute !important;
     right: -4px !important;
     top: 50% !important;
@@ -6022,12 +6032,12 @@
     cursor: pointer !important;
   }
 
-  .play-v3 .inicio-desktop-right .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-next svg {
+  .play-v3 .inicio-desktop-right .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-next:not([hidden]) svg {
     width: 14px !important;
     height: 14px !important;
   }
 
-  .play-v3 .inicio-desktop-right .proxplanes-movil.proxplanes-movil--many .pp-mov-track {
+  .play-v3 .inicio-desktop-right .proxplanes-movil.proxplanes-movil--many:has(.pp-mov-nav-next:not([hidden])) .pp-mov-track {
     padding-right: 18px !important;
   }
 
