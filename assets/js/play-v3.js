@@ -1261,8 +1261,12 @@
             if (d && d.texto) extra += '<span class="inv-descubrimiento">' + esc(d.texto) + '</span> ';
           });
         }
+        const escena = (r && typeof r.escena === 'string') ? r.escena : '';
+        const eco = (r && typeof r.eco_emocional === 'string') ? r.eco_emocional : '';
+        const escenaHtml = escena ? '<span class="inv-escena">' + esc(escena) + '</span> ' : '';
+        const ecoHtml = eco ? '<span class="inv-eco-emocional">' + esc(eco) + '</span> ' : '';
         feedback.hidden = false;
-        feedback.innerHTML = esc(texto) + (extra ? ' ' + extra : '');
+        feedback.innerHTML = escenaHtml + esc(texto) + (ecoHtml ? ' ' + ecoHtml : '') + (extra ? ' ' + extra : '');
         feedback.classList.toggle('is-mal', r.reaccion === 'no_le_gusta');
         feedback.classList.remove('is-error');
       }

@@ -6,6 +6,10 @@ namespace AquiHayTema\Engine;
 /**
  * Recuperación emocional tras encuentro: resultado + hobby como red de seguridad.
  * No sustituye el azar de EncuentroExperiencia; garantiza mejora mínima si ya estaba mal.
+ *
+ * Tambien expone evaluarRegalo() con la misma lógica rank-ordered para Regalos v2:
+ * el regalo puede MEJORAR un estado negativo (nunca empeorarlo), preservando
+ * la causa histórica en `contexto.estado_antes_*` (responsabilidad del caller).
  */
 final class EmotionalRecovery
 {
@@ -77,6 +81,88 @@ final class EmotionalRecovery
         if ($resultado === 'mal') {
             return EstadoEmocional::ENFADADO;
         }
+        return null;
+    }
+
+    /**
+     * Regalos v2 — transición emocional mejoradora por regalo.
+     *
+     * Reglas:
+     *  - indiferente: NUNCA aplica emoción. Devuelve null (caller no hace nada).
+     *  - no_le_gusta: NUNCA devuelve un estado mejorado. Devuelve null SIEMPRE
+     *    (caller decide: si estado antes ∈ {TRISTE, ENFADADO} → mantener;
+     *    si estado antes ∈ {NEUTRO, ALEGRE} → legacy enfadado 4h).
+     *  - Si estado antes ∈ {NEUTRO, ALEGRE}: devuelve null (no aplica nada nuevo;
+     *    el caller mantiene su flujo actual de "regalo aplica alegria").
+     *  - Si estado antes ∈ {TRISTE, ENFADADO}:
+     *      · le_gusta   → candidato = NEUTRO (motivo 'regalo_alivia').
+     *      · le_encanta → candidatos = [NEUTRO, ALEGRE] (motivo 'regalo_animó' si final=ALEGRE,
+     *                                                  'regalo_alivia' si final=NEUTRO).
+     *      · siempre se exige rank(final) > rank(antes) — nunca empeora.
+     *
+     * Si hobbyMatch=true, el regalo acertó en un gusto conocido del receptor y la
+     * mejora es plausible. Si hobbyMatch=false (acierto a ciegas), se permite
+     * igualmente la transición si la reacción es le_encanta — pero se devuelve
+     * con `motivo='regalo_animó_sin_match'` para que el caller pueda reflejar
+     * el carácter "a ciegas" en copy si quiere. Por defecto le_gusta sin match
+     * devuelve null (no es suficiente para aliviar sin afinidad confirmada).
+     *
+     * @return array{estado: string, motivo: string, hobby_match: bool, mejor_de_rank: bool}|null
+     */
+    public static function evaluarRegalo(
+        string $estadoAntes,
+        string $reaccion,
+        bool $hobbyMatch
+    ): ?array {
+        $estadoAntes = EstadoEmocional::canonId($estadoAntes);
+
+        // Sin cambio emocional en indiferente (caller no hace nada).
+        if ($reaccion === RegaloEngine::INDIFERENTE) {
+            return null;
+        }
+
+        // no_le_gusta: nunca devuelve estado mejorado. Caller decide legacy vs mantener.
+        if ($reaccion === RegaloEngine::NO_LE_GUSTA) {
+            return null;
+        }
+
+        // Si ya está bien, el caller sigue su flujo propio (alegre por regalo).
+        if (!in_array($estadoAntes, [EstadoEmocional::TRISTE, EstadoEmocional::ENFADADO], true)) {
+            return null;
+        }
+
+        if ($reaccion === RegaloEngine::LE_GUSTA) {
+            // Sin hobby_match: no basta para aliviar.
+            if (!$hobbyMatch) {
+                return null;
+            }
+            return [
+                'estado' => EstadoEmocional::NEUTRO,
+                'motivo' => 'regalo_alivia',
+                'hobby_match' => true,
+                'mejor_de_rank' => self::rank(EstadoEmocional::NEUTRO) > self::rank($estadoAntes),
+            ];
+        }
+
+        if ($reaccion === RegaloEngine::LE_ENCANTA) {
+            // le_encanta siempre permite el salto a ALEGRE (con o sin match).
+            // Candidatos: NEUTRO + ALEGRE → elegimos el mejor (siempre ALEGRE si ambos).
+            $candidatos = [EstadoEmocional::NEUTRO, EstadoEmocional::ALEGRE];
+            $final = self::mejor(...$candidatos);
+            if ($final === null || self::rank($final) <= self::rank($estadoAntes)) {
+                return null;
+            }
+            $motivo = $hobbyMatch
+                ? ($final === EstadoEmocional::ALEGRE ? 'regalo_animó' : 'regalo_alivia')
+                : ($final === EstadoEmocional::ALEGRE ? 'regalo_animó_sin_match' : 'regalo_alivia_sin_match');
+            return [
+                'estado' => $final,
+                'motivo' => $motivo,
+                'hobby_match' => $hobbyMatch,
+                'mejor_de_rank' => true,
+            ];
+        }
+
         return null;
     }
 

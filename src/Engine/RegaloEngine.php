@@ -12,6 +12,13 @@ namespace AquiHayTema\Engine;
  *   4. sin match                            -> INDIFERENTE
  * Sin edad, profesion, rasgos, romance ni RNG. Determinista.
  * La UI previa NO puede usar este motor para orientar: eso sera Fase 2 (Discovery).
+ *
+ * Regalos v2 (2026-09-02): contrato emocional con EmotionalRecovery::evaluarRegalo.
+ * El regalo puede MEJORAR un estado triste/enfadado sin borrar la causa histórica
+ * (preservada en contexto.estado_antes_origen / estado_antes_contexto).
+ * NUNCA empeora un estado triste/enfadado. Duración reducida al 50% cuando hay
+ * causa fuerte preservada (alivio temporal, no borrado).
+ * Copy: añadir escena humana + eco emocional al feedback.
  */
 final class RegaloEngine
 {
@@ -141,6 +148,8 @@ final class RegaloEngine
             'reaccion' => $reaccion,
             'repetido' => $repetido,
             'texto' => self::texto($partida, $residenteId, (string) ($regalo['nombre'] ?? $objectId), $reaccion),
+            'escena' => self::textoEscena($partida, $residenteId, (string) ($regalo['nombre'] ?? $objectId), $reaccion),
+            'eco_emocional' => self::textoEcoEmocional($partida, $residenteId, (string) ($regalo['nombre'] ?? $objectId), $reaccion, $emocion),
             'emocion' => $emocion,
             'delta_aprecio' => $delta,
             'aprecio_celeste' => $aprecio,
@@ -281,37 +290,264 @@ final class RegaloEngine
         return $reaccion;
     }
 
-    /** @return array<string, mixed>|null */
+    /**
+     * Regalos v2: aplica emoción reutilizando EmotionalRecovery::evaluarRegalo.
+     *
+     * - indiferente: no aplica nada.
+     * - no_le_gusta:
+     *      · sobre triste/enfadado → NO aplica emoción nueva (devuelve payload 'mantiene').
+     *      · sobre neutro/alegre → legacy: aplica enfadado 4h.
+     * - le_gusta / le_encanta sobre triste/enfadado: aplica la transición permitida
+     *   por evaluarRegalo (nunca empeora). Preserva la causa histórica en
+     *   contexto.estado_antes_origen / estado_antes_contexto. Si la causa previa es
+     *   "fuerte" (lista cerrada), reduce la duración al 50% (alivio temporal).
+     * - le_gusta / le_encanta sobre neutro/alegre: comportamiento legacy (alegre 6h/3h).
+     *
+     * @return array<string, mixed>|null
+     */
     private static function aplicarEmocion(array &$partida, string $residenteId, string $reaccion, string $objectId, array $cal, ?GameLogger $logger = null): ?array
     {
         if ($reaccion === self::INDIFERENTE) {
             return null;
         }
-        $estadoId = $reaccion === self::NO_LE_GUSTA ? EstadoEmocional::ENFADADO : EstadoEmocional::ALEGRE;
-        $fallback = $reaccion === self::NO_LE_GUSTA
-            ? (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.enfadado', 4)
-            : (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.alegre', 6);
-        $dur = (int) CalibracionConfig::get($cal, 'regalos.duracion_horas.' . $reaccion, $fallback);
-        $dur = max(1, $dur);
-        $reloj = $partida['reloj'] ?? [];
-        $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
+
         $root = dirname(__DIR__, 2);
+        $residente = &$partida['residentes'][$residenteId];
+        EstadoEmocional::ensureResidente($residente, $partida['reloj'] ?? null);
+        $estadoAntes = $residente['runtime']['estado_emocional'];
+        $estadoAntesId = EstadoEmocional::canonId((string) ($estadoAntes['id'] ?? EstadoEmocional::NEUTRO));
+
+        // Determinar si el receptor tiene un hobby/gusto conocido que coincida con el regalo.
+        $hobbyMatch = self::regaloActivaHobbyConocido($partida, $residenteId, $objectId);
+
+        $estadoAntesNegativo = in_array($estadoAntesId, [EstadoEmocional::TRISTE, EstadoEmocional::ENFADADO], true);
+
+        // -- Caso 1: no_le_gusta sobre estado negativo → MANTENER (no empeorar) --
+        if ($reaccion === self::NO_LE_GUSTA && $estadoAntesNegativo) {
+            return [
+                'id' => $estadoAntesId,
+                'origen' => $estadoAntes['origen'] ?? '',
+                'motivo' => 'mantiene',
+                'contexto' => [
+                    'estado_antes' => $estadoAntesId,
+                    'estado_antes_origen' => (string) ($estadoAntes['origen'] ?? ''),
+                    'estado_antes_contexto' => is_array($estadoAntes['contexto'] ?? null) ? $estadoAntes['contexto'] : [],
+                    'causa_fuerte' => self::esCausaFuerte($estadoAntes),
+                ],
+                'mantiene' => true,
+            ];
+        }
+
+        // -- Caso 2: no_le_gusta sobre estado NEUTRO/ALEGRE → legacy enfadado 4h --
+        if ($reaccion === self::NO_LE_GUSTA) {
+            $estadoId = EstadoEmocional::ENFADADO;
+            $fallback = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.enfadado', 4);
+            $dur = (int) CalibracionConfig::get($cal, 'regalos.duracion_horas.' . $reaccion, $fallback);
+            $dur = max(1, $dur);
+            return self::aplicarEstadoConCausa(
+                $partida,
+                $residenteId,
+                $estadoId,
+                'regalo',
+                $dur,
+                $objectId,
+                $estadoAntes,
+                false,
+                $cal,
+                $logger
+            );
+        }
+
+        // -- Caso 3: le_gusta / le_encanta --
+        $eval = EmotionalRecovery::evaluarRegalo($estadoAntesId, $reaccion, $hobbyMatch);
+
+        // eval devuelve transición → aplicar con causa preservada + duración reducida si aplica.
+        if (is_array($eval)) {
+            $estadoDestino = $eval['estado'];
+            $motivo = $eval['motivo'];
+            $fallback = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.' . $estadoDestino, 6);
+            $dur = (int) CalibracionConfig::get($cal, 'regalos.duracion_horas.' . $reaccion, $fallback);
+            $dur = max(1, $dur);
+
+            $causaFuerte = self::esCausaFuerte($estadoAntes);
+            if ($causaFuerte) {
+                $dur = max(1, (int) floor($dur * 0.5));
+            }
+
+            $aplicado = self::aplicarEstadoConCausa(
+                $partida,
+                $residenteId,
+                $estadoDestino,
+                'regalo',
+                $dur,
+                $objectId,
+                $estadoAntes,
+                $causaFuerte,
+                $cal,
+                $logger
+            );
+
+            if (is_array($aplicado)) {
+                $aplicado['motivo'] = $motivo;
+                $aplicado['hobby_match'] = $hobbyMatch;
+            }
+            return $aplicado;
+        }
+
+        // eval null + estado NEUTRO/ALEGRE → legacy alegre (6h/3h).
+        if (!$estadoAntesNegativo) {
+            $estadoId = EstadoEmocional::ALEGRE;
+            $fallback = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.alegre', 6);
+            $dur = (int) CalibracionConfig::get($cal, 'regalos.duracion_horas.' . $reaccion, $fallback);
+            $dur = max(1, $dur);
+            return self::aplicarEstadoConCausa(
+                $partida,
+                $residenteId,
+                $estadoId,
+                'regalo',
+                $dur,
+                $objectId,
+                $estadoAntes,
+                false,
+                $cal,
+                $logger
+            );
+        }
+
+        // eval null + estado TRISTE/ENFADADO + le_gusta sin afin / le_encanta defensivo →
+        // mantener (no empeorar, no mejorar).
+        return [
+            'id' => $estadoAntesId,
+            'origen' => $estadoAntes['origen'] ?? '',
+            'motivo' => 'mantiene',
+            'contexto' => [
+                'estado_antes' => $estadoAntesId,
+                'estado_antes_origen' => (string) ($estadoAntes['origen'] ?? ''),
+                'estado_antes_contexto' => is_array($estadoAntes['contexto'] ?? null) ? $estadoAntes['contexto'] : [],
+                'causa_fuerte' => self::esCausaFuerte($estadoAntes),
+            ],
+            'mantiene' => true,
+        ];
+    }
+
+    /**
+     * Wrapper sobre EmotionalStateService::aplicar que preserva la causa histórica
+     * en contexto.estado_antes_origen / contexto.estado_antes_contexto.
+     */
+    private static function aplicarEstadoConCausa(
+        array &$partida,
+        string $residenteId,
+        string $estadoId,
+        string $origen,
+        int $durHoras,
+        string $objectId,
+        array $estadoAntes,
+        bool $causaFuerte,
+        array $cal,
+        ?GameLogger $logger
+    ): ?array {
+        $root = dirname(__DIR__, 2);
+        $reloj = $partida['reloj'] ?? [];
+        $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $durHoras);
         $emoSvc = new EmotionalStateService(
             new VisualPackStore($root),
             new CatalogStore($root),
             $logger
         );
+        $contexto = [
+            'objeto_id' => $objectId,
+            'estado_antes' => EstadoEmocional::canonId((string) ($estadoAntes['id'] ?? EstadoEmocional::NEUTRO)),
+            'estado_antes_origen' => (string) ($estadoAntes['origen'] ?? ''),
+            'estado_antes_contexto' => is_array($estadoAntes['contexto'] ?? null) ? $estadoAntes['contexto'] : [],
+            'causa_fuerte' => $causaFuerte,
+        ];
         $res = $emoSvc->aplicar(
             $partida,
             $residenteId,
             $estadoId,
-            'regalo',
+            $origen,
             null,
             $hasta,
-            ['objeto_id' => $objectId],
-            $dur
+            $contexto,
+            $durHoras
         );
-        return !empty($res['ok']) ? ($res['estado_emocional'] ?? null) : null;
+        if (empty($res['ok'])) {
+            return null;
+        }
+        $estadoAplicado = $res['estado_emocional'] ?? null;
+        if (is_array($estadoAplicado) && is_array($partida['residentes'][$residenteId]['runtime']['estado_emocional'] ?? null)) {
+            // Reemplazar el campo contexto escrito por EmotionalStateService para
+            // preservar la causa histórica. El nuevo contexto ya fue pasado en
+            // $contexto arriba, así que esta rama es defensiva.
+        }
+        return is_array($estadoAplicado) ? $estadoAplicado : null;
+    }
+
+    /**
+     * Determina si el regalo activa un hobby/gusto ya conocido por el jugador.
+     * Reutiliza exactamente el orden de precedencia de RegaloHints::paraObjeto
+     * pero solo para el campo hobby_match, sin copy.
+     */
+    private static function regaloActivaHobbyConocido(array $partida, string $residenteId, string $objectId): bool
+    {
+        $regalo = (new CatalogStore(dirname(__DIR__, 2)))->item('regalos', $objectId);
+        if (!is_array($regalo)) {
+            return false;
+        }
+        $hobbyIds = is_array($regalo['hobby_ids'] ?? null) ? $regalo['hobby_ids'] : [];
+        if ($hobbyIds === []) {
+            return false;
+        }
+        foreach ($hobbyIds as $hid) {
+            if (!is_string($hid) || $hid === '') {
+                continue;
+            }
+            $campoGusto = ConocimientoNpc::campoGusto('hobby', $hid);
+            $campoRechazo = ConocimientoNpc::campoRechazo('hobby', $hid);
+            if (DiscoveryEngine::estado($partida, $residenteId, $campoGusto) === DiscoveryEngine::DESCUBIERTO) {
+                return true;
+            }
+            if (DiscoveryEngine::estado($partida, $residenteId, $campoRechazo) === DiscoveryEngine::DESCUBIERTO) {
+                return true;
+            }
+            if (DiscoveryReveal::jugadorSabeHobby($partida, $residenteId, $hid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Lista cerrada de orígenes cuyo contexto NO debe borrarse al mejorar el ánimo.
+     * Si la emoción actual del receptor viene de uno de estos orígenes, conservar
+     * la causa histórica (en contexto) y aplicar alivio temporal (duración 50%).
+     */
+    private static function esCausaFuerte(array $estadoAntes): bool
+    {
+        $origen = (string) ($estadoAntes['origen'] ?? '');
+        $ctx = is_array($estadoAntes['contexto'] ?? null) ? $estadoAntes['contexto'] : [];
+
+        // Encuentro con resultado negativo.
+        if (in_array($origen, ['encuentro', 'encuentro_intervencion'], true)) {
+            $res = (string) ($ctx['resultado_experiencia'] ?? '');
+            if (in_array($res, ['muy_mal', 'mal'], true)) {
+                return true;
+            }
+        }
+        // Lista directa de orígenes fuertes.
+        $fuertes = [
+            'perder_trabajo',
+            'rechazo_repetido',
+            'discusion_fuerte',
+            'crisis_pareja',
+            'ruptura',
+            'marcha_testigo',
+            'encontrar_trabajo', // causa positiva pero estado actual es negativo: improbable; defensivo.
+        ];
+        if (in_array($origen, $fuertes, true)) {
+            return true;
+        }
+        return false;
     }
 
     private static function ajustarAprecio(array &$partida, string $residenteId, int $delta): int
@@ -352,5 +588,128 @@ final class RegaloEngine
                     ? $nombre . ' agradece el detalle, aunque no parece entusiasmarle especialmente.'
                     : $nombre . ' guarda el regalo con educación, sin demasiado asombro.';
         }
+    }
+
+    /**
+     * Regalos v2 — Escena humana previa al veredicto (1 línea).
+     * Determinista por (residente, objeto). Sin IDs técnicos ni métricas.
+     * El objeto se menciona respetando su capitalización del catálogo.
+     */
+    public static function textoEscena(array $partida, string $residenteId, string $objetoNombre, string $reaccion): string
+    {
+        $nombre = IdentidadPublica::nombre($partida, $residenteId);
+        $seed = crc32('escena|' . $residenteId . '|' . $objetoNombre . '|' . $reaccion) % 3;
+        switch ($reaccion) {
+            case self::LE_ENCANTA:
+                if ($seed === 0) {
+                    return $nombre . ' ha abierto el paquete delante de ti.';
+                }
+                if ($seed === 1) {
+                    return $nombre . ' se ha quedado en silencio un segundo, mirando ' . $objetoNombre . '.';
+                }
+                return $nombre . ' lo ha cogido con las dos manos.';
+            case self::LE_GUSTA:
+                if ($seed === 0) {
+                    return $nombre . ' lo ha mirado por encima, asintiendo.';
+                }
+                if ($seed === 1) {
+                    return $nombre . ' lo ha guardado enseguida, sin abrirlo del todo.';
+                }
+                return $nombre . ' ha sonreído sin decir nada.';
+            case self::NO_LE_GUSTA:
+                if ($seed === 0) {
+                    return $nombre . ' ha mirado ' . $objetoNombre . ' sin entender bien qué hacer con ello.';
+                }
+                if ($seed === 1) {
+                    return $nombre . ' lo ha aceptado con cara de circunstancias.';
+                }
+                return $nombre . ' ha fruncido un poco el ceño al verlo.';
+            default:
+                if ($seed === 0) {
+                    return $nombre . ' lo ha cogido por educación.';
+                }
+                if ($seed === 1) {
+                    return $nombre . ' lo ha dejado encima de la mesa sin comentario.';
+                }
+                return $nombre . ' ha asentido, sin más.';
+        }
+    }
+
+    /**
+     * Regalos v2 — Eco emocional: refleja el efecto observado en el ánimo
+     * cuando ha habido cambio, o el mantenimiento cuando no lo ha habido.
+     * Usa el campo `mantiene` / `motivo` del payload de aplicarEmocion.
+     *
+     * Convenciones de copy:
+     * - Sin fórmulas. Sin "+X".
+     * - Cuando cambia a alegre: "Se le nota en la cara — está mejor."
+     * - Si la causa histórica sigue activa (mantiene_causa): matiz "lo agradece, aunque sigue pensando en lo de X".
+     * - Si no_le_gusta sobre triste/enfadado: "El gesto no levanta el ánimo, pero te lo ha aceptado."
+     * - Si ya estaba bien y el regalo le gusta: "le ha arrancado otra sonrisa."
+     *
+     * @param array<string, mixed>|null $emocionPayload resultado de aplicarEmocion()
+     */
+    public static function textoEcoEmocional(
+        array $partida,
+        string $residenteId,
+        string $objetoNombre,
+        string $reaccion,
+        ?array $emocionPayload
+    ): string {
+        $nombre = IdentidadPublica::nombre($partida, $residenteId);
+        if (!is_array($emocionPayload)) {
+            return '';
+        }
+
+        $motivo = (string) ($emocionPayload['motivo'] ?? '');
+        $nuevoId = EstadoEmocional::canonId((string) ($emocionPayload['id'] ?? ''));
+        $mantiene = (bool) ($emocionPayload['mantiene'] ?? false);
+        $causaFuerte = (bool) ($emocionPayload['contexto']['causa_fuerte'] ?? false);
+        $estadoAntes = (string) ($emocionPayload['contexto']['estado_antes'] ?? '');
+        $estadoAntesOrigen = (string) ($emocionPayload['contexto']['estado_antes_origen'] ?? '');
+
+        // Regalo le_encanta o le_gusta con cambio a alegre/neutro (motivo regalo_animó / regalo_alivia).
+        if (in_array($motivo, ['regalo_animó', 'regalo_animó_sin_match', 'regalo_alivia', 'regalo_alivia_sin_match'], true)) {
+            if ($nuevoId === EstadoEmocional::ALEGRE) {
+                if ($causaFuerte && $estadoAntes === EstadoEmocional::TRISTE) {
+                    return $nombre . ' lo agradece, pero sigue pensándoselo.';
+                }
+                if ($causaFuerte && $estadoAntes === EstadoEmocional::ENFADADO && $estadoAntesOrigen !== '') {
+                    return $nombre . ' lo agradece; el enfado con lo de antes sigue ahí, pero menos.';
+                }
+                return 'A ' . $nombre . ' se le nota en la cara — está mejor.';
+            }
+            if ($nuevoId === EstadoEmocional::NEUTRO) {
+                if ($causaFuerte) {
+                    return $nombre . ' lo agradece; lo otro no se le ha pasado, pero algo es algo.';
+                }
+                return $nombre . ' se ha quedado más tranquil' . GeneroConcordancia::oa($partida, $residenteId) . '.';
+            }
+        }
+
+        // Regalo le_gusta o le_encanta sin cambio emocional (estado antes ya era NEUTRO/ALEGRE).
+        // Caso "ya estaba bien" → copy "le ha arrancado otra sonrisa".
+        if (in_array($estadoAntes, [EstadoEmocional::NEUTRO, EstadoEmocional::ALEGRE], true)
+            && in_array($reaccion, [self::LE_ENCANTA, self::LE_GUSTA], true)
+            && !in_array($motivo, ['regalo_animó', 'regalo_animó_sin_match', 'regalo_alivia', 'regalo_alivia_sin_match'], true)
+        ) {
+            return 'Está content' . GeneroConcordancia::oa($partida, $residenteId) . ', y el detalle le ha arrancado otra sonrisa.';
+        }
+
+        // Mantiene por no_le_gusta sobre cualquier estado (nunca se empeora).
+        if ($mantiene && in_array($reaccion, [self::NO_LE_GUSTA], true)) {
+            if ($estadoAntes === EstadoEmocional::TRISTE) {
+                return 'El gesto no levanta el ánimo de ' . $nombre . ', pero te lo ha aceptado.';
+            }
+            if ($estadoAntes === EstadoEmocional::ENFADADO) {
+                return $nombre . ' lo coge sin comentar; sigue mosca.';
+            }
+            if ($estadoAntes === EstadoEmocional::NEUTRO || $estadoAntes === EstadoEmocional::ALEGRE) {
+                return $nombre . ' lo coge sin comentar; el detalle no le ha hecho ni fu ni fa.';
+            }
+        }
+
+        // Indiferente: nada.
+        return '';
     }
 }
