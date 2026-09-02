@@ -341,4 +341,76 @@ final class NecesidadEstado
         ];
         return $copys[$necesidad][$banda] ?? '';
     }
+
+    /**
+     * Obtiene el perfil de necesidades de un lugar desde el catálogo.
+     *
+     * @param array<string, mixed> $lugar
+     * @return array{principal: string, secundaria: string}|null
+     */
+    public static function perfilLugar(array $lugar): ?array
+    {
+        $necesidades = $lugar['necesidades'] ?? null;
+        if (!is_array($necesidades)) {
+            return null;
+        }
+        $principal = null;
+        $secundaria = null;
+        foreach ($necesidades as $nec => $rol) {
+            if ($rol === 'principal') {
+                $principal = $nec;
+            } elseif ($rol === 'secundaria') {
+                $secundaria = $nec;
+            }
+        }
+        if ($principal === null) {
+            return null;
+        }
+        return [
+            'principal' => $principal,
+            'secundaria' => $secundaria ?? '',
+        ];
+    }
+
+    /**
+     * Genera copy informativo de un lugar para el jugador.
+     *
+     * @param array<string, mixed> $lugar
+     */
+    public static function copyLugar(array $lugar): array
+    {
+        $perfil = self::perfilLugar($lugar);
+        if ($perfil === null) {
+            return [];
+        }
+        $iconos = [
+            'social' => "\ud83e\udd1d",
+            'diversion' => "\ud83c\udf89",
+            'actividad' => "\ud83d\udcaa",
+            'calma' => "\u2615",
+        ];
+        $nombres = [
+            'social' => 'Socializar',
+            'diversion' => 'Diversión',
+            'actividad' => 'Actividad',
+            'calma' => 'Calma',
+        ];
+        $out = [
+            'principal' => [
+                'id' => $perfil['principal'],
+                'icono' => $iconos[$perfil['principal']] ?? '',
+                'nombre' => $nombres[$perfil['principal']] ?? $perfil['principal'],
+                'nivel' => 'principal',
+            ],
+        ];
+        if ($perfil['secundaria'] !== '') {
+            $out['secundaria'] = [
+                'id' => $perfil['secundaria'],
+                'icono' => $iconos[$perfil['secundaria']] ?? '',
+                'nombre' => $nombres[$perfil['secundaria']] ?? $perfil['secundaria'],
+                'nivel' => 'secundaria',
+            ];
+        }
+        return $out;
+    }
 }
