@@ -1,32 +1,31 @@
 /* ============================================================
    MENSAJITOS LAB — Piloto DS Modal + Body Mensajitos
-   ITERACIÓN 2: identidad AHT + funciones reales
+   ITERACIÓN 3: pulido visual
    Trigger: ?modal_catalog=1
-   
-   Lógica real reutilizada:
-   - Tabs NUEVOS/TODOS (estado === 'pendiente')
-   - Marcar todos (buzon.leer_todos)
-   - Tint por hash de remitente (mensajitoTintDeRemitente)
-   - Sistema de avatar (cara-ini con inicial + emoción)
+
+   Reglas:
+   - Colores por POSICIÓN (no hash) para garantizar variedad
+     en una bandeja de varios mensajes del mismo remitente.
+   - Avatares y nombres son interactivos → abrir perfil
+     (regla DS: CARA DE VECINO → FICHA DEL VECINO)
+   - Tabs NUEVOS/TODOS con semántica real (estado === 'pendiente')
+   - Marcar todos visible dentro de NUEVOS con pendientes
    ============================================================ */
 
 (function () {
   'use strict';
 
-  /* === ALGORITMO REAL DE TINT (de play-v3.js) === */
-  function tintDeRemitente(id) {
-    var s = String(id || '');
-    if (!s) return 0;
-    var h = 0;
-    for (var i = 0; i < s.length; i++) {
-      h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-    }
-    return (Math.abs(h) % 4);
-  }
-
   function inicialDe(nombre) {
     if (typeof nombre !== 'string' || !nombre.length) return '?';
     return nombre.charAt(0).toUpperCase();
+  }
+
+  /* 5 papeles pastel planos (sin gradient).
+     Asignados por índice rotativo para que una bandeja de 5+ mensajes
+     tenga variedad visual real. */
+  var PAPELES = ['rose', 'blue', 'green', 'cream', 'lilac'];
+  function paperParaIndice(i) {
+    return PAPELES[i % PAPELES.length];
   }
 
   /* === DATOS REALISTAS === */
@@ -38,15 +37,15 @@
           id: 'msg_simple_1',
           de: 'Nora', de_id: 'per_i03', emocion: 'alegre',
           texto: 'He visto que has quedado con Hugo el otro día. Me alegro, de verdad. A veces necesita alguien que le saque una sonrisa.',
-          dia: 3, fecha: 'Día 3 — Tarde',
-          estado: 'pendiente', tipo: 'info', clasificacion: 'cotilleo'
+          fecha: 'Día 3 — Tarde',
+          estado: 'pendiente', tipo: 'info'
         },
         {
           id: 'msg_simple_2',
           de: 'Teo', de_id: 'per_i06', emocion: 'neutro',
           texto: 'Oye, si vas por el parque hoy, he dejado unas flores en la entrada para que las recojas. Son para el jardín de Lina.',
-          dia: 2, fecha: 'Día 2 — Mañana',
-          estado: 'leido', tipo: 'info', clasificacion: 'oportunidad'
+          fecha: 'Día 2 — Mañana',
+          estado: 'leido', tipo: 'info'
         }
       ]
     },
@@ -57,8 +56,8 @@
           id: 'msg_decision_1',
           de: 'Hugo', de_id: 'per_i04', emocion: 'triste',
           texto: 'Estoy pensando en apuntarme al torneo de cartas del viernes, pero no sé si será un poco tonto. ¿Tú qué crees?',
-          dia: 4, fecha: 'Día 4 — Mañana',
-          estado: 'pendiente', tipo: 'accion', clasificacion: 'importante',
+          fecha: 'Día 4 — Mañana',
+          estado: 'pendiente', tipo: 'accion',
           requiere_decision: true,
           consejo_titulo: '¿Qué le sugieres?',
           opciones_consejo: [
@@ -76,8 +75,8 @@
           id: 'msg_regalo_1',
           de: 'Carlita', de_id: 'per_i11', emocion: 'alegre',
           texto: 'He hecho una tarta de manzana extra y he pensado en ti. Aquí la tienes, que la disfrutes.',
-          dia: 5, fecha: 'Día 5 — Tarde',
-          estado: 'pendiente', tipo: 'accion', clasificacion: 'oportunidad',
+          fecha: 'Día 5 — Tarde',
+          estado: 'pendiente', tipo: 'accion',
           es_objeto_recibido: true,
           regalo: { icono: '🍰', nombre: 'Tarta de manzana', desc: 'Receta de la abuela Carlita' }
         }
@@ -90,9 +89,10 @@
           id: 'msg_peticion_1',
           de: 'Lina', de_id: 'per_i05', emocion: 'triste',
           texto: 'Necesito que alguien me presente a Dario. No me atrevo a hablarle directamente, ¡me pongo nerviosa! ¿Podrías organizar algo?',
-          dia: 6, fecha: 'Día 6 — Mañana',
-          estado: 'pendiente', tipo: 'accion', clasificacion: 'peticion',
+          fecha: 'Día 6 — Mañana',
+          estado: 'pendiente', tipo: 'accion',
           requiere_decision: true, plazo: 'Antes del día 10',
+          persona_mencionada: { id: 'per_i08', nombre: 'Dario' },
           selector_titulo: '¿Quién puede presentarle?',
           selector_opciones: [
             { personaje_id: 'per_i01', nombre: 'Marc', pista: 'Conoce a ambos desde hace tiempo' },
@@ -109,8 +109,8 @@
           id: 'msg_hilo_1',
           de: 'Ariadna', de_id: 'per_i07', emocion: 'alegre',
           texto: '¡Gracias por lo de ayer! Dario se lo pasó genial. Dice que quiere repetir la próxima semana.',
-          dia: 7, fecha: 'Día 7 — Tarde',
-          estado: 'pendiente', tipo: 'info', clasificacion: 'importante',
+          fecha: 'Día 7 — Tarde',
+          estado: 'pendiente', tipo: 'info',
           hilo: {
             titulo: 'Sobre lo que me contaste',
             texto: '¿Podrías presentarme a Dario? Creo que nos llevaríamos bien...',
@@ -125,20 +125,20 @@
         {
           id: 'msg_noleido', de: 'Valentina', de_id: 'per_i09', emocion: 'alegre',
           texto: '¿Has visto el partido de ayer? Estaba todo el pueblo animando. Fue épico.',
-          dia: 8, fecha: 'Día 8 — Noche',
-          estado: 'pendiente', tipo: 'info', clasificacion: 'cotilleo'
+          fecha: 'Día 8 — Noche',
+          estado: 'pendiente', tipo: 'info'
         },
         {
           id: 'msg_leido', de: 'Rafa', de_id: 'per_i10', emocion: 'neutro',
           texto: 'Mañana organizo algo en el parque si te apetece. Avísame.',
-          dia: 7, fecha: 'Día 7 — Tarde',
-          estado: 'leido', tipo: 'info', clasificacion: 'oportunidad'
+          fecha: 'Día 7 — Tarde',
+          estado: 'leido', tipo: 'info'
         },
         {
           id: 'msg_resuelto', de: 'Dario', de_id: 'per_i08', emocion: 'alegre',
           texto: 'La clase de ayer salió genial. Los alumnos estuvieron muy atentos.',
-          dia: 6, fecha: 'Día 6 — Tarde',
-          estado: 'resuelto', tipo: 'info', clasificacion: 'cotilleo'
+          fecha: 'Día 6 — Tarde',
+          estado: 'resuelto', tipo: 'info'
         }
       ]
     },
@@ -148,43 +148,69 @@
         {
           id: 'msg_v1', de: 'Marc', de_id: 'per_i01', emocion: 'alegre',
           texto: 'Oye, ¿te apuntas a cenar esta noche en el bar? Vamos unos cuantos.',
-          dia: 9, fecha: 'Día 9 — Tarde',
-          estado: 'pendiente', tipo: 'accion', clasificacion: 'oportunidad'
+          fecha: 'Día 9 — Tarde',
+          estado: 'pendiente', tipo: 'accion'
         },
         {
           id: 'msg_v2', de: 'Lina', de_id: 'per_i05', emocion: 'triste',
           texto: 'He visto que Dario no ha venido hoy. ¿Sabes si está bien?',
-          dia: 9, fecha: 'Día 9 — Tarde',
-          estado: 'pendiente', tipo: 'info', clasificacion: 'cotilleo'
+          fecha: 'Día 9 — Tarde',
+          estado: 'pendiente', tipo: 'info',
+          persona_mencionada: { id: 'per_i08', nombre: 'Dario' }
         },
         {
           id: 'msg_v3', de: 'Nora', de_id: 'per_i03', emocion: 'neutro',
           texto: 'Si pasas por la biblioteca, devuélveme el libro que te presté. ¡Gracias!',
-          dia: 9, fecha: 'Día 9 — Mañana',
-          estado: 'pendiente', tipo: 'info', clasificacion: 'peticion'
+          fecha: 'Día 9 — Mañana',
+          estado: 'pendiente', tipo: 'info'
         },
         {
           id: 'msg_v4', de: 'Hugo', de_id: 'per_i04', emocion: 'alegre',
           texto: '¡Al final me apunté al torneo! Te aviso de cómo va.',
-          dia: 8, fecha: 'Día 8 — Noche',
-          estado: 'leido', tipo: 'info', clasificacion: 'cotilleo'
+          fecha: 'Día 8 — Noche',
+          estado: 'leido', tipo: 'info'
         },
         {
           id: 'msg_v5', de: 'Teo', de_id: 'per_i06', emocion: 'neutro',
           texto: 'Las flores para Lina ya están en el jarrón. Quedaron preciosas.',
-          dia: 7, fecha: 'Día 7 — Mañana',
-          estado: 'resuelto', tipo: 'info', clasificacion: 'oportunidad'
+          fecha: 'Día 7 — Mañana',
+          estado: 'resuelto', tipo: 'info',
+          persona_mencionada: { id: 'per_i05', nombre: 'Lina' }
         }
       ]
     }
   };
 
+  /* === AVATAR HTML === */
+  function avatarHTML(nombre, id, emocion, mini) {
+    var emoEmoji = { alegre: '😊', neutro: '😐', triste: '😢', enfadado: '😠' }[emocion] || '😐';
+    var cls = 'aht-msg-avatar cara-ini' + (mini ? ' aht-msg-avatar--mini' : '');
+    return '<div class="' + cls + '" ' +
+           'data-persona-id="' + (id || '') + '" ' +
+           'data-persona-nombre="' + nombre + '" ' +
+           'role="button" tabindex="0" ' +
+           'aria-label="Abrir perfil de ' + nombre + '">' +
+           inicialDe(nombre) +
+           '<span class="emo-face emo-face--' + (emocion || 'neutro') + '">' + emoEmoji + '</span>' +
+           '</div>';
+  }
+
+  /* === NAVEGACIÓN A PERFIL — regla DS === */
+  function abrirPerfil(personaId, nombre) {
+    /* En el lab: log + intento de integración con sistema real.
+       En producción: window.AHT.residenteOpen(personaId) o equivalente. */
+    if (window.AHT && typeof window.AHT.residenteOpen === 'function') {
+      window.AHT.residenteOpen(personaId);
+    } else {
+      console.log('[AHT-LAB] Abrir perfil de vecino:', personaId || nombre);
+    }
+  }
+
   /* === RENDER DE CARTA === */
-  function renderCard(c) {
-    var tint = tintDeRemitente(c.de_id || c.de);
+  function renderCard(c, idx) {
     var leido = (c.estado || 'pendiente') !== 'pendiente';
     var attrs = [];
-    attrs.push('data-tint="' + tint + '"');
+    attrs.push('data-paper="' + paperParaIndice(idx) + '"');
     attrs.push('data-unread="' + (!leido) + '"');
     if (c.tipo === 'accion') attrs.push('data-action="true"');
     if (c.tipo === 'info') attrs.push('data-info="true"');
@@ -194,23 +220,32 @@
 
     var html = '<article class="aht-msg-card" ' + attrs.join(' ') + '>';
 
+    /* AVATAR (grid-area: avatar) */
+    html += avatarHTML(c.de, c.de_id, c.emocion, false);
+
+    /* HEADER (grid-area: header) — nombre + badge */
     var flagClass = 'aht-msg-flag--new';
     var flagText = 'Nuevo';
     if (leido && c.estado !== 'resuelto') { flagClass = 'aht-msg-flag--read'; flagText = 'Visto'; }
     if (c.estado === 'resuelto') { flagClass = 'aht-msg-flag--resolved'; flagText = 'Resuelto'; }
+
+    html += '<div class="aht-msg-header-row">';
+    html += '<p class="aht-msg-from" data-persona-id="' + (c.de_id || '') + '" data-persona-nombre="' + c.de + '" role="button" tabindex="0">' + c.de + '</p>';
     html += '<span class="aht-msg-flag ' + flagClass + '">' + flagText + '</span>';
-
-    var emoEmoji = { alegre: '😊', neutro: '😐', triste: '😢', enfadado: '😠' }[c.emocion] || '😐';
-    html += '<div class="aht-msg-avatar cara-ini" aria-hidden="true">';
-    html += inicialDe(c.de);
-    html += '<span class="emo-face emo-face--' + (c.emocion || 'neutro') + '">' + emoEmoji + '</span>';
     html += '</div>';
 
-    html += '<div class="aht-msg-content">';
-    html += '<div class="aht-msg-head">';
-    html += '<p class="aht-msg-from">' + c.de + '</p>';
+    /* STATUS ROW (grid-area: status) — fecha + leído */
+    html += '<div class="aht-msg-status-row">';
     html += '<span class="aht-msg-date">' + c.fecha + '</span>';
+    html += '<span class="aht-msg-status">';
+    html += '<button type="button" class="aht-msg-read-toggle" data-read="' + leido + '">';
+    html += leido ? '✓ Leído' : '○ No leído';
+    html += '</button>';
+    html += '</span>';
     html += '</div>';
+
+    /* CONTENT (grid-area: content) */
+    html += '<div class="aht-msg-content">';
 
     if (c.hilo) {
       html += '<div class="aht-msg-thread">';
@@ -224,6 +259,15 @@
     }
 
     html += '<p class="aht-msg-body">' + c.texto + '</p>';
+
+    /* Persona mencionada en peticiones (avatar + nombre) */
+    if (c.persona_mencionada) {
+      var pm = c.persona_mencionada;
+      html += '<div class="aht-msg-person">';
+      html += avatarHTML(pm.nombre, pm.id, 'neutro', true);
+      html += '<span>Sobre <span class="aht-msg-person-name" data-persona-id="' + (pm.id || '') + '" data-persona-nombre="' + pm.nombre + '" role="button" tabindex="0">' + pm.nombre + '</span></span>';
+      html += '</div>';
+    }
 
     if (c.regalo) {
       html += '<div class="aht-msg-gift">';
@@ -279,13 +323,7 @@
       html += '</div>';
     }
 
-    html += '<div style="margin-top:8px">';
-    html += '<button type="button" class="aht-msg-read-toggle" data-read="' + leido + '">';
-    html += leido ? '✓ Leído' : '○ No leído';
-    html += '</button>';
-    html += '</div>';
-
-    html += '</div></article>';
+    html += '</div></article>'; /* /aht-msg-content /article */
     return html;
   }
 
@@ -313,7 +351,7 @@
     } else {
       var html = '<div class="aht-msg-section">';
       for (var i = 0; i < cartas.length; i++) {
-        html += renderCard(cartas[i]);
+        html += renderCard(cartas[i], i);
       }
       html += '</div>';
       list.innerHTML = html;
@@ -434,6 +472,7 @@
     });
   }
 
+  /* === TOGGLE LEÍDO === */
   document.addEventListener('click', function (e) {
     var toggle = e.target.closest('.aht-msg-read-toggle');
     if (!toggle) return;
@@ -458,12 +497,41 @@
     card.setAttribute('data-unread', String(current));
     var flag = card.querySelector('.aht-msg-flag');
     if (flag) {
-      flag.className = 'aht-msg-flag ' + (current ? 'aht-msg-flag--read' : 'aht-msg-flag--new');
-      flag.textContent = current ? 'Visto' : 'Nuevo';
+      if (current) {
+        flag.className = 'aht-msg-flag aht-msg-flag--read';
+        flag.textContent = 'Visto';
+      } else {
+        flag.className = 'aht-msg-flag aht-msg-flag--new';
+        flag.textContent = 'Nuevo';
+      }
     }
 
     updateCount();
     updateMarkAll();
+  });
+
+  /* === AVATARES Y NOMBRES → PERFIL ===
+     Regla DS: CARA DE VECINO → FICHA DEL VECINO */
+  document.addEventListener('click', function (e) {
+    var target = e.target.closest('[data-persona-id], .aht-msg-avatar, .aht-msg-from, .aht-msg-person-name');
+    if (!target) return;
+    var pid = target.getAttribute('data-persona-id');
+    var pnom = target.getAttribute('data-persona-nombre') || '';
+    if (!pid && !pnom) return;
+    /* No interceptar clicks en opciones/botones dentro de cards */
+    if (e.target.closest('.aht-msg-choice-opt, .aht-msg-btn, .aht-msg-read-toggle')) return;
+    abrirPerfil(pid, pnom);
+  });
+
+  /* Teclado: Enter/Space en avatares/nombres */
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var target = e.target.closest('.aht-msg-avatar, .aht-msg-from, .aht-msg-person-name');
+    if (!target) return;
+    e.preventDefault();
+    var pid = target.getAttribute('data-persona-id');
+    var pnom = target.getAttribute('data-persona-nombre') || '';
+    abrirPerfil(pid, pnom);
   });
 
   var params = new URLSearchParams(window.location.search);

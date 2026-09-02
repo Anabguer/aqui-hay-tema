@@ -68,17 +68,17 @@
   border-bottom: 1px solid var(--modal-border, #D8D1DE);
 }
 
-/* Marca de título (highlight detrás) */
+/* Marca de título (highlight detrás) — centrada verticalmente */
 .aht-modal-header::before {
   content: "";
   position: absolute;
   left: 50%;
-  top: 0.08em;
+  top: 50%;
   width: min(74%, 12rem);
-  height: 1.05em;
-  transform: translateX(-50%) rotate(-1.5deg);
+  height: 1.4em;
+  transform: translate(-50%, -50%) rotate(-1.5deg);
   background-color: var(--modal-title-mark, #F1EDF6);
-  border-radius: 5px;
+  border-radius: 6px;
   pointer-events: none;
   z-index: 0;
 }
