@@ -1,9 +1,10 @@
 # AHT — DISEÑO CANÓNICO DEL SISTEMA DE NECESIDADES PERSONALES
 
-**Estado:** DISEÑO PRODUCTO APROBADO — FASE DE IMPLEMENTACIÓN
+**Estado:** DISEÑO PRODUCTO APROBADO — IMPLEMENTACIÓN PARCIAL (6/8 piezas)
 **Fecha:** 2026-09-02
 **Alcance:** Diseño de producto + arquitectura basada en código real
 **Decisiones cerradas:** 4 necesidades, 9 lugares canónicos, principal/secundaria, peticiones, visibilidad global
+**SHAs:** 6e7cbeea → 2543a3af → f58afb60 → 5347633e → 66d60c97 → b4fc5e01
 
 ---
 
@@ -871,6 +872,23 @@ El sistema de Intenciones (decidido por el agente paralelo de Relaciones) se ali
 | **REUTILIZAR** | EstadoEmocional, EmotionalRecovery, AgendaEngine, AgendaConjunta, IniciativaSocial, LugarAutonomo, PlanAfinidad, RelacionDesgaste, ConocimientoNpc, EncuentroExperiencia, HobbyAccionable, EstiloSocial, MotorVidaDiaria, CatchUpEngine, PeticionEngine |
 | **MODIFICAR (leve)** | LugarAutonomo (añadir peso necesidad), IniciativaSocial (ponderar necesidades), MotorVidaDiaria (tick necesidades), CatchUpEngine (recalcular), PeticionEngine (generar desde necesidad) |
 | **NO CREAR** | Nuevo motor de relaciones, nuevo sistema de amistad, barras de UI, fórmulas complejas, sistema paralelo de vínculos |
+
+---
+
+## I. Estado de implementación
+
+| Pieza | Estado | SHA | Archivos |
+|-------|--------|-----|----------|
+| 1. Catálogo necesidades + campo lugares | ✅ | 6e7cbeea | necesidades.json, lugares.json, CatalogStore.php |
+| 2. NecesidadEstado.php | ✅ | 2543a3af | NecesidadEstado.php |
+| 3. Tick horario + recuperación | ✅ | f58afb60 | MotorVidaDiaria.php, EncuentroResolver.php |
+| 4. Ficha Vecino | ✅ | 5347633e | PartidaService.php |
+| 5. Info edificios | ✅ | 66d60c97 | NecesidadEstado.php (perfilLugar, copyLugar) |
+| 6. Autonomía (LugarAutonomo) | ✅ | b4fc5e01 | LugarAutonomo.php |
+| 7. Catch-up offline | ⏳ | — | Pendiente |
+| 8. Peticiones desde necesidades | ⏳ | — | Pendiente |
+
+**Piezas pendientes (7-8) son mejoras futuras. El núcleo funcional está implementado.**
 
 ---
 
