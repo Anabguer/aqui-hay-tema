@@ -223,7 +223,7 @@
     "content content";
   gap: 0 12px;
   padding: 12px 14px 12px 12px;
-  border: 2px solid var(--msg-border-soft);
+  border: 2.5px solid var(--msg-border-soft);
   border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
   box-shadow: 2px 3px 0 rgba(51, 38, 30, .18);
   transform: rotate(-0.35deg);
@@ -239,26 +239,27 @@
 /* Papeles planos pastel — asignados por data-paper en el JS (5 colores)
    Plano, sin gradients. Iteración 6: el COLOR REPRESENTA AL VECINO.
    Mismo de_id = mismo papel SIEMPRE. Hash determinista estable.
-   Borde 2.5px del color del tono, claramente visible. */
+   Borde 2.5px sólido del color del tono, claramente visible.
+   Shorthand completo para evitar cualquier cascade issue. */
 .aht-msg-card[data-paper="rose"] {
   background: var(--msg-paper-rose);
-  border-color: var(--msg-border-rose);
+  border: 2.5px solid var(--msg-border-rose);
 }
 .aht-msg-card[data-paper="blue"] {
   background: var(--msg-paper-blue);
-  border-color: var(--msg-border-blue);
+  border: 2.5px solid var(--msg-border-blue);
 }
 .aht-msg-card[data-paper="green"] {
   background: var(--msg-paper-green);
-  border-color: var(--msg-border-green);
+  border: 2.5px solid var(--msg-border-green);
 }
 .aht-msg-card[data-paper="cream"] {
   background: var(--msg-paper-cream);
-  border-color: var(--msg-border-cream);
+  border: 2.5px solid var(--msg-border-cream);
 }
 .aht-msg-card[data-paper="lilac"] {
   background: var(--msg-paper-lilac);
-  border-color: var(--msg-border-lilac);
+  border: 2.5px solid var(--msg-border-lilac);
 }
 
 /* Resuelto: opacidad + sin rotación fuerte */
