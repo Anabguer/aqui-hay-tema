@@ -36,21 +36,20 @@
   --msg-font-serif: "Fraunces", Georgia, serif;
 
   /* Papeles planos pastel — 5 colores (sin gradient, planos)
-     Iteración 4: saturación/presencia aumentada para que se distingan
-     a simple vista. Planos, sin gradient. Cada uno con su propio
-     borde cromático derivado del tono. */
-  --msg-paper-rose:    #fbd0dc;  /* rosa pastel plano, más presente */
-  --msg-paper-blue:    #c8dbf2;  /* azul pastel plano */
-  --msg-paper-green:   #cde6cb;  /* verde pastel plano */
-  --msg-paper-cream:   #f4e0a8;  /* amarillo/crema pastel plano */
-  --msg-paper-lilac:   #dbc9ef;  /* lavanda pastel plano */
+     Iteración 5: saturación claramente visible a simple vista.
+     Cada papel con su propio borde más oscuro del mismo tono. */
+  --msg-paper-rose:    #f7c4d2;  /* rosa pastel visible */
+  --msg-paper-blue:    #bcd4ee;  /* azul pastel visible */
+  --msg-paper-green:   #c4e2c1;  /* verde pastel visible */
+  --msg-paper-cream:   #f5dca0;  /* amarillo/crema pastel visible */
+  --msg-paper-lilac:   #d4bee8;  /* lavanda pastel visible */
 
-  /* Bordes cromáticos sutiles por tono (derivados del papel) */
-  --msg-border-rose:   #d18aa3;
-  --msg-border-blue:   #7a9bc4;
-  --msg-border-green:  #85b27e;
-  --msg-border-cream:  #c9a14b;
-  --msg-border-lilac:  #9a82c4;
+  /* Bordes 2px sólidos derivados del papel (visibles) */
+  --msg-border-rose:   #b85a78;
+  --msg-border-blue:   #4a78a8;
+  --msg-border-green:  #5e9a5a;
+  --msg-border-cream:  #a07a2a;
+  --msg-border-lilac:  #7c5eaa;
 }
 
 /* === ZONA DE NAVEGACIÓN (tabs + marcar todos) === */
@@ -68,8 +67,7 @@
 }
 
 /* === Tabs NUEVOS / TODOS — estilo AHT físico ===
-   Iteración 4: ambos estados tienen color perceptible.
-   TODOS: lavanda pastel saturado, NIEVOS activo: rosa fuerte. */
+   Iteración 5: TODOS lavanda claramente perceptible, NIEVOS activo: rosa fuerte. */
 .aht-msg-tab {
   flex: 0 1 auto;
   min-height: 42px;
@@ -80,20 +78,20 @@
   padding: 7px 18px;
   border: 2.5px solid var(--msg-ink);
   border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
-  background: var(--msg-paper-lilac);
-  color: #5a3d8e;
+  background: #d4bee8;
+  color: #4a2a78;
   font: 700 1.15rem/1 var(--msg-font-hand);
   letter-spacing: 0.5px;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .22);
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .25);
   transform: rotate(-0.4deg);
   transition: transform 150ms ease, box-shadow 150ms ease;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .4);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
 }
 .aht-msg-tab:hover {
   transform: rotate(0deg) translateY(-1px);
-  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .25);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .28);
 }
 .aht-msg-tab:active {
   transform: rotate(-0.4deg) translateY(0);
@@ -105,7 +103,7 @@
   background: #e8628a;
   color: #fff;
   text-shadow: 0 1.5px 0 rgba(146, 39, 73, .5);
-  box-shadow: 2px 3px 0 rgba(196, 43, 74, .45);
+  box-shadow: 2px 3px 0 rgba(196, 43, 74, .5);
   transform: rotate(0.4deg);
   border-color: var(--msg-ink);
 }
@@ -113,27 +111,34 @@
   content: "";
   position: absolute;
   inset: 3px;
-  border: 1.5px dashed rgba(255, 255, 255, .85);
+  border: 1.5px dashed rgba(255, 255, 255, .9);
   border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
   pointer-events: none;
 }
 
-/* Contador dentro del tab (sello pequeño) */
+/* Contador dentro del tab (sello pequeño) — contraste alto siempre */
 .aht-msg-tab-count {
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   background: #fff;
   border: 2px solid var(--msg-ink);
-  font: 800 .72rem/1 var(--msg-font-body);
-  color: var(--msg-accent-pink);
-  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .2);
+  font: 800 .82rem/1 var(--msg-font-body);
+  color: #b85a78;
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .28);
   transform: rotate(4deg);
 }
+/* Tab activo (NUEVOS, fondo rosa): bolita blanca con número rosa oscuro */
+.aht-msg-tab.is-on .aht-msg-tab-count {
+  background: #fff;
+  color: #b85a78;
+  border-color: var(--msg-ink);
+}
+/* Tab inactivo (TODOS, fondo lila): bolita rosa con número blanco */
 .aht-msg-tab:not(.is-on) .aht-msg-tab-count {
   background: var(--msg-accent-pink);
   color: #fff;
@@ -168,12 +173,16 @@
   display: none;
 }
 
-/* === CONTENEDOR DEL BODY === */
+/* === CONTENEDOR DEL BODY ===
+   Iteración 5: fondo casi blanco (off-white) para que los papeles
+   pastel destaquen con contraste. Esto sobreescribe el gris-lila
+   del DS modal SOLO dentro del contexto del Lab Mensajitos. */
 .aht-msg-list {
   display: flex;
   flex-direction: column;
   gap: 0;
   padding: 10px 12px 16px;
+  background-color: #FAFBFE;
 }
 
 /* === SECCIÓN === */
@@ -181,6 +190,9 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  background-color: #FAFBFE;
+  border-radius: 12px;
+  padding: 4px;
 }
 
 /* === CARTA (mensaje individual) === */
@@ -195,9 +207,9 @@
     "content content";
   gap: 0 12px;
   padding: 12px 14px 12px 12px;
-  border: 1.5px solid var(--msg-border-soft);
+  border: 2px solid var(--msg-border-soft);
   border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .15), 0 4px 8px rgba(70, 50, 30, .06);
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .18), 0 4px 8px rgba(70, 50, 30, .08);
   transform: rotate(-0.35deg);
   transition: transform 200ms ease, box-shadow 200ms ease;
   overflow: visible;
@@ -205,14 +217,13 @@
 .aht-msg-card:nth-child(even) { transform: rotate(0.3deg); }
 .aht-msg-card:hover {
   transform: rotate(0deg) translateY(-1px);
-  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .18), 0 6px 12px rgba(70, 50, 30, .08);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .22), 0 6px 12px rgba(70, 50, 30, .1);
 }
 
 /* Papeles planos pastel — asignados por data-paper en el JS (5 colores)
    Plano, sin gradients. La regla del JS usa índice (no hash) para
    garantizar variedad visual en una bandeja de varios mensajes.
-   Iteración 4: borde cromático derivado del papel para definir
-   la silueta sin recurrir a borde negro genérico. */
+   Iteración 5: borde 2px sólido claramente visible del color del tono. */
 .aht-msg-card[data-paper="rose"] {
   background: var(--msg-paper-rose);
   border-color: var(--msg-border-rose);
