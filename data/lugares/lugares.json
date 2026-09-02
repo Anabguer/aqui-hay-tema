@@ -1,23 +1,175 @@
 {
   "meta": {
-    "descripcion": "Catalogo base cerrado. V0 mapa: 3 abiertos + cine/bar/arcade candado. Casa no es parcela comercial. Precios y fama null. Sin coordenadas.",
+    "descripcion": "Catalogo base cerrado. 9 lugares canónicos con 'necesidades'. Lugares extra existentes en JSON pero NO canónicos (no operativos en producto).",
     "iniciales": ["lug_cafeteria", "lug_parque", "lug_biblioteca"],
-    "candados_visibles_v0": ["lug_cine", "lug_bar", "lug_arcade"]
+    "candados_visibles_v0": ["lug_cine", "lug_bar", "lug_bingo"]
   },
   "items": [
-    { "id": "lug_biblioteca", "nombre": "Biblioteca", "tipo": "interior_cultura", "comprable": true, "desbloqueado_inicial": true, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": ["leer"], "coordenadas": null },
-    { "id": "lug_cafeteria", "nombre": "Cafeteria", "tipo": "interior_ocio", "comprable": true, "desbloqueado_inicial": true, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_parque", "nombre": "Parque", "tipo": "exterior", "comprable": true, "desbloqueado_inicial": true, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": ["pasear"], "coordenadas": null },
-    { "id": "lug_cine", "nombre": "Cine", "tipo": "interior_ocio", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": ["cine"], "coordenadas": null },
-    { "id": "lug_plaza", "nombre": "Plaza", "tipo": "exterior_publico", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_restaurante", "nombre": "Restaurante", "tipo": "interior_comida", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_bar", "nombre": "Bar", "tipo": "interior_nocturno", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_discoteca", "nombre": "Discoteca", "tipo": "interior_nocturno", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": ["bailar"], "coordenadas": null },
-    { "id": "lug_bingo", "nombre": "Bingo", "tipo": "interior_ocio", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_arcade", "nombre": "Arcade", "tipo": "interior_ocio", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": ["videojuegos"], "coordenadas": null },
-    { "id": "lug_tienda_ropa", "nombre": "Tienda de ropa", "tipo": "interior_tienda", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "actividades_posibles": ["comprar_look"], "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_gimnasio", "nombre": "Gimnasio", "tipo": "interior_deporte", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": [], "coordenadas": null },
-    { "id": "lug_mirador", "nombre": "Mirador", "tipo": "exterior", "comprable": true, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "hobbies_relacionados": ["pasear"], "coordenadas": null },
-    { "id": "lug_casa", "nombre": "Casa", "tipo": "casa", "comprable": false, "desbloqueado_inicial": false, "coste_dinero": null, "requisito_fama": null, "desbloquea_si": "fase_de_relacion_intimidad_convivencia_o_evento", "hobbies_relacionados": [], "coordenadas": null }
+    {
+      "id": "lug_biblioteca",
+      "nombre": "Biblioteca",
+      "tipo": "interior_cultura",
+      "comprable": true,
+      "desbloqueado_inicial": true,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": ["leer"],
+      "coordenadas": null,
+      "necesidades": { "calma": "principal" }
+    },
+    {
+      "id": "lug_cafeteria",
+      "nombre": "Cafeteria",
+      "tipo": "interior_ocio",
+      "comprable": true,
+      "desbloqueado_inicial": true,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": [],
+      "coordenadas": null,
+      "necesidades": { "social": "principal", "calma": "secundaria" }
+    },
+    {
+      "id": "lug_parque",
+      "nombre": "Parque",
+      "tipo": "exterior",
+      "comprable": true,
+      "desbloqueado_inicial": true,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": ["pasear"],
+      "coordenadas": null,
+      "necesidades": { "actividad": "principal", "calma": "secundaria" }
+    },
+    {
+      "id": "lug_cine",
+      "nombre": "Cine",
+      "tipo": "interior_ocio",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": ["cine"],
+      "coordenadas": null,
+      "necesidades": { "diversion": "principal", "calma": "secundaria" }
+    },
+    {
+      "id": "lug_restaurante",
+      "nombre": "Restaurante",
+      "tipo": "interior_comida",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": [],
+      "coordenadas": null,
+      "necesidades": { "social": "principal", "diversion": "secundaria" }
+    },
+    {
+      "id": "lug_bar",
+      "nombre": "Bar",
+      "tipo": "interior_nocturno",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": [],
+      "coordenadas": null,
+      "necesidades": { "social": "principal", "diversion": "secundaria" }
+    },
+    {
+      "id": "lug_discoteca",
+      "nombre": "Discoteca",
+      "tipo": "interior_nocturno",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": ["baile"],
+      "coordenadas": null,
+      "necesidades": { "diversion": "principal", "social": "secundaria" }
+    },
+    {
+      "id": "lug_bingo",
+      "nombre": "Bingo",
+      "tipo": "interior_ocio",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": [],
+      "coordenadas": null,
+      "necesidades": { "social": "principal", "diversion": "secundaria" }
+    },
+    {
+      "id": "lug_gimnasio",
+      "nombre": "Gimnasio",
+      "tipo": "interior_deporte",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": [],
+      "coordenadas": null,
+      "necesidades": { "actividad": "principal", "diversion": "secundaria" }
+    },
+    {
+      "id": "lug_plaza",
+      "nombre": "Plaza",
+      "tipo": "exterior_publico",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": [],
+      "coordenadas": null
+    },
+    {
+      "id": "lug_arcade",
+      "nombre": "Arcade",
+      "tipo": "interior_ocio",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": ["videojuegos"],
+      "coordenadas": null
+    },
+    {
+      "id": "lug_tienda_ropa",
+      "nombre": "Tienda de ropa",
+      "tipo": "interior_tienda",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "actividades_posibles": ["comprar_look"],
+      "hobbies_relacionados": [],
+      "coordenadas": null
+    },
+    {
+      "id": "lug_mirador",
+      "nombre": "Mirador",
+      "tipo": "exterior",
+      "comprable": true,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "hobbies_relacionados": ["pasear"],
+      "coordenadas": null
+    },
+    {
+      "id": "lug_casa",
+      "nombre": "Casa",
+      "tipo": "casa",
+      "comprable": false,
+      "desbloqueado_inicial": false,
+      "coste_dinero": null,
+      "requisito_fama": null,
+      "desbloquea_si": "fase_de_relacion_intimidad_convivencia_o_evento",
+      "hobbies_relacionados": [],
+      "coordenadas": null,
+      "necesidades": { "calma": "principal" }
+    }
   ]
 }

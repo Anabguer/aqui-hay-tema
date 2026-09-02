@@ -80,6 +80,9 @@ final class CatalogStore
             case 'regalos':
                 $file = 'regalos.json';
                 break;
+            case 'necesidades':
+                $file = 'necesidades.json';
+                break;
             default:
                 $file = null;
         }
