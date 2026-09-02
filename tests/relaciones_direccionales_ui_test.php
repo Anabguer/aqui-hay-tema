@@ -73,8 +73,8 @@ ok($par1 !== null, 'CASO 3: vista global incluye par A-B');
 $abDir = $par1['a_hacia_b'] ?? [];
 $baDir = $par1['b_hacia_a'] ?? [];
 ok($abDir['romance_visible'] === true || $baDir['romance_visible'] === true, 'CASO 3: al menos una dirección con romance_visible');
-// No hay conflicto, así que badge no debería activarse por asimetría
-ok(true, 'CASO 3: asimetría NO genera badge (verificación UI en JS)');
+// Badge se alimenta de f.conflicto. Sin relaciones_conflicto → conflicto=null → sin badge
+ok(($par1['conflicto'] ?? null) === null, 'CASO 3: asimetría SIN conflicto → conflicto=null en DTO → badge NO');
 
 // ── CASO 4: Social asimétrico sin conflicto ──
 $p4 = $service->nuevaPartida('test_fixtures_v0', 'dir-caso4');

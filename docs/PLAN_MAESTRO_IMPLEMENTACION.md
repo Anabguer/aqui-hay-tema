@@ -1846,3 +1846,33 @@ Estas hipótesis salen de la auditoría. Neni decidirá cuáles incorporar al Pl
 
 **NO se activaron flags, NO se implementó código, NO se cambió balance, NO se alteró funcionalidad.** Esta sección es exclusivamente documental.
 
+---
+
+## 29. Representación direccional de relaciones — ficha y badge (2026-09-02)
+
+🧪 **PENDIENTE PLAYTEST** — 02/09/2026
+
+Corrección de coherencia de representación entre vista global de relaciones y ficha individual. Modelo, persistencia, deltas y romance intactos. Solo capa de presentación.
+
+### Qué cambia
+
+- **Ficha individual** muestra social + romance cuando ambos existen (separador `·`). Antes solo mostraba social y ocultaba romance.
+- **A→B y B→A** conservan direccionalidad en ambas pantallas. La ficha de Julia muestra "Me gusta" hacia Marina; la ficha de Marina muestra solo "Conocida" hacia Julia.
+- **Badge ❗** reservado exclusivamente a conflicto real (`relaciones_conflicto`). La asimetría social/romántica entre A→B y B→A no genera badge.
+- **"DISTINTO EN CADA SENTIDO"** se conserva en vista global cuando las direcciones difieren.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| `assets/js/play-v3.js` | `etiquetaRelText()`, `emojiRel()`, badge en `htmlVecRelCard()` |
+| `tests/relaciones_direccionales_ui_test.php` | Nuevo — 28 assertions, 6 casos |
+
+### Validación pendiente
+
+PlayTest real con Neni para confirmar que:
+- el jugador comprende "Conocido · Me gusta" como dos canales;
+- la dirección es inequívoca;
+- el badge no genera confusión;
+- la asimetría no se percibe como error.
+
