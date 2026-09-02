@@ -45,26 +45,28 @@ body.play-v3 {
   padding: .22rem .5rem; cursor: pointer; text-decoration: none;
 }
 .taller .msg { margin-left: auto; font-size: .78rem; color: var(--muted); }
-.play-stage { flex: 1; min-height: 0; min-width: 0; padding: 0; }
-.play-root { position: relative; width: 100%; height: 100%; overflow: hidden; }
-.board-scroll { position: absolute; inset: 0; z-index: 1; }
-.play-root.phone .board-scroll { inset: 52px 0 58px 0; overflow: hidden; }
-.play-root.pc .board-fit { height: 100%; }
 
-/* Mapa definitivo (contrato Neni). Sin suelo antiguo ni overlay de cajas. */
-.play-v3 .calles { display: none !important; }
-.play-v3 .board-scroll {
-  display: flex; align-items: center; justify-content: center;
-  overflow: hidden;
+@media (min-width: 769px) {
+  .play-stage { flex: 1; min-height: 0; min-width: 0; padding: 0; }
+  .play-root { position: relative; width: 100%; height: 100%; overflow: hidden; }
+  .board-scroll { position: absolute; inset: 0; z-index: 1; }
+  .play-root.pc .board-fit { height: 100%; }
+
+  /* Mapa definitivo (contrato Neni). Sin suelo antiguo ni overlay de cajas. */
+  .play-v3 .calles { display: none !important; }
+  .play-v3 .board-scroll {
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .play-v3 .board-fit {
+    position: relative;
+    flex: 0 0 auto;
+    background: url("../play-v3/mapa_base_rectas.png") center / 100% 100% no-repeat;
+    box-shadow: inset 0 0 0 2px rgba(139, 90, 43, .12);
+  }
+  .play-v3 .play-root.pc .board-scroll { inset: 0; }
 }
-.play-v3 .board-fit {
-  position: relative;
-  flex: 0 0 auto;
-  background: url("../play-v3/mapa_base_rectas.png") center / 100% 100% no-repeat;
-  box-shadow: inset 0 0 0 2px rgba(139, 90, 43, .12);
-}
-.play-v3 .play-root.phone .board-scroll { inset: 52px 0 58px 0; }
-.play-v3 .play-root.pc .board-scroll { inset: 0; }
+.play-v3 .play-root.phone .board-scroll { inset: 52px 0 58px 0; overflow: hidden; }
 
 .mesa { position: absolute; z-index: 5; top: 8px; left: 10px; right: 10px; pointer-events: none; }
 .mesa-papel { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
@@ -359,21 +361,23 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
 
 
 
-/* Layout shell (grid 3 columnas) */
-.game-shell {
-  display: flex; flex-direction: column;
-  height: calc(100vh - 52px); min-height: 520px;
-}
-body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
-.game-main {
-  flex: 1; min-height: 0;
-  display: grid;
-  grid-template-columns: minmax(168px, 210px) minmax(0, 1fr) minmax(168px, 210px);
-  gap: 8px; padding: 8px; align-items: stretch;
-}
-.game-left, .game-right {
-  display: flex; flex-direction: column; gap: .45rem;
-  overflow-y: auto; min-height: 0;
+@media (min-width: 769px) {
+  /* Layout shell (grid 3 columnas) — solo escritorio */
+  .game-shell {
+    display: flex; flex-direction: column;
+    height: calc(100vh - 52px); min-height: 520px;
+  }
+  body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
+  .game-main {
+    flex: 1; min-height: 0;
+    display: grid;
+    grid-template-columns: minmax(168px, 210px) minmax(0, 1fr) minmax(168px, 210px);
+    gap: 8px; padding: 8px; align-items: stretch;
+  }
+  .game-left, .game-right {
+    display: flex; flex-direction: column; gap: .45rem;
+    overflow-y: auto; min-height: 0;
+  }
 }
 .game-map-wrap {
   min-width: 0; min-height: 0; position: relative;
