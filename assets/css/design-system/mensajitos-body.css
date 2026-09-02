@@ -36,20 +36,20 @@
   --msg-font-serif: "Fraunces", Georgia, serif;
 
   /* Papeles planos pastel — 5 colores (sin gradient, planos)
-     Iteración 6: saturación claramente perceptible a simple vista.
-     Cada papel con borde del mismo tono más oscuro. */
-  --msg-paper-rose:    #f5b8c8;  /* rosa pastel saturado */
-  --msg-paper-blue:    #a8c8e8;  /* azul pastel saturado */
-  --msg-paper-green:   #b6dcae;  /* verde pastel saturado */
-  --msg-paper-cream:   #f0cf85;  /* amarillo/crema pastel saturado */
-  --msg-paper-lilac:   #c4a8e0;  /* lavanda pastel saturado */
+     Iteración 6: el COLOR REPRESENTA AL VECINO. Mismo de_id = mismo papel.
+     Saturación claramente perceptible a simple vista, identidad cromática. */
+  --msg-paper-rose:    #f4aac0;  /* rosa pastel saturado */
+  --msg-paper-blue:    #9bc0e6;  /* azul pastel saturado */
+  --msg-paper-green:   #a8d8a0;  /* verde pastel saturado */
+  --msg-paper-cream:   #ecc878;  /* amarillo/crema pastel saturado */
+  --msg-paper-lilac:   #b89edc;  /* lavanda pastel saturado */
 
   /* Bordes 2.5px sólidos del color del tono, claramente visibles */
   --msg-border-rose:   #b04868;
-  --msg-border-blue:   #3a6ca0;
-  --msg-border-green:  #4a8847;
-  --msg-border-cream:  #946a1c;
-  --msg-border-lilac:  #6c4ca0;
+  --msg-border-blue:   #2a5a8a;
+  --msg-border-green:  #3a7838;
+  --msg-border-cream:  #8a5a14;
+  --msg-border-lilac:  #5e3e90;
 }
 
 /* === ZONA DE NAVEGACIÓN (tabs + marcar todos) === */
@@ -185,14 +185,15 @@
   background-color: #FAFBFE;
 }
 
-/* === SECCIÓN === */
+/* === SECCIÓN ===
+   Iteración 6: fondo blanco puro para máximo contraste con los papeles. */
 .aht-msg-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background-color: #FAFBFE;
+  gap: 14px;
+  background-color: #FFFFFF;
   border-radius: 12px;
-  padding: 4px;
+  padding: 8px;
 }
 
 /* === CARTA (mensaje individual) === */
@@ -221,9 +222,9 @@
 }
 
 /* Papeles planos pastel — asignados por data-paper en el JS (5 colores)
-   Plano, sin gradients. La regla del JS usa índice (no hash) para
-   garantizar variedad visual en una bandeja de varios mensajes.
-   Iteración 5: borde 2px sólido claramente visible del color del tono. */
+   Plano, sin gradients. Iteración 6: el COLOR REPRESENTA AL VECINO.
+   Mismo de_id = mismo papel SIEMPRE. Hash determinista estable.
+   Borde 2.5px del color del tono, claramente visible. */
 .aht-msg-card[data-paper="rose"] {
   background: var(--msg-paper-rose);
   border-color: var(--msg-border-rose);

@@ -1309,6 +1309,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <label class="aht-modal-lab-tab" data-msg-lab="hilo">Hilo</label>
       <label class="aht-modal-lab-tab" data-msg-lab="leido">Leído/No</label>
       <label class="aht-modal-lab-tab" data-msg-lab="varios">Varios</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="identidad">Identidad</label>
     </div>
 
     <!-- DS MODAL FRAME -->

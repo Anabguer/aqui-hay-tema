@@ -251,7 +251,42 @@
           texto: 'Ya he hablado con Dario. Gracias por presentarme.',
           fecha: 'Día 6 — Tarde',
           estado: 'resuelto', tipo: 'info'
+        },
+        /* Iter 6: SEGUNDO mensaje de Nora en esta variante para
+           validar visualmente "mismo de_id = mismo papel" en una
+           sola vista con 5 vecinos distintos. */
+        {
+          id: 'msg_v9', de: 'Nora', de_id: 'per_i03', emocion: 'alegre',
+          texto: 'Cuando pases por la plaza, te dejo un detalle en la fuente.',
+          fecha: 'Día 9 — Tarde',
+          estado: 'pendiente', tipo: 'oportunidad'
         }
+      ]
+    },
+    /* === Iter 6: PRUEBA VISUAL de identidad cromática ===
+       2 mensajes de Nora + 2 de Marc + 1 de Lina + 1 de Teo
+       → 4 vecinos con colores estables, 2 con mismo color que otro. */
+    identidad: {
+      titulo: 'Mensajitos',
+      cards: [
+        { id: 'id_1', de: 'Nora',  de_id: 'per_i03', emocion: 'alegre',
+          texto: '¿Te has enterado de lo de ayer en el Café?',
+          fecha: 'Día 9 — Tarde', estado: 'pendiente', tipo: 'info' },
+        { id: 'id_2', de: 'Marc',  de_id: 'per_i01', emocion: 'neutro',
+          texto: 'Voy a necesitar tu ayuda con la mudanza del sábado.',
+          fecha: 'Día 9 — Tarde', estado: 'pendiente', tipo: 'accion' },
+        { id: 'id_3', de: 'Lina',  de_id: 'per_i05', emocion: 'triste',
+          texto: 'No he visto a Dario en todo el día. ¿Está bien?',
+          fecha: 'Día 9 — Mañana', estado: 'pendiente', tipo: 'info' },
+        { id: 'id_4', de: 'Nora',  de_id: 'per_i03', emocion: 'alegre',
+          texto: 'El libro que me prestaste está en mi mesa, gracias.',
+          fecha: 'Día 8 — Tarde', estado: 'leido', tipo: 'info' },
+        { id: 'id_5', de: 'Teo',   de_id: 'per_i06', emocion: 'neutro',
+          texto: '¿Pasas por el huerto? Hay verdura de sobra.',
+          fecha: 'Día 8 — Mañana', estado: 'pendiente', tipo: 'oportunidad' },
+        { id: 'id_6', de: 'Marc',  de_id: 'per_i01', emocion: 'alegre',
+          texto: 'Confirmado el jueves a las 8. Te paso la lista.',
+          fecha: 'Día 7 — Noche', estado: 'leido', tipo: 'accion' }
       ]
     }
   };
