@@ -11,8 +11,17 @@
    - Badge NUEVO como sello/pegatina
    ============================================================ */
 
-/* === TOKENS LOCALES === */
-.aht-msg {
+/* === TOKENS LOCALES ===
+   Arquitectura saneada (FASE 1 — piloto Mensajitos LAB):
+   Las variables --msg-* se declaran en :root,.aht-modal para que
+   cualquier descendiente (incluido .aht-msg-card) las herede por cascada.
+
+   Bug original (auditoría 7fda6b54): estaban en .aht-msg, clase que
+   nunca aterriza en el DOM. Resultado: las var() caían a `initial`
+   y la card renderizaba con fondo transparente.
+   Fix: selector `:root, .aht-modal` — global + scoped, sin clase fantasma. */
+:root,
+.aht-modal {
   --msg-ink: var(--ds-ink, #3b3028);
   --msg-ink-soft: var(--ds-ink-soft, #594839);
   --msg-muted: var(--ds-text-muted, #75634F);
@@ -33,7 +42,6 @@
   --msg-border-soft: rgba(120, 96, 72, .18);
   --msg-font-hand: var(--ds-font-hand, "Caveat", "Segoe Print", cursive);
   --msg-font-body: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
-  --msg-font-serif: "Fraunces", Georgia, serif;
 
   /* Papeles planos pastel — 5 colores (sin gradient, planos)
      Iteración 6: el COLOR REPRESENTA AL VECINO. Mismo de_id = mismo papel.
@@ -199,14 +207,11 @@
 }
 
 /* === CARTA (mensaje individual) ===
-   Iteración 7: DIAGNOSTICO REAL.
-   CAUSA DE POR QUÉ ITER 6 SE VEÍA GRIS:
-   .aht-msg-card tenía box-shadow con 2 valores:
-     1) 2.5px 4px 0 (sombra dura de papel) — bien
-     2) 0 5px 10px rgba(70,50,30,.1) (sombra difusa gris)
-   La SEGUNDA sombra difuminada gris inferior se sumaba al fondo
-   casi-blanco y neutralizaba visualmente el color del papel.
-   FIX: SOLO sombra dura de papel (efecto 3D plano), CERO blur. */
+   Arquitectura saneada (FASE 1): el fondo y borde del card dependen
+   del atributo data-paper (rose/blue/green/cream/lilac) y de las vars
+   --msg-paper-* y --msg-border-*. Esas vars ahora se declaran en
+   :root,.aht-modal (cabecera de este archivo) en vez de en la clase
+   inexistente .aht-msg. Por eso ahora el color del papel se ve. */
 .aht-msg-card {
   position: relative;
   display: grid;

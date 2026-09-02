@@ -164,13 +164,17 @@
   background-color: var(--modal-content-bg, #F6F3F8);
 }
 
-/* === E) RESPONSIVE: MOBILE === */
+/* === E) RESPONSIVE: MOBILE ===
+   Saneado (FASE 1): los !important eran redundantes — estas reglas
+   vienen DESPUÉS de la regla base .aht-modal { … } en source order,
+   tienen la misma especificidad y viven dentro del @media, así que
+   ya ganan la cascada en mobile sin necesidad de !important. */
 @media (max-width: 768px) {
   .aht-modal {
-    width: min(100%, 393px) !important;
-    max-width: min(100%, 393px) !important;
-    max-height: min(88vh, 720px) !important;
-    transform: translate(-50%, -50%) rotate(-0.2deg) !important;
+    width: min(100%, 393px);
+    max-width: min(100%, 393px);
+    max-height: min(88vh, 720px);
+    transform: translate(-50%, -50%) rotate(-0.2deg);
   }
 
   .aht-modal-header {
