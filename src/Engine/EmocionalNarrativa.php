@@ -50,7 +50,7 @@ final class EmocionalNarrativa
                 if ($motivo === 'hobby_recuperacion' || $origen === 'hobby_recuperacion') {
                     $explicacion = 'Un rato con su hobby le ha sentado de fábula.';
                 } elseif ($res === 'muy_mal') {
-                    $explicacion = 'Su encuentro con ' . $otroNombre . ' no salió como esperaba. Aquello la dejó hecha polv' . self::oA($partida, $residenteId) . '.';
+                    $explicacion = 'Su encuentro con ' . $otroNombre . ' no salió como esperaba. Aquello la dejó hecha polv' . GeneroConcordancia::oa($partida, $residenteId) . '.';
                     if ($histCtx !== '') {
                         $explicacion .= ' ' . ucfirst($histCtx) . '.';
                     }
@@ -109,7 +109,7 @@ final class EmocionalNarrativa
                 break;
 
             case 'cumple_felicidad':
-                $explicacion = 'Ha recibido la enhorabuena de sus vecinos y se le nota content' . self::oA($partida, $residenteId) . '.';
+                $explicacion = 'Ha recibido la enhorabuena de sus vecinos y se le nota content' . GeneroConcordancia::oa($partida, $residenteId) . '.';
                 break;
 
             case 'consejo_celestine':
@@ -120,10 +120,10 @@ final class EmocionalNarrativa
                 $parejaId = (string) ($ctx['pareja_id'] ?? '');
                 $nombrePareja = $parejaId !== '' ? IdentidadPublica::nombre($partida, $parejaId) : '';
                 if ($nombrePareja !== '') {
-                    $explicacion = 'Está muy content' . self::oA($partida, $residenteId)
+                    $explicacion = 'Está muy content' . GeneroConcordancia::oa($partida, $residenteId)
                         . ' desde que empezó a salir con ' . $nombrePareja . '.';
                 } else {
-                    $explicacion = 'Está muy content' . self::oA($partida, $residenteId)
+                    $explicacion = 'Está muy content' . GeneroConcordancia::oa($partida, $residenteId)
                         . ' desde que empezó una relación.';
                 }
                 $diaDesde = (int) ($estado['desde']['dia'] ?? 0);
@@ -225,7 +225,7 @@ final class EmocionalNarrativa
             case EstadoEmocional::TRISTE:
                 return 'triste';
             case EstadoEmocional::ENFADADO:
-                return 'enfadad' . self::oA($partida, $rid);
+                return 'enfadad' . GeneroConcordancia::oa($partida, $rid);
         }
         return $estadoId;
     }
@@ -416,7 +416,7 @@ final class EmocionalNarrativa
         if ($nombre === '') {
             return null;
         }
-        $oA = self::oA($partida, $residenteId);
+        $oA = GeneroConcordancia::oa($partida, $residenteId);
 
         switch ($origen) {
             case 'perder_trabajo':
@@ -500,11 +500,5 @@ final class EmocionalNarrativa
             ],
             '_placeholder_contenido' => false,
         ]);
-    }
-
-    private static function oA(array $partida, string $rid): string
-    {
-        $g = (string) ($partida['residentes'][$rid]['identidad_publica']['genero'] ?? '');
-        return $g === 'mujer' ? 'a' : 'o';
     }
 }

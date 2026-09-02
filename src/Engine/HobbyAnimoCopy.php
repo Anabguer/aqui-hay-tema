@@ -44,7 +44,7 @@ final class HobbyAnimoCopy
         $variantes = [];
         if ($lugarTxt !== '') {
             $variantes[] = 'Parece que a ' . $nombre . ' le ha sentado bien pasar un rato' . $lugarTxt . '.';
-            $variantes[] = 'Después de un rato' . $lugarTxt . ', ' . $nombre . ' está bastante más despejad' . self::oA($partida, $rid) . '.';
+            $variantes[] = 'Después de un rato' . $lugarTxt . ', ' . $nombre . ' está bastante más despejad' . GeneroConcordancia::oa($partida, $rid) . '.';
         }
         $variantes[] = 'Eso era justo lo que ' . $nombre . ' necesitaba.';
         if ($despues === EstadoEmocional::ALEGRE) {
@@ -54,18 +54,6 @@ final class HobbyAnimoCopy
         $seed = (string) ($enc['id'] ?? '') . '|' . $rid . '|' . $antes;
         $idx = abs(crc32($seed)) % count($variantes);
         return $variantes[$idx];
-    }
-
-    private static function oA(array $partida, string $rid): string
-    {
-        $g = self::genero($partida, $rid);
-        return $g === 'mujer' ? 'a' : 'o';
-    }
-
-    private static function genero(array $partida, string $rid): ?string
-    {
-        $g = (string) ($partida['residentes'][$rid]['identidad_publica']['genero'] ?? '');
-        return $g !== '' ? $g : null;
     }
 
     private static function rank(string $estado): int
