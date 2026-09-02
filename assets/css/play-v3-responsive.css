@@ -44,7 +44,7 @@
 /* â”€â”€ MÃ³vil vertical â”€â”€ */
 @media (max-width: 768px) {
   html {
-    overflow-x: hidden;
+    overflow: visible;
   }
 
   body.play-v3 {
