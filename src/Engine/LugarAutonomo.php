@@ -70,6 +70,36 @@ final class LugarAutonomo
                     $w += $rng->nextFloat() * 0.8;
                 }
             }
+            // Candidato C: bonus por necesidad actual del NPC
+            if (FeatureConfig::isEnabled($partida, 'necesidades_enabled') && isset($partida['residentes'][$quien])) {
+                $lugarData = null;
+                if ($catalog !== null) {
+                    foreach ($catalog->loadLugares()['items'] ?? [] as $lugItem) {
+                        if (($lugItem['id'] ?? '') === $lug) {
+                            $lugarData = $lugItem;
+                            break;
+                        }
+                    }
+                }
+                $necesidadesLugar = $lugarData['necesidades'] ?? null;
+                if (is_array($necesidadesLugar)) {
+                    $res = $partida['residentes'][$quien];
+                    NecesidadEstado::ensureResidente($res);
+                    foreach (NecesidadEstado::TODAS as $nec) {
+                        $rol = $necesidadesLugar[$nec] ?? null;
+                        if ($rol === null) {
+                            continue;
+                        }
+                        $estadoNec = NecesidadEstado::obtenerUna($res, $nec);
+                        $banda = $estadoNec['banda'];
+                        if ($banda === NecesidadEstado::BANDA_EN_ROJO) {
+                            $w += $rol === 'principal' ? 2.5 : 1.2;
+                        } elseif ($banda === NecesidadEstado::BANDA_LO_NECESITA) {
+                            $w += $rol === 'principal' ? 1.5 : 0.7;
+                        }
+                    }
+                }
+            }
             $cands[] = ['lugar' => $lug, 'w' => max(0.05, $w)];
         }
         if ($cands === []) {
