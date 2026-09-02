@@ -21,11 +21,29 @@
   }
 
   /* 5 papeles pastel planos (sin gradient).
-     Asignados por índice rotativo para que una bandeja de 5+ mensajes
-     tenga variedad visual real. */
+     Asignación determinista:
+     - Si el mensaje tiene hilo_id → todos los del mismo hilo comparten papel.
+     - Si no → por índice rotativo para variedad visual.
+     No hay aleatoriedad: misma bandeja → mismo color siempre. */
   var PAPELES = ['rose', 'blue', 'green', 'cream', 'lilac'];
-  function paperParaIndice(i) {
-    return PAPELES[i % PAPELES.length];
+
+  /* Hash determinista estable para IDs (mismo id → mismo índice) */
+  function hashIdToIndex(id) {
+    var s = String(id || '');
+    var h = 0;
+    for (var i = 0; i < s.length; i++) {
+      h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    }
+    return Math.abs(h) % PAPELES.length;
+  }
+
+  /* Mapa hilo_id → papel (cache, determinista) */
+  var hiloColorMap = {};
+  function paperParaHilo(hiloId) {
+    if (!hiloColorMap[hiloId]) {
+      hiloColorMap[hiloId] = PAPELES[Object.keys(hiloColorMap).length % PAPELES.length];
+    }
+    return hiloColorMap[hiloId];
   }
 
   /* === DATOS REALISTAS === */
@@ -105,17 +123,36 @@
     hilo: {
       titulo: 'Mensajitos',
       cards: [
+        /* Tres mensajes del mismo hilo (hilo_id='h_presentacion_dario').
+           Deben compartir el mismo papel para mostrar la regla visual. */
         {
           id: 'msg_hilo_1',
           de: 'Ariadna', de_id: 'per_i07', emocion: 'alegre',
           texto: '¡Gracias por lo de ayer! Dario se lo pasó genial. Dice que quiere repetir la próxima semana.',
           fecha: 'Día 7 — Tarde',
           estado: 'pendiente', tipo: 'info',
+          hilo_id: 'h_presentacion_dario',
           hilo: {
             titulo: 'Sobre lo que me contaste',
             texto: '¿Podrías presentarme a Dario? Creo que nos llevaríamos bien...',
             fecha: 'Día 5 — Mañana'
           }
+        },
+        {
+          id: 'msg_hilo_2',
+          de: 'Dario', de_id: 'per_i08', emocion: 'alegre',
+          texto: 'Oye, ¿al final conocí a Ariadna gracias a ti? Me ha caído genial, sí.',
+          fecha: 'Día 8 — Tarde',
+          estado: 'leido', tipo: 'info',
+          hilo_id: 'h_presentacion_dario'
+        },
+        {
+          id: 'msg_hilo_3',
+          de: 'Ariadna', de_id: 'per_i07', emocion: 'alegre',
+          texto: '¡Confirmado! El jueves quedamos para merendar. Esto gracias a ti.',
+          fecha: 'Día 9 — Mañana',
+          estado: 'pendiente', tipo: 'info',
+          hilo_id: 'h_presentacion_dario'
         }
       ]
     },
@@ -209,8 +246,17 @@
   /* === RENDER DE CARTA === */
   function renderCard(c, idx) {
     var leido = (c.estado || 'pendiente') !== 'pendiente';
+    /* Asignación de papel:
+       - Hilos: mismo papel para todos los del mismo hilo_id
+       - Independientes: por índice rotativo entre los papeles disponibles */
+    var paper;
+    if (c.hilo_id) {
+      paper = paperParaHilo(c.hilo_id);
+    } else {
+      paper = PAPELES[idx % PAPELES.length];
+    }
     var attrs = [];
-    attrs.push('data-paper="' + paperParaIndice(idx) + '"');
+    attrs.push('data-paper="' + paper + '"');
     attrs.push('data-unread="' + (!leido) + '"');
     if (c.tipo === 'accion') attrs.push('data-action="true"');
     if (c.tipo === 'info') attrs.push('data-info="true"');
@@ -459,6 +505,10 @@
         t.classList.remove('is-active');
       });
       tab.classList.add('is-active');
+
+      /* Reset del mapa de hilos al cambiar de variante:
+         asegura que la asignación hilo→color sea estable por variante */
+      hiloColorMap = {};
 
       if (navZone) {
         navZone.querySelectorAll('.aht-msg-tab').forEach(function (t) {
