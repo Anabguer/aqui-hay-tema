@@ -72,7 +72,7 @@ final class MisionPlantillas
                 'prioridad' => 65,
                 'exigencia' => 75,
                 'hecho' => 'Que esa persona participe en un encuentro que tú organizas y se celebra.',
-                'copy' => '{nombre} está haciendo vida de mueble. Sácala un rato.',
+                'copy' => '{nombre} está haciendo vida de mueble. Sáca{loLa} un rato.',
             ],
             [
                 'id' => 'por_descubrir',

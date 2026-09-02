@@ -110,7 +110,7 @@ final class MensajitoDudaPermanenciaEngine
                 'intencion' => 'animo',
                 'participantes' => [$rid],
             ],
-            'mensaje_ui' => 'Le montamos algo para que no se sienta tan solo/a.',
+            'mensaje_ui' => 'Le montamos algo para que no se sienta tan solo' . GeneroConcordancia::oa($partida, $rid) . '.',
         ];
     }
 

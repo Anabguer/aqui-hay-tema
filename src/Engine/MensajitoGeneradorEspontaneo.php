@@ -177,7 +177,7 @@ final class MensajitoGeneradorEspontaneo
                     'subtipo' => 'crush',
                     'otro_id' => $crush['otro_id'],
                     'otro_nombre' => $crush['otro_nombre'],
-                    'emocion' => 'nervioso/a',
+                    'emocion' => 'nervioso' . GeneroConcordancia::oa($partida, $rid),
                     'clave' => $clave,
                 ],
             ];
@@ -364,7 +364,7 @@ final class MensajitoGeneradorEspontaneo
                 return MensajitoVoz::linea(
                     $partida,
                     'f_confidencia',
-                    ['texto' => $datos['emocion'] ?? 'algo personal'],
+                    ['texto' => str_replace('/a', GeneroConcordancia::oa($partida, $rid), $datos['emocion'] ?? 'algo personal')],
                     'f_confidencia|' . $rid . '|' . ($datos['subtipo'] ?? ''),
                     $rid
                 );
@@ -387,7 +387,8 @@ final class MensajitoGeneradorEspontaneo
             case 'f_alerta_vecinal':
                 $observado = $datos['observado_id'] ?? '';
                 $historial = $observado !== '' ? HistorialPar::contextoNarrativo($partida, $rid, $observado) : '';
-                return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado', 'historial' => $historial], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
+                $oaRef = $observado !== '' ? GeneroConcordancia::oa($partida, $observado) : 'o';
+                return MensajitoVoz::linea($partida, 'f_alerta_vecinal', ['otro' => $datos['observado_nombre'] ?? '', 'texto' => 'apagado', 'historial' => $historial, 'oa_ref' => $oaRef], 'f_alerta|' . $rid . '|' . ($datos['observado_id'] ?? ''), $rid);
             case 'f_duda_permanencia':
                 return MensajitoVoz::linea(
                     $partida,

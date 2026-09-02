@@ -650,6 +650,9 @@ final class MisionDiariaEngine
         }
         if (isset($params['residente_id'])) {
             $tpl = str_replace('{nombre}', IdentidadPublica::nombre($partida, (string) $params['residente_id']), $tpl);
+            if (str_contains($tpl, '{loLa}')) {
+                $tpl = str_replace('{loLa}', GeneroConcordancia::loLa($partida, (string) $params['residente_id']), $tpl);
+            }
         }
         if (isset($params['a'], $params['b'])) {
             $tpl = str_replace('{a}', IdentidadPublica::nombre($partida, (string) $params['a']), $tpl);
