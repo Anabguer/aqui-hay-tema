@@ -1876,3 +1876,71 @@ PlayTest real con Neni para confirmar que:
 - el badge no genera confusión;
 - la asimetría no se percibe como error.
 
+---
+
+## 30. Concordancia gramatical de género — copy dinámico (2026-09-02)
+
+🧪 **PENDIENTE PLAYTEST** — 02/09/2026
+
+Corrección transversal de concordancia de género en todo el copy dinámico (Mensajitos, Diario, Emociones, Hobbies, Misiones, PlaytestGuia). Implementación centralizada sin librería gramatical.
+
+### Qué corrige
+
+- **10 casos de producción** que mostraban `/a` visible o clítico incorrecto:
+  - MensajitoVoz: 7 bancos (F1, F6, F7) — `confundido/a`, `sincero/a`, `apagado/a`, `bajoneado/a`, `preocupado/a`, `nervioso/a`, `loco/a`
+  - MensajitoGeneradorEspontaneo: dato `nervioso/a` en flujo
+  - MensajitoDudaPermanenciaEngine: `solo/a`
+  - MisionPlantillas: `Sácala` fijo → `Sáca{loLa}`
+  - PlaytestGuia: `enfadado/a`, `neutro/a` (debug)
+
+### Arquitectura
+
+| Componente | Cambio |
+|------------|--------|
+| `GeneroConcordancia.php` (nuevo) | Helper central: `genero()`, `oa()`, `loLa()` — fuente `identidad_publica.genero`, fallback 'o'/'lo' |
+| `MensajitoVoz` | Tokens `{oa}` (hablante) / `{oa_ref}` (tercero) + auto-resolución `{oa}` |
+| `DiarioHitoEngine`, `EmocionalNarrativa`, `HobbyAnimoCopy` | `oA()` privados → `GeneroConcordancia::oa()` |
+| `MisionDiariaEngine::renderCopy` | Token `{loLa}` para `Sácalo/Sácala` |
+
+### Principios
+
+- **Cero inferencia por nombre/avatar**: solo `identidad_publica.genero` en runtime
+- **Doble concordancia explícita**: sujeto hablante vs. sujeto tercero (F7 usa `oa_ref` para `apagado/bajoneado` del observado)
+- **Fallback seguro**: género ausente → 'o'/'lo' (nunca `/a` visible)
+- **Sin librería gramatical general**: solo lo que los casos reales necesitan
+
+### Tests
+
+`tests/concordancia_genero_test.php` — 29 tests: helper, hablante (hombre/mujer), tercero (hombre/mujer), cruzados H→M / M→H, clítico lo/la, fallback, no-inferencia-por-nombre, barrido exhaustivo 5 familias × 2 géneros × 3 seeds.
+
+### Archivos modificados
+
+| Archivo | Tipo |
+|---------|------|
+| `src/Engine/GeneroConcordancia.php` | Nuevo |
+| `src/Engine/MensajitoVoz.php` | Modificado |
+| `src/Engine/MensajitoGeneradorEspontaneo.php` | Modificado |
+| `src/Engine/MensajitoDudaPermanenciaEngine.php` | Modificado |
+| `src/Engine/MisionDiariaEngine.php` | Modificado |
+| `src/Engine/MisionPlantillas.php` | Modificado |
+| `src/Engine/PlaytestGuia.php` | Modificado |
+| `src/Engine/DiarioHitoEngine.php` | Modificado |
+| `src/Engine/EmocionalNarrativa.php` | Modificado |
+| `src/Engine/HobbyAnimoCopy.php` | Modificado |
+| `tests/concordancia_genero_test.php` | Nuevo |
+
+### Validación
+
+- Syntax check 10/10 ✅
+- Tests focales 29/29 ✅
+- Cruzados hablante≠tercero ✅
+- Búsqueda residual `/a` en copy producción: 0 ✅
+- Commit: `dab742a4` → `origin/deploy/integrated` ✅
+
+### Validación pendiente
+
+PlayTest real con Neni para confirmar:
+- copy visible sin `/a` ni clíticos incorrectos en partidas reales;
+- concordancia correcta con personajes hombre/mujer;
+- no regresiones en tono/voz de los mensajes.
+
