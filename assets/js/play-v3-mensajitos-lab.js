@@ -1,11 +1,13 @@
 /* ============================================================
    MENSAJITOS LAB — Piloto DS Modal + Body Mensajitos
-   ITERACIÓN 3: pulido visual
+   ITERACIÓN 6: color por VECINO (autoridad = remitente)
    Trigger: ?modal_catalog=1
 
    Reglas:
-   - Colores por POSICIÓN (no hash) para garantizar variedad
-     en una bandeja de varios mensajes del mismo remitente.
+   - Color por VECINO (de_id determinista, fallback a nombre normalizado).
+     Mismo remitente = mismo color SIEMPRE.
+   - El color NO representa: leído/no, emoción, tipo, hilo, estado.
+   - Hilos: la autoridad es el REMITENTE, no el hilo_id.
    - Avatares y nombres son interactivos → abrir perfil
      (regla DS: CARA DE VECINO → FICHA DEL VECINO)
    - Tabs NUEVOS/TODOS con semántica real (estado === 'pendiente')
@@ -20,30 +22,46 @@
     return nombre.charAt(0).toUpperCase();
   }
 
-  /* 5 papeles pastel planos (sin gradient).
-     Asignación determinista:
-     - Si el mensaje tiene hilo_id → todos los del mismo hilo comparten papel.
-     - Si no → por índice rotativo para variedad visual.
-     No hay aleatoriedad: misma bandeja → mismo color siempre. */
+  /* 5 papeles pastel planos (sin gradient). */
   var PAPELES = ['rose', 'blue', 'green', 'cream', 'lilac'];
 
-  /* Hash determinista estable para IDs (mismo id → mismo índice) */
-  function hashIdToIndex(id) {
-    var s = String(id || '');
-    var h = 0;
+  /* Mapeo explícito de de_id → papel.
+     Estabilidad TOTAL: mismo vecino = mismo papel, en cualquier
+     bandeja, en cualquier orden, en cualquier variante del lab.
+     Si el de_id no está en el mapa, fallback a hash FNV-1a. */
+  var PAPER_POR_VECINO = {
+    'per_i01': 'lilac',  /* Marc   */
+    'per_i02': 'rose',   /* (pendiente) */
+    'per_i03': 'rose',   /* Nora   */
+    'per_i04': 'cream',  /* Hugo   */
+    'per_i05': 'blue',   /* Lina   */
+    'per_i06': 'green',  /* Teo    */
+    'per_i07': 'cream',  /* Ariadna */
+    'per_i08': 'green',  /* Dario  */
+    'per_i09': 'blue',   /* Valentina */
+    'per_i10': 'lilac',  /* Rafa   */
+    'per_i11': 'rose'    /* Carlita */
+  };
+
+  /* Hash determinista FNV-1a para IDs no mapeados.
+     Estable, mismo id → mismo papel siempre. */
+  function fnv1a(s) {
+    var x = 2166136261;
     for (var i = 0; i < s.length; i++) {
-      h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+      x ^= s.charCodeAt(i);
+      x = (x * 16777619) >>> 0;
     }
-    return Math.abs(h) % PAPELES.length;
+    return x;
   }
 
-  /* Mapa hilo_id → papel (cache, determinista) */
-  var hiloColorMap = {};
-  function paperParaHilo(hiloId) {
-    if (!hiloColorMap[hiloId]) {
-      hiloColorMap[hiloId] = PAPELES[Object.keys(hiloColorMap).length % PAPELES.length];
+  /* Color por vecino: mapa explícito + hash fallback.
+     El nombre se usa como fallback secundario si no hay de_id. */
+  function paperParaRemitente(deId, nombre) {
+    if (deId && PAPER_POR_VECINO[deId]) {
+      return PAPER_POR_VECINO[deId];
     }
-    return hiloColorMap[hiloId];
+    var key = deId || ('name:' + (nombre || '').toLowerCase().trim());
+    return PAPELES[fnv1a(String(key)) % PAPELES.length];
   }
 
   /* === DATOS REALISTAS === */
@@ -213,6 +231,26 @@
           fecha: 'Día 7 — Mañana',
           estado: 'resuelto', tipo: 'info',
           persona_mencionada: { id: 'per_i05', nombre: 'Lina' }
+        },
+        /* Iter 6: 2+ mensajes del mismo vecino para validar la regla
+           "mismo de_id = mismo papel" visualmente. */
+        {
+          id: 'msg_v6', de: 'Marc', de_id: 'per_i01', emocion: 'neutro',
+          texto: 'Recuérdame lo del libro de Nora. Se lo devolveré mañana.',
+          fecha: 'Día 8 — Tarde',
+          estado: 'leido', tipo: 'info'
+        },
+        {
+          id: 'msg_v7', de: 'Marc', de_id: 'per_i01', emocion: 'alegre',
+          texto: '¡Mira qué buena combinación de cafés! Te paso la lista.',
+          fecha: 'Día 7 — Noche',
+          estado: 'pendiente', tipo: 'oportunidad', clasificacion: 'oportunidad'
+        },
+        {
+          id: 'msg_v8', de: 'Lina', de_id: 'per_i05', emocion: 'alegre',
+          texto: 'Ya he hablado con Dario. Gracias por presentarme.',
+          fecha: 'Día 6 — Tarde',
+          estado: 'resuelto', tipo: 'info'
         }
       ]
     }
@@ -246,15 +284,9 @@
   /* === RENDER DE CARTA === */
   function renderCard(c, idx) {
     var leido = (c.estado || 'pendiente') !== 'pendiente';
-    /* Asignación de papel:
-       - Hilos: mismo papel para todos los del mismo hilo_id
-       - Independientes: por índice rotativo entre los papeles disponibles */
-    var paper;
-    if (c.hilo_id) {
-      paper = paperParaHilo(c.hilo_id);
-    } else {
-      paper = PAPELES[idx % PAPELES.length];
-    }
+    /* Iter 6: el color pertenece al VECINO.
+       Mismo de_id (o nombre fallback) → mismo papel SIEMPRE. */
+    var paper = paperParaRemitente(c.de_id, c.de);
     var attrs = [];
     attrs.push('data-paper="' + paper + '"');
     attrs.push('data-unread="' + (!leido) + '"');

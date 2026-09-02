@@ -36,20 +36,20 @@
   --msg-font-serif: "Fraunces", Georgia, serif;
 
   /* Papeles planos pastel — 5 colores (sin gradient, planos)
-     Iteración 5: saturación claramente visible a simple vista.
-     Cada papel con su propio borde más oscuro del mismo tono. */
-  --msg-paper-rose:    #f7c4d2;  /* rosa pastel visible */
-  --msg-paper-blue:    #bcd4ee;  /* azul pastel visible */
-  --msg-paper-green:   #c4e2c1;  /* verde pastel visible */
-  --msg-paper-cream:   #f5dca0;  /* amarillo/crema pastel visible */
-  --msg-paper-lilac:   #d4bee8;  /* lavanda pastel visible */
+     Iteración 6: saturación claramente perceptible a simple vista.
+     Cada papel con borde del mismo tono más oscuro. */
+  --msg-paper-rose:    #f5b8c8;  /* rosa pastel saturado */
+  --msg-paper-blue:    #a8c8e8;  /* azul pastel saturado */
+  --msg-paper-green:   #b6dcae;  /* verde pastel saturado */
+  --msg-paper-cream:   #f0cf85;  /* amarillo/crema pastel saturado */
+  --msg-paper-lilac:   #c4a8e0;  /* lavanda pastel saturado */
 
-  /* Bordes 2px sólidos derivados del papel (visibles) */
-  --msg-border-rose:   #b85a78;
-  --msg-border-blue:   #4a78a8;
-  --msg-border-green:  #5e9a5a;
-  --msg-border-cream:  #a07a2a;
-  --msg-border-lilac:  #7c5eaa;
+  /* Bordes 2.5px sólidos del color del tono, claramente visibles */
+  --msg-border-rose:   #b04868;
+  --msg-border-blue:   #3a6ca0;
+  --msg-border-green:  #4a8847;
+  --msg-border-cream:  #946a1c;
+  --msg-border-lilac:  #6c4ca0;
 }
 
 /* === ZONA DE NAVEGACIÓN (tabs + marcar todos) === */
@@ -207,9 +207,9 @@
     "content content";
   gap: 0 12px;
   padding: 12px 14px 12px 12px;
-  border: 2px solid var(--msg-border-soft);
+  border: 2.5px solid var(--msg-border-soft);
   border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .18), 0 4px 8px rgba(70, 50, 30, .08);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .22), 0 5px 10px rgba(70, 50, 30, .1);
   transform: rotate(-0.35deg);
   transition: transform 200ms ease, box-shadow 200ms ease;
   overflow: visible;
