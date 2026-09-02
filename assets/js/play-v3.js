@@ -5135,11 +5135,14 @@
     if (rel.etiqueta_vinculo === 'crisis') return '\uD83D\uDCA5 ';
     if (rel.etiqueta_vinculo === 'pareja') return '\uD83D\uDC95 ';
     if (rel.etiqueta_vinculo === 'ex_pareja') return '\uD83D\uDC94 ';
-    const s = rel.etiqueta_social || '';
-    if (s === 'cae_mal') return '\uD83D\uDE21 ';
-    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '\uD83D\uDC9A ';
-    if (s === 'amigo') return '\uD83D\uDE0A ';
-    if (s === 'conocido') return '\uD83D\uDC4B ';
+    var s = rel.etiqueta_social || '';
+    var socialEmoji = '';
+    if (s === 'cae_mal') socialEmoji = '\uD83D\uDE21 ';
+    else if (s === 'buena_amistad' || s === 'muy_buena_amistad') socialEmoji = '\uD83D\uDC9A ';
+    else if (s === 'amigo') socialEmoji = '\uD83D\uDE0A ';
+    else if (s === 'conocido') socialEmoji = '\uD83D\uDC4B ';
+    if (socialEmoji) return socialEmoji;
+    if (rel.romance_visible && rel.etiqueta_romance) return '\uD83D\uDC98 ';
     return '';
   }
 
@@ -5427,7 +5430,7 @@
       (f.romance ? ' is-amor' : '') +
       (f.mal ? ' is-mal' : '') +
       (f.conflicto ? ' is-conflicto' : '');
-    const badge = (f.conflicto || asim) ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
+    const badge = f.conflicto ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
     const puente = vecRelPuenteHtml(ab, ba);
     return (
       '<article class="' + cls + '">' +
@@ -6046,19 +6049,30 @@ function hobbyIconKey(id, texto) {
     if (rel.etiqueta_vinculo === 'crisis') return 'En crisis';
     if (rel.etiqueta_vinculo === 'pareja') return 'Pareja';
     if (rel.etiqueta_vinculo === 'ex_pareja') return 'Ex pareja';
-    if (rel.etiqueta_social_ui) return String(rel.etiqueta_social_ui);
-    const map = {
-      desconocido: 'Desconocido',
-      conocido: 'Conocido',
-      amigo: 'Amigo',
-      buena_amistad: 'Buena amistad',
-      muy_buena_amistad: 'Buena amistad',
-      cae_mal: 'Cae mal',
-      cae_bien: 'Le cae bien',
-      buen_amigo: 'Buen amigo',
-      mejor_amigo: 'Mejor amigo'
-    };
-    return map[rel.etiqueta_social] || String(rel.etiqueta_social || '—').replace(/_/g, ' ');
+    var social = '';
+    if (rel.etiqueta_social_ui) {
+      social = String(rel.etiqueta_social_ui);
+    } else {
+      var map = {
+        desconocido: 'Desconocido',
+        conocido: 'Conocido',
+        amigo: 'Amigo',
+        buena_amistad: 'Buena amistad',
+        muy_buena_amistad: 'Buena amistad',
+        cae_mal: 'Cae mal',
+        cae_bien: 'Le cae bien',
+        buen_amigo: 'Buen amigo',
+        mejor_amigo: 'Mejor amigo'
+      };
+      social = map[rel.etiqueta_social] || String(rel.etiqueta_social || '').replace(/_/g, ' ');
+    }
+    var rom = '';
+    if (rel.romance_visible && rel.etiqueta_romance) {
+      rom = String(rel.etiqueta_romance);
+    }
+    if (rom && social) return social + ' \u00B7 ' + rom;
+    if (rom) return rom;
+    return social || '\u2014';
   }
 
   function barRelPct(rel) {
