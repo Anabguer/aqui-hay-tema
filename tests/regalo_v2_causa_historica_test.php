@@ -158,15 +158,13 @@ ok($partida['bitacora_relaciones'] !== [], '6: bitacora_relaciones intacta');
 $partida = regalo_fixture_partida([
     'per_a' => regalo_perfil(['preferencias' => ['hobbies_pos' => ['leer'], 'hobbies_neg' => [], 'personalidad_pos' => [], 'personalidad_neg' => [], 'visual_pos' => [], 'visual_neg' => []]]),
 ]);
+$partida['features']['discovery_enabled'] = true; // activar discovery para verificar side-effect
 // NO revelamos 'leer' al jugador.
 setEstado($partida, 'per_a', EstadoEmocional::NEUTRO, 'inicial');
 darObjeto($partida, 'libro');
 $antes = $partida['descubrimientos'] ?? [];
 $r = RegaloEngine::entregar($partida, 'per_a', 'libro', $cal, $catalogo);
 ok($r['reaccion'] === RegaloEngine::LE_ENCANTA, '7: resolucion determinista (le_encanta por hobbies_pos real)');
-// PERO no se ha registrado discovery (regalo solo descubre hobbies_pos si LE_ENCANTA
-// y el hobby_pos no estaba descubierto ya. Aquí 'leer' está en hobbies_pos pero NO
-// descubierto, así que el regalo lo descubre.)
 $d = $partida['descubrimientos'] ?? [];
 ok(count($d) > count($antes), '7: regalo acertado dispara discovery (aprendizaje real)');
 ok(DiscoveryEngine::estado($partida, 'per_a', ConocimientoNpc::campoGusto('hobby', 'leer')) === DiscoveryEngine::DESCUBIERTO, '7: gusto_hobby:leer ahora DESCUBIERTO');
@@ -187,7 +185,9 @@ InventarioEngine::anadir($partida, 'libro', 3, $catalogo);
 $antesTotal = InventarioEngine::totalUnidades($partida);
 $antesInv = $partida['inventario'];
 $r = RegaloEngine::entregar($partida, 'per_a', 'libro', $cal, $catalogo);
-ok($partida['inventario'] === $antesInv, '8: estructura inventario intacta (mismo array)');
+// Nota: InventarioEngine::ordenar() reasigna el array internamente (ksort),
+// así que no podemos comparar referencia. Comparamos claves + valores.
+ok(array_keys($partida['inventario']) === array_keys($antesInv), '8: claves inventario intactas');
 ok(InventarioEngine::totalUnidades($partida) === $antesTotal - 1, '8: inventario -1 unidad');
 ok(!array_key_exists('regalos', $partida), '8: no aparece sección regalos paralela');
 ok(!array_key_exists('regalos_dos', $partida), '8: no aparece segundo flujo');

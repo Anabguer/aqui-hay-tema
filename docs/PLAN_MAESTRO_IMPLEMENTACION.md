@@ -977,7 +977,7 @@ Reutiliza el patrón `PersistenciaCaps` + claves nuevas en `persistencia.json`. 
 
 SOLO DOCUMENTACIÓN/DISEÑO. Sin runtime, sin deploy, sin cache-buster. Reconcilia decisiones cerradas tras revisar ideas externas. Actualiza en sitio §19.2/§19.3/§19.4 y §21.2/§21.3; Mensajitos con valor, Cotilleos, Diario y economía narrativa quedan consolidados en §21.2 + §22; regalos/experiencias/recuerdos/nueva partida ya están en §23 — aquí no se duplican.
 
-### 24.1 Llegadas — convertirlas en jugabilidad real [DECIDIDO]
+### 24.1 Llegadas — convertirlas en jugabilidad real 🧪 PENDIENTE PLAYTEST — 02/09/2026
 Problema: hoy una llegada puede sentirse pasiva (aparece solicitud → Celestine aprueba → entra el residente → el jugador puede no darse cuenta bien de quién ha llegado).
 
 **A) Perfil previo.** Antes de aceptar definitivamente la incorporación, Celestine consulta una ficha/perfil visual del candidato: conceptualmente un pequeño perfil social tipo Instagram adaptado al tono AHT. Enseña ÚNICAMENTE información legítimamente conocible en ese momento — cara, nombre, edad, algún hobby/interés visible, alguna información pública permitida, pequeño texto de presentación. NO revela compatibilidad oculta, preferencias ocultas, sentimientos, rasgos aún por descubrir ni información interna del motor. Objetivo: que el jugador pueda razonar «Ah, le gusta el deporte; quizá José pueda recibirlo porque también es deportista». Aceptar una llegada deja de ser pulsar OK.

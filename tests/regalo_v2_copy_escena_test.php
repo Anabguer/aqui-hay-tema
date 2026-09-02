@@ -60,7 +60,7 @@ ok(strpos($e1, 'php') === false, 'escena: sin jerga tecnica');
 // ============================================================
 
 // 1. Regalo le_encanta sobre neutro → "se le nota en la cara".
-$partida = regalo_fixture_partida(['per_a' => regalo_perfil()]);
+$partida = regalo_fixture_partida(['per_a' => regalo_perfil(['preferencias' => ['hobbies_pos' => ['leer'], 'hobbies_neg' => [], 'personalidad_pos' => [], 'personalidad_neg' => [], 'visual_pos' => [], 'visual_neg' => []]])]);
 $partida['residentes']['per_a']['identidad_publica']['genero'] = 'mujer';
 setEstado($partida, 'per_a', EstadoEmocional::NEUTRO, 'inicial');
 InventarioEngine::anadir($partida, 'libro', 2, $catalogo);
@@ -70,18 +70,14 @@ ok(is_string($r['eco_emocional']) && $r['eco_emocional'] !== '', 'eco: string no
 ok(strpos($r['eco_emocional'], '+') === false, 'eco: sin +X');
 
 // 2. Regalo le_encanta sobre triste con causa fuerte → copy "lo agradece, pero sigue pensándoselo".
-$partida = regalo_fixture_partida(['per_a' => regalo_perfil()]);
+$partida = regalo_fixture_partida(['per_a' => regalo_perfil(['preferencias' => ['hobbies_pos' => ['leer'], 'hobbies_neg' => [], 'personalidad_pos' => [], 'personalidad_neg' => [], 'visual_pos' => [], 'visual_neg' => []]])]);
 setEstado($partida, 'per_a', EstadoEmocional::TRISTE, 'perder_trabajo', ['fuente' => 'f10']);
 $partida['residentes']['per_a']['identidad_publica']['genero'] = 'mujer';
 InventarioEngine::anadir($partida, 'libro', 2, $catalogo);
 $r = RegaloEngine::entregar($partida, 'per_a', 'libro', $cal, $catalogo);
 ok(is_string($r['eco_emocional']) && $r['eco_emocional'] !== '', 'eco 2: no vacio');
-// En el fixture sin hobbies_pos, el libro cae en INDIFERENTE. Saltamos la aserción
-// semántica y verificamos que sin match NO hay animación completa; o que el
-// regalo no empeora si la reacción es no_le_gusta. Verificamos el contrato general:
-//   si reacción ∈ {LE_ENCANTA, LE_GUSTA} Y hay causa fuerte Y estado cambió a Alegre,
-//   eco debe hablar de agradecimiento Y mantenimiento parcial.
-ok(in_array($r['reaccion'], [RegaloEngine::LE_ENCANTA, RegaloEngine::LE_GUSTA, RegaloEngine::INDIFERENTE, RegaloEngine::NO_LE_GUSTA], true), 'eco 2: reacción válida');
+ok($r['reaccion'] === RegaloEngine::LE_ENCANTA, 'eco 2: reaccion le_encanta');
+ok(strpos($r['eco_emocional'], 'agradece') !== false, 'eco 2: copy de mantenimiento');
 
 // 3. Regalo no_le_gusta sobre triste → eco refleja mantenimiento.
 $partida = regalo_fixture_partida(['per_a' => regalo_perfil(['preferencias' => ['hobbies_neg' => ['leer'], 'hobbies_pos' => [], 'personalidad_pos' => [], 'personalidad_neg' => [], 'visual_pos' => [], 'visual_neg' => []]])]);

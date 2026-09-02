@@ -135,8 +135,10 @@ ok(!isset($r['hobby_match']), '7: payload sin hobby_match interno');
 ok(!isset($r['compatibilidad']) && !isset($r['probabilidad']) && !isset($r['score']),
    '7: payload sin scores');
 ok(count($r['descubrimientos']) > 0, '7: side-effect: discovery_leer registrado tras LE_ENCANTA');
-ok(strpos($r['descubrimientos'][0]['texto'], 'leer') !== false || strpos($r['descubrimientos'][0]['texto'], 'cocina') !== false,
-   '7: copy del descubrimiento coherente');
+ok(is_string($r['descubrimientos'][0]['texto']) && $r['descubrimientos'][0]['texto'] !== '',
+   '7: copy del descubrimiento no vacío');
+ok($r['descubrimientos'][0]['campo'] === ConocimientoNpc::campoGusto('hobby', 'leer'),
+   '7: campo del descubrimiento = gusto_hobby:leer');
 
 // ============================================================
 // 8. No se duplica inventario ni se crea un segundo flujo de regalos

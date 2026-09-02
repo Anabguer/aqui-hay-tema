@@ -16,7 +16,8 @@ final class EncuentroResolver
         if ($catalog !== null) {
             $cal = CalibracionConfig::load($catalog->getRoot());
         }
-        $reales = EncuentroDeltasReales::activo($partida, $cal);
+        $reales = EncuentroDeltasReales::activo($partida, $cal)
+            || ($encuentro['intencion'] ?? '') === 'bienvenida_llegada';
 
         $deltaSocial = [];
         $deltaRomance = [];

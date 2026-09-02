@@ -239,6 +239,14 @@ final class LlegadaPresentacionEngine
         $rest = ComplejoCatalog::horasRestantesAbiertas($lugar, $hora);
         $durH = min(self::FRANJA_HORAS, max(1, $rest));
 
+        foreach ($partida['encuentros'] ?? [] as $ex) {
+            if (($ex['intencion'] ?? '') === 'bienvenida_llegada'
+                && in_array($nuevoId, $ex['participantes'] ?? [], true)
+            ) {
+                return;
+            }
+        }
+
         $rng = RngService::fromPartida($partida);
         $encId = 'enc_bienvenida_' . bin2hex(substr(pack('N', $rng->next()), 0, 4));
         $rng->persistToPartida($partida);
@@ -256,7 +264,6 @@ final class LlegadaPresentacionEngine
             'estado' => 'en_curso',
             'reserva_agenda' => ['tipo' => 'bienvenida', 'origen' => 'llegada'],
             'resultado' => null,
-            '_placeholder_resultado' => true,
         ];
         $partida['encuentros'] ??= [];
         $partida['encuentros'][] = $encuentro;

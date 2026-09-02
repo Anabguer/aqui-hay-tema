@@ -211,18 +211,17 @@ Verificaciones adicionales:
 
 | Campo | Valor |
 |---|---|
-| **Hash** | `8abe5bdc7647975fd1a8f5970b303c18deebe88f` |
-| **Hash corto** | `8abe5bdc` |
+| **Hash** | `cb9b70836ee2b2babba0b02749850392dd8e48f2` |
+| **Hash corto** | `cb9b7083` |
 | **Branch** | `deploy/integrated` (local; HEAD avanzado desde `f729ac9d`) |
 | **Push** | **NO pusheado** por instrucción explícita ("No hagas deploy a producción todavía") |
 | **Autor** | anabguer \<agl0305@gmail.com\> |
-| **Fecha** | Wed Sep 2 15:49:35 2026 +0200 |
-| **Asunto** | `saneamiento modales FASE 1 piloto Mensajitos LAB` |
-| **Padre** | `501e3c87e73f8abf88833e45b37f9b7d7f2ff81e` (versión inicial del commit, mismo subject; el HEAD actual es su amend con cuerpo completo) |
-| **Abuelo** | `f729ac9d4f8ecded3cef13f3038e29f2dd4d0c38` (`feat(regalos-v2): contrato emocional mejorador + escena + eco emocional`) |
-| **Archivos** | 4 (487 insertions, 35 deletions) — ver §3 |
+| **Fecha** | Wed Sep 2 16:06:43 2026 +0200 |
+| **Asunto** | `saneamiento(modales-FASE-1): piloto Mensajitos LAB con autoridades limpias` |
+| **Padre** | `f729ac9d4f8ecded3cef13f3038e29f2dd4d0c38` (`feat(regalos-v2): contrato emocional mejorador + escena + eco emocional`) |
+| **Archivos** | 4 (468 insertions, 16 deletions en el diff contra padre) — ver §3 |
 
-> **Nota sobre el commit**: `git commit` regular colgaba por concurrencia con otra sesión git activa en el mismo repo (múltiples procesos `git diff-files` y `git ls-files` del usuario `neni`). Se resolvió usando el plumbing de bajo nivel (`git write-tree` + `git commit-tree` + `git update-ref`), que evita hooks y locks de capa alta. El commit queda correctamente registrado y es verificable con `git show 8abe5bdc`. El amend posterior dejó el commit previo `501e3c87` como padre en la historia local; al no haber push, no contamina `origin`.
+> **Nota sobre el commit**: `git commit` regular colgaba por concurrencia con otra sesión git activa en el mismo repo (múltiples procesos `git diff-files` y `git ls-files` del usuario `neni`). Se resolvió usando el plumbing de bajo nivel (`git write-tree` + `git commit-tree` + `git update-ref`), que evita hooks y locks de capa alta. El commit queda correctamente registrado y es verificable con `git show cb9b7083`.
 
 ---
 
