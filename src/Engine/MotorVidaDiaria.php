@@ -112,8 +112,30 @@ final class MotorVidaDiaria
         $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
         $out['iniciativa_social'] = IniciativaSocial::quizasDelTick($partida, $catalog, $cal, $rng, $logger);
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
+
+        // Necesidades: decay horario para todos los residentes
+        self::tickNecesidades($partida, $cal);
+
         $rng->persistToPartida($partida);
         return $out;
+    }
+
+    /**
+     * Aplica decay de necesidades a todos los residentes activos.
+     * Solo durante horas de juego (hora_inicio – hora_fin).
+     *
+     * @param array<string, mixed> $cal
+     */
+    private static function tickNecesidades(array &$partida, array $cal): void
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return;
+        }
+        foreach ($partida['residentes'] as &$res) {
+            NecesidadEstado::ensureResidente($res);
+            NecesidadEstado::aplicarDecay($res, $cal);
+        }
+        unset($res);
     }
 
     /**
