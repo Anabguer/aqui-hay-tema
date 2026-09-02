@@ -1,7 +1,7 @@
 # ENTREGA — Saneamiento de modales AHT, FASE 1 (piloto Mensajitos LAB)
 
 > **Fecha**: 2026-09-02
-> **Branch**: `deploy/integrated` (pusheado a `origin/deploy/integrated`, SHA `bf61de86`)
+> **Branch**: `deploy/integrated` (pusheado a `origin/deploy/integrated`, SHA `6d4123b7`)
 > **Backup tag**: `backup/pre-saneamiento-modales-fase-1-20260902`
 > **Auditoría previa**: `docs/AUDITORIA_CSS_MODALES.md` (commit `7fda6b54`)
 > **Arquitectura documentada**: `docs/AHT_ARQUITECTURA_MODALES.md`
@@ -213,18 +213,17 @@ Verificaciones adicionales:
 |---|---|
 | **Commit modales (FASE 1)** | `331f19a8233863df62bde32a91475d440f0f4090` |
 | **Commit modales (corto)** | `331f19a8` |
-| **HEAD actual (entrega docs)** | `bf61de86111dfed49e40f31396442d93f67804cc` |
-| **HEAD corto** | `bf61de86` |
-| **Branch** | `deploy/integrated` (local + remoto sincronizados) |
-| **Push** | **PUSHEADO** a `origin/deploy/integrated` (SHA remoto: `bf61de86` = local) |
+| **HEAD actual (repositorio)** | `6d4123b79f56291a5a38f7e465f01701808d1b73` |
+| **HEAD corto** | `6d4123b7` |
+| **Branch** | `deploy/integrated` (local + remoto sincronizados en `6d4123b7`) |
+| **Push** | **PUSHEADO** a `origin/deploy/integrated` (SHA remoto: `6d4123b7` = local) |
 | **Autor** | anabguer \<agl0305@gmail.com\> |
 | **Fecha commit modales** | Wed Sep 2 16:19:09 2026 +0200 |
-| **Fecha commit docs** | Wed Sep 2 18:51:37 2026 +0200 |
+| **Fecha HEAD actual** | Wed Sep 2 19:35:21 2026 +0200 |
 | **Asunto modales** | `saneamiento(modales-FASE-1): piloto Mensajitos LAB con autoridades limpias` |
-| **Asunto docs** | `docs(modales-FASE-1): entrega final con SHA real + push confirmado` |
 | **Archivos modales puros** | 4 (468 insertions, 16 deletions en el diff contra padre — ver §3) |
 
-> **Historia**: `331f19a8` (modales + mix) → `dab742a4` (§24.1) → `bf61de86` (docs entrega, este commit).
+> **Historia**: `331f19a8` (modales FASE 1) → `dab742a4` (§24.1) → `bf61de86` (docs entrega) → `0f3fafa3` (docs actualización SHA) → `6d4123b7` (fix mobile, HEAD actual).
 
 ---
 
@@ -252,12 +251,14 @@ Verificaciones adicionales:
 
 ## 12. STOP / Estado final
 
-**Trabajo entregado y pusheado a `origin/deploy/integrated` (SHA remoto = SHA local = `bf61de86`).**
+**FASE 1 COMPLETADA Y PUSHEADA. Estado: ESPERANDO VALIDACIÓN VISUAL DE NENI — MENSAJITOS LAB.**
 
-La FASE 1 del sistema de modales está completa y sincronizada. Este archivo de entrega se actualizó para reflejar el estado real del repositorio.
+Trabajo entregado y pusheado a `origin/deploy/integrated` (SHA remoto = SHA local = `6d4123b7`).
+
+La FASE 1 técnica del sistema de modales está completa y sincronizada. No hay iteraciones pendientes del agente anterior sobre Mensajitos LAB. Este archivo de entrega se actualizó para reflejar el estado real del repositorio.
 
 Pendiente de la pieza:
-- [ ] Revisión visual de Neni en desktop + mobile con `?modal_catalog=1` (validación manual, fuera de scope de esta pieza).
-- [ ] Decisión GO/NO-GO sobre FASE 2 (migración del primer `.capa.ds-migrada` al sistema `.aht-modal`, siguiendo `docs/AHT_ARQUITECTURA_MODALES.md` §7; recomendación: **Vecinos**).
+- [ ] **Revisión visual de Neni en desktop + mobile con `?modal_catalog=1`** — validación manual del piloto Mensajitos LAB.
+- [ ] Decisión GO/NO-GO sobre FASE 2 (migración de Vecinos al sistema `.aht-modal`, siguiendo `docs/AHT_ARQUITECTURA_MODALES.md` §7).
 
-**STOP para esta pieza.** Nada de tocar cuerpos legacy ni migraciones adicionales hasta validación visual + GO explícito.
+**STOP para esta pieza.** No se inicia FASE 2 ni se migra ningún modal hasta validación visual + GO explícito de Neni.
