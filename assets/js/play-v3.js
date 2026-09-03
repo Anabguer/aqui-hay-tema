@@ -1125,7 +1125,7 @@
     const sub = $('[data-historia-sub]', root);
     if (!grid) return;
     try {
-      const r = await api('historia.snapshot', { partida_id: pid() });
+      const r = await api('historia.snapshot');
       if (!r || !r.ok) { grid.innerHTML = '<p class="mini">No se pudo cargar la historia.</p>'; return; }
       const h = r.historia;
       if (sub) sub.textContent = h.total_revelados + ' de ' + h.total_hitos + ' recuerdos descubiertos';
@@ -1173,7 +1173,7 @@
     body.innerHTML = '<p class="necg-vacio mini">Cargando...</p>';
     if (vacio) vacio.hidden = true;
     try {
-      var r = await api('partida.necesidades_global', { partida_id: pid() });
+      var r = await api('partida.necesidades_global');
       if (!r.ok || !r.necesidades || !r.necesidades.items || !Object.keys(r.necesidades.items).length) {
         body.innerHTML = '<p class="necg-vacio">Todos est&aacute;n bien por ahora.</p>';
         return;
