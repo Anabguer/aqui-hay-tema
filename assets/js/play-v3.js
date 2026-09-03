@@ -1224,8 +1224,16 @@
             needsHtml += barHTML(n.valor, n.banda);
             needsHtml += '</div>';
           });
+          var avatarHtml = '';
+          var img = res.retrato_url || tokenDe(res.id);
+          if (img) {
+            avatarHtml = '<span class="necg-card-avatar"><img src="' + esc(img) + '" alt=""/></span>';
+          } else {
+            var ini = (res.nombre || '?').charAt(0);
+            avatarHtml = '<span class="necg-card-avatar necg-card-avatar--fallback">' + esc(ini) + '</span>';
+          }
           html += '<div class="necg-card" data-necg-res="' + esc(res.id) + '" data-worst="' + worstBand + '">';
-          html += '<h4 class="necg-card-nom">' + esc(res.nombre) + '</h4>';
+          html += '<div class="necg-card-header">' + avatarHtml + '<h4 class="necg-card-nom">' + esc(res.nombre) + '</h4></div>';
           html += '<div class="necg-card-needs">' + needsHtml + '</div>';
           html += '</div>';
         });

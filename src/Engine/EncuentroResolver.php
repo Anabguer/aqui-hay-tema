@@ -173,9 +173,13 @@ final class EncuentroResolver
         return $resultado;
     }
 
-    public static function aplicarResultado(array &$partida, array $encuentro, array $resultado, ?GameLogger $logger = null): void
+    public static function aplicarResultado(array &$partida, array $encuentro, array $resultado, ?GameLogger $logger = null, ?Catalog $catalog = null): void
     {
         $participantes = $encuentro['participantes'] ?? [];
+
+        // Necesidades: recuperación por lugar (individual + social)
+        self::aplicarNecesidadesEncuentro($partida, $encuentro, $resultado, $catalog);
+
         if (count($participantes) === 1) {
             $pid = (string) $participantes[0];
             $exp = $resultado['por_participante'][$pid]['resultado'] ?? null;
@@ -295,9 +299,6 @@ final class EncuentroResolver
             (string) ($encuentro['tipo'] ?? 'encuentro'),
             $resultado['por_participante'][$a]['resultado'] ?? null
         );
-
-        // Necesidades: recuperación por lugar al terminar encuentro
-        self::aplicarNecesidadesEncuentro($partida, $encuentro, $resultado, $catalog);
     }
 
     /**

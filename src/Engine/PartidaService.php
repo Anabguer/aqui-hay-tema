@@ -533,51 +533,40 @@ final class PartidaService
         if (empty($residentes)) {
             return null;
         }
-        $grupo = [];
+        $lista = [];
         foreach ($residentes as $rid => $res) {
             $rt = $res['runtime'] ?? [];
             $necesidades = $rt['necesidades'] ?? [];
-            if (!is_array($necesidades)) {
-                continue;
-            }
+            $necs = [];
             foreach (NecesidadEstado::TODAS as $nec) {
-                $n = $necesidades[$nec] ?? null;
-                if (!is_array($n)) {
-                    continue;
-                }
-                $banda = $n['banda'] ?? NecesidadEstado::BANDA_BIEN;
-                $valor = $n['valor'] ?? 85;
-                if (!isset($grupo[$nec])) {
-                    $grupo[$nec] = [
-                        'banda' => [],
-                        'residentes' => [],
-                    ];
-                }
-                // Agregar residente solo si necesita (lo_necesita o en_rojo)
-                // Estas son las bandas que afectan gameplay real
-                if ($banda === NecesidadEstado::BANDA_LO_NECESITA || $banda === NecesidadEstado::BANDA_EN_ROJO) {
-                    $grupo[$nec]['banda'][$banda] = true;
-                    $grupo[$nec]['residentes'][] = [
-                        'id' => $rid,
-                        'nombre' => $res['nombre'] ?? $rid,
-                        'banda' => $banda,
-                        'valor' => $valor,
-                        'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
-                    ];
-                }
+                $n = is_array($necesidades) ? ($necesidades[$nec] ?? null) : null;
+                $banda = (is_array($n) ? ($n['banda'] ?? null) : null) ?? NecesidadEstado::BANDA_BIEN;
+                $valor = (is_array($n) ? ($n['valor'] ?? null) : null) ?? 85;
+                $necs[$nec] = [
+                    'banda' => $banda,
+                    'valor' => $valor,
+                    'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
+                ];
             }
+            $lista[] = [
+                'id' => $rid,
+                'nombre' => IdentidadPublica::nombre($partida, $rid),
+                'retrato_url' => $res['retrato_url'] ?? null,
+                'necesidades' => $necs,
+            ];
         }
-        // Filtrar solo necesidades que tengan residentes
-        $out = [];
-        foreach ($grupo as $nec => $data) {
-            if ($data['residentes'] !== []) {
-                $out[$nec] = $data;
+        usort($lista, static function (array $a, array $b): int {
+            $worstA = 101;
+            $worstB = 101;
+            foreach ($a['necesidades'] as $n) {
+                if ($n['valor'] < $worstA) { $worstA = $n['valor']; }
             }
-        }
-        if ($out === []) {
-            return null;
-        }
-        return ['items' => $out];
+            foreach ($b['necesidades'] as $n) {
+                if ($n['valor'] < $worstB) { $worstB = $n['valor']; }
+            }
+            return $worstA <=> $worstB;
+        });
+        return ['residentes' => $lista];
     }
 
     public function emociones(): EmotionalStateService
