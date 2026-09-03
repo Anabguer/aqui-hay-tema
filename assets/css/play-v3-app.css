@@ -112,7 +112,7 @@ body.play-v3 {
 .play-root.phone .btn-organizar-pc { display: none; }
 .play-root.phone .dock {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 58px;
 }
 .play-root.pc .dock { display: none; }

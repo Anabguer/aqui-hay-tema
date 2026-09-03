@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260903-095000';
+$ahtUi = 'v3-20260903-144500';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -91,8 +91,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/modal-catalog.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <?php /* CANON: DS Modal nuevo + body Mensajitos piloto */ ?>
   <link rel="stylesheet" href="assets/css/design-system/modal-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/mensajitos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <style>
+   <link rel="stylesheet" href="assets/css/design-system/mensajitos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <link rel="stylesheet" href="assets/css/design-system/vecinos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .875rem;
       font-family: Fraunces, Georgia, serif; font-style: italic;
@@ -1057,6 +1058,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
         </span>
         <span class="play-bottom-nav-txt">Necesidades</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="historia">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Historia</span>
       </button>
     </nav>
       </div>
