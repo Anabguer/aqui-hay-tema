@@ -11,10 +11,11 @@
     "narrative_reactions_enabled": false,
     "discovery_enabled": false,
     "expression_resolver_enabled": true,
-    "emotional_state_from_events_enabled": false,
+    "emotional_state_from_events_enabled": true,
     "consequences_enabled": false,
     "vida_pueblo_enabled": false,
     "misiones_diarias_enabled": false,
     "peticiones_pueblo_enabled": false,
     "mensajitos_espontaneos_enabled": true
 }
+

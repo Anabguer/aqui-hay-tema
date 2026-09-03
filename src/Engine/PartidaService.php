@@ -516,6 +516,70 @@ final class PartidaService
         return ['items' => $items];
     }
 
+    /**
+     * Vista global de necesidades para el panel de consulta.
+     * Agrupa a todos los residentes por necesidad y banda para que el jugador
+     * pueda detectar quién necesita qué y organizar planes en consecuencia.
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>|null
+     */
+    public static function vistaGlobalNecesidades(array $partida): ?array
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return null;
+        }
+        $residentes = $partida['residentes'] ?? [];
+        if (empty($residentes)) {
+            return null;
+        }
+        $grupo = [];
+        foreach ($residentes as $rid => $res) {
+            $rt = $res['runtime'] ?? [];
+            $necesidades = $rt['necesidades'] ?? [];
+            if (!is_array($necesidades)) {
+                continue;
+            }
+            foreach (NecesidadEstado::TODAS as $nec) {
+                $n = $necesidades[$nec] ?? null;
+                if (!is_array($n)) {
+                    continue;
+                }
+                $banda = $n['banda'] ?? NecesidadEstado::BANDA_BIEN;
+                $valor = $n['valor'] ?? 85;
+                if (!isset($grupo[$nec])) {
+                    $grupo[$nec] = [
+                        'banda' => [],
+                        'residentes' => [],
+                    ];
+                }
+                // Agregar residente solo si necesita (lo_necesita o en_rojo)
+                // Estas son las bandas que afectan gameplay real
+                if ($banda === NecesidadEstado::BANDA_LO_NECESITA || $banda === NecesidadEstado::BANDA_EN_ROJO) {
+                    $grupo[$nec]['banda'][$banda] = true;
+                    $grupo[$nec]['residentes'][] = [
+                        'id' => $rid,
+                        'nombre' => $res['nombre'] ?? $rid,
+                        'banda' => $banda,
+                        'valor' => $valor,
+                        'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
+                    ];
+                }
+            }
+        }
+        // Filtrar solo necesidades que tengan residentes
+        $out = [];
+        foreach ($grupo as $nec => $data) {
+            if ($data['residentes'] !== []) {
+                $out[$nec] = $data;
+            }
+        }
+        if ($out === []) {
+            return null;
+        }
+        return ['items' => $out];
+    }
+
     public function emociones(): EmotionalStateService
     {
         if ($this->visualPackStore === null) {
