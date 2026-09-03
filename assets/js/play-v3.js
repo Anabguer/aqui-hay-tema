@@ -1093,6 +1093,7 @@
     if (name === 'inventario') renderInventario();
     if (name === 'historia') renderHistoriaPueblo();
     if (name === 'ajustes') syncAjustesUI();
+    if (name === 'necesidades_global') renderNecesidadesGlobal();
     if (name && name !== prev && !uiHistSilent) uiHistPush();
     $$('.dock button, .play-bottom-nav-btn').forEach(function (b) {
       const open = b.getAttribute('data-open');
@@ -1162,6 +1163,47 @@
       grid.innerHTML = html;
     } catch (e) {
       grid.innerHTML = '<p class="mini">Error al cargar la historia.</p>';
+    }
+  }
+
+  async function renderNecesidadesGlobal() {
+    var body = $('[data-necesidades-global-body]');
+    var vacio = $('[data-necesidades-global-vacio]');
+    if (!body) return;
+    body.innerHTML = '<p class="necg-vacio mini">Cargando...</p>';
+    if (vacio) vacio.hidden = true;
+    try {
+      var r = await api('partida.necesidades_global', { partida_id: pid() });
+      if (!r.ok || !r.necesidades || !r.necesidades.items || !Object.keys(r.necesidades.items).length) {
+        body.innerHTML = '<p class="necg-vacio">Todos est&aacute;n bien por ahora.</p>';
+        return;
+      }
+      var items = r.necesidades.items;
+      var iconos = { social: '\ud83e\udd1d', diversion: '\ud83c\udf89', actividad: '\ud83d\udcaa', calma: '\u2615' };
+      var nombres = { social: 'SOCIALIZAR', diversion: 'DIVERSI\u00d3N', actividad: 'ACTIVIDAD', calma: 'CALMA' };
+      var html = '';
+      var orden = ['social', 'diversion', 'actividad', 'calma'];
+      orden.forEach(function (nec) {
+        var data = items[nec];
+        if (!data || !data.residentes || !data.residentes.length) return;
+        html += '<div class="necg-grupo">';
+        html += '<h4 class="necg-grupo-tit"><span aria-hidden="true">' + (iconos[nec] || '') + '</span> ' + (nombres[nec] || nec) + '</h4>';
+        html += '<div class="necg-grupo-list">';
+        data.residentes.forEach(function (res) {
+          var cls = 'necg-res-row necg-res-row--' + esc(res.band || '');
+          var badgeCls = 'necg-res-badge necg-res-badge--' + esc(res.band || '');
+          var badgeTxt = res.band === 'en_rojo' ? 'En rojo' : 'Lo necesita';
+          html += '<div class="' + cls + '" data-necg-res="' + esc(res.id || '') + '">';
+          html += '<span class="necg-res-nom">' + esc(res.nombre || res.id || '') + '</span>';
+          html += '<span class="necg-res-copy">' + esc(res.copy || '') + '</span>';
+          html += '<span class="' + badgeCls + '">' + badgeTxt + '</span>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      });
+      body.innerHTML = html || '<p class="necg-vacio">Todos est&aacute;n bien por ahora.</p>';
+    } catch (e) {
+      body.innerHTML = '<p class="necg-vacio">Error al cargar necesidades.</p>';
     }
   }
 
@@ -6240,6 +6282,27 @@ function hobbyIconKey(id, texto) {
         abrirRegalosDesdeFicha(id, nom);
       };
     }
+    // Necesidades personales
+    const necSection = $('[data-ficha-necesidades]');
+    const necBox = $('[data-ficha-necesidades-body]');
+    if (necSection && necBox) {
+      const nec = f.necesidades;
+      if (nec && nec.items && nec.items.length) {
+        necBox.innerHTML = '';
+        nec.items.forEach(function (item) {
+          var cls = 'ficha-nec-item ficha-nec-item--' + esc(item.band || '');
+          necBox.insertAdjacentHTML('beforeend',
+            '<span class="' + cls + '">'
+            + '<span class="ficha-nec-item-icono" aria-hidden="true">' + esc(item.icono || '') + '</span>'
+            + '<span class="ficha-nec-item-copy">' + esc(item.copy || item.nombre || '') + '</span>'
+            + '</span>'
+          );
+        });
+        necSection.hidden = false;
+      } else {
+        necSection.hidden = true;
+      }
+    }
     syncFichaNav();
   }
 
@@ -8480,6 +8543,15 @@ function hobbyIconKey(id, texto) {
       }
       if (name === 'vecinos') { vecTabActiva = 'vecinos'; aplicarVecTabUI(); renderVecinos(); }
       if (name === 'buzon') renderBuzon(cacheBuzon);
+      return;
+    }
+    const necgRes = ev.target.closest('[data-necg-res]');
+    if (necgRes && uiRootFrom(necgRes)) {
+      var rid = necgRes.getAttribute('data-necg-res');
+      if (rid) {
+        setCapa('ficha');
+        abrirFicha(rid);
+      }
       return;
     }
     const invEntregar = ev.target.closest('[data-inv-entregar]');

@@ -44,6 +44,11 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return PartidaHandler::estado($ctx, $body, $p);
     },
+    'partida.necesidades_global' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        $vista = \AquiHayTema\Engine\PartidaService::vistaGlobalNecesidades($p);
+        return ['ok' => true, 'necesidades' => $vista];
+    },
     'partida.refresh' => static function () use ($ctx, $body) {
         $p = requirePartidaRefresh($ctx, $body);
         return PartidaHandler::refrescar($ctx, $body, $p);

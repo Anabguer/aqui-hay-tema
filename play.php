@@ -714,6 +714,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <div class="ficha-planes" data-ficha-planes></div>
               </div>
             </section>
+            <section class="ficha-seccion ficha-seccion-necesidades" data-ficha-necesidades hidden>
+              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Qu&eacute; le vendr&iacute;a bien</h4>
+              <div class="ficha-seccion-body">
+                <div class="ficha-necesidades" data-ficha-necesidades-body></div>
+              </div>
+            </section>
           </div>
         </div>
       </aside>
@@ -753,6 +759,19 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <button type="button" class="fdi-orden" data-diario-orden aria-label="Ordenar">&#9783; M&aacute;s reciente</button>
         </header>
         <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
+      </aside>
+      <aside class="capa capa-necesidades-global ds-migrada" aria-label="Necesidades del pueblo">
+        <button type="button" class="cerrar necg-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <header class="necg-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
+            <div class="ds-modal-head-row">
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">NECESIDADES</h2>
+            </div>
+          </div>
+        </header>
+        <div class="necg-body capa-scroll" data-necesidades-global-body>
+          <p class="necg-vacio mini" data-necesidades-global-vacio hidden>Todos est&aacute;n bien por ahora.</p>
+        </div>
       </aside>
       <aside class="capa capa-misiones ds-migrada" aria-label="Misiones de hoy">
         <button type="button" class="cerrar mis-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
@@ -1032,6 +1051,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </span>
         <span class="play-bottom-nav-txt">Relaciones</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="necesidades_global">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Necesidades</span>
       </button>
     </nav>
       </div>
