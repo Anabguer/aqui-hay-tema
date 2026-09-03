@@ -32,7 +32,7 @@ final class HistoriaPuebloEngine
         array &$partida,
         string $hitoId,
         array $protagonistas,
-        ?array $contexto = null,
+        ?array $contexto = null
     ): array {
         self::ensure($partida);
 
