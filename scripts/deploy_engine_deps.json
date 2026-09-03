@@ -1,5 +1,6 @@
 {
   "src/Engine/RelojOperations.php": [
+    "src/Engine/CanalDeduplicador.php",
     "src/Engine/MensajitoDudaPermanenciaEngine.php",
     "src/Engine/MensajitosCadenciaEngine.php"
   ],
@@ -7,17 +8,29 @@
     "src/Engine/MensajitoDudaPermanenciaEngine.php"
   ],
   "src/Engine/MensajitoGeneradorEspontaneo.php": [
+    "src/Engine/CanalDeduplicador.php",
     "src/Engine/MensajitoDudaPermanenciaEngine.php",
     "src/Engine/MensajitosCadenciaEngine.php"
   ],
   "src/Engine/MensajitoDudaPermanenciaEngine.php": [
+    "src/Engine/CanalDeduplicador.php",
     "src/Engine/MensajitosCadenciaEngine.php"
   ],
   "src/Engine/MensajitoContextualEngine.php": [
+    "src/Engine/CanalDeduplicador.php",
     "src/Engine/MensajitosCadenciaEngine.php"
   ],
   "src/Engine/MensajitoPeticionEngine.php": [
     "src/Engine/MensajitosCadenciaEngine.php"
+  ],
+  "src/Engine/EventosPuebloAnuncioEngine.php": [
+    "src/Engine/CanalDeduplicador.php"
+  ],
+  "src/Engine/EventosPuebloCierreEngine.php": [
+    "src/Engine/CanalDeduplicador.php"
+  ],
+  "src/Engine/SeguimientoConsejoEngine.php": [
+    "src/Engine/CanalDeduplicador.php"
   ],
   "src/Engine/MarchaEngine.php": [
     "src/Engine/MensajitoDudaPermanenciaEngine.php"
