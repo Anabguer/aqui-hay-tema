@@ -32,6 +32,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-historia.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -540,6 +541,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <button type="button" data-open="diario"><img src="assets/play-v3/dock/sello_diario.png" alt=""/>Diario</button>
         <button type="button" data-open="organizar"><img src="assets/play-v3/dock/sello_organizar.png" alt=""/>Organizar</button>
         <button type="button" data-open="vecinos"><img src="assets/play-v3/dock/sello_vecinos.png" alt=""/>Vecinos</button>
+        <button type="button" data-open="historia"><img src="assets/play-v3/dock/sello_pueblo.png" alt=""/>Historia</button>
       </nav>
       <div class="velo" data-close></div>
       <p class="feedback-toast" data-toast></p>
@@ -776,6 +778,20 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </header>
         <div class="par-body capa-scroll" data-parejas-modal-list></div>
         <p class="par-sub mini" data-parejas-teaser hidden>&mdash;</p>
+      </aside>
+      <aside class="capa capa-historia ds-migrada" aria-label="Historia del pueblo">
+        <button type="button" class="cerrar historia-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
+        <header class="vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
+            <div class="ds-modal-head-row">
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">HISTORIA DEL PUEBLO</h2>
+            </div>
+          </div>
+        </header>
+        <div class="historia-body capa-scroll">
+          <p class="historia-sub mini" data-historia-sub></p>
+          <div class="historia-grid" data-historia-grid></div>
+        </div>
       </aside>
       <aside class="capa capa-vida-pueblo ds-migrada" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
         <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
