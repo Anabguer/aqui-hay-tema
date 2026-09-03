@@ -1529,12 +1529,13 @@
   function htmlMensajitoRegaloObjeto(vista) {
     if (!vista || !vista.nombre) return '';
     const imgHtml = vista.url
-      ? '<img class="carta-regalo-objeto-img" src="' + esc(vista.url) + '" alt="" loading="lazy" decoding="async"/>'
-      : '';
-    return '<div class="carta-regalo-objeto" aria-label="Objeto recibido">' +
-      (imgHtml ? '<div class="carta-regalo-objeto-visual">' + imgHtml + '</div>' : '') +
-      '<p class="carta-regalo-objeto-nom">' + esc(vista.nombre) + '</p>' +
-      '</div>';
+      ? '<img class="aht-msg-gift-icon" src="' + esc(vista.url) + '" alt="" loading="lazy" decoding="async"/>'
+      : '<span class="aht-msg-gift-icon">\uD83C\uDF81</span>';
+    return '<div class="aht-msg-gift" aria-label="Objeto recibido">' +
+      imgHtml +
+      '<div><p class="aht-msg-gift-name">' + esc(vista.nombre) + '</p>' +
+      (vista.desc ? '<p class="aht-msg-gift-desc">' + esc(vista.desc) + '</p>' : '') +
+      '</div></div>';
   }
 
   function dineroTxt(insp, estado) {
@@ -1665,6 +1666,20 @@
     return (Math.abs(h) % 4);
   }
 
+  var MSG_PAPERS = ['rose', 'blue', 'green', 'cream', 'lilac'];
+  function msgFnv1a(str) {
+    var s = String(str || '');
+    var h = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+  function msgPaperDeRemitente(rid, nombre) {
+    return MSG_PAPERS[msgFnv1a(String(rid || nombre || '')) % MSG_PAPERS.length];
+  }
+
   function remitenteIdDe(m) {
     if (!m || typeof m !== 'object') return null;
     const direct = m.de_persona || m.de;
@@ -1693,14 +1708,14 @@
   function htmlAvatarMensajito(m, nombre, cls) {
     const rid = remitenteIdDe(m);
     const tok = rid && !m.candidato_catalog_id ? tokenDe(rid) : null;
-    const base = cls || 'msg-item-avatar';
+    const base = cls || 'aht-msg-avatar';
     if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""/>';
     return '<span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span>';
   }
 
   function htmlAvatarEleccion(personaje_id, nombre, cls) {
     const tok = personaje_id ? tokenDe(personaje_id) : null;
-    const base = cls || 'msg-eleccion-avatar';
+    const base = cls || 'aht-msg-avatar aht-msg-avatar--mini';
     if (tok) {
       return '<span class="msg-eleccion-avatar-wrap"><img class="' + base + '" src="' + esc(tok) + '" alt=""/></span>';
     }
@@ -1794,6 +1809,74 @@
       if (nomA) txt += ' ' + nomA + ' le ense\u00f1a Villaborde.';
     }
     toast(txt);
+  }
+
+  // ── Celebración de historia del pueblo ─────────────────────
+  let colaCelebraciones = [];
+  let celebracionHitoActual = '';
+
+  function procesarCelebraciones(historia) {
+    const celebs = (historia && historia.celebraciones) || [];
+    if (!celebs.length) return;
+    for (const c of celebs) {
+      colaCelebraciones.push(c);
+    }
+    mostrarSiguienteCelebracion();
+  }
+
+  function mostrarSiguienteCelebracion() {
+    if ($('.capa-historia-celebracion.is-on')) return;
+    const c = colaCelebraciones.shift();
+    if (!c) return;
+    celebracionHitoActual = c.hito_id || '';
+    renderCelebracion(c);
+    setCapa('historia_celebracion');
+  }
+
+  function renderCelebracion(c) {
+    const img = $('[data-historia-celebracion-img]');
+    const titulo = $('[data-historia-celebracion-titulo]');
+    const texto = $('[data-historia-celebracion-texto]');
+    const protWrap = $('[data-historia-celebracion-protagonistas]');
+    const recDiv = $('[data-historia-celebracion-recompensa]');
+    const recObj = $('[data-historia-celebracion-recompensa-objeto]');
+    if (img) { img.src = c.imagen || ''; img.alt = c.nombre || ''; }
+    if (titulo) titulo.textContent = '\u00a1' + (c.nombre || 'Nuevo recuerdo') + '!';
+    if (texto) texto.textContent = c.texto_narrativo || 'Primer recuerdo del pueblo descubierto.';
+    if (protWrap) {
+      let ph = '';
+      for (const p of (c.protagonistas || [])) {
+        ph += '<span class="histcele-protagonista">';
+        ph += '<img class="histcele-protagonista-avatar" src="assets/img/chars/' + esc(p.id) + '.png" alt="' + esc(p.nombre) + '"/>';
+        ph += esc(p.nombre);
+        ph += '</span>';
+      }
+      protWrap.innerHTML = ph;
+    }
+    if (recDiv) {
+      if (c.recompensa && c.recompensa.objeto_nombre) {
+        recDiv.hidden = false;
+        if (recObj) recObj.textContent = c.recompensa.objeto_nombre + (c.recompensa.cantidad > 1 ? ' \u00d7' + c.recompensa.cantidad : '');
+      } else {
+        recDiv.hidden = true;
+      }
+    }
+  }
+
+  async function celebracionClose(hitoId) {
+    try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
+    setCapa('historia');
+    renderHistoriaPueblo().then(function () {
+      setTimeout(function () {
+        const pol = $('[data-hito-id="' + hitoId + '"]');
+        if (pol) pol.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 200);
+    });
+    setTimeout(mostrarSiguienteCelebracion, 600);
+  }
+
+  function celebracionIrAlbum() {
+    celebracionClose(celebracionHitoActual);
   }
 
   function mensajitoPlazoLabel(m) {
@@ -1909,13 +1992,13 @@
     let cuerpo = cuerpoMensajito(origen, nomOrig);
     if (cuerpo.length > 120) cuerpo = cuerpo.slice(0, 117) + '\u2026';
     const cuando = mensajitoCuandoLabel(origen);
-    return '<div class="carta-hilo" aria-label="Contexto del mensaje">' +
-      '<div class="carta-hilo-origen">' +
-      '<span class="carta-hilo-tit">' + esc(mensajitoTituloHilo(origen)) + '</span>' +
-      '<p class="carta-hilo-cuerpo">\u201C' + esc(cuerpo) + '\u201D</p>' +
-      (cuando ? '<span class="carta-hilo-cuando">' + esc(cuando) + '</span>' : '') +
+    return '<div class="aht-msg-thread" aria-label="Contexto del mensaje">' +
+      '<div class="aht-msg-thread-origin">' +
+      '<span class="aht-msg-thread-label">' + esc(mensajitoTituloHilo(origen)) + '</span>' +
+      '<p class="aht-msg-thread-text">\u201C' + esc(cuerpo) + '\u201D</p>' +
+      (cuando ? '<span class="aht-msg-thread-date">' + esc(cuando) + '</span>' : '') +
       '</div>' +
-      '<div class="carta-hilo-flecha" aria-hidden="true"></div>' +
+      '<div class="aht-msg-thread-arrow" aria-hidden="true"></div>' +
       '</div>';
   }
 
@@ -1971,9 +2054,9 @@
   }
 
   function htmlOpcionesEleccion(titulo, opcionesHtml, extraCls) {
-    return '<div class="msg-eleccion' + (extraCls ? ' ' + extraCls : '') + '">' +
-      '<p class="msg-eleccion-tit">' + esc(titulo) + '</p>' +
-      '<div class="msg-eleccion-lista">' + opcionesHtml + '</div>' +
+    return '<div class="aht-msg-choice' + (extraCls ? ' ' + extraCls : '') + '">' +
+      '<span class="aht-msg-choice-title">' + esc(titulo) + '</span>' +
+      '<div class="aht-msg-choice-list">' + opcionesHtml + '</div>' +
       '</div>';
   }
 
@@ -1984,11 +2067,11 @@
       const tit = m.consejo_titulo || '\u00bfQu\u00e9 le dices?';
       const optsHtml = m.opciones_consejo.map(function (o) {
         if (!o || !o.id) return '';
-        return '<button type="button" class="msg-eleccion-opt msg-opcion" data-consejo-opcion="' + esc(o.id) + '">' +
-          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.etiqueta || o.id) + '</span></span>' +
-          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
+        return '<button type="button" class="aht-msg-choice-opt" data-consejo-opcion="' + esc(o.id) + '">' +
+          '<span class="aht-msg-choice-opt-copy"><span class="aht-msg-choice-opt-name">' + esc(o.etiqueta || o.id) + '</span></span>' +
+          '<span class="aht-msg-choice-opt-arrow" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones msg-eleccion msg-eleccion--consejo">' + htmlOpcionesEleccion(tit, optsHtml) + '</div>';
+      return '<div class="aht-msg-actions aht-msg-choice aht-msg-choice--consejo">' + htmlOpcionesEleccion(tit, optsHtml) + '</div>';
     }
     if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' &&
@@ -1996,13 +2079,13 @@
       const titSel = m.selector_titulo || '\u00bfA qui\u00e9n le presentar\u00edas?';
       const optsHtml = m.selector_opciones.map(function (o) {
         if (!o || !o.personaje_id) return '';
-        const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
-        return '<button type="button" class="msg-eleccion-opt" data-elegir-persona="' + esc(o.personaje_id) + '">' +
+        const hint = o.pista ? '<span class="aht-msg-choice-opt-hint">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="aht-msg-choice-opt" data-elegir-persona="' + esc(o.personaje_id) + '">' +
           htmlAvatarEleccion(o.personaje_id, o.nombre) +
-          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
-          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
+          '<span class="aht-msg-choice-opt-copy"><span class="aht-msg-choice-opt-name">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
+          '<span class="aht-msg-choice-opt-arrow" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones msg-eleccion">' + htmlOpcionesEleccion(titSel, optsHtml) + '</div>';
+      return '<div class="aht-msg-actions aht-msg-choice">' + htmlOpcionesEleccion(titSel, optsHtml) + '</div>';
     }
     if (m.tipo === 'candidato_llegada' &&
         (m.estado || '') === 'pendiente' &&
@@ -2011,23 +2094,23 @@
       const titA = m.selector_titulo_acompanante || '\u00bfQui\u00e9n le ense\u00f1a Villaborde?';
       const optsHtml = opts.map(function (o) {
         if (!o || !o.personaje_id) return '';
-        const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
-        return '<button type="button" class="msg-eleccion-opt llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
+        const hint = o.pista ? '<span class="aht-msg-choice-opt-hint">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="aht-msg-choice-opt llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
           htmlAvatarEleccion(o.personaje_id, o.nombre) +
-          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
-          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
+          '<span class="aht-msg-choice-opt-copy"><span class="aht-msg-choice-opt-name">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
+          '<span class="aht-msg-choice-opt-arrow" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones msg-eleccion llegada-acciones">' +
+      return '<div class="aht-msg-actions aht-msg-choice llegada-acciones">' +
         htmlOpcionesEleccion(titA, optsHtml || '<p class="llegada-sin-acomp">Nadie libre ahora para la bienvenida.</p>') +
         '<div class="llegada-acciones-pie">' +
-        '<button type="button" class="carta-cta carta-cta--suave" data-llegada-rechazar="1">Ahora no</button>' +
+        '<button type="button" class="aht-msg-btn aht-msg-btn--soft" data-llegada-rechazar="1">Ahora no</button>' +
         '</div></div>';
     }
     const acciones = Array.isArray(m.acciones_ui) ? m.acciones_ui : [];
     if (!acciones.length) return '';
-    return '<div class="acciones-msg">' + acciones.map(function (a) {
+    return '<div class="aht-msg-actions">' + acciones.map(function (a) {
       const suave = (a.estilo || '') === 'suave';
-      const cls = 'carta-cta carta-cta--primario' + (suave ? ' carta-cta--suave' : ' carta-cta--abrir');
+      const cls = 'aht-msg-btn aht-msg-btn--primary' + (suave ? ' aht-msg-btn--soft' : '');
       const lab = mensajitoCtaAccionLabel(m, a.id || '', a.etiqueta || a.id || '');
       return '<button type="button" class="' + cls + '" data-accion-id="' + esc(a.id || '') + '">' +
         esc(lab) + '</button>';
@@ -2141,8 +2224,9 @@
 
   function wireMsgLeidoToggle(btn, m) {
     const leido = mensajitoEstaLeido(m);
-    btn.className = 'msg-leido-toggle' + (leido ? ' is-leido' : ' is-pendiente');
-    btn.innerHTML = '<span class="msg-leido-ico" aria-hidden="true"></span>';
+    btn.className = 'aht-msg-read-toggle' + (leido ? ' is-leido' : ' is-pendiente');
+    btn.innerHTML = leido ? '\u2713 Le\u00eddo' : '\u25CB No le\u00eddo';
+    btn.setAttribute('data-read', leido ? 'true' : 'false');
     btn.setAttribute('aria-pressed', leido ? 'true' : 'false');
     btn.setAttribute('aria-label', leido ? 'Marcar como no le\u00eddo' : 'Marcar como le\u00eddo');
     btn.removeAttribute('title');
@@ -6530,7 +6614,10 @@ function hobbyIconKey(id, texto) {
     });
     const cartas = filtro === 'todos' ? cartasTodas : nuevos;
     if (!cartas.length) {
-      box.innerHTML = '<p class="lista-vacia buzon-vacio">No hay mensajes por ahora. Cuando llegue algo, lo verás aquí.</p>';
+      box.innerHTML = '<div class="aht-msg-empty">' +
+        '<div class="aht-msg-empty-icon">\uD83D\uDCED</div>' +
+        '<p class="aht-msg-empty-text">No hay mensajes por ahora. Cuando llegue algo, lo ver\u00e1s aqu\u00ed.</p>' +
+        '</div>';
       return;
     }
     const accion = cartas.filter(mensajitoRequiereAccion);
@@ -6544,81 +6631,75 @@ function hobbyIconKey(id, texto) {
       const ridRem = remitenteIdDe(m);
       const esRegaloRecibido = mensajitoEsObjetoRecibido(m);
       const objetoVista = esRegaloRecibido ? mensajitoObjetoVistaDe(m) : null;
-      const inclin = ((inclinIdx || 0) % 4 + 4) % 4;
-      const tint = (mensajitoTintDeRemitente(ridRem || nombre) + inclin) % 4;
+      const paper = msgPaperDeRemitente(ridRem || nombre);
       const origen = mensajitoBuscarOrigen(m, cacheBuzon);
       const esActualizacion = !!origen;
       const tieneEleccion = Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' && (m.estado_pueblo || 'pendiente') === 'pendiente';
-      art.className = 'carta-msg' +
-        (esAccion ? ' carta-accion' : ' carta-info') +
-        (leido ? ' leida' : ' no-leida') +
-        (st.cls ? ' ' + st.cls : '') +
-        (esActualizacion ? ' carta-hilo-card' : '') +
-        (tieneEleccion ? ' carta-eleccion' : '') +
-        (esRegaloRecibido ? ' carta-regalo-recibido' : '') +
-        ' carta-tinta-' + tint +
-        ' carta-inclin-' + inclin;
+      art.className = 'aht-msg-card' +
+        (esActualizacion ? ' aht-msg-card--thread' : '') +
+        (tieneEleccion ? ' aht-msg-card--election' : '') +
+        (esRegaloRecibido ? ' aht-msg-card--gift' : '');
+      art.setAttribute('data-paper', paper);
+      art.setAttribute('data-unread', leido ? 'false' : 'true');
+      if (esAccion) art.setAttribute('data-action', 'true');
+      else art.setAttribute('data-info', 'true');
       if (ridRem) art.setAttribute('data-remitente', ridRem);
       const cuerpo = cuerpoMensajito(m, nombre);
       const regaloObjetoHtml = objetoVista ? htmlMensajitoRegaloObjeto(objetoVista) : '';
       const perfilLlegadaHtml = (m.tipo === 'candidato_llegada') ? htmlPerfilCandidato(m) : '';
       const plazoLbl = mensajitoPlazoLabel(m);
       const cuando = mensajitoCuandoLabel(m);
+      const avatarHtml = htmlAvatarMensajito(m, nombre, 'aht-msg-avatar');
       const flagHtml = !leido
-        ? '<span class="carta-flag carta-flag--nuevo" aria-hidden="true">Nuevo</span>'
-        : '<span class="carta-flag carta-flag--visto"><span class="carta-flag-ico" aria-hidden="true">\u2606</span><span>Visto</span></span>';
+        ? '<span class="aht-msg-flag aht-msg-flag--new">Nuevo</span>'
+        : '<span class="aht-msg-flag aht-msg-flag--read">Visto</span>';
+      const headerHtml = '<div class="aht-msg-header-row">' +
+        (nombre && (ridRem || m.tipo !== 'detallito_sorpresa')
+          ? '<p class="aht-msg-from" data-persona-id="' + esc(ridRem || '') + '" data-persona-nombre="' + esc(nombre) + '" role="button" tabindex="0">' + esc(nombre) + '</p>'
+          : '') +
+        flagHtml +
+        '</div>';
+      const statusHtml = '<div class="aht-msg-status-row">' +
+        (cuando ? '<span class="aht-msg-date">' + esc(cuando) + '</span>' : '') +
+        '<span class="aht-msg-status"></span>' +
+        '</div>';
       const accionesDecision = htmlAccionesMensajito(m);
       let accionesHtml = '';
       if (accionesDecision) {
         accionesHtml = accionesDecision;
       } else if (m.preset_organizar && (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
         const orgLab = mensajitoCtaOrganizarLabel(m);
-        accionesHtml = '<div class="acciones-msg">' +
-          '<button type="button" class="carta-cta carta-cta--abrir carta-cta--primario" data-carta-organizar="1">' + esc(orgLab) + '</button>' +
+        accionesHtml = '<div class="aht-msg-actions">' +
+          '<button type="button" class="aht-msg-btn aht-msg-btn--primary" data-carta-organizar="1">' + esc(orgLab) + '</button>' +
           '</div>';
       } else {
         const destLab = mensajitoCtaDestinoLabel(m);
         if (destLab) {
-          const ctaClass = mensajitoEstaLeido(m) ? 'carta-cta carta-cta--ver' : 'carta-cta carta-cta--abrir';
-          accionesHtml = '<div class="acciones-msg">' +
-            '<button type="button" class="' + ctaClass + ' carta-cta--primario" data-carta-cta="1">' + esc(destLab) + '</button>' +
+          const ctaClass = mensajitoEstaLeido(m) ? 'aht-msg-btn aht-msg-btn--soft' : 'aht-msg-btn aht-msg-btn--primary';
+          accionesHtml = '<div class="aht-msg-actions">' +
+            '<button type="button" class="' + ctaClass + '" data-carta-cta="1">' + esc(destLab) + '</button>' +
             '</div>';
         }
       }
       const estadoTxt = st.txt || mensajitoEstadoNatural(m);
-      const estadoHtml = estadoTxt
-        ? '<div class="carta-estado"><span class="carta-estado-ico" aria-hidden="true">' + esc(mensajitoEstadoIcono(estadoTxt)) + '</span><span>' + esc(estadoTxt) + '</span></div>'
-        : '';
       const plazoHtml = plazoLbl
-        ? '<p class="carta-plazo"><span class="carta-plazo-ico" aria-hidden="true">\uD83D\uDD52</span><span>' + esc(plazoLbl) + '</span></p>'
+        ? '<div class="aht-msg-deadline">\uD83D\uDD52 ' + esc(plazoLbl) + '</div>'
         : '';
       const actualizacionEtq = esActualizacion
-        ? '<span class="carta-actualizacion-etq">Actualización' + (cuando ? ' \u00b7 ' + esc(cuando.split(' \u00b7 ').pop()) : '') + '</span>'
+        ? '<span class="carta-actualizacion-etq">Actualizaci\u00f3n' + (cuando ? ' \u00b7 ' + esc(cuando.split(' \u00b7 ').pop()) : '') + '</span>'
         : '';
       const mostrarCabeceraVecino = !esRegaloRecibido || !!ridRem || m.tipo !== 'detallito_sorpresa';
-      const cabeceraHtml = mostrarCabeceraVecino
-        ? '<header class="carta-top">' + htmlAvatarMensajito(m, nombre, 'carta-avatar') +
-          '<div class="carta-head">' +
-          (nombre && (ridRem || m.tipo !== 'detallito_sorpresa') ? '<div class="de">' + esc(nombre) + '</div>' : '') +
-          (cuando ? '<div class="carta-cuando">' + esc(cuando) + '</div>' : '') +
-          '</div></header>'
-        : (cuando ? '<div class="carta-cuando carta-cuando--solo">' + esc(cuando) + '</div>' : '');
-      art.innerHTML = flagHtml +
-        '<div class="carta-inner">' +
-        cabeceraHtml +
+      const bodyHtml = '<div class="aht-msg-content">' +
         (esActualizacion ? htmlMensajitoHilo(origen) : '') +
-        '<div class="carta-copy"><div class="carta-cuerpo-wrap">' +
         actualizacionEtq +
-        '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
+        '<p class="aht-msg-body">' + esc(cuerpo) + '</p>' +
         regaloObjetoHtml +
         perfilLlegadaHtml +
-        '</div>' +
         plazoHtml +
-        '<div class="carta-pie">' +
-        '<div class="carta-pie-meta"></div>' +
-        '<div class="carta-pie-cta">' + accionesHtml + estadoHtml + '</div>' +
-        '</div></div></div>';
+        accionesHtml +
+        '</div>';
+      art.innerHTML = (mostrarCabeceraVecino ? avatarHtml + headerHtml + statusHtml : (cuando ? '<div class="aht-msg-status-row"><span class="aht-msg-date">' + esc(cuando) + '</span></div>' : '')) + bodyHtml;
       art.querySelectorAll('[data-carta-cta]').forEach(function (btn) {
         btn.addEventListener('click', async function (ev) {
           ev.stopPropagation();
@@ -6639,14 +6720,17 @@ function hobbyIconKey(id, texto) {
         });
       });
       art.addEventListener('click', async function (ev) {
-        if (ev.target.closest('button') || ev.target.closest('.msg-leido-toggle')) return;
+        if (ev.target.closest('button') || ev.target.closest('.aht-msg-read-toggle')) return;
         if (!mensajitoEstaLeido(m) && !mensajitoTieneAccionReal(m) && !mensajitoDestinoFicha(m)) {
           await marcarMensajitoLeido(m);
           await refresh();
         }
       });
       wireAccionesMensajito(art, m);
-      art.appendChild(crearMsgLeidoToggle(m));
+      var readToggle = crearMsgLeidoToggle(m);
+      var statusSlot = art.querySelector('.aht-msg-status');
+      if (statusSlot) statusSlot.appendChild(readToggle);
+      else art.appendChild(readToggle);
       return art;
     }
 
@@ -6654,7 +6738,7 @@ function hobbyIconKey(id, texto) {
     function pintarSeccion(titulo, items, esAccion) {
       if (!items.length) return;
       const sec = document.createElement('section');
-      sec.className = 'mensajitos-seccion';
+      sec.className = 'aht-msg-section';
       sec.innerHTML = '<h3 class="mensajitos-seccion-tit">' + titulo + '</h3>';
       items.forEach(function (m) {
         sec.appendChild(pintarCarta(m, esAccion, inclinGlobal++));
@@ -8196,6 +8280,7 @@ function hobbyIconKey(id, texto) {
       renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
     renderBuzon(buzon.mensajes || []);
     pintarLlegadaCelebracionSiToca();
+    procesarCelebraciones(paquete.historia);
     renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
     actualizarCotiBadgesUI();
     renderVecinos();
@@ -8238,6 +8323,7 @@ function hobbyIconKey(id, texto) {
         partida_id: partidaId,
         seed: (r.partida && r.partida.meta && r.partida.meta.seed) || null
       });
+      procesarCelebraciones(r.historia);
       toast('Partida nueva (seed limpia).');
     } else {
       toast(r.mensaje_ui || 'No se pudo crear la partida.');
@@ -8558,6 +8644,18 @@ function hobbyIconKey(id, texto) {
         uiHistDepth--;
         try { history.back(); } catch (e) { uiHistBack(); }
       } else uiHistBack();
+      return;
+    }
+    const histCelebClose = ev.target.closest('[data-historia-celebracion-close]');
+    if (histCelebClose) {
+      ev.preventDefault();
+      celebracionClose(celebracionHitoActual);
+      return;
+    }
+    const histCelebAlbum = ev.target.closest('[data-historia-celebracion-album]');
+    if (histCelebAlbum) {
+      ev.preventDefault();
+      celebracionIrAlbum();
       return;
     }
     const t = ev.target.closest('[data-close], .velo');
