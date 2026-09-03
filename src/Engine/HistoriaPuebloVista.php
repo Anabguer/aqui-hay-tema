@@ -10,7 +10,7 @@ namespace AquiHayTema\Engine;
 final class HistoriaPuebloVista
 {
     /**
-     * Snapshot completo para el modal.
+     * Snapshot completo para el modal — 33 posiciones en orden editorial.
      *
      * @param array<string, mixed> $partida
      * @return array{total_revelados: int, total_hitos: int, hitos: list<array>}
@@ -18,21 +18,20 @@ final class HistoriaPuebloVista
     public static function snapshot(array $partida): array
     {
         $catalogo = HistoriaPuebloEngine::catalogo($partida);
-        $revelados = [];
-        $bloqueados = [];
+        $hitos = [];
 
         foreach ($catalogo as $item) {
             if ($item['revelado']) {
-                $revelados[] = self::presentarRevelado($partida, $item);
+                $hitos[] = self::presentarRevelado($partida, $item);
             } else {
-                $bloqueados[] = self::presentarBloqueado($item);
+                $hitos[] = self::presentarBloqueado($item);
             }
         }
 
         return [
-            'total_revelados' => count($revelados),
+            'total_revelados' => count(array_filter($catalogo, fn($c) => $c['revelado'])),
             'total_hitos' => count($catalogo),
-            'hitos' => array_merge($revelados, $bloqueados),
+            'hitos' => $hitos,
         ];
     }
 
@@ -55,6 +54,7 @@ final class HistoriaPuebloVista
             'id' => $item['id'],
             'nombre' => $item['nombre'],
             'revelado' => true,
+            'orden' => $item['orden'],
             'dia' => $entrada['dia'] ?? 1,
             'protagonistas' => $protagonistas,
             'imagen_url' => self::imagenUrl($item['id']),
@@ -67,6 +67,7 @@ final class HistoriaPuebloVista
             'id' => $item['id'],
             'nombre' => '???',
             'revelado' => false,
+            'orden' => $item['orden'],
             'dia' => null,
             'protagonistas' => [],
             'imagen_url' => null,

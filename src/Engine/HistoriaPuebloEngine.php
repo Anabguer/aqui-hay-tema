@@ -11,6 +11,43 @@ final class HistoriaPuebloEngine
 {
     public const HITO_EMPEZO_COTARRO = 'empezo_el_cotarro';
 
+    /** @var list<array{id: string, nombre: string}> Catálogo visual editorial (33 posiciones, orden fijo) */
+    public const CATÁLOGO_VISUAL = [
+        ['id' => 'empezo_el_cotarro',  'nombre' => 'AQUÍ EMPEZÓ EL COTARRO'],
+        ['id' => 'hito_02',            'nombre' => '???'],
+        ['id' => 'hito_03',            'nombre' => '???'],
+        ['id' => 'hito_04',            'nombre' => '???'],
+        ['id' => 'hito_05',            'nombre' => '???'],
+        ['id' => 'hito_06',            'nombre' => '???'],
+        ['id' => 'hito_07',            'nombre' => '???'],
+        ['id' => 'hito_08',            'nombre' => '???'],
+        ['id' => 'hito_09',            'nombre' => '???'],
+        ['id' => 'hito_10',            'nombre' => '???'],
+        ['id' => 'hito_11',            'nombre' => '???'],
+        ['id' => 'hito_12',            'nombre' => '???'],
+        ['id' => 'hito_13',            'nombre' => '???'],
+        ['id' => 'hito_14',            'nombre' => '???'],
+        ['id' => 'hito_15',            'nombre' => '???'],
+        ['id' => 'hito_16',            'nombre' => '???'],
+        ['id' => 'hito_17',            'nombre' => '???'],
+        ['id' => 'hito_18',            'nombre' => '???'],
+        ['id' => 'hito_19',            'nombre' => '???'],
+        ['id' => 'hito_20',            'nombre' => '???'],
+        ['id' => 'hito_21',            'nombre' => '???'],
+        ['id' => 'hito_22',            'nombre' => '???'],
+        ['id' => 'hito_23',            'nombre' => '???'],
+        ['id' => 'hito_24',            'nombre' => '???'],
+        ['id' => 'hito_25',            'nombre' => '???'],
+        ['id' => 'hito_26',            'nombre' => '???'],
+        ['id' => 'hito_27',            'nombre' => '???'],
+        ['id' => 'hito_28',            'nombre' => '???'],
+        ['id' => 'hito_29',            'nombre' => '???'],
+        ['id' => 'hito_30',            'nombre' => '???'],
+        ['id' => 'hito_31',            'nombre' => '???'],
+        ['id' => 'hito_32',            'nombre' => '???'],
+        ['id' => 'hito_33',            'nombre' => '???'],
+    ];
+
     /** @var array<string, array{day: int, hora: int}> Hitos registrados => timestamp */
     private static array $catálogoHitos = [
         self::HITO_EMPEZO_COTARRO => ['day' => 1, 'hora' => 8],
@@ -106,26 +143,27 @@ final class HistoriaPuebloEngine
     }
 
     /**
-     * Catálogo de hitos disponibles (para UI: mostrar bloqueados).
+     * Catálogo visual completo (33 posiciones en orden editorial).
+     * Cruza el catálogo editorial con el estado real de la partida.
      *
-     * @return list<array{id: string, revelado: bool, entrada: ?array}>
+     * @return list<array{id: string, nombre: string, revelado: bool, entrada: ?array, orden: int}>
      */
     public static function catalogo(array $partida): array
     {
         self::ensure($partida);
         $resultado = [];
 
-        $nombresHitos = [
-            self::HITO_EMPEZO_COTARRO => 'AQUÍ EMPEZÓ EL COTARRO',
-        ];
-
-        foreach (self::$catálogoHitos as $hitoId => $meta) {
+        foreach (self::CATÁLOGO_VISUAL as $i => $slot) {
+            $hitoId = $slot['id'];
             $entrada = self::buscarPorHito($partida, $hitoId);
+            $revelado = $entrada !== null && !empty($entrada['revelado']);
+
             $resultado[] = [
                 'id' => $hitoId,
-                'nombre' => $nombresHitos[$hitoId] ?? $hitoId,
-                'revelado' => $entrada !== null && !empty($entrada['revelado']),
+                'nombre' => $revelado ? ($slot['nombre']) : '???',
+                'revelado' => $revelado,
                 'entrada' => $entrada,
+                'orden' => $i + 1,
             ];
         }
 

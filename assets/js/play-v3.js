@@ -1128,18 +1128,17 @@
       const r = await api('historia.snapshot');
       if (!r || !r.ok) { grid.innerHTML = '<p class="mini">No se pudo cargar la historia.</p>'; return; }
       const h = r.historia;
-      if (sub) sub.textContent = h.total_revelados + ' de ' + h.total_hitos + ' recuerdos descubiertos';
+      if (sub) sub.textContent = h.total_revelados + ' / ' + h.total_hitos + ' recuerdos';
       let html = '';
       for (const hito of h.hitos) {
         const cls = hito.revelado ? '' : ' historia-polaroid--bloqueada';
         html += '<div class="historia-polaroid' + cls + '">';
+        html += '<span class="historia-orden">' + hito.orden + '</span>';
         html += '<div class="historia-img-wrap">';
         if (hito.revelado && hito.imagen_url) {
           html += '<img src="' + esc(hito.imagen_url) + '" alt="' + esc(hito.nombre) + '" loading="lazy"/>';
-        } else if (hito.revelado) {
-          html += '<div class="historia-placeholder" aria-hidden="true">&#x1F4F7;</div>';
         } else {
-          html += '<div class="historia-placeholder" aria-hidden="true">&#x1F512;</div>';
+          html += '<div class="historia-placeholder" aria-hidden="true">' + (hito.revelado ? '&#x1F4F7;' : '&#x1F512;') + '</div>';
         }
         html += '</div>';
         html += '<div class="historia-titulo">' + esc(hito.nombre) + '</div>';
