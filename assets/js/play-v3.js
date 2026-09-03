@@ -8087,7 +8087,12 @@ function hobbyIconKey(id, texto) {
   }
   async function ensurePartida() {
     if (await adoptSqlPartidaIfAny()) return true;
-    if (partidaId) return true;
+    if (partidaId) {
+      const probe = await api('partida.estado', {}, 'GET');
+      if (probe.ok) return true;
+      try { localStorage.removeItem(storageKey()); } catch (e) {}
+      partidaId = null;
+    }
     const r = await api('partida.nueva', configNueva(true));
     if (r.ok && r.partida_id) persistPartidaId(r.partida_id);
     return !!r.ok;
@@ -8103,12 +8108,21 @@ function hobbyIconKey(id, texto) {
         partidaId = null;
         if (await adoptSqlPartidaIfAny()) {
           paquete = await api('partida.refresh', {}, 'GET');
-        } else if (await ensurePartida()) {
-          paquete = await api('partida.refresh', {}, 'GET');
+        }
+        if (!paquete.ok) {
+          try { localStorage.removeItem(storageKey()); } catch (e) {}
+          partidaId = null;
+          if (await ensurePartida()) {
+            paquete = await api('partida.refresh', {}, 'GET');
+          }
         }
       }
     }
-    if (!paquete.ok) return;
+    if (!paquete.ok) {
+      toast('Partida no disponible. Recarga la p\u00e1gina.');
+      stopSyncClock();
+      return;
+    }
     cacheEstado = paquete.estado || null;
     cacheInsp = paquete.partida || null;
     const mapa = { mapa: paquete.mapa || {}, pueblo: paquete.pueblo || {} };
