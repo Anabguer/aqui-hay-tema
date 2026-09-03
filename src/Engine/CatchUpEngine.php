@@ -213,14 +213,9 @@ final class CatchUpEngine
             $stats['salidas_offline'] += (int) ($r['offline_salidas'] ?? 0);
 $restantes -= $chunk;
         }
-        // F11 — Aplicar decay de necesidades durante el catch-up offline.
-        // Esto asegura que las necesidades disminuyan con el tiempo ausente,
-        // modulados por el mismo decay que usa MotorVidaDiaria::tickHora().
-        if (FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
-            $cal = CalibracionConfig::load($partida);
-            $decayStats = NecesidadEstado::aplicarDecay($partida, $cal);
-            $stats['necesidades_decay_aplicadas'] = $decayStats;
-        }
+        // F11 — Necesidades: decay ya se aplica dentro del loop de avanzarPasoAPaso
+        // via MotorVidaDiaria::tickHora → tickNecesidades → aplicarDecay por residente.
+        // No se necesita aplicación adicional aquí.
         return $stats;
     }
 
