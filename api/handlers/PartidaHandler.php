@@ -43,7 +43,7 @@ final class PartidaHandler
             LabAudit::eventoNuevaPartida($partida, new Catalog($ctx->root));
             LabAudit::eventoTutorial($partida, 'NUEVA_PARTIDA', new Catalog($ctx->root));
         }
-        return withLabAudit(['ok' => true, 'partida' => $ctx->service->estadoResumido($partida), 'partida_id' => $partida['meta']['partida_id'], 'historia' => HistoriaPuebloHandler::pendientes($partida)]);
+        return withLabAudit(['ok' => true, 'partida' => $ctx->service->estadoResumido($partida), 'partida_id' => $partida['meta']['partida_id'], 'historia' => HistoriaPuebloHandler::pendientes($partida, $ctx)]);
     }
 
     public static function listar(ApiContext $ctx, array $body): array
@@ -157,7 +157,7 @@ final class PartidaHandler
             'pueblo' => $mapa['pueblo'] ?? [],
             'buzon' => $buzon,
             'diario' => $diario,
-            'historia' => HistoriaPuebloHandler::pendientes($partida),
+            'historia' => HistoriaPuebloHandler::pendientes($partida, $ctx),
         ];
         if ($labOn) {
             $eventosLab = LabAudit::flush();

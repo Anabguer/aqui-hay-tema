@@ -1082,6 +1082,10 @@
   .game-map-wrap {
     z-index: 1;
   }
+  .play-v3:has(.play-root[data-capa="historia_celebracion"]) .game-map-wrap,
+  .play-v3:has(.play-root[data-capa="historia_detalle"]) .game-map-wrap {
+    z-index: 13;
+  }
 
   .game-left .shell-grupo,
   .game-left .mensajitos-wrap {

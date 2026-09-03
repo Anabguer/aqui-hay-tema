@@ -23,11 +23,13 @@ final class HistoriaPuebloHandler
      *
      * @return array{ok: bool, celebraciones: list<array>}
      */
-    public static function pendientes(array $partida): array
+    public static function pendientes(array $partida, ?ApiContext $ctx = null): array
     {
+        $root = $ctx ? $ctx->root : null;
+        $partidaId = $partida['meta']['partida_id'] ?? null;
         return [
             'ok' => true,
-            'celebraciones' => HistoriaPuebloEngine::celebracionesPendientes($partida),
+            'celebraciones' => HistoriaPuebloEngine::celebracionesPendientes($partida, $root, $partidaId),
         ];
     }
 
@@ -47,6 +49,14 @@ final class HistoriaPuebloHandler
 
         if ($ackOk) {
             savePartida($ctx, $partida);
+            // Also persist to separate consumed list (survives cargar() race condition)
+            $root = $ctx->root;
+            $partidaId = $partida['meta']['partida_id'] ?? '';
+            if ($root && $partidaId) {
+                $consumed = HistoriaPuebloEngine::loadConsumed($root, $partidaId);
+                $consumed[] = $hitoId;
+                HistoriaPuebloEngine::saveConsumed($root, $partidaId, $consumed);
+            }
         }
 
         return [

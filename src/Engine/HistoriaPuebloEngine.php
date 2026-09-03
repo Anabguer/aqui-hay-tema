@@ -192,9 +192,12 @@ final class HistoriaPuebloEngine
      *
      * @return list<array>
      */
-    public static function celebracionesPendientes(array $partida): array
+    public static function celebracionesPendientes(array $partida, ?string $root = null, ?string $partidaId = null): array
     {
         self::ensure($partida);
+        $consumed = ($root !== null && $partidaId !== null)
+            ? self::loadConsumed($root, $partidaId)
+            : [];
         $pendientes = [];
 
         foreach (self::CATÁLOGO_VISUAL as $i => $slot) {
@@ -204,6 +207,10 @@ final class HistoriaPuebloEngine
             }
             // Legacy entries without celebracion_estado are treated as consumed
             if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
+                continue;
+            }
+            // Also check separate consumed list (survives cargar() race)
+            if (in_array($slot['id'], $consumed, true)) {
                 continue;
             }
             $pendientes[] = [
@@ -322,5 +329,37 @@ final class HistoriaPuebloEngine
             }
         }
         return $n;
+    }
+
+    /**
+     * Ruta al archivo de celebraciones consumidas (separate from partida to avoid race with cargar()).
+     */
+    public static function consumedPath(string $root, string $partidaId): string
+    {
+        $safe = preg_replace('/[^a-zA-Z0-9_\-]/', '', $partidaId) ?? $partidaId;
+        return $root . '/data/partidas/' . $safe . '_celebraciones_consumidas.json';
+    }
+
+    /**
+     * Load consumed celebration IDs from separate file.
+     * @return list<string>
+     */
+    public static function loadConsumed(string $root, string $partidaId): array
+    {
+        $path = self::consumedPath($root, $partidaId);
+        if (!is_file($path)) {
+            return [];
+        }
+        $data = @json_decode(file_get_contents($path), true);
+        return is_array($data) ? $data : [];
+    }
+
+    /**
+     * Save consumed celebration IDs to separate file.
+     */
+    public static function saveConsumed(string $root, string $partidaId, array $consumed): void
+    {
+        $path = self::consumedPath($root, $partidaId);
+        @file_put_contents($path, json_encode(array_values(array_unique($consumed)), JSON_UNESCAPED_UNICODE));
     }
 }

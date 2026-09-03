@@ -8398,7 +8398,6 @@ function hobbyIconKey(id, texto) {
         partida_id: partidaId,
         seed: (r.partida && r.partida.meta && r.partida.meta.seed) || null
       });
-      procesarCelebraciones(r.historia);
       toast('Partida nueva (seed limpia).');
     } else {
       toast(r.mensaje_ui || 'No se pudo crear la partida.');
