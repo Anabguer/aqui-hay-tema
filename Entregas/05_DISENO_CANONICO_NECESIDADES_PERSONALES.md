@@ -1,10 +1,10 @@
 # AHT — DISEÑO CANÓNICO DEL SISTEMA DE NECESIDADES PERSONALES
 
-**Estado:** DISEÑO PRODUCTO APROBADO — IMPLEMENTACIÓN PARCIAL (6/8 piezas)
-**Fecha:** 2026-09-02
+**Estado:** DISEÑO PRODUCTO APROBADO — IMPLEMENTACIÓN COMPLETA (9/9 piezas)
+**Fecha:** 2026-09-03
 **Alcance:** Diseño de producto + arquitectura basada en código real
-**Decisiones cerradas:** 4 necesidades, 9 lugares canónicos, principal/secundaria, peticiones, visibilidad global
-**SHAs:** 6e7cbeea → 2543a3af → f58afb60 → 5347633e → 66d60c97 → b4fc5e01
+**Decisiones cerradas:** 4 necesidades, 9 lugares canónicos, principal/secundaria, peticiones, visibilidad global, catch-up offline
+**SHAs:** 6e7cbeea → 2543a3af → f58afb60 → 5347633e → 66d60c97 → b4fc5e01 → 976cbfd6
 
 ---
 
@@ -885,10 +885,11 @@ El sistema de Intenciones (decidido por el agente paralelo de Relaciones) se ali
 | 4. Ficha Vecino | ✅ | 5347633e | PartidaService.php |
 | 5. Info edificios | ✅ | 66d60c97 | NecesidadEstado.php (perfilLugar, copyLugar) |
 | 6. Autonomía (LugarAutonomo) | ✅ | b4fc5e01 | LugarAutonomo.php |
-| 7. Catch-up offline | ⏳ | — | Pendiente |
-| 8. Peticiones desde necesidades | ⏳ | — | Pendiente |
+| 7. Peticiones desde necesidades | ✅ | 976cbfd6 | NecesidadPeticionBridge.php, PeticionPuebloEngine.php |
+| 8. Vista global Necesidades | ✅ | 976cbfd6 | PartidaService.php (vistaGlobalNecesidades) |
+| 9. Catch-up offline | ✅ | 976cbfd6 | CatchUpEngine.php (decay de necesidades) |
 
-**Piezas pendientes (7-8) son mejoras futuras. El núcleo funcional está implementado.**
+**Todas las 9 piezas completadas. Validación focal + regresiones realizadas.**
 
 ---
 
