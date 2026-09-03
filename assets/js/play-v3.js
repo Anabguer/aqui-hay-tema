@@ -2775,31 +2775,99 @@
     if (!planEsEnCurso(enc, estado)) return '';
     var iv = intervencionVistaDe(enc, estado);
     if (!iv) return '';
-    if (iv.usada && iv.ultimo && iv.ultimo.texto) return htmlIntervencionResultado(enc, estado);
-    if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
+
+    /* FASE 1: Si hay turnos, usar UI de turnos. */
+    var turnos = iv.turnos || [];
+    var turnoActual = iv.turno_actual || 0;
+    var turnosMax = iv.turnos_max || 4;
+    var actorActual = iv.actor_actual || '';
+    var barra = iv.barra_quedada || 0;
+
+    /* Si no hay más turnos y hay resultado, mostrar resumen. */
+    if (turnos.length >= turnosMax && iv.ultimo && iv.ultimo.texto) {
+      return htmlIntervencionResultado(enc, estado);
+    }
+
+    /* Si no está disponible y no hay turnos, no mostrar nada (legacy). */
+    if (!iv.disponible && turnos.length === 0) return '';
+    if (!iv.acciones || !iv.acciones.length) return '';
+
     var ids = enc.participantes || [];
-    var html = '<div class="enc-int enc-int--modal" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-int-step" data-enc-int-paso="persona">' +
-      '<div class="enc-int-duo" aria-hidden="true">';
-    ids.forEach(function (rid) {
-      html += '<div class="enc-int-duo-persona">' + htmlCaraToken(rid, { wrapClass: 'enc-int-duo-cara' }) +
-        '<span class="enc-int-duo-nombre">' + esc(nombreDe(rid)) + '</span></div>';
+    if (ids.length < 2) return '';
+
+    /* FASE 1: Construir UI de turno. */
+    var html = '<div class="enc-int enc-int--modal enc-int--turnos" data-enc-int data-enc-id="' + esc(enc.id || '') + '">';
+
+    /* Barra de quedada */
+    html += '<div class="enc-int-barra" data-enc-int-barra>';
+    html += '<p class="enc-int-barra-tit">\u2728 C\u00f3mo va la quedada</p>';
+    html += '<div class="enc-int-barra-track">';
+    var barraPct = Math.max(0, Math.min(100, 50 + barra * 4));
+    html += '<div class="enc-int-barra-fill" style="width:' + barraPct + '%"></div>';
+    html += '<span class="enc-int-barra-emoji-left">\ud83e\udee0</span>';
+    html += '<span class="enc-int-barra-emoji-mid">\ud83d\ude10</span>';
+    html += '<span class="enc-int-barra-emoji-right">\ud83d\ude0a</span>';
+    html += '<span class="enc-int-barra-emoji-fire">\ud83d\udd25</span>';
+    html += '</div>';
+    html += '</div>';
+
+    /* Turnos completados (reacciones previas) */
+    if (turnos.length > 0) {
+      html += '<div class="enc-int-historial">';
+      turnos.forEach(function (t) {
+        var emoji = t.tono === 'bien' ? '\ud83d\udc4d' : (t.tono === 'mal' ? '\ud83d\udc4e' : '\ud83d\ude10');
+        html += '<span class="enc-int-historial-item" title="' + esc(t.texto || '') + '">';
+        html += '<span class="enc-int-historial-nom">' + esc(nombreDe(t.actor)) + '</span> ';
+        html += '<span class="enc-int-historial-emoji">' + emoji + '</span>';
+        html += '</span>';
+      });
+      html += '</div>';
+    }
+
+    /* Cara del actor actual + receptor */
+    var receptorActual = '';
+    for (var ri = 0; ri < ids.length; ri++) {
+      if (ids[ri] !== actorActual) { receptorActual = ids[ri]; break; }
+    }
+    html += '<div class="enc-int-duo" aria-hidden="true">';
+    html += '<div class="enc-int-duo-persona enc-int-duo-persona--activo">' + htmlCaraToken(actorActual, { wrapClass: 'enc-int-duo-cara' }) +
+      '<span class="enc-int-duo-nombre">' + esc(nombreDe(actorActual)) + '</span></div>';
+    html += '<span class="enc-int-duo-flecha">\u2192</span>';
+    html += '<div class="enc-int-duo-persona">' + htmlCaraToken(receptorActual, { wrapClass: 'enc-int-duo-cara' }) +
+      '<span class="enc-int-duo-nombre">' + esc(nombreDe(receptorActual)) + '</span></div>';
+    html += '</div>';
+
+    /* Indicador de turno */
+    html += '<p class="enc-int-kicker enc-int-kicker--turno">Turno ' + (turnoActual + 1) + '/' + turnosMax + '</p>';
+
+    /* Acciones disponibles */
+    html += '<div class="enc-int-btns enc-int-temas-grid">';
+    iv.acciones.forEach(function (ac) {
+      if (!ac.disponible) return;
+      var btn = '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(ac.id) + '">';
+      if (ac.id === 'hobby') {
+        btn = '<button type="button" class="enc-int-btn enc-int-btn--hobby" data-enc-int-accion="' + esc(ac.id) + '">';
+      }
+      btn += esc(ac.etiqueta || ac.id);
+      btn += '</button>';
+      html += btn;
     });
-    html += '</div><p class="enc-int-kicker enc-int-kicker--q">\u00bfQui\u00E9n va a romper el hielo?</p>' +
-      '<div class="enc-int-personas">';
-    ids.forEach(function (rid) {
-      html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
-        htmlCaraToken(rid, { wrapClass: 'enc-int-persona-cara' }) +
-        '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
-    });
-    html += '</div></div>';
-    html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
-      '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
-      '<p class="enc-int-kicker enc-int-kicker-tema" data-enc-int-kicker-tema></p>' +
-      '<div class="enc-int-btns enc-int-temas-grid" data-temas-panel></div></div>';
-    html += '<div class="enc-int-step" data-enc-int-paso="resultado" hidden>' +
-      '<div class="enc-int-result" data-enc-int-resultado></div></div>';
-    html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
+    html += '</div>';
+
+    /* Temas de hobby (si aplica) */
+    html += '<div class="enc-int-temas-grid" data-temas-panel hidden></div>';
+
+    /* Feedback de la última acción (si hay) */
+    if (turnos.length > 0) {
+      var ultimo = turnos[turnos.length - 1];
+      var emojiR = ultimo.tono === 'bien' ? '\ud83d\udc4d' : (ultimo.tono === 'mal' ? '\ud83d\udc4e' : '\ud83d\ude10');
+      html += '<div class="enc-int-result enc-int-result--card">';
+      html += '<p class="enc-int-result-txt enc-int-result-txt--' + esc(ultimo.tono || 'neutral') + '">';
+      html += emojiR + ' ' + esc(ultimo.texto || '');
+      html += '</p></div>';
+    }
+
+    html += '</div>';
     return html;
   }
   function encuentroPorId(encId) {
@@ -2904,8 +2972,19 @@
     }
     var capaActual = ($('.play-root') && $('.play-root').getAttribute('data-capa')) || '';
     activarMentesFeedbackCard(encId, vistaIntervencion);
+
+    /* FASE 1: Re-render del modal con el nuevo estado de turnos. */
     if (r.ok && capaActual === 'mentes' && String(mentesEncIdActivo) === String(encId)) {
-      mostrarMentesResultado(vistaIntervencion);
+      var enc = encuentroPorId(encId);
+      var body = document.querySelector('[data-mentes-body]');
+      if (enc && body) {
+        var contenido = htmlIntervencionEncuentro(enc, cacheEstado);
+        if (contenido && contenido.indexOf('data-enc-int') >= 0) {
+          body.innerHTML = contenido;
+        } else {
+          mostrarMentesResultado(vistaIntervencion);
+        }
+      }
     }
     renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
     return r;

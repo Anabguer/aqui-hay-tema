@@ -167,10 +167,9 @@ ok((string) (($rOk['vista']['ultimo']['objetivo'] ?? '')) === $objDePrueba,
 ok(in_array($rOk['intervencion']['tono'] ?? '', ['bien', 'neutral', 'mal'], true),
     'tono real del motor presente');
 
-/* --- 4. Guarda canonica: una sola intervencion por encuentro --- */
+/* --- 4. FASE 1: segunda intervención SÍ está permitida (múltiples turnos) --- */
 $rDoble = EncuentroIntervencion::ejecutar($partida, $encA, EncuentroIntervencion::HABLAR, ['objetivo' => (string) $partA[1]], $catalog);
-ok(!($rDoble['ok'] ?? true) && (($rDoble['error'] ?? '') === 'INTERVENCION_YA_USADA'),
-    'segunda intervencion (otro objetivo) rechazada: una por encuentro');
+ok(($rDoble['ok'] ?? false) === true, 'FASE 1: segunda intervención permitida');
 
 /* --- 5. Aislamiento entre encuentros simultaneos --- */
 $rowB = EncuentroIntervencion::buscar($partida, $encB);

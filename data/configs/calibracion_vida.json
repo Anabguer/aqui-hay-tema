@@ -217,8 +217,9 @@
             "emocional": 0.1,
             "lugar": 0.14,
             "hobbies_plan": 0.14,
+            "barra_quedada": 0.1,
             "historial": 0.06,
-            "azar": 0.1
+            "azar": 0.0
         }
     },
     "plan_afinidad": {

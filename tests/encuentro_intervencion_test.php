@@ -123,7 +123,12 @@ if ($hid !== '') {
         }
     }
     ok(($hobby3['disponible'] ?? false) === true, 'hobby disponible con descubrimiento');
-    ok(count($hobby3['hobbies'] ?? []) >= 1, 'hobby expone opciones conocidas');
+    /* FASE 1: hobbies ahora vienen en temas_por_objetivo. */
+    $temasAll = [];
+    foreach (($hobby3['temas_por_objetivo'] ?? []) as $lista) {
+        foreach ($lista as $t) { $temasAll[] = $t; }
+    }
+    ok(count($temasAll) >= 1, 'hobby expone opciones conocidas');
 }
 
 $coq = null;
@@ -132,7 +137,8 @@ foreach ($acciones2 as $row) {
         $coq = $row;
     }
 }
-ok(($coq['disponible'] ?? false) === false, 'coquetear bloqueado sin señal');
+/* FASE 1: coquetear no está en ACCIONES_SOCIALES, no aparece en la lista. */
+ok($coq === null, 'coquetear no aparece en FASE 1 (sin romance)');
 
 RelacionEngine::setRomanceHacia($partida, $a, $b, SenalRomantica::umbralTilin($cal) + 2);
 $accionesRom = EncuentroIntervencion::accionesDisponibles($partida, $partida['encuentros'][0], $catalog);
@@ -146,8 +152,9 @@ foreach ($accionesRom as $row) {
         $beso = $row;
     }
 }
-ok(($coq2['disponible'] ?? false) === true, 'coquetear con señal romántica');
-ok(($beso['disponible'] ?? false) === false, 'beso bloqueado sin contexto cita/pareja');
+/* FASE 1: coquetear y beso no están en ACCIONES_SOCIALES. */
+ok($coq2 === null, 'coquetear ausente con señal romántica (FASE 1)');
+ok($beso === null, 'beso ausente sin contexto cita/pareja (FASE 1)');
 
 $partida['encuentros'][0]['tipo'] = 'primera_cita';
 $accionesCita = EncuentroIntervencion::accionesDisponibles($partida, $partida['encuentros'][0], $catalog);
@@ -157,18 +164,22 @@ foreach ($accionesCita as $row) {
         $besoCita = $row;
     }
 }
-ok(($besoCita['disponible'] ?? false) === true, 'beso disponible en primera cita con señal');
+/* FASE 1: beso no está en ACCIONES_SOCIALES. */
+ok($besoCita === null, 'beso ausente en primera cita (FASE 1)');
 
 $antesCoti = count(array_filter(BuzonEngine::listar($partida), static fn($m) => ($m['clasificacion'] ?? '') === 'cotilleo'));
 $rHablar = EncuentroIntervencion::ejecutar($partida, $encId, EncuentroIntervencion::HABLAR, [], $catalog);
 ok($rHablar['ok'] ?? false, 'hablar ejecuta ok');
 ok(!empty($partida['encuentros'][0]['intervencion_celeste']['usada']), 'marca intervención usada');
+ok(count($partida['encuentros'][0]['turnos'] ?? []) === 1, 'FASE 1: registra turno 1');
+ok(is_int($partida['encuentros'][0]['barra_quedada'] ?? null), 'FASE 1: barra_quedada existe');
 $despuesCoti = count(array_filter(BuzonEngine::listar($partida), static fn($m) => ($m['clasificacion'] ?? '') === 'cotilleo'));
 ok($despuesCoti === $antesCoti, 'hablar trivial no genera cotilleo');
 
+/* FASE 1: Segunda intervención ahora SÍ está permitida (múltiples turnos). */
 $r2 = EncuentroIntervencion::ejecutar($partida, $encId, EncuentroIntervencion::BROMA, [], $catalog);
-ok(!($r2['ok'] ?? true), 'segunda intervención rechazada');
-ok(($r2['error'] ?? '') === 'INTERVENCION_YA_USADA', 'error limite una intervención');
+ok(($r2['ok'] ?? false) === true, 'FASE 1: segunda intervención permitida');
+ok(count($partida['encuentros'][0]['turnos'] ?? []) === 2, 'FASE 1: registra turno 2');
 
 [$svc2, $partida2, $a2, $b2, $catalog2] = setupEncuentroEnCurso();
 $encId2 = (string) ($partida2['encuentros'][0]['id'] ?? '');
@@ -183,12 +194,9 @@ $partida2['encuentros'][0]['tipo'] = 'primera_cita';
 RelacionEngine::setRomanceHacia($partida2, $a2, $b2, SenalRomantica::umbralTilin($cal) + 3);
 RelacionEngine::setRomanceHacia($partida2, $b2, $a2, SenalRomantica::umbralTilin($cal) + 3);
 $partida2['rng']['seed'] = 424242;
-$antesCoti2 = count(array_filter(BuzonEngine::listar($partida2), static fn($m) => ($m['clasificacion'] ?? '') === 'cotilleo'));
+/* FASE 1: beso no está en ACCIONES_SOCIALES, debe ser rechazado. */
 $rBeso = EncuentroIntervencion::ejecutar($partida2, $encId2, EncuentroIntervencion::BESO, [], $catalog2);
-ok($rBeso['ok'] ?? false, 'beso ejecuta con requisitos');
-ok(in_array($rBeso['intervencion']['tono'] ?? '', ['bien', 'mal'], true), 'beso tiene tono real');
-$despuesCoti2 = count(array_filter(BuzonEngine::listar($partida2), static fn($m) => ($m['clasificacion'] ?? '') === 'cotilleo'));
-ok($despuesCoti2 > $antesCoti2, 'beso genera cotilleo por hito');
+ok(!($rBeso['ok'] ?? false), 'FASE 1: beso rechazado (no es acción social)');
 
 echo $failures === 0 ? "encuentro_intervencion_test OK\n" : "encuentro_intervencion_test FAIL ({$failures})\n";
 exit($failures > 0 ? 1 : 0);
