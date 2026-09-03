@@ -234,6 +234,11 @@
     pointer-events: auto;
   }
 
+  /* Evita que la capa de zonas captura toques y bloquee scroll vertical */
+  .play-v3:has(.game-shell) .mapa-zonas-layer {
+    pointer-events: none;
+  }
+
   .play-v3:has(.game-shell) .game-map-wrap .play-stage {
     flex: none !important;
     height: auto !important;
