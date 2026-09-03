@@ -1185,11 +1185,14 @@
       var nombres = { social: 'Socializar', diversion: 'Diversi\u00f3n', actividad: 'Actividad', calma: 'Desconectar' };
       var orden = ['social', 'diversion', 'actividad', 'calma'];
 
+      var initialFilter = necgFiltroInicial || 'todos';
+      necgFiltroInicial = '';
+
       if (filtersWrap) {
-        var fhtml = '<button type="button" class="necg-filt necg-filt--on" data-nec-filter="todos">Todos</button>';
-        fhtml += '<button type="button" class="necg-filt" data-nec-filter="necesitan">Con necesidad</button>';
+        var fhtml = '<button type="button" class="necg-filt' + (initialFilter === 'todos' ? ' necg-filt--on' : '') + '" data-nec-filter="todos">Todos</button>';
+        fhtml += '<button type="button" class="necg-filt' + (initialFilter === 'necesitan' ? ' necg-filt--on' : '') + '" data-nec-filter="necesitan">Con necesidad</button>';
         orden.forEach(function (nec) {
-          fhtml += '<button type="button" class="necg-filt" data-nec-filter="' + nec + '">' + iconos[nec] + ' ' + nombres[nec] + '</button>';
+          fhtml += '<button type="button" class="necg-filt' + (initialFilter === nec ? ' necg-filt--on' : '') + '" data-nec-filter="' + nec + '">' + iconos[nec] + ' ' + nombres[nec] + '</button>';
         });
         filtersWrap.innerHTML = fhtml;
       }
@@ -1229,7 +1232,25 @@
         body.innerHTML = html;
       }
 
-      renderCards(allResidents);
+      function applyFilter(filter) {
+        if (filter === 'todos') {
+          renderCards(allResidents);
+        } else if (filter === 'necesitan') {
+          renderCards(allResidents.filter(function (res) {
+            return orden.some(function (nec) {
+              var n = res.necesidades[nec];
+              return n && (n.banda === 'lo_necesita' || n.banda === 'en_rojo');
+            });
+          }));
+        } else {
+          renderCards(allResidents.filter(function (res) {
+            var n = res.necesidades[filter];
+            return n && n.banda !== 'bien';
+          }));
+        }
+      }
+
+      applyFilter(initialFilter);
 
       if (filtersWrap) {
         filtersWrap.addEventListener('click', function (e) {
@@ -1238,21 +1259,7 @@
           var filter = btn.getAttribute('data-nec-filter');
           filtersWrap.querySelectorAll('.necg-filt').forEach(function (b) { b.classList.remove('necg-filt--on'); });
           btn.classList.add('necg-filt--on');
-          if (filter === 'todos') {
-            renderCards(allResidents);
-          } else if (filter === 'necesitan') {
-            renderCards(allResidents.filter(function (res) {
-              return orden.some(function (nec) {
-                var n = res.necesidades[nec];
-                return n && (n.banda === 'lo_necesita' || n.banda === 'en_rojo');
-              });
-            }));
-          } else {
-            renderCards(allResidents.filter(function (res) {
-              var n = res.necesidades[filter];
-              return n && n.banda !== 'bien';
-            }));
-          }
+          applyFilter(filter);
         });
       }
 
@@ -2408,7 +2415,16 @@
       if (esCrisisPareja(r)) crisis++;
     });
     const cap = capObjetivoPoblacionVisible(partida);
-    return { vecinos: ids.length, cap: cap, parejas: parejasList.length, crisis: crisis, emo: emo };
+    let conNecesidad = 0;
+    ids.forEach(function (id) {
+      var rt = res[id].runtime && res[id].runtime.necesidades;
+      if (!rt) return;
+      if (['social', 'diversion', 'actividad', 'calma'].some(function (nec) {
+        var n = rt[nec];
+        return n && n.banda !== 'bien';
+      })) conNecesidad++;
+    });
+    return { vecinos: ids.length, cap: cap, parejas: parejasList.length, crisis: crisis, emo: emo, conNecesidad: conNecesidad };
   }
 
   function htmlFilaCelestineFiltro(opts) {
@@ -2434,6 +2450,12 @@
         valor: n,
       }));
     });
+    if (met.conNecesidad > 0) {
+      bits.push('<div class="vecinos-stat celeste-necesitan-algo" role="presentation" data-celestine-necesitan="1">' +
+        '<span class="vecinos-stat-ico" aria-hidden="true">\ud83e\ude77</span>' +
+        '<span class="vecinos-stat-k">Necesitan algo</span>' +
+        '<strong class="vecinos-stat-v">' + esc(String(met.conNecesidad)) + '</strong></div>');
+    }
     if (met.parejas > 0) {
       bits.push('<span class="obj-vecinos-tit celeste-seccion-parejas">Parejas</span>');
       bits.push('<div class="stat-row celeste-cuenta-parejas"><span>Parejas</span><strong>' +
@@ -5214,6 +5236,7 @@
 
   let vecBuscaTxt = '';
   let vecTabActiva = 'vecinos';
+  let necgFiltroInicial = '';
 
   function txtBuscaNorm(s) {
     return String(s || '')
@@ -8724,6 +8747,13 @@ function hobbyIconKey(id, texto) {
         setCapa('ficha');
         abrirFicha(rid);
       }
+      return;
+    }
+    const celestNecesitan = ev.target.closest('[data-celestine-necesitan]');
+    if (celestNecesitan && uiRootFrom(celestNecesitan)) {
+      ev.preventDefault();
+      necgFiltroInicial = 'necesitan';
+      setCapa('necesidades_global');
       return;
     }
     const invEntregar = ev.target.closest('[data-inv-entregar]');

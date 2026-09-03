@@ -422,6 +422,8 @@ body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
 .vecinos-stat-ico { width: 1rem; text-align: center; opacity: .85; font-size: .72rem; }
 .vecinos-stat-k { flex: 1; color: #5a5048; }
 .vecinos-stat-v { font-weight: 800; }
+.celeste-necesitan-algo { cursor: pointer; border-radius: .3rem; transition: background .15s; }
+.celeste-necesitan-algo:hover { background: rgba(0,0,0,.04); }
 
 .obj-bloques-res { display: flex; flex-direction: column; gap: .55rem; width: 100%; max-width: 100%; min-width: 0; overflow: hidden; }
 .obj-bloque-mini {
