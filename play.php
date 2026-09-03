@@ -894,7 +894,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </div>
         <div data-buzon-list></div>
-        <p class="mensajitos-hint">&#11088; Abrir mensajitos puede desbloquear planes y cotilleos</p>
       </aside>
       <aside class="capa capa-inventario ds-migrada" aria-label="Inventario de Celestine">
         <button type="button" class="cerrar inv-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
@@ -1424,10 +1423,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-msg-list" id="msgLabList"></div>
       </div>
 
-      <!-- HINT FOOTER -->
-      <div class="aht-msg-hint">⭐ Abrir mensajitos puede desbloquear planes y cotilleos</div>
+      </div>
     </div>
-  </div>
   <!-- ====== FIN MENSAJITOS LAB ====== -->
 
   <script src="assets/js/play-v3-mensajitos-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
