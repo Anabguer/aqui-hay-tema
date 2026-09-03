@@ -12,6 +12,7 @@ use AquiHayTema\Api\Handlers\DebugLabHandler;
 use AquiHayTema\Api\Handlers\DiarioHandler;
 use AquiHayTema\Api\Handlers\EventosPuebloHandler;
 use AquiHayTema\Api\Handlers\EncuentrosHandler;
+use AquiHayTema\Api\Handlers\HistoriaPuebloHandler;
 use AquiHayTema\Api\Handlers\LlegadaHandler;
 use AquiHayTema\Api\Handlers\MapaHandler;
 use AquiHayTema\Api\Handlers\MarchaHandler;
@@ -323,6 +324,10 @@ $routes = [
     'diario.cotilleo_visto' => static function () use ($ctx, $body) {
         $p = requirePartidaLigera($ctx, $body);
         return DiarioHandler::cotilleoVisto($ctx, $body, $p);
+    },
+    'historia.snapshot' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return HistoriaPuebloHandler::snapshot($ctx, $body, $p);
     },
     'dev.snapshot.guardar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

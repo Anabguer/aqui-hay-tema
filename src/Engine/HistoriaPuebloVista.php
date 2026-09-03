@@ -1,0 +1,98 @@
+<?php
+declare(strict_types=1);
+
+namespace AquiHayTema\Engine;
+
+/**
+ * Historia del Pueblo — Vista de presentación para UI.
+ * Transforma datos crudos en estructuras listas para el cliente.
+ */
+final class HistoriaPuebloVista
+{
+    /**
+     * Snapshot completo para el modal.
+     *
+     * @param array<string, mixed> $partida
+     * @return array{total_revelados: int, total_hitos: int, hitos: list<array>}
+     */
+    public static function snapshot(array $partida): array
+    {
+        $catalogo = HistoriaPuebloEngine::catalogo($partida);
+        $revelados = [];
+        $bloqueados = [];
+
+        foreach ($catalogo as $item) {
+            if ($item['revelado']) {
+                $revelados[] = self::presentarRevelado($partida, $item);
+            } else {
+                $bloqueados[] = self::presentarBloqueado($item);
+            }
+        }
+
+        return [
+            'total_revelados' => count($revelados),
+            'total_hitos' => count($catalogo),
+            'hitos' => array_merge($revelados, $bloqueados),
+        ];
+    }
+
+    private static function presentarRevelado(array $partida, array $item): array
+    {
+        $entrada = $item['entrada'] ?? [];
+        $protagonistas = [];
+
+        foreach ($entrada['protagonistas'] ?? [] as $pid) {
+            $pid = (string) $pid;
+            $residente = $partida['residentes'][$pid] ?? null;
+            $protagonistas[] = [
+                'id' => $pid,
+                'nombre' => $entrada['nombres'][$pid] ?? IdentidadPublica::nombre($partida, $pid),
+                'retrato' => self::retratoMini($partida, $pid),
+            ];
+        }
+
+        return [
+            'id' => $item['id'],
+            'nombre' => $item['nombre'],
+            'revelado' => true,
+            'dia' => $entrada['dia'] ?? 1,
+            'protagonistas' => $protagonistas,
+            'imagen_url' => self::imagenUrl($item['id']),
+        ];
+    }
+
+    private static function presentarBloqueado(array $item): array
+    {
+        return [
+            'id' => $item['id'],
+            'nombre' => '???',
+            'revelado' => false,
+            'dia' => null,
+            'protagonistas' => [],
+            'imagen_url' => null,
+        ];
+    }
+
+    private static function retratoMini(array $partida, string $pid): ?string
+    {
+        $residente = $partida['residentes'][$pid] ?? null;
+        if ($residente === null) {
+            return null;
+        }
+        try {
+            $packs = new VisualPackStore();
+            $retrato = RetratoResolver::resolver($residente, $pid, $packs);
+            return $retrato['url'] ?? null;
+        } catch (\Throwable $e) {
+            return null;
+        }
+    }
+
+    private static function imagenUrl(string $hitoId): ?string
+    {
+        $map = [
+            HistoriaPuebloEngine::HITO_EMPEZO_COTARRO => 'assets/img/historia/empezo_el_cotarro.webp',
+        ];
+        return $map[$hitoId] ?? null;
+    }
+}

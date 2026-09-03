@@ -1091,6 +1091,7 @@
     if (name === 'vida_pueblo') renderVidaPuebloModal();
     if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
     if (name === 'inventario') renderInventario();
+    if (name === 'historia') renderHistoriaPueblo();
     if (name === 'ajustes') syncAjustesUI();
     if (name && name !== prev && !uiHistSilent) uiHistPush();
     $$('.dock button, .play-bottom-nav-btn').forEach(function (b) {
@@ -1113,6 +1114,55 @@
     invFichaRid = id || null;
     invFichaNombre = String(nombre || '');
     setCapa('inventario');
+  }
+
+// --- Historia del Pueblo ---
+  async function renderHistoriaPueblo() {
+    const root = $('.play-root');
+    if (!root) return;
+    const grid = $('[data-historia-grid]', root);
+    const sub = $('[data-historia-sub]', root);
+    if (!grid) return;
+    try {
+      const r = await api('historia.snapshot', { partida_id: pid() });
+      if (!r || !r.ok) { grid.innerHTML = '<p class="mini">No se pudo cargar la historia.</p>'; return; }
+      const h = r.historia;
+      if (sub) sub.textContent = h.total_revelados + ' de ' + h.total_hitos + ' recuerdos descubiertos';
+      let html = '';
+      for (const hito of h.hitos) {
+        const cls = hito.revelado ? '' : ' historia-polaroid--bloqueada';
+        html += '<div class="historia-polaroid' + cls + '">';
+        html += '<div class="historia-img-wrap">';
+        if (hito.revelado && hito.imagen_url) {
+          html += '<img src="' + esc(hito.imagen_url) + '" alt="' + esc(hito.nombre) + '" loading="lazy"/>';
+        } else if (hito.revelado) {
+          html += '<div class="historia-placeholder" aria-hidden="true">&#x1F4F7;</div>';
+        } else {
+          html += '<div class="historia-placeholder" aria-hidden="true">&#x1F512;</div>';
+        }
+        html += '</div>';
+        html += '<div class="historia-titulo">' + esc(hito.nombre) + '</div>';
+        if (hito.revelado && hito.protagonistas && hito.protagonistas.length) {
+          html += '<div class="historia-protagonistas">';
+          for (const p of hito.protagonistas) {
+            html += '<div class="historia-avatar">';
+            if (p.retrato) {
+              html += '<img class="historia-avatar-img" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+            } else {
+              html += '<div class="historia-avatar-img" style="display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#a09080;">' + esc((p.nombre || '?')[0]) + '</div>';
+            }
+            html += '<span class="historia-avatar-nombre">' + esc(p.nombre) + '</span>';
+            html += '</div>';
+          }
+          html += '</div>';
+          html += '<div class="historia-dia">D&iacute;a ' + hito.dia + '</div>';
+        }
+        html += '</div>';
+      }
+      grid.innerHTML = html;
+    } catch (e) {
+      grid.innerHTML = '<p class="mini">Error al cargar la historia.</p>';
+    }
   }
 
   async function renderInventario() {

@@ -1,0 +1,185 @@
+/* play-v3-historia.css — Historia del Pueblo: Polaroid grid */
+
+.historia-body {
+  padding: .75rem 1rem 2rem;
+}
+
+.historia-sub {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* ── Grid de polaroids ────────────────────────────────────── */
+.historia-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1.2rem .8rem;
+  justify-items: center;
+  padding: .5rem 0;
+}
+
+@media (min-width: 600px) {
+  .historia-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .historia-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* ── Polaroid individual ──────────────────────────────────── */
+.historia-polaroid {
+  background: #fff;
+  padding: .5rem .5rem 2.2rem;
+  box-shadow:
+    2px 3px 6px rgba(44, 38, 31, .18),
+    0 0 0 1px rgba(44, 38, 31, .06);
+  width: 100%;
+  max-width: 170px;
+  position: relative;
+  transition: transform .18s ease;
+}
+
+/* ligera rotación aleatoria */
+.historia-polaroid:nth-child(5n+1) { transform: rotate(-1.8deg); }
+.historia-polaroid:nth-child(5n+2) { transform: rotate(1.2deg); }
+.historia-polaroid:nth-child(5n+3) { transform: rotate(-0.6deg); }
+.historia-polaroid:nth-child(5n+4) { transform: rotate(2.1deg); }
+.historia-polaroid:nth-child(5n+5) { transform: rotate(-1.1deg); }
+
+.historia-polaroid:hover {
+  transform: rotate(0deg) scale(1.04);
+  z-index: 2;
+}
+
+/* ── Imagen ───────────────────────────────────────────────── */
+.historia-img-wrap {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: #e8e0d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.historia-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* placeholder para asset futuro */
+.historia-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #d4c8b8 0%, #c9bba8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.4rem;
+  color: #a09080;
+  user-select: none;
+}
+
+/* ── Título (debajo de la foto, estilo Polaroid) ──────────── */
+.historia-titulo {
+  position: absolute;
+  bottom: .45rem;
+  left: .5rem;
+  right: .5rem;
+  text-align: center;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: .72rem;
+  font-weight: 700;
+  color: #3a3025;
+  letter-spacing: .02em;
+  line-height: 1.15;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Protagonistas (avatars + nombres) ────────────────────── */
+.historia-protagonistas {
+  display: flex;
+  gap: .35rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: .35rem;
+}
+
+.historia-avatar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .12rem;
+}
+
+.historia-avatar-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #c9bba8;
+  background: #e8e0d4;
+}
+
+.historia-avatar-nombre {
+  font-size: .55rem;
+  color: var(--muted, #7a6e60);
+  max-width: 50px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* ── Día ──────────────────────────────────────────────────── */
+.historia-dia {
+  text-align: center;
+  font-size: .6rem;
+  color: var(--muted, #9a8e80);
+  margin-top: .15rem;
+}
+
+/* ── Polaroid bloqueada (no revelada) ─────────────────────── */
+.historia-polaroid--bloqueada .historia-img-wrap {
+  background: #bbb;
+}
+
+.historia-polaroid--bloqueada .historia-placeholder {
+  background: linear-gradient(135deg, #a0a0a0 0%, #888 100%);
+  color: #777;
+  font-size: 1.8rem;
+}
+
+.historia-polaroid--bloqueada .historia-titulo {
+  color: #999;
+  font-style: italic;
+}
+
+.historia-polaroid--bloqueada .historia-protagonistas {
+  display: none;
+}
+
+.historia-polaroid--bloqueada .historia-dia {
+  display: none;
+}
+
+/* ── Contador de recuerdos ────────────────────────────────── */
+.historia-counter {
+  text-align: center;
+  margin-bottom: .6rem;
+  font-size: .78rem;
+  color: var(--muted, #7a6e60);
+}
+
+.historia-counter strong {
+  color: #3a3025;
+}
