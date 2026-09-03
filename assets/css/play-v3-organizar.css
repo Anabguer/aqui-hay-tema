@@ -1121,3 +1121,18 @@
   opacity: .55;
   cursor: not-allowed;
 }
+
+.play-v3 .capa-organizar .org-intencion-emoji {
+  font-size: 1.15rem;
+  line-height: 1;
+  width: 1.35rem;
+  height: 1.35rem;
+  display: grid;
+  place-items: center;
+}
+
+.play-v3 .capa-organizar .org-tipo-card.is-blocked {
+  opacity: .5;
+  cursor: not-allowed;
+  pointer-events: none;
+}

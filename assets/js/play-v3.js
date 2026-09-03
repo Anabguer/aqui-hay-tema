@@ -246,7 +246,7 @@
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
   const ORG_MAX_VECINOS = 2;
-  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null };
+  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null, intencion: '' };
   let orgPresetNuevo = false;
   let orgProponiendo = false;
   const ORG_BTN_LABEL = 'Crear plan';
@@ -6801,6 +6801,26 @@ function hobbyIconKey(id, texto) {
       (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
       '</span>' + check + '</button>';
   }
+  function orgIntencionHtml(intencion) {
+    var id = String(intencion.id || '');
+    var emoji = intencion.emoji || '';
+    var label = intencion.label || id;
+    var desc = intencion.descripcion || '';
+    var blocked = intencion.status === 'blocked';
+    var hidden = intencion.status === 'hidden';
+    if (hidden) return '';
+    var cls = 'org-tipo-card';
+    if (blocked) cls += ' is-blocked';
+    else if (org.intencion === id) cls += ' is-on';
+    var disabled = blocked ? ' disabled' : '';
+    var tooltip = blocked ? ' title="' + esc(intencion.bloqueado_motivo || '') + '"' : '';
+    return '<button type="button" class="' + cls + '" data-org-intencion="' + esc(id) + '"' + disabled + tooltip + '>' +
+      '<span class="org-tipo-card-ico org-intencion-emoji" aria-hidden="true">' + esc(emoji) + '</span>' +
+      '<span class="org-tipo-card-copy">' +
+      '<span class="org-tipo-card-tit">' + esc(label) + '</span>' +
+      (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
+      '</span><span class="org-tipo-card-check" aria-hidden="true"></span></button>';
+  }
   var ORG_LUGAR_IMG = {
     lug_bar: 'bar.png', lug_biblioteca: 'biblioteca.png', lug_bingo: 'bingo.png', lug_cafeteria: 'cafeteria.png',
     lug_cine: 'cine.png', lug_discoteca: 'discoteca.png', lug_gimnasio: 'gimnasio.png', lug_parque: 'parque.png',
@@ -7514,6 +7534,7 @@ function hobbyIconKey(id, texto) {
     org.sel = orgIdsDesdePreset(p);
     org.tipo = p.tipo || ((p.modo === 'evento' || p.modo === 'evento_pueblo') ? 'otro' : '');
     org.lugar = p.lugar || '';
+    org.intencion = '';
     org.peticion_id = p.peticion_id || null;
     if (org.modo === 'evento_pueblo') {
       org.dia = p.dia || null;
@@ -7703,6 +7724,42 @@ function hobbyIconKey(id, texto) {
       box.innerHTML = '';
       return;
     }
+    org.intencion = '';
+    const rInt = await api('encuentro.intenciones_disponibles', { participantes: sel }, 'GET');
+    if (rInt.ok && rInt.intenciones && rInt.intenciones.length) {
+      const visibles = rInt.intenciones.filter(function (i) { return i.status !== 'hidden'; });
+      if (visibles.length) {
+        box.innerHTML = visibles.map(function (i) {
+          return orgIntencionHtml(i);
+        }).join('');
+        $$('[data-org-intencion]', box).forEach(function (btn) {
+          btn.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            if (btn.disabled) return;
+            var id = btn.getAttribute('data-org-intencion') || '';
+            org.intencion = id;
+            var matched = rInt.intenciones.find(function (i) { return i.id === id; });
+            if (matched) {
+              org.tipo = matched.tipo || '';
+            }
+            $$('[data-org-intencion]', box).forEach(function (c) {
+              c.classList.toggle('is-on', c.getAttribute('data-org-intencion') === id);
+            });
+            refreshOrgHoras();
+          });
+        });
+        if (!org.intencion) {
+          var primerVisible = visibles.find(function (i) { return i.status === 'visible'; });
+          if (primerVisible) {
+            org.intencion = primerVisible.id;
+            org.tipo = primerVisible.tipo || '';
+            box.querySelector('[data-org-intencion="' + primerVisible.id + '"]')?.classList.add('is-on');
+          }
+        }
+        return;
+      }
+    }
     const r = await api('encuentro.tipos_permitidos', {
       participantes: sel,
       residente_a: sel[0],
@@ -7854,6 +7911,7 @@ function hobbyIconKey(id, texto) {
         modo: orgModo()
       };
       if (org.peticion_id) payload.peticion_id = org.peticion_id;
+      if (org.intencion) payload.intencion = org.intencion;
       r = await api('encuentro.proponer', payload);
       if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
       try {

@@ -171,6 +171,10 @@ $routes = [
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::tiposPermitidos($ctx, $body, $p);
     },
+    'encuentro.intenciones_disponibles' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::intencionesDisponibles($ctx, $body, $p);
+    },
     'encuentro.propuesta.decidir' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::decidirPropuesta($ctx, $body, $p);

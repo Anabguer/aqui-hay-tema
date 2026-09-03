@@ -53,6 +53,7 @@ final class EncuentrosHandler
         }
         $lab = labActiva($body);
         $antesRes = $lab ? LabAudit::residentesActivos($partida) : [];
+        $intencion = (string) ($body['intencion'] ?? '');
         $r = $ctx->service->proponerEncuentro(
             $partida,
             is_array($body['participantes'] ?? null) ? $body['participantes'] : [
@@ -65,6 +66,18 @@ final class EncuentrosHandler
             isset($body['lugar']) ? (string) $body['lugar'] : null,
             isset($body['peticion_id']) ? (string) $body['peticion_id'] : null
         );
+        if (($r['ok'] ?? false) && $intencion !== '') {
+            $propId = (string) ($r['propuesta']['id'] ?? '');
+            if ($propId !== '') {
+                foreach ($partida['propuestas_pendientes'] as &$prop) {
+                    if (($prop['id'] ?? '') === $propId) {
+                        $prop['intencion'] = $intencion;
+                        break;
+                    }
+                }
+                unset($prop);
+            }
+        }
         savePartida($ctx, $partida);
         if ($lab) {
             $catalog = new Catalog($ctx->root);
@@ -178,6 +191,26 @@ final class EncuentrosHandler
             'candidatos_b' => \AquiHayTema\Engine\OrganizarMotivo::candidatos($partida, $a),
             'planes_organizar' => \AquiHayTema\Engine\PropuestaNivel::contratoOrganizar(),
             'hint' => \AquiHayTema\Engine\PropuestaNivel::hintPlay($partida, $a, $b, $cal),
+        ];
+    }
+
+    public static function intencionesDisponibles(ApiContext $ctx, array $body, array $partida): array
+    {
+        $parts = is_array($body['participantes'] ?? null) ? $body['participantes'] : [
+            (string) ($body['residente_a'] ?? ''),
+            (string) ($body['residente_b'] ?? ''),
+        ];
+        $a = (string) ($parts[0] ?? '');
+        $b = (string) ($parts[1] ?? '');
+        if ($a === '' || $b === '' || $a === $b) {
+            return ['ok' => true, 'intenciones' => [], 'contrato' => \AquiHayTema\Engine\IntencionCelestina::contratoOrganizar()];
+        }
+        $cal = \AquiHayTema\Engine\CalibracionConfig::load($ctx->root);
+        $intenciones = \AquiHayTema\Engine\IntencionCelestina::disponiblesPara($partida, $a, $b, $cal);
+        return [
+            'ok' => true,
+            'intenciones' => $intenciones,
+            'contrato' => \AquiHayTema\Engine\IntencionCelestina::contratoOrganizar(),
         ];
     }
 
