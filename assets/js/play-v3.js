@@ -1169,39 +1169,100 @@
   async function renderNecesidadesGlobal() {
     var body = $('[data-necesidades-global-body]');
     var vacio = $('[data-necesidades-global-vacio]');
+    var filtersWrap = $('[data-necesidades-global-filters]');
     if (!body) return;
     body.innerHTML = '<p class="necg-vacio mini">Cargando...</p>';
     if (vacio) vacio.hidden = true;
     try {
       var r = await api('partida.necesidades_global');
-      if (!r.ok || !r.necesidades || !r.necesidades.items || !Object.keys(r.necesidades.items).length) {
-        body.innerHTML = '<p class="necg-vacio">Todos est&aacute;n bien por ahora.</p>';
+      var data = r.ok && r.necesidades ? r.necesidades : null;
+      if (!data || !data.residentes || !data.residentes.length) {
+        body.innerHTML = '<p class="necg-vacio">No hay datos de necesidades a&uacute;n.</p>';
+        if (filtersWrap) filtersWrap.innerHTML = '';
         return;
       }
-      var items = r.necesidades.items;
+      var allResidents = data.residentes;
       var iconos = { social: '\ud83e\udd1d', diversion: '\ud83c\udf89', actividad: '\ud83d\udcaa', calma: '\u2615' };
-      var nombres = { social: 'SOCIALIZAR', diversion: 'DIVERSI\u00d3N', actividad: 'ACTIVIDAD', calma: 'CALMA' };
-      var html = '';
+      var nombres = { social: 'Socializar', diversion: 'Diversi\u00f3n', actividad: 'Actividad', calma: 'Desconectar' };
       var orden = ['social', 'diversion', 'actividad', 'calma'];
-      orden.forEach(function (nec) {
-        var data = items[nec];
-        if (!data || !data.residentes || !data.residentes.length) return;
-        html += '<div class="necg-grupo">';
-        html += '<h4 class="necg-grupo-tit"><span aria-hidden="true">' + (iconos[nec] || '') + '</span> ' + (nombres[nec] || nec) + '</h4>';
-        html += '<div class="necg-grupo-list">';
-        data.residentes.forEach(function (res) {
-          var cls = 'necg-res-row necg-res-row--' + esc(res.band || '');
-          var badgeCls = 'necg-res-badge necg-res-badge--' + esc(res.band || '');
-          var badgeTxt = res.band === 'en_rojo' ? 'En rojo' : 'Lo necesita';
-          html += '<div class="' + cls + '" data-necg-res="' + esc(res.id || '') + '">';
-          html += '<span class="necg-res-nom">' + esc(res.nombre || res.id || '') + '</span>';
-          html += '<span class="necg-res-copy">' + esc(res.copy || '') + '</span>';
-          html += '<span class="' + badgeCls + '">' + badgeTxt + '</span>';
+
+      if (filtersWrap) {
+        var fhtml = '<button type="button" class="necg-filt necg-filt--on" data-nec-filter="todos">Todos</button>';
+        fhtml += '<button type="button" class="necg-filt" data-nec-filter="necesitan">Con necesidad</button>';
+        orden.forEach(function (nec) {
+          fhtml += '<button type="button" class="necg-filt" data-nec-filter="' + nec + '">' + iconos[nec] + ' ' + nombres[nec] + '</button>';
+        });
+        filtersWrap.innerHTML = fhtml;
+      }
+
+      function barHTML(valor, banda) {
+        var pct = Math.max(0, Math.min(100, valor));
+        var cls = 'necg-bar-fill--' + banda;
+        return '<div class="necg-bar"><div class="necg-bar-fill ' + cls + '" style="width:' + pct + '%"></div></div>';
+      }
+
+      function renderCards(residents) {
+        if (!residents.length) {
+          body.innerHTML = '<p class="necg-vacio">Nadie necesita nada ahora mismo.</p>';
+          return;
+        }
+        var html = '';
+        residents.forEach(function (res) {
+          var needsHtml = '';
+          var worstBand = 'bien';
+          var worstVal = 101;
+          orden.forEach(function (nec) {
+            var n = res.necesidades[nec];
+            if (!n) return;
+            if (n.valor < worstVal) { worstVal = n.valor; worstBand = n.banda; }
+            var bandCls = 'necg-need-row--' + n.banda;
+            needsHtml += '<div class="necg-need-row ' + bandCls + '">';
+            needsHtml += '<span class="necg-need-icon">' + iconos[nec] + '</span>';
+            needsHtml += '<span class="necg-need-name">' + nombres[nec] + '</span>';
+            needsHtml += barHTML(n.valor, n.banda);
+            needsHtml += '</div>';
+          });
+          html += '<div class="necg-card" data-necg-res="' + esc(res.id) + '" data-worst="' + worstBand + '">';
+          html += '<h4 class="necg-card-nom">' + esc(res.nombre) + '</h4>';
+          html += '<div class="necg-card-needs">' + needsHtml + '</div>';
           html += '</div>';
         });
-        html += '</div></div>';
+        body.innerHTML = html;
+      }
+
+      renderCards(allResidents);
+
+      if (filtersWrap) {
+        filtersWrap.addEventListener('click', function (e) {
+          var btn = e.target.closest('[data-nec-filter]');
+          if (!btn) return;
+          var filter = btn.getAttribute('data-nec-filter');
+          filtersWrap.querySelectorAll('.necg-filt').forEach(function (b) { b.classList.remove('necg-filt--on'); });
+          btn.classList.add('necg-filt--on');
+          if (filter === 'todos') {
+            renderCards(allResidents);
+          } else if (filter === 'necesitan') {
+            renderCards(allResidents.filter(function (res) {
+              return orden.some(function (nec) {
+                var n = res.necesidades[nec];
+                return n && (n.banda === 'lo_necesita' || n.banda === 'en_rojo');
+              });
+            }));
+          } else {
+            renderCards(allResidents.filter(function (res) {
+              var n = res.necesidades[filter];
+              return n && n.banda !== 'bien';
+            }));
+          }
+        });
+      }
+
+      body.addEventListener('click', function (e) {
+        var card = e.target.closest('[data-necg-res]');
+        if (!card) return;
+        var rid = card.getAttribute('data-necg-res');
+        if (rid) abrirFicha(rid);
       });
-      body.innerHTML = html || '<p class="necg-vacio">Todos est&aacute;n bien por ahora.</p>';
     } catch (e) {
       body.innerHTML = '<p class="necg-vacio">Error al cargar necesidades.</p>';
     }
