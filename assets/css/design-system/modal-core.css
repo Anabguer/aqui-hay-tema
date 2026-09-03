@@ -26,7 +26,8 @@
 .play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="necesidades_global"] .capa-necesidades-global.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="historia"] .capa-historia.ds-migrada,
-.play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada {
+.play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_detalle"] .capa-historia-detalle.ds-migrada {
   position: fixed;
   left: 50%;
   top: 50%;

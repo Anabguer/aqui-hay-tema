@@ -239,6 +239,7 @@
   color: #3a3025;
   margin: 0 0 .5rem;
   letter-spacing: .02em;
+  text-align: center;
 }
 
 .histcele-texto {
@@ -249,6 +250,7 @@
   max-width: 340px;
   margin-left: auto;
   margin-right: auto;
+  text-align: center;
 }
 
 .histcele-protagonistas {
@@ -320,4 +322,101 @@
 .histcele-album:hover {
   background: var(--modal-title-mark, #F1EDF6);
   border-color: #b0a0c0;
+}
+
+/* ── Detalle de recuerdo (desde álbum) ────────────────────── */
+.capa-historia-detalle .histdet-body {
+  padding: 1.2rem 1.5rem 2rem;
+  text-align: center;
+}
+
+.histdet-img-wrap {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(44, 38, 31, .2);
+}
+
+.histdet-img {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.histdet-titulo {
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3a3025;
+  margin: 0 0 .5rem;
+  letter-spacing: .02em;
+  text-align: center;
+}
+
+.histdet-texto {
+  font-size: .88rem;
+  color: #5a4e40;
+  line-height: 1.45;
+  margin: 0 0 .8rem;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.histdet-protagonistas {
+  display: flex;
+  gap: .5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: .8rem;
+}
+
+.histdet-protagonista {
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+  background: var(--modal-content-bg, #F6F3F8);
+  border: 1px solid var(--modal-border, #D8D1DE);
+  border-radius: 20px;
+  padding: .25rem .6rem .25rem .25rem;
+  font-size: .75rem;
+  color: #3a3025;
+}
+
+.histdet-protagonista-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.histdet-protagonista-avatar--fallback {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .65rem;
+  color: #a09080;
+  background: var(--modal-border, #D8D1DE);
+}
+
+.histdet-dia {
+  font-size: .75rem;
+  color: #8a7e70;
+  margin-top: .3rem;
+}
+
+/* Polaroid clickeable */
+.historia-polaroid:not(.historia-polaroid--bloqueada) {
+  cursor: pointer;
+  transition: transform .15s;
+}
+.historia-polaroid:not(.historia-polaroid--bloqueada):hover {
+  transform: scale(1.03);
 }

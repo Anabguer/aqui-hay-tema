@@ -1833,6 +1833,8 @@
 
   function mostrarSiguienteCelebracion() {
     if ($('.capa-historia-celebracion.is-on')) return;
+    const tut = cacheEstado && cacheEstado.tutorial;
+    if (tut && tut.id === 'primeros_pasos' && !tut.jugable_completado) return;
     const c = colaCelebraciones.shift();
     if (!c) return;
     celebracionHitoActual = c.hito_id || '';
@@ -1854,7 +1856,11 @@
       let ph = '';
       for (const p of (c.protagonistas || [])) {
         ph += '<span class="histcele-protagonista">';
-        ph += '<img class="histcele-protagonista-avatar" src="assets/img/chars/' + esc(p.id) + '.png" alt="' + esc(p.nombre) + '"/>';
+        if (p.retrato) {
+          ph += '<img class="histcele-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+        } else {
+          ph += '<div class="histcele-protagonista-avatar histcele-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
+        }
         ph += esc(p.nombre);
         ph += '</span>';
       }
@@ -1872,6 +1878,13 @@
 
   async function celebracionClose(hitoId) {
     try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
+    setCapa('');
+    setTimeout(mostrarSiguienteCelebracion, 400);
+  }
+
+  async function celebracionIrAlbum() {
+    const hitoId = celebracionHitoActual;
+    try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
     setCapa('historia');
     renderHistoriaPueblo().then(function () {
       setTimeout(function () {
@@ -1882,8 +1895,44 @@
     setTimeout(mostrarSiguienteCelebracion, 600);
   }
 
-  function celebracionIrAlbum() {
-    celebracionClose(celebracionHitoActual);
+  let historiaDetalleHitoActual = '';
+
+  async function historiaDetalleAbrir(hitoId) {
+    try {
+      const r = await api('historia.snapshot');
+      if (!r || !r.ok) return;
+      const hito = (r.historia.hitos || []).find(function (h) { return h.id === hitoId && h.revelado; });
+      if (!hito) return;
+      historiaDetalleHitoActual = hitoId;
+      const img = $('[data-historia-detalle-img]');
+      const titulo = $('[data-historia-detalle-titulo]');
+      const texto = $('[data-historia-detalle-texto]');
+      const protWrap = $('[data-historia-detalle-protagonistas]');
+      const diaDiv = $('[data-historia-detalle-dia]');
+      if (img) { img.src = hito.imagen_url || ''; img.alt = hito.nombre || ''; }
+      if (titulo) titulo.textContent = hito.nombre || '';
+      if (texto) texto.textContent = hito.texto_narrativo || '';
+      if (protWrap) {
+        let ph = '';
+        for (const p of (hito.protagonistas || [])) {
+          ph += '<span class="histdet-protagonista">';
+          if (p.retrato) {
+            ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+          } else {
+            ph += '<div class="histdet-protagonista-avatar histdet-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
+          }
+          ph += esc(p.nombre);
+          ph += '</span>';
+        }
+        protWrap.innerHTML = ph;
+      }
+      if (diaDiv) diaDiv.textContent = hito.dia ? 'D\u00eda ' + hito.dia : '';
+      setCapa('historia_detalle');
+    } catch (e) { /* noop */ }
+  }
+
+  function historiaDetalleClose() {
+    setCapa('historia');
   }
 
   function mensajitoPlazoLabel(m) {
@@ -8679,6 +8728,19 @@ function hobbyIconKey(id, texto) {
     if (histCelebAlbum) {
       ev.preventDefault();
       celebracionIrAlbum();
+      return;
+    }
+    const histDetClose = ev.target.closest('[data-historia-detalle-close]');
+    if (histDetClose) {
+      ev.preventDefault();
+      historiaDetalleClose();
+      return;
+    }
+    const pol = ev.target.closest('.historia-polaroid:not(.historia-polaroid--bloqueada)');
+    if (pol && uiRootFrom(pol)) {
+      ev.preventDefault();
+      const hitoId = pol.getAttribute('data-hito-id');
+      if (hitoId) historiaDetalleAbrir(hitoId);
       return;
     }
     const t = ev.target.closest('[data-close], .velo');

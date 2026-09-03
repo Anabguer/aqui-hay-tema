@@ -241,7 +241,7 @@ final class HistoriaPuebloEngine
     /**
      * Genera el texto narrativo de un hito usando la plantilla y los protagonistas reales.
      */
-    private static function generarTextoNarrativo(array $slot, array $entrada): string
+    public static function generarTextoNarrativo(array $slot, array $entrada): string
     {
         $plantilla = $slot['plantilla'] ?? '';
         if ($plantilla === '') {
@@ -264,7 +264,7 @@ final class HistoriaPuebloEngine
     /**
      * Prepara protagonistas para el frontend.
      *
-     * @return list<array{id: string, nombre: string}>
+     * @return list<array{id: string, nombre: string, retrato: string|null}>
      */
     private static function protagonistasParaUI(array $partida, array $entrada): array
     {
@@ -274,9 +274,25 @@ final class HistoriaPuebloEngine
             $resultado[] = [
                 'id' => $pid,
                 'nombre' => $entrada['nombres'][$pid] ?? IdentidadPublica::nombre($partida, $pid),
+                'retrato' => self::retratoMini($partida, $pid),
             ];
         }
         return $resultado;
+    }
+
+    private static function retratoMini(array $partida, string $pid): ?string
+    {
+        $residente = $partida['residentes'][$pid] ?? null;
+        if ($residente === null) {
+            return null;
+        }
+        try {
+            $packs = new VisualPackStore();
+            $retrato = RetratoResolver::resolver($residente, $pid, $packs);
+            return $retrato['url'] ?? null;
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     private static function buscarPorHito(array $partida, string $hitoId): ?array

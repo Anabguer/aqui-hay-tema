@@ -58,6 +58,7 @@ final class HistoriaPuebloVista
             'dia' => $entrada['dia'] ?? 1,
             'protagonistas' => $protagonistas,
             'imagen_url' => $item['imagen'],
+            'texto_narrativo' => HistoriaPuebloEngine::generarTextoNarrativo($item, $entrada),
         ];
     }
 

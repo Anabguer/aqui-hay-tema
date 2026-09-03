@@ -837,7 +837,23 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <button type="button" class="histcele-album" data-historia-celebracion-album>IR AL &#193;LBUM</button>
         </div>
       </aside>
-      <aside class="capa capa-vida-pueblo ds-migrada" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
+      <aside class="capa capa-historia-detalle ds-migrada" aria-label="Detalle del recuerdo" role="dialog" aria-modal="true">
+        <button type="button" class="cerrar histdet-cerrar ds-modal-close" data-historia-detalle-close aria-label="Cerrar">X</button>
+        <header class="ds-modal-head vecinos-head">
+          <div class="ds-modal-head-row">
+            <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">RECUERDO</h2>
+          </div>
+        </header>
+        <div class="histdet-body capa-scroll">
+          <div class="histdet-img-wrap">
+            <img class="histdet-img" src="" alt="" data-historia-detalle-img/>
+          </div>
+          <h3 class="histdet-titulo" data-historia-detalle-titulo></h3>
+          <p class="histdet-texto" data-historia-detalle-texto></p>
+          <div class="histdet-protagonistas" data-historia-detalle-protagonistas></div>
+          <div class="histdet-dia" data-historia-detalle-dia></div>
+        </div>
+      </aside>
         <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vida-top vecinos-cab">
           <div class="ds-modal-head vecinos-head">

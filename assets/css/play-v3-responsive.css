@@ -826,6 +826,20 @@
     max-height: min(88vh, 720px) !important;
     transform: translate(-50%, -50%) !important;
   }
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="historia_detalle"] .capa-historia-detalle.ds-migrada {
+    display: flex !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    position: fixed !important;
+    left: 50% !important;
+    top: 50% !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: min(100%, 393px) !important;
+    max-width: min(100%, 393px) !important;
+    max-height: min(88vh, 720px) !important;
+    transform: translate(-50%, -50%) !important;
+  }
 
   .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
   .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
@@ -882,6 +896,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo,
 .play-v3:has(.game-shell) .play-root[data-capa="historia"] .capa-historia,
 .play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa-historia-celebracion,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_detalle"] .capa-historia-detalle,
 .play-v3:has(.game-shell) .play-root[data-capa="residencias"] .capa-residencias {
   z-index: 100 !important;
 }

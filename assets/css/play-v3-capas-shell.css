@@ -59,7 +59,8 @@
 .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar.ds-migrada,
 .play-v3 .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo.ds-migrada,
 .play-v3 .play-root.pc[data-capa="historia"] .capa-historia.ds-migrada,
-.play-v3 .play-root.pc[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada {
+.play-v3 .play-root.pc[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada,
+.play-v3 .play-root.pc[data-capa="historia_detalle"] .capa-historia-detalle.ds-migrada {
   visibility: visible;
   pointer-events: auto;
 }

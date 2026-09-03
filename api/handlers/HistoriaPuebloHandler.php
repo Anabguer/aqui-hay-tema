@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
+use function AquiHayTema\Api\savePartida;
 use AquiHayTema\Engine\HistoriaPuebloEngine;
 use AquiHayTema\Engine\HistoriaPuebloVista;
 
@@ -43,6 +44,10 @@ final class HistoriaPuebloHandler
         }
 
         $ackOk = HistoriaPuebloEngine::ack($partida, $hitoId);
+
+        if ($ackOk) {
+            savePartida($ctx, $partida);
+        }
 
         return [
             'ok' => true,
