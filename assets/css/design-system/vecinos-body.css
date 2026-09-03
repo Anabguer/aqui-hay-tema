@@ -274,28 +274,6 @@
   color: var(--vec-red) !important;
 }
 
-/* === VER FICHA === */
-.vecino-ver {
-  margin-top: auto !important;
-  width: 100%;
-  padding: 7px 6px 2px !important;
-  border-top: 1px dashed rgba(107, 81, 56, .28) !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  gap: 4px !important;
-  font: 700 .62rem/1.1 var(--vec-font-body) !important;
-  letter-spacing: .06em !important;
-  text-transform: uppercase !important;
-  color: var(--vec-pink-deep) !important;
-  text-decoration: none !important;
-}
-
-.vecino-ver-arr {
-  font-size: .95rem;
-  line-height: 1;
-}
-
 /* === HINT PIE === */
 .mensajitos-hint.vecinos-hint {
   margin: 8px 0 0 !important;
