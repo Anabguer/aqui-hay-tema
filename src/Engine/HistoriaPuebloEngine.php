@@ -11,41 +11,41 @@ final class HistoriaPuebloEngine
 {
     public const HITO_EMPEZO_COTARRO = 'empezo_el_cotarro';
 
-    /** @var list<array{id: string, nombre: string}> Catálogo visual editorial (33 posiciones, orden fijo) */
+    /** @var list<array{id: string, nombre: string, imagen: string}> Catálogo visual editorial (33 posiciones, orden fijo) */
     public const CATÁLOGO_VISUAL = [
-        ['id' => 'empezo_el_cotarro',  'nombre' => 'AQUÍ EMPEZÓ EL COTARRO'],
-        ['id' => 'hito_02',            'nombre' => '???'],
-        ['id' => 'hito_03',            'nombre' => '???'],
-        ['id' => 'hito_04',            'nombre' => '???'],
-        ['id' => 'hito_05',            'nombre' => '???'],
-        ['id' => 'hito_06',            'nombre' => '???'],
-        ['id' => 'hito_07',            'nombre' => '???'],
-        ['id' => 'hito_08',            'nombre' => '???'],
-        ['id' => 'hito_09',            'nombre' => '???'],
-        ['id' => 'hito_10',            'nombre' => '???'],
-        ['id' => 'hito_11',            'nombre' => '???'],
-        ['id' => 'hito_12',            'nombre' => '???'],
-        ['id' => 'hito_13',            'nombre' => '???'],
-        ['id' => 'hito_14',            'nombre' => '???'],
-        ['id' => 'hito_15',            'nombre' => '???'],
-        ['id' => 'hito_16',            'nombre' => '???'],
-        ['id' => 'hito_17',            'nombre' => '???'],
-        ['id' => 'hito_18',            'nombre' => '???'],
-        ['id' => 'hito_19',            'nombre' => '???'],
-        ['id' => 'hito_20',            'nombre' => '???'],
-        ['id' => 'hito_21',            'nombre' => '???'],
-        ['id' => 'hito_22',            'nombre' => '???'],
-        ['id' => 'hito_23',            'nombre' => '???'],
-        ['id' => 'hito_24',            'nombre' => '???'],
-        ['id' => 'hito_25',            'nombre' => '???'],
-        ['id' => 'hito_26',            'nombre' => '???'],
-        ['id' => 'hito_27',            'nombre' => '???'],
-        ['id' => 'hito_28',            'nombre' => '???'],
-        ['id' => 'hito_29',            'nombre' => '???'],
-        ['id' => 'hito_30',            'nombre' => '???'],
-        ['id' => 'hito_31',            'nombre' => '???'],
-        ['id' => 'hito_32',            'nombre' => '???'],
-        ['id' => 'hito_33',            'nombre' => '???'],
+        ['id' => 'empezo_el_cotarro',  'nombre' => 'AQUÍ EMPEZÓ EL COTARRO',  'imagen' => 'assets/img/historia/01.png'],
+        ['id' => 'hito_02',            'nombre' => '???',                      'imagen' => 'assets/img/historia/02.png'],
+        ['id' => 'hito_03',            'nombre' => '???',                      'imagen' => 'assets/img/historia/03.png'],
+        ['id' => 'hito_04',            'nombre' => '???',                      'imagen' => 'assets/img/historia/04.png'],
+        ['id' => 'hito_05',            'nombre' => '???',                      'imagen' => 'assets/img/historia/05.png'],
+        ['id' => 'hito_06',            'nombre' => '???',                      'imagen' => 'assets/img/historia/06.png'],
+        ['id' => 'hito_07',            'nombre' => '???',                      'imagen' => 'assets/img/historia/07.png'],
+        ['id' => 'hito_08',            'nombre' => '???',                      'imagen' => 'assets/img/historia/08.png'],
+        ['id' => 'hito_09',            'nombre' => '???',                      'imagen' => 'assets/img/historia/09.png'],
+        ['id' => 'hito_10',            'nombre' => '???',                      'imagen' => 'assets/img/historia/10.png'],
+        ['id' => 'hito_11',            'nombre' => '???',                      'imagen' => 'assets/img/historia/11.png'],
+        ['id' => 'hito_12',            'nombre' => '???',                      'imagen' => 'assets/img/historia/12.png'],
+        ['id' => 'hito_13',            'nombre' => '???',                      'imagen' => 'assets/img/historia/13.png'],
+        ['id' => 'hito_14',            'nombre' => '???',                      'imagen' => 'assets/img/historia/14.png'],
+        ['id' => 'hito_15',            'nombre' => '???',                      'imagen' => 'assets/img/historia/15.png'],
+        ['id' => 'hito_16',            'nombre' => '???',                      'imagen' => 'assets/img/historia/16.png'],
+        ['id' => 'hito_17',            'nombre' => '???',                      'imagen' => 'assets/img/historia/17.png'],
+        ['id' => 'hito_18',            'nombre' => '???',                      'imagen' => 'assets/img/historia/18.png'],
+        ['id' => 'hito_19',            'nombre' => '???',                      'imagen' => 'assets/img/historia/19.png'],
+        ['id' => 'hito_20',            'nombre' => '???',                      'imagen' => 'assets/img/historia/20.png'],
+        ['id' => 'hito_21',            'nombre' => '???',                      'imagen' => 'assets/img/historia/21.png'],
+        ['id' => 'hito_22',            'nombre' => '???',                      'imagen' => 'assets/img/historia/22.png'],
+        ['id' => 'hito_23',            'nombre' => '???',                      'imagen' => 'assets/img/historia/23.png'],
+        ['id' => 'hito_24',            'nombre' => '???',                      'imagen' => 'assets/img/historia/24.png'],
+        ['id' => 'hito_25',            'nombre' => '???',                      'imagen' => 'assets/img/historia/25.png'],
+        ['id' => 'hito_26',            'nombre' => '???',                      'imagen' => 'assets/img/historia/26.png'],
+        ['id' => 'hito_27',            'nombre' => '???',                      'imagen' => 'assets/img/historia/27.png'],
+        ['id' => 'hito_28',            'nombre' => '???',                      'imagen' => 'assets/img/historia/28.png'],
+        ['id' => 'hito_29',            'nombre' => '???',                      'imagen' => 'assets/img/historia/29.png'],
+        ['id' => 'hito_30',            'nombre' => '???',                      'imagen' => 'assets/img/historia/30.png'],
+        ['id' => 'hito_31',            'nombre' => '???',                      'imagen' => 'assets/img/historia/31.png'],
+        ['id' => 'hito_32',            'nombre' => '???',                      'imagen' => 'assets/img/historia/32.png'],
+        ['id' => 'hito_33',            'nombre' => '???',                      'imagen' => 'assets/img/historia/33.png'],
     ];
 
     /** @var array<string, array{day: int, hora: int}> Hitos registrados => timestamp */
@@ -146,7 +146,7 @@ final class HistoriaPuebloEngine
      * Catálogo visual completo (33 posiciones en orden editorial).
      * Cruza el catálogo editorial con el estado real de la partida.
      *
-     * @return list<array{id: string, nombre: string, revelado: bool, entrada: ?array, orden: int}>
+     * @return list<array{id: string, nombre: string, revelado: bool, entrada: ?array, orden: int, imagen: string}>
      */
     public static function catalogo(array $partida): array
     {
@@ -164,6 +164,7 @@ final class HistoriaPuebloEngine
                 'revelado' => $revelado,
                 'entrada' => $entrada,
                 'orden' => $i + 1,
+                'imagen' => $slot['imagen'],
             ];
         }
 

@@ -57,7 +57,7 @@ final class HistoriaPuebloVista
             'orden' => $item['orden'],
             'dia' => $entrada['dia'] ?? 1,
             'protagonistas' => $protagonistas,
-            'imagen_url' => self::imagenUrl($item['id']),
+            'imagen_url' => $item['imagen'],
         ];
     }
 
@@ -87,13 +87,5 @@ final class HistoriaPuebloVista
         } catch (\Throwable $e) {
             return null;
         }
-    }
-
-    private static function imagenUrl(string $hitoId): ?string
-    {
-        $map = [
-            HistoriaPuebloEngine::HITO_EMPEZO_COTARRO => 'assets/img/historia/empezo_el_cotarro.webp',
-        ];
-        return $map[$hitoId] ?? null;
     }
 }
