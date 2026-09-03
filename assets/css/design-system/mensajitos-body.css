@@ -44,13 +44,13 @@
   --msg-font-body: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
 
   /* Papeles planos pastel — 5 colores (sin gradient, planos)
-     Iteración 6: el COLOR REPRESENTA AL VECINO. Mismo de_id = mismo papel.
-     Saturación claramente perceptible a simple vista, identidad cromática. */
-  --msg-paper-rose:    #f4aac0;  /* rosa pastel saturado */
-  --msg-paper-blue:    #9bc0e6;  /* azul pastel saturado */
-  --msg-paper-green:   #a8d8a0;  /* verde pastel saturado */
-  --msg-paper-cream:   #ecc878;  /* amarillo/crema pastel saturado */
-  --msg-paper-lilac:   #b89edc;  /* lavanda pastel saturado */
+     Iteración 9: suavizados para pastel más claro sin perder identidad.
+     Mismo de_id = mismo papel SIEMPRE. Borde mantiene intensidad. */
+  --msg-paper-rose:    #f7bdd0;  /* rosa pastel suave */
+  --msg-paper-blue:    #b3ceed;  /* azul pastel suave */
+  --msg-paper-green:   #bddcb5;  /* verde pastel suave */
+  --msg-paper-cream:   #f1daa0;  /* amarillo/crema pastel suave */
+  --msg-paper-lilac:   #ccb2e6;  /* lavanda pastel suave */
 
   /* Bordes 2.5px sólidos del color del tono, claramente visibles */
   --msg-border-rose:   #b04868;
