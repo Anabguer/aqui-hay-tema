@@ -108,15 +108,29 @@
 /* === GRID VECINOS === */
 .vecinos-grid,
 [data-vecinos-list].vecinos-grid {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-  gap: 10px !important;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
   overflow-x: clip;
-  padding: 0 0 8px !important;
-  align-items: stretch !important;
+  padding: 0 0 8px;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .vecinos-grid,
+  [data-vecinos-list].vecinos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .vecinos-grid,
+  [data-vecinos-list].vecinos-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* === TARJETA VECINO === */
