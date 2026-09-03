@@ -139,22 +139,22 @@ final class EncounterOutcome
         $esA = ($participantes[0] ?? '') === $pid;
 
         return new Perspective(
-            resultado: (string) ($datos['resultado'] ?? 'normal'),
-            carga: (float) ($datos['carga'] ?? 0.0),
-            cargaTema: (float) ($datos['carga_tema'] ?? 0.0),
-            cargaAccion: (float) ($datos['carga_accion'] ?? 0.0),
-            socialDelta: $esA
+            (string) ($datos['resultado'] ?? 'normal'),
+            (float) ($datos['carga'] ?? 0.0),
+            (float) ($datos['carga_tema'] ?? 0.0),
+            (float) ($datos['carga_accion'] ?? 0.0),
+            $esA
                 ? (int) ($social['a_hacia_b'] ?? 0)
                 : (int) ($social['b_hacia_a'] ?? 0),
-            socialCalidad: $esA
+            $esA
                 ? (string) ($social['calidad_a'] ?? 'normal')
                 : (string) ($social['calidad_b'] ?? 'normal'),
-            romanceDelta: $romance !== null
+            $romance !== null
                 ? ($esA ? (int) ($romance['a_hacia_b'] ?? 0) : (int) ($romance['b_hacia_a'] ?? 0))
                 : 0,
-            conflictoDelta: $this->conflicto(),
-            copyMentes: $datos['texto'] ?? null,
-            compatibilidadHaciaOtro: $datos['compatibilidad_hacia_otro'] ?? null,
+            $this->conflicto(),
+            $datos['texto'] ?? null,
+            $datos['compatibilidad_hacia_otro'] ?? null
         );
     }
 
@@ -165,31 +165,63 @@ final class EncounterOutcome
         }
         $int = $this->intervencion;
         return new IntervencionSummary(
-            accion: (string) ($int['accion'] ?? ''),
-            temaId: $int['tema_id'] ?? null,
-            afinidadTema: $int['afinidad_tema'] ?? null,
-            rompeHielo: $int['rompe_hielo'] ?? null,
-            beneficiario: $int['beneficiario'] ?? null,
-            carga: isset($int['carga']) ? (float) $int['carga'] : null,
-            temaCargas: $int['tema_cargas'] ?? [],
+            (string) ($int['accion'] ?? ''),
+            $int['tema_id'] ?? null,
+            $int['afinidad_tema'] ?? null,
+            $int['rompe_hielo'] ?? null,
+            $int['beneficiario'] ?? null,
+            isset($int['carga']) ? (float) $int['carga'] : null,
+            $int['tema_cargas'] ?? []
         );
     }
 }
 
 final class Perspective
 {
+    /** @var string */
+    public $resultado;
+    /** @var float */
+    public $carga;
+    /** @var float */
+    public $cargaTema;
+    /** @var float */
+    public $cargaAccion;
+    /** @var int */
+    public $socialDelta;
+    /** @var string */
+    public $socialCalidad;
+    /** @var int */
+    public $romanceDelta;
+    /** @var int|null */
+    public $conflictoDelta;
+    /** @var string|null */
+    public $copyMentes;
+    /** @var float|null */
+    public $compatibilidadHaciaOtro;
+
     public function __construct(
-        public readonly string $resultado,
-        public readonly float $carga,
-        public readonly float $cargaTema,
-        public readonly float $cargaAccion,
-        public readonly int $socialDelta,
-        public readonly string $socialCalidad,
-        public readonly int $romanceDelta,
-        public readonly ?int $conflictoDelta,
-        public readonly ?string $copyMentes,
-        public readonly ?float $compatibilidadHaciaOtro,
-    ) {}
+        string $resultado,
+        float $carga,
+        float $cargaTema,
+        float $cargaAccion,
+        int $socialDelta,
+        string $socialCalidad,
+        int $romanceDelta,
+        ?int $conflictoDelta,
+        ?string $copyMentes,
+        ?float $compatibilidadHaciaOtro
+    ) {
+        $this->resultado = $resultado;
+        $this->carga = $carga;
+        $this->cargaTema = $cargaTema;
+        $this->cargaAccion = $cargaAccion;
+        $this->socialDelta = $socialDelta;
+        $this->socialCalidad = $socialCalidad;
+        $this->romanceDelta = $romanceDelta;
+        $this->conflictoDelta = $conflictoDelta;
+        $this->copyMentes = $copyMentes;
+        $this->compatibilidadHaciaOtro = $compatibilidadHaciaOtro;
+    }
 
     public function esPositivo(): bool
     {
@@ -221,15 +253,38 @@ final class Perspective
 
 final class IntervencionSummary
 {
+    /** @var string */
+    public $accion;
+    /** @var string|null */
+    public $temaId;
+    /** @var string|null */
+    public $afinidadTema;
+    /** @var string|null */
+    public $rompeHielo;
+    /** @var string|null */
+    public $beneficiario;
+    /** @var float|null */
+    public $carga;
+    /** @var array */
+    public $temaCargas;
+
     public function __construct(
-        public readonly string $accion,
-        public readonly ?string $temaId,
-        public readonly ?string $afinidadTema,
-        public readonly ?string $rompeHielo,
-        public readonly ?string $beneficiario,
-        public readonly ?float $carga,
-        public readonly array $temaCargas,
-    ) {}
+        string $accion,
+        ?string $temaId,
+        ?string $afinidadTema,
+        ?string $rompeHielo,
+        ?string $beneficiario,
+        ?float $carga,
+        array $temaCargas
+    ) {
+        $this->accion = $accion;
+        $this->temaId = $temaId;
+        $this->afinidadTema = $afinidadTema;
+        $this->rompeHielo = $rompeHielo;
+        $this->beneficiario = $beneficiario;
+        $this->carga = $carga;
+        $this->temaCargas = $temaCargas;
+    }
 
     public function hayTema(): bool
     {

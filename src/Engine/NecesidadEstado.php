@@ -108,7 +108,7 @@ final class NecesidadEstado
     /**
      * Calcula la banda para un valor dado.
      */
-    public static function calcularBanda(int|float $valor): string
+    public static function calcularBanda(float $valor): string
     {
         foreach (self::BANDAS as $banda => $rango) {
             if ($valor >= $rango['min'] && $valor <= $rango['max']) {
