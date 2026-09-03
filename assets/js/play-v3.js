@@ -1132,7 +1132,7 @@
       let html = '';
       for (const hito of h.hitos) {
         const cls = hito.revelado ? '' : ' historia-polaroid--bloqueada';
-        html += '<div class="historia-polaroid' + cls + '">';
+        html += '<div class="historia-polaroid' + cls + '" data-hito-id="' + esc(hito.id) + '">';
         html += '<span class="historia-orden">' + hito.orden + '</span>';
         html += '<div class="historia-img-wrap">';
         if (hito.revelado && hito.imagen_url) {

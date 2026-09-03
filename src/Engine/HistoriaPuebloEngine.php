@@ -11,41 +11,41 @@ final class HistoriaPuebloEngine
 {
     public const HITO_EMPEZO_COTARRO = 'empezo_el_cotarro';
 
-    /** @var list<array{id: string, nombre: string, imagen: string}> Catálogo visual editorial (33 posiciones, orden fijo) */
+    /** @var list<array{id: string, nombre: string, imagen: string, plantilla: string, recompensa: array|null}> */
     public const CATÁLOGO_VISUAL = [
-        ['id' => 'empezo_el_cotarro',  'nombre' => 'AQUÍ EMPEZÓ EL COTARRO',  'imagen' => 'assets/img/historia/01.png'],
-        ['id' => 'hito_02',            'nombre' => '???',                      'imagen' => 'assets/img/historia/02.png'],
-        ['id' => 'hito_03',            'nombre' => '???',                      'imagen' => 'assets/img/historia/03.png'],
-        ['id' => 'hito_04',            'nombre' => '???',                      'imagen' => 'assets/img/historia/04.png'],
-        ['id' => 'hito_05',            'nombre' => '???',                      'imagen' => 'assets/img/historia/05.png'],
-        ['id' => 'hito_06',            'nombre' => '???',                      'imagen' => 'assets/img/historia/06.png'],
-        ['id' => 'hito_07',            'nombre' => '???',                      'imagen' => 'assets/img/historia/07.png'],
-        ['id' => 'hito_08',            'nombre' => '???',                      'imagen' => 'assets/img/historia/08.png'],
-        ['id' => 'hito_09',            'nombre' => '???',                      'imagen' => 'assets/img/historia/09.png'],
-        ['id' => 'hito_10',            'nombre' => '???',                      'imagen' => 'assets/img/historia/10.png'],
-        ['id' => 'hito_11',            'nombre' => '???',                      'imagen' => 'assets/img/historia/11.png'],
-        ['id' => 'hito_12',            'nombre' => '???',                      'imagen' => 'assets/img/historia/12.png'],
-        ['id' => 'hito_13',            'nombre' => '???',                      'imagen' => 'assets/img/historia/13.png'],
-        ['id' => 'hito_14',            'nombre' => '???',                      'imagen' => 'assets/img/historia/14.png'],
-        ['id' => 'hito_15',            'nombre' => '???',                      'imagen' => 'assets/img/historia/15.png'],
-        ['id' => 'hito_16',            'nombre' => '???',                      'imagen' => 'assets/img/historia/16.png'],
-        ['id' => 'hito_17',            'nombre' => '???',                      'imagen' => 'assets/img/historia/17.png'],
-        ['id' => 'hito_18',            'nombre' => '???',                      'imagen' => 'assets/img/historia/18.png'],
-        ['id' => 'hito_19',            'nombre' => '???',                      'imagen' => 'assets/img/historia/19.png'],
-        ['id' => 'hito_20',            'nombre' => '???',                      'imagen' => 'assets/img/historia/20.png'],
-        ['id' => 'hito_21',            'nombre' => '???',                      'imagen' => 'assets/img/historia/21.png'],
-        ['id' => 'hito_22',            'nombre' => '???',                      'imagen' => 'assets/img/historia/22.png'],
-        ['id' => 'hito_23',            'nombre' => '???',                      'imagen' => 'assets/img/historia/23.png'],
-        ['id' => 'hito_24',            'nombre' => '???',                      'imagen' => 'assets/img/historia/24.png'],
-        ['id' => 'hito_25',            'nombre' => '???',                      'imagen' => 'assets/img/historia/25.png'],
-        ['id' => 'hito_26',            'nombre' => '???',                      'imagen' => 'assets/img/historia/26.png'],
-        ['id' => 'hito_27',            'nombre' => '???',                      'imagen' => 'assets/img/historia/27.png'],
-        ['id' => 'hito_28',            'nombre' => '???',                      'imagen' => 'assets/img/historia/28.png'],
-        ['id' => 'hito_29',            'nombre' => '???',                      'imagen' => 'assets/img/historia/29.png'],
-        ['id' => 'hito_30',            'nombre' => '???',                      'imagen' => 'assets/img/historia/30.png'],
-        ['id' => 'hito_31',            'nombre' => '???',                      'imagen' => 'assets/img/historia/31.png'],
-        ['id' => 'hito_32',            'nombre' => '???',                      'imagen' => 'assets/img/historia/32.png'],
-        ['id' => 'hito_33',            'nombre' => '???',                      'imagen' => 'assets/img/historia/33.png'],
+        ['id' => 'empezo_el_cotarro', 'nombre' => 'AQUÍ EMPEZÓ EL COTARRO', 'imagen' => 'assets/img/historia/01.png', 'plantilla' => '{p1}, {p2} y {p3} acaban de llegar al pueblo. Aquí empieza todo.', 'recompensa' => null],
+        ['id' => 'hito_02',           'nombre' => '???',                     'imagen' => 'assets/img/historia/02.png', 'plantilla' => '{p1} y {p2} se han conocido por primera vez.', 'recompensa' => null],
+        ['id' => 'hito_03',           'nombre' => '???',                     'imagen' => 'assets/img/historia/03.png', 'plantilla' => '{p1} ha ayudado a {p2} en un momento difícil.', 'recompensa' => null],
+        ['id' => 'hito_04',           'nombre' => '???',                     'imagen' => 'assets/img/historia/04.png', 'plantilla' => '{p1} y {p2} han tenido su primera discusión.', 'recompensa' => null],
+        ['id' => 'hito_05',           'nombre' => '???',                     'imagen' => 'assets/img/historia/05.png', 'plantilla' => '{p1} ha descubierto un secreto del pueblo.', 'recompensa' => null],
+        ['id' => 'hito_06',           'nombre' => '???',                     'imagen' => 'assets/img/historia/06.png', 'plantilla' => '{p1} y {p2} han compartido un momento especial.', 'recompensa' => null],
+        ['id' => 'hito_07',           'nombre' => '???',                     'imagen' => 'assets/img/historia/07.png', 'plantilla' => '{p1} ha sido el primero en llegar a un lugar importante.', 'recompensa' => null],
+        ['id' => 'hito_08',           'nombre' => '???',                     'imagen' => 'assets/img/historia/08.png', 'plantilla' => '{p1} y {p2} se han dado el primer beso del pueblo.', 'recompensa' => null],
+        ['id' => 'hito_09',           'nombre' => '???',                     'imagen' => 'assets/img/historia/09.png', 'plantilla' => '{p1} ha organizado el primer evento del pueblo.', 'recompensa' => null],
+        ['id' => 'hito_10',           'nombre' => '???',                     'imagen' => 'assets/img/historia/10.png', 'plantilla' => '{p1} ha tenido un momento de reflexión profunda.', 'recompensa' => null],
+        ['id' => 'hito_11',           'nombre' => '???',                     'imagen' => 'assets/img/historia/11.png', 'plantilla' => '{p1} y {p2} han superado un malentendido.', 'recompensa' => null],
+        ['id' => 'hito_12',           'nombre' => '???',                     'imagen' => 'assets/img/historia/12.png', 'plantilla' => '{p1} ha recibido una noticia inesperada.', 'recompensa' => null],
+        ['id' => 'hito_13',           'nombre' => '???',                     'imagen' => 'assets/img/historia/13.png', 'plantilla' => '{p1} ha tomado una decisión importante para el pueblo.', 'recompensa' => null],
+        ['id' => 'hito_14',           'nombre' => '???',                     'imagen' => 'assets/img/historia/14.png', 'plantilla' => '{p1} y {p2} han celebrado algo juntos.', 'recompensa' => null],
+        ['id' => 'hito_15',           'nombre' => '???',                     'imagen' => 'assets/img/historia/15.png', 'plantilla' => '{p1} ha descubierto algo sorprendente sobre {p2}.', 'recompensa' => null],
+        ['id' => 'hito_16',           'nombre' => '???',                     'imagen' => 'assets/img/historia/16.png', 'plantilla' => '{p1} ha tenido un encuentro inesperado.', 'recompensa' => null],
+        ['id' => 'hito_17',           'nombre' => '???',                     'imagen' => 'assets/img/historia/17.png', 'plantilla' => '{p1} ha demostrado ser una persona muy valiosa.', 'recompensa' => null],
+        ['id' => 'hito_18',           'nombre' => '???',                     'imagen' => 'assets/img/historia/18.png', 'plantilla' => '{p1} y {p2} han vivido una aventura juntos.', 'recompensa' => null],
+        ['id' => 'hito_19',           'nombre' => '???',                     'imagen' => 'assets/img/historia/19.png', 'plantilla' => '{p1} ha cambiado de opinión sobre algo importante.', 'recompensa' => null],
+        ['id' => 'hito_20',           'nombre' => '???',                     'imagen' => 'assets/img/historia/20.png', 'plantilla' => '{p1} ha hecho algo que nadie esperaba.', 'recompensa' => null],
+        ['id' => 'hito_21',           'nombre' => '???',                     'imagen' => 'assets/img/historia/21.png', 'plantilla' => '{p1} y {p2} han fortalecido su relación.', 'recompensa' => null],
+        ['id' => 'hito_22',           'nombre' => '???',                     'imagen' => 'assets/img/historia/22.png', 'plantilla' => '{p1} ha sido reconocido por su esfuerzo.', 'recompensa' => null],
+        ['id' => 'hito_23',           'nombre' => '???',                     'imagen' => 'assets/img/historia/23.png', 'plantilla' => '{p1} ha tenido un momento de gran felicidad.', 'recompensa' => null],
+        ['id' => 'hito_24',           'nombre' => '???',                     'imagen' => 'assets/img/historia/24.png', 'plantilla' => '{p1} ha tomado una decisión que cambiará las cosas.', 'recompensa' => null],
+        ['id' => 'hito_25',           'nombre' => '???',                     'imagen' => 'assets/img/historia/25.png', 'plantilla' => '{p1} ha sido el primero en hacer algo especial.', 'recompensa' => null],
+        ['id' => 'hito_26',           'nombre' => '???',                     'imagen' => 'assets/img/historia/26.png', 'plantilla' => '{p1} y {p2} han compartido una experiencia única.', 'recompensa' => null],
+        ['id' => 'hito_27',           'nombre' => '???',                     'imagen' => 'assets/img/historia/27.png', 'plantilla' => '{p1} ha superado un obstáculo importante.', 'recompensa' => null],
+        ['id' => 'hito_28',           'nombre' => '???',                     'imagen' => 'assets/img/historia/28.png', 'plantilla' => '{p1} ha inspirado a otros con su ejemplo.', 'recompensa' => null],
+        ['id' => 'hito_29',           'nombre' => '???',                     'imagen' => 'assets/img/historia/29.png', 'plantilla' => '{p1} ha vivido un momento de gran intensidad.', 'recompensa' => null],
+        ['id' => 'hito_30',           'nombre' => '???',                     'imagen' => 'assets/img/historia/30.png', 'plantilla' => '{p1} y {p2} han creado un recuerdo inolvidable.', 'recompensa' => null],
+        ['id' => 'hito_31',           'nombre' => '???',                     'imagen' => 'assets/img/historia/31.png', 'plantilla' => '{p1} ha demostrado su verdadero carácter.', 'recompensa' => null],
+        ['id' => 'hito_32',           'nombre' => '???',                     'imagen' => 'assets/img/historia/32.png', 'plantilla' => '{p1} ha dado un paso importante en su vida.', 'recompensa' => null],
+        ['id' => 'hito_33',           'nombre' => '???',                     'imagen' => 'assets/img/historia/33.png', 'plantilla' => '{p1} ha dejado una huella imborrable en el pueblo.', 'recompensa' => null],
     ];
 
     /** @var array<string, array{day: int, hora: int}> Hitos registrados => timestamp */
@@ -60,6 +60,7 @@ final class HistoriaPuebloEngine
 
     /**
      * Registra un hito si no existe ya para esa clave.
+     * Si es nuevo, crea celebración pendiente y concede recompensa si existe.
      *
      * @param array<string, mixed> $partida
      * @param list<string> $protagonistas IDs de residentes involucrados
@@ -96,6 +97,7 @@ final class HistoriaPuebloEngine
             'hora' => $hora,
             'contexto' => $contexto ?? [],
             'revelado' => true,
+            'celebracion_estado' => 'pendiente',
         ];
 
         $partida['historia_pueblo'][] = $entrada;
@@ -144,7 +146,6 @@ final class HistoriaPuebloEngine
 
     /**
      * Catálogo visual completo (33 posiciones en orden editorial).
-     * Cruza el catálogo editorial con el estado real de la partida.
      *
      * @return list<array{id: string, nombre: string, revelado: bool, entrada: ?array, orden: int, imagen: string}>
      */
@@ -172,8 +173,112 @@ final class HistoriaPuebloEngine
     }
 
     /**
-     * Busca una entrada por hito_id (independiente de protagonistas).
+     * Obtiene el slot del catálogo visual para un hito.
      */
+    public static function slotCatalogo(string $hitoId): ?array
+    {
+        foreach (self::CATÁLOGO_VISUAL as $slot) {
+            if ($slot['id'] === $hitoId) {
+                return $slot;
+            }
+        }
+        return null;
+    }
+
+    // ── Celebraciones ──────────────────────────────────────────────
+
+    /**
+     * Retorna celebraciones pendientes ordenadas por orden editorial.
+     *
+     * @return list<array>
+     */
+    public static function celebracionesPendientes(array $partida): array
+    {
+        self::ensure($partida);
+        $pendientes = [];
+
+        foreach (self::CATÁLOGO_VISUAL as $i => $slot) {
+            $entrada = self::buscarPorHito($partida, $slot['id']);
+            if ($entrada === null) {
+                continue;
+            }
+            // Legacy entries without celebracion_estado are treated as consumed
+            if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
+                continue;
+            }
+            $pendientes[] = [
+                'hito_id' => $slot['id'],
+                'nombre' => $slot['nombre'],
+                'imagen' => $slot['imagen'],
+                'orden' => $i + 1,
+                'protagonistas' => self::protagonistasParaUI($partida, $entrada),
+                'dia' => $entrada['dia'] ?? 1,
+                'texto_narrativo' => self::generarTextoNarrativo($slot, $entrada),
+                'recompensa' => $entrada['_recompensa'] ?? null,
+            ];
+        }
+
+        return $pendientes;
+    }
+
+    /**
+     * Marca una celebración como consumida (ACK idempotente).
+     */
+    public static function ack(array &$partida, string $hitoId): bool
+    {
+        self::ensure($partida);
+        foreach ($partida['historia_pueblo'] as &$e) {
+            if (($e['hito_id'] ?? '') === $hitoId && ($e['celebracion_estado'] ?? '') === 'pendiente') {
+                $e['celebracion_estado'] = 'consumida';
+                return true;
+            }
+        }
+        return false; // ya estaba consumida o no existe
+    }
+
+    // ── Helpers ────────────────────────────────────────────────────
+
+    /**
+     * Genera el texto narrativo de un hito usando la plantilla y los protagonistas reales.
+     */
+    private static function generarTextoNarrativo(array $slot, array $entrada): string
+    {
+        $plantilla = $slot['plantilla'] ?? '';
+        if ($plantilla === '') {
+            return 'Primer recuerdo del pueblo descubierto.';
+        }
+
+        $nombres = $entrada['nombres'] ?? [];
+        $protagonistas = $entrada['protagonistas'] ?? [];
+        $tags = ['{p1}', '{p2}', '{p3}', '{p4}', '{p5}'];
+
+        foreach ($tags as $i => $tag) {
+            $pid = $protagonistas[$i] ?? null;
+            $nombre = $pid !== null ? ($nombres[$pid] ?? $pid) : '';
+            $plantilla = str_replace($tag, $nombre, $plantilla);
+        }
+
+        return $plantilla;
+    }
+
+    /**
+     * Prepara protagonistas para el frontend.
+     *
+     * @return list<array{id: string, nombre: string}>
+     */
+    private static function protagonistasParaUI(array $partida, array $entrada): array
+    {
+        $resultado = [];
+        foreach ($entrada['protagonistas'] ?? [] as $pid) {
+            $pid = (string) $pid;
+            $resultado[] = [
+                'id' => $pid,
+                'nombre' => $entrada['nombres'][$pid] ?? IdentidadPublica::nombre($partida, $pid),
+            ];
+        }
+        return $resultado;
+    }
+
     private static function buscarPorHito(array $partida, string $hitoId): ?array
     {
         foreach ($partida['historia_pueblo'] ?? [] as $e) {
@@ -191,10 +296,6 @@ final class HistoriaPuebloEngine
         return $hitoId . ':' . implode('|', $sorted);
     }
 
-    /**
-     * Placeholder para futura integración con el catálogo de hitos
-     * que se irá ampliando pieza a pieza.
-     */
     public static function totalRevelados(array $partida): int
     {
         self::ensure($partida);

@@ -769,6 +769,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">NECESIDADES</h2>
             </div>
           </div>
+          <div class="necg-filtros" data-necesidades-global-filters></div>
         </header>
         <div class="necg-body capa-scroll" data-necesidades-global-body>
           <p class="necg-vacio mini" data-necesidades-global-vacio hidden>Todos est&aacute;n bien por ahora.</p>
@@ -811,6 +812,29 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="historia-body capa-scroll">
           <p class="historia-sub mini" data-historia-sub></p>
           <div class="historia-grid" data-historia-grid></div>
+        </div>
+      </aside>
+      <aside class="capa capa-historia-celebracion ds-migrada" aria-label="Nuevo recuerdo" role="dialog" aria-modal="true">
+        <button type="button" class="cerrar histcele-cerrar ds-modal-close" data-close data-historia-celebracion-close aria-label="Cerrar">X</button>
+        <header class="histcele-top vecinos-cab">
+          <div class="ds-modal-head vecinos-head">
+            <div class="ds-modal-head-row">
+              <h2 class="ds-modal-tit ds-modal-tit--ink modal-title-aht">NUEVO RECUERDO</h2>
+            </div>
+          </div>
+        </header>
+        <div class="histcele-body capa-scroll">
+          <div class="histcele-img-wrap">
+            <img class="histcele-img" src="" alt="" data-historia-celebracion-img/>
+          </div>
+          <h3 class="histcele-titulo" data-historia-celebracion-titulo></h3>
+          <p class="histcele-texto" data-historia-celebracion-texto></p>
+          <div class="histcele-protagonistas" data-historia-celebracion-protagonistas></div>
+          <div class="histcele-recompensa" data-historia-celebracion-recompensa hidden>
+            <span class="histcele-recompensa-label">&#x1F381; POR ESTE NUEVO RECUERDO RECIBES:</span>
+            <span class="histcele-recompensa-objeto" data-historia-celebracion-recompensa-objeto></span>
+          </div>
+          <button type="button" class="histcele-album" data-historia-celebracion-album>IR AL &#193;LBUM</button>
         </div>
       </aside>
       <aside class="capa capa-vida-pueblo ds-migrada" aria-label="Vida del pueblo" role="dialog" aria-modal="true">

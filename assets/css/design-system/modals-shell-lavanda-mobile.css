@@ -32,6 +32,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa="misiones"] .capa.capa-misiones.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="ajustes"] .capa.capa-ajustes.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="historia"] .capa.capa-historia.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa.capa-historia-celebracion.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-consulta="sel"] .selector.nota-mapa.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.nota-mapa.ds-modal-sheet {
   background-color: var(--modal-shell-bg) !important;
@@ -191,6 +192,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="ajustes"] .capa-ajustes.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="historia"] .capa-historia.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) {
   display: flex !important;
   flex-direction: column !important;
