@@ -1207,25 +1207,10 @@
 
 
 .play-v3 .capa-buzon .mensajitos-leer-todos,
-
-
-
 .play-v3 .capa-buzon .mensajitos-leer-todos-txt {
-
-
-
-  font: 700 1.05rem/1.2 Caveat, cursive !important;
-
-
-
+  font: 700 1.05rem/1.2 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   letter-spacing: 0.5px !important;
-
-
-
   color: var(--ds-ink, #3b3028) !important;
-
-
-
 }
 
 

@@ -10,15 +10,15 @@
 .play-v3 .capa-vecinos .vecinos-cuenta.ds-pill {
   display: inline-flex !important;
   align-items: center !important;
-  margin: 0 !important;
-  padding: 3px 11px !important;
-  border-radius: 999px !important;
-  border: none !important;
-  background: var(--ds-pink, #e86b8f) !important;
-  font: 700 .72rem/1.2 Nunito, sans-serif !important;
-  letter-spacing: .2px !important;
-  color: #fff !important;
-  box-shadow: 1px 1.5px 0 rgba(51,38,30,.12) !important;
+  margin: 2px 0 0 !important;
+  padding: 1px 8px !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--ds-pink-soft, #fce4ec) !important;
+  background: var(--ds-pink-soft, #fce4ec) !important;
+  font: 600 .68rem/1.3 Nunito, sans-serif !important;
+  letter-spacing: .1px !important;
+  color: var(--ds-pink-deep, #c85b78) !important;
+  box-shadow: none !important;
 }
 
 /* --- Tabs --- */

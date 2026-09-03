@@ -653,7 +653,7 @@
 }
 
 .play-v3 .capa-vecinos .vecinos-cuenta {
-  font-family: Caveat, cursive;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--pink-deep);
