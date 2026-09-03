@@ -854,6 +854,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="histdet-dia" data-historia-detalle-dia></div>
         </div>
       </aside>
+      <aside class="capa capa-vida-pueblo ds-migrada" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
         <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
         <header class="vida-top vecinos-cab">
           <div class="ds-modal-head vecinos-head">
