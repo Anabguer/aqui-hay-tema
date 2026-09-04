@@ -9,7 +9,8 @@
    2) Muestra cuando data-capa coincide
    3) Aplica posición V4 propia (no hereda .capa)
    
-   0 !important — source order + specificity ganan.
+   Mínimo !important: solo bg/border/shadow para sobreescribir
+   los !important que legacy fuerza en .capa-* classes.
    ============================================================ */
 
 /* ── Ocultar por defecto ───────────────────────────────────── */
@@ -36,10 +37,14 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--aht-dur, 200ms) ease;
-  /* Reset legacy visual: sin border, sin box-shadow de .capa */
-  border: none;
-  box-shadow: none;
-  background: transparent;
+  /* Reset legacy: !important needed to override play-v3-capas-shell.css,
+     play-v3-app.css, modals-shell-lavanda-mobile.css which force
+     backgrounds, borders and shadows with !important on .capa-* classes */
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  background-image: none !important;
+  border-radius: 0;
 }
 
 /* ── Mostrar cuando data-capa coincide ─────────────────────── */

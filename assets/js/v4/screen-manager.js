@@ -106,9 +106,6 @@
       historyPushState(screenId);
     }
 
-    // Render content for known screens (legacy bridge)
-    renderScreenContent(screenId);
-
     // Actualizar dock highlight
     updateDock(screenId);
 
@@ -300,13 +297,14 @@
       return;
     }
 
-    // [data-open] — intercept and route through V4
+    // [data-open] — V4 sets data-capa/velo/stack via capture-phase open().
+    // Do NOT stopPropagation: legacy setCapa() in bubbling phase handles
+    // render calls (renderVecinos, renderBuzon, etc.) that V4 cannot access.
     var openBtn = target.closest('[data-open]');
     if (openBtn) {
       var screenId = openBtn.getAttribute('data-open');
       if (V4_SCREENS.has(screenId)) {
         e.preventDefault();
-        e.stopPropagation();
         open(screenId);
         return;
       }
@@ -367,31 +365,6 @@
     };
     var sel = selectors[screenId];
     return sel ? root.querySelector(sel) : null;
-  }
-
-  /* ── Legacy bridge: render content ───────────────────────── */
-  // Called when opening a screen to trigger legacy render functions
-
-  function renderScreenContent(screenId) {
-    // These call existing play-v3.js functions
-    if (screenId === 'vida_pueblo' && typeof renderVidaPuebloModal === 'function') {
-      renderVidaPuebloModal();
-    }
-    if (screenId === 'parejas' && typeof renderParejasModalList === 'function') {
-      renderParejasModalList();
-    }
-    if (screenId === 'inventario' && typeof renderInventario === 'function') {
-      renderInventario();
-    }
-    if (screenId === 'historia' && typeof renderHistoriaPueblo === 'function') {
-      renderHistoriaPueblo();
-    }
-    if (screenId === 'ajustes' && typeof syncAjustesUI === 'function') {
-      syncAjustesUI();
-    }
-    if (screenId === 'necesidades_global' && typeof renderNecesidadesGlobal === 'function') {
-      renderNecesidadesGlobal();
-    }
   }
 
   /* ── Expose global API ───────────────────────────────────── */
