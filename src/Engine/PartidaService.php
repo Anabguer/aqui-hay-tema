@@ -432,6 +432,7 @@ final class PartidaService
                 : null,
             'placeholder' => $runtime['_placeholder'] ?? false,
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
+            'necesidades' => self::vistaNecesidades($runtime, $partida),
             'presentacion_visual' => $presentacion,
             'aprecio_celeste' => AprecioCelesteVista::vista((int) ($rt['aprecio_celeste'] ?? 0), $calFicha),
         ];
@@ -467,6 +468,105 @@ final class PartidaService
     public function presentacionVisual(array $partida, array $runtime): array
     {
         return $this->emociones()->resolverResidente($partida, $runtime);
+    }
+
+    /**
+     * Genera la vista de necesidades para la ficha del residente.
+     * Solo muestra necesidades en banda "lo_necesita" o "en_rojo".
+     *
+     * @param array<string, mixed> $runtime
+     * @return array<string, mixed>|null
+     */
+    private static function vistaNecesidades(array $runtime, array $partida): ?array
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return null;
+        }
+        $necesidades = $runtime['runtime']['necesidades'] ?? null;
+        if (!is_array($necesidades)) {
+            return null;
+        }
+        $items = [];
+        $iconos = [
+            'social' => "\ud83e\udd1d",
+            'diversion' => "\ud83c\udf89",
+            'actividad' => "\ud83d\udcaa",
+            'calma' => "\u2615",
+        ];
+        foreach (NecesidadEstado::TODAS as $nec) {
+            $n = $necesidades[$nec] ?? null;
+            if (!is_array($n)) {
+                continue;
+            }
+            $banda = $n['banda'] ?? NecesidadEstado::BANDA_BIEN;
+            if ($banda !== NecesidadEstado::BANDA_LO_NECESITA && $banda !== NecesidadEstado::BANDA_EN_ROJO) {
+                continue;
+            }
+            $items[] = [
+                'id' => $nec,
+                'icono' => $iconos[$nec] ?? '',
+                'nombre' => ucfirst($nec),
+                'banda' => $banda,
+                'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
+            ];
+        }
+        if ($items === []) {
+            return null;
+        }
+        return ['items' => $items];
+    }
+
+    /**
+     * Vista global de necesidades para el panel de consulta.
+     * Agrupa a todos los residentes por necesidad y banda para que el jugador
+     * pueda detectar quién necesita qué y organizar planes en consecuencia.
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>|null
+     */
+    public static function vistaGlobalNecesidades(array $partida): ?array
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return null;
+        }
+        $residentes = $partida['residentes'] ?? [];
+        if (empty($residentes)) {
+            return null;
+        }
+        $lista = [];
+        foreach ($residentes as $rid => $res) {
+            $rt = $res['runtime'] ?? [];
+            $necesidades = $rt['necesidades'] ?? [];
+            $necs = [];
+            foreach (NecesidadEstado::TODAS as $nec) {
+                $n = is_array($necesidades) ? ($necesidades[$nec] ?? null) : null;
+                $banda = (is_array($n) ? ($n['banda'] ?? null) : null) ?? NecesidadEstado::BANDA_BIEN;
+                $valor = (is_array($n) ? ($n['valor'] ?? null) : null) ?? 85;
+                $necs[$nec] = [
+                    'banda' => $banda,
+                    'valor' => $valor,
+                    'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
+                ];
+            }
+            $lista[] = [
+                'id' => $rid,
+                'nombre' => IdentidadPublica::nombre($partida, $rid),
+                'retrato_url' => $res['retrato_url'] ?? null,
+                'necesidades' => $necs,
+            ];
+        }
+        usort($lista, static function (array $a, array $b): int {
+            $worstA = 101;
+            $worstB = 101;
+            foreach ($a['necesidades'] as $n) {
+                if ($n['valor'] < $worstA) { $worstA = $n['valor']; }
+            }
+            foreach ($b['necesidades'] as $n) {
+                if ($n['valor'] < $worstB) { $worstB = $n['valor']; }
+            }
+            return $worstA <=> $worstB;
+        });
+        return ['residentes' => $lista];
     }
 
     public function emociones(): EmotionalStateService

@@ -246,7 +246,7 @@
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
   const ORG_MAX_VECINOS = 2;
-  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null };
+  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null, intencion: '' };
   let orgPresetNuevo = false;
   let orgProponiendo = false;
   const ORG_BTN_LABEL = 'Crear plan';
@@ -1074,7 +1074,7 @@
       estEl.hidden = !hint;
       estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
     }
-    const modal = $('.capa-vida-pueblo');
+    const modal = $('[data-aht-screen="vida_pueblo"]');
     if (modal) {
       modal.classList.toggle('vida-modal--critica', !!(vida && vida.critico));
       modal.classList.toggle('vida-modal--alta', valor >= 80 && !(vida && vida.critico));
@@ -1091,7 +1091,9 @@
     if (name === 'vida_pueblo') renderVidaPuebloModal();
     if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
     if (name === 'inventario') renderInventario();
+    if (name === 'historia') renderHistoriaPueblo();
     if (name === 'ajustes') syncAjustesUI();
+    if (name === 'necesidades_global') renderNecesidadesGlobal();
     if (name && name !== prev && !uiHistSilent) uiHistPush();
     $$('.dock button, .play-bottom-nav-btn').forEach(function (b) {
       const open = b.getAttribute('data-open');
@@ -1113,6 +1115,171 @@
     invFichaRid = id || null;
     invFichaNombre = String(nombre || '');
     setCapa('inventario');
+  }
+
+// --- Historia del Pueblo ---
+  async function renderHistoriaPueblo() {
+    const root = $('.play-root');
+    if (!root) return;
+    const grid = $('[data-historia-grid]', root);
+    const sub = $('[data-historia-sub]', root);
+    if (!grid) return;
+    try {
+      const r = await api('historia.snapshot');
+      if (!r || !r.ok) { grid.innerHTML = '<p class="mini">No se pudo cargar la historia.</p>'; return; }
+      const h = r.historia;
+      if (sub) sub.textContent = h.total_revelados + ' / ' + h.total_hitos + ' recuerdos';
+      let html = '';
+      for (const hito of h.hitos) {
+        const cls = hito.revelado ? '' : ' historia-polaroid--bloqueada';
+        html += '<div class="historia-polaroid' + cls + '" data-hito-id="' + esc(hito.id) + '">';
+        html += '<span class="historia-orden">' + hito.orden + '</span>';
+        html += '<div class="historia-img-wrap">';
+        if (hito.revelado && hito.imagen_url) {
+          html += '<img src="' + esc(hito.imagen_url) + '" alt="' + esc(hito.nombre) + '" loading="lazy"/>';
+        } else {
+          html += '<div class="historia-placeholder" aria-hidden="true">' + (hito.revelado ? '&#x1F4F7;' : '&#x1F512;') + '</div>';
+        }
+        html += '</div>';
+        html += '<div class="historia-titulo">' + esc(hito.nombre) + '</div>';
+        if (hito.revelado && hito.protagonistas && hito.protagonistas.length) {
+          html += '<div class="historia-protagonistas">';
+          for (const p of hito.protagonistas) {
+            html += '<div class="historia-avatar">';
+            if (p.retrato) {
+              html += '<img class="historia-avatar-img" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+            } else {
+              html += '<div class="historia-avatar-img" style="display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#a09080;">' + esc((p.nombre || '?')[0]) + '</div>';
+            }
+            html += '<span class="historia-avatar-nombre">' + esc(p.nombre) + '</span>';
+            html += '</div>';
+          }
+          html += '</div>';
+          html += '<div class="historia-dia">D&iacute;a ' + hito.dia + '</div>';
+        }
+        html += '</div>';
+      }
+      grid.innerHTML = html;
+    } catch (e) {
+      grid.innerHTML = '<p class="mini">Error al cargar la historia.</p>';
+    }
+  }
+
+  async function renderNecesidadesGlobal() {
+    var body = $('[data-necesidades-global-body]');
+    var vacio = $('[data-necesidades-global-vacio]');
+    var filtersWrap = $('[data-necesidades-global-filters]');
+    if (!body) return;
+    body.innerHTML = '<p class="necg-vacio mini">Cargando...</p>';
+    if (vacio) vacio.hidden = true;
+    try {
+      var r = await api('partida.necesidades_global');
+      var data = r.ok && r.necesidades ? r.necesidades : null;
+      if (!data || !data.residentes || !data.residentes.length) {
+        body.innerHTML = '<p class="necg-vacio">No hay datos de necesidades a&uacute;n.</p>';
+        if (filtersWrap) filtersWrap.innerHTML = '';
+        return;
+      }
+      var allResidents = data.residentes;
+      var iconos = { social: '\ud83e\udd1d', diversion: '\ud83c\udf89', actividad: '\ud83d\udcaa', calma: '\u2615' };
+      var nombres = { social: 'Socializar', diversion: 'Diversi\u00f3n', actividad: 'Actividad', calma: 'Desconectar' };
+      var orden = ['social', 'diversion', 'actividad', 'calma'];
+
+      var initialFilter = necgFiltroInicial || 'todos';
+      necgFiltroInicial = '';
+
+      if (filtersWrap) {
+        var fhtml = '<button type="button" class="necg-filt' + (initialFilter === 'todos' ? ' necg-filt--on' : '') + '" data-nec-filter="todos">Todos</button>';
+        fhtml += '<button type="button" class="necg-filt' + (initialFilter === 'necesitan' ? ' necg-filt--on' : '') + '" data-nec-filter="necesitan">Con necesidad</button>';
+        orden.forEach(function (nec) {
+          fhtml += '<button type="button" class="necg-filt' + (initialFilter === nec ? ' necg-filt--on' : '') + '" data-nec-filter="' + nec + '">' + iconos[nec] + ' ' + nombres[nec] + '</button>';
+        });
+        filtersWrap.innerHTML = fhtml;
+      }
+
+      function barHTML(valor, banda) {
+        var pct = Math.max(0, Math.min(100, valor));
+        var cls = 'necg-bar-fill--' + banda;
+        return '<div class="necg-bar"><div class="necg-bar-fill ' + cls + '" style="width:' + pct + '%"></div></div>';
+      }
+
+      function renderCards(residents) {
+        if (!residents.length) {
+          body.innerHTML = '<p class="necg-vacio">Nadie necesita nada ahora mismo.</p>';
+          return;
+        }
+        var html = '';
+        residents.forEach(function (res) {
+          var needsHtml = '';
+          var worstBand = 'bien';
+          var worstVal = 101;
+          orden.forEach(function (nec) {
+            var n = res.necesidades[nec];
+            if (!n) return;
+            if (n.valor < worstVal) { worstVal = n.valor; worstBand = n.banda; }
+            var bandCls = 'necg-need-row--' + n.banda;
+            needsHtml += '<div class="necg-need-row ' + bandCls + '">';
+            needsHtml += '<span class="necg-need-icon">' + iconos[nec] + '</span>';
+            needsHtml += '<span class="necg-need-name">' + nombres[nec] + '</span>';
+            needsHtml += barHTML(n.valor, n.banda);
+            needsHtml += '</div>';
+          });
+          var avatarHtml = '';
+          var img = res.retrato_url || tokenDe(res.id);
+          if (img) {
+            avatarHtml = '<span class="necg-card-avatar"><img src="' + esc(img) + '" alt=""/></span>';
+          } else {
+            var ini = (res.nombre || '?').charAt(0);
+            avatarHtml = '<span class="necg-card-avatar necg-card-avatar--fallback">' + esc(ini) + '</span>';
+          }
+          html += '<div class="necg-card" data-necg-res="' + esc(res.id) + '" data-worst="' + worstBand + '">';
+          html += '<div class="necg-card-header">' + avatarHtml + '<h4 class="necg-card-nom">' + esc(res.nombre) + '</h4></div>';
+          html += '<div class="necg-card-needs">' + needsHtml + '</div>';
+          html += '</div>';
+        });
+        body.innerHTML = html;
+      }
+
+      function applyFilter(filter) {
+        if (filter === 'todos') {
+          renderCards(allResidents);
+        } else if (filter === 'necesitan') {
+          renderCards(allResidents.filter(function (res) {
+            return orden.some(function (nec) {
+              var n = res.necesidades[nec];
+              return n && (n.banda === 'lo_necesita' || n.banda === 'en_rojo');
+            });
+          }));
+        } else {
+          renderCards(allResidents.filter(function (res) {
+            var n = res.necesidades[filter];
+            return n && n.banda !== 'bien';
+          }));
+        }
+      }
+
+      applyFilter(initialFilter);
+
+      if (filtersWrap) {
+        filtersWrap.addEventListener('click', function (e) {
+          var btn = e.target.closest('[data-nec-filter]');
+          if (!btn) return;
+          var filter = btn.getAttribute('data-nec-filter');
+          filtersWrap.querySelectorAll('.necg-filt').forEach(function (b) { b.classList.remove('necg-filt--on'); });
+          btn.classList.add('necg-filt--on');
+          applyFilter(filter);
+        });
+      }
+
+      body.addEventListener('click', function (e) {
+        var card = e.target.closest('[data-necg-res]');
+        if (!card) return;
+        var rid = card.getAttribute('data-necg-res');
+        if (rid) abrirFicha(rid);
+      });
+    } catch (e) {
+      body.innerHTML = '<p class="necg-vacio">Error al cargar necesidades.</p>';
+    }
   }
 
   async function renderInventario() {
@@ -1165,7 +1332,7 @@
     if (!root) return;
     invSelObjeto = item;
     invSelVecino = null;
-    $('.inv-objeto', root).forEach(function (b) { b.classList.remove('is-sel'); });
+    $$('.inv-objeto', root).forEach(function (b) { b.classList.remove('is-sel'); });
     btn.classList.add('is-sel');
     const caja = $('[data-inv-regalo]', root);
     const nombre = $('[data-inv-objeto-nombre]', root);
@@ -1203,7 +1370,7 @@
       chip.textContent = v.nombre;
       chip.addEventListener('click', function () {
         invSelVecino = v;
-        $('.inv-vecino', root).forEach(function (c) { c.classList.remove('is-sel'); });
+        $$('.inv-vecino', root).forEach(function (c) { c.classList.remove('is-sel'); });
         chip.classList.add('is-sel');
         btnEntregar.disabled = false;
         pintarHintChip(item, v);
@@ -1261,8 +1428,12 @@
             if (d && d.texto) extra += '<span class="inv-descubrimiento">' + esc(d.texto) + '</span> ';
           });
         }
+        const escena = (r && typeof r.escena === 'string') ? r.escena : '';
+        const eco = (r && typeof r.eco_emocional === 'string') ? r.eco_emocional : '';
+        const escenaHtml = escena ? '<span class="inv-escena">' + esc(escena) + '</span> ' : '';
+        const ecoHtml = eco ? '<span class="inv-eco-emocional">' + esc(eco) + '</span> ' : '';
         feedback.hidden = false;
-        feedback.innerHTML = esc(texto) + (extra ? ' ' + extra : '');
+        feedback.innerHTML = escenaHtml + esc(texto) + (ecoHtml ? ' ' + ecoHtml : '') + (extra ? ' ' + extra : '');
         feedback.classList.toggle('is-mal', r.reaccion === 'no_le_gusta');
         feedback.classList.remove('is-error');
       }
@@ -1285,6 +1456,102 @@
     }
   }
   // --- fin Inventario / Regalos (F1) ---
+
+  /** Catálogo estático de regalos (data/catalogos/regalos.json) para assets en mensajitos. */
+  let cacheCatalogoRegalos = null;
+  let cacheCatalogoRegalosCargando = null;
+
+  function catalogoRegalosUiVersion() {
+    var script = document.querySelector('script[src*="play-v3.js"]');
+    if (script && script.src) {
+      var m = script.src.match(/[?&]v=([^&]+)/);
+      if (m) return decodeURIComponent(m[1]);
+    }
+    return '';
+  }
+
+  function ensureCatalogoRegalos() {
+    if (cacheCatalogoRegalos) return Promise.resolve(cacheCatalogoRegalos);
+    if (cacheCatalogoRegalosCargando) return cacheCatalogoRegalosCargando;
+    cacheCatalogoRegalosCargando = fetch('data/catalogos/regalos.json?v=' + encodeURIComponent(catalogoRegalosUiVersion()))
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        const map = { byId: {}, byNombre: {} };
+        (data && data.items || []).forEach(function (it) {
+          if (!it || !it.id) return;
+          const row = {
+            id: String(it.id),
+            nombre: String(it.nombre || it.id),
+            url: 'assets/play-v3/' + String(it.asset || ('regalos/' + it.id + '.png'))
+          };
+          map.byId[row.id] = row;
+          map.byNombre[row.nombre.trim().toLowerCase()] = row;
+        });
+        cacheCatalogoRegalos = map;
+        return map;
+      })
+      .catch(function () {
+        cacheCatalogoRegalos = { byId: {}, byNombre: {} };
+        return cacheCatalogoRegalos;
+      })
+      .finally(function () { cacheCatalogoRegalosCargando = null; });
+    return cacheCatalogoRegalosCargando;
+  }
+
+  function mensajitoEsObjetoRecibido(m) {
+    const t = String((m && m.tipo) || '');
+    return t === 'regalo_recompensa' || t === 'detallito_sorpresa';
+  }
+
+  function mensajitoObjetoNombreDeTexto(m) {
+    const t = String((m && m.texto) || '');
+    const patterns = [
+      /te manda\s+(.+?)\.\s*(?:Guardado|$)/i,
+      /te deja\s+(.+?)\s+como agradecimiento/i,
+      /encuentras\s+(.+?)\./i,
+      /del d[ií]a:\s*(.+?)\.\s*(?:Guardado|$)/i,
+      /Detallito merecido:\s*(.+?)\./i,
+      /sorpresa del d[ií]a:\s*(.+?)\./i
+    ];
+    for (let i = 0; i < patterns.length; i++) {
+      const hit = t.match(patterns[i]);
+      if (hit && hit[1]) return hit[1].trim();
+    }
+    return '';
+  }
+
+  function mensajitoObjetoIdDe(m) {
+    if (!m || typeof m !== 'object') return '';
+    const origen = m.origen || {};
+    const eid = String(origen.evento_id || '');
+    if (eid.indexOf('detallito_sorpresa:') === 0) {
+      return eid.slice('detallito_sorpresa:'.length);
+    }
+    return '';
+  }
+
+  function mensajitoObjetoVistaDe(m, catalogo) {
+    if (!mensajitoEsObjetoRecibido(m)) return null;
+    const cat = catalogo || cacheCatalogoRegalos || { byId: {}, byNombre: {} };
+    const idDirecto = mensajitoObjetoIdDe(m);
+    if (idDirecto && cat.byId[idDirecto]) return cat.byId[idDirecto];
+    const nomTxt = mensajitoObjetoNombreDeTexto(m);
+    if (nomTxt && cat.byNombre[nomTxt.toLowerCase()]) return cat.byNombre[nomTxt.toLowerCase()];
+    if (nomTxt) return { id: '', nombre: nomTxt, url: '' };
+    return null;
+  }
+
+  function htmlMensajitoRegaloObjeto(vista) {
+    if (!vista || !vista.nombre) return '';
+    const imgHtml = vista.url
+      ? '<img class="aht-msg-gift-icon" src="' + esc(vista.url) + '" alt="" loading="lazy" decoding="async"/>'
+      : '<span class="aht-msg-gift-icon">\uD83C\uDF81</span>';
+    return '<div class="aht-msg-gift" aria-label="Objeto recibido">' +
+      imgHtml +
+      '<div><p class="aht-msg-gift-name">' + esc(vista.nombre) + '</p>' +
+      (vista.desc ? '<p class="aht-msg-gift-desc">' + esc(vista.desc) + '</p>' : '') +
+      '</div></div>';
+  }
 
   function dineroTxt(insp, estado) {
     const eco = (insp && insp.economia && insp.economia.dinero) ? insp.economia.dinero.balance : null;
@@ -1414,6 +1681,20 @@
     return (Math.abs(h) % 4);
   }
 
+  var MSG_PAPERS = ['rose', 'blue', 'green', 'cream', 'lilac'];
+  function msgFnv1a(str) {
+    var s = String(str || '');
+    var h = 0x811c9dc5;
+    for (var i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 0x01000193);
+    }
+    return h >>> 0;
+  }
+  function msgPaperDeRemitente(rid, nombre) {
+    return MSG_PAPERS[msgFnv1a(String(rid || nombre || '')) % MSG_PAPERS.length];
+  }
+
   function remitenteIdDe(m) {
     if (!m || typeof m !== 'object') return null;
     const direct = m.de_persona || m.de;
@@ -1442,18 +1723,20 @@
   function htmlAvatarMensajito(m, nombre, cls) {
     const rid = remitenteIdDe(m);
     const tok = rid && !m.candidato_catalog_id ? tokenDe(rid) : null;
-    const base = cls || 'msg-item-avatar';
-    if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""/>';
-    return '<span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span>';
+    const base = cls || 'aht-msg-avatar';
+    const dataAttr = rid ? ' data-persona-id="' + esc(rid) + '"' : '';
+    if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""' + dataAttr + '/>';
+    return '<span class="' + base + ' cara-ini"' + dataAttr + '>' + esc(inicialDe(nombre || '?')) + '</span>';
   }
 
   function htmlAvatarEleccion(personaje_id, nombre, cls) {
     const tok = personaje_id ? tokenDe(personaje_id) : null;
-    const base = cls || 'msg-eleccion-avatar';
+    const base = cls || 'aht-msg-avatar aht-msg-avatar--mini';
+    const dataAttr = personaje_id ? ' data-persona-id="' + esc(personaje_id) + '"' : '';
     if (tok) {
-      return '<span class="msg-eleccion-avatar-wrap"><img class="' + base + '" src="' + esc(tok) + '" alt=""/></span>';
+      return '<span class="msg-eleccion-avatar-wrap"><img class="' + base + '" src="' + esc(tok) + '" alt=""' + dataAttr + '/></span>';
     }
-    return '<span class="msg-eleccion-avatar-wrap"><span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span></span>';
+    return '<span class="msg-eleccion-avatar-wrap"><span class="' + base + ' cara-ini"' + dataAttr + '>' + esc(inicialDe(nombre || '?')) + '</span></span>';
   }
 
   function mensajitosCartas(msgs) {
@@ -1543,6 +1826,134 @@
       if (nomA) txt += ' ' + nomA + ' le ense\u00f1a Villaborde.';
     }
     toast(txt);
+  }
+
+  // ── Celebración de historia del pueblo ─────────────────────
+  let colaCelebraciones = [];
+  let celebracionHitoActual = '';
+
+  function procesarCelebraciones(historia) {
+    const celebs = (historia && historia.celebraciones) || [];
+    if (!celebs.length) return;
+    for (const c of celebs) {
+      colaCelebraciones.push(c);
+    }
+    mostrarSiguienteCelebracion();
+  }
+
+  function mostrarSiguienteCelebracion() {
+    if ($('[data-aht-screen="historia_celebracion"].is-on')) return;
+    const tut = cacheEstado && cacheEstado.tutorial;
+    if (tut && tut.id === 'primeros_pasos' && !tut.jugable_completado) return;
+    if (tut && tut.id === 'primeros_pasos' && tut.finale_pendiente) return;
+    if (document.body.hasAttribute('data-tut-activo')) return;
+    if (document.body.hasAttribute('data-tut-finale')) return;
+    const c = colaCelebraciones.shift();
+    if (!c) return;
+    celebracionHitoActual = c.hito_id || '';
+    renderCelebracion(c);
+    setCapa('historia_celebracion');
+  }
+
+  function renderCelebracion(c) {
+    const img = $('[data-historia-celebracion-img]');
+    const titulo = $('[data-historia-celebracion-titulo]');
+    const texto = $('[data-historia-celebracion-texto]');
+    const protWrap = $('[data-historia-celebracion-protagonistas]');
+    const recDiv = $('[data-historia-celebracion-recompensa]');
+    const recObj = $('[data-historia-celebracion-recompensa-objeto]');
+    if (img) { img.src = c.imagen || ''; img.alt = c.nombre || ''; }
+    if (titulo) titulo.textContent = '\u00a1' + (c.nombre || 'Nuevo recuerdo') + '!';
+    if (texto) texto.textContent = c.texto_narrativo || 'Primer recuerdo del pueblo descubierto.';
+    if (protWrap) {
+      let ph = '';
+      for (const p of (c.protagonistas || [])) {
+        ph += '<span class="histcele-protagonista">';
+        if (p.retrato) {
+          ph += '<img class="histcele-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+        } else {
+          ph += '<div class="histcele-protagonista-avatar histcele-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
+        }
+        ph += esc(p.nombre);
+        ph += '</span>';
+      }
+      protWrap.innerHTML = ph;
+    }
+    if (recDiv) {
+      if (c.recompensa && c.recompensa.objeto_nombre) {
+        recDiv.hidden = false;
+        if (recObj) recObj.textContent = c.recompensa.objeto_nombre + (c.recompensa.cantidad > 1 ? ' \u00d7' + c.recompensa.cantidad : '');
+      } else {
+        recDiv.hidden = true;
+      }
+    }
+  }
+
+  async function celebracionClose(hitoId) {
+    try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
+    setCapa('');
+    setTimeout(mostrarSiguienteCelebracion, 400);
+  }
+
+  window.__ahtCloseCelebracion = function () {
+    var hito = celebracionHitoActual;
+    celebracionHitoActual = '';
+    if (hito) {
+      api('historia.celebrar_ack', { hito_id: hito }).catch(function () {});
+    }
+  };
+
+  async function celebracionIrAlbum() {
+    const hitoId = celebracionHitoActual;
+    try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
+    setCapa('historia');
+    renderHistoriaPueblo().then(function () {
+      setTimeout(function () {
+        const pol = $('[data-hito-id="' + hitoId + '"]');
+        if (pol) pol.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }, 200);
+    });
+    setTimeout(mostrarSiguienteCelebracion, 600);
+  }
+
+  let historiaDetalleHitoActual = '';
+
+  async function historiaDetalleAbrir(hitoId) {
+    try {
+      const r = await api('historia.snapshot');
+      if (!r || !r.ok) return;
+      const hito = (r.historia.hitos || []).find(function (h) { return h.id === hitoId && h.revelado; });
+      if (!hito) return;
+      historiaDetalleHitoActual = hitoId;
+      const img = $('[data-historia-detalle-img]');
+      const titulo = $('[data-historia-detalle-titulo]');
+      const texto = $('[data-historia-detalle-texto]');
+      const protWrap = $('[data-historia-detalle-protagonistas]');
+      const diaDiv = $('[data-historia-detalle-dia]');
+      if (img) { img.src = hito.imagen_url || ''; img.alt = hito.nombre || ''; }
+      if (titulo) titulo.textContent = hito.nombre || '';
+      if (texto) texto.textContent = hito.texto_narrativo || '';
+      if (protWrap) {
+        let ph = '';
+        for (const p of (hito.protagonistas || [])) {
+          ph += '<span class="histdet-protagonista">';
+          if (p.retrato) {
+            ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+          } else {
+            ph += '<div class="histdet-protagonista-avatar histdet-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
+          }
+          ph += esc(p.nombre);
+          ph += '</span>';
+        }
+        protWrap.innerHTML = ph;
+      }
+      if (diaDiv) diaDiv.textContent = hito.dia ? 'D\u00eda ' + hito.dia : '';
+      setCapa('historia_detalle');
+    } catch (e) { /* noop */ }
+  }
+
+  function historiaDetalleClose() {
+    setCapa('historia');
   }
 
   function mensajitoPlazoLabel(m) {
@@ -1658,13 +2069,13 @@
     let cuerpo = cuerpoMensajito(origen, nomOrig);
     if (cuerpo.length > 120) cuerpo = cuerpo.slice(0, 117) + '\u2026';
     const cuando = mensajitoCuandoLabel(origen);
-    return '<div class="carta-hilo" aria-label="Contexto del mensaje">' +
-      '<div class="carta-hilo-origen">' +
-      '<span class="carta-hilo-tit">' + esc(mensajitoTituloHilo(origen)) + '</span>' +
-      '<p class="carta-hilo-cuerpo">\u201C' + esc(cuerpo) + '\u201D</p>' +
-      (cuando ? '<span class="carta-hilo-cuando">' + esc(cuando) + '</span>' : '') +
+    return '<div class="aht-msg-thread" aria-label="Contexto del mensaje">' +
+      '<div class="aht-msg-thread-origin">' +
+      '<span class="aht-msg-thread-label">' + esc(mensajitoTituloHilo(origen)) + '</span>' +
+      '<p class="aht-msg-thread-text">\u201C' + esc(cuerpo) + '\u201D</p>' +
+      (cuando ? '<span class="aht-msg-thread-date">' + esc(cuando) + '</span>' : '') +
       '</div>' +
-      '<div class="carta-hilo-flecha" aria-hidden="true"></div>' +
+      '<div class="aht-msg-thread-arrow" aria-hidden="true"></div>' +
       '</div>';
   }
 
@@ -1710,14 +2121,19 @@
     if (tipo === 'respuesta_plan') return 'Leer respuesta';
     if (tipo === 'peticion_resultado') return '';
     if (tipo === 'marcha_publica' || tipo === 'marcha_despedida' || tipo === 'legado_despedida') return '';
+    if (tipo === 'detallito_sorpresa') return '';
+    if (tipo === 'regalo_recompensa') {
+      if (!mensajitoDestinoFicha(m)) return '';
+      return mensajitoEstaLeido(m) ? 'Ver perfil' : 'Entendido';
+    }
     if (!mensajitoDestinoFicha(m)) return '';
     return mensajitoEstaLeido(m) ? 'Ver perfil' : 'Abrir mensaje';
   }
 
   function htmlOpcionesEleccion(titulo, opcionesHtml, extraCls) {
-    return '<div class="msg-eleccion' + (extraCls ? ' ' + extraCls : '') + '">' +
-      '<p class="msg-eleccion-tit">' + esc(titulo) + '</p>' +
-      '<div class="msg-eleccion-lista">' + opcionesHtml + '</div>' +
+    return '<div class="aht-msg-choice' + (extraCls ? ' ' + extraCls : '') + '">' +
+      '<span class="aht-msg-choice-title">' + esc(titulo) + '</span>' +
+      '<div class="aht-msg-choice-list">' + opcionesHtml + '</div>' +
       '</div>';
   }
 
@@ -1728,11 +2144,11 @@
       const tit = m.consejo_titulo || '\u00bfQu\u00e9 le dices?';
       const optsHtml = m.opciones_consejo.map(function (o) {
         if (!o || !o.id) return '';
-        return '<button type="button" class="msg-eleccion-opt msg-opcion" data-consejo-opcion="' + esc(o.id) + '">' +
-          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.etiqueta || o.id) + '</span></span>' +
-          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
+        return '<button type="button" class="aht-msg-choice-opt" data-consejo-opcion="' + esc(o.id) + '">' +
+          '<span class="aht-msg-choice-opt-copy"><span class="aht-msg-choice-opt-name">' + esc(o.etiqueta || o.id) + '</span></span>' +
+          '<span class="aht-msg-choice-opt-arrow" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones msg-eleccion msg-eleccion--consejo">' + htmlOpcionesEleccion(tit, optsHtml) + '</div>';
+      return '<div class="aht-msg-actions aht-msg-choice aht-msg-choice--consejo">' + htmlOpcionesEleccion(tit, optsHtml) + '</div>';
     }
     if (Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' &&
@@ -1740,13 +2156,13 @@
       const titSel = m.selector_titulo || '\u00bfA qui\u00e9n le presentar\u00edas?';
       const optsHtml = m.selector_opciones.map(function (o) {
         if (!o || !o.personaje_id) return '';
-        const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
-        return '<button type="button" class="msg-eleccion-opt" data-elegir-persona="' + esc(o.personaje_id) + '">' +
+        const hint = o.pista ? '<span class="aht-msg-choice-opt-hint">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="aht-msg-choice-opt" data-elegir-persona="' + esc(o.personaje_id) + '">' +
           htmlAvatarEleccion(o.personaje_id, o.nombre) +
-          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
-          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
+          '<span class="aht-msg-choice-opt-copy"><span class="aht-msg-choice-opt-name">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
+          '<span class="aht-msg-choice-opt-arrow" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones msg-eleccion">' + htmlOpcionesEleccion(titSel, optsHtml) + '</div>';
+      return '<div class="aht-msg-actions aht-msg-choice">' + htmlOpcionesEleccion(titSel, optsHtml) + '</div>';
     }
     if (m.tipo === 'candidato_llegada' &&
         (m.estado || '') === 'pendiente' &&
@@ -1755,23 +2171,23 @@
       const titA = m.selector_titulo_acompanante || '\u00bfQui\u00e9n le ense\u00f1a Villaborde?';
       const optsHtml = opts.map(function (o) {
         if (!o || !o.personaje_id) return '';
-        const hint = o.pista ? '<span class="msg-eleccion-hint">' + esc(o.pista) + '</span>' : '';
-        return '<button type="button" class="msg-eleccion-opt llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
+        const hint = o.pista ? '<span class="aht-msg-choice-opt-hint">' + esc(o.pista) + '</span>' : '';
+        return '<button type="button" class="aht-msg-choice-opt llegada-acomp-opt" data-llegada-acomp="' + esc(o.personaje_id) + '">' +
           htmlAvatarEleccion(o.personaje_id, o.nombre) +
-          '<span class="msg-eleccion-opt-copy"><span class="msg-eleccion-nom">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
-          '<span class="msg-eleccion-flecha" aria-hidden="true">\u203A</span></button>';
+          '<span class="aht-msg-choice-opt-copy"><span class="aht-msg-choice-opt-name">' + esc(o.nombre || '') + '</span>' + hint + '</span>' +
+          '<span class="aht-msg-choice-opt-arrow" aria-hidden="true">\u203A</span></button>';
       }).join('');
-      return '<div class="acciones-msg msg-opciones msg-eleccion llegada-acciones">' +
+      return '<div class="aht-msg-actions aht-msg-choice llegada-acciones">' +
         htmlOpcionesEleccion(titA, optsHtml || '<p class="llegada-sin-acomp">Nadie libre ahora para la bienvenida.</p>') +
         '<div class="llegada-acciones-pie">' +
-        '<button type="button" class="carta-cta carta-cta--suave" data-llegada-rechazar="1">Ahora no</button>' +
+        '<button type="button" class="aht-msg-btn aht-msg-btn--soft" data-llegada-rechazar="1">Ahora no</button>' +
         '</div></div>';
     }
     const acciones = Array.isArray(m.acciones_ui) ? m.acciones_ui : [];
     if (!acciones.length) return '';
-    return '<div class="acciones-msg">' + acciones.map(function (a) {
+    return '<div class="aht-msg-actions">' + acciones.map(function (a) {
       const suave = (a.estilo || '') === 'suave';
-      const cls = 'carta-cta carta-cta--primario' + (suave ? ' carta-cta--suave' : ' carta-cta--abrir');
+      const cls = 'aht-msg-btn aht-msg-btn--primary' + (suave ? ' aht-msg-btn--soft' : '');
       const lab = mensajitoCtaAccionLabel(m, a.id || '', a.etiqueta || a.id || '');
       return '<button type="button" class="' + cls + '" data-accion-id="' + esc(a.id || '') + '">' +
         esc(lab) + '</button>';
@@ -1814,6 +2230,7 @@
     });
     art.querySelectorAll('[data-elegir-persona]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
+        if (ev.target.closest('.aht-msg-choice-opt-name') || ev.target.closest('.msg-eleccion-avatar-wrap')) return;
         ev.stopPropagation();
         if (btn.disabled) return;
         art.querySelectorAll('[data-elegir-persona]').forEach(function (b) { b.disabled = true; });
@@ -1830,6 +2247,7 @@
       : (accionesRaw.indexOf('responder_escuchar') >= 0 ? 'responder_escuchar' : 'responder_consejo');
     art.querySelectorAll('[data-llegada-acomp]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
+        if (ev.target.closest('.aht-msg-choice-opt-name') || ev.target.closest('.msg-eleccion-avatar-wrap')) return;
         ev.stopPropagation();
         if (btn.disabled) return;
         const acomp = btn.getAttribute('data-llegada-acomp');
@@ -1885,8 +2303,9 @@
 
   function wireMsgLeidoToggle(btn, m) {
     const leido = mensajitoEstaLeido(m);
-    btn.className = 'msg-leido-toggle' + (leido ? ' is-leido' : ' is-pendiente');
-    btn.innerHTML = '<span class="msg-leido-ico" aria-hidden="true"></span>';
+    btn.className = 'aht-msg-read-toggle' + (leido ? ' is-leido' : ' is-pendiente');
+    btn.innerHTML = leido ? '\u2713 Le\u00eddo' : '\u25CB No le\u00eddo';
+    btn.setAttribute('data-read', leido ? 'true' : 'false');
     btn.setAttribute('aria-pressed', leido ? 'true' : 'false');
     btn.setAttribute('aria-label', leido ? 'Marcar como no le\u00eddo' : 'Marcar como le\u00eddo');
     btn.removeAttribute('title');
@@ -2068,7 +2487,16 @@
       if (esCrisisPareja(r)) crisis++;
     });
     const cap = capObjetivoPoblacionVisible(partida);
-    return { vecinos: ids.length, cap: cap, parejas: parejasList.length, crisis: crisis, emo: emo };
+    let conNecesidad = 0;
+    ids.forEach(function (id) {
+      var rt = res[id].runtime && res[id].runtime.necesidades;
+      if (!rt) return;
+      if (['social', 'diversion', 'actividad', 'calma'].some(function (nec) {
+        var n = rt[nec];
+        return n && n.banda !== 'bien';
+      })) conNecesidad++;
+    });
+    return { vecinos: ids.length, cap: cap, parejas: parejasList.length, crisis: crisis, emo: emo, conNecesidad: conNecesidad };
   }
 
   function htmlFilaCelestineFiltro(opts) {
@@ -2094,6 +2522,12 @@
         valor: n,
       }));
     });
+    if (met.conNecesidad > 0) {
+      bits.push('<div class="vecinos-stat celeste-necesitan-algo" role="presentation" data-celestine-necesitan="1">' +
+        '<span class="vecinos-stat-ico" aria-hidden="true">\ud83e\ude77</span>' +
+        '<span class="vecinos-stat-k">Necesitan algo</span>' +
+        '<strong class="vecinos-stat-v">' + esc(String(met.conNecesidad)) + '</strong></div>');
+    }
     if (met.parejas > 0) {
       bits.push('<span class="obj-vecinos-tit celeste-seccion-parejas">Parejas</span>');
       bits.push('<div class="stat-row celeste-cuenta-parejas"><span>Parejas</span><strong>' +
@@ -2356,31 +2790,99 @@
     if (!planEsEnCurso(enc, estado)) return '';
     var iv = intervencionVistaDe(enc, estado);
     if (!iv) return '';
-    if (iv.usada && iv.ultimo && iv.ultimo.texto) return htmlIntervencionResultado(enc, estado);
-    if (!iv.disponible || !iv.acciones || !iv.acciones.length) return '';
+
+    /* FASE 1: Si hay turnos, usar UI de turnos. */
+    var turnos = iv.turnos || [];
+    var turnoActual = iv.turno_actual || 0;
+    var turnosMax = iv.turnos_max || 4;
+    var actorActual = iv.actor_actual || '';
+    var barra = iv.barra_quedada || 0;
+
+    /* Si no hay más turnos y hay resultado, mostrar resumen. */
+    if (turnos.length >= turnosMax && iv.ultimo && iv.ultimo.texto) {
+      return htmlIntervencionResultado(enc, estado);
+    }
+
+    /* Si no está disponible y no hay turnos, no mostrar nada (legacy). */
+    if (!iv.disponible && turnos.length === 0) return '';
+    if (!iv.acciones || !iv.acciones.length) return '';
+
     var ids = enc.participantes || [];
-    var html = '<div class="enc-int enc-int--modal" data-enc-int data-enc-id="' + esc(enc.id || '') + '">' +
-      '<div class="enc-int-step" data-enc-int-paso="persona">' +
-      '<div class="enc-int-duo" aria-hidden="true">';
-    ids.forEach(function (rid) {
-      html += '<div class="enc-int-duo-persona">' + htmlCaraToken(rid, { wrapClass: 'enc-int-duo-cara' }) +
-        '<span class="enc-int-duo-nombre">' + esc(nombreDe(rid)) + '</span></div>';
+    if (ids.length < 2) return '';
+
+    /* FASE 1: Construir UI de turno. */
+    var html = '<div class="enc-int enc-int--modal enc-int--turnos" data-enc-int data-enc-id="' + esc(enc.id || '') + '">';
+
+    /* Barra de quedada */
+    html += '<div class="enc-int-barra" data-enc-int-barra>';
+    html += '<p class="enc-int-barra-tit">\u2728 C\u00f3mo va la quedada</p>';
+    html += '<div class="enc-int-barra-track">';
+    var barraPct = Math.max(0, Math.min(100, 50 + barra * 4));
+    html += '<div class="enc-int-barra-fill" style="width:' + barraPct + '%"></div>';
+    html += '<span class="enc-int-barra-emoji-left">\ud83e\udee0</span>';
+    html += '<span class="enc-int-barra-emoji-mid">\ud83d\ude10</span>';
+    html += '<span class="enc-int-barra-emoji-right">\ud83d\ude0a</span>';
+    html += '<span class="enc-int-barra-emoji-fire">\ud83d\udd25</span>';
+    html += '</div>';
+    html += '</div>';
+
+    /* Turnos completados (reacciones previas) */
+    if (turnos.length > 0) {
+      html += '<div class="enc-int-historial">';
+      turnos.forEach(function (t) {
+        var emoji = t.tono === 'bien' ? '\ud83d\udc4d' : (t.tono === 'mal' ? '\ud83d\udc4e' : '\ud83d\ude10');
+        html += '<span class="enc-int-historial-item" title="' + esc(t.texto || '') + '">';
+        html += '<span class="enc-int-historial-nom">' + esc(nombreDe(t.actor)) + '</span> ';
+        html += '<span class="enc-int-historial-emoji">' + emoji + '</span>';
+        html += '</span>';
+      });
+      html += '</div>';
+    }
+
+    /* Cara del actor actual + receptor */
+    var receptorActual = '';
+    for (var ri = 0; ri < ids.length; ri++) {
+      if (ids[ri] !== actorActual) { receptorActual = ids[ri]; break; }
+    }
+    html += '<div class="enc-int-duo" aria-hidden="true">';
+    html += '<div class="enc-int-duo-persona enc-int-duo-persona--activo">' + htmlCaraToken(actorActual, { wrapClass: 'enc-int-duo-cara' }) +
+      '<span class="enc-int-duo-nombre">' + esc(nombreDe(actorActual)) + '</span></div>';
+    html += '<span class="enc-int-duo-flecha">\u2192</span>';
+    html += '<div class="enc-int-duo-persona">' + htmlCaraToken(receptorActual, { wrapClass: 'enc-int-duo-cara' }) +
+      '<span class="enc-int-duo-nombre">' + esc(nombreDe(receptorActual)) + '</span></div>';
+    html += '</div>';
+
+    /* Indicador de turno */
+    html += '<p class="enc-int-kicker enc-int-kicker--turno">Turno ' + (turnoActual + 1) + '/' + turnosMax + '</p>';
+
+    /* Acciones disponibles */
+    html += '<div class="enc-int-btns enc-int-temas-grid">';
+    iv.acciones.forEach(function (ac) {
+      if (!ac.disponible) return;
+      var btn = '<button type="button" class="enc-int-btn" data-enc-int-accion="' + esc(ac.id) + '">';
+      if (ac.id === 'hobby') {
+        btn = '<button type="button" class="enc-int-btn enc-int-btn--hobby" data-enc-int-accion="' + esc(ac.id) + '">';
+      }
+      btn += esc(ac.etiqueta || ac.id);
+      btn += '</button>';
+      html += btn;
     });
-    html += '</div><p class="enc-int-kicker enc-int-kicker--q">\u00bfQui\u00E9n va a romper el hielo?</p>' +
-      '<div class="enc-int-personas">';
-    ids.forEach(function (rid) {
-      html += '<button type="button" class="enc-int-persona" data-enc-int-persona="' + esc(rid) + '">' +
-        htmlCaraToken(rid, { wrapClass: 'enc-int-persona-cara' }) +
-        '<span class="enc-int-pers-nombre">' + esc(nombreDe(rid)) + '</span></button>';
-    });
-    html += '</div></div>';
-    html += '<div class="enc-int-step" data-enc-int-paso="accion" hidden>' +
-      '<button type="button" class="enc-int-volver" data-enc-int-volver>\u2039 Volver</button>' +
-      '<p class="enc-int-kicker enc-int-kicker-tema" data-enc-int-kicker-tema></p>' +
-      '<div class="enc-int-btns enc-int-temas-grid" data-temas-panel></div></div>';
-    html += '<div class="enc-int-step" data-enc-int-paso="resultado" hidden>' +
-      '<div class="enc-int-result" data-enc-int-resultado></div></div>';
-    html += '<p class="enc-int-feedback" data-enc-int-feedback hidden></p></div>';
+    html += '</div>';
+
+    /* Temas de hobby (si aplica) */
+    html += '<div class="enc-int-temas-grid" data-temas-panel hidden></div>';
+
+    /* Feedback de la última acción (si hay) */
+    if (turnos.length > 0) {
+      var ultimo = turnos[turnos.length - 1];
+      var emojiR = ultimo.tono === 'bien' ? '\ud83d\udc4d' : (ultimo.tono === 'mal' ? '\ud83d\udc4e' : '\ud83d\ude10');
+      html += '<div class="enc-int-result enc-int-result--card">';
+      html += '<p class="enc-int-result-txt enc-int-result-txt--' + esc(ultimo.tono || 'neutral') + '">';
+      html += emojiR + ' ' + esc(ultimo.texto || '');
+      html += '</p></div>';
+    }
+
+    html += '</div>';
     return html;
   }
   function encuentroPorId(encId) {
@@ -2485,8 +2987,19 @@
     }
     var capaActual = ($('.play-root') && $('.play-root').getAttribute('data-capa')) || '';
     activarMentesFeedbackCard(encId, vistaIntervencion);
+
+    /* FASE 1: Re-render del modal con el nuevo estado de turnos. */
     if (r.ok && capaActual === 'mentes' && String(mentesEncIdActivo) === String(encId)) {
-      mostrarMentesResultado(vistaIntervencion);
+      var enc = encuentroPorId(encId);
+      var body = document.querySelector('[data-mentes-body]');
+      if (enc && body) {
+        var contenido = htmlIntervencionEncuentro(enc, cacheEstado);
+        if (contenido && contenido.indexOf('data-enc-int') >= 0) {
+          body.innerHTML = contenido;
+        } else {
+          mostrarMentesResultado(vistaIntervencion);
+        }
+      }
     }
     renderShellPanels(cacheEstado, cacheBuzon, cacheDiario);
     return r;
@@ -2731,7 +3244,8 @@
       '<span class="pp-mov-star" aria-hidden="true"><span class="pp-mov-star-ico">\u2605</span></span>' +
       '</div>' +
       '<div class="pp-mov-body">' +
-      '<div class="prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<div class="prox-faces' + (ids.length >= 2 ? ' prox-faces--duo' : '') + '">' +
+      (ids.length >= 2 ? planDuoFacesMovilHtml(enc, ids) : carasPlanHtml(ids, maxCaras)) + '</div>' +
       '<div class="pp-mov-copy">' +
       '<p class="pp-mov-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
       '<p class="pp-mov-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
@@ -2749,7 +3263,7 @@
     return '<div class="plan-desk-duo-wrap">' +
       '<div class="enc-mov-faces prox-faces plan-desk-duo-faces">' +
       htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' }) +
       '</div>' +
       '<div class="plan-desk-duo-nombres">' +
@@ -2757,6 +3271,14 @@
       '<span class="plan-desk-duo-nombre plan-desk-duo-nombre--r">' + esc(nombreDe(slice[1])) + '</span>' +
       '</div></div>';
   }
+  function planDuoFacesMovilHtml(enc, ids) {
+    var slice = (ids || []).slice(0, 2);
+    if (slice.length < 2) return carasPlanHtml(slice);
+    return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
+      iconoPlanCentroHtml(enc) +
+      htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
+  }
+
   function htmlProximoPlanCardDesktop(enc, estado) {
     if (planEsEventoPueblo(enc)) {
       return htmlProximoPlanCardEvento(enc, estado);
@@ -2935,6 +3457,34 @@
     if (t === 'quedar' || t === 'amistad' || t === 'otro') return 'social';
     return 'social';
   }
+  var PLAN_TIPO_EMOJI = {
+    conocerse: "\uD83D\uDC4B",
+    quedar: "\u2615",
+    amistad: "\uD83E\uDD1D",
+    primera_cita: "\uD83D\uDC95",
+    cita: "\u2764\uFE0F",
+    romance: "\uD83D\uDC95",
+    romantico: "\u2764\uFE0F",
+    conflicto: "\u26A1",
+    grupal: "\uD83D\uDC65",
+    individual: "\uD83D\uDEB6",
+    otro: "\u2728",
+    social: "\u2615"
+  };
+  function planTipoEmojiDe(enc) {
+    const tipo = String((enc && enc.tipo) || '').toLowerCase();
+    if (PLAN_TIPO_EMOJI[tipo]) return PLAN_TIPO_EMOJI[tipo];
+    const fam = familiaTipoEncuentro(enc);
+    if (fam === 'social') return PLAN_TIPO_EMOJI.quedar;
+    if (PLAN_TIPO_EMOJI[fam]) return PLAN_TIPO_EMOJI[fam];
+    return PLAN_TIPO_EMOJI.otro;
+  }
+  function iconoPlanCentroHtml(enc) {
+    const ids = (enc && enc.participantes) || [];
+    if (ids.length < 2) return '';
+    const emoji = planTipoEmojiDe(enc);
+    return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--emoji" aria-hidden="true">' + emoji + '</span>';
+  }
   function iconoRelacionesCentroHtml() {
     return '<span class="enc-mov-tipo-ico enc-mov-tipo-ico--relaciones" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span>';
   }
@@ -2970,7 +3520,7 @@
     const slice = ids.slice(0, 2);
     if (slice.length < 2) return carasPlanHtml(slice);
     return htmlCaraToken(slice[0], { wrapClass: 'enc-mov-cara enc-mov-cara--l' }) +
-      iconoRelacionesCentroHtml() +
+      iconoPlanCentroHtml(enc) +
       htmlCaraToken(slice[1], { wrapClass: 'enc-mov-cara enc-mov-cara--r' });
   }
   function resumenEncursoMovil(enc, estado) {
@@ -3213,16 +3763,22 @@
     block._ppMovIndice = idx;
     shell.hidden = false;
     shell.removeAttribute('aria-hidden');
-    const desktopMany = ppMovEsDesktop(block) && n > 2;
-    block.classList.toggle('proxplanes-movil--many', desktopMany);
-    if (desktopMany) {
+    if (ppMovEsDesktop(block)) {
       const max = Math.max(0, track.scrollWidth - track.clientWidth);
-      prev.hidden = true;
+      const needsCarousel = n > 2 && max > 2;
+      block.classList.toggle('proxplanes-movil--many', needsCarousel);
+      if (!needsCarousel) {
+        prev.hidden = true;
+        next.hidden = true;
+        return;
+      }
+      prev.hidden = track.scrollLeft <= 2;
       next.hidden = track.scrollLeft >= max - 2;
-    } else {
-      prev.hidden = n < 2 || idx <= 0;
-      next.hidden = n < 2 || idx >= n - 1;
+      return;
     }
+    block.classList.remove('proxplanes-movil--many');
+    prev.hidden = n < 2 || idx <= 0;
+    next.hidden = n < 2 || idx >= n - 1;
   }
   function renderProxplanesNav() {
     inicioBlocks('[data-proxplanes-block]').forEach(renderProxplanesNavFor);
@@ -4831,6 +5387,7 @@
 
   let vecBuscaTxt = '';
   let vecTabActiva = 'vecinos';
+  let necgFiltroInicial = '';
 
   function txtBuscaNorm(s) {
     return String(s || '')
@@ -4992,11 +5549,14 @@
     if (rel.etiqueta_vinculo === 'crisis') return '\uD83D\uDCA5 ';
     if (rel.etiqueta_vinculo === 'pareja') return '\uD83D\uDC95 ';
     if (rel.etiqueta_vinculo === 'ex_pareja') return '\uD83D\uDC94 ';
-    const s = rel.etiqueta_social || '';
-    if (s === 'cae_mal') return '\uD83D\uDE21 ';
-    if (s === 'buena_amistad' || s === 'muy_buena_amistad') return '\uD83D\uDC9A ';
-    if (s === 'amigo') return '\uD83D\uDE0A ';
-    if (s === 'conocido') return '\uD83D\uDC4B ';
+    var s = rel.etiqueta_social || '';
+    var socialEmoji = '';
+    if (s === 'cae_mal') socialEmoji = '\uD83D\uDE21 ';
+    else if (s === 'buena_amistad' || s === 'muy_buena_amistad') socialEmoji = '\uD83D\uDC9A ';
+    else if (s === 'amigo') socialEmoji = '\uD83D\uDE0A ';
+    else if (s === 'conocido') socialEmoji = '\uD83D\uDC4B ';
+    if (socialEmoji) return socialEmoji;
+    if (rel.romance_visible && rel.etiqueta_romance) return '\uD83D\uDC98 ';
     return '';
   }
 
@@ -5091,7 +5651,6 @@
   var vecRelFiltro = '';
   var vecRelPersona = '';
   var vecRelCargado = false;
-  var VEC_REL_ICONO_PAR = '<span class="vec-rel-vinculo-ico" aria-hidden="true">\u2194</span>';
 
   function aplicarVecTabUI() {
     const isRel = vecTabActiva === 'relaciones';
@@ -5106,7 +5665,7 @@
     $$('[data-vec-panel]').forEach(function (p) {
       p.hidden = p.getAttribute('data-vec-panel') !== vecTabActiva;
     });
-    const capa = document.querySelector('.capa-vecinos');
+    const capa = document.querySelector('[data-aht-screen="vecinos"]');
     if (capa) capa.classList.toggle('is-relaciones', isRel);
   }
 
@@ -5165,17 +5724,70 @@
     }).join('');
   }
 
-  function vecRelTextoDir(dir) {
+  function vecRelPillTexto(dir) {
     dir = dir || {};
-    const parts = [];
-    if (dir.etiqueta_vinculo === 'pareja') parts.push('\u2764\uFE0F Pareja');
-    else if (dir.etiqueta_vinculo === 'crisis') parts.push('\uD83D\uDC94 En crisis');
-    else if (dir.etiqueta_vinculo === 'ex_pareja') parts.push('\uD83D\uDC94 Ex pareja');
-    else if (dir.romance_visible && dir.etiqueta_romance) parts.push((dir.emoji_romance || '\uD83D\uDC98') + ' ' + dir.etiqueta_romance);
+    if (dir.etiqueta_vinculo === 'pareja') return 'PAREJA';
+    if (dir.etiqueta_vinculo === 'crisis') return 'EN CRISIS';
+    if (dir.etiqueta_vinculo === 'ex_pareja') return 'EX PAREJA';
+    if (dir.romance_visible && dir.etiqueta_romance) return String(dir.etiqueta_romance).toUpperCase();
     if ((dir.conocidos || dir.social_negativo) && dir.etiqueta_social_ui && dir.etiqueta_social !== 'desconocido') {
-      parts.push(((dir.emoji_social || '') + ' ' + dir.etiqueta_social_ui).trim());
+      return String(dir.etiqueta_social_ui).toUpperCase();
     }
-    return parts.join(' \u00B7 ');
+    if (dir.conocidos) return 'CONOCIDO';
+    return '';
+  }
+
+  function vecRelHasDir(dir) {
+    return !!vecRelPillTexto(dir);
+  }
+
+  function vecRelToneFromDir(dir) {
+    const cls = vecRelPillClass(dir);
+    if (cls === 'vec-rel-pill--red') return 'red';
+    if (cls === 'vec-rel-pill--pink') return 'pink';
+    if (cls === 'vec-rel-pill--mustard') return 'mustard';
+    return 'green';
+  }
+
+  function vecRelCardTone(f) {
+    if (f.conflicto || f.mal) return 'red';
+    if (f.romance) return 'pink';
+    if (f.bien) return 'green';
+    if (f.conocidos) return 'mustard';
+    return 'neutral';
+  }
+
+  function vecRelFlechaHtml(dir, mutual, reverse) {
+    const txt = vecRelPillTexto(dir) || 'CONOCIDO';
+    const tone = vecRelToneFromDir(dir);
+    const pillCls = vecRelPillClass(dir);
+    const mutualCls = mutual ? ' vec-rel-flecha--mutual' : '';
+    const revCls = reverse ? ' vec-rel-flecha--rev' : '';
+    return '<div class="vec-rel-flecha' + mutualCls + revCls + '">' +
+      '<span class="vec-rel-flecha-linea vec-rel-flecha-linea--' + tone + (mutual ? ' vec-rel-flecha-linea--dbl' : '') + '" aria-hidden="true"></span>' +
+      '<span class="vec-rel-pill ' + pillCls + '">' + esc(txt) + '</span>' +
+      '</div>';
+  }
+
+  function vecRelPuenteHtml(ab, ba) {
+    const tAb = vecRelPillTexto(ab);
+    const tBa = vecRelPillTexto(ba);
+    const hasAb = vecRelHasDir(ab);
+    const hasBa = vecRelHasDir(ba);
+    if (!hasAb && !hasBa) {
+      return '<p class="vec-rel-puente-vacio">Se conocen de vista.</p>';
+    }
+    const same = hasAb && hasBa && tAb === tBa && (ab.social_bar_pct || 0) === (ba.social_bar_pct || 0);
+    const parts = [];
+    if (same) {
+      parts.push(vecRelFlechaHtml(ab, true, false));
+      parts.push('<p class="vec-rel-puente-nota">MISMO V\u00CDNCULO</p>');
+    } else {
+      if (hasAb) parts.push(vecRelFlechaHtml(ab, false, false));
+      if (hasBa) parts.push(vecRelFlechaHtml(ba, false, true));
+      if (hasAb && hasBa) parts.push('<p class="vec-rel-puente-nota">DISTINTO EN CADA SENTIDO</p>');
+    }
+    return parts.join('');
   }
 
   function vecRelPillClass(dir) {
@@ -5216,58 +5828,37 @@
     return img ? '<img src="' + esc(img) + '" alt=""/>' : '<span>' + esc(ini) + '</span>';
   }
 
-  function vecRelBarra(dir, extraCls) {
-    dir = dir || {};
-    const pct = typeof dir.social_bar_pct === 'number'
-      ? Math.max(4, Math.min(100, dir.social_bar_pct))
-      : 8;
-    const cls = 'vec-rel-barra' + (dir.social_negativo ? ' is-neg' : '') + (extraCls || '');
-    return '<span class="' + cls + '" aria-hidden="true"><span style="width:' + pct + '%"></span></span>';
-  }
-
-  function vecRelDirCard(nomFrom, nomTo, dir) {
-    const txt = vecRelTextoDir(dir);
-    if (!txt && !(dir && dir.conocidos)) return '';
-    const pill = '<span class="vec-rel-pill ' + vecRelPillClass(dir) + '">' + esc(txt || 'Se conocen de vista') + '</span>';
-    const barExtra = dir.etiqueta_social === 'conocido' ? ' vec-rel-barra--mustard' : '';
-    return '<div class="vec-rel-dir-card">' +
-      '<div class="vec-rel-dir-head">' +
-      '<span class="vec-rel-dir-nom">' + esc(nomFrom) + ' \u2192 ' + esc(nomTo) + '</span>' +
-      pill +
-      '</div>' +
-      vecRelBarra(dir, barExtra) +
-      '</div>';
-  }
-
   function htmlVecRelCard(row) {
     const a = row.persona_a || {};
     const b = row.persona_b || {};
     const ab = row.a_hacia_b || {};
     const ba = row.b_hacia_a || {};
-    const tAb = vecRelTextoDir(ab);
-    const tBa = vecRelTextoDir(ba);
+    const tAb = vecRelPillTexto(ab);
+    const tBa = vecRelPillTexto(ba);
     const f = vecRelFlags(row);
-    const cls = 'vec-rel-card' + (f.romance ? ' is-amor' : '') + (f.mal ? ' is-mal' : '') + (f.conflicto ? ' is-conflicto' : '');
-    const cardAb = vecRelDirCard(a.nombre || a.id || '', b.nombre || b.id || '', ab);
-    const cardBa = vecRelDirCard(b.nombre || b.id || '', a.nombre || a.id || '', ba);
-    let dirs = cardAb + cardBa;
-    if (!dirs) dirs = '<p class="vec-rel-linea">Se conocen de vista.</p>';
-    const asim = tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0);
-    const div = asim && cardAb && cardBa ? '<div class="vec-rel-divider">Diferente en cada sentido</div>' : '';
+    const tone = vecRelCardTone(f);
+    const hasAb = vecRelHasDir(ab);
+    const hasBa = vecRelHasDir(ba);
+    const asim = hasAb && hasBa && (tAb !== tBa || (ab.social_bar_pct || 0) !== (ba.social_bar_pct || 0));
+    const cls = 'vec-rel-card vec-rel-card--tone-' + tone +
+      (f.romance ? ' is-amor' : '') +
+      (f.mal ? ' is-mal' : '') +
+      (f.conflicto ? ' is-conflicto' : '');
     const badge = f.conflicto ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
+    const puente = vecRelPuenteHtml(ab, ba);
     return (
       '<article class="' + cls + '">' +
-      '<div class="vec-rel-par">' +
+      '<span class="vec-rel-card-accent" aria-hidden="true"></span>' +
+      badge +
+      '<div class="vec-rel-card-grid">' +
       '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(a.id || '') + '">' +
       '<span class="vec-rel-cara">' + caraVecRel(a.id, a.nombre) + '</span>' +
       '<span class="vec-rel-nom">' + esc(a.nombre || a.id || '?') + '</span></button>' +
-      VEC_REL_ICONO_PAR +
+      '<div class="vec-rel-puente">' + puente + '</div>' +
       '<button type="button" class="vec-rel-pers" data-vec-rel-open="' + esc(b.id || '') + '">' +
       '<span class="vec-rel-cara">' + caraVecRel(b.id, b.nombre) + '</span>' +
       '<span class="vec-rel-nom">' + esc(b.nombre || b.id || '?') + '</span></button>' +
-      badge +
       '</div>' +
-      '<div class="vec-rel-estados">' + dirs + div + '</div>' +
       '</article>'
     );
   }
@@ -5510,6 +6101,17 @@ function canonEmoId(id) {
   let diarioVolverCapa = 'ficha';
   let animoVolverCapa = 'ficha';
   let relVolverCapa = 'ficha';
+  let fichaOverlayActiva = false;
+
+  function cerrarFichaOverlay() {
+    if (!fichaOverlayActiva) return;
+    fichaOverlayActiva = false;
+    var capaF = document.querySelector('[data-aht-screen="ficha"]');
+    if (capaF) {
+      capaF.classList.remove('ds-ficha-overlay');
+      capaF.removeAttribute('data-overlay-active');
+    }
+  }
 
   function cerrarDiarioVecino() {
     setCapa(diarioVolverCapa || 'ficha');
@@ -5872,19 +6474,30 @@ function hobbyIconKey(id, texto) {
     if (rel.etiqueta_vinculo === 'crisis') return 'En crisis';
     if (rel.etiqueta_vinculo === 'pareja') return 'Pareja';
     if (rel.etiqueta_vinculo === 'ex_pareja') return 'Ex pareja';
-    if (rel.etiqueta_social_ui) return String(rel.etiqueta_social_ui);
-    const map = {
-      desconocido: 'Desconocido',
-      conocido: 'Conocido',
-      amigo: 'Amigo',
-      buena_amistad: 'Buena amistad',
-      muy_buena_amistad: 'Buena amistad',
-      cae_mal: 'Cae mal',
-      cae_bien: 'Le cae bien',
-      buen_amigo: 'Buen amigo',
-      mejor_amigo: 'Mejor amigo'
-    };
-    return map[rel.etiqueta_social] || String(rel.etiqueta_social || '—').replace(/_/g, ' ');
+    var social = '';
+    if (rel.etiqueta_social_ui) {
+      social = String(rel.etiqueta_social_ui);
+    } else {
+      var map = {
+        desconocido: 'Desconocido',
+        conocido: 'Conocido',
+        amigo: 'Amigo',
+        buena_amistad: 'Buena amistad',
+        muy_buena_amistad: 'Buena amistad',
+        cae_mal: 'Cae mal',
+        cae_bien: 'Le cae bien',
+        buen_amigo: 'Buen amigo',
+        mejor_amigo: 'Mejor amigo'
+      };
+      social = map[rel.etiqueta_social] || String(rel.etiqueta_social || '').replace(/_/g, ' ');
+    }
+    var rom = '';
+    if (rel.romance_visible && rel.etiqueta_romance) {
+      rom = String(rel.etiqueta_romance);
+    }
+    if (rom && social) return social + ' \u00B7 ' + rom;
+    if (rom) return rom;
+    return social || '\u2014';
   }
 
   function barRelPct(rel) {
@@ -5998,11 +6611,32 @@ function hobbyIconKey(id, texto) {
         abrirRegalosDesdeFicha(id, nom);
       };
     }
+    // Necesidades personales
+    const necSection = $('[data-ficha-necesidades]');
+    const necBox = $('[data-ficha-necesidades-body]');
+    if (necSection && necBox) {
+      const nec = f.necesidades;
+      if (nec && nec.items && nec.items.length) {
+        necBox.innerHTML = '';
+        nec.items.forEach(function (item) {
+          var cls = 'ficha-nec-item ficha-nec-item--' + esc(item.band || '');
+          necBox.insertAdjacentHTML('beforeend',
+            '<span class="' + cls + '">'
+            + '<span class="ficha-nec-item-icono" aria-hidden="true">' + esc(item.icono || '') + '</span>'
+            + '<span class="ficha-nec-item-copy">' + esc(item.copy || item.nombre || '') + '</span>'
+            + '</span>'
+          );
+        });
+        necSection.hidden = false;
+      } else {
+        necSection.hidden = true;
+      }
+    }
     syncFichaNav();
   }
 
   function fichaNavBotones() {
-    const capa = document.querySelector('.capa-ficha');
+    const capa = document.querySelector('[data-aht-screen="ficha"]');
     if (!capa) return { prev: null, next: null };
     return {
       prev: capa.querySelector('[data-ficha-nav-prev]'),
@@ -6072,7 +6706,16 @@ function hobbyIconKey(id, texto) {
     const vista = f.vista_play || f;
     try {
       pintarFicha(rid, f, vista);
-      setCapa('ficha');
+      if (opts.overlay) {
+        fichaOverlayActiva = true;
+        var capaF = document.querySelector('[data-aht-screen="ficha"]');
+        if (capaF) {
+          capaF.classList.add('ds-ficha-overlay');
+          capaF.setAttribute('data-overlay-active', '1');
+        }
+      } else {
+        setCapa('ficha');
+      }
     } catch (err) {
       console.error('pintarFicha', err);
       toast('No se pudo mostrar la ficha de este vecino.');
@@ -6135,6 +6778,9 @@ function hobbyIconKey(id, texto) {
     cacheBuzon = msgs || [];
     const box = $('[data-buzon-list]');
     if (!box) return;
+    if ((msgs || []).some(mensajitoEsObjetoRecibido) && !cacheCatalogoRegalos) {
+      ensureCatalogoRegalos().then(function () { renderBuzon(cacheBuzon); });
+    }
     box.innerHTML = '';
     renderMensajitosPop(msgs);
     actualizarBuzonLeerTodosBtn(msgs);
@@ -6162,7 +6808,10 @@ function hobbyIconKey(id, texto) {
     });
     const cartas = filtro === 'todos' ? cartasTodas : nuevos;
     if (!cartas.length) {
-      box.innerHTML = '<p class="lista-vacia buzon-vacio">No hay mensajes por ahora. Cuando llegue algo, lo verás aquí.</p>';
+      box.innerHTML = '<div class="aht-msg-empty">' +
+        '<div class="aht-msg-empty-icon">\uD83D\uDCED</div>' +
+        '<p class="aht-msg-empty-text">No hay mensajes por ahora. Cuando llegue algo, lo ver\u00e1s aqu\u00ed.</p>' +
+        '</div>';
       return;
     }
     const accion = cartas.filter(mensajitoRequiereAccion);
@@ -6174,74 +6823,77 @@ function hobbyIconKey(id, texto) {
       const leido = (m.estado || '') !== 'pendiente';
       const nombre = nombrePublicoDe(m);
       const ridRem = remitenteIdDe(m);
-      const inclin = ((inclinIdx || 0) % 4 + 4) % 4;
-      const tint = (mensajitoTintDeRemitente(ridRem || nombre) + inclin) % 4;
+      const esRegaloRecibido = mensajitoEsObjetoRecibido(m);
+      const objetoVista = esRegaloRecibido ? mensajitoObjetoVistaDe(m) : null;
+      const paper = msgPaperDeRemitente(ridRem || nombre);
       const origen = mensajitoBuscarOrigen(m, cacheBuzon);
       const esActualizacion = !!origen;
       const tieneEleccion = Array.isArray(m.selector_opciones) && m.selector_opciones.length &&
         m.selector_estado === 'pendiente' && (m.estado_pueblo || 'pendiente') === 'pendiente';
-      art.className = 'carta-msg' +
-        (esAccion ? ' carta-accion' : ' carta-info') +
-        (leido ? ' leida' : ' no-leida') +
-        (st.cls ? ' ' + st.cls : '') +
-        (esActualizacion ? ' carta-hilo-card' : '') +
-        (tieneEleccion ? ' carta-eleccion' : '') +
-        ' carta-tinta-' + tint +
-        ' carta-inclin-' + inclin;
+      art.className = 'aht-msg-card' +
+        (esActualizacion ? ' aht-msg-card--thread' : '') +
+        (tieneEleccion ? ' aht-msg-card--election' : '') +
+        (esRegaloRecibido ? ' aht-msg-card--gift' : '');
+      art.setAttribute('data-paper', paper);
+      art.setAttribute('data-unread', leido ? 'false' : 'true');
+      if (esAccion) art.setAttribute('data-action', 'true');
+      else art.setAttribute('data-info', 'true');
       if (ridRem) art.setAttribute('data-remitente', ridRem);
       const cuerpo = cuerpoMensajito(m, nombre);
+      const regaloObjetoHtml = objetoVista ? htmlMensajitoRegaloObjeto(objetoVista) : '';
       const perfilLlegadaHtml = (m.tipo === 'candidato_llegada') ? htmlPerfilCandidato(m) : '';
       const plazoLbl = mensajitoPlazoLabel(m);
       const cuando = mensajitoCuandoLabel(m);
+      const avatarHtml = htmlAvatarMensajito(m, nombre, 'aht-msg-avatar');
       const flagHtml = !leido
-        ? '<span class="carta-flag carta-flag--nuevo" aria-hidden="true">Nuevo</span>'
-        : '<span class="carta-flag carta-flag--visto"><span class="carta-flag-ico" aria-hidden="true">\u2606</span><span>Visto</span></span>';
+        ? '<span class="aht-msg-flag aht-msg-flag--new">Nuevo</span>'
+        : '<span class="aht-msg-flag aht-msg-flag--read">Visto</span>';
+      const headerHtml = '<div class="aht-msg-header-row">' +
+        (nombre && (ridRem || m.tipo !== 'detallito_sorpresa')
+          ? '<p class="aht-msg-from" data-persona-id="' + esc(ridRem || '') + '" data-persona-nombre="' + esc(nombre) + '" role="button" tabindex="0">' + esc(nombre) + '</p>'
+          : '') +
+        flagHtml +
+        '</div>';
+      const statusHtml = '<div class="aht-msg-status-row">' +
+        (cuando ? '<span class="aht-msg-date">' + esc(cuando) + '</span>' : '') +
+        '<span class="aht-msg-status"></span>' +
+        '</div>';
       const accionesDecision = htmlAccionesMensajito(m);
       let accionesHtml = '';
       if (accionesDecision) {
         accionesHtml = accionesDecision;
       } else if (m.preset_organizar && (m.estado_pueblo || 'pendiente') === 'pendiente' && (m.estado || '') === 'pendiente') {
         const orgLab = mensajitoCtaOrganizarLabel(m);
-        accionesHtml = '<div class="acciones-msg">' +
-          '<button type="button" class="carta-cta carta-cta--abrir carta-cta--primario" data-carta-organizar="1">' + esc(orgLab) + '</button>' +
+        accionesHtml = '<div class="aht-msg-actions">' +
+          '<button type="button" class="aht-msg-btn aht-msg-btn--primary" data-carta-organizar="1">' + esc(orgLab) + '</button>' +
           '</div>';
       } else {
         const destLab = mensajitoCtaDestinoLabel(m);
         if (destLab) {
-          const ctaClass = mensajitoEstaLeido(m) ? 'carta-cta carta-cta--ver' : 'carta-cta carta-cta--abrir';
-          accionesHtml = '<div class="acciones-msg">' +
-            '<button type="button" class="' + ctaClass + ' carta-cta--primario" data-carta-cta="1">' + esc(destLab) + '</button>' +
+          const ctaClass = mensajitoEstaLeido(m) ? 'aht-msg-btn aht-msg-btn--soft' : 'aht-msg-btn aht-msg-btn--primary';
+          accionesHtml = '<div class="aht-msg-actions">' +
+            '<button type="button" class="' + ctaClass + '" data-carta-cta="1">' + esc(destLab) + '</button>' +
             '</div>';
         }
       }
       const estadoTxt = st.txt || mensajitoEstadoNatural(m);
-      const estadoHtml = estadoTxt
-        ? '<div class="carta-estado"><span class="carta-estado-ico" aria-hidden="true">' + esc(mensajitoEstadoIcono(estadoTxt)) + '</span><span>' + esc(estadoTxt) + '</span></div>'
-        : '';
       const plazoHtml = plazoLbl
-        ? '<p class="carta-plazo"><span class="carta-plazo-ico" aria-hidden="true">\uD83D\uDD52</span><span>' + esc(plazoLbl) + '</span></p>'
+        ? '<div class="aht-msg-deadline">\uD83D\uDD52 ' + esc(plazoLbl) + '</div>'
         : '';
       const actualizacionEtq = esActualizacion
-        ? '<span class="carta-actualizacion-etq">Actualización' + (cuando ? ' \u00b7 ' + esc(cuando.split(' \u00b7 ').pop()) : '') + '</span>'
+        ? '<span class="carta-actualizacion-etq">Actualizaci\u00f3n' + (cuando ? ' \u00b7 ' + esc(cuando.split(' \u00b7 ').pop()) : '') + '</span>'
         : '';
-      art.innerHTML = flagHtml +
-        '<div class="carta-inner">' +
-        '<header class="carta-top">' + htmlAvatarMensajito(m, nombre, 'carta-avatar') +
-        '<div class="carta-head">' +
-        (nombre ? '<div class="de">' + esc(nombre) + '</div>' : '') +
-        (cuando ? '<div class="carta-cuando">' + esc(cuando) + '</div>' : '') +
-        '</div></header>' +
+      const mostrarCabeceraVecino = !esRegaloRecibido || !!ridRem || m.tipo !== 'detallito_sorpresa';
+      const bodyHtml = '<div class="aht-msg-content">' +
         (esActualizacion ? htmlMensajitoHilo(origen) : '') +
-        '<div class="carta-copy"><div class="carta-cuerpo-wrap">' +
         actualizacionEtq +
-        '<p class="cuerpo">' + esc(cuerpo) + '</p>' +
+        '<p class="aht-msg-body">' + esc(cuerpo) + '</p>' +
+        regaloObjetoHtml +
         perfilLlegadaHtml +
-        '</div>' +
         plazoHtml +
-        '<div class="carta-pie">' +
-        '<div class="carta-pie-meta"></div>' +
-        '<div class="carta-pie-cta">' + accionesHtml + estadoHtml + '</div>' +
-        '</div></div></div>';
+        accionesHtml +
+        '</div>';
+      art.innerHTML = (mostrarCabeceraVecino ? avatarHtml + headerHtml + statusHtml : (cuando ? '<div class="aht-msg-status-row"><span class="aht-msg-date">' + esc(cuando) + '</span></div>' : '')) + bodyHtml;
       art.querySelectorAll('[data-carta-cta]').forEach(function (btn) {
         btn.addEventListener('click', async function (ev) {
           ev.stopPropagation();
@@ -6261,15 +6913,51 @@ function hobbyIconKey(id, texto) {
           abrirOrganizarConPreset(m.preset_organizar);
         });
       });
+      art.addEventListener('click', function (ev) {
+        var fromEl = ev.target.closest('.aht-msg-from[data-persona-id]');
+        if (fromEl) {
+          ev.stopPropagation();
+          var pid = fromEl.getAttribute('data-persona-id');
+          if (pid) abrirFicha(pid, { overlay: true });
+          return;
+        }
+        var avatarEl = ev.target.closest('.aht-msg-avatar[data-persona-id]');
+        if (avatarEl && !avatarEl.closest('.aht-msg-choice-opt')) {
+          ev.stopPropagation();
+          var pid3 = avatarEl.getAttribute('data-persona-id');
+          if (pid3) abrirFicha(pid3, { overlay: true });
+          return;
+        }
+        var optAvatar = ev.target.closest('.msg-eleccion-avatar-wrap [data-persona-id]');
+        if (optAvatar) {
+          ev.stopPropagation();
+          var pid4 = optAvatar.getAttribute('data-persona-id');
+          if (pid4) abrirFicha(pid4, { overlay: true });
+          return;
+        }
+        var optName = ev.target.closest('.aht-msg-choice-opt-name');
+        if (optName) {
+          var optBtn = optName.closest('button[data-elegir-persona], button[data-llegada-acomp]');
+          if (optBtn) {
+            ev.stopPropagation();
+            var pid2 = optBtn.getAttribute('data-elegir-persona') || optBtn.getAttribute('data-llegada-acomp');
+            if (pid2) abrirFicha(pid2, { overlay: true });
+            return;
+          }
+        }
+      });
       art.addEventListener('click', async function (ev) {
-        if (ev.target.closest('button') || ev.target.closest('.msg-leido-toggle')) return;
+        if (ev.target.closest('button') || ev.target.closest('.aht-msg-read-toggle')) return;
         if (!mensajitoEstaLeido(m) && !mensajitoTieneAccionReal(m) && !mensajitoDestinoFicha(m)) {
           await marcarMensajitoLeido(m);
           await refresh();
         }
       });
       wireAccionesMensajito(art, m);
-      art.appendChild(crearMsgLeidoToggle(m));
+      var readToggle = crearMsgLeidoToggle(m);
+      var statusSlot = art.querySelector('.aht-msg-status');
+      if (statusSlot) statusSlot.appendChild(readToggle);
+      else art.appendChild(readToggle);
       return art;
     }
 
@@ -6277,7 +6965,7 @@ function hobbyIconKey(id, texto) {
     function pintarSeccion(titulo, items, esAccion) {
       if (!items.length) return;
       const sec = document.createElement('section');
-      sec.className = 'mensajitos-seccion';
+      sec.className = 'aht-msg-section';
       sec.innerHTML = '<h3 class="mensajitos-seccion-tit">' + titulo + '</h3>';
       items.forEach(function (m) {
         sec.appendChild(pintarCarta(m, esAccion, inclinGlobal++));
@@ -6597,6 +7285,21 @@ function hobbyIconKey(id, texto) {
       (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
       '</span>' + check + '</button>';
   }
+  function orgIntencionHtml(intencion) {
+    var id = String(intencion.id || '');
+    var emoji = intencion.emoji || '';
+    var label = intencion.label || id;
+    var desc = intencion.descripcion || '';
+    if (intencion.estado !== 'visible') return '';
+    var cls = 'org-tipo-card';
+    if (org.intencion === id) cls += ' is-on';
+    return '<button type="button" class="' + cls + '" data-org-intencion="' + esc(id) + '">' +
+      '<span class="org-tipo-card-ico org-intencion-emoji" aria-hidden="true">' + esc(emoji) + '</span>' +
+      '<span class="org-tipo-card-copy">' +
+      '<span class="org-tipo-card-tit">' + esc(label) + '</span>' +
+      (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
+      '</span><span class="org-tipo-card-check" aria-hidden="true"></span></button>';
+  }
   var ORG_LUGAR_IMG = {
     lug_bar: 'bar.png', lug_biblioteca: 'biblioteca.png', lug_bingo: 'bingo.png', lug_cafeteria: 'cafeteria.png',
     lug_cine: 'cine.png', lug_discoteca: 'discoteca.png', lug_gimnasio: 'gimnasio.png', lug_parque: 'parque.png',
@@ -6748,8 +7451,8 @@ function hobbyIconKey(id, texto) {
   }
 
   function aplicarOrgModoEventoUi() {
-    var capa = document.querySelector('.capa-organizar');
-    var tit = document.querySelector('.capa-organizar .org-tit');
+    var capa = document.querySelector('[data-aht-screen="organizar"]');
+    var tit = document.querySelector('[data-aht-screen="organizar"] .org-tit');
     var modoToggle = document.querySelector('[data-org-modo-toggle]');
     var seccQue = document.querySelector('.org-seccion--que');
     var seccDonde = document.querySelector('.org-seccion--donde');
@@ -6980,7 +7683,7 @@ function hobbyIconKey(id, texto) {
   function ajustarOrgDdMenu(box) {
     var menu = box.querySelector('.org-dd-menu');
     var trigger = box.querySelector('.org-dd-trigger');
-    var capa = box.closest('.capa-organizar');
+    var capa = box.closest('[data-aht-screen="organizar"]');
     var body = capa && capa.querySelector('.org-body');
     if (!menu || !trigger) return;
     box.classList.remove('org-dd--flip');
@@ -6997,7 +7700,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function cerrarOrgDds() {
-    var capa = $('.capa-organizar');
+    var capa = $('[data-aht-screen="organizar"]');
     var body = capa && capa.querySelector('.org-body');
     if (capa) capa.classList.remove('org-dd-menu-open');
     if (body) body.classList.remove('org-dd-menu-open');
@@ -7310,6 +8013,7 @@ function hobbyIconKey(id, texto) {
     org.sel = orgIdsDesdePreset(p);
     org.tipo = p.tipo || ((p.modo === 'evento' || p.modo === 'evento_pueblo') ? 'otro' : '');
     org.lugar = p.lugar || '';
+    org.intencion = '';
     org.peticion_id = p.peticion_id || null;
     if (org.modo === 'evento_pueblo') {
       org.dia = p.dia || null;
@@ -7499,6 +8203,42 @@ function hobbyIconKey(id, texto) {
       box.innerHTML = '';
       return;
     }
+    org.intencion = '';
+    org.tipo = '';
+    const rInt = await api('encuentro.intenciones_disponibles', { participantes: sel }, 'GET');
+    if (rInt.ok && rInt.intenciones && rInt.intenciones.length) {
+      const visibles = rInt.intenciones.filter(function (i) { return i.estado === 'visible'; });
+      if (visibles.length) {
+        box.innerHTML = visibles.map(function (i) {
+          return orgIntencionHtml(i);
+        }).join('');
+        $$('[data-org-intencion]', box).forEach(function (btn) {
+          btn.addEventListener('click', function (ev) {
+            ev.preventDefault();
+            ev.stopPropagation();
+            var id = btn.getAttribute('data-org-intencion') || '';
+            org.intencion = id;
+            var matched = rInt.intenciones.find(function (i) { return i.id === id; });
+            if (matched) {
+              org.tipo = matched.tipo_encuentro || '';
+            }
+            $$('[data-org-intencion]', box).forEach(function (c) {
+              c.classList.toggle('is-on', c.getAttribute('data-org-intencion') === id);
+            });
+            refreshOrgHoras();
+          });
+        });
+        if (!org.intencion) {
+          var primerVisible = visibles[0];
+          if (primerVisible) {
+            org.intencion = primerVisible.id;
+            org.tipo = primerVisible.tipo_encuentro || '';
+            box.querySelector('[data-org-intencion="' + primerVisible.id + '"]')?.classList.add('is-on');
+          }
+        }
+        return;
+      }
+    }
     const r = await api('encuentro.tipos_permitidos', {
       participantes: sel,
       residente_a: sel[0],
@@ -7650,6 +8390,7 @@ function hobbyIconKey(id, texto) {
         modo: orgModo()
       };
       if (org.peticion_id) payload.peticion_id = org.peticion_id;
+      if (org.intencion) payload.intencion = org.intencion;
       r = await api('encuentro.proponer', payload);
       if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
       try {
@@ -7712,7 +8453,12 @@ function hobbyIconKey(id, texto) {
   }
   async function ensurePartida() {
     if (await adoptSqlPartidaIfAny()) return true;
-    if (partidaId) return true;
+    if (partidaId) {
+      const probe = await api('partida.estado', {}, 'GET');
+      if (probe.ok) return true;
+      try { localStorage.removeItem(storageKey()); } catch (e) {}
+      partidaId = null;
+    }
     const r = await api('partida.nueva', configNueva(true));
     if (r.ok && r.partida_id) persistPartidaId(r.partida_id);
     return !!r.ok;
@@ -7728,12 +8474,21 @@ function hobbyIconKey(id, texto) {
         partidaId = null;
         if (await adoptSqlPartidaIfAny()) {
           paquete = await api('partida.refresh', {}, 'GET');
-        } else if (await ensurePartida()) {
-          paquete = await api('partida.refresh', {}, 'GET');
+        }
+        if (!paquete.ok) {
+          try { localStorage.removeItem(storageKey()); } catch (e) {}
+          partidaId = null;
+          if (await ensurePartida()) {
+            paquete = await api('partida.refresh', {}, 'GET');
+          }
         }
       }
     }
-    if (!paquete.ok) return;
+    if (!paquete.ok) {
+      toast('Partida no disponible. Recarga la p\u00e1gina.');
+      stopSyncClock();
+      return;
+    }
     cacheEstado = paquete.estado || null;
     cacheInsp = paquete.partida || null;
     const mapa = { mapa: paquete.mapa || {}, pueblo: paquete.pueblo || {} };
@@ -7747,6 +8502,7 @@ function hobbyIconKey(id, texto) {
       renderMisiones(cacheEstado.misiones_hoy || (cacheInsp && cacheInsp.misiones_diarias));
     renderBuzon(buzon.mensajes || []);
     pintarLlegadaCelebracionSiToca();
+    procesarCelebraciones(paquete.historia);
     renderCotilleo(diario.cotilleo || { hoy: diario.entradas || [], ayer: [], viejos: [] });
     actualizarCotiBadgesUI();
     renderVecinos();
@@ -8111,6 +8867,31 @@ function hobbyIconKey(id, texto) {
       } else uiHistBack();
       return;
     }
+    const histCelebClose = ev.target.closest('[data-historia-celebracion-close]');
+    if (histCelebClose) {
+      ev.preventDefault();
+      celebracionClose(celebracionHitoActual);
+      return;
+    }
+    const histCelebAlbum = ev.target.closest('[data-historia-celebracion-album]');
+    if (histCelebAlbum) {
+      ev.preventDefault();
+      celebracionIrAlbum();
+      return;
+    }
+    const histDetClose = ev.target.closest('[data-historia-detalle-close]');
+    if (histDetClose) {
+      ev.preventDefault();
+      historiaDetalleClose();
+      return;
+    }
+    const pol = ev.target.closest('.historia-polaroid:not(.historia-polaroid--bloqueada)');
+    if (pol && uiRootFrom(pol)) {
+      ev.preventDefault();
+      const hitoId = pol.getAttribute('data-hito-id');
+      if (hitoId) historiaDetalleAbrir(hitoId);
+      return;
+    }
     const t = ev.target.closest('[data-close], .velo');
     if (t && uiRootFrom(t)) {
       cerrarUiCompleto();
@@ -8168,6 +8949,22 @@ function hobbyIconKey(id, texto) {
       }
       if (name === 'vecinos') { vecTabActiva = 'vecinos'; aplicarVecTabUI(); renderVecinos(); }
       if (name === 'buzon') renderBuzon(cacheBuzon);
+      return;
+    }
+    const necgRes = ev.target.closest('[data-necg-res]');
+    if (necgRes && uiRootFrom(necgRes)) {
+      var rid = necgRes.getAttribute('data-necg-res');
+      if (rid) {
+        setCapa('ficha');
+        abrirFicha(rid);
+      }
+      return;
+    }
+    const celestNecesitan = ev.target.closest('[data-celestine-necesitan]');
+    if (celestNecesitan && uiRootFrom(celestNecesitan)) {
+      ev.preventDefault();
+      necgFiltroInicial = 'necesitan';
+      setCapa('necesidades_global');
       return;
     }
     const invEntregar = ev.target.closest('[data-inv-entregar]');
@@ -8295,7 +9092,6 @@ function hobbyIconKey(id, texto) {
       ev.stopPropagation();
       var wrap = encIntBtn.closest('[data-enc-int]');
       if (!wrap || wrap.classList.contains('is-busy')) return;
-      wrap.classList.add('is-busy');
       var encId = wrap.getAttribute('data-enc-id');
       var acc = encIntBtn.getAttribute('data-enc-int-accion');
       var objetivoId = wrap.getAttribute('data-enc-int-objetivo') || '';
@@ -8303,7 +9099,28 @@ function hobbyIconKey(id, texto) {
       if (acc === 'hobby') {
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
         extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+        if (!extra.hobby_id) {
+          var encH = encuentroPorId(encId);
+          var ivH = encH ? intervencionVistaDe(encH, cacheEstado) : null;
+          if (ivH) {
+            var idsH = encH.participantes || [];
+            var actorH = ivH.actor_actual || '';
+            var receptorH = '';
+            for (var riH = 0; riH < idsH.length; riH++) {
+              if (idsH[riH] !== actorH) { receptorH = idsH[riH]; break; }
+            }
+            if (receptorH) {
+              wrap.classList.add('is-busy');
+              pintarTemasIntervencion(wrap, ivH, receptorH);
+              var panelT = wrap.querySelector('[data-temas-panel]');
+              if (panelT) panelT.hidden = false;
+              wrap.classList.remove('is-busy');
+            }
+          }
+          return;
+        }
       }
+      wrap.classList.add('is-busy');
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');
       });
@@ -8396,7 +9213,7 @@ function hobbyIconKey(id, texto) {
   }
 
   (function bindFichaNavCircular() {
-    const capa = document.querySelector('.capa-ficha');
+    const capa = document.querySelector('[data-aht-screen="ficha"]');
     if (!capa || capa._ahtFichaNavBound) return;
     capa._ahtFichaNavBound = true;
     const prev = capa.querySelector('[data-ficha-nav-prev]');
@@ -8434,8 +9251,19 @@ function hobbyIconKey(id, texto) {
 
   const fichaVolver = $('[data-ficha-volver]');
   if (fichaVolver) {
-    fichaVolver.addEventListener('click', function () { setCapa('vecinos'); renderVecinos(); });
+    fichaVolver.addEventListener('click', function () {
+    if (fichaOverlayActiva) { cerrarFichaOverlay(); return; }
+    setCapa('vecinos'); renderVecinos();
+  });
   }
+
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && fichaOverlayActiva) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarFichaOverlay();
+    }
+  });
 
 
   const buzonLeerTodos = $('[data-buzon-leer-todos]');
@@ -8493,14 +9321,14 @@ function hobbyIconKey(id, texto) {
   });
   document.addEventListener('click', function (ev) {
     const filtroBtn = ev.target.closest('[data-vec-rel-filtro]');
-    if (filtroBtn && ev.target.closest('.capa-vecinos')) {
+    if (filtroBtn && ev.target.closest('[data-aht-screen="vecinos"]')) {
       vecRelFiltro = filtroBtn.getAttribute('data-vec-rel-filtro') || '';
       pintarVecRelFiltros();
       renderVecRelLista();
       return;
     }
     const pers = ev.target.closest('[data-vec-rel-open]');
-    if (pers && pers.getAttribute('data-vec-rel-open') && ev.target.closest('.capa-vecinos')) {
+    if (pers && pers.getAttribute('data-vec-rel-open') && ev.target.closest('[data-aht-screen="vecinos"]')) {
       ev.preventDefault();
       abrirFicha(pers.getAttribute('data-vec-rel-open'));
       return;

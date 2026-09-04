@@ -5,6 +5,7 @@
    NO tocar selectores .capa (riesgo regresion). */
 
 :root {
+  --tut-shell-height: min(87dvh, 580px);
   /* Colores */
   --tut-shell-bg: #FCFBFE;
   --tut-header-bg: #FFFFFF;

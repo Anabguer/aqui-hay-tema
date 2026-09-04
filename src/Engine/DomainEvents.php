@@ -45,6 +45,7 @@ final class DomainEvents
     public const COINCIDENCIA_INTERACCION = 'coincidencia_interaccion';
     public const MARCHA_INTENCION = 'marcha_intencion';
     public const MARCHA_EFECTIVA = 'marcha_efectiva';
+    public const HISTORIA_PUEBLO_HITO = 'historia_pueblo_hito';
 
     /** @deprecated usar ENCUENTRO_TERMINADO */
     public const ENCOUNTER_FINISHED_LEGACY = 'encounter_finished';

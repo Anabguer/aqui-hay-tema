@@ -238,6 +238,7 @@
   font-size: var(--aht-type-secondary) !important;
 }
 
+
 /* Vecinos/buz+�n preview */
 .play-v3:has(.game-shell) .vecinos-stat,
 .play-v3:has(.game-shell) .obj-pueblo-txt,
@@ -307,7 +308,7 @@
    10. EXCEPCIONES DECORATIVAS ��� MANTENER Caveat
    ============================================================ */
 
-/* Estos elementos CONSERVAN la manuscrita por ser decorativos/t+�tulos: */
+/* Estos elementos CONSERVAN la manuscrita por ser decorativos/t+�tulos:
 .play-v3 .mensajitos-tit,           /* "MENSAJITOS" */
 .play-v3 .mensajitos-tab,           /* Tabs NUEVOS/TODOS */
 .play-v3 .mensajitos-leer-todos-txt,/* "Marcar todo como le+�do" */

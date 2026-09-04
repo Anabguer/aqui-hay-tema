@@ -18,7 +18,8 @@ function ok(cond, msg) {
 
 // 1. Marcado ds-migrada en DOM
 ok(/capa-misiones[^>]*ds-migrada/.test(php), 'play.php: capa-misiones con ds-migrada');
-ok(/capa-buzon[^>]*ds-migrada/.test(php), 'play.php: capa-buzon (Mensajitos) con ds-migrada');
+ok(/data-open="parejas"/.test(php), 'play.php: data-open parejas en desktop (shell-grupo-parejas-open)');
+ok(/capa-parejas[^>]*ds-migrada/.test(php), 'play.php: capa-parejas con ds-migrada');
 
 // 2. Desktop Misiones abre modal (data-open)
 ok(/class="inicio-desktop[\s\S]*?data-open="misiones"/.test(php),
@@ -31,8 +32,16 @@ ok((php.match(/data-open="misiones"/g) || []).length >= 2,
 // 3. Autoridad DS: reglas per-capa en modal-core
 ok(/data-capa="misiones"\][\s\S]*capa-misiones\.ds-migrada/.test(modalCore),
   'modal-core: show rule misiones.ds-migrada');
-ok(/data-capa="buzon"\][\s\S]*capa-buzon\.ds-migrada/.test(modalCore),
-  'modal-core: show rule buzon.ds-migrada');
+ok(/data-capa="vida_pueblo"\][\s\S]*capa-vida-pueblo\.ds-migrada/.test(modalCore),
+  'modal-core: show rule vida_pueblo.ds-migrada');
+ok(/data-capa="parejas"\][\s\S]*capa-parejas\.ds-migrada/.test(modalCore),
+  'modal-core: show rule parejas.ds-migrada');
+ok(/data-capa="inventario"\][\s\S]*capa-inventario\.ds-migrada/.test(modalCore),
+  'modal-core: show rule inventario.ds-migrada');
+ok(/data-capa="organizar"\][\s\S]*capa-organizar\.ds-migrada/.test(modalCore),
+  'modal-core: show rule organizar.ds-migrada');
+ok(/720px/.test(modalCore) && /z-index: 110/.test(modalCore),
+  'modal-core: geometria canonica 720px + z-index 110');
 ok(/capa\.ds-migrada \[data-buzon-list\]/.test(modalCore),
   'modal-core: scroll [data-buzon-list] en ds-migrada');
 

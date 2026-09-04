@@ -234,12 +234,20 @@ final class RomanticProgressionBridge
             return;
         }
 
-        $subtipo = match ($tipo) {
-            RomanticProgression::SENAL_SE_FIJA => 'interes_incipiente',
-            RomanticProgression::SENAL_INTERES_CRECIENTE => 'interes_creciente',
-            RomanticProgression::SENAL_MUTUO => 'interes_mutuo',
-            default => 'interes_incipiente',
-        };
+        switch ($tipo) {
+            case RomanticProgression::SENAL_SE_FIJA:
+                $subtipo = 'interes_incipiente';
+                break;
+            case RomanticProgression::SENAL_INTERES_CRECIENTE:
+                $subtipo = 'interes_creciente';
+                break;
+            case RomanticProgression::SENAL_MUTUO:
+                $subtipo = 'interes_mutuo';
+                break;
+            default:
+                $subtipo = 'interes_incipiente';
+                break;
+        }
 
         $eventoId = 'progrom_diario:' . $tipo . ':' . $desde . '|' . $hacia;
         if (DiarioEngine::entradaPorEvento($partida, $eventoId) !== null) {
@@ -266,13 +274,19 @@ final class RomanticProgressionBridge
 
     private static function tituloDiario(string $tipo): string
     {
-        return match ($tipo) {
-            RomanticProgression::SENAL_SE_FIJA => 'Algo empieza',
-            RomanticProgression::SENAL_INTERES_CRECIENTE => 'No puedo evitarlo',
-            RomanticProgression::SENAL_MUTUO => 'Creo que es mutuo',
-            RomanticProgression::SENAL_CITA => 'Una cita',
-            RomanticProgression::SENAL_PRE_PAREJA => 'Esto ya tiene nombre',
-            default => 'Algo entre nosotros',
-        };
+        switch ($tipo) {
+            case RomanticProgression::SENAL_SE_FIJA:
+                return 'Algo empieza';
+            case RomanticProgression::SENAL_INTERES_CRECIENTE:
+                return 'No puedo evitarlo';
+            case RomanticProgression::SENAL_MUTUO:
+                return 'Creo que es mutuo';
+            case RomanticProgression::SENAL_CITA:
+                return 'Una cita';
+            case RomanticProgression::SENAL_PRE_PAREJA:
+                return 'Esto ya tiene nombre';
+            default:
+                return 'Algo entre nosotros';
+        }
     }
 }

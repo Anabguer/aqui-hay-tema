@@ -35,22 +35,32 @@
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
 .play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
-.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar,
-.play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda,
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar:not(.ds-migrada),
+.play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda:not(.ds-migrada),
 .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
 .play-v3 .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
 .play-v3 .play-root.pc[data-capa="mentes"] .capa-mentes,
 .play-v3 .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo,
 .play-v3 .play-root.pc[data-capa="ficha_relaciones"] .capa-ficha-relaciones,
 .play-v3 .play-root.pc[data-capa="residencias"] .capa-residencias,
-.play-v3 .play-root.pc[data-capa="diario"] .capa-diario {
+.play-v3 .play-root.pc[data-capa="diario"] .capa-diario,
+.play-v3 .play-root.pc[data-capa="historia"] .capa-historia {
   visibility: visible;
   transform: translateX(0);
   pointer-events: auto;
 }
 /* ds-migrada: visibility + pointer-events handled by modal-core; transform by modal-core */
 .play-v3 .play-root.pc[data-capa="misiones"] .capa-misiones.ds-migrada,
-.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon.ds-migrada {
+.play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon.ds-migrada,
+.play-v3 .play-root.pc[data-capa="ajustes"] .capa-ajustes.ds-migrada,
+.play-v3 .play-root.pc[data-capa="parejas"] .capa-parejas.ds-migrada,
+.play-v3 .play-root.pc[data-capa="inventario"] .capa-inventario.ds-migrada,
+.play-v3 .play-root.pc[data-capa="agenda"] .capa-agenda.ds-migrada,
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar.ds-migrada,
+.play-v3 .play-root.pc[data-capa="vida_pueblo"] .capa-vida-pueblo.ds-migrada,
+.play-v3 .play-root.pc[data-capa="historia"] .capa-historia.ds-migrada,
+.play-v3 .play-root.pc[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada,
+.play-v3 .play-root.pc[data-capa="historia_detalle"] .capa-historia-detalle.ds-migrada {
   visibility: visible;
   pointer-events: auto;
 }

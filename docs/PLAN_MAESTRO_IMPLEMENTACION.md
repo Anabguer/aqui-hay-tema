@@ -1,6 +1,6 @@
 # Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-08-31 (Auditoría maestra reconciliada · §28 Feature Flags realidad · §27 reloj pendiente PlayTest · §22 Mensajitos 2.0 motor completo · §23 Espacio de Celestine Fase 1 desplegada · §25 Expansión loop juego PENDIENTE · móvil NPC APARCADO · vínculo Celestine APARCADO · F12/F13 APARCADAS)
+**Versión:** 2026-09-03 (§32: reconciliación estados ya confirmados — Ajustes móvil ✅, Favicon ✅, Tutorial ✅, Scroll móvil ✅, Mensajitos LAB ✅, Modales en curso, Población ✅, Relaciones P20 actualizado, Concordancia 🧪 PlayTest · §25.12 · §28.2 · 02_TEMAS_PENDIENTES_AHT.md)
 
 **Estado post-auditoría:** Ver §28 para reconciliación completa plan ↔ código. El código está significativamente más avanzado de lo que esta tabla histórica refleja. Varios sistemas aparecen como "hechos" en bloques anteriores pero están apagados por feature flags — ver §28.
 
@@ -50,7 +50,7 @@
 - **🟢 Operativo (flag ON, accesible en producto):** Schema v2→v3, RNG, Logging, FeatureConfig, Calibración, Persistencia, Partida lifecycle, Domain Events, Población/Llegadas (PoolCanónico, GeneradorResidente, PerfilPartida, PoblaciónV3, CapacidadViviendas, CandidatoLlegada, LlegadaPresentación, NombresReservados), Tutorial (PrimerosPasos+Incorporaciones), Encuentros (EncuentroEngine+lifecycle+resolver+experiencia+intervencion, PropuestaEncuentroEngine, PropuestaNivel, Rechazo/Memoria, Disponibilidad), Reloj motor+Agenda, Relaciones core (Engine+Bitacora+Fase+Grafo+Historial+Bandas+VistaJugador+NarrativaBridge), Romance (Elegibilidad, ProgressiveProgression+Bridge, AcciónRomántica, SenalRomantica, IniciativaRomantica, TerceroRomantico), Compatibilidad/Química, Buzón/Mensajitos 2.0 (15 motores completos), Cotilleos, Coincidencias/Interacción casual, Lugares (9 canónicos+presencia+afecto+autónomo), HayTema, Marchas, Cumpleaños, Regalos/Inventario (Fase 1), Pareja/Parentesco, MENTES 2-pasos.
 - **🟣 Implementado pero apagado (flag OFF):** Diario (4 motores), Discovery (5 motores), Emociones (5 motores), CatchUp (CatchUpPlanner = stub interno, no sistema independiente), VidaPueblo, MisionesDiarias, PeticionesPueblo, Consecuencias (3 motores).
 - **🟡 Parcial/stub:** EconomyLedger, AutonomousPlanner.
-- **🔴 No implementado:** Romance Fase 2, crisis/ruptura autónomas, Historia del Pueblo, misión semanal, eventos interactivos (§25), §26 3 voces.
+- **🔴 No implementado:** Romance Fase 2, crisis/ruptura autónomas, eventos interactivos (§25), §26 3 voces. **Historia del Pueblo + Reto Semanal** → separados en `docs/02_TEMAS_PENDIENTES_AHT.md` (ambos 🔴 NO IMPLEMENTAR, pendientes PlayTest longitudinal).
 - **❓ Reloj:** motor implementado; comportamiento con pestaña abierta = PlayTest pendiente (§27).
 
 ### Infraestructura técnica no documentada previamente en este plan
@@ -977,7 +977,7 @@ Reutiliza el patrón `PersistenciaCaps` + claves nuevas en `persistencia.json`. 
 
 SOLO DOCUMENTACIÓN/DISEÑO. Sin runtime, sin deploy, sin cache-buster. Reconcilia decisiones cerradas tras revisar ideas externas. Actualiza en sitio §19.2/§19.3/§19.4 y §21.2/§21.3; Mensajitos con valor, Cotilleos, Diario y economía narrativa quedan consolidados en §21.2 + §22; regalos/experiencias/recuerdos/nueva partida ya están en §23 — aquí no se duplican.
 
-### 24.1 Llegadas — convertirlas en jugabilidad real [DECIDIDO]
+### 24.1 Llegadas — convertirlas en jugabilidad real 🧪 PENDIENTE PLAYTEST — 02/09/2026
 Problema: hoy una llegada puede sentirse pasiva (aparece solicitud → Celestine aprueba → entra el residente → el jugador puede no darse cuenta bien de quién ha llegado).
 
 **A) Perfil previo.** Antes de aceptar definitivamente la incorporación, Celestine consulta una ficha/perfil visual del candidato: conceptualmente un pequeño perfil social tipo Instagram adaptado al tono AHT. Enseña ÚNICAMENTE información legítimamente conocible en ese momento — cara, nombre, edad, algún hobby/interés visible, alguna información pública permitida, pequeño texto de presentación. NO revela compatibilidad oculta, preferencias ocultas, sentimientos, rasgos aún por descubrir ni información interna del motor. Objetivo: que el jugador pueda razonar «Ah, le gusta el deporte; quizá José pueda recibirlo porque también es deportista». Aceptar una llegada deja de ser pulsar OK.
@@ -1131,10 +1131,10 @@ Tras la calibración, estudiar una mezcla de:
 
 Tres capas diferentes:
 - **MISIONES DIARIAS:** «¿Qué puedo hacer hoy?»
-- **MISIÓN SEMANAL:** «¿Qué pequeño objetivo quiero conseguir durante estos días?»
+- **RETO SEMANAL:** «¿Qué pequeño objetivo quiero conseguir durante estos días?»
 - **HISTORIA DEL PUEBLO:** «¿Qué ha conseguido vivir este pueblo desde que llegué?»
 
-No fusionarlas en una única checklist.
+No fusionarlas en una única checklist. Documento canónico de ambos pendientes: `docs/02_TEMAS_PENDIENTES_AHT.md`.
 
 ### 25.13 Pareja no significa fin de contenido
 
@@ -1159,7 +1159,7 @@ NO ejecutar ahora. Cuando termine el playtest/calibración actual, reevaluar y o
 
 1. **FEEDBACK DE INTERVENCIÓN / ENTRAR EN LA MENTE** — la mecánica ya existe y ya requiere estrategia; el problema actual es que el juego no devuelve adecuadamente el mérito o fracaso de la decisión (§25.5–25.7).
 2. **HISTORIA DEL PUEBLO** — usar las estadísticas reales del playtest para establecer hitos, ventanas y rareza (§25.8–25.11).
-3. **MISIÓN SEMANAL** — generada preferentemente desde el estado real del pueblo (§25.2).
+3. **RETO SEMANAL** — generada preferentemente desde el estado real del pueblo (§25.2, `docs/02_TEMAS_PENDIENTES_AHT.md` §A).
 4. **EVENTOS GRANDES INTERACTIVOS** — convertir eventos sociales seleccionados en espacios de intervención sin transformarlos en minijuegos aislados (§25.3–25.4).
 
 Este orden NO es compromiso de implementación. Debe revisarse tras el playtest completo.
@@ -1426,6 +1426,30 @@ Familia semántica: campo `categoria` del catálogo de hobbies (reutilizado, sin
 - Gracia post-tutorial: `llegadas.dias_gracia_post_tutorial` (2 días sin ofertas tras activar modo normal).
 - Partidas existentes no migradas: el cambio aplica solo a **partidas nuevas** vía config.
 
+### 19.13 Observación playtest — ritmo de incorporación de residentes (2026-08-31)
+
+**Estado: 🧪 EN PLAYTEST — ABIERTA.** No clasificar como bug. No decidir balance. No modificar código ni configuración.
+
+**Partida longitudinal real observada (Neni):**
+
+| Momento | Residentes |
+|---|---|
+| D1 ~09:00 | 3 |
+| D1 ~11:00 | 6 |
+
+En unas 2 horas de juego la población inicial ha pasado de 3 a 6.
+
+**Percepción jugable:** Neni percibe la incorporación como demasiado rápida. Puede no dejar suficiente tiempo al jugador para: conocer a los residentes iniciales, identificar sus personalidades, seguir sus primeras relaciones, generar apego y percibir cada nueva incorporación como un acontecimiento. Además, un crecimiento tan rápido puede acelerar indirectamente la densidad social (encuentros, relaciones, flechazos, parejas, Cotilleos y Mensajitos).
+
+**Qué observar antes de decidir:**
+- Próximas incorporaciones durante D1.
+- Población al final de D1.
+- Evolución durante D2.
+- Cadencia real entre incorporaciones.
+- Si el 3→6 fue una concentración puntual o representa el ritmo normal actual.
+- Si la cadencia actual ha cambiado respecto al comportamiento/configuración anterior (§19.12).
+
+**Protecciones:** no inventar cadencia objetivo. No cerrar la incidencia sin evidencia suficiente. Esta observación NO modifica §19.12 ni sus decisiones; la cuestiona empiricalmente para que pueda revisarse si el playtest lo confirma.
 
 ### MENTES iteración 2 — peso real y coherencia narrativa (2026-08-28)
 
@@ -1764,8 +1788,8 @@ No existe implementación funcional.
 
 1. Romance Fase 2 (declaración + pareja autónoma) — `romance_hito` y `pareja` excluidas de `familias_en_play`
 2. Crisis/ruptura/reconciliación autónomas — umbrales RelacionFase BLOQUEADO_DECISION
-3. Historia del Pueblo (álbum hitos) — §25, explícitamente "NO implementar nada"
-4. Misión semanal — §25, propuesta conceptual
+3. Historia del Pueblo (álbum hitos) — §25, documentado en `docs/02_TEMAS_PENDIENTES_AHT.md` §B, explícitamente "NO implementar nada"
+4. Reto Semanal (antes "misión semanal") — §25, documentado en `docs/02_TEMAS_PENDIENTES_AHT.md` §A, propuesta conceptual
 5. Eventos grandes interactivos — §25.3, propuesta conceptual
 6. §26 Diario/Cotilleo/Ánimo 3 voces — "NO implementar todavía"
 
@@ -1821,4 +1845,196 @@ Estas hipótesis salen de la auditoría. Neni decidirá cuáles incorporar al Pl
 ### 28.5 Protecciones
 
 **NO se activaron flags, NO se implementó código, NO se cambió balance, NO se alteró funcionalidad.** Esta sección es exclusivamente documental.
+
+---
+
+## 29. Representación direccional de relaciones — ficha y badge (2026-09-02)
+
+🧪 **PENDIENTE PLAYTEST** — 02/09/2026
+
+Corrección de coherencia de representación entre vista global de relaciones y ficha individual. Modelo, persistencia, deltas y romance intactos. Solo capa de presentación.
+
+### Qué cambia
+
+- **Ficha individual** muestra social + romance cuando ambos existen (separador `·`). Antes solo mostraba social y ocultaba romance.
+- **A→B y B→A** conservan direccionalidad en ambas pantallas. La ficha de Julia muestra "Me gusta" hacia Marina; la ficha de Marina muestra solo "Conocida" hacia Julia.
+- **Badge ❗** reservado exclusivamente a conflicto real (`relaciones_conflicto`). La asimetría social/romántica entre A→B y B→A no genera badge.
+- **"DISTINTO EN CADA SENTIDO"** se conserva en vista global cuando las direcciones difieren.
+
+### Archivos modificados
+
+| Archivo | Cambio |
+|---------|--------|
+| `assets/js/play-v3.js` | `etiquetaRelText()`, `emojiRel()`, badge en `htmlVecRelCard()` |
+| `tests/relaciones_direccionales_ui_test.php` | Nuevo — 28 assertions, 6 casos |
+
+### Validación pendiente
+
+PlayTest real con Neni para confirmar que:
+- el jugador comprende "Conocido · Me gusta" como dos canales;
+- la dirección es inequívoca;
+- el badge no genera confusión;
+- la asimetría no se percibe como error.
+
+---
+
+## 30. Concordancia gramatical de género — copy dinámico (2026-09-02)
+
+🧪 **PENDIENTE PLAYTEST** — 02/09/2026
+
+Corrección transversal de concordancia de género en todo el copy dinámico (Mensajitos, Diario, Emociones, Hobbies, Misiones, PlaytestGuia). Implementación centralizada sin librería gramatical.
+
+### Qué corrige
+
+- **10 casos de producción** que mostraban `/a` visible o clítico incorrecto:
+  - MensajitoVoz: 7 bancos (F1, F6, F7) — `confundido/a`, `sincero/a`, `apagado/a`, `bajoneado/a`, `preocupado/a`, `nervioso/a`, `loco/a`
+  - MensajitoGeneradorEspontaneo: dato `nervioso/a` en flujo
+  - MensajitoDudaPermanenciaEngine: `solo/a`
+  - MisionPlantillas: `Sácala` fijo → `Sáca{loLa}`
+  - PlaytestGuia: `enfadado/a`, `neutro/a` (debug)
+
+### Arquitectura
+
+| Componente | Cambio |
+|------------|--------|
+| `GeneroConcordancia.php` (nuevo) | Helper central: `genero()`, `oa()`, `loLa()` — fuente `identidad_publica.genero`, fallback 'o'/'lo' |
+| `MensajitoVoz` | Tokens `{oa}` (hablante) / `{oa_ref}` (tercero) + auto-resolución `{oa}` |
+| `DiarioHitoEngine`, `EmocionalNarrativa`, `HobbyAnimoCopy` | `oA()` privados → `GeneroConcordancia::oa()` |
+| `MisionDiariaEngine::renderCopy` | Token `{loLa}` para `Sácalo/Sácala` |
+
+### Principios
+
+- **Cero inferencia por nombre/avatar**: solo `identidad_publica.genero` en runtime
+- **Doble concordancia explícita**: sujeto hablante vs. sujeto tercero (F7 usa `oa_ref` para `apagado/bajoneado` del observado)
+- **Fallback seguro**: género ausente → 'o'/'lo' (nunca `/a` visible)
+- **Sin librería gramatical general**: solo lo que los casos reales necesitan
+
+### Tests
+
+`tests/concordancia_genero_test.php` — 29 tests: helper, hablante (hombre/mujer), tercero (hombre/mujer), cruzados H→M / M→H, clítico lo/la, fallback, no-inferencia-por-nombre, barrido exhaustivo 5 familias × 2 géneros × 3 seeds.
+
+### Archivos modificados
+
+| Archivo | Tipo |
+|---------|------|
+| `src/Engine/GeneroConcordancia.php` | Nuevo |
+| `src/Engine/MensajitoVoz.php` | Modificado |
+| `src/Engine/MensajitoGeneradorEspontaneo.php` | Modificado |
+| `src/Engine/MensajitoDudaPermanenciaEngine.php` | Modificado |
+| `src/Engine/MisionDiariaEngine.php` | Modificado |
+| `src/Engine/MisionPlantillas.php` | Modificado |
+| `src/Engine/PlaytestGuia.php` | Modificado |
+| `src/Engine/DiarioHitoEngine.php` | Modificado |
+| `src/Engine/EmocionalNarrativa.php` | Modificado |
+| `src/Engine/HobbyAnimoCopy.php` | Modificado |
+| `tests/concordancia_genero_test.php` | Nuevo |
+
+### Validación
+
+- Syntax check 10/10 ✅
+- Tests focales 29/29 ✅
+- Cruzados hablante≠tercero ✅
+- Búsqueda residual `/a` en copy producción: 0 ✅
+- Commit: `dab742a4` → `origin/deploy/integrated` ✅
+
+### Validación pendiente
+
+PlayTest real con Neni para confirmar:
+- copy visible sin `/a` ni clíticos incorrectos en partidas reales;
+- concordancia correcta con personajes hombre/mujer;
+- no regresiones en tono/voz de los mensajes.
+
+---
+
+## 31. Design System de Modales — FASE 1 cerrada, piloto Mensajitos aprobado (2026-09-03)
+
+✅ **CERRADA** — 03/09/2026
+
+### Resumen
+
+Saneamiento arquitectónico del sistema de modales AHT. Criterio: UNA autoridad clara por concern. Piloto: Mensajitos LAB.
+
+### Resultado
+
+- **Mensajitos LAB**: aprobado visualmente por Neni en producción (SHA `d675d326`)
+- **Shell común** (`.aht-modal`): `modal-ds.css` — geometría, header, X, body slot, responsive
+- **Body Mensajitos**: `mensajitos-body.css` — tokens locales, tabs, papers, cards, flags, choices, lab panel
+- **Variables**: declaradas en `:root, .aht-modal` (resuelve bug de scoping original en `.aht-msg` clase fantasma)
+- **Color por vecino**: determinista vía `PAPER_POR_VECINO` (de_id → papel), hash FNV-1a fallback
+- **Pastels**: 5 tonos suaves (`#f7bdd0`, `#b3ceed`, `#bddcb5`, `#f1daa0`, `#ccb2e6`) + bordes sólidos 2.5px
+
+### Archivos canónicos
+
+| Archivo | Autoridad |
+|---------|-----------|
+| `assets/css/design-system/tokens.css` | Tokens globales (--modal-*) |
+| `assets/css/design-system/modal-ds.css` | Shell .aht-modal (188 líneas) |
+| `assets/css/design-system/mensajitos-body.css` | Body Mensajitos LAB (831 líneas) |
+
+### Verificaciones
+
+- [x] `grep -rln '\.aht-modal' assets/css/` → solo `modal-ds.css` + `mensajitos-body.css`
+- [x] Variables en `:root, .aht-modal` (no en `.aht-msg`)
+- [x] Mobile sin `!important` redundante
+- [x] Ningún CSS legacy escribe sobre `.aht-modal`
+- [x] Producción sirviendo v3-20260903-070218
+
+### FASE 2
+
+Migración de Vecinos al sistema `.aht-modal`, siguiendo `docs/AHT_ARQUITECTURA_MODALES.md` §7.
+
+### Referencias
+
+- Auditoría: `docs/AUDITORIA_CSS_MODALES.md` (commit `7fda6b54`)
+- Arquitectura: `docs/AHT_ARQUITECTURA_MODALES.md`
+- Entrega FASE 1: `Entregas/ENTREGA_MODALES_SANEAMIENTO_FASE_1.md`
+
+---
+
+## 32. Estados ya confirmados — reconciliación documental (2026-09-03)
+
+📋 **ACTUALIZACIÓN DOCUMENTAL** — 03/09/2026
+
+Reconciliación de estados de asuntos que aparecían como abiertos en documentos pero ya están resueltos o cerrados en código/producción. Solo corrección de documentación; sin cambio de funcionalidad.
+
+### Asuntos cerrados / solucionados
+
+| Asunto | Estado actual | Evidence | Nota |
+|--------|---------------|----------|------|
+| Ajustes móvil abría Misiones | ✅ SOLUCIONADO | Comportamiento corregido en producción | No reabrir |
+| Favicon | ✅ CERRADO | Implementado y operativo | No reabrir |
+| Tutorial | ✅ CERRADO | TutorialPrimerosPasos completo, 977 líneas, 3 misiones, garantía pedagógica. Commits `1c50da0`, `7bff700`, `a336c96`. | Su DISEÑO podrá retomarse cuando termine la migración/saneamiento de modales, pero no reabrir ahora el Tutorial funcional |
+| Scroll móvil sobre el mapa | ✅ VALIDADO POR NENI — 03/09/2026 | Fix definitivo commit `65c669af` | Congelar salvo bug real |
+| Mensajitos LAB | ✅ APROBADO VISUALMENTE POR NENI — 03/09/2026 | Iteración final commit `d675d3264ff7c4fa03a3536c3a4464162f738a6c` | Congelar salvo bug real |
+| Sistema de Modales | EN CURSO | FASE 1 cerrada (§31). Mensajitos es piloto aprobado; se continúa la migración modal por modal | Ver §31 |
+| Población inicial / llegadas | ✅ RESUELTO | PoblaciónV3 + curva llegadas V3. Comportamiento documentado y controlado | NO volver a abrir implementación sin comprobar primero el trabajo ya realizado (§19.12) |
+| Concordancia gramatical | 🧪 PENDIENTE PLAYTEST — 02/09/2026 | Implementación terminada. Tests `concordancia_genero_test.php` (29 tests). Commits completados | No reabrir salvo incidencia real |
+
+### Relaciones como jugabilidad (P20) — actualizar texto obsoleto
+
+Las decisiones de producto sobre Relaciones ya fueron cerradas y la implementación comenzó por piezas:
+
+- **PIEZA 1** (contrato + matriz semántica): completada y publicada — commit `badfc3d147c8dea9692734843fde1931c34830bb`
+- **Relaciones core** operativo (§28.2, sistema 23): Engine + Bitácora + Fase + Grafo + Historial + Bandas + VistaJugador + NarrativaBridge
+- El texto que decía "NO IMPLEMENTAR" en referencia a Relaciones como jugabilidad está obsoleto
+- Continúa por piezas sucesivas el resto de la implementación
+
+### Regla de oro
+
+**NO reabrir asuntos cerrados sin comprobar primero el estado real del código y la documentación.** Cada asunto cerrado tiene evidencia verificable (commit, validación de Neni, o ambos).
+
+---
+
+### Referencias cruzadas
+
+| § | Contenido | Estado |
+|---|-----------|--------|
+| §2 | Estado actual del código | Ver §28 |
+| §14 | Auditoría vs implementación | Obsoleto — ver §28 |
+| §19.12 | Recalibración población inicial | Resuelto |
+| §28 | Feature Flags y estado real | Fuente de verdad |
+| §29 | Representación direccional relaciones | PENDIENTE PLAYTEST |
+| §30 | Concordancia gramatical | PENDIENTE PLAYTEST |
+| §31 | Design System de Modales | FASE 1 CERRADA, FASE 2 pendiente |
+| §32 | Esta sección — reconciliación de estados | Completada 03/09/2026 |
 

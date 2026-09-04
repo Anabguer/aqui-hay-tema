@@ -16,7 +16,8 @@ final class EncuentroResolver
         if ($catalog !== null) {
             $cal = CalibracionConfig::load($catalog->getRoot());
         }
-        $reales = EncuentroDeltasReales::activo($partida, $cal);
+        $reales = EncuentroDeltasReales::activo($partida, $cal)
+            || ($encuentro['intencion'] ?? '') === 'bienvenida_llegada';
 
         $deltaSocial = [];
         $deltaRomance = [];
@@ -172,9 +173,13 @@ final class EncuentroResolver
         return $resultado;
     }
 
-    public static function aplicarResultado(array &$partida, array $encuentro, array $resultado, ?GameLogger $logger = null): void
+    public static function aplicarResultado(array &$partida, array $encuentro, array $resultado, ?GameLogger $logger = null, ?Catalog $catalog = null): void
     {
         $participantes = $encuentro['participantes'] ?? [];
+
+        // Necesidades: recuperación por lugar (individual + social)
+        self::aplicarNecesidadesEncuentro($partida, $encuentro, $resultado, $catalog);
+
         if (count($participantes) === 1) {
             $pid = (string) $participantes[0];
             $exp = $resultado['por_participante'][$pid]['resultado'] ?? null;
@@ -294,5 +299,70 @@ final class EncuentroResolver
             (string) ($encuentro['tipo'] ?? 'encuentro'),
             $resultado['por_participante'][$a]['resultado'] ?? null
         );
+    }
+
+    /**
+     * Aplica recuperación de necesidades a los participantes según el lugar del encuentro.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $encuentro
+     * @param array<string, mixed> $resultado
+     */
+    private static function aplicarNecesidadesEncuentro(
+        array &$partida,
+        array $encuentro,
+        array $resultado,
+        ?Catalog $catalog
+    ): void {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return;
+        }
+        $lugarId = (string) ($encuentro['lugar'] ?? '');
+        if ($lugarId === '') {
+            return;
+        }
+        $lugares = $catalog !== null ? $catalog->loadLugares() : [];
+        $lugarNecesidades = null;
+        foreach ($lugares['items'] ?? [] as $lug) {
+            if (($lug['id'] ?? '') === $lugarId) {
+                $lugarNecesidades = $lug['necesidades'] ?? null;
+                break;
+            }
+        }
+        if (!is_array($lugarNecesidades)) {
+            return;
+        }
+        $cal = $catalog !== null ? CalibracionConfig::load($catalog->getRoot()) : [];
+        $participantes = $encuentro['participantes'] ?? [];
+        $nParticipantes = count($participantes);
+        $estaAcompanado = $nParticipantes > 1;
+
+        foreach ($participantes as $pid) {
+            $pid = (string) $pid;
+            if (!isset($partida['residentes'][$pid])) {
+                continue;
+            }
+            $res = &$partida['residentes'][$pid];
+            NecesidadEstado::ensureResidente($res);
+            // hobby match: si el lugar tiene hobbies relacionados que el residente tiene
+            $hobbyMatch = false;
+            if ($catalog !== null) {
+                $store = $catalog->store();
+                $perfil = PerfilPartida::deOLegacy($partida, $pid, $catalog);
+                $hobbies = is_array($perfil['hobbies'] ?? null) ? $perfil['hobbies'] : [];
+                foreach ($hobbies as $h) {
+                    $hobbyItem = $store->hobby((string) $h);
+                    if (is_array($hobbyItem)) {
+                        $lugs = is_array($hobbyItem['lugar_ids'] ?? null) ? $hobbyItem['lugar_ids'] : [];
+                        if (in_array($lugarId, $lugs, true)) {
+                            $hobbyMatch = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            NecesidadEstado::aplicarRecuperacion($res, $lugarNecesidades, $estaAcompanado, $hobbyMatch, $cal);
+            unset($res);
+        }
     }
 }

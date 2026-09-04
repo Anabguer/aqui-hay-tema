@@ -1,0 +1,85 @@
+/* ============================================================
+   AHT V4 — TOKENS CANÓNICOS
+   Autoridad ÚNICA para colores, espaciados, radios, sombras,
+   tipografía y motion del sistema de pantallas V4.
+
+   Regla: cambiar un token aquí modifica TODAS las screens V4
+   que lo consumen deliberadamente.
+   ============================================================ */
+
+:root {
+  /* --- Superficies V4 --- */
+  --aht-bg: #FDFBFE;
+  --aht-surface: #F6F3F8;
+  --aht-surface-raised: #FFFFFF;
+  --aht-surface-dim: #EEE8FA;
+
+  /* --- Texto --- */
+  --aht-text: #33261E;
+  --aht-text-muted: #75634F;
+  --aht-text-faint: #A99A87;
+
+  /* --- Marca AHT --- */
+  --aht-accent: #C42B4A;
+  --aht-accent-soft: #F9DCE4;
+  --aht-accent-hover: #A8203D;
+
+  /* --- Borde --- */
+  --aht-border: #D8D1DE;
+  --aht-border-strong: #33261E;
+
+  /* --- Frame --- */
+  --aht-frame-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
+  --aht-frame-radius-sm: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  --aht-frame-shadow: 0 8px 24px rgba(48, 40, 58, 0.20);
+  --aht-overlay: rgba(38, 31, 47, 0.45);
+
+  /* --- Close (X) — token global testable --- */
+  --aht-close-color: var(--aht-accent);
+  --aht-close-bg: #F1EDF6;
+  --aht-close-border: #D8D1DE;
+
+  /* --- Header --- */
+  --aht-header-bg: #FFFFFF;
+  --aht-header-mark: #F1EDF6;
+
+  /* --- Body --- */
+  --aht-body-bg: #F6F3F8;
+
+  /* --- Footer --- */
+  --aht-footer-bg: #EEE8FA;
+  --aht-footer-border: #A99ADF;
+
+  /* --- Vainilla / acento puntual --- */
+  --aht-vanilla: #F1EDF6;
+  --aht-vanilla-deep: #E3D6F0;
+
+  /* --- Tipografía --- */
+  --aht-font-hand: "Caveat", "Segoe Print", cursive;
+  --aht-font-ui: "Nunito", "Segoe UI", sans-serif;
+
+  /* --- Espaciado --- */
+  --aht-gap-xs: 4px;
+  --aht-gap-sm: 8px;
+  --aht-gap-md: 12px;
+  --aht-gap-lg: 16px;
+  --aht-gap-xl: 24px;
+
+  /* --- Z-index V4 --- */
+  --aht-z-velo: 100;
+  --aht-z-frame: 110;
+  --aht-z-frame-overlay: 200;
+
+  /* --- Motion --- */
+  --aht-ease: cubic-bezier(.22, .9, .3, 1.2);
+  --aht-dur-fast: 120ms;
+  --aht-dur: 200ms;
+  --aht-dur-slow: 320ms;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --aht-frame-radius: 18px 14px 20px 13px / 14px 20px 13px 18px;
+    --aht-gap-xl: 16px;
+  }
+}

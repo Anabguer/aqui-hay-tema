@@ -1,4 +1,4 @@
-/* MODALS-SHELL-LAVANDA-CANON-v3
+﻿/* MODALS-SHELL-LAVANDA-CANON-v3
    Piel comun blanca/lavanda â€” movil + desktop. NO acortar a solo .phone. */
 
 :root {
@@ -20,16 +20,20 @@
 
 .play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa.capa-buzon.ds-modal-sheet:not(.ds-migrada),
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa.capa-vecinos,
-.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa.capa-organizar.org-plan-papel.ds-modal-sheet,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa.capa-organizar.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa.capa-ficha.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha_diario"] .capa.capa-ficha-diario.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .capa.capa-ficha-animo.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa.capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa.capa-agenda.agenda-modal.ds-modal-sheet,
-.play-v3:has(.game-shell) .play-root[data-capa="parejas"] .capa.capa-parejas.par-modal-papel.ds-modal-sheet,
-.play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa.capa-vida-pueblo.vida-modal-papel.ds-modal-sheet,
-.play-v3:has(.game-shell) .play-root[data-capa="inventario"] .capa.capa-inventario.inv-modal-papel.ds-modal-sheet,
-.play-v3:has(.game-shell) .play-root[data-capa="ajustes"] .capa.capa-ajustes.ajust-modal-papel.ds-modal-sheet,
+.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa.capa-agenda.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="parejas"] .capa.capa-parejas.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa.capa-vida-pueblo.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="inventario"] .capa.capa-inventario.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="misiones"] .capa.capa-misiones.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="ajustes"] .capa.capa-ajustes.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia"] .capa.capa-historia.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa.capa-historia-celebracion.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_detalle"] .capa.capa-historia-detalle.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-consulta="sel"] .selector.nota-mapa.ds-modal-sheet,
 .play-v3:has(.game-shell) .play-root[data-consulta="quien"] .quien.nota-mapa.ds-modal-sheet {
   background-color: var(--modal-shell-bg) !important;
@@ -60,6 +64,7 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .ficha-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .coti-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .org-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .par-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .vida-top,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-cab,
@@ -108,6 +113,7 @@
 
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .org-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .coti-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa .mis-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .par-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .inv-body,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa .ajustes-body,
@@ -177,10 +183,18 @@
   background-color: var(--modal-header-bg) !important;
 }
 /* MODAL-SHELL-PILOTO-v1 — Familia A (Agenda, Vecinos, Ficha, Nuevo Plan, Mensajitos) */
-.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda,
+.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos,
 .play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha,
-.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="misiones"] .capa-misiones.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="parejas"] .capa-parejas.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="inventario"] .capa-inventario.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="vida_pueblo"] .capa-vida-pueblo.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="ajustes"] .capa-ajustes.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia"] .capa-historia.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_celebracion"] .capa-historia-celebracion.ds-migrada,
+.play-v3:has(.game-shell) .play-root[data-capa="historia_detalle"] .capa-historia-detalle.ds-migrada,
 .play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) {
   display: flex !important;
   flex-direction: column !important;
@@ -193,7 +207,7 @@
   content: none !important;
 }
 
-.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar {
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar.ds-migrada {
   overflow-x: hidden !important;
 }
 

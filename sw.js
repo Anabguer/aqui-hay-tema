@@ -20,5 +20,13 @@ self.addEventListener('fetch', function (event) {
   if (path.indexOf('/api/') !== -1 || path.endsWith('/api/index.php') || path.indexOf('/data/') !== -1) {
     return;
   }
-  event.respondWith(fetch(event.request));
+  event.respondWith(
+    fetch(event.request).catch(function () {
+      return new Response('Error de red', {
+        status: 503,
+        statusText: 'Service Unavailable',
+        headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+      });
+    })
+  );
 });

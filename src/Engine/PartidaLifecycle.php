@@ -36,6 +36,13 @@ final class PartidaLifecycle
         PoblacionV3::incorporarIniciales($partida, $config, $this->root, $this->residentes);
         self::aplicarParentescoConfig($partida, $config);
 
+        HistoriaPuebloEngine::registrar(
+            $partida,
+            HistoriaPuebloEngine::HITO_EMPEZO_COTARRO,
+            array_keys($partida['residentes']),
+            ['origen' => 'partida_nueva']
+        );
+
         FeatureConfig::mergeIntoPartida($partida, $this->root);
         if (!empty($config['features']) && is_array($config['features'])) {
             $partida['features'] = array_merge(

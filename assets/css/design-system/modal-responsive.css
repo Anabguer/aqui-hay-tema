@@ -1,11 +1,19 @@
-/* MODAL-RESPONSIVE — dimensiones por viewport de modales AHT
-   Gate: .ds-migrada — solo modales marcadas reciben autoridad nueva.
-   Desktop y móvil: mismo sistema. Solo adapta tamaño. */
+﻿/* MODAL-RESPONSIVE — adaptacion movil del shell canonico AHT */
 
-@media (min-width: 769px) {
-  .play-v3:has(.game-shell) .play-root.pc[data-capa] .capa.ds-migrada {
-    width: min(100%, 480px);
-    max-width: min(100%, 480px);
-    max-height: min(88vh, 720px);
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="misiones"] .capa-misiones.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="parejas"] .capa-parejas.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa-inventario.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="vida_pueblo"] .capa-vida-pueblo.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="ajustes"] .capa-ajustes.ds-migrada,
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon.ds-migrada {
+    width: min(100%, 393px) !important;
+    max-width: min(100%, 393px) !important;
+    max-height: min(88vh, 720px) !important;
+    padding: 14px 13px 12px !important;
+    transform: translate(-50%, -50%) rotate(-0.2deg) !important;
   }
 }

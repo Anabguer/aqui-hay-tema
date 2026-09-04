@@ -1841,22 +1841,22 @@
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara img,
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara .cara-ini,
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara {
-    width: 34px !important;
-    height: 34px !important;
+    width: 30px !important;
+    height: 30px !important;
   }
 
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara-ini {
-    font-size: .62rem !important;
+    font-size: .55rem !important;
   }
 
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::before {
-    inset: -6px !important;
+    inset: -5px !important;
     border-width: 2px !important;
   }
 
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -4px !important;
-    height: 6px !important;
+    bottom: -3px !important;
+    height: 5px !important;
   }
 }
 
@@ -8181,7 +8181,7 @@
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .inicio-mobile:not(.inicio-mobile-feed) .game-top.game-top-mock {
     padding-top: 13px !important;
-    padding-bottom: 14px !important;
+    padding-bottom: 0 !important;
     row-gap: 8px !important;
   }
 
@@ -10018,7 +10018,7 @@
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .board-fit {
     aspect-ratio: auto !important;
     height: auto !important;
-    padding-bottom: 14px !important;
+    padding-bottom: 0 !important;
     box-sizing: border-box !important;
     overflow: hidden !important;
   }
@@ -10032,7 +10032,7 @@
   }
 }
 
-/* INICIO-BOTTOM-NAV-FLOW-v133 — nav tras feed; sin hueco viewport-fijo en móvil alto */
+/* INICIO-BOTTOM-NAV-FLOW-v133 ï¿½ nav tras feed; sin hueco viewport-fijo en mï¿½vil alto */
 @media (max-width: 768px) {
   .inicio-stage > .play-bottom-nav {
     order: 4 !important;
@@ -10085,5 +10085,70 @@
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-par-izq,
   .play-v3:has(.game-shell) .inicio-mobile .inicio-mp-par-faces {
     display: none !important;
+  }
+}
+
+/* INICIO-PLANES-MOBIL-DUO-ICON-v148 - movil: caras separadas con emoji entre ambas */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile .proxplanes-movil .prox-faces--duo,
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+  }
+
+  .play-v3 .inicio-mobile .proxplanes-movil .prox-faces--duo .enc-mov-cara--r,
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces .enc-mov-cara--r {
+    margin-left: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .proxplanes-movil .prox-faces--duo img,
+  .play-v3 .inicio-mobile .proxplanes-movil .prox-faces--duo .cara-ini,
+  .play-v3 .inicio-mobile .proxplanes-movil .prox-faces--duo .cara-token .cara,
+  .play-v3:has(.game-shell) .inicio-mobile .proxplanes-movil .pp-mov-card--mock .prox-faces--duo img,
+  .play-v3:has(.game-shell) .inicio-mobile .proxplanes-movil .pp-mov-card--mock .prox-faces--duo .cara-ini {
+    margin-right: 0 !important;
+  }
+
+  .play-v3 .inicio-mobile .proxplanes-movil .prox-faces--duo .enc-mov-tipo-ico--emoji,
+  .play-v3 .inicio-mobile .encursos-movil .enc-mov-faces .enc-mov-tipo-ico--emoji,
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-faces .enc-mov-tipo-ico--emoji {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    flex: 0 0 auto !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 2px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+    z-index: 3 !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3:has(.game-shell) .encursos-movil .enc-mov-faces .enc-mov-cara--r {
+    margin-left: 0 !important;
+  }
+}
+
+/* INICIO-MAPA-BALANCE â€” respiro inferior = gap .inicio-stage (12px), sin estirar host */
+@media (max-width: 768px) {
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host.game-map-wrap {
+    flex: 0 0 auto !important;
+    max-height: none !important;
+  }
+
+  .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .board-fit {
+    padding-bottom: 0 !important;
   }
 }

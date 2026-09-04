@@ -12,6 +12,7 @@ use AquiHayTema\Api\Handlers\DebugLabHandler;
 use AquiHayTema\Api\Handlers\DiarioHandler;
 use AquiHayTema\Api\Handlers\EventosPuebloHandler;
 use AquiHayTema\Api\Handlers\EncuentrosHandler;
+use AquiHayTema\Api\Handlers\HistoriaPuebloHandler;
 use AquiHayTema\Api\Handlers\LlegadaHandler;
 use AquiHayTema\Api\Handlers\MapaHandler;
 use AquiHayTema\Api\Handlers\MarchaHandler;
@@ -42,6 +43,11 @@ $routes = [
     'partida.estado' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return PartidaHandler::estado($ctx, $body, $p);
+    },
+    'partida.necesidades_global' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        $vista = \AquiHayTema\Engine\PartidaService::vistaGlobalNecesidades($p);
+        return ['ok' => true, 'necesidades' => $vista];
     },
     'partida.refresh' => static function () use ($ctx, $body) {
         $p = requirePartidaRefresh($ctx, $body);
@@ -170,6 +176,10 @@ $routes = [
     'encuentro.tipos_permitidos' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return EncuentrosHandler::tiposPermitidos($ctx, $body, $p);
+    },
+    'encuentro.intenciones_disponibles' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return EncuentrosHandler::intencionesDisponibles($ctx, $body, $p);
     },
     'encuentro.propuesta.decidir' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
@@ -319,6 +329,14 @@ $routes = [
     'diario.cotilleo_visto' => static function () use ($ctx, $body) {
         $p = requirePartidaLigera($ctx, $body);
         return DiarioHandler::cotilleoVisto($ctx, $body, $p);
+    },
+    'historia.snapshot' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return HistoriaPuebloHandler::snapshot($ctx, $body, $p);
+    },
+    'historia.celebrar_ack' => static function () use ($ctx, $body) {
+        $p = requirePartida($ctx, $body);
+        return HistoriaPuebloHandler::ack($ctx, $body, $p);
     },
     'dev.snapshot.guardar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);

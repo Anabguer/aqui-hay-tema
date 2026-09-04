@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-static';
+$ahtUi = 'v3-20260903-144500';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -32,6 +32,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: inicio-views carga temprano para ocultar la vista inactiva antes del flash */ ?>
+  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-historia.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-shell-art.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-capas-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -45,7 +48,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/tokens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/modals.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -72,6 +74,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop-cromatica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/design-system/mensajitos-carta-regalo-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/ficha-neni-ref-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modal-titles-aht.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modals-secondary-unified.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -85,7 +88,17 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/design-system/modal-skin.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modal-header.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/modal-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <style>
+  <?php /* CANON: modal catálogo — frame limpio de laboratorio, sin herencia legacy */ ?>
+  <link rel="stylesheet" href="assets/css/design-system/modal-catalog.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: DS Modal nuevo + body Mensajitos piloto */ ?>
+  <link rel="stylesheet" href="assets/css/design-system/modal-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <link rel="stylesheet" href="assets/css/design-system/mensajitos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <link rel="stylesheet" href="assets/css/design-system/vecinos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <?php /* === V4 SCREEN SYSTEM === */ ?>
+   <link rel="stylesheet" href="assets/css/v4/tokens-v4.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <link rel="stylesheet" href="assets/css/v4/screen-frame.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <link rel="stylesheet" href="assets/css/v4/screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+   <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .875rem;
       font-family: Fraunces, Georgia, serif; font-style: italic;
@@ -428,8 +441,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
-              <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/><span class="obj-buzon-badge" data-buzon-badge hidden>0</span></span>
-              <span class="obj-buzon-txt game-left-tile-label">Mensajitos</span>
+              <span class="inicio-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/><span class="obj-buzon-badge" data-buzon-badge hidden>0</span></span>
+              <span class="obj-buzon-txt inicio-tile-label">Mensajitos</span>
               <span class="obj-buzon-flecha" aria-hidden="true">&#8250;</span>
             </button>
           </div>
@@ -437,11 +450,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo shell-grupo-resumen">
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
-            <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
+            <span class="obj-vecinos-preview inicio-tile-ico" data-vecinos-preview aria-hidden="true"></span>
             <span class="obj-vecinos-total-badge" data-vecinos-total-badge hidden></span>
             <div class="obj-vecinos-head">
-              <span class="obj-vecinos-tit game-left-tile-label">VECINOS</span>
-              <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
+              <span class="obj-vecinos-tit inicio-tile-label">VECINOS</span>
+              <span class="obj-vecinos-poblacion inicio-tile-meta" data-vecinos-poblacion></span>
             </div>
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
@@ -449,7 +462,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo shell-grupo-planes">
 <button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Crear plan">
               <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt game-left-tile-label">PLAN</span>
+              <span class="obj-nuevo-plan-txt inicio-tile-label">PLAN</span>
             </button>
 </section>
           </div>
@@ -534,6 +547,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <button type="button" data-open="diario"><img src="assets/play-v3/dock/sello_diario.png" alt=""/>Diario</button>
         <button type="button" data-open="organizar"><img src="assets/play-v3/dock/sello_organizar.png" alt=""/>Organizar</button>
         <button type="button" data-open="vecinos"><img src="assets/play-v3/dock/sello_vecinos.png" alt=""/>Vecinos</button>
+        <button type="button" data-open="historia"><img src="assets/play-v3/dock/sello_pueblo.png" alt=""/>Historia</button>
       </nav>
       <div class="velo" data-close></div>
       <p class="feedback-toast" data-toast></p>
@@ -582,423 +596,484 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="capa capa-vecinos" aria-label="Vecinos del pueblo">
-        <button type="button" class="cerrar vecinos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="vecinos-cab">
-          <div class="ds-modal-head vecinos-head">
-            <div class="ds-modal-head-row">
-              <h2 class="ds-modal-tit ds-modal-tit--ink">Vecinos del pueblo</h2>
-            </div>
-            <span class="vecinos-cuenta-wrap" data-vec-cuenta-wrap><span class="vecinos-cuenta ds-pill ds-pill--pink" data-vecinos-count></span></span>
+      <aside class="aht-screen" data-aht-screen="vecinos" aria-label="Vecinos del pueblo">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Vecinos del pueblo</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-tabs" role="tablist" aria-label="Vecinos y relaciones">
+            <button type="button" class="aht-frame-tab is-active" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
+            <button type="button" class="aht-frame-tab" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
           </div>
-        </header>
-        <div class="vec-tabs" role="tablist" aria-label="Vecinos y relaciones">
-          <button type="button" class="vec-tab is-on" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
-          <button type="button" class="vec-tab vec-tab--lavanda" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
-        </div>
-        <div class="vec-panel" data-vec-panel="vecinos">
-          <div class="vec-busca-tira">
-            <label class="vec-busca-wrap">
-              <span class="vec-busca-ico" aria-hidden="true">&#8981;</span>
-              <input type="search" class="vec-busca-inp" data-vec-busca placeholder="Buscar vecino..." autocomplete="off" spellcheck="false"/>
-            </label>
-          </div>
-          <div class="vecinos-grid" data-vecinos-list></div>
-          <p class="mensajitos-hint vecinos-hint">&#11088; Toca un vecino para ver su historia, estado y relaciones</p>
-        </div>
-        <div class="vec-panel" data-vec-panel="relaciones" hidden>
-          <div class="vec-rel-filtros" data-vec-rel-filtros></div>
-          <label class="vec-rel-dd-wrap">
-            <select class="vec-rel-persona" data-vec-rel-persona aria-label="Filtrar por vecino"></select>
-          </label>
-          <div class="vec-rel-scroll capa-scroll" data-vec-rel-list></div>
-          <p class="mensajitos-hint vec-rel-hint">&#128156; Las relaciones pueden cambiar con cada plan</p>
-        </div>
-      </aside>
-      <aside class="capa capa-agenda agenda-modal ds-modal-sheet" aria-label="Planes de Celestine">
-        <span class="agenda-pin agenda-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar agenda-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="agenda-cab">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#128197;</span>
-              <h2 class="agenda-tit ds-modal-tit ds-modal-tit--brown">Planes</h2>
-            </div>
-            <p class="ds-modal-sub agenda-sub">Lo que est&#8212; por venir.</p>
-          </div>
-        </header>
-        <div class="agenda-list capa-scroll" data-agenda-list></div>
-      </aside>
-      <aside class="capa capa-mentes mentes-modal ds-modal-sheet" aria-label="&iquest;Qu&eacute; se cuece ah&iacute;?" role="dialog" aria-modal="true">
-        <button type="button" class="cerrar mentes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="mentes-top">
-          <div class="ds-modal-head">
-            <h2 class="mentes-tit ds-modal-tit ds-modal-tit--lavender">&iquest;Qu&eacute; se cuece ah&iacute;?</h2>
-          </div>
-        </header>
-        <div class="mentes-body capa-scroll" data-mentes-body></div>
-      </aside>
-      <aside class="capa capa-ficha ds-modal-sheet" aria-label="Ficha de vecino">
-        <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="ficha-top">
-          <h2 class="ficha-tit ds-modal-tit ds-modal-tit--ink">Ficha de vecino</h2>
-          <button type="button" class="ficha-volver" data-ficha-volver>&larr; VECINOS</button>
-        </header>
-        <section class="ficha-hero" aria-label="Perfil del vecino">
-          <div class="ficha-cara-ring" data-ficha-cara-ring>
-            <div class="ficha-cara" data-ficha-img></div>
-          </div>
-          <div class="ficha-hero-info">
-            <div class="ficha-nombre-nav">
-              <button type="button" class="ficha-nav ficha-nav-prev" data-ficha-nav-prev aria-label="Vecino anterior">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <h3 class="ficha-nombre" data-ficha-nombre></h3>
-              <button type="button" class="ficha-nav ficha-nav-next" data-ficha-nav-next aria-label="Vecino siguiente">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-            </div>
-            <p class="ficha-edad" data-ficha-edad hidden></p>
-            <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
-            <p class="ficha-desde" data-ficha-desde></p>
-            <div class="ficha-animo-row" data-ficha-animo-row>
-              <div class="ficha-animo-pill" data-ficha-animo-pill>
-                <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                <span class="ficha-animo-val" data-ficha-animo-text></span>
-                <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="&iquest;Por qu&eacute; est&aacute; as&iacute;?">?</button>
+          <div class="aht-frame-body">
+            <div class="vec-panel" data-vec-panel="vecinos">
+              <div class="vec-busca-tira">
+                <label class="vec-busca-wrap">
+                  <span class="vec-busca-ico" aria-hidden="true">&#8981;</span>
+                  <input type="search" class="vec-busca-inp" data-vec-busca placeholder="Buscar vecino..." autocomplete="off" spellcheck="false"/>
+                </label>
               </div>
+              <div class="vecinos-grid" data-vecinos-list></div>
             </div>
-          </div>
-          <div class="ficha-hero-acciones" aria-label="Acciones con el vecino">
-            <button type="button" class="ficha-btn-diario ficha-hero-btn" data-ficha-diario-btn>Diario</button>
-            <button type="button" class="ficha-btn-org ficha-hero-btn" data-ficha-org>Nuevo plan</button>
-            <button type="button" class="ficha-btn-regalo ficha-hero-btn" data-ficha-regalar>Regalar</button>
-          </div>
-        </section>
-        <div class="ficha-body">
-          <div class="ficha-rasgos-hobbies">
-            <section class="ficha-seccion ficha-seccion-rasgos">
-              <h4 class="ficha-seccion-tit">Rasgos</h4>
-              <div class="ficha-seccion-body">
-                <div class="ficha-rasgos" data-ficha-rasgos></div>
-              </div>
-            </section>
-            <section class="ficha-seccion ficha-seccion-hobbies">
-              <h4 class="ficha-seccion-tit">Hobbies</h4>
-              <div class="ficha-seccion-body">
-                <div class="ficha-hobbies" data-ficha-hobbies></div>
-              </div>
-            </section>
-          </div>
-          <div class="ficha-col ficha-col-detalles capa-scroll">
-            <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
-              <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
-              <div class="ficha-seccion-body ficha-seccion-body-prefs" data-ficha-sabes-body></div>
-            </section>
-            <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">Relaciones</h4>
-              <div class="ficha-seccion-body">
-                <div class="ficha-relaciones" data-ficha-relaciones></div>
-              <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver m&aacute;s relaciones</button>
-              </div>
-            </section>
-            <section class="ficha-seccion">
-              <h4 class="ficha-seccion-tit">Pr&oacute;ximos planes</h4>
-              <div class="ficha-seccion-body">
-                <div class="ficha-planes" data-ficha-planes></div>
-              </div>
-            </section>
+            <div class="vec-panel" data-vec-panel="relaciones" hidden>
+              <div class="vec-rel-filtros" data-vec-rel-filtros></div>
+              <label class="vec-rel-dd-wrap">
+                <select class="vec-rel-persona" data-vec-rel-persona aria-label="Filtrar por vecino"></select>
+              </label>
+              <div class="vec-rel-scroll capa-scroll" data-vec-rel-list></div>
+              <p class="mensajitos-hint vec-rel-hint">&#128156; Las relaciones pueden cambiar con cada plan</p>
+            </div>
           </div>
         </div>
       </aside>
-      <aside class="capa capa-ficha-relaciones ds-modal-sheet" aria-label="Relaciones del vecino">
-        <span class="ficha-tape ficha-tape-l" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-ficha-rel-close aria-label="Cerrar">X</button>
-        <header class="frel-top">
-          <button type="button" class="frel-volver" data-frel-volver>&larr; FICHA</button>
-          <h3 class="frel-tit" data-ficha-rel-modal-tit>Relaciones</h3>
-        </header>
-        <div class="frel-scroll capa-scroll" data-ficha-rel-list></div>
-      </aside>
-      <aside class="capa capa-ficha-animo ds-modal-sheet" aria-label="Estado de animo del vecino">
-        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-animo-close aria-label="Cerrar">X</button>
-        <header class="fani-top">
-          <button type="button" class="fani-volver" data-animo-volver>&larr; FICHA</button>
-        </header>
-        <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
-      </aside>
-      <aside class="capa capa-ficha-diario ds-modal-sheet" aria-label="Diario del vecino">
-        <span class="ficha-tape ficha-tape-r fdi-tape-r" aria-hidden="true"></span>
-        <button type="button" class="cerrar ficha-cerrar ds-modal-close" data-diario-vecino-close aria-label="Cerrar">X</button>
-        <header class="fdi-top">
-          <button type="button" class="fdi-volver" data-diario-volver>&larr; FICHA</button>
-          <div class="fdi-hero" data-diario-hero></div>
-          <label class="fdi-busca-wrap">
-            <span class="fdi-busca-ico" aria-hidden="true">&#8981;</span>
-            <input type="search" class="fdi-busca-inp" data-diario-busca placeholder="Buscar en su historia..." autocomplete="off" spellcheck="false"/>
-          </label>
-          <div class="fdi-filtros" role="tablist" aria-label="Filtrar entradas">
-            <button type="button" class="fdi-filt is-on" data-diario-filt="todo" role="tab" aria-selected="true">Todo</button>
-            <button type="button" class="fdi-filt" data-diario-filt="planes" role="tab" aria-selected="false">Planes</button>
-            <button type="button" class="fdi-filt" data-diario-filt="relaciones" role="tab" aria-selected="false">Relaciones</button>
-            <button type="button" class="fdi-filt" data-diario-filt="cambios" role="tab" aria-selected="false">Cambios</button>
+      <aside class="aht-screen" data-aht-screen="agenda" aria-label="Planes de Celestine">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Planes</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="agenda-list capa-scroll" data-agenda-list></div>
           </div>
-          <button type="button" class="fdi-orden" data-diario-orden aria-label="Ordenar">&#9783; M&aacute;s reciente</button>
-        </header>
-        <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
-      </aside>
-      <aside class="capa capa-misiones mis-modal-papel ds-modal-sheet ds-migrada" aria-label="Misiones de hoy">
-        <span class="ficha-tape ficha-tape-l mis-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r mis-tape-tr" aria-hidden="true"></span>
-        <span class="mis-pin mis-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar mis-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="mis-top">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#9733;</span>
-              <h2 class="mis-tit ds-modal-tit ds-modal-tit--brown">Hoy en el pueblo</h2>
-            </div>
-          </div>
-          <p class="mis-sub mini" data-misiones-teaser>&#8212;</p>
-        </header>
-        <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
-      </aside>
-
-      <aside class="capa capa-parejas par-modal-papel ds-modal-sheet" aria-label="Parejas del pueblo">
-        <span class="ficha-tape ficha-tape-l par-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r par-tape-tr" aria-hidden="true"></span>
-        <button type="button" class="cerrar par-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="par-top">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--pink" aria-hidden="true">&#9829;</span>
-              <h2 class="par-tit ds-modal-tit ds-modal-tit--pink">Parejas</h2>
-            </div>
-          </div>
-          <p class="par-sub mini" data-parejas-teaser">&mdash;</p>
-        </header>
-        <div class="par-body capa-scroll" data-parejas-modal-list></div>
-      </aside>
-      <aside class="capa capa-vida-pueblo vida-modal-papel ds-modal-sheet" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
-        <button type="button" class="cerrar vida-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="vida-top">
-          <p class="vida-modal-ico" aria-hidden="true">&#127793;</p>
-          <h2 class="vida-tit ds-modal-tit ds-modal-tit--pink">Vida del pueblo</h2>
-          <p class="vida-valor" data-vida-modal-valor>&#8212; / 100</p>
-          <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
-          <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
-        </header>
-        <div class="vida-body capa-scroll">
-          <div class="vida-copy">
-            <p>Esto no es decoraci&#8212;n, aunque lo parezca.</p>
-            <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por alg&#8212;n motivo, ahora son responsabilidad tuya.</p>
-            <p>Haz que las cosas salgan bien y el coraz&#8212;n subir&#8212;. D&#8212;jalos a su suerte demasiado tiempo y&#8212; bueno, procura que esto no llegue a 0.</p>
-          </div>
-          <p class="vida-latido mini">&#8212;Llegas a 100? ?? Hay latido.<br>S&#8212;, conseguir que este pueblo funcione tiene premio. Incre&#8212;ble, pero cierto.</p>
         </div>
       </aside>
-      <aside class="capa capa-buzon ds-modal-sheet ds-migrada" aria-label="Mensajitos">
-        <button type="button" class="cerrar mensajitos-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="mensajitos-cab">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <h2 class="ds-modal-tit ds-modal-tit--ink">Mensajitos</h2>
-            </div>
+      <aside class="aht-screen" data-aht-screen="mentes" aria-label="¿Qué se cuece ahí?" role="dialog" aria-modal="true">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">¿Qué se cuece ahí?</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="mentes-body capa-scroll" data-mentes-body></div>
           </div>
-          <div class="mensajitos-tabs" role="tablist" aria-label="Filtrar mensajitos">
-            <button type="button" class="mensajitos-tab is-on" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
-            <button type="button" class="mensajitos-tab" data-buzon-tab="todos" role="tab" aria-selected="false">TODOS</button>
-          </div>
-        </header>
-        <div class="mensajitos-toolbar">
-          <button type="button" class="mensajitos-leer-todos" data-buzon-leer-todos hidden>
-            <span class="mensajitos-leer-todos-box" aria-hidden="true"></span>
-            <span class="mensajitos-leer-todos-txt">Marcar todo como le&iacute;do</span>
-          </button>
-        </div>
-        <div data-buzon-list></div>
-        <p class="mensajitos-hint">&#11088; Abrir mensajitos puede desbloquear planes y cotilleos</p>
-      </aside>
-      <aside class="capa capa-inventario inv-modal-papel ds-modal-sheet" aria-label="Inventario de Celestine">
-        <span class="ficha-tape ficha-tape-l inv-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r inv-tape-tr" aria-hidden="true"></span>
-        <button type="button" class="cerrar inv-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="inv-cab">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#127890;</span>
-              <h2 class="inv-tit ds-modal-tit ds-modal-tit--brown">Inventario</h2>
-            </div>
-            <p class="inv-sub ds-modal-sub" data-inv-sub>Detalles guardados para regalar a los vecinos.</p>
-          </div>
-        </header>
-        <div class="inv-body capa-scroll">
-          <div class="inv-lista" data-inv-lista></div>
-          <div class="inv-regalo" data-inv-regalo hidden>
-            <p class="inv-regalo-titulo">Regalar <strong data-inv-objeto-nombre></strong> a&hellip;</p>
-            <div class="inv-vecinos" data-inv-vecinos></div>
-            <div class="inv-acciones">
-              <button type="button" class="inv-entregar" data-inv-entregar disabled>Regalar</button>
-              <button type="button" class="inv-cancelar" data-inv-cancelar>Cancelar</button>
-            </div>
-          </div>
-          <p class="inv-feedback" data-inv-feedback hidden aria-live="polite"></p>
         </div>
       </aside>
-
-      <aside class="capa capa-ajustes ajust-modal-papel ds-modal-sheet" aria-label="Ajustes">
-        <span class="ficha-tape ficha-tape-l ajust-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r ajust-tape-tr" aria-hidden="true"></span>
-        <button type="button" class="cerrar ajustes-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="ajustes-top">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--brown" aria-hidden="true">&#9881;</span>
-              <h2 class="ds-modal-tit ds-modal-tit--ink">Ajustes</h2>
+      <aside class="aht-screen" data-aht-screen="ficha" aria-label="Ficha de vecino">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <button type="button" class="ficha-volver" data-ficha-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; VECINOS</button>
+            <h2 class="aht-frame-title">Ficha</h2>
+            <div style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;display:flex;gap:4px;">
+              <button type="button" class="ficha-nav" data-ficha-nav-prev aria-label="Vecino anterior" style="border:none;background:transparent;cursor:pointer;padding:2px 4px;font-size:1.1rem;color:var(--aht-text-muted,#75634F);">‹</button>
+              <button type="button" class="ficha-nav" data-ficha-nav-next aria-label="Vecino siguiente" style="border:none;background:transparent;cursor:pointer;padding:2px 4px;font-size:1.1rem;color:var(--aht-text-muted,#75634F);">›</button>
             </div>
-            <p class="ds-modal-sub">Sonido, tutorial y partida</p>
-          </div>
-        </header>
-        <div class="ajustes-body capa-scroll">
-          <button type="button" class="ajustes-link" data-ajustes-tut>&iquest;C&oacute;mo se juega?</button>
-          <section class="ajustes-grupo" aria-label="M&uacute;sica de fondo">
-            <div class="ajustes-grupo-head">
-              <span class="ajustes-grupo-tit">M&uacute;sica de fondo</span>
-              <button type="button" class="ajustes-toggle" data-musica-toggle aria-pressed="true">
-                <span class="ajustes-toggle-track" aria-hidden="true"><span class="ajustes-toggle-knob"></span></span>
-              </button>
-            </div>
-            <label class="ajustes-vol">
-              <span class="ajustes-vol-lbl">Volumen</span>
-              <input type="range" class="ajustes-range" min="0" max="100" value="22" data-musica-vol aria-label="Volumen de m&uacute;sica"/>
-            </label>
-          </section>
-          <section class="ajustes-grupo" aria-label="Efectos de sonido">
-            <div class="ajustes-grupo-head">
-              <span class="ajustes-grupo-tit">Efectos de sonido</span>
-              <button type="button" class="ajustes-toggle" data-efectos-toggle aria-pressed="true">
-                <span class="ajustes-toggle-track" aria-hidden="true"><span class="ajustes-toggle-knob"></span></span>
-              </button>
-            </div>
-            <label class="ajustes-vol">
-              <span class="ajustes-vol-lbl">Volumen</span>
-              <input type="range" class="ajustes-range" min="0" max="100" value="55" data-sfx-vol aria-label="Volumen de efectos"/>
-            </label>
-          </section>
-          <section class="ajustes-grupo ajustes-diag" aria-label="Diagn&oacute;stico">
-            <div class="ajustes-grupo-head">
-              <span class="ajustes-grupo-tit">Diagn&oacute;stico</span>
-            </div>
-            <p class="ajustes-diag-hint">Herramienta t&eacute;cnica para copiar o guardar el estado de depuraci&oacute;n.</p>
-            <div class="ajustes-diag-actions">
-              <button type="button" class="ajustes-diag-btn" data-ajustes-debug-copy>Copiar debug</button>
-              <button type="button" class="ajustes-diag-btn" data-ajustes-debug-download>Descargar debug</button>
-            </div>
-            <p class="ajustes-diag-feedback" data-ajustes-debug-feedback hidden aria-live="polite"></p>
-          </section>
-          <button type="button" class="ajustes-reiniciar" data-ajustes-reiniciar>Reiniciar partida</button>
-        </div>
-      </aside>
-
-      <aside class="capa capa-diario coti-modal-papel" aria-label="Cotilleos">
-        <button type="button" class="cerrar coti-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="coti-top">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <span class="ds-modal-icon ds-modal-icon--lavender" aria-hidden="true">&#128226;</span>
-              <h2 class="coti-tit ds-modal-tit ds-modal-tit--lavender">Cotilleos</h2>
-              <span class="coti-badge" data-coti-count hidden></span>
-            </div>
-            <p class="ds-modal-sub">Lo &uacute;ltimo que corre por el pueblo</p>
-          </div>
-          <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
-        </header>
-        <div class="coti-body capa-scroll">
-          <div class="coti-list" data-coti-list></div>
-        </div>
-        <footer class="coti-pie">
-          <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">&#128161;</span> Estos rumores cambian con el tiempo. Contin&uacute;a conociendo a los vecinos para descubrir m&aacute;s.</p>
-        </footer>
-      </aside>
-      <aside class="capa capa-organizar org-plan-papel ds-modal-sheet" aria-label="Nuevo plan">
-        <span class="ficha-tape ficha-tape-l org-tape-tl" aria-hidden="true"></span>
-        <span class="ficha-tape ficha-tape-r org-tape-tr" aria-hidden="true"></span>
-        <span class="org-pin org-pin-l" aria-hidden="true"></span>
-        <button type="button" class="cerrar org-cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-        <header class="org-top">
-          <div class="ds-modal-head">
-            <div class="ds-modal-head-row">
-              <h2 class="org-tit ds-modal-tit ds-modal-tit--ink">Nuevo plan</h2>
-            </div>
-          </div>
-          <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
-            <span class="org-modo-pill" data-org-modo-solo>Solo</span>
-            <span class="org-modo-pill" data-org-modo-pareja>Acompa&ntilde;ado</span>
-          </div>
-          <p class="org-modo-estado sr-only" data-org-modo-estado hidden></p>
-          <p class="org-aviso" data-org-aviso hidden></p>
-        </header>
-        <div class="org-body capa-scroll">
-          <section class="ficha-seccion org-seccion org-seccion--quienes">
-            <div class="org-seccion-head">
-              <div class="org-seccion-head-row">
-                <h4 class="ficha-seccion-tit">&iquest;Qui&eacute;nes van?</h4>
-                <span class="org-vecinos-contador" data-org-vecinos-contador hidden></span>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <section class="ficha-hero" aria-label="Perfil del vecino">
+              <div class="ficha-cara-ring" data-ficha-cara-ring>
+                <div class="ficha-cara" data-ficha-img></div>
               </div>
-              <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
-            </div>
-            <div class="ficha-seccion-body">
-              <div class="org-busca-wrap">
-                <span class="org-busca-ico" aria-hidden="true"></span>
-                <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino&hellip;" autocomplete="off" aria-label="Buscar vecino"/>
-                <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
-              </div>
-              <div class="org-picker-strip capa-scroll" data-org-picker></div>
-            </div>
-          </section>
-          <section class="ficha-seccion org-seccion org-seccion--que">
-            <h4 class="ficha-seccion-tit">&iquest;Qu&eacute; har&aacute;n?</h4>
-            <div class="ficha-seccion-body">
-              <div class="org-tipos" data-org-tipos></div>
-            </div>
-          </section>
-          <section class="ficha-seccion org-seccion org-seccion--donde">
-            <h4 class="ficha-seccion-tit">&iquest;D&oacute;nde?</h4>
-            <div class="ficha-seccion-body org-donde-fila">
-              <div class="org-dd org-dd--lugar" data-org-dd-lugar></div>
-              <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
-              <p class="org-lugar-horario mini" data-org-lugar-horario hidden></p>
-            </div>
-          </section>
-          <section class="ficha-seccion org-seccion org-seccion--cuando">
-            <h4 class="ficha-seccion-tit">&iquest;Cu&aacute;ndo?</h4>
-            <div class="ficha-seccion-body">
-              <div class="org-cuando">
-                <div class="org-cuando-campo org-cuando-campo--dia">
-                  <span class="org-cuando-ico org-cuando-ico--dia" aria-hidden="true"></span>
-                  <div class="org-dd org-dd--dia" data-org-dd-dia></div>
+              <div class="ficha-hero-info">
+                <div class="ficha-nombre-nav">
+                  <h3 class="ficha-nombre" data-ficha-nombre></h3>
                 </div>
-                <div class="org-cuando-campo org-cuando-campo--hora">
-                  <span class="org-cuando-ico org-cuando-ico--hora" aria-hidden="true"></span>
-                  <div class="org-dd org-dd--hora" data-org-dd-hora></div>
+                <p class="ficha-edad" data-ficha-edad hidden></p>
+                <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
+                <p class="ficha-desde" data-ficha-desde></p>
+                <div class="ficha-animo-row" data-ficha-animo-row>
+                  <div class="ficha-animo-pill" data-ficha-animo-pill>
+                    <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                    <span class="ficha-animo-val" data-ficha-animo-text></span>
+                    <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="¿Por qué está así?">?</button>
+                  </div>
                 </div>
-                <select class="org-select org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
-                <select class="org-select org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
               </div>
-              <p class="org-horas-hint mini" data-org-horas-hint hidden></p>
+              <div class="ficha-hero-acciones" aria-label="Acciones con el vecino">
+                <button type="button" class="ficha-btn-diario ficha-hero-btn" data-ficha-diario-btn>Diario</button>
+                <button type="button" class="ficha-btn-org ficha-hero-btn" data-ficha-org>Nuevo plan</button>
+                <button type="button" class="ficha-btn-regalo ficha-hero-btn" data-ficha-regalar>Regalar</button>
+              </div>
+            </section>
+            <div class="ficha-body">
+              <div class="ficha-rasgos-hobbies">
+                <section class="ficha-seccion ficha-seccion-rasgos">
+                  <h4 class="ficha-seccion-tit">Rasgos</h4>
+                  <div class="ficha-seccion-body">
+                    <div class="ficha-rasgos" data-ficha-rasgos></div>
+                  </div>
+                </section>
+                <section class="ficha-seccion ficha-seccion-hobbies">
+                  <h4 class="ficha-seccion-tit">Hobbies</h4>
+                  <div class="ficha-seccion-body">
+                    <div class="ficha-hobbies" data-ficha-hobbies></div>
+                  </div>
+                </section>
+              </div>
+              <div class="ficha-col ficha-col-detalles capa-scroll">
+                <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
+                  <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
+                  <div class="ficha-seccion-body ficha-seccion-body-prefs" data-ficha-sabes-body></div>
+                </section>
+                <section class="ficha-seccion">
+                  <h4 class="ficha-seccion-tit">Relaciones</h4>
+                  <div class="ficha-seccion-body">
+                    <div class="ficha-relaciones" data-ficha-relaciones></div>
+                    <button type="button" class="ficha-ver-mas" data-ficha-rel-mas hidden>Ver más relaciones</button>
+                  </div>
+                </section>
+                <section class="ficha-seccion">
+                  <h4 class="ficha-seccion-tit">Próximos planes</h4>
+                  <div class="ficha-seccion-body">
+                    <div class="ficha-planes" data-ficha-planes></div>
+                  </div>
+                </section>
+                <section class="ficha-seccion ficha-seccion-necesidades" data-ficha-necesidades hidden>
+                  <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Qué le vendría bien</h4>
+                  <div class="ficha-seccion-body">
+                    <div class="ficha-necesidades" data-ficha-necesidades-body></div>
+                  </div>
+                </section>
+              </div>
             </div>
-          </section>
+          </div>
         </div>
-        <footer class="org-footer">
-          <button type="button" class="org-crear" data-org-go>
-            <span class="org-crear-tape org-crear-tape-l" aria-hidden="true"></span>
-            <span class="org-crear-tape org-crear-tape-r" aria-hidden="true"></span>
-            <span class="org-crear-txt">Crear plan</span>
-          </button>
-        </footer>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="ficha_relaciones" aria-label="Relaciones del vecino">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <button type="button" class="frel-volver" data-frel-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <h2 class="aht-frame-title" data-ficha-rel-modal-tit>Relaciones</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="frel-scroll capa-scroll" data-ficha-rel-list></div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="ficha_animo" aria-label="Estado de ánimo del vecino">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <button type="button" class="fani-volver" data-animo-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <h2 class="aht-frame-title">Ánimo</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="ficha_diario" aria-label="Diario del vecino">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <button type="button" class="fdi-volver" data-diario-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <h2 class="aht-frame-title">Diario</h2>
+            <div class="fdi-hero" data-diario-hero style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;"></div>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div style="padding:8px 16px;">
+              <label class="fdi-busca-wrap">
+                <span class="fdi-busca-ico" aria-hidden="true">&#8981;</span>
+                <input type="search" class="fdi-busca-inp" data-diario-busca placeholder="Buscar en su historia..." autocomplete="off" spellcheck="false"/>
+              </label>
+              <div class="fdi-filtros" role="tablist" aria-label="Filtrar entradas">
+                <button type="button" class="fdi-filt is-on" data-diario-filt="todo" role="tab" aria-selected="true">Todo</button>
+                <button type="button" class="fdi-filt" data-diario-filt="planes" role="tab" aria-selected="false">Planes</button>
+                <button type="button" class="fdi-filt" data-diario-filt="relaciones" role="tab" aria-selected="false">Relaciones</button>
+                <button type="button" class="fdi-filt" data-diario-filt="cambios" role="tab" aria-selected="false">Cambios</button>
+              </div>
+              <button type="button" class="fdi-orden" data-diario-orden aria-label="Ordenar">&#9783; Más reciente</button>
+            </div>
+            <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="necesidades_global" aria-label="Necesidades del pueblo">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Necesidades</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="necg-filtros" data-necesidades-global-filters></div>
+            <div class="necg-body capa-scroll" data-necesidades-global-body>
+              <p class="necg-vacio mini" data-necesidades-global-vacio hidden>Todos están bien por ahora.</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="misiones" aria-label="Misiones de hoy">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Misiones</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
+            <p class="mis-sub mini" data-misiones-teaser hidden>—</p>
+          </div>
+        </div>
+      </aside>
+
+      <aside class="aht-screen" data-aht-screen="parejas" aria-label="Parejas del pueblo">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Parejas</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="par-body capa-scroll" data-parejas-modal-list></div>
+            <p class="par-sub mini" data-parejas-teaser hidden>—</p>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="historia" aria-label="Historia del pueblo">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Historia del pueblo</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="historia-body capa-scroll">
+              <p class="historia-sub mini" data-historia-sub></p>
+              <div class="historia-grid" data-historia-grid></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="historia_celebracion" aria-label="Nuevo recuerdo" role="dialog" aria-modal="true">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Nuevo recuerdo</h2>
+          </header>
+          <button type="button" class="aht-frame-close" data-historia-celebracion-close aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="histcele-body">
+              <div class="histcele-img-wrap">
+                <img class="histcele-img" src="" alt="" data-historia-celebracion-img/>
+              </div>
+              <h3 class="histcele-titulo" data-historia-celebracion-titulo></h3>
+              <p class="histcele-texto" data-historia-celebracion-texto></p>
+              <div class="histcele-protagonistas" data-historia-celebracion-protagonistas></div>
+              <div class="histcele-recompensa" data-historia-celebracion-recompensa hidden>
+                <span class="histcele-recompensa-label">🎁 POR ESTE NUEVO RECUERDO RECIBES:</span>
+                <span class="histcele-recompensa-objeto" data-historia-celebracion-recompensa-objeto></span>
+              </div>
+              <button type="button" class="histcele-album" data-historia-celebracion-album>IR AL ÁLBUM</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="historia_detalle" aria-label="Detalle del recuerdo" role="dialog" aria-modal="true">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Recuerdo</h2>
+          </header>
+          <button type="button" class="aht-frame-close" data-historia-detalle-close aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="histdet-body">
+              <div class="histdet-img-wrap">
+                <img class="histdet-img" src="" alt="" data-historia-detalle-img/>
+              </div>
+              <h3 class="histdet-titulo" data-historia-detalle-titulo></h3>
+              <p class="histdet-texto" data-historia-detalle-texto></p>
+              <div class="histdet-protagonistas" data-historia-detalle-protagonistas></div>
+              <div class="histdet-dia" data-historia-detalle-dia></div>
+            </div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="vida_pueblo" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Vida del pueblo</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <p class="vida-valor" data-vida-modal-valor>— / 100</p>
+            <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
+            <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
+            <div class="vida-copy">
+              <p>Esto no es decoración, aunque lo parezca.</p>
+              <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algún motivo, ahora son responsabilidad tuya.</p>
+              <p>Haz que las cosas salgan bien y el corazón subirá. Déjalos a su suerte demasiado tiempo y— bueno, procura que esto no llegue a 0.</p>
+            </div>
+            <p class="vida-latido mini">—¿Llegas a 100? ¡Hay latido!<br>Sí, conseguir que este pueblo funcione tiene premio. Increíble, pero cierto.</p>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="buzon" aria-label="Mensajitos">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Mensajitos</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-tabs" role="tablist" aria-label="Filtrar mensajitos">
+            <button type="button" class="aht-frame-tab is-active" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
+            <button type="button" class="aht-frame-tab" data-buzon-tab="todos" role="tab" aria-selected="false">TODOS</button>
+          </div>
+          <div class="aht-frame-body">
+            <div class="buzon-toolbar" data-buzon-leer-todos-wrap hidden>
+              <button type="button" class="buzon-mark-all" data-buzon-leer-todos>
+                <span class="buzon-mark-all-box" aria-hidden="true"></span>
+                <span>Marcar todo como le&iacute;do</span>
+              </button>
+            </div>
+            <div data-buzon-list></div>
+          </div>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="inventario" aria-label="Inventario de Celestine">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Inventario</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <p class="inv-sub mini" data-inv-sub hidden>Detalles guardados para regalar a los vecinos.</p>
+            <div class="inv-lista" data-inv-lista></div>
+            <div class="inv-regalo" data-inv-regalo hidden>
+              <p class="inv-regalo-titulo">Regalar <strong data-inv-objeto-nombre></strong> a…</p>
+              <div class="inv-vecinos" data-inv-vecinos></div>
+              <div class="inv-acciones">
+                <button type="button" class="inv-entregar" data-inv-entregar disabled>Regalar</button>
+                <button type="button" class="inv-cancelar" data-inv-cancelar>Cancelar</button>
+              </div>
+            </div>
+            <p class="inv-feedback" data-inv-feedback hidden aria-live="polite"></p>
+          </div>
+        </div>
+      </aside>
+
+      <aside class="aht-screen" data-aht-screen="ajustes" aria-label="Ajustes">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Ajustes</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <button type="button" class="ajustes-link" data-ajustes-tut>¿Cómo se juega?</button>
+            <section class="ajustes-grupo" aria-label="Música de fondo">
+              <div class="ajustes-grupo-head">
+                <span class="ajustes-grupo-tit">Música de fondo</span>
+                <button type="button" class="ajustes-toggle" data-musica-toggle aria-pressed="true">
+                  <span class="ajustes-toggle-track" aria-hidden="true"><span class="ajustes-toggle-knob"></span></span>
+                </button>
+              </div>
+              <label class="ajustes-vol">
+                <span class="ajustes-vol-lbl">Volumen</span>
+                <input type="range" class="ajustes-range" min="0" max="100" value="22" data-musica-vol aria-label="Volumen de música"/>
+              </label>
+            </section>
+            <section class="ajustes-grupo" aria-label="Efectos de sonido">
+              <div class="ajustes-grupo-head">
+                <span class="ajustes-grupo-tit">Efectos de sonido</span>
+                <button type="button" class="ajustes-toggle" data-efectos-toggle aria-pressed="true">
+                  <span class="ajustes-toggle-track" aria-hidden="true"><span class="ajustes-toggle-knob"></span></span>
+                </button>
+              </div>
+              <label class="ajustes-vol">
+                <span class="ajustes-vol-lbl">Volumen</span>
+                <input type="range" class="ajustes-range" min="0" max="100" value="55" data-sfx-vol aria-label="Volumen de efectos"/>
+              </label>
+            </section>
+            <section class="ajustes-grupo ajustes-diag" aria-label="Diagnóstico">
+              <div class="ajustes-grupo-head">
+                <span class="ajustes-grupo-tit">Diagnóstico</span>
+              </div>
+              <p class="ajustes-diag-hint">Herramienta técnica para copiar o guardar el estado de depuración.</p>
+              <div class="ajustes-diag-actions">
+                <button type="button" class="ajustes-diag-btn" data-ajustes-debug-copy>Copiar debug</button>
+                <button type="button" class="ajustes-diag-btn" data-ajustes-debug-download>Descargar debug</button>
+              </div>
+              <p class="ajustes-diag-feedback" data-ajustes-debug-feedback hidden aria-live="polite"></p>
+            </section>
+            <button type="button" class="ajustes-reiniciar" data-ajustes-reiniciar>Reiniciar partida</button>
+          </div>
+        </div>
+      </aside>
+
+      <aside class="aht-screen" data-aht-screen="diario" aria-label="Cotilleos">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Cotilleos</h2>
+            <span class="coti-badge" data-coti-count hidden style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;"></span>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
+            <div class="coti-body capa-scroll">
+              <div class="coti-list" data-coti-list></div>
+            </div>
+          </div>
+          <footer class="aht-frame-footer">
+            <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">💡</span> Estos rumores cambian con el tiempo. Continúa conociendo a los vecinos para descubrir más.</p>
+          </footer>
+        </div>
+      </aside>
+      <aside class="aht-screen" data-aht-screen="organizar" aria-label="Nuevo plan">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title">Nuevo plan</h2>
+          </header>
+          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
+          <div class="aht-frame-body">
+            <div class="org-body capa-scroll">
+              <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
+                <span class="org-modo-pill" data-org-modo-solo>Solo</span>
+                <span class="org-modo-pill" data-org-modo-pareja>Acompañado</span>
+              </div>
+              <p class="org-modo-estado sr-only" data-org-modo-estado hidden></p>
+              <p class="org-aviso" data-org-aviso hidden></p>
+              <section class="ficha-seccion org-seccion org-seccion--quienes">
+                <div class="org-seccion-head">
+                  <div class="org-seccion-head-row">
+                    <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
+                    <span class="org-vecinos-contador" data-org-vecinos-contador hidden></span>
+                  </div>
+                  <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
+                </div>
+                <div class="ficha-seccion-body">
+                  <div class="org-busca-wrap">
+                    <span class="org-busca-ico" aria-hidden="true"></span>
+                    <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
+                    <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
+                  </div>
+                  <div class="org-picker-strip capa-scroll" data-org-picker></div>
+                </div>
+              </section>
+              <section class="ficha-seccion org-seccion org-seccion--que">
+                <h4 class="ficha-seccion-tit">¿Qué harán?</h4>
+                <div class="ficha-seccion-body">
+                  <div class="org-tipos" data-org-tipos></div>
+                </div>
+              </section>
+              <section class="ficha-seccion org-seccion org-seccion--donde">
+                <h4 class="ficha-seccion-tit">¿Dónde?</h4>
+                <div class="ficha-seccion-body org-donde-fila">
+                  <div class="org-dd org-dd--lugar" data-org-dd-lugar></div>
+                  <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
+                  <p class="org-lugar-horario mini" data-org-lugar-horario hidden></p>
+                </div>
+              </section>
+              <section class="ficha-seccion org-seccion org-seccion--cuando">
+                <h4 class="ficha-seccion-tit">¿Cuándo?</h4>
+                <div class="ficha-seccion-body">
+                  <div class="org-cuando">
+                    <div class="org-cuando-campo org-cuando-campo--dia">
+                      <span class="org-cuando-ico org-cuando-ico--dia" aria-hidden="true"></span>
+                      <div class="org-dd org-dd--dia" data-org-dd-dia></div>
+                    </div>
+                    <div class="org-cuando-campo org-cuando-campo--hora">
+                      <span class="org-cuando-ico org-cuando-ico--hora" aria-hidden="true"></span>
+                      <div class="org-dd org-dd--hora" data-org-dd-hora></div>
+                    </div>
+                    <select class="org-select org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
+                    <select class="org-select org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
+                  </div>
+                  <p class="org-horas-hint mini" data-org-horas-hint hidden></p>
+                </div>
+              </section>
+            </div>
+          </div>
+          <footer class="aht-frame-footer">
+            <button type="button" class="org-crear" data-org-go>
+              <span class="org-crear-txt">Crear plan</span>
+            </button>
+          </footer>
+        </div>
       </aside>
     </div>
   </div>
@@ -1028,6 +1103,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <svg viewBox="0 0 24 24" focusable="false"><path d="M12 20.5s-6.5-4.2-6.5-8.4C5.5 9.2 8.1 7 11 7c1.6 0 2.7.7 3.5 1.6.8-.9 1.9-1.6 3.5-1.6 2.9 0 5.5 2.2 5.5 5.1 0 4.2-6.5 8.4-6.5 8.4Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
         </span>
         <span class="play-bottom-nav-txt">Relaciones</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="necesidades_global">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Necesidades</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="historia">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M4 19V5a2 2 0 0 1 2-2h8l6 6v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M14 3v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Historia</span>
       </button>
     </nav>
       </div>
@@ -1103,8 +1190,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
-              <span class="game-left-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
-              <span class="obj-buzon-txt game-left-tile-label">Mensajitos</span>
+              <span class="inicio-tile-ico obj-buzon-ico-wrap" aria-hidden="true"><img class="obj-buzon-img" src="assets/play-v3/hud/sobre.png" alt="" width="72" height="58"/></span>
+              <span class="obj-buzon-txt inicio-tile-label">Mensajitos</span>
               <span class="obj-buzon-badge" data-buzon-badge hidden>0</span>
               <span class="obj-buzon-flecha" aria-hidden="true">&#8250;</span>
             </button>
@@ -1113,10 +1200,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <section class="shell-grupo shell-grupo-resumen">
           <button type="button" class="obj-vecinos-resumen celestine-nota" data-open="vecinos" aria-label="Ver vecinos">
             <span class="libreta-kicker">Celestine apunta</span>
-            <span class="obj-vecinos-preview game-left-tile-ico" data-vecinos-preview aria-hidden="true"></span>
+            <span class="obj-vecinos-preview inicio-tile-ico" data-vecinos-preview aria-hidden="true"></span>
             <div class="obj-vecinos-head">
-              <span class="obj-vecinos-tit game-left-tile-label">VECINOS</span>
-              <span class="obj-vecinos-poblacion game-left-tile-meta" data-vecinos-poblacion></span>
+              <span class="obj-vecinos-tit inicio-tile-label">VECINOS</span>
+              <span class="obj-vecinos-poblacion inicio-tile-meta" data-vecinos-poblacion></span>
             </div>
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
@@ -1212,10 +1299,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 </section>
             </div>
             </div>
+            <button type="button" class="shell-grupo-parejas-open" data-open="parejas" aria-label="Ver parejas del pueblo">
             <section class="shell-grupo shell-grupo-parejas" data-inicio-parejas>
           <span class="zona-tit zona-tit-parejas">PAREJAS</span>
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
+            </button>
           </aside>
         </div>
       </section>
@@ -1304,9 +1393,57 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       </section>
 
     </div>
-  </div>  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  </div>
+
+  <!-- ====== MENSAJITOS LAB — Piloto DS Modal ====== -->
+  <div class="aht-modal-overlay" id="msgLabOverlay" aria-hidden="true">
+
+    <!-- LAB PANEL — selector de variantes (solo visible con ?modal_catalog=1) -->
+    <div class="aht-modal-lab-panel" id="msgLabPanel" hidden>
+      <span class="aht-modal-lab-label">LAB</span>
+      <label class="aht-modal-lab-tab is-active" data-msg-lab="simple">Simple</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="decision">Decisión</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="regalo">Regalo</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="peticion">Petición</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="hilo">Hilo</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="leido">Leído/No</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="varios">Varios</label>
+      <label class="aht-modal-lab-tab" data-msg-lab="identidad">Identidad</label>
+    </div>
+
+    <!-- DS MODAL FRAME -->
+    <div class="aht-modal" role="dialog" aria-modal="true" aria-label="Mensajitos — piloto DS">
+      <button type="button" class="aht-modal-close" id="msgLabClose" aria-label="Cerrar">X</button>
+      <header class="aht-modal-header">
+        <h2 class="aht-modal-title">Mensajitos</h2>
+      </header>
+
+      <!-- ZONA DE NAVEGACIÓN: tabs + marcar todos -->
+      <nav class="aht-msg-nav" role="tablist" aria-label="Filtros de mensajitos">
+        <button type="button" class="aht-msg-tab is-on" data-msg-filtro="nuevos" role="tab" aria-selected="true">
+          <span>NUEVOS</span>
+          <span class="aht-msg-tab-count" id="msgLabCount" hidden>0</span>
+        </button>
+        <button type="button" class="aht-msg-tab" data-msg-filtro="todos" role="tab" aria-selected="false">TODOS</button>
+        <button type="button" class="aht-msg-mark-all" id="msgLabMarkAll" hidden>
+          <span>Marcar todos como leídos</span>
+        </button>
+      </nav>
+
+      <!-- BODY: Contenido dinámico según variante -->
+      <div class="aht-modal-body" id="msgLabBody">
+        <div class="aht-msg-list" id="msgLabList"></div>
+      </div>
+
+      </div>
+    </div>
+  <!-- ====== FIN MENSAJITOS LAB ====== -->
+
+  <script src="assets/js/play-v3-mensajitos-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/v4/screen-manager.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script>

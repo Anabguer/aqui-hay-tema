@@ -1,0 +1,831 @@
+/* ============================================================
+   MENSAJITOS BODY — Estilo visual AHT para el body del piloto
+   ITERACIÓN 3: pulido visual (no reorganización)
+   Dependencias: modal-ds.css (frame), tokens.css (variables)
+   
+   Inspirado en el Mensajitos real:
+   - Tabs estilo ficha (rosa fuerte + lavanda suave, manuscrito)
+   - Avatares circulares con inicial (sistema real de producción)
+   - Papeles planos pastel variados por índice (5 colores)
+   - Botones con personalidad AHT (rotación, bordes, sombra)
+   - Badge NUEVO como sello/pegatina
+   ============================================================ */
+
+/* === TOKENS LOCALES ===
+   Arquitectura saneada (FASE 1 — piloto Mensajitos LAB):
+   Las variables --msg-* se declaran en :root,.aht-modal para que
+   cualquier descendiente (incluido .aht-msg-card) las herede por cascada.
+
+   Bug original (auditoría 7fda6b54): estaban en .aht-msg, clase que
+   nunca aterriza en el DOM. Resultado: las var() caían a `initial`
+   y la card renderizaba con fondo transparente.
+   Fix: selector `:root, .aht-modal` — global + scoped, sin clase fantasma. */
+:root,
+.aht-modal {
+  --msg-ink: var(--ds-ink, #3b3028);
+  --msg-ink-soft: var(--ds-ink-soft, #594839);
+  --msg-muted: var(--ds-text-muted, #75634F);
+  --msg-paper: #fffdf8;
+  --msg-paper-card: #fffdf7;
+  --msg-accent-gold: #e8b84a;
+  --msg-accent-lavender: var(--ds-lavender-deep, #7C6BAE);
+  --msg-accent-lavender-soft: #ece6f8;
+  --msg-accent-pink: var(--ds-pink-deep, #C85B78);
+  --msg-accent-pink-soft: #fbe3ec;
+  --msg-accent-blue: #5C7AAE;
+  --msg-accent-blue-soft: #dde6f4;
+  --msg-accent-green: #7BA178;
+  --msg-accent-green-soft: #dbead4;
+  --msg-accent-cream: #D4B26A;
+  --msg-accent-cream-soft: #f5ebd2;
+  --msg-border: var(--ds-ink-soft, #594839);
+  --msg-border-soft: rgba(120, 96, 72, .18);
+  --msg-font-hand: var(--ds-font-hand, "Caveat", "Segoe Print", cursive);
+  --msg-font-body: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+
+  /* Papeles planos pastel — 5 colores (sin gradient, planos)
+     Iteración 9: suavizados para pastel más claro sin perder identidad.
+     Mismo de_id = mismo papel SIEMPRE. Borde mantiene intensidad. */
+  --msg-paper-rose:    #f7bdd0;  /* rosa pastel suave */
+  --msg-paper-blue:    #b3ceed;  /* azul pastel suave */
+  --msg-paper-green:   #bddcb5;  /* verde pastel suave */
+  --msg-paper-cream:   #f1daa0;  /* amarillo/crema pastel suave */
+  --msg-paper-lilac:   #ccb2e6;  /* lavanda pastel suave */
+
+  /* Bordes 2.5px sólidos del color del tono, claramente visibles */
+  --msg-border-rose:   #b04868;
+  --msg-border-blue:   #2a5a8a;
+  --msg-border-green:  #3a7838;
+  --msg-border-cream:  #8a5a14;
+  --msg-border-lilac:  #5e3e90;
+}
+
+/* === ZONA DE NAVEGACIÓN (tabs + marcar todos) === */
+.aht-msg-nav {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px 14px;
+  background-color: var(--msg-paper-card);
+  border-bottom: 1.5px dashed var(--msg-border-soft);
+  position: relative;
+  flex-wrap: wrap;
+}
+
+/* === Tabs NUEVOS / TODOS — estilo AHT físico ===
+   Iteración 5: TODOS lavanda claramente perceptible, NIEVOS activo: rosa fuerte. */
+.aht-msg-tab {
+  flex: 0 1 auto;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border: 2.5px solid var(--msg-ink);
+  border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
+  background: #d4bee8;
+  color: #4a2a78;
+  font: 700 1.15rem/1 var(--msg-font-body);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .25);
+  transform: rotate(-0.4deg);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
+}
+.aht-msg-tab:hover {
+  transform: rotate(0deg) translateY(-1px);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .28);
+}
+.aht-msg-tab:active {
+  transform: rotate(-0.4deg) translateY(0);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .15);
+}
+
+/* Estado activo (NUEVOS): rosa fuerte perceptible, borde oscuro manuscrito */
+.aht-msg-tab.is-on {
+  background: #e8628a;
+  color: #fff;
+  text-shadow: 0 1.5px 0 rgba(146, 39, 73, .5);
+  box-shadow: 2px 3px 0 rgba(196, 43, 74, .5);
+  transform: rotate(0.4deg);
+  border-color: var(--msg-ink);
+}
+.aht-msg-tab.is-on::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px dashed rgba(255, 255, 255, .9);
+  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
+  pointer-events: none;
+}
+
+/* Contador dentro del tab — Iteración 7: bolita SIEMPRE blanca.
+   Solo cambia el color del número según el estado del botón:
+   - Botón activo (NUEVOS rosa) → número rosa oscuro #b85a78
+   - Botón inactivo (TODOS lila) → número lila oscuro #5e3e90 */
+.aht-msg-tab-count {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: #fff;
+  border: 2px solid var(--msg-ink);
+  font: 800 .82rem/1 var(--msg-font-body);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .28);
+  transform: rotate(4deg);
+}
+/* Tab activo (NUEVOS, fondo rosa) → número rosa oscuro */
+.aht-msg-tab.is-on .aht-msg-tab-count {
+  background: #fff;
+  color: #b85a78;
+  border-color: var(--msg-ink);
+}
+/* Tab inactivo (TODOS, fondo lila) → número lila oscuro */
+.aht-msg-tab:not(.is-on) .aht-msg-tab-count {
+  background: #fff;
+  color: #5e3e90;
+  border-color: var(--msg-ink);
+}
+
+/* === Marcar todos como leídos — sutil, descubrible, dentro de NUEVOS === */
+.aht-msg-mark-all {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border: 1.5px solid var(--msg-border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .6);
+  font: 600 0.78rem/1 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  transform: rotate(0.5deg);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  text-decoration-color: rgba(120, 96, 72, .3);
+}
+.aht-msg-mark-all:hover {
+  background: var(--msg-accent-lavender-soft);
+  color: var(--msg-accent-lavender);
+  border-color: var(--msg-accent-lavender);
+  text-decoration-color: var(--msg-accent-lavender);
+}
+.aht-msg-mark-all[hidden] {
+  display: none;
+}
+
+/* === CONTENEDOR DEL BODY ===
+   Iteración 5: fondo casi blanco (off-white) para que los papeles
+   pastel destaquen con contraste. Esto sobreescribe el gris-lila
+   del DS modal SOLO dentro del contexto del Lab Mensajitos. */
+.aht-msg-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 10px 12px 16px;
+  background-color: #FAFBFE;
+}
+
+/* === SECCIÓN ===
+   Iteración 6: fondo blanco puro para máximo contraste con los papeles. */
+.aht-msg-section {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 8px;
+}
+
+/* === CARTA (mensaje individual) ===
+   Arquitectura saneada (FASE 1): el fondo y borde del card dependen
+   del atributo data-paper (rose/blue/green/cream/lilac) y de las vars
+   --msg-paper-* y --msg-border-*. Esas vars ahora se declaran en
+   :root,.aht-modal (cabecera de este archivo) en vez de en la clase
+   inexistente .aht-msg. Por eso ahora el color del papel se ve. */
+.aht-msg-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto auto;
+  grid-template-areas:
+    "avatar  header"
+    "avatar  status"
+    "content content";
+  gap: 0 12px;
+  padding: 12px 14px 12px 12px;
+  border: 2.5px solid var(--msg-border-soft);
+  border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .18);
+  transform: rotate(-0.35deg);
+  transition: transform 200ms ease;
+  overflow: visible;
+}
+.aht-msg-card:nth-child(even) { transform: rotate(0.3deg); }
+.aht-msg-card:hover {
+  transform: rotate(0deg) translateY(-1px);
+  box-shadow: 2.5px 3.5px 0 rgba(51, 38, 30, .22);
+}
+
+/* Papeles planos pastel — asignados por data-paper en el JS (5 colores)
+   Plano, sin gradients. Iteración 6: el COLOR REPRESENTA AL VECINO.
+   Mismo de_id = mismo papel SIEMPRE. Hash determinista estable.
+   Borde 2.5px sólido del color del tono, claramente visible.
+   Shorthand completo para evitar cualquier cascade issue. */
+.aht-msg-card[data-paper="rose"] {
+  background: var(--msg-paper-rose);
+  border: 2.5px solid var(--msg-border-rose);
+}
+.aht-msg-card[data-paper="blue"] {
+  background: var(--msg-paper-blue);
+  border: 2.5px solid var(--msg-border-blue);
+}
+.aht-msg-card[data-paper="green"] {
+  background: var(--msg-paper-green);
+  border: 2.5px solid var(--msg-border-green);
+}
+.aht-msg-card[data-paper="cream"] {
+  background: var(--msg-paper-cream);
+  border: 2.5px solid var(--msg-border-cream);
+}
+.aht-msg-card[data-paper="lilac"] {
+  background: var(--msg-paper-lilac);
+  border: 2.5px solid var(--msg-border-lilac);
+}
+
+/* Resuelto: opacidad + sin rotación fuerte */
+.aht-msg-card[data-resolved="true"] {
+  opacity: 0.62;
+  transform: rotate(0deg);
+}
+.aht-msg-card[data-resolved="true"]:hover {
+  opacity: 0.85;
+}
+
+/* === AVATAR (grid-area) === */
+.aht-msg-avatar {
+  grid-area: avatar;
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2.5px solid #fff;
+  box-shadow: 0 2px 4px rgba(40, 28, 16, .15);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 1.3rem;
+  font-family: var(--msg-font-body);
+  color: var(--msg-ink);
+  background: var(--msg-paper-card);
+  overflow: visible;
+  position: relative;
+  flex-shrink: 0;
+  cursor: pointer;
+  align-self: start;
+  margin-top: 2px;
+}
+.aht-msg-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+.aht-msg-avatar.cara-ini {
+  background: linear-gradient(135deg, #fff5e0 0%, #fde6cc 100%);
+}
+.aht-msg-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 0 3px 6px rgba(40, 28, 16, .25);
+  border-color: var(--msg-accent-lavender);
+}
+
+/* Emociones (mini expresión facial) */
+.aht-msg-avatar .emo-face {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.65rem;
+  line-height: 1;
+  box-shadow: 0 1px 2px rgba(0,0,0,.15);
+}
+.aht-msg-avatar .emo-face--alegre { background: #d9e4cf; }
+.aht-msg-avatar .emo-face--neutro { background: #f3e6cc; }
+.aht-msg-avatar .emo-face--triste { background: #d4dde5; }
+.aht-msg-avatar .emo-face--enfadado { background: #f3d3ce; }
+
+/* Avatar pequeño (segundo vecino en peticiones) */
+.aht-msg-avatar--mini {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  font-size: 1rem;
+  border-width: 2px;
+}
+
+/* === HEADER ROW (avatar | nombre + status) === */
+.aht-msg-header-row {
+  grid-area: header;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+  margin-top: 2px;
+}
+
+/* Nombre (remitente) */
+.aht-msg-from {
+  margin: 0;
+  font: 700 1.4rem/1.12 var(--msg-font-hand);
+  color: var(--msg-ink);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  transition: text-decoration-color 150ms ease;
+}
+.aht-msg-from:hover {
+  text-decoration-color: var(--msg-accent-lavender);
+}
+
+/* === STATUS ROW (avatar | fecha + estado) === */
+.aht-msg-status-row {
+  grid-area: status;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.aht-msg-date {
+  margin: 0;
+  font: 600 0.76rem/1.3 var(--msg-font-body);
+  color: var(--msg-muted);
+  white-space: nowrap;
+}
+
+/* === STATUS ZONE (badge + estado leido) === */
+.aht-msg-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/* === FLAG / SELLO NUEVO — sello/pegatina con personalidad AHT === */
+.aht-msg-flag {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 9px;
+  border: 2px solid var(--msg-ink);
+  border-radius: 12px 8px 13px 9px / 8px 13px 9px 12px;
+  background: #e54a3a;
+  color: #fff;
+  font: 800 0.66rem/1 var(--msg-font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 0 rgba(120, 20, 10, .35);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .25);
+  transform: rotate(-3deg);
+  white-space: nowrap;
+}
+.aht-msg-flag--read {
+  background: #d8d2c5;
+  color: var(--msg-ink-soft);
+  border-color: var(--msg-ink-soft);
+  text-shadow: none;
+  transform: rotate(2deg);
+}
+.aht-msg-flag--resolved {
+  background: var(--msg-accent-lavender);
+  color: #fff;
+  border-color: var(--msg-ink);
+  transform: rotate(-2deg);
+}
+
+/* === TOGGLE LEÍDO (compacto, zona derecha, junto al flag) === */
+.aht-msg-read-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
+  border: 1.5px solid var(--msg-border-soft);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+  font: 600 0.7rem/1 var(--msg-font-body);
+  color: var(--msg-muted);
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
+  white-space: nowrap;
+}
+.aht-msg-read-toggle:hover {
+  background: var(--msg-accent-lavender-soft);
+  color: var(--msg-accent-lavender);
+  border-color: var(--msg-accent-lavender);
+}
+.aht-msg-read-toggle[data-read="true"] {
+  background: var(--msg-accent-lavender-soft);
+  color: var(--msg-accent-lavender);
+  border-color: var(--msg-accent-lavender);
+}
+.aht-msg-read-toggle[data-read="false"] {
+  background: rgba(229, 74, 58, .12);
+  color: var(--msg-accent-pink);
+  border-color: rgba(229, 74, 58, .3);
+}
+
+/* === CONTENT (debajo del header) === */
+.aht-msg-content {
+  grid-area: content;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  margin-top: 8px;
+}
+
+/* Cuerpo del mensaje */
+.aht-msg-body {
+  margin: 4px 0 8px;
+  font: 600 1.15rem/1.35 var(--msg-font-body);
+  color: var(--msg-ink);
+}
+
+/* === HILO (thread context) === */
+.aht-msg-thread {
+  margin: 0 0 10px;
+}
+.aht-msg-thread-origin {
+  margin-left: 6px;
+  padding: 8px 10px 8px 14px;
+  border-left: 3px solid rgba(124, 107, 174, .55);
+  border-radius: 0 10px 10px 0;
+  background: rgba(255, 255, 255, .55);
+}
+.aht-msg-thread-label {
+  display: block;
+  margin: 0 0 4px;
+  font: 800 0.68rem/1.2 var(--msg-font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--msg-accent-lavender);
+}
+.aht-msg-thread-text {
+  margin: 0 0 4px;
+  font: 600 0.95rem/1.3 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+  font-style: italic;
+}
+.aht-msg-thread-date {
+  font: 600 0.72rem/1.2 var(--msg-font-body);
+  color: var(--msg-muted);
+}
+.aht-msg-thread-arrow {
+  width: 0;
+  height: 0;
+  margin: 4px 0 4px 22px;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-top: 8px solid rgba(124, 107, 174, .5);
+}
+
+/* === REGALO (objeto) === */
+.aht-msg-gift {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0;
+  padding: 8px 10px;
+  border: 1.5px dashed var(--msg-accent-gold);
+  border-radius: 10px 8px 11px 7px / 8px 11px 7px 10px;
+  background: rgba(255, 255, 255, .55);
+}
+.aht-msg-gift-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+.aht-msg-gift-name {
+  font: 700 1rem/1.2 var(--msg-font-body);
+  color: var(--msg-ink);
+}
+.aht-msg-gift-desc {
+  font: 600 0.75rem/1.3 var(--msg-font-body);
+  color: var(--msg-muted);
+}
+
+/* === PLAZO === */
+.aht-msg-deadline {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 8px;
+  padding: 4px 8px;
+  background: rgba(255, 246, 200, .7);
+  border: 1.5px dashed var(--msg-accent-gold);
+  border-radius: 8px;
+  font: 600 0.78rem/1.3 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+  width: fit-content;
+}
+
+/* === PERSONA MENCIONADA (peticiones) === */
+.aht-msg-person {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 6px 0 2px;
+  padding: 4px 8px 4px 4px;
+  background: rgba(255, 255, 255, .6);
+  border: 1.5px solid var(--msg-border-soft);
+  border-radius: 999px;
+  font: 600 0.78rem/1.1 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+}
+.aht-msg-person-name {
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  font-weight: 800;
+  color: var(--msg-ink);
+}
+.aht-msg-person-name:hover {
+  text-decoration-color: var(--msg-accent-lavender);
+}
+
+/* === ACCIONES (botones — antiguo, mantener) === */
+.aht-msg-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* === BOTONES DECISIÓN — estilo AHT físico/imperfecto === */
+.aht-msg-choice {
+  margin: 10px 0 0;
+  width: 100%;
+}
+.aht-msg-choice-title {
+  display: block;
+  margin: 0 0 8px;
+  font: 700 1.15rem/1.25 var(--msg-font-body);
+  color: var(--msg-ink);
+}
+.aht-msg-choice-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Opción de decisión: papel físico con borde manuscrito, sombra de papel real,
+   tap target >= 44px, sin gradiente. */
+.aht-msg-choice-opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 2.5px solid var(--msg-ink);
+  border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
+  background: #fffbe8;
+  color: var(--msg-ink);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .2);
+  transform: rotate(-0.3deg);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  font: inherit;
+}
+.aht-msg-choice-opt:nth-child(odd) { transform: rotate(-0.3deg); }
+.aht-msg-choice-opt:nth-child(even) { transform: rotate(0.25deg); }
+.aht-msg-choice-opt:hover {
+  transform: rotate(0deg) translateY(-1px);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .25);
+}
+.aht-msg-choice-opt:active {
+  transform: rotate(-0.2deg) translateY(0);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .15);
+}
+.aht-msg-choice-opt-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.aht-msg-choice-opt-name {
+  font: 700 1.15rem/1.2 var(--msg-font-hand);
+  color: var(--msg-ink);
+}
+.aht-msg-choice-opt-hint {
+  font: 600 0.78rem/1.35 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+}
+.aht-msg-choice-opt-arrow {
+  flex: 0 0 auto;
+  font: 700 1.5rem/1 var(--msg-font-body);
+  color: var(--msg-accent-lavender);
+  transform: rotate(-3deg);
+}
+
+/* CTA principal antiguo (mantener compatibilidad) */
+.aht-msg-btn {
+  position: relative;
+  padding: 8px 16px;
+  border: 2.5px solid var(--msg-ink);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  font: 800 0.85rem/1 var(--msg-font-body);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transform: rotate(-0.4deg);
+  box-shadow: 2px 3px 0 rgba(44, 38, 31, .15);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+.aht-msg-btn:hover {
+  transform: rotate(0deg) translateY(-1px);
+  box-shadow: 2.5px 4px 0 rgba(44, 38, 31, .2);
+}
+.aht-msg-btn:active {
+  transform: rotate(-0.4deg) translateY(0);
+  box-shadow: 1.5px 2px 0 rgba(44, 38, 31, .1);
+}
+.aht-msg-btn--primary {
+  background: #fff6c8;
+  color: var(--msg-ink);
+}
+.aht-msg-btn--soft {
+  background: var(--msg-paper);
+  border-color: #a89888;
+  font-weight: 700;
+  color: var(--msg-ink-soft);
+  transform: rotate(0.3deg);
+}
+
+/* === ESTADO VACÍO === */
+.aht-msg-empty {
+  margin: 2rem auto;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  max-width: 18rem;
+}
+.aht-msg-empty-icon {
+  font-size: 2.5rem;
+  margin: 0 0 8px;
+  opacity: 0.5;
+}
+.aht-msg-empty-text {
+  font: 600 1.1rem/1.35 var(--msg-font-body);
+  color: var(--msg-ink-soft);
+  font-style: italic;
+}
+
+/* === LAB PANEL — selector de variantes (solo ?modal_catalog=1) === */
+.aht-modal-lab-panel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  padding: 8px 16px;
+  background: #1a1a2e;
+  color: #e0e0e0;
+  font: 600 0.78rem/1 var(--msg-font-body);
+  border-bottom: 2px solid var(--msg-accent-gold);
+}
+.aht-modal-lab-panel[hidden] {
+  display: none;
+}
+
+.aht-modal-lab-label {
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--msg-accent-gold);
+  margin-right: 4px;
+}
+
+.aht-modal-lab-tab {
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 150ms ease, color 150ms ease;
+  user-select: none;
+}
+.aht-modal-lab-tab:hover {
+  background: rgba(232, 184, 74, .15);
+}
+.aht-modal-lab-tab.is-active {
+  background: var(--msg-accent-gold);
+  color: #1a1a2e;
+  font-weight: 800;
+}
+
+/* === RESPONSIVE: MOBILE === */
+@media (max-width: 768px) {
+  .aht-msg-nav {
+    gap: 8px;
+    padding: 10px 10px 12px;
+  }
+
+  .aht-msg-tab {
+    min-height: 38px;
+    padding: 5px 12px;
+    font-size: 1rem;
+  }
+
+  .aht-msg-tab-count {
+    min-width: 20px;
+    height: 20px;
+    font-size: .68rem;
+  }
+
+  .aht-msg-list {
+    padding: 8px 10px 14px;
+  }
+
+  .aht-msg-card {
+    padding: 10px 12px 10px 10px;
+    gap: 0 10px;
+  }
+
+  .aht-msg-avatar {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.15rem;
+  }
+
+  .aht-msg-avatar--mini {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    font-size: .9rem;
+  }
+
+  .aht-msg-from {
+    font-size: 1.2rem;
+  }
+
+  .aht-msg-body {
+    font-size: 1.05rem;
+  }
+
+  .aht-msg-btn {
+    min-height: 44px;
+    padding: 8px 14px;
+  }
+
+  .aht-msg-choice-opt {
+    min-height: 48px;
+  }
+
+  .aht-msg-mark-all {
+    font-size: 0.74rem;
+    padding: 4px 10px;
+  }
+
+  .aht-modal-lab-panel {
+    padding: 6px 10px;
+    gap: 6px;
+    font-size: 0.7rem;
+  }
+}
+
+/* === Clickables: avatar/nombre abren Ficha overlay === */
+.aht-msg-from[data-persona-id],
+.aht-msg-avatar[data-persona-id],
+.msg-eleccion-avatar-wrap [data-persona-id] {
+  cursor: pointer;
+}
+.aht-msg-choice-opt-name {
+  cursor: pointer;
+}

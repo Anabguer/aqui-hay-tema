@@ -19,6 +19,11 @@ final class ResidenteOperations
         if (isset($partida['residentes'][$catalogId])) {
             return ['ok' => false, 'error' => 'ya_presente'];
         }
+        $root = $this->catalog->getRoot();
+        $usados = NombresReservadosPartida::usados($partida, $root);
+        if (NombresReservadosPartida::idBloqueado($usados, $root, $catalogId)) {
+            return ['ok' => false, 'error' => 'nombre_duplicado'];
+        }
         try {
             $catalogo = $this->catalog->loadPersonaje($catalogId);
         } catch (ContentValidationException $e) {

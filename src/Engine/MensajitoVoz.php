@@ -250,7 +250,7 @@ final class MensajitoVoz
             'Te voy a contar una cosa de {otro}... ¿tú qué opinas?',
             'Últimamente no sé qué pensar de {otro}. ¿Me ayudas a aclararme?',
             'Necesito que me des tu opinión sobre {otro}. En serio.',
-            '{otro} me tiene un poco confundido/a. ¿Tú lo conoces bien?',
+            '{otro} me tiene un poco confundid{oa}. ¿Tú lo conoces bien?',
             'Contigo hablo de {otro}. {historial}, y no sé qué pensar.',
             '{otro} me ronda la cabeza. {historial}, y eso me deja con dudas.',
         ];
@@ -274,7 +274,7 @@ final class MensajitoVoz
         return [
             'Te confieso algo, Celestine: últimamente estoy {texto}.',
             'No se lo cuento a nadie, pero tú... últimamente me siento {texto}.',
-            'Contigo puedo ser sincero/a: estoy {texto}. No sé qué hacer.',
+            'Contigo puedo ser sincero{oa}: estoy {texto}. No sé qué hacer.',
             'Celestine, necesito desahogarme. Estoy {texto} y no sé cuánto aguanto.',
             'Oye, entre nosotros: estoy {texto}. No quiero que se entere nadie.',
         ];
@@ -284,12 +284,12 @@ final class MensajitoVoz
     private static function bancoFAlertaVecinal(): array
     {
         return [
-            '¿Has visto a {otro}? Lleva unos días bastante apagado/a.',
+            '¿Has visto a {otro}? Lleva unos días bastante apagad{oa_ref}.',
             'Me preocupa {otro}. No sé si está bien, lleva un tiempo raro.',
             '{otro} no está nada bien. ¿Podrías echarle un ojo?',
             'Celestine, algo le pasa a {otro}. No es el mismo de siempre.',
-            'He visto a {otro} un poco bajoneado/a. ¿Tú sabes algo?',
-            '¿Sabes de {otro}? {historial}, y me tiene preocupado/a.',
+            'He visto a {otro} un poco bajonead{oa_ref}. ¿Tú sabes algo?',
+            '¿Sabes de {otro}? {historial}, y me tiene preocupado{oa}.',
             'Me da vueltas lo de {otro}. {historial}, y últimamente no lo veo bien.',
         ];
     }
@@ -299,9 +299,9 @@ final class MensajitoVoz
     {
         return [
             'Te confieso algo, Celestine: creo que me gusta {otro}.',
-            'No se lo he dicho a nadie, pero {otro} me pone nervioso/a.',
+            'No se lo he dicho a nadie, pero {otro} me pone nervioso{oa}.',
             'Entre nosotros: {otro} me gusta. No sé qué hacer.',
-            'Celestine, necesito desahogarme. {otro} me tiene loco/a.',
+            'Celestine, necesito desahogarme. {otro} me tiene loco{oa}.',
             'Te voy a decir una cosa de {otro}. {historial}, y eso me tiene así.',
         ];
     }
@@ -522,6 +522,10 @@ final class MensajitoVoz
         $claveSeed = $seed !== '' ? $seed : $familia . '|' . implode('|', array_map('strval', $vars));
         $plantilla = CopyVariante::elegir($partida, 'mensajito_voz|' . $familia, $pool, $claveSeed);
         $out = strtr((string) $plantilla, self::tokens($vars));
+        // Auto-resolver {oa} desde género del hablante si no se pasó explícitamente.
+        if (str_contains($out, '{oa}') && !isset($vars['oa']) && $rid !== null && $rid !== '') {
+            $out = str_replace('{oa}', self::oa(self::perfilPublico($partida, $rid)['genero']), $out);
+        }
         // Sin token disponible, la variante muere limpia (nunca llega un "{otro}" al jugador).
         $out = trim((string) preg_replace('/\{[a-z_]+\}/u', '', $out));
         $out = trim((string) preg_replace('/\s{2,}/u', ' ', $out));
@@ -757,7 +761,7 @@ final class MensajitoVoz
     private static function tokens(array $vars): array
     {
         $t = [];
-        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa', 'dia_semana', 'nombre_evento', 'asistencia', 'historial'] as $k) {
+        foreach (['texto', 'otro', 'nombre', 'nombre_a', 'nombre_b', 'dia', 'min', 's', 'oa', 'oa_ref', 'dia_semana', 'nombre_evento', 'asistencia', 'historial'] as $k) {
             $v = $vars[$k] ?? null;
             if ($v !== null && $v !== '') {
                 $t['{' . $k . '}'] = (string) $v;

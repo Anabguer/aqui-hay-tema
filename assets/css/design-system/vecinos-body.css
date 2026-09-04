@@ -1,0 +1,626 @@
+/* ============================================================
+   VECINOS BODY — Estilo visual AHT para el body del modal Vecinos
+   Migrado al sistema .aht-modal (FASE 2 — modales)
+   Dependencias: modal-ds.css (frame), tokens.css (variables)
+   
+   Tokens locales (--vec-*) en :root,.aht-modal.vecinos para
+   que cualquier descendiente los herede por cascada.
+   ============================================================ */
+
+/* === TOKENS LOCALES === */
+:root,
+.aht-modal.vecinos {
+  --vec-ink: var(--ds-ink, #3b3028);
+  --vec-ink-soft: var(--ds-ink-soft, #594839);
+  --vec-muted: var(--ds-text-muted, #75634F);
+  --vec-paper: var(--ds-paper-card, #fffdf7);
+  --vec-lavender: var(--ds-lavender, #b8a8d8);
+  --vec-lavender-deep: var(--ds-lavender-deep, #7a6a9a);
+  --vec-pink: var(--ds-pink, #e88ba8);
+  --vec-pink-deep: var(--ds-pink-deep, #c85b78);
+  --vec-green: var(--ds-green-deep, #4a7a52);
+  --vec-red: var(--ds-red-alert, #c42b4a);
+  --vec-mustard: var(--ds-mustard, #d4b84a);
+  --vec-font-hand: var(--ds-font-hand, "Caveat", "Segoe Print", cursive);
+  --vec-font-body: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+}
+
+/* === HEADER VECINOS — contador a la derecha === */
+.vecinos-cab .ds-modal-head {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  text-align: left !important;
+}
+.vecinos-cab .ds-modal-head-row {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.vecinos-cuenta-wrap {
+  flex: 0 0 auto;
+  margin-left: 8px;
+}
+
+/* === TABS VECINOS / RELACIONES === */
+.vec-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 0 0 10px;
+}
+
+.vec-tab {
+  flex: 1;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--vec-lavender);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--vec-paper);
+  font: 700 1.05rem/1 var(--vec-font-hand);
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--vec-lavender-deep);
+  cursor: pointer;
+  padding: 0 8px;
+}
+
+.vec-tab.is-on {
+  border-style: solid;
+  border-color: var(--vec-ink);
+  background: var(--vec-pink);
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(146, 39, 73, .35);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .2);
+}
+
+.vec-tab--lavanda.is-on {
+  background: var(--vec-lavender);
+  color: var(--vec-ink);
+  text-shadow: none;
+}
+
+/* === PANELES === */
+.vec-panel {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.vec-panel[hidden] { display: none !important; }
+
+.capa-vecinos.is-relaciones .vecinos-cuenta-wrap { display: none !important; }
+
+/* === BUSCADOR === */
+.vec-busca-tira { margin: 0 0 10px !important; }
+
+.vec-busca-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px !important;
+  border: 2px solid var(--vec-ink-soft) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: #fff !important;
+}
+
+.vec-busca-ico {
+  font-size: 1rem;
+  color: var(--vec-muted);
+  opacity: .9;
+  line-height: 1;
+}
+
+.vec-busca-inp {
+  flex: 1;
+  min-width: 0;
+  border: none !important;
+  background: transparent !important;
+  font: 600 .875rem/1.3 var(--vec-font-body) !important;
+  color: var(--vec-ink) !important;
+}
+
+/* === GRID VECINOS === */
+.vecinos-grid,
+[data-vecinos-list].vecinos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: clip;
+  padding: 0 0 8px;
+  align-items: stretch;
+}
+
+@media (max-width: 768px) {
+  .vecinos-grid,
+  [data-vecinos-list].vecinos-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .vecinos-grid,
+  [data-vecinos-list].vecinos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* === TARJETA VECINO === */
+.vecino-celda {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  text-align: center !important;
+  min-height: 188px !important;
+  padding: 12px 10px 8px !important;
+  border: 2px solid var(--vec-ink-soft) !important;
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important;
+  background: var(--vec-paper) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .1), 0 4px 8px rgba(70, 50, 30, .08) !important;
+  cursor: pointer;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+  overflow: visible;
+}
+
+.vecino-celda:nth-child(odd) { transform: rotate(-0.35deg) !important; }
+.vecino-celda:nth-child(even) { transform: rotate(0.3deg) !important; }
+
+.vecino-celda:hover,
+.vecino-celda:focus-within,
+.vecino-celda:focus-visible {
+  background: rgba(255, 246, 220, .92) !important;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .15), 0 6px 12px rgba(70, 50, 30, .12) !important;
+}
+.vecino-celda:focus-visible { z-index: 4 !important; }
+
+.vecino-celda-top {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-width: 0;
+  position: relative;
+}
+
+/* Decoraciones discretas por tarjeta */
+.vecino-celda::before,
+.vecino-celda::after {
+  position: absolute;
+  font-size: .85rem;
+  line-height: 1;
+  opacity: .55;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.vecino-celda--decor-0::before { content: "\2665"; top: 6px; left: 8px; color: #e88ba8; }
+.vecino-celda--decor-0::after { content: "\273F"; bottom: 38px; right: 8px; color: #9a8a78; }
+
+.vecino-celda--decor-1::before { content: "\273F"; top: 8px; right: 10px; color: #7a9e6a; }
+.vecino-celda--decor-1::after { content: "\2605"; bottom: 42px; left: 10px; color: #b8a8d8; font-size: .7rem; }
+
+.vecino-celda--decor-2::before { content: "\273F"; top: 6px; left: 9px; color: #c85b78; }
+.vecino-celda--decor-2::after { content: "\2665"; bottom: 40px; right: 9px; color: #e88ba8; font-size: .75rem; }
+
+.vecino-celda--decor-3::before { content: "\2605"; top: 7px; right: 9px; color: #d4b84a; }
+.vecino-celda--decor-3::after { content: "\273F"; bottom: 38px; left: 8px; color: #7a6a9a; }
+
+.vecino-celda--decor-4::before { content: "\2665"; top: 8px; left: 10px; color: #c4b5e8; }
+.vecino-celda--decor-4::after { content: "\2605"; bottom: 41px; right: 10px; color: #7a9e6a; font-size: .68rem; }
+
+.vecino-celda--decor-5::before { content: "\273F"; top: 6px; right: 8px; color: #9a6a28; }
+.vecino-celda--decor-5::after { content: "\2665"; bottom: 39px; left: 9px; color: #e88ba8; font-size: .72rem; }
+
+/* === CARA VECINO === */
+.vecino-cara {
+  position: relative !important;
+  width: 76px !important;
+  height: 76px !important;
+  margin: 4px auto 8px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  border: 3px solid var(--vec-ink-soft) !important;
+  box-shadow: none !important;
+  background: #fffdf8 !important;
+  flex-shrink: 0;
+}
+
+.vecino-cara--alegre { border-color: var(--vec-green) !important; }
+.vecino-cara--neutro { border-color: #c48a3a !important; }
+.vecino-cara--enfadado { border-color: var(--vec-red) !important; }
+.vecino-cara--triste { border-color: var(--vec-lavender-deep) !important; }
+
+.vecino-cara img,
+.vecino-cara .vecino-ini {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.vecino-ini {
+  display: grid !important;
+  place-items: center !important;
+  font-family: var(--vec-font-hand) !important;
+  font-size: 1.65rem !important;
+}
+
+/* === NOMBRE + EMOCION === */
+.vecino-nom {
+  margin: 0 0 6px !important;
+  font-family: var(--vec-font-hand) !important;
+  font-size: 1.15rem !important;
+  font-weight: 700 !important;
+  color: var(--vec-ink) !important;
+  line-height: 1.1 !important;
+}
+
+.vecino-emo { display: none !important; }
+
+.vecino-emo-pill {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 5px;
+  margin: 0 0 4px !important;
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  border: 1.5px solid var(--vec-ink-soft) !important;
+  font: 800 .64rem/1.2 var(--vec-font-body) !important;
+  letter-spacing: .25px !important;
+  text-transform: uppercase !important;
+}
+
+.vecino-emo-pill-ico { font-size: .78rem; line-height: 1; }
+
+.vecino-emo-pill--alegre {
+  background: var(--ds-green-soft, #e8f3e6) !important;
+  border-color: var(--vec-green) !important;
+  color: var(--vec-green) !important;
+}
+
+.vecino-emo-pill--neutro {
+  background: #fff0dc !important;
+  border-color: #c48a3a !important;
+  color: #9a6a28 !important;
+}
+
+.vecino-emo-pill--triste {
+  background: var(--ds-lavender-soft, #ece6f8) !important;
+  border-color: var(--vec-lavender-deep) !important;
+  color: var(--vec-lavender-deep) !important;
+}
+
+.vecino-emo-pill--enfadado {
+  background: var(--ds-red-soft, #fde8ec) !important;
+  border-color: var(--vec-red) !important;
+  color: var(--vec-red) !important;
+}
+
+/* === HINT PIE === */
+.mensajitos-hint.vecinos-hint {
+  margin: 8px 0 0 !important;
+  padding: 9px 12px !important;
+  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px !important;
+  border: none !important;
+  background: rgba(196, 181, 232, .45) !important;
+  color: var(--vec-ink-soft) !important;
+  font: 600 .78rem/1.35 var(--vec-font-body) !important;
+  font-style: italic !important;
+  text-align: center !important;
+  flex-shrink: 0;
+}
+
+/* === RELACIONES (pestaña) === */
+.vec-rel-filtros {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+  margin: 0 0 8px;
+  flex-wrap: nowrap;
+}
+
+.vec-rel-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+  flex: 1;
+  font: 600 .5625rem/1.1 var(--vec-font-body);
+  color: var(--vec-muted);
+}
+
+.vec-rel-chip > b {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--vec-ink-soft);
+  border-radius: 999px;
+  background: var(--vec-paper);
+  font: 700 .75rem/1 var(--vec-font-body);
+}
+
+.vec-rel-chip.is-on > b {
+  border: 2px solid var(--vec-ink);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .2);
+}
+
+.vec-rel-chip.is-on { color: var(--vec-ink); font-weight: 800; }
+
+.vec-rel-dd-wrap { margin: 0 0 10px; }
+
+select.vec-rel-persona {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 2px solid var(--vec-ink-soft);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--vec-paper);
+  font: 600 .875rem/1.3 var(--vec-font-body);
+  color: var(--vec-ink);
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--vec-muted) 50%), linear-gradient(135deg, var(--vec-muted) 50%, transparent 50%);
+  background-position: calc(100% - 16px) 55%, calc(100% - 11px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.vec-rel-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: clip;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-start;
+  gap: 8px;
+  padding: 0 0 6px;
+}
+
+.is-relaciones .vec-rel-scroll {
+  display: flex !important;
+  flex-direction: column !important;
+  align-content: flex-start !important;
+  gap: 8px !important;
+}
+
+.vec-rel-card {
+  position: relative;
+  padding: 8px 10px 8px 12px;
+  border: none;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(51, 38, 30, .1);
+  overflow: hidden;
+  transform: none !important;
+}
+
+.is-relaciones .vec-rel-card {
+  flex: 0 0 auto !important;
+  flex-shrink: 0 !important;
+  min-height: auto;
+  padding: 10px 12px 10px 14px;
+  background: #fff !important;
+  box-shadow: 0 1px 6px rgba(51, 38, 30, .1) !important;
+}
+
+.vec-rel-card-accent {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  background: var(--vec-mustard);
+}
+
+.vec-rel-card--tone-red .vec-rel-card-accent { background: var(--vec-red); }
+.vec-rel-card--tone-pink .vec-rel-card-accent { background: var(--vec-pink-deep); }
+.vec-rel-card--tone-green .vec-rel-card-accent { background: var(--vec-green); }
+.vec-rel-card--tone-mustard .vec-rel-card-accent { background: var(--vec-mustard); }
+.vec-rel-card--tone-neutral .vec-rel-card-accent { background: rgba(107, 81, 56, .35); }
+
+.vec-rel-card.is-amor {
+  background: linear-gradient(180deg, #fff 0%, #fdf5f8 100%);
+}
+
+.is-relaciones .vec-rel-card.is-amor {
+  background: linear-gradient(180deg, #fff 0%, #fdf5f8 100%) !important;
+}
+
+.is-relaciones .vec-rel-card-grid {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 14px !important;
+  width: 100% !important;
+  padding: 0 1cm !important;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+.is-relaciones .vec-rel-card-grid > .vec-rel-pers {
+  flex: 0 0 calc(52px + 0.5cm) !important;
+  width: calc(52px + 0.5cm) !important;
+  max-width: calc(52px + 0.5cm) !important;
+  min-width: calc(52px + 0.5cm) !important;
+  padding: 0 !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.is-relaciones .vec-rel-card-grid > .vec-rel-puente {
+  flex: 0 1 auto !important;
+  width: auto !important;
+  min-width: 64px !important;
+  max-width: 132px !important;
+  padding: 0 4px !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+.vec-rel-pers {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.is-relaciones .vec-rel-cara {
+  width: calc(52px + 0.5cm);
+  height: calc(52px + 0.5cm);
+}
+
+.vec-rel-cara {
+  width: 46px;
+  height: 46px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1.5px var(--vec-ink-soft);
+  background: #e8dcc4;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.vec-rel-cara img { width: 100%; height: 100%; object-fit: cover; }
+
+.is-relaciones .vec-rel-nom {
+  max-width: calc(52px + 0.5cm);
+  font-size: .9rem;
+}
+
+.vec-rel-nom {
+  font: 700 .9rem/1.1 var(--vec-font-hand);
+  color: var(--vec-ink);
+  text-align: center;
+  max-width: 52px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.vec-rel-puente {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: 4px;
+  min-width: 0;
+  padding: 0;
+}
+
+.vec-rel-flecha {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 18px;
+  width: 100%;
+}
+
+.vec-rel-flecha-linea {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: currentColor;
+}
+
+.vec-rel-flecha-linea::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid currentColor;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+}
+
+.vec-rel-flecha-label {
+  position: relative;
+  z-index: 1;
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, .85);
+  font: 700 .5625rem/1.2 var(--vec-font-body);
+  color: var(--vec-ink-soft);
+  white-space: nowrap;
+}
+
+.vec-rel-resumen {
+  margin: 0;
+  padding: 0;
+  font: 600 .68rem/1.3 var(--vec-font-body);
+  color: var(--vec-muted);
+  text-align: center;
+}
+
+.vec-rel-resumen b {
+  font-weight: 800;
+  color: var(--vec-ink);
+}
+
+/* === RESPONSIVE: MOBILE === */
+@media (max-width: 768px) {
+  .vec-tab {
+    min-height: 38px;
+    padding: 5px 12px;
+    font-size: .95rem;
+  }
+
+  .vec-busca-wrap {
+    padding: 7px 10px !important;
+  }
+
+  .vecinos-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+  }
+
+  .vecino-celda {
+    min-height: 160px !important;
+    padding: 10px 8px 6px !important;
+  }
+
+  .vecino-cara {
+    width: 64px !important;
+    height: 64px !important;
+  }
+
+  .vecino-nom {
+    font-size: 1.05rem !important;
+  }
+
+  .vec-rel-card {
+    padding: 8px 10px !important;
+  }
+}

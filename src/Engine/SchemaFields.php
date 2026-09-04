@@ -43,6 +43,7 @@ final class SchemaFields
         $partida['mensajitos_hilos'] ??= [];
         $partida['seguimientos_consejo_pendientes'] ??= [];
         RelacionBitacora::ensure($partida);
+        HistoriaPuebloEngine::ensure($partida);
         DiarioHitoEngine::ensure($partida);
         DiarioHitoEngine::sincronizarDesdeBitacora($partida);
         $partida['parentesco'] ??= [];

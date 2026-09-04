@@ -361,7 +361,6 @@
 .play-v3 .capa-agenda .ds-modal-head,
 .play-v3 .capa-misiones .ds-modal-head,
 .play-v3 .capa-organizar .ds-modal-head,
-.play-v3 .capa-vecinos .ds-modal-head,
 .play-v3 .capa-diario .coti-top .ds-modal-head {
   display: flex !important;
   flex-direction: column !important;
@@ -374,7 +373,6 @@
 .play-v3 .capa-agenda .ds-modal-head-row,
 .play-v3 .capa-misiones .ds-modal-head-row,
 .play-v3 .capa-organizar .ds-modal-head-row,
-.play-v3 .capa-vecinos .ds-modal-head-row,
 .play-v3 .capa-diario .coti-top .ds-modal-head-row {
   justify-content: center !important;
   align-items: center !important;

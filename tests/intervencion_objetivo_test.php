@@ -167,10 +167,9 @@ ok((string) (($rOk['vista']['ultimo']['objetivo'] ?? '')) === $objDePrueba,
 ok(in_array($rOk['intervencion']['tono'] ?? '', ['bien', 'neutral', 'mal'], true),
     'tono real del motor presente');
 
-/* --- 4. Guarda canonica: una sola intervencion por encuentro --- */
+/* --- 4. FASE 1: segunda intervención SÍ está permitida (múltiples turnos) --- */
 $rDoble = EncuentroIntervencion::ejecutar($partida, $encA, EncuentroIntervencion::HABLAR, ['objetivo' => (string) $partA[1]], $catalog);
-ok(!($rDoble['ok'] ?? true) && (($rDoble['error'] ?? '') === 'INTERVENCION_YA_USADA'),
-    'segunda intervencion (otro objetivo) rechazada: una por encuentro');
+ok(($rDoble['ok'] ?? false) === true, 'FASE 1: segunda intervención permitida');
 
 /* --- 5. Aislamiento entre encuentros simultaneos --- */
 $rowB = EncuentroIntervencion::buscar($partida, $encB);
@@ -183,9 +182,19 @@ ok(($rB['ok'] ?? false), 'intervencion en B ejecuta tras intervenir A');
 
 $rowA = EncuentroIntervencion::buscar($partida, $encA);
 $rowB = EncuentroIntervencion::buscar($partida, $encB);
-ok((string) ($rowA['intervencion_celeste']['objetivo'] ?? '') === $objDePrueba
-    && (string) ($rowB['intervencion_celeste']['objetivo'] ?? '') === $objB,
-    'cada intervencion conserva SU encuentro y SU persona');
+/* FASE 1: cada encuentro conserva SU historial de turnos y no se mezclan. */
+$turnosA = $rowA['turnos'] ?? [];
+$turnosB = $rowB['turnos'] ?? [];
+ok(count($turnosA) === 2, 'encuentro A tiene 2 turnos');
+ok(count($turnosB) === 1, 'encuentro B tiene 1 turno');
+ok((string) ($turnosA[0]['objetivo'] ?? '') === $objDePrueba, 'turno 0 de A tiene objetivo correcto');
+ok((string) ($turnosA[1]['objetivo'] ?? '') === (string) $partA[1], 'turno 1 de A tiene objetivo correcto');
+ok((string) ($turnosB[0]['objetivo'] ?? '') === $objB, 'turno 0 de B tiene objetivo correcto');
+/* intervencion_celeste refleja el último turno de CADA encuentro. */
+ok((string) ($rowA['intervencion_celeste']['objetivo'] ?? '') === (string) $partA[1],
+    'intervencion_celeste A refleja último turno');
+ok((string) ($rowB['intervencion_celeste']['objetivo'] ?? '') === $objB,
+    'intervencion_celeste B conserva su turno');
 
 /* --- 6. Compatibilidad: sin objetivo el contrato sigue igual --- */
 [$svc2, $partida2, $enc2, , $qa2, $p12, , , $catalog2] = setupDosEncuentrosSimultaneos();

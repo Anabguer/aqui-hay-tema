@@ -95,7 +95,7 @@ final class NecesidadEstado
      */
     public static function normalizar(array $necesidad, ?array $reloj = null): array
     {
-        $valor = round((float) ($necesidad['valor'] ?? self::INITIAL_VALUE), 1);
+        $valor = (int) ($necesidad['valor'] ?? self::INITIAL_VALUE);
         $valor = max(self::MIN_VALUE, min(self::MAX_VALUE, $valor));
         return [
             'valor' => $valor,
@@ -186,29 +186,6 @@ final class NecesidadEstado
         }
 
         return $cambios;
-    }
-
-    /**
-     * Aplica recuperacion pasiva flat por hora a todas las necesidades.
-     *
-     * @param array<string, mixed> &$residente
-     * @param array<string, mixed> $cal
-     */
-    public static function aplicarRecuperacionPasiva(array &$residente, array $cal): void
-    {
-        $rp = (float) CalibracionConfig::get($cal, 'necesidades.recuperacion_pasiva', 0.0);
-        if ($rp <= 0.0) {
-            return;
-        }
-        self::ensureResidente($residente);
-        $rt = &$residente['runtime'];
-        foreach (self::TODAS as $nec) {
-            $rt['necesidades'][$nec]['valor'] = min(
-                self::MAX_VALUE,
-                $rt['necesidades'][$nec]['valor'] + $rp
-            );
-            $rt['necesidades'][$nec]['banda'] = self::calcularBanda($rt['necesidades'][$nec]['valor']);
-        }
     }
 
     /**

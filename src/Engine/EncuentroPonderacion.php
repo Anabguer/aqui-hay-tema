@@ -40,6 +40,8 @@ final class EncuentroPonderacion
             'emocional_a' => $emoA,
             'emocional_b' => $emoB,
             'historial_reciente' => MemoriaEventos::recientes($partida, $ids, 5),
+            /* FASE 1: Barra de quedada como factor adicional. */
+            'barra_quedada' => self::normalizarBarra((int) ($encuentro['barra_quedada'] ?? 0)),
             'azar' => null,
         ];
 
@@ -60,5 +62,15 @@ final class EncuentroPonderacion
                 ],
             ],
         ];
+    }
+
+    /**
+     * FASE 1: Normaliza barra de quedada (-12..+12) a valor -1..+1 para el motor de experiencia.
+     */
+    private static function normalizarBarra(int $barra): float
+    {
+        /* Rango esperado: -12 (4 turnos muy_mal) a +12 (4 turnos muy_bien). */
+        $max = 12.0;
+        return max(-1.0, min(1.0, $barra / $max));
     }
 }

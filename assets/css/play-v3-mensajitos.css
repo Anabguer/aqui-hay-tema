@@ -732,6 +732,8 @@
   gap: 6px;
   margin: 0;
   padding: 0;
+  max-width: 100%;
+  min-width: 0;
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -756,10 +758,12 @@
   background: var(--ds-pink-soft, #fff0f4);
 }
 .play-v3 .capa-buzon .mensajitos-leer-todos-txt {
-  font-family: Caveat, cursive;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
   font-size: .95rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
+  white-space: nowrap;
+  min-width: 0;
 }
 .play-v3 .capa-buzon .mensajitos-leer-todos[hidden] {
   display: none !important;

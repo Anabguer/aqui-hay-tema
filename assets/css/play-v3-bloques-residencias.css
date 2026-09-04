@@ -544,7 +544,7 @@
   pointer-events: auto;
 }
 
-.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos {
+.play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos:not(.ds-migrada) {
   position: absolute;
   left: 50% !important;
   top: 50% !important;
@@ -653,7 +653,7 @@
 }
 
 .play-v3 .capa-vecinos .vecinos-cuenta {
-  font-family: Caveat, cursive;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
   font-size: 1.05rem;
   font-weight: 700;
   color: var(--pink-deep);
@@ -704,7 +704,7 @@
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .vecinos-grid,
 .play-v3 .play-root.pc[data-capa="vecinos"] [data-vecinos-list].vecinos-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: .45rem .35rem;
   padding-bottom: .15rem;
   max-height: calc(68vh - 168px);
@@ -767,7 +767,7 @@
 @media (max-width: 560px) {
   .play-v3 .play-root.pc[data-capa="vecinos"] .vecinos-grid,
   .play-v3 .play-root.pc[data-capa="vecinos"] [data-vecinos-list].vecinos-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -784,7 +784,7 @@
 
   .play-v3 .play-root.phone[data-capa="vecinos"] .vecinos-grid,
   .play-v3 .play-root.phone[data-capa="vecinos"] [data-vecinos-list].vecinos-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     max-height: calc(72vh - 150px);
   }
 }
@@ -2095,7 +2095,7 @@
 
 /* === Nuevo plan v1: modal scrapbook como ficha === */
 
-.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar {
+.play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar:not(.ds-migrada) {
   position: absolute;
   left: 50% !important;
   top: 50% !important;

@@ -1,0 +1,263 @@
+/* ============================================================
+   AHT V4 — SCREEN FRAME
+   Autoridad ÚNICA para: frame exterior, header, título, X,
+   body, footer, scroll estructural, responsive base.
+
+   Cada screen V4 consume estos tokens y esta estructura.
+   El CONTENIDO de cada screen se define en screens/<nombre>.css
+
+   Aislamiento: todas las reglas usan prefijo .aht-frame
+   para no chocar con clases legacy (.capa, .cerrar, etc.)
+   ============================================================ */
+
+/* ── VELO V4 (backdrop) ───────────────────────────────────── */
+.aht-velo {
+  position: fixed;
+  inset: 0;
+  z-index: var(--aht-z-velo, 100);
+  background-color: var(--aht-overlay, rgba(38, 31, 47, 0.45));
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--aht-dur, 200ms) ease;
+}
+.aht-velo--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── FRAME: Shell base ────────────────────────────────────── */
+.aht-frame {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: min(calc(100% - 32px), 720px);
+  max-width: min(calc(100% - 32px), 720px);
+  height: auto;
+  min-height: 0;
+  max-height: min(90vh, 840px);
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: var(--aht-z-frame, 110);
+  /* Piel V4 — autoridad propia */
+  background-color: var(--aht-surface-raised, #FFFFFF);
+  border: 1px solid var(--aht-border, #D8D1DE);
+  border-radius: var(--aht-frame-radius, 22px 16px 24px 15px / 16px 24px 15px 22px);
+  box-shadow: var(--aht-frame-shadow, 0 8px 24px rgba(48, 40, 58, 0.20));
+}
+
+/* ── FRAME: Overlay mode (ficha desde mensajitos) ──────────── */
+.aht-frame--overlay {
+  z-index: var(--aht-z-frame-overlay, 200);
+}
+
+/* ── HEADER ────────────────────────────────────────────────── */
+.aht-frame-header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 12px 52px 10px 20px;
+  background-color: var(--aht-header-bg, #FFFFFF);
+  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+}
+
+/* Highlight detrás del título */
+.aht-frame-header::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(74%, 12rem);
+  height: 1.4em;
+  transform: translate(-50%, -50%) rotate(-1.5deg);
+  background-color: var(--aht-header-mark, #F1EDF6);
+  border-radius: 6px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── TÍTULO ────────────────────────────────────────────────── */
+.aht-frame-title {
+  position: relative;
+  z-index: 1;
+  font-family: var(--aht-font-hand, "Caveat", cursive);
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.05;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  color: var(--aht-text, #33261E);
+  text-shadow: none;
+  display: block;
+}
+
+/* Decoración ✦ */
+.aht-frame-title::before,
+.aht-frame-title::after {
+  content: "\2726";
+  display: inline-block;
+  margin: 0 0.28em;
+  font-size: 0.55em;
+  color: #e8b84a;
+  vertical-align: middle;
+  transform: translateY(-0.08em);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ── CLOSE (X) ─────────────────────────────────────────────── */
+.aht-frame-close {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  z-index: 12;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  min-height: 40px;
+  max-width: 40px;
+  max-height: 40px;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  border: 2px solid var(--aht-close-border, #D8D1DE);
+  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+  background: var(--aht-close-bg, #F1EDF6);
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12);
+  font: 800 17px/1 "Nunito", sans-serif;
+  color: var(--aht-close-color, #C42B4A);
+  text-transform: none;
+  letter-spacing: 0;
+  text-shadow: none;
+  transform: rotate(2.5deg);
+  transition: transform var(--aht-dur-fast, 120ms) ease,
+              box-shadow var(--aht-dur-fast, 120ms) ease;
+  line-height: 1;
+}
+.aht-frame-close:hover {
+  transform: rotate(0deg) scale(1.05);
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .16);
+}
+.aht-frame-close:active {
+  transform: rotate(2.5deg) scale(0.96);
+}
+
+/* ── BODY ──────────────────────────────────────────────────── */
+.aht-frame-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--aht-body-bg, #F6F3F8);
+}
+
+/* ── FOOTER (opcional) ─────────────────────────────────────── */
+.aht-frame-footer {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  background-color: var(--aht-footer-bg, #EEE8FA);
+  border-top: 1px solid var(--aht-footer-border, #A99ADF);
+}
+
+/* ── SUBTITLE slot ─────────────────────────────────────────── */
+.aht-frame-subtitle {
+  font-family: var(--aht-font-hand, "Caveat", cursive);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--aht-text-muted, #75634F);
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── TABS slot (para screens con pestañas) ─────────────────── */
+.aht-frame-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 16px;
+  background-color: var(--aht-header-bg, #FFFFFF);
+  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+}
+.aht-frame-tab {
+  flex: 1;
+  padding: 10px 8px;
+  border: none;
+  background: transparent;
+  font-family: var(--aht-font-ui, "Nunito", sans-serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--aht-text-muted, #75634F);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--aht-dur-fast, 120ms) ease;
+}
+.aht-frame-tab:hover {
+  color: var(--aht-text, #33261E);
+}
+.aht-frame-tab.is-active {
+  color: var(--aht-text, #33261E);
+}
+.aht-frame-tab.is-active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 16px;
+  right: 16px;
+  height: 2px;
+  background-color: var(--aht-accent, #C42B4A);
+}
+
+/* ── RESPONSIVE: MOBILE ────────────────────────────────────── */
+@media (max-width: 768px) {
+  .aht-frame {
+    width: min(100%, 393px);
+    max-width: min(100%, 393px);
+    max-height: min(88vh, 720px);
+    transform: translate(-50%, -50%) rotate(-0.2deg);
+  }
+
+  .aht-frame-header {
+    padding: 10px 48px 8px 14px;
+  }
+
+  .aht-frame-title {
+    font-size: 1.95rem;
+  }
+
+  .aht-frame-close {
+    top: 4px;
+    right: 4px;
+  }
+}
+
+/* ── SCROLLBAR styling (consistente con AHT) ───────────────── */
+.aht-frame-body::-webkit-scrollbar {
+  width: 9px;
+}
+.aht-frame-body::-webkit-scrollbar-track {
+  background: rgba(243, 230, 204, .35);
+  border-radius: 6px;
+}
+.aht-frame-body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d4c4a8, #b89a78);
+  border-radius: 6px;
+  border: 2px solid rgba(243, 230, 204, .45);
+}
+.aht-frame-body {
+  scrollbar-width: thin;
+  scrollbar-color: #c9b59a rgba(243, 230, 204, .35);
+}

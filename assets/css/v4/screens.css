@@ -1,0 +1,194 @@
+/* ============================================================
+   AHT V4 — SCREEN WRAPPER
+   Aislamiento V4 de las screens que usan .aht-frame.
+   
+   Selector: .aht-screen (sin conflicto con .capa legacy)
+   Carga: DESPUÉS de todo el CSS legacy/DS.
+   
+   1) Oculta por defecto (fuera de pantalla)
+   2) Muestra cuando data-capa coincide
+   3) Aplica posición V4 propia (no hereda .capa)
+   
+   0 !important — aislamiento por estructura, no por cascada.
+   ============================================================ */
+
+/* ── Ocultar por defecto ───────────────────────────────────── */
+.play-root .aht-screen {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(calc(100% - 32px), 720px);
+  max-width: min(calc(100% - 32px), 720px);
+  height: auto;
+  min-height: 0;
+  max-height: min(90vh, 840px);
+  margin: 0;
+  padding: 0;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-sizing: border-box;
+  z-index: var(--aht-z-frame, 110);
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--aht-dur, 200ms) ease;
+  /* Aislamiento: sin heredar nada de .capa-* legacy.
+     Este nodo NO lleva clases .capa-*. */
+}
+
+/* ── Mostrar cuando data-capa coincide ─────────────────────── */
+/* Cada screen V4 tiene una regla individual (sin comas múltiples
+   para que sea fácil testear individualmente) */
+.play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
+.play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+.play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
+.play-root[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"],
+.play-root[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
+.play-root[data-capa="ficha_relaciones"] .aht-screen[data-aht-screen="ficha_relaciones"],
+.play-root[data-capa="ficha_animo"] .aht-screen[data-aht-screen="ficha_animo"],
+.play-root[data-capa="ficha_diario"] .aht-screen[data-aht-screen="ficha_diario"],
+.play-root[data-capa="necesidades_global"] .aht-screen[data-aht-screen="necesidades_global"],
+.play-root[data-capa="misiones"] .aht-screen[data-aht-screen="misiones"],
+.play-root[data-capa="parejas"] .aht-screen[data-aht-screen="parejas"],
+.play-root[data-capa="historia"] .aht-screen[data-aht-screen="historia"],
+.play-root[data-capa="historia_celebracion"] .aht-screen[data-aht-screen="historia_celebracion"],
+.play-root[data-capa="historia_detalle"] .aht-screen[data-aht-screen="historia_detalle"],
+.play-root[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"],
+.play-root[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"],
+.play-root[data-capa="ajustes"] .aht-screen[data-aht-screen="ajustes"],
+.play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"],
+.play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* ── Responsive mobile ─────────────────────────────────────── */
+@media (max-width: 768px) {
+  .play-root .aht-screen {
+    width: min(100%, 393px);
+    max-width: min(100%, 393px);
+    max-height: min(88vh, 720px);
+    transform: translate(-50%, -50%) rotate(-0.2deg);
+  }
+}
+
+/* ============================================================
+   INTERIORES DE CADA SCREEN V4
+   Cada screen define sus estilos internos aquí.
+   ============================================================ */
+
+/* ── BUZÓN / MENSAJITOS ────────────────────────────────────── */
+.aht-screen[data-aht-screen="buzon"] .aht-frame-body {
+  padding: 0;
+}
+
+.aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--aht-gap-sm, 8px);
+  padding: 6px 16px;
+  background-color: var(--aht-surface-raised, #FFFFFF);
+  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+}
+.aht-screen[data-aht-screen="buzon"] .buzon-toolbar[hidden] {
+  display: none;
+}
+.aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
+  border: none;
+  background: transparent;
+  font: 600 0.8rem/1 "Nunito", sans-serif;
+  color: var(--aht-text-muted, #75634F);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.aht-screen[data-aht-screen="buzon"] .buzon-mark-all-box {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--aht-border, #D8D1DE);
+  border-radius: 3px;
+  display: inline-block;
+}
+
+/* ── VECINOS ────────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── MISIONES ───────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="misiones"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── PAREJAS ────────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="parejas"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── AGENDA ─────────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="agenda"] .aht-frame-body {
+  padding: 0;
+}
+
+/* ── ORGANIZAR ──────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="organizar"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── HISTORIA ───────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="historia"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── VIDA DEL PUEBLO ────────────────────────────────────────── */
+.aht-screen[data-aht-screen="vida_pueblo"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── INVENTARIO ─────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="inventario"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── AJUSTES ────────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="ajustes"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── NECESIDADES ────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="necesidades_global"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── COTILLEOS / DIARIO ─────────────────────────────────────── */
+.aht-screen[data-aht-screen="diario"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── MENTES ─────────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="mentes"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── FICHA ──────────────────────────────────────────────────── */
+.aht-screen[data-aht-screen="ficha"] .aht-frame-body {
+  padding: 0;
+}
+
+/* ── HISTORIA CELEBRACIÓN ───────────────────────────────────── */
+.aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* ── HISTORIA DETALLE ───────────────────────────────────────── */
+.aht-screen[data-aht-screen="historia_detalle"] .aht-frame-body {
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}

@@ -42,7 +42,7 @@ final class EncuentroLifecycle
             if ($now >= $end && in_array($enc['estado'] ?? '', ['programado', 'en_curso'], true)) {
                 $enc['estado'] = 'terminado';
                 $resultado = EncuentroResolver::resolver($partida, $enc, $logger, $catalog);
-                EncuentroResolver::aplicarResultado($partida, $enc, $resultado, $logger);
+                EncuentroResolver::aplicarResultado($partida, $enc, $resultado, $logger, $catalog);
                 $calVp = $catalog !== null ? CalibracionConfig::load($catalog->getRoot()) : [];
                 $vpR = VidaPuebloEngine::aplicarEncuentroOrganizado($partida, $enc, $resultado, $calVp, $logger);
                 if ($vpR !== null) {

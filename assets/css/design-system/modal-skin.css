@@ -1,60 +1,42 @@
-/* MODAL-SKIN — piel visual canónica de modales AHT
-   Background, border, border-radius, box-shadow.
-   Gate: .ds-migrada — solo modales marcadas reciben autoridad nueva.
-   Carga ANTES de los locales; los locales no deben definir propiedades de skin. */
+﻿/* MODAL-SKIN — decoracion canónica (fondo shell = lavanda) */
 
-/* === Skin scrapbook (modales .ds-migradas con estilo libreta) === */
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada {
-  background-color: var(--ds-paper-modal, #fffaf0);
-  background-image:
-    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
-    linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
-    url("../../play-v3/capas/libreta_hoja.png");
-  background-position: center, center, center;
-  background-size: cover, cover, cover;
-  background-repeat: no-repeat;
-  border: 2.5px solid var(--ds-ink, #3b3028);
-  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14);
-}
-
-/* === Header bg (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-top,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mensajitos-cab {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mensajitos-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .vecinos-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .inv-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .org-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .vida-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .par-top,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .agenda-cab,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .ajustes-top {
   background-color: var(--modal-header-bg, #FFFFFF);
   background-image: none;
 }
 
-/* === Body bg (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .mis-body,
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada [data-buzon-list] {
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada [data-buzon-list],
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .par-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .inv-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .org-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .vida-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .agenda-list,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .ajustes-body,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .vec-panel,
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .vec-rel-scroll {
   background-color: var(--modal-content-bg, #F6F3F8);
   background-image: none;
 }
 
-/* === Head-row position:relative (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .ds-modal-head-row {
   position: relative;
 }
 
-/* === ::before scrapbook — show for .ds-migrada === */
-.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada::before {
-  content: "";
-  display: block;
-  position: absolute;
-  inset: 5px;
-  border: 1.5px dashed rgba(107, 81, 56, .34);
-  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* === Hide ::after (solo dentro de .ds-migrada) === */
+.play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada::before,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada::after {
-  display: none;
+  display: none !important;
+  content: none !important;
 }
 
-/* === Hide pins/tapes (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada > .ficha-tape,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada > .mis-pin,
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada > .org-pin,
@@ -62,30 +44,34 @@
   display: none;
 }
 
-/* === X / cerrar — decorative (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .capa.ds-migrada > .cerrar:not(.tut-skip),
 .play-v3:has(.game-shell) .capa.ds-migrada .cerrar.ds-modal-close {
-  border: 2px solid var(--ds-ink, #3b3028);
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--modal-title-mark, #F1EDF6);
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .22);
-  font: 800 17px/1 Nunito, sans-serif;
-  color: var(--ds-ink, #3b3028);
-  text-transform: none;
-  letter-spacing: 0;
-  text-shadow: none;
-  transform: rotate(2.5deg);
+  border: 2px solid var(--modal-border, #D8D1DE) !important;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
+  background: var(--modal-title-mark, #F1EDF6) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12) !important;
+  font: 800 17px/1 Nunito, sans-serif !important;
+  color: var(--ds-ink, #3b3028) !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  text-shadow: none !important;
+  transform: rotate(2.5deg) !important;
 }
 
-/* === X ::before hide (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .capa.ds-migrada > .cerrar:not(.tut-skip)::before,
 .play-v3:has(.game-shell) .capa.ds-migrada .cerrar.ds-modal-close::before {
-  display: none;
-  content: none;
+  display: none !important;
+  content: none !important;
 }
 
-/* === hide capa-cerrar-pestaña (solo dentro de .ds-migrada) === */
 .play-v3:has(.game-shell) .capa.ds-migrada .capa-cerrar-pestaña,
 .play-v3:has(.game-shell) .capa.ds-migrada > .capa-cerrar-pestaña {
-  display: none;
+  display: none !important;
+}
+
+.play-v3:has(.game-shell) .capa.ds-migrada .mis-sub,
+.play-v3:has(.game-shell) .capa.ds-migrada .par-sub,
+.play-v3:has(.game-shell) .capa.ds-migrada .inv-sub,
+.play-v3:has(.game-shell) .capa.ds-migrada .ds-modal-sub {
+  display: none !important;
 }

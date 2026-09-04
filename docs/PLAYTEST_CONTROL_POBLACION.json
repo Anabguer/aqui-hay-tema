@@ -1,0 +1,104 @@
+{
+  "meta": {
+    "ts": "2026-09-02T07:00:00+00:00",
+    "ts_fix": "2026-09-02T12:00:00+00:00",
+    "estado": "PENDIENTE_PLAYTEST",
+    "p8_cerrado": false,
+    "seeds_analizadas": 39,
+    "partidas_nuevas": 28,
+    "simulacion_postfix": 1500,
+    "config": "juego_v1"
+  },
+  "pool_canonico": {
+    "total": 199,
+    "mujer": 99,
+    "hombre": 100,
+    "no_binarie": 0,
+    "edad_min": 22,
+    "edad_max": 72,
+    "edad_media": 31.7,
+    "edad_mediana": 28
+  },
+  "poblacion_inicial": {
+    "regla_genero": {
+      "total_analizadas": 39,
+      "mixta_2+1": 27,
+      "mixta_pct": 69,
+      "3_mujeres": 4,
+      "3_hombres": 8,
+      "monogennero_pct": 31,
+      "probabilidad_teorica_monogennero": "24.5%",
+      "veredicto": "FALLO — 25-31% de partidas arrancan con composición monogénero"
+    },
+    "regla_edad": {
+      "diff_media": 19,
+      "diff_maxima": 40,
+      "ejemplo_extremo": "hombre(70) + mujer(31) + hombre(30)",
+      "ejemplo_extremo_2": "mujer(24) + hombre(64) + mujer(28)",
+      "veredicto": "FALLO — Se producen arranques con 'un yayo entre los tres primeros'"
+    },
+    "causa_raiz": {
+      "archivo": "src/Engine/PoblacionV3.php",
+      "linea": 30,
+      "codigo": "$picked = $rng->pickUnique($pool, min($n, count($pool)));",
+      "problema": "Selección puramente aleatoria sin filtro de género ni edad"
+    }
+  },
+  "llegadas_posteriores": {
+    "muestras": 6,
+    "dias_por_partida": 25,
+    "llegadas_promedio": 4.7,
+    "primera_llegada_promedio_dia": 5,
+    "genero": {
+      "mujer": 16,
+      "hombre": 13,
+      "pct_mujer": 55,
+      "pct_hombre": 45
+    },
+    "edades": {
+      "min": 22,
+      "max": 49,
+      "media": 29.4
+    },
+    "caso_d1_reproducido": false,
+    "veredicto": "ACEPTABLE — ritmo y diversidad OK"
+  },
+  "partidas_problematicas": [
+    {"seed": "pob-test-17", "combo": "hombre+hombre+hombre", "edades": [27,38,33]},
+    {"seed": "pob-test-9", "combo": "hombre+hombre+hombre", "edades": [24,27,26]},
+    {"seed": "pob-test-10", "combo": "hombre+hombre+hombre", "edades": [29,22,29]},
+    {"seed": "pob-test-1", "combo": "mujer+mujer+mujer", "edades": [28,25,27]},
+    {"seed": "pob-test-5", "combo": "mujer+mujer+mujer", "edades": [26,22,53]},
+    {"seed": "pob-test-2", "combo": "mixta", "edades": [24,64,28], "diff": 40},
+    {"seed": "pob-test-3", "combo": "mixta", "edades": [45,27,64], "diff": 37},
+    {"seed": "pob-test-16", "combo": "mixta", "edades": [70,31,30], "diff": 40},
+    {"seed": "pob-test-19", "combo": "mixta", "edades": [59,26,26], "diff": 33},
+    {"seed": "llegadas-test-2", "combo": "mujer+mujer+mujer", "edades": [26,63,24], "diff": 39}
+  ],
+  "veredicto_p8": "EN_PLAYTEST — implementado pero no cumple reglas de producto",
+  "accion_requerida": "Filtrar selección inicial para garantizar composición mixta + edades within ~20 años",
+  "postfix": {
+    "fecha": "2026-09-02",
+    "archivo_modificado": "src/Engine/PoblacionV3.php",
+    "umbral_edad": 15,
+    "algoritmo": "muestreo_directo_con_fallback",
+    "simulacion": {
+      "N": 1500,
+      "monogennero": 0,
+      "violaciones_edad": 0,
+      "combos": {"hombre+hombre+mujer": 763, "mujer+mujer+hombre": 737},
+      "edades_diff_media": 5.6,
+      "edades_diff_max": 15,
+      "edad_media_trio": 31.2,
+      "npc_distintos": "199/199",
+      "ratio_max_esperado": 1.68
+    },
+    "tests": {
+      "archivo": "tests/poblacion_v3_initial_test.php",
+      "total_assertions": 2010,
+      "fallos": 0
+    },
+    "llegadas_posteriores": "SIN_CAMBIOS",
+    "veredicto": "PENDIENTE_PLAYTEST"
+  }
+}

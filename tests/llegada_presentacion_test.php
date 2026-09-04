@@ -3,12 +3,17 @@ declare(strict_types=1);
 
 require_once dirname(__DIR__) . '/src/autoload.php';
 
+use AquiHayTema\Engine\AgendaEngine;
 use AquiHayTema\Engine\BuzonEngine;
 use AquiHayTema\Engine\CandidatoLlegadaEngine;
 use AquiHayTema\Engine\CapacidadViviendas;
 use AquiHayTema\Engine\EncuentroEngine;
+use AquiHayTema\Engine\EncuentroLifecycle;
+use AquiHayTema\Engine\EncuentroResolver;
 use AquiHayTema\Engine\LlegadaPresentacionEngine;
+use AquiHayTema\Engine\MemoriaEventos;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\RelacionEngine;
 use AquiHayTema\Engine\TutorialIncorporaciones;
 use AquiHayTema\Engine\TutorialPrimerosPasos;
 
@@ -109,5 +114,133 @@ ok(count(TutorialIncorporaciones::residentesActivos($p)) === 15, 'marcha manual 
 $rLlegada = $svc->crearResidentePlaceholderDev($p);
 ok(($rLlegada['ok'] ?? false) === true, 'refill tras vacante');
 ok(count(TutorialIncorporaciones::residentesActivos($p)) === 16, 'vuelve a 16');
+
+// ──────────────────────────────────────────────────────
+// §24.1 — Acompañar al nuevo vecino: agenda, resolución real, idempotencia
+// ──────────────────────────────────────────────────────
+
+// --- Test: Agenda bloquea a ambos participantes durante la franja ---
+$encBien = null;
+foreach (EncuentroEngine::list($p) as $enc) {
+    if (($enc['intencion'] ?? '') === 'bienvenida_llegada'
+        && in_array($nuevoId, $enc['participantes'] ?? [], true)
+        && ($enc['estado'] ?? '') === 'en_curso'
+    ) {
+        $encBien = $enc;
+        break;
+    }
+}
+ok($encBien !== null, '§24.1 encore bienvenida activo para test agenda');
+if (is_array($encBien)) {
+    $diaEnc = (int) ($encBien['dia'] ?? 1);
+    $horaEnc = (int) ($encBien['hora'] ?? 0);
+    $parts = $encBien['participantes'] ?? [];
+    $p1 = (string) ($parts[0] ?? '');
+    $p2 = (string) ($parts[1] ?? '');
+
+    $dispP1 = AgendaEngine::estaDisponible($p, $p1, $diaEnc, $horaEnc);
+    ok(($dispP1['disponible'] ?? true) === false, '§24.1 agenda bloquea participante 1 durante bienvenida');
+    $dispP2 = AgendaEngine::estaDisponible($p, $p2, $diaEnc, $horaEnc);
+    ok(($dispP2['disponible'] ?? true) === false, '§24.1 agenda bloquea participante 2 durante bienvenida');
+
+    $dispInt = AgendaEngine::estaDisponibleIntervalo($p, $p1, $diaEnc, $horaEnc, LlegadaPresentacionEngine::FRANJA_HORAS);
+    ok(($dispInt['disponible'] ?? true) === false, '§24.1 intervalo bienvenida bloqueado para participante 1');
+
+    $otros = array_diff(TutorialIncorporaciones::residentesActivos($p), [$p1, $p2]);
+    if ($otros !== []) {
+        $otro = (string) reset($otros);
+        $dispOtro = AgendaEngine::estaDisponible($p, $otro, $diaEnc, $horaEnc);
+        ok(($dispOtro['disponible'] ?? false) === true, '§24.1 tercero libre durante bienvenida');
+    }
+
+    // --- Test: Slots marcados como ocupados (antes de resolver) ---
+    $slotsOcupados = 0;
+    for ($h = $horaEnc; $h < $horaEnc + LlegadaPresentacionEngine::FRANJA_HORAS; $h++) {
+        $disp = AgendaEngine::estaDisponible($p, $p1, $diaEnc, $h);
+        if (!($disp['disponible'] ?? true)) {
+            $slotsOcupados++;
+        }
+    }
+    ok($slotsOcupados >= 1, '§24.1 agenda marca slots ocupados durante bienvenida');
+}
+
+// --- Test: Resolución usa pipeline real (no placeholder) ---
+if (is_array($encBien)) {
+    $encBienRef = null;
+    foreach ($p['encuentros'] as &$enc) {
+        if (($enc['id'] ?? '') === ($encBien['id'] ?? '___none')) {
+            $encBienRef = &$enc;
+            break;
+        }
+    }
+    if (is_array($encBienRef)) {
+        $encBienRef['dia'] = (int) ($p['reloj']['dia_pueblo'] ?? 1);
+        $encBienRef['hora'] = max(0, (int) ($p['reloj']['hora_actual'] ?? 0) - 2);
+        $encBienRef['duracion_horas'] = 1;
+        $catalog = new \AquiHayTema\Engine\Catalog($root);
+        EncuentroLifecycle::sincronizarConReloj($p, null, $catalog);
+
+        $resuelveReal = false;
+        foreach ($p['encuentros'] as $enc) {
+            if (($enc['id'] ?? '') === ($encBien['id'] ?? '') && ($enc['estado'] ?? '') === 'terminado') {
+                $resultado = $enc['resultado'] ?? [];
+                if (!empty($resultado['_deltas_reales']) || empty($resultado['_placeholder'])) {
+                    $resuelveReal = true;
+                }
+                break;
+            }
+        }
+        ok($resuelveReal, '§24.1 resolución bienvenida usa pipeline real (no placeholder)');
+    }
+}
+
+// --- Test: Contacto registrado tras resolución real ---
+if (is_array($encBien)) {
+    $parts = $encBien['participantes'] ?? [];
+    if (count($parts) >= 2) {
+        $a = (string) $parts[0];
+        $b = (string) $parts[1];
+        $socialAB = RelacionEngine::socialHacia($p, $a, $b);
+        ok(is_array($socialAB), '§24.1 contacto registrado A→B tras resolución');
+        $socialBA = RelacionEngine::socialHacia($p, $b, $a);
+        ok(is_array($socialBA), '§24.1 contacto registrado B→A tras resolución');
+    }
+}
+
+// --- Test: Memoria registrada tras resolución ---
+if (is_array($encBien)) {
+    $memEventos = false;
+    foreach ($p['memoria_eventos'] ?? [] as $evt) {
+        if (($evt['familia'] ?? '') === 'encuentro'
+            && is_array($evt['participantes'] ?? null)
+            && in_array($nuevoId, $evt['participantes'], true)
+        ) {
+            $memEventos = true;
+            break;
+        }
+    }
+    ok($memEventos, '§24.1 memoria registró evento de encuentro bienvenida');
+}
+
+// --- Test: Idempotencia — segunda llamada NO duplica encuentro ---
+if (is_array($encBien)) {
+    $countAntes = count(EncuentroEngine::list($p));
+    LlegadaPresentacionEngine::alLlegadaEfectiva($p, $nuevoId, $root, $enCamino ?? null, null);
+    $countDespues = count(EncuentroEngine::list($p));
+    ok($countDespues === $countAntes, '§24.1 idempotencia: no duplica bienvenida');
+
+    // Solo 1 encuentro total con intencion bienvenida_llegada para este residente
+    $totalBien = 0;
+    foreach (EncuentroEngine::list($p) as $enc) {
+        if (($enc['intencion'] ?? '') === 'bienvenida_llegada'
+            && in_array($nuevoId, $enc['participantes'] ?? [], true)
+        ) {
+            $totalBien++;
+        }
+    }
+    ok($totalBien === 1, '§24.1 solo 1 bienvenida total por residente');
+}
+
+echo "--- §24.1 tests completados ---\n";
 
 exit($fail > 0 ? 1 : 0);

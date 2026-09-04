@@ -211,7 +211,11 @@ final class PeticionPuebloEngine
                     $repes++;
                 }
             }
-            $cands[$k]['_score'] = (int) ($c['prioridad'] ?? 0) + $rng->nextInt(0, 8) - ($penal > 0 ? $penal * $repes : 0);
+            $needsBoost = NecesidadPeticionBridge::boostPrioridad($partida, (string) ($c['residente_id'] ?? ''), $c['plantilla'] ?? []);
+            $cands[$k]['_score'] = (int) ($c['prioridad'] ?? 0) + $rng->nextInt(0, 8) - ($penal > 0 ? $penal * $repes : 0) + $needsBoost;
+            if ($needsBoost > 0) {
+                $cands[$k]['_needs_boost'] = $needsBoost;
+            }
             if ($repes > 0) {
                 $cands[$k]['_anti_rep'] = $penal * $repes;
             }

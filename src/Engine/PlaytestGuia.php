@@ -296,8 +296,8 @@ final class PlaytestGuia
                 continue;
             }
             $lineas[] = IdentidadPublica::nombre($partida, (string) $rid)
-                . ' ahora se le nota ' . self::emocionHumana($emo)
-                . ' (antes ' . self::emocionHumana($antesE) . ').';
+                . ' ahora se le nota ' . self::emocionHumana($emo, $partida, (string) $rid)
+                . ' (antes ' . self::emocionHumana($antesE, $partida, (string) $rid) . ').';
             $marcados['cambio_emocional'] = true;
         }
 
@@ -680,8 +680,9 @@ final class PlaytestGuia
         return 'EL TIEMPO HA AVANZADO';
     }
 
-    private static function emocionHumana(string $id): string
+    private static function emocionHumana(string $id, array $partida, string $rid): string
     {
+        $oa = GeneroConcordancia::oa($partida, $rid);
         if ($id === EstadoEmocional::ALEGRE) {
             return 'alegre';
         }
@@ -689,9 +690,9 @@ final class PlaytestGuia
             return 'triste';
         }
         if ($id === EstadoEmocional::ENFADADO) {
-            return 'enfadado/a';
+            return 'enfadado' . $oa;
         }
-        return 'neutro/a';
+        return 'neutro' . $oa;
     }
 
     /**

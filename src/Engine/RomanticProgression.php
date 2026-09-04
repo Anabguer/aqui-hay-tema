@@ -135,14 +135,26 @@ final class RomanticProgression
      */
     private static function intensidadNarrativa(int $romanceMax, string $senal): int
     {
-        $base = match ($senal) {
-            self::SENAL_SE_FIJA => 10,
-            self::SENAL_INTERES_CRECIENTE => 30,
-            self::SENAL_MUTUO => 55,
-            self::SENAL_CITA => 70,
-            self::SENAL_PRE_PAREJA => 85,
-            default => 0,
-        };
+        switch ($senal) {
+            case self::SENAL_SE_FIJA:
+                $base = 10;
+                break;
+            case self::SENAL_INTERES_CRECIENTE:
+                $base = 30;
+                break;
+            case self::SENAL_MUTUO:
+                $base = 55;
+                break;
+            case self::SENAL_CITA:
+                $base = 70;
+                break;
+            case self::SENAL_PRE_PAREJA:
+                $base = 85;
+                break;
+            default:
+                $base = 0;
+                break;
+        }
 
         return min(100, $base + (int) ($romanceMax * 0.3));
     }

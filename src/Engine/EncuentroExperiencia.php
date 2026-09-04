@@ -137,6 +137,9 @@ final class EncuentroExperiencia
                 $ap = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
                 $pe = is_array($plan) ? (int) ($plan['penalizacion'] ?? 0) : 0;
                 $v = ($ap - $pe) / 20.0;
+            } elseif ($k === 'barra_quedada') {
+                /* FASE 1: La barra ya viene normalizada -1..+1 desde EncuentroPonderacion. */
+                $v = (float) ($fact['barra_quedada'] ?? 0.0);
             } elseif ($k === 'azar') {
                 $v = 0.0;
             }
@@ -207,6 +210,8 @@ final class EncuentroExperiencia
                 $ap = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
                 $pe = is_array($plan) ? (int) ($plan['penalizacion'] ?? 0) : 0;
                 $v = ($ap - $pe) / 20.0;
+            } elseif ($k === 'barra_quedada') {
+                $v = (float) ($fact['barra_quedada'] ?? 0.0);
             }
             $contrib[(string) $k] = $w * $v;
             $acc += $contrib[(string) $k];

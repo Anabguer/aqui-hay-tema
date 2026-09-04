@@ -76,8 +76,6 @@
 /* Cabeceras centradas */
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head,
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head-row,
-.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-head,
-.play-v3:has(.game-shell) .capa-vecinos .vecinos-head,
 .play-v3:has(.game-shell) .capa-ficha .ficha-top,
 .play-v3:has(.game-shell) .capa-agenda .agenda-cab .ds-modal-head,
 .play-v3:has(.game-shell) .capa-agenda .agenda-cab .ds-modal-head-row,
@@ -90,7 +88,6 @@
 }
 
 .play-v3:has(.game-shell) .capa-buzon .mensajitos-cab .ds-modal-head-row,
-.play-v3:has(.game-shell) .capa-vecinos .vecinos-cab .ds-modal-head,
 .play-v3:has(.game-shell) .capa-diario .coti-top .ds-modal-head-row,
 .play-v3:has(.game-shell) .capa-organizar .org-top .ds-modal-head-row {
   display: block !important;

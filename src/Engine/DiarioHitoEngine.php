@@ -284,7 +284,7 @@ final class DiarioHitoEngine
             $emo = self::emocionAnotadaDelEncuentro($res, (string) $id);
             if ($emo !== '') {
                 $nom = IdentidadPublica::nombre($partida, (string) $id);
-                $consecuencias[] = $nom . ' terminó ' . ($emo === EstadoEmocional::TRISTE ? 'triste' : 'enfadad' . self::oA($partida, (string) $id)) . '.';
+                $consecuencias[] = $nom . ' terminó ' . ($emo === EstadoEmocional::TRISTE ? 'triste' : 'enfadad' . GeneroConcordancia::oa($partida, (string) $id)) . '.';
             }
         }
 

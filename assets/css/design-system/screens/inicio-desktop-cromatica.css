@@ -709,12 +709,6 @@
     font-weight: 700 !important;
     color: #4a7352 !important;
   }
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-track {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    overflow: visible !important;
-  }
   .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-wrap {
     display: flex !important;
     flex-direction: column !important;
@@ -833,5 +827,536 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
     font-size: .56rem !important;
+  }
+}
+
+
+/* INICIO-PLANES-SAFE-TWEAKS-DESKTOP-v142 - carrusel proximos + emoji tipo plan + avatares EN CURSO */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-tipo-ico--emoji {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 5 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: none !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    font-size: 1.05rem !important;
+    line-height: 1 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-tipo-ico--emoji svg {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces {
+    gap: 0 !important;
+    min-width: 78px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-cara--r {
+    margin-left: -18px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .cara-token .cara {
+    width: 50px !important;
+    height: 50px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-resumen--cuece {
+    margin: 2px 0 0 !important;
+    padding: 5px 12px 6px !important;
+    max-width: 100% !important;
+    border-radius: 9px !important;
+    border: 1px dashed rgba(109, 155, 118, .38) !important;
+    background: rgba(255, 255, 255, .5) !important;
+    box-shadow: none !important;
+    font-family: "Caveat", "Caveat Brush", cursive !important;
+    font-size: 1rem !important;
+    font-style: normal !important;
+    font-weight: 600 !important;
+    line-height: 1.1 !important;
+    color: #3f6340 !important;
+    text-align: center !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-resumen--cuece::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-card--desk-duo .pp-mov-body--desk-duo {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-wrap {
+    display: grid !important;
+    grid-template-rows: 44px minmax(28px, auto) !important;
+    align-items: center !important;
+    justify-items: center !important;
+    gap: 4px !important;
+    width: 100% !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
+    grid-row: 1 !important;
+    min-height: 44px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombre,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombres {
+    grid-row: 2 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 28px !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombres {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 0 8px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-lugar {
+    min-height: 18px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-hora {
+    padding: 4px 10px 3px !important;
+  }
+}
+
+
+/* INICIO-MAP-HOST-COLLAPSE-v139 - eliminar hueco bajo mapa: contenedor termina donde termina el mapa */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap {
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    flex: 0 0 auto !important;
+    align-self: start !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-stage,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-root.pc,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-scroll {
+    position: relative !important;
+    inset: auto !important;
+    top: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    display: block !important;
+    flex: 0 0 auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap .play-root.pc .board-fit {
+    height: auto !important;
+    min-height: 0 !important;
+  }
+}
+
+/* INICIO-PLANES-FIXES-DESKTOP-v143 - contador, caras horizontales, carrusel ida/vuelta, flechas alineadas */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-cab,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-tit {
+    overflow: visible !important;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-tit .plan-seccion-cnt {
+    flex-shrink: 0 !important;
+    overflow: visible !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji {
+    z-index: 6 !important;
+    font-size: 1.1rem !important;
+    line-height: 1 !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-nav-prev:not([hidden]),
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-nav-next:not([hidden]) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    padding: 0 !important;
+    border: 1.5px solid rgba(111, 95, 154, .28) !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, .94) !important;
+    color: #6f5f9a !important;
+    box-shadow: 0 2px 8px rgba(111, 95, 154, .16) !important;
+    cursor: pointer !important;
+    position: static !important;
+    right: auto !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    align-self: center !important;
+    z-index: 3 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-nav-prev:not([hidden]) svg,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-nav-next:not([hidden]) svg {
+    width: 14px !important;
+    height: 14px !important;
+    display: block !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many:has(.pp-mov-nav-next:not([hidden])) .pp-mov-track,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many:has(.pp-mov-nav-prev:not([hidden])) .pp-mov-track {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-nav-prev:not([hidden]),
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-nav-next:not([hidden]) {
+    display: inline-flex !important;
+  }
+}
+
+/* INICIO-PLANES-FIXES-DESKTOP-v144 - flechas laterales centradas, emoji limpio, separacion caras */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil .pp-mov-shell {
+    display: contents !important;
+    position: static !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 6px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many {
+    align-items: center !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-prev:not([hidden]),
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-next:not([hidden]) {
+    display: inline-flex !important;
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    align-self: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    margin: 0 !important;
+    z-index: 4 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-prev:not([hidden]) {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    justify-self: end !important;
+    margin-right: 2px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .proxplanes-movil.proxplanes-movil--many .pp-mov-nav-next:not([hidden]) {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    justify-self: start !important;
+    margin-left: 2px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-tipo-ico--emoji {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 1.2rem !important;
+    margin: 0 4px !important;
+    padding: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+    color: inherit !important;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    font-size: 1.35rem !important;
+    line-height: 1 !important;
+    z-index: 8 !important;
+    flex: 0 0 auto !important;
+    pointer-events: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji svg,
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-tipo-ico--emoji svg {
+    display: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
+    gap: 5px !important;
+    min-width: 78px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara--r {
+    margin-left: -6px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces {
+    gap: 5px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-cara--r {
+    margin-left: -8px !important;
+  }
+}
+
+/* INICIO-ENC-CAROUSEL-DESKTOP-v145 - EN CURSO: 1 card, carrusel lateral, sin flecha interna */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.is-on {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+    column-gap: 6px !important;
+    width: 100% !important;
+    margin: 0 0 .55rem !important;
+    padding: 0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.encursos-movil--solo {
+    grid-template-columns: minmax(0, 1fr) !important;
+    column-gap: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-shell {
+    display: contents !important;
+    position: static !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-track {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: hidden !important;
+    overflow-y: visible !important;
+    grid-column: 2 !important;
+    grid-row: 2 !important;
+    min-width: 0 !important;
+    width: auto !important;
+    max-width: none !important;
+    gap: 0 !important;
+    padding: 4px 0 2px !important;
+    scroll-snap-type: x mandatory !important;
+    margin: 0 !important;
+    scrollbar-width: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.encursos-movil--solo .enc-mov-track {
+    grid-column: 1 / -1 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-card {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    scroll-snap-align: start !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-desk-chevron {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.encursos-movil--multi .enc-mov-nav-prev:not([hidden]),
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.encursos-movil--multi .enc-mov-nav-next:not([hidden]) {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    position: static !important;
+    inset: auto !important;
+    transform: none !important;
+    align-self: center !important;
+    width: 26px !important;
+    height: 26px !important;
+    min-width: 26px !important;
+    min-height: 26px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: 4 !important;
+    border: 1.5px solid rgba(111, 95, 154, .28) !important;
+    border-radius: 50% !important;
+    background: rgba(255, 255, 255, .94) !important;
+    color: #6f5f9a !important;
+    box-shadow: 0 2px 8px rgba(111, 95, 154, .16) !important;
+    cursor: pointer !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.encursos-movil--multi .enc-mov-nav-prev:not([hidden]) {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    justify-self: end !important;
+    margin-right: 2px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil.encursos-movil--multi .enc-mov-nav-next:not([hidden]) {
+    grid-column: 3 !important;
+    grid-row: 2 !important;
+    justify-self: start !important;
+    margin-left: 2px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-nav-prev[hidden],
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .encursos-movil .enc-mov-nav-next[hidden] {
+    display: none !important;
+  }
+}
+
+/* INICIO-PLANES-PROX-DUO-COMPACT-v146 - proximos duo: caras mas juntas, emoji cafe legible */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
+    gap: 2px !important;
+    min-width: 72px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara--r {
+    margin-left: -10px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji {
+    margin: 0 2px !important;
+    padding: 0 !important;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    font-size: 1.3rem !important;
+    line-height: 1 !important;
+    background: transparent !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}
+
+/* INICIO-PLANES-PROX-DUO-COMPACT-v147 - proximos duo: caras mas juntas, emoji centrado sin tapar */
+@media (min-width: 769px) {
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 0 !important;
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara {
+    flex: 0 0 auto !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara--r {
+    margin-left: -12px !important;
+  }
+
+  .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico--emoji {
+    position: relative !important;
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    flex: 0 0 auto !important;
+    z-index: 3 !important;
+    width: auto !important;
+    height: auto !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 1px !important;
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    font-size: 1.2rem !important;
+    line-height: 1 !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    pointer-events: none !important;
+  }
+}
+
+
+/* INICIO-BOTTOM-NAV-DESKTOP-v138 - anula transform coma-roto en btns map-host; ::after intacto */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn {
+    transform: none !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    top: auto !important;
+    content: normal !important;
+  }
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn.is-on::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 3px !important;
+    transform: translateX(-50%) !important;
+    width: min(72%, 56px) !important;
+    height: 3.5px !important;
+    border-radius: 999px !important;
+    background: var(--ds-pink-deep, #c42b4a) !important;
   }
 }

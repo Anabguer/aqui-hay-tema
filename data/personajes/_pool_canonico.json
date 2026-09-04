@@ -1408,6 +1408,33 @@
         }
     ],
     "excluidos_seleccion": [
-        "per_p020"
+        "per_p001",
+        "per_p004",
+        "per_p011",
+        "per_p013",
+        "per_p014",
+        "per_p020",
+        "per_p024",
+        "per_p030",
+        "per_p033",
+        "per_p035",
+        "per_p036",
+        "per_p038",
+        "per_p039",
+        "per_p042",
+        "per_p045",
+        "per_p050",
+        "per_p053",
+        "per_p054",
+        "per_p055",
+        "per_p077",
+        "per_p089",
+        "per_p090",
+        "per_p092",
+        "per_p093",
+        "per_p095",
+        "per_p098",
+        "per_p099",
+        "per_p100"
     ]
 }

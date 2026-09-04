@@ -20,7 +20,7 @@ use AquiHayTema\Engine\Voluntad\VoluntadPonderadaEvaluator;
  */
 final class IniciativaSocial
 {
-    private const TIPOS_SOCIALES = ['conocerse', 'quedar'];
+    private const TIPOS_SOCIALES = ['conocerse', 'quedar', 'cita'];
     private const INTENCION = 'autonomo_npc_social';
     private const LOG_MAX = 500;
 
@@ -289,6 +289,13 @@ final class IniciativaSocial
      */
     public static function tieneTensionRomantica(array $partida, string $a, string $b, array $cal): bool
     {
+        $est = ParejaEngine::estado($partida, $a, $b);
+        if ($est === ParejaEngine::PAREJA) {
+            return false;
+        }
+        if ($est === ParejaEngine::CRISIS) {
+            return true;
+        }
         $umbral = (int) CalibracionConfig::get($cal, 'iniciativa_social.romance_umbral_bloqueo', 22);
         $romAb = (int) (RelacionEngine::romanceHacia($partida, $a, $b) ?? 0);
         $romBa = (int) (RelacionEngine::romanceHacia($partida, $b, $a) ?? 0);
@@ -301,12 +308,15 @@ final class IniciativaSocial
         if (!empty(SenalRomantica::desdeHacia($partida, $b, $a, $cal)['ok'])) {
             return true;
         }
-        $est = ParejaEngine::estado($partida, $a, $b);
-        return $est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS;
+        return false;
     }
 
     private static function tipoSocial(array $partida, string $desde, string $hacia): string
     {
+        $est = ParejaEngine::estado($partida, $desde, $hacia);
+        if ($est === ParejaEngine::PAREJA) {
+            return 'cita';
+        }
         return RelacionEngine::seConocen($partida, $desde, $hacia) ? 'quedar' : 'conocerse';
     }
 

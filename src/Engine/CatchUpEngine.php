@@ -211,9 +211,11 @@ final class CatchUpEngine
             $stats['peticiones_caducadas'] += (int) ($r['peticiones_caducadas'] ?? 0);
             $stats['eventos_offline'] += (int) ($r['offline_eventos'] ?? 0);
             $stats['salidas_offline'] += (int) ($r['offline_salidas'] ?? 0);
-            $restantes -= $chunk;
+$restantes -= $chunk;
         }
-
+        // F11 — Necesidades: decay ya se aplica dentro del loop de avanzarPasoAPaso
+        // via MotorVidaDiaria::tickHora → tickNecesidades → aplicarDecay por residente.
+        // No se necesita aplicación adicional aquí.
         return $stats;
     }
 

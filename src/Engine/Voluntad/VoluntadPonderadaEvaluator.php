@@ -133,6 +133,24 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
     }
 
     /**
+     * Boost/malus por intención celestina seleccionada.
+     * Modifica el score total de la propuesta.
+     *
+     * @param array<string, mixed> $propuesta
+     * @param array<string, mixed> $cal
+     * @return int
+     */
+    public static function modIntencion(array $propuesta, array $cal): int
+    {
+        $id = (string) ($propuesta['intencion'] ?? '');
+        if ($id === '') {
+            return 0;
+        }
+        $v = (int) CalibracionConfig::get($cal, 'voluntad.mod_intencion.' . $id, 0);
+        return is_numeric($v) ? $v : 0;
+    }
+
+    /**
      * Desglose real del score (para playtest / diagnóstico).
      *
      * @param array<string, mixed> $partida
@@ -147,6 +165,8 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
         $mods = EstadoEmocional::modificadores($emo, $cal);
         $modEmo = (int) ($mods['aceptar_planes'] ?? 0);
         $s = $base + $modEmo;
+        $modInt = self::modIntencion($propuesta, $cal);
+        $s += $modInt;
         $conocen = false;
         $soc = 0;
         $rom = null;
@@ -231,6 +251,7 @@ final class VoluntadPonderadaEvaluator implements VoluntadEvaluator
             'tipo' => $tipo,
             'mod_tipo' => $modTipo,
             'mod_iniciativa_romantica' => $modRomTipo,
+            'mod_intencion' => $modInt,
         ];
     }
 

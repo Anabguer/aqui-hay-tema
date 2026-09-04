@@ -5,7 +5,8 @@ namespace AquiHayTema\Engine;
 
 /**
  * Intervención de Celeste durante un encuentro organizado en curso.
- * Una acción significativa por encuentro; consecuencias vía motores canónicos.
+ * FASE 1: múltiples turnos de interacción con barra temporal de quedada.
+ * Legacy: una acción significativa por encuentro (compatibilidad hacia atrás).
  */
 final class EncuentroIntervencion
 {
@@ -15,6 +16,26 @@ final class EncuentroIntervencion
     public const PERSONAL = 'personal';
     public const COQUETEAR = 'coquetear';
     public const BESO = 'beso';
+
+    /** FASE 1: Acciones sociales seguras (sin romance). */
+    public const ACCIONES_SOCIALES = [
+        self::HABLAR,
+        self::BROMA,
+        self::HOBBY,
+        self::PERSONAL,
+    ];
+
+    /** FASE 1: Máximo de turnos por encuentro (configurable vía calibración). */
+    public const TURNOS_MAX_DEFAULT = 4;
+
+    /** FASE 1: Puntuación por resultado de acción (barra de quedada). */
+    private const BARRA_PUNTOS = [
+        'muy_bien' => 3,
+        'bien'     => 2,
+        'normal'   => 1,
+        'mal'      => -2,
+        'muy_mal'  => -3,
+    ];
 
   /** @var list<string> */
     private const ACCIONES = [
@@ -62,7 +83,14 @@ final class EncuentroIntervencion
         if (count($ids) !== 2) {
             return 'no_pareja';
         }
-        if (!empty($enc['intervencion_celeste']['usada'])) {
+        /* FASE 1: Verificar límite de turnos en vez de flag usada legacy. */
+        $turnos = $enc['turnos'] ?? [];
+        $maxTurnos = self::turnosMax($partida);
+        if (count($turnos) >= $maxTurnos) {
+            return 'turnos_agotados';
+        }
+        /* Compatibilidad legacy: si existe intervencion_celeste usada sin turnos, bloquear. */
+        if (empty($turnos) && !empty($enc['intervencion_celeste']['usada'])) {
             return 'intervencion_ya_usada';
         }
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
@@ -91,6 +119,14 @@ final class EncuentroIntervencion
             }
         }
         $prev = is_array($enc['intervencion_celeste'] ?? null) ? $enc['intervencion_celeste'] : null;
+
+        /* FASE 1: Estado de turnos. */
+        $turnos = $enc['turnos'] ?? [];
+        $maxTurnos = self::turnosMax($partida);
+        $numTurnos = count($turnos);
+        $actorActual = self::actorDeTurno($enc, $numTurnos);
+        $ultimoTurno = $numTurnos > 0 ? $turnos[$numTurnos - 1] : null;
+
         return [
             'disponible' => $puede && $tieneAccion,
             'puede_intervenir_motor' => $puede,
@@ -106,8 +142,86 @@ final class EncuentroIntervencion
                 'texto' => $prev['texto'] ?? null,
                 'objetivo' => $prev['objetivo'] ?? null,
             ] : null,
+            /* FASE 1: Campos de turno. */
+            'turnos' => $turnos,
+            'turno_actual' => $numTurnos,
+            'turnos_max' => $maxTurnos,
+            'turnos_restantes' => max(0, $maxTurnos - $numTurnos),
+            'actor_actual' => $actorActual,
+            'barra_quedada' => (int) ($enc['barra_quedada'] ?? 0),
         ];
     }
+
+    /* ── FASE 1: Helpers de turno ────────────────────────────────────── */
+
+    /**
+     * Máximo de turnos configurable. Lee de calibración, fallback constante.
+     */
+    public static function turnosMax(array $partida): int
+    {
+        $cal = CalibracionConfig::load(dirname(__DIR__, 2));
+        return (int) CalibracionConfig::get($cal, 'encuentro_interactivo.turnos_max', self::TURNOS_MAX_DEFAULT);
+    }
+
+    /**
+     * ID del residente que actúa en el turno dado (0-indexed).
+     * Turnos pares: A actúa sobre B. Turnos impares: B actúa sobre A.
+     */
+    public static function actorDeTurno(array $enc, int $turno): string
+    {
+        $ids = array_values($enc['participantes'] ?? []);
+        if (count($ids) < 2) {
+            return '';
+        }
+        return (string) ($ids[$turno % 2] ?? $ids[0]);
+    }
+
+    /**
+     * ID del residente que recibe la acción en el turno dado (0-indexed).
+     */
+    public static function receptorDeTurno(array $enc, int $turno): string
+    {
+        $ids = array_values($enc['participantes'] ?? []);
+        if (count($ids) < 2) {
+            return '';
+        }
+        return (string) ($ids[($turno + 1) % 2] ?? $ids[1]);
+    }
+
+    /**
+     * Puntos de barra de quedada para un resultado dado.
+     */
+    public static function barraPuntos(string $resultado): int
+    {
+        return self::BARRA_PUNTOS[$resultado] ?? 0;
+    }
+
+    /**
+     * Emoji de reacción visual para un tono dado.
+     */
+    public static function emojiReaccion(string $tono): string
+    {
+        switch ($tono) {
+            case 'bien': return '👍';
+            case 'mal': return '👎';
+            default: return '😐';
+        }
+    }
+
+    /**
+     * Inicializa el registro de turnos en un encuentro nuevo.
+     */
+    public static function inicializarTurnos(array &$enc): void
+    {
+        if (!isset($enc['turnos'])) {
+            $enc['turnos'] = [];
+        }
+        if (!isset($enc['barra_quedada'])) {
+            $enc['barra_quedada'] = 0;
+        }
+    }
+
+    /* ── Fin FASE 1 helpers ─────────────────────────────────────────── */
 
     /**
      * Hobbies YA conocidos por el jugador de UNA persona concreta del encuentro.
@@ -201,14 +315,19 @@ final class EncuentroIntervencion
         if (!self::puedeIntervenir($partida, $enc)) {
             return [];
         }
-        [$a, $b] = self::par($enc);
+        /* FASE 1: Usar actor/receptor del turno actual. */
+        $turnos = $enc['turnos'] ?? [];
+        $numTurno = count($turnos);
+        $actor = self::actorDeTurno($enc, $numTurno);
+        $receptor = self::receptorDeTurno($enc, $numTurno);
+        if ($actor === '' || $receptor === '') {
+            return [];
+        }
         $cal = $catalog !== null ? CalibracionConfig::load($catalog->getRoot()) : [];
         $out = [];
-        foreach (self::ACCIONES as $id) {
-            if ($id === self::HABLAR) {
-                continue;
-            }
-            $req = self::requisitos($partida, $enc, $id, $a, $b, $cal, $catalog);
+        /* FASE 1: Solo acciones sociales (sin romance). */
+        foreach (self::ACCIONES_SOCIALES as $id) {
+            $req = self::requisitos($partida, $enc, $id, $actor, $receptor, $cal, $catalog);
             $row = [
                 'id' => $id,
                 'etiqueta' => self::etiqueta($id),
@@ -216,13 +335,11 @@ final class EncuentroIntervencion
                 'motivo' => $req['motivo'] ?? null,
             ];
             if ($id === self::HOBBY) {
-                $temasA = MentesTemas::temasElegibles($partida, $enc, $a, $catalog);
-                $temasB = MentesTemas::temasElegibles($partida, $enc, $b, $catalog);
+                $temasReceptor = MentesTemas::temasElegibles($partida, $enc, $receptor, $catalog);
                 $row['temas_por_objetivo'] = [
-                    $a => $temasA,
-                    $b => $temasB,
+                    $receptor => $temasReceptor,
                 ];
-                $row['disponible'] = $temasA !== [] || $temasB !== [];
+                $row['disponible'] = $temasReceptor !== [];
                 if (!$row['disponible']) {
                     $row['motivo'] = 'sin_temas_conocidos';
                 }
@@ -261,17 +378,26 @@ final class EncuentroIntervencion
             }
             return GameError::respuesta(GameError::INTERVENCION_NO_DISPONIBLE);
         }
-        if (!in_array($accionId, self::ACCIONES, true)) {
+        /* FASE 1: Validar contra ACCIONES_SOCIALES (sin romance). */
+        if (!in_array($accionId, self::ACCIONES_SOCIALES, true)) {
             return GameError::respuesta(GameError::INTERVENCION_ACCION_INVALIDA, ['accion' => $accionId]);
         }
 
-        [$a, $b] = self::par($enc);
+        /* FASE 1: Determinar actor/receptor del turno actual. */
+        self::inicializarTurnos($enc);
+        $numTurno = count($enc['turnos']);
+        $actor = self::actorDeTurno($enc, $numTurno);
+        $receptor = self::receptorDeTurno($enc, $numTurno);
+        if ($actor === '' || $receptor === '') {
+            return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'turno_invalido']);
+        }
+
         $cal = CalibracionConfig::load($catalog->getRoot());
         /* "Meterme en su cabeza": persona objetivo OPCIONAL (ENCUENTRO + PERSONA).
            Si viene, debe ser participante de ESTE encuentro. No cambia cargas,
            probabilidades ni efectos: el motor resuelve igual que siempre. */
         $objetivo = isset($params['objetivo']) ? (string) $params['objetivo'] : '';
-        if ($objetivo !== '' && $objetivo !== $a && $objetivo !== $b) {
+        if ($objetivo !== '' && $objetivo !== $actor && $objetivo !== $receptor) {
             return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'objetivo_no_participante']);
         }
         if ($accionId === self::HOBBY && !isset($params['hobby_id'])) {
@@ -292,7 +418,7 @@ final class EncuentroIntervencion
                 }
             }
             if (!$encontrado && $objetivo === '') {
-                foreach (self::hobbiesConocidos($partida, $a, $b, $catalog) as $opt) {
+                foreach (self::hobbiesConocidos($partida, $actor, $receptor, $catalog) as $opt) {
                     if (($opt['id'] ?? '') === $hid) {
                         $params['residente_id'] = (string) ($opt['residente_id'] ?? '');
                         $encontrado = true;
@@ -303,8 +429,18 @@ final class EncuentroIntervencion
             if (!$encontrado) {
                 return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'tema_no_disponible']);
             }
+            /* Restaurar guard: el hobby debe pertenecer al interlocutor, no al influido. */
+            if ($objetivo !== '') {
+                $interloc = self::interlocutorDe($enc, $objetivo);
+                if ($interloc !== '') {
+                    $perfilInterloc = PerfilPartida::deOLegacy($partida, $interloc, $catalog);
+                    if (!in_array($hid, $perfilInterloc['hobbies'] ?? [], true)) {
+                        return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
+                    }
+                }
+            }
         }
-        $req = self::requisitos($partida, $enc, $accionId, $a, $b, $cal, $catalog, $params);
+        $req = self::requisitos($partida, $enc, $accionId, $actor, $receptor, $cal, $catalog, $params);
         if (!($req['ok'] ?? false)) {
             return array_merge(
                 GameError::respuesta(GameError::INTERVENCION_ACCION_INVALIDA, ['motivo' => $req['motivo'] ?? 'bloqueada']),
@@ -326,14 +462,40 @@ final class EncuentroIntervencion
                 $params['residente_id'] = $interlocutorPre;
             }
         }
-        $res = self::resolverAccion($partida, $enc, $accionId, $a, $b, $params, $cal, $catalog, $rng);
+        $res = self::resolverAccion($partida, $enc, $accionId, $actor, $receptor, $params, $cal, $catalog, $rng);
         $rng->persistToPartida($partida);
+
+        /* FASE 1: Calcular puntos de barra. */
+        $barraDelta = self::barraPuntos($res['resultado'] ?? 'normal');
 
         foreach ($partida['encuentros'] as &$row) {
             if (($row['id'] ?? '') !== $encuentroId) {
                 continue;
             }
             $interlocutor = $objetivo !== '' ? self::interlocutorDe($enc, $objetivo) : null;
+
+            /* FASE 1: Registrar turno en array. */
+            self::inicializarTurnos($row);
+            $turnoRow = [
+                'num' => $numTurno,
+                'actor' => $actor,
+                'receptor' => $receptor,
+                'accion' => $accionId,
+                'tono' => $res['tono'],
+                'resultado' => $res['resultado'],
+                'texto' => $res['texto'],
+                'barra_delta' => $barraDelta,
+                'hobby_id' => $params['hobby_id'] ?? null,
+                'objetivo' => $objetivo !== '' ? $objetivo : null,
+                'afinidad_tema' => $params['afinidad_tema'] ?? null,
+                'hito' => $res['hito'] ?? null,
+                'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
+            ];
+            $row['turnos'][] = $turnoRow;
+            $row['barra_quedada'] = (int) ($row['barra_quedada'] ?? 0) + $barraDelta;
+
+            /* Compatibilidad legacy: mantener intervencion_celeste con el último turno. */
             $intervRow = [
                 'usada' => true,
                 'accion' => $accionId,
@@ -355,7 +517,7 @@ final class EncuentroIntervencion
             ];
             $intervRow['tema_cargas'] = MentesTemas::cargasExperienciaPorParticipante(
                 $intervRow,
-                [$a, $b],
+                [$actor, $receptor],
                 $cal
             );
             $row['intervencion_celeste'] = $intervRow;
@@ -366,9 +528,14 @@ final class EncuentroIntervencion
 
         \aht_log_optional($logger, $partida, 'encuentro_intervencion', [
             'encuentro_id' => $encuentroId,
+            'turno' => $numTurno,
+            'actor' => $actor,
+            'receptor' => $receptor,
             'accion' => $accionId,
             'tono' => $res['tono'],
             'resultado' => $res['resultado'],
+            'barra_delta' => $barraDelta,
+            'barra_total' => $enc['barra_quedada'] ?? 0,
             'objetivo' => $objetivo !== '' ? $objetivo : null,
         ]);
 

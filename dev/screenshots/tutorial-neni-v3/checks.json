@@ -1,0 +1,112 @@
+[
+  {
+    "label": "desktop",
+    "step": 1,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "desktop",
+    "step": 2,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "desktop",
+    "step": 3,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "desktop",
+    "step": 4,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "desktop",
+    "step": 5,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "mobile",
+    "step": 1,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "mobile",
+    "step": 2,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "mobile",
+    "step": 3,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "mobile",
+    "step": 4,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  },
+  {
+    "label": "mobile",
+    "step": 5,
+    "shellH": 580,
+    "overflowY": "hidden",
+    "cuerpoOverflow": "hidden",
+    "scrollH": 578,
+    "clientH": 578,
+    "heroSrc": "assets/play-v3/tutorial/Cabecera.png?v=v3-20260901-133344",
+    "atrasText": "Atrás"
+  }
+]

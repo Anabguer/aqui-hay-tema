@@ -102,14 +102,22 @@ final class CopyRomanticProgression
 
     public static function fichaPista(string $senal, string $nombreYo, string $nombreOtro): string
     {
-        $pool = match ($senal) {
-            RomanticProgression::SENAL_SE_FIJA => self::FICHA_PISTA_SE_FIJA,
-            RomanticProgression::SENAL_INTERES_CRECIENTE,
-            RomanticProgression::SENAL_CITA,
-            RomanticProgression::SENAL_PRE_PAREJA => self::FICHA_PISTA_INTERES,
-            RomanticProgression::SENAL_MUTUO => self::FICHA_PISTA_MUTUO,
-            default => [],
-        };
+        switch ($senal) {
+            case RomanticProgression::SENAL_SE_FIJA:
+                $pool = self::FICHA_PISTA_SE_FIJA;
+                break;
+            case RomanticProgression::SENAL_INTERES_CRECIENTE:
+            case RomanticProgression::SENAL_CITA:
+            case RomanticProgression::SENAL_PRE_PAREJA:
+                $pool = self::FICHA_PISTA_INTERES;
+                break;
+            case RomanticProgression::SENAL_MUTUO:
+                $pool = self::FICHA_PISTA_MUTUO;
+                break;
+            default:
+                $pool = [];
+                break;
+        }
         if ($pool === []) {
             return '';
         }

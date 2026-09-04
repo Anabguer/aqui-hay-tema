@@ -29,13 +29,14 @@
 Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen, volver aquí, **comprobar el código real** (no confiar en el informe del agente) y revalidar las entradas relacionadas de este backlog.
 
 ### P01 — Continuidad relacional / crecimiento de relaciones
-- **Clase:** JUGABILIDAD/UX · **Prioridad:** ALTA · **Estado:** IMPLEMENTADO LOCALMENTE (M2+) / PENDIENTE DE INTEGRACIÓN Y REVALIDACIÓN — bloqueado por decisión de balance en extremos (ver INCIDENTE, hallazgo >0.85) + compatibilidad P2
+- **Clase:** JUGABILIDAD/UX · **Prioridad:** ALTA · **Estado:** 🧪 PENDIENTE PLAYTEST — 03/09/2026
 - **Subsistema:** relaciones/voluntad/experiencia · **Archivos implicados conocidos:** VoluntadPonderadaEvaluator.php, RelacionEngine.php, RelacionDesgaste.php, EncuentroResolver.php, EncuentroDeltasReales.php, ContactoCalidad.php, calibracion_vida.json
-- **Hallazgo de playtest:** caso Yeray+Sergio: conocerse muy_bien + intervención exitosa → social ≈7; horas después una propuesta seguía ≈51%. La voluntad apenas conserva calidad/recencia del encuentro.
+- **Decision product actual:** MANENAR ESTADO ACTUAL. NO wirear P2/M2+/bonus_primera_cita_reciproca/conflicto_mult_cita/delta_multiplier_positivo/continuidad_reciente.
+- **Motivo:** El edge case >0.85 NO afecta actualmente al gameplay porque esos knobs no están conectados. Si se conectaran, 44% de combinaciones extremadamente favorables superarían 0.85 (máx 0.920). No se decide por intuición; se observará en PlayTest longitudinal.
 - **Objetivo de producto:** relaciones construibles progresivamente; trayectoria comprensible; relación fuerte amortigua incidentes pequeños (80→70 sí; 80→"como recién conocidos" no); relación fuerte facilita aceptar planes/citas/recuperación.
-- **Implementado (M2+, modelo aprobado):** `mod_continuidad_reciente` por PAR (memoria_eventos, muy_bien +10/bien +5, dos buenos 48h +3, half-life 12h, cap 12, corte por mal/muy_mal posterior del mismo par; tercero NO corta); consolidación por niveles (40/62/82 → desgaste base 0.8/0.4/0.2/0.1); protección progresiva de daño `max(0.3, 1−0.005×social)`; nivel 3 primer muy_mal max −5; delta positivo ×1.15; `mod_social_factor` configurable. Caso Yeray+Sergio verificado: p_plan 0.51 → **0.596**.
-- **Comprobar al revalidar:** curva social/día con juego real; percepción de consolidación; que continuidad nunca dispare aceptación automática (pendiente: decisión sobre extremos primera_cita).
-- **Solapa con:** B3, B15, R02, S04. **Criterio de aceptación:** tras varios encuentros buenos, la probabilidad de propuestas futuras sube de forma perceptible y estable; una mala experiencia puntual no resetea la relación.
+- **Implementado:** Estado base sin knobs P2/M2+ activados. Codebase actual no los lee; son config dead.
+- **Comprobar al revalidar (PlayTest longitudinal):** Después de encuentros muy positivos, ¿los residentes vuelven a relacionarse de forma natural, mantienen continuidad, o parecen olvidar demasiado rápido lo ocurrido? Solo si el PlayTest demuestra una carencia real se retomará P01 con decisión de wirear P2/M2+ y calibración.
+- **Solapa con:** B3, B15, R02, S04. **Criterio de aceptación:** percepción de progreso relacional en juego real; consistencia de continuidad entre encuentros; no reseteo rápido tras positivas.
 
 ### P02 — Barras sociales visibles muy cortas incluso tras muchos días
 - **Clase:** JUGABILIDAD/UX · **Prioridad:** MEDIA · **Estado:** IMPLEMENTADO PARCIALMENTE (M2+ acelera crecimiento ×1.15 + consolidación frena desgaste) / PENDIENTE DE VALIDACIÓN JUGANDO
@@ -189,8 +190,12 @@ Estas entradas están siendo trabajadas por otros agentes AHORA. Cuando terminen
 
 **Tabla A–F motor real (quedar/cita):** A=0.51 · B(soc7+muybien2h)=0.587 · C(1ªcita mutua)=0.673 · D(+muybien)=0.751 · E(enfado dirigido)=0.581 · F(enfado ajeno)=0.62. Orden **E < C/F < D cumple**.
 
-**⚠️ HALLAZGO ABIERTO QUE BLOQUEA EL DEPLOY — extremos >0.85 (PARA Y REPORTADO):**
-Simulación de extremos (72 combinaciones: soc 20–80 × rom medio/alto × conf 0/leve/fuerte × neutro/alegre/enfadado, SIEMPRE primera_cita + señal mutua + muy_bien reciente): **32/72 (44%) superan p_plan 0.85**, máximo **0.920** (= cap `p_excelente`, score≥88). Causas apiladas: P2 (+4 tipo, +12 recíproco) + M2+ continuidad (+9) suben muchos casos neutrales por encima del umbral excelente 88 que antes requería estado alegre. El caso real jugable D queda en 0.751 (<0.85 ✔), pero el frame favorable-sistemático cruza el techo con demasiada frecuencia. **DECISIÓN PENDIENTE DEL USUARIO:** aceptar 0.92 como techo diseñado para el stack perfecto, o recalibrar (p.ej. cap de suma recíproco+continuidad, bajar bonus, o subir `score_excelente`). NO se ha tocado nada silenciosamente. **DEPLOY EN ESPERA hasta decisión.**
+**⚠️ HALLAZGO PREVIO BLOQUEO DEPLOY — extremos >0.85 (ARREGLAO Y DOCUMENTADO):**
+Simulación de extremos (72 combinaciones: soc 20–80 × rom medio/alto × conf 0/leve/fuerte × neutro/alegre/enfadado, SIEMPRE primera_cita + señal mutua + muy_bien reciente): **32/72 (44%) superan p_plan 0.85**, máximo **0.920** (= cap `p_excelente`, score≥88). Causas apiladas: P2 (+4 tipo, +12 recíproco) + M2+ continuidad (+9) suben muchos casos neutrales por encima del umbral excelente 88 que antes requería estado alegre. El caso real jugable D queda en 0.751 (<0.85 ✔), pero el frame favorable-sistemático cruza el techo con demasiada frecuencia.
+
+**Decision adoptada 03/09/2026:** MANENAR ESTADO ACTUAL. NO wirear P2/M2+/bonus_primera_cita_reciproca/conflicto_mult_cita/delta_multiplier_positivo/continuidad_reciente. El edge case >0.85 no afecta gameplay porque esos knobs no están conectados en código desplegado. Documentado para futura revalidación en PlayTest longitudinal.
+
+**DEPLOY:** Libertad total — decisión tomada, bloque eliminado.
 
 ---
 
