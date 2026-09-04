@@ -9121,6 +9121,7 @@ function hobbyIconKey(id, texto) {
               if (idsH[riH] !== actorH) { receptorH = idsH[riH]; break; }
             }
             if (receptorH) {
+              wrap.setAttribute('data-enc-int-objetivo', receptorH);
               wrap.classList.add('is-busy');
               pintarTemasIntervencion(wrap, ivH, receptorH);
               var panelT = wrap.querySelector('[data-temas-panel]');

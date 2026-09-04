@@ -404,40 +404,33 @@ final class EncuentroIntervencion
             return GameError::respuesta(GameError::INTERVENCION_ACCION_INVALIDA, ['motivo' => 'elige_hobby']);
         }
         if ($accionId === self::HOBBY && isset($params['hobby_id'])) {
-            $optsHobby = $objetivo !== ''
-                ? MentesTemas::temasElegibles($partida, $enc, $objetivo, $catalog)
-                : [];
             $hid = (string) $params['hobby_id'];
             $encontrado = false;
-            foreach ($optsHobby as $opt) {
-                if (($opt['id'] ?? '') === $hid) {
-                    $params['residente_id'] = (string) ($opt['interlocutor_id'] ?? '');
-                    $params['rompe_hielo'] = (string) ($opt['rompe_hielo_id'] ?? $objetivo);
-                    $encontrado = true;
-                    break;
-                }
-            }
-            if (!$encontrado && $objetivo === '') {
-                foreach (self::hobbiesConocidos($partida, $actor, $receptor, $catalog) as $opt) {
+            /* Validar contra temasElegibles: fuente unica UI+backend. */
+            if ($objetivo !== '') {
+                foreach (MentesTemas::temasElegibles($partida, $enc, $objetivo, $catalog) as $opt) {
                     if (($opt['id'] ?? '') === $hid) {
-                        $params['residente_id'] = (string) ($opt['residente_id'] ?? '');
+                        $params['residente_id'] = (string) ($opt['interlocutor_id'] ?? '');
+                        $params['rompe_hielo'] = (string) ($opt['rompe_hielo_id'] ?? $objetivo);
                         $encontrado = true;
                         break;
+                    }
+                }
+            } else {
+                /* Phase 1: buscar en temasElegibles del receptor y del actor. */
+                foreach ([MentesTemas::temasElegibles($partida, $enc, $receptor, $catalog), MentesTemas::temasElegibles($partida, $enc, $actor, $catalog)] as $opts) {
+                    foreach ($opts as $opt) {
+                        if (($opt['id'] ?? '') === $hid) {
+                            $params['residente_id'] = (string) ($opt['interlocutor_id'] ?? '');
+                            $params['rompe_hielo'] = (string) ($opt['rompe_hielo_id'] ?? '');
+                            $encontrado = true;
+                            break 2;
+                        }
                     }
                 }
             }
             if (!$encontrado) {
                 return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'tema_no_disponible']);
-            }
-            /* Restaurar guard: el hobby debe pertenecer al interlocutor, no al influido. */
-            if ($objetivo !== '') {
-                $interloc = self::interlocutorDe($enc, $objetivo);
-                if ($interloc !== '') {
-                    $perfilInterloc = PerfilPartida::deOLegacy($partida, $interloc, $catalog);
-                    if (!in_array($hid, $perfilInterloc['hobbies'] ?? [], true)) {
-                        return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
-                    }
-                }
             }
         }
         $req = self::requisitos($partida, $enc, $accionId, $actor, $receptor, $cal, $catalog, $params);
@@ -646,20 +639,21 @@ final class EncuentroIntervencion
             }
             return ['ok' => false, 'motivo' => 'tema_no_disponible'];
         }
-        $legacy = self::hobbiesConocidos($partida, $a, $b, $catalog);
-        if ($legacy === []) {
-            return ['ok' => false, 'motivo' => 'sin_hobby_conocido'];
-        }
+        /* Phase 1: validar contra temasElegibles (misma fuente que UI). */
+        $mentes = array_merge(
+            MentesTemas::temasElegibles($partida, $enc, $a, $catalog),
+            MentesTemas::temasElegibles($partida, $enc, $b, $catalog)
+        );
         $hid = isset($params['hobby_id']) ? (string) $params['hobby_id'] : '';
         if ($hid === '') {
-            return ['ok' => true, 'hobbies' => $legacy];
+            return $mentes !== [] ? ['ok' => true] : ['ok' => false, 'motivo' => 'sin_temas_conocidos'];
         }
-        foreach ($legacy as $o) {
+        foreach ($mentes as $o) {
             if (($o['id'] ?? '') === $hid) {
-                return ['ok' => true, 'hobbies' => $legacy];
+                return ['ok' => true];
             }
         }
-        return ['ok' => false, 'motivo' => 'hobby_no_conocido'];
+        return ['ok' => false, 'motivo' => 'tema_no_disponible'];
     }
 
     /**
