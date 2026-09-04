@@ -48,15 +48,13 @@
   /* ── Inicialización ──────────────────────────────────────── */
   function init() {
     root = $('.play-root');
-    velo = $('.velo', root);
 
-    // Crear velo V4 si no existe
-    if (!velo) {
-      velo = document.createElement('div');
-      velo.className = 'aht-velo';
-      root.appendChild(velo);
-    }
-    velo.classList.add('aht-velo');
+    // Crear backdrop V4 SEPARADO del .velo legacy.
+    // El .velo legacy tiene autoridad visual legacy con !important.
+    // .aht-velo tiene autoridad V4 propia — cero dependencia legacy.
+    velo = document.createElement('div');
+    velo.className = 'aht-velo';
+    root.appendChild(velo);
 
     // Event listeners
     document.addEventListener('keydown', handleKeydown);
@@ -146,6 +144,16 @@
       isOpen = false;
       hideVelo();
       unlockScroll();
+
+      // DEPENDENCIA FUNCIONAL LEGACY TEMPORAL:
+      // Limpiar scroll lock legacy que setCapa() aplicó en apertura.
+      // Cuando renderers se expongan desde play-v3.js IIFE, se añadirá
+      // stopPropagation en [data-open] y esta limpieza no será necesaria.
+      document.body.classList.remove('play-v3--scroll-lock');
+      delete document.body.dataset.scrollLockY;
+      delete document.body.dataset.scrollLockPad;
+      document.body.style.top = '';
+      document.body.style.paddingRight = '';
     }
 
     // Send celebration ack if closing historia_celebracion
