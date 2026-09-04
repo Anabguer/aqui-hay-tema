@@ -348,20 +348,20 @@
   function getScrollableElement(screenId) {
     if (!root) return null;
     var selectors = {
-      'vecinos': '.capa-vecinos .vec-panel',
-      'buzon': '.capa-buzon [data-buzon-list]',
-      'ficha': '.capa-ficha .ficha-body',
-      'agenda': '.capa-agenda .agenda-list',
-      'misiones': '.capa-misiones .mis-body',
-      'parejas': '.capa-parejas .par-body',
-      'inventario': '.capa-inventario .inv-body',
-      'organizar': '.capa-organizar .org-body',
-      'ajustes': '.capa-ajustes .ajustes-body',
-      'historia': '.capa-historia .historia-grid',
-      'vida_pueblo': '.capa-vida-pueblo .vida-body',
-      'necesidades_global': '.capa-necesidades-global .necg-body',
-      'diario': '.capa-diario .coti-body',
-      'mentes': '.capa-mentes .mentes-body'
+      'vecinos': '[data-aht-screen="vecinos"] .vec-panel',
+      'buzon': '[data-aht-screen="buzon"] [data-buzon-list]',
+      'ficha': '[data-aht-screen="ficha"] .ficha-body',
+      'agenda': '[data-aht-screen="agenda"] .agenda-list',
+      'misiones': '[data-aht-screen="misiones"] .mis-body',
+      'parejas': '[data-aht-screen="parejas"] .par-body',
+      'inventario': '[data-aht-screen="inventario"] .inv-body',
+      'organizar': '[data-aht-screen="organizar"] .org-body',
+      'ajustes': '[data-aht-screen="ajustes"] .ajustes-body',
+      'historia': '[data-aht-screen="historia"] .historia-grid',
+      'vida_pueblo': '[data-aht-screen="vida_pueblo"] .vida-body',
+      'necesidades_global': '[data-aht-screen="necesidades_global"] .necg-body',
+      'diario': '[data-aht-screen="diario"] .coti-body',
+      'mentes': '[data-aht-screen="mentes"] .mentes-body'
     };
     var sel = selectors[screenId];
     return sel ? root.querySelector(sel) : null;

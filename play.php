@@ -596,7 +596,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="aht-screen capa-vecinos" data-aht-screen="vecinos" aria-label="Vecinos del pueblo">
+      <aside class="aht-screen" data-aht-screen="vecinos" aria-label="Vecinos del pueblo">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Vecinos del pueblo</h2>
@@ -627,7 +627,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-agenda" data-aht-screen="agenda" aria-label="Planes de Celestine">
+      <aside class="aht-screen" data-aht-screen="agenda" aria-label="Planes de Celestine">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Planes</h2>
@@ -638,7 +638,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-mentes" data-aht-screen="mentes" aria-label="¿Qué se cuece ahí?" role="dialog" aria-modal="true">
+      <aside class="aht-screen" data-aht-screen="mentes" aria-label="¿Qué se cuece ahí?" role="dialog" aria-modal="true">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">¿Qué se cuece ahí?</h2>
@@ -649,7 +649,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-ficha" data-aht-screen="ficha" aria-label="Ficha de vecino">
+      <aside class="aht-screen" data-aht-screen="ficha" aria-label="Ficha de vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <button type="button" class="ficha-volver" data-ficha-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; VECINOS</button>
@@ -730,7 +730,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-ficha-relaciones" data-aht-screen="ficha_relaciones" aria-label="Relaciones del vecino">
+      <aside class="aht-screen" data-aht-screen="ficha_relaciones" aria-label="Relaciones del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <button type="button" class="frel-volver" data-frel-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
@@ -742,7 +742,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-ficha-animo" data-aht-screen="ficha_animo" aria-label="Estado de ánimo del vecino">
+      <aside class="aht-screen" data-aht-screen="ficha_animo" aria-label="Estado de ánimo del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <button type="button" class="fani-volver" data-animo-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
@@ -754,7 +754,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-ficha-diario" data-aht-screen="ficha_diario" aria-label="Diario del vecino">
+      <aside class="aht-screen" data-aht-screen="ficha_diario" aria-label="Diario del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <button type="button" class="fdi-volver" data-diario-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
@@ -780,7 +780,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-necesidades-global" data-aht-screen="necesidades_global" aria-label="Necesidades del pueblo">
+      <aside class="aht-screen" data-aht-screen="necesidades_global" aria-label="Necesidades del pueblo">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Necesidades</h2>
@@ -794,7 +794,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-misiones" data-aht-screen="misiones" aria-label="Misiones de hoy">
+      <aside class="aht-screen" data-aht-screen="misiones" aria-label="Misiones de hoy">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Misiones</h2>
@@ -807,7 +807,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="aht-screen capa-parejas" data-aht-screen="parejas" aria-label="Parejas del pueblo">
+      <aside class="aht-screen" data-aht-screen="parejas" aria-label="Parejas del pueblo">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Parejas</h2>
@@ -819,7 +819,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-historia" data-aht-screen="historia" aria-label="Historia del pueblo">
+      <aside class="aht-screen" data-aht-screen="historia" aria-label="Historia del pueblo">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Historia del pueblo</h2>
@@ -833,7 +833,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-historia-celebracion" data-aht-screen="historia_celebracion" aria-label="Nuevo recuerdo" role="dialog" aria-modal="true">
+      <aside class="aht-screen" data-aht-screen="historia_celebracion" aria-label="Nuevo recuerdo" role="dialog" aria-modal="true">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Nuevo recuerdo</h2>
@@ -856,7 +856,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-historia-detalle" data-aht-screen="historia_detalle" aria-label="Detalle del recuerdo" role="dialog" aria-modal="true">
+      <aside class="aht-screen" data-aht-screen="historia_detalle" aria-label="Detalle del recuerdo" role="dialog" aria-modal="true">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Recuerdo</h2>
@@ -875,7 +875,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-vida-pueblo" data-aht-screen="vida_pueblo" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
+      <aside class="aht-screen" data-aht-screen="vida_pueblo" aria-label="Vida del pueblo" role="dialog" aria-modal="true">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Vida del pueblo</h2>
@@ -894,7 +894,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-buzon" data-aht-screen="buzon" aria-label="Mensajitos">
+      <aside class="aht-screen" data-aht-screen="buzon" aria-label="Mensajitos">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Mensajitos</h2>
@@ -915,7 +915,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen capa-inventario" data-aht-screen="inventario" aria-label="Inventario de Celestine">
+      <aside class="aht-screen" data-aht-screen="inventario" aria-label="Inventario de Celestine">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Inventario</h2>
@@ -937,7 +937,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="aht-screen capa-ajustes" data-aht-screen="ajustes" aria-label="Ajustes">
+      <aside class="aht-screen" data-aht-screen="ajustes" aria-label="Ajustes">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Ajustes</h2>
@@ -985,7 +985,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
       </aside>
 
-      <aside class="aht-screen capa-diario" data-aht-screen="diario" aria-label="Cotilleos">
+      <aside class="aht-screen" data-aht-screen="diario" aria-label="Cotilleos">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Cotilleos</h2>
@@ -1003,7 +1003,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </footer>
         </div>
       </aside>
-      <aside class="aht-screen capa-organizar" data-aht-screen="organizar" aria-label="Nuevo plan">
+      <aside class="aht-screen" data-aht-screen="organizar" aria-label="Nuevo plan">
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Nuevo plan</h2>

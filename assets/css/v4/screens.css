@@ -9,8 +9,7 @@
    2) Muestra cuando data-capa coincide
    3) Aplica posición V4 propia (no hereda .capa)
    
-   Mínimo !important: solo bg/border/shadow para sobreescribir
-   los !important que legacy fuerza en .capa-* classes.
+   0 !important — aislamiento por estructura, no por cascada.
    ============================================================ */
 
 /* ── Ocultar por defecto ───────────────────────────────────── */
@@ -37,14 +36,8 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--aht-dur, 200ms) ease;
-  /* Reset legacy: !important needed to override play-v3-capas-shell.css,
-     play-v3-app.css, modals-shell-lavanda-mobile.css which force
-     backgrounds, borders and shadows with !important on .capa-* classes */
-  border: none !important;
-  box-shadow: none !important;
-  background: transparent !important;
-  background-image: none !important;
-  border-radius: 0;
+  /* Aislamiento: sin heredar nada de .capa-* legacy.
+     Este nodo NO lleva clases .capa-*. */
 }
 
 /* ── Mostrar cuando data-capa coincide ─────────────────────── */

@@ -1074,7 +1074,7 @@
       estEl.hidden = !hint;
       estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
     }
-    const modal = $('.capa-vida-pueblo');
+    const modal = $('[data-aht-screen="vida_pueblo"]');
     if (modal) {
       modal.classList.toggle('vida-modal--critica', !!(vida && vida.critico));
       modal.classList.toggle('vida-modal--alta', valor >= 80 && !(vida && vida.critico));
@@ -1842,7 +1842,7 @@
   }
 
   function mostrarSiguienteCelebracion() {
-    if ($('.capa-historia-celebracion.is-on')) return;
+    if ($('[data-aht-screen="historia_celebracion"].is-on')) return;
     const tut = cacheEstado && cacheEstado.tutorial;
     if (tut && tut.id === 'primeros_pasos' && !tut.jugable_completado) return;
     if (tut && tut.id === 'primeros_pasos' && tut.finale_pendiente) return;
@@ -5657,7 +5657,7 @@
     $$('[data-vec-panel]').forEach(function (p) {
       p.hidden = p.getAttribute('data-vec-panel') !== vecTabActiva;
     });
-    const capa = document.querySelector('.capa-vecinos');
+    const capa = document.querySelector('[data-aht-screen="vecinos"]');
     if (capa) capa.classList.toggle('is-relaciones', isRel);
   }
 
@@ -6098,7 +6098,7 @@ function canonEmoId(id) {
   function cerrarFichaOverlay() {
     if (!fichaOverlayActiva) return;
     fichaOverlayActiva = false;
-    var capaF = document.querySelector('.capa-ficha');
+    var capaF = document.querySelector('[data-aht-screen="ficha"]');
     if (capaF) {
       capaF.classList.remove('ds-ficha-overlay');
       capaF.removeAttribute('data-overlay-active');
@@ -6628,7 +6628,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function fichaNavBotones() {
-    const capa = document.querySelector('.capa-ficha');
+    const capa = document.querySelector('[data-aht-screen="ficha"]');
     if (!capa) return { prev: null, next: null };
     return {
       prev: capa.querySelector('[data-ficha-nav-prev]'),
@@ -6700,7 +6700,7 @@ function hobbyIconKey(id, texto) {
       pintarFicha(rid, f, vista);
       if (opts.overlay) {
         fichaOverlayActiva = true;
-        var capaF = document.querySelector('.capa-ficha');
+        var capaF = document.querySelector('[data-aht-screen="ficha"]');
         if (capaF) {
           capaF.classList.add('ds-ficha-overlay');
           capaF.setAttribute('data-overlay-active', '1');
@@ -7443,8 +7443,8 @@ function hobbyIconKey(id, texto) {
   }
 
   function aplicarOrgModoEventoUi() {
-    var capa = document.querySelector('.capa-organizar');
-    var tit = document.querySelector('.capa-organizar .org-tit');
+    var capa = document.querySelector('[data-aht-screen="organizar"]');
+    var tit = document.querySelector('[data-aht-screen="organizar"] .org-tit');
     var modoToggle = document.querySelector('[data-org-modo-toggle]');
     var seccQue = document.querySelector('.org-seccion--que');
     var seccDonde = document.querySelector('.org-seccion--donde');
@@ -7675,7 +7675,7 @@ function hobbyIconKey(id, texto) {
   function ajustarOrgDdMenu(box) {
     var menu = box.querySelector('.org-dd-menu');
     var trigger = box.querySelector('.org-dd-trigger');
-    var capa = box.closest('.capa-organizar');
+    var capa = box.closest('[data-aht-screen="organizar"]');
     var body = capa && capa.querySelector('.org-body');
     if (!menu || !trigger) return;
     box.classList.remove('org-dd--flip');
@@ -7692,7 +7692,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function cerrarOrgDds() {
-    var capa = $('.capa-organizar');
+    var capa = $('[data-aht-screen="organizar"]');
     var body = capa && capa.querySelector('.org-body');
     if (capa) capa.classList.remove('org-dd-menu-open');
     if (body) body.classList.remove('org-dd-menu-open');
@@ -9205,7 +9205,7 @@ function hobbyIconKey(id, texto) {
   }
 
   (function bindFichaNavCircular() {
-    const capa = document.querySelector('.capa-ficha');
+    const capa = document.querySelector('[data-aht-screen="ficha"]');
     if (!capa || capa._ahtFichaNavBound) return;
     capa._ahtFichaNavBound = true;
     const prev = capa.querySelector('[data-ficha-nav-prev]');
@@ -9313,14 +9313,14 @@ function hobbyIconKey(id, texto) {
   });
   document.addEventListener('click', function (ev) {
     const filtroBtn = ev.target.closest('[data-vec-rel-filtro]');
-    if (filtroBtn && ev.target.closest('.capa-vecinos')) {
+    if (filtroBtn && ev.target.closest('[data-aht-screen="vecinos"]')) {
       vecRelFiltro = filtroBtn.getAttribute('data-vec-rel-filtro') || '';
       pintarVecRelFiltros();
       renderVecRelLista();
       return;
     }
     const pers = ev.target.closest('[data-vec-rel-open]');
-    if (pers && pers.getAttribute('data-vec-rel-open') && ev.target.closest('.capa-vecinos')) {
+    if (pers && pers.getAttribute('data-vec-rel-open') && ev.target.closest('[data-aht-screen="vecinos"]')) {
       ev.preventDefault();
       abrirFicha(pers.getAttribute('data-vec-rel-open'));
       return;
