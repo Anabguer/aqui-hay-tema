@@ -9084,7 +9084,6 @@ function hobbyIconKey(id, texto) {
       ev.stopPropagation();
       var wrap = encIntBtn.closest('[data-enc-int]');
       if (!wrap || wrap.classList.contains('is-busy')) return;
-      wrap.classList.add('is-busy');
       var encId = wrap.getAttribute('data-enc-id');
       var acc = encIntBtn.getAttribute('data-enc-int-accion');
       var objetivoId = wrap.getAttribute('data-enc-int-objetivo') || '';
@@ -9092,7 +9091,28 @@ function hobbyIconKey(id, texto) {
       if (acc === 'hobby') {
         extra.hobby_id = encIntBtn.getAttribute('data-hobby-id');
         extra.residente_id = encIntBtn.getAttribute('data-residente-id');
+        if (!extra.hobby_id) {
+          var encH = encuentroPorId(encId);
+          var ivH = encH ? intervencionVistaDe(encH, cacheEstado) : null;
+          if (ivH) {
+            var idsH = encH.participantes || [];
+            var actorH = ivH.actor_actual || '';
+            var receptorH = '';
+            for (var riH = 0; riH < idsH.length; riH++) {
+              if (idsH[riH] !== actorH) { receptorH = idsH[riH]; break; }
+            }
+            if (receptorH) {
+              wrap.classList.add('is-busy');
+              pintarTemasIntervencion(wrap, ivH, receptorH);
+              var panelT = wrap.querySelector('[data-temas-panel]');
+              if (panelT) panelT.hidden = false;
+              wrap.classList.remove('is-busy');
+            }
+          }
+          return;
+        }
       }
+      wrap.classList.add('is-busy');
       ejecutarIntervencionEncuentro(encId, acc, extra).finally(function () {
         wrap.classList.remove('is-busy');
       });
