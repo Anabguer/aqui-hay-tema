@@ -204,7 +204,7 @@
   border-bottom: none;
 }
 .aht-frame-tab {
-  flex: 0 1 auto;
+  flex: 1;
   min-height: 42px;
   display: inline-flex;
   align-items: center;
