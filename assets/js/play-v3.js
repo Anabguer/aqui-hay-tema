@@ -1843,6 +1843,9 @@
     if ($('.capa-historia-celebracion.is-on')) return;
     const tut = cacheEstado && cacheEstado.tutorial;
     if (tut && tut.id === 'primeros_pasos' && !tut.jugable_completado) return;
+    if (tut && tut.id === 'primeros_pasos' && tut.finale_pendiente) return;
+    if (document.body.hasAttribute('data-tut-activo')) return;
+    if (document.body.hasAttribute('data-tut-finale')) return;
     const c = colaCelebraciones.shift();
     if (!c) return;
     celebracionHitoActual = c.hito_id || '';
