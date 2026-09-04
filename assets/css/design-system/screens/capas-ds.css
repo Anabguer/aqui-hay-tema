@@ -90,7 +90,7 @@
 .play-v3 .capa-diario .coti-vacio { margin: 1rem 0; text-align: center; font-style: italic; color: var(--ds-text-muted, #7a6a5c); }
 
 /* --- 04 Vecinos --- */
-.play-v3 .capa-vecinos .vecinos-cab { margin-bottom: .65rem; }
+.play-v3 .capa-vecinos .vecinos-cab { margin-bottom: .35rem; }
 .play-v3 .capa-vecinos .vecinos-cab .ds-modal-head-row { align-items: flex-start; }
 .play-v3 .capa-vecinos .vecinos-cuenta.ds-pill { margin-left: auto; }
 .play-v3 .capa-vecinos .vec-busca-tira { margin: 0 0 .55rem; }

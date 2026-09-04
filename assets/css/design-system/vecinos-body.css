@@ -25,6 +25,22 @@
   --vec-font-body: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
 }
 
+/* === HEADER VECINOS — contador a la derecha === */
+.vecinos-cab .ds-modal-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  text-align: left !important;
+}
+.vecinos-cab .ds-modal-head-row {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.vecinos-cuenta-wrap {
+  flex: 0 0 auto;
+  margin-left: 8px;
+}
+
 /* === TABS VECINOS / RELACIONES === */
 .vec-tabs {
   display: flex;

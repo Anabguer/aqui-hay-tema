@@ -638,7 +638,7 @@
   gap: 2px;
 }
 .aht-msg-choice-opt-name {
-  font: 700 1.15rem/1.2 var(--msg-font-body);
+  font: 700 1.15rem/1.2 var(--msg-font-hand);
   color: var(--msg-ink);
 }
 .aht-msg-choice-opt-hint {

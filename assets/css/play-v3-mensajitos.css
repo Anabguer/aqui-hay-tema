@@ -732,6 +732,8 @@
   gap: 6px;
   margin: 0;
   padding: 0;
+  max-width: 100%;
+  min-width: 0;
   border: 0 !important;
   background: transparent !important;
   box-shadow: none !important;
@@ -761,6 +763,7 @@
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
   white-space: nowrap;
+  min-width: 0;
 }
 .play-v3 .capa-buzon .mensajitos-leer-todos[hidden] {
   display: none !important;
