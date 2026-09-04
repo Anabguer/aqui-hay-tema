@@ -201,11 +201,11 @@ final class EncuentroIntervencion
      */
     public static function emojiReaccion(string $tono): string
     {
-        return match ($tono) {
-            'bien' => '👍',
-            'mal' => '👎',
-            default => '😐',
-        };
+        switch ($tono) {
+            case 'bien': return '👍';
+            case 'mal': return '👎';
+            default: return '😐';
+        }
     }
 
     /**
