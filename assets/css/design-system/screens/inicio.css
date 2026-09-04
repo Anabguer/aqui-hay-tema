@@ -281,7 +281,7 @@
   }
 
   /* Slot de icono transparente (el papel lo pone la tarjeta) */
-  .play-v3:has(.game-shell) .game-left .game-left-tile-ico,
+  .play-v3:has(.game-shell) .game-left .inicio-tile-ico,
   .play-v3:has(.game-shell) .game-left .obj-buzon-ico-wrap {
     background: none;
     border: none;
@@ -317,7 +317,7 @@
     transform: rotate(4deg);
   }
 
-  .play-v3:has(.game-shell) .game-left-tile-label,
+  .play-v3:has(.game-shell) .inicio-tile-label,
   .play-v3:has(.game-shell) .zona-actividad .obj-buzon-txt,
   .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-tit {
     font-family: var(--ds-font-hand);

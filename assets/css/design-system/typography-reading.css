@@ -239,7 +239,7 @@
 }
 
 /* Tiles izquierda (Mensajitos, Vecinos, Plan) */
-.play-v3:has(.game-shell) .game-left .game-left-tile-label,
+.play-v3:has(.game-shell) .game-left .inicio-tile-label,
 .play-v3:has(.game-shell) .game-left .obj-buzon-txt,
 .play-v3:has(.game-shell) .game-left .obj-vecinos-tit,
 .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before {
@@ -622,7 +622,7 @@
    Autoridad final sobre play-v3-responsive legado.
    ============================================================ */
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .game-left .game-left-tile-label,
+  .play-v3:has(.game-shell) .game-left .inicio-tile-label,
   .play-v3:has(.game-shell) .game-left .zona-actividad .obj-buzon-txt,
   .play-v3:has(.game-shell) .game-left .celestine-nota .obj-vecinos-tit,
   .play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt,

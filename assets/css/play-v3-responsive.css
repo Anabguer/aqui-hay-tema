@@ -1112,7 +1112,7 @@
     gap: .16rem !important;
   }
 
-  .game-left-tile-ico,
+  .inicio-tile-ico,
   .obj-vecinos-preview,
   .obj-nuevo-plan-ico {
     flex: 0 0 26px !important;
@@ -1126,7 +1126,7 @@
     pointer-events: none;
   }
 
-  .game-left-tile-label,
+  .inicio-tile-label,
   .celestine-nota .obj-vecinos-tit,
   .obj-nuevo-plan-txt {
     font-family: Nunito, "Segoe UI", sans-serif !important;

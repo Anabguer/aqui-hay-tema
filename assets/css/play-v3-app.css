@@ -369,12 +369,6 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
     height: calc(100vh - 52px); min-height: 520px;
   }
   body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
-  .game-main {
-    flex: 1; min-height: 0;
-    display: grid;
-    grid-template-columns: minmax(168px, 210px) minmax(0, 1fr) minmax(168px, 210px);
-    gap: 8px; padding: 8px; align-items: stretch;
-  }
 }
 .game-map-wrap {
   min-width: 0; min-height: 0; position: relative;

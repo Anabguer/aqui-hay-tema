@@ -23,11 +23,6 @@ body.play-v3[data-lab="1"] .taller, body.play-v3[data-lab="1"] .playtest-cheats 
 @media (min-width: 769px) {
   .game-shell { display: flex; flex-direction: column; height: calc(100vh - 52px); min-height: 0; background: #fafaf8; }
   body.play-v3[data-lab="1"] .game-shell { height: 100vh; }
-  .game-main {
-    flex: 1; min-height: 0; display: grid;
-    grid-template-columns: minmax(250px, 320px) minmax(0, 1fr) minmax(250px, 320px);
-    gap: 14px; padding: 10px 14px; background: #fafaf8;
-  }
   .game-map-wrap { min-width: 0; min-height: 0; display: flex; background: #fff; border: none; border-radius: 0; }
   .game-map-wrap .play-stage { flex: 1; min-height: 0; width: 100%; }
 }
@@ -257,8 +252,7 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .obj-dinero-lbl { font-size: .5rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; color: #7a7164; }
 .obj-dinero-val { font-family: Fraunces, Georgia, serif; font-weight: 700; font-size: .88rem; line-height: 1.1; }
 
-/* === Zona ACTIVIDAD (izquierda) â€” proximidad, sin caja === */
-.zona-actividad { display: flex; flex-direction: column; gap: .65rem; align-items: stretch; padding-top: .15rem; }
+/* === Zona ACTIVIDAD (izquierda) — proximidad, sin caja === */
 .obj-buzon {
   position: relative; display: flex; flex-direction: column; align-items: center;
   padding: .2rem 0 0; border: 0; background: transparent; cursor: pointer; font: inherit; color: inherit;
@@ -312,8 +306,6 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .bloque-info { font-size: .64rem; line-height: 1.2; }
 .bloque-info strong { font-weight: 800; }
 
-/* === Zona PERSONAS (derecha) === */
-.zona-personas { display: flex; flex-direction: column; gap: .75rem; align-items: stretch; padding-top: .15rem; }
 .obj-pueblo {
   display: flex; flex-direction: column; align-items: center; gap: .25rem;
   padding: 0; border: 0; background: transparent; cursor: pointer; font: inherit; color: inherit;
@@ -395,17 +387,8 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 .play-v3 .capa-buzon .carta-copy { flex: 1 1 auto; min-width: 0; }
 
 
-/* === Coherencia: aire, overflow, vecinos, bloques, buzÃ³n === */
-body.play-v3, .game-shell, .game-main { overflow-x: hidden; max-width: 100vw; }
-.zona-actividad { gap: 1.1rem; padding-bottom: .5rem; }
-.zona-actividad .obj-vecinos-resumen { margin-bottom: .35rem; }
-.zona-actividad .obj-buzon { margin-top: .85rem; }
-.zona-actividad .obj-cotilleo { margin-top: .35rem; padding-bottom: .55rem; border-bottom: 1px dashed rgba(120,96,72,.22); max-width: 100%; box-sizing: border-box; }
-.zona-actividad .obj-proximo { margin-top: 1rem; padding: .55rem 0 .65rem; border-bottom: 1px dashed rgba(120,96,72,.18); }
-.zona-actividad .obj-nuevo-plan { margin-top: 1rem; }
-.zona-personas { gap: 1.25rem; }
-.zona-personas .obj-bloques-res { margin-bottom: .35rem; }
-.zona-personas .obj-parejas { margin-top: .5rem; }
+/* === Coherencia: aire, overflow, vecinos, bloques, buzón === */
+body.play-v3, .game-shell { overflow-x: hidden; max-width: 100vw; }
 
 .obj-vecinos-resumen:not(.celestine-nota) {
   display: block; width: 100%; padding: .35rem 0 .2rem; border: 0; background: transparent;

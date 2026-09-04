@@ -4,9 +4,7 @@
 
  */
 
-body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; }
-
-.zona-actividad, .zona-personas { gap: 0 !important; padding-top: .25rem; }
+body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .shell-grupo { position: relative; width: 100%; max-width: 100%; min-width: 0; }
 
@@ -226,14 +224,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 /* Anular restos dashboard del shell-ui base */
 
-.zona-actividad .obj-cotilleo,
-
-.zona-actividad .obj-proximo { border-bottom: 0 !important; margin-top: 0 !important; }
-
-.zona-actividad .obj-buzon { margin-top: 0 !important; }
-
-.zona-actividad .obj-nuevo-plan { margin-top: 0 !important; }
-
 .res-id { font-size: .62rem; font-weight: 800; letter-spacing: .06em; color: #2c261f; line-height: 1; }
 
 .obj-residencia-mini.is-cerrado .res-meta { font-style: italic; font-size: .52rem; }
@@ -249,12 +239,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 /* === PASS 2: composicion lateral izquierdo === */
 
 .shell-grupo-resumen { overflow: visible; padding-top: 0; margin-bottom: 0; }
-
-.zona-actividad .shell-grupo-buzon { margin-top: 2rem !important; }
-
-.zona-actividad .shell-grupo-planes { margin-top: 1.5rem !important; }
-
-.zona-actividad .shell-grupo-cotilleo { margin-top: 2.25rem !important; }
 
 
 
@@ -1129,12 +1113,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 .shell-grupo-resumen { padding-top: 0; }
 
-.zona-actividad .shell-grupo-buzon { margin-top: 2.4rem !important; }
-
-.zona-actividad .shell-grupo-planes { margin-top: 2rem !important; }
-
-.zona-actividad .shell-grupo-cotilleo { margin-top: 2.75rem !important; }
-
 
 
 .celestine-nota { padding: 1.02rem 1.38rem .92rem .95rem; }
@@ -1152,16 +1130,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 .celeste-m { font-size: .78rem; gap: .4rem; }
 
 .celeste-m::before { flex: 0 0 13px; width: 13px; height: 13px; }
-
-
-
-.zona-actividad .obj-buzon { padding: .35rem 0 .15rem; }
-
-.zona-actividad .obj-buzon-img { width: 68px; }
-
-.zona-actividad .obj-buzon-badge { font-size: .78rem; min-width: 1.35rem; right: calc(50% - 54px); top: 0; }
-
-.zona-actividad .obj-buzon-txt { font-size: .82rem; margin-top: .28rem; letter-spacing: .1em; }
 
 
 
@@ -1292,22 +1260,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 .celeste-m { font-size: .88rem; gap: .42rem; }
 
 .celeste-m::before { flex: 0 0 14px; width: 14px; height: 14px; }
-
-
-
-.zona-actividad .shell-grupo-buzon { margin-top: 2.75rem !important; }
-
-.zona-actividad .shell-grupo-planes { margin-top: 2.35rem !important; }
-
-.zona-actividad .shell-grupo-cotilleo { margin-top: 3rem !important; }
-
-
-
-.zona-actividad .obj-buzon-img { width: 78px; }
-
-.zona-actividad .obj-buzon-txt { font-size: .88rem; }
-
-.zona-actividad .obj-buzon-badge { font-size: .82rem; right: calc(50% - 62px); }
 
 
 
@@ -1640,14 +1592,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   padding: 0 .15rem;
 }
 
-/* Parejas: margen derecho 1cm y alineacion izquierda */
-.game-right.zona-personas {
-  min-width: 0;
-  box-sizing: border-box;
-  overflow-x: visible;
-  padding-right: .15rem !important;
-  align-items: stretch !important;
-}
 .shell-grupo-parejas {
   align-items: flex-start !important;
   width: 100%;
@@ -1899,25 +1843,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   background-size: 100% 5px;
   padding-bottom: 6px;
 }
-/* === Mensajitos arriba en columna izquierda === */
-.zona-actividad .shell-grupo-buzon {
-  display: flex !important;
-  justify-content: center;
-  align-items: center;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-  overflow: visible;
-}
-.zona-actividad .shell-grupo-buzon + .shell-grupo-resumen {
-  margin-top: 1rem !important;
-}
-.zona-actividad .shell-grupo-buzon .obj-buzon {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: .15rem .25rem .1rem;
-}
 /* === Columna derecha: Misiones + Cotilleo + Parejas === */
 .shell-grupo-buzon-par {
   display: flex;
@@ -1991,9 +1916,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
   margin-top: 0 !important;
   overflow: visible;
   padding-top: .72rem;
-}
-.game-right.zona-personas .shell-grupo-cotilleo-par {
-  overflow: visible;
 }
 .obj-cotilleo-par {
   position: relative;
