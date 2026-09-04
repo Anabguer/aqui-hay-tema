@@ -1724,17 +1724,19 @@
     const rid = remitenteIdDe(m);
     const tok = rid && !m.candidato_catalog_id ? tokenDe(rid) : null;
     const base = cls || 'aht-msg-avatar';
-    if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""/>';
-    return '<span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span>';
+    const dataAttr = rid ? ' data-persona-id="' + esc(rid) + '"' : '';
+    if (tok) return '<img class="' + base + '" src="' + esc(tok) + '" alt=""' + dataAttr + '/>';
+    return '<span class="' + base + ' cara-ini"' + dataAttr + '>' + esc(inicialDe(nombre || '?')) + '</span>';
   }
 
   function htmlAvatarEleccion(personaje_id, nombre, cls) {
     const tok = personaje_id ? tokenDe(personaje_id) : null;
     const base = cls || 'aht-msg-avatar aht-msg-avatar--mini';
+    const dataAttr = personaje_id ? ' data-persona-id="' + esc(personaje_id) + '"' : '';
     if (tok) {
-      return '<span class="msg-eleccion-avatar-wrap"><img class="' + base + '" src="' + esc(tok) + '" alt=""/></span>';
+      return '<span class="msg-eleccion-avatar-wrap"><img class="' + base + '" src="' + esc(tok) + '" alt=""' + dataAttr + '/></span>';
     }
-    return '<span class="msg-eleccion-avatar-wrap"><span class="' + base + ' cara-ini">' + esc(inicialDe(nombre || '?')) + '</span></span>';
+    return '<span class="msg-eleccion-avatar-wrap"><span class="' + base + ' cara-ini"' + dataAttr + '>' + esc(inicialDe(nombre || '?')) + '</span></span>';
   }
 
   function mensajitosCartas(msgs) {
@@ -2220,6 +2222,7 @@
     });
     art.querySelectorAll('[data-elegir-persona]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
+        if (ev.target.closest('.aht-msg-choice-opt-name') || ev.target.closest('.msg-eleccion-avatar-wrap')) return;
         ev.stopPropagation();
         if (btn.disabled) return;
         art.querySelectorAll('[data-elegir-persona]').forEach(function (b) { b.disabled = true; });
@@ -2236,6 +2239,7 @@
       : (accionesRaw.indexOf('responder_escuchar') >= 0 ? 'responder_escuchar' : 'responder_consejo');
     art.querySelectorAll('[data-llegada-acomp]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
+        if (ev.target.closest('.aht-msg-choice-opt-name') || ev.target.closest('.msg-eleccion-avatar-wrap')) return;
         ev.stopPropagation();
         if (btn.disabled) return;
         const acomp = btn.getAttribute('data-llegada-acomp');
@@ -6089,6 +6093,17 @@ function canonEmoId(id) {
   let diarioVolverCapa = 'ficha';
   let animoVolverCapa = 'ficha';
   let relVolverCapa = 'ficha';
+  let fichaOverlayActiva = false;
+
+  function cerrarFichaOverlay() {
+    if (!fichaOverlayActiva) return;
+    fichaOverlayActiva = false;
+    var capaF = document.querySelector('.capa-ficha');
+    if (capaF) {
+      capaF.classList.remove('ds-ficha-overlay');
+      capaF.removeAttribute('data-overlay-active');
+    }
+  }
 
   function cerrarDiarioVecino() {
     setCapa(diarioVolverCapa || 'ficha');
@@ -6683,7 +6698,16 @@ function hobbyIconKey(id, texto) {
     const vista = f.vista_play || f;
     try {
       pintarFicha(rid, f, vista);
-      setCapa('ficha');
+      if (opts.overlay) {
+        fichaOverlayActiva = true;
+        var capaF = document.querySelector('.capa-ficha');
+        if (capaF) {
+          capaF.classList.add('ds-ficha-overlay');
+          capaF.setAttribute('data-overlay-active', '1');
+        }
+      } else {
+        setCapa('ficha');
+      }
     } catch (err) {
       console.error('pintarFicha', err);
       toast('No se pudo mostrar la ficha de este vecino.');
@@ -6880,6 +6904,39 @@ function hobbyIconKey(id, texto) {
           if (!mensajitoEstaLeido(m)) await marcarMensajitoLeido(m);
           abrirOrganizarConPreset(m.preset_organizar);
         });
+      });
+      art.addEventListener('click', function (ev) {
+        var fromEl = ev.target.closest('.aht-msg-from[data-persona-id]');
+        if (fromEl) {
+          ev.stopPropagation();
+          var pid = fromEl.getAttribute('data-persona-id');
+          if (pid) abrirFicha(pid, { overlay: true });
+          return;
+        }
+        var avatarEl = ev.target.closest('.aht-msg-avatar[data-persona-id]');
+        if (avatarEl && !avatarEl.closest('.aht-msg-choice-opt')) {
+          ev.stopPropagation();
+          var pid3 = avatarEl.getAttribute('data-persona-id');
+          if (pid3) abrirFicha(pid3, { overlay: true });
+          return;
+        }
+        var optAvatar = ev.target.closest('.msg-eleccion-avatar-wrap [data-persona-id]');
+        if (optAvatar) {
+          ev.stopPropagation();
+          var pid4 = optAvatar.getAttribute('data-persona-id');
+          if (pid4) abrirFicha(pid4, { overlay: true });
+          return;
+        }
+        var optName = ev.target.closest('.aht-msg-choice-opt-name');
+        if (optName) {
+          var optBtn = optName.closest('button[data-elegir-persona], button[data-llegada-acomp]');
+          if (optBtn) {
+            ev.stopPropagation();
+            var pid2 = optBtn.getAttribute('data-elegir-persona') || optBtn.getAttribute('data-llegada-acomp');
+            if (pid2) abrirFicha(pid2, { overlay: true });
+            return;
+          }
+        }
       });
       art.addEventListener('click', async function (ev) {
         if (ev.target.closest('button') || ev.target.closest('.aht-msg-read-toggle')) return;
@@ -9166,8 +9223,19 @@ function hobbyIconKey(id, texto) {
 
   const fichaVolver = $('[data-ficha-volver]');
   if (fichaVolver) {
-    fichaVolver.addEventListener('click', function () { setCapa('vecinos'); renderVecinos(); });
+    fichaVolver.addEventListener('click', function () {
+    if (fichaOverlayActiva) { cerrarFichaOverlay(); return; }
+    setCapa('vecinos'); renderVecinos();
+  });
   }
+
+  document.addEventListener('keydown', function (ev) {
+    if (ev.key === 'Escape' && fichaOverlayActiva) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      cerrarFichaOverlay();
+    }
+  });
 
 
   const buzonLeerTodos = $('[data-buzon-leer-todos]');

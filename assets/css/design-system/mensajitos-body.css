@@ -819,3 +819,13 @@
     font-size: 0.7rem;
   }
 }
+
+/* === Clickables: avatar/nombre abren Ficha overlay === */
+.aht-msg-from[data-persona-id],
+.aht-msg-avatar[data-persona-id],
+.msg-eleccion-avatar-wrap [data-persona-id] {
+  cursor: pointer;
+}
+.aht-msg-choice-opt-name {
+  cursor: pointer;
+}

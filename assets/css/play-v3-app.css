@@ -193,7 +193,7 @@ body.play-v3 {
   background: url("../play-v3/capas/celo.png") center / contain no-repeat;
   pointer-events: none;
 }
-.capa-buzon {
+.capa-buzon:not(.ds-migrada) {
   background: #f3e6cc;
 }
 .capa-diario {

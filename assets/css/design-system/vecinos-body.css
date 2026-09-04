@@ -28,6 +28,7 @@
 /* === HEADER VECINOS — contador a la derecha === */
 .vecinos-cab .ds-modal-head {
   display: flex !important;
+  flex-direction: row !important;
   align-items: center !important;
   justify-content: space-between !important;
   text-align: left !important;

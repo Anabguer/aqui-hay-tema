@@ -98,3 +98,29 @@
 .play-v3:has(.game-shell) .play-root[data-capa] .capa.ds-migrada .vec-rel-hint {
   flex: 0 0 auto;
 }
+
+/* === Ficha overlay mode (desde Mensajitos) === */
+.capa-ficha.ds-ficha-overlay {
+  position: fixed !important;
+  left: 50% !important;
+  top: 50% !important;
+  right: auto !important;
+  bottom: auto !important;
+  width: min(calc(100% - 32px), 720px) !important;
+  max-width: min(calc(100% - 32px), 720px) !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: min(90vh, 840px) !important;
+  margin: 0 !important;
+  padding: 18px 20px 14px !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 200 !important;
+  visibility: visible !important;
+  pointer-events: auto !important;
+  opacity: 1 !important;
+  overflow: hidden !important;
+}
+.capa-ficha.ds-ficha-overlay .ficha-body {
+  overflow-y: auto !important;
+  max-height: calc(90vh - 120px) !important;
+}
