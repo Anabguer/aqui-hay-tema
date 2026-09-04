@@ -429,6 +429,16 @@ final class EncuentroIntervencion
             if (!$encontrado) {
                 return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'tema_no_disponible']);
             }
+            /* Restaurar guard: el hobby debe pertenecer al interlocutor, no al influido. */
+            if ($objetivo !== '') {
+                $interloc = self::interlocutorDe($enc, $objetivo);
+                if ($interloc !== '') {
+                    $perfilInterloc = PerfilPartida::deOLegacy($partida, $interloc, $catalog);
+                    if (!in_array($hid, $perfilInterloc['hobbies'] ?? [], true)) {
+                        return GameError::respuesta(GameError::VALIDACION_FALLIDA, ['detalle' => 'hobby_de_otro_residente']);
+                    }
+                }
+            }
         }
         $req = self::requisitos($partida, $enc, $accionId, $actor, $receptor, $cal, $catalog, $params);
         if (!($req['ok'] ?? false)) {
