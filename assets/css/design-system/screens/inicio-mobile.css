@@ -1898,8 +1898,8 @@
   }
   body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .shell-grupo,
   body.play-v3 .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > section {
-    background: transparent !important;
-    background-image: none !important;
+    background: transparent;
+    background-image: none;
   }
 
   /* Mapa: mismo respiro arriba y abajo respecto a tiles y feed */
@@ -9978,8 +9978,8 @@
 
   body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > .shell-grupo,
   body.play-v3:has(.game-shell) .inicio-mobile.inicio-mobile-feed .inicio-mobile-feed-inner > section {
-    background-color: transparent !important;
-    background-image: none !important;
+    background-color: transparent;
+    background-image: none;
   }
 }
 

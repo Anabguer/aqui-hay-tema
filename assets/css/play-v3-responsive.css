@@ -261,7 +261,7 @@
   .shell-grupo {
     min-width: 0;
     max-width: 100%;
-    margin: 0 !important;
+    margin: 0;
     position: relative;
     box-sizing: border-box;
   }
@@ -1115,28 +1115,28 @@
   .inicio-tile-ico,
   .obj-vecinos-preview,
   .obj-nuevo-plan-ico {
-    flex: 0 0 26px !important;
-    width: 100% !important;
-    height: 26px !important;
-    min-height: 26px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    margin: 0 !important;
+    flex: 0 0 26px;
+    width: 100%;
+    height: 26px;
+    min-height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
     pointer-events: none;
   }
 
   .inicio-tile-label,
   .celestine-nota .obj-vecinos-tit,
   .obj-nuevo-plan-txt {
-    font-family: Nunito, "Segoe UI", sans-serif !important;
-    font-size: .8125rem !important;
-    font-weight: 800 !important;
-    letter-spacing: .07em !important;
-    line-height: 1.1 !important;
-    text-transform: uppercase !important;
-    text-align: center !important;
-    margin: 0 !important;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .8125rem;
+    font-weight: 800;
+    letter-spacing: .07em;
+    line-height: 1.1;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
     color: #2c261f;
   }
 
@@ -2696,8 +2696,8 @@ html:has(body.play-v3.play-v3--scroll-lock) {
 
 .play-v3 .capa-organizar .org-seccion--que .ficha-seccion-body {
   padding-left: .45rem !important;
-  margin-top: 0 !important;
-}
+    margin-top: 0;
+  }
 
 .play-v3 .capa-organizar .org-seccion--que .org-tipos {
   display: flex;

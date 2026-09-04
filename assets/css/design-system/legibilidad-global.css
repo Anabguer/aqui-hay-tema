@@ -518,54 +518,6 @@
 
 
 
-/* === Inicio: tiles izquierda (Mensajitos / Vecinos / Plan) === */
-
-
-
-.play-v3:has(.game-shell) .game-left .inicio-tile-label,
-
-
-
-.play-v3:has(.game-shell) .game-left .obj-buzon-txt,
-
-
-
-.play-v3:has(.game-shell) .game-left .obj-vecinos-tit,
-
-
-
-.play-v3:has(.game-shell) .game-left .obj-nuevo-plan-txt::before {
-
-
-
-  font-size: var(--aht-type-caption) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .game-left .obj-vecinos-poblacion {
-
-
-
-  font-size: max(.8125rem, var(--aht-type-caption)) !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Vecinos / buzón preview (Inicio) === */
 
 
