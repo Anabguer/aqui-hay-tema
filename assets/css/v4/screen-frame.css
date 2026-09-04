@@ -200,11 +200,12 @@
   display: flex;
   gap: 8px;
   padding: 7px 16px;
+  margin-bottom: 8px;
   background-color: transparent;
   border-bottom: none;
 }
 .aht-frame-tab {
-  flex: 1;
+  flex: 0 1 auto;
   min-height: 42px;
   display: inline-flex;
   align-items: center;
@@ -307,20 +308,20 @@
   }
 }
 
-/* ── SCROLLBAR styling (consistente con AHT) ───────────────── */
+/* ── SCROLLBAR styling (AHT rosa) ──────────────────────────── */
 .aht-frame-body::-webkit-scrollbar {
   width: 9px;
 }
 .aht-frame-body::-webkit-scrollbar-track {
-  background: rgba(243, 230, 204, .35);
+  background: rgba(249, 220, 228, .45);
   border-radius: 6px;
 }
 .aht-frame-body::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #d4c4a8, #b89a78);
+  background: linear-gradient(180deg, #e989a7, #c42b4a);
   border-radius: 6px;
-  border: 2px solid rgba(243, 230, 204, .45);
+  border: 2px solid rgba(249, 220, 228, .5);
 }
 .aht-frame-body {
   scrollbar-width: thin;
-  scrollbar-color: #c9b59a rgba(243, 230, 204, .35);
+  scrollbar-color: #e989a7 rgba(249, 220, 228, .45);
 }

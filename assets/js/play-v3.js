@@ -7009,7 +7009,9 @@ function hobbyIconKey(id, texto) {
     }
 
     pintarSeccion('Piden algo', accion, true);
-    pintarSeccion('Lo que circula', info, false);
+    info.forEach(function (m) {
+      box.appendChild(pintarCarta(m, false, inclinGlobal++));
+    });
   }
 
   function cotiFiltroIco(catId) {
