@@ -355,11 +355,16 @@ final class HistoriaPuebloEngine
     }
 
     /**
-     * Save consumed celebration IDs to separate file.
+     * Save consumed celebration IDs to separate file (atomic: temp+rename).
      */
     public static function saveConsumed(string $root, string $partidaId, array $consumed): void
     {
         $path = self::consumedPath($root, $partidaId);
-        @file_put_contents($path, json_encode(array_values(array_unique($consumed)), JSON_UNESCAPED_UNICODE));
+        $tmp = $path . '.tmp.' . getmypid();
+        $ok = @file_put_contents($tmp, json_encode(array_values(array_unique($consumed)), JSON_UNESCAPED_UNICODE));
+        if ($ok === false) {
+            return;
+        }
+        rename($tmp, $path);
     }
 }

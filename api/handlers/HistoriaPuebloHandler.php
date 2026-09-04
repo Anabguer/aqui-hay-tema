@@ -48,8 +48,7 @@ final class HistoriaPuebloHandler
         $ackOk = HistoriaPuebloEngine::ack($partida, $hitoId);
 
         if ($ackOk) {
-            savePartida($ctx, $partida);
-            // Also persist to separate consumed list (survives cargar() race condition)
+            // Persist consumed FIRST (survives race: cargar() overwriting main file)
             $root = $ctx->root;
             $partidaId = $partida['meta']['partida_id'] ?? '';
             if ($root && $partidaId) {
@@ -57,6 +56,7 @@ final class HistoriaPuebloHandler
                 $consumed[] = $hitoId;
                 HistoriaPuebloEngine::saveConsumed($root, $partidaId, $consumed);
             }
+            savePartida($ctx, $partida);
         }
 
         return [

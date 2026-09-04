@@ -83,5 +83,71 @@ ok($catPrimero['id'] === HistoriaPuebloEngine::HITO_EMPEZO_COTARRO, '11.1 primer
 ok($catPrimero['nombre'] === 'AQUÍ EMPEZÓ EL COTARRO', '11.2 nombre correcto');
 ok($catPrimero['revelado'] === true, '11.3 primer hito revelado en catálogo');
 
+// ====================================================================
+// === ACK + consumed file persistence tests                         ===
+// ====================================================================
+
+// --- 12) Celebration starts as pendiente ---
+$partidaId = $p2['meta']['partida_id'];
+$celebsPend = HistoriaPuebloEngine::celebracionesPendientes($p2, $root, $partidaId);
+ok(count($celebsPend) >= 1, '12. celebracionesPendientes returns pending after load');
+$celebHito = $celebsPend[0]['hito_id'];
+
+// --- 13) ack() marks celebracion_estado as consumida in memory ---
+$ackResult = HistoriaPuebloEngine::ack($p2, $celebHito);
+ok($ackResult === true, '13. ack() returns true for pending celebration');
+$entradaAfterAck = HistoriaPuebloEngine::obtener($p2, HistoriaPuebloEngine::clave($celebHito, array_keys($p2['residentes'])));
+ok($entradaAfterAck['celebracion_estado'] === 'consumida', '13.1 celebracion_estado is consumida after ack in-memory');
+
+// --- 14) celebracionesPendientes returns empty after ack in-memory ---
+$celebsPendAfterAck = HistoriaPuebloEngine::celebracionesPendientes($p2, $root, $partidaId);
+ok(count($celebsPendAfterAck) === 0, '14. celebracionesPendientes empty after ack in-memory');
+
+// --- 15) Save consumed file + reload: celebration stays consumed (main file check) ---
+HistoriaPuebloEngine::saveConsumed($root, $partidaId, [$celebHito]);
+$service->guardar($p2);
+$p3 = $service->cargar($partidaId);
+$celebsPendReloaded = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
+ok(count($celebsPendReloaded) === 0, '15. celebracionesPendientes empty after save+reload (main file consumed)');
+
+// --- 16) Consumed file contains the hito_id ---
+$consumed = HistoriaPuebloEngine::loadConsumed($root, $partidaId);
+ok(in_array($celebHito, $consumed, true), '16. consumed file contains hito_id');
+
+// --- 17) ack() is idempotent (already consumed) ---
+$ackResult2 = HistoriaPuebloEngine::ack($p3, $celebHito);
+ok($ackResult2 === false, '17. ack() returns false for already-consumed celebration');
+
+// --- 18) Race condition simulation: overwrite celebracion_estado to pendiente directly in array ---
+foreach ($p3['historia_pueblo'] as &$entry) {
+    if (($entry['hito_id'] ?? '') === $celebHito) {
+        $entry['celebracion_estado'] = 'pendiente';
+    }
+}
+unset($entry);
+$celebsPendRace = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
+ok(count($celebsPendRace) === 0, '18. consumed file protects against race (celebracion_estado=pendiente but consumed)');
+
+// --- 19) If consumed file is missing AND estado is pendiente, celebration reappears ---
+$consumedPath = HistoriaPuebloEngine::consumedPath($root, $partidaId);
+if (is_file($consumedPath)) {
+    unlink($consumedPath);
+}
+$celebsPendNoFile = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
+ok(count($celebsPendNoFile) === 1, '19. without consumed file AND pendiente state, celebration reappears');
+ok($celebsPendNoFile[0]['hito_id'] === $celebHito, '19.1 reappeared celebration is the correct hito');
+
+// --- 20) SaveConsumed writes atomically (temp+rename) ---
+HistoriaPuebloEngine::saveConsumed($root, $partidaId, ['test_hito_atomic']);
+$consumedAtomic = HistoriaPuebloEngine::loadConsumed($root, $partidaId);
+ok(in_array('test_hito_atomic', $consumedAtomic, true), '20. saveConsumed persists atomically');
+$tempFiles = glob($consumedPath . '.tmp.*');
+ok($tempFiles === false || count($tempFiles) === 0, '20.1 no temp files left after saveConsumed');
+
+// Cleanup
+if (is_file($consumedPath)) {
+    unlink($consumedPath);
+}
+
 echo "\n" . ($failures === 0 ? 'TODOS LOS TESTS PASARON' : "$failures tests FALLARON") . "\n";
 exit($failures > 0 ? 1 : 0);
