@@ -1127,10 +1127,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 /* === PASS 3: laterales mas grandes === */
 
-.game-left, .game-right { padding: 0 .15rem; }
-
-
-
 .shell-grupo-resumen { padding-top: 0; }
 
 .zona-actividad .shell-grupo-buzon { margin-top: 2.4rem !important; }
@@ -1246,14 +1242,6 @@ body.play-v3, .game-shell, .game-main, .game-top { background: #fff !important; 
 
 
 /* === PASS 3b: celestine XL + chincheta visible + laterales mas grandes === */
-
-.game-left,
-
-.game-right,
-
-.zona-actividad,
-
-.zona-personas,
 
 .shell-grupo-resumen {
 

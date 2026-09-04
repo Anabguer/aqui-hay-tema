@@ -375,10 +375,6 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
     grid-template-columns: minmax(168px, 210px) minmax(0, 1fr) minmax(168px, 210px);
     gap: 8px; padding: 8px; align-items: stretch;
   }
-  .game-left, .game-right {
-    display: flex; flex-direction: column; gap: .45rem;
-    overflow-y: auto; min-height: 0;
-  }
 }
 .game-map-wrap {
   min-width: 0; min-height: 0; position: relative;
