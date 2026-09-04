@@ -336,7 +336,7 @@
   background: #f7f1e2 !important;
   background-image: none !important;
 }
-.capa-buzon { background: #f3e6cc !important; background-image: none !important; }
+.capa-buzon:not(.ds-migrada) { background: #f3e6cc !important; background-image: none !important; }
 .capa-vecinos, .capa-ficha-conocida, .capa-ficha-nueva {
   background: #fffaf0 !important;
 }

@@ -704,7 +704,7 @@
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .vecinos-grid,
 .play-v3 .play-root.pc[data-capa="vecinos"] [data-vecinos-list].vecinos-grid {
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: .45rem .35rem;
   padding-bottom: .15rem;
   max-height: calc(68vh - 168px);
@@ -767,7 +767,7 @@
 @media (max-width: 560px) {
   .play-v3 .play-root.pc[data-capa="vecinos"] .vecinos-grid,
   .play-v3 .play-root.pc[data-capa="vecinos"] [data-vecinos-list].vecinos-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -784,7 +784,7 @@
 
   .play-v3 .play-root.phone[data-capa="vecinos"] .vecinos-grid,
   .play-v3 .play-root.phone[data-capa="vecinos"] [data-vecinos-list].vecinos-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     max-height: calc(72vh - 150px);
   }
 }
