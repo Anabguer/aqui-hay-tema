@@ -64,6 +64,13 @@
       var v4s = Array.from(document.styleSheets).filter(function(ss){try{return(ss.href||'').includes('/v4/');}catch(e){return false;}});
       var imp=0; v4s.forEach(function(ss){try{Array.from(ss.cssRules||[]).forEach(function(r){if(r.cssText&&r.cssText.includes('!important'))imp++;});}catch(e){}});
       test('8.1 zero !important', imp===0, imp?imp+' found':'');
+      var bT=document.querySelector('[data-aht-screen="buzon"] .aht-frame-tabs');
+      var vT=document.querySelector('[data-aht-screen="vecinos"] .aht-frame-tabs');
+      test('9.1 buzon has .aht-frame-tabs',!!bT);
+      test('9.2 vecinos has .aht-frame-tabs',!!vT);
+      if(bT){var bt=bT.querySelectorAll('.aht-frame-tab');test('9.3 buzon 2 tabs',bt.length===2);var ba=bT.querySelector('.is-active');test('9.4 buzon is-active',!!ba);if(ba){var bcs=getComputedStyle(ba);test('9.5 buzon active pink bg',bcs.backgroundColor==='rgb(196, 43, 74)',bcs.backgroundColor);test('9.6 buzon active white text',bcs.color==='rgb(255, 255, 255)',bcs.color);}}
+      if(vT){var vt=vT.querySelectorAll('.aht-frame-tab');test('9.7 vecinos 2 tabs',vt.length===2);var va=vT.querySelector('.is-active');test('9.8 vecinos is-active',!!va);if(va){var vcs=getComputedStyle(va);test('9.9 vecinos active pink bg',vcs.backgroundColor==='rgb(196, 43, 74)',vcs.backgroundColor);test('9.10 vecinos active white text',vcs.color==='rgb(255, 255, 255)',vcs.color);}}
+      test('9.11 tabs share same class names',!!bT&&!!vT&&bT.className===vT.className);
       var pass=0,fail=0; console.log('\\n=== AHT V4 Architecture Test (FASE 5) ===');
       results.forEach(function(r){var i=r.ok?'PASS':'FAIL';console.log('['+i+'] '+r.name+(r.detail?' -- '+r.detail:''));if(r.ok)pass++;else fail++;});
       console.log('--------------------------------');console.log('Total: '+(pass+fail)+' | Pass: '+pass+' | Fail: '+fail);console.log('================================\\n');

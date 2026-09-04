@@ -114,6 +114,44 @@
     window.AHTScreenManager.close();
   }
 
+  /* 10. SHARED VIEW-Switch (Mensajitos + Vecinos) */
+  var buzonAside = document.querySelector('[data-aht-screen="buzon"]');
+  var vecinosAside = document.querySelector('[data-aht-screen="vecinos"]');
+  var buzonTabs = buzonAside ? buzonAside.querySelector('.aht-frame-tabs') : null;
+  var vecinosTabs = vecinosAside ? vecinosAside.querySelector('.aht-frame-tabs') : null;
+  test('10.1 buzon has .aht-frame-tabs', !!buzonTabs);
+  test('10.2 vecinos has .aht-frame-tabs', !!vecinosTabs);
+  if (buzonTabs) {
+    var bTabs = buzonTabs.querySelectorAll('.aht-frame-tab');
+    test('10.3 buzon has 2 tabs', bTabs.length === 2);
+    var bActive = buzonTabs.querySelector('.is-active');
+    test('10.4 buzon has is-active tab', !!bActive);
+    if (bActive) {
+      var bCs = getComputedStyle(bActive);
+      test('10.5 buzon active bg is accent pink', bCs.backgroundColor === 'rgb(196, 43, 74)', bCs.backgroundColor);
+      test('10.6 buzon active text is white', bCs.color === 'rgb(255, 255, 255)', bCs.color);
+    }
+    var bInactive = Array.from(bTabs).find(function(t){ return !t.classList.contains('is-active'); });
+    if (bInactive) {
+      var biCs = getComputedStyle(bInactive);
+      test('10.7 buzon inactive has lilac bg', biCs.backgroundColor !== 'rgba(0, 0, 0, 0)', biCs.backgroundColor);
+    }
+  }
+  if (vecinosTabs) {
+    var vTabs = vecinosTabs.querySelectorAll('.aht-frame-tab');
+    test('10.8 vecinos has 2 tabs', vTabs.length === 2);
+    var vActive = vecinosTabs.querySelector('.is-active');
+    test('10.9 vecinos has is-active tab', !!vActive);
+    if (vActive) {
+      var vCs = getComputedStyle(vActive);
+      test('10.10 vecinos active bg is accent pink', vCs.backgroundColor === 'rgb(196, 43, 74)', vCs.backgroundColor);
+      test('10.11 vecinos active text is white', vCs.color === 'rgb(255, 255, 255)', vCs.color);
+    }
+  }
+  test('10.12 tabs share same CSS class names',
+    !!buzonTabs && !!vecinosTabs &&
+    buzonTabs.className === vecinosTabs.className);
+
   /* Print */
   var pass = 0, fail = 0;
   console.log('\n=== AHT V4 Architecture Test (FASE 5) ===');

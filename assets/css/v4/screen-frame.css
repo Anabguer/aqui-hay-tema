@@ -187,43 +187,73 @@
   padding: 0;
 }
 
-/* ── TABS slot (para screens con pestañas) ─────────────────── */
+/* ── TABS: View switch compartido (Mensajitos + Vecinos) ─── */
+/* Autoridad ÚNICA para el selector de dos vistas.
+   Celestine: pills redondeados, pespunte sutil, activo rosa. */
 .aht-frame-tabs {
   display: flex;
-  gap: 2px;
-  padding: 0 16px;
-  background-color: var(--aht-header-bg, #FFFFFF);
-  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+  gap: 6px;
+  padding: 8px 16px;
+  background-color: transparent;
+  border-bottom: none;
 }
 .aht-frame-tab {
   flex: 1;
-  padding: 10px 8px;
-  border: none;
-  background: transparent;
-  font-family: var(--aht-font-ui, "Nunito", sans-serif);
-  font-size: 0.85rem;
+  padding: 8px 12px;
+  border: 1.5px solid var(--aht-border, #D8D1DE);
+  border-radius: 999px;
+  background: var(--aht-surface-dim, #EEE8FA);
+  font-family: var(--aht-font-hand, "Caveat", cursive);
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--aht-text-muted, #75634F);
   cursor: pointer;
   position: relative;
-  transition: color var(--aht-dur-fast, 120ms) ease;
+  transition: background var(--aht-dur-fast, 120ms) ease,
+              color var(--aht-dur-fast, 120ms) ease,
+              border-color var(--aht-dur-fast, 120ms) ease;
+  text-align: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
-.aht-frame-tab:hover {
+.aht-frame-tab:hover:not(.is-active) {
+  background: var(--aht-accent-soft, #F9DCE4);
+  border-color: var(--aht-accent-soft, #F9DCE4);
   color: var(--aht-text, #33261E);
 }
 .aht-frame-tab.is-active {
-  color: var(--aht-text, #33261E);
+  background: var(--aht-accent, #C42B4A);
+  border-color: var(--aht-accent, #C42B4A);
+  color: #FFFFFF;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
 }
 .aht-frame-tab.is-active::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 16px;
-  right: 16px;
-  height: 2px;
-  background-color: var(--aht-accent, #C42B4A);
+  display: none;
+}
+/* Counter pill */
+.aht-frame-tab .mensajitos-tab-badge,
+.aht-frame-tab [data-buzon-tab-count] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  color: var(--aht-accent, #C42B4A);
+  font-family: var(--aht-font-ui, "Nunito", sans-serif);
+  font-size: 0.7rem;
+  font-weight: 800;
+  line-height: 1;
+  vertical-align: middle;
+}
+.aht-frame-tab.is-active .mensajitos-tab-badge,
+.aht-frame-tab.is-active [data-buzon-tab-count] {
+  background: rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
 }
 
 /* ── RESPONSIVE: MOBILE ────────────────────────────────────── */
