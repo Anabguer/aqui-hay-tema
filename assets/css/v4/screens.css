@@ -78,8 +78,8 @@
 }
 
 /* ============================================================
-   INTERIORES DE CADA SCREEN V4
-   Cada screen define sus estilos internos aquí.
+   INTERIORES DE CADA SCREEN V4 — Dirección Celestine
+   Cada screen define su estilo interno libre.
    ============================================================ */
 
 /* ── BUZÓN / MENSAJITOS ────────────────────────────────────── */
@@ -116,7 +116,7 @@
   display: inline-block;
 }
 
-/* ── VECINOS ────────────────────────────────────────────────── */
+/* ── VECINOS — Celestine: grid de tarjetas ──────────────────── */
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
   padding: 0;
   display: flex;
@@ -133,7 +133,7 @@
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── AGENDA ─────────────────────────────────────────────────── */
+/* ── AGENDA — Celestine: cronograma del pueblo ─────────────── */
 .aht-screen[data-aht-screen="agenda"] .aht-frame-body {
   padding: 0;
 }
@@ -168,7 +168,7 @@
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── COTILLEOS / DIARIO ─────────────────────────────────────── */
+/* ── COTILLEOS / DIARIO — Celestine: notas del pueblo ──────── */
 .aht-screen[data-aht-screen="diario"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
@@ -178,7 +178,7 @@
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── FICHA ──────────────────────────────────────────────────── */
+/* ── FICHA — Celestine: ficha personal del vecino ──────────── */
 .aht-screen[data-aht-screen="ficha"] .aht-frame-body {
   padding: 0;
 }
