@@ -311,14 +311,14 @@
       return;
     }
 
-    // [data-open] — V4 sets data-capa/velo/stack via capture-phase open().
-    // Do NOT stopPropagation: legacy setCapa() in bubbling phase handles
-    // render calls (renderVecinos, renderBuzon, etc.) that V4 cannot access.
+    // [data-open] — V4 owns lifecycle via capture-phase open().
+    // Mark event so legacy bubbling handler skips redundant setCapa/scroll/history.
     var openBtn = target.closest('[data-open]');
     if (openBtn) {
       var screenId = openBtn.getAttribute('data-open');
       if (V4_SCREENS.has(screenId)) {
         e.preventDefault();
+        e.__ahtV4 = true;
         open(screenId);
         return;
       }
@@ -383,11 +383,16 @@
 
   /* ── Expose global API ───────────────────────────────────── */
 
+  function isAnyOpen() {
+    return isOpen;
+  }
+
   window.AHTScreenManager = {
     open: open,
     close: close,
     closeAll: closeAll,
     isOpen: isScreenOpen,
+    isAnyOpen: isAnyOpen,
     getCurrent: getCurrent,
     getStackDepth: getStackDepth,
     init: init,
