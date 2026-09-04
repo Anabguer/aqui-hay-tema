@@ -72,25 +72,7 @@
     gap: 12px;
     padding: 10px 12px;
   }
-.inicio-desktop .mapa-zona-hit .hab .cara,
-  .inicio-desktop .mapa-zona-hit .hab .cara img,
-  .inicio-desktop .mapa-zona-hit .hab .cara .cara-ini,
-  .inicio-desktop .mapa-zona-hit .hab.cara-token .cara {
-    width: 64px !important;
-    height: 64px !important;
-  }
-
-  .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::before {
-    inset: -10px;
-    border-width: 3px;
-  }
-
-  .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -6px;
-    height: 8px;
-  }
-
-  .inicio-desktop .game-top .btn-guia {
+.inicio-desktop .game-top .btn-guia {
     font-size: .82rem;
     padding: .32rem .62rem;
     margin-top: .65rem;
@@ -1056,8 +1038,8 @@
   .inicio-desktop .mapa-zona-hit .hab .cara img,
   .inicio-desktop .mapa-zona-hit .hab .cara .cara-ini,
   .inicio-desktop .mapa-zona-hit .hab.cara-token .cara {
-    width: 72px !important;
-    height: 72px !important;
+    width: 64px !important;
+    height: 64px !important;
   }
 
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::before,
@@ -1068,8 +1050,8 @@
 
   .play-v3:has(.game-shell) .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::after,
   .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -7px !important;
-    height: 9px !important;
+    bottom: -6px !important;
+    height: 8px !important;
   }
 }
 

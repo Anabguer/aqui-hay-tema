@@ -1258,15 +1258,6 @@
   flex: 0 0 auto;
 }
 
-@media (min-width: 769px) {
-  .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara,
-  .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara img,
-  .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara .cara-ini {
-    width: 64px !important;
-    height: 64px !important;
-  }
-}
-
 @media (max-width: 768px) {
   .celestine-nota.obj-vecinos-resumen::after {
     display: none !important;
