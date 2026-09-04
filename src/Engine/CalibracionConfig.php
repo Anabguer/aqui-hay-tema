@@ -3,9 +3,16 @@ declare(strict_types=1);
 
 namespace AquiHayTema\Engine;
 
-/** Pesos y cifras de calibración. Provisional: no canon. */
+/** Pesos y cifras de calibracion. Provisional: no canon. */
 final class CalibracionConfig
 {
+    private static ?array $testOverrides = null;
+
+    public static function setTestOverrides(?array $overrides): void
+    {
+        self::$testOverrides = $overrides;
+    }
+
     /** @return array<string, mixed> */
     public static function load(string $projectRoot): array
     {
@@ -21,6 +28,9 @@ final class CalibracionConfig
                 $out = array_merge($out, $chunk);
                 $out['_provisional'] = true;
             }
+        }
+        if (is_array(self::$testOverrides)) {
+            $out = array_replace_recursive($out, self::$testOverrides);
         }
         return $out;
     }

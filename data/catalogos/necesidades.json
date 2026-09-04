@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "catalogo": "necesidades",
+    "descripcion": "Necesidades personales cotidianas de los residentes. 4 necesidades canónicas. Personalidad/hobbies modifican intensidad y forma de cubrirlas, pero no eliminan ninguna.",
+    "estado": "catalogo_cerrado",
+    "version": 1
+  },
+  "items": [
+    {
+      "id": "social",
+      "nombre": "Socializar",
+      "icono": "\ud83e\udd1d",
+      "descripcion": "Necesidad de contacto social cotidiano: hablar con alguien, quedar, sentirse parte de algo.",
+      "decay_base": 2.5,
+      "recuperacion_base": 3.0
+    },
+    {
+      "id": "diversion",
+      "nombre": "Diversión",
+      "icono": "\ud83c\udf89",
+      "descripcion": "Necesidad de ocio, experiencias agradables, entretenimiento.",
+      "decay_base": 2.5,
+      "recuperacion_base": 3.0
+    },
+    {
+      "id": "actividad",
+      "nombre": "Actividad",
+      "icono": "\ud83d\udcaa",
+      "descripcion": "Necesidad de moverse, salir, hacer algo con el cuerpo o con las manos.",
+      "decay_base": 2.5,
+      "recuperacion_base": 3.0
+    },
+    {
+      "id": "calma",
+      "nombre": "Calma",
+      "icono": "\u2615",
+      "descripcion": "Necesidad de desconexión, estar tranquilo, no tener agobios ni ruido.",
+      "decay_base": 2.5,
+      "recuperacion_base": 3.0
+    }
+  ],
+  "bandas": [
+    { "id": "bien", "min": 75, "max": 100, "etiqueta": "Bien" },
+    { "id": "le_vendria_bien", "min": 50, "max": 74, "etiqueta": "Le vendría bien" },
+    { "id": "lo_necesita", "min": 25, "max": 49, "etiqueta": "Lo necesita" },
+    { "id": "en_rojo", "min": 0, "max": 24, "etiqueta": "En rojo" }
+  ]
+}

@@ -99,6 +99,7 @@ final class MotorVidaDiaria
             'casuales' => [],
         ];
         if ($hora < $ini || $hora > $fin) {
+            self::tickRecuperacionPasiva($partida, $cal);
             return $out;
         }
         if (!isset($partida['huecos_vida']['dia']) || (int) $partida['huecos_vida']['dia'] !== $dia) {
@@ -112,8 +113,57 @@ final class MotorVidaDiaria
         $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
         $out['iniciativa_social'] = IniciativaSocial::quizasDelTick($partida, $catalog, $cal, $rng, $logger);
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
+
+        // Necesidades: decay horario para todos los residentes
+        self::tickNecesidades($partida, $cal);
+
         $rng->persistToPartida($partida);
         return $out;
+    }
+
+    /**
+     * Aplica decay de necesidades a todos los residentes activos.
+     * Solo durante horas de juego (hora_inicio – hora_fin).
+     *
+     * @param array<string, mixed> $cal
+     */
+    private static function tickNecesidades(array &$partida, array $cal): void
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return;
+        }
+        foreach ($partida['residentes'] as &$res) {
+            NecesidadEstado::ensureResidente($res);
+            NecesidadEstado::aplicarDecay($res, $cal);
+        }
+        unset($res);
+        self::tickRecuperacionPasiva($partida, $cal);
+    }
+
+    private static function tickRecuperacionPasiva(array &$partida, array $cal): void
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return;
+        }
+        $rp = (float) CalibracionConfig::get($cal, 'necesidades.recuperacion_pasiva', 0.0);
+        if ($rp <= 0.0) {
+            return;
+        }
+        $MAX = 100;
+        $MIN = 0;
+        $TODAS = ['social', 'diversion', 'actividad', 'calma'];
+        foreach ($partida['residentes'] as &$res) {
+            $res['runtime'] ??= [];
+            $res['runtime']['necesidades'] ??= [];
+            $rt = &$res['runtime'];
+            foreach ($TODAS as $nec) {
+                $rt['necesidades'][$nec] ??= ['valor' => 85, 'banda' => 'bien', 'ultima_actualizacion' => null, 'ultima_recuperacion' => null];
+                $rt['necesidades'][$nec]['valor'] = min($MAX, $rt['necesidades'][$nec]['valor'] + $rp);
+                $v = $rt['necesidades'][$nec]['valor'];
+                $rt['necesidades'][$nec]['banda'] = $v >= 75 ? 'bien' : ($v >= 50 ? 'le_vendria_bien' : ($v >= 25 ? 'lo_necesita' : 'en_rojo'));
+            }
+        }
+        unset($res);
     }
 
     /**
