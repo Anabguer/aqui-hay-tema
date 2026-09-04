@@ -1085,6 +1085,38 @@
   function setCapa(name) {
     const root = $('.play-root');
     const prev = (root && root.getAttribute('data-capa')) || '';
+
+    // ── BRIDGE V4 ──────────────────────────────────────────────
+    // Si screen-manager gestiona esta screen, delegar lifecycle.
+    // Esto asegura que stack/velo/scroll V4 se mantengan correctamente.
+    if (window.AHTScreenManager) {
+      // Abrir screen V4: delegar a open()
+      if (name && window.AHTScreenManager.V4_SCREENS.has(name)) {
+        if (window.AHTScreenManager.getCurrent() !== name) {
+          window.AHTScreenManager.open(name, { silent: true });
+        }
+        // V4 ya manejó dock/scroll/history. Ejecutar SOLO renderers legacy.
+        if (name !== 'mentes') mentesEncIdActivo = null;
+        if (name === 'vida_pueblo') renderVidaPuebloModal();
+        if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
+        if (name === 'inventario') renderInventario();
+        if (name === 'historia') renderHistoriaPueblo();
+        if (name === 'ajustes') syncAjustesUI();
+        if (name === 'necesidades_global') renderNecesidadesGlobal();
+        return;
+      }
+      // Cerrar screen V4: delegar a close()
+      if (window.AHTScreenManager.isAnyOpen() && (!name || !window.AHTScreenManager.V4_SCREENS.has(name))) {
+        window.AHTScreenManager.close();
+        if (!window.AHTScreenManager.isAnyOpen()) {
+          root.removeAttribute('data-capa');
+        }
+        syncScrollLock();
+        if (name) { /* fall through to legacy setCapa */ } else { return; }
+      }
+    }
+    // ── FIN BRIDGE V4 ──────────────────────────────────────────
+
     if (!name) root.removeAttribute('data-capa');
     else root.setAttribute('data-capa', name);
     if (name !== 'mentes') mentesEncIdActivo = null;
@@ -8934,6 +8966,9 @@ function hobbyIconKey(id, texto) {
     }
     const open = ev.target.closest('[data-open]');
     if (open && uiRootFrom(open)) {
+      // BRIDGE V4: si screen-manager ya manejó la apertura en capture phase,
+      // NO duplicar setCapa/scroll/history.
+      if (ev.__ahtV4) return;
       const name = open.getAttribute('data-open');
       cerrarMensajitosPop();
       if (name === 'relaciones') {
