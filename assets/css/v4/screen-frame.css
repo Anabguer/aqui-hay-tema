@@ -26,21 +26,19 @@
 }
 
 /* ── FRAME: Shell base ────────────────────────────────────── */
+/* .aht-frame is a flex child of .aht-screen (which handles
+   position:fixed + centering). Do NOT apply position:fixed here —
+   the ancestor .aht-screen already has a transform, which would
+   create a new containing block and clip the frame to 0 height. */
 .aht-frame {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  width: min(calc(100% - 32px), 720px);
-  max-width: min(calc(100% - 32px), 720px);
+  width: 100%;
+  max-width: 100%;
   height: auto;
   min-height: 0;
-  max-height: min(90vh, 840px);
-  transform: translate(-50%, -50%) rotate(-0.3deg);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  z-index: var(--aht-z-frame, 110);
   /* Piel V4 — autoridad propia, dirección Celestine */
   background-color: var(--aht-surface-raised, #FFFFFF);
   border: 1.5px solid var(--aht-border, #D8D1DE);
@@ -231,10 +229,8 @@
 /* ── RESPONSIVE: MOBILE ────────────────────────────────────── */
 @media (max-width: 768px) {
   .aht-frame {
-    width: min(100%, 393px);
-    max-width: min(100%, 393px);
-    max-height: min(88vh, 720px);
-    transform: translate(-50%, -50%) rotate(-0.2deg);
+    width: 100%;
+    max-width: 100%;
   }
 
   .aht-frame-header {

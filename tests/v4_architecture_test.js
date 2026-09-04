@@ -44,12 +44,12 @@
   var frame = document.querySelector('.aht-frame');
   if (frame) {
     var fcs = getComputedStyle(frame);
-    test('3.2 position:fixed', fcs.position === 'fixed');
+    test('3.2 frame NOT position:fixed (parent handles it)', fcs.position !== 'fixed');
     test('3.3 border-radius', fcs.borderRadius !== '0px');
     test('3.4 box-shadow', fcs.boxShadow !== 'none');
     var fOk = true;
-    allF.forEach(function (f) { if (getComputedStyle(f).position !== 'fixed') fOk = false; });
-    test('3.5 Frame uniform all screens', fOk);
+    allF.forEach(function (f) { if (getComputedStyle(f).position === 'fixed') fOk = false; });
+    test('3.5 no frame has position:fixed', fOk);
   }
 
   /* 4. SCREENS */
@@ -92,6 +92,27 @@
     }); } catch (e) {}
   });
   test('8.1 zero !important in V4 CSS', impCnt === 0, impCnt ? impCnt + ' found' : '');
+
+  /* 9. VISUAL VISIBILITY — open a screen and verify frame renders */
+  if (window.AHTScreenManager && typeof window.AHTScreenManager.open === 'function') {
+    var prevOpen = window.AHTScreenManager.isAnyOpen();
+    window.AHTScreenManager.open('vecinos');
+    var aside = document.querySelector('[data-aht-screen="vecinos"]');
+    var frameEl = aside ? aside.querySelector('.aht-frame') : null;
+    if (aside && frameEl) {
+      var aRect = aside.getBoundingClientRect();
+      var fRect = frameEl.getBoundingClientRect();
+      var veloCs = velo ? getComputedStyle(velo) : null;
+      test('9.1 aside has non-zero height', aRect.height > 0, 'height=' + aRect.height);
+      test('9.2 frame has non-zero height', fRect.height > 0, 'height=' + fRect.height);
+      test('9.3 frame visible (opacity)', getComputedStyle(frameEl).opacity === '1');
+      test('9.4 frame above backdrop', veloCs ? (getComputedStyle(frameEl).zIndex >= veloCs.zIndex) : false);
+      test('9.5 frame inside viewport', fRect.top >= 0 && fRect.left >= 0 && fRect.right <= window.innerWidth);
+    } else {
+      test('9.1 aside/frame found', false, 'aside=' + !!aside + ' frame=' + !!frameEl);
+    }
+    window.AHTScreenManager.close();
+  }
 
   /* Print */
   var pass = 0, fail = 0;
