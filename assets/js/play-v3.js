@@ -1829,6 +1829,7 @@
   }
 
   // ── Celebración de historia del pueblo ─────────────────────
+  const celebracionesConsumidas = new Set();
   let colaCelebraciones = [];
   let celebracionHitoActual = '';
 
@@ -1836,6 +1837,7 @@
     const celebs = (historia && historia.celebraciones) || [];
     if (!celebs.length) return;
     for (const c of celebs) {
+      if (celebracionesConsumidas.has(c.hito_id)) continue;
       colaCelebraciones.push(c);
     }
     mostrarSiguienteCelebracion();
@@ -1848,7 +1850,12 @@
     if (tut && tut.id === 'primeros_pasos' && tut.finale_pendiente) return;
     if (document.body.hasAttribute('data-tut-activo')) return;
     if (document.body.hasAttribute('data-tut-finale')) return;
-    const c = colaCelebraciones.shift();
+    let c = null;
+    while (colaCelebraciones.length) {
+      c = colaCelebraciones.shift();
+      if (!celebracionesConsumidas.has(c.hito_id)) break;
+      c = null;
+    }
     if (!c) return;
     celebracionHitoActual = c.hito_id || '';
     renderCelebracion(c);
@@ -1890,6 +1897,8 @@
   }
 
   async function celebracionClose(hitoId) {
+    celebracionesConsumidas.add(hitoId);
+    colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
     setCapa('');
     setTimeout(mostrarSiguienteCelebracion, 400);
@@ -1905,6 +1914,8 @@
 
   async function celebracionIrAlbum() {
     const hitoId = celebracionHitoActual;
+    celebracionesConsumidas.add(hitoId);
+    colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
     setCapa('historia');
     renderHistoriaPueblo().then(function () {
