@@ -1841,22 +1841,22 @@
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara img,
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara .cara-ini,
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara {
-    width: 34px !important;
-    height: 34px !important;
+    width: 30px !important;
+    height: 30px !important;
   }
 
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara-ini {
-    font-size: .62rem !important;
+    font-size: .55rem !important;
   }
 
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::before {
-    inset: -6px !important;
+    inset: -5px !important;
     border-width: 2px !important;
   }
 
   .inicio-stage > .inicio-map-host .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -4px !important;
-    height: 6px !important;
+    bottom: -3px !important;
+    height: 5px !important;
   }
 }
 

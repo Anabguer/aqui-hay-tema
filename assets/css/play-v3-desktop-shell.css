@@ -10,18 +10,18 @@
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara img,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara .cara-ini,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara {
-    width: 80px !important;
-    height: 80px !important;
+    width: 64px !important;
+    height: 64px !important;
   }
 
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara::before {
-    inset: -12px;
+    inset: -10px;
     border-width: 3px;
   }
 
   .play-v3:has(.game-shell) .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -8px;
-    height: 10px;
+    bottom: -6px;
+    height: 8px;
   }
 
   .play-v3:has(.game-shell) .game-top .btn-guia {

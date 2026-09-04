@@ -1262,8 +1262,8 @@
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara img,
   .play-v3:has(.game-shell) .mapa-zona-hit .hab .cara .cara-ini {
-    width: 30px !important;
-    height: 30px !important;
+    width: 64px !important;
+    height: 64px !important;
   }
 }
 

@@ -76,18 +76,18 @@
   .inicio-desktop .mapa-zona-hit .hab .cara img,
   .inicio-desktop .mapa-zona-hit .hab .cara .cara-ini,
   .inicio-desktop .mapa-zona-hit .hab.cara-token .cara {
-    width: 80px !important;
-    height: 80px !important;
+    width: 64px !important;
+    height: 64px !important;
   }
 
   .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::before {
-    inset: -12px;
+    inset: -10px;
     border-width: 3px;
   }
 
   .inicio-desktop .mapa-zona-hit .hab.cara-token .cara::after {
-    bottom: -8px;
-    height: 10px;
+    bottom: -6px;
+    height: 8px;
   }
 
   .inicio-desktop .game-top .btn-guia {
