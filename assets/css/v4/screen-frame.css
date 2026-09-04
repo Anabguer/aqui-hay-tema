@@ -189,71 +189,100 @@
 
 /* ── TABS: View switch compartido (Mensajitos + Vecinos) ─── */
 /* Autoridad ÚNICA para el selector de dos vistas.
-   Celestine: pills redondeados, pespunte sutil, activo rosa. */
+   Restauración fiel del diseño legacy AHT:
+   - radius orgánico asimétrico
+   - pespunte dashed blanco interior
+   - sombra exterior con profundidad
+   - rotación sutil
+   - rosa legacy #e8628a activo / lavanda #d4bee8 inactivo
+   - borde sólido oscuro siempre */
 .aht-frame-tabs {
   display: flex;
-  gap: 6px;
-  padding: 8px 16px;
+  gap: 8px;
+  padding: 7px 16px;
   background-color: transparent;
   border-bottom: none;
 }
 .aht-frame-tab {
-  flex: 1;
-  padding: 8px 12px;
-  border: 1.5px solid var(--aht-border, #D8D1DE);
-  border-radius: 999px;
-  background: var(--aht-surface-dim, #EEE8FA);
-  font-family: var(--aht-font-hand, "Caveat", cursive);
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  flex: 0 1 auto;
+  min-height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border: 2.5px solid #33261E;
+  border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
+  background: #d4bee8;
+  color: #4a2a78;
+  font: 700 1.15rem/1 "Nunito", "Segoe UI", sans-serif;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
-  color: var(--aht-text-muted, #75634F);
   cursor: pointer;
   position: relative;
-  transition: background var(--aht-dur-fast, 120ms) ease,
-              color var(--aht-dur-fast, 120ms) ease,
-              border-color var(--aht-dur-fast, 120ms) ease;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .25);
+  transform: rotate(-0.4deg);
+  transition: transform 150ms ease, box-shadow 150ms ease;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
   text-align: center;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
-.aht-frame-tab:hover:not(.is-active) {
-  background: var(--aht-accent-soft, #F9DCE4);
-  border-color: var(--aht-accent-soft, #F9DCE4);
-  color: var(--aht-text, #33261E);
+.aht-frame-tab:hover {
+  transform: rotate(0deg) translateY(-1px);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .28);
+}
+.aht-frame-tab:active {
+  transform: rotate(-0.4deg) translateY(0);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .15);
 }
 .aht-frame-tab.is-active {
-  background: var(--aht-accent, #C42B4A);
-  border-color: var(--aht-accent, #C42B4A);
-  color: #FFFFFF;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.3);
+  background: #e8628a;
+  color: #fff;
+  border-color: #33261E;
+  text-shadow: 0 1.5px 0 rgba(146, 39, 73, .5);
+  box-shadow: 2px 3px 0 rgba(196, 43, 74, .5);
+  transform: rotate(0.4deg);
 }
 .aht-frame-tab.is-active::after {
   display: none;
 }
-/* Counter pill */
+/* Pespunte interior — rasgo signature del diseño AHT */
+.aht-frame-tab.is-active::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px dashed rgba(255, 255, 255, .9);
+  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
+  pointer-events: none;
+}
+/* Counter pill — bolita blanca con borde oscuro */
 .aht-frame-tab .mensajitos-tab-badge,
 .aht-frame-tab [data-buzon-tab-count] {
+  min-width: 24px;
+  height: 24px;
+  padding: 0 7px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 5px;
-  margin-left: 4px;
   border-radius: 999px;
-  background: #FFFFFF;
-  color: var(--aht-accent, #C42B4A);
-  font-family: var(--aht-font-ui, "Nunito", sans-serif);
-  font-size: 0.7rem;
-  font-weight: 800;
-  line-height: 1;
-  vertical-align: middle;
+  background: #fff;
+  border: 2px solid #33261E;
+  font: 800 .82rem/1 "Nunito", "Segoe UI", sans-serif;
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .28);
+  transform: rotate(4deg);
 }
+/* Tab activo → número rosa oscuro */
 .aht-frame-tab.is-active .mensajitos-tab-badge,
 .aht-frame-tab.is-active [data-buzon-tab-count] {
-  background: rgba(255, 255, 255, 0.25);
-  color: #FFFFFF;
+  background: #fff;
+  color: #b85a78;
+  border-color: #33261E;
+}
+/* Tab inactivo → número lila oscuro */
+.aht-frame-tab:not(.is-active) .mensajitos-tab-badge,
+.aht-frame-tab:not(.is-active) [data-buzon-tab-count] {
+  background: #fff;
+  color: #5e3e90;
+  border-color: #33261E;
 }
 
 /* ── RESPONSIVE: MOBILE ────────────────────────────────────── */
