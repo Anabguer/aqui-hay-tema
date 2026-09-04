@@ -144,6 +144,57 @@ ok(in_array('test_hito_atomic', $consumedAtomic, true), '20. saveConsumed persis
 $tempFiles = glob($consumedPath . '.tmp.*');
 ok($tempFiles === false || count($tempFiles) === 0, '20.1 no temp files left after saveConsumed');
 
+// ====================================================================
+// === reconcileConsumedState() tests                                 ===
+// ====================================================================
+
+// --- 21) reconcileConsumedState corrects stale pendiente → consumida ---
+HistoriaPuebloEngine::saveConsumed($root, $partidaId, [$celebHito]);
+foreach ($p3['historia_pueblo'] as &$entry) {
+    if (($entry['hito_id'] ?? '') === $celebHito) {
+        $entry['celebracion_estado'] = 'pendiente';
+    }
+}
+unset($entry);
+$corrected = HistoriaPuebloEngine::reconcileConsumedState($p3, $root, $partidaId);
+ok($corrected === true, '21. reconcileConsumedState returns true when correcting stale entry');
+$reconciledEntry = HistoriaPuebloEngine::obtener($p3, HistoriaPuebloEngine::clave($celebHito, array_keys($p3['residentes'])));
+ok($reconciledEntry['celebracion_estado'] === 'consumida', '21.1 celebracion_estado corrected to consumida');
+
+// --- 22) reconcileConsumedState is no-op when already consumida ---
+$corrected2 = HistoriaPuebloEngine::reconcileConsumedState($p3, $root, $partidaId);
+ok($corrected2 === false, '22. reconcileConsumedState returns false when already consistent');
+
+// --- 23) reconcileConsumedState is no-op when consumed file is empty ---
+if (is_file($consumedPath)) {
+    unlink($consumedPath);
+}
+foreach ($p3['historia_pueblo'] as &$entry) {
+    if (($entry['hito_id'] ?? '') === $celebHito) {
+        $entry['celebracion_estado'] = 'pendiente';
+    }
+}
+unset($entry);
+$corrected3 = HistoriaPuebloEngine::reconcileConsumedState($p3, $root, $partidaId);
+ok($corrected3 === false, '23. reconcileConsumedState returns false when no consumed file');
+$entryStillPending = HistoriaPuebloEngine::obtener($p3, HistoriaPuebloEngine::clave($celebHito, array_keys($p3['residentes'])));
+ok($entryStillPending['celebracion_estado'] === 'pendiente', '23.1 celebracion_estado remains pendiente without consumed file');
+
+// --- 24) Race condition simulation: save with stale pendiente, then reconcile + save ---
+HistoriaPuebloEngine::saveConsumed($root, $partidaId, [$celebHito]);
+foreach ($p3['historia_pueblo'] as &$entry) {
+    if (($entry['hito_id'] ?? '') === $celebHito) {
+        $entry['celebracion_estado'] = 'pendiente';
+    }
+}
+unset($entry);
+$service->guardar($p3);
+$p4 = $service->cargar($partidaId);
+$celebsPendAfterRace = HistoriaPuebloEngine::celebracionesPendientes($p4, $root, $partidaId);
+ok(count($celebsPendAfterRace) === 0, '24. celebration stays consumed after race+reload (consumed file protects)');
+$reconciledEntry2 = HistoriaPuebloEngine::obtener($p4, HistoriaPuebloEngine::clave($celebHito, array_keys($p4['residentes'])));
+ok($reconciledEntry2['celebracion_estado'] === 'consumida', '24.1 main file reconciled to consumida after cargar()');
+
 // Cleanup
 if (is_file($consumedPath)) {
     unlink($consumedPath);

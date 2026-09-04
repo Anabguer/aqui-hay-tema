@@ -367,4 +367,32 @@ final class HistoriaPuebloEngine
         }
         rename($tmp, $path);
     }
+
+    /**
+     * Reconcile celebracion_estado in partition with consumed file.
+     * Ensures monotonicity: once consumed, cannot revert to pendiente.
+     * Call after cargar() to prevent stale main-file overwrites.
+     *
+     * @param array<string, mixed> $partida
+     * @return bool true if any entry was corrected (stale pendiente → consumida)
+     */
+    public static function reconcileConsumedState(array &$partida, string $root, string $partidaId): bool
+    {
+        $consumed = self::loadConsumed($root, $partidaId);
+        if (empty($consumed)) {
+            return false;
+        }
+        $corrected = false;
+        self::ensure($partida);
+        foreach ($partida['historia_pueblo'] as &$entry) {
+            if (($entry['celebracion_estado'] ?? '') === 'pendiente'
+                && in_array($entry['hito_id'] ?? '', $consumed, true)
+            ) {
+                $entry['celebracion_estado'] = 'consumida';
+                $corrected = true;
+            }
+        }
+        unset($entry);
+        return $corrected;
+    }
 }

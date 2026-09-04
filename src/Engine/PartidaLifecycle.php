@@ -100,6 +100,9 @@ final class PartidaLifecycle
         $this->generarMisionesSiToca($partida);
         $this->tickPeticiones($partida);
 
+        // Monotonicity guard: reconcile stale celebracion_estado with consumed file
+        HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
+
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
         }
@@ -119,6 +122,9 @@ final class PartidaLifecycle
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
         $this->generarMisionesSiToca($partida);
         $this->tickPeticiones($partida);
+
+        // Monotonicity guard: reconcile stale celebracion_estado with consumed file
+        HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);

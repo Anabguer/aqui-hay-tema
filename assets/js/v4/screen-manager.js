@@ -30,7 +30,7 @@
   const V4_SCREENS = new Set([
     'vecinos', 'agenda', 'mentes', 'ficha', 'ficha_relaciones',
     'ficha_animo', 'ficha_diario', 'necesidades_global', 'misiones',
-    'parejas', 'historia', 'historia_celebracion', 'historia_detalle',
+    'parejas', 'historia', 'historia_detalle',
     'vida_pueblo', 'buzon', 'inventario', 'ajustes', 'diario',
     'organizar'
   ]);
@@ -42,7 +42,7 @@
 
   // screens que NO usan stack (se cierran directamente)
   const FLAT_SCREENS = new Set([
-    'historia_celebracion', 'historia_detalle'
+    'historia_detalle'
   ]);
 
   /* ── Inicialización ──────────────────────────────────────── */
@@ -122,6 +122,26 @@
   function close() {
     if (!isOpen || !currentScreen) return false;
 
+    // DOM-staleness guard: if a legacy screen (e.g. historia_celebracion)
+    // was shown on top via setCapa(), the DOM data-capa may differ from
+    // currentScreen. In that case, V4 doesn't own the visible screen —
+    // clear V4 state without popping the stack, let legacy handle it.
+    var domCapa = root.getAttribute('data-capa') || '';
+    if (domCapa && domCapa !== currentScreen && !V4_SCREENS.has(domCapa)) {
+      currentScreen = null;
+      isOpen = false;
+      stack.length = 0;
+      hideVelo();
+      unlockScroll();
+      document.body.classList.remove('play-v3--scroll-lock');
+      delete document.body.dataset.scrollLockY;
+      delete document.body.dataset.scrollLockPad;
+      document.body.style.top = '';
+      document.body.style.paddingRight = '';
+      updateDock('');
+      return true;
+    }
+
     var closingScreen = currentScreen;
     var prevScreen = popStack();
 
@@ -154,11 +174,6 @@
       delete document.body.dataset.scrollLockPad;
       document.body.style.top = '';
       document.body.style.paddingRight = '';
-    }
-
-    // Send celebration ack if closing historia_celebracion
-    if (closingScreen === 'historia_celebracion' && typeof window.__ahtCloseCelebracion === 'function') {
-      try { window.__ahtCloseCelebracion(); } catch (e) {}
     }
 
     // Actualizar dock
