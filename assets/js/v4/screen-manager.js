@@ -124,6 +124,7 @@
   function close() {
     if (!isOpen || !currentScreen) return false;
 
+    var closingScreen = currentScreen;
     var prevScreen = popStack();
 
     if (prevScreen) {
@@ -145,6 +146,11 @@
       isOpen = false;
       hideVelo();
       unlockScroll();
+    }
+
+    // Send celebration ack if closing historia_celebracion
+    if (closingScreen === 'historia_celebracion' && typeof window.__ahtCloseCelebracion === 'function') {
+      try { window.__ahtCloseCelebracion(); } catch (e) {}
     }
 
     // Actualizar dock

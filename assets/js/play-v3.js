@@ -1895,6 +1895,14 @@
     setTimeout(mostrarSiguienteCelebracion, 400);
   }
 
+  window.__ahtCloseCelebracion = function () {
+    var hito = celebracionHitoActual;
+    celebracionHitoActual = '';
+    if (hito) {
+      api('historia.celebrar_ack', { hito_id: hito }).catch(function () {});
+    }
+  };
+
   async function celebracionIrAlbum() {
     const hitoId = celebracionHitoActual;
     try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
