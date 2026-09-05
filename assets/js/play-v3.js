@@ -246,7 +246,7 @@
   let vidaCorazonPctPrev = null;
   let vidaCorazonReady = false;
   const ORG_MAX_VECINOS = 2;
-  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null, intencion: '' };
+  let org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17, peticion_id: null, modo: null, evento_pueblo_id: null, evento_ctx: null };
   let orgPresetNuevo = false;
   let orgProponiendo = false;
   const ORG_BTN_LABEL = 'Crear plan';
@@ -1931,7 +1931,10 @@
   async function celebracionClose(hitoId) {
     celebracionesConsumidas.add(hitoId);
     colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
-    try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
+    var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
+    if (!ackResult || ackResult.ok === false) {
+      console.warn('[AHT] celebrar_ack not persisted', { hito_id: hitoId, result: ackResult });
+    }
     setCapa('');
     setTimeout(mostrarSiguienteCelebracion, 400);
   }
@@ -1940,7 +1943,10 @@
     const hitoId = celebracionHitoActual;
     celebracionesConsumidas.add(hitoId);
     colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
-    try { await api('historia.celebrar_ack', { hito_id: hitoId }); } catch (e) {}
+    var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
+    if (!ackResult || ackResult.ok === false) {
+      console.warn('[AHT] celebrar_ack not persisted', { hito_id: hitoId, result: ackResult });
+    }
     setCapa('historia');
     renderHistoriaPueblo().then(function () {
       setTimeout(function () {
@@ -7009,7 +7015,9 @@ function hobbyIconKey(id, texto) {
     }
 
     pintarSeccion('Piden algo', accion, true);
-    pintarSeccion('Lo que circula', info, false);
+    info.forEach(function (m) {
+      box.appendChild(pintarCarta(m, false, inclinGlobal++));
+    });
   }
 
   function cotiFiltroIco(catId) {
@@ -7250,23 +7258,6 @@ function hobbyIconKey(id, texto) {
     return Object.keys((cacheInsp && cacheInsp.residentes) || {});
   }
 
-  var ORG_TIPO_SVG = {
-    conocerse: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4zm12 0c0-2.2 1.8-4 4-4s4 1.8 4 4-1.8 4-4 4-4-1.8-4-4zM2 20c0-3.3 2.7-5 6-5h.8c1.2 0 2.3.3 3.2.9-1.6 1.1-2.7 2.8-2.9 4.6H2v-.5zm14 0c-.2-1.8-1.3-3.5-2.9-4.6.9-.6 2-.9 3.2-.9H17c3.3 0 6 1.7 6 5h-7z"/></svg>',
-    quedar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-3.2l-2.3 2.3a1 1 0 0 1-1.7-.7V18H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm2 5.5h6v-1.5H9v1.5zm0 3h4v-1.5H9v1.5z"/></svg>',
-    primera_cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/></svg>',
-    cita: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.2S5.5 15.2 5.5 9.8c0-3.3 2.7-5.8 6-5.8s6 2.5 6 5.8c0 5.4-6.5 10.4-6.5 10.4z"/><circle cx="17.5" cy="6.5" r="3.2"/></svg>',
-    individual: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 12c2.8 0 5-2.2 5-5s-2.2-5-5-5-5 2.2-5 5 2.2 5 5 5zm0 2c-3.9 0-7 2.1-7 4.7V21h14v-2.3C19 16.1 15.9 14 12 14z"/></svg>'
-  };
-  var ORG_TIPO_DESC = {
-    conocerse: 'Centraros en charlar y conocer más al vecino.',
-    quedar: 'Un rato tranquilo juntos, sin más presión.',
-    primera_cita: 'Algo especial para dar el primer paso romántico.',
-    cita: 'Tiempo a solas, con más confianza entre vosotros.',
-    individual: 'Un plan en solitario, a su ritmo.',
-    amistad: 'Un rato tranquilo juntos, sin más presión.',
-    romance: 'Algo especial para dar el primer paso romántico.',
-    romantico: 'Tiempo a solas, con más confianza entre vosotros.'
-  };
   var ORG_LUGAR_DESC = {
     lug_cafeteria: 'El lugar perfecto para tomar algo y charlar tranquilamente.',
     lug_bar: 'Ambiente relajado para una copa y buena conversación.',
@@ -7286,12 +7277,6 @@ function hobbyIconKey(id, texto) {
     lug_tienda: 'Un paseo por la tienda del pueblo.'
   };
   var ORG_HORAS_HINT_DEFAULT = 'Los horarios disponibles pueden variar según el lugar.';
-  function orgTipoDesc(id) {
-    var k = String(id || '').toLowerCase();
-    if (k === 'amistad') return ORG_TIPO_DESC.quedar;
-    if (k === 'romance' || k === 'romantico') return ORG_TIPO_DESC.primera_cita;
-    return ORG_TIPO_DESC[k] || '';
-  }
   function orgLugarDesc(lugId) {
     var d = destinoOperativoPorId(lugId);
     if (d && d.descripcion) return String(d.descripcion);
@@ -7301,39 +7286,6 @@ function hobbyIconKey(id, texto) {
     if (!horario) return '';
     var m = String(horario).match(/(\d{1,2}:\d{2})\s*[-\u2013]\s*(\d{1,2}:\d{2})/);
     return m ? ('Abierto hasta ' + m[2]) : '';
-  }
-  function orgTipoIcoSvg(id) {
-    const k = String(id || '').toLowerCase();
-    if (k === 'amistad') return ORG_TIPO_SVG.quedar;
-    if (k === 'romance' || k === 'romantico') return ORG_TIPO_SVG.primera_cita;
-    return ORG_TIPO_SVG[k] || ORG_TIPO_SVG.quedar;
-  }
-  function orgTipoHtml(id, label, on, descExtra) {
-    const ico = orgTipoIcoSvg(id);
-    const cls = 'org-tipo-card' + (on ? ' is-on' : '');
-    const desc = descExtra || orgTipoDesc(id);
-    const check = '<span class="org-tipo-card-check" aria-hidden="true"></span>';
-    return '<button type="button" class="' + cls + '" data-org-tipo="' + esc(id) + '">' +
-      '<span class="org-tipo-card-ico" aria-hidden="true">' + ico + '</span>' +
-      '<span class="org-tipo-card-copy">' +
-      '<span class="org-tipo-card-tit">' + esc(String(label || '')) + '</span>' +
-      (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
-      '</span>' + check + '</button>';
-  }
-  function orgIntencionHtml(intencion) {
-    var id = String(intencion.id || '');
-    var emoji = intencion.emoji || '';
-    var label = intencion.label || id;
-    var desc = intencion.descripcion || '';
-    if (intencion.estado !== 'visible') return '';
-    var cls = 'org-tipo-card';
-    if (org.intencion === id) cls += ' is-on';
-    return '<button type="button" class="' + cls + '" data-org-intencion="' + esc(id) + '">' +
-      '<span class="org-tipo-card-ico org-intencion-emoji" aria-hidden="true">' + esc(emoji) + '</span>' +
-      '<span class="org-tipo-card-copy">' +
-      '<span class="org-tipo-card-tit">' + esc(label) + '</span>' +
-      (desc ? '<span class="org-tipo-card-desc">' + esc(desc) + '</span>' : '') +
-      '</span><span class="org-tipo-card-check" aria-hidden="true"></span></button>';
   }
   var ORG_LUGAR_IMG = {
     lug_bar: 'bar.png', lug_biblioteca: 'biblioteca.png', lug_bingo: 'bingo.png', lug_cafeteria: 'cafeteria.png',
@@ -7489,7 +7441,6 @@ function hobbyIconKey(id, texto) {
     var capa = document.querySelector('[data-aht-screen="organizar"]');
     var tit = document.querySelector('[data-aht-screen="organizar"] .org-tit');
     var modoToggle = document.querySelector('[data-org-modo-toggle]');
-    var seccQue = document.querySelector('.org-seccion--que');
     var seccDonde = document.querySelector('.org-seccion--donde');
     var seccCuando = document.querySelector('.org-seccion--cuando');
     var quienTit = document.querySelector('.org-seccion--quienes .ficha-seccion-tit');
@@ -7505,7 +7456,6 @@ function hobbyIconKey(id, texto) {
       }
     }
     if (modoToggle) modoToggle.hidden = esEvt;
-    if (seccQue) seccQue.hidden = esEvt;
     if (seccDonde) seccDonde.hidden = esEvt;
     if (seccCuando) seccCuando.hidden = esEvt;
     if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '¿Quiénes van?';
@@ -8048,7 +7998,6 @@ function hobbyIconKey(id, texto) {
     org.sel = orgIdsDesdePreset(p);
     org.tipo = p.tipo || ((p.modo === 'evento' || p.modo === 'evento_pueblo') ? 'otro' : '');
     org.lugar = p.lugar || '';
-    org.intencion = '';
     org.peticion_id = p.peticion_id || null;
     if (org.modo === 'evento_pueblo') {
       org.dia = p.dia || null;
@@ -8222,86 +8171,21 @@ function hobbyIconKey(id, texto) {
   }
 
   async function refreshTipos() {
-    const box = $('[data-org-tipos]');
     const sel = orgSeleccionados();
     if (orgModo() === 'solo') {
-      if (!sel.length) {
-        box.innerHTML = '';
-        return;
-      }
-      const rSolo = await api('encuentro.tipos_permitidos', { participantes: [sel[0]], modo: 'solo' }, 'GET');
+      if (!sel.length) { org.tipo = ''; return; }
       org.tipo = 'individual';
-      box.innerHTML = orgTipoHtml('individual', 'Por su cuenta', true);
       return;
     }
-    if (sel.length < 2) {
-      box.innerHTML = '';
-      return;
-    }
-    org.intencion = '';
+    if (sel.length < 2) { org.tipo = ''; return; }
     org.tipo = '';
-    const rInt = await api('encuentro.intenciones_disponibles', { participantes: sel }, 'GET');
-    if (rInt.ok && rInt.intenciones && rInt.intenciones.length) {
-      const visibles = rInt.intenciones.filter(function (i) { return i.estado === 'visible'; });
-      if (visibles.length) {
-        box.innerHTML = visibles.map(function (i) {
-          return orgIntencionHtml(i);
-        }).join('');
-        $$('[data-org-intencion]', box).forEach(function (btn) {
-          btn.addEventListener('click', function (ev) {
-            ev.preventDefault();
-            ev.stopPropagation();
-            var id = btn.getAttribute('data-org-intencion') || '';
-            org.intencion = id;
-            var matched = rInt.intenciones.find(function (i) { return i.id === id; });
-            if (matched) {
-              org.tipo = matched.tipo_encuentro || '';
-            }
-            $$('[data-org-intencion]', box).forEach(function (c) {
-              c.classList.toggle('is-on', c.getAttribute('data-org-intencion') === id);
-            });
-            refreshOrgHoras();
-          });
-        });
-        if (!org.intencion) {
-          var primerVisible = visibles[0];
-          if (primerVisible) {
-            org.intencion = primerVisible.id;
-            org.tipo = primerVisible.tipo_encuentro || '';
-            box.querySelector('[data-org-intencion="' + primerVisible.id + '"]')?.classList.add('is-on');
-          }
-        }
-        return;
-      }
-    }
     const r = await api('encuentro.tipos_permitidos', {
       participantes: sel,
       residente_a: sel[0],
       residente_b: sel[1]
     }, 'GET');
-    box.innerHTML = '';
     const ops = r.opciones || [];
-    const ids = ops.map(function (op) { return op.id; });
-    if (!org.tipo || ids.indexOf(org.tipo) < 0) {
-      org.tipo = r.tipo_sugerido || (ops[0] && ops[0].id) || '';
-    }
-    box.innerHTML = ops.map(function (op) {
-      return orgTipoHtml(op.id, op.label, org.tipo === op.id);
-    }).join('');
-    $$('[data-org-tipo]', box).forEach(function (btn) {
-      btn.addEventListener('click', function (ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        org.tipo = btn.getAttribute('data-org-tipo') || '';
-        $$('[data-org-tipo]', box).forEach(function (c) {
-          c.classList.toggle('is-on', c === btn);
-        });
-        refreshOrgHoras();
-      });
-    });
-    if (!ops.length) {
-      box.innerHTML = '<p class="mini">' + (r.mensaje_ui || 'Entre estas dos, ahora no sale un plan.') + '</p>';
-    }
+    org.tipo = r.tipo_sugerido || (ops[0] && ops[0].id) || '';
   }
 
   function mostrarOrgAviso(txt) {
@@ -8425,7 +8309,6 @@ function hobbyIconKey(id, texto) {
         modo: orgModo()
       };
       if (org.peticion_id) payload.peticion_id = org.peticion_id;
-      if (org.intencion) payload.intencion = org.intencion;
       r = await api('encuentro.proponer', payload);
       if (r.playtest_diag) pintarPlaytestDiag(r.playtest_diag);
       try {

@@ -68,11 +68,10 @@ final class PropuestaEncuentroEngine
         }
 
         $tipo = PropuestaNivel::aliasTipo($tipo);
-        if ($tipo === '') {
-            // El payload real del JS puede enviar tipo vacío (modo 'pareja' deja
-            // org.tipo === ''); sin esto se pierde la garantía pedagógica del
-            // tutorial M1. Restaurar el default canónico 'conocerse' (PRESENTAR).
-            $tipo = PropuestaNivel::PRESENTAR;
+        if ($tipo === '' && count($participantes) >= 2) {
+            $tipo = PropuestaNivel::tipoPara($partida, (string) $participantes[0], (string) $participantes[1]);
+        } elseif ($tipo === '' && count($participantes) === 1) {
+            $tipo = 'individual';
         }
         $ctx = EncuentroEngine::validarContexto($partida, $participantes, $tipo, $lugarId, $logger);
         if (!($ctx['ok'] ?? false)) {

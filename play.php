@@ -1034,12 +1034,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   <div class="org-picker-strip capa-scroll" data-org-picker></div>
                 </div>
               </section>
-              <section class="ficha-seccion org-seccion org-seccion--que">
-                <h4 class="ficha-seccion-tit">¿Qué harán?</h4>
-                <div class="ficha-seccion-body">
-                  <div class="org-tipos" data-org-tipos></div>
-                </div>
-              </section>
               <section class="ficha-seccion org-seccion org-seccion--donde">
                 <h4 class="ficha-seccion-tit">¿Dónde?</h4>
                 <div class="ficha-seccion-body org-donde-fila">

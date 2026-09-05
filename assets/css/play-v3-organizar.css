@@ -314,14 +314,6 @@
   max-width: 100%;
 }
 
-/* --- Qué harán --- */
-.play-v3 .capa-organizar .org-tipos {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: .4rem;
-}
-
 .play-v3 .capa-organizar .org-tipo-card {
   display: inline-flex;
   flex-direction: row;
@@ -740,15 +732,6 @@
     grid-column: 1 / -1;
   }
 
-  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-seccion--que {
-    grid-column: 1 / -1;
-  }
-
-  .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-tipos {
-    flex-wrap: wrap;
-    justify-content: flex-start;
-  }
-
   .play-v3 .play-root.pc[data-capa="organizar"] .capa-organizar .org-tipo-card {
     flex: 0 1 auto;
     min-width: 0;
@@ -1120,15 +1103,6 @@
 .play-v3 .capa-organizar.org-plan-papel--evento .org-picker-celda.is-apuntado {
   opacity: .55;
   cursor: not-allowed;
-}
-
-.play-v3 .capa-organizar .org-intencion-emoji {
-  font-size: 1.15rem;
-  line-height: 1;
-  width: 1.35rem;
-  height: 1.35rem;
-  display: grid;
-  place-items: center;
 }
 
 .play-v3 .capa-organizar .org-tipo-card.is-blocked {
