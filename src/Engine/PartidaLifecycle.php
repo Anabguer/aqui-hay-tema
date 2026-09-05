@@ -185,6 +185,8 @@ final class PartidaLifecycle
             'rechazos_propuesta' => $partida['rechazos_propuesta'] ?? [],
             'historial_coincidencias' => $partida['historial_coincidencias'] ?? [],
             'descubrimientos' => $partida['descubrimientos'] ?? [],
+            'historia_pueblo' => $partida['historia_pueblo'] ?? [],
+            'celebraciones_consumidas' => $partida['celebraciones_consumidas'] ?? [],
         ];
         $json = json_encode($slice, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
         return hash('sha256', $json);

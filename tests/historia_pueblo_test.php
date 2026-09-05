@@ -93,49 +93,49 @@ $celebsPend = HistoriaPuebloEngine::celebracionesPendientes($p2, $root, $partida
 ok(count($celebsPend) >= 1, '12. celebracionesPendientes returns pending after load');
 $celebHito = $celebsPend[0]['hito_id'];
 
-// --- 13) ack() marks celebracion_estado as consumida in memory ---
+// --- 13) ack() marks celebracion_estado as consumida in memory + adds to in-game array ---
 $ackResult = HistoriaPuebloEngine::ack($p2, $celebHito);
 ok($ackResult === true, '13. ack() returns true for pending celebration');
 $entradaAfterAck = HistoriaPuebloEngine::obtener($p2, HistoriaPuebloEngine::clave($celebHito, array_keys($p2['residentes'])));
 ok($entradaAfterAck['celebracion_estado'] === 'consumida', '13.1 celebracion_estado is consumida after ack in-memory');
+ok(in_array($celebHito, $p2['celebraciones_consumidas'] ?? [], true), '13.2 hito added to celebraciones_consumidas array');
 
 // --- 14) celebracionesPendientes returns empty after ack in-memory ---
 $celebsPendAfterAck = HistoriaPuebloEngine::celebracionesPendientes($p2, $root, $partidaId);
 ok(count($celebsPendAfterAck) === 0, '14. celebracionesPendientes empty after ack in-memory');
 
-// --- 15) Save consumed file + reload: celebration stays consumed (main file check) ---
-HistoriaPuebloEngine::saveConsumed($root, $partidaId, [$celebHito]);
+// --- 15) Save + reload: celebration stays consumed via in-game array ---
 $service->guardar($p2);
 $p3 = $service->cargar($partidaId);
 $celebsPendReloaded = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
-ok(count($celebsPendReloaded) === 0, '15. celebracionesPendientes empty after save+reload (main file consumed)');
+ok(count($celebsPendReloaded) === 0, '15. celebracionesPendientes empty after save+reload');
+ok(in_array($celebHito, $p3['celebraciones_consumidas'] ?? [], true), '15.1 celebraciones_consumidas persisted through save/reload');
 
-// --- 16) Consumed file contains the hito_id ---
-$consumed = HistoriaPuebloEngine::loadConsumed($root, $partidaId);
-ok(in_array($celebHito, $consumed, true), '16. consumed file contains hito_id');
+// --- 16) In-game array contains the hito_id after save+reload ---
+ok(in_array($celebHito, $p3['celebraciones_consumidas'] ?? [], true), '16. celebraciones_consumidas contains hito_id');
 
-// --- 17) ack() is idempotent (already consumed) ---
+// --- 17) ack() is idempotent (already consumed via in-game array) ---
 $ackResult2 = HistoriaPuebloEngine::ack($p3, $celebHito);
 ok($ackResult2 === false, '17. ack() returns false for already-consumed celebration');
 
-// --- 18) Race condition simulation: overwrite celebracion_estado to pendiente directly in array ---
+// --- 18) In-game array protects against lost consumed file ---
+$consumedPath = HistoriaPuebloEngine::consumedPath($root, $partidaId);
+if (is_file($consumedPath)) {
+    unlink($consumedPath);
+}
+$celebsPendNoFile = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
+ok(count($celebsPendNoFile) === 0, '18. in-game celebraciones_consumidas protects against lost consumed file');
+
+// --- 19) Clearing BOTH in-game array AND consumed file + pendiente = reappears ---
+$p3['celebraciones_consumidas'] = [];
 foreach ($p3['historia_pueblo'] as &$entry) {
     if (($entry['hito_id'] ?? '') === $celebHito) {
         $entry['celebracion_estado'] = 'pendiente';
     }
 }
 unset($entry);
-$celebsPendRace = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
-ok(count($celebsPendRace) === 0, '18. consumed file protects against race (celebracion_estado=pendiente but consumed)');
-
-// --- 19) If consumed file is missing AND estado is pendiente, celebration reappears ---
-$consumedPath = HistoriaPuebloEngine::consumedPath($root, $partidaId);
-if (is_file($consumedPath)) {
-    unlink($consumedPath);
-}
-$celebsPendNoFile = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
-ok(count($celebsPendNoFile) === 1, '19. without consumed file AND pendiente state, celebration reappears');
-ok($celebsPendNoFile[0]['hito_id'] === $celebHito, '19.1 reappeared celebration is the correct hito');
+$celebsPendBothCleared = HistoriaPuebloEngine::celebracionesPendientes($p3, $root, $partidaId);
+ok(count($celebsPendBothCleared) === 1, '19. without consumed file AND in-game array AND pendiente, celebration reappears');
 
 // --- 20) SaveConsumed writes atomically (temp+rename) ---
 HistoriaPuebloEngine::saveConsumed($root, $partidaId, ['test_hito_atomic']);
@@ -165,10 +165,11 @@ ok($reconciledEntry['celebracion_estado'] === 'consumida', '21.1 celebracion_est
 $corrected2 = HistoriaPuebloEngine::reconcileConsumedState($p3, $root, $partidaId);
 ok($corrected2 === false, '22. reconcileConsumedState returns false when already consistent');
 
-// --- 23) reconcileConsumedState is no-op when consumed file is empty ---
+// --- 23) reconcileConsumedState corrects via in-game array even without consumed file ---
 if (is_file($consumedPath)) {
     unlink($consumedPath);
 }
+$p3['celebraciones_consumidas'] = [$celebHito];
 foreach ($p3['historia_pueblo'] as &$entry) {
     if (($entry['hito_id'] ?? '') === $celebHito) {
         $entry['celebracion_estado'] = 'pendiente';
@@ -176,9 +177,9 @@ foreach ($p3['historia_pueblo'] as &$entry) {
 }
 unset($entry);
 $corrected3 = HistoriaPuebloEngine::reconcileConsumedState($p3, $root, $partidaId);
-ok($corrected3 === false, '23. reconcileConsumedState returns false when no consumed file');
-$entryStillPending = HistoriaPuebloEngine::obtener($p3, HistoriaPuebloEngine::clave($celebHito, array_keys($p3['residentes'])));
-ok($entryStillPending['celebracion_estado'] === 'pendiente', '23.1 celebracion_estado remains pendiente without consumed file');
+ok($corrected3 === true, '23. reconcileConsumedState corrects via in-game array even without consumed file');
+$entryReconciled3 = HistoriaPuebloEngine::obtener($p3, HistoriaPuebloEngine::clave($celebHito, array_keys($p3['residentes'])));
+ok($entryReconciled3['celebracion_estado'] === 'consumida', '23.1 celebracion_estado corrected to consumida via in-game array');
 
 // --- 24) Race condition simulation: save with stale pendiente, then reconcile + save ---
 HistoriaPuebloEngine::saveConsumed($root, $partidaId, [$celebHito]);
