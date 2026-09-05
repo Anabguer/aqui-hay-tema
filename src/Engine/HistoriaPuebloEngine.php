@@ -244,10 +244,6 @@ final class HistoriaPuebloEngine
         if (self::tutorialBloqueaPrimerRecuerdo($partida)) {
             return [];
         }
-        $consumed = ($root !== null && $partidaId !== null)
-            ? self::loadConsumed($root, $partidaId)
-            : [];
-        $consumedInGame = $partida['celebraciones_consumidas'] ?? [];
         $pendientes = [];
 
         foreach (self::CATÁLOGO_VISUAL as $i => $slot) {
@@ -255,13 +251,10 @@ final class HistoriaPuebloEngine
             if ($entrada === null) {
                 continue;
             }
-            if (in_array($slot['id'], $consumedInGame, true)) {
+            if (in_array($slot['id'], $partida['celebraciones_consumidas'] ?? [], true)) {
                 continue;
             }
             if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
-                continue;
-            }
-            if (in_array($slot['id'], $consumed, true)) {
                 continue;
             }
             $pendientes[] = [
@@ -458,6 +451,14 @@ final class HistoriaPuebloEngine
     {
         $safe = preg_replace('/[^a-zA-Z0-9_\-]/', '', $partidaId) ?? $partidaId;
         return $root . '/data/partidas/' . $safe . '_celebraciones_consumidas.json';
+    }
+
+    public static function clearConsumedFile(string $root, string $partidaId): void
+    {
+        $path = self::consumedPath($root, $partidaId);
+        if (is_file($path)) {
+            @unlink($path);
+        }
     }
 
     /**
