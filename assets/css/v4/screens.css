@@ -157,6 +157,26 @@
   padding: 0;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+.aht-screen[data-aht-screen="vecinos"] .aht-frame-body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+/* Avatar bigger — variable override, no !important */
+.aht-screen[data-aht-screen="vecinos"] .vecino-cara {
+  --vec-cara-size: 96px;
+}
+/* Single scroll container: grid must not scroll independently */
+.aht-screen[data-aht-screen="vecinos"] [data-vecinos-list].vecinos-grid {
+  overflow-y: visible;
+}
+@media (max-width: 768px) {
+  .aht-screen[data-aht-screen="vecinos"] .vecino-cara {
+    --vec-cara-size: 72px;
+  }
 }
 
 /* ── MISIONES ───────────────────────────────────────────────── */
