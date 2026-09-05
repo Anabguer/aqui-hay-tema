@@ -1,8 +1,8 @@
-# Plan Maestro de Implementación — Aquí Hay Tema
+﻿# Plan Maestro de Implementación — Aquí Hay Tema
 
-**Versión:** 2026-09-03 (§32: reconciliación estados ya confirmados — Ajustes móvil ✅, Favicon ✅, Tutorial ✅, Scroll móvil ✅, Mensajitos LAB ✅, Modales en curso, Población ✅, Relaciones P20 actualizado, Concordancia 🧪 PlayTest · §25.12 · §28.2 · 02_TEMAS_PENDIENTES_AHT.md)
+**Versión:** 2026-09-05 (Reconciliación definitiva post-auditoría completa — §28 actualizado, §33 incidencias activas, §34 contratos técnicos)
 
-**Estado post-auditoría:** Ver §28 para reconciliación completa plan ↔ código. El código está significativamente más avanzado de lo que esta tabla histórica refleja. Varios sistemas aparecen como "hechos" en bloques anteriores pero están apagados por feature flags — ver §28.
+**Estado:** Este documento es la fuente de verdad del proyecto. Refleja el estado REAL verificado por auditoría de código + evidencia Git + correcciones de Neni. Cada sistema tiene UNA categoría clara de estado. No usar como referencia histórica sin contrastar con §28.
 
 ---
 
@@ -48,9 +48,9 @@
 **Ver §28 para tabla completa y Feature Flags.** Resumen ejecutivo:
 
 - **🟢 Operativo (flag ON, accesible en producto):** Schema v2→v3, RNG, Logging, FeatureConfig, Calibración, Persistencia, Partida lifecycle, Domain Events, Población/Llegadas (PoolCanónico, GeneradorResidente, PerfilPartida, PoblaciónV3, CapacidadViviendas, CandidatoLlegada, LlegadaPresentación, NombresReservados), Tutorial (PrimerosPasos+Incorporaciones), Encuentros (EncuentroEngine+lifecycle+resolver+experiencia+intervencion, PropuestaEncuentroEngine, PropuestaNivel, Rechazo/Memoria, Disponibilidad), Reloj motor+Agenda, Relaciones core (Engine+Bitacora+Fase+Grafo+Historial+Bandas+VistaJugador+NarrativaBridge), Romance (Elegibilidad, ProgressiveProgression+Bridge, AcciónRomántica, SenalRomantica, IniciativaRomantica, TerceroRomantico), Compatibilidad/Química, Buzón/Mensajitos 2.0 (15 motores completos), Cotilleos, Coincidencias/Interacción casual, Lugares (9 canónicos+presencia+afecto+autónomo), HayTema, Marchas, Cumpleaños, Regalos/Inventario (Fase 1), Pareja/Parentesco, MENTES 2-pasos.
-- **🟣 Implementado pero apagado (flag OFF):** Diario (4 motores), Discovery (5 motores), Emociones (5 motores), CatchUp (CatchUpPlanner = stub interno, no sistema independiente), VidaPueblo, MisionesDiarias, PeticionesPueblo, Consecuencias (3 motores).
-- **🟡 Parcial/stub:** EconomyLedger, AutonomousPlanner.
-- **🔴 No implementado:** Romance Fase 2, crisis/ruptura autónomas, eventos interactivos (§25), §26 3 voces. **Historia del Pueblo + Reto Semanal** → separados en `docs/02_TEMAS_PENDIENTES_AHT.md` (ambos 🔴 NO IMPLEMENTAR, pendientes PlayTest longitudinal).
+- **?? Implementado técnico — flag OFF — pendiente activación/validación:** Diario (4 motores, `diario_enabled=false`), Discovery (5 motores, `discovery_enabled=false`), Emociones (5 motores, `emotional_state_from_events_enabled=false`), CatchUp (stub interno), Consecuencias (triggers OFF).
+- **?? Parcial/stub:** EconomyLedger, AutonomousPlanner, CatchUpPlanner (stub interno, no ejecuta).
+- **?? No implementado:** Romance Fase 2, crisis/ruptura autónomas, eventos interactivos (§25), §26 3 voces, Reto Semanal (solo docs, cero código), Espacio de Celestine (cajón+experiencias+recuerdos, diseño aprobado §23, sin implementar).
 - **❓ Reloj:** motor implementado; comportamiento con pestaña abierta = PlayTest pendiente (§27).
 
 ### Infraestructura técnica no documentada previamente en este plan
@@ -1726,7 +1726,7 @@ La investigación deberá devolver:
 
 ### 28.2 Resumen por categoría (58 sistemas, sin doble conteo)
 
-#### 🟢 HECHO Y OPERATIVO (30 sistemas)
+#### ?? HECHO Y OPERATIVO (33 sistemas)
 
 Código completo + flag ON + accesible en producto actual.
 
@@ -1738,12 +1738,12 @@ Código completo + flag ON + accesible en producto actual.
 6. Persistencia (SchemaFields + PersistenciaCaps)
 7. Partida lifecycle (nueva/cargar/guardar/reiniciar)
 8. Domain Events + EventBus + Dispatcher
-9. Pool jugable canónico (200 IDs)
+9. Pool jugable canónico (200 IDs, excluidos per_p058 + per_p112 = 170 seleccionables)
 10. Generador residente + PerfilPartida (seed)
-11. Población V3 (arranque 3 + curva llegadas)
+11. Población V3 (arranque 3 + curva llegadas V3)
 12. Capacidad viviendas (CAP=16)
-13. CandidatoLlegadaEngine (offer→accept→arrive)
-14. LlegadaPresentación (perfil previo + acompañantes)
+13. CandidatoLlegadaEngine (offer→accept→arrive, Candidate B: max 1/día, caps D1/D2, pity, curva V3)
+14. LlegadaPresentación (perfil previo + acompañantes + franja bienvenida)
 15. NombresReservadosPartida
 16. Tutorial (PrimerosPasos + Incorporaciones)
 17. Encuentros (Engine + lifecycle + resolver + experiencia + intervencion)
@@ -1759,60 +1759,40 @@ Código completo + flag ON + accesible en producto actual.
 27. Cotilleos (AutonomoCadencia + Categoría + Narrativo + PatrónCadencia + VistaV3 + EncuentroCopy + Copys)
 28. Coincidencias + Interacción casual + ContactoCalidad + SeleccionSocialPeso + IniciativaSocial
 29. Lugares (PresenciaEngine + LugaresCanonicos + LugarAtributos + LugarAutonomo + AforoEngine + HayTema)
-30. Marchas + Cumpleaños + Regalos/Inventario (Fase 1) + ParejaEngine + ParentescoVeto + Copys narrativos
+30. Marchas + Cumpleaños (F10.1 datos + F10.2 fiesta con lugar/asistentes/encuentro) + Regalos/Inventario (Fase 1) + ParejaEngine + ParentescoVeto + Copys narrativos
 
-#### 🟣 IMPLEMENTADO PERO APAGADO (8 sistemas)
+31. MisionesDiarias (MisionDiariaEngine + 3 misiones + Latido) — flag `misiones_diarias_enabled` OFF pero motor funcional committed
+32. VidaPueblo (VidaPuebloEngine, 739 líneas) — flag `vida_pueblo_enabled` OFF pero código committed
+33. PeticionesPueblo (PeticionPuebloEngine, 1307 líneas) — flag `peticiones_pueblo_enabled` OFF pero código committed
+#### ?? IMPLEMENTADO TÉCNICAMENTE — FLAG OFF — PENDIENTE ACTIVACIÓN/VALIDACIÓN (5 sistemas)
 
-Código sustancial completo, pero feature flag o gate impide funcionamiento en producto.
+
+Código sustancial completo + tests existentes, pero feature flag impide funcionamiento en producto. Pendiente activar + validar en playtest.
 
 1. **Diario** (DiarioEngine + DiarioHitoEngine + DiarioNarrativaBridge + DiarioVista) — flag `diario_enabled=false`
 2. **Discovery** (DiscoveryEngine + Reveal + Projection + Visibility*) — flag `discovery_enabled=false`
 3. **Emociones** (EmotionalStateService + EmotionalEventBridge + EmotionalRecovery + EmocionalNarrativa) — flag `emotional_state_from_events_enabled=false` + EmotionalEventBridge solo 1/14 handlers activos
 4. **CatchUp** (CatchUpEngine completo, CatchUpPlanner stub interno) — flag `offline_events_enabled=false`
-5. **VidaPueblo** (VidaPuebloEngine, 739 líneas) — flag `vida_pueblo_enabled=false`
-6. **MisionesDiarias** (MisionDiariaEngine, 771 líneas) — flag `misiones_diarias_enabled=false`
-7. **PeticionesPueblo** (PeticionPuebloEngine, 1307 líneas) — flag `peticiones_pueblo_enabled=false`
-8. **Consecuencias** (ConsecuenciaReactionSubscriber + ConsecuenciaTriggerRegistry + ContentReactionSubscriber) — flag `consequences_enabled=false` + todos los triggers `enabled: false`
+5. **Consecuencias** (ConsecuenciaReactionSubscriber + ConsecuenciaTriggerRegistry + ContentReactionSubscriber) — flag `consequences_enabled=false` + todos los triggers `enabled: false`
+#### ?? PLANIFICADO / PARCIAL (6 sistemas)
 
-#### 🟡 PARCIAL / STUB (3 sistemas)
 
-Código existe pero es scaffolding o stub sin funcionalidad real.
+| # | Sistema | Estado real |
+|---|---------|-------------|
+| 1 | Romance Fase 2 (declaración + pareja autónoma) | `romance_hito` y `pareja` excluidas de `familias_en_play`. Bloqueado por validación Fase 1 |
+| 2 | Crisis/ruptura/reconciliación autónomas | Umbrales RelacionFase BLOQUEADO_DECISION |
+| 3 | **Historia del Pueblo** | 🟡 **PARCIAL:** Engine + Vista committed. 33 hitos diseñados. 11 bridges escritos pero UNTRACKED (no committed). Hito_27/hito_31 committed y cerrados técnicamente. Ver §33.1 |
+| 4 | Reto Semanal | Solo 2 docs de diseño (untracked). Cero código. Ver `docs/02_TEMAS_PENDIENTES_AHT.md` §A |
+| 5 | Eventos grandes interactivos | §25.3, propuesta conceptual. MVP bingo diseñado, sin motor |
+| 6 | §26 Diario/Cotilleo/Ánimo 3 voces | "NO implementar todavía" |
 
-1. **EconomyLedger** — `_placeholder: true` en toda parte, solo dev handler, sin cifras
-2. **AutonomousPlanner** — `_placeholder_dev`, solo "visitar_lugar", sin prioridades reales
-3. **CatchUpPlanner** — `cantidades: null`, TODO BLOQUEADO_DECISION, no ejecuta eventos
-
-#### 🔴 PLANIFICADO NO IMPLEMENTADO (6 sistemas)
-
-No existe implementación funcional.
-
-1. Romance Fase 2 (declaración + pareja autónoma) — `romance_hito` y `pareja` excluidas de `familias_en_play`
-2. Crisis/ruptura/reconciliación autónomas — umbrales RelacionFase BLOQUEADO_DECISION
-3. Historia del Pueblo (álbum hitos) — §25, documentado en `docs/02_TEMAS_PENDIENTES_AHT.md` §B, explícitamente "NO implementar nada"
-4. Reto Semanal (antes "misión semanal") — §25, documentado en `docs/02_TEMAS_PENDIENTES_AHT.md` §A, propuesta conceptual
-5. Eventos grandes interactivos — §25.3, propuesta conceptual
-6. §26 Diario/Cotilleo/Ánimo 3 voces — "NO implementar todavía"
-
-#### ⚪ HISTÓRICO / APARCADO / DESCARTADO (9 sistemas)
-
-No reactivar automáticamente.
-
-1. Escáner compatibilidad — `deprecated: true, desbloqueable: false`
-2. Móvil NPC↔NPC — APARCADO (§21.3)
-3. Vínculo Celestine numérico — APARCADO (§22.4)
-4. F12 Carta del que se fue — APARCADA (§22.3)
-5. F13 Plan discreto — APARCADA (§22.3)
-6. Sistema de secretos — DESCARTADO (dirección C)
-7. 6 complejos / 14 destinos — DESCARTADO (DOC V3: solo 9 lugares)
-8. Economía V3 visible — DESCARTADO en V3
-9. Compra/desbloqueo lugares — DESCARTADO
-
-#### ❓ NECESITA PLAYTEST (2)
+#### ? NECESITA PLAYTEST (3)
 
 Comportamiento no certificable por código.
 
 1. **Reloj comportamiento auto** (§27) — motor implementado; actualización con pestaña abierta = pendiente
 2. **Marchas frecuencia/pacing** — §19.4 observó 54 días sin intención en partida observada
+3. **Llegadas Candidate B curva** — Implementado y desplegado; validación longitudinal de curva pendiente
 
 ### 28.3 Corrección histórica del plan
 
@@ -2026,15 +2006,126 @@ Las decisiones de producto sobre Relaciones ya fueron cerradas y la implementaci
 ---
 
 ### Referencias cruzadas
+### Referencias cruzadas
 
 | § | Contenido | Estado |
 |---|-----------|--------|
-| §2 | Estado actual del código | Ver §28 |
+| §2 | Estado actual del código | **Actualizado 2026-09-05** — fuente de verdad |
 | §14 | Auditoría vs implementación | Obsoleto — ver §28 |
 | §19.12 | Recalibración población inicial | Resuelto |
-| §28 | Feature Flags y estado real | Fuente de verdad |
+| §19.13 | Ritmo incorporación residentes | EN PLAYTEST — abierta |
+| §28 | Feature Flags y estado real | **Actualizado 2026-09-05** — clasificación reconciliada |
 | §29 | Representación direccional relaciones | PENDIENTE PLAYTEST |
 | §30 | Concordancia gramatical | PENDIENTE PLAYTEST |
 | §31 | Design System de Modales | FASE 1 CERRADA, FASE 2 pendiente |
-| §32 | Esta sección — reconciliación de estados | Completada 03/09/2026 |
+| §32 | Reconciliación de estados | Completada 03/09/2026 |
+| §33 | **Incidencias activas** | **Nuevo 2026-09-05** |
+| §34 | **Contratos técnicos** | **Nuevo 2026-09-05** |
+| `docs/ARQUITECTURA_CSS.md` | **Contrato CSS/UI/modales** | **Autoridad específica — obligatorio leer antes de tocar CSS/UI** |
+| `docs/02_TEMAS_PENDIENTES_AHT.md` | Reto Semanal + Historia del Pueblo (diseño) | Referencia canónica de diseño |
 
+---
+
+## 33. Incidencias activas (2026-09-05)
+
+### 33.1 Historia del Pueblo — bridges WIP sin commit
+
+**Estado: 🟡 EN CURSO — PARCIAL**
+
+**Lo que SÍ está committed:**
+- `src/Engine/HistoriaPuebloEngine.php` — motor central (registrar hitos, catálogo, evaluación)
+- `src/Engine/HistoriaPuebloVista.php` — vista/álbum
+- Triggers hito_27 (beso_rechazado + coquetear_fallido) y hito_31 (continuidad duo) — commit `e6242d7f`
+- 95 tests / 0 failures
+- Integrado en `deploy/integrated` vía `d5d0d63f`
+
+**Lo que está escrito pero UNTRACKED (no committed):**
+- 11 archivos `src/Engine/Historia*Bridge.php` (Apoyo, Autonomía, Confianza, Cotilleo, Emociones, Encuentro, EventosPueblo, InterésMutuo, Marcha, Regalo, Vínculo)
+- Cada bridge usa `EventBus::on(DomainEvents::XXX, ...)` + `HistoriaPuebloEngine::registrar()`
+- Todos funcionales pero NO integrados en git
+
+**Acción necesaria:** commit de los 11 bridges antes de cualquier merge/deploy futuro.
+
+**Validación pendiente (PlayTest):**
+- hito_27 por coqueteo fallido
+- hito_27 por beso rechazado
+- hito_31 por segundo encuentro real válido
+- Ausencia de falsos positivos
+
+### 33.2 Bug 3→5 residentes — diagnóstico runtime
+
+**Estado: 🟡 EN DIAGNÓSTICO**
+
+Una nueva partida `juego_v1` DEBE comenzar con exactamente 3 residentes en D1 09:00. Se ha observado que puede mostrar 5.
+
+**Evidencia:**
+- Creación estática auditada indica 3 (config `tutorial_objetivo_residentes=3`)
+- Se diagnostica runtime/adopción/race
+- Instrumentación temporal desplegada: commit `99b23830`
+
+**Puntos trazados:**
+- `PartidaLifecycle`
+- `PartidaHandler`
+- `RelojHandler`
+- `ensurePartida`
+- `adoptSqlPartidaIfAny`
+- `nuevaPartidaLimpiaInterna`
+- `refresh`
+- `syncClock`
+- `persistPartidaId`
+- `api`
+
+**NO confundir con Candidate B de llegadas** (§28.2 sistema 13). Candidate B es el motor de llegadas progresivas post-tutorial; este bug afecta al arranque inicial.
+
+### 33.3 Arquitectura CSS — cirugía global fase 2
+
+**Estado: 🟡 EN CURSO**
+
+**Fase 1 completada** (commit `2dc2dd30`):
+- V4 única autoridad modal
+- 18 CSS legacy eliminados
+- ~7.477 líneas menos
+- ~2.500 !important eliminados
+- Contrato `docs/ARQUITECTURA_CSS.md` creado
+
+**Fase 2 en ejecución** (Carlos activo):
+- Limpieza de `screens-secondary.css`
+- Stacks Inicio desktop/mobile
+- `play-v3-*` activos
+- Reglas `.capa` restantes
+- `!important` restantes
+- CSS/overrides/parches
+- Huérfanos FTP
+- Contrato CSS final
+
+**NO documentar como deuda futura algo que actualmente está siendo limpiado.**
+
+---
+
+## 34. Contratos técnicos
+
+### 34.1 CSS / UI / Modales — `docs/ARQUITECTURA_CSS.md`
+
+**Este documento es la AUTORIDAD ESPECÍFICA para cualquier trabajo en:**
+- CSS
+- UI de play
+- Modales
+- Responsive
+
+**OBLIGATORIO:** antes de cualquier cambio en CSS, UI de play, modales o orden de hojas en `play.php`, leer `docs/ARQUITECTURA_CSS.md` y respetar el contrato V4.
+
+Tras tocar frame o links: ejecutar `scripts/aht_guard_modal_shell.ps1` y `node tests/modal_architecture_test.js`.
+
+No duplicar dentro del Plan Maestro el contenido de `ARQUITECTURA_CSS.md`. Solo referenciarlo como contrato técnico obligatorio.
+
+### 34.2 Pool de personajes — exclusión
+
+Excluidos del pool de selección:
+- `per_p058` — Francesca (71yr)
+- `per_p112` — Noelia (23yr)
+
+Guardado en `data/personajes/_pool_canonico.json` → `excluidos_seleccion[]`.
+
+Pool seleccionable: 172 → 170.
+
+Commit: `559a2da6`. Implementado, desplegado y cerrado.
