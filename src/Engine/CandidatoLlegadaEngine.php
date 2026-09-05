@@ -40,6 +40,7 @@ final class CandidatoLlegadaEngine
         }
         $l['dias_sin_oferta'] ??= 0;
         $l['ultimo_dia_intento_pity'] ??= 0;
+        $l['ultima_llegada_dia'] ??= 0;
         self::sincronizarPityLegacy($partida);
     }
 
@@ -124,6 +125,11 @@ final class CandidatoLlegadaEngine
         self::ensure($partida);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         if ($dia < (int) ($partida['llegadas']['cooldown_hasta_dia'] ?? 0)) {
+            return null;
+        }
+        // Máximo 1 incorporación por día (política aprobada Candidate B)
+        $ultimaLlegada = (int) ($partida['llegadas']['ultima_llegada_dia'] ?? 0);
+        if ($dia === $ultimaLlegada) {
             return null;
         }
         $huecos = CapacidadViviendas::huecos($partida);
@@ -411,6 +417,7 @@ final class CandidatoLlegadaEngine
             'vivienda_id' => $r['vivienda_id'] ?? null,
         ];
         self::aplicarCooldown($partida, $root, 'llegada');
+        $partida['llegadas']['ultima_llegada_dia'] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $nombre = IdentidadPublica::nombre($partida, $catalogId);
         $llegadaTxt = MensajitoVoz::linea(
             $partida,
