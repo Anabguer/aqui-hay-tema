@@ -583,7 +583,7 @@ final class MensajitoConsejoEngine
     {
         foreach ($partida['buzon'] ?? [] as $m) {
             if (is_array($m) && (string) ($m['id'] ?? '') === $mensajeId) {
-                return $m;
+                return BuzonEngine::normalizar($m);
             }
         }
         return null;
