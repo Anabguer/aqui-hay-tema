@@ -65,8 +65,7 @@ foreach ($rel in $deployRels) {
 }
 
 if (-not $DryRun) {
-    $buster = Update-AhtCacheBuster -Ctx $Ctx
-    Write-DeployLog -LogFile $logFile -Message "Cache-buster: $buster" -ToHost
+    Write-DeployLog -LogFile $logFile -Message 'Cache-buster: se actualiza tras revalidacion de guardas.' -ToHost
 } else {
     Write-DeployLog -LogFile $logFile -Message 'DRY-RUN: cache-buster no se modifica.' -ToHost
 }
@@ -80,9 +79,6 @@ foreach ($rel in $deployRels) {
 }
 if ($needsPlayPhp) {
     Add-AhtDeployFile -Files $packed -Ctx $Ctx -RelPath 'play.php'
-}
-if (-not $DryRun) {
-    Add-AhtDeployFile -Files $packed -Ctx $Ctx -RelPath $Ctx.CacheBusterRel
 }
 
 Assert-AhtDeployFileListExplicit -RequestedFiles $deployRels -PackedFiles $packed -LogFile $logFile
@@ -101,6 +97,12 @@ if (-not $AutoConfirm -and -not (Read-DeployYesNo 'Confirmas DEPLOY QUIRURGICO a
 }
 
 [void](Assert-AhtCanonicalDeployGuards -Ctx $Ctx -LogFile $logFile -ExpectedHeadAtStart $headAtStart)
+
+if (-not $DryRun) {
+    $buster = Update-AhtCacheBuster -Ctx $Ctx
+    Write-DeployLog -LogFile $logFile -Message "Cache-buster: $buster" -ToHost
+    Add-AhtDeployFile -Files $packed -Ctx $Ctx -RelPath $Ctx.CacheBusterRel
+}
 
 $backupRels = @($packed | ForEach-Object { [string]$_.Rel })
 Invoke-AhtRemoteBackup -Ctx $Ctx -RelPaths $backupRels -BackupDir $backupDir -LogFile $logFile -WinScpLogPath $winscpLog
