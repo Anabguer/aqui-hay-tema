@@ -79,5 +79,14 @@ try {
   if (e.stdout) process.stdout.write(e.stdout);
 }
 
+try {
+  execFileSync(process.execPath, [path.join(root, 'dev/audit_inicio_authority.cjs')], { stdio: 'pipe' });
+  ok(true, 'audit_inicio_authority sin doble stack legacy');
+} catch (e) {
+  ok(false, 'audit_inicio_authority sin doble stack legacy');
+  if (e.stdout) process.stdout.write(e.stdout);
+  if (e.stderr) process.stderr.write(e.stderr);
+}
+
 console.log(failures ? '\n' + failures + ' FAIL' : '\nTODO OK');
 process.exit(failures ? 1 : 0);
