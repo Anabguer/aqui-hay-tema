@@ -2681,44 +2681,6 @@ html:has(body.play-v3.play-v3--scroll-lock) {
   }
 }
 
-/* === Batch 26: chips Â¿QuÃ© buscamos? debajo del tÃ­tulo === */
-.play-v3 .capa-organizar .org-seccion--que .ficha-seccion-tit {
-  display: flex !important;
-  align-items: center;
-  gap: .45rem;
-  margin: 0 0 .24rem !important;
-}
-
-.play-v3 .capa-organizar .org-seccion--que .ficha-seccion-tit::after {
-  display: block !important;
-  flex: 1 1 auto;
-}
-
-.play-v3 .capa-organizar .org-seccion--que .ficha-seccion-body {
-  padding-left: .45rem !important;
-    margin-top: 0;
-  }
-
-.play-v3 .capa-organizar .org-seccion--que .org-tipos {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-  gap: .28rem;
-  margin: 0;
-}
-
-.play-v3 .capa-organizar .org-seccion--que .org-tipo-chip {
-  font-size: .74rem !important;
-  padding: .2rem .44rem !important;
-}
-
-.play-v3 .capa-organizar .org-seccion-head--que .org-tipos--inline,
-.play-v3 .capa-organizar .org-tipos--inline {
-  flex: none !important;
-  justify-content: flex-start !important;
-}
-
 /* === Batch 27: Mensajitos mÃ³vil â€” texto debajo de nombre + marcar === */
 @media (max-width: 768px) {
   .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg {

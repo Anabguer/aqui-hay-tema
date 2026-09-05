@@ -194,26 +194,6 @@ final class EncuentrosHandler
         ];
     }
 
-    public static function intencionesDisponibles(ApiContext $ctx, array $body, array $partida): array
-    {
-        $parts = is_array($body['participantes'] ?? null) ? $body['participantes'] : [
-            (string) ($body['residente_a'] ?? ''),
-            (string) ($body['residente_b'] ?? ''),
-        ];
-        $a = (string) ($parts[0] ?? '');
-        $b = (string) ($parts[1] ?? '');
-        if ($a === '' || $b === '' || $a === $b) {
-            return ['ok' => true, 'intenciones' => [], 'contrato' => \AquiHayTema\Engine\IntencionCelestina::contratoOrganizar()];
-        }
-        $cal = \AquiHayTema\Engine\CalibracionConfig::load($ctx->root);
-        $intenciones = \AquiHayTema\Engine\IntencionCelestina::disponiblesPara($partida, $a, $b, $cal);
-        return [
-            'ok' => true,
-            'intenciones' => $intenciones,
-            'contrato' => \AquiHayTema\Engine\IntencionCelestina::contratoOrganizar(),
-        ];
-    }
-
     public static function estado(ApiContext $ctx, array $body, array &$partida): array
     {
         $r = EncuentroEngine::cambiarEstado($partida, (string) ($body['encuentro_id'] ?? ''), (string) ($body['estado'] ?? ''));

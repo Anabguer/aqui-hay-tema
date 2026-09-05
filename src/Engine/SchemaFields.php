@@ -55,6 +55,8 @@ final class SchemaFields
         CotilleoAutonomoCadencia::ensure($partida);
         RelacionGrafo::asegurarTodos($partida);
 
+        ResidenteCumpleanosEngine::asegurarCumpleanos($partida);
+
         foreach ($partida['relaciones_sociales'] ?? [] as $i => $rel) {
             if (is_array($rel)) {
                 RelacionEngine::ensureSocialCampos($partida['relaciones_sociales'][$i]);

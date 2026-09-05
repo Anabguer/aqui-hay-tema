@@ -11,6 +11,7 @@ use AquiHayTema\Engine\IdentidadPublica;
 use AquiHayTema\Engine\InventarioEngine;
 use AquiHayTema\Engine\RegaloEngine;
 use AquiHayTema\Engine\RegaloHints;
+use AquiHayTema\Engine\RegalitoRecompensaService;
 use function AquiHayTema\Api\jsonOut;
 use function AquiHayTema\Api\savePartida;
 
@@ -25,10 +26,15 @@ final class RegalosHandler
      * @param array<string, mixed> $partida
      * @return array<string, mixed>
      */
-    public static function inventario(ApiContext $ctx, array $body, array $partida): array
+    public static function inventario(ApiContext $ctx, array $body, array &$partida): array
     {
         $catalog = new CatalogStore($ctx->root);
         InventarioEngine::ensure($partida);
+
+        $pendientesEntregados = RegalitoRecompensaService::reclamarPendientes($partida, $catalog);
+        if ($pendientesEntregados > 0) {
+            savePartida($ctx, $partida);
+        }
         $residenteId = trim((string) ($body['residente_id'] ?? ''));
         $vecinoValido = $residenteId !== '' && isset($partida['residentes'][$residenteId]);
         if ($residenteId !== '' && !$vecinoValido) {

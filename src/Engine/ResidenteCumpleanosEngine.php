@@ -4,10 +4,17 @@ declare(strict_types=1);
 namespace AquiHayTema\Engine;
 
 /**
- * Cumpleaños mínimo de residente (§19.6 / F10).
+ * Cumpleaños de residente (§19.6 / F10).
  *
- * Contrato persistente: identidad_publica.cumpleanos = { dia: 1-28, mes: 1-12 }.
- * Sin año de nacimiento. Asignación lazy y determinista para saves antiguos.
+ * Campo canónico: identidad.cumpleanos = { dia: 1-28, mes: 1-12 } (catálogo)
+ * Persistencia en save: identidad_publica.cumpleanos = { dia: 1-28, mes: 1-12 }
+ *
+ * Prioridad de resolución:
+ *   1. Save existente (identidad_publica.cumpleanos) → backward compat
+ *   2. Catálogo (identidad.cumpleanos) → diseño intencionado
+ *   3. Generación determinista (CRC32) → migración legacy → se persiste
+ *
+ * Sin año de nacimiento.
  */
 final class ResidenteCumpleanosEngine
 {
@@ -23,15 +30,21 @@ final class ResidenteCumpleanosEngine
         if (!isset($res['identidad_publica']) || !is_array($res['identidad_publica'])) {
             $res['identidad_publica'] = [];
         }
+
+        // 1. Save existente (backward compat)
         $actual = $res['identidad_publica']['cumpleanos'] ?? null;
         if (is_array($actual) && self::esValido($actual)) {
             return ['dia' => (int) $actual['dia'], 'mes' => (int) $actual['mes']];
         }
+
+        // 2. Catálogo (diseño intencionado)
         $desdeCatalogo = self::desdeCatalogo($res, $catalog);
         if ($desdeCatalogo !== null) {
             $res['identidad_publica']['cumpleanos'] = $desdeCatalogo;
             return $desdeCatalogo;
         }
+
+        // 3. Generación determinista → persiste una vez
         $generado = self::generarDeterminista($partida, $residenteId);
         $res['identidad_publica']['cumpleanos'] = $generado;
         return $generado;
@@ -59,6 +72,29 @@ final class ResidenteCumpleanosEngine
     }
 
     /**
+     * Asegura que todos los residentes tengan cumpleaños persistente.
+     * Migración una sola vez: genera y guarda si falta.
+     */
+    public static function asegurarCumpleanos(array &$partida, ?Catalog $catalog = null): void
+    {
+        foreach (array_keys($partida['residentes'] ?? []) as $rid) {
+            if (!isset($partida['residentes'][$rid]) || !is_array($partida['residentes'][$rid])) {
+                continue;
+            }
+            $res = &$partida['residentes'][$rid];
+            if (!isset($res['identidad_publica']) || !is_array($res['identidad_publica'])) {
+                $res['identidad_publica'] = [];
+            }
+            $actual = $res['identidad_publica']['cumpleanos'] ?? null;
+            if (is_array($actual) && self::esValido($actual)) {
+                continue;
+            }
+            self::obtener($partida, $rid, $catalog);
+            unset($res);
+        }
+    }
+
+    /**
      * @param array<string, mixed> $residente
      * @return array{dia: int, mes: int}|null
      */
@@ -67,11 +103,15 @@ final class ResidenteCumpleanosEngine
         if ($catalog === null) {
             return null;
         }
+        $catId = $residente['catalog_id'] ?? null;
+        if (!is_string($catId) || $catId === '') {
+            return null;
+        }
         $cat = ResidenteRuntime::catalogoParaRuntime($residente, $catalog);
         if ($cat === null) {
             return null;
         }
-        $raw = $cat['identidad']['cumpleanos'] ?? $cat['vida']['cumpleanos'] ?? null;
+        $raw = $cat['identidad']['cumpleanos'] ?? null;
         if (!is_array($raw) || !self::esValido($raw)) {
             return null;
         }

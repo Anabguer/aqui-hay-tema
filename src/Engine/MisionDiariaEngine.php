@@ -518,7 +518,8 @@ final class MisionDiariaEngine
                 'mision' => $m,
                 'actores' => [],
             ], $logger, 'MisionDiariaEngine::cumplir');
-            return ['ok' => true, 'mision' => $m, 'vida_delta' => 0, 'detallito' => $detallito];
+            $regalito = self::evaluarRegalito3x3($partida, (int) ($m['dia'] ?? 0), $logger);
+            return ['ok' => true, 'mision' => $m, 'vida_delta' => 0, 'detallito' => $detallito, 'regalito' => $regalito];
         }
         $valido = !empty($m['cuenta_latido']) && !self::yaHuboValidoHoy($partida, (int) ($m['dia'] ?? 0), (string) ($m['id'] ?? ''));
         VidaPuebloEngine::aplicar($partida, $delta, [
@@ -532,7 +533,45 @@ final class MisionDiariaEngine
             'mision' => $m,
             'actores' => [],
         ], $logger, 'MisionDiariaEngine::cumplir');
-        return ['ok' => true, 'mision' => $m, 'detallito' => $detallito];
+        $regalito = self::evaluarRegalito3x3($partida, (int) ($m['dia'] ?? 0), $logger);
+        return ['ok' => true, 'mision' => $m, 'detallito' => $detallito, 'regalito' => $regalito];
+    }
+
+    /**
+     * Evalúa si todas las misiones normales del día están cumplidas.
+     * Si es así, concede 1 regalito garantizado via RegalitoRecompensaService.
+     * Idempotente: solo otorga una vez por día (contexto misiones_diarias:{dia}).
+     *
+     * @param array<string, mixed> $partida
+     * @return array<string, mixed>|null null si no corresponde regalito
+     */
+    private static function evaluarRegalito3x3(array &$partida, int $dia, ?GameLogger $logger): ?array
+    {
+        if (!self::activa($partida)) {
+            return null;
+        }
+
+        $total = 0;
+        $cumplidas = 0;
+        foreach ($partida['misiones_diarias']['items'] ?? [] as $m) {
+            if (!is_array($m) || (int) ($m['dia'] ?? 0) !== $dia) {
+                continue;
+            }
+            if (TutorialPrimerosPasos::esMisionTutorial($m)) {
+                continue;
+            }
+            $total++;
+            if (($m['estado'] ?? '') === self::EST_CUMPLIDA) {
+                $cumplidas++;
+            }
+        }
+
+        if ($total < 3 || $cumplidas < $total) {
+            return null;
+        }
+
+        $contexto = 'misiones_diarias:' . $dia;
+        return RegalitoRecompensaService::otorgar($partida, $contexto, $logger);
     }
 
     /**
