@@ -207,10 +207,18 @@ final class PartidaLifecycle
         $partida = PartidaSchema::nueva($this->root, $configId, $seed);
         $partida['meta']['partida_id'] = $partidaId;
         $config = $this->catalog->loadConfigPrevalidada($configId);
+
         foreach ($config['residentes_iniciales'] ?? [] as $entry) {
             $this->residentes->incorporarCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
         }
+        PoblacionV3::incorporarIniciales($partida, $config, $this->root, $this->residentes);
         self::aplicarParentescoConfig($partida, $config);
+
+        $arrancaTutorialPrimeros = TutorialPrimerosPasos::debeArrancar($config);
+        if (!$arrancaTutorialPrimeros) {
+            HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
+        }
+
         FeatureConfig::mergeIntoPartida($partida, $this->root);
         if (!empty($config['features']) && is_array($config['features'])) {
             $partida['features'] = array_merge(
@@ -218,10 +226,23 @@ final class PartidaLifecycle
                 $config['features']
             );
         }
+        PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         SchemaFields::ensure($partida);
-        $this->generarMisionesSiToca($partida);
+
+        if (TutorialPrimerosPasos::debeArrancar($config)) {
+            TutorialPrimerosPasos::arrancar($partida, $config, $this->catalog);
+        } elseif (TutorialBucle::debeArrancar($config)) {
+            TutorialBucle::arrancar($partida, $config);
+        }
+        TutorialIncorporaciones::ensureDesdeConfig($partida, $config);
+
+        $partida = SchemaMigrator::migrate($partida);
+
+        if (MisionDiariaEngine::activa($partida)) {
+            $this->generarMisionesSiToca($partida);
+        }
         $this->tickPeticiones($partida);
-        TutorialBucle::arrancar($partida, $config);
+
         $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
         $this->repo->guardar($partida);
         return $partida;

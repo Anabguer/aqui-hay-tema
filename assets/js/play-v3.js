@@ -5154,6 +5154,7 @@
   /* ── Auto-sync: sincronización periódica del reloj ── */
   var _syncClockTimer = null;
   var _syncClockBusy = false;
+  var _partidaSwitchBusy = false;
   var SYNC_CLOCK_INTERVAL_MS = 45000;
 
   function renderClockOnly(relojVista, relojRaw) {
@@ -8377,6 +8378,7 @@ function hobbyIconKey(id, texto) {
     return !!r.ok;
   }
   async function refresh() {
+    if (_partidaSwitchBusy) return;
     const popMensajitosAbierto = mensajitosPopAbierto;
     let paquete = await api('partida.refresh', {}, 'GET');
     if (!paquete.ok && partidaId) {
@@ -8436,10 +8438,7 @@ function hobbyIconKey(id, texto) {
     get partidaId() { return partidaId; }
   };
 
-  async function nuevaPartidaLimpia() {
-    try { localStorage.removeItem(tutIntroKey()); } catch (e) {}
-    localStorage.removeItem(storageKey());
-    partidaId = null;
+  function limpiarCachesPartidaUi() {
     cacheEstado = null;
     cacheInsp = null;
     cachePueblo = null;
@@ -8449,6 +8448,13 @@ function hobbyIconKey(id, texto) {
     org = { tipo: '', sel: [], lugar: '', dia: null, hora: 17 };
     playtestLogClient.entries = [];
     setCapa('');
+  }
+
+  async function nuevaPartidaLimpiaInterna() {
+    try { localStorage.removeItem(tutIntroKey()); } catch (e) {}
+    localStorage.removeItem(storageKey());
+    partidaId = null;
+    limpiarCachesPartidaUi();
     const r = await api('partida.nueva', configNueva(true));
     if (r.ok && r.partida_id) {
       persistPartidaId(r.partida_id);
@@ -8464,6 +8470,43 @@ function hobbyIconKey(id, texto) {
     }
     await refresh();
     quizaMostrarTutIntro();
+  }
+
+  async function reiniciarPartidaActual() {
+    if (_partidaSwitchBusy) return;
+    _partidaSwitchBusy = true;
+    stopSyncClock();
+    try {
+      if (!(await recuperarPartidaIdPerdida()) || !partidaId) {
+        await nuevaPartidaLimpiaInterna();
+        return;
+      }
+      try { localStorage.removeItem(tutIntroKey()); } catch (e) {}
+      limpiarCachesPartidaUi();
+      const r = await api('partida.reiniciar', configNueva(true));
+      if (r.ok) {
+        toast('Partida reiniciada.');
+        await refresh();
+        quizaMostrarTutIntro();
+      } else {
+        toast(r.mensaje_ui || 'No se pudo reiniciar la partida.');
+      }
+    } finally {
+      _partidaSwitchBusy = false;
+      startSyncClock();
+    }
+  }
+
+  async function nuevaPartidaLimpia() {
+    if (_partidaSwitchBusy) return;
+    _partidaSwitchBusy = true;
+    stopSyncClock();
+    try {
+      await nuevaPartidaLimpiaInterna();
+    } finally {
+      _partidaSwitchBusy = false;
+      startSyncClock();
+    }
   }
 
   (function bindDebugControls() {
@@ -8833,7 +8876,8 @@ function hobbyIconKey(id, texto) {
     }
     const reiniciarAjustes = ev.target.closest('[data-ajustes-reiniciar]');
     if (reiniciarAjustes && uiRootFrom(reiniciarAjustes)) {
-      nuevaPartidaLimpia();
+      ev.preventDefault();
+      reiniciarPartidaActual();
       return;
     }
     const open = ev.target.closest('[data-open]');
