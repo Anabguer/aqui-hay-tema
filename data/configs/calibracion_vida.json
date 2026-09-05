@@ -677,5 +677,23 @@
             "puzzle",
             "peluche"
         ]
+    },
+    "regalito_recompensa": {
+        "_nota": "Recompensa garantizada por completar bloques (3/3 misiones, futuro reto semanal, historia). Servicio compartido: RegalitoRecompensaService. Idempotente por contexto.",
+        "activa": true,
+        "objetos": [
+            "tarro_mermelada",
+            "caja_dulces",
+            "taza",
+            "bolsa_cafe",
+            "cuaderno",
+            "marcapaginas",
+            "vela_casera",
+            "kit_costura",
+            "maceta_pintada",
+            "postal_pueblo",
+            "puzzle",
+            "peluche"
+        ]
     }
 }
