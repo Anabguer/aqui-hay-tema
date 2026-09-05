@@ -12,6 +12,7 @@ use AquiHayTema\Engine\Catalog;
 use AquiHayTema\Engine\ContentValidationException;
 use AquiHayTema\Engine\EncuentroLifecycle;
 use AquiHayTema\Engine\DebugParejasEngine;
+use AquiHayTema\Engine\DiagnosticTrace;
 use AquiHayTema\Engine\FeatureConfig;
 use AquiHayTema\Engine\LabAudit;
 use AquiHayTema\Engine\PartidaValidator;
@@ -43,7 +44,9 @@ final class PartidaHandler
             LabAudit::eventoNuevaPartida($partida, new Catalog($ctx->root));
             LabAudit::eventoTutorial($partida, 'NUEVA_PARTIDA', new Catalog($ctx->root));
         }
-        return withLabAudit(['ok' => true, 'partida' => $ctx->service->estadoResumido($partida), 'partida_id' => $partida['meta']['partida_id'], 'historia' => HistoriaPuebloHandler::pendientes($partida, $ctx)]);
+        $resumen = $ctx->service->estadoResumido($partida);
+        DiagnosticTrace::log('HANDLER_NUEVA_RETORNO', $partida, 'residentes_count=' . ($resumen['residentes_count'] ?? '?') . ' activos=' . ($resumen['pueblo_residentes_activos'] ?? '?'));
+        return withLabAudit(['ok' => true, 'partida' => $resumen, 'partida_id' => $partida['meta']['partida_id'], 'historia' => HistoriaPuebloHandler::pendientes($partida, $ctx)]);
     }
 
     public static function listar(ApiContext $ctx, array $body): array
@@ -60,6 +63,7 @@ final class PartidaHandler
         if (labActiva($body)) {
             LabAudit::eventoSnapshotCargada($partida, new Catalog($ctx->root));
         }
+        DiagnosticTrace::log('HANDLER_ESTADO_RETORNO', $partida, 'residentes_count=' . count($partida['residentes'] ?? []));
         return withLabAudit(['ok' => true, 'estado' => $ctx->service->estadoResumido($partida)]);
     }
 
@@ -159,6 +163,7 @@ final class PartidaHandler
             'diario' => $diario,
             'historia' => HistoriaPuebloHandler::pendientes($partida, $ctx),
         ];
+        DiagnosticTrace::log('HANDLER_REFRESH_RETORNO', $partida, 'residentes_count=' . ($out['estado']['residentes_count'] ?? '?'));
         if ($labOn) {
             $eventosLab = LabAudit::flush();
             if ($eventosLab !== []) {

@@ -642,6 +642,7 @@
       logApiError(action, method, body, resp.status, data, data.error || ('http_' + resp.status));
     }
     ahtLabAuditLog(data);
+    console.log('[DIAG-TRACE] api', { action, method, ok: data.ok, error: data.error, nResCount: data.estado && data.estado.residentes_count, nResPartida: data.partida && data.partida.residentes ? data.partida.residentes.length : '?' });
     return data;
   }
 
@@ -5262,9 +5263,12 @@
     if (!partidaId) return;
     _syncClockBusy = true;
     try {
+      console.log('[DIAG-TRACE] syncClock INICIO', { partidaId, ts: new Date().toISOString() });
       var r = await api('reloj.sincronizar', {});
+      console.log('[DIAG-TRACE] syncClock result', { ok: r.ok, hay_cambios: r.hay_cambios_visibles, nResCount: r.reloj && r.reloj.residentes_count });
       if (!r.ok) return;
       if (r.hay_cambios_visibles) {
+        console.log('[DIAG-TRACE] syncClock: hay_cambios → refresh');
         await refresh();
       } else {
         if (cacheEstado) {
@@ -8390,13 +8394,16 @@ function hobbyIconKey(id, texto) {
   }
   function persistPartidaId(id) {
     if (!id) return;
+    console.log('[DIAG-TRACE] persistPartidaId', { old: partidaId, new: id, ts: new Date().toISOString() });
     partidaId = id;
     try { localStorage.setItem(storageKey(), id); } catch (e) {}
     try { localStorage.removeItem('aht_partida_id'); } catch (e) {}
   }
   async function adoptSqlPartidaIfAny(opts) {
     opts = opts || {};
+    console.log('[DIAG-TRACE] adoptSql INICIO', { opts, partidaId });
     const list = await api('partida.listar', {}, 'GET');
+    console.log('[DIAG-TRACE] adoptSql listar', { ok: list.ok, nPartidas: list.partidas ? list.partidas.length : 0, first: list.partidas && list.partidas[0] ? list.partidas[0].partida_id : null });
     if (!list.ok || !Array.isArray(list.partidas) || list.partidas.length === 0) return false;
     const canonicalId = list.partidas[0] && list.partidas[0].partida_id;
     if (!canonicalId) return false;
@@ -8404,9 +8411,11 @@ function hobbyIconKey(id, texto) {
       const probe = await api('partida.estado', {}, 'GET');
       if (probe.ok) return true;
     }
+    console.log('[DIAG-TRACE] adoptSql: persist canonicalId', { canonicalId });
     persistPartidaId(canonicalId);
     if (opts.forceRebind) {
       const probe = await api('partida.estado', {}, 'GET');
+      console.log('[DIAG-TRACE] adoptSql: forceRebind probe', { ok: probe.ok, error: probe.error });
       if (!probe.ok) {
         try { localStorage.removeItem(storageKey()); } catch (e) {}
         partidaId = null;
@@ -8433,30 +8442,41 @@ function hobbyIconKey(id, texto) {
     return adoptSqlPartidaIfAny({ forceRebind: true });
   }
   async function ensurePartida() {
+    console.log('[DIAG-TRACE] ensurePartida INICIO', { partidaId, ts: new Date().toISOString() });
     if (partidaId) {
+      console.log('[DIAG-TRACE] ensurePartida: probe existing', { partidaId });
       const probe = await api('partida.estado', {}, 'GET');
+      console.log('[DIAG-TRACE] ensurePartida: probe result', { ok: probe.ok, error: probe.error, nResCount: probe.estado && probe.estado.residentes_count });
       if (probe.ok) return true;
       try { localStorage.removeItem(storageKey()); } catch (e) {}
       partidaId = null;
     }
+    console.log('[DIAG-TRACE] ensurePartida: try adoptSql');
     if (await adoptSqlPartidaIfAny({ forceRebind: true })) {
+      console.log('[DIAG-TRACE] ensurePartida: adopted, retry probe', { partidaId });
       const retry = await api('partida.estado', {}, 'GET');
+      console.log('[DIAG-TRACE] ensurePartida: retry result', { ok: retry.ok, nResCount: retry.estado && retry.estado.residentes_count });
       if (retry.ok) return true;
       try { localStorage.removeItem(storageKey()); } catch (e) {}
       partidaId = null;
     }
+    console.log('[DIAG-TRACE] ensurePartida: calling partida.nueva', { config: CONFIG_JUEGO.meta && CONFIG_JUEGO.meta.config_id });
     const r = await api('partida.nueva', configNueva(true));
+    console.log('[DIAG-TRACE] ensurePartida: nueva result', { ok: r.ok, partida_id: r.partida_id, nResPartida: r.partida && r.partida.residentes ? r.partida.residentes.length : '?', nResCount: r.estado && r.estado.residentes_count });
     if (r.ok && r.partida_id) persistPartidaId(r.partida_id);
     return !!r.ok;
   }
   async function refresh() {
     if (_partidaSwitchBusy) return;
+    console.log('[DIAG-TRACE] refresh INICIO', { partidaId, ts: new Date().toISOString() });
     const popMensajitosAbierto = mensajitosPopAbierto;
     let paquete = await api('partida.refresh', {}, 'GET');
+    console.log('[DIAG-TRACE] refresh paquete', { ok: paquete.ok, error: paquete.error, nResCount: paquete.estado && paquete.estado.residentes_count, nResArray: paquete.partida && paquete.partida.residentes ? paquete.partida.residentes.length : '?', resIds: paquete.partida && paquete.partida.residentes ? paquete.partida.residentes.map(r => r.id).join(',') : '?' });
     if (!paquete.ok && partidaId) {
       const errRefresh = String(paquete.error || '').toUpperCase();
       const partidaPerdida = errRefresh === 'PARTIDA_NO_ENCONTRADA' || errRefresh === 'SAVE_CORRUPTO';
       if (partidaPerdida) {
+        console.log('[DIAG-TRACE] refresh: PARTIDA_PERDIDA', { errRefresh });
         try { localStorage.removeItem(storageKey()); } catch (e) {}
         partidaId = null;
         if (await adoptSqlPartidaIfAny({ forceRebind: true })) {
@@ -8526,11 +8546,15 @@ function hobbyIconKey(id, texto) {
   }
 
   async function nuevaPartidaLimpiaInterna() {
+    console.log('[DIAG-TRACE] nuevaPartidaLimpiaInterna INICIO', { ts: new Date().toISOString() });
     try { localStorage.removeItem(tutIntroKey()); } catch (e) {}
     localStorage.removeItem(storageKey());
+    const oldPartidaId = partidaId;
     partidaId = null;
     limpiarCachesPartidaUi();
+    console.log('[DIAG-TRACE] nuevaPartidaLimpia: calling partida.nueva', { oldPartidaId, config: CONFIG_JUEGO.meta && CONFIG_JUEGO.meta.config_id });
     const r = await api('partida.nueva', configNueva(true));
+    console.log('[DIAG-TRACE] nuevaPartidaLimpia: result', { ok: r.ok, newPartida_id: r.partida_id, nResPartida: r.partida && r.partida.residentes ? r.partida.residentes.length : '?', nResCount: r.estado && r.estado.residentes_count });
     if (r.ok && r.partida_id) {
       persistPartidaId(r.partida_id);
       playtestLogClient.push({
@@ -8543,6 +8567,7 @@ function hobbyIconKey(id, texto) {
     } else {
       toast(r.mensaje_ui || 'No se pudo crear la partida.');
     }
+    console.log('[DIAG-TRACE] nuevaPartidaLimpia: calling refresh', { partidaId });
     await refresh();
     quizaMostrarTutIntro();
   }

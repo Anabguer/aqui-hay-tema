@@ -8,6 +8,7 @@ use function AquiHayTema\Api\labActiva;
 use function AquiHayTema\Api\savePartida;
 use function AquiHayTema\Api\withLabAudit;
 use AquiHayTema\Engine\Catalog;
+use AquiHayTema\Engine\DiagnosticTrace;
 use AquiHayTema\Engine\LabAudit;
 use AquiHayTema\Engine\Reloj;
 use AquiHayTema\Engine\RelojDev;
@@ -78,6 +79,7 @@ final class RelojHandler
         $ejecutado = !empty($cu['ejecutado']);
         $hayCambiosVisibles = $ejecutado && $horasProcesadas > 0;
         savePartida($ctx, $partida);
+        DiagnosticTrace::log('HANDLER_SINCRONIZAR', $partida, 'horas=' . $horasProcesadas . ' ejecutado=' . ($ejecutado ? 'S' : 'N') . ' cambios=' . ($hayCambiosVisibles ? 'S' : 'N'));
         return withLabAudit([
             'ok' => true,
             'reloj' => $partida['reloj'],

@@ -27,19 +27,34 @@ final class PartidaLifecycle
 
     public function nueva(string $configId = 'debug_v0', ?string $seed = null, ?array $horaLocalCliente = null): array
     {
-        $partida = PartidaSchema::nueva($this->root, $configId, $seed, $horaLocalCliente);
-        $config = $this->catalog->loadConfigPrevalidada($configId);
+        DiagnosticTrace::clear();
+        DiagnosticTrace::logRaw('NUEVA_INICIO', ['config_id' => $configId, 'seed' => $seed]);
 
+        $partida = PartidaSchema::nueva($this->root, $configId, $seed, $horaLocalCliente);
+        DiagnosticTrace::setPartida($partida['meta']['partida_id'] ?? '?', $configId);
+        DiagnosticTrace::log('A_SchemaNueva', $partida, 'blank schema');
+
+        $config = $this->catalog->loadConfigPrevalidada($configId);
+        DiagnosticTrace::logRaw('B_ConfigLoaded', ['config_id' => $configId, 'has_residentes_iniciales' => isset($config['residentes_iniciales']), 'iniciales_aleatorios' => $config['poblacion_v3']['iniciales_aleatorios'] ?? '?', 'incorporaciones_aleatorias' => $config['poblacion_v3']['incorporaciones_aleatorias'] ?? '?']);
+
+        $antesResidentes = count($partida['residentes'] ?? []);
         foreach ($config['residentes_iniciales'] ?? [] as $entry) {
             $this->residentes->incorporarCatalogo($partida, $entry['catalog_id'], $entry['presencia'] ?? 'residente');
         }
+        $despuesResidentes = count($partida['residentes'] ?? []);
+        DiagnosticTrace::log('C_residentesIniciales', $partida, "antes=$antesResidentes despues=$despuesResidentes");
+
         PoblacionV3::incorporarIniciales($partida, $config, $this->root, $this->residentes);
+        DiagnosticTrace::log('D_PoblacionV3', $partida, 'tras incorporarIniciales');
+
         self::aplicarParentescoConfig($partida, $config);
+        DiagnosticTrace::log('E_Parentesco', $partida);
 
         $arrancaTutorialPrimeros = TutorialPrimerosPasos::debeArrancar($config);
         if (!$arrancaTutorialPrimeros) {
             HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
         }
+        DiagnosticTrace::log('F_Historia', $partida, "arrancaTutorialPrimeros=$arrancaTutorialPrimeros");
 
         FeatureConfig::mergeIntoPartida($partida, $this->root);
         if (!empty($config['features']) && is_array($config['features'])) {
@@ -48,8 +63,12 @@ final class PartidaLifecycle
                 $config['features']
             );
         }
+        DiagnosticTrace::log('G_Features', $partida);
+
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         SchemaFields::ensure($partida);
+        DiagnosticTrace::log('H_SchemaFields', $partida);
+
         DomainBootstrap::boot();
 
         DomainEventDispatcher::emit($partida, DomainEvents::PARTIDA_CREADA, [
@@ -57,50 +76,78 @@ final class PartidaLifecycle
             'partida_id' => $partida['meta']['partida_id'],
             'actores' => array_keys($partida['residentes']),
         ], $this->logger, 'PartidaLifecycle::nueva');
+        DiagnosticTrace::log('I_DomainEvents', $partida, 'PARTIDA_CREADA emitted');
 
         if (TutorialPrimerosPasos::debeArrancar($config)) {
             TutorialPrimerosPasos::arrancar($partida, $config, $this->catalog);
         } elseif (TutorialBucle::debeArrancar($config)) {
             TutorialBucle::arrancar($partida, $config);
         }
+        DiagnosticTrace::log('J_Tutorial', $partida);
+
         TutorialIncorporaciones::ensureDesdeConfig($partida, $config);
+        DiagnosticTrace::log('K_Incorporaciones', $partida, 'ensureDesdeConfig done');
+
         if (PlaytestGuia::activa($partida)) {
             PlaytestGuia::ensure($partida);
         }
 
         $partida = SchemaMigrator::migrate($partida);
+        DiagnosticTrace::log('L_Migrator', $partida);
 
         if (MisionDiariaEngine::activa($partida)) {
             $this->generarMisionesSiToca($partida);
         }
+        DiagnosticTrace::log('M_Misiones', $partida);
+
         $this->tickPeticiones($partida);
+        DiagnosticTrace::log('N_Peticiones', $partida);
 
         $this->logger->log($partida, 'partida_nueva', ['config_id' => $configId]);
         $this->repo->guardar($partida);
+        DiagnosticTrace::log('O_PREGUARDAR', $partida, '>>> GUARDANDO <<<');
+        DiagnosticTrace::logRaw('P_POSTGUARDAR', ['partida_id' => $partida['meta']['partida_id'] ?? '?']);
+
         return $partida;
     }
 
     public function cargar(string $partidaId): array
     {
+        DiagnosticTrace::setPartida($partidaId);
+        DiagnosticTrace::logRaw('CARGAR_INICIO', ['partida_id' => $partidaId]);
+
         $partida = $this->repo->cargar($partidaId);
+        DiagnosticTrace::log('CARGAR_LOADED', $partida, 'post repo->cargar');
+
         $fingerprintAntes = self::fingerprintEstadoPersistible($partida);
 
         SchemaFields::ensure($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         $cal = CalibracionConfig::load($this->root);
-        if (CatchUpEngine::activo($partida)) {
-            CatchUpEngine::ejecutarAlCargar($partida, $this->root, $cal, $this->logger, $this->catalog);
+        $catchUpActivo = CatchUpEngine::activo($partida);
+        DiagnosticTrace::logRaw('CARGAR_CatchUpCheck', ['activo' => $catchUpActivo, 'offline_events' => FeatureConfig::isEnabled($partida, 'offline_events_enabled')]);
+
+        if ($catchUpActivo) {
+            $catchUpResult = CatchUpEngine::ejecutarAlCargar($partida, $this->root, $cal, $this->logger, $this->catalog);
+            DiagnosticTrace::log('CARGAR_CatchUpEjecutado', $partida, 'horas=' . ($catchUpResult['horas_juego_avanzadas'] ?? 0) . ' aplicado=' . (($catchUpResult['aplicado'] ?? false) ? 'S' : 'N'));
         } else {
             Reloj::calcularCatchUpPendiente($partida);
+            DiagnosticTrace::log('CARGAR_CatchUpSkip', $partida, 'activo=false');
         }
         CatchUpEngine::marcarSesion($partida);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
+        DiagnosticTrace::log('CARGAR_Encuentros', $partida);
+
         $this->generarMisionesSiToca($partida);
+        DiagnosticTrace::log('CARGAR_Misiones', $partida);
+
         $this->tickPeticiones($partida);
+        DiagnosticTrace::log('CARGAR_Peticiones', $partida);
 
         // Monotonicity guard: reconcile stale celebracion_estado with consumed file
         HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
         HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
+        DiagnosticTrace::log('CARGAR_Final', $partida, '>>> RETURN <<<');
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
@@ -113,18 +160,29 @@ final class PartidaLifecycle
      */
     public function cargarParaRefresh(string $partidaId): array
     {
+        DiagnosticTrace::setPartida($partidaId);
+        DiagnosticTrace::logRaw('REFRESH_INICIO', ['partida_id' => $partidaId]);
+
         $partida = $this->repo->cargar($partidaId);
+        DiagnosticTrace::log('REFRESH_LOADED', $partida, 'post repo->cargar');
+
         $fingerprintAntes = self::fingerprintEstadoPersistible($partida);
 
         SchemaFields::ensure($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         EncuentroLifecycle::sincronizarConReloj($partida, $this->logger, $this->catalog);
+        DiagnosticTrace::log('REFRESH_Encuentros', $partida);
+
         $this->generarMisionesSiToca($partida);
+        DiagnosticTrace::log('REFRESH_Misiones', $partida);
+
         $this->tickPeticiones($partida);
+        DiagnosticTrace::log('REFRESH_Peticiones', $partida);
 
         // Monotonicity guard: reconcile stale celebracion_estado with consumed file
         HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
         HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
+        DiagnosticTrace::log('REFRESH_Final', $partida, '>>> RETURN <<<');
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
