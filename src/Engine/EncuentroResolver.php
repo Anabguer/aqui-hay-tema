@@ -291,6 +291,8 @@ final class EncuentroResolver
         SenalRomantica::avisarSiAplica($partida, $a, $b, $cal);
         SenalRomantica::avisarSiAplica($partida, $b, $a, $cal);
 
+        self::detectarHitoContinuidad($partida, $a, $b);
+
         MemoriaEventos::registrar(
             $partida,
             'encuentro',
@@ -364,5 +366,40 @@ final class EncuentroResolver
             NecesidadEstado::aplicarRecuperacion($res, $lugarNecesidades, $estaAcompanado, $hobbyMatch, $cal);
             unset($res);
         }
+    }
+
+    /**
+     * Detecta continuidad de un dúo: 2+ encuentros reales terminados,
+     * con al menos uno previo no claramente malo.
+     */
+    private static function detectarHitoContinuidad(array &$partida, string $a, string $b): void
+    {
+        $encs = HistorialPar::encuentros($partida, $a, $b);
+        if (count($encs) < 2) {
+            return;
+        }
+        if (HistoriaPuebloEngine::existe(
+            $partida,
+            HistoriaPuebloEngine::clave('hito_31', [$a, $b])
+        )) {
+            return;
+        }
+        $primeros = array_slice($encs, 0, -1);
+        $negativos = ['muy_mal', 'mal'];
+        $hayAlgoBueno = false;
+        foreach ($primeros as $e) {
+            $resA = $e['resultado_a'] ?? 'normal';
+            $resB = $e['resultado_b'] ?? 'normal';
+            if (!in_array($resA, $negativos, true) && !in_array($resB, $negativos, true)) {
+                $hayAlgoBueno = true;
+                break;
+            }
+        }
+        if (!$hayAlgoBueno) {
+            return;
+        }
+        HistoriaPuebloEngine::registrar($partida, 'hito_31', [$a, $b], [
+            'origen' => 'encuentro_continuidad',
+        ]);
     }
 }

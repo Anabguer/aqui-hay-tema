@@ -830,9 +830,12 @@ final class EncuentroIntervencion
                 $efectos['romance'] = ['desde' => $desde, 'hacia' => $hacia, 'delta' => $rom];
                 SenalRomantica::avisarSiAplica($partida, $desde, $hacia, $cal);
                 if ($tono === 'bien' && $rom > 0) {
-                    RelacionBitacora::registrar($partida, RelacionBitacora::HITO_ROMANTICO, [$desde, $hacia], $desde . '>' . $hacia);
+                    RelacionBitacora::registrar($partida, RelacionBitacora::HITO_ROMANTICO, [$desde, $hacia], $desde . '>' . $hacia, null, null, ['subtipo' => 'coquetear']);
                     $hito = RelacionBitacora::HITO_ROMANTICO;
                     $cotilleo = RelacionNarrativaBridge::alHito($partida, RelacionBitacora::HITO_ROMANTICO, [$desde, $hacia]);
+                }
+                if ($tono === 'mal') {
+                    RelacionBitacora::registrar($partida, RelacionBitacora::INTENTO_ROMANTICO_FALLIDO, [$desde, $hacia], $desde . '>' . $hacia, null, null, ['subtipo' => 'coquetear_fallido']);
                 }
             }
         }
@@ -1033,7 +1036,7 @@ final class EncuentroIntervencion
             $texto = IdentidadPublica::nombre($partida, $desde) . ' y ' . IdentidadPublica::nombre($partida, $hacia)
                 . ' se besan. El plan se calienta.';
         } else {
-            RelacionBitacora::registrar($partida, RelacionBitacora::RECHAZO_IMPORTANTE, [$desde, $hacia], $desde . '>' . $hacia);
+            RelacionBitacora::registrar($partida, RelacionBitacora::RECHAZO_IMPORTANTE, [$desde, $hacia], $desde . '>' . $hacia, null, null, ['subtipo' => 'beso_rechazado']);
             RelacionEngine::registrarContacto($partida, $desde, $hacia, ContactoCalidad::LEVE, $cal, -1, -2);
             RelacionEngine::registrarContacto($partida, $hacia, $desde, ContactoCalidad::LEVE, $cal, -1, -1);
             RelacionEngine::upsertConflicto($partida, $a, $b, 2, 'roce', 'beso_rechazado');
