@@ -44,4 +44,10 @@ if (($refresh['tutorial']['id'] ?? '') !== TutorialPrimerosPasos::ID) {
     exit(1);
 }
 
+$pendientes = \AquiHayTema\Engine\HistoriaPuebloEngine::celebracionesPendientes($refresh, $root, $id);
+if ($pendientes !== []) {
+    fwrite(STDERR, "FAIL: celebraciones pendientes durante tutorial tras reiniciar\n");
+    exit(1);
+}
+
 echo "OK: reiniciar conserva id y refresh/tutorial válidos ($id)\n";
