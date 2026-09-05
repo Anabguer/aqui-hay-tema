@@ -52,12 +52,17 @@
   transition: opacity var(--aht-dur, 200ms) ease;
 }
 
+
+/* VELA LEGACY SOLO CONSULTA — modales V4 usan .aht-velo */
+.play-v3 .play-root[data-capa]:not([data-capa=""]) > .velo {
+  display: none;
+}
+
 .aht-velo--visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-.play-v3:not([data-capa=""]) .velo,
 .play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
   background-color: var(--aht-overlay, rgba(38, 31, 47, 0.45));
 }
@@ -73,7 +78,9 @@
   width: 100%;
   max-width: 100%;
   height: auto;
+  flex: 1 1 auto;
   min-height: 0;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -239,6 +246,10 @@
 }
 
 .aht-frame-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: #e989a7 rgba(249, 220, 228, .45);
 }

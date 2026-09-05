@@ -40,9 +40,11 @@
   --aht-overlay: rgba(38, 31, 47, 0.45);
 
   /* --- Modal shell: dimensiones (pantallazos 03/04/06) --- */
-  --aht-modal-mobile-w: min(100%, 393px);
+  --aht-modal-mobile-inset: 16px;
+  --aht-modal-mobile-w: min(calc(100% - (var(--aht-modal-mobile-inset) * 2)), 393px);
   --aht-modal-mobile-max-h: min(88vh, 720px);
-  --aht-modal-desktop-w: min(calc(100% - 32px), 720px);
+  --aht-modal-desktop-inset: 16px;
+  --aht-modal-desktop-w: min(calc(100% - (var(--aht-modal-desktop-inset) * 2)), 720px);
   --aht-modal-desktop-max-h: min(90vh, 840px);
 
   /* --- Close (X) â€” token global testable --- */

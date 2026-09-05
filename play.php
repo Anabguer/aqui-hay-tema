@@ -70,8 +70,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/v4/bodies/cintas-scrapbook.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/v4/bodies/relaciones-filtros.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/v4/bodies/misc-screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <?php /* CANON: V4 visibility + contenido modal */ ?>
-  <link rel="stylesheet" href="assets/css/v4/screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <?php /* CANON: stack inicio unificado (fase 2) */ ?>
   <link rel="stylesheet" href="assets/css/inicio/tokens-inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/inicio/inicio-base.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -82,6 +80,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 <?php /* CANON: cromatica desktop blindada — no mover ni fusionar con inicio-desktop.css */ ?>
 <link rel="stylesheet" href="assets/css/design-system/typography-reading.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: screens.css última autoridad shell modal V4 */ ?>
+  <link rel="stylesheet" href="assets/css/v4/screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
    <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .875rem;

@@ -145,40 +145,6 @@ body.play-v3 {
 
 .dock button.is-on { background: rgba(243,177,195,.35); }
 
-.aht-screen {
-  position: absolute; z-index: 8;
-  display: flex; flex-direction: column; gap: .65rem;
-  padding: 1rem; overflow: auto; pointer-events: none;
-  transform: translateX(110%); transition: transform .28s ease;
-  border: 3px solid var(--ink);
-  box-shadow: 8px 10px 0 rgba(44,38,31,.12);
-}
-
-.play-root.pc .aht-screen { top: 14px; right: 14px; bottom: 14px; width: min(400px, 38%); }
-
-.play-root.phone .aht-screen {
-  left: 8px; right: 8px; bottom: 74px; max-height: 76%;
-  transform: translateY(120%);
-}
-
-.play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
-.play-root[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
-.play-root[data-capa="ficha_diario"] .aht-screen[data-aht-screen="ficha_diario"],
-.play-root[data-capa="ficha_animo"] .aht-screen[data-aht-screen="ficha_animo"],
-.play-root[data-capa="ficha_relaciones"] .aht-screen[data-aht-screen="ficha_relaciones"],
-.play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
-.play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"],
-.play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
-.play-root[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"],
-.play-root[data-capa="misiones"] .aht-screen[data-aht-screen="misiones"],
-.play-root[data-capa="parejas"] .aht-screen[data-aht-screen="parejas"],
-.play-root[data-capa="residencias"] .aht-screen[data-aht-screen="residencias"],
-.play-root[data-capa="ajustes"] .aht-screen[data-aht-screen="ajustes"] { transform: none; pointer-events: auto; }
-
-.play-root[data-capa="historia"] .aht-screen[data-aht-screen="historia"] { transform: none; pointer-events: auto; }
-
-.play-root[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] { transform: none; pointer-events: auto; }
-
 .cerrar { align-self: flex-start; border: 2px solid #c9b59a; background: var(--day); font: inherit; font-weight: 800; cursor: pointer; padding: .18rem .5rem; }
 
 .aht-screen h2 { font-family: Fraunces, Georgia, serif; margin: 0; font-size: 1.45rem; }
@@ -223,40 +189,6 @@ body.play-v3 {
 .ficha-hero .cara { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 3px solid var(--ring); background: #fff; }
 
 .ficha-hero .cara img { width: 100%; height: 100%; object-fit: cover; }
-
-.aht-screen[data-aht-screen="vecinos"], .aht-screen[data-aht-screen="ficha"] {
-  background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat;
-}
-
-.aht-screen[data-aht-screen="vecinos"]::before, .aht-screen[data-aht-screen="ficha"]::before {
-  content: ""; position: absolute; left: 10px; top: 8px; width: 46px; height: 18px;
-  background: url("../play-v3/capas/celo.png") center / contain no-repeat;
-  pointer-events: none;
-}
-
-.aht-screen[data-aht-screen="buzon"]:not() {
-  background: #f3e6cc;
-}
-
-.aht-screen[data-aht-screen="diario"] {
-  background: #f7f1e2;
-}
-
-.aht-screen[data-aht-screen="diario"] .masthead {
-  position: relative; min-height: 72px;
-  background: #2c261f url("../play-v3/capas/masthead_cotilleo.png") center / cover no-repeat;
-  color: #fffdf6; padding: .55rem .7rem; border: 2px solid var(--pink-deep);
-}
-
-.aht-screen[data-aht-screen="diario"] .masthead img { display: none; }
-
-.aht-screen[data-aht-screen="diario"] .masthead h2 { color: #fffdf6; }
-
-.aht-screen[data-aht-screen="diario"] .masthead .edicion { color: #f3b1c3; margin: 0; font-size: .78rem; }
-
-.aht-screen[data-aht-screen="organizar"] {
-  background: #f7f0de url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat;
-}
 
 .carta-msg.importante .lacre {
   width: 32px; height: 32px; border-radius: 0; background:
@@ -490,8 +422,6 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
 .aht-screen[data-aht-screen="organizar"] .org-row select, .aht-screen[data-aht-screen="organizar"] .org-row button.cta { font-size: .88rem; }
 
 .aht-screen[data-aht-screen="organizar"] .org-row { gap: .85rem; }
-
-.play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"] { transform: none; pointer-events: auto; }
 
 .play-v3 .cara-token {
   display: inline-block;

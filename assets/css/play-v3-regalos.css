@@ -18,17 +18,6 @@
   background: #fffaf0;
 }
 
-.play-root[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
-  transform: none;
-  pointer-events: auto;
-}
-
-.play-v3 .play-root.pc[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
-  visibility: visible;
-  transform: translate(-50%, -50%) rotate(-0.2deg);
-  pointer-events: auto;
-}
-
 .inv-cerrar {
   /* patrón X en play-v3-visual-review.css */
   font-family: Nunito, sans-serif;

@@ -416,31 +416,6 @@
   box-shadow: 8px 10px 0 rgba(44,38,31,.12);
 }
 
-.aht-screen[data-aht-screen="diario"] {
-  background: #f7f1e2;
-  background-image: none;
-}
-
-.aht-screen[data-aht-screen="buzon"]:not() { background: #f3e6cc; background-image: none; }
-
-.aht-screen[data-aht-screen="vecinos"], .aht-screen[data-aht-screen="ficha"].ficha-conocida, .aht-screen[data-aht-screen="ficha"].ficha-nueva {
-  background: #fffaf0;
-}
-
-.aht-screen[data-aht-screen="organizar"] {
-  background-image:
-    radial-gradient(circle at 12% 8%, rgba(196,43,74,.12), transparent 18%),
-    repeating-linear-gradient(transparent, transparent 27px, #ead9c4 28px);
-}
-
-.play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"],
-.play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
-.play-root[data-capa="ficha-conocida"] .aht-screen[data-aht-screen="ficha"].ficha-conocida,
-.play-root[data-capa="ficha-nueva"] .aht-screen[data-aht-screen="ficha"].ficha-nueva {
-  transform: none;
-  pointer-events: auto;
-}
-
 .mapa-complejos { position: absolute; inset: 0; }
 
 .quien-sum {
@@ -468,8 +443,6 @@
 .play-root[data-consulta]:not([data-consulta=""]) .velo { opacity: 1; pointer-events: auto; }
 
 .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
-.play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] { transform: none; pointer-events: auto; }
-
 .pc .postit { top: auto; right: 6%; bottom: 18%; width: 154px; font-size: .92rem; }
 
 .complejo .frente::after {

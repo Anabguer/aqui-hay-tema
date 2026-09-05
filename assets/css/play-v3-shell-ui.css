@@ -456,8 +456,6 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
   border: 1px solid rgba(44,38,31,.35);
 }
 
-.play-v3 .play-root.pc .aht-screen[data-aht-screen="buzon"] { width: min(520px, 94vw); max-width: 520px; }
-
 .play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] { display: flex; flex-direction: column; gap: .85rem; padding-top: .25rem; }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {

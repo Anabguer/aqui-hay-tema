@@ -152,7 +152,6 @@
   display: none;
 }
 
-.play-v3:not([data-capa=""]) .velo,
 .play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
   position: fixed;
   inset: 0;
@@ -160,7 +159,6 @@
   z-index: 90;
 }
 
-.play-v3 .play-root[data-capa]:not([data-capa=""]) .velo,
 .play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
   opacity: 1;
   pointer-events: auto;

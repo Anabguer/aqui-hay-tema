@@ -81,8 +81,11 @@
 /* Ghost button */
 /* Hint */
 
-.play-root .aht-screen {
+/* V4 shell wrapper — única autoridad posición/tamaño modal */
+.play-v3 .play-root.phone .aht-screen,
+.play-v3 .play-root.pc .aht-screen {
   position: fixed;
+  inset: auto;
   left: 50%;
   top: 50%;
   right: auto;
@@ -94,6 +97,9 @@
   max-height: var(--aht-modal-desktop-max-h, min(90vh, 840px));
   margin: 0;
   padding: 0;
+  gap: 0;
+  border: none;
+  box-shadow: none;
   transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
@@ -104,6 +110,22 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity var(--aht-dur, 200ms) ease;
+}
+
+.play-v3 .play-root .aht-screen > .aht-frame {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: 100%;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .play-v3 .play-root.phone .aht-screen,
+  .play-v3 .play-root.pc .aht-screen {
+    width: var(--aht-modal-mobile-w, min(calc(100% - 32px), 393px));
+    max-width: var(--aht-modal-mobile-w, min(calc(100% - 32px), 393px));
+    max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
+  }
 }
 
 .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
@@ -1312,21 +1334,10 @@
   min-height: 0;
 }
 
-/* ============================================================
-   PILOT MOBILE � shell + Mensajitos / Vecinos / Ficha
-   Spec: Dise�o_Ayuda/Pantallazos antes del arreglo/ (03, 04, 06)
-   ============================================================ */
+/* Vecinos — ajustes móvil (contenido, no shell) */
 @media (max-width: 768px) {
-  .play-root .aht-screen {
-    width: var(--aht-modal-mobile-w, min(100%, 393px));
-    max-width: var(--aht-modal-mobile-w, min(100%, 393px));
-    max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
-    transform: translate(-50%, -50%) rotate(-0.2deg);
-  }
-
   .aht-screen[data-aht-screen="vecinos"] {
     min-height: 0;
-    max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
   }
 
   .aht-screen[data-aht-screen="vecinos"] .vecinos-grid,
@@ -1337,87 +1348,5 @@
 
   .aht-screen[data-aht-screen="vecinos"] .vecino-cara {
     --vec-cara-size: 76px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .aht-frame {
-    position: relative;
-    background-color: var(--ds-paper-modal, #fffaf0);
-    border: 2.5px solid var(--ds-ink, #3b3028);
-    box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .aht-frame::before {
-    content: "";
-    position: absolute;
-    inset: 5px;
-    border: 1.5px dashed rgba(107, 81, 56, .34);
-    border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .aht-frame > * {
-    position: relative;
-    z-index: 2;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .aht-frame-header {
-    background-color: transparent;
-    border-bottom-color: rgba(107, 81, 56, .18);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero {
-    display: block;
-    padding: 8px 12px 0;
-    border-bottom: none;
-    background: transparent;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-left {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: flex-start;
-    text-align: left;
-    gap: 12px;
-    margin-bottom: 10px;
-    padding-bottom: 6px;
-    border-bottom: 1px dashed rgba(107, 81, 56, .22);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-info {
-    text-align: left;
-    align-items: flex-start;
-    flex: 1;
-    min-width: 0;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-    --ficha-cara-size: 88px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
-    font-size: 1.6rem;
-    color: var(--ds-pink-deep, #c85b78);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-edad,
-  .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,
-  .aht-screen[data-aht-screen="ficha"] .ficha-desde {
-    font-size: .8125rem;
-    color: var(--ds-text-muted, #7a6a5c);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-right {
-    gap: 10px;
-    padding-bottom: 8px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-acciones {
-    padding: 8px 12px 0;
-  }
-
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-body,
-  .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
-    min-height: 0;
   }
 }

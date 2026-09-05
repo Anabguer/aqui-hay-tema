@@ -314,17 +314,6 @@
   text-align: center;
 }
 
-.play-root[data-capa="residencias"] .aht-screen[data-aht-screen="residencias"] {
-  transform: none;
-  pointer-events: auto;
-}
-
-.play-v3 .play-root.pc[data-capa="residencias"] .aht-screen[data-aht-screen="residencias"] {
-  visibility: visible;
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
 .play-v3 .aht-screen[data-aht-screen="residencias"] .libreta-kicker {
   display: block;
   font-family: Caveat, cursive;
@@ -477,21 +466,6 @@
   font-size: .9rem;
   color: #6a5848;
   padding: .75rem .5rem;
-}
-
-.play-v3 .velo {
-  position: absolute;
-  inset: 0;
-  z-index: 10;
-  background: rgba(44, 38, 31, .28);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .25s ease;
-}
-
-.play-v3 .play-root[data-capa="vecinos"] .velo {
-  opacity: 1;
-  pointer-events: auto;
 }
 
 .play-v3 .play-root.pc[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"]:not() {
@@ -705,23 +679,6 @@
   display: block;
 }
 
-.play-v3 .play-root[data-capa="ficha"] .velo {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.play-v3 .play-root[data-capa="ficha_diario"] .velo,
-.play-v3 .play-root[data-capa="ficha_animo"] .velo,
-.play-v3 .play-root[data-capa="ficha_relaciones"] .velo {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"] {
-  max-height: min(86vh, 780px);
-  padding: 1.85rem 1.15rem 1rem;
-  gap: .65rem;
-}
 
 .play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"]::before,
 .play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"]::after {

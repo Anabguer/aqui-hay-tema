@@ -193,32 +193,6 @@
   color: var(--ds-text-muted, #7a6a5c); text-align: center; white-space: nowrap;
 }
 
-.play-v3 .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel,
-.play-v3 .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel {
-  position: fixed;
-  left: 50%;
-  right: auto;
-  top: 50%;
-  bottom: auto;
-  width: min(100%, 393px);
-  max-width: min(100%, 393px);
-  max-height: min(88vh, 720px);
-  transform: translate(-50%, -50%) rotate(-0.25deg);
-  padding: 1rem .85rem .75rem;
-  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
-  border: 2.5px solid var(--ds-ink, #3b3028);
-  background-color: #f7f0de;
-  background-image:
-    radial-gradient(ellipse 130% 85% at 50% -5%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
-    linear-gradient(180deg, rgba(255,253,249,.58) 0%, rgba(255,248,236,.22) 45%, rgba(235,220,190,.12) 100%),
-    linear-gradient(90deg, rgba(120,96,72,.05) 0%, transparent 7%, transparent 93%, rgba(120,96,72,.05) 100%),
-    url("../play-v3/capas/libreta_hoja.png");
-  background-position: center, center, center, center;
-  background-size: cover, cover, cover, cover;
-  background-repeat: no-repeat;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14);
-  overflow: hidden;
-}
 
 .play-v3 .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::after,
 .play-v3 .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::after {
@@ -239,36 +213,3 @@
   box-shadow: none;
 }
 
-.play-v3 .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel,
-.play-v3 .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel {
-  position: fixed;
-  left: 50%;
-  right: auto;
-  top: 50%;
-  bottom: auto;
-  width: min(100%, 393px);
-  max-width: min(100%, 393px);
-  max-height: min(88vh, 720px);
-  transform: translate(-50%, -50%) rotate(-0.25deg);
-  z-index: 110;
-  padding: 1rem .85rem .75rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-  overflow: hidden;
-  visibility: visible;
-  pointer-events: auto;
-  opacity: 1;
-  border: 2.5px solid var(--ds-ink, #3b3028);
-  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
-  background-color: #f7f0de;
-  background-image:
-    radial-gradient(ellipse 130% 85% at 50% -5%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
-    linear-gradient(180deg, rgba(255,253,249,.58) 0%, rgba(255,248,236,.22) 45%, rgba(235,220,190,.12) 100%),
-    linear-gradient(90deg, rgba(120,96,72,.05) 0%, transparent 7%, transparent 93%, rgba(120,96,72,.05) 100%),
-    url("../play-v3/capas/libreta_hoja.png");
-  background-position: center, center, center, center;
-  background-size: cover, cover, cover, cover;
-  background-repeat: no-repeat;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14);
-}
