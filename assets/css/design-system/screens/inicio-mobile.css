@@ -1,4 +1,4 @@
-/* INICIO-MOBILE-STAGE-CHILD-ORDER */
+﻿/* INICIO-MOBILE-STAGE-CHILD-ORDER */
 
 @media (max-width: 768px) {
   .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) { order: 1; }
@@ -2630,7 +2630,7 @@
     line-height: 1.4 !important;
   }
 
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg .cuerpo {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
     font-size: 1.375rem !important;
     line-height: 1.4 !important;
   }
@@ -5271,14 +5271,14 @@
     padding-bottom: calc(58px + env(safe-area-inset-bottom, 0));
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-body {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-body {
     display: flex;
     flex-direction: column;
     gap: 14px;
     padding-top: 4px;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-link {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-link {
     width: 100%;
     text-align: left;
     padding: 10px 12px;
@@ -5291,14 +5291,14 @@
     cursor: pointer;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-grupo {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-grupo {
     padding: 10px 12px;
     border: 1.5px solid rgba(107, 81, 56, .22);
     border-radius: 12px;
     background: rgba(255, 255, 255, .42);
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-grupo-head {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-grupo-head {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -5306,21 +5306,21 @@
     margin-bottom: 8px;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-grupo-tit {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-grupo-tit {
     font-weight: 800;
     font-size: .82rem;
     letter-spacing: .03em;
     text-transform: uppercase;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle {
     border: 0;
     background: transparent;
     padding: 0;
     cursor: pointer;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle-track {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle-track {
     display: block;
     width: 42px;
     height: 24px;
@@ -5330,7 +5330,7 @@
     transition: background .2s ease;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle-knob {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle-knob {
     position: absolute;
     top: 3px;
     left: 3px;
@@ -5342,35 +5342,35 @@
     transition: transform .2s ease;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle[data-musica="on"] .ajustes-toggle-track,
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle[data-efectos="on"] .ajustes-toggle-track {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-musica="on"] .ajustes-toggle-track,
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-efectos="on"] .ajustes-toggle-track {
     background: #c85b78;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle[data-musica="on"] .ajustes-toggle-knob,
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-toggle[data-efectos="on"] .ajustes-toggle-knob {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-musica="on"] .ajustes-toggle-knob,
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-efectos="on"] .ajustes-toggle-knob {
     transform: translateX(18px);
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-vol {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-vol {
     display: flex;
     align-items: center;
     gap: 10px;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-vol-lbl {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-vol-lbl {
     font-size: .72rem;
     font-weight: 700;
     color: rgba(44, 38, 31, .72);
     min-width: 52px;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-range {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-range {
     flex: 1 1 auto;
     accent-color: #c85b78;
   }
 
-  .play-v3:has(.game-shell) .capa-ajustes .ajustes-reiniciar {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-reiniciar {
     margin-top: 4px;
     width: 100%;
     padding: 11px 12px;
@@ -5971,15 +5971,15 @@
     font: inherit !important;
   }
 
-  .play-v3:has(.game-shell) .capa-parejas.par-modal-papel {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="parejas"].par-modal-papel {
     background: #fff8f6 !important;
   }
 
-  .play-v3:has(.game-shell) .capa-parejas .par-body {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="parejas"] .par-body {
     padding: 8px 14px 18px !important;
   }
 
-  .play-v3:has(.game-shell) .capa-parejas .par-modal-item {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="parejas"] .par-modal-item {
     display: flex !important;
     align-items: center !important;
     gap: 12px !important;
@@ -5987,11 +5987,11 @@
     border-bottom: 1px dashed rgba(107, 81, 56, .22) !important;
   }
 
-  .play-v3:has(.game-shell) .capa-parejas .par-modal-item:last-child {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="parejas"] .par-modal-item:last-child {
     border-bottom: none !important;
   }
 
-  .play-v3:has(.game-shell) .capa-parejas .par-modal-crisis {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="parejas"] .par-modal-crisis {
     margin: 2px 0 0 !important;
     font-size: .72rem !important;
     font-weight: 800 !important;
@@ -6000,7 +6000,7 @@
     letter-spacing: .04em !important;
   }
 
-  .play-v3:has(.game-shell) .capa-parejas .par-vacio {
+  .play-v3:has(.game-shell) .aht-screen[data-aht-screen="parejas"] .par-vacio {
     margin: 0 !important;
     padding: 12px 0 !important;
     color: #7a6f65 !important;
@@ -8068,18 +8068,18 @@
   }
 }
 /* AHT-DIAG-AJUSTES ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â copiar/descargar debug en Ajustes (mÃƒÆ’Ã‚Â³vil + desktop) */
-.play-v3:has(.game-shell) .capa-ajustes .ajustes-diag-hint {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-hint {
   margin: 0 0 8px;
   font-size: .72rem;
   line-height: 1.35;
   color: rgba(44, 38, 31, .68);
 }
-.play-v3:has(.game-shell) .capa-ajustes .ajustes-diag-actions {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-actions {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.play-v3:has(.game-shell) .capa-ajustes .ajustes-diag-btn {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-btn {
   width: 100%;
   text-align: left;
   padding: 9px 12px;
@@ -8092,7 +8092,7 @@
   font-size: .82rem;
   cursor: pointer;
 }
-.play-v3:has(.game-shell) .capa-ajustes .ajustes-diag-feedback {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-feedback {
   margin: 6px 0 0;
   font-size: .72rem;
   line-height: 1.35;

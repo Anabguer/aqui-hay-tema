@@ -1,13 +1,13 @@
-/**
+﻿/**
  * Capa VECINOS � redise�o visual (ref mockup vecinos modal)
- * Alcance: .capa-vecinos �nicamente
+ * Alcance: .aht-screen[data-aht-screen="vecinos"] �nicamente
  */
 
-/* NOTA: Bloque legacy :not(.ds-migrada) eliminado — shell migrado a modal-core.css */
+/* NOTA: Bloque legacy :not() eliminado — shell migrado a modal-core.css */
 
-/* NOTA: Reglas cabecera :not(.ds-migrada) eliminadas — migradas a vecinos-body.css */
+/* NOTA: Reglas cabecera :not() eliminadas — migradas a vecinos-body.css */
 
-.play-v3 .capa-vecinos .vecinos-cuenta.ds-pill {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cuenta.ds-pill {
   display: inline-flex !important;
   align-items: center !important;
   margin: 2px 0 0 !important;
@@ -22,13 +22,13 @@
 }
 
 /* --- Tabs --- */
-.play-v3 .capa-vecinos .vec-tabs {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-tabs {
   display: flex;
   gap: 8px;
   margin: 0 0 10px;
 }
 
-.play-v3 .capa-vecinos .vec-tab {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-tab {
   flex: 1;
   min-height: 44px;
   display: inline-flex;
@@ -45,7 +45,7 @@
   padding: 0 8px;
 }
 
-.play-v3 .capa-vecinos .vec-tab.is-on {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-tab.is-on {
   border-style: solid;
   border-color: var(--ds-ink, #3b3028);
   background: var(--ds-pink, #e88ba8);
@@ -54,27 +54,27 @@
   box-shadow: 1.5px 2px 0 rgba(51,38,30,.2);
 }
 
-.play-v3 .capa-vecinos .vec-tab--lavanda.is-on {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-tab--lavanda.is-on {
   background: var(--ds-lavender, #c4b5e8);
   color: var(--ds-ink, #3b3028);
   text-shadow: none;
 }
 
-.play-v3 .capa-vecinos .vec-panel {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-panel {
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
   min-height: 0;
 }
 
-.play-v3 .capa-vecinos .vec-panel[hidden] { display: none !important; }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-panel[hidden] { display: none !important; }
 
-.play-v3 .capa-vecinos.is-relaciones .vecinos-cuenta-wrap { display: none !important; }
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vecinos-cuenta-wrap { display: none !important; }
 
 /* --- Buscador --- */
-.play-v3 .capa-vecinos .vec-busca-tira { margin: 0 0 10px !important; }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-busca-tira { margin: 0 0 10px !important; }
 
-.play-v3 .capa-vecinos .vec-busca-wrap {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-busca-wrap {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -84,14 +84,14 @@
   background: #fff !important;
 }
 
-.play-v3 .capa-vecinos .vec-busca-ico {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-busca-ico {
   font-size: 1rem;
   color: var(--ds-text-muted, #7a6a5c);
   opacity: .9;
   line-height: 1;
 }
 
-.play-v3 .capa-vecinos .vec-busca-inp {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-busca-inp {
   flex: 1;
   min-width: 0;
   border: none !important;
@@ -107,7 +107,7 @@
    y source order le da autoridad sobre estos selectores scoped. */
 
 /* --- Hint pie --- */
-.play-v3 .capa-vecinos .mensajitos-hint.vecinos-hint {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .mensajitos-hint.vecinos-hint {
   margin: 8px 0 0 !important;
   padding: 9px 12px !important;
   border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px !important;
@@ -121,7 +121,7 @@
 }
 
 /* --- Relaciones (pesta�a) --- */
-.play-v3 .capa-vecinos .vec-rel-filtros {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-filtros {
   display: flex;
   gap: 6px;
   justify-content: space-between;
@@ -129,7 +129,7 @@
   flex-wrap: nowrap;
 }
 
-.play-v3 .capa-vecinos .vec-rel-chip {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-chip {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -144,7 +144,7 @@
   color: var(--ds-text-muted, #7a6a5c);
 }
 
-.play-v3 .capa-vecinos .vec-rel-chip > b {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-chip > b {
   width: 28px;
   height: 28px;
   display: grid;
@@ -155,16 +155,16 @@
   font: 700 .75rem/1 Nunito, sans-serif;
 }
 
-.play-v3 .capa-vecinos .vec-rel-chip.is-on > b {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-chip.is-on > b {
   border: 2px solid var(--ds-ink, #3b3028);
   box-shadow: 1.5px 2px 0 rgba(51,38,30,.2);
 }
 
-.play-v3 .capa-vecinos .vec-rel-chip.is-on { color: var(--ds-ink, #3b3028); font-weight: 800; }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-chip.is-on { color: var(--ds-ink, #3b3028); font-weight: 800; }
 
-.play-v3 .capa-vecinos .vec-rel-dd-wrap { margin: 0 0 10px; }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-dd-wrap { margin: 0 0 10px; }
 
-.play-v3 .capa-vecinos select.vec-rel-persona {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] select.vec-rel-persona {
   width: 100%;
   min-height: 40px;
   padding: 8px 12px;
@@ -180,7 +180,7 @@
   background-repeat: no-repeat;
 }
 
-.play-v3 .capa-vecinos .vec-rel-scroll {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-scroll {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
@@ -192,14 +192,14 @@
   padding: 0 0 6px;
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-scroll {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll {
   display: flex !important;
   flex-direction: column !important;
   align-content: flex-start !important;
   gap: 8px !important;
 }
 
-.play-v3 .capa-vecinos .vec-rel-card {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card {
   position: relative;
   padding: 8px 10px 8px 12px;
   border: none;
@@ -210,7 +210,7 @@
   transform: none !important;
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-card {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card {
   flex: 0 0 auto !important;
   flex-shrink: 0 !important;
   min-height: auto;
@@ -218,7 +218,7 @@
   background: #fff !important;
   box-shadow: 0 1px 6px rgba(51, 38, 30, .1) !important;
 }
-.play-v3 .capa-vecinos .vec-rel-card-accent {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card-accent {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -227,21 +227,21 @@
   background: var(--ds-mustard, #d4b84a);
 }
 
-.play-v3 .capa-vecinos .vec-rel-card--tone-red .vec-rel-card-accent { background: var(--ds-red-alert, #c42b4a); }
-.play-v3 .capa-vecinos .vec-rel-card--tone-pink .vec-rel-card-accent { background: var(--ds-pink-deep, #c85b78); }
-.play-v3 .capa-vecinos .vec-rel-card--tone-green .vec-rel-card-accent { background: var(--ds-green-deep, #4a7a52); }
-.play-v3 .capa-vecinos .vec-rel-card--tone-mustard .vec-rel-card-accent { background: var(--ds-mustard, #d4b84a); }
-.play-v3 .capa-vecinos .vec-rel-card--tone-neutral .vec-rel-card-accent { background: rgba(107, 81, 56, .35); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card--tone-red .vec-rel-card-accent { background: var(--ds-red-alert, #c42b4a); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card--tone-pink .vec-rel-card-accent { background: var(--ds-pink-deep, #c85b78); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card--tone-green .vec-rel-card-accent { background: var(--ds-green-deep, #4a7a52); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card--tone-mustard .vec-rel-card-accent { background: var(--ds-mustard, #d4b84a); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card--tone-neutral .vec-rel-card-accent { background: rgba(107, 81, 56, .35); }
 
-.play-v3 .capa-vecinos .vec-rel-card.is-amor {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card.is-amor {
   background: linear-gradient(180deg, #fff 0%, #fdf5f8 100%);
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-card.is-amor {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card.is-amor {
   background: linear-gradient(180deg, #fff 0%, #fdf5f8 100%) !important;
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-card-grid {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card-grid {
   display: flex !important;
   flex-direction: row !important;
   flex-wrap: nowrap !important;
@@ -254,7 +254,7 @@
   min-width: 0;
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-card-grid > .vec-rel-pers {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card-grid > .vec-rel-pers {
   flex: 0 0 calc(52px + 0.5cm) !important;
   width: calc(52px + 0.5cm) !important;
   max-width: calc(52px + 0.5cm) !important;
@@ -265,7 +265,7 @@
   box-shadow: none !important;
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-card-grid > .vec-rel-puente {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card-grid > .vec-rel-puente {
   flex: 0 1 auto !important;
   width: auto !important;
   min-width: 64px !important;
@@ -276,7 +276,7 @@
   box-shadow: none !important;
 }
 
-.play-v3 .capa-vecinos .vec-rel-pers {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-pers {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -288,12 +288,12 @@
   min-width: 0;
 }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-cara {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-cara {
   width: calc(52px + 0.5cm);
   height: calc(52px + 0.5cm);
 }
 
-.play-v3 .capa-vecinos .vec-rel-cara {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-cara {
   width: 46px;
   height: 46px;
   border-radius: 999px;
@@ -306,14 +306,14 @@
   flex-shrink: 0;
 }
 
-.play-v3 .capa-vecinos .vec-rel-cara img { width: 100%; height: 100%; object-fit: cover; }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-cara img { width: 100%; height: 100%; object-fit: cover; }
 
-.play-v3 .capa-vecinos.is-relaciones .vec-rel-nom {
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-nom {
   max-width: calc(52px + 0.5cm);
   font-size: .9rem;
 }
 
-.play-v3 .capa-vecinos .vec-rel-nom {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-nom {
   font: 700 .9rem/1.1 Caveat, cursive;
   color: var(--ds-ink, #3b3028);
   text-align: center;
@@ -323,7 +323,7 @@
   white-space: nowrap;
 }
 
-.play-v3 .capa-vecinos .vec-rel-puente {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-puente {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -333,7 +333,7 @@
   padding: 0;
 }
 
-.play-v3 .capa-vecinos .vec-rel-flecha {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha {
   position: relative;
   display: flex;
   align-items: center;
@@ -342,7 +342,7 @@
   width: 100%;
 }
 
-.play-v3 .capa-vecinos .vec-rel-flecha-linea {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea {
   position: absolute;
   left: 2px;
   right: 2px;
@@ -352,7 +352,7 @@
   background: currentColor;
 }
 
-.play-v3 .capa-vecinos .vec-rel-flecha-linea::after {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea::after {
   content: "";
   position: absolute;
   top: 50%;
@@ -364,7 +364,7 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-.play-v3 .capa-vecinos .vec-rel-flecha-linea--dbl::before {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea--dbl::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -376,7 +376,7 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-.play-v3 .capa-vecinos .vec-rel-flecha--rev .vec-rel-flecha-linea::after {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha--rev .vec-rel-flecha-linea::after {
   right: auto;
   left: 0;
   border-top: none;
@@ -386,12 +386,12 @@
   transform: translateY(-50%) rotate(45deg);
 }
 
-.play-v3 .capa-vecinos .vec-rel-flecha-linea--red { color: var(--ds-red-alert, #c42b4a); }
-.play-v3 .capa-vecinos .vec-rel-flecha-linea--pink { color: var(--ds-pink-deep, #c85b78); }
-.play-v3 .capa-vecinos .vec-rel-flecha-linea--mustard { color: var(--ds-mustard-deep, #a88a30); }
-.play-v3 .capa-vecinos .vec-rel-flecha-linea--green { color: var(--ds-green-deep, #4a7a52); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea--red { color: var(--ds-red-alert, #c42b4a); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea--pink { color: var(--ds-pink-deep, #c85b78); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea--mustard { color: var(--ds-mustard-deep, #a88a30); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-flecha-linea--green { color: var(--ds-green-deep, #4a7a52); }
 
-.play-v3 .capa-vecinos .vec-rel-pill {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-pill {
   position: relative;
   z-index: 1;
   display: inline-flex;
@@ -408,27 +408,27 @@
   text-overflow: ellipsis;
 }
 
-.play-v3 .capa-vecinos .vec-rel-pill--green {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-pill--green {
   background: var(--ds-green-deep, #4a7a52);
   color: #fff;
 }
 
-.play-v3 .capa-vecinos .vec-rel-pill--mustard {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-pill--mustard {
   background: var(--ds-mustard, #d4b84a);
   color: #fff;
 }
 
-.play-v3 .capa-vecinos .vec-rel-pill--pink {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-pill--pink {
   background: var(--ds-pink-deep, #c85b78);
   color: #fff;
 }
 
-.play-v3 .capa-vecinos .vec-rel-pill--red {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-pill--red {
   background: var(--ds-red-alert, #c42b4a);
   color: #fff;
 }
 
-.play-v3 .capa-vecinos .vec-rel-puente-nota {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-puente-nota {
   margin: 0;
   text-align: center;
   color: var(--ds-text-faint, #a89888);
@@ -437,14 +437,14 @@
   text-transform: uppercase;
 }
 
-.play-v3 .capa-vecinos .vec-rel-puente-vacio {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-puente-vacio {
   margin: 0;
   text-align: center;
   color: var(--ds-text-muted, #7a6a5c);
   font: 600 .68rem/1.25 Nunito, sans-serif;
 }
 
-.play-v3 .capa-vecinos .vec-rel-badge {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-badge {
   position: absolute;
   top: 6px;
   right: 6px;
@@ -463,12 +463,12 @@
   z-index: 2;
 }
 
-.play-v3 .capa-vecinos .vec-rel-vacio,
-.play-v3 .capa-vecinos .vec-rel-hint {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-vacio,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-hint {
   text-align: center;
 }
 
-.play-v3 .capa-vecinos .vec-rel-hint {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-hint {
   margin: 8px 0 0 !important;
   padding: 9px 12px !important;
   border-radius: 10px !important;
@@ -478,10 +478,10 @@
   flex-shrink: 0;
 }
 
-/* --- Desktop: reglas :not(.ds-migrada) eliminadas — responsive en modal-responsive.css --- */
+/* --- Desktop: reglas :not() eliminadas — responsive en modal-responsive.css --- */
 
 /* === PATRON DS BLANCO (ds-migrada) � solo contenido interno vecinos === */
-.play-v3 .capa-vecinos.ds-migrada .mensajitos-hint.vecinos-hint {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .mensajitos-hint.vecinos-hint {
   display: none !important;
 }
 

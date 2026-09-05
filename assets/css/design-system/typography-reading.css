@@ -18,7 +18,7 @@
    ============================================================ */
 
 /* Cuerpo del mensajito (texto principal que el jugador lee) */
-.play-v3 .capa-buzon .carta-msg .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
   font-weight: 400 !important;
@@ -29,7 +29,7 @@
 }
 
 /* Pregunta de elecci+�n ("-+A qui+�n presentas?") */
-.play-v3 .capa-buzon .mensajitos-seccion-tit,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit,
 .play-v3 .msg-eleccion-tit {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
@@ -64,8 +64,8 @@
 }
 
 /* Empty state */
-.play-v3 .capa-buzon .buzon-vacio,
-.play-v3 .capa-buzon .lista-vacia {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .lista-vacia {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
   font-style: normal !important;
@@ -74,7 +74,7 @@
 }
 
 /* Hint / ayuda */
-.play-v3 .capa-buzon .mensajitos-hint {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-secondary) !important;
   font-weight: 600 !important;
@@ -85,14 +85,14 @@
    ============================================================ */
 
 /* Descripciones, rasgos, hobbies, relaciones, planes */
-.play-v3 .capa-ficha .ficha-seccion-body,
-.play-v3 .capa-ficha .ficha-rasgo-tag,
-.play-v3 .capa-ficha .ficha-hobby-card,
-.play-v3 .capa-ficha .ficha-rel-nom,
-.play-v3 .capa-ficha .ficha-plan-item,
-.play-v3 .capa-ficha .ficha-vacio,
-.play-v3 .capa-ficha .ficha-pref-line,
-.play-v3 .capa-ficha .ficha-sabes-body {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-nom,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-vacio,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-sabes-body {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
   font-weight: 400 !important;
@@ -103,17 +103,17 @@
 }
 
 /* Etiquetas de secci+�n (RASGOS, HOBBIES, RELACIONES) ��� MANTENER Caveat como decorativo */
-.play-v3 .capa-ficha .ficha-seccion-tit {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
 
 /* Nombre del vecino ��� MANTENER Caveat como hero */
-.play-v3 .capa-ficha .ficha-nombre {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
 
 /* +�nimo ��� MANTENER Caveat como acento */
-.play-v3 .capa-ficha .ficha-animo-val {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
 
@@ -121,7 +121,7 @@
    3. COTILLEOS / DIARIO ��� Cuerpos ��� Nunito
    ============================================================ */
 
-.play-v3 .capa-diario .coti-item-txt,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt,
 .play-v3 .obj-cotilleo-txt {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
@@ -131,7 +131,7 @@
 }
 
 /* Metadatos (cu+�ndo, categor+�a) */
-.play-v3 .capa-diario .coti-item-cuando,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando,
 .play-v3 .coti-item-cat-pill {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-caption) !important;
@@ -139,7 +139,7 @@
 }
 
 /* T+�tulo COTILLEOS ��� MANTENER Caveat */
-.play-v3 .capa-diario .coti-tit,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-tit,
 .play-v3 .obj-cotilleo-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
@@ -148,7 +148,7 @@
    4. MISIONES ��� Textos ��� Nunito
    ============================================================ */
 
-.play-v3 .capa-misiones .mis-txt,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
 .play-v3 .obj-misiones-vacio {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
@@ -158,7 +158,7 @@
 }
 
 /* T+�tulo MISIONES ��� MANTENER Caveat */
-.play-v3 .capa-misiones .mis-tit {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
 
@@ -169,16 +169,16 @@
    6. NUEVO PLAN ��� Textos de lectura ��� Nunito
    ============================================================ */
 
-.play-v3 .capa-organizar .org-seccion-meta,
-.play-v3 .capa-organizar .org-picker-hint,
-.play-v3 .capa-organizar .org-dd-label,
-.play-v3 .capa-organizar .org-dd-opt,
-.play-v3 .capa-organizar .org-tipo-card-txt,
-.play-v3 .capa-organizar .org-lugar-horario,
-.play-v3 .capa-organizar .org-horas-hint,
-.play-v3 .capa-organizar .org-busca,
-.play-v3 .capa-organizar .org-aviso,
-.play-v3 .capa-organizar .org-picker-nom {
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-seccion-meta,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-hint,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-label,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-opt,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-tipo-card-txt,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-horario,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-horas-hint,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-aviso,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-nom {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
   font-weight: 400 !important;
@@ -188,9 +188,9 @@
 }
 
 /* T+�tulos de secci+�n y bot+�n CREAR ��� MANTENER Caveat */
-.play-v3 .capa-organizar .org-tit,
-.play-v3 .capa-organizar .ficha-seccion-tit,
-.play-v3 .capa-organizar .org-crear-txt {
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-txt {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
 
@@ -272,33 +272,33 @@
 
 /* Forzar tama+�os m+�nimos en m+�vil */
 @media (max-width: 768px) {
-  .play-v3 .capa .mini,
-  .play-v3 .capa .org-picker-hint,
-  .play-v3 .capa .org-horas-hint,
-  .play-v3 .capa .org-lugar-horario,
-  .play-v3 .capa .org-aviso,
-  .play-v3 .capa .agenda-sub,
-  .play-v3 .capa .vecinos-pie,
-  .play-v3 .capa .mensajitos-seccion-tit,
-  .play-v3 .capa .carta-meta,
-  .play-v3 .capa .msg-leido-toggle,
-  .play-v3 .capa .carta-copy,
-  .play-v3 .capa .ficha-animo-line,
-  .play-v3 .capa .ficha-animo-val,
-  .play-v3 .capa .ficha-edad,
-  .play-v3 .capa .ficha-trabajo,
-  .play-v3 .capa .ficha-desde,
-  .play-v3 .capa .ficha-rasgo-tag,
-  .play-v3 .capa .ficha-pref-line,
-  .play-v3 .capa .ficha-hobby-lab,
-  .play-v3 .capa .ficha-vacio,
-  .play-v3 .capa .ficha-plan-item,
-  .play-v3 .capa .ficha-rel-nom,
-  .play-v3 .capa .ficha-rel-etiq,
-  .play-v3 .capa .ficha-seccion-tit-sm,
-  .play-v3 .capa .coti-item-cuando,
-  .play-v3 .capa .org-dd-label,
-  .play-v3 .capa .org-dd-opt {
+  .play-v3 .aht-screen .mini,
+  .play-v3 .aht-screen .org-picker-hint,
+  .play-v3 .aht-screen .org-horas-hint,
+  .play-v3 .aht-screen .org-lugar-horario,
+  .play-v3 .aht-screen .org-aviso,
+  .play-v3 .aht-screen .agenda-sub,
+  .play-v3 .aht-screen .vecinos-pie,
+  .play-v3 .aht-screen .mensajitos-seccion-tit,
+  .play-v3 .aht-screen .carta-meta,
+  .play-v3 .aht-screen .msg-leido-toggle,
+  .play-v3 .aht-screen .carta-copy,
+  .play-v3 .aht-screen .ficha-animo-line,
+  .play-v3 .aht-screen .ficha-animo-val,
+  .play-v3 .aht-screen .ficha-edad,
+  .play-v3 .aht-screen .ficha-trabajo,
+  .play-v3 .aht-screen .ficha-desde,
+  .play-v3 .aht-screen .ficha-rasgo-tag,
+  .play-v3 .aht-screen .ficha-pref-line,
+  .play-v3 .aht-screen .ficha-hobby-lab,
+  .play-v3 .aht-screen .ficha-vacio,
+  .play-v3 .aht-screen .ficha-plan-item,
+  .play-v3 .aht-screen .ficha-rel-nom,
+  .play-v3 .aht-screen .ficha-rel-etiq,
+  .play-v3 .aht-screen .ficha-seccion-tit-sm,
+  .play-v3 .aht-screen .coti-item-cuando,
+  .play-v3 .aht-screen .org-dd-label,
+  .play-v3 .aht-screen .org-dd-opt {
     font-size: var(--aht-type-secondary) !important;
     line-height: 1.4 !important;
   }
@@ -315,17 +315,17 @@
 .play-v3 .carta-copy .de,           /* Nombre remitente (decorativo) */
 .play-v3 .acciones-msg button,      /* Botones de acci+�n (decorativos) */
 .play-v3 .msg-leido-toggle,         /* Toggle le+�do (decorativo) */
-.play-v3 .capa-ficha .ficha-tit,    /* "FICHA DE VECINO" */
-.play-v3 .capa-ficha .ficha-nombre, /* Nombre vecino hero */
-.play-v3 .capa-ficha .ficha-animo-val, /* Estado an+�mico (acento) */
-.play-v3 .capa-ficha .ficha-seccion-tit, /* RASGOS, HOBBIES, RELACIONES */
-.play-v3 .capa-ficha .ficha-btn-org, /* "Nuevo plan" */
-.play-v3 .capa-organizar .org-tit,  /* "NUEVO PLAN" */
-.play-v3 .capa-organizar .ficha-seccion-tit, /* QUI+�NES, QU+�, D+�NDE, CU+�NDO */
-.play-v3 .capa-organizar .org-crear-txt, /* Bot+�n CREAR */
-.play-v3 .capa-diario .coti-tit,    /* "DIARIO / COTILLEOS" */
-.play-v3 .capa-misiones .mis-tit,   /* "HOY EN EL PUEBLO" */
-.play-v3 .capa-vida-pueblo .vida-tit, /* "VIDA DEL PUEBLO" */
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-tit,    /* "FICHA DE VECINO" */
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre, /* Nombre vecino hero */
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val, /* Estado an+�mico (acento) */
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit, /* RASGOS, HOBBIES, RELACIONES */
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-btn-org, /* "Nuevo plan" */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,  /* "NUEVO PLAN" */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit, /* QUI+�NES, QU+�, D+�NDE, CU+�NDO */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-txt, /* Bot+�n CREAR */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-tit,    /* "DIARIO / COTILLEOS" */
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit,   /* "HOY EN EL PUEBLO" */
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit, /* "VIDA DEL PUEBLO" */
 .play-v3 .libreta-kicker,           /* "Celestine apunta" etc */
 .play-v3 .obj-vecinos-tit,          /* "VECINOS" en tile */
 .play-v3 .obj-buzon-txt,            /* "MENSAJITOS" en tile */
@@ -445,17 +445,17 @@
    12. MENTES � textos explicativos legibles (t�tulo/avatares intactos)
    ============================================================ */
 
-.play-v3 .capa-mentes .enc-int-kicker--q,
-.play-v3 .capa-mentes .enc-int-kicker-tema {
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker--q,
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker-tema {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-caption) !important;
   font-weight: 700 !important;
   line-height: 1.4 !important;
 }
 
-.play-v3 .capa-mentes .enc-int-result-txt,
-.play-v3 .capa-mentes .enc-int-temas-grid .enc-int-btn,
-.play-v3 .capa-mentes .enc-int-volver {
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-result-txt,
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-temas-grid .enc-int-btn,
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-volver {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body) !important;
   line-height: 1.45 !important;
@@ -473,23 +473,23 @@
 }
 
 /* --- MENSAJITOS: lectura y metadatos --- */
-.play-v3 .capa-buzon .carta-msg .cuerpo,
-.play-v3 .capa-buzon .carta-cuerpo-wrap .cuerpo,
-.play-v3 .capa-buzon .cuerpo,
-.play-v3 .capa-buzon .carta-hilo-cuerpo,
-.play-v3 .capa-buzon .carta-cuando,
-.play-v3 .capa-buzon .carta-meta,
-.play-v3 .capa-buzon .carta-pie-meta,
-.play-v3 .capa-buzon .carta-msg .plazo,
-.play-v3 .capa-buzon .carta-msg .sello-estado,
-.play-v3 .capa-buzon .carta-pie-meta .plazo,
-.play-v3 .capa-buzon .carta-pie-meta .sello-estado,
-.play-v3 .capa-buzon .mensajitos-hint,
-.play-v3 .capa-buzon .buzon-vacio,
-.play-v3 .capa-buzon .lista-vacia,
-.play-v3 .capa-buzon .msg-item-txt,
-.play-v3 .capa-buzon .msg-item-copy,
-.play-v3 .capa-buzon .mensajitos-seccion-tit,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-hilo-cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-meta,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-meta,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .sello-estado,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-meta .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-meta .sello-estado,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .lista-vacia,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .msg-item-txt,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .msg-item-copy,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit,
 .play-v3 .msg-eleccion-tit,
 .play-v3 .msg-eleccion-hint,
 .play-v3 .msg-eleccion-opt-copy,
@@ -500,17 +500,17 @@
   text-transform: none !important;
 }
 
-.play-v3 .capa-buzon .carta-cuando,
-.play-v3 .capa-buzon .carta-meta,
-.play-v3 .capa-buzon .carta-msg .plazo,
-.play-v3 .capa-buzon .carta-msg .sello-estado {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-meta,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .sello-estado {
   font: var(--aht-read-font-secondary) !important;
 }
 
 /* Nombres en mensajitos / elecciones */
-.play-v3 .capa-buzon .carta-msg .de,
-.play-v3 .capa-buzon .carta-head .de,
-.play-v3 .capa-buzon .carta-copy .de,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-head .de,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de,
 .play-v3 .msg-eleccion-nom {
   font: var(--aht-name-font) !important;
   font-style: normal !important;
@@ -519,49 +519,49 @@
 }
 
 /* --- FICHA: cuerpos legibles; nombre hero manuscrito --- */
-.play-v3 .capa-ficha .ficha-seccion-body,
-.play-v3 .capa-ficha .ficha-seccion-body p,
-.play-v3 .capa-ficha .ficha-seccion-body li,
-.play-v3 .capa-ficha .ficha-rasgo-tag,
-.play-v3 .capa-ficha .ficha-hobby-card,
-.play-v3 .capa-ficha .ficha-hobby-lab,
-.play-v3 .capa-ficha .ficha-plan-item,
-.play-v3 .capa-ficha .ficha-vacio,
-.play-v3 .capa-ficha .ficha-pref-line,
-.play-v3 .capa-ficha .ficha-sabes-body,
-.play-v3 .capa-ficha .ficha-animo-line,
-.play-v3 .capa-ficha .ficha-edad,
-.play-v3 .capa-ficha .ficha-trabajo,
-.play-v3 .capa-ficha .ficha-desde,
-.play-v3 .capa-ficha .ficha-rel-etiq {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body p,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body li,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-vacio,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-sabes-body,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-line,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-edad,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-desde,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
   font: var(--aht-read-font) !important;
   font-style: normal !important;
   letter-spacing: normal !important;
   text-transform: none !important;
 }
 
-.play-v3 .capa-ficha .ficha-nombre,
-.play-v3 .capa-ficha .ficha-rel-nom,
-.play-v3 .capa-ficha .ficha-animo-val {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-nom,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
   font-family: var(--ds-font-hand, "Caveat", cursive) !important;
 }
 
 /* --- DIARIO / COTILLEOS / MISIONES --- */
-.play-v3 .capa-diario .coti-item-txt,
-.play-v3 .capa-diario .coti-item-cuando,
-.play-v3 .capa-diario .coti-item-cat-pill,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cat-pill,
 .play-v3 .obj-cotilleo-txt,
-.play-v3 .capa-misiones .mis-txt,
-.play-v3 .capa-misiones .mis-sub,
-.play-v3 .capa-misiones .mis-estado,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-sub,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado,
 .play-v3 .obj-misiones-vacio,
 .play-v3 .mision-strip-txt {
   font: var(--aht-read-font) !important;
   font-style: normal !important;
 }
 
-.play-v3 .capa-diario .coti-item-cuando,
-.play-v3 .capa-misiones .mis-estado {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado {
   font: var(--aht-read-font-caption) !important;
 }
 
@@ -587,27 +587,27 @@
    Neutraliza cualquier !important anterior que imponga Caveat
    en selectores de lectura/comprension.
    ============================================================ */
-.play-v3 .capa-buzon .carta-msg .cuerpo,
-.play-v3 .capa-buzon .carta-cuerpo-wrap .cuerpo,
-.play-v3 .capa-buzon .cuerpo,
-.play-v3 .capa-buzon .mensajitos-hint,
-.play-v3 .capa-buzon .carta-cuando,
-.play-v3 .capa-buzon .carta-meta,
-.play-v3 .capa-buzon .carta-msg .plazo,
-.play-v3 .capa-diario .coti-item-txt,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-meta,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt,
 .play-v3 .obj-cotilleo-txt,
-.play-v3 .capa-misiones .mis-txt,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
 .play-v3 .mision-strip-txt,
 .play-v3 .tut-bloque-txt,
 .play-v3 .tut-intro-line,
 .play-v3 .tut-cierre,
-.play-v3 .capa-ficha .ficha-seccion-body,
-.play-v3 .capa-ficha .ficha-rasgo-tag,
-.play-v3 .capa-ficha .ficha-hobby-card,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card,
 .play-v3 .animo-modal-causa p,
 .play-v3 .animo-modal-hint,
-.play-v3 .capa-vida-pueblo .vida-copy p,
-.play-v3 .capa-vida-pueblo .vida-latido {
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-copy p,
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-latido {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
 }
 
@@ -629,8 +629,8 @@
     line-height: 1.15 !important;
   }
 
-  .play-v3:has(.game-shell) .play-root.phone .capa-ficha .ficha-volver,
-  .play-v3 .capa-ficha .ficha-volver {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="ficha"] .ficha-volver,
+  .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-volver {
     font-size: var(--aht-type-secondary, 0.875rem) !important;
     line-height: 1.25 !important;
   }
@@ -646,9 +646,9 @@
    TYPO-READING-v4 � cuerpo mensajitos: autoridad vs visual-replica/avisos
    Misma especificidad :has(.game-shell); carga al final del archivo.
    ============================================================ */
-.play-v3:has(.game-shell) .capa-buzon .carta-msg .cuerpo,
-.play-v3:has(.game-shell) .capa-buzon .carta-cuerpo-wrap .cuerpo,
-.play-v3:has(.game-shell) .capa-buzon .carta-hilo-cuerpo {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-hilo-cuerpo {
   font: var(--aht-read-font) !important;
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   font-size: var(--aht-type-body, 1rem) !important;

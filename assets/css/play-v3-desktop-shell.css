@@ -1,4 +1,4 @@
-﻿/* play-v3-desktop-shell.css - ajustes columna izquierda y mapa (solo sobremesa >=769px) */
+/* play-v3-desktop-shell.css - ajustes columna izquierda y mapa (solo sobremesa >=769px) */
 
 @media (min-width: 769px) {
   .play-v3:has(.game-shell) .game-main {
@@ -426,8 +426,8 @@
     overflow: hidden !important;
   }
 
-  .play-v3:has(.game-shell) .play-root.pc .capa:not(.ds-migrada),
-  .play-v3:has(.game-shell) .play-root.pc .capa.ds-modal-sheet:not(.ds-migrada) {
+  .play-v3:has(.game-shell) .play-root.pc .aht-screen,
+  .play-v3:has(.game-shell) .play-root.pc .aht-screen {
     position: absolute !important;
   }
 
@@ -550,11 +550,11 @@
 
 /* VISUAL-FINAL desktop modals width */
 @media (min-width: 769px) {
-  .play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon,
-  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-  .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
-  .play-v3 .play-root.pc .capa-ficha-diario,
-  .play-v3 .play-root.pc .capa-ficha .ficha-animo-overlay .ficha-animo-modal {
+  .play-v3 .play-root.pc[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
+  .play-v3 .play-root.pc[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+  .play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
+  .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha_diario"],
+  .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha"] .ficha-animo-overlay .ficha-animo-modal {
     width: min(100%, 480px) !important;
     max-width: min(100%, 480px) !important;
     max-height: min(88vh, 720px) !important;

@@ -2,7 +2,7 @@
  * Capa MENSAJITOS (ex buzon) â€” solo esta capa.
  */
 
-.play-v3 .capa-buzon .mensajitos-tit {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
   font-family: Caveat, cursive;
   font-size: 1.55rem;
   font-weight: 700;
@@ -11,11 +11,11 @@
   color: #2c261f;
 }
 
-.play-v3 .capa-buzon > .mini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] > .mini {
   display: none !important;
 }
 
-.play-v3 .capa-buzon [data-buzon-list] {
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
   display: flex;
   flex-direction: column;
   gap: .65rem;
@@ -29,7 +29,7 @@
   padding-top: .15rem;
 }
 
-.play-v3 .capa-buzon .mensajitos-seccion {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion {
   display: flex;
   flex-direction: column;
   gap: .55rem;
@@ -37,13 +37,13 @@
   max-width: 100%;
 }
 
-.play-v3 .capa-buzon .mensajitos-seccion + .mensajitos-seccion {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion + .mensajitos-seccion {
   margin-top: .85rem;
   padding-top: .65rem;
   border-top: 1px dashed rgba(120, 96, 72, .22);
 }
 
-.play-v3 .capa-buzon .mensajitos-seccion-tit {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit {
   margin: 0 0 .15rem;
   font-size: .58rem;
   font-weight: 800;
@@ -52,7 +52,7 @@
   color: #8a7a66;
 }
 
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   display: block !important;
   width: 100%;
   max-width: 100%;
@@ -69,30 +69,30 @@
   cursor: default;
 }
 
-.play-v3 .capa-buzon .carta-msg.no-leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida {
   margin: 0 !important;
   padding-left: .55rem !important;
   padding-right: .55rem !important;
   background: rgba(255, 246, 220, .45);
 }
 
-.play-v3 .capa-buzon .carta-msg.importante,
-.play-v3 .capa-buzon .carta-msg.carta-accion {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.importante,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion {
   background: #fffef8;
   box-shadow: inset 3px 0 0 #c9a87a, 0 1px 0 rgba(44, 38, 31, .06) !important;
 }
 
-.play-v3 .capa-buzon .carta-msg.carta-info {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-info {
   background: #fffdf9;
   box-shadow: inset 3px 0 0 rgba(180, 150, 110, .35), 0 1px 0 rgba(44, 38, 31, .05);
 }
 
-.play-v3 .capa-buzon .lacre,
-.play-v3 .capa-buzon .chincheta-carta {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .lacre,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .chincheta-carta {
   display: none !important;
 }
 
-.play-v3 .capa-buzon .carta-inner {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
   display: flex !important;
   align-items: flex-start;
   gap: .65rem;
@@ -101,8 +101,8 @@
   min-width: 0;
 }
 
-.play-v3 .capa-buzon .carta-avatar,
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   flex: 0 0 44px;
   width: 44px;
   height: 44px;
@@ -118,7 +118,7 @@
   background: #f3e6cc;
 }
 
-.play-v3 .capa-buzon .carta-copy {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy {
   flex: 1 1 auto;
   min-width: 0;
   max-width: 100%;
@@ -126,7 +126,7 @@
   word-break: break-word;
 }
 
-.play-v3 .capa-buzon .carta-msg .de {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de {
   font-family: Fraunces, Georgia, serif;
   font-weight: 700;
   font-size: .92rem;
@@ -134,7 +134,7 @@
   margin-bottom: .12rem;
 }
 
-.play-v3 .capa-buzon .carta-msg .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
   font-family: Fraunces, Georgia, serif;
   font-size: 1.12rem;
   font-style: italic;
@@ -146,13 +146,13 @@
   max-width: 100%;
 }
 
-.play-v3 .capa-buzon .carta-msg.carta-info .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-info .cuerpo {
   font-size: 1.08rem;
   color: #4a4038;
 }
 
-.play-v3 .capa-buzon .carta-msg .plazo,
-.play-v3 .capa-buzon .carta-msg .sello-estado {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .sello-estado {
   font-size: .76rem;
   font-weight: 800;
   margin-top: .28rem;
@@ -161,7 +161,7 @@
   word-break: break-word;
 }
 
-.play-v3 .capa-buzon .acciones-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
   display: flex;
   flex-wrap: wrap;
   gap: .4rem;
@@ -169,7 +169,7 @@
   max-width: 100%;
 }
 
-.play-v3 .capa-buzon .acciones-msg button {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button {
   border: 2px solid #2c261f;
   background: #fff6c8;
   font: inherit;
@@ -183,13 +183,13 @@
   text-align: left;
 }
 
-.play-v3 .capa-buzon .acciones-msg button.btn-suave {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button.btn-suave {
   background: #fffdf6;
   border-color: #a89888;
   font-weight: 700;
 }
 
-.play-v3 .capa-buzon .lista-vacia {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .lista-vacia {
   font-family: Fraunces, Georgia, serif;
   font-style: italic;
   font-size: .9rem;
@@ -402,36 +402,36 @@
 }
 
 /* === Modal completo (capa) === */
-.play-v3 .capa-buzon .capa-cerrar-pestaÃƒÂ±a { display: none !important; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .aht-screen .capa-cerrar-pestaÃƒÂ±a { display: none !important; }
 
-.play-v3 .capa-buzon .mensajitos-tit {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
   margin: 0;
   padding-right: 0;
 }
 
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   border-radius: 8px 9px 7px 8px !important;
   padding: .5rem .45rem !important;
 }
 
-.play-v3 .capa-buzon .carta-inner {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
   align-items: center;
 }
 
-.play-v3 .capa-buzon .carta-msg .de {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de {
   display: inline;
   font-family: Fraunces, Georgia, serif;
   font-size: .98rem;
 }
 
-.play-v3 .capa-buzon .carta-msg .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
   display: inline;
   font-family: Caveat, cursive;
   font-size: 1.28rem;
   font-style: normal;
 }
 
-.play-v3 .capa-buzon .carta-msg .de::after {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de::after {
   content: " \2013 ";
   font-weight: 400;
   color: #6a5848;
@@ -451,26 +451,26 @@
   }
 }
 
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   display: flex !important;
   align-items: flex-start;
   gap: .55rem;
 }
 
-.play-v3 .capa-buzon .carta-inner {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
   flex: 1 1 auto;
 }
 
 /* Toggle leÃƒÂ­do / marcar */
 /* msg-leido-toggle capa-buzon: ver bloque DS Mensajitos */
 
-.play-v3 .capa-buzon .mensajitos-cab {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
   margin: 0 0 12px;
   padding: 0;
   position: relative;
   z-index: 3;
 }
-.play-v3 .capa-buzon .mensajitos-cab-row {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row {
   display: flex;
   align-items: center;
   gap: 9px;
@@ -560,9 +560,9 @@
   transform: rotate(4deg);
 }
 
-.play-v3 .capa-buzon .mensajitos-seccion-tit { display: none; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit { display: none; }
 
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   display: block;
   margin: 0 0 10px;
   padding: 10px 12px;
@@ -573,27 +573,27 @@
   transform: rotate(-0.15deg);
 }
 
-.play-v3 .capa-buzon .carta-msg:nth-child(even) { transform: rotate(0.2deg); }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg:nth-child(even) { transform: rotate(0.2deg); }
 
-.play-v3 .capa-buzon .carta-msg.no-leida,
-.play-v3 .capa-buzon .carta-msg.carta-accion.no-leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
   border-color: var(--ds-pink-deep, #c85b78);
   background: linear-gradient(180deg, #fbe3ec, var(--ds-pink-soft, #fff0f4));
 }
 
-.play-v3 .capa-buzon .carta-msg.leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.leida {
   opacity: .78;
   background: #fff9f0;
 }
 
-.play-v3 .capa-buzon .carta-inner {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
   display: flex;
   gap: 10px;
   align-items: flex-start;
 }
 
-.play-v3 .capa-buzon .carta-avatar,
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -603,7 +603,7 @@
   box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .15);
 }
 
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -612,15 +612,15 @@
   color: var(--ds-ink, #3b3028);
 }
 
-.play-v3 .capa-buzon .carta-copy { flex: 1; min-width: 0; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1; min-width: 0; }
 
-.play-v3 .capa-buzon .carta-copy .de {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de {
   font: 700 1.15rem Caveat, cursive;
   color: var(--ds-ink, #3b3028);
   margin: 0 0 2px;
 }
 
-.play-v3 .capa-buzon .carta-msg.no-leida .de::after {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida .de::after {
   content: 'Nuevo';
   display: inline-block;
   margin-left: 6px;
@@ -636,14 +636,14 @@
   vertical-align: middle;
 }
 
-.play-v3 .capa-buzon .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo {
   margin: 6px 0 8px;
   font: 1.1rem/1.25 Caveat, cursive;
   color: var(--ds-ink, #3b3028);
 }
 
-.play-v3 .capa-buzon .plazo,
-.play-v3 .capa-buzon .sello-estado {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .sello-estado {
   display: inline-block;
   margin: 0 6px 7px 0;
   padding: 4px 9px;
@@ -654,15 +654,15 @@
   text-transform: uppercase;
 }
 
-.play-v3 .capa-buzon .acciones-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
 }
 
-.play-v3 .capa-buzon .acciones-msg button,
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -682,21 +682,21 @@
   white-space: nowrap;
 }
 
-.play-v3 .capa-buzon .acciones-msg button.btn-suave,
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-leido {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button.btn-suave,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-leido {
   background: linear-gradient(178deg, rgba(255,255,255,.25), rgba(255,255,255,0) 50%), var(--ds-lavender, #c5b8e8) !important;
   box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .2), inset 0 -3px 0 rgba(88, 74, 130, .28) !important;
   color: #fff !important;
   text-shadow: 0 1px 0 rgba(70, 55, 110, .35);
 }
 
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-pendiente {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-pendiente {
   background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f) !important;
 }
 
-.play-v3 .capa-buzon .buzon-vacio { font-family: Caveat, cursive; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio { font-family: Caveat, cursive; }
 
-.play-v3 .capa-buzon .mensajitos-hint {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
   margin: 10px 0 0;
   padding: 8px 10px;
   border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
@@ -708,17 +708,17 @@
 }
 
 @media (max-width: 600px) {
-  .play-v3 .capa-buzon:not(.ds-migrada) { width: min(100%, 393px); }
+  .play-v3 .aht-screen[data-aht-screen="buzon"]:not() { width: min(100%, 393px); }
   .play-v3 .mensajitos-leer-todos { display: none !important; }
   .play-v3 .mensajitos-tabs { gap: 6px; }
   .play-v3 .mensajitos-tab { max-width: none; flex: 1 1 0; font-size: .98rem; }
-  .play-v3 .capa-buzon .acciones-msg button,
-  .play-v3 .capa-buzon .carta-msg .msg-leido-toggle { min-height: 40px; padding: 7px 12px; }
+  .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
+  .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle { min-height: 40px; padding: 7px 12px; }
 }
 
 
 /* VISUAL-FINAL mensajitos-toolbar */
-.play-v3 .capa-buzon .mensajitos-toolbar {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-toolbar {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -726,7 +726,7 @@
   padding: 0 2px;
   min-height: 22px;
 }
-.play-v3 .capa-buzon .mensajitos-leer-todos {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos {
   display: inline-flex !important;
   align-items: center;
   gap: 6px;
@@ -744,7 +744,7 @@
   text-decoration: none;
   transform: none !important;
 }
-.play-v3 .capa-buzon .mensajitos-leer-todos-box {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos-box {
   width: 14px;
   height: 14px;
   flex: 0 0 14px;
@@ -754,10 +754,10 @@
   box-shadow: 1px 1px 0 rgba(51, 38, 30, .1);
   transform: rotate(-2deg);
 }
-.play-v3 .capa-buzon .mensajitos-leer-todos:hover .mensajitos-leer-todos-box {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos:hover .mensajitos-leer-todos-box {
   background: var(--ds-pink-soft, #fff0f4);
 }
-.play-v3 .capa-buzon .mensajitos-leer-todos-txt {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos-txt {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
   font-size: .95rem;
   font-weight: 700;
@@ -765,27 +765,27 @@
   white-space: nowrap;
   min-width: 0;
 }
-.play-v3 .capa-buzon .mensajitos-leer-todos[hidden] {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos[hidden] {
   display: none !important;
 }
-.play-v3 .capa-buzon .mensajitos-cab-row .mensajitos-leer-todos {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row .mensajitos-leer-todos {
   display: none !important;
 }
 
 /* DS Mensajitos — acabado visual (ref. 02-mensajitos.png); shell delegado a modal-core/skin */
-.play-v3 .capa-buzon:not(.ds-migrada) {
+.play-v3 .aht-screen[data-aht-screen="buzon"]:not() {
   background: var(--ds-paper, #fffaf1);
   padding: 14px 13px 12px;
   overflow-y: auto;
 }
 
-.play-v3 .capa-buzon .mensajitos-cab {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
   margin: 0 0 12px;
   padding: 0;
   position: relative;
   z-index: 3;
 }
-.play-v3 .capa-buzon .mensajitos-cab-row {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row {
   display: flex;
   align-items: center;
   gap: 9px;
@@ -875,9 +875,9 @@
   transform: rotate(4deg);
 }
 
-.play-v3 .capa-buzon .mensajitos-seccion-tit { display: none; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit { display: none; }
 
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   display: block;
   margin: 0 0 10px;
   padding: 10px 12px;
@@ -888,27 +888,27 @@
   transform: rotate(-0.15deg);
 }
 
-.play-v3 .capa-buzon .carta-msg:nth-child(even) { transform: rotate(0.2deg); }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg:nth-child(even) { transform: rotate(0.2deg); }
 
-.play-v3 .capa-buzon .carta-msg.no-leida,
-.play-v3 .capa-buzon .carta-msg.carta-accion.no-leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
   border-color: var(--ds-pink-deep, #c85b78);
   background: linear-gradient(180deg, #fbe3ec, var(--ds-pink-soft, #fff0f4));
 }
 
-.play-v3 .capa-buzon .carta-msg.leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.leida {
   opacity: .78;
   background: #fff9f0;
 }
 
-.play-v3 .capa-buzon .carta-inner {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
   display: flex;
   gap: 10px;
   align-items: flex-start;
 }
 
-.play-v3 .capa-buzon .carta-avatar,
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -918,7 +918,7 @@
   box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .15);
 }
 
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -927,15 +927,15 @@
   color: var(--ds-ink, #3b3028);
 }
 
-.play-v3 .capa-buzon .carta-copy { flex: 1; min-width: 0; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1; min-width: 0; }
 
-.play-v3 .capa-buzon .carta-copy .de {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de {
   font: 700 1.15rem Caveat, cursive;
   color: var(--ds-ink, #3b3028);
   margin: 0 0 2px;
 }
 
-.play-v3 .capa-buzon .carta-msg.no-leida .de::after {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida .de::after {
   content: 'Nuevo';
   display: inline-block;
   margin-left: 6px;
@@ -951,14 +951,14 @@
   vertical-align: middle;
 }
 
-.play-v3 .capa-buzon .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo {
   margin: 6px 0 8px;
   font: 1.1rem/1.25 Caveat, cursive;
   color: var(--ds-ink, #3b3028);
 }
 
-.play-v3 .capa-buzon .plazo,
-.play-v3 .capa-buzon .sello-estado {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .sello-estado {
   display: inline-block;
   margin: 0 6px 7px 0;
   padding: 4px 9px;
@@ -969,15 +969,15 @@
   text-transform: uppercase;
 }
 
-.play-v3 .capa-buzon .acciones-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
 }
 
-.play-v3 .capa-buzon .acciones-msg button,
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -997,21 +997,21 @@
   white-space: nowrap;
 }
 
-.play-v3 .capa-buzon .acciones-msg button.btn-suave,
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-leido {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button.btn-suave,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-leido {
   background: linear-gradient(178deg, rgba(255,255,255,.25), rgba(255,255,255,0) 50%), var(--ds-lavender, #c5b8e8) !important;
   box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .2), inset 0 -3px 0 rgba(88, 74, 130, .28) !important;
   color: #fff !important;
   text-shadow: 0 1px 0 rgba(70, 55, 110, .35);
 }
 
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-pendiente {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-pendiente {
   background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f) !important;
 }
 
-.play-v3 .capa-buzon .buzon-vacio { font-family: Caveat, cursive; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio { font-family: Caveat, cursive; }
 
-.play-v3 .capa-buzon .mensajitos-hint {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
   margin: 10px 0 0;
   padding: 8px 10px;
   border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
@@ -1023,10 +1023,10 @@
 }
 
 @media (max-width: 600px) {
-  .play-v3 .capa-buzon:not(.ds-migrada) { width: min(100%, 393px); }
+  .play-v3 .aht-screen[data-aht-screen="buzon"]:not() { width: min(100%, 393px); }
   .play-v3 .mensajitos-leer-todos { display: none !important; }
   .play-v3 .mensajitos-tabs { gap: 6px; }
   .play-v3 .mensajitos-tab { max-width: none; flex: 1 1 0; font-size: .98rem; }
-  .play-v3 .capa-buzon .acciones-msg button,
-  .play-v3 .capa-buzon .carta-msg .msg-leido-toggle { min-height: 40px; padding: 7px 12px; }
+  .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
+  .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle { min-height: 40px; padding: 7px 12px; }
 }

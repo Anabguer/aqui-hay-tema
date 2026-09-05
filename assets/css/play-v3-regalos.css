@@ -2,26 +2,26 @@
    Reutiliza el patron de capas (.capa), tokens y tipografias existentes.
    Sin estetica nueva: mismos bordes/tinta que el resto de capas. */
 
-.capa-inventario {
+.aht-screen[data-aht-screen="inventario"] {
   background: #fffaf0 !important;
 }
 
-.play-root[data-capa="inventario"] .capa-inventario {
+.play-root[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
   transform: none;
   pointer-events: auto;
 }
 
 /* PC (libreta lateral) */
-.play-v3 .play-root.pc[data-capa="inventario"] .capa-inventario {
+.play-v3 .play-root.pc[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
   visibility: visible;
   transform: translateX(0);
   pointer-events: auto;
 }
 
 /* Movil con shell: mismo patron que el resto de capas (responsive.css).
-   .capa.capa-inventario sube especificidad para ganar al hide generico posterior. */
+   .aht-screen[data-aht-screen="inventario"] sube especificidad para ganar al hide generico posterior. */
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa.capa-inventario {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
     visibility: visible !important;
     pointer-events: auto !important;
     display: flex !important;
@@ -274,7 +274,7 @@
 }
 
 /* F2: boton REGALAR en la ficha (mismo lenguaje que ficha-btn-org) */
-.play-v3 .capa-ficha .ficha-btn-regalo {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-btn-regalo {
   align-self: flex-start;
   margin-top: .15rem;
   border: 0;
@@ -291,12 +291,12 @@
   clip-path: polygon(2% 0, 100% 5%, 97% 100%, 0 94%);
 }
 
-.play-v3 .capa-ficha .ficha-btn-regalo:hover {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-btn-regalo:hover {
   transform: rotate(0deg) translateY(-1px);
 }
 
 /* F2: banda de aprecio del vecino hacia Celestine (texto, sin numero) */
-.play-v3 .capa-ficha .ficha-aprecio {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-aprecio {
   margin: .15rem 0 0;
   font-family: Nunito, sans-serif;
   font-size: .72rem;
@@ -304,13 +304,13 @@
   color: var(--muted, #7a7164);
 }
 
-.play-v3 .capa-ficha .ficha-aprecio[data-aprecio-banda="confianza"],
-.play-v3 .capa-ficha .ficha-aprecio[data-aprecio-banda="cariño"] {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-aprecio[data-aprecio-banda="confianza"],
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-aprecio[data-aprecio-banda="cariño"] {
   color: #5c7a4f;
 }
 
-.play-v3 .capa-ficha .ficha-aprecio[data-aprecio-banda="distancia"],
-.play-v3 .capa-ficha .ficha-aprecio[data-aprecio-banda="molestia"] {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-aprecio[data-aprecio-banda="distancia"],
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-aprecio[data-aprecio-banda="molestia"] {
   color: #b0663f;
 }
 
@@ -367,14 +367,14 @@
 }
 
 /* VISUAL-REVIEW inventario: anular layout legacy lateral */
-.play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .capa-inventario {
+.play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
   visibility: visible !important;
   transform: translate(-50%, -50%) rotate(-0.2deg) !important;
   pointer-events: auto !important;
 }
 
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .capa.capa-inventario {
+  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
     top: 50% !important;
     width: min(100%, 393px) !important;
     max-width: min(100%, 393px) !important;

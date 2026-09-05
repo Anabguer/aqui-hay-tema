@@ -1,23 +1,23 @@
-/** Misiones (11) — interior only, shell delegado a modal-core/skin/header */
+﻿/** Misiones (11) — interior only, shell delegado a modal-core/skin/header */
 
-.play-v3 .capa-misiones > * { position: relative; z-index: 2; }
-.play-v3 .capa-misiones .mis-top { padding-right: 2.2rem; }
-.play-v3 .capa-misiones .mis-body { flex: 1; min-height: 0; overflow-y: auto; }
-.play-v3 .capa-misiones .mis-item {
+.play-v3 .aht-screen[data-aht-screen="misiones"] > * { position: relative; z-index: 2; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top { padding-right: 2.2rem; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-body { flex: 1; min-height: 0; overflow-y: auto; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item {
   display: flex; align-items: center; gap: 8px; padding: 6px 0;
   border-bottom: 1px dashed rgba(107,81,56,.22);
 }
-.play-v3 .capa-misiones .mis-item:last-child { border-bottom: 0; }
-.play-v3 .capa-misiones .mis-item-cumplida .mis-txt { color: var(--ds-green-deep, #4a7a52) !important; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: 1.05rem; }
-.play-v3 .capa-misiones .mis-item-cumplida::before { content: "\2713"; font-weight: 800; color: var(--ds-green-deep, #4a7a52); }
-.play-v3 .capa-misiones .mis-item:not(.mis-item-cumplida)::before { content: ""; width: 14px; height: 14px; border: 2px solid var(--ds-ink-soft, #594839); border-radius: 999px; flex: 0 0 auto; }
-.play-v3 .capa-misiones .mis-estado { padding: 3px 10px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px; border: 1.5px solid var(--ds-ink-soft, #594839); font: 800 .6875rem/1.2 Nunito, sans-serif; }
-.play-v3 .capa-misiones .mis-item-cumplida .mis-estado { background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52); }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item:last-child { border-bottom: 0; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-txt { color: var(--ds-green-deep, #4a7a52) !important; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: 1.05rem; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida::before { content: "\2713"; font-weight: 800; color: var(--ds-green-deep, #4a7a52); }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item:not(.mis-item-cumplida)::before { content: ""; width: 14px; height: 14px; border: 2px solid var(--ds-ink-soft, #594839); border-radius: 999px; flex: 0 0 auto; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado { padding: 3px 10px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px; border: 1.5px solid var(--ds-ink-soft, #594839); font: 800 .6875rem/1.2 Nunito, sans-serif; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-estado { background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52); }
 
 /* DS-REVIEW-11 check fix */
-.play-v3 .capa-misiones .mis-item-cumplida::before { content: "\2713"; }
-.play-v3 .capa-misiones .mis-body > .pg-card,
-.play-v3 .capa-misiones .misiones-body > .mis-card-wrap {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida::before { content: "\2713"; }
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-body > .pg-card,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .misiones-body > .mis-card-wrap {
   border: 2px solid var(--ds-ink-soft, #594839); border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
   background: var(--ds-paper-card, #fffdf7); padding: 6px 12px; margin-bottom: 8px;
 }

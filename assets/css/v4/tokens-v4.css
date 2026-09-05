@@ -10,6 +10,7 @@
 :root {
   /* --- Superficies V4 --- */
   --aht-bg: #FDFBFE;
+  --aht-shell-bg: #FCFBFE;
   --aht-surface: #F6F3F8;
   --aht-surface-raised: #FFFFFF;
   --aht-surface-dim: #EEE8FA;

@@ -1,4 +1,4 @@
-/* LEGIBILIDAD-GLOBAL-v1 — pasada tipográfica sin tocar layout.
+﻿/* LEGIBILIDAD-GLOBAL-v1 — pasada tipográfica sin tocar layout.
 
 
 
@@ -414,7 +414,7 @@
 
 
 
-.play-v3 .capa-misiones .mis-top::before {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top::before {
 
 
 
@@ -430,7 +430,7 @@
 
 
 
-.play-v3 .capa-misiones .mis-tit {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit {
 
 
 
@@ -446,7 +446,7 @@
 
 
 
-.play-v3 .capa-misiones .mis-sub {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-sub {
 
 
 
@@ -462,11 +462,11 @@
 
 
 
-.play-v3 .capa-misiones .mis-txt,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
 
 
 
-.play-v3 .capa-misiones .mis-item .mis-txt {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item .mis-txt {
 
 
 
@@ -486,7 +486,7 @@
 
 
 
-.play-v3 .capa-misiones .mis-item-cumplida .mis-txt {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-txt {
 
 
 
@@ -502,7 +502,7 @@
 
 
 
-.play-v3 .capa-misiones .mis-estado {
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado {
 
 
 
@@ -658,11 +658,11 @@
 
 
 
-.play-v3 .capa-buzon .mensajitos-cab .ds-modal-head,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab .ds-modal-head,
 
 
 
-.play-v3 .capa-buzon .mensajitos-cab .ds-modal-head-row {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab .ds-modal-head-row {
 
 
 
@@ -686,11 +686,11 @@
 
 
 
-.play-v3 .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .ds-modal-head .ds-modal-tit,
 
 
 
-.play-v3 .capa-buzon .mensajitos-tit {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
 
 
 
@@ -750,7 +750,7 @@
 
 
 
-.play-v3 .capa-buzon .carta-msg .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
   /* Autoridad: typography-reading.css */
   font-size: var(--aht-type-body) !important;
   font-weight: 400 !important;
@@ -774,23 +774,23 @@
 
 
 
-.play-v3 .capa-buzon .carta-msg,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg,
 
 
 
-.play-v3:has(.game-shell) .capa-buzon .carta-msg.no-leida,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
 
 
 
-.play-v3:has(.game-shell) .capa-buzon .carta-msg.carta-accion.no-leida,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida,
 
 
 
-.play-v3 .capa-buzon .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
 
 
 
-.play-v3 .capa-buzon .carta-msg.carta-accion.no-leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
 
 
 
@@ -810,15 +810,15 @@
 
 
 
-.play-v3 .capa-buzon .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
 
 
 
-.play-v3:has(.game-shell) .capa-buzon .carta-msg.no-leida,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
 
 
 
-.play-v3:has(.game-shell) .capa-buzon .carta-msg.carta-accion.no-leida {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
 
 
 
@@ -842,7 +842,7 @@
 
 
 
-.play-v3 .capa-buzon .carta-msg.leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.leida {
 
 
 
@@ -886,19 +886,19 @@
 
 
 
-.play-v3 .capa-buzon .carta-cta--abrir,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir,
 
 
 
-.play-v3 .capa-buzon .acciones-msg button,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
 
 
 
-.play-v3:has(.game-shell) .capa-buzon .carta-cta--abrir,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir,
 
 
 
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-pendiente {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-pendiente {
 
 
 
@@ -922,19 +922,19 @@
 
 
 
-.play-v3 .capa-buzon .carta-cta--ver,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--ver,
 
 
 
-.play-v3 .capa-buzon .carta-cta--suave,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--suave,
 
 
 
-.play-v3 .capa-buzon .acciones-msg button.btn-suave,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button.btn-suave,
 
 
 
-.play-v3 .capa-buzon .carta-msg .msg-leido-toggle.is-leido {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-leido {
 
 
 
@@ -962,7 +962,7 @@
 
 
 
-.play-v3 .capa-buzon .mensajitos-cab {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
 
 
 
@@ -982,7 +982,7 @@
 
 
 
-.play-v3 .capa-buzon .mensajitos-tabs {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
 
 
 
@@ -998,7 +998,7 @@
 
 
 
-.play-v3 .capa-buzon .mensajitos-toolbar {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-toolbar {
 
 
 
@@ -1030,7 +1030,7 @@
 
 
 
-  .play-v3 .capa-buzon .mensajitos-tabs {
+  .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
 
 
 
@@ -1046,7 +1046,7 @@
 
 
 
-  .play-v3 .capa-buzon .mensajitos-toolbar {
+  .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-toolbar {
 
 
 
@@ -1070,11 +1070,11 @@
 
 
 
-.play-v3 .capa-buzon .ds-modal-head .ds-modal-tit,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .ds-modal-head .ds-modal-tit,
 
 
 
-.play-v3 .capa-buzon .mensajitos-tit {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
 
 
 
@@ -1130,7 +1130,7 @@
 
 
 
-.play-v3:has(.game-shell) .capa-buzon .mensajitos-tab {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .mensajitos-tab {
 
 
 
@@ -1158,8 +1158,8 @@
 
 
 
-.play-v3 .capa-buzon .mensajitos-leer-todos,
-.play-v3 .capa-buzon .mensajitos-leer-todos-txt {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos-txt {
   font: 700 .85rem/1.2 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
   letter-spacing: 0.3px !important;
   color: var(--ds-ink, #3b3028) !important;
@@ -1171,11 +1171,11 @@
 
 
 
-.play-v3 .capa-buzon .carta-copy .de,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de,
 
 
 
-.play-v3 .capa-buzon .carta-head .de {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-head .de {
 
 
 
@@ -1195,7 +1195,7 @@
 
 
 
-.play-v3 .capa-buzon .carta-cuando {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando {
 
 
 
@@ -1220,7 +1220,7 @@
 
 
 
-.play-v3 .capa-buzon .carta-msg .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
 
 
 
@@ -1246,7 +1246,7 @@
 
 
 
-.play-v3 .capa-buzon .carta-flag--nuevo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag--nuevo {
 
 
 
@@ -1262,7 +1262,7 @@
 
 
 
-.play-v3 .capa-buzon .carta-flag--visto {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag--visto {
 
 
 
@@ -1278,19 +1278,19 @@
 
 
 
-.play-v3 .capa-buzon .carta-msg .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
 
 
 
-.play-v3 .capa-buzon .carta-msg .sello-estado,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .sello-estado,
 
 
 
-.play-v3 .capa-buzon .carta-pie-meta .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-meta .plazo,
 
 
 
-.play-v3 .capa-buzon .carta-pie-meta .sello-estado {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-meta .sello-estado {
 
 
 
@@ -1306,15 +1306,15 @@
 
 
 
-.play-v3 .capa-buzon .carta-cta,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta,
 
 
 
-.play-v3 .capa-buzon .acciones-msg button,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
 
 
 
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta {
 
 
 
@@ -1338,15 +1338,15 @@
 
 
 
-.play-v3 .capa-buzon .mensajitos-hint,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint,
 
 
 
-.play-v3 .capa-buzon .lista-vacia,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .lista-vacia,
 
 
 
-.play-v3 .capa-buzon .buzon-vacio {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio {
 
 
 

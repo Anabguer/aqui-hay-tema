@@ -1,4 +1,4 @@
-/**
+﻿/**
 
  * Direccion artistica shell Ã¢â‚¬â€ objetos visuales, no dashboard.
 
@@ -1371,15 +1371,15 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 /* Libreta de Celestine en capas */
 
-.capa-vecinos .libreta-kicker,
+.aht-screen[data-aht-screen="vecinos"] .libreta-kicker,
 
-.capa-ficha .libreta-kicker,
+.aht-screen[data-aht-screen="ficha"] .libreta-kicker,
 
-.capa-organizar .libreta-kicker,
+.aht-screen[data-aht-screen="organizar"] .libreta-kicker,
 
-.capa-agenda .libreta-kicker,
+.aht-screen[data-aht-screen="agenda"] .libreta-kicker,
 
-.capa-residencias .libreta-kicker {
+.aht-screen[data-aht-screen="residencias"] .libreta-kicker {
 
   font-family: Caveat, cursive;
 
@@ -1399,7 +1399,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 
 
-.play-v3 .capa-cerrar-pestaÃƒÂ±a {
+.play-v3 .aht-screen .capa-cerrar-pestaÃƒÂ±a {
 
   font-size: .72rem !important;
 
@@ -1413,7 +1413,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-.play-v3 .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
+.play-v3 .aht-screen .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
 
 
 
@@ -2311,13 +2311,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   vertical-align: middle;
 }
 /* Las caras del plan en curso usan solo el aro emocional del token */
-.play-v3 .capa-agenda .agenda-fila--en-curso {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila--en-curso {
   position: relative;
   padding-left: .85rem;
   background: linear-gradient(90deg, rgba(212, 232, 196, 0.42) 0%, rgba(255, 254, 248, 0.96) 22%);
   border-left: 0;
 }
-.play-v3 .capa-agenda .agenda-fila--en-curso::before {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila--en-curso::before {
   content: "";
   position: absolute;
   left: .25rem;
@@ -2333,7 +2333,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 @media (prefers-reduced-motion: reduce) {
   .obj-proximo-polaroid.is-en-curso { animation: none !important; }
   .obj-proximo-polaroid .prox-meta--en-curso::after,
-  .play-v3 .capa-agenda .agenda-fila--en-curso::before { animation: none !important; }
+  .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila--en-curso::before { animation: none !important; }
 }
 
 

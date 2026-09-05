@@ -1,3 +1,13 @@
+/* AHT-FRAME-CANON-v4 */
+
+.play-v3:has(.game-shell) .play-root[data-capa]:not([data-capa=""]) .velo,
+.play-v3:has(.game-shell) .play-root[data-consulta]:not([data-consulta=""]) .velo {
+  background-color: var(--aht-overlay, rgba(38, 31, 47, 0.45));
+}
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .ficha-tape,
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .mis-pin,
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .org-pin,
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .agenda-pin { display: none; }
 /* ============================================================
    AHT V4 — SCREEN FRAME
    Autoridad ÚNICA para: frame exterior, header, título, X,
@@ -40,7 +50,7 @@
   overflow: hidden;
   box-sizing: border-box;
   /* Piel V4 — autoridad propia, dirección Celestine */
-  background-color: var(--aht-surface-raised, #FFFFFF);
+  background-color: var(--aht-shell-bg, #FCFBFE);
   border: 1.5px solid var(--aht-border, #D8D1DE);
   border-radius: var(--aht-frame-radius, 22px 16px 24px 15px / 16px 24px 15px 22px);
   box-shadow:

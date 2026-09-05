@@ -30,3 +30,8 @@
 - Snapshot de seguridad: `git tag backup/pre-<contexto>-<timestamp> origin/deploy/integrated`
 - Manifiestos fuera del repo: `W:\juegos\_AHT_CONSOLIDACION_<timestamp>\`
 - Archivo de preservación: `W:\juegos\_AHT_ARCHIVO\`
+
+## CSS / UI / modales
+
+- **OBLIGATORIO:** antes de cualquier cambio en CSS, UI de play, modales o orden de hojas en `play.php`, leer `docs/ARQUITECTURA_CSS.md` y respetar el contrato V4.
+- Tras tocar frame o links: `scripts/aht_guard_modal_shell.ps1` y `node tests/modal_architecture_test.js`.

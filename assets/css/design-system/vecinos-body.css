@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    VECINOS BODY — Estilo visual AHT para el body del modal Vecinos
    Migrado al sistema .aht-modal (FASE 2 — modales)
    Dependencias: modal-ds.css (frame), tokens.css (variables)
@@ -91,7 +91,7 @@
 
 .vec-panel[hidden] { display: none !important; }
 
-.capa-vecinos.is-relaciones .vecinos-cuenta-wrap { display: none !important; }
+.aht-screen[data-aht-screen="vecinos"].is-relaciones .vecinos-cuenta-wrap { display: none !important; }
 
 /* === BUSCADOR === */
 .vec-busca-tira { margin: 0 0 10px !important; }

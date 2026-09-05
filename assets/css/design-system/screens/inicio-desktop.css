@@ -1,4 +1,4 @@
-﻿/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
+/* INICIO-DESKTOP â€” presentaciÃ³n desktop namespaced (.inicio-desktop) */
 
 .inicio-desktop .inicio-desktop-layout {
   display: grid;
@@ -493,8 +493,8 @@
     overflow: hidden !important;
   }
 
-  .inicio-desktop .play-root.pc .capa,
-  .inicio-desktop .play-root.pc .capa.ds-modal-sheet {
+  .inicio-desktop .play-root.pc .aht-screen,
+  .inicio-desktop .play-root.pc .aht-screen {
     position: absolute !important;
   }
 
@@ -617,11 +617,11 @@
 
 /* VISUAL-FINAL desktop modals width */
 @media (min-width: 769px) {
-  .play-v3 .play-root.pc[data-capa="buzon"] .capa-buzon,
-  .play-v3 .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-  .play-v3 .play-root.pc[data-capa="ficha"] .capa-ficha,
-  .play-v3 .play-root.pc .capa-ficha-diario,
-  .play-v3 .play-root.pc .capa-ficha .ficha-animo-overlay .ficha-animo-modal {
+  .play-v3 .play-root.pc[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
+  .play-v3 .play-root.pc[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+  .play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
+  .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha_diario"],
+  .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha"] .ficha-animo-overlay .ficha-animo-modal {
     width: min(100%, 480px) !important;
     max-width: min(100%, 480px) !important;
     max-height: min(88vh, 720px) !important;

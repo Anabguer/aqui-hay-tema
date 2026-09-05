@@ -42,20 +42,20 @@
 
 
 /* CAPAS-PRINCIPALES-SHELL-UNIFICADO */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
-.play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .capa-organizar,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .capa-ficha,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .capa-ficha-diario,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .capa-ficha-animo,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_relaciones"] .capa-ficha-relaciones,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
-.play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .capa-organizar,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel {
+.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not(),
+.play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_diario"] .aht-screen[data-aht-screen="ficha_diario"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_animo"] .aht-screen[data-aht-screen="ficha_animo"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="ficha_relaciones"] .aht-screen[data-aht-screen="ficha_relaciones"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not(),
+.play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel {
   position: fixed !important;
   left: 50% !important;
   top: 50% !important;
@@ -82,15 +82,15 @@
   background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%), var(--ds-paper-modal, #fffaf0) !important;
   box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
 }
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada)::before,
-.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos::before,
-.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar::before,
-.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda::before,
-.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .capa-ficha::before,
-.play-v3:has(.game-shell) .play-root[data-capa="ficha_diario"] .capa-ficha-diario::before,
-.play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .capa-ficha-animo::before,
-.play-v3:has(.game-shell) .play-root[data-capa="ficha_relaciones"] .capa-ficha-relaciones::before,
-.play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario.coti-modal-papel::before {
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not()::before,
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha_diario"] .aht-screen[data-aht-screen="ficha_diario"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha_animo"] .aht-screen[data-aht-screen="ficha_animo"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="ficha_relaciones"] .aht-screen[data-aht-screen="ficha_relaciones"]::before,
+.play-v3:has(.game-shell) .play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::before {
   content: "" !important;
   display: block !important;
   position: absolute;
@@ -100,29 +100,29 @@
   pointer-events: none;
   z-index: 1;
 }
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-buzon:not(.ds-migrada) > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-vecinos > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-organizar > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-agenda > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-diario > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-ficha-animo > *:not(.cerrar):not(.ds-modal-close),
-.play-v3:has(.game-shell) .play-root[data-capa] .capa-diario.coti-modal-papel > *:not(.cerrar):not(.ds-modal-close) {
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="buzon"]:not() > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="vecinos"] > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="organizar"] > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="agenda"] > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="ficha"] > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="ficha_diario"] > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="ficha_animo"] > *:not(.cerrar):not(.ds-modal-close),
+.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen[data-aht-screen="diario"].coti-modal-papel > *:not(.cerrar):not(.ds-modal-close) {
   position: relative;
   z-index: 2;
 }
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) [data-buzon-list],
-.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .vec-panel:not([hidden]),
-.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .capa-organizar .org-body,
-.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .capa-agenda .agenda-list,
-.play-v3:has(.game-shell) .play-root[data-capa="diario"] .capa-diario .coti-body {
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not() [data-buzon-list],
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"] .vec-panel:not([hidden]),
+.play-v3:has(.game-shell) .play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-body,
+.play-v3:has(.game-shell) .play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"] .agenda-list,
+.play-v3:has(.game-shell) .play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"] .coti-body {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto !important;
   -webkit-overflow-scrolling: touch;
 }
-.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .capa-buzon:not(.ds-migrada) .mensajitos-hint,
-.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .capa-vecinos .mensajitos-hint {
+.play-v3:has(.game-shell) .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not() .mensajitos-hint,
+.play-v3:has(.game-shell) .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"] .mensajitos-hint {
   flex: 0 0 auto;
 }
 
@@ -184,8 +184,8 @@
 }
 
 /* CERRAR-X-FICHA-TODAS-CAPAS */
-.play-v3 .capa:not(.ds-migrada) > .cerrar.ds-modal-close,
-.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close {
+.play-v3 .aht-screen > .cerrar.ds-modal-close,
+.play-v3 .aht-screen .cerrar.ds-modal-close {
   position: absolute !important;
   top: 6px !important;
   right: 6px !important;
@@ -214,23 +214,23 @@
   place-items: center !important;
   cursor: pointer;
 }
-.play-v3 .capa:not(.ds-migrada) > .cerrar.ds-modal-close::before,
-.play-v3 .capa:not(.ds-migrada) .cerrar.ds-modal-close::before {
+.play-v3 .aht-screen > .cerrar.ds-modal-close::before,
+.play-v3 .aht-screen .cerrar.ds-modal-close::before {
   display: none !important;
   content: none !important;
 }
 
 /* CAPAS-LIBRETA-SUTIL */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
-.play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .capa-agenda,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .capa-buzon:not(.ds-migrada),
-.play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .capa-vecinos,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .capa-agenda,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .capa-ficha,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .capa-ficha-diario,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_animo"] .capa-ficha-animo,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_relaciones"] .capa-ficha-relaciones {
+.play-v3:has(.game-shell) .play-root.phone[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not(),
+.play-v3:has(.game-shell) .play-root.phone[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+.play-v3:has(.game-shell) .play-root.phone[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not(),
+.play-v3:has(.game-shell) .play-root.pc[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_diario"] .aht-screen[data-aht-screen="ficha_diario"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_animo"] .aht-screen[data-aht-screen="ficha_animo"],
+.play-v3:has(.game-shell) .play-root.pc[data-capa="ficha_relaciones"] .aht-screen[data-aht-screen="ficha_relaciones"] {
   background-color: var(--ds-paper-modal, #fffaf0) !important;
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.48), rgba(255,255,255,0) 58%),
@@ -243,8 +243,8 @@
 
 
 /* COTILLEOS-LIBRETA-SUTIL */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .capa-diario.coti-modal-papel,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .capa-diario.coti-modal-papel {
+.play-v3:has(.game-shell) .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel,
+.play-v3:has(.game-shell) .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel {
   background-color: var(--modal-shell-bg, #FCFBFE) !important;
   background-image:
     radial-gradient(ellipse 130% 85% at 50% -5%, rgba(255,255,255,.32), rgba(255,255,255,0) 55%),
@@ -257,24 +257,24 @@
 }
 
 /* COTILLEOS-SIN-SCROLLBAR */
-.play-v3 .capa-diario .coti-body {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-body {
   scrollbar-width: none !important;
   -ms-overflow-style: none;
 }
-.play-v3 .capa-diario .coti-body::-webkit-scrollbar {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-body::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
 }
 
 /* COTILLEOS-CABECERA-CENTRO-PRUEBA */
-.play-v3 .capa-diario .coti-top {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top {
   padding-top: .9rem !important;
 }
-.play-v3:has(.game-shell) .capa-diario .coti-top {
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="diario"] .coti-top {
   padding-top: .9rem !important;
 }
-.play-v3 .capa-diario .coti-top .ds-modal-head {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-head {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -283,29 +283,29 @@
   padding-left: 0 !important;
   width: 100%;
 }
-.play-v3 .capa-diario .coti-top .ds-modal-head-row {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-head-row {
   justify-content: center !important;
   align-items: center !important;
   position: relative;
   width: 100%;
   gap: 8px !important;
 }
-.play-v3 .capa-diario .coti-top .coti-tit.ds-modal-tit {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .coti-tit.ds-modal-tit {
   flex: 0 0 auto !important;
 }
-.play-v3 .capa-diario .coti-top .coti-badge {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .coti-badge {
   position: absolute !important;
   right: 0 !important;
   top: 50% !important;
   transform: translateY(-50%) rotate(2deg) !important;
 }
-.play-v3 .capa-diario .coti-top .ds-modal-sub {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-sub {
   text-align: center !important;
   width: 100%;
   margin: 8px 0 12px !important;
 }
-.play-v3 .capa-diario .coti-filtros,
-.play-v3:has(.game-shell) .capa-diario .coti-filtros {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtros,
+.play-v3:has(.game-shell) .aht-screen[data-aht-screen="diario"] .coti-filtros {
   justify-content: center !important;
   align-self: center !important;
   justify-self: center !important;
@@ -313,55 +313,55 @@
 }
 
 /* MODALES-SIN-SCROLLBAR */
-.play-v3 .capa .capa-scroll,
-.play-v3 .capa-buzon [data-buzon-list],
-.play-v3 .capa-agenda .agenda-list,
-.play-v3 .capa-misiones .mis-body,
-.play-v3 .capa-vida-pueblo .vida-body,
-.play-v3 .capa-organizar .org-body,
-.play-v3 .capa-vecinos .vecinos-grid,
-.play-v3 .capa-vecinos .vec-rel-scroll,
-.play-v3 .capa-diario .coti-body,
-.play-v3 .capa-ficha .ficha-body,
-.play-v3 .capa-ficha .ficha-col-detalles,
-.play-v3 .capa-ficha .ficha-rel-scroll,
-.play-v3 .capa-ficha .ficha-diario-scroll {
+.play-v3 .aht-screen .capa-scroll,
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list],
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-list,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-body,
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-body,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-body,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-grid,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-scroll,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-body,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-scroll,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-diario-scroll {
   scrollbar-width: none !important;
   -ms-overflow-style: none;
 }
-.play-v3 .capa .capa-scroll::-webkit-scrollbar,
-.play-v3 .capa-buzon [data-buzon-list]::-webkit-scrollbar,
-.play-v3 .capa-agenda .agenda-list::-webkit-scrollbar,
-.play-v3 .capa-misiones .mis-body::-webkit-scrollbar,
-.play-v3 .capa-vida-pueblo .vida-body::-webkit-scrollbar,
-.play-v3 .capa-organizar .org-body::-webkit-scrollbar,
-.play-v3 .capa-vecinos .vecinos-grid::-webkit-scrollbar,
-.play-v3 .capa-vecinos .vec-rel-scroll::-webkit-scrollbar,
-.play-v3 .capa-diario .coti-body::-webkit-scrollbar,
-.play-v3 .capa-ficha .ficha-body::-webkit-scrollbar,
-.play-v3 .capa-ficha .ficha-col-detalles::-webkit-scrollbar,
-.play-v3 .capa-ficha .ficha-rel-scroll::-webkit-scrollbar,
-.play-v3 .capa-ficha .ficha-diario-scroll::-webkit-scrollbar {
+.play-v3 .aht-screen .capa-scroll::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list]::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-list::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-body::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-body::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-body::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-grid::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-scroll::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-body::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-scroll::-webkit-scrollbar,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-diario-scroll::-webkit-scrollbar {
   display: none !important;
   width: 0 !important;
   height: 0 !important;
 }
 
 /* MODALES-CABECERA-COTILLEOS */
-.play-v3 .capa-buzon .mensajitos-cab,
-.play-v3 .capa-vecinos .vecinos-cab,
-.play-v3 .capa-agenda .agenda-cab,
-.play-v3 .capa-misiones .mis-top,
-.play-v3 .capa-vida-pueblo .vida-top,
-.play-v3 .capa-organizar .org-top,
-.play-v3 .capa-diario .coti-top,
-.play-v3:has(.game-shell) .play-root.phone .capa-buzon .mensajitos-cab {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cab,
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top,
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-top,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-top,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top,
+.play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
   padding-top: .9rem !important;
 }
-.play-v3 .capa-agenda .ds-modal-head,
-.play-v3 .capa-misiones .ds-modal-head,
-.play-v3 .capa-organizar .ds-modal-head,
-.play-v3 .capa-diario .coti-top .ds-modal-head {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-head,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .ds-modal-head,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .ds-modal-head,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-head {
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
@@ -370,19 +370,19 @@
   padding-left: 0 !important;
   width: 100%;
 }
-.play-v3 .capa-agenda .ds-modal-head-row,
-.play-v3 .capa-misiones .ds-modal-head-row,
-.play-v3 .capa-organizar .ds-modal-head-row,
-.play-v3 .capa-diario .coti-top .ds-modal-head-row {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-head-row,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .ds-modal-head-row,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .ds-modal-head-row,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-head-row {
   justify-content: center !important;
   align-items: center !important;
   position: relative;
   width: 100%;
   gap: 8px !important;
 }
-.play-v3 .capa .ds-modal-sub,
-.play-v3 .capa-agenda .agenda-sub,
-.play-v3 .capa-misiones .mis-sub {
+.play-v3 .aht-screen .ds-modal-sub,
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-sub,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-sub {
   text-align: center !important;
   width: 100%;
   margin: 8px 0 12px !important;
@@ -391,51 +391,51 @@
   font-weight: 600 !important;
   color: var(--ds-text-muted, #7a6a5c) !important;
 }
-.play-v3 .capa-agenda .ds-modal-icon,
-.play-v3 .capa-misiones .ds-modal-icon,
-.play-v3 .capa-organizar .ds-modal-icon {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-icon,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .ds-modal-icon,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .ds-modal-icon {
   display: inline !important;
   font-size: 1.6rem !important;
   transform: rotate(-8deg);
 }
-.play-v3 .capa-agenda .agenda-cab::before,
-.play-v3 .capa-misiones .mis-top::before {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab::before,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top::before {
   display: none !important;
   content: none !important;
 }
-.play-v3 .capa-agenda .agenda-tit,
-.play-v3 .capa-misiones .mis-tit,
-.play-v3 .capa-organizar .org-tit,
-.play-v3 .capa-buzon .mensajitos-tit,
-.play-v3 .capa-vida-pueblo .vida-tit {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-tit,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit,
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit {
   font-family: Caveat, cursive !important;
   font-size: 1.75rem !important;
   font-weight: 700 !important;
   transform: none !important;
   line-height: 1.1 !important;
 }
-.play-v3 .capa-agenda .agenda-cab,
-.play-v3 .capa-misiones .mis-top,
-.play-v3 .capa-organizar .org-top {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-top {
   padding-right: 0 !important;
 }
-.play-v3 .capa-organizar .org-top {
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-top {
   text-align: center !important;
   margin-bottom: 0 !important;
 }
-.play-v3 .capa-organizar .org-top::after {
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-top::after {
   font-family: Caveat, cursive !important;
   font-size: 1.05rem !important;
   font-weight: 600 !important;
   margin: 8px 0 12px !important;
 }
-.play-v3 .capa-buzon .mensajitos-cab {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
   padding-left: 0 !important;
   padding-right: 0 !important;
   margin-bottom: 12px !important;
   text-align: center;
 }
-.play-v3 .capa-buzon .mensajitos-cab-row {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row {
   justify-content: center !important;
   align-items: center !important;
   position: relative;
@@ -443,16 +443,16 @@
   gap: 8px !important;
   margin-bottom: 10px !important;
 }
-.play-v3 .capa-buzon .mensajitos-icono {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-icono {
   font-size: 1.6rem !important;
   transform: rotate(-8deg) !important;
 }
-.play-v3 .capa-buzon .mensajitos-tit {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
   margin: 0 !important;
   padding: 0 !important;
   flex: 0 0 auto !important;
 }
-.play-v3 .capa-buzon .mensajitos-leer-todos {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos {
   position: absolute !important;
   right: 0 !important;
   top: 50% !important;
@@ -460,28 +460,28 @@
   font-size: .65rem !important;
   max-width: 38%;
 }
-.play-v3 .capa-buzon .mensajitos-tabs {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
   justify-content: center !important;
 }
-.play-v3 .capa-vecinos .vecinos-cab {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cab {
   padding-left: 0 !important;
   padding-right: 0 !important;
 }
-.play-v3 .capa-vida-pueblo .vida-top {
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-top {
   padding-right: 0 !important;
   text-align: center !important;
 }
-.play-v3 .capa-vida-pueblo .vida-modal-ico {
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-modal-ico {
   font-size: 1.6rem !important;
   transform: rotate(-8deg);
   margin: 0 0 4px !important;
 }
-.play-v3 .capa-vida-pueblo .vida-tit {
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit {
   margin: 0 !important;
   color: var(--ds-pink-deep, #c85b78) !important;
 }
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .mensajitos-leer-todos {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos {
     position: static !important;
     transform: none !important;
     max-width: none !important;
@@ -490,32 +490,32 @@
 }
 
 /* MENSAJITOS-TABS-BAJAR */
-.play-v3 .capa-buzon .mensajitos-cab-row {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row {
   margin-bottom: 4px !important;
 }
-.play-v3 .capa-buzon .mensajitos-tabs {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
   justify-content: center !important;
   margin-top: 18px !important;
   margin-bottom: 10px !important;
   padding-top: 2px !important;
 }
-.play-v3 .capa-buzon .mensajitos-tab {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tab {
   padding: 8px 18px !important;
   min-height: 40px !important;
   font-size: .8rem !important;
 }
-.play-v3:has(.game-shell) .play-root.phone .capa-buzon .mensajitos-tabs {
+.play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
   margin-top: 20px !important;
   margin-bottom: 12px !important;
 }
 
 /* MENSAJITOS-CARTAS-MOCKUP */
-.play-v3 .capa-buzon [data-buzon-list] {
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
   display: flex;
   flex-direction: column;
   gap: 0;
 }
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   display: block !important;
   flex-direction: column !important;
   align-items: stretch !important;
@@ -530,20 +530,20 @@
   transform: rotate(-0.35deg);
   overflow: visible !important;
 }
-.play-v3 .capa-buzon .carta-msg:nth-child(even) { transform: rotate(0.3deg); }
-.play-v3 .capa-buzon .carta-msg.no-leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg:nth-child(even) { transform: rotate(0.3deg); }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida {
   border-color: var(--ds-pink-deep, #c85b78) !important;
   background: linear-gradient(180deg, #fbe3ec 0%, #fff0f4 55%, #fff8fa 100%) !important;
   opacity: 1 !important;
 }
-.play-v3 .capa-buzon .carta-msg.leida {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.leida {
   border-color: var(--ds-ink-soft, #806c59) !important;
   background: #fff9f0 !important;
   opacity: 1 !important;
 }
-.play-v3 .capa-buzon .carta-msg .de::after { display: none !important; content: none !important; }
-.play-v3 .capa-buzon .carta-msg > .msg-leido-toggle { display: none !important; }
-.play-v3 .capa-buzon .carta-flag {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de::after { display: none !important; content: none !important; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg > .msg-leido-toggle { display: none !important; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag {
   position: absolute;
   top: 8px;
   right: 10px;
@@ -553,7 +553,7 @@
   gap: 4px;
   pointer-events: none;
 }
-.play-v3 .capa-buzon .carta-flag--nuevo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag--nuevo {
   padding: 3px 9px 4px;
   background: var(--ds-red-alert, #c42b4a);
   border: 2px solid var(--ds-ink, #3b3028);
@@ -565,23 +565,23 @@
   transform: rotate(3deg);
   box-shadow: 1px 2px 0 rgba(51,38,30,.18);
 }
-.play-v3 .capa-buzon .carta-flag--visto {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag--visto {
   font: 700 .78rem/1.1 Caveat, cursive;
   color: var(--ds-lavender-deep, #7a6a9a);
   transform: rotate(-2deg);
 }
-.play-v3 .capa-buzon .carta-flag-ico {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag-ico {
   font-size: .95rem;
   line-height: 1;
 }
-.play-v3 .capa-buzon .carta-inner {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
   display: flex !important;
   gap: 10px !important;
   align-items: flex-start !important;
   padding-right: 58px;
 }
-.play-v3 .capa-buzon .carta-avatar,
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   width: 52px !important;
   height: 52px !important;
   flex: 0 0 52px !important;
@@ -590,32 +590,32 @@
   border: 2.5px solid #fff !important;
   box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839) !important;
 }
-.play-v3 .capa-buzon .carta-avatar.cara-ini {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
   background: #e8dcc4 !important;
   font: 700 1.2rem Caveat, cursive !important;
 }
-.play-v3 .capa-buzon .carta-copy { flex: 1; min-width: 0; }
-.play-v3 .capa-buzon .carta-head { margin: 0 0 4px; }
-.play-v3 .capa-buzon .carta-copy .de {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1; min-width: 0; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-head { margin: 0 0 4px; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de {
   margin: 0 !important;
   font: 700 1.2rem/1.15 Caveat, cursive !important;
   color: var(--ds-ink, #3b3028) !important;
 }
-.play-v3 .capa-buzon .carta-cuando {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando {
   margin: 2px 0 0 !important;
   font: 600 .75rem/1.25 Nunito, sans-serif !important;
   color: var(--ds-text-muted, #7a6a5c) !important;
   letter-spacing: .02em;
 }
-.play-v3 .capa-buzon .carta-msg .cuerpo {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
   margin: 0 !important;
   font: 600 1.22rem/1.28 Caveat, cursive !important;
   color: var(--ds-ink, #3b3028) !important;
 }
-.play-v3 .capa-buzon .carta-pie {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -624,7 +624,7 @@
   padding-top: 9px;
   border-top: 1.5px dashed rgba(107, 81, 56, .38);
 }
-.play-v3 .capa-buzon .carta-pie-meta {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -632,12 +632,12 @@
   min-width: 0;
   flex: 1 1 auto;
 }
-.play-v3 .capa-buzon .carta-pie-cta {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-pie-cta {
   flex: 0 0 auto;
   margin-left: auto;
 }
-.play-v3 .capa-buzon .carta-msg .plazo,
-.play-v3 .capa-buzon .carta-msg .sello-estado {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .sello-estado {
   display: inline-flex !important;
   align-items: center;
   margin: 0 !important;
@@ -649,14 +649,14 @@
   text-transform: uppercase;
   color: var(--ds-ink-soft, #594839) !important;
 }
-.play-v3 .capa-buzon .acciones-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
   display: flex !important;
   flex-wrap: wrap;
   justify-content: flex-end;
   gap: 6px !important;
   margin: 0 !important;
 }
-.play-v3 .capa-buzon .carta-cta {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
@@ -673,13 +673,13 @@
   transform: rotate(-0.5deg);
   white-space: nowrap;
 }
-.play-v3 .capa-buzon .carta-cta--abrir {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir {
   background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), #e86b8f !important;
   box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.25), inset 0 -3px 0 rgba(146, 39, 73, .28) !important;
   text-shadow: 0 1px 0 rgba(146, 39, 73, .35);
 }
-.play-v3 .capa-buzon .carta-cta--ver,
-.play-v3 .capa-buzon .carta-cta--suave {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--ver,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--suave {
   background: linear-gradient(178deg, rgba(255,255,255,.25), rgba(255,255,255,0) 50%), #b8a8e8 !important;
   box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.2), inset 0 -3px 0 rgba(88, 74, 130, .28) !important;
   text-shadow: 0 1px 0 rgba(70, 55, 110, .35);
@@ -687,28 +687,28 @@
   font-size: .95rem !important;
 }
 @media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-msg {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .carta-msg {
     display: block !important;
     padding-top: 12px !important;
   }
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-pie {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .carta-pie {
     flex-wrap: wrap;
   }
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-pie-cta {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .carta-pie-cta {
     width: 100%;
     margin-left: 0;
   }
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .acciones-msg {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .acciones-msg {
     justify-content: stretch !important;
   }
-  .play-v3:has(.game-shell) .play-root.phone .capa-buzon .carta-cta {
+  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="buzon"] .carta-cta {
     flex: 1 1 auto;
   }
 }
 
 /* MENSAJITOS-CTA-MOCKUP — botones Abrir/Ver estilo dibujo */
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta,
-.play-v3 .capa-buzon .carta-cta {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta {
   position: relative;
   display: inline-flex !important;
   align-items: center !important;
@@ -731,13 +731,13 @@
   white-space: nowrap;
   box-shadow: 1px 2px 0 rgba(51, 38, 30, .22) !important;
 }
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta--abrir,
-.play-v3 .capa-buzon .carta-cta--abrir {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir {
   background: #e87868 !important;
   border-color: var(--ds-ink, #3b3028) !important;
 }
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta--abrir::after,
-.play-v3 .capa-buzon .carta-cta--abrir::after {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir::after,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir::after {
   content: "";
   display: block;
   width: 10px;
@@ -751,19 +751,19 @@
   transform: translateY(-1px) rotate(4deg);
   opacity: .95;
 }
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta--ver,
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta--suave,
-.play-v3 .capa-buzon .carta-cta--ver,
-.play-v3 .capa-buzon .carta-cta--suave {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta--ver,
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta--suave,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--ver,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--suave {
   background: #b8a0e0 !important;
   border-color: var(--ds-ink, #3b3028) !important;
   min-width: 68px !important;
   font-size: .98rem !important;
 }
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta--ver::after,
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta--suave::after,
-.play-v3 .capa-buzon .carta-cta--ver::after,
-.play-v3 .capa-buzon .carta-cta--suave::after {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta--ver::after,
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta--suave::after,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--ver::after,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--suave::after {
   content: "";
   display: block;
   width: 10px;
@@ -777,8 +777,8 @@
   transform: translateY(-1px) rotate(4deg);
   opacity: .95;
 }
-.play-v3:has(.game-shell) .play-root .capa-buzon .carta-cta:active,
-.play-v3 .capa-buzon .carta-cta:active {
+.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta:active,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta:active {
   transform: rotate(-0.8deg) translateY(1px);
   border-bottom-width: 2px !important;
   box-shadow: 0 1px 0 rgba(51, 38, 30, .18) !important;

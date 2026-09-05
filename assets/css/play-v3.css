@@ -1,4 +1,4 @@
-/* V3 — pueblo de papel. No es laboratorio. */
+﻿/* V3 — pueblo de papel. No es laboratorio. */
 .play-root {
   background:
     radial-gradient(ellipse at 30% 20%, rgba(255,253,246,.45), transparent 42%),
@@ -332,20 +332,20 @@
   border: 3px solid var(--ink) !important;
   box-shadow: 8px 10px 0 rgba(44,38,31,.12);
 }
-.capa-diario {
+.aht-screen[data-aht-screen="diario"] {
   background: #f7f1e2 !important;
   background-image: none !important;
 }
-.capa-buzon:not(.ds-migrada) { background: #f3e6cc !important; background-image: none !important; }
-.capa-vecinos, .capa-ficha-conocida, .capa-ficha-nueva {
+.aht-screen[data-aht-screen="buzon"]:not() { background: #f3e6cc !important; background-image: none !important; }
+.aht-screen[data-aht-screen="vecinos"], .aht-screen[data-aht-screen="ficha"].ficha-conocida, .aht-screen[data-aht-screen="ficha"].ficha-nueva {
   background: #fffaf0 !important;
 }
-.capa-organizar { background: #f7f0de !important; }
+.aht-screen[data-aht-screen="organizar"] { background: #f7f0de !important; }
 
-.play-root[data-capa="diario"] .capa-diario,
-.play-root[data-capa="vecinos"] .capa-vecinos,
-.play-root[data-capa="ficha-conocida"] .capa-ficha-conocida,
-.play-root[data-capa="ficha-nueva"] .capa-ficha-nueva {
+.play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"],
+.play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
+.play-root[data-capa="ficha-conocida"] .aht-screen[data-aht-screen="ficha"].ficha-conocida,
+.play-root[data-capa="ficha-nueva"] .aht-screen[data-aht-screen="ficha"].ficha-nueva {
   transform: none;
   pointer-events: auto;
 }
@@ -371,8 +371,8 @@
 .play-root.phone .btn-guia { bottom: 66px; font-size: .65rem; }
 
 .play-root[data-consulta]:not([data-consulta=""]) .velo { opacity: 1; pointer-events: auto; }
-.play-root[data-capa="buzon"] .capa-buzon,
-.play-root[data-capa="organizar"] .capa-organizar { transform: none; pointer-events: auto; }
+.play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
+.play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] { transform: none; pointer-events: auto; }
 
 .pc .postit { top: auto; right: 6%; bottom: 18%; width: 154px; font-size: .92rem; }
 
@@ -462,16 +462,16 @@
 }
 .dock button[data-open="vecinos"] i { border-radius: 50% 50% 40% 40%; background: #f3d4b8; width: 16px; height: 16px; }
 
-.capa-vecinos .vecino {
+.aht-screen[data-aht-screen="vecinos"] .vecino {
   transform: rotate(-.4deg);
   box-shadow: 2px 2px 0 rgba(44,38,31,.06);
 }
-.capa-diario .masthead {
+.aht-screen[data-aht-screen="diario"] .masthead {
   background: #2c261f; color: #fffdf6; border-color: var(--pink-deep);
 }
-.capa-diario .masthead h2 { color: #fffdf6; }
-.capa-diario .masthead .edicion { color: #f3b1c3; }
-.capa-organizar {
+.aht-screen[data-aht-screen="diario"] .masthead h2 { color: #fffdf6; }
+.aht-screen[data-aht-screen="diario"] .masthead .edicion { color: #f3b1c3; }
+.aht-screen[data-aht-screen="organizar"] {
   background-image:
     radial-gradient(circle at 12% 8%, rgba(196,43,74,.12), transparent 18%),
     repeating-linear-gradient(transparent, transparent 27px, #ead9c4 28px) !important;

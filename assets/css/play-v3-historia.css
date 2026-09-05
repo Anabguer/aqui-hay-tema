@@ -1,4 +1,4 @@
-/* play-v3-historia.css — Historia del Pueblo: Polaroid grid */
+﻿/* play-v3-historia.css — Historia del Pueblo: Polaroid grid */
 
 .historia-body {
   padding: .75rem 1rem 2rem;
@@ -325,7 +325,7 @@
 }
 
 /* ── Detalle de recuerdo (desde álbum) ────────────────────── */
-.capa-historia-detalle .histdet-body {
+.aht-screen[data-aht-screen="historia_detalle"] .histdet-body {
   padding: 1.2rem 1.5rem 2rem;
   text-align: center;
 }

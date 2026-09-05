@@ -380,11 +380,11 @@ body.vida-derrota-activa .play-root { pointer-events: none; filter: grayscale(.2
 }
 
 /* BuzÃ³n modal */
-.play-v3 .play-root.pc .capa-buzon { width: min(520px, 94vw) !important; max-width: 520px !important; }
-.play-v3 .capa-buzon [data-buzon-list] { max-height: calc(88vh - 120px); overflow-x: clip; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #c9b59a rgba(243, 230, 204, .35); }
-.play-v3 .capa-buzon .carta-msg { display: block !important; grid-template-columns: unset !important; }
-.play-v3 .capa-buzon .carta-inner { display: flex !important; gap: .75rem; min-width: 0; width: 100%; }
-.play-v3 .capa-buzon .carta-copy { flex: 1 1 auto; min-width: 0; }
+.play-v3 .play-root.pc .aht-screen[data-aht-screen="buzon"] { width: min(520px, 94vw) !important; max-width: 520px !important; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] { max-height: calc(88vh - 120px); overflow-x: clip; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #c9b59a rgba(243, 230, 204, .35); }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg { display: block !important; grid-template-columns: unset !important; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner { display: flex !important; gap: .75rem; min-width: 0; width: 100%; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1 1 auto; min-width: 0; }
 
 
 /* === Coherencia: aire, overflow, vecinos, bloques, buzón === */
@@ -434,30 +434,30 @@ body.play-v3, .game-shell { overflow-x: hidden; max-width: 100vw; }
 }
 
 /* BuzÃ³n modal â€” menos ventana, mÃ¡s papel */
-.play-v3 .capa-buzon:not(.ds-migrada) {
+.play-v3 .aht-screen[data-aht-screen="buzon"]:not() {
   background: #fff9ee !important;
   border: 2px solid #2c261f !important;
   box-shadow: 6px 8px 0 rgba(44,38,31,.08), inset 0 0 0 1px rgba(255,255,255,.6) !important;
   border-radius: 2px !important;
   max-width: 540px !important;
 }
-.play-v3 .capa-buzon > .cerrar {
+.play-v3 .aht-screen[data-aht-screen="buzon"] > .cerrar {
   position: absolute; top: -12px; right: 12px; border: 2px solid #2c261f; background: #fde8ef;
   font-size: .65rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
   padding: .2rem .45rem; cursor: pointer; transform: rotate(2deg); border-radius: 2px;
   box-shadow: 2px 2px 0 rgba(44,38,31,.1);
 }
-.play-v3 .capa-buzon h2 { font-family: Fraunces, Georgia, serif; font-size: 1.35rem; margin: .2rem 0 .65rem; }
-.play-v3 .capa-buzon [data-buzon-list] { display: flex; flex-direction: column; gap: .85rem; padding-top: .25rem; }
-.play-v3 .capa-buzon .carta-msg {
+.play-v3 .aht-screen[data-aht-screen="buzon"] h2 { font-family: Fraunces, Georgia, serif; font-size: 1.35rem; margin: .2rem 0 .65rem; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] { display: flex; flex-direction: column; gap: .85rem; padding-top: .25rem; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
   background: #fffdf8; border: 0 !important; box-shadow: 0 1px 0 rgba(44,38,31,.08);
   padding: .65rem .5rem !important; border-radius: 0 !important;
 }
-.play-v3 .capa-buzon .carta-msg.importante {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.importante {
   background: linear-gradient(135deg, #fff5f8, #fffdf8);
   box-shadow: inset 3px 0 0 #c42b4a, 0 1px 0 rgba(44,38,31,.06);
 }
-.play-v3 .capa-buzon .carta-msg + .carta-msg { border-top: none; }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg + .carta-msg { border-top: none; }
 
 .obj-vecinos-resumen, .obj-cotilleo, .obj-proximo, .obj-buzon { max-width:100%; box-sizing:border-box; }
 
@@ -494,7 +494,7 @@ body.play-v3, .game-shell { overflow-x: hidden; max-width: 100vw; }
 .plan-notif-nombres { display: block; font-family: Fraunces, Georgia, serif; font-size: .92rem; line-height: 1.25; }
 .plan-notif-meta { display: block; margin-top: .18rem; font-size: .76rem; color: #5a5048; }
 
-.capa-agenda {
+.aht-screen[data-aht-screen="agenda"] {
   background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat;
 }
 .agenda-list { display: flex; flex-direction: column; gap: .15rem; margin-top: .45rem; }
