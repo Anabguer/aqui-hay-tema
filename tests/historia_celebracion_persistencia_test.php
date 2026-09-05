@@ -152,12 +152,12 @@ ok($reconciled['celebracion_estado'] === 'consumida', 'D2. state corrected to co
 // ====================================================================
 // === E. fingerprint: cambio en historia_pueblo se detecta           ===
 // ====================================================================
-echo "\n=== E. fingerprint: historia_pueblo detectado ===\n";
+echo "\n=== E. fingerprint: historia_pueblo NO participa ===\n";
 
 $fpBefore = fingerprint($pAV);
 $regResult = HistoriaPuebloEngine::registrar($pAV, 'hito_test_fp', $resIds);
 ok($regResult['ok'], 'E1. new hito registered');
-ok($fpBefore !== fingerprint($pAV), 'E2. fingerprint changed after adding hito');
+ok($fpBefore === fingerprint($pAV), 'E2. fingerprint unchanged — historia_pueblo excluded (consumed file is authority)');
 
 // ====================================================================
 // === F. reload: ACK → reload → 0 celebración                       ===
