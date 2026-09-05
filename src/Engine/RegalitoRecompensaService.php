@@ -44,16 +44,16 @@ final class RegalitoRecompensaService
     private static function poolMensaje(): array
     {
         return [
-            '¡Completaste todo hoy! Como recompensa, {objeto}. Ya está en tu inventario.',
-            'Día bien hecho. Te llevas {objeto} — guárdalo para cuando quieras regalarlo.',
-            'Has cumplido con creces. {objeto} es tuyo. A ver a quién le toca.',
+            'Has completado todas las misiones de hoy. Te has ganado {objeto}. Ya está en tu inventario.',
+            'Día bien hecho: las tres misiones cumplidas. Te llevas {objeto} — guárdalo para quien quieras.',
+            'Has cumplido con creces las misiones del día. {objeto} es tuyo. A ver a quién le toca.',
         ];
     }
 
     private static function poolMensajePendiente(): array
     {
         return [
-            '¡Completaste todo hoy! Te has ganado {objeto}, pero el inventario está lleno. Cuando-libres hueco, será tuyo.',
+            'Has completado todas las misiones de hoy. Te has ganado {objeto}, pero el inventario está lleno. Cuando libres hueco, será tuyo.',
         ];
     }
 

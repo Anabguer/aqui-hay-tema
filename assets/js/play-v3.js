@@ -1628,6 +1628,7 @@
       const pref = t.slice(0, ci).trim();
       if (pref && !esIdInterno(pref)) return pref;
     }
+    if (mensajitoEsObjetoRecibido(m) && !remitenteIdDe(m)) return '';
     return 'Alguien';
   }
 
@@ -6896,7 +6897,7 @@ function hobbyIconKey(id, texto) {
         ? '<span class="aht-msg-flag aht-msg-flag--new">Nuevo</span>'
         : '<span class="aht-msg-flag aht-msg-flag--read">Visto</span>';
       const headerHtml = '<div class="aht-msg-header-row">' +
-        (nombre && (ridRem || m.tipo !== 'detallito_sorpresa')
+        (nombre && (ridRem || !esRegaloRecibido)
           ? '<p class="aht-msg-from" data-persona-id="' + esc(ridRem || '') + '" data-persona-nombre="' + esc(nombre) + '" role="button" tabindex="0">' + esc(nombre) + '</p>'
           : '') +
         flagHtml +
@@ -6930,7 +6931,7 @@ function hobbyIconKey(id, texto) {
       const actualizacionEtq = esActualizacion
         ? '<span class="carta-actualizacion-etq">Actualizaci\u00f3n' + (cuando ? ' \u00b7 ' + esc(cuando.split(' \u00b7 ').pop()) : '') + '</span>'
         : '';
-      const mostrarCabeceraVecino = !esRegaloRecibido || !!ridRem || m.tipo !== 'detallito_sorpresa';
+      const mostrarCabeceraVecino = !esRegaloRecibido || !!ridRem;
       const bodyHtml = '<div class="aht-msg-content">' +
         (esActualizacion ? htmlMensajitoHilo(origen) : '') +
         actualizacionEtq +

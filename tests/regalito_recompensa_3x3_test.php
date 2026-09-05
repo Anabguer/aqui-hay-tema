@@ -389,4 +389,73 @@ ok($rF2 !== null && ($rF2['ok'] ?? false), 'F: reto_semanal:R7 otorgado');
 $invF = InventarioEngine::totalUnidades($p);
 ok($invF === 2, 'F: 2 regalitos en inventario (sin cap global)');
 
+// ============================================================
+// TEST COPY_A: 3/3 → mensaje explica origen + de_persona null
+// ============================================================
+$p = regalito_fixture_partida();
+$p['misiones_diarias']['items'][] = make_mision('mis_copy_a');
+$p['misiones_diarias']['items'][] = make_mision('mis_copy_b');
+$p['misiones_diarias']['items'][] = make_mision('mis_copy_c');
+completarMision($p, 'mis_copy_a');
+completarMision($p, 'mis_copy_b');
+completarMision($p, 'mis_copy_c');
+$msgReg = null;
+foreach ($p['buzon'] ?? [] as $m) {
+    if (($m['tipo'] ?? '') === 'regalito_recompensa') { $msgReg = $m; break; }
+}
+ok($msgReg !== null, 'COPY_A: existe mensajito regalito_recompensa');
+ok($msgReg !== null && stripos($msgReg['texto'] ?? '', 'misi') !== false, 'COPY_A: texto menciona misiones');
+ok($msgReg !== null && array_key_exists('de_persona', $msgReg) && $msgReg['de_persona'] === null, 'COPY_A: de_persona es null');
+
+// ============================================================
+// TEST COPY_B: regalo por petición conserva vecino real
+// ============================================================
+require_once __DIR__ . '/regalos_f1_fixture.php';
+use AquiHayTema\Engine\PeticionFeedback;
+use AquiHayTema\Engine\PeticionEsquemas;
+use AquiHayTema\Engine\RegaloRecompensaEngine;
+$pb = regalo_fixture_partida(['per_x' => regalo_perfil()]);
+$pb['features'] = ['buzon_enabled' => true];
+$pb['peticiones'] = [[
+    'id' => 'pet_copy_b_01',
+    'peso' => PeticionEsquemas::PESO_DIFICIL,
+    'residente_id' => 'per_x',
+    'texto' => 'Arregla la fuente',
+    'estado' => 'abierta',
+    'schema_b4' => true,
+]];
+$pb['peticiones_pueblo'] = ['validos_dia' => 0];
+RegaloRecompensaEngine::porPeticionCumplida($pb, $pb['peticiones'][0]);
+$msgPet = null;
+foreach ($pb['buzon'] ?? [] as $m) {
+    if (($m['tipo'] ?? '') === 'regalo_recompensa') { $msgPet = $m; break; }
+}
+ok($msgPet !== null, 'COPY_B: existe mensajito regalo_recompensa de petición');
+ok($msgPet !== null && ($msgPet['de_persona'] ?? '') === 'per_x', 'COPY_B: de_persona es el vecino real');
+ok($msgPet !== null && stripos($msgPet['texto'] ?? '', 'per_x') !== false || ($msgPet['texto'] ?? '') !== '', 'COPY_B: texto tiene contenido');
+
+// ============================================================
+// TEST COPY_C: F5 / reload no altera mensajito ni duplica
+// ============================================================
+$p = regalito_fixture_partida();
+$p['misiones_diarias']['items'][] = make_mision('mis_copy_f5a');
+$p['misiones_diarias']['items'][] = make_mision('mis_copy_f5b');
+$p['misiones_diarias']['items'][] = make_mision('mis_copy_f5c');
+completarMision($p, 'mis_copy_f5a');
+completarMision($p, 'mis_copy_f5b');
+completarMision($p, 'mis_copy_f5c');
+$countAntes = count($p['buzon'] ?? []);
+$textoAntes = '';
+foreach ($p['buzon'] ?? [] as $m) {
+    if (($m['tipo'] ?? '') === 'regalito_recompensa') { $textoAntes = $m['texto'] ?? ''; break; }
+}
+RegalitoRecompensaService::otorgar($p, 'misiones_diarias:1');
+$countDespues = count($p['buzon'] ?? []);
+ok($countDespues === $countAntes, 'COPY_C: F5 no duplica mensajito');
+$textoDespues = '';
+foreach ($p['buzon'] ?? [] as $m) {
+    if (($m['tipo'] ?? '') === 'regalito_recompensa') { $textoDespues = $m['texto'] ?? ''; break; }
+}
+ok($textoDespues === $textoAntes, 'COPY_C: F5 no altera texto del mensajito');
+
 exit($failures > 0 ? 1 : 0);

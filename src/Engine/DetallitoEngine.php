@@ -27,9 +27,9 @@ final class DetallitoEngine
     private static function poolMensaje(): array
     {
         return [
-            'Hoy te has ganado un detallito. Abres la cajita y encuentras {objeto}.',
-            'Pequeña sorpresa del día: {objeto}. Guardado en tu inventario para cuando quieras usarlo.',
-            'Detallito merecido: {objeto}. Ya está en el cajón.',
+            'Hoy, al completar una misión, te has ganado un detallito. Abres la cajita y encuentras {objeto}.',
+            'Pequeña sorpresa del día: {objeto}. Guardado en tu inventario. Te lo has ganado al cumplir una misión.',
+            'Detallito merecido: {objeto}. Regalo al cumplir una misión. Ya está en el cajón.',
         ];
     }
 

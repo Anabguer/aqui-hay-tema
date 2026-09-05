@@ -253,4 +253,24 @@ $px['misiones_diarias']['items'][] = $m;
 $r = DetallitoEngine::alCumplirMision($px, $m);
 ok(true, 'N+: cooldown entre días permite tras esperar (probabilidad aparte)');
 
+// --- COPY_D: detallito → texto explica origen + de_persona null ---
+$midCopy = buscar_id_detallito('mis_copy_d');
+$pxc = detallito_fixture_partida();
+$mc = make_mision($midCopy);
+$pxc['misiones_diarias']['items'][] = $mc;
+$rc = DetallitoEngine::alCumplirMision($pxc, $mc);
+if ($rc !== null && ($rc['ok'] ?? false)) {
+    $msgDet = null;
+    foreach ($pxc['buzon'] ?? [] as $bm) {
+        if (($bm['tipo'] ?? '') === 'detallito_sorpresa') { $msgDet = $bm; break; }
+    }
+    ok($msgDet !== null, 'COPY_D: existe mensajito detallito_sorpresa');
+    ok($msgDet !== null && stripos($msgDet['texto'] ?? '', 'misi') !== false, 'COPY_D: texto menciona misión');
+    ok($msgDet !== null && array_key_exists('de_persona', $msgDet) && $msgDet['de_persona'] === null, 'COPY_D: de_persona es null');
+} else {
+    ok(false, 'COPY_D: detallito no se generó (probabilidad)');
+    ok(false, 'COPY_D: skip (no detallito)');
+    ok(false, 'COPY_D: skip (no detallito)');
+}
+
 exit($failures > 0 ? 1 : 0);
