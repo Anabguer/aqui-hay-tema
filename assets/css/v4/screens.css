@@ -117,6 +117,9 @@
 }
 
 /* ── VECINOS — Celestine: grid de tarjetas ──────────────────── */
+.aht-screen[data-aht-screen="vecinos"] {
+  --ds-paper-card: #F4EFF8;
+}
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
   padding: 0;
   display: flex;

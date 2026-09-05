@@ -156,7 +156,7 @@
   flex-direction: column !important;
   align-items: stretch !important;
   text-align: center !important;
-  min-height: 188px !important;
+  min-height: 170px !important;
   padding: 12px 10px 8px !important;
   border: 2px solid var(--vec-ink-soft) !important;
   border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important;
@@ -222,8 +222,8 @@
 /* === CARA VECINO === */
 .vecino-cara {
   position: relative !important;
-  width: 76px !important;
-  height: 76px !important;
+  width: 60px !important;
+  height: 60px !important;
   margin: 4px auto 8px !important;
   border-radius: 50% !important;
   overflow: hidden !important;
@@ -607,13 +607,13 @@ select.vec-rel-persona {
   }
 
   .vecino-celda {
-    min-height: 160px !important;
+    min-height: 140px !important;
     padding: 10px 8px 6px !important;
   }
 
   .vecino-cara {
-    width: 64px !important;
-    height: 64px !important;
+    width: 48px !important;
+    height: 48px !important;
   }
 
   .vecino-nom {
