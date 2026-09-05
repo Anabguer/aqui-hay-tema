@@ -642,7 +642,7 @@
       logApiError(action, method, body, resp.status, data, data.error || ('http_' + resp.status));
     }
     ahtLabAuditLog(data);
-    console.log('[DIAG-TRACE] api', { action, method, ok: data.ok, error: data.error, nResCount: data.estado && data.estado.residentes_count, nResPartida: data.partida && data.partida.residentes ? data.partida.residentes.length : '?' });
+    console.log('[DIAG-TRACE] api', { action, method, ok: data.ok, error: data.error, nResCount: data.estado && data.estado.residentes_count, nResPartida: data.partida && data.partida.residentes ? Object.keys(data.partida.residentes).length : '?' });
     return data;
   }
 
@@ -8462,7 +8462,7 @@ function hobbyIconKey(id, texto) {
     }
     console.log('[DIAG-TRACE] ensurePartida: calling partida.nueva', { config: CONFIG_JUEGO.meta && CONFIG_JUEGO.meta.config_id });
     const r = await api('partida.nueva', configNueva(true));
-    console.log('[DIAG-TRACE] ensurePartida: nueva result', { ok: r.ok, partida_id: r.partida_id, nResPartida: r.partida && r.partida.residentes ? r.partida.residentes.length : '?', nResCount: r.estado && r.estado.residentes_count });
+    console.log('[DIAG-TRACE] ensurePartida: nueva result', { ok: r.ok, partida_id: r.partida_id, nResPartida: r.partida && r.partida.residentes ? Object.keys(r.partida.residentes).length : '?', nResCount: r.estado && r.estado.residentes_count });
     if (r.ok && r.partida_id) persistPartidaId(r.partida_id);
     return !!r.ok;
   }
@@ -8471,7 +8471,7 @@ function hobbyIconKey(id, texto) {
     console.log('[DIAG-TRACE] refresh INICIO', { partidaId, ts: new Date().toISOString() });
     const popMensajitosAbierto = mensajitosPopAbierto;
     let paquete = await api('partida.refresh', {}, 'GET');
-    console.log('[DIAG-TRACE] refresh paquete', { ok: paquete.ok, error: paquete.error, nResCount: paquete.estado && paquete.estado.residentes_count, nResArray: paquete.partida && paquete.partida.residentes ? paquete.partida.residentes.length : '?', resIds: paquete.partida && paquete.partida.residentes ? paquete.partida.residentes.map(r => r.id).join(',') : '?' });
+    console.log('[DIAG-TRACE] refresh paquete', { ok: paquete.ok, error: paquete.error, nResCount: paquete.estado && paquete.estado.residentes_count, nResArray: paquete.partida && paquete.partida.residentes ? Object.keys(paquete.partida.residentes).length : '?', resIds: paquete.partida && paquete.partida.residentes ? Object.keys(paquete.partida.residentes).join(',') : '?' });
     if (!paquete.ok && partidaId) {
       const errRefresh = String(paquete.error || '').toUpperCase();
       const partidaPerdida = errRefresh === 'PARTIDA_NO_ENCONTRADA' || errRefresh === 'SAVE_CORRUPTO';
@@ -8554,7 +8554,7 @@ function hobbyIconKey(id, texto) {
     limpiarCachesPartidaUi();
     console.log('[DIAG-TRACE] nuevaPartidaLimpia: calling partida.nueva', { oldPartidaId, config: CONFIG_JUEGO.meta && CONFIG_JUEGO.meta.config_id });
     const r = await api('partida.nueva', configNueva(true));
-    console.log('[DIAG-TRACE] nuevaPartidaLimpia: result', { ok: r.ok, newPartida_id: r.partida_id, nResPartida: r.partida && r.partida.residentes ? r.partida.residentes.length : '?', nResCount: r.estado && r.estado.residentes_count });
+    console.log('[DIAG-TRACE] nuevaPartidaLimpia: result', { ok: r.ok, newPartida_id: r.partida_id, nResPartida: r.partida && r.partida.residentes ? Object.keys(r.partida.residentes).length : '?', nResCount: r.estado && r.estado.residentes_count });
     if (r.ok && r.partida_id) {
       persistPartidaId(r.partida_id);
       playtestLogClient.push({
