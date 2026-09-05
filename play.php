@@ -628,11 +628,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="ficha" aria-label="Ficha de vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <button type="button" class="ficha-volver" data-ficha-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; VECINOS</button>
+            <button type="button" class="aht-frame-back" data-ficha-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title">Ficha</h2>
-            <div style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;display:flex;gap:6px;">
-              <button type="button" class="ficha-nav" data-ficha-nav-prev aria-label="Vecino anterior" style="border:none;background:transparent;cursor:pointer;padding:4px 8px;font-size:1.5rem;font-weight:700;color:var(--aht-text,#33261E);line-height:1;">&#8249;</button>
-              <button type="button" class="ficha-nav" data-ficha-nav-next aria-label="Vecino siguiente" style="border:none;background:transparent;cursor:pointer;padding:4px 8px;font-size:1.5rem;font-weight:700;color:var(--aht-text,#33261E);line-height:1;">&#8250;</button>
+            <div class="ficha-header-nav" aria-label="Navegar entre vecinos">
+              <button type="button" class="ficha-nav" data-ficha-nav-prev aria-label="Vecino anterior">&#8249;</button>
+              <button type="button" class="ficha-nav" data-ficha-nav-next aria-label="Vecino siguiente">&#8250;</button>
             </div>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
@@ -714,7 +714,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="ficha_relaciones" aria-label="Relaciones del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <button type="button" class="frel-volver" data-frel-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <button type="button" class="aht-frame-back" data-frel-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title" data-ficha-rel-modal-tit>Relaciones</h2>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
@@ -726,8 +726,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="ficha_animo" aria-label="Estado de ánimo del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <button type="button" class="aht-frame-back" data-capa-back aria-label="Volver">&#8592;</button>
-          <button type="button" class="fani-volver" data-animo-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <button type="button" class="aht-frame-back" data-animo-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title">Ánimo</h2>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
@@ -739,9 +738,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="ficha_diario" aria-label="Diario del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <button type="button" class="fdi-volver" data-diario-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <button type="button" class="aht-frame-back" data-diario-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title">Diario</h2>
-            <div class="fdi-hero" data-diario-hero style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;"></div>
+            <div class="fdi-hero" data-diario-hero></div>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
@@ -990,10 +989,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="coti-body capa-scroll">
               <div class="coti-list" data-coti-list></div>
             </div>
-          </div>
-          <footer class="aht-frame-footer">
             <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">💡</span> Estos rumores cambian con el tiempo. Continúa conociendo a los vecinos para descubrir más.</p>
-          </footer>
+          </div>
         </div>
       </aside>
       <aside class="aht-screen" data-aht-screen="organizar" aria-label="Nuevo plan">
@@ -1054,12 +1051,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 </div>
               </section>
             </div>
+            <div class="org-actions">
+              <button type="button" class="org-crear" data-org-go>
+                <span class="org-crear-txt">Crear plan</span>
+              </button>
+            </div>
           </div>
-          <footer class="aht-frame-footer">
-            <button type="button" class="org-crear" data-org-go>
-              <span class="org-crear-txt">Crear plan</span>
-            </button>
-          </footer>
         </div>
       </aside>
     </div>

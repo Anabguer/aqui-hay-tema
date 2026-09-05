@@ -1259,3 +1259,53 @@
   padding: 8px 24px 16px;
   margin: 0;
 }
+/* --- Shell: nav ficha + pie cotilleos/organizar en body (sin footer global) --- */
+.aht-screen[data-aht-screen="ficha"] .ficha-header-nav {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  gap: 6px;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nav {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px 8px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--aht-text, #33261E);
+  line-height: 1;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-hero {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.aht-screen[data-aht-screen="diario"] .coti-pie-hint {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 10px 16px 14px;
+}
+
+.aht-screen[data-aht-screen="organizar"] .org-actions {
+  flex: 0 0 auto;
+  padding: 10px 16px 14px;
+}
+
+.aht-screen[data-aht-screen="organizar"] .aht-frame-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.aht-screen[data-aht-screen="organizar"] .org-body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
