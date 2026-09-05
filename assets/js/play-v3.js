@@ -914,15 +914,23 @@
     document.body.setAttribute('data-tut-finale', '1');
     syncScrollLock();
   }
+  function capaHistoriaCelebracionAbierta() {
+    var root = $('.play-root');
+    return !!(root && root.getAttribute('data-capa') === 'historia_celebracion');
+  }
   async function cerrarTutFinale() {
     /* aside[...]: nunca resuelve a <body>, hidden solo puede aplicar al modal. */
     var box = $('aside[data-tut-finale]');
     if (box) box.hidden = true;
     document.body.removeAttribute('data-tut-finale');
     syncScrollLock();
-    await api('partida.tutorial_finale', {});
+    const res = await api('partida.tutorial_finale', {});
+    if (res && res.tutorial && cacheEstado) {
+      cacheEstado.tutorial = res.tutorial;
+    }
     await refresh();
-    setCapa('');
+    if (res && res.historia) procesarCelebraciones(res.historia);
+    if (!capaHistoriaCelebracionAbierta()) setCapa('');
   }
   function quizaMostrarTutIntro() {
     const reopen = $('[data-tut-reopen]');
@@ -1877,7 +1885,7 @@
   }
 
   function mostrarSiguienteCelebracion() {
-    if ($('[data-aht-screen="historia_celebracion"].is-on')) return;
+    if (capaHistoriaCelebracionAbierta()) return;
     if (enTutorialPrimerosPasos()) return;
     if (document.body.hasAttribute('data-tut-activo')) return;
     if (document.body.hasAttribute('data-tut-finale')) return;

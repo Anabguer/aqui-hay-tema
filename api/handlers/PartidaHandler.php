@@ -223,6 +223,7 @@ final class PartidaHandler
         return [
             'ok' => true,
             'tutorial' => \AquiHayTema\Engine\TutorialPrimerosPasos::vistaPublica($partida),
+            'historia' => HistoriaPuebloHandler::pendientes($partida, $ctx),
         ];
     }
 
