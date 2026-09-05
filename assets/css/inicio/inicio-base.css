@@ -398,3 +398,342 @@
 .play-v3 .shell-grupo-parejas .zona-tit-parejas {
   gap: 8px;
 }
+/* INICIO-LATERALES-DESKTOP — estructura columnas derecha (autoridad inicio-base) */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-escena {
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 8px 10px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-lugar-stamp {
+    flex: 0 0 auto;
+    width: 58px;
+    min-width: 58px;
+    max-width: 58px;
+    padding: 4px 4px 9px;
+    margin-top: 2px;
+    box-sizing: border-box;
+    align-self: start;
+    grid-row: 1 / span 2;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-lugar-stamp img {
+    display: block;
+    width: 100%;
+    height: 40px;
+    max-width: 50px;
+    max-height: 40px;
+    object-fit: cover;
+    object-position: center bottom;
+    border-radius: 2px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-escena-core {
+    align-items: stretch;
+    text-align: center;
+    gap: 5px;
+  }
+}
+
+/* INICIO-ENC-INT-AUTHORITY — UI encuentro en laterales Inicio */
+.play-v3 .inicio-stage .encursos-movil .enc-int {
+  margin-top: .55rem;
+  padding-top: .55rem;
+  border-top: 1px dashed rgba(120,96,72,.35);
+  margin-bottom: .9rem;
+  text-align: center;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int::after {
+  content: "\00B7\00A0\00A0\00B7\00A0\00A0\00B7";
+  display: block;
+  margin-top: .9rem;
+  font-family: Caveat, cursive;
+  font-size: .8rem;
+  line-height: 1;
+  letter-spacing: .3em;
+  color: rgba(122,100,80,.45);
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-kicker { font-family: Caveat, cursive; font-size: .85rem; color: #7a6450; margin: 0 0 .6rem; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btns { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .42rem .34rem; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: .3em;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .69rem;
+  font-weight: 700;
+  line-height: 1.15;
+  padding: .26rem .58rem .28rem;
+  border: 1px solid rgba(120,96,72,.4);
+  border-radius: 999px;
+  background: #fdf6e6;
+  color: #4a4038;
+  cursor: pointer;
+  box-shadow: 1px 2px 0 rgba(120,96,72,.12);
+  transition: background-color .12s ease, transform .12s ease, box-shadow .12s ease;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btns .enc-int-btn:nth-child(odd) { transform: rotate(-.5deg); }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btns .enc-int-btn:nth-child(even) { transform: rotate(.45deg); }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn::before { font-size: .95em; line-height: 1; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btns .enc-int-btn:hover {
+  transform: translateY(-1px) rotate(0deg);
+  box-shadow: 1.5px 2.5px 0 rgba(120,96,72,.18);
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 rgba(120,96,72,.14); }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-enc-int-accion="hablar"]::before { content: "\01F4AC"; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-enc-int-accion="hablar"] { background: #e2edf8; border-color: #b9cde2; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-enc-int-accion="broma"]::before { content: "\01F602"; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-enc-int-accion="broma"] { background: #fbf0cd; border-color: #e0cf9d; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn--hobby { background: #f3ecdd; border-color: #d8c9ac; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="manualidades"]::before { content: "\01F3A8"; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="manualidades"] { background: #fadfe9; border-color: #e5bccd; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="bingo"]::before { content: "\01F3B1"; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="bingo"] { background: #e7dff6; border-color: #c6b8e2; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="videojuegos"]::before { content: "\01F3AE"; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="videojuegos"] { background: #dfeeda; border-color: #bcd4b4; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="cocina"]::before { content: "\01F373"; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn[data-hobby-id="cocina"] { background: #fce3cf; border-color: #e6c4a4; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn:hover { background-color: #fffef9; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int.is-busy { opacity: .65; pointer-events: none; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result { margin-top: .5rem; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt { font-size: .78rem; line-height: 1.35; margin: 0; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--bien { color: #3d6b3a; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--mal { color: #8b3a32; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--neutral { color: #5c5044; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas {
+  position: relative;
+  margin-top: .5rem;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn--temas {
+  background: #eef3ee;
+  border-color: #c9d6c6;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn--temas::after {
+  content: "\25BE";
+  font-size: .85em;
+  line-height: 1;
+  opacity: .65;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn--temas.is-elegido {
+  background: #f3ecdd;
+  border-color: #d8c9ac;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn--temas.is-elegido::after {
+  content: "";
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: .22rem;
+  max-height: min(264px, 44vh);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: .45rem;
+  border-radius: .9rem;
+  background: #fffdf4;
+  border: 1px solid rgba(120, 96, 72, .35);
+  box-shadow: 0 6px 18px rgba(80, 60, 40, .18);
+  text-align: left;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas-panel[hidden] { display: none; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas-panel .enc-int-btn {
+  justify-content: flex-start;
+  width: 100%;
+  transform: none;
+  box-shadow: none;
+  background: #fdf6e6;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas-panel .enc-int-btn:hover {
+  background-color: #f3ead4;
+  transform: none;
+}
+
+.shell-grupo-planes .enc-int-temas-panel {
+  position: absolute;
+  top: calc(100% + .4rem);
+  left: 0;
+  right: 0;
+  z-index: 30;
+  margin: 0 auto;
+  width: min(300px, 100%, calc(100vw - 32px));
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas-panel {
+  position: static;
+  width: 100%;
+  margin-top: .4rem;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-step[hidden] { display: none; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-temas[hidden] { display: none; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn--hobby[hidden] { display: none; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-pers {
+  flex-direction: column;
+  gap: .18rem;
+  min-width: 5.4rem;
+  padding: .5rem .6rem .4rem;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-btn.enc-int-pers::before { content: none; }
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-pers.is-on {
+  outline: 2px solid #c9a86a;
+  outline-offset: -2px;
+  background: #fff8ea;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-pers-cara {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #efe6d6;
+  border: 1px solid #d8c9ac;
+  font-size: .95rem;
+  color: #7a6450;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-pers-cara img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-pers-nombre {
+  font-size: .72rem;
+  line-height: 1.15;
+  color: #5c5044;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-volver {
+  background: none;
+  border: none;
+  padding: .05rem .25rem;
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  color: #7a6450;
+  cursor: pointer;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-volver:hover { color: #4a3a2a; }
+
+/* INICIO-ENC-INT-RESULT */
+.play-v3 .inicio-stage .encursos-movil .enc-int-result {
+  margin: .55rem .08rem 1.9rem;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt {
+  display: block;
+  margin: 0;
+  padding: .48rem .55rem .54rem;
+  text-align: center;
+  font-family: Nunito, "Segoe UI", sans-serif;
+  font-size: .88rem;
+  line-height: 1.38;
+  border-radius: 9px 12px 10px 9px;
+  box-shadow:
+    1px 2px 0 rgba(120, 96, 72, .14),
+    inset 0 0 0 1px rgba(255, 255, 255, .55);
+  transform: rotate(-.35deg);
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt::before {
+  display: block;
+  margin: 0 0 .16rem;
+  font-family: Caveat, cursive;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  line-height: 1.15;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--bien {
+  background: #e2efdb;
+  border: 1px solid #b7d1ae;
+  color: #345f31;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--bien::before {
+  content: "\2728\00A0\00A1HA FUNCIONADO!";
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--mal {
+  background: #fae1de;
+  border: 1px solid #e3b9b4;
+  color: #8b3a32;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--mal::before {
+  content: "\01F62C\00A0\00A0NO HA SALIDO BIEN";
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--neutral {
+  background: #fbf1cf;
+  border: 1px solid #dfcd98;
+  color: #6b5a3e;
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result-txt--neutral::before {
+  content: "\01F937\00A0\00A0SIN MUCHO EFECTO";
+}
+
+.play-v3 .inicio-stage .encursos-movil .enc-int-result::after {
+  content: "\00B7\00A0\00A0\00B7\00A0\00A0\00B7";
+  display: block;
+  margin-top: .6rem;
+  font-family: Caveat, cursive;
+  font-size: .8rem;
+  line-height: 1;
+  letter-spacing: .3em;
+  color: rgba(122, 100, 80, .45);
+}
+
+

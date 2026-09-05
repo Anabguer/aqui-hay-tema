@@ -24,8 +24,13 @@ const mobDeskBad = mobDeskRefs.filter(function (_, i, arr) {
 ok(mobDeskBad.length === 0 || /\.inicio-stage\s*>\s*\.inicio-desktop\s*\{\s*order:/.test(mobCss),
   'mobile CSS no referencia .inicio-desktop (excepto order stage)');
 
-// 2. CSS desktop no selecciona .inicio-mobile
-ok(!/\.inicio-mobile[\s,{.:]/.test(deskCss), 'desktop CSS no referencia .inicio-mobile');
+// 2. CSS desktop no estiliza layout móvil (solo ocultar vista inactiva en grid desktop)
+const deskMobLayout = deskCss.replace(
+  /\/\* INICIO-DESKTOP-LAYOUT[\s\S]*?@media \(min-width: 769px\) \{[\s\S]*?\n\}\s*$/m,
+  ''
+);
+ok(!/\.inicio-mobile[\s,{.:]/.test(deskMobLayout),
+  'desktop CSS no referencia .inicio-mobile fuera de toggles de vista');
 
 // 3. Contador mensajitos compartido (inicioAll)
 ok(/function inicioAll/.test(js) && /inicioAll\('\[data-buzon-badge\]'\)/.test(js),
@@ -61,11 +66,11 @@ ok(/inicio-views\.css/.test(php) && /inicio-mobile\.css/.test(php) &&
   !/screens\/inicio\.css/.test(php), 'PHP: CSS views+mobile (sin inicio.css)');
 ok(/@media \(max-width: 768px\)/.test(viewsCss) && /@media \(min-width: 769px\)/.test(viewsCss),
   'inicio-views.css: toggles 768/769');
-// 2b. display:contents permitido solo en cotilleo-cuerpo y wrappers de stage (layout fix)
-let deskCssNoContents = deskCss.replace(/\/\* INICIO-DESKTOP-LAYOUT-FIX[\s\S]*$/, '');
+// 2b. display:contents solo en INICIO-DESKTOP-LAYOUT (grid stage)
+let deskCssNoContents = deskCss.replace(/\/\* INICIO-DESKTOP-LAYOUT[\s\S]*$/m, '');
 deskCssNoContents = deskCssNoContents.replace(/\.obj-cotilleo-cuerpo[\s\S]{0,160}?display:\s*contents[^;]*;?/g, '');
 ok(!/display:\s*contents/.test(deskCssNoContents),
-  'desktop CSS: sin display:contents en layout');
+  'desktop CSS: display:contents acotado a INICIO-DESKTOP-LAYOUT');
 
 console.log(failures ? '\n' + failures + ' FAIL' : '\nTODO OK 7/7 + estructura');
 process.exit(failures ? 1 : 0);

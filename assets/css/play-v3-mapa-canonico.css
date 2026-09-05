@@ -10,7 +10,7 @@
 /* Horario en edificios del mapa (deshabilitado en mapa) */
 /* Horario: oculto en mapa (solo en ventana al pulsar edificio) */
 
-.play-v3 .board-fit {
+.play-v3 .game-map-wrap:not(.inicio-map-host) .board-fit {
   background: transparent;
   position: relative;
   aspect-ratio: 618 / 404;
@@ -20,7 +20,7 @@
   box-shadow: none;
 }
 
-.play-v3 .play-root.phone .board-fit {
+.play-v3 .game-map-wrap:not(.inicio-map-host) .play-root.phone .board-fit {
   width: 89%;
   max-height: min(71vh, 605px);
 }

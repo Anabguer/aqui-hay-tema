@@ -1,69 +1,11 @@
-/* inicio-desktop */
+#!/usr/bin/env node
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const p = path.join(__dirname, '..', 'assets/css/inicio/inicio-desktop.css');
+let d = fs.readFileSync(p, 'utf8');
 
-/* layout columnas: ver grid en .inicio-stage (inicio-desktop.css @media 769) */
-
-@media (min-width: 769px) {
-  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card--escena .enc-mov-faces img,
-  .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card--escena .enc-mov-faces .cara-ini {
-    width: 56px;
-    height: 56px;
-    min-width: 56px;
-    min-height: 56px;
-  }
-  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta {
-    margin-top: 4px;
-  }
-  .play-v3 .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tit {
-    font-size: 2rem;
-  }
-}
-
-.play-v3 .shell-grupo-parejas .obj-parejas-list {
-  min-height: 72px;
-}
-
-.play-v3 .shell-grupo-parejas .obj-pareja-piece {
-  background: #fff1f6;
-  border: 1.5px solid rgba(232, 120, 152, .38);
-  border-radius: 16px;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .82),
-    0 2px 7px rgba(232, 56, 90, .1);
-}
-
-.play-v3 .shell-grupo-parejas {
-  background: #fff6f9;
-  border-color: rgba(232, 136, 168, .68);
-}
-
-.play-v3 .shell-grupo-parejas .zona-tit-parejas::before {
-  font-size: 1.08rem;
-  letter-spacing: -1px;
-  line-height: 1;
-  transform: translateY(-1px);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .45);
-}
-
-.play-v3 .shell-grupo-parejas .zona-tit-parejas {
-  gap: 8px;
-}
-
-/* INICIO-FIEL-PANTALLAZOS-20260906 */
-
-@media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .btn-guia:not([hidden]) {
-    display: inline-flex;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-cuerpo .obj-dia-meta {
-    display: block;
-    font-size: .78rem;
-    font-weight: 700;
-    line-height: 1.15;
-  }
-}
-
-/* INICIO-DESKTOP-LAYOUT — autoridad única layout desktop */
+const gridBlock = `/* INICIO-DESKTOP-LAYOUT — autoridad única layout desktop */
 
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
@@ -137,4 +79,21 @@
     align-self: end;
   }
 }
+`;
 
+d = d.replace(/\.inicio-desktop \.inicio-desktop-left\s*\{[^}]+\}\s*/g, '');
+d = d.replace(/\.play-v3 \.encursos-movil \.enc-mov-escena\s*\{[^}]+\}\s*/g, '');
+d = d.replace(/\.play-v3 \.encursos-movil \.enc-mov-lugar-stamp\s*\{[^}]+\}\s*/g, '');
+d = d.replace(/\.play-v3 \.encursos-movil \.enc-mov-lugar-stamp img\s*\{[^}]+\}\s*/g, '');
+d = d.replace(/\.play-v3 \.encursos-movil \.enc-mov-escena-core\s*\{[^}]+\}\s*/g, '');
+
+const marker = '/* INICIO-DESKTOP-LAYOUT';
+const idx = d.indexOf(marker);
+if (idx >= 0) {
+  d = d.slice(0, idx).trimEnd() + '\n\n' + gridBlock + '\n';
+} else {
+  d = d.trimEnd() + '\n\n' + gridBlock + '\n';
+}
+
+fs.writeFileSync(p, d);
+console.log('patch_inicio_desktop_grid OK');

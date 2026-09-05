@@ -45,10 +45,7 @@ body.play-v3[data-lab="1"] .taller, body.play-v3[data-lab="1"] .playtest-cheats 
 
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
-.game-top {
-  display: grid; grid-template-columns: auto 1fr minmax(240px, 300px); align-items: center; gap: .75rem 1.25rem;
-  background: #fafaf8; border-bottom: none; padding: .45rem 1cm .55rem; box-sizing: border-box;
-}
+/* .game-top layout: autoridad inicio-mobile / inicio-desktop (no shell-ui) */
 
 .brand { margin: 0; display: flex; align-items: center; gap: .4rem; transform: rotate(-1deg); }
 

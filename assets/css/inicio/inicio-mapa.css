@@ -1,0 +1,76 @@
+/* INICIO-MAPA — autoridad única estructural del mapa en Inicio (.inicio-map-host) */
+
+@media (max-width: 768px) {
+  .play-v3 .inicio-stage > .inicio-map-host {
+    width: 100%;
+    min-width: 0;
+    padding: 0 13px 10px;
+    box-sizing: border-box;
+    position: relative;
+    overflow: visible;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .play-stage {
+    min-height: 0;
+    position: relative;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-fit {
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
+    position: static;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .play-v3 .inicio-stage .inicio-map-host .play-root.phone .board-scroll {
+    inset: 0;
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host {
+    width: 100%;
+    min-width: 0;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 0;
+    position: relative;
+    overflow: visible;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-stage {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .play-root.pc {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-scroll {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit {
+    width: 100%;
+    max-height: min(76vh, 660px);
+    position: relative;
+    overflow: hidden;
+  }
+}

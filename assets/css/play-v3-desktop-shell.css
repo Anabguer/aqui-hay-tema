@@ -398,27 +398,26 @@
   }
 
   /* Mapa un poco mas compacto */
-  .play-v3 .game-map-wrap .board-fit,
-  .play-v3 .play-root.pc .board-fit {
+  .play-v3 .game-map-wrap:not(.inicio-map-host) .board-fit,\n  .play-v3 .game-map-wrap:not(.inicio-map-host) .play-root.pc .board-fit {
     width: 91%;
     max-height: min(76vh, 660px);
   }
 
   /* Mapa: capas/modales no empujan scroll */
-  .play-v3 .game-map-wrap .play-stage {
+  .play-v3 .game-map-wrap:not(.inicio-map-host) .play-stage {
     flex: 1 1 auto;
     height: 100%;
     min-height: 0;
     overflow: hidden;
   }
 
-  .play-v3 .game-map-wrap .play-root.pc {
+  .play-v3 .game-map-wrap:not(.inicio-map-host) .play-root.pc {
     height: 100%;
     min-height: 0;
     overflow: hidden;
   }
 
-  .play-v3 .game-map-wrap .play-root.pc .board-scroll {
+  .play-v3 .game-map-wrap:not(.inicio-map-host) .play-root.pc .board-scroll {
     position: absolute;
     inset: 0;
     width: 100%;

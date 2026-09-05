@@ -80,6 +80,15 @@ try {
 }
 
 try {
+  execFileSync(process.execPath, [path.join(root, 'dev/audit_inicio_cascade_authority.cjs')], { stdio: 'pipe' });
+  ok(true, 'audit_inicio_cascade_authority una autoridad por zona');
+} catch (e) {
+  ok(false, 'audit_inicio_cascade_authority una autoridad por zona');
+  if (e.stdout) process.stdout.write(e.stdout);
+  if (e.stderr) process.stderr.write(e.stderr);
+}
+
+try {
   execFileSync(process.execPath, [path.join(root, 'dev/audit_inicio_authority.cjs')], { stdio: 'pipe' });
   ok(true, 'audit_inicio_authority sin doble stack legacy');
 } catch (e) {

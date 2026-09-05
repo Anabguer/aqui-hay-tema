@@ -28,7 +28,8 @@ ok(!/encursos-movil[\s\S]{0,80}display:\s*none/.test(dsShell), 'desktop-shell: n
 ok(/@media \(min-width: 769px\)/.test(inicioDesktop) || /@media \(min-width: 769px\)/.test(inicioCroma),
   'inicio desktop: bloque >=769px');
 ok(/\.obj-cotilleo/.test(inicioCroma) || /\.obj-cotilleo/.test(inicioDesktop), 'inicio desktop: bloque cotilleos');
-ok(/data-inicio-view="desktop"/.test(php), 'play.php: vista desktop separada');
+ok(/inicio\/inicio-mapa\.css/.test(php), 'play.php: enlaza inicio-mapa.css');
+ok(!/inicio\/inicio-responsive\.css/.test(php), 'play.php: sin inicio-responsive.css');
 
 if (failures) {
   console.error('\n' + failures + ' fallo(s)');
