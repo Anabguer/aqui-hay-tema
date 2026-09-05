@@ -662,32 +662,24 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <section class="ficha-hero" aria-label="Perfil del vecino">
-              <div class="ficha-cara-ring" data-ficha-cara-ring>
-                <div class="ficha-cara" data-ficha-img></div>
-              </div>
-              <div class="ficha-hero-info">
-                <div class="ficha-nombre-nav">
-                  <h3 class="ficha-nombre" data-ficha-nombre></h3>
+              <div class="ficha-hero-left">
+                <div class="ficha-cara-ring" data-ficha-cara-ring>
+                  <div class="ficha-cara" data-ficha-img></div>
                 </div>
-                <p class="ficha-edad" data-ficha-edad hidden></p>
-                <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
-                <p class="ficha-desde" data-ficha-desde></p>
-                <div class="ficha-animo-row" data-ficha-animo-row>
-                  <div class="ficha-animo-pill" data-ficha-animo-pill>
-                    <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                    <span class="ficha-animo-val" data-ficha-animo-text></span>
-                    <button type="button" class="ficha-animo-q" data-ficha-animo-q hidden aria-label="¿Por qué está así?">?</button>
+                <div class="ficha-hero-info">
+                  <h3 class="ficha-nombre" data-ficha-nombre></h3>
+                  <p class="ficha-edad" data-ficha-edad hidden></p>
+                  <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
+                  <p class="ficha-desde" data-ficha-desde></p>
+                  <div class="ficha-animo-row" data-ficha-animo-row>
+                    <button type="button" class="ficha-animo-pill" data-ficha-animo-pill>
+                      <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                      <span class="ficha-animo-val" data-ficha-animo-text></span>
+                    </button>
                   </div>
                 </div>
               </div>
-              <div class="ficha-hero-acciones" aria-label="Acciones con el vecino">
-                <button type="button" class="ficha-btn-diario ficha-hero-btn" data-ficha-diario-btn>Diario</button>
-                <button type="button" class="ficha-btn-org ficha-hero-btn" data-ficha-org>Nuevo plan</button>
-                <button type="button" class="ficha-btn-regalo ficha-hero-btn" data-ficha-regalar>Regalar</button>
-              </div>
-            </section>
-            <div class="ficha-body">
-              <div class="ficha-rasgos-hobbies">
+              <div class="ficha-hero-right">
                 <section class="ficha-seccion ficha-seccion-rasgos">
                   <h4 class="ficha-seccion-tit">Rasgos</h4>
                   <div class="ficha-seccion-body">
@@ -701,6 +693,19 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   </div>
                 </section>
               </div>
+            </section>
+            <nav class="ficha-acciones" aria-label="Acciones con el vecino">
+              <button type="button" class="ficha-btn-acc ficha-btn-diario" data-ficha-diario-btn>
+                <span class="ficha-btn-acc-ico">📓</span> Diario
+              </button>
+              <button type="button" class="ficha-btn-acc ficha-btn-org" data-ficha-org>
+                <span class="ficha-btn-acc-ico">📋</span> Nuevo plan
+              </button>
+              <button type="button" class="ficha-btn-acc ficha-btn-regalo" data-ficha-regalar>
+                <span class="ficha-btn-acc-ico">🎁</span> Regalar
+              </button>
+            </nav>
+            <div class="ficha-body">
               <div class="ficha-col ficha-col-detalles capa-scroll">
                 <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
                   <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
