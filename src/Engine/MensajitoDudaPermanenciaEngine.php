@@ -99,6 +99,9 @@ final class MensajitoDudaPermanenciaEngine
             return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
         }
         $rid = (string) ($mensaje['de_persona'] ?? '');
+        if ($rid === '' || !isset($partida['residentes'][$rid])) {
+            return ['ok' => false, 'error' => 'sin_residente'];
+        }
         self::marcarAtendida($partida, $rid, 'organizar');
         MensajitoConsejoEngine::cerrarHiloPublico($partida, $mensajeId, ['accion' => 'organizar_contacto']);
         return [
