@@ -48,9 +48,19 @@ final class TutorialIncorporaciones
         CandidatoLlegadaEngine::ensure($partida);
         $hechas = [];
         // Primera oleada inmediata (2) + resto a lo largo del día vía tick
-        $hechas = array_merge($hechas, self::incorporarHasta($partida, $root, 2, $logger));
+        // D1/D2: no exceder 3 residentes iniciales (política aprobada)
+        $objetivo = (int) ($partida['llegadas']['tutorial_objetivo'] ?? self::META_OBJETIVO);
+        $nActual = count(self::residentesActivos($partida));
+        $maxInmediatas = max(0, min(2, $objetivo - $nActual));
+        if ($maxInmediatas > 0) {
+            $hechas = array_merge($hechas, self::incorporarHasta($partida, $root, $maxInmediatas, $logger));
+        }
         $partida['llegadas']['tutorial_completado_dia'] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
-        $partida['llegadas']['tutorial_pendiente_resto'] = true;
+        if ($nActual >= $objetivo || count(self::residentesActivos($partida)) >= $objetivo) {
+            $partida['llegadas']['tutorial_pendiente_resto'] = false;
+        } else {
+            $partida['llegadas']['tutorial_pendiente_resto'] = true;
+        }
         return $hechas;
     }
 
@@ -82,6 +92,15 @@ final class TutorialIncorporaciones
         $n = count(self::residentesActivos($partida));
         $objetivo = (int) ($partida['llegadas']['tutorial_objetivo'] ?? self::META_OBJETIVO);
 
+        // D1/D2: no incorporar por encima de 3 (política aprobada)
+        if ($n >= $objetivo) {
+            $partida['llegadas']['tutorial_pendiente_resto'] = false;
+            if (($partida['llegadas']['modo'] ?? '') === 'tutorial') {
+                CandidatoLlegadaEngine::activarModoNormal($partida, $root);
+            }
+            return [];
+        }
+
         // Espaciar: a partir de completar, cada ~2–3 h una llegada tutorial
         $ultimaHora = (int) ($partida['llegadas']['tutorial_ultima_hora'] ?? -99);
         if ($hora - $ultimaHora < 2 && $n < $objetivo) {
@@ -99,10 +118,12 @@ final class TutorialIncorporaciones
             CandidatoLlegadaEngine::activarModoNormal($partida, $root);
         }
 
-        // Si se acabó el día 1 sin llegar a 8, forzar el resto al cierre
+        // Si se acabó el día 1 sin llegar al objetivo, forzar el resto al cierre
         if ($dia > (int) ($partida['llegadas']['tutorial_completado_dia'] ?? 1)
-            && !empty($partida['llegadas']['tutorial_cola'])) {
-            $hechas = array_merge($hechas, self::incorporarHasta($partida, $root, 99, $logger));
+            && !empty($partida['llegadas']['tutorial_cola'])
+            && $n2 < $objetivo) {
+            $restante = $objetivo - $n2;
+            $hechas = array_merge($hechas, self::incorporarHasta($partida, $root, $restante, $logger));
             $partida['llegadas']['tutorial_pendiente_resto'] = false;
             CandidatoLlegadaEngine::activarModoNormal($partida, $root);
         }
@@ -120,9 +141,16 @@ final class TutorialIncorporaciones
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $compDia = (int) ($partida['llegadas']['tutorial_completado_dia'] ?? 0);
         if ($compDia !== 1 || $dia !== 1) {
-            // cuando cruzamos a día 2
+            // cuando cruzamos a día 2: completar SOLO hasta objetivo, no más
             if ($compDia === 1 && $dia >= 2 && !empty($partida['llegadas']['tutorial_cola'])) {
-                $h = self::incorporarHasta($partida, $root, 99, $logger);
+                $objetivo = (int) ($partida['llegadas']['tutorial_objetivo'] ?? self::META_OBJETIVO);
+                $nActual = count(self::residentesActivos($partida));
+                $restante = max(0, $objetivo - $nActual);
+                if ($restante > 0) {
+                    $h = self::incorporarHasta($partida, $root, $restante, $logger);
+                } else {
+                    $h = [];
+                }
                 $partida['llegadas']['tutorial_pendiente_resto'] = false;
                 CandidatoLlegadaEngine::activarModoNormal($partida, $root);
                 return $h;

@@ -543,10 +543,10 @@
         "bonus_nucleo_modificado": 30
     },
     "llegadas": {
-        "_nota": "Lab SimuladorEconomia + brief post-gate. Plazo 2d sin cifra canonica previa.",
+        "_nota": "Lab SimuladorEconomia + brief post-gate. Plazo 2d sin cifra canonica previa. Candidate B aprobado 2026-09.",
         "p_base": 0.08,
-        "p_por_hueco": 0.04,
-        "p_max_dia": 0.45,
+        "p_por_hueco": 0.018,
+        "p_max_dia": 0.35,
         "p_cooldown_1d": 0.4,
         "plazo_oferta_dias": 2,
         "espera_minutos_min": 1,
