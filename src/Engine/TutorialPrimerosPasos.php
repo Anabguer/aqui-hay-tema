@@ -416,6 +416,7 @@ final class TutorialPrimerosPasos
         }
         $partida['tutorial']['finale_visto'] = true;
         $partida['tutorial']['activo'] = false;
+        HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
         if (LabAudit::activaEnRequest()) {
             LabAudit::eventoTutorial($partida, 'FINALE_VISTO', new Catalog(dirname(__DIR__, 2)));
         }

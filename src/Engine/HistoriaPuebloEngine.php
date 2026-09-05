@@ -61,13 +61,51 @@ final class HistoriaPuebloEngine
     }
 
     /**
-     * Registra un hito si no existe ya para esa clave.
-     * Si es nuevo, crea celebración pendiente y concede recompensa si existe.
+     * Primer recuerdo del pueblo: los tres primeros habitantes.
+     * Idempotente — no registra ni premia dos veces.
      *
-     * @param array<string, mixed> $partida
-     * @param list<string> $protagonistas IDs de residentes involucrados
-     * @return array{ok: bool, ya_existia: bool, entrada: ?array}
+     * @return array{ok: bool, ya_existia: bool, entrada: ?array}|null null si aún no hay 3 residentes
      */
+    public static function registrarEmpezoCotarroSiToca(array &$partida): ?array
+    {
+        if (self::tutorialBloqueaPrimerRecuerdo($partida)) {
+            return null;
+        }
+        $ids = array_keys($partida['residentes'] ?? []);
+        if (count($ids) < 3) {
+            return null;
+        }
+        $protagonistas = array_slice($ids, 0, 3);
+
+        return self::registrar(
+            $partida,
+            self::HITO_EMPEZO_COTARRO,
+            $protagonistas,
+            ['origen' => 'tres_primeros_habitantes'],
+        );
+    }
+
+    /**
+     * Puente bitácora relacional → hitos de Historia del Pueblo.
+     *
+     * @param list<string> $participantes
+     */
+    public static function alBitacoraHito(array &$partida, string $tipoBitacora, array $participantes): ?array
+    {
+        $hitoId = match ($tipoBitacora) {
+            RelacionBitacora::SE_CONOCIERON => 'hito_02',
+            default => null,
+        };
+        if ($hitoId === null || count($participantes) < 2) {
+            return null;
+        }
+
+        return self::registrar($partida, $hitoId, array_slice($participantes, 0, 2), [
+            'origen' => 'bitacora_relaciones',
+            'tipo_bitacora' => $tipoBitacora,
+        ]);
+    }
+
     public static function registrar(
         array &$partida,
         string $hitoId,
@@ -216,10 +254,10 @@ final class HistoriaPuebloEngine
             if (in_array($slot['id'], $consumedInGame, true)) {
                 continue;
             }
-            if (in_array($slot['id'], $consumed, true)) {
+            if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
                 continue;
             }
-            if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
+            if (in_array($slot['id'], $consumed, true)) {
                 continue;
             }
             $pendientes[] = [
@@ -241,6 +279,20 @@ final class HistoriaPuebloEngine
      * Marca una celebración como consumida (ACK idempotente).
      * Persiste en celebraciones_consumidas (in-game array) Y celebracion_estado.
      */
+    public static function estaConsumida(array $partida, string $hitoId): bool
+    {
+        if (in_array($hitoId, $partida['celebraciones_consumidas'] ?? [], true)) {
+            return true;
+        }
+        $entrada = self::buscarPorHito($partida, $hitoId);
+        return $entrada !== null && ($entrada['celebracion_estado'] ?? '') === 'consumida';
+    }
+
+    /**
+     * Marca celebración como consumida. Idempotente: si ya estaba consumida, no muta.
+     *
+     * @return bool true si mutó pendiente→consumida; false si ya consumida o no existe
+     */
     public static function ack(array &$partida, string $hitoId): bool
     {
         self::ensure($partida);
@@ -250,15 +302,51 @@ final class HistoriaPuebloEngine
         }
 
         foreach ($partida['historia_pueblo'] as &$e) {
-            if (($e['hito_id'] ?? '') === $hitoId && ($e['celebracion_estado'] ?? '') === 'pendiente') {
-                $e['celebracion_estado'] = 'consumida';
+            if (($e['hito_id'] ?? '') !== $hitoId) {
+                continue;
+            }
+            if (($e['celebracion_estado'] ?? '') === 'consumida') {
                 if (!in_array($hitoId, $partida['celebraciones_consumidas'], true)) {
                     $partida['celebraciones_consumidas'][] = $hitoId;
                 }
-                return true;
+                return false;
             }
+            $e['celebracion_estado'] = 'consumida';
+            if (!in_array($hitoId, $partida['celebraciones_consumidas'], true)) {
+                $partida['celebraciones_consumidas'][] = $hitoId;
+            }
+            return true;
         }
         return false;
+    }
+
+    /**
+     * Evita que un guardado concurrente revierta consumida→pendiente (race refresh/ACK).
+     *
+     * @param list<array<string, mixed>> $persistedHistoria
+     */
+    public static function preservarCelebracionesConsumidas(array &$partida, array $persistedHistoria): void
+    {
+        $consumidas = [];
+        foreach ($persistedHistoria as $e) {
+            if (($e['celebracion_estado'] ?? '') === 'consumida') {
+                $clave = (string) ($e['clave'] ?? '');
+                if ($clave !== '') {
+                    $consumidas[$clave] = true;
+                }
+            }
+        }
+        if ($consumidas === []) {
+            return;
+        }
+        self::ensure($partida);
+        foreach ($partida['historia_pueblo'] as &$e) {
+            $clave = (string) ($e['clave'] ?? '');
+            if ($clave !== '' && isset($consumidas[$clave]) && ($e['celebracion_estado'] ?? '') === 'pendiente') {
+                $e['celebracion_estado'] = 'consumida';
+            }
+        }
+        unset($e);
     }
 
     // ── Helpers ────────────────────────────────────────────────────
@@ -328,6 +416,16 @@ final class HistoriaPuebloEngine
             }
         }
         return null;
+    }
+
+    private static function tutorialBloqueaPrimerRecuerdo(array $partida): bool
+    {
+        $tut = $partida['tutorial'] ?? null;
+        if (!is_array($tut) || ($tut['id'] ?? '') !== TutorialPrimerosPasos::ID) {
+            return false;
+        }
+
+        return empty($tut['finale_visto']);
     }
 
     public static function clave(string $hitoId, array $protagonistas): string

@@ -36,12 +36,10 @@ final class PartidaLifecycle
         PoblacionV3::incorporarIniciales($partida, $config, $this->root, $this->residentes);
         self::aplicarParentescoConfig($partida, $config);
 
-        HistoriaPuebloEngine::registrar(
-            $partida,
-            HistoriaPuebloEngine::HITO_EMPEZO_COTARRO,
-            array_keys($partida['residentes']),
-            ['origen' => 'partida_nueva']
-        );
+        $arrancaTutorialPrimeros = TutorialPrimerosPasos::debeArrancar($config);
+        if (!$arrancaTutorialPrimeros) {
+            HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
+        }
 
         FeatureConfig::mergeIntoPartida($partida, $this->root);
         if (!empty($config['features']) && is_array($config['features'])) {
@@ -102,6 +100,7 @@ final class PartidaLifecycle
 
         // Monotonicity guard: reconcile stale celebracion_estado with consumed file
         HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
+        HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
@@ -125,6 +124,7 @@ final class PartidaLifecycle
 
         // Monotonicity guard: reconcile stale celebracion_estado with consumed file
         HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
+        HistoriaPuebloEngine::registrarEmpezoCotarroSiToca($partida);
 
         if (self::fingerprintEstadoPersistible($partida) !== $fingerprintAntes) {
             $this->guardar($partida);
@@ -150,6 +150,7 @@ final class PartidaLifecycle
      */
     public function guardarRapido(array $partida): void
     {
+        $this->fusionarCelebracionesDesdeDisco($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         RngService::fromPartida($partida)->persistToPartida($partida);
         $this->repo->guardarRapido($partida);
@@ -194,6 +195,7 @@ final class PartidaLifecycle
 
     public function guardar(array $partida): void
     {
+        $this->fusionarCelebracionesDesdeDisco($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
         PersistenciaCaps::aplicar($partida);
         RngService::fromPartida($partida)->persistToPartida($partida);
@@ -228,6 +230,31 @@ final class PartidaLifecycle
     public function listar(): array
     {
         return $this->repo->listar();
+    }
+
+    /**
+     * @param array<string, mixed> $partida
+     */
+    private function fusionarCelebracionesDesdeDisco(array &$partida): void
+    {
+        $partidaId = (string) ($partida['meta']['partida_id'] ?? '');
+        if ($partidaId === '' || !$this->repo->existe($partidaId) || $this->repo->persistenceBackend() === 'sql') {
+            return;
+        }
+        try {
+            $data = JsonFile::read($this->repo->pathFor($partidaId));
+            HistoriaPuebloEngine::preservarCelebracionesConsumidas($partida, $data['historia_pueblo'] ?? []);
+            HistoriaPuebloEngine::ensure($partida);
+            foreach ($data['celebraciones_consumidas'] ?? [] as $hitoId) {
+                if (!is_string($hitoId) || $hitoId === '') {
+                    continue;
+                }
+                if (!in_array($hitoId, $partida['celebraciones_consumidas'], true)) {
+                    $partida['celebraciones_consumidas'][] = $hitoId;
+                }
+            }
+        } catch (\Throwable $ignored) {
+        }
     }
 
     /**

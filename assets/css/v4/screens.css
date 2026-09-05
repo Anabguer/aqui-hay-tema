@@ -157,26 +157,6 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
-  scrollbar-width: none;
-}
-.aht-screen[data-aht-screen="vecinos"] .aht-frame-body::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
-/* Avatar bigger — variable override, no !important */
-.aht-screen[data-aht-screen="vecinos"] .vecino-cara {
-  --vec-cara-size: 96px;
-}
-/* Single scroll container: grid must not scroll independently */
-.aht-screen[data-aht-screen="vecinos"] [data-vecinos-list].vecinos-grid {
-  overflow-y: visible;
-}
-@media (max-width: 768px) {
-  .aht-screen[data-aht-screen="vecinos"] .vecino-cara {
-    --vec-cara-size: 72px;
-  }
 }
 
 /* ── MISIONES ───────────────────────────────────────────────── */
@@ -412,4 +392,15 @@
 /* ── HISTORIA DETALLE ───────────────────────────────────────── */
 .aht-screen[data-aht-screen="historia_detalle"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+}
+
+/* Historia celebraci�n: X por encima del contenido, hit-area c�moda */
+.aht-screen[data-aht-screen=""historia_celebracion""] .aht-frame-close {
+  z-index: 30;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+.aht-screen[data-aht-screen=""historia_celebracion""] .aht-frame-header {
+  position: relative;
+  z-index: 25;
 }

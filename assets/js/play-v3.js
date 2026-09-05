@@ -1930,8 +1930,12 @@
   }
 
   async function celebracionClose(hitoId) {
+    if (!hitoId) {
+      setCapa('');
+      return;
+    }
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
-    if (!ackResult || ackResult.ok === false || ackResult.ack_ok === false) {
+    if (!ackResult || ackResult.ok === false || !ackResult.ack_ok) {
       console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
       return;
     }
@@ -1943,8 +1947,12 @@
 
   async function celebracionIrAlbum() {
     const hitoId = celebracionHitoActual;
+    if (!hitoId) {
+      setCapa('historia');
+      return;
+    }
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
-    if (!ackResult || ackResult.ok === false || ackResult.ack_ok === false) {
+    if (!ackResult || ackResult.ok === false || !ackResult.ack_ok) {
       console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
       return;
     }
@@ -8775,12 +8783,14 @@ function hobbyIconKey(id, texto) {
     const histCelebClose = ev.target.closest('[data-historia-celebracion-close]');
     if (histCelebClose) {
       ev.preventDefault();
+      ev.stopPropagation();
       celebracionClose(celebracionHitoActual);
       return;
     }
     const histCelebAlbum = ev.target.closest('[data-historia-celebracion-album]');
     if (histCelebAlbum) {
       ev.preventDefault();
+      ev.stopPropagation();
       celebracionIrAlbum();
       return;
     }
@@ -9336,14 +9346,6 @@ var finOk = $('[data-tut-fin-ok]');
         t.setAttribute('aria-selected', t.getAttribute('data-buzon-tab') === 'nuevos' ? 'true' : 'false');
       });
       renderBuzon(cacheBuzon);
-    }
-    if (screen === 'vecinos') {
-      vecBuscaTxt = '';
-      var buscaInp = $('[data-vec-busca]');
-      if (buscaInp) buscaInp.value = '';
-      vecTabActiva = 'vecinos';
-      aplicarVecTabUI();
-      renderVecinos();
     }
   });
 

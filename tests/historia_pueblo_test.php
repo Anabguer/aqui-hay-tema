@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 use AquiHayTema\Engine\HistoriaPuebloEngine;
 use AquiHayTema\Engine\HistoriaPuebloVista;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\TutorialPrimerosPasos;
 
 $root = dirname(__DIR__);
 $failures = 0;
@@ -26,12 +27,16 @@ $p1 = $service->nuevaPartida('juego_v1', 'hp-test-1');
 ok(isset($p1['historia_pueblo']), '1. historia_pueblo existe en partida nueva');
 ok(is_array($p1['historia_pueblo']), '1. es array');
 
-// --- 2) Primer hito registrado al crear partida ---
+// --- 2) Primer hito tras finale del tutorial (no al crear partida) ---
+ok(count(HistoriaPuebloEngine::listar($p1)) === 0, '2.0 sin hito antes del finale');
+$p1['tutorial']['jugable_completado'] = true;
+TutorialPrimerosPasos::marcarFinaleVisto($p1);
 $entradas = HistoriaPuebloEngine::listar($p1);
-ok(count($entradas) >= 1, '2. al menos 1 hito registrado en partida nueva');
+ok(count($entradas) >= 1, '2. al menos 1 hito tras finale tutorial');
 
 // --- 3) Hito empezo_el_cotarro existe ---
-$clave = HistoriaPuebloEngine::clave(HistoriaPuebloEngine::HITO_EMPEZO_COTARRO, array_keys($p1['residentes']));
+$protagonistas = array_slice(array_keys($p1['residentes']), 0, 3);
+$clave = HistoriaPuebloEngine::clave(HistoriaPuebloEngine::HITO_EMPEZO_COTARRO, $protagonistas);
 $existe = HistoriaPuebloEngine::existe($p1, $clave);
 ok($existe, '3. hito empezo_el_cotarro existe');
 
@@ -39,12 +44,12 @@ ok($existe, '3. hito empezo_el_cotarro existe');
 $entrada = HistoriaPuebloEngine::obtener($p1, $clave);
 ok($entrada !== null, '4. entrada no null');
 ok(!empty($entrada['revelado']), '4.1 hito está revelado');
-ok(count($entrada['protagonistas']) === count($p1['residentes']), '4.2 todos los residentes son protagonistas');
+ok(count($entrada['protagonistas']) === 3, '4.2 los tres primeros habitantes son protagonistas');
 ok(($entrada['dia'] ?? 0) >= 1, '4.3 día registrado >= 1');
 
 // --- 5) Idempotencia ---
 $nAntes = count(HistoriaPuebloEngine::listar($p1));
-$resultado = HistoriaPuebloEngine::registrar($p1, HistoriaPuebloEngine::HITO_EMPEZO_COTARRO, array_keys($p1['residentes']));
+$resultado = HistoriaPuebloEngine::registrar($p1, HistoriaPuebloEngine::HITO_EMPEZO_COTARRO, $protagonistas);
 ok($resultado['ya_existia'] === true, '5. registrar duplicado retorna ya_existia=true');
 ok(count(HistoriaPuebloEngine::listar($p1)) === $nAntes, '5.1 no se duplica entrada');
 
