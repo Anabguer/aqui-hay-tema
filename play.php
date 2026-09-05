@@ -59,8 +59,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 <link rel="stylesheet" href="assets/css/play-v3-consulta-edificio-v2.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-tutorial-lavanda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/mensajitos-carta-regalo-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/mensajitos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/vecinos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 <?php /* CANON: V4 visibility + contenido modal — ultima autoridad pantallas */ ?>
@@ -90,16 +88,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       font-family: Fraunces, Georgia, serif; font-style: italic;
       background: #f3e6cc; border-bottom: 2px solid #c9b8a0; color: #2a2218;
     }
-        body.play-v3 .playtest-guia,
-    body.play-v3 .playtest-cheats,
-    body.play-v3 .tiempo-juego { display: none !important; }
     body.play-v3[data-tutorial-zona="buzon"] [data-open="buzon"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="vecinos"] [data-open="vecinos"] { outline: 2px solid #c45; }
     body.play-v3[data-tutorial-zona="organizar"] [data-open="organizar"] { outline: 2px solid #c45; }
     .taller-debug { display: none; max-width: 42rem; margin: .25rem .5rem; padding: .4rem .6rem; font: 12px/1.35 monospace; background: #1a1a1a; color: #cfc; white-space: pre-wrap; }
     body.play-v3[data-taller="1"] .taller-debug.is-on { display: block; }
     .taller strong.lab { color: #c45; }
-    .playtest-cheats {
+    .playtest-cheats:not([hidden]) {
       display: flex; flex-wrap: wrap; gap: .55rem; align-items: center;
       margin: 0 .5rem .5rem; padding: .65rem .8rem;
       background: #2a2218; color: #f7f1e8;
@@ -119,7 +114,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     }
     .playtest-cheats button:hover { background: #a8324a; }
     .playtest-cheats .pc-msg { font-size: .85rem; color: #eadfd4; margin-left: .35rem; }
-    .playtest-guia {
+    .playtest-guia:not([hidden]) {
+      display: block;
       margin: .35rem .5rem .6rem;
       padding: .75rem 1rem;
       max-width: 52rem;
@@ -161,11 +157,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       margin: 0; max-height: 22rem; overflow: auto; white-space: pre-wrap;
       font: 11px/1.4 ui-monospace, Consolas, monospace; color: #cfc6b8;
     }
-    .aht-debug-float { position: fixed; z-index: 90; left: 10px; bottom: 10px; display: none !important; }
-    body.play-v3[data-debug="1"] .aht-debug-float { display: block !important; }
+    .aht-debug-float { position: fixed; z-index: 90; left: 10px; bottom: 10px; }
+    body.play-v3:not([data-debug="1"]) .aht-debug-float { display: none; }
+    body.play-v3[data-debug="1"] .aht-debug-float { display: block; }
     .aht-debug-toggle { border: 1px solid #8a7a66; background: #fff6c8; font: 700 .72rem Nunito,sans-serif; padding: .35rem .55rem; border-radius: 999px; cursor: pointer; opacity: .92; }
-    .aht-debug-panel { position: absolute; left: 0; bottom: calc(100% + 6px); width: min(260px, 88vw); padding: .5rem; background: #fffdf6; border: 1px solid #8a7a66; display: flex; flex-wrap: wrap; gap: .3rem; box-shadow: 2px 3px 8px rgba(0,0,0,.12); }
-    .aht-debug-panel[hidden] { display: none !important; }
+    .aht-debug-panel:not([hidden]) {
+      position: absolute; left: 0; bottom: calc(100% + 6px); width: min(260px, 88vw); padding: .5rem; background: #fffdf6; border: 1px solid #8a7a66; display: flex; flex-wrap: wrap; gap: .3rem; box-shadow: 2px 3px 8px rgba(0,0,0,.12);
+    }
     .aht-debug-title { width: 100%; margin: 0; font-size: .65rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: #7a7164; }
     .aht-debug-panel button { border: 1px solid #8a7a66; background: #fff; font: inherit; font-size: .7rem; font-weight: 700; padding: .2rem .4rem; cursor: pointer; }
     .tut-caras {
@@ -512,7 +510,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="fecha" data-fecha></div>
             <div class="hora" data-hora>&#8212;</div>
           </div>
-          <div class="tiempo-juego" aria-label="Avanzar el tiempo">
+          <div class="tiempo-juego" hidden aria-label="Avanzar el tiempo">
             <button type="button" class="tique-hora" data-horas="1" title="Avanzar una hora">+1 h</button>
             <button type="button" class="tique-dia" data-horas="24" title="Avanzar un d&#8212;a">+1 d&#8212;a</button>
           </div>

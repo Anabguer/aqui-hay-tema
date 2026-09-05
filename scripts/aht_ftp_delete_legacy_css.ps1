@@ -1,10 +1,9 @@
 ﻿#Requires -Version 5.1
-# Borra CSS legacy en FTP tras fase 1+2 (ejecutar desde worktree canonico con credenciales deploy).
 param([switch]$DryRun)
 $ErrorActionPreference='Stop'
 $ScriptDir=Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $ScriptDir 'deploy_lib_aht.ps1')
-$Ctx = Get-AhtDeployContext
+$Ctx = Initialize-AhtDeployContext -ScriptDir $ScriptDir
 $legacy = @(
  'assets/css/play-v3-ficha.css','assets/css/ficha-neni-ref-v1.css',
  'assets/css/play-v3-visual-review.css','assets/css/play-v3-visual-interior.css','assets/css/play-v3-visual-replica.css',
@@ -16,7 +15,8 @@ $legacy = @(
  'assets/css/play-v3-agenda.css','assets/css/play-v3-misiones.css','assets/css/play-v3-vida.css','assets/css/play-v3-notas-mapa.css',
  'assets/css/design-system/screens/inicio.css','assets/css/design-system/screens/inicio-mobile.css',
  'assets/css/design-system/screens/inicio-desktop.css','assets/css/design-system/screens/inicio-desktop-cromatica.css',
- 'assets/css/design-system/screens/inicio-evento-pueblo-mobile.css','assets/css/design-system/screens/inicio-evento-pueblo-desktop.css'
+ 'assets/css/design-system/screens/inicio-evento-pueblo-mobile.css','assets/css/design-system/screens/inicio-evento-pueblo-desktop.css',
+ 'assets/css/design-system/mensajitos-cartas-persona-v1.css','assets/css/design-system/mensajitos-carta-regalo-v1.css'
 )
 $cfg = Get-Content -LiteralPath $Ctx.CredsPath -Raw -Encoding UTF8 | ConvertFrom-Json
 $winscp = Find-WinScpCom -JsonExplicitPath ([string]$cfg.HOSTALIA_WINSCP_PATH)
@@ -37,5 +37,5 @@ $script = Join-Path $env:TEMP ('aht-rm-legacy-css-' + [guid]::NewGuid().ToString
 & $winscp /ini=nul /script=$script
 $code = $LASTEXITCODE
 Remove-Item $script -Force -ErrorAction SilentlyContinue
-if ($code -ne 0) { Write-Warning "WinSCP rm legacy codigo $code (algunos ya ausentes)" }
-Write-Host 'FTP legacy CSS delete script ejecutado.'
+if ($code -ne 0) { Write-Warning "WinSCP rm legacy codigo $code" }
+Write-Host 'FTP legacy CSS delete ejecutado.'

@@ -1,4 +1,4 @@
-# Arquitectura CSS — Aquí Hay Tema (contrato canónico)
+﻿# Arquitectura CSS — Aquí Hay Tema (contrato canónico)
 
 Documento **prescriptivo**. Antes de tocar CSS de play, modales, inicio o pantallas, léalo completo.
 
@@ -6,8 +6,8 @@ Documento **prescriptivo**. Antes de tocar CSS de play, modales, inicio o pantal
 
 - **Modales:** V4 única autoridad (`aht-screen` + `aht-frame` + `screens.css`).
 - **Inicio:** stack unificado en `assets/css/inicio/` (sin `inicio-mobile.css` legacy en design-system/screens).
-- **Prohibido** reintroducir hojas eliminadas (capas, modal-core, lavanda shell, visual-review, screens-secondary, etc.).
-- **No añadir `!important` nuevo** salvo excepciones documentadas (§I).
+- **Prohibido** reintroducir hojas eliminadas (capas, modal-core, lavanda shell, visual-review, screens-secondary, mensajitos-cartas-*-v1, etc.).
+- **Política cero `!important` (obligatoria):** en `assets/css/**` y en bloques `<style>` inline de `play.php` el total debe ser **0**. Sin excepciones por debug, decoración, ocultar playtest o “deuda” temporal. Si hace falta prioridad, usar orden de carga, especificidad y tokens — nunca `!important`.
 
 ## B. Contrato DOM
 
@@ -24,12 +24,17 @@ Documento **prescriptivo**. Antes de tocar CSS de play, modales, inicio o pantal
 2. Global play-v3 + inicio-views (flash dual-view)
 3. `v4/screen-frame.css`
 4. Cuerpos `play-v3-*.css` (selectores `.aht-screen[…]`)
-5. DS: mensajitos-body, vecinos-body, cartas v1
+5. DS: **`design-system/mensajitos-body.css`** (mensajitos/buzón), `vecinos-body`
 6. **`v4/bodies/*.css`** — parejas, ajustes, relaciones, misc (ex screens-secondary)
 7. **`v4/screens.css`** — visibilidad + inventario + última autoridad modal
 8. **Inicio:** `inicio/tokens-inicio.css` → `inicio-base.css` → `inicio-mobile.css` → `inicio-desktop.css` → `inicio-cromatica-desktop.css` → `inicio-responsive.css`
 9. `legibilidad-global.css`, `typography-reading.css`
 10. `play-v3-lab.css` solo con `?lab=1`
+
+### Mensajitos (autoridad)
+
+- **Única hoja:** `assets/css/design-system/mensajitos-body.css`.
+- Eliminadas como legacy muerto (selectores `.carta-*`, no enlazadas en `play.php`): `mensajitos-cartas-persona-v1.css`, `mensajitos-carta-regalo-v1.css`. No reintroducir.
 
 ## D. Tokens
 
@@ -44,22 +49,15 @@ Documento **prescriptivo**. Antes de tocar CSS de play, modales, inicio o pantal
 
 - `scripts/aht_guard_css_architecture.ps1` (alias `aht_guard_modal_shell.ps1`)
 - `node tests/css_architecture_test.js`
+- **Umbral:** fallo si `assets/css` contiene cualquier `!important` o si `play.php` tiene `!important` en CSS inline (objetivo **total 0** en ambos).
 - Revisión visual: **intocables13.com** (Neni).
 
 ## G. Prohibiciones
 
 - Selectores wrapper `.capa-vecinos`, `.capa-parejas`, etc.
 - Enlazar `screens-secondary.css` o stacks inicio legacy bajo `design-system/screens/inicio-*.css` (salvo `inicio-views.css`).
+- Cualquier `!important` nuevo en CSS de play o modales.
 
 ## H. FTP / prod
 
-Tras deploy fase 2, borrar remotos listados en `scripts/aht_ftp_delete_legacy_css.ps1`.
-
-## I. `!important` legítimo restante
-
-| Ubicación | Motivo |
-|-----------|--------|
-| `play.php` inline (4 reglas) | Debug / ocultar playtest y tiempo en prod |
-| `mensajitos-cartas-persona-v1.css`, `mensajitos-carta-regalo-v1.css` | Cartas DS aún no migradas a autoridad V4 (fase cartas pendiente) |
-
-Objetivo inicio + v4: **0 `!important`** (cumplido en fase 2).
+Tras cambios de arquitectura, borrar remotos listados en `scripts/aht_ftp_delete_legacy_css.ps1` (incluye hojas mensajitos v1 retiradas del repo).

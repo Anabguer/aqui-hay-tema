@@ -12,12 +12,16 @@ alwaysApply: true
 1. `assets/css/v4/tokens-v4.css` — tokens `--aht-*` y shell `#FCFBFE`
 2. `assets/css/v4/screen-frame.css` — marcador `AHT-FRAME-CANON-v4`, reglas `.aht-frame`
 
-No reintroducir `modals-shell-lavanda-mobile.css`, `modal-core.css`, `play-v3-capas*.css` ni selectores `.capa-*` en CSS nuevo.
+No reintroducir `modals-shell-lavanda-mobile.css`, `modal-core.css`, `play-v3-capas*.css`, `mensajitos-cartas-persona-v1.css` ni selectores `.capa-*` en CSS nuevo.
+
+## Cero !important
+
+Prohibido `!important` en cualquier hoja bajo `assets/css/` y en estilos inline de `play.php`. Los guards fallan si se detecta uno.
 
 ## Orden en play.php
 
-`screen-frame.css` antes de los cuerpos `play-v3-*`; `v4/screens.css` **después** de bodies y `screens-secondary.css`. No añadir hojas modales legacy después de `screens.css`.
+`screen-frame.css` antes de los cuerpos `play-v3-*` y `v4/bodies/*`; `v4/screens.css` **después** de todos los bodies modales. No añadir hojas modales legacy después de `screens.css`.
 
 ## Guardia
 
-Tras cambios: `scripts/aht_guard_css_architecture.ps1` + `node tests/modal_architecture_test.js`.
+Tras cambios: `scripts/aht_guard_css_architecture.ps1` + `node tests/css_architecture_test.js`.
