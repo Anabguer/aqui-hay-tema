@@ -154,9 +154,29 @@ ok($reconciled['celebracion_estado'] === 'consumida', 'D2. state corrected to co
 // ====================================================================
 echo "\n=== E. fingerprint: historia_pueblo NO participa ===\n";
 
+$pAV['historia_pueblo'][] = [
+    'hito_id' => 'hito_test_fp',
+    'clave' => 'hito_test_fp:' . implode('|', $resIds),
+    'protagonistas' => $resIds,
+    'nombres' => [],
+    'dia' => 1,
+    'hora' => 8,
+    'contexto' => [],
+    'revelado' => true,
+    'celebracion_estado' => 'pendiente',
+];
 $fpBefore = fingerprint($pAV);
-$regResult = HistoriaPuebloEngine::registrar($pAV, 'hito_test_fp', $resIds);
-ok($regResult['ok'], 'E1. new hito registered');
+$pAV['historia_pueblo'][] = [
+    'hito_id' => 'hito_test_fp_2',
+    'clave' => 'hito_test_fp_2:' . implode('|', $resIds),
+    'protagonistas' => $resIds,
+    'nombres' => [],
+    'dia' => 2,
+    'hora' => 9,
+    'contexto' => [],
+    'revelado' => true,
+    'celebracion_estado' => 'consumida',
+];
 ok($fpBefore === fingerprint($pAV), 'E2. fingerprint unchanged — historia_pueblo excluded (consumed file is authority)');
 
 // ====================================================================

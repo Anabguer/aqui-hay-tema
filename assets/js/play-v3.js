@@ -1931,7 +1931,7 @@
 
   async function celebracionClose(hitoId) {
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
-    if (!ackResult || ackResult.ok === false) {
+    if (!ackResult || ackResult.ok === false || ackResult.ack_ok === false) {
       console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
       return;
     }
@@ -1944,7 +1944,7 @@
   async function celebracionIrAlbum() {
     const hitoId = celebracionHitoActual;
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
-    if (!ackResult || ackResult.ok === false) {
+    if (!ackResult || ackResult.ok === false || ackResult.ack_ok === false) {
       console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
       return;
     }

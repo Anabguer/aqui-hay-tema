@@ -179,5 +179,46 @@ if (is_file($gamePath)) {
     unlink($gamePath);
 }
 
+// ====================================================================
+// === PHASE 7: cargarLigero regression — consumed file is authority ===
+// ====================================================================
+echo "\n=== PHASE 7: cargarLigero regression ===\n";
+
+$p7 = $service->nuevaPartida('juego_v1', 'hp-test-ligero');
+$pid7 = $p7['meta']['partida_id'];
+$cp7 = HistoriaPuebloEngine::consumedPath($root, $pid7);
+
+$celebs7 = HistoriaPuebloEngine::celebracionesPendientes($p7, $root, $pid7);
+ok(count($celebs7) >= 1, 'R1. pending celebration exists');
+
+$celebHito7 = $celebs7[0]['hito_id'];
+HistoriaPuebloEngine::ack($p7, $celebHito7);
+$service->guardar($p7);
+unset($p7);
+gc_collect_cycles();
+
+// Load via cargarLigero (simulates buzon.leer)
+$p7Ligero = $service->cargarLigero($pid7);
+ok($p7Ligero['historia_pueblo'][0]['celebracion_estado'] === 'consumida', 'R2. celebracion_estado stays consumida after cargarLigero');
+
+// Save via guardarRapido (simulates what buzon.leer does after mutating state)
+$service->guardarRapido($p7Ligero);
+unset($p7Ligero);
+gc_collect_cycles();
+
+// Reload and check — consumed file is authority
+$p7Reload = $service->cargarParaRefresh($pid7);
+$celebs7After = HistoriaPuebloEngine::celebracionesPendientes($p7Reload, $root, $pid7);
+ok(count($celebs7After) === 0, 'R3. 0 pendientes after cargarLigero+save+reload');
+
+// Cleanup phase 7
+if (is_file($cp7)) {
+    unlink($cp7);
+}
+$gamePath7 = rtrim($root, DIRECTORY_SEPARATOR) . '/data/partidas/' . preg_replace('/[^a-zA-Z0-9_\-]/', '', $pid7) . '.json';
+if (is_file($gamePath7)) {
+    unlink($gamePath7);
+}
+
 echo "\n" . ($failures === 0 ? 'TODOS LOS TESTS PASARON' : "$failures tests FALLARON") . "\n";
 exit($failures > 0 ? 1 : 0);
