@@ -55,7 +55,8 @@
     "edad": null,
     "genero": null,
     "pronombres": [],
-    "apertura_descubrimiento": null
+    "apertura_descubrimiento": null,
+    "cumpleanos": null
   },
   "vida": {
     "ocupacion": null,

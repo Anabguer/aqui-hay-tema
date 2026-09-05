@@ -340,6 +340,17 @@ final class MensajitoVoz
     }
 
     /** @return list<string> */
+    private static function bancoFCumpleSeguimiento(): array
+    {
+        return [
+            'Hoy cumple años {otro}. Ya le he dicho yo también.',
+            'Que sepas que hoy es el cumple de {otro}. Yo ya le he dedicado unas palabras.',
+            'Me alegra que le hagas caso a {otro}. Hoy es su día.',
+            'Justo, que hoy cumple {otro}. Menos mal que alguien se acuerda.',
+        ];
+    }
+
+    /** @return list<string> */
     private static function bancoAnuncioEventoPueblo(): array
     {
         return [
@@ -752,6 +763,8 @@ final class MensajitoVoz
                 return self::bancoFRitualCumpleAviso();
             case 'f_ritual_cumple_invitacion':
                 return self::bancoFRitualCumpleInvitacion();
+            case 'f_cumple_seguimiento':
+                return self::bancoFCumpleSeguimiento();
             default:
                 return [];
         }

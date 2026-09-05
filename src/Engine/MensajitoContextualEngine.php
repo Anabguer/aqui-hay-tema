@@ -9,9 +9,17 @@ namespace AquiHayTema\Engine;
  * Disparado por calendario real del pueblo (fecha_ancla + dia_pueblo).
  * Variante jugable de aviso contextual: participar / organizar / ignorar.
  * Los eventos colectivos del pueblo (B2) NO son F10; van por EventosPuebloAnuncioEngine.
+ *
+ * F10.1: Reacción social ligera — 1-2 vecinos cercanos reaccionan con follow-up.
  */
 final class MensajitoContextualEngine
 {
+    /** Máximo de vecinos que reaccionan además del remitente principal. */
+    private const MAX_REACCIONES_SOCIALES = 2;
+
+    /** Umbral social mínimo para reacción de follow-up. */
+    private const UMBRAL_SOCIAL_FOLLOWUP = 15;
+
     /**
      * Evalúa cumpleaños al comenzar un nuevo día de pueblo.
      *
@@ -109,13 +117,22 @@ final class MensajitoContextualEngine
                 'mensaje' => $r['mensaje'] ?? null,
                 'origen_evento' => 'ritual_contextual_cumpleanos',
             ], $logger, 'MensajitoContextualEngine');
+
+            // F10.1: Reacción social — follow-up de 1-2 vecinos cercanos
+            $followups = self::generarFollowups($partida, $rid, $remitente, $claveAnual, $cal, $logger);
+            $emitidos = array_merge($emitidos, $followups);
         }
 
         return $emitidos;
     }
 
     /**
-     * Celestine felicita (micro-efecto emocional, sin pareja).
+     * Celestine felicita (micro-efecto emocional + contacto social).
+     *
+     * Efectos:
+     *   - Cumpleañero: estado ALEGRE 12h, origen cumple_felicidad
+     *   - Celestine ↔ cumpleañero: contacto social +3 (calidad "normal")
+     *   - detallito_hook para posible regalo sorpresa
      *
      * @return array<string, mixed>
      */
@@ -132,13 +149,27 @@ final class MensajitoContextualEngine
             $partida['residentes'][$cumpleId]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
                 EstadoEmocional::ALEGRE,
                 1,
-                'cumple_felicitud',
+                'cumple_felicidad',
                 EstadoEmocional::marcaReloj($reloj),
                 EstadoEmocional::hastaDesdeDuracion($reloj, 12),
                 ['fuente' => 'f10_cumpleanos'],
                 12
             );
             $partida['residentes'][$cumpleId]['runtime']['animo'] = EstadoEmocional::ALEGRE;
+
+            // F10.1: Contacto social Celestine → cumpleañero (+3, calidad normal)
+            $celestineId = self::buscarCelestine($partida);
+            if ($celestineId !== null && $celestineId !== $cumpleId) {
+                $cal = CalibracionConfig::load('');
+                RelacionEngine::registrarContacto(
+                    $partida,
+                    $celestineId,
+                    $cumpleId,
+                    ContactoCalidad::NORMAL,
+                    $cal,
+                    1
+                );
+            }
         }
         self::cerrarHilo($partida, $mensajeId, ['accion' => 'participar_cumple', 'cumpleanero_id' => $cumpleId]);
         return [
@@ -228,6 +259,143 @@ final class MensajitoContextualEngine
         }
         if (self::esResidenteActivo($partida, $cumpleaneroId)) {
             return $cumpleaneroId;
+        }
+        return null;
+    }
+
+    /**
+     * F10.1: Genera follow-up de 1-2 vecinos cercanos que también reaccionan al cumpleaños.
+     * Selecciona por vínculo social (≥ UMBRAL_SOCIAL_FOLLOWUP), excluye el remitente principal.
+     *
+     * @param array<string, mixed> $cal
+     * @return list<array<string, mixed>>
+     */
+    private static function generarFollowups(
+        array &$partida,
+        string $cumpleaneroId,
+        string $remitentePrincipal,
+        string $claveAnual,
+        array $cal,
+        ?GameLogger $logger
+    ): array {
+        $candidatos = [];
+        foreach ($partida['relaciones_sociales'] ?? [] as $rel) {
+            if (!is_array($rel)) {
+                continue;
+            }
+            $a = (string) ($rel['persona_a'] ?? '');
+            $b = (string) ($rel['persona_b'] ?? '');
+            $otro = null;
+            if ($a === $cumpleaneroId) {
+                $otro = $b;
+            } elseif ($b === $cumpleaneroId) {
+                $otro = $a;
+            } else {
+                continue;
+            }
+            if ($otro === $cumpleaneroId || $otro === $remitentePrincipal) {
+                continue;
+            }
+            if (!self::esResidenteActivo($partida, $otro)) {
+                continue;
+            }
+            $dir = RelacionEngine::socialHacia($partida, $cumpleaneroId, $otro);
+            $social = (float) (($dir['valor']) ?? 0);
+            if ($social >= self::UMBRAL_SOCIAL_FOLLOWUP) {
+                $candidatos[$otro] = $social;
+            }
+        }
+
+        if ($candidatos === []) {
+            return [];
+        }
+
+        // Ordenar por social descendente, tomar los N primeros
+        arsort($candidatos);
+        $elegidos = array_slice(array_keys($candidatos), 0, self::MAX_REACCIONES_SOCIALES, true);
+
+        $nombreCumple = IdentidadPublica::nombre($partida, $cumpleaneroId);
+        $emitidos = [];
+
+        foreach ($elegidos as $followupId => $_) {
+            $eventoId = 'f10_followup_' . $claveAnual . '_' . $followupId;
+            $msgId = 'msg_f10_fu_' . substr(md5($eventoId), 0, 10);
+
+            if (CanalDeduplicador::yaPublicado($partida, $eventoId, BuzonEngine::CANAL_BUZON)) {
+                continue;
+            }
+
+            $texto = MensajitoVoz::linea(
+                $partida,
+                'f_cumple_seguimiento',
+                ['otro' => $nombreCumple],
+                'f10_followup|' . $followupId . '|' . $cumpleaneroId,
+                $followupId
+            );
+            if ($texto === '') {
+                continue;
+            }
+
+            $r = CanalDeduplicador::crearSiAplica($partida, [
+                'id' => $msgId,
+                'clasificacion' => BuzonEngine::COTILLEO,
+                'tipo' => 'ritual_contextual_cumpleanos_followup',
+                'canal' => BuzonEngine::CANAL_BUZON,
+                'de_persona' => $followupId,
+                'actores' => [$followupId, $cumpleaneroId],
+                'texto' => $texto,
+                'acciones' => [],
+                'familia_mensajito' => 'f_cumple_seguimiento',
+                'datos_familia' => [
+                    'subtipo' => 'cumpleanos_followup',
+                    'cumpleanero_id' => $cumpleaneroId,
+                    'seguimiento_de' => $remitentePrincipal,
+                ],
+                'hilo_id' => $msgId,
+                'hilo_estado' => 'respondido',
+                'seguimiento_pendiente' => false,
+                'origen' => [
+                    'evento_id' => $eventoId,
+                    'tipo_evento' => 'ritual_contextual_cumpleanos_followup',
+                    'es_narrativo' => false,
+                    '_placeholder' => false,
+                ],
+                '_placeholder_contenido' => false,
+            ]);
+
+            if ($r === null || !($r['ok'] ?? false)) {
+                continue;
+            }
+
+            MensajitosCadenciaEngine::registrar($partida, $followupId, 'f_cumple_seguimiento', 'contextual', $claveAnual);
+            $emitidos[] = [
+                'cumpleanero_id' => $cumpleaneroId,
+                'remitente_id' => $followupId,
+                'mensaje_id' => $msgId,
+                'tipo' => 'followup',
+            ];
+            DomainEventDispatcher::emit($partida, DomainEvents::BUZON_MENSAJE, [
+                'mensaje' => $r['mensaje'] ?? null,
+                'origen_evento' => 'ritual_contextual_cumpleanos_followup',
+            ], $logger, 'MensajitoContextualEngine::generarFollowups');
+        }
+
+        return $emitidos;
+    }
+
+    /**
+     * Busca el ID de Celestine (el jugador) en la partida.
+     * Celestine es el primer residente placeholder o el identificado como 'celestine'.
+     */
+    private static function buscarCelestine(array $partida): ?string
+    {
+        foreach ($partida['residentes'] ?? [] as $rid => $res) {
+            if (!is_array($res)) {
+                continue;
+            }
+            if (!empty($res['_placeholder'])) {
+                return $rid;
+            }
         }
         return null;
     }
