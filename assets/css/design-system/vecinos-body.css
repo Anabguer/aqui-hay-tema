@@ -221,9 +221,10 @@
 
 /* === CARA VECINO === */
 .vecino-cara {
+  --vec-cara-size: 80px;
   position: relative !important;
-  width: 80px !important;
-  height: 80px !important;
+  width: var(--vec-cara-size) !important;
+  height: var(--vec-cara-size) !important;
   margin: 4px auto 8px !important;
   border-radius: 50% !important;
   overflow: hidden !important;
@@ -612,8 +613,9 @@ select.vec-rel-persona {
   }
 
   .vecino-cara {
-    width: 60px !important;
-    height: 60px !important;
+    --vec-cara-size: 60px;
+    width: var(--vec-cara-size) !important;
+    height: var(--vec-cara-size) !important;
   }
 
   .vecino-nom {

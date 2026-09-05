@@ -9337,6 +9337,14 @@ var finOk = $('[data-tut-fin-ok]');
       });
       renderBuzon(cacheBuzon);
     }
+    if (screen === 'vecinos') {
+      vecBuscaTxt = '';
+      var buscaInp = $('[data-vec-busca]');
+      if (buscaInp) buscaInp.value = '';
+      vecTabActiva = 'vecinos';
+      aplicarVecTabUI();
+      renderVecinos();
+    }
   });
 
   window.addEventListener('resize', layout);
