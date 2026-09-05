@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace AquiHayTema\Api\Handlers;
 
 use AquiHayTema\Api\ApiContext;
-use function AquiHayTema\Api\savePartida;
+use function AquiHayTema\Api\savePartidaRapida;
 use AquiHayTema\Engine\HistoriaPuebloEngine;
 use AquiHayTema\Engine\HistoriaPuebloVista;
 
@@ -45,23 +45,25 @@ final class HistoriaPuebloHandler
             return ['ok' => false, 'error' => 'missing_hito_id'];
         }
 
-        $ackOk = HistoriaPuebloEngine::ack($partida, $hitoId);
+        HistoriaPuebloEngine::ack($partida, $hitoId);
+        $consumida = HistoriaPuebloEngine::estaConsumida($partida, $hitoId);
 
-        if ($ackOk) {
-            // Persist consumed FIRST (survives race: cargar() overwriting main file)
+        if ($consumida) {
             $root = $ctx->root;
             $partidaId = $partida['meta']['partida_id'] ?? '';
             if ($root && $partidaId) {
                 $consumed = HistoriaPuebloEngine::loadConsumed($root, $partidaId);
-                $consumed[] = $hitoId;
-                HistoriaPuebloEngine::saveConsumed($root, $partidaId, $consumed);
+                if (!in_array($hitoId, $consumed, true)) {
+                    $consumed[] = $hitoId;
+                    HistoriaPuebloEngine::saveConsumed($root, $partidaId, $consumed);
+                }
             }
-            savePartida($ctx, $partida);
+            savePartidaRapida($ctx, $partida);
         }
 
         return [
             'ok' => true,
-            'ack_ok' => $ackOk,
+            'ack_ok' => $consumida,
         ];
     }
 }

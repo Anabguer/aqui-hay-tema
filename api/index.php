@@ -331,7 +331,7 @@ $routes = [
         return HistoriaPuebloHandler::snapshot($ctx, $body, $p);
     },
     'historia.celebrar_ack' => static function () use ($ctx, $body) {
-        $p = requirePartida($ctx, $body);
+        $p = requirePartidaLigera($ctx, $body);
         return HistoriaPuebloHandler::ack($ctx, $body, $p);
     },
     'dev.snapshot.guardar' => static function () use ($ctx, $body) {

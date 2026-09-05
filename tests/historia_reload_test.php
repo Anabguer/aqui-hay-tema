@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 use AquiHayTema\Engine\HistoriaPuebloEngine;
 use AquiHayTema\Engine\HistoriaPuebloVista;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\TutorialPrimerosPasos;
 
 $root = dirname(__DIR__);
 $failures = 0;
@@ -33,6 +34,10 @@ $service = new PartidaService($root);
 echo "\n=== PHASE 1: Create game + ACK ===\n";
 
 $p1 = $service->nuevaPartida('juego_v1', 'hp-test-reload');
+$p1['tutorial']['jugable_completado'] = true;
+TutorialPrimerosPasos::marcarFinaleVisto($p1);
+$service->guardar($p1);
+$p1 = $service->cargar($p1['meta']['partida_id']);
 $partidaId = $p1['meta']['partida_id'];
 $consumedPath = HistoriaPuebloEngine::consumedPath($root, $partidaId);
 
@@ -185,6 +190,10 @@ if (is_file($gamePath)) {
 echo "\n=== PHASE 7: cargarLigero regression ===\n";
 
 $p7 = $service->nuevaPartida('juego_v1', 'hp-test-ligero');
+$p7['tutorial']['jugable_completado'] = true;
+TutorialPrimerosPasos::marcarFinaleVisto($p7);
+$service->guardar($p7);
+$p7 = $service->cargar($p7['meta']['partida_id']);
 $pid7 = $p7['meta']['partida_id'];
 $cp7 = HistoriaPuebloEngine::consumedPath($root, $pid7);
 

@@ -6,6 +6,7 @@ require_once dirname(__DIR__) . '/src/autoload.php';
 use AquiHayTema\Engine\HistoriaPuebloEngine;
 use AquiHayTema\Engine\PartidaLifecycle;
 use AquiHayTema\Engine\PartidaService;
+use AquiHayTema\Engine\TutorialPrimerosPasos;
 
 $root = dirname(__DIR__);
 $failures = 0;
@@ -55,6 +56,15 @@ function getResIds(array $partida, int $n): array
     return array_slice($ids, 0, $n);
 }
 
+function partidaConPrimerRecuerdo(PartidaService $service, string $config, string $seed): array
+{
+    $p = $service->nuevaPartida($config, $seed);
+    $p['tutorial']['jugable_completado'] = true;
+    TutorialPrimerosPasos::marcarFinaleVisto($p);
+    $service->guardar($p);
+    return $service->cargar($p['meta']['partida_id']);
+}
+
 function pendingIds(array $partida, string $root, string $partidaId): array
 {
     return array_column(HistoriaPuebloEngine::celebracionesPendientes($partida, $root, $partidaId), 'hito_id');
@@ -65,7 +75,7 @@ function pendingIds(array $partida, string $root, string $partidaId): array
 // ====================================================================
 echo "\n=== A. ACK: consumida + persistencia ===\n";
 
-$pA = $service->nuevaPartida('juego_v1', 'hp-test-celeb-fix-a');
+$pA = partidaConPrimerRecuerdo($service, 'juego_v1', 'hp-test-celeb-fix-a');
 $partidaId = $pA['meta']['partida_id'];
 $consumedPath = HistoriaPuebloEngine::consumedPath($root, $partidaId);
 $resIds = getResIds($pA, 2);
@@ -152,7 +162,7 @@ ok($reconciled['celebracion_estado'] === 'consumida', 'D2. state corrected to co
 // ====================================================================
 // === E. fingerprint: cambio en historia_pueblo se detecta           ===
 // ====================================================================
-echo "\n=== E. fingerprint: historia_pueblo NO participa ===\n";
+echo "\n=== E. fingerprint: historia_pueblo participa ===\n";
 
 $pAV['historia_pueblo'][] = [
     'hito_id' => 'hito_test_fp',
@@ -177,7 +187,7 @@ $pAV['historia_pueblo'][] = [
     'revelado' => true,
     'celebracion_estado' => 'consumida',
 ];
-ok($fpBefore === fingerprint($pAV), 'E2. fingerprint unchanged — historia_pueblo excluded (consumed file is authority)');
+ok($fpBefore !== fingerprint($pAV), 'E2. fingerprint changes when historia_pueblo mutates');
 
 // ====================================================================
 // === F. reload: ACK → reload → 0 celebración                       ===
@@ -204,7 +214,7 @@ cleanup($partidaId);
 // ====================================================================
 echo "\n=== G. reloj: ACK → sincronizar reloj → reload → 0 ===\n";
 
-$pG = $service->nuevaPartida('juego_v1', 'hp-test-celeb-fix-g');
+$pG = partidaConPrimerRecuerdo($service, 'juego_v1', 'hp-test-celeb-fix-g');
 $partidaIdG = $pG['meta']['partida_id'];
 
 // ACK the initial celebration
@@ -244,7 +254,7 @@ cleanup($partidaIdG);
 // ====================================================================
 echo "\n=== H. pasar el rato: ACK → avanzar tiempo → 0 ===\n";
 
-$pH = $service->nuevaPartida('juego_v1', 'hp-test-celeb-fix-h');
+$pH = partidaConPrimerRecuerdo($service, 'juego_v1', 'hp-test-celeb-fix-h');
 $partidaIdH = $pH['meta']['partida_id'];
 
 $celebsH = HistoriaPuebloEngine::celebracionesPendientes($pH, $root, $partidaIdH);
@@ -274,7 +284,7 @@ cleanup($partidaIdH);
 // ====================================================================
 echo "\n=== I. celebración distinta pendiente ===\n";
 
-$pI = $service->nuevaPartida('juego_v1', 'hp-test-celeb-fix-i');
+$pI = partidaConPrimerRecuerdo($service, 'juego_v1', 'hp-test-celeb-fix-i');
 $partidaIdI = $pI['meta']['partida_id'];
 $resIdsI = getResIds($pI, 2);
 
@@ -314,7 +324,7 @@ cleanup($partidaIdI);
 // ====================================================================
 echo "\n=== J. ACK-fail-then-retry ===\n";
 
-$pJ = $service->nuevaPartida('juego_v1', 'hp-test-celeb-fix-j');
+$pJ = partidaConPrimerRecuerdo($service, 'juego_v1', 'hp-test-celeb-fix-j');
 $partidaIdJ = $pJ['meta']['partida_id'];
 
 $celebsJ = HistoriaPuebloEngine::celebracionesPendientes($pJ, $root, $partidaIdJ);
