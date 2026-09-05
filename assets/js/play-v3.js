@@ -7997,6 +7997,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function abrirOrganizarConPreset(preset) {
+    cerrarMensajitosPop();
     resetOrgForm(preset);
     orgPresetNuevo = true;
     limpiarOrgAviso();
