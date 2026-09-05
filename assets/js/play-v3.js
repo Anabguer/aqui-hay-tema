@@ -7007,7 +7007,6 @@ function hobbyIconKey(id, texto) {
       if (!items.length) return;
       const sec = document.createElement('section');
       sec.className = 'aht-msg-section';
-      sec.innerHTML = '<h3 class="mensajitos-seccion-tit">' + titulo + '</h3>';
       items.forEach(function (m) {
         sec.appendChild(pintarCarta(m, esAccion, inclinGlobal++));
       });
