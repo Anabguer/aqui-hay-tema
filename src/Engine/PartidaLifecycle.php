@@ -141,6 +141,7 @@ final class PartidaLifecycle
         $partida = $this->repo->cargar($partidaId);
         SchemaFields::ensure($partida);
         PersistenciaCaps::mergeIntoPartida($partida, $this->root);
+        HistoriaPuebloEngine::reconcileConsumedState($partida, $this->root, $partidaId);
         return $partida;
     }
 

@@ -211,12 +211,12 @@ final class HistoriaPuebloEngine
             if ($entrada === null) {
                 continue;
             }
-            // Legacy entries without celebracion_estado are treated as consumed
-            if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
+            // Consumed file is the SOLE authority — survives any concurrent overwrites
+            if (in_array($slot['id'], $consumed, true)) {
                 continue;
             }
-            // Also check separate consumed list (survives cargar() race)
-            if (in_array($slot['id'], $consumed, true)) {
+            // Legacy entries without celebracion_estado are treated as consumed
+            if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
                 continue;
             }
             $pendientes[] = [
