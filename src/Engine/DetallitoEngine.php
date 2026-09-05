@@ -41,6 +41,13 @@ final class DetallitoEngine
      */
     public static function alCumplirMision(array &$partida, array $mision, ?GameLogger $logger = null): ?array
     {
+        // Desactivado: sin regalos aleatorios por misión individual (solo 3/3 e Historia).
+        return null;
+    }
+
+    /** @deprecated Sin uso en producto — conservado para tests legacy. */
+    private static function alCumplirMisionLegacy(array &$partida, array $mision, ?GameLogger $logger = null): ?array
+    {
         if (!FeatureConfig::isEnabled($partida, 'misiones_diarias_enabled')) {
             return null;
         }

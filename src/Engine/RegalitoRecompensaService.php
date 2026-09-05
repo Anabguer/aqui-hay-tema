@@ -6,63 +6,23 @@ namespace AquiHayTema\Engine;
 /**
  * Servicio compartido de concesión de regalitos (recompensas garantizadas).
  *
- * Cada motor es autoridad de su propio cumplimiento y llama a este servicio
- * con un contexto idempotente:
- *   - misiones_diarias:{dia}  (3/3 misiones completadas)
- *   - reto_semanal:{reto_id}  (futuro)
- *   - historia:{hito_id}      (futuro)
- *
- * Reglas:
- *   - máximo 1 regalito por contexto (nunca duplica);
- *   - la idempotencia vive en partida['regalito_recompensas'] (mapa por contexto);
- *   - si el inventario está lleno, la recompensa queda pendiente
- *     DENTRO del mismo mapa de estado (estado: pendiente);
- *   - reclamarPendientes() itera TODOS los pendientes y entrega los que quepan;
- *   - respeta inventario_cap;
- *   - pool configurable en calibracion_vida.json (regalito_recompensa.objetos);
- *   - selección determinista: crc32('regalito_recomp|' . contexto);
- *   - eco narrativo vía mensajito tipo regalito_recompensa.
- *
- * Estructura persistente en partida['regalito_recompensas']:
- *   {
- *     "misiones_diarias:1": { "objeto_id": "taza", "estado": "entregado" },
- *     "reto_semanal:R7":    { "objeto_id": "libro", "estado": "pendiente" }
- *   }
- *
- * NO existe un slot global 'regalito_recompensa_pendiente'.
- * Cada contexto es independiente y se resuelve por sí mismo.
+ * Causas canónicas:
+ *   - misiones_diarias:{dia}  → 3/3 misiones completadas
+ *   - historia:{clave}        → nuevo recuerdo de Historia del Pueblo
  */
 final class RegalitoRecompensaService
 {
     public const TIPO_MENSAJE = 'regalito_recompensa';
     public const ORIGEN_EVENTO = 'regalito_recompensa';
+    public const ORIGEN_MISIONES_3X3 = 'misiones_3x3';
+    public const ORIGEN_HISTORIA = 'historia_pueblo';
 
     public const ESTADO_ENTREGADO = 'entregado';
     public const ESTADO_PENDIENTE = 'pendiente';
 
-    /** @return list<string> */
-    private static function poolMensaje(): array
-    {
-        return [
-            'Has completado todas las misiones de hoy. Te has ganado {objeto}. Ya está en tu inventario.',
-            'Día bien hecho: las tres misiones cumplidas. Te llevas {objeto} — guárdalo para quien quieras.',
-            'Has cumplido con creces las misiones del día. {objeto} es tuyo. A ver a quién le toca.',
-        ];
-    }
-
-    private static function poolMensajePendiente(): array
-    {
-        return [
-            'Has completado todas las misiones de hoy. Te has ganado {objeto}, pero el inventario está lleno. Cuando libres hueco, será tuyo.',
-        ];
-    }
-
     /**
-     * Otorga 1 regalito garantizado por un contexto dado.
-     * Idempotente: segunda llamada con el mismo contexto devuelve null.
-     *
      * @param array<string, mixed> $partida
-     * @return array<string, mixed>|null null si ya otorgado o no aplica
+     * @return array<string, mixed>|null
      */
     public static function otorgar(array &$partida, string $contexto, ?GameLogger $logger = null): ?array
     {
@@ -77,63 +37,57 @@ final class RegalitoRecompensaService
             return null;
         }
 
-        // --- idempotencia: ¿ya otorgado/pendiente para este contexto? ---
         $partida['regalito_recompensas'] ??= [];
         if (isset($partida['regalito_recompensas'][$contexto])) {
             return null;
         }
 
-        // --- elegir objeto del pool ---
         $catalog = new CatalogStore($root);
         $objetoId = self::elegirObjeto($cal, $contexto, $catalog);
         if ($objetoId === null) {
             return null;
         }
 
-        // --- intentar añadir a inventario ---
+        $nombreObjeto = self::nombreObjeto($catalog, $objetoId);
         $alta = InventarioEngine::anadir($partida, $objetoId, 1, $catalog);
         if (empty($alta['ok'])) {
-            // Inventario lleno: guardar como pendiente dentro del mapa por contexto
             $partida['regalito_recompensas'][$contexto] = [
                 'objeto_id' => $objetoId,
                 'estado' => self::ESTADO_PENDIENTE,
             ];
-            $nombreObjeto = self::nombreObjeto($catalog, $objetoId);
-            self::mensajito($partida, $objetoId, $nombreObjeto, $logger, true);
+            self::mensajito($partida, $contexto, $objetoId, $nombreObjeto, $catalog, $logger, true);
             return [
                 'ok' => true,
                 'objeto_id' => $objetoId,
                 'objeto_nombre' => $nombreObjeto,
+                'objeto_imagen' => self::urlImagenObjeto($catalog, $objetoId),
                 'cantidad' => 0,
                 'pendiente' => true,
+                'origen' => self::origenDeContexto($contexto),
             ];
         }
 
-        // --- marcar como entregado ---
         $partida['regalito_recompensas'][$contexto] = [
             'objeto_id' => $objetoId,
             'estado' => self::ESTADO_ENTREGADO,
         ];
 
-        $nombreObjeto = self::nombreObjeto($catalog, $objetoId);
-        self::mensajito($partida, $objetoId, $nombreObjeto, $logger, false);
+        self::mensajito($partida, $contexto, $objetoId, $nombreObjeto, $catalog, $logger, false);
 
         return [
             'ok' => true,
             'objeto_id' => $objetoId,
             'objeto_nombre' => $nombreObjeto,
+            'objeto_imagen' => self::urlImagenObjeto($catalog, $objetoId),
             'cantidad' => (int) ($alta['cantidad'] ?? 1),
             'pendiente' => false,
+            'origen' => self::origenDeContexto($contexto),
         ];
     }
 
     /**
-     * Reclama TODAS las recompensas pendientes que quepan en inventario.
-     * Llamar al listar inventario (inventario.listar).
-     * Operación idempotente: los que ya estaban entregados no se procesan.
-     *
      * @param array<string, mixed> $partida
-     * @return list<array<string, mixed>> recompensas entregadas en esta llamada
+     * @return list<array<string, mixed>>
      */
     public static function reclamarPendientes(array &$partida, ?GameLogger $logger = null): array
     {
@@ -155,22 +109,21 @@ final class RegalitoRecompensaService
 
             $alta = InventarioEngine::anadir($partida, $objetoId, 1, $catalog);
             if (empty($alta['ok'])) {
-                // Inventario sigue lleno, este pendiente queda para la próxima
                 continue;
             }
 
-            // Entregado: actualizar estado dentro del mapa
             $entry['estado'] = self::ESTADO_ENTREGADO;
-
             $nombreObjeto = self::nombreObjeto($catalog, $objetoId);
-            self::mensajito($partida, $objetoId, $nombreObjeto, $logger, false);
+            self::mensajito($partida, (string) $contexto, $objetoId, $nombreObjeto, $catalog, $logger, false);
 
             $entregados[] = [
                 'ok' => true,
                 'objeto_id' => $objetoId,
                 'objeto_nombre' => $nombreObjeto,
+                'objeto_imagen' => self::urlImagenObjeto($catalog, $objetoId),
                 'cantidad' => (int) ($alta['cantidad'] ?? 1),
                 'contexto' => $contexto,
+                'origen' => self::origenDeContexto((string) $contexto),
             ];
         }
         unset($entry);
@@ -178,9 +131,6 @@ final class RegalitoRecompensaService
         return $entregados;
     }
 
-    /**
-     * ¿Hay recompensas pendientes?
-     */
     public static function hayPendientes(array $partida): bool
     {
         foreach ($partida['regalito_recompensas'] ?? [] as $entry) {
@@ -191,9 +141,6 @@ final class RegalitoRecompensaService
         return false;
     }
 
-    /**
-     * Objeto determinista por contexto dentro del pool calibrado.
-     */
     public static function elegirObjeto(array $cal, string $contexto, CatalogStore $catalog): ?string
     {
         $lista = CalibracionConfig::get($cal, 'regalito_recompensa.objetos', []);
@@ -214,26 +161,145 @@ final class RegalitoRecompensaService
         return $validas[crc32('regalito_recomp|' . $contexto) % count($validas)];
     }
 
+    /**
+     * Vista UI de recompensa para Historia / celebraciones.
+     *
+     * @param array<string, mixed>|null $regalito
+     * @return array<string, mixed>|null
+     */
+    public static function vistaRecompensa(?array $regalito, string $contexto, ?CatalogStore $catalog = null): ?array
+    {
+        if ($regalito === null || empty($regalito['objeto_id'])) {
+            return null;
+        }
+        $catalog ??= new CatalogStore(dirname(__DIR__, 2));
+        $objetoId = (string) $regalito['objeto_id'];
+        return [
+            'objeto_id' => $objetoId,
+            'objeto_nombre' => (string) ($regalito['objeto_nombre'] ?? self::nombreObjeto($catalog, $objetoId)),
+            'objeto_imagen' => (string) ($regalito['objeto_imagen'] ?? self::urlImagenObjeto($catalog, $objetoId)),
+            'cantidad' => (int) ($regalito['cantidad'] ?? 1),
+            'pendiente' => !empty($regalito['pendiente']),
+            'origen' => self::origenDeContexto($contexto),
+        ];
+    }
+
+    /**
+     * Reconstruye recompensa persistida desde mapa regalito_recompensas + entrada historia.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $entrada
+     * @return array<string, mixed>|null
+     */
+    public static function recompensaDeEntradaHistoria(array $partida, array $entrada): ?array
+    {
+        if (!empty($entrada['recompensa']) && is_array($entrada['recompensa'])) {
+            return $entrada['recompensa'];
+        }
+        $clave = (string) ($entrada['clave'] ?? '');
+        if ($clave === '') {
+            return null;
+        }
+        $contexto = 'historia:' . $clave;
+        $map = $partida['regalito_recompensas'][$contexto] ?? null;
+        if (!is_array($map) || empty($map['objeto_id'])) {
+            return null;
+        }
+        $catalog = new CatalogStore(dirname(__DIR__, 2));
+        $objetoId = (string) $map['objeto_id'];
+        return [
+            'objeto_id' => $objetoId,
+            'objeto_nombre' => self::nombreObjeto($catalog, $objetoId),
+            'objeto_imagen' => self::urlImagenObjeto($catalog, $objetoId),
+            'cantidad' => 1,
+            'pendiente' => ($map['estado'] ?? '') === self::ESTADO_PENDIENTE,
+            'origen' => self::ORIGEN_HISTORIA,
+            'animacion_vista' => !empty($entrada['recompensa_animacion_vista']),
+        ];
+    }
+
+    public static function urlImagenObjeto(CatalogStore $catalog, string $objetoId): string
+    {
+        $item = $catalog->item('regalos', $objetoId);
+        if (!is_array($item)) {
+            return 'assets/play-v3/regalos/' . $objetoId . '.png';
+        }
+        $asset = (string) ($item['asset'] ?? ('regalos/' . $objetoId . '.png'));
+        return 'assets/play-v3/' . ltrim($asset, '/');
+    }
+
+    public static function origenDeContexto(string $contexto): string
+    {
+        if (strpos($contexto, 'historia:') === 0) {
+            return self::ORIGEN_HISTORIA;
+        }
+        if (strpos($contexto, 'misiones_diarias:') === 0) {
+            return self::ORIGEN_MISIONES_3X3;
+        }
+        return self::ORIGEN_EVENTO;
+    }
+
     private static function nombreObjeto(CatalogStore $catalog, string $objetoId): string
     {
         $item = $catalog->item('regalos', $objetoId);
         return (string) (is_array($item) ? ($item['nombre'] ?? $objetoId) : $objetoId);
     }
 
+    private static function conArticulo(string $nombre): string
+    {
+        $nombre = trim($nombre);
+        if ($nombre === '') {
+            return 'un regalo';
+        }
+        $low = mb_strtolower($nombre);
+        $femenino = preg_match('/^(a|á|e|é|i|í|o|ó|u|ú|h)/u', $low) === 1
+            && preg_match('/\b(taza|planta|bolsa|bufanda|caja|maceta|vela|postal|cantimplora)\b/u', $low);
+        if (!$femenino && preg_match('/a$/u', $low) && !preg_match('/(ma|pa|ta)$/u', $low)) {
+            $femenino = true;
+        }
+        return ($femenino ? 'una ' : 'un ') . $low;
+    }
+
+    private static function textoMensajito(string $contexto, string $objetoNombre, bool $pendiente): string
+    {
+        $objeto = self::conArticulo($objetoNombre);
+        $origen = self::origenDeContexto($contexto);
+        if ($origen === self::ORIGEN_HISTORIA) {
+            if ($pendiente) {
+                return 'Has desbloqueado un nuevo recuerdo en Historia del Pueblo. Te has ganado '
+                    . $objeto . ', pero el inventario está lleno. Cuando libres hueco, será tuyo.';
+            }
+            return 'Has desbloqueado un nuevo recuerdo en Historia del Pueblo. Te has ganado '
+                . $objeto . '. Ya está en tu inventario.';
+        }
+        if ($pendiente) {
+            return 'Has cumplido las tres misiones del día. Te llevas de regalito '
+                . $objeto . ', pero el inventario está lleno. Cuando libres hueco, será tuyo.';
+        }
+        return 'Has cumplido las tres misiones del día. Te llevas de regalito '
+            . $objeto . '. ¡Guárdalo para quien quieras!';
+    }
+
     /**
      * @param array<string, mixed> $partida
      */
-    private static function mensajito(array &$partida, string $objetoId, string $objetoNombre, ?GameLogger $logger, bool $pendiente): void
-    {
+    private static function mensajito(
+        array &$partida,
+        string $contexto,
+        string $objetoId,
+        string $objetoNombre,
+        CatalogStore $catalog,
+        ?GameLogger $logger,
+        bool $pendiente
+    ): void {
         if (!FeatureConfig::isEnabled($partida, 'buzon_enabled')) {
             return;
         }
         if (!empty($partida['_lab_peticiones_b4']) || !empty($partida['_lab_misiones_b3'])) {
             return;
         }
-        $pool = $pendiente ? self::poolMensajePendiente() : self::poolMensaje();
-        $plantilla = $pool[crc32($objetoId) % count($pool)];
-        $texto = strtr($plantilla, ['{objeto}' => $objetoNombre]);
+        $origenTipo = self::origenDeContexto($contexto);
+        $texto = self::textoMensajito($contexto, $objetoNombre, $pendiente);
         $r = BuzonEngine::crear($partida, [
             'clasificacion' => BuzonEngine::OPORTUNIDAD,
             'tipo' => self::TIPO_MENSAJE,
@@ -244,6 +310,11 @@ final class RegalitoRecompensaService
             'origen' => [
                 'evento_id' => self::ORIGEN_EVENTO . ':' . $objetoId,
                 'tipo_evento' => self::TIPO_MENSAJE,
+                'regalito_contexto' => $contexto,
+                'regalito_origen' => $origenTipo,
+                'objeto_id' => $objetoId,
+                'objeto_nombre' => $objetoNombre,
+                'objeto_imagen' => self::urlImagenObjeto($catalog, $objetoId),
                 'es_narrativo' => false,
                 'informacion_revelada' => [],
                 '_placeholder' => false,

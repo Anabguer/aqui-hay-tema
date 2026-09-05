@@ -334,6 +334,10 @@ $routes = [
         $p = requirePartidaLigera($ctx, $body);
         return HistoriaPuebloHandler::ack($ctx, $body, $p);
     },
+    'historia.recompensa_anim_ack' => static function () use ($ctx, $body) {
+        $p = requirePartidaLigera($ctx, $body);
+        return HistoriaPuebloHandler::recompensaAnimAck($ctx, $body, $p);
+    },
     'dev.snapshot.guardar' => static function () use ($ctx, $body) {
         $p = requirePartida($ctx, $body);
         return DevHandler::snapshotGuardar($ctx, $body, $p);

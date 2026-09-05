@@ -143,10 +143,18 @@ final class HistoriaPuebloEngine
 
         $partida['historia_pueblo'][] = $entrada;
 
+        $contextoRegalo = 'historia:' . $clave;
         $regalito = RegalitoRecompensaService::otorgar(
             $partida,
-            'historia:' . $clave,
+            $contextoRegalo,
         );
+        if ($regalito !== null) {
+            $recompensa = RegalitoRecompensaService::vistaRecompensa($regalito, $contextoRegalo);
+            if ($recompensa !== null) {
+                $recompensa['animacion_vista'] = false;
+                $partida['historia_pueblo'][count($partida['historia_pueblo']) - 1]['recompensa'] = $recompensa;
+            }
+        }
 
         DomainEventDispatcher::emit(
             $partida,
@@ -265,7 +273,7 @@ final class HistoriaPuebloEngine
                 'protagonistas' => self::protagonistasParaUI($partida, $entrada),
                 'dia' => $entrada['dia'] ?? 1,
                 'texto_narrativo' => self::generarTextoNarrativo($slot, $entrada),
-                'recompensa' => $entrada['_recompensa'] ?? null,
+                'recompensa' => RegalitoRecompensaService::recompensaDeEntradaHistoria($partida, $entrada),
             ];
         }
 
@@ -315,6 +323,46 @@ final class HistoriaPuebloEngine
             return true;
         }
         return false;
+    }
+
+    public static function entradaPorHito(array $partida, string $hitoId): ?array
+    {
+        return self::buscarPorHito($partida, $hitoId);
+    }
+
+    public static function marcarRecompensaAnimada(array &$partida, string $hitoId): bool
+    {
+        self::ensure($partida);
+        $mutado = false;
+        foreach ($partida['historia_pueblo'] as &$e) {
+            if (($e['hito_id'] ?? '') !== $hitoId) {
+                continue;
+            }
+            if (!empty($e['recompensa_animacion_vista'])) {
+                return false;
+            }
+            $e['recompensa_animacion_vista'] = true;
+            if (is_array($e['recompensa'] ?? null)) {
+                $e['recompensa']['animacion_vista'] = true;
+            }
+            $mutado = true;
+            break;
+        }
+        unset($e);
+        return $mutado;
+    }
+
+    public static function recompensaAnimacionPendiente(array $partida, string $hitoId): bool
+    {
+        $entrada = self::buscarPorHito($partida, $hitoId);
+        if ($entrada === null) {
+            return false;
+        }
+        $recompensa = RegalitoRecompensaService::recompensaDeEntradaHistoria($partida, $entrada);
+        if ($recompensa === null || empty($recompensa['objeto_id'])) {
+            return false;
+        }
+        return empty($entrada['recompensa_animacion_vista']) && empty($recompensa['animacion_vista']);
     }
 
     /**

@@ -8,7 +8,7 @@ declare(strict_types=1);
    4  - simular reload/F5 → no duplica
    5  - misión caducada no cuenta
    6  - doble cumplimiento no duplica
-   7  - Detallito sorpresa sigue funcionando independientemente
+   7  - misión individual no concede detallito (solo regalito 3/3 al completar tercera)
    8  - una recompensa de otro contexto NO bloquea la de 3/3
    9  - inventario lleno → recompensa ganada NO se pierde (queda pendiente en mapa)
    10 - día siguiente → nuevo 3/3 puede conceder nueva recompensa
@@ -175,7 +175,7 @@ ok(($r2['ok'] ?? false) === false, '6: doble cumplimiento retorna error');
 ok($inv2 === $inv1, '6: inventario no duplica');
 
 // ============================================================
-// TEST 7: Detallito sorpresa sigue funcionando independientemente
+// TEST 7: misión individual no concede detallito; 3/3 sí regalito
 // ============================================================
 $p = regalito_fixture_partida();
 $p['misiones_diarias']['items'][] = make_mision('mis_det_a');

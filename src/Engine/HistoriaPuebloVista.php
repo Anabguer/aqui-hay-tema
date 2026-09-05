@@ -59,6 +59,7 @@ final class HistoriaPuebloVista
             'protagonistas' => $protagonistas,
             'imagen_url' => $item['imagen'],
             'texto_narrativo' => HistoriaPuebloEngine::generarTextoNarrativo($item, $entrada),
+            'recompensa' => RegalitoRecompensaService::recompensaDeEntradaHistoria($partida, $entrada),
         ];
     }
 
