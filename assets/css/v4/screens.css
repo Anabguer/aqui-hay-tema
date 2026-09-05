@@ -120,13 +120,13 @@
 .aht-screen[data-aht-screen="vecinos"] {
   --ds-paper-card: #F4EFF8;
 }
-/* Pastel card backgrounds per decorator variant */
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-0 { background: #FDE8EE !important; }
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-1 { background: #E8F5E3 !important; }
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-2 { background: #EDE8F4 !important; }
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-3 { background: #FEF5E0 !important; }
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-4 { background: #E3F0F8 !important; }
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-5 { background: #F5EDE3 !important; }
+/* Pastel card backgrounds — variable override, no !important */
+.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-0 { --vec-paper: #FDE8EE; }
+.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-1 { --vec-paper: #E8F5E3; }
+.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-2 { --vec-paper: #EDE8F4; }
+.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-3 { --vec-paper: #FEF5E0; }
+.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-4 { --vec-paper: #E3F0F8; }
+.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-5 { --vec-paper: #F5EDE3; }
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
   padding: 0;
   display: flex;
