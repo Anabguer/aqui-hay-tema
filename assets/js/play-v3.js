@@ -6156,18 +6156,7 @@ function canonEmoId(id) {
     const emoId = canonEmoId(exp.estado_id || '');
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
     const consec = Array.isArray(exp.consecuencias) ? exp.consecuencias : [];
-    let mientras = '';
-    if (consec.length) {
-      mientras = '<div class="animo-modal-mientras">' +
-        '<span class="animo-modal-mientras-tit"><span class="animo-modal-mientras-ico" aria-hidden="true">!</span> Mientras siga así</span>' +
-        '<div class="animo-modal-mientras-list">' +
-        consec.map(function (c) {
-          return '<span class="animo-modal-badge">' +
-            '<span class="animo-modal-badge-ico" aria-hidden="true">' + esc(c.icono || '\u2022') + '</span>' +
-            esc(c.texto || '') + '</span>';
-        }).join('') +
-        '</div></div>';
-    }
+    var mientras = '';
     const consejo = exp.consejo
       ? '<p class="animo-modal-hint">\uD83D\uDCA1 ' + esc(exp.consejo) + '</p>'
       : '';
@@ -6527,7 +6516,7 @@ function hobbyIconKey(id, texto) {
         lab.textContent = sl.texto || '';
       } else {
         ico.innerHTML = '<span class="ficha-hobby-q">?</span>';
-        lab.textContent = '?';
+        lab.textContent = '';
         lab.className += ' is-desconocido';
       }
       card.appendChild(ico);

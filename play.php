@@ -654,13 +654,24 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <header class="aht-frame-header">
             <button type="button" class="ficha-volver" data-ficha-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; VECINOS</button>
             <h2 class="aht-frame-title">Ficha</h2>
-            <div style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;display:flex;gap:4px;">
-              <button type="button" class="ficha-nav" data-ficha-nav-prev aria-label="Vecino anterior" style="border:none;background:transparent;cursor:pointer;padding:2px 4px;font-size:1.1rem;color:var(--aht-text-muted,#75634F);">‹</button>
-              <button type="button" class="ficha-nav" data-ficha-nav-next aria-label="Vecino siguiente" style="border:none;background:transparent;cursor:pointer;padding:2px 4px;font-size:1.1rem;color:var(--aht-text-muted,#75634F);">›</button>
+            <div style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;display:flex;gap:6px;">
+              <button type="button" class="ficha-nav" data-ficha-nav-prev aria-label="Vecino anterior" style="border:none;background:transparent;cursor:pointer;padding:4px 8px;font-size:1.5rem;font-weight:700;color:var(--aht-text,#33261E);line-height:1;">&#8249;</button>
+              <button type="button" class="ficha-nav" data-ficha-nav-next aria-label="Vecino siguiente" style="border:none;background:transparent;cursor:pointer;padding:4px 8px;font-size:1.5rem;font-weight:700;color:var(--aht-text,#33261E);line-height:1;">&#8250;</button>
             </div>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
+            <nav class="ficha-acciones" aria-label="Acciones con el vecino">
+              <button type="button" class="ficha-btn-acc ficha-btn-diario" data-ficha-diario-btn>
+                <span class="ficha-btn-acc-ico">📓</span> Diario
+              </button>
+              <button type="button" class="ficha-btn-acc ficha-btn-org" data-ficha-org>
+                <span class="ficha-btn-acc-ico">📋</span> Nuevo plan
+              </button>
+              <button type="button" class="ficha-btn-acc ficha-btn-regalo" data-ficha-regalar>
+                <span class="ficha-btn-acc-ico">🎁</span> Regalar
+              </button>
+            </nav>
             <section class="ficha-hero" aria-label="Perfil del vecino">
               <div class="ficha-hero-left">
                 <div class="ficha-cara-ring" data-ficha-cara-ring>
@@ -692,25 +703,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                     <div class="ficha-hobbies" data-ficha-hobbies></div>
                   </div>
                 </section>
-              </div>
-            </section>
-            <nav class="ficha-acciones" aria-label="Acciones con el vecino">
-              <button type="button" class="ficha-btn-acc ficha-btn-diario" data-ficha-diario-btn>
-                <span class="ficha-btn-acc-ico">📓</span> Diario
-              </button>
-              <button type="button" class="ficha-btn-acc ficha-btn-org" data-ficha-org>
-                <span class="ficha-btn-acc-ico">📋</span> Nuevo plan
-              </button>
-              <button type="button" class="ficha-btn-acc ficha-btn-regalo" data-ficha-regalar>
-                <span class="ficha-btn-acc-ico">🎁</span> Regalar
-              </button>
-            </nav>
-            <div class="ficha-body">
-              <div class="ficha-col ficha-col-detalles capa-scroll">
-                <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
-                  <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
-                  <div class="ficha-seccion-body ficha-seccion-body-prefs" data-ficha-sabes-body></div>
-                </section>
                 <section class="ficha-seccion">
                   <h4 class="ficha-seccion-tit">Relaciones</h4>
                   <div class="ficha-seccion-body">
@@ -723,6 +715,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   <div class="ficha-seccion-body">
                     <div class="ficha-planes" data-ficha-planes></div>
                   </div>
+                </section>
+              </div>
+            </section>
+            <div class="ficha-body">
+              <div class="ficha-col ficha-col-detalles capa-scroll">
+                <section class="ficha-seccion ficha-seccion-prefs" data-ficha-sabes hidden>
+                  <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Lo que sabes</h4>
+                  <div class="ficha-seccion-body ficha-seccion-body-prefs" data-ficha-sabes-body></div>
                 </section>
                 <section class="ficha-seccion ficha-seccion-necesidades" data-ficha-necesidades hidden>
                   <h4 class="ficha-seccion-tit ficha-seccion-tit-sm">Qué le vendría bien</h4>
