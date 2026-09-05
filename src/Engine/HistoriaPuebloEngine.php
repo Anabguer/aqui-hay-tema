@@ -57,6 +57,7 @@ final class HistoriaPuebloEngine
     public static function ensure(array &$partida): void
     {
         $partida['historia_pueblo'] ??= [];
+        $partida['celebraciones_consumidas'] ??= [];
     }
 
     /**
@@ -204,6 +205,7 @@ final class HistoriaPuebloEngine
         $consumed = ($root !== null && $partidaId !== null)
             ? self::loadConsumed($root, $partidaId)
             : [];
+        $consumedInGame = $partida['celebraciones_consumidas'] ?? [];
         $pendientes = [];
 
         foreach (self::CATÁLOGO_VISUAL as $i => $slot) {
@@ -211,11 +213,12 @@ final class HistoriaPuebloEngine
             if ($entrada === null) {
                 continue;
             }
-            // Consumed file is the SOLE authority — survives any concurrent overwrites
+            if (in_array($slot['id'], $consumedInGame, true)) {
+                continue;
+            }
             if (in_array($slot['id'], $consumed, true)) {
                 continue;
             }
-            // Legacy entries without celebracion_estado are treated as consumed
             if (($entrada['celebracion_estado'] ?? 'consumida') !== 'pendiente') {
                 continue;
             }
@@ -236,17 +239,26 @@ final class HistoriaPuebloEngine
 
     /**
      * Marca una celebración como consumida (ACK idempotente).
+     * Persiste en celebraciones_consumidas (in-game array) Y celebracion_estado.
      */
     public static function ack(array &$partida, string $hitoId): bool
     {
         self::ensure($partida);
+
+        if (in_array($hitoId, $partida['celebraciones_consumidas'], true)) {
+            return false;
+        }
+
         foreach ($partida['historia_pueblo'] as &$e) {
             if (($e['hito_id'] ?? '') === $hitoId && ($e['celebracion_estado'] ?? '') === 'pendiente') {
                 $e['celebracion_estado'] = 'consumida';
+                if (!in_array($hitoId, $partida['celebraciones_consumidas'], true)) {
+                    $partida['celebraciones_consumidas'][] = $hitoId;
+                }
                 return true;
             }
         }
-        return false; // ya estaba consumida o no existe
+        return false;
     }
 
     // ── Helpers ────────────────────────────────────────────────────
@@ -375,7 +387,7 @@ final class HistoriaPuebloEngine
     }
 
     /**
-     * Reconcile celebracion_estado in partition with consumed file.
+     * Reconcile celebracion_estado in partition with consumed file AND in-game array.
      * Ensures monotonicity: once consumed, cannot revert to pendiente.
      * Call after cargar() to prevent stale main-file overwrites.
      *
@@ -384,21 +396,29 @@ final class HistoriaPuebloEngine
      */
     public static function reconcileConsumedState(array &$partida, string $root, string $partidaId): bool
     {
-        $consumed = self::loadConsumed($root, $partidaId);
-        if (empty($consumed)) {
+        self::ensure($partida);
+        $consumedFile = self::loadConsumed($root, $partidaId);
+        $consumedInGame = $partida['celebraciones_consumidas'] ?? [];
+        $allConsumed = array_values(array_unique(array_merge($consumedInGame, $consumedFile)));
+
+        if (empty($allConsumed)) {
             return false;
         }
         $corrected = false;
-        self::ensure($partida);
         foreach ($partida['historia_pueblo'] as &$entry) {
             if (($entry['celebracion_estado'] ?? '') === 'pendiente'
-                && in_array($entry['hito_id'] ?? '', $consumed, true)
+                && in_array($entry['hito_id'] ?? '', $allConsumed, true)
             ) {
                 $entry['celebracion_estado'] = 'consumida';
                 $corrected = true;
             }
         }
         unset($entry);
+
+        if ($corrected) {
+            $partida['celebraciones_consumidas'] = $allConsumed;
+        }
+
         return $corrected;
     }
 }
