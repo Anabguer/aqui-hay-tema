@@ -19,8 +19,6 @@ final class HistoriaPuebloHandler
     }
 
     /**
-     * Retorna celebraciones pendientes (para partida.refresh y partida.nueva).
-     *
      * @return array{ok: bool, celebraciones: list<array>}
      */
     public static function pendientes(array $partida, ?ApiContext $ctx = null): array
@@ -34,9 +32,7 @@ final class HistoriaPuebloHandler
     }
 
     /**
-     * ACK de celebración — marca como consumida (idempotente).
-     *
-     * @return array{ok: bool, ack_ok: bool}
+     * @return array{ok: bool, ack_ok: bool, recompensa?: array, animacion_pendiente?: bool}
      */
     public static function ack(ApiContext $ctx, array $body, array &$partida): array
     {
@@ -44,6 +40,9 @@ final class HistoriaPuebloHandler
         if ($hitoId === '') {
             return ['ok' => false, 'error' => 'missing_hito_id'];
         }
+
+        $animPendienteAntes = HistoriaPuebloEngine::recompensaAnimacionPendiente($partida, $hitoId);
+        $entradaAntes = HistoriaPuebloEngine::entradaPorHito($partida, $hitoId);
 
         HistoriaPuebloEngine::ack($partida, $hitoId);
         $consumida = HistoriaPuebloEngine::estaConsumida($partida, $hitoId);
@@ -61,9 +60,29 @@ final class HistoriaPuebloHandler
             savePartidaRapida($ctx, $partida);
         }
 
+        $recompensa = null;
+        if (is_array($entradaAntes)) {
+            $recompensa = \AquiHayTema\Engine\RegalitoRecompensaService::recompensaDeEntradaHistoria($partida, $entradaAntes);
+        }
+
         return [
             'ok' => true,
             'ack_ok' => $consumida,
+            'recompensa' => $recompensa,
+            'animacion_pendiente' => $consumida && $animPendienteAntes,
         ];
+    }
+
+    public static function recompensaAnimAck(ApiContext $ctx, array $body, array &$partida): array
+    {
+        $hitoId = $body['hito_id'] ?? '';
+        if ($hitoId === '') {
+            return ['ok' => false, 'error' => 'missing_hito_id'];
+        }
+        $mutado = HistoriaPuebloEngine::marcarRecompensaAnimada($partida, $hitoId);
+        if ($mutado) {
+            savePartidaRapida($ctx, $partida);
+        }
+        return ['ok' => true, 'marcado' => $mutado];
     }
 }

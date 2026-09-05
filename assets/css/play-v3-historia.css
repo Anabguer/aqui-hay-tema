@@ -420,3 +420,66 @@
 .historia-polaroid:not(.historia-polaroid--bloqueada):hover {
   transform: scale(1.03);
 }
+
+.histcele-recompensa-card,
+.histdet-recompensa-card {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  margin-top: .25rem;
+}
+
+.histcele-recompensa-img,
+.histdet-recompensa-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.histdet-recompensa {
+  background: var(--modal-content-bg, #F6F3F8);
+  border: 1px dashed var(--modal-border, #D8D1DE);
+  border-radius: 8px;
+  padding: .6rem .8rem;
+  margin: .6rem 0;
+}
+
+.histdet-recompensa-label {
+  display: block;
+  font-size: .7rem;
+  font-weight: 700;
+  color: #7a6e60;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  margin-bottom: .25rem;
+}
+
+.histdet-recompensa-nombre {
+  font-size: .85rem;
+  color: #3a3025;
+  font-weight: 600;
+}
+
+.histcele-recompensa-fly {
+  position: fixed;
+  left: 50%;
+  bottom: 5.5rem;
+  transform: translateX(-50%) scale(1);
+  z-index: 12000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease, transform .7s ease;
+}
+
+.histcele-recompensa-fly.is-on {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4.5rem) scale(0.35);
+}
+
+.histcele-recompensa-fly img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.18));
+}

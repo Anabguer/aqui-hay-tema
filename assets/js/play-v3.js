@@ -1540,7 +1540,7 @@
 
   function mensajitoEsObjetoRecibido(m) {
     const t = String((m && m.tipo) || '');
-    return t === 'regalo_recompensa' || t === 'detallito_sorpresa';
+    return t === 'regalo_recompensa' || t === 'detallito_sorpresa' || t === 'regalito_recompensa';
   }
 
   function mensajitoObjetoNombreDeTexto(m) {
@@ -1563,15 +1563,28 @@
   function mensajitoObjetoIdDe(m) {
     if (!m || typeof m !== 'object') return '';
     const origen = m.origen || {};
+    if (origen.objeto_id) return String(origen.objeto_id);
     const eid = String(origen.evento_id || '');
     if (eid.indexOf('detallito_sorpresa:') === 0) {
       return eid.slice('detallito_sorpresa:'.length);
+    }
+    if (eid.indexOf('regalito_recompensa:') === 0) {
+      return eid.slice('regalito_recompensa:'.length);
     }
     return '';
   }
 
   function mensajitoObjetoVistaDe(m, catalogo) {
     if (!mensajitoEsObjetoRecibido(m)) return null;
+    const origen = (m && m.origen) || {};
+    if (origen.objeto_nombre) {
+      return {
+        id: String(origen.objeto_id || ''),
+        nombre: String(origen.objeto_nombre),
+        url: String(origen.objeto_imagen || ''),
+        desc: origen.regalito_origen === 'historia_pueblo' ? 'Historia del Pueblo' : (origen.regalito_origen === 'misiones_3x3' ? 'Tres misiones del día' : '')
+      };
+    }
     const cat = catalogo || cacheCatalogoRegalos || { byId: {}, byNombre: {} };
     const idDirecto = mensajitoObjetoIdDe(m);
     if (idDirecto && cat.byId[idDirecto]) return cat.byId[idDirecto];
@@ -1873,6 +1886,7 @@
   const celebracionesConsumidas = new Set();
   let colaCelebraciones = [];
   let celebracionHitoActual = '';
+  let celebracionRecompensaActual = null;
 
   function procesarCelebraciones(historia) {
     const celebs = (historia && historia.celebraciones) || [];
@@ -1926,13 +1940,46 @@
       protWrap.innerHTML = ph;
     }
     if (recDiv) {
+      const recImg = $('[data-historia-celebracion-recompensa-img]');
       if (c.recompensa && c.recompensa.objeto_nombre) {
         recDiv.hidden = false;
         if (recObj) recObj.textContent = c.recompensa.objeto_nombre + (c.recompensa.cantidad > 1 ? ' \u00d7' + c.recompensa.cantidad : '');
+        if (recImg) {
+          if (c.recompensa.objeto_imagen) {
+            recImg.src = c.recompensa.objeto_imagen;
+            recImg.alt = c.recompensa.objeto_nombre;
+            recImg.hidden = false;
+          } else recImg.hidden = true;
+        }
       } else {
         recDiv.hidden = true;
+        if (recImg) recImg.hidden = true;
       }
     }
+    celebracionRecompensaActual = c.recompensa || null;
+  }
+
+
+  function animarRecompensaAlInventario(recompensa) {
+    return new Promise(function (resolve) {
+      if (!recompensa || !recompensa.objeto_imagen) { resolve(); return; }
+      var fly = document.createElement('div');
+      fly.className = 'histcele-recompensa-fly';
+      fly.innerHTML = '<img src="' + esc(recompensa.objeto_imagen) + '" alt="' + esc(recompensa.objeto_nombre || '') + '"/>';
+      document.body.appendChild(fly);
+      requestAnimationFrame(function () {
+        fly.classList.add('is-on');
+        setTimeout(function () { fly.remove(); resolve(); }, 720);
+      });
+    });
+  }
+
+  async function postCelebracionRecompensaAnim(hitoId, ackResult) {
+    if (!hitoId || !ackResult || !ackResult.animacion_pendiente) return;
+    var rec = ackResult.recompensa || celebracionRecompensaActual;
+    if (!rec || !rec.objeto_imagen) return;
+    await animarRecompensaAlInventario(rec);
+    await api('historia.recompensa_anim_ack', { hito_id: hitoId });
   }
 
   async function celebracionClose(hitoId) {
@@ -1948,6 +1995,8 @@
     celebracionesConsumidas.add(hitoId);
     colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     setCapa('');
+    await postCelebracionRecompensaAnim(hitoId, ackResult);
+    celebracionRecompensaActual = null;
     setTimeout(mostrarSiguienteCelebracion, 400);
   }
 
@@ -1964,6 +2013,8 @@
     }
     celebracionesConsumidas.add(hitoId);
     colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
+    await postCelebracionRecompensaAnim(hitoId, ackResult);
+    celebracionRecompensaActual = null;
     setCapa('historia');
     renderHistoriaPueblo().then(function () {
       setTimeout(function () {
@@ -2006,6 +2057,22 @@
         protWrap.innerHTML = ph;
       }
       if (diaDiv) diaDiv.textContent = hito.dia ? 'D\u00eda ' + hito.dia : '';
+      var recWrap = $('[data-historia-detalle-recompensa]');
+      var recImg = $('[data-historia-detalle-recompensa-img]');
+      var recNom = $('[data-historia-detalle-recompensa-nombre]');
+      if (recWrap) {
+        if (hito.recompensa && hito.recompensa.objeto_nombre) {
+          recWrap.hidden = false;
+          if (recNom) recNom.textContent = hito.recompensa.objeto_nombre;
+          if (recImg) {
+            if (hito.recompensa.objeto_imagen) {
+              recImg.src = hito.recompensa.objeto_imagen;
+              recImg.alt = hito.recompensa.objeto_nombre;
+              recImg.hidden = false;
+            } else recImg.hidden = true;
+          }
+        } else recWrap.hidden = true;
+      }
       setCapa('historia_detalle');
     } catch (e) { /* noop */ }
   }
@@ -2180,6 +2247,7 @@
     if (tipo === 'peticion_resultado') return '';
     if (tipo === 'marcha_publica' || tipo === 'marcha_despedida' || tipo === 'legado_despedida') return '';
     if (tipo === 'detallito_sorpresa') return '';
+    if (tipo === 'regalito_recompensa') return '';
     if (tipo === 'regalo_recompensa') {
       if (!mensajitoDestinoFicha(m)) return '';
       return mensajitoEstaLeido(m) ? 'Ver perfil' : 'Entendido';

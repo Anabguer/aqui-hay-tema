@@ -848,8 +848,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <p class="histcele-texto" data-historia-celebracion-texto></p>
               <div class="histcele-protagonistas" data-historia-celebracion-protagonistas></div>
               <div class="histcele-recompensa" data-historia-celebracion-recompensa hidden>
-                <span class="histcele-recompensa-label">🎁 POR ESTE NUEVO RECUERDO RECIBES:</span>
-                <span class="histcele-recompensa-objeto" data-historia-celebracion-recompensa-objeto></span>
+                <span class="histcele-recompensa-label">Recompensa desbloqueada</span>
+                <div class="histcele-recompensa-card">
+                  <img class="histcele-recompensa-img" src="" alt="" data-historia-celebracion-recompensa-img hidden/>
+                  <span class="histcele-recompensa-objeto" data-historia-celebracion-recompensa-objeto></span>
+                </div>
               </div>
               <button type="button" class="histcele-album" data-historia-celebracion-album>IR AL ÁLBUM</button>
             </div>
@@ -870,6 +873,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <h3 class="histdet-titulo" data-historia-detalle-titulo></h3>
               <p class="histdet-texto" data-historia-detalle-texto></p>
               <div class="histdet-protagonistas" data-historia-detalle-protagonistas></div>
+              <div class="histdet-recompensa" data-historia-detalle-recompensa hidden>
+                <span class="histdet-recompensa-label">Recompensa desbloqueada</span>
+                <div class="histdet-recompensa-card">
+                  <img class="histdet-recompensa-img" src="" alt="" data-historia-detalle-recompensa-img hidden/>
+                  <span class="histdet-recompensa-nombre" data-historia-detalle-recompensa-nombre></span>
+                </div>
+              </div>
               <div class="histdet-dia" data-historia-detalle-dia></div>
             </div>
           </div>

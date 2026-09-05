@@ -512,14 +512,13 @@ final class MisionDiariaEngine
     $delta = VidaPuebloEngine::DELTA_MISION_CUMPLIDA;
         $partida['misiones_diarias']['items'][$i]['estado'] = self::EST_CUMPLIDA;
         $m = $partida['misiones_diarias']['items'][$i];
-        $detallito = DetallitoEngine::alCumplirMision($partida, $m, $logger);
         if (!FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
             self::emit($partida, DomainEvents::MISION_CUMPLIDA, [
                 'mision' => $m,
                 'actores' => [],
             ], $logger, 'MisionDiariaEngine::cumplir');
             $regalito = self::evaluarRegalito3x3($partida, (int) ($m['dia'] ?? 0), $logger);
-            return ['ok' => true, 'mision' => $m, 'vida_delta' => 0, 'detallito' => $detallito, 'regalito' => $regalito];
+            return ['ok' => true, 'mision' => $m, 'vida_delta' => 0, 'regalito' => $regalito];
         }
         $valido = !empty($m['cuenta_latido']) && !self::yaHuboValidoHoy($partida, (int) ($m['dia'] ?? 0), (string) ($m['id'] ?? ''));
         VidaPuebloEngine::aplicar($partida, $delta, [
@@ -534,7 +533,7 @@ final class MisionDiariaEngine
             'actores' => [],
         ], $logger, 'MisionDiariaEngine::cumplir');
         $regalito = self::evaluarRegalito3x3($partida, (int) ($m['dia'] ?? 0), $logger);
-        return ['ok' => true, 'mision' => $m, 'detallito' => $detallito, 'regalito' => $regalito];
+        return ['ok' => true, 'mision' => $m, 'regalito' => $regalito];
     }
 
     /**
