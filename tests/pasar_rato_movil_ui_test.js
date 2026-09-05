@@ -8,7 +8,7 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
-const cssResp = fs.readFileSync(path.join(root, 'assets/css/play-v3-responsive.css'), 'utf8');
+const cssMob = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-mobile.css'), 'utf8');
 const cssArt = fs.readFileSync(path.join(root, 'assets/css/play-v3-shell-art.css'), 'utf8');
 
 let failures = 0;
@@ -20,36 +20,18 @@ function ok(c, m) {
 // ── 1. Sistema único: mismos nodos, sin duplicados móviles ──
 ok((php.match(/data-pasar-rato/g) || []).length >= 2, 'play.php: botones dual-view móvil+desktop (mismo contrato)');
 ok((php.match(/data-es-noche/g) || []).length >= 2, 'play.php: indicador noche en cada vista');
-ok(!/(pasar-rato-movil|data-pasar-rato-movil|es-noche-movil|avance-movil-btn)/.test(php + js + cssResp), 'sin segunda versión funcional móvil');
+ok(!/(pasar-rato-movil|data-pasar-rato-movil|es-noche-movil|avance-movil-btn)/.test(php + js + cssMob), 'sin segunda versión funcional móvil');
 ok(/function pasarRatoBtns\(\)/.test(js) && /bindPasarRatoDelegacion/.test(js) && /relojAvanceRespuestaOk/.test(js), 'JS: delegacion unica y feedback coherente de avance');
 
-// ── 2. La cabecera móvil ya NO oculta .top-center ──
-ok(!/\.play-v3:has\(\.game-shell\) \.top-center\s*\{[^}]*display:\s*none/.test(cssResp), 'responsive: .top-center ya no display:none en móvil');
-  ok(/\.play-v3:has\(\.game-shell\) \.top-center\s*\{\s*display:\s*contents !important;\s*\}/.test(cssResp), 'responsive: .top-center cuelga del grid vía display:contents');
-  ok(/"brand guia vida"\s*\n\s*"meta avance avance"/.test(cssResp), 'responsive: fila única meta+avance bajo brand/vida');
-  ok(/\.play-v3:has\(\.game-shell\) \.brand-col\s*\{\s*display:\s*contents !important;\s*\}/.test(cssResp), 'responsive: brand-col contents (¿Cómo va esto? y meta al grid)');
-  const tail30 = cssResp.slice(cssResp.lastIndexOf('batch 30'));
-  ok(/\.top-meta-line\s*\{[^}]*white-space:\s*nowrap !important;/.test(tail30) && /\.top-meta-prim,[^}]*display:\s*inline !important;/.test(tail30), 'batch30: día/fecha + hora en una sola línea');
-  ok(/\.top-reloj \.es-noche-txt\s*\{\s*display:\s*none !important;/.test(tail30), 'batch30: móvil sin texto "Es de noche", solo luna');
-  ok(/\.top-reloj \.es-noche\s*\{[^}]*background:\s*none !important;/.test(tail30), 'batch30: luna sin tarjeta');
-  const dsInicio = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio.css'), 'utf8');
-  ok(!/\.top-reloj \.pasar-rato\s*\{[^}]*border-radius:[^;}]*!important/.test(cssResp) &&
-     /\.top-reloj \.pasar-rato\s*\{[^}]*min-height:\s*44px/.test(dsInicio) &&
-     /transform:\s*rotate\(-1\.2deg\) scale\(\.97\)/.test(dsInicio),
-    'ds-piloto: pasar-rato piel en el DS (pill lavanda 44px, tilt+press); responsive sin border-radius !important');
-  ok(/\.play-v3:has\(\.game-shell\) \.top-reloj\s*\{[^}]*flex-wrap:\s*nowrap !important;/.test(tail30), 'batch30: fila de avance sin wrap');
-ok(/\.play-v3:has\(\.game-shell\) \.top-reloj\s*\{[^}]*grid-area:\s*avance !important;[^}]*display:\s*flex !important;/.test(cssResp), 'responsive: .top-reloj anclado a la fila avance');
-ok(!/\.play-v3:has\(\.game-shell\) \.top-reloj \.obj-dia[^}]*}\s*[^~]*display:\s*flex/.test(cssResp.split('.obj-dia,')[1] || ''), 'sanity: objetos papel ocultos por regla dedicada');
-ok(/\.play-v3:has\(\.game-shell\) \.top-reloj \.obj-dia,\s*\n\s*\.play-v3:has\(\.game-shell\) \.top-reloj \.obj-hora\s*\{[^}]*display:\s*none !important;/.test(cssResp), 'responsive: obj-dia/obj-hora ocultos (meta-line evita duplicado)');
-ok(/\.play-v3:has\(\.game-shell\) \.top-reloj \.es-noche\s*\{[^}]*position:\s*static/.test(cssResp), 'responsive: "Es de noche" en flujo junto al botón');
-ok(/\.play-v3:has\(\.game-shell\) \.top-reloj \.es-noche\[hidden\]\s*\{[^}]*display:\s*none !important;/.test(cssResp), 'responsive: hidden sigue ganando de día');
-
-// Las reglas nuevas viven DENTRO del media query móvil (desktop intacto)
-{
-  const idx = cssResp.indexOf('.play-v3:has(.game-shell) .top-center');
-  const media = cssResp.lastIndexOf('@media', idx);
-  ok(media !== -1 && /\(max-width:\s*768px\)/.test(cssResp.slice(media, idx)), 'responsive: reglas nuevas dentro de @media max-width:768px');
-}
+// ── 2. Cabecera móvil FIEL: píldora temporal + solo ▶ ──
+ok(/inicio-header-card/.test(php), 'play.php: tarjeta cabecera móvil');
+ok(/inicio-temporal-pill/.test(php), 'play.php: píldora día/hora/avance');
+ok(/INICIO-CABECERA-MOVIL-20260906/.test(cssMob), 'inicio-mobile: bloque cabecera canónico');
+ok(/inicio-temporal-pill[\s\S]{0,220}flex-wrap:\s*nowrap/.test(cssMob), 'inicio-mobile: píldora en una línea');
+ok(/pasar-rato-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto Pasar el rato');
+ok(/es-noche-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto Es de noche');
+ok(/inicio-temporal-pill \.pasar-rato[\s\S]{0,220}border-radius:\s*50%/.test(cssMob), 'inicio-mobile: botón ▶ circular');
+ok(!/!important/.test(cssMob.match(/INICIO-CABECERA-MOVIL[\s\S]*/)?.[0] || ''), 'inicio-mobile cabecera: cero !important');
 
 // ── 3. Desktop intacto ──
 ok(/\.es-noche\s*\{[^}]*position:\s*absolute/.test(cssArt), 'desktop: chip absoluto bajo el reloj intacto');

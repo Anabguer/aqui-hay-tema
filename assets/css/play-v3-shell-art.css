@@ -1173,32 +1173,6 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 
 }
 
-.game-top .top-vida {
-
-  display: grid;
-
-  grid-template-columns: minmax(0, 1fr) auto;
-
-  width: 100%;
-
-  max-width: 100%;
-
-  box-sizing: border-box;
-
-  padding-right: 0;
-
-  overflow: hidden;
-
-}
-
-.game-top .corazon-svg {
-
-  margin-right: 0;
-
-  justify-self: end;
-
-}
-
 .shell-grupo-resumen::before { display: none; content: none; }
 
 .obj-pareja-cara.cara-ini {

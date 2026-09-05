@@ -130,6 +130,7 @@ for (const [view, zoneMap] of Object.entries(AUTHORITY)) {
     for (const r of allRules) {
       if (!patterns.some((re) => re.test(r.sel))) continue;
       if (/inicio-map-host\)/.test(r.sel) && /:not\(\.inicio-map-host\)/.test(r.sel)) continue;
+      if (/inicio-stage\)/.test(r.sel) && /:not\(:has\(\.inicio-stage\)\)/.test(r.sel)) continue;
       if (zone === 'inicioStage' && /encursos-movil|proxplanes-movil|shell-grupo|enc-int/.test(r.sel)) continue;
       const vp = viewportOf(r);
       if (vp !== view && vp !== 'both') continue;

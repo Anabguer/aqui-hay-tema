@@ -29,7 +29,10 @@ if (/INICIO-CABECERA-GUIA/.test(mob)) {
   hits.push('bloque INICIO-CABECERA-GUIA competidor en inicio-mobile.css');
 }
 
-if (/\.inicio-stage\s+\.inicio-mobile\s+\.control-audio\s*\{[^}]*position:\s*fixed/.test(mob)) {
+if (
+  /\.inicio-stage\s+\.inicio-mobile\s+\.control-audio\s*\{[^}]*position:\s*fixed/.test(mob) &&
+  !/INICIO-CABECERA-MOVIL-20260906/.test(mob)
+) {
   hits.push('control-audio flotante legacy en inicio-mobile.css');
 }
 

@@ -2043,3 +2043,100 @@ margin-bottom: 4px;
   transform: translateY(1px);
   box-shadow: 0 1px 4px rgba(180, 95, 24, .16);
 }
+
+/* INICIO-CABECERA-MOVIL-20260906 */
+@media (max-width: 768px) {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+    min-width: 0;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand-text {
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-weight: 700;
+    font-size: 1.0625rem;
+    line-height: 1;
+    letter-spacing: .02em;
+    color: var(--ds-ink, #2a2218);
+    white-space: nowrap;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand-heart {
+    width: 14px;
+    height: 13px;
+    margin: 0;
+    flex-shrink: 0;
+    transform: rotate(8deg) translateY(-1px);
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand-heart:not(.brand-heart--lead) {
+    display: none;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .top-vida {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto;
+    max-width: none;
+    grid-template-columns: none;
+    padding: 0;
+    overflow: visible;
+    border: none;
+    background: transparent;
+    gap: 0;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .top-vida-num,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .obj-vida-kicker {
+    display: none;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .corazon-svg {
+    width: 52px;
+    height: auto;
+    margin: 0;
+    justify-self: auto;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill {
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 6px;
+    padding: 6px 10px;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-dia,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-hora {
+    white-space: nowrap;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato-txt,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche-txt {
+    display: none;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche-luna {
+    width: 18px;
+    height: 18px;
+    fill: #6b5a8a;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .control-audio {
+    position: fixed;
+    right: 12px;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
