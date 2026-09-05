@@ -39,6 +39,12 @@
   --aht-frame-shadow: 0 8px 24px rgba(48, 40, 58, 0.20);
   --aht-overlay: rgba(38, 31, 47, 0.45);
 
+  /* --- Modal shell: dimensiones (pantallazos 03/04/06) --- */
+  --aht-modal-mobile-w: min(100%, 393px);
+  --aht-modal-mobile-max-h: min(88vh, 720px);
+  --aht-modal-desktop-w: min(calc(100% - 32px), 720px);
+  --aht-modal-desktop-max-h: min(90vh, 840px);
+
   /* --- Close (X) â€” token global testable --- */
   --aht-close-color: var(--aht-accent);
   --aht-close-bg: #F1EDF6;
@@ -81,5 +87,3 @@
   --aht-dur: 200ms;
   --aht-dur-slow: 320ms;
 }
-  --aht-frame-header-pad-x: 20px;
-  --aht-frame-header-pad-y: 12px;
