@@ -2356,7 +2356,7 @@
     });
     art.querySelectorAll('[data-elegir-persona]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
-        if (ev.target.closest('.aht-msg-choice-opt-name') || ev.target.closest('.msg-eleccion-avatar-wrap')) return;
+        if (ev.target.closest('.msg-eleccion-avatar-wrap')) return;
         ev.stopPropagation();
         if (btn.disabled) return;
         art.querySelectorAll('[data-elegir-persona]').forEach(function (b) { b.disabled = true; });
@@ -2373,7 +2373,7 @@
       : (accionesRaw.indexOf('responder_escuchar') >= 0 ? 'responder_escuchar' : 'responder_consejo');
     art.querySelectorAll('[data-llegada-acomp]').forEach(function (btn) {
       btn.addEventListener('click', async function (ev) {
-        if (ev.target.closest('.aht-msg-choice-opt-name') || ev.target.closest('.msg-eleccion-avatar-wrap')) return;
+        if (ev.target.closest('.msg-eleccion-avatar-wrap')) return;
         ev.stopPropagation();
         if (btn.disabled) return;
         const acomp = btn.getAttribute('data-llegada-acomp');
@@ -6132,7 +6132,11 @@ function canonEmoId(id) {
   }
 
   function cerrarAnimoOverlay() {
-    setCapa(animoVolverCapa || 'ficha');
+    if (window.AHTScreenManager) {
+      window.AHTScreenManager.close();
+    } else {
+      setCapa(animoVolverCapa || 'ficha');
+    }
   }
 
   function emoModalIcono(estadoId) {
@@ -7049,12 +7053,7 @@ function hobbyIconKey(id, texto) {
         var optName = ev.target.closest('.aht-msg-choice-opt-name');
         if (optName) {
           var optBtn = optName.closest('button[data-elegir-persona], button[data-llegada-acomp]');
-          if (optBtn) {
-            ev.stopPropagation();
-            var pid2 = optBtn.getAttribute('data-elegir-persona') || optBtn.getAttribute('data-llegada-acomp');
-            if (pid2) abrirFicha(pid2, { overlay: true });
-            return;
-          }
+          if (optBtn && !optBtn.closest('.aht-msg-choice')) return;
         }
       });
       art.addEventListener('click', async function (ev) {
@@ -9477,6 +9476,12 @@ var finOk = $('[data-tut-fin-ok]');
         t.setAttribute('aria-selected', t.getAttribute('data-buzon-tab') === 'nuevos' ? 'true' : 'false');
       });
       renderBuzon(cacheBuzon);
+    }
+    if (screen === 'vecinos') {
+      vecBuscaTxt = '';
+      var vecInp = $('[data-vec-busca]');
+      if (vecInp) vecInp.value = '';
+      renderVecinos();
     }
   });
 

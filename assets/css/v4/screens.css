@@ -155,10 +155,26 @@
   width: 0;
   height: 0;
 }
-/* Lateral padding for the grid */
+/* Lateral padding for the grid — matches search bar */
 .aht-screen[data-aht-screen="vecinos"] .vecinos-grid,
 .aht-screen[data-aht-screen="vecinos"] [data-vecinos-list] {
-  padding: 0 12px 8px;
+  padding: 0 12px 16px;
+}
+/* Search bar: same lateral margin as cards */
+.aht-screen[data-aht-screen="vecinos"] .vec-busca-tira {
+  padding: 0 12px;
+  margin-bottom: 10px;
+}
+/* Focus: clean outline integrated in design */
+.aht-screen[data-aht-screen="vecinos"] .vec-busca-inp:focus {
+  outline: none;
+}
+.aht-screen[data-aht-screen="vecinos"] .vec-busca-wrap:focus-within {
+  box-shadow: 0 0 0 2px rgba(232, 139, 168, 0.4);
+}
+/* Desktop: taller to show ~3 rows */
+.aht-screen[data-aht-screen="vecinos"] {
+  max-height: min(92vh, 900px);
 }
 .aht-screen[data-aht-screen="vecinos"] .vecino-cara {
   --vec-cara-size: 96px;
@@ -258,19 +274,30 @@
   width: 0;
   height: 0;
 }
-/* Hero: avatar | info | actions */
+/* Hero: two-column — left (avatar+info) | right (rasgos+hobbies) */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
   padding: 16px;
   align-items: start;
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
   background: var(--ds-paper-card, #fffdf7);
 }
-/* Avatar ring — double ring with emotion color */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Avatar ring — bigger, 120px */
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-  --ficha-cara-size: 100px;
+  --ficha-cara-size: 120px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
   padding: 4px;
@@ -312,7 +339,10 @@
   font-size: 2.2rem;
   color: var(--ds-ink, #3b3028);
 }
-/* Name */
+/* Hero info: text centered under avatar */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-info {
+  text-align: center;
+}
 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.75rem;
@@ -321,7 +351,6 @@
   margin: 0;
   line-height: 1.1;
 }
-/* Info lines */
 .aht-screen[data-aht-screen="ficha"] .ficha-edad,
 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,
 .aht-screen[data-aht-screen="ficha"] .ficha-desde {
@@ -331,18 +360,19 @@
   margin: 2px 0;
   line-height: 1.3;
 }
-/* Animo pill */
+/* Animo pill — clean fallback, no vanilla, no ? */
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 8px 3px 6px;
+  padding: 3px 10px 3px 8px;
   border: 1.5px solid rgba(180, 150, 110, 0.28);
   border-radius: 999px;
   font-family: var(--ds-font-ui, "Nunito", sans-serif);
   font-size: 0.8rem;
   margin-top: 6px;
   background: #fef5e0;
+  cursor: pointer;
 }
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="alegre"] {
   background: #e8f5e3;
@@ -356,48 +386,49 @@
   background: #fbe5e8;
   border-color: rgba(196, 43, 74, 0.3);
 }
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-emoji {
+.aht-screen[data-aht-screen="ficha"] .ficha-animo-ico {
   font-size: 1rem;
 }
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
   font-family: var(--ds-font-hand, "Patrick Hand", cursive);
   font-size: 0.9rem;
 }
-/* Hero actions */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-acciones {
+/* Actions bar — horizontal tabs like Mensajitos */
+.aht-screen[data-aht-screen="ficha"] .ficha-acciones {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+  background: var(--aht-surface-raised, #FFFFFF);
+}
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 4px;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  background: transparent;
+  font: 700 0.78rem/1 "Nunito", sans-serif;
+  color: var(--aht-text-muted, #75634F);
+  cursor: pointer;
+  transition: color 150ms, border-color 150ms;
+}
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc.is-active,
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc:hover {
+  color: var(--ds-ink, #3b3028);
+  border-bottom-color: var(--vec-pink, #e88ba8);
+}
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc-ico {
+  font-size: 1rem;
+}
+/* Body: single column (detalles) */
+.aht-screen[data-aht-screen="ficha"] .ficha-body {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-}
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-btn {
-  font-family: var(--ds-font-ui, "Nunito", sans-serif);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px;
-  background: var(--ds-paper-card, #fffdf7);
-  color: var(--ds-ink, #3b3028);
-  cursor: pointer;
-  white-space: nowrap;
-}
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-btn:hover {
-  background: var(--vec-pink, #e88ba8);
-  color: #fff;
-}
-/* Body: rasgos-hobbies + detalles */
-.aht-screen[data-aht-screen="ficha"] .ficha-body {
-  display: grid;
-  grid-template-columns: minmax(0, 0.38fr) minmax(0, 0.62fr);
-  gap: 12px;
+  gap: 14px;
   padding: 12px 16px;
-}
-/* Rasgos + Hobbies two-column grid */
-.aht-screen[data-aht-screen="ficha"] .ficha-rasgos-hobbies {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  align-items: start;
 }
 /* Section wrapper */
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion {
@@ -719,25 +750,30 @@
 /* ── Ficha mobile ──────────────────────────────────────────── */
 @media (max-width: 768px) {
   .aht-screen[data-aht-screen="ficha"] .ficha-hero {
-    grid-template-columns: auto 1fr;
+    grid-template-columns: 1fr;
     gap: 10px;
     padding: 12px;
+  }
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-left {
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+  }
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-info {
+    text-align: left;
   }
   .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
     --ficha-cara-size: 80px;
   }
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-acciones {
-    grid-column: 1 / -1;
-    flex-direction: row;
-    justify-content: center;
-    margin-top: 4px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-acciones {
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .aht-screen[data-aht-screen="ficha"] .ficha-acciones::-webkit-scrollbar {
+    display: none;
   }
   .aht-screen[data-aht-screen="ficha"] .ficha-body {
-    grid-template-columns: 1fr;
     padding: 10px 12px;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-rasgos-hobbies {
-    grid-template-columns: 1fr;
   }
 }
 
@@ -760,6 +796,46 @@
 .aht-screen[data-aht-screen="diario"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* Filters bar — styled as AHT pills */
+.aht-screen[data-aht-screen="diario"] .coti-filtros {
+  display: flex;
+  gap: 6px;
+  padding: 8px 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+  background: var(--aht-surface-raised, #FFFFFF);
+}
+.aht-screen[data-aht-screen="diario"] .coti-filtros::-webkit-scrollbar {
+  display: none;
+}
+.aht-screen[data-aht-screen="diario"] .coti-filtros[hidden] {
+  display: none;
+}
+.aht-screen[data-aht-screen="diario"] .coti-filtro {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border: 1.5px solid var(--aht-border, #D8D1DE);
+  border-radius: 999px;
+  background: var(--ds-paper-card, #fffdf7);
+  font: 600 0.75rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #75634F);
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.aht-screen[data-aht-screen="diario"] .coti-filtro.is-on {
+  background: var(--vec-pink, #e88ba8);
+  color: #fff;
+  border-color: var(--vec-pink, #e88ba8);
+}
+.aht-screen[data-aht-screen="diario"] .coti-filtro-pill {
+  font-size: 1rem;
 }
 .aht-screen[data-aht-screen="diario"] .coti-body {
   padding: 0 12px 8px;
@@ -920,17 +996,18 @@
   overflow-y: auto;
   flex: 1;
 }
-/* Animo modal — top */
+/* Animo modal — top: asymmetric layout */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-top {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 16px 12px;
+  padding: 24px 16px 16px;
   gap: 8px;
 }
+/* Avatar: bigger, prominent */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-avatar {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid var(--vec-ink-soft, #594839);
@@ -950,75 +1027,81 @@
   margin: 0;
   text-align: center;
 }
-/* Emotion pills */
+/* Emotion pills: sticker/cromo effect */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-pills {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 0 16px 16px;
+  padding: 0 16px 20px;
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   border-radius: 999px;
-  font: 700 0.9rem/1 "Nunito", sans-serif;
+  font: 700 1rem/1 "Nunito", sans-serif;
   text-transform: uppercase;
   letter-spacing: 0.03em;
+  transform: rotate(-1.5deg);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--alegre {
   background: #E8F5E3;
   color: var(--vec-green, #4a7a52);
-  border: 1.5px solid rgba(74, 122, 82, 0.25);
+  border: 2px solid rgba(74, 122, 82, 0.3);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--triste {
   background: #E6D9F3;
   color: var(--vec-lavender-deep, #7a6a9a);
-  border: 1.5px solid rgba(122, 106, 154, 0.25);
+  border: 2px solid rgba(122, 106, 154, 0.3);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--enfadado {
   background: #FBE5E8;
   color: var(--vec-red, #c42b4a);
-  border: 1.5px solid rgba(196, 43, 74, 0.25);
+  border: 2px solid rgba(196, 43, 74, 0.3);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--neutro {
   background: #FEF5E0;
   color: #b4966e;
-  border: 1.5px solid rgba(180, 150, 110, 0.25);
+  border: 2px solid rgba(180, 150, 110, 0.3);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado-ico {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-desde {
   font: 600 0.78rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
+  margin-top: 2px;
 }
 /* Section ribbons */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ribbon {
   display: block;
-  padding: 6px 16px;
+  padding: 8px 16px;
   margin: 0;
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
-  background: rgba(230, 217, 243, 0.4);
+  background: rgba(230, 217, 243, 0.35);
   border-top: 1px solid rgba(180, 150, 110, 0.12);
   border-bottom: 1px solid rgba(180, 150, 110, 0.12);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ribbon--lav {
-  background: rgba(230, 217, 243, 0.4);
+  background: rgba(230, 217, 243, 0.35);
 }
-/* Causa / explanation */
+/* Causa / explanation — airy, no beige */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-causa {
-  padding: 14px 16px;
+  padding: 16px 16px 20px;
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-causa p {
-  font: 600 0.88rem/1.4 "Nunito", sans-serif;
+  font: 500 0.9rem/1.5 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0;
+}
+.aht-screen[data-aht-screen="ficha_animo"] .animo-modal-causa--illus {
+  background: transparent;
 }
 /* Consequences */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-mientras {
@@ -1059,28 +1142,30 @@
   font: 600 0.78rem/1 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
-/* CTA button */
+/* CTA button — integrated, not isolated */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-cta {
   display: block;
   width: calc(100% - 32px);
   margin: 8px 16px;
   padding: 12px 16px;
   border: none;
-  border-radius: 12px 10px 14px 11px / 10px 14px 11px 12px;
+  border-radius: 14px 10px 12px 13px / 10px 14px 11px 12px;
   background: var(--vec-pink, #e88ba8);
   color: #fff;
   font: 700 0.95rem/1 "Nunito", sans-serif;
   cursor: pointer;
   text-align: center;
+  box-shadow: 0 2px 6px rgba(232, 139, 168, 0.25);
 }
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-cta:hover {
   background: #d67a98;
+  box-shadow: 0 3px 10px rgba(232, 139, 168, 0.35);
 }
 /* Ghost button */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ghost {
   display: block;
   width: calc(100% - 32px);
-  margin: 4px 16px 8px;
+  margin: 6px 16px 8px;
   padding: 10px 16px;
   border: 1.5px dashed var(--vec-ink-soft, #594839);
   border-radius: 10px;
@@ -1097,7 +1182,7 @@
 }
 /* Hint */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-hint {
-  font: 600 0.78rem/1.3 "Nunito", sans-serif;
+  font: 500 0.78rem/1.3 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
   text-align: center;
   padding: 8px 16px 16px;
