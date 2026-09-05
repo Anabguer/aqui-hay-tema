@@ -8343,6 +8343,14 @@ function hobbyIconKey(id, texto) {
       if (probe.ok) return true;
     }
     persistPartidaId(canonicalId);
+    if (opts.forceRebind) {
+      const probe = await api('partida.estado', {}, 'GET');
+      if (!probe.ok) {
+        try { localStorage.removeItem(storageKey()); } catch (e) {}
+        partidaId = null;
+        return false;
+      }
+    }
     return true;
   }
 

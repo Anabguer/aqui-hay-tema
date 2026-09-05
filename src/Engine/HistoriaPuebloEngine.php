@@ -92,10 +92,11 @@ final class HistoriaPuebloEngine
      */
     public static function alBitacoraHito(array &$partida, string $tipoBitacora, array $participantes): ?array
     {
-        $hitoId = match ($tipoBitacora) {
-            RelacionBitacora::SE_CONOCIERON => 'hito_02',
-            default => null,
-        };
+        if ($tipoBitacora === RelacionBitacora::SE_CONOCIERON) {
+            $hitoId = 'hito_02';
+        } else {
+            $hitoId = null;
+        }
         if ($hitoId === null || count($participantes) < 2) {
             return null;
         }
