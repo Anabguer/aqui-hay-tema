@@ -107,6 +107,12 @@ final class BuzonEngine
         if (!array_key_exists('leido', $mensaje)) {
             $mensaje['leido'] = ($mensaje['estado'] ?? '') !== 'pendiente';
         }
+        if (empty($mensaje['familia_mensajito']) && !empty($mensaje['tipo'])) {
+            $tipo = (string) $mensaje['tipo'];
+            if (str_starts_with($tipo, 'espontaneo_f_')) {
+                $mensaje['familia_mensajito'] = substr($tipo, strlen('espontaneo_'));
+            }
+        }
         return $mensaje;
     }
 
