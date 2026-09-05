@@ -31,8 +31,8 @@ final class RegalosHandler
         $catalog = new CatalogStore($ctx->root);
         InventarioEngine::ensure($partida);
 
-        $pendientesEntregados = RegalitoRecompensaService::reclamarPendientes($partida, $catalog);
-        if ($pendientesEntregados > 0) {
+        $pendientesEntregados = RegalitoRecompensaService::reclamarPendientes($partida, $ctx->logger);
+        if (!empty($pendientesEntregados)) {
             savePartida($ctx, $partida);
         }
         $residenteId = trim((string) ($body['residente_id'] ?? ''));

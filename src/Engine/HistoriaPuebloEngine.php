@@ -102,6 +102,11 @@ final class HistoriaPuebloEngine
 
         $partida['historia_pueblo'][] = $entrada;
 
+        $regalito = RegalitoRecompensaService::otorgar(
+            $partida,
+            'historia:' . $clave,
+        );
+
         DomainEventDispatcher::emit(
             $partida,
             DomainEvents::HISTORIA_PUEBLO_HITO,
@@ -112,7 +117,7 @@ final class HistoriaPuebloEngine
             ],
         );
 
-        return ['ok' => true, 'ya_existia' => false, 'entrada' => $entrada];
+        return ['ok' => true, 'ya_existia' => false, 'entrada' => $entrada, 'regalito' => $regalito];
     }
 
     public static function existe(array $partida, string $clave): bool
