@@ -190,6 +190,12 @@ final class MensajitoConsejoEngine
             return ['ok' => false, 'error' => 'mensaje_no_encontrado'];
         }
         $fam = (string) ($mensaje['familia_mensajito'] ?? '');
+        if ($fam !== MensajitoDudaPermanenciaEngine::FAMILIA) {
+            $tipo = (string) ($mensaje['tipo'] ?? '');
+            if (str_starts_with($tipo, 'espontaneo_f_')) {
+                $fam = substr($tipo, strlen('espontaneo_'));
+            }
+        }
         if ($fam === MensajitoDudaPermanenciaEngine::FAMILIA) {
             return MensajitoDudaPermanenciaEngine::organizarContacto($partida, $mensajeId);
         }
