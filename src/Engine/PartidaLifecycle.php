@@ -244,6 +244,7 @@ final class PartidaLifecycle
         $this->tickPeticiones($partida);
 
         $this->logger->log($partida, 'partida_reiniciada', ['partida_id' => $partidaId]);
+        HistoriaPuebloEngine::clearConsumedFile($this->root, $partidaId);
         $this->repo->guardar($partida);
         return $partida;
     }
