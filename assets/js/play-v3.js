@@ -8332,44 +8332,46 @@ function hobbyIconKey(id, texto) {
     try { localStorage.setItem(storageKey(), id); } catch (e) {}
     try { localStorage.removeItem('aht_partida_id'); } catch (e) {}
   }
-  async function adoptSqlPartidaIfAny() {
+  async function adoptSqlPartidaIfAny(opts) {
+    opts = opts || {};
     const list = await api('partida.listar', {}, 'GET');
     if (!list.ok || !Array.isArray(list.partidas) || list.partidas.length === 0) return false;
-    const prev = partidaId;
-    let serverId = null;
-    if (prev) {
-      const hit = list.partidas.find(function (row) { return row && row.partida_id === prev; });
-      if (hit && hit.partida_id) serverId = hit.partida_id;
+    const canonicalId = list.partidas[0] && list.partidas[0].partida_id;
+    if (!canonicalId) return false;
+    if (!opts.forceRebind && partidaId) {
+      const probe = await api('partida.estado', {}, 'GET');
+      if (probe.ok) return true;
     }
-    if (!serverId) {
-      serverId = list.partidas[0] && list.partidas[0].partida_id;
-    }
-    if (!serverId) return false;
-    if (partidaId !== serverId) persistPartidaId(serverId);
+    persistPartidaId(canonicalId);
     return true;
   }
 
   async function recuperarPartidaIdPerdida() {
     if (!partidaId) {
-      return adoptSqlPartidaIfAny();
+      return adoptSqlPartidaIfAny({ forceRebind: true });
     }
     const probe = await api('partida.estado', {}, 'GET');
     if (probe.ok) return true;
     const err = String(probe.error || '').toUpperCase();
     if (err !== 'PARTIDA_NO_ENCONTRADA' && err !== 'SAVE_CORRUPTO') return false;
-    if (await adoptSqlPartidaIfAny()) {
+    if (await adoptSqlPartidaIfAny({ forceRebind: true })) {
       const retry = await api('partida.estado', {}, 'GET');
       if (retry.ok) return true;
     }
     try { localStorage.removeItem(storageKey()); } catch (e) {}
     partidaId = null;
-    return adoptSqlPartidaIfAny();
+    return adoptSqlPartidaIfAny({ forceRebind: true });
   }
   async function ensurePartida() {
-    if (await adoptSqlPartidaIfAny()) return true;
     if (partidaId) {
       const probe = await api('partida.estado', {}, 'GET');
       if (probe.ok) return true;
+      try { localStorage.removeItem(storageKey()); } catch (e) {}
+      partidaId = null;
+    }
+    if (await adoptSqlPartidaIfAny({ forceRebind: true })) {
+      const retry = await api('partida.estado', {}, 'GET');
+      if (retry.ok) return true;
       try { localStorage.removeItem(storageKey()); } catch (e) {}
       partidaId = null;
     }
@@ -8387,7 +8389,7 @@ function hobbyIconKey(id, texto) {
       if (partidaPerdida) {
         try { localStorage.removeItem(storageKey()); } catch (e) {}
         partidaId = null;
-        if (await adoptSqlPartidaIfAny()) {
+        if (await adoptSqlPartidaIfAny({ forceRebind: true })) {
           paquete = await api('partida.refresh', {}, 'GET');
         }
         if (!paquete.ok) {
