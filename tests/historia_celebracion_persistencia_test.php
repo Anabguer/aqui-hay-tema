@@ -289,5 +289,50 @@ ok(in_array($secondHito, $pIdsAfter, true), 'I6. second hito still pending (not 
 
 cleanup($partidaIdI);
 
+// ====================================================================
+// === J. ACK-fail-then-retry: fail → still pending → retry OK → once ===
+// ====================================================================
+echo "\n=== J. ACK-fail-then-retry ===\n";
+
+$pJ = $service->nuevaPartida('juego_v1', 'hp-test-celeb-fix-j');
+$partidaIdJ = $pJ['meta']['partida_id'];
+
+$celebsJ = HistoriaPuebloEngine::celebracionesPendientes($pJ, $root, $partidaIdJ);
+ok(count($celebsJ) >= 1, 'J1. pending celebration exists');
+$jHito = $celebsJ[0]['hito_id'];
+
+// Simulate ACK failure: don't call ack(), just check state
+ok(in_array($jHito, pendingIds($pJ, $root, $partidaIdJ), true),
+    'J2. without ACK, celebration stays pending');
+
+// Simulate retry: now call ACK
+$retryAck = HistoriaPuebloEngine::ack($pJ, $jHito);
+ok($retryAck === true, 'J3. retry ACK returns true (first real ack)');
+
+// Save consumed + main file (like HistoriaPuebloHandler::ack does)
+$consumedJ = HistoriaPuebloEngine::loadConsumed($root, $partidaIdJ);
+$consumedJ[] = $jHito;
+HistoriaPuebloEngine::saveConsumed($root, $partidaIdJ, $consumedJ);
+$service->guardar($pJ);
+
+// Verify consumed exactly once
+ok(!in_array($jHito, pendingIds($pJ, $root, $partidaIdJ), true),
+    'J4. after retry ACK, celebration consumed');
+
+// Second ACK (idempotent)
+$secondAck = HistoriaPuebloEngine::ack($pJ, $jHito);
+ok($secondAck === false, 'J5. second ACK returns false (already consumed, idempotent)');
+ok(!in_array($jHito, pendingIds($pJ, $root, $partidaIdJ), true),
+    'J6. still consumed after idempotent ACK');
+
+// Reload/F5
+unset($pJ);
+gc_collect_cycles();
+$pJ2 = $service->cargarParaRefresh($partidaIdJ);
+ok(!in_array($jHito, pendingIds($pJ2, $root, $partidaIdJ), true),
+    'J7. F5 after ACK OK: celebration does NOT reappear');
+
+cleanup($partidaIdJ);
+
 echo "\n" . ($failures === 0 ? 'TODOS LOS TESTS PASARON' : "$failures tests FALLARON") . "\n";
 exit($failures > 0 ? 1 : 0);

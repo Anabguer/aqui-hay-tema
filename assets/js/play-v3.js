@@ -1929,24 +1929,26 @@
   }
 
   async function celebracionClose(hitoId) {
-    celebracionesConsumidas.add(hitoId);
-    colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
     if (!ackResult || ackResult.ok === false) {
-      console.warn('[AHT] celebrar_ack not persisted', { hito_id: hitoId, result: ackResult });
+      console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
+      return;
     }
+    celebracionesConsumidas.add(hitoId);
+    colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     setCapa('');
     setTimeout(mostrarSiguienteCelebracion, 400);
   }
 
   async function celebracionIrAlbum() {
     const hitoId = celebracionHitoActual;
-    celebracionesConsumidas.add(hitoId);
-    colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
     if (!ackResult || ackResult.ok === false) {
-      console.warn('[AHT] celebrar_ack not persisted', { hito_id: hitoId, result: ackResult });
+      console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
+      return;
     }
+    celebracionesConsumidas.add(hitoId);
+    colaCelebraciones = colaCelebraciones.filter(function (c) { return c.hito_id !== hitoId; });
     setCapa('historia');
     renderHistoriaPueblo().then(function () {
       setTimeout(function () {
