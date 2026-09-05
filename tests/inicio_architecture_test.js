@@ -6,8 +6,8 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
-const mobCss = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio-mobile.css'), 'utf8');
-const deskCss = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio-desktop.css'), 'utf8');
+const mobCss = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-mobile.css'), 'utf8');
+const deskCss = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-desktop.css'), 'utf8');
 const viewsCss = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio-views.css'), 'utf8');
 
 let failures = 0;
@@ -60,7 +60,7 @@ ok((php.match(/class="inicio-map-host/g) || []).length === 1, 'PHP: una sola ini
 ok(/inicio-views\.css/.test(php) && /inicio-mobile\.css/.test(php) &&
   !/screens\/inicio\.css/.test(php), 'PHP: CSS views+mobile (sin inicio.css)');
 ok(/@media \(max-width: 768px\)/.test(viewsCss) && /@media \(min-width: 769px\)/.test(viewsCss),
-  'views.css: toggles 768/769');
+  'inicio-views.css: toggles 768/769');
 // 2b. display:contents permitido solo en cotilleo-cuerpo y wrappers de stage (layout fix)
 let deskCssNoContents = deskCss.replace(/\/\* INICIO-DESKTOP-LAYOUT-FIX[\s\S]*$/, '');
 deskCssNoContents = deskCssNoContents.replace(/\.obj-cotilleo-cuerpo[\s\S]{0,160}?display:\s*contents[^;]*;?/g, '');

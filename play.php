@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260904-203950';
+$ahtUi = 'v3-20260906-inicio-recon';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -352,41 +352,24 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     <div class="game-shell">
     <div class="inicio-stage">
       <section class="inicio-mobile" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil">
-        <header class="game-top game-top-mock">
+        <header class="game-top">
       <div class="brand-col">
         <h1 class="brand" aria-label="Aqu&iacute; Hay Tema">
           <span class="brand-heart brand-heart--lead" aria-hidden="true"></span>
           <span class="brand-text">AQU&Iacute; HAY TEMA</span>
           <span class="brand-heart" aria-hidden="true"></span>
         </h1>
-      </div>
-      <div class="top-meta-row">
         <p class="top-meta-line" data-top-meta-mobile></p>
-        <div class="top-center">
+      </div>
+      <div class="top-center">
         <div class="top-reloj">
-          <div class="obj-dia" style="--rot:-2deg">
-            <div class="obj-dia-placa">
-              <span class="obj-dia-num" data-dia-num>&#8212;</span>
-            </div>
-            <div class="obj-dia-cuerpo">
-              <span class="obj-dia-estacion" data-dia-estacion>Primavera</span>
-              <span class="obj-dia-meta" data-dia-meta>&#8212;</span>
-            </div>
-            <span class="sr-only" data-fecha></span>
-          </div>
-          <div class="obj-hora" style="--rot:3deg" aria-label="Hora del pueblo">
-            <span class="obj-hora-ico" aria-hidden="true"></span>
-            <span class="obj-hora-val" data-hora>&#8212;</span>
-          </div>
           <span class="es-noche" data-es-noche hidden>
             <svg class="es-noche-luna" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            <span class="es-noche-txt">Es de noche</span>
           </span>
           <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora" aria-label="Pasar el rato">
             <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
             <span class="pasar-rato-txt">Pasar el rato</span>
           </button>
-        </div>
         </div>
       </div>
       <button type="button" class="top-vida top-vida-btn" data-open="vida_pueblo" aria-label="Vida del pueblo, pulsa para m&aacute;s informaci&oacute;n">
@@ -443,12 +426,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="obj-vecinos-stats" data-resumen-stats></div>
           </button>
         </section>
-            <section class="shell-grupo shell-grupo-planes">
-<button type="button" class="obj-nuevo-plan obj-proximo-cta" data-open="organizar" aria-label="Crear plan">
-              <span class="obj-nuevo-plan-ico" aria-hidden="true">+</span>
-              <span class="obj-nuevo-plan-txt inicio-tile-label">PLAN</span>
-            </button>
-</section>
           </div>
         </div>
       </section>
@@ -734,7 +711,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="ficha_animo" aria-label="Estado de ánimo del vecino">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <button type="button" class="fani-volver" data-animo-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
+            <button type="button" class="aht-frame-back" data-capa-back aria-label="Volver">&#8592;</button>
+          <button type="button" class="fani-volver" data-animo-volver style="position:absolute;left:12px;top:50%;transform:translateY(-50%);z-index:2;border:none;background:transparent;font:700 0.85rem/1 'Nunito',sans-serif;color:var(--aht-text-muted,#75634F);cursor:pointer;padding:4px 8px;">&larr; FICHA</button>
             <h2 class="aht-frame-title">Ánimo</h2>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
@@ -987,7 +965,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="diario" aria-label="Cotilleos">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <h2 class="aht-frame-title">Cotilleos</h2>
+            <button type="button" class="aht-frame-back" data-capa-back aria-label="Volver">&#8592;</button>
+          <h2 class="aht-frame-title">Cotilleos</h2>
             <span class="coti-badge" data-coti-count hidden style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;"></span>
           </header>
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>

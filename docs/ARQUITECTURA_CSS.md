@@ -61,3 +61,36 @@ Documento **prescriptivo**. Antes de tocar CSS de play, modales, inicio o pantal
 ## H. FTP / prod
 
 Tras cambios de arquitectura, borrar remotos listados en `scripts/aht_ftp_delete_legacy_css.ps1` (incluye hojas mensajitos v1 retiradas del repo).
+
+## Capa de reconstrucci�n visual � stack INICIO
+
+Responsabilidades del stack `assets/css/inicio/*` (orden en `play.php`):
+
+1. `tokens-inicio.css` � tokens locales del stage (`--ds-*`) sin pisar V4.
+2. `inicio-base.css` � layout compartido del stage y utilidades comunes.
+3. `inicio-mobile.css` � **solo** `.inicio-stage .inicio-mobile �` (cabecera grid, tiles, feed).
+4. `inicio-desktop.css` � grid de columnas desktop (estructura, sin crom�tica).
+5. `inicio-cromatica-desktop.css` � paleta lavanda aprobada (`#F3EFF7`, tarjetas blancas) en desktop activo.
+6. `inicio-responsive.css` � toggles de visibilidad m�vil/desktop del stage.
+
+Reglas migradas desde `play-v3-responsive.css` que afecten cabecera INICIO (`game-top`, `pasar-rato`, `top-reloj`) viven en el stack INICIO, no en responsive global.
+
+**Cero `!important`:** prohibido en todo el stack y en overrides de INICIO.
+
+## Shell modal can�nico (V4)
+
+Autoridad: `tokens-v4.css` + `screen-frame.css`.
+
+Componentes de cabecera:
+
+| Slot | Clase | Notas |
+|------|-------|-------|
+| Atr�s (opcional) | `.aht-frame-back` | Izquierda; misma familia visual que cerrar |
+| T�tulo | `.aht-frame-title` | Centrado; decoraci�n `?` v�a pseudo-elementos |
+| Cerrar | `.aht-frame-close` | Derecha |
+
+El **footer** (`.aht-frame-footer`) no debe crear barra visual cuando est� vac�o (`:empty` sin padding/borde).
+
+No reintroducir hojas modales legacy ni `.capa-*` en CSS nuevo.
+
+

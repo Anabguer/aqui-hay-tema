@@ -84,24 +84,72 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     mask-image: none;
   }
 
-.inicio-mobile .game-top {
+
+.inicio-stage .inicio-mobile .top-reloj .es-noche {
+  position: static;
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  transform: none;
+  display: inline-flex;
+  align-items: center;
+}
+
+.inicio-stage .inicio-mobile .top-reloj .es-noche-luna {
+  width: 22px;
+  height: 22px;
+  fill: #6b5a8a;
+}
+
+.inicio-stage .inicio-mobile .control-audio {
+  position: fixed;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inicio-stage .inicio-mobile .game-top {
     display: grid;
     grid-template-columns: auto 1fr auto auto;
     grid-template-areas:
       "brand brand guia vida"
       "meta  meta  guia  vida"
-      "hora  rato  rato  vida";
+      "rato  rato  rato  vida";
     align-items: start;
     column-gap: 8px;
     row-gap: 5px;
     padding: 10px 13px 0;
   }
 
-.inicio-mobile .brand-col { display: contents; }
+.inicio-stage .inicio-mobile .brand-col {
+    grid-area: brand;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    min-width: 0;
+  }
 
-.inicio-mobile .top-center { display: contents; }
+.inicio-stage .inicio-mobile .top-center {
+    display: contents;
+  }
 
-.inicio-mobile .top-meta-line { display: contents; }
+.inicio-stage .inicio-mobile .top-meta-line {
+    grid-area: meta;
+    align-self: end;
+    justify-self: start;
+    margin: 0;
+    font-family: var(--ds-font-ui);
+    font-size: .78rem;
+    font-weight: 700;
+    color: var(--ds-ink);
+    line-height: 1.25;
+  }
 
 .inicio-mobile .brand {
     grid-area: brand;
@@ -252,15 +300,6 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     line-height: 1;
   }
 
-.inicio-mobile .top-reloj .obj-dia {
-    position: relative;
-    top: -4px;
-  }
-
-.inicio-mobile .top-reloj .obj-hora {
-    position: relative;
-    top: -10px;
-  }
 
 .inicio-mobile .top-reloj .pasar-rato:active,
   .inicio-mobile .top-reloj .pasar-rato.pasar-rato--noche:active {

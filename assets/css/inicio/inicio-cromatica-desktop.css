@@ -61,6 +61,22 @@
     border-color: #D9D2E1;
     box-shadow: none;
   }
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .pasar-rato,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .pasar-rato.pasar-rato--noche {
+    background: #ebe3f8;
+    background-image: linear-gradient(180deg, #f3eff7 0%, #e8dff5 100%);
+    border: 1.5px solid #9a86c4;
+    border-radius: 999px;
+    box-shadow: 0 2px 0 rgba(124, 107, 174, .28);
+    color: #5e3e90;
+    transform: rotate(-1deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .pasar-rato:hover {
+    background-image: linear-gradient(180deg, #f8f4fc 0%, #efe6f8 100%);
+    transform: rotate(-1deg) translateY(-1px);
+  }
+
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon {
     background-color: #FFFFFF;
