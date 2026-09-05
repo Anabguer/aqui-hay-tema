@@ -6834,17 +6834,20 @@ function hobbyIconKey(id, texto) {
     }
     let filtro = box.getAttribute('data-buzon-filtro') || 'nuevos';
     document.querySelectorAll('[data-buzon-tab]').forEach(function (tab) {
+      const isSelected = tab.getAttribute('data-buzon-tab') === filtro;
+      tab.classList.toggle('is-active', isSelected);
+      tab.setAttribute('aria-selected', isSelected ? 'true' : 'false');
       tab.onclick = function () {
         filtro = tab.getAttribute('data-buzon-tab') || 'nuevos';
         box.setAttribute('data-buzon-filtro', filtro);
         document.querySelectorAll('[data-buzon-tab]').forEach(function (t) {
           const on = t === tab;
-          t.classList.toggle('is-on', on);
+          t.classList.toggle('is-active', on);
           t.setAttribute('aria-selected', on ? 'true' : 'false');
         });
         renderBuzon(cacheBuzon);
         const active = document.querySelector('[data-buzon-tab="' + filtro + '"]');
-        if (active) { active.classList.add('is-on'); active.setAttribute('aria-selected', 'true'); }
+        if (active) { active.classList.add('is-active'); active.setAttribute('aria-selected', 'true'); }
       };
     });
     const cartas = filtro === 'todos' ? cartasTodas : nuevos;

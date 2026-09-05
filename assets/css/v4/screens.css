@@ -86,6 +86,14 @@
 .aht-screen[data-aht-screen="buzon"] .aht-frame-body {
   padding: 0;
 }
+/* Softer card backgrounds ~50% lighter — same families, much paler */
+.aht-screen[data-aht-screen="buzon"] {
+  --msg-paper-rose:  #fbe5e8;
+  --msg-paper-blue:  #d9f0f7;
+  --msg-paper-green: #deefe9;
+  --msg-paper-cream: #f8edcf;
+  --msg-paper-lilac: #e6d9f3;
+}
 
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
   display: flex;
@@ -94,6 +102,13 @@
   padding: 6px 16px;
   background-color: var(--aht-surface-raised, #FFFFFF);
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
+}
+/* Object images: miniature, not oversized */
+.aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
+  max-width: 48px;
+  max-height: 48px;
+  width: auto;
+  height: auto;
 }
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar[hidden] {
   display: none;
