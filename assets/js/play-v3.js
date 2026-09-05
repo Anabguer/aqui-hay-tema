@@ -6915,14 +6915,6 @@ function hobbyIconKey(id, texto) {
         accionesHtml = '<div class="aht-msg-actions">' +
           '<button type="button" class="aht-msg-btn aht-msg-btn--primary" data-carta-organizar="1">' + esc(orgLab) + '</button>' +
           '</div>';
-      } else {
-        const destLab = mensajitoCtaDestinoLabel(m);
-        if (destLab) {
-          const ctaClass = mensajitoEstaLeido(m) ? 'aht-msg-btn aht-msg-btn--soft' : 'aht-msg-btn aht-msg-btn--primary';
-          accionesHtml = '<div class="aht-msg-actions">' +
-            '<button type="button" class="' + ctaClass + '" data-carta-cta="1">' + esc(destLab) + '</button>' +
-            '</div>';
-        }
       }
       const estadoTxt = st.txt || mensajitoEstadoNatural(m);
       const plazoHtml = plazoLbl
@@ -6942,18 +6934,6 @@ function hobbyIconKey(id, texto) {
         accionesHtml +
         '</div>';
       art.innerHTML = (mostrarCabeceraVecino ? avatarHtml + headerHtml + statusHtml : (cuando ? '<div class="aht-msg-status-row"><span class="aht-msg-date">' + esc(cuando) + '</span></div>' : '')) + bodyHtml;
-      art.querySelectorAll('[data-carta-cta]').forEach(function (btn) {
-        btn.addEventListener('click', async function (ev) {
-          ev.stopPropagation();
-          if (!mensajitoEstaLeido(m)) {
-            await marcarMensajitoLeido(m);
-          } else {
-            const rid = remitenteIdDe(m);
-            if (rid) await abrirFicha(rid);
-          }
-          await refresh();
-        });
-      });
       art.querySelectorAll('[data-carta-organizar]').forEach(function (btn) {
         btn.addEventListener('click', async function (ev) {
           ev.stopPropagation();
@@ -6996,7 +6976,7 @@ function hobbyIconKey(id, texto) {
       });
       art.addEventListener('click', async function (ev) {
         if (ev.target.closest('button') || ev.target.closest('.aht-msg-read-toggle')) return;
-        if (!mensajitoEstaLeido(m) && !mensajitoTieneAccionReal(m) && !mensajitoDestinoFicha(m)) {
+        if (!mensajitoEstaLeido(m) && !mensajitoTieneAccionReal(m)) {
           await marcarMensajitoLeido(m);
           await refresh();
         }
@@ -8875,7 +8855,15 @@ function hobbyIconKey(id, texto) {
         marcarCotilleoVisto();
       }
       if (name === 'vecinos') { vecTabActiva = 'vecinos'; aplicarVecTabUI(); renderVecinos(); }
-      if (name === 'buzon') renderBuzon(cacheBuzon);
+      if (name === 'buzon') {
+        var bList = $('[data-buzon-list]');
+        if (bList) bList.setAttribute('data-buzon-filtro', 'nuevos');
+        document.querySelectorAll('[data-buzon-tab]').forEach(function (t) {
+          t.classList.toggle('is-active', t.getAttribute('data-buzon-tab') === 'nuevos');
+          t.setAttribute('aria-selected', t.getAttribute('data-buzon-tab') === 'nuevos' ? 'true' : 'false');
+        });
+        renderBuzon(cacheBuzon);
+      }
       return;
     }
     const necgRes = ev.target.closest('[data-necg-res]');
@@ -9334,6 +9322,20 @@ var finOk = $('[data-tut-fin-ok]');
   window.addEventListener('popstate', function () {
     if (uiHistDepth > 0) uiHistDepth--;
     uiHistBack();
+  });
+
+  // V4 lifecycle: reset buzon tab to NUEVOS on every open
+  document.addEventListener('aht-screen-open', function (ev) {
+    var screen = ev.detail && ev.detail.screen;
+    if (screen === 'buzon') {
+      var bList = $('[data-buzon-list]');
+      if (bList) bList.setAttribute('data-buzon-filtro', 'nuevos');
+      document.querySelectorAll('[data-buzon-tab]').forEach(function (t) {
+        t.classList.toggle('is-active', t.getAttribute('data-buzon-tab') === 'nuevos');
+        t.setAttribute('aria-selected', t.getAttribute('data-buzon-tab') === 'nuevos' ? 'true' : 'false');
+      });
+      renderBuzon(cacheBuzon);
+    }
   });
 
   window.addEventListener('resize', layout);
