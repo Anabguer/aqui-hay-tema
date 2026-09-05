@@ -113,6 +113,9 @@
       if (frame) frame.focus();
     });
 
+    // Lifecycle event — legacy code can react to screen opens
+    try { document.dispatchEvent(new CustomEvent('aht-screen-open', { detail: { screen: screenId } })); } catch(e) {}
+
     return true;
   }
 
