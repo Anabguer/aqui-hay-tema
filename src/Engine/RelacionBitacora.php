@@ -24,6 +24,7 @@ final class RelacionBitacora
     public const APOYO_IMPORTANTE = 'apoyo_importante';
     public const HITO_ROMANTICO = 'hito_romantico';
     public const FLECHAZO = 'flechazo';
+    public const INTENTO_ROMANTICO_FALLIDO = 'intento_romantico_fallido';
 
     public static function ensure(array &$partida): void
     {
@@ -64,7 +65,7 @@ final class RelacionBitacora
         $partida['bitacora_relaciones'][] = $entry;
         RelacionNarrativaBridge::alHito($partida, $tipo, array_values($participantes));
         DiarioHitoEngine::alHito($partida, $entry);
-        HistoriaPuebloEngine::alBitacoraHito($partida, $tipo, array_values($participantes));
+        HistoriaPuebloEngine::alBitacoraHito($partida, $tipo, array_values($participantes), $meta, $resultado);
         return $entry;
     }
 

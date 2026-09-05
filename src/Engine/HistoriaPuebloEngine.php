@@ -89,14 +89,11 @@ final class HistoriaPuebloEngine
      * Puente bitácora relacional → hitos de Historia del Pueblo.
      *
      * @param list<string> $participantes
+     * @param array<string, mixed> $meta
      */
-    public static function alBitacoraHito(array &$partida, string $tipoBitacora, array $participantes): ?array
+    public static function alBitacoraHito(array &$partida, string $tipoBitacora, array $participantes, array $meta = [], $resultado = null): ?array
     {
-        if ($tipoBitacora === RelacionBitacora::SE_CONOCIERON) {
-            $hitoId = 'hito_02';
-        } else {
-            $hitoId = null;
-        }
+        $hitoId = self::hitoIdDesdeBitacora($tipoBitacora, $meta, $resultado);
         if ($hitoId === null || count($participantes) < 2) {
             return null;
         }
@@ -104,7 +101,67 @@ final class HistoriaPuebloEngine
         return self::registrar($partida, $hitoId, array_slice($participantes, 0, 2), [
             'origen' => 'bitacora_relaciones',
             'tipo_bitacora' => $tipoBitacora,
+            'subtipo' => $meta['subtipo'] ?? null,
         ]);
+    }
+
+    /**
+     * Resuelve hito_id desde tipo de bitácora + meta + resultado.
+     */
+    private static function hitoIdDesdeBitacora(string $tipoBitacora, array $meta, $resultado): ?string
+    {
+        switch ($tipoBitacora) {
+            case RelacionBitacora::SE_CONOCIERON:
+                return 'hito_02';
+            case RelacionBitacora::FLECHAZO:
+                return 'hito_03';
+            case RelacionBitacora::PRIMERA_CITA:
+                return 'hito_05';
+            case RelacionBitacora::INICIO_PAREJA:
+                return 'hito_10';
+            case RelacionBitacora::DECLARACION:
+                if (is_array($resultado)) {
+                    $aceptaA = $resultado['acepta_a'] ?? false;
+                    $aceptaB = $resultado['acepta_b'] ?? false;
+                    return ($aceptaA && $aceptaB) ? 'hito_11' : 'hito_12';
+                }
+                return 'hito_11';
+            case RelacionBitacora::DISCUSION_FUERTE:
+                return 'hito_13';
+            case RelacionBitacora::CRISIS:
+                return 'hito_14';
+            case RelacionBitacora::RUPTURA:
+                return 'hito_15';
+            case RelacionBitacora::RECONCILIACION:
+                return 'hito_16';
+            case RelacionBitacora::VUELTA:
+                return null;
+            case RelacionBitacora::RECHAZO_IMPORTANTE:
+                $sub = $meta['subtipo'] ?? null;
+                if ($sub === 'beso_rechazado') {
+                    return 'hito_27';
+                }
+                return null;
+            case RelacionBitacora::INTENTO_ROMANTICO_FALLIDO:
+                $sub = $meta['subtipo'] ?? null;
+                if ($sub === 'coquetear_fallido') {
+                    return 'hito_27';
+                }
+                return null;
+            case RelacionBitacora::APOYO_IMPORTANTE:
+                return 'hito_26';
+            case RelacionBitacora::HITO_ROMANTICO:
+                $sub = $meta['subtipo'] ?? null;
+                if ($sub === 'beso') {
+                    return 'hito_08';
+                }
+                if ($sub === 'coquetear') {
+                    return 'hito_09';
+                }
+                return null;
+            default:
+                return null;
+        }
     }
 
     public static function registrar(
