@@ -55,3 +55,13 @@
   pointer-events: none;
   opacity: 0;
 }
+
+/* INICIO-FIEL-PANTALLAZOS-20260906 */
+
+@media (max-width: 768px) {
+  .inicio-stage > .play-bottom-nav {
+    display: flex;
+  }
+}
+
+

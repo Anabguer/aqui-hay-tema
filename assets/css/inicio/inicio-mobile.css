@@ -2130,3 +2130,179 @@ margin-bottom: 4px;
   color: #2f6b3f;
   font-weight: 700;
 }
+
+/* INICIO-FIEL-PANTALLAZOS-20260906 */
+
+@media (max-width: 768px) {
+  .play-v3 .inicio-stage {
+    display: grid;
+    grid-template-areas:
+      "mobhead"
+      "mobtiles"
+      "map"
+      "feed"
+      "nav";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+    align-items: stretch;
+  }
+
+  .play-v3 .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) {
+    display: contents;
+  }
+
+  .play-v3 .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) .game-top {
+    grid-area: mobhead;
+  }
+
+  .play-v3 .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
+    grid-area: mobtiles;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host {
+    grid-area: map;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .play-v3 .inicio-stage > .inicio-mobile.inicio-mobile-feed {
+    grid-area: feed;
+    display: block;
+  }
+
+  .play-v3 .inicio-stage > .play-bottom-nav {
+    grid-area: nav;
+    position: sticky;
+    bottom: 0;
+    z-index: 35;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .game-top {
+    display: block;
+    padding: 10px 13px 8px;
+    background: transparent;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card {
+    background: #fff;
+    border: 1.5px solid rgba(198, 176, 210, .45);
+    border-radius: 18px 16px 20px 14px / 16px 20px 14px 18px;
+    box-shadow: 0 3px 12px rgba(70, 50, 30, .08);
+    padding: 10px 12px 12px;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand-col {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .top-vida {
+    flex: 0 0 auto;
+    margin: 0;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 10px;
+    margin: 0 auto;
+    max-width: 100%;
+    padding: 7px 12px;
+    background: linear-gradient(180deg, #f8f4fc 0%, #ebe3f8 100%);
+    border: 1.5px solid #9a86c4;
+    border-radius: 999px;
+    box-shadow: 0 2px 0 rgba(124, 107, 174, .22);
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-cal {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='4' y='5' width='16' height='16' rx='2' fill='none' stroke='%23c85b78' stroke-width='2'/%3E%3Cpath d='M4 9h16M8 3v4M16 3v4' stroke='%23c85b78' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-dia,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-hora {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .8125rem;
+    line-height: 1.2;
+    color: var(--ds-ink, #2a2218);
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-reloj-ico {
+    width: 15px;
+    height: 15px;
+    flex: 0 0 15px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%23c85b78' stroke-width='2.2'/%3E%3Cpath d='M12 7v5l3.4 2' fill='none' stroke='%23c85b78' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato {
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    padding: 0;
+    margin: 0;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #ebe3f8;
+    border: 1.5px solid #9a86c4;
+    box-shadow: 0 2px 0 rgba(124, 107, 174, .28);
+    color: #5e3e90;
+    transform: none;
+    position: static;
+    left: auto;
+    top: auto;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato-ico {
+    font-size: .72rem;
+    line-height: 1;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 0 13px 10px;
+    align-items: stretch;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-resumen,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
+    min-width: 0;
+    height: 100%;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-layout {
+    padding: 0;
+    gap: 0;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host {
+    padding: 0 13px 10px;
+    box-sizing: border-box;
+  }
+}
+

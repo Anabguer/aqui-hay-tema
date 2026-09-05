@@ -16,31 +16,6 @@
   gap: 14px;
 }
 
-/* inicio-desktop */
-
-.inicio-desktop .inicio-desktop-layout {
-  display: grid;
-  grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
-  gap: 14px;
-  align-items: start;
-  padding: 0 14px 14px;
-  box-sizing: border-box;
-}
-
-.inicio-desktop .inicio-desktop-left {
-  grid-column: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-.inicio-desktop .inicio-desktop-right {
-  grid-column: 3;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
 @media (min-width: 769px) {
   .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card--escena .enc-mov-faces img,
   .play-v3 .inicio-desktop-right .encursos-movil .enc-mov-card--escena .enc-mov-faces .cara-ini {
@@ -121,3 +96,19 @@
 .play-v3 .shell-grupo-parejas .zona-tit-parejas {
   gap: 8px;
 }
+
+/* INICIO-FIEL-PANTALLAZOS-20260906 */
+
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .btn-guia:not([hidden]) {
+    display: inline-flex;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-cuerpo .obj-dia-meta {
+    display: block;
+    font-size: .78rem;
+    font-weight: 700;
+    line-height: 1.15;
+  }
+}
+

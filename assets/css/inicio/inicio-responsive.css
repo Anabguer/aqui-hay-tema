@@ -199,3 +199,70 @@
   transform: translateY(1px);
   box-shadow: 0 1px 4px rgba(180, 95, 24, .16);
 }
+
+/* INICIO-FIEL-PANTALLAZOS-20260906 */
+
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    display: grid;
+    grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
+    grid-template-areas:
+      "head head head"
+      "left map  right";
+    column-gap: 14px;
+    row-gap: 10px;
+    align-items: start;
+    padding: 0 14px 14px;
+    box-sizing: border-box;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-desktop {
+    display: contents;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage .inicio-desktop > .game-top {
+    grid-area: head;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage .inicio-desktop-layout {
+    display: contents;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage .inicio-desktop-left {
+    grid-area: left;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host {
+    grid-area: map;
+    width: 100%;
+    min-width: 0;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage .inicio-desktop-right {
+    grid-area: right;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    grid-area: map;
+    align-self: end;
+    justify-self: stretch;
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    margin-top: 2px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-mobile.inicio-mobile-feed,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop .inicio-desktop-layout {
+    padding: 0;
+  }
+}
+
