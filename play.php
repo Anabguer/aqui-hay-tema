@@ -902,7 +902,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-tabs" role="tablist" aria-label="Filtrar mensajitos">
             <button type="button" class="aht-frame-tab is-active" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
-            <button type="button" class="aht-frame-tab" data-buzon-tab="todos" role="tab" aria-selected="false">TODOS</button>
+            <button type="button" class="aht-frame-tab" data-buzon-tab="leidos" role="tab" aria-selected="false">LEÍDOS</button>
           </div>
           <div class="aht-frame-body">
             <div class="buzon-toolbar" data-buzon-leer-todos-wrap hidden>

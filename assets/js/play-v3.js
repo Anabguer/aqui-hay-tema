@@ -6827,6 +6827,7 @@ function hobbyIconKey(id, texto) {
     actualizarBuzonLeerTodosBtn(msgs);
     const cartasTodas = mensajitosOrdenados(msgs);
     const nuevos = cartasTodas.filter(function (m) { return (m.estado || '') === 'pendiente'; });
+    const leidos = cartasTodas.filter(function (m) { return (m.estado || '') !== 'pendiente'; });
         const tabCount = $('[data-buzon-tab-count]');
     if (tabCount) {
       tabCount.textContent = String(nuevos.length);
@@ -6850,7 +6851,7 @@ function hobbyIconKey(id, texto) {
         if (active) { active.classList.add('is-active'); active.setAttribute('aria-selected', 'true'); }
       };
     });
-    const cartas = filtro === 'todos' ? cartasTodas : nuevos;
+    const cartas = filtro === 'leidos' ? leidos : nuevos;
     if (!cartas.length) {
       box.innerHTML = '<div class="aht-msg-empty">' +
         '<div class="aht-msg-empty-icon">\uD83D\uDCED</div>' +
