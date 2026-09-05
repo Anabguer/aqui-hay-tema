@@ -1,0 +1,207 @@
+/* misc screens */
+/* from assets/css/play-v3-misiones.css */
+/** Misiones (11) — interior only, shell delegado a modal-core/skin/header */
+/* DS-REVIEW-11 check fix */
+/* from assets/css/play-v3-vida.css */
+/** Vida del pueblo (12) */
+/* VISUAL-REVIEW vida pueblo: shell modal unificado */
+/* from assets/css/play-v3-agenda.css */
+/** Agenda (10) */
+/* from assets/css/play-v3-notas-mapa.css */
+/** Notas mapa (14) */
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] > * { position: relative; z-index: 2; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top { padding-right: 2.2rem; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-body { flex: 1; min-height: 0; overflow-y: auto; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item {
+  display: flex; align-items: center; gap: 8px; padding: 6px 0;
+  border-bottom: 1px dashed rgba(107,81,56,.22);
+}
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item:last-child { border-bottom: 0; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-txt { color: var(--ds-green-deep, #4a7a52); font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: 1.05rem; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida::before { content: "\2713"; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item:not(.mis-item-cumplida)::before { content: ""; width: 14px; height: 14px; border: 2px solid var(--ds-ink-soft, #594839); border-radius: 999px; flex: 0 0 auto; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado { padding: 3px 10px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px; border: 1.5px solid var(--ds-ink-soft, #594839); font: 800 .6875rem/1.2 Nunito, sans-serif; }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-estado { background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52); }
+
+.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-body > .pg-card,
+.play-v3 .aht-screen[data-aht-screen="misiones"] .misiones-body > .mis-card-wrap {
+  border: 2px solid var(--ds-ink-soft, #594839); border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7); padding: 6px 12px; margin-bottom: 8px;
+}
+
+.play-v3 .play-root.pc[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"]:not(),
+.play-v3 .play-root.phone[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"]:not(),
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"].vida-modal-papel {
+  position: absolute; left: 50%; top: 50%;
+  width: min(100%, 340px); max-width: min(100%, 340px);
+  transform: translate(-50%, -50%) rotate(0.3deg);
+  padding: 16px 14px; text-align: center;
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-modal-ico { font-size: 2.2rem; margin: 0; }
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit { font-family: Caveat, cursive; font-size: 1.75rem; margin: 2px 0; }
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-valor {
+  display: inline-flex; padding: 3px 10px; margin: 4px 0;
+  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-green-deep, #4a7a52); background: var(--ds-green-soft, #e8f3e6);
+  font: 800 .8125rem/1.2 Nunito, sans-serif; color: var(--ds-green-deep, #4a7a52);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-valor-bar {
+  height: 10px; margin: 10px 14px; border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 999px; background: var(--ds-paper-warm, #f8f0de); overflow: hidden;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-valor-bar span { display: block; height: 100%; background: var(--ds-emo-alegre, #7a9e6a); border-radius: 999px; }
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-copy {
+  border: 2px solid var(--ds-lavender-deep, #7a6a9a); border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-lavender-soft, #ece6f8); padding: 9px 12px; margin: 8px 0; text-align: left;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-copy p { margin: 0; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-size: 1.1rem; line-height: 1.3; }
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-latido { font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); color: var(--ds-text-muted, #7a6a5c); margin: 0 0 8px; }
+
+.play-v3 .play-root[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"]:not() {
+  width: min(100%, 393px);
+  max-width: min(100%, 393px);
+  max-height: min(88vh, 720px);
+  min-height: 0;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 14px 13px 12px;
+  text-align: center;
+}
+
+.play-v3 .play-root[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"] .vida-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.play-v3 .play-root.pc[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
+.play-v3 .play-root.phone[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"] {
+  position: absolute;
+  left: 50%; top: 50%; right: auto; bottom: auto;
+  width: min(100%, 393px); max-width: min(100%, 393px);
+  max-height: min(88vh, 720px);
+  transform: translate(-50%, -50%) rotate(-0.2deg);
+  z-index: 12;
+  padding: 14px 13px 12px;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
+  background: radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.6), rgba(255,255,255,0) 58%), var(--ds-paper-modal, #fffaf0);
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14);
+}
+
+.play-v3 .play-root.pc[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"]::before,
+.play-v3 .play-root.phone[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"]::before {
+  content: ""; display: block; position: absolute; inset: 5px;
+  border: 1.5px dashed rgba(107,81,56,.34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none; z-index: 1;
+}
+
+.play-v3 .play-root.pc[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"]::after,
+.play-v3 .play-root.phone[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"]::after { display: none; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] > * { position: relative; z-index: 2; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .ficha-tape, .play-v3 .aht-screen[data-aht-screen="agenda"] .org-pin, .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-pin, .play-v3 .aht-screen[data-aht-screen="agenda"] .mis-pin, .play-v3 .aht-screen[data-aht-screen="agenda"] .vecinos-pin { display: none; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-icon { display: none; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab::before { content: "Libreta de Celestine"; display: block; font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .5px; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin-bottom: 2px; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-tit { margin-bottom: 2px; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-sub { font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c); margin-bottom: 10px; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-list { flex: 1; min-height: 0; overflow-y: auto; }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-dia-cab {
+  display: inline-flex; margin: 4px 0 8px; padding: 2px 12px;
+  background: var(--ds-pink-soft, #fbe3ec); border: 1.5px solid var(--ds-ink-soft, #594839);
+  border-radius: 7px 5px 8px 6px / 5px 8px 6px 7px;
+  font: 700 1rem/1.4 Caveat, cursive; transform: rotate(-0.8deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila {
+  padding: 10px 12px; margin-bottom: 10px;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12);
+}
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila:nth-child(odd) { transform: rotate(-0.5deg); }
+
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila:nth-child(even) { transform: rotate(0.4deg); }
+
+.play-v3 .nota-mapa {
+  position: relative;
+  margin: 0 30px;
+  padding: 12px 13px;
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14);
+  transform: rotate(-0.5deg);
+}
+
+.play-v3 .nota-mapa.quien { transform: rotate(0.4deg); }
+
+.play-v3 .nota-mapa::before {
+  content: ""; position: absolute; top: -9px; left: 14px; width: 16px; height: 16px;
+  border-radius: 999px; background: radial-gradient(circle at 35% 30%, #f2a7b4, var(--ds-pink-deep, #c85b78));
+  border: 2px solid var(--ds-ink, #3b3028); box-shadow: 0 2px 3px rgba(70,50,30,.3);
+}
+
+.play-v3 .nota-mapa .cerrar {
+  width: 30px; height: 30px; font-size: 13px;
+  top: 4px; right: 4px;
+}
+
+.play-v3 .nota-mapa .nota-kicker { font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .4px; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin: 0 0 2px; }
+
+.play-v3 .nota-mapa .nota-tit, .play-v3 .nota-mapa h3 { font-family: Caveat, cursive; font-size: 1.3rem; margin: 0; }
+
+.play-v3 .nota-mapa .nota-desc { font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c); margin: 3px 0 8px; }
+
+.play-v3 .nota-mapa .nota-horario, .play-v3 .nota-mapa .nota-estado {
+  display: inline-flex; padding: 3px 10px; border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-green-deep, #4a7a52); background: var(--ds-green-soft, #e8f3e6);
+  font: 800 .6875rem/1.2 Nunito, sans-serif; color: var(--ds-green-deep, #4a7a52);
+}
+
+.play-v3 .nota-mapa .nota-acciones { display: flex; gap: 8px; margin-top: 9px; }
+
+.play-v3 .nota-mapa .nota-btn {
+  flex: 1; min-height: 40px; padding: 6px 8px;
+  border: 2px solid var(--ds-ink, #3b3028); border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: var(--ds-pink, #f3b1c3); font: 800 .9375rem/1.2 Nunito, sans-serif; color: var(--ds-ink, #3b3028);
+  box-shadow: 2px 3px 0 rgba(51,38,30,.18); cursor: pointer;
+}
+
+.play-v3 .nota-mapa .nota-btn--ghost { background: var(--ds-lavender, #c4b5e8); }

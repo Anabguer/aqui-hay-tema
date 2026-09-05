@@ -1,22 +1,22 @@
 /* INICIO-VIEWS — visibilidad por breakpoint; mapa compartido fuera de hidden */
 @media (max-width: 768px) {
   .inicio-stage .inicio-desktop .game-top {
-    display: none !important;
+    display: none;
   }
   .inicio-stage .inicio-desktop {
-    display: none !important;
+    display: none;
   }
   .inicio-stage > .inicio-mobile {
     display: block;
   }
   .inicio-stage > .inicio-map-host {
-    display: block !important;
+    display: block;
   }
 }
 
 @media (min-width: 769px) {
   .inicio-stage > .inicio-mobile {
-    display: none !important;
+    display: none;
   }
   .inicio-stage .inicio-desktop {
     display: block;
@@ -25,16 +25,33 @@
 
 .inicio-mobile[hidden],
 .inicio-desktop[hidden] {
-  display: none !important;
+  display: none;
 }
 
 .inicio-mobile[inert],
 .inicio-desktop[inert] {
-  pointer-events: none !important;
+  pointer-events: none;
   user-select: none;
 }
 
 .inicio-stage {
   width: 100%;
   box-sizing: border-box;
+}
+
+
+/* nav oculta (ex play-v3-inicio-override) */
+.inicio-mobile .enc-mov-nav-btn[hidden],
+.inicio-desktop .enc-mov-nav-btn[hidden],
+.inicio-mobile .pp-mov-nav-btn[hidden],
+.inicio-desktop .pp-mov-nav-btn[hidden] {
+  display: none;
+  width: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: none;
+  visibility: hidden;
+  pointer-events: none;
+  opacity: 0;
 }

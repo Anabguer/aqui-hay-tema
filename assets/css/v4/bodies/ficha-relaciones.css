@@ -1,0 +1,101 @@
+/* v4/bodies/ficha-relaciones.css */
+/* --- Ficha > submodal Relaciones --- */
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .75rem;
+  background: rgba(36, 28, 22, .34);
+  backdrop-filter: blur(2px);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal {
+  position: relative;
+  width: min(100%, 400px);
+  max-height: min(78vh, 560px);
+  padding: 1.15rem .85rem .75rem;
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
+  background-color: var(--ds-paper-modal, #fffaf0);
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
+    url("../../play-v3/capas/libreta_hoja.png");
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat;
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14);
+  display: flex;
+  flex-direction: column;
+  gap: .35rem;
+  overflow: hidden;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1.5px dashed rgba(107, 81, 56, .34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal > * {
+  position: relative;
+  z-index: 2;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-top {
+  flex: 0 0 auto;
+  margin: 0 0 .15rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal-tit {
+  margin: 0;
+  padding: 0;
+  font-family: Caveat, cursive;
+  font-size: 1.85rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+  text-align: left;
+  color: var(--ds-pink-deep, #c85b78);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal-sub {
+  margin: .1rem 0 0;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: .15rem .1rem .2rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal .ficha-rel-row {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .08);
+  padding: .45rem .5rem;
+  margin-bottom: .4rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-modal .ficha-rel-row:last-child {
+  margin-bottom: 0;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-modal-animo {
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
+  background-color: var(--ds-paper-modal, #fffaf0);
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .2), 0 7px 16px rgba(70, 50, 30, .14);
+}

@@ -1,4 +1,4 @@
-﻿/* TUTORIAL-LAVANDA-v4 — Variables de color Y tipografia INDEPENDIENTES.
+/* TUTORIAL-LAVANDA-v4 — Variables de color Y tipografia INDEPENDIENTES.
    PIEL BLANCA/LAVANDA. Solo variables y colores.
    La autoridad visual (shell/tipografia/layout) es play-v3-tutorial-ds.css.
    AISLADO: NO depende de --modal-* ni de --ds-*. Valores hardcoded.
@@ -32,5 +32,5 @@
 }
 
 .play-v3 .tut-intro[hidden] {
-  display: none !important;
+  display: none;
 }

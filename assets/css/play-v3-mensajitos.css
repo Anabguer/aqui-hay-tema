@@ -1,18 +1,21 @@
-﻿/**
+/**
  * Capa MENSAJITOS (ex buzon) â€” solo esta capa.
  */
+/* === Popover lateral (preview 3 mensajes) === */
+/* === Items compartidos popover + modal === */
+/* === Modal completo (capa) === */
+/* Toggle leÃƒÂ­do / marcar */
+/* msg-leido-toggle capa-buzon: ver bloque DS Mensajitos */
+/* VISUAL-FINAL mensajitos-toolbar */
+/* DS Mensajitos — acabado visual (ref. 02-mensajitos.png); shell delegado a modal-core/skin */
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
-  font-family: Caveat, cursive;
-  font-size: 1.55rem;
-  font-weight: 700;
-  margin: .35rem 0 1.1rem;
-  letter-spacing: .02em;
-  color: #2c261f;
+  margin: 0;
+  padding-right: 0;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] > .mini {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
@@ -43,43 +46,30 @@
   border-top: 1px dashed rgba(120, 96, 72, .22);
 }
 
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit {
-  margin: 0 0 .15rem;
-  font-size: .58rem;
-  font-weight: 800;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  color: #8a7a66;
-}
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit { display: none; }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
-  display: block !important;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  margin: 0 !important;
-  padding: .62rem .55rem .58rem !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  transform: none !important;
-  background: #fffdf8;
-  box-shadow: 0 1px 0 rgba(44, 38, 31, .08);
-  position: relative;
-  cursor: default;
+  display: block;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 2px solid var(--ds-ink-soft, #806c59);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(70, 50, 30, .06);
+  transform: rotate(-0.15deg);
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida {
-  margin: 0 !important;
-  padding-left: .55rem !important;
-  padding-right: .55rem !important;
+  margin: 0;
+  padding-left: .55rem;
+  padding-right: .55rem;
   background: rgba(255, 246, 220, .45);
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.importante,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion {
   background: #fffef8;
-  box-shadow: inset 3px 0 0 #c9a87a, 0 1px 0 rgba(44, 38, 31, .06) !important;
+  box-shadow: inset 3px 0 0 #c9a87a, 0 1px 0 rgba(44, 38, 31, .06);
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-info {
@@ -89,61 +79,39 @@
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .lacre,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .chincheta-carta {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
-  display: flex !important;
+  display: flex;
+  gap: 10px;
   align-items: flex-start;
-  gap: .65rem;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
-  flex: 0 0 44px;
-  width: 44px;
-  height: 44px;
-  max-width: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(40, 28, 16, .12);
+  border: 2px solid var(--ds-ink, #3b3028);
+  flex: 0 0 auto;
   object-fit: cover;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: .85rem;
-  background: #f3e6cc;
+  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .15);
 }
 
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy {
-  flex: 1 1 auto;
-  min-width: 0;
-  max-width: 100%;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-}
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1; min-width: 0; }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de {
+  display: inline;
   font-family: Fraunces, Georgia, serif;
-  font-weight: 700;
-  font-size: .92rem;
-  line-height: 1.25;
-  margin-bottom: .12rem;
+  font-size: .98rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
-  font-family: Fraunces, Georgia, serif;
-  font-size: 1.12rem;
-  font-style: italic;
-  line-height: 1.38;
-  margin: 0;
-  white-space: normal;
-  overflow-wrap: anywhere;
-  word-break: break-word;
-  max-width: 100%;
+  display: inline;
+  font-family: Caveat, cursive;
+  font-size: 1.28rem;
+  font-style: normal;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-info .cuerpo {
@@ -164,9 +132,8 @@
 .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
   display: flex;
   flex-wrap: wrap;
-  gap: .4rem;
-  margin-top: .45rem;
-  max-width: 100%;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button {
@@ -196,7 +163,7 @@
   color: #6a5848;
   margin: .25rem 0 0;
 }
-/* === Popover lateral (preview 3 mensajes) === */
+
 .play-v3 .mensajitos-wrap {
   position: relative;
   display: flex;
@@ -213,7 +180,7 @@
   filter: drop-shadow(4px 6px 0 rgba(44, 38, 31, .1));
 }
 
-.play-v3 .mensajitos-pop[hidden] { display: none !important; }
+.play-v3 .mensajitos-pop[hidden] { display: none; }
 
 .play-v3 .mensajitos-pop-punta {
   position: absolute;
@@ -299,9 +266,9 @@
 }
 
 .play-v3 .mensajitos-ver-mas:hover { color: #2c261f; }
-.play-v3 .mensajitos-ver-mas[hidden] { display: none !important; }
 
-/* === Items compartidos popover + modal === */
+.play-v3 .mensajitos-ver-mas[hidden] { display: none; }
+
 .play-v3 .msg-item {
   display: flex;
   align-items: flex-start;
@@ -401,35 +368,7 @@
   opacity: 1;
 }
 
-/* === Modal completo (capa) === */
-.play-v3 .aht-screen[data-aht-screen="buzon"] .aht-screen .capa-cerrar-pestaÃƒÂ±a { display: none !important; }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
-  margin: 0;
-  padding-right: 0;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
-  border-radius: 8px 9px 7px 8px !important;
-  padding: .5rem .45rem !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
-  align-items: center;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de {
-  display: inline;
-  font-family: Fraunces, Georgia, serif;
-  font-size: .98rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
-  display: inline;
-  font-family: Caveat, cursive;
-  font-size: 1.28rem;
-  font-style: normal;
-}
+.play-v3 .aht-screen[data-aht-screen="buzon"] .aht-screen .capa-cerrar-pestaÃƒÂ±a { display: none; }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de::after {
   content: " \2013 ";
@@ -437,39 +376,13 @@
   color: #6a5848;
 }
 
-@media (max-width: 900px) {
-  .play-v3 .mensajitos-pop {
-    left: 50%;
-    top: calc(100% + .35rem);
-    transform: translateX(-50%);
-    width: min(300px, 92vw);
-  }
-  .play-v3 .mensajitos-pop-punta {
-    left: 50%;
-    top: -7px;
-    transform: translateX(-50%) rotate(135deg);
-  }
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
-  display: flex !important;
-  align-items: flex-start;
-  gap: .55rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
-  flex: 1 1 auto;
-}
-
-/* Toggle leÃƒÂ­do / marcar */
-/* msg-leido-toggle capa-buzon: ver bloque DS Mensajitos */
-
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
   margin: 0 0 12px;
   padding: 0;
   position: relative;
   z-index: 3;
 }
+
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row {
   display: flex;
   align-items: center;
@@ -560,19 +473,6 @@
   transform: rotate(4deg);
 }
 
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit { display: none; }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
-  display: block;
-  margin: 0 0 10px;
-  padding: 10px 12px;
-  border: 2px solid var(--ds-ink-soft, #806c59);
-  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
-  background: var(--ds-paper-card, #fffdf7);
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(70, 50, 30, .06);
-  transform: rotate(-0.15deg);
-}
-
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg:nth-child(even) { transform: rotate(0.2deg); }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
@@ -586,23 +486,6 @@
   background: #fff9f0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--ds-ink, #3b3028);
-  flex: 0 0 auto;
-  object-fit: cover;
-  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .15);
-}
-
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
   display: inline-flex;
   align-items: center;
@@ -611,8 +494,6 @@
   font: 800 1rem Caveat, cursive;
   color: var(--ds-ink, #3b3028);
 }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1; min-width: 0; }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de {
   font: 700 1.15rem Caveat, cursive;
@@ -654,13 +535,6 @@
   text-transform: uppercase;
 }
 
-.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
 .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle {
   display: inline-flex;
@@ -668,14 +542,14 @@
   justify-content: center;
   min-height: 42px;
   padding: 8px 14px;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 14px 11px 15px 12px / 11px 15px 12px 14px !important;
-  background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .25), inset 0 -3px 0 rgba(146, 39, 73, .28) !important;
-  font: 700 .95rem/1 Caveat, cursive !important;
+  border: 2px solid var(--ds-ink, #3b3028);
+  border-radius: 14px 11px 15px 12px / 11px 15px 12px 14px;
+  background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f);
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .25), inset 0 -3px 0 rgba(146, 39, 73, .28);
+  font: 700 .95rem/1 Caveat, cursive;
   letter-spacing: .5px;
   text-transform: uppercase;
-  color: #fff !important;
+  color: #fff;
   text-shadow: 0 1px 0 rgba(146, 39, 73, .35);
   cursor: pointer;
   transform: rotate(-0.5deg);
@@ -684,14 +558,14 @@
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button.btn-suave,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-leido {
-  background: linear-gradient(178deg, rgba(255,255,255,.25), rgba(255,255,255,0) 50%), var(--ds-lavender, #c5b8e8) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .2), inset 0 -3px 0 rgba(88, 74, 130, .28) !important;
-  color: #fff !important;
+  background: linear-gradient(178deg, rgba(255,255,255,.25), rgba(255,255,255,0) 50%), var(--ds-lavender, #c5b8e8);
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .2), inset 0 -3px 0 rgba(88, 74, 130, .28);
+  color: #fff;
   text-shadow: 0 1px 0 rgba(70, 55, 110, .35);
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-pendiente {
-  background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f) !important;
+  background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f);
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio { font-family: Caveat, cursive; }
@@ -707,17 +581,6 @@
   text-align: center;
 }
 
-@media (max-width: 600px) {
-  .play-v3 .aht-screen[data-aht-screen="buzon"]:not() { width: min(100%, 393px); }
-  .play-v3 .mensajitos-leer-todos { display: none !important; }
-  .play-v3 .mensajitos-tabs { gap: 6px; }
-  .play-v3 .mensajitos-tab { max-width: none; flex: 1 1 0; font-size: .98rem; }
-  .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
-  .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle { min-height: 40px; padding: 7px 12px; }
-}
-
-
-/* VISUAL-FINAL mensajitos-toolbar */
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-toolbar {
   display: flex;
   justify-content: flex-end;
@@ -726,24 +589,26 @@
   padding: 0 2px;
   min-height: 22px;
 }
+
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos {
-  display: inline-flex !important;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   margin: 0;
   padding: 0;
   max-width: 100%;
   min-width: 0;
-  border: 0 !important;
-  background: transparent !important;
-  box-shadow: none !important;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
   font: 700 .72rem/1.2 Nunito, sans-serif;
   letter-spacing: .02em;
   color: var(--ds-ink-soft, #594839);
   cursor: pointer;
   text-decoration: none;
-  transform: none !important;
+  transform: none;
 }
+
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos-box {
   width: 14px;
   height: 14px;
@@ -754,9 +619,11 @@
   box-shadow: 1px 1px 0 rgba(51, 38, 30, .1);
   transform: rotate(-2deg);
 }
+
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos:hover .mensajitos-leer-todos-box {
   background: var(--ds-pink-soft, #fff0f4);
 }
+
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos-txt {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
   font-size: .95rem;
@@ -765,268 +632,17 @@
   white-space: nowrap;
   min-width: 0;
 }
+
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos[hidden] {
-  display: none !important;
-}
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row .mensajitos-leer-todos {
-  display: none !important;
+  display: none;
 }
 
-/* DS Mensajitos — acabado visual (ref. 02-mensajitos.png); shell delegado a modal-core/skin */
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row .mensajitos-leer-todos {
+  display: none;
+}
+
 .play-v3 .aht-screen[data-aht-screen="buzon"]:not() {
   background: var(--ds-paper, #fffaf1);
   padding: 14px 13px 12px;
   overflow-y: auto;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
-  margin: 0 0 12px;
-  padding: 0;
-  position: relative;
-  z-index: 3;
-}
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab-row {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  margin: 0 0 10px;
-  flex-wrap: wrap;
-}
-
-.play-v3 .mensajitos-icono {
-  font-size: 1.75rem;
-  transform: rotate(-6deg);
-  line-height: 1;
-  flex: 0 0 auto;
-}
-
-.play-v3 .mensajitos-contador {
-  margin-left: auto;
-  padding: 4px 10px;
-  border-radius: 999px;
-  border: 2px solid var(--ds-pink-deep, #c85b78);
-  background: var(--ds-pink-soft, #f8dce5);
-  color: var(--ds-pink-deep, #a94362);
-  font: 800 .72rem Nunito, sans-serif;
-  white-space: nowrap;
-  transform: rotate(0.4deg);
-}
-
-.play-v3 .mensajitos-tabs {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 2px;
-}
-
-.play-v3 .mensajitos-tab {
-  flex: 1;
-  max-width: 130px;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: 2px dashed var(--ds-lavender, #b8a8d8);
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
-  background: var(--ds-paper-card, #fffdf7);
-  color: var(--ds-lavender-deep, #7a6a9a);
-  font: 700 1.05rem/1 Caveat, cursive;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  cursor: pointer;
-  padding: 6px 12px;
-  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .08);
-  transform: rotate(-0.3deg);
-}
-
-.play-v3 .mensajitos-tab.is-on {
-  border-style: solid;
-  border-color: var(--ds-ink, #3b3028);
-  background: var(--ds-pink, #e86b8f);
-  color: #fff;
-  text-shadow: 0 1.5px 0 rgba(146, 39, 73, .35);
-  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .22);
-  position: relative;
-  transform: rotate(0.35deg);
-}
-
-.play-v3 .mensajitos-tab.is-on::before {
-  content: "";
-  position: absolute;
-  inset: 3px;
-  border: 1.5px dashed rgba(255, 255, 255, .75);
-  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
-  pointer-events: none;
-}
-
-.play-v3 .mensajitos-tab-badge {
-  min-width: 20px;
-  height: 20px;
-  padding: 0 5px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 999px;
-  background: var(--ds-red-alert, #d94a4a);
-  border: 2px solid #fff;
-  font: 800 .65rem/1 Nunito, sans-serif;
-  color: #fff;
-  box-shadow: 0 2px 3px rgba(70, 50, 30, .25);
-  transform: rotate(4deg);
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit { display: none; }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {
-  display: block;
-  margin: 0 0 10px;
-  padding: 10px 12px;
-  border: 2px solid var(--ds-ink-soft, #806c59);
-  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
-  background: var(--ds-paper-card, #fffdf7);
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12), 0 3px 7px rgba(70, 50, 30, .06);
-  transform: rotate(-0.15deg);
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg:nth-child(even) { transform: rotate(0.2deg); }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
-  border-color: var(--ds-pink-deep, #c85b78);
-  background: linear-gradient(180deg, #fbe3ec, var(--ds-pink-soft, #fff0f4));
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.leida {
-  opacity: .78;
-  background: #fff9f0;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid var(--ds-ink, #3b3028);
-  flex: 0 0 auto;
-  object-fit: cover;
-  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .15);
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar.cara-ini {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--ds-mustard-soft, #fff1bc);
-  font: 800 1rem Caveat, cursive;
-  color: var(--ds-ink, #3b3028);
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy { flex: 1; min-width: 0; }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de {
-  font: 700 1.15rem Caveat, cursive;
-  color: var(--ds-ink, #3b3028);
-  margin: 0 0 2px;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida .de::after {
-  content: 'Nuevo';
-  display: inline-block;
-  margin-left: 6px;
-  padding: 2px 8px;
-  border-radius: 4px 4px 8px 8px;
-  border: 2px solid var(--ds-ink, #3b3028);
-  background: var(--ds-red-alert, #d94a4a);
-  color: #fff;
-  font: 700 .72rem/1.2 Caveat, cursive;
-  letter-spacing: .4px;
-  text-transform: uppercase;
-  transform: rotate(2deg);
-  vertical-align: middle;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo {
-  margin: 6px 0 8px;
-  font: 1.1rem/1.25 Caveat, cursive;
-  color: var(--ds-ink, #3b3028);
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .plazo,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .sello-estado {
-  display: inline-block;
-  margin: 0 6px 7px 0;
-  padding: 4px 9px;
-  border-radius: 999px;
-  border: 1.5px solid var(--ds-mustard-deep, #b98a2f);
-  background: var(--ds-mustard-soft, #fff1bc);
-  font: 800 .68rem Nunito, sans-serif;
-  text-transform: uppercase;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 8px 14px;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 14px 11px 15px 12px / 11px 15px 12px 14px !important;
-  background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .25), inset 0 -3px 0 rgba(146, 39, 73, .28) !important;
-  font: 700 .95rem/1 Caveat, cursive !important;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: #fff !important;
-  text-shadow: 0 1px 0 rgba(146, 39, 73, .35);
-  cursor: pointer;
-  transform: rotate(-0.5deg);
-  white-space: nowrap;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button.btn-suave,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-leido {
-  background: linear-gradient(178deg, rgba(255,255,255,.25), rgba(255,255,255,0) 50%), var(--ds-lavender, #c5b8e8) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .2), inset 0 -3px 0 rgba(88, 74, 130, .28) !important;
-  color: #fff !important;
-  text-shadow: 0 1px 0 rgba(70, 55, 110, .35);
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle.is-pendiente {
-  background: linear-gradient(178deg, rgba(255,255,255,.28), rgba(255,255,255,0) 50%), var(--ds-pink, #e86b8f) !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio { font-family: Caveat, cursive; }
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
-  margin: 10px 0 0;
-  padding: 8px 10px;
-  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
-  border: 1.5px dashed rgba(107, 81, 56, .35);
-  background: var(--ds-lavender-soft, #efe8f8);
-  color: var(--ds-ink-soft, #594839);
-  font: 700 .78rem Nunito, sans-serif;
-  text-align: center;
-}
-
-@media (max-width: 600px) {
-  .play-v3 .aht-screen[data-aht-screen="buzon"]:not() { width: min(100%, 393px); }
-  .play-v3 .mensajitos-leer-todos { display: none !important; }
-  .play-v3 .mensajitos-tabs { gap: 6px; }
-  .play-v3 .mensajitos-tab { max-width: none; flex: 1 1 0; font-size: .98rem; }
-  .play-v3 .aht-screen[data-aht-screen="buzon"] .acciones-msg button,
-  .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .msg-leido-toggle { min-height: 40px; padding: 7px 12px; }
 }

@@ -1,0 +1,157 @@
+/* v4/bodies/ajustes.css */
+/* --- Ajustes: cinta + cabecera scrapbook --- */
+/* --- Ajustes: layout y controles (movil + desktop) --- */
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"].ajust-modal-papel .ajust-tape-tl {
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  z-index: 3;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"].ajust-modal-papel .ajust-tape-tr {
+  position: absolute;
+  top: 10px;
+  right: 52px;
+  z-index: 3;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"]:not() .ajustes-top {
+  flex: 0 0 auto;
+  margin: 0 0 .35rem;
+  padding: .15rem 0 0;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"]:not() .ds-modal-tit {
+  font-family: Caveat, cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 4px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-link {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec));
+  box-shadow: 1.5px 2px 0 rgba(200, 91, 120, .16);
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+  text-align: center;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-grupo {
+  padding: 10px 12px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-grupo-tit {
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  letter-spacing: .04em;
+  text-transform: none;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-reiniciar {
+  margin-top: 4px;
+  width: 100%;
+  padding: 11px 12px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-btn {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 10px 8px 11px 7px;
+  background: var(--ds-paper-card, #fffdf7);
+  font-weight: 700;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-grupo-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle-track {
+  display: block;
+  width: 42px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(107, 81, 56, .25);
+  position: relative;
+  transition: background .2s ease;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle-knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
+  transition: transform .2s ease;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-musica="on"] .ajustes-toggle-track,
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-efectos="on"] .ajustes-toggle-track {
+  background: #c85b78;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-musica="on"] .ajustes-toggle-knob,
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-toggle[data-efectos="on"] .ajustes-toggle-knob {
+  transform: translateX(18px);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-vol {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-vol-lbl {
+  font-size: .72rem;
+  font-weight: 700;
+  color: rgba(44, 38, 31, .72);
+  min-width: 52px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-range {
+  flex: 1 1 auto;
+  accent-color: #c85b78;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-hint {
+  margin: 0 0 .45rem;
+  font: 600 .74rem/1.4 Nunito, sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-feedback {
+  margin: .45rem 0 0;
+  font: 700 .74rem/1.35 Nunito, sans-serif;
+  color: var(--ds-green-deep, #4a7a52);
+}

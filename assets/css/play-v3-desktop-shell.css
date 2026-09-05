@@ -1,26 +1,26 @@
 /* play-v3-desktop-shell.css - ajustes columna izquierda y mapa (solo sobremesa >=769px) */
 
 @media (min-width: 769px) {
-  .play-v3:has(.game-shell) .game-main {
+  .play-v3 .game-main {
     grid-template-columns: minmax(280px, 340px) minmax(0, 1fr) minmax(250px, 320px);
     gap: 12px;
     padding: 10px 12px;
   }
-.play-v3:has(.game-shell) .game-top .btn-guia {
+.play-v3 .game-top .btn-guia {
     font-size: .82rem;
     padding: .32rem .62rem;
     margin-top: .65rem;
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .shell-grupo-buzon {
-    margin-top: 2.75rem !important;
+  .play-v3 .zona-actividad .shell-grupo-buzon {
+    margin-top: 2.75rem;
   }
 
-  .play-v3:has(.game-shell) .game-right .shell-grupo-misiones-par {
-    margin-top: 2.75rem !important;
+  .play-v3 .game-right .shell-grupo-misiones-par {
+    margin-top: 2.75rem;
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .obj-buzon {
+  .play-v3 .zona-actividad .obj-buzon {
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
@@ -36,21 +36,21 @@
     text-align: left;
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .obj-buzon-ico-wrap {
+  .play-v3 .zona-actividad .obj-buzon-ico-wrap {
     flex: 0 0 auto;
-    height: auto !important;
-    min-height: 0 !important;
+    height: auto;
+    min-height: 0;
     margin: 0;
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .obj-buzon-img {
-    width: 34px !important;
-    max-height: none !important;
+  .play-v3 .zona-actividad .obj-buzon-img {
+    width: 34px;
+    max-height: none;
     margin: 0;
     transform: rotate(-6deg);
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .obj-buzon-txt {
+  .play-v3 .zona-actividad .obj-buzon-txt {
     flex: 1 1 auto;
     margin: 0;
     font-family: Nunito, "Segoe UI", sans-serif;
@@ -61,7 +61,7 @@
     color: #2c261f;
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .obj-buzon-badge {
+  .play-v3 .zona-actividad .obj-buzon-badge {
     position: static;
     top: auto;
     right: auto;
@@ -81,7 +81,7 @@
     flex: 0 0 auto;
   }
 
-  .play-v3:has(.game-shell) .zona-actividad .obj-buzon-flecha {
+  .play-v3 .zona-actividad .obj-buzon-flecha {
     flex: 0 0 auto;
     font-family: Nunito, "Segoe UI", sans-serif;
     font-size: 1.15rem;
@@ -91,23 +91,23 @@
     margin-left: .1rem;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota.obj-vecinos-resumen {
-    padding: 1.15rem 1.1rem 1rem .95rem !important;
-    border: 2px solid #c9a87a !important;
-    border-radius: 3px 11px 5px 8px / 8px 5px 11px 3px !important;
-    background-color: #fdf9f4 !important;
-    background-image: linear-gradient(180deg, rgba(255, 253, 249, .85) 0%, rgba(255, 253, 249, .45) 50%, rgba(255, 253, 249, .2) 100%), url("../play-v3/capas/libreta_hoja.png") !important;
-    box-shadow: 1px 2px 0 rgba(188, 158, 118, .2), 3px 6px 18px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(255, 255, 255, .55) !important;
-    transform: rotate(-0.5deg) !important;
-    text-align: left !important;
+  .play-v3 .celestine-nota.obj-vecinos-resumen {
+    padding: 1.15rem 1.1rem 1rem .95rem;
+    border: 2px solid #c9a87a;
+    border-radius: 3px 11px 5px 8px / 8px 5px 11px 3px;
+    background-color: #fdf9f4;
+    background-image: linear-gradient(180deg, rgba(255, 253, 249, .85) 0%, rgba(255, 253, 249, .45) 50%, rgba(255, 253, 249, .2) 100%), url("../play-v3/capas/libreta_hoja.png");
+    box-shadow: 1px 2px 0 rgba(188, 158, 118, .2), 3px 6px 18px rgba(40, 28, 16, .12), inset 0 0 0 1px rgba(255, 255, 255, .55);
+    transform: rotate(-0.5deg);
+    text-align: left;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota.obj-vecinos-resumen::after {
-    display: none !important;
-    content: none !important;
+  .play-v3 .celestine-nota.obj-vecinos-resumen::after {
+    display: none;
+    content: none;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota.obj-vecinos-resumen::before {
+  .play-v3 .celestine-nota.obj-vecinos-resumen::before {
     content: "";
     position: absolute;
     top: -8px;
@@ -122,32 +122,32 @@
     border-radius: 1px;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .libreta-kicker {
-    font-size: 1.45rem !important;
-    margin-bottom: .75rem !important;
-    color: #2c261f !important;
+  .play-v3 .celestine-nota .libreta-kicker {
+    font-size: 1.45rem;
+    margin-bottom: .75rem;
+    color: #2c261f;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-preview {
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
-    gap: 6px !important;
-    margin-bottom: .65rem !important;
-    min-height: 0 !important;
-    height: auto !important;
+  .play-v3 .celestine-nota .obj-vecinos-preview {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    gap: 6px;
+    margin-bottom: .65rem;
+    min-height: 0;
+    height: auto;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-preview-cara,
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-preview-ini {
-    width: 44px !important;
-    height: 44px !important;
-    font-size: .78rem !important;
+  .play-v3 .celestine-nota .obj-vecinos-preview-cara,
+  .play-v3 .celestine-nota .obj-vecinos-preview-ini {
+    width: 44px;
+    height: 44px;
+    font-size: .78rem;
     border: 2px solid rgba(120, 96, 72, .35);
     border-radius: 50%;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-head {
+  .play-v3 .celestine-nota .obj-vecinos-head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
@@ -157,55 +157,55 @@
     border-bottom: 1.5px solid rgba(120, 96, 72, .22);
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-tit {
-    display: inline !important;
-    margin: 0 !important;
-    font-size: .95rem !important;
-    letter-spacing: .12em !important;
-    color: var(--pink-deep, #c42b4a) !important;
+  .play-v3 .celestine-nota .obj-vecinos-tit {
+    display: inline;
+    margin: 0;
+    font-size: .95rem;
+    letter-spacing: .12em;
+    color: var(--pink-deep, #c42b4a);
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-poblacion {
-    display: inline !important;
+  .play-v3 .celestine-nota .obj-vecinos-poblacion {
+    display: inline;
     font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .95rem !important;
+    font-size: .95rem;
     font-weight: 800;
     color: #2c261f;
     letter-spacing: .04em;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats { display: block !important; }
+  .play-v3 .celestine-nota .obj-vecinos-stats { display: block; }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .celeste-cuenta-vecinos {
-    display: none !important;
+  .play-v3 .celestine-nota .obj-vecinos-stats .celeste-cuenta-vecinos {
+    display: none;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .stat-row,
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .vecinos-stat {
-    font-size: .88rem !important;
-    padding: .22rem 0 !important;
+  .play-v3 .celestine-nota .obj-vecinos-stats .stat-row,
+  .play-v3 .celestine-nota .obj-vecinos-stats .vecinos-stat {
+    font-size: .88rem;
+    padding: .22rem 0;
   }
 
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .stat-row strong,
-  .play-v3:has(.game-shell) .celestine-nota .obj-vecinos-stats .vecinos-stat-v {
-    font-size: .92rem !important;
+  .play-v3 .celestine-nota .obj-vecinos-stats .stat-row strong,
+  .play-v3 .celestine-nota .obj-vecinos-stats .vecinos-stat-v {
+    font-size: .92rem;
   }
 
-  .play-v3:has(.game-shell) .shell-grupo-planes .obj-proximo-polaroid {
+  .play-v3 .shell-grupo-planes .obj-proximo-polaroid {
     display: flex;
     flex-direction: column;
     gap: .85rem;
     width: 100%;
   }
 
-  .play-v3:has(.game-shell) .shell-grupo-planes { margin-top: 1.1rem !important; }
+  .play-v3 .shell-grupo-planes { margin-top: 1.1rem; }
 
-  .play-v3:has(.game-shell) .obj-proximo-polaroid {
+  .play-v3 .obj-proximo-polaroid {
     padding: 1rem .95rem .75rem .9rem;
     margin: 0;
   }
 
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .obj-proximo-tit {
+  .play-v3 .obj-proximo-polaroid .obj-proximo-tit {
     font-size: 1.05rem;
     letter-spacing: .1em;
     text-transform: uppercase;
@@ -215,25 +215,25 @@
     margin-bottom: .5rem;
   }
 
-  .play-v3:has(.game-shell) .obj-proximo-polaroid.is-en-curso .obj-proximo-tit { color: #3d5c32; }
+  .play-v3 .obj-proximo-polaroid.is-en-curso .obj-proximo-tit { color: #3d5c32; }
 
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .obj-proximo-body { font-size: .92rem; }
+  .play-v3 .obj-proximo-polaroid .obj-proximo-body { font-size: .92rem; }
 
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .prox-faces img,
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .prox-faces .cara-ini,
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .prox-faces .cara-token .cara {
-    width: 52px !important;
-    height: 52px !important;
+  .play-v3 .obj-proximo-polaroid .prox-faces img,
+  .play-v3 .obj-proximo-polaroid .prox-faces .cara-ini,
+  .play-v3 .obj-proximo-polaroid .prox-faces .cara-token .cara {
+    width: 52px;
+    height: 52px;
   }
 
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .prox-nombres { font-size: 1.12rem; }
-  .play-v3:has(.game-shell) .obj-proximo-polaroid .prox-meta { font-size: .88rem; }
+  .play-v3 .obj-proximo-polaroid .prox-nombres { font-size: 1.12rem; }
+  .play-v3 .obj-proximo-polaroid .prox-meta { font-size: .88rem; }
 
-  .play-v3:has(.game-shell) .obj-curso-nav { top: .72rem; right: .65rem; gap: .28rem; }
-  .play-v3:has(.game-shell) .obj-curso-btn { width: 1.65rem; height: 1.65rem; font-size: 1.2rem; }
-  .play-v3:has(.game-shell) .obj-curso-cont { font-size: .95rem; }
+  .play-v3 .obj-curso-nav { top: .72rem; right: .65rem; gap: .28rem; }
+  .play-v3 .obj-curso-btn { width: 1.65rem; height: 1.65rem; font-size: 1.2rem; }
+  .play-v3 .obj-curso-cont { font-size: .95rem; }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-block {
+  .play-v3 .obj-planes-prox-block {
     position: relative;
     padding: .85rem .8rem .7rem;
     border: 2px solid #c9a87a;
@@ -245,9 +245,9 @@
     box-shadow: 1px 2px 0 rgba(188, 158, 118, .16), 2px 4px 12px rgba(40, 28, 16, .1);
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-block[hidden] { display: none !important; }
+  .play-v3 .obj-planes-prox-block[hidden] { display: none; }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-cab {
+  .play-v3 .obj-planes-prox-cab {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -255,7 +255,7 @@
     margin-bottom: .55rem;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-tit {
+  .play-v3 .obj-planes-prox-tit {
     font-family: Nunito, "Segoe UI", sans-serif;
     font-size: .82rem;
     font-weight: 800;
@@ -264,7 +264,7 @@
     color: #2c261f;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-ver {
+  .play-v3 .obj-planes-prox-ver {
     border: 0;
     background: transparent;
     padding: 0;
@@ -276,15 +276,15 @@
     white-space: nowrap;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-ver:hover { color: #3a3028; }
+  .play-v3 .obj-planes-prox-ver:hover { color: #3a3028; }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-grid {
+  .play-v3 .obj-planes-prox-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: .55rem;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card {
+  .play-v3 .obj-planes-prox-card {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -296,10 +296,10 @@
     box-shadow: 0 1px 3px rgba(70, 50, 30, .06);
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card:nth-child(odd) { transform: rotate(-0.4deg); }
-  .play-v3:has(.game-shell) .obj-planes-prox-card:nth-child(even) { transform: rotate(0.35deg); }
+  .play-v3 .obj-planes-prox-card:nth-child(odd) { transform: rotate(-0.4deg); }
+  .play-v3 .obj-planes-prox-card:nth-child(even) { transform: rotate(0.35deg); }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card .obj-planes-prox-hora {
+  .play-v3 .obj-planes-prox-card .obj-planes-prox-hora {
     display: inline-flex;
     align-items: center;
     padding: .12rem .42rem;
@@ -315,15 +315,15 @@
     border-radius: 8px 6px 9px 7px / 6px 9px 7px 8px;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card .prox-faces { margin-bottom: .28rem; }
+  .play-v3 .obj-planes-prox-card .prox-faces { margin-bottom: .28rem; }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card .prox-faces img,
-  .play-v3:has(.game-shell) .obj-planes-prox-card .prox-faces .cara-ini {
-    width: 32px !important;
-    height: 32px !important;
+  .play-v3 .obj-planes-prox-card .prox-faces img,
+  .play-v3 .obj-planes-prox-card .prox-faces .cara-ini {
+    width: 32px;
+    height: 32px;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card .obj-planes-prox-nombres {
+  .play-v3 .obj-planes-prox-card .obj-planes-prox-nombres {
     margin: 0;
     font-family: Caveat, cursive;
     font-size: .95rem;
@@ -332,7 +332,7 @@
     color: #2c261f;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-card .obj-planes-prox-lugar {
+  .play-v3 .obj-planes-prox-card .obj-planes-prox-lugar {
     margin: .1rem 0 0;
     font-family: Nunito, "Segoe UI", sans-serif;
     font-size: .72rem;
@@ -340,7 +340,7 @@
     color: #6a5848;
   }
 
-  .play-v3:has(.game-shell) .obj-planes-prox-vacio {
+  .play-v3 .obj-planes-prox-vacio {
     grid-column: 1 / -1;
     margin: 0;
     font-family: Fraunces, Georgia, serif;
@@ -351,7 +351,7 @@
     padding: .35rem 0;
   }
 
-  .play-v3:has(.game-shell) .obj-nuevo-plan-horiz {
+  .play-v3 .obj-nuevo-plan-horiz {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -369,9 +369,9 @@
     color: #fff;
   }
 
-  .play-v3:has(.game-shell) .obj-nuevo-plan-horiz:hover { filter: brightness(1.03); }
+  .play-v3 .obj-nuevo-plan-horiz:hover { filter: brightness(1.03); }
 
-  .play-v3:has(.game-shell) .obj-nuevo-plan-horiz .obj-nuevo-plan-ico {
+  .play-v3 .obj-nuevo-plan-horiz .obj-nuevo-plan-ico {
     width: auto;
     height: auto;
     flex: 0 0 auto;
@@ -387,7 +387,7 @@
     color: #fff;
   }
 
-  .play-v3:has(.game-shell) .obj-nuevo-plan-horiz .obj-nuevo-plan-txt {
+  .play-v3 .obj-nuevo-plan-horiz .obj-nuevo-plan-txt {
     font-family: Caveat, cursive;
     font-size: 1.25rem;
     font-weight: 700;
@@ -398,59 +398,59 @@
   }
 
   /* Mapa un poco mas compacto */
-  .play-v3:has(.game-shell) .game-map-wrap .board-fit,
-  .play-v3:has(.game-shell) .play-root.pc .board-fit {
-    width: 91% !important;
-    max-height: min(76vh, 660px) !important;
+  .play-v3 .game-map-wrap .board-fit,
+  .play-v3 .play-root.pc .board-fit {
+    width: 91%;
+    max-height: min(76vh, 660px);
   }
 
   /* Mapa: capas/modales no empujan scroll */
-  .play-v3:has(.game-shell) .game-map-wrap .play-stage {
-    flex: 1 1 auto !important;
-    height: 100% !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
+  .play-v3 .game-map-wrap .play-stage {
+    flex: 1 1 auto;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
   }
 
-  .play-v3:has(.game-shell) .game-map-wrap .play-root.pc {
-    height: 100% !important;
-    min-height: 0 !important;
-    overflow: hidden !important;
+  .play-v3 .game-map-wrap .play-root.pc {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
   }
 
-  .play-v3:has(.game-shell) .game-map-wrap .play-root.pc .board-scroll {
-    position: absolute !important;
-    inset: 0 !important;
-    width: 100% !important;
-    height: auto !important;
-    overflow: hidden !important;
+  .play-v3 .game-map-wrap .play-root.pc .board-scroll {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
   }
 
-  .play-v3:has(.game-shell) .play-root.pc .aht-screen,
-  .play-v3:has(.game-shell) .play-root.pc .aht-screen {
-    position: absolute !important;
+  .play-v3 .play-root.pc .aht-screen,
+  .play-v3 .play-root.pc .aht-screen {
+    position: absolute;
   }
 
   /* Columna derecha: tipografia mas legible */
-  .play-v3:has(.game-shell) .game-right .obj-misiones-papel-tit {
-    font-size: 1.05rem !important;
+  .play-v3 .game-right .obj-misiones-papel-tit {
+    font-size: 1.05rem;
   }
 
-  .play-v3:has(.game-shell) .game-right .mision-strip-txt {
-    font-size: 1.28rem !important;
-    line-height: 1.24 !important;
+  .play-v3 .game-right .mision-strip-txt {
+    font-size: 1.28rem;
+    line-height: 1.24;
   }
 
-  .play-v3:has(.game-shell) .game-right .mision-ico-svg {
-    width: 30px !important;
-    height: 26px !important;
+  .play-v3 .game-right .mision-ico-svg {
+    width: 30px;
+    height: 26px;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-misiones-vacio {
-    font-size: 1.1rem !important;
+  .play-v3 .game-right .obj-misiones-vacio {
+    font-size: 1.1rem;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-parejas-cab {
+  .play-v3 .game-right .obj-parejas-cab {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -458,11 +458,11 @@
     margin-bottom: .55rem;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-parejas-cab .zona-tit-parejas {
-    margin: 0 !important;
+  .play-v3 .game-right .obj-parejas-cab .zona-tit-parejas {
+    margin: 0;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-parejas-ver {
+  .play-v3 .game-right .obj-parejas-ver {
     display: inline;
     border: 0;
     background: transparent;
@@ -475,75 +475,75 @@
     white-space: nowrap;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-parejas-ver:hover { color: #3a3028; }
+  .play-v3 .game-right .obj-parejas-ver:hover { color: #3a3028; }
 
-  .play-v3:has(.game-shell) .game-right .zona-tit-parejas {
-    font-size: 1rem !important;
+  .play-v3 .game-right .zona-tit-parejas {
+    font-size: 1rem;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-parejas-list p.muted,
-  .play-v3:has(.game-shell) .game-right .obj-parejas-vacio {
-    font-size: 1.15rem !important;
+  .play-v3 .game-right .obj-parejas-list p.muted,
+  .play-v3 .game-right .obj-parejas-vacio {
+    font-size: 1.15rem;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-pareja-nombres {
-    font-size: 1rem !important;
+  .play-v3 .game-right .obj-pareja-nombres {
+    font-size: 1rem;
   }
 
   /* Cotilleo: badge ladeada bajo la etiqueta */
-  .play-v3:has(.game-shell) .game-right .obj-cotilleo.obj-cotilleo-par {
-    display: grid !important;
+  .play-v3 .game-right .obj-cotilleo.obj-cotilleo-par {
+    display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-rows: auto auto;
     grid-template-areas:
       "tit txt flecha"
       "badge txt flecha";
-    align-items: start !important;
-    gap: 5px 11px !important;
-    overflow: visible !important;
+    align-items: start;
+    gap: 5px 11px;
+    overflow: visible;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-cotilleo-cuerpo {
-    display: contents !important;
+  .play-v3 .game-right .obj-cotilleo-cuerpo {
+    display: contents;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-cotilleo-tit {
+  .play-v3 .game-right .obj-cotilleo-tit {
     grid-area: tit;
     align-self: start;
-    font-size: 1.05rem !important;
-    padding: 7px 10px !important;
-    background: #4f4378 !important;
+    font-size: 1.05rem;
+    padding: 7px 10px;
+    background: #4f4378;
     border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
-    color: #fffdf8 !important;
+    color: #fffdf8;
     transform: rotate(-1.2deg);
-    letter-spacing: .08em !important;
+    letter-spacing: .08em;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-cotilleo-txt {
+  .play-v3 .game-right .obj-cotilleo-txt {
     grid-area: txt;
     align-self: center;
-    font-size: 1.22rem !important;
-    line-height: 1.3 !important;
+    font-size: 1.22rem;
+    line-height: 1.3;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-cotilleo-badge {
+  .play-v3 .game-right .obj-cotilleo-badge {
     grid-area: badge;
-    position: static !important;
-    top: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    align-self: flex-start !important;
-    margin: 0 !important;
-    transform: rotate(3deg) !important;
-    font-size: .78rem !important;
+    position: static;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    align-self: flex-start;
+    margin: 0;
+    transform: rotate(3deg);
+    font-size: .78rem;
     min-height: 22px;
-    padding: 1px 8px !important;
+    padding: 1px 8px;
   }
 
-  .play-v3:has(.game-shell) .game-right .obj-cotilleo-flecha {
+  .play-v3 .game-right .obj-cotilleo-flecha {
     grid-area: flecha;
     align-self: center;
-    font-size: 1.45rem !important;
+    font-size: 1.45rem;
   }
 }
 
@@ -555,8 +555,8 @@
   .play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
   .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha_diario"],
   .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha"] .ficha-animo-overlay .ficha-animo-modal {
-    width: min(100%, 480px) !important;
-    max-width: min(100%, 480px) !important;
-    max-height: min(88vh, 720px) !important;
+    width: min(100%, 480px);
+    max-width: min(100%, 480px);
+    max-height: min(88vh, 720px);
   }
 }

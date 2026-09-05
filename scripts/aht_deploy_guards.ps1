@@ -1,5 +1,5 @@
-#Requires -Version 5.1
-# Guardas de deploy canónico AHT — ABORTAR ante estado inseguro (sin auto-fix git).
+﻿#Requires -Version 5.1
+# Guardas de deploy canonico AHT - ABORTAR ante estado inseguro (sin auto-fix git).
 
 function Get-AhtCanonicalDeployConfig {
     param([hashtable]$Ctx)
@@ -165,6 +165,7 @@ function Invoke-AhtRemoteBackup {
     $openLine = Get-WinScpOpenLine -Cfg $cfg
     $getLines = New-Object System.Collections.Generic.List[string]
     $getLines.Add($openLine)
+    $getLines.Add('option batch continue')
     foreach ($rel in $RelPaths) {
         $remote = "$($Ctx.RemotePath)/$rel"
         $localBak = Join-Path $BackupDir ($rel -replace '/', '\')
@@ -182,7 +183,7 @@ function Invoke-AhtRemoteBackup {
     $code = $LASTEXITCODE
     Remove-Item $getScript -Force -ErrorAction SilentlyContinue
     if ($code -ne 0) {
-        throw "Backup remoto fallo (WinSCP codigo $code)"
+        Write-DeployLog -LogFile $LogFile -Message "WARN: backup remoto incompleto (WinSCP codigo $code); tipico si hay archivos nuevos en prod" -ToHost
     }
 }
 

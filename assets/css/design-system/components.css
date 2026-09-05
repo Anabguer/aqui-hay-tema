@@ -10,13 +10,23 @@
 
    REGLAS:
    - Clases opt-in .ds-*: cero colisión con el CSS actual.
-   - Prohibido !important (excepciones documentadas por pantalla).
+   - Prohibido (excepciones documentadas por pantalla).
    - CERO anillas/espirales/agujeros/encuadernaciones.
    - Mobile-first: base móvil, @media (min-width:1024px) para desktop.
    - Manuscrita (Caveat) jamás por debajo de 16px; microtexto min 11px.
    ============================================================ */
-
 /* ---------- 1. Superficies ---------- */
+/* ---------- 2. Botones ---------- */
+/* ---------- 3. Navegación ---------- */
+/* ---------- 4. Identidad ---------- */
+/* ---------- 5. Decoración ---------- */
+/* ---------- 6. Estados ---------- */
+/* ---------- 7. Timeline (Diario) ---------- */
+/* ---------- 8. EventCard / EventBanner (FUTURO — sin uso hasta EV) ---------- */
+/* Componente documentado en docs/design-system/03-components.md §EventCard.
+   NO implementar motor/endpoints/comportamiento. Desaparece si no hay evento. */
+/* ---------- 8. Tipografía semántica AHT ---------- */
+/* ---------- 9. Desktop ---------- */
 
 .ds-sheet {
   background:
@@ -43,16 +53,18 @@
 }
 
 .ds-card--tint-green { background: var(--ds-green-soft); }
+
 .ds-card--tint-lavender { background: var(--ds-lavender-soft); }
+
 .ds-card--tint-pink { background: var(--ds-pink-soft); }
+
 .ds-card--tint-mustard { background: var(--ds-mustard-soft); }
 
 .ds-card--dashed { border-style: dashed; }
 
 .ds-card--tilt-l { transform: rotate(-1.5deg); }
-.ds-card--tilt-r { transform: rotate(1.5deg); }
 
-/* ---------- 2. Botones ---------- */
+.ds-card--tilt-r { transform: rotate(1.5deg); }
 
 .ds-btn {
   display: inline-flex;
@@ -157,8 +169,6 @@
   font-weight: 700;
 }
 
-/* ---------- 3. Navegación ---------- */
-
 .ds-tab {
   display: inline-flex;
   align-items: center;
@@ -215,9 +225,13 @@
 }
 
 .ds-chip.is-active { background: var(--ds-coral-soft); border-color: var(--ds-coral-deep); }
+
 .ds-chip--green.is-active { background: var(--ds-green-soft); border-color: var(--ds-green-deep); }
+
 .ds-chip--lavender.is-active { background: var(--ds-lavender-soft); border-color: var(--ds-lavender-deep); }
+
 .ds-chip--mustard.is-active { background: var(--ds-mustard-soft); border-color: var(--ds-mustard-deep); }
+
 .ds-chip:disabled { opacity: .5; cursor: not-allowed; }
 
 .ds-chip-emoji {
@@ -278,9 +292,8 @@
 }
 
 .ds-search input::placeholder { color: var(--ds-text-muted); }
-.ds-select:focus-within, .ds-search:focus-within { border-color: var(--ds-lavender-deep); }
 
-/* ---------- 4. Identidad ---------- */
+.ds-select:focus-within, .ds-search:focus-within { border-color: var(--ds-lavender-deep); }
 
 .ds-avatar {
   position: relative;
@@ -301,18 +314,27 @@
 }
 
 .ds-avatar--token { width: var(--ds-avatar-token); height: var(--ds-avatar-token); }
+
 .ds-avatar--sm { width: var(--ds-avatar-sm); height: var(--ds-avatar-sm); }
+
 .ds-avatar--md { width: var(--ds-avatar-md); height: var(--ds-avatar-md); }
+
 .ds-avatar--lg { width: var(--ds-avatar-lg); height: var(--ds-avatar-lg); }
+
 .ds-avatar--xl { width: var(--ds-avatar-xl); height: var(--ds-avatar-xl); }
 
 .ds-avatar[data-emocion="alegre"] { border-color: var(--ds-emo-alegre); }
+
 .ds-avatar[data-emocion="triste"] { border-color: var(--ds-emo-triste); }
+
 .ds-avatar[data-emocion="enfadado"] { border-color: var(--ds-emo-enfadado); }
+
 .ds-avatar[data-emocion="neutro"] { border-color: var(--ds-emo-neutro); }
 
 .ds-avatar-group { display: inline-flex; }
+
 .ds-avatar-group .ds-avatar + .ds-avatar { margin-left: -8px; }
+
 .ds-avatar-group .ds-avatar { box-shadow: 0 0 0 2.5px var(--ds-paper-card); }
 
 .ds-pill {
@@ -332,11 +354,17 @@
 }
 
 .ds-pill--emo-alegre { background: var(--ds-green-soft); color: var(--ds-green-deep); }
+
 .ds-pill--emo-triste { background: #DDE5EC; color: #4F6478; }
+
 .ds-pill--emo-enfadado { background: var(--ds-red-soft); color: var(--ds-red-alert); }
+
 .ds-pill--emo-neutro { background: var(--ds-mustard-soft); color: var(--ds-mustard-deep); }
+
 .ds-pill--pink { background: var(--ds-pink-soft); color: var(--ds-pink-deep); }
+
 .ds-pill--lavender { background: var(--ds-lavender-soft); color: var(--ds-lavender-deep); }
+
 .ds-pill--green { background: var(--ds-green-soft); color: var(--ds-green-deep); }
 
 .ds-badge {
@@ -385,8 +413,6 @@
   color: var(--ds-mustard-deep);
 }
 
-/* ---------- 5. Decoración ---------- */
-
 .ds-tape {
   position: absolute;
   width: 96px;
@@ -400,8 +426,11 @@
 }
 
 .ds-tape--tl { top: -12px; left: 18px; }
+
 .ds-tape--tr { top: -12px; right: 18px; transform: rotate(3deg); }
+
 .ds-tape--tc { top: -12px; left: 50%; margin-left: -48px; }
+
 .ds-tape--pink { background: rgba(244, 183, 195, .8); }
 
 .ds-pin {
@@ -435,9 +464,13 @@
 }
 
 .ds-ribbon--green { background: var(--ds-green); }
+
 .ds-ribbon--lavender { background: var(--ds-lavender); }
+
 .ds-ribbon--mustard { background: var(--ds-mustard); }
+
 .ds-ribbon--pink { background: var(--ds-pink); }
+
 .ds-ribbon--coral { background: var(--ds-coral); }
 
 .ds-divider {
@@ -475,13 +508,16 @@
 }
 
 .ds-progress--alegre > i { background: var(--ds-emo-alegre); }
-.ds-progress--triste > i { background: var(--ds-emo-triste); }
-.ds-progress--enfadado > i { background: var(--ds-emo-enfadado); }
-.ds-progress--mustard > i { background: var(--ds-mustard); }
-.ds-progress--pink > i { background: var(--ds-pink); }
-.ds-progress--lavender > i { background: var(--ds-lavender); }
 
-/* ---------- 6. Estados ---------- */
+.ds-progress--triste > i { background: var(--ds-emo-triste); }
+
+.ds-progress--enfadado > i { background: var(--ds-emo-enfadado); }
+
+.ds-progress--mustard > i { background: var(--ds-mustard); }
+
+.ds-progress--pink > i { background: var(--ds-pink); }
+
+.ds-progress--lavender > i { background: var(--ds-lavender); }
 
 .ds-locked {
   border: 2px dashed rgba(107, 81, 56, .45);
@@ -549,9 +585,8 @@
   position: relative;
 }
 
-/* ---------- 7. Timeline (Diario) ---------- */
-
 .ds-tl { position: relative; padding-left: 44px; }
+
 .ds-tl::before {
   content: "";
   position: absolute;
@@ -595,12 +630,10 @@
 }
 
 .ds-tl-day--lavender { background: var(--ds-lavender-soft); }
-.ds-tl-day--green { background: var(--ds-green-soft); }
-.ds-tl-day--dim { background: var(--ds-paper-dim); }
 
-/* ---------- 8. EventCard / EventBanner (FUTURO — sin uso hasta EV) ---------- */
-/* Componente documentado en docs/design-system/03-components.md §EventCard.
-   NO implementar motor/endpoints/comportamiento. Desaparece si no hay evento. */
+.ds-tl-day--green { background: var(--ds-green-soft); }
+
+.ds-tl-day--dim { background: var(--ds-paper-dim); }
 
 .ds-event {
   display: flex;
@@ -642,10 +675,8 @@
 }
 
 .ds-event-title { font-size: 1.2rem; font-weight: 700; color: var(--ds-ink); }
+
 .ds-event-meta { font-size: 1rem; color: var(--ds-text-muted); }
-
-
-/* ---------- 8. Tipografía semántica AHT ---------- */
 
 .ds-text-display {
   font-family: var(--ds-font-hand);
@@ -700,18 +731,4 @@
   font-size: var(--aht-type-body);
   font-weight: 600;
   line-height: 1.25;
-}
-
-@media (max-width: 768px) {
-  .ds-text-body { font-size: 1rem; line-height: 1.5; }
-  .ds-text-secondary { font-size: 0.875rem; line-height: 1.45; }
-  .ds-text-caption { font-size: 0.8125rem; }
-}
-
-/* ---------- 9. Desktop ---------- */
-
-@media (min-width: 1024px) {
-  .ds-btn--primary { font-size: 1.4rem; }
-  .ds-sheet--full { width: min(460px, 46%); max-height: none; }
-  .ds-tab { font-size: 1.3rem; }
 }

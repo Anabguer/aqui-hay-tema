@@ -1,9 +1,9 @@
 /* ============================================================
-   AHT V4 — TOKENS CANÓNICOS
-   Autoridad ÚNICA para colores, espaciados, radios, sombras,
-   tipografía y motion del sistema de pantallas V4.
+   AHT V4 â€” TOKENS CANÃ“NICOS
+   Autoridad ÃšNICA para colores, espaciados, radios, sombras,
+   tipografÃ­a y motion del sistema de pantallas V4.
 
-   Regla: cambiar un token aquí modifica TODAS las screens V4
+   Regla: cambiar un token aquÃ­ modifica TODAS las screens V4
    que lo consumen deliberadamente.
    ============================================================ */
 
@@ -29,13 +29,15 @@
   --aht-border: #D8D1DE;
   --aht-border-strong: #33261E;
 
-  /* --- Frame --- */
+  /* --- Frame / modal shell --- */
+  --modal-shell-bg: var(--aht-shell-bg);
+  --modal-overlay: var(--aht-overlay);
   --aht-frame-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
   --aht-frame-radius-sm: 12px 9px 13px 10px / 9px 13px 10px 12px;
   --aht-frame-shadow: 0 8px 24px rgba(48, 40, 58, 0.20);
   --aht-overlay: rgba(38, 31, 47, 0.45);
 
-  /* --- Close (X) — token global testable --- */
+  /* --- Close (X) â€” token global testable --- */
   --aht-close-color: var(--aht-accent);
   --aht-close-bg: #F1EDF6;
   --aht-close-border: #D8D1DE;
@@ -55,7 +57,7 @@
   --aht-vanilla: #F1EDF6;
   --aht-vanilla-deep: #E3D6F0;
 
-  /* --- Tipografía --- */
+  /* --- TipografÃ­a --- */
   --aht-font-hand: "Caveat", "Segoe Print", cursive;
   --aht-font-ui: "Nunito", "Segoe UI", sans-serif;
 
@@ -76,11 +78,4 @@
   --aht-dur-fast: 120ms;
   --aht-dur: 200ms;
   --aht-dur-slow: 320ms;
-}
-
-@media (max-width: 768px) {
-  :root {
-    --aht-frame-radius: 18px 14px 20px 13px / 14px 20px 13px 18px;
-    --aht-gap-xl: 16px;
-  }
 }

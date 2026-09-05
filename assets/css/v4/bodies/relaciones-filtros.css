@@ -1,0 +1,263 @@
+/* v4/bodies/relaciones-filtros.css */
+/* --- Relaciones: filtros sin circulo, iconos grandes, 1 fila --- */
+/* v91: Relaciones � filtros sin recorte superior; scroll solo en lista */
+/* INICIO-MOBILE-RAYA-DERECHA-v122 - quitar franja rosa derecha (scrollbar global) */
+/* PAREJAS-ROMANTICO-v2 � scrapbook: contraste, sin degradado rosa */
+/* INICIO-CROMATICA-MOVIL-v129 � gana a modal-titles v72 (fondo pagina movil) */
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-filtros {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 4px;
+  margin: 0 0 8px;
+  padding: .2rem 0 .12rem;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-filtros::-webkit-scrollbar {
+  display: none;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-chip {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: none;
+  gap: 2px;
+  padding: 0 1px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-chip > b {
+  width: auto;
+  height: auto;
+  min-height: 1.72rem;
+  display: block;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 1.65rem;
+  line-height: 1.12;
+  padding-top: 1px;
+  font-weight: 700;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-chip > span {
+  display: block;
+  font-size: .58rem;
+  line-height: 1.1;
+  letter-spacing: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-chip.is-on > b {
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  transform: scale(1.08);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-chip.is-on {
+  color: var(--ds-ink, #3b3028);
+  font-weight: 800;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-chip.is-on > span {
+  color: var(--ds-pink-deep, #c85b78);
+}
+
+.play-v3 .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-panel:not([hidden]) {
+  overflow: hidden;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-filtros,
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-dd-wrap,
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-hint {
+  flex-shrink: 0;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"]::before {
+  border-color: rgba(107, 81, 56, .32);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel {
+  background-color: var(--ds-paper-modal, #fffaf0);
+  background-image: url("../../play-v3/capas/libreta_hoja.png");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: min(360px, 58dvh);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-top {
+  padding: .1rem .35rem .35rem;
+  border-bottom: 1px solid rgba(90, 72, 56, .16);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-tit,
+.play-v3 .aht-screen[data-aht-screen="parejas"] .ds-modal-tit--pink {
+  font-family: Caveat, cursive;
+  font-size: 2.05rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ds-ink, #2c261f);
+  text-shadow: none;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .ds-modal-icon--pink {
+  color: #e8385a;
+  font-size: 1.2rem;
+  filter: none;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-sub {
+  margin: .22rem 0 0;
+  font-family: Fraunces, Georgia, serif;
+  font-size: .88rem;
+  font-style: italic;
+  font-weight: 600;
+  color: #6a5848;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-body {
+  min-height: 9.5rem;
+  padding: .65rem .35rem .8rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-vacio--scrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 17.5rem;
+  margin: .35rem auto 0;
+  padding: 1rem .85rem .85rem;
+  transform: rotate(-1.1deg);
+  border: 2px solid rgba(90, 72, 56, .22);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: #ebe0f8;
+  box-shadow: 2px 3px 0 rgba(90, 72, 56, .12);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-vacio-sello {
+  position: absolute;
+  top: -.55rem;
+  right: .65rem;
+  width: 1.65rem;
+  height: 1.65rem;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #f8d4df;
+  border: 2px solid #8f2f52;
+  color: #b8326a;
+  font-size: .82rem;
+  line-height: 1;
+  box-shadow: 1px 2px 0 rgba(90, 72, 56, .14);
+  transform: rotate(8deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-vacio-tit {
+  margin: 0 0 .32rem;
+  font-family: Caveat, cursive;
+  font-size: 1.42rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: #2c261f;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-vacio-poema {
+  margin: 0 0 .38rem;
+  font-family: Fraunces, Georgia, serif;
+  font-size: .9rem;
+  font-style: italic;
+  line-height: 1.35;
+  color: #5a4838;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-vacio-nota {
+  margin: 0;
+  font-family: Nunito, sans-serif;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #8a7460;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .1);
+  padding: .58rem .65rem;
+  margin-bottom: .48rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item:nth-child(odd) {
+  transform: rotate(-.35deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item:nth-child(even) {
+  transform: rotate(.28deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item.is-crisis {
+  border-color: rgba(154, 74, 42, .45);
+  background: #fff8ef;
+  box-shadow: 1.5px 2px 0 rgba(154, 74, 42, .12), inset 3px 0 0 #d48a3a;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .obj-pareja-fotos {
+  display: inline-flex;
+  align-items: center;
+  gap: .12rem;
+  flex: 0 0 auto;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .obj-pareja-enlace {
+  display: inline-flex;
+  width: 18px;
+  height: 16px;
+  flex: 0 0 18px;
+  margin: 0 .05rem;
+  background: #e8385a;
+  clip-path: polygon(50% 100%, 0 38%, 0 18%, 22% 0, 50% 16%, 78% 0, 100% 18%, 100% 38%);
+  border: 1.5px solid #8f2f52;
+  box-sizing: border-box;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .obj-pareja-nombres {
+  font-family: Caveat, cursive;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #2c261f;
+  line-height: 1.15;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-crisis {
+  margin: .1rem 0 0;
+  font-family: Nunito, sans-serif;
+  font-size: .66rem;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #9a4a2a;
+}

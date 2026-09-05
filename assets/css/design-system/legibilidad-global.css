@@ -1,4 +1,4 @@
-﻿/* LEGIBILIDAD-GLOBAL-v1 — pasada tipográfica sin tocar layout.
+/* LEGIBILIDAD-GLOBAL-v1 — pasada tipográfica sin tocar layout.
 
 
 
@@ -7,460 +7,323 @@
 
 
    Tutorial: complementa TUTORIAL-LEGIBILIDAD-v6; no altera marco fijo. */
-
-
-
-
-
-
-
 /* === Títulos principales / display === */
-
-
-
-.play-v3:has(.game-shell) .obj-dia-hora,
-
-
-
-.play-v3:has(.game-shell) .obj-dinero-val {
-
-
-
-  font-size: var(--aht-type-body) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .obj-dia-num {
-
-
-
-  font-size: var(--aht-type-secondary) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .obj-dia-dow,
-
-
-
-.play-v3:has(.game-shell) .obj-dinero-lbl {
-
-
-
-  font-size: var(--aht-type-caption) !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Inicio: títulos de bloque === */
-
-
-
-.play-v3:has(.game-shell) .enc-mov-tit,
-
-
-
-.play-v3:has(.game-shell) .pp-mov-tit,
-
-
-
-.play-v3:has(.game-shell) .obj-misiones-papel-tit,
-
-
-
-.play-v3:has(.game-shell) .zona-tit-parejas,
-
-
-
-.play-v3:has(.game-shell) .obj-cotilleo-tit,
-
-
-
-.play-v3:has(.game-shell) .obj-proximo-tit,
-
-
-
-.play-v3:has(.game-shell) .obj-vecinos-tit {
-
-
-
-  font-size: var(--aht-type-block) !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Cotilleo teaser === */
-
-
-
-.play-v3:has(.game-shell) .obj-cotilleo-txt {
-
-
-
-  font-size: var(--aht-type-body) !important;
-
-
-
-  line-height: 1.38 !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Parejas === */
-
-
-
-.play-v3:has(.game-shell) .obj-pareja-nombres {
-
-
-
-  font-size: var(--aht-type-name) !important;
-
-
-
-  line-height: 1.28 !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .obj-parejas-vacio,
-
-
-
-.play-v3:has(.game-shell) .obj-parejas-list p.muted,
-
-
-
-.play-v3:has(.game-shell) .obj-resumen {
-
-
-
-  font-size: var(--aht-type-secondary) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .obj-parejas-tab,
-
-
-
-.play-v3:has(.game-shell) .obj-pestaña,
-
-
-
-.play-v3:has(.game-shell) .pareja-crisis-sello {
-
-
-
-  font-size: var(--aht-type-caption) !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Planes en curso / próximos (tarjetas) === */
-
-
-
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-nombres,
-
-
-
-.play-v3:has(.game-shell) .proxplanes-movil .pp-mov-nombres {
-
-
-
-  font-size: 0.875rem !important;
-
-
-
-  line-height: 1.2 !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-lugar,
-
-
-
-.play-v3:has(.game-shell) .proxplanes-movil .pp-mov-lugar,
-
-
-
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-estado,
-
-
-
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-indice {
-
-
-
-  font-size: var(--aht-type-secondary) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-hora,
-
-
-
-.play-v3:has(.game-shell) .proxplanes-movil .pp-mov-hora {
-
-
-
-  font-size: var(--aht-type-caption) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .encursos-movil .enc-mov-cta {
-
-
-
-  font-size: var(--aht-type-caption) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .plan-seccion-ver,
-
-
-
-.play-v3:has(.game-shell) .obj-planes-prox-ver {
-
-
-
-  display: none !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .obj-proximo-body,
-
-
-
-.play-v3:has(.game-shell) .obj-proximo-vacio,
-
-
-
-.play-v3:has(.game-shell) .prox-nombres,
-
-
-
-.play-v3:has(.game-shell) .prox-meta {
-
-
-
-  font-size: var(--aht-type-secondary) !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Misiones (Inicio strip) === */
-
-
-
-.play-v3:has(.game-shell) .obj-misiones-papel-tit::before {
-
-
-
-  font-size: var(--aht-type-secondary) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .mision-strip-txt,
-
-
-
-.play-v3:has(.game-shell) .obj-misiones-vacio {
-
-
-
-  font-size: var(--aht-type-body) !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3:has(.game-shell) .mision-strip-ico {
-
-
-
-  font-size: var(--aht-type-caption) !important;
-
-
-
-}
-
-
-
-
-
-
-
 /* === Capa Misiones (modal) === */
+/* === Vecinos / buzón preview (Inicio) === */
+/* === Tutorial ? AUTORIDAD CAN�NICA: play-v3-tutorial-ds.css === */
+/* Badge contador planes (Próximos / En curso) */
+/* === Mensajitos: titulo VECINOS + texto legible + sin degradados === */
+/* === Mensajitos v2: tipografia = vecinos (.vec-tab 1.05rem) + marcar leido mas arriba === */
+/* Desktop: mismo aire tabs ? marcar le�do que en m�vil (avisos .phone tabs mb 12px) */
+/* MODAL-STACK-v4 - bleed-through fix:
+   v3 missed display:contents children: .inicio-desktop-left / .inicio-desktop-right
+   are real grid siblings of .inicio-map-host but were never demoted to z-index:0. */
+/* All siblings of .inicio-map-host that are NOT the map-host → z-index:0 */
+
+.play-v3 .obj-dia-hora,
 
 
+
+.play-v3 .obj-dinero-val {
+
+
+
+  font-size: var(--aht-type-body);
+
+
+
+}
+
+.play-v3 .obj-dia-num {
+
+
+
+  font-size: var(--aht-type-secondary);
+
+
+
+}
+
+.play-v3 .obj-dia-dow,
+
+
+
+.play-v3 .obj-dinero-lbl {
+
+
+
+  font-size: var(--aht-type-caption);
+
+
+
+}
+
+.play-v3 .enc-mov-tit,
+
+
+
+.play-v3 .pp-mov-tit,
+
+
+
+.play-v3 .obj-misiones-papel-tit,
+
+
+
+.play-v3 .zona-tit-parejas,
+
+
+
+.play-v3 .obj-cotilleo-tit,
+
+
+
+.play-v3 .obj-proximo-tit,
+
+
+
+.play-v3 .obj-vecinos-tit {
+
+
+
+  font-size: var(--aht-type-block);
+
+
+
+}
+
+.play-v3 .obj-cotilleo-txt {
+
+
+
+  font-size: var(--aht-type-body);
+
+
+
+  line-height: 1.38;
+
+
+
+}
+
+.play-v3 .obj-pareja-nombres {
+
+
+
+  font-size: var(--aht-type-name);
+
+
+
+  line-height: 1.28;
+
+
+
+}
+
+.play-v3 .obj-parejas-vacio,
+
+
+
+.play-v3 .obj-parejas-list p.muted,
+
+
+
+.play-v3 .obj-resumen {
+
+
+
+  font-size: var(--aht-type-secondary);
+
+
+
+}
+
+.play-v3 .obj-parejas-tab,
+
+
+
+.play-v3 .obj-pestaña,
+
+
+
+.play-v3 .pareja-crisis-sello {
+
+
+
+  font-size: var(--aht-type-caption);
+
+
+
+}
+
+.play-v3 .encursos-movil .enc-mov-nombres,
+
+
+
+.play-v3 .proxplanes-movil .pp-mov-nombres {
+
+
+
+  font-size: 0.875rem;
+
+
+
+  line-height: 1.2;
+
+
+
+}
+
+.play-v3 .encursos-movil .enc-mov-lugar,
+
+
+
+.play-v3 .proxplanes-movil .pp-mov-lugar,
+
+
+
+.play-v3 .encursos-movil .enc-mov-estado,
+
+
+
+.play-v3 .encursos-movil .enc-mov-indice {
+
+
+
+  font-size: var(--aht-type-secondary);
+
+
+
+}
+
+.play-v3 .encursos-movil .enc-mov-hora,
+
+
+
+.play-v3 .proxplanes-movil .pp-mov-hora {
+
+
+
+  font-size: var(--aht-type-caption);
+
+
+
+}
+
+.play-v3 .encursos-movil .enc-mov-cta {
+
+
+
+  font-size: var(--aht-type-caption);
+
+
+
+}
+
+.play-v3 .plan-seccion-ver,
+
+
+
+.play-v3 .obj-planes-prox-ver {
+
+
+
+  display: none;
+
+
+
+}
+
+.play-v3 .obj-proximo-body,
+
+
+
+.play-v3 .obj-proximo-vacio,
+
+
+
+.play-v3 .prox-nombres,
+
+
+
+.play-v3 .prox-meta {
+
+
+
+  font-size: var(--aht-type-secondary);
+
+
+
+}
+
+.play-v3 .obj-misiones-papel-tit::before {
+
+
+
+  font-size: var(--aht-type-secondary);
+
+
+
+}
+
+.play-v3 .mision-strip-txt,
+
+
+
+.play-v3 .obj-misiones-vacio {
+
+
+
+  font-size: var(--aht-type-body);
+
+
+
+}
+
+.play-v3 .mision-strip-ico {
+
+
+
+  font-size: var(--aht-type-caption);
+
+
+
+}
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top::before {
 
 
 
-  font-size: var(--aht-type-caption) !important;
+  font-size: var(--aht-type-caption);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit {
 
 
 
-  font-size: var(--aht-type-display) !important;
+  font-size: var(--aht-type-display);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-sub {
 
 
 
-  font-size: var(--aht-type-secondary) !important;
+  font-size: var(--aht-type-secondary);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
 
@@ -470,103 +333,59 @@
 
 
 
-  font-size: var(--aht-type-body) !important;
+  font-size: var(--aht-type-body);
 
 
 
-  line-height: 1.35 !important;
+  line-height: 1.35;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-txt {
 
 
 
-  font-size: var(--aht-type-body) !important;
+  font-size: var(--aht-type-body);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado {
 
 
 
-  font-size: var(--aht-type-caption) !important;
+  font-size: var(--aht-type-caption);
 
 
 
 }
 
+.play-v3 .vecinos-stat,
 
 
 
+.play-v3 .obj-pueblo-txt,
 
 
 
-/* === Vecinos / buzón preview (Inicio) === */
+.play-v3 .obj-buzon-preview {
 
 
 
-.play-v3:has(.game-shell) .vecinos-stat,
-
-
-
-.play-v3:has(.game-shell) .obj-pueblo-txt,
-
-
-
-.play-v3:has(.game-shell) .obj-buzon-preview {
-
-
-
-  font-size: var(--aht-type-secondary) !important;
+  font-size: var(--aht-type-secondary);
 
 
 
 }
 
+.play-v3 .plan-seccion-cnt {
 
 
 
-
-
-
-/* === Tutorial ? AUTORIDAD CAN�NICA: play-v3-tutorial-ds.css === */
-
-
-
-
-
-
-
-
-
-
-
-/* Badge contador planes (Próximos / En curso) */
-
-
-
-.play-v3:has(.game-shell) .plan-seccion-cnt {
-
-
-
-  display: inline-flex !important;
+  display: inline-flex;
 
 
 
@@ -594,7 +413,7 @@
 
 
 
-  background: var(--ds-lavender-deep, #7c6bae) !important;
+  background: var(--ds-lavender-deep, #7c6bae);
 
 
 
@@ -606,27 +425,27 @@
 
 
 
-  font-family: Nunito, "Segoe UI", sans-serif !important;
+  font-family: Nunito, "Segoe UI", sans-serif;
 
 
 
-  font-size: 0.6875rem !important;
+  font-size: 0.6875rem;
 
 
 
-  font-weight: 800 !important;
+  font-weight: 800;
 
 
 
-  letter-spacing: 0 !important;
+  letter-spacing: 0;
 
 
 
-  color: #fff !important;
+  color: #fff;
 
 
 
-  line-height: 1 !important;
+  line-height: 1;
 
 
 
@@ -636,27 +455,15 @@
 
 }
 
-
-
-.play-v3:has(.game-shell) .plan-seccion-cnt[hidden] {
+.play-v3 .plan-seccion-cnt[hidden] {
 
 
 
-  display: none !important;
+  display: none;
 
 
 
 }
-
-
-
-
-
-
-
-/* === Mensajitos: titulo VECINOS + texto legible + sin degradados === */
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab .ds-modal-head,
 
@@ -666,25 +473,19 @@
 
 
 
-  width: 100% !important;
+  width: 100%;
 
 
 
-  justify-content: center !important;
+  justify-content: center;
 
 
 
-  text-align: center !important;
+  text-align: center;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .ds-modal-head .ds-modal-tit,
 
@@ -694,95 +495,73 @@
 
 
 
-  font-family: var(--ds-font-hand, "Caveat Brush", cursive) !important;
+  font-family: Caveat, cursive;
 
 
 
-  font-size: max(1.5rem, var(--aht-type-block, 1.35rem)) !important;
+  font-size: 1.85rem;
 
 
 
-  font-weight: 700 !important;
+  font-weight: 700;
 
 
 
-  font-style: normal !important;
+  font-style: italic;
 
 
 
-  text-transform: uppercase !important;
+  color: var(--ds-ink, #3b3028);
 
 
 
-  letter-spacing: 0.1em !important;
+  text-transform: uppercase;
 
 
 
-  color: var(--ds-pink-deep, #c85b78) !important;
+  letter-spacing: 0.4px;
 
 
 
-  transform: none !important;
+  line-height: 1.1;
 
 
 
-  text-align: center !important;
-
-
-
-  width: 100% !important;
-
-
-
-  margin: 0 !important;
-
-
-
-  padding: 0 !important;
+  margin: 0 0 6px;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
-  /* Autoridad: typography-reading.css */
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  font-style: normal !important;
 
 
 
-  line-height: 1.42 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body, 1rem);
+  line-height: 1.5;
 
 
 
-  color: var(--ds-ink, #3b3028) !important;
+  font-style: normal;
+
+
+
+  color: var(--ds-ink, #3b3028);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg,
 
 
 
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
 
 
 
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida,
 
 
 
@@ -794,19 +573,17 @@
 
 
 
-  background: var(--ds-paper-card, #fffdf7) !important;
+  background: var(--ds-paper-card, #fffdf7);
 
 
 
-  background-image: none !important;
+  background-image: none;
 
 
 
 }
 
-
-
-
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
 
 
 
@@ -814,77 +591,55 @@
 
 
 
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
 
 
 
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
+  background: var(--ds-pink-soft, #fff0f4);
 
 
 
-  background: var(--ds-pink-soft, #fff0f4) !important;
+  background-image: none;
 
 
 
-  background-image: none !important;
-
-
-
-  border-color: var(--ds-pink-deep, #c85b78) !important;
+  border-color: var(--ds-pink-deep, #c85b78);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.leida {
 
 
 
-  background: #fff9f0 !important;
+  background: #fff9f0;
 
 
 
-  background-image: none !important;
+  background-image: none;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .mensajitos-tab.is-on,
 
 
 
-.play-v3:has(.game-shell) .mensajitos-tab.is-on {
+.play-v3 .mensajitos-tab.is-on {
 
 
 
-  background: var(--ds-pink, #e86b8f) !important;
+  background: var(--ds-pink, #e86b8f);
 
 
 
-  background-image: none !important;
+  background-image: none;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir,
 
@@ -894,7 +649,7 @@
 
 
 
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--abrir,
 
 
 
@@ -902,25 +657,19 @@
 
 
 
-  background: var(--ds-pink, #e86b8f) !important;
+  background: var(--ds-pink, #e86b8f);
 
 
 
-  background-image: none !important;
+  background-image: none;
 
 
 
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, 0.22) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, 0.22);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta--ver,
 
@@ -938,187 +687,63 @@
 
 
 
-  background: var(--ds-lavender, #c5b8e8) !important;
+  background: var(--ds-lavender, #c5b8e8);
 
 
 
-  background-image: none !important;
+  background-image: none;
 
 
 
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, 0.18) !important;
+  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, 0.18);
 
 
 
 }
-
-
-
-
-
-
-
-/* === Mensajitos v2: tipografia = vecinos (.vec-tab 1.05rem) + marcar leido mas arriba === */
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab {
 
 
 
-  margin-bottom: 4px !important;
+  margin-bottom: 4px;
 
 
 
-  padding-bottom: 0 !important;
+  padding-bottom: 0;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
 
 
 
-  margin-bottom: 2px !important;
+  margin-bottom: 2px;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-toolbar {
 
 
 
-  margin: -2px 0 6px !important;
+  margin: -2px 0 6px;
 
 
 
-  padding: 0 2px !important;
+  padding: 0 2px;
 
 
 
-  min-height: 0 !important;
-
-
-
-}
-
-
-
-
-
-
-
-/* Desktop: mismo aire tabs ? marcar le�do que en m�vil (avisos .phone tabs mb 12px) */
-
-
-
-@media (min-width: 769px) {
-
-
-
-  .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
-
-
-
-    margin-bottom: 10px !important;
-
-
-
-  }
-
-
-
-
-
-
-
-  .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-toolbar {
-
-
-
-    margin-top: 0 !important;
-
-
-
-    margin-bottom: 8px !important;
-
-
-
-  }
+  min-height: 0;
 
 
 
 }
 
-
-
-
-
-
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .ds-modal-head .ds-modal-tit,
-
-
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit {
-
-
-
-  font-family: Caveat, cursive !important;
-
-
-
-  font-size: 1.85rem !important;
-
-
-
-  font-weight: 700 !important;
-
-
-
-  font-style: italic !important;
-
-
-
-  color: var(--ds-ink, #3b3028) !important;
-
-
-
-  text-transform: uppercase !important;
-
-
-
-  letter-spacing: 0.4px !important;
-
-
-
-  line-height: 1.1 !important;
-
-
-
-  margin: 0 0 6px !important;
-
-
-
-}
-
-
-
-
+.play-v3 .mensajitos-tab,
 
 
 
@@ -1126,50 +751,34 @@
 
 
 
-.play-v3:has(.game-shell) .mensajitos-tab,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tab {
 
 
 
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .mensajitos-tab {
+  font: 700 1.05rem/1 Caveat, cursive;
 
 
 
-  font: 700 1.05rem/1 Caveat, cursive !important;
+  letter-spacing: 0.5px;
 
 
 
-  letter-spacing: 0.5px !important;
+  text-transform: uppercase;
 
 
 
-  text-transform: uppercase !important;
-
-
-
-  min-height: 44px !important;
+  min-height: 44px;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-leer-todos-txt {
-  font: 700 .85rem/1.2 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  letter-spacing: 0.3px !important;
-  color: var(--ds-ink, #3b3028) !important;
+  font: 700 .85rem/1.2 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  letter-spacing: 0.3px;
+  color: var(--ds-ink, #3b3028);
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de,
 
@@ -1179,104 +788,54 @@
 
 
 
-  font: 700 1.05rem/1.15 Caveat, cursive !important;
+  font: 700 1.05rem/1.15 Caveat, cursive;
 
 
 
-  color: var(--ds-ink, #3b3028) !important;
+  color: var(--ds-ink, #3b3028);
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando {
 
 
 
-  font-size: 1.05rem !important;
-  line-height: 1.25 !important;
+  font-size: 1.05rem;
+  line-height: 1.25;
 
 
 
-  color: var(--ds-text-muted, #7a6a5c) !important;
+  color: var(--ds-text-muted, #7a6a5c);
 
 
 
-  letter-spacing: 0.02em !important;
-
-
-
-}
-
-
-
-
-
-
-
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
-
-
-
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body, 1rem) !important;
-  line-height: 1.5 !important;
-
-
-
-  font-style: normal !important;
-
-
-
-  color: var(--ds-ink, #3b3028) !important;
+  letter-spacing: 0.02em;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag--nuevo {
 
 
 
-  font: 700 1.05rem/1.1 Caveat, cursive !important;
+  font: 700 1.05rem/1.1 Caveat, cursive;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-flag--visto {
 
 
 
-  font: 700 1.05rem/1.1 Caveat, cursive !important;
+  font: 700 1.05rem/1.1 Caveat, cursive;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
 
@@ -1294,17 +853,11 @@
 
 
 
-  font: 800 1.05rem/1.2 Nunito, sans-serif !important;
+  font: 800 1.05rem/1.2 Nunito, sans-serif;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cta,
 
@@ -1314,29 +867,23 @@
 
 
 
-.play-v3:has(.game-shell) .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta {
+.play-v3 .play-root .aht-screen[data-aht-screen="buzon"] .carta-cta {
 
 
 
-  font: 700 1.05rem/1 Caveat, cursive !important;
+  font: 700 1.05rem/1 Caveat, cursive;
 
 
 
-  letter-spacing: 0.5px !important;
+  letter-spacing: 0.5px;
 
 
 
-  text-transform: uppercase !important;
+  text-transform: uppercase;
 
 
 
 }
-
-
-
-
-
-
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint,
 
@@ -1350,21 +897,14 @@
 
 
 
-  font-weight: 700 !important;
-  font-size: 1.05rem !important;
-  line-height: 1.28 !important;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1.28;
 
 
 
 }
 
-
-
-/* MODAL-STACK-v4 - bleed-through fix:
-   v3 missed display:contents children: .inicio-desktop-left / .inicio-desktop-right
-   are real grid siblings of .inicio-map-host but were never demoted to z-index:0. */
-
-/* All siblings of .inicio-map-host that are NOT the map-host → z-index:0 */
 .play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .game-top,
 .play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-desktop-layout,
 .play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-desktop-left,
@@ -1387,8 +927,6 @@
 
 }
 
-
-
 .play-v3:has(.play-root[data-capa]:not([data-capa=""])) .inicio-stage > .inicio-map-host,
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .inicio-stage > .inicio-map-host {
@@ -1400,8 +938,6 @@
   isolation: isolate;
 
 }
-
-
 
 .play-v3:has(.play-root[data-capa]:not([data-capa=""])) .control-audio,
 
@@ -1419,8 +955,8 @@
 
 .play-v3:has(.play-root[data-consulta]:not([data-consulta=""])) .plan-notif {
 
-  z-index: 40 !important;
+  z-index: 40;
 
-  pointer-events: none !important;
+  pointer-events: none;
 
 }

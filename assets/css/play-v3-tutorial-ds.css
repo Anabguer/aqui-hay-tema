@@ -9,213 +9,246 @@
    capas-ds.css debe alterar selectores .tut-*.
    El tutorial NO es una capa (.capa). NO usa data-capa.
    ============================================================ */
-
 /* --- 1. OVERLAY --- */
+/* --- 2. SHELL / PAPEL — misma geometria en las 5 pantallas --- */
+/* Override capas-ds.css scrapbook border on tutorial papel */
+/* --- 3. ZONA HEADER (cabecera) --- */
+/* --- 4. ZONA CONTENT (cuerpo scrollable) --- */
+/* --- 4b. DISTRIBUCION VERTICAL POR PASO --- */
+/* --- 5. ZONA FOOTER (pie fijo) --- */
+/* --- 6. HERO / ILUSTRACION --- */
+/* --- 6b. BADGE "PRIMEROS PASOS" --- */
+/* --- 6c. DECORACIONES --- */
+/* --- 7. TITULO PRINCIPAL DE PAGINA ---
+   "Bienvenida al pueblo" / "Tus primeros vecinos" / "Lo basico" / etc.
+   MISMA fuente, tamano, peso, posicion en las 5 pantallas.
+   Nota: selector con .tut-papel para ganar a capas-ds.css. */
+/* --- 8. TEXTO DE LECTURA — Nunito SIEMPRE --- */
+/* --- 9. TITULO DE ACCION / CONCEPTO ---
+   OBSERVA / PROPON / MIRA / MAPA / VECINOS / etc.
+   Jerarquia comun: Caveat bold. */
+/* Icon cards (paso 1: OBSERVA/PROPON/MIRA) */
+/* Row icons (paso 3: MAPA/VECINOS/MENSAJITOS/NUEVO PLAN) */
+/* --- 10. BLOQUES / LISTA --- */
+/* Inline style (paso 2: personalidad/gustos/cosas raras) */
+/* --- 11. CARAS (paso 2) --- */
+/* --- 12. TAREAS / POLAROID (paso 4) --- */
+/* --- 13. PROGRESO (dots) --- */
+/* --- 14b. ATRAS: texto limpio (sin pseudo-decoracion) --- */
+/* --- 14. NAVEGACION (botones ATRAS / SIGUIENTE) --- */
+/* Override capas-ds.css pink CTA on tutorial */
+/* --- 15. SALTAR --- */
+/* --- 16. FINALE (pantalla 5 post-tutorial) --- */
+/* --- 17. ESTADOS / INTERACCION --- */
+/* --- 18. MICROANIMACIONES --- */
+/* --- 18b. CABECERA FIJA + FINALE PIE (Neni) --- */
+/* --- 19. RESPONSIVE: DESKTOP --- */
+/* --- 20. RESPONSIVE: MOVIL (max-width 768px) --- */
+
 .play-v3 .tut-intro,
 .play-v3 .tut-finale {
-  display: grid !important;
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 520 !important;
-  place-items: center !important;
-  background: var(--tut-overlay, rgba(30, 25, 22, 0.44)) !important;
-  pointer-events: auto !important;
-  box-sizing: border-box !important;
+  display: grid;
+  position: fixed;
+  inset: 0;
+  z-index: 520;
+  place-items: center;
+  background: var(--tut-overlay, rgba(30, 25, 22, 0.44));
+  pointer-events: auto;
+  box-sizing: border-box;
 }
 
 .tut-finale[hidden] {
-  display: none !important;
+  display: none;
 }
+
 .play-v3 .tut-intro[hidden] {
-  display: none !important;
+  display: none;
 }
 
-/* --- 2. SHELL / PAPEL — misma geometria en las 5 pantallas --- */
 .play-v3 .tut-intro .tut-papel,
 .play-v3 .tut-intro .tut-papel,
 .play-v3 .tut-finale .tut-papel {
-  width: min(92vw, 380px) !important;
-  height: min(87dvh, 580px) !important;
-  min-height: min(87dvh, 580px) !important;
-  max-height: min(87dvh, 580px) !important;
-  box-sizing: border-box !important;
-  margin: 0 !important;
-  position: relative !important;
-  transform: none !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  background: var(--tut-shell-bg, #FCFBFE) !important;
-  background-image: none !important;
-  border: 1px solid var(--tut-border, #D8D1DE) !important;
-  border-radius: 16px !important;
-  box-shadow: var(--tut-shadow, 0 8px 24px rgba(48, 40, 58, 0.20)) !important;
-  color: var(--tut-ink, #3b3028) !important;
-  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  width: min(92vw, 380px);
+  height: min(87dvh, 580px);
+  min-height: min(87dvh, 580px);
+  max-height: min(87dvh, 580px);
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  transform: none;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--tut-shell-bg, #FCFBFE);
+  background-image: none;
+  border: 1px solid var(--tut-border, #D8D1DE);
+  border-radius: 16px;
+  box-shadow: var(--tut-shadow, 0 8px 24px rgba(48, 40, 58, 0.20));
+  color: var(--tut-ink, #3b3028);
+  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif);
 }
-/* Override capas-ds.css scrapbook border on tutorial papel */
+
 .play-v3 .tut-papel {
-  border: 1px solid var(--tut-border, #D8D1DE) !important;
-  border-radius: 16px !important;
-  overflow: hidden !important;
+  border: 1px solid var(--tut-border, #D8D1DE);
+  border-radius: 16px;
+  overflow: hidden;
 }
 
 .play-v3 .tut-finale .tut-papel {
-  z-index: 521 !important;
-}
-
-.play-v3 .tut-finale .tut-papel {
-  z-index: 521 !important;
+  z-index: 521;
 }
 
 .play-v3 .tut-intro .tut-papel::before,
 .play-v3 .tut-intro .tut-papel::after,
 .play-v3 .tut-finale .tut-papel::before,
 .play-v3 .tut-finale .tut-papel::after {
-  display: none !important;
-  content: none !important;
+  display: none;
+  content: none;
 }
 
-/* --- 3. ZONA HEADER (cabecera) --- */
 .play-v3 .tut-papel-cabecera {
-  flex: 0 0 auto !important;
-  padding: 20px 12px 6px !important;
-  text-align: center;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: flex-start;
+ min-height: 104px;
+ max-height: 120px;
+ overflow: hidden;
+ padding: 14px 12px 4px;
 }
 
-/* --- 4. ZONA CONTENT (cuerpo scrollable) --- */
 .play-v3 .tut-papel-cuerpo {
-  flex: 1 1 auto !important;
-  min-height: 0 !important;
-  padding: 0 14px !important;
-  overflow: hidden !important;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: stretch;
 }
+
 .play-v3 .tut-papel-cuerpo::-webkit-scrollbar {
   display: none;
 }
-/* --- 4b. DISTRIBUCION VERTICAL POR PASO --- */
-.play-v3 .tut-papel-cuerpo {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: space-evenly !important;
-  align-items: stretch !important;
-}
-.play-v3 .tut-paso-1 .tut-papel-cuerpo { align-items: center !important; justify-content: space-evenly !important; }
-.play-v3 .tut-paso-1 .tut-intro-line, .play-v3 .tut-paso-1 .tut-intro-extra, .play-v3 .tut-paso-1 .tut-cierre { text-align: center !important; max-width: 100% !important; }
-.play-v3 .tut-paso-1 .tut-intro-line { margin: 0 0 8px !important; }
-.play-v3 .tut-paso-1 .tut-intro-extra { margin: 0 0 12px !important; }
-.play-v3 .tut-paso-1 .tut-bloques { width: 100% !important; max-width: 320px !important; margin: 8px auto 12px !important; gap: 6px !important; }
-.play-v3 .tut-paso-1 .tut-bloque { grid-template-columns: 48px minmax(0, 1fr) !important; gap: 2px 6px !important; padding: 8px 6px !important; }
-.play-v3 .tut-paso-1 .tut-bloque--card .tut-bloque-ico { width: 44px !important; height: 44px !important; }
-.play-v3 .tut-paso-1 .tut-cierre { margin-top: 10px !important; padding-top: 10px !important; }
-.play-v3 .tut-paso-vecinos .tut-papel-cuerpo, .play-v3 .tut-paso-2 .tut-papel-cuerpo { justify-content: space-evenly !important; align-items: center !important; }
+
+.play-v3 .tut-paso-1 .tut-papel-cuerpo { align-items: center; justify-content: space-evenly; }
+
+.play-v3 .tut-paso-1 .tut-intro-line, .play-v3 .tut-paso-1 .tut-intro-extra, .play-v3 .tut-paso-1 .tut-cierre { text-align: center; max-width: 100%; }
+
+.play-v3 .tut-paso-1 .tut-intro-line { margin: 0 0 8px; }
+
+.play-v3 .tut-paso-1 .tut-intro-extra { margin: 0 0 12px; }
+
+.play-v3 .tut-paso-1 .tut-bloques { width: 100%; max-width: 320px; margin: 8px auto 12px; gap: 6px; }
+
+.play-v3 .tut-paso-1 .tut-bloque { grid-template-columns: 48px minmax(0, 1fr); gap: 2px 6px; padding: 8px 6px; }
+
+.play-v3 .tut-paso-1 .tut-bloque--card .tut-bloque-ico { width: 44px; height: 44px; }
+
+.play-v3 .tut-paso-1 .tut-cierre { margin-top: 10px; padding-top: 10px; }
+
+.play-v3 .tut-paso-vecinos .tut-papel-cuerpo, .play-v3 .tut-paso-2 .tut-papel-cuerpo { justify-content: space-evenly; align-items: center; }
+
 .play-v3 .tut-paso-vecinos .tut-intro-line, .play-v3 .tut-paso-vecinos .tut-intro-extra, .play-v3 .tut-paso-vecinos .tut-bloques-pref, .play-v3 .tut-paso-vecinos .tut-cierre,
-.play-v3 .tut-paso-2 .tut-intro-line, .play-v3 .tut-paso-2 .tut-intro-extra, .play-v3 .tut-paso-2 .tut-bloques-pref, .play-v3 .tut-paso-2 .tut-cierre { text-align: center !important; width: 100% !important; }
-.play-v3 .tut-paso-vecinos .tut-intro-line, .play-v3 .tut-paso-2 .tut-intro-line { margin: 0 0 8px !important; }
-.play-v3 .tut-paso-vecinos .tut-caras, .play-v3 .tut-paso-2 .tut-caras { margin: 10px 0 12px !important; }
-.play-v3 .tut-paso-vecinos .tut-bloques-pref, .play-v3 .tut-paso-2 .tut-bloques-pref { margin: 8px 0 10px !important; }
-.play-v3 .tut-paso-vecinos .tut-bloques.is-inline, .play-v3 .tut-paso-2 .tut-bloques.is-inline { margin: 6px 0 10px !important; justify-content: center !important; }
-.play-v3 .tut-paso-vecinos .tut-cierre, .play-v3 .tut-paso-2 .tut-cierre { margin-top: 10px !important; }
-.play-v3 .tut-paso-3 .tut-papel-cuerpo { justify-content: space-evenly !important; align-items: center !important; }
-.play-v3 .tut-paso-3 .tut-intro-line, .play-v3 .tut-paso-3 .tut-intro-extra, .play-v3 .tut-paso-3 .tut-cierre { text-align: center !important; width: 100% !important; }
-.play-v3 .tut-paso-3 .tut-bloques { width: 100% !important; max-width: 340px !important; margin: 8px auto !important; gap: 4px !important; }
-.play-v3 .tut-paso-3 .tut-bloque { grid-template-columns: 46px minmax(0, 1fr) !important; gap: 2px 6px !important; padding: 6px 0 !important; }
-.play-v3 .tut-paso-3 .tut-bloque--row .tut-bloque-ico { width: 42px !important; height: 42px !important; }
-.play-v3 .tut-paso-misiones .tut-papel-cuerpo, .play-v3 .tut-paso-4 .tut-papel-cuerpo { justify-content: flex-start !important; align-items: center !important; gap: 6px !important; }
+.play-v3 .tut-paso-2 .tut-intro-line, .play-v3 .tut-paso-2 .tut-intro-extra, .play-v3 .tut-paso-2 .tut-bloques-pref, .play-v3 .tut-paso-2 .tut-cierre { text-align: center; width: 100%; }
+
+.play-v3 .tut-paso-vecinos .tut-intro-line, .play-v3 .tut-paso-2 .tut-intro-line { margin: 0 0 8px; }
+
+.play-v3 .tut-paso-vecinos .tut-caras, .play-v3 .tut-paso-2 .tut-caras { margin: 10px 0 12px; }
+
+.play-v3 .tut-paso-vecinos .tut-bloques-pref, .play-v3 .tut-paso-2 .tut-bloques-pref { margin: 8px 0 10px; }
+
+.play-v3 .tut-paso-vecinos .tut-bloques.is-inline, .play-v3 .tut-paso-2 .tut-bloques.is-inline { margin: 6px 0 10px; justify-content: center; }
+
+.play-v3 .tut-paso-vecinos .tut-cierre, .play-v3 .tut-paso-2 .tut-cierre { margin-top: 10px; }
+
+.play-v3 .tut-paso-3 .tut-papel-cuerpo { justify-content: space-evenly; align-items: center; }
+
+.play-v3 .tut-paso-3 .tut-intro-line, .play-v3 .tut-paso-3 .tut-intro-extra, .play-v3 .tut-paso-3 .tut-cierre { text-align: center; width: 100%; }
+
+.play-v3 .tut-paso-3 .tut-bloques { margin: 2px 0 4px; gap: 0; }
+
+.play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0; }
+
+.play-v3 .tut-paso-3 .tut-bloque--row .tut-bloque-ico { width: 42px; height: 42px; }
+
+.play-v3 .tut-paso-misiones .tut-papel-cuerpo, .play-v3 .tut-paso-4 .tut-papel-cuerpo { justify-content: flex-start; align-items: center; gap: 6px; }
+
 .play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-misiones .tut-cierre,
-.play-v3 .tut-paso-4 .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-extra, .play-v3 .tut-paso-4 .tut-cierre { text-align: center !important; width: 100% !important; }
-.play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-line { margin: 0 0 10px !important; }
-.play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 4px !important; }
-.play-v3 .tut-paso-misiones .tut-cierre, .play-v3 .tut-paso-4 .tut-cierre { margin-top: 12px !important; padding-top: 10px !important; }
+.play-v3 .tut-paso-4 .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-extra, .play-v3 .tut-paso-4 .tut-cierre { text-align: center; width: 100%; }
 
+.play-v3 .tut-paso-misiones .tut-intro-line, .play-v3 .tut-paso-4 .tut-intro-line { margin: 0 0 10px; }
 
+.play-v3 .tut-paso-misiones .tut-intro-extra, .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 4px; }
 
-/* --- 5. ZONA FOOTER (pie fijo) --- */
+.play-v3 .tut-paso-misiones .tut-cierre, .play-v3 .tut-paso-4 .tut-cierre { margin-top: 12px; padding-top: 10px; }
+
 .play-v3 .tut-papel-pie {
-  flex: 0 0 auto !important;
-  margin-top: auto !important;
-  padding: 6px 12px 10px !important;
-  border-top: 1px solid rgba(216, 209, 222, 0.55) !important;
-  background: var(--tut-header-bg, #FFFFFF) !important;
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding: 6px 12px 10px;
+  border-top: 1px solid rgba(216, 209, 222, 0.55);
+  background: var(--tut-header-bg, #FFFFFF);
 }
 
-/* --- 6. HERO / ILUSTRACION --- */
-.play-v3 .tut-hero {
-  margin: 0 0 6px;
-  text-align: center;
-}
-.play-v3 .tut-hero-img {
-  display: block;
-  width: 100%;
-  max-height: 72px;
-  object-fit: contain;
-  margin: 0 auto;
-}
+.play-v3 .tut-hero { margin: 0 0 4px; flex: 0 0 auto; }
 
-/* --- 6b. BADGE "PRIMEROS PASOS" --- */
+.play-v3 .tut-hero-img { max-height: 58px; width: auto; max-width: 100%; }
+
 .play-v3 .tut-badge {
-  display: inline-block !important;
-  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: 0.68rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.10em !important;
-  text-transform: uppercase !important;
-  color: var(--tut-lavender, #7a6a9a) !important;
-  background: rgba(196, 181, 232, 0.18) !important;
-  border: 1px solid rgba(196, 181, 232, 0.40) !important;
-  border-radius: 999px !important;
-  padding: 3px 12px 4px !important;
-  margin-bottom: 6px !important;
+  display: inline-block;
+  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: var(--tut-lavender, #7a6a9a);
+  background: rgba(196, 181, 232, 0.18);
+  border: 1px solid rgba(196, 181, 232, 0.40);
+  border-radius: 999px;
+  padding: 3px 12px 4px;
+  margin-bottom: 6px;
 }
 
-/* --- 6c. DECORACIONES --- */
 .play-v3 .tut-pin {
-  position: absolute !important;
-  top: 10px !important;
-  left: 14px !important;
-  width: 18px !important;
-  height: 18px !important;
-  border-radius: 50% !important;
-  background: radial-gradient(circle at 40% 35%, #F7A8A0, #E86B5A) !important;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.18), inset 0 -2px 3px rgba(0,0,0,0.10) !important;
-  z-index: 5 !important;
-}
-.play-v3 .tut-heart-deco {
-  display: inline-block !important;
-  font-size: 0.9rem !important;
-  color: var(--tut-coral-soft, #F9A89A) !important;
-  margin-left: 4px !important;
-  vertical-align: middle !important;
-}
-.play-v3 .tut-spark-deco {
-  display: inline-block !important;
-  font-size: 0.7rem !important;
-  color: var(--tut-lavender-soft, #C4B5E8) !important;
-  margin: 0 2px !important;
-  vertical-align: middle !important;
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #F7A8A0, #E86B5A);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.18), inset 0 -2px 3px rgba(0,0,0,0.10);
+  z-index: 5;
 }
 
-/* --- 7. TITULO PRINCIPAL DE PAGINA ---
-   "Bienvenida al pueblo" / "Tus primeros vecinos" / "Lo basico" / etc.
-   MISMA fuente, tamano, peso, posicion en las 5 pantallas.
-   Nota: selector con .tut-papel para ganar a capas-ds.css. */
+.play-v3 .tut-heart-deco {
+  display: inline-block;
+  font-size: 0.9rem;
+  color: var(--tut-coral-soft, #F9A89A);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+
+.play-v3 .tut-spark-deco {
+  display: inline-block;
+  font-size: 0.7rem;
+  color: var(--tut-lavender-soft, #C4B5E8);
+  margin: 0 2px;
+  vertical-align: middle;
+}
+
 .play-v3 .tut-papel .tut-titulo,
 .play-v3 .tut-papel h2[data-tut-tit],
 .play-v3 .tut-finale h2,
 .play-v3 .tut-titulo,
 .play-v3 .tut-fin-titulo {
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-weight: 700 !important;
-  font-size: 1.42rem !important;
-  line-height: 1.15 !important;
-  margin: 0 0 6px !important;
-  text-align: center !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.02em !important;
-  color: var(--tut-ink, #3b3028) !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-weight: 700;
+  font-size: 1.42rem;
+  line-height: 1.15;
+  margin: 0 0 6px;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--tut-ink, #3b3028);
 }
 
 .play-v3 .tut-tit-deco {
@@ -225,17 +258,19 @@
   margin: 0 0 4px;
   line-height: 1;
 }
-.play-v3 .tut-tit-spark {
-  display: inline !important;
-  font-size: 0.85rem !important;
-  color: var(--tut-coral-soft, #F9A89A) !important;
-  margin: 0 3px !important;
-  vertical-align: middle !important;
-}
-.play-v3 .tut-tit-spark::before { content: '\203A' !important; }
-.play-v3 .tut-tit-spark--r::before { content: '\2039' !important; }
 
-/* --- 8. TEXTO DE LECTURA — Nunito SIEMPRE --- */
+.play-v3 .tut-tit-spark {
+  display: inline;
+  font-size: 0.85rem;
+  color: var(--tut-coral-soft, #F9A89A);
+  margin: 0 3px;
+  vertical-align: middle;
+}
+
+.play-v3 .tut-tit-spark::before { content: '\203A'; }
+
+.play-v3 .tut-tit-spark--r::before { content: '\2039'; }
+
 .play-v3 .tut-intro-line,
 .play-v3 .tut-intro-extra,
 .play-v3 .tut-bloques-pref,
@@ -244,10 +279,10 @@
 .play-v3 .tut-fin-lead,
 .play-v3 .tut-fin-rest,
 .play-v3 .tut-texto {
-  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-style: normal !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
+  font-family: var(--tut-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .play-v3 .tut-intro-line,
@@ -256,426 +291,455 @@
 .play-v3 .tut-cierre,
 .play-v3 .tut-fin-lead,
 .play-v3 .tut-fin-rest {
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  color: var(--tut-ink, #2d2a26) !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--tut-ink, #2d2a26);
 }
 
-.play-v3 .tut-intro-line { font-size: 0.9rem !important; margin: 0 0 2px !important; }
-.play-v3 .tut-intro-extra { font-size: 0.82rem !important; margin: 0 0 4px !important; line-height: 1.35 !important; }
+.play-v3 .tut-intro-line { font-size: 0.9rem; margin: 0 0 2px; }
+
+.play-v3 .tut-intro-extra { font-size: 0.82rem; margin: 0 0 4px; line-height: 1.35; }
 
 .play-v3 .tut-bloques-pref {
-  font-size: 0.875rem !important;
-  font-weight: 700 !important;
-  color: var(--tut-ink, #2d2a26) !important;
-  margin: 0 0 4px !important;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--tut-ink, #2d2a26);
+  margin: 0 0 4px;
 }
 
 .play-v3 .tut-cierre {
-  margin: 4px 0 4px !important;
-  padding-top: 6px !important;
-  border-top: 1px solid rgba(196, 181, 232, 0.30) !important;
-  color: var(--tut-ink, #3b3028) !important;
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-style: italic !important;
-  font-size: 0.95rem !important;
-  font-weight: 500 !important;
+  margin: 4px 0 4px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(196, 181, 232, 0.30);
+  color: var(--tut-ink, #3b3028);
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-style: italic;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .play-v3 .tut-paso-1 .tut-titulo,
 .play-v3 .tut-paso-1 h2[data-tut-tit] {
-  color: var(--tut-coral, #E86B5A) !important;
-  font-size: 1.5rem !important;
+  color: var(--tut-coral, #E86B5A);
+  font-size: 1.5rem;
 }
 
 .play-v3 .tut-paso-vecinos .tut-caras {
-  justify-content: center !important;
-  gap: 10px !important;
+  justify-content: center;
+  gap: 10px;
 }
+
 .play-v3 .tut-paso-vecinos .tut-caras .tut-cara {
-  width: 52px !important;
-  height: 52px !important;
+  width: 52px;
+  height: 52px;
 }
+
 .play-v3 .tut-paso-vecinos .tut-bloques.is-inline {
-  justify-content: center !important;
+  justify-content: center;
 }
 
 .play-v3 .tut-fin-lead {
-  margin: 0 0 6px !important;
+  margin: 0 0 6px;
 }
+
 .play-v3 .tut-fin-rest {
-  margin: 0 !important;
+  margin: 0;
 }
-/* --- 9. TITULO DE ACCION / CONCEPTO ---
-   OBSERVA / PROPON / MIRA / MAPA / VECINOS / etc.
-   Jerarquia comun: Caveat bold. */
+
 .play-v3 .tut-bloque-tit {
-  display: block !important;
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.02em !important;
-  text-transform: uppercase !important;
-  margin-bottom: 2px !important;
-  color: var(--tut-coral, #E86B5A) !important;
+  display: block;
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  color: var(--tut-coral, #E86B5A);
 }
 
 .play-v3 .tut-bloque-sym {
-  font-size: 0.92rem !important;
-  line-height: 1.25 !important;
-  color: var(--tut-accent, #9B8AC4) !important;
-  font-weight: 800 !important;
-  text-align: center !important;
+  font-size: 0.92rem;
+  line-height: 1.25;
+  color: var(--tut-accent, #9B8AC4);
+  font-weight: 800;
+  text-align: center;
 }
 
-/* Icon cards (paso 1: OBSERVA/PROPON/MIRA) */
 .play-v3 .tut-bloque--card {
-  border: 1px solid rgba(216, 209, 222, 0.85) !important;
-  border-radius: 10px !important;
-  background: #FFFFFF !important;
+  border: 1px solid rgba(216, 209, 222, 0.85);
+  border-radius: 10px;
+  background: #FFFFFF;
 }
+
 .play-v3 .tut-bloque--card .tut-bloque-ico {
-  width: 52px !important;
-  height: 52px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  background: #FFFFFF !important;
-  background-image: none !important;
-  border-radius: 8px !important;
-  box-shadow: none !important;
-  overflow: hidden !important;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  background-image: none;
+  border-radius: 8px;
+  box-shadow: none;
+  overflow: hidden;
 }
+
 .play-v3 .tut-bloque--card .tut-bloque-ico img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  display: block !important;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
+
 .play-v3 .tut-bloque--card .tut-bloque-ico svg {
-  width: 48px !important;
-  height: 48px !important;
+  width: 48px;
+  height: 48px;
 }
 
-/* Row icons (paso 3: MAPA/VECINOS/MENSAJITOS/NUEVO PLAN) */
 .play-v3 .tut-bloque--row .tut-bloque-ico {
-  width: 48px !important;
-  height: 48px !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
+  width: 48px;
+  height: 48px;
+  border-radius: 10px;
+  overflow: hidden;
 }
+
 .play-v3 .tut-bloque--row .tut-bloque-ico img {
-  width: 100% !important;
-  height: 100% !important;
-  object-fit: contain !important;
-  display: block !important;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
+
 .play-v3 .tut-bloque--row .tut-bloque-ico svg {
-  width: 44px !important;
-  height: 44px !important;
+  width: 44px;
+  height: 44px;
 }
 
-/* --- 10. BLOQUES / LISTA --- */
 .play-v3 .tut-bloques {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 1px !important;
-  margin: 4px 0 6px !important;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin: 4px 0 6px;
 }
+
 .play-v3 .tut-bloque {
-  display: grid !important;
-  grid-template-columns: 76px minmax(0, 1fr) !important;
-  gap: 2px 10px !important;
-  padding: 6px 0 !important;
-  border-bottom: 1px solid rgba(216, 209, 222, 0.45) !important;
-  align-items: center !important;
+  display: grid;
+  grid-template-columns: 76px minmax(0, 1fr);
+  gap: 2px 10px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(216, 209, 222, 0.45);
+  align-items: center;
 }
+
 .play-v3 .tut-bloque:last-child {
-  border-bottom: 0 !important;
-  padding-bottom: 2px !important;
+  border-bottom: 0;
+  padding-bottom: 2px;
 }
-.play-v3 .tut-bloque-body { display: block !important; min-width: 0 !important; }
 
-/* Inline style (paso 2: personalidad/gustos/cosas raras) */
+.play-v3 .tut-bloque-body { display: block; min-width: 0; }
+
 .play-v3 .tut-bloques.is-inline {
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-  gap: 6px 8px !important;
-  margin-top: 4px !important;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-top: 4px;
 }
+
 .play-v3 .tut-bloques.is-inline .tut-bloque {
-  display: flex !important;
-  align-items: center !important;
-  gap: 4px !important;
-  border: 1px solid rgba(216, 209, 222, 0.65) !important;
-  border-bottom: 2px solid rgba(169, 154, 223, 0.35) !important;
-  border-radius: 8px !important;
-  padding: 4px 10px 5px !important;
-  background: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border: 1px solid rgba(216, 209, 222, 0.65);
+  border-bottom: 2px solid rgba(169, 154, 223, 0.35);
+  border-radius: 8px;
+  padding: 4px 10px 5px;
+  background: #FFFFFF;
 }
-.play-v3 .tut-bloques.is-inline .tut-bloque-body { display: inline !important; }
-.play-v3 .tut-bloques.is-inline .tut-bloque-txt { display: inline !important; font-size: 0.9rem !important; }
 
-/* --- 11. CARAS (paso 2) --- */
+.play-v3 .tut-bloques.is-inline .tut-bloque-body { display: inline; }
+
+.play-v3 .tut-bloques.is-inline .tut-bloque-txt { display: inline; font-size: 0.9rem; }
+
 .play-v3 .tut-caras {
-  display: flex !important;
-  justify-content: center !important;
-  align-items: flex-start !important;
-  gap: 10px !important;
-  margin: 6px 0 6px !important;
-}
-.play-v3 .tut-cara-wrap {
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  gap: 4px !important;
-}
-.play-v3 .tut-cara {
-  width: 64px !important;
-  height: 64px !important;
-  border-radius: 50% !important;
-  overflow: hidden !important;
-  border: 3px solid var(--tut-lavender-soft, #C4B5E8) !important;
-  background: #FFFFFF !important;
-  box-shadow: 0 2px 6px rgba(48, 40, 58, 0.08) !important;
-  display: grid !important;
-  place-items: center !important;
-  line-height: 0 !important;
-  flex-shrink: 0 !important;
-}
-.play-v3 .tut-cara img {
-  width: 100% !important;
-  height: 100% !important;
-  display: block !important;
-  object-fit: cover !important;
-}
-.play-v3 .tut-cara .cara-ini {
-  display: grid !important;
-  place-items: center !important;
-  width: 100% !important;
-  height: 100% !important;
-  font-weight: 800 !important;
-  font-size: 1.1rem !important;
-  background: #f3e8d4 !important;
-  color: var(--tut-ink, #2d2a26) !important;
-}
-.play-v3 .tut-cara-nombre {
-  font-size: 0.72rem !important;
-  font-weight: 800 !important;
-  letter-spacing: 0.02em !important;
-  color: var(--tut-ink, #2d2a26) !important;
-}
-.play-v3 .tut-cara-ico {
-  display: inline !important;
-  font-size: 0.65rem !important;
-  margin-left: 2px !important;
-  color: var(--tut-muted, #6b5f78) !important;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 6px 0 6px;
 }
 
-/* --- 12. TAREAS / POLAROID (paso 4) --- */
+.play-v3 .tut-cara-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.play-v3 .tut-cara {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid var(--tut-lavender-soft, #C4B5E8);
+  background: #FFFFFF;
+  box-shadow: 0 2px 6px rgba(48, 40, 58, 0.08);
+  display: grid;
+  place-items: center;
+  line-height: 0;
+  flex-shrink: 0;
+}
+
+.play-v3 .tut-cara img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.play-v3 .tut-cara .cara-ini {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  font-weight: 800;
+  font-size: 1.1rem;
+  background: #f3e8d4;
+  color: var(--tut-ink, #2d2a26);
+}
+
+.play-v3 .tut-cara-nombre {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--tut-ink, #2d2a26);
+}
+
+.play-v3 .tut-cara-ico {
+  display: inline;
+  font-size: 0.65rem;
+  margin-left: 2px;
+  color: var(--tut-muted, #6b5f78);
+}
+
 .play-v3 .tut-tareas {
-  display: flex !important;
-  justify-content: center !important;
-  gap: 8px !important;
-  margin: 6px 0 8px !important;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 6px 0 8px;
 }
+
 .play-v3 .tut-polaroid {
-  width: 88px !important;
-  height: 104px !important;
-  border: 1px solid var(--tut-border, #D8D1DE) !important;
-  border-radius: 8px !important;
-  background: #FFFFFF !important;
-  display: flex !important;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center !important;
-  position: relative !important;
+  width: 88px;
+  height: 104px;
+  border: 1px solid var(--tut-border, #D8D1DE);
+  border-radius: 8px;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
 }
+
 .play-v3 .tut-pol-q {
-  font-size: 1.5rem !important;
-  font-weight: 800 !important;
-  color: var(--tut-lavender, #7a6a9a) !important;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--tut-lavender, #7a6a9a);
 }
+
 .play-v3 .tut-pol-mark {
-  font-size: 0.6rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.06em !important;
-  color: var(--tut-muted, #6b5f78) !important;
-  margin-top: 2px !important;
+  font-size: 0.6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--tut-muted, #6b5f78);
+  margin-top: 2px;
 }
+
 .play-v3 .tut-pol-tape,
 .play-v3 .tut-pol-pin {
-  position: absolute !important;
-  top: -4px !important;
-  font-size: 0.55rem !important;
-  color: var(--tut-muted, #6b5f78) !important;
+  position: absolute;
+  top: -4px;
+  font-size: 0.55rem;
+  color: var(--tut-muted, #6b5f78);
 }
-.play-v3 .tut-pol-tape { left: 50% !important; transform: translateX(-50%) rotate(-3deg) !important; }
-.play-v3 .tut-pol-pin { right: 6px !important; }
 
-/* --- 13. PROGRESO (dots) --- */
+.play-v3 .tut-pol-tape { left: 50%; transform: translateX(-50%) rotate(-3deg); }
+
+.play-v3 .tut-pol-pin { right: 6px; }
+
 .play-v3 .tut-pasos {
-  display: flex !important;
-  gap: 5px !important;
-  margin: 0 0 8px !important;
+  display: flex;
+  gap: 5px;
+  margin: 0 0 8px;
 }
+
 .play-v3 .tut-pasos span {
-  flex: 1 !important;
-  height: 4px !important;
-  background: rgba(196, 181, 232, 0.35) !important;
-  border-radius: 2px !important;
-  transform-origin: left center !important;
+  flex: 1;
+  height: 4px;
+  background: rgba(196, 181, 232, 0.35);
+  border-radius: 2px;
+  transform-origin: left center;
 }
+
 .play-v3 .tut-pasos span.is-on {
-  background: var(--tut-coral, #E86B5A) !important;
+  background: var(--tut-coral, #E86B5A);
 }
 
-
-/* --- 14b. ATRAS: texto limpio (sin pseudo-decoracion) --- */
 .play-v3 .tut-acciones [data-tut-atras]::before,
 .play-v3 .tut-acciones [data-tut-atras]::after,
 .play-v3 .tut-acciones .cta.ghost[data-tut-atras]::before,
 .play-v3 .tut-acciones .cta.ghost[data-tut-atras]::after {
-  content: none !important;
-  display: none !important;
-}
-.play-v3 .tut-acciones [data-tut-atras] {
-  text-transform: uppercase !important;
+  content: none;
+  display: none;
 }
 
-/* --- 14. NAVEGACION (botones ATRAS / SIGUIENTE) --- */
+.play-v3 .tut-acciones [data-tut-atras] {
+  text-transform: uppercase;
+}
+
 .play-v3 .tut-acciones {
-  display: flex !important;
-  gap: 8px !important;
-  justify-content: flex-end !important;
-  align-items: center !important;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  align-items: center;
 }
+
 .play-v3 .tut-acciones .cta {
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-weight: 700 !important;
-  font-size: 1.05rem !important;
-  letter-spacing: 0.04em !important;
-  text-transform: uppercase !important;
-  border-radius: 10px !important;
-  box-shadow: none !important;
-  padding: 8px 18px !important;
-  border: none !important;
-  cursor: pointer !important;
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 10px;
+  box-shadow: none;
+  padding: 8px 18px;
+  border: none;
+  cursor: pointer;
 }
+
 .play-v3 .tut-acciones .cta.ghost {
-  background: #FFFFFF !important;
-  border: 1.5px solid var(--tut-lavender-soft, #C4B5E8) !important;
-  color: var(--tut-lavender, #7a6a9a) !important;
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-size: 1.05rem !important;
-  font-weight: 700 !important;
-  text-transform: uppercase !important;
-  letter-spacing: 0.04em !important;
+  background: #FFFFFF;
+  border: 1.5px solid var(--tut-lavender-soft, #C4B5E8);
+  color: var(--tut-lavender, #7a6a9a);
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
+
 .play-v3 .tut-acciones .cta:not(.ghost),
 .play-v3 .tut-cta-final,
 .play-v3 .tut-fin-cta {
-  background: var(--tut-coral-bg, linear-gradient(180deg, #F0856E, #E86B5A)) !important;
-  border: 1.5px solid var(--tut-coral-border, #D14D3C) !important;
-  color: #FFFFFF !important;
-  box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30)) !important;
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-size: 1.05rem !important;
+  background: var(--tut-coral-bg, linear-gradient(180deg, #F0856E, #E86B5A));
+  border: 1.5px solid var(--tut-coral-border, #D14D3C);
+  color: #FFFFFF;
+  box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30));
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-size: 1.05rem;
 }
-/* Override capas-ds.css pink CTA on tutorial */
+
 .play-v3 .tut-papel .tut-cta-final,
 .play-v3 .tut-finale .tut-cta-final,
 .play-v3 .tut-finale .cta {
-  background: var(--tut-coral-bg, linear-gradient(180deg, #F0856E, #E86B5A)) !important;
-  border: 1.5px solid var(--tut-coral-border, #D14D3C) !important;
-  color: #FFFFFF !important;
-  box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30)) !important;
-  font-family: var(--tut-font-hand, "Caveat", cursive) !important;
-  font-size: 1.05rem !important;
+  background: var(--tut-coral-bg, linear-gradient(180deg, #F0856E, #E86B5A));
+  border: 1.5px solid var(--tut-coral-border, #D14D3C);
+  color: #FFFFFF;
+  box-shadow: var(--tut-coral-shadow, 0 2px 6px rgba(209, 77, 60, 0.30));
+  font-family: var(--tut-font-hand, "Caveat", cursive);
+  font-size: 1.05rem;
 }
 
-/* --- 15. SALTAR --- */
 .play-v3 .tut-skip,
 .play-v3 .tut-papel > .tut-skip {
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  min-width: 0 !important;
-  width: auto !important;
-  height: auto !important;
-  padding: 5px 11px 6px !important;
-  border: 1px solid var(--tut-border, #D8D1DE) !important;
-  border-radius: 999px !important;
-  background: #FFFFFF !important;
-  box-shadow: 0 1px 3px rgba(48, 40, 58, 0.1) !important;
-  transform: none !important;
-  font: 700 0.72rem/1.1 Nunito, sans-serif !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
-  color: var(--tut-muted, #6b5f78) !important;
-  cursor: pointer !important;
-  z-index: 10 !important;
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  padding: 5px 11px 6px;
+  border: 1px solid var(--tut-border, #D8D1DE);
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow: 0 1px 3px rgba(48, 40, 58, 0.1);
+  transform: none;
+  font: 700 0.72rem/1.1 Nunito, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--tut-muted, #6b5f78);
+  cursor: pointer;
+  z-index: 10;
 }
-.play-v3 .tut-skip:hover { color: var(--tut-ink, #2d2a26) !important; }
 
-/* --- 16. FINALE (pantalla 5 post-tutorial) --- */
+.play-v3 .tut-skip:hover { color: var(--tut-ink, #2d2a26); }
+
 .play-v3 .tut-paso-5 .tut-papel-cuerpo {
-  justify-content: flex-start !important;
-  align-items: center !important;
-  padding-top: 4px !important;
-  padding-bottom: 4px !important;
-  gap: 4px !important;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  gap: 4px;
 }
+
 .play-v3 .tut-paso-5 .tut-titulo,
 .play-v3 .tut-paso-5 h2[data-tut-tit] {
-  margin: 0 0 4px !important;
+  margin: 0 0 4px;
 }
+
 .play-v3 .tut-paso-5 .tut-fin-lead,
 .play-v3 .tut-paso-5 .tut-fin-rest {
-  font-size: 0.85rem !important;
-  line-height: 1.4 !important;
-  margin: 0 0 4px !important;
-  text-align: center !important;
-  width: 100% !important;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  margin: 0 0 4px;
+  text-align: center;
+  width: 100%;
 }
+
 .play-v3 .tut-paso-5 .tut-fin-rest {
-  max-width: 90% !important;
-  margin: 0 auto !important;
-  text-align: left !important;
+  max-width: 90%;
+  margin: 0 auto;
+  text-align: left;
 }
+
 .play-v3 .tut-pasos--finale span {
-  flex: 1 1 0 !important;
-  max-width: 48px !important;
+  flex: 1 1 0;
+  max-width: 48px;
 }
+
 .play-v3 .tut-pasos--finale span.is-on {
-  background: var(--tut-coral, #E86B5A) !important;
+  background: var(--tut-coral, #E86B5A);
 }
 
-/* --- 17. ESTADOS / INTERACCION --- */
-body.play-v3[data-tut-activo="1"] .play-stage { pointer-events: none !important; }
-body.play-v3[data-tut-activo="1"] .tut-intro { pointer-events: auto !important; }
-body.play-v3[data-tut-activo="1"] .game-map-wrap,
-body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
+body.play-v3[data-tut-activo="1"] .play-stage { pointer-events: none; }
 
-/* --- 18. MICROANIMACIONES --- */
+body.play-v3[data-tut-activo="1"] .tut-intro { pointer-events: auto; }
+
+body.play-v3[data-tut-activo="1"] .game-map-wrap,
+body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto; }
+
 @keyframes tutFadeUp {
   from { opacity: 0; transform: translateY(7px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
 @keyframes tutPop {
   from { opacity: 0; transform: scale(0.88); }
   to { opacity: 1; transform: scale(1); }
 }
+
 @keyframes tutBarGrow {
   from { transform: scaleX(0); }
   to { transform: scaleX(1); }
 }
+
 .play-v3 .tut-papel.tut-anim .tut-titulo,
 .play-v3 .tut-papel.tut-anim h2[data-tut-tit] {
   animation: tutFadeUp .34s ease both;
 }
+
 .play-v3 .tut-papel.tut-anim .tut-intro-line,
 .play-v3 .tut-papel.tut-anim .tut-intro-extra,
 .play-v3 .tut-papel.tut-anim .tut-bloques-pref,
@@ -683,218 +747,50 @@ body.play-v3[data-tut-finale="1"] .game-map-wrap { z-index: auto !important; }
   animation: tutFadeUp .32s ease both;
   animation-delay: 50ms;
 }
+
 .play-v3 .tut-papel.tut-anim .tut-intro-extra { animation-delay: 90ms; }
+
 .play-v3 .tut-papel.tut-anim .tut-bloques-pref { animation-delay: 70ms; }
+
 .play-v3 .tut-papel.tut-anim .tut-cierre { animation-delay: 120ms; }
+
 .play-v3 .tut-papel .tut-anim-item {
   animation: tutFadeUp .3s ease both;
   animation-delay: var(--tut-delay, 0ms);
 }
+
 .play-v3 .tut-papel .tut-anim-pop {
   animation: tutPop .36s cubic-bezier(.2,.8,.3,1.15) both;
   animation-delay: var(--tut-delay, 0ms);
 }
+
 .play-v3 .tut-papel.tut-anim .tut-pasos span.is-on {
   animation: tutBarGrow .38s ease both;
 }
-.play-v3 .tut-papel.tut-anim .tut-pasos span.is-on:nth-child(2) { animation-delay: 40ms; }
-.play-v3 .tut-papel.tut-anim .tut-pasos span.is-on:nth-child(3) { animation-delay: 80ms; }
-.play-v3 .tut-papel.tut-anim .tut-pasos span.is-on:nth-child(4) { animation-delay: 120ms; }
-@media (prefers-reduced-motion: reduce) {
-  .play-v3 .tut-papel.tut-anim .tut-titulo,
-  .play-v3 .tut-papel.tut-anim h2[data-tut-tit],
-  .play-v3 .tut-papel.tut-anim .tut-intro-line,
-  .play-v3 .tut-papel.tut-anim .tut-intro-extra,
-  .play-v3 .tut-papel.tut-anim .tut-bloques-pref,
-  .play-v3 .tut-papel.tut-anim .tut-cierre,
-  .play-v3 .tut-papel .tut-anim-item,
-  .play-v3 .tut-papel .tut-anim-pop,
-  .play-v3 .tut-papel.tut-anim .tut-pasos span.is-on {
-    animation: none !important;
-  }
-}
 
-/* --- 18b. CABECERA FIJA + FINALE PIE (Neni) --- */
-.play-v3 .tut-papel-cabecera {
- display: flex !important;
- flex-direction: column !important;
- align-items: center !important;
- justify-content: flex-start !important;
- min-height: 104px !important;
- max-height: 120px !important;
- overflow: hidden !important;
- padding: 14px 12px 4px !important;
-}
-.play-v3 .tut-hero { margin: 0 0 4px !important; flex: 0 0 auto !important; }
-.play-v3 .tut-hero-img { max-height: 58px !important; width: auto !important; max-width: 100% !important; }
+.play-v3 .tut-papel.tut-anim .tut-pasos span.is-on:nth-child(2) { animation-delay: 40ms; }
+
+.play-v3 .tut-papel.tut-anim .tut-pasos span.is-on:nth-child(3) { animation-delay: 80ms; }
+
+.play-v3 .tut-papel.tut-anim .tut-pasos span.is-on:nth-child(4) { animation-delay: 120ms; }
+
 .play-v3 .tut-badge,
 .play-v3 .tut-pin,
-.play-v3 .tut-tit-deco { display: none !important; }
+.play-v3 .tut-tit-deco { display: none; }
+
 .play-v3 .tut-finale .tut-acciones--finale {
- justify-content: stretch !important;
- width: 100% !important;
+ justify-content: stretch;
+ width: 100%;
 }
+
 .play-v3 .tut-finale .tut-acciones--finale .tut-fin-cta {
- flex: 1 1 auto !important;
- width: 100% !important;
- margin: 0 !important;
+ flex: 1 1 auto;
+ width: 100%;
+ margin: 0;
 }
-.play-v3 .tut-paso-3 .tut-bloques { margin: 2px 0 4px !important; gap: 0 !important; }
-.play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0 !important; }
+
 .play-v3 .tut-paso-misiones .tut-tareas,
-.play-v3 .tut-paso-4 .tut-tareas { margin: 2px 0 8px !important; gap: 10px !important; justify-content: center !important; }
+.play-v3 .tut-paso-4 .tut-tareas { margin: 2px 0 8px; gap: 10px; justify-content: center; }
+
 .play-v3 .tut-paso-misiones .tut-polaroid,
-.play-v3 .tut-paso-4 .tut-polaroid { width: 92px !important; height: 110px !important; }
-
-/* --- 19. RESPONSIVE: DESKTOP --- */
-@media (min-width: 769px) {
-  body.play-v3[data-tut-activo="1"] .game-map-wrap,
-  body.play-v3[data-tut-finale="1"] .game-map-wrap {
-    z-index: 100000 !important;
-  }
-  body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro,
-  body.play-v3[data-tut-finale="1"] .game-map-wrap .play-root .tut-finale {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 9000 !important;
-    width: 100vw !important;
-    height: 100dvh !important;
-    max-height: 100dvh !important;
-    margin: 0 !important;
-    padding: 1rem !important;
-    box-sizing: border-box !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    background: var(--tut-overlay, rgba(30, 25, 22, 0.46)) !important;
-    pointer-events: auto !important;
-  }
-  body.play-v3[data-tut-activo="1"] .game-map-wrap .play-root .tut-intro .tut-papel,
-  body.play-v3[data-tut-finale="1"] .game-map-wrap .play-root .tut-finale .tut-papel {
-    width: min(92vw, 560px) !important;
-    height: min(88dvh, 580px) !important;
-    min-height: min(88dvh, 580px) !important;
-    max-height: min(88dvh, 580px) !important;
-    margin: 0 auto !important;
-    position: relative !important;
-    z-index: 9001 !important;
-  }
-  /* Override capas-ds.css 2rem title on desktop */
-  .play-v3 .tut-papel .tut-titulo,
-  .play-v3 .tut-papel h2[data-tut-tit],
-  .play-v3 .tut-finale h2 {
-    font-size: 1.5rem !important;
-    color: var(--tut-ink, #3b3028) !important;
-  }
-}
-
-/* --- 20. RESPONSIVE: MOVIL (max-width 768px) --- */
-@media (max-width: 768px) {
-  body.play-v3[data-tut-activo="1"] .tut-intro .tut-acciones,
-  body.play-v3[data-tut-finale="1"] .tut-finale .tut-acciones {
-    background: var(--tut-footer-bg, #EEE8FA) !important;
-  }
-  .play-v3 .tut-papel .tut-titulo,
-  .play-v3 .tut-papel h2[data-tut-tit],
-  .play-v3 .tut-finale h2 {
-    font-size: 1.28rem !important;
-    color: var(--tut-ink, #3b3028) !important;
-  }
-  .play-v3 .tut-cara { width: 56px !important; height: 56px !important; }
-  .play-v3 .tut-caras { gap: 8px !important; margin: 8px 0 10px !important; }
-
-  /* --- 20b. MOVIL: scroll interno + compactacion (pasos 1-5, finale) --- */
-  .play-v3 .tut-intro .tut-papel,
-  .play-v3 .tut-finale .tut-papel {
-    display: flex !important;
-    flex-direction: column !important;
-    overflow: hidden !important;
-  }
-  .play-v3 .tut-papel-cabecera {
-    flex-shrink: 0 !important;
-    min-height: 88px !important;
-    max-height: 108px !important;
-    padding: 10px 12px 2px !important;
-  }
-  .play-v3 .tut-hero { margin: 0 0 2px !important; }
-  .play-v3 .tut-hero-img { max-height: 52px !important; }
-  .play-v3 .tut-papel-cuerpo {
-    flex: 1 1 auto !important;
-    min-height: 0 !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none !important;
-    -ms-overflow-style: none !important;
-    padding: 0 10px !important;
-    justify-content: flex-start !important;
-    gap: 4px !important;
-  }
-  .play-v3 .tut-papel-cuerpo::-webkit-scrollbar {
-    display: none !important;
-    width: 0 !important;
-    height: 0 !important;
-  }
-  .play-v3 .tut-papel-pie {
-    flex-shrink: 0 !important;
-    flex: 0 0 auto !important;
-    padding: 4px 10px 8px !important;
-  }
-  .play-v3 .tut-papel .tut-titulo,
-  .play-v3 .tut-papel h2[data-tut-tit],
-  .play-v3 .tut-finale h2 {
-    margin: 0 0 2px !important;
-  }
-  .play-v3 .tut-intro-line { margin: 0 0 4px !important; }
-  .play-v3 .tut-intro-extra { margin: 0 0 6px !important; }
-  .play-v3 .tut-bloques-pref { margin: 4px 0 6px !important; }
-  .play-v3 .tut-cierre { margin-top: 6px !important; padding-top: 6px !important; }
-  .play-v3 .tut-paso-1 .tut-papel-cuerpo { justify-content: flex-start !important; }
-  .play-v3 .tut-paso-1 .tut-intro-line { margin: 0 0 4px !important; }
-  .play-v3 .tut-paso-1 .tut-intro-extra { margin: 0 0 6px !important; }
-  .play-v3 .tut-paso-1 .tut-bloques { margin: 4px auto 6px !important; gap: 4px !important; }
-  .play-v3 .tut-paso-1 .tut-bloque { padding: 6px 4px !important; }
-  .play-v3 .tut-paso-1 .tut-cierre { margin-top: 6px !important; padding-top: 6px !important; }
-  .play-v3 .tut-paso-vecinos .tut-intro-line,
-  .play-v3 .tut-paso-2 .tut-intro-line { margin: 0 0 4px !important; }
-  .play-v3 .tut-paso-vecinos .tut-caras,
-  .play-v3 .tut-paso-2 .tut-caras { margin: 6px 0 8px !important; }
-  .play-v3 .tut-paso-vecinos .tut-bloques-pref,
-  .play-v3 .tut-paso-2 .tut-bloques-pref { margin: 4px 0 6px !important; }
-  .play-v3 .tut-paso-vecinos .tut-bloques.is-inline,
-  .play-v3 .tut-paso-2 .tut-bloques.is-inline { margin: 4px 0 6px !important; }
-  .play-v3 .tut-paso-vecinos .tut-cierre,
-  .play-v3 .tut-paso-2 .tut-cierre { margin-top: 6px !important; }
-  .play-v3 .tut-paso-3 .tut-papel-cuerpo { justify-content: flex-start !important; }
-  .play-v3 .tut-paso-3 .tut-bloques { margin: 4px auto !important; gap: 2px !important; }
-  .play-v3 .tut-paso-3 .tut-bloque { padding: 4px 0 !important; }
-  .play-v3 .tut-paso-misiones .tut-intro-line,
-  .play-v3 .tut-paso-4 .tut-intro-line { margin: 0 0 6px !important; }
-  .play-v3 .tut-paso-misiones .tut-intro-extra,
-  .play-v3 .tut-paso-4 .tut-intro-extra { margin: 0 0 2px !important; }
-  .play-v3 .tut-paso-misiones .tut-cierre,
-  .play-v3 .tut-paso-4 .tut-cierre { margin-top: 8px !important; padding-top: 6px !important; }
-  .play-v3 .tut-paso-misiones .tut-tareas,
-  .play-v3 .tut-paso-4 .tut-tareas { margin: 2px 0 6px !important; gap: 8px !important; }
-  .play-v3 .tut-paso-5 .tut-papel-cuerpo {
-    gap: 2px !important;
-    padding-top: 2px !important;
-    padding-bottom: 2px !important;
-  }
-  .play-v3 .tut-paso-5 .tut-titulo,
-  .play-v3 .tut-paso-5 h2[data-tut-tit] { margin: 0 0 2px !important; }
-  .play-v3 .tut-paso-5 .tut-fin-lead,
-  .play-v3 .tut-paso-5 .tut-fin-rest { margin: 0 0 2px !important; }
-  .play-v3 .tut-finale .tut-papel-cuerpo { justify-content: flex-start !important; }}
-
-@media (max-width: 520px) {
-  .play-v3 .tut-papel-cabecera { padding: 10px 12px 2px !important; }
-  .play-v3 .tut-papel-cuerpo { padding: 0 10px !important; }
-  .play-v3 .tut-papel-pie { padding: 4px 10px 8px !important; }
-  .play-v3 .tut-titulo { font-size: 1.18rem !important; }
-  .play-v3 .tut-cara { width: 52px !important; height: 52px !important; }
-  .play-v3 .tut-bloques.is-inline { gap: 4px 6px !important; }
-  .play-v3 .tut-tareas { gap: 8px !important; }
-  .play-v3 .tut-paso-misiones .tut-polaroid,
-  .play-v3 .tut-paso-4 .tut-polaroid { width: 84px !important; height: 100px !important; }
-}
+.play-v3 .tut-paso-4 .tut-polaroid { width: 92px; height: 110px; }

@@ -1,3 +1,15 @@
+/* Sin fachadas antiguas: solo edificios PNG nuevos. */
+/* Edificios definitivos: composiciÃ³n FASE 3 absoluta (edificios_composicion.json). */
+/* Controles de tiempo integrados en la mesa */
+/* Tutorial de inicio → AUTORIDAD CANÓNICA: play-v3-tutorial-ds.css
+   Reglas legacy neutralizadas. No duplicar aquí. */
+/* Pista del bucle tutorial (motor) */
+/* libreta-papel-v2: menos modal, mÃ¡s cuaderno */
+/* --- Tokens cara interactivos (mapa, próximo plan, parejas, organizar) --- */
+/* Mapa canónico: contraste reforzado + halo pulsante por emoción */
+/* Parejas: rotación en el token, no en la img suelta */
+/* Hobby descubierto: pista al hover / foco (datos desde API, no hardcode JS) */
+
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@600;800&display=swap");
 :root {
   --paper: #f4ead6;
@@ -16,16 +28,20 @@
   --emo-triste: #8a9aad;
   --emo-enfadado: #c4775a;
 }
+
 * { box-sizing: border-box; }
+
 html {
   margin: 0;
   min-height: 100%;
   background: #fff;
 }
+
 body {
   margin: 0;
   height: 100%;
 }
+
 body.play-v3 {
   background: #fafaf8;
   margin: 1cm 2.5cm 0;
@@ -33,95 +49,100 @@ body.play-v3 {
   color: var(--ink);
   font-family: Nunito, "Segoe UI", sans-serif;
 }
+
 .taller {
   position: relative; z-index: 20;
   background: #f7f1e4; border-bottom: 3px solid var(--ink);
   padding: .45rem .7rem;
   display: flex; flex-wrap: wrap; gap: .4rem; align-items: center;
 }
+
 .taller a, .taller button {
   border: 2px solid var(--ink); background: #fffdf6; color: var(--ink);
   font: inherit; font-weight: 800; font-size: .75rem;
   padding: .22rem .5rem; cursor: pointer; text-decoration: none;
 }
+
 .taller .msg { margin-left: auto; font-size: .78rem; color: var(--muted); }
 
-@media (min-width: 769px) {
-  .play-stage { flex: 1; min-height: 0; min-width: 0; padding: 0; }
-  .play-root { position: relative; width: 100%; height: 100%; overflow: hidden; }
-  .board-scroll { position: absolute; inset: 0; z-index: 1; }
-  .play-root.pc .board-fit { height: 100%; }
-
-  /* Mapa definitivo (contrato Neni). Sin suelo antiguo ni overlay de cajas. */
-  .play-v3 .calles { display: none !important; }
-  .play-v3 .board-scroll {
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-  .play-v3 .board-fit {
-    position: relative;
-    flex: 0 0 auto;
-    background: url("../play-v3/mapa_base_rectas.png") center / 100% 100% no-repeat;
-    box-shadow: inset 0 0 0 2px rgba(139, 90, 43, .12);
-  }
-  .play-v3 .play-root.pc .board-scroll { inset: 0; }
-}
 .play-v3 .play-root.phone .board-scroll { inset: 52px 0 58px 0; overflow: hidden; }
 
 .mesa { position: absolute; z-index: 5; top: 8px; left: 10px; right: 10px; pointer-events: none; }
+
 .mesa-papel { display: flex; align-items: center; gap: 10px; pointer-events: auto; }
+
 .hud-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
 .corazon { position: relative; border: 0; background: transparent; padding: 0; cursor: default; pointer-events: none; }
+
 .play-v3 .corazon::after { display: none; }
+
 .corazon-dibujo {
   width: 62px; height: 56px; display: block;
   -webkit-mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
   mask: url("../play-v3/hud/corazon.png") center / contain no-repeat;
 }
+
 .play-root.phone .corazon-dibujo { width: 48px; height: 44px; }
+
 .dia {
   background: var(--day) url("../play-v3/hud/ticket_dia.png") center / cover no-repeat;
   border: 0; padding: .35rem .7rem .4rem; transform: rotate(-1.5deg);
   text-align: center; min-width: 88px; position: relative;
   box-shadow: 3px 3px 0 rgba(44,38,31,.12);
 }
+
 .dia .dow { font-family: Fraunces, Georgia, serif; font-size: 1.05rem; font-weight: 700; }
+
 .dia .hora { font-weight: 800; font-size: .92rem; }
+
 .dinero {
   background: #e7f0c8 url("../play-v3/hud/ticket_dinero.png") center / cover no-repeat;
   border: 0; padding: .4rem .7rem; font-weight: 800;
   min-width: 72px; text-align: center;
   box-shadow: 2px 3px 0 rgba(44,38,31,.1);
 }
+
 .buzon {
   width: 52px; height: 44px; padding: 0; border: 0; background: transparent;
   cursor: pointer; position: relative; overflow: visible;
 }
+
 .buzon img { width: 100%; height: 100%; object-fit: contain; display: block; pointer-events: none; }
+
 .buzon .badge {
   position: absolute; top: -8px; right: -8px; background: var(--pink-deep); color: #fffdf6;
   border: 2px solid var(--ink); min-width: 20px; height: 20px; border-radius: 99px;
   font-size: .7rem; font-weight: 800; display: none; place-items: center;
 }
+
 .buzon .badge.is-on { display: grid; }
+
 .buzon .lacre-hud {
   display: none; position: absolute; left: -10px; bottom: -8px;
   width: 28px; height: 28px; object-fit: contain; z-index: 3;
 }
+
 .play-root[data-importante="1"] .buzon .lacre-hud { display: block; }
+
 .play-root.phone .btn-organizar-pc { display: none; }
+
 .play-root.phone .dock {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   position: absolute; z-index: 6; left: 0; right: 0; bottom: 0; height: 58px;
 }
+
 .play-root.pc .dock { display: none; }
+
 .dock button {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 2px; border: 0; background: transparent; font: inherit; font-weight: 800; font-size: .62rem;
   font-family: Fraunces, Georgia, serif; cursor: pointer; color: var(--ink);
 }
+
 .dock button img { width: 22px; height: 22px; object-fit: contain; display: block; }
+
 .dock button.is-on { background: rgba(243,177,195,.35); }
 
 .aht-screen {
@@ -132,11 +153,14 @@ body.play-v3 {
   border: 3px solid var(--ink);
   box-shadow: 8px 10px 0 rgba(44,38,31,.12);
 }
+
 .play-root.pc .aht-screen { top: 14px; right: 14px; bottom: 14px; width: min(400px, 38%); }
+
 .play-root.phone .aht-screen {
   left: 8px; right: 8px; bottom: 74px; max-height: 76%;
   transform: translateY(120%);
 }
+
 .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
 .play-root[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
 .play-root[data-capa="ficha_diario"] .aht-screen[data-aht-screen="ficha_diario"],
@@ -150,12 +174,19 @@ body.play-v3 {
 .play-root[data-capa="parejas"] .aht-screen[data-aht-screen="parejas"],
 .play-root[data-capa="residencias"] .aht-screen[data-aht-screen="residencias"],
 .play-root[data-capa="ajustes"] .aht-screen[data-aht-screen="ajustes"] { transform: none; pointer-events: auto; }
+
 .play-root[data-capa="historia"] .aht-screen[data-aht-screen="historia"] { transform: none; pointer-events: auto; }
+
 .play-root[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] { transform: none; pointer-events: auto; }
+
 .cerrar { align-self: flex-start; border: 2px solid #c9b59a; background: var(--day); font: inherit; font-weight: 800; cursor: pointer; padding: .18rem .5rem; }
+
 .aht-screen h2 { font-family: Fraunces, Georgia, serif; margin: 0; font-size: 1.45rem; }
+
 .aht-screen p { margin: 0; line-height: 1.4; }
+
 .mini { color: var(--muted); font-size: .86rem; }
+
 .cta {
   border: 2px solid #2c261f;
   color: #2c261f;
@@ -168,7 +199,9 @@ body.play-v3 {
   box-shadow: 2px 3px 0 rgba(44,38,31,.18);
   transition: transform .12s ease, box-shadow .12s ease;
 }
+
 .cta:hover { transform: rotate(0deg) translateY(-1px); }
+
 .cta.ghost {
   background: transparent;
   color: var(--muted);
@@ -178,38 +211,53 @@ body.play-v3 {
   transform: none;
   font-weight: 700;
 }
+
 .cta.ghost:hover { color: var(--ink); transform: none; }
+
 .vecino { border: 2px solid #c9b59a; background: rgba(246,239,224,.9); display: flex; align-items: center; gap: .45rem; padding: .35rem; cursor: pointer; font: inherit; text-align: left; width: 100%; }
+
 .vecino img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+
 .ficha-hero { display: flex; gap: .8rem; align-items: center; }
+
 .ficha-hero .cara { width: 72px; height: 72px; border-radius: 50%; overflow: hidden; border: 3px solid var(--ring); background: #fff; }
+
 .ficha-hero .cara img { width: 100%; height: 100%; object-fit: cover; }
 
 .aht-screen[data-aht-screen="vecinos"], .aht-screen[data-aht-screen="ficha"] {
   background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat;
 }
+
 .aht-screen[data-aht-screen="vecinos"]::before, .aht-screen[data-aht-screen="ficha"]::before {
   content: ""; position: absolute; left: 10px; top: 8px; width: 46px; height: 18px;
   background: url("../play-v3/capas/celo.png") center / contain no-repeat;
   pointer-events: none;
 }
+
 .aht-screen[data-aht-screen="buzon"]:not() {
   background: #f3e6cc;
 }
+
 .aht-screen[data-aht-screen="diario"] {
   background: #f7f1e2;
 }
+
 .aht-screen[data-aht-screen="diario"] .masthead {
   position: relative; min-height: 72px;
   background: #2c261f url("../play-v3/capas/masthead_cotilleo.png") center / cover no-repeat;
   color: #fffdf6; padding: .55rem .7rem; border: 2px solid var(--pink-deep);
 }
+
 .aht-screen[data-aht-screen="diario"] .masthead img { display: none; }
+
 .aht-screen[data-aht-screen="diario"] .masthead h2 { color: #fffdf6; }
+
 .aht-screen[data-aht-screen="diario"] .masthead .edicion { color: #f3b1c3; margin: 0; font-size: .78rem; }
+
 .aht-screen[data-aht-screen="organizar"] {
   background: #f7f0de url("../play-v3/capas/hoja_organizar.png") center / cover no-repeat;
 }
+
 .carta-msg.importante .lacre {
   width: 32px; height: 32px; border-radius: 0; background:
     url("../play-v3/hud/lacre.png") center / contain no-repeat;
@@ -217,19 +265,29 @@ body.play-v3 {
 }
 
 .play-root .habs { display: block; pointer-events: none; }
-.hab { position: absolute; transform: translate(-50%, -70%); }
+
+.hab { transition: left .6s ease, top .6s ease; }
+
 .hab .cara {
   width: 52px; height: 52px; border-radius: 50%; overflow: hidden; display: grid; place-items: center;
   background: #fffdf6; border: 2.5px solid var(--ring);
   box-shadow: 0 0 0 1.5px #b08968, 2px 2px 0 rgba(44,38,31,.12);
 }
+
 .play-root.pc .hab .cara { width: 62px; height: 62px; }
+
 .hab .cara img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
 .hab[data-emocion="alegre"] .cara { border-color: var(--emo-alegre); box-shadow: 0 0 0 2px var(--emo-alegre); }
+
 .hab[data-emocion="triste"] .cara { border-color: var(--emo-triste); box-shadow: 0 0 0 2px var(--emo-triste); }
+
 .hab[data-emocion="enfadado"] .cara { border-color: var(--emo-enfadado); box-shadow: 0 0 0 2px var(--emo-enfadado); }
+
 .hab.is-rel .cara { border-color: var(--ring); box-shadow: 0 0 0 1.5px #b08968; }
+
 .hab.is-rel::after { display: none; }
+
 .hab .hab-tema-mark {
   position: absolute; right: -4px; top: -5px;
   width: 20px; height: 20px;
@@ -243,9 +301,11 @@ body.play-v3 {
   color: #5a5048;
   pointer-events: none; z-index: 4;
 }
+
 .play-root.pc .hab .hab-tema-mark { width: 22px; height: 22px; font-size: 12px; right: -5px; top: -6px; }
-.hab .sello-tema { display: none !important; }
-.hab { transition: left .6s ease, top .6s ease; }
+
+.hab .sello-tema { display: none; }
+
 .aforo-mas {
   pointer-events: auto; cursor: pointer;
 }
@@ -255,20 +315,26 @@ body.play-v3 {
   background: var(--postit); border: 2px solid #d48aa0;
   padding: .4rem .7rem; font-family: Fraunces, Georgia, serif; display: none;
 }
+
 .feedback-toast.is-on { display: block; }
+
 .lista-vacia { font-family: Fraunces, Georgia, serif; font-style: italic; color: var(--muted); }
+
 .carta-msg { cursor: pointer; }
+
 select.chip-select, .org-row select {
   font: inherit; font-weight: 800; border: 2.5px solid #c9b59a; background: #fffdf6; padding: .35rem;
 }
+
 .org-row { display: flex; flex-direction: column; gap: .25rem; margin: .35rem 0; }
+
 .aht-screen[data-aht-screen="ficha"] .animo { font-family: Fraunces, Georgia, serif; font-style: italic; }
 
-/* Sin fachadas antiguas: solo edificios PNG nuevos. */
-.play-v3 .complejo .fachada { display: none !important; }
-.play-v3 .complejo .eti-mapa { display: none !important; }
+.play-v3 .complejo .fachada { display: none; }
 
-.play-v3 .bloque-a, .play-v3 .solar { display: none !important; }
+.play-v3 .complejo .eti-mapa { display: none; }
+
+.play-v3 .bloque-a, .play-v3 .solar { display: none; }
 
 .collage .recorte {
   position: relative;
@@ -278,22 +344,26 @@ select.chip-select, .org-row select {
   margin: .45rem 0;
   box-shadow: 3px 3px 0 rgba(44,38,31,.08);
 }
+
 .collage .recorte::before {
   content: ""; position: absolute; left: 10px; top: 8px;
   width: 14px; height: 14px;
   background: url("../play-v3/capas/chincheta.png") center / contain no-repeat;
 }
 
-/* Edificios definitivos: composiciÃ³n FASE 3 absoluta (edificios_composicion.json). */
 .play-v3 .mapa-complejos { position: absolute; inset: 0; z-index: 2; }
+
 .play-v3 .complejo {
   position: absolute; margin: 0; padding: 0;
   border: 0; background: transparent; overflow: visible;
 }
+
 .play-v3 .complejo .edificios { display: none; }
+
 .play-v3 .edificios-layer {
   position: absolute; inset: 0; z-index: 3; pointer-events: none;
 }
+
 .play-v3 .edificios-layer .edif {
   position: absolute; display: none;
   object-fit: contain; object-position: left top;
@@ -301,23 +371,28 @@ select.chip-select, .org-row select {
   transform: none; pointer-events: none;
   transition: opacity .2s ease, filter .2s ease;
 }
+
 .play-v3 .edificios-layer .edif.is-on,
 .play-v3 .edificios-layer .edif.is-off {
   display: block;
 }
+
 .play-v3 .edificios-layer .edif.is-on {
   opacity: 1;
 }
+
 .play-v3 .edificios-layer .edif.is-off {
   opacity: .88;
   filter: saturate(.62) brightness(1.03) drop-shadow(0 2px 2px rgba(44,38,31,.14));
 }
+
 .play-v3 .edificios-layer .edif.is-off::after {
   content: "";
   position: absolute; inset: 0; pointer-events: none;
   border: 1.5px dashed rgba(122,113,100,.45);
   border-radius: 2px;
 }
+
 .play-v3 .edificios-layer .edif.is-off::before {
   content: "\1F512";
   position: absolute; top: 4px; right: 4px;
@@ -327,10 +402,10 @@ select.chip-select, .org-row select {
   pointer-events: none;
 }
 
-/* Controles de tiempo integrados en la mesa */
 .tiempo-juego {
   display: flex; gap: 4px; align-items: center; pointer-events: auto;
 }
+
 .tique-hora, .tique-dia {
   border: 2px solid #8a7a66; background: #fffdf6;
   font-family: Fraunces, Georgia, serif; font-style: italic; font-weight: 700;
@@ -338,76 +413,86 @@ select.chip-select, .org-row select {
   box-shadow: 2px 2px 0 rgba(44,38,31,.1); transform: rotate(-1deg);
   color: var(--ink);
 }
+
 .tique-dia { background: #f3e6cc; transform: rotate(1deg); }
+
 .tique-hora:hover, .tique-dia:hover { background: var(--postit); border-color: #d48aa0; }
+
 .btn-nueva-mesa {
   border: 2px solid #c9b59a; background: transparent;
   font-family: Nunito, "Segoe UI", sans-serif; font-weight: 800;
   font-size: .65rem; padding: .28rem .4rem; cursor: pointer;
   color: var(--muted); text-decoration: underline; text-underline-offset: 2px;
 }
+
 .btn-nueva-mesa:hover { color: var(--ink); background: rgba(255,253,246,.6); }
+
 .play-root.phone .tiempo-juego { gap: 2px; }
+
 .play-root.phone .tique-hora, .play-root.phone .tique-dia {
   font-size: .62rem; padding: .25rem .35rem;
 }
+
 .play-root.phone .btn-nueva-mesa { display: none; }
 
-/* Tutorial de inicio → AUTORIDAD CANÓNICA: play-v3-tutorial-ds.css
-   Reglas legacy neutralizadas. No duplicar aquí. */
-
-/* Pista del bucle tutorial (motor) */
 body.play-v3[data-tutorial-zona] .tutorial-pista { display: block; }
+
 body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; }
 
-
-
-@media (min-width: 769px) {
-  /* Layout shell (grid 3 columnas) — solo escritorio */
-  .game-shell {
-    display: flex; flex-direction: column;
-    height: calc(100vh - 52px); min-height: 520px;
-  }
-  body.play-v3[data-lab="1"] .game-shell { height: 100vh; min-height: 0; }
-}
 .game-map-wrap {
   min-width: 0; min-height: 0; position: relative;
   display: flex; align-items: stretch; justify-content: center;
 }
+
 .game-map-wrap .play-stage { flex: 1; min-height: 0; width: 100%; }
-.game-shell .mesa .dia, .game-shell .mesa .dinero, .game-shell .mesa .corazon { display: none !important; }
+
+.game-shell .mesa .dia, .game-shell .mesa .dinero, .game-shell .mesa .corazon { display: none; }
+
 .stat-row { display: flex; justify-content: space-between; font-size: .78rem; padding: .15rem 0; }
+
 .stat-row strong { font-size: .85rem; }
 
-/* libreta-papel-v2: menos modal, mÃ¡s cuaderno */
 .aht-screen[data-aht-screen="vecinos"], .aht-screen[data-aht-screen="ficha"], .aht-screen[data-aht-screen="organizar"] {
-  border: 0 !important;
+  border: 0;
   box-shadow: 0 14px 40px rgba(40,28,16,.18), inset 0 0 0 1px rgba(180,150,110,.35);
   border-radius: 3px 8px 6px 4px;
   max-width: min(420px, 92vw);
 }
+
 .aht-screen[data-aht-screen="vecinos"] .libreta-kicker, .aht-screen[data-aht-screen="ficha"] .libreta-kicker, .aht-screen[data-aht-screen="organizar"] .libreta-kicker {
   font-size: .62rem; letter-spacing: .14em; opacity: .72; margin-bottom: .15rem;
 }
+
 .aht-screen[data-aht-screen="vecinos"] h2, .aht-screen[data-aht-screen="organizar"] h2 { font-size: 1.35rem; margin: 0 0 .35rem; letter-spacing: .01em; }
+
 .aht-screen[data-aht-screen="vecinos"] .mini { margin: 0 0 .65rem; font-size: .78rem; opacity: .85; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino {
   border: 0; border-bottom: 1px solid rgba(140,110,80,.18);
   background: transparent; padding: .42rem .15rem; gap: .55rem;
   font-size: .88rem;
 }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino:last-child { border-bottom: 0; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino img { width: 36px; height: 36px; border: 1px solid rgba(120,96,72,.25); }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hero { gap: .65rem; margin-bottom: .75rem; }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hero .cara img { width: 52px; height: 52px; border-radius: 50%; border: 1px solid rgba(120,96,72,.3); }
+
 .aht-screen[data-aht-screen="ficha"] .seccion-lib h3 { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: #7a6450; margin-bottom: .35rem; }
+
 .aht-screen[data-aht-screen="ficha"] .seccion-lib ul { margin: 0; padding-left: 1.1rem; font-size: .86rem; line-height: 1.45; }
+
 .aht-screen[data-aht-screen="organizar"] .org-row label { font-size: .78rem; letter-spacing: .04em; }
+
 .aht-screen[data-aht-screen="organizar"] .org-row select, .aht-screen[data-aht-screen="organizar"] .org-row button.cta { font-size: .88rem; }
+
 .aht-screen[data-aht-screen="organizar"] .org-row { gap: .85rem; }
 
 .play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"] { transform: none; pointer-events: auto; }
-/* --- Tokens cara interactivos (mapa, próximo plan, parejas, organizar) --- */
+
 .play-v3 .cara-token {
   display: inline-block;
   cursor: pointer;
@@ -441,8 +526,11 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
 }
 
 .play-v3 .cara-token .cara[data-emocion="neutro"] { --cara-emo: var(--emo-neutro, #c9a06a); }
+
 .play-v3 .cara-token .cara[data-emocion="alegre"] { --cara-emo: var(--emo-alegre, #8faa84); }
+
 .play-v3 .cara-token .cara[data-emocion="triste"] { --cara-emo: var(--emo-triste, #8a9aad); }
+
 .play-v3 .cara-token .cara[data-emocion="enfadado"] { --cara-emo: var(--emo-enfadado, #c4775a); }
 
 .play-v3 .cara-token .cara img,
@@ -462,7 +550,6 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
   justify-content: center;
 }
 
-/* Mapa canónico: contraste reforzado + halo pulsante por emoción */
 .play-v3 .mapa-zona-hit .hab.cara-token .cara {
   position: relative;
   --cara-crema: #fffdf8;
@@ -585,22 +672,22 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
     0 0 26px rgba(196, 119, 90, 0.34);
 }
 
-/* Parejas: rotación en el token, no en la img suelta */
 .play-v3 .obj-pareja-fotos > .cara-token:first-child .cara {
   transform: rotate(-6deg);
   z-index: 1;
   margin-right: -10px;
 }
+
 .play-v3 .obj-pareja-fotos > .cara-token:last-child .cara {
   transform: rotate(5deg);
   z-index: 2;
   margin-left: -10px;
 }
 
-/* Hobby descubierto: pista al hover / foco (datos desde API, no hardcode JS) */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.has-pista {
   cursor: help;
 }
+
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.has-pista:focus-visible {
   outline: 2px solid rgba(120, 90, 50, 0.55);
   outline-offset: 2px;

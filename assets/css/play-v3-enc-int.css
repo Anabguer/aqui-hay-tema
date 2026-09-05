@@ -1,59 +1,72 @@
-﻿/** MENTES modal + resultado en tarjeta */
+/** MENTES modal + resultado en tarjeta */
+/* MENTES-CAPA-HOTFIX-v1: whitelist visibility (shell/responsive ocultan capas no listadas) */
+/* MENTES-AVATAR-ENCUADRE-v1: mismo encuadre canonico que bloques-residencias / htmlCaraToken */
+/** Intervencion encuentro (13) */
+/* ── FASE 1: Turnos de quedada ─────────────────────────────────────── */
+/* Barra de quedada */
+/* Historial de turnos */
+/* Duo con flecha */
+/* Indicador de turno */
+/* Reacción visual post-acción */
+/* ── Fin FASE 1 ────────────────────────────────────────────────────── */
 
 .play-v3 .play-root[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] {
-  position: fixed !important;
-  left: 50% !important;
-  top: 50% !important;
-  right: auto !important;
-  bottom: auto !important;
-  width: min(100% - 24px, 420px) !important;
-  max-width: min(100% - 24px, 420px) !important;
-  max-height: min(90vh, 780px) !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 110 !important;
-  padding: 1rem .95rem 1.05rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  border: 2px solid rgba(122, 106, 154, .32) !important;
-  border-radius: 20px 16px 22px 14px / 16px 22px 14px 20px !important;
-  background: linear-gradient(180deg, #fff 0%, #f6f3fb 100%) !important;
-  box-shadow: 0 10px 28px rgba(70, 56, 96, .16), 1.5px 2px 0 rgba(122, 106, 154, .12) !important;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(100% - 24px, 420px);
+  max-width: min(100% - 24px, 420px);
+  max-height: min(90vh, 780px);
+  transform: translate(-50%, -50%);
+  z-index: 110;
+  padding: 1rem .95rem 1.05rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2px solid rgba(122, 106, 154, .32);
+  border-radius: 20px 16px 22px 14px / 16px 22px 14px 20px;
+  background: linear-gradient(180deg, #fff 0%, #f6f3fb 100%);
+  box-shadow: 0 10px 28px rgba(70, 56, 96, .16), 1.5px 2px 0 rgba(122, 106, 154, .12);
 }
 
-/* MENTES-CAPA-HOTFIX-v1: whitelist visibility (shell/responsive ocultan capas no listadas) */
 .play-v3 .play-root.pc[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"],
-.play-v3:has(.game-shell) .play-root.phone[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"],
-.play-v3:has(.game-shell) .play-root.pc[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] {
-  visibility: visible !important;
-  pointer-events: auto !important;
+.play-v3 .play-root.phone[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"],
+.play-v3 .play-root.pc[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] {
+  visibility: visible;
+  pointer-events: auto;
 }
-.play-v3:has(.game-shell) .play-root.phone[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] {
-  display: flex !important;
-}
-@media (min-width: 769px) {
-  .play-v3 .play-root[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] {
-    width: min(100% - 48px, 480px) !important;
-    max-width: min(100% - 48px, 480px) !important;
-    padding: 1.15rem 1.1rem 1.1rem !important;
-  }
-}
-.play-v3 .aht-screen[data-aht-screen="mentes"] .mentes-top { flex: 0 0 auto; margin: 0 0 .35rem; padding-right: 2rem; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .mentes-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: .15rem .05rem .2rem; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int--modal { border: 0; background: transparent; box-shadow: none; padding: 0; margin: 0; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo { display: flex; justify-content: center; align-items: flex-start; gap: 1.25rem; margin: 0 0 .85rem; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-persona { display: flex; flex-direction: column; align-items: center; gap: .35rem; min-width: 0; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-cara .cara, .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona-cara .cara { width: 56px; height: 56px; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-nombre, .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-pers-nombre { font: 700 .95rem/1.25 Nunito, "Segoe UI", sans-serif; color: var(--ds-ink, #3b3028); text-align: center; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker--q, .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker-tema { font: 800 .72rem/1.35 Nunito, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin: 0 0 .65rem; text-align: center; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker-tema { font-size: .78rem; letter-spacing: .04em; text-transform: none; color: var(--ds-ink, #3b3028); }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-bottom: .2rem; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona { display: flex; flex-direction: column; align-items: center; gap: .45rem; min-height: 118px; padding: .75rem .55rem; border: 2px solid rgba(122, 106, 154, .28) !important; border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important; background: #fff !important; box-shadow: 1px 2px 0 rgba(122, 106, 154, .1) !important; cursor: pointer; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona-cara .cara { width: 64px; height: 64px; }
 
-/* MENTES-AVATAR-ENCUADRE-v1: mismo encuadre canonico que bloques-residencias / htmlCaraToken */
+.play-v3 .play-root.phone[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"] {
+  display: flex;
+}
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .mentes-top { flex: 0 0 auto; margin: 0 0 .35rem; padding-right: 2rem; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .mentes-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: .15rem .05rem .2rem; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int--modal { border: 0; background: transparent; box-shadow: none; padding: 0; margin: 0; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo { display: flex; justify-content: center; align-items: flex-start; gap: 1.25rem; margin: 0 0 .85rem; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-persona { display: flex; flex-direction: column; align-items: center; gap: .35rem; min-width: 0; }
+
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-cara .cara,
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona-cara .cara { overflow: hidden; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-nombre, .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-pers-nombre { font: 700 .95rem/1.25 Nunito, "Segoe UI", sans-serif; color: var(--ds-ink, #3b3028); text-align: center; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker--q, .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker-tema { font: 800 .72rem/1.35 Nunito, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin: 0 0 .65rem; text-align: center; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker-tema { font-size: .78rem; letter-spacing: .04em; text-transform: none; color: var(--ds-ink, #3b3028); }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-personas { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; margin-bottom: .2rem; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona { display: flex; flex-direction: column; align-items: center; gap: .45rem; min-height: 118px; padding: .75rem .55rem; border: 2px solid rgba(122, 106, 154, .28); border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px; background: #fff; box-shadow: 1px 2px 0 rgba(122, 106, 154, .1); cursor: pointer; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona-cara .cara { width: 64px; height: 64px; }
+
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-duo-cara .cara img,
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-persona-cara .cara img {
   width: 100%;
@@ -64,98 +77,117 @@
   transform: scale(1.1);
   transform-origin: 50% 14%;
 }
+
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-volver { display: inline-flex; align-items: center; margin: 0 0 .55rem; padding: .2rem 0; border: 0; background: transparent; font: 700 .875rem/1.2 Nunito, sans-serif; color: var(--ds-lavender-deep, #7a6a9a); cursor: pointer; }
+
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-temas-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .55rem; }
-.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-temas-grid .enc-int-btn { min-height: 52px; padding: .65rem .55rem !important; border: 2px solid rgba(122, 106, 154, .24) !important; border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px !important; background: #fff !important; font: 700 .9375rem/1.25 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important; box-shadow: 1px 2px 0 rgba(122, 106, 154, .08) !important; text-align: center; white-space: normal; }
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-temas-grid .enc-int-btn { min-height: 52px; padding: .65rem .55rem; border: 2px solid rgba(122, 106, 154, .24); border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px; background: #fff; font: 700 .9375rem/1.25 Nunito, sans-serif; color: var(--ds-ink, #3b3028); box-shadow: 1px 2px 0 rgba(122, 106, 154, .08); text-align: center; white-space: normal; }
+
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-result { margin-top: .15rem; padding: .85rem .75rem; border: 2px solid rgba(122, 106, 154, .22); border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px; background: #fff; }
+
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-result-txt { font: 600 .9375rem/1.45 Nunito, "Segoe UI", sans-serif; margin: 0; }
+
 .play-v3 .enc-int-result--card { margin-top: .55rem; }
+
 .play-v3 .enc-int-result--card .enc-int-result-txt { font: 600 .875rem/1.4 Nunito, "Segoe UI", sans-serif; }
 
-/** Intervencion encuentro (13) */
- encuentro (13) */
+encuentro (13) */
 .play-v3 .encursos-movil .enc-mov-panel {
-  border: 2px solid var(--ds-ink-soft, #594839) !important;
-  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px !important;
-  background: var(--ds-paper-card, #fffdf7) !important;
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12) !important;
-  padding: 11px 13px !important;
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12);
+  padding: 11px 13px;
 }
+
 .play-v3 .encursos-movil .enc-int-tema {
-  border: 2px solid var(--ds-lavender-deep, #7a6a9a) !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  background: var(--ds-lavender-soft, #ece6f8) !important; padding: 9px 11px !important; margin-bottom: 8px !important;
+  border: 2px solid var(--ds-lavender-deep, #7a6a9a);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-lavender-soft, #ece6f8); padding: 9px 11px; margin-bottom: 8px;
 }
+
 .play-v3 .encursos-movil .enc-int-kicker { font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .4px; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin: 0 0 3px; }
+
 .play-v3 .encursos-movil .enc-int-tema-txt { font-family: Caveat, cursive; font-size: 1.08rem; line-height: 1.28; margin: 0; }
+
 .play-v3 .encursos-movil .enc-int-acciones { display: flex; gap: 8px; margin-bottom: 8px; }
+
 .play-v3 .encursos-movil .enc-int-btn {
-  flex: 1; min-height: 44px; padding: 7px 8px !important;
-  border: 2px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px !important;
-  background: var(--ds-pink, #f3b1c3) !important;
-  font: 800 .9375rem/1.2 Nunito, sans-serif !important; color: var(--ds-ink, #3b3028) !important;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.18) !important;
+  flex: 1; min-height: 44px; padding: 7px 8px;
+  border: 2px solid var(--ds-ink, #3b3028);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: var(--ds-pink, #f3b1c3);
+  font: 800 .9375rem/1.2 Nunito, sans-serif; color: var(--ds-ink, #3b3028);
+  box-shadow: 2px 3px 0 rgba(51,38,30,.18);
 }
-.play-v3 .encursos-movil .enc-int-btn--temas { background: var(--ds-lavender, #c4b5e8) !important; }
+
+.play-v3 .encursos-movil .enc-int-btn--temas { background: var(--ds-lavender, #c4b5e8); }
+
 .play-v3 .encursos-movil .enc-int-resultado {
-  border: 2px solid var(--ds-green-deep, #4a7a52) !important;
-  background: var(--ds-green-soft, #e8f3e6) !important;
-  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px !important;
-  padding: 7px 10px !important; font-family: Caveat, cursive; font-size: 1rem;
+  border: 2px solid var(--ds-green-deep, #4a7a52);
+  background: var(--ds-green-soft, #e8f3e6);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  padding: 7px 10px; font-family: Caveat, cursive; font-size: 1rem;
 }
 
-/* ── FASE 1: Turnos de quedada ─────────────────────────────────────── */
-
-/* Barra de quedada */
 .enc-int-barra { margin: 0 0 .75rem; text-align: center; }
+
 .enc-int-barra-tit { font: 800 .72rem/1.3 Nunito, sans-serif; letter-spacing: .06em; text-transform: uppercase; color: var(--ds-text-muted, #7a6a5c); margin: 0 0 .4rem; }
+
 .enc-int-barra-track {
   position: relative; height: 28px; border-radius: 14px;
   background: linear-gradient(90deg, #e8d5c4 0%, #f0e8d8 35%, #d4e8d0 65%, #e8c8b0 100%);
   border: 2px solid rgba(122, 106, 154, .18); overflow: hidden;
 }
+
 .enc-int-barra-fill {
   position: absolute; left: 0; top: 0; bottom: 0;
   background: linear-gradient(90deg, rgba(200,160,120,.3) 0%, rgba(180,200,160,.4) 50%, rgba(220,160,120,.3) 100%);
   border-radius: 12px; transition: width .4s ease;
 }
+
 .enc-int-barra-emoji-left, .enc-int-barra-emoji-mid, .enc-int-barra-emoji-right, .enc-int-barra-emoji-fire {
   position: absolute; top: 50%; transform: translateY(-50%); font-size: .95rem; z-index: 1;
 }
+
 .enc-int-barra-emoji-left { left: 8%; }
+
 .enc-int-barra-emoji-mid { left: 38%; }
+
 .enc-int-barra-emoji-right { left: 65%; }
+
 .enc-int-barra-emoji-fire { left: 88%; }
 
-/* Historial de turnos */
 .enc-int-historial { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0 0 .6rem; justify-content: center; }
+
 .enc-int-historial-item {
   display: inline-flex; align-items: center; gap: .2rem;
   padding: .15rem .4rem; border-radius: 8px;
   background: rgba(122, 106, 154, .08); font: 600 .72rem/1.2 Nunito, sans-serif;
   color: var(--ds-ink, #3b3028);
 }
+
 .enc-int-historial-nom { font-weight: 700; }
+
 .enc-int-historial-emoji { font-size: .85rem; }
 
-/* Duo con flecha */
 .enc-int--turnos .enc-int-duo { align-items: center; }
+
 .enc-int-duo-flecha { font-size: 1.2rem; color: var(--ds-lavender-deep, #7a6a9a); margin: 0 .3rem; }
+
 .enc-int-duo-persona--activo { position: relative; }
+
 .enc-int-duo-persona--activo::after {
   content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
   width: 8px; height: 8px; border-radius: 50%; background: var(--ds-lavender-deep, #7a6a9a);
 }
 
-/* Indicador de turno */
 .enc-int--turnos .enc-int-kicker--turno {
   font: 700 .68rem/1.3 Nunito, sans-serif; letter-spacing: .04em;
   color: var(--ds-lavender-deep, #7a6a9a); margin: 0 0 .5rem; text-align: center;
 }
 
-/* Reacción visual post-acción */
 .enc-int--turnos .enc-int-result { margin-top: .5rem; }
-.enc-int--turnos .enc-int-result-txt { font: 600 .85rem/1.4 Nunito, "Segoe UI", sans-serif; }
 
-/* ── Fin FASE 1 ────────────────────────────────────────────────────── */
+.enc-int--turnos .enc-int-result-txt { font: 600 .85rem/1.4 Nunito, "Segoe UI", sans-serif; }

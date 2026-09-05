@@ -1,9 +1,21 @@
-﻿/* Inventario de Celestine + Regalos (F1).
+/* Inventario de Celestine + Regalos (F1).
    Reutiliza el patron de capas (.capa), tokens y tipografias existentes.
    Sin estetica nueva: mismos bordes/tinta que el resto de capas. */
+/* PC (libreta lateral) */
+/* Movil con shell: mismo patron que el resto de capas (responsive.css).
+   .aht-screen[data-aht-screen="inventario"] sube especificidad para ganar al hide generico posterior. */
+/* F2: hint de gusto/rechazo ya descubierto, bajo el objeto */
+/* F3: hint al elegir vecino desde el tile */
+/* F2: descubrimiento tras entregar (linea dentro del feedback) */
+/* Acceso en la barra lateral (game-left), mismo lenguaje que los tiles */
+/* F2: boton REGALAR en la ficha (mismo lenguaje que ficha-btn-org) */
+/* F2: banda de aprecio del vecino hacia Celestine (texto, sin numero) */
+/* INVENTARIO-FLOAT: ocultar tile rectangular en la fila superior */
+/* Botón circular flotante (misma familia que música/efectos) */
+/* VISUAL-REVIEW inventario: anular layout legacy lateral */
 
 .aht-screen[data-aht-screen="inventario"] {
-  background: #fffaf0 !important;
+  background: #fffaf0;
 }
 
 .play-root[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
@@ -11,57 +23,27 @@
   pointer-events: auto;
 }
 
-/* PC (libreta lateral) */
 .play-v3 .play-root.pc[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
   visibility: visible;
-  transform: translateX(0);
+  transform: translate(-50%, -50%) rotate(-0.2deg);
   pointer-events: auto;
 }
 
-/* Movil con shell: mismo patron que el resto de capas (responsive.css).
-   .aht-screen[data-aht-screen="inventario"] sube especificidad para ganar al hide generico posterior. */
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
-    visibility: visible !important;
-    pointer-events: auto !important;
-    display: flex !important;
-    position: fixed !important;
-    left: 50% !important;
-    right: auto !important;
-    top: max(10px, env(safe-area-inset-top, 0)) !important;
-    bottom: auto !important;
-    transform: translateX(-50%) !important;
-    width: min(88vw, 360px) !important;
-    max-width: 88vw !important;
-    max-height: min(68dvh, calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 16px)) !important;
-    height: auto !important;
-    margin: 0 !important;
-    overflow: hidden !important;
-    flex-direction: column !important;
-    box-sizing: border-box !important;
-    z-index: 110 !important;
-    padding: 1.15rem .75rem .65rem !important;
-  }
-}
-
 .inv-cerrar {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  border: 0;
-  background: transparent;
-  font-size: 1.2rem;
-  cursor: pointer;
-  color: #7a7164;
+  /* patrón X en play-v3-visual-review.css */
+  font-family: Nunito, sans-serif;
+  line-height: 1;
 }
 
 .inv-cab { padding: .8rem 1rem .2rem; }
+
 .inv-tit {
   margin: 0;
   font-family: Fraunces, Georgia, serif;
   font-size: 1.15rem;
   color: var(--ink, #2c261f);
 }
+
 .inv-sub {
   margin: .1rem 0 0;
   font-size: .74rem;
@@ -210,7 +192,6 @@
   border-color: #c45;
 }
 
-/* F2: hint de gusto/rechazo ya descubierto, bajo el objeto */
 .inv-hint {
   display: block;
   font-size: .62rem;
@@ -228,14 +209,12 @@
   color: #b0663f;
 }
 
-/* F3: hint al elegir vecino desde el tile */
 .inv-chip-hint {
   margin: .25rem 0 0;
   text-align: left;
   font-size: .68rem;
 }
 
-/* F2: descubrimiento tras entregar (linea dentro del feedback) */
 .inv-descubrimiento {
   display: block;
   margin-top: .25rem;
@@ -246,7 +225,6 @@
   color: #5c7a4f;
 }
 
-/* Acceso en la barra lateral (game-left), mismo lenguaje que los tiles */
 .obj-inventario {  display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -273,7 +251,6 @@
   color: var(--muted, #7a7164);
 }
 
-/* F2: boton REGALAR en la ficha (mismo lenguaje que ficha-btn-org) */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-btn-regalo {
   align-self: flex-start;
   margin-top: .15rem;
@@ -295,7 +272,6 @@
   transform: rotate(0deg) translateY(-1px);
 }
 
-/* F2: banda de aprecio del vecino hacia Celestine (texto, sin numero) */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-aprecio {
   margin: .15rem 0 0;
   font-family: Nunito, sans-serif;
@@ -314,17 +290,11 @@
   color: #b0663f;
 }
 
-@media (max-width: 768px) {
-  .play-v3 .ficha-btn-regalo { min-height: 44px; }
-}
-
-/* INVENTARIO-FLOAT: ocultar tile rectangular en la fila superior */
 .shell-grupo-inventario,
 .play-v3 .game-left .obj-inventario {
-  display: none !important;
+  display: none;
 }
 
-/* Botón circular flotante (misma familia que música/efectos) */
 .play-v3 .control-audio .control-inventario {
   position: relative;
   right: auto;
@@ -356,39 +326,4 @@
   display: block;
   font: .88rem/1.65rem Nunito, sans-serif;
   text-align: center;
-}
-
-@media (max-width: 768px) {
-  .play-v3 .control-audio .control-inventario {
-    width: 1.65rem;
-    height: 1.65rem;
-    flex-basis: 1.65rem;
-  }
-}
-
-/* VISUAL-REVIEW inventario: anular layout legacy lateral */
-.play-v3:has(.game-shell) .play-root.pc[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
-  visibility: visible !important;
-  transform: translate(-50%, -50%) rotate(-0.2deg) !important;
-  pointer-events: auto !important;
-}
-
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="inventario"] .aht-screen[data-aht-screen="inventario"] {
-    top: 50% !important;
-    width: min(100%, 393px) !important;
-    max-width: min(100%, 393px) !important;
-    max-height: min(88vh, 720px) !important;
-    min-height: 0 !important;
-    transform: translate(-50%, -50%) rotate(-0.2deg) !important;
-    padding: 14px 13px 12px !important;
-    border: 0 !important;
-    background: transparent !important;
-  }
-}
-
-.inv-cerrar {
-  /* patrón X en play-v3-visual-review.css */
-  font-family: Nunito, sans-serif !important;
-  line-height: 1 !important;
 }

@@ -3,88 +3,144 @@
    Migraci+�n sist+�mica: cuerpos de texto ��� Nunito (--ds-font-ui)
    T+�tulos, acentos, elementos decorativos ��� Caveat (--ds-font-hand)
    ============================================================ */
-
 /* --- Tokens de tama+�o legibles en m+�vil --- */
-@media (max-width: 768px) {
-  :root {
-    --aht-type-body: 1rem;      /* 16px base */
-    --aht-type-secondary: 0.875rem; /* 14px m+�nimo */
-    --aht-type-caption: 0.8125rem;  /* 13px metadata */
-  }
-}
-
 /* ============================================================
    1. MENSAJITOS ��� Cuerpos de lectura ��� Nunito
    ============================================================ */
-
 /* Cuerpo del mensajito (texto principal que el jugador lee) */
-.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  font-style: normal !important;
-  line-height: 1.5 !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
-}
-
 /* Pregunta de elecci+�n ("-+A qui+�n presentas?") */
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit,
-.play-v3 .msg-eleccion-tit {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 600 !important;
-  line-height: 1.4 !important;
-  text-transform: none !important;
-  letter-spacing: normal !important;
-}
-
 /* Explicaciones de opciones (pistas) */
-.play-v3 .msg-eleccion-hint,
-.play-v3 .msg-eleccion-opt-copy {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-}
-
 /* Preview popover */
-.play-v3 .msg-item-copy,
-.play-v3 .msg-item-txt {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-}
-
-.play-v3 .msg-item-nom {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-secondary) !important;
-  font-weight: 700 !important;
-}
-
 /* Empty state */
-.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio,
-.play-v3 .aht-screen[data-aht-screen="buzon"] .lista-vacia {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-}
-
 /* Hint / ayuda */
-.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-secondary) !important;
-  font-weight: 600 !important;
-}
-
 /* ============================================================
    2. FICHA VECINO ��� Textos de lectura ��� Nunito
    ============================================================ */
-
 /* Descripciones, rasgos, hobbies, relaciones, planes */
+/* Etiquetas de secci+�n (RASGOS, HOBBIES, RELACIONES) ��� MANTENER Caveat como decorativo */
+/* Nombre del vecino ��� MANTENER Caveat como hero */
+/* +�nimo ��� MANTENER Caveat como acento */
+/* ============================================================
+   3. COTILLEOS / DIARIO ��� Cuerpos ��� Nunito
+   ============================================================ */
+/* Metadatos (cu+�ndo, categor+�a) */
+/* T+�tulo COTILLEOS ��� MANTENER Caveat */
+/* ============================================================
+   4. MISIONES ��� Textos ��� Nunito
+   ============================================================ */
+/* T+�tulo MISIONES ��� MANTENER Caveat */
+/* ============================================================
+   5. TUTORIAL -> AUTORIDAD CANONICA: play-v3-tutorial-ds.css
+   ============================================================ */
+/* ============================================================
+   6. NUEVO PLAN ��� Textos de lectura ��� Nunito
+   ============================================================ */
+/* T+�tulos de secci+�n y bot+�n CREAR ��� MANTENER Caveat */
+/* ============================================================
+   7. INICIO (mobile/desktop) ��� Textos de lectura ��� Nunito
+   ============================================================ */
+/* Cotilleo teaser */
+/* Planes en curso / pr+�ximos */
+/* Misiones strip */
+/* Parejas */
+/* Vecinos/buz+�n preview */
+/* ============================================================
+   8. AVISOS / DERROTA / PLAN NOTIF ��� Textos ��� Nunito
+   ============================================================ */
+/* T+�tulos ��� MANTENER Caveat */
+/* ============================================================
+   9. REGLAS GLOBALES ��� No microtexto
+   ============================================================ */
+/* Forzar tama+�os m+�nimos en m+�vil */
+/* ============================================================
+   10. EXCEPCIONES DECORATIVAS ��� MANTENER Caveat
+   ============================================================ */
+/* Estos elementos CONSERVAN la manuscrita por ser decorativos/t+�tulos:
+.play-v3 .mensajitos-tit,           /* "MENSAJITOS" */
+/* ============================================================
+   11. AVATARES EN ELECCIONES DE PERSONA
+   ============================================================ */
+/* ============================================================
+   12. MENTES � textos explicativos legibles (t�tulo/avatares intactos)
+   ============================================================ */
+/* TYPO-READING-v2 � capa final: LECTURA=Nunito / NOMBRE=Caveat */
+/* Regla: NOMBRE/personalidad ? Caveat. Frase/p�rrafo/metadato ? Nunito.
+   Usa font: shorthand para ganar a mensajitos-cartas-persona-v1 y legibilidad-global. */
+/* --- MENSAJITOS: lectura y metadatos --- */
+/* Nombres en mensajitos / elecciones */
+/* --- FICHA: cuerpos legibles; nombre hero manuscrito --- */
+/* --- DIARIO / COTILLEOS / MISIONES --- */
+/* ============================================================
+   GUARD � LECTURA FINAL: Nunito authority para texto de lectura
+   Neutraliza cualquier anterior que imponga Caveat
+   en selectores de lectura/comprension.
+   ============================================================ */
+/* ============================================================
+   TYPO-READING-v3 � labels funcionales movil (piso ~13px)
+   Autoridad final sobre play-v3-responsive legado.
+   ============================================================ */
+/* ============================================================
+   TYPO-READING-v4 � cuerpo mensajitos: autoridad vs visual-replica/avisos
+   Misma especificidad :has(.game-shell); carga al final del archivo.
+   ============================================================ */
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-seccion-tit,
+.play-v3 .msg-eleccion-tit {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.play-v3 .msg-eleccion-hint,
+.play-v3 .msg-eleccion-opt-copy {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.play-v3 .msg-item-copy,
+.play-v3 .msg-item-txt {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.play-v3 .msg-item-nom {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-secondary);
+  font-weight: 700;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .buzon-vacio,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .lista-vacia {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-secondary);
+  font-weight: 600;
+}
+
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card,
@@ -93,81 +149,60 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-vacio,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-sabes-body {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  font-style: normal !important;
-  text-transform: none !important;
-  letter-spacing: normal !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  font-style: normal;
+  text-transform: none;
+  letter-spacing: normal;
 }
 
-/* Etiquetas de secci+�n (RASGOS, HOBBIES, RELACIONES) ��� MANTENER Caveat como decorativo */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
-/* Nombre del vecino ��� MANTENER Caveat como hero */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
-/* +�nimo ��� MANTENER Caveat como acento */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
-
-/* ============================================================
-   3. COTILLEOS / DIARIO ��� Cuerpos ��� Nunito
-   ============================================================ */
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt,
 .play-v3 .obj-cotilleo-txt {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  font-style: normal !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  font-style: normal;
 }
 
-/* Metadatos (cu+�ndo, categor+�a) */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando,
 .play-v3 .coti-item-cat-pill {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-caption) !important;
-  font-weight: 600 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-caption);
+  font-weight: 600;
 }
 
-/* T+�tulo COTILLEOS ��� MANTENER Caveat */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-tit,
 .play-v3 .obj-cotilleo-tit {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
-
-/* ============================================================
-   4. MISIONES ��� Textos ��� Nunito
-   ============================================================ */
 
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
 .play-v3 .obj-misiones-vacio {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  font-style: normal !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  font-style: normal;
 }
 
-/* T+�tulo MISIONES ��� MANTENER Caveat */
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
-
-/* ============================================================
-   5. TUTORIAL -> AUTORIDAD CANONICA: play-v3-tutorial-ds.css
-   ============================================================ */
-/* ============================================================
-   6. NUEVO PLAN ��� Textos de lectura ��� Nunito
-   ============================================================ */
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-seccion-meta,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-hint,
@@ -179,137 +214,77 @@
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-aviso,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-nom {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  font-style: normal !important;
-  text-transform: none !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
+  font-style: normal;
+  text-transform: none;
 }
 
-/* T+�tulos de secci+�n y bot+�n CREAR ��� MANTENER Caveat */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-txt {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
-/* ============================================================
-   7. INICIO (mobile/desktop) ��� Textos de lectura ��� Nunito
-   ============================================================ */
-
-/* Cotilleo teaser */
-.play-v3:has(.game-shell) .obj-cotilleo-txt {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  line-height: 1.4 !important;
+.play-v3 .obj-cotilleo-txt {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  line-height: 1.4;
 }
 
-/* Planes en curso / pr+�ximos */
-.play-v3:has(.game-shell) .enc-mov-nombres,
-.play-v3:has(.game-shell) .pp-mov-nombres,
-.play-v3:has(.game-shell) .prox-nombres {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important; /* Nombres decorativos */
+.play-v3 .enc-mov-nombres,
+.play-v3 .pp-mov-nombres,
+.play-v3 .prox-nombres {
+  font-family: var(--ds-font-hand, "Caveat", cursive); /* Nombres decorativos */
 }
 
-.play-v3:has(.game-shell) .enc-mov-lugar,
-.play-v3:has(.game-shell) .pp-mov-lugar,
-.play-v3:has(.game-shell) .prox-meta {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-secondary) !important;
+.play-v3 .enc-mov-lugar,
+.play-v3 .pp-mov-lugar,
+.play-v3 .prox-meta {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-secondary);
 }
 
-/* Misiones strip */
-.play-v3:has(.game-shell) .mision-strip-txt,
-.play-v3:has(.game-shell) .obj-misiones-vacio {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  line-height: 1.4 !important;
+.play-v3 .mision-strip-txt,
+.play-v3 .obj-misiones-vacio {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  line-height: 1.4;
 }
 
-/* Parejas */
-.play-v3:has(.game-shell) .obj-pareja-nombres {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important; /* Nombres decorativos */
+.play-v3 .obj-pareja-nombres {
+  font-family: var(--ds-font-hand, "Caveat", cursive); /* Nombres decorativos */
 }
 
-.play-v3:has(.game-shell) .obj-parejas-vacio,
-.play-v3:has(.game-shell) .obj-parejas-list p.muted {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-secondary) !important;
+.play-v3 .obj-parejas-vacio,
+.play-v3 .obj-parejas-list p.muted {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-secondary);
 }
 
-
-/* Vecinos/buz+�n preview */
-.play-v3:has(.game-shell) .vecinos-stat,
-.play-v3:has(.game-shell) .obj-pueblo-txt,
-.play-v3:has(.game-shell) .obj-buzon-preview {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-secondary) !important;
+.play-v3 .vecinos-stat,
+.play-v3 .obj-pueblo-txt,
+.play-v3 .obj-buzon-preview {
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-secondary);
 }
-
-/* ============================================================
-   8. AVISOS / DERROTA / PLAN NOTIF ��� Textos ��� Nunito
-   ============================================================ */
 
 .play-v3 .vida-derrota .tut-texto,
 .play-v3 .plan-notif-nombres,
 .play-v3 .plan-notif-meta {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  font-weight: 400;
+  line-height: 1.5;
 }
 
-/* T+�tulos ��� MANTENER Caveat */
 .play-v3 .vida-derrota h2,
 .play-v3 .vida-derrota .ds-modal-tit {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
-/* ============================================================
-   9. REGLAS GLOBALES ��� No microtexto
-   ============================================================ */
-
-/* Forzar tama+�os m+�nimos en m+�vil */
-@media (max-width: 768px) {
-  .play-v3 .aht-screen .mini,
-  .play-v3 .aht-screen .org-picker-hint,
-  .play-v3 .aht-screen .org-horas-hint,
-  .play-v3 .aht-screen .org-lugar-horario,
-  .play-v3 .aht-screen .org-aviso,
-  .play-v3 .aht-screen .agenda-sub,
-  .play-v3 .aht-screen .vecinos-pie,
-  .play-v3 .aht-screen .mensajitos-seccion-tit,
-  .play-v3 .aht-screen .carta-meta,
-  .play-v3 .aht-screen .msg-leido-toggle,
-  .play-v3 .aht-screen .carta-copy,
-  .play-v3 .aht-screen .ficha-animo-line,
-  .play-v3 .aht-screen .ficha-animo-val,
-  .play-v3 .aht-screen .ficha-edad,
-  .play-v3 .aht-screen .ficha-trabajo,
-  .play-v3 .aht-screen .ficha-desde,
-  .play-v3 .aht-screen .ficha-rasgo-tag,
-  .play-v3 .aht-screen .ficha-pref-line,
-  .play-v3 .aht-screen .ficha-hobby-lab,
-  .play-v3 .aht-screen .ficha-vacio,
-  .play-v3 .aht-screen .ficha-plan-item,
-  .play-v3 .aht-screen .ficha-rel-nom,
-  .play-v3 .aht-screen .ficha-rel-etiq,
-  .play-v3 .aht-screen .ficha-seccion-tit-sm,
-  .play-v3 .aht-screen .coti-item-cuando,
-  .play-v3 .aht-screen .org-dd-label,
-  .play-v3 .aht-screen .org-dd-opt {
-    font-size: var(--aht-type-secondary) !important;
-    line-height: 1.4 !important;
-  }
-}
-
-/* ============================================================
-   10. EXCEPCIONES DECORATIVAS ��� MANTENER Caveat
-   ============================================================ */
-
-/* Estos elementos CONSERVAN la manuscrita por ser decorativos/t+�tulos:
-.play-v3 .mensajitos-tit,           /* "MENSAJITOS" */
 .play-v3 .mensajitos-tab,           /* Tabs NUEVOS/TODOS */
 .play-v3 .mensajitos-leer-todos-txt,/* "Marcar todo como le+�do" */
 .play-v3 .carta-copy .de,           /* Nombre remitente (decorativo) */
@@ -353,12 +328,8 @@
 .play-v3 .par-tit,                  /* "PAREJAS" */
 .play-v3 .agenda-tit,               /* "PLANES" */
 .play-v3 .obj-pareja-nombres {      /* Nombres pareja */
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
-
-/* ============================================================
-   11. AVATARES EN ELECCIONES DE PERSONA
-   ============================================================ */
 
 .play-v3 .msg-eleccion-avatar-wrap {
   flex: 0 0 40px;
@@ -392,7 +363,7 @@
 }
 
 .play-v3 .msg-eleccion-opt {
-  display: flex !important;
+  display: flex;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
@@ -405,65 +376,35 @@
 
 .play-v3 .msg-eleccion-nom {
   display: block;
-  font: var(--aht-name-font, 700 var(--aht-type-name)/1.2 var(--ds-font-hand, "Caveat", cursive)) !important;
+  font: var(--aht-name-font, 700 var(--aht-type-name)/1.2 var(--ds-font-hand, "Caveat", cursive));
   color: var(--ds-ink, #3b3028);
 }
 
 .play-v3 .msg-eleccion-hint {
   display: block;
   margin-top: 2px;
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-secondary) !important;
-  font-weight: 400 !important;
-  line-height: 1.4 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-secondary);
+  font-weight: 400;
+  line-height: 1.4;
   color: var(--ds-text-muted, #7a6a5c);
 }
 
-@media (max-width: 768px) {
-  .play-v3 .msg-eleccion-avatar-wrap {
-    flex: 0 0 36px;
-    width: 36px;
-    height: 36px;
-  }
-  
-  .play-v3 .msg-eleccion-avatar,
-  .play-v3 .msg-eleccion-avatar.cara-ini {
-    width: 36px;
-    height: 36px;
-  }
-  
-  .play-v3 .msg-eleccion-nom {
-    font-size: 1rem !important;
-  }
-  
-  .play-v3 .msg-eleccion-hint {
-    font-size: 0.875rem !important;
-  }
-}
-
-/* ============================================================
-   12. MENTES � textos explicativos legibles (t�tulo/avatares intactos)
-   ============================================================ */
-
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker--q,
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-kicker-tema {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-caption) !important;
-  font-weight: 700 !important;
-  line-height: 1.4 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-caption);
+  font-weight: 700;
+  line-height: 1.4;
 }
 
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-result-txt,
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-temas-grid .enc-int-btn,
 .play-v3 .aht-screen[data-aht-screen="mentes"] .enc-int-volver {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body) !important;
-  line-height: 1.45 !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body);
+  line-height: 1.45;
 }
-
-/* TYPO-READING-v2 � capa final: LECTURA=Nunito / NOMBRE=Caveat */
-/* Regla: NOMBRE/personalidad ? Caveat. Frase/p�rrafo/metadato ? Nunito.
-   Usa font: shorthand para ganar a mensajitos-cartas-persona-v1 y legibilidad-global. */
 
 .play-v3 {
   --aht-read-font: 400 var(--aht-type-body)/1.5 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
@@ -472,7 +413,6 @@
   --aht-name-font: 700 var(--aht-type-name)/1.2 var(--ds-font-hand, "Caveat", cursive);
 }
 
-/* --- MENSAJITOS: lectura y metadatos --- */
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo,
@@ -494,31 +434,29 @@
 .play-v3 .msg-eleccion-hint,
 .play-v3 .msg-eleccion-opt-copy,
 .play-v3 .llegada-sin-acomp {
-  font: var(--aht-read-font) !important;
-  font-style: normal !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
+  font: var(--aht-read-font);
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuando,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-meta,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .plazo,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .sello-estado {
-  font: var(--aht-read-font-secondary) !important;
+  font: var(--aht-read-font-secondary);
 }
 
-/* Nombres en mensajitos / elecciones */
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-head .de,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-copy .de,
 .play-v3 .msg-eleccion-nom {
-  font: var(--aht-name-font) !important;
-  font-style: normal !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
+  font: var(--aht-name-font);
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
-/* --- FICHA: cuerpos legibles; nombre hero manuscrito --- */
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body p,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body li,
@@ -534,19 +472,18 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-desde,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
-  font: var(--aht-read-font) !important;
-  font-style: normal !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
+  font: var(--aht-read-font);
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-nom,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
-/* --- DIARIO / COTILLEOS / MISIONES --- */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cat-pill,
@@ -556,37 +493,22 @@
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado,
 .play-v3 .obj-misiones-vacio,
 .play-v3 .mision-strip-txt {
-  font: var(--aht-read-font) !important;
-  font-style: normal !important;
+  font: var(--aht-read-font);
+  font-style: normal;
 }
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando,
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado {
-  font: var(--aht-read-font-caption) !important;
+  font: var(--aht-read-font-caption);
 }
 
-
-
-.play-v3:has(.game-shell) .enc-mov-nombres,
-.play-v3:has(.game-shell) .pp-mov-nombres,
-.play-v3:has(.game-shell) .prox-nombres,
-.play-v3:has(.game-shell) .obj-pareja-nombres {
-  font-family: var(--ds-font-hand, "Caveat", cursive) !important;
+.play-v3 .enc-mov-nombres,
+.play-v3 .pp-mov-nombres,
+.play-v3 .prox-nombres,
+.play-v3 .obj-pareja-nombres {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
-@media (max-width: 768px) {
-  .play-v3 {
-    --aht-read-font: 400 1rem/1.5 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
-    --aht-read-font-secondary: 400 0.875rem/1.45 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
-    --aht-read-font-caption: 600 0.8125rem/1.35 var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
-  }
-}
-
-/* ============================================================
-   GUARD � LECTURA FINAL: Nunito authority para texto de lectura
-   Neutraliza cualquier !important anterior que imponga Caveat
-   en selectores de lectura/comprension.
-   ============================================================ */
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .cuerpo,
@@ -608,54 +530,18 @@
 .play-v3 .animo-modal-hint,
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-copy p,
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-latido {
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
 }
 
-/* ============================================================
-   TYPO-READING-v3 � labels funcionales movil (piso ~13px)
-   Autoridad final sobre play-v3-responsive legado.
-   ============================================================ */
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .obj-cotilleo-par .obj-cotilleo-tit,
-  .play-v3:has(.game-shell) .obj-misiones-papel-tit,
-  .play-v3:has(.game-shell) .shell-grupo-parejas .zona-tit-parejas,
-  .play-v3 .zona-actividad .obj-buzon-txt,
-  .play-v3 .celestine-nota .obj-vecinos-tit,
-  .play-v3 .obj-nuevo-plan-txt,
-  .play-v3 .obj-cotilleo-tit,
-  .play-v3 .obj-misiones-papel-tit,
-  .play-v3 .shell-grupo-parejas .zona-tit-parejas {
-    font-size: var(--aht-type-caption, 0.8125rem) !important;
-    line-height: 1.15 !important;
-  }
-
-  .play-v3:has(.game-shell) .play-root.phone .aht-screen[data-aht-screen="ficha"] .ficha-volver,
-  .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-volver {
-    font-size: var(--aht-type-secondary, 0.875rem) !important;
-    line-height: 1.25 !important;
-  }
-
-  body.play-v3 .tutorial-pista,
-  .play-v3 .tutorial-pista {
-    font-size: var(--aht-type-secondary, 0.875rem) !important;
-    line-height: 1.35 !important;
-  }
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-hilo-cuerpo {
+  font: var(--aht-read-font);
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-size: var(--aht-type-body, 1rem);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: normal;
+  text-transform: none;
 }
-
-/* ============================================================
-   TYPO-READING-v4 � cuerpo mensajitos: autoridad vs visual-replica/avisos
-   Misma especificidad :has(.game-shell); carga al final del archivo.
-   ============================================================ */
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-msg .cuerpo,
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-cuerpo-wrap .cuerpo,
-.play-v3:has(.game-shell) .aht-screen[data-aht-screen="buzon"] .carta-hilo-cuerpo {
-  font: var(--aht-read-font) !important;
-  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif) !important;
-  font-size: var(--aht-type-body, 1rem) !important;
-  font-style: normal !important;
-  font-weight: 400 !important;
-  line-height: 1.5 !important;
-  letter-spacing: normal !important;
-  text-transform: none !important;
-}
-

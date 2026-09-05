@@ -1,0 +1,31 @@
+/* v4/bodies/cintas-scrapbook.css */
+/* --- Cintas scrapbook: ajustes + inventario (+ parejas) --- */
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"].ajust-modal-papel .ficha-tape,
+.play-v3 .aht-screen[data-aht-screen="inventario"].inv-modal-papel .ficha-tape,
+.play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel .ficha-tape {
+  position: absolute;
+  width: 34px;
+  height: 13px;
+  background: rgba(228, 198, 118, .82);
+  z-index: 4;
+  box-shadow: 0 1px 1px rgba(60, 44, 28, .12);
+  pointer-events: none;
+  display: block;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"].ajust-modal-papel .ajust-tape-tl,
+.play-v3 .aht-screen[data-aht-screen="inventario"].inv-modal-papel .inv-tape-tl,
+.play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel .par-tape-tl {
+  top: -2px;
+  left: 8px;
+  transform: rotate(-7deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"].ajust-modal-papel .ajust-tape-tr,
+.play-v3 .aht-screen[data-aht-screen="inventario"].inv-modal-papel .inv-tape-tr,
+.play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel .par-tape-tr {
+  top: -2px;
+  right: 52px;
+  transform: rotate(6deg);
+}

@@ -1,56 +1,71 @@
-﻿/* Nuevo Plan — rediseño móvil + desktop (v5) */
+/* Nuevo Plan — rediseño móvil + desktop (v5) */
+/* --- Modal shell --- */
+/* --- Header --- */
+/* --- Body / steps --- */
+/* --- Quiénes van --- */
+/* --- Dónde --- */
+/* --- Cuándo --- */
+/* --- Footer --- */
+/* --- Desktop layout --- */
+/* ORG-CREAR-DESKTOP-UNIFIED — mismo botón coral que sidebar */
+/* v6: fondo identico Mensajitos - pisa libreta rayada */
+/* Miniatura edificio en select Dónde */
+/* Dónde: ancho completo — legible con miniatura */
+/* Llegada candidato — perfil previo en Mensajito */
+/* v7: tipografía Nuevo plan más legible */
+/* v8: buscador — no tapar la lupa */
+/* v9: Cuando — dia legible, hora compacta al lado */
+/* EVENTO-PUEBLO-AFORO-v1 — cabecera modo evento en organizador */
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] {
   counter-reset: org-step;
 }
 
-/* --- Modal shell --- */
 .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"]:not(),
 .play-v3 .play-root.phone[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"]:not() {
-  position: absolute !important;
-  left: 50% !important;
-  top: 50% !important;
-  right: auto !important;
-  bottom: auto !important;
-  width: min(100%, 420px) !important;
-  max-width: min(100%, 420px) !important;
-  max-height: min(90vh, 860px) !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 13 !important;
-  padding: 1.15rem 1rem 1.2rem !important;
-  display: flex !important;
-  flex-direction: column !important;
-  overflow: hidden !important;
-  border: 2.5px solid var(--ds-ink, #3b3028) !important;
-  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px !important;
-  background-color: var(--ds-paper-modal, #fffaf0) !important;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  right: auto;
+  bottom: auto;
+  width: min(100%, 420px);
+  max-width: min(100%, 420px);
+  max-height: min(90vh, 860px);
+  transform: translate(-50%, -50%);
+  z-index: 13;
+  padding: 1.15rem 1rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 2.5px solid var(--ds-ink, #3b3028);
+  border-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
+  background-color: var(--ds-paper-modal, #fffaf0);
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.48), rgba(255,255,255,0) 58%),
     linear-gradient(180deg, rgba(255,253,249,.7) 0%, rgba(248,241,223,.38) 100%),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  background-position: center, center, center !important;
-  background-size: cover, cover, cover !important;
-  background-repeat: no-repeat !important;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.2), 0 7px 16px rgba(70,50,30,.14);
 }
 
 .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"]:not() {
-  width: min(760px, 94vw) !important;
-  max-width: min(760px, 94vw) !important;
-  max-height: min(88vh, 820px) !important;
-  padding: 1.35rem 1.25rem 1rem !important;
+  width: min(760px, 94vw);
+  max-width: min(760px, 94vw);
+  max-height: min(88vh, 820px);
+  padding: 1.35rem 1.25rem 1rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"]::after {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-tape,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-pin {
-  display: none !important;
+  display: none;
 }
 
-/* --- Header --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-top {
   text-align: center;
   padding: 0 0 .35rem;
@@ -67,16 +82,16 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit {
-  margin: 0 !important;
-  font-family: Caveat, cursive !important;
-  font-weight: 700 !important;
-  letter-spacing: .05em !important;
-  text-transform: uppercase !important;
-  color: var(--ds-ink, #3b3028) !important;
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ds-ink, #3b3028);
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-modal-ico {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-modo-toggle {
@@ -113,7 +128,6 @@
   box-shadow: 0 1px 3px rgba(44,38,31,.14);
 }
 
-/* --- Body / steps --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-body {
   flex: 1 1 auto;
   min-height: 0;
@@ -128,34 +142,17 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit {
-  display: flex !important;
-  align-items: center !important;
-  gap: .5rem !important;
-  margin: 0 0 .45rem !important;
-  font-family: Nunito, sans-serif !important;
-  font-size: .72rem !important;
-  font-weight: 800 !important;
-  letter-spacing: .08em !important;
-  text-transform: uppercase !important;
-  color: #8a7460 !important;
+  font-size: .82rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit::before {
-  content: counter(org-step);
-  display: inline-grid;
-  place-items: center;
-  width: 1.35rem;
-  height: 1.35rem;
-  border-radius: 50%;
-  background: #f3b1c3;
-  border: 1.5px solid var(--ds-ink, #3b3028);
-  font: 800 .68rem/1 Nunito, sans-serif;
-  color: var(--ds-ink, #3b3028);
-  flex: 0 0 auto;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-size: .74rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit::after {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-seccion-head-row {
@@ -181,39 +178,23 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-body {
-  padding-left: 0 !important;
+  padding-left: 0;
 }
 
-/* --- Quiénes van --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca-wrap {
   position: relative;
   margin-bottom: .5rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca-ico {
-  position: absolute;
-  left: .65rem;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 1rem;
-  height: 1rem;
-  opacity: .55;
-  pointer-events: none;
-  background:
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5' fill='none' stroke='%235a4838' stroke-width='2'/%3E%3Cpath d='M15.5 15.5L20 20' stroke='%235a4838' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E")
-    center / contain no-repeat;
+  left: .75rem;
+  width: 1.05rem;
+  height: 1.05rem;
+  z-index: 1;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca {
-  width: 100%;
-  margin: 0;
-  padding: .55rem .65rem .55rem 2.85rem;
-  border: 1.5px solid rgba(44,38,31,.14);
-  border-radius: 12px;
-  background: rgba(255,252,245,.95);
-  font: 600 .88rem/1.2 Nunito, sans-serif;
-  color: var(--ds-ink, #3b3028);
-  box-shadow: inset 0 1px 2px rgba(44,38,31,.04);
+  font-size: .94rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-strip {
@@ -370,36 +351,14 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tipo-card-tit {
-  font: 800 .7rem/1.1 Nunito, sans-serif;
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  text-align: left;
-  color: #3a3028;
-  white-space: nowrap;
+  font-size: .78rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tipo-card-desc {
-  font: 500 .62rem/1.2 Nunito, sans-serif;
-  letter-spacing: .02em;
-  text-transform: none;
-  text-align: left;
-  color: #7a6a5c;
-  white-space: nowrap;
-  opacity: .85;
+  font-size: .7rem;
 }
 
-/* --- Dónde --- */
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugares-strip {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  gap: .55rem;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: .15rem .05rem .45rem;
-  scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
-}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugares-strip { display: none; }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-card {
   flex: 0 0 auto;
@@ -487,6 +446,7 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-estado--abierto { color: #3d7a52; }
+
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-estado--cerrado { color: #b85c5c; }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-card-estado {
@@ -501,11 +461,8 @@
   display: none;
 }
 
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-horario {
-  margin: .35rem 0 0;
-}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-horario { margin-top: .4rem; }
 
-/* --- Cuándo --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-cuando {
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.9fr);
@@ -528,20 +485,7 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-trigger {
-  display: flex;
-  align-items: center;
-  gap: .45rem;
-  width: 100%;
-  min-height: 2.85rem;
-  padding: .5rem .65rem;
-  border: 1.5px solid rgba(44,38,31,.14);
-  border-radius: 12px;
-  background: rgba(255,252,245,.95);
-  font: 700 .82rem/1.2 Nunito, sans-serif;
-  color: #2c261f;
-  text-align: left;
-  cursor: pointer;
-  box-shadow: inset 0 1px 2px rgba(44,38,31,.04);
+  font-size: .94rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-trigger:disabled {
@@ -572,8 +516,6 @@
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-ico--hora {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8.5' fill='none' stroke='%235a4838' stroke-width='1.8'/%3E%3Cpath d='M12 7.5V12l3.5 2' stroke='%235a4838' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E");
 }
-
-
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-chev {
   width: .75rem;
@@ -608,11 +550,7 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-opt {
-  padding: .45rem .55rem;
-  border-radius: 8px;
-  font: 600 .82rem/1.2 Nunito, sans-serif;
-  color: #3a3028;
-  cursor: pointer;
+  font-size: .94rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-opt.is-on,
@@ -630,7 +568,6 @@
   color: #3d6b45;
 }
 
-/* --- Footer --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-footer {
   display: flex;
   justify-content: center;
@@ -650,14 +587,14 @@
   margin: .15rem auto .1rem;
   padding: .58rem 1.15rem .6rem;
   overflow: visible;
-  border: 2px solid #a84f48 !important;
-  border-radius: 16px 19px 14px 18px / 18px 14px 19px 16px !important;
+  border: 2px solid #a84f48;
+  border-radius: 16px 19px 14px 18px / 18px 14px 19px 16px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, .08) 0%, rgba(0, 0, 0, 0) 38%),
-    linear-gradient(165deg, #dd7a72 0%, #cf645c 52%, #c4564f 100%) !important;
-  color: #fff !important;
-  box-shadow: 0 2px 0 rgba(120, 40, 35, .22), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
-  transform: rotate(-.35deg) !important;
+    linear-gradient(165deg, #dd7a72 0%, #cf645c 52%, #c4564f 100%);
+  color: #fff;
+  box-shadow: 0 2px 0 rgba(120, 40, 35, .22), inset 0 1px 0 rgba(255, 255, 255, .22);
+  transform: rotate(-.35deg);
   cursor: pointer;
 }
 
@@ -673,13 +610,13 @@
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-txt {
   position: relative;
   z-index: 1;
-  font-family: "Caveat", "Segoe Print", cursive !important;
-  font-size: 1.22rem !important;
-  font-weight: 700 !important;
-  font-style: italic !important;
-  letter-spacing: .08em !important;
-  text-transform: uppercase !important;
-  color: #fff !important;
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 1.22rem;
+  font-weight: 700;
+  font-style: italic;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #fff;
   text-shadow: 0 1px 0 rgba(120, 35, 30, .28);
 }
 
@@ -690,16 +627,16 @@
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear:hover {
   filter: brightness(1.04);
-  transform: rotate(-.35deg) translateY(-1px) !important;
-  box-shadow: 0 3px 0 rgba(120, 40, 35, .25), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
+  transform: rotate(-.35deg) translateY(-1px);
+  box-shadow: 0 3px 0 rgba(120, 40, 35, .25), inset 0 1px 0 rgba(255, 255, 255, .22);
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-ico {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-tape {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear.is-busy,
@@ -719,106 +656,52 @@
   font-size: .82rem;
 }
 
-/* --- Desktop layout --- */
-@media (min-width: 900px) {
-  .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-body {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: .65rem 1rem;
-    align-content: start;
-  }
-
-  .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-seccion--quienes {
-    grid-column: 1 / -1;
-  }
-
-  .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-tipo-card {
-    flex: 0 1 auto;
-    min-width: 0;
-    max-width: none;
-  }
-
-  .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-lugares-strip {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    max-height: none;
-  }
-}
-
-@media (max-width: 560px) {
-  .play-v3 .play-root.phone[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] {
-    width: min(96vw, 96vw) !important;
-    max-width: 96vw !important;
-    padding-top: 1rem !important;
-  }
-
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-cara {
-    width: 3rem;
-    height: 3rem;
-  }
-
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-card {
-    width: 5.2rem;
-  }
-
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-card-art {
-    width: 3.1rem;
-    height: 2.35rem;
-  }
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-horario { margin-top: .4rem; }
-
-
-/* ORG-CREAR-DESKTOP-UNIFIED — mismo botón coral que sidebar */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear {
-  width: auto !important;
-  min-width: 0 !important;
-  min-height: 0 !important;
-  padding: .58rem 1.15rem .6rem !important;
-  border: 2px solid #a84f48 !important;
-  border-radius: 16px 19px 14px 18px / 18px 14px 19px 16px !important;
+.play-v3 .play-root.phone[data-capa="organizar"] .org-crear,
+.play-v3 .play-root.pc[data-capa="organizar"] .org-crear {
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: .58rem 1.15rem .6rem;
+  border: 2px solid #a84f48;
+  border-radius: 16px 19px 14px 18px / 18px 14px 19px 16px;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, .08) 0%, rgba(0, 0, 0, 0) 38%),
-    linear-gradient(165deg, #dd7a72 0%, #cf645c 52%, #c4564f 100%) !important;
-  color: #fff !important;
-  box-shadow: 0 2px 0 rgba(120, 40, 35, .22), inset 0 1px 0 rgba(255, 255, 255, .22) !important;
-  transform: rotate(-.35deg) !important;
-  clip-path: none !important;
-  -webkit-clip-path: none !important;
+    linear-gradient(165deg, #dd7a72 0%, #cf645c 52%, #c4564f 100%);
+  color: #fff;
+  box-shadow: 0 2px 0 rgba(120, 40, 35, .22), inset 0 1px 0 rgba(255, 255, 255, .22);
+  transform: rotate(-.35deg);
+  clip-path: none;
+  -webkit-clip-path: none;
 }
 
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear .org-crear-txt {
-  font-size: 1.26rem !important;
+.play-v3 .play-root.pc[data-capa="organizar"] .org-crear .org-crear-txt {
+  font-size: 1.26rem;
 }
 
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear-tape,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-crear-tape {
-  display: none !important;
+.play-v3 .play-root.phone[data-capa="organizar"] .org-crear-tape,
+.play-v3 .play-root.pc[data-capa="organizar"] .org-crear-tape {
+  display: none;
 }
 
-/* v6: fondo identico Mensajitos - pisa libreta rayada */
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
+.play-v3 .play-root.phone[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
+.play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
 .play-v3 .play-root.phone[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
 .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
 .play-v3 .aht-screen[data-aht-screen="organizar"] {
-  background-color: var(--ds-paper-modal, #fffaf0) !important;
+  background-color: var(--ds-paper-modal, #fffaf0);
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.48), rgba(255,255,255,0) 58%),
     linear-gradient(180deg, rgba(255,253,249,.7) 0%, rgba(248,241,223,.38) 100%),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  background-position: center, center, center !important;
-  background-size: cover, cover, cover !important;
-  background-repeat: no-repeat !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat;
 }
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugares-strip { display: none !important; }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-dd--lugar { width: 100%; }
+
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-dd--lugar .org-dd-trigger { min-height: 3.1rem; padding-left: .45rem; }
 
-/* Miniatura edificio en select Dónde */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-thumb {
   display: grid;
   place-items: center;
@@ -864,49 +747,6 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd--lugar .org-dd-menu {
-  max-height: 14rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd--lugar .org-dd-opt--lugar {
-  display: flex;
-  align-items: center;
-  gap: .55rem;
-  padding: .42rem .5rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd--lugar .org-dd-opt-txt {
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-
-
-/* Dónde: ancho completo — legible con miniatura */
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: .4rem;
-  padding-left: 0 !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-dd,
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-dd--lugar {
-  flex: 1 1 auto;
-  width: 100% !important;
-  max-width: none !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-lugar-horario {
-  width: 100%;
-  margin: .35rem 0 0 !important;
-  text-align: left;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd--lugar .org-dd-menu {
   min-width: 100%;
   width: 100%;
 }
@@ -922,21 +762,27 @@
   line-height: 1.2;
 }
 
-@media (min-width: 900px) {
-  .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-seccion--donde,
-  .play-v3 .play-root.pc[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"] .org-seccion--cuando {
-    grid-column: 1 / -1;
-  }
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: .4rem;
+  padding-left: 0;
 }
 
-@media (max-width: 768px) {
-  .play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-donde-fila .org-dd {
-    flex-basis: auto !important;
-    max-width: none !important;
-  }
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-dd,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-dd--lugar {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
 }
 
-/* Llegada candidato — perfil previo en Mensajito */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-donde-fila .org-lugar-horario {
+  width: 100%;
+  margin: .35rem 0 0;
+  text-align: left;
+}
+
 .llegada-perfil {
   display: flex;
   gap: 12px;
@@ -946,6 +792,7 @@
   background: rgba(255, 248, 230, 0.65);
   border: 1px solid rgba(180, 140, 60, 0.25);
 }
+
 .llegada-perfil-foto {
   width: 52px;
   height: 52px;
@@ -953,6 +800,7 @@
   object-fit: cover;
   flex-shrink: 0;
 }
+
 .llegada-perfil-foto--ini {
   display: flex;
   align-items: center;
@@ -962,10 +810,12 @@
   background: #e8dcc8;
   color: #5a4a32;
 }
+
 .llegada-perfil-nom {
   font-weight: 600;
   margin-bottom: 4px;
 }
+
 .llegada-perfil-tag {
   font-size: 0.75rem;
   font-weight: 500;
@@ -975,117 +825,81 @@
   border-radius: 4px;
   margin-left: 4px;
 }
+
 .llegada-perfil-txt {
   font-size: 0.9rem;
   margin: 0 0 6px;
   line-height: 1.35;
 }
+
 .llegada-perfil-chips {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
+
 .llegada-perfil-chip {
   font-size: 0.75rem;
   padding: 2px 8px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.06);
 }
+
 .llegada-acciones .llegada-acomp-opt.is-selected {
   outline: 2px solid #c9a227;
 }
+
 .llegada-acciones-pie {
   margin-top: 8px;
 }
+
 .llegada-sin-acomp {
   font-size: 0.85rem;
   margin: 4px 0;
   color: #666;
 }
 
-
-/* v7: tipografía Nuevo plan más legible */
-.play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit {
-  font-size: .82rem !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit::before {
-  width: 1.5rem;
-  height: 1.5rem;
-  font-size: .74rem;
-}
-
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-seccion-meta,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-hint {
-  font-size: 1.08rem !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-trigger {
-  font-size: .94rem !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-dd-opt {
-  font-size: .94rem !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-tipo-card-tit {
-  font-size: .78rem !important;
-}
-
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-tipo-card-desc {
-  font-size: .7rem !important;
+  font-size: 1.08rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-horario,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-horas-hint {
-  font-size: .86rem !important;
+  font-size: .86rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca {
-  font-size: .94rem !important;
+.play-v3 .play-root.phone[data-capa="organizar"] .org-crear {
+  min-height: 0;
+  padding: .58rem 1.15rem .6rem;
 }
 
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear {
-  min-height: 0 !important;
-  padding: .58rem 1.15rem .6rem !important;
+.play-v3 .play-root.phone[data-capa="organizar"] .org-crear .org-crear-txt {
+  font-size: 1.22rem;
 }
 
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-crear .org-crear-txt {
-  font-size: 1.22rem !important;
+.play-v3 .play-root.phone[data-capa="organizar"] .org-busca {
+  padding: .5rem .65rem .5rem 2.9rem;
 }
 
-
-/* v8: buscador — no tapar la lupa */
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-busca-ico {
-  left: .75rem;
-  width: 1.05rem;
-  height: 1.05rem;
-  z-index: 1;
-}
-
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-busca {
-  padding: .5rem .65rem .5rem 2.9rem !important;
-}
-
-/* v9: Cuando — dia legible, hora compacta al lado */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-cuando-campo--hora .org-dd-trigger {
   padding-left: .5rem;
   padding-right: .5rem;
 }
 
-.play-v3:has(.game-shell) .play-root.phone[data-capa="organizar"] .org-cuando,
-.play-v3:has(.game-shell) .play-root.pc[data-capa="organizar"] .org-cuando {
-  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.9fr) !important;
-  gap: .5rem !important;
+.play-v3 .play-root.phone[data-capa="organizar"] .org-cuando,
+.play-v3 .play-root.pc[data-capa="organizar"] .org-cuando {
+  grid-template-columns: minmax(0, 1.55fr) minmax(0, 0.9fr);
+  gap: .5rem;
 }
 
-/* EVENTO-PUEBLO-AFORO-v1 — cabecera modo evento en organizador */
 .play-v3 .aht-screen[data-aht-screen="organizar"].org-plan-papel--evento .org-tit {
   display: flex;
   flex-direction: column;
   gap: 2px;
   line-height: 1.1;
 }
+
 .play-v3 .aht-screen[data-aht-screen="organizar"].org-plan-papel--evento .org-evento-kicker {
   font-family: Nunito, "Segoe UI", sans-serif;
   font-size: .625rem;
@@ -1094,12 +908,14 @@
   text-transform: uppercase;
   color: #b8643f;
 }
+
 .play-v3 .aht-screen[data-aht-screen="organizar"].org-plan-papel--evento .org-evento-nombre {
   font-family: "Caveat", "Segoe Print", cursive;
   font-size: 1.35rem;
   font-weight: 700;
   color: #3b3028;
 }
+
 .play-v3 .aht-screen[data-aht-screen="organizar"].org-plan-papel--evento .org-picker-celda.is-apuntado {
   opacity: .55;
   cursor: not-allowed;

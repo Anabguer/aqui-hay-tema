@@ -34,4 +34,4 @@
 ## CSS / UI / modales
 
 - **OBLIGATORIO:** antes de cualquier cambio en CSS, UI de play, modales o orden de hojas en `play.php`, leer `docs/ARQUITECTURA_CSS.md` y respetar el contrato V4.
-- Tras tocar frame o links: `scripts/aht_guard_modal_shell.ps1` y `node tests/modal_architecture_test.js`.
+- Tras tocar frame o links: `scripts/aht_guard_css_architecture.ps1 (alias aht_guard_modal_shell.ps1)` y `node tests/css_architecture_test.js`.

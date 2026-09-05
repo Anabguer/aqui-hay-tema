@@ -9,10 +9,78 @@
    2) Muestra cuando data-capa coincide
    3) Aplica posición V4 propia (no hereda .capa)
    
-   0 !important — aislamiento por estructura, no por cascada.
+   0 — aislamiento por estructura, no por cascada.
    ============================================================ */
-
 /* ── Ocultar por defecto ───────────────────────────────────── */
+/* ── Mostrar cuando data-capa coincide ─────────────────────── */
+/* ── Responsive mobile ─────────────────────────────────────── */
+/* ============================================================
+   INTERIORES DE CADA SCREEN V4
+   ============================================================ */
+/* ── BUZÓN / MENSAJITOS ────────────────────────────────────── */
+/* ── VECINOS — grid de tarjetas ────────────────────────────── */
+/* Lateral padding for the grid — matches search bar */
+/* Search bar: same lateral margin as cards */
+/* Focus: clean outline integrated in design */
+/* Height: match Buzon/Mensajitos — inherit global max-height, add min-height */
+/* ── MISIONES ──────────────────────────────────────────────── */
+/* ── PAREJAS ───────────────────────────────────────────────── */
+/* ── AGENDA ────────────────────────────────────────────────── */
+/* ── ORGANIZAR ─────────────────────────────────────────────── */
+/* ── HISTORIA ──────────────────────────────────────────────── */
+/* ── VIDA DEL PUEBLO ──────────────────────────────────────── */
+/* ── INVENTARIO ────────────────────────────────────────────── */
+/* ── AJUSTES ───────────────────────────────────────────────── */
+/* ── NECESIDADES ───────────────────────────────────────────── */
+/* ── MENTES ────────────────────────────────────────────────── */
+/* ── HISTORIA CELEBRACIÓN ──────────────────────────────────── */
+/* ── HISTORIA DETALLE ──────────────────────────────────────── */
+/* Historia celebracion: X por encima del contenido */
+/* ============================================================
+   FICHA VECINO — Visual richness
+   ============================================================ */
+/* Actions bar — ABOVE the hero, like Mensajitos NUEVOS/LEÍDOS pills */
+/* Hero: lila suave background, two-column */
+/* Avatar ring — 140px, protagonist */
+/* Avatar face */
+/* Hero info: text centered under avatar */
+/* Animo pill — clean fallback, no vanilla, no ? */
+/* Body:只剩 Lo que sabes + Necesidades (Relaciones/Planes moved to hero-right) */
+/* Section wrapper */
+/* Tape decoration (washi tape) */
+/* Rasgos section — pink/lavender */
+/* Hobbies section — mint */
+/* Section titles */
+/* Rasgo tags */
+/* Hobby cards */
+/* Detalles column */
+/* Lo que sabes */
+/* Relaciones rows */
+/* Ver más relaciones */
+/* Plan items */
+/* Necesidades */
+/* Empty state */
+/* ── Ficha mobile ──────────────────────────────────────────── */
+/* ============================================================
+   COTILLEOS / DIARIO — Visual richness
+   ============================================================ */
+/* Filters bar — styled as AHT pills */
+/* ============================================================
+   FICHA DIARIO (per-vecino diary) — scrollbar fix
+   ============================================================ */
+/* ============================================================
+   ESTADO DE ANIMO — Complete visual redesign
+   ============================================================ */
+/* Animo modal — compact, centered */
+/* Avatar: bigger, prominent */
+/* Emotion pill — small, compact, not full-width */
+/* Section ribbons */
+/* Causa / explanation — airy, no beige */
+/* Consequences — hidden (removed in JS) */
+/* CTA button — AHT button language, integrated */
+/* Ghost button */
+/* Hint */
+
 .play-root .aht-screen {
   position: fixed;
   left: 50%;
@@ -38,7 +106,6 @@
   transition: opacity var(--aht-dur, 200ms) ease;
 }
 
-/* ── Mostrar cuando data-capa coincide ─────────────────────── */
 .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
 .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
 .play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
@@ -63,31 +130,18 @@
   opacity: 1;
 }
 
-/* ── Responsive mobile ─────────────────────────────────────── */
-@media (max-width: 768px) {
-  .play-root .aht-screen {
-    width: min(100%, 393px);
-    max-width: min(100%, 393px);
-    max-height: min(88vh, 720px);
-    transform: translate(-50%, -50%) rotate(-0.2deg);
-  }
-}
-
-/* ============================================================
-   INTERIORES DE CADA SCREEN V4
-   ============================================================ */
-
-/* ── BUZÓN / MENSAJITOS ────────────────────────────────────── */
 .aht-screen[data-aht-screen="buzon"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="buzon"] .aht-frame-body::-webkit-scrollbar {
   display: none;
   width: 0;
   height: 0;
 }
+
 .aht-screen[data-aht-screen="buzon"] {
   --msg-paper-rose:  #fbe5e8;
   --msg-paper-blue:  #d9f0f7;
@@ -95,6 +149,7 @@
   --msg-paper-cream: #f8edcf;
   --msg-paper-lilac: #e6d9f3;
 }
+
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
   display: flex;
   align-items: center;
@@ -103,18 +158,22 @@
   background-color: var(--aht-surface-raised, #FFFFFF);
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
 }
+
 .aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
   max-width: 48px;
   max-height: 48px;
   width: auto;
   height: auto;
 }
+
 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
   overflow-x: hidden;
 }
+
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar[hidden] {
   display: none;
 }
+
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
   border: none;
   background: transparent;
@@ -125,6 +184,7 @@
   align-items: center;
   gap: 6px;
 }
+
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all-box {
   width: 16px;
   height: 16px;
@@ -133,16 +193,23 @@
   display: inline-block;
 }
 
-/* ── VECINOS — grid de tarjetas ────────────────────────────── */
 .aht-screen[data-aht-screen="vecinos"] {
-  --ds-paper-card: #F4EFF8;
+  max-height: min(90vh, 840px);
+  min-height: min(90vh, 840px);
 }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-0 { --vec-paper: #FDE8EE; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-1 { --vec-paper: #E8F5E3; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-2 { --vec-paper: #EDE8F4; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-3 { --vec-paper: #FEF5E0; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-4 { --vec-paper: #E3F0F8; }
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-5 { --vec-paper: #F5EDE3; }
+
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
   padding: 0;
   display: flex;
@@ -150,138 +217,117 @@
   overflow-x: hidden;
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body::-webkit-scrollbar {
   display: none;
   width: 0;
   height: 0;
 }
-/* Lateral padding for the grid — matches search bar */
+
 .aht-screen[data-aht-screen="vecinos"] .vecinos-grid,
 .aht-screen[data-aht-screen="vecinos"] [data-vecinos-list] {
   padding: 0 12px 24px;
 }
-/* Search bar: same lateral margin as cards */
+
 .aht-screen[data-aht-screen="vecinos"] .vec-busca-tira {
   padding: 0 12px;
   margin-bottom: 10px;
 }
-/* Focus: clean outline integrated in design */
+
 .aht-screen[data-aht-screen="vecinos"] .vec-busca-inp:focus {
   outline: none;
 }
+
 .aht-screen[data-aht-screen="vecinos"] .vec-busca-wrap:focus-within {
   box-shadow: 0 0 0 2px rgba(232, 139, 168, 0.4);
 }
-/* Height: match Buzon/Mensajitos — inherit global max-height, add min-height */
-.aht-screen[data-aht-screen="vecinos"] {
-  max-height: min(90vh, 840px);
-  min-height: min(90vh, 840px);
-}
+
 .aht-screen[data-aht-screen="vecinos"] .vecino-cara {
   --vec-cara-size: 96px;
 }
+
 .aht-screen[data-aht-screen="vecinos"] [data-vecinos-list].vecinos-grid {
   overflow-y: visible;
 }
-@media (max-width: 768px) {
-  .aht-screen[data-aht-screen="vecinos"] .vecino-cara {
-    --vec-cara-size: 72px;
-  }
-}
 
-/* ── MISIONES ──────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="misiones"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── PAREJAS ───────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="parejas"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── AGENDA ────────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="agenda"] .aht-frame-body {
   padding: 0;
 }
 
-/* ── ORGANIZAR ─────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="organizar"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── HISTORIA ──────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="historia"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── VIDA DEL PUEBLO ──────────────────────────────────────── */
 .aht-screen[data-aht-screen="vida_pueblo"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── INVENTARIO ────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="inventario"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── AJUSTES ───────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="ajustes"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── NECESIDADES ───────────────────────────────────────────── */
 .aht-screen[data-aht-screen="necesidades_global"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── MENTES ────────────────────────────────────────────────── */
 .aht-screen[data-aht-screen="mentes"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── HISTORIA CELEBRACIÓN ──────────────────────────────────── */
 .aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* ── HISTORIA DETALLE ──────────────────────────────────────── */
 .aht-screen[data-aht-screen="historia_detalle"] .aht-frame-body {
   padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
 }
 
-/* Historia celebracion: X por encima del contenido */
 .aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-close {
   z-index: 30;
   pointer-events: auto;
   touch-action: manipulation;
 }
+
 .aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-header {
   position: relative;
   z-index: 25;
 }
-
-
-/* ============================================================
-   FICHA VECINO — Visual richness
-   ============================================================ */
 
 .aht-screen[data-aht-screen="ficha"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="ficha"] .aht-frame-body::-webkit-scrollbar {
   display: none;
   width: 0;
   height: 0;
 }
-/* Actions bar — ABOVE the hero, like Mensajitos NUEVOS/LEÍDOS pills */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-acciones {
   display: flex;
   gap: 0;
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
   background: var(--aht-surface-raised, #FFFFFF);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-btn-acc {
   flex: 1;
   display: flex;
@@ -297,14 +343,16 @@
   cursor: pointer;
   transition: color 150ms, border-color 150ms;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-btn-acc:hover {
   color: var(--ds-ink, #3b3028);
   border-bottom-color: var(--vec-pink, #e88ba8);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-btn-acc-ico {
   font-size: 1rem;
 }
-/* Hero: lila suave background, two-column */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -314,18 +362,20 @@
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
   background: var(--aht-header-mark, #F1EDF6);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-left {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-right {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-/* Avatar ring — 140px, protagonist */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
   --ficha-cara-size: 140px;
   width: var(--ficha-cara-size);
@@ -337,16 +387,19 @@
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-ink-soft, #594839);
   flex-shrink: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="alegre"] {
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-green, #4a7a52);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="triste"] {
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-lavender-deep, #7a6a9a);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="enfadado"] {
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-red, #c42b4a);
 }
-/* Avatar face */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara {
   width: 100%;
   height: 100%;
@@ -354,12 +407,14 @@
   overflow: hidden;
   background: #fffdf8;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-cara .ficha-ini {
   width: 100%;
   height: 100%;
@@ -369,10 +424,11 @@
   font-size: 2.6rem;
   color: var(--ds-ink, #3b3028);
 }
-/* Hero info: text centered under avatar */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-info {
   text-align: center;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.75rem;
@@ -381,6 +437,7 @@
   margin: 0;
   line-height: 1.1;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-edad,
 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,
 .aht-screen[data-aht-screen="ficha"] .ficha-desde {
@@ -390,7 +447,7 @@
   margin: 2px 0;
   line-height: 1.3;
 }
-/* Animo pill — clean fallback, no vanilla, no ? */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill {
   display: inline-flex;
   align-items: center;
@@ -404,40 +461,45 @@
   background: #fef5e0;
   cursor: pointer;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="alegre"] {
   background: #e8f5e3;
   border-color: rgba(74, 122, 82, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="triste"] {
   background: #e6d9f3;
   border-color: rgba(122, 106, 154, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="enfadado"] {
   background: #fbe5e8;
   border-color: rgba(196, 43, 74, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-ico {
   font-size: 1rem;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
   font-family: var(--ds-font-hand, "Patrick Hand", cursive);
   font-size: 0.9rem;
 }
-/* Body:只剩 Lo que sabes + Necesidades (Relaciones/Planes moved to hero-right) */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-body {
   display: flex;
   flex-direction: column;
   gap: 14px;
   padding: 12px 16px;
 }
-/* Section wrapper */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion {
   border-radius: 14px 10px 16px 12px / 10px 16px 12px 14px;
   padding: 12px;
   position: relative;
   overflow: hidden;
 }
-/* Tape decoration (washi tape) */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion::before {
   content: '';
   position: absolute;
@@ -451,23 +513,25 @@
   z-index: 1;
   pointer-events: none;
 }
-/* Rasgos section — pink/lavender */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-rasgos {
   background: #FDE8EE;
   border: 1.5px solid rgba(232, 139, 168, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-rasgos::before {
   background: rgba(232, 139, 168, 0.45);
 }
-/* Hobbies section — mint */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-hobbies {
   background: #E8F5E3;
   border: 1.5px solid rgba(74, 122, 82, 0.2);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-hobbies::before {
   background: rgba(74, 122, 82, 0.35);
 }
-/* Section titles */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.15rem;
@@ -476,14 +540,16 @@
   margin: 0 0 8px;
   line-height: 1.2;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit-sm {
   font-size: 0.95rem;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body {
   position: relative;
   z-index: 2;
 }
-/* Rasgo tags */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
   display: inline-block;
   padding: 4px 10px;
@@ -495,12 +561,13 @@
   margin: 0 4px 4px 0;
   white-space: nowrap;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
   background: rgba(255, 255, 255, 0.5);
   border-style: dashed;
   color: var(--ds-text-muted, #75634F);
 }
-/* Hobby cards */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
   display: flex;
   align-items: center;
@@ -511,13 +578,16 @@
   border: 1.5px solid rgba(74, 122, 82, 0.2);
   margin-bottom: 6px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card:last-child {
   margin-bottom: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.is-desconocido {
   background: rgba(255, 255, 255, 0.4);
   border-style: dashed;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-ico {
   width: 24px;
   height: 24px;
@@ -526,22 +596,26 @@
   align-items: center;
   justify-content: center;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-svg {
   width: 22px;
   height: 22px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab {
   font: 600 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab.is-desconocido {
   color: var(--ds-text-muted, #75634F);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-q {
   font: 700 0.9rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
 }
-/* Detalles column */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles {
   display: flex;
   flex-direction: column;
@@ -549,30 +623,34 @@
   overflow-y: auto;
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles::-webkit-scrollbar {
   display: none;
 }
-/* Lo que sabes */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-prefs {
   background: #FEF5E0;
   border: 1.5px solid rgba(180, 150, 110, 0.2);
   border-radius: 10px;
   padding: 10px 12px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body-prefs {
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line {
   font: 600 0.82rem/1.3 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-sabes-ico {
   margin-right: 4px;
 }
-/* Relaciones rows */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row {
   display: flex;
   align-items: center;
@@ -583,16 +661,20 @@
   border: 1.5px solid rgba(74, 122, 82, 0.15);
   margin-bottom: 6px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row:last-child {
   margin-bottom: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis {
   border-color: rgba(196, 43, 74, 0.25);
   background: #fff5f7;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-compact {
   padding: 6px 8px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara {
   width: 36px;
   height: 36px;
@@ -604,36 +686,43 @@
   align-items: center;
   justify-content: center;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara span {
   font: 700 0.85rem/1 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-main {
   flex: 1;
   min-width: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-nom {
   font: 700 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin-bottom: 3px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-bar {
   height: 6px;
   border-radius: 3px;
   background: #E8F5E3;
   overflow: hidden;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-bar span {
   display: block;
   height: 100%;
   border-radius: 3px;
   background: var(--vec-green, #4a7a52);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
   font: 700 0.7rem/1 "Nunito", sans-serif;
   padding: 3px 8px;
@@ -643,11 +732,12 @@
   color: var(--vec-green, #4a7a52);
   flex-shrink: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis .ficha-rel-etiq {
   background: #fbe5e8;
   color: var(--vec-red, #c42b4a);
 }
-/* Ver más relaciones */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-ver-mas {
   display: block;
   width: 100%;
@@ -661,12 +751,13 @@
   cursor: pointer;
   text-align: center;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-ver-mas:hover {
   background: var(--vec-pink, #e88ba8);
   color: #fff;
   border-style: solid;
 }
-/* Plan items */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item {
   display: flex;
   align-items: center;
@@ -677,9 +768,11 @@
   border: 1.5px solid rgba(180, 150, 110, 0.2);
   margin-bottom: 6px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item:last-child {
   margin-bottom: 0;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-comp {
   width: 32px;
   height: 32px;
@@ -691,11 +784,13 @@
   align-items: center;
   justify-content: center;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-comp-cara {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-main {
   flex: 1;
   min-width: 0;
@@ -703,14 +798,17 @@
   flex-direction: column;
   gap: 1px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-lugar {
   font: 700 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-meta {
   font: 600 0.72rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-plan-extra {
   font: 700 0.7rem/1 "Nunito", sans-serif;
   padding: 2px 6px;
@@ -719,13 +817,14 @@
   color: var(--vec-lavender-deep, #7a6a9a);
   flex-shrink: 0;
 }
-/* Necesidades */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-necesidades {
   background: #E3F0F8;
   border: 1.5px solid rgba(100, 160, 210, 0.2);
   border-radius: 10px;
   padding: 10px 12px;
 }
+
 .aht-screen[data-aht-screen="ficha"] .ficha-nec-item {
   display: inline-flex;
   align-items: center;
@@ -738,7 +837,7 @@
   color: var(--ds-ink, #3b3028);
   margin: 0 4px 4px 0;
 }
-/* Empty state */
+
 .aht-screen[data-aht-screen="ficha"] .ficha-vacio {
   font: 600 0.82rem/1.3 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
@@ -747,45 +846,12 @@
   margin: 0;
 }
 
-/* ── Ficha mobile ──────────────────────────────────────────── */
-@media (max-width: 768px) {
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 12px;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-left {
-    flex-direction: row;
-    gap: 12px;
-    align-items: center;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-info {
-    text-align: left;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-    --ficha-cara-size: 80px;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-acciones {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-acciones::-webkit-scrollbar {
-    display: none;
-  }
-  .aht-screen[data-aht-screen="ficha"] .ficha-body {
-    padding: 10px 12px;
-  }
-}
-
-
-/* ============================================================
-   COTILLEOS / DIARIO — Visual richness
-   ============================================================ */
 .aht-screen[data-aht-screen="diario"] .aht-frame-body,
 .aht-screen[data-aht-screen="diario"] .coti-body,
 .aht-screen[data-aht-screen="diario"] .coti-list {
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="diario"] .aht-frame-body::-webkit-scrollbar,
 .aht-screen[data-aht-screen="diario"] .coti-body::-webkit-scrollbar,
 .aht-screen[data-aht-screen="diario"] .coti-list::-webkit-scrollbar {
@@ -793,13 +859,14 @@
   width: 0;
   height: 0;
 }
+
 .aht-screen[data-aht-screen="diario"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
 }
-/* Filters bar — styled as AHT pills */
+
 .aht-screen[data-aht-screen="diario"] .coti-filtros {
   display: flex;
   gap: 6px;
@@ -809,12 +876,15 @@
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
   background: var(--aht-surface-raised, #FFFFFF);
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-filtros::-webkit-scrollbar {
   display: none;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-filtros[hidden] {
   display: none;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-filtro {
   display: inline-flex;
   align-items: center;
@@ -829,19 +899,23 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-filtro.is-on {
   background: var(--vec-pink, #e88ba8);
   color: #fff;
   border-color: var(--vec-pink, #e88ba8);
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-filtro-pill {
   font-size: 1rem;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-body {
   padding: 0 12px 8px;
   overflow-y: auto;
   flex: 1;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item {
   position: relative;
   border-radius: 12px 10px 14px 11px / 10px 14px 11px 12px;
@@ -851,13 +925,16 @@
   margin-bottom: 10px;
   overflow: hidden;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item:last-child {
   margin-bottom: 0;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item--destacado {
   border-color: rgba(232, 139, 168, 0.35);
   background: #fef9fb;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-tape {
   position: absolute;
   top: -4px;
@@ -870,6 +947,7 @@
   z-index: 1;
   pointer-events: none;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-hoy {
   display: inline-block;
   font: 700 0.6rem/1 "Nunito", sans-serif;
@@ -880,11 +958,13 @@
   color: #fff;
   margin-bottom: 6px;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-inner {
   display: flex;
   gap: 10px;
   align-items: flex-start;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-cara {
   width: 36px;
   height: 36px;
@@ -896,28 +976,34 @@
   justify-content: center;
   background: #FDE8EE;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-cara + .coti-item-cara {
   margin-left: -8px;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-cuerpo {
   flex: 1;
   min-width: 0;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-txt {
   font: 600 0.85rem/1.35 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0 0 4px;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-cuando {
   font: 600 0.72rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
   margin: 0;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-ico {
   flex-shrink: 0;
   width: 28px;
@@ -926,6 +1012,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-item-doblado {
   position: absolute;
   bottom: 0;
@@ -936,6 +1023,7 @@
   border-radius: 0 0 12px 0;
   pointer-events: none;
 }
+
 .aht-screen[data-aht-screen="diario"] .coti-vacio {
   font: 600 0.85rem/1.3 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
@@ -944,15 +1032,12 @@
   margin: 0;
 }
 
-
-/* ============================================================
-   FICHA DIARIO (per-vecino diary) — scrollbar fix
-   ============================================================ */
 .aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body,
 .aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll,
 .aht-screen[data-aht-screen="ficha_diario"] .ficha-diario-scroll {
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body::-webkit-scrollbar,
 .aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll::-webkit-scrollbar,
 .aht-screen[data-aht-screen="ficha_diario"] .ficha-diario-scroll::-webkit-scrollbar {
@@ -960,25 +1045,24 @@
   width: 0;
   height: 0;
 }
+
 .aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
 }
+
 .aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll {
   padding: 0 16px 12px;
   overflow-y: auto;
   flex: 1;
 }
 
-
-/* ============================================================
-   ESTADO DE ANIMO — Complete visual redesign
-   ============================================================ */
 .aht-screen[data-aht-screen="ficha_animo"] .aht-frame-body,
 .aht-screen[data-aht-screen="ficha_animo"] .fani-scroll,
 .aht-screen[data-aht-screen="ficha_animo"] .ficha-diario-scroll {
   scrollbar-width: none;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .aht-frame-body::-webkit-scrollbar,
 .aht-screen[data-aht-screen="ficha_animo"] .fani-scroll::-webkit-scrollbar,
 .aht-screen[data-aht-screen="ficha_animo"] .ficha-diario-scroll::-webkit-scrollbar {
@@ -986,17 +1070,19 @@
   width: 0;
   height: 0;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .fani-scroll,
 .aht-screen[data-aht-screen="ficha_animo"] .ficha-diario-scroll {
   padding: 0;
   overflow-y: auto;
   flex: 1;
 }
-/* Animo modal — compact, centered */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-top {
   display: flex;
   flex-direction: column;
@@ -1004,7 +1090,7 @@
   padding: 20px 24px 12px;
   gap: 8px;
 }
-/* Avatar: bigger, prominent */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-avatar {
   width: 80px;
   height: 80px;
@@ -1014,11 +1100,13 @@
   box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-ink-soft, #594839);
   background: #fff;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.4rem;
@@ -1027,7 +1115,7 @@
   margin: 0;
   text-align: center;
 }
-/* Emotion pill — small, compact, not full-width */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-pills {
   display: flex;
   flex-direction: column;
@@ -1035,6 +1123,7 @@
   gap: 6px;
   padding: 0 24px 16px;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado {
   display: inline-flex;
   align-items: center;
@@ -1047,35 +1136,41 @@
   transform: rotate(-1.5deg);
   box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--alegre {
   background: #E8F5E3;
   color: var(--vec-green, #4a7a52);
   border: 2px solid rgba(74, 122, 82, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--triste {
   background: #E6D9F3;
   color: var(--vec-lavender-deep, #7a6a9a);
   border: 2px solid rgba(122, 106, 154, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--enfadado {
   background: #FBE5E8;
   color: var(--vec-red, #c42b4a);
   border: 2px solid rgba(196, 43, 74, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado--neutro {
   background: #FEF5E0;
   color: #b4966e;
   border: 2px solid rgba(180, 150, 110, 0.3);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-estado-ico {
   font-size: 1rem;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-desde {
   font: 600 0.78rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
   margin-top: 2px;
 }
-/* Section ribbons */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ribbon {
   display: block;
   padding: 8px 24px;
@@ -1088,26 +1183,29 @@
   border-top: 1px solid rgba(180, 150, 110, 0.12);
   border-bottom: 1px solid rgba(180, 150, 110, 0.12);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ribbon--lav {
   background: rgba(230, 217, 243, 0.35);
 }
-/* Causa / explanation — airy, no beige */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-causa {
   padding: 16px 24px 20px;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-causa p {
   font: 500 0.9rem/1.5 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-causa--illus {
   background: transparent;
 }
-/* Consequences — hidden (removed in JS) */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-mientras {
   display: none;
 }
-/* CTA button — AHT button language, integrated */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-cta {
   display: block;
   width: calc(100% - 48px);
@@ -1123,14 +1221,16 @@
   box-shadow: 0 2px 6px rgba(232, 139, 168, 0.25);
   transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-cta:hover {
   background: #d67a98;
   box-shadow: 0 3px 10px rgba(232, 139, 168, 0.35);
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-cta:active {
   transform: scale(0.97);
 }
-/* Ghost button */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ghost {
   display: block;
   width: calc(100% - 48px);
@@ -1145,12 +1245,13 @@
   text-align: center;
   transition: background 0.15s, color 0.15s, border-style 0.15s;
 }
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-ghost:hover {
   background: var(--vec-pink, #e88ba8);
   color: #fff;
   border-style: solid;
 }
-/* Hint */
+
 .aht-screen[data-aht-screen="ficha_animo"] .animo-modal-hint {
   font: 500 0.78rem/1.3 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);

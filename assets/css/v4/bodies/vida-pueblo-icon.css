@@ -1,0 +1,9 @@
+/* v4/bodies/vida-pueblo-icon.css */
+/* --- Vida del pueblo: icono --- */
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-modal-ico {
+  margin: 0 auto .15rem;
+  font-size: 1.65rem;
+  line-height: 1;
+  transform: rotate(-4deg);
+}

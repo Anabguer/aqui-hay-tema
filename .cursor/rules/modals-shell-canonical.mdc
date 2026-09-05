@@ -20,4 +20,4 @@ No reintroducir `modals-shell-lavanda-mobile.css`, `modal-core.css`, `play-v3-ca
 
 ## Guardia
 
-Tras cambios: `scripts/aht_guard_modal_shell.ps1` + `node tests/modal_architecture_test.js`.
+Tras cambios: `scripts/aht_guard_css_architecture.ps1` + `node tests/modal_architecture_test.js`.

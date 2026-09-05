@@ -1,16 +1,7 @@
 /* AHT-FRAME-CANON-v4 */
-
-.play-v3:has(.game-shell) .play-root[data-capa]:not([data-capa=""]) .velo,
-.play-v3:has(.game-shell) .play-root[data-consulta]:not([data-consulta=""]) .velo {
-  background-color: var(--aht-overlay, rgba(38, 31, 47, 0.45));
-}
-.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .ficha-tape,
-.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .mis-pin,
-.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .org-pin,
-.play-v3:has(.game-shell) .play-root[data-capa] .aht-screen > .agenda-pin { display: none; }
 /* ============================================================
-   AHT V4 — SCREEN FRAME
-   Autoridad ÚNICA para: frame exterior, header, título, X,
+   AHT V4 â€” SCREEN FRAME
+   Autoridad ÃšNICA para: frame exterior, header, tÃ­tulo, X,
    body, footer, scroll estructural, responsive base.
 
    Cada screen V4 consume estos tokens y esta estructura.
@@ -19,8 +10,38 @@
    Aislamiento: todas las reglas usan prefijo .aht-frame
    para no chocar con clases legacy (.capa, .cerrar, etc.)
    ============================================================ */
+/* â”€â”€ VELO V4 (backdrop) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ FRAME: Shell base â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* .aht-frame is a flex child of .aht-screen (which handles
+   position:fixed + centering). Do NOT apply position:fixed here â€”
+   the ancestor .aht-screen already has a transform, which would
+   create a new containing block and clip the frame to 0 height. */
+/* AHT-FRAME-CANON-v4 */
+/* â”€â”€ FRAME: Overlay mode (ficha desde mensajitos) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ HEADER â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* Highlight detrÃ¡s del tÃ­tulo â€” Celestine: ligeramente torcido */
+/* â”€â”€ TÃTULO â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* DecoraciÃ³n âœ¦ */
+/* â”€â”€ CLOSE (X) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ BODY â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ FOOTER (opcional) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ SUBTITLE slot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ TABS: View switch compartido (Mensajitos + Vecinos) â”€â”€â”€ */
+/* Autoridad ÃšNICA para el selector de dos vistas.
+   RestauraciÃ³n fiel del diseÃ±o legacy AHT:
+   - radius orgÃ¡nico asimÃ©trico
+   - pespunte dashed blanco interior
+   - sombra exterior con profundidad
+   - rotaciÃ³n sutil
+   - rosa legacy #e8628a activo / lavanda #d4bee8 inactivo
+   - borde sÃ³lido oscuro siempre */
+/* Pespunte interior â€” rasgo signature del diseÃ±o AHT */
+/* Counter pill â€” bolita blanca con borde oscuro */
+/* Tab activo â†’ nÃºmero rosa oscuro */
+/* Tab inactivo â†’ nÃºmero lila oscuro */
+/* â”€â”€ RESPONSIVE: MOBILE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* â”€â”€ SCROLLBAR styling (AHT rosa) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-/* ── VELO V4 (backdrop) ───────────────────────────────────── */
 .aht-velo {
   position: fixed;
   inset: 0;
@@ -30,16 +51,24 @@
   pointer-events: none;
   transition: opacity var(--aht-dur, 200ms) ease;
 }
+
 .aht-velo--visible {
   opacity: 1;
   pointer-events: auto;
 }
 
-/* ── FRAME: Shell base ────────────────────────────────────── */
-/* .aht-frame is a flex child of .aht-screen (which handles
-   position:fixed + centering). Do NOT apply position:fixed here —
-   the ancestor .aht-screen already has a transform, which would
-   create a new containing block and clip the frame to 0 height. */
+.play-v3:not([data-capa=""]) .velo,
+.play-v3 .play-root[data-consulta]:not([data-consulta=""]) .velo {
+  background-color: var(--aht-overlay, rgba(38, 31, 47, 0.45));
+}
+
+.play-v3 .aht-screen > .ficha-tape,
+.play-v3 .aht-screen > .mis-pin,
+.play-v3 .aht-screen > .org-pin,
+.play-v3 .aht-screen > .agenda-pin {
+  display: none;
+}
+
 .aht-frame {
   width: 100%;
   max-width: 100%;
@@ -49,7 +78,7 @@
   flex-direction: column;
   overflow: hidden;
   box-sizing: border-box;
-  /* Piel V4 — autoridad propia, dirección Celestine */
+  /* Piel V4 â€” autoridad propia, direcciÃ³n Celestine */
   background-color: var(--aht-shell-bg, #FCFBFE);
   border: 1.5px solid var(--aht-border, #D8D1DE);
   border-radius: var(--aht-frame-radius, 22px 16px 24px 15px / 16px 24px 15px 22px);
@@ -58,12 +87,10 @@
     0 1px 0 rgba(255, 255, 255, 0.6) inset;
 }
 
-/* ── FRAME: Overlay mode (ficha desde mensajitos) ──────────── */
 .aht-frame--overlay {
   z-index: var(--aht-z-frame-overlay, 200);
 }
 
-/* ── HEADER ────────────────────────────────────────────────── */
 .aht-frame-header {
   flex: 0 0 auto;
   display: flex;
@@ -75,7 +102,6 @@
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
 }
 
-/* Highlight detrás del título — Celestine: ligeramente torcido */
 .aht-frame-header::before {
   content: "";
   position: absolute;
@@ -90,7 +116,6 @@
   z-index: 0;
 }
 
-/* ── TÍTULO ────────────────────────────────────────────────── */
 .aht-frame-title {
   position: relative;
   z-index: 1;
@@ -110,7 +135,6 @@
   display: block;
 }
 
-/* Decoración ✦ */
 .aht-frame-title::before,
 .aht-frame-title::after {
   content: "\2726";
@@ -125,7 +149,6 @@
   text-transform: none;
 }
 
-/* ── CLOSE (X) ─────────────────────────────────────────────── */
 .aht-frame-close {
   position: absolute;
   top: 6px;
@@ -158,27 +181,21 @@
               box-shadow var(--aht-dur-fast, 120ms) ease;
   line-height: 1;
 }
+
 .aht-frame-close:hover {
   transform: rotate(0deg) scale(1.05);
   box-shadow: 2px 3px 0 rgba(51, 38, 30, .16);
 }
+
 .aht-frame-close:active {
   transform: rotate(2.5deg) scale(0.96);
 }
 
-/* ── BODY ──────────────────────────────────────────────────── */
 .aht-frame-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  background-color: var(--aht-body-bg, #F6F3F8);
-  background-image:
-    radial-gradient(ellipse at 20% 50%, rgba(241, 237, 246, 0.3) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(249, 220, 228, 0.15) 0%, transparent 40%);
+  scrollbar-width: thin;
+  scrollbar-color: #e989a7 rgba(249, 220, 228, .45);
 }
 
-/* ── FOOTER (opcional) ─────────────────────────────────────── */
 .aht-frame-footer {
   flex: 0 0 auto;
   padding: 10px 16px;
@@ -186,7 +203,6 @@
   border-top: 1px solid var(--aht-footer-border, #A99ADF);
 }
 
-/* ── SUBTITLE slot ─────────────────────────────────────────── */
 .aht-frame-subtitle {
   font-family: var(--aht-font-hand, "Caveat", cursive);
   font-size: 1.05rem;
@@ -197,15 +213,6 @@
   padding: 0;
 }
 
-/* ── TABS: View switch compartido (Mensajitos + Vecinos) ─── */
-/* Autoridad ÚNICA para el selector de dos vistas.
-   Restauración fiel del diseño legacy AHT:
-   - radius orgánico asimétrico
-   - pespunte dashed blanco interior
-   - sombra exterior con profundidad
-   - rotación sutil
-   - rosa legacy #e8628a activo / lavanda #d4bee8 inactivo
-   - borde sólido oscuro siempre */
 .aht-frame-tabs {
   display: flex;
   justify-content: center;
@@ -215,6 +222,7 @@
   background-color: transparent;
   border-bottom: none;
 }
+
 .aht-frame-tab {
   flex: 0 1 auto;
   min-height: 42px;
@@ -238,14 +246,17 @@
   text-shadow: 0 1px 0 rgba(255, 255, 255, .35);
   text-align: center;
 }
+
 .aht-frame-tab:hover {
   transform: rotate(0deg) translateY(-1px);
   box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .28);
 }
+
 .aht-frame-tab:active {
   transform: rotate(-0.4deg) translateY(0);
   box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .15);
 }
+
 .aht-frame-tab.is-active {
   background: #e8628a;
   color: #fff;
@@ -254,10 +265,11 @@
   box-shadow: 2px 3px 0 rgba(196, 43, 74, .5);
   transform: rotate(0.4deg);
 }
+
 .aht-frame-tab.is-active::after {
   display: none;
 }
-/* Pespunte interior — rasgo signature del diseño AHT */
+
 .aht-frame-tab.is-active::before {
   content: "";
   position: absolute;
@@ -266,7 +278,7 @@
   border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
   pointer-events: none;
 }
-/* Counter pill — bolita blanca con borde oscuro */
+
 .aht-frame-tab .mensajitos-tab-badge,
 .aht-frame-tab [data-buzon-tab-count] {
   min-width: 24px;
@@ -282,14 +294,14 @@
   box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .28);
   transform: rotate(4deg);
 }
-/* Tab activo → número rosa oscuro */
+
 .aht-frame-tab.is-active .mensajitos-tab-badge,
 .aht-frame-tab.is-active [data-buzon-tab-count] {
   background: #fff;
   color: #b85a78;
   border-color: #33261E;
 }
-/* Tab inactivo → número lila oscuro */
+
 .aht-frame-tab:not(.is-active) .mensajitos-tab-badge,
 .aht-frame-tab:not(.is-active) [data-buzon-tab-count] {
   background: #fff;
@@ -297,42 +309,17 @@
   border-color: #33261E;
 }
 
-/* ── RESPONSIVE: MOBILE ────────────────────────────────────── */
-@media (max-width: 768px) {
-  .aht-frame {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  .aht-frame-header {
-    padding: 10px 48px 8px 14px;
-  }
-
-  .aht-frame-title {
-    font-size: 1.95rem;
-  }
-
-  .aht-frame-close {
-    top: 4px;
-    right: 4px;
-    transform: rotate(1.5deg);
-  }
-}
-
-/* ── SCROLLBAR styling (AHT rosa) ──────────────────────────── */
 .aht-frame-body::-webkit-scrollbar {
   width: 9px;
 }
+
 .aht-frame-body::-webkit-scrollbar-track {
   background: rgba(249, 220, 228, .45);
   border-radius: 6px;
 }
+
 .aht-frame-body::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #e989a7, #c42b4a);
   border-radius: 6px;
   border: 2px solid rgba(249, 220, 228, .5);
-}
-.aht-frame-body {
-  scrollbar-width: thin;
-  scrollbar-color: #e989a7 rgba(249, 220, 228, .45);
 }

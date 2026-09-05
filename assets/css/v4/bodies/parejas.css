@@ -1,0 +1,55 @@
+/* v4/bodies/parejas.css */
+/* --- Parejas: mismo shell que misiones/cotilleos --- */
+
+.play-v3 .aht-screen[data-aht-screen="parejas"]::before {
+  content: "";
+  display: block;
+  position: absolute;
+  inset: 5px;
+  border: 1.5px dashed rgba(107, 81, 56, .34);
+  border-radius: 17px 12px 19px 11px / 12px 19px 11px 17px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel {
+  background-color: var(--ds-paper-modal, #fffaf0);
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
+    linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
+    url("../../play-v3/capas/libreta_hoja.png");
+  background-position: center, center, center;
+  background-size: cover, cover, cover;
+  background-repeat: no-repeat;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: .35rem .2rem .5rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-sub {
+  margin: .15rem 0 0;
+  font: 600 .78rem/1.35 Nunito, "Segoe UI", sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 14px 11px 15px 10px / 11px 15px 10px 14px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .1);
+  padding: .55rem .65rem;
+  margin-bottom: .45rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item:nth-child(odd) {
+  transform: rotate(-.25deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-modal-item:nth-child(even) {
+  transform: rotate(.2deg);
+}

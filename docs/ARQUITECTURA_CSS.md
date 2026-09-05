@@ -1,73 +1,65 @@
 # Arquitectura CSS — Aquí Hay Tema (contrato canónico)
 
-Documento **prescriptivo**. Antes de tocar CSS de play, modales o pantallas, léelo completo.
+Documento **prescriptivo**. Antes de tocar CSS de play, modales, inicio o pantallas, léalo completo.
 
 ## A. Principio rector
 
-- **Una sola generación de modales en producción:** V4 (`aht-screen` + `aht-frame`).
-- El DOM de `play.php` **no** usa wrappers `.capa-*` (solo utilidad `capa-scroll` en scroll internos).
-- **Prohibido** reintroducir hojas eliminadas (`play-v3-capas*`, `modal-core*`, `modals-shell-lavanda*`, trilogía visual-review, `play-v3-ficha.css`, etc.).
-- **No añadir `!important` nuevo** salvo excepción documentada en este archivo (ninguna hoy).
+- **Modales:** V4 única autoridad (`aht-screen` + `aht-frame` + `screens.css`).
+- **Inicio:** stack unificado en `assets/css/inicio/` (sin `inicio-mobile.css` legacy en design-system/screens).
+- **Prohibido** reintroducir hojas eliminadas (capas, modal-core, lavanda shell, visual-review, screens-secondary, etc.).
+- **No añadir `!important` nuevo** salvo excepciones documentadas (§I).
 
 ## B. Contrato DOM
 
 | Elemento | Rol |
 |----------|-----|
-| `.aht-screen[data-aht-screen="…"]` | Contenedor fijo de cada pantalla modal (19 screens). |
-| `.aht-frame` | Carcasa (borde, fondo shell, header, body, footer, X). |
-| `.aht-velo` / `.velo` | Backdrop; color desde `--aht-overlay`. |
-| `data-capa` en `.play-root` | Sigue siendo el **interruptor JS** de visibilidad; CSS V4 mapea `data-capa` → `data-aht-screen`. |
+| `.aht-screen[data-aht-screen="…"]` | Pantalla modal (19 screens). |
+| `.aht-frame` | Carcasa modal V4. |
+| `data-capa` en `.play-root` | Interruptor JS de visibilidad. |
+| `.capa-scroll`, `.capa-cerrar-pestaña` | **Utilidades** de scroll/cierre (no wrappers `.capa-*`). |
 
 ## C. Orden de carga en `play.php`
 
-1. `design-system/tokens.css` + `v4/tokens-v4.css`
-2. Layout global: `play-v3.css`, `play-v3-app.css`, inicio-views, shell, mapa, responsive base
-3. `design-system/components.css`
-4. **`v4/screen-frame.css`** — autoridad de carcasa
-5. Cuerpos por pantalla: `play-v3-*.css` (selectores **`.aht-screen[data-aht-screen="…"]`**, no `.capa-*`)
-6. DS bodies: `mensajitos-body.css`, `vecinos-body.css`, cartas v1
-7. **`v4/screens-secondary.css`** — reglas secundarias migradas (ex secondary-unified)
-8. **`v4/screens.css`** — visibilidad + contenido V4 (**última autoridad** de pantallas modales)
-9. Stacks inicio móvil/desktop (grandes; no refactorizar sin plan)
-10. `typography-reading.css`, `legibilidad-global.css`
-
-No enlazar CSS de capas/modal legacy después de `screens.css`.
+1. `tokens.css` + `v4/tokens-v4.css`
+2. Global play-v3 + inicio-views (flash dual-view)
+3. `v4/screen-frame.css`
+4. Cuerpos `play-v3-*.css` (selectores `.aht-screen[…]`)
+5. DS: mensajitos-body, vecinos-body, cartas v1
+6. **`v4/bodies/*.css`** — parejas, ajustes, relaciones, misc (ex screens-secondary)
+7. **`v4/screens.css`** — visibilidad + inventario + última autoridad modal
+8. **Inicio:** `inicio/tokens-inicio.css` → `inicio-base.css` → `inicio-mobile.css` → `inicio-desktop.css` → `inicio-cromatica-desktop.css` → `inicio-responsive.css`
+9. `legibilidad-global.css`, `typography-reading.css`
+10. `play-v3-lab.css` solo con `?lab=1`
 
 ## D. Tokens
 
-- **V4:** `assets/css/v4/tokens-v4.css` — `--aht-*`, incl. `--aht-shell-bg: #FCFBFE`.
-- **Legacy DS:** `tokens.css` — componentes globales; alias `--modal-shell-bg` apunta a V4 donde aplique.
-- Cambios de color de carcasa modal → **tokens-v4** y/o **screen-frame**, no en `play-v3-avisos` ni similares.
+- V4: `v4/tokens-v4.css` (`--aht-shell-bg: #FCFBFE`).
+- Inicio: `inicio/tokens-inicio.css` + cromática desktop en `inicio-cromatica-desktop.css` (sin `!important`; orden de carga sustituye blindaje).
 
-## E. Frame (carcasa)
+## E. Frame
 
-- Archivo: `assets/css/v4/screen-frame.css`
-- Marcador de integridad: `AHT-FRAME-CANON-v4`
-- `.aht-frame` usa `--aht-shell-bg`, borde `--aht-border`, sombra `--aht-frame-shadow`
-- Título, tabs, X: solo clases `.aht-frame-*`
+- `v4/screen-frame.css` — marcador `AHT-FRAME-CANON-v4`.
 
-## F. Contenido por pantalla
+## F. Guardas
 
-- Reglas de negocio visual en `play-v3-<pantalla>.css` y DS bodies.
-- Selector canónico: `.aht-screen[data-aht-screen="nombre"]` (snake_case como en DOM).
-- `v4/screens.css` — layout compartido, visibilidad, piezas mensajitos/buzón migradas.
-- `v4/screens-secondary.css` — ajustes finos (parejas, ajustes, ficha relaciones, etc.).
+- `scripts/aht_guard_css_architecture.ps1` (alias `aht_guard_modal_shell.ps1`)
+- `node tests/css_architecture_test.js`
+- Revisión visual: **intocables13.com** (Neni).
 
-## G. Prohibiciones explícitas
+## G. Prohibiciones
 
-- Fondos scrapbook `#fffaf0`, `libreta_hoja.png` en modales principales.
-- Selectores `.capa-*` nuevos en CSS cargado por play (excepto comentarios y clase util `capa-scroll`).
-- Duplicar piel modal en `play-v3-visual-*` (eliminados).
-- Cargar `!important` wars entre lavanda y capas (lavanda eliminada).
+- Selectores wrapper `.capa-vecinos`, `.capa-parejas`, etc.
+- Enlazar `screens-secondary.css` o stacks inicio legacy bajo `design-system/screens/inicio-*.css` (salvo `inicio-views.css`).
 
-## H. Validación y guardas
+## H. FTP / prod
 
-- Tras cambios en frame/screens/play links: `scripts/aht_guard_modal_shell.ps1`
-- Tests: `node tests/modal_architecture_test.js`, `php tests/tutorial_lavanda_css_test.php`
-- Revisión visual final: **intocables13.com** (Neni), no localhost como producto.
+Tras deploy fase 2, borrar remotos listados en `scripts/aht_ftp_delete_legacy_css.ps1`.
 
-### Deuda conocida (honesta)
+## I. `!important` legítimo restante
 
-- Algunas reglas en `screens-secondary.css` conservan `!important` heredado del unified legacy; reducir gradualmente sin regresión visual.
-- Consulta edificio / notas mapa pueden tener selectores antiguos menores — auditar si se reabre esa pieza.
-- Stacks inicio desktop/mobile siguen siendo voluminosos y separados del V4 frame.
+| Ubicación | Motivo |
+|-----------|--------|
+| `play.php` inline (4 reglas) | Debug / ocultar playtest y tiempo en prod |
+| `mensajitos-cartas-persona-v1.css`, `mensajitos-carta-regalo-v1.css` | Cartas DS aún no migradas a autoridad V4 (fase cartas pendiente) |
+
+Objetivo inicio + v4: **0 `!important`** (cumplido en fase 2).

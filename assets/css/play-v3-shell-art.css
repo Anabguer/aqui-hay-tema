@@ -1,56 +1,79 @@
-﻿/**
+/**
 
  * Direccion artistica shell Ã¢â‚¬â€ objetos visuales, no dashboard.
 
  */
+/* Anular restos dashboard del shell-ui base */
+/* === PASS 2: composicion lateral izquierdo === */
+/* Dia ticket: placa amarilla + ficha blanca */
+/* Reloj HUD: ficha dia + hora separada */
+/* Pasar el rato: control de jugador junto al reloj */
+/* Es de noche: indicador pequeño y secundario, colgado bajo el bloque reloj/botón */
+/* Noche activa (23:00–07:59): velo azulado global sobre la partida.
 
-body.play-v3, .game-shell, .game-top { background: #fff !important; }
+   Capa decorativa pura: pointer-events none, no bloquea clics, no oculta nada.
+
+   position:fixed + inset:0 → cubre TODO el viewport (la página tiene una franja
+
+   superior fuera de .game-shell). Jerarquía: interfaz base < velo < modales
+
+   (capa=8+, consulta 10/90/110, lab 200, tutorial 520/12000…), que conservan
+
+   su z-index propio por encima. Reversible vía .noche-activa. */
+/* Noche: chrome HOME bajo el velo nocturno (z-index:2).
+   Mensajitos ya tenía z-index:1; Celestine necesita capa contenida (CELESTINE-STACK-v1)
+   para que ::before/::after decorativos (z-index 3–5 internos) no escapen al contexto
+   de .game-shell y queden bajo el velo. */
+/* CELESTINE-STACK-v1 — contiene pseudos decorativos dentro del botón.
+   Sin isolation, ::before (z-index 3–4) participa en el contexto de .game-shell
+   y puede pintar por encima del velo nocturno (z-index:2). */
+/* Dinero: etiqueta horizontal tipo chapa clavada */
+/* Vida del pueblo - corazon organico */
+/* Bloques - mini edificios mas grandes */
+/* Parejas mas grandes + rotulo */
+/* ASSET hint in devtools comment: mini_fachadas_abc.png recomendado si se quiere salto ilustrado */
+/* === PASS 3: laterales mas grandes === */
+/* Anular ticket plano del shell-ui base */
+/* === PASS 3b: celestine XL + chincheta visible + laterales mas grandes === */
+/* Cabecera: titulo mas grande + corazon acorde */
+/* Dinero: mas separado del dia y un poco mas bajo */
+/* Libreta de Celestine en capas */
+/* Vida pueblo: margen derecho cabecera */
+/* === Parejas: fichas horizontales (ref. diseno Neni) === */
+/* === Proximo plan polaroid (debajo vecinos) === */
+/* === Planes en curso: navegacion discreta ‹ 1/N › (solo visible con N>1) ===
+   Una sola polaroid activa; cambiar de encuentro solo re-renderiza. */
+/* plan-cara-token: clic → ficha */
+/* === Columna derecha: Misiones + Cotilleo + Parejas === */
+/* Parejas: raya difuminada bajo titulo */
+/* Parejas: raya difuminada visible bajo titulo */
+/* Parejas: layout ref. foto (corazon entre avatares) */
+/* === Misiones papel (debajo mensajitos) === */
+/* Plan en curso — polaroid y agenda */
+/* Las caras del plan en curso usan solo el aro emocional del token */
+/* Aquí hay tema — bloque en nota del edificio */
+/* Popover «Quién está» — listado compacto + temas */
+/* Popover Qui�n est� � bloques jer�rquicos */
+/* Intervenci�n durante encuentro (polaroid) */
+/* Pastel suave por acción */
+/* Selector agrupado de temas (P07 — reorganización UX, sin semántica nueva) */
+/* Desktop (polaroid overflow:visible): popover anclado al ancho de la tarjeta */
+/* Móvil (carrusel con overflow-x:auto): bloque estático dentro de la tarjeta,
+   sin recortes ni desbordes; scroll solo en el listado */
+/* === METERME EN SU CABEZA — eleccion de persona (flujo 2 pasos, contenido) === */
+/* Consulta edificio + Nuevo plan: alineación estilo mockup */
+
+body.play-v3, .game-shell, .game-top { background: #fff; }
 
 .shell-grupo { position: relative; width: 100%; max-width: 100%; min-width: 0; }
 
 .shell-grupo + .shell-grupo { margin-top: 1.35rem; }
 
-.shell-grupo-kicker, .zona-tit { display: block; margin: 0 0 .55rem; font-size: .52rem; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: #a89888; }
+.shell-grupo-kicker, .zona-tit { font-size: .68rem; }
 
 .shell-par-buzon-coti { display: flex; flex-direction: column; align-items: stretch; gap: .15rem; }
 
-.celestine-nota {
-
-  position: relative; display: block; width: 100%; overflow: visible;
-
-  padding: 1.02rem 1.38rem .92rem .95rem;
-
-  border: 1.5px solid #dcc8aa;
-
-  border-radius: 2px 9px 4px 6px;
-
-  background-color: #fdf9f4;
-
-  background-image:
-
-    linear-gradient(180deg, rgba(255, 253, 249, 0.82) 0%, rgba(255, 253, 249, 0.5) 42%, rgba(255, 253, 249, 0.28) 100%),
-
-    url("../play-v3/capas/libreta_hoja.png");
-
-  background-position: center, left center;
-
-  background-size: cover, cover;
-
-  background-repeat: no-repeat, no-repeat;
-
-  cursor: pointer; text-align: left; font: inherit; color: inherit;
-
-  transform: rotate(-0.45deg);
-
-  box-shadow:
-
-    1px 2px 0 rgba(210, 190, 165, 0.14),
-
-    2px 4px 12px rgba(80, 70, 58, 0.07),
-
-    inset 0 0 0 1px rgba(255, 255, 255, 0.62);
-
-}
+.celestine-nota { padding: 1.02rem 1.38rem .92rem .95rem; }
 
 .celestine-nota::before {
 
@@ -104,21 +127,17 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .celestine-nota .libreta-kicker {
 
-  display: block; margin: 0 0 1.12rem;
+  font-size: 1.28rem;
 
-  font-family: Caveat, cursive; font-size: 1.3rem; font-weight: 700;
+  line-height: 1.05;
 
-  color: #2c261f; letter-spacing: .01em; text-transform: none; line-height: 1.05;
+  margin-bottom: 1.1rem;
 
-}
-
-.celestine-nota .obj-vecinos-tit {
-
-  display: block; margin: 0 0 .48rem;
-
-  font-family: Nunito, "Segoe UI", sans-serif; font-size: .82rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; color: #6a5848;
+  color: #6e5848;
 
 }
+
+.celestine-nota .obj-vecinos-tit { font-size: .82rem; margin-bottom: .48rem; }
 
 .celestine-nota .obj-vecinos-stats .stat-row {
 
@@ -136,17 +155,17 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-.celeste-lead { margin: 0 0 .35rem; font-family: Fraunces, Georgia, serif; font-size: .92rem; line-height: 1.2; color: #2c261f; }
+.celeste-lead { font-size: 1.1rem; margin-bottom: .48rem; }
 
-.celeste-lead strong { font-size: 1.15rem; font-weight: 700; }
+.celeste-lead strong { font-size: 1.62rem; }
 
-.celeste-lead span { font-style: italic; font-size: .82rem; color: #6a5848; }
+.celeste-lead span { font-size: 1.02rem; }
 
 .celeste-metricas { display: flex; flex-direction: column; gap: .18rem; }
 
-.celeste-m { display: flex; align-items: center; gap: .45rem; font-size: .66rem; line-height: 1.25; color: #4a4038; font-family: Fraunces, Georgia, serif; font-style: italic; }
+.celeste-m { font-size: .88rem; gap: .42rem; }
 
-.celeste-m::before { content: ""; flex: 0 0 11px; width: 11px; height: 11px; background: #c9a87a; }
+.celeste-m::before { flex: 0 0 14px; width: 14px; height: 14px; }
 
 .celeste-m.m-pareja::before { height: 9px; background: #e56b8a; clip-path: polygon(50% 100%, 0 38%, 0 18%, 22% 0, 50% 16%, 78% 0, 100% 18%, 100% 38%); border: 1px solid #2c261f; box-sizing: border-box; }
 
@@ -162,21 +181,39 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .shell-grupo-paso .obj-cotilleo { margin-top: -.05rem; margin-left: .35rem; max-width: calc(100% - .35rem); border-bottom: 0; }
 
-.shell-grupo-planes .obj-proximo { margin-top: 0; padding: .55rem .5rem .45rem .55rem; background: #fffef8; border-left: 3px solid #d4c4a8; box-shadow: 0 1px 0 rgba(120,96,72,.15), 2px 4px 10px rgba(40,28,16,.05); transform: rotate(-0.4deg); position: relative; }
+.shell-grupo-planes .obj-proximo { padding: .82rem .68rem .65rem .75rem; }
 
 .shell-grupo-planes .obj-proximo::before { content: ""; position: absolute; top: -7px; left: 14px; width: 28px; height: 11px; background: rgba(255,228,190,.75); transform: rotate(-3deg); }
 
-.shell-grupo-planes .obj-proximo-tit { font-family: Caveat, cursive; font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: none; color: #7a6450; }
+.shell-grupo-planes .obj-proximo-tit {
 
-.shell-grupo-planes .obj-planes-pend { display: inline-flex; width: auto; max-width: 100%; margin-top: .45rem; padding: .22rem .5rem .22rem .42rem; background: #fff6c8; border: 1px dashed #c9a87a; transform: rotate(1.2deg); clip-path: polygon(2% 0, 98% 4%, 96% 100%, 0 92%); font-family: Caveat, cursive; font-size: .78rem; font-weight: 700; color: #5a4838; }
+  font-family: Caveat, cursive;
 
-.obj-nota-rosa { display: inline-flex; align-items: center; gap: .35rem; width: auto; margin-top: .65rem; padding: .38rem .62rem .42rem .5rem; border: 0; background: linear-gradient(145deg, #fde8ef, #fff0f4); transform: rotate(2.5deg); clip-path: polygon(0 6%, 96% 0, 100% 88%, 8% 100%, 0 94%); box-shadow: 2px 3px 0 rgba(196,43,74,.12); cursor: pointer; font: inherit; color: #2c261f; }
+  font-size: 1.32rem;
 
-.obj-nota-rosa .obj-nuevo-plan-ico { width: auto; height: auto; border: 0; border-radius: 0; background: transparent; box-shadow: none; transform: none; font-family: Caveat, cursive; font-size: 1.1rem; font-weight: 700; }
+  font-weight: 700;
 
-.obj-nota-rosa .obj-nuevo-plan-txt { font-family: Caveat, cursive; font-size: .82rem; font-weight: 700; }
+  letter-spacing: .02em;
 
-.obj-residencias-row, .obj-bloques-res { display: flex; flex-direction: row; justify-content: space-between; align-items: flex-start; gap: .25rem; width: 100%; max-width: 100%; min-width: 0; padding: .45rem .35rem .35rem; background: linear-gradient(180deg, #fffef9, #fff); border: 1px solid rgba(180,150,110,.2); transform: rotate(.5deg); clip-path: polygon(0 0, 100% 2%, 100% 100%, 0 98%); box-shadow: 0 2px 8px rgba(40,28,16,.04); }
+  text-transform: none;
+
+  color: #7a6450;
+
+  line-height: 1.05;
+
+  margin-bottom: .24rem;
+
+}
+
+.shell-grupo-planes .obj-planes-pend { font-size: .94rem; }
+
+.obj-nota-rosa { margin-top: .85rem; padding: .48rem .72rem .52rem .6rem; }
+
+.obj-nota-rosa .obj-nuevo-plan-ico { font-size: 1.25rem; }
+
+.obj-nota-rosa .obj-nuevo-plan-txt { font-size: 1rem; }
+
+.obj-residencias-row, .obj-bloques-res { padding: .65rem .45rem .55rem; gap: .45rem; }
 
 .obj-residencia-mini, .obj-bloque-mini { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: .2rem; padding: .15rem .05rem; border: 0; background: transparent; font: inherit; text-align: center; color: inherit; cursor: default; }
 
@@ -186,7 +223,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .obj-residencia-mini.is-cerrado .res-fachada, .obj-bloque-mini.is-cerrado .bloque-mini-fachada { background: #ece8e0; border-color: #b8b0a4; filter: grayscale(.2); }
 
-.res-fachada, .bloque-mini-fachada { width: 34px; height: 28px; border: 2px solid #2c261f; position: relative; clip-path: polygon(8% 100%, 8% 38%, 50% 6%, 92% 38%, 92% 100%); background: linear-gradient(180deg, #f3e6cc, #e8dcc8); }
+.res-fachada, .bloque-mini-fachada { width: 58px; height: 52px; }
 
 .res-letra, .bloque-mini-letra { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); font-size: .58rem; font-weight: 800; background: #fff6c8; border: 1px solid #2c261f; padding: 0 4px; }
 
@@ -194,67 +231,120 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .obj-bloque-mini .bloque-mini-info strong { display: none; }
 
-.obj-parejas-list { display: flex; flex-direction: column; gap: .75rem; }
+.obj-parejas-list {
+  gap: .42rem;
+}
 
-.obj-pareja-piece, .obj-pareja-fila { display: flex; flex-direction: column; align-items: center; gap: .22rem; }
+.obj-pareja-piece,
+.obj-pareja-fila {
+  gap: .55rem;
+  padding: .28rem .5rem;
+  min-height: 0;
+}
 
-.obj-pareja-fotos { display: flex; align-items: center; justify-content: center; min-height: 38px; }
+.obj-pareja-fotos {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0;
+  min-height: 0;
+  flex: 0 0 auto;
+}
 
-.obj-pareja-cara { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(40,28,16,.15); background: #f3e6cc; }
+.obj-pareja-cara {
+  width: 32px;
+  height: 32px;
+  margin: 0;
+  border: 2px solid #2c261f;
+  box-shadow: none;
+  flex: 0 0 32px;
+}
 
-.obj-pareja-cara:first-child { transform: rotate(-6deg); z-index: 1; margin-right: -10px; }
+.obj-pareja-cara:first-child {
+  margin-right: 0;
+  transform: rotate(-3deg);
+  z-index: 1;
+}
 
-.obj-pareja-cara:last-child { transform: rotate(5deg); z-index: 2; margin-left: -10px; }
+.obj-pareja-cara:last-child {
+  margin-left: 0;
+  transform: rotate(3deg);
+  z-index: 1;
+}
 
-.obj-pareja-enlace, .obj-pareja-corazon { flex: 0 0 14px; width: 14px; height: 12px; z-index: 3; margin: 0 -2px; background: #e56b8a; clip-path: polygon(50% 100%, 0 38%, 0 18%, 22% 0, 50% 16%, 78% 0, 100% 18%, 100% 38%); border: 1px solid #2c261f; box-sizing: border-box; }
+.obj-pareja-enlace,
+.obj-pareja-corazon {
+  width: 10px;
+  height: 9px;
+  flex: 0 0 10px;
+  margin: 0 5px;
+  position: relative;
+  top: 0;
+  z-index: 2;
+  align-self: center;
+}
 
-.obj-pareja-piece.is-crisis .obj-pareja-enlace { background: transparent; clip-path: none; border: none; width: 16px; height: 14px; background: linear-gradient(45deg, transparent 42%, #c42b4a 42%, #c42b4a 52%, transparent 52%), linear-gradient(-45deg, transparent 42%, #c42b4a 42%, #c42b4a 52%, transparent 52%); }
+.obj-pareja-piece.is-crisis .obj-pareja-enlace {
+  background: #e98da4;
+  clip-path: polygon(50% 100%, 0 38%, 0 18%, 22% 0, 50% 16%, 78% 0, 100% 18%, 100% 38%);
+  border: 1px solid #2c261f;
+  width: 14px;
+  height: 12px;
+}
 
-.obj-pareja-nombres { font-family: Fraunces, Georgia, serif; font-size: .7rem; line-height: 1.25; text-align: center; }
+.obj-pareja-nombres {
+  font-family: Fraunces, Georgia, serif;
+  font-size: .86rem;
+  font-weight: 500;
+  font-style: normal;
+  color: #4a423a;
+  letter-spacing: .01em;
+  line-height: 1.15;
+}
 
-.pareja-crisis-sello { display: inline-block; margin-top: .08rem; padding: .1rem .35rem; font-size: .48rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #c42b4a; background: #fff5f8; border: 1px solid #e56b8a; transform: rotate(-2deg); }
+.pareja-crisis-sello {
+  margin-left: auto;
+  margin-top: 0;
+  padding: .16rem .46rem;
+  font-size: .64rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  color: #c85a65;
+  background: transparent;
+  border: 1.5px solid #c85a65;
+  border-radius: 3px;
+  transform: rotate(-6deg);
+  flex: 0 0 auto;
+}
 
-.obj-parejas-head { display: none !important; }
+.obj-parejas-head { display: none; }
 
 .obj-dinero-val::before { content: ""; display: inline-block; width: 10px; height: 10px; margin-right: .2rem; vertical-align: -1px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, #ffe566, #c9a020); box-shadow: inset 0 -1px 0 rgba(0,0,0,.12); }
 
-
-
-
-
-/* Anular restos dashboard del shell-ui base */
-
-.res-id { font-size: .62rem; font-weight: 800; letter-spacing: .06em; color: #2c261f; line-height: 1; }
+.res-id { font-size: .84rem; }
 
 .obj-residencia-mini.is-cerrado .res-meta { font-style: italic; font-size: .52rem; }
 
 .shell-grupo-residencias { margin-bottom: .15rem; }
 
-.shell-grupo-parejas { margin-top: .25rem; }
-
-
-
-
-
-/* === PASS 2: composicion lateral izquierdo === */
-
-.shell-grupo-resumen { overflow: visible; padding-top: 0; margin-bottom: 0; }
-
-
-
-.shell-grupo-cotilleo .obj-cotilleo {
-
-  margin-left: 0;
-
+.shell-grupo-parejas {
+  align-items: flex-start;
+  width: 100%;
   max-width: 100%;
+  box-sizing: border-box;
+}
 
-  transform: rotate(-0.5deg);
+.shell-grupo-resumen {
+
+  position: relative;
+
+  padding-top: 0;
+
+  padding-right: 0;
 
 }
 
-
-
-/* Dia ticket: placa amarilla + ficha blanca */
+.shell-grupo-cotilleo .obj-cotilleo { padding: .65rem .72rem .68rem .78rem; }
 
 .obj-dia {
 
@@ -272,15 +362,15 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
   margin-top: 8px;
 
-  background: transparent !important;
+  background: transparent;
 
-  border: 0 !important;
+  border: 0;
 
   transform: rotate(var(--rot, -2deg));
 
-  box-shadow: none !important;
+  box-shadow: none;
 
-  clip-path: none !important;
+  clip-path: none;
 
   filter: drop-shadow(2px 3px 0 rgba(44,38,31,.14));
 
@@ -432,12 +522,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-
-
-
-
-/* Reloj HUD: ficha dia + hora separada */
-
 .top-reloj {
 
   position: relative;
@@ -501,7 +585,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 .obj-hora::before { left: 6px; }
 
 .obj-hora::after { right: 6px; }
-
 
 .obj-hora-ico {
 
@@ -584,13 +667,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-@media (prefers-reduced-motion: reduce) {
-
-  .obj-hora-ico::after { animation: none !important; opacity: 0 !important; }
-
-}
-
-
 .obj-hora-val {
 
   display: block;
@@ -612,10 +688,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   white-space: nowrap;
 
 }
-
-
-
-/* Pasar el rato: control de jugador junto al reloj */
 
 .pasar-rato {
 
@@ -709,10 +781,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-
-
-/* Es de noche: indicador pequeño y secundario, colgado bajo el bloque reloj/botón */
-
 .es-noche {
 
   position: absolute;
@@ -789,20 +857,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-
-
-/* Noche activa (23:00–07:59): velo azulado global sobre la partida.
-
-   Capa decorativa pura: pointer-events none, no bloquea clics, no oculta nada.
-
-   position:fixed + inset:0 → cubre TODO el viewport (la página tiene una franja
-
-   superior fuera de .game-shell). Jerarquía: interfaz base < velo < modales
-
-   (capa=8+, consulta 10/90/110, lab 200, tutorial 520/12000…), que conservan
-
-   su z-index propio por encima. Reversible vía .noche-activa. */
-
 .game-shell {
 
   position: relative;
@@ -837,21 +891,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-/* Noche: chrome HOME bajo el velo nocturno (z-index:2).
-   Mensajitos ya tenía z-index:1; Celestine necesita capa contenida (CELESTINE-STACK-v1)
-   para que ::before/::after decorativos (z-index 3–5 internos) no escapen al contexto
-   de .game-shell y queden bajo el velo. */
-
 .game-shell.noche-activa .mensajitos-wrap {
 
   z-index: 1;
 
 }
 
-/* CELESTINE-STACK-v1 — contiene pseudos decorativos dentro del botón.
-   Sin isolation, ::before (z-index 3–4) participa en el contexto de .game-shell
-   y puede pintar por encima del velo nocturno (z-index:2). */
-.play-v3:has(.game-shell) .celestine-nota.obj-vecinos-resumen {
+.play-v3 .celestine-nota.obj-vecinos-resumen {
 
   isolation: isolate;
 
@@ -864,10 +910,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   z-index: 1;
 
 }
-
-
-
-/* Dinero: etiqueta horizontal tipo chapa clavada */
 
 .obj-dinero {
 
@@ -931,13 +973,15 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-.obj-dinero-val::before, .obj-dinero-lbl { display: none !important; }
+.obj-dinero-val::before, .obj-dinero-lbl { display: none; }
 
-.top-center { gap: 1.1rem; align-items: center; }
+.top-center {
 
+  gap: 2rem;
 
+  align-items: flex-end;
 
-/* Vida del pueblo - corazon organico */
+}
 
 .corazon-org .corazon-bg { fill: #fceef0; }
 
@@ -964,34 +1008,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   letter-spacing: .03em;
 
   opacity: 1;
-
-}
-
-
-
-/* Bloques - mini edificios mas grandes */
-
-.obj-residencias-row, .obj-bloques-res {
-
-  padding: .55rem .4rem .5rem;
-
-  gap: .35rem;
-
-  transform: rotate(0.3deg);
-
-}
-
-.res-fachada, .bloque-mini-fachada {
-
-  width: 46px;
-
-  height: 42px;
-
-  clip-path: polygon(6% 100%, 6% 42%, 18% 42%, 18% 58%, 82% 58%, 82% 42%, 94% 42%, 94% 100%);
-
-  background: linear-gradient(180deg, #f7edd8 0%, #e8dcc8 55%, #ddd0b8 100%);
-
-  box-shadow: inset 0 -3px 0 rgba(120,96,72,.15);
 
 }
 
@@ -1047,247 +1063,21 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-.res-id { font-size: .68rem; margin-top: .12rem; }
-
-.res-meta { font-size: .56rem; margin-top: .05rem; }
-
-.obj-residencia-mini.is-activo .res-meta { font-size: .6rem; }
-
-
-
-/* Parejas mas grandes + rotulo */
-
-.zona-tit-parejas {
-
-  display: inline-block;
-
-  margin: 0 auto .65rem;
-
-  padding: .18rem .55rem .22rem;
-
-  background: #fde8ef;
-
-  transform: rotate(-1deg);
-
-  clip-path: polygon(0 8%, 96% 0, 100% 88%, 6% 100%);
-
-  box-shadow: 1px 2px 0 rgba(196,43,74,.1);
-
-  letter-spacing: .12em;
-
-}
-
-.shell-grupo-parejas { display: flex; flex-direction: column; align-items: stretch; }
-
-.obj-parejas-list { gap: 1.05rem; margin-top: .15rem; }
-
-.obj-pareja-fotos { min-height: 52px; }
-
-.obj-pareja-cara {
-
-  width: 44px !important;
-
-  height: 44px !important;
-
-  border-width: 2.5px;
-
-}
-
-.obj-pareja-cara:first-child { margin-right: -12px; transform: rotate(-7deg) !important; }
-
-.obj-pareja-cara:last-child { margin-left: -12px; transform: rotate(6deg) !important; }
-
-.obj-pareja-enlace, .obj-pareja-corazon { width: 18px; height: 15px; }
-
-.obj-pareja-nombres { font-size: .82rem; margin-top: .12rem; }
-
-.pareja-crisis-sello { font-size: .52rem; padding: .12rem .42rem; margin-top: .15rem; }
-
-
-
-/* ASSET hint in devtools comment: mini_fachadas_abc.png recomendado si se quiere salto ilustrado */
-
-
-
-/* === PASS 3: laterales mas grandes === */
-
-.shell-grupo-resumen { padding-top: 0; }
-
-
-
-.celestine-nota { padding: 1.02rem 1.38rem .92rem .95rem; }
-
-.celestine-nota .libreta-kicker { font-size: 1.28rem; margin-bottom: 1.1rem; }
-
-.celestine-nota .obj-vecinos-tit { font-size: .82rem; margin-bottom: .48rem; }
-
-.celeste-lead { font-size: 1.02rem; margin-bottom: .42rem; }
-
-.celeste-lead strong { font-size: 1.38rem; }
-
-.celeste-lead span { font-size: .92rem; }
-
-.celeste-m { font-size: .78rem; gap: .4rem; }
-
-.celeste-m::before { flex: 0 0 13px; width: 13px; height: 13px; }
-
-
-
-.shell-grupo-planes .obj-proximo { padding: .72rem .62rem .58rem .68rem; }
-
-.shell-grupo-planes .obj-proximo-tit { font-size: .95rem; margin-bottom: .32rem; }
-
-.shell-grupo-planes .obj-proximo-body { font-size: .88rem; line-height: 1.4; }
-
-.shell-grupo-planes .obj-planes-pend { font-size: .88rem; margin-top: .55rem; padding: .28rem .58rem; }
-
-.prox-faces img, .prox-faces .cara-ini { width: 34px; height: 34px; border-width: 2.5px; }
-
-.prox-nombres { font-size: .92rem; margin-bottom: .12rem; }
-
-.prox-meta { font-size: .82rem; }
-
-.obj-proximo-vacio { font-size: .88rem; }
-
-
-
-.obj-nota-rosa { margin-top: .85rem; padding: .48rem .72rem .52rem .6rem; }
-
-.obj-nota-rosa .obj-nuevo-plan-ico { font-size: 1.25rem; }
-
-.obj-nota-rosa .obj-nuevo-plan-txt { font-size: .95rem; }
-
-
-
-.shell-grupo-cotilleo .obj-cotilleo { padding: .58rem .65rem .62rem .72rem; }
-
-.obj-cotilleo-tit { font-size: .68rem; margin-bottom: .28rem; letter-spacing: .12em; }
-
-.obj-cotilleo-txt { font-size: .88rem; line-height: 1.38; }
-
-
-
-.shell-grupo-kicker, .zona-tit { font-size: .62rem; margin-bottom: .65rem; letter-spacing: .16em; }
-
-.zona-tit-parejas { font-size: .62rem; padding: .24rem .65rem .28rem; margin-bottom: .75rem; }
-
-
-
-.obj-residencias-row, .obj-bloques-res { padding: .65rem .45rem .55rem; gap: .45rem; }
-
-.res-fachada, .bloque-mini-fachada { width: 54px; height: 48px; }
-
-.res-id { font-size: .78rem; }
-
-.res-meta { font-size: .64rem; }
+.res-meta { font-size: .68rem; }
 
 .obj-residencia-mini.is-activo .res-meta { font-size: .68rem; }
 
-
-
-.obj-parejas-list { gap: 1.25rem; margin-top: .25rem; }
-
-.obj-pareja-fotos { min-height: 58px; }
-
-.obj-pareja-cara { width: 52px !important; height: 52px !important; border-width: 3px; }
-
-.obj-pareja-cara:first-child { margin-right: -14px; }
-
-.obj-pareja-cara:last-child { margin-left: -14px; }
-
-.obj-pareja-enlace, .obj-pareja-corazon { width: 20px; height: 17px; }
-
-.obj-pareja-nombres { font-size: .94rem; margin-top: .18rem; }
-
-.pareja-crisis-sello { font-size: .58rem; padding: .14rem .48rem; margin-top: .2rem; }
-
-
-
-/* Anular ticket plano del shell-ui base */
-
-.top-center .obj-dia { gap: 0; }
-
-
-
-/* === PASS 3b: celestine XL + chincheta visible + laterales mas grandes === */
-
-.shell-grupo-resumen {
-
-  overflow: visible !important;
-
-}
-
-
-
-.shell-grupo-resumen {
-
+.zona-tit-parejas {
   position: relative;
-
-  padding-top: 0;
-
-  padding-right: 0;
-
-}
-
-
-
-
-
-
-
-.celestine-nota .libreta-kicker {
-
-  font-size: 1.28rem;
-
-  line-height: 1.05;
-
-  margin-bottom: 1.1rem;
-
-  color: #6e5848;
-
-}
-
-
-
-.celestine-nota .obj-vecinos-tit { font-size: .82rem; margin-bottom: .48rem; }
-
-.celeste-lead { font-size: 1.1rem; margin-bottom: .48rem; }
-
-.celeste-lead strong { font-size: 1.62rem; }
-
-.celeste-lead span { font-size: 1.02rem; }
-
-.celeste-m { font-size: .88rem; gap: .42rem; }
-
-.celeste-m::before { flex: 0 0 14px; width: 14px; height: 14px; }
-
-
-
-.shell-grupo-planes .obj-proximo { padding: .82rem .68rem .65rem .75rem; }
-
-.shell-grupo-planes .obj-proximo-tit {
-
-  font-family: Caveat, cursive;
-
-  font-size: 1.32rem;
-
-  font-weight: 700;
-
-  letter-spacing: .02em;
-
-  text-transform: none;
-
-  color: #7a6450;
-
-  line-height: 1.05;
-
-  margin-bottom: .24rem;
-
+  padding-bottom: .48rem;
+  background-color: transparent;
+  background-image: linear-gradient(90deg, #2c261f 0%, rgba(44, 38, 31, .78) 20%, rgba(44, 38, 31, .3) 52%, rgba(44, 38, 31, 0) 100%);
+  background-size: 100% 1.5px;
+  background-repeat: no-repeat;
+  background-position: left bottom;
 }
 
 .shell-grupo-planes .obj-proximo-body { font-size: .94rem; }
-
-.shell-grupo-planes .obj-planes-pend { font-size: .94rem; }
 
 .prox-faces img, .prox-faces .cara-ini { width: 38px; height: 38px; }
 
@@ -1295,35 +1085,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .prox-meta { font-size: .86rem; }
 
-
-
-.obj-nota-rosa .obj-nuevo-plan-txt { font-size: 1rem; }
+.obj-proximo-vacio { font-size: .88rem; }
 
 .obj-cotilleo-tit { font-size: .72rem; }
 
 .obj-cotilleo-txt { font-size: .94rem; }
 
-.shell-grupo-cotilleo .obj-cotilleo { padding: .65rem .72rem .68rem .78rem; }
-
-
-
-.shell-grupo-kicker, .zona-tit { font-size: .68rem; }
-
-.res-fachada, .bloque-mini-fachada { width: 58px; height: 52px; }
-
-.res-id { font-size: .84rem; }
-
-.res-meta { font-size: .68rem; }
-
-.obj-pareja-cara { width: 56px !important; height: 56px !important; }
-
-.obj-pareja-nombres { font-size: 1rem; }
-
-.obj-pareja-fotos { min-height: 62px; }
-
-
-
-/* Cabecera: titulo mas grande + corazon acorde */
+.top-center .obj-dia { gap: 0; }
 
 .brand-text {
 
@@ -1347,18 +1115,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .brand { gap: .5rem; }
 
-
-
-/* Dinero: mas separado del dia y un poco mas bajo */
-
-.top-center {
-
-  gap: 2rem !important;
-
-  align-items: flex-end !important;
-
-}
-
 .top-center .obj-dinero {
 
   margin-top: .4rem;
@@ -1366,10 +1122,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   transform: rotate(var(--rot, .6deg)) translateY(6px);
 
 }
-
-
-
-/* Libreta de Celestine en capas */
 
 .aht-screen[data-aht-screen="vecinos"] .libreta-kicker,
 
@@ -1397,13 +1149,11 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-
-
 .play-v3 .aht-screen .capa-cerrar-pestaÃƒÂ±a {
 
-  font-size: .72rem !important;
+  font-size: .72rem;
 
-  color: #2c261f !important;
+  color: #2c261f;
 
   text-shadow: 0 1px 0 rgba(255,255,255,.95);
 
@@ -1415,13 +1165,9 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .play-v3 .aht-screen .capa-cerrar-pestaÃƒÂ±a::before { z-index: -1; }
 
-
-
-/* Vida pueblo: margen derecho cabecera */
-
 .game-top {
 
-  padding-right: 1cm !important;
+  padding-right: 1cm;
 
   box-sizing: border-box;
 
@@ -1429,9 +1175,9 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 .game-top .top-vida {
 
-  display: grid !important;
+  display: grid;
 
-  grid-template-columns: minmax(0, 1fr) auto !important;
+  grid-template-columns: minmax(0, 1fr) auto;
 
   width: 100%;
 
@@ -1453,136 +1199,12 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
 
 }
 
-.shell-grupo-resumen::before { display: none !important; content: none !important; }
+.shell-grupo-resumen::before { display: none; content: none; }
 
-/* === Parejas: fichas horizontales (ref. diseno Neni) === */
-.shell-grupo-parejas {
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  width: 100%;
-}
-.zona-tit-parejas {
-  display: block !important;
-  width: 100%;
-  margin: 0 0 .55rem !important;
-  padding: 0 0 .38rem !important;
-  background: none !important;
-  transform: none !important;
-  clip-path: none !important;
-  box-shadow: none !important;
-  font-family: Nunito, "Segoe UI", sans-serif;
-  font-size: .82rem !important;
-  font-weight: 800;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: #2c261f;
-  text-align: left;
-  border-bottom: none !important;
-  position: relative;
-}
-.obj-parejas-list {
-  display: flex;
-  flex-direction: column;
-  gap: .55rem !important;
-  margin-top: 0 !important;
-  width: 100%;
-}
-.obj-pareja-piece,
-.obj-pareja-fila {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  gap: .68rem !important;
-  width: 100%;
-  padding: .68rem .82rem;
-  background: #fffdf6;
-  border: 1.5px solid rgba(44, 38, 31, .14);
-  border-radius: 12px;
-  box-shadow: 0 2px 5px rgba(44, 38, 31, .06);
-  box-sizing: border-box;
-}
-.obj-pareja-fotos {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  flex: 0 0 auto;
-  min-height: 0 !important;
-}
-.obj-pareja-cara {
-  width: 40px !important;
-  height: 40px !important;
-  border-radius: 50%;
-  border: 2px solid #2c261f !important;
-  box-shadow: none;
-  background: #f3e6cc;
-  object-fit: cover;
-}
 .obj-pareja-cara.cara-ini {
-  display: grid;
-  place-items: center;
-  font-size: .82rem;
-  font-weight: 800;
-  color: #2c261f;
+  font-size: .72rem;
 }
-.obj-pareja-cara:first-child {
-  margin-right: -8px !important;
-  transform: rotate(-4deg) !important;
-  z-index: 1;
-}
-.obj-pareja-cara:last-child {
-  margin-left: -8px !important;
-  transform: rotate(4deg) !important;
-  z-index: 2;
-}
-.obj-pareja-enlace,
-.obj-pareja-corazon {
-  width: 14px !important;
-  height: 12px !important;
-  flex: 0 0 14px;
-  z-index: 3;
-  margin: 0 -1px;
-  background: #e98da4 !important;
-  clip-path: polygon(50% 100%, 0 38%, 0 18%, 22% 0, 50% 16%, 78% 0, 100% 18%, 100% 38%);
-  border: 1px solid #2c261f;
-  box-sizing: border-box;
-}
-.obj-pareja-piece.is-crisis .obj-pareja-enlace {
-  background: #e98da4 !important;
-  clip-path: polygon(50% 100%, 0 38%, 0 18%, 22% 0, 50% 16%, 78% 0, 100% 18%, 100% 38%) !important;
-  border: 1px solid #2c261f !important;
-  width: 14px !important;
-  height: 12px !important;
-}
-.obj-pareja-nombres {
-  flex: 1 1 auto;
-  min-width: 0;
-  font-family: Nunito, "Segoe UI", sans-serif !important;
-  font-size: .84rem !important;
-  font-weight: 700;
-  line-height: 1.25;
-  text-align: left !important;
-  margin-top: 0 !important;
-  color: #2c261f;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.pareja-crisis-sello {
-  flex: 0 0 auto;
-  margin: 0 0 0 .3rem !important;
-  padding: .22rem .48rem !important;
-  font-family: Nunito, "Segoe UI", sans-serif;
-  font-size: .54rem !important;
-  font-weight: 800;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: #c85a65 !important;
-  background: transparent !important;
-  border: 1.5px solid #c85a65 !important;
-  border-radius: 4px;
-  transform: none !important;
-}
+
 .obj-parejas-list > .muted {
   font-family: Fraunces, Georgia, serif;
   font-style: italic;
@@ -1592,12 +1214,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   padding: 0 .15rem;
 }
 
-.shell-grupo-parejas {
-  align-items: flex-start !important;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-}
 .zona-tit-parejas,
 .obj-parejas-list,
 .obj-pareja-piece {
@@ -1606,12 +1222,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   min-width: 0;
   box-sizing: border-box;
 }
+
 .obj-pareja-piece {
   overflow: hidden;
 }
 
-/* === Proximo plan polaroid (debajo vecinos) === */
-.shell-grupo-planes { margin-top: 1.35rem !important; }
+.shell-grupo-planes { margin-top: 1.35rem; }
+
 .obj-proximo-polaroid {
   position: relative;
   display: block;
@@ -1632,6 +1249,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
     3px 5px 16px rgba(40, 28, 16, 0.14),
     inset 0 0 0 1px rgba(255, 255, 255, 0.5);
 }
+
 .obj-proximo-polaroid::before {
   content: "";
   position: absolute;
@@ -1645,8 +1263,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   box-shadow: 0 1px 1px rgba(60, 44, 28, 0.08);
 }
 
-/* === Planes en curso: navegacion discreta ‹ 1/N › (solo visible con N>1) ===
-   Una sola polaroid activa; cambiar de encuentro solo re-renderiza. */
 .obj-curso-nav {
   position: absolute;
   top: .58rem;
@@ -1656,7 +1272,9 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   align-items: center;
   gap: .22rem;
 }
-.obj-curso-nav[hidden] { display: none !important; }
+
+.obj-curso-nav[hidden] { display: none; }
+
 .obj-curso-btn {
   width: 1.35rem;
   height: 1.35rem;
@@ -1675,9 +1293,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   cursor: pointer;
   box-shadow: 1px 1px 0 rgba(74, 110, 58, .12);
 }
+
 .obj-curso-btn:hover { background: #e2efdb; }
+
 .obj-curso-btn:active { transform: translateY(1px); box-shadow: none; }
+
 .obj-curso-btn[disabled] { opacity: .45; cursor: default; }
+
 .obj-curso-cont {
   min-width: 2.1rem;
   text-align: center;
@@ -1687,6 +1309,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   letter-spacing: .06em;
   color: #7a6450;
 }
+
 .obj-proximo-polaroid .obj-proximo-tit {
   display: block;
   margin: 0 0 .55rem;
@@ -1697,6 +1320,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   line-height: 1.05;
   text-align: left;
 }
+
 .obj-proximo-polaroid .obj-proximo-body {
   display: flex;
   flex-direction: column;
@@ -1706,6 +1330,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   line-height: 1.35;
   color: #2c261f;
 }
+
 .obj-proximo-polaroid .prox-faces {
   display: flex;
   justify-content: center;
@@ -1714,6 +1339,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   margin-bottom: .38rem;
   width: 100%;
 }
+
 .obj-proximo-polaroid .prox-faces img,
 .obj-proximo-polaroid .prox-faces .cara-ini {
   width: 46px;
@@ -1728,16 +1354,16 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   justify-content: center;
   font-weight: 800;
   font-size: .95rem;
-  margin-right: 0 !important;
-  vertical-align: unset !important;
+  margin-right: 0;
+  vertical-align: unset;
   flex-shrink: 0;
 }
 
-/* plan-cara-token: clic → ficha */
 .obj-proximo-polaroid .prox-faces .cara-token .cara {
   width: 46px;
   height: 46px;
 }
+
 .obj-proximo-polaroid .prox-faces .cara-token .cara img,
 .obj-proximo-polaroid .prox-faces .cara-token .cara .cara-ini,
 .obj-proximo-polaroid .prox-faces .cara-token .cara .plan-cara {
@@ -1746,6 +1372,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   border: none;
   margin: 0;
 }
+
 .obj-proximo-polaroid .prox-nombres {
   margin: 0 0 .22rem;
   width: 100%;
@@ -1756,6 +1383,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   line-height: 1.2;
   text-align: center;
 }
+
 .obj-proximo-polaroid .prox-meta {
   margin: 0;
   display: flex;
@@ -1769,6 +1397,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   line-height: 1.35;
   text-align: center;
 }
+
 .obj-proximo-polaroid .prox-meta-ico {
   display: inline-block;
   width: 2.75rem;
@@ -1780,6 +1409,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   transform: rotate(-4deg) translateY(1px);
   opacity: 0.95;
 }
+
 .obj-proximo-polaroid .obj-proximo-vacio {
   font-family: Fraunces, Georgia, serif;
   font-style: italic;
@@ -1787,6 +1417,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   color: #6a5848;
   font-size: .88rem;
 }
+
 .obj-proximo-cta {
   display: flex;
   align-items: center;
@@ -1807,12 +1438,14 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   box-shadow: 1px 2px 0 rgba(196, 43, 74, 0.1);
   transform: rotate(-0.5deg);
 }
+
 .obj-proximo-cta .obj-nuevo-plan-ico {
   font-family: Caveat, cursive;
   font-size: 1.15rem;
   font-weight: 700;
   line-height: 1;
 }
+
 .obj-proximo-cta .obj-nuevo-plan-txt {
   font-family: Caveat, cursive;
   font-size: .95rem;
@@ -1820,6 +1453,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   letter-spacing: .04em;
   text-transform: uppercase;
 }
+
 .obj-ver-planes {
   display: block;
   width: 100%;
@@ -1831,7 +1465,9 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   font: inherit;
   text-align: center;
 }
-.obj-ver-planes[hidden] { display: none !important; }
+
+.obj-ver-planes[hidden] { display: none; }
+
 .obj-ver-planes-txt {
   font-family: Caveat, cursive;
   font-size: .98rem;
@@ -1843,24 +1479,28 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   background-size: 100% 5px;
   padding-bottom: 6px;
 }
-/* === Columna derecha: Misiones + Cotilleo + Parejas === */
+
 .shell-grupo-buzon-par {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 0 !important;
+  margin-bottom: 0;
   overflow: visible;
 }
+
 .shell-grupo-buzon-par + .shell-grupo-cotilleo-par {
-  margin-top: .75rem !important;
+  margin-top: .75rem;
 }
+
 .shell-grupo-cotilleo-par + .shell-grupo-parejas {
-  margin-top: 1rem !important;
+  margin-top: 1rem;
 }
+
 .shell-grupo-misiones-par,
 .shell-grupo-cotilleo-par {
   width: 100%;
 }
+
 .obj-buzon-par {
   position: relative;
   display: flex;
@@ -1878,6 +1518,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   font: inherit;
   color: inherit;
 }
+
 .obj-buzon-par .obj-buzon-img {
   width: 76px;
   height: auto;
@@ -1885,6 +1526,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   transform: rotate(-2deg);
   filter: drop-shadow(2px 4px 0 rgba(44, 38, 31, .12));
 }
+
 .obj-buzon-par .obj-buzon-badge {
   top: -.05rem;
   right: calc(50% - 52px);
@@ -1903,6 +1545,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   color: #fff;
   box-shadow: 0 1px 3px rgba(196, 43, 74, .35);
 }
+
 .obj-buzon-par .obj-buzon-txt {
   margin-top: .38rem;
   font-family: Nunito, "Segoe UI", sans-serif;
@@ -1912,11 +1555,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   text-transform: uppercase;
   color: #2c261f;
 }
+
 .shell-grupo-cotilleo-par {
-  margin-top: 0 !important;
+  margin-top: 0;
   overflow: visible;
   padding-top: .72rem;
 }
+
 .obj-cotilleo-par {
   position: relative;
   display: block;
@@ -1939,6 +1584,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   word-break: break-word;
   box-sizing: border-box;
 }
+
 .obj-cotilleo-par::before {
   content: "";
   position: absolute;
@@ -1952,6 +1598,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   box-shadow: 0 1px 2px rgba(60, 44, 28, .12);
   pointer-events: none;
 }
+
 .obj-cotilleo-par .obj-cotilleo-tit {
   font-family: Nunito, "Segoe UI", sans-serif;
   font-size: .88rem;
@@ -1961,6 +1608,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   color: #2c261f;
   margin: 0 0 .32rem;
 }
+
 .obj-cotilleo-par .obj-cotilleo-txt {
   font-family: Caveat, cursive;
   font-style: normal;
@@ -1981,123 +1629,29 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   text-transform: lowercase;
   color: #8a4a58;
 }
+
 .obj-cotilleo-par .obj-cotilleo-ver-mas[hidden] {
-  display: none !important;
+  display: none;
 }
 
-/* Parejas: raya difuminada bajo titulo */
 .zona-tit-parejas::after {
-  content: "";
-  display: block;
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1.5px;
-  background: linear-gradient(90deg, #2c261f 0%, rgba(44, 38, 31, .72) 22%, rgba(44, 38, 31, .28) 55%, rgba(44, 38, 31, 0) 100%);
-  pointer-events: none;
+  display: none;
 }
 
-/* Parejas: raya difuminada visible bajo titulo */
-.zona-tit-parejas {
-  position: relative !important;
-  padding-bottom: .48rem !important;
-  background-color: transparent !important;
-  background-image: linear-gradient(90deg, #2c261f 0%, rgba(44, 38, 31, .78) 20%, rgba(44, 38, 31, .3) 52%, rgba(44, 38, 31, 0) 100%) !important;
-  background-size: 100% 1.5px !important;
-  background-repeat: no-repeat !important;
-  background-position: left bottom !important;
-}
-.zona-tit-parejas::after {
-  display: none !important;
-}
-
-/* Parejas: layout ref. foto (corazon entre avatares) */
-.obj-parejas-list {
-  gap: .42rem !important;
-}
-.obj-pareja-piece,
-.obj-pareja-fila {
-  gap: .55rem !important;
-  padding: .28rem .5rem !important;
-  min-height: 0 !important;
-}
-.obj-pareja-fotos {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: flex-start !important;
-  gap: 0 !important;
-  min-height: 0 !important;
-  flex: 0 0 auto !important;
-}
-.obj-pareja-cara {
-  width: 32px !important;
-  height: 32px !important;
-  margin: 0 !important;
-  border: 2px solid #2c261f !important;
-  box-shadow: none !important;
-  flex: 0 0 32px !important;
-}
-.obj-pareja-cara.cara-ini {
-  font-size: .72rem !important;
-}
-.obj-pareja-cara:first-child {
-  margin-right: 0 !important;
-  transform: rotate(-3deg) !important;
-  z-index: 1 !important;
-}
-.obj-pareja-cara:last-child {
-  margin-left: 0 !important;
-  transform: rotate(3deg) !important;
-  z-index: 1 !important;
-}
-.obj-pareja-enlace,
-.obj-pareja-corazon {
-  width: 10px !important;
-  height: 9px !important;
-  flex: 0 0 10px !important;
-  margin: 0 5px !important;
-  position: relative !important;
-  top: 0 !important;
-  z-index: 2 !important;
-  align-self: center !important;
-}
-.obj-pareja-nombres {
-  font-family: Fraunces, Georgia, serif !important;
-  font-size: .86rem !important;
-  font-weight: 500 !important;
-  font-style: normal;
-  color: #4a423a !important;
-  letter-spacing: .01em;
-  line-height: 1.15 !important;
-}
-.pareja-crisis-sello {
-  margin-left: auto !important;
-  margin-top: 0 !important;
-  padding: .16rem .46rem !important;
-  font-size: .64rem !important;
-  font-weight: 800;
-  letter-spacing: .05em;
-  color: #c85a65 !important;
-  background: transparent !important;
-  border: 1.5px solid #c85a65 !important;
-  border-radius: 3px;
-  transform: rotate(-6deg) !important;
-  flex: 0 0 auto;
-}
-
-/* === Misiones papel (debajo mensajitos) === */
 .shell-grupo-misiones-par {
-  margin-top: .65rem !important;
+  margin-top: .65rem;
   overflow: visible;
   width: 100%;
 }
+
 .shell-grupo-buzon-par + .shell-grupo-misiones-par {
-  margin-top: .55rem !important;
+  margin-top: .55rem;
 }
+
 .shell-grupo-misiones-par + .shell-grupo-cotilleo-par {
-  margin-top: 1rem !important;
+  margin-top: 1rem;
 }
+
 .obj-misiones-papel {
   position: relative;
   display: block;
@@ -2122,6 +1676,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   overflow: visible;
   box-sizing: border-box;
 }
+
 .mision-tape {
   position: absolute;
   width: 26px;
@@ -2131,10 +1686,15 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   box-shadow: 0 1px 1px rgba(60, 44, 28, .1);
   pointer-events: none;
 }
+
 .mision-tape-tl { top: -5px; left: 10px; transform: rotate(-38deg); }
+
 .mision-tape-tr { top: -5px; right: 10px; transform: rotate(38deg); }
+
 .mision-tape-bl { bottom: -5px; left: 10px; transform: rotate(38deg); }
+
 .mision-tape-br { bottom: -5px; right: 10px; transform: rotate(-38deg); }
+
 .obj-misiones-papel-tit {
   display: block;
   margin: 0 0 .5rem;
@@ -2159,17 +1719,20 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
     1px 2px 0 rgba(74, 122, 82, .1),
     2px 4px 12px rgba(40, 28, 16, .06);
 }
+
 .obj-misiones-strip {
   display: flex;
   flex-direction: column;
   gap: 0;
 }
+
 .obj-misiones-vacio {
   margin: 0;
   font-family: Caveat, cursive;
   font-size: .95rem;
   color: #6a5848;
 }
+
 .mision-strip-row {
   display: grid;
   grid-template-columns: 32px 1fr 1.35rem;
@@ -2178,25 +1741,32 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   padding: .45rem 0;
   border-bottom: 1px solid rgba(44, 38, 31, .08);
 }
+
 .mision-strip-row:last-child { border-bottom: 0; padding-bottom: .1rem; }
+
 .mision-strip-row.mision-bloqueada { opacity: .55; }
+
 .mision-strip-row--accion {
   cursor: pointer;
 }
+
 .mision-strip-row--accion:hover .mision-strip-txt {
   color: #a84a62;
 }
+
 .mision-strip-ico {
   display: flex;
   align-items: center;
   justify-content: center;
   color: #2c261f;
 }
+
 .mision-ico-svg {
   width: 26px;
   height: 22px;
   display: block;
 }
+
 .mision-strip-txt {
   font-family: Caveat, cursive;
   font-size: 1.12rem;
@@ -2205,6 +1775,7 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   color: #2c261f;
   min-width: 0;
 }
+
 .mision-strip-row .mision-bolita {
   width: 1.1rem;
   height: 1.1rem;
@@ -2217,18 +1788,24 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   justify-content: center;
   box-shadow: 1px 1px 0 rgba(60, 48, 36, .12);
 }
+
 .mision-strip-row .mision-bolita.bloqueada {
   background: #ece6da;
   border-color: #a89a88;
   opacity: .75;
 }
+
 .mision-strip-row .mision-bolita.cumplida {
   background: #fff6c8;
   border-color: #2c261f;
 }
+
 .mision-strip-row:nth-child(1) .mision-check { transform: rotate(-14deg) scale(1.05); }
+
 .mision-strip-row:nth-child(2) .mision-check { transform: rotate(8deg) scale(1.08); }
+
 .mision-strip-row:nth-child(3) .mision-check { transform: rotate(-6deg) scale(1.02); }
+
 .mision-strip-row .mision-check {
   font-family: Caveat, cursive;
   font-size: 1.15rem;
@@ -2238,7 +1815,6 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   display: block;
 }
 
-/* Plan en curso — polaroid y agenda */
 @keyframes plan-curso-respiro {
   0%, 100% {
     box-shadow:
@@ -2253,10 +1829,12 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
       inset 0 0 0 1px rgba(255, 255, 255, 0.55);
   }
 }
+
 @keyframes plan-curso-punto {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: .55; transform: scale(.82); }
 }
+
 .obj-proximo-polaroid.is-en-curso,
 .shell-grupo-planes .obj-proximo.obj-proximo-polaroid.is-en-curso {
   border: 2px solid #b8c9a8;
@@ -2265,11 +1843,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
     url("../play-v3/capas/libreta_hoja.png");
   animation: plan-curso-respiro 2.8s ease-in-out infinite;
 }
+
 .obj-proximo-polaroid.is-en-curso::before {
   width: 42px;
   background: rgba(196, 220, 178, 0.9);
   box-shadow: 0 1px 2px rgba(74, 110, 58, 0.14);
 }
+
 .obj-proximo-polaroid.is-en-curso::after {
   content: "ahora";
   position: absolute;
@@ -2288,16 +1868,19 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   box-shadow: 1px 2px 0 rgba(74, 110, 58, 0.1);
   pointer-events: none;
 }
+
 .obj-proximo-polaroid.is-en-curso .obj-proximo-tit {
   color: #3d5c32;
   display: inline-block;
   padding-right: .15rem;
   background: linear-gradient(transparent 66%, rgba(196, 220, 178, 0.58) 66%, rgba(196, 220, 178, 0.58) 92%, transparent 92%);
 }
+
 .obj-proximo-polaroid .prox-meta--en-curso {
   color: #4a6e3a;
   font-weight: 600;
 }
+
 .obj-proximo-polaroid .prox-meta--en-curso::after {
   content: "";
   display: inline-block;
@@ -2310,13 +1893,14 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   animation: plan-curso-punto 1.6s ease-in-out infinite;
   vertical-align: middle;
 }
-/* Las caras del plan en curso usan solo el aro emocional del token */
+
 .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila--en-curso {
   position: relative;
   padding-left: .85rem;
   background: linear-gradient(90deg, rgba(212, 232, 196, 0.42) 0%, rgba(255, 254, 248, 0.96) 22%);
   border-left: 0;
 }
+
 .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila--en-curso::before {
   content: "";
   position: absolute;
@@ -2330,25 +1914,21 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   box-shadow: 0 0 0 2px rgba(143, 188, 120, 0.3);
   animation: plan-curso-punto 1.6s ease-in-out infinite;
 }
-@media (prefers-reduced-motion: reduce) {
-  .obj-proximo-polaroid.is-en-curso { animation: none !important; }
-  .obj-proximo-polaroid .prox-meta--en-curso::after,
-  .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-fila--en-curso::before { animation: none !important; }
-}
 
-
-/* Aquí hay tema — bloque en nota del edificio */
 .play-v3 .quien-tema { margin: .45rem 0 .55rem; }
+
 .play-v3 .quien-tema-card {
   padding: .5rem .55rem .55rem;
   border: 1px dashed rgba(138, 74, 88, .28);
   border-radius: .15rem;
   background: rgba(255, 248, 242, .72);
 }
+
 .play-v3 .quien-tema--destacado {
   border-color: rgba(138, 74, 88, .42);
   background: rgba(255, 240, 244, .82);
 }
+
 .play-v3 .quien-tema-kicker {
   margin: 0 0 .2rem;
   font-size: .58rem;
@@ -2357,13 +1937,16 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   text-transform: uppercase;
   color: #8a4a58;
 }
+
 .play-v3 .quien-tema-cat {
   margin: 0 0 .28rem;
   font-family: "Caveat", "Segoe Print", cursive;
   font-size: .92rem;
   color: #6d3f4d;
 }
+
 .play-v3 .quien-tema-ico { margin-right: .15rem; }
+
 .play-v3 .quien-tema-txt {
   margin: 0 0 .25rem;
   font-family: Fraunces, Georgia, serif;
@@ -2371,11 +1954,13 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   line-height: 1.36;
   color: #2c261f;
 }
+
 .play-v3 .quien-tema-quien {
   margin: 0 0 .2rem;
   font-size: .72rem;
   color: #5a4a42;
 }
+
 .play-v3 .quien-tema-pista {
   margin: 0;
   font-size: .72rem;
@@ -2384,35 +1969,48 @@ body.play-v3, .game-shell, .game-top { background: #fff !important; }
   color: #6a5348;
 }
 
-/* Popover «Quién está» — listado compacto + temas */
 .quien-kicker { text-align: center; }
+
 aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; font-style: italic; }
+
 .quien-residentes { display: flex; margin: 0; }
+
 .quien-residente { display: flex; align-items: center; justify-content: center; gap: 0.35rem; flex-wrap: wrap; }
+
 .quien-residente--activo .quien-residente-nombre { font-weight: 600; }
+
 .quien-residente-nombre {
   background: none; border: none; padding: 0; font: inherit; color: inherit;
   cursor: pointer; text-decoration: underline dotted transparent;
 }
+
 .quien-residente-nombre:hover, .quien-residente-nombre:focus-visible { text-decoration-color: currentColor; }
+
 .quien-tema-mark {
   border: none; border-radius: 999px; width: 1.35rem; height: 1.35rem;
   font-size: 0.72rem; line-height: 1; cursor: pointer; padding: 0;
   background: rgba(255, 120, 160, 0.18); color: #b8326a;
 }
+
 .quien-tema-mark--coincidencias { background: rgba(120, 140, 200, 0.15); color: #4a5a8a; }
+
 .quien-tema-mark--relacion { background: rgba(100, 160, 120, 0.15); color: #2d6a4f; }
+
 .quien-tema-mark--romance { background: rgba(255, 120, 160, 0.28); color: #b8326a; }
+
 .quien-tema-mark--drama { background: rgba(220, 140, 60, 0.2); color: #9a5a10; }
+
 .quien-tema-mas { text-align: center; font-size: 0.8rem; opacity: 0.75; margin: 0.2rem 0 0; }
+
 .quien-tema-card .quien-tema-quien { font-size: 0.85rem; opacity: 0.85; margin: 0 0 0.25rem; }
-/* Popover Qui�n est� � bloques jer�rquicos */
+
 .play-v3 aside.quien .quien-bloque {
   margin: 0 0 0.55rem;
   padding: 0.5rem 0.55rem 0.55rem;
   border-radius: 0.2rem;
   text-align: center;
 }
+
 .play-v3 aside.quien .quien-bloque--lugar {
   margin-top: 0.15rem;
   padding: 0.55rem 0.6rem 0.5rem;
@@ -2420,6 +2018,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   background: rgba(255, 252, 246, 0.88);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
 }
+
 .play-v3 aside.quien .quien-lugar-tit {
   margin: 0;
   font-family: Caveat, cursive;
@@ -2428,31 +2027,41 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   letter-spacing: 0.03em;
   color: #2c261f;
 }
+
 .play-v3 aside.quien .quien-bloque--lugar .quien-horario {
   margin: 0.28rem 0 0;
   font-size: 0.8rem;
   line-height: 1.35;
   color: #5a4a3a;
 }
+
 .play-v3 aside.quien .quien-estado { font-weight: 800; }
+
 .play-v3 aside.quien .quien-estado--abierto { color: #2d6a4f; }
+
 .play-v3 aside.quien .quien-estado--cerrado { color: #9a4a2a; }
+
 .play-v3 aside.quien .quien-horas { font-weight: 600; opacity: 0.92; }
+
 .play-v3 aside.quien .quien-horario-sep { opacity: 0.45; font-weight: 400; }
+
 .play-v3 aside.quien .quien-bloque--presencia {
   padding: 0.55rem 0.55rem 0.85rem;
   border: 1px dashed rgba(138, 116, 96, 0.35);
   background: rgba(255, 255, 255, 0.35);
 }
+
 .play-v3 aside.quien .quien-bloque--presencia .quien-kicker {
   margin: 0 0 0.25rem;
   padding-bottom: 0.15rem;
 }
+
 .play-v3 aside.quien .quien-bloque--presencia .quien-residentes,
 .play-v3 aside.quien .quien-bloque--presencia .quien-vacio {
   margin: 0.55rem 0 0.18rem;
   padding-bottom: 0.12rem;
 }
+
 .play-v3 aside.quien .quien-vacio {
   margin: 0;
   font-family: Fraunces, Georgia, serif;
@@ -2460,34 +2069,30 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   font-style: italic;
   color: #6a5848;
 }
+
 .play-v3 aside.quien .quien-bloque--tema {
-  margin-bottom: 0.45rem;
   padding: 0;
   border: none;
   background: transparent;
 }
+
 .play-v3 aside.quien .quien-bloque--tema .quien-tema-card {
   margin: 0;
 }
+
 .play-v3 .quien-residentes--inline {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  align-items: center;
   justify-content: center;
-  gap: 0.2rem 0.15rem;
-  margin: 0;
 }
+
 .play-v3 .quien-residente-sep {
   opacity: 0.55;
   font-size: 0.95rem;
   line-height: 1;
   padding: 0 0.05rem;
 }
+
 .play-v3 aside.quien .destinos { margin-top: 0.35rem; }
 
-
-/* Intervenci�n durante encuentro (polaroid) */
 :is(.shell-grupo-planes, .encursos-movil) .enc-int {
   margin-top: .55rem;
   padding-top: .55rem;
@@ -2495,6 +2100,7 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   margin-bottom: .9rem;
   text-align: center;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int::after {
   content: "\00B7\00A0\00A0\00B7\00A0\00A0\00B7";
   display: block;
@@ -2505,8 +2111,11 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   letter-spacing: .3em;
   color: rgba(122,100,80,.45);
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-kicker { font-family: Caveat, cursive; font-size: .85rem; color: #7a6450; margin: 0 0 .6rem; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btns { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .42rem .34rem; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn {
   display: inline-flex;
   align-items: center;
@@ -2524,58 +2133,86 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   box-shadow: 1px 2px 0 rgba(120,96,72,.12);
   transition: background-color .12s ease, transform .12s ease, box-shadow .12s ease;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btns .enc-int-btn:nth-child(odd) { transform: rotate(-.5deg); }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btns .enc-int-btn:nth-child(even) { transform: rotate(.45deg); }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn::before { font-size: .95em; line-height: 1; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btns .enc-int-btn:hover {
   transform: translateY(-1px) rotate(0deg);
   box-shadow: 1.5px 2.5px 0 rgba(120,96,72,.18);
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn:active { transform: translateY(0); box-shadow: 1px 1px 0 rgba(120,96,72,.14); }
-/* Pastel suave por acción */
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="hablar"]::before { content: "\01F4AC"; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="hablar"] { background: #e2edf8; border-color: #b9cde2; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="broma"]::before { content: "\01F602"; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-enc-int-accion="broma"] { background: #fbf0cd; border-color: #e0cf9d; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--hobby { background: #f3ecdd; border-color: #d8c9ac; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="manualidades"]::before { content: "\01F3A8"; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="manualidades"] { background: #fadfe9; border-color: #e5bccd; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="bingo"]::before { content: "\01F3B1"; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="bingo"] { background: #e7dff6; border-color: #c6b8e2; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="videojuegos"]::before { content: "\01F3AE"; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="videojuegos"] { background: #dfeeda; border-color: #bcd4b4; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="cocina"]::before { content: "\01F373"; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn[data-hobby-id="cocina"] { background: #fce3cf; border-color: #e6c4a4; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn:hover { background-color: #fffef9; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int.is-busy { opacity: .65; pointer-events: none; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result { margin-top: .5rem; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt { font-size: .78rem; line-height: 1.35; margin: 0; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--bien { color: #3d6b3a; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--mal { color: #8b3a32; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-result-txt--neutral { color: #5c5044; }
 
-/* Selector agrupado de temas (P07 — reorganización UX, sin semántica nueva) */
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas {
   position: relative;
   margin-top: .5rem;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas {
   background: #eef3ee;
   border-color: #c9d6c6;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas::after {
   content: "\25BE";
   font-size: .85em;
   line-height: 1;
   opacity: .65;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas.is-elegido {
   background: #f3ecdd;
   border-color: #d8c9ac;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--temas.is-elegido::after {
   content: "";
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel {
   display: flex;
   flex-direction: column;
@@ -2592,7 +2229,9 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   box-shadow: 0 6px 18px rgba(80, 60, 40, .18);
   text-align: left;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel[hidden] { display: none; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel .enc-int-btn {
   justify-content: flex-start;
   width: 100%;
@@ -2600,11 +2239,12 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   box-shadow: none;
   background: #fdf6e6;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas-panel .enc-int-btn:hover {
   background-color: #f3ead4;
   transform: none;
 }
-/* Desktop (polaroid overflow:visible): popover anclado al ancho de la tarjeta */
+
 .shell-grupo-planes .enc-int-temas-panel {
   position: absolute;
   top: calc(100% + .4rem);
@@ -2614,30 +2254,34 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   margin: 0 auto;
   width: min(300px, 100%, calc(100vw - 32px));
 }
-/* Móvil (carrusel con overflow-x:auto): bloque estático dentro de la tarjeta,
-   sin recortes ni desbordes; scroll solo en el listado */
+
 .encursos-movil .enc-int-temas-panel {
   position: static;
   width: 100%;
   margin-top: .4rem;
 }
 
-/* === METERME EN SU CABEZA — eleccion de persona (flujo 2 pasos, contenido) === */
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-step[hidden] { display: none; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-temas[hidden] { display: none; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn--hobby[hidden] { display: none; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-pers {
   flex-direction: column;
   gap: .18rem;
   min-width: 5.4rem;
   padding: .5rem .6rem .4rem;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-btn.enc-int-pers::before { content: none; }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-pers.is-on {
   outline: 2px solid #c9a86a;
   outline-offset: -2px;
   background: #fff8ea;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-pers-cara {
   width: 2.15rem;
   height: 2.15rem;
@@ -2651,17 +2295,20 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   font-size: .95rem;
   color: #7a6450;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-pers-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-pers-nombre {
   font-size: .72rem;
   line-height: 1.15;
   color: #5c5044;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-volver {
   background: none;
   border: none;
@@ -2671,9 +2318,9 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
   color: #7a6450;
   cursor: pointer;
 }
+
 :is(.shell-grupo-planes, .encursos-movil) .enc-int-volver:hover { color: #4a3a2a; }
 
-/* Consulta edificio + Nuevo plan: alineación estilo mockup */
 .play-v3 .play-root[data-consulta="quien"] .quien.nota-mapa {
   text-align: center;
 }
@@ -2682,14 +2329,4 @@ aside.quien .quien-vacio { text-align: center; font-size: 0.92rem; margin: 0; fo
 .play-v3 aside.quien .quien-bloque--presencia .quien-kicker,
 .play-v3 aside.quien .quien-vacio {
   text-align: center;
-}
-
-.play-v3 .quien-residentes--inline {
-  justify-content: center;
-}
-
-.play-v3 aside.quien .quien-bloque--tema {
-  padding: 0;
-  border: none;
-  background: transparent;
 }

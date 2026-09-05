@@ -33,7 +33,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/v4/tokens-v4.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-app.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <?php /* CANON: inicio-views */ ?>
+  <?php /* CANON: inicio-views carga temprano para ocultar la vista inactiva antes del flash */ ?>
   <link rel="stylesheet" href="assets/css/design-system/screens/inicio-views.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-historia.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-shell-ui.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -44,39 +44,46 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-musica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-audio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-regalos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php if (!empty($_GET['lab'])): ?>
   <link rel="stylesheet" href="assets/css/play-v3-lab.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php endif; ?>
   <link rel="stylesheet" href="assets/css/play-v3-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/components.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/v4/screen-frame.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-agenda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-misiones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-vida.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-notas-mapa.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+<link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+<link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-desktop-shell.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-inicio-override.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/play-v3-consulta-edificio-v2.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+<link rel="stylesheet" href="assets/css/play-v3-consulta-edificio-v2.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-tutorial-lavanda.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/mensajitos-cartas-persona-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/mensajitos-carta-regalo-v1.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/mensajitos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/design-system/vecinos-body.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/v4/screens-secondary.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <?php /* V4 ultima autoridad pantallas */ ?>
+<?php /* CANON: V4 visibility + contenido modal — ultima autoridad pantallas */ ?>
+    <link rel="stylesheet" href="assets/css/v4/bodies/parejas.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/ajustes.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/ficha-relaciones.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/vida-pueblo-icon.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/mobile-submodales.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/cintas-scrapbook.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/relaciones-filtros.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/misc-screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: V4 visibility + contenido modal */ ?>
   <link rel="stylesheet" href="assets/css/v4/screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <?php /* cromatica desktop */ ?>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-desktop-cromatica.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/screens/inicio-evento-pueblo-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
-  <link rel="stylesheet" href="assets/css/design-system/typography-reading.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <?php /* CANON: stack inicio unificado (fase 2) */ ?>
+  <link rel="stylesheet" href="assets/css/inicio/tokens-inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/inicio/inicio-base.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/inicio/inicio-mobile.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/inicio/inicio-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/inicio/inicio-cromatica-desktop.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/inicio/inicio-responsive.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+<link rel="stylesheet" href="assets/css/design-system/legibilidad-global.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+<?php /* CANON: cromatica desktop blindada — no mover ni fusionar con inicio-desktop.css */ ?>
+<link rel="stylesheet" href="assets/css/design-system/typography-reading.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
    <style>
     .tutorial-pista {
       margin: 0; padding: .45rem .85rem; font-size: .875rem;

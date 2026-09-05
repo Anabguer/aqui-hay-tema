@@ -1,0 +1,119 @@
+/* v4/bodies/mobile-submodales.css */
+/* --- M�vil: submodales y secundarios --- */
+
+?
+/* --- Inventario (Mochila): scrapbook movil + desktop --- */
+.play-v3 .aht-screen[data-aht-screen="inventario"].inv-modal-papel .inv-cab {
+  flex: 0 0 auto;
+  margin: 0 0 .35rem;
+  padding: .15rem 2.5rem .1rem .15rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-tit {
+  margin: 0;
+  font-family: Caveat, cursive;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-sub {
+  margin: .15rem 0 0;
+  font: 600 .78rem/1.35 Nunito, "Segoe UI", sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: none;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: .35rem .2rem .5rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-lista {
+  gap: .55rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-objeto {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .1);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-objeto:nth-child(odd) {
+  transform: rotate(-.25deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-objeto:nth-child(even) {
+  transform: rotate(.2deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-objeto.is-sel {
+  border-color: var(--ds-pink-deep, #c85b78);
+  background: linear-gradient(180deg, #fceef3, var(--ds-pink-soft, #fbe3ec));
+  box-shadow: 1.5px 2.5px 0 rgba(200, 91, 120, .16);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vacio {
+  margin: 0;
+  padding: .75rem .5rem;
+  border: 1.5px dashed rgba(107, 81, 56, .28);
+  border-radius: 10px 8px 11px 7px / 8px 11px 7px 10px;
+  background: rgba(255, 252, 244, .72);
+  font-family: Caveat, cursive;
+  font-style: italic;
+  font-size: 1.05rem;
+  text-align: center;
+  color: #6a5a48;
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-regalo {
+  margin-top: .55rem;
+  padding: .55rem .45rem 0;
+  border-top: 1.5px dashed rgba(107, 81, 56, .28);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-regalo-titulo {
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vecino {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 999px;
+  background: var(--ds-paper-card, #fffdf7);
+  box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .08);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vecino.is-sel {
+  border-color: var(--ds-pink-deep, #c85b78);
+  background: linear-gradient(180deg, #fceef3, var(--ds-pink-soft, #fbe3ec));
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-entregar,
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-cancelar {
+  border: 2px solid var(--ds-ink-soft, #594839);
+  border-radius: 10px 8px 11px 7px;
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-entregar:not(:disabled) {
+  background: linear-gradient(180deg, #fce8ef, var(--ds-pink-soft, #fbe3ec));
+  border-color: var(--ds-pink-deep, #c85b78);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-feedback {
+  border: 1.5px dashed rgba(107, 81, 56, .28);
+  border-radius: 10px 8px 11px 7px;
+  background: rgba(255, 252, 244, .85);
+  font-weight: 700;
+}

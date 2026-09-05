@@ -1,13 +1,23 @@
-﻿/* Mapa canonico unico - 9 zonas calibradas (mapa_zonas.json) */
+/* Mapa canonico unico - 9 zonas calibradas (mapa_zonas.json) */
+/* Idle en mapa: un poco más de vida; la base .hab no se mueve entre refreshes */
+/* Encuentro en curso / proximo — UI plan + mapa */
+/* El aro del token refleja estado emocional; la agenda marca el plan en curso. */
+/* Consulta de edificio: contenido equilibrado dentro de la tarjeta. */
+/* Personalidad por lugar: cada rincón tiene su propia nota. */
+/* Alias del complejo antiguo, por compatibilidad con el mapa anterior. */
+/* Marco más visible: tinta y doble línea de papel. */
+/* Chinchetas mapa: dentro del papel */
+/* Horario en edificios del mapa (deshabilitado en mapa) */
+/* Horario: oculto en mapa (solo en ventana al pulsar edificio) */
 
 .play-v3 .board-fit {
-  background: transparent !important;
+  background: transparent;
   position: relative;
   aspect-ratio: 618 / 404;
   width: 89%;
-  height: auto !important;
+  height: auto;
   max-height: min(78vh, 640px);
-  box-shadow: none !important;
+  box-shadow: none;
 }
 
 .play-v3 .play-root.phone .board-fit {
@@ -17,7 +27,7 @@
 
 .play-v3 .mapa-complejos,
 .play-v3 .edificios-layer {
-  display: none !important;
+  display: none;
 }
 
 .play-v3 .mapa-canonico {
@@ -82,7 +92,6 @@
   object-fit: cover;
 }
 
-/* Idle en mapa: un poco más de vida; la base .hab no se mueve entre refreshes */
 .play-v3 .mapa-zona-hit .hab .cara {
   will-change: transform;
 }
@@ -134,46 +143,24 @@
   cursor: pointer;
   pointer-events: auto;
 }
-/* Encuentro en curso / proximo — UI plan + mapa */
+
 .play-v3 .mapa-zona-hit.mapa-zona--en-curso {
   /* La cita en curso se ve por los tokens en el edificio, sin marco sobre el mapa. */
 }
+
 .play-v3 .mapa-zona-hit.mapa-zona--proximo {
   /* El proximo encuentro sigue indicado en la agenda, sin marco sobre el mapa. */
 }
-/* El aro del token refleja estado emocional; la agenda marca el plan en curso. */
 
 .play-v3 .play-root[data-consulta="sel"] .selector,
 .play-v3 .play-root[data-consulta="quien"] .quien {
-  left: 50% !important;
-  top: 50% !important;
-  right: auto !important;
-  bottom: auto !important;
-  width: min(420px, 92vw) !important;
-  max-width: min(420px, 92vw) !important;
-  max-height: min(78vh, 680px) !important;
-  padding: 1.55rem 1.1rem .95rem !important;
-  border: 1.5px solid rgba(44, 38, 31, .14) !important;
-  border-radius: 3px 10px 6px 5px !important;
+  border: 2.5px solid #4f4034;
+  outline: 1px solid rgba(44, 38, 31, .18);
+  outline-offset: -6px;
   box-shadow:
-    3px 6px 22px rgba(40, 28, 16, .16),
-    inset 0 0 0 1px rgba(255, 255, 255, .45) !important;
-  background-color: #fdf8f2 !important;
-  background-image:
-    repeating-linear-gradient(
-      180deg,
-      transparent 0,
-      transparent 1.35rem,
-      rgba(217, 107, 138, .07) 1.35rem,
-      rgba(217, 107, 138, .07) calc(1.35rem + 1px)
-    ),
-    linear-gradient(180deg, rgba(255, 253, 249, .94) 0%, rgba(255, 249, 242, .78) 100%),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  background-position: 0 2.8rem, center, center !important;
-  background-size: auto, cover, cover !important;
-  overflow-y: auto;
-  transform: translate(-50%, -50%) rotate(-.35deg) !important;
-  z-index: 50;
+    4px 7px 0 rgba(44, 38, 31, .17),
+    inset 0 0 0 1px rgba(255, 255, 255, .6),
+    inset 0 0 0 3px rgba(90, 72, 56, .06);
 }
 
 .play-v3 .play-root[data-consulta="sel"] .selector::before,
@@ -188,8 +175,8 @@
 .play-v3 .play-root[data-consulta="quien"] .nota-mapa .cerrar {
   top: .5rem;
   right: .55rem;
-  border: 0 !important;
-  background: transparent !important;
+  border: 0;
+  background: transparent;
   font-family: Caveat, cursive;
   font-size: 1.55rem;
   line-height: 1;
@@ -227,16 +214,8 @@
 
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .destinos button,
 .play-v3 .play-root[data-consulta="quien"] .nota-mapa .destinos button {
-  border: 1.5px solid rgba(201, 90, 118, .35);
-  background: #f8d4df;
-  font-family: Caveat, cursive;
-  font-size: 1rem;
-  font-style: normal;
-  letter-spacing: .03em;
-  padding: .45rem .65rem;
-  color: #2c261f;
-  box-shadow: 2px 3px 0 rgba(44, 38, 31, .1);
-  clip-path: polygon(1% 8%, 99% 0, 97% 92%, 3% 100%);
+  width: min(100%, 300px);
+  text-align: center;
 }
 
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .destinos button:hover,
@@ -250,34 +229,14 @@
 }
 
 .play-v3 .play-root[data-consulta="quien"] .quien-dest {
-  margin: .5rem 0 .12rem;
-  font-family: Caveat, cursive;
-  font-size: .95rem;
-  letter-spacing: .06em;
-  color: #5a4838;
+  text-align: center;
 }
 
 .play-v3 .play-root[data-consulta="quien"] .quien-list ul {
-  margin: 0;
+  display: inline-block;
   padding-left: 1.15rem;
-  font-size: .88rem;
-  line-height: 1.45;
-  color: #3a3028;
-}
-
-@media (max-width: 560px) {
-  .play-v3 .play-root[data-consulta="sel"] .selector,
-  .play-v3 .play-root[data-consulta="quien"] .quien {
-    width: min(94vw, 420px) !important;
-    max-width: 94vw !important;
-    max-height: min(76vh, 680px) !important;
-  }
-}
-
-/* Consulta de edificio: contenido equilibrado dentro de la tarjeta. */
-.play-v3 .play-root[data-consulta="sel"] .selector,
-.play-v3 .play-root[data-consulta="quien"] .quien {
-  text-align: center;
+  text-align: left;
+  list-style-position: outside;
 }
 
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .libreta-kicker,
@@ -291,198 +250,182 @@
   text-align: center;
 }
 
-.play-v3 .play-root[data-consulta="quien"] .quien-dest {
-  text-align: center;
-}
-
-.play-v3 .play-root[data-consulta="quien"] .quien-list ul {
-  display: inline-block;
-  padding-left: 1.15rem;
-  text-align: left;
-  list-style-position: outside;
-}
-
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .destinos,
 .play-v3 .play-root[data-consulta="quien"] .nota-mapa .destinos {
   align-items: center;
 }
 
-.play-v3 .play-root[data-consulta="sel"] .nota-mapa .destinos button,
-.play-v3 .play-root[data-consulta="quien"] .nota-mapa .destinos button {
-  width: min(100%, 300px);
-  text-align: center;
-}
-/* Personalidad por lugar: cada rincón tiene su propia nota. */
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="bar"] {
-  width: min(360px, 92vw) !important;
-  max-width: min(360px, 92vw) !important;
-  border-radius: 2px 14px 5px 8px !important;
-  background-color: #fff5df !important;
+  width: min(360px, 92vw);
+  max-width: min(360px, 92vw);
+  border-radius: 2px 14px 5px 8px;
+  background-color: #fff5df;
   background-image:
     linear-gradient(180deg, rgba(255, 249, 232, .9), rgba(255, 242, 214, .78)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(1.25deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(1.25deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="bar"] .destinos button {
   background: #f5c58d;
   border-color: rgba(175, 103, 51, .38);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="cafeteria"] {
-  width: min(460px, 92vw) !important;
-  max-width: min(460px, 92vw) !important;
-  border-radius: 5px 8px 3px 13px !important;
-  background-color: #fff8f1 !important;
+  width: min(460px, 92vw);
+  max-width: min(460px, 92vw);
+  border-radius: 5px 8px 3px 13px;
+  background-color: #fff8f1;
   background-image:
     linear-gradient(180deg, rgba(255, 250, 247, .9), rgba(255, 242, 239, .74)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(-.65deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(-.65deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="cafeteria"] .destinos button {
   background: #f3b1c3;
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="parque"] {
-  width: min(400px, 92vw) !important;
-  max-width: min(400px, 92vw) !important;
-  border-radius: 15px 5px 13px 7px !important;
-  background-color: #f5f8e8 !important;
+  width: min(400px, 92vw);
+  max-width: min(400px, 92vw);
+  border-radius: 15px 5px 13px 7px;
+  background-color: #f5f8e8;
   background-image:
     linear-gradient(180deg, rgba(250, 252, 236, .88), rgba(236, 246, 220, .76)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(.35deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(.35deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="parque"] .destinos button {
   background: #cfe5b8;
   border-color: rgba(91, 126, 71, .38);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="cine"] {
-  width: min(380px, 92vw) !important;
-  max-width: min(380px, 92vw) !important;
-  border-radius: 4px 6px 12px 3px !important;
-  background-color: #fff4cf !important;
+  width: min(380px, 92vw);
+  max-width: min(380px, 92vw);
+  border-radius: 4px 6px 12px 3px;
+  background-color: #fff4cf;
   background-image:
     linear-gradient(180deg, rgba(255, 249, 221, .9), rgba(255, 239, 181, .76)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(.9deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(.9deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="cine"] .destinos button {
   background: #f2d25a;
   border-color: rgba(142, 111, 26, .42);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="discoteca"] {
-  width: min(440px, 92vw) !important;
-  max-width: min(440px, 92vw) !important;
-  border-radius: 10px 4px 7px 14px !important;
-  background-color: #f7eff8 !important;
+  width: min(440px, 92vw);
+  max-width: min(440px, 92vw);
+  border-radius: 10px 4px 7px 14px;
+  background-color: #f7eff8;
   background-image:
     linear-gradient(180deg, rgba(253, 247, 253, .9), rgba(244, 229, 247, .78)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(-1deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(-1deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="discoteca"] .destinos button {
   background: #dfc1e1;
   border-color: rgba(125, 79, 133, .38);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="gimnasio"] {
-  width: min(370px, 92vw) !important;
-  max-width: min(370px, 92vw) !important;
-  border-radius: 3px 11px 5px 4px !important;
-  background-color: #eef7f0 !important;
+  width: min(370px, 92vw);
+  max-width: min(370px, 92vw);
+  border-radius: 3px 11px 5px 4px;
+  background-color: #eef7f0;
   background-image:
     linear-gradient(180deg, rgba(247, 253, 248, .9), rgba(228, 244, 231, .76)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(-.75deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(-.75deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="gimnasio"] .destinos button {
   background: #b9dfc0;
   border-color: rgba(66, 118, 76, .36);
 }
 
-/* Alias del complejo antiguo, por compatibilidad con el mapa anterior. */
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="cafe_libros"] {
-  width: min(460px, 92vw) !important;
-  max-width: min(460px, 92vw) !important;
-  transform: translate(-50%, -50%) rotate(-.65deg) !important;
+  width: min(460px, 92vw);
+  max-width: min(460px, 92vw);
+  transform: translate(-50%, -50%) rotate(-.65deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="cine_game"] {
-  width: min(380px, 92vw) !important;
-  max-width: min(380px, 92vw) !important;
-  transform: translate(-50%, -50%) rotate(.9deg) !important;
+  width: min(380px, 92vw);
+  max-width: min(380px, 92vw);
+  transform: translate(-50%, -50%) rotate(.9deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="mala_idea"] {
-  width: min(440px, 92vw) !important;
-  max-width: min(440px, 92vw) !important;
-  transform: translate(-50%, -50%) rotate(-1deg) !important;
+  width: min(440px, 92vw);
+  max-width: min(440px, 92vw);
+  transform: translate(-50%, -50%) rotate(-1deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="restaurante"] {
-  width: min(430px, 92vw) !important;
-  max-width: min(430px, 92vw) !important;
-  border-radius: 5px 12px 4px 8px !important;
-  background-color: #fff1e7 !important;
+  width: min(430px, 92vw);
+  max-width: min(430px, 92vw);
+  border-radius: 5px 12px 4px 8px;
+  background-color: #fff1e7;
   background-image:
     linear-gradient(180deg, rgba(255, 249, 242, .9), rgba(255, 232, 215, .78)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(-1.3deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(-1.3deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="restaurante"] .destinos button {
   background: #efb08d;
   border-color: rgba(164, 80, 47, .38);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="bingo"] {
-  width: min(410px, 92vw) !important;
-  max-width: min(410px, 92vw) !important;
-  border-radius: 12px 4px 8px 5px !important;
-  background-color: #fff8cd !important;
+  width: min(410px, 92vw);
+  max-width: min(410px, 92vw);
+  border-radius: 12px 4px 8px 5px;
+  background-color: #fff8cd;
   background-image:
     linear-gradient(180deg, rgba(255, 253, 226, .9), rgba(247, 239, 184, .78)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(.7deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(.7deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="bingo"] .destinos button {
   background: #d5e39c;
   border-color: rgba(104, 125, 48, .38);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="biblioteca"] {
-  width: min(400px, 92vw) !important;
-  max-width: min(400px, 92vw) !important;
-  border-radius: 4px 7px 13px 5px !important;
-  background-color: #edf4f4 !important;
+  width: min(400px, 92vw);
+  max-width: min(400px, 92vw);
+  border-radius: 4px 7px 13px 5px;
+  background-color: #edf4f4;
   background-image:
     linear-gradient(180deg, rgba(247, 253, 252, .9), rgba(225, 240, 239, .78)),
-    url("../play-v3/capas/libreta_hoja.png") !important;
-  transform: translate(-50%, -50%) rotate(-.45deg) !important;
+    url("../play-v3/capas/libreta_hoja.png");
+  transform: translate(-50%, -50%) rotate(-.45deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="biblioteca"] .destinos button {
   background: #b9dada;
   border-color: rgba(65, 116, 116, .38);
 }
 
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="rincon_lola"] {
-  width: min(430px, 92vw) !important;
-  max-width: min(430px, 92vw) !important;
-  transform: translate(-50%, -50%) rotate(-1.3deg) !important;
+  width: min(430px, 92vw);
+  max-width: min(430px, 92vw);
+  transform: translate(-50%, -50%) rotate(-1.3deg);
 }
+
 .play-v3 .play-root[data-consulta] .nota-mapa[data-consulta-lugar="gimnasio_spa"] {
-  width: min(370px, 92vw) !important;
-  max-width: min(370px, 92vw) !important;
-  transform: translate(-50%, -50%) rotate(-.75deg) !important;
-}
-/* Marco más visible: tinta y doble línea de papel. */
-.play-v3 .play-root[data-consulta="sel"] .selector,
-.play-v3 .play-root[data-consulta="quien"] .quien {
-  border: 2.5px solid #4f4034 !important;
-  outline: 1px solid rgba(44, 38, 31, .18);
-  outline-offset: -6px;
-  box-shadow:
-    4px 7px 0 rgba(44, 38, 31, .17),
-    inset 0 0 0 1px rgba(255, 255, 255, .6),
-    inset 0 0 0 3px rgba(90, 72, 56, .06) !important;
+  width: min(370px, 92vw);
+  max-width: min(370px, 92vw);
+  transform: translate(-50%, -50%) rotate(-.75deg);
 }
 
 .play-v3 .play-root[data-consulta="quien"] .quien-horario {
@@ -494,57 +437,22 @@
   color: #5a4a3a;
 }
 
-
-/* Chinchetas mapa: dentro del papel */
 .play-v3 .play-root[data-consulta="sel"] .selector::before,
 .play-v3 .play-root[data-consulta="quien"] .quien::before,
 .play-v3 .nota-mapa::before {
-  top: 8px !important;
+  top: 8px;
 }
 
-
-/* Horario en edificios del mapa (deshabilitado en mapa) */
 .play-v3 .mapa-zona-horario {
-  position: absolute;
-  left: 50%;
-  bottom: 4%;
-  transform: translateX(-50%);
-  z-index: 5;
-  max-width: 96%;
-  padding: 0.12rem 0.32rem;
-  border-radius: 5px;
-  background: rgba(255, 252, 245, 0.94);
-  border: 1px solid rgba(58, 48, 40, 0.14);
-  box-shadow: 0 1px 3px rgba(44, 38, 31, 0.12);
-  font-size: 0.58rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  line-height: 1.15;
-  color: #5a4a3a;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  pointer-events: none;
+  display: none;
 }
+
 .play-v3 .mapa-zona-horario[data-abierto="1"] {
   color: #2d6a3e;
   border-color: rgba(45, 106, 62, 0.22);
 }
+
 .play-v3 .mapa-zona-horario[data-abierto="0"] {
   color: #8a4545;
   border-color: rgba(138, 69, 69, 0.2);
 }
-
-/* Horario: oculto en mapa (solo en ventana al pulsar edificio) */
-.play-v3 .mapa-zona-horario {
-  display: none !important;
-}
-.play-v3 .play-root[data-consulta="quien"] .quien-horario {
-  display: block;
-  margin: 0.2rem 0 0.5rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  line-height: 1.35;
-  color: #5a4a3a;
-}
-
