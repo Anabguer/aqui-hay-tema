@@ -179,7 +179,22 @@ final class MensajitoContextualEngine
         ];
     }
 
+    /** Máximo de invitados además del cumpleañero. */
+    private const MAX_INVITADOS_FIESTA = 5;
+
+    /** Umbral social mínimo para considerar candidato a invitado. */
+    private const UMBRAL_SOCIAL_MIN_INVITADO = 0;
+
+    /** ID de hito Historia del Pueblo para la primera fiesta de cumpleaños. */
+    public const HITO_EL_PRIMER_CUMPLE = 'el_primer_cumple';
+
+    /** Prefijo de clave de dedup de fiestas de cumpleaños. */
+    private const CLAVE_FIESTA_PREFIJO = 'cumple_fiesta_';
+
     /**
+     * Organiza una fiesta de cumpleaños real: selecciona lugar, asistentes
+     * y programa un encuentro que se resolverá por el pipeline normal.
+     *
      * @return array<string, mixed>
      */
     public static function organizarCumple(array &$partida, string $mensajeId): array
@@ -192,16 +207,127 @@ final class MensajitoContextualEngine
         if ($cumpleId === '') {
             return ['ok' => false, 'error' => 'sin_cumpleanero'];
         }
+
+        $reloj = $partida['reloj'] ?? [];
+        $diaActual = (int) ($reloj['dia_pueblo'] ?? 1);
+        $horaActual = (int) ($reloj['hora_actual'] ?? 9);
+
+        // Dedup: una fiesta por cumpleaños real del residente
+        $claveAnual = ResidenteCumpleanosEngine::claveAnual($partida, $cumpleId);
+        $claveFiesta = self::CLAVE_FIESTA_PREFIJO . $claveAnual;
+        $partida['fiestas_cumple_emitidas'] ??= [];
+        if (!empty($partida['fiestas_cumple_emitidas'][$claveFiesta])) {
+            self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_cumple', 'cumpleanero_id' => $cumpleId]);
+            return [
+                'ok' => true,
+                'mensaje_ui' => 'Ya se está organizando.',
+                'ya_programada' => true,
+            ];
+        }
+
+        // Seleccionar lugar
+        $lugar = self::seleccionarLugarFiesta($partida, $diaActual, $horaActual);
+        if ($lugar === null) {
+            self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_cumple', 'cumpleanero_id' => $cumpleId]);
+            return [
+                'ok' => false,
+                'error' => 'no_hay_lugar_valido',
+                'mensaje_ui' => 'No hay ningún sitio abierto donde celebrarlo.',
+            ];
+        }
+
+        // Seleccionar asistentes (cumpleañero + invitados)
+        $asistentes = self::seleccionarAsistentesFiesta($partida, $cumpleId, $lugar);
+        if (count($asistentes) < 1) {
+            self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_cumple', 'cumpleanero_id' => $cumpleId]);
+            return [
+                'ok' => false,
+                'error' => 'sin_participantes',
+                'mensaje_ui' => 'No hay nadie que pueda venir.',
+            ];
+        }
+
+        // Buscar franja horaria válida
+        $attr = LugarAtributos::de($lugar);
+        $durH = $attr['horas'];
+        $franja = self::buscarFranjaFiesta($partida, $lugar, $durH, $diaActual, $horaActual);
+        if ($franja === null) {
+            self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_cumple', 'cumpleanero_id' => $cumpleId]);
+            return [
+                'ok' => false,
+                'error' => 'sin_franja',
+                'mensaje_ui' => 'No hay hueco hoy para la fiesta.',
+            ];
+        }
+
+        // Programar encuentro real
+        $r = EncuentroEngine::programar(
+            $partida,
+            $asistentes,
+            $franja['dia'],
+            $franja['hora'],
+            'amistad',
+            $lugar,
+            null,
+            null,
+            false,
+            true
+        );
+        if (!($r['ok'] ?? false)) {
+            self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_cumple', 'cumpleanero_id' => $cumpleId]);
+            return [
+                'ok' => false,
+                'error' => $r['error'] ?? 'encuentro_fallido',
+                'mensaje_ui' => 'No se ha podido organizar la fiesta.',
+            ];
+        }
+
+        // Marcar intención como fiesta de cumpleaños
+        $encId = (string) ($r['encuentro']['id'] ?? '');
+        foreach ($partida['encuentros'] as &$enc) {
+            if (($enc['id'] ?? '') !== $encId) {
+                continue;
+            }
+            $enc['intencion'] = 'fiesta_cumpleanos';
+            $enc['cumpleanero_id'] = $cumpleId;
+            $enc['reserva_agenda'] = ['tipo' => 'encuentro', 'origen' => 'fiesta_cumple'];
+            break;
+        }
+        unset($enc);
+
+        // Aplicar ALEGRE al cumpleañero
+        if (isset($partida['residentes'][$cumpleId])) {
+            EstadoEmocional::ensureResidente($partida['residentes'][$cumpleId], $reloj);
+            $partida['residentes'][$cumpleId]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
+                EstadoEmocional::ALEGRE,
+                1,
+                'cumple_fiesta',
+                EstadoEmocional::marcaReloj($reloj),
+                EstadoEmocional::hastaDesdeDuracion($reloj, 12),
+                ['fuente' => 'f10_cumpleanos', 'lugar' => $lugar],
+                12
+            );
+            $partida['residentes'][$cumpleId]['runtime']['animo'] = EstadoEmocional::ALEGRE;
+        }
+
+        // Registrar dedup
+        $partida['fiestas_cumple_emitidas'][$claveFiesta] = true;
+
+        // Cerrar hilo del mensajito
         self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_cumple', 'cumpleanero_id' => $cumpleId]);
+
+        $nombreLugar = self::nombreLugarHumano($lugar);
+        $horaUi = str_pad((string) $franja['hora'], 2, '0', STR_PAD_LEFT) . ':00';
+        $diaUi = $franja['dia'] === $diaActual ? 'esta tarde' : 'mañana';
+
         return [
             'ok' => true,
-            'mensaje_ui' => 'Vamos a montarle algo.',
-            'preset_organizar' => [
-                'modo' => 'individual',
-                'participantes' => [$cumpleId],
-                'tipo' => 'individual',
-                'intencion' => 'fiesta',
-            ],
+            'mensaje_ui' => "Listo. {$diaUi} celebrarán el cumple en {$nombreLugar} a las {$horaUi}.",
+            'encuentro_id' => $encId,
+            'lugar' => $lugar,
+            'asistentes' => $asistentes,
+            'dia' => $franja['dia'],
+            'hora' => $franja['hora'],
         ];
     }
 
@@ -416,6 +542,180 @@ final class MensajitoContextualEngine
     }
 
     /**
+     * Selecciona un lugar válido para la fiesta entre los desbloqueados y abiertos.
+     * Aplica variedad determinista via RNG del partido.
+     */
+    private static function seleccionarLugarFiesta(array $partida, int $diaActual, int $horaActual): ?string
+    {
+        $operativos = $partida['celeste']['lugares_desbloqueados'] ?? [];
+        $candidatos = [];
+
+        foreach ($operativos as $lugarId) {
+            $lugarId = (string) $lugarId;
+            if (!LugaresCanonicos::esCanonico($lugarId)) {
+                continue;
+            }
+            if (!ComplejoCatalog::estaAbierto($lugarId, $horaActual)) {
+                // Probar si abrirá pronto (en las próximas 3 horas)
+                $encontrado = false;
+                for ($h = $horaActual + 1; $h <= min($horaActual + 3, 23); $h++) {
+                    if (ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                        $encontrado = true;
+                        break;
+                    }
+                }
+                if (!$encontrado) {
+                    continue;
+                }
+            }
+            // Excluir lugares no aptos para fiesta social
+            if (in_array($lugarId, ['lug_biblioteca', 'lug_gimnasio'], true)) {
+                continue;
+            }
+            $attr = LugarAtributos::de($lugarId);
+            $candidatos[] = [
+                'id' => $lugarId,
+                'aforo' => $attr['aforo'],
+            ];
+        }
+
+        if ($candidatos === []) {
+            return null;
+        }
+
+        // Selección determinista con RNG para variedad
+        $rng = RngService::fromPartida($partida);
+        $idx = $rng->nextInt(0, count($candidatos) - 1);
+        $rng->persistToPartida($partida);
+
+        return $candidatos[$idx]['id'];
+    }
+
+    /**
+     * Selecciona asistentes para la fiesta de cumpleaños.
+     * Incluye al cumpleañero + hasta MAX_INVITADOS_FIESTA invitados.
+     * Prioriza: pareja > amigos cercanos > relaciones positivas.
+     * No exige social >= 20: permite fiestas pequeñas en pueblos con pocos contactos.
+     *
+     * @return list<string>
+     */
+    private static function seleccionarAsistentesFiesta(array $partida, string $cumpleaneroId, string $lugarId): array
+    {
+        $asistentes = [$cumpleaneroId];
+        $candidatos = [];
+
+        // Buscar pareja
+        $parejaId = TerceroRomantico::parejaDe($partida, $cumpleaneroId);
+        if ($parejaId !== null && $parejaId !== $cumpleaneroId && self::esResidenteActivo($partida, $parejaId)) {
+            $candidatos[$parejaId] = 200; // Prioridad máxima
+        }
+
+        // Buscar otros candidatos por social
+        foreach ($partida['relaciones_sociales'] ?? [] as $rel) {
+            if (!is_array($rel)) {
+                continue;
+            }
+            $a = (string) ($rel['persona_a'] ?? '');
+            $b = (string) ($rel['persona_b'] ?? '');
+            $otro = null;
+            if ($a === $cumpleaneroId) {
+                $otro = $b;
+            } elseif ($b === $cumpleaneroId) {
+                $otro = $a;
+            } else {
+                continue;
+            }
+            if ($otro === $cumpleaneroId || $otro === $parejaId) {
+                continue;
+            }
+            if (!self::esResidenteActivo($partida, $otro)) {
+                continue;
+            }
+
+            $dir = RelacionEngine::socialHacia($partida, $cumpleaneroId, $otro);
+            $social = (float) (($dir['valor']) ?? 0);
+
+            // Excluir si hay conflicto activo fuerte
+            $entre = RelacionEngine::obtenerEntre($partida, $cumpleaneroId, $otro);
+            $confIntensidad = (int) (($entre['conflicto'] ?? [])['intensidad'] ?? 0);
+            if ($confIntensidad >= 9) {
+                continue;
+            }
+
+            if ($social >= self::UMBRAL_SOCIAL_MIN_INVITADO) {
+                $candidatos[$otro] = (int) $social;
+            }
+        }
+
+        // Ordenar por social descendente
+        arsort($candidatos);
+
+        $aforoMax = LugarAtributos::de($lugarId)['aforo'];
+        $maxInvitados = min(self::MAX_INVITADOS_FIESTA, $aforoMax - 1);
+
+        foreach ($candidatos as $invitadoId => $_) {
+            if (count($asistentes) >= $maxInvitados + 1) {
+                break;
+            }
+            $asistentes[] = $invitadoId;
+        }
+
+        return $asistentes;
+    }
+
+    /**
+     * Busca una franja horaria válida para la fiesta.
+     * Prioriza la tarde del día actual si el lugar está abierto.
+     *
+     * @return array{dia: int, hora: int}|null
+     */
+    private static function buscarFranjaFiesta(
+        array $partida,
+        string $lugarId,
+        int $durH,
+        int $diaActual,
+        int $horaActual
+    ): ?array {
+        // Probar hoy desde la hora actual +1 hasta 22
+        for ($h = max($horaActual + 1, 17); $h <= 22 - $durH + 1; $h++) {
+            if (!ComplejoCatalog::estaAbierto($lugarId, $h)) {
+                continue;
+            }
+            if (!Reloj::esFuturo($partida['reloj'] ?? [], $diaActual, $h)) {
+                continue;
+            }
+            return ['dia' => $diaActual, 'hora' => $h];
+        }
+
+        // Probar mañana 19:00
+        $manana = $diaActual + 1;
+        $horaManana = 19;
+        if (ComplejoCatalog::estaAbierto($lugarId, $horaManana)
+            && Reloj::esFuturo($partida['reloj'] ?? [], $manana, $horaManana)
+        ) {
+            return ['dia' => $manana, 'hora' => $horaManana];
+        }
+
+        return null;
+    }
+
+    /** Nombre legible de un lugar a partir de su ID. */
+    private static function nombreLugarHumano(string $lugarId): string
+    {
+        $map = [
+            'lug_cafeteria' => 'la Cafetería',
+            'lug_bar' => 'el Bar',
+            'lug_restaurante' => 'el Restaurante',
+            'lug_bingo' => 'el Bingo',
+            'lug_parque' => 'el Parque',
+            'lug_cine' => 'el Cine',
+            'lug_discoteca' => 'la Discoteca',
+            'lug_plaza' => 'la Plaza',
+        ];
+        return $map[$lugarId] ?? ucfirst(str_replace(['lug_', '_'], ['', ' '], $lugarId));
+    }
+
+    /**
      * @param array<string, mixed> $meta
      */
     private static function cerrarHilo(array &$partida, string $mensajeId, array $meta): void
@@ -430,5 +730,47 @@ final class MensajitoContextualEngine
             break;
         }
         unset($m);
+    }
+
+    // ── Historia del Pueblo: EL PRIMER CUMPLEAÑOS ──────────────
+
+    /**
+     * Registra "EL PRIMER CUMPLEAÑOS" en Historia del Pueblo si es la primera
+     * fiesta de cumpleaños celebrada en la partida.
+     * Se llama cuando un encuentro con intención 'fiesta_cumpleanos' termina.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $encuentro
+     * @return array{ok: bool, ya_existia: bool}|null
+     */
+    public static function registrarPrimerCumpleHistoria(array &$partida, array $encuentro): ?array
+    {
+        if (($encuentro['intencion'] ?? '') !== 'fiesta_cumpleanos') {
+            return null;
+        }
+        if (($encuentro['estado'] ?? '') !== 'terminado') {
+            return null;
+        }
+        $resultado = $encuentro['resultado'] ?? null;
+        if (!is_array($resultado)) {
+            return null;
+        }
+
+        $protagonistas = $encuentro['participantes'] ?? [];
+        if ($protagonistas === []) {
+            return null;
+        }
+
+        $contexto = [
+            'cumpleanero_id' => $encuentro['cumpleanero_id'] ?? $protagonistas[0],
+            'lugar' => $encuentro['lugar'] ?? null,
+        ];
+
+        return HistoriaPuebloEngine::registrar(
+            $partida,
+            self::HITO_EL_PRIMER_CUMPLE,
+            $protagonistas,
+            $contexto
+        );
     }
 }

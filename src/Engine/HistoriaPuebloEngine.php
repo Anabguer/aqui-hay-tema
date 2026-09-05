@@ -46,6 +46,7 @@ final class HistoriaPuebloEngine
         ['id' => 'hito_31',           'nombre' => '¿OTRA VEZ VOSOTROS DOS?',   'imagen' => 'assets/img/historia/31.png', 'plantilla' => '{p1} y {p2} vuelven a quedar juntos. ¿Otra vez vosotros dos?', 'recompensa' => null],
         ['id' => 'hito_32',           'nombre' => 'TODO EL MUNDO PA\' DENTRO', 'imagen' => 'assets/img/historia/32.png', 'plantilla' => 'Aquí ya no falta nadie. Todo el mundo pa\' dentro, que esto empieza.', 'recompensa' => null],
         ['id' => 'hito_33',           'nombre' => 'AQUÍ HUELE A COTILLEO',     'imagen' => 'assets/img/historia/33.png', 'plantilla' => '{p1} ha estado pendiente de lo que no le importa. Uy… aquí huele a cotilleo.', 'recompensa' => null],
+        ['id' => 'el_primer_cumple', 'nombre' => 'EL PRIMER CUMPLEAÑOS',       'imagen' => 'assets/img/historia/34.png', 'plantilla' => 'La primera fiesta de cumpleaños del pueblo. {p1} celebró con {p2}, {p3} y más gente. Esto había que apuntarlo.', 'recompensa' => null],
     ];
 
     /** @var array<string, array{day: int, hora: int}> Hitos registrados => timestamp */
