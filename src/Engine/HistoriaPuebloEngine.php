@@ -241,6 +241,9 @@ final class HistoriaPuebloEngine
     public static function celebracionesPendientes(array $partida, ?string $root = null, ?string $partidaId = null): array
     {
         self::ensure($partida);
+        if (self::tutorialBloqueaPrimerRecuerdo($partida)) {
+            return [];
+        }
         $consumed = ($root !== null && $partidaId !== null)
             ? self::loadConsumed($root, $partidaId)
             : [];

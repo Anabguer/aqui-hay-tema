@@ -449,6 +449,7 @@ final class TutorialPrimerosPasos
             'id' => self::ID,
             'activo' => !empty($partida['tutorial']['activo']),
             'jugable_completado' => !empty($partida['tutorial']['jugable_completado']),
+            'finale_visto' => !empty($partida['tutorial']['finale_visto']),
             'finale_pendiente' => !empty($partida['tutorial']['jugable_completado'])
                 && empty($partida['tutorial']['finale_visto']),
             'intro' => [

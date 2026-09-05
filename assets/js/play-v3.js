@@ -1878,9 +1878,7 @@
 
   function mostrarSiguienteCelebracion() {
     if ($('[data-aht-screen="historia_celebracion"].is-on')) return;
-    const tut = cacheEstado && cacheEstado.tutorial;
-    if (tut && tut.id === 'primeros_pasos' && !tut.jugable_completado) return;
-    if (tut && tut.id === 'primeros_pasos' && tut.finale_pendiente) return;
+    if (enTutorialPrimerosPasos()) return;
     if (document.body.hasAttribute('data-tut-activo')) return;
     if (document.body.hasAttribute('data-tut-finale')) return;
     let c = null;
@@ -8449,6 +8447,9 @@ function hobbyIconKey(id, texto) {
   };
 
   function limpiarCachesPartidaUi() {
+    colaCelebraciones = [];
+    celebracionHitoActual = '';
+    celebracionesConsumidas.clear();
     cacheEstado = null;
     cacheInsp = null;
     cachePueblo = null;
@@ -8496,8 +8497,8 @@ function hobbyIconKey(id, texto) {
       const r = await api('partida.reiniciar', configNueva(true));
       if (r.ok) {
         toast('Partida reiniciada.');
-        await refresh();
         quizaMostrarTutIntro();
+        await refresh();
       } else {
         toast(r.mensaje_ui || 'No se pudo reiniciar la partida.');
       }
