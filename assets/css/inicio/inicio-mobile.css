@@ -1437,7 +1437,7 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -1782,7 +1782,7 @@ margin-bottom: 4px;
     justify-content: center;
     gap: 5px;
     margin: 0 auto;
-    padding: 4px 8px;
+    padding: 2px 5px;
     background: linear-gradient(180deg, #f8f4fc 0%, #ebe3f8 100%);
     border: 1.5px solid #9a86c4;
     border-radius: 999px;
@@ -1921,7 +1921,7 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand-text {
     font-family: var(--ds-font-hand, Caveat, cursive);
     font-weight: 700;
-    font-size: 1.0625rem;
+    font-size: 1.7rem;
     line-height: 1;
     letter-spacing: .02em;
     color: var(--ds-ink, #2a2218);
