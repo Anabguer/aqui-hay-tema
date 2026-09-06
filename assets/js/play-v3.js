@@ -2212,7 +2212,12 @@
     switch (accionId) {
       case 'organizar_algo':
         if (fam === 'f_duda_permanencia') return 'Ayudarle a quedarse';
-        if (fam === 'f_alerta_vecinal') return 'Organizar algo con él';
+        if (fam === 'f_alerta_vecinal') {
+          var _obsId = datos.observado_id || '';
+          var _obsRes = (cacheInsp && cacheInsp.residentes && cacheInsp.residentes[_obsId]) || {};
+          var _obsGen = (_obsRes.identidad_publica && _obsRes.identidad_publica.genero) || '';
+          return 'Organizar algo con ' + (_obsGen === 'mujer' ? 'ella' : 'él');
+        }
         return 'Organizar plan';
       case 'organizar_encargo':
         if (fam === 'f_presentacion' || plantilla === 'conocer_a_alguien') return 'Elegir plan';
