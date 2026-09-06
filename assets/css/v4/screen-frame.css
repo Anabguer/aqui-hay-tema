@@ -125,7 +125,7 @@
   z-index: 0;
 }
 
-.aht-frame-title {
+.aht-frame .aht-frame-title {
   position: relative;
   z-index: 1;
   font-family: var(--aht-font-hand, "Caveat Brush", "Caveat", cursive);
@@ -145,7 +145,7 @@
 }
 
 /* Decoración: estrellas doradas — visibles, con presencia */
-.aht-frame-title::before {
+.aht-frame .aht-frame-title::before {
   content: "\2726  \2726";
   display: inline;
   margin: 0 0.18em 0 0;
@@ -159,7 +159,7 @@
 }
 
 /* Decoración: corazón rosa — intencionado, no accidental */
-.aht-frame-title::after {
+.aht-frame .aht-frame-title::after {
   content: "\2665";
   display: inline;
   margin: 0 0 0 0.18em;
@@ -451,7 +451,7 @@
 }
 
 @media (max-width: 768px) {
-  .aht-frame-title {
+  .aht-frame .aht-frame-title {
     font-size: var(--aht-frame-title-size-mobile, 1.375rem);
   }
 }
