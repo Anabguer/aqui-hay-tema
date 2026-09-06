@@ -22,6 +22,7 @@ ok(/background-image: url\("data:image\/svg\+xml/.test(mob), 'mobile: icono coti
 ok(/INICIO-VISUAL-PNG-20260906[\s\S]{0,20}desktop/.test(desk), 'desktop: marcador visual PNG');
 ok(/grid-template-areas:[\s\S]{0,120}"\.    nav  \."/.test(desk), 'desktop: nav bajo mapa');
 ok(/INICIO-VISUAL-PNG-PASS2-20260906/.test(desk), 'desktop: pass2 laterales PNG');
+ok(/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: pass3 derecha PNG');
 
 ok(/INICIO-VISUAL-PNG-20260906[\s\S]{0,20}mapa/.test(mapa), 'mapa: marcador visual PNG');
 ok(/aspect-ratio:\s*618\s*\/\s*404/.test(mapa), 'mapa movil: proporcion canonica');

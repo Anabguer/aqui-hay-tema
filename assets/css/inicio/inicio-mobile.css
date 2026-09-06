@@ -2746,4 +2746,61 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage > .play-bottom-nav .play-bottom-nav-ico--inv {
     position: relative;
   }
+  /* INICIO-VISUAL-PASS3-20260906 — movil pulido PNG 01 */
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen,
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan {
+    position: relative;
+    min-height: 78px;
+    border-radius: 14px;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    background: linear-gradient(180deg, #f06a8a 0%, #e85a78 100%);
+    border: 2px dashed rgba(255, 255, 255, .85);
+    box-shadow: 0 2px 8px rgba(196, 43, 74, .2);
+    color: #fff;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .68rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .inicio-mp-duo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .inicio-mp-card--mis {
+    background: linear-gradient(180deg, #e8f5e4 0%, #d9ecd4 100%);
+    border-color: rgba(109, 155, 118, .42);
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .inicio-mp-card--par {
+    background: linear-gradient(180deg, #fdeef3 0%, #f8e0ea 100%);
+    border-color: rgba(232, 120, 152, .42);
+  }
+
 }

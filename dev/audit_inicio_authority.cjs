@@ -64,6 +64,14 @@ if (/(^|\n)\.obj-buzon\s*\{/.test(shell)) {
   hits.push('.obj-buzon sin acotar a .inicio-desktop en play-v3-shell-ui.css');
 }
 
+if (/\.inicio-desktop \.obj-buzon\s*\{/.test(shell)) {
+  hits.push('reglas .inicio-desktop .obj-buzon legacy en play-v3-shell-ui.css');
+}
+
+if (!/INICIO-SHELL-UI-MIGRATED-20260906/.test(shell)) {
+  hits.push('play-v3-shell-ui.css sin marcador INICIO-SHELL-UI-MIGRATED');
+}
+
 if (hits.length) {
   console.error('AUDIT INICIO AUTORIDAD — FALLOS:\n' + hits.map((h) => '  - ' + h).join('\n'));
   process.exit(1);
