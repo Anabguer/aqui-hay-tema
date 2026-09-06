@@ -255,3 +255,78 @@
     display: none;
   }
 }
+
+/* INICIO-VISUAL-PNG-20260906 — desktop */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    background: #f3eef8;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    grid-template-areas:
+      "head head head"
+      "left map  right"
+      ".    nav  .";
+    row-gap: 10px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-area: nav;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 8px 0;
+    background: #fff;
+    border: 1px solid rgba(198, 176, 210, .35);
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(70, 55, 85, .08);
+    position: static;
+    align-self: stretch;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    min-height: 56px;
+    padding: 6px 4px;
+    margin: 0;
+    border: none;
+    border-right: 1px solid rgba(198, 176, 210, .28);
+    background: transparent;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:last-child {
+    border-right: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-ico {
+    width: 28px;
+    height: 28px;
+    color: #c85b78;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:nth-child(3) .play-bottom-nav-ico {
+    color: #6b5a8a;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .62rem;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--ds-ink, #2a2218);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right {
+    gap: 12px;
+  }
+}

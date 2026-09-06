@@ -74,3 +74,39 @@
     overflow: hidden;
   }
 }
+
+/* INICIO-VISUAL-PNG-20260906 — mapa */
+@media (max-width: 768px) {
+  .play-v3 .inicio-stage > .inicio-map-host {
+    padding: 0 13px 10px;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .board-fit {
+    aspect-ratio: 618 / 404;
+    min-height: 200px;
+    max-height: min(52vw, 280px);
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico,
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico-bg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico {
+    display: block;
+    border-radius: 20px 18px 22px 16px / 18px 22px 16px 20px;
+    border: 2px solid rgba(107, 81, 56, .28);
+    box-shadow: 0 3px 10px rgba(70, 50, 30, .1);
+    overflow: hidden;
+    background: #fff;
+  }
+}
+
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit {
+    min-height: 360px;
+    max-height: min(76vh, 660px);
+  }
+}
