@@ -88,12 +88,12 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara img,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara .cara-ini {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara-ini {
-    font-size: .82rem;
+    font-size: .9rem;
   }
 }
 
@@ -128,12 +128,12 @@
   .play-v3 .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara,
   .play-v3 .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara img,
   .play-v3 .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara .cara-ini {
-    width: 46px;
-    height: 46px;
+    width: 52px;
+    height: 52px;
   }
 
   .play-v3 .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara-ini {
-    font-size: .8rem;
+    font-size: .86rem;
   }
 }
 
