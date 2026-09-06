@@ -116,10 +116,10 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(88%, 16rem);
-  height: 1.6em;
+  width: min(96%, 18rem);
+  height: 2em;
   transform: translate(-50%, -50%) rotate(-1.8deg);
-  background-color: var(--aht-header-mark, #F1EDF6);
+  background-color: var(--aht-header-mark, #E3D6F0);
   border-radius: 18px 10px 14px 8px / 10px 16px 8px 14px;
   pointer-events: none;
   z-index: 0;
@@ -129,16 +129,17 @@
   position: relative;
   z-index: 1;
   font-family: var(--aht-font-hand, "Caveat Brush", "Caveat", cursive);
-  font-size: var(--aht-frame-title-size-desktop, 1.75rem);
-  font-weight: 400;
+  font-size: var(--aht-frame-title-size-desktop, 2.1rem);
+  font-weight: 700;
   font-style: normal;
   line-height: 1.15;
-  letter-spacing: 0.015em;
+  letter-spacing: 0.04em;
   text-align: center;
-  text-transform: none;
+  text-transform: uppercase;
   margin: 0;
-  padding: 0;
+  padding: 0 48px;
   width: 100%;
+  box-sizing: border-box;
   color: var(--aht-text, #33261E);
   text-shadow: none;
   display: block;
@@ -149,7 +150,7 @@
   content: "\2726  \2726";
   display: inline;
   margin: 0 0.18em 0 0;
-  font-size: 0.7em;
+  font-size: 0.95em;
   color: #e8b84a;
   vertical-align: middle;
   transform: translateY(-0.06em);
@@ -163,7 +164,7 @@
   content: "\2665";
   display: inline;
   margin: 0 0 0 0.18em;
-  font-size: 0.75em;
+  font-size: 1em;
   color: #F1A0B4;
   vertical-align: middle;
   transform: translateY(-0.06em);
@@ -247,12 +248,12 @@
   background: var(--aht-close-bg-pink, #FDE8EC);
   box-shadow:
     2px 3px 0 rgba(51, 38, 30, .18),
-    0 1px 3px rgba(196, 43, 74, 0.06);
+    0 1px 3px rgba(107, 74, 94, 0.10);
   font-family: "Nunito", "Segoe UI", sans-serif;
   font-size: 20px;
   font-weight: 800;
   line-height: 1;
-  color: var(--aht-close-color, #C42B4A);
+  color: var(--aht-close-color, #6B4A5E);
   transform: translateY(-50%);
   transition: transform var(--aht-dur-fast, 120ms) ease,
               box-shadow var(--aht-dur-fast, 120ms) ease;
@@ -452,6 +453,7 @@
 
 @media (max-width: 768px) {
   .aht-frame .aht-frame-title {
-    font-size: var(--aht-frame-title-size-mobile, 1.375rem);
+    font-size: var(--aht-frame-title-size-mobile, 1.6rem);
+    padding: 0 44px;
   }
 }
