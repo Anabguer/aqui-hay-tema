@@ -64,6 +64,7 @@ ok(/celeste-necesitan-algo[\s\S]{0,500}border-top:\s*1px solid/.test(desk), 'des
 ok(/celeste-necesitan-algo[\s\S]{0,500}margin-left:\s*auto/.test(desk), 'desktop: necesitan numero alineado derecha');
 ok(/celestine-nota \.obj-vecinos-tit[\s\S]{0,220}font-size:\s*1\.05rem/.test(desk), 'desktop: vecinos titulo 1.05rem');
 ok(/obj-cotilleo-tit[\s\S]{0,220}font-size:\s*1\.05rem/.test(desk), 'desktop: cotilleos titulo 1.05rem');
+ok(/obj-cotilleo-tit::before[\s\S]{0,80}content:\s*"# "/.test(desk), 'desktop: cotilleos hash titulo');
 ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk), 'desktop: cotilleos corazon sutil');
 ok(/obj-misiones-papel::before[\s\S]{0,220}grid-column:\s*1 \/ -1/.test(desk), 'desktop: misiones linea cabecera continua');
 ok(/obj-misiones-papel-tit[\s\S]{0,260}border-bottom:\s*none/.test(desk), 'desktop: misiones titulo sin borde partido');
@@ -71,7 +72,7 @@ ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*1\.05rem/.test(desk), 'deskt
 ok(/obj-misiones-papel-meta[\s\S]{0,400}rgba\(200,\s*91,\s*120/.test(desk), 'desktop: misiones pendientes rosa');
 ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*1\.05rem/.test(desk), 'desktop: planes titulo tamano vecinos');
 ok(/INICIO-PLANES-BLOQUE-CANON-20260906/.test(desk), 'desktop: planes bloque canon');
-ok(/inicio-planes-agenda[\s\S]{0,200}border:\s*1\.5px dashed/.test(desk), 'desktop: agenda proximos dashed');
+ok(/inicio-planes-agenda[\s\S]{0,220}border:\s*1px dashed/.test(desk), 'desktop: agenda proximos dashed ligero');
 ok(!/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: sin PASS3 duplicado');
 ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*1\.05rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
 
