@@ -89,6 +89,7 @@ echo "=== TESTS DE TRIGGERS DE HISTORIA DEL PUEBLO ===\n\n";
 // ====================================================================
 
 $p = crearPartidaConTutorial();
+$p['residentes']['per_test_h4'] = ['presencia' => 'residente', 'catalog_id' => 'per_test_h4'];
 $res = getRes($p, 4);
 $pA = $res[0];
 $pB = $res[1];

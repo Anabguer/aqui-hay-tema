@@ -10,6 +10,7 @@ namespace AquiHayTema\Engine;
 final class HistoriaPuebloEngine
 {
     public const HITO_EMPEZO_COTARRO = 'empezo_el_cotarro';
+    private const HITO_02 = 'hito_02';
 
     /** @var list<array{id: string, nombre: string, imagen: string, plantilla: string, recompensa: array|null}> */
     public const CATÁLOGO_VISUAL = [
@@ -95,6 +96,10 @@ final class HistoriaPuebloEngine
     {
         $hitoId = self::hitoIdDesdeBitacora($tipoBitacora, $meta, $resultado);
         if ($hitoId === null || count($participantes) < 2) {
+            return null;
+        }
+
+        if ($hitoId === self::HITO_02 && count(TutorialIncorporaciones::residentesActivos($partida)) < 4) {
             return null;
         }
 

@@ -97,6 +97,7 @@ $p3 = $service->cargarParaRefresh($pid);
 ok(count(pending($p3, $root, $pid)) === 0, '4.1 tras avanzar tiempo: 0 pendientes');
 
 echo "\n=== 5. Segundo hito (hito_02 / se_conocieron) ===\n";
+$p3['residentes']['per_test_h4'] = ['presencia' => 'residente', 'catalog_id' => 'per_test_h4'];
 $res = array_slice(array_keys($p3['residentes']), 0, 2);
 RelacionBitacora::registrar($p3, RelacionBitacora::SE_CONOCIERON, $res);
 $service->guardar($p3);
