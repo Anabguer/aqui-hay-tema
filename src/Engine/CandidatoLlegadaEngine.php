@@ -162,7 +162,8 @@ final class CandidatoLlegadaEngine
         $fracDias = max(1, $horasAvanzadas) / 24.0;
         $p = 1.0 - pow(1.0 - $pDia, $fracDias);
 
-        $forzarPity = self::modoNormalActivo($partida) && self::forzarOfertaPorPity($n, $diasSinOferta);
+        $forzarPrimeraIncorporacion = ($n === 3 && $dia >= 3);
+        $forzarPity = $forzarPrimeraIncorporacion || (self::modoNormalActivo($partida) && self::forzarOfertaPorPity($n, $diasSinOferta));
         $rng = RngService::fromPartida($partida);
         if (!$forzarPity) {
             $tirada = $rng->nextFloat();
