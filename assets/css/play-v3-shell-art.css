@@ -783,45 +783,15 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 
 .es-noche {
 
-  display: inline-flex;
-
-  align-items: center;
-
-  gap: .26rem;
-
-  pointer-events: none;
-
-  z-index: 4;
+  display: none;
 
 }
-
-.es-noche[hidden] { display: none; }
 
 .es-estado-ico {
 
-  width: .78rem;
+  width: .72rem;
 
-  height: .78rem;
-
-  flex: none;
-
-}
-
-.es-estado-dia-ico {
-
-  fill: none;
-
-  stroke: #c88a2e;
-
-  stroke-width: 2;
-
-  stroke-linecap: round;
-
-  stroke-linejoin: round;
-
-}
-
-.es-estado-noche-ico {
+  height: .72rem;
 
   fill: none;
 
@@ -833,6 +803,8 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 
   stroke-linejoin: round;
 
+  flex: none;
+
 }
 
 .es-estado-txt {
@@ -841,43 +813,17 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 
   font-weight: 800;
 
-  font-size: .62rem;
+  font-size: .6rem;
 
   letter-spacing: .02em;
 
   line-height: 1;
 
+  color: #5e3e90;
+
   white-space: nowrap;
 
 }
-
-.es-estado-dia-txt {
-
-  color: #9a7b2a;
-
-}
-
-.es-estado-noche-txt {
-
-  color: #5e3e90;
-
-}
-
-.es-noche > .es-estado-dia-ico,
-.es-noche > .es-estado-dia-txt { display: none; }
-
-.es-noche > .es-estado-noche-ico,
-.es-noche > .es-estado-noche-txt { display: none; }
-
-.es-noche.is-dia > .es-estado-dia-ico,
-.es-noche.is-dia > .es-estado-dia-txt { display: inline-flex; }
-
-.es-noche.is-dia > .es-estado-dia-txt { display: inline; }
-
-.es-noche.is-noche > .es-estado-noche-ico,
-.es-noche.is-noche > .es-estado-noche-txt { display: inline-flex; }
-
-.es-noche.is-noche > .es-estado-noche-txt { display: inline; }
 
 .pasar-rato--noche {
 

@@ -355,6 +355,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <section class="inicio-mobile" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil">
         <header class="game-top">
       <div class="inicio-header-card">
+        <span class="es-noche" data-es-noche hidden>
+          <svg class="es-estado-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span class="es-estado-txt">Noche</span>
+        </span>
         <div class="inicio-header-brand-row">
           <div class="brand-col">
             <h1 class="brand" aria-label="Aqu&iacute; Hay Tema">
@@ -392,12 +396,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <span class="inicio-temporal-hora">
             <span class="inicio-temporal-reloj-ico" aria-hidden="true"></span>
             <span class="inicio-temporal-hora-val" data-hora>&#8212;</span>
-          </span>
-          <span class="es-noche" data-es-noche hidden>
-            <svg class="es-estado-ico es-estado-dia-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-            <svg class="es-estado-ico es-estado-noche-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            <span class="es-estado-txt es-estado-dia-txt">Es de d&iacute;a</span>
-            <span class="es-estado-txt es-estado-noche-txt">Es de noche</span>
           </span>
           <button type="button" class="pasar-rato inicio-temporal-play" data-pasar-rato title="Avanza el tiempo exactamente 1 hora" aria-label="Pasar el rato">
             <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
@@ -1082,10 +1080,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="obj-hora-val" data-hora>&#8212;</span>
           </div>
           <span class="es-noche" data-es-noche hidden>
-            <svg class="es-estado-ico es-estado-dia-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-            <svg class="es-estado-ico es-estado-noche-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            <span class="es-estado-txt es-estado-dia-txt">Es de d&iacute;a</span>
-            <span class="es-estado-txt es-estado-noche-txt">Es de noche</span>
+            <svg class="es-estado-ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+            <span class="es-estado-txt">Noche</span>
           </span>
           <button type="button" class="pasar-rato" data-pasar-rato title="Avanza el tiempo exactamente 1 hora">
             <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
