@@ -3774,7 +3774,7 @@
     const maxCaras = Math.min(2, Math.max(1, ids.length));
     var html = '<article class="enc-mov-card enc-mov-card--mock" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<div class="enc-mov-mock-grid">' +
-      '<div class="enc-mov-faces prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<div class="enc-mov-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
       '<div class="enc-mov-mock-main">' +
       '<p class="enc-mov-nombres">' + esc(nombres) + '</p>' +
       '<p class="enc-mov-lugar">' + esc(lugar) + '</p>' +
