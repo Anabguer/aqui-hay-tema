@@ -188,7 +188,7 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
   .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt {
     font-family: var(--ds-font-hand);
     font-weight: 700;
-    font-size: 1.0625rem;
+    font-size: 1.3125rem;
     letter-spacing: .7px;
     text-transform: uppercase;
     color: var(--ds-ink);
@@ -1762,7 +1762,7 @@ margin-bottom: 4px;
     gap: 4px;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .8125rem;
+    font-size: .75rem;
     line-height: 1.2;
     color: var(--ds-ink, #2a2218);
   }
@@ -1777,8 +1777,8 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato {
     width: 30px;
     height: 30px;
-    min-width: 30px;
-    min-height: 30px;
+    max-width: 30px;
+    flex-shrink: 0;
     padding: 0;
     margin: 0;
     display: inline-grid;
@@ -1860,8 +1860,8 @@ margin-bottom: 4px;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand-heart {
-    width: 14px;
-    height: 13px;
+    width: 16px;
+    height: 15px;
     margin: 0;
     flex-shrink: 0;
     transform: rotate(8deg) translateY(-1px);
@@ -2629,14 +2629,28 @@ margin-bottom: 4px;
     width: max-content;
     max-width: 100%;
     justify-content: center;
-    gap: 8px;
+    gap: 5px;
+    padding: 4px 8px;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato {
-    background: #fff;
-    border: 1.5px solid rgba(200, 91, 120, .55);
-    box-shadow: 0 1px 0 rgba(200, 91, 120, .12);
-    color: #c85b78;
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    padding: 0;
+    margin: 0;
+    flex-shrink: 0;
+    display: inline-grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #ebe3f8;
+    border: 1.5px solid #9a86c4;
+    box-shadow: 0 2px 0 rgba(124, 107, 174, .28);
+    color: #5e3e90;
+    transform: none;
+    position: static;
+    left: auto;
+    top: auto;
   }
 }
 
