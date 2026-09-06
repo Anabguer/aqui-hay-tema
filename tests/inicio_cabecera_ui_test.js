@@ -58,9 +58,12 @@ ok(/inicio-desktop-left \.obj-buzon-ico-wrap[\s\S]{0,420}background:\s*url\("dat
 ok(/inicio-desktop-left \.obj-buzon-img[\s\S]{0,120}display:\s*none/.test(desk), 'desktop: mensajitos sin png legacy');
 ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
 ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'desktop: celestine negro');
-ok(/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,320}chincheta\.png/.test(desk), 'desktop: chincheta derecha');
-ok(!/obj-vecinos-resumen\.celestine-nota::after[\s\S]{0,80}display:\s*none/.test(resp), 'responsive: sin ocultar chincheta celestine');
-ok(/inicio-mobile-tiles \.celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,80}display:\s*none/.test(mob), 'mobile: sin chincheta en tile vecinos');
+ok(/celestine-nota\.obj-vecinos-resumen::before,[\s\S]{0,280}display:\s*none/.test(desk), 'desktop: vecinos sin decoracion ::before');
+ok(/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,120}display:\s*none/.test(desk), 'desktop: vecinos sin chincheta ::after');
+ok(!/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,320}chincheta\.png/.test(desk), 'desktop: sin chincheta.png en vecinos');
+ok(!/obj-vecinos-resumen\.celestine-nota::after[\s\S]{0,80}display:\s*none/.test(resp), 'responsive: sin regla global legacy ::after celestine');
+ok(/inicio-mobile-tiles \.celestine-nota\.obj-vecinos-resumen::before,[\s\S]{0,280}display:\s*none/.test(mob), 'mobile: vecinos sin decoracion ::before');
+ok(/inicio-mobile-tiles \.celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,80}display:\s*none/.test(mob), 'mobile: vecinos sin chincheta ::after');
 ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: caras vecinos grandes');
 ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
 ok(/celeste-necesitan-algo[\s\S]{0,500}border-top:\s*1px solid/.test(desk), 'desktop: necesitan apartado vecinos');

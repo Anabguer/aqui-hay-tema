@@ -684,27 +684,10 @@
     cursor: pointer;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::before {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::after {
     content: none;
     display: none;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    width: 28px;
-    height: 32px;
-    background: url("../../play-v3/capas/chincheta.png") center / contain no-repeat;
-    border: none;
-    border-radius: 0;
-    transform: rotate(10deg);
-    box-shadow: none;
-    filter: drop-shadow(1px 2px 1px rgba(60, 50, 40, .12));
-    pointer-events: none;
-    z-index: 3;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .libreta-kicker,
