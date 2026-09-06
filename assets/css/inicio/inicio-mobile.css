@@ -1287,7 +1287,7 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0;
+    gap: 6px;
     margin: 2px 0 0;
     flex: none;
   }

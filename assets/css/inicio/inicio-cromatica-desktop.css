@@ -321,8 +321,7 @@
 }
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .enc-mov-cara--r {
-  z-index: 2;
-  margin-left: -10px;
+  margin-left: 0;
 }
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-faces .cara-token .cara {
@@ -340,8 +339,6 @@
 }
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-tipo-ico {
-  transform: translate(-50%, -50%);
-  z-index: 10;
   border-radius: 50%;
   background: transparent;
   border: none;
@@ -366,8 +363,7 @@
 
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-cara--r {
-  z-index: 2;
-  margin-left: -10px;
+  margin-left: 0;
 }
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .cara-token .cara {
@@ -385,8 +381,6 @@
 }
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico {
-  transform: translate(-50%, -50%);
-  z-index: 10;
   border-radius: 50%;
   background: transparent;
   border: none;
