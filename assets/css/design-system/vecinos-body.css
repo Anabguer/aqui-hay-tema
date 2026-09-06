@@ -639,3 +639,67 @@ select.vec-rel-persona {
   font: 600 .72rem/1.4 Nunito, sans-serif;
   color: #6a5a48;
 }
+
+/* CIERRE-VISUAL-04-VECINOS-20260906 */
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cuenta-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 4px 0 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cuenta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 52px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: #e85a78;
+  border: 1.5px solid #b84868;
+  font-family: var(--ds-font-ui, Nunito, sans-serif);
+  font-weight: 800;
+  font-size: .72rem;
+  color: #fff;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 12px 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-tab.is-on {
+  background: #e85a78;
+  color: #fff;
+  border: 1.5px solid #8a3d52;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-tab:not(.is-on) {
+  background: #fff;
+  color: #6f5f9a;
+  border: 1.5px dashed rgba(111, 95, 154, .55);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-card {
+  background: #faf6ef;
+  border: 1.5px solid rgba(90, 70, 50, .35);
+  border-radius: 12px;
+  padding: 8px 6px 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-card .cara,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-card .vecino-cara {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 6px;
+  border: 2px solid #d4a84a;
+  border-radius: 50%;
+}

@@ -2803,4 +2803,30 @@ margin-bottom: 4px;
     border-color: rgba(232, 120, 152, .42);
   }
 
+  /* INICIO-VISUAL-PASS4-20260906 — remate movil ref 01 */
+  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed {
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-cotilleo-compacto {
+    border-radius: 14px;
+    padding: 10px 12px;
+    background: #ece6f8;
+    border: 1.5px solid rgba(111, 95, 154, .22);
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-planes-unif {
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1.5px solid rgba(111, 95, 154, .22);
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-nav-inferior {
+    margin-top: 4px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(90, 70, 50, .18);
+    box-shadow: 0 2px 8px rgba(70, 55, 40, .08);
+  }
+
 }

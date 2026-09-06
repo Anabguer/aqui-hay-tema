@@ -191,3 +191,44 @@ encuentro (13) */
 .enc-int--turnos .enc-int-result { margin-top: .5rem; }
 
 .enc-int--turnos .enc-int-result-txt { font: 600 .85rem/1.4 Nunito, "Segoe UI", sans-serif; }
+
+/* CIERRE-VISUAL-13-15-ENCUENTRO-20260906 */
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-elegir-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding: 12px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-elegir-card {
+  padding: 14px 10px;
+  border-radius: 14px;
+  background: #fff;
+  border: 1.5px solid rgba(90, 70, 50, .25);
+  text-align: center;
+}
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-hobby-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 12px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-hobby-btn {
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1.5px solid rgba(90, 70, 50, .25);
+  font-weight: 700;
+  text-align: left;
+}
+
+.play-v3 .aht-screen[data-aht-screen="mentes"] .enc-detalle-caja {
+  margin: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #f4f2f6;
+  border: 1.5px solid rgba(90, 70, 50, .2);
+}

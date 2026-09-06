@@ -846,3 +846,33 @@
     padding: 8px 4px;
   }
 }
+
+/* INICIO-VISUAL-PASS4-20260906 — remate desktop ref 02 */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-grid {
+    gap: 14px;
+    align-items: start;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-center {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-center .inicio-nav-mapa {
+    margin-top: 4px;
+  }
+}

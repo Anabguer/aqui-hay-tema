@@ -186,3 +186,41 @@
   line-height: 1.3;
   color: var(--ds-ink, #2a2218);
 }
+
+/* CIERRE-VISUAL-16-17-MISC-20260906 */
+.play-v3 .aht-screen[data-aht-screen="parejas"] .aht-frame-body,
+.play-v3 .aht-screen[data-aht-screen="parejas"] .parejas-body {
+  background: #f4f2f6;
+  border-radius: 12px;
+  margin: 0 12px 12px;
+  padding: 16px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="parejas"] .parejas-vacio,
+.play-v3 .aht-screen[data-aht-screen="parejas"] .parejas-body > .muted {
+  font-family: var(--ds-font-ui, Nunito, sans-serif);
+  font-size: .88rem;
+  font-weight: 600;
+  color: #6a5848;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-pueblo-score {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: #e8f3e6;
+  border: 1.5px solid rgba(74, 122, 82, .45);
+  font-weight: 800;
+  color: #8a3038;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-pueblo-caja {
+  margin: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #ece6f8;
+  border: 1.5px solid rgba(111, 95, 154, .35);
+  line-height: 1.45;
+}

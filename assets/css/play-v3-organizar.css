@@ -926,3 +926,52 @@
   cursor: not-allowed;
   pointer-events: none;
 }
+
+/* CIERRE-VISUAL-11-12-ORGANIZAR-20260906 */
+.play-v3 .aht-screen[data-aht-screen="organizar"].is-lugar .org-lugar-cita {
+  margin: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #faf6ef;
+  border: 1.5px solid rgba(90, 70, 50, .25);
+  font-family: var(--ds-font-hand, Caveat, cursive);
+  font-size: 1.2rem;
+  font-style: italic;
+  text-align: center;
+  color: #5a4838;
+}
+
+.play-v3 .aht-screen[data-aht-screen="organizar"].is-lugar .org-lugar-cta {
+  margin: 0 12px 12px;
+  min-height: 48px;
+  border-radius: 14px;
+  background: #e85a78;
+  color: #fff;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.play-v3 .aht-screen[data-aht-screen="organizar"]:not(.is-lugar) .org-paso-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e85a78;
+  color: #fff;
+  font-weight: 800;
+  font-size: .82rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="organizar"]:not(.is-lugar) .org-crear-plan {
+  margin: 12px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #e85a78;
+  border: 2px dashed rgba(255, 255, 255, .85);
+  color: #fff;
+  font-weight: 800;
+  text-transform: uppercase;
+}

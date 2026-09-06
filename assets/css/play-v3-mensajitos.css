@@ -646,3 +646,68 @@
   padding: 14px 13px 12px;
   overflow-y: auto;
 }
+
+/* CIERRE-VISUAL-03-MENSAJITOS-20260906 */
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 12px 8px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tab {
+  min-height: 40px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: .78rem;
+  letter-spacing: .04em;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tab:not(.is-on) {
+  background: #e8e0f4;
+  color: #6f5f9a;
+  border: 1.5px solid rgba(111, 95, 154, .35);
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tab.is-on {
+  background: #d85a78;
+  color: #fff;
+  border: 1.5px solid #8a3d52;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
+  padding: 8px 12px 0;
+  gap: 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.no-leida,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg.carta-accion.no-leida {
+  background: #fde8ef;
+  border: 1.5px solid rgba(196, 75, 110, .45);
+  border-radius: 14px;
+  box-shadow: 0 2px 6px rgba(196, 75, 110, .1);
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-inner {
+  gap: 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg .de {
+  font-family: var(--ds-font-hand, Caveat, cursive);
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-hint {
+  margin: 10px 12px 12px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #ece6f8;
+  border: 1.5px solid rgba(111, 95, 154, .22);
+  font-family: var(--ds-font-ui, Nunito, sans-serif);
+  font-size: .76rem;
+  font-weight: 600;
+  font-style: italic;
+  color: #5a4a78;
+  text-align: center;
+}

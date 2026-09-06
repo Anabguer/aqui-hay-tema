@@ -1417,3 +1417,58 @@
   color: #6a5848;
   text-align: center;
 }
+
+/* CIERRE-VISUAL-07-08-FICHA-SUB-20260906 */
+.aht-screen[data-aht-screen="ficha_animo"] .animo-estado-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: #e85a78;
+  color: #fff;
+  font-weight: 800;
+  font-size: .82rem;
+  text-transform: uppercase;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-causa-caja {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #faf6ef;
+  border: 1.5px solid rgba(90, 70, 50, .3);
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-consecuencias {
+  margin-top: 12px;
+  padding: 12px;
+  border: 2px dashed rgba(111, 95, 154, .35);
+  border-radius: 14px;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .diario-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 12px 10px;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .diario-filtro {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(90, 70, 50, .3);
+  background: #fff;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .diario-entrada {
+  margin: 0 12px 10px;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+  border: 2px solid #e8dcc8;
+  box-shadow: inset 0 0 0 3px #faf6ef;
+}

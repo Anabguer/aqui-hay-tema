@@ -155,3 +155,32 @@
   font: 700 .74rem/1.35 Nunito, sans-serif;
   color: var(--ds-green-deep, #4a7a52);
 }
+
+/* CIERRE-VISUAL-18-AJUSTES-20260906 */
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajust-bloque {
+  margin: 0 12px 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(90, 70, 50, .3);
+  background: #fff;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajust-bloque--como {
+  background: #fdeef3;
+  text-align: center;
+  font-family: var(--ds-font-hand, Caveat, cursive);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajust-toggle.is-on {
+  background: #e85a78;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajust-bloque--reiniciar {
+  border-color: rgba(196, 75, 110, .55);
+  text-align: center;
+  font-family: var(--ds-font-hand, Caveat, cursive);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
