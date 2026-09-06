@@ -215,7 +215,7 @@
 
 }
 
-.play-v3 .encursos-movil .enc-mov-cta {
+.play-v3 .encursos-movil .enc-mov-cta:not(.enc-mov-cta--mock):not(.enc-mov-cta--mentes) {
 
 
 

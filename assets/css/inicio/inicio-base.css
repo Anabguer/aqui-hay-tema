@@ -169,7 +169,7 @@
 }
 
 .play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-meta,
-.play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-resumen,
+.play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-resumen:not(.enc-mov-resumen--cuece),
 .play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-card-tit {
   display: none;
 }
