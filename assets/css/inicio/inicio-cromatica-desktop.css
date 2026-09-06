@@ -197,17 +197,6 @@
   box-shadow: 0 2px 12px rgba(232, 136, 168, .12);
 }
 
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas .zona-tit-parejas {
-  border-bottom: 1.5px solid rgba(232, 160, 180, .32);
-  font-family: Nunito, "Segoe UI", sans-serif;
-  font-size: .82rem;
-  font-weight: 800;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: #2c261f;
-  line-height: 1;
-}
-
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas .zona-tit-parejas::before {
   content: "";
   border-radius: 6px;
@@ -323,15 +312,6 @@
 }
 
 /* INICIO-PLANES-BLOQUE-DESKTOP-v107 — migrado a inicio-desktop.css PLANES-BLOQUE-CANON */
-
-.play-v3 .inicio-desktop-right .inicio-planes-libreta-tit {
-  font-family: Nunito, "Segoe UI", sans-serif;
-  font-size: 1.02rem;
-  font-weight: 800;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: #6f5f9a;
-}
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta-badge {
   font-family: Nunito, "Segoe UI", sans-serif;

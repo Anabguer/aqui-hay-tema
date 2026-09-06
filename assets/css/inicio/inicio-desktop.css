@@ -930,12 +930,13 @@
     grid-row: 2;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 600;
-    font-size: .82rem;
+    font-size: 1rem;
     line-height: 1.38;
     color: var(--ds-ink, #2a2218);
     white-space: normal;
     overflow: visible;
     text-overflow: unset;
+    font-style: italic;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-flecha {
