@@ -42,9 +42,10 @@
     grid-template-columns: minmax(300px, 380px) minmax(0, 1fr) minmax(272px, 348px);
     grid-template-areas:
       "head head head"
-      "left map  right";
+      "left map  right"
+      "left nav  right";
     column-gap: 10px;
-    row-gap: 10px;
+    row-gap: 3mm;
     align-items: start;
     width: 100%;
     max-width: 100%;
@@ -469,8 +470,8 @@
     grid-template-areas:
       "head head head"
       "left map  right"
-      ".    nav  .";
-    row-gap: 10px;
+      "left nav  right";
+    row-gap: 3mm;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
