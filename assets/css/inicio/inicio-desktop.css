@@ -213,7 +213,7 @@
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-reloj {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
+    align-items: center;
     justify-content: center;
     gap: 12px;
     flex-wrap: nowrap;
@@ -261,6 +261,7 @@
     box-shadow: none;
     margin: 0;
     align-self: center;
+    filter: none;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia::before {
@@ -357,6 +358,7 @@
     height: 28px;
     margin: 0;
     flex-shrink: 0;
+    filter: none;
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%237c6bae' stroke-width='1.8'/%3E%3Cpath d='M12 7v5l3 2' stroke='%237c6bae' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
   }
 
@@ -380,6 +382,9 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    height: auto;
+    min-height: 0;
+    align-self: center;
     padding: 10px 16px;
     margin: 0;
     background: #ebe3f8;
@@ -388,6 +393,7 @@
     box-shadow: none;
     color: #5e3e90;
     transform: none;
+    filter: none;
     cursor: pointer;
     font: inherit;
   }

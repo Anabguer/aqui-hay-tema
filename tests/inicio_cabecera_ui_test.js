@@ -41,8 +41,10 @@ ok(/obj-vida-kicker::after[\s\S]{0,520}filter:\s*blur/.test(desk), 'desktop: sub
 ok(!/inicio-desktop > \.game-top \.control-audio/.test(desk), 'desktop: sin controles flotantes en cabecera');
 ok(/obj-dia[\s\S]{0,500}height:\s*54px/.test(desk), 'desktop: pastilla dia altura fija');
 ok(/obj-hora[\s\S]{0,500}height:\s*54px/.test(desk), 'desktop: pastilla hora altura fija');
-ok(/obj-dia[\s\S]{0,600}box-shadow:\s*none/.test(desk), 'desktop: pastilla dia sin sombra');
-ok(/obj-hora[\s\S]{0,600}box-shadow:\s*none/.test(desk), 'desktop: pastilla hora sin sombra');
+ok(/top-reloj[\s\S]{0,200}align-items:\s*center/.test(desk), 'desktop: reloj alineado al centro');
+ok(/obj-dia[\s\S]{0,700}filter:\s*none/.test(desk), 'desktop: pastilla dia sin drop-shadow');
+ok(/obj-hora[\s\S]{0,700}filter:\s*none/.test(desk), 'desktop: pastilla hora sin drop-shadow');
+ok(/pasar-rato[\s\S]{0,400}height:\s*auto/.test(desk), 'desktop: pasar-rato altura natural');
 ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Primavera en cabecera');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
