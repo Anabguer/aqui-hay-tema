@@ -50,6 +50,10 @@ ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Prima
 ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}border-radius:\s*999px/.test(desk), 'desktop: mensajitos pill');
 ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,600}rgba\(232,\s*90,\s*120/.test(desk), 'desktop: mensajitos borde/sombra rosa');
 ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
+ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'desktop: celestine negro');
+ok(/celestine-nota\.obj-vecinos-resumen::before[\s\S]{0,280}chincheta\.png/.test(desk), 'desktop: chincheta derecha');
+ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: caras vecinos grandes');
+ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
 ok(!/!important/.test(mob + desk), 'cabeceras: cero !important');
