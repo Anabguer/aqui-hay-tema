@@ -484,9 +484,10 @@
     grid-column: 2;
     grid-row: 2;
     display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1px;
     margin: 0;
     padding: 0;
     border-top: none;
@@ -506,10 +507,11 @@
     display: block;
     margin: 0;
     font-family: Nunito, "Segoe UI", sans-serif;
-    font-size: .7rem;
+    font-size: .55rem;
     font-weight: 600;
-    color: #5f544a;
-    line-height: 1.2;
+    color: #8a7e76;
+    line-height: 1.1;
+    white-space: nowrap;
   }
 
   .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces img,
