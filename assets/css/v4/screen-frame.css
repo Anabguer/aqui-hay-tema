@@ -105,21 +105,22 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: var(--aht-header-pad-y-desktop, 22px) 52px 20px var(--aht-frame-header-pad-x, 20px);
+  padding: var(--aht-header-pad-y-desktop, 22px) 56px 18px 56px;
   background-color: var(--aht-header-bg, #FFFFFF);
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
 }
 
+/* Mancha/pincelada lila — irregular, ancha, claramente visible */
 .aht-frame-header::before {
   content: "";
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(74%, 12rem);
-  height: 1.4em;
-  transform: translate(-50%, -50%) rotate(-1.5deg);
+  width: min(88%, 16rem);
+  height: 1.6em;
+  transform: translate(-50%, -50%) rotate(-1.8deg);
   background-color: var(--aht-header-mark, #F1EDF6);
-  border-radius: 6px;
+  border-radius: 18px 10px 14px 8px / 10px 16px 8px 14px;
   pointer-events: none;
   z-index: 0;
 }
@@ -128,13 +129,13 @@
   position: relative;
   z-index: 1;
   font-family: var(--aht-font-hand, "Caveat Brush", "Caveat", cursive);
-  font-size: var(--aht-frame-title-size-desktop, 1.625rem);
+  font-size: var(--aht-frame-title-size-desktop, 1.75rem);
   font-weight: 400;
   font-style: normal;
   line-height: 1.15;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.015em;
   text-align: center;
-  text-transform: uppercase;
+  text-transform: none;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -143,27 +144,29 @@
   display: block;
 }
 
+/* Decoración: estrellas doradas — visibles, con presencia */
 .aht-frame-title::before {
   content: "\2726  \2726";
   display: inline;
-  margin: 0 0.15em 0 0;
-  font-size: 0.45em;
+  margin: 0 0.18em 0 0;
+  font-size: 0.7em;
   color: #e8b84a;
   vertical-align: middle;
-  transform: translateY(-0.08em);
+  transform: translateY(-0.06em);
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: none;
 }
 
+/* Decoración: corazón rosa — intencionado, no accidental */
 .aht-frame-title::after {
   content: "\2665";
   display: inline;
-  margin: 0 0 0 0.15em;
-  font-size: 0.5em;
+  margin: 0 0 0 0.18em;
+  font-size: 0.75em;
   color: #F1A0B4;
   vertical-align: middle;
-  transform: translateY(-0.08em);
+  transform: translateY(-0.06em);
   font-weight: 400;
   letter-spacing: 0;
   text-transform: none;
@@ -172,33 +175,33 @@
 }
 
 
-/* Back (optional, izquierda) — misma familia que .aht-frame-close */
+/* Back (optional, izquierda) — estilo AHT craft */
 .aht-frame-header:has(.aht-frame-back) {
-  padding-left: 52px;
+  padding-left: 56px;
 }
 
 .aht-frame-back {
   position: absolute;
   top: 50%;
-  left: 6px;
+  left: 8px;
   z-index: 12;
-  width: var(--aht-btn-size, 36px);
-  height: var(--aht-btn-size, 36px);
-  min-width: var(--aht-btn-size, 36px);
-  min-height: var(--aht-btn-size, 36px);
+  width: var(--aht-btn-size, 40px);
+  height: var(--aht-btn-size, 40px);
+  min-width: var(--aht-btn-size, 40px);
+  min-height: var(--aht-btn-size, 40px);
   margin: 0;
   padding: 0;
   display: grid;
   place-items: center;
   cursor: pointer;
-  border: 2px solid var(--aht-close-border, #D8D1DE);
-  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+  border: 2.5px solid var(--aht-border-strong, #33261E);
+  border-radius: 14px 10px 12px 11px / 10px 14px 11px 13px;
   background: var(--aht-back-bg, #E8DFF5);
   box-shadow:
-    1.5px 2.5px 0 rgba(51, 38, 30, .12),
-    0 1px 2px rgba(196, 43, 74, 0.08);
+    2px 3px 0 rgba(51, 38, 30, .18),
+    0 1px 3px rgba(196, 43, 74, 0.06);
   font-family: "Nunito", "Segoe UI", sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   line-height: 1;
   color: var(--aht-back-color, var(--aht-accent, #C42B4A));
@@ -208,8 +211,12 @@
 }
 
 .aht-frame-back:hover {
-  transform: translateY(-50%) scale(1.05);
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .16);
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .22);
+}
+
+.aht-frame-back:active {
+  transform: translateY(-50%) scale(0.96);
 }
 
 .aht-frame-footer:empty {
@@ -222,27 +229,27 @@
 .aht-frame-close {
   position: absolute;
   top: 50%;
-  right: 6px;
+  right: 8px;
   z-index: 12;
-  width: var(--aht-btn-size, 36px);
-  height: var(--aht-btn-size, 36px);
-  min-width: var(--aht-btn-size, 36px);
-  min-height: var(--aht-btn-size, 36px);
-  max-width: var(--aht-btn-size, 36px);
-  max-height: var(--aht-btn-size, 36px);
+  width: var(--aht-btn-size, 40px);
+  height: var(--aht-btn-size, 40px);
+  min-width: var(--aht-btn-size, 40px);
+  min-height: var(--aht-btn-size, 40px);
+  max-width: var(--aht-btn-size, 40px);
+  max-height: var(--aht-btn-size, 40px);
   margin: 0;
   padding: 0;
   display: grid;
   place-items: center;
   cursor: pointer;
-  border: 2px solid var(--aht-close-border, #D8D1DE);
-  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+  border: 2.5px solid var(--aht-border-strong, #33261E);
+  border-radius: 14px 10px 12px 11px / 10px 14px 11px 13px;
   background: var(--aht-close-bg-pink, #FDE8EC);
   box-shadow:
-    1.5px 2.5px 0 rgba(51, 38, 30, .12),
-    0 1px 2px rgba(196, 43, 74, 0.08);
+    2px 3px 0 rgba(51, 38, 30, .18),
+    0 1px 3px rgba(196, 43, 74, 0.06);
   font-family: "Nunito", "Segoe UI", sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   line-height: 1;
   color: var(--aht-close-color, #C42B4A);
@@ -252,8 +259,8 @@
 }
 
 .aht-frame-close:hover {
-  transform: translateY(-50%) scale(1.05);
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .16);
+  transform: translateY(-50%) scale(1.06);
+  box-shadow: 2.5px 4px 0 rgba(51, 38, 30, .22);
 }
 
 .aht-frame-close:active {
@@ -445,6 +452,6 @@
 
 @media (max-width: 768px) {
   .aht-frame-title {
-    font-size: var(--aht-frame-title-size-mobile, 1.3125rem);
+    font-size: var(--aht-frame-title-size-mobile, 1.375rem);
   }
 }
