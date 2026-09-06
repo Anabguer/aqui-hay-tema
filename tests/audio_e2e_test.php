@@ -139,7 +139,7 @@ $playPhpContent = is_file($playPhp) ? file_get_contents($playPhp) : '';
 // Controles flotantes (bottom-right)
 ok(strpos($playPhpContent, 'data-musica-toggle') !== false, 'HTML: botón data-musica-toggle presente');
 ok(strpos($playPhpContent, 'data-efectos-toggle') !== false, 'HTML: botón data-efectos-toggle presente');
-ok(strpos($playPhpContent, 'control-audio') !== false, 'HTML: contenedor control-audio presente');
+ok(strpos($playPhpContent, 'control-audio') === false, 'HTML: sin contenedor control-audio flotante en play.php');
 
 // Ajustes panel
 ok(strpos($playPhpContent, 'data-musica-vol') !== false, 'HTML: slider data-musica-vol en ajustes');

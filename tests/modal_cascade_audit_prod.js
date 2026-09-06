@@ -64,7 +64,7 @@ async function closeModal(page) {
   const steps = [
     { key: 'vecinos', trigger: '[data-inicio-view="desktop"] [data-open="vecinos"]', capa: '.capa-vecinos' },
     { key: 'misiones', trigger: '[data-inicio-view="desktop"] .obj-misiones-papel', capa: '.capa-misiones' },
-    { key: 'inventario', trigger: '[data-inicio-view="desktop"] .control-inventario', capa: '.capa-inventario' },
+    { key: 'inventario', trigger: '.play-bottom-nav [data-open="inventario"]', capa: '.capa-inventario' },
     { key: 'organizar', trigger: '[data-inicio-view="desktop"] .obj-nuevo-plan', capa: '.capa-organizar' },
     { key: 'ajustes', trigger: '[data-open="ajustes"]', capa: '.capa-ajustes' },
     { key: 'vida_pueblo', trigger: '[data-open="vida_pueblo"]', capa: '.capa-vida-pueblo' },

@@ -20,6 +20,7 @@ ok(/inicio-temporal-pill/.test(php), 'play.php: píldora temporal móvil');
 ok(/obj-vida-kicker/.test(php), 'play.php: kicker vida desktop');
 
 ok(/INICIO-CABECERA-MOVIL-20260906/.test(mob), 'mobile: bloque cabecera canónico');
+ok(!/inicio-mobile \.control-audio/.test(mob), 'mobile: sin reglas control-audio en cabecera');
 ok(/inicio-temporal-pill[\s\S]{0,200}flex-wrap:\s*nowrap/.test(mob), 'mobile: píldora en una línea');
 ok(/INICIO-CABECERA-MOVIL[\s\S]*pasar-rato-txt[\s\S]{0,100}display:\s*none/.test(mob), 'mobile: sin texto Pasar el rato');
 ok(/inicio-header-brand-row[\s\S]{0,500}top-vida[\s\S]{0,200}width:\s*auto/.test(mob), 'mobile: corazón vida compacto');
