@@ -111,7 +111,8 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
   }
 
 .inicio-mobile .inicio-mobile-tiles .obj-buzon::before,
-  .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen::before {
+  .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen::before,
+  .inicio-mobile .inicio-mobile-tiles .celestine-nota.obj-vecinos-resumen::after {
     content: none;
     display: none;
   }

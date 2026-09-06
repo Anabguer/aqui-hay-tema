@@ -87,10 +87,6 @@
   z-index: 1;
 }
 
-.play-v3 .obj-vecinos-resumen.celestine-nota::after {
-  display: none;
-}
-
 .play-v3 .obj-vecinos-preview {
   display: flex;
   align-items: center;

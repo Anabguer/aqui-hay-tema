@@ -7,6 +7,7 @@ const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const mob = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-mobile.css'), 'utf8');
 const desk = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-desktop.css'), 'utf8');
+const resp = fs.readFileSync(path.join(root, 'assets/css/play-v3-responsive.css'), 'utf8');
 const art = fs.readFileSync(path.join(root, 'assets/css/play-v3-shell-art.css'), 'utf8');
 
 let failures = 0;
@@ -58,6 +59,8 @@ ok(/inicio-desktop-left \.obj-buzon-img[\s\S]{0,120}display:\s*none/.test(desk),
 ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
 ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'desktop: celestine negro');
 ok(/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,320}chincheta\.png/.test(desk), 'desktop: chincheta derecha');
+ok(!/obj-vecinos-resumen\.celestine-nota::after[\s\S]{0,80}display:\s*none/.test(resp), 'responsive: sin ocultar chincheta celestine');
+ok(/inicio-mobile-tiles \.celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,80}display:\s*none/.test(mob), 'mobile: sin chincheta en tile vecinos');
 ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: caras vecinos grandes');
 ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
 ok(/celeste-necesitan-algo[\s\S]{0,500}border-top:\s*1px solid/.test(desk), 'desktop: necesitan apartado vecinos');
@@ -77,7 +80,7 @@ ok(!/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: sin PASS3 duplicado');
 ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*1\.05rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
-ok(!/!important/.test(mob + desk), 'cabeceras: cero !important');
+ok(!/!important/.test(mob + desk + resp), 'cabeceras: cero !important');
 
 if (failures) {
   console.error('\n' + failures + ' fallo(s)');
