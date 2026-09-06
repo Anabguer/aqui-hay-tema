@@ -24,7 +24,7 @@
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),
     linear-gradient(180deg, rgba(255, 253, 249, .7) 0%, rgba(248, 241, 223, .38) 100%),
-    url("../../play-v3/capas/libreta_hoja.png");
+    url("../../../play-v3/capas/libreta_hoja.png");
   background-position: center, center, center;
   background-size: cover, cover, cover;
   background-repeat: no-repeat;

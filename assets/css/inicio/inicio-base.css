@@ -356,7 +356,7 @@
     background-color: #e2cff5;
     background-image:
       linear-gradient(180deg, rgba(228, 208, 248, .96) 0%, rgba(204, 176, 236, .94) 100%),
-      url("../../../play-v3/capas/libreta_hoja.png");
+      url("../../play-v3/capas/libreta_hoja.png");
     border-color: rgba(106, 88, 142, .5);
   }
 

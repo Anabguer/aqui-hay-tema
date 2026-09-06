@@ -95,7 +95,7 @@
 
 .play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel {
   background-color: var(--ds-paper-modal, #fffaf0);
-  background-image: url("../../play-v3/capas/libreta_hoja.png");
+  background-image: url("../../../play-v3/capas/libreta_hoja.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;

@@ -2578,7 +2578,10 @@ margin-bottom: 4px;
     color: #d95f78;
   }
 
-  .play-v3 .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:nth-child(5) .play-bottom-nav-ico,
+  .play-v3 .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:nth-child(5) .play-bottom-nav-ico {
+    color: #E88A5B;
+  }
+
   .play-v3 .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:nth-child(6) .play-bottom-nav-ico {
     color: #33261e;
   }
