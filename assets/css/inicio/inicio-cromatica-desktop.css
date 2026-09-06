@@ -172,18 +172,6 @@
       0 2px 12px rgba(109, 155, 118, .14);
 }
 
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--ref-desk .enc-mov-resumen--cuece {
-  border-color: rgba(109, 155, 118, .28);
-  background: rgba(255, 255, 255, .88);
-  background-color: rgba(255, 255, 255, .88);
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--ref-desk .enc-mov-resumen--cuece::before {
-  border-top-color: rgba(109, 155, 118, .28);
-  border-left-color: rgba(109, 155, 118, .28);
-  background: rgba(255, 255, 255, .88);
-}
-
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--desk-mock {
   background: transparent;
   background-color: transparent;
@@ -197,7 +185,6 @@
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
-  font-size: .88rem;
   color: #33261e;
 }
 
@@ -246,7 +233,6 @@
 
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-txt,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {
-  font-size: .88rem;
   font-weight: 800;
   color: #33261e;
 }
@@ -455,16 +441,6 @@
 
 }
 
-
-/* INICIO-MAP-HOST-COLLAPSE-v139 - eliminar hueco bajo mapa: contenedor termina donde termina el mapa */
-@media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host.game-map-wrap {
-}
-
-}
-
-/* INICIO-PLANES-FIXES-DESKTOP-v143-v147 � estructura migrada a inicio-desktop.css PLANES-BLOQUE-CANON */
 
 /* INICIO-BOTTOM-NAV-DESKTOP-v138 - anula transform coma-roto en btns map-host; ::after intacto */
 @media (min-width: 769px) {
