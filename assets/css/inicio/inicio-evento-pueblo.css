@@ -486,10 +486,13 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    justify-content: center;
-    gap: 1px;
+    justify-content: flex-start;
+    gap: 3px;
     margin: 0;
-    padding: 0;
+    padding-top: 2px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 0;
     border-top: none;
   }
 
@@ -516,10 +519,10 @@
 
   .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces img,
   .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces .cara-ini {
-    width: 20px;
-    height: 20px;
-    min-width: 20px;
-    min-height: 20px;
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
     border: 2px solid rgba(232, 196, 160, .72);
   }
 
