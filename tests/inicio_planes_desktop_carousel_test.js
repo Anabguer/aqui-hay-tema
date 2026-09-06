@@ -31,10 +31,15 @@ ok(/enc-mov-track[\s\S]{0,260}overflow-x:\s*auto/.test(desk), 'desktop EN CURSO:
 ok(/enc-mov-card[\s\S]{0,260}flex:\s*0\s*0\s*100%/.test(desk), 'desktop EN CURSO: 1 card ancho completo');
 ok(/pp-mov-card--desk-duo[\s\S]{0,320}calc\(50% - 4px\)/.test(desk), 'desktop PRÓXIMOS: duo 2 columnas');
 ok(/proxplanes-movil--solo[\s\S]{0,220}flex:\s*0\s*0\s*100%/.test(desk), 'desktop PRÓXIMOS: 1 card ancho completo');
-ok(/encursos-movil\.is-on[\s\S]{0,320}background:\s*rgba\(232,\s*245,\s*234/.test(desk), 'desktop EN CURSO: zona verde suave');
-ok(/obj-nuevo-plan-ico[\s\S]{0,180}display:\s*inline-flex/.test(desk), 'desktop CREAR PLAN: icono ++ visible');
-ok(!/obj-nuevo-plan-txt::before/.test(desk), 'desktop CREAR PLAN: sin pseudo ++ en texto');
+ok(/encursos-movil\.is-on[\s\S]{0,320}background:\s*#edf6ef/.test(desk), 'desktop EN CURSO: zona verde plana');
+ok(/inicio-planes-libreta[\s\S]{0,260}background:\s*#fff[\s\S]{0,180}box-shadow:/.test(desk), 'desktop PLANES: bloque blanco emmarcado');
+ok(/enc-mov-desk-chevron[\s\S]{0,120}display:\s*none/.test(desk), 'desktop EN CURSO: sin flecha interna');
+ok(/obj-nuevo-plan-ico[\s\S]{0,120}display:\s*none/.test(desk), 'desktop CREAR PLAN: sin icono apilado');
+ok(/obj-nuevo-plan-txt::before[\s\S]{0,80}content:\s*"\+ "/.test(desk), 'desktop CREAR PLAN: + CREAR PLAN + ref');
+ok(!/obj-nuevo-plan\.obj-nuevo-plan-horiz[\s\S]{0,220}border-radius:\s*999px/.test(desk), 'desktop CREAR PLAN: no pill');
 ok(!/INICIO-PLANES-FIXES-DESKTOP-v145/.test(croma), 'cromatica: sin bloque carrusel duplicado roto');
+ok(!/inicio-planes-libreta,\s*\n\s*\.play-v3:has\(\.inicio-desktop\.is-inicio-view-active\) \.inicio-desktop-right \.encursos-movil/.test(croma), 'cromatica: libreta fuera de grupo transparente');
+ok(!/linear-gradient\(165deg, #f8fcf9/.test(croma), 'cromatica: sin degradado EN CURSO');
 ok(!/!important/.test(desk), 'desktop planes: cero !important');
 
 ok(/ppMovEsDesktop\(block\)/.test(js), 'js PRÓXIMOS: rama desktop en nav');
