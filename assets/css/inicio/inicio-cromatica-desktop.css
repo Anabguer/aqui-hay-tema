@@ -343,8 +343,8 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   border-radius: 50%;
-  background: #fff;
-  border: 1.5px solid rgba(111, 95, 154, .28);
+  background: transparent;
+  border: none;
   color: #6f5f9a;
 }
 
@@ -388,8 +388,8 @@
   transform: translate(-50%, -50%);
   z-index: 10;
   border-radius: 50%;
-  background: #fff;
-  border: 1.5px solid rgba(111, 95, 154, .24);
+  background: transparent;
+  border: none;
   color: #6f5f9a;
 }
 
