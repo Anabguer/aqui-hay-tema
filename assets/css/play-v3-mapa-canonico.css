@@ -90,6 +90,22 @@
   border-radius: 50%;
   display: block;
   object-fit: cover;
+
+.play-v3 .mapa-zona-hit .hab.cara-token,
+.play-v3 .mapa-zona-hit .hab.cara-token .cara {
+  cursor: pointer;
+}
+
+.play-v3 .mapa-zona-hit .hab.cara-token .cara {
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.play-v3 .mapa-zona-hit .hab.cara-token:hover .cara,
+.play-v3 .mapa-zona-hit .hab.cara-token:focus-visible .cara {
+  animation-play-state: paused;
+  transform: scale(1.18);
+  box-shadow: 0 4px 14px rgba(40, 28, 52, .22);
+}
 }
 
 .play-v3 .mapa-zona-hit .hab .cara {

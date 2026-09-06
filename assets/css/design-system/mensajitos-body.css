@@ -11,6 +11,24 @@
    - Badge NUEVO como sello/pegatina
    ============================================================ */
 
+
+/* Overlay LAB: oculto por defecto; el JS pone aria-hidden=false al abrir */
+.aht-modal-overlay[aria-hidden="true"] {
+  display: none;
+}
+
+.aht-modal-overlay[aria-hidden="false"] {
+  position: fixed;
+  inset: 0;
+  z-index: 12000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(34, 24, 40, .42);
+  box-sizing: border-box;
+}
+
 /* === TOKENS LOCALES ===
    Arquitectura saneada (FASE 1 — piloto Mensajitos LAB):
    Las variables --msg-* se declaran en :root,.aht-modal para que
