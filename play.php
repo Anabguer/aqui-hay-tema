@@ -453,30 +453,41 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="mapa-zonas-layer" data-mapa-zonas></div>
           </div>
           <div class="edificios-layer" data-edificios-layer aria-hidden="true"></div>
-          <aside class="selector nota-mapa ds-modal-sheet">
-            <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr&aacute;s">? Atr&aacute;s</button>
-            <p class="libreta-kicker">Un vistazo al lugar</p>
-            <h3 data-s-tit></h3>
-            <p class="cotilleo" data-s-coti></p>
-            <div class="destinos" data-s-btns></div>
-          </aside>
-          <aside class="quien nota-mapa ds-modal-sheet consulta-edificio-v2">
-            <button type="button" class="cerrar ds-modal-close" data-close aria-label="Cerrar">X</button>
-            <button type="button" class="nota-atras" data-consulta-atras hidden aria-label="Atr&aacute;s">&larr; Atr&aacute;s</button>
-            <header class="consulta-ed-head">
-              <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
-              <div class="consulta-ed-head-copy">
-                <h3 class="consulta-ed-tit" data-q-tit></h3>
-                <div class="consulta-ed-meta" data-q-horario hidden></div>
+          <aside class="aht-screen selector" data-aht-screen="selector" aria-label="Seleccionar lugar">
+            <div class="aht-frame">
+              <header class="aht-frame-header">
+                <h2 class="aht-frame-title" data-s-tit></h2>
+                <button type="button" class="aht-frame-close" data-close aria-label="Cerrar">&#10005;</button>
+              </header>
+              <div class="aht-frame-body">
+                <p class="libreta-kicker">Un vistazo al lugar</p>
+                <p class="cotilleo" data-s-coti></p>
+                <div class="destinos" data-s-btns></div>
               </div>
-            </header>
-            <section class="consulta-ed-presencia">
-              <p class="consulta-ed-vacio" data-q-sum hidden></p>
-              <div class="consulta-ed-avatars" data-q-list></div>
-            </section>
-            <div class="consulta-ed-tema-wrap" data-q-tema hidden></div>
-            <div class="consulta-ed-acciones" data-q-btns></div>
+            </div>
+          </aside>
+          <aside class="aht-screen quien" data-aht-screen="edificios" aria-label="Edificio">
+            <div class="aht-frame">
+              <header class="aht-frame-header">
+                <button type="button" class="aht-frame-back" data-consulta-atras hidden aria-label="Atr&aacute;s">&#8592;</button>
+                <h2 class="aht-frame-title" data-q-tit></h2>
+                <button type="button" class="aht-frame-close" data-close aria-label="Cerrar">&#10005;</button>
+              </header>
+              <div class="aht-frame-body">
+                <div class="consulta-ed-head">
+                  <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
+                  <div class="consulta-ed-head-copy">
+                    <div class="consulta-ed-meta" data-q-horario hidden></div>
+                  </div>
+                </div>
+                <section class="consulta-ed-presencia">
+                  <p class="consulta-ed-vacio" data-q-sum hidden></p>
+                  <div class="consulta-ed-avatars" data-q-list></div>
+                </section>
+                <div class="consulta-ed-tema-wrap" data-q-tema hidden></div>
+                <div class="consulta-ed-acciones" data-q-btns></div>
+              </div>
+            </div>
           </aside>
         </div>
       </div>

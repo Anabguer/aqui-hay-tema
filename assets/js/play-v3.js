@@ -4576,32 +4576,6 @@ function renderInicioMpDuo(misiones, parejas) {
     if (!el) return;
     el.setAttribute('data-consulta-lugar', String(lugarId || '').replace(/^lug_/, ''));
   }
-  function posicionarNotaMapa(el, zonaBtn) {
-    if (!el || !zonaBtn) return;
-    var board = $('.board-fit');
-    if (!board) return;
-    var boardRect = board.getBoundingClientRect();
-    var zonaRect = zonaBtn.getBoundingClientRect();
-    var margen = 10;
-    var pw = el.offsetWidth || 240;
-    var ph = el.offsetHeight || 160;
-    var relX = zonaRect.left - boardRect.left;
-    var relY = zonaRect.top - boardRect.top;
-    var bw = boardRect.width;
-    var bh = boardRect.height;
-    var left = relX + zonaRect.width + margen;
-    if (left + pw > bw - margen) {
-      left = relX - pw - margen;
-    }
-    if (left < margen) left = margen;
-    if (left + pw > bw - margen) left = Math.max(margen, bw - pw - margen);
-    var top = relY;
-    if (top + ph > bh - margen) top = Math.max(margen, bh - ph - margen);
-    if (top < margen) top = margen;
-    el.style.right = 'auto';
-    el.style.left = left + 'px';
-    el.style.top = top + 'px';
-  }
 
   function actualizarNotaAtras() {
     var root = $('.play-root');
@@ -4637,7 +4611,6 @@ function renderInicioMpDuo(misiones, parejas) {
       all.textContent = 'Quién hay aquí';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, null, zonaBtn); });
       box.appendChild(all);
-      posicionarNotaMapa($('.selector'), zonaBtn);
       actualizarNotaAtras();
       return;
     }
@@ -4799,7 +4772,6 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       box.appendChild(b);
     });
-    posicionarNotaMapa($('.quien'), zonaBtn);
     actualizarNotaAtras();
   }
 

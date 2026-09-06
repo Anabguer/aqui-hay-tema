@@ -146,16 +146,14 @@
   z-index: auto;
 }
 
-.play-v3 .play-root[data-consulta="sel"] .selector,
-.play-v3 .play-root[data-consulta="quien"] .quien {
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  right: auto;
-  bottom: auto;
-  transform: translate(-50%, -50%) rotate(-.35deg);
-  z-index: 110;
+/* V4 consulta screens — show when data-consulta matches */
+.play-v3 .play-root.phone[data-consulta="sel"] .aht-screen[data-aht-screen="selector"],
+.play-v3 .play-root.pc[data-consulta="sel"] .aht-screen[data-aht-screen="selector"],
+.play-v3 .play-root.phone[data-consulta="quien"] .aht-screen[data-aht-screen="edificios"],
+.play-v3 .play-root.pc[data-consulta="quien"] .aht-screen[data-aht-screen="edificios"] {
+  visibility: visible;
   pointer-events: auto;
+  opacity: 1;
 }
 
 html:has(body.play-v3) {
