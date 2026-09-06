@@ -144,12 +144,12 @@
   text-shadow: none;
   display: inline-block;
   background: #fffdf8;
-  border: 1.5px dashed #d4bee8;
+  border: 1.5px dashed #e0899e;
   border-radius: 6px 4px 5px 7px / 4px 6px 5px 4px;
   box-shadow:
-    0 0 0 1px rgba(212, 190, 232, 0.10),
-    0 2px 8px rgba(212, 190, 232, 0.14),
-    1px 2px 0 rgba(51, 38, 30, .08);
+    0 0 0 2px rgba(228, 137, 158, 0.12),
+    0 0 6px 1px rgba(228, 137, 158, 0.14),
+    0 2px 8px rgba(228, 137, 158, 0.12);
   transform: rotate(-0.3deg);
 }
 
