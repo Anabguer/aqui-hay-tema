@@ -330,3 +330,236 @@
     gap: 12px;
   }
 }
+
+/* INICIO-VISUAL-PNG-PASS2-20260906 — desktop laterales contra 02_INICIO_DESKTOP */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .shell-grupo {
+    margin: 0;
+    padding: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 64px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1.5px solid rgba(198, 176, 210, .42);
+    border-radius: 16px 14px 18px 15px / 14px 17px 15px 16px;
+    box-shadow: 0 2px 8px rgba(70, 55, 85, .08);
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon-ico-wrap {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon-img {
+    width: 44px;
+    height: auto;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon-txt {
+    flex: 1 1 auto;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #7a7164;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon-badge {
+    flex: 0 0 auto;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3c4d0;
+    border: 2px solid #fff;
+    border-radius: 999px;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .72rem;
+    color: #9a3d58;
+    box-shadow: 0 1px 3px rgba(196, 43, 74, .15);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-buzon-flecha {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen {
+    display: block;
+    width: 100%;
+    padding: 14px 14px 12px;
+    background: #fff;
+    border: 1.5px solid rgba(198, 176, 210, .42);
+    border-radius: 16px 14px 18px 15px / 14px 17px 15px 16px;
+    box-shadow: 0 2px 8px rgba(70, 55, 85, .08);
+    position: relative;
+    overflow: visible;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 14px;
+    width: 42px;
+    height: 16px;
+    background: linear-gradient(180deg, #f5e6a8 0%, #e8d48c 100%);
+    border: 1px solid rgba(160, 130, 60, .35);
+    border-radius: 2px;
+    transform: rotate(-4deg);
+    box-shadow: 0 1px 2px rgba(80, 60, 20, .12);
+    pointer-events: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .libreta-kicker {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #c85b78;
+    transform: rotate(-1deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 4px 0 8px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-tit {
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #c85b78;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-poblacion {
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 700;
+    font-size: .68rem;
+    color: #7a7164;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    min-height: 0;
+    padding: 12px 14px 14px;
+    border-radius: 16px 14px 18px 15px / 14px 17px 15px 16px;
+    border: 1.5px solid rgba(106, 88, 142, .38);
+    background: linear-gradient(180deg, #ebe3f8 0%, #e4daf2 100%);
+    box-shadow: 0 2px 8px rgba(90, 70, 120, .1);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-ico {
+    flex: 0 0 auto;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z' fill='%235e3e90'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+    border: 1.5px solid rgba(106, 88, 142, .28);
+    box-shadow: 0 1px 3px rgba(70, 50, 90, .12);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-cuerpo {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-badges {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-tit {
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #5e3e90;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-txt {
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 600;
+    font-size: .78rem;
+    line-height: 1.35;
+    color: var(--ds-ink, #2a2218);
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-flecha {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-papel {
+    display: block;
+    width: 100%;
+    padding: 12px 14px 10px;
+    background: #f6faf3;
+    border: 1.5px solid rgba(109, 155, 118, .42);
+    border-radius: 16px 14px 18px 15px / 14px 17px 15px 16px;
+    box-shadow: 0 2px 8px rgba(70, 90, 70, .08);
+    cursor: pointer;
+    text-align: left;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-papel-tit {
+    display: block;
+    margin-bottom: 8px;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #7a7164;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-misiones-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+}

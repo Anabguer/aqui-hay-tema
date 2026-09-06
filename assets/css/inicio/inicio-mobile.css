@@ -1,4 +1,4 @@
-/* inicio-mobile */
+﻿/* inicio-mobile */
 
 .inicio-mobile .inicio-mobile-layout {
   display: flex;
@@ -1841,20 +1841,20 @@ margin-bottom: 4px;
 
 }
 
-/* Migrado desde inicio-responsive — evento pueblo móvil */
+/* Migrado desde inicio-responsive â€” evento pueblo mÃ³vil */
 /* inicio-responsive */
-/* INICIO-EVENTO-POBLLO-MOBILE — presentación móvil namespaced (.inicio-mobile)
+/* INICIO-EVENTO-POBLLO-MOBILE â€” presentaciÃ³n mÃ³vil namespaced (.inicio-mobile)
    Independiente de desktop. INICIO-EVENTO-COMPACT-v68 */
-/* INICIO-EVENTO-COMPACT-v68 — fila compacta solo móvil (ref mockup) */
-/* Anula layout scrapbook legacy en móvil para la libreta compacta */
-/* INICIO-EVENTO-TAG-FLOAT-v77 — badge ¡AHORA! / EVENTO fuera del marco, arriba izq */
-/* INICIO-EVENTO-CTA-v133 — boton naranja en movil */
-/* INICIO-EVENTO-CENTRO-MOVIL-v135 — etiqueta y textos centrados */
-/* INICIO-EVENTO-CTA-FIX-v137 — restaura boton naranja legible (fix v136 enano/gris) */
-/* INICIO-EVENTO-POBLLO-DESKTOP — .inicio-desktop-right namespaced */
-/* INICIO-EVENTO-TILT-v51 — ligera rotacion scrapbook en evento pueblo */
+/* INICIO-EVENTO-COMPACT-v68 â€” fila compacta solo mÃ³vil (ref mockup) */
+/* Anula layout scrapbook legacy en mÃ³vil para la libreta compacta */
+/* INICIO-EVENTO-TAG-FLOAT-v77 â€” badge Â¡AHORA! / EVENTO fuera del marco, arriba izq */
+/* INICIO-EVENTO-CTA-v133 â€” boton naranja en movil */
+/* INICIO-EVENTO-CENTRO-MOVIL-v135 â€” etiqueta y textos centrados */
+/* INICIO-EVENTO-CTA-FIX-v137 â€” restaura boton naranja legible (fix v136 enano/gris) */
+/* INICIO-EVENTO-POBLLO-DESKTOP â€” .inicio-desktop-right namespaced */
+/* INICIO-EVENTO-TILT-v51 â€” ligera rotacion scrapbook en evento pueblo */
 /* INICIO-EVENTO-v76 - ref mockup: crema+naranja, calendario rosa, sin flecha (gana v39/v44/v51) */
-/* INICIO-EVENTO-NARANJA-v134 — titulo y CTA acorde a tarjeta crema+naranja */
+/* INICIO-EVENTO-NARANJA-v134 â€” titulo y CTA acorde a tarjeta crema+naranja */
 
 .play-v3 .inicio-mobile .inicio-proximo-evento {
   padding: 0 13px;
@@ -2141,7 +2141,7 @@ margin-bottom: 4px;
   }
 }
 
-/* INICIO-VISUAL-PNG-20260906 — movil */
+/* INICIO-VISUAL-PNG-20260906 â€” movil */
 @media (max-width: 768px) {
   .play-v3 .inicio-stage {
     background: #f3eef8;
@@ -2157,7 +2157,7 @@ margin-bottom: 4px;
     background: transparent;
   }
 
-  /* Cabecera — píldora blanca con borde rosa (ref 01) */
+  /* Cabecera â€” pÃ­ldora blanca con borde rosa (ref 01) */
   .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill {
     background: #fff;
     border: 1.5px solid rgba(200, 91, 120, .55);
@@ -2233,7 +2233,7 @@ margin-bottom: 4px;
     position: relative;
   }
 
-  /* Cotilleos — barra horizontal lavanda */
+  /* Cotilleos â€” barra horizontal lavanda */
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact {
     display: flex;
     align-items: center;
@@ -2254,7 +2254,11 @@ margin-bottom: 4px;
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background: #fff;
+    background-color: #fff;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-6l-4 3v-3H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z' fill='%235e3e90'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
     border: 1.5px solid rgba(106, 88, 142, .25);
     box-shadow: 0 1px 3px rgba(70, 50, 90, .12);
   }
@@ -2309,7 +2313,7 @@ margin-bottom: 4px;
     color: rgba(90, 70, 120, .65);
   }
 
-  /* Planes — bloque con spine vertical */
+  /* Planes â€” bloque con spine vertical */
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .planes-movil-unif {
     margin: 0;
     padding: 0;
@@ -2654,7 +2658,7 @@ margin-bottom: 4px;
     color: rgba(90, 70, 50, .5);
   }
 
-  /* Navegación inferior */
+  /* NavegaciÃ³n inferior */
   .play-v3 .inicio-stage > .play-bottom-nav {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
