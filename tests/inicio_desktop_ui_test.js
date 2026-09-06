@@ -30,6 +30,12 @@ ok(/@media \(min-width: 769px\)/.test(inicioDesktop) || /@media \(min-width: 769
 ok(/\.obj-cotilleo/.test(inicioCroma) || /\.obj-cotilleo/.test(inicioDesktop), 'inicio desktop: bloque cotilleos');
 ok(/inicio\/inicio-mapa\.css/.test(php), 'play.php: enlaza inicio-mapa.css');
 ok(!/inicio\/inicio-responsive\.css/.test(php), 'play.php: sin inicio-responsive.css');
+ok(/margin-left:\s*1\.25cm/.test(inicioDesktop) && /margin-right:\s*1\.25cm/.test(inicioDesktop),
+  'inicio desktop: mitad marco exterior lateral (body 1.25cm)');
+ok(/padding:\s*0\s+5px\s+10px/.test(inicioDesktop),
+  'inicio desktop: stage padding lateral 5px');
+ok(/grid-template-columns:\s*minmax\(300px,\s*380px\)\s*minmax\(0,\s*1fr\)\s*minmax\(272px,\s*348px\)/.test(inicioDesktop),
+  'inicio desktop: grid-template-columns sin cambio');
 
 if (failures) {
   console.error('\n' + failures + ' fallo(s)');
