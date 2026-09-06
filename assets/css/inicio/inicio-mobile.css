@@ -2320,8 +2320,10 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .plan-unif-faces {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
     margin-top: 2px;
+    width: 100%;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .plan-unif-nombres {
@@ -2331,6 +2333,8 @@ margin-bottom: 4px;
     font-size: 1.05rem;
     line-height: 1.1;
     color: var(--ds-ink, #2a2218);
+    text-align: center;
+    width: 100%;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .plan-unif-lugar {
