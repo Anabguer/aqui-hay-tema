@@ -2,7 +2,9 @@
 const fs = require('fs');
 const path = require('path');
 const file = path.join(__dirname, '..', 'assets/js/play-v3.js');
-let js = fs.readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+const raw = fs.readFileSync(file, 'utf8');
+const eol = raw.includes('\r\n') ? '\r\n' : '\n';
+let js = raw.replace(/\r\n/g, '\n');
 
 const oldBlock = `    if (met.conNecesidad > 0) {
       bits.push('<div class="vecinos-stat celeste-necesitan-algo" role="presentation" data-celestine-necesitan="1">' +
@@ -26,5 +28,5 @@ const newBlock = `    /* celeste-necesitan-algo: oculto hasta pantalla necesidad
 `;
 
 js = js.replace(oldBlock, newBlock);
-fs.writeFileSync(file, js, 'utf8');
+fs.writeFileSync(file, js.replace(/\n/g, eol), 'utf8');
 console.log('patch_hide_necesitan_algo_resumen OK');
