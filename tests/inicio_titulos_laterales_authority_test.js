@@ -19,7 +19,7 @@ const titulos = [
   { nombre: 'COTILLEOS', desk: /obj-cotilleo-tit[\s\S]{0,220}font-size:\s*1\.05rem/, croma: /obj-cotilleo-tit[\s\S]{0,120}font-size:/ },
   { nombre: 'MISIONES', desk: /obj-misiones-papel-tit[\s\S]{0,260}font-size:\s*1\.05rem/, croma: /obj-misiones-papel-tit[\s\S]{0,120}font-size:/ },
   { nombre: 'PLANES', desk: /inicio-planes-libreta-tit[\s\S]{0,220}font-size:\s*1\.05rem/, croma: /inicio-planes-libreta-tit[\s\S]{0,120}font-size:/ },
-  { nombre: 'PAREJAS', desk: /shell-grupo-parejas \.zona-tit-parejas[\s\S]{0,320}font-size:\s*1\.05rem/, croma: /zona-tit-parejas[\s\S]{0,120}font-size:/ },
+  { nombre: 'PAREJAS', desk: /shell-grupo-parejas \.zona-tit-parejas[\s\S]{0,420}font-size:\s*1\.05rem/, croma: /zona-tit-parejas[\s\S]{0,120}font-size:/ },
 ];
 
 titulos.forEach(function (t) {
@@ -29,7 +29,8 @@ titulos.forEach(function (t) {
 
 ok(!/zona-tit-parejas[\s\S]{0,260}font-size:\s*\.82rem/.test(croma), 'PAREJAS: eliminado legacy .82rem en cromatica');
 ok(!/inicio-planes-libreta-tit[\s\S]{0,260}font-size:\s*1\.02rem/.test(croma), 'PLANES: eliminado legacy 1.02rem en cromatica');
-ok(/zona-tit-parejas::before[\s\S]{0,400}linear-gradient/.test(croma), 'PAREJAS: cromatica conserva solo icono ::before');
+ok(/shell-grupo-parejas \.zona-tit-parejas::before[\s\S]{0,900}linear-gradient/.test(desk), 'PAREJAS: icono ::before solo en inicio-desktop.css');
+ok(!/shell-grupo-parejas \.zona-tit-parejas::before/.test(croma), 'PAREJAS: sin ::before duplicado en cromatica');
 ok(!/!important/.test(desk + croma), 'titulos laterales: cero !important');
 
 if (failures) {

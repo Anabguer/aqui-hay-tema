@@ -7,7 +7,7 @@
  * Cargar en play.php DESPUÃ‰S de inicio-desktop.css.
  */
 
-/* Estructura retirada — solo cromática/decoración. Layout: inicio-mobile | inicio-desktop | inicio-mapa */
+/* Estructura retirada ï¿½ solo cromï¿½tica/decoraciï¿½n. Layout: inicio-mobile | inicio-desktop | inicio-mapa */
 
 /*
  * INICIO-DESKTOP-CROMATICA â€” blindaje cromÃ¡tico desktop (paleta lavanda aprobada)
@@ -184,24 +184,6 @@
   background: rgba(255, 255, 255, .88);
 }
 
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas {
-  background: #fff9fa;
-  background-color: #fff9fa;
-  background-image: none;
-  border: 1.5px solid rgba(232, 160, 180, .38);
-  border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(232, 136, 168, .12);
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo.shell-grupo-parejas .zona-tit-parejas::before {
-  content: "";
-  border-radius: 6px;
-  background:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z' fill='%23fff'/%3E%3C/svg%3E") center / 14px 14px no-repeat,
-      linear-gradient(180deg, #f2a0b4 0%, #e8889e 100%);
-  box-shadow: 0 1px 3px rgba(232, 100, 130, .22);
-}
-
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--desk-mock {
   background: transparent;
   background-color: transparent;
@@ -293,7 +275,7 @@
 
 }
 
-/* INICIO-PLANES-BLOQUE-DESKTOP-v107 — migrado a inicio-desktop.css PLANES-BLOQUE-CANON */
+/* INICIO-PLANES-BLOQUE-DESKTOP-v107 ï¿½ migrado a inicio-desktop.css PLANES-BLOQUE-CANON */
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta-badge {
   font-family: Nunito, "Segoe UI", sans-serif;
@@ -427,7 +409,7 @@
 
 }
 
-/* INICIO-BOTTOM-NAV-DESKTOP-v137 — gana v106 (iconos gigantes); ref móvil v120 */
+/* INICIO-BOTTOM-NAV-DESKTOP-v137 ï¿½ gana v106 (iconos gigantes); ref mï¿½vil v120 */
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav-btn,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn {
@@ -487,7 +469,7 @@
 
 }
 
-/* INICIO-PLANES-FIXES-DESKTOP-v143-v147 — estructura migrada a inicio-desktop.css PLANES-BLOQUE-CANON */
+/* INICIO-PLANES-FIXES-DESKTOP-v143-v147 ï¿½ estructura migrada a inicio-desktop.css PLANES-BLOQUE-CANON */
 
 /* INICIO-BOTTOM-NAV-DESKTOP-v138 - anula transform coma-roto en btns map-host; ::after intacto */
 @media (min-width: 769px) {
