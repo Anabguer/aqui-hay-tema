@@ -125,12 +125,12 @@
 .aht-frame .aht-frame-title {
   position: relative;
   z-index: 1;
-  font-family: "Fraunces", Georgia, "Times New Roman", serif;
+  font-family: "Caveat", "Segoe Print", cursive;
   font-size: var(--aht-frame-title-size-desktop, 1.85rem);
-  font-weight: 600;
-  font-style: normal;
+  font-weight: 700;
+  font-style: italic;
   line-height: 1.2;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
   text-align: center;
   text-transform: uppercase;
   margin: 0;
@@ -195,7 +195,7 @@
 .aht-screen[data-aht-screen="organizar"] .aht-frame-title,
 .aht-screen[data-aht-screen="necesidades_global"] .aht-frame-title {
   background: #fffdf8;
-  border: 1.5px dashed rgba(107, 81, 56, .30);
+  border: 1.5px dashed #d4bee8;
   border-radius: 6px 4px 5px 7px / 4px 6px 5px 4px;
   box-shadow: 1px 2px 0 rgba(51, 38, 30, .08);
   transform: rotate(-0.3deg);
@@ -216,9 +216,9 @@
   width: 11px;
   height: 11px;
   border-radius: 999px;
-  background: radial-gradient(circle at 35% 30%, #dfc4cf, #b08fa3);
-  border: 1.5px solid rgba(107, 81, 56, .35);
-  box-shadow: 0 2px 3px rgba(70, 50, 30, .18);
+  background: radial-gradient(circle at 35% 30%, #f4a0bf, #d44d8a);
+  border: 1.5px solid #b03370;
+  box-shadow: 0 2px 3px rgba(180, 50, 100, .22);
   pointer-events: none;
 }
 
