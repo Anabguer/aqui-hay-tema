@@ -567,8 +567,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Vecinos del pueblo</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-tabs" role="tablist" aria-label="Vecinos y relaciones">
             <button type="button" class="aht-frame-tab is-active" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
             <button type="button" class="aht-frame-tab" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
@@ -598,8 +598,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Planes</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="agenda-list capa-scroll" data-agenda-list></div>
           </div>
@@ -609,8 +609,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">¿Qué se cuece ahí?</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="mentes-body capa-scroll" data-mentes-body></div>
           </div>
@@ -625,8 +625,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <button type="button" class="ficha-nav" data-ficha-nav-prev aria-label="Vecino anterior">&#8249;</button>
               <button type="button" class="ficha-nav" data-ficha-nav-next aria-label="Vecino siguiente">&#8250;</button>
             </div>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <nav class="ficha-acciones" aria-label="Acciones con el vecino">
               <button type="button" class="ficha-btn-acc ficha-btn-diario" data-ficha-diario-btn>
@@ -707,8 +707,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <header class="aht-frame-header">
             <button type="button" class="aht-frame-back" data-frel-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title" data-ficha-rel-modal-tit>Relaciones</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="frel-scroll capa-scroll" data-ficha-rel-list></div>
           </div>
@@ -719,8 +719,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <header class="aht-frame-header">
             <button type="button" class="aht-frame-back" data-animo-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title">Ánimo</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="ficha-diario-scroll capa-scroll fani-scroll" data-animo-body></div>
           </div>
@@ -732,8 +732,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <button type="button" class="aht-frame-back" data-diario-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title">Diario</h2>
             <div class="fdi-hero" data-diario-hero></div>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div style="padding:8px 16px;">
               <label class="fdi-busca-wrap">
@@ -756,8 +756,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Necesidades</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="necg-filtros" data-necesidades-global-filters></div>
             <div class="necg-body capa-scroll" data-necesidades-global-body>
@@ -770,8 +770,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Misiones</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="mis-body capa-scroll misiones-body" data-misiones-list></div>
             <p class="mis-sub mini" data-misiones-teaser hidden>—</p>
@@ -783,8 +783,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Parejas</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="par-body capa-scroll" data-parejas-modal-list></div>
             <p class="par-sub mini" data-parejas-teaser hidden>—</p>
@@ -795,8 +795,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Historia del pueblo</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="historia-body capa-scroll">
               <p class="historia-sub mini" data-historia-sub></p>
@@ -809,8 +809,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Nuevo recuerdo</h2>
+            <button type="button" class="aht-frame-close" data-historia-celebracion-close aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" data-historia-celebracion-close aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="histcele-body">
               <div class="histcele-img-wrap">
@@ -835,8 +835,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Recuerdo</h2>
+            <button type="button" class="aht-frame-close" data-historia-detalle-close aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" data-historia-detalle-close aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="histdet-body">
               <div class="histdet-img-wrap">
@@ -861,8 +861,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Vida del pueblo</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <p class="vida-valor" data-vida-modal-valor>— / 100</p>
             <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
@@ -880,8 +880,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Mensajitos</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-tabs" role="tablist" aria-label="Filtrar mensajitos">
             <button type="button" class="aht-frame-tab is-active" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
             <button type="button" class="aht-frame-tab" data-buzon-tab="leidos" role="tab" aria-selected="false">LEÍDOS</button>
@@ -901,8 +901,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Inventario</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <p class="inv-sub mini" data-inv-sub hidden>Detalles guardados para regalar a los vecinos.</p>
             <div class="inv-lista" data-inv-lista></div>
@@ -923,8 +923,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Ajustes</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <button type="button" class="ajustes-link" data-ajustes-tut>¿Cómo se juega?</button>
             <section class="ajustes-grupo" aria-label="Música de fondo">
@@ -973,8 +973,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <button type="button" class="aht-frame-back" data-capa-back aria-label="Volver">&#8592;</button>
           <h2 class="aht-frame-title">Cotilleos</h2>
             <span class="coti-badge" data-coti-count hidden style="position:absolute;right:52px;top:50%;transform:translateY(-50%);z-index:2;"></span>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
             <div class="coti-body capa-scroll">
@@ -988,8 +988,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Nuevo plan</h2>
+            <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           <div class="aht-frame-body">
             <div class="org-body capa-scroll">
               <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
