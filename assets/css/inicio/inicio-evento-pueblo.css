@@ -527,6 +527,6 @@
   }
 
   .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces .cara-token + .cara-token {
-    margin-left: -4px;
+    margin-left: 1px;
   }
 }
