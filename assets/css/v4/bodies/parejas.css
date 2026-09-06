@@ -1,7 +1,7 @@
 /* v4/bodies/parejas.css */
 /* --- Parejas: mismo shell que misiones/cotilleos --- */
 
-.play-v3 .aht-screen[data-aht-screen="parejas"]::before {
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-body::before {
   content: "";
   display: block;
   position: absolute;
@@ -12,7 +12,7 @@
   z-index: 1;
 }
 
-.play-v3 .aht-screen[data-aht-screen="parejas"].par-modal-papel {
+.play-v3 .aht-screen[data-aht-screen="parejas"] .par-body {
   background-color: var(--ds-paper-modal, #fffaf0);
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, .48), rgba(255, 255, 255, 0) 58%),

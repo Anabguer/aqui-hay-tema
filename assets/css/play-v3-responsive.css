@@ -61,25 +61,7 @@
    Sin planes en curso: .is-on no existe y el bloque no ocupa espacio.
    ====================================================================== */
 /* === Fix regresion desktop: mapa + tiles === */
-/*
-
 /* === BATCH 10 — Legibilidad: labels funcionales ~13px (corrige 8-9px) === */
-
-.play-v3 .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
-.play-v3 .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"]:not(),
-.play-v3 .play-root[data-capa="organizar"] .aht-screen[data-aht-screen="organizar"],
-.play-v3 .play-root[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
-.play-v3 .play-root[data-capa="mentes"] .aht-screen[data-aht-screen="mentes"],
-.play-v3 .play-root[data-capa="ficha_animo"] .aht-screen[data-aht-screen="ficha_animo"],
-.play-v3 .play-root[data-capa="diario"] .aht-screen[data-aht-screen="diario"],
-.play-v3 .play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],
-.play-v3 .play-root[data-capa="vida_pueblo"] .aht-screen[data-aht-screen="vida_pueblo"],
-.play-v3 .play-root[data-capa="historia"] .aht-screen[data-aht-screen="historia"],
-.play-v3 .play-root[data-capa="historia_celebracion"] .aht-screen[data-aht-screen="historia_celebracion"],
-.play-v3 .play-root[data-capa="historia_detalle"] .aht-screen[data-aht-screen="historia_detalle"],
-.play-v3 .play-root[data-capa="residencias"] .aht-screen[data-aht-screen="residencias"] {
-  z-index: 100;
-}
 
 .play-v3:has(.play-root[data-capa]:not([data-capa=""])) .mensajitos-wrap,
 .play-v3:has(.play-root[data-consulta="sel"]) .mensajitos-wrap,

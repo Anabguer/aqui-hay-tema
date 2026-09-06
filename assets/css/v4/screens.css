@@ -128,6 +128,20 @@
   }
 }
 
+@media (min-width: 769px) {
+  .play-v3 .play-root.phone .aht-screen[data-aht-screen="mentes"],
+  .play-v3 .play-root.pc .aht-screen[data-aht-screen="mentes"] {
+    width: min(calc(100% - 32px), 420px);
+    max-width: min(calc(100% - 32px), 420px);
+  }
+
+  .play-v3 .play-root.phone .aht-screen[data-aht-screen="vida_pueblo"],
+  .play-v3 .play-root.pc .aht-screen[data-aht-screen="vida_pueblo"] {
+    width: min(calc(100% - 32px), 393px);
+    max-width: min(calc(100% - 32px), 393px);
+  }
+}
+
 .play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
 .play-root[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
 .play-root[data-capa="agenda"] .aht-screen[data-aht-screen="agenda"],

@@ -452,7 +452,7 @@ body.play-v3, .game-shell { overflow-x: hidden; max-width: 100vw; }
 
 .plan-notif-meta { display: block; margin-top: .18rem; font-size: .76rem; color: #5a5048; }
 
-.aht-screen[data-aht-screen="agenda"] {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .aht-frame-body {
   background: #fffaf0 url("../play-v3/capas/libreta_hoja.png") center / cover no-repeat;
 }
 

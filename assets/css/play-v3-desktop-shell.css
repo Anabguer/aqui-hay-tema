@@ -540,17 +540,4 @@
 }
 
 
-/* VISUAL-FINAL desktop modals width */
-@media (min-width: 769px) {
-  .play-v3 .play-root.pc[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
-  .play-v3 .play-root.pc[data-capa="vecinos"] .aht-screen[data-aht-screen="vecinos"],
-  .play-v3 .play-root.pc[data-capa="ficha"] .aht-screen[data-aht-screen="ficha"],
-  .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha_diario"],
-  .play-v3 .play-root.pc .aht-screen[data-aht-screen="ficha"] .ficha-animo-overlay .ficha-animo-modal {
-    width: min(100%, 480px);
-    max-width: min(100%, 480px);
-    max-height: min(88vh, 720px);
-  }
-}
-
 /* INICIO-DESKTOP-SHELL-QUARANTINE-20260906 — celestine acotado fuera de Inicio canonico */

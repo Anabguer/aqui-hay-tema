@@ -442,7 +442,6 @@
 
 .play-root[data-consulta]:not([data-consulta=""]) .velo { opacity: 1; pointer-events: auto; }
 
-.play-root[data-capa="buzon"] .aht-screen[data-aht-screen="buzon"],
 .pc .postit { top: auto; right: 6%; bottom: 18%; width: 154px; font-size: .92rem; }
 
 .complejo .frente::after {
