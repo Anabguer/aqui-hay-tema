@@ -37,8 +37,8 @@ ok(/\.es-noche\s*\{[^}]*display:\s*none/.test(cssArt), 'desktop: indicador ocult
 ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo base del botón intacto');
 
 // ── 4. Mobile: indicador en cabecera, solo de noche ──
-ok(/inicio-temporal-pill[\s\S]{0,800}es-noche/.test(php), 'play.php: indicador en inicio-temporal-pill (mobile)');
-ok(/inicio-temporal-pill \.es-noche[\s\S]{0,200}position:\s*absolute/.test(cssMob), 'mobile: indicador position absolute en pill');
+ok(/inicio-header-card[\s\S]{0,600}es-noche/.test(php), 'play.php: indicador en inicio-header-card (mobile)');
+ok(/inicio-header-card > \.es-noche[\s\S]{0,200}position:\s*absolute/.test(cssMob), 'mobile: indicador position absolute en header-card');
 ok(/\.es-noche\.is-noche[\s\S]{0,100}display:\s*inline-flex/.test(cssMob), 'mobile: indicador visible solo con .is-noche');
 
 // ── 5. Arnés: la MISMA lógica única pinta ambos modos (día/noche) ──
