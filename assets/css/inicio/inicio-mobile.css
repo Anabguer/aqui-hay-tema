@@ -510,7 +510,7 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     display: contents;
   }
 
-.inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit {
+.inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo:not(.obj-cotilleo-compact) .obj-cotilleo-tit {
     grid-area: tit;
     flex: none;
     margin: 0;
@@ -534,12 +534,12 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     white-space: nowrap;
   }
 
-.inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo-tit::after {
+.inicio-mobile .inicio-mobile-feed-inner .obj-cotilleo:not(.obj-cotilleo-compact) .obj-cotilleo-tit::after {
     content: none;
     display: none;
   }
 
-.inicio-mobile .obj-cotilleo-txt {
+.inicio-mobile .obj-cotilleo:not(.obj-cotilleo-compact) .obj-cotilleo-txt {
     grid-area: txt;
     align-self: start;
     margin-top: 2px;
@@ -2018,28 +2018,21 @@ margin-bottom: 4px;
     align-items: center;
     gap: 8px;
     width: 100%;
-    min-height: 52px;
-    padding: 8px 10px 8px 8px;
+    min-height: 44px;
+    padding: 6px 10px 6px 8px;
     margin: 0;
     position: relative;
     background: linear-gradient(180deg, #e8dcf5 0%, #ddd0f0 100%);
     border: 1.5px solid rgba(106, 88, 142, .38);
-    border-radius: 999px;
+    border-radius: 12px;
     box-shadow: 0 2px 6px rgba(90, 70, 120, .1);
     text-align: left;
     overflow: visible;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact::after {
-    content: "";
-    position: absolute;
-    top: 8px;
-    right: 10px;
-    width: 20px;
-    height: 20px;
-    pointer-events: none;
-    opacity: .75;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.4s-6.8-4.2-6.8-8.6A3.7 3.7 0 0 1 12 9.8a3.7 3.7 0 0 1 6.8 2c0 4.4-6.8 8.6-6.8 8.6z' fill='none' stroke='%23b8a4d8' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
+    content: none;
+    display: none;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-ico {
@@ -2058,8 +2051,10 @@ margin-bottom: 4px;
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-cuerpo {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 1px;
     min-width: 0;
     flex: 1 1 auto;
   }
@@ -2069,18 +2064,22 @@ margin-bottom: 4px;
   }
 
 .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit {
-    display: inline-flex;
-    align-items: center;
+    display: block;
+    margin: 0;
     padding: 0;
     background: transparent;
     border-radius: 0;
+    box-shadow: none;
+    transform: none;
+    transform-origin: initial;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
-    font-weight: 800;
-    font-size: 1.05rem;
-    letter-spacing: .06em;
+    font-weight: 650;
+    font-size: .62rem;
+    letter-spacing: .1em;
     text-transform: uppercase;
     color: #5e3e90;
-    line-height: 1.2;
+    line-height: 1.15;
+    white-space: nowrap;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit::before {
@@ -2093,13 +2092,16 @@ margin-bottom: 4px;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-txt {
-    flex: 1 1 auto;
+    flex: 0 1 auto;
+    width: 100%;
     min-width: 0;
+    margin: 0;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
-    font-weight: 700;
-    font-size: .72rem;
-    line-height: 1.25;
-    color: var(--ds-ink, #2a2218);
+    font-style: italic;
+    font-weight: 500;
+    font-size: .78rem;
+    line-height: 1.3;
+    color: rgba(59, 48, 40, .72);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
