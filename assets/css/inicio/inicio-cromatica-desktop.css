@@ -423,46 +423,7 @@
 
 }
 
-/* INICIO-TOP-RELOJ-CROMATICA-DESKTOP-v108 - pastillas dia/hora blanco-lavanda (gana v81 vainilla) */
-@media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora {
-    background: #fff;
-  background-color: #fff;
-  background-image: none;
-  border: 1.5px solid #D9D2E1;
-  border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(70, 55, 85, 0.08);
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora {
-  border-left: 1.5px solid #D9D2E1;
-  border-right: 1.5px solid #D9D2E1;
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-num,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora-val {
-  color: #33261e;
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-meta {
-  color: #6b5f78;
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora-ico {
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%237c6bae' stroke-width='1.8'/%3E%3Cpath d='M12 7v5l3 2' stroke='%237c6bae' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-
-}
-
-/* INICIO-BOTTOM-NAV-DESKTOP-v134 - blindaje nav accesos rapidos en desktop (hijo directo de stage) */
-@media (min-width: 769px) {
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-bottom-nav,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
-  visibility: visible;
-  opacity: 1;
-  pointer-events: auto;
-}
+/* INICIO-TOP-RELOJ-CROMATICA-DESKTOP-v108 — migrado a inicio-desktop.css CABECERA-RELOJ-CANON */
 
 }
 /* INICIO-PLANES-MOCKUP-DESKTOP-v136 - mockup PLANES desktop */

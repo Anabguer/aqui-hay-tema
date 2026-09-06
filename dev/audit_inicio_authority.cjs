@@ -14,7 +14,25 @@ const shell = fs.readFileSync(path.join(root, 'assets/css/play-v3-shell-ui.css')
 const croma = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-cromatica-desktop.css'), 'utf8');
 const mapa = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-mapa.css'), 'utf8');
 
+const desk = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-desktop.css'), 'utf8');
 const hits = [];
+
+const correctiveReloj = [
+  'INICIO-DESKTOP-TOP-RELOJ-20260906',
+  'INICIO-DESKTOP-TOP-RELOJ-FIX-20260906',
+];
+correctiveReloj.forEach((m) => {
+  if (desk.includes(m)) hits.push('bloque corrector ' + m + ' en inicio-desktop.css');
+});
+
+const headerSel =
+  '.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top';
+const esc = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+['top-reloj', 'obj-dia', 'obj-hora', 'pasar-rato'].forEach((c) => {
+  const re = new RegExp(esc(headerSel) + ' \\.' + c + '(?![-a-z])\\s*\\{', 'g');
+  const n = (desk.match(re) || []).length;
+  if (n > 1) hits.push('duplicado interno .' + c + ' x' + n + ' en inicio-desktop.css');
+});
 
 if (/body\.play-v3\s*\{[^}]*margin:\s*1cm\s+2\.5cm/.test(app) &&
   !/@media\s*\(\s*min-width:\s*769px\s*\)[\s\S]*body\.play-v3\s*\{[^}]*margin:\s*1cm\s+2\.5cm/.test(app)) {

@@ -97,5 +97,14 @@ try {
   if (e.stderr) process.stderr.write(e.stderr);
 }
 
+try {
+  execFileSync(process.execPath, [path.join(root, 'tests/inicio_desktop_reloj_authority_test.js')], { stdio: 'pipe' });
+  ok(true, 'inicio_desktop_reloj_authority una regla por componente');
+} catch (e) {
+  ok(false, 'inicio_desktop_reloj_authority una regla por componente');
+  if (e.stdout) process.stdout.write(e.stdout);
+  if (e.stderr) process.stderr.write(e.stderr);
+}
+
 console.log(failures ? '\n' + failures + ' FAIL' : '\nTODO OK');
 process.exit(failures ? 1 : 0);
