@@ -47,6 +47,10 @@ ok(/obj-hora[\s\S]{0,700}filter:\s*none/.test(desk), 'desktop: pastilla hora sin
 ok(/pasar-rato[\s\S]{0,400}height:\s*auto/.test(desk), 'desktop: pasar-rato altura natural');
 ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Primavera en cabecera');
 
+ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}border-radius:\s*999px/.test(desk), 'desktop: mensajitos pill');
+ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,600}rgba\(232,\s*90,\s*120/.test(desk), 'desktop: mensajitos borde/sombra rosa');
+ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
+
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
 ok(!/!important/.test(mob + desk), 'cabeceras: cero !important');
 
