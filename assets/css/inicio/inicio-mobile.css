@@ -86,22 +86,7 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
   border: none;
   box-shadow: none;
   transform: none;
-  display: inline-flex;
-  align-items: center;
-}
-
-.inicio-stage .inicio-mobile .top-reloj .es-estado-ico {
-  width: 22px;
-  height: 22px;
-}
-
-.inicio-stage .inicio-mobile .top-reloj .es-estado-dia-ico {
-  stroke: #c88a2e;
-}
-
-.inicio-stage .inicio-mobile .top-reloj .es-estado-noche-ico {
-  stroke: #5e3e90;
-  fill: #6b5a8a;
+  display: none;
 }
 
 
@@ -1857,6 +1842,34 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-header-card {
     width: 100%;
     box-sizing: border-box;
+    position: relative;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card > .es-noche {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    display: none;
+    align-items: center;
+    gap: 3px;
+    pointer-events: none;
+    z-index: 4;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card > .es-noche.is-noche {
+    display: inline-flex;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card .es-estado-ico {
+    width: 13px;
+    height: 13px;
+    fill: #5e3e90;
+    stroke: none;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card .es-estado-txt {
+    font-size: .58rem;
+    color: #5e3e90;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-header-brand-row .brand {
@@ -1915,23 +1928,8 @@ margin-bottom: 4px;
     white-space: nowrap;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato-txt,
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-txt {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato-txt {
     display: none;
-  }
-
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-ico {
-    width: 18px;
-    height: 18px;
-  }
-
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-dia-ico {
-    stroke: #c88a2e;
-  }
-
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-noche-ico {
-    stroke: #5e3e90;
-    fill: #6b5a8a;
   }
 
 }

@@ -29,16 +29,19 @@ ok(/inicio-temporal-pill/.test(php), 'play.php: píldora día/hora/avance');
 ok(/INICIO-CABECERA-MOVIL-20260906/.test(cssMob), 'inicio-mobile: bloque cabecera canónico');
 ok(/inicio-temporal-pill[\s\S]{0,220}flex-wrap:\s*nowrap/.test(cssMob), 'inicio-mobile: píldora en una línea');
 ok(/pasar-rato-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto Pasar el rato');
-ok(/es-estado-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto estado día/noche');
 ok(/inicio-temporal-pill \.pasar-rato[\s\S]{0,220}border-radius:\s*50%/.test(cssMob), 'inicio-mobile: botón ▶ circular');
 ok(!/!important/.test(cssMob.match(/INICIO-CABECERA-MOVIL[\s\S]*/)?.[0] || ''), 'inicio-mobile cabecera: cero !important');
 
-// ── 3. Desktop: indicador integrado en el flujo del reloj ──
-ok(/\.es-noche\s*\{[^}]*display:\s*inline-flex/.test(cssArt), 'desktop: indicador integrado inline-flex');
-ok(/\.es-noche\s*\{[^}]*pointer-events:\s*none/.test(cssArt), 'desktop: pointer-events none intacto');
+// ── 3. Desktop: indicador oculto (solo visible en mobile de noche) ──
+ok(/\.es-noche\s*\{[^}]*display:\s*none/.test(cssArt), 'desktop: indicador oculto por defecto');
 ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo base del botón intacto');
 
-// ── 4. Arnés: la MISMA lógica única pinta ambos modos (día/noche) ──
+// ── 4. Mobile: indicador en cabecera, solo de noche ──
+ok(/inicio-header-card[\s\S]{0,300}es-noche/.test(php), 'play.php: indicador en inicio-header-card (mobile)');
+ok(/inicio-header-card > \.es-noche[\s\S]{0,200}position:\s*absolute/.test(cssMob), 'mobile: indicador position absolute en header-card');
+ok(/\.es-noche\.is-noche[\s\S]{0,100}display:\s*inline-flex/.test(cssMob), 'mobile: indicador visible solo con .is-noche');
+
+// ── 5. Arnés: la MISMA lógica única pinta ambos modos (día/noche) ──
 (function () {
   const ini = js.indexOf('function aplicarNocheVisual');
   const fin = js.indexOf('\n  }', js.indexOf('function pintarModoReloj'));
@@ -74,10 +77,10 @@ ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo b
     return { pintar, indicador, get etiqueta() { return etiqueta; }, clases };
   }
 
-  // A) 14:00 · día — indicador siempre visible, muestra estado día
+  // A) 14:00 · día — indicador oculto (hidden=false pero sin .is-noche)
   let ctx = montar();
   ctx.pintar(false);
-  ok(ctx.indicador.hidden === false, 'móvil A 14:00: indicador visible (estado día)');
+  ok(ctx.indicador.hidden === false, 'móvil A 14:00: indicador hidden=false');
   ok(ctx.clases.has('is-dia'), 'móvil A 14:00: clase is-dia activa');
   ok(!ctx.clases.has('is-noche'), 'móvil A 14:00: sin is-noche');
   ok(ctx.etiqueta === 'Pasar el rato', 'móvil A 14:00: botón "Pasar el rato"');
@@ -86,7 +89,7 @@ ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo b
   ok(ctx.clases.has('is-dia') && ctx.etiqueta === 'Pasar el rato', 'móvil B 22:00: sigue día');
   // C) 22→23: el mismo sistema cambia a noche
   ctx.pintar(true);
-  ok(ctx.indicador.hidden === false, 'móvil D 23:00: indicador visible (estado noche)');
+  ok(ctx.indicador.hidden === false, 'móvil D 23:00: indicador hidden=false');
   ok(ctx.clases.has('is-noche'), 'móvil D 23:00: clase is-noche activa');
   ok(!ctx.clases.has('is-dia'), 'móvil D 23:00: sin is-dia');
   ok(ctx.etiqueta === 'Pasar la noche', 'móvil D 23:00: botón "Pasar la noche"');
