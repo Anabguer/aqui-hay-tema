@@ -347,27 +347,44 @@
 
 /* ── Detalle de recuerdo — Scrapbook ──────────────────────── */
 .histdet-body {
-  padding: .6rem .8rem 1.2rem;
+  padding: .8rem 1rem 1.4rem;
   position: relative;
   overflow: hidden;
+  min-height: 320px;
 }
 
-/* Fondo scrapbook sutil con textura de papel */
+/* Fondo scrapbook — papel envejecido + doodles sutiles */
 .histdet-body::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 20% 80%, rgba(200,160,120,.06) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 20%, rgba(180,140,110,.05) 0%, transparent 50%);
+    radial-gradient(ellipse at 15% 85%, rgba(200,160,120,.07) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 15%, rgba(180,140,110,.06) 0%, transparent 45%),
+    radial-gradient(circle at 50% 50%, rgba(220,200,180,.03) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
+}
+
+/* Doodles decorativos — corazones, estrellitas, trazos */
+.histdet-body::after {
+  content: '\2661   \2726   \2661';
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  color: rgba(200,160,140,.18);
+  letter-spacing: 1.5rem;
+  pointer-events: none;
+  z-index: 0;
+  white-space: nowrap;
 }
 
 /* Layout principal: polaroid + sidebar */
 .histdet-main {
   display: flex;
-  gap: 1rem;
+  gap: 1.2rem;
   align-items: flex-start;
   position: relative;
   z-index: 1;
@@ -377,13 +394,13 @@
 .histdet-polaroid {
   position: relative;
   flex: 0 1 auto;
-  max-width: 260px;
+  max-width: 300px;
   background: #fff;
-  padding: .5rem .5rem 1.6rem;
+  padding: .6rem .6rem 2rem;
   box-shadow:
-    2px 3px 8px rgba(44, 38, 31, .18),
+    2px 4px 12px rgba(44, 38, 31, .16),
     0 0 0 1px rgba(44, 38, 31, .04);
-  transform: rotate(-1.8deg);
+  transform: rotate(-2deg);
   transform-origin: top center;
   transition: transform .2s ease;
 }
@@ -391,15 +408,15 @@
 /* Celo decorativo superior izquierdo */
 .histdet-polaroid-tape {
   position: absolute;
-  top: -6px;
-  left: 12px;
-  width: 48px;
-  height: 18px;
-  background: linear-gradient(135deg, rgba(220,180,200,.55) 0%, rgba(210,170,190,.45) 100%);
+  top: -7px;
+  left: 14px;
+  width: 56px;
+  height: 20px;
+  background: linear-gradient(135deg, rgba(220,180,200,.5) 0%, rgba(210,170,190,.4) 100%);
   border-radius: 2px;
   transform: rotate(-8deg);
   z-index: 2;
-  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
 
 .histdet-polaroid-tape::after {
@@ -409,9 +426,9 @@
   background: repeating-linear-gradient(
     90deg,
     transparent,
-    transparent 3px,
-    rgba(255,255,255,.3) 3px,
-    rgba(255,255,255,.3) 4px
+    transparent 4px,
+    rgba(255,255,255,.25) 4px,
+    rgba(255,255,255,.25) 5px
   );
 }
 
@@ -432,22 +449,22 @@
 
 .histdet-polaroid-caption {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   font-weight: 600;
   color: #3a3025;
   line-height: 1.35;
-  margin: .5rem 0 0;
+  margin: .6rem 0 0;
   text-align: center;
-  padding: 0 .2rem;
+  padding: 0 .3rem;
 }
 
 .histdet-polaroid-hearts {
   position: absolute;
-  bottom: .45rem;
-  right: .6rem;
-  font-size: .7rem;
+  bottom: .55rem;
+  right: .7rem;
+  font-size: .85rem;
   color: #e8a0b0;
-  letter-spacing: .1em;
+  letter-spacing: .12em;
 }
 
 /* ── Sidebar ─────────────────────────────────────────────── */
@@ -456,8 +473,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .8rem;
-  padding-top: .3rem;
+  gap: 1rem;
+  padding-top: .4rem;
 }
 
 /* ── Protagonistas — disposition juguetona ────────────────── */
@@ -465,56 +482,56 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: .5rem;
+  gap: .6rem;
 }
 
 .histdet-protagonista {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .2rem;
+  gap: .25rem;
   position: relative;
 }
 
 /* Variaciones de rotación para efecto juguetón */
 .histdet-protagonista:nth-child(odd) {
-  transform: rotate(-2deg);
+  transform: rotate(-2.5deg);
 }
 .histdet-protagonista:nth-child(even) {
-  transform: rotate(2.5deg);
+  transform: rotate(3deg);
 }
 .histdet-protagonista:nth-child(3n) {
-  transform: rotate(-1deg) translateY(2px);
+  transform: rotate(-1deg) translateY(3px);
 }
 
 .histdet-protagonista-avatar {
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2.5px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 2px 8px rgba(44, 38, 31, .15);
+  border: 3px solid var(--cara-emo, #c9a06a);
+  box-shadow: 0 3px 10px rgba(44, 38, 31, .15);
   background: #e8e0d4;
 }
 
 .histdet-protagonista-avatar--fallback {
-  width: 54px;
-  height: 54px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.15rem;
+  font-size: 1.4rem;
   font-weight: 700;
   color: #2c261f;
   background: #fff6c8;
-  border: 2.5px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 2px 8px rgba(44, 38, 31, .15);
+  border: 3px solid var(--cara-emo, #c9a06a);
+  box-shadow: 0 3px 10px rgba(44, 38, 31, .15);
 }
 
 .histdet-protagonista-nombre {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: .78rem;
+  font-size: .92rem;
   font-weight: 600;
   color: #5a4e40;
 }
@@ -523,78 +540,101 @@
   display: none;
 }
 
-/* ── Recompensa — sticker del scrapbook ──────────────────── */
+/* ── Recompensa — sticker/regalito del scrapbook ─────────── */
 .histdet-recompensa {
-  background: linear-gradient(145deg, #fff8e8 0%, #fef3d8 100%);
-  border: 1.5px dashed #d4b896;
-  border-radius: 6px;
-  padding: .5rem .7rem;
+  background:
+    linear-gradient(145deg, #fff8e6 0%, #fef0d0 40%, #f8e8c4 100%);
+  border: 2px dashed #d4b080;
+  border-radius: 8px;
+  padding: .7rem .9rem .8rem;
   text-align: center;
   position: relative;
-  transform: rotate(1.5deg);
-  box-shadow: 1px 2px 4px rgba(44, 38, 31, .1);
-  max-width: 160px;
+  transform: rotate(1.8deg);
+  box-shadow:
+    2px 3px 8px rgba(44, 38, 31, .12),
+    inset 0 1px 2px rgba(255,255,255,.5);
+  max-width: 200px;
+  /* Papel envejecido: borde irregular sutil */
+  background-image:
+    linear-gradient(145deg, #fff8e6 0%, #fef0d0 40%, #f8e8c4 100%),
+    radial-gradient(ellipse at 30% 20%, rgba(200,170,130,.08) 0%, transparent 50%);
 }
 
+/* Celo superior derecho */
 .histdet-recompensa::before {
   content: '';
   position: absolute;
-  top: -4px;
-  right: 8px;
-  width: 20px;
-  height: 12px;
-  background: rgba(220,180,200,.4);
+  top: -5px;
+  right: 10px;
+  width: 24px;
+  height: 14px;
+  background: linear-gradient(135deg, rgba(220,180,200,.45) 0%, rgba(210,170,190,.35) 100%);
   border-radius: 1px;
-  transform: rotate(12deg);
+  transform: rotate(14deg);
+  box-shadow: 0 1px 2px rgba(0,0,0,.06);
+}
+
+/* Sutil desgaste en esquina inferior izquierda */
+.histdet-recompensa::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  background: linear-gradient(135deg, transparent 50%, rgba(200,180,160,.12) 50%);
+  border-radius: 0 0 0 8px;
 }
 
 .histdet-recompensa-ico {
   display: block;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: #d4a060;
-  margin-bottom: .1rem;
+  margin-bottom: .15rem;
 }
 
 .histdet-recompensa-label {
   display: block;
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: .85rem;
+  font-size: 1.05rem;
   font-weight: 700;
   color: #8a6e50;
-  margin-bottom: .2rem;
+  margin-bottom: .3rem;
 }
 
 .histdet-recompensa-card {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: .4rem;
+  gap: .5rem;
 }
 
 .histdet-recompensa-img {
-  width: 36px;
-  height: 36px;
+  width: 72px;
+  height: 72px;
   object-fit: contain;
   flex-shrink: 0;
+  filter: drop-shadow(1px 2px 4px rgba(0,0,0,.12));
 }
 
 .histdet-recompensa-nombre {
-  font-size: .78rem;
+  font-size: 1rem;
   color: #3a3025;
   font-weight: 600;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
 }
 
 /* ── Footer / Día ────────────────────────────────────────── */
 .histdet-footer {
   text-align: center;
-  margin-top: .6rem;
+  margin-top: .8rem;
   position: relative;
   z-index: 1;
 }
 
 .histdet-dia {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: .78rem;
+  font-size: .92rem;
   color: #8a7e70;
   letter-spacing: .02em;
 }
@@ -663,21 +703,40 @@
   }
 
   .histdet-polaroid {
-    max-width: 220px;
-    transform: rotate(-1deg);
+    max-width: 240px;
+    transform: rotate(-1.2deg);
+  }
+
+  .histdet-polaroid-caption {
+    font-size: 1.15rem;
   }
 
   .histdet-sidebar {
     width: 100%;
-    padding-top: .2rem;
+    padding-top: .3rem;
   }
 
   .histdet-protagonistas {
     justify-content: center;
   }
 
+  .histdet-protagonista-avatar,
+  .histdet-protagonista-avatar--fallback {
+    width: 56px;
+    height: 56px;
+  }
+
   .histdet-recompensa {
-    max-width: 180px;
-    transform: rotate(0deg);
+    max-width: 190px;
+    transform: rotate(1deg);
+  }
+
+  .histdet-recompensa-img {
+    width: 60px;
+    height: 60px;
+  }
+
+  .histdet-recompensa-nombre {
+    font-size: .92rem;
   }
 }

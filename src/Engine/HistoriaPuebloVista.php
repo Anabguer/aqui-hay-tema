@@ -15,14 +15,14 @@ final class HistoriaPuebloVista
      * @param array<string, mixed> $partida
      * @return array{total_revelados: int, total_hitos: int, hitos: list<array>}
      */
-    public static function snapshot(array $partida): array
+    public static function snapshot(array $partida, ?string $root = null): array
     {
         $catalogo = HistoriaPuebloEngine::catalogo($partida);
         $hitos = [];
 
         foreach ($catalogo as $item) {
             if ($item['revelado']) {
-                $hitos[] = self::presentarRevelado($partida, $item);
+                $hitos[] = self::presentarRevelado($partida, $item, $root);
             } else {
                 $hitos[] = self::presentarBloqueado($item);
             }
@@ -35,7 +35,7 @@ final class HistoriaPuebloVista
         ];
     }
 
-    private static function presentarRevelado(array $partida, array $item): array
+    private static function presentarRevelado(array $partida, array $item, ?string $root): array
     {
         $entrada = $item['entrada'] ?? [];
         $protagonistas = [];
@@ -46,7 +46,7 @@ final class HistoriaPuebloVista
             $protagonistas[] = [
                 'id' => $pid,
                 'nombre' => $entrada['nombres'][$pid] ?? IdentidadPublica::nombre($partida, $pid),
-                'retrato' => self::retratoMini($partida, $pid),
+                'retrato' => self::retratoMini($partida, $pid, $root),
             ];
         }
 
@@ -76,15 +76,18 @@ final class HistoriaPuebloVista
         ];
     }
 
-    private static function retratoMini(array $partida, string $pid): ?string
+    private static function retratoMini(array $partida, string $pid, ?string $root): ?string
     {
         $residente = $partida['residentes'][$pid] ?? null;
         if ($residente === null) {
             return null;
         }
+        if (!is_string($root) || $root === '') {
+            return null;
+        }
         try {
-            $packs = new VisualPackStore();
-            $retrato = RetratoResolver::resolver($residente, $pid, $packs);
+            $packs = new VisualPackStore($root);
+            $retrato = RetratoResolver::resolver($residente, $pid, $packs, $root);
             return $retrato['url'] ?? null;
         } catch (\Throwable $e) {
             return null;

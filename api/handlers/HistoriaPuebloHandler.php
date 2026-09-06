@@ -14,7 +14,7 @@ final class HistoriaPuebloHandler
     {
         return [
             'ok' => true,
-            'historia' => HistoriaPuebloVista::snapshot($partida),
+            'historia' => HistoriaPuebloVista::snapshot($partida, $ctx->root),
         ];
     }
 

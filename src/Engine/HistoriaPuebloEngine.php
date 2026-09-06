@@ -332,7 +332,7 @@ final class HistoriaPuebloEngine
                 'nombre' => $slot['nombre'],
                 'imagen' => $slot['imagen'],
                 'orden' => $i + 1,
-                'protagonistas' => self::protagonistasParaUI($partida, $entrada),
+                'protagonistas' => self::protagonistasParaUI($partida, $entrada, $root),
                 'dia' => $entrada['dia'] ?? 1,
                 'texto_narrativo' => self::generarTextoNarrativo($slot, $entrada),
                 'recompensa' => RegalitoRecompensaService::recompensaDeEntradaHistoria($partida, $entrada),
@@ -486,7 +486,7 @@ final class HistoriaPuebloEngine
      *
      * @return list<array{id: string, nombre: string, retrato: string|null}>
      */
-    private static function protagonistasParaUI(array $partida, array $entrada): array
+    private static function protagonistasParaUI(array $partida, array $entrada, ?string $root): array
     {
         $resultado = [];
         foreach ($entrada['protagonistas'] ?? [] as $pid) {
@@ -494,21 +494,24 @@ final class HistoriaPuebloEngine
             $resultado[] = [
                 'id' => $pid,
                 'nombre' => $entrada['nombres'][$pid] ?? IdentidadPublica::nombre($partida, $pid),
-                'retrato' => self::retratoMini($partida, $pid),
+                'retrato' => self::retratoMini($partida, $pid, $root),
             ];
         }
         return $resultado;
     }
 
-    private static function retratoMini(array $partida, string $pid): ?string
+    private static function retratoMini(array $partida, string $pid, ?string $root): ?string
     {
         $residente = $partida['residentes'][$pid] ?? null;
         if ($residente === null) {
             return null;
         }
+        if (!is_string($root) || $root === '') {
+            return null;
+        }
         try {
-            $packs = new VisualPackStore();
-            $retrato = RetratoResolver::resolver($residente, $pid, $packs);
+            $packs = new VisualPackStore($root);
+            $retrato = RetratoResolver::resolver($residente, $pid, $packs, $root);
             return $retrato['url'] ?? null;
         } catch (\Throwable $e) {
             return null;
