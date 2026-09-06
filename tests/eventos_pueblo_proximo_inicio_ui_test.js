@@ -8,6 +8,8 @@ const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
 const cssEv = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-evento-pueblo.css'), 'utf8');
+const cssDesk = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-desktop.css'), 'utf8');
+const cssMob = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-mobile.css'), 'utf8');
 
 let failures = 0;
 function ok(c, m) {
@@ -28,6 +30,10 @@ ok(cssEv.includes('.inicio-proximo-evento'), 'css evento-pueblo: estilos proximo
 ok(cssEv.includes('inicio-evento-tag::before'), 'css evento-pueblo: icono calendario en cabecera');
 ok(cssEv.includes('inicio-evento-libreta::before'), 'css evento-pueblo: cinta decorativa');
 ok(cssEv.includes('inicio-evento-asisten'), 'css evento-pueblo: pie con asistentes');
+ok(!/Caveat/i.test(cssEv), 'css evento-pueblo: sin Caveat');
+ok(cssEv.includes('font-family: Nunito, "Segoe UI", sans-serif'), 'css evento-pueblo: titulo con Nunito');
+ok(!/inicio-proximo-evento|inicio-evento-/.test(cssDesk), 'desktop: sin autoridad competidora evento pueblo');
+ok(!/inicio-proximo-evento|inicio-evento-/.test(cssMob), 'mobile: sin autoridad competidora evento pueblo');
 
 const fn = (function () {
   const i = js.indexOf('function renderProximoEventoPueblo(');

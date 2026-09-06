@@ -146,7 +146,7 @@
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tit {
     margin: 0;
-    font-family: "Caveat", "Caveat Brush", cursive;
+    font-family: Nunito, "Segoe UI", sans-serif;
     font-size: 1.62rem;
     font-weight: 700;
     line-height: 1.08;
@@ -406,7 +406,7 @@
 
   .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
     margin: 0;
-    font-family: "Caveat", "Caveat Brush", cursive;
+    font-family: Nunito, "Segoe UI", sans-serif;
     font-size: 1.28rem;
     font-weight: 700;
     line-height: 1.08;
