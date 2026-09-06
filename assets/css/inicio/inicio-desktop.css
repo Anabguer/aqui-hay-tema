@@ -502,7 +502,7 @@
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-area: nav;
     width: 100%;
     max-width: 100%;
@@ -542,8 +542,32 @@
     color: #c85b78;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn:nth-child(3) .play-bottom-nav-ico {
-    color: #6b5a8a;
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="ajustes"] .play-bottom-nav-ico {
+    color: #c42b4a;
+    background: transparent;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="inventario"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="necesidades_global"] .play-bottom-nav-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="historia"] .play-bottom-nav-ico {
+    color: #33261e;
+    background: transparent;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="vecinos"] .play-bottom-nav-ico {
+    color: #7c6bae;
+    background: #e4dcf4;
+    border-radius: 8px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico {
+    color: #d95f78;
+    background: transparent;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-btn[data-open="relaciones"] .play-bottom-nav-ico svg path {
+    fill: #d95f78;
+    stroke: #d95f78;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .play-bottom-nav .play-bottom-nav-txt {

@@ -15,7 +15,9 @@ function ok(c, m) {
   if (!c) failures++;
 }
 
-ok(/inicio-header-card/.test(php), 'play.php: cabecera móvil con inicio-header-card');
+ok(/data-open="necesidades_global"/.test(php), 'play.php: nav necesidades');
+ok(/data-open="historia"/.test(php), 'play.php: nav historia');
+ok(/repeat\(6, minmax\(0, 1fr\)\)/.test(desk), 'desktop: nav inferior 6 botones');
 ok(/inicio-temporal-pill/.test(php), 'play.php: píldora temporal móvil');
 ok(/obj-vida-kicker/.test(php), 'play.php: kicker vida desktop');
 

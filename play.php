@@ -1340,6 +1340,18 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </span>
         <span class="play-bottom-nav-txt">Relaciones</span>
       </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="necesidades_global">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 8v4M12 16h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Necesidades</span>
+      </button>
+      <button type="button" class="play-bottom-nav-btn" data-open="historia">
+        <span class="play-bottom-nav-ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" focusable="false"><path d="M6 3h11a2 2 0 0 1 2 2v16H8a2 2 0 0 1-2-2V3Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M8 3v18" stroke="currentColor" stroke-width="1.8"/><rect x="11" y="7" width="5.5" height="4.5" rx=".5" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="12.3" cy="8.8" r=".65" fill="currentColor"/><path d="M11 10.7l1.2-1 1 .8 1.5-1.6" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <span class="play-bottom-nav-txt">Historia</span>
+      </button>
     </nav>
     </div>
   </div>
