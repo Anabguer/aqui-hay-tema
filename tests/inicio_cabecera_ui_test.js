@@ -47,8 +47,12 @@ ok(/obj-hora[\s\S]{0,700}filter:\s*none/.test(desk), 'desktop: pastilla hora sin
 ok(/pasar-rato[\s\S]{0,400}height:\s*auto/.test(desk), 'desktop: pasar-rato altura natural');
 ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Primavera en cabecera');
 
-ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}border-radius:\s*999px/.test(desk), 'desktop: mensajitos pill');
+ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}border-radius:\s*14px/.test(desk), 'desktop: mensajitos radio ref PNG');
+ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}min-height:\s*68px/.test(desk), 'desktop: mensajitos mas alto');
 ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,600}rgba\(232,\s*90,\s*120/.test(desk), 'desktop: mensajitos borde/sombra rosa');
+ok(/inicio-desktop-left \.obj-buzon-txt[\s\S]{0,220}font-size:\s*\.98rem/.test(desk), 'desktop: mensajitos texto grande');
+ok(/inicio-desktop-left \.obj-buzon-ico-wrap[\s\S]{0,420}background:\s*url\("data:image\/svg\+xml/.test(desk), 'desktop: mensajitos sobre outline svg');
+ok(/inicio-desktop-left \.obj-buzon-img[\s\S]{0,120}display:\s*none/.test(desk), 'desktop: mensajitos sin png legacy');
 ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
 ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'desktop: celestine negro');
 ok(/celestine-nota\.obj-vecinos-resumen::before[\s\S]{0,280}chincheta\.png/.test(desk), 'desktop: chincheta derecha');
