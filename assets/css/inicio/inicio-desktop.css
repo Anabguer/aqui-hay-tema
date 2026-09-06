@@ -35,6 +35,8 @@
   body.play-v3:has(.inicio-desktop.is-inicio-view-active) {
     margin-left: 1.25cm;
     margin-right: 1.25cm;
+    margin-top: 0.5cm;
+    min-height: calc(100% - 0.5cm);
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
