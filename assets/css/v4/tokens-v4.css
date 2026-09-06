@@ -35,8 +35,8 @@
   --aht-frame-radius: 22px 16px 24px 15px / 16px 24px 15px 22px;
   --aht-frame-header-pad-x: 20px;
   --aht-frame-header-pad-y: 16px;
-  --aht-frame-title-size-desktop: 2.1rem;
-  --aht-frame-title-size-mobile: 1.6rem;
+  --aht-frame-title-size-desktop: 1.95rem;
+  --aht-frame-title-size-mobile: 1.5rem;
   --aht-frame-radius-sm: 12px 9px 13px 10px / 9px 13px 10px 12px;
   --aht-frame-shadow: 0 8px 24px rgba(48, 40, 58, 0.20);
   --aht-overlay: rgba(38, 31, 47, 0.45);
@@ -50,19 +50,18 @@
   --aht-modal-desktop-max-h: min(90vh, 840px);
 
   /* --- Close (X) â€” token global testable --- */
-  --aht-close-color: #6B4A5E;
+  --aht-close-color: #7C6BAE;
   --aht-close-bg: #F1EDF6;
   --aht-close-border: #D8D1DE;
 
   /* --- Header --- */
-  --aht-header-bg: #FFFFFF;
-  --aht-header-mark: #E3D6F0;
+  --aht-header-bg: #FEFCF8;
   --aht-header-pad-y-desktop: 22px;
 
   /* --- Buttons (volver / cerrar) --- */
   --aht-btn-size: 40px;
   --aht-back-bg: #E8DFF5;
-  --aht-close-bg-pink: #F5EDE0;
+  --aht-close-bg-pink: #F1EDF6;
 
   /* --- Body --- */
   --aht-body-bg: #F6F3F8;
