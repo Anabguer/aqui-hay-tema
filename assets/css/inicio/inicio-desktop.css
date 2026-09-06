@@ -68,14 +68,16 @@
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
     display: grid;
-    grid-template-columns: minmax(328px, 400px) minmax(0, 1fr) minmax(282px, 362px);
+    grid-template-columns: minmax(220px, 250px) minmax(0, 1fr) minmax(220px, 250px);
     grid-template-areas:
       "head head head"
       "left map  right";
-    column-gap: 14px;
+    column-gap: 10px;
     row-gap: 10px;
     align-items: start;
-    padding: 0 14px 14px;
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
     box-sizing: border-box;
   }
 
