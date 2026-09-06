@@ -9488,6 +9488,9 @@ var finOk = $('[data-tut-fin-ok]');
       if (vecInp) vecInp.value = '';
       renderVecinos();
     }
+    if (screen === 'historia') {
+      renderHistoriaPueblo();
+    }
   });
 
   window.addEventListener('resize', layout);
