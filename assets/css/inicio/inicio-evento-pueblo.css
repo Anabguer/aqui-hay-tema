@@ -1,0 +1,516 @@
+/* inicio-evento-pueblo — tarjeta scrapbook EVENTO PUEBLO (ref aprobada) */
+
+/* —— Desktop (columna derecha Inicio) —— */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento {
+    margin-bottom: .55rem;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
+    gap: 0;
+    padding: 14px 14px 12px;
+    margin-top: 4px;
+    background: linear-gradient(180deg, rgba(255, 250, 244, .98) 0%, rgba(255, 242, 228, .96) 100%);
+    border: 1.5px solid rgba(232, 148, 72, .38);
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(232, 136, 168, .14);
+    overflow: visible;
+    transform: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta.inicio-evento-card--marcha {
+    background: linear-gradient(180deg, rgba(255, 250, 244, .98) 0%, rgba(246, 252, 238, .96) 100%);
+    border-color: rgba(118, 168, 72, .38);
+    box-shadow: 0 2px 12px rgba(168, 200, 130, .16);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -7px;
+    right: 14px;
+    width: 38px;
+    height: 14px;
+    background: rgba(255, 176, 96, .72);
+    border: 1px solid rgba(210, 130, 60, .18);
+    transform: rotate(5deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 2px rgba(60, 44, 28, .08);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta::after,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-card::after {
+    display: none;
+    content: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tag {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 10px;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tag::before {
+    content: "";
+    display: block;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Crect x='3.5' y='5.5' width='17' height='15' rx='2' stroke='%23e8889e' stroke-width='1.65'/%3E%3Cpath d='M3.5 9.5h17' stroke='%23e8889e' stroke-width='1.65'/%3E%3Cpath d='M8 3.8v3.2M16 3.8v3.2' stroke='%23e8889e' stroke-width='1.65' stroke-linecap='round'/%3E%3Ccircle cx='8.2' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='12' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='15.8' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='8.2' cy='16.4' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='12' cy='16.4' r='1.15' fill='%23e8889e'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tag-txt {
+    display: inline;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .82rem;
+    font-weight: 800;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #4a4a4a;
+    line-height: 1;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-card--marcha .inicio-evento-tag-txt {
+    color: #3d6b38;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-main {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta:has(.inicio-evento-cta[hidden]) .inicio-evento-main,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-libreta:not(:has(.inicio-evento-cta:not([hidden]))) .inicio-evento-main {
+    grid-column: 1 / -1;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico--evento,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico--lugar {
+    flex: 0 0 auto;
+    width: 56px;
+    min-width: 56px;
+    max-width: 56px;
+    height: auto;
+    min-height: 0;
+    padding: 3px 3px 7px;
+    margin-top: 1px;
+    background: #fff;
+    border: 1px solid rgba(89, 72, 57, .16);
+    border-radius: 6px;
+    box-shadow: 0 2px 7px rgba(44, 38, 31, .12);
+    transform: rotate(-2deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-ico img {
+    display: block;
+    width: 100%;
+    height: 44px;
+    max-height: 44px;
+    object-fit: cover;
+    object-position: center bottom;
+    border-radius: 3px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    min-width: 0;
+    flex: 1 1 auto;
+    padding-top: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-tit {
+    margin: 0;
+    font-family: "Caveat", "Caveat Brush", cursive;
+    font-size: 1.62rem;
+    font-weight: 700;
+    line-height: 1.08;
+    letter-spacing: .01em;
+    text-transform: none;
+    color: #d4567a;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-meta {
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: #5f544a;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    white-space: normal;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    min-width: 30px;
+    min-height: 30px;
+    margin: 0 0 0 6px;
+    padding: 0;
+    border: 1px solid rgba(130, 120, 110, .35);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(60, 44, 28, .1);
+    color: #6a5f56;
+    cursor: pointer;
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta[hidden] {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta-txt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta::after {
+    content: "\203A";
+    font-size: 1.05rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: -1px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-cta-spark {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-pie {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding-top: 9px;
+    border-top: 1px dashed rgba(232, 148, 72, .28);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-pie[hidden] {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces .cara-token + .cara-token {
+    margin-left: -8px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces img,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-faces .cara-ini {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    border: 2px solid rgba(232, 196, 160, .72);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-proximo-evento .inicio-evento-asisten {
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .78rem;
+    font-weight: 600;
+    color: #5f544a;
+    line-height: 1.2;
+  }
+}
+
+/* —— Móvil (feed Inicio) —— */
+@media (max-width: 768px) {
+  .play-v3 .inicio-mobile .inicio-proximo-evento {
+    padding: 0 13px;
+    margin: 0;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento[hidden] {
+    display: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: auto auto auto;
+    gap: 0;
+    padding: 12px 12px 10px;
+    margin-top: 4px;
+    background: linear-gradient(180deg, rgba(255, 250, 244, .98) 0%, rgba(255, 242, 228, .96) 100%);
+    border: 1.5px solid rgba(232, 148, 72, .38);
+    border-radius: 14px;
+    box-shadow: 0 2px 10px rgba(232, 136, 168, .12);
+    overflow: visible;
+    transform: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta::before {
+    content: "";
+    display: block;
+    position: absolute;
+    top: -6px;
+    right: 12px;
+    width: 32px;
+    height: 12px;
+    background: rgba(255, 176, 96, .72);
+    border: 1px solid rgba(210, 130, 60, .18);
+    transform: rotate(5deg);
+    z-index: 2;
+    pointer-events: none;
+    box-shadow: 0 1px 2px rgba(60, 44, 28, .08);
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta::after,
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-card::after {
+    display: none;
+    content: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-tag {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 8px;
+    padding: 0;
+    background: none;
+    border: none;
+    box-shadow: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-tag::before {
+    content: "";
+    display: block;
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Crect x='3.5' y='5.5' width='17' height='15' rx='2' stroke='%23e8889e' stroke-width='1.65'/%3E%3Cpath d='M3.5 9.5h17' stroke='%23e8889e' stroke-width='1.65'/%3E%3Cpath d='M8 3.8v3.2M16 3.8v3.2' stroke='%23e8889e' stroke-width='1.65' stroke-linecap='round'/%3E%3Ccircle cx='8.2' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='12' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='15.8' cy='13.2' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='8.2' cy='16.4' r='1.15' fill='%23e8889e'/%3E%3Ccircle cx='12' cy='16.4' r='1.15' fill='%23e8889e'/%3E%3C/svg%3E") center / contain no-repeat;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-tag-txt {
+    display: inline;
+    padding: 0;
+    border: none;
+    background: none;
+    box-shadow: none;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .68rem;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: #4a4a4a;
+    line-height: 1;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-card--marcha .inicio-evento-tag-txt {
+    color: #3d6b38;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-main {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-libreta:has(.inicio-evento-cta[hidden]) .inicio-evento-main {
+    grid-column: 1 / -1;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-ico,
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-ico--evento,
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-ico--lugar {
+    flex: 0 0 auto;
+    width: 48px;
+    min-width: 48px;
+    max-width: 48px;
+    height: auto;
+    padding: 2px 2px 6px;
+    margin: 0;
+    background: #fff;
+    border: 1px solid rgba(89, 72, 57, .16);
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(44, 38, 31, .1);
+    transform: rotate(-2deg);
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-ico img {
+    display: block;
+    width: 100%;
+    height: 38px;
+    max-height: 38px;
+    object-fit: cover;
+    border-radius: 3px;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-tit {
+    margin: 0;
+    font-family: "Caveat", "Caveat Brush", cursive;
+    font-size: 1.28rem;
+    font-weight: 700;
+    line-height: 1.08;
+    color: #d4567a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-meta {
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .68rem;
+    font-weight: 600;
+    line-height: 1.25;
+    color: #5f544a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-cta {
+    grid-column: 2;
+    grid-row: 2;
+    align-self: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    margin: 0;
+    padding: 0;
+    border: 1px solid rgba(130, 120, 110, .35);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(60, 44, 28, .1);
+    color: #6a5f56;
+    cursor: pointer;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-cta[hidden] {
+    display: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-txt {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-cta::after {
+    content: "\203A";
+    font-size: .95rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-cta-spark {
+    display: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-pie {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(232, 148, 72, .28);
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-pie[hidden] {
+    display: none;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-asisten {
+    display: block;
+    margin: 0;
+    font-family: Nunito, "Segoe UI", sans-serif;
+    font-size: .7rem;
+    font-weight: 600;
+    color: #5f544a;
+    line-height: 1.2;
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces img,
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces .cara-ini {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+    min-height: 24px;
+    border: 2px solid rgba(232, 196, 160, .72);
+  }
+
+  .play-v3 .inicio-mobile .inicio-proximo-evento .inicio-evento-faces .cara-token + .cara-token {
+    margin-left: -7px;
+  }
+}

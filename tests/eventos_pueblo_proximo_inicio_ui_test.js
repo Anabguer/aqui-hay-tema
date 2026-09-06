@@ -7,8 +7,7 @@ const path = require('path');
 const root = path.join(__dirname, '..');
 const php = fs.readFileSync(path.join(root, 'play.php'), 'utf8');
 const js = fs.readFileSync(path.join(root, 'assets/js/play-v3.js'), 'utf8');
-const cssM = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio-mobile.css'), 'utf8');
-const cssD = fs.readFileSync(path.join(root, 'assets/css/design-system/screens/inicio.css'), 'utf8');
+const cssEv = fs.readFileSync(path.join(root, 'assets/css/inicio/inicio-evento-pueblo.css'), 'utf8');
 
 let failures = 0;
 function ok(c, m) {
@@ -24,8 +23,11 @@ ok(js.includes('estado.proximo_evento_pueblo'), 'js: lee proximo_evento_pueblo d
 ok(js.includes('renderProximoEventoPueblo(estado)'), 'js: renderInicio invoca proximo evento');
 ok(!js.includes('proximo_evento_pueblo') || js.indexOf('proximosPlanesFuturos') < js.indexOf('proximo_evento_pueblo') || true,
   'js: proximo evento separado de proximos planes');
-ok(cssM.includes('.inicio-proximo-evento'), 'css mobile: estilos proximo evento');
-ok(cssD.includes('.inicio-proximo-evento'), 'css desktop: estilos proximo evento');
+ok(php.includes('inicio/inicio-evento-pueblo.css'), 'play.php: enlaza inicio-evento-pueblo.css');
+ok(cssEv.includes('.inicio-proximo-evento'), 'css evento-pueblo: estilos proximo evento');
+ok(cssEv.includes('inicio-evento-tag::before'), 'css evento-pueblo: icono calendario en cabecera');
+ok(cssEv.includes('inicio-evento-libreta::before'), 'css evento-pueblo: cinta decorativa');
+ok(cssEv.includes('inicio-evento-asisten'), 'css evento-pueblo: pie con asistentes');
 
 const fn = (function () {
   const i = js.indexOf('function renderProximoEventoPueblo(');
@@ -61,25 +63,40 @@ if (fn) {
     querySelector: function () { return null; },
     appendChild: function () {}
   };
+  const ctaMock = {
+    hidden: true,
+    disabled: true,
+    onclick: null,
+    querySelector: function (sel) {
+      if (sel === '[data-proximo-evento-cta-txt]' || sel === '.inicio-evento-cta-txt') return { textContent: '' };
+      return null;
+    }
+  };
   const slot = { hidden: true, querySelector: function (sel) {
     if (sel === '[data-proximo-evento-card]') return cardMock;
     if (sel === '[data-proximo-evento-tag-txt]') return { textContent: '' };
     if (sel === '[data-proximo-evento-tit]') return { textContent: '' };
     if (sel === '[data-proximo-evento-meta]') return { textContent: '' };
     if (sel === '[data-proximo-evento-ico]') return { textContent: '', className: '', classList: { add: function () {} }, innerHTML: '' };
-    if (sel === '[data-proximo-evento-cta]') return { hidden: true, disabled: true, onclick: null };
+    if (sel === '[data-proximo-evento-cta]') return ctaMock;
     return null;
   }, setAttribute: function () {}, removeAttribute: function () {} };
   const orig = global.document;
   global.orgLugarImg = function () { return ''; };
   global.esc = function (s) { return String(s); };
   global.cacheInsp = {};
+  global.carasPlanHtml = function () { return ''; };
+  global.asistentesEventoPuebloTxt = function () { return ''; };
   global.eventoPuebloImgSrc = function (_enc, _partida, evEstado) {
     if (evEstado && evEstado.illustracion) return String(evEstado.illustracion);
     if (evEstado && evEstado.lugar) return global.orgLugarImg(evEstado.lugar);
     return '';
   };
+  global.tituloEventoPuebloUi = function (txt) { return String(txt || ''); };
   global.document = {
+    createElement: function (tag) {
+      return { className: '', setAttribute: function () {}, appendChild: function () {}, hidden: false, innerHTML: '' };
+    },
     querySelectorAll: function () { return [slot]; }
   };
   const render = eval('(function () {' + (fnIco || '') + (fn || '') + ' return renderProximoEventoPueblo; })()');
