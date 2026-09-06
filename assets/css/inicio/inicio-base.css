@@ -174,6 +174,11 @@
   display: none;
 }
 
+.play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-resumen--cuece {
+  display: inline-block;
+  padding: 6px 14px;
+}
+
 .play-v3 .encursos-movil.encursos-movil--solo .enc-mov-card--escena {
   max-width: 100%;
 }
