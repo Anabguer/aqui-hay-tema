@@ -641,11 +641,11 @@
   display: none;
 }
 
-.play-v3 .aht-screen[data-aht-screen="buzon"]:not() {
+.play-v3 .aht-screen[data-aht-screen="buzon"] .aht-frame-body {
   background: var(--ds-paper, #fffaf1);
   padding: 14px 13px 12px;
-  overflow-y: auto;
 }
+
 
 /* CIERRE-VISUAL-03-MENSAJITOS-20260906 */
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tabs {

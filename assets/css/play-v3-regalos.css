@@ -14,7 +14,8 @@
 /* Botón circular flotante (misma familia que música/efectos) */
 /* VISUAL-REVIEW inventario: anular layout legacy lateral */
 
-.aht-screen[data-aht-screen="inventario"] {
+.play-v3 .aht-screen[data-aht-screen="inventario"] .aht-frame-body,
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-lista {
   background: #fffaf0;
 }
 

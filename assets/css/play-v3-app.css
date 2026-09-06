@@ -389,13 +389,6 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
 
 .stat-row strong { font-size: .85rem; }
 
-.aht-screen[data-aht-screen="vecinos"], .aht-screen[data-aht-screen="ficha"], .aht-screen[data-aht-screen="organizar"] {
-  border: 0;
-  box-shadow: 0 14px 40px rgba(40,28,16,.18), inset 0 0 0 1px rgba(180,150,110,.35);
-  border-radius: 3px 8px 6px 4px;
-  max-width: min(420px, 92vw);
-}
-
 .aht-screen[data-aht-screen="vecinos"] .libreta-kicker, .aht-screen[data-aht-screen="ficha"] .libreta-kicker, .aht-screen[data-aht-screen="organizar"] .libreta-kicker {
   font-size: .62rem; letter-spacing: .14em; opacity: .72; margin-bottom: .15rem;
 }

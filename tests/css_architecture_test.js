@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 const fs = require('fs');
 const path = require('path');
 const root = path.join(__dirname, '..');
@@ -62,6 +62,12 @@ const forbiddenShell = [
   { file: 'assets/css/play-v3-regalos.css', pattern: /\[data-capa="inventario"\][^{]*\.aht-screen[^{]*\{[^}]*transform:\s*none/, msg: 'sin transform:none inventario en play-v3-regalos' },
   { file: 'assets/css/play-v3-cotilleos.css', pattern: /\[data-capa="diario"\][^{]*\.aht-screen[^{]*coti-modal-papel[^{]*\{[^}]*position:\s*fixed[^}]*visibility:\s*visible/, msg: 'sin shell coti-modal-papel en play-v3-cotilleos' },
   { file: 'assets/css/play-v3-bloques-residencias.css', pattern: /\[data-capa="vecinos"\]\s+\.velo\s*\{[^}]*opacity:\s*1/, msg: 'sin velo legacy vecinos en bloques-residencias' },
+  { file: 'assets/css/play-v3-desktop-shell.css', pattern: /\.aht-screen\[data-aht-screen[^\]]*\](?::not\([^)]*\))?\s*\{[^}]*\bwidth\s*:/, msg: 'sin width shell .aht-screen en play-v3-desktop-shell' },
+  { file: 'assets/css/play-v3-desktop-shell.css', pattern: /\.aht-screen\[data-aht-screen[^\]]*\](?::not\([^)]*\))?\s*\{[^}]*max-height\s*:/, msg: 'sin max-height shell .aht-screen en play-v3-desktop-shell' },
+  { file: 'assets/css/play-v3-organizar.css', pattern: /\.aht-screen\[data-aht-screen[^\]]*\](?::not\([^)]*\))?\s*\{[^}]*position\s*:\s*absolute/, msg: 'sin position:absolute shell .aht-screen en play-v3-organizar' },
+  { file: 'assets/css/play-v3-organizar.css', pattern: /\.aht-screen\[data-aht-screen[^\]]*\](?::not\([^)]*\))?\s*\{[^}]*z-index\s*:/, msg: 'sin z-index shell .aht-screen en play-v3-organizar' },
+  { file: 'assets/css/play-v3-bloques-residencias.css', pattern: /\.aht-screen\[data-aht-screen[^\]]*\](?::not\([^)]*\))?\s*\{[^}]*position\s*:\s*absolute/, msg: 'sin position:absolute shell .aht-screen en play-v3-bloques-residencias' },
+  { file: 'assets/css/play-v3-responsive.css', pattern: /data-capa[^\{]*\.aht-screen\[data-aht-screen[^\]]*\](?::not\([^)]*\))?\s*\{[^}]*z-index\s*:/, msg: 'sin z-index data-capa .aht-screen en play-v3-responsive' },
   { file: 'assets/css/v4/screens.css', pattern: /V4 SHELL AUTHORITY/, msg: 'sin bloque parche AUTHORITY en screens.css' },
 ];
 forbiddenShell.forEach(({ file, pattern, msg }) => {
@@ -69,7 +75,7 @@ forbiddenShell.forEach(({ file, pattern, msg }) => {
   ok(!pattern.test(content), msg);
 });
 
-// Auditoría reproducible (dev/audit_modal_pollution.cjs)
+// Auditor�a reproducible (dev/audit_modal_pollution.cjs)
 const { execFileSync } = require('child_process');
 try {
   execFileSync(process.execPath, [path.join(root, 'dev/audit_modal_pollution.cjs')], { stdio: 'pipe' });
