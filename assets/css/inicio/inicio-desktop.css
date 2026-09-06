@@ -1176,10 +1176,10 @@
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .enc-mov-tit .plan-seccion-cnt,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-tit .plan-seccion-cnt {
-    display: inline-flex;
+    display: inline-grid;
+    place-items: center;
     flex: 0 0 auto;
-    align-items: center;
-    justify-content: center;
+    box-sizing: border-box;
     min-width: 20px;
     height: 20px;
     margin-left: auto;
@@ -1187,9 +1187,12 @@
     border-radius: 999px;
     border: 2px solid #fff;
     color: #fff;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-size: .68rem;
     font-weight: 800;
     line-height: 1;
+    font-variant-numeric: tabular-nums;
+    text-align: center;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .enc-mov-tit .plan-seccion-cnt {
