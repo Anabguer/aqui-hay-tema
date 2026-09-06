@@ -413,7 +413,7 @@
 
 
 
-  background: var(--ds-lavender-deep, #7c6bae);
+  background: var(--plan-cnt-bg, var(--ds-lavender-deep, #7c6bae));
 
 
 
@@ -437,19 +437,11 @@
 
 
 
-  letter-spacing: 0;
-
-
-
   color: #fff;
 
 
 
   line-height: 1;
-
-
-
-  vertical-align: middle;
 
 
 
