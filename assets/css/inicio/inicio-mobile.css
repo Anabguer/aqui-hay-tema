@@ -90,9 +90,17 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
   align-items: center;
 }
 
-.inicio-stage .inicio-mobile .top-reloj .es-noche-luna {
+.inicio-stage .inicio-mobile .top-reloj .es-estado-ico {
   width: 22px;
   height: 22px;
+}
+
+.inicio-stage .inicio-mobile .top-reloj .es-estado-dia-ico {
+  stroke: #c88a2e;
+}
+
+.inicio-stage .inicio-mobile .top-reloj .es-estado-noche-ico {
+  stroke: #5e3e90;
   fill: #6b5a8a;
 }
 
@@ -1908,13 +1916,21 @@ margin-bottom: 4px;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .pasar-rato-txt,
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche-txt {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-txt {
     display: none;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche-luna {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-ico {
     width: 18px;
     height: 18px;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-dia-ico {
+    stroke: #c88a2e;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-noche-ico {
+    stroke: #5e3e90;
     fill: #6b5a8a;
   }
 
