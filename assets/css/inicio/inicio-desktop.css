@@ -247,10 +247,12 @@
     column-gap: 10px;
     row-gap: 2px;
     align-items: center;
+    align-content: center;
     width: auto;
     min-width: 0;
-    min-height: 52px;
-    padding: 10px 14px;
+    height: 54px;
+    min-height: 54px;
+    padding: 0 14px;
     box-sizing: border-box;
     transform: none;
     background: #fff;
@@ -326,8 +328,9 @@
     gap: 10px;
     width: auto;
     min-width: 0;
-    min-height: 52px;
-    padding: 10px 16px;
+    height: 54px;
+    min-height: 54px;
+    padding: 0 14px;
     box-sizing: border-box;
     transform: none;
     background: #fff;
@@ -428,10 +431,12 @@
     letter-spacing: .01em;
     text-transform: none;
     color: var(--ds-ink, #2a2218);
+    border-bottom: none;
+    padding-bottom: 0;
     text-decoration: underline;
-    text-decoration-color: var(--ds-pink-deep, #c85b78);
-    text-decoration-thickness: 2.5px;
-    text-underline-offset: 5px;
+    text-decoration-color: rgba(200, 91, 120, .45);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
     opacity: 1;
     white-space: nowrap;
   }

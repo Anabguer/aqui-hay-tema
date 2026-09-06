@@ -39,6 +39,8 @@ ok(/obj-vida-kicker[\s\S]{0,280}clamp\(1\.5rem,\s*2\.4vw,\s*1\.95rem\)/.test(des
 ok(/corazon-svg[\s\S]{0,120}clamp\(72px,\s*5\.8vw,\s*92px\)/.test(desk), 'desktop: corazón vida grande');
 ok(/obj-vida-kicker[\s\S]{0,280}text-decoration:\s*underline/.test(desk), 'desktop: subrayado vida del pueblo');
 ok(!/inicio-desktop > \.game-top \.control-audio/.test(desk), 'desktop: sin controles flotantes en cabecera');
+ok(/obj-dia[\s\S]{0,500}height:\s*54px/.test(desk), 'desktop: pastilla dia altura fija');
+ok(/obj-hora[\s\S]{0,500}height:\s*54px/.test(desk), 'desktop: pastilla hora altura fija');
 ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Primavera en cabecera');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
