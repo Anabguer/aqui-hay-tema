@@ -345,19 +345,82 @@
   border-color: #b0a0c0;
 }
 
-/* ── Detalle de recuerdo (desde álbum) ────────────────────── */
-.aht-screen[data-aht-screen="historia_detalle"] .histdet-body {
-  padding: 1.2rem 1.5rem 2rem;
-  text-align: center;
+/* ── Detalle de recuerdo — Scrapbook ──────────────────────── */
+.histdet-body {
+  padding: .6rem .8rem 1.2rem;
+  position: relative;
+  overflow: hidden;
 }
 
-.histdet-img-wrap {
+/* Fondo scrapbook sutil con textura de papel */
+.histdet-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(200,160,120,.06) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(180,140,110,.05) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Layout principal: polaroid + sidebar */
+.histdet-main {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Polaroid ────────────────────────────────────────────── */
+.histdet-polaroid {
+  position: relative;
+  flex: 0 1 auto;
+  max-width: 260px;
+  background: #fff;
+  padding: .5rem .5rem 1.6rem;
+  box-shadow:
+    2px 3px 8px rgba(44, 38, 31, .18),
+    0 0 0 1px rgba(44, 38, 31, .04);
+  transform: rotate(-1.8deg);
+  transform-origin: top center;
+  transition: transform .2s ease;
+}
+
+/* Celo decorativo superior izquierdo */
+.histdet-polaroid-tape {
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  width: 48px;
+  height: 18px;
+  background: linear-gradient(135deg, rgba(220,180,200,.55) 0%, rgba(210,170,190,.45) 100%);
+  border-radius: 2px;
+  transform: rotate(-8deg);
+  z-index: 2;
+  box-shadow: 0 1px 2px rgba(0,0,0,.08);
+}
+
+.histdet-polaroid-tape::after {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    rgba(255,255,255,.3) 3px,
+    rgba(255,255,255,.3) 4px
+  );
+}
+
+.histdet-polaroid-img {
   width: 100%;
-  max-width: 240px;
-  margin: 0 auto .8rem;
-  border-radius: 8px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(44, 38, 31, .2);
+  border-radius: 2px;
+  background: #e8e0d4;
 }
 
 .histdet-img {
@@ -367,84 +430,185 @@
   object-fit: cover;
 }
 
-.histdet-titulo {
+.histdet-polaroid-caption {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #8a7e70;
-  margin: 0 0 .4rem;
-  letter-spacing: .02em;
-  text-align: center;
-}
-
-.histdet-texto {
-  font-size: 1.3rem;
+  font-size: 1.05rem;
   font-weight: 600;
   color: #3a3025;
-  line-height: 1.45;
-  margin: 0 auto .8rem;
-  max-width: 340px;
+  line-height: 1.35;
+  margin: .5rem 0 0;
   text-align: center;
+  padding: 0 .2rem;
 }
 
+.histdet-polaroid-hearts {
+  position: absolute;
+  bottom: .45rem;
+  right: .6rem;
+  font-size: .7rem;
+  color: #e8a0b0;
+  letter-spacing: .1em;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+.histdet-sidebar {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .8rem;
+  padding-top: .3rem;
+}
+
+/* ── Protagonistas — disposition juguetona ────────────────── */
 .histdet-protagonistas {
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: .6rem;
-  margin-bottom: .8rem;
+  gap: .5rem;
 }
 
 .histdet-protagonista {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .25rem;
+  gap: .2rem;
+  position: relative;
+}
+
+/* Variaciones de rotación para efecto juguetón */
+.histdet-protagonista:nth-child(odd) {
+  transform: rotate(-2deg);
+}
+.histdet-protagonista:nth-child(even) {
+  transform: rotate(2.5deg);
+}
+.histdet-protagonista:nth-child(3n) {
+  transform: rotate(-1deg) translateY(2px);
 }
 
 .histdet-protagonista-avatar {
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 2px 6px rgba(44, 38, 31, .18);
+  border: 2.5px solid var(--cara-emo, #c9a06a);
+  box-shadow: 0 2px 8px rgba(44, 38, 31, .15);
   background: #e8e0d4;
 }
 
 .histdet-protagonista-avatar--fallback {
-  width: 48px;
-  height: 48px;
+  width: 54px;
+  height: 54px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: #2c261f;
   background: #fff6c8;
-  border: 2px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 2px 6px rgba(44, 38, 31, .18);
+  border: 2.5px solid var(--cara-emo, #c9a06a);
+  box-shadow: 0 2px 8px rgba(44, 38, 31, .15);
 }
 
 .histdet-protagonista-nombre {
-  font-size: .75rem;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
   color: #5a4e40;
 }
 
 .histdet-rel {
-  font-size: 1.1rem;
-  color: #c9a06a;
-  line-height: 1;
+  display: none;
+}
+
+/* ── Recompensa — sticker del scrapbook ──────────────────── */
+.histdet-recompensa {
+  background: linear-gradient(145deg, #fff8e8 0%, #fef3d8 100%);
+  border: 1.5px dashed #d4b896;
+  border-radius: 6px;
+  padding: .5rem .7rem;
+  text-align: center;
+  position: relative;
+  transform: rotate(1.5deg);
+  box-shadow: 1px 2px 4px rgba(44, 38, 31, .1);
+  max-width: 160px;
+}
+
+.histdet-recompensa::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 8px;
+  width: 20px;
+  height: 12px;
+  background: rgba(220,180,200,.4);
+  border-radius: 1px;
+  transform: rotate(12deg);
+}
+
+.histdet-recompensa-ico {
+  display: block;
+  font-size: 1rem;
+  color: #d4a060;
+  margin-bottom: .1rem;
+}
+
+.histdet-recompensa-label {
+  display: block;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: .85rem;
+  font-weight: 700;
+  color: #8a6e50;
+  margin-bottom: .2rem;
+}
+
+.histdet-recompensa-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .4rem;
+}
+
+.histdet-recompensa-img {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.histdet-recompensa-nombre {
+  font-size: .78rem;
+  color: #3a3025;
+  font-weight: 600;
+}
+
+/* ── Footer / Día ────────────────────────────────────────── */
+.histdet-footer {
+  text-align: center;
+  margin-top: .6rem;
+  position: relative;
+  z-index: 1;
 }
 
 .histdet-dia {
-  font-size: .75rem;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: .78rem;
   color: #8a7e70;
-  margin-top: .3rem;
+  letter-spacing: .02em;
 }
 
-/* Polaroid clickeable */
+.histdet-dia::before {
+  content: '~ ';
+  color: #d4a060;
+}
+.histdet-dia::after {
+  content: ' ~';
+  color: #d4a060;
+}
+
+/* ── Polaroid clickeable ─────────────────────────────────── */
 .historia-polaroid:not(.historia-polaroid--bloqueada) {
   cursor: pointer;
   transition: transform .15s;
@@ -453,44 +617,19 @@
   transform: scale(1.03);
 }
 
-.histcele-recompensa-card,
-.histdet-recompensa-card {
+/* ── Recompensa celebración (se mantiene para celeb modal) ─ */
+.histcele-recompensa-card {
   display: flex;
   align-items: center;
   gap: .6rem;
   margin-top: .25rem;
 }
 
-.histcele-recompensa-img,
-.histdet-recompensa-img {
+.histcele-recompensa-img {
   width: 48px;
   height: 48px;
   object-fit: contain;
   flex-shrink: 0;
-}
-
-.histdet-recompensa {
-  background: var(--modal-content-bg, #F6F3F8);
-  border: 1px dashed var(--modal-border, #D8D1DE);
-  border-radius: 8px;
-  padding: .6rem .8rem;
-  margin: .6rem 0;
-}
-
-.histdet-recompensa-label {
-  display: block;
-  font-size: .7rem;
-  font-weight: 700;
-  color: #7a6e60;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  margin-bottom: .25rem;
-}
-
-.histdet-recompensa-nombre {
-  font-size: .85rem;
-  color: #3a3025;
-  font-weight: 600;
 }
 
 .histcele-recompensa-fly {
@@ -514,4 +653,31 @@
   height: 72px;
   object-fit: contain;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,.18));
+}
+
+/* ── Responsive: móvil ───────────────────────────────────── */
+@media (max-width: 540px) {
+  .histdet-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .histdet-polaroid {
+    max-width: 220px;
+    transform: rotate(-1deg);
+  }
+
+  .histdet-sidebar {
+    width: 100%;
+    padding-top: .2rem;
+  }
+
+  .histdet-protagonistas {
+    justify-content: center;
+  }
+
+  .histdet-recompensa {
+    max-width: 180px;
+    transform: rotate(0deg);
+  }
 }

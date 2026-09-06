@@ -2039,19 +2039,16 @@
       if (!hito) return;
       historiaDetalleHitoActual = hitoId;
       const img = $('[data-historia-detalle-img]');
-      const titulo = $('[data-historia-detalle-titulo]');
       const texto = $('[data-historia-detalle-texto]');
       const protWrap = $('[data-historia-detalle-protagonistas]');
       const diaDiv = $('[data-historia-detalle-dia]');
       if (img) { img.src = hito.imagen_url || ''; img.alt = hito.nombre || ''; }
-      if (titulo) titulo.textContent = hito.nombre || '';
       if (texto) texto.textContent = hito.texto_narrativo || '';
       if (protWrap) {
         let ph = '';
         const prots = hito.protagonistas || [];
         for (let i = 0; i < prots.length; i++) {
           const p = prots[i];
-          if (i > 0) ph += '<span class="histdet-rel" aria-hidden="true">&middot;</span>';
           ph += '<span class="histdet-protagonista">';
           if (p.retrato) {
             ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
