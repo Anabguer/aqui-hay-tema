@@ -56,7 +56,10 @@ ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: ca
 ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
 ok(/obj-cotilleo-tit::before[\s\S]{0,80}content:\s*"# "/.test(desk), 'desktop: cotilleos hash titulo');
 ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk), 'desktop: cotilleos corazon sutil');
-ok(/obj-cotilleo-tit[\s\S]{0,200}font-size:\s*\.9rem/.test(desk), 'desktop: cotilleos titulo tamano vecinos');
+ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*\.9rem/.test(desk), 'desktop: misiones titulo tamano vecinos');
+ok(/obj-misiones-papel-meta[\s\S]{0,400}rgba\(200,\s*91,\s*120/.test(desk), 'desktop: misiones pendientes rosa');
+ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*\.9rem/.test(desk), 'desktop: planes titulo tamano vecinos');
+ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*\.9rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
 ok(!/!important/.test(mob + desk), 'cabeceras: cero !important');
