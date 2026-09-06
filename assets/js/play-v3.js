@@ -4569,6 +4569,9 @@ function renderInicioMpDuo(misiones, parejas) {
     if (p.hay_tema) {
       el.insertAdjacentHTML('beforeend', '<img class="sello-tema" src="assets/play-v3/marcas/sello_hay_tema.png" alt=""/>');
     }
+    if (p.nombre) {
+      el.insertAdjacentHTML('beforeend', '<span class="hab-nombre">' + esc(p.nombre) + '</span>');
+    }
     box.appendChild(el);
   }
 

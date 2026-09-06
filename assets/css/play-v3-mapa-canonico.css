@@ -116,6 +116,37 @@
   will-change: transform;
 }
 
+.play-v3 .mapa-zona-hit .hab.cara-token .hab-nombre {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.85);
+  margin-top: 3px;
+  padding: 2px 7px;
+  background: #faf6ee;
+  border: 1px solid rgba(44, 38, 31, .22);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(44, 38, 31, .12);
+  font-family: inherit;
+  font-size: .62rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #3a3026;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .12s ease, transform .12s ease;
+  z-index: 10;
+}
+
+@media (hover: hover) {
+  .play-v3 .mapa-zona-hit .hab.cara-token:hover .hab-nombre,
+  .play-v3 .mapa-zona-hit .hab.cara-token:focus-visible .hab-nombre {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
 .play-v3 .mapa-zona-hit .hab.hab-idle-a .cara {
   animation: hab-idle-can-a 4.8s ease-in-out infinite alternate;
   animation-delay: var(--hab-idle-delay, 0s);
