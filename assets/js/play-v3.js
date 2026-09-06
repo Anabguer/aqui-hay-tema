@@ -3481,7 +3481,7 @@
     var html = '<article class="plan-unif-card plan-unif-card--curso enc-mov-card" data-enc-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<span class="plan-unif-badge plan-unif-badge--curso">EN CURSO</span>' +
       '<span class="plan-unif-menu" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 7h8M8 12h8M8 17h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>' +
-      '<div class="plan-unif-faces prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<div class="plan-unif-faces prox-faces">' + encCursoFacesHtml(enc) + '</div>' +
       '<p class="plan-unif-nombres">' + esc(nombres) + '</p>' +
       '<p class="plan-unif-lugar">' + esc(lugar) + '</p>';
     if (ctaVisible) {
@@ -3502,7 +3502,7 @@
       ' \u00b7 ' + String(horaEnc(enc)).padStart(2, '0') + ':00';
     return '<article class="plan-unif-card plan-unif-card--prox pp-mov-card" data-pp-mov-card data-enc-id="' + esc(enc.id || '') + '">' +
       '<span class="plan-unif-badge plan-unif-badge--prox">' + esc(sello) + '</span>' +
-      '<div class="plan-unif-faces prox-faces">' + carasPlanHtml(ids, maxCaras) + '</div>' +
+      '<div class="plan-unif-faces prox-faces">' + planDuoFacesMovilHtml(enc, ids) + '</div>' +
       '<p class="plan-unif-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' \u00b7 ')) + '</p>' +
       '<p class="plan-unif-lugar">' + esc(nombreLugarTitulo(enc.lugar_nombre || enc.lugar, enc.lugar)) + '</p>' +
       '</article>';
