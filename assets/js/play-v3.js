@@ -4115,11 +4115,14 @@
       else el.textContent = arr.length + ' pareja' + (arr.length === 1 ? '' : 's');
     });
   }
-  function renderParejasStripIn(scopeSel, parejas) {
+function renderInicioMpDuo(misiones, parejas) {
+    if (misiones !== undefined) updateMpDuoMisiones(misiones);
+    if (parejas !== undefined) updateMpDuoParejas(parejas);
+  }  function renderParejasStripIn(scopeSel, parejas) {
     document.querySelectorAll(scopeSel).forEach(function (root) {
       renderParejasStripEl(root.querySelector('[data-parejas-strip]'), parejas);
     });
-    updateMpDuoParejas(parejas);
+    renderInicioMpDuo(undefined, parejas);
     renderParejasModalList(parejas);
   }
 
@@ -4889,7 +4892,7 @@
     renderMisionesStripIn(".inicio-mobile.inicio-mobile-feed", cacheMisionesStripItems);
     renderMisionesStripIn(".inicio-desktop", cacheMisionesStripItems);
     actualizarMisionesCompletadas(items);
-    updateMpDuoMisiones(items);
+    renderInicioMpDuo(items, undefined);
   }
   function renderMisionesStripEl(strip, items) {
     if (!strip) return;
