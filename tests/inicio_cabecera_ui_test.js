@@ -37,7 +37,7 @@ ok(!/obj-dia-num::before[\s\S]{0,80}content:\s*"Día /.test(desk), 'desktop: sin
 ok(/INICIO-DESKTOP-VIDA-SCALE-20260906/.test(desk), 'desktop: escala vida del pueblo ref PNG');
 ok(/obj-vida-kicker[\s\S]{0,280}clamp\(1\.5rem,\s*2\.4vw,\s*1\.95rem\)/.test(desk), 'desktop: kicker vida grande');
 ok(/corazon-svg[\s\S]{0,120}clamp\(72px,\s*5\.8vw,\s*92px\)/.test(desk), 'desktop: corazón vida grande');
-ok(/obj-vida-kicker[\s\S]{0,280}text-decoration:\s*underline/.test(desk), 'desktop: subrayado vida del pueblo');
+ok(/obj-vida-kicker::after[\s\S]{0,520}filter:\s*blur/.test(desk), 'desktop: subrayado vida difuminado');
 ok(!/inicio-desktop > \.game-top \.control-audio/.test(desk), 'desktop: sin controles flotantes en cabecera');
 ok(/obj-dia[\s\S]{0,500}height:\s*54px/.test(desk), 'desktop: pastilla dia altura fija');
 ok(/obj-hora[\s\S]{0,500}height:\s*54px/.test(desk), 'desktop: pastilla hora altura fija');

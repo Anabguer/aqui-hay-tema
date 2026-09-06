@@ -429,6 +429,8 @@
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-vida-kicker {
+    position: relative;
+    display: inline-block;
     font-family: var(--ds-font-hand, Caveat, cursive);
     font-size: clamp(1.5rem, 2.4vw, 1.95rem);
     font-weight: 700;
@@ -436,13 +438,30 @@
     text-transform: none;
     color: var(--ds-ink, #2a2218);
     border-bottom: none;
-    padding-bottom: 0;
-    text-decoration: underline;
-    text-decoration-color: rgba(200, 91, 120, .45);
-    text-decoration-thickness: 1px;
-    text-underline-offset: 3px;
+    padding-bottom: 7px;
+    text-decoration: none;
     opacity: 1;
     white-space: nowrap;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-vida-kicker::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 1px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(
+      90deg,
+      rgba(200, 91, 120, 0) 0%,
+      rgba(200, 91, 120, .32) 18%,
+      rgba(200, 91, 120, .42) 50%,
+      rgba(200, 91, 120, .32) 82%,
+      rgba(200, 91, 120, 0) 100%
+    );
+    filter: blur(1.4px);
+    pointer-events: none;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .corazon-svg {
