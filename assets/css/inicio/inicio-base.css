@@ -276,9 +276,9 @@
 }
 
 .play-v3 .encursos-movil .enc-mov-escena-core {
-  align-items: stretch;
+  align-items: center;
   text-align: center;
-  gap: 5px;
+  gap: 3px;
 }
 
 .play-v3 .encursos-movil .enc-mov-escena-top {
@@ -293,6 +293,7 @@
 .play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-faces {
   margin: 0;
   flex: 0 1 auto;
+  justify-content: center;
 }
 
 .play-v3 .encursos-movil .enc-mov-card--escena .enc-mov-estado-pill {
