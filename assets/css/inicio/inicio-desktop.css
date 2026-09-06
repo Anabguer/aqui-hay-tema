@@ -213,7 +213,7 @@
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-reloj {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     gap: 12px;
     flex-wrap: nowrap;
@@ -258,7 +258,9 @@
     background: #fff;
     border: 1.5px solid #d9d2e1;
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(70, 55, 85, .08);
+    box-shadow: none;
+    margin: 0;
+    align-self: center;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia::before {
@@ -336,7 +338,9 @@
     background: #fff;
     border: 1.5px solid #d9d2e1;
     border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(70, 55, 85, .08);
+    box-shadow: none;
+    margin: 0;
+    align-self: center;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora::before,
