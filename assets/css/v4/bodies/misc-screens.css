@@ -161,15 +161,6 @@
   color: var(--ds-ink, #2a2218);
 }
 
-/* CIERRE-VISUAL-16-17-MISC-20260906 */
-.play-v3 .aht-screen[data-aht-screen="parejas"] .aht-frame-body,
-.play-v3 .aht-screen[data-aht-screen="parejas"] .parejas-body {
-  background: #f4f2f6;
-  border-radius: 12px;
-  margin: 0 12px 12px;
-  padding: 16px;
-}
-
 .play-v3 .aht-screen[data-aht-screen="parejas"] .parejas-vacio,
 .play-v3 .aht-screen[data-aht-screen="parejas"] .parejas-body > .muted {
   font-family: var(--ds-font-ui, Nunito, sans-serif);

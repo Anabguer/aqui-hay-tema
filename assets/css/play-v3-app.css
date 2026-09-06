@@ -393,8 +393,6 @@ body.play-v3:not([data-tutorial-zona]) .tutorial-pista[hidden] { display: none; 
   font-size: .62rem; letter-spacing: .14em; opacity: .72; margin-bottom: .15rem;
 }
 
-.aht-screen[data-aht-screen="vecinos"] h2, .aht-screen[data-aht-screen="organizar"] h2 { font-size: 1.35rem; margin: 0 0 .35rem; letter-spacing: .01em; }
-
 .aht-screen[data-aht-screen="vecinos"] .mini { margin: 0 0 .65rem; font-size: .78rem; opacity: .85; }
 
 .aht-screen[data-aht-screen="vecinos"] .vecino {

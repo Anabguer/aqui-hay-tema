@@ -14,11 +14,6 @@
 /* Botón circular flotante (misma familia que música/efectos) */
 /* VISUAL-REVIEW inventario: anular layout legacy lateral */
 
-.play-v3 .aht-screen[data-aht-screen="inventario"] .aht-frame-body,
-.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-lista {
-  background: #fffaf0;
-}
-
 .inv-cerrar {
   /* patrón X en play-v3-visual-review.css */
   font-family: Nunito, sans-serif;
