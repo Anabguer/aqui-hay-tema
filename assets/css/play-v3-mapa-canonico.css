@@ -120,17 +120,17 @@
   position: absolute;
   top: 100%;
   left: 50%;
-  transform: translateX(-50%) scale(0.85);
+  transform: translateX(-50%) scale(0.85) rotate(-2deg);
   margin-top: 3px;
-  padding: 2px 7px;
+  padding: 2px 8px 1px;
   background: #E9DDF4;
-  border: 1px solid rgba(107, 74, 94, .30);
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(44, 38, 31, .12);
-  font-family: inherit;
-  font-size: .62rem;
-  font-weight: 600;
-  line-height: 1.25;
+  border: 1.2px solid rgba(107, 74, 94, .35);
+  border-radius: 4px 6px 5px 3px;
+  box-shadow: 0 1px 2px rgba(44, 38, 31, .15), inset 0 1px 0 rgba(255, 255, 255, .4);
+  font-family: var(--ds-font-hand, Caveat, cursive);
+  font-size: .72rem;
+  font-weight: 700;
+  line-height: 1.2;
   color: #4A3543;
   white-space: nowrap;
   opacity: 0;
@@ -143,7 +143,7 @@
   .play-v3 .mapa-zona-hit .hab.cara-token:hover .hab-nombre,
   .play-v3 .mapa-zona-hit .hab.cara-token:focus-visible .hab-nombre {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: translateX(-50%) scale(1) rotate(-2deg);
   }
 }
 
