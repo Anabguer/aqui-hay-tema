@@ -340,6 +340,7 @@
     border: 1.5px solid #d9d2e1;
     border-radius: 16px;
     box-shadow: none;
+    filter: none;
     margin: 0;
     align-self: center;
   }
@@ -348,6 +349,8 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora::after {
     display: none;
     content: none;
+    box-shadow: none;
+    filter: none;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-hora-ico {
