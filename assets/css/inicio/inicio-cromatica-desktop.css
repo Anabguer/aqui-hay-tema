@@ -202,20 +202,6 @@
   box-shadow: 0 1px 3px rgba(232, 100, 130, .22);
 }
 
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo-planes .obj-nuevo-plan.obj-nuevo-plan-horiz {
-  border: 1.5px solid #6f5f9a;
-  border-radius: 12px;
-  background: #fff;
-  background-color: #fff;
-  background-image: none;
-  box-shadow: none;
-}
-
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo-planes .obj-nuevo-plan-ico,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .shell-grupo-planes .obj-nuevo-plan-txt {
-  color: #6f5f9a;
-}
-
 .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .encursos-movil .enc-mov-card--desk-mock {
   background: transparent;
   background-color: transparent;
@@ -437,15 +423,6 @@
   text-align: center;
   font-size: .72rem;
   color: #655c54;
-}
-
-.play-v3 .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan.obj-nuevo-plan-horiz {
-  border-color: #6f5f9a;
-}
-
-.play-v3 .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan-ico,
-  .play-v3 .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan-txt {
-  color: #6f5f9a;
 }
 
 }

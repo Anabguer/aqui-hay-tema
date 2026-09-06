@@ -1404,13 +1404,18 @@
     justify-content: center;
     gap: 0;
     width: 100%;
-    min-height: 38px;
-    margin: 6px 0 0;
-    padding: 9px 14px;
+    min-height: 54px;
+    margin: 8px 0 0;
+    padding: 14px 18px;
     background: #fff;
-    border: 1.5px solid #6f5f9a;
-    border-radius: 12px;
-    box-shadow: none;
+    border: 1.5px solid rgba(111, 95, 154, .58);
+    border-radius: 14px;
+    box-shadow:
+      0 0 0 1px rgba(111, 95, 154, .10),
+      0 4px 14px rgba(111, 95, 154, .22);
+    clip-path: none;
+    filter: none;
+    transform: none;
     cursor: pointer;
     font: inherit;
     color: #6f5f9a;
@@ -1423,8 +1428,8 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .obj-nuevo-plan-txt {
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .72rem;
-    letter-spacing: .06em;
+    font-size: 1rem;
+    letter-spacing: .05em;
     text-transform: uppercase;
     color: #6f5f9a;
   }
