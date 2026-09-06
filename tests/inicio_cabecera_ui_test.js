@@ -59,6 +59,9 @@ ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk
 ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*\.9rem/.test(desk), 'desktop: misiones titulo tamano vecinos');
 ok(/obj-misiones-papel-meta[\s\S]{0,400}rgba\(200,\s*91,\s*120/.test(desk), 'desktop: misiones pendientes rosa');
 ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*\.9rem/.test(desk), 'desktop: planes titulo tamano vecinos');
+ok(/INICIO-PLANES-BLOQUE-CANON-20260906/.test(desk), 'desktop: planes bloque canon');
+ok(/inicio-planes-agenda[\s\S]{0,200}border:\s*1\.5px dashed/.test(desk), 'desktop: agenda proximos dashed');
+ok(!/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: sin PASS3 duplicado');
 ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*\.9rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
