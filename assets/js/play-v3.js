@@ -1928,14 +1928,17 @@
     if (texto) texto.textContent = c.texto_narrativo || 'Primer recuerdo del pueblo descubierto.';
     if (protWrap) {
       let ph = '';
-      for (const p of (c.protagonistas || [])) {
+      const prots = c.protagonistas || [];
+      for (let i = 0; i < prots.length; i++) {
+        const p = prots[i];
+        if (i > 0) ph += '<span class="histcele-rel" aria-hidden="true">&middot;</span>';
         ph += '<span class="histcele-protagonista">';
         if (p.retrato) {
           ph += '<img class="histcele-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
         } else {
           ph += '<div class="histcele-protagonista-avatar histcele-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
         }
-        ph += esc(p.nombre);
+        ph += '<span class="histcele-protagonista-nombre">' + esc(p.nombre) + '</span>';
         ph += '</span>';
       }
       protWrap.innerHTML = ph;
@@ -2045,14 +2048,17 @@
       if (texto) texto.textContent = hito.texto_narrativo || '';
       if (protWrap) {
         let ph = '';
-        for (const p of (hito.protagonistas || [])) {
+        const prots = hito.protagonistas || [];
+        for (let i = 0; i < prots.length; i++) {
+          const p = prots[i];
+          if (i > 0) ph += '<span class="histdet-rel" aria-hidden="true">&middot;</span>';
           ph += '<span class="histdet-protagonista">';
           if (p.retrato) {
             ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
           } else {
             ph += '<div class="histdet-protagonista-avatar histdet-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
           }
-          ph += esc(p.nombre);
+          ph += '<span class="histdet-protagonista-nombre">' + esc(p.nombre) + '</span>';
           ph += '</span>';
         }
         protWrap.innerHTML = ph;
