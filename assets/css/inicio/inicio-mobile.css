@@ -766,6 +766,35 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     font-size: 1rem;
   }
 
+.inicio-mobile .encursos-movil .enc-mov-cta--mentes,
+.inicio-mobile .encursos-movil .enc-mov-cta--mock {
+    border-radius: 9px;
+    border: 1px dashed rgba(109, 155, 118, .38);
+    background: rgba(255, 255, 255, .5);
+    box-shadow: none;
+    font-family: "Caveat", "Caveat Brush", cursive;
+    font-size: .88rem;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #3f6340;
+    text-align: center;
+  }
+
+.inicio-mobile .encursos-movil .enc-mov-cta--mentes .enc-mov-cta-txt,
+.inicio-mobile .encursos-movil .enc-mov-cta--mock .enc-mov-cta-txt {
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: inherit;
+    text-transform: none;
+  }
+
+.inicio-mobile .encursos-movil .enc-mov-cta--mock .enc-mov-cta-flecha {
+    color: #3f6340;
+  }
+
 .inicio-mobile .proxplanes-movil .pp-mov-track {
     display: flex;
     flex-wrap: nowrap;
