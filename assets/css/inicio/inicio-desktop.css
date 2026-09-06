@@ -666,101 +666,37 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen {
     display: block;
     width: 100%;
-    padding: 14px 14px 12px;
+    padding: 12px 14px 10px;
     background: #fff;
-    border: 1.5px solid rgba(198, 176, 210, .42);
-    border-radius: 16px 14px 18px 15px / 14px 17px 15px 16px;
+    border: 1.5px solid #d9d2e1;
+    border-radius: 16px;
     box-shadow: 0 2px 8px rgba(70, 55, 85, .08);
     position: relative;
-    overflow: visible;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    z-index: 0;
-    background: linear-gradient(115deg, rgba(255, 253, 250, .35) 0%, transparent 55%, rgba(255, 253, 250, .2) 100%);
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::after {
-    content: "";
-    display: block;
-    position: absolute;
-    top: 8px;
-    right: 12px;
-    width: 28px;
-    height: 32px;
-    background: url("../../play-v3/capas/chincheta.png") center / contain no-repeat;
-    border: none;
-    border-radius: 0;
-    transform: rotate(10deg);
-    box-shadow: none;
-    filter: drop-shadow(1px 2px 1px rgba(60, 50, 40, .12));
-    pointer-events: none;
-    z-index: 3;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .libreta-kicker {
-    display: block;
-    margin: 0 0 8px;
-    padding-right: 30px;
-    text-align: left;
-    font-family: var(--ds-font-hand, Caveat, cursive);
-    font-size: 1.42rem;
-    font-weight: 700;
-    line-height: 1.05;
-    color: #2a2218;
-    transform: none;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin: 6px 0 12px;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview-cara-wrap,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview-cara {
-    width: 54px;
-    height: 54px;
-    flex: 0 0 54px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(55, 45, 38, .22);
-    box-sizing: border-box;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview-cara-wrap {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     overflow: hidden;
-    padding: 0;
-    background: #fff;
+    text-align: left;
+    cursor: pointer;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview-ini {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--ds-font-ui, Nunito, sans-serif);
-    font-weight: 800;
-    font-size: 1rem;
-    color: #5e3e90;
-    background: #f3eff7;
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::before,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota.obj-vecinos-resumen::after {
+    content: none;
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .libreta-kicker,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-preview,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-total-badge {
+    display: none;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-head {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 8px;
-    margin-bottom: 4px;
+    margin: 0;
+    padding: 0 0 10px;
+    border-bottom: 1px solid rgba(198, 176, 210, .35);
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-tit {
@@ -779,6 +715,62 @@
     color: #2a2218;
   }
 
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats {
+    margin: 0;
+    padding: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .celeste-cuenta-vecinos,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .celeste-cuenta-parejas {
+    display: none;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat:not(.celeste-necesitan-algo),
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .stat-row:not(.celeste-cuenta-vecinos):not(.celeste-cuenta-parejas) {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 6px;
+    width: 100%;
+    margin: 0;
+    padding: 9px 0;
+    border-bottom: 1px solid rgba(198, 176, 210, .28);
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-size: .86rem;
+    line-height: 1.2;
+    color: #2a2218;
+    text-align: left;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-ico {
+    flex: 0 0 auto;
+    width: auto;
+    font-size: 1rem;
+    line-height: 1;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-k,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .stat-row > span {
+    flex: 1 1 auto;
+    min-width: 0;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 700;
+    font-size: .86rem;
+    letter-spacing: 0;
+    text-transform: none;
+    color: #2a2218;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .stat-row strong,
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-v {
+    flex: 0 0 auto;
+    margin-left: auto;
+    font-family: var(--ds-font-ui, Nunito, sans-serif);
+    font-weight: 800;
+    font-size: .86rem;
+    color: #2a2218;
+  }
+
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .celeste-necesitan-algo {
     display: flex;
     align-items: center;
@@ -788,6 +780,7 @@
     margin-top: 6px;
     padding: 8px 0 2px;
     border-top: 1px solid rgba(198, 176, 210, .30);
+    border-bottom: none;
     text-align: left;
     cursor: pointer;
   }
@@ -795,7 +788,7 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .celeste-necesitan-algo .vecinos-stat-ico {
     flex: 0 0 auto;
     width: auto;
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1;
   }
 
@@ -817,31 +810,6 @@
     font-weight: 800;
     font-size: .86rem;
     color: #2a2218;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .celeste-cuenta-vecinos {
-    display: none;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .stat-row,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat {
-    font-size: 1.12rem;
-    padding: .38rem 0;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-ico {
-    font-size: 1.22rem;
-    width: 1.5rem;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-k,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .stat-row > span {
-    font-size: 1.08rem;
-  }
-
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .stat-row strong,
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-v {
-    font-size: 1.16rem;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par {
