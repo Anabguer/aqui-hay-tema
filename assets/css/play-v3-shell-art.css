@@ -783,31 +783,59 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 
 .es-noche {
 
-  position: absolute;
-
-  top: 100%;
-
-  left: 50%;
-
-  margin: .24rem 0 0;
-
   display: inline-flex;
 
   align-items: center;
 
   gap: .26rem;
 
-  padding: .26rem .48rem;
+  pointer-events: none;
 
-  background: linear-gradient(180deg, #ece7f6 0%, #ddd5ee 100%);
+  z-index: 4;
 
-  border: 2px solid rgba(44,38,31,.82);
+}
 
-  border-radius: 4px 6px 5px 4px;
+.es-noche[hidden] { display: none; }
 
-  box-shadow: 2px 2px 0 rgba(44,38,31,.12);
+.es-estado-ico {
 
-  transform: translateX(-50%) rotate(var(--rot, -1.5deg));
+  width: .78rem;
+
+  height: .78rem;
+
+  flex: none;
+
+}
+
+.es-estado-dia-ico {
+
+  fill: none;
+
+  stroke: #c88a2e;
+
+  stroke-width: 2;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+}
+
+.es-estado-noche-ico {
+
+  fill: none;
+
+  stroke: #5e3e90;
+
+  stroke-width: 2;
+
+  stroke-linecap: round;
+
+  stroke-linejoin: round;
+
+}
+
+.es-estado-txt {
 
   font-family: Nunito, "Segoe UI", sans-serif;
 
@@ -819,37 +847,37 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 
   line-height: 1;
 
-  color: #2c261f;
-
   white-space: nowrap;
 
-  pointer-events: none;
+}
 
-  z-index: 4;
+.es-estado-dia-txt {
+
+  color: #9a7b2a;
 
 }
 
-.es-noche[hidden] { display: none; }
+.es-estado-noche-txt {
 
-.es-noche-luna {
-
-  width: .78rem;
-
-  height: .78rem;
-
-  fill: none;
-
-  stroke: #2c261f;
-
-  stroke-width: 2;
-
-  stroke-linecap: round;
-
-  stroke-linejoin: round;
-
-  flex: none;
+  color: #5e3e90;
 
 }
+
+.es-noche > .es-estado-dia-ico,
+.es-noche > .es-estado-dia-txt { display: none; }
+
+.es-noche > .es-estado-noche-ico,
+.es-noche > .es-estado-noche-txt { display: none; }
+
+.es-noche.is-dia > .es-estado-dia-ico,
+.es-noche.is-dia > .es-estado-dia-txt { display: inline-flex; }
+
+.es-noche.is-dia > .es-estado-dia-txt { display: inline; }
+
+.es-noche.is-noche > .es-estado-noche-ico,
+.es-noche.is-noche > .es-estado-noche-txt { display: inline-flex; }
+
+.es-noche.is-noche > .es-estado-noche-txt { display: inline; }
 
 .pasar-rato--noche {
 

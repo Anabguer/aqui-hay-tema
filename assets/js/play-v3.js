@@ -5131,7 +5131,9 @@ function renderInicioMpDuo(misiones, parejas) {
   function pintarModoReloj(esNoche) {
     aplicarNocheVisual(esNoche);
     $$('[data-es-noche]').forEach(function (el) {
-      el.hidden = !esNoche;
+      el.hidden = false;
+      el.classList.toggle('is-dia', !esNoche);
+      el.classList.toggle('is-noche', esNoche);
     });
     pasarRatoBtns().forEach(function (btn) {
       btn.classList.toggle('pasar-rato--noche', esNoche);

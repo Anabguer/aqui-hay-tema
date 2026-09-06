@@ -1,5 +1,5 @@
 'use strict';
-// Prueba UI móvil: los controles canónicos de avance (reloj + "Es de noche" +
+// Prueba UI móvil: los controles canónicos de avance (reloj + indicador día/noche +
 // "Pasar el rato/noche") deben estar visibles en la cabecera móvil REUTILIZANDO
 // los mismos nodos/handlers de desktop. Sin segunda lógica ni endpoints nuevos.
 const fs = require('fs');
@@ -29,13 +29,12 @@ ok(/inicio-temporal-pill/.test(php), 'play.php: píldora día/hora/avance');
 ok(/INICIO-CABECERA-MOVIL-20260906/.test(cssMob), 'inicio-mobile: bloque cabecera canónico');
 ok(/inicio-temporal-pill[\s\S]{0,220}flex-wrap:\s*nowrap/.test(cssMob), 'inicio-mobile: píldora en una línea');
 ok(/pasar-rato-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto Pasar el rato');
-ok(/es-noche-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto Es de noche');
+ok(/es-estado-txt[\s\S]{0,100}display:\s*none/.test(cssMob), 'inicio-mobile: sin texto estado día/noche');
 ok(/inicio-temporal-pill \.pasar-rato[\s\S]{0,220}border-radius:\s*50%/.test(cssMob), 'inicio-mobile: botón ▶ circular');
 ok(!/!important/.test(cssMob.match(/INICIO-CABECERA-MOVIL[\s\S]*/)?.[0] || ''), 'inicio-mobile cabecera: cero !important');
 
-// ── 3. Desktop intacto ──
-ok(/\.es-noche\s*\{[^}]*position:\s*absolute/.test(cssArt), 'desktop: chip absoluto bajo el reloj intacto');
-ok(/\.es-noche\s*\{[^}]*top:\s*100%/.test(cssArt), 'desktop: chip colgando (top:100%) intacto');
+// ── 3. Desktop: indicador integrado en el flujo del reloj ──
+ok(/\.es-noche\s*\{[^}]*display:\s*inline-flex/.test(cssArt), 'desktop: indicador integrado inline-flex');
 ok(/\.es-noche\s*\{[^}]*pointer-events:\s*none/.test(cssArt), 'desktop: pointer-events none intacto');
 ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo base del botón intacto');
 
@@ -46,9 +45,15 @@ ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo b
   const codigo = js.slice(ini, fin + 4);
 
   function montar() {
-    const indicador = { hidden: true };
-    let etiqueta = '';
     const clases = new Set();
+    const indicador = {
+      hidden: true,
+      classList: {
+        toggle(c, on) { if (on) clases.add(c); else clases.delete(c); },
+        contains(c) { return clases.has(c); },
+      },
+    };
+    let etiqueta = '';
     const btn = {
       classList: {
         toggle(c, on) { if (on) clases.add(c); else clases.delete(c); },
@@ -69,31 +74,35 @@ ok(/\.pasar-rato\s*\{[^}]*margin-bottom:\s*3px/.test(cssArt), 'desktop: estilo b
     return { pintar, indicador, get etiqueta() { return etiqueta; }, clases };
   }
 
-  // A) 14:00 · día
+  // A) 14:00 · día — indicador siempre visible, muestra estado día
   let ctx = montar();
   ctx.pintar(false);
-  ok(ctx.indicador.hidden === true, 'móvil A 14:00: "Es de noche" oculto');
+  ok(ctx.indicador.hidden === false, 'móvil A 14:00: indicador visible (estado día)');
+  ok(ctx.clases.has('is-dia'), 'móvil A 14:00: clase is-dia activa');
+  ok(!ctx.clases.has('is-noche'), 'móvil A 14:00: sin is-noche');
   ok(ctx.etiqueta === 'Pasar el rato', 'móvil A 14:00: botón "Pasar el rato"');
   // B) 22:00 · todavía día
   ctx.pintar(false);
-  ok(ctx.indicador.hidden === true && ctx.etiqueta === 'Pasar el rato', 'móvil B 22:00: sigue día, sin "Es de noche"');
+  ok(ctx.clases.has('is-dia') && ctx.etiqueta === 'Pasar el rato', 'móvil B 22:00: sigue día');
   // C) 22→23: el mismo sistema cambia a noche
   ctx.pintar(true);
-  ok(ctx.indicador.hidden === false, 'móvil D 23:00: "Es de noche" visible');
+  ok(ctx.indicador.hidden === false, 'móvil D 23:00: indicador visible (estado noche)');
+  ok(ctx.clases.has('is-noche'), 'móvil D 23:00: clase is-noche activa');
+  ok(!ctx.clases.has('is-dia'), 'móvil D 23:00: sin is-dia');
   ok(ctx.etiqueta === 'Pasar la noche', 'móvil D 23:00: botón "Pasar la noche"');
   // F) 08:00 · vuelve el día
   ctx.pintar(false);
-  ok(ctx.indicador.hidden === true && ctx.etiqueta === 'Pasar el rato', 'móvil F 08:00: vuelve "Pasar el rato"');
+  ok(ctx.clases.has('is-dia') && ctx.etiqueta === 'Pasar el rato', 'móvil F 08:00: vuelve "Pasar el rato"');
   // Refresh directo a 23:00 (idempotente)
   let ctxN = montar();
   ctxN.pintar(true);
   ctxN.pintar(true);
-  ok(ctxN.indicador.hidden === false && ctxN.etiqueta === 'Pasar la noche', 'refresh directo 23:00: controles correctos');
+  ok(ctxN.clases.has('is-noche') && ctxN.etiqueta === 'Pasar la noche', 'refresh directo 23:00: controles correctos');
   // Refresh directo a 14:00 (idempotente)
   let ctxD = montar();
   ctxD.pintar(false);
   ctxD.pintar(false);
-  ok(ctxD.indicador.hidden === true && ctxD.etiqueta === 'Pasar el rato', 'refresh directo 14:00: controles correctos');
+  ok(ctxD.clases.has('is-dia') && ctxD.etiqueta === 'Pasar el rato', 'refresh directo 14:00: controles correctos');
 })();
 
 
