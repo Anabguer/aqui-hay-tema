@@ -123,7 +123,7 @@
   pointer-events: none;
 }
 
-/* ─── TÍTULO — ficha física del universo AHT ─── */
+/* ─── TÍTULO — ficha física canónica (todas las modales V4) ─── */
 .aht-frame .aht-frame-title {
   position: relative;
   z-index: 1;
@@ -143,73 +143,18 @@
   color: var(--aht-text, #33261E);
   text-shadow: none;
   display: inline-block;
-  /* Base ficha — variante C por defecto */
-  background: #fdf9f4;
-  border: 1.5px solid rgba(107, 81, 56, .25);
-  border-radius: 5px 8px 6px 7px / 6px 5px 8px 6px;
-  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .09);
-  transform: rotate(-0.5deg);
-}
-
-/* ─── Variante A — Celo dorado (social/personas) ─── */
-.aht-screen[data-aht-screen="vecinos"] .aht-frame-title,
-.aht-screen[data-aht-screen="ficha"] .aht-frame-title,
-.aht-screen[data-aht-screen="ficha_relaciones"] .aht-frame-title,
-.aht-screen[data-aht-screen="ficha_animo"] .aht-frame-title,
-.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-title,
-.aht-screen[data-aht-screen="buzon"] .aht-frame-title,
-.aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-title,
-.aht-screen[data-aht-screen="diario"] .aht-frame-title {
-  background: #FBF5E6;
-  border: 1.5px solid #c9a87a;
-  border-radius: 4px 7px 5px 6px / 5px 4px 7px 5px;
-  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .10);
-  transform: rotate(-0.4deg);
-}
-
-/* Celo — ::before */
-.aht-screen[data-aht-screen="vecinos"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="ficha"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="ficha_relaciones"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="ficha_animo"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="buzon"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="diario"] .aht-frame-title::before {
-  content: "";
-  position: absolute;
-  top: -5px;
-  left: 14px;
-  width: 38px;
-  height: 13px;
-  background: rgba(228, 198, 118, .82);
-  border-radius: 1px;
-  box-shadow: 0 1px 2px rgba(60, 44, 28, .12);
-  transform: rotate(-4deg);
-  pointer-events: none;
-}
-
-/* ─── Variante B — Chincheta discreta (acción/organización) ─── */
-.aht-screen[data-aht-screen="edificios"] .aht-frame-title,
-.aht-screen[data-aht-screen="agenda"] .aht-frame-title,
-.aht-screen[data-aht-screen="misiones"] .aht-frame-title,
-.aht-screen[data-aht-screen="parejas"] .aht-frame-title,
-.aht-screen[data-aht-screen="organizar"] .aht-frame-title,
-.aht-screen[data-aht-screen="necesidades_global"] .aht-frame-title {
   background: #fffdf8;
   border: 1.5px dashed #d4bee8;
   border-radius: 6px 4px 5px 7px / 4px 6px 5px 4px;
-  box-shadow: 1px 2px 0 rgba(51, 38, 30, .08);
+  box-shadow:
+    0 0 0 1px rgba(212, 190, 232, 0.10),
+    0 2px 8px rgba(212, 190, 232, 0.14),
+    1px 2px 0 rgba(51, 38, 30, .08);
   transform: rotate(-0.3deg);
 }
 
-/* Chincheta — ::before */
-.aht-screen[data-aht-screen="edificios"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="agenda"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="misiones"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="parejas"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="organizar"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="necesidades_global"] .aht-frame-title::before {
+/* Chincheta — ::before (decoración universal) */
+.aht-frame .aht-frame-title::before {
   content: "";
   position: absolute;
   top: -6px;
@@ -221,44 +166,6 @@
   background: radial-gradient(circle at 35% 30%, #f4a0bf, #d44d8a);
   border: 1.5px solid #b03370;
   box-shadow: 0 2px 3px rgba(180, 50, 100, .22);
-  pointer-events: none;
-}
-
-/* ─── Variante C — Esquina doblada + pespunte (resto/utilitarios) ─── */
-/* selector, mentes, historia, historia_detalle, vida_pueblo, inventario, ajustes */
-/* Hereda los estilos base de .aht-frame-title (fondo #fdf9f4, border sólido) */
-
-/* Pespunte interior — ::before */
-.aht-screen[data-aht-screen="selector"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="mentes"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="historia"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="historia_detalle"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="vida_pueblo"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="inventario"] .aht-frame-title::before,
-.aht-screen[data-aht-screen="ajustes"] .aht-frame-title::before {
-  content: "";
-  position: absolute;
-  inset: 4px;
-  border: 1.5px dashed rgba(107, 81, 56, .18);
-  border-radius: inherit;
-  pointer-events: none;
-}
-
-/* Esquina doblada — ::after */
-.aht-screen[data-aht-screen="selector"] .aht-frame-title::after,
-.aht-screen[data-aht-screen="mentes"] .aht-frame-title::after,
-.aht-screen[data-aht-screen="historia"] .aht-frame-title::after,
-.aht-screen[data-aht-screen="historia_detalle"] .aht-frame-title::after,
-.aht-screen[data-aht-screen="vida_pueblo"] .aht-frame-title::after,
-.aht-screen[data-aht-screen="inventario"] .aht-frame-title::after,
-.aht-screen[data-aht-screen="ajustes"] .aht-frame-title::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background: linear-gradient(135deg, transparent 50%, rgba(232, 139, 168, .15) 50%);
   pointer-events: none;
 }
 
@@ -544,19 +451,5 @@
     font-size: var(--aht-frame-title-size-mobile, 0.92rem);
     padding: 6px 18px 4px;
     max-width: 85%;
-  }
-
-  .aht-screen[data-aht-screen="vecinos"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="ficha"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="ficha_relaciones"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="ficha_animo"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="ficha_diario"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="historia_celebracion"] .aht-frame-title::before,
-  .aht-screen[data-aht-screen="diario"] .aht-frame-title::before {
-    width: 32px;
-    height: 11px;
-    top: -4px;
-    left: 10px;
   }
 }
