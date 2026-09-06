@@ -341,7 +341,7 @@
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-tipo-ico {
   transform: translate(-50%, -50%);
-  z-index: 5;
+  z-index: 10;
   border-radius: 50%;
   background: #fff;
   border: 1.5px solid rgba(111, 95, 154, .28);
@@ -386,7 +386,7 @@
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-faces .enc-mov-tipo-ico {
   transform: translate(-50%, -50%);
-  z-index: 5;
+  z-index: 10;
   border-radius: 50%;
   background: #fff;
   border: 1.5px solid rgba(111, 95, 154, .24);
