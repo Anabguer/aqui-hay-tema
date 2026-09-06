@@ -850,20 +850,30 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </header>
           <div class="aht-frame-body">
             <div class="histdet-body">
-              <div class="histdet-img-wrap">
-                <img class="histdet-img" src="" alt="" data-historia-detalle-img/>
-              </div>
-              <h3 class="histdet-titulo" data-historia-detalle-titulo></h3>
-              <p class="histdet-texto" data-historia-detalle-texto></p>
-              <div class="histdet-protagonistas" data-historia-detalle-protagonistas></div>
-              <div class="histdet-recompensa" data-historia-detalle-recompensa hidden>
-                <span class="histdet-recompensa-label">Recompensa desbloqueada</span>
-                <div class="histdet-recompensa-card">
-                  <img class="histdet-recompensa-img" src="" alt="" data-historia-detalle-recompensa-img hidden/>
-                  <span class="histdet-recompensa-nombre" data-historia-detalle-recompensa-nombre></span>
+              <div class="histdet-main">
+                <div class="histdet-polaroid">
+                  <div class="histdet-polaroid-tape" aria-hidden="true"></div>
+                  <div class="histdet-polaroid-img">
+                    <img class="histdet-img" src="" alt="" data-historia-detalle-img/>
+                  </div>
+                  <p class="histdet-polaroid-caption" data-historia-detalle-texto></p>
+                  <span class="histdet-polaroid-hearts" aria-hidden="true">&#9825;&#9825;</span>
+                </div>
+                <div class="histdet-sidebar">
+                  <div class="histdet-recompensa" data-historia-detalle-recompensa hidden>
+                    <span class="histdet-recompensa-ico" aria-hidden="true">&#9734;</span>
+                    <span class="histdet-recompensa-label">&#161;Regalito!</span>
+                    <div class="histdet-recompensa-card">
+                      <img class="histdet-recompensa-img" src="" alt="" data-historia-detalle-recompensa-img hidden/>
+                      <span class="histdet-recompensa-nombre" data-historia-detalle-recompensa-nombre></span>
+                    </div>
+                  </div>
+                  <div class="histdet-protagonistas" data-historia-detalle-protagonistas></div>
                 </div>
               </div>
-              <div class="histdet-dia" data-historia-detalle-dia></div>
+              <div class="histdet-footer">
+                <div class="histdet-dia" data-historia-detalle-dia></div>
+              </div>
             </div>
           </div>
         </div>
