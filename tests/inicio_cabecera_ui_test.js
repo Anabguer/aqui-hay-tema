@@ -54,6 +54,9 @@ ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'd
 ok(/celestine-nota\.obj-vecinos-resumen::before[\s\S]{0,280}chincheta\.png/.test(desk), 'desktop: chincheta derecha');
 ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: caras vecinos grandes');
 ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
+ok(/obj-cotilleo-tit::before[\s\S]{0,80}content:\s*"# "/.test(desk), 'desktop: cotilleos hash titulo');
+ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk), 'desktop: cotilleos corazon sutil');
+ok(/obj-cotilleo-tit[\s\S]{0,200}font-size:\s*\.9rem/.test(desk), 'desktop: cotilleos titulo tamano vecinos');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
 ok(!/!important/.test(mob + desk), 'cabeceras: cero !important');
