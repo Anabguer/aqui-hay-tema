@@ -1076,7 +1076,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 
       </div>
 
-<section class="inicio-desktop" data-inicio-view="desktop" aria-label="Inicio escritorio">
+<section class="inicio-desktop" data-inicio-view="desktop" hidden aria-label="Inicio escritorio">
         <header class="game-top">
       <div class="brand-col">
         <h1 class="brand" aria-label="Aqu&iacute; Hay Tema">
