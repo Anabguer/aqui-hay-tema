@@ -90,8 +90,8 @@
   top: 50%;
   right: auto;
   bottom: auto;
-  width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 720px));
-  max-width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 720px));
+  width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 840px));
+  max-width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 840px));
   height: auto;
   min-height: 0;
   max-height: var(--aht-modal-desktop-max-h, min(90vh, 840px));
@@ -213,13 +213,6 @@
   border: 2px solid var(--aht-border, #D8D1DE);
   border-radius: 3px;
   display: inline-block;
-}
-
-@media (min-width: 769px) {
-  .aht-screen[data-aht-screen="vecinos"] {
-    max-height: var(--aht-modal-desktop-max-h, min(90vh, 840px));
-    min-height: var(--aht-modal-desktop-max-h, min(90vh, 840px));
-  }
 }
 
 .aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-0 { --vec-paper: #FDE8EE; }
@@ -1336,10 +1329,6 @@
 
 /* Vecinos — ajustes móvil (contenido, no shell) */
 @media (max-width: 768px) {
-  .aht-screen[data-aht-screen="vecinos"] {
-    min-height: 0;
-  }
-
   .aht-screen[data-aht-screen="vecinos"] .vecinos-grid,
   .aht-screen[data-aht-screen="vecinos"] [data-vecinos-list].vecinos-grid {
     grid-template-columns: 1fr 1fr;
