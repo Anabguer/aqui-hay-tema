@@ -37,15 +37,13 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     background: transparent;
   }
 
-.inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 1; }
+.inicio-mobile .inicio-mobile-feed-inner .inicio-proximo-evento    { order: 1; }
 
-.inicio-mobile .inicio-mobile-feed-inner .encursos-movil           { order: 2; }
+.inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 2; }
 
-.inicio-mobile .inicio-mobile-feed-inner .proxplanes-movil         { order: 3; }
+.inicio-mobile .inicio-mobile-feed-inner .planes-movil-unif        { order: 3; }
 
-.inicio-mobile .inicio-mobile-feed-inner .shell-grupo-misiones-par { order: 4; }
-
-.inicio-mobile .inicio-mobile-feed-inner .shell-grupo-parejas      { order: 5; }
+.inicio-mobile .inicio-mobile-feed-inner .inicio-mp-duo            { order: 4; }
 
 .inicio-mobile .inicio-layout { gap: 12px; }
 
@@ -1675,6 +1673,10 @@ margin-bottom: 4px;
     align-items: stretch;
   }
 
+  .play-v3 .inicio-stage > .inicio-map-host {
+    grid-area: map;
+  }
+
   .play-v3 .inicio-stage > .inicio-mobile:not(.inicio-mobile-feed) {
     display: contents;
   }
@@ -2016,11 +2018,25 @@ margin-bottom: 4px;
     min-height: 52px;
     padding: 8px 10px 8px 8px;
     margin: 0;
+    position: relative;
     background: linear-gradient(180deg, #e8dcf5 0%, #ddd0f0 100%);
     border: 1.5px solid rgba(106, 88, 142, .38);
     border-radius: 999px;
     box-shadow: 0 2px 6px rgba(90, 70, 120, .1);
     text-align: left;
+    overflow: visible;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    pointer-events: none;
+    opacity: .75;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20.4s-6.8-4.2-6.8-8.6A3.7 3.7 0 0 1 12 9.8a3.7 3.7 0 0 1 6.8 2c0 4.4-6.8 8.6-6.8 8.6z' fill='none' stroke='%23b8a4d8' stroke-width='1.5'/%3E%3C/svg%3E") center / contain no-repeat;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-ico {
@@ -2049,18 +2065,24 @@ margin-bottom: 4px;
     flex: 0 0 auto;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit {
+.play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit {
     display: inline-flex;
     align-items: center;
-    padding: 3px 8px;
-    background: #5e3e90;
-    border-radius: 999px;
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .62rem;
+    font-size: 1.05rem;
     letter-spacing: .06em;
-    color: #fff;
+    text-transform: uppercase;
+    color: #5e3e90;
     line-height: 1.2;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit::before {
+    content: "# ";
+    color: #5e3e90;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-badge {
