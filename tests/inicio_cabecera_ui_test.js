@@ -64,6 +64,8 @@ ok(/celeste-necesitan-algo[\s\S]{0,500}border-top:\s*1px solid/.test(desk), 'des
 ok(/celeste-necesitan-algo[\s\S]{0,500}margin-left:\s*auto/.test(desk), 'desktop: necesitan numero alineado derecha');
 ok(/obj-cotilleo-tit::before[\s\S]{0,80}content:\s*"# "/.test(desk), 'desktop: cotilleos hash titulo');
 ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk), 'desktop: cotilleos corazon sutil');
+ok(/obj-misiones-papel::before[\s\S]{0,220}grid-column:\s*1 \/ -1/.test(desk), 'desktop: misiones linea cabecera continua');
+ok(/obj-misiones-papel-tit[\s\S]{0,260}border-bottom:\s*none/.test(desk), 'desktop: misiones titulo sin borde partido');
 ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*\.9rem/.test(desk), 'desktop: misiones titulo tamano vecinos');
 ok(/obj-misiones-papel-meta[\s\S]{0,400}rgba\(200,\s*91,\s*120/.test(desk), 'desktop: misiones pendientes rosa');
 ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*\.9rem/.test(desk), 'desktop: planes titulo tamano vecinos');
