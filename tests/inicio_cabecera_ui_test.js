@@ -52,7 +52,7 @@ ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Prima
 ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}border-radius:\s*14px/.test(desk), 'desktop: mensajitos radio ref PNG');
 ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,500}min-height:\s*68px/.test(desk), 'desktop: mensajitos mas alto');
 ok(/inicio-desktop-left \.obj-buzon[\s\S]{0,600}rgba\(232,\s*90,\s*120/.test(desk), 'desktop: mensajitos borde/sombra rosa');
-ok(/inicio-desktop-left \.obj-buzon-txt[\s\S]{0,220}font-size:\s*\.98rem/.test(desk), 'desktop: mensajitos texto grande');
+ok(/inicio-desktop-left \.obj-buzon-txt[\s\S]{0,220}font-size:\s*1\.05rem/.test(desk), 'desktop: mensajitos texto grande');
 ok(/inicio-desktop-left \.obj-buzon-ico-wrap[\s\S]{0,420}background:\s*url\("data:image\/svg\+xml/.test(desk), 'desktop: mensajitos sobre outline svg');
 ok(/inicio-desktop-left \.obj-buzon-img[\s\S]{0,120}display:\s*none/.test(desk), 'desktop: mensajitos sin png legacy');
 ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
@@ -62,17 +62,18 @@ ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: ca
 ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
 ok(/celeste-necesitan-algo[\s\S]{0,500}border-top:\s*1px solid/.test(desk), 'desktop: necesitan apartado vecinos');
 ok(/celeste-necesitan-algo[\s\S]{0,500}margin-left:\s*auto/.test(desk), 'desktop: necesitan numero alineado derecha');
-ok(/obj-cotilleo-tit::before[\s\S]{0,80}content:\s*"# "/.test(desk), 'desktop: cotilleos hash titulo');
+ok(/celestine-nota \.obj-vecinos-tit[\s\S]{0,220}font-size:\s*1\.05rem/.test(desk), 'desktop: vecinos titulo 1.05rem');
+ok(/obj-cotilleo-tit[\s\S]{0,220}font-size:\s*1\.05rem/.test(desk), 'desktop: cotilleos titulo 1.05rem');
 ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk), 'desktop: cotilleos corazon sutil');
 ok(/obj-misiones-papel::before[\s\S]{0,220}grid-column:\s*1 \/ -1/.test(desk), 'desktop: misiones linea cabecera continua');
 ok(/obj-misiones-papel-tit[\s\S]{0,260}border-bottom:\s*none/.test(desk), 'desktop: misiones titulo sin borde partido');
-ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*\.9rem/.test(desk), 'desktop: misiones titulo tamano vecinos');
+ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*1\.05rem/.test(desk), 'desktop: misiones titulo tamano vecinos');
 ok(/obj-misiones-papel-meta[\s\S]{0,400}rgba\(200,\s*91,\s*120/.test(desk), 'desktop: misiones pendientes rosa');
-ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*\.9rem/.test(desk), 'desktop: planes titulo tamano vecinos');
+ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*1\.05rem/.test(desk), 'desktop: planes titulo tamano vecinos');
 ok(/INICIO-PLANES-BLOQUE-CANON-20260906/.test(desk), 'desktop: planes bloque canon');
 ok(/inicio-planes-agenda[\s\S]{0,200}border:\s*1\.5px dashed/.test(desk), 'desktop: agenda proximos dashed');
 ok(!/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: sin PASS3 duplicado');
-ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*\.9rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
+ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*1\.05rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
 ok(!/!important/.test(mob + desk), 'cabeceras: cero !important');

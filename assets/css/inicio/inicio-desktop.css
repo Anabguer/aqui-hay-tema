@@ -632,7 +632,7 @@
     flex: 1 1 auto;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .98rem;
+    font-size: 1.05rem;
     letter-spacing: .05em;
     text-transform: uppercase;
     color: #2a2218;
@@ -764,7 +764,7 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-tit {
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .9rem;
+    font-size: 1.05rem;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: #c85b78;
@@ -914,7 +914,7 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-tit {
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .9rem;
+    font-size: 1.05rem;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: #5e3e90;
@@ -984,7 +984,7 @@
     border-bottom: none;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .9rem;
+    font-size: 1.05rem;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: #2a2218;
@@ -1045,7 +1045,7 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta-tit {
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .9rem;
+    font-size: 1.05rem;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: #6f5f9a;
@@ -1237,7 +1237,7 @@
     border-bottom: 1.5px solid rgba(232, 160, 180, .28);
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .9rem;
+    font-size: 1.05rem;
     letter-spacing: .06em;
     text-transform: uppercase;
     color: #2a2218;
