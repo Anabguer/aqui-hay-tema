@@ -29,6 +29,7 @@ ok(/INICIO-DESKTOP-CABECERA-20260906/.test(desk), 'desktop: bloque cabecera canÃ
 ok(/brand-text[\s\S]{0,200}clamp\(2\.75rem,\s*4\.6vw,\s*3\.65rem\)/.test(desk), 'desktop: marca grande ref PNG');
 ok(/game-top[\s\S]{0,300}border:\s*1px solid #d9d2e1/.test(desk), 'desktop: tarjeta blanca cabecera');
 ok(/top-center[\s\S]{0,200}justify-content:\s*center/.test(desk), 'desktop: reloj centrado');
+ok(/INICIO-DESKTOP-TOP-RELOJ-20260906/.test(desk), 'desktop: pastillas dia/hora ref PNG');
 ok(/obj-vida-kicker[\s\S]{0,280}text-transform:\s*none/.test(desk), 'desktop: Vida del pueblo sin mayÃºsculas forzadas');
 ok(/obj-vida-kicker[\s\S]{0,280}text-decoration:\s*underline/.test(desk), 'desktop: subrayado vida del pueblo');
 ok(!/inicio-desktop > \.game-top \.control-audio/.test(desk), 'desktop: sin controles flotantes en cabecera');
