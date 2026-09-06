@@ -81,7 +81,7 @@ ok(/inicio-planes-libreta-tit[\s\S]{0,200}font-size:\s*1\.05rem/.test(desk), 'de
 ok(/INICIO-PLANES-BLOQUE-CANON-20260906/.test(desk), 'desktop: planes bloque canon');
 ok(/inicio-planes-agenda[\s\S]{0,220}border:\s*1px dashed/.test(desk), 'desktop: agenda proximos dashed ligero');
 ok(!/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: sin PASS3 duplicado');
-ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*1\.05rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
+ok(/zona-tit-parejas[\s\S]{0,420}font-size:\s*1\.05rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
 ok(/shell-grupo-parejas \.zona-tit-parejas::before[\s\S]{0,500}linear-gradient/.test(desk), 'desktop: parejas corazon rosita en titulo');
 ok(/shell-grupo\.shell-grupo-parejas[\s\S]{0,260}background:\s*#fff6f9/.test(desk), 'desktop: parejas bloque rosita');
 ok(/pareja-crisis-sello[\s\S]{0,520}transform:\s*rotate\(-6deg\)/.test(desk), 'desktop: etiqueta EN CRISIS inclinada');

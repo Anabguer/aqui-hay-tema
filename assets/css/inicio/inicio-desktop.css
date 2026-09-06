@@ -1584,7 +1584,7 @@
     flex: 1 1 auto;
     min-width: 0;
     margin: 0;
-    font-family: "Caveat", "Caveat Brush", cursive;
+    font-family: var(--ds-font-hand, "Segoe Print", cursive);
     font-size: 1.18rem;
     font-weight: 700;
     font-style: italic;
