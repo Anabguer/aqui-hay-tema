@@ -58,6 +58,8 @@ ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'd
 ok(/celestine-nota\.obj-vecinos-resumen::before[\s\S]{0,280}chincheta\.png/.test(desk), 'desktop: chincheta derecha');
 ok(/obj-vecinos-preview-cara[\s\S]{0,120}width:\s*54px/.test(desk), 'desktop: caras vecinos grandes');
 ok(/celeste-cuenta-vecinos[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin fila en el pueblo');
+ok(/celeste-necesitan-algo[\s\S]{0,500}border-top:\s*1px solid/.test(desk), 'desktop: necesitan apartado vecinos');
+ok(/celeste-necesitan-algo[\s\S]{0,500}margin-left:\s*auto/.test(desk), 'desktop: necesitan numero alineado derecha');
 ok(/obj-cotilleo-tit::before[\s\S]{0,80}content:\s*"# "/.test(desk), 'desktop: cotilleos hash titulo');
 ok(/obj-cotilleo\.obj-cotilleo-par::after[\s\S]{0,600}opacity:\s*\.45/.test(desk), 'desktop: cotilleos corazon sutil');
 ok(/obj-misiones-papel-tit[\s\S]{0,400}font-size:\s*\.9rem/.test(desk), 'desktop: misiones titulo tamano vecinos');

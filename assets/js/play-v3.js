@@ -2649,8 +2649,12 @@
         valor: n,
       }));
     });
-    /* celeste-necesitan-algo: oculto hasta pantalla necesidades_global lista */
-
+    if (met.conNecesidad > 0) {
+      bits.push('<div class="vecinos-stat celeste-necesitan-algo" role="presentation" data-celestine-necesitan="1">' +
+        '<span class="vecinos-stat-ico" aria-hidden="true">\ud83e\ude77</span>' +
+        '<span class="vecinos-stat-k">Necesitan algo</span>' +
+        '<strong class="vecinos-stat-v">' + esc(String(met.conNecesidad)) + '</strong></div>');
+    }
     if (met.parejas > 0) {
       bits.push('<span class="obj-vecinos-tit celeste-seccion-parejas">Parejas</span>');
       bits.push('<div class="stat-row celeste-cuenta-parejas"><span>Parejas</span><strong>' +
