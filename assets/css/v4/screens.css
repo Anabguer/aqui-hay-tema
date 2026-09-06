@@ -90,8 +90,8 @@
   top: 50%;
   right: auto;
   bottom: auto;
-  width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 840px));
-  max-width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 840px));
+  width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 760px));
+  max-width: var(--aht-modal-desktop-w, min(calc(100% - 32px), 760px));
   height: auto;
   min-height: 0;
   max-height: var(--aht-modal-desktop-max-h, min(90vh, 840px));

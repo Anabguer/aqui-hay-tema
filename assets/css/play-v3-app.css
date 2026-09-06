@@ -10,7 +10,7 @@
 /* Parejas: rotación en el token, no en la img suelta */
 /* Hobby descubierto: pista al hover / foco (datos desde API, no hardcode JS) */
 
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Nunito:wght@600;800&family=Caveat+Brush&display=swap");
 :root {
   --paper: #f4ead6;
   --desk: #b9ad96;
