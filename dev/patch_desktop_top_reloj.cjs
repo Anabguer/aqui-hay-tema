@@ -82,11 +82,6 @@ const block = `
     color: #33261e;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-num::before {
-    content: "Día ";
-    font-weight: 800;
-  }
-
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-meta {
     display: block;
     font-family: var(--ds-font-ui, Nunito, sans-serif);

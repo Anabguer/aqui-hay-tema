@@ -32,6 +32,8 @@ ok(/brand-heart[\s\S]{0,200}clamp\(22px,\s*2\.6vw,\s*30px\)/.test(desk), 'deskto
 ok(/game-top[\s\S]{0,300}border:\s*1px solid #d9d2e1/.test(desk), 'desktop: tarjeta blanca cabecera');
 ok(/top-center[\s\S]{0,200}justify-content:\s*center/.test(desk), 'desktop: reloj centrado');
 ok(/INICIO-DESKTOP-TOP-RELOJ-20260906/.test(desk), 'desktop: pastillas dia/hora ref PNG');
+ok(/INICIO-DESKTOP-TOP-RELOJ-FIX-20260906/.test(desk), 'desktop: fix dia duplicado y altura');
+ok(!/obj-dia-num::before[\s\S]{0,80}content:\s*"Día /.test(desk), 'desktop: sin prefijo Día duplicado');
 ok(/INICIO-DESKTOP-VIDA-SCALE-20260906/.test(desk), 'desktop: escala vida del pueblo ref PNG');
 ok(/obj-vida-kicker[\s\S]{0,280}clamp\(1\.5rem,\s*2\.4vw,\s*1\.95rem\)/.test(desk), 'desktop: kicker vida grande');
 ok(/corazon-svg[\s\S]{0,120}clamp\(72px,\s*5\.8vw,\s*92px\)/.test(desk), 'desktop: corazón vida grande');
