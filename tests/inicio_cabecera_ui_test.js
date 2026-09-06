@@ -27,7 +27,9 @@ ok(/inicio-header-brand-row[\s\S]{0,500}top-vida[\s\S]{0,200}width:\s*auto/.test
 ok(/INICIO-DESKTOP-CABECERA-20260906/.test(desk), 'desktop: bloque cabecera canónico');
 ok(/game-top[\s\S]{0,300}border:\s*1px solid #d9d2e1/.test(desk), 'desktop: tarjeta blanca cabecera');
 ok(/top-center[\s\S]{0,200}justify-content:\s*center/.test(desk), 'desktop: reloj centrado');
-ok(/obj-vida-kicker[\s\S]{0,200}text-transform:\s*uppercase/.test(desk), 'desktop: VIDA DEL PUEBLO');
+ok(/obj-vida-kicker[\s\S]{0,280}text-transform:\s*none/.test(desk), 'desktop: Vida del pueblo sin mayúsculas forzadas');
+ok(/obj-vida-kicker[\s\S]{0,280}text-decoration:\s*underline/.test(desk), 'desktop: subrayado vida del pueblo');
+ok(!/inicio-desktop > \.game-top \.control-audio/.test(desk), 'desktop: sin controles flotantes en cabecera');
 ok(/obj-dia-estacion[\s\S]{0,80}display:\s*none/.test(desk), 'desktop: sin Primavera en cabecera');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');

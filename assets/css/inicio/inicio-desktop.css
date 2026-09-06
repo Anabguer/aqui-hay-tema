@@ -213,25 +213,34 @@
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-vida {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: flex-end;
+    justify-self: end;
     width: auto;
     max-width: none;
     grid-template-columns: none;
     padding: 0;
     margin: 0;
     overflow: visible;
-    gap: 4px;
+    gap: 10px;
+    border: none;
+    background: transparent;
+    box-shadow: none;
+    cursor: pointer;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-vida-kicker {
     font-family: var(--ds-font-hand, Caveat, cursive);
-    font-size: 1rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    letter-spacing: .04em;
-    text-transform: uppercase;
+    letter-spacing: .01em;
+    text-transform: none;
     color: var(--ds-ink, #2a2218);
+    text-decoration: underline;
+    text-decoration-color: var(--ds-pink-deep, #c85b78);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 4px;
     opacity: 1;
     white-space: nowrap;
   }
@@ -243,13 +252,6 @@
     justify-self: auto;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .control-audio {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    display: flex;
-    gap: 6px;
-  }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .obj-dia-estacion {
     display: none;
@@ -876,3 +878,5 @@
     margin-top: 4px;
   }
 }
+
+/* INICIO-DESKTOP-VIDA-HEADER-20260906 — sin controles flotantes; vida+kicker ref PNG 02 */
