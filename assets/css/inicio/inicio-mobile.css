@@ -1845,10 +1845,11 @@ margin-bottom: 4px;
     position: relative;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card > .es-noche {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche {
     position: absolute;
-    right: 0;
-    top: 2px;
+    bottom: calc(100% + 3px);
+    left: 50%;
+    transform: translateX(-50%);
     display: none;
     align-items: center;
     gap: 3px;
@@ -1856,18 +1857,18 @@ margin-bottom: 4px;
     z-index: 4;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card > .es-noche.is-noche {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-noche.is-noche {
     display: inline-flex;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card .es-estado-ico {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-ico {
     width: 13px;
     height: 13px;
     fill: #5e3e90;
     stroke: none;
   }
 
-  .play-v3 .inicio-stage .inicio-mobile .inicio-header-card .es-estado-txt {
+  .play-v3 .inicio-stage .inicio-mobile .inicio-temporal-pill .es-estado-txt {
     font-size: .58rem;
     color: #5e3e90;
   }
