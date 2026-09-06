@@ -107,8 +107,8 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  padding: var(--aht-header-pad-y-desktop, 22px) 56px 18px 56px;
-  background-color: var(--aht-header-bg, #FEFCF8);
+  padding: var(--aht-header-pad-y-desktop, 22px) 56px 28px 56px;
+  background-color: #d4bee885;
 }
 
 /* Línea decorativa inferior — rosa → lavanda */
