@@ -347,7 +347,7 @@
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-nombres {
   font-family: "Caveat", "Caveat Brush", cursive;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #2f5a38;
   line-height: 1.05;
@@ -355,7 +355,7 @@
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-donde-cuando {
   font-family: Nunito, "Segoe UI", sans-serif;
-  font-size: .74rem;
+  font-size: .82rem;
   font-weight: 600;
   color: #4a7352;
 }
@@ -389,7 +389,7 @@
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .plan-desk-duo-nombre {
   font-family: "Caveat", "Caveat Brush", cursive;
-  font-size: .92rem;
+  font-size: 1rem;
   font-weight: 700;
   text-align: center;
   color: #3b3028;
@@ -399,7 +399,7 @@
 
 .play-v3 .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-lugar {
   text-align: center;
-  font-size: .72rem;
+  font-size: .8rem;
   color: #655c54;
 }
 
