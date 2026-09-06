@@ -97,15 +97,19 @@
   cursor: pointer;
 }
 
-.play-v3 .mapa-zona-hit .hab.cara-token .cara {
-  transition: transform .15s ease, box-shadow .15s ease;
+.play-v3 .mapa-zona-hit .hab.cara-token {
+  transition: transform .15s ease, filter .15s ease;
 }
 
-.play-v3 .mapa-zona-hit .hab.cara-token:hover .cara,
-.play-v3 .mapa-zona-hit .hab.cara-token:focus-visible .cara {
+.play-v3 .mapa-zona-hit .hab.cara-token:hover,
+.play-v3 .mapa-zona-hit .hab.cara-token:focus-visible {
+  transform: translate(-50%, -50%) scale(1.14);
+  z-index: 10;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.35)) drop-shadow(0 3px 6px rgba(40, 28, 52, .35));
+}
+
+.play-v3 .mapa-zona-hit .hab.cara-token:hover .cara {
   animation-play-state: paused;
-  transform: scale(1.18);
-  box-shadow: 0 4px 14px rgba(40, 28, 52, .22);
 }
 
 .play-v3 .mapa-zona-hit .hab .cara {
@@ -166,38 +170,6 @@
 
 .play-v3 .mapa-zona-hit.mapa-zona--proximo {
   /* El proximo encuentro sigue indicado en la agenda, sin marco sobre el mapa. */
-}
-
-.play-v3 .play-root[data-consulta="sel"] .selector,
-.play-v3 .play-root[data-consulta="quien"] .quien {
-  border: 2.5px solid #4f4034;
-  outline: 1px solid rgba(44, 38, 31, .18);
-  outline-offset: -6px;
-  box-shadow:
-    4px 7px 0 rgba(44, 38, 31, .17),
-    inset 0 0 0 1px rgba(255, 255, 255, .6),
-    inset 0 0 0 3px rgba(90, 72, 56, .06);
-}
-
-.play-v3 .play-root[data-consulta="sel"] .selector::before,
-.play-v3 .play-root[data-consulta="quien"] .quien::before {
-  left: 18px;
-  top: 8px;
-  width: 20px;
-  height: 20px;
-}
-
-.play-v3 .play-root[data-consulta="sel"] .nota-mapa .cerrar,
-.play-v3 .play-root[data-consulta="quien"] .nota-mapa .cerrar {
-  top: .5rem;
-  right: .55rem;
-  border: 0;
-  background: transparent;
-  font-family: Caveat, cursive;
-  font-size: 1.55rem;
-  line-height: 1;
-  color: #5a4838;
-  box-shadow: none;
 }
 
 .play-v3 .play-root[data-consulta="sel"] .nota-mapa .libreta-kicker,
