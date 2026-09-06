@@ -58,9 +58,10 @@ ok(/inicio-desktop-left \.obj-buzon-ico-wrap[\s\S]{0,420}background:\s*url\("dat
 ok(/inicio-desktop-left \.obj-buzon-img[\s\S]{0,120}display:\s*none/.test(desk), 'desktop: mensajitos sin png legacy');
 ok(/inicio-desktop-left \.obj-buzon-badge[\s\S]{0,280}background:\s*#e85a78/.test(desk), 'desktop: mensajitos bolita rosa');
 ok(/celestine-nota \.libreta-kicker[\s\S]{0,280}color:\s*#2a2218/.test(desk), 'desktop: celestine negro');
-ok(/celestine-nota\.obj-vecinos-resumen::before,[\s\S]{0,280}display:\s*none/.test(desk), 'desktop: vecinos sin decoracion ::before');
-ok(/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,120}display:\s*none/.test(desk), 'desktop: vecinos sin chincheta ::after');
-ok(!/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,320}chincheta\.png/.test(desk), 'desktop: sin chincheta.png en vecinos');
+ok(/celestine-nota\.obj-vecinos-resumen::before[\s\S]{0,220}#f5e6a8/.test(desk), 'desktop: vecinos cinta ::before');
+ok(/celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,320}chincheta\.png/.test(desk), 'desktop: vecinos chincheta ::after');
+ok(/celestine-nota \.libreta-kicker[\s\S]{0,180}display:\s*block/.test(desk), 'desktop: celestine apunta visible');
+ok(/celestine-nota \.obj-vecinos-preview[\s\S]{0,180}display:\s*flex/.test(desk), 'desktop: caras vecinos visibles');
 ok(!/obj-vecinos-resumen\.celestine-nota::after[\s\S]{0,80}display:\s*none/.test(resp), 'responsive: sin regla global legacy ::after celestine');
 ok(/inicio-mobile-tiles \.celestine-nota\.obj-vecinos-resumen::before,[\s\S]{0,280}display:\s*none/.test(mob), 'mobile: vecinos sin decoracion ::before');
 ok(/inicio-mobile-tiles \.celestine-nota\.obj-vecinos-resumen::after[\s\S]{0,80}display:\s*none/.test(mob), 'mobile: vecinos sin chincheta ::after');
@@ -81,6 +82,10 @@ ok(/INICIO-PLANES-BLOQUE-CANON-20260906/.test(desk), 'desktop: planes bloque can
 ok(/inicio-planes-agenda[\s\S]{0,220}border:\s*1px dashed/.test(desk), 'desktop: agenda proximos dashed ligero');
 ok(!/INICIO-VISUAL-PASS3-20260906/.test(desk), 'desktop: sin PASS3 duplicado');
 ok(/zona-tit-parejas[\s\S]{0,300}font-size:\s*1\.05rem/.test(desk), 'desktop: parejas titulo tamano vecinos');
+ok(/shell-grupo-parejas \.zona-tit-parejas::before[\s\S]{0,500}linear-gradient/.test(desk), 'desktop: parejas corazon rosita en titulo');
+ok(/shell-grupo\.shell-grupo-parejas[\s\S]{0,260}background:\s*#fff6f9/.test(desk), 'desktop: parejas bloque rosita');
+ok(/pareja-crisis-sello[\s\S]{0,520}transform:\s*rotate\(-6deg\)/.test(desk), 'desktop: etiqueta EN CRISIS inclinada');
+ok(/obj-pareja-piece[\s\S]{0,320}background:\s*transparent/.test(desk), 'desktop: parejas filas sin cajas individuales');
 
 ok(!/:not\(:has\(\.inicio-stage\)\) \.game-top \.top-vida/.test(art), 'shell-art: sin top-vida legacy en cabecera');
 ok(!/!important/.test(mob + desk + resp), 'cabeceras: cero !important');
