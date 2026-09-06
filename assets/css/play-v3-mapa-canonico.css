@@ -123,15 +123,15 @@
   transform: translateX(-50%) scale(0.85);
   margin-top: 3px;
   padding: 2px 7px;
-  background: #faf6ee;
-  border: 1px solid rgba(44, 38, 31, .22);
+  background: #E9DDF4;
+  border: 1px solid rgba(107, 74, 94, .30);
   border-radius: 6px;
   box-shadow: 0 1px 3px rgba(44, 38, 31, .12);
   font-family: inherit;
   font-size: .62rem;
   font-weight: 600;
   line-height: 1.25;
-  color: #3a3026;
+  color: #4A3543;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
