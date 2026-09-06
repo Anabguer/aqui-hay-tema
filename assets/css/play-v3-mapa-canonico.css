@@ -90,6 +90,7 @@
   border-radius: 50%;
   display: block;
   object-fit: cover;
+}
 
 .play-v3 .mapa-zona-hit .hab.cara-token,
 .play-v3 .mapa-zona-hit .hab.cara-token .cara {
@@ -105,7 +106,6 @@
   animation-play-state: paused;
   transform: scale(1.18);
   box-shadow: 0 4px 14px rgba(40, 28, 52, .22);
-}
 }
 
 .play-v3 .mapa-zona-hit .hab .cara {
