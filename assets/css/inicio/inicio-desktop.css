@@ -41,7 +41,7 @@
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
     display: grid;
-    grid-template-columns: minmax(300px, 380px) minmax(0, 1fr) minmax(272px, 348px);
+    grid-template-columns: minmax(300px, 380px) minmax(0, 1fr) minmax(300px, 380px);
     grid-template-areas:
       "head head head"
       "left map  right"

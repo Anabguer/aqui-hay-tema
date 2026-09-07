@@ -69,7 +69,7 @@
     width: 100%;
     height: auto;
     aspect-ratio: 618 / 404;
-    max-height: min(76vh, 660px);
+    max-height: min(65vh, 570px);
     position: relative;
     overflow: hidden;
     border-radius: 14px;
