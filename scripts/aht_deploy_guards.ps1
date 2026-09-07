@@ -274,3 +274,24 @@ function Invoke-AhtVisualRegression {
     }
     return @{ Ok = $true; Output = $out }
 }
+
+function Assert-AhtNoBomInPhp {
+    param(
+        [System.Collections.Generic.List[object]]$PackedFiles,
+        [string]$LogFile
+    )
+
+    foreach ($f in $PackedFiles) {
+        $rel = [string]$f.Rel
+        if ($rel -notmatch '\.php$') { continue }
+
+        $local = [string]$f.Local
+        if (-not (Test-Path -LiteralPath $local -PathType Leaf)) { continue }
+
+        $bytes = [System.IO.File]::ReadAllBytes($local)
+        if ($bytes.Length -ge 3 -and $bytes[0] -eq 0xEF -and $bytes[1] -eq 0xBB -and $bytes[2] -eq 0xBF) {
+            Write-DeployLog -LogFile $LogFile -Message "ABORT: BOM UTF-8 detectado en $rel — no se permite desplegar PHP con BOM; puede romper declare(strict_types=1) y provocar HTTP 500" -ToHost
+            throw "AHT_DEPLOY_ABORT: BOM en $rel"
+        }
+    }
+}
