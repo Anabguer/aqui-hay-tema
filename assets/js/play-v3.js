@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   'use strict';
 
   function ctaEncuentroMovVisible(enc, iv) {
@@ -8967,6 +8967,22 @@ function hobbyIconKey(id, texto) {
       ev.preventDefault();
       reiniciarPartidaActual();
       return;
+    const celestNecesitan = ev.target.closest('[data-celestine-necesitan]');
+    if (celestNecesitan && uiRootFrom(celestNecesitan)) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      necgFiltroInicial = 'necesitan';
+      setCapa('necesidades_global');
+      return;
+    }
+    const necgRes = ev.target.closest('[data-necg-res]');
+    if (necgRes && uiRootFrom(necgRes)) {
+      var rid = necgRes.getAttribute('data-necg-res');
+      if (rid) {
+        setCapa('ficha');
+        abrirFicha(rid);
+      }
+      return;
     }
     const open = ev.target.closest('[data-open]');
     if (open && uiRootFrom(open)) {
@@ -9009,21 +9025,6 @@ function hobbyIconKey(id, texto) {
       }
       return;
     }
-    const necgRes = ev.target.closest('[data-necg-res]');
-    if (necgRes && uiRootFrom(necgRes)) {
-      var rid = necgRes.getAttribute('data-necg-res');
-      if (rid) {
-        setCapa('ficha');
-        abrirFicha(rid);
-      }
-      return;
-    }
-    const celestNecesitan = ev.target.closest('[data-celestine-necesitan]');
-    if (celestNecesitan && uiRootFrom(celestNecesitan)) {
-      ev.preventDefault();
-      necgFiltroInicial = 'necesitan';
-      setCapa('necesidades_global');
-      return;
     }
     const invEntregar = ev.target.closest('[data-inv-entregar]');
     if (invEntregar && uiRootFrom(invEntregar)) {
@@ -9487,6 +9488,9 @@ var finOk = $('[data-tut-fin-ok]');
     }
     if (screen === 'historia') {
       renderHistoriaPueblo();
+    }
+    if (screen === 'necesidades_global') {
+      renderNecesidadesGlobal();
     }
   });
 
