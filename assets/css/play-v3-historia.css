@@ -449,7 +449,7 @@
 
 .histdet-polaroid-caption {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #3a3025;
   line-height: 1.35;
@@ -473,7 +473,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 2rem;
   padding-top: .4rem;
 }
 
@@ -505,8 +505,8 @@
 }
 
 .histdet-protagonista-avatar {
-  width: 64px;
-  height: 64px;
+  width: 90px;
+  height: 90px;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--cara-emo, #c9a06a);
@@ -531,7 +531,7 @@
 
 .histdet-protagonista-nombre {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: .92rem;
+  font-size: 1.5rem;
   font-weight: 600;
   color: #5a4e40;
 }
@@ -596,7 +596,7 @@
 .histdet-recompensa-label {
   display: block;
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: 1.05rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #8a6e50;
   margin-bottom: .3rem;
@@ -610,15 +610,15 @@
 }
 
 .histdet-recompensa-img {
-  width: 72px;
-  height: 72px;
+  width: 110px;
+  height: 110px;
   object-fit: contain;
   flex-shrink: 0;
   filter: drop-shadow(1px 2px 4px rgba(0,0,0,.12));
 }
 
 .histdet-recompensa-nombre {
-  font-size: 1rem;
+  font-size: 1.4rem;
   color: #3a3025;
   font-weight: 600;
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
@@ -634,7 +634,7 @@
 
 .histdet-dia {
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: .92rem;
+  font-size: 1.4rem;
   color: #8a7e70;
   letter-spacing: .02em;
 }
