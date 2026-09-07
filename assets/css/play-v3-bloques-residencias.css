@@ -580,11 +580,6 @@
   max-height: calc(68vh - 168px);
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda {
-  padding: .1rem .05rem .2rem;
-  gap: .18rem;
-}
-
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:hover,
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:focus-visible {
   outline: none;
@@ -608,21 +603,6 @@
     0 2px 6px rgba(44, 38, 31, 0.15),
     0 0 0 1.5px var(--cara-emo),
     0 0 0 3.5px var(--cara-crema);
-}
-
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-nom {
-  margin: 0;
-  padding: 0 .05rem;
-  font-family: Caveat, cursive;
-  font-size: 1.05rem;
-  font-weight: 600;
-  line-height: 1.1;
-  color: #8a7460;
-  text-align: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  max-width: 100%;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-pie {
@@ -2095,6 +2075,7 @@
   object-position: 50% 20%;
   transform: scale(1.1);
   transform-origin: 50% 14%;
+  background: #f0e8dc;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-pin,
