@@ -615,33 +615,7 @@ select.vec-rel-persona {
   box-shadow: 1px 2px 0 rgba(122, 106, 154, .18);
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card {
-  position: relative;
-  box-shadow: 1.5px 2.5px 0 rgba(51, 38, 30, .12);
-}
-
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(odd) {
-  transform: rotate(-.3deg);
-}
-
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(even) {
-  transform: rotate(.25deg);
-}
-
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card.is-amor {
-  background: linear-gradient(180deg, #fceef3, var(--ds-pink-soft, #fbe3ec));
-}
-
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-hint {
-  margin: .55rem 0 0;
-  padding: .4rem .55rem;
-  border: 1.5px dashed rgba(107, 81, 56, .28);
-  border-radius: 10px 8px 11px 7px / 8px 11px 7px 10px;
-  background: rgba(255, 252, 244, .72);
-  text-align: center;
-  font: 600 .72rem/1.4 Nunito, sans-serif;
-  color: #6a5a48;
-}
+/* card visual: relaciones-tablon.css owner (background, box-shadow, transforms, is-amor) */
 
 /* CIERRE-VISUAL-04-VECINOS-20260906 */
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cuenta-wrap {
