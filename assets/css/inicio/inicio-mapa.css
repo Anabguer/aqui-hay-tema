@@ -68,8 +68,8 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host .board-fit {
     width: 100%;
     height: auto;
-    aspect-ratio: 618 / 404;
-    max-height: min(65vh, 570px);
+    aspect-ratio: 618 / 448;
+    max-height: min(72vh, 630px);
     position: relative;
     overflow: hidden;
     border-radius: 14px;

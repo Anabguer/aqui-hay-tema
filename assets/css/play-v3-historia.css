@@ -1,12 +1,75 @@
 ﻿/* play-v3-historia.css — Historia del Pueblo: Polaroid grid */
 
 .historia-body {
-  padding: .75rem 1rem 2rem;
+  padding: .75rem 1rem 3rem;
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(170deg, #fdf8f0 0%, #f9f1e4 30%, #f5edd8 60%, #f8f0e0 100%);
+  border-radius: 6px;
+}
+
+/* Papel envejecido — variaciones sutiles */
+.historia-body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 15% 85%, rgba(200,170,130,.07) 0%, transparent 45%),
+    radial-gradient(ellipse at 85% 15%, rgba(190,160,120,.06) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 50%, rgba(210,190,160,.04) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Doodles del álbum — esquinas y bordes */
+.historia-body::after {
+  content: '♡\A☆\A✿';
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 1.5rem;
+  line-height: 2;
+  color: rgba(200,160,130,.13);
+  white-space: pre;
+  pointer-events: none;
+  z-index: 0;
+  transform: rotate(6deg);
 }
 
 .historia-sub {
   text-align: center;
   margin-bottom: 1rem;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  background: linear-gradient(145deg, #fdf6e8 0%, #f5ecd4 100%);
+  border: 1px solid rgba(200,180,140,.3);
+  border-radius: 4px;
+  padding: .3rem .9rem;
+  font-size: .82rem;
+  color: #6a5e50;
+  box-shadow: 1px 2px 5px rgba(44,38,31,.07);
+  position: relative;
+  z-index: 1;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  letter-spacing: .01em;
+}
+
+/* Celo sutil en la etiqueta */
+.historia-sub::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 28px;
+  height: 10px;
+  background: linear-gradient(135deg, rgba(210,170,190,.3) 0%, rgba(200,160,180,.2) 100%);
+  border-radius: 1px;
 }
 
 /* ── Grid de polaroids ────────────────────────────────────── */
@@ -16,6 +79,40 @@
   gap: 1.2rem .8rem;
   justify-items: center;
   padding: .5rem 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* Textos manuscritos decorativos del álbum */
+.historia-grid::before {
+  content: 'Pequeños momentos,\Agrandes historias ♡';
+  position: absolute;
+  top: -6px;
+  left: 8px;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: .85rem;
+  color: rgba(180,140,110,.22);
+  white-space: pre;
+  line-height: 1.3;
+  pointer-events: none;
+  transform: rotate(-4deg);
+  z-index: 0;
+}
+
+.historia-grid::after {
+  content: 'Lo mejor aún está\Apor vivir ♡';
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
+  font-size: .82rem;
+  color: rgba(180,140,110,.20);
+  white-space: pre;
+  line-height: 1.3;
+  text-align: right;
+  pointer-events: none;
+  transform: rotate(3deg);
+  z-index: 0;
 }
 
 @media (min-width: 600px) {
@@ -80,6 +177,67 @@
 .historia-polaroid:hover {
   transform: rotate(0deg) scale(1.04);
   z-index: 2;
+}
+
+/* ── Cintas adhesivas en Polaroids selectas ───────────────── */
+.historia-polaroid:nth-child(4n+1)::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 12px;
+  width: 38px;
+  height: 12px;
+  background: linear-gradient(135deg, rgba(230,160,170,.4) 0%, rgba(220,150,160,.3) 100%);
+  border-radius: 1px;
+  transform: rotate(-6deg);
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,.05);
+}
+
+.historia-polaroid:nth-child(4n+2)::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: 14px;
+  width: 34px;
+  height: 11px;
+  background: linear-gradient(135deg, rgba(160,190,220,.35) 0%, rgba(150,180,210,.25) 100%);
+  border-radius: 1px;
+  transform: rotate(5deg);
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+.historia-polaroid:nth-child(4n+3)::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-3deg);
+  width: 36px;
+  height: 11px;
+  background: linear-gradient(135deg, rgba(170,210,170,.35) 0%, rgba(160,200,160,.25) 100%);
+  border-radius: 1px;
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
+}
+
+.historia-polaroid:nth-child(4n)::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 16px;
+  width: 32px;
+  height: 10px;
+  background: linear-gradient(135deg, rgba(230,210,140,.38) 0%, rgba(220,200,130,.28) 100%);
+  border-radius: 1px;
+  transform: rotate(8deg);
+  z-index: 3;
+  pointer-events: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04);
 }
 
 /* ── Imagen ───────────────────────────────────────────────── */
@@ -175,18 +333,28 @@
 }
 
 /* ── Polaroid bloqueada (no revelada) ─────────────────────── */
+.historia-polaroid--bloqueada {
+  background: #f0ece6;
+}
+
 .historia-polaroid--bloqueada .historia-img-wrap {
-  background: #bbb;
+  background: #d8d0c6;
 }
 
 .historia-polaroid--bloqueada .historia-placeholder {
-  background: linear-gradient(135deg, #a0a0a0 0%, #888 100%);
-  color: #777;
+  background: linear-gradient(135deg, #d0c8be 0%, #c4bab0 100%);
+  color: #b0a898;
   font-size: 1.8rem;
 }
 
+.historia-polaroid--bloqueada .historia-orden {
+  background: rgba(200,190,178,.6);
+  color: #8a7e70;
+  border-color: rgba(0,0,0,.06);
+}
+
 .historia-polaroid--bloqueada .historia-titulo {
-  color: #999;
+  color: #a09888;
   font-style: italic;
 }
 
@@ -196,6 +364,20 @@
 
 .historia-polaroid--bloqueada .historia-dia {
   display: none;
+}
+
+/* Silueta sutil de paisaje en bloqueadas */
+.historia-polaroid--bloqueada .historia-img-wrap::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 10%;
+  right: 10%;
+  height: 35%;
+  background:
+    radial-gradient(ellipse at 30% 100%, rgba(160,148,130,.18) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 100%, rgba(160,148,130,.14) 0%, transparent 45%);
+  pointer-events: none;
 }
 
 /* ── Contador de recuerdos ────────────────────────────────── */
@@ -347,10 +529,12 @@
 
 /* ── Detalle de recuerdo — Scrapbook ──────────────────────── */
 .histdet-body {
-  padding: .8rem 1rem 1.4rem;
+  padding: .6rem 1rem .8rem;
   position: relative;
   overflow: hidden;
   min-height: 320px;
+  background:
+    linear-gradient(170deg, rgba(255,252,245,.6) 0%, rgba(250,244,232,.3) 35%, rgba(245,237,220,.5) 70%, rgba(250,244,232,.4) 100%);
 }
 
 /* Fondo scrapbook — papel envejecido + doodles sutiles */
@@ -359,26 +543,28 @@
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 15% 85%, rgba(200,160,120,.07) 0%, transparent 45%),
-    radial-gradient(ellipse at 85% 15%, rgba(180,140,110,.06) 0%, transparent 45%),
-    radial-gradient(circle at 50% 50%, rgba(220,200,180,.03) 0%, transparent 60%);
+    radial-gradient(ellipse at 10% 90%, rgba(200,160,120,.09) 0%, transparent 40%),
+    radial-gradient(ellipse at 90% 10%, rgba(180,140,110,.08) 0%, transparent 40%),
+    radial-gradient(ellipse at 50% 60%, rgba(220,200,180,.05) 0%, transparent 55%),
+    radial-gradient(circle at 25% 20%, rgba(210,180,150,.04) 0%, transparent 35%),
+    radial-gradient(circle at 75% 80%, rgba(190,160,130,.04) 0%, transparent 35%);
   pointer-events: none;
   z-index: 0;
 }
 
-/* Doodles decorativos — corazones, estrellitas, trazos */
+/* Doodles decorativos — corazón sutil esquina superior izquierda */
 .histdet-body::after {
-  content: '\2661   \2726   \2661';
+  content: '';
   position: absolute;
-  bottom: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 1rem;
-  color: rgba(200,160,140,.18);
-  letter-spacing: 1.5rem;
+  top: 8%;
+  left: 6%;
+  width: 44px;
+  height: 44px;
+  background: radial-gradient(circle, rgba(210,130,150,.10) 0%, transparent 65%);
+  border-radius: 50% 50% 0 0;
+  transform: rotate(-18deg) scale(1.4);
   pointer-events: none;
   z-index: 0;
-  white-space: nowrap;
 }
 
 /* Layout principal: polaroid + sidebar */
@@ -473,8 +659,37 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1.3rem;
   padding-top: .4rem;
+  position: relative;
+}
+
+/* Estrella doodle — esquina superior derecha del sidebar */
+.histdet-sidebar::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  background: radial-gradient(circle, rgba(212,160,96,.10) 0%, transparent 60%);
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  transform: rotate(12deg);
+  pointer-events: none;
+}
+
+/* Cinta sutil — parte baja del sidebar */
+.histdet-sidebar::after {
+  content: '';
+  position: absolute;
+  bottom: 18%;
+  right: -6px;
+  width: 38px;
+  height: 12px;
+  background: linear-gradient(135deg, rgba(210,170,190,.14) 0%, rgba(200,160,180,.10) 100%);
+  border-radius: 1px;
+  transform: rotate(22deg);
+  pointer-events: none;
 }
 
 /* ── Protagonistas — disposition juguetona ────────────────── */
@@ -483,6 +698,34 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: .6rem;
+  position: relative;
+}
+
+/* Garabato circular sutil bajo protagonistas */
+.histdet-protagonistas::before {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 60px;
+  border: 1.5px dashed rgba(180,150,120,.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Trazo ondulado sutil sobre protagonistas */
+.histdet-protagonistas::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 10%;
+  width: 40px;
+  height: 8px;
+  border-bottom: 1.5px solid rgba(200,160,130,.10);
+  border-radius: 0 0 50% 50%;
+  pointer-events: none;
 }
 
 .histdet-protagonista {
@@ -536,6 +779,14 @@
   color: #5a4e40;
 }
 
+/* ── Zoom interior global — retratos Historia ─────────────── */
+.historia-avatar-img,
+.histcele-protagonista-avatar,
+.histdet-protagonista-avatar {
+  transform: scale(1.08);
+  transform-origin: 50% 30%;
+}
+
 .histdet-rel {
   display: none;
 }
@@ -553,7 +804,7 @@
   box-shadow:
     2px 3px 8px rgba(44, 38, 31, .12),
     inset 0 1px 2px rgba(255,255,255,.5);
-  max-width: 200px;
+  max-width: 260px;
   /* Papel envejecido: borde irregular sutil */
   background-image:
     linear-gradient(145deg, #fff8e6 0%, #fef0d0 40%, #f8e8c4 100%),
@@ -596,7 +847,7 @@
 .histdet-recompensa-label {
   display: block;
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: 2rem;
+  font-size: 2.4rem;
   font-weight: 700;
   color: #8a6e50;
   margin-bottom: .3rem;
@@ -604,21 +855,22 @@
 
 .histdet-recompensa-card {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: .5rem;
 }
 
 .histdet-recompensa-img {
-  width: 110px;
-  height: 110px;
+  width: 190px;
+  height: 190px;
   object-fit: contain;
   flex-shrink: 0;
   filter: drop-shadow(1px 2px 4px rgba(0,0,0,.12));
 }
 
 .histdet-recompensa-nombre {
-  font-size: 1.4rem;
+  font-size: 1.7rem;
   color: #3a3025;
   font-weight: 600;
   font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
@@ -627,9 +879,22 @@
 /* ── Footer / Día ────────────────────────────────────────── */
 .histdet-footer {
   text-align: center;
-  margin-top: .8rem;
+  margin-top: .4rem;
   position: relative;
   z-index: 1;
+}
+
+/* Decoración: garabato sutil bajo el día */
+.histdet-footer::before {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 48px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, rgba(200,170,130,.15), transparent);
+  pointer-events: none;
 }
 
 .histdet-dia {
@@ -637,6 +902,8 @@
   font-size: 1.4rem;
   color: #8a7e70;
   letter-spacing: .02em;
+  position: relative;
+  display: inline-block;
 }
 
 .histdet-dia::before {
@@ -714,6 +981,7 @@
   .histdet-sidebar {
     width: 100%;
     padding-top: .3rem;
+    gap: 1rem;
   }
 
   .histdet-protagonistas {
@@ -727,16 +995,24 @@
   }
 
   .histdet-recompensa {
-    max-width: 190px;
+    max-width: 220px;
     transform: rotate(1deg);
   }
 
   .histdet-recompensa-img {
-    width: 60px;
-    height: 60px;
+    width: 130px;
+    height: 130px;
+  }
+
+  .histdet-recompensa-label {
+    font-size: 2rem;
   }
 
   .histdet-recompensa-nombre {
-    font-size: .92rem;
+    font-size: 1.3rem;
+  }
+
+  .histdet-footer {
+    margin-top: .3rem;
   }
 }
