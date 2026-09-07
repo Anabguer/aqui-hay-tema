@@ -106,8 +106,7 @@
 
   .play-v3 .inicio-stage > .inicio-map-host.game-map-wrap,
   .play-v3 .inicio-stage > .inicio-map-host .play-stage,
-  .play-v3 .inicio-stage > .inicio-map-host .board-scroll,
-  .play-v3 .inicio-stage > .inicio-map-host .board-fit {
+  .play-v3 .inicio-stage > .inicio-map-host .board-scroll {
     background: transparent;
   }
 
