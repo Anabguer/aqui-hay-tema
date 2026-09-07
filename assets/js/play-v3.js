@@ -1,4 +1,4 @@
-﻿(function () {
+(function () {
   'use strict';
 
   function ctaEncuentroMovVisible(enc, iv) {
@@ -1611,8 +1611,8 @@
     const eco = (insp && insp.economia && insp.economia.dinero) ? insp.economia.dinero.balance : null;
     const cel = estado && estado.celeste ? estado.celeste.dinero : null;
     const v = eco !== null && eco !== undefined ? eco : cel;
-    if (v === null || v === undefined || v === '') return 'ÔÇö';
-    return String(Math.round(Number(v))) + ' Ôé¼';
+    if (v === null || v === undefined || v === '') return '—';
+    return String(Math.round(Number(v))) + ' €';
   }
 
 
@@ -1992,7 +1992,7 @@
     }
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
     if (!ackResult || ackResult.ok === false || !ackResult.ack_ok) {
-      console.warn('[AHT] celebrar_ack failed ÔÇö celebration NOT consumed', { hito_id: hitoId, result: ackResult });
+      console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
       return;
     }
     celebracionesConsumidas.add(hitoId);
@@ -2011,7 +2011,7 @@
     }
     var ackResult = await api('historia.celebrar_ack', { hito_id: hitoId });
     if (!ackResult || ackResult.ok === false || !ackResult.ack_ok) {
-      console.warn('[AHT] celebrar_ack failed ÔÇö celebration NOT consumed', { hito_id: hitoId, result: ackResult });
+      console.warn('[AHT] celebrar_ack failed — celebration NOT consumed', { hito_id: hitoId, result: ackResult });
       return;
     }
     celebracionesConsumidas.add(hitoId);
@@ -2467,7 +2467,7 @@
     const cuerpo = cuerpoMensajito(m, nombre);
     row.innerHTML = htmlAvatarMensajito(m, nombre) +
       '<div class="msg-item-copy"><span class="msg-item-nom">' + esc(nombre) + '</span>' +
-      (compact ? ' ÔÇö ' : '<br/>') +
+      (compact ? ' — ' : '<br/>') +
       '<span class="msg-item-txt">' + esc(cuerpo) + '</span></div>';
     row.appendChild(crearMsgLeidoToggle(m));
     return row;
@@ -3161,10 +3161,10 @@
     var lim = max || 110;
     if (!s) return '';
     if (s.length <= lim) return s;
-    return s.slice(0, lim - 1).trim() + 'ÔÇö';
+    return s.slice(0, lim - 1).trim() + '—';
   }
 
-  /* === Planes en curso ÔÇö carrusel movil (misma fuente canonica que desktop) === */
+  /* === Planes en curso — carrusel movil (misma fuente canonica que desktop) === */
 
   function planEsEventoPueblo(enc) {
     if (!enc) return false;
@@ -6781,7 +6781,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function etiquetaRelText(rel) {
-    if (!rel) return 'ÔÇö';
+    if (!rel) return '—';
     if (rel.etiqueta_vinculo === 'crisis') return 'En crisis';
     if (rel.etiqueta_vinculo === 'pareja') return 'Pareja';
     if (rel.etiqueta_vinculo === 'ex_pareja') return 'Ex pareja';
@@ -7336,7 +7336,7 @@ function hobbyIconKey(id, texto) {
     lug_cafeteria: 'Cafeter\u00eda', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
     lug_restaurante: 'Restaurante', lug_parque: 'Parque', lug_bar: 'Bar',
     lug_cine: 'Cine', lug_discoteca: 'Discoteca', lug_bingo: 'Bingo',
-    lug_plaza: 'Plaza', lug_arcade: 'Arcade', lug_tienda_ropa: 'Tienda',
+    lug_plaza: 'Plaza', lug_arcade: 'Arcade', lug_tienda_ropa: 'Tienda de ropa',
     lug_mirador: 'Mirador', lug_casa: 'Casa'
   };
 
@@ -8055,7 +8055,7 @@ function hobbyIconKey(id, texto) {
         } else if (abierto === false) {
           estadoLinea = 'Cerrado · abre a las ' + apertura;
         } else {
-          estadoLinea = 'Horario: ' + apertura + 'ÔÇô' + cierre;
+          estadoLinea = 'Horario: ' + apertura + '–' + cierre;
         }
       }
     }
@@ -8279,9 +8279,9 @@ function hobbyIconKey(id, texto) {
       btn.className = 'org-picker-celda' + (sel.indexOf(id) >= 0 ? ' is-on' : '') + (yaApuntado ? ' is-apuntado' : '') + (noElegible ? ' is-bloqueado' : '');
       var title = yaApuntado ? (nom + ' (ya apuntado/a)') : nom;
       if (noElegible) {
-        title = nom + ' ÔÇö no disponible para este evento';
-        if (motivo === 'agenda_ocupada') title = nom + ' ÔÇö tiene otro plan a esa hora';
-        else if (motivo === 'no_residente') title = nom + ' ÔÇö no es residente';
+        title = nom + ' — no disponible para este evento';
+        if (motivo === 'agenda_ocupada') title = nom + ' — tiene otro plan a esa hora';
+        else if (motivo === 'no_residente') title = nom + ' — no es residente';
       }
       btn.title = title;
       btn.setAttribute('aria-label', title);
@@ -8300,7 +8300,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function fillSelect(sel, value, excludeId) {
-    sel.innerHTML = '<option value="">ÔÇö</option>';
+    sel.innerHTML = '<option value="">—</option>';
     idsResidentes().forEach(function (id) {
       if (excludeId && id === excludeId) return;
       const o = document.createElement('option');
@@ -8372,21 +8372,21 @@ function hobbyIconKey(id, texto) {
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
     var parts = orgSeleccionados();
     if (!orgParticipantesListos()) {
-      pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
+      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('', false);
       actualizarOrgCrearBtn();
       return;
     }
     if (!org.lugar) {
-      pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
+      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('Elige un lugar para ver horarios.', true);
       actualizarOrgCrearBtn();
       return;
     }
     if (!org.dia) {
-      pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
+      pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
       org.hora = 0;
       setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
       actualizarOrgCrearBtn();
@@ -8403,7 +8403,7 @@ function hobbyIconKey(id, texto) {
         max_slots: 48
       }, 'GET');
       if (!r.ok) {
-        pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
+        pintarOrgDropdown('hora', [{ value: '', label: '—', disabled: true }], '', null);
         org.hora = 0;
         setOrgHorasHint(mensajeErrorOrgApi(r, 'No hay horarios disponibles ahora.'), true);
         actualizarOrgCrearBtn();
