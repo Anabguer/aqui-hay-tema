@@ -329,7 +329,7 @@
       return;
     }
 
-    // .aht-frame-back / [data-capa-back] � volver en stack V4 (p. ej. Cotilleos)
+    // .aht-frame-back / [data-capa-back] � volver en stack V4 (p. ej. Cotilleos)
     var v4Back = target.closest('.aht-frame-back[data-capa-back], [data-capa-back].aht-frame-back');
     if (v4Back && v4Back.closest('.play-root')) {
       if (currentScreen && V4_SCREENS.has(currentScreen)) {
@@ -340,7 +340,9 @@
       }
     }
 
- // [data-open] — V4 owns lifecycle via capture-phase open().
+     // Skip if click is on celestNecesitan (nested inside data-open vecinos button).
+    if (target.closest('[data-celestine-necesitan]')) return;
+    // [data-open] — V4 owns lifecycle via capture-phase open().
     // Mark event so legacy bubbling handler skips redundant setCapa/scroll/history.
     var openBtn = target.closest('[data-open]');
     if (openBtn) {

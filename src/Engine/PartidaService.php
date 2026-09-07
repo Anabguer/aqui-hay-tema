@@ -459,6 +459,7 @@ final class PartidaService
                 'relaciones' => $relaciones,
                 'presentacion_visual' => ['asset' => $asset],
                 'identidad' => ['nombre' => $out['identidad']['nombre']],
+                'necesidades' => $out['necesidades'],
             ];
         }
 
