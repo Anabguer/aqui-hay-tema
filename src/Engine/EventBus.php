@@ -50,6 +50,11 @@ final class EventBus
         return ['evento' => $evento, 'correlacion_id' => $envelope['correlacion_id'], 'results' => $results];
     }
 
+    public static function listenerCount(string $evento): int
+    {
+        return count(self::$listeners[$evento] ?? []);
+    }
+
     public static function reset(): void
     {
         self::$listeners = [];

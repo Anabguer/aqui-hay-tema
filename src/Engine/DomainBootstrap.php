@@ -38,6 +38,17 @@ final class DomainBootstrap
         EventosPuebloBridge::register();
         CumpleanosFiestaBridge::register();
         DiarioHitoEngine::register();
+
+        HistoriaEmocionesBridge::register();
+        HistoriaEncuentroBridge::register();
+        HistoriaEventosPuebloBridge::register();
+        HistoriaAutonomiaBridge::register();
+        HistoriaMarchaBridge::register();
+        HistoriaConfianzaBridge::register();
+        HistoriaVinculoBridge::register();
+        HistoriaInteresMutuoBridge::register();
+        HistoriaCotilleoBridge::register();
+        HistoriaRegaloBridge::register();
     }
 
     public static function resetForTests(): void
