@@ -4755,8 +4755,33 @@ function renderInicioMpDuo(misiones, parejas) {
     var seed = habPosSeed(p.id);
     var jx = ((seed % 5) - 2) * 0.35;
     var jy = (((seed >> 4) % 5) - 2) * 0.25;
-    el.style.left = (slot.left + jx).toFixed(2) + '%';
-    el.style.top = (slot.top + jy).toFixed(2) + '%';
+    var left = slot.left + jx;
+    var top  = slot.top  + jy;
+
+    // Clamp: keep token center inside map (28px radius = 20px token + 8px ::before inset)
+    var _zonaHit = box.closest('.mapa-zona-hit');
+    var _layer   = box.closest('[data-mapa-zonas]');
+    if (_zonaHit && _layer) {
+      var _zR = _zonaHit.getBoundingClientRect();
+      var _lR = _layer.getBoundingClientRect();
+      var _zL = (_zR.left - _lR.left) / _lR.width;
+      var _zT = (_zR.top  - _lR.top)  / _lR.height;
+      var _zW = _zR.width  / _lR.width;
+      var _zH = _zR.height / _lR.height;
+      var _cx = _zL + (left / 100) * _zW;
+      var _cy = _zT + (top  / 100) * _zH;
+      var _minX = 28 / _lR.width;
+      var _maxX = 1 - 28 / _lR.width;
+      var _minY = 28 / _lR.height;
+      var _maxY = 1 - 28 / _lR.height;
+      _cx = Math.max(_minX, Math.min(_maxX, _cx));
+      _cy = Math.max(_minY, Math.min(_maxY, _cy));
+      left = ((_cx - _zL) / _zW) * 100;
+      top  = ((_cy - _zT) / _zH) * 100;
+    }
+
+    el.style.left = left.toFixed(2) + '%';
+    el.style.top  = top.toFixed(2)  + '%';
     var idleKind = ['a', 'b', 'c'][seed % 3];
     el.classList.add('hab-idle-' + idleKind);
     el.style.setProperty('--hab-idle-delay', (-(seed % 800) / 100).toFixed(2) + 's');

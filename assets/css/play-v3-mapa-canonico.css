@@ -51,7 +51,6 @@
   position: absolute;
   inset: 0;
   z-index: 3;
-  overflow: hidden;
 }
 
 .play-v3 .mapa-zona-hit {
