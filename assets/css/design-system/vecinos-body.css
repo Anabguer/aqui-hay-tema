@@ -148,14 +148,14 @@
   align-items: stretch;
 }
 
-.vecino-celda {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   text-align: center;
   min-height: 190px;
   padding: 12px 10px 8px;
-  border: 1.5px dashed rgba(160, 140, 120, .35);
+  border: 1.5px dashed rgba(160, 140, 120, .45);
   border-radius: 14px;
   background: var(--vec-paper);
   box-shadow: none;
@@ -166,17 +166,17 @@
   overflow: visible;
 }
 
-.vecino-celda:nth-child(3n+1) { background: rgba(253, 232, 238, .55); }
-.vecino-celda:nth-child(3n+2) { background: rgba(232, 245, 227, .55); }
-.vecino-celda:nth-child(3n)   { background: rgba(237, 232, 244, .55); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(3n+1) { background: rgba(253, 232, 238, .7); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(3n+2) { background: rgba(232, 245, 227, .7); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(3n)   { background: rgba(237, 232, 244, .7); }
 
-.vecino-celda:nth-child(odd) { transform: rotate(-0.35deg); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(odd) { transform: rotate(-0.35deg); }
 
-.vecino-celda:nth-child(even) { transform: rotate(0.3deg); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(even) { transform: rotate(0.3deg); }
 
-.vecino-celda:hover,
-.vecino-celda:focus-within,
-.vecino-celda:focus-visible {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:hover,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:focus-within,
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:focus-visible {
   box-shadow: 0 2px 8px rgba(70, 50, 30, .1);
 }
 
@@ -264,10 +264,10 @@
   font-size: 1.65rem;
 }
 
-.vecino-nom {
+.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-nom {
   margin: 0 0 6px;
   font-family: var(--vec-font-hand);
-  font-size: 1.15rem;
+  font-size: 1.3rem;
   font-weight: 700;
   color: var(--vec-ink);
   line-height: 1.1;
