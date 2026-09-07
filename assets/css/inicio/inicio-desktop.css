@@ -967,6 +967,7 @@
     overflow: visible;
     text-overflow: unset;
     font-style: italic;
+    padding-left: 20px;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .obj-cotilleo.obj-cotilleo-par .obj-cotilleo-flecha {
