@@ -148,13 +148,14 @@
   align-items: stretch;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda {
+.vecino-celda {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   text-align: center;
   min-height: 190px;
-  padding: 12px 10px 8px;
+  padding: .1rem .05rem .2rem;
+  gap: .18rem;
   border: 1.5px dashed rgba(160, 140, 120, .45);
   border-radius: 14px;
   background: var(--vec-paper);
@@ -166,17 +167,17 @@
   overflow: visible;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(3n+1) { background: rgba(253, 232, 238, .7); }
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(3n+2) { background: rgba(232, 245, 227, .7); }
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(3n)   { background: rgba(237, 232, 244, .7); }
+.vecino-celda:nth-child(3n+1) { background: rgba(253, 232, 238, .7); }
+.vecino-celda:nth-child(3n+2) { background: rgba(232, 245, 227, .7); }
+.vecino-celda:nth-child(3n)   { background: rgba(237, 232, 244, .7); }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(odd) { transform: rotate(-0.35deg); }
+.vecino-celda:nth-child(odd) { transform: rotate(-0.35deg); }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:nth-child(even) { transform: rotate(0.3deg); }
+.vecino-celda:nth-child(even) { transform: rotate(0.3deg); }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:hover,
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:focus-within,
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:focus-visible {
+.vecino-celda:hover,
+.vecino-celda:focus-within,
+.vecino-celda:focus-visible {
   box-shadow: 0 2px 8px rgba(70, 50, 30, .1);
 }
 
@@ -264,13 +265,19 @@
   font-size: 1.65rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-nom {
+.vecino-nom {
   margin: 0 0 6px;
+  padding: 0 .05rem;
   font-family: var(--vec-font-hand);
   font-size: 1.3rem;
   font-weight: 700;
   color: var(--vec-ink);
   line-height: 1.1;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .vecino-emo { display: none; }
