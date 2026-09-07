@@ -15,6 +15,10 @@
     position: relative;
   }
 
+  .play-v3 .inicio-stage > .inicio-map-host .play-root {
+    background: transparent;
+  }
+
   .play-v3 .inicio-stage > .inicio-map-host .board-fit {
     width: 100%;
     position: relative;
