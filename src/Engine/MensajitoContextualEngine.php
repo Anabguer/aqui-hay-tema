@@ -146,6 +146,7 @@ final class MensajitoContextualEngine
         if ($cumpleId !== '' && isset($partida['residentes'][$cumpleId])) {
             EstadoEmocional::ensureResidente($partida['residentes'][$cumpleId], $partida['reloj'] ?? null);
             $reloj = $partida['reloj'] ?? [];
+            $antes = $partida['residentes'][$cumpleId]['runtime']['estado_emocional'];
             $partida['residentes'][$cumpleId]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
                 EstadoEmocional::ALEGRE,
                 1,
@@ -156,6 +157,12 @@ final class MensajitoContextualEngine
                 12
             );
             $partida['residentes'][$cumpleId]['runtime']['animo'] = EstadoEmocional::ALEGRE;
+            DomainEventDispatcher::emit($partida, DomainEvents::ESTADO_EMOCIONAL_CAMBIADO, [
+                'residente_id' => $cumpleId,
+                'antes' => $antes,
+                'despues' => $partida['residentes'][$cumpleId]['runtime']['estado_emocional'],
+                'actores' => [$cumpleId],
+            ]);
 
             // F10.1: Contacto social Celestine → cumpleañero (+3, calidad normal)
             $celestineId = self::buscarCelestine($partida);
@@ -298,6 +305,7 @@ final class MensajitoContextualEngine
         // Aplicar ALEGRE al cumpleañero
         if (isset($partida['residentes'][$cumpleId])) {
             EstadoEmocional::ensureResidente($partida['residentes'][$cumpleId], $reloj);
+            $antes = $partida['residentes'][$cumpleId]['runtime']['estado_emocional'];
             $partida['residentes'][$cumpleId]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
                 EstadoEmocional::ALEGRE,
                 1,
@@ -308,6 +316,12 @@ final class MensajitoContextualEngine
                 12
             );
             $partida['residentes'][$cumpleId]['runtime']['animo'] = EstadoEmocional::ALEGRE;
+            DomainEventDispatcher::emit($partida, DomainEvents::ESTADO_EMOCIONAL_CAMBIADO, [
+                'residente_id' => $cumpleId,
+                'antes' => $antes,
+                'despues' => $partida['residentes'][$cumpleId]['runtime']['estado_emocional'],
+                'actores' => [$cumpleId],
+            ]);
         }
 
         // Registrar dedup

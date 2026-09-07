@@ -569,6 +569,7 @@ final class MensajitoConsejoEngine
         $actual = (string) ($res['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);
         if ($hacia === EstadoEmocional::ALEGRE && in_array($actual, [EstadoEmocional::TRISTE, EstadoEmocional::NEUTRO], true)) {
             $reloj = $partida['reloj'] ?? [];
+            $antes = $res['runtime']['estado_emocional'];
             $res['runtime']['estado_emocional'] = EstadoEmocional::estructura(
                 EstadoEmocional::ALEGRE,
                 1,
@@ -579,6 +580,12 @@ final class MensajitoConsejoEngine
                 12
             );
             $res['runtime']['animo'] = EstadoEmocional::ALEGRE;
+            DomainEventDispatcher::emit($partida, DomainEvents::ESTADO_EMOCIONAL_CAMBIADO, [
+                'residente_id' => $rid,
+                'antes' => $antes,
+                'despues' => $res['runtime']['estado_emocional'],
+                'actores' => [$rid],
+            ]);
         }
     }
 

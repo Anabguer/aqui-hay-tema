@@ -1152,6 +1152,7 @@ final class EncuentroIntervencion
             return;
         }
         EstadoEmocional::ensureResidente($partida['residentes'][$rid], $partida['reloj'] ?? null);
+        $antes = $partida['residentes'][$rid]['runtime']['estado_emocional'];
         $partida['residentes'][$rid]['runtime']['estado_emocional'] = EstadoEmocional::estructura(
             $estadoId,
             null,
@@ -1161,6 +1162,13 @@ final class EncuentroIntervencion
             [],
             3
         );
+        $partida['residentes'][$rid]['runtime']['animo'] = $estadoId;
+        DomainEventDispatcher::emit($partida, DomainEvents::ESTADO_EMOCIONAL_CAMBIADO, [
+            'residente_id' => $rid,
+            'antes' => $antes,
+            'despues' => $partida['residentes'][$rid]['runtime']['estado_emocional'],
+            'actores' => [$rid],
+        ]);
     }
 
     /**

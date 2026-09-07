@@ -392,121 +392,15 @@
   color: #3a3025;
 }
 
-/* ── Celebración de nuevo recuerdo ─────────────────────────── */
+/* ── Celebración de nuevo recuerdo — comparte layout polaroid del detalle ── */
 .histcele-body {
-  padding: 1.2rem 1.5rem 2rem;
-  text-align: center;
+  padding-bottom: 1.2rem;
 }
 
-.histcele-img-wrap {
-  width: 100%;
-  max-width: 240px;
-  margin: 0 auto .8rem;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(44, 38, 31, .2);
-}
-
-.histcele-img {
-  width: 100%;
-  display: block;
-  aspect-ratio: 1 / 1;
-  object-fit: cover;
-}
-
-.histcele-titulo {
-  font-family: 'Caveat', 'Segoe Script', cursive, sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #8a7e70;
-  margin: 0 0 .4rem;
-  letter-spacing: .02em;
-  text-align: center;
-}
-
-.histcele-texto {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #3a3025;
-  line-height: 1.45;
-  margin: 0 auto .8rem;
-  max-width: 340px;
-  text-align: center;
-}
-
-.histcele-protagonistas {
+.histcele-cta {
   display: flex;
-  align-items: center;
   justify-content: center;
-  gap: .6rem;
-  margin-bottom: 1rem;
-}
-
-.histcele-protagonista {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .25rem;
-}
-
-.histcele-protagonista-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 2px 6px rgba(44, 38, 31, .18);
-  background: #e8e0d4;
-}
-
-.histcele-protagonista-avatar--fallback {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #2c261f;
-  background: #fff6c8;
-  border: 2px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 2px 6px rgba(44, 38, 31, .18);
-}
-
-.histcele-protagonista-nombre {
-  font-size: .75rem;
-  color: #5a4e40;
-}
-
-.histcele-rel {
-  font-size: 1.1rem;
-  color: #c9a06a;
-  line-height: 1;
-}
-
-.histcele-recompensa {
-  background: var(--modal-content-bg, #F6F3F8);
-  border: 1px dashed var(--modal-border, #D8D1DE);
-  border-radius: 8px;
-  padding: .6rem .8rem;
-  margin-bottom: 1rem;
-}
-
-.histcele-recompensa-label {
-  display: block;
-  font-size: .7rem;
-  font-weight: 700;
-  color: #7a6e60;
-  text-transform: uppercase;
-  letter-spacing: .04em;
-  margin-bottom: .25rem;
-}
-
-.histcele-recompensa-objeto {
-  font-size: .85rem;
-  color: #3a3025;
-  font-weight: 600;
+  margin-top: .8rem;
 }
 
 .histcele-album {
@@ -519,7 +413,6 @@
   color: #3a3025;
   cursor: pointer;
   transition: background .15s, border-color .15s;
-  margin-top: .3rem;
 }
 
 .histcele-album:hover {
