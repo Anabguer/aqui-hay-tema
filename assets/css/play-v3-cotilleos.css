@@ -1,19 +1,14 @@
 /**
- * Capa COTILLEOS (03) � fidelidad a dev/propuestas/arnes.html #p03
+ * Capa COTILLEOS (03) — Feed estilo "Twitter del Pueblo"
+ * Mantiene identidad AHT: colores pastel, bordes, Caveat, Nunito.
  */
-/* shell modal: solo cuando la capa est� activa (ver FIX-COTILLEOS-BOLITA al final) */
-/* Override scrapbook rosa (bloques-residencias) */
-/* FIX-COTILLEOS-BOLITA */
-/* Cerrada: no reservar hueco ni mostrar fragmento sobre el mapa */
-/* Abierta: modal centrado en viewport (como Vecinos/Mensajitos) */
 
+/* ─── Modal shell ─── */
 .play-v3 .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::before,
 .play-v3 .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::before {
   display: block;
 }
-
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-speech-tail { display: none; }
-
 .play-v3 .aht-screen[data-aht-screen="diario"] > *:not(.cerrar) { position: relative; z-index: 2; }
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-cerrar.ds-modal-close {
@@ -30,11 +25,8 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-top { display: block; padding: .35rem .15rem 0; margin: 0 0 .35rem; }
-
 .play-v3 .aht-screen[data-aht-screen="diario"] .ds-modal-head { padding-right: 2.4rem; }
-
 .play-v3 .aht-screen[data-aht-screen="diario"] .ds-modal-head-row { align-items: center; gap: 9px; }
-
 .play-v3 .aht-screen[data-aht-screen="diario"] .ds-modal-icon { font-size: 1.6rem; transform: rotate(-8deg); }
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-tit.ds-modal-tit {
@@ -51,20 +43,20 @@
   box-shadow: 0 2px 5px rgba(160, 40, 100, .34); transform: rotate(2deg);
   white-space: nowrap; letter-spacing: .02em;
 }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-badge:empty, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-badge[hidden] { display: none; }
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-badge:empty,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-badge[hidden] { display: none; }
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .ds-modal-sub {
   font-family: Caveat, cursive; font-size: 1.05rem; font-weight: 600;
   color: var(--ds-text-muted, #7a6a5c); margin: 0 0 10px;
 }
 
+/* ─── Filtros ─── */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtros {
   display: flex; flex-wrap: wrap; gap: 8px;
   margin: 0 0 12px; padding: 0;
   justify-content: center; align-self: center; width: 100%; max-width: none;
 }
-
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro {
   display: inline-flex; align-items: center; gap: 5px;
   min-height: 0; height: auto; width: auto; min-width: 0;
@@ -75,19 +67,59 @@
   text-transform: uppercase; color: var(--ds-ink, #3b3028);
   box-shadow: none; transform: none; cursor: pointer;
 }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro.is-on, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro--todo.is-on {
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro.is-on,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro--todo.is-on {
   background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78);
 }
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-cat,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-svg { display: none; }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-cat, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-svg { display: none; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-body { flex: 1 1 auto; min-height: 0; overflow-y: auto; overflow-x: clip; padding: 0 .05rem .15rem; }
-
+/* ─── Layout: feed + lateral ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-layout {
+  display: flex; gap: 16px; flex: 1 1 auto; min-height: 0;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-body {
+  flex: 1 1 0%; min-height: 0; overflow-y: auto; overflow-x: clip; padding: 0 .05rem .15rem;
+}
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-list {
   display: flex; flex-direction: column; gap: 0;
 }
 
+/* ─── Lateral "Se habla de…" ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral {
+  flex: 0 0 220px; min-width: 0; padding: 8px 0;
+  border-left: 1.5px solid rgba(90,70,50,.12);
+  overflow-y: auto;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral:empty { display: none; }
+
+.coti-sehabla-tit {
+  margin: 0 0 10px; padding: 0 4px;
+  font-family: Caveat, cursive; font-size: 1.15rem; font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+}
+.coti-sehabla-list {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.coti-sehabla-item {
+  display: flex; align-items: center; gap: 6px;
+  padding: 6px 10px; border-radius: 10px;
+  background: var(--ds-paper-warm, #f8f0de);
+  border: 1px solid rgba(90,70,50,.1);
+  font: 600 .82rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+.coti-sehabla-num {
+  font-weight: 800; color: var(--ds-pink-deep, #c85b78); min-width: 18px;
+}
+.coti-sehabla-tag { flex: 1; }
+.coti-sehabla-count {
+  font-size: .72rem; color: var(--ds-text-muted, #7a6a5c);
+  background: rgba(90,70,50,.06); padding: 1px 6px; border-radius: 8px;
+}
+
+/* ─── Día cabecera ─── */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-dia-cab {
   display: inline-flex; margin: 4px 0 8px; padding: 2px 12px;
   background: var(--ds-pink-soft, #fbe3ec); border: 1.5px solid var(--ds-ink-soft, #594839);
@@ -95,39 +127,142 @@
   font: 700 1rem/1.4 Caveat, cursive; color: var(--ds-ink, #3b3028); transform: rotate(-0.8deg);
 }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-vacio { margin: 1rem 0; text-align: center; font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c); }
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-vacio {
+  margin: 1rem 0; text-align: center;
+  font-family: Caveat, cursive; font-size: 1.05rem; color: var(--ds-text-muted, #7a6a5c);
+}
+
+/* ═══════════════════════════════════════
+   ITEM DEL FEED — estilo Twitter del pueblo
+   ═══════════════════════════════════════ */
 
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item {
-  position: relative; display: block; margin: 0 0 12px; padding: 14px 12px 11px;
-  border: 2px solid var(--ds-ink-soft, #594839);
-  border-radius: 16px 12px 18px 13px / 12px 18px 13px 16px;
+  position: relative; display: block;
+  margin: 0 0 10px; padding: 12px 14px 10px;
+  border: 1.5px solid rgba(90, 70, 50, .15);
+  border-radius: 14px;
   background: var(--ds-paper-card, #fffdf7);
-  box-shadow: 1.5px 2.5px 0 rgba(51,38,30,.12), 0 3px 7px rgba(70,50,30,.09);
+  box-shadow: 0 1px 3px rgba(51,38,30,.06);
 }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item:nth-child(odd) { transform: rotate(-0.5deg); }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item:nth-child(even) { transform: rotate(0.45deg); }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--descubrimiento, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--encuentro, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--pueblo {
-  background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52);
+/* Colores suaves por categoría */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--encuentro,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--pueblo,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--descubrimiento {
+  background: #f4faf3; border-color: rgba(74,122,82,.18);
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--romance,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--relacion {
+  background: #f8f4fc; border-color: rgba(122,106,154,.18);
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--drama {
+  background: #fdf8ee; border-color: rgba(154,106,46,.18);
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--coincidencias {
+  background: #f4f8fc; border-color: rgba(70,110,140,.18);
 }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--romance, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--relacion {
-  background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a);
+/* ─── Header: caras + @handle · tiempo ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-header {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-avatares {
+  display: flex; align-items: center; flex: 0 0 auto;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara {
+  width: 38px; height: 38px; border-radius: 999px; border: 2px solid #fff;
+  box-shadow: 0 0 0 1px rgba(90,70,50,.2); overflow: hidden; background: #e8dcc4;
+  margin-left: -12px;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara:first-child { margin-left: 0; z-index: 2; }
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara img { width: 100%; height: 100%; object-fit: cover; }
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-ini {
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  font-family: Caveat, cursive; font-weight: 700; font-size: .95rem; color: #8a7460;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-sin-cara {
+  width: 38px; height: 38px; border-radius: 999px;
+  border: 2px dashed rgba(107,81,56,.25); background: #e8dcc4;
 }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--drama, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--conflicto {
-  background: var(--ds-mustard-soft, #f8efd4); border-color: #9a6a2e;
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-meta-line {
+  display: flex; align-items: baseline; gap: 5px; min-width: 0;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-handle {
+  font: 700 .88rem/1.2 Nunito, sans-serif;
+  color: var(--ds-pink-deep, #c85b78); white-space: nowrap;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-sep {
+  color: var(--ds-text-muted, #7a6a5c); font-size: .82rem;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-tiempo {
+  font: 600 .78rem/1.2 Nunito, sans-serif;
+  color: var(--ds-text-muted, #7a6a5c); white-space: nowrap;
 }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-tape {
-  position: absolute; top: -6px; left: 14px; width: 42px; height: 15px;
-  background: rgba(228, 210, 170, .94); border: 1px solid rgba(107, 81, 56, .2);
-  box-shadow: 0 1px 2px rgba(60, 44, 28, .12); transform: rotate(-5deg); z-index: 4;
-  pointer-events: none;
+/* ─── Body: texto ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-body {
+  margin: 0 0 6px;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt {
+  margin: 0;
+  font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);
+  font-weight: 600; font-size: .92rem; line-height: 1.35;
+  color: var(--ds-ink, #3b3028);
 }
 
+/* ─── Footer: hashtags + reacción ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-footer {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px;
+  margin-top: 4px;
+}
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-tags {
+  display: flex; flex-wrap: wrap; gap: 4px; flex: 1 1 auto;
+}
+.coti-tag {
+  display: inline-block; padding: 2px 8px;
+  border-radius: 8px; background: rgba(200,91,120,.08);
+  border: 1px solid rgba(200,91,120,.15);
+  font: 700 .72rem/1.3 Nunito, sans-serif;
+  color: var(--ds-pink-deep, #c85b78);
+  white-space: nowrap;
+}
+.coti-item--encuentro .coti-tag,
+.coti-item--pueblo .coti-tag,
+.coti-item--descubrimiento .coti-tag {
+  background: rgba(74,122,82,.08); border-color: rgba(74,122,82,.15);
+  color: var(--ds-green-deep, #4a7a52);
+}
+.coti-item--romance .coti-tag,
+.coti-item--relacion .coti-tag {
+  background: rgba(122,106,154,.08); border-color: rgba(122,106,154,.15);
+  color: var(--ds-lavender-deep, #7a6a9a);
+}
+.coti-item--drama .coti-tag {
+  background: rgba(154,106,46,.08); border-color: rgba(154,106,46,.15);
+  color: #9a6a2e;
+}
+
+.coti-item-reaccion {
+  display: inline-flex; align-items: center; gap: 3px;
+  padding: 2px 8px; border-radius: 8px;
+  background: rgba(90,70,50,.04);
+  font: 600 .72rem/1.3 Nunito, sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+  white-space: nowrap;
+}
+.coti-item-reaccion-ico { font-size: .82rem; }
+
+/* ─── Pie hint ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-pie-hint {
+  margin: 8px 0 0; padding: 8px 12px;
+  font: 600 .78rem/1.3 Nunito, sans-serif;
+  color: var(--ds-text-muted, #7a6a5c); text-align: center;
+}
+
+/* ─── Legacy / ocultos ─── */
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-tape,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-hoy,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-col .coti-cat-sello,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-star,
@@ -135,119 +270,45 @@
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-tape-l,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-tape-r { display: none; }
 
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-inner { display: flex; gap: 12px; align-items: flex-start; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-izq {
-  flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 68px;
-}
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-avatares { display: flex; align-items: center; flex: 0 0 auto; padding: 2px 0 0; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara {
-  width: 62px; height: 62px; border-radius: 999px; border: 2.5px solid #fff;
-  box-shadow: 0 0 0 1.5px var(--ds-ink-soft, #594839); overflow: hidden; background: #e8dcc4; margin-left: -34px;
-}
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara:first-child { margin-left: 0; z-index: 2; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara img { width: 100%; height: 100%; object-fit: cover; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-ini { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; font-family: Caveat, cursive; font-weight: 700; font-size: 1.35rem; color: #8a7460; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-sin-cara { width: 62px; height: 62px; border-radius: 999px; border: 2px dashed rgba(107,81,56,.3); background: #e8dcc4; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuerpo { flex: 1; min-width: 0; padding: 2px 0 0; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-bottom: 6px; padding-right: 52px; }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cat-pill {
-  display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
-  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
-  border: 1.5px solid var(--ds-ink-soft, #594839); background: var(--ds-paper-warm, #f8f0de);
-  font: 800 .6875rem/1.2 Nunito, sans-serif; letter-spacing: .4px; text-transform: uppercase;
-}
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cat-ico { font-size: .82rem; line-height: 1; transform: translateY(-.5px); }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--descubrimiento .coti-item-cat-pill, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--encuentro .coti-item-cat-pill, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--pueblo .coti-item-cat-pill {
-  background: var(--ds-green-soft, #e8f3e6); border-color: var(--ds-green-deep, #4a7a52); color: var(--ds-green-deep, #4a7a52);
-}
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--romance .coti-item-cat-pill, .play-v3 .aht-screen[data-aht-screen="diario"] .coti-item--relacion .coti-item-cat-pill {
-  background: var(--ds-lavender-soft, #ece6f8); border-color: var(--ds-lavender-deep, #7a6a9a); color: var(--ds-lavender-deep, #7a6a9a);
-}
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-flag {
-  position: absolute; top: -2px; right: 10px; z-index: 5;
-  display: inline-flex; padding: 4px 10px 5px;
-  background: var(--ds-red-alert, #c42b4a); border: 2px solid var(--ds-ink, #3b3028);
-  border-radius: 3px 3px 7px 7px / 3px 3px 8px 8px;
-  font: 700 .9rem/1.1 Caveat, cursive; letter-spacing: .5px; text-transform: uppercase;
-  color: #fff; transform: rotate(3deg); box-shadow: 1px 2px 0 rgba(51,38,30,.18);
-}
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-txt { margin: 0; font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif); font-weight: 600; font-size: 1.35rem; line-height: 1.25; color: var(--ds-ink, #3b3028); }
-
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cuando {
-  margin: 0; font: 700 .78rem/1.2 Nunito, sans-serif; letter-spacing: .02em;
-  color: var(--ds-text-muted, #7a6a5c); text-align: center; white-space: nowrap;
-}
-
-
+/* ─── Modal papel ─── */
 .play-v3 .play-root.pc[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::after,
-.play-v3 .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::after {
-  display: none;
-}
+.play-v3 .play-root.phone[data-capa="diario"] .aht-screen[data-aht-screen="diario"].coti-modal-papel::after { display: none; }
 
 .play-v3 .play-root:not([data-capa]) .aht-screen[data-aht-screen="diario"].coti-modal-papel {
-  display: none;
-  visibility: hidden;
-  pointer-events: none;
-  opacity: 0;
-  position: fixed;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  padding: 0;
-  border: 0;
-  box-shadow: none;
+  display: none; visibility: hidden; pointer-events: none;
+  opacity: 0; position: fixed; width: 0; height: 0;
+  overflow: hidden; padding: 0; border: 0; box-shadow: none;
 }
 
-/* CIERRE-VISUAL-09-COTILLEOS-20260906 — body cotilleos; sin shell duplicado */
+/* ─── cotilleos screen (sin cambios) ─── */
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 8px 12px 0;
+  display: flex; flex-direction: column; gap: 10px; padding: 8px 12px 0;
 }
-
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-item {
-  position: relative;
-  padding: 12px 12px 12px 14px;
-  border-radius: 14px;
-  border: 1.5px solid rgba(90, 70, 50, .22);
+  position: relative; padding: 12px 12px 12px 14px;
+  border-radius: 14px; border: 1.5px solid rgba(90, 70, 50, .22);
 }
-
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-item:nth-child(5n+1) { background: #fff6d6; }
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-item:nth-child(5n+2) { background: #ece6f8; }
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-item:nth-child(5n+3) { background: #e8f5e4; }
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-item:nth-child(5n+4) { background: #fdeef3; }
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-item:nth-child(5n+5) { background: #fff0e0; }
-
 .play-v3 .aht-screen[data-aht-screen="cotilleos"] .coti-footer-hint {
-  margin: 10px 12px 12px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: #ece6f8;
-  font-size: .76rem;
-  font-style: italic;
-  color: #5a4a78;
-  text-align: center;
+  margin: 10px 12px 12px; padding: 10px 12px; border-radius: 12px;
+  background: #ece6f8; font-size: .76rem; font-style: italic;
+  color: #5a4a78; text-align: center;
 }
 
 /* diario submodal: quitar scrapbook shell legacy */
 .play-v3 .aht-screen[data-aht-screen="diario"].coti-modal-papel::before,
 .play-v3 .aht-screen[data-aht-screen="diario"].coti-modal-papel::after {
-  display: none;
-  content: none;
+  display: none; content: none;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE — Mobile: solo feed, sin lateral
+   ═══════════════════════════════════════ */
+@media (max-width: 768px) {
+  .play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral { display: none; }
+  .play-v3 .aht-screen[data-aht-screen="diario"] .coti-layout { flex-direction: column; }
 }
