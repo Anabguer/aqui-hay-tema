@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260907-scrapbook-vivo';
+$ahtUi = 'v3-20260907-tablon-scrapbook';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -824,21 +824,34 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <button type="button" class="aht-frame-close" data-historia-celebracion-close aria-label="Cerrar">✕</button>
           </header>
           <div class="aht-frame-body">
-            <div class="histcele-body">
-              <div class="histcele-img-wrap">
-                <img class="histcele-img" src="" alt="" data-historia-celebracion-img/>
-              </div>
-              <h3 class="histcele-titulo" data-historia-celebracion-titulo></h3>
-              <p class="histcele-texto" data-historia-celebracion-texto></p>
-              <div class="histcele-protagonistas" data-historia-celebracion-protagonistas></div>
-              <div class="histcele-recompensa" data-historia-celebracion-recompensa hidden>
-                <span class="histcele-recompensa-label">Recompensa desbloqueada</span>
-                <div class="histcele-recompensa-card">
-                  <img class="histcele-recompensa-img" src="" alt="" data-historia-celebracion-recompensa-img hidden/>
-                  <span class="histcele-recompensa-objeto" data-historia-celebracion-recompensa-objeto></span>
+            <div class="histdet-body histcele-body">
+              <div class="histdet-main">
+                <div class="histdet-polaroid">
+                  <div class="histdet-polaroid-tape" aria-hidden="true"></div>
+                  <div class="histdet-polaroid-img">
+                    <img class="histdet-img" src="" alt="" data-historia-celebracion-img/>
+                  </div>
+                  <p class="histdet-polaroid-caption" data-historia-celebracion-texto></p>
+                  <span class="histdet-polaroid-hearts" aria-hidden="true">&#9825;&#9825;</span>
+                </div>
+                <div class="histdet-sidebar">
+                  <div class="histdet-recompensa" data-historia-celebracion-recompensa hidden>
+                    <span class="histdet-recompensa-ico" aria-hidden="true">&#9734;</span>
+                    <span class="histdet-recompensa-label">&#161;Regalito!</span>
+                    <div class="histdet-recompensa-card">
+                      <img class="histdet-recompensa-img" src="" alt="" data-historia-celebracion-recompensa-img hidden/>
+                      <span class="histdet-recompensa-nombre" data-historia-celebracion-recompensa-objeto></span>
+                    </div>
+                  </div>
+                  <div class="histdet-protagonistas" data-historia-celebracion-protagonistas></div>
                 </div>
               </div>
-              <button type="button" class="histcele-album" data-historia-celebracion-album>IR AL ÁLBUM</button>
+              <div class="histdet-footer">
+                <div class="histdet-dia" data-historia-celebracion-dia></div>
+              </div>
+              <div class="histcele-cta">
+                <button type="button" class="histcele-album" data-historia-celebracion-album>IR AL ÁLBUM</button>
+              </div>
             </div>
           </div>
         </div>
