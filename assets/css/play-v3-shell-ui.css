@@ -18,7 +18,10 @@
 
 .play-v3 .play-root::after { display: none; }
 
-.play-v3 .board-scroll, .play-v3 .board-fit, .play-v3 .play-stage, .play-v3 .game-map-wrap { background: #fff; }
+.play-v3 .board-scroll:not(.inicio-map-host .board-scroll),
+.play-v3 .board-fit:not(.inicio-map-host .board-fit),
+.play-v3 .play-stage:not(.inicio-map-host .play-stage),
+.play-v3 .game-map-wrap:not(.inicio-map-host) { background: #fff; }
 
 .play-v3 .board-fit {
   box-shadow: none;
