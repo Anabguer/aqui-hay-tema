@@ -6103,12 +6103,14 @@ function renderInicioMpDuo(misiones, parejas) {
   function vecRelFlechaHtml(dir, mutual, reverse) {
     const txt = vecRelPillTexto(dir) || 'CONOCIDO';
     const tone = vecRelToneFromDir(dir);
-    const pillCls = vecRelPillClass(dir);
-    const mutualCls = mutual ? ' vec-rel-flecha--mutual' : '';
-    const revCls = reverse ? ' vec-rel-flecha--rev' : '';
-    return '<div class="vec-rel-flecha' + mutualCls + revCls + '">' +
-      '<span class="vec-rel-flecha-linea vec-rel-flecha-linea--' + tone + (mutual ? ' vec-rel-flecha-linea--dbl' : '') + '" aria-hidden="true"></span>' +
-      '<span class="vec-rel-pill ' + pillCls + '">' + esc(txt) + '</span>' +
+    if (mutual) {
+      return '<div class="vec-rel-flecha-row vec-rel-flecha-row--mutual">' +
+        '<span class="vec-rel-flecha-body vec-rel-flecha-body--' + tone + '">' + esc(txt) + '</span>' +
+        '</div>';
+    }
+    var revCls = reverse ? ' vec-rel-flecha-row--rev' : '';
+    return '<div class="vec-rel-flecha-row' + revCls + '">' +
+      '<span class="vec-rel-flecha-body vec-rel-flecha-body--' + tone + '">' + esc(txt) + '</span>' +
       '</div>';
   }
 
@@ -6128,7 +6130,6 @@ function renderInicioMpDuo(misiones, parejas) {
     } else {
       if (hasAb) parts.push(vecRelFlechaHtml(ab, false, false));
       if (hasBa) parts.push(vecRelFlechaHtml(ba, false, true));
-      if (hasAb && hasBa) parts.push('<p class="vec-rel-puente-nota">DISTINTO EN CADA SENTIDO</p>');
     }
     return parts.join('');
   }
@@ -6187,7 +6188,7 @@ function renderInicioMpDuo(misiones, parejas) {
       (f.romance ? ' is-amor' : '') +
       (f.mal ? ' is-mal' : '') +
       (f.conflicto ? ' is-conflicto' : '');
-    const badge = f.conflicto ? '<span class="vec-rel-badge" aria-hidden="true">!</span>' : '';
+    const badge = f.conflicto ? '<span class="vec-rel-badge" aria-label="Conflicto activo">CONFLICTO</span>' : '';
     const puente = vecRelPuenteHtml(ab, ba);
     return (
       '<article class="' + cls + '">' +

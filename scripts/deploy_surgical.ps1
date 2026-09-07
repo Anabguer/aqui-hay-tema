@@ -83,6 +83,8 @@ if ($needsPlayPhp) {
 
 Assert-AhtDeployFileListExplicit -RequestedFiles $deployRels -PackedFiles $packed -LogFile $logFile
 
+Assert-AhtNoBomInPhp -PackedFiles $packed -LogFile $logFile
+
 Write-DeployLog -LogFile $logFile -Message "--- Archivos a subir ($($packed.Count)) ---" -ToHost
 Write-AhtDeployFileList -LogFile $logFile -Files $packed -ToHost
 

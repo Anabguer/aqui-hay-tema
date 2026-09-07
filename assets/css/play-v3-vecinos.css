@@ -438,17 +438,19 @@
   right: 6px;
   min-width: 18px;
   height: 18px;
-  padding: 0 4px;
+  padding: 2px 6px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: 4px;
   background: var(--ds-red-alert, #c42b4a);
-  border: 2px solid #fff;
+  border: 1.5px solid #fff;
   box-shadow: 0 1px 3px rgba(51, 38, 30, .18);
-  font: 800 .56rem/1 Nunito, sans-serif;
+  font: 800 .48rem/1 Nunito, sans-serif;
+  letter-spacing: .4px;
   color: #fff;
   z-index: 2;
+  white-space: nowrap;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-vacio,

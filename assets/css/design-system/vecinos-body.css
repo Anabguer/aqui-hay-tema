@@ -465,7 +465,7 @@ select.vec-rel-persona {
   flex-wrap: nowrap;
   align-items: center;
   justify-content: center;
-  gap: 14px;
+  gap: 20px;
   width: 100%;
   padding: 0 1cm;
   box-sizing: border-box;
@@ -484,10 +484,10 @@ select.vec-rel-persona {
 }
 
 .is-relaciones .vec-rel-card-grid > .vec-rel-puente {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   width: auto;
-  min-width: 64px;
-  max-width: 132px;
+  min-width: 100px;
+  max-width: 180px;
   padding: 0 4px;
   border: none;
   background: none;
@@ -551,48 +551,93 @@ select.vec-rel-persona {
   padding: 0;
 }
 
-.vec-rel-flecha {
-  position: relative;
+/* --- Arrow signal rows --- */
+.vec-rel-flecha-row {
   display: flex;
   align-items: center;
-  justify-content: center;
-  min-height: 18px;
   width: 100%;
+  min-height: 24px;
 }
 
-.vec-rel-flecha-linea {
-  position: absolute;
-  left: 2px;
-  right: 2px;
-  top: 50%;
-  height: 2px;
-  margin-top: -1px;
-  background: currentColor;
+.vec-rel-flecha-row--rev {
+  justify-content: flex-end;
 }
 
-.vec-rel-flecha-linea::after {
+.vec-rel-flecha-row--mutual {
+  justify-content: center;
+}
+
+.vec-rel-flecha-body {
+  position: relative;
+  display: inline-block;
+  padding: 4px 14px;
+  min-width: 80px;
+  border-radius: 4px;
+  text-align: center;
+  font: 800 .6rem/1.2 Nunito, sans-serif;
+  letter-spacing: .3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+}
+
+/* Right-pointing arrowhead (::after) */
+.vec-rel-flecha-row:not(.vec-rel-flecha-row--rev):not(.vec-rel-flecha-row--mutual) .vec-rel-flecha-body::after {
   content: "";
   position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%);
+  top: 0;
+  left: 100%;
   width: 0;
   height: 0;
-  border-left: 6px solid currentColor;
-  border-top: 4px solid transparent;
-  border-bottom: 4px solid transparent;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 10px solid currentColor;
 }
 
-.vec-rel-flecha-label {
-  position: relative;
-  z-index: 1;
-  padding: 1px 6px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, .85);
-  font: 700 .5625rem/1.2 var(--vec-font-body);
-  color: var(--vec-ink-soft);
-  white-space: nowrap;
+/* Left-pointing arrowhead (::before) */
+.vec-rel-flecha-row--rev .vec-rel-flecha-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 10px solid currentColor;
 }
+
+/* Mutual: both arrowheads */
+.vec-rel-flecha-row--mutual .vec-rel-flecha-body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 100%;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-right: 10px solid currentColor;
+}
+
+.vec-rel-flecha-row--mutual .vec-rel-flecha-body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 100%;
+  width: 0;
+  height: 0;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+  border-left: 10px solid currentColor;
+}
+
+/* Color by tone */
+.vec-rel-flecha-body--green { background: var(--vec-green, #4a7a52); }
+.vec-rel-flecha-body--pink { background: var(--vec-pink-deep, #c85b78); }
+.vec-rel-flecha-body--red { background: var(--vec-red, #c42b4a); }
+.vec-rel-flecha-body--mustard { background: var(--vec-mustard, #a88a30); }
+.vec-rel-flecha-body--neutral { background: #8a7a68; }
 
 .vec-rel-resumen {
   margin: 0;
