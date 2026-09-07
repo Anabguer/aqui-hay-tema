@@ -67,7 +67,7 @@
     document.body.setAttribute('data-debug', DEBUG_ON ? '1' : '0');
     syncDebugFloatVisibility();
     if (DEBUG_ON) {
-      try { console.log('%c[AHT DEBUG] Instrumentaci├│n activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
+      try { console.log('%c[AHT DEBUG] Instrumentación activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
     }
   }
   function isDebugOn() { return DEBUG_ON; }
@@ -114,7 +114,7 @@
   let musicaPrimerGestoPendiente = false;
 
   function actualizarControlMusica() {
-    const etiqueta = musicaActiva ? 'Desactivar m├║sica' : 'Activar m├║sica';
+    const etiqueta = musicaActiva ? 'Desactivar música' : 'Activar música';
     $$('[data-musica-toggle]').forEach(function (control) {
       control.dataset.musica = musicaActiva ? 'on' : 'off';
       control.setAttribute('aria-pressed', musicaActiva ? 'true' : 'false');
@@ -346,7 +346,7 @@
     const all = [];
     if (serverText) all.push(serverText);
     if (clientBits.length) all.push('--- CLIENT / API ---\n' + clientBits.join('\n\n'));
-    pre.textContent = all.length ? all.join('\n\n') : '(a├║n no hay eventos)';
+    pre.textContent = all.length ? all.join('\n\n') : '(aún no hay eventos)';
     try { if (fromServer && fromServer.texto) console.log('[AHT playtest_diag]\n' + fromServer.texto); } catch (e) {}
   }
 
@@ -408,8 +408,8 @@
       if (navigator.share && navigator.canShare) {
         const file = new File([blob], nombre, { type: 'application/json' });
         if (navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: 'AHT debug', text: 'Diagn├│stico Aqu├¡ Hay Tema' });
-          toast('Diagn├│stico compartido.');
+          await navigator.share({ files: [file], title: 'AHT debug', text: 'Diagnóstico Aquí Hay Tema' });
+          toast('Diagnóstico compartido.');
           return;
         }
       }
@@ -634,7 +634,7 @@
     try {
       data = raw ? JSON.parse(raw) : {};
     } catch (err) {
-      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvi├│ JSON.', raw: raw.slice(0, 400) };
+      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvió JSON.', raw: raw.slice(0, 400) };
       logApiError(action, method, body, resp.status, fail, 'json_parse');
       return fail;
     }
@@ -1076,9 +1076,9 @@
     const estEl = $('[data-vida-modal-estado]');
     if (estEl) {
       let hint = '';
-      if (vida && vida.critico) hint = 'La cosa se est├í poniendo fea.';
+      if (vida && vida.critico) hint = 'La cosa se está poniendo fea.';
       else if (valor >= 80) hint = 'Por ahora el pueblo respira.';
-      else if (valor <= 39) hint = 'Aqu├¡ pasa algo, y no es bueno.';
+      else if (valor <= 39) hint = 'Aquí pasa algo, y no es bueno.';
       estEl.textContent = hint;
       estEl.hidden = !hint;
       estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
@@ -1095,7 +1095,7 @@
     const root = $('.play-root');
     const prev = (root && root.getAttribute('data-capa')) || '';
 
-    // ÔöÇÔöÇ BRIDGE V4 ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ══ BRIDGE V4 ══════════════════════════════════════════════
     // Si screen-manager gestiona esta screen, delegar lifecycle.
     // Esto asegura que stack/velo/scroll V4 se mantengan correctamente.
     if (window.AHTScreenManager) {
@@ -1104,7 +1104,7 @@
         if (window.AHTScreenManager.getCurrent() !== name) {
           window.AHTScreenManager.open(name, { silent: true });
         }
-        // V4 ya manej├│ dock/scroll/history. Ejecutar SOLO renderers legacy.
+        // V4 ya manejó dock/scroll/history. Ejecutar SOLO renderers legacy.
         if (name !== 'mentes') mentesEncIdActivo = null;
         if (name === 'vida_pueblo') renderVidaPuebloModal();
         if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
@@ -1124,7 +1124,7 @@
         if (name) { /* fall through to legacy setCapa */ } else { return; }
       }
     }
-    // ÔöÇÔöÇ FIN BRIDGE V4 ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+    // ══ FIN BRIDGE V4 ══════════════════════════════════════════
 
     if (!name) root.removeAttribute('data-capa');
     else root.setAttribute('data-capa', name);
@@ -1498,7 +1498,7 @@
   }
   // --- fin Inventario / Regalos (F1) ---
 
-  /** Cat├ílogo est├ítico de regalos (data/catalogos/regalos.json) para assets en mensajitos. */
+  /** Catálogo estático de regalos (data/catalogos/regalos.json) para assets en mensajitos. */
   let cacheCatalogoRegalos = null;
   let cacheCatalogoRegalosCargando = null;
 
@@ -1550,9 +1550,9 @@
       /te manda\s+(.+?)\.\s*(?:Guardado|$)/i,
       /te deja\s+(.+?)\s+como agradecimiento/i,
       /encuentras\s+(.+?)\./i,
-      /del d[i├¡]a:\s*(.+?)\.\s*(?:Guardado|$)/i,
+      /del d[ií]a:\s*(.+?)\.\s*(?:Guardado|$)/i,
       /Detallito merecido:\s*(.+?)\./i,
-      /sorpresa del d[i├¡]a:\s*(.+?)\./i
+      /sorpresa del d[ií]a:\s*(.+?)\./i
     ];
     for (let i = 0; i < patterns.length; i++) {
       const hit = t.match(patterns[i]);
@@ -1583,7 +1583,7 @@
         id: String(origen.objeto_id || ''),
         nombre: String(origen.objeto_nombre),
         url: String(origen.objeto_imagen || ''),
-        desc: origen.regalito_origen === 'historia_pueblo' ? 'Historia del Pueblo' : (origen.regalito_origen === 'misiones_3x3' ? 'Tres misiones del d├¡a' : '')
+        desc: origen.regalito_origen === 'historia_pueblo' ? 'Historia del Pueblo' : (origen.regalito_origen === 'misiones_3x3' ? 'Tres misiones del día' : '')
       };
     }
     const cat = catalogo || cacheCatalogoRegalos || { byId: {}, byNombre: {} };
@@ -1816,8 +1816,8 @@
     if (diaHoy && diaMsg === diaHoy) diaLbl = 'Hoy';
     else if (diaHoy && diaHoy > 1 && diaMsg === diaHoy - 1) diaLbl = 'Ayer';
     else if (fc) diaLbl = fc;
-    else if (diaMsg) diaLbl = 'D├¡a ' + diaMsg;
-    if (diaLbl && hora) return diaLbl + ' ┬À ' + hora;
+    else if (diaMsg) diaLbl = 'Día ' + diaMsg;
+    if (diaLbl && hora) return diaLbl + ' · ' + hora;
     return diaLbl || hora || fc || '';
   }
 
@@ -1883,7 +1883,7 @@
     toast(txt);
   }
 
-  // ÔöÇÔöÇ Celebraci├│n de historia del pueblo ÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇÔöÇ
+  // ══ Celebración de historia del pueblo ═════════════════════
   const celebracionesConsumidas = new Set();
   let colaCelebraciones = [];
   let celebracionHitoActual = '';
@@ -2089,7 +2089,7 @@
     if (!m || m.estado_pueblo === 'caducada') return '';
     const raw = String(m.plazo_humano || '').trim();
     if (!raw || raw === 'Cuando puedas.') return '';
-    if (raw === 'El tiempo se acaba.') return '├Ültimas horas';
+    if (raw === 'El tiempo se acaba.') return 'Últimas horas';
     let label = raw.replace(/^Te quedan\s+/i, 'Quedan ').replace(/^Te queda\s+/i, 'Queda ');
     if (/^quedan?\s+\d+\s*h/i.test(label)) {
       return label.charAt(0).toUpperCase() + label.slice(1);
@@ -2103,7 +2103,7 @@
     const familia = String(m.familia_mensajito || '');
     const origenTipo = String((m.origen && m.origen.tipo_evento) || '');
     if (pueblo === 'cumplida') {
-      if (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado') return 'Petici├│n resuelta';
+      if (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado') return 'Petición resuelta';
       return 'Hecho';
     }
     if (pueblo === 'caducada') {
@@ -2184,7 +2184,7 @@
     const fam = String(origen.familia_mensajito || '');
     const nom = nombrePublicoDe(origen);
     if (fam === 'f_peticion' || fam === 'f_presentacion' || origen.tipo === 'peticion') {
-      return 'Petici├│n de ' + nom;
+      return 'Petición de ' + nom;
     }
     if (fam === 'anuncio_evento_pueblo') return 'Anuncio del evento';
     if (fam === 'f_colectivo') return 'Propuesta del pueblo';
@@ -2219,7 +2219,7 @@
           var _obsId = datos.observado_id || '';
           var _obsRes = (cacheInsp && cacheInsp.residentes && cacheInsp.residentes[_obsId]) || {};
           var _obsGen = (_obsRes.identidad_publica && _obsRes.identidad_publica.genero) || '';
-          return 'Organizar algo con ' + (_obsGen === 'mujer' ? 'ella' : '├®l');
+          return 'Organizar algo con ' + (_obsGen === 'mujer' ? 'ella' : 'él');
         }
         return 'Organizar plan';
       case 'organizar_encargo':
@@ -2738,9 +2738,9 @@
     const reloj = (estado && estado.reloj) || {};
     const enCurso = planEsEnCurso(enc, estado);
 
-    if (enCurso) return lugar + ' ┬À En curso ┬À ' + hora;
-    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' ┬À Hoy ' + hora;
-    return lugar + ' ┬À D├¡a ' + (enc.dia || '?') + ' ┬À ' + hora;
+    if (enCurso) return lugar + ' · En curso · ' + hora;
+    if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' · Hoy ' + hora;
+    return lugar + ' · Día ' + (enc.dia || '?') + ' · ' + hora;
   }
   function emocionDe(id) {
     var r = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id];
@@ -2831,7 +2831,7 @@
     const ids = enc.participantes || [];
     const enCurso = planEsEnCurso(enc, estado);
     return '<div class="prox-faces' + (enCurso ? ' prox-faces--en-curso' : '') + '">' + carasPlanHtml(ids) + '</div>' +
-      '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' ┬À ')) + '</p>' +
+      '<p class="prox-nombres">' + esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</p>' +
       '<p class="prox-meta' + (enCurso ? ' prox-meta--en-curso' : '') + '"><span class="prox-meta-ico" aria-hidden="true"></span>' +
       esc(formatPlanMeta(enc, estado)) + '</p>' +
       htmlIntervencionResultado(enc, estado, enCurso ? { cardFlash: true } : {});
@@ -2933,12 +2933,12 @@
     var actorActual = iv.actor_actual || '';
     var barra = iv.barra_quedada || 0;
 
-    /* Si no hay m├ís turnos y hay resultado, mostrar resumen. */
+    /* Si no hay más turnos y hay resultado, mostrar resumen. */
     if (turnos.length >= turnosMax && iv.ultimo && iv.ultimo.texto) {
       return htmlIntervencionResultado(enc, estado);
     }
 
-    /* Si no est├í disponible y no hay turnos, no mostrar nada (legacy). */
+    /* Si no está disponible y no hay turnos, no mostrar nada (legacy). */
     if (!iv.disponible && turnos.length === 0) return '';
     if (!iv.acciones || !iv.acciones.length) return '';
 
@@ -3007,7 +3007,7 @@
     /* Temas de hobby (si aplica) */
     html += '<div class="enc-int-temas-grid" data-temas-panel hidden></div>';
 
-    /* Feedback de la ├║ltima acci├│n (si hay) */
+    /* Feedback de la última acción (si hay) */
     if (turnos.length > 0) {
       var ultimo = turnos[turnos.length - 1];
       var emojiR = ultimo.tono === 'bien' ? '\ud83d\udc4d' : (ultimo.tono === 'mal' ? '\ud83d\udc4e' : '\ud83d\ude10');
@@ -3152,7 +3152,7 @@
       const ids = enc.participantes || [];
       btn.innerHTML = '<span class="agenda-fila-fotos">' + carasPlanHtml(ids) + '</span>' +
         '<span class="agenda-fila-cuerpo"><span class="agenda-fila-nombres">' +
-        esc(ids.map(function (id) { return nombreDe(id); }).join(' ┬À ')) + '</span>' +
+        esc(ids.map(function (id) { return nombreDe(id); }).join(' · ')) + '</span>' +
         '<span class="agenda-fila-meta">' + esc(formatPlanMeta(enc, cacheEstado)) + '</span></span>';
       box.appendChild(btn);
     });
@@ -3188,8 +3188,8 @@
 
   const EVENTO_PUEBLO_NOMBRE_UI = {
     noche_bingo: 'Noche de bingo',
-    partido_futbol_benefico: 'Partido de f├║tbol ben├®fico',
-    sesion_cine_comunitaria: 'Sesi├│n de cine comunitaria',
+    partido_futbol_benefico: 'Partido de fútbol benéfico',
+    sesion_cine_comunitaria: 'Sesión de cine comunitaria',
     tardeo_en_el_bar: 'Tardeo en el bar',
     clase_abierta_gimnasio: 'Clase abierta en el gimnasio',
     club_lectura: 'Club de lectura'
@@ -3683,7 +3683,7 @@
     if (list.length === 2) {
       return esc(nombreDe(list[0])) + ' y ' + esc(nombreDe(list[1]));
     }
-    return esc(list.map(function (id) { return nombreDe(id); }).join(' ┬À '));
+    return esc(list.map(function (id) { return nombreDe(id); }).join(' · '));
   }
 
   function encCursoTituloDe(enc) {
@@ -4235,7 +4235,7 @@ function renderInicioMpDuo(misiones, parejas) {
       }
       if (cta) {
         var ctaTxtEl = cta.querySelector('[data-proximo-evento-cta-txt]') || cta.querySelector('.inicio-evento-cta-txt');
-        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || '┬┐Qui├®n va?';
+        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || '¿Quién va?';
         cta.hidden = !puedeApuntar;
         cta.disabled = !puedeApuntar;
         if (puedeApuntar) {
@@ -4311,7 +4311,7 @@ function renderInicioMpDuo(misiones, parejas) {
   var cacheMapaZonas = null;
   var cacheMapaPresencia = null;
   const LUGAR_TITULO_UI = {
-    lug_cafeteria: 'Cafeter├¡a', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
+    lug_cafeteria: 'Cafetería', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
     lug_restaurante: 'Restaurante', lug_parque: 'Parque', lug_bar: 'Bar',
     lug_cine: 'Cine', lug_discoteca: 'Discoteca', lug_bingo: 'Bingo'
   };
@@ -4320,7 +4320,7 @@ function renderInicioMpDuo(misiones, parejas) {
     return nombreLugarUi(id, fb);
   }
   const LUGAR_NOMBRE_UI = {
-    lug_cafeteria: 'la cafeter├¡a', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
+    lug_cafeteria: 'la cafetería', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
     lug_restaurante: 'el restaurante', lug_parque: 'el parque', lug_bar: 'el bar',
     lug_cine: 'el cine', lug_discoteca: 'la discoteca', lug_bingo: 'el bingo'
   };
@@ -4376,7 +4376,7 @@ function renderInicioMpDuo(misiones, parejas) {
     return layer ? layer.querySelector('[data-zona="' + zonaId + '"]') : null;
   }
 
-  /** Hit-test por coordenadas sobre la imagen del mapa (m├ís fiable que botones % en m├│vil). */
+  /** Hit-test por coordenadas sobre la imagen del mapa (más fiable que botones % en móvil). */
   function zonaDesdePuntoMapa(clientX, clientY) {
     if (!cacheMapaZonas || !cacheMapaZonas.zonas) return null;
     var img = document.querySelector('[data-mapa-canonico] .mapa-canonico-bg');
@@ -4432,7 +4432,7 @@ function renderInicioMpDuo(misiones, parejas) {
   function lineaHorarioDestino(d) {
     if (!d || !d.horario) return '';
     var est = d.abierto_ahora ? 'Abierto ahora' : 'Cerrado ahora';
-    return est + ' ┬À ' + d.horario;
+    return est + ' · ' + d.horario;
   }
 
   function pintarConsultaEdArt(lugId) {
@@ -4489,7 +4489,7 @@ function renderInicioMpDuo(misiones, parejas) {
     var trig = box.querySelector('.org-dd-trigger');
     if (!trig || !id) return;
     var label = trig.querySelector('.org-lugar-card-nom');
-    var nom = label ? label.textContent : (nombreLugarTitulo(id, id) || 'ElegirÔÇª');
+    var nom = label ? label.textContent : (nombreLugarTitulo(id, id) || 'Elegir═');
     trig.innerHTML = orgDdTriggerContent('lugar', nom, id);
   }
 
@@ -4524,7 +4524,7 @@ function renderInicioMpDuo(misiones, parejas) {
     return Math.abs(s);
   }
 
-  /** Slots en franja inferior del hotspot (% left/top). ├ìndice estable por cantidad. */
+  /** Slots en franja inferior del hotspot (% left/top). Índice estable por cantidad. */
   function slotsTokensZona(total) {
     var n = Math.max(1, Math.min(5, total || 1));
     if (n === 1) return [{ left: 50, top: 82 }];
@@ -4602,7 +4602,7 @@ function renderInicioMpDuo(misiones, parejas) {
       if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.selector'), zonaId);
       $('[data-s-tit]').textContent = meta ? meta.label : zonaId;
-      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' ┬À ');
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
       var box = $('[data-s-btns]');
       box.innerHTML = '';
       ops.forEach(function (d) {
@@ -4614,7 +4614,7 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       var all = document.createElement('button');
       all.type = 'button';
-      all.textContent = 'Qui├®n hay aqu├¡';
+      all.textContent = 'Quién hay aquí';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, null, zonaBtn); });
       box.appendChild(all);
       actualizarNotaAtras();
@@ -4730,7 +4730,7 @@ function renderInicioMpDuo(misiones, parejas) {
       var tag = tv.categoria_etiqueta || 'Tema';
       return '<section class="consulta-ed-tema-card">' +
         '<div class="consulta-ed-tema-head">' +
-        '<p class="consulta-ed-tema-kicker">Aqu├¡ hay tema</p>' +
+        '<p class="consulta-ed-tema-kicker">Aquí hay tema</p>' +
         '<span class="consulta-ed-tema-tag">' + esc(tag) + '</span>' +
         '</div>' +
         '<p class="consulta-ed-tema-txt">' + esc(tv.texto || '') + '</p>' +
@@ -5115,7 +5115,7 @@ function renderInicioMpDuo(misiones, parejas) {
     });
     pasarRatoBtns().forEach(function (btn) {
       btn.classList.toggle('pasar-rato--noche', esNoche);
-      btn.title = esNoche ? 'Avanza hasta las 08:00 de la ma├▒ana' : 'Avanza el tiempo exactamente 1 hora';
+      btn.title = esNoche ? 'Avanza hasta las 08:00 de la mañana' : 'Avanza el tiempo exactamente 1 hora';
       if (!btn.classList.contains('is-busy')) {
         const txt = btn.querySelector('.pasar-rato-txt');
         if (txt) txt.textContent = esNoche ? 'Pasar la noche' : 'Pasar el rato';
@@ -5214,7 +5214,7 @@ function renderInicioMpDuo(misiones, parejas) {
     else $('.play-root').removeAttribute('data-importante');
   }
 
-  /* ÔöÇÔöÇ Auto-sync: sincronizaci├│n peri├│dica del reloj ÔöÇÔöÇ */
+  /* ══ Auto-sync: sincronización periódica del reloj ══ */
   var _syncClockTimer = null;
   var _syncClockBusy = false;
   var _partidaSwitchBusy = false;
@@ -5256,7 +5256,7 @@ function renderInicioMpDuo(misiones, parejas) {
       console.log('[DIAG-TRACE] syncClock result', { ok: r.ok, hay_cambios: r.hay_cambios_visibles, nResCount: r.reloj && r.reloj.residentes_count });
       if (!r.ok) return;
       if (r.hay_cambios_visibles) {
-        console.log('[DIAG-TRACE] syncClock: hay_cambios ÔåÆ refresh');
+        console.log('[DIAG-TRACE] syncClock: hay_cambios ─ refresh');
         await refresh();
       } else {
         if (cacheEstado) {
@@ -5403,7 +5403,7 @@ function renderInicioMpDuo(misiones, parejas) {
       if (!silentHist) uiHistPush();
     marcarConsultaLugar($('.selector'), id);
       $('[data-s-tit]').textContent = cx.nombre;
-      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' ┬À ');
+      $('[data-s-coti]').textContent = ops.map(function (d) { return d.nombre; }).join(' · ');
       const box = $('[data-s-btns]');
       box.innerHTML = '';
       ops.forEach(function (d) {
@@ -5415,7 +5415,7 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       const all = document.createElement('button');
       all.type = 'button';
-      all.textContent = 'Qui├®n hay en el complejo';
+      all.textContent = 'Quién hay en el complejo';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, null); });
       box.appendChild(all);
       actualizarNotaAtras();
@@ -5467,12 +5467,12 @@ function renderInicioMpDuo(misiones, parejas) {
 
   function copyVacio(cid) {
     const t = {
-      cafe_libros: 'Ni el caf├® humea. No hay ni un alma.',
-      rincon_lola: 'Hoy Lola no tendr├¡a a qui├®n servir.',
+      cafe_libros: 'Ni el café humea. No hay ni un alma.',
+      rincon_lola: 'Hoy Lola no tendría a quién servir.',
       cine_game: 'Pantalla en negro. No hay ni un alma.',
-      mala_idea: 'Hasta el bar est├í en silencio.',
+      mala_idea: 'Hasta el bar está en silencio.',
       parque: 'Solo el banco, esperando.',
-      gimnasio_spa: 'M├íquinas quietas. No hay ni un alma.'
+      gimnasio_spa: 'Máquinas quietas. No hay ni un alma.'
     };
     return t[cid] || 'No hay ni un alma.';
   }
@@ -6009,7 +6009,7 @@ function canonEmoId(id) {
   function etiquetaVecinoDesde(vista, dia) {
     const g = vista && vista.genero;
     const rol = g === 'mujer' ? 'Vecina' : (g === 'hombre' ? 'Vecino' : 'Vecino');
-    return rol + ' desde el d├¡a ' + dia;
+    return rol + ' desde el día ' + dia;
   }
 
   function textoAnimoDisplay(emo) {
@@ -6035,9 +6035,9 @@ function canonEmoId(id) {
   function textoEmoVecinoSutil(emo, genero) {
     const e = canonEmoId(emo);
     if (e === 'neutro') return '';
-    if (e === 'alegre') return 'est├í feliz';
-    if (e === 'triste') return 'est├í triste';
-    if (e === 'enfadado') return genero === 'mujer' ? 'est├í enfadada' : 'est├í enfadado';
+    if (e === 'alegre') return 'está feliz';
+    if (e === 'triste') return 'está triste';
+    if (e === 'enfadado') return genero === 'mujer' ? 'está enfadada' : 'está enfadado';
     return '';
   }
 
@@ -6231,14 +6231,14 @@ function canonEmoId(id) {
 
   function diarioCategoriaMeta(e) {
     const filtro = e.filtro_grupo || 'relaciones';
-    const txt = e.categoria_etiqueta || 'Relaci├│n';
+    const txt = e.categoria_etiqueta || 'Relación';
     const clsMap = {
       planes: 'pg-pill--lavender',
       relaciones: 'pg-pill--mustard',
       cambios: 'pg-pill--tan'
     };
     const low = String(txt).toLowerCase();
-    if (low.indexOf('├ínimo') >= 0 || low.indexOf('animo') >= 0) {
+    if (low.indexOf('ánimo') >= 0 || low.indexOf('animo') >= 0) {
       return { cls: 'pg-pill--red', txt: txt, grupo: 'cambios' };
     }
     return { cls: clsMap[filtro] || 'pg-pill--mustard', txt: txt, grupo: filtro };
@@ -6289,7 +6289,7 @@ function canonEmoId(id) {
   function entradaDiarioHtml(e, rid) {
     const meta = diarioCategoriaMeta(e);
     const eventoId = (e.origen && e.origen.evento_id) || e.evento_id || '';
-    const titulo = String(e.titulo || '').trim() || 'Algo pas├│';
+    const titulo = String(e.titulo || '').trim() || 'Algo pasó';
     const explicacion = String(e.explicacion || e.texto || '').trim();
     const tono = e.tono || '';
     const tonoCls = tono ? ' fdi-card--' + tono : '';
@@ -6321,7 +6321,7 @@ function canonEmoId(id) {
       entradas = entradas.slice().reverse();
     }
     if (!entradas.length) {
-      list.innerHTML = '<p class="ficha-vacio ficha-ironico">A├║n no ha pasado nada digno de p├ígina.</p>';
+      list.innerHTML = '<p class="ficha-vacio ficha-ironico">Aún no ha pasado nada digno de página.</p>';
       return;
     }
     let html = '';
@@ -6329,7 +6329,7 @@ function canonEmoId(id) {
     let inTl = false;
     entradas.forEach(function (e) {
       const diaNum = e.dia || '';
-      const diaLbl = e.fecha_corta || ('D├¡a ' + diaNum);
+      const diaLbl = e.fecha_corta || ('Día ' + diaNum);
       const diaKey = String(diaNum) + '|' + diaLbl;
       if (diaKey !== diaPrev) {
         if (inTl) html += '</div></div>';
@@ -6374,7 +6374,7 @@ function canonEmoId(id) {
     });
     const ord = $('[data-diario-orden]');
     if (ord) {
-      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'M├ís antiguo' : 'M├ís reciente';
+      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'Más antiguo' : 'Más reciente';
     }
     const busca = $('[data-diario-busca]');
     if (busca && busca.value !== diarioVecinoBusca) busca.value = diarioVecinoBusca;
@@ -6474,7 +6474,7 @@ function hobbyIconKey(id, texto) {
 
   function emojiHobby(txt) {
     const t = String(txt || '').toLowerCase();
-    if (t.indexOf('caf├®') >= 0 || t.indexOf('cafe') >= 0) return '? ';
+    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '? ';
     if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '?? ';
     if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '?? ';
     return '';
@@ -6524,7 +6524,7 @@ function hobbyIconKey(id, texto) {
 
   function lineaGente(slots) {
     const items = (slots && slots.length >= 2) ? slots.slice(0, 2) : [null, null];
-    return 'Gente: ' + slotGenteTxt(items[0]) + ' ┬À ' + slotGenteTxt(items[1]);
+    return 'Gente: ' + slotGenteTxt(items[0]) + ' · ' + slotGenteTxt(items[1]);
   }
 
   function pintarLoQueSabes(vista) {
@@ -6555,10 +6555,10 @@ function hobbyIconKey(id, texto) {
   }
   function textoPlanesVacios(id) {
     const frases = [
-      'Ni un caf├® en el horizonte. O eso cree.',
+      'Ni un café en el horizonte. O eso cree.',
       'Agenda libre. Demasiado libre.',
-      'Hoy no tiene nada apuntado. Ni ma├▒ana, seg├║n parece.',
-      'Cero planes. Cero prisas. Cero dramaÔÇª por ahora.'
+      'Hoy no tiene nada apuntado. Ni mañana, según parece.',
+      'Cero planes. Cero prisas. Cero drama═ por ahora.'
     ];
     let h = 0;
     const s = String(id || '');
@@ -6776,7 +6776,7 @@ function hobbyIconKey(id, texto) {
     const ids = vecinosIdsOrdenados();
     const ok = ids.length > 1;
     const nav = fichaNavBotones();
-    // Navegaci├│n circular: con 2+ vecinos ambas flechas siempre activas
+    // Navegación circular: con 2+ vecinos ambas flechas siempre activas
     if (nav.prev) nav.prev.disabled = !ok;
     if (nav.next) nav.next.disabled = !ok;
   }
@@ -6867,6 +6867,8 @@ function hobbyIconKey(id, texto) {
     const n = mensajitosPendientesCount(msgs);
     btn.hidden = n === 0;
     btn.disabled = n === 0;
+    const wrap = $('[data-buzon-leer-todos-wrap]');
+    if (wrap) wrap.hidden = n === 0;
   }
 
   async function marcarTodosMensajitosLeidos() {
@@ -7114,12 +7116,12 @@ function hobbyIconKey(id, texto) {
     if (e.fecha_corta) return e.fecha_corta;
     if (bucket === 'ayer') return 'Ayer';
     if (bucket === 'hoy') return '';
-    return e.dia ? ('d├¡a ' + e.dia) : '';
+    return e.dia ? ('día ' + e.dia) : '';
   }
 
   function htmlCotiAvatares(actores) {
     const ids = (actores && actores.length) ? actores.slice(0, 2) : [];
-    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">ÔÇª</span>';
+    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">═</span>';
     return ids.map(function (id) {
       const img = tokenDe(id);
       const nom = nombreDe(id);
@@ -7309,23 +7311,23 @@ function hobbyIconKey(id, texto) {
 
   var ORG_LUGAR_DESC = {
     lug_cafeteria: 'El lugar perfecto para tomar algo y charlar tranquilamente.',
-    lug_bar: 'Ambiente relajado para una copa y buena conversaci├│n.',
+    lug_bar: 'Ambiente relajado para una copa y buena conversación.',
     lug_biblioteca: 'Rincones tranquilos para leer o charlar en voz baja.',
     lug_parque: 'Aire libre y calma para pasear o sentarse un rato.',
-    lug_cine: 'Una sesi├│n de cine para compartir sin prisas.',
+    lug_cine: 'Una sesión de cine para compartir sin prisas.',
     lug_gimnasio: 'Moverse juntos o animar un plan activo.',
     lug_restaurante: 'Mesa puesta para comer bien y hablar con calma.',
     lug_bingo: 'Partida de bingo y risas en comunidad.',
-    lug_discoteca: 'M├║sica y ambiente para soltar el cuerpo.',
-    lug_karaoke: 'Cantar, re├¡r y pasarlo bien.',
+    lug_discoteca: 'Música y ambiente para soltar el cuerpo.',
+    lug_karaoke: 'Cantar, reír y pasarlo bien.',
     lug_mirador: 'Vistas del pueblo para un momento especial.',
     lug_picnic: 'Manta, comida y charla al aire libre.',
-    lug_arcade: 'Juegos y diversi├│n en el recreativo.',
-    lug_recreativo: 'Juegos y diversi├│n en el recreativo.',
+    lug_arcade: 'Juegos y diversión en el recreativo.',
+    lug_recreativo: 'Juegos y diversión en el recreativo.',
     lug_spa: 'Relax y cuidado para desconectar un poco.',
     lug_tienda: 'Un paseo por la tienda del pueblo.'
   };
-  var ORG_HORAS_HINT_DEFAULT = 'Los horarios disponibles pueden variar seg├║n el lugar.';
+  var ORG_HORAS_HINT_DEFAULT = 'Los horarios disponibles pueden variar según el lugar.';
   function orgLugarDesc(lugId) {
     var d = destinoOperativoPorId(lugId);
     if (d && d.descripcion) return String(d.descripcion);
@@ -7507,7 +7509,7 @@ function hobbyIconKey(id, texto) {
     if (modoToggle) modoToggle.hidden = esEvt;
     if (seccDonde) seccDonde.hidden = esEvt;
     if (seccCuando) seccCuando.hidden = esEvt;
-    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '┬┐Qui├®nes van?';
+    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '¿Quiénes van?';
     if (contador) {
       if (esEvt && org.evento_ctx && org.evento_ctx.aforo_total) {
         var act = (org.evento_ctx.participantes_apuntados || []).length;
@@ -7625,12 +7627,12 @@ function hobbyIconKey(id, texto) {
       return pend || 'Elige al menos dos vecinos.';
     }
     if (err === 'PARTICIPANTES_EXCESO') return 'Puedes organizar planes con hasta 2 vecinos.';
-    if (err === 'AFORO_COMPLETO') return 'El evento ya est├í completo.';
-    if (err === 'PARTICIPANTE_YA_APUNTADO') return 'Ese vecino ya est├í apuntado al evento.';
+    if (err === 'AFORO_COMPLETO') return 'El evento ya está completo.';
+    if (err === 'PARTICIPANTE_YA_APUNTADO') return 'Ese vecino ya está apuntado al evento.';
     if (err === 'EVENTO_PUEBLO_NO_ENCONTRADO') return 'No se ha encontrado ese evento del pueblo.';
     if (err === 'EVENTO_PUEBLO_CERRADO') return 'Ese evento ya no admite apuntados.';
     if (err === 'lugar_requerido' || err === 'LUGAR_NO_OPERATIVO') return 'Elige un lugar.';
-    if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cu├índo quedar.';
+    if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cuándo quedar.';
     if (err === 'LIMITE_INTERVENCIONES') return 'Has alcanzado el l\u00edmite de intervenciones de hoy.';
     if (err === 'network_error' || err === 'respuesta_no_json' || err === 'excepcion') return fallback;
     return fallback;
@@ -7764,9 +7766,9 @@ function hobbyIconKey(id, texto) {
         if (es24h) {
           estadoLinea = 'Abierto 24 h';
         } else if (abierto === true) {
-          estadoLinea = 'Abierto ahora ┬À hasta ' + cierre;
+          estadoLinea = 'Abierto ahora · hasta ' + cierre;
         } else if (abierto === false) {
-          estadoLinea = 'Cerrado ┬À abre a las ' + apertura;
+          estadoLinea = 'Cerrado · abre a las ' + apertura;
         } else {
           estadoLinea = 'Horario: ' + apertura + 'ÔÇô' + cierre;
         }
@@ -7823,7 +7825,7 @@ function hobbyIconKey(id, texto) {
     if (!box) return;
     var opts = Array.isArray(options) ? options : [];
     var valStr = value === null || value === undefined ? '' : String(value);
-    var label = 'ElegirÔÇª';
+    var label = 'Elegir═';
     opts.forEach(function (opt) {
       var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
       if (valStr !== '' && optVal === valStr) label = opt.label || optVal;
@@ -8098,7 +8100,7 @@ function hobbyIconKey(id, texto) {
     if (!org.dia) {
       pintarOrgDropdown('hora', [{ value: '', label: 'ÔÇö', disabled: true }], '', null);
       org.hora = 0;
-      setOrgHorasHint('Elige cu├índo quedar para ver horarios.', true);
+      setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
       actualizarOrgCrearBtn();
       return;
     }
@@ -8741,7 +8743,7 @@ function hobbyIconKey(id, texto) {
     }
     el.hidden = false;
     el.classList.add('is-on');
-    el.textContent = lineas.map(function (l) { return '┬À ' + (l.texto || l.tipo || ''); }).join('\n');
+    el.textContent = lineas.map(function (l) { return '· ' + (l.texto || l.tipo || ''); }).join('\n');
   }
 
   async function avanzarHoras(horas) {
@@ -8756,17 +8758,17 @@ function hobbyIconKey(id, texto) {
   async function pasarElRato() {
     if (!pasarRatoBtns().length || pasarRatoEnCurso) return;
     pasarRatoEnCurso = true;
-    setPasarRatoBusy(true, 'A ver qu├® se cueceÔÇª');
+    setPasarRatoBusy(true, 'A ver qué se cuece═');
     const relojAntes = relojAbsDesdeEstado();
     try {
       if (!(await recuperarPartidaIdPerdida())) {
-        toast('No encuentro tu partida guardada. Recarga la p├ígina o inicia sesi├│n en Intocables.');
+        toast('No encuentro tu partida guardada. Recarga la página o inicia sesión en Intocables.');
         return;
       }
       const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
         !!(cacheEstado && cacheEstado.vida_pueblo && cacheEstado.vida_pueblo.game_over_activo);
       if (perdida) {
-        toast('La partida ha terminado. Empieza otra con ┬½Nueva partida┬╗.');
+        toast('La partida ha terminado. Empieza otra con «Nueva partida».');
         return;
       }
       const h = horaActualEstado();
@@ -8986,7 +8988,7 @@ function hobbyIconKey(id, texto) {
     }
     const open = ev.target.closest('[data-open]');
     if (open && uiRootFrom(open)) {
-      // BRIDGE V4: si screen-manager ya manej├│ la apertura en capture phase,
+      // BRIDGE V4: si screen-manager ya manejó la apertura en capture phase,
       // NO duplicar setCapa/scroll/history.
       if (ev.__ahtV4) return;
       const name = open.getAttribute('data-open');
