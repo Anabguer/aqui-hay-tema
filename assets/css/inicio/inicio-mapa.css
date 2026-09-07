@@ -123,9 +123,10 @@
 
   .play-v3 .inicio-stage > .inicio-map-host .mapa-canonico {
     border-radius: 14px;
-    border: 2px solid rgb(222 169 185);
+    border: 2px solid rgba(107, 81, 56, .28);
     box-shadow: 0 3px 10px rgba(70, 50, 30, .1);
     overflow: hidden;
+    background: transparent;
   }
 
   .play-v3 .inicio-stage > .inicio-map-host .mapa-zona-hit .hab .cara,
