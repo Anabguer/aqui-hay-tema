@@ -8356,7 +8356,6 @@ function hobbyIconKey(id, texto) {
     limpiarOrgAviso();
     setCapa('organizar');
     if ($('.play-root')) $('.play-root').removeAttribute('data-consulta');
-    fillOrganizar();
   }
 
   function syncOrgModoUi() {
@@ -9778,6 +9777,8 @@ var finOk = $('[data-tut-fin-ok]');
       orgBuscaTxt = '';
       var buscaInp = $('[data-org-busca]');
       if (buscaInp) buscaInp.value = '';
+      if (!orgPresetNuevo) resetOrgForm();
+      orgPresetNuevo = false;
       fillOrganizar();
     }
   });
