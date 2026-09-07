@@ -670,7 +670,7 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
-  padding: 8px 12px 0;
+  padding: 0 12px 0;
   gap: 10px;
 }
 

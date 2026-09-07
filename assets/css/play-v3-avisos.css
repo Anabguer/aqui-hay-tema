@@ -365,7 +365,7 @@
 .play-v3 .aht-screen[data-aht-screen="buzon"] [data-buzon-list] {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: .85rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="buzon"] .carta-msg {

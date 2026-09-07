@@ -229,18 +229,6 @@
   display: inline-block;
 }
 
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-0 { --vec-paper: #FDE8EE; }
-
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-1 { --vec-paper: #E8F5E3; }
-
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-2 { --vec-paper: #EDE8F4; }
-
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-3 { --vec-paper: #FEF5E0; }
-
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-4 { --vec-paper: #E3F0F8; }
-
-.aht-screen[data-aht-screen="vecinos"] .vecino-celda--decor-5 { --vec-paper: #F5EDE3; }
-
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
   padding: 0;
   display: flex;
