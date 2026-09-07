@@ -202,9 +202,7 @@
   flex: 0 0 auto;
   flex-shrink: 0;
   min-height: auto;
-  padding: 10px 12px 10px 14px;
-  background: #fff;
-  box-shadow: 0 1px 6px rgba(51, 38, 30, .1);
+  /* background, box-shadow: relaciones-tablon.css owner */
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card-accent {
@@ -226,13 +224,7 @@
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card--tone-neutral .vec-rel-card-accent { background: rgba(107, 81, 56, .35); }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-card.is-amor {
-  background: linear-gradient(180deg, #fff 0%, #fdf5f8 100%);
-}
-
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card.is-amor {
-  background: linear-gradient(180deg, #fff 0%, #fdf5f8 100%);
-}
+/* .vec-rel-card.is-amor: relaciones-tablon.css owner */
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card-grid {
   display: flex;

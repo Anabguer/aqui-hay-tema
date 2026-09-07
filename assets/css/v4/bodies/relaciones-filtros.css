@@ -184,11 +184,7 @@
   flex-shrink: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-y: auto;
-}
+/* vec-rel-scroll structural (flex/overflow): vecinos-body.css:389 owner, tablon:bg */
 
 .play-v3 .aht-screen[data-aht-screen="parejas"]::before {
   border-color: rgba(107, 81, 56, .32);

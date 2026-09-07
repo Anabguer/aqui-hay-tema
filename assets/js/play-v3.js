@@ -1918,27 +1918,26 @@
 
   function renderCelebracion(c) {
     const img = $('[data-historia-celebracion-img]');
-    const titulo = $('[data-historia-celebracion-titulo]');
     const texto = $('[data-historia-celebracion-texto]');
     const protWrap = $('[data-historia-celebracion-protagonistas]');
     const recDiv = $('[data-historia-celebracion-recompensa]');
     const recObj = $('[data-historia-celebracion-recompensa-objeto]');
+    const diaDiv = $('[data-historia-celebracion-dia]');
     if (img) { img.src = c.imagen || ''; img.alt = c.nombre || ''; }
-    if (titulo) titulo.textContent = '\u00a1' + (c.nombre || 'Nuevo recuerdo') + '!';
     if (texto) texto.textContent = c.texto_narrativo || 'Primer recuerdo del pueblo descubierto.';
+    if (diaDiv) diaDiv.textContent = c.dia ? 'D\u00eda ' + c.dia : '';
     if (protWrap) {
       let ph = '';
       const prots = c.protagonistas || [];
       for (let i = 0; i < prots.length; i++) {
         const p = prots[i];
-        if (i > 0) ph += '<span class="histcele-rel" aria-hidden="true">&middot;</span>';
-        ph += '<span class="histcele-protagonista">';
+        ph += '<span class="histdet-protagonista">';
         if (p.retrato) {
-          ph += '<img class="histcele-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+          ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
         } else {
-          ph += '<div class="histcele-protagonista-avatar histcele-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
+          ph += '<div class="histdet-protagonista-avatar histdet-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
         }
-        ph += '<span class="histcele-protagonista-nombre">' + esc(p.nombre) + '</span>';
+        ph += '<span class="histdet-protagonista-nombre">' + esc(p.nombre) + '</span>';
         ph += '</span>';
       }
       protWrap.innerHTML = ph;
@@ -8969,6 +8968,7 @@ function hobbyIconKey(id, texto) {
       ev.preventDefault();
       reiniciarPartidaActual();
       return;
+    }
     const celestNecesitan = ev.target.closest('[data-celestine-necesitan]');
     if (celestNecesitan && uiRootFrom(celestNecesitan)) {
       ev.preventDefault();
@@ -9026,7 +9026,6 @@ function hobbyIconKey(id, texto) {
         renderBuzon(cacheBuzon);
       }
       return;
-    }
     }
     const invEntregar = ev.target.closest('[data-inv-entregar]');
     if (invEntregar && uiRootFrom(invEntregar)) {
