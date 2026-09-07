@@ -2073,7 +2073,7 @@
 .play-v3 .tut-caras .cara img {
   object-fit: cover;
   object-position: 50% 20%;
-  transform: scale(1.1);
+  transform: scale(1.12) translateY(2px);
   transform-origin: 50% 14%;
   background: #f0e8dc;
 }
