@@ -837,9 +837,8 @@
     justify-content: flex-start;
     gap: 6px;
     width: 100%;
-    margin-top: 6px;
     padding: 8px 0 2px;
-    border-top: 1px solid rgba(198, 176, 210, .30);
+    border-top: 1px solid rgb(225 53 149 / 47%);
     border-bottom: none;
     text-align: left;
     cursor: pointer;
