@@ -47,8 +47,8 @@ final class MemoriaEventos
         }
         $maxHitos = (int) ceil($cap * 0.6);
         $maxNoHitos = $cap - $maxHitos;
-        $lastHitos = array_slice($hitos, -$maxHitos, preserve_keys: true);
-        $lastNoHitos = array_slice($noHitos, -$maxNoHitos, preserve_keys: true);
+        $lastHitos = array_slice($hitos, -$maxHitos, null, true);
+        $lastNoHitos = array_slice($noHitos, -$maxNoHitos, null, true);
         $mantener = array_merge($lastNoHitos, $lastHitos);
         usort($mantener, static function (array $a, array $b): int {
             $ta = ((int) ($a['dia'] ?? 0)) * 24 + (int) ($a['hora'] ?? 0);

@@ -182,7 +182,7 @@ final class PoblacionV3
                 if ($edad > 0 && in_array($genero, ['mujer', 'hombre'], true)) {
                     $meta[] = ['id' => $id, 'genero' => $genero, 'edad' => $edad];
                 }
-            } catch (\Throwable) {
+            } catch (\Throwable $e) {
                 continue;
             }
         }
