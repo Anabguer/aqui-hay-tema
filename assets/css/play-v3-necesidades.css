@@ -1,0 +1,207 @@
+/* AHT — NECESIDADES GLOBALES (necesidades_global)
+   Estilos para el panel de necesidades del pueblo.
+   Clases generadas por renderNecesidadesGlobal() en play-v3.js.
+   Patrón visual: tarjetas de residente con barras de necesidad.
+   ============================================================ */
+
+/* ── Filtros ────────────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 0 var(--aht-gap-sm, 8px);
+  justify-content: center;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt {
+  flex: 0 1 auto;
+  min-height: 32px;
+  padding: 4px 12px;
+  border: 1.5px solid var(--ds-ink-soft, #594839);
+  border-radius: 999px;
+  background: var(--ds-paper-warm, #f8f0de);
+  font: 700 .75rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink-soft, #594839);
+  cursor: pointer;
+  transition: background .15s, color .15s, box-shadow .15s;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt:hover {
+  background: var(--ds-lavender-soft, #ece6f8);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt--on {
+  background: var(--ds-ink-soft, #594839);
+  color: #fff;
+  border-color: var(--ds-ink-soft, #594839);
+}
+
+/* ── Contenedor de cuerpo ───────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0;
+}
+
+/* ── Mensajes vacío / error ─────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-vacio {
+  text-align: center;
+  color: var(--ds-text-muted, #7a6a5c);
+  font-family: var(--ds-font-ui, Nunito, sans-serif);
+  font-size: .88rem;
+  font-weight: 600;
+  padding: var(--aht-gap-lg, 16px) var(--aht-gap-md, 12px);
+}
+
+/* ── Tarjeta de residente ───────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card {
+  background: var(--ds-paper-card, #fffdf7);
+  border: 1.5px solid var(--ds-ink-soft, #594839);
+  border-radius: 14px 10px 16px 11px / 10px 16px 11px 14px;
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .12);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card:active {
+  transform: translateY(0);
+}
+
+/* ── Header de tarjeta ──────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+/* ── Avatar ─────────────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-avatar {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1.5px solid var(--ds-ink-soft, #594839);
+  background: var(--ds-paper-warm, #f8f0de);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-avatar--fallback {
+  font: 800 .88rem/1 Nunito, sans-serif;
+  color: var(--ds-ink-soft, #594839);
+}
+
+/* ── Nombre ─────────────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-nom {
+  margin: 0;
+  font: 800 .88rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #2a2218);
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Contenedor de necesidades ──────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-needs {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* ── Fila de necesidad ──────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+}
+
+/* ── Icono de necesidad ─────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-icon {
+  font-size: .95rem;
+  width: 20px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+/* ── Nombre de necesidad ────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-name {
+  font: 600 .72rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink-soft, #594839);
+  width: 80px;
+  flex: 0 0 auto;
+}
+
+/* ── Barra de necesidad (contenedor) ────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar {
+  flex: 1 1 auto;
+  height: 10px;
+  min-width: 0;
+  border: 1.5px solid var(--ds-ink-soft, #594839);
+  border-radius: 999px;
+  background: var(--ds-paper-warm, #f8f0de);
+  overflow: hidden;
+}
+
+/* ── Relleno de barra ───────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .3s ease;
+}
+
+/* ── Colores por banda ──────────────────────────────────────── */
+/* bien */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--bien {
+  background: var(--ds-green-deep, #4a7a52);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--bien .necg-need-name {
+  color: var(--ds-green-deep, #4a7a52);
+}
+
+/* le_vendria_bien */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--le_vendria_bien {
+  background: var(--ds-mustard-deep, #B98A2F);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--le_vendria_bien .necg-need-name {
+  color: var(--ds-mustard-deep, #B98A2F);
+}
+
+/* lo_necesita */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--lo_necesita {
+  background: var(--ds-warning, #E0A93F);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--lo_necesita .necg-need-name {
+  color: var(--ds-coral-deep, #C9563E);
+}
+
+/* en_rojo */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--en_rojo {
+  background: var(--ds-pink-deep, #C42B4A);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--en_rojo .necg-need-name {
+  color: var(--ds-pink-deep, #C42B4A);
+}
