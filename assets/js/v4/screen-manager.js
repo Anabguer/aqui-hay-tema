@@ -323,10 +323,12 @@
     // .aht-frame-close buttons (V4 close)
     var v4Close = target.closest('.aht-frame-close');
     if (v4Close) {
-      e.preventDefault();
-      e.stopPropagation();
-      close();
-      return;
+      if (currentScreen && V4_SCREENS.has(currentScreen)) {
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+        return;
+      }
     }
 
     // .aht-frame-back / [data-capa-back] � volver en stack V4 (p. ej. Cotilleos)
