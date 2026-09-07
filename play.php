@@ -1012,10 +1012,13 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </header>
           <div class="aht-frame-body">
             <div class="coti-filtros" data-coti-filtros role="group" aria-label="Filtrar por tipo" hidden></div>
-            <div class="coti-body capa-scroll">
-              <div class="coti-list" data-coti-list></div>
+            <div class="coti-layout">
+              <div class="coti-body capa-scroll">
+                <div class="coti-list" data-coti-list></div>
+              </div>
+              <aside class="coti-lateral" data-coti-se-habla aria-label="Se habla de"></aside>
             </div>
-            <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">💡</span> Estos rumores cambian con el tiempo. Continúa conociendo a los vecinos para descubrir más.</p>
+            <p class="coti-pie-hint"><span class="coti-pie-ico" aria-hidden="true">&#128161;</span> Estos rumores cambian con el tiempo. Contin&uacute;a conociendo a los vecinos para descubrir m&aacute;s.</p>
           </div>
         </div>
       </aside>
@@ -1027,54 +1030,42 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </header>
           <div class="aht-frame-body">
             <div class="org-body capa-scroll">
-              <div class="org-modo-toggle" data-org-modo-toggle aria-label="Modo del plan">
-                <span class="org-modo-pill" data-org-modo-solo>Solo</span>
-                <span class="org-modo-pill" data-org-modo-pareja>Acompañado</span>
-              </div>
-              <p class="org-modo-estado sr-only" data-org-modo-estado hidden></p>
               <p class="org-aviso" data-org-aviso hidden></p>
-              <section class="ficha-seccion org-seccion org-seccion--quienes">
-                <div class="org-seccion-head">
-                  <div class="org-seccion-head-row">
-                    <h4 class="ficha-seccion-tit">¿Quiénes van?</h4>
-                    <span class="org-vecinos-contador" data-org-vecinos-contador hidden></span>
-                  </div>
-                  <p class="org-seccion-meta org-picker-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
+              <select class="org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
+              <select class="org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
+              <select class="org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
+
+              <section class="org-step org-step--quienes">
+                <h3 class="org-step-tit">¿Quiénes van?</h3>
+                <p class="org-step-hint" data-org-picker-hint>Elige hasta 2 vecinos.</p>
+                <div class="org-busca-wrap">
+                  <span class="org-busca-ico" aria-hidden="true"></span>
+                  <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
+                  <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
                 </div>
-                <div class="ficha-seccion-body">
-                  <div class="org-busca-wrap">
-                    <span class="org-busca-ico" aria-hidden="true"></span>
-                    <input type="search" class="org-busca" data-org-busca placeholder="Buscar vecino…" autocomplete="off" aria-label="Buscar vecino"/>
-                    <span class="org-busca-todos" data-org-mostrar-todos role="button" tabindex="0" hidden>mostrar todos</span>
-                  </div>
-                  <div class="org-picker-strip capa-scroll" data-org-picker></div>
-                </div>
+                <div class="org-vecinos-strip" data-org-picker></div>
               </section>
-              <section class="ficha-seccion org-seccion org-seccion--donde">
-                <h4 class="ficha-seccion-tit">¿Dónde?</h4>
-                <div class="ficha-seccion-body org-donde-fila">
-                  <div class="org-dd org-dd--lugar" data-org-dd-lugar></div>
-                  <select class="org-select org-select-native" data-org-lugar hidden tabindex="-1" aria-hidden="true"></select>
-                  <p class="org-lugar-horario mini" data-org-lugar-horario hidden></p>
-                </div>
+
+              <section class="org-step org-step--donde">
+                <h3 class="org-step-tit">¿Dónde?</h3>
+                <p class="org-step-hint">Elige un lugar del pueblo.</p>
+                <div class="org-lugares-grid" data-org-lugares-grid></div>
               </section>
-              <section class="ficha-seccion org-seccion org-seccion--cuando">
-                <h4 class="ficha-seccion-tit">¿Cuándo?</h4>
-                <div class="ficha-seccion-body">
-                  <div class="org-cuando">
-                    <div class="org-cuando-campo org-cuando-campo--dia">
-                      <span class="org-cuando-ico org-cuando-ico--dia" aria-hidden="true"></span>
-                      <div class="org-dd org-dd--dia" data-org-dd-dia></div>
-                    </div>
-                    <div class="org-cuando-campo org-cuando-campo--hora">
-                      <span class="org-cuando-ico org-cuando-ico--hora" aria-hidden="true"></span>
-                      <div class="org-dd org-dd--hora" data-org-dd-hora></div>
-                    </div>
-                    <select class="org-select org-select-native" data-org-dia hidden tabindex="-1" aria-hidden="true"></select>
-                    <select class="org-select org-select-native" data-org-hora hidden tabindex="-1" aria-hidden="true"></select>
-                  </div>
-                  <p class="org-horas-hint mini" data-org-horas-hint hidden></p>
-                </div>
+
+              <section class="org-step org-step--cuando">
+                <h3 class="org-step-tit">¿Cuándo?</h3>
+                <p class="org-step-hint">Selecciona día y hora.</p>
+                <div class="org-dias-strip" data-org-dias-strip></div>
+                <div class="org-horas-grid" data-org-horas-grid></div>
+                <p class="org-horas-hint" data-org-horas-hint hidden></p>
+              </section>
+
+              <section class="org-step org-step--lugar-info" data-org-step-lugar-info hidden>
+                <div class="org-lugar-info-card" data-org-lugar-info></div>
+              </section>
+
+              <section class="org-step org-step--estado" data-org-step-estado hidden>
+                <div class="org-estado-card" data-org-estado></div>
               </section>
             </div>
             <div class="org-actions">

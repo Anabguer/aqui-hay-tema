@@ -79,7 +79,9 @@ final class VistaCotilleoV3
             }
 
             // Canon: DIARIO = memoria personal; COTILLEOS = subconjunto público.
+
             // Solo es publicable la entrada que declara clasificación de Cotilleo
+
             // explícita (cotilleo_meta.categoria). Sin esa señal → memoria privada.
 
             $metaPublicable = is_array($e['cotilleo_meta'] ?? null) ? $e['cotilleo_meta'] : [];
@@ -214,8 +216,6 @@ final class VistaCotilleoV3
 
         unset($item);
 
-
-
         return array_values($items);
 
     }
@@ -238,8 +238,6 @@ final class VistaCotilleoV3
 
         $hora = (int) ($ts['hora'] ?? 0);
 
-
-
         return $dia * 24 + $hora;
 
     }
@@ -247,53 +245,99 @@ final class VistaCotilleoV3
 
 
     /**
+
      * Claves canónicas de cotilleos ya representados en el buzón (dedup vista global).
+
      *
+
      * @param array<string, mixed> $partida
+
      * @return array<string, true>
+
      */
+
     private static function clavesEventoCotilleoBuzon(array $partida): array
+
     {
+
         $out = [];
+
         foreach ($partida['buzon'] ?? [] as $m) {
+
             if (!is_array($m)) {
+
                 continue;
+
             }
+
             $clas = (string) ($m['clasificacion'] ?? '');
+
             $canal = (string) ($m['canal'] ?? BuzonEngine::canalDe($clas));
+
             if ($clas !== BuzonEngine::COTILLEO && $canal !== BuzonEngine::CANAL_COTILLEO) {
+
                 continue;
+
             }
+
             if (trim((string) ($m['texto'] ?? '')) === '') {
+
                 continue;
+
             }
+
             $clave = DiarioNarrativaBridge::claveEventoDeMensaje($m);
+
             if ($clave !== '') {
+
                 $out[$clave] = true;
+
             }
+
         }
+
         return $out;
+
     }
 
     /**
+
      * @param array<string, mixed> $entradaDiario
+
      * @param array<string, true> $clavesBuzon
+
      */
+
     private static function diarioDuplicadoEnCotilleoBuzon(array $entradaDiario, array $clavesBuzon): bool
+
     {
+
         if ($clavesBuzon === []) {
+
             return false;
+
         }
+
         $origen = is_array($entradaDiario['origen'] ?? null) ? $entradaDiario['origen'] : [];
+
         $eventoId = (string) ($origen['evento_id'] ?? '');
+
         if ($eventoId !== '' && isset($clavesBuzon[$eventoId])) {
+
             return true;
+
         }
+
         $buzonId = (string) ($origen['buzon_id'] ?? '');
+
         if ($buzonId !== '' && isset($clavesBuzon['buzon:' . $buzonId])) {
+
             return true;
+
         }
+
         return false;
+
     }
 
     /**
@@ -382,6 +426,8 @@ final class VistaCotilleoV3
 
         }
 
+        $lugarId = (string) ($m['lugar_id'] ?? '');
+
         $row = [
 
             'id' => (string) ($m['id'] ?? ''),
@@ -407,6 +453,10 @@ final class VistaCotilleoV3
             'categoria_icono' => $cat['icono'],
 
             'destacado' => $cat['destacado'],
+
+            'lugar_id' => $lugarId !== '' ? $lugarId : null,
+
+            'lugar_handle' => LugarHandle::de($lugarId !== '' ? $lugarId : null),
 
             '_seq' => $seq,
 
@@ -438,6 +488,8 @@ final class VistaCotilleoV3
 
         $cat = CotilleoCategoria::de($e);
 
+        $lugarId = (string) ($e['lugar_id'] ?? '');
+
         return [
 
             'id' => (string) ($e['id'] ?? ''),
@@ -463,6 +515,10 @@ final class VistaCotilleoV3
             'categoria_icono' => $cat['icono'],
 
             'destacado' => $cat['destacado'],
+
+            'lugar_id' => $lugarId !== '' ? $lugarId : null,
+
+            'lugar_handle' => LugarHandle::de($lugarId !== '' ? $lugarId : null),
 
         ];
 
@@ -507,5 +563,3 @@ final class VistaCotilleoV3
     }
 
 }
-
-
