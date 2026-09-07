@@ -189,6 +189,7 @@
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: var(--aht-gap-sm, 8px);
   padding: 6px 16px;
   background-color: var(--aht-surface-raised, #FFFFFF);
@@ -211,22 +212,34 @@
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
-  border: none;
-  background: transparent;
-  font: 600 0.8rem/1 "Nunito", sans-serif;
-  color: var(--aht-text-muted, #75634F);
+  border: 1px solid var(--ds-pink-deep, #C42B4A);
+  background: var(--ds-pink-soft, #F9DCE4);
+  font: 600 0.78rem/1 "Nunito", sans-serif;
+  color: var(--ds-ink-soft, #6B5138);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  white-space: nowrap;
+  transition: background .15s, border-color .15s, color .15s;
+}
+
+.aht-screen[data-aht-screen="buzon"] .buzon-mark-all:hover {
+  background: var(--ds-pink-deep, #C42B4A);
+  border-color: var(--ds-pink-deep, #C42B4A);
+  color: #fff;
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all-box {
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--aht-border, #D8D1DE);
-  border-radius: 3px;
-  display: inline-block;
+  display: none;
+}
+
+.aht-screen[data-aht-screen="buzon"] .buzon-mark-all::before {
+  content: '✓✓';
+  font-size: 0.85em;
+  line-height: 1;
 }
 
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
