@@ -341,7 +341,7 @@
   height: 4.75rem;
   min-width: 4.75rem;
   min-height: 4.75rem;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 800;
   letter-spacing: .05em;
   text-transform: lowercase;
@@ -544,9 +544,6 @@
   align-items: center;
   gap: .4rem;
   padding: .34rem .58rem;
-  border: 1.5px solid rgba(140, 110, 80, .32);
-  border-radius: 999px;
-  background: rgba(255, 253, 246, .9);
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-busca-ico {
@@ -584,17 +581,12 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda {
-  border: 0;
-  background: transparent;
-  transform: none;
   padding: .1rem .05rem .2rem;
-  box-shadow: none;
   gap: .18rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:hover,
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecino-celda:focus-visible {
-  background: rgba(255, 246, 220, .55);
   outline: none;
 }
 
@@ -622,7 +614,7 @@
   margin: 0;
   padding: 0 .05rem;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.1;
   color: #8a7460;
@@ -1254,7 +1246,7 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-vacio,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-ironico {
-  font-size: .92rem;
+  font-size: 1.05rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body .ficha-relaciones {
@@ -2396,7 +2388,7 @@
   background: #f3b1c3;
   color: #2c261f;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: .04em;
   text-transform: uppercase;
