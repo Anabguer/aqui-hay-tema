@@ -2070,7 +2070,9 @@
 .play-v3 .caras-clip img,
 .play-v3 .caras-clip .cara img,
 .play-v3 .tut-caras img,
-.play-v3 .tut-caras .cara img {
+.play-v3 .tut-caras .cara img,
+.play-v3 .obj-vecinos-preview-cara,
+.play-v3 .histdet-protagonista-avatar {
   object-fit: cover;
   object-position: 50% 20%;
   transform: scale(1.12) translateY(2px);

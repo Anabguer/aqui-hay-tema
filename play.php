@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
@@ -179,14 +179,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     }
     .tut-caras img, .tut-caras .cara img {
       width: 52px; height: 52px; max-width: 52px; max-height: 52px;
-      object-fit: cover; object-position: 50% 20%; transform: scale(1.1); transform-origin: 50% 14%; display: block; border-radius: 50%;
+      object-fit: cover; object-position: 50% 20%; display: block; border-radius: 50%;
     }
     .caras-clip { display: flex; justify-content: center; gap: .35rem; margin-bottom: .35rem; flex-wrap: wrap; overflow: hidden; }
     .caras-clip .cara {
       width: 52px; height: 52px; flex: 0 0 52px; overflow: hidden;
       border-radius: 50%; border: 2px solid rgba(120,96,72,.35);
     }
-    .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; max-width: 52px; max-height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; transform: scale(1.1); transform-origin: 50% 14%; display: block; }
+    .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; max-width: 52px; max-height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; display: block; }
     .mision-accion {
       margin-top: .35rem; border: 1px solid #8a7a66; background: #fff6c8;
       font: inherit; font-size: .75rem; font-weight: 800; padding: .25rem .5rem; cursor: pointer;
@@ -222,8 +222,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     .prox-caras img {
       object-fit: cover;
       object-position: 50% 20%;
-      transform: scale(1.1);
-      transform-origin: 50% 14%;
     }
     .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; border-radius: 50%; }
     .prox-caras { display: flex; gap: .35rem; margin-bottom: .35rem; }
