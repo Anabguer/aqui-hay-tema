@@ -1,0 +1,300 @@
+/* ============================================================
+   RELACIONES TABLÓN — Scrapbook / tablón de cotilleos del pueblo
+   Alcance: SOLO .is-relaciones dentro de [data-aht-screen="vecinos"]
+   Autoridad: después de relaciones-filtros.css y play-v3-vecinos.css
+   Sin priority overrides — cascada pura
+   ============================================================ */
+
+/* --- FONDO TABLÓN (cork/paper) --- */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll {
+  background:
+    /* Textura sutil de grano/corcho */
+    radial-gradient(ellipse at 20% 30%, rgba(210,180,140,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 70%, rgba(196,181,232,.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(232,220,200,.15) 0%, transparent 70%),
+    /* Base cálida */
+    linear-gradient(175deg, #f5efe4 0%, #efe8da 40%, #e8dfd0 100%);
+  border-radius: 12px;
+  padding: 14px 10px 10px;
+  position: relative;
+  /* Doodles decorativos como pseudo-elementos */
+  background-color: #f0e8d8;
+}
+
+/* Doodles decorativos detrás de las cards */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll::before,
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll::after {
+  position: absolute;
+  font-size: 1.6rem;
+  line-height: 1;
+  opacity: .35;
+  pointer-events: none;
+  z-index: 0;
+  content: "";
+}
+
+/* Corazón + estrella arriba izquierda */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll::before {
+  content: "\2665  \273F  \2605";
+  top: 6px;
+  left: 10px;
+  font-size: 1.1rem;
+  letter-spacing: 6px;
+  color: #c85b78;
+  opacity: .3;
+}
+
+/* Florecita + rayita abajo derecha */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll::after {
+  content: "\2740  \2734  \2015";
+  bottom: 8px;
+  right: 12px;
+  font-size: 1rem;
+  letter-spacing: 5px;
+  color: #9a8a78;
+  opacity: .28;
+}
+
+/* --- CARDS — PAPELITOS --- */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card {
+  /* Papel base */
+  background: #fffdf7;
+  border: 1.5px solid rgba(160, 140, 120, .22);
+  border-radius: 10px 8px 12px 7px / 8px 12px 7px 11px;
+  box-shadow:
+    2px 3px 0 rgba(90, 72, 56, .1),
+    0 1px 3px rgba(90, 72, 56, .06);
+  /* Quitar accent bar clásica */
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+  transition: transform .15s ease;
+}
+
+/* Accent bar: convertir a cinta/chincheta decorativa */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card-accent {
+  display: none;
+}
+
+/* --- 4 VARIANTES PAPELITO (nth-child determinista) --- */
+
+/* A — Rosa */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+1) {
+  background: linear-gradient(160deg, #fff8fa 0%, #fdeef3 100%);
+  border-color: rgba(200, 91, 120, .18);
+  transform: rotate(-1deg);
+}
+
+/* B — Crema/amarillo */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+2) {
+  background: linear-gradient(160deg, #fffdf5 0%, #faf3d8 100%);
+  border-color: rgba(212, 184, 74, .22);
+  transform: rotate(.7deg);
+}
+
+/* C — Lila */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+3) {
+  background: linear-gradient(160deg, #faf8fd 0%, #ede6f8 100%);
+  border-color: rgba(184, 168, 216, .22);
+  transform: rotate(-.5deg);
+}
+
+/* D — Verde menta */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n) {
+  background: linear-gradient(160deg, #f6fbf5 0%, #e2f0df 100%);
+  border-color: rgba(74, 122, 82, .18);
+  transform: rotate(.9deg);
+}
+
+/* Cintas/chinchetas decorativas por variante */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+1)::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 18px;
+  width: 28px;
+  height: 10px;
+  background: rgba(200, 91, 120, .25);
+  border-radius: 0 0 3px 3px;
+  transform: rotate(-2deg);
+  z-index: 2;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+2)::before {
+  content: "";
+  position: absolute;
+  top: -5px;
+  right: 20px;
+  width: 10px;
+  height: 10px;
+  background: #d4b84a;
+  border-radius: 50%;
+  border: 1.5px solid #a88a30;
+  box-shadow: 0 1px 2px rgba(90,72,56,.15);
+  z-index: 2;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+3)::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%) rotate(1deg);
+  width: 30px;
+  height: 8px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(184, 168, 216, .3) 0px,
+    rgba(184, 168, 216, .3) 4px,
+    transparent 4px,
+    transparent 6px
+  );
+  border-radius: 1px;
+  z-index: 2;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n)::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  left: 14px;
+  width: 10px;
+  height: 10px;
+  background: #e88ba8;
+  border-radius: 50%;
+  border: 1.5px solid #c85b78;
+  box-shadow: 0 1px 2px rgba(90,72,56,.12);
+  z-index: 2;
+}
+
+/* Sombra especial para card de amor (parejas) */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card.is-amor {
+  background: linear-gradient(160deg, #fff8fa 0%, #fdeef3 100%);
+  border-color: rgba(200, 91, 120, .22);
+}
+
+/* Badge conflicto: mantener z-index alto */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-badge {
+  z-index: 3;
+}
+
+/* --- DESKTOP: DOS COLUMNAS con irregularidad --- */
+@media (min-width: 640px) {
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px 14px;
+    padding: 18px 16px 14px;
+    align-items: start;
+  }
+
+  /* Irregularidad: offsets por variante */
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+1) {
+    transform: rotate(-1.2deg) translateY(2px);
+    margin-left: -3px;
+  }
+
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+2) {
+    transform: rotate(.8deg) translateY(-4px);
+    margin-right: -2px;
+  }
+
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n+3) {
+    transform: rotate(-.6deg) translateY(6px);
+    margin-left: 4px;
+  }
+
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(4n) {
+    transform: rotate(1deg) translateY(-2px);
+    margin-right: 3px;
+  }
+
+  /* Filtros: 2 filas en desktop para acomodar Todo el pueblo */
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-filtros {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+/* --- MOBILE: UNA COLUMNA con alternancia --- */
+@media (max-width: 639px) {
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px 8px 10px;
+  }
+
+  /* Alternancia izquierda/derecha */
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(odd) {
+    transform: rotate(-1deg) translateX(4px);
+    margin-right: 8px;
+  }
+
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(even) {
+    transform: rotate(.7deg) translateX(-4px);
+    margin-left: 8px;
+  }
+
+  /* Tercera card: rotación distinta */
+  .play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-card:nth-child(3n) {
+    transform: rotate(-.4deg) translateX(2px);
+  }
+}
+
+/* --- PIE — Notita manuscrita --- */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-hint {
+  margin: 12px 4px 4px;
+  padding: 8px 14px;
+  border: 1.5px dashed rgba(160, 140, 120, .3);
+  border-radius: 8px 6px 9px 5px / 6px 9px 5px 8px;
+  background: rgba(255, 253, 244, .7);
+  font-family: "Caveat", cursive;
+  font-size: .88rem;
+  font-style: italic;
+  color: #6a5a48;
+  text-align: center;
+  transform: rotate(-.5deg);
+  position: relative;
+  z-index: 1;
+  box-shadow: 1px 1px 0 rgba(90,72,56,.06);
+}
+
+/* Corazón decorativo al final del hint */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-hint::before {
+  content: "\2665";
+  margin-right: 4px;
+  color: #c85b78;
+  opacity: .5;
+}
+
+/* --- SELECT "Todo el pueblo" — integrar como nota tablón --- */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-dd-wrap {
+  margin: 0 0 10px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones select.vec-rel-persona {
+  border: 1.5px dashed rgba(160, 140, 120, .35);
+  border-radius: 10px 7px 11px 6px / 7px 11px 6px 10px;
+  background-color: rgba(255, 253, 244, .8);
+  font-family: "Caveat", cursive;
+  font-size: .92rem;
+  transform: rotate(-.3deg);
+  box-shadow: 1px 1px 0 rgba(90,72,56,.06);
+}
+
+/* --- EMPTY STATE — notita papel --- */
+.play-v3 .aht-screen[data-aht-screen="vecinos"].is-relaciones .vec-rel-vacio {
+  padding: 16px 20px;
+  border: 2px dashed rgba(160, 140, 120, .3);
+  border-radius: 12px 9px 13px 8px / 9px 13px 8px 12px;
+  background: rgba(255, 253, 244, .6);
+  font-family: "Caveat", cursive;
+  font-size: 1.05rem;
+  color: #8a7a68;
+  text-align: center;
+  transform: rotate(-.8deg);
+  max-width: 260px;
+  margin: 20px auto;
+  box-shadow: 2px 2px 0 rgba(90,72,56,.08);
+}
