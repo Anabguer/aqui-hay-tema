@@ -1276,6 +1276,11 @@
     display: none;
   }
 
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .enc-mov-card--ref-desk .enc-mov-donde-cuando {
+    gap: 4px 10px;
+    margin-top: 1px;
+  }
+
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .enc-mov-desk-chevron {
     display: none;
   }
