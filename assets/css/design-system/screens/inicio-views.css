@@ -21,6 +21,9 @@
   .inicio-stage .inicio-desktop {
     display: block;
   }
+  .inicio-stage > .play-bottom-nav {
+    display: none;
+  }
 }
 
 .inicio-mobile[hidden],
