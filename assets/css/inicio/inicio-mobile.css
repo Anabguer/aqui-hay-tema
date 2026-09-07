@@ -2763,7 +2763,6 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt,
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-vecinos-tit,
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
-    margin-top: auto;
     flex: 0 0 auto;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 700;
