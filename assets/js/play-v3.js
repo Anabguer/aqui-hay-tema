@@ -9778,6 +9778,7 @@ var finOk = $('[data-tut-fin-ok]');
       orgBuscaTxt = '';
       var buscaInp = $('[data-org-busca]');
       if (buscaInp) buscaInp.value = '';
+      fillOrganizar();
     }
   });
 

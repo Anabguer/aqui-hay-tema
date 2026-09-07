@@ -188,6 +188,9 @@
 
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
   margin-left: auto;
+  display: flex;
+  justify-content: center;
+  padding: 0 16px;
 }
 
 .aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
