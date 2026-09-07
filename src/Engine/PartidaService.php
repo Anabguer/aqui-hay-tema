@@ -489,10 +489,10 @@ final class PartidaService
         }
         $items = [];
         $iconos = [
-            'social' => "\ud83e\udd1d",
-            'diversion' => "\ud83c\udf89",
-            'actividad' => "\ud83d\udcaa",
-            'calma' => "\u2615",
+            'social' => "🤝",
+            'diversion' => "🎉",
+            'actividad' => "💪",
+            'calma' => "☕",
         ];
         foreach (NecesidadEstado::TODAS as $nec) {
             $n = $necesidades[$nec] ?? null;
