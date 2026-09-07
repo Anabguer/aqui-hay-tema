@@ -2110,7 +2110,8 @@ margin-bottom: 4px;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-badges {
-    flex: 0 0 auto;
+    flex: 0 1 auto;
+    min-width: 0;
   }
 
 .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit {
@@ -2129,7 +2130,6 @@ margin-bottom: 4px;
     text-transform: uppercase;
     color: #5e3e90;
     line-height: 1.15;
-    white-space: nowrap;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .obj-cotilleo.obj-cotilleo-compact .obj-cotilleo-tit::before {
