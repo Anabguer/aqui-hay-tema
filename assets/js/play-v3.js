@@ -11,7 +11,7 @@
   }
   function ctaTxtEncuentroMov(enc, iv) {
     if (!ctaEncuentroMovVisible(enc, iv)) return '';
-    return '\u00bfQu\u00e9 se cuece ah\u00ed?';
+    return '\u00bfQu\u00e9 se cuece ah\u00ed? \ud83d\udc40';
   }
   var mentesEncIdActivo = null;
 
