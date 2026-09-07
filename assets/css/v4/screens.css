@@ -930,7 +930,7 @@
 }
 
 .aht-screen[data-aht-screen="diario"] .coti-body {
-  padding: 0 12px 8px;
+  padding: 0 13px 2.9px;
   overflow-y: auto;
   flex: 1;
 }

@@ -805,7 +805,6 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-left .celestine-nota .obj-vecinos-stats .vecinos-stat-ico {
     flex: 0 0 auto;
     width: auto;
-    font-size: 1rem;
     line-height: 1;
   }
 

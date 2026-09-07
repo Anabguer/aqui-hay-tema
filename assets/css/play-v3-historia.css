@@ -779,12 +779,11 @@
   color: #5a4e40;
 }
 
-/* ── Zoom interior global — retratos Historia ─────────────── */
+/* ── Retratos — filling circle (object-position para transparent PNGs) ── */
 .historia-avatar-img,
 .histcele-protagonista-avatar,
 .histdet-protagonista-avatar {
-  transform: scale(1.08);
-  transform-origin: 50% 30%;
+  object-position: 50% 40%;
 }
 
 .histdet-rel {
