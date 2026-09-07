@@ -2663,6 +2663,7 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
     height: 100%;
     min-width: 0;
+    margin: 0;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon .mensajitos-wrap {
@@ -2705,6 +2706,12 @@ margin-bottom: 4px;
     position: relative;
   }
 
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-img {
+    object-fit: contain;
+    width: 42px;
+    height: auto;
+  }
+
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-badge {
     top: 0;
     right: 0;
@@ -2738,8 +2745,8 @@ margin-bottom: 4px;
     justify-self: end;
     align-self: start;
     position: relative;
-    top: -4px;
-    right: 0;
+    top: -6px;
+    right: -2px;
     margin: 0;
   }
 
