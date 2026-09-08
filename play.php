@@ -343,6 +343,15 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   </aside>
     <div class="game-shell">
     <div class="inicio-stage">
+      <div class="inicio-doodles" aria-hidden="true">
+        <span class="inicio-doodle dsk-corazon" data-doodle="h"></span>
+        <span class="inicio-doodle dsk-estrella" data-doodle="s"></span>
+        <span class="inicio-doodle dsk-flor" data-doodle="f"></span>
+        <span class="inicio-doodle dsk-sparkle" data-doodle="x"></span>
+        <span class="inicio-doodle dsk-corazon2" data-doodle="h"></span>
+        <span class="inicio-doodle dsk-flor2" data-doodle="f"></span>
+        <span class="inicio-doodle dsk-ojo" data-doodle="o"></span>
+      </div>
       <section class="inicio-mobile" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil">
         <header class="game-top">
       <div class="inicio-header-card">
@@ -1195,10 +1204,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
-      <span class="inicio-doodle dsk-corazon" data-doodle="h" aria-hidden="true"></span>
-      <span class="inicio-doodle dsk-estrella" data-doodle="s" aria-hidden="true"></span>
-      <span class="inicio-doodle dsk-flor" data-doodle="f" aria-hidden="true"></span>
-      <span class="inicio-doodle dsk-sparkle" data-doodle="x" aria-hidden="true"></span>
     </header>
         <div class="inicio-layout inicio-desktop-layout">
           <aside class="inicio-chrome-left inicio-desktop-left">
@@ -1321,7 +1326,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </section>
             </button>
             <div class="inicio-doodle-postit inicio-postit" aria-hidden="true">
-              Mis vecinos hacen este pueblo especial
+              <span class="inicio-doodle-postit-tape"></span>
+              <span class="inicio-doodle-postit-txt">Mis vecinos hacen este pueblo especial</span>
               <span class="inicio-doodle-postit-heart" data-doodle="d"></span>
             </div>
           </aside>

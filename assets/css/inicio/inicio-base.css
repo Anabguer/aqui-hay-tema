@@ -5,8 +5,7 @@
   position: absolute;
   pointer-events: none;
   opacity: 0;
-  transform: scale(0.7);
-  transition: opacity .3s ease, transform .3s ease;
+  transition: opacity .35s ease;
   z-index: 0;
   line-height: 0;
 }
@@ -17,7 +16,6 @@
 }
 .inicio-doodle.injected {
   opacity: 1;
-  transform: scale(1);
 }
 
 /* ── Post-it vainilla — base compartida ── */
