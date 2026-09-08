@@ -1631,12 +1631,12 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    z-index: 0;
+    z-index: 1;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle {
     position: absolute;
-    z-index: 0;
+    z-index: 1;
     pointer-events: none;
   }
 
