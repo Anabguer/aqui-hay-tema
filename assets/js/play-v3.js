@@ -2582,9 +2582,23 @@
       list.innerHTML = '<p class="mis-vacio">No hay misiones para hoy.</p>';
       return;
     }
+    var cumplidas = hoy.filter(function (m) { return (m.estado || '') === 'cumplida'; }).length;
+    var total = hoy.length;
+    var todasCumplidas = total > 0 && cumplidas === total;
+    list.insertAdjacentHTML('beforeend',
+      '<span class="mis-doodle mis-doodle-star" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5L15 6.3l-3.5 3.4.8 4.9L8 12.2 3.7 14.6l.8-4.9L1 6.3l4.8-.8z" fill="currentColor"/></svg></span>');
     hoy.forEach(function (m) {
       list.insertAdjacentHTML('beforeend', htmlMisionItem(m));
     });
+    if (todasCumplidas) {
+      list.insertAdjacentHTML('beforeend',
+        '<div class="mis-sello" aria-label="Completado"><span class="mis-sello-txt">COMPLETADO</span></div>');
+    } else if (total > 0) {
+      list.insertAdjacentHTML('beforeend',
+        '<div class="mis-progreso"><span class="mis-progreso-txt">' + cumplidas + ' de ' + total + ' hechas</span></div>');
+    }
+    list.insertAdjacentHTML('beforeend',
+      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
     enlazarAccionesMision(list, hoy);
   }
 
@@ -4758,7 +4772,14 @@ function renderInicioMpDuo(misiones, parejas) {
     var left = slot.left + jx;
     var top  = slot.top  + jy;
 
-    // Clamp: keep token center inside map (28px radius = 20px token + 8px ::before inset)
+    // Clamp: keep entire token visual inside map boundary
+    // Visual radius from .hab center (derived from CSS, not hardcoded):
+    //   .cara half-size: 20px (40px width/height)
+    //   ::before inset: -8px → 28px from center (sides/top)
+    //   ::after: bottom -5px + height 7px → 32px from center (bottom)
+    //   Idle animation peak: translate(±3, ±4) scale(1.04)
+    //   Animated bottom = 32 * 1.04 + 4 = 37.3px
+    //   Animated top/sides = 28 * 1.04 + 4 = 33.1px
     var _zonaHit = box.closest('.mapa-zona-hit');
     var _layer   = box.closest('[data-mapa-zonas]');
     if (_zonaHit && _layer) {
@@ -4770,10 +4791,13 @@ function renderInicioMpDuo(misiones, parejas) {
       var _zH = _zR.height / _lR.height;
       var _cx = _zL + (left / 100) * _zW;
       var _cy = _zT + (top  / 100) * _zH;
-      var _minX = 28 / _lR.width;
-      var _maxX = 1 - 28 / _lR.width;
-      var _minY = 28 / _lR.height;
-      var _maxY = 1 - 28 / _lR.height;
+      var _radX  = 34; // 28px * 1.04 + 3px translateX (sides)
+      var _radTop = 34; // 28px * 1.04 + 4px translateY (top)
+      var _radBot = 38; // 32px * 1.04 + 4px translateY (bottom, includes ::after)
+      var _minX = _radX / _lR.width;
+      var _maxX = 1 - _radX / _lR.width;
+      var _minY = _radTop / _lR.height;
+      var _maxY = 1 - _radBot / _lR.height;
       _cx = Math.max(_minX, Math.min(_maxX, _cx));
       _cy = Math.max(_minY, Math.min(_maxY, _cy));
       left = ((_cx - _zL) / _zW) * 100;
@@ -5123,21 +5147,27 @@ function renderInicioMpDuo(misiones, parejas) {
     var est = m.estado || 'pendiente';
     var accBtn = '';
     if (m.accion && est !== 'bloqueada' && est !== 'cumplida') {
-      accBtn = '<button type="button" class="mis-accion mision-accion" data-mision-accion="' + esc(m.id || '') + '">' +
+      accBtn = '<button type="button" class="mis-check-accion" data-mision-accion="' + esc(m.id || '') + '">' +
         esc(m.accion_label || 'Ir') + '</button>';
     }
-    var titulo = m.titulo
-      ? '<strong class="mis-item-tit">' + esc(m.titulo) + '</strong>'
+    var tit = m.titulo
+      ? '<span class="mis-check-tit">' + esc(m.titulo) + '</span>'
       : '';
-    var estado = opts.primerosPasos
-      ? ''
-      : '<span class="mis-item-estado">' + esc(estadoMisionLabel(est)) + '</span>';
-    return '<article class="mis-item mis-item-' + est + (opts.primerosPasos ? ' mis-item-pp' : '') + '">' +
-      '<span class="mis-item-tape mis-item-tape-l" aria-hidden="true"></span>' +
-      '<span class="mis-item-tape mis-item-tape-r" aria-hidden="true"></span>' +
-      '<div class="mis-item-head">' + bolitaMision(est) + titulo + '</div>' +
-      '<p class="mis-item-txt">' + esc(m.texto || m.hecho || 'Objetivo') + '</p>' +
-      estado + accBtn + '</article>';
+    var desc = (m.texto || m.hecho)
+      ? '<span class="mis-check-desc">' + esc(m.texto || m.hecho) + '</span>'
+      : '';
+    var chkClass = 'mis-chk';
+    var chkInner = '';
+    if (est === 'cumplida') {
+      chkClass += ' is-done';
+      chkInner = '<svg class="mis-chk-ico" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3.5 3.5 7-7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    } else if (est === 'bloqueada') {
+      chkClass += ' is-locked';
+    }
+    return '<div class="mis-check-row mis-check-' + est + (opts.primerosPasos ? ' mis-check-pp' : '') + '">' +
+      '<span class="' + chkClass + '" aria-label="' + esc(estadoMisionLabel(est)) + '">' + chkInner + '</span>' +
+      '<div class="mis-check-copy">' + tit + desc + '</div>' +
+      accBtn + '</div>';
   }
 
   function enlazarAccionesMision(container, items) {
@@ -6948,7 +6978,7 @@ function hobbyIconKey(id, texto) {
         abrirRegalosDesdeFicha(id, nom);
       };
     }
-    // Necesidades personales
+    // Necesidades personales — siempre las 4, con barra y color por banda
     const necSection = $('[data-ficha-necesidades]');
     const necBox = $('[data-ficha-necesidades-body]');
     if (necSection && necBox) {
@@ -6956,12 +6986,19 @@ function hobbyIconKey(id, texto) {
       if (nec && nec.items && nec.items.length) {
         necBox.innerHTML = '';
         nec.items.forEach(function (item) {
-          var cls = 'ficha-nec-item ficha-nec-item--' + esc(item.band || '');
+          var val = Math.max(0, Math.min(100, parseInt(item.valor, 10) || 0));
+          var banda = esc(item.band || item.banda || '');
+          var colorBar = banda === 'en_rojo' ? '#c42b4a'
+            : banda === 'lo_necesita' ? '#d98a3e'
+            : banda === 'le_vendria_bien' ? '#b8a44e'
+            : '#5a9a6a';
           necBox.insertAdjacentHTML('beforeend',
-            '<span class="' + cls + '">'
-            + '<span class="ficha-nec-item-icono" aria-hidden="true">' + esc(item.icono || '') + '</span>'
-            + '<span class="ficha-nec-item-copy">' + esc(item.copy || item.nombre || '') + '</span>'
-            + '</span>'
+            '<div class="ficha-nec-row">'
+            + '<span class="ficha-nec-ico" aria-hidden="true">' + esc(item.icono || '') + '</span>'
+            + '<span class="ficha-nec-nom">' + esc(item.nombre || item.id || '') + '</span>'
+            + '<div class="ficha-nec-bar"><i style="width:' + val + '%;background:' + colorBar + '"></i></div>'
+            + '<span class="ficha-nec-val">' + val + '</span>'
+            + '</div>'
           );
         });
         necSection.hidden = false;

@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260908-020227';
+$ahtUi = 'v3-20260908-misiones-checklist-v4';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -187,15 +187,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       border-radius: 50%; border: 2px solid rgba(120,96,72,.35);
     }
     .caras-clip img, .caras-clip .cara img { width: 52px; height: 52px; max-width: 52px; max-height: 52px; border-radius: 50%; object-fit: cover; object-position: 50% 20%; display: block; }
-    .mision-accion {
-      margin-top: .35rem; border: 1px solid #8a7a66; background: #fff6c8;
-      font: inherit; font-size: .75rem; font-weight: 800; padding: .25rem .5rem; cursor: pointer;
-    }
-    .mision-pp { margin-bottom: .55rem; }
-    .mision-pp.mision-bloqueada { opacity: .55; }
-    .mision-pp-head { display: flex; align-items: center; gap: .45rem; margin-bottom: .2rem; }
-    .mision-pp-tit { font-size: .92rem; }
-    .mision-pp-texto { margin: 0; font-size: .82rem; line-height: 1.35; }
     .mision-bolita {
       width: 1.15rem; height: 1.15rem; flex: 0 0 1.15rem;
       border: 2px solid #5c4f42; border-radius: 50%; background: #fffef8;

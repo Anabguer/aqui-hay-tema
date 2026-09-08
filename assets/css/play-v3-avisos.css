@@ -176,7 +176,6 @@
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-scroll,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-body,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-scroll,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-diario-scroll {
   scrollbar-width: none;
@@ -193,7 +192,6 @@
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vec-rel-scroll::-webkit-scrollbar,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-body::-webkit-scrollbar,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body::-webkit-scrollbar,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles::-webkit-scrollbar,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-scroll::-webkit-scrollbar,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-diario-scroll::-webkit-scrollbar {
   display: none;
@@ -204,7 +202,6 @@
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-cab,
 .play-v3 .aht-screen[data-aht-screen="vecinos"] .vecinos-cab,
 .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top,
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-top,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-top,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-top,
@@ -213,7 +210,6 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-head,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .ds-modal-head,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ds-modal-head,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-head {
   display: flex;
@@ -226,7 +222,6 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-head-row,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .ds-modal-head-row,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ds-modal-head-row,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-top .ds-modal-head-row {
   justify-content: center;
@@ -237,8 +232,7 @@
 }
 
 .play-v3 .aht-screen .ds-modal-sub,
-.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-sub,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-sub {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-sub {
   text-align: center;
   width: 100%;
   margin: 8px 0 12px;
@@ -249,21 +243,18 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="agenda"] .ds-modal-icon,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .ds-modal-icon,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ds-modal-icon {
   display: inline;
   font-size: 1.6rem;
   transform: rotate(-8deg);
 }
 
-.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab::before,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top::before {
+.play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab::before {
   display: none;
   content: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-tit,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,
 .play-v3 .aht-screen[data-aht-screen="buzon"] .mensajitos-tit,
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit {
@@ -275,7 +266,6 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-cab,
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-top,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-top {
   padding-right: 0;
 }

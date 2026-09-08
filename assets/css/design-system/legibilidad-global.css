@@ -325,44 +325,6 @@
 
 }
 
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-txt,
-
-
-
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item .mis-txt {
-
-
-
-  font-size: var(--aht-type-body);
-
-
-
-  line-height: 1.35;
-
-
-
-}
-
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-item-cumplida .mis-txt {
-
-
-
-  font-size: var(--aht-type-body);
-
-
-
-}
-
-.play-v3 .aht-screen[data-aht-screen="misiones"] .mis-estado {
-
-
-
-  font-size: var(--aht-type-caption);
-
-
-
-}
-
 .play-v3 .vecinos-stat,
 
 
