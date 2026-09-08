@@ -6558,9 +6558,13 @@ function canonEmoId(id) {
     const tono = e.tono || '';
     const tonoCls = tono ? ' fdi-card--' + tono : '';
     const personasHtml = diarioPersonasHtml(e, rid);
+    const doodleHtml = diarioDoodleHtml(e);
+    const horaHtml = diarioHoraHtml(e);
     let html = '<article class="ficha-diario-entrada fdi-entrada" data-diario-evento="' + esc(eventoId) + '">' +
       '<div class="ficha-diario-card fdi-card' + tonoCls + '">' +
       '<div class="fdi-card-body">' +
+      doodleHtml +
+      horaHtml +
       '<b class="ficha-diario-titulo">' + esc(titulo) + '</b>';
     if (personasHtml) {
       html += '<div class="fdi-personas">' + personasHtml + '</div>';
