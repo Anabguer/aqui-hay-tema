@@ -2,9 +2,9 @@
 # Libreria compartida para DEPLOY.bat (Aquí Hay Tema → producción canónica).
 # Dot-source desde deploy_manual.ps1. No ejecutar directamente.
 
-$__ahtDeployHelpers = 'W:\_Recursos\GestorProyectos\plantillas\deploy_helpers.ps1'
+$__ahtDeployHelpers = Join-Path (Split-Path -Parent $PSScriptRoot) '_infra\deploy_helpers.ps1'
 if (-not (Test-Path -LiteralPath $__ahtDeployHelpers)) {
-    throw "Falta infraestructura de deploy: $__ahtDeployHelpers"
+    throw "Falta infraestructura de deploy: $__ahtDeployHelpers (copia desde el ordenador antiguo)"
 }
 . $__ahtDeployHelpers
 
@@ -58,7 +58,7 @@ function Initialize-AhtDeployContext {
         PostCommands = @($target.postDeployWinScpCommands | ForEach-Object { [string]$_ })
         LogsDir = $logsDir
         CacheBusterRel = 'assets/aht-cache-buster.txt'
-        FullScript = 'W:\juegos\deploy\winscp_put_aqui_hay_tema_canonical.ps1'
+        FullScript = Join-Path (Split-Path -Parent $PSScriptRoot) '_infra\winscp_put_aqui_hay_tema_canonical.ps1'
     }
 }
 

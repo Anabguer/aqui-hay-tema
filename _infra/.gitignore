@@ -1,0 +1,5 @@
+﻿# Credenciales Hostalia — NUNCA commitear
+hostalia.publish.local.json
+
+# Logs de deploy
+*.log
