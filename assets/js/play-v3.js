@@ -4667,8 +4667,7 @@ function renderInicioMpDuo(misiones, parejas) {
         org.hora = 0;
         var hintEl = document.querySelector('[data-org-horas-hint]');
         if (hintEl && r.primera_compatible && (r.primera_compatible.dia || 0) !== org.dia) {
-          hintEl.textContent = 'Primera compatible: ' + (r.primera_compatible.etiqueta_ui || '');
-          hintEl.hidden = false;
+          hintEl.hidden = true;
         } else if (hintEl) { hintEl.hidden = true; }
         actualizarOrgCrearBtn();
         return;
@@ -4695,8 +4694,7 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       var hintEl2 = document.querySelector('[data-org-horas-hint]');
       if (hintEl2) {
-        if (r.hint_ui) { hintEl2.textContent = r.hint_ui; hintEl2.hidden = false; }
-        else { hintEl2.hidden = true; }
+        hintEl2.hidden = true;
       }
     } catch (e) {
       grid.innerHTML = '<p class="mini org-horas-vacio">Error cargando horarios.</p>';
@@ -8083,12 +8081,7 @@ function hobbyIconKey(id, texto) {
   function setOrgHorasHint(txt, show) {
     var hintEl = document.querySelector('[data-org-horas-hint]');
     if (!hintEl) return;
-    if (show && txt) {
-      hintEl.textContent = txt;
-    } else {
-      hintEl.textContent = ORG_HORAS_HINT_DEFAULT;
-    }
-    hintEl.hidden = false;
+    hintEl.hidden = true;
   }
 
   function mensajeErrorOrgApi(r, fallback) {

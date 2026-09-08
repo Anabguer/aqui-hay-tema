@@ -1098,18 +1098,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <p class="org-horas-hint" data-org-horas-hint hidden></p>
               </section>
 
-              <section class="org-step org-step--lugar-info" data-org-step-lugar-info hidden>
-                <div class="org-lugar-info-card" data-org-lugar-info></div>
-              </section>
-
-              <section class="org-step org-step--estado" data-org-step-estado hidden>
-                <div class="org-estado-card" data-org-estado></div>
-              </section>
-            </div>
-            <div class="org-actions">
-              <button type="button" class="org-crear" data-org-go>
-                <span class="org-crear-txt">Crear plan</span>
-              </button>
+              <div class="org-actions">
+                <button type="button" class="org-crear" data-org-go>
+                  <span class="org-crear-txt">Crear plan</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
