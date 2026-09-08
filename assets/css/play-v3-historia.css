@@ -854,7 +854,7 @@
   filter: drop-shadow(0 4px 12px rgba(0,0,0,.18));
 }
 
-/* ── Responsive: móvil ───────────────────────────────────── */
+/* ── Responsive: móvil — detalle ──────────────────────────── */
 @media (max-width: 540px) {
   .histdet-main {
     flex-direction: column;
@@ -862,49 +862,93 @@
   }
 
   .histdet-polaroid {
-    max-width: 240px;
+    max-width: 200px;
     transform: rotate(-1.2deg);
+    order: 1;
+  }
+
+  .histdet-polaroid-img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .histdet-polaroid-img .histdet-img {
+    aspect-ratio: 4 / 3;
   }
 
   .histdet-polaroid-caption {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
   }
 
   .histdet-sidebar {
     width: 100%;
     padding-top: .3rem;
-    gap: 1rem;
+    gap: .6rem;
+    order: 2;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
   }
 
   .histdet-protagonistas {
     justify-content: center;
+    order: 1;
+    width: 100%;
+  }
+
+  .histdet-protagonista {
+    transform: none;
   }
 
   .histdet-protagonista-avatar,
   .histdet-protagonista-avatar--fallback {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
+  }
+
+  .histdet-protagonista-nombre {
+    font-size: 1.2rem;
   }
 
   .histdet-recompensa {
-    max-width: 220px;
-    transform: rotate(1deg);
+    order: 2;
+    max-width: 100%;
+    width: 100%;
+    transform: rotate(0deg);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+    padding: .4rem .6rem;
+    border-radius: 6px;
+  }
+
+  .histdet-recompensa-card {
+    flex-direction: row;
+    align-items: center;
+    gap: .4rem;
   }
 
   .histdet-recompensa-img {
-    width: 130px;
-    height: 130px;
+    width: 48px;
+    height: 48px;
   }
 
   .histdet-recompensa-label {
-    font-size: 2rem;
+    font-size: 1.3rem;
+    margin-bottom: 0;
   }
 
   .histdet-recompensa-nombre {
-    font-size: 1.3rem;
+    font-size: 1rem;
+  }
+
+  .histdet-recompensa-ico {
+    font-size: 1rem;
   }
 
   .histdet-footer {
+    order: 3;
     margin-top: .3rem;
   }
 }
@@ -924,16 +968,53 @@
 /* ── Responsive: móvil — álbum ──────────────────────────── */
 @media (max-width: 540px) {
   .historia-body {
-    padding: .6rem .6rem 2rem;
+    padding: .5rem .5rem 1.5rem;
   }
 
   .historia-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: .8rem .5rem;
+    gap: .6rem .4rem;
   }
 
   .historia-polaroid {
-    max-width: 140px;
+    max-width: 130px;
+    padding: .35rem .35rem 1.8rem;
+  }
+
+  .historia-img-wrap {
+    aspect-ratio: 4 / 3;
+  }
+
+  .historia-img-wrap img {
+    aspect-ratio: 4 / 3;
+  }
+
+  .historia-titulo {
+    font-size: .65rem;
+    bottom: .35rem;
+    left: .35rem;
+    right: .35rem;
+  }
+
+  .historia-avatar-img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .historia-avatar-nombre {
+    font-size: .5rem;
+    max-width: 40px;
+  }
+
+  .historia-orden {
+    width: 1.2rem;
+    height: 1.2rem;
+    font-size: .5rem;
+  }
+
+  .historia-dia {
+    font-size: .5rem;
+    margin-top: .1rem;
   }
 
   .historia-grid::before,
@@ -942,13 +1023,13 @@
   }
 
   .historia-body::after {
-    font-size: 1.1rem;
-    top: 6px;
-    right: 10px;
+    font-size: 1rem;
+    top: 4px;
+    right: 8px;
   }
 
   .historia-sub {
-    font-size: .75rem;
-    padding: .25rem .7rem;
+    font-size: .7rem;
+    padding: .2rem .6rem;
   }
 }

@@ -1,0 +1,538 @@
+/* ============================================================
+   AHT — Diario Personal (ficha_diario)
+   Body canónico. Autoridad única para el diario del residente.
+   Migrado desde screens.css + bloques-residencias + typography-reading.
+   ============================================================ */
+
+/* ── Grupo de día ─────────────────────────────────────────── */
+.fdi-dia-grupo {
+  margin-bottom: var(--ds-space-5);
+}
+
+.fdi-dia-lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: var(--ds-space-5) 0 var(--ds-space-3);
+  padding: 2px 14px;
+  border-radius: 6px;
+  background: var(--ds-pink-soft);
+  border: var(--ds-border-w) solid var(--ds-ink-soft);
+  font-family: var(--ds-font-hand);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ds-ink);
+  transform: rotate(-1deg);
+}
+
+.fdi-dia-lbl--lavender { background: var(--ds-lavender-soft); }
+.fdi-dia-lbl--green { background: var(--ds-green-soft); }
+.fdi-dia-lbl--dim { background: var(--ds-paper-dim); }
+
+/* ── Hora ─────────────────────────────────────────────────── */
+.fdi-hora {
+  display: block;
+  margin: 0 0 4px 2px;
+  font-family: var(--ds-font-hand);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ds-text-faint);
+  letter-spacing: 0.02em;
+}
+
+/* ── Timeline (wrapper del grupo de día) ──────────────────── */
+.fdi-tl {
+  position: relative;
+  padding-left: 20px;
+}
+
+.fdi-tl::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: rgba(107, 81, 56, .18);
+  border-radius: 1px;
+}
+
+/* ── Card de entrada ──────────────────────────────────────── */
+.fdi-entrada {
+  position: relative;
+  margin-bottom: var(--ds-space-3);
+}
+
+.fdi-card {
+  position: relative;
+  background: #fffdf8;
+  border: 2px solid #e8dcc8;
+  border-radius: 14px 10px 12px 13px / 10px 14px 11px 12px;
+  box-shadow:
+    inset 0 0 0 3px #faf6ef,
+    0 1px 3px rgba(107, 81, 56, .06);
+  padding: 12px 14px 10px;
+  transition: box-shadow var(--ds-dur-fast) ease;
+}
+
+.fdi-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 18px;
+  height: 18px;
+  background: linear-gradient(135deg, transparent 50%, rgba(232, 139, 168, .1) 50%);
+  border-radius: 0 0 12px 0;
+  pointer-events: none;
+}
+
+/* Tono — acento lateral sutil */
+.fdi-card--positivo {
+  border-left: 3px solid var(--ds-emo-alegre);
+}
+
+.fdi-card--negativo {
+  border-left: 3px solid var(--ds-emo-triste);
+}
+
+.fdi-card--neutro {
+  border-left: 3px solid var(--ds-emo-neutro);
+}
+
+/* ── Doodle decorativo de esquina ─────────────────────────── */
+.fdi-doodle {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  opacity: .45;
+  pointer-events: none;
+  transform: rotate(8deg);
+}
+
+.fdi-doodle svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Body de la card ──────────────────────────────────────── */
+.fdi-card-body {
+  position: relative;
+}
+
+/* ── Título de la entrada ─────────────────────────────────── */
+.ficha-diario-titulo {
+  display: block;
+  margin: 0 0 4px;
+  font-family: var(--ds-font-hand);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ds-ink);
+  line-height: 1.25;
+}
+
+/* ── Personas ─────────────────────────────────────────────── */
+.fdi-personas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.fdi-con {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fdi-con-ava {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #e8dcc8;
+  background: var(--ds-paper-warm);
+}
+
+.fdi-con-ava--ph {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--ds-lavender-soft);
+  border: 1.5px solid #e8dcc8;
+}
+
+.fdi-con-nom {
+  font: 600 0.72rem/1 "Nunito", sans-serif;
+  color: var(--ds-ink-soft);
+}
+
+/* ── Texto de la entrada ──────────────────────────────────── */
+.ficha-diario-texto {
+  margin: 0 0 6px;
+  font: 400 0.88rem/1.45 "Nunito", sans-serif;
+  color: var(--ds-ink);
+}
+
+/* ── Pill de categoría ────────────────────────────────────── */
+.ficha-diario-cat {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  border: 1.5px solid var(--ds-ink-soft);
+  background: var(--ds-paper-warm);
+  font: 800 0.65rem/1.2 "Nunito", sans-serif;
+  letter-spacing: .4px;
+  text-transform: uppercase;
+  color: var(--ds-ink);
+}
+
+.ficha-diario-cat.pg-pill--pink {
+  background: var(--ds-pink-soft);
+  border-color: var(--ds-pink-deep);
+  color: var(--ds-pink-deep);
+}
+
+.ficha-diario-cat.pg-pill--green {
+  background: var(--ds-green-soft);
+  border-color: var(--ds-green-deep);
+  color: var(--ds-green-deep);
+}
+
+.ficha-diario-cat.pg-pill--lavender {
+  background: var(--ds-lavender-soft);
+  border-color: var(--ds-lavender-deep);
+  color: var(--ds-lavender-deep);
+}
+
+.ficha-diario-cat.pg-pill--mustard {
+  background: var(--ds-mustard-soft);
+  border-color: var(--ds-mustard-deep);
+  color: var(--ds-mustard-deep);
+}
+
+.ficha-diario-cat.pg-pill--red {
+  background: var(--ds-red-soft);
+  border-color: var(--ds-red-alert);
+  color: var(--ds-red-alert);
+}
+
+.ficha-diario-cat.pg-pill--tan {
+  background: var(--ds-paper-dim);
+  border-color: var(--ds-ink-soft);
+  color: var(--ds-ink-soft);
+}
+
+/* ── Separador entre entradas del mismo día ───────────────── */
+.fdi-sep {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 4px 0 8px;
+  padding-left: 20px;
+}
+
+.fdi-sep-line {
+  flex: 1;
+  height: 0;
+  border: none;
+  border-top: 1.5px dashed rgba(107, 81, 56, .15);
+}
+
+.fdi-sep-doodle {
+  flex: 0 0 auto;
+  width: 14px;
+  height: 14px;
+  margin: 0 6px;
+  opacity: .3;
+}
+
+.fdi-sep-doodle svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Hero (header con avatar + candado) ───────────────────── */
+.fdi-hero {
+  position: absolute;
+  right: 52px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+.fdi-head-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fdi-head-ava img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1.5px solid #e8dcc8;
+}
+
+.fdi-head-txt {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.fdi-head-tit {
+  font-family: var(--ds-font-hand);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ds-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.fdi-lock {
+  flex: 0 0 auto;
+  display: inline-flex;
+  width: 13px;
+  height: 15px;
+  opacity: .6;
+}
+
+.fdi-lock svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fdi-head-sub {
+  margin: 0;
+  font: 400 0.65rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-faint);
+}
+
+.fdi-count {
+  font: 700 0.68rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-muted);
+  white-space: nowrap;
+}
+
+/* ── Empty state ──────────────────────────────────────────── */
+.ficha-vacio.ficha-diario-vacio {
+  margin: var(--ds-space-6) 0;
+  padding: 24px 16px;
+  border: 2px dashed rgba(120, 96, 72, .25);
+  border-radius: 14px;
+  background: rgba(255, 253, 248, .6);
+  font-family: var(--ds-font-hand);
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--ds-text-muted);
+  text-align: center;
+}
+
+/* ── Highlight de evento ──────────────────────────────────── */
+.fdi-entrada.is-destacada .fdi-card {
+  box-shadow:
+    inset 0 0 0 3px #faf6ef,
+    0 0 0 3px var(--ds-mustard),
+    0 2px 8px rgba(227, 176, 75, .25);
+}
+
+/* ── Controles (migrado desde screens.css) ────────────────── */
+.aht-screen[data-aht-screen="ficha_diario"] .diario-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 12px 10px;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .diario-filtro {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(90, 70, 50, .3);
+  background: #fff;
+  font-size: .72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* ── Filtros (fdi-filt) — controles del header ────────────── */
+.fdi-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.fdi-filt {
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(90, 70, 50, .25);
+  background: #fff;
+  font: 700 0.7rem/1 "Nunito", sans-serif;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  color: var(--ds-ink-soft);
+  cursor: pointer;
+  transition: background var(--ds-dur-fast) ease, color var(--ds-dur-fast) ease, border-color var(--ds-dur-fast) ease;
+}
+
+.fdi-filt.is-on {
+  background: var(--ds-lavender-soft);
+  border-color: var(--ds-lavender-deep);
+  color: var(--ds-lavender-deep);
+}
+
+.fdi-orden {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1.5px dashed rgba(90, 70, 50, .25);
+  border-radius: 8px;
+  background: transparent;
+  font: 600 0.7rem/1 "Nunito", sans-serif;
+  color: var(--ds-ink-soft);
+  cursor: pointer;
+}
+
+/* ── Búsqueda ─────────────────────────────────────────────── */
+.fdi-busca-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1.5px solid rgba(90, 70, 50, .2);
+  border-radius: 10px;
+  background: #fff;
+  margin-bottom: 8px;
+}
+
+.fdi-busca-ico {
+  flex: 0 0 auto;
+  font-size: 1rem;
+  color: var(--ds-text-faint);
+}
+
+.fdi-busca-inp {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: 400 0.82rem/1 "Nunito", sans-serif;
+  color: var(--ds-ink);
+  min-width: 0;
+}
+
+.fdi-busca-inp::placeholder {
+  color: var(--ds-text-faint);
+}
+
+/* ── Scrollbar hidden (migrado desde screens.css) ─────────── */
+.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body,
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll,
+.aht-screen[data-aht-screen="ficha_diario"] .ficha-diario-scroll {
+  scrollbar-width: none;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body::-webkit-scrollbar,
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll::-webkit-scrollbar,
+.aht-screen[data-aht-screen="ficha_diario"] .ficha-diario-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body {
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll {
+  padding: 0 16px 12px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ── Fondo papel del diario ───────────────────────────────── */
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll {
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(249, 220, 228, .12) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, rgba(228, 220, 244, .1) 0%, transparent 50%),
+    #fffdf8;
+}
+
+/* ── MOBILE ───────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .fdi-head-row {
+    gap: 6px;
+  }
+
+  .fdi-head-ava img {
+    width: 24px;
+    height: 24px;
+  }
+
+  .fdi-head-tit {
+    font-size: 0.88rem;
+  }
+
+  .fdi-head-sub {
+    font-size: 0.6rem;
+  }
+
+  .fdi-count {
+    font-size: 0.62rem;
+  }
+
+  .fdi-dia-lbl {
+    font-size: 1rem;
+    padding: 2px 10px;
+  }
+
+  .fdi-card {
+    padding: 10px 12px 8px;
+    border-radius: 12px 8px 10px 11px / 8px 12px 9px 10px;
+  }
+
+  .ficha-diario-titulo {
+    font-size: 1.05rem;
+  }
+
+  .ficha-diario-texto {
+    font-size: 0.84rem;
+  }
+
+  .fdi-filtros {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 2px;
+  }
+
+  .fdi-filtros::-webkit-scrollbar {
+    display: none;
+  }
+
+  .fdi-filt {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .fdi-tl {
+    padding-left: 14px;
+  }
+
+  .fdi-sep {
+    padding-left: 14px;
+  }
+}
