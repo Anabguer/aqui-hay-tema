@@ -45,6 +45,91 @@
     'historia_detalle'
   ]);
 
+  /* ── DOODLES — catálogo decorativo header ─────────────────── */
+  // Catálogo cerrado de SVGs inline. Cada doodle es un trazo a mano
+  // alzada en color pastel, puramente decorativo.
+  var DOODLE_SVGS = {
+    h: '<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    s: '<svg viewBox="0 0 24 24" fill="none" stroke="#e3b04b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    f: '<svg viewBox="0 0 24 24" fill="none" stroke="#d4bee8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="#e3d6f0"/><path d="M12 2a3 3 0 0 1 0 6 3 3 0 0 1 0-6z"/><path d="M19.07 4.93a3 3 0 0 1-4.24 4.24 3 3 0 0 1 4.24-4.24z"/><path d="M22 12a3 3 0 0 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.07 19.07a3 3 0 0 1-4.24-4.24 3 3 0 0 1 4.24 4.24z"/><path d="M12 22a3 3 0 0 1 0-6 3 3 0 0 1 0 6z"/><path d="M4.93 19.07a3 3 0 0 1 4.24-4.24 3 3 0 0 1-4.24 4.24z"/><path d="M2 12a3 3 0 0 1 6 0 3 3 0 0 1-6 0z"/><path d="M4.93 4.93a3 3 0 0 1 4.24 4.24A3 3 0 0 1 4.93 4.93z"/></svg>',
+    p: '<svg viewBox="0 0 24 24" fill="#8faa84" stroke="none"><ellipse cx="7" cy="5" rx="2.5" ry="3"/><ellipse cx="17" cy="5" rx="2.5" ry="3"/><ellipse cx="12" cy="4" rx="2.5" ry="3"/><ellipse cx="12" cy="14" rx="5" ry="4"/></svg>',
+    o: '<svg viewBox="0 0 24 24" fill="none" stroke="#b9a8dc" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="12" rx="10" ry="7"/><circle cx="12" cy="12" r="3" fill="#d4bee8"/><circle cx="13" cy="11" r="1" fill="#fff"/></svg>',
+    w: '<svg viewBox="0 0 24 24" fill="none" stroke="#e87a5a" stroke-width="2" stroke-linecap="round"><path d="M12 12c-2-2.67-6-4-6-8a6 6 0 0 1 12 0c0 4-4 5.33-6 8z"/><path d="M12 12c2-2.67 6-4 6-8a6 6 0 0 0-12 0c0 4 4 5.33 6 8z"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="#e3b04b" stroke-width="2" stroke-linecap="round"><line x1="8" y1="2" x2="6" y2="8"/><line x1="16" y1="4" x2="18" y2="10"/><line x1="12" y1="1" x2="12" y2="7"/></svg>',
+    d: '<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.84 4.61a3.5 3.5 0 0 0-5.68 0L12 5.17l-.84-.84a3.5 3.5 0 0 0-5.68 5.68L12 17.5l6.52-6.52a3.5 3.5 0 0 0-1.68-6.37z" fill="#f9dce4"/><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
+  };
+
+  // Posiciones: variación asimétrica para composiciones tipo libreta
+  var DOODLE_POSITIONS = {
+    l:  { cls: 'd-l',  tilt: -8  },
+    r:  { cls: 'd-r',  tilt: 12  },
+    tl: { cls: 'd-tl', tilt: -5  },
+    tr: { cls: 'd-tr', tilt: 18  },
+    b:  { cls: 'd-b',  tilt: 6   },
+    t:  { cls: 'd-t',  tilt: -10 }
+  };
+
+  // Firma determinista por screen: misma screen = mismos doodles siempre.
+  // Composiciones variadas: no todas simétricas [doodle] título [doodle].
+  // Algunas: uno abajo + otro arriba, pareja en un lado, espiral desplazada, etc.
+  var DOODLE_MAP = {
+    vecinos:              { d: [{id:'p',pos:'l'},{id:'h',pos:'tr'}],                              tilt: 0.8  },
+    buzon:                { d: [{id:'h',pos:'tl'},{id:'x',pos:'r'}],                              tilt: -1.2 },
+    misiones:             { d: [{id:'s',pos:'tl'},{id:'x',pos:'tr'}],                             tilt: 0.3  },
+    agenda:               { d: [{id:'f',pos:'l'},{id:'o',pos:'r'}],                               tilt: -0.5 },
+    inventario:           { d: [{id:'w',pos:'tl'},{id:'p',pos:'r'}],                              tilt: 1.0  },
+    ajustes:              { d: [{id:'o',pos:'tl'},{id:'s',pos:'r'}],                              tilt: -0.7 },
+    diario:               { d: [{id:'d',pos:'r'},{id:'x',pos:'tl'}],                              tilt: 0.6  },
+    mentes:               { d: [{id:'w',pos:'l'},{id:'f',pos:'tr'}],                              tilt: -0.9 },
+    organizar:            { d: [{id:'s',pos:'l'},{id:'f',pos:'r'}],                               tilt: 0.4  },
+    parejas:              { d: [{id:'h',pos:'tl'},{id:'d',pos:'r'}],                              tilt: -0.6 },
+    vida_pueblo:          { d: [{id:'h',pos:'l'},{id:'s',pos:'r'}],                               tilt: 0.5  },
+    historia:             { d: [{id:'o',pos:'l'},{id:'f',pos:'tr'}],                              tilt: -0.4 },
+    historia_detalle:     { d: [{id:'w',pos:'tl'},{id:'h',pos:'r'}],                              tilt: 0.7  },
+    historia_celebracion: { d: [{id:'d',pos:'l'},{id:'s',pos:'tr'}],                              tilt: -0.3 },
+    ficha:                { d: [{id:'p',pos:'tl'},{id:'w',pos:'r'}],                              tilt: 0.9  },
+    ficha_relaciones:     { d: [{id:'h',pos:'l'},{id:'o',pos:'tr'}],                             tilt: -0.8 },
+    ficha_animo:          { d: [{id:'f',pos:'tl'},{id:'h',pos:'r'}],                             tilt: 0.2  },
+    ficha_diario:         { d: [{id:'w',pos:'l'},{id:'d',pos:'tr'}],                             tilt: -1.0 },
+    necesidades_global:   { d: [{id:'s',pos:'tl'},{id:'p',pos:'r'}],                             tilt: 0.35 }
+  };
+
+  /**
+   * Inyectar doodles decorativos en el título de una screen.
+   * Lazy, idempotente: solo inserta si no existen ya.
+   * @param {string} screenId
+   */
+  function injectDoodles(screenId) {
+    var combo = DOODLE_MAP[screenId];
+    if (!combo) return;
+
+    var screen = root.querySelector('.aht-screen[data-aht-screen="' + screenId + '"]');
+    if (!screen) return;
+
+    var title = screen.querySelector('.aht-frame-title');
+    if (!title) return;
+
+    // Idempotente: si ya tiene doodles, no re-inyectar
+    if (title.querySelector('.aht-doodle')) return;
+
+    // Tilt determinista por screen
+    title.style.setProperty('--aht-title-tilt', combo.tilt + 'deg');
+
+    // Crear e inyectar doodles
+    combo.d.forEach(function(entry, i) {
+      var span = document.createElement('span');
+      span.className = 'aht-doodle ' + DOODLE_POSITIONS[entry.pos].cls;
+      span.setAttribute('aria-hidden', 'true');
+      span.innerHTML = DOODLE_SVGS[entry.id];
+      title.appendChild(span);
+
+      // Fade-in escalonado
+      requestAnimationFrame(function() {
+        setTimeout(function() { span.classList.add('injected'); }, 60 * i);
+      });
+    });
+  }
+
   /* ── Inicialización ──────────────────────────────────────── */
   function init() {
     root = $('.play-root');
@@ -112,6 +197,9 @@
       var frame = root.querySelector('.aht-frame-close');
       if (frame) frame.focus();
     });
+
+    // Doodles decorativos del header (lazy, idempotente)
+    injectDoodles(screenId);
 
     // Lifecycle event — legacy code can react to screen opens
     try { document.dispatchEvent(new CustomEvent('aht-screen-open', { detail: { screen: screenId } })); } catch(e) {}
