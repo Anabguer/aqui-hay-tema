@@ -4578,9 +4578,7 @@ function renderInicioMpDuo(misiones, parejas) {
         ev.preventDefault(); ev.stopPropagation();
         org.lugar = d.id;
         renderOrgLugaresCards();
-        renderOrgLugarInfo(d.id);
         refreshOrgHorasGrid();
-        renderOrgEstado();
         actualizarOrgCrearBtn();
       });
       grid.appendChild(btn);
