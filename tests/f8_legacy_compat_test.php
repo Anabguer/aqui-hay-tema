@@ -94,10 +94,10 @@ ok($enriched !== null, 'buscar finds the message');
 ok(($enriched['familia_mensajito'] ?? '') === 'f_duda_permanencia', 'buscar infers familia_mensajito from tipo');
 ok(BuzonEngine::tieneDecisionPendiente($enriched ?? []), 'decision is pending');
 
-// ── 6. Verify consejo choices are populated (requires familia_mensajito) ──
+// ── 6. Verify action buttons are populated (no consejo panel for F8) ──
 $ui = BuzonEngine::enriquecerParaUi($enriched ?? [], $p);
-ok(!empty($ui['opciones_consejo']), 'opciones_consejo populated for legacy F8');
-ok(count($ui['opciones_consejo'] ?? []) === 3, '3 consejo options for legacy F8');
+ok(empty($ui['opciones_consejo']), 'no opciones_consejo for legacy F8 (second layer removed)');
+ok(!empty($ui['acciones_ui']), 'acciones_ui populated for legacy F8');
 
 // ── 7. Verify organizar_algo works (the actual fix) ──
 $rOrg = MensajitoAcciones::resolver($p, $msgId, MensajitoAcciones::ORGANIZAR_ALGO, $root2);

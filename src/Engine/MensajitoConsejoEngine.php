@@ -40,9 +40,6 @@ final class MensajitoConsejoEngine
             case 'f_promesa':
                 $opciones = self::opcionesF14();
                 break;
-            case 'f_duda_permanencia':
-                $opciones = self::opcionesF8();
-                break;
             case 'f_mediacion':
                 $opciones = self::opcionesF11($partida, $datos);
                 break;
@@ -127,6 +124,17 @@ final class MensajitoConsejoEngine
                 $mensajeId,
                 (string) ($mensaje['hilo_id'] ?? $mensajeId)
             );
+            $celestineId = null;
+            foreach ($partida['residentes'] ?? [] as $_rid => $_res) {
+                if (is_array($_res) && !empty($_res['_placeholder'])) {
+                    $celestineId = $_rid;
+                    break;
+                }
+            }
+            if ($celestineId !== null && $celestineId !== $rid) {
+                $socialDelta = $opcionId === 'op_escucha' ? 4 : 2;
+                RelacionEngine::ajustarSocialHacia($partida, $rid, $celestineId, $socialDelta);
+            }
         }
         if ($familia === 'f_promesa') {
             MensajitoPromesaEngine::cerrarPromesa(
@@ -233,6 +241,22 @@ final class MensajitoConsejoEngine
                 (string) ($mensaje['de_persona'] ?? ''),
                 $mensajeId
             );
+        }
+        if ($fam === 'f_alerta_vecinal') {
+            $datos = is_array($mensaje['datos_familia'] ?? null) ? $mensaje['datos_familia'] : [];
+            $observadoId = (string) ($datos['observado_id'] ?? '');
+            if ($observadoId !== '' && isset($partida['residentes'][$observadoId])) {
+                $celestineId = null;
+                foreach ($partida['residentes'] ?? [] as $_rid => $_res) {
+                    if (is_array($_res) && !empty($_res['_placeholder'])) {
+                        $celestineId = $_rid;
+                        break;
+                    }
+                }
+                if ($celestineId !== null && $celestineId !== $observadoId) {
+                    RelacionEngine::ajustarSocialHacia($partida, $celestineId, $observadoId, -2);
+                }
+            }
         }
         self::cerrarHilo($partida, $mensajeId, ['accion' => 'no_meterse']);
         return ['ok' => true, 'mensaje_ui' => 'De acuerdo, no me meto.'];
@@ -490,8 +514,6 @@ final class MensajitoConsejoEngine
                 return self::opcionesEscuchar();
             case 'f_promesa':
                 return self::opcionesF14();
-            case 'f_duda_permanencia':
-                return self::opcionesF8();
             case 'f_mediacion':
                 return self::opcionesF11($partida, $datos);
             default:
