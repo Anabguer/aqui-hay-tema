@@ -70,6 +70,7 @@ final class VistaPuebloV3
                     'operativo' => $operativo,
                     'horario' => ComplejoCatalog::horarioUi($did),
                     'abierto_ahora' => ComplejoCatalog::estaAbierto($did, $horaPueblo),
+                    'necesidades' => is_array($row) ? ($row['necesidades'] ?? null) : null,
                 ];
             }
 

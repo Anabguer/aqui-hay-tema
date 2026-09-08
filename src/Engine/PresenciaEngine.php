@@ -17,12 +17,14 @@ final class PresenciaEngine
             $id = $lug['id'];
             $operativo = LugaresCanonicos::operativoEnProducto($id)
                 || in_array($id, $partida['celeste']['lugares_desbloqueados'] ?? [], true);
+            $necesidades = $lug['necesidades'] ?? null;
             $mapa[$id] = [
                 'id' => $id,
                 'nombre' => Utf8Text::paraJson((string) ($lug['nombre'] ?? $id)),
                 'operativo' => $operativo,
                 'candado' => !$operativo && ($lug['desbloqueado_inicial'] ?? false) === false,
                 'capacidad' => $lug['capacidad'] ?? null,
+                'necesidades' => is_array($necesidades) ? $necesidades : null,
                 'residentes_presentes' => [],
             ];
         }
