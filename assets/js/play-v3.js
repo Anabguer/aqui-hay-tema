@@ -6397,19 +6397,14 @@ function canonEmoId(id) {
   }
 
   function htmlAnimoModal(exp, nom) {
-    const estadoTxt = esc(String(exp.texto_estado || '').toUpperCase());
-    const causa = esc(exp.explicacion || '');
-    const desde = esc(exp.desde_texto || '');
+    const estadoTxt = esc(String(exp.texto_estado || ''));
+    const pensamiento = esc(exp.pensamiento || '');
+    const desde = exp.desde_texto ? esc(exp.desde_texto) : '';
     const emoId = canonEmoId(exp.estado_id || '');
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
-    const consec = Array.isArray(exp.consecuencias) ? exp.consecuencias : [];
-    var mientras = '';
-    const consejo = exp.consejo
-      ? '<p class="animo-modal-hint">\uD83D\uDCA1 ' + esc(exp.consejo) + '</p>'
-      : '';
     return '<div class="animo-modal-top">' +
       '<div class="animo-modal-avatar">' + img + '</div>' +
-      '<h3 class="animo-modal-tit">\u00bfQu\u00e9 le pasa a ' + esc(nom) + '?</h3>' +
+      '<h3 class="animo-modal-tit">' + esc(nom) + '</h3>' +
       '</div>' +
       '<div class="animo-modal-pills">' +
       '<span class="animo-modal-estado animo-modal-estado--' + esc(emoId) + '">' +
@@ -6417,15 +6412,9 @@ function canonEmoId(id) {
       estadoTxt + '</span>' +
       (desde ? '<span class="animo-modal-desde">\uD83D\uDD50 ' + desde + '</span>' : '') +
       '</div>' +
-      '<span class="animo-modal-ribbon animo-modal-ribbon--lav">\u00bfQu\u00e9 ha pasado?</span>' +
-      '<div class="animo-modal-causa animo-modal-causa--illus">' +
-      '<p>' + causa + '</p>' +
-      '<span class="animo-modal-conflicto" aria-hidden="true"></span>' +
-      '</div>' +
-      mientras +
-      '<button type="button" class="animo-modal-cta" data-animo-org>\uD83D\uDCC5 Organizar un plan</button>' +
-      '<button type="button" class="animo-modal-ghost" data-animo-diario>Ver en su diario</button>' +
-      consejo;
+      '<div class="animo-modal-pensamiento">' +
+      '<p>' + pensamiento + '</p>' +
+      '</div>';
   }
 
   function abrirAnimoModal() {
@@ -6436,26 +6425,6 @@ function canonEmoId(id) {
     animoVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
     const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
     body.innerHTML = htmlAnimoModal(exp, nom);
-    const orgBtn = body.querySelector('[data-animo-org]');
-    if (orgBtn) {
-      orgBtn.onclick = function () {
-        cerrarAnimoOverlay();
-        abrirOrganizarConPreset({ a: fichaActualId });
-      };
-    }
-    const diarioBtn = body.querySelector('[data-animo-diario]');
-    if (diarioBtn) {
-      if (exp.diario_evento_id) {
-        diarioBtn.hidden = false;
-        diarioBtn.onclick = function () {
-          cerrarAnimoOverlay();
-          abrirDiarioVecino(fichaActualId, exp.diario_evento_id);
-        };
-      } else {
-        diarioBtn.hidden = true;
-        diarioBtn.onclick = null;
-      }
-    }
     setCapa('ficha_animo');
   }
 
@@ -6907,27 +6876,32 @@ function hobbyIconKey(id, texto) {
       }
     }
     const trabajoEl = $('[data-ficha-trabajo]');
+    const trabajoTxtEl = $('[data-ficha-trabajo-txt]');
     if (trabajoEl) {
       var t = vista.trabajo || {};
       var linea = '';
       if (t.desempleado) {
-        linea = '\uD83D\uDCBC ' + (t.linea_principal || 'Desempleado/a');
+        linea = t.linea_principal || 'Desempleado/a';
       } else if (t.linea_principal) {
-        linea = '\uD83D\uDCBC ' + t.linea_principal;
-        if (t.linea_horario) linea += '\n' + t.linea_horario;
+        linea = t.linea_principal;
+        if (t.linea_horario) linea += ' \u00b7 ' + t.linea_horario;
       } else if (vista.ocupacion) {
-        linea = '\uD83D\uDCBC ' + vista.ocupacion;
+        linea = vista.ocupacion;
       }
       if (linea) {
-        trabajoEl.textContent = linea;
+        if (trabajoTxtEl) trabajoTxtEl.textContent = linea;
         trabajoEl.hidden = false;
       } else {
-        trabajoEl.textContent = '';
+        if (trabajoTxtEl) trabajoTxtEl.textContent = '';
         trabajoEl.hidden = true;
       }
     }
-    const desdeEl = $('[data-ficha-desde]');
-    if (desdeEl) desdeEl.textContent = etiquetaVecinoDesde(vista, diaLlegadaVecino(id));
+    const desdeTagEl = $('[data-ficha-desde-tag]');
+    const desdeTxtEl = $('[data-ficha-desde-txt]');
+    if (desdeTagEl && desdeTxtEl) {
+      desdeTxtEl.textContent = etiquetaVecinoDesde(vista, diaLlegadaVecino(id));
+      desdeTagEl.hidden = false;
+    }
     pintarAnimoFicha(vista);
     const rasgosBox = $('[data-ficha-rasgos]');
     pintarSlotsRasgos(rasgosBox, vista.rasgos_slots || slotsDesdeLista(vista.manera_de_ser));

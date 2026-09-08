@@ -716,17 +716,11 @@
   font-size: 1.52rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-edad,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,\n.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-desde,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-line {
-  margin: 0;
-  font-size: .78rem;
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-tag {
+  font-size: .68rem;
   line-height: 1.35;
   color: #6a5848;
 }
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-line {
-  font-size: .94rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgos {
@@ -751,11 +745,6 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body {
   gap: .85rem;
   padding: .15rem .2rem .25rem .1rem;
-  max-height: calc(86vh - 11rem);
-  overflow-y: auto;
-  overflow-x: clip;
-  scrollbar-width: thin;
-  scrollbar-color: #c9b59a rgba(243, 230, 204, .35);
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
@@ -1037,13 +1026,8 @@
   flex-shrink: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-edad,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,\n.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-desde {
-  font-size: 1.1rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-edad {
-  margin-bottom: .1rem;
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-tag {
+  font-size: .68rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-row {
@@ -1211,10 +1195,8 @@
   padding-left: 1.25rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-line,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-label,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
-  font-size: 1.1rem;
+  font-size: .78rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item,

@@ -648,17 +648,23 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <div class="ficha-cara-ring" data-ficha-cara-ring>
                   <div class="ficha-cara" data-ficha-img></div>
                 </div>
-                <div class="ficha-hero-info">
-                  <h3 class="ficha-nombre" data-ficha-nombre></h3>
-                  <p class="ficha-edad" data-ficha-edad hidden></p>
-                  <p class="ficha-trabajo" data-ficha-trabajo hidden></p>
-                  <p class="ficha-desde" data-ficha-desde></p>
-                  <div class="ficha-animo-row" data-ficha-animo-row>
-                    <button type="button" class="ficha-animo-pill" data-ficha-animo-pill>
-                      <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                      <span class="ficha-animo-val" data-ficha-animo-text></span>
-                    </button>
-                  </div>
+                <h3 class="ficha-nombre" data-ficha-nombre></h3>
+                <div class="ficha-hero-tags">
+                  <span class="ficha-tag ficha-tag--edad" data-ficha-edad hidden></span>
+                  <span class="ficha-tag ficha-tag--trabajo" data-ficha-trabajo hidden>
+                    <svg class="ficha-tag-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 5h12v8a1 1 0 01-1 1H3a1 1 0 01-1-1V5z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 5V3a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+                    <span data-ficha-trabajo-txt></span>
+                  </span>
+                  <span class="ficha-tag ficha-tag--desde" data-ficha-desde-tag>
+                    <svg class="ficha-tag-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <span data-ficha-desde-txt></span>
+                  </span>
+                </div>
+                <div class="ficha-animo-row" data-ficha-animo-row>
+                  <button type="button" class="ficha-animo-pill" data-ficha-animo-pill>
+                    <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                    <span class="ficha-animo-val" data-ficha-animo-text></span>
+                  </button>
                 </div>
               </div>
             </section>

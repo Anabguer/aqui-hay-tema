@@ -467,10 +467,7 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-vacio,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-sabes-body,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-line,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-edad,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-trabajo,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-desde,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-tag,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
   font: var(--aht-read-font);
   font-style: normal;
