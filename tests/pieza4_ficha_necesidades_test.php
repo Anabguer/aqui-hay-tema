@@ -50,6 +50,23 @@ ok(isset($item['icono']), 'Item has icono');
 ok(isset($item['banda']), 'Item has banda');
 ok(isset($item['copy']), 'Item has copy');
 ok($item['copy'] !== '', 'Copy is not empty');
+ok(isset($item['valor']), 'Item has valor');
+ok(is_int($item['valor']), 'valor is integer');
+ok($item['valor'] >= 0 && $item['valor'] <= 100, 'valor in 0-100 range');
+
+// Test 4: valor matches input data
+$socialItem = null;
+foreach ($result2['items'] as $it) {
+    if ($it['id'] === 'social') { $socialItem = $it; break; }
+}
+ok($socialItem !== null, 'social item found');
+ok($socialItem['valor'] === 20, 'social valor is 20 (matches input)');
+$actividadItem = null;
+foreach ($result2['items'] as $it) {
+    if ($it['id'] === 'actividad') { $actividadItem = $it; break; }
+}
+ok($actividadItem !== null, 'actividad item found');
+ok($actividadItem['valor'] === 30, 'actividad valor is 30 (matches input)');
 
 // Test 4: Copy narrativo is correct
 $socialCopy = NecesidadEstado::copyNecesidad('social', 'en_rojo');
