@@ -67,7 +67,7 @@
     document.body.setAttribute('data-debug', DEBUG_ON ? '1' : '0');
     syncDebugFloatVisibility();
     if (DEBUG_ON) {
-      try { console.log('%c[AHT DEBUG] InstrumentaciÃ³n activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
+      try { console.log('%c[AHT DEBUG] Instrumentación activa', 'color:#c45;font-weight:bold'); } catch (e3) {}
     }
   }
   function isDebugOn() { return DEBUG_ON; }
@@ -114,7 +114,7 @@
   let musicaPrimerGestoPendiente = false;
 
   function actualizarControlMusica() {
-    const etiqueta = musicaActiva ? 'Desactivar mÃºsica' : 'Activar mÃºsica';
+    const etiqueta = musicaActiva ? 'Desactivar música' : 'Activar música';
     $$('[data-musica-toggle]').forEach(function (control) {
       control.dataset.musica = musicaActiva ? 'on' : 'off';
       control.setAttribute('aria-pressed', musicaActiva ? 'true' : 'false');
@@ -346,7 +346,7 @@
     const all = [];
     if (serverText) all.push(serverText);
     if (clientBits.length) all.push('--- CLIENT / API ---\n' + clientBits.join('\n\n'));
-    pre.textContent = all.length ? all.join('\n\n') : '(aÃºn no hay eventos)';
+    pre.textContent = all.length ? all.join('\n\n') : '(aún no hay eventos)';
     try { if (fromServer && fromServer.texto) console.log('[AHT playtest_diag]\n' + fromServer.texto); } catch (e) {}
   }
 
@@ -408,8 +408,8 @@
       if (navigator.share && navigator.canShare) {
         const file = new File([blob], nombre, { type: 'application/json' });
         if (navigator.canShare({ files: [file] })) {
-          await navigator.share({ files: [file], title: 'AHT debug', text: 'DiagnÃ³stico AquÃ­ Hay Tema' });
-          toast('DiagnÃ³stico compartido.');
+          await navigator.share({ files: [file], title: 'AHT debug', text: 'Diagnóstico Aquí Hay Tema' });
+          toast('Diagnóstico compartido.');
           return;
         }
       }
@@ -634,7 +634,7 @@
     try {
       data = raw ? JSON.parse(raw) : {};
     } catch (err) {
-      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolviÃ³ JSON.', raw: raw.slice(0, 400) };
+      const fail = { ok: false, error: 'respuesta_no_json', status: resp.status, mensaje_ui: 'La API no devolvió JSON.', raw: raw.slice(0, 400) };
       logApiError(action, method, body, resp.status, fail, 'json_parse');
       return fail;
     }
@@ -1093,9 +1093,9 @@
     const estEl = $('[data-vida-modal-estado]');
     if (estEl) {
       let hint = '';
-      if (vida && vida.critico) hint = 'La cosa se estÃ¡ poniendo fea.';
+      if (vida && vida.critico) hint = 'La cosa se está poniendo fea.';
       else if (valor >= 80) hint = 'Por ahora el pueblo respira.';
-      else if (valor <= 39) hint = 'AquÃ­ pasa algo, y no es bueno.';
+      else if (valor <= 39) hint = 'Aquí pasa algo, y no es bueno.';
       estEl.textContent = hint;
       estEl.hidden = !hint;
       estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
@@ -1112,7 +1112,7 @@
     const root = $('.play-root');
     const prev = (root && root.getAttribute('data-capa')) || '';
 
-    // â•â• BRIDGE V4 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ââ BRIDGE V4 ââââââââââââââââââââââââââââââââââââââââââââââ
     // Si screen-manager gestiona esta screen, delegar lifecycle.
     // Esto asegura que stack/velo/scroll V4 se mantengan correctamente.
     if (window.AHTScreenManager) {
@@ -1121,7 +1121,7 @@
         if (window.AHTScreenManager.getCurrent() !== name) {
           window.AHTScreenManager.open(name, { silent: true });
         }
-        // V4 ya manejÃ³ dock/scroll/history. Ejecutar SOLO renderers legacy.
+        // V4 ya manejó dock/scroll/history. Ejecutar SOLO renderers legacy.
         if (name !== 'mentes') mentesEncIdActivo = null;
         if (name === 'vida_pueblo') renderVidaPuebloModal();
         if (name === 'parejas') renderParejasModalList(parejasParaUI(cacheInsp || {}));
@@ -1141,7 +1141,7 @@
         if (name) { /* fall through to legacy setCapa */ } else { return; }
       }
     }
-    // â•â• FIN BRIDGE V4 â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+    // ââ FIN BRIDGE V4 ââââââââââââââââââââââââââââââââââââââââââ
 
     if (!name) root.removeAttribute('data-capa');
     else root.setAttribute('data-capa', name);
@@ -1515,7 +1515,7 @@
   }
   // --- fin Inventario / Regalos (F1) ---
 
-  /** CatÃ¡logo estÃ¡tico de regalos (data/catalogos/regalos.json) para assets en mensajitos. */
+  /** Catálogo estático de regalos (data/catalogos/regalos.json) para assets en mensajitos. */
   let cacheCatalogoRegalos = null;
   let cacheCatalogoRegalosCargando = null;
 
@@ -1567,9 +1567,9 @@
       /te manda\s+(.+?)\.\s*(?:Guardado|$)/i,
       /te deja\s+(.+?)\s+como agradecimiento/i,
       /encuentras\s+(.+?)\./i,
-      /del d[iÃ­]a:\s*(.+?)\.\s*(?:Guardado|$)/i,
+      /del d[ií]a:\s*(.+?)\.\s*(?:Guardado|$)/i,
       /Detallito merecido:\s*(.+?)\./i,
-      /sorpresa del d[iÃ­]a:\s*(.+?)\./i
+      /sorpresa del d[ií]a:\s*(.+?)\./i
     ];
     for (let i = 0; i < patterns.length; i++) {
       const hit = t.match(patterns[i]);
@@ -1600,7 +1600,7 @@
         id: String(origen.objeto_id || ''),
         nombre: String(origen.objeto_nombre),
         url: String(origen.objeto_imagen || ''),
-        desc: origen.regalito_origen === 'historia_pueblo' ? 'Historia del Pueblo' : (origen.regalito_origen === 'misiones_3x3' ? 'Tres misiones del dÃ­a' : '')
+        desc: origen.regalito_origen === 'historia_pueblo' ? 'Historia del Pueblo' : (origen.regalito_origen === 'misiones_3x3' ? 'Tres misiones del día' : '')
       };
     }
     const cat = catalogo || cacheCatalogoRegalos || { byId: {}, byNombre: {} };
@@ -1629,7 +1629,7 @@
     const cel = estado && estado.celeste ? estado.celeste.dinero : null;
     const v = eco !== null && eco !== undefined ? eco : cel;
     if (v === null || v === undefined || v === '') return 'â€”';
-    return String(Math.round(Number(v))) + ' â‚¬';
+    return String(Math.round(Number(v))) + ' â¬';
   }
 
 
@@ -1833,7 +1833,7 @@
     if (diaHoy && diaMsg === diaHoy) diaLbl = 'Hoy';
     else if (diaHoy && diaHoy > 1 && diaMsg === diaHoy - 1) diaLbl = 'Ayer';
     else if (fc) diaLbl = fc;
-    else if (diaMsg) diaLbl = 'DÃ­a ' + diaMsg;
+    else if (diaMsg) diaLbl = 'Día ' + diaMsg;
     if (diaLbl && hora) return diaLbl + ' Â· ' + hora;
     return diaLbl || hora || fc || '';
   }
@@ -1900,7 +1900,7 @@
     toast(txt);
   }
 
-  // â•â• CelebraciÃ³n de historia del pueblo â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  // ââ Celebración de historia del pueblo âââââââââââââââââââââ
   const celebracionesConsumidas = new Set();
   let colaCelebraciones = [];
   let celebracionHitoActual = '';
@@ -2105,7 +2105,7 @@
     if (!m || m.estado_pueblo === 'caducada') return '';
     const raw = String(m.plazo_humano || '').trim();
     if (!raw || raw === 'Cuando puedas.') return '';
-    if (raw === 'El tiempo se acaba.') return 'Ãšltimas horas';
+    if (raw === 'El tiempo se acaba.') return 'Últimas horas';
     let label = raw.replace(/^Te quedan\s+/i, 'Quedan ').replace(/^Te queda\s+/i, 'Queda ');
     if (/^quedan?\s+\d+\s*h/i.test(label)) {
       return label.charAt(0).toUpperCase() + label.slice(1);
@@ -2119,7 +2119,7 @@
     const familia = String(m.familia_mensajito || '');
     const origenTipo = String((m.origen && m.origen.tipo_evento) || '');
     if (pueblo === 'cumplida') {
-      if (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado') return 'PeticiÃ³n resuelta';
+      if (tipo === 'peticion_resultado' || origenTipo === 'peticion_resultado') return 'Petición resuelta';
       return 'Hecho';
     }
     if (pueblo === 'caducada') {
@@ -2200,7 +2200,7 @@
     const fam = String(origen.familia_mensajito || '');
     const nom = nombrePublicoDe(origen);
     if (fam === 'f_peticion' || fam === 'f_presentacion' || origen.tipo === 'peticion') {
-      return 'PeticiÃ³n de ' + nom;
+      return 'Petición de ' + nom;
     }
     if (fam === 'anuncio_evento_pueblo') return 'Anuncio del evento';
     if (fam === 'f_colectivo') return 'Propuesta del pueblo';
@@ -2235,7 +2235,7 @@
           var _obsId = datos.observado_id || '';
           var _obsRes = (cacheInsp && cacheInsp.residentes && cacheInsp.residentes[_obsId]) || {};
           var _obsGen = (_obsRes.identidad_publica && _obsRes.identidad_publica.genero) || '';
-          return 'Organizar algo con ' + (_obsGen === 'mujer' ? 'ella' : 'Ã©l');
+          return 'Organizar algo con ' + (_obsGen === 'mujer' ? 'ella' : 'él');
         }
         return 'Organizar plan';
       case 'organizar_encargo':
@@ -2770,7 +2770,7 @@
 
     if (enCurso) return lugar + ' Â· En curso Â· ' + hora;
     if (Number(enc.dia) === Number(reloj.dia_pueblo)) return lugar + ' Â· Hoy ' + hora;
-    return lugar + ' Â· DÃ­a ' + (enc.dia || '?') + ' Â· ' + hora;
+    return lugar + ' Â· Día ' + (enc.dia || '?') + ' Â· ' + hora;
   }
   function emocionDe(id) {
     var r = cacheInsp && cacheInsp.residentes && cacheInsp.residentes[id];
@@ -2963,12 +2963,12 @@
     var actorActual = iv.actor_actual || '';
     var barra = iv.barra_quedada || 0;
 
-    /* Si no hay mÃ¡s turnos y hay resultado, mostrar resumen. */
+    /* Si no hay más turnos y hay resultado, mostrar resumen. */
     if (turnos.length >= turnosMax && iv.ultimo && iv.ultimo.texto) {
       return htmlIntervencionResultado(enc, estado);
     }
 
-    /* Si no estÃ¡ disponible y no hay turnos, no mostrar nada (legacy). */
+    /* Si no está disponible y no hay turnos, no mostrar nada (legacy). */
     if (!iv.disponible && turnos.length === 0) return '';
     if (!iv.acciones || !iv.acciones.length) return '';
 
@@ -3037,7 +3037,7 @@
     /* Temas de hobby (si aplica) */
     html += '<div class="enc-int-temas-grid" data-temas-panel hidden></div>';
 
-    /* Feedback de la Ãºltima acciÃ³n (si hay) */
+    /* Feedback de la última acción (si hay) */
     if (turnos.length > 0) {
       var ultimo = turnos[turnos.length - 1];
       var emojiR = ultimo.tono === 'bien' ? '\ud83d\udc4d' : (ultimo.tono === 'mal' ? '\ud83d\udc4e' : '\ud83d\ude10');
@@ -3218,8 +3218,8 @@
 
   const EVENTO_PUEBLO_NOMBRE_UI = {
     noche_bingo: 'Noche de bingo',
-    partido_futbol_benefico: 'Partido de fÃºtbol benÃ©fico',
-    sesion_cine_comunitaria: 'SesiÃ³n de cine comunitaria',
+    partido_futbol_benefico: 'Partido de fútbol benéfico',
+    sesion_cine_comunitaria: 'Sesión de cine comunitaria',
     tardeo_en_el_bar: 'Tardeo en el bar',
     clase_abierta_gimnasio: 'Clase abierta en el gimnasio',
     club_lectura: 'Club de lectura'
@@ -4265,7 +4265,7 @@ function renderInicioMpDuo(misiones, parejas) {
       }
       if (cta) {
         var ctaTxtEl = cta.querySelector('[data-proximo-evento-cta-txt]') || cta.querySelector('.inicio-evento-cta-txt');
-        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || 'Â¿QuiÃ©n va?';
+        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || 'Â¿Quién va?';
         cta.hidden = !puedeApuntar;
         cta.disabled = !puedeApuntar;
         if (puedeApuntar) {
@@ -4341,7 +4341,7 @@ function renderInicioMpDuo(misiones, parejas) {
   var cacheMapaZonas = null;
   var cacheMapaPresencia = null;
   const LUGAR_TITULO_UI = {
-    lug_cafeteria: 'CafeterÃ­a', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
+    lug_cafeteria: 'Cafetería', lug_biblioteca: 'Biblioteca', lug_gimnasio: 'Gimnasio',
     lug_restaurante: 'Restaurante', lug_parque: 'Parque', lug_bar: 'Bar',
     lug_cine: 'Cine', lug_discoteca: 'Discoteca', lug_bingo: 'Bingo'
   };
@@ -4350,7 +4350,7 @@ function renderInicioMpDuo(misiones, parejas) {
     return nombreLugarUi(id, fb);
   }
   const LUGAR_NOMBRE_UI = {
-    lug_cafeteria: 'la cafeterÃ­a', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
+    lug_cafeteria: 'la cafetería', lug_biblioteca: 'la biblioteca', lug_gimnasio: 'el gimnasio',
     lug_restaurante: 'el restaurante', lug_parque: 'el parque', lug_bar: 'el bar',
     lug_cine: 'el cine', lug_discoteca: 'la discoteca', lug_bingo: 'el bingo'
   };
@@ -4406,7 +4406,7 @@ function renderInicioMpDuo(misiones, parejas) {
     return layer ? layer.querySelector('[data-zona="' + zonaId + '"]') : null;
   }
 
-  /** Hit-test por coordenadas sobre la imagen del mapa (mÃ¡s fiable que botones % en mÃ³vil). */
+  /** Hit-test por coordenadas sobre la imagen del mapa (más fiable que botones % en móvil). */
   function zonaDesdePuntoMapa(clientX, clientY) {
     if (!cacheMapaZonas || !cacheMapaZonas.zonas) return null;
     var img = document.querySelector('[data-mapa-canonico] .mapa-canonico-bg');
@@ -4519,7 +4519,7 @@ function renderInicioMpDuo(misiones, parejas) {
     var trig = box.querySelector('.org-dd-trigger');
     if (!trig || !id) return;
     var label = trig.querySelector('.org-lugar-card-nom');
-    var nom = label ? label.textContent : (nombreLugarTitulo(id, id) || 'Elegirâ•');
+    var nom = label ? label.textContent : (nombreLugarTitulo(id, id) || 'Elegirâ');
     trig.innerHTML = orgDdTriggerContent('lugar', nom, id);
   }
 
@@ -4781,7 +4781,7 @@ function renderInicioMpDuo(misiones, parejas) {
     return Math.abs(s);
   }
 
-  /** Slots en franja inferior del hotspot (% left/top). Ãndice estable por cantidad. */
+  /** Slots en franja inferior del hotspot (% left/top). Índice estable por cantidad. */
   function slotsTokensZona(total) {
     var n = Math.max(1, Math.min(5, total || 1));
     if (n === 1) return [{ left: 50, top: 82 }];
@@ -4906,7 +4906,7 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       var all = document.createElement('button');
       all.type = 'button';
-      all.textContent = 'QuiÃ©n hay aquÃ­';
+      all.textContent = 'Quién hay aquí';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuienZona(zonaId, null, zonaBtn); });
       box.appendChild(all);
       actualizarNotaAtras();
@@ -5022,7 +5022,7 @@ function renderInicioMpDuo(misiones, parejas) {
       var tag = tv.categoria_etiqueta || 'Tema';
       return '<section class="consulta-ed-tema-card">' +
         '<div class="consulta-ed-tema-head">' +
-        '<p class="consulta-ed-tema-kicker">AquÃ­ hay tema</p>' +
+        '<p class="consulta-ed-tema-kicker">Aquí hay tema</p>' +
         '<span class="consulta-ed-tema-tag">' + esc(tag) + '</span>' +
         '</div>' +
         '<p class="consulta-ed-tema-txt">' + esc(tv.texto || '') + '</p>' +
@@ -5413,7 +5413,7 @@ function renderInicioMpDuo(misiones, parejas) {
     });
     pasarRatoBtns().forEach(function (btn) {
       btn.classList.toggle('pasar-rato--noche', esNoche);
-      btn.title = esNoche ? 'Avanza hasta las 08:00 de la maÃ±ana' : 'Avanza el tiempo exactamente 1 hora';
+      btn.title = esNoche ? 'Avanza hasta las 08:00 de la mañana' : 'Avanza el tiempo exactamente 1 hora';
       if (!btn.classList.contains('is-busy')) {
         const txt = btn.querySelector('.pasar-rato-txt');
         if (txt) txt.textContent = esNoche ? 'Pasar la noche' : 'Pasar el rato';
@@ -5512,7 +5512,7 @@ function renderInicioMpDuo(misiones, parejas) {
     else $('.play-root').removeAttribute('data-importante');
   }
 
-  /* â•â• Auto-sync: sincronizaciÃ³n periÃ³dica del reloj â•â• */
+  /* ââ Auto-sync: sincronización periódica del reloj ââ */
   var _syncClockTimer = null;
   var _syncClockBusy = false;
   var _partidaSwitchBusy = false;
@@ -5713,7 +5713,7 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       const all = document.createElement('button');
       all.type = 'button';
-      all.textContent = 'QuiÃ©n hay en el complejo';
+      all.textContent = 'Quién hay en el complejo';
       all.addEventListener('click', function (ev) { ev.preventDefault(); ev.stopPropagation(); abrirQuien(id, null); });
       box.appendChild(all);
       actualizarNotaAtras();
@@ -5765,12 +5765,12 @@ function renderInicioMpDuo(misiones, parejas) {
 
   function copyVacio(cid) {
     const t = {
-      cafe_libros: 'Ni el cafÃ© humea. No hay ni un alma.',
-      rincon_lola: 'Hoy Lola no tendrÃ­a a quiÃ©n servir.',
+      cafe_libros: 'Ni el café humea. No hay ni un alma.',
+      rincon_lola: 'Hoy Lola no tendría a quién servir.',
       cine_game: 'Pantalla en negro. No hay ni un alma.',
-      mala_idea: 'Hasta el bar estÃ¡ en silencio.',
+      mala_idea: 'Hasta el bar está en silencio.',
       parque: 'Solo el banco, esperando.',
-      gimnasio_spa: 'MÃ¡quinas quietas. No hay ni un alma.'
+      gimnasio_spa: 'Máquinas quietas. No hay ni un alma.'
     };
     return t[cid] || 'No hay ni un alma.';
   }
@@ -6308,7 +6308,7 @@ function canonEmoId(id) {
   function etiquetaVecinoDesde(vista, dia) {
     const g = vista && vista.genero;
     const rol = g === 'mujer' ? 'Vecina' : (g === 'hombre' ? 'Vecino' : 'Vecino');
-    return rol + ' desde el dÃ­a ' + dia;
+    return rol + ' desde el día ' + dia;
   }
 
   function textoAnimoDisplay(emo) {
@@ -6334,9 +6334,9 @@ function canonEmoId(id) {
   function textoEmoVecinoSutil(emo, genero) {
     const e = canonEmoId(emo);
     if (e === 'neutro') return '';
-    if (e === 'alegre') return 'estÃ¡ feliz';
-    if (e === 'triste') return 'estÃ¡ triste';
-    if (e === 'enfadado') return genero === 'mujer' ? 'estÃ¡ enfadada' : 'estÃ¡ enfadado';
+    if (e === 'alegre') return 'está feliz';
+    if (e === 'triste') return 'está triste';
+    if (e === 'enfadado') return genero === 'mujer' ? 'está enfadada' : 'está enfadado';
     return '';
   }
 
@@ -6505,14 +6505,14 @@ function canonEmoId(id) {
 
   function diarioCategoriaMeta(e) {
     const filtro = e.filtro_grupo || 'relaciones';
-    const txt = e.categoria_etiqueta || 'RelaciÃ³n';
+    const txt = e.categoria_etiqueta || 'Relación';
     const clsMap = {
       planes: 'pg-pill--lavender',
       relaciones: 'pg-pill--mustard',
       cambios: 'pg-pill--tan'
     };
     const low = String(txt).toLowerCase();
-    if (low.indexOf('Ã¡nimo') >= 0 || low.indexOf('animo') >= 0) {
+    if (low.indexOf('ánimo') >= 0 || low.indexOf('animo') >= 0) {
       return { cls: 'pg-pill--red', txt: txt, grupo: 'cambios' };
     }
     return { cls: clsMap[filtro] || 'pg-pill--mustard', txt: txt, grupo: filtro };
@@ -6560,7 +6560,7 @@ function canonEmoId(id) {
       '<span class="fdi-con-nom">' + esc(nombre) + '</span></span>';
   }
 
-  /* â”€â”€ Diario: doodles decorativos (catÃ¡logo compartido) â”€â”€ */
+  /* â”€â”€ Diario: doodles decorativos (catálogo compartido) â”€â”€ */
   var DIARIO_DOODLE = {
     h: '<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
     s: '<svg viewBox="0 0 24 24" fill="none" stroke="#e3b04b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
@@ -6573,17 +6573,17 @@ function canonEmoId(id) {
   };
 
   var DIARIO_DOODLE_MAP = {
-    'RelaciÃ³n': 'h',
+    'Relación': 'h',
     'Relacion': 'h',
     'Encuentro': 'f',
     'Descubrimiento': 's',
-    'Ãnimo': 'p',
+    'Ánimo': 'p',
     'Animo': 'p',
     'Cambio': 'p',
     'Plan': 's',
     'Nos vimos': 'f',
     'Algo con vecinos': 'f',
-    'SeÃ±al romÃ¡ntica': 'h',
+    'Señal romántica': 'h',
     'Senal romantica': 'h'
   };
 
@@ -6611,7 +6611,7 @@ function canonEmoId(id) {
   function entradaDiarioHtml(e, rid) {
     const meta = diarioCategoriaMeta(e);
     const eventoId = (e.origen && e.origen.evento_id) || e.evento_id || '';
-    const titulo = String(e.titulo || '').trim() || 'Algo pasÃ³';
+    const titulo = String(e.titulo || '').trim() || 'Algo pasó';
     const explicacion = String(e.explicacion || e.texto || '').trim();
     const tono = e.tono || '';
     const tonoCls = tono ? ' fdi-card--' + tono : '';
@@ -6647,7 +6647,7 @@ function canonEmoId(id) {
       entradas = entradas.slice().reverse();
     }
     if (!entradas.length) {
-      list.innerHTML = '<p class="ficha-vacio ficha-ironico">AÃºn no ha pasado nada digno de pÃ¡gina.</p>';
+      list.innerHTML = '<p class="ficha-vacio ficha-ironico">Aún no ha pasado nada digno de página.</p>';
       return;
     }
     let html = '';
@@ -6655,7 +6655,7 @@ function canonEmoId(id) {
     let inTl = false;
     entradas.forEach(function (e) {
       const diaNum = e.dia || '';
-      const diaLbl = e.fecha_corta || ('DÃ­a ' + diaNum);
+      const diaLbl = e.fecha_corta || ('Día ' + diaNum);
       const diaKey = String(diaNum) + '|' + diaLbl;
       if (diaKey !== diaPrev) {
         if (inTl) html += '</div></div>';
@@ -6703,7 +6703,7 @@ function canonEmoId(id) {
     });
     const ord = $('[data-diario-orden]');
     if (ord) {
-      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'MÃ¡s antiguo' : 'MÃ¡s reciente';
+      ord.textContent = diarioVecinoOrden === 'antiguo' ? 'Más antiguo' : 'Más reciente';
     }
     const busca = $('[data-diario-busca]');
     if (busca && busca.value !== diarioVecinoBusca) busca.value = diarioVecinoBusca;
@@ -6803,7 +6803,7 @@ function hobbyIconKey(id, texto) {
 
   function emojiHobby(txt) {
     const t = String(txt || '').toLowerCase();
-    if (t.indexOf('cafÃ©') >= 0 || t.indexOf('cafe') >= 0) return '? ';
+    if (t.indexOf('café') >= 0 || t.indexOf('cafe') >= 0) return '? ';
     if (t.indexOf('biblioteca') >= 0 || t.indexOf('leer') >= 0) return '?? ';
     if (t.indexOf('pasear') >= 0 || t.indexOf('parque') >= 0) return '?? ';
     return '';
@@ -6884,10 +6884,10 @@ function hobbyIconKey(id, texto) {
   }
   function textoPlanesVacios(id) {
     const frases = [
-      'Ni un cafÃ© en el horizonte. O eso cree.',
+      'Ni un café en el horizonte. O eso cree.',
       'Agenda libre. Demasiado libre.',
-      'Hoy no tiene nada apuntado. Ni maÃ±ana, segÃºn parece.',
-      'Cero planes. Cero prisas. Cero dramaâ• por ahora.'
+      'Hoy no tiene nada apuntado. Ni mañana, según parece.',
+      'Cero planes. Cero prisas. Cero dramaâ por ahora.'
     ];
     let h = 0;
     const s = String(id || '');
@@ -7131,7 +7131,7 @@ function hobbyIconKey(id, texto) {
     const ids = vecinosIdsOrdenados();
     const ok = ids.length > 1;
     const nav = fichaNavBotones();
-    // NavegaciÃ³n circular: con 2+ vecinos ambas flechas siempre activas
+    // Navegación circular: con 2+ vecinos ambas flechas siempre activas
     if (nav.prev) nav.prev.disabled = !ok;
     if (nav.next) nav.next.disabled = !ok;
   }
@@ -7471,12 +7471,12 @@ function hobbyIconKey(id, texto) {
     if (bucket === 'hoy') return 'Hoy';
     if (bucket === 'ayer') return 'Ayer';
     if (e.fecha_corta) return e.fecha_corta;
-    return e.dia ? ('dÃ­a ' + e.dia) : '';
+    return e.dia ? ('día ' + e.dia) : '';
   }
 
   function htmlCotiAvatares(actores) {
     const ids = (actores && actores.length) ? actores.slice(0, 2) : [];
-    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">â•</span>';
+    if (!ids.length) return '<span class="coti-item-sin-cara" aria-hidden="true">â</span>';
     return ids.map(function (id) {
       const img = tokenDe(id);
       const nom = nombreDe(id);
@@ -7738,7 +7738,7 @@ function hobbyIconKey(id, texto) {
     });
     var sorted = Object.keys(contar).sort(function (a, b) { return contar[b] - contar[a]; }).slice(0, 5);
     if (!sorted.length) { box.innerHTML = ''; return; }
-    var html = '<h3 class="coti-sehabla-tit">ðŸ”¥ Se habla deâ€¦</h3><ul class="coti-sehabla-list">';
+    var html = '<h3 class="coti-sehabla-tit">🔥 Se habla de…</h3><ul class="coti-sehabla-list">';
     sorted.forEach(function (tag, i) {
       html += '<li class="coti-sehabla-item"><span class="coti-sehabla-num">#' + (i + 1) + '</span> <span class="coti-sehabla-tag">' + esc(tag) + '</span> <span class="coti-sehabla-count">' + contar[tag] + '</span></li>';
     });
@@ -7752,23 +7752,23 @@ function hobbyIconKey(id, texto) {
 
   var ORG_LUGAR_DESC = {
     lug_cafeteria: 'El lugar perfecto para tomar algo y charlar tranquilamente.',
-    lug_bar: 'Ambiente relajado para una copa y buena conversaciÃ³n.',
+    lug_bar: 'Ambiente relajado para una copa y buena conversación.',
     lug_biblioteca: 'Rincones tranquilos para leer o charlar en voz baja.',
     lug_parque: 'Aire libre y calma para pasear o sentarse un rato.',
-    lug_cine: 'Una sesiÃ³n de cine para compartir sin prisas.',
+    lug_cine: 'Una sesión de cine para compartir sin prisas.',
     lug_gimnasio: 'Moverse juntos o animar un plan activo.',
     lug_restaurante: 'Mesa puesta para comer bien y hablar con calma.',
     lug_bingo: 'Partida de bingo y risas en comunidad.',
-    lug_discoteca: 'MÃºsica y ambiente para soltar el cuerpo.',
-    lug_karaoke: 'Cantar, reÃ­r y pasarlo bien.',
+    lug_discoteca: 'Música y ambiente para soltar el cuerpo.',
+    lug_karaoke: 'Cantar, reír y pasarlo bien.',
     lug_mirador: 'Vistas del pueblo para un momento especial.',
     lug_picnic: 'Manta, comida y charla al aire libre.',
-    lug_arcade: 'Juegos y diversiÃ³n en el recreativo.',
-    lug_recreativo: 'Juegos y diversiÃ³n en el recreativo.',
+    lug_arcade: 'Juegos y diversión en el recreativo.',
+    lug_recreativo: 'Juegos y diversión en el recreativo.',
     lug_spa: 'Relax y cuidado para desconectar un poco.',
     lug_tienda: 'Un paseo por la tienda del pueblo.'
   };
-  var ORG_HORAS_HINT_DEFAULT = 'Los horarios disponibles pueden variar segÃºn el lugar.';
+  var ORG_HORAS_HINT_DEFAULT = 'Los horarios disponibles pueden variar según el lugar.';
   function orgLugarDesc(lugId) {
     var d = destinoOperativoPorId(lugId);
     if (d && d.descripcion) return String(d.descripcion);
@@ -7982,7 +7982,7 @@ function hobbyIconKey(id, texto) {
     if (modoToggle) modoToggle.hidden = esEvt;
     if (seccDonde) seccDonde.hidden = esEvt;
     if (seccCuando) seccCuando.hidden = esEvt;
-    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : 'Â¿QuiÃ©nes van?';
+    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : 'Â¿Quiénes van?';
     if (contador) {
       if (esEvt && org.evento_ctx && org.evento_ctx.aforo_total) {
         var act = (org.evento_ctx.participantes_apuntados || []).length;
@@ -8100,12 +8100,12 @@ function hobbyIconKey(id, texto) {
       return pend || 'Elige al menos dos vecinos.';
     }
     if (err === 'PARTICIPANTES_EXCESO') return 'Puedes organizar planes con hasta 2 vecinos.';
-    if (err === 'AFORO_COMPLETO') return 'El evento ya estÃ¡ completo.';
-    if (err === 'PARTICIPANTE_YA_APUNTADO') return 'Ese vecino ya estÃ¡ apuntado al evento.';
+    if (err === 'AFORO_COMPLETO') return 'El evento ya está completo.';
+    if (err === 'PARTICIPANTE_YA_APUNTADO') return 'Ese vecino ya está apuntado al evento.';
     if (err === 'EVENTO_PUEBLO_NO_ENCONTRADO') return 'No se ha encontrado ese evento del pueblo.';
     if (err === 'EVENTO_PUEBLO_CERRADO') return 'Ese evento ya no admite apuntados.';
     if (err === 'lugar_requerido' || err === 'LUGAR_NO_OPERATIVO') return 'Elige un lugar.';
-    if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cuÃ¡ndo quedar.';
+    if (err === 'dia_requerido' || err === 'hora_requerida' || err === 'HORA_PASADA') return 'Elige cuándo quedar.';
     if (err === 'LIMITE_INTERVENCIONES') return 'Has alcanzado el l\u00edmite de intervenciones de hoy.';
     if (err === 'network_error' || err === 'respuesta_no_json' || err === 'excepcion') return fallback;
     return fallback;
@@ -8295,7 +8295,7 @@ function hobbyIconKey(id, texto) {
     if (!box) return;
     var opts = Array.isArray(options) ? options : [];
     var valStr = value === null || value === undefined ? '' : String(value);
-    var label = 'Elegirâ•';
+    var label = 'Elegirâ';
     opts.forEach(function (opt) {
       var optVal = opt.value === null || opt.value === undefined ? '' : String(opt.value);
       if (valStr !== '' && optVal === valStr) label = opt.label || optVal;
@@ -8568,7 +8568,7 @@ function hobbyIconKey(id, texto) {
     if (!org.dia) {
       pintarOrgDropdown('hora', [{ value: '', label: 'â€”', disabled: true }], '', null);
       org.hora = 0;
-      setOrgHorasHint('Elige cuÃ¡ndo quedar para ver horarios.', true);
+      setOrgHorasHint('Elige cuándo quedar para ver horarios.', true);
       actualizarOrgCrearBtn();
       return;
     }
@@ -9266,11 +9266,11 @@ function hobbyIconKey(id, texto) {
   async function pasarElRato() {
     if (!pasarRatoBtns().length || pasarRatoEnCurso) return;
     pasarRatoEnCurso = true;
-    setPasarRatoBusy(true, 'A ver quÃ© se cueceâ•');
+    setPasarRatoBusy(true, 'A ver qué se cueceâ');
     const relojAntes = relojAbsDesdeEstado();
     try {
       if (!(await recuperarPartidaIdPerdida())) {
-        toast('No encuentro tu partida guardada. Recarga la pÃ¡gina o inicia sesiÃ³n en Intocables.');
+        toast('No encuentro tu partida guardada. Recarga la página o inicia sesión en Intocables.');
         return;
       }
       const perdida = !!(cacheEstado && cacheEstado.partida_perdida) ||
@@ -9497,7 +9497,7 @@ function hobbyIconKey(id, texto) {
     }
     const open = ev.target.closest('[data-open]');
     if (open && uiRootFrom(open)) {
-      // BRIDGE V4: si screen-manager ya manejÃ³ la apertura en capture phase,
+      // BRIDGE V4: si screen-manager ya manejó la apertura en capture phase,
       // NO duplicar setCapa/scroll/history.
       if (ev.__ahtV4) return;
       const name = open.getAttribute('data-open');
