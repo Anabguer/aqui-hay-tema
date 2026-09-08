@@ -50,13 +50,7 @@ final class MensajitoContextualEngine
             // Edad real: +1 el día del cumpleaños, idempotente por residente + año.
             $partida['edad_incrementos'] ??= [];
             if (empty($partida['edad_incrementos'][$claveAnual])) {
-                $res = &$partida['residentes'][$rid];
-                $perfil = &$res['runtime']['perfil_partida'] ?? null;
-                if (is_array($perfil) && isset($perfil['edad']) && is_int($perfil['edad'])) {
-                    $perfil['edad'] = $perfil['edad'] + 1;
-                }
-                $partida['edad_incrementos'][$claveAnual] = true;
-                unset($res, $perfil);
+                self::incrementarEdadResidente($partida, $rid, $claveAnual, $catalog);
             }
             if (!empty($partida['mensajitos_cumpleanos_emitidos'][$claveAnual])) {
                 continue;
@@ -798,5 +792,53 @@ final class MensajitoContextualEngine
             $protagonistas,
             $contexto
         );
+    }
+
+    /**
+     * Incrementa +1 la edad de un residente en su día de cumpleaños.
+     *
+     * Flujo:
+     *   1. Resuelve edad canónica (perfil_partida → catálogo).
+     *   2. Si no hay edad resoluble, NO marca la key → reintentará mañana.
+     *   3. Materializa perfil_partida.edad si aún no existe (saves antiguos).
+     *   4. Incrementa +1.
+     *   5. Solo marca edad_incrementos DESPUÉS del incremento exitoso.
+     *
+     * Idempotencia: la key claveAnual previene duplicación por refresh/reintentos.
+     * Año siguiente: nueva claveAnual → vuelve a ejecutarse.
+     * Post-incremento: perfil_partida.edad tiene el valor nuevo; edadResuelta()
+     * lo lee de ahí primero → catálogo NO sobrescribe.
+     */
+    private static function incrementarEdadResidente(
+        array &$partida,
+        string $rid,
+        string $claveAnual,
+        Catalog $catalog
+    ): void {
+        // 1. Edad canónica: perfil_partida → catálogo.
+        $edad = PerfilPartida::edadResuelta($partida, $rid, $catalog);
+        if ($edad === null) {
+            // Sin edad resoluble: no marcar, reintentará al próximo tick de día.
+            return;
+        }
+
+        // 2. Asegurar perfil_partida existe.
+        $res = &$partida['residentes'][$rid];
+        if (!isset($res['runtime']['perfil_partida']) || !is_array($res['runtime']['perfil_partida'])) {
+            $res['runtime']['perfil_partida'] = [];
+        }
+        $perfil = &$res['runtime']['perfil_partida'];
+
+        // 3. Materializar edad si no estaba en perfil (save antiguo).
+        if (!isset($perfil['edad']) || $perfil['edad'] === null) {
+            $perfil['edad'] = $edad;
+        }
+
+        // 4. Incrementar +1.
+        $perfil['edad'] = (int) $perfil['edad'] + 1;
+
+        // 5. Marcar SOLO después de incremento exitoso.
+        $partida['edad_incrementos'][$claveAnual] = true;
+        unset($res, $perfil);
     }
 }

@@ -393,9 +393,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </button>
         </div>
       </div>
-      <span class="inicio-scrap-m inicio-scrap-m--corazon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 20.4s-6.8-4.2-6.8-8.6A3.7 3.7 0 0 1 12 9.8a3.7 3.7 0 0 1 6.8 2c0 4.4-6.8 8.6-6.8 8.6z" fill="none" stroke="#E989A7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="inicio-scrap-m inicio-scrap-m--estrella" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3.5l2.5 5.3 5.8.7-4.3 3.9 1.1 5.7-5.1-2.8-5.1 2.8 1.1-5.7L3.7 9.5l5.8-.7z" fill="none" stroke="#E3B04B" stroke-width="1.8" stroke-linejoin="round"/></svg></span>
-      <span class="inicio-scrap-m inicio-scrap-m--flor" aria-hidden="true"><svg viewBox="0 0 32 32"><g fill="#E4DCF4" stroke="#B9A8DC" stroke-width="1.6"><circle cx="16" cy="8" r="5"/><circle cx="23.5" cy="13.5" r="5"/><circle cx="20.5" cy="22.5" r="5"/><circle cx="11.5" cy="22.5" r="5"/><circle cx="8.5" cy="13.5" r="5"/></g><circle cx="16" cy="16" r="4" fill="#F6E3AE" stroke="#B98A2F" stroke-width="1.6"/></svg></span>
     </header>
         <div class="inicio-layout inicio-mobile-layout">
           <div class="inicio-chrome-left inicio-mobile-tiles">

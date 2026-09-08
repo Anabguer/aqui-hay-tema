@@ -2598,7 +2598,7 @@
         '<div class="mis-progreso"><span class="mis-progreso-txt">' + cumplidas + ' de ' + total + ' hechas</span></div>');
     }
     list.insertAdjacentHTML('beforeend',
-      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20" width="18" height="18"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
+      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
     enlazarAccionesMision(list, hoy);
   }
 
