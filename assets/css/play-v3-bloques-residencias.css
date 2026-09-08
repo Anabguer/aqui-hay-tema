@@ -2031,6 +2031,7 @@
   object-position: 50% 20%;
   transform: scale(1.12) translateY(2px);
   transform-origin: 50% 30%;
+  background: transparent;
 }
 
 .play-v3 .cara-token .cara img,
