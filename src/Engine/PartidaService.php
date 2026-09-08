@@ -507,6 +507,7 @@ final class PartidaService
                 'id' => $nec,
                 'icono' => $iconos[$nec] ?? '',
                 'nombre' => ucfirst($nec),
+                'valor' => (int) ($n['valor'] ?? 0),
                 'banda' => $banda,
                 'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
             ];
