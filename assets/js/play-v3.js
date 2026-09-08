@@ -722,7 +722,7 @@
     const paso = pasos[tutIntroIdx];
     if (!paso) return;
     var pasoNum = tutIntroIdx + 1;
-    var papel = $('[data-tut-papel]') || box.querySelector('.tut-papel');
+    var papel = box.querySelector('[data-tut-papel]') || box.querySelector('.tut-papel');
     if (papel) {
       papel.classList.remove('tut-anim');
       papel.className = 'tut-papel tut-paso-' + pasoNum;
@@ -897,8 +897,17 @@
     if (!tut || !tut.finale_pendiente || !tut.finale) return;
     var box = $('aside[data-tut-finale]');
     if (!box) return;
+    var papel = box.querySelector('.tut-papel') || box.querySelector('[data-tut-papel]');
+    if (papel) {
+      papel.className = 'tut-papel tut-paso-5';
+    }
+    var skipBtn = box.querySelector('.tut-skip');
+    if (skipBtn) skipBtn.hidden = true;
     var finTit = tut.finale.tit || '';
-    $('[data-tut-fin-tit]').textContent = finTit.indexOf('. ') > 0 ? finTit.replace('. ', '.\n') : finTit;
+    var titEl = $('[data-tut-fin-tit]');
+    if (titEl) {
+      titEl.innerHTML = '<span class="tut-tit-spark" aria-hidden="true"></span><span class="tut-tit-txt">' + esc(finTit) + '</span><span class="tut-tit-spark tut-tit-spark--r" aria-hidden="true"></span>';
+    }
     var texto = tut.finale.txt || '';
     var partes = texto.split(/\n\n+/);
     var leadEl = $('[data-tut-fin-lead]');
@@ -908,7 +917,15 @@
     if (restEl) restEl.textContent = partes.slice(1).join('\n\n');
     if (textoEl) textoEl.textContent = texto;
     var heroFin = $('[data-tut-fin-hero]');
-    if (heroFin) heroFin.innerHTML = '<img class="tut-fin-hero-img" src="' + esc(tutAssetUrl('Cabecera.png')) + '" alt=""/>';
+    if (heroFin) {
+      heroFin.hidden = false;
+      heroFin.innerHTML = '<img class="tut-hero-img" src="' + esc(tutAssetUrl('illus-pueblo.png')) + '" alt=""/>';
+    }
+    var dots = $('[data-tut-pasos]', box);
+    if (dots) {
+      dots.innerHTML = '';
+      for (var i = 0; i < 5; i++) { var s = document.createElement('span'); s.className = 'is-on'; dots.appendChild(s); }
+    }
     var btn = $('[data-tut-fin-ok]');
     if (btn) btn.textContent = tut.finale.boton || 'Que empiece el tema';
     box.hidden = false;
@@ -4520,7 +4537,8 @@ function renderInicioMpDuo(misiones, parejas) {
       var ico = NEC_ICONOS[necId] || '';
       var nom = NEC_NOMBRES[necId] || necId;
       var rolLabel = NEC_ROL_LABEL[rol] || rol;
-      chips += '<span class="org-lc-nec">' + esc(ico) + ' ' + esc(nom) + ' <small>' + esc(rolLabel) + '</small></span>';
+      var sec = rol === 'secundaria' ? ' org-lc-nec--sec' : '';
+      chips += '<span class="org-lc-nec' + sec + '" title="' + esc(nom) + ' \u2014 ' + esc(rolLabel) + '" aria-label="' + esc(nom) + ' (' + esc(rolLabel) + ')">' + esc(ico) + '</span>';
     });
     return chips;
   }
