@@ -295,7 +295,7 @@
     2px 3px 0 rgba(51, 38, 30, .18),
     0 1px 3px rgba(196, 43, 74, 0.06);
   font-family: "Nunito", "Segoe UI", sans-serif;
-  font-size: 20px;
+  font-size: 30px;
   font-weight: 800;
   line-height: 1;
   color: var(--aht-back-color, var(--aht-accent, #C42B4A));
