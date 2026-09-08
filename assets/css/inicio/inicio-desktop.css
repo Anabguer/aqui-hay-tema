@@ -1320,7 +1320,7 @@
     display: inline-flex;
     align-items: center;
     margin: 0;
-    padding: 3px 8px;
+    padding: 4px 8px 2px;
     border: 1px solid rgba(111, 95, 154, .2);
     border-radius: 999px;
     background: #fff;
@@ -1336,7 +1336,7 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-star {
     flex: 0 0 auto;
     color: #e0b820;
-    font-size: .9rem;
+    font-size: 1.2rem;
     line-height: 1;
   }
 
@@ -1351,14 +1351,14 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .plan-desk-duo-faces .cara-token .cara,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .plan-desk-duo-faces img,
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .plan-desk-duo-faces .cara-ini {
-    width: 38px;
-    height: 38px;
+    width: 45px;
+    height: 45px;
     min-width: 38px;
     min-height: 38px;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .plan-desk-duo-nombre {
-    font-size: .84rem;
+    font-size: 1.2rem;
     line-height: 1;
     margin: 0;
   }
@@ -1366,7 +1366,7 @@
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-right .inicio-planes-libreta .pp-mov-card--desk-duo .pp-mov-lugar {
     margin: 0;
     padding-top: 1px;
-    font-size: .68rem;
+    font-size: 0.8rem;
     line-height: 1.1;
   }
 
