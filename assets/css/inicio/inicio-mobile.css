@@ -856,8 +856,8 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
 
 .inicio-mobile .proxplanes-movil .prox-faces img,
   .inicio-mobile .proxplanes-movil .prox-faces .cara-ini {
-    width: 32px;
-    height: 32px;
+    width: 46px;
+    height: 46px;
     aspect-ratio: 1;
     border-radius: 50%;
     object-fit: cover;
@@ -2125,7 +2125,7 @@ margin-bottom: 4px;
     transform-origin: initial;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 650;
-    font-size: .62rem;
+    font-size: 1rem;
     letter-spacing: .1em;
     text-transform: uppercase;
     color: #5e3e90;
@@ -2149,7 +2149,7 @@ margin-bottom: 4px;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-style: italic;
     font-weight: 500;
-    font-size: .78rem;
+    font-size: .9rem;
     line-height: 1.3;
     color: rgba(59, 48, 40, .72);
     white-space: nowrap;
@@ -2209,7 +2209,7 @@ margin-bottom: 4px;
     margin: 0;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .58rem;
+    font-size: 1rem;
     letter-spacing: .08em;
     color: #4a6888;
     writing-mode: vertical-rl;
@@ -2290,7 +2290,7 @@ margin-bottom: 4px;
     border-radius: 999px;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .58rem;
+    font-size: .8rem;
     letter-spacing: .04em;
     line-height: 1.2;
   }
@@ -2328,7 +2328,7 @@ margin-bottom: 4px;
     margin: 0;
     font-family: var(--ds-font-hand, Caveat, cursive);
     font-weight: 700;
-    font-size: 1.05rem;
+    font-size: 1.2rem;
     line-height: 1.1;
     color: var(--ds-ink, #2a2218);
     text-align: center;
@@ -2451,7 +2451,7 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .inicio-mp-tit {
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 650;
-    font-size: .72rem;
+    font-size: 1rem;
     letter-spacing: .1em;
     text-transform: uppercase;
     line-height: 1.15;
@@ -2490,7 +2490,7 @@ margin-bottom: 4px;
     white-space: nowrap;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 700;
-    font-size: .62rem;
+    font-size: .8rem;
     line-height: 1.2;
     color: rgba(55, 45, 38, .78);
   }
@@ -2505,7 +2505,7 @@ margin-bottom: 4px;
     background: rgba(74, 122, 72, .14);
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 800;
-    font-size: .58rem;
+    font-size: .8rem;
     line-height: 1.2;
     color: #4a7a48;
   }
