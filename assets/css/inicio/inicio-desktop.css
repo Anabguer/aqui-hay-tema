@@ -1621,74 +1621,119 @@
 }
 
 
-/* INICIO-SCRAPBOOK-DOODLES-20260908 — decoración scrapbook Inicio desktop */
+/* INICIO-SCRAPBOOK-DOODLES-20260908 — decoración scrapbook Inicio desktop (v2: overflow-safe) */
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
     position: relative;
   }
 
-  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top {
-    position: relative;
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle {
     position: absolute;
     z-index: 0;
+    pointer-events: none;
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-corazon {
-    left: -52px;
-    top: 8px;
-    width: 38px;
-    height: 38px;
+    left: 8px;
+    top: 10px;
+    width: 44px;
+    height: 44px;
     transform: rotate(-8deg);
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-estrella {
-    left: -42px;
-    top: 60px;
-    width: 26px;
-    height: 26px;
+    left: 14px;
+    top: 64px;
+    width: 28px;
+    height: 28px;
     transform: rotate(12deg);
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-flor {
-    right: -46px;
-    top: 16px;
-    width: 30px;
-    height: 30px;
+    right: 10px;
+    top: 12px;
+    width: 32px;
+    height: 32px;
     transform: rotate(-6deg);
   }
 
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-sparkle {
-    right: -38px;
-    top: 56px;
-    width: 18px;
-    height: 18px;
+    right: 16px;
+    top: 54px;
+    width: 20px;
+    height: 20px;
     transform: rotate(10deg);
   }
 
-  /* Post-it inferior derecho — "Mis vecinos hacen este pueblo especial" */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-corazon2 {
+    right: 60px;
+    top: 6px;
+    width: 36px;
+    height: 36px;
+    transform: rotate(6deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-flor2 {
+    left: 4px;
+    top: 120px;
+    width: 24px;
+    height: 24px;
+    transform: rotate(14deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-ojo {
+    right: 8px;
+    top: 90px;
+    width: 22px;
+    height: 22px;
+    transform: rotate(-10deg);
+  }
+
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit {
     position: relative;
-    width: 170px;
-    padding: 10px 12px 8px;
+    width: 220px;
+    padding: 18px 20px 14px;
     font-family: var(--ds-font-hand, Caveat, cursive);
-    font-size: .92rem;
-    font-weight: 600;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.3;
     color: var(--ds-ink, #3b3028);
     transform: rotate(3deg);
     margin-left: auto;
-    margin-top: 8px;
+    margin-top: 14px;
     pointer-events: none;
     z-index: 0;
   }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit-tape {
+    position: absolute;
+    top: -6px;
+    right: 16px;
+    width: 36px;
+    height: 12px;
+    background: rgba(255, 228, 150, .72);
+    border: 1px solid rgba(89, 72, 57, .12);
+    transform: rotate(4deg);
+    border-radius: 1px;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit-txt {
+    display: block;
+  }
+
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit .inicio-doodle-postit-heart {
     display: inline-block;
     vertical-align: middle;
-    width: 14px;
-    height: 14px;
-    margin-left: 4px;
+    width: 20px;
+    height: 20px;
+    margin-left: 6px;
     opacity: .85;
   }
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit .inicio-doodle-postit-heart svg {
@@ -1696,7 +1741,6 @@
     height: 100%;
   }
 
-  /* Etiqueta "Vida del pueblo" — post-it vainilla ligeramente girado */
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-vida .obj-vida-kicker {
     background: #FFF8E7;
     border: 1.5px dashed rgba(180, 160, 120, .35);
