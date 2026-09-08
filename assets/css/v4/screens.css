@@ -453,8 +453,16 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 5px;
-  margin-top: 2px;
+  align-items: center;
+  gap: 6px 8px;
+  margin-top: 4px;
+  max-width: 280px;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
@@ -466,52 +474,72 @@
   line-height: 1.1;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 9px;
-  border-radius: 999px;
-  font: 600 0.68rem/1 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-  background: rgba(255, 255, 255, 0.7);
-  border: 1.5px solid rgba(180, 150, 110, 0.22);
-}
-
+/* ── Edad — ticket de papel con esquina doblada ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-tag--edad {
-  background: #FEF5E0;
-  border-color: rgba(180, 150, 110, 0.3);
-  color: #8a7350;
+  position: relative;
+  padding: 3px 10px 3px 8px;
+  border-radius: 3px 8px 6px 3px;
+  background: #FAF0DC;
+  border: 1.5px solid rgba(180, 150, 110, 0.35);
+  color: #7a6340;
+  font: 600 0.66rem/1.2 "Nunito", sans-serif;
+  transform: rotate(-2deg);
+  box-shadow: 1px 1px 0 rgba(180, 150, 110, 0.15);
 }
 
+.aht-screen[data-aht-screen="ficha"] .ficha-tag--edad::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: linear-gradient(135deg, transparent 50%, rgba(180, 150, 110, 0.2) 50%);
+  border-radius: 0 0 6px 0;
+}
+
+/* ── Trabajo — credencial limpia horizontal ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-tag--trabajo {
+  padding: 3px 10px 3px 7px;
+  border-radius: 4px;
   background: #E8F5E3;
-  border-color: rgba(74, 122, 82, 0.25);
+  border: 1.5px solid rgba(74, 122, 82, 0.28);
   color: #3d6a48;
+  font: 600 0.66rem/1.2 "Nunito", sans-serif;
 }
 
+/* ── Desde — cinta scrapbook estampada ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-tag--desde {
+  padding: 3px 10px 3px 7px;
+  border-radius: 2px;
   background: #E6D9F3;
-  border-color: rgba(122, 106, 154, 0.25);
+  border: 1.5px dashed rgba(122, 106, 154, 0.45);
   color: var(--vec-lavender-deep, #7a6a9a);
+  font: 600 0.66rem/1.2 "Nunito", sans-serif;
+  transform: rotate(1.5deg);
+  letter-spacing: 0.02em;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tag-ico {
   flex-shrink: 0;
+  opacity: 0.7;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 3px 10px 3px 8px;
-  border: 1.5px solid rgba(180, 150, 110, 0.28);
+  gap: 5px;
+  padding: 4px 12px 4px 8px;
+  border: 2px solid rgba(180, 150, 110, 0.28);
   border-radius: 999px;
   font-family: var(--ds-font-ui, "Nunito", sans-serif);
-  font-size: 0.8rem;
-  margin-top: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  margin-top: 8px;
   background: #fef5e0;
   cursor: pointer;
+  transform: rotate(-1deg);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="alegre"] {
@@ -1569,5 +1597,17 @@
   .aht-screen[data-aht-screen="ficha"] .ficha-btn-acc-svg {
     width: 16px;
     height: 16px;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-tags {
+    max-width: 240px;
+    gap: 5px 6px;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-tag--edad,
+  .aht-screen[data-aht-screen="ficha"] .ficha-tag--trabajo,
+  .aht-screen[data-aht-screen="ficha"] .ficha-tag--desde {
+    font-size: 0.6rem;
+    padding: 2px 7px 2px 6px;
   }
 }
