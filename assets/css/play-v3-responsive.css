@@ -544,8 +544,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     min-height: 5rem;
     gap: .5rem;
   }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--lugar-info,
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--estado {
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--lugar-info {
     display: block;
   }
 }
@@ -589,7 +588,7 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     font-size: .82rem;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step {
-    margin-bottom: 1rem;
+    margin-bottom: .7rem;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step-tit {
     font-size: .92rem;
