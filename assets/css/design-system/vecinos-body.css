@@ -585,7 +585,8 @@ select.vec-rel-persona {
 .vec-rel-flecha-row:not(.vec-rel-flecha-row--rev):not(.vec-rel-flecha-row--mutual) .vec-rel-flecha-body::after {
   content: "";
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   left: 100%;
   width: 0;
   height: 0;
@@ -598,7 +599,8 @@ select.vec-rel-persona {
 .vec-rel-flecha-row--rev .vec-rel-flecha-body::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   right: 100%;
   width: 0;
   height: 0;
@@ -611,7 +613,8 @@ select.vec-rel-persona {
 .vec-rel-flecha-row--mutual .vec-rel-flecha-body::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   right: 100%;
   width: 0;
   height: 0;
@@ -623,7 +626,8 @@ select.vec-rel-persona {
 .vec-rel-flecha-row--mutual .vec-rel-flecha-body::after {
   content: "";
   position: absolute;
-  top: 0;
+  top: 50%;
+  transform: translateY(-50%);
   left: 100%;
   width: 0;
   height: 0;
