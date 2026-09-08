@@ -325,7 +325,7 @@
 }
 
 /* ── Empty state ──────────────────────────────────────────── */
-.ficha-vacio.ficha-diario-vacio {
+.aht-screen[data-aht-screen="ficha_diario"] .ficha-vacio {
   margin: var(--ds-space-6) 0;
   padding: 24px 16px;
   border: 2px dashed rgba(120, 96, 72, .25);
@@ -345,24 +345,6 @@
     inset 0 0 0 3px #faf6ef,
     0 0 0 3px var(--ds-mustard),
     0 2px 8px rgba(227, 176, 75, .25);
-}
-
-/* ── Controles (migrado desde screens.css) ────────────────── */
-.aht-screen[data-aht-screen="ficha_diario"] .diario-filtros {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 0 12px 10px;
-}
-
-.aht-screen[data-aht-screen="ficha_diario"] .diario-filtro {
-  padding: 6px 12px;
-  border-radius: 999px;
-  border: 1.5px solid rgba(90, 70, 50, .3);
-  background: #fff;
-  font-size: .72rem;
-  font-weight: 800;
-  text-transform: uppercase;
 }
 
 /* ── Filtros (fdi-filt) — controles del header ────────────── */
