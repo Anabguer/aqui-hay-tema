@@ -124,13 +124,7 @@ final class MensajitoConsejoEngine
                 $mensajeId,
                 (string) ($mensaje['hilo_id'] ?? $mensajeId)
             );
-            $celestineId = null;
-            foreach ($partida['residentes'] ?? [] as $_rid => $_res) {
-                if (is_array($_res) && !empty($_res['_placeholder'])) {
-                    $celestineId = $_rid;
-                    break;
-                }
-            }
+            $celestineId = self::buscarCelestine($partida);
             if ($celestineId !== null && $celestineId !== $rid) {
                 $socialDelta = $opcionId === 'op_escucha' ? 4 : 2;
                 RelacionEngine::ajustarSocialHacia($partida, $rid, $celestineId, $socialDelta);
@@ -178,6 +172,13 @@ final class MensajitoConsejoEngine
         if ($observado === '' || !isset($partida['residentes'][$observado])) {
             return ['ok' => false, 'error' => 'sin_observado'];
         }
+        $fam7 = (string) ($mensaje['familia_mensajito'] ?? '');
+        if ($fam7 === 'f_alerta_vecinal') {
+            $cId = self::buscarCelestine($partida);
+            if ($cId !== null && $cId !== $observado) {
+                RelacionEngine::ajustarSocialHacia($partida, $cId, $observado, 2);
+            }
+        }
         self::cerrarHilo($partida, $mensajeId, ['accion' => 'investigar', 'observado_id' => $observado]);
         return [
             'ok' => true,
@@ -211,6 +212,12 @@ final class MensajitoConsejoEngine
         $observado = (string) ($datos['observado_id'] ?? '');
         if ($observado === '') {
             return ['ok' => false, 'error' => 'sin_observado'];
+        }
+        if ($fam === 'f_alerta_vecinal') {
+            $cId = self::buscarCelestine($partida);
+            if ($cId !== null && $cId !== $observado) {
+                RelacionEngine::ajustarSocialHacia($partida, $cId, $observado, 4);
+            }
         }
         self::cerrarHilo($partida, $mensajeId, ['accion' => 'organizar_algo', 'observado_id' => $observado]);
         return [
@@ -246,13 +253,7 @@ final class MensajitoConsejoEngine
             $datos = is_array($mensaje['datos_familia'] ?? null) ? $mensaje['datos_familia'] : [];
             $observadoId = (string) ($datos['observado_id'] ?? '');
             if ($observadoId !== '' && isset($partida['residentes'][$observadoId])) {
-                $celestineId = null;
-                foreach ($partida['residentes'] ?? [] as $_rid => $_res) {
-                    if (is_array($_res) && !empty($_res['_placeholder'])) {
-                        $celestineId = $_rid;
-                        break;
-                    }
-                }
+                $celestineId = self::buscarCelestine($partida);
                 if ($celestineId !== null && $celestineId !== $observadoId) {
                     RelacionEngine::ajustarSocialHacia($partida, $celestineId, $observadoId, -2);
                 }
@@ -609,6 +610,16 @@ final class MensajitoConsejoEngine
                 'actores' => [$rid],
             ]);
         }
+    }
+
+    private static function buscarCelestine(array $partida): ?string
+    {
+        foreach ($partida['residentes'] ?? [] as $_rid => $_res) {
+            if (is_array($_res) && !empty($_res['_placeholder'])) {
+                return $_rid;
+            }
+        }
+        return null;
     }
 
     /**

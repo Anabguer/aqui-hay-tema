@@ -139,9 +139,9 @@ if ($observadoId === null && count($thirdRids) > 0) {
 ok(is_string($observadoId) && $observadoId !== '', 'observado NPC found');
 
 if (is_string($observadoId)) {
-    // ── F7 Test: ignorar → -2 social ──
+    // ── F7: exactly 3 options, no fourth ──
     $msgIdF7 = 'msg_f7_' . bin2hex(random_bytes(2));
-    $rF7 = BuzonEngine::crear($p, [
+    BuzonEngine::crear($p, [
         'id' => $msgIdF7,
         'clasificacion' => BuzonEngine::IMPORTANTE,
         'tipo' => 'espontaneo_f_alerta_vecinal',
@@ -158,45 +158,73 @@ if (is_string($observadoId)) {
         'hilo_id' => $msgIdF7,
         'hilo_estado' => 'abierto',
     ]);
-    ok($rF7['ok'] ?? false, 'F7 message created');
-
-    $socialBeforeIgnorar = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
-    $rIgnorar = MensajitoAcciones::resolver($p, $msgIdF7, MensajitoAcciones::NO_METERSE, $root);
-    ok($rIgnorar['ok'] ?? false, 'F7 ignorar returns ok');
-    $socialAfterIgnorar = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
-    $deltaIgnorar = $socialAfterIgnorar - $socialBeforeIgnorar;
-    ok($deltaIgnorar === -2, "F7 ignorar → -2 social (got $deltaIgnorar)");
-
-    // ── F7: no new option created ──
     $rF7check = BuzonEngine::buscar($p, $msgIdF7);
-    $accionesAfter = $rF7check['acciones'] ?? [];
-    ok(count($accionesAfter) === 3, 'F7 has exactly 3 options (no fourth created)');
+    $accionesF7 = $rF7check['acciones'] ?? [];
+    ok(count($accionesF7) === 3, 'F7 has exactly 3 options (no fourth created)');
+    ok(in_array('investigar', $accionesF7, true), 'F7 includes investigar');
+    ok(in_array('organizar_algo', $accionesF7, true), 'F7 includes organizar_algo');
+    ok(in_array('no_meterse', $accionesF7, true), 'F7 includes no_meterse');
 
-    // ── F7: implicarse options don't change social (investigar) ──
-    $msgIdF7b = 'msg_f7b_' . bin2hex(random_bytes(2));
-    $rF7b = BuzonEngine::crear($p, [
-        'id' => $msgIdF7b,
+    // ── F7: investigar (implicada normal) → +2 social ──
+    $socialBeforeInv = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
+    $rInv = MensajitoAcciones::resolver($p, $msgIdF7, MensajitoAcciones::INVESTIGAR, $root);
+    ok($rInv['ok'] ?? false, 'F7 investigar returns ok');
+    $socialAfterInv = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
+    $deltaInv = $socialAfterInv - $socialBeforeInv;
+    ok($deltaInv === 2, "F7 investigar (implicada) → +2 social (got $deltaInv)");
+
+    // ── F7: organizar_algo (más comprometida) → +4 social ──
+    $msgIdF7c = 'msg_f7c_' . bin2hex(random_bytes(2));
+    BuzonEngine::crear($p, [
+        'id' => $msgIdF7c,
         'clasificacion' => BuzonEngine::IMPORTANTE,
         'tipo' => 'espontaneo_f_alerta_vecinal',
         'de_persona' => $otherId,
         'actores' => [$otherId],
-        'texto' => 'Oye, ' . ($p['residentes'][$observadoId]['nombre'] ?? 'alguien') . ' parece...',
+        'texto' => 'Creo que ' . ($p['residentes'][$observadoId]['nombre'] ?? 'alguien') . ' lo necesita...',
         'acciones' => ['investigar', 'organizar_algo', 'no_meterse'],
         'familia_mensajito' => 'f_alerta_vecinal',
         'datos_familia' => [
             'observado_id' => $observadoId,
             'observado_nombre' => $p['residentes'][$observadoId]['nombre'] ?? 'alguien',
-            'clave' => 'f_alerta|' . $observadoId . '|b',
+            'clave' => 'f_alerta|' . $observadoId . '|c',
         ],
-        'hilo_id' => $msgIdF7b,
+        'hilo_id' => $msgIdF7c,
         'hilo_estado' => 'abierto',
     ]);
-    $socialBeforeInvestigar = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
-    $rInvestigar = MensajitoAcciones::resolver($p, $msgIdF7b, MensajitoAcciones::INVESTIGAR, $root);
-    ok($rInvestigar['ok'] ?? false, 'F7 investigar returns ok');
-    $socialAfterInvestigar = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
-    $deltaInvestigar = $socialAfterInvestigar - $socialBeforeInvestigar;
-    ok($deltaInvestigar === 0, "F7 investigar → +0 social (got $deltaInvestigar)");
+    $socialBeforeOrg = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
+    $rOrg = MensajitoAcciones::resolver($p, $msgIdF7c, MensajitoAcciones::ORGANIZAR_ALGO, $root);
+    ok($rOrg['ok'] ?? false, 'F7 organizar_algo returns ok');
+    ok(!empty($rOrg['preset_organizar']), 'F7 organizar_algo returns preset_organizar');
+    $socialAfterOrg = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
+    $deltaOrg = $socialAfterOrg - $socialBeforeOrg;
+    ok($deltaOrg === 4, "F7 organizar_algo (más comprometida) → +4 social (got $deltaOrg)");
+
+    // ── F7: ignorar (no_meterse) → -2 social ──
+    $msgIdF7d = 'msg_f7d_' . bin2hex(random_bytes(2));
+    BuzonEngine::crear($p, [
+        'id' => $msgIdF7d,
+        'clasificacion' => BuzonEngine::IMPORTANTE,
+        'tipo' => 'espontaneo_f_alerta_vecinal',
+        'de_persona' => $otherId,
+        'actores' => [$otherId],
+        'texto' => 'No sé qué hacer con ' . ($p['residentes'][$observadoId]['nombre'] ?? 'alguien') . '...',
+        'acciones' => ['investigar', 'organizar_algo', 'no_meterse'],
+        'familia_mensajito' => 'f_alerta_vecinal',
+        'datos_familia' => [
+            'observado_id' => $observadoId,
+            'observado_nombre' => $p['residentes'][$observadoId]['nombre'] ?? 'alguien',
+            'clave' => 'f_alerta|' . $observadoId . '|d',
+        ],
+        'hilo_id' => $msgIdF7d,
+        'hilo_estado' => 'abierto',
+    ]);
+    $socialBeforeNoM = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
+    $rNoM = MensajitoAcciones::resolver($p, $msgIdF7d, MensajitoAcciones::NO_METERSE, $root);
+    ok($rNoM['ok'] ?? false, 'F7 ignorar returns ok');
+    $socialAfterNoM = RelacionEngine::valorSocialHacia($p, $celestineId, $observadoId);
+    $deltaNoM = $socialAfterNoM - $socialBeforeNoM;
+    ok($deltaNoM === -2, "F7 ignorar (no_meterse) → -2 social (got $deltaNoM)");
 }
 
 // ═══════════════════════════════════════════════════════════════
