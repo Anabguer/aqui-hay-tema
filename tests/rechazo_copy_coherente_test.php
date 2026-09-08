@@ -166,6 +166,6 @@ ok(!EncuentroEngine::hayConflictoHorario($p5, [$a, $b], (int) $sig2['dia'], (int
 
 // --- hint UI horarios ---
 $slots = DisponibilidadEngine::slotsCompatibles($p4, [$a, $b], 'conocerse', 1, 14, 7, 24, null, 'lug_cafeteria');
-ok(!empty($slots['hint_ui']) && str_contains((string) $slots['hint_ui'], 'Primera hora compatible'), 'hint_ui cuando hora pedida bloqueada');
+ok(!empty($slots['primera_compatible']), 'primera_compatible still returned for internal use');
 
 echo "\nTodas las comprobaciones de rechazo_copy_coherente pasaron.\n";

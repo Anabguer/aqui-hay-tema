@@ -325,11 +325,9 @@ final class DisponibilidadEngine
         }
         if ($firstKey > $desdeKey) {
             $etiqueta = CopyRechazoPropuesta::etiquetaSlotUi($partida, $first);
-            $hint = 'Primera hora compatible: ' . $etiqueta;
             if ($bloqueo !== '') {
-                $hint .= ' (' . $bloqueo . ')';
+                $extra['hint_ui'] = $bloqueo;
             }
-            $extra['hint_ui'] = $hint;
         } elseif ($bloqueo !== '' && $firstKey === $desdeKey) {
             $extra['hint_ui'] = $bloqueo;
         }
