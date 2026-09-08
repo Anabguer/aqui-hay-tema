@@ -195,17 +195,10 @@
   pointer-events: none;
 }
 
-/* ── Doodle decorativo — disperso, sin pisar texto ────────── */
+/* ── Doodle decorativo — eliminado de entradas ────────────── */
 .fdi-entrada .fdi-doodle,
 .fdi-entrada .fdi-doodle--extra {
   display: none;
-}
-
-.fdi-doodle--extra {
-  width: 18px;
-  height: 18px;
-  opacity: .35;
-  --fdi-doodle-rot: -14deg;
 }
 
 .fdi-doodle svg {
