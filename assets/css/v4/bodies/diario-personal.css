@@ -391,6 +391,7 @@
   scrollbar-width: none;
   padding: 12px 18px 20px;
   overflow-y: auto;
+  overflow-x: hidden;
   flex: 1;
   background:
     radial-gradient(ellipse at 15% 8%, rgba(249, 220, 228, .16) 0%, transparent 50%),
@@ -429,7 +430,9 @@
 
 .aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body {
   padding: 0;
-  overflow-x: hidden;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 /* ── MOBILE ───────────────────────────────────────────────── */

@@ -8765,39 +8765,40 @@ function hobbyIconKey(id, texto) {
     var mensajitoEl = $('[data-pr-mensajito]');
     var mensajitoTxtEl = $('[data-pr-mensajito-text]');
     var btnAgenda = $('[data-pr-btn-agenda]');
+    var btnOk = $('[data-pr-btn-ok]');
+    var whoUi = orgModo() === 'solo'
+      ? na
+      : na + ' y ' + nb;
     if (r.ok && !r.rechazada) {
-      if (iconEl) iconEl.textContent = '✅';
-      if (titleEl) titleEl.textContent = r.mensaje_ui || (orgModo() === 'solo'
-        ? 'Plan organizado'
-        : 'Plan organizado');
-      if (metaEl) metaEl.textContent = orgModo() === 'solo'
-        ? na + ' en ' + lugUi
-        : na + ' y ' + nb + ' en ' + lugUi;
-      if (detallesEl) detallesEl.textContent = 'D\u00eda ' + org.dia + ' a las ' + horaUi;
+      if (iconEl) iconEl.textContent = '\uD83C\uDF89';
+      if (titleEl) titleEl.textContent = '\u00A1Conseguido! Tenemos plan \uD83C\uDF89';
+      if (metaEl) metaEl.textContent = whoUi + ' \u2014 ' + lugUi;
+      if (detallesEl) detallesEl.textContent = 'D\u00EDa ' + org.dia + ' a las ' + horaUi;
       if (contraEl) contraEl.hidden = true;
       if (btnAgenda) btnAgenda.hidden = false;
+      if (btnOk) btnOk.textContent = 'Vale';
     } else if (r.ok && r.rechazada) {
-      if (iconEl) iconEl.textContent = '😔';
-      if (titleEl) titleEl.textContent = r.mensaje_ui || 'Plan rechazado';
-      if (metaEl) metaEl.textContent = orgModo() === 'solo'
-        ? na + ' en ' + lugUi
-        : na + ' y ' + nb + ' en ' + lugUi;
-      if (detallesEl) detallesEl.textContent = '';
+      if (iconEl) iconEl.textContent = '\uD83D\uDC94';
+      if (titleEl) titleEl.textContent = 'Chasco\u2026 esta vez no ha colado \uD83D\uDC94';
+      if (metaEl) metaEl.textContent = whoUi;
+      if (detallesEl) detallesEl.textContent = r.mensaje_ui || '';
       if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
         var contraHora = String(r.contrapropuesta.hora).padStart(2, '0') + ':00';
         if (contraEl) contraEl.hidden = false;
-        if (contraTxtEl) contraTxtEl.textContent = 'D\u00eda ' + r.contrapropuesta.dia + ' a las ' + contraHora;
+        if (contraTxtEl) contraTxtEl.textContent = 'D\u00EDa ' + r.contrapropuesta.dia + ' a las ' + contraHora;
       } else {
         if (contraEl) contraEl.hidden = true;
       }
       if (btnAgenda) btnAgenda.hidden = true;
+      if (btnOk) btnOk.textContent = 'Vale';
     } else {
-      if (iconEl) iconEl.textContent = '⚠️';
-      if (titleEl) titleEl.textContent = 'No se ha podido organizar el plan';
-      if (metaEl) metaEl.textContent = 'Int\u00e9ntalo de nuevo.';
+      if (iconEl) iconEl.textContent = '\u26A0\uFE0F';
+      if (titleEl) titleEl.textContent = 'Algo ha fallado';
+      if (metaEl) metaEl.textContent = r.mensaje_ui || 'Error t\u00E9cnico \u2014 no es un rechazo social. Int\u00E9ntalo de nuevo.';
       if (detallesEl) detallesEl.textContent = '';
       if (contraEl) contraEl.hidden = true;
       if (btnAgenda) btnAgenda.hidden = true;
+      if (btnOk) btnOk.textContent = 'Cerrar';
     }
     if (r.nuevo_mensajito && mensajitoEl && mensajitoTxtEl) {
       mensajitoEl.hidden = false;
