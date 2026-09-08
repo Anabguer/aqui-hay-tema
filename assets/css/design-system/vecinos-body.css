@@ -587,12 +587,12 @@ select.vec-rel-persona {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 100%;
+  left: 98%;
   width: 0;
   height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 10px solid var(--arrow-color, currentColor);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid var(--arrow-color, currentColor);
 }
 
 /* Left-pointing arrowhead (::before) */
@@ -601,12 +601,12 @@ select.vec-rel-persona {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 100%;
+  right: 98%;
   width: 0;
   height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-right: 10px solid var(--arrow-color, currentColor);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 20px solid var(--arrow-color, currentColor);
 }
 
 /* Mutual: both arrowheads */
@@ -615,12 +615,12 @@ select.vec-rel-persona {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 100%;
+  right: 98%;
   width: 0;
   height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-right: 10px solid var(--arrow-color, currentColor);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-right: 20px solid var(--arrow-color, currentColor);
 }
 
 .vec-rel-flecha-row--mutual .vec-rel-flecha-body::after {
@@ -628,12 +628,12 @@ select.vec-rel-persona {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  left: 100%;
+  left: 98%;
   width: 0;
   height: 0;
-  border-top: 12px solid transparent;
-  border-bottom: 12px solid transparent;
-  border-left: 10px solid var(--arrow-color, currentColor);
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 20px solid var(--arrow-color, currentColor);
 }
 
 /* Color by tone — --arrow-color = tip color, matching background */
