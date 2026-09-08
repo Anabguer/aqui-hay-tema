@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AHT — Sticker Composer (temporal)</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;font:13px/1.3 'Segoe UI',system-ui,sans-serif;background:#1a1714;color:#f5f0e8}
+
+/* ── Layout ── */
+#app{display:grid;grid-template-rows:44px 1fr;grid-template-columns:240px 1fr;height:100vh}
+#toolbar{grid-column:1/-1;display:flex;align-items:center;gap:8px;padding:0 12px;background:#2c261f;border-bottom:2px solid #4a3f32;z-index:100}
+#palette{grid-row:2;overflow-y:auto;padding:8px;background:#231f1a;border-right:1px solid #3a3228}
+#stage{grid-row:2;position:relative;overflow:hidden;background:#0e0c0a}
+
+/* ── Toolbar ── */
+#toolbar h1{font-size:14px;font-weight:700;color:#e8dcc4;white-space:nowrap}
+.sep{width:1px;height:24px;background:#4a3f32;flex-shrink:0}
+#toolbar button,#toolbar label{font:inherit;border:1px solid #5a4f42;border-radius:5px;padding:4px 10px;background:#3a3228;color:#e8dcc4;cursor:pointer;white-space:nowrap}
+#toolbar button:hover{background:#4a3f32}
+#toolbar button.active{background:#c45b72;border-color:#c45b72;color:#fff}
+#toolbar .spacer{flex:1}
+#toolbar .mode-btn.active{background:#6b8f5e;border-color:#6b8f5e}
+#toolbar .protect-btn.active{background:#d4a843;border-color:#d4a843;color:#1a1714}
+#toolbar .export-btn{background:#4a7fb5;border-color:#4a7fb5;color:#fff;font-weight:700}
+#toolbar .export-btn:hover{background:#5a9fd5}
+#toolbar .clear-btn{background:#8b4545;border-color:#8b4545;color:#fff}
+
+/* ── Palette ── */
+.sticker-option{display:flex;align-items:center;gap:8px;padding:8px;margin-bottom:4px;border:1px solid transparent;border-radius:6px;cursor:pointer;transition:border-color .15s}
+.sticker-option:hover{border-color:#6b8f5e;background:#2a2520}
+.sticker-option.selected{border-color:#c45b72;background:#3a2530}
+.sticker-option svg{width:32px;height:32px;flex-shrink:0}
+.sticker-option .label{font-size:12px;color:#c4b89a}
+.palette-section{font-size:11px;text-transform:uppercase;color:#7a6e5e;letter-spacing:.5px;margin:12px 0 4px;padding-left:4px}
+.palette-help{font-size:11px;color:#7a6e5e;padding:8px;line-height:1.4}
+
+/* ── Iframe ── */
+#game-frame{width:100%;height:100%;border:none;background:#fff}
+
+/* ── Sticker layer (injected into iframe) ── */
+.sticker-layer{position:absolute;inset:0;pointer-events:none;z-index:9999}
+.sticker-layer .sticker{position:absolute;pointer-events:all;cursor:move;touch-action:none;user-select:none;filter:drop-shadow(1px 2px 3px rgba(0,0,0,.15));transition:filter .15s}
+.sticker-layer .sticker:hover{filter:drop-shadow(2px 3px 6px rgba(0,0,0,.25))}
+.sticker-layer .sticker.selected{outline:2px dashed #c45b72;outline-offset:2px}
+.sticker-layer .sticker svg{width:100%;height:100%;display:block}
+
+/* Resize handles */
+.sticker-layer .sticker .handle{position:absolute;width:10px;height:10px;background:#c45b72;border:1px solid #fff;border-radius:50%;pointer-events:all;display:none}
+.sticker-layer .sticker.selected .handle{display:block}
+.sticker-layer .sticker .handle-tl{top:-5px;left:-5px;cursor:nwse-resize}
+.sticker-layer .sticker .handle-br{bottom:-5px;right:-5px;cursor:nwse-resize}
+.sticker-layer .sticker .handle-rot{top:-20px;left:50%;transform:translateX(-50%);cursor:grab;background:#4a7fb5}
+
+/* Protected zones overlay */
+.protected-zone{position:absolute;pointer-events:none;border:2px dashed rgba(212,168,67,.5);background:rgba(212,168,67,.08);border-radius:4px;z-index:9998}
+.protected-label{position:absolute;top:2px;left:4px;font-size:9px;color:#d4a843;pointer-events:none;white-space:nowrap;z-index:9998}
+
+/* ── JSON modal ── */
+#json-modal{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);align-items:center;justify-content:center}
+#json-modal.show{display:flex}
+#json-modal-inner{background:#2c261f;border:2px solid #5a4f42;border-radius:10px;padding:20px;max-width:600px;width:90%;max-height:80vh;display:flex;flex-direction:column;gap:12px}
+#json-modal h2{font-size:16px;color:#e8dcc4}
+#json-modal textarea{flex:1;min-height:200px;background:#1a1714;color:#e8dcc4;border:1px solid #4a3f32;border-radius:6px;padding:10px;font:12px/1.4 monospace;resize:vertical}
+#json-modal .modal-btns{display:flex;gap:8px;justify-content:flex-end}
+#json-modal button{padding:6px 16px;border-radius:5px;border:1px solid #5a4f42;cursor:pointer;font:inherit}
+#json-modal .btn-copy{background:#4a7fb5;color:#fff;border-color:#4a7fb5}
+#json-modal .btn-close{background:#3a3228;color:#e8dcc4}
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="toolbar">
+    <h1>Sticker Composer</h1>
+    <div class="sep"></div>
+    <button class="mode-btn active" data-mode="desktop">Desktop</button>
+    <button class="mode-btn" data-mode="mobile">Móvil 390px</button>
+    <div class="sep"></div>
+    <button class="protect-btn" data-toggle="protected">Zonas protegidas</button>
+    <div class="sep"></div>
+    <span style="font-size:11px;color:#7a6e5e">Selecciona un sticker → clickea en el juego</span>
+    <div class="spacer"></div>
+    <button class="export-btn" data-act="export">COPIAR CONFIGURACIÓN</button>
+    <button class="clear-btn" data-act="clear">Limpiar todo</button>
+  </header>
+
+  <aside id="palette">
+    <div class="palette-section">Stickers</div>
+    <div id="sticker-list"></div>
+    <div class="palette-section">Instrucciones</div>
+    <div class="palette-help">
+      1. Selecciona un sticker arriba<br>
+      2. Clickea donde quieras colocarlo<br>
+      3. Arrastra para mover<br>
+      4. Esquinas para redimensionar<br>
+      5. Círculo azul arriba para rotar<br>
+      6. Doble clic = eliminar<br>
+      7. Botón duplicar = copiar<br>
+      Activa "Zonas protegidas" para ver dónde NO colocar stickers.
+    </div>
+    <div class="palette-section">Stickers colocados</div>
+    <div id="placed-list"></div>
+  </aside>
+
+  <main id="stage">
+    <iframe id="game-frame"></iframe>
+  </main>
+</div>
+
+<div id="json-modal">
+  <div id="json-modal-inner">
+    <h2>Configuración de stickers</h2>
+    <textarea id="json-output" readonly></textarea>
+    <div class="modal-btns">
+      <button class="btn-close" data-act="close-modal">Cerrar</button>
+      <button class="btn-copy" data-act="copy-json">Copiar al portapapeles</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var CATALOG = {
+  h: {name:'Corazón rosa', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'},
+  s: {name:'Estrella', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#e3b04b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>'},
+  f: {name:'Flor', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#d4bee8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="#e3d6f0"/><path d="M12 2a3 3 0 0 1 0 6 3 3 0 0 1 0-6z"/><path d="M19.07 4.93a3 3 0 0 1-4.24 4.24 3 3 0 0 1 4.24-4.24z"/><path d="M22 12a3 3 0 0 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.07 19.07a3 3 0 0 1-4.24-4.24 3 3 0 0 1 4.24 4.24z"/><path d="M12 22a3 3 0 0 1 0-6 3 3 0 0 1 0 6z"/><path d="M4.93 19.07a3 3 0 0 1 4.24-4.24 3 3 0 0 1-4.24 4.24z"/><path d="M2 12a3 3 0 0 1 6 0 3 3 0 0 1-6 0z"/><path d="M4.93 4.93a3 3 0 0 1 4.24 4.24A3 3 0 0 1 4.93 4.93z"/></svg>'},
+  p: {name:'Pétalo', svg:'<svg viewBox="0 0 24 24" fill="#8faa84" stroke="none"><ellipse cx="7" cy="5" rx="2.5" ry="3"/><ellipse cx="17" cy="5" rx="2.5" ry="3"/><ellipse cx="12" cy="4" rx="2.5" ry="3"/><ellipse cx="12" cy="14" rx="5" ry="4"/></svg>'},
+  o: {name:'Ojo / luciérnaga', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#b9a8dc" stroke-width="2" stroke-linecap="round"><ellipse cx="12" cy="12" rx="10" ry="7"/><circle cx="12" cy="12" r="3" fill="#d4bee8"/><circle cx="13" cy="11" r="1" fill="#fff"/></svg>'},
+  w: {name:'Tulipán', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#e87a5a" stroke-width="2" stroke-linecap="round"><path d="M12 12c-2-2.67-6-4-6-8a6 6 0 0 1 12 0c0 4-4 5.33-6 8z"/><path d="M12 12c2-2.67 6-4 6-8a6 6 0 0 0-12 0c0 4 4 5.33 6 8z"/></svg>'},
+  x: {name:'Sparkle / corona', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#e3b04b" stroke-width="2" stroke-linecap="round"><line x1="8" y1="2" x2="6" y2="8"/><line x1="16" y1="4" x2="18" y2="10"/><line x1="12" y1="1" x2="12" y2="7"/></svg>'},
+  d: {name:'Corazón relleno', svg:'<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.84 4.61a3.5 3.5 0 0 0-5.68 0L12 5.17l-.84-.84a3.5 3.5 0 0 0-5.68 5.68L12 17.5l6.52-6.52a3.5 3.5 0 0 0-1.68-6.37z" fill="#f9dce4"/><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'}
+};
+
+var state = {
+  mode: 'desktop',
+  selectedSticker: null,
+  placed: {desktop: [], mobile: []},
+  showProtected: false,
+  nextId: 1
+};
+
+var frame = document.getElementById('game-frame');
+var stickerList = document.getElementById('sticker-list');
+var placedList = document.getElementById('placed-list');
+var protectedZones = [];
+
+/* ── Init palette ── */
+Object.keys(CATALOG).forEach(function(key){
+  var item = document.createElement('div');
+  item.className = 'sticker-option';
+  item.dataset.key = key;
+  item.innerHTML = CATALOG[key].svg + '<span class="label">' + CATALOG[key].name + '</span>';
+  item.addEventListener('click', function(){
+    document.querySelectorAll('.sticker-option.selected').forEach(function(s){s.classList.remove('selected');});
+    item.classList.add('selected');
+    state.selectedSticker = key;
+  });
+  stickerList.appendChild(item);
+});
+
+/* ── Load iframe ── */
+function loadGame(){
+  var url = 'play.php?design=' + state.mode;
+  if(state.mode === 'mobile') url += '&v=' + Date.now();
+  frame.onload = function(){
+    frame.onload = null;
+    setTimeout(function(){
+      injectStickerLayer();
+      injectProtectedZones();
+      restorePlacedStickers();
+    }, 800);
+  };
+  frame.src = url;
+}
+
+/* ── Inject sticker layer into iframe ── */
+function injectStickerLayer(){
+  var doc = getDoc();
+  if(!doc) return;
+  var existing = doc.querySelector('.sticker-layer');
+  if(existing) existing.remove();
+  var layer = doc.createElement('div');
+  layer.className = 'sticker-layer';
+  doc.body.appendChild(layer);
+
+  /* Click on layer = add sticker */
+  layer.addEventListener('click', function(e){
+    if(e.target !== layer) return;
+    if(!state.selectedSticker) return;
+    var rect = layer.getBoundingClientRect();
+    var x = e.clientX - rect.left - 20;
+    var y = e.clientY - rect.top - 20;
+    addSticker(state.selectedSticker, x, y, 40, 0);
+  });
+}
+
+/* ── Add sticker to iframe ── */
+function addSticker(key, x, y, w, r){
+  var doc = getDoc();
+  var layer = doc.querySelector('.sticker-layer');
+  if(!doc || !layer) return;
+
+  var id = 'stk_' + (state.nextId++);
+  var el = doc.createElement('div');
+  el.className = 'sticker';
+  el.dataset.id = id;
+  el.dataset.key = key;
+  el.dataset.x = Math.round(x);
+  el.dataset.y = Math.round(y);
+  el.dataset.w = Math.round(w);
+  el.dataset.r = Math.round(r);
+  el.innerHTML = CATALOG[key].svg +
+    '<div class="handle handle-tl" data-handle="tl"></div>' +
+    '<div class="handle handle-br" data-handle="br"></div>' +
+    '<div class="handle handle-rot" data-handle="rot"></div>';
+  applyStickerStyle(el);
+  layer.appendChild(el);
+
+  state.placed[state.mode].push({id:id, key:key, x:Math.round(x), y:Math.round(y), w:Math.round(w), r:Math.round(r)});
+  updatePlacedList();
+  setupStickerEvents(el);
+}
+
+function applyStickerStyle(el){
+  el.style.left = el.dataset.x + 'px';
+  el.style.top = el.dataset.y + 'px';
+  el.style.width = el.dataset.w + 'px';
+  el.style.height = el.dataset.w + 'px';
+  el.style.transform = 'rotate(' + el.dataset.r + 'deg)';
+}
+
+/* ── Sticker interaction (drag, resize, rotate) ── */
+function setupStickerEvents(el){
+  var doc = getDoc();
+  var layer = doc.querySelector('.sticker-layer');
+  var dragging = null;
+
+  el.addEventListener('pointerdown', function(e){
+    if(e.target.classList.contains('handle')){
+      e.stopPropagation();
+      var handle = e.target.dataset.handle;
+      dragging = {
+        type: handle,
+        startX: e.clientX,
+        startY: e.clientY,
+        origX: +el.dataset.x,
+        origY: +el.dataset.y,
+        origW: +el.dataset.w,
+        origR: +el.dataset.r
+      };
+      el.setPointerCapture(e.pointerId);
+      return;
+    }
+    e.stopPropagation();
+    selectStickerEl(el);
+    dragging = {
+      type: 'move',
+      startX: e.clientX,
+      startY: e.clientY,
+      origX: +el.dataset.x,
+      origY: +el.dataset.y
+    };
+    el.setPointerCapture(e.pointerId);
+  });
+
+  el.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var dx = e.clientX - dragging.startX;
+    var dy = e.clientY - dragging.startY;
+    var scale = (frame.contentWindow.innerWidth > 0) ? 1 : 1;
+
+    if(dragging.type === 'move'){
+      el.dataset.x = Math.round(dragging.origX + dx);
+      el.dataset.y = Math.round(dragging.origY + dy);
+    } else if(dragging.type === 'br'){
+      var newW = Math.max(16, Math.round(dragging.origW + dx));
+      el.dataset.w = newW;
+    } else if(dragging.type === 'tl'){
+      var newW2 = Math.max(16, Math.round(dragging.origW - dx));
+      el.dataset.x = Math.round(dragging.origX + (dragging.origW - newW2));
+      el.dataset.y = Math.round(dragging.origY + (dragging.origW - newW2));
+      el.dataset.w = newW2;
+    } else if(dragging.type === 'rot'){
+      var cx = el.getBoundingClientRect().left + el.getBoundingClientRect().width/2;
+      var cy = el.getBoundingClientRect().top + el.getBoundingClientRect().height/2;
+      var angle = Math.atan2(e.clientY - cy, e.clientX - cx) * 180 / Math.PI + 90;
+      el.dataset.r = Math.round(angle);
+    }
+    applyStickerStyle(el);
+    syncStateFromDOM(el);
+  });
+
+  el.addEventListener('pointerup', function(){ dragging = null; });
+  el.addEventListener('dblclick', function(e){
+    e.stopPropagation();
+    removeSticker(el);
+  });
+}
+
+function selectStickerEl(el){
+  var doc = getDoc();
+  doc.querySelectorAll('.sticker.selected').forEach(function(s){s.classList.remove('selected');});
+  el.classList.add('selected');
+}
+
+function removeSticker(el){
+  var id = el.dataset.id;
+  el.remove();
+  state.placed[state.mode] = state.placed[state.mode].filter(function(s){return s.id !== id;});
+  updatePlacedList();
+}
+
+function syncStateFromDOM(el){
+  var entry = state.placed[state.mode].find(function(s){return s.id === el.dataset.id;});
+  if(entry){
+    entry.x = +el.dataset.x;
+    entry.y = +el.dataset.y;
+    entry.w = +el.dataset.w;
+    entry.r = +el.dataset.r;
+  }
+}
+
+/* ── Protected zones ── */
+var PROTECTED_SELECTORS = {
+  desktop: [
+    {sel: '.top-vida', label: 'Vida del pueblo'},
+    {sel: '.brand', label: 'Marca'},
+    {sel: '.btn-guia', label: 'Cómo va esto'},
+    {sel: '.obj-buzon', label: 'Mensajitos'},
+    {sel: '.obj-vecinos-resumen', label: 'Vecinos'},
+    {sel: '.obj-nuevo-plan', label: 'Nuevo plan'},
+    {sel: '.inicio-map-host', label: 'Mapa'},
+    {sel: '.play-bottom-nav', label: 'Navegación'},
+    {sel: '.obj-cotilleo-par', label: 'Cotilleo'},
+    {sel: '[data-inicio-parejas]', label: 'Parejas'},
+    {sel: '.inicio-doodle-postit', label: 'Post-it existente'},
+    {sel: '.obj-proximo-cta', label: 'Próximo plan'}
+  ],
+  mobile: [
+    {sel: '.top-vida', label: 'Vida del pueblo'},
+    {sel: '.brand', label: 'Marca'},
+    {sel: '.pasar-rato', label: 'Pasar rato'},
+    {sel: '.obj-buzon', label: 'Mensajitos'},
+    {sel: '.obj-vecinos-resumen', label: 'Vecinos'},
+    {sel: '.obj-nuevo-plan', label: 'Nuevo plan'},
+    {sel: '.inicio-map-host', label: 'Mapa'},
+    {sel: '.play-bottom-nav', label: 'Navegación'},
+    {sel: '.obj-cotilleo-par', label: 'Cotilleo'},
+    {sel: '.obj-proximo-cta', label: 'Próximo plan'}
+  ]
+};
+
+function injectProtectedZones(){
+  var doc = getDoc();
+  if(!doc) return;
+  doc.querySelectorAll('.protected-zone,.protected-label').forEach(function(e){e.remove();});
+  protectedZones = [];
+  if(!state.showProtected) return;
+  var defs = PROTECTED_SELECTORS[state.mode] || [];
+  var stage = doc.querySelector('.inicio-stage');
+  if(!stage) return;
+  var stageRect = stage.getBoundingClientRect();
+  defs.forEach(function(d){
+    var el = doc.querySelector(d.sel);
+    if(!el) return;
+    var r = el.getBoundingClientRect();
+    var zone = doc.createElement('div');
+    zone.className = 'protected-zone';
+    zone.style.left = (r.left - stageRect.left) + 'px';
+    zone.style.top = (r.top - stageRect.top) + 'px';
+    zone.style.width = r.width + 'px';
+    zone.style.height = r.height + 'px';
+    stage.appendChild(zone);
+    var label = doc.createElement('div');
+    label.className = 'protected-label';
+    label.textContent = d.label;
+    label.style.left = (r.left - stageRect.left + 4) + 'px';
+    label.style.top = (r.top - stageRect.top + 2) + 'px';
+    stage.appendChild(label);
+    protectedZones.push({el:zone, label:label});
+  });
+}
+
+/* ── Restore placed stickers from state ── */
+function restorePlacedStickers(){
+  var list = state.placed[state.mode] || [];
+  list.forEach(function(s){
+    var doc = getDoc();
+    var layer = doc.querySelector('.sticker-layer');
+    if(!doc || !layer || !CATALOG[s.key]) return;
+    var el = doc.createElement('div');
+    el.className = 'sticker';
+    el.dataset.id = s.id;
+    el.dataset.key = s.key;
+    el.dataset.x = s.x;
+    el.dataset.y = s.y;
+    el.dataset.w = s.w;
+    el.dataset.r = s.r;
+    el.innerHTML = CATALOG[s.key].svg +
+      '<div class="handle handle-tl" data-handle="tl"></div>' +
+      '<div class="handle handle-br" data-handle="br"></div>' +
+      '<div class="handle handle-rot" data-handle="rot"></div>';
+    applyStickerStyle(el);
+    layer.appendChild(el);
+    setupStickerEvents(el);
+  });
+  if(state.nextId <= list.length) state.nextId = list.length + 1;
+  updatePlacedList();
+}
+
+/* ── Placed list in sidebar ── */
+function updatePlacedList(){
+  placedList.innerHTML = '';
+  var list = state.placed[state.mode] || [];
+  if(list.length === 0){
+    placedList.innerHTML = '<div class="palette-help">Ninguno colocado aún</div>';
+    return;
+  }
+  list.forEach(function(s){
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:6px;padding:4px 6px;margin-bottom:2px;border-radius:4px;background:#2a2520;font-size:11px';
+    var svg = CATALOG[s.key] ? CATALOG[s.key].svg : '';
+    row.innerHTML = '<span style="width:18px;height:18px;flex-shrink:0">' + svg + '</span>' +
+      '<span style="flex:1;color:#c4b89a">' + s.id + ' (' + Math.round(s.x) + ',' + Math.round(s.y) + ')</span>' +
+      '<button data-dup="' + s.id + '" style="background:#4a3f32;border:1px solid #5a4f42;color:#e8dcc4;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px">Dup</button>' +
+      '<button data-del="' + s.id + '" style="background:#6b3535;border:1px solid #8b4545;color:#e8dcc4;border-radius:3px;padding:1px 6px;cursor:pointer;font-size:10px">X</button>';
+    placedList.appendChild(row);
+  });
+  placedList.querySelectorAll('[data-dup]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var orig = list.find(function(s){return s.id === btn.dataset.dup;});
+      if(orig) addSticker(orig.key, orig.x + 15, orig.y + 15, orig.w, orig.r);
+    });
+  });
+  placedList.querySelectorAll('[data-del]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var doc = getDoc();
+      var el = doc.querySelector('.sticker[data-id="' + btn.dataset.del + '"]');
+      if(el) removeSticker(el);
+    });
+  });
+}
+
+/* ── Mode switching ── */
+document.querySelectorAll('.mode-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.mode-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    state.mode = btn.dataset.mode;
+    loadGame();
+  });
+});
+
+/* ── Protected zones toggle ── */
+document.querySelector('.protect-btn').addEventListener('click', function(){
+  state.showProtected = !state.showProtected;
+  this.classList.toggle('active', state.showProtected);
+  injectProtectedZones();
+});
+
+/* ── Export ── */
+document.querySelector('[data-act="export"]').addEventListener('click', function(){
+  var output = {desktop: state.placed.desktop.map(cleanSticker), mobile: state.placed.mobile.map(cleanSticker)};
+  document.getElementById('json-output').value = JSON.stringify(output, null, 2);
+  document.getElementById('json-modal').classList.add('show');
+});
+
+function cleanSticker(s){
+  return {id:s.id, sticker:s.key, x:s.x, y:s.y, width:s.w, rotation:s.r};
+}
+
+/* ── Clear ── */
+document.querySelector('[data-act="clear"]').addEventListener('click', function(){
+  if(!confirm('¿Limpiar todos los stickers de ' + state.mode + '?')) return;
+  state.placed[state.mode] = [];
+  var doc = getDoc();
+  if(doc){
+    doc.querySelectorAll('.sticker-layer .sticker').forEach(function(el){el.remove();});
+  }
+  updatePlacedList();
+});
+
+/* ── Modal ── */
+document.querySelector('[data-act="close-modal"]').addEventListener('click', function(){
+  document.getElementById('json-modal').classList.remove('show');
+});
+document.querySelector('[data-act="copy-json"]').addEventListener('click', function(){
+  var ta = document.getElementById('json-output');
+  ta.select();
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(ta.value).then(function(){alert('¡Copiado!');});
+  } else {
+    document.execCommand('copy');
+    alert('¡Copiado!');
+  }
+});
+document.getElementById('json-modal').addEventListener('click', function(e){
+  if(e.target === this) this.classList.remove('show');
+});
+
+/* ── Helpers ── */
+function getDoc(){
+  try { return frame.contentDocument || frame.contentWindow.document; }
+  catch(e){ return null; }
+}
+
+/* ── Boot ── */
+loadGame();
+
+})();
+</script>
+</body>
+</html>
