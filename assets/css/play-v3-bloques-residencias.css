@@ -2030,7 +2030,7 @@
   object-fit: cover;
   object-position: 50% 20%;
   transform: scale(1.12) translateY(2px);
-  transform-origin: 50% 14%;
+  transform-origin: 50% 30%;
   background: #f0e8dc;
 }
 
