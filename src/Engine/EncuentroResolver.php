@@ -437,7 +437,7 @@ final class EncuentroResolver
                 }
             }
         } else {
-            RelacionEngine::upsertConflicto($partida, $a, $b, $nueva, $conf['tipo'] ?? 'roce', 'reparacion_encuentro');
+            RelacionEngine::upsertConflicto($partida, $a, $b, $nueva, $conf['tipo'] ?? 'roce', 'reparacion_encuentro', null, false);
         }
     }
 }

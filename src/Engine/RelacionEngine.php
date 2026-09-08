@@ -133,7 +133,8 @@ final class RelacionEngine
         ?int $intensidad = null,
         ?string $tipo = null,
         ?string $eventoOrigen = 'manual',
-        ?string $correlacionId = null
+        ?string $correlacionId = null,
+        bool $reiniciarReloj = true
     ): array {
         [$a, $b] = self::ordenarPar($personaA, $personaB);
         $id = "conf_{$a}_{$b}";
@@ -150,7 +151,9 @@ final class RelacionEngine
                 if ($tipo !== null) {
                     $rel['tipo'] = $tipo;
                 }
-                $rel['ultimo_conflicto_dia'] = $diaActual;
+                if ($reiniciarReloj) {
+                    $rel['ultimo_conflicto_dia'] = $diaActual;
+                }
                 RelacionFase::ensure($rel);
                 self::postCambio($partida, $a, $b, 'conflicto', $eventoOrigen, $antes, $rel, $correlacionId);
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
