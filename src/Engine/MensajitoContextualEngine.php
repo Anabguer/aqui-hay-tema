@@ -46,6 +46,18 @@ final class MensajitoContextualEngine
                 continue;
             }
             $claveAnual = ResidenteCumpleanosEngine::claveAnual($partida, $rid);
+
+            // Edad real: +1 el día del cumpleaños, idempotente por residente + año.
+            $partida['edad_incrementos'] ??= [];
+            if (empty($partida['edad_incrementos'][$claveAnual])) {
+                $res = &$partida['residentes'][$rid];
+                $perfil = &$res['runtime']['perfil_partida'] ?? null;
+                if (is_array($perfil) && isset($perfil['edad']) && is_int($perfil['edad'])) {
+                    $perfil['edad'] = $perfil['edad'] + 1;
+                }
+                $partida['edad_incrementos'][$claveAnual] = true;
+                unset($res, $perfil);
+            }
             if (!empty($partida['mensajitos_cumpleanos_emitidos'][$claveAnual])) {
                 continue;
             }

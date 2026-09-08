@@ -501,6 +501,25 @@
   opacity: 0.8;
 }
 
+/* ── CUMPLEAÑOS: debajo del nombre ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-cumple {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 3px;
+  padding: 2px 10px;
+  background: rgba(255, 235, 205, 0.45);
+  border: 1px solid rgba(200, 170, 100, 0.2);
+  border-radius: 10px;
+  font: 500 0.56rem/1.1 "Nunito", sans-serif;
+  color: #8a7350;
+  transform: rotate(0.5deg);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.ficha-cumple-txt {
+  white-space: nowrap;
+}
+
 /* ── NUBE DE PENSAMIENTO: Ánimo (above-right of portrait) ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
   position: absolute;

@@ -96,6 +96,7 @@ final class FichaPlayVista
             'nombre' => $ficha['identidad']['nombre'] ?? '',
             'edad' => $ficha['identidad']['edad'] ?? null,
             'genero' => $ficha['identidad']['genero'] ?? null,
+            'cumpleanos' => $ficha['identidad']['cumpleanos'] ?? null,
             'ocupacion' => $ocupacion,
             'trabajo' => $trabajoVista,
             'gusta' => $hobbies,
