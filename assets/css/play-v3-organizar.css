@@ -95,8 +95,7 @@
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-body {
   flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
-  overflow-x: clip;
+  overflow: visible;
   padding: 0 .1rem .2rem;
   max-width: 100%;
 }

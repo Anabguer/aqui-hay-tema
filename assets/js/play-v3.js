@@ -6402,18 +6402,20 @@ function canonEmoId(id) {
     const desde = exp.desde_texto ? esc(exp.desde_texto) : '';
     const emoId = canonEmoId(exp.estado_id || '');
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
-    return '<div class="animo-modal-top">' +
-      '<div class="animo-modal-avatar">' + img + '</div>' +
-      '<h3 class="animo-modal-tit">' + esc(nom) + '</h3>' +
-      '</div>' +
-      '<div class="animo-modal-pills">' +
-      '<span class="animo-modal-estado animo-modal-estado--' + esc(emoId) + '">' +
-      '<span class="animo-modal-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
+    return '<div class="animo-scene animo-scene--' + esc(emoId) + '">' +
+      '<div class="animo-hero">' +
+      '<div class="animo-avatar">' + img + '</div>' +
+      '<h3 class="animo-nombre">' + esc(nom) + '</h3>' +
+      '<span class="animo-estado animo-estado--' + esc(emoId) + '">' +
+      '<span class="animo-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
       estadoTxt + '</span>' +
-      (desde ? '<span class="animo-modal-desde">\uD83D\uDD50 ' + desde + '</span>' : '') +
       '</div>' +
-      '<div class="animo-modal-pensamiento">' +
+      '<div class="animo-pensamiento-wrap">' +
+      '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
       '<p>' + pensamiento + '</p>' +
+      '</div>' +
+      (desde ? '<span class="animo-desde">' + desde + '</span>' : '') +
+      '</div>' +
       '</div>';
   }
 
@@ -6508,6 +6510,44 @@ function canonEmoId(id) {
     return '<span class="fdi-con">' +
       (cara ? '<img class="fdi-con-ava" src="' + esc(cara) + '" alt=""/>' : '') +
       '<span class="fdi-con-nom">' + esc(nombre) + '</span></span>';
+  }
+
+  /* ── Diario: doodles decorativos por categoría ─────────── */
+  var DIARIO_DOODLE = {
+    h: '<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    s: '<svg viewBox="0 0 24 24" fill="none" stroke="#e3b04b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    f: '<svg viewBox="0 0 24 24" fill="none" stroke="#d4bee8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3" fill="#e3d6f0"/><path d="M12 2a3 3 0 0 1 0 6 3 3 0 0 1 0-6z"/><path d="M19.07 4.93a3 3 0 0 1-4.24 4.24 3 3 0 0 1 4.24-4.24z"/><path d="M22 12a3 3 0 0 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.07 19.07a3 3 0 0 1-4.24-4.24 3 3 0 0 1 4.24 4.24z"/><path d="M12 22a3 3 0 0 1 0-6 3 3 0 0 1 0 6z"/><path d="M4.93 19.07a3 3 0 0 1 4.24-4.24 3 3 0 0 1-4.24 4.24z"/><path d="M2 12a3 3 0 0 1 6 0 3 3 0 0 1-6 0z"/><path d="M4.93 4.93a3 3 0 0 1 4.24 4.24A3 3 0 0 1 4.93 4.93z"/></svg>',
+    p: '<svg viewBox="0 0 24 24" fill="#8faa84" stroke="none"><ellipse cx="7" cy="5" rx="2.5" ry="3"/><ellipse cx="17" cy="5" rx="2.5" ry="3"/><ellipse cx="12" cy="4" rx="2.5" ry="3"/><ellipse cx="12" cy="14" rx="5" ry="4"/></svg>'
+  };
+
+  var DIARIO_DOODLE_MAP = {
+    'Relación': 'h',
+    'Relacion': 'h',
+    'Encuentro': 'f',
+    'Descubrimiento': 's',
+    'Ánimo': 'p',
+    'Animo': 'p',
+    'Cambio': 'p',
+    'Plan': 's',
+    'Nos vimos': 'f',
+    'Algo con vecinos': 'f',
+    'Señal romántica': 'h',
+    'Senal romantica': 'h'
+  };
+
+  function diarioDoodleHtml(e) {
+    var cat = e.categoria_etiqueta || '';
+    var key = DIARIO_DOODLE_MAP[cat] || 'f';
+    var svg = DIARIO_DOODLE[key] || DIARIO_DOODLE.f;
+    return '<span class="fdi-doodle" aria-hidden="true">' + svg + '</span>';
+  }
+
+  function diarioHoraHtml(e) {
+    var ts = e.ts_juego;
+    if (!ts || typeof ts.hora !== 'number') return '';
+    var h = ts.hora;
+    var m = typeof ts.minuto === 'number' ? ts.minuto : 0;
+    return '<span class="fdi-hora">' + String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + '</span>';
   }
 
   function entradaDiarioHtml(e, rid) {
@@ -7594,7 +7634,7 @@ function hobbyIconKey(id, texto) {
   }
 
   function renderSeHablaDe(items) {
-    var box = [data-coti-se-habla];
+    var box = document.querySelector('[data-coti-se-habla]');
     if (!box) return;
     if (!items || !items.length) { box.innerHTML = ''; return; }
     var contar = {};
@@ -7993,9 +8033,6 @@ function hobbyIconKey(id, texto) {
   }
 
   function validarOrgForm() {
-    org.lugar = $('[data-org-lugar]').value;
-    org.dia = parseInt($('[data-org-dia]').value, 10);
-    org.hora = parseInt($('[data-org-hora]').value, 10);
     const parts = orgSeleccionados();
     if (orgEsEventoPueblo()) {
       if (orgMaxVecinos() <= 0) return { ok: false, msg: 'Aforo completo.' };
@@ -8433,10 +8470,6 @@ function hobbyIconKey(id, texto) {
     actualizarOrgModoEstado();
   }
   async function refreshOrgHoras() {
-    var hora = $('[data-org-hora]');
-    if (!hora) return;
-    org.lugar = $('[data-org-lugar]').value;
-    org.dia = parseInt($('[data-org-dia]').value, 10);
     if (!org.dia && cacheEstado && cacheEstado.reloj) org.dia = cacheEstado.reloj.dia_pueblo;
     var parts = orgSeleccionados();
     if (!orgParticipantesListos()) {
