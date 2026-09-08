@@ -294,7 +294,7 @@
 }
 
 .aht-screen[data-aht-screen="organizar"] .aht-frame-body {
-  padding: var(--aht-gap-md, 12px) var(--aht-gap-lg, 16px);
+  padding: 10px 14px 6px;
 }
 
 .aht-screen[data-aht-screen="historia"] .aht-frame-body {
