@@ -137,5 +137,55 @@ ok(is_file($root . '/assets/play-v3/complejos/cafe_temprano.png'), 'fachada cafÃ
 ok(is_file($root . '/assets/play-v3/marcas/sello_hay_tema.png'), 'sello hay tema C3');
 ok(is_file($root . '/play-provisional.php'), 'PLAY anterior comparable');
 
+// --- P14: necesidades en destinos_operativos ---
+$biblioNec = null;
+foreach ($pueblo['complejos'] ?? [] as $cx) {
+    foreach ($cx['destinos_operativos'] ?? [] as $d) {
+        if (($d['id'] ?? '') === 'lug_biblioteca') {
+            $biblioNec = $d;
+            break 2;
+        }
+    }
+}
+ok(is_array($biblioNec), 'P14: biblioteca destino existe');
+ok(is_array($biblioNec['necesidades'] ?? null), 'P14: biblioteca tiene necesidades');
+ok(($biblioNec['necesidades']['calma'] ?? '') === 'principal', 'P14: biblioteca calma=principal');
+ok(!isset($biblioNec['necesidades']['social']), 'P14: biblioteca sin social');
+
+$gimNec = null;
+foreach ($pueblo['complejos'] ?? [] as $cx) {
+    foreach ($cx['destinos_operativos'] ?? [] as $d) {
+        if (($d['id'] ?? '') === 'lug_gimnasio') {
+            $gimNec = $d;
+            break 2;
+        }
+    }
+}
+ok(is_array($gimNec), 'P14: gimnasio destino existe');
+ok(($gimNec['necesidades']['actividad'] ?? '') === 'principal', 'P14: gimnasio actividad=principal');
+ok(($gimNec['necesidades']['diversion'] ?? '') === 'secundaria', 'P14: gimnasio diversion=secundaria');
+
+$cafeNec = null;
+foreach ($pueblo['complejos'] ?? [] as $cx) {
+    foreach ($cx['destinos_operativos'] ?? [] as $d) {
+        if (($d['id'] ?? '') === 'lug_cafeteria') {
+            $cafeNec = $d;
+            break 2;
+        }
+    }
+}
+ok(($cafeNec['necesidades']['social'] ?? '') === 'principal', 'P14: cafeteria social=principal');
+ok(($cafeNec['necesidades']['calma'] ?? '') === 'secundaria', 'P14: cafeteria calma=secundaria');
+
+// Verificar que PresenciaEngine tambiÃ©n propaga necesidades
+$presMapa = PresenciaEngine::resolver($partida, $root);
+foreach ($presMapa['lugares'] ?? [] as $lug) {
+    if (($lug['id'] ?? '') === 'lug_bar') {
+        ok(is_array($lug['necesidades'] ?? null), 'P14: PresenciaEngine propaga necesidades para bar');
+        ok(($lug['necesidades']['social'] ?? '') === 'principal', 'P14: bar social=principal en PresenciaEngine');
+        break;
+    }
+}
+
 echo $failures === 0 ? "OK vista_pueblo_v3\n" : "FAIL vista_pueblo_v3 ({$failures})\n";
 exit($failures > 0 ? 1 : 0);
