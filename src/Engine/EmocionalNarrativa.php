@@ -9,6 +9,80 @@ namespace AquiHayTema\Engine;
  */
 final class EmocionalNarrativa
 {
+    /**
+     * Pensamiento en primera persona para el modal de ánimo.
+     * Generado exclusivamente a partir de datos reales del estado.
+     * Null si neutro o origen no explicable.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $estado
+     * @return array{texto_estado: string, pensamiento: string, desde_texto: ?string, estado_id: string}|null
+     */
+    public static function pensamientoModal(array $partida, string $residenteId, array $estado): ?array
+    {
+        $estadoId = EstadoEmocional::canonId((string) ($estado['id'] ?? ''));
+        if ($estadoId === EstadoEmocional::NEUTRO || !self::esSignificativo($estadoId)) {
+            return null;
+        }
+
+        $origen = (string) ($estado['origen'] ?? '');
+        $ctx = is_array($estado['contexto'] ?? null) ? $estado['contexto'] : [];
+        $pensamiento = null;
+
+        switch ($origen) {
+            case 'cumple_felicidad':
+                $pensamiento = 'Hoy me han dedicado unas palabras muy bonitas. Me ha encantado.';
+                break;
+            case 'encontrar_trabajo':
+                $pensamiento = 'He encontrado trabajo y estoy que me salgo.';
+                break;
+            case 'hobby_recuperacion':
+            case 'encuentro_y_hobby':
+                $pensamiento = 'Me he dedicado un rato a lo mío y estoy mucho mejor. A veces hace falta.';
+                break;
+            case 'consejo_celestine':
+                $pensamiento = 'Me has dado un buen consejo. Se te nota.';
+                break;
+            case 'formacion_pareja':
+                $parejaId = (string) ($ctx['pareja_id'] ?? '');
+                $nombrePareja = $parejaId !== '' ? IdentidadPublica::nombre($partida, $parejaId) : '';
+                if ($nombrePareja !== '') {
+                    $pensamiento = 'Estoy de enhorabuena. He empezado una relación con ' . $nombrePareja . ' y quería contártelo.';
+                } else {
+                    $pensamiento = 'Estoy de enhorabuena. He empezado una relación y quería contártelo.';
+                }
+                break;
+            case 'perder_trabajo':
+                $pensamiento = 'Me han soltado del trabajo. Ando con la moral por los suelos.';
+                break;
+            case 'rechazo_repetido':
+                $pensamiento = 'Esta vez no doy más. Necesito un respiro de planes, ¿de acuerdo?';
+                break;
+            case 'encuentro':
+            case 'encuentro_intervencion':
+                $res = (string) ($ctx['resultado_experiencia'] ?? '');
+                if ($res === 'bien' || $res === 'muy_bien') {
+                    $pensamiento = 'He pasado un buen rato y se me ha pasado el mal humor.';
+                } elseif ($res === 'mal' || $res === 'muy_mal') {
+                    $pensamiento = 'He pasado un mal rato. Estoy de bajón.';
+                }
+                break;
+            default:
+                return null;
+        }
+
+        if ($pensamiento === null) {
+            return null;
+        }
+
+        return [
+            'texto_estado' => 'Estoy ' . self::textoEstadoPensamiento($estadoId, $partida, $residenteId),
+            'pensamiento' => $pensamiento,
+            'desde_texto' => self::desdeTextoModal($estado, $partida),
+            'estado_id' => $estadoId,
+        ];
+    }
+
     public static function esSignificativo(string $estadoId): bool
     {
         $id = EstadoEmocional::canonId($estadoId);
@@ -149,6 +223,7 @@ final class EmocionalNarrativa
 
     /**
      * Payload para modal de animo en ficha (vista jugador).
+     * Devuelve pensamiento en primera persona sin explicación, consejo ni consecuencias.
      *
      * @param array<string, mixed> $partida
      * @param array<string, mixed> $estado
@@ -157,32 +232,7 @@ final class EmocionalNarrativa
      */
     public static function vistaModalAnimo(array $partida, string $residenteId, array $estado, array $cal = []): ?array
     {
-        $estadoId = EstadoEmocional::canonId((string) ($estado['id'] ?? ''));
-        if (!self::esSignificativo($estadoId)) {
-            return null;
-        }
-
-        $base = self::explicacionCompleta($partida, $residenteId, $estado);
-        if ($base === null) {
-            $pista = self::pistaFicha($estado);
-            $base = [
-                'texto_estado' => 'Está ' . self::textoEstado($estadoId, $partida, $residenteId),
-                'explicacion' => is_string($pista) && $pista !== ''
-                    ? $pista
-                    : 'Algo le ha afectado últimamente.',
-                'desde_texto' => self::desdeTexto($estado, $partida),
-                'diario_evento_id' => null,
-            ];
-        }
-
-        $base['estado_id'] = $estadoId;
-        $base['consecuencias'] = self::consecuenciasModal($estadoId, $cal);
-        $consejo = self::consejoModal($estadoId);
-        if ($consejo !== null) {
-            $base['consejo'] = $consejo;
-        }
-
-        return $base;
+        return self::pensamientoModal($partida, $residenteId, $estado);
     }
 
     /**
@@ -230,6 +280,19 @@ final class EmocionalNarrativa
         return $estadoId;
     }
 
+    private static function textoEstadoPensamiento(string $estadoId, array $partida, string $rid): string
+    {
+        switch ($estadoId) {
+            case EstadoEmocional::ALEGRE:
+                return 'alegre';
+            case EstadoEmocional::TRISTE:
+                return 'triste';
+            case EstadoEmocional::ENFADADO:
+                return 'enfadad' . GeneroConcordancia::oa($partida, $rid);
+        }
+        return $estadoId;
+    }
+
     /** @param array<string, mixed> $estado */
     private static function desdeTexto(array $estado, array $partida): string
     {
@@ -244,6 +307,39 @@ final class EmocionalNarrativa
             return 'Desde hoy mismo.';
         }
         return 'Desde hace ' . $dias . ' día' . ($dias === 1 ? '.' : 's.');
+    }
+
+    /**
+     * Temporalidad para pensamiento en primera persona.
+     * mismo día → Desde las HH:00; día anterior → Desde ayer · HH:00; más antiguo → Desde hace N días · HH:00.
+     *
+     * @param array<string, mixed> $estado
+     * @return string|null
+     */
+    private static function desdeTextoModal(array $estado, array $partida): ?string
+    {
+        $desde = is_array($estado['desde'] ?? null) ? $estado['desde'] : [];
+        $diaDesde = (int) ($desde['dia'] ?? 0);
+        $horaDesde = (int) ($desde['hora'] ?? 0);
+        if ($diaDesde <= 0) {
+            return null;
+        }
+        $hoy = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ($hoy <= 0) {
+            return null;
+        }
+        $dias = $hoy - $diaDesde;
+        if ($dias < 0) {
+            return null;
+        }
+        $horaFmt = sprintf('%02d:00', $horaDesde);
+        if ($dias === 0) {
+            return 'Desde las ' . $horaFmt;
+        }
+        if ($dias === 1) {
+            return 'Desde ayer · ' . $horaFmt;
+        }
+        return 'Desde hace ' . $dias . ' días · ' . $horaFmt;
     }
 
     /** @param array<string, mixed> $ctx */

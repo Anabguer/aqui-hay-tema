@@ -34,8 +34,10 @@ $modal = EmocionalNarrativa::vistaModalAnimo($partida, (string) $rid, $estado, $
 ok(is_array($modal), 'vistaModalAnimo devuelve payload');
 ok(($modal['estado_id'] ?? '') === EstadoEmocional::ENFADADO, 'estado_id enfadado');
 ok(($modal['texto_estado'] ?? '') !== '', 'texto_estado presente');
-ok(($modal['explicacion'] ?? '') !== '', 'explicacion presente');
-ok(is_array($modal['consecuencias'] ?? null) && count($modal['consecuencias']) > 0, 'consecuencias motor');
+ok(($modal['pensamiento'] ?? '') !== '', 'pensamiento presente');
+ok(!isset($modal['explicacion']), 'sin explicacion');
+ok(!isset($modal['consecuencias']), 'sin consecuencias');
+ok(!isset($modal['consejo']), 'sin consejo');
 
 $partida['residentes'][$rid]['runtime']['estado_emocional'] = $estado;
 $ficha = $svc->fichaResidente($partida, (string) $rid, true);
