@@ -140,6 +140,8 @@ final class RelacionEngine
         $partida['relaciones_conflicto'] ??= [];
         $antes = self::obtenerEntre($partida, $a, $b)['conflicto'];
 
+        $diaActual = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+
         foreach ($partida['relaciones_conflicto'] as &$rel) {
             if ($rel['id'] === $id) {
                 if ($intensidad !== null) {
@@ -148,6 +150,7 @@ final class RelacionEngine
                 if ($tipo !== null) {
                     $rel['tipo'] = $tipo;
                 }
+                $rel['ultimo_conflicto_dia'] = $diaActual;
                 RelacionFase::ensure($rel);
                 self::postCambio($partida, $a, $b, 'conflicto', $eventoOrigen, $antes, $rel, $correlacionId);
                 return ['ok' => true, 'relacion' => $rel, 'creada' => false];
@@ -161,6 +164,7 @@ final class RelacionEngine
             'persona_b' => $b,
             'tipo' => $tipo,
             'intensidad' => $intensidad,
+            'ultimo_conflicto_dia' => $diaActual,
             '_placeholder_balance' => true,
             '_bloqueado_decision' => ['formula', 'umbrales'],
         ];

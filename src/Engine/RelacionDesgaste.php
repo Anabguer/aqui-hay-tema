@@ -18,18 +18,23 @@ final class RelacionDesgaste
         $activo = (bool) CalibracionConfig::get($cal, 'desgaste_social.activo', false);
         $nSocial = 0;
         $nPareja = 0;
+        $nConflicto = 0;
         if ($activo) {
             $nSocial = self::aplicarSocial($partida, $cal);
         }
         if ((bool) CalibracionConfig::get($cal, 'desgaste_pareja.activo', false)) {
             $nPareja = self::aplicarPareja($partida, $cal);
         }
+        if ((bool) CalibracionConfig::get($cal, 'conflicto.activo', false)) {
+            $nConflicto = self::aplicarConflicto($partida, $cal);
+        }
         return [
             'ok' => true,
-            'aplicado' => $nSocial > 0 || $nPareja > 0,
+            'aplicado' => $nSocial > 0 || $nPareja > 0 || $nConflicto > 0,
             'motivo' => $activo ? 'formula_central' : 'inactivo',
             'social_tocadas' => $nSocial,
             'parejas_tocadas' => $nPareja,
+            'conflictos_tocados' => $nConflicto,
         ];
     }
 
@@ -118,6 +123,56 @@ final class RelacionDesgaste
             $rel['estabilidad_pareja']['valor'] = $nv;
             $partida['relaciones_romanticas'][$i] = $rel;
             $n++;
+        }
+        return $n;
+    }
+
+    /**
+     * Decae conflicto por tiempo limpio. Config: conflicto.dias_para_bajar_nivel,
+     * conflicto.dias_nivel1_para_eliminar.
+     *
+     * @param array<string, mixed> $cal
+     */
+    private static function aplicarConflicto(array &$partida, array $cal): int
+    {
+        $diasBajar = (int) CalibracionConfig::get($cal, 'conflicto.dias_para_bajar_nivel', 7);
+        $diasEliminar = (int) CalibracionConfig::get($cal, 'conflicto.dias_nivel1_para_eliminar', 7);
+        if ($diasBajar <= 0) {
+            $diasBajar = 7;
+        }
+        if ($diasEliminar <= 0) {
+            $diasEliminar = 7;
+        }
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $n = 0;
+        $aEliminar = [];
+        foreach ($partida['relaciones_conflicto'] ?? [] as $i => $rel) {
+            if (!is_array($rel)) {
+                continue;
+            }
+            $intensidad = (int) ($rel['intensidad'] ?? 0);
+            if ($intensidad <= 0) {
+                continue;
+            }
+            $ultimoDia = $rel['ultimo_conflicto_dia'] ?? null;
+            if ($ultimoDia === null) {
+                $rel['ultimo_conflicto_dia'] = $dia;
+                $partida['relaciones_conflicto'][$i] = $rel;
+                continue;
+            }
+            $diasSinConflicto = $dia - (int) $ultimoDia;
+            if ($intensidad === 1 && $diasSinConflicto >= $diasEliminar) {
+                $aEliminar[] = $i;
+                $n++;
+            } elseif ($intensidad > 1 && $diasSinConflicto >= $diasBajar) {
+                $rel['intensidad'] = $intensidad - 1;
+                $rel['ultimo_conflicto_dia'] = $dia;
+                $partida['relaciones_conflicto'][$i] = $rel;
+                $n++;
+            }
+        }
+        foreach (array_reverse($aEliminar) as $i) {
+            array_splice($partida['relaciones_conflicto'], $i, 1);
         }
         return $n;
     }
