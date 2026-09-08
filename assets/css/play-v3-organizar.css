@@ -938,22 +938,115 @@
    org-estado-card, org-lugar-info-card
    ===================================================== */
 
-/* --- Steps --- */
+/* =====================================================
+   ORG-SCRAPBOOK — cada paso como bloque de cuaderno
+   Tape + rotación + color diferenciado por sección
+   ===================================================== */
+
+/* --- Base: todos los steps --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step {
-  margin-bottom: .6rem;
+  position: relative;
+  margin-bottom: .7rem;
+  padding: .55rem .65rem .5rem;
+  border-radius: 10px;
+  border: 1.5px solid rgba(44,38,31,.10);
+  background: rgba(255,252,245,.88);
+  box-shadow: 2px 2px 0 rgba(44,38,31,.06);
+  transform: rotate(var(--org-step-rot, 0deg));
 }
+
+/* Tape strip — pseudo-element shared base */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step::before {
+  content: "";
+  position: absolute;
+  top: -4px;
+  width: 32px;
+  height: 12px;
+  border-radius: 2px;
+  box-shadow: 0 1px 1px rgba(60,44,28,.10);
+  pointer-events: none;
+}
+
+/* Doodle underline — pseudo-element shared base */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: .65rem;
+  right: .65rem;
+  height: 3px;
+  border-radius: 2px;
+  opacity: .22;
+  pointer-events: none;
+}
+
+/* --- Títulos --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step-tit {
-  margin: 0 0 .2rem;
+  margin: 0 0 .15rem;
   font: 700 .88rem/1.2 Nunito, sans-serif;
   letter-spacing: .04em;
   text-transform: uppercase;
-  color: var(--ds-ink, #3b3028);
+  color: var(--org-step-color, var(--ds-ink, #3b3028));
+  position: relative;
+  z-index: 1;
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step-hint {
   margin: 0 0 .3rem;
   font-family: Caveat, cursive;
   font-size: 1rem;
   color: #8a7460;
+  position: relative;
+  z-index: 1;
+}
+
+/* --- QUIÉNES — rosa suave, rotación izquierda --- */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--quienes {
+  --org-step-rot: -0.6deg;
+  --org-step-color: #9e4a6a;
+  background: linear-gradient(160deg, rgba(252,232,240,.75), rgba(255,252,245,.92) 60%);
+  border-color: rgba(158,74,106,.14);
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--quienes::before {
+  left: 8px;
+  background: rgba(228,170,190,.72);
+  transform: rotate(-8deg);
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--quienes::after {
+  background: #c27a9a;
+}
+
+/* --- DÓNDE — ámbar cálido, rotación derecha --- */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--donde {
+  --org-step-rot: 0.5deg;
+  --org-step-color: #8a6a2e;
+  background: linear-gradient(170deg, rgba(248,238,215,.75), rgba(255,252,245,.92) 55%);
+  border-color: rgba(138,106,46,.14);
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--donde::before {
+  right: 10px;
+  left: auto;
+  background: rgba(228,198,118,.72);
+  transform: rotate(6deg);
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--donde::after {
+  background: #b89a4a;
+}
+
+/* --- CUÁNDO — lavanda, sin rotación (estable = tiempo) --- */
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--cuando {
+  --org-step-rot: 0deg;
+  --org-step-color: #5a5a8a;
+  background: linear-gradient(155deg, rgba(232,230,248,.7), rgba(255,252,245,.92) 55%);
+  border-color: rgba(90,90,138,.12);
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--cuando::before {
+  left: 50%;
+  margin-left: -16px;
+  background: rgba(170,168,210,.65);
+  transform: rotate(-2deg);
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--cuando::after {
+  background: #8888b8;
 }
 
 /* --- Where: Lugares grid --- */
