@@ -6472,10 +6472,8 @@ function canonEmoId(id) {
     const body = $('[data-animo-body]');
     const root = $('.play-root');
     if (!exp || !body) return;
-    console.log('[AHT-ANIMO] payload:', JSON.stringify(exp));
-    console.log('[AHT-ANIMO] pensamiento:', exp.pensamiento, '| tipo:', typeof exp.pensamiento, '| largo:', (exp.pensamiento || '').length);
     animoVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
-    const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]')).textContent || '';
+    const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
     body.innerHTML = htmlAnimoModal(exp, nom);
     setCapa('ficha_animo');
   }
