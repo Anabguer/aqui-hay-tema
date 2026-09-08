@@ -4,7 +4,7 @@
    Estilo: diario privado / libreta scrapbook.
    ============================================================ */
 
-/* ── Hero: presentación del propietario dentro del body ──── */
+/* ── Hero: portadilla orgánica manuscrita ─────────────────── */
 .fdi-hero-body {
   position: relative;
   display: flex;
@@ -21,6 +21,7 @@
 
 .fdi-hero-portrait {
   flex: 0 0 auto;
+  transform: rotate(2.5deg) translateY(-1px);
 }
 
 .fdi-hero-portrait img {
@@ -45,13 +46,17 @@
   font-weight: 700;
   color: var(--ds-ink);
   line-height: 1.2;
+  transform: rotate(-0.8deg);
+  transform-origin: left center;
 }
 
 .fdi-hero-sub {
-  margin: 0 0 3px;
+  margin: -2px 0 3px 6px;
   font: 400 0.78rem/1.2 "Nunito", sans-serif;
   color: var(--ds-text-muted);
   font-style: italic;
+  transform: rotate(0.4deg);
+  transform-origin: left center;
 }
 
 .fdi-hero-count {
@@ -62,6 +67,7 @@
   border: 1.5px solid var(--ds-mustard);
   font: 700 0.7rem/1.2 "Nunito", sans-serif;
   color: var(--ds-mustard-deep);
+  transform: rotate(1.8deg) translate(3px, -1px);
 }
 
 .fdi-hero-doodle {
@@ -189,7 +195,7 @@
   pointer-events: none;
 }
 
-/* ── Doodle decorativo — disperso, no saturado ────────────── */
+/* ── Doodle decorativo — disperso, sin pisar texto ────────── */
 .fdi-doodle {
   position: absolute;
   width: 26px;
@@ -197,12 +203,13 @@
   opacity: .55;
   pointer-events: none;
   transform: rotate(var(--fdi-doodle-rot, 8deg));
+  z-index: 2;
 }
 
-.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle { top: 10px; right: 12px; --fdi-doodle-rot: 6deg; }
-.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle { top: 6px; right: 28px; --fdi-doodle-rot: -4deg; }
-.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle { top: 12px; left: 10px; right: auto; --fdi-doodle-rot: 12deg; }
-.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle { bottom: 10px; right: 14px; top: auto; --fdi-doodle-rot: -8deg; }
+.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle { top: 8px; right: 8px; --fdi-doodle-rot: 6deg; }
+.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle { top: 6px; right: 6px; --fdi-doodle-rot: -4deg; }
+.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle { bottom: 8px; right: 8px; top: auto; --fdi-doodle-rot: 12deg; }
+.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle { bottom: 10px; right: 10px; top: auto; --fdi-doodle-rot: -8deg; }
 
 .fdi-doodle--extra {
   width: 18px;
@@ -211,10 +218,10 @@
   --fdi-doodle-rot: -14deg;
 }
 
-.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 8px; left: 10px; right: auto; }
-.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 10px; left: auto; right: 10px; }
-.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle--extra { top: 8px; left: auto; right: 10px; bottom: auto; }
-.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle--extra { top: 8px; left: 12px; right: auto; bottom: auto; }
+.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 10px; left: 8px; right: auto; }
+.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle--extra { top: 8px; left: 8px; right: auto; bottom: auto; }
+.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle--extra { top: 6px; left: auto; right: 6px; bottom: auto; }
+.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 6px; left: 10px; right: auto; }
 
 .fdi-doodle svg {
   width: 100%;
@@ -440,6 +447,10 @@
     gap: 10px;
     padding: 8px 36px 6px 14px;
     transform: rotate(-0.4deg);
+  }
+
+  .fdi-hero-portrait {
+    transform: rotate(2deg) translateY(-1px);
   }
 
   .fdi-hero-portrait img {
