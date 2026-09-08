@@ -55,7 +55,14 @@ function setupPareja(): array
     $service = new PartidaService($root);
     $partida = $service->nuevaPartida('test_fixtures_v0', 'presencia-enc');
     $ph = $service->crearResidentePlaceholderDev($partida);
-    return [$service, $partida, 'per_qa_valid', $ph['residente']['catalog_id']];
+    $ida = 'per_qa_valid';
+    $idb = $ph['residente']['catalog_id'];
+    foreach ([$ida, $idb] as $rid) {
+        if (isset($partida['residentes'][$rid]['runtime']['perfil_partida'])) {
+            $partida['residentes'][$rid]['runtime']['perfil_partida']['lugares_preferentes'] = ['lug_parque'];
+        }
+    }
+    return [$service, $partida, $ida, $idb];
 }
 
 [$service, $partida, $ida, $idb] = setupPareja();
