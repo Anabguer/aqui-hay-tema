@@ -2586,7 +2586,7 @@
     var total = hoy.length;
     var todasCumplidas = total > 0 && cumplidas === total;
     list.insertAdjacentHTML('beforeend',
-      '<span class="mis-doodle mis-doodle-star" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 1l2.2 4.5L15 6.3l-3.5 3.4.8 4.9L8 12.2 3.7 14.6l.8-4.9L1 6.3l4.8-.8z" fill="currentColor"/></svg></span>');
+      '<span class="mis-doodle mis-doodle-star" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5L15 6.3l-3.5 3.4.8 4.9L8 12.2 3.7 14.6l.8-4.9L1 6.3l4.8-.8z" fill="currentColor"/></svg></span>');
     hoy.forEach(function (m) {
       list.insertAdjacentHTML('beforeend', htmlMisionItem(m));
     });
@@ -2598,7 +2598,7 @@
         '<div class="mis-progreso"><span class="mis-progreso-txt">' + cumplidas + ' de ' + total + ' hechas</span></div>');
     }
     list.insertAdjacentHTML('beforeend',
-      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20" width="18" height="18"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
+      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
     enlazarAccionesMision(list, hoy);
   }
 
@@ -4976,9 +4976,7 @@ function renderInicioMpDuo(misiones, parejas) {
     box.hidden = false;
     box.innerHTML = activos.slice(0, 1).map(function (tv) {
       var tag = tv.categoria_etiqueta || 'Tema';
-      var cat = tv.categoria || '';
-      var catClass = cat ? ' consulta-ed-tema-card--' + cat : '';
-      return '<section class="consulta-ed-tema-card' + catClass + '">' +
+      return '<section class="consulta-ed-tema-card">' +
         '<div class="consulta-ed-tema-head">' +
         '<p class="consulta-ed-tema-kicker">Aquí hay tema</p>' +
         '<span class="consulta-ed-tema-tag">' + esc(tag) + '</span>' +
@@ -5012,7 +5010,6 @@ function renderInicioMpDuo(misiones, parejas) {
     quienTemaActivo = null;
     quienAvatarFlip = false;
     pintarConsultaEdArt(destId || (destinosHorario[0] && destinosHorario[0].id) || '');
-    pintarEdInfo(destId || (destinosHorario[0] && destinosHorario[0].id) || '');
     pintarQuienResidentes(gente, null, gente.length ? '' : 'No hay ni un alma.');
     pintarQuienTema(gente, null);
     var box = $('[data-q-btns]');
@@ -5703,7 +5700,6 @@ function renderInicioMpDuo(misiones, parejas) {
     quienTemaActivo = null;
     quienAvatarFlip = false;
     pintarConsultaEdArt(destId || id);
-    pintarEdInfo(destId || id);
     pintarQuienResidentes(gente, null, gente.length ? '' : copyVacio(id));
     pintarQuienTema(gente, null);
     const box = $('[data-q-btns]');
@@ -6341,16 +6337,16 @@ function canonEmoId(id) {
     const genero = vista && vista.genero;
     const txtEl = $('[data-ficha-animo-text]');
     const icoEl = $('[data-ficha-animo-ico]');
-    const nubeEl = $('[data-ficha-animo-pill]');
+    const pillEl = $('[data-ficha-animo-pill]');
     const ringEl = $('[data-ficha-cara-ring]');
     if (txtEl) txtEl.textContent = textoAnimoFichaPill(emo, genero);
     if (icoEl) {
       icoEl.setAttribute('data-emo', emo);
       icoEl.innerHTML = '<span class="ficha-animo-emoji" aria-hidden="true">' + emoEmojiFicha(emo) + '</span>';
     }
-    if (nubeEl) {
-      nubeEl.setAttribute('data-emo', emo);
-      nubeEl.className = 'ficha-animo-nube ficha-animo-nube--' + emo;
+    if (pillEl) {
+      pillEl.setAttribute('data-emo', emo);
+      pillEl.className = 'ficha-animo-pill ficha-animo-pill--' + emo;
     }
     if (ringEl) ringEl.setAttribute('data-emocion', emo);
     fichaAnimoExplicacion = vista.animo_explicacion || null;
@@ -6360,14 +6356,14 @@ function canonEmoId(id) {
       qBtn.hidden = !showAnimoQ;
       qBtn.onclick = abrirAnimoModal;
     }
-    const bindAnimoOpen = showAnimoQ ? abrirAnimoModal : null;
+  const bindAnimoOpen = showAnimoQ ? abrirAnimoModal : null;
     if (txtEl) {
       txtEl.classList.toggle('is-clickable', showAnimoQ);
       txtEl.onclick = bindAnimoOpen;
-      const nube = txtEl.closest('.ficha-animo-nube');
-      if (nube) {
-        nube.classList.toggle('is-clickable', showAnimoQ);
-        nube.onclick = bindAnimoOpen;
+      const pill = txtEl.closest('.ficha-animo-pill');
+      if (pill) {
+        pill.classList.toggle('is-clickable', showAnimoQ);
+        pill.onclick = bindAnimoOpen;
       }
     }
     const animoRow = $('[data-ficha-animo-row]');
@@ -7674,6 +7670,38 @@ function hobbyIconKey(id, texto) {
     var file = ORG_LUGAR_IMG[String(lugId || '')];
     if (!file) { var slug = String(lugId || '').replace(/^lug_/, ''); if (slug) file = slug + '.png'; }
     return file ? ahtAssetUrl('assets/play-v3/edificios/' + file) : '';
+  }
+
+  var LUGAR_META = {
+    lug_biblioteca: { necesidades: ['Calma'], hobbies: ['Leer'] },
+    lug_cafeteria: { necesidades: ['Social', 'Calma'], hobbies: [] },
+    lug_parque: { necesidades: ['Actividad', 'Calma'], hobbies: ['Pasear'] },
+    lug_cine: { necesidades: ['Diversion', 'Calma'], hobbies: ['Cine'] },
+    lug_restaurante: { necesidades: ['Social', 'Diversion'], hobbies: [] },
+    lug_bar: { necesidades: ['Social', 'Diversion'], hobbies: [] },
+    lug_discoteca: { necesidades: ['Diversion', 'Social'], hobbies: ['Baile'] },
+    lug_bingo: { necesidades: ['Social', 'Diversion'], hobbies: [] },
+    lug_gimnasio: { necesidades: ['Actividad', 'Diversion'], hobbies: [] }
+  };
+  function pintarEdInfo(lugId) {
+    var el = $('[data-q-info]');
+    if (!el) return;
+    var info = LUGAR_META[String(lugId || '')];
+    if (!info || (!info.necesidades.length && !info.hobbies.length)) {
+      el.hidden = true;
+      el.innerHTML = '';
+      return;
+    }
+    var html = '<p class="consulta-ed-info-kicker">Qu\u00e9 se puede hacer aqu\u00ed</p><div class="consulta-ed-info-chips">';
+    info.necesidades.forEach(function (n) {
+      html += '<span class="consulta-ed-info-chip">' + esc(n) + '</span>';
+    });
+    info.hobbies.forEach(function (h) {
+      html += '<span class="consulta-ed-info-chip consulta-ed-info-chip--hobby">' + esc(h) + '</span>';
+    });
+    html += '</div>';
+    el.innerHTML = html;
+    el.hidden = false;
   }
 
   function orgLugarThumbHtml(lugId) {
