@@ -189,7 +189,7 @@ final class CotilleoPatronCadencia
         }
 
         $interes = CotilleoNarrativo::esInteresNarrativo($partida, $ids);
-        if ($interes['hito_reciente'] || $interes['emocion_reciente']) {
+        if ($interes['hito_reciente']) {
             return true;
         }
 
