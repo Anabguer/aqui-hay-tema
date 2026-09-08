@@ -4615,7 +4615,6 @@ function renderInicioMpDuo(misiones, parejas) {
         org.dia = d.dia_pueblo;
         renderOrgDiasStrip();
         refreshOrgHorasGrid();
-        renderOrgEstado();
         actualizarOrgCrearBtn();
       });
       strip.appendChild(btn);
@@ -4690,7 +4689,6 @@ function renderInicioMpDuo(misiones, parejas) {
           ev.preventDefault(); ev.stopPropagation();
           org.hora = s.hora;
           refreshOrgHorasGrid();
-          renderOrgEstado();
           actualizarOrgCrearBtn();
         });
         grid.appendChild(btn);
@@ -6449,18 +6447,22 @@ function canonEmoId(id) {
     const emoId = canonEmoId(exp.estado_id || '');
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
     return '<div class="animo-scene animo-scene--' + esc(emoId) + '">' +
-      '<div class="animo-left">' +
+      '<div class="animo-composition">' +
+      '<div class="animo-retrato">' +
       '<div class="animo-avatar">' + img + '</div>' +
       '<h3 class="animo-nombre">' + esc(nom) + '</h3>' +
       '</div>' +
-      '<div class="animo-right">' +
+      '<div class="animo-nube animo-nube--' + esc(emoId) + '">' +
+      '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
+      '<p>' + (pensamiento || '&nbsp;') + '</p>' +
+      '</div>' +
+      '<div class="animo-meta">' +
       '<span class="animo-estado animo-estado--' + esc(emoId) + '">' +
       '<span class="animo-estado-ico" aria-hidden="true">' + svgAnimoBadge(emoId) + '</span>' +
       estadoTxt + '</span>' +
-      '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
-      '<p>' + pensamiento + '</p>' +
-      '</div>' +
       (desde ? '<span class="animo-desde">' + desde + '</span>' : '') +
+      '</div>' +
+      '</div>' +
       '</div>' +
       '</div>';
   }
@@ -8610,20 +8612,7 @@ function hobbyIconKey(id, texto) {
       }
       var hintEl = document.querySelector('[data-org-horas-hint]');
       if (hintEl) {
-        if (r.hint_ui) {
-          hintEl.textContent = r.hint_ui;
-          hintEl.hidden = false;
-        } else if (!slots.length && r.primera_compatible && (r.primera_compatible.dia || 0) !== org.dia) {
-          hintEl.textContent = 'Primera hora compatible: ' + (r.primera_compatible.etiqueta_ui || r.primera_compatible.etiqueta_hora || '');
-          if (r.bloqueo_solicitado) hintEl.textContent += ' (' + r.bloqueo_solicitado + ')';
-          hintEl.hidden = false;
-        } else if (!slots.length && r.diagnostico && r.diagnostico.resumen_ui) {
-          hintEl.textContent = r.diagnostico.resumen_ui;
-          hintEl.hidden = false;
-        } else {
-          hintEl.textContent = ORG_HORAS_HINT_DEFAULT;
-          hintEl.hidden = false;
-        }
+        hintEl.hidden = true;
       }
     } catch (e) {
       pintarOrgDropdown('hora', [{ value: '', label: 'Sin huecos', disabled: true }], '', null);
