@@ -2663,6 +2663,7 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-planes {
     height: 100%;
     min-width: 0;
+    margin: 0;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .shell-grupo-buzon .mensajitos-wrap {
@@ -2681,6 +2682,7 @@ margin-bottom: 4px;
     height: 101px;
     min-height: 101px;
     max-height: 101px;
+    flex: 1;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -2697,11 +2699,18 @@ margin-bottom: 4px;
     align-items: center;
     justify-content: center;
     min-height: 0;
+    max-height: 62px;
     width: 100%;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-ico-wrap {
     position: relative;
+  }
+
+  .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-img {
+    object-fit: contain;
+    width: 42px;
+    height: auto;
   }
 
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-badge {
@@ -2737,8 +2746,8 @@ margin-bottom: 4px;
     justify-self: end;
     align-self: start;
     position: relative;
-    top: -2px;
-    right: 2px;
+    top: -6px;
+    right: -2px;
     margin: 0;
   }
 
@@ -2755,11 +2764,10 @@ margin-bottom: 4px;
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-buzon-txt,
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-vecinos-tit,
   .play-v3 .inicio-stage .inicio-mobile .inicio-mobile-tiles .obj-nuevo-plan-txt {
-    margin-top: auto;
     flex: 0 0 auto;
     font-family: var(--ds-font-ui, Nunito, sans-serif);
     font-weight: 700;
-    font-size: 1.0625rem;
+    font-size: 0.9375rem;
     letter-spacing: .02em;
     line-height: 1.1;
     text-transform: uppercase;
