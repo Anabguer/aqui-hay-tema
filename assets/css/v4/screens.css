@@ -385,18 +385,6 @@
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 18px 16px 14px;
-  border-bottom: 1px solid var(--aht-border, #D8D1DE);
-  background: var(--aht-header-mark, #F1EDF6);
-}
-
-/* ══════════════════════════════════════════════
-   HERO — Composición ilustrada
-   ══════════════════════════════════════════════ */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero {
   padding: 10px 12px 0;
 }
 
@@ -405,6 +393,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
   min-height: 220px;
   padding: 8px 0 6px;
 }
@@ -492,10 +481,11 @@
 /* ── IZQUIERDA: Calendario de sobremesa (Edad) ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
   position: absolute;
-  left: 8px;
+  left: 50%;
+  right: auto;
   top: 10px;
   z-index: 3;
-  transform: rotate(-4deg);
+  transform: translateX(calc(-70px - 8px - 100%)) rotate(-4deg);
   filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.08));
 }
 
@@ -556,10 +546,11 @@
 /* ── DERECHA: Ficha laboral (Trabajo) ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
   position: absolute;
-  right: 4px;
+  left: 50%;
+  right: auto;
   top: 14px;
   z-index: 3;
-  transform: rotate(1.5deg);
+  transform: translateX(calc(70px + 10px)) rotate(1.5deg);
 }
 
 .ficha-trab-cinta {
@@ -625,7 +616,8 @@
 /* ── DESDE: texto secundario bajo calendario ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
   position: absolute;
-  left: 10px;
+  left: 50%;
+  right: auto;
   top: 140px;
   z-index: 3;
   display: flex;
@@ -633,7 +625,7 @@
   gap: 4px;
   font: 500 0.58rem/1.1 "Nunito", sans-serif;
   color: #8a7a68;
-  transform: rotate(-1deg);
+  transform: translateX(calc(-70px - 20px - 100%)) rotate(-1deg);
 }
 
 .ficha-desde-ico {
@@ -645,13 +637,15 @@
 /* ── NUBE DE PENSAMIENTO: Ánimo ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
   position: absolute;
-  right: 8px;
+  left: 50%;
+  right: auto;
   top: 2px;
   z-index: 4;
   display: flex;
   align-items: flex-end;
   gap: 3px;
   cursor: pointer;
+  transform: translateX(50px);
 }
 
 .ficha-animo-burbuja1,
@@ -1556,6 +1550,7 @@
   padding: 8px 24px 16px;
   margin: 0;
 }
+
 /* --- Shell: nav ficha + pie cotilleos/organizar en body (sin footer global) --- */
 .aht-screen[data-aht-screen="ficha"] .ficha-header-nav {
   position: absolute;
@@ -1758,27 +1753,24 @@
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
-    left: 2px;
     top: 4px;
-    transform: rotate(-5deg) scale(0.85);
+    transform: translateX(calc(-55px - 6px - 100%)) rotate(-5deg) scale(0.85);
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
-    right: 0;
     top: 8px;
-    transform: rotate(1deg) scale(0.88);
+    transform: translateX(calc(55px + 8px)) rotate(1deg) scale(0.88);
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
-    left: 4px;
     top: 108px;
     font-size: 0.52rem;
+    transform: translateX(calc(-55px - 15px - 100%));
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
-    right: 2px;
     top: -2px;
-    transform: scale(0.88);
+    transform: translateX(40px) scale(0.88);
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-pair {
