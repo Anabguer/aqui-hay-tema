@@ -515,36 +515,6 @@
   visibility: hidden;
 }
 
-.play-v3 .play-root > .velo {
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.play-v3 .play-root[data-capa]:not([data-capa=""]) > .velo,
-.play-v3 .play-root[data-consulta]:not([data-consulta=""]) > .velo {
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.play-v3 .play-root > .velo {
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
-
-.play-v3 .play-root[data-capa]:not([data-capa=""]) > .velo,
-.play-v3 .play-root[data-consulta]:not([data-consulta=""]) > .velo {
-  display: none;
-  opacity: 0;
-  pointer-events: none;
-  visibility: hidden;
-}
-
 @media (max-width: 768px) {
   .aht-frame .aht-frame-title {
     font-size: var(--aht-frame-title-size-mobile, 0.92rem);
