@@ -1103,6 +1103,35 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
+      <aside class="aht-screen" data-aht-screen="plan-resultado" aria-label="Resultado del plan">
+        <div class="aht-frame">
+          <header class="aht-frame-header">
+            <h2 class="aht-frame-title" data-pr-titulo>Resultado</h2>
+            <button type="button" class="aht-frame-close" data-pr-close aria-label="Cerrar">✕</button>
+          </header>
+          <div class="aht-frame-body">
+            <div class="pr-body capa-scroll">
+              <div class="pr-card" data-pr-card>
+                <span class="pr-icon" data-pr-icon aria-hidden="true"></span>
+                <h3 class="pr-title" data-pr-title></h3>
+                <p class="pr-meta" data-pr-meta></p>
+                <p class="pr-detalles" data-pr-detalles></p>
+              </div>
+              <div class="pr-contrapropuesta" data-pr-contra hidden>
+                <p class="pr-contra-label">Contra-propuesta:</p>
+                <p class="pr-contra-text" data-pr-contra-text></p>
+              </div>
+              <div class="pr-mensajito" data-pr-mensajito hidden>
+                <p class="pr-mensajito-text" data-pr-mensajito-text></p>
+              </div>
+            </div>
+            <div class="pr-actions">
+              <button type="button" class="pr-btn pr-btn-ok" data-pr-btn-ok>Vale</button>
+              <button type="button" class="pr-btn pr-btn-agenda" data-pr-btn-agenda hidden>Ver agenda</button>
+            </div>
+          </div>
+        </div>
+      </aside>
     </div>
   </div>
 

@@ -1326,3 +1326,108 @@
   font-weight: 700;
   color: #3b3028;
 }
+
+/* --- Plan resultado modal --- */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem 1rem;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-card {
+  width: 100%;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  border-radius: 14px;
+  background: rgba(255,252,245,.92);
+  border: 1px solid rgba(44,38,31,.10);
+  box-shadow: 0 2px 10px rgba(44,38,31,.08);
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-icon {
+  display: block;
+  font-size: 2.2rem;
+  margin-bottom: .6rem;
+  line-height: 1;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-title {
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #3b3028;
+  margin: 0 0 .4rem;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-meta {
+  font-size: .85rem;
+  color: #6b5a48;
+  margin: 0 0 .3rem;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-detalles {
+  font-size: .8rem;
+  color: #8a7460;
+  margin: 0;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contrapropuesta {
+  margin-top: .8rem;
+  padding: .7rem;
+  border-radius: 10px;
+  background: rgba(224,122,152,.08);
+  border: 1px solid rgba(224,122,152,.18);
+  text-align: center;
+  width: 100%;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contra-label {
+  font-size: .78rem;
+  font-weight: 600;
+  color: #b8643f;
+  text-transform: uppercase;
+  margin: 0 0 .25rem;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contra-text {
+  font-size: .85rem;
+  color: #5a4838;
+  margin: 0;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-mensajito {
+  margin-top: .7rem;
+  padding: .6rem;
+  border-radius: 10px;
+  background: rgba(139,160,80,.10);
+  border: 1px solid rgba(139,160,80,.18);
+  text-align: center;
+  width: 100%;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-mensajito-text {
+  font-size: .82rem;
+  color: #4a5a2e;
+  margin: 0;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-actions {
+  display: flex;
+  gap: .7rem;
+  justify-content: center;
+  margin-top: 1rem;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn {
+  padding: .55rem 1.4rem;
+  border-radius: 20px;
+  border: 1px solid rgba(44,38,31,.12);
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .12s ease, border-color .12s ease;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-ok {
+  background: #e07a98;
+  color: #fff;
+  border-color: #e07a98;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-ok:hover {
+  background: #d06080;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-agenda {
+  background: rgba(255,252,245,.85);
+  color: #6b5a48;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-agenda:hover {
+  background: #f8e8d8;
+}
