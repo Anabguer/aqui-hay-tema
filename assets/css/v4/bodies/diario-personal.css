@@ -196,20 +196,10 @@
 }
 
 /* ── Doodle decorativo — disperso, sin pisar texto ────────── */
-.fdi-doodle {
-  position: absolute;
-  width: 26px;
-  height: 26px;
-  opacity: .55;
-  pointer-events: none;
-  transform: rotate(var(--fdi-doodle-rot, 8deg));
-  z-index: 2;
+.fdi-entrada .fdi-doodle,
+.fdi-entrada .fdi-doodle--extra {
+  display: none;
 }
-
-.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle { top: 8px; right: 8px; --fdi-doodle-rot: 6deg; }
-.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle { top: 6px; right: 6px; --fdi-doodle-rot: -4deg; }
-.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle { bottom: 8px; right: 8px; top: auto; --fdi-doodle-rot: 12deg; }
-.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle { bottom: 10px; right: 10px; top: auto; --fdi-doodle-rot: -8deg; }
 
 .fdi-doodle--extra {
   width: 18px;
@@ -217,11 +207,6 @@
   opacity: .35;
   --fdi-doodle-rot: -14deg;
 }
-
-.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 10px; left: 8px; right: auto; }
-.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle--extra { top: 8px; left: 8px; right: auto; bottom: auto; }
-.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle--extra { top: 6px; left: auto; right: 6px; bottom: auto; }
-.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 6px; left: 10px; right: auto; }
 
 .fdi-doodle svg {
   width: 100%;
@@ -497,18 +482,6 @@
 
   .ficha-diario-texto {
     font-size: 0.84rem;
-  }
-
-  .fdi-doodle {
-    width: 22px;
-    height: 22px;
-    opacity: .4;
-  }
-
-  .fdi-doodle--extra {
-    width: 16px;
-    height: 16px;
-    opacity: .25;
   }
 
   .fdi-tl {
