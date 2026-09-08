@@ -591,7 +591,7 @@ select.vec-rel-persona {
   height: 0;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
-  border-left: 10px solid currentColor;
+  border-left: 10px solid var(--arrow-color, currentColor);
 }
 
 /* Left-pointing arrowhead (::before) */
@@ -604,7 +604,7 @@ select.vec-rel-persona {
   height: 0;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
-  border-right: 10px solid currentColor;
+  border-right: 10px solid var(--arrow-color, currentColor);
 }
 
 /* Mutual: both arrowheads */
@@ -617,7 +617,7 @@ select.vec-rel-persona {
   height: 0;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
-  border-right: 10px solid currentColor;
+  border-right: 10px solid var(--arrow-color, currentColor);
 }
 
 .vec-rel-flecha-row--mutual .vec-rel-flecha-body::after {
@@ -629,15 +629,15 @@ select.vec-rel-persona {
   height: 0;
   border-top: 12px solid transparent;
   border-bottom: 12px solid transparent;
-  border-left: 10px solid currentColor;
+  border-left: 10px solid var(--arrow-color, currentColor);
 }
 
-/* Color by tone */
-.vec-rel-flecha-body--green { background: var(--vec-green, #4a7a52); }
-.vec-rel-flecha-body--pink { background: var(--vec-pink-deep, #c85b78); }
-.vec-rel-flecha-body--red { background: var(--vec-red, #c42b4a); }
-.vec-rel-flecha-body--mustard { background: var(--vec-mustard, #a88a30); }
-.vec-rel-flecha-body--neutral { background: #8a7a68; }
+/* Color by tone — --arrow-color = tip color, matching background */
+.vec-rel-flecha-body--green { background: var(--vec-green, #4a7a52); --arrow-color: var(--vec-green, #4a7a52); }
+.vec-rel-flecha-body--pink { background: var(--vec-pink-deep, #c85b78); --arrow-color: var(--vec-pink-deep, #c85b78); }
+.vec-rel-flecha-body--red { background: var(--vec-red, #c42b4a); --arrow-color: var(--vec-red, #c42b4a); }
+.vec-rel-flecha-body--mustard { background: var(--vec-mustard, #a88a30); --arrow-color: var(--vec-mustard, #a88a30); }
+.vec-rel-flecha-body--neutral { background: #8a7a68; --arrow-color: #8a7a68; }
 
 .vec-rel-resumen {
   margin: 0;
