@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260908-misiones-checklist-v4';
+$ahtUi = 'v3-20260908-misiones-star-fix';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
