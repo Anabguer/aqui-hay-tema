@@ -4506,6 +4506,24 @@ function renderInicioMpDuo(misiones, parejas) {
     trig.innerHTML = orgDdTriggerContent('lugar', nom, id);
   }
 
+  var NEC_ICONOS = { social: '\ud83e\udd1d', diversion: '\ud83c\udf89', actividad: '\ud83d\udcaa', calma: '\u2615' };
+  var NEC_NOMBRES = { social: 'Social', diversion: 'Diversi\u00f3n', actividad: 'Actividad', calma: 'Calma' };
+  var NEC_ROL_LABEL = { principal: 'principal', secundaria: 'secundaria' };
+
+  function necLugarChipsHtml(necesidades) {
+    if (!necesidades || typeof necesidades !== 'object') return '';
+    var chips = '';
+    var orden = ['social', 'diversion', 'actividad', 'calma'];
+    orden.forEach(function (necId) {
+      var rol = necesidades[necId];
+      if (!rol) return;
+      var ico = NEC_ICONOS[necId] || '';
+      var nom = NEC_NOMBRES[necId] || necId;
+      var rolLabel = NEC_ROL_LABEL[rol] || rol;
+      chips += '<span class="org-lc-nec">' + esc(ico) + ' ' + esc(nom) + ' <small>' + esc(rolLabel) + '</small></span>';
+    });
+    return chips;
+  }
 
   function renderOrgLugaresCards() {
     var grid = $('[data-org-lugares-grid]');
@@ -4529,12 +4547,14 @@ function renderInicioMpDuo(misiones, parejas) {
       var imgHtml = img
         ? '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>'
         : '<span class="org-lc-fallback" aria-hidden="true"></span>';
+      var necHtml = necLugarChipsHtml(d.necesidades);
       btn.innerHTML =
         '<span class="org-lc-art">' + imgHtml + '</span>' +
         '<span class="org-lc-body">' +
           '<span class="org-lc-nom">' + esc(d.nombre || d.id) + '</span>' +
           (estado ? '<span class="org-lugar-estado ' + estadoCls + '">' + esc(estado) + '</span>' : '') +
           (horario ? '<span class="org-lc-horario">' + esc(horario) + '</span>' : '') +
+          (necHtml ? '<span class="org-lc-necs">' + necHtml + '</span>' : '') +
         '</span>';
       btn.addEventListener('click', function (ev) {
         ev.preventDefault(); ev.stopPropagation();
@@ -4687,12 +4707,14 @@ function renderInicioMpDuo(misiones, parejas) {
     else if (abierto === false) estadoHtml = '<span class="org-lugar-estado org-lugar-estado--cerrado">Cerrado</span>';
     var horarioHtml = horario ? '<span class="org-li-horario">' + esc(horario) + '</span>' : '';
     var imgHtml = img ? '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>' : '';
+    var necHtml = necLugarChipsHtml(d.necesidades);
     el.innerHTML =
       '<div class="org-li-art">' + imgHtml + '</div>' +
       '<div class="org-li-body">' +
         '<span class="org-li-nom">' + esc(nombreLugarTitulo(id, id)) + '</span>' +
         '<span class="org-li-desc">' + esc(desc) + '</span>' +
         '<span class="org-li-meta">' + estadoHtml + horarioHtml + '</span>' +
+        (necHtml ? '<span class="org-li-necs">' + necHtml + '</span>' : '') +
       '</div>';
     wrap.hidden = false;
   }
@@ -6411,14 +6433,14 @@ function canonEmoId(id) {
     const emoId = canonEmoId(exp.estado_id || '');
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
     return '<div class="animo-scene animo-scene--' + esc(emoId) + '">' +
-      '<div class="animo-hero">' +
+      '<div class="animo-left">' +
       '<div class="animo-avatar">' + img + '</div>' +
       '<h3 class="animo-nombre">' + esc(nom) + '</h3>' +
-      '<span class="animo-estado animo-estado--' + esc(emoId) + '">' +
-      '<span class="animo-estado-ico" aria-hidden="true">' + emoModalIcono(emoId) + '</span>' +
-      estadoTxt + '</span>' +
       '</div>' +
-      '<div class="animo-pensamiento-wrap">' +
+      '<div class="animo-right">' +
+      '<span class="animo-estado animo-estado--' + esc(emoId) + '">' +
+      '<span class="animo-estado-ico" aria-hidden="true">' + svgAnimoBadge(emoId) + '</span>' +
+      estadoTxt + '</span>' +
       '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
       '<p>' + pensamiento + '</p>' +
       '</div>' +
