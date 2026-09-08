@@ -1,15 +1,15 @@
 ﻿{
-  "projectRoot": "W:\\juegos\\aqui-hay-tema-deploy-integrated",
+  "projectRoot": "\\\\anngamer\\ProyectosAnn\\aqui-hay-tema-deploy-integrated",
   "gitRemote": "origin",
   "gitRepo": "git@github.com:Anabguer/aqui-hay-tema.git",
   "defaultBranch": "playtest-01-php74",
   "canonicalDeploy": {
-    "worktreePath": "W:\\juegos\\aqui-hay-tema-deploy-integrated",
+    "worktreePath": "\\\\anngamer\\ProyectosAnn\\aqui-hay-tema-deploy-integrated",
     "branch": "deploy/integrated",
     "remoteRef": "origin/deploy/integrated"
   },
-  "credentialsConfig": "W:\\anabel\\deploy\\hostalia.publish.local.json",
-  "winscpLogHint": "W:\\juegos\\deploy\\logs\\deploy-aht-canonical-*.log",
+  "credentialsConfig": "\\\\anngamer\\ProyectosAnn\\aqui-hay-tema\\_infra\\hostalia.publish.local.json",
+  "winscpLogHint": "\\\\anngamer\\ProyectosAnn\\aqui-hay-tema\\logs\\deploy-aht-canonical-*.log",
   "deployDefault": "incremental",
   "deployTargets": {
     "playtest": {

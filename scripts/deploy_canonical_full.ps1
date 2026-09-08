@@ -5,14 +5,9 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$Helpers = 'W:\_Recursos\GestorProyectos\plantillas\deploy_helpers.ps1'
-if (-not (Test-Path -LiteralPath $Helpers)) {
-    Write-Host "ERROR: Falta infraestructura: $Helpers"
-    exit 1
-}
-. $Helpers
-
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+. (Join-Path $ScriptDir 'deploy_lib_aht.ps1')
+
 $RepoRoot = Split-Path -Parent $ScriptDir
 $ConfigPath = Join-Path $ScriptDir 'deploy.config.json'
 $LogsDir = Join-Path $RepoRoot 'logs'
@@ -20,10 +15,11 @@ if (-not (Test-Path -LiteralPath $LogsDir)) {
     New-Item -ItemType Directory -Path $LogsDir -Force | Out-Null
 }
 
-$DeployScript = 'W:\juegos\deploy\winscp_put_aqui_hay_tema_canonical.ps1'
+$config = Get-Content -LiteralPath $ConfigPath -Raw -Encoding UTF8 | ConvertFrom-Json
+$DeployScript = Join-Path $RepoRoot '_infra\winscp_put_aqui_hay_tema_canonical.ps1'
 $RemotePath = '/juegos/aqui-hay-tema'
 $PublicUrl = 'https://intocables13.com/juegos/aqui-hay-tema/play.php'
-$CredsPath = 'W:\anabel\deploy\hostalia.publish.local.json'
+$CredsPath = [string]$config.credentialsConfig
 
 $ts = Get-Date -Format 'yyyyMMdd-HHmmss'
 $LogFile = Join-Path $LogsDir "deploy-canonical-full-$ts.log"

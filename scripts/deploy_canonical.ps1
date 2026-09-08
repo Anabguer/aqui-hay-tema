@@ -8,13 +8,6 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$Helpers = 'W:\_Recursos\GestorProyectos\plantillas\deploy_helpers.ps1'
-if (-not (Test-Path -LiteralPath $Helpers)) {
-    Write-Host "ERROR: Falta infraestructura incremental: $Helpers"
-    exit 1
-}
-. $Helpers
-
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 . (Join-Path $ScriptDir 'deploy_lib_aht.ps1')
 . (Join-Path $ScriptDir 'aht_deploy_guards.ps1')
