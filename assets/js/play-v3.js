@@ -2586,7 +2586,7 @@
     var total = hoy.length;
     var todasCumplidas = total > 0 && cumplidas === total;
     list.insertAdjacentHTML('beforeend',
-      '<span class="mis-doodle mis-doodle-star" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M8 1l2.2 4.5L15 6.3l-3.5 3.4.8 4.9L8 12.2 3.7 14.6l.8-4.9L1 6.3l4.8-.8z" fill="currentColor"/></svg></span>');
+      '<span class="mis-doodle mis-doodle-star" aria-hidden="true"><svg viewBox="0 0 16 16" width="14" height="14"><path d="M8 1l2.2 4.5L15 6.3l-3.5 3.4.8 4.9L8 12.2 3.7 14.6l.8-4.9L1 6.3l4.8-.8z" fill="currentColor"/></svg></span>');
     hoy.forEach(function (m) {
       list.insertAdjacentHTML('beforeend', htmlMisionItem(m));
     });
@@ -2598,7 +2598,7 @@
         '<div class="mis-progreso"><span class="mis-progreso-txt">' + cumplidas + ' de ' + total + ' hechas</span></div>');
     }
     list.insertAdjacentHTML('beforeend',
-      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
+      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20" width="18" height="18"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
     enlazarAccionesMision(list, hoy);
   }
 
