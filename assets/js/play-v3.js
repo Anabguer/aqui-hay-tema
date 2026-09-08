@@ -7011,7 +7011,6 @@ function hobbyIconKey(id, texto) {
     var cumpleTxtEl = $('[data-ficha-cumple-txt]');
     if (cumpleTagEl && cumpleTxtEl) {
       var cp = vista.cumpleanos || (f.identidad && f.identidad.cumpleanos);
-      console.log('[DIAG-CUMPLE]', { vistaCumpleanos: vista && vista.cumpleanos ? JSON.stringify(vista.cumpleanos) : 'null', fIdCumple: f && f.identidad && f.identidad.cumpleanos ? JSON.stringify(f.identidad.cumpleanos) : 'null', cp: cp ? JSON.stringify(cp) : 'null', vistaKeys: vista ? Object.keys(vista).slice(0,5).join(',') : '?' });
       if (cp && cp.dia && cp.mes) {
         var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
         cumpleTxtEl.textContent = 'Cumplea\u00f1os: ' + cp.dia + ' de ' + (meses[(cp.mes | 0) - 1] || '');
@@ -7021,7 +7020,6 @@ function hobbyIconKey(id, texto) {
         cumpleTagEl.hidden = true;
       }
     } else {
-      console.log('[DIAG-CUMPLE] ELEMENTS NOT FOUND', { tag: !!cumpleTagEl, txt: !!cumpleTxtEl });
     }
     pintarAnimoFicha(vista);
     const rasgosBox = $('[data-ficha-rasgos]');
