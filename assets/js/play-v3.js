@@ -4667,7 +4667,8 @@ function renderInicioMpDuo(misiones, parejas) {
         org.hora = 0;
         var hintEl = document.querySelector('[data-org-horas-hint]');
         if (hintEl && r.primera_compatible && (r.primera_compatible.dia || 0) !== org.dia) {
-          hintEl.hidden = true;
+          hintEl.textContent = 'Primera compatible: ' + (r.primera_compatible.etiqueta_ui || '');
+          hintEl.hidden = false;
         } else if (hintEl) { hintEl.hidden = true; }
         actualizarOrgCrearBtn();
         return;
@@ -4694,7 +4695,8 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       var hintEl2 = document.querySelector('[data-org-horas-hint]');
       if (hintEl2) {
-        hintEl2.hidden = true;
+        if (r.hint_ui) { hintEl2.textContent = r.hint_ui; hintEl2.hidden = false; }
+        else { hintEl2.hidden = true; }
       }
     } catch (e) {
       grid.innerHTML = '<p class="mini org-horas-vacio">Error cargando horarios.</p>';
@@ -6452,7 +6454,7 @@ function canonEmoId(id) {
       '</div>' +
       '<div class="animo-nube animo-nube--' + esc(emoId) + '">' +
       '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
-      '<p>' + (pensamiento || '&nbsp;') + '</p>' +
+      (pensamiento ? '<p>' + pensamiento + '</p>' : '') +
       '</div>' +
       '<div class="animo-meta">' +
       '<span class="animo-estado animo-estado--' + esc(emoId) + '">' +
@@ -6470,8 +6472,10 @@ function canonEmoId(id) {
     const body = $('[data-animo-body]');
     const root = $('.play-root');
     if (!exp || !body) return;
+    console.log('[AHT-ANIMO] payload:', JSON.stringify(exp));
+    console.log('[AHT-ANIMO] pensamiento:', exp.pensamiento, '| tipo:', typeof exp.pensamiento, '| largo:', (exp.pensamiento || '').length);
     animoVolverCapa = (root && root.getAttribute('data-capa')) || 'ficha';
-    const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]').textContent) || '';
+    const nom = ($('[data-ficha-nombre]') && $('[data-ficha-nombre]')).textContent || '';
     body.innerHTML = htmlAnimoModal(exp, nom);
     setCapa('ficha_animo');
   }
@@ -8079,7 +8083,12 @@ function hobbyIconKey(id, texto) {
   function setOrgHorasHint(txt, show) {
     var hintEl = document.querySelector('[data-org-horas-hint]');
     if (!hintEl) return;
-    hintEl.hidden = true;
+    if (show && txt) {
+      hintEl.textContent = txt;
+    } else {
+      hintEl.textContent = ORG_HORAS_HINT_DEFAULT;
+    }
+    hintEl.hidden = false;
   }
 
   function mensajeErrorOrgApi(r, fallback) {
