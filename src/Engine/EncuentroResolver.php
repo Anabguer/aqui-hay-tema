@@ -224,6 +224,12 @@ final class EncuentroResolver
             if ($conf !== null && $conf !== false && $conf !== '' && (int) $conf > 0) {
                 RelacionEngine::upsertConflicto($partida, $a, $b, (int) $conf, 'roce', 'encuentro');
             }
+            $resA_val = (string) ($resultado['por_participante'][$a]['resultado'] ?? 'normal');
+            $resB_val = (string) ($resultado['por_participante'][$b]['resultado'] ?? 'normal');
+            $hayRepPendiente = ($resA_val === 'bien' || $resA_val === 'muy_bien' || $resB_val === 'bien' || $resB_val === 'muy_bien');
+            if ($hayRepPendiente) {
+                self::repararConflictoSiAplica($partida, $a, $b);
+            }
             $est = ParejaEngine::estado($partida, $a, $b);
             if ($est === ParejaEngine::PAREJA || $est === ParejaEngine::CRISIS) {
                 $rel = ParejaEngine::ensureRomance($partida, $a, $b);
@@ -401,5 +407,37 @@ final class EncuentroResolver
         HistoriaPuebloEngine::registrar($partida, 'hito_31', [$a, $b], [
             'origen' => 'encuentro_continuidad',
         ]);
+    }
+
+    /**
+     * Repara 1 nivel de conflicto si el encuentro fue positivo (bien/muy_bien).
+     * Config: conflicto (decisión de producto 2026-08-24).
+     */
+    private static function repararConflictoSiAplica(array &$partida, string $a, string $b): void
+    {
+        $entre = RelacionEngine::obtenerEntre($partida, $a, $b);
+        $conf = $entre['conflicto'] ?? null;
+        if (!is_array($conf)) {
+            return;
+        }
+        $intensidad = (int) ($conf['intensidad'] ?? 0);
+        if ($intensidad <= 0) {
+            return;
+        }
+        $nueva = $intensidad - 1;
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ($nueva <= 0) {
+            $confId = (string) ($conf['id'] ?? '');
+            if ($confId !== '') {
+                foreach ($partida['relaciones_conflicto'] as $i => $c) {
+                    if (($c['id'] ?? '') === $confId) {
+                        array_splice($partida['relaciones_conflicto'], $i, 1);
+                        break;
+                    }
+                }
+            }
+        } else {
+            RelacionEngine::upsertConflicto($partida, $a, $b, $nueva, $conf['tipo'] ?? 'roce', 'reparacion_encuentro');
+        }
     }
 }
