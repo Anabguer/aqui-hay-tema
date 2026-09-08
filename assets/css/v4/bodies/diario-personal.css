@@ -195,10 +195,18 @@
   pointer-events: none;
 }
 
-/* ── Doodle decorativo — eliminado de entradas ────────────── */
-.fdi-entrada .fdi-doodle,
-.fdi-entrada .fdi-doodle--extra {
-  display: none;
+/* ── Doodle decorativo — inline antes del título ───────────── */
+.fdi-doodle {
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  opacity: .55;
+  pointer-events: none;
+  transform: rotate(-8deg);
+}
+
+.fdi-doodle--extra {
+  transform: rotate(12deg) translate(-2px, -1px);
 }
 
 .fdi-doodle svg {
@@ -206,15 +214,25 @@
   height: 100%;
 }
 
-/* ── Body de la card ──────────────────────────────────────── */
+/* ── Body de la card — flex column para doodles inline ────── */
 .fdi-card-body {
   position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 0;
+}
+
+.fdi-card-body > .fdi-doodle,
+.fdi-card-body > .fdi-doodle--extra {
+  align-self: flex-start;
+  margin-top: 2px;
 }
 
 /* ── Título de la entrada ─────────────────────────────────── */
 .ficha-diario-titulo {
-  display: block;
-  margin: 0 0 4px;
+  display: inline;
+  margin: 0;
   font-family: var(--ds-font-hand);
   font-size: 1.2rem;
   font-weight: 700;
@@ -471,6 +489,11 @@
 
   .ficha-diario-titulo {
     font-size: 1.05rem;
+  }
+
+  .fdi-doodle {
+    width: 16px;
+    height: 16px;
   }
 
   .ficha-diario-texto {
