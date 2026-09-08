@@ -32,7 +32,7 @@
     'ficha_animo', 'ficha_diario', 'necesidades_global', 'misiones',
     'parejas', 'historia', 'historia_detalle',
     'vida_pueblo', 'buzon', 'inventario', 'ajustes', 'diario',
-    'organizar'
+    'organizar', 'plan-resultado'
   ]);
 
   // sub-screens que se apilan sobre su padre

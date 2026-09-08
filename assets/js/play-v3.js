@@ -8115,7 +8115,7 @@ function hobbyIconKey(id, texto) {
     actualizarOrgModoEstado();
     if (orgEsEventoPueblo()) aplicarOrgModoEventoUi();
     refreshTipos();
-    refreshOrgHoras();
+    refreshOrgHorasGrid();
     actualizarOrgCrearBtn();
   }
 
@@ -8682,37 +8682,97 @@ function hobbyIconKey(id, texto) {
     return 'Plan rechazado: ' + na + ' y ' + nb + ' en ' + lugUi + '.';
   }
 
+  function mostrarResultadoPlan(r) {
+    var partsUi = orgSeleccionados();
+    var na = nombreDe(partsUi[0]);
+    var nb = nombreDe(partsUi[1] || '');
+    var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
+    var horaUi = String(org.hora).padStart(2, '0') + ':00';
+    var iconEl = $('[data-pr-icon]');
+    var titleEl = $('[data-pr-title]');
+    var metaEl = $('[data-pr-meta]');
+    var detallesEl = $('[data-pr-detalles]');
+    var contraEl = $('[data-pr-contra]');
+    var contraTxtEl = $('[data-pr-contra-text]');
+    var mensajitoEl = $('[data-pr-mensajito]');
+    var mensajitoTxtEl = $('[data-pr-mensajito-text]');
+    var btnAgenda = $('[data-pr-btn-agenda]');
+    if (r.ok && !r.rechazada) {
+      if (iconEl) iconEl.textContent = '✅';
+      if (titleEl) titleEl.textContent = r.mensaje_ui || (orgModo() === 'solo'
+        ? 'Plan organizado'
+        : 'Plan organizado');
+      if (metaEl) metaEl.textContent = orgModo() === 'solo'
+        ? na + ' en ' + lugUi
+        : na + ' y ' + nb + ' en ' + lugUi;
+      if (detallesEl) detallesEl.textContent = 'D\u00eda ' + org.dia + ' a las ' + horaUi;
+      if (contraEl) contraEl.hidden = true;
+      if (btnAgenda) btnAgenda.hidden = false;
+    } else if (r.ok && r.rechazada) {
+      if (iconEl) iconEl.textContent = '😔';
+      if (titleEl) titleEl.textContent = r.mensaje_ui || 'Plan rechazado';
+      if (metaEl) metaEl.textContent = orgModo() === 'solo'
+        ? na + ' en ' + lugUi
+        : na + ' y ' + nb + ' en ' + lugUi;
+      if (detallesEl) detallesEl.textContent = '';
+      if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
+        var contraHora = String(r.contrapropuesta.hora).padStart(2, '0') + ':00';
+        if (contraEl) contraEl.hidden = false;
+        if (contraTxtEl) contraTxtEl.textContent = 'D\u00eda ' + r.contrapropuesta.dia + ' a las ' + contraHora;
+      } else {
+        if (contraEl) contraEl.hidden = true;
+      }
+      if (btnAgenda) btnAgenda.hidden = true;
+    } else {
+      if (iconEl) iconEl.textContent = '⚠️';
+      if (titleEl) titleEl.textContent = 'No se ha podido organizar el plan';
+      if (metaEl) metaEl.textContent = 'Int\u00e9ntalo de nuevo.';
+      if (detallesEl) detallesEl.textContent = '';
+      if (contraEl) contraEl.hidden = true;
+      if (btnAgenda) btnAgenda.hidden = true;
+    }
+    if (r.nuevo_mensajito && mensajitoEl && mensajitoTxtEl) {
+      mensajitoEl.hidden = false;
+      mensajitoTxtEl.textContent = r.mensajito_aviso_ui || 'Tienes un nuevo Mensajito.';
+    } else if (mensajitoEl) {
+      mensajitoEl.hidden = true;
+    }
+  }
+
+  function cerrarResultadoPlan() {
+    setCapa('');
+  }
+
   async function aplicarRespuestaProponer(r) {
     if (!r || typeof r !== 'object') {
-      mostrarOrgAviso('No se ha podido organizar el plan. Int\u00e9ntalo de nuevo.');
+      mostrarResultadoPlan({ ok: false });
+      setCapa('plan-resultado');
       return;
     }
     if (r.ok) {
       if (r.rechazada) {
-        var msgRech = mensajeRechazoProponer(r);
-        mostrarOrgAviso(msgRech);
+        mostrarResultadoPlan(r);
         if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
           org.dia = r.contrapropuesta.dia;
           org.hora = r.contrapropuesta.hora;
           await fillOrganizar();
         }
+        setCapa('plan-resultado');
         await refresh();
         return;
       }
-      var msgOk = mensajeExitoProponer(r);
-      mostrarOrgAviso(msgOk);
-      toast(msgOk);
+      mostrarResultadoPlan(r);
       if (r.nuevo_mensajito) {
-        toast(r.mensajito_aviso_ui || 'Tienes un nuevo Mensajito.');
         $('.play-root').setAttribute('data-importante', '1');
       }
-      setCapa('');
+      setCapa('plan-resultado');
       await refresh();
       if (r.tutorial) pintarTutorialMotor(r.tutorial);
       quizaMostrarTutFinale();
       return;
     }
-    mostrarOrgAviso(mensajeErrorOrgApi(r, 'No se ha podido organizar el plan. Int\u00e9ntalo de nuevo.'));
+    mostrarResultadoPlan(r);
+    setCapa('plan-resultado');
     await refresh();
   }
 
@@ -9833,6 +9893,15 @@ var finOk = $('[data-tut-fin-ok]');
     document.body.classList.remove('vida-derrota-activa');
   });
   if (orgGo) orgGo.addEventListener('click', proponer);
+
+  var prBtnOk = $('[data-pr-btn-ok]');
+  var prBtnAgenda = $('[data-pr-btn-agenda]');
+  var prClose = $('[data-pr-close]');
+  if (prBtnOk) prBtnOk.addEventListener('click', cerrarResultadoPlan);
+  if (prClose) prClose.addEventListener('click', cerrarResultadoPlan);
+  if (prBtnAgenda) prBtnAgenda.addEventListener('click', function () {
+    setCapa('agenda');
+  });
 
   actualizarControlMusica();
   $$('[data-musica-toggle]').forEach(function (btn) {
