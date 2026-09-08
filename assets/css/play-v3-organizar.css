@@ -1170,9 +1170,6 @@
 }
 
 /* --- Estado card (hidden — redundant with selections above) --- */
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--estado {
-  display: none;
-}
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-estado-card {
   padding: .55rem .65rem;
   border-radius: 12px;
