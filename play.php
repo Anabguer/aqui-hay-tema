@@ -392,6 +392,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
           </button>
         </div>
+        <span class="inicio-doodle mob-flor" data-doodle="f" aria-hidden="true"></span>
+        <span class="inicio-doodle mob-estrella" data-doodle="s" aria-hidden="true"></span>
       </div>
     </header>
         <div class="inicio-layout inicio-mobile-layout">
@@ -1189,6 +1191,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </svg>
         <span class="sr-only" data-vida-pct>0%</span>
       </button>
+      <span class="inicio-doodle dsk-corazon" data-doodle="h" aria-hidden="true"></span>
+      <span class="inicio-doodle dsk-estrella" data-doodle="s" aria-hidden="true"></span>
+      <span class="inicio-doodle dsk-flor" data-doodle="f" aria-hidden="true"></span>
+      <span class="inicio-doodle dsk-sparkle" data-doodle="x" aria-hidden="true"></span>
     </header>
         <div class="inicio-layout inicio-desktop-layout">
           <aside class="inicio-chrome-left inicio-desktop-left">
@@ -1310,6 +1316,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="obj-parejas-list" data-parejas-strip></div>
         </section>
             </button>
+            <div class="inicio-doodle-postit inicio-postit" aria-hidden="true">
+              Mis vecinos hacen este pueblo especial
+              <span class="inicio-doodle-postit-heart" data-doodle="d"></span>
+            </div>
           </aside>
         </div>
       </section>
@@ -1490,6 +1500,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <script src="assets/js/lab-audit.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-audio.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/hobby-icons.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
+  <script src="assets/js/doodle-catalog.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/v4/screen-manager.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
   <script src="assets/js/play-v3-lab.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"></script>
@@ -1501,6 +1512,17 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
     });
   }
   </script>
+<script>
+/* Inicio doodles: inyectar SVGs del catálogo compartido en placeholders estáticos */
+(function(){
+  var cat = window.AHT_DOODLE_SVGS;
+  if (!cat) return;
+  document.querySelectorAll('[data-doodle]').forEach(function(el){
+    var svg = cat[el.getAttribute('data-doodle')];
+    if (svg) { el.innerHTML = svg; el.classList.add('injected'); }
+  });
+})();
+</script>
 <script>if(/^(mobile|desktop)$/.test(new URLSearchParams(location.search).get('design')||'')){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/inicio-design-mode.js';document.body.appendChild(s)}</script>
 </body>
 </html>
