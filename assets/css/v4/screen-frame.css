@@ -170,13 +170,15 @@
 }
 
 /* ─── DOODLES — decoración libreta/scrapbook (inyectados por screen-manager.js) ─── */
+/* Tres tiers de tamaño: sm (14-20px), md (22-32px), lg (34-50px).
+   Posiciones absolutas relativas al HEADER (.aht-frame-header),
+   NO al título — los doodles se distribuyen por todo el espacio libre. */
 .aht-doodle {
   position: absolute;
-  width: var(--aht-doodle-size, 20px);
-  height: var(--aht-doodle-size, 20px);
+  width: var(--aht-doodle-lg, 38px);
+  height: var(--aht-doodle-lg, 38px);
   pointer-events: none;
-  display: inline-block;
-  vertical-align: middle;
+  display: block;
   opacity: 0;
   transform: scale(0.7);
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -188,48 +190,83 @@
   display: block;
 }
 
+/* Tier sizes — el JS asigna .d-sm, .d-md, .d-lg */
+.aht-doodle.d-sm { width: var(--aht-doodle-sm, 16px); height: var(--aht-doodle-sm, 16px); }
+.aht-doodle.d-md { width: var(--aht-doodle-md, 26px); height: var(--aht-doodle-md, 26px); }
+.aht-doodle.d-lg { width: var(--aht-doodle-lg, 38px); height: var(--aht-doodle-lg, 38px); }
+
 /* Inyectado = visible */
 .aht-doodle.injected {
   opacity: 1;
   transform: scale(1);
 }
 
-/* Posiciones variadas — left/right respecto al título */
-.aht-doodle.d-l {
-  left: calc(var(--aht-doodle-offset-x, 18px) * -1);
-  top: 60%;
-  transform: scale(1) rotate(-8deg);
-}
+/* ─── Posiciones header-wide — distribuidas por todo el espacio ─── */
 
-.aht-doodle.d-r {
-  right: calc(var(--aht-doodle-offset-x, 16px) * -1);
-  top: -4px;
-  transform: scale(1) rotate(12deg);
-}
-
+/* Cercanas al título (alrededor de la "ficha de papel") */
 .aht-doodle.d-tl {
-  left: calc(var(--aht-doodle-offset-x, 14px) * -1);
-  top: -6px;
+  left: calc(50% - 130px);
+  top: 4px;
   transform: scale(1) rotate(-5deg);
 }
-
 .aht-doodle.d-tr {
-  right: calc(var(--aht-doodle-offset-x, 12px) * -1);
-  top: 50%;
-  transform: scale(1) rotate(18deg);
+  right: calc(50% - 130px);
+  top: 4px;
+  transform: scale(1) rotate(14deg);
 }
-
-.aht-doodle.d-b {
-  left: 50%;
-  bottom: calc(var(--aht-doodle-size, 20px) * -1 - 4px);
-  margin-left: calc(var(--aht-doodle-size, 20px) / -2);
+.aht-doodle.d-lm {
+  left: calc(50% - 145px);
+  top: 50%;
+  transform: scale(1) rotate(-10deg);
+}
+.aht-doodle.d-rm {
+  right: calc(50% - 145px);
+  top: 50%;
+  transform: scale(1) rotate(8deg);
+}
+.aht-doodle.d-bl {
+  left: calc(50% - 110px);
+  bottom: 6px;
   transform: scale(1) rotate(6deg);
 }
+.aht-doodle.d-br {
+  right: calc(50% - 110px);
+  bottom: 6px;
+  transform: scale(1) rotate(-4deg);
+}
 
-.aht-doodle.d-t {
-  right: calc(var(--aht-doodle-offset-x, 10px) * -1);
-  top: calc(var(--aht-doodle-size, 20px) * -1 - 2px);
-  transform: scale(1) rotate(-10deg);
+/* Zona izquierda del header (cerca del back / edge) */
+.aht-doodle.d-fl {
+  left: 8px;
+  top: 6px;
+  transform: scale(1) rotate(-12deg);
+}
+.aht-doodle.d-fml {
+  left: 12px;
+  top: 50%;
+  transform: scale(1) rotate(10deg);
+}
+.aht-doodle.d-fbl {
+  left: 10px;
+  bottom: 5px;
+  transform: scale(1) rotate(-6deg);
+}
+
+/* Zona derecha del header (cerca de la X / edge) */
+.aht-doodle.d-fr {
+  right: 8px;
+  top: 6px;
+  transform: scale(1) rotate(8deg);
+}
+.aht-doodle.d-fmr {
+  right: 12px;
+  top: 50%;
+  transform: scale(1) rotate(-14deg);
+}
+.aht-doodle.d-fbr {
+  right: 10px;
+  bottom: 5px;
+  transform: scale(1) rotate(5deg);
 }
 
 /* ─── Back (optional, izquierda) — estilo AHT craft ─── */
@@ -515,8 +552,13 @@
     max-width: 85%;
   }
 
-  .aht-doodle {
-    --aht-doodle-size: 16px;
-    --aht-doodle-offset-x: 12px;
-  }
+  .aht-doodle.d-sm { --aht-doodle-sm: 12px; }
+  .aht-doodle.d-md { --aht-doodle-md: 18px; }
+  .aht-doodle.d-lg { --aht-doodle-lg: 28px; }
+  .aht-doodle.d-fl,
+  .aht-doodle.d-fml,
+  .aht-doodle.d-fbl,
+  .aht-doodle.d-fr,
+  .aht-doodle.d-fmr,
+  .aht-doodle.d-fbr { display: none; }
 }

@@ -59,44 +59,110 @@
     d: '<svg viewBox="0 0 24 24" fill="none" stroke="#e989a7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.84 4.61a3.5 3.5 0 0 0-5.68 0L12 5.17l-.84-.84a3.5 3.5 0 0 0-5.68 5.68L12 17.5l6.52-6.52a3.5 3.5 0 0 0-1.68-6.37z" fill="#f9dce4"/><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
   };
 
-  // Posiciones: variación asimétrica para composiciones tipo libreta
+  // Posiciones: distribuidas por TODO el header, no solo alrededor del título.
+  // cls = clase CSS, sz = tier (sm/md/lg), tilt = rotación individual del SVG.
   var DOODLE_POSITIONS = {
-    l:  { cls: 'd-l',  tilt: -8  },
-    r:  { cls: 'd-r',  tilt: 12  },
-    tl: { cls: 'd-tl', tilt: -5  },
-    tr: { cls: 'd-tr', tilt: 18  },
-    b:  { cls: 'd-b',  tilt: 6   },
-    t:  { cls: 'd-t',  tilt: -10 }
+    tl:  { cls: 'd-tl',  sz: 'md', tilt: -5  },
+    tr:  { cls: 'd-tr',  sz: 'md', tilt: 14  },
+    lm:  { cls: 'd-lm',  sz: 'sm', tilt: -10 },
+    rm:  { cls: 'd-rm',  sz: 'sm', tilt: 8   },
+    bl:  { cls: 'd-bl',  sz: 'sm', tilt: 6   },
+    br:  { cls: 'd-br',  sz: 'sm', tilt: -4  },
+    fl:  { cls: 'd-fl',  sz: 'lg', tilt: -12 },
+    fml: { cls: 'd-fml', sz: 'md', tilt: 10  },
+    fbl: { cls: 'd-fbl', sz: 'sm', tilt: -6  },
+    fr:  { cls: 'd-fr',  sz: 'lg', tilt: 8   },
+    fmr: { cls: 'd-fmr', sz: 'md', tilt: -14 },
+    fbr: { cls: 'd-fbr', sz: 'sm', tilt: 5   }
   };
 
-  // Firma determinista por screen: misma screen = mismos doodles siempre.
-  // Composiciones variadas: no todas simétricas [doodle] título [doodle].
-  // Algunas: uno abajo + otro arriba, pareja en un lado, espiral desplazada, etc.
+  // Firma determinista por screen: 5-7 doodles repartidos por el header.
+  // Composición scrapbook: grandes en esquinas, medianas cerca del título,
+  // pequeños acentos distribuidos. Misma screen = misma decoración siempre.
   var DOODLE_MAP = {
-    vecinos:              { d: [{id:'p',pos:'l'},{id:'h',pos:'tr'}],                              tilt: 0.8  },
-    buzon:                { d: [{id:'h',pos:'tl'},{id:'x',pos:'r'}],                              tilt: -1.2 },
-    misiones:             { d: [{id:'s',pos:'tl'},{id:'x',pos:'tr'}],                             tilt: 0.3  },
-    agenda:               { d: [{id:'f',pos:'l'},{id:'o',pos:'r'}],                               tilt: -0.5 },
-    inventario:           { d: [{id:'w',pos:'tl'},{id:'p',pos:'r'}],                              tilt: 1.0  },
-    ajustes:              { d: [{id:'o',pos:'tl'},{id:'s',pos:'r'}],                              tilt: -0.7 },
-    diario:               { d: [{id:'d',pos:'r'},{id:'x',pos:'tl'}],                              tilt: 0.6  },
-    mentes:               { d: [{id:'w',pos:'l'},{id:'f',pos:'tr'}],                              tilt: -0.9 },
-    organizar:            { d: [{id:'s',pos:'l'},{id:'f',pos:'r'}],                               tilt: 0.4  },
-    parejas:              { d: [{id:'h',pos:'tl'},{id:'d',pos:'r'}],                              tilt: -0.6 },
-    vida_pueblo:          { d: [{id:'h',pos:'l'},{id:'s',pos:'r'}],                               tilt: 0.5  },
-    historia:             { d: [{id:'o',pos:'l'},{id:'f',pos:'tr'}],                              tilt: -0.4 },
-    historia_detalle:     { d: [{id:'w',pos:'tl'},{id:'h',pos:'r'}],                              tilt: 0.7  },
-    historia_celebracion: { d: [{id:'d',pos:'l'},{id:'s',pos:'tr'}],                              tilt: -0.3 },
-    ficha:                { d: [{id:'p',pos:'tl'},{id:'w',pos:'r'}],                              tilt: 0.9  },
-    ficha_relaciones:     { d: [{id:'h',pos:'l'},{id:'o',pos:'tr'}],                             tilt: -0.8 },
-    ficha_animo:          { d: [{id:'f',pos:'tl'},{id:'h',pos:'r'}],                             tilt: 0.2  },
-    ficha_diario:         { d: [{id:'w',pos:'l'},{id:'d',pos:'tr'}],                             tilt: -1.0 },
-    necesidades_global:   { d: [{id:'s',pos:'tl'},{id:'p',pos:'r'}],                             tilt: 0.35 }
+    vecinos:              { d: [
+      {id:'h',pos:'fl'},{id:'x',pos:'tl'},{id:'f',pos:'tr'},
+      {id:'s',pos:'rm'},{id:'x',pos:'fmr'},{id:'h',pos:'fr'}
+    ], tilt: 0.8 },
+    buzon:                { d: [
+      {id:'h',pos:'fl'},{id:'x',pos:'tl'},{id:'w',pos:'bl'},
+      {id:'d',pos:'tr'},{id:'x',pos:'rm'},{id:'h',pos:'fr'},{id:'x',pos:'fmr'}
+    ], tilt: -1.2 },
+    misiones:             { d: [
+      {id:'s',pos:'fl'},{id:'x',pos:'tl'},{id:'h',pos:'lm'},
+      {id:'x',pos:'tr'},{id:'s',pos:'fmr'},{id:'x',pos:'fr'}
+    ], tilt: 0.3 },
+    agenda:               { d: [
+      {id:'f',pos:'fl'},{id:'o',pos:'tl'},{id:'x',pos:'bl'},
+      {id:'h',pos:'tr'},{id:'x',pos:'rm'},{id:'f',pos:'fr'}
+    ], tilt: -0.5 },
+    inventario:           { d: [
+      {id:'w',pos:'fl'},{id:'p',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'s',pos:'rm'},{id:'x',pos:'fmr'},{id:'w',pos:'fr'}
+    ], tilt: 1.0 },
+    ajustes:              { d: [
+      {id:'o',pos:'fl'},{id:'s',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'f',pos:'rm'},{id:'x',pos:'fmr'},{id:'o',pos:'fr'}
+    ], tilt: -0.7 },
+    diario:               { d: [
+      {id:'d',pos:'fl'},{id:'x',pos:'tl'},{id:'h',pos:'bl'},
+      {id:'x',pos:'tr'},{id:'w',pos:'rm'},{id:'d',pos:'fr'}
+    ], tilt: 0.6 },
+    mentes:               { d: [
+      {id:'w',pos:'fl'},{id:'f',pos:'tl'},{id:'x',pos:'lm'},
+      {id:'h',pos:'tr'},{id:'x',pos:'fmr'},{id:'w',pos:'fr'}
+    ], tilt: -0.9 },
+    organizar:            { d: [
+      {id:'s',pos:'fl'},{id:'f',pos:'tl'},{id:'x',pos:'bl'},
+      {id:'h',pos:'tr'},{id:'x',pos:'rm'},{id:'s',pos:'fr'}
+    ], tilt: 0.4 },
+    parejas:              { d: [
+      {id:'h',pos:'fl'},{id:'d',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'f',pos:'rm'},{id:'x',pos:'fmr'},{id:'h',pos:'fr'}
+    ], tilt: -0.6 },
+    vida_pueblo:          { d: [
+      {id:'h',pos:'fl'},{id:'s',pos:'tl'},{id:'x',pos:'bl'},
+      {id:'o',pos:'tr'},{id:'x',pos:'rm'},{id:'h',pos:'fr'}
+    ], tilt: 0.5 },
+    historia:             { d: [
+      {id:'o',pos:'fl'},{id:'f',pos:'tl'},{id:'x',pos:'lm'},
+      {id:'w',pos:'tr'},{id:'x',pos:'fmr'},{id:'o',pos:'fr'}
+    ], tilt: -0.4 },
+    historia_detalle:     { d: [
+      {id:'w',pos:'fl'},{id:'h',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'s',pos:'rm'},{id:'x',pos:'fmr'},{id:'w',pos:'fr'}
+    ], tilt: 0.7 },
+    historia_celebracion: { d: [
+      {id:'d',pos:'fl'},{id:'s',pos:'tl'},{id:'x',pos:'bl'},
+      {id:'h',pos:'tr'},{id:'x',pos:'rm'},{id:'d',pos:'fr'}
+    ], tilt: -0.3 },
+    ficha:                { d: [
+      {id:'p',pos:'fl'},{id:'w',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'h',pos:'rm'},{id:'x',pos:'fmr'},{id:'p',pos:'fr'}
+    ], tilt: 0.9 },
+    ficha_relaciones:     { d: [
+      {id:'h',pos:'fl'},{id:'o',pos:'tl'},{id:'x',pos:'bl'},
+      {id:'f',pos:'tr'},{id:'x',pos:'rm'},{id:'h',pos:'fr'}
+    ], tilt: -0.8 },
+    ficha_animo:          { d: [
+      {id:'f',pos:'fl'},{id:'h',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'w',pos:'rm'},{id:'x',pos:'fmr'},{id:'f',pos:'fr'}
+    ], tilt: 0.2 },
+    ficha_diario:         { d: [
+      {id:'w',pos:'fl'},{id:'d',pos:'tl'},{id:'x',pos:'bl'},
+      {id:'h',pos:'tr'},{id:'x',pos:'rm'},{id:'w',pos:'fr'}
+    ], tilt: -1.0 },
+    necesidades_global:   { d: [
+      {id:'s',pos:'fl'},{id:'p',pos:'tl'},{id:'x',pos:'tr'},
+      {id:'o',pos:'rm'},{id:'x',pos:'fmr'},{id:'s',pos:'fr'}
+    ], tilt: 0.35 }
   };
 
   /**
-   * Inyectar doodles decorativos en el título de una screen.
+   * Inyectar doodles decorativos en el HEADER de una screen.
    * Lazy, idempotente: solo inserta si no existen ya.
+   * Los doodles se insertan en .aht-frame-header (no en .aht-frame-title)
+   * para distribuirse por todo el espacio libre del header.
    * @param {string} screenId
    */
   function injectDoodles(screenId) {
@@ -106,26 +172,28 @@
     var screen = root.querySelector('.aht-screen[data-aht-screen="' + screenId + '"]');
     if (!screen) return;
 
+    var header = screen.querySelector('.aht-frame-header');
     var title = screen.querySelector('.aht-frame-title');
-    if (!title) return;
+    if (!header || !title) return;
 
     // Idempotente: si ya tiene doodles, no re-inyectar
-    if (title.querySelector('.aht-doodle')) return;
+    if (header.querySelector('.aht-doodle')) return;
 
     // Tilt determinista por screen
     title.style.setProperty('--aht-title-tilt', combo.tilt + 'deg');
 
-    // Crear e inyectar doodles
+    // Crear e inyectar doodles en el HEADER
     combo.d.forEach(function(entry, i) {
+      var pos = DOODLE_POSITIONS[entry.pos];
       var span = document.createElement('span');
-      span.className = 'aht-doodle ' + DOODLE_POSITIONS[entry.pos].cls;
+      span.className = 'aht-doodle ' + pos.cls + ' ' + pos.sz;
       span.setAttribute('aria-hidden', 'true');
       span.innerHTML = DOODLE_SVGS[entry.id];
-      title.appendChild(span);
+      header.appendChild(span);
 
       // Fade-in escalonado
       requestAnimationFrame(function() {
-        setTimeout(function() { span.classList.add('injected'); }, 60 * i);
+        setTimeout(function() { span.classList.add('injected'); }, 50 * i);
       });
     });
   }
