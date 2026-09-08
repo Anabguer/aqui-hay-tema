@@ -394,10 +394,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
         </div>
         <span class="inicio-doodle mob-flor" data-doodle="f" aria-hidden="true"></span>
         <span class="inicio-doodle mob-estrella" data-doodle="s" aria-hidden="true"></span>
+        <span class="inicio-doodle mob-corazon" data-doodle="h" aria-hidden="true"></span>
+        <span class="inicio-doodle mob-sparkle" data-doodle="x" aria-hidden="true"></span>
       </div>
     </header>
         <div class="inicio-layout inicio-mobile-layout">
-          <div class="inicio-chrome-left inicio-mobile-tiles">
+          <div class="inicio-chrome-left inicio-mobile-tiles" style="position:relative">
+            <span class="inicio-doodle mob-flor2" data-doodle="f" aria-hidden="true"></span>
+            <span class="inicio-doodle mob-corazon2" data-doodle="h" aria-hidden="true"></span>
             <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
