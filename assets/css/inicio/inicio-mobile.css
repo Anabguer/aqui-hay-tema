@@ -1702,6 +1702,10 @@ margin-bottom: 4px;
     align-items: stretch;
   }
 
+  .play-v3 .inicio-stage > .inicio-doodles {
+    display: none;
+  }
+
   .play-v3 .inicio-stage > .inicio-map-host {
     grid-area: map;
   }
@@ -2627,6 +2631,7 @@ margin-bottom: 4px;
   }
 
   /* INICIO-SCRAPBOOK-DOODLES-20260908 — decoración scrapbook Inicio mobile (v2: más densidad) */
+
   .play-v3 .inicio-stage .inicio-mobile .inicio-doodle.mob-flor {
     position: absolute;
     right: 14px;
