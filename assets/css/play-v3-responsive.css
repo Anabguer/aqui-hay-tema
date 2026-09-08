@@ -183,7 +183,6 @@ html:has(body.play-v3.play-v3--scroll-lock) {
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-body,
 .play-v3 .aht-screen .capa-scroll,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body,
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-col-detalles,
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-body,
 .play-v3 .aht-screen[data-aht-screen="agenda"] .agenda-list,
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vecinos-list],
