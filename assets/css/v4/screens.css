@@ -393,35 +393,55 @@
   background: var(--aht-header-mark, #F1EDF6);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-identity {
+/* ══════════════════════════════════════════════
+   HERO — Composición ilustrada
+   ══════════════════════════════════════════════ */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero {
+  padding: 10px 12px 0;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-composition {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  min-height: 220px;
+  padding: 8px 0 6px;
+}
+
+/* ── Centro: retrato + nombre ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-  --ficha-cara-size: 160px;
+  --ficha-cara-size: 140px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
   padding: 4px;
   border-radius: 50%;
-  border: 3px solid var(--vec-ink-soft, #594839);
+  border: 3px solid #e87898;
   background: #fff;
-  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-ink-soft, #594839);
+  box-shadow: 0 0 0 3px rgba(232, 120, 152, 0.2), 0 2px 8px rgba(232, 120, 152, 0.15);
   flex-shrink: 0;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="alegre"] {
-  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-green, #4a7a52);
+  border-color: var(--vec-green, #4a7a52);
+  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.2), 0 2px 8px rgba(74, 122, 82, 0.12);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="triste"] {
-  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-lavender-deep, #7a6a9a);
+  border-color: var(--vec-lavender-deep, #7a6a9a);
+  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.2), 0 2px 8px rgba(122, 106, 154, 0.12);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="enfadado"] {
-  box-shadow: 0 0 0 3px #fff, 0 0 0 5px var(--vec-red, #c42b4a);
+  border-color: var(--vec-red, #c42b4a);
+  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.2), 0 2px 8px rgba(196, 43, 74, 0.12);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara {
@@ -449,122 +469,303 @@
   color: var(--ds-ink, #3b3028);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 6px 8px;
-  margin-top: 4px;
-  max-width: 280px;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
-  margin: 0;
+  margin: 2px 0 0;
   line-height: 1.1;
+  text-align: center;
 }
 
-/* ── Edad — ticket de papel con esquina doblada ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-tag--edad {
-  position: relative;
-  padding: 3px 10px 3px 8px;
-  border-radius: 3px 8px 6px 3px;
-  background: #FAF0DC;
-  border: 1.5px solid rgba(180, 150, 110, 0.35);
-  color: #7a6340;
-  font: 600 0.66rem/1.2 "Nunito", sans-serif;
-  transform: rotate(-2deg);
-  box-shadow: 1px 1px 0 rgba(180, 150, 110, 0.15);
+.aht-screen[data-aht-screen="ficha"] .ficha-nombre-trazo {
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin: 1px auto 0;
+  background: var(--vec-lavender, #b49ad4);
+  border-radius: 2px;
+  opacity: 0.45;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-tag--edad::after {
-  content: '';
+/* ── IZQUIERDA: Calendario de sobremesa (Edad) ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  left: 8px;
+  top: 10px;
+  z-index: 3;
+  transform: rotate(-4deg);
+  filter: drop-shadow(1px 2px 2px rgba(0,0,0,0.08));
+}
+
+.ficha-cal-anillas {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: -3px;
+  position: relative;
+  z-index: 1;
+}
+
+.ficha-cal-anillas span {
+  display: block;
   width: 8px;
   height: 8px;
-  background: linear-gradient(135deg, transparent 50%, rgba(180, 150, 110, 0.2) 50%);
-  border-radius: 0 0 6px 0;
+  border-radius: 50%;
+  border: 2px solid #e87898;
+  background: #fff;
 }
 
-/* ── Trabajo — credencial limpia horizontal ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-tag--trabajo {
-  padding: 3px 10px 3px 7px;
-  border-radius: 4px;
-  background: #E8F5E3;
-  border: 1.5px solid rgba(74, 122, 82, 0.28);
-  color: #3d6a48;
-  font: 600 0.66rem/1.2 "Nunito", sans-serif;
+.ficha-cal-body {
+  background: #fef5e0;
+  border: 1.5px solid rgba(180, 150, 110, 0.3);
+  border-radius: 4px 4px 2px 2px;
+  padding: 6px 10px 4px;
+  text-align: center;
+  min-width: 52px;
+  position: relative;
 }
 
-/* ── Desde — cinta scrapbook estampada ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-tag--desde {
-  padding: 3px 10px 3px 7px;
-  border-radius: 2px;
-  background: #E6D9F3;
-  border: 1.5px dashed rgba(122, 106, 154, 0.45);
-  color: var(--vec-lavender-deep, #7a6a9a);
-  font: 600 0.66rem/1.2 "Nunito", sans-serif;
+.ficha-cal-num {
+  display: block;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: #6a4a2a;
+  line-height: 1;
+}
+
+.ficha-cal-label {
+  display: block;
+  font: 600 0.48rem/1 "Nunito", sans-serif;
+  color: #8a7350;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.ficha-cal-pata {
+  width: 28px;
+  height: 6px;
+  margin: 0 auto;
+  background: #d4c4a8;
+  border-radius: 0 0 3px 3px;
+}
+
+/* ── DERECHA: Ficha laboral (Trabajo) ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
+  position: absolute;
+  right: 4px;
+  top: 14px;
+  z-index: 3;
   transform: rotate(1.5deg);
-  letter-spacing: 0.02em;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-tag-ico {
+.ficha-trab-cinta {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 32px;
+  height: 10px;
+  background: rgba(180, 210, 240, 0.55);
+  border: 1px solid rgba(120, 160, 200, 0.3);
+  border-radius: 1px;
+  z-index: 1;
+}
+
+.ficha-trab-body {
+  background: #fff;
+  border: 1.5px solid rgba(90, 70, 50, 0.18);
+  border-radius: 4px;
+  padding: 8px 10px 6px;
+  min-width: 80px;
+  box-shadow: 1px 2px 3px rgba(0,0,0,0.06);
+  position: relative;
+}
+
+.ficha-trab-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 3px;
+  font: 600 0.52rem/1 "Nunito", sans-serif;
+  color: #8a7a68;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ficha-trab-ico {
   flex-shrink: 0;
+  color: #8a7a68;
+}
+
+.ficha-trab-val {
+  font: 600 0.72rem/1.15 "Nunito", sans-serif;
+  color: #3d6a48;
+}
+
+.ficha-trab-rayas {
+  display: block;
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 10px;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 2px,
+    rgba(180, 150, 110, 0.18) 2px,
+    rgba(180, 150, 110, 0.18) 3px
+  );
+}
+
+/* ── DESDE: texto secundario bajo calendario ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
+  position: absolute;
+  left: 10px;
+  top: 140px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font: 500 0.58rem/1.1 "Nunito", sans-serif;
+  color: #8a7a68;
+  transform: rotate(-1deg);
+}
+
+.ficha-desde-ico {
+  flex-shrink: 0;
+  color: var(--vec-lavender, #b49ad4);
   opacity: 0.7;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  padding: 4px 12px 4px 8px;
-  border: 2px solid rgba(180, 150, 110, 0.28);
-  border-radius: 999px;
-  font-family: var(--ds-font-ui, "Nunito", sans-serif);
-  font-size: 0.78rem;
-  font-weight: 700;
-  margin-top: 8px;
-  background: #fef5e0;
+/* ── NUBE DE PENSAMIENTO: Ánimo ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
+  position: absolute;
+  right: 8px;
+  top: 2px;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
   cursor: pointer;
-  transform: rotate(-1deg);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="alegre"] {
+.ficha-animo-burbuja1,
+.ficha-animo-burbuja2 {
+  display: block;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(180, 150, 110, 0.2);
+}
+
+.ficha-animo-burbuja1 {
+  width: 8px;
+  height: 8px;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+.ficha-animo-burbuja2 {
+  width: 5px;
+  height: 5px;
+  margin-bottom: 16px;
+}
+
+.ficha-animo-nube {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px 5px 7px;
+  background: #fff;
+  border: 1.5px solid rgba(180, 150, 110, 0.22);
+  border-radius: 14px 14px 14px 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  position: relative;
+}
+
+.ficha-animo-nube--alegre {
   background: #e8f5e3;
-  border-color: rgba(74, 122, 82, 0.3);
+  border-color: rgba(74, 122, 82, 0.25);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="triste"] {
+.ficha-animo-nube--triste {
   background: #e6d9f3;
-  border-color: rgba(122, 106, 154, 0.3);
+  border-color: rgba(122, 106, 154, 0.25);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-pill[data-emo="enfadado"] {
+.ficha-animo-nube--enfadado {
   background: #fbe5e8;
-  border-color: rgba(196, 43, 74, 0.3);
+  border-color: rgba(196, 43, 74, 0.25);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-ico {
-  font-size: 1rem;
+.ficha-animo-ico {
+  font-size: 0.9rem;
+  line-height: 1;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
+.ficha-animo-emoji {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.ficha-animo-val {
   font-family: var(--ds-font-ui, "Nunito", sans-serif);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+}
+
+/* ── DECORACIONES: micro-doodles ── */
+.ficha-deco {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.ficha-deco-linea1 {
+  top: 18px;
+  left: 50%;
+  transform: translateX(-56px) rotate(-12deg);
+  width: 18px;
+  height: 2px;
+  background: var(--vec-lavender, #b49ad4);
+  border-radius: 1px;
+  opacity: 0.35;
+}
+
+.ficha-deco-linea2 {
+  top: 30px;
+  left: 50%;
+  transform: translateX(42px) rotate(8deg);
+  width: 12px;
+  height: 2px;
+  background: var(--vec-green, #4a7a52);
+  border-radius: 1px;
+  opacity: 0.3;
+}
+
+.ficha-deco-corazon {
+  bottom: 18px;
+  right: 14px;
+  font-size: 0.6rem;
+  color: var(--vec-lavender, #b49ad4);
+  opacity: 0.35;
+  transform: rotate(12deg);
+}
+
+.ficha-deco-trazo {
+  bottom: 30px;
+  left: 12px;
+  width: 14px;
+  height: 2px;
+  background: #e87898;
+  border-radius: 1px;
+  opacity: 0.25;
+  transform: rotate(-6deg);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-body {
@@ -1151,30 +1352,7 @@
   margin: 0;
 }
 
-.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body,
-.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll,
-.aht-screen[data-aht-screen="ficha_diario"] .ficha-diario-scroll {
-  scrollbar-width: none;
-}
-
-.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body::-webkit-scrollbar,
-.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll::-webkit-scrollbar,
-.aht-screen[data-aht-screen="ficha_diario"] .ficha-diario-scroll::-webkit-scrollbar {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-.aht-screen[data-aht-screen="ficha_diario"] .aht-frame-body {
-  padding: 0;
-  overflow-x: hidden;
-}
-
-.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll {
-  padding: 0 16px 12px;
-  overflow-y: auto;
-  flex: 1;
-}
+/* ficha_diario scrollbar/scroll/frame-body → diario-personal.css */
 
 .aht-screen[data-aht-screen="ficha_animo"] .aht-frame-body,
 .aht-screen[data-aht-screen="ficha_animo"] .fani-scroll,
@@ -1566,8 +1744,41 @@
 
 /* Ficha — móvil */
 @media (max-width: 768px) {
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-composition {
+    min-height: 180px;
+    padding: 4px 0 2px;
+  }
+
   .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-    --ficha-cara-size: 120px;
+    --ficha-cara-size: 110px;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
+    font-size: 1.35rem;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
+    left: 2px;
+    top: 4px;
+    transform: rotate(-5deg) scale(0.85);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
+    right: 0;
+    top: 8px;
+    transform: rotate(1deg) scale(0.88);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
+    left: 4px;
+    top: 108px;
+    font-size: 0.52rem;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
+    right: 2px;
+    top: -2px;
+    transform: scale(0.88);
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-pair {
@@ -1599,15 +1810,7 @@
     height: 16px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-tags {
-    max-width: 240px;
-    gap: 5px 6px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-tag--edad,
-  .aht-screen[data-aht-screen="ficha"] .ficha-tag--trabajo,
-  .aht-screen[data-aht-screen="ficha"] .ficha-tag--desde {
-    font-size: 0.6rem;
-    padding: 2px 7px 2px 6px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-deco {
+    display: none;
   }
 }

@@ -716,12 +716,6 @@
   font-size: 1.52rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-tag {
-  font-size: .68rem;
-  line-height: 1.35;
-  color: #6a5848;
-}
-}
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgos {
   flex-direction: column;
@@ -1026,34 +1020,18 @@
   flex-shrink: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-tag {
-  font-size: .68rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-row {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .35rem;
-  width: 100%;
-  margin: .15rem 0 .25rem;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-label {
-  font-size: .96rem;
+  align-items: flex-end;
+  gap: 3px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
-  font-size: .96rem;
+  font-size: .68rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-ico {
-  width: 32px;
-  height: 32px;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-svg {
-  display: block;
+  font-size: .9rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag::before {
