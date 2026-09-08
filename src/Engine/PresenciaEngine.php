@@ -104,16 +104,14 @@ final class PresenciaEngine
      */
     private static function lugarRutina(array $partida, string $rid, int $dia, int $hora): ?string
     {
-        if ($hora < 8 || $hora > 22) {
-            return null;
-        }
         $perfil = PerfilPartida::de($partida, $rid);
         if ($perfil === null) {
             return null;
         }
         $prefs = is_array($perfil['lugares_preferentes'] ?? null) ? $perfil['lugares_preferentes'] : [];
-        $prefs = array_values(array_filter($prefs, static function ($lug): bool {
-            return is_string($lug) && $lug !== '' && LugaresCanonicos::operativoEnProducto($lug);
+        $prefs = array_values(array_filter($prefs, static function ($lug) use ($hora): bool {
+            return is_string($lug) && $lug !== '' && LugaresCanonicos::operativoEnProducto($lug)
+                && ComplejoCatalog::estaAbierto($lug, $hora);
         }));
         if ($prefs === []) {
             return null;
