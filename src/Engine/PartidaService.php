@@ -408,6 +408,7 @@ final class PartidaService
                 'edad' => PerfilPartida::edadResuelta($partida, $residenteId, $this->catalog)
                     ?? ($catalogo['identidad']['edad'] ?? null),
                 'genero' => $catalogo['identidad']['genero'] ?? null,
+                'cumpleanos' => ResidenteCumpleanosEngine::obtener($partida, $residenteId, $this->catalog),
             ],
             'vivienda_id' => $runtime['vivienda_id'],
             'presencia' => $runtime['presencia'],

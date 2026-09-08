@@ -2598,7 +2598,7 @@
         '<div class="mis-progreso"><span class="mis-progreso-txt">' + cumplidas + ' de ' + total + ' hechas</span></div>');
     }
     list.insertAdjacentHTML('beforeend',
-      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
+      '<span class="mis-doodle mis-doodle-check" aria-hidden="true"><svg viewBox="0 0 20 20" width="18" height="18"><path d="M4 10.5l4 4 8-8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>');
     enlazarAccionesMision(list, hoy);
   }
 
@@ -6941,6 +6941,19 @@ function hobbyIconKey(id, texto) {
     if (desdeTagEl && desdeTxtEl) {
       desdeTxtEl.textContent = etiquetaVecinoDesde(vista, diaLlegadaVecino(id));
       desdeTagEl.hidden = false;
+    }
+    var cumpleTagEl = $('[data-ficha-cumple]');
+    var cumpleTxtEl = $('[data-ficha-cumple-txt]');
+    if (cumpleTagEl && cumpleTxtEl) {
+      var cp = vista.cumpleanos || (f.identidad && f.identidad.cumpleanos);
+      if (cp && cp.dia && cp.mes) {
+        var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+        cumpleTxtEl.textContent = 'Cumplea\u00f1os: ' + cp.dia + ' de ' + (meses[(cp.mes | 0) - 1] || '');
+        cumpleTagEl.hidden = false;
+      } else {
+        cumpleTxtEl.textContent = '';
+        cumpleTagEl.hidden = true;
+      }
     }
     pintarAnimoFicha(vista);
     const rasgosBox = $('[data-ficha-rasgos]');
