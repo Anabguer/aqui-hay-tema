@@ -190,28 +190,32 @@
   pointer-events: none;
 }
 
-/* ── Doodle decorativo — más visible, más disperso ────────── */
+/* ── Doodle decorativo — disperso, no saturado ────────────── */
 .fdi-doodle {
   position: absolute;
-  top: 8px;
-  right: 10px;
   width: 26px;
   height: 26px;
-  opacity: .6;
+  opacity: .55;
   pointer-events: none;
   transform: rotate(var(--fdi-doodle-rot, 8deg));
 }
 
+.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle { top: 10px; right: 12px; --fdi-doodle-rot: 6deg; }
+.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle { top: 6px; right: 28px; --fdi-doodle-rot: -4deg; }
+.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle { top: 12px; left: 10px; right: auto; --fdi-doodle-rot: 12deg; }
+.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle { bottom: 10px; right: 14px; top: auto; --fdi-doodle-rot: -8deg; }
+
 .fdi-doodle--extra {
-  top: auto;
-  right: auto;
-  bottom: 8px;
-  left: 8px;
-  width: 20px;
-  height: 20px;
-  opacity: .4;
+  width: 18px;
+  height: 18px;
+  opacity: .35;
   --fdi-doodle-rot: -14deg;
 }
+
+.fdi-entrada:nth-child(4n+1) > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 8px; left: 10px; right: auto; }
+.fdi-entrada:nth-child(4n+2) > .fdi-card > .fdi-doodle--extra { top: auto; bottom: 10px; left: auto; right: 10px; }
+.fdi-entrada:nth-child(4n+3) > .fdi-card > .fdi-doodle--extra { top: 8px; left: auto; right: 10px; bottom: auto; }
+.fdi-entrada:nth-child(4n)   > .fdi-card > .fdi-doodle--extra { top: 8px; left: 12px; right: auto; bottom: auto; }
 
 .fdi-doodle svg {
   width: 100%;
@@ -381,8 +385,9 @@
   border-color: var(--ds-mustard);
 }
 
-/* ── Fondo papel del diario — cálido, no dominante ────────── */
+/* ── Fondo papel del diario — cálido, textura sutil ───────── */
 .aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll {
+  position: relative;
   scrollbar-width: none;
   padding: 12px 18px 20px;
   overflow-y: auto;
@@ -393,6 +398,27 @@
     radial-gradient(ellipse at 50% 95%, rgba(246, 227, 174, .1) 0%, transparent 40%),
     radial-gradient(ellipse at 90% 80%, rgba(217, 228, 207, .08) 0%, transparent 35%),
     linear-gradient(180deg, #fffdf8 0%, #fdf8f0 50%, #faf5eb 100%);
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 28px,
+      rgba(185, 168, 140, .03) 28px,
+      rgba(185, 168, 140, .03) 29px
+    );
+  z-index: 0;
+}
+
+.aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll > * {
+  position: relative;
+  z-index: 1;
 }
 
 .aht-screen[data-aht-screen="ficha_diario"] .fdi-scroll::-webkit-scrollbar {
@@ -463,13 +489,13 @@
   .fdi-doodle {
     width: 22px;
     height: 22px;
-    opacity: .45;
+    opacity: .4;
   }
 
   .fdi-doodle--extra {
-    width: 18px;
-    height: 18px;
-    opacity: .3;
+    width: 16px;
+    height: 16px;
+    opacity: .25;
   }
 
   .fdi-tl {
