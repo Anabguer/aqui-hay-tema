@@ -39,7 +39,7 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
 
 .inicio-mobile .inicio-mobile-feed-inner .inicio-proximo-evento    { order: 1; }
 
-.inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 2; margin-top: 0; }
+.inicio-mobile .inicio-mobile-feed-inner .shell-grupo-cotilleo-par { order: 2; margin-top: 0; padding-top: 0; }
 
 .inicio-mobile .inicio-mobile-feed-inner .planes-movil-unif        { order: 3; }
 
