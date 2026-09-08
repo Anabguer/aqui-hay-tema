@@ -66,7 +66,7 @@
   line-height: 1.25; color: #2c261f;
 }
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-check-desc {
-  font-family: Caveat, cursive; font-size: .92rem; line-height: 1.35;
+  font-family: Caveat, cursive; font-size: 1.7rem; line-height: 1.35;
   color: #6a5848;
 }
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-check-cumplida .mis-check-tit {
@@ -100,8 +100,8 @@
   margin-top: .15rem;
 }
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-progreso-txt {
-  font-family: Caveat, cursive; font-size: .88rem; font-weight: 600;
-  color: #7a6450; letter-spacing: .02em;
+  font-family: Caveat, cursive; font-size: 1rem; font-weight: 600;
+  color: #ff9434; letter-spacing: .02em;
 }
 
 /* — Sello COMPLETADO — */
