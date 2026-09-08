@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260908-misiones-star-fix';
+$ahtUi = 'v3-20260908-misiones-checklist-v4';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -464,18 +464,16 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <button type="button" class="aht-frame-close" data-close aria-label="Cerrar">&#10005;</button>
               </header>
               <div class="aht-frame-body">
-                <div class="consulta-ed-head">
-                  <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
-                  <div class="consulta-ed-head-copy">
-                    <div class="consulta-ed-meta" data-q-horario hidden></div>
-                  </div>
-                </div>
+                <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
+                <div class="consulta-ed-meta" data-q-horario hidden></div>
                 <section class="consulta-ed-presencia">
+                  <p class="consulta-ed-presencia-kicker">Qui&eacute;n anda por aqu&iacute;</p>
                   <p class="consulta-ed-vacio" data-q-sum hidden></p>
                   <div class="consulta-ed-avatars" data-q-list></div>
                 </section>
                 <div class="consulta-ed-tema-wrap" data-q-tema hidden></div>
                 <div class="consulta-ed-acciones" data-q-btns></div>
+                <div class="consulta-ed-info" data-q-info hidden></div>
               </div>
             </div>
           </aside>
@@ -644,27 +642,55 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               </button>
             </nav>
             <section class="ficha-hero" aria-label="Perfil del vecino">
-              <div class="ficha-hero-identity">
-                <div class="ficha-cara-ring" data-ficha-cara-ring>
-                  <div class="ficha-cara" data-ficha-img></div>
+              <div class="ficha-hero-composition">
+                <span class="ficha-deco ficha-deco-linea1" aria-hidden="true"></span>
+                <span class="ficha-deco ficha-deco-linea2" aria-hidden="true"></span>
+                <span class="ficha-deco ficha-deco-corazon" aria-hidden="true">&#9825;</span>
+                <span class="ficha-deco ficha-deco-trazo" aria-hidden="true"></span>
+
+                <div class="ficha-hero-edad" data-ficha-edad hidden>
+                  <div class="ficha-cal-anillas" aria-hidden="true">
+                    <span></span><span></span>
+                  </div>
+                  <div class="ficha-cal-body">
+                    <span class="ficha-cal-num" data-ficha-edad-num></span>
+                    <span class="ficha-cal-label">A&#209;OS</span>
+                  </div>
+                  <div class="ficha-cal-pata" aria-hidden="true"></div>
                 </div>
-                <h3 class="ficha-nombre" data-ficha-nombre></h3>
-                <div class="ficha-hero-tags">
-                  <span class="ficha-tag ficha-tag--edad" data-ficha-edad hidden></span>
-                  <span class="ficha-tag ficha-tag--trabajo" data-ficha-trabajo hidden>
-                    <svg class="ficha-tag-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 5h12v8a1 1 0 01-1 1H3a1 1 0 01-1-1V5z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 5V3a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
-                    <span data-ficha-trabajo-txt></span>
-                  </span>
-                  <span class="ficha-tag ficha-tag--desde" data-ficha-desde-tag>
-                    <svg class="ficha-tag-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    <span data-ficha-desde-txt></span>
-                  </span>
+
+                <div class="ficha-hero-center">
+                  <div class="ficha-cara-ring" data-ficha-cara-ring>
+                    <div class="ficha-cara" data-ficha-img></div>
+                  </div>
+                  <h3 class="ficha-nombre" data-ficha-nombre></h3>
+                  <span class="ficha-nombre-trazo" aria-hidden="true"></span>
                 </div>
-                <div class="ficha-animo-row" data-ficha-animo-row>
-                  <button type="button" class="ficha-animo-pill" data-ficha-animo-pill>
+
+                <div class="ficha-hero-trabajo" data-ficha-trabajo hidden>
+                  <div class="ficha-trab-cinta" aria-hidden="true"></div>
+                  <div class="ficha-trab-body">
+                    <div class="ficha-trab-head">
+                      <svg class="ficha-trab-ico" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M2 6h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6V4a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+                      <span>TRABAJO</span>
+                    </div>
+                    <div class="ficha-trab-val" data-ficha-trabajo-txt></div>
+                  </div>
+                  <span class="ficha-trab-rayas" aria-hidden="true"></span>
+                </div>
+
+                <div class="ficha-hero-desde" data-ficha-desde-tag>
+                  <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                  <span class="ficha-desde-txt" data-ficha-desde-txt></span>
+                </div>
+
+                <div class="ficha-hero-animo" data-ficha-animo-row>
+                  <span class="ficha-animo-burbuja1" aria-hidden="true"></span>
+                  <span class="ficha-animo-burbuja2" aria-hidden="true"></span>
+                  <div class="ficha-animo-nube" data-ficha-animo-pill>
                     <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                     <span class="ficha-animo-val" data-ficha-animo-text></span>
-                  </button>
+                  </div>
                 </div>
               </div>
             </section>
