@@ -785,23 +785,9 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <header class="aht-frame-header">
             <button type="button" class="aht-frame-back" data-diario-volver aria-label="Volver">&#8592;</button>
             <h2 class="aht-frame-title">Diario</h2>
-            <div class="fdi-hero" data-diario-hero></div>
             <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
           <div class="aht-frame-body">
-            <div style="padding:8px 16px;">
-              <label class="fdi-busca-wrap">
-                <span class="fdi-busca-ico" aria-hidden="true">&#8981;</span>
-                <input type="search" class="fdi-busca-inp" data-diario-busca placeholder="Buscar en su historia..." autocomplete="off" spellcheck="false"/>
-              </label>
-              <div class="fdi-filtros" role="tablist" aria-label="Filtrar entradas">
-                <button type="button" class="fdi-filt is-on" data-diario-filt="todo" role="tab" aria-selected="true">Todo</button>
-                <button type="button" class="fdi-filt" data-diario-filt="planes" role="tab" aria-selected="false">Planes</button>
-                <button type="button" class="fdi-filt" data-diario-filt="relaciones" role="tab" aria-selected="false">Relaciones</button>
-                <button type="button" class="fdi-filt" data-diario-filt="cambios" role="tab" aria-selected="false">Cambios</button>
-              </div>
-              <button type="button" class="fdi-orden" data-diario-orden aria-label="Ordenar">&#9783; Más reciente</button>
-            </div>
             <div class="fdi-scroll capa-scroll ficha-diario-scroll" data-diario-list></div>
           </div>
         </div>
