@@ -223,4 +223,56 @@ $p7['reloj']['dia_pueblo'] = 9;
 $resultado = RelacionDesgaste::alCerrarDia($p7, $cal);
 cl_ok(array_key_exists('conflictos_tocados', $resultado), '14a. resultado incluye conflictos_tocados');
 
+// ============================================================
+// 15. reparación NO reinicia el reloj de decay
+// ============================================================
+$p8 = makePartida(1);
+RelacionEngine::upsertConflicto($p8, $a, $b, 3, 'roce', 'test');
+
+// Paso 1: 7 días limpios → decay 3→2
+avanzarDia($p8, 7, $cal);
+cl_ok(intensidad($p8, $a, $b) === 2, '15a. tras 7 días: 3→2');
+$diaDespuesDecay = $p8['reloj']['dia_pueblo']; // día 8
+
+// Paso 2: encuentro bien repara 2→1
+$entre8 = RelacionEngine::obtenerEntre($p8, $a, $b);
+$conf8 = $entre8['conflicto'];
+RelacionEngine::upsertConflicto($p8, $a, $b, 1, $conf8['tipo'] ?? 'roce', 'reparacion_encuentro', null, false);
+$diaReparacion = $p8['reloj']['dia_pueblo']; // día 8
+$ucd = $p8['relaciones_conflicto'][0]['ultimo_conflicto_dia'] ?? null;
+
+// El reloj NO debe haberse reiniciado al día de reparación.
+// Debe conservar el día del decay anterior (8), NO resetearse.
+// Como repairs no reinician, el ucd sigue apuntando al día del último decay.
+cl_ok(intensidad($p8, $a, $b) === 1, '15b. reparación reduce 2→1');
+cl_ok($ucd !== null, '15c. ultimo_conflicto_dia definido');
+
+// Paso 3: pasar 6 días más desde la reparación → aún activo
+avanzarDia($p8, 6, $cal);
+cl_ok(existeConflicto($p8, $a, $b), '15d. tras 6 días desde reparación sigue activo');
+
+// Paso 4: día 7 desde el decay original → eliminado
+avanzarDia($p8, 1, $cal);
+cl_ok(!existeConflicto($p8, $a, $b), '15e. tras 7 días desde decay original → eliminado');
+
+// ============================================================
+// 16. escalada SÍ reinicia el reloj
+// ============================================================
+$p9 = makePartida(1);
+RelacionEngine::upsertConflicto($p9, $a, $b, 1, 'roce', 'test');
+avanzarDia($p9, 5, $cal);
+// Escalada: sube de 1 a 3 → debe reiniciar reloj
+RelacionEngine::upsertConflicto($p9, $a, $b, 3, 'roce', 'test_escalada');
+$ucd9 = $p9['relaciones_conflicto'][0]['ultimo_conflicto_dia'] ?? null;
+cl_ok(intensidad($p9, $a, $b) === 3, '16a. escalada 1→3');
+cl_ok($ucd9 === $p9['reloj']['dia_pueblo'], '16b. escalada reinicia reloj');
+
+// 7+7+7 días tras escalada: 3→2→1→eliminado
+avanzarDia($p9, 7, $cal);
+cl_ok(intensidad($p9, $a, $b) === 2, '16c. 7 días: 3→2');
+avanzarDia($p9, 7, $cal);
+cl_ok(intensidad($p9, $a, $b) === 1, '16d. 14 días: 2→1');
+avanzarDia($p9, 7, $cal);
+cl_ok(!existeConflicto($p9, $a, $b), '16e. 21 días: eliminado');
+
 exit($failures > 0 ? 1 : 0);
