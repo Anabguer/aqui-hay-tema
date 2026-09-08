@@ -647,7 +647,7 @@
   object-fit: cover;
   border: 3px solid var(--cara-emo, #c9a06a);
   box-shadow: 0 3px 10px rgba(44, 38, 31, .15);
-  background: #f0e8dc;
+  background: transparent;
 }
 
 .histdet-protagonista-avatar--fallback {
@@ -674,8 +674,7 @@
 
 /* ── Retratos — filling circle (object-position para transparent PNGs) ── */
 .historia-avatar-img,
-.histcele-protagonista-avatar,
-.histdet-protagonista-avatar {
+.histcele-protagonista-avatar {
   object-position: 50% 40%;
   background: #f0e8dc;
 }

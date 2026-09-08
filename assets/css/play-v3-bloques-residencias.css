@@ -2031,6 +2031,30 @@
   object-position: 50% 20%;
   transform: scale(1.12) translateY(2px);
   transform-origin: 50% 30%;
+}
+
+.play-v3 .cara-token .cara img,
+.play-v3 .vecino-cara img,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-cara img,
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara img,
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-picker-cara img,
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-item-cara img,
+.play-v3 .prox-cara img,
+.play-v3 .prox-faces img,
+.play-v3 .plan-cara,
+.play-v3 .aht-screen[data-aht-screen="agenda"] .plan-cara,
+.play-v3 .hab .cara img,
+.play-v3 .mapa-zona-hit .hab .cara img,
+.play-v3 .tut-cara img,
+.play-v3 .ficha-hero .cara img,
+.play-v3 .aht-screen[data-aht-screen="buzon"] .carta-avatar,
+.play-v3 .msg-item-avatar,
+.play-v3 .obj-proximo-polaroid .prox-faces img,
+.play-v3 .caras-clip img,
+.play-v3 .caras-clip .cara img,
+.play-v3 .tut-caras img,
+.play-v3 .tut-caras .cara img,
+.play-v3 .obj-vecinos-preview-cara {
   background: #f0e8dc;
 }
 
