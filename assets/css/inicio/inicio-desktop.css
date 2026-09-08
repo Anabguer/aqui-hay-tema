@@ -1621,6 +1621,92 @@
 }
 
 
+/* INICIO-SCRAPBOOK-DOODLES-20260908 — decoración scrapbook Inicio desktop */
+@media (min-width: 769px) {
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
+    position: relative;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top {
+    position: relative;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle {
+    position: absolute;
+    z-index: 0;
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-corazon {
+    left: -52px;
+    top: 8px;
+    width: 38px;
+    height: 38px;
+    transform: rotate(-8deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-estrella {
+    left: -42px;
+    top: 60px;
+    width: 26px;
+    height: 26px;
+    transform: rotate(12deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-flor {
+    right: -46px;
+    top: 16px;
+    width: 30px;
+    height: 30px;
+    transform: rotate(-6deg);
+  }
+
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle.dsk-sparkle {
+    right: -38px;
+    top: 56px;
+    width: 18px;
+    height: 18px;
+    transform: rotate(10deg);
+  }
+
+  /* Post-it inferior derecho — "Mis vecinos hacen este pueblo especial" */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit {
+    position: relative;
+    width: 170px;
+    padding: 10px 12px 8px;
+    font-family: var(--ds-font-hand, Caveat, cursive);
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--ds-ink, #3b3028);
+    transform: rotate(3deg);
+    margin-left: auto;
+    margin-top: 8px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit .inicio-doodle-postit-heart {
+    display: inline-block;
+    vertical-align: middle;
+    width: 14px;
+    height: 14px;
+    margin-left: 4px;
+    opacity: .85;
+  }
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-doodle-postit .inicio-doodle-postit-heart svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Etiqueta "Vida del pueblo" — post-it vainilla ligeramente girado */
+  .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop > .game-top .top-vida .obj-vida-kicker {
+    background: #FFF8E7;
+    border: 1.5px dashed rgba(180, 160, 120, .35);
+    border-radius: 3px;
+    padding: 2px 10px 4px;
+    transform: rotate(-2deg);
+    box-shadow: 1px 2px 6px rgba(44, 38, 31, .08);
+  }
+}
+
 /* INICIO-VISUAL-PASS4-20260906 — remate desktop ref 02 */
 @media (min-width: 769px) {
   .play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-desktop-grid {
