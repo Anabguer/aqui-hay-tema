@@ -504,8 +504,13 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     gap: .3rem;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dc {
-    padding: .28rem .55rem;
-    font-size: .72rem;
+    padding: .3rem .5rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dc-dia {
+    font-size: .68rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dc-fecha {
+    font-size: .58rem;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-horas-grid {
     gap: .25rem;
@@ -568,8 +573,13 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     gap: .5rem;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dc {
-    padding: .4rem .8rem;
-    font-size: .82rem;
+    padding: .4rem .7rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dc-dia {
+    font-size: .75rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dc-fecha {
+    font-size: .65rem;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-horas-grid {
     gap: .4rem;

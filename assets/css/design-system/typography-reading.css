@@ -223,8 +223,7 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,
-.play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit,
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-txt {
+.play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive);
 }
 
@@ -297,7 +296,6 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-btn-org, /* "Nuevo plan" */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-tit,  /* "NUEVO PLAN" */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .ficha-seccion-tit, /* QUI+�NES, QU+�, D+�NDE, CU+�NDO */
-.play-v3 .aht-screen[data-aht-screen="organizar"] .org-crear-txt, /* Bot+�n CREAR */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-tit,    /* "DIARIO / COTILLEOS" */
 .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-tit,   /* "HOY EN EL PUEBLO" */
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit, /* "VIDA DEL PUEBLO" */
@@ -321,8 +319,6 @@
 .play-v3 .ds-tl-day,                /* D+�as en timeline */
 .play-v3 .ds-event-title,           /* T+�tulos eventos */
 .play-v3 .ds-flag-new,              /* Flag "NUEVO" */
-.play-v3 .animo-modal-tit,          /* T+�tulo modal +�nimo */
-.play-v3 .animo-modal-ribbon,       /* Ribbon +�nimo */
 .play-v3 .ficha-diario-head-tit,    /* T+�tulo diario vecino */
 .play-v3 .ficha-rel-modal-tit,      /* T+�tulo modal relaciones */
 .play-v3 .par-tit,                  /* "PAREJAS" */
@@ -522,8 +518,6 @@
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag,
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card,
-.play-v3 .animo-modal-causa p,
-.play-v3 .animo-modal-hint,
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-copy p,
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-latido {
   font-family: var(--ds-font-ui, "Nunito", "Segoe UI", sans-serif);

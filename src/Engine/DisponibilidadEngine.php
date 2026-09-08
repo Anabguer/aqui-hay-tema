@@ -57,7 +57,7 @@ final class DisponibilidadEngine
             $horaMin = 0;
             if ($d === 0) {
                 $horaMin = $desdeHora;
-                if ($minuto > 0) {
+                if ($minuto > 0 && $dia === $nowDia) {
                     $horaMin = $desdeHora + 1;
                 }
             }
