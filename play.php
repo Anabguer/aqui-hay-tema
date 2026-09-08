@@ -71,6 +71,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/v4/bodies/relaciones-filtros.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/v4/bodies/relaciones-tablon.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/v4/bodies/misc-screens.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/v4/bodies/diario-personal.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <?php /* CANON: stack inicio unificado (fase 2) */ ?>
   <link rel="stylesheet" href="assets/css/inicio/tokens-inicio.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/inicio/inicio-base.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -646,50 +647,49 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <span class="ficha-deco ficha-deco-linea1" aria-hidden="true"></span>
                 <span class="ficha-deco ficha-deco-linea2" aria-hidden="true"></span>
                 <span class="ficha-deco ficha-deco-corazon" aria-hidden="true">&#9825;</span>
-                <span class="ficha-deco ficha-deco-trazo" aria-hidden="true"></span>
 
                 <div class="ficha-hero-edad" data-ficha-edad hidden>
-                  <div class="ficha-cal-anillas" aria-hidden="true">
-                    <span></span><span></span>
+                  <div class="ficha-edad-cinta" aria-hidden="true"></div>
+                  <div class="ficha-edad-cal">
+                    <div class="ficha-edad-anillas">
+                      <span></span><span></span>
+                    </div>
+                    <div class="ficha-edad-body">
+                      <span class="ficha-edad-num" data-ficha-edad-num></span>
+                      <span class="ficha-edad-label">A&#209;OS</span>
+                    </div>
+                    <div class="ficha-edad-pata" aria-hidden="true"></div>
                   </div>
-                  <div class="ficha-cal-body">
-                    <span class="ficha-cal-num" data-ficha-edad-num></span>
-                    <span class="ficha-cal-label">A&#209;OS</span>
-                  </div>
-                  <div class="ficha-cal-pata" aria-hidden="true"></div>
                 </div>
 
                 <div class="ficha-hero-center">
+                  <div class="ficha-hero-animo" data-ficha-animo-row>
+                    <span class="ficha-animo-burbuja1" aria-hidden="true"></span>
+                    <span class="ficha-animo-burbuja2" aria-hidden="true"></span>
+                    <div class="ficha-animo-nube" data-ficha-animo-pill>
+                      <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                      <span class="ficha-animo-val" data-ficha-animo-text></span>
+                    </div>
+                  </div>
                   <div class="ficha-cara-ring" data-ficha-cara-ring>
                     <div class="ficha-cara" data-ficha-img></div>
                   </div>
                   <h3 class="ficha-nombre" data-ficha-nombre></h3>
                   <span class="ficha-nombre-trazo" aria-hidden="true"></span>
+                  <div class="ficha-hero-desde" data-ficha-desde-tag>
+                    <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <span class="ficha-desde-txt" data-ficha-desde-txt></span>
+                  </div>
                 </div>
 
                 <div class="ficha-hero-trabajo" data-ficha-trabajo hidden>
                   <div class="ficha-trab-cinta" aria-hidden="true"></div>
                   <div class="ficha-trab-body">
                     <div class="ficha-trab-head">
-                      <svg class="ficha-trab-ico" viewBox="0 0 16 16" width="13" height="13" aria-hidden="true"><path d="M2 6h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6V4a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+                      <svg class="ficha-trab-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 6h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6V4a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
                       <span>TRABAJO</span>
                     </div>
                     <div class="ficha-trab-val" data-ficha-trabajo-txt></div>
-                  </div>
-                  <span class="ficha-trab-rayas" aria-hidden="true"></span>
-                </div>
-
-                <div class="ficha-hero-desde" data-ficha-desde-tag>
-                  <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                  <span class="ficha-desde-txt" data-ficha-desde-txt></span>
-                </div>
-
-                <div class="ficha-hero-animo" data-ficha-animo-row>
-                  <span class="ficha-animo-burbuja1" aria-hidden="true"></span>
-                  <span class="ficha-animo-burbuja2" aria-hidden="true"></span>
-                  <div class="ficha-animo-nube" data-ficha-animo-pill>
-                    <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                    <span class="ficha-animo-val" data-ficha-animo-text></span>
                   </div>
                 </div>
               </div>
