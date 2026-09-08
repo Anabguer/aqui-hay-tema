@@ -6722,9 +6722,9 @@ function canonEmoId(id) {
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
     diarioVecinoCache = Array.isArray(r.entradas) ? r.entradas : [];
     diarioHighlightId = highlightEventoId || null;
-    pintarDiarioVecinoHero(nom, img, diarioVecinoCache.length);
     syncDiarioVecinoFiltros();
     pintarDiarioVecinoLista();
+    pintarDiarioVecinoHero(nom, img, diarioVecinoCache.length);
     setCapa('ficha_diario');
   }
 
