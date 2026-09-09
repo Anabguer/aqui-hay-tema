@@ -6442,14 +6442,18 @@ function canonEmoId(id) {
 
   function animoDecoHtml(emoId) {
     const decos = {
-      triste: '<span class="animo-deco-item animo-deco-lluvia" aria-hidden="true">&#x1F4A7;</span>' +
-              '<span class="animo-deco-item animo-deco-lluvia2" aria-hidden="true">&#x1F4A7;</span>' +
-              '<span class="animo-deco-item animo-deco-lluvia3" aria-hidden="true">&#x1F4A7;</span>',
-      alegre: '<span class="animo-deco-item animo-deco-estrella" aria-hidden="true">&#x2B50;</span>' +
-              '<span class="animo-deco-item animo-deco-estrella2" aria-hidden="true">&#x2B50;</span>' +
-              '<span class="animo-deco-item animo-deco-confeti" aria-hidden="true">&#x1F389;</span>',
-      enfadado: '<span class="animo-deco-item animo-deco-rayo" aria-hidden="true">&#x26A1;</span>' +
-                '<span class="animo-deco-item animo-deco-rayo2" aria-hidden="true">&#x1F4A5;</span>'
+      triste: '<span class="animo-deco animo-deco--drop1" aria-hidden="true">&#x1F4A7;</span>' +
+              '<span class="animo-deco animo-deco--drop2" aria-hidden="true">&#x1F4A7;</span>' +
+              '<span class="animo-deco animo-deco--drop3" aria-hidden="true">&#x1F4A7;</span>' +
+              '<span class="animo-deco animo-deco--cloud" aria-hidden="true">&#x2601;</span>',
+      alegre: '<span class="animo-deco animo-deco--star1" aria-hidden="true">&#x2B50;</span>' +
+              '<span class="animo-deco animo-deco--star2" aria-hidden="true">&#x2728;</span>' +
+              '<span class="animo-deco animo-deco--confetti" aria-hidden="true">&#x1F389;</span>' +
+              '<span class="animo-deco animo-deco--spark" aria-hidden="true">&#x1F31F;</span>',
+      enfadado: '<span class="animo-deco animo-deco--bolt1" aria-hidden="true">&#x26A1;</span>' +
+                '<span class="animo-deco animo-deco--boom" aria-hidden="true">&#x1F4A5;</span>' +
+                '<span class="animo-deco animo-deco--bolt2" aria-hidden="true">&#x26A1;</span>' +
+                '<span class="animo-deco animo-deco--anger" aria-hidden="true">&#x1F4A2;</span>'
     };
     return decos[emoId] || '';
   }
@@ -6461,13 +6465,13 @@ function canonEmoId(id) {
     const emoId = canonEmoId(exp.estado_id || '');
     const img = $('[data-ficha-img]') ? $('[data-ficha-img]').innerHTML : '';
     return '<div class="animo-scene animo-scene--' + esc(emoId) + '">' +
-      '<div class="animo-composition">' +
+      '<div class="animo-deco-ring">' + animoDecoHtml(emoId) + '</div>' +
+      '<div class="animo-card">' +
       '<div class="animo-retrato">' +
-      '<div class="animo-deco-top">' + animoDecoHtml(emoId) + '</div>' +
       '<div class="animo-avatar">' + img + '</div>' +
       '<h3 class="animo-nombre">' + esc(nom) + '</h3>' +
       '</div>' +
-      '<div class="animo-nube animo-nube--' + esc(emoId) + '">' +
+      '<div class="animo-emocion animo-emocion--' + esc(emoId) + '">' +
       '<div class="animo-emoji-hero" aria-hidden="true">' + emoModalIcono(emoId) + '</div>' +
       '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
       (pensamiento ? '<p>' + pensamiento + '</p>' : '') +
