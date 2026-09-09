@@ -230,6 +230,7 @@
   flex-wrap: wrap;
   align-items: baseline;
   gap: 4px 0;
+  width: 100%;
 }
 
 .fdi-card-body > .fdi-doodle,
