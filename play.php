@@ -924,10 +924,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </div>
             <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
             <div class="vida-copy">
-              <p>El pueblo vive gracias a sus vecinos. Cada acierto alimenta su corazón, cada error lo debilita.</p>
-              <p>Tus decisiones mantienen el latido. Si lo cuidas bien, cuando esté lleno el pueblo responderá con un regalo.</p>
+              <p>El pueblo vive gracias a sus vecinos.</p>
+              <p>Cada acierto alimenta su corazón, pero cada problema lo debilita.</p>
+              <p>Tus decisiones mantienen el latido. Cuida a tus vecinos y evita que el corazón del pueblo se apague.</p>
+              <p>Cuando esté lleno, el pueblo te devolverá el favor con un regalo.</p>
             </div>
-            <p class="vida-latido mini">Cuando el corazón del pueblo esté lleno, responderá con un regalo.</p>
           </div>
         </div>
       </aside>
