@@ -21,16 +21,22 @@
 
 .fdi-hero-portrait {
   flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2.5px solid var(--ds-lavender);
+  box-shadow: 0 2px 6px rgba(185, 168, 220, .25);
+  background: #fff;
   transform: rotate(2.5deg) translateY(-1px);
 }
 
 .fdi-hero-portrait img {
-  width: 56px;
+  width: 62px;
   height: 56px;
-  border-radius: 50%;
+  border-radius: 0;
   object-fit: cover;
-  border: 2.5px solid var(--ds-lavender);
-  box-shadow: 0 2px 6px rgba(185, 168, 220, .25);
+  display: block;
 }
 
 .fdi-hero-txt {
@@ -446,11 +452,13 @@
   }
 
   .fdi-hero-portrait {
+    width: 44px;
+    height: 44px;
     transform: rotate(2deg) translateY(-1px);
   }
 
   .fdi-hero-portrait img {
-    width: 44px;
+    width: 50px;
     height: 44px;
   }
 
