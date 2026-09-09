@@ -646,8 +646,6 @@
   height: 90px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--cara-emo, #c9a06a);
-  box-shadow: 0 3px 10px rgba(44, 38, 31, .15);
   background: transparent;
 }
 
