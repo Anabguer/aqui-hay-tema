@@ -4263,7 +4263,7 @@ function renderInicioMpDuo(misiones, parejas) {
       }
       if (cta) {
         var ctaTxtEl = cta.querySelector('[data-proximo-evento-cta-txt]') || cta.querySelector('.inicio-evento-cta-txt');
-        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || 'Â¿Quién va?';
+        if (ctaTxtEl) ctaTxtEl.textContent = ev.cta_label || '¿Quién va?';
         cta.hidden = !puedeApuntar;
         cta.disabled = !puedeApuntar;
         if (puedeApuntar) {

@@ -674,14 +674,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   </div>
                 </div>
                 <div class="ficha-hero-col ficha-hero-col--center">
-                  <div class="ficha-hero-animo" data-ficha-animo-row>
-                    <span class="ficha-animo-burbuja1" aria-hidden="true"></span>
-                    <span class="ficha-animo-burbuja2" aria-hidden="true"></span>
-                    <div class="ficha-animo-nube" data-ficha-animo-pill>
-                      <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                      <span class="ficha-animo-val" data-ficha-animo-text></span>
-                    </div>
-                  </div>
                   <div class="ficha-cara-ring" data-ficha-cara-ring>
                     <div class="ficha-cara" data-ficha-img></div>
                   </div>
