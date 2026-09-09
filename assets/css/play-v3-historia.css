@@ -655,8 +655,8 @@
 }
 
 .histdet-protagonista-avatar {
-  width: 84px;
-  height: 84px;
+  width: 99px;
+  height: 90px;
   border-radius: 0;
   object-fit: cover;
   background: transparent;
@@ -924,7 +924,7 @@
   }
 
   .histdet-protagonista-avatar {
-    width: 38px;
+    width: 42px;
     height: 38px;
   }
 
