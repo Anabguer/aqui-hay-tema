@@ -343,15 +343,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   </aside>
     <div class="game-shell">
     <div class="inicio-stage">
-      <div class="inicio-doodles" aria-hidden="true">
-        <span class="inicio-doodle dsk-corazon" data-doodle="h"></span>
-        <span class="inicio-doodle dsk-estrella" data-doodle="s"></span>
-        <span class="inicio-doodle dsk-flor" data-doodle="f"></span>
-        <span class="inicio-doodle dsk-sparkle" data-doodle="x"></span>
-        <span class="inicio-doodle dsk-corazon2" data-doodle="h"></span>
-        <span class="inicio-doodle dsk-flor2" data-doodle="f"></span>
-        <span class="inicio-doodle dsk-ojo" data-doodle="o"></span>
-      </div>
+      <div class="inicio-doodles" aria-hidden="true"></div>
       <section class="inicio-mobile" data-inicio-view="mobile" aria-label="Inicio m&oacute;vil">
         <header class="game-top">
       <div class="inicio-header-card">
@@ -401,16 +393,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <span class="pasar-rato-ico" aria-hidden="true">&#9654;</span>
           </button>
         </div>
-        <span class="inicio-doodle mob-flor" data-doodle="f" aria-hidden="true"></span>
-        <span class="inicio-doodle mob-estrella" data-doodle="s" aria-hidden="true"></span>
-        <span class="inicio-doodle mob-corazon" data-doodle="h" aria-hidden="true"></span>
-        <span class="inicio-doodle mob-sparkle" data-doodle="x" aria-hidden="true"></span>
       </div>
     </header>
         <div class="inicio-layout inicio-mobile-layout">
           <div class="inicio-chrome-left inicio-mobile-tiles" style="position:relative">
-            <span class="inicio-doodle mob-flor2" data-doodle="f" aria-hidden="true"></span>
-            <span class="inicio-doodle mob-corazon2" data-doodle="h" aria-hidden="true"></span>
             <section class="shell-grupo shell-grupo-buzon">
           <div class="mensajitos-wrap">
             <button type="button" class="obj-buzon" data-open="buzon" aria-label="Abrir mensajitos">
