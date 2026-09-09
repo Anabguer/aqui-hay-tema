@@ -8,7 +8,7 @@ var DESKTOP=[
   {id:'ds1',k:'sparkle',x:1436,y:100,w:44,r:0},
   {id:'ds2',k:'rainbow',x:1518,y:765,w:114,r:0},
   {id:'ds3',k:'house',x:1207,y:52,w:67,r:0},
-  {id:'ds4',k:'bird',x:1651,y:-6,w:44,r:0},
+  {id:'ds4',k:'bird',x:1692,y:-6,w:44,r:0},
   {id:'ds5',k:'star-malva',x:465,y:1,w:28,r:0},
   {id:'ds6',k:'star-azul',x:452,y:33,w:21,r:0},
   {id:'ds7',k:'balloon',x:1567,y:750,w:29,r:-20},
@@ -18,7 +18,7 @@ var DESKTOP=[
   {id:'ds11',k:'coffee',x:126,y:603,w:44,r:9},
   {id:'ds12',k:'sun',x:1500,y:702,w:44,r:0},
   {id:'ds13',k:'music',x:329,y:547,w:34,r:20},
-  {id:'ds14',k:'sun',x:1483,y:16,w:44,r:0},
+  {id:'ds14',k:'sun',x:1524,y:16,w:44,r:0},
   {id:'ds15',k:'moon',x:5,y:59,w:44,r:-18}
 ];
 
@@ -56,23 +56,26 @@ function getStage(){
 
 function render(){
   var stage=getStage();if(!stage)return;
-  var existing=stage.querySelector('.aht-prod-layer');
+  var existing=document.querySelector('.aht-prod-layer');
   if(existing)existing.remove();
+  var rect=stage.getBoundingClientRect();
+  var scrollY=window.pageYOffset||0;
+  var scrollX=window.pageXOffset||0;
   var layer=document.createElement('div');
   layer.className='aht-prod-layer';
-  layer.style.cssText='position:absolute;inset:0;pointer-events:none;z-index:100;overflow:visible';
+  layer.style.cssText='position:fixed;left:0;top:0;width:100vw;height:100vh;pointer-events:none;z-index:100;overflow:visible';
   var items=isMobile()?MOBILE:DESKTOP;
   items.forEach(function(s){
     var el=document.createElement('div');
     el.style.cssText='position:absolute;pointer-events:none;z-index:100;filter:drop-shadow(1px 2px 3px rgba(0,0,0,.18))';
-    el.style.left=s.x+'px';el.style.top=s.y+'px';
+    el.style.left=(rect.left+scrollX+s.x)+'px';
+    el.style.top=(rect.top+scrollY+s.y)+'px';
     el.style.width=s.w+'px';el.style.height=s.w+'px';
     el.style.transform='rotate('+s.r+'deg)';
     el.innerHTML='<div style="width:100%;height:100%">'+(SVGS[s.k]||SVGS.heart)+'</div>';
     layer.appendChild(el);
   });
-  stage.style.position='relative';
-  stage.appendChild(layer);
+  document.body.appendChild(layer);
 }
 
 if(document.readyState==='loading'){
@@ -81,4 +84,6 @@ if(document.readyState==='loading'){
   setTimeout(render,300);
 }
 window.addEventListener('resize',function(){setTimeout(render,100);});
+window.addEventListener('scroll',function(){setTimeout(render,50);});
+new MutationObserver(function(){setTimeout(render,200);}).observe(document.body,{childList:true,subtree:true});
 })();
