@@ -247,7 +247,8 @@
             "conocerse": 34,
             "quedar": 0,
             "primera_cita": 4,
-            "cita": 0
+            "cita": 0,
+            "romantico": 4
         },
         "bonus_primera_cita_reciproca": 12,
         "_nota_bonus_primera_cita_reciproca": "P2: solo primera_cita y SOLO si SenalRomantica::desdeHacia ok en AMBAS direcciones (flechazo o romance>=tilin).",
