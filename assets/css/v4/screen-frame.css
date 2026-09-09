@@ -454,18 +454,18 @@
   pointer-events: none;
 }
 
-/* Pestaña Cuidados — lavanda/azul suave */
+/* Pestaña Cuidados — azul suave */
 .aht-frame-tab[data-vec-tab="cuidados"] {
-  background: #c8b8e8;
-  color: #4a2a78;
+  background: #b8d4e8;
+  color: #2a5a78;
 }
 
 .aht-frame-tab[data-vec-tab="cuidados"].is-on {
-  background: #7a5aa8;
+  background: #5f8fb8;
   color: #fff;
   border-color: #33261E;
-  text-shadow: 0 1.5px 0 rgba(90, 50, 140, .5);
-  box-shadow: 2px 3px 0 rgba(122, 90, 168, .5);
+  text-shadow: 0 1.5px 0 rgba(60, 90, 130, .5);
+  box-shadow: 2px 3px 0 rgba(95, 143, 184, .5);
   transform: rotate(0.4deg);
 }
 
