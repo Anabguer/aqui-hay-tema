@@ -657,9 +657,12 @@
   height: 100%;
   border-radius: 0;
   object-fit: cover;
-  object-position: 50% 50%;
   background: transparent;
   display: block;
+}
+
+.play-v3 .histdet-protagonista-avatar {
+  object-position: 50% 50%;
 }
 
 .histdet-protagonista-avatar--fallback {
