@@ -143,6 +143,20 @@
 
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-tit { font-family: Caveat, cursive; font-size: 1.75rem; margin: 2px 0; }
 
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-hero {
+  text-align: center; padding: 12px 0 8px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-hero-ico {
+  font-size: 2.4rem; display: block; margin-bottom: 4px;
+  animation: vida-hero-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes vida-hero-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
 .play-v3 .aht-screen[data-aht-screen="vida_pueblo"] .vida-valor {
   display: inline-flex; padding: 3px 10px; margin: 4px 0;
   border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;

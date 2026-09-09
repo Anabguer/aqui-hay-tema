@@ -639,41 +639,41 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <button type="button" class="aht-frame-close" aria-label="Cerrar">&#10005;</button>
           </header>
           <div class="aht-frame-body">
-            <nav class="ficha-acciones" aria-label="Acciones con el vecino">
-              <button type="button" class="ficha-btn-acc ficha-btn-diario" data-ficha-diario-btn>
-                <svg class="ficha-btn-acc-svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M6 2h9l5 5v13a2 2 0 01-2 2H6a2 2 0 01-2-2V4a2 2 0 012-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 2v5h5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                Diario
+            <nav class="ficha-tabs" aria-label="Acciones con el vecino">
+              <button type="button" class="ficha-tab ficha-tab--diario" data-ficha-diario-btn>
+                <svg class="ficha-tab-ico" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M4 19V5a2 2 0 012-2h8l6 6v10a2 2 0 01-2 2H6a2 2 0 01-2-2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M14 3v6h6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="8" y1="13" x2="16" y2="13" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><line x1="8" y1="17" x2="13" y2="17" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <span>Diario</span>
               </button>
-              <button type="button" class="ficha-btn-acc ficha-btn-org" data-ficha-org>
-                <svg class="ficha-btn-acc-svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="7" x2="16" y2="7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="8" y1="11" x2="16" y2="11" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="8" y1="15" x2="12" y2="15" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                Nuevo plan
+              <button type="button" class="ficha-tab ficha-tab--plan" data-ficha-org>
+                <svg class="ficha-tab-ico" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="3" y1="10" x2="21" y2="10" stroke="currentColor" stroke-width="1.5"/><line x1="8" y1="2" x2="8" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><line x1="16" y1="2" x2="16" y2="6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                <span>Nuevo plan</span>
               </button>
-              <button type="button" class="ficha-btn-acc ficha-btn-regalo" data-ficha-regalar>
-                <svg class="ficha-btn-acc-svg" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><rect x="3" y="10" width="18" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10V21" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 14h18" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10c-2-4-6-4-6-1s4 1 6 1c2 0 6-2 6 1s-4-3-6 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Regalar
+              <button type="button" class="ficha-tab ficha-tab--regalo" data-ficha-regalar>
+                <svg class="ficha-tab-ico" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><rect x="3" y="10" width="18" height="11" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10V21" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 14h18" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M12 10c-2-4-6-4-6-1s4 1 6 1c2 0 6-2 6 1s-4-3-6 1" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                <span>Regalar</span>
               </button>
             </nav>
             <section class="ficha-hero" aria-label="Perfil del vecino">
-              <div class="ficha-hero-composition">
-                <span class="ficha-deco ficha-deco-linea1" aria-hidden="true"></span>
-                <span class="ficha-deco ficha-deco-linea2" aria-hidden="true"></span>
-                <span class="ficha-deco ficha-deco-corazon" aria-hidden="true">&#9825;</span>
-
-                <div class="ficha-hero-edad" data-ficha-edad hidden>
-                  <div class="ficha-edad-cinta" aria-hidden="true"></div>
-                  <div class="ficha-edad-cal">
-                    <div class="ficha-edad-anillas">
-                      <span></span><span></span>
+              <div class="ficha-hero-card">
+                <div class="ficha-hero-col ficha-hero-col--left">
+                  <div class="ficha-hero-edad" data-ficha-edad hidden>
+                    <div class="ficha-edad-cal">
+                      <div class="ficha-edad-anillas">
+                        <span></span><span></span>
+                      </div>
+                      <div class="ficha-edad-body">
+                        <span class="ficha-edad-num" data-ficha-edad-num></span>
+                        <span class="ficha-edad-label">A&#209;OS</span>
+                      </div>
+                      <div class="ficha-edad-pata" aria-hidden="true"></div>
                     </div>
-                    <div class="ficha-edad-body">
-                      <span class="ficha-edad-num" data-ficha-edad-num></span>
-                      <span class="ficha-edad-label">A&#209;OS</span>
-                    </div>
-                    <div class="ficha-edad-pata" aria-hidden="true"></div>
+                  </div>
+                  <div class="ficha-hero-cumple" data-ficha-cumple hidden>
+                    <svg class="ficha-cumple-ico" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="2" y="6" width="12" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 9h12" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="4.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="8" cy="3.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="11" cy="4.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+                    <span class="ficha-cumple-txt" data-ficha-cumple-txt></span>
                   </div>
                 </div>
-
-                <div class="ficha-hero-center">
+                <div class="ficha-hero-col ficha-hero-col--center">
                   <div class="ficha-hero-animo" data-ficha-animo-row>
                     <span class="ficha-animo-burbuja1" aria-hidden="true"></span>
                     <span class="ficha-animo-burbuja2" aria-hidden="true"></span>
@@ -687,23 +687,26 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   </div>
                   <h3 class="ficha-nombre" data-ficha-nombre></h3>
                   <span class="ficha-nombre-trazo" aria-hidden="true"></span>
-                   <div class="ficha-hero-desde" data-ficha-desde-tag>
-                     <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                     <span class="ficha-desde-txt" data-ficha-desde-txt></span>
-                   </div>
-                   <div class="ficha-hero-cumple" data-ficha-cumple hidden>
-                     <span class="ficha-cumple-txt" data-ficha-cumple-txt></span>
-                   </div>
+                  <div class="ficha-hero-desde" data-ficha-desde-tag>
+                    <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <span class="ficha-desde-txt" data-ficha-desde-txt></span>
+                  </div>
                 </div>
-
-                <div class="ficha-hero-trabajo" data-ficha-trabajo hidden>
-                  <div class="ficha-trab-cinta" aria-hidden="true"></div>
-                  <div class="ficha-trab-body">
-                    <div class="ficha-trab-head">
-                      <svg class="ficha-trab-ico" viewBox="0 0 16 16" width="12" height="12" aria-hidden="true"><path d="M2 6h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6V4a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
-                      <span>TRABAJO</span>
+                <div class="ficha-hero-col ficha-hero-col--right">
+                  <div class="ficha-hero-animo-inline" data-ficha-animo-row>
+                    <div class="ficha-animo-nube" data-ficha-animo-pill>
+                      <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                      <span class="ficha-animo-val" data-ficha-animo-text></span>
                     </div>
-                    <div class="ficha-trab-val" data-ficha-trabajo-txt></div>
+                  </div>
+                  <div class="ficha-hero-trabajo" data-ficha-trabajo hidden>
+                    <div class="ficha-trab-body">
+                      <div class="ficha-trab-head">
+                        <svg class="ficha-trab-ico" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M2 6h12v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6z" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M5 6V4a1 1 0 011-1h4a1 1 0 011 1v2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg>
+                        <span>TRABAJO</span>
+                      </div>
+                      <div class="ficha-trab-val" data-ficha-trabajo-txt></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -923,15 +926,16 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
           <div class="aht-frame-body">
-            <p class="vida-valor" data-vida-modal-valor>— / 100</p>
-            <div class="vida-valor-bar" data-vida-modal-bar hidden><span style="width:0%"></span></div>
+            <div class="vida-hero">
+              <span class="vida-hero-ico">💚</span>
+              <p class="vida-tit">El corazón del pueblo</p>
+            </div>
             <p class="vida-estado-pista mini" data-vida-modal-estado hidden></p>
             <div class="vida-copy">
-              <p>Esto no es decoración, aunque lo parezca.</p>
-              <p>Tus vecinos tienen una peligrosa tendencia a complicarse la vida y, por algún motivo, ahora son responsabilidad tuya.</p>
-              <p>Haz que las cosas salgan bien y el corazón subirá. Déjalos a su suerte demasiado tiempo y— bueno, procura que esto no llegue a 0.</p>
+              <p>El pueblo vive gracias a sus vecinos. Cada acierto alimenta su corazón, cada error lo debilita.</p>
+              <p>Tus decisiones mantienen el latido. Si lo cuidas bien, cuando esté lleno el pueblo responderá con un regalo.</p>
             </div>
-            <p class="vida-latido mini">—¿Llegas a 100? ¡Hay latido!<br>Sí, conseguir que este pueblo funcione tiene premio. Increíble, pero cierto.</p>
+            <p class="vida-latido mini">Cuando el corazón del pueblo esté lleno, responderá con un regalo.</p>
           </div>
         </div>
       </aside>
@@ -1241,7 +1245,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </span>
           </span>
           <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
-            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Â¿Qui&eacute;n va?</span>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>¿Qui&eacute;n va?</span>
             <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
           </button>
         </div>
@@ -1324,7 +1328,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </span>
           </span>
           <button type="button" class="inicio-evento-cta" data-proximo-evento-cta hidden>
-            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>Â¿Qui&eacute;n va?</span>
+            <span class="inicio-evento-cta-txt" data-proximo-evento-cta-txt>¿Qui&eacute;n va?</span>
             <span class="inicio-evento-cta-spark" aria-hidden="true"></span>
           </button>
         </div>

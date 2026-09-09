@@ -1088,14 +1088,12 @@
   function renderVidaPuebloModal() {
     const vida = cacheEstado && cacheEstado.vida_pueblo ? cacheEstado.vida_pueblo : null;
     const valor = vida && typeof vida.corazon_pct === 'number' ? Math.round(vida.corazon_pct) : 0;
-    const valEl = $('[data-vida-modal-valor]');
-    if (valEl) valEl.textContent = valor + ' / 100';
     const estEl = $('[data-vida-modal-estado]');
     if (estEl) {
       let hint = '';
-      if (vida && vida.critico) hint = 'La cosa se está poniendo fea.';
-      else if (valor >= 80) hint = 'Por ahora el pueblo respira.';
-      else if (valor <= 39) hint = 'Aquí pasa algo, y no es bueno.';
+      if (vida && vida.critico) hint = 'El corazón se debilita...';
+      else if (valor >= 80) hint = 'El pueblo respira con fuerza.';
+      else if (valor <= 39) hint = 'El latido se siente tenue.';
       estEl.textContent = hint;
       estEl.hidden = !hint;
       estEl.className = 'vida-estado-pista mini' + (vida && vida.critico ? ' vida-estado--critica' : (valor >= 80 ? ' vida-estado--alta' : (valor <= 39 ? ' vida-estado--baja' : '')));
@@ -8046,7 +8044,7 @@ function hobbyIconKey(id, texto) {
     if (modoToggle) modoToggle.hidden = esEvt;
     if (seccDonde) seccDonde.hidden = esEvt;
     if (seccCuando) seccCuando.hidden = esEvt;
-    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : 'Â¿Quiénes van?';
+    if (quienTit) quienTit.textContent = esEvt ? 'Apuntar vecinos' : '¿Quiénes van?';
     if (contador) {
       if (esEvt && org.evento_ctx && org.evento_ctx.aforo_total) {
         var act = (org.evento_ctx.participantes_apuntados || []).length;
