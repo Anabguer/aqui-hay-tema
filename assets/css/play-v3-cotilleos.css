@@ -89,7 +89,7 @@
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral {
   flex: 0 0 220px; min-width: 0; padding: 8px 0;
   border-left: 1.5px solid rgba(90,70,50,.12);
-  background: var(--aht-surface-dim, #EEE8FA);
+  background: #b8a9d7;
   overflow-y: auto;
 }
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral:empty { display: none; }
