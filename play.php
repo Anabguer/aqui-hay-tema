@@ -53,6 +53,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
   <link rel="stylesheet" href="assets/css/play-v3-cotilleos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-vecinos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-organizar.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
+  <link rel="stylesheet" href="assets/css/play-v3-necesidades.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 <link rel="stylesheet" href="assets/css/play-v3-enc-int.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
 <link rel="stylesheet" href="assets/css/play-v3-tutorial-ds.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
   <link rel="stylesheet" href="assets/css/play-v3-avisos.css?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>"/>
@@ -580,9 +581,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <h2 class="aht-frame-title">Vecinos del pueblo</h2>
             <button type="button" class="aht-frame-close" aria-label="Cerrar">✕</button>
           </header>
-          <div class="aht-frame-tabs" role="tablist" aria-label="Vecinos y relaciones">
+          <div class="aht-frame-tabs" role="tablist" aria-label="Vecinos, relaciones y cuidados">
             <button type="button" class="aht-frame-tab is-active" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
             <button type="button" class="aht-frame-tab" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
+            <button type="button" class="aht-frame-tab" data-vec-tab="cuidados" role="tab" aria-selected="false">&#127793; CUIDADOS</button>
           </div>
           <div class="aht-frame-body">
             <div class="vec-panel" data-vec-panel="vecinos">
@@ -601,6 +603,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               </label>
               <div class="vec-rel-scroll capa-scroll" data-vec-rel-list></div>
               <p class="mensajitos-hint vec-rel-hint">&#128156; Las relaciones pueden cambiar con cada plan</p>
+            </div>
+            <div class="vec-panel" data-vec-panel="cuidados" hidden>
+              <div class="vec-cuid-resumen" data-vec-cuid-resumen></div>
+              <div class="vec-cuid-list capa-scroll" data-vec-cuid-list></div>
             </div>
           </div>
         </div>
@@ -1098,12 +1104,31 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </header>
           <div class="aht-frame-body">
             <div class="pr-body capa-scroll">
-              <div class="pr-card" data-pr-card>
-                <span class="pr-icon" data-pr-icon aria-hidden="true"></span>
-                <h3 class="pr-title" data-pr-title></h3>
-                <p class="pr-meta" data-pr-meta></p>
-                <p class="pr-detalles" data-pr-detalles></p>
+              <div class="pr-scene">
+                <div class="pr-avatar pr-avatar--left">
+                  <span class="pr-avatar-img" data-pr-avatar-1></span>
+                  <span class="pr-avatar-name" data-pr-avatar-name-1></span>
+                </div>
+                <div class="pr-status" data-pr-status>
+                  <span class="pr-status-emoji" data-pr-status-emoji></span>
+                  <span class="pr-status-label" data-pr-status-label></span>
+                </div>
+                <div class="pr-avatar pr-avatar--right">
+                  <span class="pr-avatar-img" data-pr-avatar-2></span>
+                  <span class="pr-avatar-name" data-pr-avatar-name-2></span>
+                </div>
               </div>
+              <div class="pr-responses">
+                <div class="pr-response pr-response--left" data-pr-resp-1>
+                  <span class="pr-response-icon" data-pr-resp-icon-1></span>
+                  <span class="pr-response-text" data-pr-resp-text-1></span>
+                </div>
+                <div class="pr-response pr-response--right" data-pr-resp-2>
+                  <span class="pr-response-icon" data-pr-resp-icon-2></span>
+                  <span class="pr-response-text" data-pr-resp-text-2></span>
+                </div>
+              </div>
+              <p class="pr-message" data-pr-message></p>
               <div class="pr-contrapropuesta" data-pr-contra hidden>
                 <p class="pr-contra-label">Contra-propuesta:</p>
                 <p class="pr-contra-text" data-pr-contra-text></p>
@@ -1113,7 +1138,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               </div>
             </div>
             <div class="pr-actions">
-              <button type="button" class="pr-btn pr-btn-ok" data-pr-btn-ok>Vale</button>
               <button type="button" class="pr-btn pr-btn-agenda" data-pr-btn-agenda hidden>Ver agenda</button>
             </div>
           </div>

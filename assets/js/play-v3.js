@@ -1274,16 +1274,18 @@
             var n = res.necesidades[nec];
             if (!n) return;
             if (n.valor < worstVal) { worstVal = n.valor; worstBand = n.banda; }
+            if (n.banda === 'bien') return;
             var bandCls = 'necg-need-row--' + n.banda;
             needsHtml += '<div class="necg-need-row ' + bandCls + '">';
             needsHtml += '<span class="necg-need-icon">' + iconos[nec] + '</span>';
             needsHtml += '<span class="necg-need-name">' + nombres[nec] + '</span>';
             needsHtml += barHTML(n.valor, n.banda);
             needsHtml += '</div>';
-            if (n.copy && n.banda !== 'bien') {
+            if (n.copy) {
               needsHtml += '<p class="necg-need-copy">' + esc(n.copy) + '</p>';
             }
           });
+          if (!needsHtml) return;
           var avatarHtml = '';
           var img = res.retrato_url || tokenDe(res.id);
           if (img) {
@@ -1297,7 +1299,7 @@
           html += '<div class="necg-card-needs">' + needsHtml + '</div>';
           html += '</div>';
         });
-        body.innerHTML = html;
+        body.innerHTML = html || '<p class="necg-vacio">Nadie necesita nada ahora mismo.</p>';
       }
 
       function applyFilter(filter) {
@@ -6181,6 +6183,7 @@ function renderInicioMpDuo(misiones, parejas) {
 
   function aplicarVecTabUI() {
     const isRel = vecTabActiva === 'relaciones';
+    const isCuid = vecTabActiva === 'cuidados';
     $$('[data-vec-tab]').forEach(function (btn) {
       const t = btn.getAttribute('data-vec-tab');
       const on = t === vecTabActiva;
@@ -6188,18 +6191,22 @@ function renderInicioMpDuo(misiones, parejas) {
       btn.setAttribute('aria-selected', on ? 'true' : 'false');
     });
     const cuentaWrap = $('[data-vec-cuenta-wrap]');
-    if (cuentaWrap) cuentaWrap.hidden = isRel;
+    if (cuentaWrap) cuentaWrap.hidden = isRel || isCuid;
     $$('[data-vec-panel]').forEach(function (p) {
       p.hidden = p.getAttribute('data-vec-panel') !== vecTabActiva;
     });
     const capa = document.querySelector('[data-aht-screen="vecinos"]');
-    if (capa) capa.classList.toggle('is-relaciones', isRel);
+    if (capa) {
+      capa.classList.toggle('is-relaciones', isRel);
+      capa.classList.toggle('is-cuidados', isCuid);
+    }
   }
 
   function setVecTab(tab) {
-    vecTabActiva = tab === 'relaciones' ? 'relaciones' : 'vecinos';
+    vecTabActiva = ['vecinos', 'relaciones', 'cuidados'].indexOf(tab) >= 0 ? tab : 'vecinos';
     aplicarVecTabUI();
     if (vecTabActiva === 'relaciones') cargarVecRelaciones();
+    if (vecTabActiva === 'cuidados') cargarVecCuidados();
     const root = $('.play-root');
     syncBottomNav((root && root.getAttribute('data-capa')) || '');
   }
@@ -6249,6 +6256,107 @@ function renderInicioMpDuo(misiones, parejas) {
       const nom = nombreDe(id);
       return '<option value="' + esc(id) + '"' + (vecRelPersona === id ? ' selected' : '') + '>' + esc(nom) + '</option>';
     }).join('');
+  }
+
+  /* ── Cuidados tab ─────────────────────────────────────────── */
+  var vecCuidCache = null;
+  var vecCuidCargado = false;
+  var NEC_ORDEN_CUIDADOS = ['social', 'diversion', 'actividad', 'calma'];
+
+  async function cargarVecCuidados() {
+    if (vecCuidCargado) { renderVecCuidados(); return; }
+    var body = $('[data-vec-cuid-list]');
+    var resumen = $('[data-vec-cuid-resumen]');
+    if (resumen) resumen.innerHTML = '';
+    if (body) body.innerHTML = '<p class="lista-vacia">Mirando qui\u00E9n necesita algo\u2026</p>';
+    try {
+      var r = await api('partida.necesidades_global');
+      var data = r.ok && r.necesidades ? r.necesidades : null;
+      if (!data || !data.residentes || !data.residentes.length) {
+        if (body) body.innerHTML = '<p class="lista-vacia">No hay datos de necesidades.</p>';
+        return;
+      }
+      vecCuidCache = data.residentes;
+      vecCuidCargado = true;
+      renderVecCuidados();
+    } catch (e) {
+      if (body) body.innerHTML = '<p class="lista-vacia">No se pudieron cargar los cuidados.</p>';
+    }
+  }
+
+  function renderVecCuidados() {
+    if (!vecCuidCache) return;
+    var ico = NEC_ICONOS || { social: '\ud83e\udd1d', diversion: '\ud83c\udf89', actividad: '\ud83d\udcaa', calma: '\u2615' };
+    var nom = NEC_NOMBRES || { social: 'Social', diversion: 'Diversi\u00f3n', actividad: 'Actividad', calma: 'Calma' };
+    var orden = NEC_ORDEN_CUIDADOS;
+
+    var resumenEl = $('[data-vec-cuid-resumen]');
+    if (resumenEl) {
+      var totales = { social: 0, diversion: 0, actividad: 0, calma: 0 };
+      var count = vecCuidCache.length;
+      vecCuidCache.forEach(function (res) {
+        orden.forEach(function (nec) {
+          var n = res.necesidades[nec];
+          if (n) totales[nec] += n.valor;
+        });
+      });
+      var rhtml = '<h3 class="vec-cuid-resumen-tit">Estado general del pueblo</h3>';
+      rhtml += '<div class="vec-cuid-bars">';
+      orden.forEach(function (nec) {
+        var avg = count ? Math.round(totales[nec] / count) : 0;
+        var banda = avg >= 75 ? 'bien' : avg >= 50 ? 'le_vendria_bien' : avg >= 25 ? 'lo_necesita' : 'en_rojo';
+        rhtml += '<div class="vec-cuid-bar-row">';
+        rhtml += '<span class="vec-cuid-bar-ico" aria-hidden="true">' + (ico[nec] || '') + '</span>';
+        rhtml += '<span class="vec-cuid-bar-nom">' + (nom[nec] || nec) + '</span>';
+        rhtml += '<div class="vec-cuid-bar"><div class="vec-cuid-bar-fill vec-cuid-bar-fill--' + banda + '" style="width:' + avg + '%"></div></div>';
+        rhtml += '<span class="vec-cuid-bar-val">' + avg + '</span>';
+        rhtml += '</div>';
+      });
+      rhtml += '</div>';
+      resumenEl.innerHTML = rhtml;
+    }
+
+    var listEl = $('[data-vec-cuid-list]');
+    if (!listEl) return;
+    var attn = vecCuidCache.filter(function (res) {
+      return orden.some(function (nec) {
+        var n = res.necesidades[nec];
+        return n && n.banda !== 'bien';
+      });
+    });
+    if (!attn.length) {
+      listEl.innerHTML = '<p class="lista-vacia">Todos los vecinos est\u00E1n bien. No hay nada que atender ahora mismo.</p>';
+      return;
+    }
+    var lhtml = '';
+    attn.forEach(function (res) {
+      var worstNec = null, worstVal = 101;
+      orden.forEach(function (nec) {
+        var n = res.necesidades[nec];
+        if (n && n.banda !== 'bien' && n.valor < worstVal) { worstVal = n.valor; worstNec = nec; }
+      });
+      var img = res.retrato_url || tokenDe(res.id);
+      var ini = (res.nombre || '?').charAt(0);
+      lhtml += '<div class="vec-cuid-card" data-residente="' + esc(res.id) + '">';
+      lhtml += '<div class="vec-cuid-card-avatar">';
+      if (img) lhtml += '<img src="' + esc(img) + '" alt=""/>';
+      else lhtml += '<span class="vec-cuid-card-fallback">' + esc(ini) + '</span>';
+      lhtml += '</div>';
+      lhtml += '<div class="vec-cuid-card-info">';
+      lhtml += '<p class="vec-cuid-card-nom">' + esc(res.nombre) + '</p>';
+      if (worstNec) {
+        lhtml += '<p class="vec-cuid-card-nec">' + (ico[worstNec] || '') + ' ' + (nom[worstNec] || worstNec) + ' \u2014 ' + worstVal + '%</p>';
+      }
+      lhtml += '</div></div>';
+    });
+    listEl.innerHTML = lhtml;
+
+    listEl.querySelectorAll('.vec-cuid-card').forEach(function (card) {
+      card.addEventListener('click', function () {
+        var rid = card.getAttribute('data-residente');
+        if (rid) abrirFicha(rid);
+      });
+    });
   }
 
   function vecRelPillTexto(dir) {
