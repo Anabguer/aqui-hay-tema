@@ -8977,36 +8977,93 @@ function hobbyIconKey(id, texto) {
 
   function mostrarResultadoPlan(r) {
     var partsUi = orgSeleccionados();
-    var na = nombreDe(partsUi[0]);
-    var nb = nombreDe(partsUi[1] || '');
-    var lugUi = nombreLugarTitulo(org.lugar, org.lugar);
-    var horaUi = String(org.hora).padStart(2, '0') + ':00';
-    var iconEl = $('[data-pr-icon]');
-    var titleEl = $('[data-pr-title]');
-    var metaEl = $('[data-pr-meta]');
-    var detallesEl = $('[data-pr-detalles]');
+    var idA = partsUi[0] || '';
+    var idB = partsUi[1] || '';
+    var na = nombreDe(idA);
+    var nb = nombreDe(idB);
     var contraEl = $('[data-pr-contra]');
     var contraTxtEl = $('[data-pr-contra-text]');
     var mensajitoEl = $('[data-pr-mensajito]');
     var mensajitoTxtEl = $('[data-pr-mensajito-text]');
     var btnAgenda = $('[data-pr-btn-agenda]');
-    var btnOk = $('[data-pr-btn-ok]');
-    var whoUi = orgModo() === 'solo'
-      ? na
-      : na + ' y ' + nb;
+    var avatar1 = $('[data-pr-avatar-1]');
+    var avatar2 = $('[data-pr-avatar-2]');
+    var name1 = $('[data-pr-avatar-name-1]');
+    var name2 = $('[data-pr-avatar-name-2]');
+    var statusEmoji = $('[data-pr-status-emoji]');
+    var statusLabel = $('[data-pr-status-label]');
+    var respIcon1 = $('[data-pr-resp-icon-1]');
+    var respText1 = $('[data-pr-resp-text-1]');
+    var respIcon2 = $('[data-pr-resp-icon-2]');
+    var respText2 = $('[data-pr-resp-text-2]');
+    var resp1 = $('[data-pr-resp-1]');
+    var resp2 = $('[data-pr-resp-2]');
+    var messageEl = $('[data-pr-message]');
+
+    function setAvatar(el, id, nombre) {
+      if (!el) return;
+      var img = tokenDe(id);
+      if (img) {
+        el.innerHTML = '<img src="' + esc(img) + '" alt="' + esc(nombre) + '"/>';
+      } else {
+        el.innerHTML = '<span class="cara-ini">' + esc((nombre || '?')[0]) + '</span>';
+      }
+    }
+
+    setAvatar(avatar1, idA, na);
+    setAvatar(avatar2, idB, nb);
+    if (name1) name1.textContent = na;
+    if (name2) name2.textContent = nb;
+
+    function getDecision(rid) {
+      if (!r.propuesta || !r.propuesta.reacciones) return null;
+      for (var i = 0; i < r.propuesta.reacciones.length; i++) {
+        var reac = r.propuesta.reacciones[i];
+        if (reac.residente_id === rid) return reac.decision || null;
+      }
+      return null;
+    }
+
+    function setResponse(iconEl, textEl, wrapEl, decision, nombre) {
+      if (!iconEl || !textEl) return;
+      if (!decision || !nombre) {
+        if (wrapEl) wrapEl.hidden = true;
+        return;
+      }
+      wrapEl.hidden = false;
+      wrapEl.className = wrapEl.className.replace(/pr-response--(acepta|rechaza|duda)/g, '').trim();
+      if (decision === 'acepta') {
+        iconEl.textContent = '\uD83D\uDC9A';
+        textEl.textContent = 'Acepta';
+        wrapEl.classList.add('pr-response--acepta');
+      } else if (decision === 'rechaza') {
+        iconEl.textContent = '\uD83D\uDC94';
+        textEl.textContent = 'Rechaza';
+        wrapEl.classList.add('pr-response--rechaza');
+      } else {
+        iconEl.textContent = '\uD83D\uDE10';
+        textEl.textContent = 'Duda';
+        wrapEl.classList.add('pr-response--duda');
+      }
+    }
+
+    var decA = idA ? getDecision(idA) : null;
+    var decB = idB ? getDecision(idB) : null;
+
     if (r.ok && !r.rechazada) {
-      if (iconEl) iconEl.textContent = '\uD83C\uDF89';
-      if (titleEl) titleEl.textContent = '\u00A1Plan en marcha! \uD83C\uDF89';
-      if (metaEl) metaEl.textContent = whoUi + ' \u2014 ' + lugUi;
-      if (detallesEl) detallesEl.textContent = 'D\u00EDa ' + org.dia + ' a las ' + horaUi;
+      if (statusEmoji) statusEmoji.textContent = '\uD83C\uDF89';
+      if (statusLabel) statusLabel.textContent = '\u00A1En marcha!';
+      setResponse(respIcon1, respText1, resp1, decA || 'acepta', na);
+      setResponse(respIcon2, respText2, resp2, decB || 'acepta', nb);
+      if (messageEl) messageEl.textContent = nombreLugarTitulo(org.lugar, org.lugar) + ' \u2014 D\u00EDa ' + org.dia + ' a las ' + String(org.hora).padStart(2, '0') + ':00';
       if (contraEl) contraEl.hidden = true;
       if (btnAgenda) btnAgenda.hidden = false;
-      if (btnOk) btnOk.textContent = 'Genial';
     } else if (r.ok && r.rechazada) {
-      if (iconEl) iconEl.textContent = '\u2615';
-      if (titleEl) titleEl.textContent = 'Hoy Cupido estaba tomando caf\u00E9 \u2615';
-      if (metaEl) metaEl.textContent = whoUi;
-      if (detallesEl) detallesEl.textContent = r.mensaje_ui || 'Esta vez no ha cuajado el plan.';
+      if (statusEmoji) statusEmoji.textContent = '\u2615';
+      if (statusLabel) statusLabel.textContent = 'No ha cuajado';
+      setResponse(respIcon1, respText1, resp1, decA, na);
+      setResponse(respIcon2, respText2, resp2, decB, nb);
+      if (messageEl) messageEl.textContent = r.mensaje_ui || 'Esta vez no ha cuajado el plan.';
       if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
         var contraHora = String(r.contrapropuesta.hora).padStart(2, '0') + ':00';
         if (contraEl) contraEl.hidden = false;
@@ -9015,15 +9072,14 @@ function hobbyIconKey(id, texto) {
         if (contraEl) contraEl.hidden = true;
       }
       if (btnAgenda) btnAgenda.hidden = true;
-      if (btnOk) btnOk.textContent = 'Vale';
     } else {
-      if (iconEl) iconEl.textContent = '\uD83D\uDE05';
-      if (titleEl) titleEl.textContent = 'Uy... el vecino se ha quedado pensando demasiado \uD83D\uDE05';
-      if (metaEl) metaEl.textContent = r.mensaje_ui || 'Ha ocurrido un problemilla t\u00E9cnico. No es un rechazo social \u2014 int\u00E9ntalo de nuevo.';
-      if (detallesEl) detallesEl.textContent = '';
+      if (statusEmoji) statusEmoji.textContent = '\uD83D\uDE05';
+      if (statusLabel) statusLabel.textContent = 'Problemilla';
+      setResponse(respIcon1, respText1, resp1, decA, na);
+      setResponse(respIcon2, respText2, resp2, decB, nb);
+      if (messageEl) messageEl.textContent = r.mensaje_ui || 'Ha ocurrido un problemilla t\u00E9cnico. No es un rechazo social \u2014 int\u00E9ntalo de nuevo.';
       if (contraEl) contraEl.hidden = true;
       if (btnAgenda) btnAgenda.hidden = true;
-      if (btnOk) btnOk.textContent = 'Cerrar';
     }
     if (r.nuevo_mensajito && mensajitoEl && mensajitoTxtEl) {
       mensajitoEl.hidden = false;
@@ -10188,10 +10244,8 @@ var finOk = $('[data-tut-fin-ok]');
   });
   if (orgGo) orgGo.addEventListener('click', proponer);
 
-  var prBtnOk = $('[data-pr-btn-ok]');
   var prBtnAgenda = $('[data-pr-btn-agenda]');
   var prClose = $('[data-pr-close]');
-  if (prBtnOk) prBtnOk.addEventListener('click', cerrarResultadoPlan);
   if (prClose) prClose.addEventListener('click', cerrarResultadoPlan);
   if (prBtnAgenda) prBtnAgenda.addEventListener('click', function () {
     setCapa('agenda');
