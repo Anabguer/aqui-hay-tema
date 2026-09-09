@@ -1256,7 +1256,8 @@
       function barHTML(valor, banda) {
         var pct = Math.max(0, Math.min(100, valor));
         var cls = 'necg-bar-fill--' + banda;
-        return '<div class="necg-bar"><div class="necg-bar-fill ' + cls + '" style="width:' + pct + '%"></div></div>';
+        return '<div class="necg-bar"><div class="necg-bar-fill ' + cls + '" style="width:' + pct + '%"></div></div>'
+          + '<span class="necg-need-val">' + Math.round(pct) + '%</span>';
       }
 
       function renderCards(residents) {
@@ -1279,6 +1280,9 @@
             needsHtml += '<span class="necg-need-name">' + nombres[nec] + '</span>';
             needsHtml += barHTML(n.valor, n.banda);
             needsHtml += '</div>';
+            if (n.copy && n.banda !== 'bien') {
+              needsHtml += '<p class="necg-need-copy">' + esc(n.copy) + '</p>';
+            }
           });
           var avatarHtml = '';
           var img = res.retrato_url || tokenDe(res.id);
@@ -1297,21 +1301,87 @@
       }
 
       function applyFilter(filter) {
+        var filtered;
         if (filter === 'todos') {
-          renderCards(allResidents);
+          filtered = allResidents;
         } else if (filter === 'necesitan') {
-          renderCards(allResidents.filter(function (res) {
+          filtered = allResidents.filter(function (res) {
             return orden.some(function (nec) {
               var n = res.necesidades[nec];
               return n && (n.banda === 'lo_necesita' || n.banda === 'en_rojo');
             });
-          }));
+          });
         } else {
-          renderCards(allResidents.filter(function (res) {
+          filtered = allResidents.filter(function (res) {
             var n = res.necesidades[filter];
             return n && n.banda !== 'bien';
-          }));
+          });
         }
+        renderCards(filtered);
+        renderAlertas();
+      }
+
+      function renderAlertas() {
+        var alertas = [];
+        allResidents.forEach(function (res) {
+          var worstNec = null;
+          var worstVal = 101;
+          var worstBanda = 'bien';
+          orden.forEach(function (nec) {
+            var n = res.necesidades[nec];
+            if (!n) return;
+            if (n.banda !== 'bien' && n.valor < worstVal) {
+              worstVal = n.valor;
+              worstBanda = n.banda;
+              worstNec = nec;
+            }
+          });
+          if (worstNec) {
+            alertas.push({
+              id: res.id,
+              nombre: res.nombre,
+              retrato_url: res.retrato_url,
+              necId: worstNec,
+              necNombre: nombres[worstNec],
+              necIcono: iconos[worstNec],
+              valor: worstVal,
+              banda: worstBanda
+            });
+          }
+        });
+        alertas.sort(function (a, b) { return a.valor - b.valor; });
+        var alertEl = body.querySelector('.necg-alertas');
+        if (!alertEl) {
+          alertEl = document.createElement('div');
+          alertEl.className = 'necg-alertas';
+          body.appendChild(alertEl);
+        }
+        if (!alertas.length) {
+          alertEl.innerHTML = '';
+          alertEl.hidden = true;
+          return;
+        }
+        alertEl.hidden = false;
+        var ahtml = '<h4 class="necg-alertas-title">Vecinos que necesitan atenci\u00f3n</h4>';
+        alertas.forEach(function (a) {
+          var avHtml = '';
+          var img = a.retrato_url || tokenDe(a.id);
+          if (img) {
+            avHtml = '<span class="necg-alerta-avatar"><img src="' + esc(img) + '" alt=""/></span>';
+          } else {
+            var ini = (a.nombre || '?').charAt(0);
+            avHtml = '<span class="necg-alerta-avatar necg-alerta-avatar--fallback">' + esc(ini) + '</span>';
+          }
+          ahtml += '<div class="necg-alerta-item" data-necg-res="' + esc(a.id) + '">';
+          ahtml += avHtml;
+          ahtml += '<div class="necg-alerta-info">';
+          ahtml += '<span class="necg-alerta-nom">' + esc(a.nombre) + '</span>';
+          ahtml += '<span class="necg-alerta-sep">\u2014</span>';
+          ahtml += '<span class="necg-alerta-nec necg-alerta-nec--' + a.banda + '">' + a.necIcono + ' ' + a.necNombre + ' (' + Math.round(a.valor) + '%)</span>';
+          ahtml += '</div>';
+          ahtml += '</div>';
+        });
+        alertEl.innerHTML = ahtml;
       }
 
       applyFilter(initialFilter);

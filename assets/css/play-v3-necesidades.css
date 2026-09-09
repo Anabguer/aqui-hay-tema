@@ -147,8 +147,41 @@
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-name {
   font: 600 .72rem/1.2 Nunito, sans-serif;
   color: var(--ds-ink-soft, #594839);
-  width: 80px;
+  width: 70px;
   flex: 0 0 auto;
+}
+
+/* ── Valor numérico ─────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-val {
+  font: 700 .68rem/1 Nunito, sans-serif;
+  color: var(--ds-ink-soft, #594839);
+  width: 30px;
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--bien .necg-need-val {
+  color: var(--ds-green-deep, #4a7a52);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--le_vendria_bien .necg-need-val {
+  color: var(--ds-mustard-deep, #B98A2F);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--lo_necesita .necg-need-val {
+  color: var(--ds-coral-deep, #C9563E);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--en_rojo .necg-need-val {
+  color: var(--ds-pink-deep, #C42B4A);
+}
+
+/* ── Copy narrativo de necesidad ─────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-copy {
+  font: 500 .65rem/1.2 Nunito, sans-serif;
+  color: var(--ds-text-muted, #7a6a5c);
+  padding: 0 0 2px 28px;
+  font-style: italic;
 }
 
 /* ── Barra de necesidad (contenedor) ────────────────────────── */
@@ -203,5 +236,118 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--en_rojo .necg-need-name {
+  color: var(--ds-pink-deep, #C42B4A);
+}
+
+/* ── Separador ───────────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-sep {
+  border: none;
+  border-top: 1.5px solid var(--ds-ink-soft, #594839);
+  opacity: .2;
+  margin: 12px 0;
+}
+
+/* ── Zona de alertas (vecinos que necesitan atención) ────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas {
+  margin-top: 4px;
+  padding-bottom: 8px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas-title {
+  font: 700 .78rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #2a2218);
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas-title::before {
+  content: "\u26a0\ufe0f";
+  font-size: .85rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: var(--ds-paper-warm, #f8f0de);
+  border: 1px solid var(--ds-ink-soft, #594839);
+  margin-bottom: 5px;
+  cursor: pointer;
+  transition: background .12s;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-item:hover {
+  background: var(--ds-lavender-soft, #ece6f8);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-avatar {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 999px;
+  overflow: hidden;
+  border: 1px solid var(--ds-ink-soft, #594839);
+  background: var(--ds-paper-warm, #f8f0de);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-avatar--fallback {
+  font: 700 .6rem/1 Nunito, sans-serif;
+  color: var(--ds-ink-soft, #594839);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-info {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nom {
+  font: 700 .72rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #2a2218);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-sep {
+  color: var(--ds-text-muted, #7a6a5c);
+  font-size: .72rem;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec {
+  font: 600 .65rem/1.2 Nunito, sans-serif;
+  padding: 1px 6px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec--le_vendria_bien {
+  background: rgba(185, 138, 47, .15);
+  color: var(--ds-mustard-deep, #B98A2F);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec--lo_necesita {
+  background: rgba(224, 169, 63, .18);
+  color: var(--ds-coral-deep, #C9563E);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec--en_rojo {
+  background: rgba(196, 43, 74, .15);
   color: var(--ds-pink-deep, #C42B4A);
 }
