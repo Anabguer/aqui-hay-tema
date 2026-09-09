@@ -948,7 +948,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="buzon-toolbar" data-buzon-leer-todos-wrap hidden>
             <button type="button" class="buzon-mark-all" data-buzon-leer-todos>
               <span class="buzon-mark-all-box" aria-hidden="true"></span>
-              <span>Marcar todo como le&iacute;do</span>
+              <span>Todo le&iacute;do</span>
             </button>
           </div>
           <div class="aht-frame-body">

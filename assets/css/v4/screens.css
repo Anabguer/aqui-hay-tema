@@ -190,8 +190,8 @@
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
   margin-left: auto;
   display: flex;
-  justify-content: center;
-  padding: 0 16px;
+  justify-content: flex-end;
+  padding: 6px 16px 2px;
 }
 
 .aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
@@ -212,17 +212,18 @@
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
   border: 1.5px solid var(--ds-pink-deep, #C42B4A);
   background: var(--ds-pink-soft, #F9DCE4);
-  font: 700 0.78rem/1 "Nunito", sans-serif;
+  font: 700 0.7rem/1 "Nunito", sans-serif;
   color: var(--ds-ink-soft, #6B5138);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 6px 14px;
+  gap: 4px;
+  padding: 4px 10px;
   border-radius: 999px;
   white-space: nowrap;
   transition: background .15s, border-color .15s, color .15s;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transform: rotate(-1.5deg);
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all:hover {
@@ -237,9 +238,7 @@
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all::before {
-  content: '✓✓';
-  font-size: 0.85em;
-  line-height: 1;
+  content: none;
 }
 
 .aht-screen[data-aht-screen="vecinos"] .aht-frame-body {
