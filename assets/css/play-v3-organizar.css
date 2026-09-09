@@ -1514,28 +1514,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: .8rem;
+  gap: .6rem;
   width: 100%;
-  padding: 1rem .5rem;
+  padding: .8rem .5rem .4rem;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .4rem;
-  flex: 0 1 100px;
+  gap: .3rem;
+  flex: 0 1 64px;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img {
-  width: 72px;
-  height: 72px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  border: 2.5px solid var(--aht-border, #D8D1DE);
+  border: 2px solid var(--aht-border, #D8D1DE);
   background: var(--aht-shell-bg, #FCFBFE);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(48,40,58,.1);
+  box-shadow: 0 2px 4px rgba(48,40,58,.1);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img img {
   width: 100%;
@@ -1543,14 +1543,14 @@
   object-fit: cover;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img .cara-ini {
-  font: 700 1.6rem/1 var(--aht-font-ui, "Nunito", sans-serif);
+  font: 700 1.1rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text-muted, #75634F);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-name {
-  font: 700 .78rem/1 var(--aht-font-ui, "Nunito", sans-serif);
+  font: 700 .72rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text, #33261E);
   text-align: center;
-  max-width: 90px;
+  max-width: 70px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1561,20 +1561,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .2rem;
+  gap: .15rem;
   flex: 0 0 auto;
-  min-width: 50px;
+  min-width: 40px;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
-  font-size: 2rem;
+  font-size: 1.5rem;
   line-height: 1;
   filter: drop-shadow(0 2px 4px rgba(0,0,0,.08));
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-label {
-  font: 600 .65rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
+  font: 600 .6rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text-muted, #75634F);
   text-align: center;
-  max-width: 80px;
+  max-width: 70px;
 }
 
 /* Respuestas individuales */
@@ -1582,21 +1582,21 @@
   display: flex;
   justify-content: space-around;
   width: 100%;
-  padding: .3rem 1rem .6rem;
+  padding: .2rem 1rem .4rem;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-response {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .2rem;
+  gap: .15rem;
   flex: 1;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-response-icon {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   line-height: 1;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-response-text {
-  font: 600 .72rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
+  font: 600 .68rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
   text-align: center;
 }
 .pr-response--acepta .pr-response-icon { color: #2d8a4e; }
@@ -1608,11 +1608,11 @@
 
 /* Mensaje contextual */
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-message {
-  font: 500 .82rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
+  font: 500 .78rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text-muted, #75634F);
   text-align: center;
   margin: 0;
-  padding: 0 .5rem .5rem;
+  padding: 0 .5rem .3rem;
   opacity: .85;
 }
 
@@ -1687,13 +1687,13 @@
 /* Responsive móvil */
 @media (max-width: 480px) {
   .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-scene {
-    gap: .5rem;
+    gap: .4rem;
   }
   .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img {
-    width: 60px;
-    height: 60px;
+    width: 42px;
+    height: 42px;
   }
   .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
   }
 }
