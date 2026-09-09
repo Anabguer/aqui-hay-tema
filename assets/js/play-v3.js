@@ -1950,7 +1950,7 @@
         const p = prots[i];
         ph += '<span class="histdet-protagonista">';
         if (p.retrato) {
-          ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+          ph += '<span class="histdet-protagonista-avatar-wrap"><img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/></span>';
         } else {
           ph += '<div class="histdet-protagonista-avatar histdet-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
         }
@@ -2067,7 +2067,7 @@
           const p = prots[i];
           ph += '<span class="histdet-protagonista">';
           if (p.retrato) {
-            ph += '<img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/>';
+            ph += '<span class="histdet-protagonista-avatar-wrap"><img class="histdet-protagonista-avatar" src="' + esc(p.retrato) + '" alt="' + esc(p.nombre) + '"/></span>';
           } else {
             ph += '<div class="histdet-protagonista-avatar histdet-protagonista-avatar--fallback">' + esc((p.nombre || '?')[0]) + '</div>';
           }
@@ -6440,6 +6440,20 @@ function canonEmoId(id) {
     return map[canonEmoId(estadoId)] || map.neutro;
   }
 
+  function animoDecoHtml(emoId) {
+    const decos = {
+      triste: '<span class="animo-deco-item animo-deco-lluvia" aria-hidden="true">&#x1F4A7;</span>' +
+              '<span class="animo-deco-item animo-deco-lluvia2" aria-hidden="true">&#x1F4A7;</span>' +
+              '<span class="animo-deco-item animo-deco-lluvia3" aria-hidden="true">&#x1F4A7;</span>',
+      alegre: '<span class="animo-deco-item animo-deco-estrella" aria-hidden="true">&#x2B50;</span>' +
+              '<span class="animo-deco-item animo-deco-estrella2" aria-hidden="true">&#x2B50;</span>' +
+              '<span class="animo-deco-item animo-deco-confeti" aria-hidden="true">&#x1F389;</span>',
+      enfadado: '<span class="animo-deco-item animo-deco-rayo" aria-hidden="true">&#x26A1;</span>' +
+                '<span class="animo-deco-item animo-deco-rayo2" aria-hidden="true">&#x1F4A5;</span>'
+    };
+    return decos[emoId] || '';
+  }
+
   function htmlAnimoModal(exp, nom) {
     const estadoTxt = esc(String(exp.texto_estado || ''));
     const pensamiento = esc(exp.pensamiento || '');
@@ -6449,10 +6463,12 @@ function canonEmoId(id) {
     return '<div class="animo-scene animo-scene--' + esc(emoId) + '">' +
       '<div class="animo-composition">' +
       '<div class="animo-retrato">' +
+      '<div class="animo-deco-top">' + animoDecoHtml(emoId) + '</div>' +
       '<div class="animo-avatar">' + img + '</div>' +
       '<h3 class="animo-nombre">' + esc(nom) + '</h3>' +
       '</div>' +
       '<div class="animo-nube animo-nube--' + esc(emoId) + '">' +
+      '<div class="animo-emoji-hero" aria-hidden="true">' + emoModalIcono(emoId) + '</div>' +
       '<div class="animo-pensamiento animo-pensamiento--' + esc(emoId) + '">' +
       (pensamiento ? '<p>' + pensamiento + '</p>' : '') +
       '</div>' +

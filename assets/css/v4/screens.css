@@ -439,7 +439,7 @@
   height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  background: #fffdf8;
+  background: transparent;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara img {
@@ -964,7 +964,7 @@
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  background: #FDE8EE;
+  background: transparent;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1383,8 +1383,8 @@
   flex: 1;
 }
 
-/* ── ESTADO DE ANIMO — modal "cabeza del vecino" ──────────── */
-/* Composición orgánica: retrato protagonista + nube de pensamiento */
+/* ── ESTADO DE ANIMO — scrapbook nube de pensamiento ──────── */
+/* Composición: avatar protagonista → nube conectada → decoración emocional */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-scene {
   display: flex;
   align-items: center;
@@ -1403,13 +1403,107 @@
   position: relative;
 }
 
+/* ── Retrato protagonista ──────────────────────────────────── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-retrato {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   z-index: 2;
   position: relative;
+}
+
+/* Decoración flotante arriba del avatar */
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-top {
+  position: relative;
+  width: 80px;
+  height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-item {
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0.7;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-lluvia {
+  left: 0;
+  top: 0;
+  animation: animo-lluvia-float 3s ease-in-out infinite;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-lluvia2 {
+  left: 30px;
+  top: 4px;
+  font-size: 0.8rem;
+  animation: animo-lluvia-float 3s ease-in-out infinite 0.8s;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-lluvia3 {
+  right: 0;
+  top: 2px;
+  font-size: 0.7rem;
+  animation: animo-lluvia-float 3s ease-in-out infinite 1.6s;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-estrella {
+  left: 0;
+  top: 0;
+  font-size: 1.1rem;
+  animation: animo-star-spin 4s linear infinite;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-estrella2 {
+  right: 0;
+  top: 2px;
+  font-size: 0.85rem;
+  animation: animo-star-spin 4s linear infinite reverse 1s;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-confeti {
+  left: 50%;
+  top: -2px;
+  transform: translateX(-50%);
+  font-size: 0.9rem;
+  animation: animo-confeti-bounce 2s ease-in-out infinite 0.5s;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-rayo {
+  left: 4px;
+  top: 2px;
+  font-size: 1.2rem;
+  animation: animo-rayo-shake 1.5s ease-in-out infinite;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-deco-rayo2 {
+  right: 4px;
+  top: 0;
+  font-size: 0.9rem;
+  animation: animo-rayo-shake 1.5s ease-in-out infinite 0.7s;
+}
+
+@keyframes animo-lluvia-float {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(4px); opacity: 0.5; }
+}
+
+@keyframes animo-star-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes animo-confeti-bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0) rotate(0deg); }
+  50% { transform: translateX(-50%) translateY(-3px) rotate(10deg); }
+}
+
+@keyframes animo-rayo-shake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-avatar {
@@ -1422,6 +1516,18 @@
   background: #fff;
   flex-shrink: 0;
   margin-bottom: -18px;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-scene--triste .animo-avatar {
+  box-shadow: 0 4px 12px rgba(122, 106, 154, 0.2), 0 0 0 3px #fff, 0 0 0 6px rgba(122, 106, 154, 0.35);
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-scene--alegre .animo-avatar {
+  box-shadow: 0 4px 12px rgba(74, 122, 82, 0.2), 0 0 0 3px #fff, 0 0 0 6px rgba(74, 122, 82, 0.35);
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-scene--enfadado .animo-avatar {
+  box-shadow: 0 4px 12px rgba(196, 43, 74, 0.2), 0 0 0 3px #fff, 0 0 0 6px rgba(196, 43, 74, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-avatar img {
@@ -1439,6 +1545,7 @@
   text-align: center;
 }
 
+/* ── Nube de pensamiento conectada al avatar ───────────────── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-nube {
   position: relative;
   width: 100%;
@@ -1450,6 +1557,7 @@
   z-index: 1;
 }
 
+/* Triángulo conector nube → avatar */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-nube::before {
   content: '';
   position: absolute;
@@ -1463,8 +1571,50 @@
   filter: drop-shadow(0 -1px 1px rgba(180, 150, 110, 0.1));
 }
 
+/* ── Emoji emocional protagonista ──────────────────────────── */
+.aht-screen[data-aht-screen="ficha_animo"] .animo-emoji-hero {
+  display: flex;
+  justify-content: center;
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--triste .animo-emoji-hero {
+  animation: animo-emoji-sad-pulse 3s ease-in-out infinite;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--alegre .animo-emoji-hero {
+  animation: animo-emoji-happy-bounce 2s ease-in-out infinite;
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--enfadado .animo-emoji-hero {
+  animation: animo-emoji-angry-shake 1.5s ease-in-out infinite;
+}
+
+@keyframes animo-emoji-sad-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+@keyframes animo-emoji-happy-bounce {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-4px) rotate(-3deg); }
+  75% { transform: translateY(-2px) rotate(3deg); }
+}
+
+@keyframes animo-emoji-angry-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-4deg); }
+  40% { transform: rotate(4deg); }
+  60% { transform: rotate(-2deg); }
+  80% { transform: rotate(2deg); }
+}
+
+/* ── Variantes de nube por emoción ─────────────────────────── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-nube--triste {
-  background: linear-gradient(135deg, #f8f4fc 0%, #f0eaf8 100%);
+  background: linear-gradient(145deg, #f8f4fc 0%, #f0eaf8 50%, #e8dff5 100%);
   box-shadow: 0 2px 12px rgba(122, 106, 154, 0.1), inset 0 0 0 1px rgba(122, 106, 154, 0.15);
 }
 
@@ -1472,17 +1622,8 @@
   background: #f8f4fc;
 }
 
-.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--enfadado {
-  background: linear-gradient(135deg, #fef4f5 0%, #fceaec 100%);
-  box-shadow: 0 2px 12px rgba(196, 43, 74, 0.1), inset 0 0 0 1px rgba(196, 43, 74, 0.15);
-}
-
-.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--enfadado::before {
-  background: #fef4f5;
-}
-
 .aht-screen[data-aht-screen="ficha_animo"] .animo-nube--alegre {
-  background: linear-gradient(135deg, #f2f9f0 0%, #eaf5e6 100%);
+  background: linear-gradient(145deg, #f2f9f0 0%, #eaf5e6 50%, #e2f0dc 100%);
   box-shadow: 0 2px 12px rgba(74, 122, 82, 0.1), inset 0 0 0 1px rgba(74, 122, 82, 0.15);
 }
 
@@ -1490,15 +1631,24 @@
   background: #f2f9f0;
 }
 
+.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--enfadado {
+  background: linear-gradient(145deg, #fef4f5 0%, #fceaec 50%, #fbe5e8 100%);
+  box-shadow: 0 2px 12px rgba(196, 43, 74, 0.1), inset 0 0 0 1px rgba(196, 43, 74, 0.15);
+}
+
+.aht-screen[data-aht-screen="ficha_animo"] .animo-nube--enfadado::before {
+  background: #fef4f5;
+}
+
+/* ── Pensamiento (frase en primera persona) ────────────────── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-pensamiento {
   position: relative;
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-pensamiento p {
-  font: 500 0.95rem/1.6 "Nunito", sans-serif;
+  font: italic 500 1rem/1.65 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0;
-  font-style: italic;
   text-align: center;
 }
 
@@ -1514,6 +1664,7 @@
   color: var(--vec-green, #4a7a52);
 }
 
+/* ── Meta: estado + temporalidad ───────────────────────────── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-meta {
   display: flex;
   flex-direction: column;
@@ -1521,44 +1672,45 @@
   gap: 6px;
   margin-top: 14px;
   padding-top: 12px;
-  border-top: 1px solid rgba(180, 150, 110, 0.12);
+  border-top: 1px dashed rgba(180, 150, 110, 0.2);
 }
 
+/* ── Pill de estado emocional (etiqueta grande y visible) ──── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-estado {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 4px 14px;
+  padding: 5px 16px;
   border-radius: 999px;
-  font: 700 0.72rem/1 "Nunito", sans-serif;
+  font: 700 0.78rem/1 "Nunito", sans-serif;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   transform: rotate(-2deg);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-estado--alegre {
   background: #E8F5E3;
   color: var(--vec-green, #4a7a52);
-  border: 2px solid rgba(74, 122, 82, 0.3);
+  border: 2px solid rgba(74, 122, 82, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-estado--triste {
   background: #E6D9F3;
   color: var(--vec-lavender-deep, #7a6a9a);
-  border: 2px solid rgba(122, 106, 154, 0.3);
+  border: 2px solid rgba(122, 106, 154, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-estado--enfadado {
   background: #FBE5E8;
   color: var(--vec-red, #c42b4a);
-  border: 2px solid rgba(196, 43, 74, 0.3);
+  border: 2px solid rgba(196, 43, 74, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-estado--neutro {
   background: #FEF5E0;
   color: #b4966e;
-  border: 2px solid rgba(180, 150, 110, 0.3);
+  border: 2px solid rgba(180, 150, 110, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha_animo"] .animo-estado-ico {
@@ -1572,6 +1724,7 @@
   height: 100%;
 }
 
+/* ── Temporalidad (pequeña debajo) ─────────────────────────── */
 .aht-screen[data-aht-screen="ficha_animo"] .animo-desde {
   font: 600 0.7rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
@@ -1749,9 +1902,23 @@
     font-size: 1.2rem;
   }
 
+  .aht-screen[data-aht-screen="ficha_animo"] .animo-deco-top {
+    width: 60px;
+    height: 22px;
+  }
+
+  .aht-screen[data-aht-screen="ficha_animo"] .animo-deco-item {
+    font-size: 0.85rem;
+  }
+
   .aht-screen[data-aht-screen="ficha_animo"] .animo-nube {
     padding: 22px 16px 14px;
     border-radius: 20px 20px 20px 6px;
+  }
+
+  .aht-screen[data-aht-screen="ficha_animo"] .animo-emoji-hero {
+    font-size: 2.4rem;
+    margin-bottom: 8px;
   }
 
   .aht-screen[data-aht-screen="ficha_animo"] .animo-pensamiento p {
@@ -1760,8 +1927,8 @@
   }
 
   .aht-screen[data-aht-screen="ficha_animo"] .animo-estado {
-    padding: 3px 10px;
-    font-size: 0.68rem;
+    padding: 4px 12px;
+    font-size: 0.72rem;
   }
 
   .aht-screen[data-aht-screen="ficha_animo"] .animo-desde {
@@ -1781,8 +1948,22 @@
     font-size: 1.1rem;
   }
 
+  .aht-screen[data-aht-screen="ficha_animo"] .animo-deco-top {
+    width: 50px;
+    height: 18px;
+  }
+
+  .aht-screen[data-aht-screen="ficha_animo"] .animo-deco-item {
+    font-size: 0.75rem;
+  }
+
   .aht-screen[data-aht-screen="ficha_animo"] .animo-nube {
     padding: 18px 12px 12px;
+  }
+
+  .aht-screen[data-aht-screen="ficha_animo"] .animo-emoji-hero {
+    font-size: 2rem;
+    margin-bottom: 6px;
   }
 
   .aht-screen[data-aht-screen="ficha_animo"] .animo-pensamiento p {
