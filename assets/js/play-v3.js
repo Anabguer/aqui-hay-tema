@@ -4557,15 +4557,15 @@ function renderInicioMpDuo(misiones, parejas) {
       if (d.abierto_ahora === true) { estado = 'Abierto'; estadoCls = 'org-lugar-estado--abierto'; }
       else if (d.abierto_ahora === false) { estado = 'Cerrado'; estadoCls = 'org-lugar-estado--cerrado'; }
       var horario = d.horario || '';
+      var necHtml = necLugarChipsHtml(d.necesidades);
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'org-lc' + (on ? ' is-on' : '');
+      btn.className = 'org-lc' + (on ? ' is-on' : '') + (necHtml ? ' has-necs' : '');
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       btn.setAttribute('data-org-lug-id', d.id);
       var imgHtml = img
         ? '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>'
         : '<span class="org-lc-fallback" aria-hidden="true"></span>';
-      var necHtml = necLugarChipsHtml(d.necesidades);
       btn.innerHTML =
         '<span class="org-lc-art">' + imgHtml + '</span>' +
         '<span class="org-lc-body">' +
