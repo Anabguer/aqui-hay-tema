@@ -167,6 +167,10 @@
   opacity: 1;
 }
 
+.aht-screen[data-aht-screen="buzon"] .aht-frame {
+  position: relative;
+}
+
 .aht-screen[data-aht-screen="buzon"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
@@ -188,10 +192,12 @@
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-  margin-left: auto;
+  position: absolute;
+  top: 36px;
+  right: 16px;
+  z-index: 1;
   display: flex;
   justify-content: flex-end;
-  padding: 14px 16px 2px;
 }
 
 .aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
@@ -224,7 +230,7 @@
   white-space: nowrap;
   transition: background .15s, border-color .15s, color .15s;
   box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .25);
-  transform: translateY(-6px) rotate(3deg);
+  transform: rotate(3deg);
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all:hover {
@@ -232,7 +238,7 @@
   border-color: var(--ds-green-deep, #4a7a52);
   color: var(--ds-green-deep, #4a7a52);
   box-shadow: 2px 3px 0 rgba(74, 122, 82, .25);
-  transform: translateY(-6px) rotate(1deg);
+  transform: rotate(1deg);
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all-box {
