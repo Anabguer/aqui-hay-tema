@@ -949,7 +949,7 @@
   background: rgba(80, 120, 180, 0.35);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.15rem;
   font-weight: 700;
@@ -958,7 +958,7 @@
   line-height: 1.2;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit-sm {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit-sm {
   font-size: 0.95rem;
 }
 
@@ -967,7 +967,7 @@
   z-index: 2;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
   display: inline-block;
   padding: 4px 10px;
   border-radius: 999px;
@@ -979,13 +979,13 @@
   white-space: nowrap;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
   background: rgba(255, 255, 255, 0.5);
   border-style: dashed;
   color: var(--ds-text-muted, #75634F);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -996,16 +996,16 @@
   margin-bottom: 6px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-card:last-child {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card:last-child {
   margin-bottom: 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.is-desconocido {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.is-desconocido {
   background: rgba(255, 255, 255, 0.4);
   border-style: dashed;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-ico {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-ico {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -1014,17 +1014,17 @@
   justify-content: center;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-svg {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-svg {
   width: 22px;
   height: 22px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab {
   font: 600 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab.is-desconocido {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab.is-desconocido {
   color: var(--ds-text-muted, #75634F);
 }
 
@@ -1046,7 +1046,7 @@
   gap: 4px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-pref-line {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line {
   font: 600 0.82rem/1.3 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0;
@@ -1056,7 +1056,7 @@
   margin-right: 4px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-row {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1067,20 +1067,20 @@
   margin-bottom: 6px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-row:last-child {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row:last-child {
   margin-bottom: 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis {
   border-color: rgba(196, 43, 74, 0.25);
   background: #fff5f7;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-compact {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-compact {
   padding: 6px 8px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-cara {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -1092,43 +1092,43 @@
   justify-content: center;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-cara img {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-cara span {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara span {
   font: 700 0.85rem/1 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-main {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-main {
   flex: 1;
   min-width: 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-nom {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-nom {
   font: 700 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin-bottom: 3px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-bar {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-bar {
   height: 6px;
   border-radius: 3px;
   background: #E8F5E3;
   overflow: hidden;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-bar span {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-bar span {
   display: block;
   height: 100%;
   border-radius: 3px;
   background: var(--vec-green, #4a7a52);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
   font: 700 0.62rem/1 "Nunito", sans-serif;
   padding: 2px 6px;
   border-radius: 999px;
@@ -1138,12 +1138,12 @@
   flex-shrink: 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis .ficha-rel-etiq {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis .ficha-rel-etiq {
   background: #fbe5e8;
   color: var(--vec-red, #c42b4a);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-ver-mas {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-ver-mas {
   display: block;
   width: 100%;
   padding: 8px 12px;
@@ -1157,13 +1157,13 @@
   text-align: center;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-ver-mas:hover {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-ver-mas:hover {
   background: var(--vec-pink, #e88ba8);
   color: #fff;
   border-style: solid;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-plan-item {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1174,7 +1174,7 @@
   margin-bottom: 6px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-plan-item:last-child {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item:last-child {
   margin-bottom: 0;
 }
 
