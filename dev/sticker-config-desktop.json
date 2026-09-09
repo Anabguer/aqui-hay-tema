@@ -1,0 +1,125 @@
+{
+  "desktop": [
+    {
+      "id": "stk_3",
+      "sticker": "sparkle",
+      "x": 1249,
+      "y": 102,
+      "width": 44,
+      "rotation": 0
+    },
+    {
+      "id": "stk_5",
+      "sticker": "rainbow",
+      "x": 1276,
+      "y": 764,
+      "width": 114,
+      "rotation": 0
+    },
+    {
+      "id": "stk_9",
+      "sticker": "house",
+      "x": 1107,
+      "y": 50,
+      "width": 67,
+      "rotation": 0
+    },
+    {
+      "id": "stk_12",
+      "sticker": "bird",
+      "x": 1490,
+      "y": -5,
+      "width": 44,
+      "rotation": 0
+    },
+    {
+      "id": "stk_13",
+      "sticker": "star-malva",
+      "x": 465,
+      "y": 1,
+      "width": 28,
+      "rotation": 0
+    },
+    {
+      "id": "stk_14",
+      "sticker": "star-azul",
+      "x": 452,
+      "y": 33,
+      "width": 21,
+      "rotation": 0
+    },
+    {
+      "id": "stk_16",
+      "sticker": "balloon",
+      "x": 1294,
+      "y": 758,
+      "width": 29,
+      "rotation": -20
+    },
+    {
+      "id": "stk_19",
+      "sticker": "heart",
+      "x": 1160,
+      "y": 38,
+      "width": 25,
+      "rotation": 21
+    },
+    {
+      "id": "stk_20",
+      "sticker": "heart",
+      "x": 1101,
+      "y": 32,
+      "width": 21,
+      "rotation": -23
+    },
+    {
+      "id": "stk_21",
+      "sticker": "balloon",
+      "x": 1355,
+      "y": 779,
+      "width": 26,
+      "rotation": 10
+    },
+    {
+      "id": "stk_26",
+      "sticker": "coffee",
+      "x": 126,
+      "y": 603,
+      "width": 44,
+      "rotation": 9
+    },
+    {
+      "id": "stk_28",
+      "sticker": "sun",
+      "x": 1596,
+      "y": 799,
+      "width": 44,
+      "rotation": 0
+    },
+    {
+      "id": "stk_29",
+      "sticker": "music",
+      "x": 329,
+      "y": 547,
+      "width": 34,
+      "rotation": 20
+    },
+    {
+      "id": "stk_34",
+      "sticker": "sun",
+      "x": 1310,
+      "y": 15,
+      "width": 44,
+      "rotation": 0
+    },
+    {
+      "id": "stk_37",
+      "sticker": "moon",
+      "x": 5,
+      "y": 59,
+      "width": 44,
+      "rotation": -18
+    }
+  ],
+  "mobile": []
+}

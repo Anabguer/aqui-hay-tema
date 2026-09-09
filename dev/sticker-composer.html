@@ -24,6 +24,7 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
 #toolbar button.active{background:#6b8f5e;border-color:#6b8f5e}
 #toolbar .protect-btn.active{background:#d4a843;border-color:#d4a843;color:#1a1714}
 #toolbar .export-btn{background:#4a7fb5;border-color:#4a7fb5;color:#fff;font-weight:700}
+#import-btn{background:#5a9a7a;border-color:#5a9a7a;color:#fff;font-weight:700}
 #toolbar .clear-btn{background:#8b4545;border-color:#8b4545;color:#fff}
 #toolbar .spacer{flex:1}
 #toolbar .hint{font-size:10px;color:#7a6e5e}
@@ -78,7 +79,8 @@ html,body{height:100%;overflow:hidden;font-family:'Segoe UI',system-ui,sans-seri
     <div class="sep"></div>
     <span class="hint" id="status-hint">Esperando juego...</span>
     <div class="spacer"></div>
-    <button class="export-btn" data-act="export">COPIAR CONFIGURACION</button>
+    <button class="export-btn" data-act="export">COPIAR CONFIG</button>
+    <button class="import-btn" data-act="import">IMPORTAR</button>
     <button class="clear-btn" data-act="clear">Limpiar</button>
   </header>
   <aside id="palette">
@@ -311,6 +313,19 @@ document.querySelector('[data-act="clear"]').addEventListener('click',function()
   if(!confirm('Limpiar stickers?'))return;
   S.placed.forEach(function(s){sendCmd({type:'aht-remove-sticker',id:s.id});});
   S.placed=[];updList();
+});
+document.querySelector('[data-act="import"]').addEventListener('click',function(){
+  var json=prompt('Pega el JSON de stickers:');
+  if(!json)return;
+  try{
+    var cfg=JSON.parse(json);
+    var items=cfg.desktop||cfg.mobile||[];
+    items.forEach(function(item){
+      var sc=CAT[item.sticker]||CAT[item.sticker.split('-')[0]];
+      if(!sc)return;
+      sendCmd({type:'aht-place-sticker',key:item.sticker,x:item.x,y:item.y,w:item.width,r:item.rotation||0});
+    });
+  }catch(e){alert('JSON invalido: '+e.message);}
 });
 document.querySelector('[data-act="close-modal"]').onclick=function(){document.getElementById('json-modal').classList.remove('show')};
 document.querySelector('[data-act="copy-json"]').onclick=function(){
