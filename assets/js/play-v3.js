@@ -6679,17 +6679,22 @@ function canonEmoId(id) {
     let html = '<article class="ficha-diario-entrada fdi-entrada" data-diario-evento="' + esc(eventoId) + '">' +
       '<div class="ficha-diario-card fdi-card' + tonoCls + '">' +
       '<div class="fdi-card-body">' +
+      '<div class="fdi-card-main">' +
+      '<div class="fdi-card-head">' +
       doodleHtml +
-      horaHtml +
-      '<b class="ficha-diario-titulo">' + esc(titulo) + '</b>';
-    if (personasHtml) {
-      html += '<div class="fdi-personas">' + personasHtml + '</div>';
-    }
+      '<b class="ficha-diario-titulo">' + esc(titulo) + '</b>' +
+      '</div>';
     if (explicacion && explicacion !== titulo) {
       html += '<p class="ficha-diario-texto">' + esc(explicacion) + '</p>';
     }
-    html += '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>' +
-      '</div></div></article>';
+    html += '</div>' +
+      '<div class="fdi-card-side">' +
+      horaHtml +
+      '<span class="ficha-diario-cat ' + meta.cls + '">' + esc(meta.txt) + '</span>';
+    if (personasHtml) {
+      html += '<div class="fdi-personas">' + personasHtml + '</div>';
+    }
+    html += '</div></div></div></article>';
     return html;
   }
 
@@ -6746,8 +6751,8 @@ function canonEmoId(id) {
       '<div class="fdi-hero-txt">' +
       '<b class="fdi-hero-nom">Diario de ' + esc(nom) + '</b>' +
       '<p class="fdi-hero-sub">Mi historia en el pueblo</p>' +
-      '<span class="fdi-hero-count">' + total + ' recuerdos</span>' +
       '</div>' +
+      '<span class="fdi-hero-count">' + total + ' recuerdos</span>' +
       '<span class="fdi-hero-doodle" aria-hidden="true">' + (window.AHT_DOODLE_SVGS && window.AHT_DOODLE_SVGS.d || '') + '</span>' +
       '</div>';
     list.insertAdjacentHTML('afterbegin', heroHtml);
