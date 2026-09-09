@@ -1056,6 +1056,7 @@
   gap: .55rem;
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1293,10 +1294,13 @@
 
 /* --- Necesidades chips (P14: data-driven from lugares.json) --- */
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-necs {
+  position: absolute;
+  top: .4rem;
+  right: .3rem;
   display: flex;
-  flex-wrap: wrap;
-  gap: .3rem;
-  margin-top: .35rem;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .2rem;
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-li-necs {
   display: flex;
@@ -1337,6 +1341,12 @@
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-necs:empty,
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-li-necs:empty {
   display: none;
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc.has-necs .org-lc-body {
+  padding-right: 1.5rem;
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc.has-necs .org-lc-art {
+  margin-right: 1.5rem;
 }
 
 /* --- Vecinos strip (renamed from picker) --- */
