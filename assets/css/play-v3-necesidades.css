@@ -1,35 +1,41 @@
 /* AHT — NECESIDADES GLOBALES (necesidades_global)
-   Estilos para el panel de necesidades del pueblo.
-   Clases generadas por renderNecesidadesGlobal() en play-v3.js.
-   Patrón visual: tarjetas de residente con barras de necesidad.
+   Rediseño visual: carrusel de vecinos + detalle de necesidades.
+   Colores por tipo de necesidad (no por estado).
+   Patrones reutilizados: organizar carrusel, frame tabs, tokens AHT.
    ============================================================ */
 
-/* ── Filtros (estética pegatina/pestaña AHT) ───────────────── */
+/* ── Filtros ────────────────────────────────────────────────── */
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filtros {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 5px;
-  padding: 0 0 var(--aht-gap-sm, 8px);
-  justify-content: center;
+  padding: 0 0 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filtros::-webkit-scrollbar {
+  display: none;
 }
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   min-height: 28px;
   padding: 3px 10px;
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  border-radius: 6px 8px 7px 9px / 8px 6px 9px 7px;
-  background: var(--ds-paper-warm, #f8f0de);
+  border: 2px solid var(--ds-ink, #33261E);
+  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  background: var(--ds-paper-warm, #F3E7CE);
   font: 700 .68rem/1.2 Nunito, sans-serif;
-  color: var(--ds-ink-soft, #594839);
+  color: var(--ds-ink, #33261E);
   cursor: pointer;
-  transition: background .15s, color .15s, box-shadow .12s;
-  box-shadow: 1px 2px 0 rgba(51, 38, 30, .1);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .15);
+  transition: background .12s, color .12s, box-shadow .12s, transform .12s;
+  white-space: nowrap;
 }
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt:hover {
-  background: var(--ds-lavender-soft, #ece6f8);
-  box-shadow: 1px 2px 0 rgba(51, 38, 30, .18);
+  background: var(--ds-lavender-soft, #E4DCF4);
 }
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt:active {
@@ -38,10 +44,10 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-filt--on {
-  background: var(--ds-ink-soft, #594839);
+  background: var(--ds-lavender-deep, #7C6BAE);
   color: #fff;
-  border-color: var(--ds-ink-soft, #594839);
-  box-shadow: 1px 2px 0 rgba(51, 38, 30, .25);
+  border-color: var(--ds-ink, #33261E);
+  box-shadow: 1.5px 2px 0 rgba(124, 107, 174, .35);
 }
 
 /* ── Contenedor de cuerpo ───────────────────────────────────── */
@@ -52,220 +58,27 @@
   padding: 0;
 }
 
-/* ── Mensajes vacío / error ─────────────────────────────────── */
+/* ── Mensajes vacío ─────────────────────────────────────────── */
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-vacio {
   text-align: center;
-  color: var(--ds-text-muted, #7a6a5c);
-  font-family: var(--ds-font-ui, Nunito, sans-serif);
-  font-size: .88rem;
-  font-weight: 600;
-  padding: var(--aht-gap-lg, 16px) var(--aht-gap-md, 12px);
+  color: var(--ds-text-muted, #75634F);
+  font: 600 .85rem/1.3 Nunito, sans-serif;
+  padding: 24px 16px;
 }
 
-/* ── Tarjeta de residente ───────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card {
-  background: var(--ds-paper-card, #fffdf7);
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  border-radius: 14px 10px 16px 11px / 10px 16px 11px 14px;
-  padding: 8px 12px;
-  margin-bottom: 8px;
-  cursor: pointer;
-  transition: transform .12s ease, box-shadow .12s ease;
-}
+/* ============================================================
+   BLOQUE 1: CARRUSEL — Vecinos que necesitan atención
+   Patrón: flex nowrap + overflow-x + scroll-snap (organizar)
+   ============================================================ */
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card:hover {
-  transform: translateY(-1px);
-  box-shadow: 2px 3px 0 rgba(51, 38, 30, .12);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card:active {
-  transform: translateY(0);
-}
-
-/* ── Header de tarjeta ──────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-header {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
-}
-
-/* ── Avatar ─────────────────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-avatar {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
-  border-radius: 999px;
-  overflow: hidden;
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  background: var(--ds-paper-warm, #f8f0de);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-avatar--fallback {
-  font: 800 .72rem/1 Nunito, sans-serif;
-  color: var(--ds-ink-soft, #594839);
-}
-
-/* ── Nombre ─────────────────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-nom {
-  margin: 0;
-  font: 800 .82rem/1.2 Nunito, sans-serif;
-  color: var(--ds-ink, #2a2218);
-  flex: 1 1 auto;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-/* ── Contenedor de necesidades ──────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-card-needs {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* ── Fila de necesidad ──────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 2px 0;
-}
-
-/* ── Icono de necesidad ─────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-icon {
-  font-size: .78rem;
-  width: 16px;
-  text-align: center;
-  flex: 0 0 auto;
-  opacity: .85;
-}
-
-/* ── Nombre de necesidad ────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-name {
-  font: 600 .72rem/1.2 Nunito, sans-serif;
-  color: var(--ds-ink-soft, #594839);
-  width: 70px;
-  flex: 0 0 auto;
-}
-
-/* ── Valor numérico ─────────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-val {
-  font: 700 .68rem/1 Nunito, sans-serif;
-  color: var(--ds-ink-soft, #594839);
-  width: 30px;
-  text-align: right;
-  flex: 0 0 auto;
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--bien .necg-need-val {
-  color: var(--ds-green-deep, #4a7a52);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--le_vendria_bien .necg-need-val {
-  color: var(--ds-mustard-deep, #B98A2F);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--lo_necesita .necg-need-val {
-  color: var(--ds-coral-deep, #C9563E);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--en_rojo .necg-need-val {
-  color: var(--ds-pink-deep, #C42B4A);
-}
-
-/* ── Copy narrativo de necesidad ─────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-copy {
-  font: 500 .62rem/1.2 Nunito, sans-serif;
-  color: var(--ds-text-muted, #7a6a5c);
-  padding: 0 0 1px 22px;
-  font-style: italic;
-}
-
-/* ── Barra de necesidad (contenedor) ────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar {
-  flex: 1 1 auto;
-  height: 8px;
-  min-width: 0;
-  border: 1.5px solid var(--ds-ink-soft, #594839);
-  border-radius: 999px;
-  background: var(--ds-paper-warm, #f8f0de);
-  overflow: hidden;
-}
-
-/* ── Relleno de barra ───────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill {
-  height: 100%;
-  border-radius: 999px;
-  transition: width .3s ease;
-}
-
-/* ── Colores por banda ──────────────────────────────────────── */
-/* bien */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--bien {
-  background: var(--ds-green-deep, #4a7a52);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--bien .necg-need-name {
-  color: var(--ds-green-deep, #4a7a52);
-}
-
-/* le_vendria_bien */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--le_vendria_bien {
-  background: var(--ds-mustard-deep, #B98A2F);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--le_vendria_bien .necg-need-name {
-  color: var(--ds-mustard-deep, #B98A2F);
-}
-
-/* lo_necesita */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--lo_necesita {
-  background: var(--ds-warning, #E0A93F);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--lo_necesita .necg-need-name {
-  color: var(--ds-coral-deep, #C9563E);
-}
-
-/* en_rojo */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--en_rojo {
-  background: var(--ds-pink-deep, #C42B4A);
-}
-
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--en_rojo .necg-need-name {
-  color: var(--ds-pink-deep, #C42B4A);
-}
-
-/* ── Separador ───────────────────────────────────────────────── */
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-sep {
-  border: none;
-  border-top: 1.5px solid var(--ds-ink-soft, #594839);
-  opacity: .2;
-  margin: 12px 0;
-}
-
-/* ── Zona de alertas (vecinos que necesitan atención) ────────── */
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas {
-  margin-top: 4px;
-  padding-bottom: 8px;
+  margin-bottom: 12px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas-title {
-  font: 700 .78rem/1.2 Nunito, sans-serif;
-  color: var(--ds-ink, #2a2218);
-  margin: 0 0 8px;
+  font: 800 .85rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #33261E);
+  margin: 0 0 4px;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -273,90 +86,314 @@
 
 .play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas-title::before {
   content: "\u26a0\ufe0f";
-  font-size: .85rem;
+  font-size: .9rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-item {
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alertas-hint {
+  font: 500 .65rem/1.2 Nunito, sans-serif;
+  color: var(--ds-text-muted, #75634F);
+  margin: 0 0 8px;
+  font-style: italic;
+}
+
+/* ── Strip carrusel ─────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-carousel {
   display: flex;
-  align-items: center;
+  flex-wrap: nowrap;
   gap: 8px;
-  padding: 6px 8px;
-  border-radius: 8px;
-  background: var(--ds-paper-warm, #f8f0de);
-  border: 1px solid var(--ds-ink-soft, #594839);
-  margin-bottom: 5px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 2px 8px;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ── Card de vecino en carrusel ─────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card {
+  flex: 0 0 auto;
+  width: 100px;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 6px 6px;
+  border: 2px solid var(--ds-ink-soft, #6B5138);
+  border-radius: 14px 10px 16px 11px / 10px 16px 11px 14px;
+  background: var(--ds-paper-card, #FBF5E6);
   cursor: pointer;
-  transition: background .12s;
+  transition: transform .12s, box-shadow .12s, border-color .12s;
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .1);
+  position: relative;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-item:hover {
-  background: var(--ds-lavender-soft, #ece6f8);
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 2px 3px 0 rgba(51, 38, 30, .15);
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-avatar {
-  width: 24px;
-  height: 24px;
-  min-width: 24px;
-  min-height: 24px;
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card:active {
+  transform: translateY(0);
+}
+
+/* ── Card seleccionada ──────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card.is-active {
+  border-color: var(--ds-ink, #33261E);
+  background: var(--ds-lavender-soft, #E4DCF4);
+  box-shadow: 2px 3px 0 rgba(124, 107, 174, .3);
+  transform: translateY(-2px) rotate(.5deg);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card.is-active::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px dashed rgba(124, 107, 174, .45);
+  border-radius: 11px 8px 13px 9px / 8px 13px 9px 11px;
+  pointer-events: none;
+}
+
+/* ── Primera card (peor estado) ─────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card--worst {
+  border-color: var(--ds-coral-deep, #C9563E);
+  background: var(--ds-coral-soft, #F7C9B9);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card--worst.is-active {
+  background: var(--ds-coral-soft, #F7C9B9);
+  box-shadow: 2px 3px 0 rgba(201, 86, 62, .3);
+}
+
+/* ── Avatar en carrusel ─────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-avatar {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  min-height: 48px;
   border-radius: 999px;
   overflow: hidden;
-  border: 1px solid var(--ds-ink-soft, #594839);
-  background: var(--ds-paper-warm, #f8f0de);
+  border: 2px solid var(--ds-ink-soft, #6B5138);
+  background: var(--ds-paper-warm, #F3E7CE);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-avatar img {
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-card.is-active .necg-caro-avatar {
+  border-color: var(--ds-ink, #33261E);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-avatar--fallback {
-  font: 700 .6rem/1 Nunito, sans-serif;
-  color: var(--ds-ink-soft, #594839);
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-avatar--fallback {
+  font: 800 .95rem/1 Nunito, sans-serif;
+  color: var(--ds-ink-soft, #6B5138);
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-info {
-  flex: 1 1 auto;
-  min-width: 0;
+/* ── Nombre en carrusel ─────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-nom {
+  font: 700 .7rem/1.1 Nunito, sans-serif;
+  color: var(--ds-ink, #33261E);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90px;
+}
+
+/* ── Badge de estado ────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-badge {
+  font: 700 .58rem/1 Nunito, sans-serif;
+  padding: 2px 6px;
+  border-radius: 9px 7px 10px 8px / 7px 10px 8px 9px;
+  white-space: nowrap;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-badge--en_rojo {
+  background: var(--ds-pink-deep, #C42B4A);
+  color: #fff;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-badge--lo_necesita {
+  background: var(--ds-coral, #E87A5A);
+  color: #fff;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-caro-badge--le_vendria_bien {
+  background: var(--ds-mustard, #E3B04B);
+  color: var(--ds-ink, #33261E);
+}
+
+/* ============================================================
+   BLOQUE 2: NECESIDADES DEL VECINO SELECCIONADO
+   ============================================================ */
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-detail {
+  margin-top: 4px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-detail-title {
+  font: 800 .82rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #33261E);
+  margin: 0 0 8px;
+  padding-bottom: 6px;
+  border-bottom: 1.5px solid var(--ds-ink-soft, #6B5138);
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nom {
-  font: 700 .72rem/1.2 Nunito, sans-serif;
-  color: var(--ds-ink, #2a2218);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+/* ── Fila de necesidad ──────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  margin-bottom: 4px;
+  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
+  border: 1.5px solid transparent;
+  transition: background .12s;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-sep {
-  color: var(--ds-text-muted, #7a6a5c);
-  font-size: .72rem;
+/* ── Colores de fondo por tipo de necesidad ─────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--social {
+  background: rgba(233, 137, 167, .1);
+  border-color: rgba(233, 137, 167, .2);
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec {
-  font: 600 .65rem/1.2 Nunito, sans-serif;
-  padding: 1px 6px;
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--diversion {
+  background: rgba(227, 176, 75, .1);
+  border-color: rgba(227, 176, 75, .2);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--actividad {
+  background: rgba(120, 160, 210, .1);
+  border-color: rgba(120, 160, 210, .2);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-row--calma {
+  background: rgba(185, 168, 220, .1);
+  border-color: rgba(185, 168, 220, .2);
+}
+
+/* ── Icono de necesidad ─────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-icon {
+  font-size: 1rem;
+  width: 22px;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+/* ── Nombre de necesidad ────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-name {
+  font: 700 .78rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #33261E);
+  width: 80px;
+  flex: 0 0 auto;
+}
+
+/* ── Barra de necesidad ─────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar {
+  flex: 1 1 auto;
+  height: 14px;
+  min-width: 0;
+  border: 1.5px solid var(--ds-ink-soft, #6B5138);
   border-radius: 999px;
-  white-space: nowrap;
+  background: var(--ds-paper-warm, #F3E7CE);
+  overflow: hidden;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec--le_vendria_bien {
-  background: rgba(185, 138, 47, .15);
-  color: var(--ds-mustard-deep, #B98A2F);
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  transition: width .3s ease;
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec--lo_necesita {
-  background: rgba(224, 169, 63, .18);
-  color: var(--ds-coral-deep, #C9563E);
+/* ── Colores de barra por tipo de necesidad ─────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--social {
+  background: var(--ds-pink, #E989A7);
 }
 
-.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-alerta-nec--en_rojo {
-  background: rgba(196, 43, 74, .15);
-  color: var(--ds-pink-deep, #C42B4A);
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--diversion {
+  background: var(--ds-mustard, #E3B04B);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--actividad {
+  background: #78A0D2;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-bar-fill--calma {
+  background: var(--ds-lavender, #B9A8DC);
+}
+
+/* ── Valor numérico ─────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-val {
+  font: 700 .75rem/1 Nunito, sans-serif;
+  color: var(--ds-ink, #33261E);
+  width: 34px;
+  text-align: right;
+  flex: 0 0 auto;
+}
+
+/* ── Copy narrativo ─────────────────────────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-copy {
+  font: 500 .65rem/1.2 Nunito, sans-serif;
+  color: var(--ds-text-muted, #75634F);
+  padding: 0 0 2px 28px;
+  font-style: italic;
+  grid-column: 1 / -1;
+}
+
+/* ── Fila con copy (grid para alinear) ──────────────────────── */
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-group {
+  margin-bottom: 6px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-need-group .necg-need-row {
+  margin-bottom: 0;
+}
+
+/* ============================================================
+   SEPARADOR
+   ============================================================ */
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-sep {
+  border: none;
+  border-top: 1.5px solid var(--ds-ink-soft, #6B5138);
+  opacity: .15;
+  margin: 10px 0;
+}
+
+/* ============================================================
+   SCROLLBAR VISIBLE — Override solo para necesidades
+   Usa la scrollbar pink global de play-v3-avisos.css
+   pero la hace visible forzando scrollbar-width en el body.
+   ============================================================ */
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ds-pink, #E989A7) rgba(249, 220, 228, .45);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-body::-webkit-scrollbar {
+  width: 9px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-body::-webkit-scrollbar-track {
+  background: rgba(249, 220, 228, .45);
+  border-radius: 6px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-body::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--ds-pink, #E989A7), var(--ds-pink-deep, #C42B4A));
+  border-radius: 6px;
+  border: 2px solid rgba(249, 220, 228, .5);
+}
+
+.play-v3 .aht-screen[data-aht-screen="necesidades_global"] .necg-body::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #F5A8BC, var(--ds-pink-deep, #C42B4A));
 }
