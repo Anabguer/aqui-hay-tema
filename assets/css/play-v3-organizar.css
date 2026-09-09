@@ -1470,77 +1470,78 @@
   color: #3b3028;
 }
 
-/* --- Plan resultado modal --- */
+/* --- Plan resultado modal — AHT V4 --- */
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-body {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  padding: 1.2rem 1rem;
+  padding: var(--aht-gap-md, 12px) var(--aht-gap-md, 12px) var(--aht-gap-sm, 8px);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-card {
   width: 100%;
   text-align: center;
-  padding: 1.5rem 1rem;
-  border-radius: 14px;
-  background: rgba(255,252,245,.92);
-  border: 1px solid rgba(44,38,31,.10);
-  box-shadow: 0 2px 10px rgba(44,38,31,.08);
+  padding: 1.5rem 1.2rem 1.3rem;
+  border-radius: var(--aht-frame-radius, 22px 16px 24px 15px / 16px 24px 15px 22px);
+  background: var(--aht-shell-bg, #FCFBFE);
+  border: 1.5px solid var(--aht-border, #D8D1DE);
+  box-shadow: 0 2px 8px rgba(48, 40, 58, .08);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-icon {
   display: block;
-  font-size: 2.2rem;
-  margin-bottom: .6rem;
+  font-size: 2.4rem;
+  margin-bottom: .5rem;
   line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.08));
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-title {
-  font-family: "Caveat", "Segoe Print", cursive;
-  font-size: 1.4rem;
+  font-family: var(--aht-font-hand, "Caveat", "Segoe Print", cursive);
+  font-size: 1.5rem;
   font-weight: 700;
-  color: #3b3028;
-  margin: 0 0 .4rem;
+  color: var(--aht-text, #33261E);
+  margin: 0 0 .5rem;
+  line-height: 1.2;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-meta {
-  font-size: .85rem;
-  color: #6b5a48;
-  margin: 0 0 .3rem;
+  font: 600 .88rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
+  color: var(--aht-text-muted, #75634F);
+  margin: 0 0 .35rem;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-detalles {
-  font-size: .8rem;
-  color: #8a7460;
+  font: 500 .82rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
+  color: var(--aht-text-muted, #75634F);
   margin: 0;
+  opacity: .78;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contrapropuesta {
-  margin-top: .8rem;
-  padding: .7rem;
-  border-radius: 10px;
-  background: rgba(224,122,152,.08);
-  border: 1px solid rgba(224,122,152,.18);
+  margin-top: var(--aht-gap-md, 12px);
+  padding: var(--aht-gap-md, 12px);
+  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+  background: rgba(224,122,152,.07);
+  border: 1.5px dashed rgba(224,122,152,.28);
   text-align: center;
   width: 100%;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contra-label {
-  font-size: .78rem;
-  font-weight: 600;
+  font: 700 .72rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: #b8643f;
   text-transform: uppercase;
-  margin: 0 0 .25rem;
+  letter-spacing: .04em;
+  margin: 0 0 .3rem;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contra-text {
-  font-size: .85rem;
+  font: 600 .88rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
   color: #5a4838;
   margin: 0;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-mensajito {
-  margin-top: .7rem;
-  padding: .6rem;
-  border-radius: 10px;
-  background: rgba(139,160,80,.10);
-  border: 1px solid rgba(139,160,80,.18);
+  margin-top: var(--aht-gap-sm, 8px);
+  padding: .65rem;
+  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+  background: rgba(139,160,80,.08);
+  border: 1.5px dashed rgba(139,160,80,.25);
   text-align: center;
   width: 100%;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-mensajito-text {
-  font-size: .82rem;
+  font: 600 .84rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
   color: #4a5a2e;
   margin: 0;
 }
@@ -1548,29 +1549,32 @@
   display: flex;
   gap: .7rem;
   justify-content: center;
-  margin-top: 1rem;
+  padding: var(--aht-gap-sm, 8px) var(--aht-gap-lg, 16px) var(--aht-gap-md, 12px);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn {
-  padding: .55rem 1.4rem;
-  border-radius: 20px;
-  border: 1px solid rgba(44,38,31,.12);
-  font-size: .85rem;
-  font-weight: 600;
+  padding: .6rem 1.5rem;
+  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+  border: 2px solid var(--aht-border-strong, #33261E);
+  font: 700 .88rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   cursor: pointer;
-  transition: background .12s ease, border-color .12s ease;
+  transition: transform var(--aht-dur-fast, 120ms) ease, box-shadow var(--aht-dur-fast, 120ms) ease;
+  box-shadow: 2px 3px 0 rgba(51,38,30,.18);
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn:active {
+  transform: translateY(1px);
+  box-shadow: 1px 1px 0 rgba(51,38,30,.15);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-ok {
   background: #e07a98;
   color: #fff;
-  border-color: #e07a98;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-ok:hover {
   background: #d06080;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-agenda {
-  background: rgba(255,252,245,.85);
-  color: #6b5a48;
+  background: var(--aht-back-bg, #E8DFF5);
+  color: var(--aht-close-color, #7C6BAE);
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-agenda:hover {
-  background: #f8e8d8;
+  background: var(--aht-vanilla-deep, #E3D6F0);
 }
