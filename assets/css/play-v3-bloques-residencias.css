@@ -418,7 +418,7 @@
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid #2c261f;
-  background: #fff;
+  background: transparent;
   box-shadow: 0 2px 0 rgba(40, 28, 16, .12);
   margin-bottom: .4rem;
   flex-shrink: 0;
@@ -694,7 +694,7 @@
   border: none;
   border-radius: 50%;
   overflow: hidden;
-  background: #fffdf6;
+  background: transparent;
   display: grid;
   place-items: center;
 }
@@ -785,7 +785,7 @@
   border-radius: 50%;
   overflow: hidden;
   border: 1.5px solid rgba(120, 96, 72, .35);
-  background: #fffdf6;
+  background: transparent;
   display: grid;
   place-items: center;
   font-size: .7rem;

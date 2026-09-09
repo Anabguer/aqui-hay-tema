@@ -641,12 +641,24 @@
   transform: rotate(-1deg) translateY(3px);
 }
 
-.histdet-protagonista-avatar {
+.histdet-protagonista-avatar-wrap {
   width: 90px;
   height: 90px;
   border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+}
+
+.histdet-protagonista-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
   object-fit: cover;
   background: transparent;
+  display: block;
 }
 
 .histdet-protagonista-avatar--fallback {
@@ -899,7 +911,7 @@
     transform: none;
   }
 
-  .histdet-protagonista-avatar,
+  .histdet-protagonista-avatar-wrap,
   .histdet-protagonista-avatar--fallback {
     width: 44px;
     height: 44px;
