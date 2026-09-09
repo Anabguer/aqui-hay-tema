@@ -584,7 +584,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="aht-frame-tabs" role="tablist" aria-label="Vecinos, relaciones y cuidados">
             <button type="button" class="aht-frame-tab is-active" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
             <button type="button" class="aht-frame-tab" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
-            <button type="button" class="aht-frame-tab" data-vec-tab="cuidados" role="tab" aria-selected="false">&#127793; CUIDADOS</button>
+            <button type="button" class="aht-frame-tab" data-vec-tab="cuidados" role="tab" aria-selected="false">CUIDADOS</button>
           </div>
           <div class="aht-frame-body">
             <div class="vec-panel" data-vec-panel="vecinos">
