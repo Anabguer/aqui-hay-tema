@@ -89,6 +89,7 @@
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral {
   flex: 0 0 220px; min-width: 0; padding: 8px 0;
   border-left: 1.5px solid rgba(90,70,50,.12);
+  background: var(--aht-surface-dim, #EEE8FA);
   overflow-y: auto;
 }
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral:empty { display: none; }
@@ -117,6 +118,32 @@
 .coti-sehabla-count {
   font-size: .72rem; color: var(--ds-text-muted, #7a6a5c);
   background: rgba(90,70,50,.06); padding: 1px 6px; border-radius: 8px;
+}
+
+/* ─── Ranking: TOP 3 diferenciado ─── */
+.coti-sehabla-top-1 {
+  background: #fdf3e0;
+  border-color: rgba(200, 160, 80, .25);
+}
+.coti-sehabla-top-1 .coti-sehabla-num {
+  color: #b8860b;
+}
+.coti-sehabla-top-2 {
+  background: #f0eaf6;
+  border-color: rgba(150, 130, 180, .25);
+}
+.coti-sehabla-top-2 .coti-sehabla-num {
+  color: #7a6a9a;
+}
+.coti-sehabla-top-3 {
+  background: #fdf0f4;
+  border-color: rgba(200, 120, 150, .2);
+}
+.coti-sehabla-top-3 .coti-sehabla-num {
+  color: #c87a92;
+}
+.coti-sehabla-normal {
+  opacity: .78;
 }
 
 /* ─── Día cabecera ─── */

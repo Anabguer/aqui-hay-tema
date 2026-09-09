@@ -4557,15 +4557,15 @@ function renderInicioMpDuo(misiones, parejas) {
       if (d.abierto_ahora === true) { estado = 'Abierto'; estadoCls = 'org-lugar-estado--abierto'; }
       else if (d.abierto_ahora === false) { estado = 'Cerrado'; estadoCls = 'org-lugar-estado--cerrado'; }
       var horario = d.horario || '';
-      var necHtml = necLugarChipsHtml(d.necesidades);
       var btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'org-lc' + (on ? ' is-on' : '') + (necHtml ? ' has-necs' : '');
+      btn.className = 'org-lc' + (on ? ' is-on' : '');
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       btn.setAttribute('data-org-lug-id', d.id);
       var imgHtml = img
         ? '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>'
         : '<span class="org-lc-fallback" aria-hidden="true"></span>';
+      var necHtml = necLugarChipsHtml(d.necesidades);
       btn.innerHTML =
         '<span class="org-lc-art">' + imgHtml + '</span>' +
         '<span class="org-lc-body">' +
@@ -7773,7 +7773,8 @@ function hobbyIconKey(id, texto) {
     if (!sorted.length) { box.innerHTML = ''; return; }
     var html = '<h3 class="coti-sehabla-tit">🔥 Se habla de…</h3><ul class="coti-sehabla-list">';
     sorted.forEach(function (tag, i) {
-      html += '<li class="coti-sehabla-item"><span class="coti-sehabla-num">#' + (i + 1) + '</span> <span class="coti-sehabla-tag">' + esc(tag) + '</span> <span class="coti-sehabla-count">' + contar[tag] + '</span></li>';
+      var rankClass = i < 3 ? ' coti-sehabla-top-' + (i + 1) : ' coti-sehabla-normal';
+      html += '<li class="coti-sehabla-item' + rankClass + '"><span class="coti-sehabla-num">#' + (i + 1) + '</span> <span class="coti-sehabla-tag">' + esc(tag) + '</span> <span class="coti-sehabla-count">' + contar[tag] + '</span></li>';
     });
     html += '</ul>';
     box.innerHTML = html;
