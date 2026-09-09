@@ -1110,8 +1110,9 @@
     center / 42% no-repeat;
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-body {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
   gap: .08rem;
   min-width: 0;
   width: 100%;
@@ -1297,6 +1298,14 @@
   display: flex;
   flex-wrap: wrap;
   gap: .3rem;
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-necs {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  align-self: start;
+  justify-items: end;
+}
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-li-necs {
   margin-top: .35rem;
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-nec,
@@ -1472,6 +1481,10 @@
 
 /* --- Plan resultado modal — AHT V4 --- */
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   padding: var(--aht-gap-md, 12px) var(--aht-gap-md, 12px) var(--aht-gap-sm, 8px);
 }
@@ -1546,6 +1559,7 @@
   margin: 0;
 }
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-actions {
+  flex: 0 0 auto;
   display: flex;
   gap: .7rem;
   justify-content: center;

@@ -1773,6 +1773,11 @@
   min-height: 0;
 }
 
+.aht-screen[data-aht-screen="plan-resultado"] .aht-frame-body {
+  display: flex;
+  flex-direction: column;
+}
+
 /* Vecinos — ajustes móvil (contenido, no shell) */
 @media (max-width: 768px) {
   .aht-screen[data-aht-screen="vecinos"] .vecinos-grid,
