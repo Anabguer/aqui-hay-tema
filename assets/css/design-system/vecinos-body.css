@@ -237,7 +237,7 @@
   overflow: hidden;
   border: 3px solid var(--vec-ink-soft);
   box-shadow: none;
-  background: #fffdf8;
+  background: transparent;
   flex-shrink: 0;
 }
 
@@ -518,7 +518,7 @@ select.vec-rel-persona {
   overflow: hidden;
   border: 2px solid #fff;
   box-shadow: 0 0 0 1.5px var(--vec-ink-soft);
-  background: #e8dcc4;
+  background: transparent;
   display: grid;
   place-items: center;
   flex-shrink: 0;
@@ -735,4 +735,126 @@ select.vec-rel-persona {
   margin: 0 auto 6px;
   border: 2px solid #d4a84a;
   border-radius: 50%;
+}
+
+/* === PANEL CUIDADOS === */
+.vec-cuid-resumen {
+  background: var(--vec-paper);
+  border: 2px solid var(--vec-lavender);
+  border-radius: 14px 10px 15px 11px / 10px 15px 11px 14px;
+  padding: 14px 16px;
+  margin-bottom: 16px;
+}
+
+.vec-cuid-resumen-tit {
+  font: 700 1rem/1.2 var(--vec-font-hand);
+  color: var(--vec-ink);
+  margin: 0 0 10px;
+  text-transform: uppercase;
+}
+
+.vec-cuid-bars { display: flex; flex-direction: column; gap: 8px; }
+
+.vec-cuid-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vec-cuid-bar-ico { font-size: 1.1rem; flex: 0 0 auto; }
+
+.vec-cuid-bar-nom {
+  font: 600 .85rem/1 var(--vec-font-body);
+  color: var(--vec-ink-soft);
+  flex: 0 0 80px;
+}
+
+.vec-cuid-bar {
+  flex: 1 1 auto;
+  height: 10px;
+  background: #e8e0d0;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.vec-cuid-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width .3s ease;
+}
+
+.vec-cuid-bar-fill--bien { background: var(--ds-green-deep, #4a7a52); }
+.vec-cuid-bar-fill--le_vendria_bien { background: var(--ds-mustard-deep, #B98A2F); }
+.vec-cuid-bar-fill--lo_necesita { background: var(--ds-warning, #E0A93F); }
+.vec-cuid-bar-fill--en_rojo { background: var(--ds-pink-deep, #C42B4A); }
+
+.vec-cuid-bar-val {
+  font: 700 .8rem/1 var(--vec-font-body);
+  color: var(--vec-muted);
+  flex: 0 0 30px;
+  text-align: right;
+}
+
+.vec-cuid-list { max-height: 45vh; }
+
+.vec-cuid-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  margin-bottom: 8px;
+  background: var(--vec-paper);
+  border: 2px dashed var(--vec-lavender);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  cursor: pointer;
+  transition: transform .12s, box-shadow .12s;
+}
+
+.vec-cuid-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .15);
+}
+
+.vec-cuid-card:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.vec-cuid-card-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex: 0 0 auto;
+  border: 2px solid var(--vec-ink);
+  background: #e8d8c8;
+}
+
+.vec-cuid-card-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.vec-cuid-card-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font: 700 1.1rem/1 var(--vec-font-hand);
+  color: var(--vec-ink);
+}
+
+.vec-cuid-card-info { flex: 1 1 auto; min-width: 0; }
+
+.vec-cuid-card-nom {
+  font: 700 .95rem/1.2 var(--vec-font-body);
+  color: var(--vec-ink);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.vec-cuid-card-nec {
+  font: 500 .82rem/1.2 var(--vec-font-body);
+  color: var(--vec-pink-deep);
+  margin: 2px 0 0;
 }

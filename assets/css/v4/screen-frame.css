@@ -454,6 +454,30 @@
   pointer-events: none;
 }
 
+/* Pestaña Cuidados — color propio lavanda claro */
+.aht-frame-tab[data-vec-tab="cuidados"] {
+  background: #c8b8e8;
+  color: #4a2a78;
+}
+
+.aht-frame-tab[data-vec-tab="cuidados"].is-on {
+  background: #6aaa7a;
+  color: #fff;
+  border-color: #33261E;
+  text-shadow: 0 1.5px 0 rgba(60, 100, 70, .5);
+  box-shadow: 2px 3px 0 rgba(74, 122, 82, .5);
+  transform: rotate(0.4deg);
+}
+
+.aht-frame-tab[data-vec-tab="cuidados"].is-on::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1.5px dashed rgba(255, 255, 255, .9);
+  border-radius: 10px 8px 11px 9px / 8px 11px 9px 10px;
+  pointer-events: none;
+}
+
 .aht-frame-tab .mensajitos-tab-badge,
 .aht-frame-tab [data-buzon-tab-count] {
   min-width: 24px;
