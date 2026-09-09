@@ -374,8 +374,8 @@
         "en_espera_no_congela": true
     },
     "flechazo": {
-        "probabilidad": 0.006,
-        "delta_romance": 28,
+        "probabilidad": 0.003,
+        "delta_romance": 12,
         "solo_tras_contacto": true,
         "no_crea_pareja": true,
         "casual_mult": 0.35
