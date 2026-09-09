@@ -677,7 +677,7 @@
 .historia-avatar-img,
 .histcele-protagonista-avatar {
   object-position: 50% 40%;
-  background: #f0e8dc;
+  background: transparent;
 }
 
 .histdet-rel {
