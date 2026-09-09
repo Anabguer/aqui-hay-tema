@@ -1007,12 +1007,13 @@
   border-color: rgba(158,74,106,.14);
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--quienes::before {
+  top: 4px;
   left: 8px;
-  background: rgba(228,170,190,.72);
-  transform: rotate(-8deg);
+  background: rgba(228,170,190,.35);
+  transform: rotate(-8deg) scale(.75);
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-step--quienes::after {
-  background: #c27a9a;
+  background: rgba(194,122,154,.25);
 }
 
 /* --- DÓNDE — ámbar cálido, rotación derecha --- */
