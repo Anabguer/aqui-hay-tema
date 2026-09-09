@@ -287,7 +287,7 @@
         "por_familia": {
             "romance_accion": 20,
             "romance": 48,
-            "romance_hito": 336,
+            "romance_hito": 168,
             "pareja": 36,
             "crisis": 48,
             "trabajo": 72,
@@ -312,7 +312,7 @@
             "vida": 1,
             "romance": 0.12,
             "romance_accion": 0.18,
-            "romance_hito": 0.04,
+            "romance_hito": 0.10,
             "pareja": 0.08,
             "consejo": 0.15
         },
