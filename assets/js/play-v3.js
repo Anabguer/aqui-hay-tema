@@ -4798,7 +4798,7 @@ function renderInicioMpDuo(misiones, parejas) {
     ];
   }
 
-  function placeHabEnZona(box, p, i, total) {
+  function placeHabEnZona(box, p, i, total, prevZona, newZona) {
     var el = document.createElement('span');
     el.className = 'hab cara-token';
     el.setAttribute('role', 'button');
@@ -4850,6 +4850,12 @@ function renderInicioMpDuo(misiones, parejas) {
 
     el.style.left = left.toFixed(2) + '%';
     el.style.top  = top.toFixed(2)  + '%';
+    
+    // Movement animation: if NPC moved from a different zone, add movement class
+    if (prevZona && prevZona !== newZona) {
+      el.classList.add('hab-moviendo');
+    }
+    
     var idleKind = ['a', 'b', 'c'][seed % 3];
     el.classList.add('hab-idle-' + idleKind);
     el.style.setProperty('--hab-idle-delay', (-(seed % 800) / 100).toFixed(2) + 's');
@@ -5636,6 +5642,17 @@ function renderInicioMpDuo(misiones, parejas) {
     cachePueblo = pueblo;
     var layer = $('[data-mapa-zonas]');
     if (!layer) return;
+    
+    // Cache previous token positions for movement animation
+    var prevPositions = {};
+    $$('.mapa-zona-hit .habs .hab[data-residente]').forEach(function(el) {
+      var rid = el.getAttribute('data-residente');
+      var zid = el.closest('.mapa-zona-hit')?.getAttribute('data-zona');
+      if (rid && zid) {
+        prevPositions[rid] = zid;
+      }
+    });
+    
     $$('.mapa-zona-hit .habs').forEach(function (b) { b.innerHTML = ''; });
     var porZona = {};
     (pueblo.complejos || []).forEach(function (cx) {
@@ -5657,7 +5674,7 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       var marcaZona = btn.getAttribute('data-encuentro-marca') || '';
       enZona.forEach(function (p, i) {
-        placeHabEnZona(box, p, i, enZona.length);
+        placeHabEnZona(box, p, i, enZona.length, prevPositions[p.id] || null, zid);
       });
     });
     pintarHorariosMapa();
@@ -6613,11 +6630,7 @@ function canonEmoId(id) {
     var cat = e.categoria_etiqueta || '';
     var key = DIARIO_DOODLE_MAP[cat] || 'f';
     var svg = DIARIO_DOODLE[key] || DIARIO_DOODLE.f;
-    var seed = (e.ts_juego && e.ts_juego.hora) || 0;
-    var extraKey = DIARIO_DOODLE_EXTRA[seed % DIARIO_DOODLE_EXTRA.length];
-    var extraSvg = DIARIO_DOODLE[extraKey] || '';
-    var extraHtml = extraSvg ? '<span class="fdi-doodle fdi-doodle--extra" aria-hidden="true">' + extraSvg + '</span>' : '';
-    return '<span class="fdi-doodle" aria-hidden="true">' + svg + '</span>' + extraHtml;
+    return '<span class="fdi-doodle" aria-hidden="true">' + svg + '</span>';
   }
 
   function diarioHoraHtml(e) {
@@ -8776,30 +8789,30 @@ function hobbyIconKey(id, texto) {
       : na + ' y ' + nb;
     if (r.ok && !r.rechazada) {
       if (iconEl) iconEl.textContent = '\uD83C\uDF89';
-      if (titleEl) titleEl.textContent = '\u00A1Conseguido! Tenemos plan \uD83C\uDF89';
+      if (titleEl) titleEl.textContent = '\u00A1Plan en marcha! \uD83C\uDF89';
       if (metaEl) metaEl.textContent = whoUi + ' \u2014 ' + lugUi;
       if (detallesEl) detallesEl.textContent = 'D\u00EDa ' + org.dia + ' a las ' + horaUi;
       if (contraEl) contraEl.hidden = true;
       if (btnAgenda) btnAgenda.hidden = false;
-      if (btnOk) btnOk.textContent = 'Vale';
+      if (btnOk) btnOk.textContent = 'Genial';
     } else if (r.ok && r.rechazada) {
-      if (iconEl) iconEl.textContent = '\uD83D\uDC94';
-      if (titleEl) titleEl.textContent = 'Chasco\u2026 esta vez no ha colado \uD83D\uDC94';
+      if (iconEl) iconEl.textContent = '\u2615';
+      if (titleEl) titleEl.textContent = 'Hoy Cupido estaba tomando caf\u00E9 \u2615';
       if (metaEl) metaEl.textContent = whoUi;
-      if (detallesEl) detallesEl.textContent = r.mensaje_ui || '';
+      if (detallesEl) detallesEl.textContent = r.mensaje_ui || 'Esta vez no ha cuajado el plan.';
       if (r.contrapropuesta && r.contrapropuesta.dia && r.contrapropuesta.hora) {
         var contraHora = String(r.contrapropuesta.hora).padStart(2, '0') + ':00';
         if (contraEl) contraEl.hidden = false;
-        if (contraTxtEl) contraTxtEl.textContent = 'D\u00EDa ' + r.contrapropuesta.dia + ' a las ' + contraHora;
+        if (contraTxtEl) contraTxtEl.textContent = 'Pero quiz\u00E1s \u2014 D\u00EDa ' + r.contrapropuesta.dia + ' a las ' + contraHora;
       } else {
         if (contraEl) contraEl.hidden = true;
       }
       if (btnAgenda) btnAgenda.hidden = true;
       if (btnOk) btnOk.textContent = 'Vale';
     } else {
-      if (iconEl) iconEl.textContent = '\u26A0\uFE0F';
-      if (titleEl) titleEl.textContent = 'Algo ha fallado';
-      if (metaEl) metaEl.textContent = r.mensaje_ui || 'Error t\u00E9cnico \u2014 no es un rechazo social. Int\u00E9ntalo de nuevo.';
+      if (iconEl) iconEl.textContent = '\uD83D\uDE05';
+      if (titleEl) titleEl.textContent = 'Uy... el vecino se ha quedado pensando demasiado \uD83D\uDE05';
+      if (metaEl) metaEl.textContent = r.mensaje_ui || 'Ha ocurrido un problemilla t\u00E9cnico. No es un rechazo social \u2014 int\u00E9ntalo de nuevo.';
       if (detallesEl) detallesEl.textContent = '';
       if (contraEl) contraEl.hidden = true;
       if (btnAgenda) btnAgenda.hidden = true;
