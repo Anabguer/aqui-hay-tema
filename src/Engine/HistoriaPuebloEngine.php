@@ -263,7 +263,7 @@ final class HistoriaPuebloEngine
     /**
      * Catálogo visual completo (33 posiciones en orden editorial).
      *
-     * @return list<array{id: string, nombre: string, revelado: bool, entrada: ?array, orden: int, imagen: string}>
+     * @return list<array{id: string, nombre: string, revelado: bool, entrada: ?array, orden: int, imagen: string, plantilla: string}>
      */
     public static function catalogo(array $partida): array
     {
@@ -282,6 +282,7 @@ final class HistoriaPuebloEngine
                 'entrada' => $entrada,
                 'orden' => $i + 1,
                 'imagen' => $slot['imagen'],
+                'plantilla' => $slot['plantilla'],
             ];
         }
 
