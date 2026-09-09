@@ -1509,7 +1509,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 })();
 </script>
 <script>if(/^(mobile|desktop)$/.test(new URLSearchParams(location.search).get('design')||'')){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/inicio-design-mode.js';document.body.appendChild(s)}</script>
-<script>if(new URLSearchParams(location.search).get('composer')==='1'){var cs=document.createElement('script');cs.src='dev/composer-inject.js';document.body.appendChild(cs)}</script>
+<script>if(new URLSearchParams(location.search).get('composer')==='1'){var cs=document.createElement('script');cs.src='dev/composer-inject.js';document.body.appendChild(cs)}else{var sd=document.createElement('script');sd.src='assets/js/sticker-defaults.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>';document.body.appendChild(sd)}</script>
 </body>
 </html>
 
