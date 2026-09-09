@@ -4,7 +4,7 @@ header('Content-Type: text/html; charset=utf-8');
 header('Cache-Control: no-store, no-cache, must-revalidate');
 header('Pragma: no-cache');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
-$ahtUi = 'v3-20260908-rendersehablade-fix';
+$ahtUi = 'v3-20260909-histdet-wrapper-celestine';
 if (is_file($ahtBusterFile)) {
     $ahtBusterRaw = trim((string) file_get_contents($ahtBusterFile));
     if ($ahtBusterRaw !== '') {
@@ -1110,7 +1110,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
       <aside class="aht-screen" data-aht-screen="plan-resultado" aria-label="Resultado del plan">
         <div class="aht-frame">
           <header class="aht-frame-header">
-            <h2 class="aht-frame-title" data-pr-titulo>Resultado</h2>
+            <h2 class="aht-frame-title" data-pr-titulo>Plan</h2>
             <button type="button" class="aht-frame-close" data-pr-close aria-label="Cerrar">✕</button>
           </header>
           <div class="aht-frame-body">
@@ -1523,6 +1523,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 })();
 </script>
 <script>if(/^(mobile|desktop)$/.test(new URLSearchParams(location.search).get('design')||'')){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/inicio-design-mode.js';document.body.appendChild(s)}</script>
+<script>if(new URLSearchParams(location.search).get('composer')==='1'){var cs=document.createElement('script');cs.src='dev/composer-inject.js';document.body.appendChild(cs)}</script>
 </body>
 </html>
 
