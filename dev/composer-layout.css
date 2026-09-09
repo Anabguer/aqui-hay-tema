@@ -1,11 +1,11 @@
 /*
  * composer-layout.css — scoped to ?composer=1 only
  * Injected by composer-inject.js at runtime.
- * Expands the map to full width, hides side columns.
- * NO toca play.php ni el layout normal.
+ * Minimal overrides: full width + sticker layer context.
+ * Does NOT alter play.php layout or hide any elements.
  */
 
-/* ── 1. Allow horizontal overflow on body/shell ── */
+/* ── 1. Full width: remove horizontal margins ── */
 body.play-v3 {
   overflow-x: auto !important;
   max-width: none !important;
@@ -18,73 +18,7 @@ body.play-v3 {
   max-width: none !important;
 }
 
-/* ── 1b. Ensure .inicio-stage is positioning context for sticker layer ── */
+/* ── 2. Position context for sticker layer ── */
 .play-v3 .game-shell .inicio-stage {
   position: relative;
 }
-
-/* ── 2. Collapse the three-column grid to single column ── */
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage {
-  grid-template-columns: 1fr !important;
-  grid-template-areas:
-    "map" !important;
-  padding: 0 !important;
-}
-
-/* ── 3. Hide side columns, header, doodles, and bottom nav from grid ── */
-.play-v3 .inicio-desktop > .game-top,
-.play-v3 .inicio-desktop-left,
-.play-v3 .inicio-desktop-right,
-.play-v3 .inicio-doodles {
-  display: none !important;
-}
-
-/* Prevent grid area assignment from overriding display:none */
-.play-v3 .inicio-desktop > .game-top { grid-area: auto !important; }
-.play-v3 .inicio-desktop-left { grid-area: auto !important; }
-.play-v3 .inicio-desktop-right { grid-area: auto !important; }
-
-/* Nav references area "nav" which doesn't exist in "map" — creates implicit columns */
-.play-v3 .play-bottom-nav { display: none !important; }
-
-/* ── 4. Map host: single grid participant, full width ── */
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-stage > .inicio-map-host {
-  grid-area: map !important;
-  width: 100% !important;
-  padding: 0 !important;
-}
-
-/* ── 5. Board-fit: real desktop proportions, no cap ── */
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .board-fit {
-  width: 100% !important;
-  max-height: none !important;
-  aspect-ratio: 618 / 404 !important;
-  border-radius: 8px !important;
-}
-
-/* ── 6. Board-scroll: static, full size ── */
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .board-scroll {
-  position: static !important;
-  inset: auto !important;
-  width: 100% !important;
-  height: auto !important;
-  overflow: visible !important;
-}
-
-/* ── 7. Play-root: natural size, no clamp ── */
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-root.pc {
-  height: auto !important;
-  min-height: 0 !important;
-  overflow: visible !important;
-}
-
-/* ── 8. Play-stage: full width ── */
-.play-v3:has(.inicio-desktop.is-inicio-view-active) .inicio-map-host .play-stage {
-  width: 100% !important;
-  overflow: visible !important;
-}
-
-/* ── 9. Mobile mode: maintain 390px phone layout ── */
-/* When composer parent switches to mobile, the iframe loads at 390px.
-   The media query (max-width:768px) inside play.php activates mobile layout.
-   No additional overrides needed — mobile layout is already single-column. */
