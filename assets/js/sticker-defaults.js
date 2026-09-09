@@ -5,20 +5,20 @@
 'use strict';
 
 var DESKTOP=[
-  {id:'ds1',k:'sparkle',x:1249,y:102,w:44,r:0},
-  {id:'ds2',k:'rainbow',x:1276,y:764,w:114,r:0},
-  {id:'ds3',k:'house',x:1107,y:50,w:67,r:0},
-  {id:'ds4',k:'bird',x:1490,y:-5,w:44,r:0},
-  {id:'ds5',k:'star-malva',x:466,y:7,w:28,r:0},
-  {id:'ds6',k:'star-azul',x:450,y:40,w:21,r:0},
-  {id:'ds7',k:'balloon',x:1294,y:758,w:29,r:-20},
-  {id:'ds8',k:'heart',x:1160,y:38,w:25,r:21},
-  {id:'ds9',k:'heart',x:1101,y:32,w:21,r:-23},
-  {id:'ds10',k:'balloon',x:1355,y:779,w:26,r:10},
+  {id:'ds1',k:'sparkle',x:1436,y:100,w:44,r:0},
+  {id:'ds2',k:'rainbow',x:1518,y:765,w:114,r:0},
+  {id:'ds3',k:'house',x:1207,y:52,w:67,r:0},
+  {id:'ds4',k:'bird',x:1692,y:-6,w:44,r:0},
+  {id:'ds5',k:'star-malva',x:465,y:1,w:28,r:0},
+  {id:'ds6',k:'star-azul',x:452,y:33,w:21,r:0},
+  {id:'ds7',k:'balloon',x:1567,y:750,w:29,r:-20},
+  {id:'ds8',k:'heart',x:1250,y:25,w:25,r:21},
+  {id:'ds9',k:'heart',x:1203,y:48,w:21,r:-23},
+  {id:'ds10',k:'balloon',x:1628,y:782,w:26,r:10},
   {id:'ds11',k:'coffee',x:126,y:603,w:44,r:9},
-  {id:'ds12',k:'sun',x:1349,y:709,w:44,r:0},
+  {id:'ds12',k:'sun',x:1500,y:702,w:44,r:0},
   {id:'ds13',k:'music',x:329,y:547,w:34,r:20},
-  {id:'ds14',k:'sun',x:1310,y:15,w:44,r:0},
+  {id:'ds14',k:'sun',x:1524,y:16,w:44,r:0},
   {id:'ds15',k:'moon',x:5,y:59,w:44,r:-18}
 ];
 
