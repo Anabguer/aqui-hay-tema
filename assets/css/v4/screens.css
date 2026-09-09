@@ -210,27 +210,29 @@
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
-  border: 1.5px solid var(--ds-pink-deep, #C42B4A);
+  position: relative;
+  border: 2px solid var(--msg-ink, #3b3028);
   background: var(--ds-pink-soft, #F9DCE4);
-  font: 700 0.78rem/1 "Nunito", sans-serif;
-  color: var(--ds-ink-soft, #6B5138);
+  font: 800 0.75rem/1 var(--ds-font-body, "Nunito", sans-serif);
+  color: var(--ds-ink, #3b3028);
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  padding: 6px 16px;
-  border-radius: 999px;
+  padding: 5px 14px 4px;
+  border-radius: 12px 8px 13px 9px / 8px 13px 9px 12px;
   white-space: nowrap;
   transition: background .15s, border-color .15s, color .15s;
-  box-shadow: 0 2px 6px rgba(196, 43, 74, 0.10);
-  transform: rotate(-2.5deg);
+  box-shadow: 1.5px 2px 0 rgba(51, 38, 30, .25);
+  transform: rotate(-3deg);
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all:hover {
   background: var(--ds-pink-deep, #C42B4A);
   border-color: var(--ds-pink-deep, #C42B4A);
   color: #fff;
-  box-shadow: 0 2px 6px rgba(196, 43, 74, 0.18);
+  box-shadow: 2px 3px 0 rgba(196, 43, 74, .30);
+  transform: rotate(-1deg);
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-mark-all-box {
