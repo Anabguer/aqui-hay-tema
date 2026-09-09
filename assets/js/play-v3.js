@@ -7228,10 +7228,12 @@ function hobbyIconKey(id, texto) {
     if (edadEl) {
       var edadVal = vista.edad != null ? vista.edad : (f.identidad && f.identidad.edad);
       if (edadVal != null && edadVal !== '') {
-        edadEl.textContent = String(edadVal) + ' a\u00f1os';
+        var edadNum = $('[data-ficha-edad-num]', edadEl);
+        if (edadNum) edadNum.textContent = String(edadVal);
         edadEl.hidden = false;
       } else {
-        edadEl.textContent = '';
+        var edadNum2 = $('[data-ficha-edad-num]', edadEl);
+        if (edadNum2) edadNum2.textContent = '';
         edadEl.hidden = true;
       }
     }

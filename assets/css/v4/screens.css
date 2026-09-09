@@ -365,9 +365,8 @@
 /* ── PESTAÑAS DE CARPETA ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-tabs {
   display: flex;
-  gap: 4px;
-  padding: 0 12px;
-  padding-top: 8px;
+  gap: 8px;
+  padding: 6px 18px 0;
   background: transparent;
 }
 
@@ -456,14 +455,14 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 6px 12px;
+  gap: 4px 10px;
   width: 100%;
   background:
     linear-gradient(135deg, rgba(237, 232, 244, 0.5), rgba(243, 239, 247, 0.7)),
     repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(180, 150, 110, 0.04) 18px, rgba(180, 150, 110, 0.04) 19px);
   border: 2px solid rgba(180, 150, 110, 0.2);
   border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
-  padding: 16px 18px 12px;
+  padding: 12px 14px 10px;
   position: relative;
   box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
 }
@@ -473,9 +472,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   min-width: 0;
-  padding: 4px 0;
+  padding: 2px 0;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--left {
@@ -490,7 +489,7 @@
   align-items: flex-start;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
   --ficha-cara-size: 156px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
@@ -542,7 +541,7 @@
   color: var(--ds-ink, #3b3028);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nombre {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.8rem;
   font-weight: 700;
@@ -619,16 +618,41 @@
   position: relative;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-animo-inline .ficha-animo-nube {
-  border-radius: 20px 20px 20px 8px;
+/* Base shared by nube and pill (JS replaces class) */
+.ficha-animo-nube,
+.ficha-animo-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   padding: 8px 14px 8px 10px;
-  min-width: 80px;
-  text-align: center;
-  position: relative;
+  background: #fff;
   border: 2px solid rgba(180, 150, 110, 0.25);
+  border-radius: 20px 20px 20px 8px;
   box-shadow:
     1.5px 2px 0 rgba(51, 38, 30, 0.10),
     0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+  min-width: 80px;
+  text-align: center;
+}
+
+/* Emotion variants — nube (legacy) and pill (JS active) */
+.ficha-animo-nube--alegre,
+.ficha-animo-pill--alegre {
+  background: #e8f5e3;
+  border-color: rgba(74, 122, 82, 0.45);
+}
+
+.ficha-animo-nube--triste,
+.ficha-animo-pill--triste {
+  background: #e6d9f3;
+  border-color: rgba(122, 106, 154, 0.45);
+}
+
+.ficha-animo-nube--enfadado,
+.ficha-animo-pill--enfadado {
+  background: #fbe5e8;
+  border-color: rgba(196, 43, 74, 0.45);
 }
 
 /* Burbujas de la nube de pensamiento */
@@ -644,16 +668,16 @@
 }
 
 .ficha-hero-animo-inline::before {
-  width: 12px;
-  height: 12px;
-  bottom: -8px;
+  width: 14px;
+  height: 14px;
+  bottom: -10px;
   left: 2px;
 }
 
 .ficha-hero-animo-inline::after {
-  width: 8px;
-  height: 8px;
-  bottom: -16px;
+  width: 10px;
+  height: 10px;
+  bottom: -20px;
   left: -2px;
 }
 
@@ -662,34 +686,7 @@
   display: none;
 }
 
-.ficha-animo-nube {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 5px 10px 5px 7px;
-  background: #fff;
-  border: 1.5px solid rgba(180, 150, 110, 0.22);
-  border-radius: 14px 14px 14px 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  position: relative;
-}
-
-.ficha-animo-nube--alegre {
-  background: #e8f5e3;
-  border-color: rgba(74, 122, 82, 0.35);
-}
-
-.ficha-animo-nube--triste {
-  background: #e6d9f3;
-  border-color: rgba(122, 106, 154, 0.35);
-}
-
-.ficha-animo-nube--enfadado {
-  background: #fbe5e8;
-  border-color: rgba(196, 43, 74, 0.35);
-}
-
-.ficha-animo-ico {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-ico {
   font-size: 1.1rem;
   line-height: 1;
 }
@@ -699,9 +696,9 @@
   line-height: 1;
 }
 
-.ficha-animo-val {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
   display: block;
@@ -836,67 +833,67 @@
 }
 
 .ficha-deco-linea1 {
-  top: 18px;
+  top: 14px;
   left: 50%;
   transform: translateX(-56px) rotate(-12deg);
-  width: 18px;
-  height: 2px;
+  width: 20px;
+  height: 2.5px;
   background: var(--vec-lavender, #b49ad4);
+  border-radius: 1px;
+  opacity: 0.55;
+}
+
+.ficha-deco-linea2 {
+  top: 24px;
+  left: 50%;
+  transform: translateX(44px) rotate(8deg);
+  width: 14px;
+  height: 2.5px;
+  background: var(--vec-green, #4a7a52);
   border-radius: 1px;
   opacity: 0.45;
 }
 
-.ficha-deco-linea2 {
-  top: 30px;
-  left: 50%;
-  transform: translateX(42px) rotate(8deg);
-  width: 12px;
-  height: 2px;
-  background: var(--vec-green, #4a7a52);
-  border-radius: 1px;
-  opacity: 0.35;
-}
-
 .ficha-deco-corazon {
-  bottom: 18px;
-  right: 14px;
-  font-size: 0.7rem;
+  bottom: 14px;
+  right: 12px;
+  font-size: 0.85rem;
   color: var(--vec-pink, #e88ba8);
-  opacity: 0.4;
+  opacity: 0.55;
   transform: rotate(12deg);
 }
 
-/* Doodle estrella - esquina superior derecha */
+/* Doodle estrella — esquina superior derecha */
 .ficha-hero-card::before {
   content: '★';
   position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 0.7rem;
+  top: 6px;
+  right: 10px;
+  font-size: 0.9rem;
   color: var(--ds-mustard, #e3b04b);
-  opacity: 0.35;
+  opacity: 0.55;
   transform: rotate(15deg);
   pointer-events: none;
   z-index: 1;
 }
 
-/* Doodle rayitas - esquina inferior izquierda */
+/* Doodle rayitas — esquina inferior izquierda */
 .ficha-hero-card::after {
   content: '';
   position: absolute;
-  bottom: 12px;
-  left: 14px;
-  width: 14px;
-  height: 14px;
+  bottom: 10px;
+  left: 12px;
+  width: 18px;
+  height: 18px;
   background:
-    linear-gradient(135deg, transparent 40%, var(--vec-green, #4a7a52) 40%, var(--vec-green, #4a7a52) 45%, transparent 45%),
-    linear-gradient(135deg, transparent 55%, var(--vec-green, #4a7a52) 55%, var(--vec-green, #4a7a52) 60%, transparent 60%);
-  opacity: 0.25;
+    linear-gradient(135deg, transparent 38%, var(--vec-green, #4a7a52) 38%, var(--vec-green, #4a7a52) 44%, transparent 44%),
+    linear-gradient(135deg, transparent 52%, var(--vec-green, #4a7a52) 52%, var(--vec-green, #4a7a52) 58%, transparent 58%);
+  opacity: 0.40;
   pointer-events: none;
   z-index: 1;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-body {
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body {
   display: flex;
   flex-direction: column;
   gap: 14px;
