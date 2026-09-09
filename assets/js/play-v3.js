@@ -5643,13 +5643,14 @@ function renderInicioMpDuo(misiones, parejas) {
     var layer = $('[data-mapa-zonas]');
     if (!layer) return;
     
-    // Cache previous token positions for movement animation
+    // Save previous screen positions and zone IDs for movement animation
     var prevPositions = {};
     $$('.mapa-zona-hit .habs .hab[data-residente]').forEach(function(el) {
       var rid = el.getAttribute('data-residente');
       var zid = el.closest('.mapa-zona-hit')?.getAttribute('data-zona');
       if (rid && zid) {
-        prevPositions[rid] = zid;
+        var rect = el.getBoundingClientRect();
+        prevPositions[rid] = { zone: zid, x: rect.left + rect.width / 2, y: rect.top + rect.height / 2 };
       }
     });
     
@@ -5674,9 +5675,33 @@ function renderInicioMpDuo(misiones, parejas) {
       });
       var marcaZona = btn.getAttribute('data-encuentro-marca') || '';
       enZona.forEach(function (p, i) {
-        placeHabEnZona(box, p, i, enZona.length, prevPositions[p.id] || null, zid);
+        var prev = prevPositions[p.id] || null;
+        var prevZone = prev ? prev.zone : null;
+        placeHabEnZona(box, p, i, enZona.length, prevZone, zid);
       });
     });
+    
+    // Animate NPCs that changed zones: slide from old position to new
+    requestAnimationFrame(function() {
+      $$('.mapa-zona-hit .habs .hab[data-residente]').forEach(function(el) {
+        var rid = el.getAttribute('data-residente');
+        var prev = prevPositions[rid];
+        if (!prev) return;
+        var newZid = el.closest('.mapa-zona-hit')?.getAttribute('data-zona');
+        if (!newZid || prev.zone === newZid) return;
+        var rect = el.getBoundingClientRect();
+        var dx = prev.x - (rect.left + rect.width / 2);
+        var dy = prev.y - (rect.top + rect.height / 2);
+        if (Math.abs(dx) < 2 && Math.abs(dy) < 2) return;
+        el.style.transform = 'translate(' + dx.toFixed(1) + 'px, ' + dy.toFixed(1) + 'px)';
+        el.style.transition = 'none';
+        el.offsetHeight;
+        el.classList.add('hab-moviendo');
+        el.style.transition = 'transform 2.2s cubic-bezier(0.22, 1, 0.36, 1)';
+        el.style.transform = '';
+      });
+    });
+    
     pintarHorariosMapa();
   }
 
