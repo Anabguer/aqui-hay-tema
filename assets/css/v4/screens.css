@@ -2148,7 +2148,13 @@
   }
 
   .ficha-seccion-necesidades .ficha-necesidades {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ficha-hero-col--necesidades .ficha-necesidades {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-tab {
