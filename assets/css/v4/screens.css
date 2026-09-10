@@ -126,16 +126,13 @@
     max-width: var(--aht-modal-mobile-w, min(calc(100% - 32px), 393px));
     max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
   }
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
-    flex-wrap: wrap;
-    gap: 8px;
-    align-items: center;
-  }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-    flex-basis: 100%;
-    display: flex;
-    justify-content: flex-end;
-    order: 10;
+    position: absolute;
+    top: 100%;
+    right: 12px;
+    left: auto;
+    z-index: 5;
+    padding: 4px 0;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
     position: static;
