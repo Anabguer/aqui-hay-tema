@@ -4659,12 +4659,13 @@ function renderInicioMpDuo(misiones, parejas) {
       var imgHtml = img
         ? '<img src="' + esc(img) + '" alt="" loading="lazy" decoding="async"/>'
         : '<span class="org-lc-fallback" aria-hidden="true"></span>';
+      var isMobileLugares = window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
       btn.innerHTML =
         '<span class="org-lc-art">' + imgHtml + '</span>' +
         '<span class="org-lc-body">' +
           '<span class="org-lc-nom">' + esc(d.nombre || d.id) + '</span>' +
           (estado ? '<span class="org-lugar-estado ' + estadoCls + '">' + esc(estado) + '</span>' : '') +
-          (horario ? '<span class="org-lc-horario">' + esc(horario) + '</span>' : '') +
+          (!isMobileLugares && horario ? '<span class="org-lc-horario">' + esc(horario) + '</span>' : '') +
           (necHtml ? '<span class="org-lc-necs">' + necHtml + '</span>' : '') +
         '</span>';
       btn.addEventListener('click', function (ev) {
