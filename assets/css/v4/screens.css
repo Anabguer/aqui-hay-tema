@@ -131,9 +131,13 @@
     gap: 8px;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-    width: 100%;
     display: flex;
     justify-content: flex-end;
+    padding: 2px 16px 0;
+  }
+  .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
+    position: static;
+    transform: none;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
     position: static;
