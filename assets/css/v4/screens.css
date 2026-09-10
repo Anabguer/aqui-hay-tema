@@ -1890,6 +1890,10 @@
     gap: 10px;
   }
 
+  .aht-screen[data-aht-screen="ficha"] .ficha-pair:has(.ficha-seccion-rasgos) {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .aht-screen[data-aht-screen="ficha"] .ficha-body {
     padding: 10px 12px;
     gap: 10px;
