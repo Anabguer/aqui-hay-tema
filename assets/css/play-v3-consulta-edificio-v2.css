@@ -2,14 +2,109 @@
 /* Sin !important. Autoridad vía especificidad .play-v3 .quien */
 
 /* ═══════════════════════════════════════════════════════════
-   MOBILE FIRST — vertical stack
+   MOBILE — reducir todo
+   ═══════════════════════════════════════════════════════════ */
+
+@media (max-width: 768px) {
+  .play-v3 .quien .aht-frame-body {
+    padding: .3rem .4rem .5rem;
+  }
+
+  .play-v3 .quien .aht-frame-title {
+    font-size: .78rem;
+  }
+
+  .play-v3 .quien .consulta-ed-art {
+    max-height: 140px;
+    aspect-ratio: 16 / 9;
+  }
+
+  .qed-main {
+    gap: .3rem;
+  }
+
+  .qed-subtitle {
+    font-size: .95rem;
+  }
+
+  .qed-art-desc {
+    font-size: .78rem;
+    padding: .3rem .4rem;
+    margin-top: .3rem;
+  }
+
+  .qed-card {
+    padding: .35rem .4rem;
+  }
+
+  .qed-card-title {
+    font-size: .58rem;
+    margin-bottom: .2rem;
+  }
+
+  .qed-nec-lugar-ico {
+    width: 18px;
+    height: 18px;
+  }
+
+  .qed-nec-lugar-name {
+    font-size: .55rem;
+  }
+
+  .qed-nec-lugar-frase {
+    font-size: .65rem;
+  }
+
+  .qed-nec-lugar-row {
+    gap: .35rem;
+  }
+
+  .qed-curiosity-list li {
+    font-size: .55rem;
+    padding: .12rem 0 .12rem .6rem;
+  }
+
+  .play-v3 .quien .consulta-ed-presencia-kicker {
+    font-size: .58rem;
+  }
+
+  .play-v3 .quien .consulta-ed-estado {
+    font-size: .48rem;
+    padding: .1rem .3rem;
+  }
+
+  .play-v3 .quien .consulta-ed-horas {
+    font-size: .62rem;
+  }
+
+  .consulta-ed-avatars {
+    gap: .1rem;
+  }
+
+  .qed-footer-quote {
+    font-size: .75rem;
+    margin-top: .4rem;
+  }
+
+  .qed-bottom {
+    gap: .3rem;
+    margin-top: .4rem;
+  }
+
+  .qed-offline {
+    font-size: .55rem;
+    padding: .3rem .4rem;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   DESKTOP — 2 columnas
    ═══════════════════════════════════════════════════════════ */
 
 /* ─── Frame body ─── */
 .play-v3 .quien .aht-frame-body {
   padding: .6rem .7rem 1rem;
   background: #fed785e8;
-  background: var(--ds-paper, #F9F7F4);
 }
 
 /* ─── Main 2-column layout ─── */

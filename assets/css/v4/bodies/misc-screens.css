@@ -218,21 +218,24 @@
 /* — Misiones checklist responsive — */
 @media (max-width: 420px) {
   .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-chk {
-    width: 1.4rem; height: 1.4rem;
+    width: 1.5rem; height: 1.5rem;
   }
   .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-check-row {
-    gap: .5rem; padding: .55rem .15rem;
+    gap: .55rem; padding: .6rem .15rem;
   }
   .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-check-tit {
-    font-size: 1rem;
+    font-size: 1.15rem;
   }
   .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-check-desc {
-    font-size: .85rem;
+    font-size: 1.35rem;
   }
   .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-check-accion {
-    font-size: .85rem; padding: .2rem .5rem;
+    font-size: .95rem; padding: .25rem .6rem;
   }
   .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-sello-txt {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="misiones"] .mis-progreso-txt {
+    font-size: 1.05rem;
   }
 }
