@@ -128,7 +128,7 @@
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     padding: 0 16px 4px;
   }
 }
