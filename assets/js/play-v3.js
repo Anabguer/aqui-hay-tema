@@ -1500,7 +1500,7 @@
     Object.keys(vistos).forEach(function (id) {
       const info = vistos[id] || {};
       const nom = info.identidad_publica && info.identidad_publica.nombre;
-      if (nom) vecinos.push({ id: id, nombre: nom });
+      if (nom) vecinos.push({ id: id, nombre: nom, avatar: tokenDe(id) });
     });
     vecinos.sort(function (a, b) { return a.nombre.localeCompare(b.nombre, 'es'); });
     cont.innerHTML = '';
@@ -1511,7 +1511,11 @@
       const chip = document.createElement('button');
       chip.type = 'button';
       chip.className = 'inv-vecino';
-      chip.textContent = v.nombre;
+      if (v.avatar) {
+        chip.innerHTML = '<img class="inv-vecino-avatar" src="' + esc(v.avatar) + '" alt=""/><span class="inv-vecino-nombre">' + esc(v.nombre) + '</span>';
+      } else {
+        chip.innerHTML = '<span class="inv-vecino-avatar inv-vecino-avatar--ini">' + esc((v.nombre || '?')[0]) + '</span><span class="inv-vecino-nombre">' + esc(v.nombre) + '</span>';
+      }
       chip.addEventListener('click', function () {
         invSelVecino = v;
         $$('.inv-vecino', root).forEach(function (c) { c.classList.remove('is-sel'); });
@@ -5158,6 +5162,21 @@ function renderInicioMpDuo(misiones, parejas) {
     var lugIdZ = destId || (destinosHorario[0] && destinosHorario[0].id) || '';
     var subElZ = $('[data-q-subtitle]');
     if (subElZ) subElZ.textContent = LUGAR_SUBTITULO[lugIdZ] || '';
+    var necElZ = $('[data-q-necesidades]');
+    if (necElZ) {
+      var metaNecZ = LUGAR_META[lugIdZ] || {};
+      var necListZ = (metaNecZ.necesidades || []);
+      necElZ.innerHTML = necListZ.map(function (n) {
+        var k = n.toLowerCase();
+        var icon = NEC_ICON_PATHS[k] || '';
+        if (icon) return '<span class="qed-nec-pill"><img src="' + esc(icon) + '" alt="" class="qed-nec-ico"/>' + n + '</span>';
+        return '<span class="qed-nec-pill">' + n + '</span>';
+      }).join('');
+    }
+    var offlineElZ = $('[data-q-offline]');
+    var vacioElZ = $('[data-q-sum]');
+    if (offlineElZ) offlineElZ.hidden = gente.length > 0;
+    if (vacioElZ && !gente.length) vacioElZ.hidden = true;
     quienTemaActivo = null;
     quienAvatarFlip = false;
     pintarConsultaEdArt(lugIdZ);
@@ -5913,6 +5932,21 @@ function renderInicioMpDuo(misiones, parejas) {
     pintarHorarioQuien(destinosHorarioCx);
     var subEl = $('[data-q-subtitle]');
     if (subEl) subEl.textContent = LUGAR_SUBTITULO[lugId] || '';
+    var necEl = $('[data-q-necesidades]');
+    if (necEl) {
+      var metaNec = LUGAR_META[lugId] || {};
+      var necList = (metaNec.necesidades || []);
+      necEl.innerHTML = necList.map(function (n) {
+        var k = n.toLowerCase();
+        var icon = NEC_ICON_PATHS[k] || '';
+        if (icon) return '<span class="qed-nec-pill"><img src="' + esc(icon) + '" alt="" class="qed-nec-ico"/>' + n + '</span>';
+        return '<span class="qed-nec-pill">' + n + '</span>';
+      }).join('');
+    }
+    var offlineEl = $('[data-q-offline]');
+    var vacioEl = $('[data-q-sum]');
+    if (offlineEl) offlineEl.hidden = gente.length > 0;
+    if (vacioEl && !gente.length) vacioEl.hidden = true;
     quienTemaActivo = null;
     quienAvatarFlip = false;
     pintarConsultaEdArt(lugId);

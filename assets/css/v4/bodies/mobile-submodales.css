@@ -85,10 +85,34 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vecino {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   border: 2px solid var(--ds-ink-soft, #594839);
   border-radius: 999px;
   background: var(--ds-paper-card, #fffdf7);
   box-shadow: 1px 1.5px 0 rgba(51, 38, 30, .08);
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vecino-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: 0 0 28px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vecino-avatar--ini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--ds-pink-soft, #fbe3ec);
+  color: var(--ds-ink, #3b3028);
+  font: 700 .75rem/1 Nunito, sans-serif;
+  flex: 0 0 28px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="inventario"] .inv-vecino.is-sel {
