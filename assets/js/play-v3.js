@@ -1562,14 +1562,17 @@
     invEntregando = true;
     const btnEntregar = $('[data-inv-entregar]', root);
     const feedback = $('[data-inv-feedback]', root);
+    const selObjeto = invSelObjeto;
+    const selVecino = invSelVecino;
     if (btnEntregar) btnEntregar.disabled = true;
     try {
-    const r = await api('regalo.entregar', { objeto_id: invSelObjeto.id, residente_id: invSelVecino.id });
+    const r = await api('regalo.entregar', { objeto_id: selObjeto.id, residente_id: selVecino.id });
     const texto = (r && (r.texto || r.mensaje_ui)) || '';
     if (r && r.ok) {
       toast(texto || 'Regalo entregado.');
       await renderInventario();
-      if (feedback) {
+      const feedbackEl = $('[data-inv-feedback]', root);
+      if (feedbackEl) {
         let extra = '';
         if (Array.isArray(r.descubrimientos)) {
           r.descubrimientos.forEach(function (d) {
@@ -1578,7 +1581,7 @@
         }
         const escena = (r && typeof r.escena === 'string') ? r.escena : '';
         const eco = (r && typeof r.eco_emocional === 'string') ? r.eco_emocional : '';
-        const avatar = tokenDe(invSelVecino.id);
+        const avatar = tokenDe(selVecino.id);
         const reaccion = r.reaccion || '';
         const isPos = reaccion === 'le_encanta' || reaccion === 'le_gusta';
         const isNeg = reaccion === 'no_le_gusta';
@@ -1587,15 +1590,15 @@
         if (avatar) {
           avatarHtml = '<img class="inv-feedback-avatar" src="' + esc(avatar) + '" alt=""/>';
         } else {
-          avatarHtml = '<span class="inv-feedback-avatar inv-feedback-avatar--ini">' + esc((invSelVecino.nombre || '?')[0]) + '</span>';
+          avatarHtml = '<span class="inv-feedback-avatar inv-feedback-avatar--ini">' + esc((selVecino.nombre || '?')[0]) + '</span>';
         }
         let reaccionBadge = reaccionLabel ? '<span class="inv-feedback-badge inv-feedback-badge--' + esc(reaccion) + '">' + esc(reaccionLabel) + '</span>' : '';
-        feedback.hidden = false;
-        feedback.innerHTML =
+        feedbackEl.hidden = false;
+        feedbackEl.innerHTML =
           '<div class="inv-feedback-card">' +
             '<div class="inv-feedback-cara">' + avatarHtml + '</div>' +
             '<div class="inv-feedback-body">' +
-              '<span class="inv-feedback-nombre">' + esc(invSelVecino.nombre) + '</span>' +
+              '<span class="inv-feedback-nombre">' + esc(selVecino.nombre) + '</span>' +
               reaccionBadge +
               (escena ? '<span class="inv-feedback-escena">' + esc(escena) + '</span>' : '') +
               '<span class="inv-feedback-texto">' + esc(texto) + '</span>' +
@@ -1603,9 +1606,10 @@
               (extra ? '<span class="inv-feedback-extra">' + extra + '</span>' : '') +
             '</div>' +
           '</div>';
-        feedback.classList.toggle('is-mal', isNeg);
-        feedback.classList.toggle('is-bien', isPos);
-        feedback.classList.remove('is-error');
+        feedbackEl.classList.toggle('is-mal', isNeg);
+        feedbackEl.classList.toggle('is-bien', isPos);
+        feedbackEl.classList.remove('is-error');
+        feedbackEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     } else {
       if (feedback) {
@@ -9546,19 +9550,15 @@ window.AHT_PLAN_IMAGES = {
       mensajitoEl.hidden = true;
     }
     var prBody = document.querySelector('.pr-body');
-    if (prBody && !prBody.querySelector('.pr-btn-volver')) {
-      if (r.rechazada) {
-        var btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'pr-btn-volver';
-        btn.setAttribute('data-pr-close', '');
-        btn.style.cssText = 'margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);';
-        btn.textContent = 'Volver a planes';
-        btn.addEventListener('click', function() { cerrarResultadoPlan(); setCapa('organizar'); });
-        prBody.appendChild(btn);
-      } else {
-        setTimeout(function() { cerrarResultadoPlan(); }, 2500);
-      }
+    if (prBody && !prBody.querySelector('.pr-btn-volver') && r.rechazada) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'pr-btn-volver';
+      btn.setAttribute('data-pr-close', '');
+      btn.style.cssText = 'margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);';
+      btn.textContent = 'Volver a planes';
+      btn.addEventListener('click', function() { if (window.AHTScreenManager) window.AHTScreenManager.close(); });
+      prBody.appendChild(btn);
     }
     injectDoodlesPlanResultado();
   }
