@@ -9,3 +9,15 @@ function aht_dev_enabled(): bool
     }
     return is_file(__DIR__ . '/dev.local.php');
 }
+
+/**
+ * Acciones DEV de solo lectura permitidas sin el gate completo.
+ * Cualquier nueva acción read-only debe añadirse aquí explícitamente.
+ */
+function aht_dev_readonly_allowed(string $action): bool
+{
+    static $allowed = [
+        'dev.diagnostico.export',
+    ];
+    return in_array($action, $allowed, true);
+}

@@ -183,7 +183,7 @@ final class DevHandler
 
     public static function diagnosticoExport(ApiContext $ctx, array $body, array $partida): array
     {
-        requireDev();
+        requireDev(['dev.diagnostico.export']);
         return DiagnosticExport::export($partida, $ctx->root);
     }
 

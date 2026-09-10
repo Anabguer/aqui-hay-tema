@@ -135,12 +135,17 @@ function requirePartidaLigera(ApiContext $ctx, array $body): array
     }
 }
 
-function requireDev(): void
+function requireDev(array $readonlyAllowlist = []): void
 {
     require_once dirname(__DIR__) . '/src/dev_gate.php';
-    if (!aht_dev_enabled()) {
-        jsonOut(GameError::respuesta(GameError::DEV_DESHABILITADO, [], 403));
+    if (aht_dev_enabled()) {
+        return;
     }
+    $action = $_GET['action'] ?? '';
+    if ($action !== '' && in_array($action, $readonlyAllowlist, true)) {
+        return;
+    }
+    jsonOut(GameError::respuesta(GameError::DEV_DESHABILITADO, [], 403));
 }
 
 function savePartida(ApiContext $ctx, array &$partida): void
