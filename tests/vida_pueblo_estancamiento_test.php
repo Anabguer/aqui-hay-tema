@@ -53,9 +53,6 @@ function forzarHeart(array &$p, int $valor): void
     ], $cal);
 }
 
-/**
- * Ajusta el valor de TODAS las necesidades de TODOS los residentes activos.
- */
 function setNecesidades(array &$p, int $valor): void
 {
     $residentes = $p['residentes'] ?? [];
@@ -93,7 +90,7 @@ info("SH inicial = " . round($shA, 1));
 
 for ($d = 0; $d < 10; $d++) {
     $pA['reloj']['dia_pueblo'] = $d + 1;
-    setNecesidades($pA, 80); // bien
+    setNecesidades($pA, 80);
     cerrarDia($pA);
 }
 $estA = $pA['vida_pueblo']['estancamiento'];
@@ -101,26 +98,31 @@ ok($estA['dias_bajo_umbral'] === 0, 'A: pueblo sano: dias_bajo_umbral = 0');
 ok($estA['activo'] === false, 'A: pueblo sano: estancamiento no activo');
 
 // ============================================================
-// B. stateHeart <= 60 durante menos de 5 días → no activa presión
+// B. GRACE PERIOD: day-by-day boundary test
+// Día 1-5: no activa. Día 6: SÍ activa.
 // ============================================================
-echo "\n--- B: Período corto bajo umbral ---\n";
+echo "\n--- B: Grace period día a día (boundary exacto) ---\n";
 $pB = partidaEst();
-setNecesidades($pB, 20); // en_rojo → SH bajo
-$estadoB = VidaPuebloEngine::calcularEstadoPueblo($pB, $cal);
-$shB = VidaPuebloEngine::stateHeart($estadoB, VidaPuebloEngine::cfg($cal));
-info("SH con necesidades en rojo = " . round($shB, 1));
+setNecesidades($pB, 20);
 
-for ($d = 0; $d < 4; $d++) {
-    $pB['reloj']['dia_pueblo'] = $d + 1;
+for ($d = 1; $d <= 8; $d++) {
+    $pB['reloj']['dia_pueblo'] = $d;
     setNecesidades($pB, 20);
     cerrarDia($pB);
+    $est = $pB['vida_pueblo']['estancamiento'];
+    $heart = VidaPuebloEngine::valor($pB);
+    info("Día $d: dias_bajo={$est['dias_bajo_umbral']} activo=" . ($est['activo'] ? 'SÍ' : 'NO') . " heart=$heart");
+
+    if ($d <= 5) {
+        ok($est['activo'] === false, "B: día $d: estancamiento NO activo (grace)");
+    }
+    if ($d === 6) {
+        ok($est['activo'] === true, "B: día 6: estancamiento SÍ activo (grace expiró)");
+    }
 }
-$estB = $pB['vida_pueblo']['estancamiento'];
-ok($estB['dias_bajo_umbral'] >= 1, 'B: al menos 1 día bajo umbral (' . $estB['dias_bajo_umbral'] . ')');
-ok($estB['activo'] === false, 'B: <5 días: estancamiento NO activo');
 
 // ============================================================
-// C. stateHeart <= 60 durante 5+ días sin mejora → activa -1/día
+// C. 5+ días sin mejora → activa -1/día
 // ============================================================
 echo "\n--- C: 5+ días sin mejora ---\n";
 $pC = partidaEst();
@@ -136,57 +138,42 @@ for ($d = 0; $d < 8; $d++) {
 $heartDespues = VidaPuebloEngine::valor($pC);
 $estC = $pC['vida_pueblo']['estancamiento'];
 info("Heart después: $heartDespues (delta: " . ($heartDespues - $heartAntes) . ")");
-info("Días bajo umbral: " . $estC['dias_bajo_umbral']);
-info("Activo: " . ($estC['activo'] ? 'SÍ' : 'NO'));
-ok($estC['activo'] === true, 'C: 5+ días sin mejora: estancamiento ACTIVO');
+ok($estC['activo'] === true, 'C: estancamiento ACTIVO tras 8 días');
 ok($heartDespues < $heartAntes, 'C: heart bajó por presión (' . ($heartDespues - $heartAntes) . ')');
 
 // ============================================================
-// D. Oscilación diaria sin tendencia real: 58→60→58→60→58
+// D. Oscilación diaria sin tendencia real
 // ============================================================
 echo "\n--- D: Oscilación sin tendencia ---\n";
 $pD = partidaEst();
-// Simular SH oscilante alrededor de 55-60
 for ($d = 0; $d < 10; $d++) {
     $pD['reloj']['dia_pueblo'] = $d + 1;
-    $target = ($d % 2 === 0) ? 28 : 32; // Oscilar entre lo_necesita-bajo y lo_necesita-medio
+    $target = ($d % 2 === 0) ? 28 : 32;
     setNecesidades($pD, $target);
     cerrarDia($pD);
 }
 $estD = $pD['vida_pueblo']['estancamiento'];
-info("Días bajo umbral: " . $estD['dias_bajo_umbral']);
-info("Activo: " . ($estD['activo'] ? 'SÍ' : 'NO'));
 ok($estD['dias_bajo_umbral'] >= 5, 'D: oscilación cuenta como estancamiento (' . $estD['dias_bajo_umbral'] . ' días)');
+ok($estD['activo'] === true, 'D: estancamiento activo por oscilación');
 
 // ============================================================
-// E. Mejora real: desactiva presión
+// E. Mejora real desactiva presión
 // ============================================================
 echo "\n--- E: Mejora real desactiva presión ---\n";
 $pE = partidaEst();
-// Activar estancamiento primero
 for ($d = 0; $d < 8; $d++) {
     $pE['reloj']['dia_pueblo'] = $d + 1;
     setNecesidades($pE, 20);
     cerrarDia($pE);
 }
-$estE1 = $pE['vida_pueblo']['estancamiento'];
-ok($estE1['activo'] === true, 'E: estancamiento activado correctamente');
+ok($pE['vida_pueblo']['estancamiento']['activo'] === true, 'E: estancamiento activado');
 
-// Mejorar gradualmente
 for ($d = 0; $d < 8; $d++) {
     $pE['reloj']['dia_pueblo'] = 100 + $d;
-    $target = 20 + ($d * 8); // 20→28→36→44→52→60→68→76
-    setNecesidades($pE, $target);
+    setNecesidades($pE, 20 + ($d * 8));
     cerrarDia($pE);
 }
-$estE2 = $pE['vida_pueblo']['estancamiento'];
-$shE2 = VidaPuebloEngine::stateHeart(
-    VidaPuebloEngine::calcularEstadoPueblo($pE, $cal),
-    VidaPuebloEngine::cfg($cal)
-);
-info("SH final: " . round($shE2, 1));
-info("Después de mejora — Activo: " . ($estE2['activo'] ? 'SÍ' : 'NO'));
-ok($estE2['activo'] === false, 'E: mejora real desactiva estancamiento');
+ok($pE['vida_pueblo']['estancamiento']['activo'] === false, 'E: mejora desactiva estancamiento');
 
 // ============================================================
 // F. Recuperación desde heart 10
@@ -194,66 +181,49 @@ ok($estE2['activo'] === false, 'E: mejora real desactiva estancamiento');
 echo "\n--- F: Recuperación desde HF=10 ---\n";
 $pF = partidaEst();
 forzarHeart($pF, 10);
-$infoF = VidaPuebloEngine::vista($pF, $cal);
-ok($infoF['corazon_pct'] === 10, 'F: heart forzado a 10');
-ok($infoF['banda'] === 'critico', 'F: en banda crítico');
+ok(VidaPuebloEngine::vista($pF, $cal)['corazon_pct'] === 10, 'F: heart forzado a 10');
+ok(VidaPuebloEngine::vista($pF, $cal)['banda'] === 'critico', 'F: en banda crítico');
 
-// Simular recuperación
 forzarHeart($pF, 65);
 for ($d = 0; $d < 5; $d++) {
     $pF['reloj']['dia_pueblo'] = 200 + $d;
     setNecesidades($pF, 75 + ($d * 5));
     cerrarDia($pF);
 }
-$infoF2 = VidaPuebloEngine::vista($pF, $cal);
-ok($infoF2['corazon_pct'] >= 50, 'F: recuperación a HF≥50 (' . $infoF2['corazon_pct'] . ')');
-ok($infoF2['banda'] !== 'critico', 'F: salió de crítico');
+$infoF = VidaPuebloEngine::vista($pF, $cal);
+ok($infoF['corazon_pct'] >= 50, 'F: recuperación a HF≥50 (' . $infoF['corazon_pct'] . ')');
+ok($infoF['banda'] !== 'critico', 'F: salió de crítico');
 
 // ============================================================
-// G. Jugador mínimo: actividad superficial sin mejora real → ALERTA
+// G. Jugador mínimo → ALERTA
 // ============================================================
 echo "\n--- G: Jugador mínimo → ALERTA ---\n";
 $pG = partidaEst();
 for ($d = 0; $d < 40; $d++) {
     $pG['reloj']['dia_pueblo'] = $d + 1;
-    $target = max(15, 75 - ($d * 2)); // Decay gradual
-    setNecesidades($pG, $target);
+    setNecesidades($pG, max(15, 75 - ($d * 2)));
     cerrarDia($pG);
 }
 $estG = $pG['vida_pueblo']['estancamiento'];
-$heartG = VidaPuebloEngine::valor($pG);
-$shG = VidaPuebloEngine::stateHeart(
-    VidaPuebloEngine::calcularEstadoPueblo($pG, $cal),
-    VidaPuebloEngine::cfg($cal)
-);
-info("Heart: $heartG, SH: " . round($shG, 1));
-info("Estancamiento activo: " . ($estG['activo'] ? 'SÍ' : 'NO'));
 ok($estG['activo'] === true, 'G: estancamiento activo por falta de mejora real');
-ok($heartG < 65, 'G: heart bajó del inicial (' . $heartG . ')');
+ok(VidaPuebloEngine::valor($pG) < 65, 'G: heart bajó del inicial (' . VidaPuebloEngine::valor($pG) . ')');
 
 // ============================================================
-// H. No producir GO artificial cuando stateHeart está mejorando
+// H. Sin GO artificial con mejora
 // ============================================================
 echo "\n--- H: Sin GO artificial con mejora ---\n";
 $pH = partidaEst();
 forzarHeart($pH, 25);
-$infoH = VidaPuebloEngine::vista($pH, $cal);
-ok($infoH['corazon_pct'] === 25, 'H: heart inicial = 25');
-
 for ($d = 0; $d < 10; $d++) {
     $pH['reloj']['dia_pueblo'] = $d + 1;
     setNecesidades($pH, min(100, 30 + ($d * 8)));
     cerrarDia($pH);
 }
-$heartH = VidaPuebloEngine::valor($pH);
-$estH = $pH['vida_pueblo']['estancamiento'];
-info("Heart final: $heartH");
-info("Estancamiento activo: " . ($estH['activo'] ? 'SÍ' : 'NO'));
-ok($heartH > 0, 'H: no hubo game over');
-ok($estH['activo'] === false, 'H: estancamiento no se activó con mejora');
+ok(VidaPuebloEngine::valor($pH) > 0, 'H: no hubo game over');
+ok($pH['vida_pueblo']['estancamiento']['activo'] === false, 'H: estancamiento no se activó');
 
 // ============================================================
-// I. Catch-up: comportamiento durante ausencia
+// I. Catch-up: ausencia no acumula presión
 // ============================================================
 echo "\n--- I: Catch-up / ausencia ---\n";
 $pI = partidaEst();
@@ -264,15 +234,27 @@ for ($d = 0; $d < 8; $d++) {
     setNecesidades($pI, 20);
     cerrarDia($pI);
 }
-$estI1 = $pI['vida_pueblo']['estancamiento'];
-ok($estI1['activo'] === true, 'I: estancamiento activado antes de ausencia');
+ok($pI['vida_pueblo']['estancamiento']['activo'] === true, 'I: estancamiento activado antes de ausencia');
 
-// Vista no debería resetear el estado
-$infoI = VidaPuebloEngine::vista($pI, $cal);
-ok($infoI['estancamiento']['activo'] === true, 'I: estancamiento persiste tras vista');
+// Simular que el jugador estuvo ausente (no se llama cerrarDia)
+// El estado no cambia — el estancamiento persiste pero no acumula días nuevos
+$antesVista = VidaPuebloEngine::vista($pI, $cal);
+ok($antesVista['estancamiento']['activo'] === true, 'I: estancamiento persiste sin tick');
+
+// Al volver: siguiente cerrarDia re-evalúa normalmente
+$pI['reloj']['dia_pueblo'] = 100;
+setNecesidades($pI, 20);
+cerrarDia($pI);
+ok($pI['vida_pueblo']['estancamiento']['activo'] === true, 'I: al volver, estancamiento sigue activo');
+
+// Si el jugador mejora, se desactiva
+$pI['reloj']['dia_pueblo'] = 101;
+setNecesidades($pI, 80);
+cerrarDia($pI);
+ok($pI['vida_pueblo']['estancamiento']['activo'] === false, 'I: mejora al volver desactiva estancamiento');
 
 // ============================================================
-// J. Vista expone datos de estancamiento
+// J. Vista expone estancamiento
 // ============================================================
 echo "\n--- J: Vista expone estancamiento ---\n";
 $pJ = partidaEst();
@@ -299,6 +281,110 @@ ok(is_array($estK), 'K: estancamiento existe en estado nuevo');
 ok($estK['activo'] === false, 'K: estancamiento.inactivo al inicio');
 ok($estK['dias_bajo_umbral'] === 0, 'K: dias_bajo_umbral = 0 al inicio');
 ok(is_array($estK['historial_sh']), 'K: historial_sh es array');
+
+// ============================================================
+// L. FEEDBACK: primera activación → notificar=true
+// ============================================================
+echo "\n--- L: Feedback: notificar en primera activación ---\n";
+$pL = partidaEst();
+forzarHeart($pL, 30);
+setNecesidades($pL, 20);
+
+// Avanzar hasta activación (7 días)
+for ($d = 0; $d < 7; $d++) {
+    $pL['reloj']['dia_pueblo'] = $d + 1;
+    setNecesidades($pL, 20);
+    cerrarDia($pL);
+}
+ok($pL['vida_pueblo']['estancamiento']['activo'] === true, 'L: estancamiento activado');
+
+// Primera vista: notificar debe ser true
+$infoL1 = VidaPuebloEngine::vista($pL, $cal);
+ok(($infoL1['estancamiento']['notificar'] ?? false) === true, 'L: primera vista → notificar=true');
+ok(($infoL1['estancamiento']['dia_activacion'] ?? 0) > 0, 'L: dia_activacion expuesto');
+
+// Segunda vista: notificar sigue true (server no puede mutar por copy-value)
+// La deduplication ocurre en JS con Set por dia_activacion
+$infoL2 = VidaPuebloEngine::vista($pL, $cal);
+ok(($infoL2['estancamiento']['notificar'] ?? false) === true, 'L: segunda vista → notificar=true (dedup en JS)');
+
+// Si no está activo, notificar no aparece
+$pL2 = partidaEst();
+forzarHeart($pL2, 80);
+setNecesidades($pL2, 80);
+$infoL3 = VidaPuebloEngine::vista($pL2, $cal);
+ok(!isset($infoL3['estancamiento']['notificar']), 'L: pueblo sano → sin notificar');
+
+// ============================================================
+// M. FEEDBACK: sigue activo varios días → notificar siempre presente
+// (deduplication ocurre en JS con Set, no server-side)
+// ============================================================
+echo "\n--- M: Activo varios días → notificar siempre presente ---\n";
+$pM = partidaEst();
+forzarHeart($pM, 30);
+setNecesidades($pM, 20);
+for ($d = 0; $d < 7; $d++) {
+    $pM['reloj']['dia_pueblo'] = $d + 1;
+    setNecesidades($pM, 20);
+    cerrarDia($pM);
+}
+
+// Simular 5 días más activo: notificar sigue true (dedup en JS)
+for ($d = 0; $d < 5; $d++) {
+    $pM['reloj']['dia_pueblo'] = 100 + $d;
+    setNecesidades($pM, 20);
+    cerrarDia($pM);
+    $info = VidaPuebloEngine::vista($pM, $cal);
+    ok(($info['estancamiento']['notificar'] ?? false) === true, "M: día " . (100 + $d) . " activo → notificar presente");
+    ok(($info['estancamiento']['activo'] ?? false) === true, "M: día " . (100 + $d) . " → activo=true");
+}
+
+// Sin estancamiento → sin notificar
+$pM2 = partidaEst();
+forzarHeart($pM2, 80);
+setNecesidades($pM2, 80);
+$infoM2 = VidaPuebloEngine::vista($pM2, $cal);
+ok(!isset($infoM2['estancamiento']['notificar']), 'M: pueblo sano → sin notificar');
+
+// ============================================================
+// N. FEEDBACK: se recupera → vuelve a estancarse → notifica otra vez
+// ============================================================
+echo "\n--- N: Re-activación tras recuperación ---\n";
+$pN = partidaEst();
+forzarHeart($pN, 30);
+setNecesidades($pN, 20);
+
+// Activar estancamiento
+for ($d = 0; $d < 7; $d++) {
+    $pN['reloj']['dia_pueblo'] = $d + 1;
+    setNecesidades($pN, 20);
+    cerrarDia($pN);
+}
+ok($pN['vida_pueblo']['estancamiento']['activo'] === true, 'N: primera activación');
+
+// Consumir notificación
+$infoN1 = VidaPuebloEngine::vista($pN, $cal);
+ok(($infoN1['estancamiento']['notificar'] ?? false) === true, 'N: notifica en primera activación');
+
+// Recuperar (mejora real)
+for ($d = 0; $d < 8; $d++) {
+    $pN['reloj']['dia_pueblo'] = 50 + $d;
+    setNecesidades($pN, 20 + ($d * 10));
+    cerrarDia($pN);
+}
+ok($pN['vida_pueblo']['estancamiento']['activo'] === false, 'N: estancamiento desactivado');
+
+// Volver a estancarse
+for ($d = 0; $d < 8; $d++) {
+    $pN['reloj']['dia_pueblo'] = 200 + $d;
+    setNecesidades($pN, 20);
+    cerrarDia($pN);
+}
+ok($pN['vida_pueblo']['estancamiento']['activo'] === true, 'N: re-activación');
+
+// Debe notificar de nuevo
+$infoN2 = VidaPuebloEngine::vista($pN, $cal);
+ok(($infoN2['estancamiento']['notificar'] ?? false) === true, 'N: notifica en re-activación');
 
 // ============================================================
 // RESUMEN

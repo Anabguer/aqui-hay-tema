@@ -274,6 +274,7 @@ final class VidaPuebloEngine
                 'activo' => (bool) $est['activo'],
                 'dias_bajo_umbral' => (int) $est['dias_bajo_umbral'],
                 'dias_activo' => (int) $est['dias_activo'],
+                'dia_activacion' => (int) ($est['dia_activacion'] ?? 0),
             ];
             // notificado_ui: solo se envía en la primera respuesta tras activación
             if (!(bool) $est['notificado_ui'] && (bool) $est['activo']) {
@@ -882,10 +883,10 @@ final class VidaPuebloEngine
         // Condición: stateHeart bajo umbral
         $bajoUmbral = $stateHeart <= $umbralSH;
 
-        // Detectar tendencia contra hace ventana_dias
+        // Detectar tendencia contra hace ventana_dias (siempre que haya historial suficiente)
         $mejora = false;
         $tendencia = 0.0;
-        if ($bajoUmbral && count($est['historial_sh']) > $ventana) {
+        if (count($est['historial_sh']) > $ventana) {
             $shAntiguo = $est['historial_sh'][count($est['historial_sh']) - 1 - $ventana];
             $tendencia = $stateHeart - $shAntiguo;
             $mejora = $tendencia >= $umbralMejora;

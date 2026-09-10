@@ -2018,6 +2018,7 @@
 
   // ââ Celebración de historia del pueblo âââââââââââââââââââââ
   const celebracionesConsumidas = new Set();
+  const estancamientoConsumidas = new Set();
   let colaCelebraciones = [];
   let celebracionHitoActual = '';
   let celebracionRecompensaActual = null;
@@ -5675,6 +5676,13 @@ function renderInicioMpDuo(misiones, parejas) {
       vidaCorazonReady = true;
     }
     renderVidaDerrota(estado);
+    if (vida && vida.estancamiento && vida.estancamiento.notificar && vida.estancamiento.dia_activacion) {
+      const key = 'est_' + vida.estancamiento.dia_activacion;
+      if (!estancamientoConsumidas.has(key)) {
+        toast('El pueblo lleva días sin mejorar de verdad. El Corazón se resiente.');
+        estancamientoConsumidas.add(key);
+      }
+    }
     const nPend = buzonNoLeidos(estado, buzon);
     const badgeHud = $('.buzon .badge');
     if (badgeHud) {
@@ -9818,6 +9826,7 @@ window.AHT_PLAN_IMAGES = {
     colaCelebraciones = [];
     celebracionHitoActual = '';
     celebracionesConsumidas.clear();
+    estancamientoConsumidas.clear();
     cacheEstado = null;
     cacheInsp = null;
     cachePueblo = null;
