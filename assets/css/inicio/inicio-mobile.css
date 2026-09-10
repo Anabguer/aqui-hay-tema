@@ -773,10 +773,10 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     gap: 5px;
     padding: 6px 14px;
     min-height: 34px;
-    border: 1.5px solid rgba(109, 155, 118, .5);
+    border: 1.5px solid rgba(109, 155, 118, .75);
     border-radius: 8px;
     background: rgba(220, 240, 220, .55);
-    box-shadow: 0 1px 2px rgba(44, 38, 31, .08);
+    box-shadow: 0 2px 6px rgba(109, 155, 118, .25), 0 1px 2px rgba(44, 38, 31, .08);
     font-family: "Caveat", "Caveat Brush", cursive;
     font-size: .88rem;
     font-style: normal;
