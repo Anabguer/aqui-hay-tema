@@ -29,9 +29,9 @@ final class NecesidadEstado
         self::BANDA_EN_ROJO        => ['min' => 0,  'max' => 24],
     ];
 
-    private const DECAY_BASE = 2.5;
-    private const RECUPERACION_BASE = 3.0;
-    private const INITIAL_VALUE = 85;
+    private const DECAY_BASE = 0.6;
+    private const RECUPERACION_BASE = 8.0;
+    private const INITIAL_VALUE = 75;
     private const MIN_VALUE = 0;
     private const MAX_VALUE = 100;
 
@@ -138,6 +138,38 @@ final class NecesidadEstado
             $rt['necesidades'][$nec]['valor'] = max(
                 self::MIN_VALUE,
                 $rt['necesidades'][$nec]['valor'] - $decay
+            );
+            $rt['necesidades'][$nec]['banda'] = self::calcularBanda($rt['necesidades'][$nec]['valor']);
+            if ($rt['necesidades'][$nec]['banda'] !== $antes) {
+                $cambios++;
+            }
+        }
+
+        return $cambios;
+    }
+
+    /**
+     * Recuperación autónoma pasiva: cada hora el residente recupera una pequeña
+     * cantidad en cada necesidad (simula vida cotidiana: comer, pasear, etc.).
+     * Balance objetivo: decay 0.6/hora - rec 0.4/hora = -0.2/hora = -2.8/día.
+     * El NPC decae lentamente sin intervención del jugador, pero no colapsa.
+     *
+     * @param array<string, mixed> &$residente
+     * @param array<string, mixed> $cal
+     * @return int número de necesidades que cambiaron de banda
+     */
+    public static function aplicarRecuperacionAutonoma(array &$residente, array $cal): int
+    {
+        self::ensureResidente($residente);
+        $rt = &$residente['runtime'];
+        $cambios = 0;
+        $recBase = (float) CalibracionConfig::get($cal, 'necesidades.recuperacion_autonoma', 0.4);
+
+        foreach (self::TODAS as $nec) {
+            $antes = $rt['necesidades'][$nec]['banda'];
+            $rt['necesidades'][$nec]['valor'] = min(
+                self::MAX_VALUE,
+                $rt['necesidades'][$nec]['valor'] + $recBase
             );
             $rt['necesidades'][$nec]['banda'] = self::calcularBanda($rt['necesidades'][$nec]['valor']);
             if ($rt['necesidades'][$nec]['banda'] !== $antes) {

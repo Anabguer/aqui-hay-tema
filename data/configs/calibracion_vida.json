@@ -336,9 +336,9 @@
         "prioridad_agenda_jugador": true,
         "atraccion_ocupacion_bonus": 0.6,
         "atraccion_ocupacion_cap": 3,
-        "anti_aislamiento_umbral_dias": 0,
-        "anti_aislamiento_bonus_salida": 0,
-        "anti_aislamiento_bonus_lugar": 0,
+        "anti_aislamiento_umbral_dias": 3,
+        "anti_aislamiento_bonus_salida": 2.0,
+        "anti_aislamiento_bonus_lugar": 1.5,
         "salida_individual_voluntad": {
             "_provisional": true,
             "_nota": "A3: evaluador barato previo a LugarAutonomo::elegir (H3).",

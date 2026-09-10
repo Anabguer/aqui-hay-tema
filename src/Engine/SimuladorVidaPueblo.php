@@ -102,7 +102,7 @@ final class SimuladorVidaPueblo
         $partida = [
             'reloj' => ['dia_pueblo' => 1, 'hora_actual' => 12, 'ultima_sesion_iso' => null],
             'meta' => ['seed' => 'lab'],
-            'features' => [VidaPuebloEngine::FLAG => false],
+            'features' => [VidaPuebloEngine::FLAG => true],
         ];
         VidaPuebloEngine::ensure($partida, $cal);
         $inicial = VidaPuebloEngine::valor($partida);
@@ -148,6 +148,8 @@ final class SimuladorVidaPueblo
                     break 2;
                 }
             }
+            // Sobreextensión al final del día (misma lógica que juego real)
+            VidaPuebloEngine::aplicarSobreextension($partida, $cal);
             $val = VidaPuebloEngine::valor($partida);
             if ($val <= 19) {
                 $diasCritico++;

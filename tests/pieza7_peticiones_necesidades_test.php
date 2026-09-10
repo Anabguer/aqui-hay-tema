@@ -66,15 +66,15 @@ $necs = [
 ];
 $p = makePartidaConNecesidades($necs);
 
-// social(30)=lo_necesita(10), diversion(60)=le_vendria_bien(4), actividad(80)=bien(0), calma(90)=bien(0)
+// social(30)=lo_necesita(15), diversion(60)=le_vendria_bien(6), actividad(80)=bien(0), calma(90)=bien(0)
 $boost = NecesidadPeticionBridge::boostPrioridad($p, 'r1', ['id' => 'ir_al_lugar']);
-ok($boost === 14, "ir_al_lugar: social lo_necesita(10) + diversion le_vendria(4) = 14");
+ok($boost === 21, "ir_al_lugar: social lo_necesita(15) + diversion le_vendria(6) = 21");
 
 $boost2 = NecesidadPeticionBridge::boostPrioridad($p, 'r1', ['id' => 'salir_de_casa']);
-ok($boost2 === 14, "salir_de_casa: same = 14");
+ok($boost2 === 21, "salir_de_casa: same = 21");
 
 $boost3 = NecesidadPeticionBridge::boostPrioridad($p, 'r1', ['id' => 'conocer_a_alguien']);
-ok($boost3 === 10, "conocer_a_alguien: solo social lo_necesita = 10");
+ok($boost3 === 15, "conocer_a_alguien: solo social lo_necesita = 15");
 
 // --- Test 3: sin necesidades bajas ---
 echo "\nSin necesidades bajas:\n";

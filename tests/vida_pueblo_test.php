@@ -65,7 +65,10 @@ ok(VidaPuebloEngine::valor($p) === 65, 'emoción RNG no mueve Vida');
 $bridge = file_get_contents($root . '/src/Engine/EmotionalEventBridge.php');
 ok(strpos($bridge, 'VidaPuebloEngine') === false, 'EmotionalEventBridge no escribe Vida');
 $motor = file_get_contents($root . '/src/Engine/MotorVidaDiaria.php');
-ok(strpos($motor, 'VidaPuebloEngine') === false, 'MotorVidaDiaria no escribe Vida');
+$tieneEscritura = strpos($motor, 'VidaPuebloEngine::aplicar') !== false
+    || strpos($motor, 'VidaPuebloEngine::aplicarAusencia') !== false
+    || strpos($motor, 'VidaPuebloEngine::aplicarSobreextension') !== false;
+ok(!$tieneEscritura, 'MotorVidaDiaria no escribe Vida (solo lee FLAG/valor)');
 
 $r1 = VidaPuebloEngine::aplicar($p, 3, [
     'causa' => VidaPuebloEngine::CAUSA_MISION_CUMPLIDA,

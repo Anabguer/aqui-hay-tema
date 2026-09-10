@@ -134,6 +134,7 @@ final class MotorVidaDiaria
         foreach ($partida['residentes'] as &$res) {
             NecesidadEstado::ensureResidente($res);
             NecesidadEstado::aplicarDecay($res, $cal);
+            NecesidadEstado::aplicarRecuperacionAutonoma($res, $cal);
         }
         unset($res);
     }

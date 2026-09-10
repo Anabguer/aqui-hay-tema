@@ -11,32 +11,32 @@
       "nombre": "Socializar",
       "icono": "\ud83e\udd1d",
       "descripcion": "Necesidad de contacto social cotidiano: hablar con alguien, quedar, sentirse parte de algo.",
-      "decay_base": 2.5,
-      "recuperacion_base": 3.0
+      "decay_base": 0.6,
+      "recuperacion_base": 8.0
     },
     {
       "id": "diversion",
       "nombre": "Diversión",
       "icono": "\ud83c\udf89",
       "descripcion": "Necesidad de ocio, experiencias agradables, entretenimiento.",
-      "decay_base": 2.5,
-      "recuperacion_base": 3.0
+      "decay_base": 0.6,
+      "recuperacion_base": 8.0
     },
     {
       "id": "actividad",
       "nombre": "Actividad",
       "icono": "\ud83d\udcaa",
       "descripcion": "Necesidad de moverse, salir, hacer algo con el cuerpo o con las manos.",
-      "decay_base": 2.5,
-      "recuperacion_base": 3.0
+      "decay_base": 0.6,
+      "recuperacion_base": 8.0
     },
     {
       "id": "calma",
       "nombre": "Calma",
       "icono": "\u2615",
       "descripcion": "Necesidad de desconexión, estar tranquilo, no tener agobios ni ruido.",
-      "decay_base": 2.5,
-      "recuperacion_base": 3.0
+      "decay_base": 0.6,
+      "recuperacion_base": 8.0
     }
   ],
   "bandas": [

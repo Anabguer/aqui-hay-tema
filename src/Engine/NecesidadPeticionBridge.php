@@ -17,9 +17,9 @@ final class NecesidadPeticionBridge
      * Peso base de boost según urgencia de la necesidad.
      */
     private const BOOST_PESOS = [
-        'en_rojo' => 18,
-        'lo_necesita' => 10,
-        'le_vendria_bien' => 4,
+        'en_rojo' => 25,
+        'lo_necesita' => 15,
+        'le_vendria_bien' => 6,
     ];
 
     /**

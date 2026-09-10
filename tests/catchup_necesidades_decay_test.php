@@ -57,15 +57,15 @@ foreach ($p['residentes'] as &$res) {
 }
 unset($res);
 
-// --- Test 1: Estado inicial = 85 en las 4 necesidades ---
+// --- Test 1: Estado inicial = 75 en las 4 necesidades ---
 $valoresIniciales = [];
 foreach ($rids as $rid) {
     $nec = NecesidadEstado::obtener($p['residentes'][$rid]);
     $valoresIniciales[$rid] = $nec;
-    ok($nec['social']['valor'] === 85, "$rid social inicial = 85");
-    ok($nec['diversion']['valor'] === 85, "$rid diversion inicial = 85");
-    ok($nec['actividad']['valor'] === 85, "$rid actividad inicial = 85");
-    ok($nec['calma']['valor'] === 85, "$rid calma inicial = 85");
+    ok($nec['social']['valor'] === 75, "$rid social inicial = 75");
+    ok($nec['diversion']['valor'] === 75, "$rid diversion inicial = 75");
+    ok($nec['actividad']['valor'] === 75, "$rid actividad inicial = 75");
+    ok($nec['calma']['valor'] === 75, "$rid calma inicial = 75");
 }
 
 // --- Test 2: Ejecutar catch-up de 3 horas ---
@@ -93,7 +93,7 @@ foreach ($rids as $rid) {
             break;
         }
     }
-    ok($algunaMenor, "$rid tiene al menos una necesidad con decay (< 85)");
+    ok($algunaMenor, "$rid tiene al menos una necesidad con decay (< 75)");
 }
 ok($decayAplicado, 'Al menos un residente tuvo decay aplicado');
 
@@ -110,16 +110,16 @@ foreach ($rids as $rid) {
     $vectores[$rid] = array_map(fn($n) => $n['valor'], $nec);
 }
 
-// Con 3 horas de decay y 2.5 base, los valores deberían ser ~77.5
-// Pero pueden variar según calibración. Verificar que no son todos 85.
-$todosIguales85 = true;
+// Con 3 horas de decay, los valores deberían ser < 75
+// Pero pueden variar según calibración. Verificar que no son todos 75.
+$todosIguales75 = true;
 foreach ($vectores as $vec) {
-    if (array_unique($vec) !== [85]) {
-        $todosIguales85 = false;
+    if (array_unique($vec) !== [75]) {
+        $todosIguales75 = false;
         break;
     }
 }
-ok(!$todosIguales85, 'Valores ya no son todos 85 tras catch-up');
+ok(!$todosIguales75, 'Valores ya no son todos 75 tras catch-up');
 
 // --- Test 6: Divergencia vía recuperación (lugar) ---
 // Bajar social a un residente y recuperar solo social

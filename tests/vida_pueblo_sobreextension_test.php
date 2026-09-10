@@ -160,5 +160,20 @@ ok(VidaPuebloEngine::valor($p9) === 0, 'heart en 0 antes de clamp test');
 $r9 = VidaPuebloEngine::aplicarSobreextension($p9, $cal);
 ok(VidaPuebloEngine::valor($p9) >= 0, 'heart no baja de 0 tras sobreextensión');
 
+// ============================================================
+// 10. SimuladorVidaPueblo aplica sobreextensión
+// ============================================================
+use AquiHayTema\Engine\SimuladorVidaPueblo;
+
+$lab = SimuladorVidaPueblo::ejecutar($root, [7], 2, 'sobreext-sim-test');
+$g7 = $lab['por_perfil']['G']['por_horizonte']['7'];
+// Con sobreextensión, el perfil G no debería llegar a 99 de forma estable
+// (max puede tocar 99 dentro del día, pero final baja con sobreextensión)
+ok(($g7['final_media'] ?? 0) < 99, 'simulador G 7d final < 99 con sobreextensión (' . round((float)($g7['final_media'] ?? 0), 1) . ')');
+
+// Perfil A (balance): el final debería estar por debajo del máximo teórico 90
+$a7 = $lab['por_perfil']['A']['por_horizonte']['7'];
+ok(($a7['final_media'] ?? 0) < 90, 'simulador A 7d final < 90 con sobreextensión (' . round((float)($a7['final_media'] ?? 0), 1) . ')');
+
 echo "\n";
 exit($failures > 0 ? 1 : 0);
