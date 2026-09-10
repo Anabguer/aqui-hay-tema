@@ -546,6 +546,24 @@
     max-width: 85%;
   }
 
+  .aht-frame-tabs {
+    gap: 5px;
+    padding: 6px 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .aht-frame-tab {
+    flex: 1 1 0;
+    min-height: 34px;
+    padding: 5px 8px;
+    font-size: 0.82rem;
+    border-width: 2px;
+    border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
+    box-shadow: 1px 2px 0 rgba(51, 38, 30, .2);
+    letter-spacing: 0.3px;
+  }
+
   .aht-doodle.d-sm { --aht-doodle-sm: 12px; }
   .aht-doodle.d-md { --aht-doodle-md: 18px; }
   .aht-doodle.d-lg { --aht-doodle-lg: 28px; }
