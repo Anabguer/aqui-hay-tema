@@ -447,10 +447,10 @@
   padding: 0 12px;
 }
 
-/* ── FICHA HERO: 2 columnas ── */
+/* ── FICHA HERO: 3 columnas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: auto 1fr auto;
   align-items: start;
   gap: 0;
   width: 100%;
@@ -704,22 +704,24 @@
   color: var(--vec-blue, #4a7fbf);
 }
 
-/* ── NECESIDADES: debajo del hero card ── */
-.ficha-hero-necesidades {
+/* ── NECESIDADES: cajito compacto dentro del hero ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  margin-top: 8px;
-  padding: 10px 12px;
+  gap: 4px;
+  padding: 8px 10px;
   background: linear-gradient(150deg, #fdf6ee, #f8f0e4);
   border: 1.5px solid rgba(200, 170, 120, 0.22);
-  border-radius: 14px 10px 16px 12px / 10px 16px 12px 14px;
+  border-left: 1.5px solid rgba(200, 170, 120, 0.18);
+  border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
   box-shadow: 1px 2px 0 rgba(200, 170, 120, 0.08);
+  max-width: 160px;
+  margin-left: 8px;
 }
 
 .ficha-necesidades-titulo {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
   padding-bottom: 2px;
@@ -729,22 +731,17 @@
 .ficha-necesidades {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .ficha-nec-row {
   display: flex;
   flex-direction: column;
   gap: 2px;
-  padding: 4px 6px;
+  padding: 3px 5px;
   background: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(200, 170, 120, 0.1);
-  border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
-  transition: transform 0.12s ease;
-}
-
-.ficha-nec-row:hover {
-  transform: translateX(2px);
+  border-radius: 8px 6px 10px 5px / 6px 10px 5px 8px;
 }
 
 .ficha-nec-row[hidden] { display: none; }
@@ -752,12 +749,12 @@
 .ficha-nec-head {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
 }
 
 .ficha-nec-ico {
   flex-shrink: 0;
-  width: 22px;
+  width: 18px;
   text-align: center;
   display: flex;
   align-items: center;
@@ -765,27 +762,27 @@
 }
 
 .ficha-nec-ico .nec-icon {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   object-fit: contain;
 }
 
 .ficha-nec-nom {
-  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  font: 600 0.6rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   flex: 1;
 }
 
 .ficha-nec-val {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.9rem;
+  font-size: 0.78rem;
   font-weight: 700;
   color: var(--ds-text-muted, #75634F);
 }
 
 .ficha-nec-bar {
-  height: 6px;
-  border-radius: 4px;
+  height: 4px;
+  border-radius: 3px;
   background: rgba(180, 160, 130, 0.1);
   overflow: hidden;
 }
@@ -793,16 +790,12 @@
 .ficha-nec-bar i {
   display: block;
   height: 100%;
-  border-radius: 4px;
+  border-radius: 3px;
   transition: width 300ms ease;
 }
 
 .ficha-nec-copy {
-  display: block;
-  font: 400 0.58rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-text-muted, #8a7a68);
-  font-style: italic;
-  margin-top: 1px;
+  display: none;
 }
 
 /* Doodles — integrados al personaje */
@@ -1839,6 +1832,10 @@
 
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
     padding: 8px 10px;
+    max-width: none;
+    margin-left: 0;
+    border-left: none;
+    border-top: 1.5px solid rgba(200, 170, 120, 0.18);
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-avatar-area .ficha-cara-ring {

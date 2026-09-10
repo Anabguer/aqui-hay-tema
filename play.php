@@ -701,10 +701,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                     </div>
                   </div>
                 </div>
-              </div>
-              <div class="ficha-hero-necesidades" data-ficha-necesidades>
-                <div class="ficha-necesidades-titulo">Necesidades</div>
-                <div class="ficha-necesidades" data-ficha-necesidades-body></div>
+                <div class="ficha-hero-col ficha-hero-col--necesidades" data-ficha-necesidades>
+                  <div class="ficha-necesidades-titulo">Necesidades</div>
+                  <div class="ficha-necesidades" data-ficha-necesidades-body></div>
+                </div>
               </div>
             </section>
             <div class="ficha-body">
