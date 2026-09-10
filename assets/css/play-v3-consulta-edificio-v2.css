@@ -123,12 +123,9 @@
   margin-bottom: .1rem;
 }
 
-/* ─── Necesidades pills ─── */
+/* ─── Necesidades pills (top — hidden, now in bottom card) ─── */
 .qed-necesidades {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .3rem;
-  margin-bottom: .2rem;
+  display: none;
 }
 
 .qed-nec-pill {
@@ -257,6 +254,30 @@
 .qed-curiosities {
   border: 1.5px solid rgba(124, 107, 174, .3);
   background: rgba(238, 232, 248, .7);
+}
+
+.qed-curiosity-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qed-curiosity-list li {
+  position: relative;
+  padding: .2rem 0 .2rem .85rem;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: .65rem;
+  line-height: 1.25;
+  color: var(--ds-ink, #33261e);
+}
+
+.qed-curiosity-list li::before {
+  content: "\2022";
+  position: absolute;
+  left: 0;
+  top: .2rem;
+  font-size: .8rem;
+  color: rgba(124, 107, 174, .6);
 }
 
 /* ─── Presencia ─── */
