@@ -605,8 +605,11 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <p class="mensajitos-hint vec-rel-hint">&#128156; Las relaciones pueden cambiar con cada plan</p>
             </div>
             <div class="vec-panel" data-vec-panel="cuidados" hidden>
+              <div class="necg-filtros" data-necg-filters></div>
               <div class="vec-cuid-resumen" data-vec-cuid-resumen></div>
-              <div class="vec-cuid-list capa-scroll" data-vec-cuid-list></div>
+              <div class="necg-body capa-scroll" data-necg-body>
+                <p class="necg-vacio mini" data-necg-vacio hidden>Todos están bien por ahora.</p>
+              </div>
             </div>
           </div>
         </div>
@@ -661,41 +664,35 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             </nav>
             <section class="ficha-hero" aria-label="Perfil del vecino">
               <div class="ficha-hero-card">
-                <div class="ficha-hero-col ficha-hero-col--left">
-                  <div class="ficha-hero-edad" data-ficha-edad hidden>
-                    <div class="ficha-edad-cal">
-                      <div class="ficha-edad-anillas">
-                        <span></span><span></span>
+                <div class="ficha-hero-col ficha-hero-col--personaje">
+                  <div class="ficha-hero-top-row">
+                    <div class="ficha-hero-edad" data-ficha-edad hidden>
+                      <div class="ficha-edad-cal">
+                        <div class="ficha-edad-anillas">
+                          <span></span><span></span>
+                        </div>
+                        <div class="ficha-edad-body">
+                          <span class="ficha-edad-num" data-ficha-edad-num></span>
+                          <span class="ficha-edad-label">A&#209;OS</span>
+                        </div>
+                        <div class="ficha-edad-pata" aria-hidden="true"></div>
                       </div>
-                      <div class="ficha-edad-body">
-                        <span class="ficha-edad-num" data-ficha-edad-num></span>
-                        <span class="ficha-edad-label">A&#209;OS</span>
+                    </div>
+                    <div class="ficha-hero-animo-inline" data-ficha-animo-row>
+                      <div class="ficha-animo-nube" data-ficha-animo-pill>
+                        <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
+                        <span class="ficha-animo-val" data-ficha-animo-text></span>
                       </div>
-                      <div class="ficha-edad-pata" aria-hidden="true"></div>
                     </div>
                   </div>
-                  <div class="ficha-hero-cumple" data-ficha-cumple hidden>
-                    <svg class="ficha-cumple-ico" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="2" y="6" width="12" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 9h12" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="4.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="8" cy="3.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="11" cy="4.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
-                    <span class="ficha-cumple-txt" data-ficha-cumple-txt></span>
-                  </div>
-                </div>
-                <div class="ficha-hero-col ficha-hero-col--center">
                   <div class="ficha-cara-ring" data-ficha-cara-ring>
                     <div class="ficha-cara" data-ficha-img></div>
                   </div>
                   <h3 class="ficha-nombre" data-ficha-nombre></h3>
                   <span class="ficha-nombre-trazo" aria-hidden="true"></span>
-                  <div class="ficha-hero-desde" data-ficha-desde-tag>
-                    <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-                    <span class="ficha-desde-txt" data-ficha-desde-txt></span>
-                  </div>
-                </div>
-                <div class="ficha-hero-col ficha-hero-col--right">
-                  <div class="ficha-hero-animo-inline" data-ficha-animo-row>
-                    <div class="ficha-animo-nube" data-ficha-animo-pill>
-                      <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                      <span class="ficha-animo-val" data-ficha-animo-text></span>
-                    </div>
+                  <div class="ficha-hero-cumple" data-ficha-cumple hidden>
+                    <svg class="ficha-cumple-ico" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><rect x="2" y="6" width="12" height="8" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.2"/><path d="M2 9h12" fill="none" stroke="currentColor" stroke-width="1.2"/><circle cx="5" cy="4.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="8" cy="3.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/><circle cx="11" cy="4.5" r="1.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+                    <span class="ficha-cumple-txt" data-ficha-cumple-txt></span>
                   </div>
                   <div class="ficha-hero-trabajo" data-ficha-trabajo hidden>
                     <div class="ficha-trab-body">
@@ -706,6 +703,14 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                       <div class="ficha-trab-val" data-ficha-trabajo-txt></div>
                     </div>
                   </div>
+                  <div class="ficha-hero-desde" data-ficha-desde-tag>
+                    <svg class="ficha-desde-ico" viewBox="0 0 16 16" width="11" height="11" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="2" y1="6.5" x2="14" y2="6.5" stroke="currentColor" stroke-width="1.3"/><line x1="5.5" y1="1.5" x2="5.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="10.5" y1="1.5" x2="10.5" y2="4.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+                    <span class="ficha-desde-txt" data-ficha-desde-txt></span>
+                  </div>
+                </div>
+                <div class="ficha-hero-col ficha-hero-col--necesidades" data-ficha-necesidades>
+                  <div class="ficha-necesidades-titulo">Necesidades</div>
+                  <div class="ficha-necesidades" data-ficha-necesidades-body></div>
                 </div>
               </div>
             </section>
@@ -724,12 +729,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   </div>
                 </section>
               </div>
-              <section class="ficha-seccion ficha-seccion-necesidades" data-ficha-necesidades hidden>
-                <h4 class="ficha-seccion-tit">Necesidades</h4>
-                <div class="ficha-seccion-body">
-                  <div class="ficha-necesidades" data-ficha-necesidades-body></div>
-                </div>
-              </section>
               <div class="ficha-pair">
                 <section class="ficha-seccion ficha-seccion-relaciones">
                   <h4 class="ficha-seccion-tit">Relaciones</h4>
@@ -789,7 +788,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           </div>
         </div>
       </aside>
-      <aside class="aht-screen" data-aht-screen="necesidades_global" aria-label="Necesidades del pueblo">
+      <aside class="aht-screen" data-aht-screen="necesidades_global" aria-label="Necesidades del pueblo" hidden>
         <div class="aht-frame">
           <header class="aht-frame-header">
             <h2 class="aht-frame-title">Necesidades</h2>

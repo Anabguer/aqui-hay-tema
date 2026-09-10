@@ -450,43 +450,147 @@
   padding: 0 12px;
 }
 
-/* ── FICHA PERSONAJE: tarjeta 3 columnas ── */
+/* ── FICHA PERSONAJE: tarjeta 2 zonas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 4px 10px;
+  grid-template-columns: 1fr 1fr;
+  align-items: start;
+  gap: 0;
   width: 100%;
   background:
     linear-gradient(135deg, rgba(237, 232, 244, 0.5), rgba(243, 239, 247, 0.7)),
     repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(180, 150, 110, 0.04) 18px, rgba(180, 150, 110, 0.04) 19px);
   border: 2px solid rgba(180, 150, 110, 0.2);
   border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
-  padding: 12px 14px 10px;
+  padding: 14px 16px 12px;
   position: relative;
   box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
 }
 
-/* Columnas */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col {
+/* Columna personaje */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  min-width: 0;
-  padding: 2px 0;
+  padding-right: 12px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--left {
-  align-items: flex-end;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--center {
-  z-index: 2;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--right {
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-top-row {
+  display: flex;
   align-items: flex-start;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Columna necesidades */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px 12px;
+  background: linear-gradient(150deg, #f0f7fc, #e8f2fa);
+  border: 1.5px solid rgba(100, 160, 210, 0.25);
+  border-radius: 14px 10px 16px 12px / 10px 16px 12px 14px;
+  box-shadow: 1px 2px 0 rgba(100, 160, 210, 0.08);
+}
+
+.ficha-necesidades-titulo {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid rgba(100, 160, 210, 0.15);
+}
+
+.ficha-necesidades {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ficha-nec-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(100, 160, 210, 0.12);
+  border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
+}
+
+.ficha-nec-row + .ficha-nec-row {
+  border-top: none;
+}
+
+.ficha-nec-ico {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+}
+
+.ficha-nec-nom {
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+  min-width: 56px;
+  flex-shrink: 0;
+}
+
+.ficha-nec-bar {
+  flex: 1;
+  height: 9px;
+  border-radius: 5px;
+  background: rgba(100, 160, 210, 0.12);
+  overflow: hidden;
+}
+
+.ficha-nec-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  transition: width 300ms ease;
+}
+
+.ficha-nec-val {
+  font: 700 0.72rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #75634F);
+  min-width: 28px;
+  text-align: right;
+}
+
+.ficha-nec-copy {
+  display: none;
+}
+
+/* Doodles —Heart (top-left) */
+.ficha-hero-card::before {
+  content: '♥';
+  position: absolute;
+  top: 10px;
+  left: 14px;
+  font-size: 1.1rem;
+  color: var(--vec-pink, #e88ba8);
+  opacity: 0.45;
+  transform: rotate(-12deg);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Doodle — star (bottom-left) */
+.ficha-hero-card::after {
+  content: '★';
+  position: absolute;
+  bottom: 10px;
+  left: 16px;
+  font-size: 0.9rem;
+  color: var(--ds-mustard, #e3b04b);
+  opacity: 0.5;
+  transform: rotate(10deg);
+  pointer-events: none;
+  z-index: 1;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
@@ -825,73 +929,7 @@
   color: #3d6a78;
 }
 
-/* ── DECORACIONES: micro-doodles ── */
-.ficha-deco {
-  position: absolute;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.ficha-deco-linea1 {
-  top: 14px;
-  left: 50%;
-  transform: translateX(-56px) rotate(-12deg);
-  width: 20px;
-  height: 2.5px;
-  background: var(--vec-lavender, #b49ad4);
-  border-radius: 1px;
-  opacity: 0.55;
-}
-
-.ficha-deco-linea2 {
-  top: 24px;
-  left: 50%;
-  transform: translateX(44px) rotate(8deg);
-  width: 14px;
-  height: 2.5px;
-  background: var(--vec-green, #4a7a52);
-  border-radius: 1px;
-  opacity: 0.45;
-}
-
-.ficha-deco-corazon {
-  bottom: 14px;
-  right: 12px;
-  font-size: 0.85rem;
-  color: var(--vec-pink, #e88ba8);
-  opacity: 0.55;
-  transform: rotate(12deg);
-}
-
-/* Doodle estrella — esquina superior derecha */
-.ficha-hero-card::before {
-  content: '★';
-  position: absolute;
-  top: 6px;
-  right: 10px;
-  font-size: 0.9rem;
-  color: var(--ds-mustard, #e3b04b);
-  opacity: 0.55;
-  transform: rotate(15deg);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Doodle rayitas — esquina inferior izquierda */
-.ficha-hero-card::after {
-  content: '';
-  position: absolute;
-  bottom: 10px;
-  left: 12px;
-  width: 18px;
-  height: 18px;
-  background:
-    linear-gradient(135deg, transparent 38%, var(--vec-green, #4a7a52) 38%, var(--vec-green, #4a7a52) 44%, transparent 44%),
-    linear-gradient(135deg, transparent 52%, var(--vec-green, #4a7a52) 52%, var(--vec-green, #4a7a52) 58%, transparent 58%);
-  opacity: 0.40;
-  pointer-events: none;
-  z-index: 1;
-}
+/* old deco styles removed — replaced by .ficha-hero-card::before/::after above */
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body {
   display: flex;
@@ -1223,65 +1261,8 @@
   flex-shrink: 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-seccion-necesidades {
-  background: #E3F0F8;
-  border: 1.5px solid rgba(100, 160, 210, 0.2);
-  border-radius: 10px;
-  padding: 10px 12px;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-necesidades {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px 12px;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 0;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-row + .ficha-nec-row {
-  border-top: none;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-ico {
-  font-size: 1rem;
-  flex-shrink: 0;
-  width: 20px;
-  text-align: center;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-nom {
-  font: 600 0.78rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-  min-width: 60px;
-  flex-shrink: 0;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-bar {
-  flex: 1;
-  height: 7px;
-  border-radius: 4px;
-  background: rgba(100, 160, 210, 0.12);
-  overflow: hidden;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-bar i {
-  display: block;
-  height: 100%;
-  border-radius: 4px;
-  transition: width 300ms ease;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-val {
-  font: 700 0.7rem/1 "Nunito", sans-serif;
-  color: var(--ds-text-muted, #75634F);
-  min-width: 22px;
-  text-align: right;
-}
+/* Necesidades moved into hero — old section hidden */
+.ficha-seccion-necesidades { display: none; }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-vacio {
   font: 600 0.82rem/1.3 "Nunito", sans-serif;
@@ -1946,12 +1927,14 @@
     padding: 12px 14px 10px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--left,
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--right {
-    align-items: center;
-    flex-direction: row;
-    justify-content: center;
-    gap: 10px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
+    padding-right: 0;
+    padding-bottom: 8px;
+    border-bottom: 1.5px solid rgba(180, 150, 110, 0.12);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
+    padding: 8px 10px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
@@ -1993,10 +1976,6 @@
   .aht-screen[data-aht-screen="ficha"] .ficha-tab-ico {
     width: 14px;
     height: 14px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-deco {
-    display: none;
   }
 
   /* Animo — móvil: card vertical */
