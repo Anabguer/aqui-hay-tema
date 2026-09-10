@@ -925,6 +925,7 @@
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body {
   position: relative;
   z-index: 2;
+  padding-left: 0.1rem;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
@@ -932,7 +933,7 @@
   align-items: center;
   gap: 6px;
   padding: 7px 10px;
-  min-height: 32px;
+  min-height: 41px;
   width: 100%;
   box-sizing: border-box;
   border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
