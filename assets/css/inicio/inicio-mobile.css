@@ -2381,16 +2381,18 @@ margin-bottom: 4px;
 
   /* Misiones + Parejas */
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .inicio-mp-duo {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    display: flex;
+    gap: 12px;
     margin: 0;
     padding: 0;
     background: transparent;
     border: none;
+    overflow: hidden;
   }
 
   .play-v3 .inicio-stage .inicio-mobile.inicio-mobile-feed .inicio-mp-card {
+    flex: 1 1 0;
+    min-width: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
