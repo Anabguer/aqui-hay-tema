@@ -923,14 +923,18 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 7px 10px;
+  min-height: 32px;
   border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
   background: #fff;
   border: 1.5px solid rgba(232, 139, 168, 0.3);
-  font: 600 0.75rem/1.2 "Nunito", sans-serif;
+  font: 600 0.78rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
+  min-width: 0;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag:last-child {
@@ -953,17 +957,6 @@
 
 .ficha-rasgo-tag.is-desconocido .ficha-rasgo-dot {
   background: rgba(180, 160, 130, 0.3);
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 10px;
-  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
-  background: #fff;
-  border: 1.5px solid rgba(74, 122, 82, 0.2);
-  margin-bottom: 6px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card:last-child {
@@ -989,9 +982,26 @@
   height: 22px;
 }
 
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  min-height: 32px;
+  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
+  background: #fff;
+  border: 1.5px solid rgba(74, 122, 82, 0.2);
+  margin-bottom: 6px;
+  min-width: 0;
+}
+
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab {
-  font: 600 0.82rem/1.2 "Nunito", sans-serif;
+  font: 600 0.78rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab.is-desconocido {
