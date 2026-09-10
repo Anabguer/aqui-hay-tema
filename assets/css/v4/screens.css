@@ -477,7 +477,8 @@
 /* ── FICHA HERO: 3 columnas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
   align-items: start;
   gap: 0;
   width: 100%;
