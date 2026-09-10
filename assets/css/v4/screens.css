@@ -356,19 +356,22 @@
   height: 0;
 }
 
+/* ── PESTAÑAS DE CARPETA ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-tabs {
   display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--aht-border, #D8D1DE);
-  background: var(--aht-surface-raised, #FFFFFF);
+  gap: 4px;
+  padding: 0 12px;
+  padding-top: 8px;
+  background: transparent;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab {
-  flex: 1;
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
+  flex: 1;
   padding: 9px 4px;
   border: none;
   border-bottom: 2.5px solid transparent;
@@ -380,12 +383,63 @@
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab:hover {
+  transform: translateY(2px);
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
   color: var(--ds-ink, #3b3028);
   border-bottom-color: var(--vec-pink, #e88ba8);
 }
 
+.aht-screen[data-aht-screen="ficha"] .ficha-tab.is-active {
+  transform: translateY(0);
+  color: #fff;
+  border-color: rgba(0,0,0,0.15);
+  z-index: 3;
+}
+
 .aht-screen[data-aht-screen="ficha"] .ficha-tab-ico {
   flex-shrink: 0;
+}
+
+/* Diario — rosa/lila */
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--diario {
+  background: rgba(232, 139, 168, 0.12);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--diario:hover {
+  background: rgba(232, 139, 168, 0.2);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--diario.is-active {
+  background: var(--vec-pink, #e88ba8);
+  box-shadow: 0 -2px 8px rgba(232, 139, 168, 0.35);
+}
+
+/* Nuevo plan — azul */
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--plan {
+  background: rgba(80, 120, 180, 0.1);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--plan:hover {
+  background: rgba(80, 120, 180, 0.18);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--plan.is-active {
+  background: #5a8abf;
+  box-shadow: 0 -2px 8px rgba(80, 120, 180, 0.35);
+}
+
+/* Regalar — amarillo */
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo {
+  background: rgba(220, 180, 80, 0.12);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo:hover {
+  background: rgba(220, 180, 80, 0.22);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo.is-active {
+  background: #d4a830;
+  box-shadow: 0 -2px 8px rgba(220, 180, 80, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-hero {
@@ -1961,13 +2015,13 @@
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-tab {
-    padding: 8px 2px;
-    font-size: 0.72rem;
+    padding: 7px 10px 9px;
+    font-size: 0.7rem;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-tab-ico {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-deco {
