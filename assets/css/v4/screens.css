@@ -1293,6 +1293,11 @@
 .aht-screen[data-aht-screen="diario"] .coti-filtro-pill {
   font-size: 1rem;
 }
+.aht-screen[data-aht-screen="diario"] .coti-filtro-pill .coti-svg {
+  width: 1.1em;
+  height: 1.1em;
+  flex-shrink: 0;
+}
 
 .aht-screen[data-aht-screen="diario"] .coti-body {
   padding: 0 13px 2.9px;
