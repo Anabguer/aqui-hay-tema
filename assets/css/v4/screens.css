@@ -1246,6 +1246,9 @@
   scrollbar-width: none;
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
   background: var(--aht-surface-raised, #FFFFFF);
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 5;
 }
 
 .aht-screen[data-aht-screen="diario"] .coti-filtros::-webkit-scrollbar {
