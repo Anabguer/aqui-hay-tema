@@ -924,6 +924,8 @@
   gap: 6px;
   padding: 7px 10px;
   min-height: 32px;
+  width: 100%;
+  box-sizing: border-box;
   border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
   background: #fff;
   border: 1.5px solid rgba(232, 139, 168, 0.3);
@@ -987,6 +989,8 @@
   gap: 8px;
   padding: 7px 10px;
   min-height: 32px;
+  width: 100%;
+  box-sizing: border-box;
   border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
   background: #fff;
   border: 1.5px solid rgba(74, 122, 82, 0.2);
