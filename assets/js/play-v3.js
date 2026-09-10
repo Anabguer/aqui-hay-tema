@@ -6676,6 +6676,16 @@ function canonEmoId(id) {
     return rol + ' desde el día ' + dia;
   }
 
+  function diasEnElPueblo(id) {
+    var diaLlegada = diaLlegadaVecino(id);
+    if (!diaLlegada) return 0;
+    var hoy = new Date();
+    var llegada = new Date(hoy.getFullYear(), 0, diaLlegada);
+    if (llegada > hoy) llegada.setFullYear(hoy.getFullYear() - 1);
+    var diff = Math.floor((hoy - llegada) / (1000 * 60 * 60 * 24));
+    return Math.max(1, diff);
+  }
+
   function textoAnimoDisplay(emo) {
     const map = {
       neutro: 'neutral',
@@ -6741,6 +6751,13 @@ function canonEmoId(id) {
     return map[canonEmoId(emo)] || map.neutro;
   }
 
+  var ANIMO_ICON_PATHS = {
+    neutro: 'assets/img/estado_neutral.png',
+    alegre: 'assets/img/estado_feliz.png',
+    triste: 'assets/img/estado_triste.png',
+    enfadado: 'assets/img/estado_enfadado.png'
+  };
+
   function pintarAnimoFicha(vista) {
     const emo = canonEmoId(vista.estado_animo);
     const genero = vista && vista.genero;
@@ -6751,7 +6768,8 @@ function canonEmoId(id) {
     if (txtEl) txtEl.textContent = textoAnimoFichaPill(emo, genero);
     if (icoEl) {
       icoEl.setAttribute('data-emo', emo);
-      icoEl.innerHTML = '<span class="ficha-animo-emoji" aria-hidden="true">' + emoEmojiFicha(emo) + '</span>';
+      var iconPath = ANIMO_ICON_PATHS[emo] || ANIMO_ICON_PATHS.neutro;
+      icoEl.innerHTML = '<img src="' + iconPath + '" alt="" width="22" height="22">';
     }
     if (pillEl) {
       pillEl.setAttribute('data-emo', emo);
@@ -7374,7 +7392,7 @@ function hobbyIconKey(id, texto) {
       var t = vista.trabajo || {};
       var linea = '';
       if (t.desempleado) {
-        linea = t.linea_principal || 'Desempleado/a';
+        linea = 'Sin trabajo \u{1F4CB}';
       } else if (t.linea_principal) {
         linea = t.linea_principal;
         if (t.linea_horario) linea += ' \u00b7 ' + t.linea_horario;
@@ -7390,22 +7408,23 @@ function hobbyIconKey(id, texto) {
       }
     }
     const desdeTagEl = $('[data-ficha-desde-tag]');
-    const desdeTxtEl = $('[data-ficha-desde-txt]');
-    if (desdeTagEl && desdeTxtEl) {
-      desdeTxtEl.textContent = etiquetaVecinoDesde(vista, diaLlegadaVecino(id));
+    const desdeDiasEl = $('[data-ficha-dias-num]');
+    if (desdeTagEl && desdeDiasEl) {
+      var dias = diasEnElPueblo(id);
+      desdeDiasEl.textContent = String(dias);
       desdeTagEl.hidden = false;
     }
-    var cumpleTagEl = $('[data-ficha-cumple]');
+    var cumpleTagEl = $('[data-ficha-edad]');
     var cumpleTxtEl = $('[data-ficha-cumple-txt]');
     if (cumpleTagEl && cumpleTxtEl) {
       var cp = vista.cumpleanos || (f.identidad && f.identidad.cumpleanos);
       if (cp && cp.dia && cp.mes) {
         var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-        cumpleTxtEl.textContent = 'Cumplea\u00f1os: ' + cp.dia + ' de ' + (meses[(cp.mes | 0) - 1] || '');
+        cumpleTxtEl.textContent = cp.dia + ' de ' + (meses[(cp.mes | 0) - 1] || '');
         cumpleTagEl.hidden = false;
       } else {
         cumpleTxtEl.textContent = '';
-        cumpleTagEl.hidden = true;
+        if (edadVal == null || edadVal === '') cumpleTagEl.hidden = true;
       }
     } else {
     }
@@ -7459,12 +7478,12 @@ function hobbyIconKey(id, texto) {
         abrirRegalosDesdeFicha(id, nom);
       };
     }
-    // Necesidades personales — siempre las 4, con barra y color por banda
+    // Necesidades personales — solo las que tienen valor > 0
     const necSection = $('[data-ficha-necesidades]');
     const necBox = $('[data-ficha-necesidades-body]');
     if (necSection && necBox) {
       var necDefaults = [
-        { id: 'social',    nombre: 'Socializar' },
+        { id: 'social',    nombre: 'Social' },
         { id: 'diversion', nombre: 'Diversi\u00f3n' },
         { id: 'actividad', nombre: 'Actividad' },
         { id: 'calma',     nombre: 'Calma' }
@@ -7477,9 +7496,12 @@ function hobbyIconKey(id, texto) {
         byId[key] = item;
       });
       necBox.innerHTML = '';
+      var necVisible = 0;
       necDefaults.forEach(function (def) {
         var item = byId[def.id] || byId[def.nombre] || {};
         var val = Math.max(0, Math.min(100, parseInt(item.valor, 10) || 0));
+        if (val <= 0) return;
+        necVisible++;
         var banda = esc(item.band || item.banda || '');
         var colorBar = banda === 'en_rojo' ? '#c42b4a'
           : banda === 'lo_necesita' ? '#d98a3e'
@@ -7498,7 +7520,7 @@ function hobbyIconKey(id, texto) {
           + '</div>'
         );
       });
-      necSection.hidden = false;
+      necSection.hidden = necVisible === 0;
     }
     syncFichaNav();
   }

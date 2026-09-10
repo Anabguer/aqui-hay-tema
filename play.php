@@ -670,7 +670,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                       <div class="ficha-cara" data-ficha-img></div>
                     </div>
                     <div class="ficha-hero-animo-inline" data-ficha-animo-row>
-                      <div class="ficha-animo-nube" data-ficha-animo-pill>
+                      <div class="ficha-animo-pill" data-ficha-animo-pill>
                         <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
                         <span class="ficha-animo-val" data-ficha-animo-text></span>
                       </div>
@@ -679,22 +679,23 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   <h3 class="ficha-nombre" data-ficha-nombre></h3>
                   <span class="ficha-nombre-trazo" aria-hidden="true"></span>
                   <div class="ficha-datos-card">
-                    <div class="ficha-dato" data-ficha-edad hidden>
+                    <div class="ficha-dato-row" data-ficha-edad hidden>
                       <span class="ficha-dato-ico" aria-hidden="true">🎂</span>
                       <span class="ficha-dato-num" data-ficha-edad-num></span>
                       <span class="ficha-dato-lbl">años</span>
-                    </div>
-                    <div class="ficha-dato" data-ficha-cumple hidden>
+                      <span class="ficha-dato-sep">·</span>
                       <span class="ficha-dato-ico" aria-hidden="true">🍰</span>
                       <span class="ficha-dato-txt" data-ficha-cumple-txt></span>
                     </div>
-                    <div class="ficha-dato" data-ficha-trabajo hidden>
-                      <span class="ficha-dato-ico" aria-hidden="true">💼</span>
-                      <span class="ficha-dato-txt" data-ficha-trabajo-txt></span>
+                    <div class="ficha-bloque-empleo" data-ficha-trabajo hidden>
+                      <span class="ficha-bloque-empleo-ico" aria-hidden="true">💼</span>
+                      <span class="ficha-bloque-empleo-estado" data-ficha-trabajo-txt></span>
                     </div>
-                    <div class="ficha-dato" data-ficha-desde-tag>
-                      <span class="ficha-dato-ico" aria-hidden="true">🏠</span>
-                      <span class="ficha-dato-txt" data-ficha-desde-txt></span>
+                    <div class="ficha-badge-dias" data-ficha-desde-tag>
+                      <span aria-hidden="true">🏠</span>
+                      <span>lleva</span>
+                      <span class="ficha-badge-dias-num" data-ficha-dias-num></span>
+                      <span>aquí</span>
                     </div>
                   </div>
                 </div>
@@ -936,12 +937,12 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="aht-frame-tabs" role="tablist" aria-label="Filtrar mensajitos">
             <button type="button" class="aht-frame-tab is-active" data-buzon-tab="nuevos" role="tab" aria-selected="true">NUEVOS <span class="mensajitos-tab-badge" data-buzon-tab-count hidden></span></button>
             <button type="button" class="aht-frame-tab" data-buzon-tab="leidos" role="tab" aria-selected="false">LEÍDOS</button>
-          </div>
-          <div class="buzon-toolbar" data-buzon-leer-todos-wrap hidden>
-            <button type="button" class="buzon-mark-all" data-buzon-leer-todos>
-              <span class="buzon-mark-all-box" aria-hidden="true"></span>
-              <span>Todo le&iacute;do</span>
-            </button>
+            <div class="buzon-toolbar" data-buzon-leer-todos-wrap hidden>
+              <button type="button" class="buzon-mark-all" data-buzon-leer-todos>
+                <span class="buzon-mark-all-box" aria-hidden="true"></span>
+                <span>Todo le&iacute;do</span>
+              </button>
+            </div>
           </div>
           <div class="aht-frame-body">
             <div data-buzon-list></div>

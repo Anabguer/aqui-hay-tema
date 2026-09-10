@@ -192,12 +192,9 @@
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-  position: absolute;
-  top: 36px;
-  right: 16px;
-  z-index: 1;
+  margin-left: auto;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
 }
 
 .aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
@@ -450,10 +447,10 @@
   padding: 0 12px;
 }
 
-/* ── FICHA PERSONAJE: 2 zonas compactas ── */
+/* ── FICHA PERSONAJE: 2 zonas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: 1fr 1fr;
   align-items: start;
   gap: 0;
   width: 100%;
@@ -472,28 +469,25 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding-right: 14px;
-  border-right: 1.5px solid rgba(180, 150, 110, 0.1);
-}
-
-/* Avatar area: ring + ánimo side-by-side */
-.ficha-avatar-area {
-  display: flex;
-  align-items: flex-start;
   gap: 6px;
 }
 
+/* Avatar area: ring grande */
+.ficha-avatar-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .ficha-avatar-area .ficha-cara-ring {
-  --ficha-cara-size: 120px;
+  --ficha-cara-size: 180px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
-  padding: 4px;
+  padding: 5px;
   border-radius: 50%;
   border: 3px solid #e87898;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(232, 120, 152, 0.18), 0 2px 8px rgba(232, 120, 152, 0.14);
-  flex-shrink: 0;
+  box-shadow: 0 0 0 4px rgba(232, 120, 152, 0.15), 0 4px 12px rgba(232, 120, 152, 0.18);
 }
 
 .ficha-avatar-area .ficha-cara-ring[data-emocion="alegre"] {
@@ -511,39 +505,56 @@
   box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.18), 0 2px 8px rgba(196, 43, 74, 0.10);
 }
 
-/* Ánimo: pill compacto al lado del avatar */
-.ficha-avatar-area .ficha-hero-animo-inline {
+/* Ánimo: etiqueta moderna con icono */
+.ficha-hero-animo-inline {
   display: flex;
   align-items: center;
+  justify-content: center;
   cursor: pointer;
-  position: relative;
-  margin-top: 8px;
 }
 
 .ficha-animo-nube,
 .ficha-animo-pill {
   display: inline-flex;
   align-items: center;
-  gap: 3px;
-  padding: 4px 10px 4px 6px;
+  gap: 5px;
+  padding: 5px 12px 5px 8px;
   background: #fff;
   border: 1.5px solid rgba(180, 150, 110, 0.22);
-  border-radius: 14px 14px 14px 6px;
-  box-shadow: 1px 1px 0 rgba(51, 38, 30, 0.06);
-  position: relative;
-  font-size: 0.75rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(51, 38, 30, 0.08);
+  font-size: 0.78rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.ficha-animo-nube--alegre,
+.ficha-animo-pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(51, 38, 30, 0.12);
+}
+
 .ficha-animo-pill--alegre {
   background: #e8f5e3;
   border-color: rgba(74, 122, 82, 0.35);
 }
 
-.ficha-animo-nube--triste,
 .ficha-animo-pill--triste {
   background: #e6d9f3;
   border-color: rgba(122, 106, 154, 0.35);
+}
+
+.ficha-animo-burbuja1,
+.ficha-animo-burbuja2 { display: none; }
+
+.ficha-animo-emoji {
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.ficha-animo-val {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
 }
 
 .ficha-animo-nube--enfadado,
@@ -614,16 +625,16 @@
   opacity: 0.45;
 }
 
-/* Datos card: edad, cumple, trabajo, desde — unificados */
+/* Datos card: reorganizado para juego */
 .ficha-datos-card {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   width: 100%;
-  padding: 6px 8px;
-  background: rgba(255, 255, 255, 0.55);
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(180, 150, 110, 0.12);
-  border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
+  border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
 }
 
 .ficha-dato {
@@ -631,7 +642,7 @@
   align-items: center;
   gap: 5px;
   padding: 2px 0;
-  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
 
@@ -639,36 +650,90 @@
 
 .ficha-dato-ico {
   flex-shrink: 0;
-  font-size: 0.75rem;
-  width: 16px;
+  font-size: 0.8rem;
+  width: 18px;
   text-align: center;
-  opacity: 0.75;
 }
 
 .ficha-dato-num {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   color: var(--vec-lavender-deep, #7a6a9a);
 }
 
 .ficha-dato-lbl {
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   color: var(--vec-lavender, #b49ad4);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
 .ficha-dato-txt {
-  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
 
-/* ── NECESIDADES: panel del estado del vecino ── */
+/* Bloque integrado edad+cumple */
+.ficha-dato-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ficha-dato-sep {
+  color: rgba(180, 150, 110, 0.3);
+  font-size: 0.6rem;
+}
+
+/* Badge días en el pueblo */
+.ficha-badge-dias {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, rgba(232, 139, 168, 0.15), rgba(180, 154, 212, 0.15));
+  border: 1px solid rgba(232, 139, 168, 0.25);
+  border-radius: 20px;
+  font: 700 0.68rem/1 "Nunito", sans-serif;
+  color: var(--vec-lavender-deep, #7a6a9a);
+  margin-top: 2px;
+}
+
+.ficha-badge-dias-num {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--vec-pink, #e88ba8);
+}
+
+/* Bloque empleo */
+.ficha-bloque-empleo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(74, 127, 191, 0.08);
+  border: 1px solid rgba(74, 127, 191, 0.15);
+  border-radius: 8px;
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+.ficha-bloque-empleo-ico {
+  font-size: 0.85rem;
+}
+
+.ficha-bloque-empleo-estado {
+  font-weight: 700;
+  color: var(--vec-blue, #4a7fbf);
+}
+
+/* ── NECESIDADES: panel informal tipo juego ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
   padding: 10px 12px;
   background: linear-gradient(150deg, #fdf6ee, #f8f0e4);
   border: 1.5px solid rgba(200, 170, 120, 0.22);
@@ -678,38 +743,45 @@
 
 .ficha-necesidades-titulo {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
-  padding-bottom: 3px;
-  border-bottom: 1.5px solid rgba(200, 170, 120, 0.15);
+  padding-bottom: 2px;
+  border-bottom: 1.5px dashed rgba(200, 170, 120, 0.2);
 }
 
 .ficha-necesidades {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .ficha-nec-row {
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  padding: 5px 8px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(200, 170, 120, 0.12);
+  gap: 2px;
+  padding: 4px 6px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(200, 170, 120, 0.1);
   border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
+  transition: transform 0.12s ease;
 }
+
+.ficha-nec-row:hover {
+  transform: translateX(2px);
+}
+
+.ficha-nec-row[hidden] { display: none; }
 
 .ficha-nec-head {
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
 .ficha-nec-ico {
   flex-shrink: 0;
-  width: 24px;
+  width: 22px;
   text-align: center;
   display: flex;
   align-items: center;
@@ -717,40 +789,41 @@
 }
 
 .ficha-nec-ico .nec-icon {
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
 }
 
 .ficha-nec-nom {
-  font: 600 0.7rem/1.2 "Nunito", sans-serif;
+  font: 600 0.68rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   flex: 1;
 }
 
 .ficha-nec-val {
-  font: 700 0.68rem/1 "Nunito", sans-serif;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--ds-text-muted, #75634F);
-  min-width: 28px;
-  text-align: right;
 }
 
 .ficha-nec-bar {
-  height: 8px;
-  border-radius: 5px;
-  background: rgba(180, 160, 130, 0.12);
+  height: 6px;
+  border-radius: 4px;
+  background: rgba(180, 160, 130, 0.1);
   overflow: hidden;
 }
 
 .ficha-nec-bar i {
   display: block;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 4px;
   transition: width 300ms ease;
 }
 
 .ficha-nec-copy {
   display: block;
-  font: 400 0.58rem/1.25 "Nunito", sans-serif;
+  font: 400 0.58rem/1.2 "Nunito", sans-serif;
   color: var(--ds-text-muted, #8a7a68);
   font-style: italic;
   margin-top: 1px;
@@ -1793,7 +1866,7 @@
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-avatar-area .ficha-cara-ring {
-    --ficha-cara-size: 100px;
+    --ficha-cara-size: 140px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
