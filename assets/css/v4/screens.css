@@ -126,26 +126,6 @@
     max-width: var(--aht-modal-mobile-w, min(calc(100% - 32px), 393px));
     max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
   }
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
-    flex-wrap: wrap;
-    gap: 17px;
-  }
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs .buzon-toolbar {
-    position: static;
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: 0;
-    margin-bottom: -4px;
-  }
-  .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
-    position: static;
-    transform: none;
-  }
-  .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
-    position: static;
-    transform: none;
-  }
 }
 
 @media (min-width: 769px) {
@@ -187,10 +167,6 @@
   opacity: 1;
 }
 
-.aht-screen[data-aht-screen="buzon"] .aht-frame {
-  position: relative;
-}
-
 .aht-screen[data-aht-screen="buzon"] .aht-frame-body {
   padding: 0;
   overflow-x: hidden;
@@ -212,16 +188,10 @@
 }
 
 .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-  position: absolute;
-  right: 16px;
-  top: 50%;
-  transform: translateY(-50%);
+  margin-left: auto;
   display: flex;
-  align-items: center;
-}
-
-.aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
-  position: relative;
+  justify-content: flex-end;
+  padding: 4px 16px 2px;
 }
 
 .aht-screen[data-aht-screen="buzon"] img.aht-msg-gift-icon {
@@ -386,229 +356,114 @@
   height: 0;
 }
 
-/* ── PESTAÑAS DE CARPETA ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-tabs {
+.aht-screen[data-aht-screen="ficha"] .ficha-acciones {
   display: flex;
-  gap: 8px;
-  padding: 6px 18px 0;
-  background: transparent;
+  gap: 0;
+  border-bottom: 1px solid var(--aht-border, #D8D1DE);
+  background: var(--aht-surface-raised, #FFFFFF);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-tab {
-  position: relative;
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 7px 14px 8px;
-  border: 1.5px solid rgba(180, 150, 110, 0.25);
-  border-bottom: none;
-  border-radius: 8px 8px 0 0;
-  font: 700 0.75rem/1 "Nunito", sans-serif;
-  color: var(--ds-text-muted, #75634F);
+  padding: 9px 4px;
+  border: none;
+  border-bottom: 2.5px solid transparent;
+  background: transparent;
+  font: 700 0.78rem/1 "Nunito", sans-serif;
+  color: var(--aht-text-muted, #75634F);
   cursor: pointer;
-  transform: translateY(2px);
-  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
-  z-index: 1;
+  transition: color 150ms, border-color 150ms;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-tab:hover {
-  transform: translateY(2px);
-  box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc:hover {
+  color: var(--ds-ink, #3b3028);
+  border-bottom-color: var(--vec-pink, #e88ba8);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-tab.is-active {
-  transform: translateY(0);
-  color: #fff;
-  border-color: rgba(0,0,0,0.15);
-  z-index: 3;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab-ico {
+.aht-screen[data-aht-screen="ficha"] .ficha-btn-acc-svg {
   flex-shrink: 0;
-}
-
-/* Diario — rosa vivo */
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--diario {
-  background: rgba(232, 120, 150, 0.22);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--diario:hover {
-  background: rgba(232, 120, 150, 0.35);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--diario.is-active {
-  background: var(--vec-pink, #e88ba8);
-  box-shadow: 0 -2px 8px rgba(232, 139, 168, 0.4);
-}
-
-/* Nuevo plan — azul marcado */
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--plan {
-  background: rgba(70, 110, 175, 0.18);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--plan:hover {
-  background: rgba(70, 110, 175, 0.32);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--plan.is-active {
-  background: #4a7fbf;
-  box-shadow: 0 -2px 8px rgba(70, 110, 175, 0.4);
-}
-
-/* Regalar — amarillo cálido */
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo {
-  background: rgba(218, 170, 60, 0.2);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo:hover {
-  background: rgba(218, 170, 60, 0.36);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo.is-active {
-  background: #d4a020;
-  box-shadow: 0 -2px 8px rgba(218, 170, 60, 0.4);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-hero {
-  padding: 0 12px;
+  padding: 10px 12px 0;
 }
 
-/* ── FICHA HERO: 3 columnas ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  align-items: start;
-  gap: 0;
-  width: 100%;
-  background:
-    linear-gradient(135deg, rgba(237, 232, 244, 0.4), rgba(250, 245, 252, 0.6)),
-    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(180, 150, 110, 0.03) 18px, rgba(180, 150, 110, 0.03) 19px);
-  border: 2px solid rgba(180, 150, 110, 0.18);
-  border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
-  padding: 12px 14px 10px;
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-composition {
   position: relative;
-  box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
-}
-
-/* ── COL IZQUIERDA: avatar + nombre ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 4px;
-  padding-right: 14px;
-  border-right: 1.5px solid rgba(180, 150, 110, 0.1);
+  width: 100%;
+  min-height: 220px;
+  padding: 8px 0 6px;
 }
 
-/* Avatar area: ring grande */
-.ficha-avatar-area {
+/* ── Centro: retrato + nombre + desde + animo ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-center {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  z-index: 2;
+  position: relative;
 }
 
-.ficha-avatar-area .ficha-cara-ring {
-  --ficha-cara-size: 160px;
+.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
+  --ficha-cara-size: 140px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
-  padding: 5px;
+  padding: 4px;
   border-radius: 50%;
   border: 3px solid #e87898;
   background: #fff;
-  box-shadow: 0 0 0 4px rgba(232, 120, 152, 0.15), 0 4px 12px rgba(232, 120, 152, 0.18);
-}
-
-.ficha-avatar-area .ficha-cara-ring[data-emocion="alegre"] {
-  border-color: var(--vec-green, #4a7a52);
-  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.18), 0 2px 8px rgba(74, 122, 82, 0.10);
-}
-
-.ficha-avatar-area .ficha-cara-ring[data-emocion="triste"] {
-  border-color: var(--vec-lavender-deep, #7a6a9a);
-  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.18), 0 2px 8px rgba(122, 106, 154, 0.10);
-}
-
-.ficha-avatar-area .ficha-cara-ring[data-emocion="enfadado"] {
-  border-color: var(--vec-red, #c42b4a);
-  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.18), 0 2px 8px rgba(196, 43, 74, 0.10);
-}
-
-/* ── COL CENTRO: ánimo + datos apilados ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Ánimo: imagen grande + etiqueta */
-.ficha-hero-animo-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
+  box-shadow: 0 0 0 3px rgba(232, 120, 152, 0.2), 0 2px 8px rgba(232, 120, 152, 0.15);
   flex-shrink: 0;
 }
 
-.ficha-animo-img-wrap {
-  width: 80px;
-  height: 80px;
+.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="alegre"] {
+  border-color: var(--vec-green, #4a7a52);
+  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.2), 0 2px 8px rgba(74, 122, 82, 0.12);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="triste"] {
+  border-color: var(--vec-lavender-deep, #7a6a9a);
+  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.2), 0 2px 8px rgba(122, 106, 154, 0.12);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="enfadado"] {
+  border-color: var(--vec-red, #c42b4a);
+  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.2), 0 2px 8px rgba(196, 43, 74, 0.12);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-cara {
+  width: 100%;
+  height: 100%;
   border-radius: 50%;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.6);
-  border: 2px solid rgba(180, 150, 110, 0.15);
-  box-shadow: 0 2px 8px rgba(51, 38, 30, 0.1);
-  flex-shrink: 0;
+  background: transparent;
 }
 
-.ficha-animo-img {
+.aht-screen[data-aht-screen="ficha"] .ficha-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.ficha-animo-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(180, 150, 110, 0.18);
-  border-radius: 12px;
-  transition: transform 0.15s ease;
-}
-
-.ficha-animo-pill:hover {
-  transform: translateY(-1px);
-}
-
-.ficha-animo-pill--alegre { background: rgba(232, 245, 227, 0.8); border-color: rgba(74, 122, 82, 0.3); }
-.ficha-animo-pill--triste { background: rgba(230, 217, 243, 0.8); border-color: rgba(122, 106, 154, 0.3); }
-.ficha-animo-pill--enfadado { background: rgba(251, 229, 232, 0.8); border-color: rgba(196, 43, 74, 0.3); }
-.ficha-animo-pill--neutro { background: rgba(245, 243, 240, 0.8); border-color: rgba(180, 150, 110, 0.2); }
-
-.ficha-animo-val {
+.aht-screen[data-aht-screen="ficha"] .ficha-cara .ficha-ini {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.82rem;
-  font-weight: 700;
+  font-size: 2.6rem;
   color: var(--ds-ink, #3b3028);
 }
 
-.ficha-animo-burbuja1,
-.ficha-animo-burbuja2 { display: none; }
-
-.ficha-animo-val {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--ds-ink, #3b3028);
-}
-
-/* Nombre */
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
+.aht-screen[data-aht-screen="ficha"] .ficha-nombre {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.6rem;
   font-weight: 700;
@@ -618,250 +473,306 @@
   text-align: center;
 }
 
-.ficha-nombre-trazo {
+.aht-screen[data-aht-screen="ficha"] .ficha-nombre-trazo {
   display: block;
-  width: 44px;
+  width: 48px;
   height: 3px;
   margin: 1px auto 0;
-  background: linear-gradient(90deg, transparent, var(--vec-lavender, #b49ad4), transparent);
-  border-radius: 3px;
+  background: var(--vec-lavender, #b49ad4);
+  border-radius: 2px;
   opacity: 0.45;
 }
 
-/* Datos card: reorganizado para juego */
-.ficha-datos-card {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  flex: 1;
-  min-width: 0;
-}
-
-.ficha-dato {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  padding: 1px 0;
-  font: 600 0.72rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-}
-
-.ficha-dato[hidden] { display: none; }
-
-.ficha-dato-ico {
-  flex-shrink: 0;
-  font-size: 0.8rem;
-  width: 18px;
-  text-align: center;
-}
-
-.ficha-dato-num {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--vec-lavender-deep, #7a6a9a);
-}
-
-.ficha-dato-lbl {
-  font-size: 0.62rem;
-  color: var(--vec-lavender, #b49ad4);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.ficha-dato-txt {
-  font: 600 0.72rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-}
-
-/* Bloque integrado edad+cumple */
-.ficha-dato-row {
-  display: flex;
-  align-items: baseline;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.ficha-dato-extra {
-  font: 400 0.65rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-text-muted, #8a7a68);
-  font-style: italic;
-}
-
-/* Badge días en el pueblo */
-.ficha-badge-dias {
+/* ── DESDE: cinta debajo del nombre ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
   display: inline-flex;
-  align-items: baseline;
-  gap: 4px;
-  padding: 3px 10px;
-  background: linear-gradient(135deg, rgba(232, 139, 168, 0.15), rgba(180, 154, 212, 0.15));
-  border: 1px solid rgba(232, 139, 168, 0.25);
-  border-radius: 20px;
-  font: 600 0.68rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-  margin-top: 2px;
-}
-
-.ficha-badge-dias-num {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--vec-pink, #e88ba8);
-}
-
-/* Bloque empleo */
-.ficha-bloque-empleo {
-  display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 8px;
-  background: rgba(74, 127, 191, 0.08);
-  border: 1px solid rgba(74, 127, 191, 0.15);
-  border-radius: 8px;
-  font: 600 0.72rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-}
-
-.ficha-bloque-empleo-ico {
-  font-size: 0.85rem;
-}
-
-.ficha-bloque-empleo-estado {
-  font-weight: 700;
-  color: var(--vec-blue, #4a7fbf);
-}
-
-/* ── NECESIDADES: cajito compacto dentro del hero ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
-  display: flex;
-  flex-direction: column;
   gap: 4px;
-  padding: 8px 10px;
-  background: linear-gradient(150deg, #fdf6ee, #f8f0e4);
-  border: 1.5px solid rgba(200, 170, 120, 0.22);
-  border-left: 1.5px solid rgba(200, 170, 120, 0.18);
-  border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
-  box-shadow: 2px 3px 0 rgba(200, 170, 120, 0.12);
-  max-width: 190px;
-  min-width: 170px;
-  margin-left: 10px;
-  transform: rotate(1.5deg);
+  margin-top: 5px;
+  padding: 3px 10px 3px 7px;
+  background: rgba(230, 217, 243, 0.4);
+  border: 1px solid rgba(180, 150, 110, 0.18);
+  border-radius: 10px;
+  font: 500 0.58rem/1.1 "Nunito", sans-serif;
+  color: #8a7a68;
+  transform: rotate(-1deg);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
-.ficha-necesidades-titulo {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--ds-ink, #3b3028);
-  padding-bottom: 2px;
-  border-bottom: 1.5px dashed rgba(200, 170, 120, 0.2);
-}
-
-.ficha-necesidades {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 4px;
-}
-
-.ficha-nec-row {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 3px 5px;
-  background: rgba(255, 255, 255, 0.5);
-  border: 1px solid rgba(200, 170, 120, 0.1);
-  border-radius: 8px 6px 10px 5px / 6px 10px 5px 8px;
-}
-
-.ficha-nec-row[hidden] { display: none; }
-
-.ficha-nec-head {
-  display: flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.ficha-nec-ico {
+.ficha-desde-ico {
   flex-shrink: 0;
-  width: 18px;
-  text-align: center;
+  color: var(--vec-lavender, #b49ad4);
+  opacity: 0.8;
+}
+
+/* ── CUMPLEAÑOS: debajo del nombre ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-cumple {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 3px;
+  padding: 2px 10px;
+  background: rgba(255, 235, 205, 0.45);
+  border: 1px solid rgba(200, 170, 100, 0.2);
+  border-radius: 10px;
+  font: 500 0.56rem/1.1 "Nunito", sans-serif;
+  color: #8a7350;
+  transform: rotate(0.5deg);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+
+.ficha-cumple-txt {
+  white-space: nowrap;
+}
+
+/* ── NUBE DE PENSAMIENTO: Ánimo (above-right of portrait) ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  z-index: 4;
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  cursor: pointer;
+}
+
+.ficha-animo-burbuja1,
+.ficha-animo-burbuja2 {
+  display: block;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(180, 150, 110, 0.2);
+}
+
+.ficha-animo-burbuja1 {
+  width: 8px;
+  height: 8px;
+  align-self: flex-end;
+  margin-bottom: 10px;
+}
+
+.ficha-animo-burbuja2 {
+  width: 5px;
+  height: 5px;
+  margin-bottom: 16px;
+}
+
+.ficha-animo-nube {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
+  padding: 5px 10px 5px 7px;
+  background: #fff;
+  border: 1.5px solid rgba(180, 150, 110, 0.22);
+  border-radius: 14px 14px 14px 6px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  position: relative;
 }
 
-.ficha-nec-ico .nec-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
+.ficha-animo-nube--alegre {
+  background: #e8f5e3;
+  border-color: rgba(74, 122, 82, 0.25);
 }
 
-.ficha-nec-nom {
-  font: 600 0.6rem/1.2 "Nunito", sans-serif;
-  color: var(--ds-ink, #3b3028);
-  flex: 1;
+.ficha-animo-nube--triste {
+  background: #e6d9f3;
+  border-color: rgba(122, 106, 154, 0.25);
 }
 
-.ficha-nec-val {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.78rem;
+.ficha-animo-nube--enfadado {
+  background: #fbe5e8;
+  border-color: rgba(196, 43, 74, 0.25);
+}
+
+.ficha-animo-ico {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.ficha-animo-emoji {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.ficha-animo-val {
+  font-family: var(--ds-font-ui, "Nunito", sans-serif);
+  font-size: 0.68rem;
   font-weight: 700;
-  color: var(--ds-text-muted, #75634F);
+  color: var(--ds-ink, #3b3028);
 }
 
-.ficha-nec-bar {
-  height: 4px;
-  border-radius: 3px;
-  background: rgba(180, 160, 130, 0.1);
-  overflow: hidden;
-}
-
-.ficha-nec-bar--en_rojo { background: rgba(196, 43, 74, .18); }
-.ficha-nec-bar--lo_necesita { background: rgba(224, 169, 63, .18); }
-.ficha-nec-bar--le_vendria_bien { background: rgba(185, 138, 47, .15); }
-.ficha-nec-bar--bien { background: rgba(74, 122, 82, .12); }
-
-.ficha-nec-bar i {
-  display: block;
-  height: 100%;
-  border-radius: 3px;
-  transition: width 300ms ease;
-}
-
-.ficha-nec-copy {
-  display: none;
-}
-
-/* Doodles — integrados al personaje */
-.ficha-hero-card::before {
-  content: '♥';
+/* ── IZQUIERDA: Calendario de sobremesa (Edad) ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
   position: absolute;
+  left: 50%;
+  right: auto;
   top: 8px;
-  right: 12px;
-  font-size: 1rem;
-  color: var(--vec-pink, #e88ba8);
-  opacity: 0.4;
-  transform: rotate(-10deg);
-  pointer-events: none;
-  z-index: 1;
+  z-index: 3;
+  transform: translateX(calc(-70px - 10px - 100%)) rotate(-4deg);
+  filter: drop-shadow(1px 2px 3px rgba(0,0,0,0.1));
 }
 
-.ficha-hero-card::after {
-  content: '★';
+.ficha-edad-cinta {
   position: absolute;
-  bottom: 8px;
-  right: 50%;
-  font-size: 0.85rem;
-  color: var(--ds-mustard, #e3b04b);
-  opacity: 0.4;
-  transform: rotate(12deg);
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(2deg);
+  width: 30px;
+  height: 10px;
+  background: rgba(232, 120, 152, 0.4);
+  border: 1px solid rgba(200, 100, 130, 0.3);
+  border-radius: 1px;
+  z-index: 1;
+}
+
+.ficha-edad-cal {
+  position: relative;
+}
+
+.ficha-edad-anillas {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: -3px;
+  position: relative;
+  z-index: 1;
+}
+
+.ficha-edad-anillas span {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid #e87898;
+  background: #fff;
+}
+
+.ficha-edad-body {
+  background: #fef5e0;
+  border: 1.5px solid rgba(180, 150, 110, 0.35);
+  border-radius: 4px 4px 2px 2px;
+  padding: 6px 12px 5px;
+  text-align: center;
+  min-width: 52px;
+  position: relative;
+}
+
+.ficha-edad-num {
+  display: block;
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #6a4a2a;
+  line-height: 1;
+}
+
+.ficha-edad-label {
+  display: block;
+  font: 600 0.48rem/1 "Nunito", sans-serif;
+  color: #8a7350;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+
+.ficha-edad-pata {
+  width: 30px;
+  height: 6px;
+  margin: 0 auto;
+  background: #d4c4a8;
+  border-radius: 0 0 3px 3px;
+}
+
+/* ── DERECHA: Trabajo ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.ficha-trab-cinta {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-2deg);
+  width: 34px;
+  height: 10px;
+  background: rgba(180, 210, 240, 0.6);
+  border: 1px solid rgba(120, 160, 200, 0.35);
+  border-radius: 1px;
+  z-index: 1;
+}
+
+.ficha-trab-body {
+  background: #fff;
+  border: 1.5px solid rgba(90, 70, 50, 0.18);
+  border-radius: 4px;
+  padding: 8px 10px 6px;
+  min-width: 80px;
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.07);
+  position: relative;
+}
+
+.ficha-trab-head {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 3px;
+  font: 600 0.52rem/1 "Nunito", sans-serif;
+  color: #8a7a68;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ficha-trab-ico {
+  flex-shrink: 0;
+  color: #8a7a68;
+}
+
+.ficha-trab-val {
+  font: 600 0.72rem/1.15 "Nunito", sans-serif;
+  color: #3d6a48;
+}
+
+/* ── DECORACIONES: micro-doodles ── */
+.ficha-deco {
+  position: absolute;
   pointer-events: none;
   z-index: 1;
 }
 
-/* old deco styles removed — replaced by .ficha-hero-card::before/::after above */
+.ficha-deco-linea1 {
+  top: 18px;
+  left: 50%;
+  transform: translateX(-56px) rotate(-12deg);
+  width: 18px;
+  height: 2px;
+  background: var(--vec-lavender, #b49ad4);
+  border-radius: 1px;
+  opacity: 0.35;
+}
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-body {
+.ficha-deco-linea2 {
+  top: 30px;
+  left: 50%;
+  transform: translateX(42px) rotate(8deg);
+  width: 12px;
+  height: 2px;
+  background: var(--vec-green, #4a7a52);
+  border-radius: 1px;
+  opacity: 0.3;
+}
+
+.ficha-deco-corazon {
+  bottom: 18px;
+  right: 14px;
+  font-size: 0.6rem;
+  color: var(--vec-lavender, #b49ad4);
+  opacity: 0.35;
+  transform: rotate(12deg);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-body {
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -917,7 +828,7 @@
   background: rgba(80, 120, 180, 0.35);
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
+.aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit {
   font-family: var(--ds-font-hand, "Caveat", cursive);
   font-size: 1.15rem;
   font-weight: 700;
@@ -926,68 +837,54 @@
   line-height: 1.2;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit-sm {
+.aht-screen[data-aht-screen="ficha"] .ficha-seccion-tit-sm {
   font-size: 0.95rem;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-seccion-body {
   position: relative;
   z-index: 2;
-  padding-left: 0.1rem;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 10px;
-  min-height: 41px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
+.aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
   background: #fff;
   border: 1.5px solid rgba(232, 139, 168, 0.3);
-  font: 600 0.78rem/1.2 "Nunito", sans-serif;
+  font: 600 0.75rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
-  margin-bottom: 6px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin: 0 4px 4px 0;
   white-space: nowrap;
-  min-width: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag:last-child {
-  margin-bottom: 0;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
+.aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
   background: rgba(255, 255, 255, 0.5);
   border-style: dashed;
   color: var(--ds-text-muted, #75634F);
 }
 
-.ficha-rasgo-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(232, 139, 168, 0.45);
-  flex-shrink: 0;
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
+  background: #fff;
+  border: 1.5px solid rgba(74, 122, 82, 0.2);
+  margin-bottom: 6px;
 }
 
-.ficha-rasgo-tag.is-desconocido .ficha-rasgo-dot {
-  background: rgba(180, 160, 130, 0.3);
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card:last-child {
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-card:last-child {
   margin-bottom: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.is-desconocido {
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-card.is-desconocido {
   background: rgba(255, 255, 255, 0.4);
   border-style: dashed;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-ico {
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-ico {
   width: 24px;
   height: 24px;
   flex-shrink: 0;
@@ -996,36 +893,17 @@
   justify-content: center;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-svg {
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-svg {
   width: 22px;
   height: 22px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 10px;
-  min-height: 32px;
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
-  background: #fff;
-  border: 1.5px solid rgba(74, 122, 82, 0.2);
-  margin-bottom: 6px;
-  min-width: 0;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab {
-  font: 600 0.78rem/1.2 "Nunito", sans-serif;
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab {
+  font: 600 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab.is-desconocido {
+.aht-screen[data-aht-screen="ficha"] .ficha-hobby-lab.is-desconocido {
   color: var(--ds-text-muted, #75634F);
 }
 
@@ -1047,7 +925,7 @@
   gap: 4px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-pref-line {
+.aht-screen[data-aht-screen="ficha"] .ficha-pref-line {
   font: 600 0.82rem/1.3 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin: 0;
@@ -1057,7 +935,7 @@
   margin-right: 4px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-row {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1068,20 +946,20 @@
   margin-bottom: 6px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row:last-child {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-row:last-child {
   margin-bottom: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis {
   border-color: rgba(196, 43, 74, 0.25);
   background: #fff5f7;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-compact {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-compact {
   padding: 6px 8px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-cara {
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -1093,43 +971,43 @@
   justify-content: center;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara img {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-cara img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-cara span {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-cara span {
   font: 700 0.85rem/1 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-main {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-main {
   flex: 1;
   min-width: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-nom {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-nom {
   font: 700 0.82rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   margin-bottom: 3px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-bar {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-bar {
   height: 6px;
   border-radius: 3px;
   background: #E8F5E3;
   overflow: hidden;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-bar span {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-bar span {
   display: block;
   height: 100%;
   border-radius: 3px;
   background: var(--vec-green, #4a7a52);
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-etiq {
   font: 700 0.62rem/1 "Nunito", sans-serif;
   padding: 2px 6px;
   border-radius: 999px;
@@ -1139,12 +1017,12 @@
   flex-shrink: 0;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis .ficha-rel-etiq {
+.aht-screen[data-aht-screen="ficha"] .ficha-rel-row.is-crisis .ficha-rel-etiq {
   background: #fbe5e8;
   color: var(--vec-red, #c42b4a);
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-ver-mas {
+.aht-screen[data-aht-screen="ficha"] .ficha-ver-mas {
   display: block;
   width: 100%;
   padding: 8px 12px;
@@ -1158,13 +1036,13 @@
   text-align: center;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-ver-mas:hover {
+.aht-screen[data-aht-screen="ficha"] .ficha-ver-mas:hover {
   background: var(--vec-pink, #e88ba8);
   color: #fff;
   border-style: solid;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item {
+.aht-screen[data-aht-screen="ficha"] .ficha-plan-item {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1175,7 +1053,7 @@
   margin-bottom: 6px;
 }
 
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-plan-item:last-child {
+.aht-screen[data-aht-screen="ficha"] .ficha-plan-item:last-child {
   margin-bottom: 0;
 }
 
@@ -1224,8 +1102,65 @@
   flex-shrink: 0;
 }
 
-/* Necesidades moved into hero — old section hidden */
-.ficha-seccion-necesidades { display: none; }
+.aht-screen[data-aht-screen="ficha"] .ficha-seccion-necesidades {
+  background: #E3F0F8;
+  border: 1.5px solid rgba(100, 160, 210, 0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-necesidades {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px 12px;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-row + .ficha-nec-row {
+  border-top: none;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-ico {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-nom {
+  font: 600 0.78rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-bar {
+  flex: 1;
+  height: 7px;
+  border-radius: 4px;
+  background: rgba(100, 160, 210, 0.12);
+  overflow: hidden;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 4px;
+  transition: width 300ms ease;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-nec-val {
+  font: 700 0.7rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #75634F);
+  min-width: 22px;
+  text-align: right;
+}
 
 .aht-screen[data-aht-screen="ficha"] .ficha-vacio {
   font: 600 0.82rem/1.3 "Nunito", sans-serif;
@@ -1264,9 +1199,6 @@
   scrollbar-width: none;
   border-bottom: 1px solid var(--aht-border, #D8D1DE);
   background: var(--aht-surface-raised, #FFFFFF);
-  flex: 0 0 auto;
-  position: relative;
-  z-index: 5;
 }
 
 .aht-screen[data-aht-screen="diario"] .coti-filtros::-webkit-scrollbar {
@@ -1300,11 +1232,6 @@
 
 .aht-screen[data-aht-screen="diario"] .coti-filtro-pill {
   font-size: 1rem;
-}
-.aht-screen[data-aht-screen="diario"] .coti-filtro-pill .coti-svg {
-  width: 1.1em;
-  height: 1.1em;
-  flex-shrink: 0;
 }
 
 .aht-screen[data-aht-screen="diario"] .coti-body {
@@ -1892,41 +1819,42 @@
 
 /* Ficha — móvil */
 @media (max-width: 768px) {
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
-    grid-template-columns: 1fr;
-    gap: 10px;
-    padding: 10px 12px 8px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-composition {
+    min-height: 180px;
+    padding: 4px 0 2px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
-    padding-right: 0;
-    padding-bottom: 8px;
-    border-right: none;
-    border-bottom: 1.5px solid rgba(180, 150, 110, 0.12);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
-    padding: 8px 10px;
-    max-width: none;
-    min-width: 0;
-    margin-left: 0;
-    border-left: none;
-    border-top: 1.5px solid rgba(200, 170, 120, 0.18);
-    transform: none;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
-    flex-direction: row;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-avatar-area .ficha-cara-ring {
-    --ficha-cara-size: 140px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
+    --ficha-cara-size: 110px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
     font-size: 1.35rem;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
+    top: 4px;
+    transform: translateX(calc(-55px - 8px - 100%)) rotate(-5deg) scale(0.85);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
+    top: 8px;
+    transform: translateX(calc(55px + 8px)) rotate(1deg) scale(0.88);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
+    font-size: 0.52rem;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
+    top: -2px;
+    right: -6px;
+    transform: scale(0.85);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-animo-burbuja1,
+  .aht-screen[data-aht-screen="ficha"] .ficha-animo-burbuja2 {
+    display: none;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-pair {
@@ -1934,23 +1862,32 @@
     gap: 10px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-pair:has(.ficha-seccion-rasgos) {
-    grid-template-columns: 1fr 1fr;
-  }
-
   .aht-screen[data-aht-screen="ficha"] .ficha-body {
     padding: 10px 12px;
     gap: 10px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-tab {
-    padding: 7px 10px 9px;
-    font-size: 0.7rem;
+  .aht-screen[data-aht-screen="ficha"] .ficha-nec-nom {
+    min-width: 50px;
+    font-size: 0.72rem;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-tab-ico {
-    width: 14px;
-    height: 14px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-necesidades {
+    grid-template-columns: 1fr;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-btn-acc {
+    padding: 8px 2px;
+    font-size: 0.72rem;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-btn-acc-svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-deco {
+    display: none;
   }
 
   /* Animo — móvil: card vertical */
