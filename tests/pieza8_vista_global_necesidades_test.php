@@ -76,67 +76,78 @@ $p = [
 ];
 $result = PartidaService::vistaGlobalNecesidades($p);
 ok($result !== null, 'Con datos -> no null');
-ok(isset($result['items']), 'Tiene items');
+ok(isset($result['residentes']), 'Tiene residentes');
 
 // Social: solo Ana (30=lo_necesita), Benja(50)=le_vendria_bien no cuenta
-ok(isset($result['items']['social']), 'social en items');
-$social = $result['items']['social'];
-ok(count($social['residentes']) === 1, 'social 1 residente (Ana lo_necesita)');
-ok($social['residentes'][0]['id'] === 'r1', 'social residente es r1 (Ana)');
+$lista = $result['residentes'];
+// Build needs index by necessity for easier assertions
+$necIndex = [];
+foreach ($lista as $res) {
+    foreach ($res['necesidades'] as $nec => $data) {
+        if (!isset($necIndex[$nec])) $necIndex[$nec] = [];
+        $necIndex[$nec][] = ['id' => $res['id'], 'nombre' => $res['nombre'], 'banda' => $data['banda'], 'valor' => $data['valor']];
+    }
+}
+
+ok(isset($necIndex['social']), 'social present in data');
+$socialLNV = array_filter($necIndex['social'] ?? [], fn($r) => $r['banda'] === 'lo_necesita' || $r['banda'] === 'en_rojo');
+ok(count($socialLNV) === 1, 'social 1 residente crítico (Ana lo_necesita)');
+$socialFirst = reset($socialLNV);
+ok($socialFirst['id'] === 'r1', 'social residente es r1 (Ana)');
 
 // Calma: Ana en_rojo (20)
-ok(isset($result['items']['calma']), 'calma en items');
-$calma = $result['items']['calma'];
-ok(count($calma['residentes']) === 1, 'calma 1 residente (Ana en_rojo)');
-ok($calma['residentes'][0]['nombre'] === 'Ana', 'calma residente es Ana');
+ok(isset($necIndex['calma']), 'calma present in data');
+$calmaCrit = array_filter($necIndex['calma'] ?? [], fn($r) => $r['banda'] === 'lo_necesita' || $r['banda'] === 'en_rojo');
+ok(count($calmaCrit) === 1, 'calma 1 residente crítico (Ana en_rojo)');
+$calmaFirst = reset($calmaCrit);
+ok($calmaFirst['id'] === 'r1', 'calma residente es r1 (Ana)');
 
 // Actividad: ninguna (todas bien)
-ok(!isset($result['items']['actividad']), 'actividad filtrada (todas bien)');
+$actividadCrit = array_filter($necIndex['actividad'] ?? [], fn($r) => $r['banda'] === 'lo_necesita' || $r['banda'] === 'en_rojo');
+ok(count($actividadCrit) === 0, 'actividad sin residentes críticos (todas bien)');
 
 // Diversion: Benja lo_necesita(30), Ana le_vendria_bien(60=no cuenta)
-ok(isset($result['items']['diversion']), 'diversion en items');
-$diversion = $result['items']['diversion'];
-ok(count($diversion['residentes']) === 1, 'diversion 1 residente (Benja lo_necesita)');
+ok(isset($necIndex['diversion']), 'diversion present in data');
+$divCrit = array_filter($necIndex['diversion'] ?? [], fn($r) => $r['banda'] === 'lo_necesita' || $r['banda'] === 'en_rojo');
+ok(count($divCrit) === 1, 'diversion 1 residente crítico (Benja lo_necesita)');
 
 // --- Test 4: verificar estructura de datos ---
 echo "\nEstructura de datos:\n";
 $result = PartidaService::vistaGlobalNecesidades($p);
-if (isset($result['items']['social'])) {
-    $s = $result['items']['social'];
-    ok(isset($s['residentes']), 'social tiene residentes');
-    ok($s['residentes'][0]['id'] === 'r1', 'primer residente r1 (Ana)');
-    ok($s['residentes'][0]['copy'] !== '', 'copy no vacía');
-    ok($s['residentes'][0]['banda'] === 'lo_necesita', 'banda es lo_necesita');
+$lista = $result['residentes'];
+$ana = null;
+foreach ($lista as $res) {
+    if ($res['id'] === 'r1') { $ana = $res; break; }
 }
+ok($ana !== null, 'r1 (Ana) found in residentes');
+ok($ana['necesidades']['social']['banda'] === 'lo_necesita', 'Ana social banda es lo_necesita');
+ok($ana['necesidades']['social']['copy'] !== '', 'Ana social copy no vacía');
 
 // --- Test 5: copia de texto ---
 echo "\nCopy de texto:\n";
 $result = PartidaService::vistaGlobalNecesidades($p);
-ok(isset($result['items']['social']), 'social en items');
-if (isset($result['items']['social'])) {
-    $social = $result['items']['social'];
-    // $social es un array con 'banda' y 'residentes'
-    ok(is_array($social), 'social es array');
-    if (is_array($social) && isset($social['residentes']) && count($social['residentes']) > 0) {
-        $first = $social['residentes'][0] ?? null;
-        ok($first !== null, 'primer residente existe');
-        if ($first !== null) {
-            ok(isset($first['copy']), 'residente tiene copy');
-            ok($first['copy'] !== null, 'copy no es null');
-            ok(is_string($first['copy']), 'copy es string');
-        }
-    }
-}
+$lista = $result['residentes'];
+ok(count($lista) > 0, 'Hay residentes');
+$first = $lista[0];
+ok(isset($first['necesidades']), 'Residente tiene necesidades');
+$firstNec = reset($first['necesidades']);
+ok($firstNec['copy'] !== null, 'copy no es null');
+ok(is_string($firstNec['copy']), 'copy es string');
 
 // --- Test 6: todas las necesidades críticas ---
 echo "\nTodas las necesidades críticas:\n";
 $result = PartidaService::vistaGlobalNecesidades($p);
+$lista = $result['residentes'];
 $criticas = 0;
-foreach ($result['items'] as $nec => $data) {
-    $criticas += count($data['residentes']);
+foreach ($lista as $res) {
+    foreach ($res['necesidades'] as $nec => $data) {
+        if ($data['banda'] === 'lo_necesita' || $data['banda'] === 'en_rojo') {
+            $criticas++;
+        }
+    }
 }
 ok($criticas > 0, 'Hay necesidades críticas mostradas');
-echo "  Mostrando $criticas residentes con necesidades críticas\n";
+echo "  Mostrando $criticas necesidades críticas\n";
 
 // --- Test 7: sin necesidades bajas ---
 echo "\nSin necesidades bajas:\n";

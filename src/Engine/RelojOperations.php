@@ -106,6 +106,12 @@ final class RelojOperations
             MotorVidaDiaria::tickHora($partida, new Catalog($this->projectRoot), $calTick, $rngTick, $this->logger);
             $rngTick->persistToPartida($partida);
         }
+        // Catch-up: simula solo decay + autocuidado de necesidades, sin side effects narrativos
+        if ($catchUp && FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            $rngNec = RngService::fromPartida($partida);
+            MotorVidaDiaria::tickNecesidadesCatchUp($partida, new Catalog($this->projectRoot), $calTick, $rngNec);
+            $rngNec->persistToPartida($partida);
+        }
         // Coincidencias ANTES de sincronizar: los encuentros siguen programado/en_curso
         // y aún ocupan lugar. Coincidir ≠ interactuar.
         $coins = [];

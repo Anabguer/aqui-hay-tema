@@ -702,5 +702,47 @@
             "puzzle",
             "peluche"
         ]
+    },
+    "necesidades": {
+        "_canon_e5": true,
+        "_nota": "Modelo E5 aprobado 2026-09-10. Banda define FRECUENCIA de autocuidado, NO poder de recuperación. Cuanto mejor estoy, menos me preocupo. Cuanto peor, más intento cuidarme. recAuto pasiva=0; toda recuperación viene de visitas/acciones.",
+        "initial_value": 75,
+        "min_value": 0,
+        "max_value": 100,
+        "bandas": {
+            "bien": {"min": 75, "max": 100},
+            "le_vendria_bien": {"min": 50, "max": 74},
+            "lo_necesita": {"min": 25, "max": 49},
+            "en_rojo": {"min": 0, "max": 24}
+        },
+        "decay": {
+            "_nota": "Decay horario por banda. Bien decae más (0.30) porque tiene reserva. LeV decae más rápido (0.35) para empujar a LoNec. LoNec y Rojo decaen menos (0.20/0.15) porque ya están en el suelo.",
+            "bien": 0.30,
+            "le_vendria_bien": 0.35,
+            "lo_necesita": 0.20,
+            "en_rojo": 0.15
+        },
+        "recuperacion_autonoma": 0.0,
+        "_nota_recAuto": "Recuperación pasiva por hora eliminada (E5). Toda recuperación viene de visitas a lugares (aplicarRecuperacion) o acciones autónomas del catch-up.",
+        "recuperacion": {
+            "_nota": "Base de recuperación por visita a lugar, por BANDA. Se multiplica por intensidad (principal=1.0, secundaria=0.5) × compañía × hobby.",
+            "bien": 7.0,
+            "le_vendria_bien": 7.0,
+            "lo_necesita": 8.0,
+            "en_rojo": 7.0
+        },
+        "probabilidad_visita": {
+            "_nota": "Probabilidad por hora de que un NPC intente autocuidado autónomo (visita a lugar). Bien=0.020 (rara), LeV=0.035, LoNec=0.070, Rojo=0.100 (frecuente)."
+        },
+        "catchup": {
+            "_nota": "En catch-up: mismo decay + probabilidad de visita autónoma. Sin encuentros, sin eventos, sin emociones. Selección de lugar ponderada por necesidad peor.",
+            "activo": true
+        },
+        "celestine": {
+            "_nota": "Celestine bonus al intervenir: +14 base, +20 extra si está en LoNec o Rojo.",
+            "base": 14,
+            "bonus_urgencia": 20,
+            "urgencia_min_banda": "lo_necesita"
+        }
     }
 }

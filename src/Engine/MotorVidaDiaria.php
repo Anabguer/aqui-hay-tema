@@ -140,6 +140,150 @@ final class MotorVidaDiaria
     }
 
     /**
+     * Catch-up de necesidades: simula solo decay + autocuidado autónomo.
+     * Sin encuentros, sin eventos diarios, sin emociones, sin narrativa.
+     * Replica el hourly loop de online pero exclusivamente para necesidades.
+     *
+     * Probabilidad de autocuidado por banda (E5):
+     *   bien=0.020, le_vendria_bien=0.035, lo_necesita=0.070, en_rojo=0.100
+     *
+     * Selección de lugar: ponderada por necesidad peor del NPC.
+     * Recovery: base × intensidad (principal=1.0, secundaria=0.5) × compañía(1.0) × hobby(1.0).
+     *
+     * @param array<string, mixed> $cal
+     */
+    public static function tickNecesidadesCatchUp(
+        array &$partida,
+        Catalog $catalog,
+        array $cal,
+        RngService $rng,
+        ?GameLogger $logger = null
+    ): void {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return;
+        }
+
+        $probBanda = [
+            NecesidadEstado::BANDA_BIEN           => 0.020,
+            NecesidadEstado::BANDA_LE_VENDRIA_BIEN => 0.035,
+            NecesidadEstado::BANDA_LO_NECESITA    => 0.070,
+            NecesidadEstado::BANDA_EN_ROJO        => 0.100,
+        ];
+
+        $ini = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_inicio', 9);
+        $fin = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.hora_fin', 22);
+        $horas = $fin - $ini + 1;
+
+        $lugaresData = $catalog->loadLugares();
+        $lugares = $lugaresData['items'] ?? [];
+        if ($lugares === []) {
+            return;
+        }
+
+        foreach ($partida['residentes'] as &$res) {
+            NecesidadEstado::ensureResidente($res);
+
+            for ($h = 0; $h < $horas; $h++) {
+                // 1. Decay
+                NecesidadEstado::aplicarDecay($res, $cal);
+
+                // 2. Autocuidado: probabilístico por banda
+                $necActuales = NecesidadEstado::obtener($res);
+                $peorBanda = NecesidadEstado::BANDA_BIEN;
+                $peorValor = 100;
+                foreach ($necActuales as $n) {
+                    if ($n['valor'] < $peorValor) {
+                        $peorValor = $n['valor'];
+                        $peorBanda = $n['banda'];
+                    }
+                }
+
+                $prob = $probBanda[$peorBanda] ?? 0.020;
+                if ($rng->nextFloat() > $prob) {
+                    continue;
+                }
+
+                // 3. Seleccionar lugar ponderado por necesidad
+                $lugar = self::elegirLugarParaNecesidades($res, $lugares, $rng);
+                if ($lugar === null) {
+                    continue;
+                }
+
+                // 4. Recuperar necesidades que el lugar cubre
+                $necesidadesLugar = $lugar['necesidades'] ?? [];
+                if ($necesidadesLugar !== []) {
+                    NecesidadEstado::aplicarRecuperacion(
+                        $res,
+                        $necesidadesLugar,
+                        false, // sin compañía
+                        false, // sin hobby match
+                        $cal
+                    );
+                }
+            }
+        }
+        unset($res);
+
+        $rng->persistToPartida($partida);
+    }
+
+    /**
+     * Selecciona un lugar ponderado por las necesidades más urgentes del NPC.
+     * Lugares cuyas necesidades coinciden con las bajas del NPC tienen más peso.
+     *
+     * @param list<array<string, mixed>> $lugares
+     */
+    private static function elegirLugarParaNecesidades(
+        array $res,
+        array $lugares,
+        RngService $rng
+    ): ?array {
+        $necesidades = NecesidadEstado::obtener($res);
+        $cands = [];
+
+        foreach ($lugares as $lugar) {
+            $necLugar = $lugar['necesidades'] ?? [];
+            if ($necLugar === []) {
+                continue;
+            }
+            $w = 1.0;
+            foreach ($necLugar as $necId => $rol) {
+                if (!isset($necesidades[$necId])) {
+                    continue;
+                }
+                $valor = $necesidades[$necId]['valor'];
+                $banda = $necesidades[$necId]['banda'];
+                if ($banda === NecesidadEstado::BANDA_EN_ROJO) {
+                    $w += ($rol === 'principal') ? 2.5 : 1.2;
+                } elseif ($banda === NecesidadEstado::BANDA_LO_NECESITA) {
+                    $w += ($rol === 'principal') ? 1.5 : 0.7;
+                } elseif ($banda === NecesidadEstado::BANDA_LE_VENDRIA_BIEN) {
+                    $w += ($rol === 'principal') ? 0.5 : 0.2;
+                }
+            }
+            $cands[] = ['lugar' => $lugar, 'w' => max(0.05, $w)];
+        }
+
+        if ($cands === []) {
+            return null;
+        }
+
+        $sum = 0.0;
+        foreach ($cands as $c) {
+            $sum += $c['w'];
+        }
+        $pick = $rng->nextFloat() * $sum;
+        $acc = 0.0;
+        foreach ($cands as $c) {
+            $acc += $c['w'];
+            if ($pick <= $acc) {
+                return $c['lugar'];
+            }
+        }
+        return $cands[count($cands) - 1]['lugar'];
+    }
+
+    /**
      * @param array<string, mixed> $cal
      * @return array<string, mixed>|null
      */

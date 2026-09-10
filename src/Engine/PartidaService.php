@@ -569,7 +569,14 @@ final class PartidaService
             }
             return $worstA <=> $worstB;
         });
-        return ['residentes' => $lista];
+        // Filter out residents where all needs are bien (>= 75)
+        $filtrados = array_filter($lista, static function (array $res): bool {
+            foreach ($res['necesidades'] as $n) {
+                if ($n['banda'] !== NecesidadEstado::BANDA_BIEN) return true;
+            }
+            return false;
+        });
+        return $filtrados !== [] ? ['residentes' => array_values($filtrados)] : null;
     }
 
     public function emociones(): EmotionalStateService

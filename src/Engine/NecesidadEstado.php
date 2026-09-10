@@ -29,8 +29,8 @@ final class NecesidadEstado
         self::BANDA_EN_ROJO        => ['min' => 0,  'max' => 24],
     ];
 
-    private const DECAY_BASE = 0.6;
-    private const RECUPERACION_BASE = 8.0;
+    private const DECAY_BASE = 0.30;
+    private const RECUPERACION_BASE = 7.0;
     private const INITIAL_VALUE = 75;
     private const MIN_VALUE = 0;
     private const MAX_VALUE = 100;
@@ -134,7 +134,7 @@ final class NecesidadEstado
 
         foreach (self::TODAS as $nec) {
             $antes = $rt['necesidades'][$nec]['banda'];
-            $decay = self::decayParaNecesidad($nec, $cal);
+            $decay = self::decayParaNecesidad($antes, $cal);
             $rt['necesidades'][$nec]['valor'] = max(
                 self::MIN_VALUE,
                 $rt['necesidades'][$nec]['valor'] - $decay
@@ -163,7 +163,7 @@ final class NecesidadEstado
         self::ensureResidente($residente);
         $rt = &$residente['runtime'];
         $cambios = 0;
-        $recBase = (float) CalibracionConfig::get($cal, 'necesidades.recuperacion_autonoma', 0.4);
+        $recBase = (float) CalibracionConfig::get($cal, 'necesidades.recuperacion_autonoma', 0.0);
 
         foreach (self::TODAS as $nec) {
             $antes = $rt['necesidades'][$nec]['banda'];
@@ -203,7 +203,8 @@ final class NecesidadEstado
 
         foreach (self::TODAS as $nec) {
             $antes = $rt['necesidades'][$nec]['banda'];
-            $recuperacion = self::recuperacionParaNecesidad($nec, $lugarNecesidades, $estaAcompanado, $hobbyMatch, $cal);
+            $banda = $rt['necesidades'][$nec]['banda'];
+            $recuperacion = self::recuperacionParaNecesidad($nec, $banda, $lugarNecesidades, $estaAcompanado, $hobbyMatch, $cal);
             if ($recuperacion > 0) {
                 $rt['necesidades'][$nec]['valor'] = min(
                     self::MAX_VALUE,
@@ -223,26 +224,28 @@ final class NecesidadEstado
     /**
      * @param array<string, mixed> $cal
      */
-    private static function decayParaNecesidad(string $necesidad, array $cal): float
+    private static function decayParaNecesidad(string $banda, array $cal): float
     {
-        $base = (float) CalibracionConfig::get($cal, "necesidades.decay.{$necesidad}", self::DECAY_BASE);
+        $base = (float) CalibracionConfig::get($cal, "necesidades.decay.{$banda}", self::DECAY_BASE);
         return max(0.0, $base);
     }
 
     /**
      * Calcula la recuperación de una necesidad según el lugar y contexto.
+     * La base se lee de config por BANDA (E5: banda define frecuencia y potencia).
      *
      * @param array<string, mixed> $lugarNecesidades
      * @param array<string, mixed> $cal
      */
     private static function recuperacionParaNecesidad(
         string $necesidad,
+        string $banda,
         array $lugarNecesidades,
         bool $estaAcompanado,
         bool $hobbyMatch,
         array $cal
     ): float {
-        $base = (float) CalibracionConfig::get($cal, "necesidades.recuperacion.{$necesidad}", self::RECUPERACION_BASE);
+        $base = (float) CalibracionConfig::get($cal, "necesidades.recuperacion.{$banda}", self::RECUPERACION_BASE);
 
         // Determinar intensidad del lugar para esta necesidad
         $intensidadLugar = 0.0;

@@ -20,7 +20,7 @@ $residente = ['id' => 'test'];
 NecesidadEstado::ensureResidente($residente);
 $nec = NecesidadEstado::obtenerUna($residente, 'social');
 ok($nec['banda'] === 'bien', 'Social starts in bien');
-ok($nec['valor'] === 85, 'Social starts at 85');
+ok($nec['valor'] === 75, 'Social starts at 75');
 
 // Test 2: Can simulate low need and check band
 $residente['runtime']['necesidades']['social']['valor'] = 20;
