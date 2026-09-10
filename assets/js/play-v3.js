@@ -5249,6 +5249,16 @@ function renderInicioMpDuo(misiones, parejas) {
     var todas = hoy.length > 0 && hoy.every(function (m) { return (m.estado || '') === 'cumplida'; });
     inicioAll('.obj-misiones-papel').forEach(function (el) {
       el.classList.toggle('misiones-completadas', todas);
+      var sello = el.querySelector('.mision-sello');
+      if (todas && !sello) {
+        sello = document.createElement('div');
+        sello.className = 'mision-sello';
+        sello.setAttribute('aria-label', 'Completado');
+        sello.innerHTML = '<span class="mision-sello-txt">COMPLETADO</span>';
+        el.appendChild(sello);
+      } else if (!todas && sello) {
+        sello.remove();
+      }
     });
     updateMisionesPapelMeta(hoy);
   }

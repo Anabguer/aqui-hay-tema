@@ -1666,6 +1666,33 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
   box-shadow:
     1px 2px 0 rgba(74, 122, 82, .1),
     2px 4px 12px rgba(40, 28, 16, .06);
+  position: relative;
+  overflow: hidden;
+}
+
+.mision-sello {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%) rotate(-12deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.mision-sello-txt {
+  display: block;
+  padding: 6px 14px;
+  font-family: "Courier New", monospace;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #3d6b4e;
+  border: 3px solid #4a7a52;
+  border-radius: 8px;
+  background: rgba(212, 237, 218, .6);
+  box-shadow: 1px 2px 0 rgba(74, 122, 82, .15);
+  white-space: nowrap;
 }
 
 .obj-misiones-strip {
@@ -1691,6 +1718,26 @@ body.play-v3, .game-shell, .game-top { background: #fff; }
 }
 
 .mision-strip-row:last-child { border-bottom: 0; padding-bottom: .1rem; }
+
+.mision-strip-row.mision-cumplida {
+  background: rgba(74, 122, 82, .08);
+  border-radius: 6px;
+}
+
+.mision-strip-row.mision-cumplida .mision-strip-txt {
+  color: #3d6b4e;
+  text-decoration: line-through;
+  text-decoration-color: rgba(74, 122, 82, .35);
+}
+
+.mision-strip-row.mision-cumplida .mision-bolita {
+  background: #d4edda;
+  border-color: #4a7a52;
+}
+
+.mision-strip-row.mision-cumplida .mision-check {
+  color: #4a7a52;
+}
 
 .mision-strip-row.mision-bloqueada { opacity: .55; }
 
