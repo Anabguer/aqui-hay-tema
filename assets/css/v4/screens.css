@@ -126,15 +126,10 @@
     max-width: var(--aht-modal-mobile-w, min(calc(100% - 32px), 393px));
     max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
   }
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
-    flex-wrap: wrap;
-  }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-    width: 100%;
     display: flex;
     justify-content: center;
-    order: 3;
-    padding-top: 4px;
+    padding: 0 16px 4px;
   }
 }
 
