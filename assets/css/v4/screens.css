@@ -392,50 +392,63 @@
   padding: 10px 12px 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-composition {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ── HERO CARD: 3 columnas ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 0;
   width: 100%;
-  min-height: 220px;
-  padding: 8px 0 6px;
+  background:
+    linear-gradient(135deg, rgba(237, 232, 244, 0.4), rgba(250, 245, 252, 0.6)),
+    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(180, 150, 110, 0.03) 18px, rgba(180, 150, 110, 0.03) 19px);
+  border: 2px solid rgba(180, 150, 110, 0.18);
+  border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
+  padding: 12px 14px 10px;
+  position: relative;
+  box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
 }
 
-/* ── Centro: retrato + nombre + desde + animo ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-center {
+/* ── COL 1: avatar + nombre ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 2;
-  position: relative;
+  gap: 4px;
+  padding-right: 14px;
+  border-right: 1.5px solid rgba(180, 150, 110, 0.1);
+}
+
+.ficha-avatar-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-  --ficha-cara-size: 140px;
+  --ficha-cara-size: 160px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
-  padding: 4px;
+  padding: 5px;
   border-radius: 50%;
   border: 3px solid #e87898;
   background: #fff;
-  box-shadow: 0 0 0 3px rgba(232, 120, 152, 0.2), 0 2px 8px rgba(232, 120, 152, 0.15);
-  flex-shrink: 0;
+  box-shadow: 0 0 0 4px rgba(232, 120, 152, 0.15), 0 4px 12px rgba(232, 120, 152, 0.18);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="alegre"] {
   border-color: var(--vec-green, #4a7a52);
-  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.2), 0 2px 8px rgba(74, 122, 82, 0.12);
+  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.18), 0 2px 8px rgba(74, 122, 82, 0.10);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="triste"] {
   border-color: var(--vec-lavender-deep, #7a6a9a);
-  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.2), 0 2px 8px rgba(122, 106, 154, 0.12);
+  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.18), 0 2px 8px rgba(122, 106, 154, 0.10);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="enfadado"] {
   border-color: var(--vec-red, #c42b4a);
-  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.2), 0 2px 8px rgba(196, 43, 74, 0.12);
+  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.18), 0 2px 8px rgba(196, 43, 74, 0.10);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-cara {
@@ -483,110 +496,182 @@
   opacity: 0.45;
 }
 
-/* ── DESDE: cinta debajo del nombre ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
+/* ── COL 2: animo arriba → datos abajo (vertical) ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ficha-hero-animo-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ficha-animo-img-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(180, 150, 110, 0.15);
+  box-shadow: 0 2px 8px rgba(51, 38, 30, 0.1);
+  flex-shrink: 0;
+}
+
+.ficha-animo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ficha-animo-pill {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  margin-top: 5px;
-  padding: 3px 10px 3px 7px;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(180, 150, 110, 0.18);
+  border-radius: 12px;
+  transition: transform 0.15s ease;
+}
+
+.ficha-animo-pill:hover {
+  transform: translateY(-1px);
+}
+
+.ficha-animo-pill--alegre { background: rgba(232, 245, 227, 0.8); border-color: rgba(74, 122, 82, 0.3); }
+.ficha-animo-pill--triste { background: rgba(230, 217, 243, 0.8); border-color: rgba(122, 106, 154, 0.3); }
+.ficha-animo-pill--enfadado { background: rgba(251, 229, 232, 0.8); border-color: rgba(196, 43, 74, 0.3); }
+.ficha-animo-pill--neutro { background: rgba(245, 243, 240, 0.8); border-color: rgba(180, 150, 110, 0.2); }
+
+.ficha-animo-val {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+}
+
+/* Datos card */
+.ficha-datos-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.ficha-dato {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  padding: 1px 0;
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+.ficha-dato[hidden] { display: none; }
+
+.ficha-dato-ico {
+  flex-shrink: 0;
+  font-size: 0.8rem;
+  width: 18px;
+  text-align: center;
+}
+
+.ficha-dato-num {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--vec-lavender-deep, #7a6a9a);
+}
+
+.ficha-dato-lbl {
+  font-size: 0.62rem;
+  color: var(--vec-lavender, #b49ad4);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ficha-dato-txt {
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+.ficha-dato-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.ficha-dato-extra {
+  font: 500 0.58rem/1.1 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #75634F);
+}
+
+.ficha-bloque-empleo {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font: 600 0.72rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+.ficha-bloque-empleo[hidden] { display: none; }
+
+.ficha-bloque-empleo-ico {
+  font-size: 0.8rem;
+}
+
+.ficha-badge-dias {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 8px;
   background: rgba(230, 217, 243, 0.4);
   border: 1px solid rgba(180, 150, 110, 0.18);
   border-radius: 10px;
   font: 500 0.58rem/1.1 "Nunito", sans-serif;
   color: #8a7a68;
-  transform: rotate(-1deg);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
 }
 
-.ficha-desde-ico {
-  flex-shrink: 0;
-  color: var(--vec-lavender, #b49ad4);
-  opacity: 0.8;
+.ficha-badge-dias-num {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--vec-lavender-deep, #7a6a9a);
 }
 
-/* ── CUMPLEAÑOS: debajo del nombre ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-cumple {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 3px;
-  padding: 2px 10px;
-  background: rgba(255, 235, 205, 0.45);
-  border: 1px solid rgba(200, 170, 100, 0.2);
-  border-radius: 10px;
-  font: 500 0.56rem/1.1 "Nunito", sans-serif;
-  color: #8a7350;
-  transform: rotate(0.5deg);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
-}
-
-.ficha-cumple-txt {
-  white-space: nowrap;
-}
-
-/* ── NUBE DE PENSAMIENTO: Ánimo (above-right of portrait) ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
-  position: absolute;
-  top: -4px;
-  right: -10px;
-  z-index: 4;
+/* ── COL 3: necesidades ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
   display: flex;
-  align-items: flex-end;
-  gap: 3px;
-  cursor: pointer;
-}
-
-.ficha-animo-burbuja1,
-.ficha-animo-burbuja2 {
-  display: block;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.85);
-  border: 1.5px solid rgba(180, 150, 110, 0.2);
-}
-
-.ficha-animo-burbuja1 {
-  width: 8px;
-  height: 8px;
-  align-self: flex-end;
-  margin-bottom: 10px;
-}
-
-.ficha-animo-burbuja2 {
-  width: 5px;
-  height: 5px;
-  margin-bottom: 16px;
-}
-
-.ficha-animo-nube {
-  display: flex;
-  align-items: center;
+  flex-direction: column;
   gap: 4px;
-  padding: 5px 10px 5px 7px;
-  background: #fff;
-  border: 1.5px solid rgba(180, 150, 110, 0.22);
-  border-radius: 14px 14px 14px 6px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-  position: relative;
+  padding: 8px 10px;
+  background: linear-gradient(150deg, #fdf6ee, #f8f0e4);
+  border: 1.5px solid rgba(200, 170, 120, 0.22);
+  border-left: 1.5px solid rgba(200, 170, 120, 0.18);
+  border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
+  box-shadow: 2px 3px 0 rgba(200, 170, 120, 0.12);
+  max-width: 190px;
+  min-width: 170px;
+  margin-left: 10px;
+  transform: rotate(1.5deg);
 }
 
-.ficha-animo-nube--alegre {
-  background: #e8f5e3;
-  border-color: rgba(74, 122, 82, 0.25);
-}
-
-.ficha-animo-nube--triste {
-  background: #e6d9f3;
-  border-color: rgba(122, 106, 154, 0.25);
-}
-
-.ficha-animo-nube--enfadado {
-  background: #fbe5e8;
-  border-color: rgba(196, 43, 74, 0.25);
-}
-
-.ficha-animo-ico {
-  font-size: 0.9rem;
-  line-height: 1;
+.ficha-necesidades-titulo {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+  padding-bottom: 2px;
+  border-bottom: 1.5px dashed rgba(200, 170, 120, 0.2);
 }
 
 .ficha-animo-emoji {
@@ -1819,42 +1904,41 @@
 
 /* Ficha — móvil */
 @media (max-width: 768px) {
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-composition {
-    min-height: 180px;
-    padding: 4px 0 2px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 10px 12px 8px;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
+    padding-right: 0;
+    padding-bottom: 8px;
+    border-right: none;
+    border-bottom: 1.5px solid rgba(180, 150, 110, 0.12);
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
+    padding: 8px 10px;
+    max-width: none;
+    min-width: 0;
+    margin-left: 0;
+    border-left: none;
+    border-top: 1.5px solid rgba(200, 170, 120, 0.18);
+    transform: none;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-    --ficha-cara-size: 110px;
+    --ficha-cara-size: 140px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
     font-size: 1.35rem;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
-    top: 4px;
-    transform: translateX(calc(-55px - 8px - 100%)) rotate(-5deg) scale(0.85);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
-    top: 8px;
-    transform: translateX(calc(55px + 8px)) rotate(1deg) scale(0.88);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
-    font-size: 0.52rem;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-animo {
-    top: -2px;
-    right: -6px;
-    transform: scale(0.85);
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-animo-burbuja1,
-  .aht-screen[data-aht-screen="ficha"] .ficha-animo-burbuja2 {
-    display: none;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-pair {
