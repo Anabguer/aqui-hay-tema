@@ -128,14 +128,7 @@
   }
   .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
     flex-wrap: wrap;
-  }
-  .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs .buzon-toolbar {
-    flex: 0 0 100%;
-    text-align: center;
-  }
-  .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
-    position: static;
-    transform: none;
+    gap: 8px;
   }
 }
 
