@@ -1169,6 +1169,15 @@ final class EncuentroIntervencion
             'despues' => $partida['residentes'][$rid]['runtime']['estado_emocional'],
             'actores' => [$rid],
         ]);
+        // PLAYTEST: instrumentación de intervención en encuentro
+        EmotionalInstrumentation::registrarCambio(
+            $partida,
+            $rid,
+            $antes,
+            $partida['residentes'][$rid]['runtime']['estado_emocional'],
+            'encuentro_intervencion',
+            []
+        );
     }
 
     /**

@@ -169,6 +169,15 @@ final class MensajitoContextualEngine
                 'despues' => $partida['residentes'][$cumpleId]['runtime']['estado_emocional'],
                 'actores' => [$cumpleId],
             ]);
+            // PLAYTEST: instrumentación de cumpleaños
+            EmotionalInstrumentation::registrarCambio(
+                $partida,
+                $cumpleId,
+                $antes,
+                $partida['residentes'][$cumpleId]['runtime']['estado_emocional'],
+                'cumple_felicidad',
+                ['fuente' => 'f10_cumpleanos']
+            );
 
             // F10.1: Contacto social Celestine → cumpleañero (+3, calidad normal)
             $celestineId = self::buscarCelestine($partida);
@@ -328,6 +337,15 @@ final class MensajitoContextualEngine
                 'despues' => $partida['residentes'][$cumpleId]['runtime']['estado_emocional'],
                 'actores' => [$cumpleId],
             ]);
+            // PLAYTEST: instrumentación de fiesta de cumpleaños
+            EmotionalInstrumentation::registrarCambio(
+                $partida,
+                $cumpleId,
+                $antes,
+                $partida['residentes'][$cumpleId]['runtime']['estado_emocional'],
+                'cumple_fiesta',
+                ['fuente' => 'f10_cumpleanos', 'lugar' => $lugar]
+            );
         }
 
         // Registrar dedup

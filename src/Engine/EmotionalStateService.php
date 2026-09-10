@@ -123,6 +123,21 @@ final class EmotionalStateService
             'actores' => [$residenteId],
         ], $this->logger, 'EmotionalStateService::resolver');
 
+        // PLAYTEST: instrumentación de cambio emocional
+        $antesId2 = EstadoEmocional::canonId((string) ($antes['id'] ?? EstadoEmocional::NEUTRO));
+        $despuesId2 = EstadoEmocional::canonId((string) ($res['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO));
+        if ($antesId2 !== $despuesId2) {
+            EmotionalInstrumentation::registrarCambio(
+                $partida,
+                $residenteId,
+                $antes,
+                $res['runtime']['estado_emocional'],
+                $origen,
+                $contexto,
+                $this->logger
+            );
+        }
+
         return ['ok' => true, 'estado_emocional' => $res['runtime']['estado_emocional'], 'expresion' => $resolved];
     }
 
@@ -194,8 +209,11 @@ final class EmotionalStateService
         $reloj = $partida['reloj'] ?? [];
         foreach (array_keys($partida['residentes'] ?? []) as $id) {
             EstadoEmocional::ensureResidente($partida['residentes'][$id], $reloj);
-            $hasta = $partida['residentes'][$id]['runtime']['estado_emocional']['hasta'] ?? null;
+            $antes = $partida['residentes'][$id]['runtime']['estado_emocional'];
+            $hasta = $antes['hasta'] ?? null;
             if (EstadoEmocional::vencido(is_array($hasta) ? $hasta : null, $reloj)) {
+                // PLAYTEST: registrar expiración antes de sobreescribir
+                EmotionalInstrumentation::registrarExpiracion($partida, (string) $id, $antes, $this->logger);
                 $this->aplicar($partida, (string) $id, EstadoEmocional::NEUTRO, 'expiracion', null, null);
                 $n++;
             }

@@ -106,7 +106,7 @@ final class AcontecimientoDiario
                 'perder_trabajo',
                 null,
                 $hasta,
-                [],
+                ['ocupacion_anterior' => $oc],
                 $dur
             );
             $partida['residentes'][$id]['runtime']['busqueda_trabajo_cd_hasta'] = null;
@@ -155,7 +155,7 @@ final class AcontecimientoDiario
                 'encontrar_trabajo',
                 null,
                 $hasta,
-                [],
+                ['ocupacion_nueva' => $oc],
                 $dur
             );
             $efectos[] = 'empleado';

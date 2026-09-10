@@ -118,12 +118,22 @@ final class EmotionalEventBridge
                 continue;
             }
             $origenAplicar = (string) ($eval['motivo'] === 'hobby_recuperacion' ? 'hobby_recuperacion' : 'encuentro');
+            // Identificar participante contrario para instrumentación
+            $participanteContra = null;
+            foreach ($actores as $otherRid) {
+                if ((string) $otherRid !== $rid) {
+                    $participanteContra = (string) $otherRid;
+                    break;
+                }
+            }
             $ctx = [
                 'encuentro_id' => $encuentro['id'] ?? null,
                 'hobby_match' => $hobbyMatch,
                 'resultado_experiencia' => $resExp,
                 'estado_antes' => $estadoAntes,
                 'motivo' => $eval['motivo'],
+                'participante_contra' => $participanteContra,
+                'lugar' => $lugarId,
             ];
             $svc->aplicar(
                 $partida,

@@ -609,6 +609,15 @@ final class MensajitoConsejoEngine
                 'despues' => $res['runtime']['estado_emocional'],
                 'actores' => [$rid],
             ]);
+            // PLAYTEST: instrumentación de consejo Celestine
+            EmotionalInstrumentation::registrarCambio(
+                $partida,
+                $rid,
+                $antes,
+                $res['runtime']['estado_emocional'],
+                'consejo_celestine',
+                ['fuente' => 'mensajito_consejo', 'hacia' => $hacia]
+            );
         }
     }
 
