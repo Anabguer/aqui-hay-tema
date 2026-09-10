@@ -127,15 +127,13 @@
     max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
   }
   .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
-    position: relative;
+    flex-wrap: wrap;
+    gap: 8px;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-    position: absolute;
-    top: 100%;
-    right: 12px;
-    left: auto;
-    z-index: 5;
-    padding: 4px 0;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
     position: static;
