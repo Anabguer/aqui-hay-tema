@@ -359,9 +359,8 @@
 /* ── PESTAÑAS DE CARPETA ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-tabs {
   display: flex;
-  gap: 4px;
-  padding: 0 12px;
-  padding-top: 8px;
+  gap: 8px;
+  padding: 6px 18px 0;
   background: transparent;
 }
 
@@ -371,22 +370,21 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  flex: 1;
-  padding: 9px 4px;
-  border: none;
-  border-bottom: 2.5px solid transparent;
-  background: transparent;
-  font: 700 0.78rem/1 "Nunito", sans-serif;
-  color: var(--aht-text-muted, #75634F);
+  padding: 7px 14px 8px;
+  border: 1.5px solid rgba(180, 150, 110, 0.25);
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  font: 700 0.75rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #75634F);
   cursor: pointer;
-  transition: color 150ms, border-color 150ms;
+  transform: translateY(2px);
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  z-index: 1;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab:hover {
   transform: translateY(2px);
   box-shadow: 0 -2px 6px rgba(0,0,0,0.06);
-  color: var(--ds-ink, #3b3028);
-  border-bottom-color: var(--vec-pink, #e88ba8);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab.is-active {
@@ -400,50 +398,50 @@
   flex-shrink: 0;
 }
 
-/* Diario — rosa/lila */
+/* Diario — rosa vivo */
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--diario {
-  background: rgba(232, 139, 168, 0.12);
+  background: rgba(232, 120, 150, 0.22);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--diario:hover {
-  background: rgba(232, 139, 168, 0.2);
+  background: rgba(232, 120, 150, 0.35);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--diario.is-active {
   background: var(--vec-pink, #e88ba8);
-  box-shadow: 0 -2px 8px rgba(232, 139, 168, 0.35);
+  box-shadow: 0 -2px 8px rgba(232, 139, 168, 0.4);
 }
 
-/* Nuevo plan — azul */
+/* Nuevo plan — azul marcado */
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--plan {
-  background: rgba(80, 120, 180, 0.1);
+  background: rgba(70, 110, 175, 0.18);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--plan:hover {
-  background: rgba(80, 120, 180, 0.18);
+  background: rgba(70, 110, 175, 0.32);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--plan.is-active {
-  background: #5a8abf;
-  box-shadow: 0 -2px 8px rgba(80, 120, 180, 0.35);
+  background: #4a7fbf;
+  box-shadow: 0 -2px 8px rgba(70, 110, 175, 0.4);
 }
 
-/* Regalar — amarillo */
+/* Regalar — amarillo cálido */
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo {
-  background: rgba(220, 180, 80, 0.12);
+  background: rgba(218, 170, 60, 0.2);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo:hover {
-  background: rgba(220, 180, 80, 0.22);
+  background: rgba(218, 170, 60, 0.36);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-tab--regalo.is-active {
-  background: #d4a830;
-  box-shadow: 0 -2px 8px rgba(220, 180, 80, 0.35);
+  background: #d4a020;
+  box-shadow: 0 -2px 8px rgba(218, 170, 60, 0.4);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-hero {
-  padding: 10px 12px 0;
+  padding: 0 12px;
 }
 
 /* ÔöÇÔöÇ HERO CARD: 3 columnas ÔöÇÔöÇ */
@@ -461,6 +459,32 @@
   padding: 12px 14px 10px;
   position: relative;
   box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-card::before {
+  content: '✦';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 1rem;
+  color: var(--vec-pink, #e88ba8);
+  opacity: 0.4;
+  transform: rotate(-10deg);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-card::after {
+  content: '♡';
+  position: absolute;
+  bottom: 8px;
+  right: 50%;
+  font-size: 0.85rem;
+  color: var(--ds-mustard, #e3b04b);
+  opacity: 0.4;
+  transform: rotate(12deg);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ÔöÇÔöÇ COL 1: avatar + nombre ÔöÇÔöÇ */
@@ -542,11 +566,11 @@
 
 .aht-screen[data-aht-screen="ficha"] .ficha-nombre-trazo {
   display: block;
-  width: 48px;
+  width: 44px;
   height: 3px;
   margin: 1px auto 0;
-  background: var(--vec-lavender, #b49ad4);
-  border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--vec-lavender, #b49ad4), transparent);
+  border-radius: 3px;
   opacity: 0.45;
 }
 
@@ -615,16 +639,21 @@
 .ficha-datos-card {
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
+  width: 100%;
+  padding: 8px 10px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(180, 150, 110, 0.12);
+  border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
   flex: 1;
   min-width: 0;
 }
 
 .ficha-dato {
   display: flex;
-  align-items: baseline;
-  gap: 4px;
-  padding: 1px 0;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
   font: 600 0.72rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
@@ -665,14 +694,19 @@
 }
 
 .ficha-dato-extra {
-  font: 500 0.58rem/1.1 "Nunito", sans-serif;
-  color: var(--ds-text-muted, #75634F);
+  font: 400 0.65rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #8a7a68);
+  font-style: italic;
 }
 
 .ficha-bloque-empleo {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(74, 127, 191, 0.08);
+  border: 1px solid rgba(74, 127, 191, 0.15);
+  border-radius: 8px;
   font: 600 0.72rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
@@ -680,26 +714,32 @@
 .ficha-bloque-empleo[hidden] { display: none; }
 
 .ficha-bloque-empleo-ico {
-  font-size: 0.8rem;
+  font-size: 0.85rem;
+}
+
+.ficha-bloque-empleo-estado {
+  font-weight: 700;
+  color: var(--vec-blue, #4a7fbf);
 }
 
 .ficha-badge-dias {
   display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  padding: 2px 8px;
-  background: rgba(230, 217, 243, 0.4);
-  border: 1px solid rgba(180, 150, 110, 0.18);
-  border-radius: 10px;
-  font: 500 0.58rem/1.1 "Nunito", sans-serif;
-  color: #8a7a68;
+  align-items: baseline;
+  gap: 4px;
+  padding: 3px 10px;
+  background: linear-gradient(135deg, rgba(232, 139, 168, 0.15), rgba(180, 154, 212, 0.15));
+  border: 1px solid rgba(232, 139, 168, 0.25);
+  border-radius: 20px;
+  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+  margin-top: 2px;
 }
 
 .ficha-badge-dias-num {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.82rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  color: var(--vec-lavender-deep, #7a6a9a);
+  color: var(--vec-pink, #e88ba8);
 }
 
 /* ÔöÇÔöÇ COL 3: necesidades ÔöÇÔöÇ */
@@ -726,6 +766,81 @@
   color: var(--ds-ink, #3b3028);
   padding-bottom: 2px;
   border-bottom: 1.5px dashed rgba(200, 170, 120, 0.2);
+}
+
+.ficha-hero-col--necesidades .ficha-necesidades {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 3px 5px;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(200, 170, 120, 0.1);
+  border-radius: 8px 6px 10px 5px / 6px 10px 5px 8px;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-row[hidden] { display: none; }
+
+.ficha-hero-col--necesidades .ficha-nec-head {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-ico {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-ico .nec-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-nom {
+  font: 600 0.6rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+  flex: 1;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-val {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--ds-text-muted, #75634F);
+}
+
+.ficha-hero-col--necesidades .ficha-nec-bar {
+  height: 4px;
+  border-radius: 3px;
+  background: rgba(180, 160, 130, 0.1);
+  overflow: hidden;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-bar--en_rojo { background: rgba(196, 43, 74, .18); }
+.ficha-hero-col--necesidades .ficha-nec-bar--lo_necesita { background: rgba(224, 169, 63, .18); }
+.ficha-hero-col--necesidades .ficha-nec-bar--le_vendria_bien { background: rgba(185, 138, 47, .15); }
+.ficha-hero-col--necesidades .ficha-nec-bar--bien { background: rgba(74, 122, 82, .12); }
+
+.ficha-hero-col--necesidades .ficha-nec-bar i {
+  display: block;
+  height: 100%;
+  border-radius: 3px;
+  transition: width 300ms ease;
+}
+
+.ficha-hero-col--necesidades .ficha-nec-copy {
+  display: none;
 }
 
 .ficha-animo-emoji {
@@ -986,21 +1101,39 @@
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
   background: #fff;
   border: 1.5px solid rgba(232, 139, 168, 0.3);
   font: 600 0.75rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
-  margin: 0 4px 4px 0;
+  margin-bottom: 6px;
   white-space: nowrap;
+}
+
+.aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag:last-child {
+  margin-bottom: 0;
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
   background: rgba(255, 255, 255, 0.5);
   border-style: dashed;
   color: var(--ds-text-muted, #75634F);
+}
+
+.ficha-rasgo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(232, 139, 168, 0.45);
+  flex-shrink: 0;
+}
+
+.ficha-rasgo-tag.is-desconocido .ficha-rasgo-dot {
+  background: rgba(180, 160, 130, 0.3);
 }
 
 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
@@ -1248,38 +1381,38 @@
   padding: 10px 12px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-necesidades {
+.ficha-seccion-necesidades .ficha-necesidades {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px 12px;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-row {
+.ficha-seccion-necesidades .ficha-nec-row {
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 5px 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-row + .ficha-nec-row {
+.ficha-seccion-necesidades .ficha-nec-row + .ficha-nec-row {
   border-top: none;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-ico {
+.ficha-seccion-necesidades .ficha-nec-ico {
   font-size: 1rem;
   flex-shrink: 0;
   width: 20px;
   text-align: center;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-nom {
+.ficha-seccion-necesidades .ficha-nec-nom {
   font: 600 0.78rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
   min-width: 60px;
   flex-shrink: 0;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-bar {
+.ficha-seccion-necesidades .ficha-nec-bar {
   flex: 1;
   height: 7px;
   border-radius: 4px;
@@ -1287,14 +1420,14 @@
   overflow: hidden;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-bar i {
+.ficha-seccion-necesidades .ficha-nec-bar i {
   display: block;
   height: 100%;
   border-radius: 4px;
   transition: width 300ms ease;
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-nec-val {
+.ficha-seccion-necesidades .ficha-nec-val {
   font: 700 0.7rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
   min-width: 22px;
@@ -2009,12 +2142,12 @@
     gap: 10px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-nec-nom {
+  .ficha-seccion-necesidades .ficha-nec-nom {
     min-width: 50px;
     font-size: 0.72rem;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-necesidades {
+  .ficha-seccion-necesidades .ficha-necesidades {
     grid-template-columns: 1fr;
   }
 
