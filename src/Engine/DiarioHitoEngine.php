@@ -151,10 +151,6 @@ final class DiarioHitoEngine
             self::alEncuentroTerminado($partida, $envelope);
             return ['ok' => true];
         });
-        EventBus::on(DomainEvents::DESCUBRIMIENTO_REGISTRADO, static function (array &$partida, array $envelope, ?GameLogger $logger): array {
-            self::alDescubrimiento($partida, $envelope);
-            return ['ok' => true];
-        });
     }
 
     public static function ensure(array &$partida): void
@@ -311,65 +307,6 @@ final class DiarioHitoEngine
                 'hito_tipo' => 'encuentro_significativo',
             ]);
         }
-    }
-
-    /**
-     * @param array<string, mixed> $envelope
-     */
-    private static function alDescubrimiento(array &$partida, array $envelope): void
-    {
-        $payload = is_array($envelope['payload'] ?? null) ? $envelope['payload'] : [];
-        $envelope = array_merge($envelope, $payload);
-        $residenteId = (string) ($envelope['residente_id'] ?? '');
-        $campo = (string) ($envelope['campo'] ?? '');
-        $origen = (string) ($envelope['origen'] ?? '');
-        if ($residenteId === '' || $campo === '' || !isset($partida['residentes'][$residenteId])) {
-            return;
-        }
-        if (!in_array($origen, ['interaccion_casual', 'encuentro', 'encuentro_intervencion'], true)) {
-            return;
-        }
-
-        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
-        $eventoId = 'diario_hito:descubrimiento:' . $residenteId . ':' . $campo . ':' . $dia;
-        if (DiarioEngine::entradaPorEvento($partida, $eventoId) !== null) {
-            return;
-        }
-
-        $nombre = IdentidadPublica::nombre($partida, $residenteId);
-        $genero = (string) ($partida['residentes'][$residenteId]['identidad_publica']['genero'] ?? '');
-        $valor = CopyDescubrimiento::idDeCampo($campo);
-        $catalog = new Catalog(dirname(__DIR__, 2));
-        $texto = CopyDescubrimiento::textoCotilleo(
-            $nombre,
-            $campo,
-            $valor,
-            $catalog->store(),
-            $genero !== '' ? $genero : null
-        );
-        if ($texto === null || trim($texto) === '') {
-            return;
-        }
-
-        self::escribir($partida, [
-            'tipo' => 'diario_hito',
-            'subtipo' => 'descubrimiento',
-            'titulo' => 'Algo nuevo sobre ' . $nombre,
-            'texto' => $texto,
-            'actores' => [$residenteId],
-            'origen' => [
-                'evento_id' => $eventoId,
-                'tipo_evento' => 'descubrimiento',
-                'es_narrativo' => true,
-                'hito_tipo' => 'descubrimiento',
-                'informacion_revelada' => [
-                    'residente_id' => $residenteId,
-                    'campo' => $campo,
-                ],
-                '_placeholder' => false,
-            ],
-            '_placeholder_contenido' => false,
-        ]);
     }
 
     /**
