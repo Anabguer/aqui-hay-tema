@@ -496,8 +496,8 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 </div>
                 <div class="qed-bottom">
                   <div class="qed-card qed-activities">
-                    <h3 class="qed-card-title">&#128248; Qu&eacute; se puede hacer aqu&iacute;</h3>
-                    <ul class="qed-activity-list" data-q-activities></ul>
+                    <h3 class="qed-card-title">Lo que este lugar te ofrece</h3>
+                    <div class="qed-nec-lugares" data-q-nec-lugares></div>
                   </div>
                   <div class="qed-card qed-curiosities">
                     <h3 class="qed-card-title">&#128161; Curiosidades</h3>
@@ -997,7 +997,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <button type="button" class="inv-cancelar" data-inv-cancelar>Cancelar</button>
               </div>
             </div>
-            <p class="inv-feedback" data-inv-feedback hidden aria-live="polite"></p>
+            <div class="inv-feedback" data-inv-feedback hidden aria-live="polite"></div>
           </div>
         </div>
       </aside>
