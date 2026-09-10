@@ -103,6 +103,15 @@ final class SimuladorVidaPueblo
             'reloj' => ['dia_pueblo' => 1, 'hora_actual' => 12, 'ultima_sesion_iso' => null],
             'meta' => ['seed' => 'lab'],
             'features' => [VidaPuebloEngine::FLAG => true],
+            'residentes' => [
+                'lab_npc' => [
+                    'id' => 'lab_npc',
+                    'nombre' => 'NPC Lab',
+                    'presencia' => 'residente',
+                    'relaciones' => [],
+                    'runtime' => ['ocupacion' => 'empleado', 'estado_emocional' => 'neutral'],
+                ],
+            ],
         ];
         VidaPuebloEngine::ensure($partida, $cal);
         $inicial = VidaPuebloEngine::valor($partida);
