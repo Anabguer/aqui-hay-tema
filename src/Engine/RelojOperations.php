@@ -91,6 +91,12 @@ final class RelojOperations
                 $calSobre = CalibracionConfig::load($this->projectRoot);
                 VidaPuebloEngine::aplicarSobreextension($partida, $calSobre, $this->logger);
             }
+
+            // Estancamiento: presión adicional si el pueblo permanece deteriorado sin mejora real
+            if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
+                $calEst = CalibracionConfig::load($this->projectRoot);
+                VidaPuebloEngine::aplicarEstancamiento($partida, $calEst, $this->logger);
+            }
         }
         $calTick = CalibracionConfig::load($this->projectRoot);
         // Vida horaria autónoma (huecos, casuales, declaración/ruptura): independiente del

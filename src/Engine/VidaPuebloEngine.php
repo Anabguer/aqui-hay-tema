@@ -28,6 +28,7 @@ final class VidaPuebloEngine
     public const CAUSA_LAB_SETUP = 'lab_setup';
     public const CAUSA_ENCUENTRO_JUGADOR = 'encuentro_jugador';
     public const CAUSA_ACONTECIMIENTO = 'acontecimiento_vida';
+    public const CAUSA_ESTANCAMIENTO = 'estancamiento_pueblo';
 
     public const DELTA_MISION_CUMPLIDA = 2;
     /** Legacy R3 (23/08/2026): sin uso en play. El castigo diario vive en
@@ -69,6 +70,14 @@ final class VidaPuebloEngine
             'sobreextension_pesos_relaciones' => 0.20,
             'sobreextension_estado_min' => 10,
             'sobreextension_estado_max' => 90,
+            'estancamiento' => [
+                'activo' => true,
+                'umbral_state_heart' => 60,
+                'ventana_dias' => 5,
+                'umbral_mejora' => 2,
+                'grace_dias' => 5,
+                'presion_por_dia' => 1,
+            ],
             'bandas' => [
                 ['id' => self::BANDA_CRITICO, 'min' => 0, 'max' => 19, 'etiqueta' => 'Se nos va de las manos'],
                 ['id' => self::BANDA_ALERTA, 'min' => 20, 'max' => 39, 'etiqueta' => 'Aquí pasa algo'],
@@ -103,6 +112,15 @@ final class VidaPuebloEngine
         $d['sobreextension_pesos_relaciones'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_pesos_relaciones', $d['sobreextension_pesos_relaciones']);
         $d['sobreextension_estado_min'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_estado_min', $d['sobreextension_estado_min']);
         $d['sobreextension_estado_max'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_estado_max', $d['sobreextension_estado_max']);
+        $estCfg = CalibracionConfig::get($cal, 'vida_pueblo.estancamiento', null);
+        if (is_array($estCfg)) {
+            $d['estancamiento']['activo'] = (bool) ($estCfg['activo'] ?? $d['estancamiento']['activo']);
+            $d['estancamiento']['umbral_state_heart'] = (float) ($estCfg['umbral_state_heart'] ?? $d['estancamiento']['umbral_state_heart']);
+            $d['estancamiento']['ventana_dias'] = (int) ($estCfg['ventana_dias'] ?? $d['estancamiento']['ventana_dias']);
+            $d['estancamiento']['umbral_mejora'] = (float) ($estCfg['umbral_mejora'] ?? $d['estancamiento']['umbral_mejora']);
+            $d['estancamiento']['grace_dias'] = (int) ($estCfg['grace_dias'] ?? $d['estancamiento']['grace_dias']);
+            $d['estancamiento']['presion_por_dia'] = (int) ($estCfg['presion_por_dia'] ?? $d['estancamiento']['presion_por_dia']);
+        }
         $bandas = CalibracionConfig::get($cal, 'vida_pueblo.bandas', null);
         if (is_array($bandas) && $bandas !== []) {
             $d['bandas'] = $bandas;
@@ -163,6 +181,17 @@ final class VidaPuebloEngine
             'origen_ultimo_cero' => null,
             'dias_en_critico' => 0,
             'offline_dano_ultima_ausencia' => 0,
+            'estancamiento' => [
+                'historial_sh' => [],
+                'dias_bajo_umbral' => 0,
+                'activo' => false,
+                'dias_activo' => 0,
+                'dia_activacion' => null,
+                'sh_en_activacion' => null,
+                'tendencia_en_activacion' => null,
+                'ultimo_sh' => null,
+                'notificado_ui' => false,
+            ],
             'ledger' => [],
             'ledger_archivo' => [],
             '_provisional' => true,
@@ -238,6 +267,20 @@ final class VidaPuebloEngine
         if ($latidoAnim) {
             $partida['vida_pueblo']['latido_ui_pendiente'] = false;
         }
+        $est = $partida['vida_pueblo']['estancamiento'] ?? null;
+        $estVista = null;
+        if ($est) {
+            $estVista = [
+                'activo' => (bool) $est['activo'],
+                'dias_bajo_umbral' => (int) $est['dias_bajo_umbral'],
+                'dias_activo' => (int) $est['dias_activo'],
+            ];
+            // notificado_ui: solo se envía en la primera respuesta tras activación
+            if (!(bool) $est['notificado_ui'] && (bool) $est['activo']) {
+                $estVista['notificar'] = true;
+                $partida['vida_pueblo']['estancamiento']['notificado_ui'] = true;
+            }
+        }
         return [
             'banda' => $b['id'],
             'etiqueta' => $b['etiqueta'],
@@ -247,6 +290,7 @@ final class VidaPuebloEngine
             'critico' => $valor <= 19,
             'game_over_pendiente' => (bool) ($partida['vida_pueblo']['game_over_pendiente'] ?? false),
             'game_over_activo' => self::derrotaVisibleEnPlay($partida, $cal),
+            'estancamiento' => $estVista,
         ];
     }
 
@@ -783,6 +827,144 @@ final class VidaPuebloEngine
             'overextension' => $overextension,
             'factor' => $factor,
         ]);
+    }
+
+    /**
+     * Detecta y aplica presión por estancamiento del pueblo.
+     *
+     * Condición: stateHeart ≤ umbral durante ventana_dias consecutivos,
+     *            sin mejora ≥ umbral_mejora comparado contra hace ventana_dias.
+     * Si se cumple tras grace_dias, aplica -presion_por_dia al heart.
+     * La presión se desactiva cuando stateHeart mejora ≥ umbral_mejora.
+     *
+     * Fórmula de tendencia:
+     *   tendencia = stateHeart_hoy - historial_sh[count - ventana_dias]
+     *   mejora = tendencia ≥ umbral_mejora
+     *
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function aplicarEstancamiento(
+        array &$partida,
+        array $cal = [],
+        ?GameLogger $logger = null
+    ): array {
+        if (!FeatureConfig::isEnabled($partida, self::FLAG)) {
+            return ['ok' => false, 'error' => 'feature_disabled', 'delta_aplicado' => 0];
+        }
+
+        $cfg = self::cfg($cal);
+        $estCfg = $cfg['estancamiento'];
+        if (!$estCfg['activo']) {
+            return ['ok' => true, 'activo' => false, 'delta_aplicado' => 0, 'skip' => 'inactivo'];
+        }
+
+        $heart = self::valor($partida);
+        $v = &$partida['vida_pueblo'];
+        $est = &$v['estancamiento'];
+
+        // Calcular stateHeart actual
+        $estado = self::calcularEstadoPueblo($partida, $cal);
+        $stateHeart = self::stateHeart($estado, $cfg);
+
+        // Mantener historial (últimos 10 días, suficiente para ventana de 5)
+        $est['historial_sh'][] = $stateHeart;
+        if (count($est['historial_sh']) > 10) {
+            array_shift($est['historial_sh']);
+        }
+
+        $ventana = $estCfg['ventana_dias'];
+        $umbralSH = $estCfg['umbral_state_heart'];
+        $umbralMejora = $estCfg['umbral_mejora'];
+        $graceDias = $estCfg['grace_dias'];
+        $presionDia = $estCfg['presion_por_dia'];
+
+        // Condición: stateHeart bajo umbral
+        $bajoUmbral = $stateHeart <= $umbralSH;
+
+        // Detectar tendencia contra hace ventana_dias
+        $mejora = false;
+        $tendencia = 0.0;
+        if ($bajoUmbral && count($est['historial_sh']) > $ventana) {
+            $shAntiguo = $est['historial_sh'][count($est['historial_sh']) - 1 - $ventana];
+            $tendencia = $stateHeart - $shAntiguo;
+            $mejora = $tendencia >= $umbralMejora;
+        }
+
+        // Actualizar contador de días bajo umbral
+        if ($bajoUmbral && !$mejora) {
+            $est['dias_bajo_umbral'] = (int) $est['dias_bajo_umbral'] + 1;
+        } else {
+            $est['dias_bajo_umbral'] = 0;
+        }
+
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        $deltaEstancamiento = 0;
+        $motivo = null;
+
+        // Si ya estaba activo, verificar si se desactiva
+        if ((bool) $est['activo']) {
+            if ($mejora) {
+                // Se desactiva: pueblo mejoró
+                $est['activo'] = false;
+                $est['dias_activo'] = 0;
+                $motivo = 'desactivado_mejora';
+            } else {
+                // Sigue activo: aplicar presión
+                $deltaEstancamiento = -$presionDia;
+                $est['dias_activo'] = (int) $est['dias_activo'] + 1;
+                $motivo = 'presion_activa';
+            }
+        } else {
+            // No está activo: ¿debería activarse?
+            if ($bajoUmbral && !$mejora && $est['dias_bajo_umbral'] > $graceDias) {
+                $est['activo'] = true;
+                $est['dia_activacion'] = $dia;
+                $est['sh_en_activacion'] = $stateHeart;
+                $est['tendencia_en_activacion'] = $tendencia;
+                $est['dias_activo'] = 1;
+                $est['notificado_ui'] = false;
+                $deltaEstancamiento = -$presionDia;
+                $motivo = 'activacion';
+            }
+        }
+
+        $est['ultimo_sh'] = $stateHeart;
+        $antes = $heart;
+
+        // Aplicar presión si hay delta
+        $r = null;
+        if ($deltaEstancamiento !== 0) {
+            $r = self::aplicar($partida, $deltaEstancamiento, [
+                'causa' => self::CAUSA_ESTANCAMIENTO,
+                'origen' => self::ORIGEN_SISTEMA,
+                'atribuible_celestine' => true,
+                'positivo_valido_latido' => false,
+            ], $cal, $logger);
+        }
+
+        \aht_log_optional($logger, $partida, 'estancamiento', [
+            'dia' => $dia,
+            'state_heart' => round($stateHeart, 1),
+            'tendencia' => round($tendencia, 1),
+            'dias_bajo_umbral' => (int) $est['dias_bajo_umbral'],
+            'activo' => (bool) $est['activo'],
+            'dias_activo' => (int) $est['dias_activo'],
+            'delta' => $deltaEstancamiento,
+            'motivo' => $motivo,
+        ]);
+
+        return [
+            'ok' => true,
+            'activo' => (bool) $est['activo'],
+            'delta_aplicado' => $deltaEstancamiento,
+            'state_heart' => round($stateHeart, 1),
+            'tendencia' => round($tendencia, 1),
+            'dias_bajo_umbral' => (int) $est['dias_bajo_umbral'],
+            'dias_activo' => (int) $est['dias_activo'],
+            'motivo' => $motivo,
+            'heart' => self::valor($partida),
+        ];
     }
 
     /**

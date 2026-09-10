@@ -470,6 +470,15 @@
         "sobreextension_pesos_relaciones": 0.20,
         "sobreextension_estado_min": 10,
         "sobreextension_estado_max": 90,
+        "estancamiento": {
+            "_nota": "Presión por estancamiento real del pueblo. stateHeart ≤ umbral durante ventana_dias sin mejora ≥ umbral_mejora → -presion_por_dia tras grace_dias.",
+            "activo": true,
+            "umbral_state_heart": 60,
+            "ventana_dias": 5,
+            "umbral_mejora": 2,
+            "grace_dias": 5,
+            "presion_por_dia": 1
+        },
         "bandas": [
             {
                 "id": "critico",
