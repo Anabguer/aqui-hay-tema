@@ -85,6 +85,12 @@ final class RelojOperations
                 $offlineEventos += ($batchResult['eventos'] ?? 0);
                 $offlineSalidas += ($batchResult['salidas'] ?? 0);
             }
+
+            // Sobreextensión: penaliza corazón si está por encima de lo que el estado justifica
+            if (FeatureConfig::isEnabled($partida, VidaPuebloEngine::FLAG)) {
+                $calSobre = CalibracionConfig::load($this->projectRoot);
+                VidaPuebloEngine::aplicarSobreextension($partida, $calSobre, $this->logger);
+            }
         }
         $calTick = CalibracionConfig::load($this->projectRoot);
         // Vida horaria autónoma (huecos, casuales, declaración/ruptura): independiente del

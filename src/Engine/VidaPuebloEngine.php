@@ -63,6 +63,12 @@ final class VidaPuebloEngine
             'offline_suelo' => 5,
             'game_over_en_play' => true,
             'ledger_cap' => 400,
+            'sobreextension_factor' => 0.45,
+            'sobreextension_pesos_necesidades' => 0.50,
+            'sobreextension_pesos_emociones' => 0.30,
+            'sobreextension_pesos_relaciones' => 0.20,
+            'sobreextension_estado_min' => 10,
+            'sobreextension_estado_max' => 90,
             'bandas' => [
                 ['id' => self::BANDA_CRITICO, 'min' => 0, 'max' => 19, 'etiqueta' => 'Se nos va de las manos'],
                 ['id' => self::BANDA_ALERTA, 'min' => 20, 'max' => 39, 'etiqueta' => 'Aquí pasa algo'],
@@ -91,6 +97,12 @@ final class VidaPuebloEngine
         $d['offline_suelo'] = (int) CalibracionConfig::get($cal, 'vida_pueblo.offline_suelo', $d['offline_suelo']);
         $d['game_over_en_play'] = (bool) CalibracionConfig::get($cal, 'vida_pueblo.game_over_en_play', $d['game_over_en_play']);
         $d['ledger_cap'] = (int) CalibracionConfig::get($cal, 'vida_pueblo.ledger_cap', $d['ledger_cap']);
+        $d['sobreextension_factor'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_factor', $d['sobreextension_factor']);
+        $d['sobreextension_pesos_necesidades'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_pesos_necesidades', $d['sobreextension_pesos_necesidades']);
+        $d['sobreextension_pesos_emociones'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_pesos_emociones', $d['sobreextension_pesos_emociones']);
+        $d['sobreextension_pesos_relaciones'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_pesos_relaciones', $d['sobreextension_pesos_relaciones']);
+        $d['sobreextension_estado_min'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_estado_min', $d['sobreextension_estado_min']);
+        $d['sobreextension_estado_max'] = (float) CalibracionConfig::get($cal, 'vida_pueblo.sobreextension_estado_max', $d['sobreextension_estado_max']);
         $bandas = CalibracionConfig::get($cal, 'vida_pueblo.bandas', null);
         if (is_array($bandas) && $bandas !== []) {
             $d['bandas'] = $bandas;
@@ -712,6 +724,199 @@ final class VidaPuebloEngine
             'positivo_valido_latido' => false,
             'fuente_id' => $eventoId,
         ], $cal, $logger);
+    }
+
+    /**
+     * Aplica penalty de sobreextensión al final del día.
+     * Si el corazón está por encima de lo que el estado del pueblo justifica,
+     * recibe un golpe proporcional. Impide farmear misiones con pueblo deteriorado.
+     *
+     * @param array<string, mixed> $cal
+     * @return array<string, mixed>
+     */
+    public static function aplicarSobreextension(
+        array &$partida,
+        array $cal = [],
+        ?GameLogger $logger = null
+    ): array {
+        if (!FeatureConfig::isEnabled($partida, self::FLAG)) {
+            return ['ok' => false, 'error' => 'feature_disabled', 'delta_aplicado' => 0];
+        }
+
+        $cfg = self::cfg($cal);
+        $factor = (float) $cfg['sobreextension_factor'];
+        if ($factor <= 0.0) {
+            return ['ok' => false, 'error' => 'factor_cero', 'delta_aplicado' => 0];
+        }
+
+        $heart = self::valor($partida);
+        $estado = self::calcularEstadoPueblo($partida, $cal);
+
+        // Sin residentes activos no hay estado que medir — no se aplica penalty
+        $residentes = $partida['residentes'] ?? [];
+        $activos = array_filter($residentes, function ($r) {
+            return ($r['presencia'] ?? '') === 'residente';
+        });
+        if ($activos === []) {
+            return ['ok' => true, 'delta_aplicado' => 0, 'heart' => $heart, 'state_heart' => 0.0, 'overextension' => 0.0, 'skip' => 'sin_residentes'];
+        }
+
+        $stateHeart = self::stateHeart($estado, $cfg);
+
+        $overextension = max(0.0, (float) $heart - $stateHeart);
+        $penalty = (int) round(-$overextension * $factor);
+
+        if ($penalty === 0) {
+            return ['ok' => true, 'delta_aplicado' => 0, 'heart' => $heart, 'state_heart' => $stateHeart, 'overextension' => $overextension];
+        }
+
+        $r = self::aplicar($partida, $penalty, [
+            'causa' => 'sobreextension_estado',
+            'origen' => self::ORIGEN_SISTEMA,
+            'atribuible_celestine' => true,
+            'positivo_valido_latido' => false,
+        ], $cal, $logger);
+
+        return array_merge($r, [
+            'heart_antes' => $heart,
+            'state_heart' => $stateHeart,
+            'overextension' => $overextension,
+            'factor' => $factor,
+        ]);
+    }
+
+    /**
+     * Calcula el estado del pueblo (-1 a +1) a partir de necesidades, emociones y relaciones.
+     *
+     * @return array{necesidades: float, emociones: float, relaciones: float, score: float}
+     */
+    public static function calcularEstadoPueblo(array $partida, array $cal = []): array
+    {
+        $cfg = self::cfg($cal);
+        $residentes = $partida['residentes'] ?? [];
+        $activos = array_filter($residentes, function ($r) {
+            return ($r['presencia'] ?? '') === 'residente';
+        });
+
+        if ($activos === []) {
+            return ['necesidades' => 0.0, 'emociones' => 0.0, 'relaciones' => 0.0, 'score' => 0.0];
+        }
+
+        $pesoN = (float) $cfg['sobreextension_pesos_necesidades'];
+        $pesoE = (float) $cfg['sobreextension_pesos_emociones'];
+        $pesoR = (float) $cfg['sobreextension_pesos_relaciones'];
+
+        $sumNecesidades = 0.0;
+        $sumEmociones = 0.0;
+        $sumRelaciones = 0.0;
+        $count = 0;
+
+        foreach ($activos as $id => $residente) {
+            $sumNecesidades += self::scoreNecesidadesResidente($residente);
+            $sumEmociones += self::scoreEmocionesResidente($residente, $partida);
+            $sumRelaciones += self::scoreRelacionesResidente($partida, $id, $activos);
+            $count++;
+        }
+
+        if ($count === 0) {
+            return ['necesidades' => 0.0, 'emociones' => 0.0, 'relaciones' => 0.0, 'score' => 0.0];
+        }
+
+        $necesidades = $sumNecesidades / $count;
+        $emociones = $sumEmociones / $count;
+        $relaciones = $sumRelaciones / $count;
+
+        $score = $necesidades * $pesoN + $emociones * $pesoE + $relaciones * $pesoR;
+
+        return [
+            'necesidades' => $necesidades,
+            'emociones' => $emociones,
+            'relaciones' => $relaciones,
+            'score' => $score,
+        ];
+    }
+
+    /**
+     * Score de necesidades de un residente (-1 a +1).
+     * 0-24 = en_rojo (-1), 25-49 = lo_necesita (-0.5), 50-74 = le_vendria_bien (+0.3), 75-100 = bien (+1)
+     */
+    private static function scoreNecesidadesResidente(array $residente): float
+    {
+        $necesidades = NecesidadEstado::obtener($residente);
+        if ($necesidades === []) {
+            return 0.0;
+        }
+        $suma = 0.0;
+        $n = 0;
+        foreach ($necesidades as $nec) {
+            if (!is_array($nec) || !isset($nec['valor'])) {
+                continue;
+            }
+            $v = (int) $nec['valor'];
+            if ($v >= 75) {
+                $suma += 1.0;
+            } elseif ($v >= 50) {
+                $suma += 0.3;
+            } elseif ($v >= 25) {
+                $suma += -0.5;
+            } else {
+                $suma += -1.0;
+            }
+            $n++;
+        }
+        return $n > 0 ? $suma / $n : 0.0;
+    }
+
+    /**
+     * Score emocional de un residente (-1 a +1).
+     * alegre=+1, neutro=+0.2, triste=-0.6, enfadado=-1
+     */
+    private static function scoreEmocionesResidente(array $residente, array $partida): float
+    {
+        $emocion = $residente['runtime']['estado_emocional']['id'] ?? 'neutro';
+        $map = [
+            'alegre' => 1.0,
+            'neutro' => 0.2,
+            'triste' => -0.6,
+            'enfadado' => -1.0,
+        ];
+        return $map[$emocion] ?? 0.2;
+    }
+
+    /**
+     * Score promedio de relaciones sociales de un residente con los demás (-1 a +1).
+     * social en -100..+100 → normalizado a -1..+1
+     */
+    private static function scoreRelacionesResidente(array $partida, string $residenteId, array $activos): float
+    {
+        $otros = [];
+        foreach ($activos as $id => $_) {
+            if ($id !== $residenteId) {
+                $otros[] = $id;
+            }
+        }
+        if ($otros === []) {
+            return 0.0;
+        }
+        $suma = 0.0;
+        foreach ($otros as $otroId) {
+            $social = RelacionEngine::valorSocialHacia($partida, $residenteId, $otroId);
+            $suma += $social / 100.0;
+        }
+        return $suma / count($otros);
+    }
+
+    /**
+     * Calcula el "corazón que el estado justifica" (stateHeart).
+     * Mapea score (-1 a +1) a un rango de corazones.
+     */
+    public static function stateHeart(array $estado, array $cfg): float
+    {
+        $min = (float) ($cfg['sobreextension_estado_min'] ?? 10.0);
+        $max = (float) ($cfg['sobreextension_estado_max'] ?? 90.0);
+        $mid = ($min + $max) / 2.0;
+        $range = ($max - $min) / 2.0;
+        return $mid + $estado['score'] * $range;
     }
 
     /**

@@ -464,6 +464,12 @@
         "offline_suelo": 5,
         "game_over_en_play": true,
         "ledger_cap": 400,
+        "sobreextension_factor": 0.45,
+        "sobreextension_pesos_necesidades": 0.50,
+        "sobreextension_pesos_emociones": 0.30,
+        "sobreextension_pesos_relaciones": 0.20,
+        "sobreextension_estado_min": 10,
+        "sobreextension_estado_max": 90,
         "bandas": [
             {
                 "id": "critico",
