@@ -128,13 +128,15 @@
   }
   .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
   }
   .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs .buzon-toolbar {
     position: static;
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    padding-top: 4px;
+    margin-top: 2px;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
     position: static;
@@ -475,8 +477,7 @@
 /* ── FICHA HERO: 3 columnas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: auto 1fr auto;
   align-items: start;
   gap: 0;
   width: 100%;
@@ -533,16 +534,12 @@
   box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.18), 0 2px 8px rgba(196, 43, 74, 0.10);
 }
 
-/* ── COL DERECHA: datos ── */
+/* ── COL DERECHA: ánimo + datos ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 12px;
-  grid-column: 1 / -1;
-  border-top: 1.5px solid rgba(180, 150, 110, 0.1);
-  padding-top: 8px;
-  margin-top: 8px;
 }
 
 /* Ánimo: imagen grande + etiqueta */
