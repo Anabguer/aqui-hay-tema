@@ -338,4 +338,14 @@
 @media (max-width: 768px) {
   .play-v3 .aht-screen[data-aht-screen="diario"] .coti-lateral { display: none; }
   .play-v3 .aht-screen[data-aht-screen="diario"] .coti-layout { flex-direction: column; }
+  .play-v3 .aht-screen[data-aht-screen="diario"] .coti-top {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtros {
+    grid-column: auto;
+    justify-self: start;
+    flex-wrap: wrap;
+  }
 }
