@@ -71,8 +71,7 @@
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro--todo.is-on {
   background: var(--ds-pink-soft, #fbe3ec); border-color: var(--ds-pink-deep, #c85b78); color: var(--ds-pink-deep, #c85b78);
 }
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-cat,
-.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-svg { display: none; }
+.play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtro .coti-cat { display: none; }
 
 /* ─── Layout: feed + lateral ─── */
 .play-v3 .aht-screen[data-aht-screen="diario"] .coti-layout {
