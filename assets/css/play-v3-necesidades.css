@@ -121,8 +121,8 @@
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-carousel {
   display: flex;
   flex-wrap: nowrap;
-  justify-content: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 8px;
   overflow-x: auto;
   overflow-y: hidden;
   padding: 4px 2px 10px;
@@ -515,4 +515,25 @@
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-body::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #F5A8BC, var(--ds-pink-deep, #C42B4A));
+}
+
+@media (max-width: 768px) {
+  .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-carousel {
+    gap: 6px;
+    padding: 4px 0 10px;
+  }
+
+  .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-caro-card {
+    width: 90px;
+    padding: 8px 6px 6px;
+  }
+
+  .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-caro-card .necg-caro-avatar {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    min-height: 46px;
+    max-width: 46px;
+    max-height: 46px;
+  }
 }
