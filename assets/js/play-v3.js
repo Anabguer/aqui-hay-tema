@@ -6371,10 +6371,9 @@ function renderInicioMpDuo(misiones, parejas) {
 
     function renderFilters() {
       if (!filtersWrap) return;
-      var fhtml = '<button type="button" class="necg-filt' + (initialFilter === 'todos' ? ' necg-filt--on' : '') + '" data-nec-filter="todos">Todos</button>';
-      fhtml += '<button type="button" class="necg-filt' + (initialFilter === 'necesitan' ? ' necg-filt--on' : '') + '" data-nec-filter="necesitan">Con necesidad</button>';
+      var fhtml = '<button type="button" class="necg-filt necg-filt--todos' + (initialFilter === 'todos' ? ' necg-filt--on' : '') + '" data-nec-filter="todos"><span class="necg-filt-all">&#x2716;</span></button>';
       orden.forEach(function (nec) {
-        fhtml += '<button type="button" class="necg-filt' + (initialFilter === nec ? ' necg-filt--on' : '') + '" data-nec-filter="' + nec + '">' + necIconHtml(nec, 16) + ' ' + nom[nec] + '</button>';
+        fhtml += '<button type="button" class="necg-filt' + (initialFilter === nec ? ' necg-filt--on' : '') + '" data-nec-filter="' + nec + '">' + necIconHtml(nec, 26) + '</button>';
       });
       filtersWrap.innerHTML = fhtml;
     }
@@ -6424,6 +6423,7 @@ function renderInicioMpDuo(misiones, parejas) {
       if (selRes) {
         html += '<div class="necg-detail">';
         html += '<h4 class="necg-detail-title">Necesidades de ' + esc(selRes.nombre) + '</h4>';
+        html += '<div class="necg-detail-grid">';
         var hasAny = false;
         orden.forEach(function (nec) {
           var n = selRes.necesidades[nec];
@@ -6434,9 +6434,9 @@ function renderInicioMpDuo(misiones, parejas) {
           html += '<div class="necg-need-row necg-need-row--' + nec + '">';
           html += '<span class="necg-need-icon">' + necIconHtml(nec, 22) + '</span>';
           html += '<span class="necg-need-name">' + nom[nec] + '</span>';
-          html += '<div class="necg-bar"><div class="necg-bar-fill necg-bar-fill--' + nec + '" style="width:' + pct + '%"></div></div>';
           html += '<span class="necg-need-val">' + Math.round(pct) + '%</span>';
           html += '</div>';
+          html += '<div class="necg-bar"><div class="necg-bar-fill necg-bar-fill--' + nec + '" style="width:' + pct + '%"></div></div>';
           if (n.copy) {
             html += '<p class="necg-need-copy">' + esc(n.copy) + '</p>';
           }
@@ -6445,6 +6445,7 @@ function renderInicioMpDuo(misiones, parejas) {
         if (!hasAny) {
           html += '<p class="necg-vacio">\u2728 Todas sus necesidades est\u00e1n cubiertas.</p>';
         }
+        html += '</div>';
         html += '</div>';
       }
 
@@ -9149,20 +9150,19 @@ function hobbyIconKey(id, texto) {
     var avatar2 = $('[data-pr-avatar-2]');
     var name1 = $('[data-pr-avatar-name-1]');
     var name2 = $('[data-pr-avatar-name-2]');
-    var statusEmoji = $('[data-pr-status-emoji]');
-    var statusLabel = $('[data-pr-status-label]');
+    var stateImg = $('[data-pr-state-img]');
     var respIcon1 = $('[data-pr-resp-icon-1]');
     var respText1 = $('[data-pr-resp-text-1]');
     var respIcon2 = $('[data-pr-resp-icon-2]');
     var respText2 = $('[data-pr-resp-text-2]');
-    var panel1 = $('[data-pr-panel-1]');
-    var panel2 = $('[data-pr-panel-2]');
+    var vignette1 = $('[data-pr-panel-1]');
+    var vignette2 = $('[data-pr-panel-2]');
     var resp1 = $('[data-pr-resp-1]');
     var resp2 = $('[data-pr-resp-2]');
     var messageEl = $('[data-pr-message]');
 
     var hasTwo = idA && idB;
-    if (panel2) panel2.hidden = !hasTwo;
+    if (vignette2) vignette2.hidden = !hasTwo;
     if (resp2) resp2.hidden = !hasTwo;
 
     function setAvatar(el, id, nombre) {
@@ -9190,12 +9190,12 @@ function hobbyIconKey(id, texto) {
       return null;
     }
 
-    function setPanelClass(panelEl, decision) {
-      if (!panelEl) return;
-      panelEl.className = panelEl.className.replace(/pr-panel--(acepta|rechaza|duda)/g, '').trim();
-      if (decision === 'acepta') panelEl.classList.add('pr-panel--acepta');
-      else if (decision === 'rechaza') panelEl.classList.add('pr-panel--rechaza');
-      else if (decision === 'duda') panelEl.classList.add('pr-panel--duda');
+    function setVignetteClass(el, decision) {
+      if (!el) return;
+      el.className = el.className.replace(/pr-vignette--(acepta|rechaza|duda)/g, '').trim();
+      if (decision === 'acepta') el.classList.add('pr-vignette--acepta');
+      else if (decision === 'rechaza') el.classList.add('pr-vignette--rechaza');
+      else if (decision === 'duda') el.classList.add('pr-vignette--duda');
     }
 
     function setResponse(iconEl, textEl, wrapEl, decision) {
@@ -9217,25 +9217,29 @@ function hobbyIconKey(id, texto) {
       }
     }
 
+    function getEstadoImg(aceptada, rechazada) {
+      if (aceptada && !rechazada) return 'assets/img/plan-resultado/plan_aceptado.png';
+      if (rechazada) return 'assets/img/plan-resultado/plan_rechazado.png';
+      return 'assets/img/plan-resultado/plan_fallido.png';
+    }
+
     var decA = idA ? getDecision(idA) : null;
     var decB = idB ? getDecision(idB) : null;
 
     if (r.ok && !r.rechazada) {
-      if (statusEmoji) statusEmoji.textContent = '\uD83C\uDF89';
-      if (statusLabel) statusLabel.textContent = '\u00A1En marcha!';
+      if (stateImg) stateImg.src = getEstadoImg(true, false);
       var dA = decA || 'acepta';
       var dB = decB || 'acepta';
-      setPanelClass(panel1, dA);
-      setPanelClass(panel2, dB);
+      setVignetteClass(vignette1, dA);
+      setVignetteClass(vignette2, dB);
       setResponse(respIcon1, respText1, resp1, dA);
       setResponse(respIcon2, respText2, resp2, dB);
       if (messageEl) messageEl.textContent = nombreLugarTitulo(org.lugar, org.lugar) + ' \u2014 D\u00EDa ' + org.dia + ' a las ' + String(org.hora).padStart(2, '0') + ':00';
       if (contraEl) contraEl.hidden = true;
     } else if (r.ok && r.rechazada) {
-      if (statusEmoji) statusEmoji.textContent = '\u2615';
-      if (statusLabel) statusLabel.textContent = 'No ha cuajado';
-      setPanelClass(panel1, decA);
-      setPanelClass(panel2, decB);
+      if (stateImg) stateImg.src = getEstadoImg(false, true);
+      setVignetteClass(vignette1, decA);
+      setVignetteClass(vignette2, decB);
       setResponse(respIcon1, respText1, resp1, decA);
       setResponse(respIcon2, respText2, resp2, decB);
       if (messageEl) messageEl.textContent = r.mensaje_ui || 'Esta vez no ha cuajado el plan.';
@@ -9247,10 +9251,9 @@ function hobbyIconKey(id, texto) {
         if (contraEl) contraEl.hidden = true;
       }
     } else {
-      if (statusEmoji) statusEmoji.textContent = '\uD83D\uDE05';
-      if (statusLabel) statusLabel.textContent = 'Problemilla';
-      setPanelClass(panel1, decA);
-      setPanelClass(panel2, decB);
+      if (stateImg) stateImg.src = getEstadoImg(false, false);
+      setVignetteClass(vignette1, decA);
+      setVignetteClass(vignette2, decB);
       setResponse(respIcon1, respText1, resp1, decA);
       setResponse(respIcon2, respText2, resp2, decB);
       if (messageEl) messageEl.textContent = r.mensaje_ui || 'Ha ocurrido un problemilla t\u00E9cnico. No es un rechazo social \u2014 int\u00E9ntalo de nuevo.';
