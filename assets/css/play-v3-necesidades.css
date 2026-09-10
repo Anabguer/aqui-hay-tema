@@ -319,6 +319,11 @@
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar-fill--lo_necesita { background: var(--ds-warning, #E0A93F); }
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar-fill--en_rojo { background: var(--ds-pink-deep, #C42B4A); }
 
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar--en_rojo { background: rgba(196, 43, 74, .18); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar--lo_necesita { background: rgba(224, 169, 63, .18); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar--le_vendria_bien { background: rgba(185, 138, 47, .15); }
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar--bien { background: rgba(74, 122, 82, .12); }
+
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar-val {
   font: 700 .65rem/1 Nunito, sans-serif;
   color: var(--ds-text-muted, #75634F);
@@ -424,6 +429,22 @@
   background: var(--ds-paper-warm, #F3E7CE);
   overflow: hidden;
   margin-top: 4px;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar--en_rojo {
+  background: rgba(196, 43, 74, .18);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar--lo_necesita {
+  background: rgba(224, 169, 63, .18);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar--le_vendria_bien {
+  background: rgba(185, 138, 47, .15);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar--bien {
+  background: rgba(74, 122, 82, .12);
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill {

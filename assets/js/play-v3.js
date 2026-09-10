@@ -6333,7 +6333,7 @@ function renderInicioMpDuo(misiones, parejas) {
         rhtml += '<div class="vec-cuid-bar-row">';
         rhtml += '<span class="vec-cuid-bar-ico" aria-hidden="true">' + necIconHtml(nec, 18) + '</span>';
         rhtml += '<span class="vec-cuid-bar-nom">' + (nom[nec] || nec) + '</span>';
-        rhtml += '<div class="vec-cuid-bar"><div class="vec-cuid-bar-fill vec-cuid-bar-fill--' + getBand(avg) + '" style="width:' + avg + '%"></div></div>';
+        rhtml += '<div class="vec-cuid-bar vec-cuid-bar--' + getBand(avg) + '"><div class="vec-cuid-bar-fill vec-cuid-bar-fill--' + getBand(avg) + '" style="width:' + avg + '%"></div></div>';
         rhtml += '<span class="vec-cuid-bar-val">' + avg + '</span>';
         rhtml += '</div>';
       });
@@ -6438,7 +6438,7 @@ function renderInicioMpDuo(misiones, parejas) {
           html += '<span class="necg-need-name">' + nom[nec] + '</span>';
           html += '<span class="necg-need-val">' + Math.round(pct) + '%</span>';
           html += '</div>';
-          html += '<div class="necg-bar"><div class="necg-bar-fill necg-bar-fill--' + n.banda + '" style="width:' + pct + '%"></div></div>';
+          html += '<div class="necg-bar necg-bar--' + n.banda + '"><div class="necg-bar-fill necg-bar-fill--' + n.banda + '" style="width:' + pct + '%"></div></div>';
           if (n.copy) {
             html += '<p class="necg-need-copy">' + esc(n.copy) + '</p>';
           }
@@ -7522,7 +7522,7 @@ function hobbyIconKey(id, texto) {
           + '<span class="ficha-nec-nom">' + esc(item.nombre || def.nombre) + '</span>'
           + '<span class="ficha-nec-val">' + val + '</span>'
           + '</div>'
-          + '<div class="ficha-nec-bar"><i style="width:' + val + '%;background:' + colorBar + '"></i></div>'
+          + '<div class="ficha-nec-bar ficha-nec-bar--' + banda + '"><i style="width:' + val + '%;background:' + colorBar + '"></i></div>'
           + (copyTxt ? '<span class="ficha-nec-copy">' + esc(copyTxt) + '</span>' : '')
           + '</div>'
         );

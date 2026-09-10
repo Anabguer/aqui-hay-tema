@@ -29,7 +29,7 @@
   // screens que usan el sistema V4 completo (frame + stack)
   const V4_SCREENS = new Set([
     'vecinos', 'agenda', 'mentes', 'ficha', 'ficha_relaciones',
-    'ficha_animo', 'ficha_diario', 'necesidades_global', 'misiones',
+    'ficha_animo', 'ficha_diario', 'misiones',
     'parejas', 'historia', 'historia_detalle',
     'vida_pueblo', 'buzon', 'inventario', 'ajustes', 'diario',
     'organizar', 'plan-resultado'
