@@ -477,7 +477,8 @@
 /* ── FICHA HERO: 3 columnas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
   align-items: start;
   gap: 0;
   width: 100%;
@@ -540,6 +541,8 @@
   flex-direction: row;
   align-items: center;
   gap: 12px;
+  grid-column: 1;
+  grid-row: 2;
 }
 
 /* Ánimo: imagen grande + etiqueta */
@@ -745,6 +748,8 @@
   min-width: 170px;
   margin-left: 10px;
   transform: rotate(1.5deg);
+  grid-column: 2;
+  grid-row: 1;
 }
 
 .ficha-necesidades-titulo {
