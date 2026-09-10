@@ -6437,7 +6437,7 @@ function renderInicioMpDuo(misiones, parejas) {
           html += '<span class="necg-need-name">' + nom[nec] + '</span>';
           html += '<span class="necg-need-val">' + Math.round(pct) + '%</span>';
           html += '</div>';
-          html += '<div class="necg-bar"><div class="necg-bar-fill necg-bar-fill--' + nec + '" style="width:' + pct + '%"></div></div>';
+          html += '<div class="necg-bar"><div class="necg-bar-fill necg-bar-fill--' + n.banda + '" style="width:' + pct + '%"></div></div>';
           if (n.copy) {
             html += '<p class="necg-need-copy">' + esc(n.copy) + '</p>';
           }
@@ -9188,7 +9188,7 @@ function hobbyIconKey(id, texto) {
       if (!id) { el.innerHTML = ''; return; }
       var img = tokenDe(id) || retratoDe(id);
       if (img) {
-        el.innerHTML = '<img src="' + esc(img) + '" alt="' + esc(nombre) + '"/>';
+        el.innerHTML = '<img src="' + esc(img) + '" alt="' + esc(nombre) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>';
       } else {
         el.innerHTML = '<span class="cara-ini">' + esc((nombre || '?')[0]) + '</span>';
       }

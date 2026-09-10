@@ -432,21 +432,21 @@
   transition: width .3s ease;
 }
 
-/* ── Colores de barra por tipo de necesidad ─────────────────── */
-.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--social {
-  background: var(--ds-pink, #E989A7);
+/* ── Colores de barra por banda de necesidad ─────────────────── */
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--en_rojo {
+  background: #C42B4A;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--diversion {
-  background: var(--ds-mustard, #E3B04B);
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--lo_necesita {
+  background: #E0A93F;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--actividad {
-  background: #78A0D2;
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--le_vendria_bien {
+  background: #B98A2F;
 }
 
-.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--calma {
-  background: var(--ds-lavender, #B9A8DC);
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-bar-fill--bien {
+  background: #4a7a52;
 }
 
 /* ── Valor numérico ─────────────────────────────────────────── */
