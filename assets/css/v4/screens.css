@@ -904,15 +904,21 @@
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 10px 8px 12px 9px / 8px 12px 9px 10px;
   background: #fff;
   border: 1.5px solid rgba(232, 139, 168, 0.3);
   font: 600 0.75rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
-  margin: 0 4px 4px 0;
+  margin-bottom: 6px;
   white-space: nowrap;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag:last-child {
+  margin-bottom: 0;
 }
 
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-rasgo-tag.is-desconocido {
