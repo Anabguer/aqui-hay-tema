@@ -829,6 +829,8 @@
   .aht-msg-mark-all {
     font-size: 0.74rem;
     padding: 4px 10px;
+    flex-basis: 100%;
+    justify-content: center;
   }
 
   .aht-modal-lab-panel {
