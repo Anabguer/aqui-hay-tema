@@ -1,8 +1,10 @@
 <?php
 declare(strict_types=1);
 header('Content-Type: text/html; charset=utf-8');
-header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
 header('Pragma: no-cache');
+header('Expires: 0');
+header('X-Accel-Cache-Control: no-store');
 $ahtBusterFile = __DIR__ . '/assets/aht-cache-buster.txt';
 $ahtUi = 'v3-20260909-diario-grid-redesign';
 if (is_file($ahtBusterFile)) {
@@ -11,12 +13,16 @@ if (is_file($ahtBusterFile)) {
         $ahtUi = $ahtBusterRaw;
     }
 }
+$ahtUi .= '-' . substr(md5((string) $_SERVER['REQUEST_TIME']), 0, 8);
 $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/play.php')), '/') . '/';
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="0"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta name="theme-color" content="#2a2218"/>
   <meta name="mobile-web-app-capable" content="yes"/>
@@ -1098,7 +1104,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
             <div class="pr-body capa-scroll">
               <div class="pr-scene">
                 <div class="pr-vignette pr-vignette--left" data-pr-panel-1>
-                  <div class="pr-vignette-avatar" data-pr-avatar-1></div>
+                  <div class="pr-vignette-avatar" data-pr-avatar-1 style="width:72px;height:72px;border-radius:50%;overflow:hidden;border:3px solid #D8D1DE;background:#FCFBFE;display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
                   <span class="pr-vignette-name" data-pr-avatar-name-1></span>
                   <span class="pr-vignette-response" data-pr-resp-1>
                     <span data-pr-resp-icon-1></span>
@@ -1110,7 +1116,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   <p class="pr-message" data-pr-message></p>
                 </div>
                 <div class="pr-vignette pr-vignette--right" data-pr-panel-2>
-                  <div class="pr-vignette-avatar" data-pr-avatar-2></div>
+                  <div class="pr-vignette-avatar" data-pr-avatar-2 style="width:72px;height:72px;border-radius:50%;overflow:hidden;border:3px solid #D8D1DE;background:#FCFBFE;display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
                   <span class="pr-vignette-name" data-pr-avatar-name-2></span>
                   <span class="pr-vignette-response" data-pr-resp-2>
                     <span data-pr-resp-icon-2></span>
