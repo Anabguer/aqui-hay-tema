@@ -714,9 +714,11 @@
   border: 1.5px solid rgba(200, 170, 120, 0.22);
   border-left: 1.5px solid rgba(200, 170, 120, 0.18);
   border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
-  box-shadow: 1px 2px 0 rgba(200, 170, 120, 0.08);
-  max-width: 160px;
-  margin-left: 8px;
+  box-shadow: 2px 3px 0 rgba(200, 170, 120, 0.12);
+  max-width: 190px;
+  min-width: 170px;
+  margin-left: 10px;
+  transform: rotate(1.5deg);
 }
 
 .ficha-necesidades-titulo {
@@ -1833,9 +1835,11 @@
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
     padding: 8px 10px;
     max-width: none;
+    min-width: 0;
     margin-left: 0;
     border-left: none;
     border-top: 1.5px solid rgba(200, 170, 120, 0.18);
+    transform: none;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-avatar-area .ficha-cara-ring {
