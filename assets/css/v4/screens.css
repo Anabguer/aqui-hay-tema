@@ -130,10 +130,11 @@
     flex-wrap: wrap;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
-    flex-basis: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     order: 3;
+    padding-top: 4px;
   }
 }
 
