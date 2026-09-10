@@ -376,14 +376,14 @@
   align-items: center;
   justify-content: center;
   gap: 5px;
-  padding: 8px 16px 10px;
+  padding: 7px 14px 8px;
   border: 1.5px solid rgba(180, 150, 110, 0.25);
   border-bottom: none;
   border-radius: 8px 8px 0 0;
   font: 700 0.75rem/1 "Nunito", sans-serif;
   color: var(--ds-text-muted, #75634F);
   cursor: pointer;
-  transform: translateY(4px);
+  transform: translateY(2px);
   transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
   z-index: 1;
 }
@@ -450,100 +450,287 @@
   padding: 0 12px;
 }
 
-/* ── FICHA PERSONAJE: tarjeta 2 zonas ── */
+/* ── FICHA PERSONAJE: 2 zonas compactas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   align-items: start;
   gap: 0;
   width: 100%;
   background:
-    linear-gradient(135deg, rgba(237, 232, 244, 0.5), rgba(243, 239, 247, 0.7)),
-    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(180, 150, 110, 0.04) 18px, rgba(180, 150, 110, 0.04) 19px);
-  border: 2px solid rgba(180, 150, 110, 0.2);
+    linear-gradient(135deg, rgba(237, 232, 244, 0.4), rgba(250, 245, 252, 0.6)),
+    repeating-linear-gradient(0deg, transparent, transparent 18px, rgba(180, 150, 110, 0.03) 18px, rgba(180, 150, 110, 0.03) 19px);
+  border: 2px solid rgba(180, 150, 110, 0.18);
   border-radius: 18px 14px 20px 12px / 14px 20px 12px 18px;
-  padding: 14px 16px 12px;
+  padding: 12px 14px 10px;
   position: relative;
   box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
 }
 
-/* Columna personaje */
+/* ── PERSONAJE: avatar + datos unificados ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  padding-right: 12px;
+  gap: 4px;
+  padding-right: 14px;
+  border-right: 1.5px solid rgba(180, 150, 110, 0.1);
 }
 
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-top-row {
+/* Avatar area: ring + ánimo side-by-side */
+.ficha-avatar-area {
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
+  gap: 6px;
 }
 
-/* Columna necesidades */
+.ficha-avatar-area .ficha-cara-ring {
+  --ficha-cara-size: 120px;
+  width: var(--ficha-cara-size);
+  height: var(--ficha-cara-size);
+  padding: 4px;
+  border-radius: 50%;
+  border: 3px solid #e87898;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(232, 120, 152, 0.18), 0 2px 8px rgba(232, 120, 152, 0.14);
+  flex-shrink: 0;
+}
+
+.ficha-avatar-area .ficha-cara-ring[data-emocion="alegre"] {
+  border-color: var(--vec-green, #4a7a52);
+  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.18), 0 2px 8px rgba(74, 122, 82, 0.10);
+}
+
+.ficha-avatar-area .ficha-cara-ring[data-emocion="triste"] {
+  border-color: var(--vec-lavender-deep, #7a6a9a);
+  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.18), 0 2px 8px rgba(122, 106, 154, 0.10);
+}
+
+.ficha-avatar-area .ficha-cara-ring[data-emocion="enfadado"] {
+  border-color: var(--vec-red, #c42b4a);
+  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.18), 0 2px 8px rgba(196, 43, 74, 0.10);
+}
+
+/* Ánimo: pill compacto al lado del avatar */
+.ficha-avatar-area .ficha-hero-animo-inline {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  margin-top: 8px;
+}
+
+.ficha-animo-nube,
+.ficha-animo-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 4px 10px 4px 6px;
+  background: #fff;
+  border: 1.5px solid rgba(180, 150, 110, 0.22);
+  border-radius: 14px 14px 14px 6px;
+  box-shadow: 1px 1px 0 rgba(51, 38, 30, 0.06);
+  position: relative;
+  font-size: 0.75rem;
+}
+
+.ficha-animo-nube--alegre,
+.ficha-animo-pill--alegre {
+  background: #e8f5e3;
+  border-color: rgba(74, 122, 82, 0.35);
+}
+
+.ficha-animo-nube--triste,
+.ficha-animo-pill--triste {
+  background: #e6d9f3;
+  border-color: rgba(122, 106, 154, 0.35);
+}
+
+.ficha-animo-nube--enfadado,
+.ficha-animo-pill--enfadado {
+  background: #fbe5e8;
+  border-color: rgba(196, 43, 74, 0.35);
+}
+
+.ficha-hero-animo-inline::before,
+.ficha-hero-animo-inline::after {
+  content: '';
+  display: block;
+  border-radius: 50%;
+  background: #fff;
+  border: 1.5px solid rgba(180, 150, 110, 0.22);
+  position: absolute;
+  pointer-events: none;
+}
+
+.ficha-hero-animo-inline::before {
+  width: 8px;
+  height: 8px;
+  bottom: -6px;
+  left: 2px;
+}
+
+.ficha-hero-animo-inline::after {
+  width: 5px;
+  height: 5px;
+  bottom: -11px;
+  left: 0;
+}
+
+.ficha-animo-burbuja1,
+.ficha-animo-burbuja2 { display: none; }
+
+.ficha-animo-ico,
+.ficha-animo-emoji {
+  font-size: 0.85rem;
+  line-height: 1;
+}
+
+.ficha-animo-val {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+}
+
+/* Nombre */
+.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+  margin: 2px 0 0;
+  line-height: 1.1;
+  text-align: center;
+}
+
+.ficha-nombre-trazo {
+  display: block;
+  width: 44px;
+  height: 3px;
+  margin: 1px auto 0;
+  background: linear-gradient(90deg, transparent, var(--vec-lavender, #b49ad4), transparent);
+  border-radius: 3px;
+  opacity: 0.45;
+}
+
+/* Datos card: edad, cumple, trabajo, desde — unificados */
+.ficha-datos-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+  padding: 6px 8px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(180, 150, 110, 0.12);
+  border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
+}
+
+.ficha-dato {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 0;
+  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+.ficha-dato[hidden] { display: none; }
+
+.ficha-dato-ico {
+  flex-shrink: 0;
+  font-size: 0.75rem;
+  width: 16px;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.ficha-dato-num {
+  font-family: var(--ds-font-hand, "Caveat", cursive);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--vec-lavender-deep, #7a6a9a);
+}
+
+.ficha-dato-lbl {
+  font-size: 0.6rem;
+  color: var(--vec-lavender, #b49ad4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ficha-dato-txt {
+  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
+}
+
+/* ── NECESIDADES: panel del estado del vecino ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   padding: 10px 12px;
-  background: linear-gradient(150deg, #f0f7fc, #e8f2fa);
-  border: 1.5px solid rgba(100, 160, 210, 0.25);
+  background: linear-gradient(150deg, #fdf6ee, #f8f0e4);
+  border: 1.5px solid rgba(200, 170, 120, 0.22);
   border-radius: 14px 10px 16px 12px / 10px 16px 12px 14px;
-  box-shadow: 1px 2px 0 rgba(100, 160, 210, 0.08);
+  box-shadow: 1px 2px 0 rgba(200, 170, 120, 0.08);
 }
 
 .ficha-necesidades-titulo {
   font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 700;
   color: var(--ds-ink, #3b3028);
-  padding-bottom: 4px;
-  border-bottom: 1.5px solid rgba(100, 160, 210, 0.15);
+  padding-bottom: 3px;
+  border-bottom: 1.5px solid rgba(200, 170, 120, 0.15);
 }
 
 .ficha-necesidades {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .ficha-nec-row {
   display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(100, 160, 210, 0.12);
+  flex-direction: column;
+  gap: 3px;
+  padding: 5px 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(200, 170, 120, 0.12);
   border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
 }
 
-.ficha-nec-row + .ficha-nec-row {
-  border-top: none;
+.ficha-nec-head {
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .ficha-nec-ico {
   font-size: 1rem;
   flex-shrink: 0;
-  width: 22px;
+  width: 20px;
   text-align: center;
 }
 
 .ficha-nec-nom {
-  font: 600 0.72rem/1.2 "Nunito", sans-serif;
+  font: 600 0.7rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
-  min-width: 56px;
-  flex-shrink: 0;
+  flex: 1;
+}
+
+.ficha-nec-val {
+  font: 700 0.68rem/1 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #75634F);
+  min-width: 28px;
+  text-align: right;
 }
 
 .ficha-nec-bar {
-  flex: 1;
-  height: 9px;
+  height: 8px;
   border-radius: 5px;
-  background: rgba(100, 160, 210, 0.12);
+  background: rgba(180, 160, 130, 0.12);
   overflow: hidden;
 }
 
@@ -554,379 +741,39 @@
   transition: width 300ms ease;
 }
 
-.ficha-nec-val {
-  font: 700 0.72rem/1 "Nunito", sans-serif;
-  color: var(--ds-text-muted, #75634F);
-  min-width: 28px;
-  text-align: right;
-}
-
 .ficha-nec-copy {
-  display: none;
-}
-
-/* Doodles —Heart (top-left) */
-.ficha-hero-card::before {
-  content: '♥';
-  position: absolute;
-  top: 10px;
-  left: 14px;
-  font-size: 1.1rem;
-  color: var(--vec-pink, #e88ba8);
-  opacity: 0.45;
-  transform: rotate(-12deg);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Doodle — star (bottom-left) */
-.ficha-hero-card::after {
-  content: '★';
-  position: absolute;
-  bottom: 10px;
-  left: 16px;
-  font-size: 0.9rem;
-  color: var(--ds-mustard, #e3b04b);
-  opacity: 0.5;
-  transform: rotate(10deg);
-  pointer-events: none;
-  z-index: 1;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-  --ficha-cara-size: 156px;
-  width: var(--ficha-cara-size);
-  height: var(--ficha-cara-size);
-  padding: 5px;
-  border-radius: 50%;
-  border: 3px solid #e87898;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(232, 120, 152, 0.2), 0 2px 10px rgba(232, 120, 152, 0.18);
-  flex-shrink: 0;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="alegre"] {
-  border-color: var(--vec-green, #4a7a52);
-  box-shadow: 0 0 0 3px rgba(74, 122, 82, 0.2), 0 2px 8px rgba(74, 122, 82, 0.12);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="triste"] {
-  border-color: var(--vec-lavender-deep, #7a6a9a);
-  box-shadow: 0 0 0 3px rgba(122, 106, 154, 0.2), 0 2px 8px rgba(122, 106, 154, 0.12);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-cara-ring[data-emocion="enfadado"] {
-  border-color: var(--vec-red, #c42b4a);
-  box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.2), 0 2px 8px rgba(196, 43, 74, 0.12);
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-cara {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  overflow: hidden;
-  background: transparent;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-cara img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
   display: block;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-cara .ficha-ini {
-  width: 100%;
-  height: 100%;
-  display: grid;
-  place-items: center;
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 2.6rem;
-  color: var(--ds-ink, #3b3028);
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--ds-ink, #3b3028);
-  margin: 4px 0 0;
-  line-height: 1.1;
-  text-align: center;
-}
-
-.aht-screen[data-aht-screen="ficha"] .ficha-nombre-trazo {
-  display: block;
-  width: 52px;
-  height: 4px;
-  margin: 2px auto 0;
-  background: linear-gradient(90deg, transparent, var(--vec-lavender, #b49ad4), transparent);
-  border-radius: 3px;
-  opacity: 0.5;
-}
-
-/* ── DESDE: cinta debajo del nombre ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  margin-top: 6px;
-  padding: 4px 12px 4px 8px;
-  background: rgba(230, 217, 243, 0.45);
-  border: 1.5px solid rgba(180, 150, 110, 0.2);
-  border-radius: 12px 8px 14px 6px / 8px 14px 6px 12px;
-  font: 600 0.6rem/1.1 "Nunito", sans-serif;
-  color: #7a6a8a;
-  transform: rotate(-1.5deg);
-  box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.04);
-}
-
-.ficha-desde-ico {
-  flex-shrink: 0;
-  color: var(--vec-lavender, #b49ad4);
-  opacity: 0.8;
-}
-
-/* ── CUMPLEAÑOS: columna izquierda ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-cumple {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 12px;
-  background: linear-gradient(135deg, #fff5ee, #ffe8d6);
-  border: 2px solid rgba(232, 139, 100, 0.3);
-  border-radius: 12px 8px 14px 6px / 8px 14px 6px 12px;
-  font: 700 0.78rem/1.1 "Nunito", sans-serif;
-  color: #8a5a30;
-  box-shadow: 1.5px 2px 0 rgba(200, 120, 60, 0.12);
-  transform: rotate(2deg);
-}
-
-.ficha-cumple-ico {
-  flex-shrink: 0;
-  color: var(--vec-pink, #e88ba8);
-  opacity: 0.85;
-  width: 16px;
-  height: 16px;
-}
-
-.ficha-cumple-txt {
-  white-space: nowrap;
-}
-
-/* ── NUBE DE PENSAMIENTO: Ánimo (columna derecha) ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-animo-inline {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  position: relative;
-}
-
-/* Base shared by nube and pill (JS replaces class) */
-.ficha-animo-nube,
-.ficha-animo-pill {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 14px 8px 10px;
-  background: #fff;
-  border: 2px solid rgba(180, 150, 110, 0.25);
-  border-radius: 20px 20px 20px 8px;
-  box-shadow:
-    1.5px 2px 0 rgba(51, 38, 30, 0.10),
-    0 2px 8px rgba(0, 0, 0, 0.06);
-  position: relative;
-  min-width: 80px;
-  text-align: center;
-}
-
-/* Emotion variants — nube (legacy) and pill (JS active) */
-.ficha-animo-nube--alegre,
-.ficha-animo-pill--alegre {
-  background: #e8f5e3;
-  border-color: rgba(74, 122, 82, 0.45);
-}
-
-.ficha-animo-nube--triste,
-.ficha-animo-pill--triste {
-  background: #e6d9f3;
-  border-color: rgba(122, 106, 154, 0.45);
-}
-
-.ficha-animo-nube--enfadado,
-.ficha-animo-pill--enfadado {
-  background: #fbe5e8;
-  border-color: rgba(196, 43, 74, 0.45);
-}
-
-/* Burbujas de la nube de pensamiento */
-.ficha-hero-animo-inline::before,
-.ficha-hero-animo-inline::after {
-  content: '';
-  display: block;
-  border-radius: 50%;
-  background: #fff;
-  border: 2px solid rgba(180, 150, 110, 0.25);
-  position: absolute;
-  pointer-events: none;
-}
-
-.ficha-hero-animo-inline::before {
-  width: 14px;
-  height: 14px;
-  bottom: -10px;
-  left: 2px;
-}
-
-.ficha-hero-animo-inline::after {
-  width: 10px;
-  height: 10px;
-  bottom: -20px;
-  left: -2px;
-}
-
-.ficha-animo-burbuja1,
-.ficha-animo-burbuja2 {
-  display: none;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-ico {
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
-.ficha-animo-emoji {
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
-.play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-animo-val {
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--ds-ink, #3b3028);
-  display: block;
+  font: 400 0.58rem/1.25 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #8a7a68);
+  font-style: italic;
   margin-top: 1px;
 }
 
-/* ── IZQUIERDA: Edad ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-edad {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transform: rotate(-3deg);
-}
-
-.ficha-edad-cal {
-  position: relative;
-}
-
-.ficha-edad-anillas {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: -3px;
-  position: relative;
-  z-index: 1;
-}
-
-.ficha-edad-anillas span {
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 2px solid var(--vec-lavender, #b49ad4);
-  background: #fff;
-}
-
-.ficha-edad-body {
-  background: linear-gradient(160deg, #f0e8f6, #e8ddf0);
-  border: 2px solid rgba(180, 150, 220, 0.35);
-  border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
-  padding: 10px 16px 8px;
-  text-align: center;
-  min-width: 60px;
-  position: relative;
-  box-shadow: 1.5px 2px 0 rgba(122, 106, 154, 0.15);
-}
-
-.ficha-edad-num {
-  display: block;
-  font-family: var(--ds-font-hand, "Caveat", cursive);
-  font-size: 2.2rem;
-  font-weight: 700;
-  color: var(--vec-lavender-deep, #7a6a9a);
-  line-height: 1;
-}
-
-.ficha-edad-label {
-  display: block;
-  font: 700 0.5rem/1 "Nunito", sans-serif;
-  color: var(--vec-lavender, #b49ad4);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  margin-top: 2px;
-}
-
-.ficha-edad-pata {
-  width: 30px;
-  height: 6px;
-  margin: 0 auto;
-  background: var(--vec-lavender, #b49ad4);
-  border-radius: 0 0 4px 4px;
-  opacity: 0.4;
-}
-
-/* ── DERECHA: Trabajo ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-trabajo {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  transform: rotate(-2deg);
-}
-
-.ficha-trab-cinta {
+/* Doodles — integrados al personaje */
+.ficha-hero-card::before {
+  content: '♥';
   position: absolute;
-  top: -5px;
-  left: 50%;
-  transform: translateX(-50%) rotate(-3deg);
-  width: 36px;
-  height: 11px;
-  background: rgba(160, 210, 240, 0.55);
-  border: 1px solid rgba(100, 160, 210, 0.35);
-  border-radius: 2px;
+  top: 8px;
+  right: 12px;
+  font-size: 1rem;
+  color: var(--vec-pink, #e88ba8);
+  opacity: 0.4;
+  transform: rotate(-10deg);
+  pointer-events: none;
   z-index: 1;
 }
 
-.ficha-trab-body {
-  background: linear-gradient(150deg, #f0f7fc, #e4f0f8);
-  border: 2px solid rgba(80, 140, 190, 0.3);
-  border-radius: 10px 8px 12px 6px / 8px 12px 6px 10px;
-  padding: 8px 14px 7px;
-  min-width: 90px;
-  box-shadow: 1.5px 2px 0 rgba(80, 140, 190, 0.12);
-  position: relative;
-}
-
-.ficha-trab-head {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-bottom: 3px;
-  font: 700 0.52rem/1 "Nunito", sans-serif;
-  color: rgba(80, 120, 160, 0.7);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-
-.ficha-trab-ico {
-  flex-shrink: 0;
-  color: rgba(80, 120, 160, 0.7);
-}
-
-.ficha-trab-val {
-  font: 700 0.78rem/1.15 "Nunito", sans-serif;
-  color: #3d6a78;
+.ficha-hero-card::after {
+  content: '★';
+  position: absolute;
+  bottom: 8px;
+  right: 50%;
+  font-size: 0.85rem;
+  color: var(--ds-mustard, #e3b04b);
+  opacity: 0.4;
+  transform: rotate(12deg);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* old deco styles removed — replaced by .ficha-hero-card::before/::after above */
@@ -1924,12 +1771,13 @@
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
     grid-template-columns: 1fr;
     gap: 10px;
-    padding: 12px 14px 10px;
+    padding: 10px 12px 8px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
     padding-right: 0;
     padding-bottom: 8px;
+    border-right: none;
     border-bottom: 1.5px solid rgba(180, 150, 110, 0.12);
   }
 
@@ -1937,16 +1785,12 @@
     padding: 8px 10px;
   }
 
-  .aht-screen[data-aht-screen="ficha"] .ficha-cara-ring {
-    --ficha-cara-size: 110px;
+  .aht-screen[data-aht-screen="ficha"] .ficha-avatar-area .ficha-cara-ring {
+    --ficha-cara-size: 100px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-nombre {
     font-size: 1.35rem;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-hero-desde {
-    font-size: 0.52rem;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-pair {
@@ -1957,15 +1801,6 @@
   .aht-screen[data-aht-screen="ficha"] .ficha-body {
     padding: 10px 12px;
     gap: 10px;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-nec-nom {
-    min-width: 50px;
-    font-size: 0.72rem;
-  }
-
-  .aht-screen[data-aht-screen="ficha"] .ficha-necesidades {
-    grid-template-columns: 1fr;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-tab {

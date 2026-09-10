@@ -7484,10 +7484,12 @@ function hobbyIconKey(id, texto) {
         var copyTxt = item.copy || '';
         necBox.insertAdjacentHTML('beforeend',
           '<div class="ficha-nec-row">'
+          + '<div class="ficha-nec-head">'
           + '<span class="ficha-nec-ico" aria-hidden="true">' + esc(item.icono || def.icono) + '</span>'
           + '<span class="ficha-nec-nom">' + esc(item.nombre || def.nombre) + '</span>'
-          + '<div class="ficha-nec-bar"><i style="width:' + val + '%;background:' + colorBar + '"></i></div>'
           + '<span class="ficha-nec-val">' + val + '</span>'
+          + '</div>'
+          + '<div class="ficha-nec-bar"><i style="width:' + val + '%;background:' + colorBar + '"></i></div>'
           + (copyTxt ? '<span class="ficha-nec-copy">' + esc(copyTxt) + '</span>' : '')
           + '</div>'
         );
