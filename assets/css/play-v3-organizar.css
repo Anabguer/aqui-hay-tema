@@ -1,4 +1,4 @@
-/* Nuevo Plan — rediseño móvil + desktop (v5) */
+﻿/* Nuevo Plan — rediseño móvil + desktop (v5) */
 /* --- Modal shell --- */
 /* --- Header --- */
 /* --- Body / steps --- */
@@ -1509,281 +1509,244 @@
   color: #3b3028;
 }
 
-/* --- Plan resultado modal — AHT V4 cómic --- */
+/* --- Plan resultado — Escena cómic --- */
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-body {
   flex: 1 1 auto;
   min-height: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--aht-gap-md, 12px) var(--aht-gap-md, 12px) var(--aht-gap-sm, 8px);
-  gap: .6rem;
-}
-
-/* ── Estado central — protagonista ── */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .2rem;
-  padding: .7rem 1.2rem .5rem;
-  border-radius: var(--aht-frame-radius, 18px 14px 20px 13px / 14px 20px 13px 17px);
-  background: var(--aht-shell-bg, #FCFBFE);
-  border: 2px solid var(--aht-border, #D8D1DE);
-  box-shadow:
-    0 2px 8px rgba(48,40,58,.08),
-    inset 0 1px 0 rgba(255,255,255,.6);
-  width: 100%;
-  max-width: 260px;
-  text-align: center;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
-  font-size: 2.2rem;
-  line-height: 1;
-  filter: drop-shadow(0 2px 6px rgba(0,0,0,.1));
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-label {
-  font: 700 .92rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
-  color: var(--aht-text, #33261E);
-  text-align: center;
-}
-
-/* ── Paneles cómic — dos viñetas ── */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panels {
-  display: flex;
+  padding: .5rem .5rem .6rem;
   gap: .5rem;
-  width: 100%;
-  justify-content: center;
 }
 
-/* Panel individual — viñeta cómic */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel {
+/* ── Escena: viñetas laterales + estado central ── */
+.pr-scene {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: .35rem;
+  width: 100%;
+  max-width: 420px;
+  align-items: start;
+}
+
+/* ── Viñeta cómic de personaje ── */
+.pr-vignette {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .35rem;
-  flex: 1;
-  max-width: 150px;
-  padding: .65rem .5rem .55rem;
-  border-radius: var(--aht-frame-radius-sm, 14px 10px 16px 9px / 10px 16px 9px 13px);
+  gap: .25rem;
+  padding: .45rem .3rem .4rem;
+  border-radius: 18px 14px 20px 12px / 14px 18px 10px 16px;
   background: var(--aht-shell-bg, #FCFBFE);
-  border: 2.5px solid var(--aht-border, #D8D1DE);
-  box-shadow: 2px 3px 0 rgba(48,40,58,.06);
   position: relative;
-  transition: transform .15s ease;
+  border: 3px solid var(--aht-border, #D8D1DE);
+  box-shadow: 3px 4px 0 rgba(48,40,58,.07);
 }
-/* Rotación base — izquierda inclinada */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel:first-child {
-  transform: rotate(-1.5deg);
+.pr-vignette--left {
+  transform: rotate(-2deg);
+  transform-origin: bottom right;
 }
-/* Derecha inclinada al revés */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel:last-child {
-  transform: rotate(1.5deg);
-}
-
-/* Viñeta acepta — borde verde punteado */
-.pr-panel--acepta {
-  background: rgba(139,190,113,.08);
-  border: 2.5px dotted rgba(100,170,70,.45);
-  box-shadow:
-    2px 3px 0 rgba(100,150,70,.1),
-    inset 0 0 0 1px rgba(139,190,113,.12);
+.pr-vignette--right {
+  transform: rotate(2deg);
+  transform-origin: bottom left;
 }
 
-/* Viñeta rechaza — borde rojo rayado */
-.pr-panel--rechaza {
-  background: rgba(210,110,110,.07);
-  border: 2.5px dashed rgba(200,80,80,.4);
-  box-shadow:
-    2px 3px 0 rgba(180,80,80,.08),
-    inset 0 0 0 1px rgba(210,110,110,.1);
+/* ── Borde por decisión ── */
+.pr-vignette--acepta {
+  border-color: #5aaf4a;
+  background: rgba(110,190,80,.08);
+  box-shadow: 3px 4px 0 rgba(80,140,50,.12);
+}
+.pr-vignette--rechaza {
+  border-color: #d45050;
+  background: rgba(220,100,100,.07);
+  box-shadow: 3px 4px 0 rgba(180,70,70,.1);
+}
+.pr-vignette--duda {
+  border-color: #c8a830;
+  background: rgba(210,180,60,.07);
+  box-shadow: 3px 4px 0 rgba(180,150,40,.1);
 }
 
-/* Viñeta duda — borde amarillo */
-.pr-panel--duda {
-  background: rgba(200,175,90,.07);
-  border: 2.5px solid rgba(200,175,90,.4);
-  box-shadow:
-    2px 3px 0 rgba(180,150,60,.08),
-    inset 0 0 0 1px rgba(200,175,90,.1);
-}
-
-/* Avatar dentro del panel */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar {
-  flex: 0 0 auto;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img {
-  width: 56px;
-  height: 56px;
+/* ── Avatar grande — protagonista de la viñeta ── */
+.pr-vignette-avatar {
+  width: 72px;
+  height: 72px;
   border-radius: 50%;
-  border: 2.5px solid var(--aht-border, #D8D1DE);
+  border: 3px solid var(--aht-border, #D8D1DE);
   background: var(--aht-shell-bg, #FCFBFE);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 2px 6px rgba(48,40,58,.1);
+  box-shadow: 0 2px 8px rgba(48,40,58,.12);
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img img {
+.pr-vignette--acepta .pr-vignette-avatar { border-color: #5aaf4a; }
+.pr-vignette--rechaza .pr-vignette-avatar { border-color: #d45050; }
+.pr-vignette--duda .pr-vignette-avatar { border-color: #c8a830; }
+
+.pr-vignette-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img .cara-ini {
-  font: 700 1.2rem/1 var(--aht-font-ui, "Nunito", sans-serif);
+.pr-vignette-avatar .cara-ini {
+  font: 700 1.6rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text-muted, #75634F);
 }
 
-/* Info dentro del panel */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-info {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .15rem;
-  text-align: center;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-name {
-  font: 700 .72rem/1 var(--aht-font-ui, "Nunito", sans-serif);
+/* Nombre */
+.pr-vignette-name {
+  font: 800 .7rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text, #33261E);
-  max-width: 100px;
+  text-align: center;
+  max-width: 90px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-response {
+
+/* Respuesta */
+.pr-vignette-response {
   display: flex;
   align-items: center;
   gap: .2rem;
+  font: 700 .65rem/1 var(--aht-font-ui, "Nunito", sans-serif);
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-response-icon {
-  font-size: 1rem;
-  line-height: 1;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-response-text {
-  font: 600 .68rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
-  text-align: center;
-}
-.pr-panel--acepta .pr-panel-response-icon { color: #2d8a4e; }
-.pr-panel--acepta .pr-panel-response-text { color: #2d6a3e; }
-.pr-panel--rechaza .pr-panel-response-icon { color: #c44b4b; }
-.pr-panel--rechaza .pr-panel-response-text { color: #8a3535; }
-.pr-panel--duda .pr-panel-response-icon { color: #b89a3f; }
-.pr-panel--duda .pr-panel-response-text { color: #8a7030; }
+.pr-vignette--acepta .pr-vignette-response { color: #2d7a3e; }
+.pr-vignette--rechaza .pr-vignette-response { color: #b83535; }
+.pr-vignette--duda .pr-vignette-response { color: #8a7030; }
 
-/* ── Mensaje narrativo — bocadillo de cómic ── */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-message {
-  font: 600 .82rem/1.35 var(--aht-font-ui, "Nunito", sans-serif);
+/* ── Estado central — imagen gráfica ── */
+.pr-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .3rem;
+  padding: .2rem 0;
+  align-self: center;
+}
+.pr-state-img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.1));
+}
+
+/* ── Mensaje narrativo ── */
+.pr-message {
+  font: 700 .78rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text, #33261E);
   text-align: center;
   margin: 0;
-  padding: .55rem .8rem;
-  width: 100%;
-  max-width: 280px;
-  border-radius: var(--aht-frame-radius-sm, 14px 10px 16px 9px / 10px 16px 9px 13px);
-  background: rgba(232,221,245,.25);
-  border: 1.5px solid rgba(200,180,220,.3);
-  box-shadow: 0 1px 4px rgba(48,40,58,.06);
-  position: relative;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-message::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 12px;
-  height: 6px;
-  background: rgba(232,221,245,.25);
-  border-left: 1.5px solid rgba(200,180,220,.3);
-  border-right: 1.5px solid rgba(200,180,220,.3);
-  border-top: 1.5px solid rgba(200,180,220,.3);
-  border-radius: 6px 6px 0 0;
+  max-width: 120px;
 }
 
-/* Contra-propuesta (mantiene estilo existente) */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contrapropuesta {
-  margin-top: var(--aht-gap-sm, 8px);
-  padding: var(--aht-gap-md, 12px);
-  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+/* ── Contra-propuesta ── */
+.pr-contrapropuesta {
+  margin-top: .3rem;
+  padding: .55rem .7rem;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
   background: rgba(224,122,152,.07);
   border: 1.5px dashed rgba(224,122,152,.28);
   text-align: center;
   width: 100%;
+  max-width: 300px;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contra-label {
-  font: 700 .72rem/1 var(--aht-font-ui, "Nunito", sans-serif);
+.pr-contra-label {
+  font: 700 .68rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: #b8643f;
   text-transform: uppercase;
   letter-spacing: .04em;
-  margin: 0 0 .3rem;
+  margin: 0 0 .25rem;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contra-text {
-  font: 600 .88rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
+.pr-contra-text {
+  font: 600 .82rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
   color: #5a4838;
   margin: 0;
 }
 
-/* Mensajito */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-mensajito {
-  margin-top: var(--aht-gap-sm, 8px);
-  padding: .65rem;
-  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
+/* ── Mensajito ── */
+.pr-mensajito {
+  margin-top: .3rem;
+  padding: .5rem .6rem;
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
   background: rgba(139,160,80,.08);
   border: 1.5px dashed rgba(139,160,80,.25);
   text-align: center;
   width: 100%;
+  max-width: 300px;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-mensajito-text {
-  font: 600 .84rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
+.pr-mensajito-text {
+  font: 600 .78rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
   color: #4a5a2e;
   margin: 0;
 }
 
-/* Acciones (solo botón agenda) */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-actions {
-  flex: 0 0 auto;
-  display: flex;
-  gap: .7rem;
-  justify-content: center;
-  padding: var(--aht-gap-sm, 8px) var(--aht-gap-lg, 16px) var(--aht-gap-md, 12px);
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn {
-  padding: .6rem 1.5rem;
-  border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
-  border: 2px solid var(--aht-border-strong, #33261E);
-  font: 700 .88rem/1 var(--aht-font-ui, "Nunito", sans-serif);
-  cursor: pointer;
-  transition: transform var(--aht-dur-fast, 120ms) ease, box-shadow var(--aht-dur-fast, 120ms) ease;
-  box-shadow: 2px 3px 0 rgba(51,38,30,.18);
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn:active {
-  transform: translateY(1px);
-  box-shadow: 1px 1px 0 rgba(51,38,30,.15);
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-agenda {
-  background: var(--aht-back-bg, #E8DFF5);
-  color: var(--aht-close-color, #7C6BAE);
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-btn-agenda:hover {
-  background: var(--aht-vanilla-deep, #E3D6F0);
+/* ── Responsive móvil ── */
+@media (max-width: 480px) {
+  .pr-scene {
+    gap: .25rem;
+  }
+  .pr-vignette-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  .pr-state-img {
+    width: 56px;
+    height: 56px;
+  }
+  .pr-vignette-name {
+    font-size: .62rem;
+    max-width: 70px;
+  }
+  .pr-vignette-response {
+    font-size: .58rem;
+  }
+  .pr-message {
+    font-size: .7rem;
+    max-width: 100px;
+  }
 }
 
-/* Responsive móvil */
-@media (max-width: 480px) {
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panels {
-    gap: .4rem;
+/* --- Mobile (≤768px): compactar tiles lugares --- */
+@media (max-width: 768px) {
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc {
+    padding: .25rem .15rem .3rem;
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
   }
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img {
-    width: 48px;
-    height: 48px;
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-art {
+    width: 2.2rem;
+    height: 1.6rem;
+    flex: 0 0 auto;
   }
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
-    font-size: 1.8rem;
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-body {
+    min-width: 0;
+    width: 100%;
   }
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-label {
-    font-size: .82rem;
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-necs {
+    top: .2rem;
+    right: .15rem;
   }
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel {
-    padding: .55rem .4rem .45rem;
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc.has-necs .org-lc-body {
+    padding-right: .9rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc.has-necs .org-lc-art {
+    margin-right: .9rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-nom {
+    font-size: .5rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-horario {
+    display: none;
+  }
+  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-estado {
+    font-size: .48rem;
   }
 }

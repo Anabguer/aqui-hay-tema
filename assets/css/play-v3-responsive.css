@@ -492,43 +492,6 @@ html:has(body.play-v3.play-v3--scroll-lock) {
     width: 100%;
     overflow: hidden;
   }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc {
-    padding: .25rem .15rem .3rem;
-    min-width: 0;
-    width: 100%;
-    overflow: hidden;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-art {
-    width: 2.2rem;
-    height: 1.6rem;
-    flex: 0 0 auto;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-body {
-    min-width: 0;
-    width: 100%;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-necs {
-    top: .2rem;
-    right: .15rem;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc.has-necs .org-lc-body {
-    padding-right: .9rem;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc.has-necs .org-lc-art {
-    margin-right: .9rem;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-nom {
-    font-size: .5rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-horario {
-    display: none;
-  }
-  .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugar-estado {
-    font-size: .48rem;
-  }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-dias-strip {
     gap: .3rem;
   }
