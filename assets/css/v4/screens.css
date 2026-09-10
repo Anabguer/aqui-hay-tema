@@ -132,8 +132,8 @@
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
     width: 100%;
-    text-align: right;
-    padding-right: 4px;
+    display: flex;
+    justify-content: flex-end;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
     position: static;
