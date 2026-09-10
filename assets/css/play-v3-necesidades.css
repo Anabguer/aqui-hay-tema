@@ -37,7 +37,7 @@
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;
-  gap: 10px;
+  gap: 6px;
   padding: 0 0 14px;
   overflow-x: auto;
   scrollbar-width: none;
@@ -86,7 +86,6 @@
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt--todos {
   background: linear-gradient(135deg, rgba(124, 107, 174, .15), rgba(233, 137, 167, .15), rgba(227, 176, 75, .15));
   border: 1.5px dashed rgba(107, 81, 56, .2);
-  margin-left: auto;
   align-self: center;
 }
 
@@ -122,6 +121,7 @@
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-carousel {
   display: flex;
   flex-wrap: nowrap;
+  justify-content: center;
   gap: 10px;
   overflow-x: auto;
   overflow-y: hidden;
