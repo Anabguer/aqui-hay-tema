@@ -522,8 +522,9 @@
 /* ── COL DERECHA: ánimo + datos ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
 }
 
 /* Ánimo: imagen grande + etiqueta */
@@ -533,6 +534,7 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .ficha-animo-img-wrap {
@@ -614,19 +616,16 @@
 .ficha-datos-card {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  width: 100%;
-  padding: 8px 10px;
-  background: rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(180, 150, 110, 0.12);
-  border-radius: 12px 10px 14px 8px / 10px 14px 8px 12px;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
 }
 
 .ficha-dato {
   display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 2px 0;
+  align-items: baseline;
+  gap: 4px;
+  padding: 1px 0;
   font: 600 0.72rem/1.2 "Nunito", sans-serif;
   color: var(--ds-ink, #3b3028);
 }
@@ -1875,6 +1874,12 @@
     border-left: none;
     border-top: 1.5px solid rgba(200, 170, 120, 0.18);
     transform: none;
+  }
+
+  .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
   }
 
   .aht-screen[data-aht-screen="ficha"] .ficha-avatar-area .ficha-cara-ring {
