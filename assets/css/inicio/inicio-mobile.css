@@ -975,6 +975,38 @@ body.play-v3 .inicio-mobile:not(.inicio-mobile-feed) .inicio-mobile-layout {
     color: var(--ds-green-deep);
   }
 
+.inicio-mobile .mision-strip-row.mision-cumplida {
+    background: rgba(74, 122, 82, .08);
+    border-radius: 6px;
+  }
+
+.inicio-mobile .mision-strip-row.mision-cumplida .mision-strip-txt {
+    color: #3d6b4e;
+    text-decoration: line-through;
+    text-decoration-color: rgba(74, 122, 82, .35);
+  }
+
+.inicio-mobile .mision-strip-row.mision-cumplida .mision-bolita {
+    background: #d4edda;
+    border-color: #4a7a52;
+  }
+
+.inicio-mobile .mision-strip-row.mision-cumplida .mision-check {
+    color: #4a7a52;
+  }
+
+.inicio-mobile .mision-sello {
+    right: 8px;
+    transform: translateY(-50%) rotate(-10deg);
+  }
+
+.inicio-mobile .mision-sello-txt {
+    padding: 4px 10px;
+    font-size: .78rem;
+    border-width: 2px;
+    border-radius: 6px;
+  }
+
 .inicio-mobile .obj-misiones-vacio {
     font-family: var(--ds-font-ui, Nunito, "Segoe UI", sans-serif);
     font-weight: 600;
