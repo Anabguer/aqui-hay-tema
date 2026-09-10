@@ -1546,6 +1546,50 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
 </script>
 <script>if(/^(mobile|desktop)$/.test(new URLSearchParams(location.search).get('design')||'')){var l=document.createElement('link');l.rel='stylesheet';l.href='dev/inicio-design-mode.css';document.head.appendChild(l);var s=document.createElement('script');s.src='dev/inicio-design-mode.js';document.body.appendChild(s)}</script>
 <script>if(new URLSearchParams(location.search).get('composer')==='1'){var cs=document.createElement('script');cs.src='dev/composer-inject.js';document.body.appendChild(cs)}else{var sd=document.createElement('script');sd.src='assets/js/sticker-defaults.js?v=<?= htmlspecialchars($ahtUi, ENT_QUOTES, 'UTF-8') ?>';document.body.appendChild(sd)}</script>
+<script>
+(function(){
+  function patchPlanResultado(){
+    var root=document.querySelector('.play-root');
+    if(!root)return;
+    var capa=root.getAttribute('data-capa')||'';
+    if(capa!=='plan-resultado')return;
+    var prBody=document.querySelector('.pr-body');
+    if(!prBody)return;
+    var btn=prBody.querySelector('.pr-btn-volver');
+    if(!btn){
+      btn=document.createElement('button');
+      btn.type='button';
+      btn.className='pr-btn-volver';
+      btn.style.cssText='margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);';
+      btn.textContent='Volver a planes';
+      prBody.appendChild(btn);
+    }
+    btn.onclick=function(){
+      if(window.AHTScreenManager){
+        var sm=window.AHTScreenManager;
+        if(sm.close)return sm.close();
+      }
+      var el=document.querySelector('[data-capas]');
+      if(el)el.setAttribute('data-capa','organizar');
+    };
+    var hdr=document.querySelector('.aht-screen[data-aht-screen="plan-resultado"] .aht-frame-header');
+    if(hdr&&!hdr.querySelector('.aht-doodle')){
+      var svgs=window.AHT_DOODLE_SVGS||{};
+      var ps=[{id:'h',cls:'d-fl',sz:'d-lg'},{id:'s',cls:'d-tl',sz:'d-md'},{id:'x',cls:'d-bl',sz:'d-sm'},{id:'d',cls:'d-tr',sz:'d-md'},{id:'x',cls:'d-rm',sz:'d-sm'},{id:'h',cls:'d-fr',sz:'d-lg'}];
+      ps.forEach(function(p,i){
+        if(!svgs[p.id])return;
+        var sp=document.createElement('span');
+        sp.className='aht-doodle '+p.cls+' '+p.sz;
+        sp.setAttribute('aria-hidden','true');
+        sp.innerHTML=svgs[p.id];
+        hdr.appendChild(sp);
+        requestAnimationFrame(function(){setTimeout(function(){sp.classList.add('injected');},50*i);});
+      });
+    }
+  }
+  new MutationObserver(patchPlanResultado).observe(document.body,{attributes:true,attributeFilter:['data-capa'],subtree:true});
+})();
+</script>
 </body>
 </html>
 
