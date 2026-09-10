@@ -224,12 +224,10 @@
   color: var(--ds-ink, #33261e);
 }
 
-/* ─── Cards ─── */
+/* ─── Cards base ─── */
 .qed-card {
   padding: .6rem .7rem;
   border-radius: 10px;
-  border: 1px solid rgba(180, 160, 130, .15);
-  background: rgba(255, 255, 255, .65);
   box-shadow: 0 1px 4px rgba(40, 32, 26, .06);
 }
 
@@ -241,6 +239,24 @@
   letter-spacing: .05em;
   text-transform: uppercase;
   color: var(--ds-ink, #33261e);
+}
+
+/* ─── Presencia: rosa suave ─── */
+.play-v3 .quien .consulta-ed-presencia.qed-card {
+  border: 1.5px solid rgba(233, 137, 167, .35);
+  background: rgba(255, 240, 243, .7);
+}
+
+/* ─── Actividades: verde con borde dashed ─── */
+.qed-activities {
+  border: 1.5px dashed rgba(94, 122, 85, .35);
+  background: rgba(240, 247, 240, .7);
+}
+
+/* ─── Curiosidades: lavanda ─── */
+.qed-curiosities {
+  border: 1.5px solid rgba(124, 107, 174, .3);
+  background: rgba(238, 232, 248, .7);
 }
 
 /* ─── Presencia ─── */
@@ -536,39 +552,43 @@
   margin-top: .7rem;
 }
 
-.qed-activity-list,
-.qed-curiosity-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
+/* ─── Necesidades del lugar ─── */
+.qed-nec-lugares {
+  display: flex;
+  flex-direction: column;
+  gap: .45rem;
 }
 
-.qed-activity-list li,
-.qed-curiosity-list li {
-  position: relative;
-  padding: .2rem 0 .2rem .9rem;
+.qed-nec-lugar-row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.qed-nec-lugar-ico {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+}
+
+.qed-nec-lugar-text {
+  display: flex;
+  flex-direction: column;
+  gap: .05rem;
+}
+
+.qed-nec-lugar-name {
   font-family: "Nunito", system-ui, sans-serif;
-  font-size: .65rem;
-  line-height: 1.3;
+  font-size: .68rem;
+  font-weight: 800;
   color: var(--ds-ink, #33261e);
 }
 
-.qed-activity-list li::before {
-  content: "\2713";
-  position: absolute;
-  left: 0;
-  top: .2rem;
-  font-size: .6rem;
-  color: #5e7a55;
-}
-
-.qed-curiosity-list li::before {
-  content: "\2022";
-  position: absolute;
-  left: 0;
-  top: .2rem;
-  font-size: .8rem;
-  color: #e85d56;
+.qed-nec-lugar-frase {
+  font-family: Caveat, cursive;
+  font-size: .82rem;
+  color: var(--ds-text-muted, #75634f);
+  line-height: 1.1;
 }
 
 /* ─── Footer quote ─── */

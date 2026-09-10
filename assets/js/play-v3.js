@@ -5208,10 +5208,20 @@ function renderInicioMpDuo(misiones, parejas) {
     pintarQuienTema(gente, null);
     var descElZ = $('[data-q-desc]');
     if (descElZ) descElZ.textContent = orgLugarDesc(lugIdZ);
-    var actElZ = $('[data-q-activities]');
-    if (actElZ) {
-      var actsZ = LUGAR_ACTIVIDADES[lugIdZ] || [];
-      actElZ.innerHTML = actsZ.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('');
+    var necLugElZ = $('[data-q-nec-lugares]');
+    if (necLugElZ) {
+      var metaNecLZ = LUGAR_META[lugIdZ] || {};
+      var necNamesZ = (metaNecLZ.necesidades || []);
+      necLugElZ.innerHTML = necNamesZ.map(function (n) {
+        var k = n.toLowerCase();
+        var icon = NEC_ICON_PATHS[k] || '';
+        var frase = NEC_FRASES_LUGAR[k] || '';
+        return '<div class="qed-nec-lugar-row">'
+          + (icon ? '<img src="' + esc(icon) + '" alt="" class="qed-nec-lugar-ico"/>' : '')
+          + '<div class="qed-nec-lugar-text"><span class="qed-nec-lugar-name">' + esc(n) + '</span>'
+          + (frase ? '<span class="qed-nec-lugar-frase">' + esc(frase) + '</span>' : '')
+          + '</div></div>';
+      }).join('');
     }
     var curElZ = $('[data-q-curiosities]');
     if (curElZ) {
@@ -5978,10 +5988,20 @@ function renderInicioMpDuo(misiones, parejas) {
     pintarQuienTema(gente, null);
     var descEl = $('[data-q-desc]');
     if (descEl) descEl.textContent = orgLugarDesc(lugId);
-    var actEl = $('[data-q-activities]');
-    if (actEl) {
-      var acts = LUGAR_ACTIVIDADES[lugId] || [];
-      actEl.innerHTML = acts.map(function (a) { return '<li>' + esc(a) + '</li>'; }).join('');
+    var necLugEl = $('[data-q-nec-lugares]');
+    if (necLugEl) {
+      var metaNecL = LUGAR_META[lugId] || {};
+      var necNames = (metaNecL.necesidades || []);
+      necLugEl.innerHTML = necNames.map(function (n) {
+        var k = n.toLowerCase();
+        var icon = NEC_ICON_PATHS[k] || '';
+        var frase = NEC_FRASES_LUGAR[k] || '';
+        return '<div class="qed-nec-lugar-row">'
+          + (icon ? '<img src="' + esc(icon) + '" alt="" class="qed-nec-lugar-ico"/>' : '')
+          + '<div class="qed-nec-lugar-text"><span class="qed-nec-lugar-name">' + esc(n) + '</span>'
+          + (frase ? '<span class="qed-nec-lugar-frase">' + esc(frase) + '</span>' : '')
+          + '</div></div>';
+      }).join('');
     }
     var curEl = $('[data-q-curiosities]');
     if (curEl) {
@@ -8349,6 +8369,13 @@ function hobbyIconKey(id, texto) {
     lug_tienda: ['Hacer compras', 'Descubrir cosas nuevas', 'Pasear entre estanterías', 'Encontrar algo especial']
   };
 
+  var NEC_FRASES_LUGAR = {
+    social: 'Compartir momentos y crear lazos.',
+    diversion: 'Risas, juego y diversión sin fin.',
+    actividad: 'Moverse, sudar y sentirse vivo.',
+    calma: 'Respirar, desconectar y estar en paz.'
+  };
+
   var LUGAR_CURIOSIDADES = {
     lug_cafeteria: ['Es uno de los lugares más populares del pueblo.', 'A veces se forman buenas amistades aquí.', 'El café de Lola es legendary entre los habitantes.'],
     lug_bar: ['El bar cierra cuando el último cliente se va.', 'Aquí se cuentan las mejores historias del pueblo.', 'La música en vivo atrae a más de uno.'],
@@ -9520,15 +9547,45 @@ window.AHT_PLAN_IMAGES = {
     }
     var prBody = document.querySelector('.pr-body');
     if (prBody && !prBody.querySelector('.pr-btn-volver')) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'pr-btn-volver';
-      btn.setAttribute('data-pr-close', '');
-      btn.style.cssText = 'margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);';
-      btn.textContent = 'Volver a planes';
-      btn.addEventListener('click', function() { cerrarResultadoPlan(); setCapa('organizar'); });
-      prBody.appendChild(btn);
+      if (r.rechazada) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'pr-btn-volver';
+        btn.setAttribute('data-pr-close', '');
+        btn.style.cssText = 'margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);';
+        btn.textContent = 'Volver a planes';
+        btn.addEventListener('click', function() { cerrarResultadoPlan(); setCapa('organizar'); });
+        prBody.appendChild(btn);
+      } else {
+        setTimeout(function() { cerrarResultadoPlan(); }, 2500);
+      }
     }
+    injectDoodlesPlanResultado();
+  }
+
+  function injectDoodlesPlanResultado() {
+    var header = document.querySelector('.aht-screen[data-aht-screen="plan-resultado"] .aht-frame-header');
+    if (!header || header.querySelector('.aht-doodle')) return;
+    var svgs = window.AHT_DOODLE_SVGS || {};
+    var positions = [
+      { id: 'h', cls: 'd-fl', sz: 'd-lg' },
+      { id: 's', cls: 'd-tl', sz: 'd-md' },
+      { id: 'x', cls: 'd-bl', sz: 'd-sm' },
+      { id: 'd', cls: 'd-tr', sz: 'd-md' },
+      { id: 'x', cls: 'd-rm', sz: 'd-sm' },
+      { id: 'h', cls: 'd-fr', sz: 'd-lg' }
+    ];
+    positions.forEach(function(p, i) {
+      if (!svgs[p.id]) return;
+      var span = document.createElement('span');
+      span.className = 'aht-doodle ' + p.cls + ' ' + p.sz;
+      span.setAttribute('aria-hidden', 'true');
+      span.innerHTML = svgs[p.id];
+      header.appendChild(span);
+      requestAnimationFrame(function() {
+        setTimeout(function() { span.classList.add('injected'); }, 50 * i);
+      });
+    });
   }
 
   function cerrarResultadoPlan() {
