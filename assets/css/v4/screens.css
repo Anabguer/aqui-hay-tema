@@ -126,6 +126,9 @@
     max-width: var(--aht-modal-mobile-w, min(calc(100% - 32px), 393px));
     max-height: var(--aht-modal-mobile-max-h, min(88vh, 720px));
   }
+  .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
+    position: relative;
+  }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
     position: absolute;
     top: 100%;
