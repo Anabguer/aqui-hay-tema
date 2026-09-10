@@ -129,11 +129,13 @@
   .aht-screen[data-aht-screen="buzon"] .aht-frame-tabs {
     flex-wrap: wrap;
     gap: 8px;
+    align-items: center;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
+    flex-basis: 100%;
     display: flex;
     justify-content: flex-end;
-    padding: 2px 16px 0;
+    order: 10;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-mark-all {
     position: static;
