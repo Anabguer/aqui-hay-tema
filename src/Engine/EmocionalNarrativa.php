@@ -220,6 +220,137 @@ final class EmocionalNarrativa
         ];
     }
 
+    /**
+     * Explicación en PRIMERA PERSONA para el Diario personal.
+     * El residente escribe sobre su propia experiencia emocional.
+     * Null si el estado es neutro o el origen no es explicable.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $estado
+     * @return array{texto_estado: string, explicacion: string, desde_texto: string, diario_evento_id: ?string}|null
+     */
+    public static function explicacionParaDiario(array $partida, string $residenteId, array $estado): ?array
+    {
+        $estadoId = EstadoEmocional::canonId((string) ($estado['id'] ?? ''));
+        if ($estadoId === EstadoEmocional::NEUTRO || !self::esSignificativo($estadoId)) {
+            return null;
+        }
+        $origen = (string) ($estado['origen'] ?? '');
+        $ctx = is_array($estado['contexto'] ?? null) ? $estado['contexto'] : [];
+        $nombre = IdentidadPublica::nombre($partida, $residenteId);
+        if ($nombre === '') {
+            return null;
+        }
+
+        $explicacion = null;
+        $diarioEventoId = null;
+
+        switch ($origen) {
+            case 'encuentro':
+            case 'encuentro_intervencion':
+                $res = (string) ($ctx['resultado_experiencia'] ?? '');
+                $otroNombre = self::nombreOtroDeEncuentro($partida, $residenteId, $ctx);
+                $otroId = self::idOtroDeEncuentro($partida, $residenteId, $ctx);
+                $motivo = (string) ($ctx['motivo'] ?? '');
+                $histCtx = $otroId !== '' ? HistorialPar::contextoNarrativo($partida, $residenteId, $otroId) : '';
+                if ($motivo === 'hobby_recuperacion' || $origen === 'hobby_recuperacion') {
+                    $explicacion = 'Un rato con mi hobby me ha sentado de fábula.';
+                } elseif ($res === 'muy_mal') {
+                    $explicacion = 'Mi encuentro con ' . $otroNombre . ' no salió como esperaba. Aquello me dejó hecha polv' . GeneroConcordancia::oa($partida, $residenteId) . '.';
+                    if ($histCtx !== '') {
+                        $explicacion .= ' ' . ucfirst($histCtx) . '.';
+                    }
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                } elseif ($res === 'mal') {
+                    $explicacion = 'Compartí un rato con ' . $otroNombre . ' que se torció, y salí de allí con el ánimo por los suelos.';
+                    if ($histCtx !== '') {
+                        $explicacion .= ' ' . ucfirst($histCtx) . '.';
+                    }
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                } elseif ($estadoId === EstadoEmocional::ALEGRE) {
+                    $otroNombreLimpio = ($otroNombre !== '' && $otroNombre !== 'otra persona') ? $otroNombre : '';
+                    if ($otroNombreLimpio !== '') {
+                        $explicacion = 'Mi encuentro con ' . $otroNombreLimpio . ' me ha animado el día.';
+                    } else {
+                        $explicacion = 'He tenido un encuentro que me ha animado el día.';
+                    }
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                } else {
+                    $explicacion = 'Mi estado cambió después de un encuentro reciente.';
+                    $diarioEventoId = self::eventoDiarioDeEncuentro($ctx);
+                }
+                break;
+
+            case 'perder_trabajo':
+                $explicacion = 'Me han soltado del trabajo. Ando con la moral por los suelos.';
+                $diarioEventoId = self::eventoDiarioDeTrabajo($partida, $residenteId, 'perder', $estado);
+                break;
+
+            case 'encontrar_trabajo':
+                $explicacion = 'He encontrado trabajo y hoy me siento por las nubes.';
+                $diarioEventoId = self::eventoDiarioDeTrabajo($partida, $residenteId, 'encontrar', $estado);
+                break;
+
+            case 'rechazo_repetido':
+                $hacia = (string) ($ctx['hacia'] ?? '');
+                $nombreOtro = $hacia !== '' && $hacia !== $residenteId ? IdentidadPublica::nombre($partida, $hacia) : '';
+                if ($nombreOtro !== '') {
+                    $explicacion = $nombreOtro . ' me ha dicho que no demasiadas veces. A la larga, eso pesa.';
+                    $diaDesde = (int) ($estado['desde']['dia'] ?? 0);
+                    if ($diaDesde > 0) {
+                        $candidato = 'rechazo_repetido:' . $residenteId . ':' . $hacia . ':' . $diaDesde;
+                        if (DiarioEngine::entradaPorEvento($partida, $candidato) !== null) {
+                            $diarioEventoId = $candidato;
+                        }
+                    }
+                } else {
+                    $explicacion = 'Me han rechazado planes demasiadas veces seguidas.';
+                }
+                break;
+
+            case 'hobby_recuperacion':
+            case 'encuentro_y_hobby':
+                $explicacion = 'Un rato a solas con mi hobby me ha levantado el ánimo.';
+                break;
+
+            case 'cumple_felicidad':
+                $explicacion = 'He recibido la enhorabuena de mis vecinos y me lo noto.';
+                break;
+
+            case 'consejo_celestine':
+                $explicacion = 'Me has dado un buen consejo. Se te nota.';
+                break;
+
+            case 'formacion_pareja':
+                $parejaId = (string) ($ctx['pareja_id'] ?? '');
+                $nombrePareja = $parejaId !== '' ? IdentidadPublica::nombre($partida, $parejaId) : '';
+                if ($nombrePareja !== '') {
+                    $explicacion = 'Estoy muy content' . GeneroConcordancia::oa($partida, $residenteId)
+                        . ' desde que empecé a salir con ' . $nombrePareja . '.';
+                } else {
+                    $explicacion = 'Estoy muy content' . GeneroConcordancia::oa($partida, $residenteId)
+                        . ' desde que empecé una relación.';
+                }
+                $diaDesde = (int) ($estado['desde']['dia'] ?? 0);
+                if ($diaDesde > 0) {
+                    $diarioEventoId = 'formacion_pareja:' . $residenteId . ':' . $diaDesde;
+                }
+                break;
+
+            default:
+                return null;
+        }
+
+        return [
+            'texto_estado' => 'Estoy ' . self::textoEstadoPensamiento($estadoId, $partida, $residenteId),
+            'explicacion' => $explicacion,
+            'desde_texto' => self::desdeTexto($estado, $partida),
+            'diario_evento_id' => ($diarioEventoId !== null && DiarioEngine::entradaPorEvento($partida, $diarioEventoId) !== null)
+                ? $diarioEventoId
+                : null,
+        ];
+    }
+
 
     /**
      * Payload para modal de animo en ficha (vista jugador).

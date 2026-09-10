@@ -30,119 +30,119 @@ final class DiarioHitoEngine
 
     /** @var list<string> */
     private const CUERPOS_SE_CONOCIERON = [
-        '{par} por fin se han presentado de verdad.',
-        'Ha quedado claro que {par} ya no son desconocidos.',
-        '{par} han dado el primer paso para conocerse.',
+        'Por fin hemos hablado de verdad. Ya no somos desconocidos.',
+        'Hemos dado el primer paso para conocernos.',
+        'Por fin nos hemos presentado de verdad.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_PRIMERA_CITA = [
-        '{par} han tenido su primera cita.',
-        'Primera cita oficial entre {par}.',
-        '{par} se han visto fuera del edificio con intención.',
+        'Hemos tenido nuestra primera cita.',
+        'Primera cita oficial. No estuvo mal.',
+        'Nos hemos visto fuera del edificio con intención.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_REGALO = [
-        '{par} intercambiaron un detalle que no pasó desapercibido.',
-        'Hubo un gesto bonito entre {par}: flores o algo parecido.',
-        '{par} se hicieron un regalo que dejó huella.',
+        'Intercambiamos un detalle que no pasó desapercibido.',
+        'Hubo un gesto bonito: flores o algo parecido.',
+        'Nos hicimos un regalo que dejó huella.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_RECHAZO = [
-        '{declara} se acercó a {rechaza} y la respuesta fue un no contundente.',
-        'Entre {declara} y {rechaza} hubo un rechazo que dolió.',
-        '{rechaza} dejó claro que no a {declara}.',
+        'Me acerqué a {otro} y la respuesta fue un no contundente.',
+        'La cosa dolió entre {otro} y yo. Fue un rechazo claro.',
+        '{otro} dejó claro que no a mí.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_FLECHAZO = [
-        '{par} se han lanzado miradas imposibles de disimular.',
-        '{par} han cruzado una mirada que ya no podían ocultar.',
-        'Había chispa en el aire con {par}. Y no era imaginación.',
+        'No puedo dejar de mirar a {otro}. Las miradas ya no se pueden disimular.',
+        'Hemos cruzado una mirada que ya no podíamos ocultar.',
+        'Hay chispa con {otro}. Y no es imaginación.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_INICIO_PAREJA = [
-        '{par} han empezado algo más que una amistad.',
-        'Oficialmente {par} ya son pareja.',
-        'Lo de {par} por fin tiene nombre: son pareja.',
+        'Hemos empezado algo más que una amistad.',
+        'Oficialmente ya somos pareja.',
+        'Lo nuestro por fin tiene nombre: somos pareja.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_VUELTA = [
-        '{par} se han dado otra oportunidad.',
-        '{par} vuelven a intentarlo.',
-        'Segunda ronda para {par}: han vuelto a juntarse.',
+        'Nos hemos dado otra oportunidad.',
+        'Volvemos a intentarlo. Segunda ronda.',
+        'Hemos vuelto a juntarse. Otra oportunidad.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_RECONCILIACION = [
-        '{par} han dejado las diferencias a un lado.',
-        '{par} se han hablado y han arreglado sus cosas.',
-        'Paz entre {par}: lo que pasó, quedó arreglado.',
+        'Hemos dejado las diferencias a un lado.',
+        'Nos hemos hablado y hemos arreglado las cosas.',
+        'Paz entre nosotros: lo que pasó, quedó arreglado.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_RUPTURA = [
-        '{par} lo han dejado.',
-        '{par} han roto su relación.',
-        'Hay ruptura entre {par}. Cada uno por su lado.',
+        'Lo hemos dejado.',
+        'Hemos roto nuestra relación.',
+        'Se acabó. Cada uno por su lado.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_CRISIS = [
-        'La relación entre {par} atraviesa momentos difíciles.',
-        'Lo de {par} pasa por un bache complicado.',
-        'La pareja que forman {par} anda tensionada.',
+        'Nuestra relación atraviesa momentos difíciles.',
+        'Lo nuestro pasa por un bache complicado.',
+        'Estamos tensionados. No es fácil.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_DISCUSION_FUERTE = [
-        '{par} tuvieron una discusión que se notó.',
-        '{par} han tenido un enfado serio.',
-        '{par} cruzaron palabras duras.',
+        'Tuvimos una discusión que se notó.',
+        'Hemos tenido un enfado serio.',
+        'Cruzamos palabras duras.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_DECLARACION_RECHAZADA = [
-        '{declara} se declaró a {rechaza}, pero no fue correspondido.',
-        '{declara} puso el corazón sobre la mesa ante {rechaza}. La respuesta fue no.',
-        'Declaración de {declara} a {rechaza}: rechazada.',
+        'Me declaré a {otro}, pero no fui correspondido.',
+        'Puse el corazón sobre la mesa ante {otro}. La respuesta fue no.',
+        'Declaración a {otro}: rechazada.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_ROMANTICO = [
-        'Algo importante ha pasado entre {par}.',
-        'Entre {par} ha habido un momento romántico que marca.',
+        'Algo importante ha pasado entre {otro} y yo.',
+        'Ha habido un momento romántico con {otro} que marca.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_APOYO = [
-        '{par} se apoyaron cuando más lo necesitaban.',
-        'Entre {par} hubo un gesto de apoyo que importa.',
+        '{otro} y yo nos apoyamos cuando más lo necesitábamos.',
+        'Un gesto de apoyo de {otro} que me importó.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_ENCUENTRO_MUY_MAL = [
-        '{par} se encontraron y la cosa no pudo salir peor.',
-        'El encuentro entre {par} fue un desastre. Así de claro.',
-        'Todo lo que podía salir mal entre {par}, salió mal.',
+        'Mi encuentro con {otro} no pudo salir peor.',
+        'El encuentro con {otro} fue un desastre. Así de claro.',
+        'Todo lo que podía salir mal con {otro}, salió mal.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_ENCUENTRO_MAL = [
-        '{par} compartieron un rato que se torció más de lo esperado.',
-        'El plan de {par} se torció. No fue para tanto, pero se torció.',
-        '{par} no acabaron de entenderse en su último rato juntos.',
+        'Compartí un rato con {otro} que se torció más de lo esperado.',
+        'El plan con {otro} se torció. No fue para tanto, pero se torció.',
+        'No acabamos de entendernos en el último rato con {otro}.',
     ];
 
     /** @var list<string> */
     private const CUERPOS_ENCUENTRO_CALENTADO = [
-        'Entre {par} surgió tensión. Del tipo que se comenta.',
-        'Ambiente tenso entre {par}. Aquí hay tema.',
-        'El aire entre {par} se cargó un poco.',
+        'Con {otro} surgió tensión. Del tipo que se comenta.',
+        'Ambiente tenso con {otro}. Aquí hay tema.',
+        'El aire con {otro} se cargó un poco.',
     ];
 
     public static function register(): void
@@ -160,6 +160,7 @@ final class DiarioHitoEngine
 
     /**
      * Llamado desde RelacionBitacora::registrar con la entrada canónica del hito.
+     * Genera una entrada por actor en primera persona.
      *
      * @param array<string, mixed> $hito
      */
@@ -179,24 +180,26 @@ final class DiarioHitoEngine
         $clave = self::claveHito($tipo, $actores);
         self::ensure($partida);
         if (!empty($partida['diario_hitos_registrados'][$clave])) {
-            return DiarioEngine::entradaPorEvento($partida, self::eventoIdDeClave($clave));
+            return self::buscarEntradaHito($partida, $tipo, $actores);
         }
 
-        $built = self::construirEntradaHito($partida, $tipo, $actores, $hito);
-        if ($built === null) {
-            return null;
-        }
+        $nAntes = count($partida['diario'] ?? []);
+        self::construirEntradasHito($partida, $tipo, $actores, $hito);
+        $nDespues = count($partida['diario'] ?? []);
 
-        $entrada = self::escribir($partida, $built);
-        if ($entrada !== null) {
+        if ($nDespues > $nAntes) {
             $partida['diario_hitos_registrados'][$clave] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
-            DomainEventDispatcher::emit($partida, DomainEvents::DIARIO_ENTRADA, [
-                'entrada' => $entrada,
-                'origen' => 'diario_hito',
-                'hito_tipo' => $tipo,
-            ]);
+            for ($i = $nAntes; $i < $nDespues; $i++) {
+                DomainEventDispatcher::emit($partida, DomainEvents::DIARIO_ENTRADA, [
+                    'entrada' => $partida['diario'][$i],
+                    'origen' => 'diario_hito',
+                    'hito_tipo' => $tipo,
+                ]);
+            }
+            return $partida['diario'][$nAntes];
         }
-        return $entrada;
+
+        return null;
     }
 
     /**
@@ -217,6 +220,9 @@ final class DiarioHitoEngine
     }
 
     /**
+     * Genera una entrada por actor afectado, en primera persona.
+     * Solo crea entrada si el actor tuvo resultado negativo.
+     *
      * @param array<string, mixed> $envelope
      */
     private static function alEncuentroTerminado(array &$partida, array $envelope): void
@@ -237,190 +243,223 @@ final class DiarioHitoEngine
             return;
         }
 
-        $peor = 'normal';
-        foreach ($res['por_participante'] ?? [] as $row) {
-            $r = (string) (is_array($row) ? ($row['resultado'] ?? '') : '');
-            if ($r === 'muy_mal') {
-                $peor = 'muy_mal';
-                break;
-            }
-            if ($r === 'mal') {
-                $peor = 'mal';
-            }
-        }
         $huboConflicto = (($res['conflicto'] ?? null) !== null) && (int) ($res['conflicto'] ?? 0) !== 0;
-        if (!$huboConflicto && $peor !== 'mal' && $peor !== 'muy_mal') {
-            return;
-        }
 
-        $eventoId = 'diario_hito:encuentro:' . $encId;
-        if (DiarioEngine::entradaPorEvento($partida, $eventoId) !== null) {
-            return;
-        }
-
-        $par = self::nombresPar($partida, $actores);
-        $consecuencias = [];
-        if ($peor === 'muy_mal') {
-            $titulo = 'Un encuentro incómodo';
-            $texto = self::cuerpo($partida, 'encuentro_muy_mal', $actores, self::CUERPOS_ENCUENTRO_MUY_MAL, [
-                'par' => ucfirst($par),
-            ]);
-        } elseif ($peor === 'mal') {
-            $titulo = 'Un encuentro torcido';
-            $texto = self::cuerpo($partida, 'encuentro_mal', $actores, self::CUERPOS_ENCUENTRO_MAL, [
-                'par' => ucfirst($par),
-            ]);
-        } else {
-            $titulo = 'Las cosas se calentaron';
-            $texto = self::cuerpo($partida, 'encuentro_calentado', $actores, self::CUERPOS_ENCUENTRO_CALENTADO, [
-                'par' => $par,
-            ]);
-        }
-        foreach ($actores as $id) {
-            $emo = self::emocionAnotadaDelEncuentro($res, (string) $id);
-            if ($emo !== '') {
-                $nom = IdentidadPublica::nombre($partida, (string) $id);
-                $consecuencias[] = $nom . ' terminó ' . ($emo === EstadoEmocional::TRISTE ? 'triste' : 'enfadad' . GeneroConcordancia::oa($partida, (string) $id)) . '.';
+        foreach ($actores as $actorId) {
+            $resultadoActor = 'normal';
+            foreach ($res['por_participante'] ?? [] as $row) {
+                if (is_array($row) && (string) ($row['residente_id'] ?? '') === $actorId) {
+                    $resultadoActor = (string) ($row['resultado'] ?? 'normal');
+                    break;
+                }
             }
-        }
 
-        $entrada = self::escribir($partida, [
-            'tipo' => 'diario_hito',
-            'subtipo' => 'encuentro',
-            'titulo' => $titulo,
-            'texto' => $texto,
-            'consecuencias' => $consecuencias,
-            'actores' => $actores,
-            'origen' => [
-                'evento_id' => $eventoId,
-                'tipo_evento' => 'encuentro_terminado',
-                'es_narrativo' => true,
-                'hito_tipo' => 'encuentro_significativo',
-                '_placeholder' => false,
-            ],
-            '_placeholder_contenido' => false,
-        ]);
-        if ($entrada !== null) {
-            DomainEventDispatcher::emit($partida, DomainEvents::DIARIO_ENTRADA, [
-                'entrada' => $entrada,
-                'origen' => 'diario_hito',
-                'hito_tipo' => 'encuentro_significativo',
+            if (!$huboConflicto && $resultadoActor !== 'mal' && $resultadoActor !== 'muy_mal') {
+                continue;
+            }
+
+            $eventoId = 'diario_hito:encuentro:' . $encId . ':' . $actorId;
+            if (DiarioEngine::entradaPorEvento($partida, $eventoId) !== null) {
+                continue;
+            }
+
+            $yo = IdentidadPublica::nombre($partida, $actorId);
+            $otrosIds = array_values(array_filter($actores, static fn($i) => (string) $i !== $actorId));
+            $otrosNombres = [];
+            foreach ($otrosIds as $oid) {
+                $n = IdentidadPublica::nombre($partida, (string) $oid);
+                if ($n !== '') {
+                    $otrosNombres[] = $n;
+                }
+            }
+            $otro = $otrosNombres !== [] ? implode(' y ', $otrosNombres) : 'otra persona';
+
+            $vars = ['yo' => $yo, 'otro' => $otro];
+            if ($resultadoActor === 'muy_mal') {
+                $titulo = 'Un encuentro incómodo';
+                $texto = self::cuerpo($partida, 'encuentro_muy_mal', $actores, self::CUERPOS_ENCUENTRO_MUY_MAL, $vars);
+            } elseif ($resultadoActor === 'mal') {
+                $titulo = 'Un encuentro torcido';
+                $texto = self::cuerpo($partida, 'encuentro_mal', $actores, self::CUERPOS_ENCUENTRO_MAL, $vars);
+            } else {
+                $titulo = 'Las cosas se calentaron';
+                $texto = self::cuerpo($partida, 'encuentro_calentado', $actores, self::CUERPOS_ENCUENTRO_CALENTADO, $vars);
+            }
+
+            $consecuencias = [];
+            $emo = self::emocionAnotadaDelEncuentro($res, $actorId);
+            if ($emo !== '') {
+                $consecuencias[] = 'Estoy ' . ($emo === EstadoEmocional::TRISTE ? 'triste' : 'enfadad' . GeneroConcordancia::oa($partida, $actorId)) . '.';
+            }
+
+            $entrada = self::escribir($partida, [
+                'tipo' => 'diario_hito',
+                'subtipo' => 'encuentro',
+                'titulo' => $titulo,
+                'texto' => $texto,
+                'consecuencias' => $consecuencias,
+                'actores' => [$actorId],
+                'origen' => [
+                    'evento_id' => $eventoId,
+                    'tipo_evento' => 'encuentro_terminado',
+                    'es_narrativo' => true,
+                    'hito_tipo' => 'encuentro_significativo',
+                    '_placeholder' => false,
+                ],
+                '_placeholder_contenido' => false,
             ]);
+            if ($entrada !== null) {
+                DomainEventDispatcher::emit($partida, DomainEvents::DIARIO_ENTRADA, [
+                    'entrada' => $entrada,
+                    'origen' => 'diario_hito',
+                    'hito_tipo' => 'encuentro_significativo',
+                ]);
+            }
         }
     }
 
     /**
+     * Genera una entrada de diario por cada actor, en primera persona.
+     * Cada residente ve el hito desde su propia perspectiva.
+     *
      * @param list<string> $actores
      * @param array<string, mixed> $hito
-     * @return array<string, mixed>|null
      */
-    private static function construirEntradaHito(array $partida, string $tipo, array $actores, array $hito): ?array
+    private static function construirEntradasHito(array &$partida, string $tipo, array $actores, array $hito): void
     {
-        $par = self::nombresPar($partida, $actores);
         $consecuencias = [];
         $titulo = 'Un hito en el edificio';
-        $texto = '';
+        $textoPool = [];
+        $varsBase = [];
 
         switch ($tipo) {
             case RelacionBitacora::SE_CONOCIERON:
                 $titulo = 'Primer contacto';
-                $texto = self::cuerpo($partida, 'se_conocieron', $actores, self::CUERPOS_SE_CONOCIERON, ['par' => $par]);
+                $textoPool = self::CUERPOS_SE_CONOCIERON;
                 break;
             case RelacionBitacora::PRIMERA_CITA:
                 $titulo = 'Primera cita';
-                $texto = self::cuerpo($partida, 'primera_cita', $actores, self::CUERPOS_PRIMERA_CITA, ['par' => $par]);
+                $textoPool = self::CUERPOS_PRIMERA_CITA;
                 break;
             case RelacionBitacora::REGALO:
                 $titulo = 'Un detalle especial';
-                $texto = self::cuerpo($partida, 'regalo', $actores, self::CUERPOS_REGALO, ['par' => $par]);
+                $textoPool = self::CUERPOS_REGALO;
                 break;
             case RelacionBitacora::RECHAZO_IMPORTANTE:
                 $titulo = 'Un rechazo importante';
+                $textoPool = self::CUERPOS_RECHAZO;
                 $dir = self::direccionDeHito($hito, $actores);
-                $texto = self::cuerpo($partida, 'rechazo_importante', $actores, self::CUERPOS_RECHAZO, [
-                    'declara' => IdentidadPublica::nombre($partida, $dir['desde']),
-                    'rechaza' => IdentidadPublica::nombre($partida, $dir['hacia']),
-                ]);
+                $varsBase = [
+                    'yo' => IdentidadPublica::nombre($partida, $dir['desde']),
+                    'otro' => IdentidadPublica::nombre($partida, $dir['hacia']),
+                ];
                 break;
             case RelacionBitacora::FLECHAZO:
                 $titulo = 'Un flechazo';
-                $texto = self::cuerpo($partida, 'flechazo', $actores, self::CUERPOS_FLECHAZO, ['par' => $par]);
+                $textoPool = self::CUERPOS_FLECHAZO;
                 break;
             case RelacionBitacora::INICIO_PAREJA:
                 $titulo = 'Nueva pareja';
-                $texto = self::cuerpo($partida, 'inicio_pareja', $actores, self::CUERPOS_INICIO_PAREJA, ['par' => $par]);
+                $textoPool = self::CUERPOS_INICIO_PAREJA;
                 break;
             case RelacionBitacora::VUELTA:
                 $titulo = 'Segunda oportunidad';
-                $texto = self::cuerpo($partida, 'vuelta', $actores, self::CUERPOS_VUELTA, ['par' => $par]);
+                $textoPool = self::CUERPOS_VUELTA;
                 break;
             case RelacionBitacora::RECONCILIACION:
                 $titulo = 'Reconciliación';
-                $texto = self::cuerpo($partida, 'reconciliacion', $actores, self::CUERPOS_RECONCILIACION, ['par' => $par]);
+                $textoPool = self::CUERPOS_RECONCILIACION;
                 break;
             case RelacionBitacora::RUPTURA:
                 $titulo = 'Ruptura';
-                $texto = self::cuerpo($partida, 'ruptura', $actores, self::CUERPOS_RUPTURA, ['par' => $par]);
-                $consecuencias = ['Ya no son pareja.'];
+                $textoPool = self::CUERPOS_RUPTURA;
+                $consecuencias = ['Ya no somos pareja.'];
                 break;
             case RelacionBitacora::CRISIS:
                 $titulo = 'Crisis de pareja';
-                $texto = self::cuerpo($partida, 'crisis', $actores, self::CUERPOS_CRISIS, ['par' => $par]);
+                $textoPool = self::CUERPOS_CRISIS;
                 break;
             case RelacionBitacora::DISCUSION_FUERTE:
                 $titulo = 'Una discusión fuerte';
-                $texto = self::cuerpo($partida, 'discusion_fuerte', $actores, self::CUERPOS_DISCUSION_FUERTE, ['par' => $par]);
+                $textoPool = self::CUERPOS_DISCUSION_FUERTE;
                 break;
             case RelacionBitacora::DECLARACION:
                 $res = is_array($hito['resultado'] ?? null) ? (array) $hito['resultado'] : [];
                 $aceptaA = (bool) ($res['acepta_a'] ?? true);
                 $aceptaB = (bool) ($res['acepta_b'] ?? true);
                 if ($aceptaA && $aceptaB) {
-                    return null;
+                    return;
                 }
                 $titulo = 'Una declaración rechazada';
+                $textoPool = self::CUERPOS_DECLARACION_RECHAZADA;
                 $rechazaId = !$aceptaA ? (string) $actores[1] : (string) $actores[0];
                 $declaraId = !$aceptaA ? (string) $actores[0] : (string) $actores[1];
-                $texto = self::cuerpo($partida, 'declaracion_rechazada', $actores, self::CUERPOS_DECLARACION_RECHAZADA, [
-                    'declara' => IdentidadPublica::nombre($partida, $declaraId),
-                    'rechaza' => IdentidadPublica::nombre($partida, $rechazaId),
-                ]);
+                $varsBase = [
+                    'yo' => IdentidadPublica::nombre($partida, $declaraId),
+                    'otro' => IdentidadPublica::nombre($partida, $rechazaId),
+                ];
                 $consecuencias = [IdentidadPublica::nombre($partida, $declaraId) . ' recibió un no.'];
                 break;
             case RelacionBitacora::HITO_ROMANTICO:
                 $titulo = 'Un momento romántico';
-                $texto = self::cuerpo($partida, 'hito_romantico', $actores, self::CUERPOS_ROMANTICO, ['par' => $par]);
+                $textoPool = self::CUERPOS_ROMANTICO;
                 break;
             case RelacionBitacora::APOYO_IMPORTANTE:
                 $titulo = 'Apoyo entre vecinos';
-                $texto = self::cuerpo($partida, 'apoyo_importante', $actores, self::CUERPOS_APOYO, ['par' => $par]);
+                $textoPool = self::CUERPOS_APOYO;
                 break;
             default:
-                return null;
+                return;
         }
 
-        if ($texto === '') {
-            return null;
+        if ($textoPool === []) {
+            return;
         }
 
         $clave = self::claveHito($tipo, $actores);
-        return [
-            'tipo' => 'diario_hito',
-            'subtipo' => $tipo,
-            'titulo' => $titulo,
-            'texto' => $texto,
-            'consecuencias' => $consecuencias,
-            'actores' => $actores,
-            'origen' => [
-                'evento_id' => self::eventoIdDeClave($clave),
-                'tipo_evento' => 'relacion_hito',
-                'es_narrativo' => true,
-                'hito_tipo' => $tipo,
-                'bitacora_id' => (string) ($hito['id'] ?? ''),
-                '_placeholder' => false,
-            ],
-            '_placeholder_contenido' => false,
-        ];
+        $eventoIdBase = self::eventoIdDeClave($clave);
+
+        foreach ($actores as $actorId) {
+            $eventoId = $eventoIdBase . ':' . $actorId;
+            if (DiarioEngine::entradaPorEvento($partida, $eventoId) !== null) {
+                continue;
+            }
+
+            $yo = IdentidadPublica::nombre($partida, $actorId);
+            $otrosIds = array_values(array_filter($actores, static fn($i) => (string) $i !== $actorId));
+            $otrosNombres = [];
+            foreach ($otrosIds as $oid) {
+                $n = IdentidadPublica::nombre($partida, (string) $oid);
+                if ($n !== '') {
+                    $otrosNombres[] = $n;
+                }
+            }
+            $otro = $otrosNombres !== [] ? implode(' y ', $otrosNombres) : 'otro';
+
+            $vars = array_merge($varsBase, ['yo' => $yo, 'otro' => $otro]);
+            $texto = self::cuerpo($partida, $tipo, $actores, $textoPool, $vars);
+            if ($texto === '') {
+                continue;
+            }
+
+            self::escribir($partida, [
+                'tipo' => 'diario_hito',
+                'subtipo' => $tipo,
+                'titulo' => $titulo,
+                'texto' => $texto,
+                'consecuencias' => $consecuencias,
+                'actores' => [$actorId],
+                'origen' => [
+                    'evento_id' => $eventoId,
+                    'tipo_evento' => 'relacion_hito',
+                    'es_narrativo' => true,
+                    'hito_tipo' => $tipo,
+                    'bitacora_id' => (string) ($hito['id'] ?? ''),
+                    '_placeholder' => false,
+                ],
+                '_placeholder_contenido' => false,
+            ]);
+        }
     }
 
     /**
@@ -436,6 +475,35 @@ final class DiarioHitoEngine
     private static function eventoIdDeClave(string $clave): string
     {
         return 'diario_hito:' . $clave;
+    }
+
+    /**
+     * Busca una entrada de hito existente para los actores dados.
+     * Usado para idempotencia cuando la entrada ya fue creada.
+     *
+     * @param list<string> $actores
+     */
+    private static function buscarEntradaHito(array $partida, string $tipo, array $actores): ?array
+    {
+        foreach ($partida['diario'] ?? [] as $e) {
+            if (!is_array($e)) {
+                continue;
+            }
+            if (($e['tipo'] ?? '') !== 'diario_hito') {
+                continue;
+            }
+            if (($e['subtipo'] ?? '') !== $tipo) {
+                continue;
+            }
+            $actoresEntrada = is_array($e['actores'] ?? null) ? $e['actores'] : [];
+            if (count($actoresEntrada) !== 1) {
+                continue;
+            }
+            if (in_array((string) $actoresEntrada[0], $actores, true)) {
+                return $e;
+            }
+        }
+        return null;
     }
 
     /**

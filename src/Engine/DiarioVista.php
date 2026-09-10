@@ -11,14 +11,14 @@ final class DiarioVista
 {
     /** @var array<string, string> */
     private const TITULOS_SUBTIPO = [
-        RelacionBitacora::SE_CONOCIERON => 'Primer contacto',
-        RelacionBitacora::PRIMERA_CITA => 'Primera cita',
-        RelacionBitacora::RECHAZO_IMPORTANTE => 'Rechazó un plan',
+        RelacionBitacora::SE_CONOCIERON => 'Mi primer contacto',
+        RelacionBitacora::PRIMERA_CITA => 'Mi primera cita',
+        RelacionBitacora::RECHAZO_IMPORTANTE => 'Me rechazaron',
         RelacionBitacora::REGALO => 'Un detalle especial',
         RelacionBitacora::FLECHAZO => 'Un flechazo',
         RelacionBitacora::INICIO_PAREJA => 'Nueva pareja',
         RelacionBitacora::VUELTA => 'Segunda oportunidad',
-        RelacionBitacora::RECONCILIACION => 'Reconciliación',
+        RelacionBitacora::RECONCILIACION => 'Nos reconciliamos',
         RelacionBitacora::RUPTURA => 'Ruptura',
         RelacionBitacora::CRISIS => 'Crisis de pareja',
         RelacionBitacora::DISCUSION_FUERTE => 'Una discusión fuerte',

@@ -188,7 +188,7 @@ final class DiarioNarrativaBridge
         if ($estadoId === EstadoEmocional::NEUTRO) {
             return null;
         }
-        $completa = EmocionalNarrativa::explicacionCompleta($partida, $residenteId, $estadoData);
+        $completa = EmocionalNarrativa::explicacionParaDiario($partida, $residenteId, $estadoData);
         if ($completa === null) {
             return null;
         }

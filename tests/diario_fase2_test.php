@@ -122,9 +122,17 @@ $rRup = AcontecimientoDiario::ejecutar($pVida, 'ruptura', [$va, $vb], $store, $c
 ok($rRup['ok'] ?? false, '3. ruptura ejecuta');
 $cotiRup = cotilleos($pVida);
 ok(count($cotiRup) > $nAntesRup, '3. ruptura genera cotilleo');
-$claveRup = 'diario_hito:' . RelacionBitacora::RUPTURA . ':' . implode('|', $va < $vb ? [$va, $vb] : [$vb, $va]);
-$diarioRup = DiarioEngine::entradaPorEvento($pVida, $claveRup);
-ok($diarioRup !== null, '3. ruptura → diario');
+$diarioRupVa = null;
+$diarioRupVb = null;
+foreach ($pVida['diario'] ?? [] as $e) {
+    if (!is_array($e)) continue;
+    if (($e['tipo'] ?? '') !== 'diario_hito') continue;
+    if (($e['subtipo'] ?? '') !== RelacionBitacora::RUPTURA) continue;
+    if (in_array($va, $e['actores'] ?? [], true)) $diarioRupVa = $e;
+    if (in_array($vb, $e['actores'] ?? [], true)) $diarioRupVb = $e;
+}
+ok($diarioRupVa !== null, '3. ruptura → diario para actor A');
+ok($diarioRupVb !== null, '3. ruptura → diario para actor B');
 
 // --- 4) Acontecimiento cotidiano → no publica ---
 $pRut = $service->nuevaPartida('playtest_01', 'fase2-rutina');

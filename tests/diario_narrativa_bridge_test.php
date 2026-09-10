@@ -65,8 +65,12 @@ ok(count($ids) >= 2, 'dos residentes');
 $a = (string) $ids[0];
 $b = (string) $ids[1];
 RelacionBitacora::registrar($pHito, RelacionBitacora::SE_CONOCIERON, [$a, $b]);
-$claveHito = 'diario_hito:' . RelacionBitacora::SE_CONOCIERON . ':' . implode('|', $a < $b ? [$a, $b] : [$b, $a]);
-$diarioHito = DiarioEngine::entradaPorEvento($pHito, $claveHito);
+$diarioHito = null;
+foreach ($pHito['diario'] ?? [] as $e) {
+    if (!is_array($e)) continue;
+    if (($e['tipo'] ?? '') !== 'diario_hito') continue;
+    if (in_array($a, $e['actores'] ?? [], true)) { $diarioHito = $e; break; }
+}
 ok($diarioHito !== null, 'hito se_conocieron → diario');
 ok(in_array($a, $diarioHito['actores'] ?? [], true), 'actor A en diario hito');
 

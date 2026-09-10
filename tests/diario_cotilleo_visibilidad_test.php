@@ -85,14 +85,14 @@ $feed = textosFeed($p);
 ok(count($feed) === 1 && str_contains($feed[0], 'mirada'), 'entrada cotilleable clasificada → SÍ aparece en Cotilleos');
 ok(count($p['diario']) === 3, 'el Diario conserva todas sus entradas');
 
-// 4) DiarioHitoEngine genera memoria privada por defecto
+// 4) DiarioHitoEngine genera memoria privada por actor (primera persona)
 $p2 = base();
 DiarioHitoEngine::alHito($p2, [
     'id' => 'h1',
     'tipo' => 'flechazo',
     'participantes' => ['per_a', 'per_b'],
 ]);
-ok(count($p2['diario'] ?? []) === 1, 'engine: crea entrada');
+ok(count($p2['diario'] ?? []) === 2, 'engine: crea entrada por actor');
 ok(count(textosFeed($p2)) === 0, 'engine: hito sin cotilleo_meta NO llega al feed');
 
 echo $failures === 0 ? "OK diario_cotilleo_visibilidad\n" : "FAIL diario_cotilleo_visibilidad ({$failures})\n";

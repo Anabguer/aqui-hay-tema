@@ -22,22 +22,47 @@ function ok(bool $c, string $m): void
     }
 }
 
+/**
+ * Busca entrada de diario_hito por tipo y actor (nuevo formato per-actor).
+ */
+function buscarHito(array $partida, string $tipo, string $actorId): ?array
+{
+    foreach ($partida['diario'] ?? [] as $e) {
+        if (!is_array($e)) continue;
+        if (($e['tipo'] ?? '') !== 'diario_hito') continue;
+        if (($e['subtipo'] ?? '') !== $tipo) continue;
+        if (in_array($actorId, $e['actores'] ?? [], true)) {
+            return $e;
+        }
+    }
+    return null;
+}
+
 DomainBootstrap::boot();
 $service = new PartidaService($root);
 $cal = CalibracionConfig::load($root);
 
-// --- 1) Hito relacional → entrada propia (no espejo) ---
+// --- 1) Hito relacional → entrada propia por actor (primera persona) ---
 $p1 = $service->nuevaPartida('juego_v1', 'diario-hito-rup');
 $ids = array_keys($p1['residentes']);
 $a = (string) $ids[0];
 $b = (string) $ids[1];
 RelacionBitacora::registrar($p1, RelacionBitacora::RUPTURA, [$a, $b]);
-$clave = 'diario_hito:' . RelacionBitacora::RUPTURA . ':' . implode('|', $a < $b ? [$a, $b] : [$b, $a]);
-$propia = DiarioEngine::entradaPorEvento($p1, $clave);
-ok($propia !== null, '1. ruptura genera entrada diario_hito propia');
-ok(($propia['tipo'] ?? '') === 'diario_hito', '1. tipo diario_hito');
-ok(trim((string) ($propia['titulo'] ?? '')) !== '', '1. titulo no vacío');
-ok(!isset($propia['cotilleo_meta']), '1. sin cotilleo_meta (memoria privada)');
+$propiaA = buscarHito($p1, RelacionBitacora::RUPTURA, $a);
+$propiaB = buscarHito($p1, RelacionBitacora::RUPTURA, $b);
+ok($propiaA !== null, '1. ruptura genera entrada para actor A');
+ok($propiaB !== null, '1. ruptura genera entrada para actor B');
+ok(($propiaA['tipo'] ?? '') === 'diario_hito', '1. tipo diario_hito');
+ok(trim((string) ($propiaA['titulo'] ?? '')) !== '', '1. titulo no vacío');
+ok(!isset($propiaA['cotilleo_meta']), '1. sin cotilleo_meta (memoria privada)');
+ok(
+    in_array($a, $propiaA['actores'] ?? [], true) && !in_array($b, $propiaA['actores'] ?? [], true),
+    '1. entrada de A solo contiene a A'
+);
+ok(
+    in_array($b, $propiaB['actores'] ?? [], true) && !in_array($a, $propiaB['actores'] ?? [], true),
+    '1. entrada de B solo contiene a B'
+);
 
 // --- 2) Idempotencia ---
 $nAntes = count($p1['diario'] ?? []);
@@ -52,9 +77,7 @@ ok(count($p1['diario'] ?? []) === $nAntes, '2. segundo alHito no duplica');
 $p3 = $service->nuevaPartida('juego_v1', 'diario-hito-plan');
 $ids3 = array_keys($p3['residentes']);
 RelacionBitacora::registrar($p3, RelacionBitacora::PLAN_SIGNIFICATIVO, [(string) $ids3[0], (string) $ids3[1]]);
-$clavePlan = 'diario_hito:' . RelacionBitacora::PLAN_SIGNIFICATIVO . ':'
-    . implode('|', $ids3[0] < $ids3[1] ? [(string) $ids3[0], (string) $ids3[1]] : [(string) $ids3[1], (string) $ids3[0]]);
-ok(DiarioEngine::entradaPorEvento($p3, $clavePlan) === null, '3. plan_significativo no genera diario_hito');
+ok(buscarHito($p3, RelacionBitacora::PLAN_SIGNIFICATIVO, (string) $ids3[0]) === null, '3. plan_significativo no genera diario_hito');
 
 // --- 4) Regalo / flores ---
 $p4 = $service->nuevaPartida('juego_v1', 'diario-hito-regalo');
@@ -67,14 +90,12 @@ foreach (array_keys($p4['residentes']) as $rid) {
     }
 }
 RelacionBitacora::registrar($p4, RelacionBitacora::REGALO, [$ida, $idb]);
-$claveRegalo = 'diario_hito:' . RelacionBitacora::REGALO . ':' . implode('|', $ida < $idb ? [$ida, $idb] : [$idb, $ida]);
-ok(DiarioEngine::entradaPorEvento($p4, $claveRegalo) !== null, '4. regalo → diario_hito');
+ok(buscarHito($p4, RelacionBitacora::REGALO, $ida) !== null, '4. regalo → diario_hito para actor');
 
 // --- 5) Rechazo importante ---
 $p5 = $service->nuevaPartida('juego_v1', 'diario-hito-rechazo');
 RelacionBitacora::registrar($p5, RelacionBitacora::RECHAZO_IMPORTANTE, [$ida, $idb], $ida . '>' . $idb);
-$claveRech = 'diario_hito:' . RelacionBitacora::RECHAZO_IMPORTANTE . ':' . implode('|', $ida < $idb ? [$ida, $idb] : [$idb, $ida]);
-ok(DiarioEngine::entradaPorEvento($p5, $claveRech) !== null, '5. rechazo_importante → diario_hito');
+ok(buscarHito($p5, RelacionBitacora::RECHAZO_IMPORTANTE, $ida) !== null, '5. rechazo_importante → diario_hito');
 
 // --- 6) listarPorResidente incluye hitos propios ---
 $porA = DiarioEngine::listarPorResidente($p1, $a);
@@ -104,17 +125,14 @@ $p7['bitacora_relaciones'][] = [
 $p7['diario'] = [];
 $p7['diario_hitos_registrados'] = [];
 $n = DiarioHitoEngine::sincronizarDesdeBitacora($p7);
-$clavePc = 'diario_hito:' . RelacionBitacora::PRIMERA_CITA . ':' . implode('|', $xa < $xb ? [$xa, $xb] : [$xb, $xa]);
-ok($n >= 1 && DiarioEngine::entradaPorEvento($p7, $clavePc) !== null, '7. backfill bitácora → diario_hito');
+ok($n >= 1 && buscarHito($p7, RelacionBitacora::PRIMERA_CITA, $xa) !== null, '7. backfill bitácora → diario_hito');
 
-// --- 8) Entrada propia persiste (espejo cotilleo ya no se refleja al diario) ---
+// --- 8) Entrada propia por actor (espejo cotilleo ya no se refleja al diario) ---
 $p8 = $service->nuevaPartida('juego_v1', 'diario-hito-diff');
 $p8['features']['buzon_enabled'] = true;
 RelacionBitacora::registrar($p8, RelacionBitacora::SE_CONOCIERON, [$ida, $idb]);
-$claveCot = RelacionBitacora::SE_CONOCIERON . ':' . implode('|', $ida < $idb ? [$ida, $idb] : [$idb, $ida]);
-$espejo = DiarioEngine::entradaPorEvento($p8, $claveCot);
-$propia8 = DiarioEngine::entradaPorEvento($p8, 'diario_hito:' . $claveCot);
-ok($espejo === null && $propia8 !== null, '8. espejo cotilleo no persiste, entrada propia sí');
+$propia8 = buscarHito($p8, RelacionBitacora::SE_CONOCIERON, $ida);
+ok($propia8 !== null, '8. entrada propia existe para actor');
 ok(
     ($propia8['titulo'] ?? '') !== '',
     '8. entrada propia aporta titulo'
