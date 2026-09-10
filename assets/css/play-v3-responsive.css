@@ -487,12 +487,15 @@ html:has(body.play-v3.play-v3--scroll-lock) {
 /* --- Mobile (≤768px) --- */
 @media (max-width: 768px) {
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lugares-grid {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: .35rem;
+    width: 100%;
+    overflow: hidden;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc {
     padding: .25rem .15rem .3rem;
     min-width: 0;
+    width: 100%;
     overflow: hidden;
   }
   .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-art {
