@@ -2442,3 +2442,17 @@
   background: none;
   border: 0;
 }
+
+@media (max-width: 768px) {
+  .play-v3 .aht-screen[data-aht-screen="diario"] .coti-top {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="diario"] .coti-filtros {
+    grid-column: auto;
+    justify-self: start;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
