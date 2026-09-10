@@ -1,21 +1,48 @@
-/* ─── CONSULTA-EDIFICIO-v3 — modal «quién está» — "cámara en directo" ─── */
-/* Interior del modal. Shell V4 = autoridad en screen-frame.css */
+/* ─── CONSULTA-EDIFICIO-v4 — modal scrapbook ─── */
 /* Sin !important. Autoridad vía especificidad .play-v3 .quien */
 
 /* ═══════════════════════════════════════════════════════════
    MOBILE FIRST — vertical stack
    ═══════════════════════════════════════════════════════════ */
 
-/* ─── Imagen / Feed cámara ─── */
+/* ─── Frame body ─── */
+.play-v3 .quien .aht-frame-body {
+  padding: .6rem .7rem 1rem;
+  background: var(--ds-paper, #F9F7F4);
+}
+
+/* ─── Main 2-column layout ─── */
+.qed-main {
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+
+.qed-col-left {
+  flex: 0 0 auto;
+}
+
+.qed-col-right {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+/* ─── Art / Image ─── */
+.qed-art-wrap {
+  position: relative;
+}
 
 .play-v3 .quien .consulta-ed-art {
   position: relative;
   width: 100%;
   aspect-ratio: 4 / 3;
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
   background: #e8e0d8;
-  margin-bottom: .6rem;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 8px rgba(40, 32, 26, .12);
 }
 
 .play-v3 .quien .consulta-ed-art[hidden] {
@@ -29,9 +56,9 @@
   object-fit: cover;
 }
 
-/* Badge EN DIRECTO */
+/* EN DIRECTO badge */
 .play-v3 .quien .consulta-ed-art::after {
-  content: "EN DIRECTO";
+  content: "\25CF  EN DIRECTO";
   position: absolute;
   top: 8px;
   left: 8px;
@@ -42,32 +69,121 @@
   letter-spacing: .06em;
   text-transform: uppercase;
   color: #fff;
-  background: rgba(232, 93, 86, .85);
+  background: rgba(232, 93, 86, .9);
   border-radius: 4px;
   pointer-events: none;
   z-index: 1;
 }
 
-/* Viewfinder sutil */
+/* Viewfinder */
 .play-v3 .quien .consulta-ed-art::before {
   content: "";
   position: absolute;
   inset: 6px;
-  border: 1.5px solid rgba(255, 255, 255, .2);
+  border: 1.5px solid rgba(255, 255, 255, .25);
   border-radius: 4px;
   pointer-events: none;
   z-index: 1;
 }
 
-/* ─── Horario / Estado ─── */
+/* Tape on image */
+.qed-art-wrap::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 60px;
+  height: 18px;
+  background: rgba(255, 243, 200, .7);
+  border: 1px solid rgba(200, 180, 120, .3);
+  z-index: 2;
+  pointer-events: none;
+}
 
+/* Description note */
+.qed-art-desc {
+  margin-top: .5rem;
+  padding: .5rem .6rem;
+  font-family: Caveat, cursive;
+  font-size: 1rem;
+  line-height: 1.25;
+  color: #5a4a3a;
+  background: #fffef5;
+  border-left: 3px solid rgba(232, 93, 86, .3);
+  border-radius: 0 6px 6px 0;
+}
+
+/* ─── Subtitle ─── */
+.qed-subtitle {
+  font-family: Caveat, cursive;
+  font-size: 1.05rem;
+  color: var(--ds-text-muted, #75634f);
+  font-style: italic;
+  margin-bottom: .1rem;
+}
+
+/* ─── Necesidades pills ─── */
+.qed-necesidades {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+  margin-bottom: .2rem;
+}
+
+.qed-nec-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+  padding: .15rem .45rem;
+  border-radius: 999px;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: .58rem;
+  font-weight: 700;
+  color: #5a4a3a;
+  background: rgba(90, 72, 56, .06);
+  border: 1px solid rgba(90, 72, 56, .1);
+}
+
+.qed-nec-ico {
+  width: 16px;
+  height: 16px;
+}
+
+/* ─── Offline ─── */
+.qed-offline {
+  margin: 0;
+  padding: .5rem .7rem;
+  border-radius: 10px;
+  border: 1.5px dashed rgba(90, 72, 56, .15);
+  background: rgba(90, 72, 56, .03);
+  text-align: center;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--ds-text-muted, #9a8a78);
+}
+
+.qed-offline[hidden] {
+  display: none;
+}
+
+.play-v3 .quien .consulta-ed-presencia:has(.qed-offline:not([hidden])) .consulta-ed-avatars {
+  display: none;
+}
+
+.play-v3 .quien .consulta-ed-presencia:has(.qed-offline:not([hidden])) .consulta-ed-presencia-kicker {
+  display: none;
+}
+
+/* ─── Horario / Estado ─── */
 .play-v3 .quien .consulta-ed-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
   gap: .4rem;
-  margin-bottom: .5rem;
+  margin-bottom: 0;
 }
 
 .play-v3 .quien .consulta-ed-meta[hidden] {
@@ -108,10 +224,28 @@
   color: var(--ds-ink, #33261e);
 }
 
-/* ─── Presencia ─── */
+/* ─── Cards ─── */
+.qed-card {
+  padding: .6rem .7rem;
+  border-radius: 10px;
+  border: 1px solid rgba(180, 160, 130, .15);
+  background: rgba(255, 255, 255, .65);
+  box-shadow: 0 1px 4px rgba(40, 32, 26, .06);
+}
 
+.qed-card-title {
+  margin: 0 0 .4rem;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--ds-ink, #33261e);
+}
+
+/* ─── Presencia ─── */
 .play-v3 .quien .consulta-ed-presencia {
-  margin-bottom: .6rem;
+  margin-bottom: 0;
 }
 
 .play-v3 .quien .consulta-ed-presencia-kicker {
@@ -124,6 +258,14 @@
   color: var(--ds-text-muted, #75634f);
 }
 
+.qed-count {
+  float: right;
+  font-weight: 600;
+  color: var(--ds-text-muted, #9a8a78);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .play-v3 .quien .consulta-ed-presencia:has(.consulta-ed-vacio:not([hidden])) .consulta-ed-presencia-kicker {
   display: none;
 }
@@ -131,12 +273,12 @@
 .play-v3 .quien .consulta-ed-vacio {
   margin: 0;
   padding: .6rem .8rem;
-  border-radius: 12px;
-  border: 1.5px solid rgba(90, 72, 56, .1);
+  border-radius: 10px;
+  border: 1.5px dashed rgba(90, 72, 56, .15);
   background: linear-gradient(180deg, #faf7f2, #f3ede4);
   text-align: center;
   font-family: Caveat, cursive;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   line-height: 1.2;
   color: #6b5a48;
   position: relative;
@@ -147,7 +289,7 @@
   font-family: Georgia, "Times New Roman", serif;
   font-size: 1.35rem;
   line-height: 1;
-  color: rgba(107, 90, 72, .35);
+  color: rgba(107, 90, 72, .3);
   pointer-events: none;
 }
 
@@ -179,19 +321,24 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .35rem;
+  gap: .3rem;
   min-width: 4.5rem;
 }
 
 .play-v3 .quien .consulta-ed-cara {
-  width: 4.8rem;
-  height: 4.8rem;
-  border: 2px solid var(--ds-ink, #33261e);
+  width: 4.2rem;
+  height: 4.2rem;
+  border: 2.5px solid var(--ds-ink, #33261e);
   border-radius: 50%;
   overflow: hidden;
   background: #fff;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(40, 32, 26, .1);
+  box-shadow: 0 2px 6px rgba(40, 32, 26, .1);
+  transition: transform .15s ease;
+}
+
+.play-v3 .quien .consulta-ed-cara:hover {
+  transform: scale(1.06);
 }
 
 .play-v3 .quien .consulta-ed-cara .cara {
@@ -214,13 +361,13 @@
   width: 100%;
   height: 100%;
   font-family: Caveat, cursive;
-  font-size: 1.65rem;
+  font-size: 1.5rem;
   font-weight: 700;
 }
 
 .play-v3 .quien .consulta-ed-nombre {
   font-family: Caveat, cursive;
-  font-size: 1.3rem;
+  font-size: 1.15rem;
   font-weight: 700;
   line-height: 1;
   color: var(--ds-ink, #33261e);
@@ -251,9 +398,8 @@
 }
 
 /* ─── Tema card ─── */
-
 .play-v3 .quien .consulta-ed-tema-wrap {
-  margin-bottom: .6rem;
+  margin-bottom: 0;
 }
 
 .play-v3 .quien .consulta-ed-tema-wrap[hidden] {
@@ -263,12 +409,11 @@
 
 .play-v3 .quien .consulta-ed-tema-card {
   margin: 0;
-  padding: .65rem .75rem;
-  border-radius: 12px;
+  padding: .55rem .65rem;
+  border-radius: 10px;
   text-align: center;
 }
 
-/* Variantes por categoría */
 .play-v3 .quien .consulta-ed-tema-card--romance {
   border: 1.5px solid #e8a8b0;
   background: #fff0f3;
@@ -293,14 +438,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .35rem;
-  margin-bottom: .5rem;
+  gap: .3rem;
+  margin-bottom: .4rem;
 }
 
 .play-v3 .quien .consulta-ed-tema-kicker {
   margin: 0;
   line-height: 1.3;
-  font-size: .62rem;
+  font-size: .6rem;
   font-weight: 800;
   letter-spacing: .07em;
   text-transform: uppercase;
@@ -311,7 +456,7 @@
   display: inline-block;
   padding: .1rem .4rem;
   border-radius: 999px;
-  font-size: .55rem;
+  font-size: .52rem;
   font-weight: 800;
   letter-spacing: .05em;
   text-transform: uppercase;
@@ -320,9 +465,9 @@
 }
 
 .play-v3 .quien .consulta-ed-tema-txt {
-  margin: 0 0 .3rem;
+  margin: 0 0 .25rem;
   font-family: Caveat, cursive;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
   font-weight: 700;
   line-height: 1.15;
   color: var(--ds-ink, #33261e);
@@ -331,14 +476,13 @@
 .play-v3 .quien .consulta-ed-tema-pista {
   margin: 0;
   font-family: Caveat, cursive;
-  font-size: .92rem;
+  font-size: .85rem;
   font-style: italic;
   line-height: 1.15;
   color: var(--ds-text-muted, #75634f);
 }
 
 /* ─── CTA ─── */
-
 .play-v3 .quien .consulta-ed-acciones {
   display: flex;
   flex-direction: column;
@@ -354,13 +498,14 @@
   border-radius: 10px;
   background: #e85d56;
   font-family: "Nunito", system-ui, sans-serif;
-  font-size: .7rem;
+  font-size: .68rem;
   font-weight: 800;
   letter-spacing: .05em;
   text-transform: uppercase;
   color: #fff;
   box-shadow: 0 3px 0 rgba(180, 55, 48, .22);
   cursor: pointer;
+  transition: filter .12s, transform .12s;
 }
 
 .play-v3 .quien .consulta-ed-cta::after {
@@ -379,95 +524,105 @@
   filter: brightness(1.04);
 }
 
-/* ─── Info secundaria ─── */
+.play-v3 .quien .consulta-ed-cta:active {
+  transform: scale(.98);
+}
 
-.play-v3 .quien .consulta-ed-info {
+/* ─── Bottom section (activities + curiosities) ─── */
+.qed-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .5rem;
+  margin-top: .7rem;
+}
+
+.qed-activity-list,
+.qed-curiosity-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qed-activity-list li,
+.qed-curiosity-list li {
+  position: relative;
+  padding: .2rem 0 .2rem .9rem;
+  font-family: "Nunito", system-ui, sans-serif;
+  font-size: .65rem;
+  line-height: 1.3;
+  color: var(--ds-ink, #33261e);
+}
+
+.qed-activity-list li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0;
+  top: .2rem;
+  font-size: .6rem;
+  color: #5e7a55;
+}
+
+.qed-curiosity-list li::before {
+  content: "\2022";
+  position: absolute;
+  left: 0;
+  top: .2rem;
+  font-size: .8rem;
+  color: #e85d56;
+}
+
+/* ─── Footer quote ─── */
+.qed-footer-quote {
+  margin: .8rem 0 0;
+  text-align: center;
+  font-family: Caveat, cursive;
+  font-size: .95rem;
+  font-style: italic;
+  color: var(--ds-text-muted, #9a8a78);
+}
+
+/* ─── Info section ─── */
+.play-v3 .quien .consult-ed-info {
   margin-top: .5rem;
   padding-top: .5rem;
   border-top: 1px dashed rgba(90, 72, 56, .12);
 }
 
-.play-v3 .quien .consulta-ed-info[hidden] {
+.play-v3 .quien .consult-ed-info[hidden] {
   display: none;
-}
-
-.play-v3 .quien .consulta-ed-info-kicker {
-  margin: 0 0 .3rem;
-  font-family: "Nunito", system-ui, sans-serif;
-  font-size: .6rem;
-  font-weight: 800;
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  color: var(--ds-text-muted, #75634f);
-}
-
-.play-v3 .quien .consulta-ed-info-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .3rem;
-}
-
-.play-v3 .quien .consulta-ed-info-chip {
-  display: inline-block;
-  padding: .15rem .45rem;
-  border-radius: 999px;
-  font-size: .58rem;
-  font-weight: 700;
-  letter-spacing: .03em;
-  color: #6b5a48;
-  background: rgba(90, 72, 56, .08);
-  border: 1px solid rgba(90, 72, 56, .12);
-}
-
-.play-v3 .quien .consulta-ed-info-chip--hobby {
-  color: #7c6bae;
-  background: rgba(124, 107, 174, .1);
-  border-color: rgba(124, 107, 174, .15);
 }
 
 /* ═══════════════════════════════════════════════════════════
    DESKTOP — 2 columnas
    ═══════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
-  .play-v3 .quien .aht-frame-body {
+  .qed-main {
     display: grid;
-    grid-template-columns: minmax(180px, 1fr) 1fr;
+    grid-template-columns: minmax(200px, 1fr) 1fr;
     gap: 0 1.2rem;
     align-items: start;
   }
 
-  .play-v3 .quien .consulta-ed-art {
+  .qed-col-left {
     grid-column: 1;
-    grid-row: 1 / -1;
+  }
+
+  .play-v3 .quien .consulta-ed-art {
     aspect-ratio: auto;
-    height: 100%;
-    min-height: 180px;
-    margin-bottom: 0;
+    min-height: 200px;
+    max-height: 380px;
   }
 
-  .play-v3 .quien .consulta-ed-meta {
-    grid-column: 2;
-    justify-content: flex-start;
-  }
-
-  .play-v3 .quien .consulta-ed-presencia {
+  .qed-col-right {
     grid-column: 2;
   }
 
-  .play-v3 .quien .consulta-ed-tema-wrap {
-    grid-column: 2;
-  }
-
-  .play-v3 .quien .consulta-ed-acciones {
-    grid-column: 2;
-  }
-
-  .play-v3 .quien .consulta-ed-info {
+  .qed-bottom {
     grid-column: 1 / -1;
   }
 
   /* Sin imagen: una columna */
-  .play-v3 .quien .aht-frame-body:has(.consulta-ed-art[hidden]) {
+  .qed-main:has(.consulta-ed-art[hidden]) {
     grid-template-columns: 1fr;
   }
 }

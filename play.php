@@ -473,16 +473,39 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                 <button type="button" class="aht-frame-close" data-close aria-label="Cerrar">&#10005;</button>
               </header>
               <div class="aht-frame-body">
-                <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
-                <div class="consulta-ed-meta" data-q-horario hidden></div>
-                <section class="consulta-ed-presencia">
-                  <p class="consulta-ed-presencia-kicker">Qui&eacute;n anda por aqu&iacute;</p>
-                  <p class="consulta-ed-vacio" data-q-sum hidden></p>
-                  <div class="consulta-ed-avatars" data-q-list></div>
-                </section>
-                <div class="consulta-ed-tema-wrap" data-q-tema hidden></div>
-                <div class="consulta-ed-acciones" data-q-btns></div>
-                <div class="consulta-ed-info" data-q-info hidden></div>
+                <div class="qed-main">
+                  <div class="qed-col-left">
+                    <div class="qed-art-wrap">
+                      <div class="consulta-ed-art" data-q-art hidden aria-hidden="true"></div>
+                      <div class="qed-art-desc" data-q-desc></div>
+                    </div>
+                  </div>
+                  <div class="qed-col-right">
+                    <div class="qed-subtitle" data-q-subtitle></div>
+                    <div class="qed-necesidades" data-q-necesidades></div>
+                    <div class="consulta-ed-meta" data-q-horario hidden></div>
+                    <section class="consulta-ed-presencia qed-card">
+                      <p class="consulta-ed-presencia-kicker">&#128101; Qui&eacute;n anda por aqu&iacute; <span class="qed-count" data-q-count></span></p>
+                      <p class="qed-offline" data-q-offline hidden>&#128246; Fuera de servicio — nadie por aquí ahora</p>
+                      <p class="consulta-ed-vacio" data-q-sum hidden></p>
+                      <div class="consulta-ed-avatars" data-q-list></div>
+                    </section>
+                    <div class="consulta-ed-tema-wrap" data-q-tema hidden></div>
+                    <div class="consulta-ed-acciones" data-q-btns></div>
+                  </div>
+                </div>
+                <div class="qed-bottom">
+                  <div class="qed-card qed-activities">
+                    <h3 class="qed-card-title">&#128248; Qu&eacute; se puede hacer aqu&iacute;</h3>
+                    <ul class="qed-activity-list" data-q-activities></ul>
+                  </div>
+                  <div class="qed-card qed-curiosities">
+                    <h3 class="qed-card-title">&#128161; Curiosidades</h3>
+                    <ul class="qed-curiosity-list" data-q-curiosities></ul>
+                  </div>
+                </div>
+                <div class="consult-ed-info" data-q-info hidden></div>
+                <p class="qed-footer-quote" data-q-footer-quote></p>
               </div>
             </div>
           </aside>
