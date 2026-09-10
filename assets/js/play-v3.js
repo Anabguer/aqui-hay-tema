@@ -1578,11 +1578,33 @@
         }
         const escena = (r && typeof r.escena === 'string') ? r.escena : '';
         const eco = (r && typeof r.eco_emocional === 'string') ? r.eco_emocional : '';
-        const escenaHtml = escena ? '<span class="inv-escena">' + esc(escena) + '</span> ' : '';
-        const ecoHtml = eco ? '<span class="inv-eco-emocional">' + esc(eco) + '</span> ' : '';
+        const avatar = tokenDe(invSelVecino.id);
+        const reaccion = r.reaccion || '';
+        const isPos = reaccion === 'le_encanta' || reaccion === 'le_gusta';
+        const isNeg = reaccion === 'no_le_gusta';
+        const reaccionLabel = reaccion === 'le_encanta' ? 'Le encanta' : reaccion === 'le_gusta' ? 'Le gusta' : reaccion === 'no_le_gusta' ? 'No le gusta' : reaccion === 'mas_o_menos' ? 'Mas o menos' : '';
+        let avatarHtml = '';
+        if (avatar) {
+          avatarHtml = '<img class="inv-feedback-avatar" src="' + esc(avatar) + '" alt=""/>';
+        } else {
+          avatarHtml = '<span class="inv-feedback-avatar inv-feedback-avatar--ini">' + esc((invSelVecino.nombre || '?')[0]) + '</span>';
+        }
+        let reaccionBadge = reaccionLabel ? '<span class="inv-feedback-badge inv-feedback-badge--' + esc(reaccion) + '">' + esc(reaccionLabel) + '</span>' : '';
         feedback.hidden = false;
-        feedback.innerHTML = escenaHtml + esc(texto) + (ecoHtml ? ' ' + ecoHtml : '') + (extra ? ' ' + extra : '');
-        feedback.classList.toggle('is-mal', r.reaccion === 'no_le_gusta');
+        feedback.innerHTML =
+          '<div class="inv-feedback-card">' +
+            '<div class="inv-feedback-cara">' + avatarHtml + '</div>' +
+            '<div class="inv-feedback-body">' +
+              '<span class="inv-feedback-nombre">' + esc(invSelVecino.nombre) + '</span>' +
+              reaccionBadge +
+              (escena ? '<span class="inv-feedback-escena">' + esc(escena) + '</span>' : '') +
+              '<span class="inv-feedback-texto">' + esc(texto) + '</span>' +
+              (eco ? '<span class="inv-feedback-eco">' + esc(eco) + '</span>' : '') +
+              (extra ? '<span class="inv-feedback-extra">' + extra + '</span>' : '') +
+            '</div>' +
+          '</div>';
+        feedback.classList.toggle('is-mal', isNeg);
+        feedback.classList.toggle('is-bien', isPos);
         feedback.classList.remove('is-error');
       }
     } else {
