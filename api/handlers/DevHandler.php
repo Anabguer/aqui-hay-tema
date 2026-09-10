@@ -20,6 +20,7 @@ use AquiHayTema\Engine\CoincidenciasEngine;
 use AquiHayTema\Engine\DiscoveryProjection;
 use AquiHayTema\Engine\DiscoveryVisibilityPolicy;
 use AquiHayTema\Engine\HobbyEmocionDev;
+use AquiHayTema\Engine\DiagnosticExport;
 use AquiHayTema\Engine\ResidenteRuntime;
 use AquiHayTema\Engine\ContentValidationException;
 
@@ -184,7 +185,13 @@ final class DevHandler
     public static function diagnosticoExport(ApiContext $ctx, array $body, array $partida): array
     {
         requireDev(['dev.diagnostico.export']);
-        return DiagnosticExport::export($partida, $ctx->root);
+        $export = DiagnosticExport::export($partida, $ctx->root);
+        return [
+            'ok' => true,
+            'diagnostico_export' => [
+                'json' => $export,
+            ],
+        ];
     }
 
     public static function simular(ApiContext $ctx, array $body): array
