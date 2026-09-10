@@ -1313,13 +1313,18 @@
   display: inline-flex;
   align-items: center;
   gap: .2rem;
-  font: 600 1.2rem/1 Nunito, sans-serif;
   padding: .15rem .4rem;
   border-radius: 999px;
   background: rgba(76,175,80,.1);
   color: #2e7d32;
   white-space: nowrap;
 }
+
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-nec .nec-icon {
+  width: 18px;
+  height: 18px;
+}
+
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-li-nec {
   display: inline-flex;
   align-items: center;
@@ -1330,6 +1335,11 @@
   background: rgba(76,175,80,.1);
   color: #2e7d32;
   white-space: nowrap;
+}
+
+.play-v3 .aht-screen[data-aht-screen="organizar"] .org-li-nec .nec-icon {
+  width: 14px;
+  height: 14px;
 }
 .play-v3 .aht-screen[data-aht-screen="organizar"] .org-lc-nec--sec {
   background: rgba(76,175,80,.06);
@@ -1507,118 +1517,192 @@
   flex-direction: column;
   align-items: center;
   padding: var(--aht-gap-md, 12px) var(--aht-gap-md, 12px) var(--aht-gap-sm, 8px);
+  gap: .6rem;
 }
 
-/* Escena cómic — avatares + estado central */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-scene {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: .6rem;
-  width: 100%;
-  padding: .8rem .5rem .4rem;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar {
+/* ── Estado central — protagonista ── */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: .3rem;
-  flex: 0 1 64px;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
+  gap: .2rem;
+  padding: .7rem 1.2rem .5rem;
+  border-radius: var(--aht-frame-radius, 18px 14px 20px 13px / 14px 20px 13px 17px);
+  background: var(--aht-shell-bg, #FCFBFE);
   border: 2px solid var(--aht-border, #D8D1DE);
+  box-shadow:
+    0 2px 8px rgba(48,40,58,.08),
+    inset 0 1px 0 rgba(255,255,255,.6);
+  width: 100%;
+  max-width: 260px;
+  text-align: center;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
+  font-size: 2.2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,.1));
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-label {
+  font: 700 .92rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
+  color: var(--aht-text, #33261E);
+  text-align: center;
+}
+
+/* ── Paneles cómic — dos viñetas ── */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panels {
+  display: flex;
+  gap: .5rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* Panel individual — viñeta cómic */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .35rem;
+  flex: 1;
+  max-width: 150px;
+  padding: .65rem .5rem .55rem;
+  border-radius: var(--aht-frame-radius-sm, 14px 10px 16px 9px / 10px 16px 9px 13px);
+  background: var(--aht-shell-bg, #FCFBFE);
+  border: 2.5px solid var(--aht-border, #D8D1DE);
+  box-shadow: 2px 3px 0 rgba(48,40,58,.06);
+  position: relative;
+  transition: transform .15s ease;
+}
+/* Rotación base — izquierda inclinada */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel:first-child {
+  transform: rotate(-1.5deg);
+}
+/* Derecha inclinada al revés */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel:last-child {
+  transform: rotate(1.5deg);
+}
+
+/* Viñeta acepta — borde verde punteado */
+.pr-panel--acepta {
+  background: rgba(139,190,113,.08);
+  border: 2.5px dotted rgba(100,170,70,.45);
+  box-shadow:
+    2px 3px 0 rgba(100,150,70,.1),
+    inset 0 0 0 1px rgba(139,190,113,.12);
+}
+
+/* Viñeta rechaza — borde rojo rayado */
+.pr-panel--rechaza {
+  background: rgba(210,110,110,.07);
+  border: 2.5px dashed rgba(200,80,80,.4);
+  box-shadow:
+    2px 3px 0 rgba(180,80,80,.08),
+    inset 0 0 0 1px rgba(210,110,110,.1);
+}
+
+/* Viñeta duda — borde amarillo */
+.pr-panel--duda {
+  background: rgba(200,175,90,.07);
+  border: 2.5px solid rgba(200,175,90,.4);
+  box-shadow:
+    2px 3px 0 rgba(180,150,60,.08),
+    inset 0 0 0 1px rgba(200,175,90,.1);
+}
+
+/* Avatar dentro del panel */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar {
+  flex: 0 0 auto;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 2.5px solid var(--aht-border, #D8D1DE);
   background: var(--aht-shell-bg, #FCFBFE);
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(48,40,58,.1);
+  box-shadow: 0 2px 6px rgba(48,40,58,.1);
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img img {
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img .cara-ini {
-  font: 700 1.1rem/1 var(--aht-font-ui, "Nunito", sans-serif);
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img .cara-ini {
+  font: 700 1.2rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text-muted, #75634F);
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-name {
+
+/* Info dentro del panel */
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .15rem;
+  text-align: center;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-name {
   font: 700 .72rem/1 var(--aht-font-ui, "Nunito", sans-serif);
   color: var(--aht-text, #33261E);
-  text-align: center;
-  max-width: 70px;
+  max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-/* Estado central */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status {
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-response {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: .15rem;
-  flex: 0 0 auto;
-  min-width: 40px;
+  gap: .2rem;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
-  font-size: 1.5rem;
-  line-height: 1;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,.08));
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-label {
-  font: 600 .6rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
-  color: var(--aht-text-muted, #75634F);
-  text-align: center;
-  max-width: 70px;
-}
-
-/* Respuestas individuales */
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-responses {
-  display: flex;
-  justify-content: space-around;
-  width: 100%;
-  padding: .2rem 1rem .4rem;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-response {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: .15rem;
-  flex: 1;
-}
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-response-icon {
-  font-size: 1.1rem;
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-response-icon {
+  font-size: 1rem;
   line-height: 1;
 }
-.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-response-text {
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-response-text {
   font: 600 .68rem/1.2 var(--aht-font-ui, "Nunito", sans-serif);
   text-align: center;
 }
-.pr-response--acepta .pr-response-icon { color: #2d8a4e; }
-.pr-response--acepta .pr-response-text { color: #2d6a3e; }
-.pr-response--rechaza .pr-response-icon { color: #c44b4b; }
-.pr-response--rechaza .pr-response-text { color: #8a3535; }
-.pr-response--duda .pr-response-icon { color: #b89a3f; }
-.pr-response--duda .pr-response-text { color: #8a7030; }
+.pr-panel--acepta .pr-panel-response-icon { color: #2d8a4e; }
+.pr-panel--acepta .pr-panel-response-text { color: #2d6a3e; }
+.pr-panel--rechaza .pr-panel-response-icon { color: #c44b4b; }
+.pr-panel--rechaza .pr-panel-response-text { color: #8a3535; }
+.pr-panel--duda .pr-panel-response-icon { color: #b89a3f; }
+.pr-panel--duda .pr-panel-response-text { color: #8a7030; }
 
-/* Mensaje contextual */
+/* ── Mensaje narrativo — bocadillo de cómic ── */
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-message {
-  font: 500 .78rem/1.3 var(--aht-font-ui, "Nunito", sans-serif);
-  color: var(--aht-text-muted, #75634F);
+  font: 600 .82rem/1.35 var(--aht-font-ui, "Nunito", sans-serif);
+  color: var(--aht-text, #33261E);
   text-align: center;
   margin: 0;
-  padding: 0 .5rem .3rem;
-  opacity: .85;
+  padding: .55rem .8rem;
+  width: 100%;
+  max-width: 280px;
+  border-radius: var(--aht-frame-radius-sm, 14px 10px 16px 9px / 10px 16px 9px 13px);
+  background: rgba(232,221,245,.25);
+  border: 1.5px solid rgba(200,180,220,.3);
+  box-shadow: 0 1px 4px rgba(48,40,58,.06);
+  position: relative;
+}
+.play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-message::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 6px;
+  background: rgba(232,221,245,.25);
+  border-left: 1.5px solid rgba(200,180,220,.3);
+  border-right: 1.5px solid rgba(200,180,220,.3);
+  border-top: 1.5px solid rgba(200,180,220,.3);
+  border-radius: 6px 6px 0 0;
 }
 
 /* Contra-propuesta (mantiene estilo existente) */
 .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-contrapropuesta {
-  margin-top: var(--aht-gap-md, 12px);
+  margin-top: var(--aht-gap-sm, 8px);
   padding: var(--aht-gap-md, 12px);
   border-radius: var(--aht-frame-radius-sm, 12px 9px 13px 10px / 9px 13px 10px 12px);
   background: rgba(224,122,152,.07);
@@ -1686,14 +1770,20 @@
 
 /* Responsive móvil */
 @media (max-width: 480px) {
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-scene {
+  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panels {
     gap: .4rem;
   }
-  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-avatar-img {
-    width: 42px;
-    height: 42px;
+  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel-avatar-img {
+    width: 48px;
+    height: 48px;
   }
   .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-emoji {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-status-label {
+    font-size: .82rem;
+  }
+  .play-v3 .aht-screen[data-aht-screen="plan-resultado"] .pr-panel {
+    padding: .55rem .4rem .45rem;
   }
 }

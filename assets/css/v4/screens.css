@@ -708,10 +708,17 @@
 }
 
 .ficha-nec-ico {
-  font-size: 1rem;
   flex-shrink: 0;
-  width: 20px;
+  width: 24px;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ficha-nec-ico .nec-icon {
+  width: 22px;
+  height: 22px;
 }
 
 .ficha-nec-nom {

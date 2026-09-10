@@ -761,7 +761,9 @@ select.vec-rel-persona {
   gap: 8px;
 }
 
-.vec-cuid-bar-ico { font-size: 1.1rem; flex: 0 0 auto; }
+.vec-cuid-bar-ico { flex: 0 0 auto; display: flex; align-items: center; }
+
+.vec-cuid-bar-ico .nec-icon { width: 18px; height: 18px; }
 
 .vec-cuid-bar-nom {
   font: 600 .85rem/1 var(--vec-font-body);

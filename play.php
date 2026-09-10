@@ -584,7 +584,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="aht-frame-tabs" role="tablist" aria-label="Vecinos, relaciones y cuidados">
             <button type="button" class="aht-frame-tab is-active" data-vec-tab="vecinos" role="tab" aria-selected="true">VECINOS</button>
             <button type="button" class="aht-frame-tab" data-vec-tab="relaciones" role="tab" aria-selected="false">RELACIONES</button>
-            <button type="button" class="aht-frame-tab" data-vec-tab="cuidados" role="tab" aria-selected="false">CUIDADOS</button>
+            <button type="button" class="aht-frame-tab" data-vec-tab="cuidados" role="tab" aria-selected="false">NECESIDADES</button>
           </div>
           <div class="aht-frame-body">
             <div class="vec-panel" data-vec-panel="vecinos">
@@ -1094,30 +1094,27 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
           <div class="aht-frame-body">
             <div class="pr-body capa-scroll">
               <div class="pr-scene">
-                <div class="pr-avatar pr-avatar--left">
-                  <span class="pr-avatar-img" data-pr-avatar-1></span>
-                  <span class="pr-avatar-name" data-pr-avatar-name-1></span>
+                <div class="pr-vignette pr-vignette--left" data-pr-panel-1>
+                  <div class="pr-vignette-avatar" data-pr-avatar-1></div>
+                  <span class="pr-vignette-name" data-pr-avatar-name-1></span>
+                  <span class="pr-vignette-response" data-pr-resp-1>
+                    <span data-pr-resp-icon-1></span>
+                    <span data-pr-resp-text-1></span>
+                  </span>
                 </div>
-                <div class="pr-status" data-pr-status>
-                  <span class="pr-status-emoji" data-pr-status-emoji></span>
-                  <span class="pr-status-label" data-pr-status-label></span>
+                <div class="pr-center" data-pr-status>
+                  <img class="pr-state-img" data-pr-state-img src="" alt=""/>
+                  <p class="pr-message" data-pr-message></p>
                 </div>
-                <div class="pr-avatar pr-avatar--right">
-                  <span class="pr-avatar-img" data-pr-avatar-2></span>
-                  <span class="pr-avatar-name" data-pr-avatar-name-2></span>
-                </div>
-              </div>
-              <div class="pr-responses">
-                <div class="pr-response pr-response--left" data-pr-resp-1>
-                  <span class="pr-response-icon" data-pr-resp-icon-1></span>
-                  <span class="pr-response-text" data-pr-resp-text-1></span>
-                </div>
-                <div class="pr-response pr-response--right" data-pr-resp-2>
-                  <span class="pr-response-icon" data-pr-resp-icon-2></span>
-                  <span class="pr-response-text" data-pr-resp-text-2></span>
+                <div class="pr-vignette pr-vignette--right" data-pr-panel-2>
+                  <div class="pr-vignette-avatar" data-pr-avatar-2></div>
+                  <span class="pr-vignette-name" data-pr-avatar-name-2></span>
+                  <span class="pr-vignette-response" data-pr-resp-2>
+                    <span data-pr-resp-icon-2></span>
+                    <span data-pr-resp-text-2></span>
+                  </span>
                 </div>
               </div>
-              <p class="pr-message" data-pr-message></p>
               <div class="pr-contrapropuesta" data-pr-contra hidden>
                 <p class="pr-contra-label">Contra-propuesta:</p>
                 <p class="pr-contra-text" data-pr-contra-text></p>
@@ -1125,9 +1122,6 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
               <div class="pr-mensajito" data-pr-mensajito hidden>
                 <p class="pr-mensajito-text" data-pr-mensajito-text></p>
               </div>
-            </div>
-            <div class="pr-actions">
-              <button type="button" class="pr-btn pr-btn-agenda" data-pr-btn-agenda hidden>Ver agenda</button>
             </div>
           </div>
         </div>
