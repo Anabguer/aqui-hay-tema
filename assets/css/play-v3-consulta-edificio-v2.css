@@ -7,93 +7,93 @@
 
 @media (max-width: 768px) {
   .play-v3 .quien .aht-frame-body {
-    padding: .4rem .5rem .7rem;
+    padding: .3rem .4rem .5rem;
   }
 
   .play-v3 .quien .aht-frame-title {
-    font-size: .82rem;
+    font-size: .78rem;
+  }
+
+  .play-v3 .quien .consulta-ed-art {
+    max-height: 140px;
+    aspect-ratio: 16 / 9;
   }
 
   .qed-main {
-    gap: .4rem;
+    gap: .3rem;
   }
 
   .qed-subtitle {
-    font-size: 1.05rem;
+    font-size: .95rem;
   }
 
   .qed-art-desc {
-    font-size: .85rem;
-    padding: .35rem .5rem;
+    font-size: .78rem;
+    padding: .3rem .4rem;
+    margin-top: .3rem;
   }
 
   .qed-card {
-    padding: .45rem .5rem;
+    padding: .35rem .4rem;
   }
 
   .qed-card-title {
-    font-size: .62rem;
-    margin-bottom: .25rem;
+    font-size: .58rem;
+    margin-bottom: .2rem;
   }
 
   .qed-nec-lugar-ico {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
   }
 
   .qed-nec-lugar-name {
-    font-size: .6rem;
+    font-size: .55rem;
   }
 
   .qed-nec-lugar-frase {
-    font-size: .72rem;
+    font-size: .65rem;
+  }
+
+  .qed-nec-lugar-row {
+    gap: .35rem;
   }
 
   .qed-curiosity-list li {
-    font-size: .58rem;
-    padding: .15rem 0 .15rem .7rem;
+    font-size: .55rem;
+    padding: .12rem 0 .12rem .6rem;
   }
 
   .play-v3 .quien .consulta-ed-presencia-kicker {
-    font-size: .62rem;
+    font-size: .58rem;
   }
 
   .play-v3 .quien .consulta-ed-estado {
-    font-size: .52rem;
-    padding: .12rem .4rem;
+    font-size: .48rem;
+    padding: .1rem .3rem;
   }
 
   .play-v3 .quien .consulta-ed-horas {
-    font-size: .7rem;
+    font-size: .62rem;
   }
 
   .consulta-ed-avatars {
-    gap: .15rem;
+    gap: .1rem;
   }
 
   .qed-footer-quote {
-    font-size: .82rem;
-    margin-top: .5rem;
+    font-size: .75rem;
+    margin-top: .4rem;
   }
 
   .qed-bottom {
-    gap: .4rem;
-    margin-top: .5rem;
+    gap: .3rem;
+    margin-top: .4rem;
   }
 
   .qed-offline {
-    font-size: .6rem;
-    padding: .35rem .5rem;
-  }
-
-  .qed-nec-pill {
-    font-size: .5rem;
-    padding: .1rem .35rem;
-  }
-
-  .qed-nec-ico {
-    width: 14px;
-    height: 14px;
+    font-size: .55rem;
+    padding: .3rem .4rem;
   }
 }
 
