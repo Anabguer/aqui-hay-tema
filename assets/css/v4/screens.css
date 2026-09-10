@@ -131,6 +131,7 @@
     gap: 8px;
   }
   .aht-screen[data-aht-screen="buzon"] .buzon-toolbar {
+    position: static;
     width: 100%;
     display: flex;
     justify-content: flex-end;
