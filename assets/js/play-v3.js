@@ -7219,10 +7219,21 @@ function hobbyIconKey(id, texto) {
     box.innerHTML = '';
     const items = (slots && slots.length) ? slots : slotsDesdeLista([]);
     items.forEach(function (sl) {
-      const sp = document.createElement('span');
-      sp.className = 'ficha-rasgo-tag' + (sl.descubierto ? '' : ' is-desconocido');
-      sp.textContent = sl.descubierto ? String(sl.texto).toUpperCase() : '?';
-      box.appendChild(sp);
+      const card = document.createElement('div');
+      card.className = 'ficha-rasgo-tag' + (sl.descubierto ? '' : ' is-desconocido');
+      const dot = document.createElement('span');
+      dot.className = 'ficha-rasgo-dot';
+      dot.setAttribute('aria-hidden', 'true');
+      const lab = document.createElement('span');
+      if (sl.descubierto) {
+        lab.textContent = sl.texto || '';
+      } else {
+        lab.textContent = '?';
+        lab.className = 'is-desconocido';
+      }
+      card.appendChild(dot);
+      card.appendChild(lab);
+      box.appendChild(card);
     });
   }
 
@@ -9186,12 +9197,13 @@ function hobbyIconKey(id, texto) {
 
     function setAvatar(el, id, nombre) {
       if (!el) return;
+      el.style.cssText = 'width:72px;height:72px;border-radius:50%;overflow:hidden;border:3px solid #D8D1DE;background:#FCFBFE;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
       if (!id) { el.innerHTML = ''; return; }
       var img = tokenDe(id) || retratoDe(id);
       if (img) {
         el.innerHTML = '<img src="' + esc(img) + '" alt="' + esc(nombre) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;"/>';
       } else {
-        el.innerHTML = '<span class="cara-ini">' + esc((nombre || '?')[0]) + '</span>';
+        el.innerHTML = '<span class="cara-ini" style="font:700 1.6rem/1 Nunito,sans-serif;color:#75634F;">' + esc((nombre || '?')[0]) + '</span>';
       }
     }
 
@@ -9212,9 +9224,19 @@ function hobbyIconKey(id, texto) {
     function setVignetteClass(el, decision) {
       if (!el) return;
       el.className = el.className.replace(/pr-vignette--(acepta|rechaza|duda)/g, '').trim();
-      if (decision === 'acepta') el.classList.add('pr-vignette--acepta');
-      else if (decision === 'rechaza') el.classList.add('pr-vignette--rechaza');
-      else if (decision === 'duda') el.classList.add('pr-vignette--duda');
+      if (decision === 'acepta') {
+        el.classList.add('pr-vignette--acepta');
+        el.style.borderColor = '#5aaf4a';
+        el.style.background = 'rgba(110,190,80,.08)';
+      } else if (decision === 'rechaza') {
+        el.classList.add('pr-vignette--rechaza');
+        el.style.borderColor = '#d45050';
+        el.style.background = 'rgba(220,100,100,.07)';
+      } else if (decision === 'duda') {
+        el.classList.add('pr-vignette--duda');
+        el.style.borderColor = '#c8a830';
+        el.style.background = 'rgba(210,180,60,.07)';
+      }
     }
 
     function setResponse(iconEl, textEl, wrapEl, decision) {
@@ -9241,6 +9263,22 @@ function hobbyIconKey(id, texto) {
       if (rechazada) return 'assets/img/plan-resultado/plan_rechazado.png';
       return 'assets/img/plan-resultado/plan_fallido.png';
     }
+
+    function forceComicLayout() {
+      var scene = document.querySelector('.pr-scene');
+      if (scene) scene.style.cssText = 'display:grid;grid-template-columns:1fr auto 1fr;gap:.35rem;width:100%;max-width:420px;align-items:start;';
+      [vignette1, vignette2].forEach(function(v) {
+        if (v) v.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.45rem .3rem .4rem;border-radius:18px 14px 20px 12px/14px 18px 10px 16px;background:#FCFBFE;border:3px solid #D8D1DE;box-shadow:3px 4px 0 rgba(48,40,58,.07);';
+      });
+      if (vignette1) vignette1.style.transform = 'rotate(-2deg)';
+      if (vignette2) vignette2.style.transform = 'rotate(2deg)';
+      var center = document.querySelector('.pr-center');
+      if (center) center.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.2rem 0;align-self:center;';
+      if (stateImg) stateImg.style.cssText = 'width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.1));';
+      if (messageEl) messageEl.style.cssText = 'font:700 .78rem/1.3 Nunito,sans-serif;color:#33261E;text-align:center;margin:0;max-width:120px;';
+    }
+
+    forceComicLayout();
 
     var decA = idA ? getDecision(idA) : null;
     var decB = idB ? getDecision(idB) : null;
