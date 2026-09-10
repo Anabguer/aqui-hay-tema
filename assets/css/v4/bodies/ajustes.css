@@ -64,6 +64,27 @@
   margin-top: 4px;
   width: 100%;
   padding: 11px 12px;
+  border: 2px solid rgba(196, 75, 110, .55);
+  border-radius: 12px 9px 13px 10px / 9px 13px 10px 12px;
+  background: linear-gradient(180deg, #fff5f8, #fdeef3);
+  box-shadow: 1.5px 2px 0 rgba(196, 75, 110, .12);
+  font-family: var(--ds-font-hand, Caveat, cursive);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ds-ink, #3b3028);
+  cursor: pointer;
+  transition: background .15s, border-color .15s, box-shadow .15s;
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-reiniciar:hover {
+  background: linear-gradient(180deg, #fdeef3, #f8dde5);
+  border-color: rgba(196, 75, 110, .75);
+  box-shadow: 2px 3px 0 rgba(196, 75, 110, .18);
+}
+
+.play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-reiniciar:active {
+  transform: translateY(1px);
+  box-shadow: .5px 1px 0 rgba(196, 75, 110, .12);
 }
 
 .play-v3 .aht-screen[data-aht-screen="ajustes"] .ajustes-diag-btn {
