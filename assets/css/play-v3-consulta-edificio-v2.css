@@ -8,6 +8,7 @@
 /* ─── Frame body ─── */
 .play-v3 .quien .aht-frame-body {
   padding: .6rem .7rem 1rem;
+  background: #fed785e8;
   background: var(--ds-paper, #F9F7F4);
 }
 
@@ -117,7 +118,7 @@
 /* ─── Subtitle ─── */
 .qed-subtitle {
   font-family: Caveat, cursive;
-  font-size: 1.05rem;
+  font-size: 1.35rem;
   color: var(--ds-text-muted, #75634f);
   font-style: italic;
   margin-bottom: .1rem;
