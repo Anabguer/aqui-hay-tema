@@ -6371,10 +6371,9 @@ function renderInicioMpDuo(misiones, parejas) {
 
     function renderFilters() {
       if (!filtersWrap) return;
-      var fhtml = '<button type="button" class="necg-filt' + (initialFilter === 'todos' ? ' necg-filt--on' : '') + '" data-nec-filter="todos">Todos</button>';
-      fhtml += '<button type="button" class="necg-filt' + (initialFilter === 'necesitan' ? ' necg-filt--on' : '') + '" data-nec-filter="necesitan">Con necesidad</button>';
+      var fhtml = '<button type="button" class="necg-filt necg-filt--todos' + (initialFilter === 'todos' ? ' necg-filt--on' : '') + '" data-nec-filter="todos"><span class="necg-filt-all">&#x2716;</span></button>';
       orden.forEach(function (nec) {
-        fhtml += '<button type="button" class="necg-filt' + (initialFilter === nec ? ' necg-filt--on' : '') + '" data-nec-filter="' + nec + '">' + necIconHtml(nec, 16) + ' ' + nom[nec] + '</button>';
+        fhtml += '<button type="button" class="necg-filt' + (initialFilter === nec ? ' necg-filt--on' : '') + '" data-nec-filter="' + nec + '">' + necIconHtml(nec, 26) + '</button>';
       });
       filtersWrap.innerHTML = fhtml;
     }

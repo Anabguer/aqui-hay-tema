@@ -56,24 +56,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 48px;
+  height: 48px;
   padding: 0;
-  border: 1.5px solid rgba(107, 81, 56, .18);
+  border: none;
   border-radius: 999px;
   background: transparent;
   cursor: pointer;
-  transition: background .12s, border-color .12s, transform .12s;
+  transition: background .12s, transform .12s;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt .nec-icon {
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt:hover {
   background: rgba(124, 107, 174, .1);
-  border-color: rgba(124, 107, 174, .3);
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt:active {
@@ -82,6 +81,21 @@
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt--on {
   background: rgba(124, 107, 174, .18);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt--todos {
+  background: linear-gradient(135deg, rgba(124, 107, 174, .15), rgba(233, 137, 167, .15), rgba(227, 176, 75, .15));
+  border: 1.5px dashed rgba(107, 81, 56, .2);
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt--todos .necg-filt-all {
+  font-size: 1.1rem;
+  color: var(--ds-ink-soft, #6B5138);
+  line-height: 1;
+}
+
+.play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .necg-filt--todos.necg-filt--on {
+  background: linear-gradient(135deg, rgba(124, 107, 174, .3), rgba(233, 137, 167, .25));
   border-color: var(--ds-lavender-deep, #7C6BAE);
 }
 
@@ -248,33 +262,36 @@
    ============================================================ */
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-resumen-tit {
-  font: 600 .78rem/1.2 Nunito, sans-serif;
-  color: var(--ds-text-muted, #75634F);
-  margin: 0 0 8px;
+  font: 700 .82rem/1.2 Nunito, sans-serif;
+  color: var(--ds-ink, #33261E);
+  margin: 0 0 10px;
   text-align: center;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bars {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 6px 14px;
+  gap: 8px 16px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar-row {
   display: flex;
   align-items: center;
   gap: 6px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: rgba(107, 81, 56, .04);
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar-ico .nec-icon {
-  width: 18px;
-  height: 18px;
+  width: 24px;
+  height: 24px;
 }
 
 .play-v3 .aht-screen[data-aht-screen="vecinos"] [data-vec-panel="cuidados"] .vec-cuid-bar-nom {
-  font: 600 .72rem/1 Nunito, sans-serif;
+  font: 600 .75rem/1 Nunito, sans-serif;
   color: var(--ds-ink, #33261E);
-  width: 60px;
+  width: 62px;
   flex: 0 0 auto;
 }
 
