@@ -447,10 +447,10 @@
   padding: 0 12px;
 }
 
-/* ── FICHA PERSONAJE: 2 zonas ── */
+/* ── FICHA HERO: 2 columnas ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-card {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   align-items: start;
   gap: 0;
   width: 100%;
@@ -464,12 +464,14 @@
   box-shadow: 0 2px 8px rgba(48, 40, 58, 0.06);
 }
 
-/* ── PERSONAJE: avatar + datos unificados ── */
+/* ── COL IZQUIERDA: avatar + nombre ── */
 .aht-screen[data-aht-screen="ficha"] .ficha-hero-col--personaje {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  padding-right: 14px;
+  border-right: 1.5px solid rgba(180, 150, 110, 0.1);
 }
 
 /* Avatar area: ring grande */
@@ -480,7 +482,7 @@
 }
 
 .ficha-avatar-area .ficha-cara-ring {
-  --ficha-cara-size: 180px;
+  --ficha-cara-size: 160px;
   width: var(--ficha-cara-size);
   height: var(--ficha-cara-size);
   padding: 5px;
@@ -505,50 +507,58 @@
   box-shadow: 0 0 0 3px rgba(196, 43, 74, 0.18), 0 2px 8px rgba(196, 43, 74, 0.10);
 }
 
-/* Ánimo: etiqueta moderna con icono */
-.ficha-hero-animo-inline {
+/* ── COL DERECHA: ánimo + datos ── */
+.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--datos {
   display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Ánimo: imagen grande + etiqueta */
+.ficha-hero-animo-block {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 4px;
   cursor: pointer;
 }
 
-.ficha-animo-nube,
+.ficha-animo-img-wrap {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(180, 150, 110, 0.15);
+  box-shadow: 0 2px 8px rgba(51, 38, 30, 0.1);
+  flex-shrink: 0;
+}
+
+.ficha-animo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .ficha-animo-pill {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 5px 12px 5px 8px;
-  background: #fff;
-  border: 1.5px solid rgba(180, 150, 110, 0.22);
-  border-radius: 20px;
-  box-shadow: 0 2px 6px rgba(51, 38, 30, 0.08);
-  font-size: 0.78rem;
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  gap: 4px;
+  padding: 3px 10px;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(180, 150, 110, 0.18);
+  border-radius: 12px;
+  transition: transform 0.15s ease;
 }
 
 .ficha-animo-pill:hover {
   transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(51, 38, 30, 0.12);
 }
 
-.ficha-animo-pill--alegre {
-  background: #e8f5e3;
-  border-color: rgba(74, 122, 82, 0.35);
-}
-
-.ficha-animo-pill--triste {
-  background: #e6d9f3;
-  border-color: rgba(122, 106, 154, 0.35);
-}
-
-.ficha-animo-burbuja1,
-.ficha-animo-burbuja2 { display: none; }
-
-.ficha-animo-emoji {
-  font-size: 1rem;
-  line-height: 1;
-}
+.ficha-animo-pill--alegre { background: rgba(232, 245, 227, 0.8); border-color: rgba(74, 122, 82, 0.3); }
+.ficha-animo-pill--triste { background: rgba(230, 217, 243, 0.8); border-color: rgba(122, 106, 154, 0.3); }
+.ficha-animo-pill--enfadado { background: rgba(251, 229, 232, 0.8); border-color: rgba(196, 43, 74, 0.3); }
+.ficha-animo-pill--neutro { background: rgba(245, 243, 240, 0.8); border-color: rgba(180, 150, 110, 0.2); }
 
 .ficha-animo-val {
   font-family: var(--ds-font-hand, "Caveat", cursive);
@@ -557,45 +567,8 @@
   color: var(--ds-ink, #3b3028);
 }
 
-.ficha-animo-nube--enfadado,
-.ficha-animo-pill--enfadado {
-  background: #fbe5e8;
-  border-color: rgba(196, 43, 74, 0.35);
-}
-
-.ficha-hero-animo-inline::before,
-.ficha-hero-animo-inline::after {
-  content: '';
-  display: block;
-  border-radius: 50%;
-  background: #fff;
-  border: 1.5px solid rgba(180, 150, 110, 0.22);
-  position: absolute;
-  pointer-events: none;
-}
-
-.ficha-hero-animo-inline::before {
-  width: 8px;
-  height: 8px;
-  bottom: -6px;
-  left: 2px;
-}
-
-.ficha-hero-animo-inline::after {
-  width: 5px;
-  height: 5px;
-  bottom: -11px;
-  left: 0;
-}
-
 .ficha-animo-burbuja1,
 .ficha-animo-burbuja2 { display: none; }
-
-.ficha-animo-ico,
-.ficha-animo-emoji {
-  font-size: 0.85rem;
-  line-height: 1;
-}
 
 .ficha-animo-val {
   font-family: var(--ds-font-hand, "Caveat", cursive);
@@ -677,26 +650,28 @@
 /* Bloque integrado edad+cumple */
 .ficha-dato-row {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  align-items: baseline;
+  gap: 4px;
+  flex-wrap: wrap;
 }
 
-.ficha-dato-sep {
-  color: rgba(180, 150, 110, 0.3);
-  font-size: 0.6rem;
+.ficha-dato-extra {
+  font: 400 0.65rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-text-muted, #8a7a68);
+  font-style: italic;
 }
 
 /* Badge días en el pueblo */
 .ficha-badge-dias {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 4px;
   padding: 3px 10px;
   background: linear-gradient(135deg, rgba(232, 139, 168, 0.15), rgba(180, 154, 212, 0.15));
   border: 1px solid rgba(232, 139, 168, 0.25);
   border-radius: 20px;
-  font: 700 0.68rem/1 "Nunito", sans-serif;
-  color: var(--vec-lavender-deep, #7a6a9a);
+  font: 600 0.68rem/1.2 "Nunito", sans-serif;
+  color: var(--ds-ink, #3b3028);
   margin-top: 2px;
 }
 
@@ -729,11 +704,12 @@
   color: var(--vec-blue, #4a7fbf);
 }
 
-/* ── NECESIDADES: panel informal tipo juego ── */
-.aht-screen[data-aht-screen="ficha"] .ficha-hero-col--necesidades {
+/* ── NECESIDADES: debajo del hero card ── */
+.ficha-hero-necesidades {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
+  margin-top: 8px;
   padding: 10px 12px;
   background: linear-gradient(150deg, #fdf6ee, #f8f0e4);
   border: 1.5px solid rgba(200, 170, 120, 0.22);

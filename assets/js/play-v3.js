@@ -6762,14 +6762,14 @@ function canonEmoId(id) {
     const emo = canonEmoId(vista.estado_animo);
     const genero = vista && vista.genero;
     const txtEl = $('[data-ficha-animo-text]');
-    const icoEl = $('[data-ficha-animo-ico]');
+    const imgEl = $('[data-ficha-animo-img]');
     const pillEl = $('[data-ficha-animo-pill]');
     const ringEl = $('[data-ficha-cara-ring]');
     if (txtEl) txtEl.textContent = textoAnimoFichaPill(emo, genero);
-    if (icoEl) {
-      icoEl.setAttribute('data-emo', emo);
+    if (imgEl) {
       var iconPath = ANIMO_ICON_PATHS[emo] || ANIMO_ICON_PATHS.neutro;
-      icoEl.innerHTML = '<img src="' + iconPath + '" alt="" width="22" height="22">';
+      imgEl.src = iconPath;
+      imgEl.alt = textoAnimoDisplay(emo);
     }
     if (pillEl) {
       pillEl.setAttribute('data-emo', emo);
@@ -6798,9 +6798,9 @@ function canonEmoId(id) {
       animoRow.classList.toggle('is-clickable', showAnimoQ);
       animoRow.onclick = bindAnimoOpen;
     }
-    if (icoEl) {
-      icoEl.classList.toggle('is-clickable', showAnimoQ);
-      icoEl.onclick = bindAnimoOpen;
+    if (imgEl) {
+      imgEl.classList.toggle('is-clickable', showAnimoQ);
+      imgEl.onclick = bindAnimoOpen;
     }
     cerrarAnimoOverlay();
   }
@@ -7414,19 +7414,17 @@ function hobbyIconKey(id, texto) {
       desdeDiasEl.textContent = String(dias);
       desdeTagEl.hidden = false;
     }
-    var cumpleTagEl = $('[data-ficha-edad]');
     var cumpleTxtEl = $('[data-ficha-cumple-txt]');
-    if (cumpleTagEl && cumpleTxtEl) {
+    if (cumpleTxtEl) {
       var cp = vista.cumpleanos || (f.identidad && f.identidad.cumpleanos);
       if (cp && cp.dia && cp.mes) {
         var meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-        cumpleTxtEl.textContent = cp.dia + ' de ' + (meses[(cp.mes | 0) - 1] || '');
-        cumpleTagEl.hidden = false;
+        cumpleTxtEl.textContent = '(cumplo ' + cp.dia + ' de ' + (meses[(cp.mes | 0) - 1] || '') + ')';
+        cumpleTxtEl.hidden = false;
       } else {
         cumpleTxtEl.textContent = '';
-        if (edadVal == null || edadVal === '') cumpleTagEl.hidden = true;
+        cumpleTxtEl.hidden = true;
       }
-    } else {
     }
     pintarAnimoFicha(vista);
     const rasgosBox = $('[data-ficha-rasgos]');
@@ -7478,7 +7476,7 @@ function hobbyIconKey(id, texto) {
         abrirRegalosDesdeFicha(id, nom);
       };
     }
-    // Necesidades personales — solo las que tienen valor > 0
+    // Necesidades personales — siempre las 4, con barra y color por banda
     const necSection = $('[data-ficha-necesidades]');
     const necBox = $('[data-ficha-necesidades-body]');
     if (necSection && necBox) {
@@ -7496,12 +7494,9 @@ function hobbyIconKey(id, texto) {
         byId[key] = item;
       });
       necBox.innerHTML = '';
-      var necVisible = 0;
       necDefaults.forEach(function (def) {
         var item = byId[def.id] || byId[def.nombre] || {};
         var val = Math.max(0, Math.min(100, parseInt(item.valor, 10) || 0));
-        if (val <= 0) return;
-        necVisible++;
         var banda = esc(item.band || item.banda || '');
         var colorBar = banda === 'en_rojo' ? '#c42b4a'
           : banda === 'lo_necesita' ? '#d98a3e'
@@ -7520,7 +7515,7 @@ function hobbyIconKey(id, texto) {
           + '</div>'
         );
       });
-      necSection.hidden = necVisible === 0;
+      necSection.hidden = false;
     }
     syncFichaNav();
   }

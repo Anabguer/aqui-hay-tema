@@ -669,23 +669,25 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                     <div class="ficha-cara-ring" data-ficha-cara-ring>
                       <div class="ficha-cara" data-ficha-img></div>
                     </div>
-                    <div class="ficha-hero-animo-inline" data-ficha-animo-row>
-                      <div class="ficha-animo-pill" data-ficha-animo-pill>
-                        <span class="ficha-animo-ico" data-ficha-animo-ico aria-hidden="true"></span>
-                        <span class="ficha-animo-val" data-ficha-animo-text></span>
-                      </div>
-                    </div>
                   </div>
                   <h3 class="ficha-nombre" data-ficha-nombre></h3>
                   <span class="ficha-nombre-trazo" aria-hidden="true"></span>
+                </div>
+                <div class="ficha-hero-col ficha-hero-col--datos">
+                  <div class="ficha-hero-animo-block" data-ficha-animo-row>
+                    <div class="ficha-animo-img-wrap">
+                      <img class="ficha-animo-img" data-ficha-animo-img src="" alt="">
+                    </div>
+                    <div class="ficha-animo-pill" data-ficha-animo-pill>
+                      <span class="ficha-animo-val" data-ficha-animo-text></span>
+                    </div>
+                  </div>
                   <div class="ficha-datos-card">
                     <div class="ficha-dato-row" data-ficha-edad hidden>
                       <span class="ficha-dato-ico" aria-hidden="true">🎂</span>
                       <span class="ficha-dato-num" data-ficha-edad-num></span>
                       <span class="ficha-dato-lbl">años</span>
-                      <span class="ficha-dato-sep">·</span>
-                      <span class="ficha-dato-ico" aria-hidden="true">🍰</span>
-                      <span class="ficha-dato-txt" data-ficha-cumple-txt></span>
+                      <span class="ficha-dato-extra" data-ficha-cumple-txt></span>
                     </div>
                     <div class="ficha-bloque-empleo" data-ficha-trabajo hidden>
                       <span class="ficha-bloque-empleo-ico" aria-hidden="true">💼</span>
@@ -699,10 +701,10 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                     </div>
                   </div>
                 </div>
-                <div class="ficha-hero-col ficha-hero-col--necesidades" data-ficha-necesidades>
-                  <div class="ficha-necesidades-titulo">Necesidades</div>
-                  <div class="ficha-necesidades" data-ficha-necesidades-body></div>
-                </div>
+              </div>
+              <div class="ficha-hero-necesidades" data-ficha-necesidades>
+                <div class="ficha-necesidades-titulo">Necesidades</div>
+                <div class="ficha-necesidades" data-ficha-necesidades-body></div>
               </div>
             </section>
             <div class="ficha-body">
@@ -1104,7 +1106,7 @@ $ahtPwaBase = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/
                   </span>
                 </div>
                 <div class="pr-center" data-pr-status>
-                  <img class="pr-state-img" data-pr-state-img src="" alt=""/>
+                  <img class="pr-state-img" data-pr-state-img src="" alt="" style="width:72px;height:72px;object-fit:contain;max-width:72px;"/>
                   <p class="pr-message" data-pr-message></p>
                 </div>
                 <div class="pr-vignette pr-vignette--right" data-pr-panel-2>
