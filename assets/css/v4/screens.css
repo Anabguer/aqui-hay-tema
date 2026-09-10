@@ -927,6 +927,18 @@
   color: var(--ds-text-muted, #75634F);
 }
 
+.ficha-rasgo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(232, 139, 168, 0.45);
+  flex-shrink: 0;
+}
+
+.ficha-rasgo-tag.is-desconocido .ficha-rasgo-dot {
+  background: rgba(180, 160, 130, 0.3);
+}
+
 .play-v3 .aht-screen[data-aht-screen="ficha"] .ficha-hobby-card {
   display: flex;
   align-items: center;
