@@ -1540,7 +1540,7 @@
       cajaHint.className = 'inv-hint inv-chip-hint';
       cajaHint.setAttribute('data-inv-chip-hint', '');
       const titulo = caja.querySelector('.inv-regalo-titulo');
-      if (titulo && titulo.nextSibling) caja.parentNode.insertBefore(cajaHint, titulo.nextSibling);
+      if (titulo && titulo.nextSibling) caja.insertBefore(cajaHint, titulo.nextSibling);
       else caja.insertBefore(cajaHint, caja.firstChild);
     }
     cajaHint.textContent = '';
@@ -9550,14 +9550,20 @@ window.AHT_PLAN_IMAGES = {
       mensajitoEl.hidden = true;
     }
     var prBody = document.querySelector('.pr-body');
-    if (prBody && !prBody.querySelector('.pr-btn-volver') && r.rechazada) {
+    if (prBody && !prBody.querySelector('.pr-btn-volver')) {
       var btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'pr-btn-volver';
       btn.setAttribute('data-pr-close', '');
       btn.style.cssText = 'margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);';
       btn.textContent = 'Volver a planes';
-      btn.addEventListener('click', function() { if (window.AHTScreenManager) window.AHTScreenManager.close(); });
+      btn.addEventListener('click', function() {
+        if (window.AHTScreenManager) {
+          window.AHTScreenManager.close();
+        } else {
+          setCapa('organizar');
+        }
+      });
       prBody.appendChild(btn);
     }
     injectDoodlesPlanResultado();
