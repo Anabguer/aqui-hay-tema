@@ -430,12 +430,23 @@
         "duracion_dias": 5
     },
     "discovery": {
-        "hobbies_iniciales": 1,
-        "rasgos_iniciales": 1,
+        "hobbies_iniciales": 0,
+        "rasgos_iniciales": 0,
         "max_por_experiencia": 2,
+        "max_por_dia": 3,
+        "prob_por_encuentro": 0.4,
+        "cooldown_dias_por_residente": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "Mecanismo OK; curva longitudinal pendiente de catâ”œÃ­logo amplio. No recalibrar ritmos ahora."
+        "_nota_balance": "Throttling activo: 0+0 iniciales, max 3/día, 40% prob/encuentro, cooldown 2d/residente."
+    },
+    "presupuesto_actividad": {
+        "base": 1.5,
+        "factor_sqrt": 0.8,
+        "min": 1,
+        "max": 15,
+        "dia_1_factor": 0.5,
+        "_nota": "Presupuesto global diario: round(base + factor × sqrt(n)). Día 1 reduce a dia_1_factor."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,

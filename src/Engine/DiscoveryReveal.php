@@ -6,6 +6,12 @@ namespace AquiHayTema\Engine;
 /**
  * Reveal inicial al incorporar + descubrimiento contextual.
  * El jugador no ve la ficha interna completa. No revela por paso del tiempo.
+ *
+ * Throttling:
+ *   - Revelación inicial controlada por calibracion (hobbies_iniciales, rasgos_iniciales)
+ *   - Cap global diario: discovery.max_por_dia
+ *   - Probabilidad por encuentro: discovery.prob_por_encuentro
+ *   - Cooldown por residente: discovery.cooldown_dias_por_residente
  */
 final class DiscoveryReveal
 {
@@ -13,7 +19,8 @@ final class DiscoveryReveal
     public const RASGO = 'rasgo';
 
     /**
-     * 1 hobby + 1 rasgo para Celestine. El resto queda ???.
+     * Revelación inicial al incorporar residente.
+     * Controlado por calibracion: discovery.hobbies_iniciales y discovery.rasgos_iniciales.
      *
      * @param array<string, mixed> $cal
      */
@@ -22,23 +29,16 @@ final class DiscoveryReveal
         $perfil = PerfilPartida::de($partida, $residenteId);
         $hobbies = is_array($perfil['hobbies'] ?? null) ? array_values($perfil['hobbies']) : [];
         $rasgos = is_array($perfil['rasgos'] ?? null) ? array_values($perfil['rasgos']) : [];
-        $nHob = (int) CalibracionConfig::get($cal, 'discovery.hobbies_iniciales', 1);
-        $nRas = (int) CalibracionConfig::get($cal, 'discovery.rasgos_iniciales', 1);
+        $nHob = (int) CalibracionConfig::get($cal, 'discovery.hobbies_iniciales', 0);
+        $nRas = (int) CalibracionConfig::get($cal, 'discovery.rasgos_iniciales', 0);
         $revelados = [];
         for ($i = 0; $i < $nHob && $i < count($hobbies); $i++) {
             $hid = (string) $hobbies[$i];
             $revelados[] = self::registrarJugador($partida, $residenteId, ConocimientoNpc::campoHobby($hid), $hid, 'reveal_inicial');
-            if ($i === 0) {
-                // vida.hobby_principal se deja para descubrimiento contextual/tests;
-                // el reveal inicial usa hobby:{id}.
-            }
         }
         for ($i = 0; $i < $nRas && $i < count($rasgos); $i++) {
             $rid = (string) $rasgos[$i];
             $revelados[] = self::registrarJugador($partida, $residenteId, ConocimientoNpc::campoRasgo($rid), $rid, 'reveal_inicial');
-            if ($i === 0) {
-                // rasgo inicial vía rasgo:{id}
-            }
         }
         return ['ok' => true, 'revelados' => array_values(array_filter($revelados))];
     }
@@ -62,7 +62,7 @@ final class DiscoveryReveal
 
     /**
      * Un evento declara qué puede descubrirse y quién lo descubre.
-     * Máximo muy pocos por experiencia.
+     * Throttled: max_por_dia global, prob_por_encuentro, cooldown por residente.
      *
      * @param list<array{campo:string,valor?:mixed,observadores?:list<string>}> $candidatos
      * @param array<string, mixed> $cal
@@ -75,9 +75,26 @@ final class DiscoveryReveal
         ?string $correlacionId = null
     ): array {
         $max = (int) CalibracionConfig::get($cal, 'discovery.max_por_experiencia', 2);
+        $maxDia = (int) CalibracionConfig::get($cal, 'discovery.max_por_dia', 3);
+        $probEncuentro = (float) CalibracionConfig::get($cal, 'discovery.prob_por_encuentro', 0.4);
+        $cooldownDias = (int) CalibracionConfig::get($cal, 'discovery.cooldown_dias_por_residente', 2);
+
+        // Initialize daily counter
+        if (!isset($partida['discovery_dia'])) {
+            $partida['discovery_dia'] = ['dia' => 0, 'count' => 0, 'por_residente' => []];
+        }
+        $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+        if ((int) $partida['discovery_dia']['dia'] !== $dia) {
+            $partida['discovery_dia'] = ['dia' => $dia, 'count' => 0, 'por_residente' => []];
+        }
+
         $hechos = [];
         foreach ($candidatos as $c) {
             if (count($hechos) >= $max) {
+                break;
+            }
+            // Daily cap
+            if ($partida['discovery_dia']['count'] >= $maxDia) {
                 break;
             }
             if (!is_array($c)) {
@@ -90,6 +107,27 @@ final class DiscoveryReveal
             $valor = $c['valor'] ?? true;
             $obs = is_array($c['observadores'] ?? null) ? $c['observadores'] : ['jugador'];
             $residente = (string) ($c['residente_id'] ?? '');
+
+            // Per-encounter probability gate
+            if ($origen === 'encuentro' && $probEncuentro < 1.0) {
+                // Use a deterministic seed based on campo+dia for consistency
+                $seed = crc32($campo . $dia . $residente);
+                $r = ($seed % 1000) / 1000.0;
+                if ($r >= $probEncuentro) {
+                    $partida['discovery_dia']['count']++;
+                    continue;
+                }
+            }
+
+            // Per-resident cooldown
+            if ($residente !== '' && $cooldownDias > 0) {
+                $ultDesc = (int) ($partida['discovery_dia']['por_residente'][$residente]['ultimo_dia'] ?? 0);
+                if ($ultDesc > 0 && ($dia - $ultDesc) < $cooldownDias) {
+                    $partida['discovery_dia']['count']++;
+                    continue;
+                }
+            }
+
             foreach ($obs as $quien) {
                 $quien = (string) $quien;
                 if ($quien === 'jugador' || $quien === 'celestine') {
@@ -97,6 +135,10 @@ final class DiscoveryReveal
                         $row = self::registrarJugador($partida, $residente, $campo, $valor, $origen, $correlacionId);
                         if ($row !== null) {
                             $hechos[] = ['quien' => 'jugador', 'de' => $residente, 'campo' => $campo];
+                            $partida['discovery_dia']['count']++;
+                            if ($residente !== '') {
+                                $partida['discovery_dia']['por_residente'][$residente]['ultimo_dia'] = $dia;
+                            }
                         }
                     }
                     continue;
@@ -105,6 +147,8 @@ final class DiscoveryReveal
                     $n = ConocimientoNpc::revelar($partida, $quien, $residente, [$campo], $origen);
                     if ($n > 0) {
                         $hechos[] = ['quien' => $quien, 'de' => $residente, 'campo' => $campo];
+                        $partida['discovery_dia']['count']++;
+                        $partida['discovery_dia']['por_residente'][$residente]['ultimo_dia'] = $dia;
                     }
                 }
             }

@@ -74,6 +74,8 @@ final class MotorVidaDiaria
         foreach (array_keys($partida['residentes'] ?? []) as $id) {
             $partida['residentes'][$id]['runtime']['acciones_autonomas_hoy'] = 0;
         }
+        // Global activity budget
+        ActividadPresupuesto::alComenzarDia($partida, $cal);
         $rng->persistToPartida($partida);
         return $partida['huecos_vida'];
     }
@@ -108,17 +110,42 @@ final class MotorVidaDiaria
         if (!isset($partida['huecos_vida']['dia']) || (int) $partida['huecos_vida']['dia'] !== $dia) {
             self::alComenzarDia($partida, $cal, $rng);
         }
+        // Ensure budget exists (e.g., resuming mid-day save)
+        if (!isset($partida['presupuesto_actividad']['dia']) || (int) $partida['presupuesto_actividad']['dia'] !== $dia) {
+            ActividadPresupuesto::alComenzarDia($partida, $cal);
+        }
         $horasHueco = is_array($partida['huecos_vida']['horas'] ?? null) ? $partida['huecos_vida']['horas'] : [];
         if (in_array($hora, $horasHueco, true) && !in_array($hora, $partida['huecos_vida']['ejecutados'] ?? [], true)) {
             $out['vida'] = self::ejecutarHuecoVida($partida, $catalog, $cal, $rng, $logger);
             $partida['huecos_vida']['ejecutados'][] = $hora;
+            // Hueco de vida always fires (pre-scheduled) but registers budget consumption
+            ActividadPresupuesto::consumir($partida, ActividadPresupuesto::CANAL_HUECO_VIDA, ActividadPresupuesto::PRIORIDAD_ALTA);
         }
-        $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
-        $out['iniciativa_social'] = IniciativaSocial::quizasDelTick($partida, $catalog, $cal, $rng, $logger);
+        // Salida individual: check global budget before attempting
+        if (!ActividadPresupuesto::agotado($partida)) {
+            $out['autonomo'] = self::quizasSalidaIndividual($partida, $catalog, $cal, $rng, $logger);
+            if ($out['autonomo'] !== null && !isset($out['autonomo']['error'])) {
+                ActividadPresupuesto::consumir($partida, ActividadPresupuesto::CANAL_SALIDA_INDIVIDUAL, ActividadPresupuesto::PRIORIDAD_BAJA);
+            }
+        } else {
+            $out['presupuesto_agotado_salida'] = true;
+        }
+        // Iniciativa social: check global budget before attempting
+        if (!ActividadPresupuesto::agotado($partida)) {
+            $out['iniciativa_social'] = IniciativaSocial::quizasDelTick($partida, $catalog, $cal, $rng, $logger);
+            if ($out['iniciativa_social'] !== null && ($out['iniciativa_social']['ok'] ?? false)) {
+                ActividadPresupuesto::consumir($partida, ActividadPresupuesto::CANAL_INICIATIVA_SOCIAL, ActividadPresupuesto::PRIORIDAD_MEDIA);
+            }
+        } else {
+            $out['presupuesto_agotado_social'] = true;
+        }
         $out['casuales'] = self::casualesDeHora($partida, $catalog, $cal, $rng);
 
         // Necesidades: decay horario para todos los residentes
         self::tickNecesidades($partida, $cal);
+
+        // Attach budget debug info
+        $out['presupuesto'] = ActividadPresupuesto::debug($partida);
 
         $rng->persistToPartida($partida);
         return $out;
