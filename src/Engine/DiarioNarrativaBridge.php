@@ -56,6 +56,10 @@ final class DiarioNarrativaBridge
             return null;
         }
 
+        if ($tipoBuzon === 'cotilleo' && $tipoEvento === 'encuentro_terminado') {
+            return null;
+        }
+
         $eventoId = self::claveEventoDeMensaje($mensaje);
         if ($eventoId === '') {
             return null;

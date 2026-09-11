@@ -322,7 +322,7 @@ final class EncuentroCotilleoCopy
 
         }
 
-        $lugarTxt = $lugar !== '' ? ' ' . self::prepLugar((string) ($base['lugar'] ?? ''), $lugar) : '';
+        $lugarTxt = $lugar !== '' ? ' ' . self::prepLugarEstancia((string) ($base['lugar'] ?? ''), $lugar) : '';
 
         $momento = self::momentoDia((int) ($enc['hora'] ?? $enc['hora_inicio'] ?? 12));
 
@@ -556,9 +556,18 @@ final class EncuentroCotilleoCopy
 
         if (!empty($conflicto['hay'])) {
 
+            $poolConflicto = [
+                'La cosa ha acabado un poco tensa.',
+                'Ha habido cierta tensión.',
+                'No ha terminado del todo bien.',
+                'El ambiente se ha quedado raro.',
+            ];
+            $seedConflicto = 'conflicto|' . implode('|', array_map('strval', $participantes)) . '|' . ($partida['rng']['cursor'] ?? 0);
+            $textoConflicto = CopyVariante::elegir($partida, 'encuentro_conflicto', $poolConflicto, $seedConflicto);
+
             return [
 
-                'texto' => 'La cosa ha acabado un poco tensa.',
+                'texto' => $textoConflicto,
 
                 'meta' => CotilleoCategoria::meta(CotilleoCategoria::DRAMA, true),
 
@@ -578,7 +587,7 @@ final class EncuentroCotilleoCopy
 
 
 
-        $tono = self::tonoExperiencia($res, $participantes);
+        $tono = self::tonoExperiencia($partida, $res, $participantes);
 
         if ($tono !== '') {
 
@@ -852,7 +861,7 @@ final class EncuentroCotilleoCopy
 
      */
 
-    private static function tonoExperiencia(array $res, array $participantes): string
+    private static function tonoExperiencia(array &$partida, array $res, array $participantes): string
 
     {
 
@@ -888,13 +897,25 @@ final class EncuentroCotilleoCopy
 
         if ($allPos) {
 
-            return 'Parece que han hecho buenas migas.';
+            $seed = 'tono_pos|' . implode('|', array_map('strval', $participantes)) . '|' . ($res['delta_social']['intensidad'] ?? 0);
+            return CopyVariante::elegir($partida, 'tono_positivo', [
+                'Parece que han hecho buenas migas.',
+                'Se les ha visto cómodos.',
+                'Han terminado con buen rollo.',
+                'La cosa ha fluido.',
+            ], $seed);
 
         }
 
         if ($allNeg) {
 
-            return 'La cosa ha estado algo fría.';
+            $seed = 'tono_neg|' . implode('|', array_map('strval', $participantes)) . '|' . ($res['delta_social']['intensidad'] ?? 0);
+            return CopyVariante::elegir($partida, 'tono_negativo', [
+                'La cosa ha estado algo fría.',
+                'No ha terminado de fluir.',
+                'La cosa se ha quedado un poco fría.',
+                'El ambiente ha quedado algo raro.',
+            ], $seed);
 
         }
 
@@ -904,12 +925,24 @@ final class EncuentroCotilleoCopy
 
         if ($hasPos && !$hasNeg) {
 
-            return 'Parece que han hecho buenas migas.';
+            $seed = 'tono_pos|' . implode('|', array_map('strval', $participantes)) . '|' . ($res['delta_social']['intensidad'] ?? 0);
+            return CopyVariante::elegir($partida, 'tono_positivo', [
+                'Parece que han hecho buenas migas.',
+                'Se les ha visto cómodos.',
+                'Han terminado con buen rollo.',
+                'La cosa ha fluido.',
+            ], $seed);
 
         }
 
         if ($hasNeg && !$hasPos) {
-            return 'La cosa ha estado algo tensa.';
+            $seed = 'tono_neg|' . implode('|', array_map('strval', $participantes)) . '|' . ($res['delta_social']['intensidad'] ?? 0);
+            return CopyVariante::elegir($partida, 'tono_negativo', [
+                'La cosa ha estado algo tensa.',
+                'No ha terminado del todo bien.',
+                'El ambiente ha quedado pesado.',
+                'La cosa se ha complicado un poco.',
+            ], $seed);
         }
 
         if ($hasPos && $hasNeg) {

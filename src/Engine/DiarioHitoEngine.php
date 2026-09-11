@@ -30,9 +30,9 @@ final class DiarioHitoEngine
 
     /** @var list<string> */
     private const CUERPOS_SE_CONOCIERON = [
-        'Por fin hemos hablado de verdad. Ya no somos desconocidos.',
-        'Hemos dado el primer paso para conocernos.',
-        'Por fin nos hemos presentado de verdad.',
+        'Hoy he conocido a {otro}. Ya nos conocemos.',
+        'Por fin he hablado de verdad con {otro}.',
+        'Hoy {otro} y yo nos hemos presentado por fin.',
     ];
 
     /** @var list<string> */
@@ -107,9 +107,9 @@ final class DiarioHitoEngine
 
     /** @var list<string> */
     private const CUERPOS_DECLARACION_RECHAZADA = [
-        'Me declaré a {otro}, pero no fui correspondido.',
+        'Me declaré a {otro}, pero no fue recíproco.',
         'Puse el corazón sobre la mesa ante {otro}. La respuesta fue no.',
-        'Declaración a {otro}: rechazada.',
+        'Declaración a {otro}: no aceptada.',
     ];
 
     /** @var list<string> */
@@ -141,7 +141,7 @@ final class DiarioHitoEngine
     /** @var list<string> */
     private const CUERPOS_ENCUENTRO_CALENTADO = [
         'Con {otro} surgió tensión. Del tipo que se comenta.',
-        'Ambiente tenso con {otro}. Aquí hay tema.',
+        'El ambiente con {otro} se puso denso.',
         'El aire con {otro} se cargó un poco.',
     ];
 
@@ -289,7 +289,7 @@ final class DiarioHitoEngine
             $consecuencias = [];
             $emo = self::emocionAnotadaDelEncuentro($res, $actorId);
             if ($emo !== '') {
-                $consecuencias[] = 'Estoy ' . ($emo === EstadoEmocional::TRISTE ? 'triste' : 'enfadad' . GeneroConcordancia::oa($partida, $actorId)) . '.';
+                $consecuencias[] = 'Estoy ' . ($emo === EstadoEmocional::TRISTE ? 'triste' : 'alterad' . GeneroConcordancia::oa($partida, $actorId)) . '.';
             }
 
             $entrada = self::escribir($partida, [
@@ -299,6 +299,10 @@ final class DiarioHitoEngine
                 'texto' => $texto,
                 'consecuencias' => $consecuencias,
                 'actores' => [$actorId],
+                'ts_juego' => [
+                    'dia' => (int) ($partida['reloj']['dia_pueblo'] ?? 1),
+                    'hora' => (int) ($enc['hora'] ?? $enc['hora_inicio'] ?? $partida['reloj']['hora_actual'] ?? 12),
+                ],
                 'origen' => [
                     'evento_id' => $eventoId,
                     'tipo_evento' => 'encuentro_terminado',
@@ -442,6 +446,12 @@ final class DiarioHitoEngine
                 continue;
             }
 
+            $hitoFecha = is_array($hito['fecha'] ?? null) ? $hito['fecha'] : [];
+            $tsHito = [
+                'dia' => (int) ($hitoFecha['dia'] ?? $partida['reloj']['dia_pueblo'] ?? 1),
+                'hora' => (int) ($hitoFecha['hora'] ?? $partida['reloj']['hora_actual'] ?? 12),
+            ];
+
             self::escribir($partida, [
                 'tipo' => 'diario_hito',
                 'subtipo' => $tipo,
@@ -449,6 +459,7 @@ final class DiarioHitoEngine
                 'texto' => $texto,
                 'consecuencias' => $consecuencias,
                 'actores' => [$actorId],
+                'ts_juego' => $tsHito,
                 'origen' => [
                     'evento_id' => $eventoId,
                     'tipo_evento' => 'relacion_hito',

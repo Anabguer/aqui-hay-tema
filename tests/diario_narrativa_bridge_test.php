@@ -30,7 +30,7 @@ DomainBootstrap::boot();
 $cal = CalibracionConfig::load($root);
 $service = new PartidaService($root);
 
-// --- 1) Encuentro social → cotilleo + diario ---
+// --- 1) Encuentro social → cotilleo en buzón, diario solo si mal/conflicto ---
 $pEnc = $service->nuevaPartida('playtest_01', 'diario-narr-enc');
 $pEnc['features']['buzon_enabled'] = true;
 $ida = 'per_p001';
@@ -50,13 +50,23 @@ $cotilleos = array_values(array_filter(
 ));
 ok($cotilleos !== [], 'cotilleo en buzón');
 $encId = (string) ($pEnc['encuentros'][0]['id'] ?? '');
-$diarioEnc = DiarioEngine::entradaPorEvento($pEnc, $encId);
-ok($diarioEnc !== null, 'encuentro → entrada diario');
-ok(
-    in_array($ida, $diarioEnc['actores'] ?? [], true) && in_array($idb, $diarioEnc['actores'] ?? [], true),
-    'actores del encuentro en diario'
-);
-ok(($diarioEnc['_placeholder_contenido'] ?? true) === false, 'sin placeholder en diario encuentro');
+// Debug: list all diario entries for this test
+foreach ($pEnc['diario'] ?? [] as $debugE) {
+    if (!is_array($debugE)) continue;
+    echo "  diario: tipo=" . ($debugE['tipo'] ?? '?') . " evento=" . ($debugE['origen']['evento_id'] ?? '?') . " texto=" . substr($debugE['texto'] ?? '', 0, 60) . "\n";
+}
+// El bridge mirror (3ra persona) NO crea entrada — solo DiarioHitoEngine crea si resultado fue malo
+$bridgeMirror = null;
+foreach ($pEnc['diario'] ?? [] as $e) {
+    if (!is_array($e)) continue;
+    $evId = (string) ($e['origen']['evento_id'] ?? '');
+    $tipo = (string) ($e['tipo'] ?? '');
+    if ($tipo === 'cotilleo' && str_contains($evId, $encId)) {
+        $bridgeMirror = $e;
+        break;
+    }
+}
+ok($bridgeMirror === null, 'bridge mirror 3ra persona NO genera entrada diario (guard funciona)');
 
 // --- 2) Hito relacional → diario ---
 $pHito = $service->nuevaPartida('juego_v1', 'diario-narr-hito');

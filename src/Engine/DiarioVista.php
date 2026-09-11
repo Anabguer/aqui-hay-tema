@@ -117,11 +117,18 @@ final class DiarioVista
         $filtro = self::filtroGrupo($entrada, $cat);
         $tono = self::tonoDe($entrada);
 
+        $ts = is_array($entrada['ts_juego'] ?? null) ? $entrada['ts_juego'] : [];
+        $horaDisplay = null;
+        if (($ts['hora'] ?? null) !== null) {
+            $horaDisplay = sprintf('%02d:%02d', (int) $ts['hora'], (int) ($ts['minuto'] ?? 0));
+        }
+
         return [
             'id' => (string) ($entrada['id'] ?? ''),
             'dia' => (int) ($entrada['dia'] ?? 0),
             'fecha_corta' => (string) ($entrada['fecha_corta'] ?? ''),
-            'ts_juego' => is_array($entrada['ts_juego'] ?? null) ? $entrada['ts_juego'] : null,
+            'ts_juego' => $ts !== [] ? $ts : null,
+            'hora_display' => $horaDisplay,
             'titulo' => $titulo,
             'explicacion' => $explicacion,
             'categoria_etiqueta' => self::etiquetaCategoria($entrada, $cat, $filtro),
@@ -136,38 +143,50 @@ final class DiarioVista
 
     /**
      * @param list<array<string, mixed>> $entradas
-     * @return array{relacional: array<string, true>, encuentro: array<string, true>}
+     * @return array{relacional: array<string, true>, encuentro: array<string, true>, emocion_encuentro: array<string, true>}
      */
     private static function indicesHito(array $entradas): array
     {
         $relacional = [];
         $encuentro = [];
+        $emocionEncuentro = [];
         foreach ($entradas as $e) {
-            if (!is_array($e) || (string) ($e['tipo'] ?? '') !== 'diario_hito') {
+            if (!is_array($e)) {
                 continue;
             }
-            $origen = is_array($e['origen'] ?? null) ? $e['origen'] : [];
-            $eventoId = (string) ($origen['evento_id'] ?? '');
-            if (str_starts_with($eventoId, 'diario_hito:encuentro:')) {
-                $encuentro[substr($eventoId, strlen('diario_hito:encuentro:'))] = true;
+            if ((string) ($e['tipo'] ?? '') === 'diario_hito') {
+                $origen = is_array($e['origen'] ?? null) ? $e['origen'] : [];
+                $eventoId = (string) ($origen['evento_id'] ?? '');
+                if (str_starts_with($eventoId, 'diario_hito:encuentro:')) {
+                    $encuentro[substr($eventoId, strlen('diario_hito:encuentro:'))] = true;
+                }
+                $sub = (string) ($e['subtipo'] ?? ($origen['hito_tipo'] ?? ''));
+                if ($sub !== '') {
+                    $actores = self::actoresOrdenados($e);
+                    if ($actores !== []) {
+                        $par = implode('|', $actores);
+                        $relacional['diario_hito:' . $sub . ':' . $par] = true;
+                        $relacional[$sub . ':' . $par] = true;
+                    }
+                }
             }
-            $sub = (string) ($e['subtipo'] ?? ($origen['hito_tipo'] ?? ''));
-            if ($sub === '') {
-                continue;
+            if ((string) ($e['tipo'] ?? '') === 'estado_emocional') {
+                $origenE = is_array($e['origen'] ?? null) ? $e['origen'] : [];
+                $info = is_array($origenE['informacion_revelada'] ?? null) ? $origenE['informacion_revelada'] : [];
+                $origenEmocional = (string) ($info['origen_emocional'] ?? '');
+                if (in_array($origenEmocional, ['encuentro', 'encuentro_intervencion'], true)) {
+                    $eventoE = (string) ($origenE['evento_id'] ?? '');
+                    if ($eventoE !== '') {
+                        $emocionEncuentro[$eventoE] = true;
+                    }
+                }
             }
-            $actores = self::actoresOrdenados($e);
-            if ($actores === []) {
-                continue;
-            }
-            $par = implode('|', $actores);
-            $relacional['diario_hito:' . $sub . ':' . $par] = true;
-            $relacional[$sub . ':' . $par] = true;
         }
-        return ['relacional' => $relacional, 'encuentro' => $encuentro];
+        return ['relacional' => $relacional, 'encuentro' => $encuentro, 'emocion_encuentro' => $emocionEncuentro];
     }
 
     /**
-     * @param array{relacional: array<string, true>, encuentro: array<string, true>} $indices
+     * @param array{relacional: array<string, true>, encuentro: array<string, true>, emocion_encuentro: array<string, true>} $indices
      * @param array<string, mixed> $entrada
      */
     private static function esRedundante(array $entrada, array $indices): bool
@@ -183,7 +202,27 @@ final class DiarioVista
         if (isset($indices['relacional']['diario_hito:' . $eventoId]) || isset($indices['relacional'][$eventoId])) {
             return true;
         }
-        return isset($indices['encuentro'][$eventoId]);
+        if (isset($indices['encuentro'][$eventoId])) {
+            return true;
+        }
+        $tipo = (string) ($entrada['tipo'] ?? '');
+        if (in_array($tipo, ['cotilleo', 'cotilleo_patron', 'discusion', 'senal_romantica'], true)) {
+            foreach ($indices['encuentro'] as $encClave => $_) {
+                if (str_contains($eventoId, $encClave) || str_contains($encClave, $eventoId)) {
+                    return true;
+                }
+            }
+        }
+        if ($tipo === 'estado_emocional') {
+            if (isset($indices['emocion_encuentro'][$eventoId])) {
+                foreach ($indices['encuentro'] as $encClave => $_) {
+                    if (str_contains($eventoId, $encClave) || str_contains($encClave, $eventoId)) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

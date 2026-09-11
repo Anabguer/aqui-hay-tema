@@ -674,7 +674,7 @@ final class EmocionalNarrativa
 
         switch ($origen) {
             case 'perder_trabajo':
-                return 'Parece que a ' . $nombre . ' le han soltado del trabajo. Está hecha polv' . $oA . '.';
+                return 'Parece que a ' . $nombre . ' le han soltado del trabajo. Está de bajón.';
             case 'encontrar_trabajo':
                 return $nombre . ' ha encontrado trabajo. Se le nota más animad' . $oA . '.';
             case 'rechazo_repetido':
@@ -690,7 +690,7 @@ final class EmocionalNarrativa
                 if ($nomQ === '') {
                     $nomQ = 'alguien';
                 }
-                return $nombre . ' ha quedado tocad' . $oA . ' tras un rechazo de ' . $nomQ . '.';
+                return $nombre . ' le ha sentado mal un rechazo de ' . $nomQ . '.';
             case 'encuentro':
             case 'encuentro_intervencion':
                 $res = (string) ($contexto['resultado_experiencia'] ?? '');
