@@ -106,15 +106,14 @@ final class NecesidadEstado
     }
 
     /**
-     * Calcula la banda para un valor dado.
+     * Calcula la banda para un valor dado (soporta floats).
+     * Rangos continuos: bien >= 75, leV >= 50 y < 75, loNec >= 25 y < 50, enRojo < 25.
      */
     public static function calcularBanda(float $valor): string
     {
-        foreach (self::BANDAS as $banda => $rango) {
-            if ($valor >= $rango['min'] && $valor <= $rango['max']) {
-                return $banda;
-            }
-        }
+        if ($valor >= 75.0) return self::BANDA_BIEN;
+        if ($valor >= 50.0) return self::BANDA_LE_VENDRIA_BIEN;
+        if ($valor >= 25.0) return self::BANDA_LO_NECESITA;
         return self::BANDA_EN_ROJO;
     }
 

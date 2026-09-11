@@ -251,6 +251,12 @@ final class IniciativaSocial
         }
         MemoriaEventos::registrar($partida, 'iniciativa_social', [$desde, $hacia], null, $tipo);
         PropuestaCooldown::marcar($partida, $desde, $hacia, $tipo, $cal);
+        MotorVidaDiaria::marcarActividad($partida, [$desde, $hacia]);
+        foreach ([$desde, $hacia] as $pid) {
+            if (isset($partida['residentes'][$pid])) {
+                $partida['residentes'][$pid]['runtime']['acciones_autonomas_hoy'] = ((int) ($partida['residentes'][$pid]['runtime']['acciones_autonomas_hoy'] ?? 0)) + 1;
+            }
+        }
 
         return self::fin($partida, 'quedada_agendada', $desde, $hacia, [
             'programado_dia' => (int) $franja['dia'],
@@ -325,11 +331,16 @@ final class IniciativaSocial
      */
     private static function elegirIniciador(array $partida, array $cal, RngService $rng, int $dia, int $hora): ?string
     {
+        $capNPC = (int) CalibracionConfig::get($cal, 'autonomia.cap_acciones_por_npc_dia', 2);
         $pesos = [];
         foreach (array_keys($partida['residentes'] ?? []) as $id) {
             $id = (string) $id;
             $disp = AgendaEngine::estaDisponible($partida, $id, $dia, $hora);
             if (!($disp['disponible'] ?? false)) {
+                continue;
+            }
+            $accionesHoy = (int) ($partida['residentes'][$id]['runtime']['acciones_autonomas_hoy'] ?? 0);
+            if ($accionesHoy >= $capNPC) {
                 continue;
             }
             $w = 1.0;

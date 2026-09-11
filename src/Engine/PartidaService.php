@@ -433,7 +433,7 @@ final class PartidaService
                 : null,
             'placeholder' => $runtime['_placeholder'] ?? false,
             'estado_emocional' => $runtime['runtime']['estado_emocional'] ?? null,
-            'necesidades' => self::vistaNecesidades($runtime, $partida),
+            'necesidades' => self::vistaNecesidadesCompletas($runtime, $partida),
             'presentacion_visual' => $presentacion,
             'aprecio_celeste' => AprecioCelesteVista::vista((int) ($rt['aprecio_celeste'] ?? 0), $calFicha),
         ];
@@ -504,6 +504,51 @@ final class PartidaService
             if ($banda !== NecesidadEstado::BANDA_LO_NECESITA && $banda !== NecesidadEstado::BANDA_EN_ROJO) {
                 continue;
             }
+            $items[] = [
+                'id' => $nec,
+                'icono' => $iconos[$nec] ?? '',
+                'nombre' => ucfirst($nec),
+                'valor' => (int) ($n['valor'] ?? 0),
+                'banda' => $banda,
+                'copy' => NecesidadEstado::copyNecesidad($nec, $banda),
+            ];
+        }
+        if ($items === []) {
+            return null;
+        }
+        return ['items' => $items];
+    }
+
+    /**
+     * Vista completa de necesidades para la ficha individual.
+     * Siempre retorna las 4 necesidades con sus valores reales.
+     * A diferencia de vistaNecesidades(), NO filtra por banda.
+     *
+     * @param array<string, mixed> $runtime
+     * @return array{items: list<array<string, mixed>>}|null
+     */
+    private static function vistaNecesidadesCompletas(array $runtime, array $partida): ?array
+    {
+        if (!FeatureConfig::isEnabled($partida, 'necesidades_enabled')) {
+            return null;
+        }
+        $necesidades = $runtime['runtime']['necesidades'] ?? null;
+        if (!is_array($necesidades)) {
+            return null;
+        }
+        $items = [];
+        $iconos = [
+            'social' => "🤝",
+            'diversion' => "🎉",
+            'actividad' => "💪",
+            'calma' => "☕",
+        ];
+        foreach (NecesidadEstado::TODAS as $nec) {
+            $n = $necesidades[$nec] ?? null;
+            if (!is_array($n)) {
+                continue;
+            }
+            $banda = $n['banda'] ?? NecesidadEstado::BANDA_BIEN;
             $items[] = [
                 'id' => $nec,
                 'icono' => $iconos[$nec] ?? '',

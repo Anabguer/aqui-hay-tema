@@ -70,6 +70,10 @@ final class MotorVidaDiaria
             'horas' => $huecos,
             'ejecutados' => [],
         ];
+        // Reset per-NPC daily action counter
+        foreach (array_keys($partida['residentes'] ?? []) as $id) {
+            $partida['residentes'][$id]['runtime']['acciones_autonomas_hoy'] = 0;
+        }
         $rng->persistToPartida($partida);
         return $partida['huecos_vida'];
     }
@@ -340,6 +344,11 @@ final class MotorVidaDiaria
             'error' => $r['error'] ?? null,
         ]);
         self::marcarActividad($partida, $elegido['participantes']);
+        foreach ($elegido['participantes'] as $pid) {
+            if (isset($partida['residentes'][$pid])) {
+                $partida['residentes'][$pid]['runtime']['acciones_autonomas_hoy'] = ((int) ($partida['residentes'][$pid]['runtime']['acciones_autonomas_hoy'] ?? 0)) + 1;
+            }
+        }
         return ['capa' => $capa, 'evento' => $elegido['id'], 'resultado' => $r];
     }
 
@@ -355,11 +364,16 @@ final class MotorVidaDiaria
         $bonusDias = (int) CalibracionConfig::get($cal, 'acontecimientos_dia.olvidados_bonus_dias', 3);
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
+        $capNPC = (int) CalibracionConfig::get($cal, 'autonomia.cap_acciones_por_npc_dia', 2);
         $pesos = [];
         foreach ($ids as $id) {
             $id = (string) $id;
             $disp = AgendaEngine::estaDisponible($partida, $id, $dia, $hora);
             if (!($disp['disponible'] ?? false)) {
+                continue;
+            }
+            $accionesHoy = (int) ($partida['residentes'][$id]['runtime']['acciones_autonomas_hoy'] ?? 0);
+            if ($accionesHoy >= $capNPC) {
                 continue;
             }
             $w = 1.0;
@@ -478,12 +492,17 @@ final class MotorVidaDiaria
         $hora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $aislamientoUmbral = (int)   CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_umbral_dias', 0);
         $aislamientoBonusSal = (float) CalibracionConfig::get($cal, 'autonomia.anti_aislamiento_bonus_salida', 0.0);
+        $capNPC = (int) CalibracionConfig::get($cal, 'autonomia.cap_acciones_por_npc_dia', 2);
         $ids = array_keys($partida['residentes'] ?? []);
         $pesos = [];
         foreach ($ids as $id) {
             $id = (string) $id;
             $disp = AgendaEngine::estaDisponible($partida, $id, $dia, $hora);
             if (!($disp['disponible'] ?? false)) {
+                continue;
+            }
+            $accionesHoy = (int) ($partida['residentes'][$id]['runtime']['acciones_autonomas_hoy'] ?? 0);
+            if ($accionesHoy >= $capNPC) {
                 continue;
             }
             $w = 1.0;
@@ -571,6 +590,7 @@ final class MotorVidaDiaria
             }
         }
 self::marcarActividad($partida, [$quien]);
+        $partida['residentes'][$quien]['runtime']['acciones_autonomas_hoy'] = ((int) ($partida['residentes'][$quien]['runtime']['acciones_autonomas_hoy'] ?? 0)) + 1;
         $nowDia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         $nowHora = (int) ($partida['reloj']['hora_actual'] ?? 0);
         $partida['npc_autonomo']['historial_eventos'][] = [
@@ -630,9 +650,12 @@ self::marcarActividad($partida, [$quien]);
     }
 
     /**
+     * Marca el último día de protagonismo para los residentes dados.
+     * Público para que otros subsistemas (IniciativaSocial) lo invoquen.
+     *
      * @param list<string> $ids
      */
-    private static function marcarActividad(array &$partida, array $ids): void
+    public static function marcarActividad(array &$partida, array $ids): void
     {
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         foreach ($ids as $id) {
