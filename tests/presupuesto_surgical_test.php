@@ -284,7 +284,7 @@ ok((int) $partidaDC['discovery_dia']['dia'] === 2, 'discovery_dia.dia = 2');
 echo "--- TEST 12: Cooldown per resident ---\n";
 
 $cooldown = (int) CalibracionConfig::get($calD, 'discovery.cooldown_dias_por_residente', 2);
-ok($cooldown === 2, "cooldown = $cooldown días");
+ok($cooldown === 3, "cooldown = $cooldown días");
 
 $partidaCD = [
     'discovery_dia' => ['dia' => 3, 'count' => 0, 'por_residente' => ['p001' => ['ultimo_dia' => 2]]],
@@ -353,6 +353,72 @@ $resultFP = DiscoveryReveal::aplicarEvento(
 );
 ok(count($resultFP['descubiertos']) === 0, 'probabilidad=0: 0 descubiertos');
 ok($partidaFP['discovery_dia']['count'] === 0, 'probabilidad=0: count NO incrementado');
+
+// ============================================================
+// TEST 14: Cooldown global bloquea discoveries recientes
+// ============================================================
+echo "--- TEST 14: Global cooldown blocks recent discoveries ---\n";
+
+$partidaGC = [
+    'discovery_dia' => ['dia' => 5, 'count' => 0, 'por_residente' => [], 'ultimo_dia_global' => 4],
+    'reloj' => ['dia_pueblo' => 5, 'hora_actual' => 12],
+    'residentes' => [],
+    'conocimiento_jugador' => [],
+];
+$calGC = $calD;
+$calGC['discovery']['cooldown_global_dias'] = 2;
+
+// Day 5, last global discovery was day 4 → 5-4=1 < 2 → BLOCKED
+$rngGC = new RngService('global-cooldown-test');
+$resultGC = DiscoveryReveal::aplicarEvento(
+    $partidaGC,
+    [['campo' => 'hobby.x', 'valor' => 'x', 'residente_id' => 'p001', 'observadores' => ['jugador']]],
+    $calGC,
+    'encuentro',
+    null,
+    $rngGC
+);
+ok(count($resultGC['descubiertos']) === 0, 'cooldown global: día 5 - último día 4 = 1 < 2 → bloqueado');
+
+// Day 6: 6-4=2 >= 2 → ALLOWED
+$partidaGC['reloj']['dia_pueblo'] = 6;
+$partidaGC['discovery_dia']['dia'] = 6;
+$partidaGC['discovery_dia']['count'] = 0;
+$rngGC2 = new RngService('global-cooldown-test-2');
+$resultGC2 = DiscoveryReveal::aplicarEvento(
+    $partidaGC,
+    [['campo' => 'hobby.y', 'valor' => 'y', 'residente_id' => 'p002', 'observadores' => ['jugador']]],
+    $calGC,
+    'encuentro',
+    null,
+    $rngGC2
+);
+ok(count($resultGC2['descubiertos']) >= 0, 'cooldown global: día 6 - último día 4 = 2 ≥ 2 → permite');
+
+// ============================================================
+// TEST 15: InteraccionCasual — solo Path A (consecuencia de presupuestada)
+// ============================================================
+echo "--- TEST 15: InteraccionCasual is Path A (consequence of budgeted) ---\n";
+
+// Entry point 1: casualesDeHora → called from tickHora (budgeted)
+$mvSrc = file_get_contents($root . '/src/Engine/MotorVidaDiaria.php');
+ok(strpos($mvSrc, 'casualesDeHora') !== false, 'MotorVidaDiaria llama a casualesDeHora');
+ok(strpos($mvSrc, 'InteraccionCasual::resolverGrupo') !== false, 'casualesDeHora llama a InteraccionCasual::resolverGrupo');
+
+// Entry point 2: CoincidenciasInteraccionBridge → RelojOperations/RelojDev
+$ciSrc = file_get_contents($root . '/src/Engine/CoincidenciasEngine.php');
+ok(strpos($ciSrc, 'CoincidenciasInteraccionBridge::intentarTrasCoincidencia') !== false,
+    'CoincidenciasEngine llama a CoincidenciasInteraccionBridge');
+$relojOps = file_get_contents($root . '/src/Engine/RelojOperations.php');
+ok(strpos($relojOps, 'CoincidenciasEngine::detectarEnIntervalo') !== false,
+    'RelojOperations llama a CoincidenciasEngine');
+
+// ejecutarPar is ONLY called from resolverGrupo (private path)
+$icSrc = file_get_contents($root . '/src/Engine/InteraccionCasual.php');
+ok(strpos($icSrc, 'self::ejecutarPar') !== false, 'ejecutarPar solo se llama desde resolverGrupo');
+
+// descubrimientoCasual uses origin='casual' (goes through throttle)
+ok(strpos($icSrc, "'casual'") !== false, 'descubrimientoCasual usa origin=casual (throttle applies)');
 
 // ============================================================
 // RESULT

@@ -432,13 +432,14 @@
     "discovery": {
         "hobbies_iniciales": 1,
         "rasgos_iniciales": 0,
-        "max_por_experiencia": 2,
+        "max_por_experiencia": 1,
         "max_por_dia": 1,
-        "prob_por_encuentro": 0.5,
-        "cooldown_dias_por_residente": 2,
+        "prob_por_encuentro": 0.4,
+        "cooldown_dias_por_residente": 3,
+        "cooldown_global_dias": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "1 hobby inicial por residente (decisión implementación, no regla narrativa definitiva). Throttling: max 3/día, 40% prob/encuentro, cooldown 2d/residente. RNG real (no crc32). Casual pasa throttle."
+        "_nota_balance": "1 hobby inicial por residente (decisión implementación, no regla narrativa definitiva). Throttling: max 1/día, 40% prob/encuentro, cooldown 3d/residente, cooldown 2d global. RNG real (no crc32). Casual pasa throttle."
     },
     "presupuesto_actividad": {
         "base": 1.5,

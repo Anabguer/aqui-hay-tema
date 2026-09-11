@@ -79,14 +79,26 @@ final class DiscoveryReveal
         $maxDia = (int) CalibracionConfig::get($cal, 'discovery.max_por_dia', 3);
         $probEncuentro = (float) CalibracionConfig::get($cal, 'discovery.prob_por_encuentro', 0.4);
         $cooldownDias = (int) CalibracionConfig::get($cal, 'discovery.cooldown_dias_por_residente', 2);
+        $cooldownGlobal = (int) CalibracionConfig::get($cal, 'discovery.cooldown_global_dias', 0);
 
         // Initialize daily counter
         if (!isset($partida['discovery_dia'])) {
-            $partida['discovery_dia'] = ['dia' => 0, 'count' => 0, 'por_residente' => []];
+            $partida['discovery_dia'] = ['dia' => 0, 'count' => 0, 'por_residente' => [], 'ultimo_dia_global' => 0];
+        }
+        if (!isset($partida['discovery_dia']['ultimo_dia_global'])) {
+            $partida['discovery_dia']['ultimo_dia_global'] = 0;
         }
         $dia = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
         if ((int) $partida['discovery_dia']['dia'] !== $dia) {
-            $partida['discovery_dia'] = ['dia' => $dia, 'count' => 0, 'por_residente' => []];
+            $partida['discovery_dia'] = ['dia' => $dia, 'count' => 0, 'por_residente' => [], 'ultimo_dia_global' => $partida['discovery_dia']['ultimo_dia_global'] ?? 0];
+        }
+
+        // Global cooldown: if a discovery happened recently, block all
+        if ($cooldownGlobal > 0 && ($partida['discovery_dia']['ultimo_dia_global'] ?? 0) > 0) {
+            $desde = $dia - $partida['discovery_dia']['ultimo_dia_global'];
+            if ($desde < $cooldownGlobal) {
+                return ['ok' => true, 'descubiertos' => []];
+            }
         }
 
         $hechos = [];
@@ -137,6 +149,7 @@ final class DiscoveryReveal
                         if ($row !== null) {
                             $hechos[] = ['quien' => 'jugador', 'de' => $residente, 'campo' => $campo];
                             $partida['discovery_dia']['count']++;
+                            $partida['discovery_dia']['ultimo_dia_global'] = $dia;
                             if ($residente !== '') {
                                 $partida['discovery_dia']['por_residente'][$residente]['ultimo_dia'] = $dia;
                             }
@@ -149,6 +162,7 @@ final class DiscoveryReveal
                     if ($n > 0) {
                         $hechos[] = ['quien' => $quien, 'de' => $residente, 'campo' => $campo];
                         $partida['discovery_dia']['count']++;
+                        $partida['discovery_dia']['ultimo_dia_global'] = $dia;
                         $partida['discovery_dia']['por_residente'][$residente]['ultimo_dia'] = $dia;
                     }
                 }

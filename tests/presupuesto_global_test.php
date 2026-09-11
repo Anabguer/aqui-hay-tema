@@ -106,13 +106,19 @@ ok($maxDia === 1, "max_por_dia = $maxDia (debe ser 1)");
 // TEST 8: Probabilidad por encuentro
 // ============================================================
 $probEnc = (float) CalibracionConfig::get($calD, 'discovery.prob_por_encuentro', 0.5);
-ok(abs($probEnc - 0.5) < 0.01, "prob_por_encuentro = $probEnc (debe ser 0.5)");
+ok(abs($probEnc - 0.4) < 0.01, "prob_por_encuentro = $probEnc (debe ser 0.4)");
 
 // ============================================================
 // TEST 9: Cooldown por residente
 // ============================================================
 $cooldown = (int) CalibracionConfig::get($calD, 'discovery.cooldown_dias_por_residente', 2);
-ok($cooldown === 2, "cooldown_dias_por_residente = $cooldown (debe ser 2)");
+ok($cooldown === 3, "cooldown_dias_por_residente = $cooldown (debe ser 3)");
+
+// ============================================================
+// TEST 9b: Cooldown global
+// ============================================================
+$cooldownGlobal = (int) CalibracionConfig::get($calD, 'discovery.cooldown_global_dias', 0);
+ok($cooldownGlobal === 2, "cooldown_global_dias = $cooldownGlobal (debe ser 2)");
 
 // ============================================================
 // TEST 10: Presupuesto calibración
