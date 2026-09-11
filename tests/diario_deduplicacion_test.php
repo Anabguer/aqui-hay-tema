@@ -246,5 +246,128 @@ foreach ($entradasAC as $e) {
 }
 ok(in_array($aC, $actoresA, true), 'C3. entrada de A pertenece a A');
 
+// ============================================================
+// CASO D: ENC_1 vs ENC_10 — sin colisión por subcadena
+// ============================================================
+$pD = $service->nuevaPartida('juego_v1', 'dedup-enc1-enc10');
+$idsD = array_keys($pD['residentes']);
+$aD = (string) $idsD[0];
+$bD = (string) $idsD[1];
+
+// Encounter 1: A y B
+$pD['reloj']['hora_actual'] = 10;
+$pD['encuentros'][] = [
+    'id' => 'enc_1',
+    'tipo' => 'plan',
+    'participantes' => [$aD, $bD],
+    'resultado' => [
+        'global' => 'mal',
+        'por_participante' => [
+            ['residente_id' => $aD, 'resultado' => 'mal'],
+            ['residente_id' => $bD, 'resultado' => 'mal'],
+        ],
+    ],
+    'hora' => 10,
+];
+DomainEventDispatcher::emit($pD, DomainEvents::ENCUENTRO_TERMINADO, [
+    'encuentro' => $pD['encuentros'][0],
+    'resultado' => $pD['encuentros'][0]['resultado'],
+    'actores' => [$aD, $bD],
+]);
+
+// Encounter 10: A y B (mismo día, distinto ID que empieza por "1")
+$pD['reloj']['hora_actual'] = 16;
+$pD['encuentros'][] = [
+    'id' => 'enc_10',
+    'tipo' => 'plan',
+    'participantes' => [$aD, $bD],
+    'resultado' => [
+        'global' => 'mal',
+        'por_participante' => [
+            ['residente_id' => $aD, 'resultado' => 'mal'],
+            ['residente_id' => $bD, 'resultado' => 'mal'],
+        ],
+    ],
+    'hora' => 16,
+];
+DomainEventDispatcher::emit($pD, DomainEvents::ENCUENTRO_TERMINADO, [
+    'encuentro' => $pD['encuentros'][1],
+    'resultado' => $pD['encuentros'][1]['resultado'],
+    'actores' => [$aD, $bD],
+]);
+
+// Verificar que AMBOS hitos existen
+$hitoD = DiarioEngine::listarPorResidente($pD, $aD);
+$enc1 = false;
+$enc10 = false;
+foreach ($hitoD as $e) {
+    if (($e['tipo'] ?? '') !== 'diario_hito') continue;
+    $evId = (string) ($e['origen']['evento_id'] ?? '');
+    if (str_contains($evId, 'enc_1:')) $enc1 = true;
+    if (str_contains($evId, 'enc_10:')) $enc10 = true;
+}
+ok($enc1, 'D1. ENC_1 sobrevive en diario_hito');
+ok($enc10, 'D2. ENC_10 sobrevive en diario_hito (no colisiona con ENC_1)');
+
+// ============================================================
+// CASO E: ENC_12 vs ENC_112 — sin colisión por subcadena
+// ============================================================
+$pE = $service->nuevaPartida('juego_v1', 'dedup-enc12-enc112');
+$idsE = array_keys($pE['residentes']);
+$aE = (string) $idsE[0];
+$bE = (string) $idsE[1];
+
+$pE['reloj']['hora_actual'] = 10;
+$pE['encuentros'][] = [
+    'id' => 'enc_12',
+    'tipo' => 'plan',
+    'participantes' => [$aE, $bE],
+    'resultado' => [
+        'global' => 'mal',
+        'por_participante' => [
+            ['residente_id' => $aE, 'resultado' => 'mal'],
+            ['residente_id' => $bE, 'resultado' => 'mal'],
+        ],
+    ],
+    'hora' => 10,
+];
+DomainEventDispatcher::emit($pE, DomainEvents::ENCUENTRO_TERMINADO, [
+    'encuentro' => $pE['encuentros'][0],
+    'resultado' => $pE['encuentros'][0]['resultado'],
+    'actores' => [$aE, $bE],
+]);
+
+$pE['reloj']['hora_actual'] = 16;
+$pE['encuentros'][] = [
+    'id' => 'enc_112',
+    'tipo' => 'plan',
+    'participantes' => [$aE, $bE],
+    'resultado' => [
+        'global' => 'mal',
+        'por_participante' => [
+            ['residente_id' => $aE, 'resultado' => 'mal'],
+            ['residente_id' => $bE, 'resultado' => 'mal'],
+        ],
+    ],
+    'hora' => 16,
+];
+DomainEventDispatcher::emit($pE, DomainEvents::ENCUENTRO_TERMINADO, [
+    'encuentro' => $pE['encuentros'][1],
+    'resultado' => $pE['encuentros'][1]['resultado'],
+    'actores' => [$aE, $bE],
+]);
+
+$hitoE = DiarioEngine::listarPorResidente($pE, $aE);
+$enc12 = false;
+$enc112 = false;
+foreach ($hitoE as $e) {
+    if (($e['tipo'] ?? '') !== 'diario_hito') continue;
+    $evId = (string) ($e['origen']['evento_id'] ?? '');
+    if (str_contains($evId, 'enc_12:')) $enc12 = true;
+    if (str_contains($evId, 'enc_112:')) $enc112 = true;
+}
+ok($enc12, 'E1. ENC_12 sobrevive en diario_hito');
+ok($enc112, 'E2. ENC_112 sobrevive en diario_hito (no colisiona con ENC_12)');
+
 echo $failures === 0 ? "OK diario_deduplicacion\n" : "FAIL diario_deduplicacion ({$failures})\n";
 exit($failures > 0 ? 1 : 0);
