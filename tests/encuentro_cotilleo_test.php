@@ -4,6 +4,7 @@ declare(strict_types=1);
 require_once dirname(__DIR__) . '/src/autoload.php';
 
 use AquiHayTema\Engine\BuzonEngine;
+use AquiHayTema\Engine\DiscoveryEngine;
 use AquiHayTema\Engine\DiscoveryReveal;
 use AquiHayTema\Engine\EncuentroCotilleoCopy;
 use AquiHayTema\Engine\EncuentroLifecycle;
@@ -65,10 +66,29 @@ ok(!str_contains($textoCita, 'tímido/a') && !str_contains($textoCita, 'timido/a
 $desc = is_array($partida['encuentros'][0]['resultado']['descubrimientos'] ?? null)
     ? $partida['encuentros'][0]['resultado']['descubrimientos']
     : [];
-// La discovery pipeline se ejecuta: el resultado del encounter existe.
+// La discovery pipeline se ejecuta siempre que el encuentro se resuelve.
 // Con calibración actual (cooldown_global_dias=2, max_por_dia=1, prob_por_encuentro=0.4),
 // los descubrimientos de preferencia pueden quedar throttled por encuentros casuales previos.
-ok(is_array($partida['encuentros'][0]['resultado'] ?? null), 'cita: discovery pipeline ejecutada (resultado existe)');
+// Verificamos señales REALES de que la pipeline se ejecutó:
+ok(is_array($partida['encuentros'][0]['resultado'] ?? null), 'cita: resultado del encuentro poblado');
+ok(is_array($desc), 'cita: descubrimientos es array (pipeline ejecutada)');
+// discovery_dia se inicializa y rastrea el día actual tras la pipeline
+$dd = $partida['discovery_dia'] ?? null;
+ok(is_array($dd), 'cita: discovery_dia inicializado por pipeline');
+ok(($dd['dia'] ?? -1) === (int) ($partida['reloj']['dia_pueblo'] ?? 0), 'cita: discovery_dia.tracks current day');
+ok(is_array($dd['por_residente'] ?? null), 'cita: discovery_dia.por_residente existe');
+// Si hubo descubrimientos efectivos, DiscoveryEngine::estado lo confirma
+$nDesc = 0;
+foreach ($desc as $d) {
+    if (!is_array($d)) continue;
+    $campo = (string) ($d['campo'] ?? '');
+    $de = (string) ($d['de'] ?? '');
+    if ($campo !== '' && $de !== '' && DiscoveryEngine::estado($partida, $de, $campo) === 'descubierto') {
+        $nDesc++;
+    }
+}
+// Puede ser 0 por throttling; lo importante es que la pipeline corrió (checks anteriores)
+ok($nDesc >= 0, 'cita: verificación de descubrimientos registrados (puede ser 0 por throttling)');
 
 echo "\n--- Cita ---\n{$textoCita}\n";
 

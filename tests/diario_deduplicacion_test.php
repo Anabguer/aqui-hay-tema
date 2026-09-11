@@ -369,5 +369,131 @@ foreach ($hitoE as $e) {
 ok($enc12, 'E1. ENC_12 sobrevive en diario_hito');
 ok($enc112, 'E2. ENC_112 sobrevive en diario_hito (no colisiona con ENC_12)');
 
+// ============================================================
+// CASO F: Dos encuentros mismo residente mismo día — ambos sobreviven
+// ============================================================
+$pF = $service->nuevaPartida('juego_v1', 'dedup-mismodía');
+$pF['features']['buzon_enabled'] = true;
+$pF['features']['diario_enabled'] = true;
+$idsF = array_keys($pF['residentes']);
+$aF = (string) $idsF[0];
+$bF = (string) $idsF[1];
+$cF = null;
+foreach ($idsF as $rid) {
+    if ($rid !== $aF && $rid !== $bF) {
+        $cF = (string) $rid;
+        break;
+    }
+}
+if ($cF === null) {
+    $cF = $aF;
+}
+
+// Simular hito de ENC_A (como lo crearía DiarioHitoEngine)
+$eventoIdHitoA = 'diario_hito:encuentro:enc_F_A:' . $aF;
+$pF['diario'][] = [
+    'id' => 'dia_hito_enc_F_A_' . $aF,
+    'dia' => $pF['reloj']['dia_pueblo'],
+    'tipo' => 'diario_hito',
+    'texto' => 'El plan con ' . $bF . ' se torció.',
+    'actores' => [$aF],
+    'ts_juego' => ['dia' => $pF['reloj']['dia_pueblo'], 'hora' => 10],
+    'origen' => [
+        'evento_id' => $eventoIdHitoA,
+        'tipo_evento' => 'encuentro_terminado',
+        'es_narrativo' => true,
+        '_placeholder' => false,
+    ],
+    '_placeholder_contenido' => false,
+];
+
+// Simular emoción de ENC_B (causada por encuentro distinto, con encuentro_id propagado)
+$pF['diario'][] = [
+    'id' => 'dia_emocion_enc_F_B_' . $aF,
+    'dia' => $pF['reloj']['dia_pueblo'],
+    'tipo' => 'estado_emocional',
+    'texto' => 'El encuentro con ' . $cF . ' me dejó hecha polva.',
+    'actores' => [$aF],
+    'origen' => [
+        'evento_id' => 'emocion:' . $aF . ':encuentro:' . $pF['reloj']['dia_pueblo'],
+        'tipo_evento' => 'estado_emocional',
+        'es_narrativo' => true,
+        'informacion_revelada' => [
+            'origen_emocional' => 'encuentro',
+            'estado' => 'triste',
+            'encuentro_id' => 'enc_F_B',
+        ],
+        '_placeholder' => false,
+    ],
+    '_placeholder_contenido' => false,
+];
+
+// Verificar raw: hito de ENC_A existe en diario
+$rawF = DiarioEngine::listarPorResidente($pF, $aF);
+$hayHitoA = false;
+foreach ($rawF as $e) {
+    if (($e['tipo'] ?? '') !== 'diario_hito') continue;
+    $evId = (string) ($e['origen']['evento_id'] ?? '');
+    if (str_contains($evId, 'enc_F_A:')) $hayHitoA = true;
+}
+ok($hayHitoA, 'F1. hito ENC_A existe en diario para residente A');
+
+// Verificar raw: emoción de ENC_B existe en diario
+$hayEmocionBRaw = false;
+foreach ($rawF as $e) {
+    if (($e['tipo'] ?? '') !== 'estado_emocional') continue;
+    $info = is_array($e['origen']['informacion_revelada'] ?? null) ? $e['origen']['informacion_revelada'] : [];
+    if (($info['encuentro_id'] ?? '') === 'enc_F_B') {
+        $hayEmocionBRaw = true;
+        break;
+    }
+}
+ok($hayEmocionBRaw, 'F2. emoción de ENC_B existe en diario para residente A');
+
+// Verificar Vista: emoción de ENC_B NO se oculta por hito de ENC_A
+// (encuentro_id: enc_F_B ≠ enc_F_A, así que no colisionan)
+$vistaF = DiarioVista::listarParaResidente($pF, $aF);
+$hayEmocionBVista = false;
+foreach ($vistaF as $e) {
+    $titulo = (string) ($e['titulo'] ?? '');
+    $explicacion = (string) ($e['explicacion'] ?? '');
+    if (str_contains($explicacion, 'hecha polva') || $titulo === 'Mi ánimo cambió' && str_contains($explicacion, $cF)) {
+        $hayEmocionBVista = true;
+        break;
+    }
+}
+ok($hayEmocionBVista, 'F3. emoción de ENC_B visible en vista (encuentro_id distinto al hito de ENC_A)');
+
+// Verificar Vista: emoción del MISMO encuentro que el hito SÍ se oculta
+$pF['diario'][] = [
+    'id' => 'dia_emocion_enc_F_A_' . $aF,
+    'dia' => $pF['reloj']['dia_pueblo'],
+    'tipo' => 'estado_emocional',
+    'texto' => 'El encuentro con ' . $bF . ' me dejó triste.',
+    'actores' => [$aF],
+    'origen' => [
+        'evento_id' => 'emocion:' . $aF . ':encuentro:1',
+        'tipo_evento' => 'estado_emocional',
+        'es_narrativo' => true,
+        'informacion_revelada' => [
+            'origen_emocional' => 'encuentro',
+            'estado' => 'triste',
+            'encuentro_id' => 'enc_F_A',
+        ],
+        '_placeholder' => false,
+    ],
+    '_placeholder_contenido' => false,
+];
+$vistaF2 = DiarioVista::listarParaResidente($pF, $aF);
+$hayEmocionAVista = false;
+foreach ($vistaF2 as $e) {
+    $explicacion = (string) ($e['explicacion'] ?? '');
+    if (str_contains($explicacion, 'me dejó triste')) {
+        $hayEmocionAVista = true;
+        break;
+    }
+}
+ok(!$hayEmocionAVista, 'F4. emoción de ENC_A oculta en vista (encuentro_id = enc_F_A = hito de ENC_A)');
+
 echo $failures === 0 ? "OK diario_deduplicacion\n" : "FAIL diario_deduplicacion ({$failures})\n";
 exit($failures > 0 ? 1 : 0);

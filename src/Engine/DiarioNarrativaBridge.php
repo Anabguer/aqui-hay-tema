@@ -205,6 +205,9 @@ final class DiarioNarrativaBridge
         $origen = (string) ($estadoData['origen'] ?? '');
         $eventoId = 'emocion:' . $residenteId . ':' . $origen . ':' . $dia;
 
+        $encCtx = is_array($estadoData['contexto'] ?? null) ? $estadoData['contexto'] : [];
+        $encId = (string) ($encCtx['encuentro_id'] ?? '');
+
         $existente = DiarioEngine::entradaPorEvento($partida, $eventoId);
         if ($existente !== null) {
             return $existente;
@@ -229,10 +232,13 @@ final class DiarioNarrativaBridge
                 'evento_id' => $eventoId,
                 'tipo_evento' => 'estado_emocional',
                 'es_narrativo' => true,
-                'informacion_revelada' => [
-                    'origen_emocional' => $origen,
-                    'estado' => $estadoId,
-                ],
+                'informacion_revelada' => array_merge(
+                    [
+                        'origen_emocional' => $origen,
+                        'estado' => $estadoId,
+                    ],
+                    $encId !== '' ? ['encuentro_id' => $encId] : []
+                ),
                 '_placeholder' => false,
             ],
             '_placeholder_contenido' => false,
