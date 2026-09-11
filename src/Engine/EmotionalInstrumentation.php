@@ -15,6 +15,8 @@ final class EmotionalInstrumentation
     private const LOG_TIPO_CAMBIO = 'emocion_cambiada';
     private const LOG_TIPO_EXPIRACION = 'emocion_expirada';
     private const LOG_TIPO_RESUMEN_DIA = 'emocion_resumen_dia';
+    private const CAP_EVENTOS = 200;
+    private const CAP_EXPIRACIONES = 100;
 
     /**
      * Asegura que la estructura de acumuladores exista en runtime.
@@ -71,6 +73,13 @@ final class EmotionalInstrumentation
         ];
 
         $partida['runtime'][self::RUNTIME_KEY]['eventos'][] = $entry;
+        // Cap de eventos para evitar crecimiento indefinido en SQL
+        if (count($partida['runtime'][self::RUNTIME_KEY]['eventos']) > self::CAP_EVENTOS) {
+            $partida['runtime'][self::RUNTIME_KEY]['eventos'] = array_slice(
+                $partida['runtime'][self::RUNTIME_KEY]['eventos'],
+                -self::CAP_EVENTOS
+            );
+        }
 
         // Acumulador global
         $acum = &$partida['runtime'][self::RUNTIME_KEY]['acumuladores'];
@@ -122,6 +131,13 @@ final class EmotionalInstrumentation
         ];
 
         $partida['runtime'][self::RUNTIME_KEY]['expiraciones'][] = $entry;
+        // Cap de expiraciones
+        if (count($partida['runtime'][self::RUNTIME_KEY]['expiraciones']) > self::CAP_EXPIRACIONES) {
+            $partida['runtime'][self::RUNTIME_KEY]['expiraciones'] = array_slice(
+                $partida['runtime'][self::RUNTIME_KEY]['expiraciones'],
+                -self::CAP_EXPIRACIONES
+            );
+        }
 
         if ($logger !== null) {
             $logger->log($partida, self::LOG_TIPO_EXPIRACION, $entry);

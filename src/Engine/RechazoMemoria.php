@@ -59,11 +59,28 @@ final class RechazoMemoria
             $actual = RelacionEngine::romanceHacia($partida, $hacia, $quienRechaza);
             $nuevo = RelacionBandas::clampRomance(($actual ?? 0) + $delta);
             RelacionEngine::setRomanceHacia($partida, $hacia, $quienRechaza, $nuevo);
-            $triste = $n >= $umbral || $relevante;
+
+            // Determinar origen y duración según sea primer rechazo o repetido
+            $esRepetido = $n >= $umbral;
+            if ($esRepetido) {
+                // Rechazo repetido: tristeza completa (10h)
+                $triste = true;
+                $originTristeza = 'rechazo_repetido';
+                $durTristeza = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 10);
+            } elseif ($relevante) {
+                // Primer rechazo relevante: tristeza leve (4h), origen distinto
+                $triste = true;
+                $originTristeza = 'rechazo_emocional';
+                $durTristeza = (int) CalibracionConfig::get($cal, 'rechazos.duracion_tristeza_emocional', 4);
+            } else {
+                $triste = false;
+                $originTristeza = '';
+                $durTristeza = 0;
+            }
+
             if ($triste) {
                 $reloj = $partida['reloj'] ?? [];
-                $dur = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 10);
-                $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $dur);
+                $hasta = EstadoEmocional::hastaDesdeDuracion($reloj, $durTristeza);
                 $root = dirname(__DIR__, 2);
                 $emoSvc = new EmotionalStateService(
                     new VisualPackStore($root),
@@ -74,16 +91,16 @@ final class RechazoMemoria
                     $partida,
                     $hacia,
                     EstadoEmocional::TRISTE,
-                    'rechazo_repetido',
+                    $originTristeza,
                     null,
                     $hasta,
-                    ['hacia' => $quienRechaza],
-                    $dur
+                    ['hacia' => $quienRechaza, 'n_rechazos' => $n, 'motivo_original' => $motivo],
+                    $durTristeza
                 );
                 EmocionalNarrativa::publicarCotilleo(
                     $partida,
                     $hacia,
-                    'rechazo_repetido',
+                    $originTristeza,
                     ['hacia' => $quienRechaza, 'quien' => $quienRechaza]
                 );
             }

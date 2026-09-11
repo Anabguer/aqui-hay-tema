@@ -273,6 +273,8 @@
         "banal_sin_consecuencia": true,
         "repetidos_umbral": 3,
         "delta_romance_hacia_quien_rechaza": -3,
+        "duracion_tristeza_emocional": 4,
+        "_nota_tristeza_emocional": "Duración (horas) de tristeza por primer rechazo relevante (emocional/relacional). Más leve que rechazo_repetido (10h).",
         "ventana_voluntad_dias": 30,
         "_nota_ventana_voluntad": "Decision producto 2026-08-24: mod_rechazos solo cuenta rechazos de los ultimos 30 dias (frontera inclusiva: dia_actual - dia_rechazo <= 30). Historico se conserva; erosion en el momento del rechazo no cambia.",
         "cooldown_horas": 6,

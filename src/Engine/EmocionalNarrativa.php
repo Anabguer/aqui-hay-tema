@@ -58,6 +58,9 @@ final class EmocionalNarrativa
             case 'rechazo_repetido':
                 $pensamiento = 'Esta vez no doy más. Necesito un respiro de planes, ¿de acuerdo?';
                 break;
+            case 'rechazo_emocional':
+                $pensamiento = 'Me ha dolido que me hayan dicho que no. Necesito un momento.';
+                break;
             case 'encuentro':
             case 'encuentro_intervencion':
                 $res = (string) ($ctx['resultado_experiencia'] ?? '');
@@ -174,6 +177,16 @@ final class EmocionalNarrativa
                     }
                 } else {
                     $explicacion = 'Le han rechazado planes demasiadas veces seguidas.';
+                }
+                break;
+
+            case 'rechazo_emocional':
+                $hacia = (string) ($ctx['hacia'] ?? '');
+                $nombreOtro = $hacia !== '' && $hacia !== $residenteId ? IdentidadPublica::nombre($partida, $hacia) : '';
+                if ($nombreOtro !== '') {
+                    $explicacion = 'Un rechazo de ' . $nombreOtro . ' le ha sentado mal. Necesita un respiro.';
+                } else {
+                    $explicacion = 'Le han rechazado un plan y le ha dolido.';
                 }
                 break;
 
@@ -305,6 +318,16 @@ final class EmocionalNarrativa
                     }
                 } else {
                     $explicacion = 'Me han rechazado planes demasiadas veces seguidas.';
+                }
+                break;
+
+            case 'rechazo_emocional':
+                $hacia = (string) ($ctx['hacia'] ?? '');
+                $nombreOtro = $hacia !== '' && $hacia !== $residenteId ? IdentidadPublica::nombre($partida, $hacia) : '';
+                if ($nombreOtro !== '') {
+                    $explicacion = 'Me ha dolido que ' . $nombreOtro . ' me haya dicho que no. Necesito un momento.';
+                } else {
+                    $explicacion = 'Me han rechazado un plan y me ha dolido.';
                 }
                 break;
 
@@ -557,6 +580,8 @@ final class EmocionalNarrativa
                 return 'Acaba de encontrar trabajo.';
             case 'rechazo_repetido':
                 return 'Le han rechazado planes repetidas veces.';
+            case 'rechazo_emocional':
+                return 'Le han rechazado un plan y le ha dolido.';
             case 'encuentro':
             case 'encuentro_intervencion':
                 $res = (string) ($ctx['resultado_experiencia'] ?? '');
@@ -606,6 +631,8 @@ final class EmocionalNarrativa
                 return '¡Tengo trabajo nuevo! Estoy que me salgo y quería decirlo.';
             case 'rechazo_repetido':
                 return 'Esta vez no doy más. Necesito un respiro de planes, ¿de acuerdo?';
+            case 'rechazo_emocional':
+                return 'Me ha dolido que me hayan dicho que no. Necesito un momento.';
             case 'hobby_recuperacion':
             case 'encuentro_y_hobby':
                 return 'Me he dedicado un rato a lo mío y estoy mucho mejor. A veces hace falta.';
@@ -657,6 +684,13 @@ final class EmocionalNarrativa
                     $nomQ = 'alguien';
                 }
                 return $nombre . ' y ' . $nomQ . ' no parecen congeniar últimamente.';
+            case 'rechazo_emocional':
+                $quien = (string) ($contexto['hacia'] ?? $contexto['quien'] ?? '');
+                $nomQ = $quien !== '' ? IdentidadPublica::nombre($partida, $quien) : 'alguien';
+                if ($nomQ === '') {
+                    $nomQ = 'alguien';
+                }
+                return $nombre . ' ha quedado tocad' . $oA . ' tras un rechazo de ' . $nomQ . '.';
             case 'encuentro':
             case 'encuentro_intervencion':
                 $res = (string) ($contexto['resultado_experiencia'] ?? '');
