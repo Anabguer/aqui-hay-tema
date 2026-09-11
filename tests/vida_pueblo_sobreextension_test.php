@@ -42,8 +42,8 @@ ok(VidaPuebloEngine::valor($p1) === $antes1, 'sin residentes: corazón no cambia
 // ============================================================
 // 2. Con residentes, corazón vs stateHeart continuo
 //    needs=75 → score=0.5, neutro=0.2, sin relaciones=0
-//    health=0.5×0.5+0.2×0.3=0.31, SH=50+0.31×40=62.4
-//    heart(65) > stateHeart(62.4) → pequeña sobreextensión
+//    health=0.5×0.5+0.2×0.3=0.31, SH=54+0.31×36=65.2
+//    heart(65) < stateHeart(65.2) → sin sobreextensión en partida nueva
 // ============================================================
 $p2 = $svc->nuevaPartida('juego_v1', 'sobreext-test-bajo');
 VidaPuebloEngine::ensure($p2, $cal);
@@ -51,10 +51,10 @@ $antes2 = VidaPuebloEngine::valor($p2);
 $estado2 = VidaPuebloEngine::calcularEstadoPueblo($p2, $cal);
 $cfg2 = VidaPuebloEngine::cfg($cal);
 $sh2 = VidaPuebloEngine::stateHeart($estado2, $cfg2);
-ok($sh2 < $antes2, 'corazón(' . $antes2 . ') > stateHeart(' . round($sh2, 1) . '): pequeña sobreextensión en partida nueva');
+ok($sh2 >= $antes2, 'stateHeart(' . round($sh2, 1) . ') ≥ corazón(' . $antes2 . '): sin sobreextensión en partida nueva (SH alineado)');
 $r2 = VidaPuebloEngine::aplicarSobreextension($p2, $cal);
 ok($r2['ok'] === true, 'bajo stateHeart: retorna ok');
-ok($r2['delta_aplicado'] < 0, 'bajo stateHeart: penalty pequeño aplicado (' . $r2['delta_aplicado'] . ')');
+ok($r2['delta_aplicado'] === 0, 'bajo stateHeart: sin penalty en partida nueva (delta=' . $r2['delta_aplicado'] . ')');
 
 // ============================================================
 // 3. Con residentes, corazón alto → penalty se aplica
@@ -122,9 +122,9 @@ $cfg7 = VidaPuebloEngine::cfg($cal);
 $shMin = VidaPuebloEngine::stateHeart(['score' => -1.0, 'necesidades' => 0, 'emociones' => 0, 'relaciones' => 0], $cfg7);
 $shMax = VidaPuebloEngine::stateHeart(['score' => 1.0, 'necesidades' => 0, 'emociones' => 0, 'relaciones' => 0], $cfg7);
 $shZero = VidaPuebloEngine::stateHeart(['score' => 0.0, 'necesidades' => 0, 'emociones' => 0, 'relaciones' => 0], $cfg7);
-ok($shMin === 10.0, 'stateHeart(-1) = 10');
+ok($shMin === 18.0, 'stateHeart(-1) = 18');
 ok($shMax === 90.0, 'stateHeart(+1) = 90');
-ok($shZero === 50.0, 'stateHeart(0) = 50');
+ok($shZero === 54.0, 'stateHeart(0) = 54');
 
 // ============================================================
 // 8. Game over no se activa por sobreextensión

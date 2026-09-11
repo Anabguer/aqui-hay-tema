@@ -235,15 +235,15 @@ ok($rBuenas['stateHeart'] > $rSinRel['stateHeart'], "Relaciones buenas suben SH"
 ok($rMalas['stateHeart'] < $rSinRel['stateHeart'], "Relaciones malas bajan SH");
 
 // ============================================================
-// 8. SOBREEXTENSIÓN SIGUE EXISTIENDO
+// 8. SOBREEXTENSIÓN ALINEADA — partida nueva sin SE
 // ============================================================
 echo "\n--- 8. Sobreextensión con scoring continuo ---\n";
 $shInfo = stateHeartForNeeds([75, 75, 75, 75]);
 info("Partida nueva: heart=65, SH={$shInfo['stateHeart']}");
-ok(65 > $shInfo['stateHeart'], "Heart(65) > SH en partida nueva → sobreextensión aplica");
+ok($shInfo['stateHeart'] >= 65, "stateHeart(" . $shInfo['stateHeart'] . ") ≥ heart(65): SH alineado, sin SE en partida nueva");
 
 // ============================================================
-// 9. JUGADOR ACTIVO NO PIERDE SISTEMÁTICAMENTE
+// 9. JUGADOR ACTIVO: necesidades 80 sube SH
 // ============================================================
 echo "\n--- 9. Jugador activo: ganancias parcialmente retenidas ---\n";
 // Con necesidades 80 (bien por encima de 75):
@@ -251,9 +251,9 @@ $rActivo = stateHeartForNeeds([80, 80, 80, 80]);
 info("Necesidades 80 → SH={$rActivo['stateHeart']}");
 ok($rActivo['stateHeart'] > 60, "Necesidades 80 → SH > 60: sobreextensión moderada");
 
-// Con necesidades 75 (en la frontera):
+// Con necesidades 75 (baseline alineado):
 info("Necesidades 75 → SH={$r75['stateHeart']}");
-ok($r75['stateHeart'] < 65, "Necesidades 75 → SH < 65: sobreextensión presente");
+ok($r75['stateHeart'] >= 65, "Necesidades 75 → SH ≥ 65: SH alineado con heart inicial");
 
 // ============================================================
 // 10. DETERIORO REAL SOSTENIDO SÍ BAJA STATEHEART

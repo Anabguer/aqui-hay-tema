@@ -484,7 +484,7 @@
         "sobreextension_pesos_necesidades": 0.50,
         "sobreextension_pesos_emociones": 0.30,
         "sobreextension_pesos_relaciones": 0.20,
-        "sobreextension_estado_min": 10,
+        "sobreextension_estado_min": 18,
         "sobreextension_estado_max": 90,
         "estancamiento": {
             "_nota": "Presión por estancamiento real del pueblo. stateHeart ≤ umbral durante ventana_dias sin mejora ≥ umbral_mejora → -presion_por_dia tras grace_dias.",
