@@ -67,12 +67,9 @@ final class RechazoMemoria
                 $triste = true;
                 $originTristeza = 'rechazo_repetido';
                 $durTristeza = (int) CalibracionConfig::get($cal, 'emociones_v1.duracion_horas_default.triste', 10);
-            } elseif ($relevante) {
-                // Primer rechazo relevante: tristeza leve (4h), origen distinto
-                $triste = true;
-                $originTristeza = 'rechazo_emocional';
-                $durTristeza = (int) CalibracionConfig::get($cal, 'rechazos.duracion_tristeza_emocional', 4);
             } else {
+                // Primer rechazo relevante: SIN tristeza directa.
+                // Solo erosiona romance; la tristeza requiere acumulación (n>=umbral).
                 $triste = false;
                 $originTristeza = '';
                 $durTristeza = 0;

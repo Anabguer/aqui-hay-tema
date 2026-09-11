@@ -36,28 +36,19 @@ $service = new PartidaService($root);
 $store = (new Catalog($root))->store();
 
 // ============================================================
-// TEST 1: Primer rechazo relevante NO se etiqueta como repetido
+// TEST 1: Primer rechazo relevante NO genera tristeza directa
 // ============================================================
-echo "--- TEST 1: Primer rechazo relevante → rechazo_emocional ---\n";
+echo "--- TEST 1: Primer rechazo relevante → SIN tristeza ---\n";
 $p1 = $service->nuevaPartida('playtest_01', 'rechazo-first-relevant');
 $rids = array_keys($p1['residentes']);
 $rA = $rids[0];
 $rB = $rids[1];
 
 $r = RechazoMemoria::registrar($p1, $rA, $rB, 'emocional', $cal);
-ok($r['triste'] === true, 'primer rechazo emocional genera tristeza');
-$emo = $p1['residentes'][$rB]['runtime']['estado_emocional'];
-eq($emo['id'], 'triste', 'rechazado está triste');
-eq($emo['origen'], 'rechazo_emocional', 'origen es rechazo_emocional (no repetido)');
-
-// Verificar duración = 4h (no 10h)
-$durConfig = (int) CalibracionConfig::get($cal, 'rechazos.duracion_tristeza_emocional', 4);
-$hasta = $emo['hasta'] ?? null;
-ok($hasta !== null, 'hasta está definido');
-$durReal = ($hasta['dia'] ?? 0) * 24 + ($hasta['hora'] ?? 0);
-$desde = $emo['desde'] ?? [];
-$durEsperada = ($desde['dia'] ?? 0) * 24 + ($desde['hora'] ?? 0) + $durConfig;
-eq($durReal, $durEsperada, 'duración del primer rechazo emocional es 4h');
+ok($r['triste'] === false, 'primer rechazo emocional NO genera tristeza (solo erosión)');
+ok($r['delta_romance'] < 0, 'rechazo emocional erosiona romance');
+$n = RechazoMemoria::countHacia($p1, $rA, $rB);
+eq($n, 1, 'countHacia = 1');
 
 // ============================================================
 // TEST 2: Rechazo repetido (n >= umbral) → rechazo_repetido
@@ -85,9 +76,9 @@ $durReal2 = ($hasta2['dia'] ?? 0) * 24 + ($hasta2['hora'] ?? 0);
 eq($durReal2, $durEsperada2, 'duración del rechazo repetido es 10h');
 
 // ============================================================
-// TEST 3: Rechazo emocional/relacional no salta al mismo castigo
+// TEST 3: Rechazo emocional no genera tristeza ni escala a repetido
 // ============================================================
-echo "--- TEST 3: Rechazo emocional no escala a repetido ---\n";
+echo "--- TEST 3: Rechazo emocional sin tristeza ---\n";
 $p3 = $service->nuevaPartida('playtest_01', 'rechazo-emotional-not-repeated');
 $rids3 = array_keys($p3['residentes']);
 $rE = $rids3[0];
@@ -96,16 +87,16 @@ $rF = $rids3[1];
 // Un solo rechazo emocional
 RechazoMemoria::registrar($p3, $rE, $rF, 'emocional', $cal);
 $emo3 = $p3['residentes'][$rF]['runtime']['estado_emocional'];
-eq($emo3['origen'], 'rechazo_emocional', 'un rechazo emocional = origen rechazo_emocional');
+eq($emo3['id'], 'neutro', 'rechazo emocional NO cambia estado emocional');
 
 // Verificar que el conteo de rechazos hacia rF es 1 (no más)
 $n = RechazoMemoria::countHacia($p3, $rE, $rF);
 eq($n, 1, 'conteo de rechazos = 1');
 
 // ============================================================
-// TEST 4: Cadena enfado→rechazo no produce loop infinito
+// TEST 4: Cadena enfado→rechazo no produce tristeza directa
 // ============================================================
-echo "--- TEST 4: Cadena enfado→rechazo con cooldown ---\n";
+echo "--- TEST 4: Cadena enfado→rechazo sin tristeza ---\n";
 $p4 = $service->nuevaPartida('playtest_01', 'rechazo-chain-loop');
 $rids4 = array_keys($p4['residentes']);
 $rG = $rids4[0];
@@ -118,7 +109,8 @@ $emoSvc->aplicar($p4, $rG, EstadoEmocional::ENFADADO, 'test_forzado', null, null
 
 // rG rechaza a rH
 $rChain = RechazoMemoria::registrar($p4, $rG, $rH, 'emocional', $cal);
-ok($rChain['triste'] === true, 'rechazo en cadena genera tristeza');
+ok($rChain['triste'] === false, 'rechazo emocional en cadena NO genera tristeza (solo erosión)');
+ok($rChain['delta_romance'] < 0, 'erosiona romance');
 
 // Verificar que hay cooldown marcado
 $cooldownHaciaG = $p4['cooldowns_propuesta'] ?? [];
@@ -155,9 +147,9 @@ eq($final5['id'], EstadoEmocional::NEUTRO, 'expiración vuelve a neutro');
 ok($n >= 1, 'expirarVencidos reporta al menos 1 expiración');
 
 // ============================================================
-// TEST 6: Emotion origin preservado correctamente
+// TEST 6: Rechazo relacional no genera tristeza directa
 // ============================================================
-echo "--- TEST 6: Origin preservado ---\n";
+echo "--- TEST 6: Rechazo relacional sin tristeza ---\n";
 $p6 = $service->nuevaPartida('playtest_01', 'rechazo-origin-preserved');
 $rids6 = array_keys($p6['residentes']);
 $rJ = $rids6[0];
@@ -165,9 +157,8 @@ $rK = $rids6[1];
 
 RechazoMemoria::registrar($p6, $rJ, $rK, 'relacional', $cal);
 $emo6 = $p6['residentes'][$rK]['runtime']['estado_emocional'];
-eq($emo6['origen'], 'rechazo_emocional', 'origen preservado como rechazo_emocional');
-ok(is_array($emo6['contexto']), 'contexto es array');
-eq($emo6['contexto']['hacia'] ?? '', $rJ, 'contexto.hacia = rechazador');
+eq($emo6['id'], 'neutro', 'rechazo relacional NO genera tristeza directa');
+ok(RechazoMemoria::countHacia($p6, $rJ, $rK) === 1, 'countHacia = 1');
 
 // ============================================================
 // TEST 7: Instrumentación persiste en partida

@@ -72,14 +72,11 @@ final class EmotionalRecovery
 
     public static function estadoDesdeResultado(string $resultado): ?string
     {
-        if ($resultado === 'muy_bien' || $resultado === 'bien') {
+        if ($resultado === 'muy_bien') {
             return EstadoEmocional::ALEGRE;
         }
         if ($resultado === 'muy_mal') {
             return EstadoEmocional::TRISTE;
-        }
-        if ($resultado === 'mal') {
-            return EstadoEmocional::ENFADADO;
         }
         return null;
     }
