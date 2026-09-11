@@ -93,20 +93,20 @@ $partidaD = $service->nuevaPartida('playtest_01', 'test-discovery-init');
 $calD = CalibracionConfig::load($root);
 $nHob = (int) CalibracionConfig::get($calD, 'discovery.hobbies_iniciales', 0);
 $nRas = (int) CalibracionConfig::get($calD, 'discovery.rasgos_iniciales', 0);
-ok($nHob === 0, "hobbies_iniciales = $nHob (debe ser 0)");
+ok($nHob === 1, "hobbies_iniciales = $nHob (debe ser 1)");
 ok($nRas === 0, "rasgos_iniciales = $nRas (debe ser 0)");
 
 // ============================================================
 // TEST 7: Cap diario de descubrimientos
 // ============================================================
 $maxDia = (int) CalibracionConfig::get($calD, 'discovery.max_por_dia', 3);
-ok($maxDia === 3, "max_por_dia = $maxDia (debe ser 3)");
+ok($maxDia === 1, "max_por_dia = $maxDia (debe ser 1)");
 
 // ============================================================
 // TEST 8: Probabilidad por encuentro
 // ============================================================
-$probEnc = (float) CalibracionConfig::get($calD, 'discovery.prob_por_encuentro', 0.4);
-ok(abs($probEnc - 0.4) < 0.01, "prob_por_encuentro = $probEnc (debe ser 0.4)");
+$probEnc = (float) CalibracionConfig::get($calD, 'discovery.prob_por_encuentro', 0.5);
+ok(abs($probEnc - 0.5) < 0.01, "prob_por_encuentro = $probEnc (debe ser 0.5)");
 
 // ============================================================
 // TEST 9: Cooldown por residente
@@ -123,6 +123,28 @@ $dia1F = (float) CalibracionConfig::get($cal, 'presupuesto_actividad.dia_1_facto
 ok(abs($base - 1.5) < 0.01, "presupuesto base = $base");
 ok(abs($factor - 0.8) < 0.01, "presupuesto factor_sqrt = $factor");
 ok(abs($dia1F - 0.5) < 0.01, "presupuesto dia_1_factor = $dia1F");
+
+// Hueco ratio
+$maxHuecoRatio = (float) CalibracionConfig::get($cal, 'presupuesto_actividad.max_hueco_ratio', 0.6);
+ok(abs($maxHuecoRatio - 0.6) < 0.01, "presupuesto max_hueco_ratio = $maxHuecoRatio");
+
+// ============================================================
+// TEST 10b: puedeCanal anti-monopolio
+// ============================================================
+$partidaAnti = [
+    'presupuesto_actividad' => [
+        'dia' => 1, 'total' => 3, 'consumido' => 0,
+        'por_canal' => ['hueco_vida' => 0, 'iniciativa_social' => 0, 'salida_individual' => 0, 'evento_pueblo' => 0],
+        'bloqueados' => [],
+    ],
+    'reloj' => ['dia_pueblo' => 1, 'hora_actual' => 10],
+];
+ok(ActividadPresupuesto::puedeCanal($partidaAnti, 'hueco_vida', $cal), 'hueco puede (0/2)');
+$partidaAnti['presupuesto_actividad']['por_canal']['hueco_vida'] = 1;
+ok(ActividadPresupuesto::puedeCanal($partidaAnti, 'hueco_vida', $cal), 'hueco puede (1/2)');
+$partidaAnti['presupuesto_actividad']['por_canal']['hueco_vida'] = 2;
+ok(!ActividadPresupuesto::puedeCanal($partidaAnti, 'hueco_vida', $cal), 'hueco bloqueado (2/2 = 67% > 60%)');
+ok(ActividadPresupuesto::puedeCanal($partidaAnti, 'salida_individual', $cal), 'salida puede (no es hueco)');
 
 // ============================================================
 // TEST 11: Debug output

@@ -430,15 +430,15 @@
         "duracion_dias": 5
     },
     "discovery": {
-        "hobbies_iniciales": 0,
+        "hobbies_iniciales": 1,
         "rasgos_iniciales": 0,
         "max_por_experiencia": 2,
-        "max_por_dia": 3,
-        "prob_por_encuentro": 0.4,
+        "max_por_dia": 1,
+        "prob_por_encuentro": 0.5,
         "cooldown_dias_por_residente": 2,
         "no_por_paso_del_tiempo": true,
         "BALANCE_PENDIENTE_CATALOGO_PERSONAJES": true,
-        "_nota_balance": "Throttling activo: 0+0 iniciales, max 3/día, 40% prob/encuentro, cooldown 2d/residente."
+        "_nota_balance": "1 hobby inicial por residente (decisión implementación, no regla narrativa definitiva). Throttling: max 3/día, 40% prob/encuentro, cooldown 2d/residente. RNG real (no crc32). Casual pasa throttle."
     },
     "presupuesto_actividad": {
         "base": 1.5,
@@ -446,7 +446,8 @@
         "min": 1,
         "max": 15,
         "dia_1_factor": 0.5,
-        "_nota": "Presupuesto global diario: round(base + factor × sqrt(n)). Día 1 reduce a dia_1_factor."
+        "max_hueco_ratio": 0.6,
+        "_nota": "Presupuesto global: round(base + factor × sqrt(n)). Día 1: dia_1_factor. Anti-monopolio: huecos máx = ceil(total × max_hueco_ratio)."
     },
     "coincidencias": {
         "prob_interactuar_base": 0.32,

@@ -14,10 +14,14 @@ namespace AquiHayTema\Engine;
  *   2. Iniciativa social (NPC→NPC deliberada) — MEDIA
  *   3. Salidas individuales (NPC solo a un lugar) — BAJA
  *
+ * Protección anti-monopolio: los huecos tienen un tope configurable
+ * (max_hueco_ratio) sobre el total del presupuesto. Si ya consumieron
+ * esa fracción, se saltan para dejar cupo a otros canales.
+ *
  * Canales que NO consumen presupuesto:
  *   - Tutorial (garantizado, pedagógico)
  *   - Propuestas del jugador/Celestine
- *   - Interacciones casuales (ocurren entre encuentros ya programados)
+ *   - Interacciones casuales (consecuencia de encuentros ya presupuestados)
  *   - Catch-up offline
  */
 final class ActividadPresupuesto
@@ -82,6 +86,39 @@ final class ActividadPresupuesto
         }
 
         return $budget;
+    }
+
+    /**
+     * Verifica si un canal puede consumir presupuesto ahora mismo.
+     * Para huecos de vida aplica anti-monopolio: si ya consumieron
+     * demasiado del total, se bloquean.
+     *
+     * @param array<string, mixed> $partida
+     * @param array<string, mixed> $cal
+     */
+    public static function puedeCanal(array $partida, string $canal, array $cal = []): bool
+    {
+        $pres = $partida['presupuesto_actividad'] ?? null;
+        if ($pres === null) {
+            return true;
+        }
+
+        // Siempre verificar agotado primero
+        if ($pres['total'] - $pres['consumido'] <= 0) {
+            return false;
+        }
+
+        // Anti-monopolio huecos: si ya consumieron más del ratio máximo, bloquear
+        if ($canal === self::CANAL_HUECO_VIDA) {
+            $maxRatio = (float) CalibracionConfig::get($cal, 'presupuesto_actividad.max_hueco_ratio', 0.6);
+            $huecoMax = (int) ceil($pres['total'] * $maxRatio);
+            $huecoActual = $pres['por_canal'][self::CANAL_HUECO_VIDA] ?? 0;
+            if ($huecoActual >= $huecoMax) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

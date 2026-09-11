@@ -116,10 +116,15 @@ final class MotorVidaDiaria
         }
         $horasHueco = is_array($partida['huecos_vida']['horas'] ?? null) ? $partida['huecos_vida']['horas'] : [];
         if (in_array($hora, $horasHueco, true) && !in_array($hora, $partida['huecos_vida']['ejecutados'] ?? [], true)) {
-            $out['vida'] = self::ejecutarHuecoVida($partida, $catalog, $cal, $rng, $logger);
-            $partida['huecos_vida']['ejecutados'][] = $hora;
-            // Hueco de vida always fires (pre-scheduled) but registers budget consumption
-            ActividadPresupuesto::consumir($partida, ActividadPresupuesto::CANAL_HUECO_VIDA, ActividadPresupuesto::PRIORIDAD_ALTA);
+            // Huecos DEBEN respetar el coordinador global (anti-monopolio + agotado)
+            if (ActividadPresupuesto::puedeCanal($partida, ActividadPresupuesto::CANAL_HUECO_VIDA, $cal)) {
+                $out['vida'] = self::ejecutarHuecoVida($partida, $catalog, $cal, $rng, $logger);
+                $partida['huecos_vida']['ejecutados'][] = $hora;
+                ActividadPresupuesto::consumir($partida, ActividadPresupuesto::CANAL_HUECO_VIDA, ActividadPresupuesto::PRIORIDAD_ALTA);
+            } else {
+                $partida['huecos_vida']['ejecutados'][] = $hora;
+                $out['hueco_bloqueado_presupuesto'] = true;
+            }
         }
         // Salida individual: check global budget before attempting
         if (!ActividadPresupuesto::agotado($partida)) {

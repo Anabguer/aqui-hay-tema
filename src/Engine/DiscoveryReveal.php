@@ -72,7 +72,8 @@ final class DiscoveryReveal
         array $candidatos,
         array $cal,
         string $origen = 'evento',
-        ?string $correlacionId = null
+        ?string $correlacionId = null,
+        ?RngService $rng = null
     ): array {
         $max = (int) CalibracionConfig::get($cal, 'discovery.max_por_experiencia', 2);
         $maxDia = (int) CalibracionConfig::get($cal, 'discovery.max_por_dia', 3);
@@ -108,13 +109,13 @@ final class DiscoveryReveal
             $obs = is_array($c['observadores'] ?? null) ? $c['observadores'] : ['jugador'];
             $residente = (string) ($c['residente_id'] ?? '');
 
-            // Per-encounter probability gate
-            if ($origen === 'encuentro' && $probEncuentro < 1.0) {
-                // Use a deterministic seed based on campo+dia for consistency
-                $seed = crc32($campo . $dia . $residente);
-                $r = ($seed % 1000) / 1000.0;
-                if ($r >= $probEncuentro) {
-                    $partida['discovery_dia']['count']++;
+            // Probability gate: encuentro and casual both go through throttle
+            if (in_array($origen, ['encuentro', 'casual'], true) && $probEncuentro < 1.0) {
+                if ($rng === null) {
+                    $rng = RngService::fromPartida($partida);
+                }
+                if ($rng->nextFloat() >= $probEncuentro) {
+                    // No discovery — do NOT increment daily counter (only real discoveries count)
                     continue;
                 }
             }
@@ -123,7 +124,7 @@ final class DiscoveryReveal
             if ($residente !== '' && $cooldownDias > 0) {
                 $ultDesc = (int) ($partida['discovery_dia']['por_residente'][$residente]['ultimo_dia'] ?? 0);
                 if ($ultDesc > 0 && ($dia - $ultDesc) < $cooldownDias) {
-                    $partida['discovery_dia']['count']++;
+                    // Cooldown active — do NOT increment daily counter
                     continue;
                 }
             }
