@@ -812,7 +812,12 @@ final class VidaPuebloEngine
         $penalty = (int) round(-$overextension * $factor);
 
         if ($penalty === 0) {
-            return ['ok' => true, 'delta_aplicado' => 0, 'heart' => $heart, 'state_heart' => $stateHeart, 'overextension' => $overextension];
+            return ['ok' => true, 'delta_aplicado' => 0, 'heart' => $heart, 'state_heart' => $stateHeart, 'overextension' => $overextension,
+                'need_score' => round($estado['necesidades'], 3),
+                'emotional_score' => round($estado['emociones'], 3),
+                'relationship_score' => round($estado['relaciones'], 3),
+                'health_score' => round($estado['score'], 3),
+            ];
         }
 
         $r = self::aplicar($partida, $penalty, [
@@ -827,6 +832,12 @@ final class VidaPuebloEngine
             'state_heart' => $stateHeart,
             'overextension' => $overextension,
             'factor' => $factor,
+            'need_score' => round($estado['necesidades'], 3),
+            'emotional_score' => round($estado['emociones'], 3),
+            'relationship_score' => round($estado['relaciones'], 3),
+            'health_score' => round($estado['score'], 3),
+            'gap' => round($overextension, 1),
+            'penalty_calculada' => (int) round(-$overextension * $factor),
         ]);
     }
 
@@ -1021,7 +1032,8 @@ final class VidaPuebloEngine
 
     /**
      * Score de necesidades de un residente (-1 a +1).
-     * 0-24 = en_rojo (-1), 25-49 = lo_necesita (-0.5), 50-74 = le_vendria_bien (+0.3), 75-100 = bien (+1)
+     * Función continua: 100→1.0, 75→0.5, 50→0.0, 25→-0.5, 0→-1.0.
+     * Sin discontinuidades en fronteras de banda.
      */
     private static function scoreNecesidadesResidente(array $residente): float
     {
@@ -1035,16 +1047,8 @@ final class VidaPuebloEngine
             if (!is_array($nec) || !isset($nec['valor'])) {
                 continue;
             }
-            $v = (int) $nec['valor'];
-            if ($v >= 75) {
-                $suma += 1.0;
-            } elseif ($v >= 50) {
-                $suma += 0.3;
-            } elseif ($v >= 25) {
-                $suma += -0.5;
-            } else {
-                $suma += -1.0;
-            }
+            $v = (float) $nec['valor'];
+            $suma += ($v - 50.0) / 50.0;
             $n++;
         }
         return $n > 0 ? $suma / $n : 0.0;

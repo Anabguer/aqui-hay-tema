@@ -40,7 +40,10 @@ ok($r1['delta_aplicado'] === 0, 'sin residentes: delta es 0');
 ok(VidaPuebloEngine::valor($p1) === $antes1, 'sin residentes: corazón no cambia');
 
 // ============================================================
-// 2. Con residentes, corazón bajo stateHeart → no penalty
+// 2. Con residentes, corazón vs stateHeart continuo
+//    needs=75 → score=0.5, neutro=0.2, sin relaciones=0
+//    health=0.5×0.5+0.2×0.3=0.31, SH=50+0.31×40=62.4
+//    heart(65) > stateHeart(62.4) → pequeña sobreextensión
 // ============================================================
 $p2 = $svc->nuevaPartida('juego_v1', 'sobreext-test-bajo');
 VidaPuebloEngine::ensure($p2, $cal);
@@ -48,10 +51,10 @@ $antes2 = VidaPuebloEngine::valor($p2);
 $estado2 = VidaPuebloEngine::calcularEstadoPueblo($p2, $cal);
 $cfg2 = VidaPuebloEngine::cfg($cal);
 $sh2 = VidaPuebloEngine::stateHeart($estado2, $cfg2);
-ok($antes2 <= $sh2, 'corazón(' . $antes2 . ') <= stateHeart(' . round($sh2, 1) . '): sin sobreextensión');
+ok($sh2 < $antes2, 'corazón(' . $antes2 . ') > stateHeart(' . round($sh2, 1) . '): pequeña sobreextensión en partida nueva');
 $r2 = VidaPuebloEngine::aplicarSobreextension($p2, $cal);
 ok($r2['ok'] === true, 'bajo stateHeart: retorna ok');
-ok($r2['delta_aplicado'] === 0, 'bajo stateHeart: delta es 0');
+ok($r2['delta_aplicado'] < 0, 'bajo stateHeart: penalty pequeño aplicado (' . $r2['delta_aplicado'] . ')');
 
 // ============================================================
 // 3. Con residentes, corazón alto → penalty se aplica
