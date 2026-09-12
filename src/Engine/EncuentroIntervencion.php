@@ -559,7 +559,7 @@ final class EncuentroIntervencion
             case self::BROMA:
                 return 'Soltar una broma';
             case self::HOBBY:
-                return 'Sacar un tema que le guste';
+                return 'Sacar un tema';
             case self::PERSONAL:
                 return 'Contar algo personal';
             case self::COQUETEAR:

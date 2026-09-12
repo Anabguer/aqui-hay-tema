@@ -3137,6 +3137,9 @@
     /* Indicador de turno */
     html += '<p class="enc-int-kicker enc-int-kicker--turno">Turno ' + (turnoActual + 1) + '/' + turnosMax + '</p>';
 
+    /* Línea contextual: quién actúa sobre quién */
+    html += '<p class="enc-int-kicker enc-int-kicker-tema">' + esc(nombreDe(actorActual)) + ' va a hablar con ' + esc(nombreDe(receptorActual)) + '</p>';
+
     /* Acciones disponibles */
     html += '<div class="enc-int-btns enc-int-temas-grid">';
     iv.acciones.forEach(function (ac) {
