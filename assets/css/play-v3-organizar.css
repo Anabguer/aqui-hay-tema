@@ -1531,6 +1531,8 @@
 }
 
 /* ── Viñeta cómic de personaje ── */
+.pr-vignette[hidden] { display: none; }
+
 .pr-vignette {
   display: flex;
   flex-direction: column;

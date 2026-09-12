@@ -9459,7 +9459,7 @@ window.AHT_PLAN_IMAGES = {
     }
 
     function setVignetteClass(el, decision) {
-      if (!el) return;
+      if (!el || el.hidden) return;
       el.className = el.className.replace(/pr-vignette--(acepta|rechaza|duda)/g, '').trim();
       if (decision === 'acepta') {
         el.classList.add('pr-vignette--acepta');
@@ -9504,9 +9504,11 @@ window.AHT_PLAN_IMAGES = {
 
     function forceComicLayout() {
       var scene = document.querySelector('.pr-scene');
-      if (scene) scene.style.cssText = 'display:grid;grid-template-columns:1fr auto 1fr;gap:.35rem;width:100%;max-width:420px;align-items:start;';
+      var cols = hasTwo ? '1fr auto 1fr' : '1fr auto';
+      if (scene) scene.style.cssText = 'display:grid;grid-template-columns:' + cols + ';gap:.35rem;width:100%;max-width:420px;align-items:start;';
       [vignette1, vignette2].forEach(function(v) {
         if (v && !v.hidden) v.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.45rem .3rem .4rem;border-radius:18px 14px 20px 12px/14px 18px 10px 16px;background:#FCFBFE;border:3px solid #D8D1DE;box-shadow:3px 4px 0 rgba(48,40,58,.07);';
+        if (v && v.hidden) v.style.display = 'none';
       });
       if (vignette1) vignette1.style.transform = 'rotate(-2deg)';
       if (vignette2 && !vignette2.hidden) vignette2.style.transform = 'rotate(2deg)';
