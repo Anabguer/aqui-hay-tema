@@ -27,6 +27,13 @@ final class DiarioVista
         RelacionBitacora::APOYO_IMPORTANTE => 'Apoyo entre vecinos',
         'encuentro' => 'Un encuentro difícil',
         'descubrimiento' => 'Algo nuevo',
+        'quimica_alta' => 'Algo conecta',
+        'quimica_baja' => 'No conecto',
+        'atraccion_asimetrica' => 'No es mutuo',
+        'conflicto_personal' => 'Tensión',
+        'calentamiento_social' => 'Mejorando',
+        'enfriamiento_social' => 'Se enfría',
+        'estabilidad_pareja_baja' => 'Preocupación',
     ];
 
     /** @var array<string, string> */
@@ -44,6 +51,7 @@ final class DiarioVista
         'senal_romantica' => 'Señal romántica',
         'acontecimiento_perder_trabajo' => 'Me quedé sin trabajo',
         'acontecimiento_encontrar_trabajo' => 'Encontré trabajo',
+        'pista_social' => 'Pista sobre nosotros',
     ];
 
     /**
@@ -310,6 +318,9 @@ final class DiarioVista
             }
             return 'Relación';
         }
+        if ($tipo === 'pista_social') {
+            return 'Pista';
+        }
         if ($tipo === 'estado_emocional') {
             return 'Ánimo';
         }
@@ -341,6 +352,7 @@ final class DiarioVista
             || $tipo === 'cotilleo_hito'
             || $tipo === 'discusion'
             || $tipo === 'senal_romantica'
+            || $tipo === 'pista_social'
             || $tipoEvento === 'relacion_hito'
             || in_array($catId, [CotilleoCategoria::ROMANCE, CotilleoCategoria::RELACION, CotilleoCategoria::DRAMA], true)) {
             return 'relaciones';
@@ -402,6 +414,10 @@ final class DiarioVista
             RelacionBitacora::CRISIS,
             RelacionBitacora::DISCUSION_FUERTE,
             'encuentro',
+            'quimica_baja',
+            'conflicto_personal',
+            'enfriamiento_social',
+            'estabilidad_pareja_baja',
         ], true)) {
             return 'negativo';
         }
@@ -415,6 +431,8 @@ final class DiarioVista
             RelacionBitacora::HITO_ROMANTICO,
             RelacionBitacora::FLECHAZO,
             RelacionBitacora::PRIMERA_CITA,
+            'quimica_alta',
+            'calentamiento_social',
         ], true)) {
             return 'positivo';
         }
