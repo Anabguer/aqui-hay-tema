@@ -12,6 +12,13 @@ final class CopyPistasSociales
 {
     /** @var array<string, list<string>> */
     private const DIARIO = [
+        'flechazo' => [
+            'No sé qué me ha pasado con %s, pero me he quedado pensando en esa persona.',
+            'Algo ha cambiado con %s. No puedo dejar de pensar en ello.',
+            'Con %s todo se siente diferente. Y no sé explicar por qué.',
+            'Desde que vi a %s algo se me quedó grabado.',
+            '%s me ha llegado de una forma que no esperaba.',
+        ],
         'quimica_alta' => [
             'Con %s todo fluye demasiado fácil.',
             'No sé qué tiene %s, pero conecto como con nadie.',
@@ -61,13 +68,30 @@ final class CopyPistasSociales
             'Con %s me siento un poco inseguro.',
             'Las cosas con %s no van como antes.',
         ],
+        'primer_rechazo_relevante' => [
+            'Me he llevado un pequeño chasco con %s.',
+            'Algo se ha roto entre %s y yo. Fue un no que dolió.',
+            'Pensaba que había conexión con %s, pero no era así.',
+            'Con %s algo se cortó. No lo esperaba.',
+            'La cosa con %s no fue como yo creía.',
+        ],
+        'rechazo_repetido' => [
+            'Empiezo a pensar que debería dejar de insistir con %s.',
+            'Con %s las cosas no fluyen. Cada vez que intento algo, lo pillo mal.',
+            'Parece que %s y yo no estamos en la misma sintonía.',
+            'Ya van varias con %s. Algo no funciona.',
+            'Creo que es hora de aceptar que con %s no hay roce.',
+        ],
     ];
 
     /** @var array<string, list<string>> */
     private const TITULOS = [
+        'flechazo' => ['Me ha pillado', 'No me lo esperaba', 'Con %s todo cambia'],
         'quimica_alta' => ['Algo conecta', 'Una conexión rara', 'Con %s todo es fácil'],
         'quimica_baja' => ['No conecto', 'Algo no cuadra', 'Le cuesta conectar'],
         'atraccion_asimetrica' => ['No es mutuo', 'Creo que es unilateral', 'Solo lo siento yo'],
+        'primer_rechazo_relevante' => ['Un chasco', 'Me duele', 'Con %s se rompió algo'],
+        'rechazo_repetido' => ['Insisto de más', 'Es hora de parar', 'Con %s no funciona'],
         'conflicto_personal' => ['Tensión', 'No vamos bien', 'Problemas con %s'],
         'calentamiento_social' => ['Mejorando', 'Algo cambia', 'Con %s todo mejor'],
         'enfriamiento_social' => ['Se enfría', 'Ya no es lo mismo', 'Algo se pierde'],

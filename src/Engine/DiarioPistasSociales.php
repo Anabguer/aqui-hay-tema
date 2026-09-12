@@ -12,9 +12,12 @@ final class DiarioPistasSociales
 {
     /** @var list<string> */
     public const FAMILIAS = [
+        'flechazo',
         'quimica_alta',
         'quimica_baja',
         'atraccion_asimetrica',
+        'primer_rechazo_relevante',
+        'rechazo_repetido',
         'conflicto_personal',
         'calentamiento_social',
         'enfriamiento_social',
@@ -23,9 +26,12 @@ final class DiarioPistasSociales
 
     /** @var array<string, int> Cooldown mínimo en días entre entradas del mismo tipo para un par */
     private const COOLDOWN_DIAS = [
+        'flechazo' => 9999,
         'quimica_alta' => 9999,
         'quimica_baja' => 9999,
         'atraccion_asimetrica' => 30,
+        'primer_rechazo_relevante' => 9999,
+        'rechazo_repetido' => 30,
         'conflicto_personal' => 7,
         'calentamiento_social' => 30,
         'enfriamiento_social' => 30,
@@ -165,12 +171,107 @@ final class DiarioPistasSociales
         array $cal
     ): array {
         $senales = [];
-
+        $senales = array_merge($senales, self::evaluarFlechazo($partida, $a, $b));
         $senales = array_merge($senales, self::evaluarQuimica($partida, $a, $b));
         $senales = array_merge($senales, self::evaluarAtraccionAsimetrica($partida, $a, $b, $cal));
+        $senales = array_merge($senales, self::evaluarRechazos($partida, $a, $b));
         $senales = array_merge($senales, self::evaluarConflicto($partida, $a, $b));
         $senales = array_merge($senales, self::evaluarSocial($partida, $a, $b, $cal));
         $senales = array_merge($senales, self::evaluarEstabilidadPareja($partida, $a, $b));
+
+        return $senales;
+    }
+
+    /**
+     * Flechazo: hito registrado en bitácora_relaciones.
+     * DiarioHitoEngine ya crea la entrada 'Un flechazo'.
+     * DiarioPistasSociales añade una pista social complementaria.
+     * Solo escribe quien SIENTE el flechazo (direccional).
+     *
+     * @return list<array{familia: string, desde: string, hacia: string}>
+     */
+    private static function evaluarFlechazo(array $partida, string $a, string $b): array
+    {
+        $flechA = self::tieneFlechazo($partida, $a, $b);
+        $flechB = self::tieneFlechazo($partida, $b, $a);
+
+        if ($flechA && !$flechB) {
+            return [['familia' => 'flechazo', 'desde' => $a, 'hacia' => $b]];
+        }
+        if ($flechB && !$flechA) {
+            return [['familia' => 'flechazo', 'desde' => $b, 'hacia' => $a]];
+        }
+        if ($flechA && $flechB) {
+            return [
+                ['familia' => 'flechazo', 'desde' => $a, 'hacia' => $b],
+                ['familia' => 'flechazo', 'desde' => $b, 'hacia' => $a],
+            ];
+        }
+
+        return [];
+    }
+
+    /**
+     * Rechazos relevantes: lee rechazos_propuesta[] directamente.
+     * Primer rechazo relevante (n=1, motivo=emocional|relacional): genera entrada.
+     * Rechazo repetido (n≥2, motivo=emocional|relacional): genera entrada diferente.
+     * Rechazo banal: NO genera entrada.
+     * Rechazo_importante (n≥4): ya lo maneja DiarioHitoEngine.
+     * Auto-rechazos (quien=hacia): NO generan entrada.
+     *
+     * @return list<array{familia: string, desde: string, hacia: string}>
+     */
+    private static function evaluarRechazos(array $partida, string $a, string $b): array
+    {
+        $rechazos = $partida['rechazos_propuesta'] ?? [];
+        if ($rechazos === []) {
+            return [];
+        }
+
+        $nRechazosA = 0;
+        $nRechazosB = 0;
+        $hayRelevanteA = false;
+        $hayRelevanteB = false;
+
+        foreach ($rechazos as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            $quien = (string) ($row['quien'] ?? '');
+            $hacia = (string) ($row['hacia'] ?? '');
+            $motivo = (string) ($row['motivo'] ?? '');
+
+            if ($quien === $hacia) {
+                continue;
+            }
+
+            if (!in_array($motivo, ['emocional', 'relacional'], true)) {
+                continue;
+            }
+
+            if ($quien === $a && $hacia === $b) {
+                $nRechazosA++;
+                $hayRelevanteA = true;
+            }
+            if ($quien === $b && $hacia === $a) {
+                $nRechazosB++;
+                $hayRelevanteB = true;
+            }
+        }
+
+        $senales = [];
+
+        if ($hayRelevanteA && $nRechazosA === 1) {
+            $senales[] = ['familia' => 'primer_rechazo_relevante', 'desde' => $b, 'hacia' => $a];
+        } elseif ($hayRelevanteA && $nRechazosA >= 2) {
+            $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $b, 'hacia' => $a];
+        }
+
+        if ($hayRelevanteB && $nRechazosB === 1) {
+            $senales[] = ['familia' => 'primer_rechazo_relevante', 'desde' => $a, 'hacia' => $b];
+        } elseif ($hayRelevanteB && $nRechazosB >= 2) {
+            $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $a, 'hacia' => $b];
+        }
 
         return $senales;
     }
