@@ -184,8 +184,8 @@ final class DiarioPistasSociales
      * Primer rechazo relevante (n=1, motivo=emocional|relacional): genera entrada.
      * Rechazo repetido (n≥2, motivo=emocional|relacional): genera entrada diferente.
      * Rechazo banal: NO genera entrada.
-     * Si ya existe un RECHAZO_IMPORTANTE en bitacora para el par, suppress rechazo_repetido
-     * para evitar duplicación con el diario_hito que ya crea DiarioHitoEngine.
+     * El rechazo que dispara RECHAZO_IMPORTANTE (n≥4) no genera pista_social adicional.
+     * Rechazos posteriores (n=5, n=6...) SÍ generan pista_social si cooldown lo permite.
      * Auto-rechazos (quien=hacia): NO generan entrada.
      *
      * @return list<array{familia: string, desde: string, hacia: string}>
@@ -228,40 +228,57 @@ final class DiarioPistasSociales
             }
         }
 
-        $hayHitoA = self::hayRechazoImportante($partida, $a, $b);
-        $hayHitoB = self::hayRechazoImportante($partida, $b, $a);
-
         $senales = [];
 
         if ($hayRelevanteA && $nRechazosA === 1) {
             $senales[] = ['familia' => 'primer_rechazo_relevante', 'desde' => $b, 'hacia' => $a];
-        } elseif ($hayRelevanteA && $nRechazosA >= 2 && !$hayHitoA) {
-            $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $b, 'hacia' => $a];
+        } elseif ($hayRelevanteA && $nRechazosA >= 2) {
+            if (!self::ultimoRechazoEsDelHito($partida, $a, $b)) {
+                $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $b, 'hacia' => $a];
+            }
         }
 
         if ($hayRelevanteB && $nRechazosB === 1) {
             $senales[] = ['familia' => 'primer_rechazo_relevante', 'desde' => $a, 'hacia' => $b];
-        } elseif ($hayRelevanteB && $nRechazosB >= 2 && !$hayHitoB) {
-            $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $a, 'hacia' => $b];
+        } elseif ($hayRelevanteB && $nRechazosB >= 2) {
+            if (!self::ultimoRechazoEsDelHito($partida, $b, $a)) {
+                $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $a, 'hacia' => $b];
+            }
         }
 
         return $senales;
     }
 
     /**
-     * Comprueba si existe un hito RECHAZO_IMPORTANTE en bitacora para un par direccional.
+     * Comprueba si el último rechazo relevante de un par es el que disparó el hito RECHAZO_IMPORTANTE.
+     * Usa el timestamp hito_registro_dia/hora que RechazoMemoria marca al disparar el hito.
      */
-    private static function hayRechazoImportante(array $partida, string $desde, string $hacia): bool
+    private static function ultimoRechazoEsDelHito(array $partida, string $quienRechaza, string $hacia): bool
     {
-        foreach (RelacionBitacora::entre($partida, $desde, $hacia) as $h) {
-            if (($h['tipo'] ?? '') === RelacionBitacora::RECHAZO_IMPORTANTE) {
-                $d = (string) ($h['direccion'] ?? '');
-                if (str_starts_with($d, $desde . '>')) {
-                    return true;
-                }
+        $rechazos = $partida['rechazos_propuesta'] ?? [];
+        $ultimoRelevante = null;
+        foreach ($rechazos as $row) {
+            if (!is_array($row)) {
+                continue;
+            }
+            if (($row['quien'] ?? '') !== $quienRechaza || ($row['hacia'] ?? '') !== $hacia) {
+                continue;
+            }
+            $motivo = (string) ($row['motivo'] ?? '');
+            if (in_array($motivo, ['emocional', 'relacional'], true)) {
+                $ultimoRelevante = $row;
             }
         }
-        return false;
+        if ($ultimoRelevante === null) {
+            return false;
+        }
+        $hitoDia = $ultimoRelevante['hito_registro_dia'] ?? null;
+        $hitoHora = $ultimoRelevante['hito_registro_hora'] ?? null;
+        if ($hitoDia === null) {
+            return false;
+        }
+        return (int) $ultimoRelevante['dia'] === (int) $hitoDia
+            && (int) $ultimoRelevante['hora'] === (int) $hitoHora;
     }
 
     /**

@@ -39,6 +39,7 @@ final class RechazoMemoria
             'hora' => (int) ($partida['reloj']['hora_actual'] ?? 0),
         ];
         $partida['rechazos_propuesta'][] = $row;
+        $idx = count($partida['rechazos_propuesta']) - 1;
         PropuestaCooldown::marcar($partida, $hacia, $quienRechaza, $tipo, $cal);
 
         $delta = 0;
@@ -106,7 +107,13 @@ final class RechazoMemoria
                 self::tocarEstabilidad($partida, $quienRechaza, $hacia, -2);
             }
             if ($n >= $umbral + 1) {
-                RelacionBitacora::registrar($partida, RelacionBitacora::RECHAZO_IMPORTANTE, [$quienRechaza, $hacia], $quienRechaza . '>' . $hacia);
+                $yaExisteHito = RelacionBitacora::tienenHito($partida, $quienRechaza, $hacia, RelacionBitacora::RECHAZO_IMPORTANTE);
+                if (!$yaExisteHito) {
+                    $partida['rechazos_propuesta'][$idx] = $row;
+                    $partida['rechazos_propuesta'][$idx]['hito_registro_dia'] = (int) ($partida['reloj']['dia_pueblo'] ?? 1);
+                    $partida['rechazos_propuesta'][$idx]['hito_registro_hora'] = (int) ($partida['reloj']['hora_actual'] ?? 0);
+                    RelacionBitacora::registrar($partida, RelacionBitacora::RECHAZO_IMPORTANTE, [$quienRechaza, $hacia], $quienRechaza . '>' . $hacia);
+                }
             }
         }
         return ['ok' => true, 'delta_romance' => $delta, 'entrada' => $row, 'triste' => $triste];

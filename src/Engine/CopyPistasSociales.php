@@ -12,13 +12,6 @@ final class CopyPistasSociales
 {
     /** @var array<string, list<string>> */
     private const DIARIO = [
-        'flechazo' => [
-            'No sé qué me ha pasado con %s, pero me he quedado pensando en esa persona.',
-            'Algo ha cambiado con %s. No puedo dejar de pensar en ello.',
-            'Con %s todo se siente diferente. Y no sé explicar por qué.',
-            'Desde que vi a %s algo se me quedó grabado.',
-            '%s me ha llegado de una forma que no esperaba.',
-        ],
         'quimica_alta' => [
             'Con %s todo fluye demasiado fácil.',
             'No sé qué tiene %s, pero conecto como con nadie.',
@@ -86,7 +79,6 @@ final class CopyPistasSociales
 
     /** @var array<string, list<string>> */
     private const TITULOS = [
-        'flechazo' => ['Me ha pillado', 'No me lo esperaba', 'Con %s todo cambia'],
         'quimica_alta' => ['Algo conecta', 'Una conexión rara', 'Con %s todo es fácil'],
         'quimica_baja' => ['No conecto', 'Algo no cuadra', 'Le cuesta conectar'],
         'atraccion_asimetrica' => ['No es mutuo', 'Creo que es unilateral', 'Solo lo siento yo'],

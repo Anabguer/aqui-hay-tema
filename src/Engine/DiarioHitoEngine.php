@@ -28,6 +28,12 @@ final class DiarioHitoEngine
         RelacionBitacora::FLECHAZO,
     ];
 
+    /** Hitos unilaterales: solo el actor afectado recibe entrada de diario. */
+    private const DIRECCIONALES = [
+        RelacionBitacora::FLECHAZO,
+        RelacionBitacora::RECHAZO_IMPORTANTE,
+    ];
+
     /** @var list<string> */
     private const CUERPOS_SE_CONOCIERON = [
         'Hoy he conocido a {otro}. Ya nos conocemos.',
@@ -361,6 +367,11 @@ final class DiarioHitoEngine
             case RelacionBitacora::FLECHAZO:
                 $titulo = 'Un flechazo';
                 $textoPool = self::CUERPOS_FLECHAZO;
+                $dir = self::direccionDeHito($hito, $actores);
+                $varsBase = [
+                    'yo' => IdentidadPublica::nombre($partida, $dir['desde']),
+                    'otro' => IdentidadPublica::nombre($partida, $dir['hacia']),
+                ];
                 break;
             case RelacionBitacora::INICIO_PAREJA:
                 $titulo = 'Nueva pareja';
@@ -418,6 +429,11 @@ final class DiarioHitoEngine
 
         if ($textoPool === []) {
             return;
+        }
+
+        if (in_array($tipo, self::DIRECCIONALES, true)) {
+            $dir = self::direccionDeHito($hito, $actores);
+            $actores = array_values(array_filter($actores, static fn($id) => (string) $id === $dir['desde']));
         }
 
         $clave = self::claveHito($tipo, $actores);
@@ -478,6 +494,9 @@ final class DiarioHitoEngine
      */
     private static function claveHito(string $tipo, array $actores): string
     {
+        if (in_array($tipo, self::DIRECCIONALES, true)) {
+            return $tipo . ':' . implode('|', array_map('strval', $actores));
+        }
         $ids = $actores;
         sort($ids);
         return $tipo . ':' . implode('|', $ids);
