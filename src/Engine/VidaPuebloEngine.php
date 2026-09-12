@@ -661,6 +661,22 @@ final class VidaPuebloEngine
     }
 
     /**
+     * Delta Heart para actividades individuales: escala reducida, coherente.
+     * Actividad individual = experiencia personal, no impacto directo del pueblo.
+     */
+    public static function deltaIndividual(string $resultado): int
+    {
+        $map = [
+            'muy_bien' => 2,
+            'bien' => 1,
+            'normal' => 0,
+            'mal' => 0,
+            'muy_mal' => -1,
+        ];
+        return $map[$resultado] ?? 0;
+    }
+
+    /**
      * @param array<string, mixed> $resultado
      */
     public static function resultadoGlobalEncuentro(array $resultado): ?string
@@ -730,8 +746,8 @@ final class VidaPuebloEngine
             return null;
         }
         $delta = self::deltaResultadoEncuentro($res);
-        if (($encuentro['tipo'] ?? '') === 'individual' && $res === 'muy_mal') {
-            $delta = 0;
+        if (($encuentro['tipo'] ?? '') === 'individual') {
+            $delta = self::deltaIndividual($res);
         }
         if ($delta === 0) {
             return ['ok' => true, 'delta_aplicado' => 0, 'resultado' => $res];

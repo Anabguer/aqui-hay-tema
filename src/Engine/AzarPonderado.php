@@ -71,4 +71,48 @@ final class AzarPonderado
         }
         return $n >= $umbral;
     }
+
+    /**
+     * Tirada ponderada para actividades individuales.
+     *
+     * Base: normal/bien dominan. Ausencia de afinidad NO equivale a mal resultado.
+     * $afinidad: -0.5 (rechazo fuerte) .. 0 (neutral) .. +0.5 (match fuerte).
+     *
+     * @param list<string> $resultados
+     * @param array<string, mixed> $cal
+     */
+    public static function tirarIndividual(RngService $rng, array $resultados, float $afinidad, array $cal): array
+    {
+        if ($resultados === []) {
+            return ['resultado' => null, 'carga' => 0.0, '_provisional' => true];
+        }
+        $n = count($resultados);
+        $afinidad = max(-0.5, min(0.5, $afinidad));
+        $base = [0.01, 0.08, 0.50, 0.30, 0.11];
+        $scale = 0.20;
+        $pesos = [];
+        for ($i = 0; $i < $n; $i++) {
+            $t = $n === 1 ? 0.0 : ($i / ($n - 1)) * 2 - 1;
+            $pesos[] = max(0.01, $base[$i] + $afinidad * $t * $scale);
+        }
+        $sum = array_sum($pesos);
+        $pick = $rng->nextFloat() * $sum;
+        $acc = 0.0;
+        $idx = $n - 1;
+        foreach ($pesos as $i => $w) {
+            $acc += $w;
+            if ($pick <= $acc) {
+                $idx = $i;
+                break;
+            }
+        }
+        LabAudit::obsTirada($rng->getState(), $resultados, $afinidad, $pesos, (float) $sum, (float) $pick, (int) $idx, (string) $resultados[$idx]);
+        return [
+            '_provisional' => true,
+            'resultado' => $resultados[$idx],
+            'carga' => $afinidad,
+            'pesos' => $pesos,
+            'compensacion_obligatoria' => false,
+        ];
+    }
 }

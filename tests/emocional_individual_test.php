@@ -79,28 +79,20 @@ assert_null($eval2, "Wendy triste + muy_mal individual → mantiene (no empeora)
 $eval3 = EmotionalRecovery::evaluar(EstadoEmocional::ENFADADO, 'muy_mal', false, true);
 assert_null($eval3, "Wendy enfadado + muy_mal individual → mantiene (no empeora)");
 
-// ── TEST 7: Heart delta — individual + muy_mal → 0 ──
-echo "\nTEST 7: Heart delta — individual + muy_mal → 0\n";
+// ── TEST 7: Heart delta — individual + muy_mal → -1 (deltaIndividual) ──
+echo "\nTEST 7: Heart delta — individual coherente\n";
 $delta = VidaPuebloEngine::deltaResultadoEncuentro('muy_mal');
 assert_eq($delta, -2, "delta base muy_mal = -2 (social)");
 
-// Simular que en aplicarEncuentroOrganizado, individual+muy_mal → delta override a 0
-// Verificamos la lógica inline ya que no podemos mockear el encounter completo
-$encIndividual = ['tipo' => 'individual', 'intencion' => 'celeste_organizado'];
-$res = 'muy_mal';
-$deltaCalc = VidaPuebloEngine::deltaResultadoEncuentro($res);
-if (($encIndividual['tipo'] ?? '') === 'individual' && $res === 'muy_mal') {
-    $deltaCalc = 0;
-}
-assert_eq($deltaCalc, 0, "Heart delta individual + muy_mal = 0");
+assert_eq(VidaPuebloEngine::deltaIndividual('muy_bien'), 2, "individual muy_bien → +2");
+assert_eq(VidaPuebloEngine::deltaIndividual('bien'), 1, "individual bien → +1");
+assert_eq(VidaPuebloEngine::deltaIndividual('normal'), 0, "individual normal → 0");
+assert_eq(VidaPuebloEngine::deltaIndividual('mal'), 0, "individual mal → 0");
+assert_eq(VidaPuebloEngine::deltaIndividual('muy_mal'), -1, "individual muy_mal → -1");
 
-// Social muy_mal sigue dando -2
-$encSocial = ['tipo' => 'social', 'intencion' => 'celeste_organizado'];
-$deltaCalc2 = VidaPuebloEngine::deltaResultadoEncuentro($res);
-if (($encSocial['tipo'] ?? '') === 'individual' && $res === 'muy_mal') {
-    $deltaCalc2 = 0;
-}
-assert_eq($deltaCalc2, -2, "Heart delta social + muy_mal = -2 (sin cambios)");
+// Social sin cambios
+assert_eq(VidaPuebloEngine::deltaResultadoEncuentro('muy_mal'), -2, "social muy_mal → -2 (sin cambios)");
+assert_eq(VidaPuebloEngine::deltaResultadoEncuentro('mal'), -1, "social mal → -1 (sin cambios)");
 
 // ── TEST 8: estadoDesdeResultado directo ──
 echo "\nTEST 8: estadoDesdeResultado directo\n";

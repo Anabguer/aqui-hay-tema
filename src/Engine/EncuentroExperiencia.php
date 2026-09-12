@@ -39,9 +39,14 @@ final class EncuentroExperiencia
                 $cargaAccion = (float) $interv['carga'];
             }
         }
+        $esIndividual = ($encuentro['tipo'] ?? '') === 'individual' && count($ids) === 1;
         foreach ($ids as $pid) {
             $pid = (string) $pid;
-            $carga = self::cargaDe($snap, $pid, $cal);
+            if ($esIndividual) {
+                $carga = self::cargaIndividual($partida, $pid, $lugarId, $catalog, $cal);
+            } else {
+                $carga = self::cargaDe($snap, $pid, $cal);
+            }
             $carga += $cargaAccion;
             $carga += (float) ($temaCargas[$pid] ?? 0.0);
             if ($carga < -1.0) {
@@ -58,7 +63,11 @@ final class EncuentroExperiencia
             }
             $avisoRacha = AzarPonderado::rachaArtificial($recientes, 'excelente', $rachaN)
                 || AzarPonderado::rachaArtificial($recientes, 'malo', $rachaN);
-            $tirada = AzarPonderado::tirar($rng, $resultados, $carga, $cal);
+            if ($esIndividual) {
+                $tirada = AzarPonderado::tirarIndividual($rng, $resultados, $carga, $cal);
+            } else {
+                $tirada = AzarPonderado::tirar($rng, $resultados, $carga, $cal);
+            }
             $resultadoExp = (string) ($tirada['resultado'] ?? 'normal');
             $textoMentes = null;
             if ($interv !== null && $catalog !== null) {
@@ -156,6 +165,39 @@ final class EncuentroExperiencia
             return 1.0;
         }
         return $carga;
+    }
+
+    /**
+     * Carga para actividades individuales: afín con el personaje, no con otra persona.
+     *
+     * Factores: hobby match, hobby rejection, estado emocional previo.
+     * Ausencia de match NO equivale a penalización — solo sesga levemente.
+     */
+    public static function cargaIndividual(
+        array $partida,
+        string $pid,
+        ?string $lugarId,
+        ?Catalog $catalog,
+        array $cal
+    ): float {
+        $plan = PlanAfinidad::paraParticipante($partida, $pid, $lugarId, $catalog);
+        $aporte = is_array($plan) ? (int) ($plan['aporte'] ?? 0) : 0;
+        $penaliza = is_array($plan) ? !empty($plan['rechazo_explicito']) : false;
+
+        $emo = (string) ($partida['residentes'][$pid]['runtime']['estado_emocional']['id'] ?? EstadoEmocional::NEUTRO);
+        $emoMod = (float) (EstadoEmocional::modificadores($emo, $cal)['experiencia_encuentro'] ?? 0);
+
+        $afinidad = 0.0;
+        if ($aporte > 0) {
+            $afinidad += 0.35;
+        }
+        if ($penaliza) {
+            $afinidad -= 0.40;
+        }
+        $afinidad += $emoMod / 80.0;
+        $afinidad = max(-0.5, min(0.5, $afinidad));
+
+        return $afinidad;
     }
 
     /**
