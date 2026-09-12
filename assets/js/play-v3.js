@@ -9475,7 +9475,7 @@ window.AHT_PLAN_IMAGES = {
 
     function setResponse(iconEl, textEl, wrapEl, decision) {
       if (!iconEl || !textEl) return;
-      if (!decision) {
+      if (!decision || (wrapEl && wrapEl.closest && wrapEl.closest('.pr-vignette') && wrapEl.closest('.pr-vignette').hidden)) {
         if (wrapEl) wrapEl.hidden = true;
         return;
       }
@@ -9503,10 +9503,10 @@ window.AHT_PLAN_IMAGES = {
       var scene = document.querySelector('.pr-scene');
       if (scene) scene.style.cssText = 'display:grid;grid-template-columns:1fr auto 1fr;gap:.35rem;width:100%;max-width:420px;align-items:start;';
       [vignette1, vignette2].forEach(function(v) {
-        if (v) v.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.45rem .3rem .4rem;border-radius:18px 14px 20px 12px/14px 18px 10px 16px;background:#FCFBFE;border:3px solid #D8D1DE;box-shadow:3px 4px 0 rgba(48,40,58,.07);';
+        if (v && !v.hidden) v.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:.25rem;padding:.45rem .3rem .4rem;border-radius:18px 14px 20px 12px/14px 18px 10px 16px;background:#FCFBFE;border:3px solid #D8D1DE;box-shadow:3px 4px 0 rgba(48,40,58,.07);';
       });
       if (vignette1) vignette1.style.transform = 'rotate(-2deg)';
-      if (vignette2) vignette2.style.transform = 'rotate(2deg)';
+      if (vignette2 && !vignette2.hidden) vignette2.style.transform = 'rotate(2deg)';
       var center = document.querySelector('.pr-center');
       if (center) center.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:.2rem 0;align-self:center;';
       if (stateImg) stateImg.style.cssText = 'width:80px;height:80px;object-fit:contain;filter:drop-shadow(0 2px 6px rgba(0,0,0,.1));';
@@ -10746,9 +10746,6 @@ var finOk = $('[data-tut-fin-ok]');
     document.body.classList.remove('vida-derrota-activa');
   });
   if (orgGo) orgGo.addEventListener('click', proponer);
-
-  var prClose = $('[data-pr-close]');
-  if (prClose) prClose.addEventListener('click', cerrarResultadoPlan);
 
   actualizarControlMusica();
   $$('[data-musica-toggle]').forEach(function (btn) {

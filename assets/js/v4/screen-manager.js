@@ -45,6 +45,11 @@
     'historia_detalle'
   ]);
 
+  // screens donde X/backdrop = closeAll() (cierra TODO el flujo, no pop)
+  const NUCLEAR_SCREENS = new Set([
+    'organizar', 'plan-resultado'
+  ]);
+
   /* ── DOODLES — catálogo decorativo header ─────────────────── */
   // Catálogo compartido vía doodle-catalog.js (window.AHT_DOODLE_SVGS).
   // Screen Manager e Inicio consumen la misma fuente, sin duplicación.
@@ -456,7 +461,11 @@
 
   function handleBackdropClick(e) {
     if (isOpen) {
-      close();
+      if (NUCLEAR_SCREENS.has(currentScreen)) {
+        closeAll();
+      } else {
+        close();
+      }
     }
   }
 
@@ -470,7 +479,11 @@
       if (currentScreen && V4_SCREENS.has(currentScreen)) {
         e.preventDefault();
         e.stopPropagation();
-        close();
+        if (NUCLEAR_SCREENS.has(currentScreen)) {
+          closeAll();
+        } else {
+          close();
+        }
         return;
       }
     }
@@ -481,7 +494,11 @@
       if (currentScreen && V4_SCREENS.has(currentScreen)) {
         e.preventDefault();
         e.stopPropagation();
-        close();
+        if (NUCLEAR_SCREENS.has(currentScreen)) {
+          closeAll();
+        } else {
+          close();
+        }
         return;
       }
     }
@@ -631,12 +648,14 @@
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "pr-btn-volver";
-      btn.setAttribute("data-pr-close", "");
       btn.style.cssText = "margin-top:.5rem;padding:.55rem 1.4rem;border-radius:12px;border:2px solid #33261E;background:#E8DFF5;color:#7C6BAE;font:700 .88rem/1 Nunito,sans-serif;cursor:pointer;box-shadow:2px 3px 0 rgba(51,38,30,.18);";
       btn.textContent = "Volver a planes";
       btn.addEventListener("click", function() {
-        if (typeof setCapa === "function") setCapa("organizar");
-        else if (typeof cerrarResultadoPlan === "function") cerrarResultadoPlan();
+        if (window.AHTScreenManager) {
+          window.AHTScreenManager.close();
+        } else if (typeof setCapa === "function") {
+          setCapa("organizar");
+        }
       });
       prBody.appendChild(btn);
     }
