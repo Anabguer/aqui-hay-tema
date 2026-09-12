@@ -730,6 +730,9 @@ final class VidaPuebloEngine
             return null;
         }
         $delta = self::deltaResultadoEncuentro($res);
+        if (($encuentro['tipo'] ?? '') === 'individual' && $res === 'muy_mal') {
+            $delta = 0;
+        }
         if ($delta === 0) {
             return ['ok' => true, 'delta_aplicado' => 0, 'resultado' => $res];
         }

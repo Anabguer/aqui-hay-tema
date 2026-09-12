@@ -113,7 +113,7 @@ final class EmotionalEventBridge
             $resExp = (string) ($resultado['por_participante'][$rid]['resultado'] ?? 'normal');
             $afin = PlanAfinidad::paraParticipante($partida, $rid, $lugarId, $catalog);
             $hobbyMatch = !empty($afin['relacionado']);
-            $eval = EmotionalRecovery::evaluar($estadoAntes, $resExp, $hobbyMatch);
+            $eval = EmotionalRecovery::evaluar($estadoAntes, $resExp, $hobbyMatch, ($encuentro['tipo'] ?? '') === 'individual');
             if ($eval === null) {
                 continue;
             }

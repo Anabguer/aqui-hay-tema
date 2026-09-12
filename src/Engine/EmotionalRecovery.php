@@ -27,10 +27,11 @@ final class EmotionalRecovery
     public static function evaluar(
         string $estadoAntes,
         string $resultadoExperiencia,
-        bool $hobbyMatch
+        bool $hobbyMatch,
+        bool $esIndividual = false
     ): ?array {
         $estadoAntes = EstadoEmocional::canonId($estadoAntes);
-        $desdeResultado = self::estadoDesdeResultado($resultadoExperiencia);
+        $desdeResultado = self::estadoDesdeResultado($resultadoExperiencia, $esIndividual);
 
         $negativoAntes = in_array($estadoAntes, [EstadoEmocional::TRISTE, EstadoEmocional::ENFADADO], true);
 
@@ -70,13 +71,13 @@ final class EmotionalRecovery
         ];
     }
 
-    public static function estadoDesdeResultado(string $resultado): ?string
+    public static function estadoDesdeResultado(string $resultado, bool $esIndividual = false): ?string
     {
         if ($resultado === 'muy_bien') {
             return EstadoEmocional::ALEGRE;
         }
         if ($resultado === 'muy_mal') {
-            return EstadoEmocional::TRISTE;
+            return $esIndividual ? null : EstadoEmocional::TRISTE;
         }
         return null;
     }
