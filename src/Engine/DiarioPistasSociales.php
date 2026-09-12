@@ -12,7 +12,6 @@ final class DiarioPistasSociales
 {
     /** @var list<string> */
     public const FAMILIAS = [
-        'flechazo',
         'quimica_alta',
         'quimica_baja',
         'atraccion_asimetrica',
@@ -26,7 +25,6 @@ final class DiarioPistasSociales
 
     /** @var array<string, int> Cooldown mínimo en días entre entradas del mismo tipo para un par */
     private const COOLDOWN_DIAS = [
-        'flechazo' => 9999,
         'quimica_alta' => 9999,
         'quimica_baja' => 9999,
         'atraccion_asimetrica' => 30,
@@ -171,7 +169,6 @@ final class DiarioPistasSociales
         array $cal
     ): array {
         $senales = [];
-        $senales = array_merge($senales, self::evaluarFlechazo($partida, $a, $b));
         $senales = array_merge($senales, self::evaluarQuimica($partida, $a, $b));
         $senales = array_merge($senales, self::evaluarAtraccionAsimetrica($partida, $a, $b, $cal));
         $senales = array_merge($senales, self::evaluarRechazos($partida, $a, $b));
@@ -183,40 +180,12 @@ final class DiarioPistasSociales
     }
 
     /**
-     * Flechazo: hito registrado en bitácora_relaciones.
-     * DiarioHitoEngine ya crea la entrada 'Un flechazo'.
-     * DiarioPistasSociales añade una pista social complementaria.
-     * Solo escribe quien SIENTE el flechazo (direccional).
-     *
-     * @return list<array{familia: string, desde: string, hacia: string}>
-     */
-    private static function evaluarFlechazo(array $partida, string $a, string $b): array
-    {
-        $flechA = self::tieneFlechazo($partida, $a, $b);
-        $flechB = self::tieneFlechazo($partida, $b, $a);
-
-        if ($flechA && !$flechB) {
-            return [['familia' => 'flechazo', 'desde' => $a, 'hacia' => $b]];
-        }
-        if ($flechB && !$flechA) {
-            return [['familia' => 'flechazo', 'desde' => $b, 'hacia' => $a]];
-        }
-        if ($flechA && $flechB) {
-            return [
-                ['familia' => 'flechazo', 'desde' => $a, 'hacia' => $b],
-                ['familia' => 'flechazo', 'desde' => $b, 'hacia' => $a],
-            ];
-        }
-
-        return [];
-    }
-
-    /**
      * Rechazos relevantes: lee rechazos_propuesta[] directamente.
      * Primer rechazo relevante (n=1, motivo=emocional|relacional): genera entrada.
      * Rechazo repetido (n≥2, motivo=emocional|relacional): genera entrada diferente.
      * Rechazo banal: NO genera entrada.
-     * Rechazo_importante (n≥4): ya lo maneja DiarioHitoEngine.
+     * Si ya existe un RECHAZO_IMPORTANTE en bitacora para el par, suppress rechazo_repetido
+     * para evitar duplicación con el diario_hito que ya crea DiarioHitoEngine.
      * Auto-rechazos (quien=hacia): NO generan entrada.
      *
      * @return list<array{familia: string, desde: string, hacia: string}>
@@ -259,21 +228,40 @@ final class DiarioPistasSociales
             }
         }
 
+        $hayHitoA = self::hayRechazoImportante($partida, $a, $b);
+        $hayHitoB = self::hayRechazoImportante($partida, $b, $a);
+
         $senales = [];
 
         if ($hayRelevanteA && $nRechazosA === 1) {
             $senales[] = ['familia' => 'primer_rechazo_relevante', 'desde' => $b, 'hacia' => $a];
-        } elseif ($hayRelevanteA && $nRechazosA >= 2) {
+        } elseif ($hayRelevanteA && $nRechazosA >= 2 && !$hayHitoA) {
             $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $b, 'hacia' => $a];
         }
 
         if ($hayRelevanteB && $nRechazosB === 1) {
             $senales[] = ['familia' => 'primer_rechazo_relevante', 'desde' => $a, 'hacia' => $b];
-        } elseif ($hayRelevanteB && $nRechazosB >= 2) {
+        } elseif ($hayRelevanteB && $nRechazosB >= 2 && !$hayHitoB) {
             $senales[] = ['familia' => 'rechazo_repetido', 'desde' => $a, 'hacia' => $b];
         }
 
         return $senales;
+    }
+
+    /**
+     * Comprueba si existe un hito RECHAZO_IMPORTANTE en bitacora para un par direccional.
+     */
+    private static function hayRechazoImportante(array $partida, string $desde, string $hacia): bool
+    {
+        foreach (RelacionBitacora::entre($partida, $desde, $hacia) as $h) {
+            if (($h['tipo'] ?? '') === RelacionBitacora::RECHAZO_IMPORTANTE) {
+                $d = (string) ($h['direccion'] ?? '');
+                if (str_starts_with($d, $desde . '>')) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**

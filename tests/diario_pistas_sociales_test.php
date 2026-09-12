@@ -63,8 +63,20 @@ function setQuimicaPares(array &$p, array $ids, int $valor): void
     }
 }
 
+function countDiario(array $p, string $tipo, ?string $subtipo = null): int
+{
+    $n = 0;
+    foreach ($p['diario'] ?? [] as $e) {
+        if (!is_array($e)) { continue; }
+        if (($e['tipo'] ?? '') !== $tipo) { continue; }
+        if ($subtipo !== null && ($e['subtipo'] ?? '') !== $subtipo) { continue; }
+        $n++;
+    }
+    return $n;
+}
+
 // ============================================================
-// 1. Flechazo: genera pista_social complementaria al diario_hito
+// 1. Flechazo: CERO pista_social (exclusivamente diario_hito)
 // ============================================================
 $p1 = crearPartidaConResidentes('pistas-flechazo');
 $ids1 = array_keys($p1['residentes']);
@@ -76,32 +88,16 @@ $result1 = DiarioPistasSociales::evaluarPistas($p1);
 $flechPistas = array_filter($result1, static function ($r) {
     return $r['familia'] === 'flechazo';
 });
-ok(count($flechPistas) >= 1, '1a. Flechazo genera pista_social');
+ok(count($flechPistas) === 0, '1a. Flechazo: CERO pista_social');
 
-// Solo quien SIENTE el flechazo recibe pista
-$desdeA1 = false;
-$desdeB1 = false;
-foreach ($flechPistas as $fp) {
-    if ($fp['desde'] === $a1) { $desdeA1 = true; }
-    if ($fp['desde'] === $b1) { $desdeB1 = true; }
+// Verificar que diario_hito SÍ se creó (por DiarioHitoEngine)
+$hitosFlechazo = 0;
+foreach ($p1['diario'] ?? [] as $e) {
+    if (($e['tipo'] ?? '') === 'diario_hito' && ($e['subtipo'] ?? '') === 'flechazo') {
+        $hitosFlechazo++;
+    }
 }
-ok($desdeA1 && !$desdeB1, '1b. Flechazo: solo A (quien siente) recibe pista');
-
-// ============================================================
-// 1c. Flechazo repetido: NO spamea
-// ============================================================
-$p1c = crearPartidaConResidentes('pistas-flechazo-dedup');
-$ids1c = array_keys($p1c['residentes']);
-$a1c = (string) $ids1c[0];
-$b1c = (string) $ids1c[1];
-
-RelacionBitacora::registrar($p1c, RelacionBitacora::FLECHAZO, [$a1c, $b1c], $a1c . '>' . $b1c);
-DiarioPistasSociales::evaluarPistas($p1c);
-$result1c = DiarioPistasSociales::evaluarPistas($p1c);
-$flechDup = array_filter($result1c, static function ($r) {
-    return $r['familia'] === 'flechazo';
-});
-ok(count($flechDup) === 0, '1c. Flechazo: segunda ejecución NO spamea');
+ok($hitosFlechazo >= 2, '1b. Flechazo: diario_hito creado (2 entradas, 1 por actor)');
 
 // ============================================================
 // 2. Química muy alta: genera pista positiva
@@ -144,7 +140,7 @@ ok(
 );
 
 // ============================================================
-// 4. Primer rechazo relevante: genera entrada desde rechazos_propuesta
+// 4. Primer rechazo relevante n=1: exactamente 1 entrada
 // ============================================================
 $p4 = crearPartidaConResidentes('pistas-primer-rechazo');
 $ids4 = array_keys($p4['residentes']);
@@ -159,9 +155,9 @@ $result4 = DiarioPistasSociales::evaluarPistas($p4);
 $rechRelevante = array_filter($result4, static function ($r) {
     return $r['familia'] === 'primer_rechazo_relevante';
 });
-ok(count($rechRelevante) >= 1, '4. Primer rechazo relevante (emocional) genera pista');
+ok(count($rechRelevante) === 1, '4. Primer rechazo relevante (n=1): exactamente 1 pista');
 
-// Verificar que el rechazado (B) recibe la entrada, no el rechazador (A)
+// Verificar que el rechazado (B) recibe la entrada
 $desdeRech4 = '';
 foreach ($rechRelevante as $rr) {
     $desdeRech4 = $rr['desde'];
@@ -169,7 +165,7 @@ foreach ($rechRelevante as $rr) {
 ok($desdeRech4 === $b4, '4b. Primer rechazo: solo el rechazado recibe pista');
 
 // ============================================================
-// 5. Rechazo repetido: genera entrada diferente/más fuerte
+// 5. Rechazo repetido n=2: sin duplicación
 // ============================================================
 $p5 = crearPartidaConResidentes('pistas-rechazo-repetido');
 $ids5 = array_keys($p5['residentes']);
@@ -185,110 +181,195 @@ $result5 = DiarioPistasSociales::evaluarPistas($p5);
 $rechRepetido = array_filter($result5, static function ($r) {
     return $r['familia'] === 'rechazo_repetido';
 });
-ok(count($rechRepetido) >= 1, '5. Rechazo repetido (2+) genera pista diferente');
+ok(count($rechRepetido) === 1, '5. Rechazo repetido (n=2): exactamente 1 pista, sin duplicación');
 
 // ============================================================
-// 6. Rechazo banal: NO genera entrada
+// 6. Rechazo repetido n=3: respeta cooldown
 // ============================================================
-$p6 = crearPartidaConResidentes('pistas-rechazo-banal');
+$p6 = crearPartidaConResidentes('pistas-rechazo-n3');
 $ids6 = array_keys($p6['residentes']);
 $a6 = (string) $ids6[0];
 $b6 = (string) $ids6[1];
 
 RelacionEngine::registrarContacto($p6, $a6, $b6, 'normal');
 RelacionEngine::registrarContacto($p6, $b6, $a6, 'normal');
-RechazoMemoria::registrar($p6, $a6, $b6, 'banal', []);
+RechazoMemoria::registrar($p6, $a6, $b6, 'emocional', []);
+RechazoMemoria::registrar($p6, $a6, $b6, 'emocional', []);
+RechazoMemoria::registrar($p6, $a6, $b6, 'relacional', []);
 
+DiarioPistasSociales::evaluarPistas($p6);
 $result6 = DiarioPistasSociales::evaluarPistas($p6);
-$rechBanals = array_filter($result6, static function ($r) {
+$rechN3 = array_filter($result6, static function ($r) {
     return in_array($r['familia'], ['primer_rechazo_relevante', 'rechazo_repetido'], true);
 });
-ok(count($rechBanals) === 0, '6. Rechazo banal NO genera entrada de diario');
+ok(count($rechN3) === 0, '6. Rechazo n=3: segunda ejecución respeta cooldown');
 
 // ============================================================
-// 7. Atracción asimétrica: solo quien siente la atracción recibe
+// 7. Rechazo importante n>=4: exactamente 1 representación
+//    (diario_hito de DiarioHitoEngine, CERO pista_social)
 // ============================================================
-$p7 = crearPartidaConResidentes('pistas-asimetrica');
+$p7 = crearPartidaConResidentes('pistas-rechazo-importante');
 $ids7 = array_keys($p7['residentes']);
 $a7 = (string) $ids7[0];
 $b7 = (string) $ids7[1];
 
-RelacionEngine::setRomanceHacia($p7, $a7, $b7, 12);
-RelacionEngine::setRomanceHacia($p7, $b7, $a7, 0);
 RelacionEngine::registrarContacto($p7, $a7, $b7, 'normal');
 RelacionEngine::registrarContacto($p7, $b7, $a7, 'normal');
-
-$result7 = DiarioPistasSociales::evaluarPistas($p7);
-$asimetricas = array_filter($result7, static function ($r) {
-    return $r['familia'] === 'atraccion_asimetrica';
-});
-$desdeA7 = false;
-$desdeB7 = false;
-foreach ($asimetricas as $as) {
-    if ($as['desde'] === $a7) { $desdeA7 = true; }
-    if ($as['desde'] === $b7) { $desdeB7 = true; }
+for ($i = 0; $i < 4; $i++) {
+    RechazoMemoria::registrar($p7, $a7, $b7, 'emocional', []);
 }
-ok($desdeA7 && !$desdeB7, '7. Atracción asimétrica: solo A (quien siente) recibe entrada');
+
+// Verificar diario_hito existe
+$hitosRechazo = 0;
+foreach ($p7['diario'] ?? [] as $e) {
+    if (($e['tipo'] ?? '') === 'diario_hito' && ($e['subtipo'] ?? '') === 'rechazo_importante') {
+        $hitosRechazo++;
+    }
+}
+ok($hitosRechazo >= 1, '7a. Rechazo n>=4: diario_hito creado por DiarioHitoEngine');
+
+// Verificar que pista_social NO se genera para el mismo rechazo
+$result7 = DiarioPistasSociales::evaluarPistas($p7);
+$rechRepetido7 = array_filter($result7, static function ($r) {
+    return $r['familia'] === 'rechazo_repetido';
+});
+ok(count($rechRepetido7) === 0, '7b. Rechazo n>=4: CERO pista_social (evita duplicación con diario_hito)');
+
+// Contar entradas totales del par en diario
+$entradasPar7 = 0;
+foreach ($p7['diario'] ?? [] as $e) {
+    if (!is_array($e)) { continue; }
+    $actores = $e['actores'] ?? [];
+    if (in_array($a7, $actores, true) || in_array($b7, $actores, true)) {
+        $entradasPar7++;
+    }
+}
+ok($entradasPar7 >= 1 && $entradasPar7 <= 8, '7c. Rechazo n>=4: entradas del par razonables (' . $entradasPar7 . ')');
 
 // ============================================================
-// 8. Dos eventos distintos mismo día: sobreviven si son diferentes
+// 8. Dos rechazos realmente distintos: NO se deduplican
 // ============================================================
-$p8 = crearPartidaConResidentes('pistas-dos-eventos');
+$p8 = crearPartidaConResidentes('pistas-rechazos-distintos');
 $ids8 = array_keys($p8['residentes']);
 $a8 = (string) $ids8[0];
 $b8 = (string) $ids8[1];
 $c8 = (string) $ids8[2];
 
 setQuimicaPares($p8, $ids8, 50);
-// A-B: química alta
-$p8['quimica']['pares'][QuimicaEngine::parId($a8, $b8)] = [
-    'id' => QuimicaEngine::parId($a8, $b8),
-    'persona_a' => $a8 < $b8 ? $a8 : $b8,
-    'persona_b' => $a8 < $b8 ? $b8 : $a8,
+RelacionEngine::registrarContacto($p8, $a8, $b8, 'normal');
+RelacionEngine::registrarContacto($p8, $b8, $a8, 'normal');
+RelacionEngine::registrarContacto($p8, $a8, $c8, 'normal');
+RelacionEngine::registrarContacto($p8, $c8, $a8, 'normal');
+
+// A rechaza a B (emocional), A rechaza a C (relacional)
+RechazoMemoria::registrar($p8, $a8, $b8, 'emocional', []);
+RechazoMemoria::registrar($p8, $a8, $c8, 'relacional', []);
+
+$result8 = DiarioPistasSociales::evaluarPistas($p8);
+$rechRelevantes8 = array_filter($result8, static function ($r) {
+    return $r['familia'] === 'primer_rechazo_relevante';
+});
+ok(count($rechRelevantes8) === 2, '8. Dos rechazos distintos (B y C): ambos generan entrada');
+
+// ============================================================
+// 9. Rechazo banal: NO genera entrada
+// ============================================================
+$p9 = crearPartidaConResidentes('pistas-rechazo-banal');
+$ids9 = array_keys($p9['residentes']);
+$a9 = (string) $ids9[0];
+$b9 = (string) $ids9[1];
+
+RelacionEngine::registrarContacto($p9, $a9, $b9, 'normal');
+RelacionEngine::registrarContacto($p9, $b9, $a9, 'normal');
+RechazoMemoria::registrar($p9, $a9, $b9, 'banal', []);
+
+$result9 = DiarioPistasSociales::evaluarPistas($p9);
+$rechBanals = array_filter($result9, static function ($r) {
+    return in_array($r['familia'], ['primer_rechazo_relevante', 'rechazo_repetido'], true);
+});
+ok(count($rechBanals) === 0, '9. Rechazo banal NO genera entrada de diario');
+
+// ============================================================
+// 10. Atracción asimétrica: solo quien siente recibe
+// ============================================================
+$p10 = crearPartidaConResidentes('pistas-asimetrica');
+$ids10 = array_keys($p10['residentes']);
+$a10 = (string) $ids10[0];
+$b10 = (string) $ids10[1];
+
+RelacionEngine::setRomanceHacia($p10, $a10, $b10, 12);
+RelacionEngine::setRomanceHacia($p10, $b10, $a10, 0);
+RelacionEngine::registrarContacto($p10, $a10, $b10, 'normal');
+RelacionEngine::registrarContacto($p10, $b10, $a10, 'normal');
+
+$result10 = DiarioPistasSociales::evaluarPistas($p10);
+$asimetricas = array_filter($result10, static function ($r) {
+    return $r['familia'] === 'atraccion_asimetrica';
+});
+$desdeA10 = false;
+$desdeB10 = false;
+foreach ($asimetricas as $as) {
+    if ($as['desde'] === $a10) { $desdeA10 = true; }
+    if ($as['desde'] === $b10) { $desdeB10 = true; }
+}
+ok($desdeA10 && !$desdeB10, '10. Atracción asimétrica: solo A recibe entrada');
+
+// ============================================================
+// 11. Dos eventos distintos mismo día: sobreviven
+// ============================================================
+$p11 = crearPartidaConResidentes('pistas-dos-eventos');
+$ids11 = array_keys($p11['residentes']);
+$a11 = (string) $ids11[0];
+$b11 = (string) $ids11[1];
+$c11 = (string) $ids11[2];
+
+setQuimicaPares($p11, $ids11, 50);
+$p11['quimica']['pares'][QuimicaEngine::parId($a11, $b11)] = [
+    'id' => QuimicaEngine::parId($a11, $b11),
+    'persona_a' => $a11 < $b11 ? $a11 : $b11,
+    'persona_b' => $a11 < $b11 ? $b11 : $a11,
     'a_hacia_b' => 90,
     'b_hacia_a' => 90,
     'simetrica' => 90,
     'visible_jugador' => false,
 ];
 
-// Conflicto A-C
-RelacionEngine::upsertConflicto($p8, $a8, $c8, 3, 'discusion');
+RelacionEngine::upsertConflicto($p11, $a11, $c11, 3, 'discusion');
 
-$result8 = DiarioPistasSociales::evaluarPistas($p8);
-$familias8 = array_column($result8, 'familia');
+$result11 = DiarioPistasSociales::evaluarPistas($p11);
+$familias11 = array_column($result11, 'familia');
 ok(
-    in_array('quimica_alta', $familias8, true) && in_array('conflicto_personal', $familias8, true),
-    '8. Dos eventos distintos mismo día: ambos sobreviven'
+    in_array('quimica_alta', $familias11, true) && in_array('conflicto_personal', $familias11, true),
+    '11. Dos eventos distintos mismo día: ambos sobreviven'
 );
 
 // ============================================================
-// 9. Química media: NO genera entrada
+// 12. Química media: NO genera entrada
 // ============================================================
-$p9 = crearPartidaConResidentes('pistas-cambio-pequeno');
-$ids9 = array_keys($p9['residentes']);
+$p12 = crearPartidaConResidentes('pistas-cambio-pequeno');
+$ids12 = array_keys($p12['residentes']);
 
-setQuimicaPares($p9, $ids9, 50);
+setQuimicaPares($p12, $ids12, 50);
 
-$result9 = DiarioPistasSociales::evaluarPistas($p9);
-ok(count($result9) === 0, '9. Química media (50) NO genera entrada');
+$result12 = DiarioPistasSociales::evaluarPistas($p12);
+ok(count($result12) === 0, '12. Química media (50) NO genera entrada');
 
 // ============================================================
-// 10. Repetición del mismo estado: NO spamea diario
+// 13. Repetición del mismo estado: NO spamea
 // ============================================================
-$p10 = crearPartidaConResidentes('pistas-dedup');
-$ids10 = array_keys($p10['residentes']);
-$a10 = (string) $ids10[0];
-$b10 = (string) $ids10[1];
+$p13 = crearPartidaConResidentes('pistas-dedup');
+$ids13 = array_keys($p13['residentes']);
+$a13 = (string) $ids13[0];
+$b13 = (string) $ids13[1];
 
-// Química alta para A-B, media para el resto
-QuimicaEngine::ensure($p10);
-for ($i = 0; $i < count($ids10); $i++) {
-    for ($j = $i + 1; $j < count($ids10); $j++) {
-        $ax = (string) $ids10[$i];
-        $bx = (string) $ids10[$j];
+QuimicaEngine::ensure($p13);
+for ($i = 0; $i < count($ids13); $i++) {
+    for ($j = $i + 1; $j < count($ids13); $j++) {
+        $ax = (string) $ids13[$i];
+        $bx = (string) $ids13[$j];
         $par = [min($ax, $bx), max($ax, $bx)];
-        $isAB = in_array($a10, $par, true) && in_array($b10, $par, true);
-        $p10['quimica']['pares'][QuimicaEngine::parId($ax, $bx)] = [
+        $isAB = in_array($a13, $par, true) && in_array($b13, $par, true);
+        $p13['quimica']['pares'][QuimicaEngine::parId($ax, $bx)] = [
             'id' => QuimicaEngine::parId($ax, $bx),
             'persona_a' => $ax < $bx ? $ax : $bx,
             'persona_b' => $ax < $bx ? $bx : $ax,
@@ -300,26 +381,26 @@ for ($i = 0; $i < count($ids10); $i++) {
     }
 }
 
-DiarioPistasSociales::evaluarPistas($p10);
-$result10 = DiarioPistasSociales::evaluarPistas($p10);
-ok(count($result10) === 0, '10. Segunda ejecución: misma química NO spamea');
+DiarioPistasSociales::evaluarPistas($p13);
+$result13 = DiarioPistasSociales::evaluarPistas($p13);
+ok(count($result13) === 0, '13. Segunda ejecución: misma química NO spamea');
 
 // ============================================================
-// 11. Género/nombres: frases sin @ ni "o "
+// 14. Género/nombres: frases sin @ ni "o "
 // ============================================================
-$p11 = crearPartidaConResidentes('pistas-genero');
-$ids11 = array_keys($p11['residentes']);
-$a11 = (string) $ids11[0];
-$b11 = (string) $ids11[1];
+$p14 = crearPartidaConResidentes('pistas-genero');
+$ids14 = array_keys($p14['residentes']);
+$a14 = (string) $ids14[0];
+$b14 = (string) $ids14[1];
 
-setQuimicaPares($p11, $ids11, 90);
+setQuimicaPares($p14, $ids14, 90);
 
-$result11 = DiarioPistasSociales::evaluarPistas($p11);
-foreach ($result11 as $r) {
+$result14 = DiarioPistasSociales::evaluarPistas($p14);
+foreach ($result14 as $r) {
     $texto = $r['texto'];
     ok(
         !str_contains($texto, '@') && !str_contains($texto, ' o '),
-        '11. Texto "' . substr($texto, 0, 50) . '..." sin @ ni "o "'
+        '14. Texto "' . substr($texto, 0, 50) . '..." sin @ ni "o "'
     );
 }
 
@@ -333,7 +414,7 @@ foreach ($familias as $fam) {
 }
 
 // ============================================================
-// DiarioVista: títulos de subtipo para todas las familias
+// DiarioVista: títulos de subtipo
 // ============================================================
 $vistaTest = DiarioVista::listarParaResidente($p2, $a2);
 $pistaEntry = null;
